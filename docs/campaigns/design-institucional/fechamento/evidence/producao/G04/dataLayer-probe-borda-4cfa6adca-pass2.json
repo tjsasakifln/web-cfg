@@ -1,0 +1,1232 @@
+{
+ "base": "https://confenge.com.br",
+ "measured_at": "2026-09-18T19:47:48.787Z",
+ "method": "produção pela borda, caminho normal do visitante (sem cache-buster); clique com preventDefault (captura); diff de window.dataLayer; sendBeacon neutralizado; POST, /api/ e origens externas abortados; nenhum formulário enviado",
+ "rows": [
+  {
+   "route": "/",
+   "label": "home hero Ver serviços por situação",
+   "selector": "a[data-cta-position=\"hero\"][href=\"/servicos/\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Ver serviços por situação",
+   "href": "/servicos/",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "destination_type": "route",
+     "consent": "not_required",
+     "cta_label": "Ver serviços por situação",
+     "source_page_type": "home",
+     "_keys": [
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/",
+   "label": "home chooser-ask → #triagem-tecnica",
+   "selector": ".chooser-ask__actions a[href=\"#triagem-tecnica\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Descrever no próximo passo, nesta página",
+   "href": "#triagem-tecnica",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "contact_band",
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "contact_band",
+     "destination_type": "form",
+     "consent": "not_required",
+     "cta_label": "Descrever no próximo passo, nesta página",
+     "source_page_type": "home",
+     "_keys": [
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/",
+   "label": "home corporate_triage → #contato",
+   "selector": "a[data-cta-position=\"corporate_triage\"][href=\"#contato\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Descrever minha situação no formulário",
+   "href": "#contato",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "corporate_triage",
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "corporate_triage",
+     "cta_kind": "service",
+     "destination_type": "form",
+     "alias_from": "service_cta_click",
+     "consent": "not_required",
+     "cta_label": "Descrever minha situação no formulário",
+     "source_page_type": "home",
+     "_keys": [
+      "alias_from",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_kind",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": [
+       "session_id"
+      ]
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/",
+   "label": "home header Solicitar proposta",
+   "selector": "a.header-cta[href=\"/triagem-tecnica/\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Solicitar proposta",
+   "href": "/triagem-tecnica/",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "header_cta",
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "header_cta",
+     "destination_type": "route",
+     "consent": "not_required",
+     "cta_label": "Solicitar proposta",
+     "source_page_type": "home",
+     "_keys": [
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/",
+   "label": "home contact critical_decision wa.me",
+   "selector": "a[data-event-name=\"critical_decision_cta_click\"]",
+   "found": true,
+   "matches": 1,
+   "text": "WhatsApp(48) 98834-4559",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago.+Quero+ex",
+   "attrs": {
+    "event_name": "critical_decision_cta_click",
+    "cta_position": "contact",
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "contact",
+     "cta_kind": "critical_decision",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "cta_label": "WhatsApp(48) 98834-4559",
+     "_keys": [
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_kind",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": [
+       "session_id"
+      ]
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "other"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "whatsapp_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos hero",
+   "selector": "a[data-cta-id=\"frame-quantities-budget-hero\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Solicitar proposta de orçamento",
+   "href": "#triagem-quantitativos",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": "frame-quantities-budget-hero",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-quantities-budget-hero",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos inline",
+   "selector": "a[data-cta-id=\"frame-quantities-budget-inline\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Solicitar proposta de orçamento",
+   "href": "#triagem-quantitativos",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "inline_cta",
+    "cta_id": "frame-quantities-budget-inline",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-quantities-budget-inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos alt whatsapp",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-whatsapp\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Solicitar proposta pelo WhatsApp",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago.+Quero+so",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "quantities-budget-alternative-whatsapp",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta pelo WhatsApp",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "other"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "whatsapp_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos alt mailto",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-email\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Solicitar proposta por e-mail",
+   "href": "mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "quantities-budget-alternative-email",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-email",
+     "destination_type": "email",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta por e-mail",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "email_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos alt tel",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-phone\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Ligar sobre o orçamento: (48) 98834-4559",
+   "href": "tel:+5548988344559",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "quantities-budget-alternative-phone",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-phone",
+     "destination_type": "tel",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "outbound_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos header Solicitar proposta",
+   "selector": "a.header-cta",
+   "found": true,
+   "matches": 1,
+   "text": "Solicitar proposta de orçamento",
+   "href": "#triagem-quantitativos",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget",
+     "_keys": [
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao hero",
+   "selector": "a[data-cta-id=\"frame-coordination-clash-hero\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Pedir proposta da compatibilização",
+   "href": "#pedido-compatibilizacao",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": "frame-coordination-clash-hero",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-coordination-clash-hero",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Pedir proposta da compatibilização",
+     "source_page_type": "engineering-projects-coordination-clash",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "offer_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": [
+       "session_id"
+      ]
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "offer_view",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao inline",
+   "selector": "a[data-cta-id=\"frame-coordination-clash-inline\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Pedir proposta da compatibilização",
+   "href": "#pedido-compatibilizacao",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "inline_cta",
+    "cta_id": "frame-coordination-clash-inline",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-coordination-clash-inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Pedir proposta da compatibilização",
+     "source_page_type": "engineering-projects-coordination-clash",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "offer_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_page_type"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "offer_view",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "cta_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao alt whatsapp",
+   "selector": "a[data-cta-id=\"coordination-clash-alternative-whatsapp\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Conversar sobre a compatibilização",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago.+Preciso+",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "coordination-clash-alternative-whatsapp",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Conversar sobre a compatibilização",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "other"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "offer_view",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "whatsapp_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao alt mailto",
+   "selector": "a[data-cta-id=\"coordination-clash-alternative-email\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Enviar contexto por e-mail",
+   "href": "mailto:tiago.sasaki@confenge.com.br?subject=Compatibiliza%C3",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "coordination-clash-alternative-email",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-email",
+     "destination_type": "email",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Enviar contexto por e-mail",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "offer_view",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "email_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao alt tel",
+   "selector": "a[data-cta-id=\"coordination-clash-alternative-phone\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Ligar sobre a compatibilização: (48) 98834-4559",
+   "href": "tel:+5548988344559",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "coordination-clash-alternative-phone",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-phone",
+     "destination_type": "tel",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "_keys": [
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_position",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "offer_view",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "outbound_click"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/servicos/",
+   "label": "hub → /quantitativos-orcamento-obras/",
+   "selector": "a[data-cta-id=\"services-private-quantities-budget\"]",
+   "found": true,
+   "matches": 1,
+   "text": "quantitativos e orçamento",
+   "href": "/quantitativos-orcamento-obras/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "services-private-quantities-budget",
+    "route_family": "servicos-corporativos",
+    "asset_id": "corporate_services_hub_v1"
+   },
+   "emitted": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "services-private-quantities-budget",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/quantitativos-orcamento-obras/",
+     "destination_service_id": "quantitativos-orcamento-obras",
+     "route_family": "servicos-corporativos",
+     "asset_id": "corporate_services_hub_v1",
+     "cta_label": "quantitativos e orçamento",
+     "source_page_type": "corporate-services",
+     "_keys": [
+      "asset_family",
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_path",
+      "destination_service_id",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_asset_family",
+      "source_asset_id",
+      "source_page_type",
+      "source_path"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "content_to_service"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "label": "artigo Continuar pelo formulário",
+   "selector": ".lead-inline a.button-secondary[href^=\"/reequilibrio-obras-publicas/\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Continuar pelo formulário",
+   "href": "/reequilibrio-obras-publicas/#captura-pilar",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "unspecified",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/reequilibrio-obras-publicas/",
+     "destination_service_id": "reequilibrio-obras-publicas",
+     "route_family": "unspecified",
+     "asset_id": "documentos-reequilibrio-obra-publica",
+     "cta_label": "Continuar pelo formulário",
+     "source_page_type": "reequilibrio",
+     "_keys": [
+      "asset_family",
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_path",
+      "destination_service_id",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_asset_family",
+      "source_asset_id",
+      "source_page_type",
+      "source_path"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "content_to_service"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "label": "artigo text-link do pilar",
+   "selector": "a[data-pillar-link=\"1\"]",
+   "found": true,
+   "matches": 1,
+   "text": "Ver serviço de reequilíbrio",
+   "href": "/reequilibrio-obras-publicas/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": null,
+    "route_family": null,
+    "asset_id": null
+   },
+   "emitted": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "unspecified",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/reequilibrio-obras-publicas/",
+     "destination_service_id": "reequilibrio-obras-publicas",
+     "route_family": "unspecified",
+     "asset_id": "documentos-reequilibrio-obra-publica",
+     "cta_label": "Ver serviço de reequilíbrio",
+     "source_page_type": "reequilibrio",
+     "_keys": [
+      "asset_family",
+      "asset_id",
+      "consent",
+      "content_cluster",
+      "correlation_id",
+      "cta_id",
+      "cta_label",
+      "cta_position",
+      "destination_path",
+      "destination_service_id",
+      "destination_type",
+      "event",
+      "event_id",
+      "page_path",
+      "pii_policy",
+      "route_family",
+      "schema_version",
+      "session_id",
+      "source",
+      "source_asset_family",
+      "source_asset_id",
+      "source_page_type",
+      "source_path"
+     ],
+     "_pii": {
+      "keys": [],
+      "values_with_at": [],
+      "values_10_15_digits": []
+     },
+     "_contains_critical_decision_cta_click": false,
+     "_correlation_id_shape": "uuid"
+    }
+   ],
+   "navigated": false,
+   "dataLayer_events_all": [
+    "web_vital",
+    "session_start",
+    "page_view",
+    "web_vital",
+    "content_to_service"
+   ],
+   "forbidden_events": [],
+   "beacons_intercepted": []
+  }
+ ],
+ "blocked_requests": []
+}

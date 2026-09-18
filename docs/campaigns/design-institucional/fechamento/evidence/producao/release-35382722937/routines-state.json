@@ -1,0 +1,35 @@
+{
+ "revops_scheduled_last_run": {"id": 35359457583, "event": "schedule", "createdAt": "2026-09-18T14:57:35Z", "conclusion": "failure",
+  "note": "Executado ANTES da promocao (19:39:03Z); o deploy_identity que ele mediu (252fc98d1) e o predecessor, nao esta release.",
+  "jobs": {"daily-ops": "failure (step 'Daily scheduled run')", "gsc-sync": "success", "nurture-tick": "success", "inbound-counters-proof": "skipped", "weekly-report": "skipped"},
+  "daily_ops_lines": [
+   "PASS deploy_identity live=252fc98d1fad64bf430220381696f399430bc260 expected=252fc98d1fad64bf430220381696f399430bc260 match=true",
+   "PASS ops_health auth_configured=true",
+   "FAIL isolated_probe id=",
+   "FAIL probe_notify_status ",
+   "FAIL probe_email_status ",
+   "FAIL probe_idempotent_same_id id1=undefined id2=undefined",
+   "PASS probe_no_commercial_inflate before=0 after=0",
+   "PASS gsc_insights_auth http=200",
+   "PASS inbound_handoff_drain attempted=0 delivered=0",
+   "PASS search_observation_produce status=HELD",
+   "PASS search_observation_drain attempted=1 held=1",
+   "FAIL gsc_sync Command failed: python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds",
+   "\"ok\": false, \"failed_critical\": 4"
+  ],
+  "gsc_sync_lines": [
+   "GSC_HISTORY_RESTORED sha256=60cddccead941cefaa76e40dde1d29eebecaa3f6bee80a706beb261b182d5ceb",
+   "readiness_status: READY (gsc-readiness/v2), path data/revops/gsc/daily/2026-09-15.json",
+   "GSC_STATE_PUBLISHED status=CURRENT producer_as_of=2026-09-15 consumer_as_of=2026-09-15 producer_manifest_sha256=c459e2f15dc95bf99125b9603154f8c85c962dff862ccf05dd… consumer_manifest_sha256=c459e2f1…",
+   "artifact gsc-sync-35359457583 uploaded (id 10553951879)"
+  ],
+  "coverage_capture_leg": "NAO EXISTE: nenhuma linha 'coverage' ou 'capture_leg' nos logs de daily-ops nem gsc-sync; grep em scripts/ e .github/ por capture_leg|captureLeg|capture-leg nao retorna nada. Linhas mais proximas: search_observation_produce status=HELD; search_observation_drain attempted=1 held=1; GSC_STATE_PUBLISHED status=CURRENT.",
+  "history": {"35240801751 (2026-09-17)": "daily-ops failure, gsc-sync success", "35115133813 (2026-09-16)": "daily-ops failure, gsc-sync success"}
+ },
+ "LEAD_PROBE_SECRET": {
+  "gh_secret_list_repo_level": ["GSC_CREDENTIALS_JSON", "GSC_SITE_URL", "OPS_TOKEN", "REVOPS_TOKEN"],
+  "present_at_repo_level": false,
+  "caveat": "gh secret list cobre apenas secrets de Actions no nivel do repositorio; environment/org e o env do host netcup nao sao visiveis daqui. O env do job daily-ops nao injeta LEAD_PROBE_SECRET.",
+  "root_cause_of_probe_failures": "scripts/revops/scheduled_daily.mjs:120 envia 'X-Confenge-Probe: 1'; netlify/functions/lib/lead-core.cjs probeAuthorized() exige igualdade timing-safe com LEAD_PROBE_SECRET de >=32 caracteres. O probe nunca autoriza, independentemente do secret; por isso isolated_probe/probe_notify_status/probe_email_status/probe_idempotent_same_id falham ha 3 execucoes consecutivas."
+ }
+}

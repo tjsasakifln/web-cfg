@@ -1,0 +1,846 @@
+{
+ "base": "https://confenge.com.br",
+ "label": "prod-4cfa6adca",
+ "measured_at": "2026-09-18T19:50:58.935Z",
+ "tool": "lighthouse (Node API) + chrome-launcher, /home/tjsasakifln/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome",
+ "method": "mobile, simulated throttling rtt 150ms / 1.6 Mbps / cpu 4x, storage reset per run (cold cache); nenhuma execução descartada; lcp_element/lcp_selector/lcp_phases_ms lidos de lcp-breakdown-insight (Lighthouse 13) por tipo de item; sob simulate as fases não somam o LCP Lantern",
+ "lighthouseVersion": "13.4.1",
+ "runs_per_route": 5,
+ "summary": [
+  {
+   "route": "/",
+   "runs": 5,
+   "perf_median": 99,
+   "perf_range": [
+    99,
+    100
+   ],
+   "lcp_median_ms": 1861,
+   "lcp_range_ms": [
+    1475,
+    1986
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 109739,
+   "a11y_median": 100,
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 117,
+    "elementRenderDelay": 171
+   }
+  },
+  {
+   "route": "/servicos/",
+   "runs": 5,
+   "perf_median": 100,
+   "perf_range": [
+    99,
+    100
+   ],
+   "lcp_median_ms": 1702,
+   "lcp_range_ms": [
+    1630,
+    2163
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 5,
+   "bytes_median": 103999,
+   "a11y_median": 100,
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 182
+   }
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "runs": 5,
+   "perf_median": 99,
+   "perf_range": [
+    98,
+    99
+   ],
+   "lcp_median_ms": 2052,
+   "lcp_range_ms": [
+    1970,
+    2232
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 136635,
+   "a11y_median": 100,
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 69,
+    "elementRenderDelay": 171
+   }
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "runs": 5,
+   "perf_median": 99,
+   "perf_range": [
+    98,
+    99
+   ],
+   "lcp_median_ms": 1969,
+   "lcp_range_ms": [
+    1810,
+    2105
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 8,
+   "bytes_median": 131153,
+   "a11y_median": 100,
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 45,
+    "elementRenderDelay": 151
+   }
+  },
+  {
+   "route": "/entregas/",
+   "runs": 5,
+   "perf_median": 99,
+   "perf_range": [
+    97,
+    99
+   ],
+   "lcp_median_ms": 1932,
+   "lcp_range_ms": [
+    1886,
+    2317
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 109821,
+   "a11y_median": 100,
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 41,
+    "elementRenderDelay": 137
+   }
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "runs": 5,
+   "perf_median": 99,
+   "perf_range": [
+    99,
+    100
+   ],
+   "lcp_median_ms": 1859,
+   "lcp_range_ms": [
+    969,
+    1861
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 118132,
+   "a11y_median": 100,
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 121,
+    "elementRenderDelay": 119
+   }
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "runs": 5,
+   "perf_median": 98,
+   "perf_range": [
+    97,
+    99
+   ],
+   "lcp_median_ms": 2160,
+   "lcp_range_ms": [
+    1968,
+    2218
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 106034,
+   "a11y_median": 100,
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 43,
+    "elementRenderDelay": 150
+   }
+  }
+ ],
+ "results": [
+  {
+   "route": "/",
+   "run": 1,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1986,
+   "cls": 0,
+   "tbt_ms": 12,
+   "fcp_ms": 1386,
+   "bytes": 151480,
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 117,
+    "elementRenderDelay": 171
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1865,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1124,
+   "bytes": 109739,
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 37,
+    "elementRenderDelay": 167
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1861,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1120,
+   "bytes": 109706,
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 32,
+    "elementRenderDelay": 147
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 4,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1475,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 884,
+   "bytes": 103783,
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 567,
+    "elementRenderDelay": 570
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 5,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1811,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1070,
+   "bytes": 109778,
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 53,
+    "elementRenderDelay": 128
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 1,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2163,
+   "cls": 0,
+   "tbt_ms": 29,
+   "fcp_ms": 1295,
+   "bytes": 157557,
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 182
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 2,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1702,
+   "cls": 0,
+   "tbt_ms": 20,
+   "fcp_ms": 961,
+   "bytes": 103999,
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 155
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 3,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1721,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 981,
+   "bytes": 103964,
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 45,
+    "elementRenderDelay": 143
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 4,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1659,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 919,
+   "bytes": 104022,
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 54,
+    "elementRenderDelay": 113
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 5,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1630,
+   "cls": 0,
+   "tbt_ms": 5,
+   "fcp_ms": 965,
+   "bytes": 103964,
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 33,
+    "elementRenderDelay": 148
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 1,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2188,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1370,
+   "bytes": 166799,
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 69,
+    "elementRenderDelay": 171
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1970,
+   "cls": 0,
+   "tbt_ms": 12,
+   "fcp_ms": 1370,
+   "bytes": 115636,
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 68,
+    "elementRenderDelay": 192
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 3,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2232,
+   "cls": 0,
+   "tbt_ms": 8,
+   "fcp_ms": 1436,
+   "bytes": 166746,
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 26,
+    "elementRenderDelay": 183
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 4,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2011,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1411,
+   "bytes": 115621,
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 36,
+    "elementRenderDelay": 153
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 5,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2052,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1377,
+   "bytes": 136635,
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 67,
+    "elementRenderDelay": 156
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 1,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2105,
+   "cls": 0,
+   "tbt_ms": 9,
+   "fcp_ms": 1835,
+   "bytes": 139758,
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 45,
+    "elementRenderDelay": 151
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1963,
+   "cls": 0,
+   "tbt_ms": 21,
+   "fcp_ms": 1649,
+   "bytes": 131163,
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 64,
+    "elementRenderDelay": 158
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1810,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1070,
+   "bytes": 125172,
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 561,
+    "elementRenderDelay": 123
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 4,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2015,
+   "cls": 0,
+   "tbt_ms": 8,
+   "fcp_ms": 1676,
+   "bytes": 125120,
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 35,
+    "elementRenderDelay": 138
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 5,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1969,
+   "cls": 0,
+   "tbt_ms": 7,
+   "fcp_ms": 1623,
+   "bytes": 131153,
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 72,
+    "elementRenderDelay": 119
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 1,
+   "performance": 97,
+   "accessibility": 100,
+   "lcp_ms": 2317,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1900,
+   "bytes": 168199,
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 41,
+    "elementRenderDelay": 137
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1926,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1411,
+   "bytes": 109803,
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 31,
+    "elementRenderDelay": 105
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1932,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1417,
+   "bytes": 109830,
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 34,
+    "elementRenderDelay": 102
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 4,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1886,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1371,
+   "bytes": 109821,
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 68,
+    "elementRenderDelay": 109
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 5,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2010,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1420,
+   "bytes": 109785,
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 44,
+    "elementRenderDelay": 218
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "run": 1,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 969,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 960,
+   "bytes": 125892,
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 121,
+    "elementRenderDelay": 119
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/triagem-tecnica/"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1855,
+   "cls": 0,
+   "tbt_ms": 56,
+   "fcp_ms": 1265,
+   "bytes": 118132,
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 29,
+    "elementRenderDelay": 118
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/triagem-tecnica/"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1859,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1269,
+   "bytes": 118143,
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 36,
+    "elementRenderDelay": 87
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/triagem-tecnica/"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "run": 4,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1860,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1502,
+   "bytes": 118130,
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 96,
+    "elementRenderDelay": 119
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/triagem-tecnica/"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "run": 5,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1861,
+   "cls": 0,
+   "tbt_ms": 22,
+   "fcp_ms": 1271,
+   "bytes": 118128,
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 103
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/triagem-tecnica/"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "run": 1,
+   "performance": 97,
+   "accessibility": 100,
+   "lcp_ms": 2218,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1977,
+   "bytes": 169339,
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 43,
+    "elementRenderDelay": 150
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1968,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1368,
+   "bytes": 106019,
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 69,
+    "elementRenderDelay": 138
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "run": 3,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2160,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1590,
+   "bytes": 106030,
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 84,
+    "elementRenderDelay": 139
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "run": 4,
+   "performance": 97,
+   "accessibility": 100,
+   "lcp_ms": 2158,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1887,
+   "bytes": 106034,
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 32,
+    "elementRenderDelay": 121
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "run": 5,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2160,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1410,
+   "bytes": 110994,
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_phases_ms": {
+    "timeToFirstByte": 73,
+    "elementRenderDelay": 108
+   },
+   "lighthouseVersion": "13.4.1",
+   "final_url": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/"
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "source": "build/reports/gsc-insights-durable.json (artifact site-ci-reports); somente metadados, sem insights",
+ "fields": {
+  "ok": true,
+  "status": "CURRENT",
+  "schema_version": "confenge-private-gsc-snapshot/v1",
+  "manifest_schema_version": "gsc_snapshot_manifest_v1",
+  "snapshot_sha256": "f98610a16387b2065ce661cc2510de0a22b088f9399f1c1f36c0882296ca4471",
+  "snapshot_content_sha256": "2d8a35426a9d37f38a4ee10527bb6c4f844348d95768b938bd7e1dc1ac6be10a",
+  "producer_manifest_sha256": "c459e2f15dc95bf99125b9603154f8c85c962dff862ccf05ddc6e6a1819df0a0",
+  "consumer_manifest_sha256": "c459e2f15dc95bf99125b9603154f8c85c962dff862ccf05ddc6e6a1819df0a0",
+  "as_of": "2026-09-15",
+  "producer_as_of": "2026-09-15",
+  "consumer_as_of": "2026-09-15",
+  "produced_at": "2026-09-18T14:58:10.305982+00:00",
+  "ingested_at": "2026-09-18T14:58:10.562Z",
+  "delivery_source": "durable_store",
+  "reason_codes": []
+ }
+}

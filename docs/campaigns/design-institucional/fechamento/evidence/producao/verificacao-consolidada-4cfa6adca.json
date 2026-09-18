@@ -1,0 +1,703 @@
+[
+ {
+  "frente": "EVIDÊNCIA DA RELEASE (G05 e scorecard) — run netcup-release 35382722937, commit 4cfa6adca",
+  "resultado": "PASS_COM_RESSALVAS",
+  "resumo": "G05-01 provado na release: o job 'exact SHA through site-ci / site-validation' (105722494370) imprime GSC_DURABLE_READ status=CURRENT as_of=2026-09-15 delivery_source=durable_store reason_codes= (2026-09-18T19:25:37Z). O artefato site-ci-reports (id 10563593363, válido até 2026-12-17) traz site-excellence.json com commit_sha 4cfa6adca, overall MEASURED_PASS, claim 10/10, 14/14 dimensões MEASURED_PASS; dimensão Freshness/gsc-freshness MEASURED_PASS, codes [], durable_read=current, durable_status=CURRENT, as_of 2026-09-15, age_days 3 (máx 7). event-semantics: 34 checks, 0 falhas (extraído do log; o JSON não foi coletado no artefato). Cadeia fechada: PR #701 head d310ff8ae -> merge 4cfa6adca (18:52:38Z) -> empacotado artifact_sha256 88ac5f34… + public_artifact_hash 004d3534… -> atestado @sha256:88ac5f34… (19:27:16Z) -> PROMOTED 19:39:03Z (previous_sha 252fc98d1, terminal state promoted/served_coverage/runtime_acceptance=success, lighthouse MEASURED_PASS) -> servido: build-info commit 4cfa6adca, artifact_hash 004d3534…, build_time 2026-09-18T18:52:37Z; runtime-info release_bundle_hash 88ac5f34…. Nenhum artefato do run expirou. Ressalvas fora do sujeito da release: revops-scheduled falha há 3 dias consecutivos no job daily-ops (4 críticos do probe sintético + FAIL gsc_sync interno), gsc-sync job verde; LEAD_PROBE_SECRET ausente no nível do repositório e, independentemente disso, scheduled_daily.mjs envia 'X-Confenge-Probe: 1' que nunca satisfaz probeAuthorized(); a linha coverage/capture_leg pedida não existe em nenhum log nem no código.",
+  "numeros": {
+   "run_id": 35382722937,
+   "run_conclusion": "success",
+   "pr_head_sha": "d310ff8aedd64ab55212c0111c1d520a4b8fbbd0",
+   "merge_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "predecessor_sha": "252fc98d1fad64bf430220381696f399430bc260",
+   "release_bundle_sha256": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4",
+   "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+   "build_time": "2026-09-18T18:52:37Z",
+   "promoted_at": "2026-09-18T19:39:03Z",
+   "gsc_durable_read": "status=CURRENT as_of=2026-09-15 delivery_source=durable_store reason_codes=",
+   "gsc_age_days": 3,
+   "gsc_max_age_days": 7,
+   "site_excellence_overall": "MEASURED_PASS",
+   "site_excellence_claim": "10/10",
+   "addressable_score": 10,
+   "dimensoes_measured_pass": 14,
+   "dimensoes_measured_fail": 0,
+   "dimensoes_blocked_external": 0,
+   "event_semantics_checks": 34,
+   "event_semantics_failed": 0,
+   "artefatos_do_run": 6,
+   "artefatos_expirados": 0,
+   "artefatos_nao_coletados": 1,
+   "site_ci_reports_expira": "2026-12-17T18:52:41Z",
+   "revops_ultimo_run": 35359457583,
+   "revops_ultimo_run_createdAt": "2026-09-18T14:57:35Z",
+   "daily_ops_failed_critical": 4,
+   "daily_ops_falhas_consecutivas": 3,
+   "gsc_sync_job": "success",
+   "lead_probe_secret_repo_level": false
+  },
+  "problemas": [
+   {
+    "severidade": "ALTA",
+    "onde": "revops-scheduled job daily-ops (runs 35359457583, 35240801751, 35115133813); scripts/revops/scheduled_daily.mjs:120 vs netlify/functions/lib/lead-core.cjs probeAuthorized()",
+    "descricao": "Probe sintético diário falha há 3 execuções consecutivas (isolated_probe, probe_notify_status, probe_email_status, probe_idempotent_same_id). O script envia 'X-Confenge-Probe: 1', enquanto o runtime exige igualdade timing-safe com LEAD_PROBE_SECRET de >=32 caracteres; o probe nunca autoriza. LEAD_PROBE_SECRET não existe no nível do repositório (gh secret list: GSC_CREDENTIALS_JSON, GSC_SITE_URL, OPS_TOKEN, REVOPS_TOKEN) e não é injetado no env do job; environment/org e env do host não são visíveis daqui. Não afeta a evidência da release.",
+    "evidencia": "producao/release-35382722937/routines-state.json (daily_ops_lines, LEAD_PROBE_SECRET.root_cause_of_probe_failures)"
+   },
+   {
+    "severidade": "MEDIA",
+    "onde": "revops-scheduled job daily-ops, check gsc_sync",
+    "descricao": "FAIL gsc_sync (search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds) dentro de daily-ops, enquanto o job gsc-sync do mesmo run conclui success com GSC_STATE_PUBLISHED status=CURRENT as_of=2026-09-15. Divergência entre caminhos de código não explicada nesta frente.",
+    "evidencia": "producao/release-35382722937/routines-state.json (daily_ops_lines, gsc_sync_lines)"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "site-ci upload-artifact 'site-ci-reports' (site-validation, if-no-files-found: ignore)",
+    "descricao": "build/reports/event-semantics.json não está na lista de paths coletados, apesar de EVENT_SEMANTICS_REPORT apontar para ele; o resultado (34 checks, 0 falhas) só é recuperável do log do job. Nenhum artefato do run expirou (0 de 6).",
+    "evidencia": "producao/release-35382722937/event-semantics-log-extract.txt; release-chain.json (artifact_gaps)"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "logs de revops-scheduled (daily-ops e gsc-sync) e código do repositório",
+    "descricao": "A linha 'coverage/capture_leg' solicitada não existe: nenhuma ocorrência nos logs e grep por capture_leg|captureLeg|capture-leg em scripts/ e .github/ não retorna nada. Linhas mais próximas registradas: search_observation_produce status=HELD; search_observation_drain attempted=1 held=1; GSC_STATE_PUBLISHED status=CURRENT. O último run de revops (14:57Z) antecede a promoção (19:39Z), então seu deploy_identity=252fc98d1 refere-se ao predecessor.",
+    "evidencia": "producao/release-35382722937/routines-state.json (coverage_capture_leg)"
+   }
+  ],
+  "evidencias_gravadas": [
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/gsc-durable-read.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/site-excellence-extract.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/site-excellence.md",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/gsc-insights-durable-metadata.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/event-semantics-log-extract.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/release-chain.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/release-35382722937/routines-state.json",
+   "NOTA: arquivos gravados no worktree docs/pos-redesign-fechamento-verificado mas ainda não commitados (untracked)."
+  ]
+ },
+ {
+  "frente": "G04 — semântica de eventos na borda (produção 4cfa6adca)",
+  "resultado": "PASS_COM_RESSALVAS",
+  "resumo": "Identidade confirmada (build-info/runtime-info: commit 4cfa6adca47ae..., artifact_hash 004d3534..., build_time 2026-09-18T18:52:37Z). Sonda read-only na borda (puppeteer-core, clique com preventDefault, diff de window.dataLayer, sendBeacon neutralizado, POST//api//externo abortados), 19 controles em 6 rotas, duas passagens idênticas: home 'Ver serviços por situação' 1x cta_click route; chooser-ask #triagem-tecnica 1x cta_click form (contact_band); #contato 1x cta_click form (alias_from=service_cta_click, cta_kind=service); header 'Solicitar proposta' 1x cta_click route (header_cta); link critical_decision wa.me → 1x whatsapp_click cta_kind=critical_decision sem a string 'critical_decision_cta_click'; hero e inline de /quantitativos-orcamento-obras/ e /compatibilizacao-projetos-engenharia/ 1x cta_click form com cta_id/route_family/asset_id; wa.me/mailto/tel dos blocos alternativos → whatsapp_click/email_click/outbound_click(tel) com os três atributos, sem chave PII nem valor com '@' (sequências de 10+ dígitos só em session_id/correlation_id opacos); /servicos/ → quantitativos content_to_service destination_service_id=quantitativos-orcamento-obras; artigo documentos-reequilibrio 'Continuar pelo formulário' → content_to_service service /reequilibrio-obras-publicas/ id reequilibrio-obras-publicas. qualified_lead/pipeline/handoff_accepted: ausentes em todo dataLayer e rejeitados estruturalmente em resolveTrackedName (analytics.js:218 'observed_owner_only'). Nenhuma requisição saiu do cliente (0 bloqueadas, 0 beacons, 0 navegações, 0 formulários). Ressalva: o artigo emite cta_position='inline' (não 'form' como registrado em artigo-evento-semantica.md), então a regra de contagem registrada retorna zero.",
+  "numeros": {
+   "casos": 19,
+   "casos_pass": 18,
+   "casos_fail": 1,
+   "passagens": 2,
+   "rotas": 6,
+   "eventos_emitidos_por_clique": 1,
+   "eventos_observed_only_no_cliente": 0,
+   "requisicoes_bloqueadas": 0,
+   "beacons_interceptados": 0,
+   "navegacoes": 0,
+   "formularios_enviados": 0,
+   "chaves_pii": 0,
+   "valores_com_arroba": 0,
+   "digitos_10_15_fora_ids_opacos": 0,
+   "commit_servido": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091"
+  },
+  "problemas": [
+   {
+    "severidade": "MEDIA",
+    "onde": "/conteudos/documentos-reequilibrio-obra-publica/ botão 'Continuar pelo formulário' (e text-link data-pillar-link) vs docs/campaigns/design-institucional/fechamento/evidence/artigo-evento-semantica.md consequências 1 e 2; js/modules/nav.js (position = data-cta-position || 'inline')",
+    "descricao": "O evento é content_to_service/service para o pilar como registrado, mas cta_position sai 'inline' nos dois links do artigo (o botão não tem data-cta-position). A regra de contagem registrada ('content_to_service filtrado por cta_position = form') retorna zero em produção e a desambiguação entre botão e text-link só é possível por cta_label. Corrigir o registro ou enriquecer o botão com data-cta-position=form.",
+    "evidencia": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/event-semantics-borda-4cfa6adca.json casos 'artigo Continuar pelo formulário' e 'artigo text-link do pilar' (cta_position 'inline' nas duas passagens)"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "/quantitativos-orcamento-obras/ header-cta contextual ('Solicitar proposta de orçamento' → #triagem-quantitativos)",
+    "descricao": "Emite cta_click destination_type=form com cta_position='inline' (sem data-cta-position), enquanto na home o header-cta sai 'header_cta'; a leitura a jusante não distingue header de corpo nos pilares privados.",
+    "evidencia": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/event-semantics-borda-4cfa6adca.json caso 'quantitativos header Solicitar proposta'"
+   }
+  ],
+  "evidencias_gravadas": [
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/event-semantics-borda-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/G04/dataLayer-probe-borda-4cfa6adca-pass1.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/G04/dataLayer-probe-borda-4cfa6adca-pass2.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/G04/probe_events_borda.mjs"
+  ]
+ },
+ {
+  "frente": "IDENTIDADE/ROTAS",
+  "resultado": "PASS_COM_RESSALVAS",
+  "resumo": "Produção serve a release 4cfa6adca: build-info e runtime-info com commit, artifact_hash 004d3534… e build_time 2026-09-18T18:52:37Z corretos; healthz/ready 200. public_verify.py (cópia no scratchpad com a lista ROUTES estendida de 28 para 29 com /conteudos/documentos-para-levantamento-quantitativos/, rota nomeada pela tarefa e ausente da lista original; nada editado fora de evidence/producao/) saiu com 0 problemas: 29/29 rotas 200 com HTML byte-idêntico ao _site do pacote de release do CI (run 35382722937, tarball sha256 confere com o release-manifest; o worktree não tem _site), 73/73 assets OK (CSS fingerprintado immutable, fonte woff2, script.js, assets/js). As entradas canonical=None do relatório são artefato do regex do script (ordem de atributos); canonical conferido manualmente e correto. Leitura pelo caminho normal do visitante (sem cache-buster) em 10 rotas também bate byte a byte com o artefato. /assets/js/diagnose-margin.js: 200, gzip (6813 B de 21143), 1 linha, sha256 igual ao artefato. robots.txt byte-idêntico ao pacote com grupos de IA no topo. Sitemaps byte-idênticos; sitemap.xml com 92 URLs e lastmod 2026-09-18 nos 6 artigos do cluster de medição. 410 nas rotas retiradas, 301 /privacidade.html e /conteudos/desconto-…, 404 com bloco class=\"state\"; /obrigado-contrato 200 por regra explícita 200 em _redirects. Cabeçalhos vs baseline 252fc98d1 (G02/prod): CSP idêntica hash a hash, cache-control idêntico (HTML no-cache; CSS/fonte immutable; JS 14400 must-revalidate); única diferença cf-cache-status REVALIDATED→HIT. Conteúdo: artigo reequilíbrio com 'Continuar pelo formulário' -> /reequilibrio-obras-publicas/#captura-pilar e link do pilar (data-pillar-link + 'Tema principal') no aside de oferta; /quantitativos-orcamento-obras/ com #qty-sample-trail logo após a prancha (figure+keys) e canais (h3, botão, contact-alt) antes da lista em #triagem-quantitativos; /servicos/#servico-avaliacao com div.contact-actions logo após o h3 e 'Pessoa física não precisa informar CNPJ' 1 vez (parágrafo visível); home com hero-deliverable de copy novo e chooser-ask#descrever-situacao com 1 botão (#triagem-tecnica; antes 3 canais). Ressalva: o artigo /conteudos/documentos-para-levantamento-quantitativos/ não tem o rótulo 'Continuar pelo formulário' e não mudou na release; o encaminhamento ao serviço está atendido por outro CTA.",
+  "numeros": {
+   "commit_servido": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "artifact_hash_servido": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+   "build_time_servido": "2026-09-18T18:52:37Z",
+   "public_verify_problemas": 0,
+   "rotas_verificadas": 29,
+   "rotas_200": 29,
+   "rotas_html_igual_artefato": 29,
+   "rotas_sem_cache_buster_iguais_artefato": "10/10",
+   "assets_verificados": 73,
+   "assets_ok": 73,
+   "diagnose_margin_js_bytes_gzip": 6813,
+   "diagnose_margin_js_bytes_raw": 21143,
+   "diagnose_margin_js_linhas": 1,
+   "robots_txt_igual_pacote": true,
+   "sitemap_urls": 92,
+   "sitemap_editorial_urls": 4,
+   "sitemap_lastmod_2026_09_18": 6,
+   "rotas_410_conferidas": 2,
+   "redirect_301_conferidos": 2,
+   "not_found_status": 404,
+   "not_found_state_block": true,
+   "cabecalhos_diff_normalizado_vs_252fc98d1": "0 (exceto cf-cache-status)",
+   "csp_identica": true,
+   "reequilibrio_continuar_formulario_count": 1,
+   "levantamento_continuar_formulario_count": 0,
+   "levantamento_links_home_formulario": 0,
+   "servicos_cnpj_string_count": 1,
+   "home_chooser_ask_botoes": 1,
+   "home_chooser_ask_botoes_predecessor": 3,
+   "tarball_release_sha256": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4"
+  },
+  "problemas": [
+   {
+    "severidade": "BAIXA",
+    "onde": "/conteudos/documentos-para-levantamento-quantitativos/",
+    "descricao": "A afirmação da tarefa ('Continuar pelo formulário' apontando ao pilar/serviço) não se verifica literalmente: o rótulo não existe no HTML servido (que é byte-idêntico ao artefato) e o arquivo não mudou entre 252fc98d1 e 4cfa6adca. O resultado para o visitante está atendido: CTA 'Solicitar proposta de levantamento' -> /quantitativos-orcamento-obras/#triagem-quantitativos, mais 'Voltar ao serviço' e ponte orgânica ao pilar, e 0 links ao formulário da home. implementacao-consolidada.json #154 registra 'Nada a mudar' para esta rota.",
+    "evidencia": "docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/verificacao-identidade-rotas-4cfa6adca.json (afirmacoes_de_conteudo → levantamento: count 0, arquivo_alterado_na_release false); git diff 252fc98d1..4cfa6adca -- conteudos/documentos-para-levantamento-quantitativos/index.html vazio"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "docs/campaigns/design-institucional/expansao/tools/public_verify.py",
+    "descricao": "A lista ROUTES do script (28) não inclui /conteudos/documentos-para-levantamento-quantitativos/, e o regex de canonical exige a ordem rel antes de href, então o relatório registra canonical=None em 17 rotas que têm canonical correto (conferido manualmente). Ferramenta não editada (fora do escopo permitido); a cópia estendida rodou no scratchpad.",
+    "evidencia": "public-verification-4cfa6adca.json (routes[].canonical null vs HTML servido com <link href=… rel=\"canonical\"/>); desvio declarado em verificacao-identidade-rotas-4cfa6adca.json → public_verify.desvio_declarado"
+   }
+  ],
+  "evidencias_gravadas": [
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/public-verification-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/verificacao-identidade-rotas-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/home.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/servicos.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/entregas.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/triagem-tecnica.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/quantitativos.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/artigo-reequilibrio.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/css-styles.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/js-diagnose.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/script.headers.txt",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/identidade-rotas/headers/font.headers.txt"
+  ]
+ },
+ {
+  "frente": "PRONTIDAO_OPERACIONAL",
+  "resultado": "PASS_COM_RESSALVAS",
+  "resumo": "Prontidão do QA G03 confirmada em 2026-09-18T19:45Z sem enviar nada: Resend confenge.com.br verified (DKIM TXT, SPF MX, SPF TXT verified); ops health ok (storage filesystem ok, auth configurada); runtime servido = 4cfa6adca na borda e no host (build-info + runtime-info idênticos, artifact 004d3534…); serviço confenge-web-runtime active/running com ExecMainStart 19:39:01Z, 46 min após build_time 18:52:37Z (reiniciado após a promoção); Warmbly backend /health ok e inbound/health público 200; outreach_inbound_leads OPEN 16 / SUPPRESSED 23 (inalterado desde o diagnóstico); LEAD_REQUIRE_TURNSTILE=1, LEAD_REQUIRE_ORIGIN=1, LEAD_DELIVERY_TIMEOUT_MS ausente. Ressalvas: (a) o action=lead com pii=0 não expõe delivery.email.provider_id (só status; provider_id exige pii=1 no shell do host com filtro jq, ou fallback por assunto no Resend GET /emails) — o protocolo já prescreve isso; (b) counts_by_kind.real=0 e email=skipped em 100% dos 23 registros: o caminho real (Resend + handoff real) nunca rodou em produção, G03 é a primeira prova; (c) Warmbly deduplica por identity_key em 24 h, logo B1 e C1 virão com dedupe_of_lead_id=A1 (esperado). Protocolo executável com os três envios (home multistep exige o clique em \"Adicionar mais detalhes\" antes de mensagem/consentimento), comandos exatos de correlação e ponto de parada do Turnstile gravado.",
+  "numeros": {
+   "resend_domain_status": "verified",
+   "resend_records_verified": 3,
+   "ops_health_http": 200,
+   "ops_storage_ok": true,
+   "leads_total": 23,
+   "leads_real": 0,
+   "leads_synthetic": 23,
+   "delivery_email_skipped": 23,
+   "handoff_persisted": 23,
+   "handoff_delivered": 17,
+   "handoff_skipped": 5,
+   "handoff_blocked": 1,
+   "handoff_permanent_failures": 1,
+   "handoff_latency_p95_ms": 369,
+   "safety_gate_auto_send_off": true,
+   "runtime_release_sha_edge": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "runtime_release_sha_host": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "artifact_hash_match": true,
+   "service_active": true,
+   "service_exec_main_start_utc": "2026-09-18T19:39:01Z",
+   "build_time_utc": "2026-09-18T18:52:37Z",
+   "start_after_build_min": 46.4,
+   "service_nrestarts": 0,
+   "warmbly_health": "ok",
+   "warmbly_inbound_health_http": 200,
+   "warmbly_outreach_inbound_leads_OPEN": 16,
+   "warmbly_outreach_inbound_leads_SUPPRESSED": 23,
+   "warmbly_ingested_today": 8,
+   "qa_identity_prior_rows_warmbly": 0,
+   "qa_identity_suppressed_recipients": 0,
+   "LEAD_REQUIRE_TURNSTILE": "1",
+   "LEAD_REQUIRE_ORIGIN": "1",
+   "LEAD_DELIVERY_TIMEOUT_MS": "UNSET(default 5000)",
+   "forms_verified_on_4cfa6adca": 3,
+   "turnstile_sitekey_present_on_3_routes": true,
+   "record_kind_esperado_qa": "real"
+  },
+  "problemas": [
+   {
+    "severidade": "MEDIA",
+    "onde": "netlify/functions/ops.cjs:364-376 + netlify/functions/lib/lead-stages.cjs:216-221 (instrução da tarefa item 6)",
+    "descricao": "ops?action=lead com pii=0 devolve delivery apenas como {notify:<status>, email:<status>}; delivery.email.provider_id/http/reason só saem com pii=1, que também expõe nome/telefone/email. O protocolo prescreve pii=1 somente no shell do host, com jq filtrando só o provider_id, e fallback sem PII por assunto (Resend GET /emails).",
+    "evidencia": "redactLeadForExport(record,{includePii}) retorna publicLeadSummary quando includePii=false; publicLeadSummary.delivery = {notify: status, email: status}"
+   },
+   {
+    "severidade": "MEDIA",
+    "onde": "store web-cfg em produção (ops?action=leads&kind=all)",
+    "descricao": "counts_by_kind.real=0 e delivery_email=skipped nos 23 registros: o caminho record_kind=real (Resend + persisted_notified + handoff real) nunca foi exercitado em produção; G03 será a primeira prova real.",
+    "evidencia": "prontidao-operacional-4cfa6adca.json §2 leads.kind_all"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "Warmbly inbound.go:16 / inbound_ingest.go:103-115",
+    "descricao": "Dedupe por identity_key em janela de 24 h: B1 e C1 terão dedupe_of_lead_id = lead_id de A1 e podem herdar commercial_action_id; status permanece OPEN. Comportamento esperado, documentado no protocolo para não ser lido como defeito.",
+    "evidencia": "const inboundDedupeWindow = 24 * time.Hour; secondaryDedupe → row.DedupeOfLeadID = peer.LeadID"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "ops?action=inbound_handoff counters",
+    "descricao": "permanent_failures=1 e blocked=1 históricos (sintéticos), inalterados desde o diagnóstico de 12:53Z; não bloqueiam o QA.",
+    "evidencia": "counters idênticos ao G03/recebimento-operacional-diagnostico.json"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "host loopback :18100",
+    "descricao": "/.well-known/build-info.json é servido pelo nginx (estático) e devolve not_found no Node loopback; /runtime-info.json e /build-info.json na raiz pública não existem (404). Caminhos canônicos: /.well-known/build-info.json e /.well-known/runtime-info.json.",
+    "evidencia": "curl 127.0.0.1:18100/.well-known/build-info.json → {ok:false,error:not_found}; borda 200 DYNAMIC"
+   }
+  ],
+  "evidencias_gravadas": [
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/prontidao-operacional-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md"
+  ]
+ },
+ {
+  "frente": "LIGHTHOUSE NA BORDA (G06 pareado) — produção 4cfa6adca vs baseline 252fc98d1",
+  "resultado": "PASS_COM_RESSALVAS",
+  "resumo": "Produção confirmada em https://confenge.com.br/.well-known/build-info.json (commit 4cfa6adca47ae2691aae2c687bbe4649ad7ecb36, artifact_hash 004d3534…dba091, build_time 2026-09-18T18:52:37Z). lighthouse_edge.mjs (versão que lê lcp-breakdown-insight) rodou 5x em 7 rotas (35 execuções, nenhuma descartada, exit 0), mobile, throttling simulado, cache frio, sem cache-buster, sem envio de formulário; mesmas versões da baseline: Lighthouse 13.4.1, Chrome for Testing 151.0.7922.34, Node v22.23.2. Nas 3 rotas pareadas com a baseline 5x de 252fc98d1 (/, /servicos/, /quantitativos-orcamento-obras/) a mediana da candidata ficou dentro ou melhor que a faixa da baseline em perf, LCP, CLS, TBT, bytes e a11y: sem regressão material. Home melhorou (perf 99 vs 98; LCP 1861 vs 1937 ms; TBT 0 vs 104 ms). As 4 rotas restantes (/medicoes-glosas-obras-publicas/, /entregas/, /triagem-tecnica/, /ferramentas/diagnostico-defesa-margem/) não têm baseline 5x em 252fc98d1: só medição absoluta (perf 98–99, LCP 1859–2160 ms, CLS 0, a11y 100), sem veredito de regressão. LCP é texto em todas as rotas e estável nas 5 execuções; em 6/7 é o h1 ou parágrafo-lead do herói, em /medicoes-glosas-obras-publicas/ é um <dd> de dl.svc-chain no bloco de abertura (BAIXA). Bytes em /quantitativos-orcamento-obras/: mediana 136,6 KB vs 117,4 KB, dentro da faixa [117,4; 170,0] mas dependente do outlier da baseline; distribuição bimodal nas duas séries, modo baixo da candidata 115,6 KB < 117,4 KB da baseline, modo alto ≈ igual (166,7 vs 170,0 KB); hipótese do webfont (60 KB) não verificada por LHR. Ressalva de isolamento: máquina ociosa no início (load 0.17) mas outras frentes gravaram evidência na mesma janela (load final ~1.3 em 16 vCPU); contaminação só pioraria a candidata, veredito conservador.",
+  "numeros": {
+   "runs_total": 35,
+   "runs_por_rota": 5,
+   "rotas": 7,
+   "rotas_pareadas": 3,
+   "rotas_sem_baseline": 4,
+   "lighthouseVersion": "13.4.1",
+   "chrome": "Google Chrome for Testing 151.0.7922.34",
+   "node": "v22.23.2",
+   "producao_commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "baseline_commit": "252fc98d1",
+   "pareado": {
+    "/": {
+     "perf": {
+      "cand_med": 99,
+      "cand_range": [
+       99,
+       100
+      ],
+      "base_med": 98,
+      "base_range": [
+       97,
+       99
+      ]
+     },
+     "lcp_ms": {
+      "cand_med": 1861,
+      "cand_range": [
+       1475,
+       1986
+      ],
+      "base_med": 1937,
+      "base_range": [
+       1867,
+       2040
+      ]
+     },
+     "cls": {
+      "cand_med": 0,
+      "base_med": 0
+     },
+     "tbt_ms": {
+      "cand_med": 0,
+      "cand_range": [
+       0,
+       12
+      ],
+      "base_med": 104,
+      "base_range": [
+       11,
+       181
+      ]
+     },
+     "bytes": {
+      "cand_med": 109739,
+      "cand_range": [
+       103783,
+       151480
+      ],
+      "base_med": 111920,
+      "base_range": [
+       109974,
+       150910
+      ]
+     },
+     "a11y": 100,
+     "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead"
+    },
+    "/servicos/": {
+     "perf": {
+      "cand_med": 100,
+      "cand_range": [
+       99,
+       100
+      ],
+      "base_med": 100,
+      "base_range": [
+       99,
+       100
+      ]
+     },
+     "lcp_ms": {
+      "cand_med": 1702,
+      "cand_range": [
+       1630,
+       2163
+      ],
+      "base_med": 1701,
+      "base_range": [
+       1586,
+       2149
+      ]
+     },
+     "cls": {
+      "cand_med": 0,
+      "base_med": 0
+     },
+     "tbt_ms": {
+      "cand_med": 5,
+      "cand_range": [
+       0,
+       29
+      ],
+      "base_med": 0,
+      "base_range": [
+       0,
+       21
+      ]
+     },
+     "bytes": {
+      "cand_med": 103999,
+      "cand_range": [
+       103964,
+       157557
+      ],
+      "base_med": 104253,
+      "base_range": [
+       104248,
+       156975
+      ]
+     },
+     "a11y": 100,
+     "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title"
+    },
+    "/quantitativos-orcamento-obras/": {
+     "perf": {
+      "cand_med": 99,
+      "cand_range": [
+       98,
+       99
+      ],
+      "base_med": 99,
+      "base_range": [
+       98,
+       99
+      ]
+     },
+     "lcp_ms": {
+      "cand_med": 2052,
+      "cand_range": [
+       1970,
+       2232
+      ],
+      "base_med": 1999,
+      "base_range": [
+       1961,
+       2193
+      ]
+     },
+     "cls": {
+      "cand_med": 0,
+      "base_med": 0
+     },
+     "tbt_ms": {
+      "cand_med": 0,
+      "cand_range": [
+       0,
+       12
+      ],
+      "base_med": 2,
+      "base_range": [
+       0,
+       16
+      ]
+     },
+     "bytes": {
+      "cand_med": 136635,
+      "cand_range": [
+       115621,
+       166799
+      ],
+      "cand_runs": [
+       166799,
+       115636,
+       166746,
+       115621,
+       136635
+      ],
+      "base_med": 117405,
+      "base_range": [
+       117370,
+       169990
+      ],
+      "base_runs": [
+       169990,
+       117370,
+       117389,
+       117405,
+       117415
+      ]
+     },
+     "a11y": 100,
+     "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure"
+    }
+   },
+   "nao_pareado": {
+    "/medicoes-glosas-obras-publicas/": {
+     "perf_med": 99,
+     "perf_range": [
+      98,
+      99
+     ],
+     "lcp_med_ms": 1969,
+     "lcp_range_ms": [
+      1810,
+      2105
+     ],
+     "cls": 0,
+     "tbt_med_ms": 8,
+     "bytes_med": 131153,
+     "a11y": 100,
+     "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd"
+    },
+    "/entregas/": {
+     "perf_med": 99,
+     "perf_range": [
+      97,
+      99
+     ],
+     "lcp_med_ms": 1932,
+     "lcp_range_ms": [
+      1886,
+      2317
+     ],
+     "cls": 0,
+     "tbt_med_ms": 0,
+     "bytes_med": 109821,
+     "a11y": 100,
+     "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service"
+    },
+    "/triagem-tecnica/": {
+     "perf_med": 99,
+     "perf_range": [
+      99,
+      100
+     ],
+     "lcp_med_ms": 1859,
+     "lcp_range_ms": [
+      969,
+      1861
+     ],
+     "cls": 0,
+     "tbt_med_ms": 0,
+     "bytes_med": 118132,
+     "a11y": 100,
+     "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead"
+    },
+    "/ferramentas/diagnostico-defesa-margem/": {
+     "perf_med": 98,
+     "perf_range": [
+      97,
+      99
+     ],
+     "lcp_med_ms": 2160,
+     "lcp_range_ms": [
+      1968,
+      2218
+     ],
+     "cls": 0,
+     "tbt_med_ms": 0,
+     "bytes_med": 106034,
+     "a11y": 100,
+     "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead"
+    }
+   },
+   "regressoes_fora_da_faixa": 0,
+   "lcp_element_estavel_5x_todas_rotas": true,
+   "load_average_inicio": "0.17/0.09/0.06",
+   "load_average_fim": "1.01/1.32/0.71 (16 vCPU)"
+  },
+  "problemas": [
+   {
+    "severidade": "MEDIA",
+    "onde": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G06/lighthouse-prod-252fc98d1-baseline.json",
+    "descricao": "A baseline 5x de 252fc98d1 cobre só 3 das 7 rotas pedidas; /medicoes-glosas-obras-publicas/, /entregas/, /triagem-tecnica/ e /ferramentas/diagnostico-defesa-margem/ ficam sem pareamento e sem veredito de regressão (referências 3x de produções anteriores, b98e0878e/47da03b64, foram gravadas apenas como informativas, não como baseline).",
+    "evidencia": "lighthouse-pareado-252fc98d1-vs-4cfa6adca.json: veredito.rotas_nao_pareadas; baseline.summary contém apenas /, /quantitativos-orcamento-obras/, /servicos/"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "https://confenge.com.br/quantitativos-orcamento-obras/ (total-byte-weight)",
+    "descricao": "Mediana de bytes 136.635 vs 117.405 na baseline (+19 KB); dentro da faixa [117.370, 169.990] só por causa do outlier alto da baseline. Distribuição bimodal nas duas séries: modo baixo da candidata (115,6 KB) é menor que o da baseline (117,4 KB) e o modo alto é equivalente (166,7 vs 170,0 KB); 3/5 execuções da candidata caíram no modo alto/intermediário contra 1/5 na baseline. Não há evidência de crescimento do payload base; a hipótese de que o modo alto é o webfont archivo-var-latin (60.064 B) entrando no trace não foi verificada por LHR completo.",
+    "evidencia": "lighthouse-pareado-252fc98d1-vs-4cfa6adca.json: veredito.bytes_quantitativos_analise (baseline [169990,117370,117389,117405,117415]; candidata [166799,115636,166746,115621,136635])"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "https://confenge.com.br/medicoes-glosas-obras-publicas/ (elemento LCP)",
+    "descricao": "O elemento LCP é um <dd> de dl.svc-chain dentro de div.svc-open__copy, não o h1 nem o parágrafo-lead do herói como nas outras 6 rotas; é texto, acima da dobra e estável nas 5 execuções (LCP mediana 1969 ms), mas diverge do esperado 'texto do herói'.",
+    "evidencia": "lighthouse-edge-4cfa6adca.json: results[route=/medicoes-glosas-obras-publicas/].lcp_selector = 'div.svc-open__copy > dl.svc-chain > div > dd' nas 5 execuções"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "janela de medição 16:45–16:51 BRT no host local",
+    "descricao": "Máquina ociosa no início (load 0.17), mas outras frentes da campanha executaram capturas/visitor-effort/event-semantics durante a medição (load final 1.01/1.32 em 16 vCPU). Throttling simulado reduz a sensibilidade a CPU e eventual contaminação só pioraria a candidata; como as medianas ficaram dentro/abaixo da faixa, o veredito é conservador, mas a condição 'máquina ociosa' não foi mantida ao longo de toda a janela.",
+    "evidencia": "lighthouse-pareado-252fc98d1-vs-4cfa6adca.json: observacoes (ressalva de isolamento); timestamps dos arquivos em evidence/producao/ (16:46–16:51)"
+   }
+  ],
+  "evidencias_gravadas": [
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/lighthouse-edge-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/lighthouse-pareado-252fc98d1-vs-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/lighthouse/edge-run-4cfa6adca.log"
+  ]
+ },
+ {
+  "frente": "ESFORÇO/CAPTURAS/TAREFAS (produção 4cfa6adca vs baseline 252fc98d1)",
+  "resultado": "PASS_COM_RESSALVAS",
+  "resumo": "Produção confirmada em 4cfa6adca (runtime-info). (1) visitor_effort v2-g04-09: 14/14 linhas pareadas; altura e prosa caem em 6 de 7 rotas (quantitativos −2486 px/−2478 chars em 390, compatibilização −1965/−1832, servicos −1190/−1236), medições inalterada (rota congelada); pranchas iguais exceto compatibilização, que deixa de carregar a prancha mobile de drenagem no desktop; first_nav com o mesmo texto em todas; first_contact sobe em /servicos/ (731→479) e /entregas/ (684→633), inalterado em quantitativos/compatibilização/medições; primary_in_fold true em 14/14. Produção reproduz o candidato 3faac7d7f linha a linha. Leitura visual: home sem referência a \"deste desenho\" (parágrafo diz \"num exemplo demonstrativo, sem obra de cliente\"), CTA 614–658 inteiro; aberturas de /servicos/, /quantitativos/ e /entregas/ coerentes (título → contexto → ação), botão WhatsApp de /servicos/ agora na 1ª tela com a lista já visível. Overflow 320 = 0 nas 7 rotas. (2) Capturas fold/menu em 390 e 1440 e -full- só da home (reamostradas ≤300 KB). (3) Percursos em contexto novo (390x844 e 1440x900), sem preencher nem enviar: T1 quantitativos — após a âncora #triagem-quantitativos o WhatsApp fica a 381 px do topo do viewport em 390 (antes 1037, fora da tela) e 469 em 1440; T2 avaliação — 'Pedir pelo WhatsApp' a 390 px do topo do bloco (antes 2487 px de leitura), visível na tela de pouso; T3 medição — igual à baseline (CTA 433 na 1ª tela, formulário passo único, contexto oculto intacto); T4 artigo reequilíbrio — 'Continuar pelo formulário' vai a /reequilibrio-obras-publicas/#captura-pilar (não mais à home), com landing_url, landing_page, tema e referrer do artigo e textarea pré-preenchida; T5 triagem — WhatsApp/e-mail/telefone na 1ª tela, 0 form/0 textarea, como antes. Nenhum bloqueio duro; ressalvas: origem no pilar continua o slug do pilar (contrato documentado), 1º campo do pilar só no rodapé da tela de pouso em 390, e as duas baselines auto-reportam builds distintos.",
+  "numeros": {
+   "producao": {
+    "release_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+    "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+    "build_timestamp": "2026-09-18T18:52:37.000Z"
+   },
+   "esforco_linhas_pareadas": 14,
+   "method_version": "v2-g04-09",
+   "delta_altura_390": {
+    "/": -473,
+    "/servicos/": -1190,
+    "/quantitativos-orcamento-obras/": -2486,
+    "/compatibilizacao-projetos-engenharia/": -1965,
+    "/medicoes-glosas-obras-publicas/": 0,
+    "/entregas/": -547,
+    "/triagem-tecnica/": -161
+   },
+   "delta_prosa_chars": {
+    "/": -209,
+    "/servicos/": -1236,
+    "/quantitativos-orcamento-obras/": -2478,
+    "/compatibilizacao-projetos-engenharia/": -1832,
+    "/medicoes-glosas-obras-publicas/": 0,
+    "/entregas/": -548,
+    "/triagem-tecnica/": -390
+   },
+   "delta_plate_chars": {
+    "/compatibilizacao-projetos-engenharia/": -308,
+    "demais": 0
+   },
+   "first_contact_top_390_base_prod": {
+    "/": [
+     4544,
+     4484
+    ],
+    "/servicos/": [
+     731,
+     479
+    ],
+    "/quantitativos-orcamento-obras/": [
+     738,
+     738
+    ],
+    "/compatibilizacao-projetos-engenharia/": [
+     697,
+     697
+    ],
+    "/medicoes-glosas-obras-publicas/": [
+     433,
+     433
+    ],
+    "/entregas/": [
+     684,
+     633
+    ],
+    "/triagem-tecnica/": [
+     650,
+     677
+    ]
+   },
+   "primary_in_fold_true": "14/14 antes e depois",
+   "overflow_320px": 0,
+   "capturas": {
+    "fold": 14,
+    "menu": 7,
+    "full_home": 2,
+    "max_bytes": 296223
+   },
+   "T1_wa_vtop_apos_ancora": {
+    "390_base": 1037,
+    "390_prod": 381,
+    "1440_base": 217,
+    "1440_prod": 469
+   },
+   "T2_offset_contato_topo_bloco_px": {
+    "base": 2487,
+    "390_prod": 390,
+    "1440_prod": 252
+   },
+   "T3_form_top_390": 10352,
+   "T4_destino": "/reequilibrio-obras-publicas/#captura-pilar",
+   "T4_hidden": {
+    "landing_url": "/conteudos/documentos-reequilibrio-obra-publica/",
+    "landing_page": "/conteudos/documentos-reequilibrio-obra-publica/",
+    "tema": "documentos reequilíbrio obra pública",
+    "origem": "reequilibrio-obras-publicas",
+    "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+   },
+   "T5_canais_1a_tela_390": [
+    677,
+    738,
+    792
+   ],
+   "formularios_enviados": 0,
+   "campos_preenchidos": 0
+  },
+  "problemas": [
+   {
+    "severidade": "BAIXA",
+    "onde": "/reequilibrio-obras-publicas/#captura-pilar (destino de T4, campo oculto origem)",
+    "descricao": "Dos três campos nomeados, landing_url e tema carregam o artigo; origem continua o slug do pilar ('reequilibrio-obras-publicas'), pré-renderizado, porque ensureHidden só grava campo vazio. Comportamento documentado como esperado em scripts/site/apply_article_pillar_form.py (mesma causa raiz de TAREFAS-01, fora desta frente); a atribuição do artigo chega por landing_url/landing_page/tema/referrer.",
+    "evidencia": "percursos-4cfa6adca.json → comparacao.T4_artigo_reequilibrio.depois.campos_ocultos_no_destino e journeys.T4_artigo_reequilibrio_390x844.log[2].form.hidden"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "/reequilibrio-obras-publicas/#captura-pilar em 390x844 (pouso de T4)",
+    "descricao": "A seção pousa a 96 px, mas o formulário começa a vtop 484 e o 1º campo 'Nome do representante' entra só no rodapé da tela de pouso (first_visible_field_in_view=false); em 1440x900 o campo fica na tela. Fricção, não bloqueio.",
+    "evidencia": "percursos-4cfa6adca.json → journeys.T4_artigo_reequilibrio_390x844.log[2].landed; percursos/t4-390-pilar-reequilibrio-formulario.jpg"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "baselines da campanha",
+    "descricao": "diagnostico/TAREFAS/percursos.json auto-reporta release b98e0878e (build 08:06Z, medido 12:51Z), enquanto baseline/visitor-effort-prod-252fc98d1-v2.json (13:35Z) está rotulada 252fc98d1; as duas baselines podem não descrever o mesmo build servido. As comparações usam cada baseline tal como gravada.",
+    "evidencia": "percursos-4cfa6adca.json → baseline.production_identity_reported; esforco-pareado.json → base.label/measured_at"
+   },
+   {
+    "severidade": "BAIXA",
+    "onde": "capturas/home-*-full-prod-4cfa6adca.jpg",
+    "descricao": "Para caber em 300 KB as duas capturas de página inteira da home foram reamostradas (escala 0,72 e 0,61; JPEG q26–28) e não são 1:1; fold e menu são 1:1.",
+    "evidencia": "capturas/manifest-prod-4cfa6adca.json → full_home_reamostragem"
+   }
+  ],
+  "evidencias_gravadas": [
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/visitor-effort-prod-4cfa6adca-v2.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/esforco-pareado.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/capturas/manifest-prod-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/capturas/ (14 fold + 7 menu + 2 full da home, prod-4cfa6adca, JPG ≤300 KB)",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/percursos-4cfa6adca.json",
+   "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-verificado/docs/campaigns/design-institucional/fechamento/evidence/producao/percursos/ (t1–t5 em 390 e 1440, home-390-menu-aberto.jpg)"
+  ]
+ }
+]

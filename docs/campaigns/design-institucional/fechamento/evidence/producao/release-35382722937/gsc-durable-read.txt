@@ -1,0 +1,3 @@
+# GSC_DURABLE_READ na release 4cfa6adca (run 35382722937, job 105722494370 'exact SHA through site-ci / site-validation')
+# log timestamp 2026-09-18T19:25:37Z, linha 14862 do log do job (sanitizada: apenas a linha de saida)
+GSC_DURABLE_READ status=CURRENT as_of=2026-09-15 delivery_source=durable_store reason_codes=

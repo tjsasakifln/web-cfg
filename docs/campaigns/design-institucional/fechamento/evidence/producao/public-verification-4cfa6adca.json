@@ -1,0 +1,983 @@
+{
+ "base": "https://confenge.com.br",
+ "expected_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+ "checked_at": "2026-09-18T19:46:04Z",
+ "identity": {
+  "/.well-known/build-info.json": {
+   "status": 200,
+   "content_type": "application/json; charset=utf-8",
+   "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+   "build_time": "2026-09-18T18:52:37Z"
+  },
+  "/.well-known/runtime-info.json": {
+   "status": 200,
+   "content_type": "application/json; charset=utf-8",
+   "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+   "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+   "build_time": "2026-09-18T18:52:37.000Z"
+  },
+  "/healthz": {
+   "status": 200,
+   "content_type": "application/json; charset=utf-8"
+  },
+  "/ready": {
+   "status": 200,
+   "content_type": "application/json; charset=utf-8"
+  }
+ },
+ "routes": [
+  {
+   "route": "/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 52628,
+   "canonical": null,
+   "robots": null,
+   "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+   "sha256": "6a1a0b436d0582b3a8b462315ed7371603e4d8f1faa8442061f6deb367fd899d",
+   "matches_artifact": true
+  },
+  {
+   "route": "/servicos/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 32567,
+   "canonical": null,
+   "robots": null,
+   "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+   "sha256": "9d38c42207dbe603ffcd7dc82875aca96400e280a593d90b404bae6f8a646af1",
+   "matches_artifact": true
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 41518,
+   "canonical": null,
+   "robots": null,
+   "title": "Quantitativos e orçamento de obras | CONFENGE",
+   "sha256": "27cb1e5f3b784456ed81be6070ef416f76acde27e87d903255597420e3fec451",
+   "matches_artifact": true
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 32213,
+   "canonical": null,
+   "robots": null,
+   "title": "Compatibilização de projetos de engenharia | CONFENGE",
+   "sha256": "e8edbeed0ae38f559fde0fc738fc2453e3ff9bc1dac791c0f84966cc5afec669",
+   "matches_artifact": true
+  },
+  {
+   "route": "/revisao-tecnica-projetos-engenharia/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 29790,
+   "canonical": null,
+   "robots": null,
+   "title": "Revisão técnica de projetos de engenharia | CONFENGE",
+   "sha256": "4c0c71ea8afcaa5c9307096bb4a153eb305af7889d1eabeee4485f79a480ac74",
+   "matches_artifact": true
+  },
+  {
+   "route": "/projetos-complementares-engenharia/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 34407,
+   "canonical": null,
+   "robots": null,
+   "title": "Projetos complementares de engenharia | CONFENGE",
+   "sha256": "f07d7b5a9de34433686b3c16f017a68a1a6d1d33f1985126cf54008a8cdc5436",
+   "matches_artifact": true
+  },
+  {
+   "route": "/inspecao-diagnostico-edificacoes/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 29756,
+   "canonical": null,
+   "robots": null,
+   "title": "Inspeção e diagnóstico de edificações | CONFENGE",
+   "sha256": "747fda9de6a0e30e4d56f63abc95cada307779079050648a14ed282a48a5c4d3",
+   "matches_artifact": true
+  },
+  {
+   "route": "/assistencia-tecnica-pericial-engenharia/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 28901,
+   "canonical": null,
+   "robots": null,
+   "title": "Assistência técnica de engenharia em disputas | CONFENGE",
+   "sha256": "784d92f418b508063793535c3d4e8e71c2b55ed60f4d0b70a7a7b2ff72b770c1",
+   "matches_artifact": true
+  },
+  {
+   "route": "/seguranca-trabalho-apoio-tecnico/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 29551,
+   "canonical": null,
+   "robots": null,
+   "title": "Apoio técnico de segurança do trabalho | CONFENGE",
+   "sha256": "f39d0c5564c6eb7faf8b6f4ed655ba318bda4ac98d7c9a308fe3401c2fd49d9f",
+   "matches_artifact": true
+  },
+  {
+   "route": "/servicos-obras-publicas/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 36308,
+   "canonical": null,
+   "robots": null,
+   "title": "Serviços para licitações e contratos de obras públicas | CONFENGE",
+   "sha256": "c675f5de7661a01d58008c982e588b2030f387566c32428364ab0bf76e23334c",
+   "matches_artifact": true
+  },
+  {
+   "route": "/problemas-que-resolvemos/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 21045,
+   "canonical": null,
+   "robots": null,
+   "title": "Problemas que resolvemos em licitações e contratos de obras | CONFENGE",
+   "sha256": "174bebfd1d58e425e81aa81d3b4c4424a1cc009597ef3bad4b800c4fc5f9ae87",
+   "matches_artifact": true
+  },
+  {
+   "route": "/aditivos-obras-publicas/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 36567,
+   "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+   "sha256": "3b528b3abc3c0b31faf1d82a330261603b1cda67907d2dd34150792352025cfc",
+   "matches_artifact": true
+  },
+  {
+   "route": "/auditoria-orcamento-licitacao/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 37346,
+   "canonical": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
+   "sha256": "6814fb3696cd205202847ca6905d47177e105b909a53adbebbe14fd86ed15d49",
+   "matches_artifact": true
+  },
+  {
+   "route": "/diagnostico-b2g-360/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 28747,
+   "canonical": null,
+   "robots": null,
+   "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
+   "sha256": "120a0160256d9f61fda1a4d6f3651776317d1caab58c68435412fa4be0a61080",
+   "matches_artifact": true
+  },
+  {
+   "route": "/diagnostico-pre-licitacao/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 34199,
+   "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
+   "sha256": "ecdb7a665f2a20428279e46367ca44aa16f6d8ead79b3f9738fa4998a3cd8aa0",
+   "matches_artifact": true
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 36570,
+   "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+   "sha256": "2ecaabeec730b95d63c0854e8360fa3efd2188ea566083079a7bdc69ad9259c3",
+   "matches_artifact": true
+  },
+  {
+   "route": "/reequilibrio-obras-publicas/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 33734,
+   "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+   "sha256": "54cca10cd6513b46743491d72d938fbbeafb36c3799df23d4012dada86939f0b",
+   "matches_artifact": true
+  },
+  {
+   "route": "/entregas/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 64143,
+   "canonical": null,
+   "robots": null,
+   "title": "Entregas de engenharia, exemplos e ofertas publicadas | CONFENGE",
+   "sha256": "e35c7e967418f53eeac3f8d6f43bba9cbd03a2c22c86456ca07a972f18afe8bc",
+   "matches_artifact": true
+  },
+  {
+   "route": "/casos/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 25269,
+   "canonical": "https://confenge.com.br/casos/",
+   "robots": "index,follow",
+   "title": "Exemplos de entrega (demonstrativos) | CONFENGE",
+   "sha256": "eca7ffe60dfb886ccc7c36afa8e16d45e8cb13391400375e26703c6988558efc",
+   "matches_artifact": true
+  },
+  {
+   "route": "/conteudos/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 54320,
+   "canonical": "https://confenge.com.br/conteudos/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Biblioteca técnica de projetos, orçamento e contratos | CONFENGE",
+   "sha256": "4e20960aa00800d1931dc53c9e6766bf73694daae930a0cf3db288fe8b0082de",
+   "matches_artifact": true
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 28044,
+   "canonical": null,
+   "robots": null,
+   "title": "Documentos essenciais para pedir reequilíbrio em obra pública | CONFENGE",
+   "sha256": "32f6a6b41f785aaa208f06493c89b8f44255bec42c5cde2ae2e70085fd36b380",
+   "matches_artifact": true
+  },
+  {
+   "route": "/conteudos/documentos-para-levantamento-quantitativos/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 13344,
+   "canonical": null,
+   "robots": null,
+   "title": "Documentos para levantamento de quantitativos | CONFENGE",
+   "sha256": "ebb6f2b3e6094d908a27ac59593b9d4cbed1cf7a62185856785e7283b069a4b6",
+   "matches_artifact": true
+  },
+  {
+   "route": "/especialista/tiago-jun-sasaki/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 24972,
+   "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+   "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+   "title": "Tiago Jun Sasaki | Engenheiro Civil | CONFENGE",
+   "sha256": "5fa0a1df5e3911b87d331a1212f6a13fac3adbaa138f3ff69fb43790d13235ac",
+   "matches_artifact": true
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 15347,
+   "canonical": "https://confenge.com.br/triagem-tecnica/",
+   "robots": "index,follow",
+   "title": "Contato e triagem técnica | CONFENGE",
+   "sha256": "e13a0d555a4819e7dfbe016bd4b5f3ae72a51981eb4ee349f6e501918d49de43",
+   "matches_artifact": true
+  },
+  {
+   "route": "/parcerias-engenharia/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 31060,
+   "canonical": null,
+   "robots": null,
+   "title": "Encaminhar orçamento, revisão, compatibilização ou elaboração | CONFENGE",
+   "sha256": "1a9117b3dec6838676de8e12711cfcf477ac05257263bd925528fe4ad43368ee",
+   "matches_artifact": true
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 34585,
+   "canonical": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+   "robots": "index,follow",
+   "title": "Diagnóstico de Defesa de Margem em Contratos Públicos | CONFENGE",
+   "sha256": "9c4e6c8938fc237d635f777c7a9fc1e0155442782e51282ce2c53321eacc6e85",
+   "matches_artifact": true
+  },
+  {
+   "route": "/diretoria-b2g/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 35843,
+   "canonical": null,
+   "robots": null,
+   "title": "Diretoria Fracionada para o Mercado Público | Rotina de licitações e contratos | CONFENGE",
+   "sha256": "6b8b91d549b8753d60c2e13993c1cd6d5946dedd6a7a957b6de5af88d5626916",
+   "matches_artifact": true
+  },
+  {
+   "route": "/obrigado",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 9204,
+   "canonical": null,
+   "robots": null,
+   "title": "Status da solicitação | CONFENGE",
+   "sha256": "1b02ef25b6e551e85ccb87d2b5a82c362fbe2a1fad26ebd198fcc3cfb3c35597",
+   "matches_artifact": true
+  },
+  {
+   "route": "/404.html",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes": 8957,
+   "canonical": null,
+   "robots": null,
+   "title": "Página não encontrada | CONFENGE",
+   "sha256": "b7d204362de57265a75a989e513d0896c342e07efb3ad8cc4d27b9408c437e71",
+   "matches_artifact": true
+  }
+ ],
+ "assets": [
+  {
+   "asset": "/assets/apple-touch-icon.png",
+   "status": 200,
+   "content_type": "image/png",
+   "bytes": 5112,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/archivo-var-latin-bf6e041e.woff2",
+   "status": 200,
+   "content_type": "font/woff2",
+   "bytes": 60064,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/assets/editorial-article.14e447dacd8d.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 19351,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/assets/editorial-tool.7bbac78170d5.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 10091,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/assets/editorial.50404a7d507e.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 43994,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/assets/home-10x.82d9ae22fae0.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 33358,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/assets/home-base.5d82be65777c.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 35922,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/assets/simple-page-a11y-v293.d9765cdedeb4.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 366,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/entregas/styles.4df6c06befb9.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 7569,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/ferramentas/diagnostico-defesa-margem/styles.f185226e525c.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 219,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/parcerias-engenharia/styles.43e22b9e1989.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 4095,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/styles-hubs.ed4668833ad8.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 2674,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/styles-offers.e23f1ae9e064.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 15282,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/styles-tools.0f7b5921d667.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 18749,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/styles.c4a0f70a8f62.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 102637,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/css/triagem-tecnica/styles.2a81ffa3d400.css",
+   "status": 200,
+   "content_type": "text/css; charset=utf-8",
+   "bytes": 6715,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/favicon-32.png",
+   "status": 200,
+   "content_type": "image/png",
+   "bytes": 973,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/js/adaptive-intake.js",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 9580,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/js/diagnose-margin.js",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 21143,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/js/tool-persist.js",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 1264,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/js/tools-common.js",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 5446,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/logo-confenge-500-f8a83f6d.png",
+   "status": 200,
+   "content_type": "image/png",
+   "bytes": 10605,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/logo-confenge-white-500-1677038e.png",
+   "status": 200,
+   "content_type": "image/png",
+   "bytes": 10605,
+   "ok": true,
+   "cache_control": "public, max-age=31536000, immutable"
+  },
+  {
+   "asset": "/assets/pranchas/aditivo-limite-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 7389,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/aditivo-limite-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5242,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/avaliacao-estrutura-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 6060,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/avaliacao-estrutura-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4060,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/carteira-eventos-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 7345,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/carteira-eventos-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5211,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/drenagem-perfil-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4303,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/drenagem-rede-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 7722,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/drenagem-rede-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4810,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/edital-checklist-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 7378,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/edital-checklist-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4110,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/inspecao-fachada-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 9487,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/inspecao-fachada-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5231,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/interfaces-versoes-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5456,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/interfaces-versoes-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 3650,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/interferencia-verga-viga-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 9634,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/interferencia-verga-viga-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5150,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/medicao-parede-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 7118,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/medicao-parede-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4847,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/orcamento-comparativo-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 6982,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/orcamento-comparativo-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4083,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/pacote-entrega-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5517,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/pacote-entrega-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 3329,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/pericia-fachada-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 9250,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/pericia-fachada-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5135,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/recorte-banheiro-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 11031,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/recorte-banheiro-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5545,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/reequilibrio-curva-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 8413,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/reequilibrio-curva-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5539,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/revisao-conferencia-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 8241,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/revisao-conferencia-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4476,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/sst-canteiro-desktop.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 7297,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/pranchas/sst-canteiro-mobile.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 4640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5456,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/projetos-complementares-engenharia/pacote-entrega.svg",
+   "status": 200,
+   "content_type": "image/svg+xml; charset=utf-8",
+   "bytes": 5517,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/tiago-sasaki-avatar-v11-sem-fundo.avif",
+   "status": 200,
+   "content_type": "image/avif",
+   "bytes": 8009,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/tiago-sasaki-avatar-v11-sem-fundo.png",
+   "status": 200,
+   "content_type": "image/png",
+   "bytes": 175218,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/tiago-sasaki-avatar-v11-sem-fundo.webp",
+   "status": 200,
+   "content_type": "image/webp",
+   "bytes": 14346,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+   "status": 200,
+   "content_type": "image/avif",
+   "bytes": 5925,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/tiago-sasaki-foto-v11-sem-fundo-560.png",
+   "status": 200,
+   "content_type": "image/png",
+   "bytes": 202732,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/assets/tiago-sasaki-foto-v11-sem-fundo-560.webp",
+   "status": 200,
+   "content_type": "image/webp",
+   "bytes": 13714,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=64807d95a6",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=ced23fca5a",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=fortune01",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=fortune02",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=fortune04",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=mv04",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=mv09",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  },
+  {
+   "asset": "/script.js?v=posinb05",
+   "status": 200,
+   "content_type": "application/javascript; charset=utf-8",
+   "bytes": 80640,
+   "ok": true,
+   "cache_control": "public, max-age=14400, must-revalidate"
+  }
+ ],
+ "robots": {
+  "status": 200,
+  "sha256": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+  "matches_artifact": true,
+  "first_lines": [
+   "# Politica de rastreio de IA — derivada de data/organic/robots-policy-baseline.v1.json",
+   "# (ai_crawlers_denied_everywhere). Mantida na origem desde 2026-09-16 por decisao do",
+   "# fundador; nao depende da composicao gerenciada da borda. Estes grupos ficam ANTES",
+   "# dos grupos \"User-agent: *\" porque os geradores de familia acrescentam regras ao",
+   "# fim do arquivo, e essas regras pertencem ao grupo \"*\".",
+   ""
+  ]
+ },
+ "redirects": [
+  {
+   "path": "/obrigado-contrato",
+   "status": 200,
+   "location": null
+  },
+  {
+   "path": "/index.html",
+   "status": 200,
+   "location": null
+  },
+  {
+   "path": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+   "status": 301,
+   "location": null
+  }
+ ],
+ "problems": [],
+ "not_found": {
+  "status": 404,
+  "carries_state_block": true
+ },
+ "sitemaps": [
+  {
+   "path": "/sitemap.xml",
+   "status": 200,
+   "urls": 92
+  },
+  {
+   "path": "/sitemap-editorial.xml",
+   "status": 200,
+   "urls": 4
+  }
+ ]
+}

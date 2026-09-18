@@ -1,0 +1,954 @@
+{
+ "campanha": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+ "frente": "LIGHTHOUSE NA BORDA (G06 pareado)",
+ "baseline": {
+  "label": "prod-252fc98d1-baseline",
+  "commit": "252fc98d1",
+  "arquivo": "fechamento/evidence/diagnostico/G06/lighthouse-prod-252fc98d1-baseline.json",
+  "measured_at": "2026-09-18T12:51:27.111Z",
+  "runs_per_route": 5,
+  "lighthouseVersion": "13.4.1 (README do G06; campo nulo no JSON)",
+  "chrome": "Chrome for Testing 151.0.7922.34 (README do G06)",
+  "rotas": [
+   "/",
+   "/quantitativos-orcamento-obras/",
+   "/servicos/"
+  ]
+ },
+ "candidata": {
+  "label": "prod-4cfa6adca",
+  "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+  "arquivo": "fechamento/evidence/producao/lighthouse-edge-4cfa6adca.json",
+  "measured_at": "2026-09-18T19:50:58.935Z",
+  "runs_per_route": 5,
+  "lighthouseVersion": "13.4.1",
+  "chrome": "lighthouse (Node API) + chrome-launcher, /home/tjsasakifln/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome",
+  "rotas": [
+   "/",
+   "/servicos/",
+   "/quantitativos-orcamento-obras/",
+   "/medicoes-glosas-obras-publicas/",
+   "/entregas/",
+   "/triagem-tecnica/",
+   "/ferramentas/diagnostico-defesa-margem/"
+  ]
+ },
+ "metodo": "mobile, throttling simulado (rtt 150 ms / 1,6 Mbps / CPU 4x), cache frio por execução, 5 execuções por rota, nenhuma descartada; mesma versão de Lighthouse/Chrome/Node; leitura pelo caminho normal do visitante, sem cache-buster",
+ "regra": "'sem regressão material' só quando a mediana da candidata está dentro ou abaixo (perf/a11y: dentro ou acima) da faixa [min,max] das 5 execuções da baseline na mesma rota; faixas de CLS/TBT/bytes derivadas de results (o summary da baseline só traz mediana)",
+ "rotas": [
+  {
+   "route": "/",
+   "pareado": true,
+   "candidata": {
+    "perf": {
+     "mediana": 99,
+     "faixa": [
+      99,
+      100
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1861,
+     "faixa": [
+      1475,
+      1986
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      12
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 109739,
+     "faixa": [
+      103783,
+      151480
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": {
+    "perf": {
+     "mediana": 98,
+     "faixa": [
+      97,
+      99
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1937,
+     "faixa": [
+      1867,
+      2040
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 104,
+     "faixa": [
+      11,
+      181
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 111920,
+     "faixa": [
+      109974,
+      150910
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "comparacao": {
+    "perf": {
+     "delta_mediana": 1,
+     "dentro_ou_melhor": true
+    },
+    "lcp_ms": {
+     "delta_mediana": -76,
+     "dentro_ou_melhor": true
+    },
+    "cls": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    },
+    "tbt_ms": {
+     "delta_mediana": -104,
+     "dentro_ou_melhor": true
+    },
+    "bytes": {
+     "delta_mediana": -2181,
+     "dentro_ou_melhor": true
+    },
+    "a11y": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    }
+   },
+   "lcp_element": "<p class=\"hero-lead opening__lead\">",
+   "lcp_selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "lcp_elements_por_execucao": [
+    "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+    "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+    "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+    "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+    "div.container > div.hero-copy > div.opening__body > p.hero-lead"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 117,
+    "elementRenderDelay": 171
+   },
+   "sem_regressao_material": true
+  },
+  {
+   "route": "/servicos/",
+   "pareado": true,
+   "candidata": {
+    "perf": {
+     "mediana": 100,
+     "faixa": [
+      99,
+      100
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1702,
+     "faixa": [
+      1630,
+      2163
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 5,
+     "faixa": [
+      0,
+      29
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 103999,
+     "faixa": [
+      103964,
+      157557
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": {
+    "perf": {
+     "mediana": 100,
+     "faixa": [
+      99,
+      100
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1701,
+     "faixa": [
+      1586,
+      2149
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      21
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 104253,
+     "faixa": [
+      104248,
+      156975
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "comparacao": {
+    "perf": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    },
+    "lcp_ms": {
+     "delta_mediana": 1,
+     "dentro_ou_melhor": true
+    },
+    "cls": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    },
+    "tbt_ms": {
+     "delta_mediana": 5,
+     "dentro_ou_melhor": true
+    },
+    "bytes": {
+     "delta_mediana": -254,
+     "dentro_ou_melhor": true
+    },
+    "a11y": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    }
+   },
+   "lcp_element": "<h1 class=\"t-service\" id=\"services-title\">",
+   "lcp_selector": "main#conteudo > section.hero > div.container > h1#services-title",
+   "lcp_elements_por_execucao": [
+    "main#conteudo > section.hero > div.container > h1#services-title",
+    "main#conteudo > section.hero > div.container > h1#services-title",
+    "main#conteudo > section.hero > div.container > h1#services-title",
+    "main#conteudo > section.hero > div.container > h1#services-title",
+    "main#conteudo > section.hero > div.container > h1#services-title"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 182
+   },
+   "sem_regressao_material": true
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "pareado": true,
+   "candidata": {
+    "perf": {
+     "mediana": 99,
+     "faixa": [
+      98,
+      99
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 2052,
+     "faixa": [
+      1970,
+      2232
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      12
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 136635,
+     "faixa": [
+      115621,
+      166799
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": {
+    "perf": {
+     "mediana": 99,
+     "faixa": [
+      98,
+      99
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1999,
+     "faixa": [
+      1961,
+      2193
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 2,
+     "faixa": [
+      0,
+      16
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 117405,
+     "faixa": [
+      117370,
+      169990
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "comparacao": {
+    "perf": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    },
+    "lcp_ms": {
+     "delta_mediana": 53,
+     "dentro_ou_melhor": true
+    },
+    "cls": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    },
+    "tbt_ms": {
+     "delta_mediana": -2,
+     "dentro_ou_melhor": true
+    },
+    "bytes": {
+     "delta_mediana": 19230,
+     "dentro_ou_melhor": true
+    },
+    "a11y": {
+     "delta_mediana": 0,
+     "dentro_ou_melhor": true
+    }
+   },
+   "lcp_element": "<p class=\"measure\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "lcp_elements_por_execucao": [
+    "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+    "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+    "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+    "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+    "div.container > div.svc-open__grid > div.svc-open__copy > p.measure"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 69,
+    "elementRenderDelay": 171
+   },
+   "sem_regressao_material": true
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "pareado": false,
+   "candidata": {
+    "perf": {
+     "mediana": 99,
+     "faixa": [
+      98,
+      99
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1969,
+     "faixa": [
+      1810,
+      2105
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 8,
+     "faixa": [
+      0,
+      21
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 131153,
+     "faixa": [
+      125120,
+      139758
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": null,
+   "comparacao": {},
+   "lcp_element": "<dd>",
+   "lcp_selector": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "lcp_elements_por_execucao": [
+    "div.svc-open__copy > dl.svc-chain > div > dd",
+    "div.svc-open__copy > dl.svc-chain > div > dd",
+    "div.svc-open__copy > dl.svc-chain > div > dd",
+    "div.svc-open__copy > dl.svc-chain > div > dd",
+    "div.svc-open__copy > dl.svc-chain > div > dd"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 45,
+    "elementRenderDelay": 151
+   },
+   "sem_regressao_material": null,
+   "motivo_sem_pareamento": "rota ausente da baseline 5x de 252fc98d1; só medição absoluta",
+   "referencia_informativa": {
+    "fonte": "expansao/evidence/producao/lighthouse-edge-b98e0878e.json (3x, prod b98e0878e)",
+    "nao_e_baseline": true,
+    "metricas": {
+     "perf": {
+      "mediana": 99,
+      "faixa": [
+       99,
+       100
+      ],
+      "n": 3
+     },
+     "lcp_ms": {
+      "mediana": 1673,
+      "faixa": [
+       1180,
+       2001
+      ],
+      "n": 3
+     },
+     "cls": {
+      "mediana": 0,
+      "faixa": [
+       0,
+       0
+      ],
+      "n": 3
+     },
+     "tbt_ms": {
+      "mediana": 0,
+      "faixa": [
+       0,
+       93
+      ],
+      "n": 3
+     },
+     "bytes": {
+      "mediana": 130241,
+      "faixa": [
+       129978,
+       130321
+      ],
+      "n": 3
+     },
+     "a11y": {
+      "mediana": 100,
+      "faixa": [
+       100,
+       100
+      ],
+      "n": 3
+     }
+    }
+   }
+  },
+  {
+   "route": "/entregas/",
+   "pareado": false,
+   "candidata": {
+    "perf": {
+     "mediana": 99,
+     "faixa": [
+      97,
+      99
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1932,
+     "faixa": [
+      1886,
+      2317
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 109821,
+     "faixa": [
+      109785,
+      168199
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": null,
+   "comparacao": {},
+   "lcp_element": "<h1 class=\"t-service\">",
+   "lcp_selector": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "lcp_elements_por_execucao": [
+    "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+    "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+    "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+    "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+    "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 41,
+    "elementRenderDelay": 137
+   },
+   "sem_regressao_material": null,
+   "motivo_sem_pareamento": "rota ausente da baseline 5x de 252fc98d1; só medição absoluta",
+   "referencia_informativa": {
+    "fonte": "expansao/evidence/producao/lighthouse-edge-b98e0878e.json (3x, prod b98e0878e)",
+    "nao_e_baseline": true,
+    "metricas": {
+     "perf": {
+      "mediana": 99,
+      "faixa": [
+       96,
+       100
+      ],
+      "n": 3
+     },
+     "lcp_ms": {
+      "mediana": 2041,
+      "faixa": [
+       1417,
+       2385
+      ],
+      "n": 3
+     },
+     "cls": {
+      "mediana": 0,
+      "faixa": [
+       0,
+       0
+      ],
+      "n": 3
+     },
+     "tbt_ms": {
+      "mediana": 0,
+      "faixa": [
+       0,
+       0
+      ],
+      "n": 3
+     },
+     "bytes": {
+      "mediana": 109965,
+      "faixa": [
+       109571,
+       167639
+      ],
+      "n": 3
+     },
+     "a11y": {
+      "mediana": 100,
+      "faixa": [
+       100,
+       100
+      ],
+      "n": 3
+     }
+    }
+   }
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "pareado": false,
+   "candidata": {
+    "perf": {
+     "mediana": 99,
+     "faixa": [
+      99,
+      100
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 1859,
+     "faixa": [
+      969,
+      1861
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      56
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 118132,
+     "faixa": [
+      118128,
+      125892
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": null,
+   "comparacao": {},
+   "lcp_element": "<p class=\"triage-lead\" data-form-value=\"\">",
+   "lcp_selector": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "lcp_elements_por_execucao": [
+    "body > main#conteudo > header.triage-intro > p.triage-lead",
+    "body > main#conteudo > header.triage-intro > p.triage-lead",
+    "body > main#conteudo > header.triage-intro > p.triage-lead",
+    "body > main#conteudo > header.triage-intro > p.triage-lead",
+    "body > main#conteudo > header.triage-intro > p.triage-lead"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 121,
+    "elementRenderDelay": 119
+   },
+   "sem_regressao_material": null,
+   "motivo_sem_pareamento": "rota ausente da baseline 5x de 252fc98d1; só medição absoluta",
+   "referencia_informativa": {
+    "fonte": "evidence/lighthouse-prod-47da03b64-mobile.json (3x, prod 47da03b64)",
+    "nao_e_baseline": true,
+    "metricas": {
+     "cls": {
+      "mediana": 0,
+      "faixa": [
+       0,
+       0
+      ],
+      "n": 3
+     },
+     "bytes": {
+      "mediana": 117108,
+      "faixa": [
+       117064,
+       125203
+      ],
+      "n": 3
+     }
+    }
+   }
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "pareado": false,
+   "candidata": {
+    "perf": {
+     "mediana": 98,
+     "faixa": [
+      97,
+      99
+     ],
+     "n": 5
+    },
+    "lcp_ms": {
+     "mediana": 2160,
+     "faixa": [
+      1968,
+      2218
+     ],
+     "n": 5
+    },
+    "cls": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "tbt_ms": {
+     "mediana": 0,
+     "faixa": [
+      0,
+      0
+     ],
+     "n": 5
+    },
+    "bytes": {
+     "mediana": 106034,
+     "faixa": [
+      106019,
+      169339
+     ],
+     "n": 5
+    },
+    "a11y": {
+     "mediana": 100,
+     "faixa": [
+      100,
+      100
+     ],
+     "n": 5
+    }
+   },
+   "baseline": null,
+   "comparacao": {},
+   "lcp_element": "<p class=\"content-lead\">",
+   "lcp_selector": "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+   "lcp_elements_por_execucao": [
+    "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+    "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+    "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+    "main#conteudo > header.tool-page-hero > div.container > p.content-lead",
+    "main#conteudo > header.tool-page-hero > div.container > p.content-lead"
+   ],
+   "lcp_phases_ms": {
+    "timeToFirstByte": 43,
+    "elementRenderDelay": 150
+   },
+   "sem_regressao_material": null,
+   "motivo_sem_pareamento": "rota ausente da baseline 5x de 252fc98d1; só medição absoluta",
+   "referencia_informativa": null
+  }
+ ],
+ "veredito": {
+  "rotas_pareadas": [
+   "/",
+   "/servicos/",
+   "/quantitativos-orcamento-obras/"
+  ],
+  "rotas_nao_pareadas": [
+   "/medicoes-glosas-obras-publicas/",
+   "/entregas/",
+   "/triagem-tecnica/",
+   "/ferramentas/diagnostico-defesa-margem/"
+  ],
+  "regressoes_fora_da_faixa": [],
+  "sem_regressao_material_nas_rotas_pareadas": true,
+  "lcp_element_por_rota": {
+   "/": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+   "/servicos/": "main#conteudo > section.hero > div.container > h1#services-title",
+   "/quantitativos-orcamento-obras/": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+   "/medicoes-glosas-obras-publicas/": "div.svc-open__copy > dl.svc-chain > div > dd",
+   "/entregas/": "div.container > div.svc-open__grid > div.deliverables-hero-copy > h1.t-service",
+   "/triagem-tecnica/": "body > main#conteudo > header.triage-intro > p.triage-lead",
+   "/ferramentas/diagnostico-defesa-margem/": "main#conteudo > header.tool-page-hero > div.container > p.content-lead"
+  },
+  "lcp_element_estavel_nas_5_execucoes": true,
+  "lcp_element_texto_em_todas_as_rotas": true,
+  "lcp_element_heroi_canonico": {
+   "/": true,
+   "/servicos/": true,
+   "/quantitativos-orcamento-obras/": true,
+   "/medicoes-glosas-obras-publicas/": false,
+   "/entregas/": true,
+   "/triagem-tecnica/": true,
+   "/ferramentas/diagnostico-defesa-margem/": true
+  },
+  "lcp_element_desvio": {
+   "/medicoes-glosas-obras-publicas/": "LCP é um <dd> de dl.svc-chain (dentro de div.svc-open__copy, acima da dobra), não o h1 nem o parágrafo-lead; texto, estável nas 5 execuções; severidade BAIXA"
+  },
+  "bytes_quantitativos_analise": {
+   "baseline_por_execucao": [
+    169990,
+    117370,
+    117389,
+    117405,
+    117415
+   ],
+   "candidata_por_execucao": [
+    166799,
+    115636,
+    166746,
+    115621,
+    136635
+   ],
+   "leitura": "distribuição bimodal nas duas séries: modo baixo (HTML+CSS+JS+imagens iniciais) e modo alto ≈ +51 KB; modo baixo da candidata 115,6 KB < baseline 117,4 KB (−1,8 KB); modo alto 166,7 KB ≈ baseline 170,0 KB; a mediana subiu (136,6 vs 117,4 KB) porque 3/5 execuções da candidata caíram no modo alto/intermediário contra 1/5 na baseline — frequência de modo, não crescimento de payload",
+   "hipotese_modo_alto": "entrada do webfont /assets/archivo-var-latin-bf6e041e.woff2 (60.064 B no wire; ~51 KB no delta de total-byte-weight) no trace quando o carregamento tardio termina dentro da janela; NÃO verificada por LHR completo (a ferramenta não grava o LHR)",
+   "veredito_regra": "dentro da faixa [117.370, 169.990]; o 'dentro' depende do outlier alto da baseline; sem evidência de aumento do payload base (HTML atual 41.518 B)"
+  }
+ },
+ "observacoes": [
+  "Baseline 5x de 252fc98d1 cobre só 3 rotas (/, /servicos/, /quantitativos-orcamento-obras/); as outras 4 rotas têm apenas medição absoluta da candidata e, quando existe, referência informativa de 3x em produção anterior (b98e0878e ou 47da03b64), que NÃO é baseline e não sustenta veredito.",
+  "lcp_element/lcp_selector da baseline são nulos por limitação da versão anterior da ferramenta (Lighthouse 13 trocou largest-contentful-paint-element por lcp-breakdown-insight); diferença de instrumentação, não regressão. O README do G06 registra as versões da baseline: lighthouse 13.4.1, Chrome for Testing 151.0.7922.34, Node v22.23.2 — as mesmas da candidata.",
+  "TBT da home caiu de mediana 104 ms (faixa 11–181) para 0 ms (faixa 0–12): melhoria; TBT em runner único é a métrica mais ruidosa.",
+  "/quantitativos-orcamento-obras/: ver veredito.bytes_quantitativos_analise (números por execução das duas séries).",
+  "/medicoes-glosas-obras-publicas/: ver veredito.lcp_element_desvio.",
+  "/triagem-tecnica/ execução 1 com LCP 969 ms (demais 1855–1861): variação de rede/borda, não descartada (nenhuma execução descartada).",
+  "Máquina ociosa antes do início (load 0.17/0.09/0.06); nenhum processo pesado em paralelo; nenhum formulário enviado; leituras pelo caminho normal do visitante, sem cache-buster.",
+  "Ressalva de isolamento: a máquina estava ociosa no início (load 0.17), mas outras frentes da campanha gravaram evidência (capturas, visitor-effort, event-semantics) na mesma janela 16:45–16:51 BRT; load average ao fim 1.01/1.32 em 16 vCPU. Throttling simulado (Lantern) reduz a sensibilidade a CPU, e eventual contaminação só pioraria a candidata; como as medianas ficaram dentro/abaixo da faixa, o veredito é conservador."
+ ]
+}

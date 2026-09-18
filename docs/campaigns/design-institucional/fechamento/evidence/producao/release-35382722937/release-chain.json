@@ -1,0 +1,22 @@
+{
+ "campaign": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+ "run": {"id": 35382722937, "workflow": "netcup-release", "conclusion": "success", "createdAt": "2026-09-18T18:52:41Z", "updatedAt": "2026-09-18T19:41:22Z", "headSha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36"},
+ "chain": [
+  {"step": "PR #701 head", "sha": "d310ff8aedd64ab55212c0111c1d520a4b8fbbd0", "source": "gh pr view 701 --json headRefOid"},
+  {"step": "merge em main", "sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "mergedAt": "2026-09-18T18:52:38Z", "source": "gh pr view 701 --json mergeCommit,mergedAt"},
+  {"step": "site-ci site-validation (job 105722494370)", "gsc_durable_read": "status=CURRENT as_of=2026-09-15 delivery_source=durable_store reason_codes=", "event_semantics": {"ok": true, "failed": 0, "checks": 34}, "site_excellence": {"overall_status": "MEASURED_PASS", "claim": "10/10", "commit_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36"}},
+  {"step": "immutable release package and attestation (job 105732830000)", "packaged": {"artifact": "confenge-web-4cfa6adca47ae2691aae2c687bbe4649ad7ecb36.tar.gz", "artifact_sha256": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4", "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091", "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "status": "PACKAGED"}, "attestation": "Attestation created for confenge-web-4cfa6adca47ae2691aae2c687bbe4649ad7ecb36.tar.gz@sha256:88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4 (2026-09-18T19:27:16Z)"},
+  {"step": "Authorized atomic promote (job 105736269687)", "event": {"event": "PROMOTED", "at": "2026-09-18T19:39:03Z", "sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "live_identity": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "runtime_identity": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "previous_sha": "252fc98d1fad64bf430220381696f399430bc260", "artifact_sha256": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4", "release_control_sha256": "490d4c7b62dc848b4e30bdeaf7595f5ce40b11bb7607820b292cfb35f5961f1e", "nginx_reloaded": true, "actor": "<redacted>"}, "terminal_state": "NETCUP_ACCEPTANCE_TERMINAL_STATE promoted=success served_coverage=success runtime_acceptance=success lighthouse=MEASURED_PASS"},
+  {"step": "identidade servida (leitura em 2026-09-18, caminho normal)", "build_info": {"commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091", "build_time": "2026-09-18T18:52:37Z", "environment": "production"}, "runtime_info": {"release_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36", "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091", "release_bundle_hash": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4", "profile": "netcup-production"}}
+ ],
+ "note": "O sujeito da atestacao e o tarball (88ac5f34...); o hash publico 004d3534... e emitido junto no empacotamento e publicado em build-info.json e runtime-info.json (release_bundle_hash = 88ac5f34...), fechando a cadeia. O digest 5cb247f4... que aparece no log e do zip site-ci baixado, objeto distinto, nao faz parte da cadeia.",
+ "artifacts_of_run": [
+  {"name": "site-ci-reports", "id": 10563593363, "expired": false, "expires_at": "2026-12-17T18:52:41Z"},
+  {"name": "first-fold-4cfa6adca...", "id": 10563880096, "expired": false, "expires_at": "2026-12-17T18:52:41Z"},
+  {"name": "netcup-release-4cfa6adca...", "id": 10563863277, "expired": false, "expires_at": "2026-10-18T19:27:16Z"},
+  {"name": "netcup-runtime-acceptance-4cfa6adca...", "id": 10563993161, "expired": false, "expires_at": "2026-10-18T19:41:16Z"},
+  {"name": "netcup-qualification-4cfa6adca...", "id": 10564117629, "expired": false, "expires_at": "2026-10-18T19:38:09Z"},
+  {"name": "site-ci-public-4cfa6adca...", "id": 10563288574, "expired": false, "expires_at": "2026-09-25T19:26:02Z"}
+ ],
+ "artifact_gaps": ["build/reports/event-semantics.json nao esta na lista de paths do upload de site-ci-reports (if-no-files-found: ignore); resultado recuperado do log do job: EVENT_SEMANTICS {\"ok\":true,\"failed\":0,\"checks\":34}"]
+}

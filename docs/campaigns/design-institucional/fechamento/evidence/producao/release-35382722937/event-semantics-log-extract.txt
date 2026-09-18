@@ -1,0 +1,39 @@
+# event-semantics: build/reports/event-semantics.json NAO esta no artefato site-ci-reports (lista de paths do upload-artifact nao o inclui; if-no-files-found: ignore).
+# Extrato do log do job 105722494370 (step 'npm run test:event-semantics', 2026-09-18T19:11:31Z..19:12:03Z):
+> confenge-site@1.0.0 test:event-semantics
+> node scripts/site/test_event_semantics.mjs
+PASS home_hero_route_cta / 
+PASS home_situation_action_route_cta / 
+PASS home_contact_anchor_form_cta / 
+PASS home_whatsapp_cta_kind_from_alias / 
+PASS header_cta_route / 
+PASS header_cta_route /servicos/ 
+PASS header_cta_route /triagem-tecnica/ 
+PASS header_cta_capture_anchor_form /quantitativos-orcamento-obras/ 
+PASS header_cta_capture_anchor_form /projetos-complementares-engenharia/ 
+PASS header_cta_capture_anchor_form /inspecao-diagnostico-edificacoes/ 
+PASS header_cta_capture_anchor_form /compatibilizacao-projetos-engenharia/ 
+PASS header_cta_capture_anchor_form /ferramentas/prontidao-tecnica-obra-privada/ 
+PASS header_cta_route_on_tool /ferramentas/diagnostico-defesa-margem/ 
+PASS hero_capture_anchor_form_cta /projetos-complementares-engenharia/ 
+PASS hero_capture_anchor_form_cta /parcerias-engenharia/ 
+PASS capture_anchor_without_cta_id_form /quantitativos-orcamento-obras/ 
+PASS toc_prose_anchor_silent /conteudos/calculo-reequilibrio-economico-financeiro/ 
+PASS skip_link_wrapper_anchor_silent /quantitativos-orcamento-obras/ 
+PASS skip_link_wrapper_anchor_silent / 
+PASS skip_link_wrapper_anchor_silent /conteudos/calculo-reequilibrio-economico-financeiro/ 
+PASS tool_submit_cta_click_form /ferramentas/diagnostico-defesa-margem/ 
+PASS home_footer_mailto_no_address_in_payload / 
+PASS quantities_hero_form_cta /quantitativos-orcamento-obras/ 
+PASS quantities_email_click_attribution /quantitativos-orcamento-obras/ 
+PASS quantities_tel_click_attribution /quantitativos-orcamento-obras/ 
+PASS quantities_whatsapp_click_attribution /quantitativos-orcamento-obras/ 
+PASS hub_servicos_content_to_service_known /servicos/ 
+PASS hub_servicos_triage_link_route_cta /servicos/ 
+PASS home_no_forbidden_events / 
+PASS origem_from_query_overrides_prerendered / 
+PASS origem_from_session_overrides_prerendered / 
+PASS origem_query_pii_dropped / 
+PASS origem_prerendered_kept_without_attribution / 
+PASS origem_route_identity_not_overwritten /entregas/ 
+EVENT_SEMANTICS {"ok":true,"failed":0,"checks":34}

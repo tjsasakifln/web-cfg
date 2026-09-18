@@ -1,0 +1,1960 @@
+{
+ "campaign": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+ "front": "G04 semântica de eventos na borda",
+ "base": "https://confenge.com.br",
+ "identity": {
+  "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+  "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+  "build_time": "2026-09-18T18:52:37Z",
+  "source": "/.well-known/build-info.json e /.well-known/runtime-info.json lidos por curl antes da sonda",
+  "predecessor": "252fc98d1"
+ },
+ "measured_at": {
+  "pass1": "2026-09-18T19:46:41.639Z",
+  "pass2": "2026-09-18T19:47:48.787Z"
+ },
+ "method": "produção pela borda, caminho normal do visitante (sem cache-buster); clique com preventDefault (captura); diff de window.dataLayer; sendBeacon neutralizado; POST, /api/ e origens externas abortados; nenhum formulário enviado",
+ "tool": "docs/campaigns/design-institucional/fechamento/evidence/producao/G04/probe_events_borda.mjs (derivada de evidence/diagnostico/G04/probe_events.mjs)",
+ "read_only_guarantees": {
+  "forms_submitted": 0,
+  "navigations": 0,
+  "beacons_intercepted_total": 0,
+  "blocked_requests_pass1": [],
+  "blocked_requests_pass2": [],
+  "note": "Nenhuma requisição POST, /api/ ou externa foi sequer tentada nas ~120 ms após o clique (ANALYTICS_FLUSH_DELAY_MS=30000 em js/modules/analytics.js); sendBeacon neutralizado por evaluateOnNewDocument nunca foi chamado. Nada saiu do cliente."
+ },
+ "observed_only_events": {
+  "names": [
+   "qualified_lead",
+   "pipeline",
+   "handoff_accepted"
+  ],
+  "seen_in_dataLayer_any_case": false,
+  "all_dataLayer_events_union": [
+   "content_to_service",
+   "cta_click",
+   "email_click",
+   "offer_view",
+   "outbound_click",
+   "page_view",
+   "session_start",
+   "web_vital",
+   "whatsapp_click"
+  ],
+  "structural_rejection": "js/modules/analytics.js:110 OBSERVED_ONLY_EVENTS={qualified_lead,pipeline,handoff_accepted}; resolveTrackedName (linha 218) devolve {ok:false, reason:'observed_owner_only'} para nome ou canônico nessa lista, antes de qualquer dataLayer.push/gtag/plausible/fila do coletor — rejeição estrutural, não só ausência na amostra"
+ },
+ "pii_check": {
+  "rule": "nenhuma chave casando PII_PARAM_PATTERN de analytics.js; nenhum valor com '@'; nenhum valor com 10-15 dígitos fora dos identificadores opacos session_id (sess-<27 hex>), correlation_id (UUID v4 / protocolo WhatsApp) e event_id",
+  "false_positives": "sequências de 10+ dígitos ocorrem por acaso em hex/UUID aleatórios (session_id, correlation_id) — identificadores opacos gerados no cliente, não telefone/CPF"
+ },
+ "summary": {
+  "cases": 19,
+  "pass_": 18,
+  "fail": 1
+ },
+ "cases": [
+  {
+   "route": "/",
+   "label": "home hero Ver serviços por situação",
+   "selector": "a[data-cta-position=\"hero\"][href=\"/servicos/\"]",
+   "element": {
+    "text": "Ver serviços por situação",
+    "href": "/servicos/",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "hero",
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "route"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "destination_type": "route",
+     "consent": "not_required",
+     "cta_label": "Ver serviços por situação",
+     "source_page_type": "home"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "destination_type": "route",
+     "consent": "not_required",
+     "cta_label": "Ver serviços por situação",
+     "source_page_type": "home"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/",
+   "label": "home chooser-ask → #triagem-tecnica",
+   "selector": ".chooser-ask__actions a[href=\"#triagem-tecnica\"]",
+   "element": {
+    "text": "Descrever no próximo passo, nesta página",
+    "href": "#triagem-tecnica",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "contact_band",
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "contact_band",
+     "destination_type": "form",
+     "consent": "not_required",
+     "cta_label": "Descrever no próximo passo, nesta página",
+     "source_page_type": "home"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "contact_band",
+     "destination_type": "form",
+     "consent": "not_required",
+     "cta_label": "Descrever no próximo passo, nesta página",
+     "source_page_type": "home"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/",
+   "label": "home corporate_triage → #contato",
+   "selector": "a[data-cta-position=\"corporate_triage\"][href=\"#contato\"]",
+   "element": {
+    "text": "Descrever minha situação no formulário",
+    "href": "#contato",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "corporate_triage",
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "corporate_triage",
+     "cta_kind": "service",
+     "destination_type": "form",
+     "alias_from": "service_cta_click",
+     "consent": "not_required",
+     "cta_label": "Descrever minha situação no formulário",
+     "source_page_type": "home"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "alias_from",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_kind",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "corporate_triage",
+     "cta_kind": "service",
+     "destination_type": "form",
+     "alias_from": "service_cta_click",
+     "consent": "not_required",
+     "cta_label": "Descrever minha situação no formulário",
+     "source_page_type": "home"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [
+      "session_id"
+     ],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/",
+   "label": "home header Solicitar proposta",
+   "selector": "a.header-cta[href=\"/triagem-tecnica/\"]",
+   "element": {
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "header_cta",
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "route"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "header_cta",
+     "destination_type": "route",
+     "consent": "not_required",
+     "cta_label": "Solicitar proposta",
+     "source_page_type": "home"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "header_cta",
+     "destination_type": "route",
+     "consent": "not_required",
+     "cta_label": "Solicitar proposta",
+     "source_page_type": "home"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/",
+   "label": "home contact critical_decision wa.me",
+   "selector": "a[data-event-name=\"critical_decision_cta_click\"]",
+   "element": {
+    "text": "WhatsApp(48) 98834-4559",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago.+Quero+ex",
+    "attrs": {
+     "event_name": "critical_decision_cta_click",
+     "cta_position": "contact",
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "whatsapp_click",
+    "cta_kind": "critical_decision"
+   },
+   "emitted_pass1": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "contact",
+     "cta_kind": "critical_decision",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "cta_label": "WhatsApp(48) 98834-4559"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_kind",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "contact",
+     "cta_kind": "critical_decision",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "cta_label": "WhatsApp(48) 98834-4559"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [
+      "session_id"
+     ],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "other",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos hero",
+   "selector": "a[data-cta-id=\"frame-quantities-budget-hero\"]",
+   "element": {
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-quantities-budget-hero",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form",
+    "cta_id": "frame-quantities-budget-hero",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-quantities-budget-hero",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-quantities-budget-hero",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos inline",
+   "selector": "a[data-cta-id=\"frame-quantities-budget-inline\"]",
+   "element": {
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-quantities-budget-inline",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form",
+    "cta_id": "frame-quantities-budget-inline",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-quantities-budget-inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-quantities-budget-inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos alt whatsapp",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-whatsapp\"]",
+   "element": {
+    "text": "Solicitar proposta pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago.+Quero+so",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "quantities-budget-alternative-whatsapp",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "whatsapp_click",
+    "cta_id": "quantities-budget-alternative-whatsapp",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta pelo WhatsApp"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta pelo WhatsApp"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "other",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos alt mailto",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-email\"]",
+   "element": {
+    "text": "Solicitar proposta por e-mail",
+    "href": "mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "quantities-budget-alternative-email",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "email_click",
+    "cta_id": "quantities-budget-alternative-email",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-email",
+     "destination_type": "email",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta por e-mail"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-email",
+     "destination_type": "email",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1",
+     "cta_label": "Solicitar proposta por e-mail"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos alt tel",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-phone\"]",
+   "element": {
+    "text": "Ligar sobre o orçamento: (48) 98834-4559",
+    "href": "tel:+5548988344559",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "quantities-budget-alternative-phone",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "outbound_click",
+    "destination_type": "tel",
+    "cta_id": "quantities-budget-alternative-phone",
+    "route_family": "private-engineering-quantities-budget",
+    "asset_id": "private_quantities_budget_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-phone",
+     "destination_type": "tel",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-phone",
+     "destination_type": "tel",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "quantitativos header Solicitar proposta",
+   "selector": "a.header-cta",
+   "element": {
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "cta_label": "Solicitar proposta de orçamento",
+     "source_page_type": "private-engineering-quantities-budget"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao hero",
+   "selector": "a[data-cta-id=\"frame-coordination-clash-hero\"]",
+   "element": {
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-coordination-clash-hero",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form",
+    "cta_id": "frame-coordination-clash-hero",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-coordination-clash-hero",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Pedir proposta da compatibilização",
+     "source_page_type": "engineering-projects-coordination-clash"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "offer_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "frame-coordination-clash-hero",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Pedir proposta da compatibilização",
+     "source_page_type": "engineering-projects-coordination-clash"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [
+      "session_id"
+     ],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao inline",
+   "selector": "a[data-cta-id=\"frame-coordination-clash-inline\"]",
+   "element": {
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao",
+    "attrs": {
+     "event_name": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-coordination-clash-inline",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "cta_click",
+    "destination_type": "form",
+    "cta_id": "frame-coordination-clash-inline",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-coordination-clash-inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Pedir proposta da compatibilização",
+     "source_page_type": "engineering-projects-coordination-clash"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "offer_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_page_type"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "cta_click",
+     "cta_position": "inline_cta",
+     "cta_id": "frame-coordination-clash-inline",
+     "destination_type": "form",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Pedir proposta da compatibilização",
+     "source_page_type": "engineering-projects-coordination-clash"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao alt whatsapp",
+   "selector": "a[data-cta-id=\"coordination-clash-alternative-whatsapp\"]",
+   "element": {
+    "text": "Conversar sobre a compatibilização",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago.+Preciso+",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "coordination-clash-alternative-whatsapp",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "whatsapp_click",
+    "cta_id": "coordination-clash-alternative-whatsapp",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Conversar sobre a compatibilização"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Conversar sobre a compatibilização"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "other",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao alt mailto",
+   "selector": "a[data-cta-id=\"coordination-clash-alternative-email\"]",
+   "element": {
+    "text": "Enviar contexto por e-mail",
+    "href": "mailto:tiago.sasaki@confenge.com.br?subject=Compatibiliza%C3",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "coordination-clash-alternative-email",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "email_click",
+    "cta_id": "coordination-clash-alternative-email",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-email",
+     "destination_type": "email",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Enviar contexto por e-mail"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-email",
+     "destination_type": "email",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1",
+     "cta_label": "Enviar contexto por e-mail"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [
+      "correlation_id"
+     ],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "compatibilizacao alt tel",
+   "selector": "a[data-cta-id=\"coordination-clash-alternative-phone\"]",
+   "element": {
+    "text": "Ligar sobre a compatibilização: (48) 98834-4559",
+    "href": "tel:+5548988344559",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "coordination-clash-alternative-phone",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "outbound_click",
+    "destination_type": "tel",
+    "cta_id": "coordination-clash-alternative-phone",
+    "route_family": "engineering-projects-coordination-clash",
+    "asset_id": "engineering_coordination_clash_route_v1"
+   },
+   "emitted_pass1": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-phone",
+     "destination_type": "tel",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_position",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "cta_id": "coordination-clash-alternative-phone",
+     "destination_type": "tel",
+     "consent": "not_required",
+     "route_family": "engineering-projects-coordination-clash",
+     "asset_id": "engineering_coordination_clash_route_v1"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/servicos/",
+   "label": "hub → /quantitativos-orcamento-obras/",
+   "selector": "a[data-cta-id=\"services-private-quantities-budget\"]",
+   "element": {
+    "text": "quantitativos e orçamento",
+    "href": "/quantitativos-orcamento-obras/",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": "services-private-quantities-budget",
+     "route_family": "servicos-corporativos",
+     "asset_id": "corporate_services_hub_v1"
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "content_to_service",
+    "destination_type": "service",
+    "destination_service_id": "quantitativos-orcamento-obras"
+   },
+   "emitted_pass1": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "services-private-quantities-budget",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/quantitativos-orcamento-obras/",
+     "destination_service_id": "quantitativos-orcamento-obras",
+     "route_family": "servicos-corporativos",
+     "asset_id": "corporate_services_hub_v1",
+     "cta_label": "quantitativos e orçamento",
+     "source_page_type": "corporate-services"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_family",
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_path",
+    "destination_service_id",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_asset_family",
+    "source_asset_id",
+    "source_page_type",
+    "source_path"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "services-private-quantities-budget",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/quantitativos-orcamento-obras/",
+     "destination_service_id": "quantitativos-orcamento-obras",
+     "route_family": "servicos-corporativos",
+     "asset_id": "corporate_services_hub_v1",
+     "cta_label": "quantitativos e orçamento",
+     "source_page_type": "corporate-services"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "label": "artigo Continuar pelo formulário",
+   "selector": ".lead-inline a.button-secondary[href^=\"/reequilibrio-obras-publicas/\"]",
+   "element": {
+    "text": "Continuar pelo formulário",
+    "href": "/reequilibrio-obras-publicas/#captura-pilar",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "content_to_service",
+    "destination_type": "service",
+    "destination_path": "/reequilibrio-obras-publicas/",
+    "destination_service_id": "reequilibrio-obras-publicas",
+    "cta_position": "form"
+   },
+   "emitted_pass1": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "unspecified",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/reequilibrio-obras-publicas/",
+     "destination_service_id": "reequilibrio-obras-publicas",
+     "route_family": "unspecified",
+     "asset_id": "documentos-reequilibrio-obra-publica",
+     "cta_label": "Continuar pelo formulário",
+     "source_page_type": "reequilibrio"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_family",
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_path",
+    "destination_service_id",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_asset_family",
+    "source_asset_id",
+    "source_page_type",
+    "source_path"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "unspecified",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/reequilibrio-obras-publicas/",
+     "destination_service_id": "reequilibrio-obras-publicas",
+     "route_family": "unspecified",
+     "asset_id": "documentos-reequilibrio-obra-publica",
+     "cta_label": "Continuar pelo formulário",
+     "source_page_type": "reequilibrio"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": false,
+     "emitted_count": 1,
+     "mismatches": {
+      "cta_position": [
+       "inline",
+       "form"
+      ]
+     },
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": false,
+     "emitted_count": 1,
+     "mismatches": {
+      "cta_position": [
+       "inline",
+       "form"
+      ]
+     },
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "FAIL",
+   "expected_source": "artigo-evento-semantica.md, consequência 2: botão do formulário cta_position 'form'; text-link inline",
+   "verdict_note": "Nome do evento, destination_type, destination_path e destination_service_id conferem; cta_position diverge do registrado ('inline' em vez de 'form'): js/modules/nav.js usa data-cta-position || 'inline' e o botão não carrega data-cta-position. A regra de contagem registrada (content_to_service filtrado por cta_position='form') retorna zero em produção."
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "label": "artigo text-link do pilar",
+   "selector": "a[data-pillar-link=\"1\"]",
+   "element": {
+    "text": "Ver serviço de reequilíbrio",
+    "href": "/reequilibrio-obras-publicas/",
+    "attrs": {
+     "event_name": null,
+     "cta_position": null,
+     "cta_id": null,
+     "route_family": null,
+     "asset_id": null
+    },
+    "matches": 1
+   },
+   "expected": {
+    "event": "content_to_service",
+    "destination_type": "service",
+    "destination_path": "/reequilibrio-obras-publicas/",
+    "destination_service_id": "reequilibrio-obras-publicas"
+   },
+   "emitted_pass1": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "unspecified",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/reequilibrio-obras-publicas/",
+     "destination_service_id": "reequilibrio-obras-publicas",
+     "route_family": "unspecified",
+     "asset_id": "documentos-reequilibrio-obra-publica",
+     "cta_label": "Ver serviço de reequilíbrio",
+     "source_page_type": "reequilibrio"
+    }
+   ],
+   "emitted_keys_pass1": [
+    "asset_family",
+    "asset_id",
+    "consent",
+    "content_cluster",
+    "correlation_id",
+    "cta_id",
+    "cta_label",
+    "cta_position",
+    "destination_path",
+    "destination_service_id",
+    "destination_type",
+    "event",
+    "event_id",
+    "page_path",
+    "pii_policy",
+    "route_family",
+    "schema_version",
+    "session_id",
+    "source",
+    "source_asset_family",
+    "source_asset_id",
+    "source_page_type",
+    "source_path"
+   ],
+   "emitted_pass2": [
+    {
+     "event": "content_to_service",
+     "cta_position": "inline",
+     "cta_id": "unspecified",
+     "destination_type": "service",
+     "consent": "not_required",
+     "destination_path": "/reequilibrio-obras-publicas/",
+     "destination_service_id": "reequilibrio-obras-publicas",
+     "route_family": "unspecified",
+     "asset_id": "documentos-reequilibrio-obra-publica",
+     "cta_label": "Ver serviço de reequilíbrio",
+     "source_page_type": "reequilibrio"
+    }
+   ],
+   "checks": [
+    {
+     "pass_": "pass1",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": null,
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    },
+    {
+     "pass_": "pass2",
+     "ok": true,
+     "emitted_count": 1,
+     "mismatches": {},
+     "pii_keys": [],
+     "values_with_at": [],
+     "digit_runs_outside_opaque_ids": [],
+     "digit_runs_in_opaque_ids": [],
+     "contains_critical_decision_cta_click": false,
+     "correlation_id_shape": "uuid",
+     "forbidden_events": [],
+     "beacons_intercepted": [],
+     "navigated": false
+    }
+   ],
+   "verdict": "PASS"
+  }
+ ],
+ "notes": [
+  "Home: 'Ver serviços por situação' 1x cta_click route; chooser-ask (#triagem-tecnica, data-cta-position=contact_band) 1x cta_click form (CAPTURE_HASH /^#(contato|captura|pedido|triagem)/ e alvo cta_formal); #contato 1x cta_click form com alias_from=service_cta_click e cta_kind=service; header 'Solicitar proposta' 1x cta_click route com cta_position=header_cta.",
+  "Link data-event-name=critical_decision_cta_click (wa.me, #contato): 1x whatsapp_click com cta_kind=critical_decision; a string 'critical_decision_cta_click' não aparece em nenhum campo (sem alias_from).",
+  "Pilares privados: hero e inline emitem 1x cta_click destination_type=form com cta_id/route_family/asset_id; wa.me/mailto/tel do bloco alternativo emitem whatsapp_click/email_click/outbound_click(tel) com os três atributos; nenhuma chave PII, nenhum valor com '@'.",
+  "/quantitativos-orcamento-obras/ header-cta é 'Solicitar proposta de orçamento' → #triagem-quantitativos (cta_click form, cta_position inline) — header contextual do pilar, não a rota /triagem-tecnica/.",
+  "/servicos/ → /quantitativos-orcamento-obras/: content_to_service destination_service_id=quantitativos-orcamento-obras (não UNKNOWN_SERVICE).",
+  "Artigo /conteudos/documentos-reequilibrio-obra-publica/: 'Continuar pelo formulário' (href /reequilibrio-obras-publicas/#captura-pilar) emite content_to_service destination_type=service, destination_path=/reequilibrio-obras-publicas/, destination_service_id=reequilibrio-obras-publicas, cta_id/route_family=unspecified, asset_id=<slug do artigo>, conforme artigo-evento-semantica.md. DIVERGÊNCIA do registro: cta_position sai 'inline' (não 'form') porque o botão não tem data-cta-position; o text-link do pilar também sai 'inline'. Os dois content_to_service do artigo só se distinguem por cta_label.",
+  "Header-cta servido em produção na home traz data-cta-position=header_cta e data-event-name=cta_click (injetados por scripts/site/shell_nav.py no build); a fonte index.html:67 não os tem. A identidade da borda é a de build-info/runtime-info, não a fonte do worktree.",
+  "Nos pilares privados o header-cta contextual emite cta_position='inline' (sem data-cta-position), diferente de 'header_cta' na home: a leitura a jusante não distingue o header do corpo nessas rotas (BAIXA)."
+ ]
+}
