@@ -196,7 +196,10 @@ export async function runCli(argv = process.argv.slice(2)) {
     process.stdout.write(`${JSON.stringify(result)}\n`);
     return result.ok ? 0 : 1;
   }
-  const result = evaluateConsumerPayload(payload, { now });
+  // A fixture run is marked as such so no consumer of the stdout (the
+  // site-excellence scorecard rejects `fixture: true`) can mistake it for a
+  // real durable read. Exit polarity stays that of the evaluated status.
+  const result = { ...evaluateConsumerPayload(payload, { now }), fixture: true };
   process.stdout.write(`${JSON.stringify(result)}\n`);
   return result.ok ? 0 : 1;
 }
