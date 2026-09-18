@@ -18,6 +18,51 @@ function skipNonReal(record, channel) {
 }
 
 const MAX_ATTEMPTS = 3;
+// Total wall-clock budget for one delivery channel (all retries included).
+// The browser aborts the POST at 15 s (js/modules/form.js) and the Warmbly
+// handoff already spends up to CONFENGE_INBOUND_TIMEOUT_MS (8 s) before the
+// notifications run, so a provider that hangs must never consume the rest of
+// that window. A channel that runs out of budget reports status "error"; the
+// record is already durable and the visitor still receives the 201.
+const DEFAULT_DELIVERY_TIMEOUT_MS = 5000;
+
+function deliveryTimeoutMs(env = process.env) {
+  const raw = Number(env.LEAD_DELIVERY_TIMEOUT_MS);
+  if (!Number.isFinite(raw) || raw <= 0) return DEFAULT_DELIVERY_TIMEOUT_MS;
+  return Math.min(30000, Math.max(100, Math.floor(raw)));
+}
+
+function isAbortError(err) {
+  return Boolean(err && (err.name === "AbortError" || err.code === "delivery_timeout"));
+}
+
+/**
+ * fetch bound to a deadline shared by every attempt of one channel. `deadline`
+ * is an absolute epoch-ms value; when it has already passed the call fails
+ * immediately with a delivery_timeout error instead of opening a connection.
+ */
+async function fetchWithDeadline(url, init, deadline) {
+  const remaining = deadline - Date.now();
+  if (remaining <= 0) {
+    const err = new Error("delivery_timeout");
+    err.code = "delivery_timeout";
+    throw err;
+  }
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), remaining) : null;
+  try {
+    return await fetch(url, { ...init, signal: controller ? controller.signal : undefined });
+  } catch (err) {
+    if (isAbortError(err)) {
+      const timeout = new Error("delivery_timeout");
+      timeout.code = "delivery_timeout";
+      throw timeout;
+    }
+    throw err;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
 
 function isProductionProfile(env = process.env) {
   const nodeEnv = String(env.NODE_ENV || "").toLowerCase();
@@ -69,6 +114,10 @@ async function withBackoff(fn, attempts = MAX_ATTEMPTS) {
       return await fn(i);
     } catch (err) {
       lastErr = err;
+      // A timed-out request may already have been accepted by the provider
+      // (an e-mail can be sent even when the response never arrives), so a
+      // retry would risk a duplicate and would also exceed the channel budget.
+      if (isAbortError(err)) break;
       if (i < attempts - 1) await sleep(100 * 2 ** i);
     }
   }
@@ -162,8 +211,9 @@ async function deliverOpsWebhook(record) {
     headers.Authorization = `Bearer ${process.env.OPS_WEBHOOK_BEARER}`;
   }
 
+  const deadline = Date.now() + deliveryTimeoutMs();
   return withBackoff(async () => {
-    const res = await fetch(destination.url, { method: "POST", headers, body });
+    const res = await fetchWithDeadline(destination.url, { method: "POST", headers, body }, deadline);
     if (!res.ok) {
       const err = new Error(`webhook_http_${res.status}`);
       err.status = res.status;
@@ -178,7 +228,7 @@ async function deliverOpsWebhook(record) {
     return {
       channel: "ops_webhook",
       status: "error",
-      reason: "upstream_error",
+      reason: isAbortError(err) ? "timeout" : "upstream_error",
     };
   });
 }
@@ -216,8 +266,9 @@ async function deliverNtfyAuth(record) {
     .filter(Boolean)
     .join("\n");
 
+  const deadline = Date.now() + deliveryTimeoutMs();
   return withBackoff(async () => {
-    const res = await fetch(destination.url, {
+    const res = await fetchWithDeadline(destination.url, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -227,7 +278,7 @@ async function deliverNtfyAuth(record) {
         "Content-Type": "text/plain; charset=utf-8",
       },
       body: message,
-    });
+    }, deadline);
     if (!res.ok) {
       const err = new Error(`ntfy_http_${res.status}`);
       throw err;
@@ -238,7 +289,7 @@ async function deliverNtfyAuth(record) {
       lead_id: record.lead_id,
       code: err && err.message ? String(err.message).slice(0, 80) : "error",
     });
-    return { channel: "ntfy", status: "error", reason: "upstream_error" };
+    return { channel: "ntfy", status: "error", reason: isAbortError(err) ? "timeout" : "upstream_error" };
   });
 }
 
@@ -283,8 +334,9 @@ async function deliverResendEmail(record) {
     .filter((l) => l !== null)
     .join("\n");
 
+  const deadline = Date.now() + deliveryTimeoutMs();
   return withBackoff(async () => {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetchWithDeadline("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -297,9 +349,10 @@ async function deliverResendEmail(record) {
         subject,
         text,
       }),
-    });
+    }, deadline);
     if (!res.ok) {
       const err = new Error(`resend_http_${res.status}`);
+      err.status = res.status;
       throw err;
     }
     const data = await res.json().catch(() => ({}));
@@ -314,32 +367,53 @@ async function deliverResendEmail(record) {
       lead_id: record.lead_id,
       code: err && err.message ? String(err.message).slice(0, 80) : "error",
     });
-    return { channel: "email", status: "error", reason: "upstream_error" };
+    return {
+      channel: "email",
+      status: "error",
+      reason: isAbortError(err) ? "timeout" : "upstream_error",
+      http: err && Number.isFinite(err.status) ? err.status : undefined,
+    };
   });
 }
 
 /**
  * Run all delivery channels. Persist-before-call is caller's responsibility.
  * Failures do not throw — return status map for audit.
+ *
+ * The channels are independent, so they run concurrently: the worst case for
+ * the whole step is one channel budget (LEAD_DELIVERY_TIMEOUT_MS), not the sum.
+ *
+ * The returned map is for the durable store only. `email.provider_id` and
+ * `email.http` are the provider's message id and HTTP status — not PII — and
+ * exist so an operator can correlate a lead_id with Resend GET /emails/{id}
+ * from the host. The public 201/200 body is built by publicSuccessBody, a
+ * positive whitelist that only carries the status strings; nothing here may be
+ * spread into that body.
  */
 async function deliverAll(record) {
-  const notifyResults = await Promise.all([deliverOpsWebhook(record), deliverNtfyAuth(record)]);
-  const emailResult = await deliverResendEmail(record);
+  const [opsResult, ntfyResult, emailResult] = await Promise.all([
+    deliverOpsWebhook(record),
+    deliverNtfyAuth(record),
+    deliverResendEmail(record),
+  ]);
+  const notifyResults = [opsResult, ntfyResult];
   const notifyOk = notifyResults.some((r) => r.status === "ok");
   const notifySkipped = notifyResults.every((r) => r.status === "skipped");
+  const email = { status: emailResult.status };
+  if (emailResult.reason) email.reason = String(emailResult.reason).slice(0, 40);
+  if (Number.isFinite(emailResult.http)) email.http = emailResult.http;
+  if (emailResult.provider_id) email.provider_id = String(emailResult.provider_id).slice(0, 64);
   return {
     notify: {
       status: notifyOk ? "ok" : notifySkipped ? "skipped" : "error",
       channels: notifyResults.map((r) => ({
         channel: r.channel,
         status: r.status,
+        reason: r.reason || undefined,
         // never return URL/topic/token
       })),
     },
-    email: {
-      status: emailResult.status,
-      // never echo provider payload
-    },
+    email,
   };
 }
 
@@ -351,4 +425,6 @@ module.exports = {
   deliverAll,
   withBackoff,
   validatePiiDestination,
+  deliveryTimeoutMs,
+  fetchWithDeadline,
 };

@@ -678,6 +678,12 @@ exports.handler = async (event) => {
         email: {
           status: email_status,
           attempts: 1,
+          // Provider correlation handle for the operator (Resend message id and
+          // HTTP status): store-only, read through authenticated ops, never
+          // part of the public body (publicSuccessBody whitelist).
+          ...(delivery?.email?.reason ? { reason: delivery.email.reason } : {}),
+          ...(Number.isFinite(delivery?.email?.http) ? { http: delivery.email.http } : {}),
+          ...(delivery?.email?.provider_id ? { provider_id: delivery.email.provider_id } : {}),
         },
       },
       status:

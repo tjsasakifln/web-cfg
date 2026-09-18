@@ -1377,6 +1377,112 @@ _reset();
   }
 }
 
+// 7a) G03-02: the Resend message id and HTTP status are persisted in the store
+// (delivery.email.provider_id / .http) so an operator can correlate lead_id ->
+// GET /emails/{id} from the host, and never appear in the public body.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  const originalFetch = globalThis.fetch;
+  const providerId = "resend-msg-id-1234567890abcdef";
+  globalThis.fetch = async (url) => {
+    if (String(url).includes("resend.com")) {
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: providerId }) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "Helena Diretora",
+        email: "helena.diretora@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.71" }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("email_provider_id_persist", data);
+    if (data.email_status !== "ok") fail("email_provider_id_status", data);
+    const bodyStr = JSON.stringify(data);
+    if (bodyStr.includes(providerId) || bodyStr.includes("provider_id") || /"http"/.test(bodyStr)) {
+      fail("email_provider_id_in_public_body", data);
+    }
+    const stored = await mem.get(data.lead_id);
+    if (!stored || !stored.delivery || !stored.delivery.email) fail("email_provider_id_store_missing", stored);
+    if (stored.delivery.email.provider_id !== providerId) fail("email_provider_id_store_value", stored.delivery.email);
+    if (stored.delivery.email.http !== 200) fail("email_http_store_value", stored.delivery.email);
+    if (stored.status !== "persisted_notified") fail("email_provider_id_store_status", stored.status);
+    pass("email_provider_id_store_only", { lead_id: data.lead_id, http: stored.delivery.email.http });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+  }
+}
+
+// 7c) G03-04: a hanging Resend (and a hanging ops webhook) never consumes the
+// visitor's 15 s budget. The delivery channels share LEAD_DELIVERY_TIMEOUT_MS
+// across all retries, the abort is not retried, and the record stays durable
+// with email/notify status "error" (reason timeout) while the visitor gets 201.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.OPS_WEBHOOK_URL = "https://example.com/hooks/ops";
+  process.env.OPS_WEBHOOK_ALLOWED_HOSTS = "example.com";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "150";
+  const originalFetch = globalThis.fetch;
+  let hangingCalls = 0;
+  let abortedCalls = 0;
+  let unsignaledCalls = 0;
+  globalThis.fetch = (url, opts) => new Promise((_resolve, reject) => {
+    hangingCalls += 1;
+    if (!opts || !opts.signal) {
+      unsignaledCalls += 1;
+      return; // hangs forever: exactly the failure this case guards against
+    }
+    opts.signal.addEventListener("abort", () => {
+      abortedCalls += 1;
+      reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+    });
+  });
+  try {
+    const started = Date.now();
+    const res = await handler(
+      event({
+        nome: "Paulo Diretor",
+        email: "paulo.diretor@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.72" }),
+    );
+    const elapsed = Date.now() - started;
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("delivery_hang_persist", data);
+    if (data.email_status !== "error" || data.notify_status !== "error") fail("delivery_hang_status", data);
+    // Two channels hang concurrently: the step costs one budget, not two, and
+    // far less than the 15 s browser abort. 1500 ms leaves room for the store.
+    if (elapsed > 1500) fail("delivery_hang_budget", { elapsed, budget_ms: 150 });
+    if (unsignaledCalls !== 0) fail("delivery_fetch_without_signal", { unsignaledCalls });
+    // One aborted attempt per channel: a timed-out send is never retried.
+    if (hangingCalls !== 2 || abortedCalls !== 2) fail("delivery_hang_retry", { hangingCalls, abortedCalls });
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.delivery?.email?.status !== "error" || stored.delivery?.email?.reason !== "timeout") {
+      fail("delivery_hang_store", stored && stored.delivery);
+    }
+    if (stored.status !== "persisted") fail("delivery_hang_store_status", stored.status);
+    pass("delivery_hang_within_budget", { elapsed_ms: elapsed, lead_id: data.lead_id });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.OPS_WEBHOOK_URL;
+    delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+  }
+}
+
 // 7b) synthetic / non-real kinds must not call Resend even when the key is set
 {
   process.env.RESEND_API_KEY = "re_test_key_must_not_send";
