@@ -1,0 +1,18 @@
+{
+  "gap": "G03-01",
+  "acao": "criacao do TXT resend._domainkey.confenge.com.br (DKIM do Resend) na zona Cloudflare e verificacao do dominio no Resend",
+  "executado_por": "integrador da campanha (agente Claude Code) com autorizacao EXECUTE_NOW do encaminhamento de 2026-09-18 (menor correcao sobre recurso ja disponivel, com rollback)",
+  "quando_utc": "2026-09-18T13:12Z (registro) / 2026-09-18T13:14:49Z (dominio verified)",
+  "estado_anterior": {
+    "resend_domain_status": "failed",
+    "registros_resend": {"DKIM TXT resend._domainkey": "failed (NXDOMAIN em 1.1.1.1 e 8.8.8.8)", "SPF MX send": "failed (registro existia no DNS)", "SPF TXT send": "failed (registro existia no DNS)"},
+    "emails_de_lead_real_enviados_ate_entao": 0,
+    "observacao": "23/23 registros do store do host eram synthetic (email=skipped por desenho); a conta Resend tinha um unico e-mail (2026-08-21, era Netlify)"
+  },
+  "credencial_usada": "token Cloudflare escopado a zona confenge.com.br (DNS write) existente no host ec-prod em /etc/letsencrypt/cloudflare.ini (uso original: certbot DNS-01); valor nunca impresso nem copiado",
+  "registro_criado": {"cloudflare_zone_id": "ea13b73bf09dcab6355baa38fbda1712", "cloudflare_record_id": "6d371d6a28364c17cdbde2f676e58872", "type": "TXT", "name": "resend._domainkey.confenge.com.br", "content_prefix": "p=MIGfMA0GCS...", "ttl": "auto", "comment": "Resend DKIM (CONFENGE leads) - campanha POS-REDESIGN-FECHAMENTO-20260918"},
+  "verificacao": {"metodo": "POST https://api.resend.com/domains/a75ceeb3-52aa-4ae6-8f9c-26f3d82489ea/verify a partir do host, depois GET ate resolver", "resultado": "verified; DKIM/SPF MX/SPF TXT = verified", "dns_doh_apos": "resend._domainkey TXT resolve p=MIGf... (cloudflare-dns.com)"},
+  "nao_alterado": ["MX apex Hostinger", "SPF apex Hostinger", "hostingermail-*._domainkey", "_dmarc (v=DMARC1; p=none, sem rua) — pendencia de decisao do fundador"],
+  "rollback": "DELETE https://api.cloudflare.com/client/v4/zones/ea13b73bf09dcab6355baa38fbda1712/dns_records/6d371d6a28364c17cdbde2f676e58872 (o dominio volta a failed no Resend)",
+  "decisao_pendente_fundador": ["criar token Cloudflare dedicado para registros de e-mail em vez de reutilizar o token do certbot (ou aceitar o uso)", "elevar DMARC para p=quarantine com rua"]
+}
