@@ -1695,7 +1695,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "descriptions": [
           "Como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir processamento da medição, glosa e pagamento."
@@ -1741,7 +1741,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
         "h1": "Atraso na medição de obra pública: onde o processo travou?",
@@ -1834,7 +1834,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "descriptions": [
           "Triagem de suspender ou só notificar: dois meses da nota fiscal, exceções do § 3º e risco de sanção por parada precoce."
@@ -1880,7 +1880,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "description": "Nota fiscal emitida e despesa liquidada sem pagamento: o art. 137 da Lei 14.133 trata extinção após dois meses, não paralisação automática no primeiro atraso.",
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
@@ -2577,7 +2577,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "descriptions": [
           "Nas 48 horas da recusa de ateste: protocolo, recado transcrito e ofício pedindo o item que impede a assinatura."
@@ -2623,7 +2623,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "description": "O fiscal recusou assinar o boletim. Nas 48 horas seguintes, registre a recusa, preserve a prova de execução e peça objeção objetiva, sem admitir culpa para destravar.",
         "h1": "Fiscal não assina medição: o que fazer nas primeiras 48h",
@@ -2646,7 +2646,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "descriptions": [
           "Como recortar o trecho com ensaio desconforme e pedir o restante da linha sem controvérsia de qualidade."
@@ -2692,7 +2692,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "description": "Um defeito de qualidade autoriza cortar o trecho em desconformidade, não o boletim inteiro. Exija localização, ensaio e o valor do trecho afetado.",
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
@@ -2852,7 +2852,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "descriptions": [
           "Evento paga o marco; quantitativo paga a unidade. O art. 46, § 9º, veda remunerar preço global como planilha unitária."
@@ -2898,7 +2898,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "description": "No preço global, o contrato pode medir por marco de resultado, não por m³. Compare a prova de evento com a prova de quantitativo antes de precificar o caixa.",
         "h1": "Medição por evento ou quantitativo: o que muda",
@@ -2989,7 +2989,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "descriptions": [
           "Triagem da etapa incompleta no preço global: avanço de campo não cria submarco, e o art. 145 depende da parcela contratual."
@@ -3035,7 +3035,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-14"
+          "2026-09-18"
         ],
         "description": "Etapa incompleta em empreitada global não é pagamento antecipado. Confira o eventograma, a meta de resultado e o que o contrato admite medir proporcionalmente.",
         "h1": "Pagamento parcial em empreitada global: quando vale",
