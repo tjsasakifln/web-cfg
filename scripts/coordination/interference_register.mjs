@@ -345,25 +345,42 @@ ${staleNote}
 </article>`;
 }
 
-/**
- * Secondary findings sit next to the primary one on the page; the demonstrative
- * note is printed once, on the primary article (G02-A-04, 2026-09-18).
- */
-export function renderSecondaryFindingHtml(record, finding, liveDocuments) {
+function pilotoFindingHref(record, findingId) {
+  return `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${findingId}`;
+}
+
+export function renderSecondaryFindingHtml(record, finding, liveDocuments, options = {}) {
   return renderFindingHtml(
-    { ...record, finding, piloto_finding_href: `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${finding.id}` },
+    { ...record, finding, piloto_finding_href: pilotoFindingHref(record, finding.id) },
     liveDocuments,
-    { kicker: false },
+    options,
   );
+}
+
+/**
+ * The demonstrative note is printed once, inside the slot and before every
+ * article (G02-A-04, 2026-09-18), carrying one deep link per published finding
+ * so provenance survives even when the articles sit side by side in the grid.
+ */
+export function renderRegisterNoteHtml(record) {
+  const findings = [record.finding, ...(record.secondary_findings || [])];
+  const links = findings
+    .map((finding) => `<a href="${escapeHtml(pilotoFindingHref(record, finding.id))}">${escapeHtml(finding.id)}</a>`)
+    .join(", ");
+  const note = record.source === "inb06"
+    ? `Os apontamentos abaixo saem do <a href="${escapeHtml(record.piloto_url || "/casos/demonstrativo-projeto-privado/")}">recorte de banheiro demonstrativo</a> (${links}). Não é obra de cliente e não é projeto executivo.`
+    : `${escapeHtml(record.public_label || "Exemplo demonstrativo. Não é obra de cliente e não é projeto executivo.")} (${links})`;
+  return `<p class="coord-finding-kicker" data-coord-register-note="demonstrative">${note}</p>`;
 }
 
 export function renderRegisterHtml(record) {
   const live = record.live_documents || [];
-  const primary = renderFindingHtml(record, live);
+  const primary = renderFindingHtml(record, live, { kicker: false });
   const secondary = (record.secondary_findings || [])
-    .map((finding) => renderSecondaryFindingHtml(record, finding, live))
+    .map((finding) => renderSecondaryFindingHtml(record, finding, live, { kicker: false }))
     .join("\n");
-  return `${COORD_SLOT_START}${primary}\n${secondary}${COORD_SLOT_END}`;
+  const articles = [primary, secondary].filter(Boolean).join("\n");
+  return `${COORD_SLOT_START}${renderRegisterNoteHtml(record)}\n<div class="grid-2">\n${articles}\n</div>${COORD_SLOT_END}`;
 }
 
 const COORD_SLOT_RE = /<!--pos-inb-02:coord-register-->[\s\S]*?<!--\/pos-inb-02:coord-register-->/i;

@@ -3,7 +3,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { loadPublicRegister, renderFindingHtml } from "../../scripts/coordination/interference_register.mjs";
+import {
+  COORD_SLOT_END,
+  COORD_SLOT_START,
+  loadPublicRegister,
+  renderFindingHtml,
+  renderRegisterHtml,
+} from "../../scripts/coordination/interference_register.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const PAGE = path.join(root, "compatibilizacao-projetos-engenharia/index.html");
@@ -149,7 +155,7 @@ test("incomplete initial context is accepted and essentials are in HTML without 
 test("shipped finding html matches the register renderer", () => {
   const html = readPage();
   const record = loadPublicRegister(root);
-  const rendered = renderFindingHtml(record);
+  const rendered = renderFindingHtml(record, undefined, { kicker: false });
   const shipped = html.match(/<article class="coord-finding"[\s\S]*?<\/article>/)?.[0];
   assert.ok(shipped);
   assert.match(shipped, /data-finding-id="CF-GEO-01"/);
@@ -159,6 +165,42 @@ test("shipped finding html matches the register renderer", () => {
     rendered.includes('data-estado="corrected_in_revision"'),
   );
   assert.equal(shipped.includes("Corrigido na revisão R01"), true);
+});
+
+test("the embedded register slot is byte-equal to the renderer output", () => {
+  const html = readPage();
+  const record = loadPublicRegister(root);
+  const start = html.indexOf(COORD_SLOT_START);
+  const end = html.indexOf(COORD_SLOT_END);
+  assert.ok(start >= 0 && end > start, "coord register slot present");
+  const shipped = html.slice(start, end + COORD_SLOT_END.length);
+  assert.equal(shipped, renderRegisterHtml(record));
+});
+
+test("every published finding keeps its demonstrative label and pilot deep link, said once before the articles", () => {
+  const html = readPage();
+  const record = loadPublicRegister(root);
+  const start = html.indexOf(COORD_SLOT_START);
+  const end = html.indexOf(COORD_SLOT_END);
+  const slot = html.slice(start, end + COORD_SLOT_END.length);
+  const ids = [...slot.matchAll(/data-finding-id="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(ids, [record.finding.id, ...(record.secondary_findings || []).map((f) => f.id)]);
+  assert.ok(ids.length >= 2, "primary and secondary findings are published");
+  const noteMatch = slot.match(/<p class="coord-finding-kicker" data-coord-register-note="demonstrative">([\s\S]*?)<\/p>/);
+  assert.ok(noteMatch, "demonstrative note present");
+  const noteText = visible(noteMatch[0]);
+  assert.match(noteText, /Não é obra de cliente e não é projeto executivo\./);
+  assert.ok(slot.indexOf(noteMatch[0]) < slot.indexOf("<article"), "note precedes the first article");
+  for (const id of ids) {
+    assert.match(noteMatch[0], new RegExp(`href="/casos/demonstrativo-projeto-privado/#${id}"`), `pilot deep link for ${id}`);
+    assert.match(noteText, new RegExp(`\\b${id}\\b`));
+  }
+  // Said once: no per-article kicker duplicates the note.
+  assert.equal((slot.match(/coord-finding-kicker/g) || []).length, 1);
+  // The two articles share one grid so they sit side by side at >= 700px (components.css .grid-2).
+  const gridOpen = slot.indexOf('<div class="grid-2">');
+  assert.ok(gridOpen > slot.indexOf(noteMatch[0]) && gridOpen < slot.indexOf("<article"));
+  assert.ok(slot.lastIndexOf("</div>") > slot.lastIndexOf("</article>"));
 });
 
 test("mutation: mixing revisão as this purchase or promising zero interference fails the contract helper", () => {
