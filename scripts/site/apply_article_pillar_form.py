@@ -94,6 +94,16 @@ def frozen_articles() -> set[str]:
         p = str(sib.get("path") or "")
         if p.startswith("conteudos/"):
             out.add(p.split("/")[1])
+    # Canário de distância de indexação (#striking-distance): a aprovação
+    # delegada do dono está ligada ao material_hash do HTML; qualquer byte
+    # exige nova aprovação com hash, não um agente. Fica congelado.
+    striking = ROOT / "data/editorial/striking-distance-noindex.v1.json"
+    if striking.is_file():
+        for row in (json.loads(striking.read_text(encoding="utf-8")).get("urls") or []):
+            approval = row.get("approval") or {}
+            path = str(row.get("path") or "")
+            if approval.get("material_hash") and path.startswith("/conteudos/"):
+                out.add(path.strip("/").split("/")[-1])
     return out
 
 
@@ -218,7 +228,7 @@ def run(write: bool) -> int:
         html = page.read_text(encoding="utf-8")
         if slug in frozen:
             if home_form_link(html):
-                pending.append(f"{slug}: congelado por hash (canário #389); ainda envia o formulário à home")
+                pending.append(f"{slug}: congelado por hash (canário #389 ou aprovação hash-bound); ainda envia o formulário à home")
             continue
         new, notes = transform(slug, html, overrides, labels)
         for n in notes:
