@@ -19,11 +19,13 @@ function skipNonReal(record, channel) {
 
 const MAX_ATTEMPTS = 3;
 // Total wall-clock budget for one delivery channel (all retries included).
-// The browser aborts the POST at 15 s (js/modules/form.js) and the Warmbly
-// handoff already spends up to CONFENGE_INBOUND_TIMEOUT_MS (8 s) before the
-// notifications run, so a provider that hangs must never consume the rest of
-// that window. A channel that runs out of budget reports status "error"; the
-// record is already durable and the visitor still receives the 201.
+// The browser aborts the POST at 15 s (js/modules/form.js); the Warmbly
+// handoff (CONFENGE_INBOUND_TIMEOUT_MS, 8 s) runs concurrently with the
+// notifications since 2026-09-18 (lead.cjs), so the post-persist step costs
+// max(8 s, this budget), not the sum. A provider that hangs must still never
+// consume more than this. A channel that runs out of budget reports status
+// "error"; the record is already durable and the visitor still receives the
+// 201 — the drain retry (reconcileEmailDeliveries) picks the e-mail up later.
 const DEFAULT_DELIVERY_TIMEOUT_MS = 5000;
 
 function deliveryTimeoutMs(env = process.env) {
@@ -163,6 +165,9 @@ async function withBackoff(fn, attempts = MAX_ATTEMPTS) {
         if (Number.isFinite(lastHttp) && !Number.isFinite(err.status)) err.last_http = lastHttp;
         break;
       }
+      // A provider answer that cannot change on retry (Resend 409
+      // invalid_idempotent_request: same key, different payload) is final.
+      if (err && err.retryable === false) break;
       if (Number.isFinite(err && err.status)) lastHttp = err.status;
       if (i < attempts - 1) await sleep(100 * 2 ** i);
     }
@@ -171,6 +176,7 @@ async function withBackoff(fn, attempts = MAX_ATTEMPTS) {
 }
 
 function failureReason(err) {
+  if (err && err.reason) return String(err.reason).slice(0, 40);
   if (!isAbortError(err)) return "upstream_error";
   return Number.isFinite(err && err.last_http) ? "timeout_after_http" : "timeout";
 }
@@ -369,7 +375,34 @@ async function deliverNtfyAuth(record) {
 }
 
 /**
+ * Resend `Idempotency-Key` for the lead notification (docs reconfirmed
+ * 2026-09-18: header ≤ 256 chars, kept 24 h; same key + same payload → the
+ * original id without a second send; same key + different payload → 409
+ * invalid_idempotent_request; two in-flight requests with the same key → 409
+ * concurrent_idempotent_requests). One key per lead_id, shared by the capture
+ * path and the drain retry, so a send that timed out after the provider had
+ * already accepted it can be retried without a duplicate e-mail.
+ */
+function emailIdempotencyKey(record) {
+  const id = String((record && record.lead_id) || "").trim();
+  if (!id) return null;
+  return `lead-email/${id}`.slice(0, 256);
+}
+
+// Resend error `name` values on HTTP 409 for idempotent requests.
+const RESEND_IDEMPOTENCY_ERRORS = Object.freeze({
+  invalid_idempotent_request: { reason: "payload_mismatch", retryable: false },
+  concurrent_idempotent_requests: { reason: "concurrent_idempotent", retryable: true },
+});
+
+/**
  * Resend transactional email (CONFENGE domain).
+ *
+ * The payload is a pure function of the stored record and the env destination
+ * (from/to): nothing time-varying (no `new Date()`), otherwise the
+ * Idempotency-Key would be rejected on retry. A changed LEAD_NOTIFY_EMAIL /
+ * LEAD_FROM_EMAIL inside the 24 h window therefore surfaces as
+ * reason=payload_mismatch, not as a silent second e-mail.
  */
 async function deliverResendEmail(record) {
   const skip = skipNonReal(record, "email");
@@ -409,6 +442,7 @@ async function deliverResendEmail(record) {
     .filter((l) => l !== null)
     .join("\n");
 
+  const idempotencyKey = emailIdempotencyKey(record);
   const deadline = monotonicNow() + deliveryTimeoutMs();
   return withBackoff(async () => {
     // Headers AND body inside the channel deadline (parse: "json"): a Resend
@@ -418,6 +452,7 @@ async function deliverResendEmail(record) {
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
+        ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
       },
       body: JSON.stringify({
         from,
@@ -430,6 +465,15 @@ async function deliverResendEmail(record) {
     if (!res.ok) {
       const err = new Error(`resend_http_${res.status}`);
       err.status = res.status;
+      // Provider error code (never PII): lets the caller tell "same key,
+      // different payload" (final) from "same key, still in flight" (retry
+      // later, the other request will carry the message).
+      const name = res.data && typeof res.data.name === "string" ? res.data.name.slice(0, 60) : "";
+      const classified = res.status === 409 ? RESEND_IDEMPOTENCY_ERRORS[name] : undefined;
+      if (classified) {
+        err.reason = classified.reason;
+        err.retryable = classified.retryable;
+      }
       throw err;
     }
     const data = res.data || {};
@@ -438,17 +482,20 @@ async function deliverResendEmail(record) {
       status: "ok",
       http: res.status,
       provider_id: data.id ? String(data.id).slice(0, 64) : undefined,
+      idempotency_key: idempotencyKey || undefined,
     };
   }).catch((err) => {
     safeLog("error", "email_failed", {
       lead_id: record.lead_id,
       code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      reason: err && err.reason ? String(err.reason).slice(0, 40) : undefined,
     });
     return {
       channel: "email",
       status: "error",
       reason: failureReason(err),
       http: failureHttp(err),
+      idempotency_key: idempotencyKey || undefined,
     };
   });
 }
@@ -480,6 +527,7 @@ async function deliverAll(record) {
   if (emailResult.reason) email.reason = String(emailResult.reason).slice(0, 40);
   if (Number.isFinite(emailResult.http)) email.http = emailResult.http;
   if (emailResult.provider_id) email.provider_id = String(emailResult.provider_id).slice(0, 64);
+  if (emailResult.idempotency_key) email.idempotency_key = String(emailResult.idempotency_key).slice(0, 256);
   return {
     notify: {
       status: notifyOk ? "ok" : notifySkipped ? "skipped" : "error",
@@ -494,6 +542,221 @@ async function deliverAll(record) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Drain-based e-mail retry (consumer: ops `drain_inbound`, called daily by
+// .github/workflows/revops-scheduled.yml → scripts/revops/scheduled_daily.mjs).
+//
+// The capture path never retries a timed-out send (the provider may already
+// have accepted it). This pass re-attempts, with the SAME Idempotency-Key,
+// the real records whose e-mail is still `error`/`pending` (a process that
+// died between persist and delivery leaves `pending`): inside Resend's 24 h
+// window a key that already carried a message returns the original id, so
+// "timeout that actually sent" converges on that id instead of a duplicate.
+//
+// Limits (stated, not hidden): 24 h window from received_at; at most
+// EMAIL_RETRY_MAX_ATTEMPTS total attempts; no exactly-once — two drains that
+// overlap inside the in-flight stamp window are deduplicated by the provider
+// (same id, or 409 concurrent_idempotent_requests), not by this store, which
+// has no compare-and-set. Out-of-window, exhausted or payload-mismatch rows
+// are only counted (`email_reconcile_required`), never re-sent blindly.
+// ---------------------------------------------------------------------------
+const EMAIL_IDEMPOTENCY_WINDOW_MS = 24 * 60 * 60 * 1000;
+const EMAIL_RETRY_MAX_ATTEMPTS = MAX_ATTEMPTS;
+// A claim older than this is treated as abandoned (function died mid-send).
+const EMAIL_RETRY_IN_FLIGHT_MS = 2 * 60 * 1000;
+const EMAIL_RETRYABLE_STATUSES = new Set(["error", "pending"]);
+
+function parseIso(value) {
+  const t = Date.parse(value || "");
+  return Number.isFinite(t) ? t : NaN;
+}
+
+/**
+ * Classify one record for the drain pass. Pure; no I/O; no PII in the result.
+ * @returns {{ class: "ignore"|"in_flight"|"retry"|"reconcile_required", reason?: string }}
+ */
+function classifyEmailRetry(record, now = new Date()) {
+  if (!record || !record.lead_id) return { class: "ignore", reason: "no_lead_id" };
+  if (!isCommercialReal(record)) return { class: "ignore", reason: "non_real" };
+  if (record.adaptive_intake === true) return { class: "ignore", reason: "adaptive" };
+  const email = (record.delivery && record.delivery.email) || {};
+  const status = email.status || "pending";
+  if (!EMAIL_RETRYABLE_STATUSES.has(status)) return { class: "ignore", reason: `status_${status}` };
+  if (email.reason === "payload_mismatch") return { class: "reconcile_required", reason: "payload_mismatch" };
+  const received = parseIso(record.received_at);
+  if (!Number.isFinite(received)) return { class: "reconcile_required", reason: "received_at_invalid" };
+  if (now.getTime() - received > EMAIL_IDEMPOTENCY_WINDOW_MS) {
+    return { class: "reconcile_required", reason: "window_expired" };
+  }
+  const attempts = Number.isFinite(Number(email.attempts)) ? Number(email.attempts) : 0;
+  if (attempts >= EMAIL_RETRY_MAX_ATTEMPTS) return { class: "reconcile_required", reason: "attempts_exhausted" };
+  const inFlight = parseIso(email.retry_in_flight_at);
+  if (Number.isFinite(inFlight) && now.getTime() - inFlight < EMAIL_RETRY_IN_FLIGHT_MS) {
+    return { class: "in_flight", reason: "claimed" };
+  }
+  return { class: "retry", reason: status, attempts };
+}
+
+function emptyEmailRetrySummary() {
+  return {
+    configured: true,
+    scanned: 0,
+    candidates: 0,
+    attempted: 0,
+    delivered: 0,
+    retryable: 0,
+    in_flight: 0,
+    deferred: 0,
+    email_reconcile_required: 0,
+    reconcile_reasons: {},
+  };
+}
+
+function countReason(target, reason) {
+  const key = String(reason || "unknown").slice(0, 40);
+  target[key] = (target[key] || 0) + 1;
+}
+
+/**
+ * Re-attempt the lead e-mail for eligible records. Never throws; never
+ * returns or logs to/email/phone/message. `limit` bounds sends per pass.
+ */
+async function reconcileEmailDeliveries(store, { now = new Date(), limit = 20, env = process.env } = {}) {
+  const summary = emptyEmailRetrySummary();
+  if (!store || typeof store.list !== "function" || typeof store.update !== "function") {
+    return { ok: false, error: "store_list_unavailable", ...summary };
+  }
+  const boundedLimit = Math.min(50, Math.max(1, Number(limit || 20)));
+  const leads = await store.list();
+  summary.scanned = Array.isArray(leads) ? leads.length : 0;
+  summary.configured = Boolean(env.RESEND_API_KEY);
+
+  for (const lead of leads || []) {
+    const cls = classifyEmailRetry(lead, now);
+    if (cls.class === "ignore") continue;
+    if (cls.class === "reconcile_required") {
+      summary.email_reconcile_required += 1;
+      countReason(summary.reconcile_reasons, cls.reason);
+      continue;
+    }
+    if (cls.class === "in_flight") {
+      summary.in_flight += 1;
+      continue;
+    }
+    summary.candidates += 1;
+    // Without a provider key there is nothing truthful to attempt: the row
+    // stays as it is and the count tells the operator what is waiting.
+    if (!summary.configured) continue;
+    if (summary.attempted >= boundedLimit) {
+      summary.deferred += 1;
+      continue;
+    }
+
+    const leadId = String(lead.lead_id);
+    // Claim: re-read, stamp a per-pass token and bump attempts, re-read again.
+    // A second drain that stamped after us owns the row (token mismatch) and
+    // we step back; the provider key covers the interleaving this cannot.
+    const fresh = (await store.get(leadId).catch(() => null)) || lead;
+    const freshCls = classifyEmailRetry(fresh, now);
+    if (freshCls.class !== "retry") {
+      if (freshCls.class === "in_flight") summary.in_flight += 1;
+      continue;
+    }
+    const token = crypto.randomUUID();
+    const claimedAttempts = (freshCls.attempts || 0) + 1;
+    const freshDelivery = fresh.delivery || {};
+    try {
+      await store.update(leadId, {
+        delivery: {
+          ...freshDelivery,
+          email: {
+            ...(freshDelivery.email || {}),
+            attempts: claimedAttempts,
+            retry_in_flight_at: now.toISOString(),
+            retry_token: token,
+          },
+        },
+      });
+    } catch (err) {
+      safeLog("error", "email_retry_claim_failed", {
+        lead_id: leadId,
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+      continue;
+    }
+    const claimed = await store.get(leadId).catch(() => null);
+    if (!claimed || !claimed.delivery || !claimed.delivery.email || claimed.delivery.email.retry_token !== token) {
+      summary.in_flight += 1;
+      continue;
+    }
+
+    summary.attempted += 1;
+    const result = await deliverResendEmail(claimed);
+    safeLog("info", "email_retry_attempt", {
+      lead_id: leadId,
+      status: result.status,
+      reason: result.reason || null,
+      http: Number.isFinite(result.http) ? result.http : null,
+      attempts: claimedAttempts,
+    });
+
+    // Never clobber a success written by a concurrent pass with our failure.
+    const latest = (await store.get(leadId).catch(() => null)) || claimed;
+    const latestEmail = (latest.delivery && latest.delivery.email) || {};
+    if (latestEmail.status === "ok" && result.status !== "ok") {
+      summary.in_flight += 1;
+      continue;
+    }
+    const nextEmail = {
+      ...latestEmail,
+      status: result.status,
+      attempts: claimedAttempts,
+      retry_in_flight_at: null,
+      retry_token: null,
+      last_retry_at: now.toISOString(),
+    };
+    delete nextEmail.reason;
+    delete nextEmail.http;
+    if (result.reason) nextEmail.reason = String(result.reason).slice(0, 40);
+    if (Number.isFinite(result.http)) nextEmail.http = result.http;
+    if (result.provider_id) nextEmail.provider_id = String(result.provider_id).slice(0, 64);
+    if (result.idempotency_key) nextEmail.idempotency_key = String(result.idempotency_key).slice(0, 256);
+    const patch = {
+      delivery: { ...(latest.delivery || {}), email: nextEmail },
+      audit: [
+        ...(Array.isArray(latest.audit) ? latest.audit : []),
+        {
+          at: now.toISOString(),
+          event: "email_retry",
+          email: result.status,
+          reason: result.reason || undefined,
+          attempts: claimedAttempts,
+        },
+      ],
+    };
+    // `status` doubles as the commercial-stage fallback (lead-stages.cjs):
+    // only promote the capture-level value, never a stage set by ops.
+    if (result.status === "ok" && latest.status === "persisted") patch.status = "persisted_notified";
+    try {
+      await store.update(leadId, patch);
+    } catch (err) {
+      safeLog("error", "email_retry_status_update_failed", {
+        lead_id: leadId,
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+    }
+    if (result.status === "ok") {
+      summary.delivered += 1;
+    } else if (result.reason === "payload_mismatch" || claimedAttempts >= EMAIL_RETRY_MAX_ATTEMPTS) {
+      summary.email_reconcile_required += 1;
+      countReason(summary.reconcile_reasons, result.reason === "payload_mismatch" ? "payload_mismatch" : "attempts_exhausted");
+    } else {
+      summary.retryable += 1;
+    }
+  }
+  return { ok: true, ...summary };
+}
+
 module.exports = {
   verifyTurnstile,
   deliverOpsWebhook,
@@ -505,4 +768,10 @@ module.exports = {
   deliveryTimeoutMs,
   fetchWithDeadline,
   monotonicNow,
+  emailIdempotencyKey,
+  classifyEmailRetry,
+  reconcileEmailDeliveries,
+  EMAIL_IDEMPOTENCY_WINDOW_MS,
+  EMAIL_RETRY_MAX_ATTEMPTS,
+  EMAIL_RETRY_IN_FLIGHT_MS,
 };
