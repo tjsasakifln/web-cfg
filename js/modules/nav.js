@@ -576,8 +576,10 @@
       routeFamilyFromPath,
     };
     const storedPseo = readStoredPseo();
+    // A queda para a query crua passa pelo mesmo sanitizador (e-mail, telefone
+    // e valores longos nunca entram no hidden nem no payload).
     const origem = fromUrl.origem || storedPseo.origem
-      || searchParams.get('origem') || hashParams.get('origem');
+      || sanitizeAttr(searchParams.get('origem') || hashParams.get('origem'), 'origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
     const ensureHidden = (fname, fval, force = false) => {
@@ -1043,10 +1045,35 @@
         || '',
     });
     // G04-01: destino de um cta_click sem renomear o evento. Ancora de captura
-    // (#contato, #captura*, #pedido*, #triagem*) = form; outra ancora = anchor;
-    // rota interna = route. O consumidor closed-loop conta no estagio 'cta'
-    // apenas form/whatsapp/email/tel; 'route' e 'anchor' sao navegacao.
+    // = form; outra ancora = anchor; rota interna = route. O consumidor
+    // closed-loop conta no estagio 'cta' apenas form/whatsapp/email/tel;
+    // 'route' e 'anchor' sao navegacao. Uma ancora e de captura quando o hash
+    // segue o padrao historico (#contato, #captura*, #pedido*, #triagem*) ou
+    // quando o alvo real na pagina e um formulario, contem um formulario ou e
+    // uma secao data-section-archetype=cta_formal (#escopo-projeto,
+    // #diagnostico da ferramenta, #contato-*) ou um bloco de contato direto
+    // (.capture-grid/.contact-primary, p. ex. #encaminhar em /parcerias-engenharia/).
+    // Um sumario que aponta para uma secao de prosa com o mesmo id
+    // (#diagnostico em /conteudos/) nao e captura.
     const CAPTURE_HASH = /^#(contato|captura|pedido|triagem)/i;
+    const captureTargetCache = new Map();
+    const isCaptureHash = (hash) => {
+      const value = String(hash || '').trim();
+      if (!value.startsWith('#') || value.length < 2) return false;
+      if (CAPTURE_HASH.test(value)) return true;
+      if (captureTargetCache.has(value)) return captureTargetCache.get(value);
+      let result = false;
+      try {
+        const target = document.getElementById(decodeURIComponent(value.slice(1)));
+        if (target) {
+          result = String(target.tagName || '').toUpperCase() === 'FORM'
+            || target.getAttribute('data-section-archetype') === 'cta_formal'
+            || !!target.querySelector?.('form, .capture-grid, .contact-primary');
+        }
+      } catch (_) { result = false; }
+      captureTargetCache.set(value, result);
+      return result;
+    };
     const destinationTypeFromHref = (rawHref) => {
       const value = String(rawHref || '').trim();
       if (!value) return '';
@@ -1054,7 +1081,7 @@
       const hash = hashAt === -1 ? '' : value.slice(hashAt);
       const beforeHash = hashAt === -1 ? value : value.slice(0, hashAt);
       const samePage = !beforeHash || beforeHash === pagePath || beforeHash === `${pagePath}`.replace(/\/$/, '');
-      if (hash && samePage) return CAPTURE_HASH.test(hash) ? 'form' : 'anchor';
+      if (hash && samePage) return isCaptureHash(hash) ? 'form' : 'anchor';
       const dest = canonicalizeDestination(value);
       if (dest.kind === 'whatsapp' || dest.kind === 'email' || dest.kind === 'tel') return dest.kind;
       if (dest.kind === 'external') return 'external';
@@ -1074,6 +1101,10 @@
     const isHeaderCta = (node) => elMatches(node, 'a.header-cta');
     const isSituationAction = (node) => elMatches(node, 'a.situation-action');
     const isTriageRoute = (rawHref) => canonicalizeDestination(rawHref).path === TRIAGE_ROUTE;
+    // Um botao de envio (ou [data-tool-to-form]) declarado como cta_click leva
+    // ao formulario que o contem: destination_type=form sem href.
+    const isFormSubmitCta = (node) => elMatches(node, 'button[type="submit"], input[type="submit"], [data-tool-to-form]')
+      || (!node.getAttribute('href') && !!node.closest?.('form'));
     const ctaKindFromEl = (node) => node.getAttribute('data-cta-kind')
       || EVENT_CTA_KIND[node.getAttribute('data-event-name') || ''] || '';
     const handleTrackedClick = (el, domEvent) => {
@@ -1166,14 +1197,18 @@
         });
         return;
       }
-      const routeCta = (isHeaderCta(el) || isTriageRoute(href))
-        && destinationTypeFromHref(href) === 'route';
+      // O 'Solicitar proposta' do cabecalho e cta_click em toda rota: destino
+      // route (/triagem-tecnica/), form (ancora de captura da propria pagina,
+      // p. ex. #triagem-quantitativos, #escopo-projeto) ou anchor.
+      const navDestination = destinationTypeFromHref(href);
+      const routeCta = (isHeaderCta(el) && (navDestination === 'route' || navDestination === 'form' || navDestination === 'anchor'))
+        || (isTriageRoute(href) && navDestination === 'route');
       if (routeCta) {
         const routeAttrs = attrsFromEl(el);
         track('cta_click', {
           ...base,
           cta_label: label,
-          destination_type: 'route',
+          destination_type: navDestination,
           source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
           offer_id: el.getAttribute('data-offer-id') || '',
           asset_id: routeAttrs.asset_id,
@@ -1204,14 +1239,17 @@
         return;
       }
       // Sem data-event-name, so viram cta_click: link de situacao da home para
-      // outra rota e ancora de captura declarada como CTA (data-cta-id), p. ex.
-      // o herói de /quantitativos-orcamento-obras/ -> #triagem-quantitativos.
-      const isCaptureAnchorCta = href.startsWith('#') && CAPTURE_HASH.test(href) && !!el.getAttribute('data-cta-id');
+      // outra rota e ancora de captura da propria pagina (com ou sem
+      // data-cta-id), p. ex. o herói de /quantitativos-orcamento-obras/ ->
+      // #triagem-quantitativos ou o de /parcerias-engenharia/ -> #encaminhar.
+      const isCaptureAnchorCta = href.startsWith('#') && isCaptureHash(href);
       const eventName = el.getAttribute('data-event-name')
-        || ((isSituationAction(el) && destinationTypeFromHref(href) === 'route') || isCaptureAnchorCta ? 'cta_click' : '');
+        || ((isSituationAction(el) && navDestination === 'route') || isCaptureAnchorCta ? 'cta_click' : '');
       if (!eventName || !namedAllowed[eventName]) return;
       const namedAttrs = attrsFromEl(el);
-      const destinationType = /cta_click$/.test(eventName) ? destinationTypeFromHref(href) : '';
+      const destinationType = /cta_click$/.test(eventName)
+        ? (navDestination || (isFormSubmitCta(el) ? 'form' : ''))
+        : '';
       track(eventName, {
         ...base,
         cta_label: label,
@@ -1245,9 +1283,14 @@
     document.querySelectorAll('[data-event-name]').forEach((el) => {
       el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
     });
-    // G04-10 (3): ancora de captura declarada como CTA sem data-event-name.
-    document.querySelectorAll('a[href^="#"][data-cta-id]').forEach((el) => {
-      if (!CAPTURE_HASH.test(el.getAttribute('href') || '')) return;
+    // G04-10 (3) / G04-02: o header-cta com ancora (toda rota privada) e toda
+    // ancora de captura da propria pagina, com ou sem data-cta-id e sem
+    // data-event-name, emitem cta_click. Ancoras de sumario para prosa ficam
+    // mudas.
+    document.querySelectorAll('a[href^="#"]').forEach((el) => {
+      if (el.hasAttribute('data-event-name')) return;
+      const anchorHref = el.getAttribute('href') || '';
+      if (!isHeaderCta(el) && !isCaptureHash(anchorHref)) return;
       el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
     });
 
