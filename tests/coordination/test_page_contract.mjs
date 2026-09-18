@@ -193,7 +193,13 @@ test("every published finding keeps its demonstrative label and pilot deep link,
   const noteMatch = slot.match(/<p class="coord-finding-kicker" data-coord-register-note="demonstrative">([\s\S]*?)<\/p>/);
   assert.ok(noteMatch, "demonstrative note present");
   const noteText = visible(noteMatch[0]);
-  assert.match(noteText, /Não é obra de cliente e não é projeto executivo\./);
+  // LAPIDACAO-COMERCIAL-20260918: the visible "demonstrativo" identification is
+  // the protected property; the former negative ("Não é obra de cliente") is
+  // superseded and must not come back. The scope cut (not an executive
+  // project) stays because it changes how the register is read.
+  assert.match(noteText, /recorte de banheiro demonstrativo/);
+  assert.doesNotMatch(noteText, /obra de cliente/i);
+  assert.match(noteText, /não é projeto executivo\./);
   assert.ok(slot.indexOf(noteMatch[0]) < slot.indexOf("<article"), "note precedes the first article");
   for (const id of ids) {
     assert.match(noteMatch[0], new RegExp(`href="/casos/demonstrativo-projeto-privado/#${id}"`), `pilot deep link for ${id}`);
@@ -205,6 +211,22 @@ test("every published finding keeps its demonstrative label and pilot deep link,
   const gridOpen = slot.indexOf('<div class="grid-2">');
   assert.ok(gridOpen > slot.indexOf(noteMatch[0]) && gridOpen < slot.indexOf("<article"));
   assert.ok(slot.lastIndexOf("</div>") > slot.lastIndexOf("</article>"));
+});
+
+test("counterproof: a register note without the demonstrative identification is not the shipped note", () => {
+  const html = readPage();
+  const record = loadPublicRegister(root);
+  const start = html.indexOf(COORD_SLOT_START);
+  const end = html.indexOf(COORD_SLOT_END);
+  const slot = html.slice(start, end + COORD_SLOT_END.length);
+  const noteMatch = slot.match(/<p class="coord-finding-kicker" data-coord-register-note="demonstrative">([\s\S]*?)<\/p>/);
+  assert.ok(noteMatch);
+  const unlabelled = noteMatch[0].replace("recorte de banheiro demonstrativo", "recorte de banheiro");
+  assert.doesNotMatch(visible(unlabelled), /demonstrativ/i);
+  const poisoned = html.replace(noteMatch[0], unlabelled);
+  const poisonedSlot = poisoned.slice(poisoned.indexOf(COORD_SLOT_START), poisoned.indexOf(COORD_SLOT_END) + COORD_SLOT_END.length);
+  assert.notEqual(poisonedSlot, renderRegisterHtml(record), "the generator never ships an unlabelled register");
+  assert.match(visible(noteMatch[0]), /demonstrativ/i);
 });
 
 test("mutation: mixing revisão as this purchase or promising zero interference fails the contract helper", () => {

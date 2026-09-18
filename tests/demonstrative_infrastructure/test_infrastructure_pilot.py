@@ -238,6 +238,13 @@ def test_page_is_demonstrative_not_client_and_has_required_title() -> None:
     # (class t-service) da composicao "prancha e percurso"; o texto continua exato.
     assert re.search(rf"<h1[^>]*>{re.escape(PAGE_H1)}</h1>", html)
     assert "não servem para execução" in html.lower()
+    # LAPIDACAO-COMERCIAL-20260918: one visible use restriction in the page
+    # body, and none of the superseded "no client / no ART" negatives.
+    main = re.search(r"<main\b[\s\S]*?</main>", html).group(0)
+    visible = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<(script|style|svg)\b.*?</\1>", " ", main, flags=re.S))).lower()
+    assert visible.count("não servem para execução") == 1
+    for absent in ("não há contratante", "sem contratante", "nem número de art", "não é obra de cliente"):
+        assert absent not in visible, absent
     assert 'rel="canonical"' in html
     assert "https://confenge.com.br/casos/demonstrativo-infraestrutura/" in html
     assert "exemplo demonstrativo" in html.lower()

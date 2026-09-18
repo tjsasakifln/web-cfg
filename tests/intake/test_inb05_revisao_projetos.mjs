@@ -190,7 +190,12 @@ test("landing extract separates four honest classes and refuses invented errors"
   const main = mainOf(pages.landing);
   assert.match(main, /data-extract-kind="demonstrative"/);
   assert.match(main, /data-extract-canonical-source="inb-06"/);
-  assert.match(main, /não é trabalho de cliente/);
+  // LAPIDACAO-COMERCIAL-20260918: "Exemplo demonstrativo" identifies the extract;
+  // the former negative ("não é trabalho de cliente") is superseded and must not
+  // come back. The honest-class limit stays as the material condition.
+  assert.match(main, /rv-note">Exemplo demonstrativo do <a/);
+  assert.doesNotMatch(main, /trabalho de cliente/i);
+  assert.match(main, /Item de checklist não respondido e norma não examinada não viram erro do projeto/);
   assert.equal(/aprovado pelo fundador|SELECT do demonstrativo|resolved_in_R01/.test(main), false);
   assert.match(main, /Corrigido na revisão R01/);
   assert.match(main, /RF-01/);

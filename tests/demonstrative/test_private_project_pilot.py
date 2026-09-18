@@ -174,6 +174,25 @@ def test_page_is_demonstrative_not_client_and_has_canonical() -> None:
     assert extracts_named_total_in_html(html)
 
 
+def _visible_main(html: str) -> str:
+    main = re.search(r"<main\b[\s\S]*?</main>", html)
+    text = main.group(0) if main else html
+    text = re.sub(r"<(script|style|svg)\b.*?</\1>", " ", text, flags=re.S)
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text)).lower()
+
+
+def test_use_restriction_is_said_once_and_no_absent_client_negative() -> None:
+    """LAPIDACAO-COMERCIAL-20260918 (revisao independente, F01/TP-01): the
+    demonstrative keeps ONE use restriction (not an opinion nor a budget to
+    build from) after the redundant "no client / no ART" negatives left."""
+    html = (ROOT / PUBLIC_DIR_REL / "index.html").read_text(encoding="utf-8")
+    text = _visible_main(html)
+    assert text.count("não é parecer nem orçamento para executar obra") == 1
+    assert "exemplo publicado para conferência" in text
+    for absent in ("sem contratante", "não há contratante", "nem número de art", "não é obra de cliente"):
+        assert absent not in text, absent
+
+
 def extracts_named_total_in_html(html: str) -> bool:
     extracts = derive(_source())
     floor = br_number(extracts["named_totals"]["floor_area_m2"])

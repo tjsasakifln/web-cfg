@@ -44,6 +44,21 @@ Decisão editorial expressa do proprietário (2026-09-18): "Exemplo demonstrativ
 | Sem documentos sensíveis no primeiro contato; canal seguro depois | uma vez junto do formulário |
 | Análise técnica ≠ garantia de pagamento (B2G) | pilar de medições e glosas |
 
+
+## Revisão comparativa independente do lote (2026-09-18, agentes; não é revisão humana)
+
+Método: três revisores independentes (editorial, jornadas J1–J8, integridade de testes/backend) compararam a produção servida (`4cfa6adca`, rótulo P) com a candidata (`e3c97a1d0`, rótulo C) sem receber a solução esperada; cada achado P0/P1 passou por um verificador adversarial que tentou refutá-lo. Resultado: nenhum P0 em nenhuma versão; C melhor em cinco das seis rotas e no formulário; um único prejuízo material em C, corrigido antes da publicação (uso restrito do demonstrativo privado: "não é parecer nem orçamento para executar obra", uma vez). Achados confirmados e destino:
+
+| Achado | Rota | Estado |
+| --- | --- | --- |
+| F02 / j3 / TP-02: consentimento e envio só dentro do painel "pode completar depois" (P) | `/` formulário | CORRIGIDO em C (2de9cf2ed); contraprova em `seo/scripts/test_form_funnel.mjs` falha contra o `script.js` de produção |
+| F01 / TP-01: restrição de uso "não é parecer para executar obra" sumiu junto com a negativa redundante | `/casos/demonstrativo-projeto-privado/` | CORRIGIDO na propagação (restaurada uma vez; "sem contratante/assinatura/ART" não volta, por decisão do proprietário) |
+| j3-nojs: nota sem JS de P afirmava "preferimos não exibi-lo" com o formulário visível | `/` | C diz só o que é verdade e aponta os canais; esconder o formulário sem JS exige CSS (fora desta campanha) — registrado |
+| j5: formulário do pilar diz "campos marcados como obrigatórios" sem marcar nenhum | pilares `#captura-pilar` | CORRIGIDO na propagação (conjunto obrigatório nomeado, opcionais marcados) |
+| j7: seis artigos de medição/prazo levam "Continuar pelo formulário" à home | `/conteudos/{glosa-de-medicao-obra-publica, medicao-de-obra-publica-rejeitada, fiscal-nao-assina-medicao-obra-publica, custos-indiretos-atraso-administracao-obra, chuva-prorrogacao-prazo-obra-publica, jogo-de-planilha-aditivo-obra-publica}/` | PRÉ-EXISTENTE, ISOLADO: os seis são congelados por hash (canário #389 / click-origin / aprovação hash-bound; `apply_article_pillar_form.py --check` lista os seis). Mudar o corpo quebra a medição do canário — conflito de autoridade fora desta decisão; permanece a ação humana já registrada no fechamento pós-redesign |
+
+P2 registrados sem ação (preferência): "Quem acessa: operação CONFENGE" saiu do microtexto do formulário e continua em `/privacidade/`; "não é software, planilha gratuita" saiu do herói de quantitativos ("não executa a obra" permanece em Condições e limites).
+
 ## Matriz A01–A12
 
 (preenchida no fechamento)

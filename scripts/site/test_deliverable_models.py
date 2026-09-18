@@ -151,13 +151,19 @@ def test_every_model_is_irreversibly_de_identified() -> None:
     for slug, *_ in MODELS:
         html = _html(slug)
         lowered = html.casefold()
+        # LAPIDACAO-COMERCIAL-20260918: the synthetic disclosure ("integralmente
+        # sintéticos", "perfil fictício") plus the visible "exemplo demonstrativo"
+        # badge are the protected properties; the former negative ("não
+        # representa cliente, licitação ou resultado real") is superseded.
         for phrase in (
             "dados sintéticos",
             "integralmente sintéticos",
-            "não representa cliente, licitação ou resultado real",
             "perfil fictício",
+            'data-permission-class="demonstrativo">exemplo demonstrativo</p>',
         ):
             assert phrase in lowered, (slug, phrase)
+        assert "não representa cliente" not in lowered, slug
+        assert "não é case de cliente" not in lowered, slug
         for forbidden in (
             "extra construtora",
             "extra empreiteira",
