@@ -713,7 +713,10 @@
         "/servicos/"
       ],
       "commercial_surfaces": [],
-      "support_destinations": [],
+      "support_destinations": [
+        "/servicos/#servico-avaliacao",
+        "/triagem-tecnica/#avaliacao-imovel"
+      ],
       "current_surface_kind": "hub",
       "bofu_family_id": null,
       "reindex_proposal": null,
@@ -743,7 +746,7 @@
       "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
-        "destination": "/triagem-tecnica/#pericia-avaliacao"
+        "destination": "/triagem-tecnica/#avaliacao-imovel"
       },
       "decision": "ENRICH",
       "function_differentiation": "Avaliação formal de imóvel urbano, não assistência de disputa nem parecer preliminar isolado.",
@@ -921,7 +924,11 @@
         "/servicos/"
       ],
       "commercial_surfaces": [],
-      "support_destinations": [],
+      "support_destinations": [
+        "/servicos-obras-publicas/#situacao-orgao",
+        "/servicos-obras-publicas/#captura-contrato",
+        "/triagem-tecnica/#planejamento-publico"
+      ],
       "current_surface_kind": "hub",
       "bofu_family_id": null,
       "reindex_proposal": null,
@@ -951,7 +958,7 @@
       "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
-        "destination": "/triagem-tecnica/#planejamento-publico"
+        "destination": "/servicos-obras-publicas/#captura-contrato"
       },
       "decision": "ENRICH",
       "function_differentiation": "Apoio técnico ao ente contratante, não consultoria ao licitante no mesmo certame.",

@@ -106,8 +106,8 @@
     },
     {
       "id": "building_diagnosis",
-      "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
-      "summary": "Quando há anomalia, dúvida sobre a condição do imóvel, recebimento ou necessidade de registrar o estado em uma data.",
+      "label": "Tenho infiltração ou fissura, vou receber ou reformar um imóvel, ou preciso documentar o construído",
+      "summary": "Quando há anomalia ou dúvida sobre a condição do imóvel, uma obra para receber ou entregar, uma reforma em condomínio para aprovar ou o construído para documentar em uma data.",
       "deliverables": "Relatório da condição do imóvel, com manifestações localizadas, data, hipóteses sustentadas e o próximo exame indicado.",
       "href": "/inspecao-diagnostico-edificacoes/",
       "index_state": "service_hub_index"
@@ -138,8 +138,8 @@
     },
     {
       "id": "public_works_b2g",
-      "label": "Medição glosada ou pagamento travado em contrato público",
-      "summary": "Quando edital, proposta, medição, glosa, aditivo, atraso ou margem exigem decisão técnica e registro contemporâneo.",
+      "label": "Edital para decidir, medição glosada ou custo fora da curva em contrato público, ou órgão estruturando a contratação",
+      "summary": "Quando edital, proposta, medição, glosa, aditivo, atraso ou margem exigem decisão técnica e registro contemporâneo, ou o órgão precisa estruturar tecnicamente a contratação.",
       "deliverables": "Dossiê técnico do evento, com cronologia, prova de cada número e parcela incontroversa; o órgão decide o ateste e o pagamento.",
       "href": "/servicos-obras-publicas/",
       "index_state": "index"
@@ -473,6 +473,13 @@
       "url": "/atrasos-prorrogacao-obras-publicas/",
       "stage": "execucao",
       "summary": "Prazo estourando por causa que não é sua. Separamos causa, responsabilidade e dias afetados no caminho crítico para instruir o pedido de prorrogação."
+    },
+    {
+      "id": "reajuste",
+      "label": "Reajuste contratual",
+      "url": "/servicos-obras-publicas/#entrega-21",
+      "stage": "execucao",
+      "summary": "Índice, data-base e cláusula aplicados ao saldo do contrato. Calculamos o valor com memória para instruir o pedido de reajuste; o deferimento é decisão da Administração."
     },
     {
       "id": "reequilibrio",

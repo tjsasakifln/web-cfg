@@ -79,7 +79,16 @@ def _visible(fragment: str) -> str:
 # gerado). As invariantes estruturais seguem identicas: 23 controles, 3
 # obrigatorios (nome, estagio, consentimento), action /obrigado, sem upload.
 # Gate executavel da propriedade: seo/scripts/test_form_funnel.mjs.
-CAPTURE_FORM_SHA256 = "f00a47798ca006bf2513cc0b2016167d86173b0368dec18600b81fed5f4cd16b"
+# 2026-09-19 (CONFENGE-BOFU-FECHAMENTO-20260919, WS-B: PUBLICAS-03 + B-05).
+# Duas opcoes do select mudaram: o rotulo do orgao publico deixou de prometer
+# "projeto ou fiscalizacao do lado do orgao" (oferta nao publicada; value e
+# data-journey intactos) e a avaliacao de imovel ganhou opcao propria
+# (value "avaliação de imóvel", data-journey "avaliacao"), separada da pericia
+# porque as duas familias tem acoes terminais distintas na matriz de intencao.
+# As invariantes estruturais seguem identicas: 23 controles, 3 obrigatorios,
+# action /obrigado, sem upload. A entrada HOME_SITUATIONS do bundle e
+# verificada por seo/scripts/test_form_funnel.mjs.
+CAPTURE_FORM_SHA256 = "72c6aa7b375e23d389d09c11cfe04c77e7991f8b8a5570e11387aee5da219948"
 
 
 def _home() -> str:
@@ -326,3 +335,195 @@ def test_stage_options_sharing_a_journey_list_the_neutral_one_first() -> None:
             assert "urgente" not in attrs_list[0].lower(), (journey, attrs_list[0])
     assert 'value="contrato em execução"' in by_journey["contrato"][0]
     assert "data-journey-default" not in form
+
+
+# ---------------------------------------------------------------------------
+# CONFENGE-BOFU-FECHAMENTO-20260919 (WS-B). Cada teste abaixo reprovava no
+# HTML servido em fedb4768b e descreve a propriedade que a correcao protege.
+# ---------------------------------------------------------------------------
+TRIAGE = ROOT / "triagem-tecnica" / "index.html"
+REGISTRY = ROOT / "data" / "organic" / "public-family-registry.json"
+PURCHASE_MAP = ROOT / "data" / "bofu-dominance" / "core" / "purchase-route-map.v1.json"
+WHATSAPP_MESSAGES = ROOT / "data" / "site" / "whatsapp-messages.json"
+
+
+def _situation_row(html: str, row_id: str) -> str:
+    match = re.search(rf'<li class="situation-row[^"]*" id="{row_id}">[\s\S]*?</li>', html)
+    assert match, row_id
+    return match.group(0)
+
+
+def _triage_item(item_id: str) -> str:
+    html = TRIAGE.read_text(encoding="utf-8")
+    match = re.search(rf'<li id="{item_id}">[\s\S]*?</li>', html)
+    assert match, item_id
+    return match.group(0)
+
+
+def _services_article(row_id: str) -> str:
+    html = SERVICES.read_text(encoding="utf-8")
+    match = re.search(rf'<article class="corporate-service-row[^"]*" id="{row_id}"[\s\S]*?</article>', html)
+    assert match, row_id
+    return match.group(0)
+
+
+def test_home_property_row_names_receiving_reform_and_as_built() -> None:
+    """HOME-HUB-01 / A-04. Quem vai receber um imovel, reformar em condominio
+    ou documentar o construido nao se reconhecia na linha 03: o titulo so
+    falava de infiltracao e o unico link ia a landing sem ancora."""
+    row = _situation_row(_home(), "situacao-obra-imovel")
+    for anchor in ("#recebimento-entrega", "#reforma-condominio", "#documentacao-as-built"):
+        assert f'href="/inspecao-diagnostico-edificacoes/{anchor}"' in row, anchor
+    text = _visible(row).casefold()
+    for term in ("receb", "reform", "construído"):
+        assert term in text, term
+
+
+def test_home_public_works_row_names_edital_and_public_entity() -> None:
+    """HOME-HUB-09. Licitante e orgao nao se reconheciam no h3 da linha 07."""
+    row = _situation_row(_home(), "situacao-obras-publicas")
+    heading = _visible(re.search(r"<h3>[\s\S]*?</h3>", row).group(0)).casefold()
+    assert "edital" in heading, heading
+    assert "órgão" in heading, heading
+
+
+def test_home_sst_row_links_the_labor_dispute_entry() -> None:
+    """B-07 (3). O advogado trabalhista nao chegava a #assistencia-trabalhista
+    em duas escolhas a partir da home."""
+    row = _situation_row(_home(), "situacao-sst")
+    assert 'href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"' in row
+
+
+def test_home_triage_section_frames_every_family_before_public_works() -> None:
+    """B-11. O unico paragrafo de expectativa de #triagem-tecnica abria com
+    "Em obra publica": a consultoria inteira era enquadrada pela vertical."""
+    triage = _section(_home(), r'id="triagem-tecnica"')
+    intro = re.search(r'<h2 class="t-editorial" id="triage-title">[\s\S]*?</h2>\s*<p>([\s\S]*?)</p>', triage)
+    assert intro, "triage intro paragraph missing"
+    text = _visible(intro.group(1)).strip()
+    assert "sem saber o nome do serviço" in text, text
+    assert not text.startswith("Em obra pública"), text
+    # O prazo publicado de obra publica continua na pagina (condicao material).
+    assert "1 dia útil" in text, text
+    assert "Não envie documentos sensíveis" in text, text
+
+
+def test_home_public_entity_paragraph_points_to_the_persisted_channel() -> None:
+    """PUBLICAS-02. 'descreva a necessidade' levava a um item da triagem sem
+    canal; o orgao precisa chegar ao formulario persistido do hub."""
+    b2g = _section(_home(), r'id="obras-publicas"')
+    assert 'href="/servicos-obras-publicas/#captura-contrato"' in b2g
+    assert 'href="/servicos-obras-publicas/#situacao-orgao"' in b2g
+
+
+def test_triage_public_entity_item_has_whatsapp_and_form() -> None:
+    """PUBLICAS-02. O li#planejamento-publico so tinha '/servicos-obras-publicas/'
+    enquanto os irmaos traziam wa.me com mensagem pronta."""
+    from urllib.parse import unquote
+
+    item = _triage_item("planejamento-publico")
+    hrefs = re.findall(r'href="([^"]+)"', item)
+    assert "/servicos-obras-publicas/#captura-contrato" in hrefs, hrefs
+    expected = json.loads(WHATSAPP_MESSAGES.read_text(encoding="utf-8"))["messages"]["orgao_planejamento"]
+    texts = [unquote(h.split("text=", 1)[1]) for h in hrefs if h.startswith("https://wa.me/") and "text=" in h]
+    assert expected in texts, texts
+
+
+def test_purchase_map_terminals_follow_the_persisted_channels() -> None:
+    """PUBLICAS-02 + B-05. O mapa de compra apontava o orgao para a triagem
+    sem canal e a avaliacao para o item fundido com pericia."""
+    doc = json.loads(PURCHASE_MAP.read_text(encoding="utf-8"))
+    rows = {row["purchase_id"]: row for row in doc["purchases"]}
+    assert rows["planejar-contratacao-publica"]["terminal_contact"]["destination"] == "/servicos-obras-publicas/#captura-contrato"
+    assert rows["avaliar-imovel"]["terminal_contact"]["destination"] == "/triagem-tecnica/#avaliacao-imovel"
+
+
+def test_home_select_separates_valuation_and_drops_unpublished_inspection_promise() -> None:
+    """PUBLICAS-03 + B-05. O rotulo do orgao prometia 'fiscalizacao do lado do
+    orgao' (oferta nao publicada) e a avaliacao de imovel so existia fundida
+    com pericia, recebendo orientacao de disputa. A entrada correspondente em
+    HOME_SITUATIONS (bundle) e verificada por seo/scripts/test_form_funnel.mjs."""
+    html = _home()
+    block = re.search(r'<select\b[^>]*id="estagio"[\s\S]*?</select>', html).group(0)
+    orgao = re.search(r'<option value="planejamento de órgão público"[^>]*>([^<]*)</option>', block)
+    assert orgao, "public entity option missing"
+    assert "fiscaliza" not in orgao.group(1).casefold(), orgao.group(1)
+    assert "órgão público" in orgao.group(1).casefold(), orgao.group(1)
+    assert '<option value="avaliação de imóvel" data-journey="avaliacao">' in block
+    pericia = re.search(r'<option value="perícia, assistência técnica ou avaliação"[^>]*>([^<]*)</option>', block)
+    assert pericia, "dispute option missing"
+    assert "avalia" not in pericia.group(1).casefold(), pericia.group(1)
+
+
+def test_triage_separates_valuation_from_dispute_and_names_labor_sst() -> None:
+    """B-05 (triagem) + B-07 (4)."""
+    valuation = _triage_item("avaliacao-imovel")
+    assert 'href="/servicos/#servico-avaliacao"' in valuation
+    assert "https://wa.me/" in valuation
+    valuation_text = _visible(valuation).casefold()
+    assert "partilha" in valuation_text
+    assert "processo" not in valuation_text
+    dispute = _triage_item("pericia-avaliacao")
+    assert "https://wa.me/" in dispute
+    sst = _triage_item("sst")
+    assert 'href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"' in sst
+    assert "trabalhista" in _visible(sst).casefold()
+
+
+def test_sst_family_visitor_job_covers_labor_dispute_evidence() -> None:
+    """B-07 (1)."""
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    row = next(r for r in registry["families"] if r.get("id") == "seguranca-trabalho-apoio-tecnico")
+    assert "reclamação trabalhista" in row["visitor_job"].casefold(), row["visitor_job"]
+
+
+def test_services_rows_close_with_contact_after_conditions() -> None:
+    """B-04. Em #servico-avaliacao o WhatsApp vinha antes de 'Fora desta
+    oferta'; quem tem imovel rural acionava o canal antes de ler a exclusao."""
+    html = SERVICES.read_text(encoding="utf-8")
+    checked = 0
+    for article in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', html):
+        row_id = re.search(r'id="([^"]+)"', article).group(1)
+        conditions = [m.end() for m in re.finditer(r'class="conditions', article)]
+        whatsapp = [m.start() for m in re.finditer(r'href="https://wa\.me/', article)]
+        if not conditions or not whatsapp:
+            continue
+        assert whatsapp[0] > conditions[-1], row_id
+        checked += 1
+    assert checked >= 1
+
+
+def test_services_contact_anchors_declare_a_cta_id() -> None:
+    """B-06. As ancoras wa.me/mailto de /servicos/ disparavam whatsapp_click
+    com cta_id 'unspecified': a familia avaliar_imovel nao era segmentavel."""
+    html = SERVICES.read_text(encoding="utf-8")
+    main = re.search(r"<main[\s\S]*?</main>", html).group(0)
+    missing = []
+    for attrs in re.findall(r"<a\b([^>]*)>", main):
+        href = re.search(r'href="([^"]+)"', attrs)
+        if not href:
+            continue
+        if not (href.group(1).startswith("https://wa.me/") or href.group(1).startswith("mailto:")):
+            continue
+        cta = re.search(r'data-cta-id="([^"]*)"', attrs)
+        if not cta or not cta.group(1).strip():
+            missing.append(href.group(1)[:60])
+    assert not missing, missing
+
+
+def test_services_valuation_names_the_taxonomy_purposes() -> None:
+    """B-03 (minimo sem rota propria): finalidades nomeadas pela taxonomia."""
+    text = _visible(_services_article("servico-avaliacao")).casefold()
+    for term in ("partilha", "garantia", "desapropriação", "aluguel"):
+        assert term in text, term
+
+
+def test_services_hub_does_not_repeat_its_own_conditions() -> None:
+    """RESSALVAS-10. 'ART' duas vezes na mesma frase, a lista de aceite
+    repetida em tres secoes e 'nao sao o mesmo trabalho' na disputa."""
+    html = SERVICES.read_text(encoding="utf-8")
+    for sentence in re.split(r"(?<=[.!?])\s+", _visible(_services_article("servico-avaliacao"))):
+        assert len(re.findall(r"\bART\b", sentence)) <= 1, sentence.strip()
+    assert "não são o mesmo trabalho" not in html
+    assert "atividade de campo, responsável técnico, ART e eventuais registros ou vistos" not in html
+    assert html.count("Local, atribuição, visita e ART, quando aplicáveis, são confirmados antes do aceite técnico") == 1
