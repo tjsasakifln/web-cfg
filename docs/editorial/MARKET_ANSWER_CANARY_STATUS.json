@@ -1,10 +1,10 @@
 {
   "report": "MARKET_ANSWER_CANARY_STATUS",
-  "as_of_report": "2026-09-16",
-  "generated_at": "2026-09-16T06:34:25.843326Z",
+  "as_of_report": "2026-09-19",
+  "generated_at": "2026-09-19T07:19:33.811241Z",
   "freshness_class": "STALE",
-  "evaluated_at": "2026-09-16T06:34:25.843326Z",
-  "age_seconds": 2581502,
+  "evaluated_at": "2026-09-19T07:19:33.811241Z",
+  "age_seconds": 2843410,
   "expires_at": "2026-08-19T11:29:23.193694+02:00",
   "candidate_decision": {
     "question": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
@@ -157,8 +157,8 @@
       "freshness_expired"
     ],
     "freshness_class": "STALE",
-    "evaluated_at": "2026-09-16T06:34:25.843326Z",
-    "age_seconds": 2581502,
+    "evaluated_at": "2026-09-19T07:19:33.811241Z",
+    "age_seconds": 2843410,
     "expires_at": "2026-08-19T11:29:23.193694+02:00"
   },
   "page_index_state": {
@@ -167,13 +167,13 @@
     "sitemap": false,
     "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
     "rendered": [
-      "/home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
+      "/home/tjsasakifln/code/confenge/.worktrees/inbound-clean/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
     ],
     "fixture_marked": false,
     "indexable": false,
     "freshness_class": "STALE",
-    "evaluated_at": "2026-09-16T06:34:25.843326Z",
-    "age_seconds": 2581502,
+    "evaluated_at": "2026-09-19T07:19:33.811241Z",
+    "age_seconds": 2843410,
     "expires_at": "2026-08-19T11:29:23.193694+02:00"
   },
   "engagement_events_available": {
