@@ -18,9 +18,9 @@ Mandato: implementar, testar, revisar, abrir PRs, fazer merge e publicar pela es
 
 | Estado | Valor | Evidência |
 | --- | --- | --- |
-| IMPLEMENTADO_E_TESTADO | Incremento 1: SIM (réplica 34/35, `evidence/replica-site-ci-70dc5f6b0.log`; único FAIL é ambiente da réplica). Incremento 2: réplica em `evidence/replica-site-ci-inc2.log` | PR #712, PR #713 |
-| INTEGRADO | Incremento 1: `b20d2b4d5` (merge commit de #712). Incremento 2: PR #713 | GitHub |
-| PUBLICADO_E_VERIFICADO | Incremento 1: SIM (`b20d2b4d5`, 22/22). Incremento 2: pendente | `/.well-known/build-info.json` |
+| IMPLEMENTADO_E_TESTADO | SIM — incremento 1: réplica 34/35 (`evidence/replica-site-ci-70dc5f6b0.log`); incremento 2: réplica 34/35 (`evidence/replica-site-ci-inc2-64f36e15a.log`); em ambos o único FAIL é o scorecard local por ambiente da réplica, e o `site-validation` real passou (runs 35452064202 e 35459648982) | PR #712, PR #713 |
+| INTEGRADO | SIM — `b20d2b4d5` (#712) e `83b63fc1f` (#713), merge commits | GitHub |
+| PUBLICADO_E_VERIFICADO | Incremento 1: SIM (`b20d2b4d5`, 22/22). Incremento 2: SIM (`83b63fc1f`, 34/34 + jornadas em navegador) | `/.well-known/build-info.json` |
 | RECEBIMENTO_COMPROVADO | PENDENTE_OPERACIONAL — ação humana mínima em §Operação (protocolo g03 A→B→C) | herdado de A06 |
 | DESCOBERTA_HABILITADA vs EXPOSICAO_OBSERVADA | HABILITADA (13/13 famílias com explicação + contato); exposição NÃO OBSERVADA (GSC mais recente committado: 2026-09-08) | §Matriz |
 | RESULTADO_COMERCIAL | AINDA_NAO_MEDIDO (Warmbly é o dono; teste sintético não é oportunidade) | #706 |
@@ -77,7 +77,7 @@ Ver PR #713. Regra aplicada: 'Exemplo demonstrativo' uma vez por prancha/bloco; 
 ## Publicação e verificação
 
 - **Incremento 1:** release 35454169706 promovida (todas as etapas success); produção serve `b20d2b4d5` (`build-info` = `runtime-info`). Verificação pública 22/22 (`evidence/verificacao-publica-b20d2b4d5.txt`): regra `.situation-row.area--b2g` no CSS servido; fonte `b19be0f7` (42 208 bytes, 200); folha publicada sem `@import`; 16 rotas 200; padding medido em navegador 16/16 (320–430), 17,5 (699/700), 28 (1440), sem overflow, Archivo carregada. Predecessor saudável para reversão: `a27472bec`.
-- **Incremento 2:** PR #713 — preenchido após a promoção.
+- **Incremento 2:** PR #713 → merge `83b63fc1f`; release 35461473231 promovida (todas as etapas success); produção serve `83b63fc1f`. Verificação pública 34/34 (`evidence/verificacao-publica-83b63fc1f.txt`): SHA, CSS, fonte, folha sem `@import`, 16 rotas 200, seis âncoras novas presentes, nota sem JS visível com JS desligado, formulário do checklist ligado ao runtime, links home/hub → âncoras, título do reequilíbrio. Predecessor saudável para reversão: `b20d2b4d5`.
 
 ## Pendências (nenhuma fecha issue)
 
@@ -87,3 +87,7 @@ Ver PR #713. Regra aplicada: 'Exemplo demonstrativo' uma vez por prancha/bloco; 
 4. NBR 13752 só entra no público após registro no catálogo da oferta de assistência.
 5. Contrato de contagem: aceite da Warmbly antes de mover o indicador oficial; campo canônico de origem.
 6. Readout GSC ≥ 2026-09-08 para os holds KEEP_NOINDEX.
+
+## Comunicação
+
+GitHub: comentários em #705, #706, #707 e nas PRs #712/#713 com antes/depois, PR/SHA, testes, cobertura e pendências. Slack: nenhuma integração disponível neste ambiente (registrado; a ausência não é omissão). Estados separados em todo registro: publicação (SIM) ≠ recebimento comprovado (PENDENTE_OPERACIONAL) ≠ resultado comercial (AINDA_NAO_MEDIDO). Nenhuma issue fechada.
