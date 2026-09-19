@@ -183,7 +183,7 @@ ${CREDIT_END}`;
 }
 
 function readingRules(contract, item) {
-  return `<aside class="eight-contract__reading"><h3>Como ler o resultado</h3><dl><div><dt>Cobertura</dt><dd>${escapeHtml(publicCopy(contract, item.objeto_incluido))}</dd></div><div><dt>Data</dt><dd>A data de corte aparece no pedido e na entrega.</dd></div><div><dt>Método</dt><dd>Fontes públicas com origem e versão registradas, reconciliação declarada e decisão humana.</dd></div><div><dt>Ausência</dt><dd>Quando a fonte não sustenta uma afirmação, o campo recebe NÃO INFORMADO.</dd></div></dl></aside>`;
+  return `<aside class="eight-contract__reading"><h3>Como ler o resultado</h3><dl><div><dt>Cobertura</dt><dd>${escapeHtml(publicCopy(contract, item.objeto_incluido))}</dd></div><div><dt>Data</dt><dd>A data de corte aparece no pedido e na entrega.</dd></div><div><dt>Método</dt><dd>Fontes públicas com origem e versão registradas, reconciliação declarada e decisão confirmada pelo responsável técnico.</dd></div><div><dt>Ausência</dt><dd>Quando a fonte não sustenta uma afirmação, o campo recebe NÃO INFORMADO.</dd></div></dl></aside>`;
 }
 
 function routeBlock(contract, item) {

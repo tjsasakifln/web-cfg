@@ -631,7 +631,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
                 "hash-bound de INDEX ainda não está válida. "
             )
         else:
-            review_message = "Autoria e revisão humanas ainda não foram confirmadas. "
+            review_message = "Autoria e revisão técnica ainda não foram confirmadas. "
         fixture_banner = (
             '<p class="ca-draft-banner" role="status">'
             "Rascunho editorial noindex. "

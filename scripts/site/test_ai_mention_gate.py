@@ -6,7 +6,7 @@ Founder editorial addendum, 2026-09-19 (EXECUTE_NOW): public communication
 images/alt/aria, metadata, JSON-LD, og/twitter previews) never mentions
 whether AI is used. ABSENCE of mention, not a DECLARATION of absence.
 
-This gate reproves three families, all on visitor-perceptible surfaces:
+This gate reproves four families, all on visitor-perceptible surfaces:
 
 1. CLAIM of AI use: "IA" (uppercase, word-bounded), "inteligência artificial"
    (with/without accent), ChatGPT, chatbot, "modelo(s) generativo(s)",
@@ -16,7 +16,22 @@ This gate reproves three families, all on visitor-perceptible surfaces:
    (inteiramente) por pessoas", "não é (uma) resposta de chatbot", "não é
    ChatGPT", "produzido/redigido por humanos", "não divulgamos nossas
    ferramentas", "preferimos não abordar" (the topic).
-3. LINKS to the retired /uso-de-ia/ route.
+3. CONTRAST human/automated (founder addendum, 2026-09-19): copy that
+   separates what a person does from what a machine does -- "revisão
+   humana", "conferência humana", "segunda leitura humana", "análise
+   humana", "conversa humana", "contato humano", "decisão humana", the bare
+   feminine "humana(s)" as a qualifier, "por/de humanos", and
+   "automático(a)/automatizado(a)" in the same sentence as "humano(a)(s)".
+   The rewrite names the real practice instead ("revisão do responsável
+   técnico", "conversa com a CONFENGE"), never a negation. Safelisted
+   idioms that are not a contrast: "erro humano", "fator humano",
+   "recursos humanos", "direitos humanos", "capital humano", "humanidade",
+   "desumano". The bare feminine pattern (`humana_sufixo`) is deliberately
+   unguarded: today no visitor page carries a legitimate "humana(s)", so a
+   future "ciências humanas" or "relações humanas" must be registered as an
+   exact exception in `data/site/copy-exceptions.json` (rule `ai_mention`,
+   match `humana_sufixo`) with a reason, not handled by weakening the pattern.
+4. LINKS to the retired /uso-de-ia/ route.
 
 Scope mirrors the other sitewide copy gates (issue #298): every shipped
 visitor HTML file, via `scripts.site.public_copy_scope`. Legitimate
@@ -97,10 +112,45 @@ _NEGATION_PATTERNS: tuple[tuple[str, str, int], ...] = (
     ("preferimos_nao_abordar", r"\bpreferimos nao abordar\b", re.I),
 )
 
-ALL_PATTERNS: tuple[tuple[str, str, int], ...] = _CLAIM_PATTERNS + _NEGATION_PATTERNS
+# Family 3: human/automated contrast. Patterns run on folded text (accents
+# stripped), so "revisão" is written "revisao" here. `_HUMAN_WORD` is the
+# adjective "humano/humana/humanos/humanas" guarded by lookbehinds for the
+# safelisted idioms ("erro humano", "fator humano", "capital humano",
+# "recursos humanos", "direitos humanos"); "humanidade" and "desumano" never
+# match `\bhuman[ao]s?\b` on their own. The automatic-vs-human rule is a
+# single sentence-bounded regex (no sentence splitter) so it behaves the same
+# in the joined corpus scan and in the per-line reporter.
+_HUMAN_WORD = (
+    r"(?<!\berro )(?<!\bfator )(?<!\bcapital )(?<!\brecursos )(?<!\bdireitos )"
+    r"\bhuman[ao]s?\b"
+)
+_AUTOMATIC_WORD = r"\bautom(?:atic|atizad)[ao]s?\b"
+_SENTENCE_WINDOW = r"[^.!?\n]{0,200}?"
+
+_CONTRAST_PATTERNS: tuple[tuple[str, str, int], ...] = (
+    (
+        "acao_humana",
+        r"\b(?:revis(?:ao|oes)|analises?|conferencias?|leituras?|decis(?:ao|oes)|"
+        r"valida(?:cao|coes)|interpreta(?:cao|coes)|produ(?:cao|coes)|reda(?:cao|coes)|"
+        r"conversas?|contatos?|atendimentos?)\s+humanos?\b",
+        re.I,
+    ),
+    ("humana_sufixo", r"\bhumanas?\b", re.I),
+    ("por_de_humanos", r"\b(?:por|de)\s+humanos\b", re.I),
+    (
+        "automatico_vs_humano",
+        rf"{_AUTOMATIC_WORD}{_SENTENCE_WINDOW}{_HUMAN_WORD}|{_HUMAN_WORD}{_SENTENCE_WINDOW}{_AUTOMATIC_WORD}",
+        re.I,
+    ),
+)
+
+ALL_PATTERNS: tuple[tuple[str, str, int], ...] = (
+    _CLAIM_PATTERNS + _NEGATION_PATTERNS + _CONTRAST_PATTERNS
+)
 
 # Compiled once, against folded text.
 _COMPILED = [(name, re.compile(pattern, flags), flags) for name, pattern, flags in ALL_PATTERNS]
+_CONTRAST_NAMES = frozenset(name for name, _p, _f in _CONTRAST_PATTERNS)
 
 RETIRED_ROUTE = "uso-de-ia"
 _HREF_RETIRED_ROUTE = re.compile(
@@ -134,6 +184,14 @@ SAFE_TERMS = (
     "materiais",
     "ART",
     "AIA",
+    # human/automated contrast safelist (family 3): idioms, not a contrast.
+    "erro humano",
+    "fator humano",
+    "recursos humanos",
+    "direitos humanos",
+    "capital humano",
+    "humanidade",
+    "desumano",
 )
 
 
@@ -189,16 +247,55 @@ def _title_attr_values(html: str) -> list[str]:
     return [m.group(1) for m in _TITLE_ATTR.finditer(html)]
 
 
+# Deferred visitor content. `visible_text()` drops nodes carrying the `hidden`
+# attribute, which is right for the first paint but wrong for this gate: the
+# tools reveal their result-gated CTA sections (`<section hidden>` toggled by
+# script after a result) and the visitor reads them. The same goes for prose
+# that an inline script injects later (`ctaContext: "..."`). Both are scanned
+# here as extra corpus parts, so a contrast hidden behind a click still fails.
+_HIDDEN_ATTR = re.compile(r"""(<[a-zA-Z][^>]*?)\s+hidden(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?(?=[\s/>])""")
+_INLINE_SCRIPT_BLOCK = re.compile(r"<script\b([^>]*)>(.*?)</script>", re.S | re.I)
+_JS_STRING_LITERAL = re.compile(r'"((?:[^"\\\n]|\\.){12,})"|\'((?:[^\'\\\n]|\\.){12,})\'')
+
+
+def _reveal_hidden(html: str) -> str:
+    """The same document with every `hidden` attribute removed."""
+    return _HIDDEN_ATTR.sub(r"\1", html)
+
+
+def _inline_script_prose(html: str) -> list[str]:
+    """Prose-like string literals (12+ chars with a space) inside inline,
+    non-JSON-LD scripts: copy the page injects after interaction."""
+    out: list[str] = []
+    for match in _INLINE_SCRIPT_BLOCK.finditer(html):
+        attrs, body = match.group(1), match.group(2)
+        if re.search(r"""\bsrc\s*=""", attrs, re.I):
+            continue
+        if re.search(r"""application/ld\+json""", attrs, re.I):
+            continue
+        for literal in _JS_STRING_LITERAL.finditer(body):
+            value = literal.group(1) or literal.group(2) or ""
+            if " " in value:
+                out.append(value)
+    return out
+
+
 def _corpus(html: str) -> str:
     """Everything a visitor can perceive: body text, alt/aria-label, meta,
-    title attrs and JSON-LD name/description/text -- joined for scanning.
+    title attrs, JSON-LD name/description/text, content revealed after
+    interaction (`hidden` sections) and inline-script prose -- joined for
+    scanning.
     """
+    revealed = _reveal_hidden(html)
     parts = [
         visible_text(html),
         visible_markup(html),
+        visible_text(revealed),
+        visible_markup(revealed),
         "\n".join(_meta_twitter_and_og_content(html)),
         "\n".join(_title_attr_values(html)),
         "\n".join(_json_ld_strings(html)),
+        "\n".join(_inline_script_prose(html)),
     ]
     return "\n".join(p for p in parts if p)
 
@@ -348,6 +445,75 @@ def test_forbidden_fixtures_each_trip_the_gate():
         )
 
 
+def test_contrast_safelist_terms_never_match_individually():
+    """Each safelisted idiom alone, and inside a sentence that also carries
+    'automático', must not trip family 3 (the sentence-window pattern could
+    otherwise bridge unrelated terms in the joined blob above)."""
+    contrast = {name: rx for name, rx, _f in _COMPILED if name in _CONTRAST_NAMES}
+    for phrase in (
+        "erro humano",
+        "fator humano",
+        "recursos humanos",
+        "direitos humanos",
+        "capital humano",
+        "humanidade",
+        "desumano",
+        "O cálculo automático reduz o erro humano na conferência.",
+        "Tratamento desumano é vedado; a rotina automatizada registra a ocorrência.",
+        "O departamento de recursos humanos recebe a planilha automática.",
+        "Os direitos humanos orientam a política; o envio é automático.",
+        "A humanidade do atendimento não depende do fluxo automatizado.",
+    ):
+        folded = _fold(phrase)
+        for name, rx in contrast.items():
+            assert not rx.search(folded), f"{phrase!r} tripped {name!r}"
+
+
+def test_contrast_fixtures_each_trip_family_three():
+    fixtures = {
+        "acao_humana:revisao": "Pedir revisão humana",
+        "acao_humana:conferencia": "Se quiser uma conferência humana da CONFENGE, use o pedido abaixo.",
+        "acao_humana:leitura": "antes de pedir segunda leitura humana.",
+        "acao_humana:analise": "O dossiê é a análise humana do evento.",
+        "acao_humana:conversa": "a conversa humana continua disponível",
+        "acao_humana:contato": "o contato humano continua visível",
+        "acao_humana:decisao": "classificação automática nunca encerra decisão humana",
+        "acao_humana:no_accent": "revisao humana sem acento",
+        "humana_sufixo": "Reconciliação declarada e curadoria humana.",
+        "humana_sufixo:plural": "Etapas humanas e etapas de máquina.",
+        "por_de_humanos": "Textos revisados por humanos.",
+        "por_de_humanos:de": "Uma leitura de humanos, não de robôs.",
+        "automatico_vs_humano": "A triagem é automática, mas um humano decide.",
+        "automatico_vs_humano:reverse": "Um humano confirma; o restante é automatizado.",
+    }
+    contrast = [rx for name, rx, _f in _COMPILED if name in _CONTRAST_NAMES]
+    for name, text in fixtures.items():
+        folded = _fold(text)
+        assert any(rx.search(folded) for rx in contrast), (
+            f"fixture for {name!r} did not trip family 3: {text!r}"
+        )
+
+
+def test_contrast_rewrites_pass():
+    """The founder rule names the real practice without the human/automated
+    axis; these are the shipped rewrites and must stay clean."""
+    contrast = {name: rx for name, rx, _f in _COMPILED if name in _CONTRAST_NAMES}
+    for text in (
+        "Pedir revisão do responsável técnico",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
+        "Separar fato oficial, derivado e desconhecido antes de pedir segunda leitura do responsável técnico.",
+        "Se quiser uma conferência do responsável técnico da CONFENGE sobre este contrato, use o pedido abaixo.",
+        "O dossiê é a análise da CONFENGE do evento de mudança de escopo.",
+        "a conversa com a CONFENGE continua disponível",
+        "o contato direto continua visível",
+        "Fontes públicas com origem e versão registradas, reconciliação declarada e decisão confirmada pelo responsável técnico.",
+        "A classificação automática das respostas acontece neste navegador.",
+    ):
+        folded = _fold(text)
+        for name, rx in contrast.items():
+            assert not rx.search(folded), f"{text!r} wrongly tripped {name!r}"
+
+
 def test_rewritten_copy_without_tool_mention_passes():
     ok_texts = (
         "Organizamos os documentos e identificamos inconsistências.",
@@ -359,6 +525,24 @@ def test_rewritten_copy_without_tool_mention_passes():
         folded = _fold(text)
         for name, rx, _flags in _COMPILED:
             assert not rx.search(folded), f"{text!r} wrongly tripped {name!r}"
+
+
+def test_hidden_sections_and_inline_script_prose_are_in_scope():
+    html = (
+        "<html><body><p>Resultado.</p>"
+        '<section id="cta" hidden><h2>Conferência humana do dossiê</h2></section>'
+        "<script>var x = { ctaContext: \"pedido de análise humana do objeto\" };</script>"
+        '<script type="application/ld+json">{"name": "Ferramenta"}</script>'
+        "</body></html>"
+    )
+    corpus = _fold(_corpus(html))
+    assert "Conferencia humana do dossie" in corpus
+    assert "pedido de analise humana do objeto" in corpus
+    # hidden attribute removed only from tags, value forms included
+    assert "hidden" not in _reveal_hidden('<div hidden><p hidden="hidden">x</p><i hidden="">y</i></div>')
+    assert "data-hidden-count" in _reveal_hidden('<div data-hidden-count="1">x</div>')
+    # short or space-free literals (identifiers, selectors) are not prose
+    assert _inline_script_prose("<script>a('#resultado'); b(\"REQUEST_HUMAN_REVIEW\");</script>") == []
 
 
 def test_retired_route_link_pattern_matches_href_only():
@@ -388,7 +572,11 @@ def main() -> int:
         test_safelist_terms_never_match,
         test_route_ia_and_intelligence_words_are_safe,
         test_forbidden_fixtures_each_trip_the_gate,
+        test_contrast_safelist_terms_never_match_individually,
+        test_contrast_fixtures_each_trip_family_three,
+        test_contrast_rewrites_pass,
         test_rewritten_copy_without_tool_mention_passes,
+        test_hidden_sections_and_inline_script_prose_are_in_scope,
         test_retired_route_link_pattern_matches_href_only,
     ):
         test()

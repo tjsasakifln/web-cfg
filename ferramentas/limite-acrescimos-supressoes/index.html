@@ -160,9 +160,9 @@
 <section class="tool-cta-contextual" id="cfg-d19-handoff" hidden aria-labelledby="cfg-d19-title">
 <p class="eyebrow">Próximo passo opcional</p>
 <h2 id="cfg-d19-title">Dossiê de Aditivo e Serviço Extra (CFG-D19)</h2>
-<p>A triagem acima permanece disponível sem cadastro. O dossiê é a análise humana do evento de mudança de escopo e entrega: escopo original comparado ao alterado, cronologia do evento, ordem ou autorização que o cobre, natureza qualitativa ou quantitativa da alteração, saldo de acréscimos e supressões, preço de item novo, impacto em prazo e custo e a matriz documental para instruir o termo aditivo ou a apostila.</p>
+<p>A triagem acima permanece disponível sem cadastro. O dossiê é a análise da CONFENGE sobre o evento de mudança de escopo e entrega: escopo original comparado ao alterado, cronologia do evento, ordem ou autorização que o cobre, natureza qualitativa ou quantitativa da alteração, saldo de acréscimos e supressões, preço de item novo, impacto em prazo e custo e a matriz documental para instruir o termo aditivo ou a apostila.</p>
 <p>Para receber o dossiê, registre abaixo o contexto do caso. Os documentos seguem depois, por canal seguro; não repita aqui os valores da calculadora.</p>
-<form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-result-gated-capture="true" data-result-source="#resultado" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" data-journey="contrato" method="POST" name="diagnostico-confenge" id="cfg-d19-form" data-form-contract="next-state/v1" data-next-state-profile="second_reading" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.</p>
+<form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-result-gated-capture="true" data-result-source="#resultado" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" data-journey="contrato" method="POST" name="diagnostico-confenge" id="cfg-d19-form" data-form-contract="next-state/v1" data-next-state-profile="second_reading" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Vincule a leitura pública a um pedido de conferência do responsável técnico sem repetir os dados do contrato nem enviar documentos pelo site.</p>
 <p class="form-hint" data-field-purpose>O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input name="form-name" type="hidden" value="art125-cfg-d19"/>
 <input name="origem" type="hidden" value="/ferramentas/limite-acrescimos-supressoes/"/>
@@ -466,7 +466,7 @@
         className: "warn",
         label: "Premissas ainda não confirmadas",
         inference: "O recorte numérico não está confirmado.",
-        ctaContext: "As premissas pendentes podem ser conferidas na análise humana do objeto e da instrução.",
+        ctaContext: "As premissas pendentes podem ser conferidas na análise da CONFENGE sobre o objeto e a instrução.",
         actionLabel: "Validar objeto e instrução",
         ctaId: "art125-input-not-confirmed"
       },
@@ -474,7 +474,7 @@
         className: "ok",
         label: "Dentro do recorte numérico informado",
         inference: "Os dois eixos estão dentro do teto aritmético com os dados confirmados.",
-        ctaContext: "A memória local pode acompanhar o pedido de análise humana, sem ser enviada automaticamente.",
+        ctaContext: "A memória local pode acompanhar o pedido de análise da CONFENGE, sem ser enviada automaticamente.",
         actionLabel: "Solicitar enquadramento do aditivo",
         ctaId: "art125-within-numeric-scope"
       },
@@ -482,7 +482,7 @@
         className: "bad",
         label: "Recorte numérico excedido",
         inference: "Pelo menos um eixo excede o teto aritmético com os dados confirmados.",
-        ctaContext: "A memória local pode acompanhar o pedido de análise humana, sem ser enviada automaticamente.",
+        ctaContext: "A memória local pode acompanhar o pedido de análise da CONFENGE, sem ser enviada automaticamente.",
         actionLabel: "Solicitar enquadramento do aditivo",
         ctaId: "art125-numeric-scope-exceeded"
       }

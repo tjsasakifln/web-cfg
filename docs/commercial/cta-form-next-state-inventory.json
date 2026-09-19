@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 195
+    "expected_declared_ctas": 196
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 195,
+    "declared_ctas": 196,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -3893,9 +3893,9 @@
           "commitment": "medium",
           "submit_label": "Registrar pedido de conferência do dossiê de reequilíbrio",
           "current_label": "Registrar pedido de conferência do dossiê de reequilíbrio",
-          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para uma conferência humana contextual.",
+          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para a conferência do responsável técnico no contexto informado.",
           "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
-          "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
+          "pre_form_value": "Vincule a leitura pública a um pedido de conferência do responsável técnico sem repetir os dados do contrato nem enviar documentos pelo site.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -3958,9 +3958,9 @@
           "commitment": "medium",
           "submit_label": "Pedir uma segunda leitura do contrato",
           "current_label": "Pedir uma segunda leitura do contrato",
-          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para uma conferência humana contextual.",
+          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para a conferência do responsável técnico no contexto informado.",
           "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
-          "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
+          "pre_form_value": "Vincule a leitura pública a um pedido de conferência do responsável técnico sem repetir os dados do contrato nem enviar documentos pelo site.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -4023,9 +4023,9 @@
           "commitment": "medium",
           "submit_label": "Solicitar o Dossiê de Aditivo e Serviço Extra",
           "current_label": "Solicitar o Dossiê de Aditivo e Serviço Extra",
-          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para uma conferência humana contextual.",
+          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para a conferência do responsável técnico no contexto informado.",
           "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
-          "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
+          "pre_form_value": "Vincule a leitura pública a um pedido de conferência do responsável técnico sem repetir os dados do contrato nem enviar documentos pelo site.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -4419,6 +4419,21 @@
           "current_label": "06 Descrever a medição",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "ver-exemplo-completo",
+          "position": "",
+          "href": "/casos/medicao-glosa-demonstrativo/",
+          "stage": "inspect",
+          "commitment": "low",
+          "current_label": "Ver o exemplo completo, item a item",
+          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
