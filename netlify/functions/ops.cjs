@@ -24,6 +24,9 @@
  *   POST gsc_insights_rollback { snapshot_sha256, reason } (exact version, auth required)
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
+ *   POST set_record_kind { lead_id, to: qa|internal, reason, approval_reference, actor? }
+ *        (A06-RECEBIMENTO-02: explicit operator reclassification of one real
+ *        record after human QA; snapshot + audit; undo via rollback_record_kind)
  *   GET  inbound_handoff
  *   GET  audit_inbound_requeue
  *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit: 1, approval_reference?: string }
@@ -684,10 +687,26 @@ exports.handler = async (event) => {
     const by_cluster = {};
     const by_offer = {};
     const by_landing = {};
+    // MEDICAO-08: segment by web origin class and by CTA so the funnel answers
+    // "which CTA produced the search_organic leads". origin_class is derived
+    // at persist time since 2026-09-19; rows without it read INDISPONIVEL,
+    // never direct_or_unknown.
+    const by_origin_class = {};
+    const by_cta = {};
+    const by_origin_class_x_cta = {};
     for (const l of real) {
       const c = l.content_cluster || "unknown";
       if (!by_cluster[c]) by_cluster[c] = [];
       by_cluster[c].push(l);
+      const oc = l.origin_class || "INDISPONIVEL";
+      if (!by_origin_class[oc]) by_origin_class[oc] = [];
+      by_origin_class[oc].push(l);
+      const cta = l.cta_id || "unknown";
+      if (!by_cta[cta]) by_cta[cta] = [];
+      by_cta[cta].push(l);
+      const cross = `${oc}|${cta}`;
+      if (!by_origin_class_x_cta[cross]) by_origin_class_x_cta[cross] = [];
+      by_origin_class_x_cta[cross].push(l);
       const o = l.offer_id || l.jornada || "unknown";
       if (!by_offer[o]) by_offer[o] = [];
       by_offer[o].push(l);
@@ -714,6 +733,22 @@ exports.handler = async (event) => {
             .slice(0, 40)
             .map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
         ),
+        by_origin_class: Object.fromEntries(
+          Object.entries(by_origin_class).map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
+        ),
+        by_cta: Object.fromEntries(
+          Object.entries(by_cta)
+            .sort((a, b) => b[1].length - a[1].length)
+            .slice(0, 60)
+            .map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
+        ),
+        by_origin_class_x_cta: Object.fromEntries(
+          Object.entries(by_origin_class_x_cta)
+            .sort((a, b) => b[1].length - a[1].length)
+            .slice(0, 120)
+            .map(([k, v]) => [k, funnelRates(v, { commercialOnly: false }).counts])
+        ),
+        origin_class_unavailable_label: "INDISPONIVEL",
         loss_reasons: real
           .filter((l) => l.loss_reason)
           .reduce((acc, l) => {
@@ -949,6 +984,87 @@ exports.handler = async (event) => {
         candidates,
         counts_by_kind_after: countByKind(after),
         system_health: systemHealth(after),
+      },
+      origin
+    );
+  }
+
+  if (action === "set_record_kind" && event.httpMethod === "POST") {
+    // A06-RECEBIMENTO-02: a QA submission with a real-looking identity has no
+    // probe signals, so backfill_record_kind keeps it as real forever. This
+    // is the explicit, audited, reversible path: one lead_id, one target kind
+    // (qa | internal only — never real, never spam), a reason and an approval
+    // reference. Same snapshot namespace and entry shape as backfill, so
+    // rollback_record_kind undoes it unchanged.
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const body = parseBody(event);
+    if (!body) return json(400, { ok: false, error: "invalid_json" }, origin);
+    const id = String(body.lead_id || body.id || "").slice(0, 64);
+    if (!id) return json(400, { ok: false, error: "lead_id_required" }, origin);
+    const to = normalizeKind(body.to);
+    if (!to || !["qa", "internal"].includes(to)) {
+      return json(400, { ok: false, error: "invalid_target_kind", allowed: ["qa", "internal"] }, origin);
+    }
+    const reason = String(body.reason || "").trim().slice(0, 120);
+    const approvalReference = String(body.approval_reference || "").trim().slice(0, 80);
+    if (!reason) return json(400, { ok: false, error: "reason_required" }, origin);
+    if (!approvalReference) return json(400, { ok: false, error: "approval_reference_required" }, origin);
+    const actor = String(body.actor || "ops").slice(0, 80);
+    if (actor === "system") return json(400, { ok: false, error: "actor_must_be_operator" }, origin);
+    const cur = await store.get(id);
+    if (!cur) return json(404, { ok: false, error: "not_found" }, origin);
+    const fromKind = normalizeKind(cur.record_kind) || "real";
+    if (fromKind !== "real") {
+      return json(409, { ok: false, error: "record_kind_not_real", record_kind: fromKind }, origin);
+    }
+    if (typeof store.putSystemRecord !== "function") {
+      return json(503, { ok: false, error: "snapshot_store_unavailable" }, origin);
+    }
+    const snapshot_id = `kind-snap-${Date.now().toString(36)}`;
+    const signals = [`operator:${approvalReference}`];
+    const snapshot = {
+      snapshot_id,
+      at: new Date().toISOString(),
+      source: "set_record_kind",
+      actor,
+      reason,
+      approval_reference: approvalReference,
+      entries: [{ lead_id: id, previous_kind: fromKind, new_kind: to, signals }],
+    };
+    try {
+      await store.putSystemRecord(`record-kind:${snapshot_id}`, snapshot, { onlyIfNew: true });
+    } catch (err) {
+      safeLog("error", "record_kind_snapshot_failed", { code: String(err?.code || "write_failed") });
+      return json(503, { ok: false, error: "snapshot_persist_failed" }, origin);
+    }
+    const next = await store.update(id, {
+      record_kind: to,
+      record_kind_signals: signals,
+      record_kind_classified_at: new Date().toISOString(),
+      next_action: "exclude_from_commercial",
+      audit: [
+        ...(cur.audit || []),
+        kindAuditEntry({
+          from: fromKind,
+          to,
+          signals,
+          actor,
+          note: `set_record_kind ${snapshot_id} approval=${approvalReference} reason=${reason}`,
+        }),
+      ],
+    });
+    safeLog("info", "set_record_kind", { lead_id: id, from: fromKind, to, snapshot_id, actor });
+    const after = await listLeads(store);
+    return json(
+      200,
+      {
+        ok: true,
+        lead: publicLeadSummary(next),
+        from: fromKind,
+        to,
+        snapshot_id,
+        rollback: { action: "rollback_record_kind", body: { snapshot_id } },
+        counts_by_kind_after: countByKind(after),
       },
       origin
     );
