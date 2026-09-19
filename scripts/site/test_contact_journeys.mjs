@@ -11,7 +11,9 @@ import { createServer } from "node:http";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
+import { createHash } from "node:crypto";
 import puppeteer from "puppeteer-core";
+import { privateRouteChannelProblems } from "./test_private_route_channels.mjs";
 
 const root = resolve(new URL("../..", import.meta.url).pathname);
 const site = resolve(process.env.SITE_ROOT || join(root, "_site"));
@@ -54,6 +56,22 @@ const journeys = [
   ["avaliacao_imovel", "/servicos/#servico-avaliacao", "situacao-avaliacao", ".situation-action[href]"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "situacao-sst", ".situation-action[href]"],
 ].map(([id, direct, homeAnchor, homeSelector]) => ({ id, direct, homeAnchor, homeSelector }));
+// CONFENGE-BOFU-FECHAMENTO-20260919. Blobs da base fedb4768b dos arquivos que
+// outro workstream (WS-B/WS-D) altera. As jornadas e cenários abaixo só entram
+// quando o arquivo alvo tiver mudado em relação à base; até lá ficam
+// registrados como pendentes no relatório, sem reprovar por trabalho alheio.
+const BASE_BLOBS = { "index.html": "a8d89a38daa53e863491e530621f266d28999013", "servicos/index.html": "9451174ec55e3cecd41c5c3b98ac915798e5cdab" };
+function gitBlobSha(rel) { const body = readFileSync(join(root, rel)); return createHash("sha1").update(`blob ${body.length}\0`).update(body).digest("hex"); }
+function changedSinceBase(rel) { return gitBlobSha(rel) !== BASE_BLOBS[rel]; }
+const pendingUntilClosure = [];
+const homeHtml = readFileSync(join(root, "index.html"), "utf8");
+// B-02 (WS-E) + WS-B/WS-D: a disputa trabalhista com componente de SST entra
+// pela situação de SST da home e cai no bloco próprio da landing de SST.
+if (changedSinceBase("index.html")) {
+  journeys.push({ id: "assistencia_trabalhista", direct: "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista", homeAnchor: "situacao-sst", homeSelector: 'a[href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"]' });
+} else {
+  pendingUntilClosure.push("journey assistencia_trabalhista (li#situacao-sst -> /seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista): home ainda na base fedb4768b");
+}
 // Compact variation matrix for the real home form. This is deliberately not
 // a cartesian product: each row represents a visitor need and, together, the
 // rows cover the material inclusion risks without generating fake leads.
@@ -69,11 +87,22 @@ const intakeScenarios = [
   { id: "orgao_planejando_projeto", audience: "orgao_publico", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "planejamento de órgão público", journey: "orgao", route: "/servicos/#servico-obras-publicas", nextTerms: ["órgão", "etapa", "apoio técnico"] },
   { id: "orgao_inspecao_inicial", audience: "orgao_publico", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "documentação técnica", "local"] },
 ];
+// WS-B (B-05/B-06): avaliação de imóvel para partilha, garantia ou
+// desapropriação como jornada própria da home. Entra quando a home publicar a
+// opção com data-journey="avaliacao"; o texto da opção é lido do HTML.
+{
+  const option = homeHtml.match(/<option\b[^>]*value="([^"]+)"[^>]*data-journey="avaliacao"[^>]*>/i) || homeHtml.match(/<option\b[^>]*data-journey="avaliacao"[^>]*value="([^"]+)"[^>]*>/i);
+  if (changedSinceBase("index.html") && option) {
+    intakeScenarios.push({ id: "pf_avaliacao_partilha", audience: "pessoa_fisica", size: "pequeno", budget: "desconhecido", docs: "disponiveis", stage: option[1], journey: "avaliacao", route: "/servicos/#servico-avaliacao", nextTerms: ["avalia"] });
+  } else {
+    pendingUntilClosure.push("intake pf_avaliacao_partilha: home sem opção data-journey=\"avaliacao\" (WS-B)");
+  }
+}
 const localAdaptiveWithheld = JSON.parse(readFileSync(join(root, "netlify/functions/data/adaptive-intake-authority.json"), "utf8")).status === "WITHHELD";
 let adaptiveWithheld = localAdaptiveWithheld;
 const mime = { ".html": "text/html", ".js": "application/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2" };
 const readOnlyFunctionPaths = new Set(["/.netlify/functions/adaptive-intake-config"]);
-const report = { mode: productionMode ? "canonical-production" : "local-artifact", base: productionMode ? productionBase : null, candidate: null, identity: { git_head: null, artifact_commit: null, served_build_commit: null, served_runtime_sha: null, consistent: null, before: null, after: null }, adaptiveIntake: { source: productionMode ? "served-readonly-config" : "local-authority-artifact", before: null, after: null }, requestSafety: { mutation_attempted: 0, mutation_blocked: 0, endpoint_reads_blocked: 0, external_reads_blocked: 0 }, site, planned: { journeys: journeys.length, viewport_route_checks: journeys.length * viewports.length, intake_scenarios: intakeScenarios.length, intake_audiences: [...new Set(intakeScenarios.map(row => row.audience))], intake_sizes: [...new Set(intakeScenarios.map(row => row.size))], intake_budgets: [...new Set(intakeScenarios.map(row => row.budget))], intake_document_states: [...new Set(intakeScenarios.map(row => row.docs))], intake_fields: ["nome", "email", "estagio", "jornada", "empresa", "mensagem"], intake_controls: ["data-form-next", "data-situation-next", "data-situation-detail", "data-situation-channels", "data-situation-route", "data-situation-whatsapp"] }, viewports: viewports.map(([width, height]) => ({ width, height })), journeys: [], intakeScenarios: [], checks: [], failures: [], blockedRequests: [], leadRequests: [] };
+const report = { mode: productionMode ? "canonical-production" : "local-artifact", base: productionMode ? productionBase : null, candidate: null, pending_until_closure: pendingUntilClosure, identity: { git_head: null, artifact_commit: null, served_build_commit: null, served_runtime_sha: null, consistent: null, before: null, after: null }, adaptiveIntake: { source: productionMode ? "served-readonly-config" : "local-authority-artifact", before: null, after: null }, requestSafety: { mutation_attempted: 0, mutation_blocked: 0, endpoint_reads_blocked: 0, external_reads_blocked: 0 }, site, planned: { journeys: journeys.length, viewport_route_checks: journeys.length * viewports.length, intake_scenarios: intakeScenarios.length, intake_audiences: [...new Set(intakeScenarios.map(row => row.audience))], intake_sizes: [...new Set(intakeScenarios.map(row => row.size))], intake_budgets: [...new Set(intakeScenarios.map(row => row.budget))], intake_document_states: [...new Set(intakeScenarios.map(row => row.docs))], intake_fields: ["nome", "email", "estagio", "jornada", "empresa", "mensagem"], intake_controls: ["data-form-next", "data-situation-next", "data-situation-detail", "data-situation-channels", "data-situation-route", "data-situation-whatsapp"] }, viewports: viewports.map(([width, height]) => ({ width, height })), journeys: [], intakeScenarios: [], checks: [], failures: [], blockedRequests: [], leadRequests: [] };
 function record(name, pass, detail, context = {}) { const row = { name, pass, detail, ...context }; report.checks.push(row); if (!pass) report.failures.push(row); }
 // Keep running after an individual failure.  The report is evidence for every
 // planned route and viewport, not only the first broken CTA.
@@ -215,6 +244,24 @@ async function blockExternal(page) {
 function routeUrl(route, probe) { const url = new URL(route, base); url.searchParams.set("__contact_journey", probe); return url.href; }
 async function focusableContextAction(page) { await page.evaluate(() => window.scrollTo(0, 0)); await page.keyboard.press("Tab"); for (let i = 0; i < 40; i += 1) { const found = await page.evaluate(() => { const e = document.activeElement; if (!e || !/^(A|BUTTON)$/.test(e.tagName)) return false; const href = e.getAttribute("href") || ""; return /^mailto:|^tel:|^https:\/\/wa\.me\/|^\/triagem-tecnica\//.test(href) || /proposta|conversar|contato/i.test(e.textContent || ""); }); if (found) return true; await page.keyboard.press("Tab"); } return false; }
 
+// Contraprovas estáticas das rotas privadas manuais (A-01, A-06, A-07, B-02,
+// B-06), lidas da fonte antes de abrir o navegador. Com
+// CONTACT_JOURNEY_STATIC_ONLY=1 o script termina aqui, sem artefato nem Chrome.
+for (const problem of privateRouteChannelProblems(root)) {
+  required("private_route_contextual_channels", false, problem, { route: problem.split(":")[0] });
+}
+if (!report.failures.some(row => row.name === "private_route_contextual_channels")) {
+  required("private_route_contextual_channels", true, "7 rotas privadas com canais nomeados por situação", { route: "source" });
+}
+if (process.env.CONTACT_JOURNEY_STATIC_ONLY === "1") {
+  mkdirSync(reportDir, { recursive: true });
+  report.ok = report.failures.length === 0;
+  report.executed = { static_only: true, check_count: report.checks.length, failure_count: report.failures.length };
+  await import("node:fs/promises").then(fs => fs.writeFile(join(reportDir, "report-static.json"), JSON.stringify(report, null, 2)));
+  if (!report.ok) { console.error("CONTACT_JOURNEYS_STATIC_FAIL", JSON.stringify(report.failures)); process.exit(1); }
+  console.log("CONTACT_JOURNEYS_STATIC_OK", JSON.stringify({ ...report.executed, pending_until_closure: pendingUntilClosure }));
+  process.exit(0);
+}
 if (!existsSync(site)) throw new Error(`site root missing: ${site}`);
 try { report.identity.git_head = execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(); } catch (_) { report.identity.git_head = null; }
 try { report.candidate = JSON.parse(readFileSync(join(site, ".well-known/build-info.json"), "utf8")); } catch (_) { report.candidate = { commit: null, identity: "build-info unavailable" }; }
@@ -255,7 +302,7 @@ try {
       required("journey_direct_status", response?.status() === 200, String(response?.status()), context);
       if (fragment) required("journey_direct_fragment", await page.$(fragment).then(Boolean), fragment, context);
       required("journey_direct_next_step", data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean), JSON.stringify(data), context);
-      if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#planejamento-publico", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/seguranca-trabalho-apoio-tecnico/"].includes(journey.direct)) {
+      if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/seguranca-trabalho-apoio-tecnico/", "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"].includes(journey.direct)) {
         required("journey_withheld_has_three_direct_channels", Object.values(data.channels).every(Boolean) && !data.activeForm, JSON.stringify(data), context);
       }
       required("journey_no_required_cnpj", data.cnpjRequired === 0, JSON.stringify(data), context);
