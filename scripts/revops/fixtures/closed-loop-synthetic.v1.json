@@ -22,7 +22,8 @@
     "cta_id": "hero-diagnostico",
     "journey": "edital",
     "offer_id": "diagnostico-pre-licitacao",
-    "origem": "organic"
+    "origem": "/diagnostico-pre-licitacao/",
+    "origin_class": "campaign"
   },
   "won": {
     "revenue": 18000,
@@ -42,7 +43,7 @@
         "asset_id": "diagnostico-pre-licitacao",
         "journey": "edital",
         "offer_id": "diagnostico-pre-licitacao",
-        "origem": "organic",
+        "origem": "/diagnostico-pre-licitacao/",
         "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
       }
     },
@@ -62,7 +63,7 @@
         "destination_type": "form",
         "journey": "edital",
         "offer_id": "diagnostico-pre-licitacao",
-        "origem": "organic",
+        "origem": "/diagnostico-pre-licitacao/",
         "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
       }
     },
@@ -80,7 +81,7 @@
         "cta_id": "hero-diagnostico",
         "journey": "edital",
         "offer_id": "diagnostico-pre-licitacao",
-        "origem": "organic",
+        "origem": "/diagnostico-pre-licitacao/",
         "form_step": 1,
         "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
       }
@@ -99,7 +100,7 @@
         "cta_id": "hero-diagnostico",
         "journey": "edital",
         "offer_id": "diagnostico-pre-licitacao",
-        "origem": "organic",
+        "origem": "/diagnostico-pre-licitacao/",
         "form_step": 2,
         "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
       }
@@ -118,7 +119,7 @@
         "cta_id": "hero-diagnostico",
         "journey": "edital",
         "offer_id": "diagnostico-pre-licitacao",
-        "origem": "organic",
+        "origem": "/diagnostico-pre-licitacao/",
         "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
         "lead_id": "lead-764fdf3765f48a03257979638b8",
         "correlation_id": "c-closedloop01",
@@ -146,7 +147,7 @@
     "delete_after": "2028-08-01T10:04:00.000Z",
     "jornada": "edital",
     "estagio": "edital",
-    "origem": "organic",
+    "origem": "/diagnostico-pre-licitacao/",
     "landing_page": "/diagnostico-pre-licitacao/",
     "landing_url": "/diagnostico-pre-licitacao/",
     "referrer": "/",
@@ -169,7 +170,8 @@
     "proposal_value": null,
     "contract_value": null,
     "revenue_received": null,
-    "loss_reason": null
+    "loss_reason": null,
+    "origin_class": "campaign"
   },
   "observations": [
     {

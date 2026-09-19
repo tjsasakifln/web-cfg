@@ -68,6 +68,21 @@ const SNAPSHOT_LEAD_FIELDS = new Set([
   "record_kind", "lead_id", "session_id", "received_at", "landing_page", "landing_url",
   "route_family", "asset_id", "cta_id", "jornada", "offer_id", "origem",
   "utm_source", "utm_medium", "utm_campaign",
+  // MEDICAO-09: web-side origin class (lead.origin_class, derived at persist
+  // time by lead-core). Web values only; never the Warmbly commercial class.
+  "origin_class",
+]);
+// MEDICAO-09/10: `origin_class` carries the web capture evidence
+// (data/revops/proposal-counting.v1.json web_origin_class.values). A missing
+// value on a lead persisted before the derivation shipped reads INDISPONIVEL,
+// never direct_or_unknown. `origem` is a LOCATION (route slug or same-site
+// path filled by nav.js/lead-core), never an acquisition channel: channel
+// words are refused so by_origem cannot mix paths with utm_source.
+const WEB_ORIGIN_CLASSES = new Set(["campaign", "search_organic", "referral", "direct_or_unknown"]);
+const ORIGIN_CLASS_UNAVAILABLE = "INDISPONIVEL";
+const ORIGEM_CHANNEL_WORDS = new Set([
+  "organic", "referral", "direct", "paid", "cpc", "ppc", "social", "email", "newsletter",
+  "display", "affiliate", "gsc", "google", "bing", "seo", "sem", "utm", "search",
 ]);
 const LIVE_EVIDENCE = Symbol("verified_warmbly_snapshot");
 
@@ -354,7 +369,17 @@ function assertSafeToken(value, field, maxLength = 120) {
 function assertAttributionValue(field, value) {
   if (value == null || value === "") return null;
   const raw = String(value);
-  if (field === "landing" || field === "landing_page" || field === "landing_url") {
+  if (field === "origin_class") {
+    if (!WEB_ORIGIN_CLASSES.has(raw)) {
+      throw codedError("invalid_attribution", "invalid_attribution:origin_class", { field });
+    }
+    return raw;
+  }
+  if (field === "origem" && ORIGEM_CHANNEL_WORDS.has(raw.toLowerCase())) {
+    throw codedError("invalid_attribution", "invalid_attribution:origem_channel_not_location", { field });
+  }
+  const pathLike = field === "origem" && (raw.startsWith("/") || /^https?:\/\//i.test(raw));
+  if (field === "landing" || field === "landing_page" || field === "landing_url" || pathLike) {
     let pathname = raw;
     if (/^https?:\/\//i.test(raw)) {
       let parsed;
@@ -495,7 +520,14 @@ function applyObservation(state, observation) {
       throw codedError("orphan_observation", "sale_commercial_chain_mismatch");
     }
     const sale_id = assertStableId("sale", observation.sale_id);
-    const revenue = Number(observation.revenue ?? observation.revenue_received ?? state.proposal.amount);
+    // RC-08 (MEDICAO-06): receita recebida nunca deriva do valor da proposta
+    // (PC-07: emitida e recebida sao numeros diferentes). Sem revenue
+    // explicito a observacao e recusada, fail-closed.
+    const declaredRevenue = observation.revenue ?? observation.revenue_received;
+    if (declaredRevenue == null) {
+      throw codedError("invalid_revenue", "invalid_revenue:revenue_not_declared");
+    }
+    const revenue = Number(declaredRevenue);
     if (!Number.isFinite(revenue) || revenue < 0) {
       throw codedError("invalid_revenue", "invalid_revenue");
     }
@@ -512,7 +544,8 @@ function applyObservation(state, observation) {
     };
     next.lead.sale_id = sale_id;
     next.lead.revenue_received = revenue;
-    next.lead.contract_value = observation.contract_value != null ? Number(observation.contract_value) : revenue;
+    // RC-03: valor de contrato/obra nunca deriva da receita; ausente fica ausente.
+    next.lead.contract_value = observation.contract_value != null ? Number(observation.contract_value) : null;
     next.lead.commercial_stage = "won";
   } else if (to === "lost") {
     const reason = observation.reject_reason || observation.loss_reason;
@@ -544,7 +577,8 @@ function pickAttribution(lead, events, explicit) {
     }
     if (!fromEvents.journey) fromEvents.journey = props.journey || "";
     if (!fromEvents.offer_id) fromEvents.offer_id = props.offer_id || "";
-    if (!fromEvents.origem) fromEvents.origem = props.origem || props.utm_source || "";
+    // MEDICAO-10: origem is a location; utm_source never stands in for it.
+    if (!fromEvents.origem) fromEvents.origem = props.origem || "";
   }
   const fromLead = {
     landing: lead && (lead.landing_page || lead.landing_url),
@@ -553,7 +587,9 @@ function pickAttribution(lead, events, explicit) {
     cta_id: lead && lead.cta_id,
     journey: lead && lead.jornada,
     offer_id: lead && lead.offer_id,
-    origem: lead && (lead.origem || lead.utm_source),
+    origem: lead && lead.origem,
+    // Only the persisted lead carries origin_class (server-derived); events never do.
+    origin_class: lead && lead.origin_class,
   };
   const out = {};
   for (const field of ATTR_FIELDS) {
@@ -806,6 +842,7 @@ function reconcileClosedLoop(input) {
   const byRoute = new Map();
   const byOffer = new Map();
   const byOrigem = new Map();
+  const byOriginClass = new Map();
   const opportunitiesByLead = new Map();
   const proposalsByLead = new Map();
   const salesByLead = new Map();
@@ -851,6 +888,7 @@ function reconcileClosedLoop(input) {
     incrementNamed(byRoute, routeKey, fields);
     incrementNamed(byOffer, bucketKey(attr, "offer_id"), fields);
     incrementNamed(byOrigem, bucketKey(attr, "origem"), fields);
+    incrementNamed(byOriginClass, String((attr && attr.origin_class) || ORIGIN_CLASS_UNAVAILABLE), fields);
   };
 
   for (const session of sessions.values()) {
@@ -921,6 +959,8 @@ function reconcileClosedLoop(input) {
     by_route: [...byRoute.values()].sort((a, b) => a.key.localeCompare(b.key)),
     by_offer: [...byOffer.values()].sort((a, b) => a.key.localeCompare(b.key)),
     by_origem: [...byOrigem.values()].sort((a, b) => a.key.localeCompare(b.key)),
+    by_origin_class: [...byOriginClass.values()].sort((a, b) => a.key.localeCompare(b.key)),
+    origin_class_unavailable_label: ORIGIN_CLASS_UNAVAILABLE,
     raw_lead_is_qualified: false,
     derived_qualified: false,
     derived_proposal: false,
@@ -1173,6 +1213,8 @@ module.exports = {
   RATE_NAMES,
   RATE_DIMENSIONS,
   ATTR_FIELDS,
+  WEB_ORIGIN_CLASSES,
+  ORIGIN_CLASS_UNAVAILABLE,
   VISITOR_EVENT_MAP,
   DEFAULT_TIMEOUT_MS,
   getContract,
