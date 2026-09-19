@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "de619fc952da73a433667f5407e3e7c2a708c530",
+  "web_cfg_sha": "633e8a977a36be72ba6987ca14df44d909fbaaf7",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "c0a443256592d4f7971fe825871fd51b8b52eb699935f8417aac901be3300935",
-  "manifest_hash": "2c16e3c8041032135b9b22032efb47fdf529706b08c6ace899b9406cd2a83b8b",
+  "public_artifact_hash": "ba9333c90af9eb1290c3248b19d4a22c9112fabd40a0a872ebb707818ad14e9e",
+  "manifest_hash": "c24e2b7c6e0dc3cb37ef7337cd6cca7dff11ec91f45e49d9d8532658043be27c",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
