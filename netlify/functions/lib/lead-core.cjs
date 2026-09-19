@@ -505,6 +505,75 @@ function normalizeSessionId(value) {
   return /^sess-[0-9a-f]{27}$/i.test(sessionId) ? sessionId.toLowerCase() : "";
 }
 
+// Web-side origin class (issue #706, contract data/revops/proposal-counting.v1.json,
+// section web_origin_class). Derived on the server at persist time from the
+// already-sanitized UTM tokens and the referrer HOST only (never the full URL,
+// never a visitor value): it is a verdict, not an intake field, so it is not in
+// ATTR_ALLOWLIST and a posted `origin_class` is ignored. It is evidence for
+// Warmbly's commercial origin class, not that class: `direct_or_unknown` is
+// never read as organic and never promotes to demonstrated inbound.
+const ORIGIN_CLASS_VALUES = Object.freeze(["campaign", "search_organic", "referral", "direct_or_unknown"]);
+const SEARCH_ENGINE_HOST_PREFIXES = Object.freeze(["google.", "bing.", "duckduckgo.", "yahoo.", "ecosia."]);
+let OWN_HOSTS = null;
+function ownHosts() {
+  // ALLOWED_ORIGINS is declared further down; resolve on first use.
+  if (!OWN_HOSTS) {
+    OWN_HOSTS = new Set(
+      [...ALLOWED_ORIGINS].map((origin) => {
+        try {
+          return new URL(origin).hostname.toLowerCase();
+        } catch {
+          return "";
+        }
+      }).filter(Boolean),
+    );
+  }
+  return OWN_HOSTS;
+}
+
+function referrerHost(referrer) {
+  const raw = String(referrer || "").trim();
+  if (!raw || raw.startsWith("/")) return "";
+  try {
+    return new URL(raw).hostname.toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+function isSearchEngineHost(host) {
+  // Classify search_organic only for the engine's actual SEARCH host, never
+  // any other subdomain on the same domain (mail., docs., drive., accounts.,
+  // groups., translate., sites. all read as referral instead). A click
+  // arriving from Gmail/Docs/Drive/etc. must never be credited as organic
+  // search — "desconhecido não recebe crédito automático".
+  const normalized = String(host || "").toLowerCase().replace(/^www\./, "");
+  if (!normalized) return false;
+  const labels = normalized.split(".");
+  // google.<tld...> (google.com, google.com.br, google.co.uk, ...): the
+  // first label must be exactly "google" (not a subdomain of it, like
+  // mail.google.com), and what follows must look like a real public-suffix
+  // tail (1–2 short labels), so google.com.evil.example never matches.
+  const tail = labels.slice(1);
+  const tailLooksLikeTld = tail.length >= 1 && tail.length <= 2 && tail.every((l) => l.length >= 2 && l.length <= 3);
+  if (labels[0] === "google" && tailLooksLikeTld) return true;
+  if (normalized === "bing.com") return true;
+  if (normalized === "duckduckgo.com") return true;
+  if (normalized === "ecosia.org") return true;
+  // Yahoo search only: search.yahoo.com or <cc>.search.yahoo.com.
+  if (normalized === "search.yahoo.com") return true;
+  if (labels.length === 4 && labels[1] === "search" && labels[2] === "yahoo" && labels[3] === "com") return true;
+  return false;
+}
+
+function deriveOriginClass({ utm_source, utm_medium, referrer } = {}) {
+  if (utm_source || utm_medium) return "campaign";
+  const host = referrerHost(referrer);
+  if (!host || ownHosts().has(host) || host === "localhost" || host === "127.0.0.1") return "direct_or_unknown";
+  if (isSearchEngineHost(host)) return "search_organic";
+  return "referral";
+}
+
 /**
  * Keep only allowlisted attribution keys. Drops arbitrary query params and PII.
  */
@@ -1131,6 +1200,9 @@ function validateAndNormalize(data) {
       clamp(data.document_intent, MAX_FIELD.document_intent) === "secure_channel_request",
   };
 
+  // Server-derived, from sanitized fields only; see deriveOriginClass.
+  lead.origin_class = deriveOriginClass(lead);
+
   if (adaptiveFields) {
     lead.adaptive_intake = true;
     lead.need_code = adaptiveFields.need_code;
@@ -1530,4 +1602,7 @@ module.exports = {
   normalizeEmail,
   normalizeJourney,
   adaptiveIntake,
+  deriveOriginClass,
+  ORIGIN_CLASS_VALUES,
+  SEARCH_ENGINE_HOST_PREFIXES,
 };

@@ -1,0 +1,90 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "j-persist-failure-retry",
+  "description_pt_br": "A primeira entrega da observação falhou ao persistir e o produtor reenviou a mesma emissão (delivery_attempt 2) e o mesmo aceite duas vezes. Conta 1.800.000 uma vez; as repetições são excluídas (duplicate_delivery). Dois recebimentos parciais em instantes distintos são eventos diferentes.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "observation_id": "prop-j-001/emitted/attempt-1",
+      "event": "emitted",
+      "proposal_id": "prop-j-001",
+      "opportunity_id": "opp-j-001",
+      "at": "2026-09-22T10:00:00-03:00",
+      "fee_total_cents": 1800000,
+      "origin_class": "demonstrated_inbound",
+      "delivery_attempt": 1
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-j-001/emitted/attempt-2",
+      "event": "emitted",
+      "proposal_id": "prop-j-001",
+      "opportunity_id": "opp-j-001",
+      "at": "2026-09-22T10:00:00-03:00",
+      "fee_total_cents": 1800000,
+      "origin_class": "demonstrated_inbound",
+      "delivery_attempt": 2
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-j-001/accepted/attempt-1",
+      "event": "accepted",
+      "proposal_id": "prop-j-001",
+      "opportunity_id": "opp-j-001",
+      "at": "2026-09-29T10:00:00-03:00",
+      "delivery_attempt": 1
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-j-001/accepted/attempt-2",
+      "event": "accepted",
+      "proposal_id": "prop-j-001",
+      "opportunity_id": "opp-j-001",
+      "at": "2026-09-29T10:00:00-03:00",
+      "delivery_attempt": 2
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-j-001/received/1",
+      "event": "received",
+      "proposal_id": "prop-j-001",
+      "opportunity_id": "opp-j-001",
+      "at": "2026-10-05T10:00:00-03:00",
+      "amount_cents": 900000
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-j-001/received/2",
+      "event": "received",
+      "proposal_id": "prop-j-001",
+      "opportunity_id": "opp-j-001",
+      "at": "2026-11-05T10:00:00-03:00",
+      "amount_cents": 900000
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 1800000,
+    "proposals_counted": 1,
+    "excluded": [
+      {
+        "id": "prop-j-001/emitted/attempt-2",
+        "reason": "duplicate_delivery"
+      },
+      {
+        "id": "prop-j-001/accepted/attempt-2",
+        "reason": "duplicate_delivery"
+      }
+    ],
+    "by_stage": {
+      "emitted": 1800000,
+      "accepted": 1800000,
+      "invoiced": 0,
+      "received": 1800000
+    },
+    "forbidden_pt_br": "3.600.000 (emissão contada duas vezes) é contagem indevida."
+  }
+}

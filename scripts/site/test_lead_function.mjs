@@ -3222,6 +3222,87 @@ for (const bodyHonoursAbort of [true, false]) {
   pass("pos_inb_01_adaptive_stays_withheld", { status: adaptive.statusCode });
 }
 
+// W7 (#706) origin_class: server-derived at persist time from sanitized UTM tokens
+// and the referrer HOST only. It is not an intake field: a posted value is ignored,
+// no full URL or PII participates, and "no referrer" is direct_or_unknown, never
+// organic. Contract: data/revops/proposal-counting.v1.json (web_origin_class).
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  if (JSON.stringify(core.ORIGIN_CLASS_VALUES) !== JSON.stringify(["campaign", "search_organic", "referral", "direct_or_unknown"])) {
+    fail("origin_class_values", core.ORIGIN_CLASS_VALUES);
+  }
+  if (core.ATTR_ALLOWLIST.includes("origin_class")) fail("origin_class_in_intake_allowlist", "must stay server-derived");
+  const base = {
+    nome: "Origem Classe",
+    telefone: "48988001122",
+    estagio: "problema urgente em contrato",
+    jornada: "contrato",
+    consentimento: "on",
+    landing_page: "/defesa-margem-contratos-publicos/",
+  };
+  const cases = [
+    // referrer exactly as the store keeps it (origin + path, query stripped): www. must not defeat the match
+    [{ referrer: "https://www.google.com/search" }, "search_organic"],
+    [{ referrer: "https://www.google.com.br/" }, "search_organic"],
+    [{ referrer: "https://www.bing.com/search" }, "search_organic"],
+    [{ referrer: "https://duckduckgo.com/" }, "search_organic"],
+    [{ referrer: "https://br.search.yahoo.com/search" }, "search_organic"],
+    [{ referrer: "https://www.ecosia.org/search" }, "search_organic"],
+    [{ referrer: "https://notgoogle.com/" }, "referral"],
+    [{ referrer: "https://google.com.evil.example/" }, "referral"],
+    // only the search host itself is organic; any other subdomain on the same
+    // domain (mail, docs, drive, accounts, groups, translate, sites, images...)
+    // is a referral, never credited as organic search.
+    [{ referrer: "https://images.google.co.uk/imgres" }, "referral"],
+    [{ referrer: "https://mail.google.com/mail/u/0/" }, "referral"],
+    [{ referrer: "https://docs.google.com/document/d/x" }, "referral"],
+    [{ referrer: "https://drive.google.com/drive/folders/x" }, "referral"],
+    [{ referrer: "https://accounts.google.com/signin" }, "referral"],
+    [{ referrer: "https://search.yahoo.com/search" }, "search_organic"],
+    [{ referrer: "https://mail.yahoo.com/d/folders/1" }, "referral"],
+    [{ referrer: "https://smartlic.tech/perguntas/indice-reajuste-contrato-publico" }, "referral"],
+    // internal navigation is not acquisition
+    [{ referrer: "https://confenge.com.br/ferramentas/checklist-reequilibrio/" }, "direct_or_unknown"],
+    [{ referrer: "/ferramentas/checklist-reequilibrio/" }, "direct_or_unknown"],
+    [{}, "direct_or_unknown"],
+    // UTM present wins, including utm_medium=organic (a decision, not an accident)
+    [{ utm_source: "google", utm_medium: "organic", referrer: "https://www.google.com/" }, "campaign"],
+    [{ utm_medium: "organic" }, "campaign"],
+    [{ utm_source: "newsletter", referrer: "https://smartlic.tech/" }, "campaign"],
+    // a posted verdict is ignored
+    [{ origin_class: "search_organic" }, "direct_or_unknown"],
+    [{ origin_class: "campaign", referrer: "https://smartlic.tech/" }, "referral"],
+    // a referrer the sanitizer drops (query-only PII, non-http) leaves no host
+    [{ referrer: "mailto:ana@example.com" }, "direct_or_unknown"],
+  ];
+  for (const [attrs, expected] of cases) {
+    const check = core.validateAndNormalize({ ...base, ...attrs });
+    if (!check.ok) fail("origin_class_validate", { attrs, check });
+    if (check.lead.origin_class !== expected) fail("origin_class_derived", { attrs, got: check.lead.origin_class, expected });
+    if (attrs.referrer && check.lead.referrer && /\?|@/.test(check.lead.referrer)) fail("origin_class_referrer_unsanitized", check.lead.referrer);
+  }
+  pass("origin_class_derivation", { cases: cases.length });
+
+  // The handler path: persisted lead keeps the class out of the public response.
+  _reset();
+  const res = await handler(event({
+    ...base,
+    referrer: "https://www.google.com/search",
+    idempotency_key: "w7-origin-class-handler-001",
+  }, "POST", { ip: "203.0.113.231" }));
+  const data = JSON.parse(res.body);
+  if (res.statusCode !== 201 || !data.ok) fail("origin_class_persist_201", data);
+  if (Object.prototype.hasOwnProperty.call(data, "origin_class")) fail("origin_class_in_public_response", data);
+  const stored = await mem.get(data.lead_id);
+  if (!stored) fail("origin_class_not_stored", data.lead_id);
+  if (stored.referrer !== "https://www.google.com/search") fail("origin_class_store_referrer", stored.referrer);
+  // buildLeadRecord (lead-store.cjs) now persists origin_class in the durable row.
+  if (stored.origin_class !== "search_organic") {
+    fail("origin_class_store_value", stored.origin_class);
+  }
+  pass("origin_class_handler_no_leak", { stored_origin_class: stored.origin_class });
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

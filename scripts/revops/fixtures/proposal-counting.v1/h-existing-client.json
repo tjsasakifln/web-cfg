@@ -1,0 +1,34 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "h-existing-client",
+  "description_pt_br": "Cliente já atendido pede nova proposta pelo formulário do site. A Warmbly declara expansion_existing_client: conta no total emitido, zero em inbound demonstrado mesmo com lead web persistido.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-h-001",
+      "opportunity_id": "opp-h-001",
+      "at": "2026-09-11T16:00:00-03:00",
+      "fee_total_cents": 2200000,
+      "origin_class": "expansion_existing_client",
+      "origin_evidence": "lead-web-existing-client"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 2200000,
+    "proposals_counted": 1,
+    "excluded": [],
+    "by_origin_class": {
+      "demonstrated_inbound": 0,
+      "outbound_assisted": 0,
+      "mixed_or_unknown": 0,
+      "expansion_existing_client": 2200000,
+      "paid_or_partner": 0
+    },
+    "demonstrated_inbound_cents": 0
+  }
+}

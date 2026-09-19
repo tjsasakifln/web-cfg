@@ -1,0 +1,248 @@
+{
+  "schema": "confenge.proposal-counting/1.0",
+  "version": "1.0.0",
+  "status": "PROPOSED",
+  "official_live": false,
+  "indicator_owner": "warmbly",
+  "web_owner": "web-cfg",
+  "effective_at": null,
+  "acceptance_required_from": "warmbly",
+  "decision_state": "VALIDATE",
+  "issue": "#706",
+  "campaign_record": "docs/campaigns/inbound-receita-20260919/README.md",
+  "reference_implementation": "scripts/revops/proposal_counting.mjs",
+  "fixtures_dir": "scripts/revops/fixtures/proposal-counting.v1/",
+  "test": "node scripts/revops/test_proposal_counting.mjs",
+  "purpose_pt_br": "Definir, antes de qualquer leitura do indicador de propostas de honorários emitidas, o que conta como uma proposta, quanto ela vale, em que mês fecha e a que classe de origem pertence. Enquanto status for PROPOSED e effective_at for null, nenhum número produzido por este contrato é indicador oficial: é leitura de referência sobre fixtures sintéticas.",
+  "indicator": {
+    "name": "proposals_emitted_fee_total",
+    "unit": "BRL_cents",
+    "grain": "one_canonical_proposal_per_opportunity_effective_scope",
+    "counted_field": "fee_total_cents",
+    "what_it_is_not": [
+      "receita",
+      "valor da obra, do contrato administrativo ou do pleito",
+      "economia ou ganho hipotético para o cliente",
+      "soma de parcelas mensais",
+      "soma de estágios (emitida + aceita + faturada + recebida)"
+    ]
+  },
+  "money": {
+    "unit": "BRL_cents",
+    "type": "integer",
+    "floats_forbidden": true,
+    "example": {
+      "fee_total_cents": 9000000,
+      "reads_as": "R$ 90.000,00"
+    }
+  },
+  "record_kind": {
+    "field": "record_kind",
+    "counted": ["real"],
+    "excluded": ["synthetic", "qa", "fixture", "test"],
+    "missing_record_kind": "excluded_with_reason",
+    "rule_pt_br": "Registro de teste, sonda diária, canário ou fixture nunca entra no indicador, mesmo quando a proposta tem valor e cliente plausíveis. Ausência de record_kind exclui com motivo (fail-closed), não presume real."
+  },
+  "observation_schema": {
+    "schema": "confenge.proposal-observation/1.0",
+    "owner": "warmbly",
+    "pii_policy": "no_direct_identifiers_or_free_text",
+    "required": ["record_kind", "event", "proposal_id", "opportunity_id", "at"],
+    "events": ["emitted", "revised", "resent", "accepted", "invoiced", "received"],
+    "fields": {
+      "record_kind": "real | synthetic | qa | fixture | test",
+      "event": "emitted | revised | resent | accepted | invoiced | received",
+      "proposal_id": "id estável Warmbly (prefixo prop-)",
+      "opportunity_id": "id estável Warmbly (prefixo opp-)",
+      "scope_id": "escopo efetivo dentro da oportunidade; ausente = a própria oportunidade",
+      "at": "ISO-8601 com offset; instante em que a proposta foi emitida/revisada/reenviada ou o estágio mudou",
+      "fee_total_cents": "honorários totais propostos, inteiro em centavos (emitted/revised)",
+      "instalment_cents": "parcela mensal proposta, inteiro em centavos (opcional)",
+      "term_months": "número de parcelas mensais (opcional, inteiro)",
+      "contract_value_cents": "valor da obra/contrato/pleito a que a proposta se refere; nunca honorários; nunca somado",
+      "supersedes_proposal_id": "proposta anterior que esta revisão substitui (revised)",
+      "alternative_group_id": "grupo de alternativas mutuamente excludentes emitidas juntas",
+      "canonical": "true na única alternativa que conta dentro do alternative_group_id",
+      "optional_items": "lista {item_id, fee_cents} de itens opcionais; nunca somados ao fee_total_cents",
+      "amount_cents": "valor do estágio (accepted/invoiced/received); received admite parcial",
+      "origin_class": "demonstrated_inbound | outbound_assisted | mixed_or_unknown | expansion_existing_client | paid_or_partner",
+      "origin_evidence": "token curto (ex.: lead_id web, campanha) — nunca URL completa, nunca PII",
+      "delivery_attempt": "inteiro; tentativa de entrega/persistência da mesma observação (retry)"
+    }
+  },
+  "rules": [
+    {
+      "id": "PC-01",
+      "name": "one_canonical_proposal_per_scope",
+      "rule_pt_br": "Conta uma proposta canônica por oportunidade e escopo efetivo (opportunity_id + scope_id). Duas emissões distintas para o mesmo escopo, sem supersedes_proposal_id, sinalizam conflito: a primeira conta, as demais são excluídas com motivo duplicate_scope_needs_decision e o resultado marca needs_decision."
+    },
+    {
+      "id": "PC-02",
+      "name": "revision_supersedes_never_sums",
+      "revision_rule": "supersedes",
+      "rule_pt_br": "Uma revisão (event revised, supersedes_proposal_id apontando a proposta anterior) substitui a proposta anterior no indicador. O valor que conta é o da revisão mais recente da cadeia; a proposta substituída é excluída com motivo superseded. Revisão nunca soma."
+    },
+    {
+      "id": "PC-03",
+      "name": "resend_is_not_emission",
+      "rule_pt_br": "Reenvio (event resent) da mesma proposta não cria emissão nova, não muda o mês de fechamento e não altera valor. É excluído com motivo resend_not_emission."
+    },
+    {
+      "id": "PC-04",
+      "name": "exclusive_alternatives_count_once",
+      "alternative_rule": "canonical_flag",
+      "default_pt_br": "Alternativas mutuamente excludentes compartilham alternative_group_id e contam uma única vez: a alternativa marcada canonical=true. Nunca a mais cara automaticamente, nunca a média, nunca a soma. Grupo sem exatamente uma alternativa canônica é excluído inteiro com motivo alternative_group_without_canonical e o resultado marca needs_decision (fail-closed).",
+      "forbidden_defaults": ["most_expensive", "cheapest", "average", "sum", "first_emitted"]
+    },
+    {
+      "id": "PC-05",
+      "name": "optional_items_not_summed",
+      "rule_pt_br": "Itens opcionais (optional_items) ficam fora do fee_total_cents contado. São reportados em separado (optional_items_total_cents) e nunca entram no indicador."
+    },
+    {
+      "id": "PC-06",
+      "name": "fee_total_vs_instalment",
+      "rule_pt_br": "fee_total_cents é o valor proposto; instalment_cents e term_months descrevem a forma de pagamento. R$ 90.000 em 12 meses conta 9.000.000 centavos propostos e 750.000 centavos/mês na visão de parcelas. Nenhum dos dois é receita. Quando instalment_cents × term_months difere do fee_total_cents, a visão de parcelas marca consistent=false e o fee_total_cents continua sendo o valor contado.",
+      "example": {
+        "fee_total_cents": 9000000,
+        "instalment_cents": 750000,
+        "term_months": 12
+      }
+    },
+    {
+      "id": "PC-07",
+      "name": "stages_never_summed",
+      "stages": ["emitted", "accepted", "invoiced", "received"],
+      "rule_pt_br": "Emitida, aceita, faturada e recebida são leituras paralelas da mesma proposta (by_stage). Nunca são somadas entre si. O indicador de propostas emitidas é by_stage.emitted; receita recebida é by_stage.received e é um número diferente."
+    },
+    {
+      "id": "PC-08",
+      "name": "contract_value_is_not_fee",
+      "rule_pt_br": "Valor da obra, do contrato administrativo, do pleito ou economia hipotética para o cliente nunca é honorário. Viaja em contract_value_cents, é reportado à parte (contract_value_total_cents, apenas informativo) e nunca entra em emitted_total_cents."
+    },
+    {
+      "id": "PC-09",
+      "name": "record_kind_exclusion",
+      "rule_pt_br": "Ver record_kind. Sonda, canário, QA e fixture são excluídos com motivo record_kind_excluded."
+    },
+    {
+      "id": "PC-10",
+      "name": "retry_is_idempotent",
+      "rule_pt_br": "A mesma observação entregue mais de uma vez (falha de persistência seguida de retry, delivery_attempt > 1 ou repetição literal de proposal_id + event) conta uma única vez. A repetição é excluída com motivo duplicate_delivery."
+    },
+    {
+      "id": "PC-11",
+      "name": "accepted_without_amount_inherits_emission",
+      "rule_pt_br": "Observação de estágio accepted sem amount_cents herda o fee_total_cents da proposta canônica emitida (mesmo proposal_id). Uma divergência declarada — amount_cents presente, mesmo que igual ou diferente do valor emitido — sempre substitui a herança e é o valor usado em by_stage.accepted; a herança só se aplica quando amount_cents é omitido (null/ausente)."
+    }
+  ],
+  "close": {
+    "timezone": "America/Sao_Paulo",
+    "boundary": "calendar_month",
+    "month_of": "at_of_counting_emission",
+    "rule_pt_br": "O mês de fechamento é o mês civil em America/Sao_Paulo do instante da emissão que conta (a emissão original quando não há revisão; a revisão mais recente quando há). 2026-09-30T23:30-03:00 fecha em 2026-09 mesmo sendo 2026-10-01T02:30Z. Reenvio nunca move o mês. Estágios (aceita, faturada, recebida) fecham no mês do próprio evento, em leitura separada."
+  },
+  "origin_classes": {
+    "field": "origin_class",
+    "values": {
+      "demonstrated_inbound": "a oportunidade nasce de contato do visitante ao site sem ação comercial anterior conhecida; há lead_id web persistido antes do primeiro contato comercial",
+      "outbound_assisted": "houve prospecção ou contato ativo comercial antes do primeiro contato do visitante; o site pode ter participado depois",
+      "mixed_or_unknown": "origem não determinável, conflitante ou sem evidência (inclui ausência do campo)",
+      "expansion_existing_client": "nova proposta para cliente já atendido, independentemente de o pedido ter entrado pelo site",
+      "paid_or_partner": "mídia paga, parceiro ou indicação remunerada"
+    },
+    "missing_field": "mixed_or_unknown",
+    "unknown_rule": "zero",
+    "rule_pt_br": "mixed_or_unknown contribui ZERO para inbound demonstrado. Não há divisão 50/50, não há atribuição proporcional e tráfego direto ou sem referência nunca vira orgânico. demonstrated_inbound só aceita a classe explícita demonstrated_inbound.",
+    "forbidden_rules": ["split_50_50", "proportional", "direct_equals_organic", "last_touch_default_inbound"],
+    "demonstrated_inbound_output": "by_origin_class.demonstrated_inbound"
+  },
+  "web_origin_class": {
+    "field": "lead.origin_class",
+    "owner": "web-cfg",
+    "derived_at": "persist_time (netlify/functions/lib/lead-core.cjs, validateAndNormalize)",
+    "values": ["campaign", "search_organic", "referral", "direct_or_unknown"],
+    "derivation": {
+      "campaign": "qualquer utm_source ou utm_medium presente (inclui utm_medium=organic: UTM presente vence)",
+      "search_organic": "sem UTM e host do referrer em lista explícita: google., bing., duckduckgo., yahoo., ecosia. (após remover www.)",
+      "referral": "sem UTM e referrer externo em outro host",
+      "direct_or_unknown": "sem UTM e sem referrer, ou referrer do próprio site (navegação interna)"
+    },
+    "not_a_mapping_pt_br": "A classe web é evidência de origem da captura, não a classe comercial. search_organic/referral/campaign são insumos para a Warmbly decidir demonstrated_inbound; direct_or_unknown nunca promove automaticamente a demonstrated_inbound e nunca é lido como orgânico. A classe comercial é declarada pela Warmbly no campo origin_class da observação de proposta.",
+    "storage_note_pt_br": "Gravada na função de lead; disponível na exportação ops (scripts/revops/export_leads.mjs) quando a linha do store a carregar. O corpo do handoff confenge.inbound.v1 não muda até a Warmbly decidir o campo canônico de origem."
+  },
+  "private_pointers": {
+    "human_minutes_per_stage": {
+      "owner": "warmbly",
+      "store": "warmbly private finance/ops store",
+      "schema_pointer": "warmbly.stage-effort/1.0 (a definir pela Warmbly)",
+      "in_this_repo": "never"
+    },
+    "margin": {
+      "owner": "warmbly",
+      "store": "private finance store",
+      "schema_pointer": "warmbly.proposal-margin/1.0 (a definir pela Warmbly)",
+      "in_this_repo": "never",
+      "note_pt_br": "MARGIN_VALIDATED é estado separado de FOUNDER_AUTHORIZED_EXPERIMENT e de autorização de preço público; nunca inferido a partir do indicador de propostas."
+    }
+  },
+  "reconciliation": {
+    "shipped_reference": "netlify/functions/lib/closed-loop.cjs + data/revops/closed-loop-funnel.v1.json (schema_version 1.1.0)",
+    "summary_pt_br": "O closed-loop embarcado modela UMA proposta escalar por oportunidade. Este contrato não altera o closed-loop: descreve o que a Warmbly precisa aceitar (envelope, campos, unidade, regras) antes que o indicador de propostas possa sair de PROPOSED.",
+    "deltas": [
+      {
+        "id": "RC-01",
+        "shipped": "netlify/functions/lib/closed-loop.cjs:463 — applyObservation lança duplicate_entity (opportunity_already_has_proposal) quando uma segunda proposta chega à mesma oportunidade",
+        "conflict": "Revisão (supersedes_proposal_id) e alternativas (alternative_group_id) são irrepresentáveis: a segunda observação de proposta é rejeitada antes de qualquer regra de contagem.",
+        "warmbly_must_accept": "Emitir revisão/alternativa como observação de proposta separada (event revised / grupo de alternativas) num envelope que o consumidor aceite; ou manter uma proposta por oportunidade no closed-loop e publicar o snapshot de propostas em contrato próprio (confenge.proposal-observation/1.0)."
+      },
+      {
+        "id": "RC-02",
+        "shipped": "netlify/functions/lib/closed-loop.cjs — amount = Number(observation.amount ?? observation.proposal_value): um único escalar",
+        "conflict": "Não há separação entre fee_total, parcela mensal e prazo; um snapshot com 7.500/mês e outro com 90.000 total são indistinguíveis.",
+        "warmbly_must_accept": "Campos fee_total_cents, instalment_cents, term_months (inteiros em centavos/meses) na observação de proposta."
+      },
+      {
+        "id": "RC-03",
+        "shipped": "netlify/functions/lib/closed-loop.cjs:515 — contract_value assume revenue quando ausente",
+        "conflict": "Valor de obra/pleito confunde-se com receita e com honorários.",
+        "warmbly_must_accept": "contract_value_cents sempre explícito e nunca derivado de receita ou honorários; ausência fica ausente."
+      },
+      {
+        "id": "RC-04",
+        "shipped": "data/revops/closed-loop-funnel.v1.json — warmbly_observation_contract.allowed_fields não contém supersedes_proposal_id, alternative_group_id, canonical, fee_total_cents, instalment_cents, term_months, contract_value_cents, origin_class, scope_id, delivery_attempt, optional_items, amount_cents; assertWarmblyObservationEnvelope rejeita campo desconhecido (unsupported_observation_field)",
+        "conflict": "O envelope embarcado é fail-closed: o primeiro passo é o envelope, não a regra de contagem.",
+        "warmbly_must_accept": "Publicar o snapshot de propostas sob confenge.proposal-observation/1.0 (novo produtor) ou versionar warmbly.closed-loop-observations para 2.0 com os campos acima; web-cfg só então estende allowed_fields, em PR própria, com fixtures."
+      },
+      {
+        "id": "RC-05",
+        "shipped": "closed-loop usa valores em reais (fixture closed-loop-synthetic.v1.json: amount 18000, revenue 18000), tipo Number",
+        "conflict": "Este contrato usa inteiros em centavos (BRL_cents). Sem conversão explícita, um snapshot misto infla ou reduz o indicador por 100×.",
+        "warmbly_must_accept": "Unidade declarada por campo (sufixo _cents) e inteiros; a conversão do closed-loop legado é responsabilidade do produtor, nunca inferida pelo consumidor."
+      },
+      {
+        "id": "RC-06",
+        "shipped": "closed-loop commercial_stages: qualified | proposal | won | lost; não há accepted, invoiced, received separados",
+        "conflict": "Faturada e recebida não existem como estágios; won carrega revenue como escalar único.",
+        "warmbly_must_accept": "Eventos accepted / invoiced / received com amount_cents e at próprios, ou um mapeamento explícito documentado (won ≠ received)."
+      },
+      {
+        "id": "RC-07",
+        "shipped": "closed-loop não carrega classe de origem comercial; web-cfg grava lead.origin_class (campaign | search_organic | referral | direct_or_unknown) só do lado web",
+        "conflict": "Sem origin_class comercial na observação, toda proposta cai em mixed_or_unknown e inbound demonstrado é zero por construção.",
+        "warmbly_must_accept": "Declarar origin_class (cinco classes) por proposta, com origin_evidence token; decidir o campo canônico de origem da oportunidade (issue #706)."
+      }
+    ],
+    "indicator_moves_when": [
+      "Warmbly aceita RC-01..RC-07 (ou registra alternativa equivalente) em contrato versionado",
+      "web-cfg publica fixtures reais-sintéticas do novo envelope e estende allowed_fields em PR própria",
+      "status passa a ACCEPTED, effective_at recebe data e official_live continua false até o primeiro snapshot completo aprovado (official_live_gate do closed-loop)"
+    ]
+  },
+  "notes_pt_br": {
+    "north_star": "Oportunidades qualificadas segmentadas por núcleo e ligadas a proposta e receita são o indicador corporativo; contagem de propostas é leitura intermediária e nunca substitui receita recebida.",
+    "zero_undue_counting": "Toda exclusão sai com {id, reason}. Um resultado sem exclusões explicadas não é auditável e não deve ser publicado.",
+    "no_pii": "Observações de proposta não carregam nome, e-mail, telefone, CNPJ, texto livre nem URL completa. origin_evidence é token curto.",
+    "fixtures": "As dez fixtures (a)–(j) são sintéticas (kind synthetic, official_live false) e cobrem: orgânico conhecido, e-mail frio depois site, origem desconhecida, mista, revisão + reenvio, alternativas excludentes, proposta anual, cliente existente, canário sintético e falha de persistência com retry."
+  }
+}

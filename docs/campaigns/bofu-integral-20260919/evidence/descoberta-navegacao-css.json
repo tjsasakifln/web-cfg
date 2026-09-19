@@ -1,0 +1,239 @@
+{
+ "home_paths": [
+  {
+   "need": "projetar_revisar_compatibilizar",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-projeto (index.html:126-134) → .area__sub links index.html:132 → /projetos-complementares-engenharia/ | /revisao-tecnica-projetos-engenharia/ (#contato-revisao) | /compatibilizacao-projetos-engenharia/ (each: own h1, explanation, wa.me ×2 + mailto ×3 + tel; no <form> in source — capture withheld fail-closed, fallback channels). Alternative via .situation-action index.html:133 → /servicos/#servico-projeto → landing = 2 clicks."
+  },
+  {
+   "need": "orcar_planejar_decidir",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-orcamento .situation-action index.html:141 → /quantitativos-orcamento-obras/ (h1 'Quantitativos e orçamento de obras', contact fragment #triagem-quantitativos; registry value_first_header_cta href #triagem-quantitativos). Hero plate link index.html:110 → /quantitativos-orcamento-obras/#amostra-quantitativos also 1."
+  },
+  {
+   "need": "inspecionar_diagnosticar",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-obra-imovel .situation-action index.html:149 → /inspecao-diagnostico-edificacoes/ (#contato-inspecao section, 'Três canais diretos', wa.me/mailto/tel)."
+  },
+  {
+   "need": "receber_entregar_reformar",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-obra-imovel index.html:144-150 → /inspecao-diagnostico-edificacoes/ (recebimento/reforma named at inspecao-diagnostico-edificacoes/index.html:63,77,130,159). CAVEAT: home row h3 index.html:146 names only 'infiltração, fissura, mofo ou dano' — recebimento/reforma not visible on home; offer renovation_plan_condo_review has no own route (UNVERIFIED: no route found by ls/grep)."
+  },
+  {
+   "need": "documentar_as_built_regularizar",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-obra-imovel index.html:149 → /inspecao-diagnostico-edificacoes/ ('registrar o estado do imóvel em uma data' inspecao:130,159). CAVEAT: no landing for asbuilt_document_reconciliation; 'as-built' appears only in /conteudos/* B2G articles (e.g. conteudos/divergencia-quantitativo-medicao-as-built/). Home has no wording for as-built/regularização; weakest private family."
+  },
+  {
+   "need": "avaliar_imovel",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-avaliacao .situation-action index.html:157 → /servicos/#servico-avaliacao (hub row servicos/index.html:173-208: explanation + plate + conditions; contact = wa.me deeplink + mailto servicos/index.html:177). CAVEAT: no dedicated route (ls -d */ | grep avalia = none), no form; terminal REQUEST_FORMAL_VALUATION_SCOPE served only by WhatsApp/e-mail."
+  },
+  {
+   "need": "produzir_prova_tecnica",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-pericia .situation-action index.html:165 → /assistencia-tecnica-pericial-engenharia/ (#contato-assistencia)."
+  },
+  {
+   "need": "assistencia_trabalhista_sst",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-sst index.html:173 → /seguranca-trabalho-apoio-tecnico/ (trabalhista named at seguranca-trabalho-apoio-tecnico/index.html:64,66,78,154; #contato-sst). Via #situacao-pericia → assistencia page → cross-link assistencia-tecnica-pericial-engenharia/index.html:185 → SST page = 2 clicks. No own home row."
+  },
+  {
+   "need": "organizar_sst",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-sst .situation-action index.html:173 → /seguranca-trabalho-apoio-tecnico/ (#contato-sst)."
+  },
+  {
+   "need": "planejar_contratacao_publica",
+   "clicks_from_home": 1,
+   "path": "/ #obras-publicas prose link index.html:315 'Órgão público preparando uma obra? Descreva a necessidade' → /triagem-tecnica/#planejamento-publico (item triagem-tecnica/index.html:91 covers órgão; channels wa/mail/tel :66-70) → /servicos-obras-publicas/#situacao-orgao (servicos-obras-publicas/index.html:113, form present) = 2. CAVEAT: situations list row 07 (index.html:176-185) is framed as contratada ('Medição glosada ou pagamento travado'); órgão visitor is not addressed in the chooser, only below the fold in #obras-publicas."
+  },
+  {
+   "need": "decidir_disputar_licitacao",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-obras-publicas .area__sub index.html:183 → /bid-room-licitacoes-obras/ (1 form) | .situation-action index.html:184 → /servicos-obras-publicas/ (1 form) | #obras-publicas path 01 index.html:306 → /bid-room-licitacoes-obras/."
+  },
+  {
+   "need": "executar_proteger_contrato_publico",
+   "clicks_from_home": 1,
+   "path": "/ #situacao-obras-publicas .area__sub index.html:183 → /medicoes-glosas-obras-publicas/ | /reequilibrio-obras-publicas/ (forms; frozen pillars) | #obras-publicas index.html:308 → /medicoes-glosas-obras-publicas/ ; :309 → /reequilibrio-obras-publicas/, /defesa-margem-contratos-publicos/."
+  },
+  {
+   "need": "outra_demanda_tecnica",
+   "clicks_from_home": 0,
+   "path": "/ in-page: #descrever-situacao index.html:188-197 → href #triagem-tecnica (:193) → button href #contato (:371) → form#formulario-contato data-next-state-profile=general_triage index.html:396 (2 anchor clicks, 0 page loads). Or hero secondary index.html:96 → /triagem-tecnica/ (1 click; wa/mail/tel, no form)."
+  }
+ ],
+ "hub_paths": [
+  {
+   "need": "projetar_revisar_compatibilizar",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ rows #servico-projeto (:96-109), #servico-revisao (:111-123), #servico-compatibilizacao (:125-135) → /projetos-complementares-engenharia/ (servicos/index.html:105) | /revisao-tecnica-projetos-engenharia/ (:119) | /compatibilizacao-projetos-engenharia/ (:133); also :105 → /triagem-tecnica/#projetos."
+  },
+  {
+   "need": "orcar_planejar_decidir",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-orcamento servicos/index.html:149 → /quantitativos-orcamento-obras/ and /quantitativos-orcamento-obras/#triagem-quantitativos."
+  },
+  {
+   "need": "inspecionar_diagnosticar",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-diagnostico servicos/index.html:165 → /inspecao-diagnostico-edificacoes/ and #contato-inspecao."
+  },
+  {
+   "need": "receber_entregar_reformar",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-diagnostico (h3 :159 'Infiltração, fissura, mofo ou registro do imóvel'; body :160 names 'recebimento, reforma') → /inspecao-diagnostico-edificacoes/ (:165)."
+  },
+  {
+   "need": "documentar_as_built_regularizar",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-diagnostico (:159 'registro do imóvel'; :160 'registrar a condição de uma edificação em uma data') → /inspecao-diagnostico-edificacoes/ (:165). No as-built/regularização route."
+  },
+  {
+   "need": "avaliar_imovel",
+   "clicks_from_hub": 0,
+   "path": "/servicos/ page-index servicos/index.html:87 → #servico-avaliacao (:173-208) with wa.me + mailto (:177) on the same page. No dedicated route or form."
+  },
+  {
+   "need": "produzir_prova_tecnica",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-pericia servicos/index.html:218 → /assistencia-tecnica-pericial-engenharia/ and #contato-assistencia."
+  },
+  {
+   "need": "assistencia_trabalhista_sst",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-sst (:229 'discussão trabalhista com componente técnico') → /seguranca-trabalho-apoio-tecnico/ (:234)."
+  },
+  {
+   "need": "organizar_sst",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-sst servicos/index.html:234 → /seguranca-trabalho-apoio-tecnico/ and #contato-sst."
+  },
+  {
+   "need": "planejar_contratacao_publica",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-obras-publicas (:243-249; body :244 names órgãos) → /triagem-tecnica/#planejamento-publico (:249) or → /servicos-obras-publicas/ (:249; #situacao-orgao at servicos-obras-publicas/index.html:113, form)."
+  },
+  {
+   "need": "decidir_disputar_licitacao",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-obras-publicas servicos/index.html:249 → /servicos-obras-publicas/ (form). Header nav :40 → /servicos-obras-publicas/ also 1."
+  },
+  {
+   "need": "executar_proteger_contrato_publico",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ #servico-obras-publicas servicos/index.html:249 → /medicoes-glosas-obras-publicas/ | /aditivos-obras-publicas/ (forms) | /servicos-obras-publicas/."
+  },
+  {
+   "need": "outra_demanda_tecnica",
+   "clicks_from_hub": 1,
+   "path": "/servicos/ hero :64 → #services-contact-title → button :293 → /triagem-tecnica/ (1); hero WhatsApp :66 (0 page loads); header CTA :43 → /triagem-tecnica/."
+  }
+ ],
+ "autonomous_entries": [
+  "/ (home) — family 'home', own title, 7 situation rows, form#formulario-contato index.html:396 (general_triage)",
+  "/servicos/ — family 'servicos-corporativos', h1 servicos/index.html:62, WhatsApp/mailto in hero and avaliação row; no form",
+  "/triagem-tecnica/ — h1 :60, channels wa/mail/tel :66-70, six situation items :86-91; registry capture_availability mode external_authority_fail_closed with withheld_fallback [whatsapp,email,telephone]; page does NOT load adaptive-intake.js and has no form → rendered state is the fail-closed fallback (by design, not drift)",
+  "/projetos-complementares-engenharia/ — h1, explanation, wa.me×2 mailto×3, loads /assets/js/adaptive-intake.js (line 30) but no [data-adaptive-intake-form] in source → script no-op; contact = channels",
+  "/revisao-tecnica-projetos-engenharia/ — h1, #contato-revisao, channels; adaptive-intake.js loaded, no form in source",
+  "/compatibilizacao-projetos-engenharia/ — h1, channels; adaptive-intake.js loaded, no form in source",
+  "/quantitativos-orcamento-obras/ — h1, #triagem-quantitativos, channels; adaptive-intake.js loaded, no form in source",
+  "/inspecao-diagnostico-edificacoes/ — h1, #contato-inspecao 'Três canais diretos'; does not load adaptive-intake.js; no form",
+  "/assistencia-tecnica-pericial-engenharia/ — h1, #contato-assistencia, channels; adaptive-intake.js loaded, no form in source",
+  "/seguranca-trabalho-apoio-tecnico/ — h1, #contato-sst, channels; adaptive-intake.js loaded, no form in source",
+  "/servicos-obras-publicas/ — h1, priced_offer, 1 <form>, #situacao-orgao :113 for órgão",
+  "/bid-room-licitacoes-obras/ — h1 'Operação de Proposta para Licitação Crítica', 1 <form>",
+  "/medicoes-glosas-obras-publicas/ — frozen pillar, 1 <form>, index,follow",
+  "/reequilibrio-obras-publicas/ — frozen pillar, 1 <form>, index,follow",
+  "/aditivos-obras-publicas/ — frozen pillar, 1 <form>, index,follow",
+  "/diretoria-b2g/ — 1 <form>",
+  "/entregas/ — priced_offer, 1 <form>",
+  "/problemas-que-resolvemos/ — service_transition profile, no form (routes onward)",
+  "NOT autonomous: avaliar_imovel (no route; hub anchor only), documentar_as_built_regularizar (no route), receber_entregar_reformar (folded into inspeção), assistencia_trabalhista_sst (folded into SST/assistência), planejar_contratacao_publica (only /triagem-tecnica/#planejamento-publico item and /servicos-obras-publicas/#situacao-orgao group)"
+ ],
+ "combined_needs": "Home: section lead index.html:124 'Se a sua mistura duas, qualquer uma serve'; #descrever-situacao index.html:188-197 ('Não se reconheceu em nenhuma, ou a sua mistura duas?') → href #triagem-tecnica (:193) → #contato button (:371) → single general form#formulario-contato (:396, data-next-state-profile=general_triage, hidden 'jornada' :400 set by data-set-journey on the B2G row :184). Hero secondary :96 → /triagem-tecnica/. Hub /servicos/: same sentence :78; 'Na mesma proposta' cross-links revisão/compatibilização/quantitativos :104; revisão↔elaboração/compatibilização :113; compatibilização↔elaborar/revisar :127; inspeção→projeto de reparo/orçamento/disputa :161; avaliação+inspeção+disputa combined :176; pericia→avaliação :213; SST+trabalhista :229; journey rail :263 'Quando o caso pede mais de um serviço, a proposta combina as etapas com um responsável nomeado'. /triagem-tecnica/: item #quantitativos :88 'Quando a inspeção mostra que o próximo passo é orçar o reparo, as duas etapas entram na mesma proposta' (inspeção+quantitativos); #pericia-avaliacao :89 merges perícia+avaliação in one item; #obra-imovel :87 merges inspeção+recebimento+laudo de estado. Landings: SST↔assistência trabalhista at seguranca-trabalho-apoio-tecnico/index.html:78 and assistencia-tecnica-pericial-engenharia/index.html:185. Quantitativos+compatibilização specifically: hub :104 (elaboração row links quantitativos) and compatibilização row :127 mentions elaborar/revisar but not orçamento — no explicit quantitativos+compatibilização pairing on hub or home (only via 'qualquer uma serve' + general form). All combined intents resolve to one general capture (home form or triagem channels), consistent with ADR SOLUCAO-INTEGRAL 'a proposta combina as etapas'.",
+ "situation_row_consumers": [
+  "HTML (index.html only, excluding _site/node_modules/.claude/docs): /index.html:126,135,144,152,160,168 (class 'situation-row area'), :176 (class 'situation-row situation-row--b2g area area--b2g' id=situacao-obras-publicas). No other public index.html uses .situation-row/.area--b2g/.situation-row--b2g. Non-public copies: docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G02/**/home.html (evidence snapshots) and .claude/worktrees/* (agent copies).",
+  "CSS defining .area--b2g: assets/editorial.css:74-79 (block 'Area index', source of truth) → copied by scripts/site/build_css.py sync_home_sheet (:143-165, HOME_EDITORIAL_BLOCKS :74-86 includes 'Area index') into assets/home-10x.css:87-92 between '/* BEGIN editorial-route-sheet */' (home-10x.css:25) and '/* END editorial-route-sheet */' (home-10x.css:188). .area (padding:1.25rem 0 1.5rem) at editorial.css:67 → home-10x.css:80.",
+  "CSS defining .situation-row / .situation-row--b2g: NATIVE to assets/home-10x.css only, all after the END marker: :232 (.situation-row grid), :234 (@media max-width:699px grid cols), :235-243 descendants, :244-249 .situation-row--b2g colour overrides, :344-345 inside '@media (max-width:699px)' block :343-358 ('9. Celular') — '.situation-row{padding:1rem 0 1.15rem;gap:.3rem}'. Not present in styles.css (0 hits), assets/home-base.css (0 hits), editorial.css (0 hits for situation-row).",
+  "Uncommitted worktree addition (not in HEAD 3cf3c4b47): assets/home-10x.css:347 '.situation-row.area--b2g{padding:1.5rem clamp(1rem,2.5vw,1.75rem) 1.6rem}' inside the same ≤699px block.",
+  "Tests/scripts referencing the classes: scripts/site/test_ui_geometry.mjs:586,591,623,710-738,778-796,1342-1346 (+ uncommitted 10b :643-691); scripts/site/test_design_gates.py:333-336,447,631-642 (asserts '.situation-row{' present in home-10x.css and no display:none); scripts/site/test_home_conversion_contract.py:139,168; scripts/site/test_nav_taskflow.py:500; scripts/site/test_production_cutover.mjs:245; scripts/site/test_contact_journeys.mjs (situacao-obras-publicas); scripts/site/test_deliverables_hub.py; scripts/site/test_visitor_redesign.py:1239.",
+  "Home stylesheet order (index.html:30-31): /assets/home-base.css (styles.css pruned; header claims build_css.py generates it but build_css.py contains no home-base logic — UNVERIFIED generator, last written in commit 97c2a933c) then /assets/home-10x.css. Pillars load /styles.css + /assets/editorial.css (medicoes-glosas-obras-publicas/index.html:17-18)."
+ ],
+ "below_fold_sections": [
+  "main>section without id: hero (index.html:84, class 'hero section--tight opening') — first fold",
+  "#situacoes (index.html:118; anchor alias span#jornadas :117; contains .situation-list rows :126-185, #descrever-situacao :188) — below fold, content-visibility:auto with contain-intrinsic-size pinned per width band at home-10x.css:334-339 (3408/3327/3279/3113/1880/1880px)",
+  "#entregas-demonstrativas (index.html:202) — content-visibility:auto",
+  "#responsabilidade (index.html:262) — content-visibility:auto",
+  "#obras-publicas (index.html:298; contains div#mercado-pncp :331, li#jornada-contrato :308) — content-visibility:auto",
+  "#triagem-tecnica (index.html:360) — forced content-visibility:visible (home-10x.css:330-333, anchor target)",
+  "#contato (index.html:380; form#formulario-contato :396) — forced content-visibility:visible",
+  "Geometry tests: scripts/site/test_ui_geometry.mjs (2741 lines; overflow 320–1920 :162-176; fold viewports :320; chooser mobile hierarchy 360/390/412 :746-806 asserts padLeft ≥18 on chooser :806; height ceilings 1440≤10500 :222, 390≤17000 :226; UNCOMMITTED case 10b 'b2g_situation_row_keeps_lateral_padding' :643-691 widths [320,390,430,699,700,900,1100,1440], scrollIntoView before measuring :653, asserts computed padL/padR ≥15.5 and padT/padB ≥15.5 :677-678, children inside padded box :680-681, no doc overflow :682, row ≤ viewport :683, plain .situation-row:not(.area--b2g) paddingLeft===0 at ≤699 :685). scripts/site/audit_sitewide_layout.mjs (npm test:layout-primitives / audit:layout-sitewide): VIEWPORTS [360,390,768,1024,1366,1440,1920] :31, primitiveRules table [selector, display, minPadding] ~:256-284 checked via getComputedStyle paddingLeft :285-298 — a case can be added as [\".situation-row.area--b2g\",\"grid\",16] but its widths do not include 320/430/699/700. scripts/site/measure_first_fold.mjs (viewports 1366x768, 390x844 only; writes data/commercial/first-fold-measurements.v1.json with input_hashes :231 and tree_dirty :230). scripts/site/test_home_first_fold.mjs (npm test:three-second-fold). No file named test_ui_geometry*.mjs other than test_ui_geometry.mjs; no test_layout_sitewide*.mjs exists (the sitewide layout script is audit_sitewide_layout.mjs).",
+  "How to add the padding case if 10b were absent: in test_ui_geometry.mjs after case 10 (matrix_mobile_stacked_records, ends :641) add a try/ok/fail block using the file's ok()/fail() helpers (:77-83): for width of [320,390,430,699,700] setViewport({width,height:900}), goto BASE+'/', scrollIntoView #situacao-obras-publicas (needed because #situacoes is content-visibility:auto), then page.evaluate getComputedStyle(row).paddingLeft/paddingRight parseFloat > 0 (≥15.5 = 1rem floor of clamp), and at 700 assert paddingLeft equals clamp(1rem,2.5vw,1.75rem) = max(16, 17.5) = 17.5px; also assert plain rows have paddingLeft 0 at ≤699. Because body[data-content-cluster=home] main has overflow-x:clip (home-10x.css:16), document.scrollWidth cannot reveal a clipped child — assert child getBoundingClientRect inside row box as 10b does. overflow:clip occurrences: assets/home-10x.css:16 (main, overflow-x:clip), assets/report-model.css:18 (main{overflow:clip}); none in styles.css or editorial.css; not on .situation-row/.area--b2g themselves."
+ ],
+ "findings": [
+  {
+   "severity": "HIGH (confirmed by static cascade analysis; not runtime-measured — build/run prohibited)",
+   "finding": "At ≤699px #situacao-obras-publicas loses its lateral padding: '.situation-row{padding:1rem 0 1.15rem;gap:.3rem}' (assets/home-10x.css:344, native block '9. Celular', after END marker :188) has the same specificity (0,1,0) as '.area--b2g{...padding:1.5rem clamp(1rem,2.5vw,1.75rem)...}' (home-10x.css:87, inside the editorial marker block, source assets/editorial.css:74) and is declared later, so the shorthand zeroes padding-left/right on the navy row; text touches the background edge. At ≥700px the mobile block does not apply and clamp() padding holds.",
+   "evidence": "assets/home-10x.css:25 BEGIN marker, :87 .area--b2g rule, :188 END marker, :343-344 @media (max-width:699px){.situation-row{padding:1rem 0 1.15rem}}; index.html:176 element carries both classes; scripts/site/build_css.py:143-165 only rewrites between markers.",
+   "minimal_fix": "Add a more specific rule inside the same @media (max-width:699px) block in assets/home-10x.css (native section, survives build_css.py sync): '.situation-row.area--b2g{padding:1.5rem clamp(1rem,2.5vw,1.75rem)}' — specificity (0,2,0) wins regardless of order, plain rows keep padding 0 lateral. Alternative even smaller: change :344 to 'padding-block:1rem 1.15rem' (never touches lateral) but that changes the dark row's vertical rhythm to 1rem/1.15rem. Reordering is worse: .area--b2g lives in the generated block sourced from editorial.css:74, so it would require editing editorial.css and regenerating home-10x.css + route subsets (wider recapture)."
+  },
+  {
+   "severity": "HIGH (process)",
+   "finding": "The working tree is dirty although the task states branch = origin/main 3cf3c4b47 and git status was clean at session start: another process wrote the fix and the test concurrently. Uncommitted: assets/home-10x.css (+3 lines, :345-347) and scripts/site/test_ui_geometry.mjs (+50 lines, :643-691 case 'b2g_situation_row_keeps_lateral_padding'). This audit did not edit anything. Parts (2)/(3) of the task are therefore already staged; do not double-apply.",
+   "evidence": "git status --short → ' M assets/home-10x.css', ' M scripts/site/test_ui_geometry.mjs'; git diff --stat 53 insertions; sha256 assets/home-10x.css worktree 47f5d760b1f4d2c9… vs HEAD 82d9ae22fae0435b….",
+   "minimal_fix": "Parent decides ownership: review the staged diff as the fix, or discard it and apply the rule above. Commit fix + test together, then recapture first-fold on a clean tree."
+  },
+  {
+   "severity": "MEDIUM",
+   "finding": "The staged rule uses padding-bottom 1.6rem ('padding:1.5rem clamp(1rem,2.5vw,1.75rem) 1.6rem', home-10x.css:347) whereas the original .area--b2g shorthand (home-10x.css:87) is 1.5rem all round vertically; the fix silently loosens the row by 1.6px and is the only declaration in the mobile block that adds rather than tightens rhythm. #situacoes has contain-intrinsic-size estimates measured 2026-09-17 (home-10x.css:334-337) and height ceilings (test_ui_geometry.mjs:226, 390px ≤17000).",
+   "evidence": "git diff assets/home-10x.css; assets/home-10x.css:87 vs :347.",
+   "minimal_fix": "Use 'padding:1.5rem clamp(1rem,2.5vw,1.75rem)' (exact restoration) unless the +0.1rem was measured deliberately; keep the rule inside the ≤699px block."
+  },
+  {
+   "severity": "MEDIUM",
+   "finding": "Any byte change to assets/home-10x.css invalidates data/commercial/first-fold-measurements.v1.json: its input_hashes pin assets/home-10x.css = 82d9ae22fae0435b… (equals HEAD, commit_sha 1ab0f428b ancestor of HEAD, tree_dirty:false); tests/commercial/test_first_fold_contract.mjs:406-407 asserts evidence bound to current inputs, and first_fold_identity.mjs:49 rejects tree_dirty evidence — so recapture must run on a committed clean tree.",
+   "evidence": "data/commercial/first-fold-measurements.v1.json input_hashes (52 inputs incl. index.html, assets/editorial.css, assets/home-10x.css, assets/home-base.css, styles.css, editorial-article.css); scripts/site/measure_first_fold.mjs:225-239; package.json:55 'measure:first-fold'.",
+   "minimal_fix": "After committing the CSS+test: npm run measure:first-fold (clean tree, Node 22 per memory) and commit the regenerated evidence in the same PR (merge commit, not squash — first-fold/frozen-specs record SHA)."
+  },
+  {
+   "severity": "INFO (recapture matrix per file)",
+   "finding": "home-10x.css-only change → recapture ONLY first-fold-measurements.v1.json. Not data/bofu-dominance/frozen-specs/hashes.json (forbidden keys: _redirects, six pillar index.html, data/organic/content-service-map.json, js/modules/analytics.js, robots.txt, script.js, sitemap-index.xml, sitemap.txt, sitemap.xml, styles-tokens.css, styles-tools.css, styles.css — no editorial.css/home-10x.css). Not data/design/css-usage-baseline.json (audit_css_usage.py AUDITED_BUNDLES = styles.css, entregas/styles.css; other files only tracked by decoration counts border_radius/box_shadow/gradient — a padding rule adds none). Not canary-contract.json (docs/evidence/389-measurement-glosa-canary/canary-contract.json hashes canary + sibling HTML sha256 only; CSS appears only in prose reasons). build_css.py --check passes because the edit is outside the markers. editorial.css change → first-fold (editorial.css + editorial-article.css inputs) + must run build_css.py to regenerate home-10x.css and route subsets (else 'FAIL assets/home-10x.css is stale', build_css.py:181-188) + css-usage only if decoration rises. styles.css change → hashes.json forbidden['styles.css'] recapture (tests/bofu_dominance/frozen_specs/test_frozen_specs.py:203-206) + first-fold + css-usage bundles['styles.css'] (bytes/class_selectors) + Lighthouse gate per memory.",
+   "evidence": "hashes.json forbidden keys listed via python; audit_css_usage.py:18-21,55; canary-contract.json /canary/after_sha256 and /frozen_siblings[*]/sha256; first-fold input_hashes.",
+   "minimal_fix": "Keep the fix in home-10x.css native block to limit recapture to first-fold only."
+  },
+  {
+   "severity": "INFO",
+   "finding": "data/bofu-dominance/frozen-specs/approvals.json does not exist. approvals.json files found: data/editorial/market-panorama/approvals.json (empty {}), data/editorial/contract-analysis/approvals.json (per-analysis content_hash/rendered_content_hash/base_sha — HTML of analysis pages, not home CSS), data/editorial/market-answers/approvals.json. UNVERIFIED whether rendered_content_hash covers linked CSS bytes; analysis pages do not load home-10x.css so a home-only fix cannot affect them.",
+   "evidence": "find . -name approvals.json (excluding node_modules/.claude/_site); ls data/bofu-dominance/frozen-specs/ shows no approvals.json.",
+   "minimal_fix": "None; report path as not found."
+  },
+  {
+   "severity": "MEDIUM (navigation)",
+   "finding": "Three intent families do not clear 'explains the solution + contact within two choices' cleanly: (a) planejar_contratacao_publica — situations list row 07 (index.html:176-185) addresses only the contratada; the órgão path is a prose link below the fold (index.html:315) to /triagem-tecnica/#planejamento-publico (channels only; form is 2 clicks at /servicos-obras-publicas/#situacao-orgao). (b) avaliar_imovel — no dedicated route; terminal is hub anchor /servicos/#servico-avaliacao with wa.me+mailto only (servicos/index.html:177) for a REQUEST_FORMAL_VALUATION_SCOPE terminal. (c) documentar_as_built_regularizar — offer asbuilt_document_reconciliation has no route; 'as-built' appears only in /conteudos/* B2G articles; nearest is inspeção ('registrar o estado em uma data', inspecao-diagnostico-edificacoes/index.html:130,159). receber_entregar_reformar and assistencia_trabalhista_sst are folded into inspeção and SST respectively (1 click each) but not named on home rows (index.html:146,170).",
+   "evidence": "index.html:144-150,176-185,315; servicos/index.html:173-208; ls -d */ | grep avalia → none; grep -rl 'as.built' --include=index.html → only conteudos/*.",
+   "minimal_fix": "Not a CSS task; if addressed: add órgão wording or a second .area__sub link ('Órgão planejando a contratação' → /servicos-obras-publicas/#situacao-orgao) to row 07 within the existing markup; extend row 03 h3/copy to name recebimento/laudo de estado. Any change to index.html requires first-fold recapture and home conversion-contract tests (test_home_conversion_contract.py:139,168 count rows)."
+  },
+  {
+   "severity": "INFO (design state, not drift)",
+   "finding": "Private landings and /triagem-tecnica/ have no <form> in source (grep '<form' = 0) while their registry families declare terminal_action capture_form_or_whatsapp with capture_availability.mode external_authority_fail_closed and withheld_fallback [whatsapp,email,telephone]. Six landings load /assets/js/adaptive-intake.js (e.g. projetos-complementares-engenharia/index.html:30) which looks for [data-adaptive-intake-form] or #triagem-tecnica-form (adaptive-intake.js:4-5) and finds none → no-op; /triagem-tecnica/ and /inspecao-diagnostico-edificacoes/ do not load it at all. Rendered contact = wa.me/mailto/tel channels — the fail-closed withheld state, consistent with the registry, not an unflagged gap.",
+   "evidence": "data/organic/public-family-registry.json families triagem-tecnica, private-engineering-quantities-budget (capture_availability), inspecao-diagnostico-edificacoes; triagem-tecnica/index.html:65-70; assets/js/adaptive-intake.js:4-14.",
+   "minimal_fix": "None for this audit; note that 'contact/form' in the click table means contextual channels for private families and real <form> for B2G pillars, /servicos-obras-publicas/, /entregas/, /diretoria-b2g/ and the home."
+  },
+  {
+   "severity": "LOW",
+   "finding": "assets/home-base.css header (:1-2) states it is generated by scripts/site/build_css.py from styles.css, but build_css.py contains no home-base logic (only styles.css assembly, home-10x sync, route subsets); the only references are audit_css_usage.py:188 (DERIVED_SUBSETS) and test_skip_link_coverage.py:135. Last written in commit 97c2a933c. The pruning step is UNVERIFIED and possibly manual, so styles.css changes may not propagate to the home base sheet.",
+   "evidence": "grep -rn home-base scripts/ → audit_css_usage.py, test_skip_link_coverage.py only; git log -- assets/home-base.css.",
+   "minimal_fix": "Out of scope; flag for the CSS owner. Not affected by a home-10x.css-only fix."
+  },
+  {
+   "severity": "LOW (measurement hazards for the new test)",
+   "finding": "#situacoes is content-visibility:auto with pinned contain-intrinsic-size (home-10x.css:334-339): child getBoundingClientRect can be zero-size until the section is on screen, and body[data-content-cluster=home] main{overflow-x:clip} (home-10x.css:16) hides horizontal spill from document.scrollWidth. The staged case handles both (scrollIntoView :653; child-box assertions :680-681) — keep those when editing. audit_sitewide_layout.mjs cannot host the 320/430/699/700 widths (VIEWPORTS :31 = 360,390,768,1024,1366,1440,1920) without changing sitewide scope.",
+   "evidence": "assets/home-10x.css:16,330-339; scripts/site/test_ui_geometry.mjs:643-691 (uncommitted); scripts/site/audit_sitewide_layout.mjs:31,285-298.",
+   "minimal_fix": "Keep the case in test_ui_geometry.mjs (npm run test:ui, package.json:141); optionally add [\".situation-row.area--b2g\",\"grid\",16] to primitiveRules in audit_sitewide_layout.mjs for 360/390 coverage sitewide."
+  }
+ ]
+}

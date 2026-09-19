@@ -1,0 +1,69 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "d-mixed",
+  "description_pt_br": "Cinco propostas, uma por classe de origem. Total emitido soma todas; inbound demonstrado é só a classe explícita demonstrated_inbound.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-d-001",
+      "opportunity_id": "opp-d-001",
+      "at": "2026-09-02T10:00:00-03:00",
+      "fee_total_cents": 1000000,
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-d-002",
+      "opportunity_id": "opp-d-002",
+      "at": "2026-09-05T10:00:00-03:00",
+      "fee_total_cents": 2000000,
+      "origin_class": "outbound_assisted"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-d-003",
+      "opportunity_id": "opp-d-003",
+      "at": "2026-09-09T10:00:00-03:00",
+      "fee_total_cents": 3000000,
+      "origin_class": "mixed_or_unknown"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-d-004",
+      "opportunity_id": "opp-d-004",
+      "at": "2026-09-14T10:00:00-03:00",
+      "fee_total_cents": 4000000,
+      "origin_class": "expansion_existing_client"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-d-005",
+      "opportunity_id": "opp-d-005",
+      "at": "2026-09-21T10:00:00-03:00",
+      "fee_total_cents": 5000000,
+      "origin_class": "paid_or_partner"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 15000000,
+    "proposals_counted": 5,
+    "excluded": [],
+    "by_origin_class": {
+      "demonstrated_inbound": 1000000,
+      "outbound_assisted": 2000000,
+      "mixed_or_unknown": 3000000,
+      "expansion_existing_client": 4000000,
+      "paid_or_partner": 5000000
+    },
+    "demonstrated_inbound_cents": 1000000
+  }
+}

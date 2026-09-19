@@ -1,0 +1,72 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "e-revision-resend",
+  "description_pt_br": "Proposta emitida por R$ 50.000 em agosto, revisada para R$ 45.000 em setembro (supersedes) e reenviada duas vezes. Conta 4.500.000 uma vez, no mês da revisão (2026-09). A original é excluída (superseded); reenvios são excluídos (resend_not_emission).",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-e-001",
+      "opportunity_id": "opp-e-001",
+      "at": "2026-08-28T11:00:00-03:00",
+      "fee_total_cents": 5000000,
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "event": "revised",
+      "proposal_id": "prop-e-002",
+      "opportunity_id": "opp-e-001",
+      "at": "2026-09-04T11:00:00-03:00",
+      "fee_total_cents": 4500000,
+      "supersedes_proposal_id": "prop-e-001",
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-e-002/resent/1",
+      "event": "resent",
+      "proposal_id": "prop-e-002",
+      "opportunity_id": "opp-e-001",
+      "at": "2026-09-10T11:00:00-03:00"
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-e-002/resent/2",
+      "event": "resent",
+      "proposal_id": "prop-e-002",
+      "opportunity_id": "opp-e-001",
+      "at": "2026-09-17T11:00:00-03:00"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 4500000,
+    "proposals_counted": 1,
+    "counted_proposal_ids": [
+      "prop-e-002"
+    ],
+    "excluded": [
+      {
+        "id": "prop-e-001/emitted",
+        "reason": "superseded"
+      },
+      {
+        "id": "prop-e-002/resent/1",
+        "reason": "resend_not_emission"
+      },
+      {
+        "id": "prop-e-002/resent/2",
+        "reason": "resend_not_emission"
+      }
+    ],
+    "by_close_month": {
+      "2026-09": 4500000
+    },
+    "naive_sum_cents": 9500000,
+    "forbidden_pt_br": "9.500.000 (original + revisão) ou 13.500.000 (com reenvios) é contagem indevida."
+  }
+}

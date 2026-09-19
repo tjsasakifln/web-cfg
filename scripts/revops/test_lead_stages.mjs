@@ -305,6 +305,50 @@ function readyGscHistory(asOf, nowIso) {
   else pass("public_summary_no_pii");
 }
 
+// 8b) 2026-09-19 (W6-ops-web): the redacted summary carries the e-mail provider
+// handles (provider_id / http / reason / idempotency_key) so the operator can
+// correlate lead_id -> Resend message with pii=0. Statuses stay plain strings.
+{
+  const summary = stages.publicLeadSummary({
+    lead_id: "lead-p2",
+    nome: "SECRET",
+    email: "secret@example.com",
+    telefone: "48999",
+    mensagem: "texto livre",
+    commercial_stage: "lead_persisted",
+    received_at: new Date().toISOString(),
+    landing_page: "/",
+    delivery: {
+      notify: { status: "ok", attempts: 1, channels: ["telegram"] },
+      email: {
+        status: "ok",
+        attempts: 1,
+        http: 200,
+        provider_id: "8b2d1f0e-aaaa-4bbb-8ccc-0123456789ab",
+        idempotency_key: "lead-email/lead-p2",
+      },
+    },
+  });
+  const d = summary.delivery || {};
+  if (d.notify !== "ok" || d.email !== "ok") fail("delivery_status_shape", d);
+  else pass("delivery_status_shape_kept");
+  if (d.email_provider_id !== "8b2d1f0e-aaaa-4bbb-8ccc-0123456789ab" || d.email_http !== 200
+      || d.email_idempotency_key !== "lead-email/lead-p2" || "email_reason" in d) {
+    fail("delivery_provider_handles", d);
+  } else pass("delivery_provider_handles_pii0");
+  const blob = JSON.stringify(summary);
+  if (/SECRET|secret@|48999|texto livre/.test(blob)) fail("pii_leak_with_delivery", blob);
+  else pass("public_summary_no_pii_with_delivery");
+  const failed = stages.publicLeadSummary({
+    lead_id: "lead-p3",
+    received_at: new Date().toISOString(),
+    delivery: { notify: { status: "error" }, email: { status: "error", reason: "timeout", attempts: 1 } },
+  }).delivery;
+  if (failed.email !== "error" || failed.email_reason !== "timeout" || "email_provider_id" in failed || "email_http" in failed) {
+    fail("delivery_error_reason", failed);
+  } else pass("delivery_error_reason_pii0");
+}
+
 
 // peak stage: proposal implies contacted/qualified/meeting reached
 {

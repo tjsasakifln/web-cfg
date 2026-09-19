@@ -1,0 +1,72 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "g-annual-proposal",
+  "description_pt_br": "Proposta anual de R$ 90.000 em 12 parcelas de R$ 7.500. Conta 9.000.000 proposto uma vez, em 2026-09; visão de parcelas mostra 750.000/mês. Nenhum dos dois é receita: by_stage.received é 0 até haver recebimento; um recebimento parcial de 750.000 em outubro aparece só em received.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-g-001",
+      "opportunity_id": "opp-g-001",
+      "at": "2026-09-16T14:00:00-03:00",
+      "fee_total_cents": 9000000,
+      "instalment_cents": 750000,
+      "term_months": 12,
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "event": "accepted",
+      "proposal_id": "prop-g-001",
+      "opportunity_id": "opp-g-001",
+      "at": "2026-09-25T14:00:00-03:00"
+    },
+    {
+      "record_kind": "real",
+      "event": "invoiced",
+      "proposal_id": "prop-g-001",
+      "opportunity_id": "opp-g-001",
+      "at": "2026-10-01T09:00:00-03:00",
+      "amount_cents": 750000
+    },
+    {
+      "record_kind": "real",
+      "event": "received",
+      "proposal_id": "prop-g-001",
+      "opportunity_id": "opp-g-001",
+      "at": "2026-10-10T09:00:00-03:00",
+      "amount_cents": 750000
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 9000000,
+    "proposals_counted": 1,
+    "excluded": [],
+    "by_close_month": {
+      "2026-09": 9000000
+    },
+    "by_stage": {
+      "emitted": 9000000,
+      "accepted": 9000000,
+      "invoiced": 750000,
+      "received": 750000
+    },
+    "instalment_view": {
+      "monthly_instalments_total_cents": 750000,
+      "proposals": [
+        {
+          "proposal_id": "prop-g-001",
+          "fee_total_cents": 9000000,
+          "instalment_cents": 750000,
+          "term_months": 12,
+          "consistent": true
+        }
+      ]
+    },
+    "forbidden_pt_br": "750.000 como valor proposto, 9.750.000 (total + parcela) ou qualquer valor como receita antes de received é contagem indevida."
+  }
+}

@@ -27,7 +27,7 @@ Encontrar itens que concentram risco de preço/BDI/referência e conhecer a marg
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE |
-| content_sha256 | `23b85aff77ebf9b9a398ca783843106b873c0ee6524895f15f90f9d6ba94ee7a` |
+| content_sha256 | `4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 

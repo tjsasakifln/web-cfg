@@ -20,14 +20,14 @@ Decidir se cabe reequilíbrio agora e estruturar evento, matriz de riscos, nexo 
 
 | Field | Value |
 |---|---|
-| title | Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE |
-| meta | Reequilíbrio econômico-financeiro de obra pública: o que é, quando pode existir, diferença entre reajuste e revisão, evento, matriz de riscos, nexo e demonstração do impacto. |
+| title | Reequilíbrio econômico-financeiro de obra pública | CONFENGE |
+| meta | Dossiê de reequilíbrio econômico-financeiro para a empresa contratada: evento, matriz de riscos, nexo com o contrato e demonstração do impacto. |
 | H1 | Reequilíbrio econômico-financeiro de obra pública |
 | canonical | https://confenge.com.br/reequilibrio-obras-publicas/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
-| og:title | Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE |
-| content_sha256 | `05f7aec63215a11e5bee4b2e0b18c17f552621df817ebb37473201c3cfd829d6` |
+| og:title | Reequilíbrio econômico-financeiro de obra pública | CONFENGE |
+| content_sha256 | `67ce169a619744a2ac45cad85d1112802e611c961d7c1ed3aa89a34137b123bc` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 

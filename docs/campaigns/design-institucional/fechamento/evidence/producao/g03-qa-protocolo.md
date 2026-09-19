@@ -71,17 +71,32 @@ curl -s -H "Authorization: Bearer $OPS_TOKEN" "$OPS?action=inbound_handoff&lead_
 # esperado: receipt.record_kind=real, receipt.handoff.status=delivered, attempts=1, delivered_at preenchido
 #   (real e transportável: inbound-handoff.cjs:1134 só pula non_real; config READY, blocked só por config).
 #   Se vier skipped/blocked/retryable: gravar handoff.last_error e safety_gate antes de chamar FAIL,
-#           receipt.delivery.email_status=ok; counters.persisted_leads=23+N, delivered=17+N
+#           receipt.delivery.email_status=ok; counters.persisted_leads = valor anterior + N,
+#           counters.delivered = valor anterior + N (N = envios reais deste QA; ler o "valor anterior"
+#           no snapshot de prontidão vigente antes do primeiro envio, nunca de memória).
+#   Nota 2026-09-19: após a run 35441489601 o contador lido em produção era delivered=19; os
+#   absolutos anteriores (17/23) valiam para o snapshot de 4cfa6adca e não devem ser reprovados como
+#   defeito quando o valor anterior já for outro.
 
-# 3.3 provider_id do Resend. ATENÇÃO: com pii=0 o action=lead devolve delivery só como
-#     {notify:<status>, email:<status>} (ops.cjs:364-376, lead-stages.cjs:216-221). provider_id, http e
-#     reason só existem no objeto delivery completo, que exige pii=1 e também expõe nome/telefone/email.
-#     Por isso: pii=1 SÓ no shell do host e SÓ com o filtro jq abaixo; nunca gravar a saída bruta.
+# 3.3 provider_id do Resend.
+#     A partir da projeção de 2026-09-19 (lead-stages.cjs publicLeadSummary → publicDeliveryProjection),
+#     o action=lead com pii=0 já devolve os identificadores do provedor, sem contato:
+#     .lead.delivery = {notify:<status>, email:<status>, email_provider_id, email_http, email_reason?, email_idempotency_key}.
+#     Preferir SEMPRE este caminho:
+PID=$(curl -s -H "Authorization: Bearer $OPS_TOKEN" "$OPS?action=lead&id=$L" \
+ | jq -r '.lead.delivery.email_provider_id // empty')
+curl -s -H "Authorization: Bearer $OPS_TOKEN" "$OPS?action=lead&id=$L" \
+ | jq '{email_status:.lead.delivery.email, http:.lead.delivery.email_http, reason:.lead.delivery.email_reason, provider_id:.lead.delivery.email_provider_id, idempotency_key:.lead.delivery.email_idempotency_key, notify:.lead.delivery.notify}'
+# esperado: email_status=ok, http=200, provider_id=<uuid Resend>, idempotency_key=lead-email/<lead_id>
+#     Só se a produção ainda servir uma release anterior a essa projeção (campos ausentes, PID vazio):
+#     o objeto delivery completo exige pii=1 e também expõe nome/telefone/email. Nesse caso pii=1 SÓ no
+#     shell do host e SÓ com o filtro jq abaixo; nunca gravar a saída bruta.
+if [ -z "$PID" ]; then
 PID=$(curl -s -H "Authorization: Bearer $OPS_TOKEN" "$OPS?action=lead&id=$L&pii=1" \
  | jq -r '.lead.delivery.email.provider_id // empty')
 curl -s -H "Authorization: Bearer $OPS_TOKEN" "$OPS?action=lead&id=$L&pii=1" \
  | jq '{email_status:.lead.delivery.email.status, http:.lead.delivery.email.http, reason:.lead.delivery.email.reason, provider_id:.lead.delivery.email.provider_id, notify:.lead.delivery.notify.status}'
-# esperado: email_status=ok, http=200, provider_id=<uuid Resend>
+fi
 
 # 3.4 Resend: estado da mensagem (só id, created_at, last_event, subject)
 if [ -n "$PID" ]; then
@@ -103,12 +118,16 @@ docker exec warmbly-confenge-postgres-1 psql -U warmbly -d warmbly_dev -At -F'|'
 #                 commercial_action_id pode ser herdado de A.
 done
 
-# 3.6 agregados pós-QA (comparar com prontidao-operacional-4cfa6adca.json)
+# 3.6 agregados pós-QA (comparar com o snapshot de prontidão vigente; o de referência histórica é
+#     prontidao-operacional-4cfa6adca.json, lido ANTES do primeiro envio)
 curl -s -H "Authorization: Bearer $OPS_TOKEN" "$OPS?action=leads&kind=real" | jq '{count, sla_breaches, counts_by_kind}'
-# esperado: count=3, counts_by_kind.real=3, synthetic=23
+# esperado: count = valor anterior + N, counts_by_kind.real = valor anterior + N (N = envios reais deste QA);
+#           counts_by_kind.synthetic = valor anterior, inalterado
 docker exec warmbly-confenge-postgres-1 psql -U warmbly -d warmbly_dev -At -F'|' -c \
  "select count(*), status from outreach_inbound_leads group by status order by status"
-# esperado: OPEN 19 | SUPPRESSED 23
+# esperado: OPEN = valor anterior + N | SUPPRESSED = valor anterior, inalterado
+#   Nota 2026-09-19: após a run 35441489601 o handoff lia delivered=19 (o snapshot de 4cfa6adca trazia
+#   OPEN 19 | SUPPRESSED 23 e delivered=17). Os absolutos servem de exemplo de leitura, não de gabarito.
 ```
 
 Opcional (fila do operador, via túnel `ssh -L 5173:127.0.0.1:5173 ec-prod`): `GET http://127.0.0.1:5173` → INBOUND NOW deve listar A1 (B1/C1 aparecem deduplicados). Não clicar em outcome/dispatch.
