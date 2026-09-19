@@ -27,7 +27,7 @@ Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extr
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Aditivos em obras públicas: documentos e margem | CONFENGE |
-| content_sha256 | `b5f35720c71b16348680962a41d83564a4c7e55a288d4d5be11341f6c9c54227` |
+| content_sha256 | `091a67cd7af55f1305e539e0f4a2ca42a60dfc6ccb1d61071235cd3365078261` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 
