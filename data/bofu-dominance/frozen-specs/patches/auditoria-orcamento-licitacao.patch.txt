@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: auditoria-orcamento-licitacao
 path: auditoria-orcamento-licitacao/index.html
-content_sha256: 23b85aff77ebf9b9a398ca783843106b873c0ee6524895f15f90f9d6ba94ee7a
+content_sha256: 4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false
