@@ -1,0 +1,43 @@
+OK   build-info.commit = 83b63fc1f8fa9c9f37f2f18f0b8b35fe9cdbf35f
+OK   runtime-info.release_sha = 83b63fc1f8fa9c9f37f2f18f0b8b35fe9cdbf35f
+OK   css.situation-row.area--b2g = .situation-row.area--b2g{padding:1.5rem clamp(1rem,2.5vw,1.75rem) 1.6rem}
+OK   font.preload = /assets/archivo-var-latin-b19be0f7.woff2
+OK   font.http = 200
+     font bytes 42208
+OK   styles.no-import = 0
+OK   http / = 200
+OK   http /servicos/ = 200
+OK   http /entregas/ = 200
+OK   http /inspecao-diagnostico-edificacoes/ = 200
+OK   http /seguranca-trabalho-apoio-tecnico/ = 200
+OK   http /servicos-obras-publicas/ = 200
+OK   http /medicoes-glosas-obras-publicas/ = 200
+OK   http /casos/medicao-glosa-demonstrativo/ = 200
+OK   http /casos/aditivo-art125-demonstrativo/ = 200
+OK   http /ferramentas/matriz-atraso-obra/ = 200
+OK   http /ferramentas/checklist-reequilibrio/ = 200
+OK   http /triagem-tecnica/ = 200
+OK   http /quantitativos-orcamento-obras/ = 200
+OK   http /bid-room-licitacoes-obras/ = 200
+OK   http /reequilibrio-obras-publicas/ = 200
+OK   http /nurture/ = 200
+OK   anchor /inspecao-diagnostico-edificacoes/#recebimento-entrega = 1
+OK   anchor /inspecao-diagnostico-edificacoes/#reforma-condominio = 1
+OK   anchor /inspecao-diagnostico-edificacoes/#documentacao-as-built = 1
+OK   anchor /seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista = 1
+OK   anchor /servicos-obras-publicas/#situacao-orgao = 1
+OK   anchor /medicoes-glosas-obras-publicas/#captura-pilar = 1
+OK   noscript note medicoes = 1
+OK   checklist form bound = 1
+OK   aditivo case wa.me in page (>=1) = 1
+OK   home -> #situacao-orgao (2) = 2
+OK   hub -> documentacao-as-built = 1
+OK   reequilibrio title = 1
+SUMMARY ok=34 fail=0
+
+Jornadas em navegador (Chromium 153, 390x844, https://confenge.com.br):
+- home #situacao-obras-publicas .area__sub: /bid-room-licitacoes-obras/ | /medicoes-glosas-obras-publicas/ | /reequilibrio-obras-publicas/ | /servicos-obras-publicas/#situacao-orgao | /guias-contratos-obras/
+- /servicos-obras-publicas/#situacao-orgao: âncora visível na chegada; formulário com telefone presente e e-mail não obrigatório (um canal de retorno).
+- /inspecao-diagnostico-edificacoes/#documentacao-as-built: âncora visível; h3 'Registrar o que foi construído e a documentação que falta'; sem overflow horizontal.
+- JS desligado em /medicoes-glosas-obras-publicas/#captura-pilar: nota 'Sem JavaScript, este formulário não envia. Use o WhatsApp ou o e-mail ao lado.' visível, com wa.me e mailto.
+- /ferramentas/checklist-reequilibrio/: form[name=diagnostico-confenge] recebe do runtime data-form-contract, data-runtime-profile, data-receipt-required, data-form-ready (antes: nome fora do seletor, nunca ligado).
