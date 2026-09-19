@@ -120,7 +120,10 @@
 </section>
 
 <div class="n-card" id="inscricao">
-<form id="nurture-form" data-capture-form novalidate>
+<form id="nurture-form" data-capture-form novalidate method="post">
+<input type="hidden" name="source" value="nurture_landing"/>
+<input type="hidden" name="landing_page" value="/nurture/"/>
+<noscript><p class="n-meta">Sem JavaScript, este formulário não envia. Use o e-mail <a href="mailto:tiago.sasaki@confenge.com.br?subject=Sequ%C3%AAncia%20t%C3%A9cnica%20por%20e-mail">tiago.sasaki@confenge.com.br</a> para pedir a sequência, informando a trilha.</p></noscript>
 <label for="track">Trilha</label>
 <select id="track" name="track" required>
 <option value="contrato">Contrato sob pressão</option>

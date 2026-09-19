@@ -734,6 +734,7 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     utm_campaign: lead.utm_campaign,
     utm_content: lead.utm_content,
     utm_term: lead.utm_term,
+    origin_class: lead.origin_class || null,
     content_cluster: lead.content_cluster,
     asset_id: lead.asset_id || null,
     source_origin_asset_id: lead.source_origin_asset_id || null,

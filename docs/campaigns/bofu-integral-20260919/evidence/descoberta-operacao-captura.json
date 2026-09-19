@@ -1,0 +1,256 @@
+{
+ "forms": [
+  {
+   "route": "/ (home)",
+   "anchor": "#contato (form id=formulario-contato; #triagem-tecnica is a CTA band that links to #contato, index.html:360-368, no form of its own)",
+   "fields_step1": "fieldset data-form-step=1 'Contato essencial': nome (req), telefone (tel, optional), email (optional) — one channel enforced client (form.js:263-279) and server (lead-core.cjs:977-983); estagio select (req, situação, 13 options with data-journey). Step 2 optional (mensagem, empresa, urgencia, faixa_contrato, risco_em_jogo, frequencia, maturidade_documental, capacidade_interna); consent + submit outside both panels (form.js:423-437).",
+   "consent": "consentimento checkbox required (index.html form; server lead-core.cjs:938-999 rejects 400 error=consent)",
+   "channel_field": "telefone OR email (either), hint #contato-hint index.html:~400",
+   "nojs_alternative": "Native POST action=/obrigado method=POST (index.html:394) — static page, POST result UNVERIFIED (nginx static; no handler). Visible without JS: .form-nojs-note 'Neste navegador, o formulário não consegue registrar…' shown via html.no-js (index.html:2,16; assets/home-10x.css:317-318) plus wa.me and mailto links in #triagem-tecnica (index.html:369-371).",
+   "handler": "js/modules/form.js:422-680 → fetch POST JSON /api/web/lead (form.js:617) → netlify/functions/lead.cjs (nginx proxies /api/web/ and /.netlify/functions/, scripts/migration/netcup/lib/contract.mjs:635)",
+   "evidence": "index.html:394-440,522-523; js/modules/nav.js:584 (binding selector); js/modules/form.js:150-157 (safeSuccessDestination), 606-640 (Turnstile token, 15 s abort, fetch)"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "anchor": "#canais (no <form>)",
+   "fields_step1": "none — page deliberately 'sem formulário' (triagem-tecnica/index.html:7,65)",
+   "consent": "n/a",
+   "channel_field": "WhatsApp button + e-mail link (triagem-tecnica/index.html:68-69) with data-cta-id technical-triage-alternative-*",
+   "nojs_alternative": "Whole page is the no-JS path: static wa.me/mailto links",
+   "handler": "none (no persistence; contact goes to WhatsApp/e-mail)",
+   "evidence": "triagem-tecnica/index.html:65-72"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/ (pattern shared by /aditivos-obras-publicas/:228, /reequilibrio-obras-publicas/:210, /acompanhamento-contratos-obras/:230, /auditoria-orcamento-licitacao/:229, /bid-room-licitacoes-obras/:280 (+canal_seguro), /diagnostico-b2g-360/:248, /diagnostico-pre-licitacao/:217, /diretoria-b2g/:334 #pedido-enquadramento)",
+   "anchor": "#captura-pilar (form.pillar-capture-form name=diagnostico-confenge, medicoes-glosas-obras-publicas/index.html:233)",
+   "fields_step1": "single step: nome (req), empresa (opt), email (opt), telefone (opt), mensagem (opt); situação fixed by hidden estagio=route slug + jornada=contrato; hidden offer_id/terms_id empty, origem/asset_id/cta_id/route_family/landing_page pre-rendered",
+   "consent": "consentimento required; data-form-boundary states 730-day retention + /privacidade/",
+   "channel_field": "email OR telefone (hint data-field-purpose 'um canal de retorno')",
+   "nojs_alternative": "Native POST urlencoded to /.netlify/functions/lead → 403 anti_abuse (no Turnstile token without JS; LEAD_REQUIRE_TURNSTILE=1) shown as raw JSON. Visible without JS: adjacent 'Falar pelo WhatsApp' button in .contact-alt (medicoes-glosas-obras-publicas/index.html:230) + footer mailto/tel",
+   "handler": "shared runtime js/modules/form.js (bound via nav.js:584 name=diagnostico-confenge) → /api/web/lead; Turnstile slot injected at build (scripts/pseo/build_site.py:380-401,642-690)",
+   "evidence": "medicoes-glosas-obras-publicas/index.html:228-236; README campaign finding on static origem (docs/campaigns/inbound-receita-20260919/README.md:39)"
+  },
+  {
+   "route": "/atrasos-prorrogacao-obras-publicas/ (also /defesa-margem-contratos-publicos/:260 with canal_seguro+document_intent, /defesa-tecnica-contratos-publicos/:244)",
+   "anchor": "#captura-pilar",
+   "fields_step1": "single step: deliverable_id hidden (CFG-D20/D17/D23), public_contract_id (opt), contract_event select (REQUIRED, situação analog), opportunity_deadline (opt), contract_stage (opt), nome (req), empresa, email, telefone, mensagem",
+   "consent": "consentimento required",
+   "channel_field": "email OR telefone",
+   "nojs_alternative": "same as pillar pattern: native POST → 403 JSON; adjacent wa.me button visible",
+   "handler": "shared runtime form.js → /api/web/lead",
+   "evidence": "atrasos-prorrogacao-obras-publicas/index.html:243; defesa-margem-contratos-publicos/index.html:260; defesa-tecnica-contratos-publicos/index.html:244"
+  },
+  {
+   "route": "/servicos-obras-publicas/",
+   "anchor": "#captura-contrato",
+   "fields_step1": "single step: deliverable_id select (opt), public_contract_id (opt), contract_event select (req), opportunity_deadline, contract_stage, nome (req), email (REQUIRED), mensagem — NO telefone field",
+   "consent": "consentimento required",
+   "channel_field": "email only (required) — divergent from every other capture form and from server rule 'telefone OU email' (lead-core.cjs:977-983)",
+   "nojs_alternative": "native POST → 403 JSON; wa.me present on page (2 occurrences)",
+   "handler": "shared runtime form.js → /api/web/lead",
+   "evidence": "servicos-obras-publicas/index.html:145-146 ('Obrigatórios: evento observado, nome do representante, e-mail profissional e o consentimento'); grep -c telefone = 0"
+  },
+  {
+   "route": "/entregas/",
+   "anchor": "#captura-entregas (form name=diagnostico-confenge, profile delivery_selection)",
+   "fields_step1": "single step: deliverable_id select (opt), nome (req), empresa, email, telefone, mensagem; hidden estagio=entregas-exemplos-hub, jornada=operacao",
+   "consent": "consentimento required",
+   "channel_field": "email OR telefone",
+   "nojs_alternative": "native POST → 403 JSON; visible fallback: mailto 'Enviar a decisão por e-mail' in .contact-alt (entregas/index.html:371) and svc-open note mailto (:73); no wa.me on page",
+   "handler": "shared runtime form.js → /api/web/lead",
+   "evidence": "entregas/index.html:325,366-373"
+  },
+  {
+   "route": "/casos/",
+   "anchor": "#captura-casos / #trazer-o-caso (profile case_evidence_review)",
+   "fields_step1": "nome (req), empresa, email, telefone, mensagem; hidden estagio=casos-hub, jornada=contrato",
+   "consent": "consentimento required",
+   "channel_field": "email OR telefone",
+   "nojs_alternative": "native POST → 403 JSON; wa.me in svc-open note (casos/index.html:54), mailto x2",
+   "handler": "shared runtime form.js → /api/web/lead",
+   "evidence": "casos/index.html:150"
+  },
+  {
+   "route": "/casos/modelo-relatorio-inteligencia-licitacoes/ (CFG-D01), /casos/modelo-base-quantitativa-canonica/ (D02), /casos/modelo-apresentacao-executiva-resultados/ (D03), /casos/modelo-mapa-compradores-publicos/ (D04), /casos/modelo-contratos-vincendos-relicitacao/ (D05), /casos/modelo-mapeamento-concorrentes-publicos/ (D06), /casos/modelo-painel-precos-obras-publicas/ (D07), /casos/modelo-relatorio-executivo-consolidado/ (D08)",
+   "anchor": "#captura-modelo (form.report-capture-form name=diagnostico-confenge, profile configured_delivery_request)",
+   "fields_step1": "single step: deliverable_id hidden, cnpj (REQ), analysis_cutoff date (REQ), opportunity_deadline date (REQ), decision_intent select (REQ), then nome (req), empresa, email, telefone, mensagem. Extra required fields are authorized by contract data/commercial/cta-form-next-state.v1.json:148-155 ('CNPJ identifica a empresa; datas delimitam corte…'); registry family casos-modelos-precificados profile=priced_offer terminal_action=capture_form",
+   "consent": "consentimento required",
+   "channel_field": "email OR telefone",
+   "nojs_alternative": "native POST → 403 JSON; wa.me present on 7 of 8 (5 occurrences each); /casos/modelo-relatorio-inteligencia-licitacoes/ has NO wa.me and only footer mailto",
+   "handler": "shared runtime form.js → /api/web/lead",
+   "evidence": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:403; casos/modelo-base-quantitativa-canonica/index.html:422; others at :517,:421,:454,:449,:442,:476"
+  },
+  {
+   "route": "/ferramentas/checklist-reequilibrio/",
+   "anchor": "#reequilibrio-handoff (form id=reequilibrio-capture-form name=checklist-reequilibrio, result-gated, hidden until tool result)",
+   "fields_step1": "nome (req), telefone, email, mensagem; hidden estagio='prontidao documental de reequilibrio', jornada=contrato, cta_id checklist-reequilibrio-conferencia",
+   "consent": "consentimento required (value=1)",
+   "channel_field": "telefone OR email",
+   "nojs_alternative": "native POST → 403 JSON; page has no wa.me; only footer mailto/tel",
+   "handler": "NOT BOUND: nav.js:584 selector matches only name=diagnostico-b2g|diagnostico-confenge; no other script binds it (tools-common.js/tool-compute.js/tool-persist.js/inline script bind only #f). Submission is a native urlencoded POST to /.netlify/functions/lead: with JS the Turnstile widget still renders (slot injected by build, scheduleTurnstile is slot-based form.js:822-838), so server may persist and answer 201 JSON that the browser renders raw; no idempotency key (falls to 15-min content bucket lead-core.cjs:1235), no receipt page, no lead_form_* analytics",
+   "evidence": "ferramentas/checklist-reequilibrio/index.html:91 (name=checklist-reequilibrio, data-ajax, data-receipt-required=true, data-success-destination=/obrigado-contrato); js/modules/nav.js:584,1359; js/modules/form.js:422; script.js contains same selector; grep reequilibrio-capture-form in script.js/assets/js = 0"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "anchor": "#segunda-leitura-contrato (form id=lead-form name=diagnostico-b2g, profile second_reading)",
+   "fields_step1": "nome (req), telefone, email, mensagem; hidden public_contract_id, public_id_slug, estagio='problema urgente em contrato'",
+   "consent": "consentimento required",
+   "channel_field": "telefone OR email",
+   "nojs_alternative": "native POST → 403 JSON; no wa.me; footer mailto only",
+   "handler": "shared runtime form.js (name=diagnostico-b2g) → /api/web/lead",
+   "evidence": "ferramentas/diagnostico-defesa-margem/index.html:150"
+  },
+  {
+   "route": "/ferramentas/limite-acrescimos-supressoes/",
+   "anchor": "#cfg-d19-handoff (form id=cfg-d19-form name=diagnostico-confenge)",
+   "fields_step1": "public_contract_id (REQ), opportunity_deadline (REQ), contract_stage (REQ), nome (req), telefone, email; hidden deliverable_id=CFG-D19, contract_event=mudanca_escopo; no mensagem field",
+   "consent": "consentimento required",
+   "channel_field": "telefone OR email",
+   "nojs_alternative": "native POST → 403 JSON; no wa.me; footer mailto only",
+   "handler": "shared runtime form.js → /api/web/lead",
+   "evidence": "ferramentas/limite-acrescimos-supressoes/index.html:165"
+  },
+  {
+   "route": "/analise-cnpj/ and /analise-cnpj/r/",
+   "anchor": "#pedido (form id=intel-lead-form action=/api/web/lead, no name attribute)",
+   "fields_step1": "nome (req), telefone, email, mensagem; hidden intent_kind, analysis_id, origem=/analise-cnpj/, estagio='escolhendo oportunidades', route_family live-company-analysis",
+   "consent": "consentimento required",
+   "channel_field": "telefone OR email",
+   "nojs_alternative": "native POST → 403 JSON; no wa.me/mailto in body (0/0)",
+   "handler": "assets/js/live-intelligence.js (LEAD_ENDPOINT /api/web/lead :15; Turnstile token :430-433) — dedicated runtime, not form.js",
+   "evidence": "analise-cnpj/index.html:94; analise-cnpj/r/index.html:71; assets/js/live-intelligence.js:15,430"
+  },
+  {
+   "route": "/comercial/radar-decisorio/",
+   "anchor": "#parametros (form id=radar-params-form, profile paid_offer_parameters, runtime inline_reference_v1)",
+   "fields_step1": "nome (req), cnpj (req), radar_recorte, radar_uf (req), radar_cidade_base, radar_raio_km, radar_segmentos, radar_acervo_tecnico (req), radar_email_entrega (req), telefone",
+   "consent": "consentimento required",
+   "channel_field": "radar_email_entrega required; telefone optional",
+   "nojs_alternative": "native POST → 403 JSON; wa.me x1, mailto x1 on page",
+   "handler": "inline script comercial/radar-decisorio/index.html:297 fetch /.netlify/functions/lead with Idempotency-Key; server mints external_reference (lead.cjs:390-431)",
+   "evidence": "comercial/radar-decisorio/index.html:102,297"
+  },
+  {
+   "route": "/diagnostico-b2g-expansao/",
+   "anchor": "#pedido-diagnostico (form id=handraise-diag, runtime inline_receipt_v1)",
+   "fields_step1": "nome (req), empresa, email, telefone, cnpj (opt), mensagem; hidden offer_id CFG-DIAG-EXP-v1, terms_id",
+   "consent": "consentimento required",
+   "channel_field": "email OR telefone",
+   "nojs_alternative": "native POST → 403 JSON; wa.me x2, mailto x2 on page",
+   "handler": "inline script diagnostico-b2g-expansao/index.html:331 fetch /.netlify/functions/lead",
+   "evidence": "diagnostico-b2g-expansao/index.html:238,331"
+  },
+  {
+   "route": "/nurture/",
+   "anchor": "#inscricao (form id=nurture-form, no action, no method)",
+   "fields_step1": "track select (req), email (req), consent checkbox (req)",
+   "consent": "consent checkbox required (client); server nurture.cjs UNVERIFIED in this audit",
+   "channel_field": "email only",
+   "nojs_alternative": "UNBOUND WITHOUT JS: no action/method → browser GET to /nurture/?track=…&email=…&consent=on, placing the e-mail in the URL (first-party only; not sent to analytics since page_path uses pathname)",
+   "handler": "inline script nurture/index.html:152-166 fetch POST JSON /.netlify/functions/nurture?action=subscribe",
+   "evidence": "nurture/index.html:123,152,166"
+  },
+  {
+   "route": "/piloto/conversao-xray/ and /piloto/ofertas/contratar/",
+   "anchor": "#xray-form/#handraise-form → /.netlify/functions/conversion-intake; /piloto/ofertas/contratar/ → /.netlify/functions/offer-eligibility",
+   "fields_step1": "handraise: nome (req), email, telefone, estagio (req), consentimento (req); xray: cnpj; eligibility: cnpj, representante, offer_id, target_contract, start_date, accept_terms",
+   "consent": "handraise-form consentimento required; eligibility accept_terms (not required attr)",
+   "channel_field": "email OR telefone (handraise)",
+   "nojs_alternative": "noscript present on conversao-xray (test_xray_turnstile_e2e.mjs:286 asserts 'Nada foi enviado'); pilot routes — indexability/registry membership UNVERIFIED here",
+   "handler": "netlify/functions/conversion-intake.cjs, offer-eligibility.cjs (not traced in this audit)",
+   "evidence": "piloto/conversao-xray/index.html:39,70; piloto/ofertas/contratar/index.html:31"
+  },
+  {
+   "route": "EXCLUDED (non-capture calculators/filters, no contact fields, no lead endpoint)",
+   "anchor": "ferramentas/matriz-atraso-obra #f; ferramentas/limite-acrescimos-supressoes #limite-form; ferramentas/checklist-reequilibrio #f; ferramentas/prontidao-tecnica-obra-privada #diagnostico; ferramentas/diagnostico-defesa-margem #lookup; conteudos/sinapi-desonerado-nao-desonerado (GET #); conflitos #conflict-gate-form (action #primeira-etapa); analise-cnpj #cnpj-form (→ live-intelligence-analyze)",
+   "fields_step1": "n/a",
+   "consent": "n/a",
+   "channel_field": "n/a",
+   "nojs_alternative": "n/a",
+   "handler": "n/a",
+   "evidence": "docs/design-audit/prototypes/* and .claude/worktrees/* also excluded from the census; /casos/medicao-glosa-demonstrativo/ has no form (debt data/organic/public-family-registry.json:557-560, expires 2026-09-30, per README:37)"
+  }
+ ],
+ "pipeline": {
+  "persistence": "Filesystem host-owned store on the Netcup host: CONFENGE_STORAGE_BACKEND=filesystem, CONFENGE_STORAGE_DIR=/var/lib/confenge-web (docs/ops/ENV-VARS.md:44-45, docs/ops/ROLLBACK.md:172-173); HostFileBackend namespaces leads / leads-idempotency / ops-system with exclusive lock (netlify/functions/lib/lead-store.cjs:82-88,132-191; lib/host-file-store.cjs). Netlify Blobs is legacy/rollback only; memory and http backends refused in production (lib/storage-config.cjs:46-51). lead.cjs persists BEFORE any success (store.put onlyIfNew, read-back, lead.cjs:559-585); 503 store_unavailable/persist_failed otherwise. Not Supabase. Runtime storage_backend=filesystem confirmed in prontidao-operacional-4cfa6adca.json §3.",
+  "receipt": "Server returns 201 {ok, lead_id (deterministic from idempotency key, lead.cjs:265), status persisted|persisted_notified, notify_status, email_status} via publicSuccessBody (no PII). Browser (form.js:496-537) tracks lead_form_success + lead_persisted, stores confenge_last_receipt in sessionStorage and redirects to /obrigado|/obrigado-contrato|/obrigado-edital|/obrigado-operacao (safeSuccessDestination form.js:150-157; JOURNEY_ACTIONS nav.js:596-609) with ?receipt=lead-…; obrigado.html:88-98 reads query/sessionStorage, shows 'Protocolo de recebimento' and sets data-lead-success=1. _redirects:68-71 map /obrigado* to static html. Inline receipts (data-runtime-profile inline_receipt_v1/inline_reference_v1) on /diagnostico-b2g-expansao/ and /comercial/radar-decisorio/ (external_reference cfg:offer:correlation).",
+  "handoff": "Server-only after persist: netlify/functions/lib/inbound-handoff.cjs POST to CONFENGE_INBOUND_WEBHOOK_URL (canonical https://api.confenge.com.br/api/v1/webhooks/confenge/inbound, fingerprint WARMBLY_PRODUCTION_V1, :23-26,534-597), HMAC X-Warmbly-Signature t=,v1= (:6,487), schema_version net-new-inbound-handraiser-request.1.0.0-draft.20260904, idempotency_key=logical_id, origin/lane CONFENGE_WEB (:347-372). Contract reference: Warmbly PR #71 docs/confenge/inbound-ingest.md (:4) and docs/ops/WARMBLY-INBOUND.md. Handoff runs concurrently with delivery (lead.cjs:611-690), states PENDING/DELIVERED/RETRYABLE/DEAD/BLOCKED/SKIPPED, max 8 attempts, 8 s timeout (:29-30), drain via ops drain_inbound daily. Only commercial records or authenticated synthetic probes are transportable (:635-637). Warmbly dedupes 24 h by identity (g03 protocol §3.5). Web-intent (intent_kind) posted separately (lead.cjs:642-668).",
+  "alert": "E-mail via Resend API to LEAD_NOTIFY_EMAIL (tiago.sasaki@confenge.com.br) from 'CONFENGE Leads <leads@confenge.com.br>', subject 'Lead CONFENGE [jornada] estagio · lead_id', body includes nome/telefone/email/mensagem (lib/lead-delivery.cjs:407-450); Resend Idempotency-Key lead-email/<lead_id> (:378-403); result persisted as delivery.email.{status,http,provider_id,reason,idempotency_key} and top-level status persisted_notified when ok (lead.cjs:700-745). Optional OPS_WEBHOOK_URL and ntfy channels skipped when not configured (:247,:325); no Slack (README:185). Non-real records skip all channels (skipNonReal :10-18). Channel budget LEAD_DELIVERY_TIMEOUT_MS default 5000 (:31). Resend domain verified 2026-09-18 (prontidao §1); before that no real lead e-mail had ever left (memory: resend-dkim). Daily drain retries error/pending e-mails with same key within 24 h (:548-565).",
+  "operator_access": "Authenticated ops function netlify/functions/ops.cjs (OPS_TOKEN Bearer or X-Ops-Token, constant-time compare :241-256; fail-closed in production): GET leads (kind filter default real, redactLeadForExport, pii=1 to include contact fields :606-634), GET lead&id=, POST stage, GET funnel/system_health/inbound_handoff, POST drain_inbound/requeue_inbound. Protocol accesses it on the host at http://127.0.0.1:18100/.netlify/functions/ops via ssh ec-prod with runtime.env (g03 §3). In-tree /ops/index.html noindex dashboard posts to /.netlify/functions/ops with OPS_TOKEN (ops/index.html:46,140) — whether it is served in production is UNVERIFIED (_redirects:131 mentions a different /ops/ on host). Also scripts/revops/export_leads.mjs, dsar_cli.mjs (docs/ops/DSAR-RETENTION-RUNBOOK.md) and Warmbly INBOUND NOW UI via ssh tunnel :5173.",
+  "timeout_retry_idempotency": "Client: idempotency key fe-<uuid> minted per page/asset/cta and kept in sessionStorage until success (form.js:106-131), sent as header Idempotency-Key and payload (:617-624); AbortController 15 s (clamped 1-30 s via data-submit-timeout-ms :612-615); on timeout/error shows non-asserting message + WhatsApp fallback link with only stage/journey (:560-600), resets Turnstile (single-use token :554-559); 429 → 'Muitas tentativas'. Server: idempotencyKeyFor uses explicit key or 15-min content bucket (lead-core.cjs:1227-1236); deterministic lead_id from key (lead.cjs:265); pre-Turnstile idempotent replay only for CLIENT_REPLAY_KEY shapes (:48-50,326-345); 4-attempt read-retry for eventual consistency (:436-458); put onlyIfNew + ALREADY_EXISTS → 200 idempotent without re-delivery (:559-640); Turnstile siteverify bounded by delivery budget (lead-delivery.cjs:214-232); rate limit 8/IP and 12/fingerprint per 10 min (lead-rate-limit.cjs:8-10). Handoff: backoff, 8 attempts, drain daily; e-mail retry same key 24 h window.",
+  "test_exclusion": "record_kind classifier netlify/functions/lib/record-kind.cjs (kinds real|synthetic|qa|spam|internal; multi-signal: SYNTHETIC/QA name regex, reserved e-mail domains example.*/test.com/confenge.test/mailinator, utm synthetic/test/probe/qa/e2e/ci, origem/landing probe paths, estagio/mensagem markers '[qa]'/'do not contact', UA confenge-probe, X-Confenge-Probe header, jornada synthetic :12-115). Authenticated probe (X-Confenge-Probe == LEAD_PROBE_SECRET, timingSafeEqual lead-core.cjs:1318-1325) forces record_kind=synthetic, next_action=exclude_from_commercial, skips Turnstile (lead.cjs:377-380,482-503); optional X-Confenge-Probe-Persist-Only=1 makes handoff SKIPPED at birth (:513-531). Non-real skip e-mail/notify (skipNonReal) and never enter commercial counts (ops leads kind=real default, funnel real-only). Daily revops-scheduled (cron 15 11 * * *) runs scheduled_daily.mjs: deploy_identity, isolated_probe (nome SYNTHETIC-PROBE, probe+daily-<stamp>@example.com, record_kind synthetic), probe_idempotent_same_id, probe_no_commercial_inflate (real count before==after :175), inbound_handoff_counters. No is_test flag; flags are record_kind + record_kind_signals + synthetic_probe_authenticated. g03 protocol forbids tokens synthetic/qa/test/probe in human QA so it classifies real."
+ },
+ "tests_existing": [
+  "scripts/site/test_contact_journeys.mjs (455 l; npm run test:contact-journeys; puppeteer over _site or production read-only; checks journey_* / intake_step_one_accepts_minimum_fields / intake_no_private_input_in_analytics / journey_js_off_essential_content / confirmation_receipt_state / journey_all_mutation_requests_blocked; no lead POST)",
+  "seo/scripts/test_form_funnel.mjs (686 l; npm run test:form-funnel; drives shipped script.js multi-step home form in vm, asserts analytics without PII and canonical /api/web/lead route)",
+  "scripts/site/test_lead_function.mjs (3231 l; npm run test:lead-function; consent_required, analytics_consent_does_not_replace_request_consent, attribution_pii_*, authenticated_probe_*, concurrent_handoff_delivery_*, delivery_hang_*/body_hang_*, delivery_status_*, idempotency, honeypot, rate limit)",
+  "scripts/site/test_synthetic_lead_probe.mjs (174 l; part of test:lead-function)",
+  "scripts/site/test_inbound_handoff.mjs (1499 l; npm run test:inbound-handoff)",
+  "scripts/site/test_capture_states.mjs (584 l; npm run test:capture-states; viewport/capture-state presets incl. CAPTURE_JS=off, not form submission)",
+  "scripts/site/test_xray_turnstile_e2e.mjs (noscript 'Nada foi enviado' on /piloto/conversao-xray/)",
+  "scripts/site/test_tools_structure.mjs (npm run test:tools; asserts reequilibrio-capture-form exists without computed values, does not assert runtime binding/name)",
+  "scripts/site/test_home_conversion_contract.py, test_ui_geometry.mjs, test_attribution_allowlist.mjs, test_money_asset_loop.mjs, test_money_asset_canary_e2e.mjs (reference /obrigado)",
+  "scripts/revops/test_privacy.mjs (509 l), test_closed_loop.mjs, test_lead_stages.mjs, test_inbound_backlog_policy.mjs, test_nurture.mjs, test_schedules.mjs (npm run test:revops)",
+  "scripts/revops/scheduled_daily.mjs (337 l; production probe: deploy_identity, isolated_probe, probe_idempotent_same_id, probe_no_commercial_inflate, inbound_handoff_counters) via .github/workflows/revops-scheduled.yml",
+  "netlify/functions/tests: directory does NOT exist in this tree (ls failed); function tests live under scripts/site/",
+  "scripts/pseo/tests/test_turnstile_build.py (build-time Turnstile slot injection)"
+ ],
+ "a06_state": "PENDENTE_OPERACIONAL (README:26,41,190). Real-lead path (record_kind=real → Resend e-mail → persisted_notified → Warmbly OPEN) has never executed in production: counts_by_kind.real=0 and delivery_email skipped for all 23 records at 2026-09-18T19:45Z (prontidao-operacional-4cfa6adca.json §2 leads.observacao); later state UNVERIFIED (daily run 35441489601 reports probe_no_commercial_inflate 0→0, README:26, i.e. still zero real). Exact minimal human action (docs/campaigns/design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md): one human in a normal (non-private, non-headless) browser performs §1 A→B→C — A: https://confenge.com.br/#contato nome 'Tiago Sasaki', e-mail tiago.sasaki@confenge.com.br, telefone empty, estagio 'Ainda não sei qual serviço preciso', optional mensagem 'REF-FECH-20260918-A1 …', tick consentimento, wait Turnstile green, click 'Descrever minha situação', record lead_id from /obrigado?receipt=lead-…; B: /medicoes-glosas-obras-publicas/#captura-pilar same identity, mensagem REF-…-B1, 'Descrever a medição'; C: /entregas/#captura-entregas, REF-…-C1, 'Saber qual entrega resolve a minha pergunta'; ≥30 s apart, no utm, no words synthetic/qa/test/probe/[qa]/do not contact anywhere (would reclassify non-real). Then §2: 3 inbox e-mails from 'CONFENGE Leads <leads@confenge.com.br>' subject 'Lead CONFENGE [jornada] estagio · lead_id', DKIM d=confenge.com.br pass, note arrival time; §3 on host (ssh ec-prod, OPS_TOKEN, 127.0.0.1:18100): action=lead → record_kind real, delivery.email ok; action=lead&pii=1 filtered by jq only for provider_id/http; inbound_handoff → delivered attempts=1; Resend GET /emails/<provider_id> last_event delivered; Warmbly psql outreach_inbound_leads OPEN (B,C dedupe_of_lead_id=A). Record per §6 in g03-qa-resultado.json with ids/timestamps only. Deliverables back: lead_id ×3, click times UTC, inbox arrival times, delivery.email.provider_id (README:190). Why automation cannot: (1) Cloudflare Turnstile sitekey 0x4AAAAAAEdwDCuWM5XOrEZ3 (non-interactive) returned TurnstileError 600010 to the automated browser (Playwright MCP, Chrome for Testing 151) on 2026-09-18T19:59Z; cf-turnstile-response stayed empty so the submit never fired (g03-qa-tentativa-automacao.json); LEAD_REQUIRE_TURNSTILE=1 + LEAD_REQUIRE_ORIGIN=1 in runtime.env (prontidao §5) make a curl/Playwright POST without token 403 anti_abuse (lead-delivery.cjs:194-236, lead.cjs:377-392). (2) The only server-side bypass, LEAD_PROBE_SECRET, forces record_kind=synthetic and next_action exclude_from_commercial (lead.cjs:482-503), and skipNonReal (lead-delivery.cjs:10-18) skips the Resend e-mail entirely — so a probe structurally cannot prove real-lead e-mail receipt; the harness in test_contact_journeys.mjs also blocks all mutation requests by design. Decision recorded: do not fake anti-abuse, do not weaken Turnstile (tentativa-automacao 'decisao'). Note: g03 §3.2/§3.6 expected counters (delivered=17+N, synthetic=23) are stale vs README:26 (delivered=19); executor must not treat the mismatch as failure.",
+ "analytics_privacy": "CONFIRMED no visitor PII in analytics events or analytics URLs, by code reading (not by live traffic capture). Client bus js/modules/analytics.js: PII_PARAM_PATTERN drops any key matching address|arquivo|cnpj|cpf|email|empresa|nome|name|message|mensagem|phone|tel|whatsapp|text|query|search|… (:14), values >180 chars dropped, looksLikePiiValue drops '@', 8+ digit runs, 10-15 digit phones, 14-digit CNPJ, while allowing envelope ids sess-/lead-/opp-/prop-/sale-/c- (:212-240,264-290); AGGREGATE_PII_ALLOWLIST empty (:13) and any non-empty allowlist aborts tracking (:277); unknown/custom_/retired events rejected (:207-218); lead_form_error validation_category restricted to required|contact_format|rate_limited (:278). Payload to /api/web/collect carries only event, props (sanitized), path = pathname (no query), sid (:187-197); page_path everywhere is window.location.pathname. Form events (form.js:159-167,317-329,464-494,500-524): stage_category/urgency_category/cta_label = finite <select> values, journey, asset_id, cta_id, route_family, receipt_id/lead_id = protocol lead-…; no nome/email/telefone/mensagem keys are ever passed (and would be dropped by pattern). nav.js CTA events send cta_label = link textContent sliced 80 (nav.js:1159) — static CTA copy; WhatsApp CTAs include the company's own number '(48) 98834-4559' (business data, not visitor PII; passes filter because digits are hyphen-separated). internal_search sends query_len only (nav.js:303-308). Attribution from URL: only allowlisted keys tema/origem/jornada/utm_*/pseo keys, each through sanitizeAttr (drops '@', phone-like, >180) before hidden fields/sessionStorage (nav.js:319-333,398-407,443-470,579-582); these go to the lead POST, not to analytics (landing_url/referrer keys are hidden inputs). WhatsApp fallback link text uses only estagio/journey (form.js:563-566) and appendWhatsappProtocol adds a c- protocol (README F005 refuted). Server: netlify/functions/lib/event-contract.cjs re-applies pii_keys denylist + looksLikePiiValue + strict_no_pii_props (:127-233,278-311) against netlify/functions/lib/event-registry.json (pii_policy aggregate_allowlist_empty :4-5, pii_keys :1106, lead_form_error strict_no_pii_props :603). URLs: success redirect /obrigado?receipt=lead-<27hex> carries a protocol id only (form.js:532-537). Residual: /nurture/ form has no action/method so a no-JS submit would GET /nurture/?email=… (first-party URL/server log only; not an analytics event) — see findings. Delivery e-mail (Resend) and Warmbly payload intentionally carry contact PII over TLS (lead-delivery.cjs:420-437) — operational channels, not analytics; safeLog redacts (lead-core.cjs:1432). Tests: seo/scripts/test_form_funnel.mjs, test_contact_journeys intake_no_private_input_in_analytics, test_lead_function attribution_pii_*/collect_pii, scripts/revops/test_privacy.mjs.",
+ "findings": [
+  {
+   "severity": "HIGH",
+   "finding": "Capture form on /ferramentas/checklist-reequilibrio/ is not bound by the shared lead runtime: name=\"checklist-reequilibrio\" does not match the only binding selector form[name=\"diagnostico-b2g\"], form[name=\"diagnostico-confenge\"] (nav.js:584), and the whole submit/fetch/idempotency/receipt block of form.js lives inside that if (form) scope (nav.js:1359 → form.js:4-680). No other script binds it (tools-common.js, tool-compute.js, tool-persist.js, inline script bind only #f; grep reequilibrio-capture-form in script.js and assets/js = 0). Result: submit is a native urlencoded POST to /.netlify/functions/lead; the Turnstile widget still renders (slot injected at build by _CAPTURE_FORM_RE, scheduleTurnstile is slot-based), so the server can persist and answer 201 JSON which the browser renders raw — no /obrigado-contrato, no visible protocol despite data-receipt-required=\"true\" and data-success-destination, no client idempotency key (server falls back to 15-min content bucket), no lead_form_submit/lead_form_success/lead_persisted/cta_click analytics, no honeypot/timeout UX. Violates the AGENTS.md rule that active forms claim a receipt only with real persistence and a functional flow.",
+   "evidence": "ferramentas/checklist-reequilibrio/index.html:91 (name=\"checklist-reequilibrio\" id=\"reequilibrio-capture-form\" data-ajax=\"true\" data-receipt-required=\"true\" data-success-destination=\"/obrigado-contrato\"); js/modules/nav.js:584,1359; js/modules/form.js:422-680; script.js contains the same selector; scripts/site/test_tools_structure.mjs:181 checks only structure, not name/binding; introduced in 45d683a62 (#61 debt closure). Live behaviour not exercised (read-only audit) — runtime consequence is inferred from code, mark end-to-end effect UNVERIFIED.",
+   "minimal_fix": "Rename the form to name=\"diagnostico-confenge\" (one attribute in ferramentas/checklist-reequilibrio/index.html:91) or widen nav.js:584 to also match form[data-runtime-profile=\"shared_lead_form_v1\"]; add an assertion in scripts/site/test_tools_structure.mjs (or cta_form_next_state_audit) that every form with data-runtime-profile=shared_lead_form_v1 has a name the runtime binds. Then rebuild script.js only if nav.js changed (build_script_modules --write) and follow the CSS-free recapture chain."
+  },
+  {
+   "severity": "MEDIUM",
+   "finding": "/servicos-obras-publicas/ capture form has no telefone field and makes e-mail required, contradicting the 'one channel (WhatsApp or e-mail)' contract every other capture form and the server enforce (lead-core.cjs:977-983 accepts either). Visitors who only want WhatsApp return cannot submit; copy states 'e-mail profissional' as mandatory.",
+   "evidence": "servicos-obras-publicas/index.html:145-146 (data-field-purpose 'Obrigatórios: evento observado, nome do representante, e-mail profissional e o consentimento'); email input has required, grep -c telefone = 0; compare medicoes-glosas-obras-publicas/index.html:234 hint 'um canal de retorno (WhatsApp ou e-mail)'.",
+   "minimal_fix": "Add the standard telefone input (pattern/inputmode as in the pillar template) and drop required from email; update the data-field-purpose hint; run test:cta-form-next-state / inbound gates."
+  },
+  {
+   "severity": "MEDIUM",
+   "finding": "No capture form has a working no-JS submission path in production, and only the home tells the visitor so. LEAD_REQUIRE_TURNSTILE=1 (prontidao §5) makes verifyTurnstile return turnstile_missing → 403 anti_abuse for any POST without token (lead-delivery.cjs:194-202, lead.cjs:377-392), and the token only exists after form.js initTurnstile runs (form.js:797-825). Without JS, pillar/casos/entregas/ferramentas forms POST natively to /.netlify/functions/lead and receive raw JSON {error:'anti_abuse'}. Only index.html carries .form-nojs-note (html.no-js gated, index.html:2,16; assets/home-10x.css:317-318). Contextual fallback without JS depends on adjacent static links: present (wa.me) on pillars and 7/8 casos/modelo, mailto on /entregas/; absent near the form (footer mailto only) on /ferramentas/checklist-reequilibrio/, /ferramentas/diagnostico-defesa-margem/, /ferramentas/limite-acrescimos-supressoes/, /casos/modelo-relatorio-inteligencia-licitacoes/, /analise-cnpj/ (no wa.me/mailto in body).",
+   "evidence": "per-form census above (nojs-note=0 on all routes except index.html; wa/mailto counts); build_site.py:642-690 injects the slot in every capture form but the widget script is JS-loaded; lead.cjs:123-141 parseBody accepts urlencoded so the server is reached and refuses on Turnstile.",
+   "minimal_fix": "Add the home's .form-nojs-note pattern (and the html.no-js/js class swap) to the shared pillar/casos/ferramentas form templates, pointing to the adjacent WhatsApp/e-mail links; where no adjacent channel exists, add the contact-alt list (wa.me + mailto) next to the form. No server change needed."
+  },
+  {
+   "severity": "LOW",
+   "finding": "/nurture/ form has neither action nor method; if the inline handler fails to run (JS disabled/blocked), the browser submits GET /nurture/?track=…&email=…&consent=on, placing the subscriber e-mail in a first-party URL (server access logs, browser history, Referer to any third party linked from the result). Analytics is unaffected (pathname only), but it is the one place where PII can reach a URL.",
+   "evidence": "nurture/index.html:123 (<form id=\"nurture-form\" data-capture-form novalidate>, no action/method); handler nurture/index.html:152-166 (preventDefault + fetch POST /.netlify/functions/nurture?action=subscribe); js/modules/analytics.js:57 lists /nurture/ as chrome prefix.",
+   "minimal_fix": "Set method=\"post\" action=\"/.netlify/functions/nurture?action=subscribe\" on the form (server behaviour for urlencoded POST UNVERIFIED — confirm nurture.cjs accepts it or returns a safe 4xx) so a no-JS submit never encodes the e-mail in the query string; optionally add a noscript note."
+  },
+  {
+   "severity": "LOW",
+   "finding": "Operator read of the Resend correlation handle requires PII exposure: ops action=lead without pii=1 returns delivery only as {notify:<status>, email:<status>}; provider_id/http/reason are only in the pii=1 projection together with nome/telefone/email. The g03 protocol works around it with jq on the host.",
+   "evidence": "prontidao-operacional-4cfa6adca.json ressalvas[0] (ops.cjs:364-376, lead-stages.cjs:216-221); g03-qa-protocolo.md §3.3.",
+   "minimal_fix": "Include delivery.email.provider_id/http/reason/idempotency_key in the redacted (pii=0) lead projection in lib/lead-stages.cjs publicLeadSummary — they are provider ids, not PII — and add an assertion in scripts/revops/test_lead_stages.mjs."
+  },
+  {
+   "severity": "LOW",
+   "finding": "g03 QA protocol acceptance numbers are stale relative to the current daily run: §3.2 expects counters.persisted_leads=23+N, delivered=17+N and §3.6 expects synthetic=23 / Warmbly OPEN 19 | SUPPRESSED 23, while the campaign README records delivered=19 pending=0 after run 35441489601. A human executor comparing literally would misread success as failure.",
+   "evidence": "docs/campaigns/design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md §3.2, §3.6 (release 4cfa6adca baseline); docs/campaigns/inbound-receita-20260919/README.md:26 (delivered=19).",
+   "minimal_fix": "Re-baseline §3.2/§3.6 expected counters from the current ops inbound_handoff/leads&kind=all output (host, read-only) before the human runs the protocol, or phrase them as 'previous + N'."
+  },
+  {
+   "severity": "LOW",
+   "finding": "Pillar forms pre-render origem and landing_page with the pillar's own slug/URL, so article-of-origin context does not reach Warmbly through those fields (form.js:604 only fills landing_page when empty); context travels only via tema/referrer/message prefix. Already recorded as dependencia_externa (Warmbly canonical field decision) — restated for completeness, no new fix here.",
+   "evidence": "medicoes-glosas-obras-publicas/index.html:235; js/modules/form.js:604; docs/campaigns/inbound-receita-20260919/README.md:39,192.",
+   "minimal_fix": "None in web-cfg until Warmbly decides the canonical origin field (README:192 item 3)."
+  },
+  {
+   "severity": "INFO",
+   "finding": "casos/modelo-* (8 routes) require cnpj, analysis_cutoff, opportunity_deadline and decision_intent before name/channel — higher friction than the essential-first pattern, but explicitly authorized by the configured_delivery_request profile and the priced_offer family gate; not a defect. Note test_contact_journeys journey_no_required_cnpj / intake_company_budget_documents_and_cnpj_not_required cover the situational journeys, not these priced routes.",
+   "evidence": "data/commercial/cta-form-next-state.v1.json:148-155; data/organic/public-family-registry.json family casos-modelos-precificados (profile priced_offer, terminal_action capture_form); casos/modelo-*/index.html form fields census.",
+   "minimal_fix": "None required; if conversion data later shows abandonment, consider making the dates optional in the contract first."
+  },
+  {
+   "severity": "INFO",
+   "finding": "Audit basis: working tree at 3cf3c4b47 (= origin/main; production serves a27472bec with identical public bytes per task). All runtime consequences (403 JSON, raw 201 JSON) are inferred from code and documented env flags, not observed live; /ops/index.html serving status, nginx behaviour for POST /obrigado, and netlify/functions/nurture.cjs urlencoded handling are UNVERIFIED. Excluded from census: docs/design-audit/prototypes/*, .claude/worktrees/*, calculator/filter forms without contact fields.",
+   "evidence": "git status clean on campaign/bofu-integral-20260919; ls netlify/functions/tests → does not exist.",
+   "minimal_fix": "n/a"
+  }
+ ]
+}

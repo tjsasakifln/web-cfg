@@ -39,6 +39,49 @@ Join key: `lead_id` / `receipt_id` (same value). Attribution that crosses the ci
 
 Missing snapshot facts stay absent. CNPJ is never derived from a `public_id` prefix. `public_entity_id` is sent only when the form actually provided it.
 
+### Web-side `origin_class` (issue #706, 2026-09-19)
+
+`netlify/functions/lib/lead-core.cjs` derives `lead.origin_class` at persist
+time from the already-sanitized `utm_source`/`utm_medium` tokens and the
+referrer **host** only (never the full URL, never a visitor value):
+
+| Value | Rule |
+| --- | --- |
+| `campaign` | any `utm_source` or `utm_medium` present (`utm_medium=organic` included: UTM presence wins) |
+| `search_organic` | no UTM and the referrer host, after `www.`, is `google.` / `bing.` / `duckduckgo.` / `yahoo.` / `ecosia.` (or a subdomain of one) |
+| `referral` | no UTM and an external referrer on any other host |
+| `direct_or_unknown` | no UTM and no referrer, or a referrer from the site itself (internal navigation). Never labelled `organic`. |
+
+It is a server verdict, not an intake field: it is absent from `ATTR_ALLOWLIST`
+and a posted `origin_class` is ignored. It is **not** the commercial origin
+class of `data/revops/proposal-counting.v1.json` (`demonstrated_inbound`,
+`outbound_assisted`, `mixed_or_unknown`, `expansion_existing_client`,
+`paid_or_partner`): the web value is evidence Warmbly may read, and
+`direct_or_unknown` never promotes to demonstrated inbound.
+
+Scope and limits today:
+
+- The `confenge.inbound.v1` body is unchanged. `origin_class` stays web-side and
+  reaches operators through the ops export (`scripts/revops/export_leads.mjs`)
+  once the stored row carries it; Warmbly's canonical origin field is still an
+  open decision on #706 and nothing here pre-empts it.
+- The public `/api/web/lead` response never includes it.
+- Not yet in the durable row: `buildLeadRecord` in
+  `netlify/functions/lib/lead-store.cjs` and `toExportRecord` in
+  `scripts/revops/export_leads.mjs` each copy an explicit field list, and
+  neither copies `origin_class` yet (one line in each, owned by the
+  store/integrator, outside W7). Until then the value exists on the validated
+  lead only. The focused tests in `scripts/site/test_lead_function.mjs`
+  (`origin_class_*`) pin the derivation and tolerate either state of the row.
+- Host matching accepts the engine label followed by a short public-suffix
+  tail only (`google.com`, `google.com.br`, `images.google.co.uk`,
+  `br.search.yahoo.com`); `notgoogle.com` or `google.com.<other-domain>` is
+  `referral`.
+- The form injects `referrer` only through the attribution session
+  (`js/modules/nav.js`); when it is absent at submit time the lead is
+  `direct_or_unknown`. Expect that class to dominate; it means "no evidence",
+  not "direct traffic", and it contributes zero to any inbound reading.
+
 ## Env
 
 See [ENV-VARS.md](./ENV-VARS.md). Required on both sides for a live handoff:

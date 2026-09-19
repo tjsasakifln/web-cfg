@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, readdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -238,6 +238,60 @@ function methodRegionIsNamedAndInsideMain(rel, html) {
 }
 for (const rel of pages) {
   methodRegionIsNamedAndInsideMain(rel, readFileSync(resolve(ROOT, rel), "utf8"));
+}
+
+// 2026-09-19 (W6-ops-web): every server-bound capture form under ferramentas/
+// must carry a `name` the shared lead runtime actually selects. The runtime binds
+// submit/fetch/idempotency/receipt through one selector in js/modules/nav.js
+// (`form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]`). The
+// reequilibrio checklist shipped as name="checklist-reequilibrio": the markup
+// declared a receipt-required capture that the runtime never bound, so a real
+// visitor got a native POST with no receipt. The accepted names are read from
+// the runtime source, not repeated here, so the two cannot drift apart.
+function runtimeFormNames() {
+  const nav = readFileSync(resolve(ROOT, "js/modules/nav.js"), "utf8");
+  const selector = nav.match(/document\.querySelector\('((?:form\[name="[^"]+"\],?\s*)+)'\)/);
+  if (!selector) return null;
+  return new Set([...selector[1].matchAll(/form\[name="([^"]+)"\]/g)].map((m) => m[1]));
+}
+function captureFormsUnderFerramentas() {
+  const out = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = resolve(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.isFile() && entry.name.endsWith(".html")) out.push(full);
+    }
+  };
+  walk(resolve(ROOT, "ferramentas"));
+  const forms = [];
+  for (const file of out) {
+    const html = readFileSync(file, "utf8");
+    for (const m of html.matchAll(/<form\b[^>]*>/gi)) {
+      const tag = m[0];
+      if (!/action="\/\.netlify\/functions\/lead"/.test(tag) && !/\bdata-capture-form\b/.test(tag)) continue;
+      forms.push({ file: file.slice(ROOT.length + 1), name: /\bname="([^"]*)"/.exec(tag)?.[1] ?? null });
+    }
+  }
+  return forms;
+}
+{
+  const accepted = runtimeFormNames();
+  if (!accepted || !accepted.size) {
+    console.error("FAIL runtime_form_selector_unreadable"); fail++;
+  } else {
+    const forms = captureFormsUnderFerramentas();
+    if (!forms.length) { console.error("FAIL ferramentas_capture_forms_absent"); fail++; }
+    const unbound = forms.filter((f) => !f.name || !accepted.has(f.name));
+    if (unbound.length) {
+      console.error("FAIL ferramentas_capture_form_unbound_by_runtime", unbound, [...accepted]);
+      fail++;
+    } else console.log("PASS ferramentas_capture_forms_bound_by_runtime", forms.length, [...accepted]);
+    // Counter-case: the exact defect this guards against must be caught.
+    if (accepted.has("checklist-reequilibrio")) {
+      console.error("FAIL runtime_selector_counter_case"); fail++;
+    } else console.log("PASS runtime_selector_counter_case");
+  }
 }
 
 const ci = readFileSync(resolve(ROOT, ".github/workflows/site-ci.yml"), "utf8");

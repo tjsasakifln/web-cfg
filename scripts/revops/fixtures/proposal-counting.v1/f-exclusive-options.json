@@ -1,0 +1,89 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "f-exclusive-options",
+  "description_pt_br": "Grupo grp-f-1: duas alternativas excludentes, A (R$ 30.000, canonical) e B (R$ 48.000). Conta 3.000.000: a canônica, nunca a mais cara. Grupo grp-f-2: duas alternativas sem canônica marcada, excluídas inteiras (fail-closed, needs_decision). Item opcional de A (R$ 5.000) não soma.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-f-a",
+      "opportunity_id": "opp-f-001",
+      "scope_id": "alt-a",
+      "at": "2026-09-08T10:00:00-03:00",
+      "fee_total_cents": 3000000,
+      "alternative_group_id": "grp-f-1",
+      "canonical": true,
+      "optional_items": [
+        {
+          "item_id": "opt-visita-extra",
+          "fee_cents": 500000
+        }
+      ],
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-f-b",
+      "opportunity_id": "opp-f-001",
+      "scope_id": "alt-b",
+      "at": "2026-09-08T10:00:00-03:00",
+      "fee_total_cents": 4800000,
+      "alternative_group_id": "grp-f-1",
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-f-c",
+      "opportunity_id": "opp-f-002",
+      "scope_id": "alt-c",
+      "at": "2026-09-15T10:00:00-03:00",
+      "fee_total_cents": 2000000,
+      "alternative_group_id": "grp-f-2",
+      "origin_class": "outbound_assisted"
+    },
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-f-d",
+      "opportunity_id": "opp-f-002",
+      "scope_id": "alt-d",
+      "at": "2026-09-15T10:00:00-03:00",
+      "fee_total_cents": 2600000,
+      "alternative_group_id": "grp-f-2",
+      "origin_class": "outbound_assisted"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 3000000,
+    "proposals_counted": 1,
+    "counted_proposal_ids": [
+      "prop-f-a"
+    ],
+    "excluded": [
+      {
+        "id": "prop-f-b/emitted",
+        "reason": "alternative_not_canonical"
+      },
+      {
+        "id": "prop-f-c/emitted",
+        "reason": "alternative_group_without_canonical"
+      },
+      {
+        "id": "prop-f-d/emitted",
+        "reason": "alternative_group_without_canonical"
+      }
+    ],
+    "needs_decision_groups": [
+      "grp-f-2"
+    ],
+    "optional_items_total_cents": 500000,
+    "most_expensive_cents": 4800000,
+    "forbidden_pt_br": "4.800.000 (mais cara), 7.800.000 (soma) ou 3.500.000 (com opcional) é contagem indevida."
+  }
+}

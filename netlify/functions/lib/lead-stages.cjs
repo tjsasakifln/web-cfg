@@ -212,14 +212,31 @@ function publicLeadSummary(record) {
       isReal &&
       (record.commercial_stage || "lead_persisted") === "lead_persisted" &&
       hoursSince(record.received_at) >= Number(process.env.LEAD_SLA_HOURS || 4),
-    // Non-PII delivery statuses for probe/ops verification
-    delivery: record.delivery
-      ? {
-          notify: record.delivery.notify?.status || null,
-          email: record.delivery.email?.status || null,
-        }
-      : null,
+    // Non-PII delivery statuses for probe/ops verification. The provider
+    // handles (Resend message id, HTTP status, failure reason and the
+    // Idempotency-Key `lead-email/<lead_id>`) are correlation keys, not contact
+    // data, so the operator reads them with pii=0 (G03 §3.3 used to need pii=1,
+    // which also exposed nome/telefone/email just to fetch a message id).
+    // `notify`/`email` stay plain statuses: G03 §3.1 and revenue_daily read them.
+    delivery: record.delivery ? publicDeliveryProjection(record.delivery) : null,
   };
+}
+
+function publicDeliveryProjection(delivery) {
+  const email = delivery.email || {};
+  const out = {
+    notify: delivery.notify?.status || null,
+    email: email.status || null,
+  };
+  if (typeof email.provider_id === "string" && email.provider_id) {
+    out.email_provider_id = email.provider_id.slice(0, 80);
+  }
+  if (Number.isFinite(email.http)) out.email_http = email.http;
+  if (typeof email.reason === "string" && email.reason) out.email_reason = email.reason.slice(0, 60);
+  if (typeof email.idempotency_key === "string" && email.idempotency_key) {
+    out.email_idempotency_key = email.idempotency_key.slice(0, 120);
+  }
+  return out;
 }
 
 function hoursSince(iso) {

@@ -1,0 +1,34 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "b-cold-email-then-site",
+  "description_pt_br": "Prospecção por e-mail frio precedeu o contato do visitante pelo site. A Warmbly declara outbound_assisted. Conta no total emitido, contribui zero para inbound demonstrado.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-b-001",
+      "opportunity_id": "opp-b-001",
+      "at": "2026-09-12T15:00:00-03:00",
+      "fee_total_cents": 2800000,
+      "origin_class": "outbound_assisted",
+      "origin_evidence": "lead-web-after-outbound"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 2800000,
+    "proposals_counted": 1,
+    "excluded": [],
+    "by_origin_class": {
+      "demonstrated_inbound": 0,
+      "outbound_assisted": 2800000,
+      "mixed_or_unknown": 0,
+      "expansion_existing_client": 0,
+      "paid_or_partner": 0
+    },
+    "demonstrated_inbound_cents": 0
+  }
+}

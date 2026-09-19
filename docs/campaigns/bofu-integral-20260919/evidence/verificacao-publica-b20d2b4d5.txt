@@ -1,0 +1,33 @@
+OK   build-info.commit = b20d2b4d5d69c60cde5742a93f8ded5f60fa18ff
+OK   runtime-info.release_sha = b20d2b4d5d69c60cde5742a93f8ded5f60fa18ff
+OK   css.situation-row.area--b2g = .situation-row.area--b2g{padding:1.5rem clamp(1rem,2.5vw,1.75rem) 1.6rem}
+OK   font.preload = /assets/archivo-var-latin-b19be0f7.woff2
+OK   font.http = 200
+     font bytes 42208
+OK   styles.no-import = 0
+OK   http / = 200
+OK   http /servicos/ = 200
+OK   http /entregas/ = 200
+OK   http /inspecao-diagnostico-edificacoes/ = 200
+OK   http /seguranca-trabalho-apoio-tecnico/ = 200
+OK   http /servicos-obras-publicas/ = 200
+OK   http /medicoes-glosas-obras-publicas/ = 200
+OK   http /casos/medicao-glosa-demonstrativo/ = 200
+OK   http /casos/aditivo-art125-demonstrativo/ = 200
+OK   http /ferramentas/matriz-atraso-obra/ = 200
+OK   http /ferramentas/checklist-reequilibrio/ = 200
+OK   http /triagem-tecnica/ = 200
+OK   http /quantitativos-orcamento-obras/ = 200
+OK   http /bid-room-licitacoes-obras/ = 200
+OK   http /reequilibrio-obras-publicas/ = 200
+OK   http /nurture/ = 200
+SUMMARY ok=22 fail=0
+
+Medição em navegador (Chromium 153, https://confenge.com.br/, #situacao-obras-publicas após scrollIntoView):
+320px pad=16px/16px row.left=18.4 child.left=34.4 overflow=false archivoLoaded=true
+390px pad=16px/16px row.left=18.4 child.left=34.4 overflow=false archivoLoaded=true
+430px pad=16px/16px row.left=18.4 child.left=34.4 overflow=false archivoLoaded=true
+699px pad=17.475px/17.475px row.left=22.4 child.left=39.8 overflow=false archivoLoaded=true
+700px pad=17.5px/17.5px row.left=22.4 child.left=39.9 overflow=false archivoLoaded=true
+1440px pad=28px/28px row.left=120.0 child.left=148.0 overflow=false archivoLoaded=true
+Antes (a27472bec, 390px): pad=0px/0px, child.left = row.left (texto na borda do fundo).

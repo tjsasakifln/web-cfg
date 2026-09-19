@@ -1,0 +1,64 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "i-canary-synthetic",
+  "description_pt_br": "Sonda diária (synthetic), registro QA e observação sem record_kind, todas com valores plausíveis. Nenhuma conta: total 0, três exclusões explicadas.",
+  "observations": [
+    {
+      "record_kind": "synthetic",
+      "event": "emitted",
+      "proposal_id": "prop-i-001",
+      "opportunity_id": "opp-i-001",
+      "at": "2026-09-19T03:00:00-03:00",
+      "fee_total_cents": 1200000,
+      "origin_class": "demonstrated_inbound",
+      "origin_evidence": "daily-probe"
+    },
+    {
+      "record_kind": "qa",
+      "event": "emitted",
+      "proposal_id": "prop-i-002",
+      "opportunity_id": "opp-i-002",
+      "at": "2026-09-19T03:05:00-03:00",
+      "fee_total_cents": 1200000,
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "event": "emitted",
+      "proposal_id": "prop-i-003",
+      "opportunity_id": "opp-i-003",
+      "at": "2026-09-19T03:10:00-03:00",
+      "fee_total_cents": 1200000,
+      "origin_class": "demonstrated_inbound"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 0,
+    "proposals_counted": 0,
+    "excluded": [
+      {
+        "id": "prop-i-001/emitted",
+        "reason": "record_kind_excluded"
+      },
+      {
+        "id": "prop-i-002/emitted",
+        "reason": "record_kind_excluded"
+      },
+      {
+        "id": "prop-i-003/emitted",
+        "reason": "record_kind_missing"
+      }
+    ],
+    "by_origin_class": {
+      "demonstrated_inbound": 0,
+      "outbound_assisted": 0,
+      "mixed_or_unknown": 0,
+      "expansion_existing_client": 0,
+      "paid_or_partner": 0
+    },
+    "demonstrated_inbound_cents": 0
+  }
+}

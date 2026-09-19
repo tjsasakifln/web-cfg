@@ -1,0 +1,194 @@
+{
+  "schema": "confenge-campaign-canais-externos-verificados/1.0",
+  "issue": "#707",
+  "tarefa": "W8-distribuicao-docs",
+  "gerado_em": "2026-09-19",
+  "ramo": "campaign/bofu-integral-20260919-b",
+  "estado_geral": "PREPARADA_NAO_PUBLICADA. Nenhum envio, postagem, contato, cadastro ou criação de conta foi feito por este agente. Cada canal abaixo foi apenas pesquisado e sua página pública de regras lida; a decisão de enviar é de Governança/fundador.",
+  "ativo": {
+    "url_canonica": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+    "arquivo": "casos/medicao-glosa-demonstrativo/index.html",
+    "natureza": "exemplo demonstrativo público, com contexto, números e órgãos hipotéticos (JSON-LD disambiguatingDescription já declara isso na página)",
+    "o_que_mostra": "uma medição mensal hipotética volta com três itens glosados; o dossiê separa mérito (serviço não executado na quantidade medida) de formalidade (serviço executado, registro apresentado fora da forma exigida) e escolhe um pedido próprio para cada parcela: reapresentação instruída, vistoria conjunta com medição no local e liberação da parcela incontroversa",
+    "oferta_de_destino": {
+      "url_canonica": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "arquivo": "medicoes-glosas-obras-publicas/index.html",
+      "ligacao_existente": "o caso já leva ao formulário do pilar e o pilar já linka o caso (ver docs/campaigns/inbound-receita-20260919/evidence/distribuicao-preparada.json, bloco conexoes_internas_publicadas_nesta_campanha)"
+    }
+  },
+  "publico": "engenheiros de custos e de fiscalização, gestores de contratos de obras públicas e construtoras que recebem ou emitem glosas de medição",
+  "distincoes_que_a_mensagem_preserva": [
+    "quem fala no exemplo: a contratada, que responde a uma glosa da fiscalização do órgão; o órgão continua sendo quem decide sobre a medição",
+    "quantitativo medido no boletim não é orçamento nem valor devido: o exemplo compara quantidade declarada, quantidade medida, quantidade evidenciada e o critério contratual",
+    "o dossiê de resposta à glosa é leitura técnica de medição e documentação, não investigação causal (perícia); se houver processo, o perito é do juízo e a peça jurídica é do advogado",
+    "nenhuma promessa de recuperação de valor: o exemplo mostra o método, não um resultado"
+  ],
+  "metodo": "pesquisa web por canais públicos nomeados; leitura da página pública de regras/submissão. Quando o WebFetch devolveu apenas resumo, a página foi baixada com curl e o texto citado foi conferido byte a byte no HTML publicado (campo metodo_de_consulta). Nada foi citado sem página lida.",
+  "canais_verificados": [
+    {
+      "id": "CANAL-A",
+      "tipo": "instituto setorial de engenharia de custos (biblioteca técnica / envio de artigo)",
+      "canal": "IBEC — Instituto Brasileiro de Engenharia de Custos, portal Engenharia de Custos",
+      "url_publica": "https://engenhariadecustos.ibec.org.br/",
+      "url_regras": "https://engenhariadecustos.ibec.org.br/envio-de-artigo/",
+      "data_da_consulta": "2026-09-19",
+      "metodo_de_consulta": "WebFetch (resumo) e, em seguida, curl do HTML publicado (HTTP 200) com conferência literal das citações",
+      "regra_citada": [
+        "O autor, titular dos direitos autorais sobre a referida obra, autoriza o IBEC publicar a obra em questão em seus meios de comunicação, principalmente através do site www.engenhariadecustos.ibec.org.br.",
+        "O autor autoriza o IBEC, para todos os fins e efeitos e na melhor forma do direito, em caráter gratuito, parcial, irrevogável, irretratável e não exclusivo, a utilização dos direitos autorais relativos à obra, por prazo indeterminado.",
+        "O autor declara ter cedido a obra ao IBEC a título gratuito, sem que isso seja devida ao autor qualquer remuneração, reembolso ou compensação de qualquer natureza.",
+        "O autor assume ampla e total responsabilidade civil e penal, quanto ao conteúdo, citações, referências e outros elementos que fazem parte da obra.",
+        "Após recebida, a obra será analisada pela comissão de avaliação do IBEC, responsável por verificar a viabilidade de publicação da mesma. A obra poderá, ou não, ser publicada, de acordo com a conclusão da análise."
+      ],
+      "formato_aceito": "envio de obra (artigo) por formulário na própria página; campos: nome, e-mail (obrigatórios), RG, CPF, endereço, bairro, cidade, título da obra, arquivo; aceite obrigatório dos termos de autorização para uso de obras",
+      "condicoes_materiais_do_canal": {
+        "cessao_de_direitos": "gratuita, parcial, irrevogável, irretratável, não exclusiva, por prazo indeterminado, para os fins do IBEC",
+        "dados_pessoais_exigidos": "nome, e-mail, RG, CPF, endereço (do autor pessoa física)",
+        "responsabilidade": "civil e penal integral do autor pelo conteúdo",
+        "decisao_de_publicar": "comissão de avaliação do IBEC; publicação não garantida",
+        "conteudo_comercial": "a página não trata explicitamente de conteúdo promocional; a peça precisa ser um artigo técnico, não um anúncio"
+      },
+      "publico": "engenheiros de custos, orçamentistas, fiscais e gestores de contratos que consultam a biblioteca do IBEC",
+      "estado_do_artigo": "NAO_ESCRITO",
+      "autor_pessoa_fisica": "a decidir antes da submissão (responsabilidade civil e técnica do autor)",
+      "passo_previo": "redigir o artigo completo (formato aceito) antes de qualquer envio; não há etapa de proposta",
+      "mensagem_util": "Resumo do artigo ainda a ser escrito para a biblioteca do IBEC (o formulário do IBEC recebe a obra pronta, não uma proposta prévia — ver passo_previo): \"Glosa de medição em obra pública: separar mérito de formalidade antes de responder\". O texto proposto apresentaria um método de leitura da glosa item a item pela contratada, distinguindo três situações que costumam chegar misturadas no mesmo relatório da fiscalização: serviço não executado na quantidade medida, serviço executado com registro apresentado fora da forma exigida, e parcela que a própria fiscalização já liberou. Para cada situação, mostraria qual prova contemporânea sustenta o item (diário de obra, relatório fotográfico datado, levantamento de campo) e qual pedido corresponde: reapresentação instruída, vistoria conjunta com termo assinado pelas duas partes ou liberação da parcela incontroversa. Basear-se-ia no exemplo demonstrativo, com números e órgão hipotéticos, publicado de forma aberta no endereço público (https://confenge.com.br/casos/medicao-glosa-demonstrativo/). O artigo não prometeria recuperação de valor: a decisão sobre a medição é do órgão, e o texto trataria de medição e documentação, não de perícia.",
+      "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+      "utm": "nenhum — o canal recebe um artigo por formulário/arquivo, revisado por comissão; um parâmetro na URL não sobreviveria à edição e o link pode ser removido. Fica a URL canônica sem parâmetro.",
+      "autorizacao": "PENDENTE: Governança/fundador. Envolve cessão de direitos autorais e entrega de RG/CPF/endereço do autor; prospecção ativa continua identificada como tal.",
+      "estado": "PREPARADA_NAO_PUBLICADA"
+    },
+    {
+      "id": "CANAL-B",
+      "tipo": "entidade de engenharia com normas públicas de publicação (Revista Engenharia)",
+      "canal": "Instituto de Engenharia (São Paulo) — Revista Engenharia, \"Envie seu artigo\"",
+      "url_publica": "https://www.institutodeengenharia.org.br/",
+      "url_regras": "https://www.institutodeengenharia.org.br/site/envie-seu-artigo-para-a-revista-engenharia/",
+      "data_da_consulta": "2026-09-19",
+      "metodo_de_consulta": "WebFetch devolveu só o menu (conteúdo truncado); curl do HTML publicado (HTTP 200, 596 KB) com extração do bloco 'NORMAS PARA APRESENTAÇÃO DE ARTIGO PARA PUBLICAÇÃO NA REVISTA ENGENHARIA' e conferência literal",
+      "regra_citada": [
+        "Participe, apresente o seu texto, que passará pela comissão editorial. Abaixo, as normas de publicação.",
+        "1. Número de páginas: o artigo deve obedecer ao limite de 12 (doze) laudas com 1200 toques por lauda, considerando-se texto e toda a matéria agregada como tabelas, figuras, fotos, ilustrações ou desenhos.",
+        "4. Envio: O artigo técnico será enviado por e-mail para o Assessor de Diretoria do IE [e-mail protegido na página] endereçado ao diretor da Revista Engenharia.",
+        "5. Análise: O artigo técnico será submetido pelo diretor da Revista Engenharia à análise de um ou mais membros da Comissão Editorial, um dos quais poderá entrar em contato com o Autor para eventuais esclarecimentos ou complementações.",
+        "6. Os trabalhos técnicos para publicação na Revista Engenharia poderão ser elaborados por autor não associado ao Instituto de Engenharia, desde que sejam de real interesse à profissão; podem representar a colaboração de vários autores, mas devem ser apresentados por um deles, que os represente.",
+        "7. Originalidade: A juízo da Comissão Editorial, não poderão ser inseridos artigos já publicados em outros veículos de informação, salvo se: a) Houver interesse na ampliação de seu universo de divulgação, pela oportunidade e importância;",
+        "a) Fica implícito que o Autor também permitirá a publicação da matéria apresentada nos sites do IE, do Jornal e da Revista Engenharia, da Internet, independentemente de autorização expressa para esse fim.",
+        "b) A aprovação de um artigo não implica na sua publicação."
+      ],
+      "formato_aceito": "artigo técnico inédito, até 12 laudas de 1200 toques (incluindo tabelas e figuras), em processador compatível com MS Word, fotos a 300 dpi, bibliografia ao final; envio por e-mail ao Assessor de Diretoria (endereço ofuscado na página, a obter na própria página no momento do envio); autor não associado é aceito",
+      "condicoes_materiais_do_canal": {
+        "cessao_de_direitos": "permissão implícita de publicação nos sites do IE, do Jornal e da Revista Engenharia",
+        "dados_pessoais_exigidos": "nome e qualificação do autor no artigo; foto do autor opcional",
+        "originalidade": "artigo não pode ter sido publicado em outro veículo, salvo exceções a juízo da Comissão Editorial — o caso demonstrativo já publicado em confenge.com.br é referência do artigo, não o artigo em si",
+        "prazos": "devolução do texto revisado com 'de acordo' em até 15 dias",
+        "decisao_de_publicar": "Comissão Editorial; aprovação não implica publicação",
+        "conteudo_comercial": "a página não trata explicitamente de conteúdo promocional; exige 'real interesse à profissão'"
+      },
+      "publico": "engenheiros e gestores leitores da Revista Engenharia e do site do IE, incluindo quem atua em contratos e fiscalização de obras",
+      "estado_do_artigo": "NAO_ESCRITO",
+      "autor_pessoa_fisica": "a decidir antes da submissão (responsabilidade civil e técnica do autor)",
+      "mensagem_util": "Resumo da proposta de artigo técnico inédito, de real interesse à profissão, a submeter à Revista Engenharia: \"Medição glosada em obra pública: do apontamento ao pedido certo\". O artigo proposto descreveria como a contratada pode ler uma glosa de medição item a item, em vez de contestar a glosa inteira em uma peça só, e por que isso muda o pedido: uma diferença de quantitativo pede vistoria conjunta com medição no local registrada em termo assinado; um registro apresentado fora da forma exigida pede reapresentação instruída; e a parcela que a fiscalização já liberou é pedida desde logo como incontroversa. O texto distinguiria quantidade declarada, quantidade medida no boletim e quantidade evidenciada por registro contemporâneo, e situaria o dossiê como leitura de medição e documentação, não como perícia. Basear-se-ia no exemplo demonstrativo público, com números e órgão hipotéticos, disponível no endereço público (https://confenge.com.br/casos/medicao-glosa-demonstrativo/). Sem promessa de resultado: a decisão sobre a medição permanece com o órgão contratante.",
+      "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+      "utm": "nenhum — revista editada e impressa, envio por e-mail em Word; parâmetro não sobreviveria à edição. URL canônica sem parâmetro.",
+      "autorizacao": "PENDENTE: Governança/fundador. Exige redação de um artigo inédito (o caso publicado serve como referência, não pode ser reenviado como artigo) e prazo de resposta de 15 dias à Comissão Editorial.",
+      "estado": "PREPARADA_NAO_PUBLICADA"
+    },
+    {
+      "id": "CANAL-C",
+      "tipo": "portal/revista técnica aberta de engenharia com normas públicas para autores",
+      "canal": "Revista Brasil Engenharia (Engenho Editora Técnica), portal brasilengenharia.com",
+      "url_publica": "https://brasilengenharia.com/",
+      "url_regras": "https://brasilengenharia.com/portal/revista/normas-para-artigos",
+      "data_da_consulta": "2026-09-19",
+      "metodo_de_consulta": "WebFetch (resumo) e, em seguida, curl do HTML publicado (HTTP 200) com conferência literal das citações",
+      "regra_citada": [
+        "1) Número de páginas: o artigo deve obedecer ao limite de 12 laudas com 1 200 toques por lauda, considerando-se texto e toda a matéria agregada como tabelas, figuras, fotos, ilustrações ou desenhos.",
+        "4) Envio: o artigo técnico será enviado por e-mail para ao Conselho Editorial ([e-mail protegido contra spambots na página]) endereçado ao diretor responsável da REVISTA BRASIL ENGENHARIA.",
+        "6) Os trabalhos técnicos para publicação na REVISTA BRASIL ENGENHARIA poderão ser elaborados por autor, desde que sejam de real interesse à profissão; podem representar a colaboração de vários autores, mas devem ser apresentados por um deles, que os represente:",
+        "7) Originalidade: a juízo da Comissão Editorial, não poderão ser inseridos artigos já publicados em outros veículos de informação, salvo se: a) Houver interesse na ampliação de seu universo de divulgação, pela oportunidade e importância;",
+        "a) Fica implícito que o autor também permitirá a publicação da matéria apresentada nos sites da REVISTA BRASIL ENGENHARIA e na Internet, independentemente de autorização expressa para esse fim;",
+        "b) A aprovação de um artigo não implica na sua publicação.",
+        "É proibida a reprodução do conteúdo desta página em qualquer meio de comunicação, eletrônico ou impresso, sem autorização escrita da Editora."
+      ],
+      "formato_aceito": "artigo técnico inédito, até 12 laudas de 1 200 toques, MS Word, fotos a 300 dpi, bibliografia ao final, foto do autor; envio por e-mail ao Conselho Editorial (endereço ofuscado na página; telefone 11 5575-8155 para informações)",
+      "condicoes_materiais_do_canal": {
+        "cessao_de_direitos": "permissão implícita de publicação nos sites da revista e na Internet; a editora proíbe reprodução do conteúdo do site sem autorização escrita",
+        "dados_pessoais_exigidos": "nome e qualificação do autor; foto do autor",
+        "originalidade": "artigo não pode ter sido publicado em outro veículo, salvo exceções a juízo da Comissão Editorial",
+        "prazos": "devolução do texto revisado com 'de acordo' em até 15 dias",
+        "decisao_de_publicar": "Comissão Editorial; aprovação não implica publicação",
+        "conteudo_comercial": "a página não trata explicitamente de conteúdo promocional; exige 'real interesse à profissão'",
+        "nota": "as normas são quase idênticas às do Instituto de Engenharia (CANAL-B); as duas páginas foram lidas separadamente e cada citação foi conferida no HTML da própria página — a regra de originalidade impede enviar o mesmo artigo a ambos"
+      },
+      "publico": "engenheiros de obras, orçamento e fiscalização leitores da revista e do portal, inclusive construtoras",
+      "estado_do_artigo": "NAO_ESCRITO",
+      "autor_pessoa_fisica": "a decidir antes da submissão (responsabilidade civil e técnica do autor)",
+      "mensagem_util": "Resumo da proposta de artigo técnico inédito a submeter à Revista Brasil Engenharia: \"Três pedidos para uma glosa: como a contratada responde a uma medição glosada item a item\". O artigo proposto mostraria que glosas por divergência de quantitativo, glosas por registro apresentado fora da forma exigida e parcelas já liberadas pela fiscalização aparecem iguais no relatório, mas exigem pedidos diferentes: vistoria conjunta com medição no local e termo assinado pelas duas partes; reapresentação instruída do documento faltante; e liberação da parcela incontroversa. Trataria da prova que cada item precisa (registro do dia, não reconstruído depois) e do protocolo com prazo. Distinguiria quantidade declarada, medida e evidenciada; deixaria claro que a decisão sobre a medição é do órgão e que o dossiê é leitura de medição e documentação, não perícia. Basear-se-ia no exemplo demonstrativo público, com números hipotéticos, no endereço público (https://confenge.com.br/casos/medicao-glosa-demonstrativo/). Não haveria promessa de recuperação de valor.",
+      "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+      "utm": "nenhum — revista editada, envio por e-mail em Word; parâmetro não sobreviveria à edição. URL canônica sem parâmetro.",
+      "autorizacao": "PENDENTE: Governança/fundador. Não enviar o mesmo artigo de CANAL-B (regra de originalidade dos dois veículos); escolher um dos dois ou redigir textos distintos.",
+      "estado": "PREPARADA_NAO_PUBLICADA"
+    }
+  ],
+  "candidatos_nao_verificados": [
+    {
+      "id": "CAND-1",
+      "tipo": "comunidade profissional de construção civil / engenharia de custos (tipo i do mandato)",
+      "canal": "Movimente — comunidade da OrçaFascio",
+      "url_tentada": "https://comunidade.orcafascio.com/",
+      "data_da_tentativa": "2026-09-19",
+      "resultado": "página pública lida (WebFetch), mas nenhuma página de regras, diretrizes, código de conduta ou termos acessível sem login; postagem exige cadastro ('Por favor, faça o log in se você já é um membro ou cadastre uma conta'). Nenhuma conta foi criada.",
+      "estado": "CANDIDATO_NAO_VERIFICADO",
+      "proximo_passo_possivel": "só com autorização: alguém com conta já existente lê as regras internas e as registra aqui antes de qualquer postagem"
+    },
+    {
+      "id": "CAND-2",
+      "tipo": "comunidade aberta de engenharia civil em português (tipo i/iii do mandato)",
+      "canal": "r/EngenhariaCivil (Reddit)",
+      "url_tentada": [
+        "https://www.reddit.com/r/EngenhariaCivil/about/rules.json",
+        "https://old.reddit.com/r/EngenhariaCivil/about/rules"
+      ],
+      "data_da_tentativa": "2026-09-19",
+      "resultado": "HTTP 403 na primeira URL; a segunda devolveu HTTP 200 com página de login ('Log in or sign up to personalize your feed'), sem o texto das regras. Regras não lidas.",
+      "estado": "CANDIDATO_NAO_VERIFICADO"
+    },
+    {
+      "id": "CAND-3",
+      "tipo": "instituto setorial de auditoria de obras públicas (tipo ii do mandato)",
+      "canal": "IBRAOP — Instituto Brasileiro de Auditoria de Obras Públicas",
+      "url_tentada": "https://www.ibraop.org.br/conteudo-tecnico/publicacoes/",
+      "data_da_tentativa": "2026-09-19",
+      "resultado": "HTTP 200; a página lista publicações do próprio instituto e não contém regra pública de envio/submissão de artigos de terceiros (busca por 'envio', 'submiss', 'colabor' sem ocorrência). A pesquisa web mencionou uma chamada de artigos para um livro temático sobre obras rodoviárias, fora do escopo do ativo. Público (auditores de controle externo) é adjacente, não o público principal do ativo.",
+      "estado": "CANDIDATO_NAO_VERIFICADO"
+    },
+    {
+      "id": "CAND-4",
+      "tipo": "grupo do LinkedIn com regras publicadas (tipo iii do mandato)",
+      "canal": "não nomeado",
+      "url_tentada": null,
+      "data_da_tentativa": "2026-09-19",
+      "resultado": "não tentado: regras de grupos do LinkedIn ficam atrás de login e exigiriam conta/ingresso no grupo, o que o mandato proíbe. Nenhum grupo foi inventado para preencher o tipo.",
+      "estado": "CANDIDATO_NAO_VERIFICADO"
+    }
+  ],
+  "regras_editoriais_aplicadas_a_mensagem_util": [
+    "pt-BR; explica a necessidade, o método, o que se entrega (dossiê item a item), como se conduz (protocolo com prazo) e onde termina (decisão do órgão)",
+    "sem promessa de recuperação, ranking ou resultado; sem preço, prazo, credencial ou conformidade normativa inventada",
+    "sem jargão interno; sem identificador de oferta; sem menção a ferramentas ou a forma de produção do conteúdo",
+    "'exemplo demonstrativo' com números hipotéticos declarado uma vez por mensagem",
+    "papéis de terceiros preservados: órgão decide sobre a medição; perícia é do juízo; peça jurídica é do advogado",
+    "atendimento condicional: qualquer contato que resulte é NEEDS_CONTEXT até confirmar escopo, local, campo e atribuição profissional"
+  ],
+  "referencia_cruzada": {
+    "distribuicao_preparada": "docs/campaigns/inbound-receita-20260919/evidence/distribuicao-preparada.json (EXT-2 e EXT-3 genéricos, agora refinados por CANAL-A/B/C; EXT-1 reclassificado como conexao_interna)",
+    "readme_campanha": "docs/campaigns/inbound-receita-20260919/README.md, seção Distribuição (#707)"
+  },
+  "janela_de_leitura": {
+    "duracao": "14 dias após a distribuição efetiva",
+    "inicio_real": null,
+    "fim_real": null
+  },
+  "nota_sobre_citacoes": "Trechos entre colchetes dentro de regra_citada (ex.: [e-mail protegido na página]) são redação deste registro no lugar de um endereço de e-mail que a própria página ofusca contra robôs; não são lacuna de citação. Todo o restante de cada item foi conferido literalmente no HTML publicado em 2026-09-19."
+}

@@ -75,6 +75,7 @@ export function toExportRecord(lead) {
     utm_source: lead.utm_source || null,
     utm_medium: lead.utm_medium || null,
     utm_campaign: lead.utm_campaign || null,
+    origin_class: lead.origin_class || null,
     content_cluster: lead.content_cluster || null,
     session_id: lead.session_id || null,
     // Contact fields included in file artifact only (ops-side). Not printed to stdout by default.

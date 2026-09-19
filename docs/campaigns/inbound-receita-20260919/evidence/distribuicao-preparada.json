@@ -1,7 +1,8 @@
 {
-  "schema": "confenge-campaign-w4-distribuicao/1.0",
+  "schema": "confenge-campaign-w4-distribuicao/1.1",
   "gerado_em": "2026-09-19",
-  "estado_geral": "PREPARADA, NAO_PUBLICADA para as três oportunidades externas. Autorização específica de publicação/contato pendente do owner de aquisição, conforme #707. Nenhum envio, contato ou postagem foi feito por este agente.",
+  "atualizado_em": "2026-09-19 (W8-distribuicao-docs, #707): EXT-1 reclassificado como conexao_interna; EXT-2/EXT-3 genéricos mantidos como histórico e refinados em três canais externos nomeados e verificados em docs/campaigns/bofu-integral-20260919/evidence/canais-externos-verificados.json. Nenhum envio, postagem ou contato foi feito.",
+  "estado_geral": "PREPARADA, NAO_PUBLICADA para as oportunidades externas (agora três canais nomeados e verificados, ver canais_externos_verificados). Autorização específica de publicação/contato pendente de Governança/fundador, conforme #707. Nenhum envio, contato ou postagem foi feito por este agente. EXT-1 não é externo: é conexão interna na biblioteca própria.",
   "conexoes_internas_publicadas_nesta_campanha": [
     {
       "de": "/medicoes-glosas-obras-publicas/",
@@ -18,9 +19,7 @@
       "estado": "JA_EXISTE_EM_PRODUCAO"
     }
   ],
-  "rotas_alteradas_nesta_tarefa_w4": ["/medicoes-glosas-obras-publicas/"],
-  "nota_rotas": "O pilar /medicoes-glosas-obras-publicas/ foi alterado nesta campanha (commit 471df38e6) para linkar ao caso; a conexão /casos/ -> /casos/medicao-glosa-demonstrativo/ já existia antes desta campanha e foi apenas confirmada por leitura direta.",
-  "oportunidades_externas_preparadas": [
+  "conexoes_internas_candidatas": [
     {
       "id": "EXT-1",
       "canal": "biblioteca própria / hub de conteúdos (/conteudos/)",
@@ -29,8 +28,16 @@
       "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (URL canônica, sem parâmetro)",
       "regra_do_canal_a_verificar": "confirmar que o link interno publicado nesta campanha no pilar (medicoes-glosas-obras-publicas/index.html:102) é suficiente ou se cabe reforço em mais um artigo da biblioteca sem duplicar o link já existente",
       "estado": "PREPARADA, NAO_PUBLICADA",
-      "autorizacao": "pendente do owner de aquisição/conteúdo"
-    },
+      "autorizacao": "pendente do owner de aquisição/conteúdo",
+      "tipo": "conexao_interna",
+      "reclassificacao": "2026-09-19: reclassificado de oportunidade externa para conexao_interna — /conteudos/ é hub próprio de confenge.com.br, não canal externo; não conta para o limite de três canais externos nem exige autorização de contato externo, só decisão editorial interna."
+    }
+  ],
+  "rotas_alteradas_nesta_tarefa_w4": [
+    "/medicoes-glosas-obras-publicas/"
+  ],
+  "nota_rotas": "O pilar /medicoes-glosas-obras-publicas/ foi alterado nesta campanha (commit 471df38e6) para linkar ao caso; a conexão /casos/ -> /casos/medicao-glosa-demonstrativo/ já existia antes desta campanha e foi apenas confirmada por leitura direta.",
+  "oportunidades_externas_preparadas": [
     {
       "id": "EXT-2",
       "canal": "comunidade profissional de engenharia de custos/obras públicas",
@@ -39,7 +46,11 @@
       "mensagem_util_rascunho": "Em resposta a uma dúvida concreta sobre como separar glosa de medição fundamentada de glosa sem base contratual: publicamos um exemplo demonstrativo, item a item, de como essa separação é feita tecnicamente. Sem promessa de recuperação de valor, só o método aplicado a um caso hipotético: [link].",
       "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (sem parâmetro livre)",
       "estado": "PREPARADA, NAO_PUBLICADA",
-      "autorizacao": "pendente do owner de aquisição; nenhum nome de pessoa ou organização privada é citado aqui"
+      "autorizacao": "pendente do owner de aquisição; nenhum nome de pessoa ou organização privada é citado aqui",
+      "historico": "rascunho genérico de 2026-09-19 (W4), sem canal nomeado; mantido como histórico. Refinado em canal nomeado com regra verificada: ver canais_externos_verificados.",
+      "refinado_em": [
+        "CANAL-A"
+      ]
     },
     {
       "id": "EXT-3",
@@ -49,9 +60,49 @@
       "mensagem_util_rascunho": "Sugestão de referência técnica para o diretório: um exemplo demonstrativo público de leitura de medição e glosa em contrato de obra pública, com separação explícita entre fato contratual e cálculo (https://confenge.com.br/casos/medicao-glosa-demonstrativo/). Não é caso de cliente nem promessa de resultado.",
       "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (sem parâmetro livre)",
       "estado": "PREPARADA, NAO_PUBLICADA",
-      "autorizacao": "pendente do owner de aquisição; entidade específica não nomeada até a decisão de contato"
+      "autorizacao": "pendente do owner de aquisição; entidade específica não nomeada até a decisão de contato",
+      "historico": "rascunho genérico de 2026-09-19 (W4), sem canal nomeado; mantido como histórico. Refinado em canal nomeado com regra verificada: ver canais_externos_verificados.",
+      "refinado_em": [
+        "CANAL-B",
+        "CANAL-C"
+      ],
+      "nota_de_reconciliacao_2026-09-19": "O campo 'entidade específica não nomeada até a decisão de contato' descreve o estado do rascunho genérico original (W4) e é mantido como histórico. Nesta atualização (W8-distribuicao-docs, #707), duas instituições públicas com página pública de submissão/normas para autores foram pesquisadas e nomeadas como candidatas em fase de preparação — Instituto de Engenharia (CANAL-B) e Revista Brasil Engenharia/Engenho Editora Técnica (CANAL-C), ver canais_externos_verificados. Nomear a entidade e a página onde ela publica sua própria regra de submissão é preparação, não contato: nenhum e-mail foi enviado, nenhum cadastro ou conta foi criado. A autorização de contato externo continua PENDENTE de Governança/fundador para os dois canais. Nenhuma pessoa física privada foi nomeada nesta reconciliação."
     }
   ],
+  "canais_externos_verificados": {
+    "arquivo": "docs/campaigns/bofu-integral-20260919/evidence/canais-externos-verificados.json",
+    "data_da_consulta": "2026-09-19",
+    "resumo": [
+      {
+        "id": "CANAL-A",
+        "canal": "IBEC — Instituto Brasileiro de Engenharia de Custos (envio de artigo)",
+        "url_regras": "https://engenhariadecustos.ibec.org.br/envio-de-artigo/",
+        "estado": "PREPARADA_NAO_PUBLICADA",
+        "autorizacao": "PENDENTE: Governança/fundador"
+      },
+      {
+        "id": "CANAL-B",
+        "canal": "Instituto de Engenharia — Revista Engenharia (Envie seu artigo)",
+        "url_regras": "https://www.institutodeengenharia.org.br/site/envie-seu-artigo-para-a-revista-engenharia/",
+        "estado": "PREPARADA_NAO_PUBLICADA",
+        "autorizacao": "PENDENTE: Governança/fundador"
+      },
+      {
+        "id": "CANAL-C",
+        "canal": "Revista Brasil Engenharia (normas para artigos)",
+        "url_regras": "https://brasilengenharia.com/portal/revista/normas-para-artigos",
+        "estado": "PREPARADA_NAO_PUBLICADA",
+        "autorizacao": "PENDENTE: Governança/fundador"
+      }
+    ],
+    "candidatos_nao_verificados": [
+      "CAND-1 Movimente/OrçaFascio (regras atrás de login)",
+      "CAND-2 r/EngenhariaCivil (403 / página de login)",
+      "CAND-3 IBRAOP (sem regra pública de submissão de terceiros)",
+      "CAND-4 grupo LinkedIn (não tentado: exigiria conta)"
+    ],
+    "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ sem parâmetro — os três canais recebem artigo revisado por comissão, onde utm não sobreviveria à edição"
+  },
   "janela_de_leitura": {
     "duracao": "14 dias após a distribuição efetiva",
     "inicio_real": null,

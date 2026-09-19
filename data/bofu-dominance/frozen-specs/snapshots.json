@@ -93,8 +93,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "091a67cd7af55f1305e539e0f4a2ca42a60dfc6ccb1d61071235cd3365078261",
-      "bytes": 36134,
+      "content_sha256": "8ff9e822a36bb86a69f6a57d18361ab283ffea8e9f488ecda90834af56dcf7f4",
+      "bytes": 36751,
       "noindex": false
     },
     {
@@ -193,19 +193,19 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "a22d05397d0ece10de9429240a50159045598d58f30b32f6aa91cba5108a5fc8",
-      "bytes": 36455,
+      "content_sha256": "2a1433dd763088013717607a981de8fc25f63dc4e80bbbd879d436793ff25b1b",
+      "bytes": 36750,
       "noindex": false
     },
     {
       "slug": "reequilibrio-obras-publicas",
       "path": "/reequilibrio-obras-publicas/",
       "html_rel": "reequilibrio-obras-publicas/index.html",
-      "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
-      "meta_description": "Reequilíbrio econômico-financeiro de obra pública: o que é, quando pode existir, diferença entre reajuste e revisão, evento, matriz de riscos, nexo e demonstração do impacto.",
+      "title": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE",
+      "meta_description": "Dossiê de reequilíbrio econômico-financeiro para a empresa contratada: evento, matriz de riscos, nexo com o contrato e demonstração do impacto.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
-      "og_title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+      "og_title": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE",
       "og_url": "https://confenge.com.br/reequilibrio-obras-publicas/",
       "h1": "Reequilíbrio econômico-financeiro de obra pública",
       "schema_types": [
@@ -288,8 +288,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "05f7aec63215a11e5bee4b2e0b18c17f552621df817ebb37473201c3cfd829d6",
-      "bytes": 33332,
+      "content_sha256": "67ce169a619744a2ac45cad85d1112802e611c961d7c1ed3aa89a34137b123bc",
+      "bytes": 33484,
       "noindex": false
     },
     {
@@ -383,8 +383,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "23b85aff77ebf9b9a398ca783843106b873c0ee6524895f15f90f9d6ba94ee7a",
-      "bytes": 36897,
+      "content_sha256": "4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3",
+      "bytes": 37257,
       "noindex": false
     },
     {
@@ -485,8 +485,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "ba261d9ed8a82b8ce6921af066cbcc2af0ac8a4a87f0177570b167f2a4da28cc",
-      "bytes": 28199,
+      "content_sha256": "7d0146da91188a268e490b18d4ff4ce846cecbb98ea26f08449011bf03e9f832",
+      "bytes": 28558,
       "noindex": false
     },
     {

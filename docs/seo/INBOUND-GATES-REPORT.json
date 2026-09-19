@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 98,
+        "scanned": 96,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 98
+        "sitemap_locs": 96
       }
     },
     "brand_shell": {
@@ -29,20 +29,6 @@
     "conversion": {
       "ok": true,
       "findings": [
-        {
-          "gate": "conversion",
-          "path": "casos/aditivo-art125-demonstrativo/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/medicao-glosa-demonstrativo/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
         {
           "gate": "conversion",
           "path": "comercial/privacidade-leads/index.html",
@@ -80,6 +66,13 @@
         },
         {
           "gate": "conversion",
+          "path": "conteudos/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
           "path": "conteudos/quando-compatibilizar-projetos/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
@@ -102,20 +95,6 @@
         {
           "gate": "conversion",
           "path": "especialista/tiago-jun-sasaki/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/matriz-atraso-obra/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -178,7 +157,7 @@
         }
       ],
       "stats": {
-        "scanned": 98,
+        "scanned": 96,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -189,14 +168,14 @@
           "service_pillar": 13,
           "priced_offer": 10,
           "commercial_content": 66,
-          "trust_or_legal": 9
+          "trust_or_legal": 7
         },
         "main_cta": {
           "covered": 89,
           "total": 89,
           "coverage": 1.0,
-          "exempt": 9,
-          "public_scanned": 98
+          "exempt": 7,
+          "public_scanned": 96
         },
         "on_page_capture": {
           "covered": 13,
@@ -216,43 +195,13 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 85,
+          "covered": 88,
           "total": 89,
-          "coverage": 0.9551,
-          "exempt_trust_or_legal": 9,
-          "registered_debt": 4
+          "coverage": 0.9888,
+          "exempt_trust_or_legal": 7,
+          "registered_debt": 1
         },
         "exemptions": [
-          {
-            "route": "/casos/aditivo-art125-demonstrativo/",
-            "family": "casos",
-            "kind": "debt",
-            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
-            "owner_issue": 61,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/casos/medicao-glosa-demonstrativo/",
-            "family": "casos",
-            "kind": "debt",
-            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
-            "owner_issue": 61,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/ferramentas/matriz-atraso-obra/",
-            "family": "ferramentas",
-            "kind": "debt",
-            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-            "owner_issue": 61,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
           {
             "route": "/metodologia-inteligencia/",
             "family": "metodologia-inteligencia",
@@ -304,14 +253,6 @@
             "expires_at": null
           },
           {
-            "route": "/politica-editorial/v/1.0.0/",
-            "family": "politica-editorial",
-            "kind": "trust_or_legal",
-            "reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
-            "owner_issue": 300,
-            "expires_at": null
-          },
-          {
             "route": "/privacidade/",
             "family": "legal-and-trust",
             "kind": "trust_or_legal",
@@ -326,14 +267,6 @@
             "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
             "owner_issue": 300,
             "expires_at": null
-          },
-          {
-            "route": "/uso-de-ia/",
-            "family": "legal-and-trust",
-            "kind": "trust_or_legal",
-            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
-            "owner_issue": 300,
-            "expires_at": null
           }
         ],
         "freeze": {
@@ -341,7 +274,7 @@
           "warn_before_date": false
         },
         "errors": 0,
-        "warnings": 21
+        "warnings": 18
       }
     },
     "legacy_entity": {
@@ -464,13 +397,6 @@
         },
         {
           "gate": "archetype_editorial_ready",
-          "path": "index.html",
-          "reason": "archetype_caveats_preserved_failed",
-          "excerpt": "family=home 1/1 sampled pages fail: /: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
           "path": "servicos/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=servicos-corporativos 1/1 sampled pages fail: /servicos/: 0 concrete specifics (min 3)",
@@ -478,9 +404,16 @@
         },
         {
           "gate": "archetype_editorial_ready",
+          "path": "conteudos/comparar-propostas-execucao-obra/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=private-engineering-quantities-budget 1/4 sampled pages fail: /quantitativos-orcamento-obras/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
           "path": "acompanhamento-contratos-obras/index.html",
           "reason": "archetype_specific_value_failed",
-          "excerpt": "family=service-pillars 2/6 sampled pages fail: /acompanhamento-contratos-obras/: 2 concrete specifics (min 3); /bid-room-licitacoes-obras/: 2 concrete specifics (min 3)",
+          "excerpt": "family=service-pillars 1/6 sampled pages fail: /bid-room-licitacoes-obras/: 2 concrete specifics (min 3)",
           "severity": "warn"
         },
         {
@@ -494,28 +427,14 @@
           "gate": "archetype_editorial_ready",
           "path": "acompanhamento-contratos-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=service-pillars 1/6 sampled pages fail: /atrasos-prorrogacao-obras-publicas/: 4 CTAs in <main> for 1406 words (max 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "confianca/index.html",
-          "reason": "archetype_answer_first_failed",
-          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /uso-de-ia/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "confianca/index.html",
-          "reason": "archetype_substantive_failed",
-          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /uso-de-ia/: 224 words",
+          "excerpt": "family=service-pillars 2/6 sampled pages fail: /acompanhamento-contratos-obras/: 4 CTAs in <main> for 1325 words (max 3); /atrasos-prorrogacao-obras-publicas/: 5 CTAs in <main> for 1746 words (max 4)",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "confianca/index.html",
           "reason": "archetype_caveats_preserved_failed",
-          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /confianca/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "excerpt": "family=legal-and-trust 1/5 sampled pages fail: /confianca/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
         },
         {
@@ -529,14 +448,14 @@
           "gate": "archetype_editorial_ready",
           "path": "politica-editorial/index.html",
           "reason": "archetype_answer_first_failed",
-          "excerpt": "family=politica-editorial 3/3 sampled pages fail: /politica-editorial/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /politica-editorial/historico/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "excerpt": "family=politica-editorial 2/2 sampled pages fail: /politica-editorial/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /politica-editorial/historico/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "politica-editorial/index.html",
           "reason": "archetype_caveats_preserved_failed",
-          "excerpt": "family=politica-editorial 1/3 sampled pages fail: /politica-editorial/historico/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "excerpt": "family=politica-editorial 1/2 sampled pages fail: /politica-editorial/historico/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
         },
         {
@@ -571,7 +490,7 @@
           "gate": "archetype_editorial_ready",
           "path": "guias-contratos-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=guias-contratos-obras 1/5 sampled pages fail: /guias-contratos-obras/: 218 words",
+          "excerpt": "family=guias-contratos-obras 1/5 sampled pages fail: /guias-contratos-obras/: 242 words",
           "severity": "warn"
         },
         {
@@ -599,7 +518,7 @@
           "gate": "archetype_editorial_ready",
           "path": "lei-14133-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/: 255 words",
+          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/: 279 words",
           "severity": "warn"
         },
         {
@@ -655,7 +574,7 @@
           "gate": "archetype_editorial_ready",
           "path": "radar/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=radar 1/2 sampled pages fail: /radar/: 194 words",
+          "excerpt": "family=radar 1/2 sampled pages fail: /radar/: 197 words",
           "severity": "warn"
         },
         {
@@ -674,23 +593,16 @@
         },
         {
           "gate": "archetype_editorial_ready",
+          "path": "casos/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=casos 1/5 sampled pages fail: /casos/demonstrativo-infraestrutura/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
           "path": "entregas/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3590 words (max 8)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "servicos-obras-publicas/index.html",
-          "reason": "archetype_caveats_preserved_failed",
-          "excerpt": "family=servicos-obras-publicas 1/1 sampled pages fail: /servicos-obras-publicas/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "problemas-que-resolvemos/index.html",
-          "reason": "archetype_specific_value_failed",
-          "excerpt": "family=problemas-que-resolvemos 1/1 sampled pages fail: /problemas-que-resolvemos/: 2 concrete specifics (min 3)",
+          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3564 words (max 8)",
           "severity": "warn"
         },
         {
@@ -711,35 +623,42 @@
           "gate": "archetype_editorial_ready",
           "path": "diagnostico-b2g-expansao/cancelado/index.html",
           "reason": "archetype_answer_first_failed",
-          "excerpt": "family=diagnostico-b2g-expansao-estados 2/3 sampled pages fail: /diagnostico-b2g-expansao/cancelado/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /diagnostico-b2g-expansao/expirado/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "excerpt": "family=diagnostico-b2g-expansao-estados 1/3 sampled pages fail: /diagnostico-b2g-expansao/cancelado/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "diagnostico-b2g-expansao/cancelado/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=diagnostico-b2g-expansao-estados 3/3 sampled pages fail: /diagnostico-b2g-expansao/cancelado/: 21 words; /diagnostico-b2g-expansao/expirado/: 26 words",
+          "excerpt": "family=diagnostico-b2g-expansao-estados 3/3 sampled pages fail: /diagnostico-b2g-expansao/cancelado/: 107 words; /diagnostico-b2g-expansao/expirado/: 123 words",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "obrigado-contrato.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=obrigado-transacional 4/4 sampled pages fail: /obrigado-contrato.html: 245 words; /obrigado-edital.html: 238 words",
+          "excerpt": "family=obrigado-transacional 2/4 sampled pages fail: /obrigado-operacao.html: 292 words; /obrigado.html: 280 words",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "404.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=pagina-nao-encontrada 1/1 sampled pages fail: /404.html: 151 words",
+          "excerpt": "family=pagina-nao-encontrada 1/1 sampled pages fail: /404.html: 198 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "inteligencia/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=inteligencia-pseo 1/6 sampled pages fail: /inteligencia/concorrencia/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "inteligencia/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=inteligencia-pseo 4/6 sampled pages fail: /inteligencia/: 126 words; /inteligencia/cenarios/: 106 words",
+          "excerpt": "family=inteligencia-pseo 4/6 sampled pages fail: /inteligencia/: 282 words; /inteligencia/cenarios/: 263 words",
           "severity": "warn"
         },
         {
@@ -760,7 +679,7 @@
           "gate": "archetype_editorial_ready",
           "path": "jurisprudencia-contratos-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 83 words [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 99 words [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
           "severity": "warn"
         },
         {
@@ -795,7 +714,7 @@
           "gate": "archetype_editorial_ready",
           "path": "compatibilizacao-projetos-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=engineering-projects-coordination-clash 1/1 sampled pages fail: /compatibilizacao-projetos-engenharia/: 9 CTAs in <main> for 2534 words (max 6)",
+          "excerpt": "family=engineering-projects-coordination-clash 1/1 sampled pages fail: /compatibilizacao-projetos-engenharia/: 10 CTAs in <main> for 2083 words (max 5)",
           "severity": "warn"
         },
         {
@@ -815,8 +734,15 @@
         {
           "gate": "archetype_editorial_ready",
           "path": "revisao-tecnica-projetos-engenharia/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "revisao-tecnica-projetos-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: 9 CTAs in <main> for 1674 words (max 4)",
+          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: 9 CTAs in <main> for 1888 words (max 4)",
           "severity": "warn"
         },
         {
@@ -830,7 +756,7 @@
           "gate": "archetype_editorial_ready",
           "path": "parcerias-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=parcerias-engenharia 1/1 sampled pages fail: /parcerias-engenharia/: 19 CTAs in <main> for 1286 words (max 3)",
+          "excerpt": "family=parcerias-engenharia 1/1 sampled pages fail: /parcerias-engenharia/: 19 CTAs in <main> for 1662 words (max 4)",
           "severity": "warn"
         },
         {
@@ -844,7 +770,7 @@
           "gate": "archetype_editorial_ready",
           "path": "projetos-complementares-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=complementary-engineering-elaboration 1/1 sampled pages fail: /projetos-complementares-engenharia/: 6 CTAs in <main> for 1792 words (max 4)",
+          "excerpt": "family=complementary-engineering-elaboration 1/1 sampled pages fail: /projetos-complementares-engenharia/: 6 CTAs in <main> for 2185 words (max 5)",
           "severity": "warn"
         },
         {
@@ -865,7 +791,7 @@
           "gate": "archetype_editorial_ready",
           "path": "inspecao-diagnostico-edificacoes/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=inspecao-diagnostico-edificacoes 1/1 sampled pages fail: /inspecao-diagnostico-edificacoes/: 7 CTAs in <main> for 1643 words (max 4)",
+          "excerpt": "family=inspecao-diagnostico-edificacoes 1/1 sampled pages fail: /inspecao-diagnostico-edificacoes/: 7 CTAs in <main> for 2291 words (max 5)",
           "severity": "warn"
         },
         {
@@ -879,7 +805,7 @@
           "gate": "archetype_editorial_ready",
           "path": "assistencia-tecnica-pericial-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=assistencia-tecnica-pericial-engenharia 1/1 sampled pages fail: /assistencia-tecnica-pericial-engenharia/: 6 CTAs in <main> for 1496 words (max 3)",
+          "excerpt": "family=assistencia-tecnica-pericial-engenharia 1/1 sampled pages fail: /assistencia-tecnica-pericial-engenharia/: 6 CTAs in <main> for 1898 words (max 4)",
           "severity": "warn"
         },
         {
@@ -893,15 +819,15 @@
           "gate": "archetype_editorial_ready",
           "path": "seguranca-trabalho-apoio-tecnico/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 6 CTAs in <main> for 1605 words (max 4)",
+          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 7 CTAs in <main> for 2461 words (max 6)",
           "severity": "warn"
         }
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
         "families": 44,
-        "archetype_ready": 9,
-        "archetype_not_ready": 35,
+        "archetype_ready": 10,
+        "archetype_not_ready": 34,
         "materially_rejected": [
           "jurisprudencia-contratos-obras"
         ],
@@ -929,13 +855,11 @@
             "material": []
           },
           "home": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/"
             ],
-            "blocking": [
-              "caveats_preserved"
-            ],
+            "blocking": [],
             "material": []
           },
           "servicos-corporativos": {
@@ -949,14 +873,16 @@
             "material": []
           },
           "private-engineering-quantities-budget": {
-            "ready": true,
+            "ready": false,
             "sample": [
               "/conteudos/comparar-propostas-execucao-obra/",
               "/conteudos/documentos-para-levantamento-quantitativos/",
               "/conteudos/revisar-ou-refazer-orcamento-obra/",
               "/quantitativos-orcamento-obras/"
             ],
-            "blocking": [],
+            "blocking": [
+              "specific_value"
+            ],
             "material": []
           },
           "service-pillars": {
@@ -983,12 +909,9 @@
               "/conflitos/",
               "/imprensa/",
               "/privacidade/",
-              "/termos-de-uso/",
-              "/uso-de-ia/"
+              "/termos-de-uso/"
             ],
             "blocking": [
-              "answer_first",
-              "substantive",
               "caveats_preserved"
             ],
             "material": []
@@ -1009,8 +932,7 @@
             "ready": false,
             "sample": [
               "/politica-editorial/",
-              "/politica-editorial/historico/",
-              "/politica-editorial/v/1.0.0/"
+              "/politica-editorial/historico/"
             ],
             "blocking": [
               "answer_first",
@@ -1135,7 +1057,7 @@
             "material": []
           },
           "casos": {
-            "ready": true,
+            "ready": false,
             "sample": [
               "/casos/",
               "/casos/aditivo-art125-demonstrativo/",
@@ -1143,7 +1065,9 @@
               "/casos/demonstrativo-projeto-privado/",
               "/casos/medicao-glosa-demonstrativo/"
             ],
-            "blocking": [],
+            "blocking": [
+              "caveats_preserved"
+            ],
             "material": []
           },
           "casos-modelos-precificados": {
@@ -1170,23 +1094,19 @@
             "material": []
           },
           "servicos-obras-publicas": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/servicos-obras-publicas/"
             ],
-            "blocking": [
-              "caveats_preserved"
-            ],
+            "blocking": [],
             "material": []
           },
           "problemas-que-resolvemos": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/problemas-que-resolvemos/"
             ],
-            "blocking": [
-              "specific_value"
-            ],
+            "blocking": [],
             "material": []
           },
           "ferramentas-hub": {
@@ -1289,6 +1209,7 @@
               "/inteligencia/orgaos/"
             ],
             "blocking": [
+              "answer_first",
               "substantive",
               "specific_value"
             ],
@@ -1349,6 +1270,7 @@
             ],
             "blocking": [
               "specific_value",
+              "caveats_preserved",
               "cta_subordinate"
             ],
             "material": []
@@ -1424,13 +1346,6 @@
     "instance_index_ready": {
       "ok": true,
       "findings": [
-        {
-          "gate": "instance_index_ready",
-          "path": "aditivos-obras-publicas/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/aditivos-obras-publicas/ blocking=official_live",
-          "severity": "warn"
-        },
         {
           "gate": "instance_index_ready",
           "path": "analises-contratos-publicos/index.html",
@@ -1594,6 +1509,13 @@
         },
         {
           "gate": "instance_index_ready",
+          "path": "reequilibrio-obras-publicas/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/reequilibrio-obras-publicas/ blocking=official_live",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
           "path": "revisao-tecnica-projetos-engenharia/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/revisao-tecnica-projetos-engenharia/ blocking=freshness",
@@ -1626,22 +1548,15 @@
           "reason": "indexable_without_evidence",
           "excerpt": "/triagem-tecnica/ blocking=citable_source",
           "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "uso-de-ia/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/uso-de-ia/ blocking=archetype_completeness",
-          "severity": "warn"
         }
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "scanned": 233,
+        "scanned": 231,
         "noindex": 135,
-        "instance_index_ready": 68,
+        "instance_index_ready": 67,
         "index_ready_but_noindex": [],
-        "indexable_without_evidence": 30,
+        "indexable_without_evidence": 29,
         "noindex_without_reason": [],
         "candidate_noindex_pending_family_activation": [],
         "blocking_subgates": {
@@ -1649,7 +1564,7 @@
           "public_safe": 98,
           "freshness": 48,
           "citable_source": 24,
-          "archetype_completeness": 22,
+          "archetype_completeness": 21,
           "self_canonical": 12,
           "no_cannibalization": 11,
           "record_specific_content": 3,

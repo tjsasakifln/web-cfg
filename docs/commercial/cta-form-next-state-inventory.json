@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 196
+    "expected_declared_ctas": 198
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 196,
+    "declared_ctas": 198,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -308,6 +308,21 @@
           "current_label": "06 Descrever o aditivo",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "ver-exemplo-completo",
+          "position": "",
+          "href": "/casos/aditivo-art125-demonstrativo/",
+          "stage": "inspect",
+          "commitment": "low",
+          "current_label": "Ver o exemplo completo, item a item",
+          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
@@ -3933,7 +3948,7 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
@@ -3998,7 +4013,7 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
@@ -4065,7 +4080,7 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
@@ -4711,19 +4726,21 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Obrigatórios: evento observado, nome do representante, e-mail profissional e o consentimento; os demais campos são opcionais. O e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "contract_event",
               "nome",
-              "email",
-              "consentimento"
+              "consentimento",
+              "email_or_whatsapp"
             ],
             "optional": [
               "deliverable_id",
               "public_contract_id",
               "opportunity_deadline",
               "contract_stage",
+              "email",
+              "telefone",
               "mensagem"
             ]
           },
@@ -4829,6 +4846,21 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-contrato",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Registrar no formulário",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
           ]
         },
         {
