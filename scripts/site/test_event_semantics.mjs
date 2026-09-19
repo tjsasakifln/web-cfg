@@ -426,6 +426,56 @@ for (const [route, selector, label] of [
   check("origem_route_identity_not_overwritten", "/entregas/", routeIdentity === "entregas", { routeIdentity });
 }
 
+// BOFU-FECHAMENTO-20260919 (WS-D). Bundle sobre o HTML real:
+//  B-05  o resolvedor da home conhece 'avaliação de imóvel' com jornada propria;
+//  A-05  a URL da ferramenta de prontidao (jornada/tema/need_code/intent_family)
+//        chega aos campos ocultos e ao select da home;
+//  PUBLICAS-01(3) um CTA da propria pagina com data-contract-event pre-seleciona
+//        o evento no formulario do hub de obras publicas (option existente).
+{
+  await page.goto("about:blank");
+  await page.evaluateOnNewDocument(() => { try { sessionStorage.clear(); } catch (_) { /* ignore */ } });
+  await open(page, "/?jornada=obra&tema=Registro%20do%20constru%C3%ADdo&origem=%2Fferramentas%2Fprontidao-tecnica-obra-privada%2F&need_code=obra_edificacao_ou_documentacao&intent_family=documentar_as_built_regularizar#contato");
+  const tool = await page.evaluate(() => ({
+    situation: window.CONFENGE_HOME_SITUATIONS && window.CONFENGE_HOME_SITUATIONS["avaliação de imóvel"],
+    journeyAction: window.CONFENGE_JOURNEY_ACTIONS && window.CONFENGE_JOURNEY_ACTIONS.avaliacao,
+    needCode: document.querySelector('form input[name="need_code"]')?.value || null,
+    intentFamily: document.querySelector('form input[name="intent_family"]')?.value || null,
+    jornada: document.querySelector('form input[name="jornada"]')?.value || null,
+    estagio: document.querySelector('form #estagio')?.value || null,
+    mensagem: document.querySelector('form #mensagem')?.value || "",
+    origem: document.querySelector('form input[name="origem"]')?.value || null,
+  }));
+  check("home_situation_avaliacao_declared", "/", Boolean(tool.situation) && tool.situation.journey === "avaliacao"
+    && tool.situation.route === "/servicos/#servico-avaliacao" && tool.journeyAction === "/obrigado", tool);
+  check("tool_context_reaches_home_form", "/", tool.needCode === "obra_edificacao_ou_documentacao"
+    && tool.intentFamily === "documentar_as_built_regularizar" && tool.jornada === "obra"
+    && tool.estagio === "obra ou imóvel para inspecionar ou documentar"
+    && /Registro do construído/.test(tool.mensagem)
+    && tool.origem === "/ferramentas/prontidao-tecnica-obra-privada/", tool);
+
+  await page.goto("about:blank");
+  await open(page, "/servicos-obras-publicas/");
+  const preselect = await page.evaluate(async () => {
+    const cta = document.querySelector('#situacao-orgao ~ li a[href="#captura-contrato"], a.list-ruled__action[href="#captura-contrato"]');
+    const select = document.querySelector('#captura-contrato select[name="contract_event"]');
+    if (!cta || !select) return { missing: true, cta: Boolean(cta), select: Boolean(select) };
+    // A option do orgao e publicada pelo gerador do hub; aqui o mecanismo e
+    // provado com uma option ja existente e com um valor inexistente.
+    cta.setAttribute("data-contract-event", "outro");
+    cta.addEventListener("click", (event) => event.preventDefault(), { capture: true });
+    cta.click();
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    const afterKnown = select.value;
+    cta.setAttribute("data-contract-event", "valor_inexistente");
+    cta.click();
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    return { missing: false, afterKnown, afterUnknown: select.value, stored: sessionStorage.getItem("confenge_pseo_attribution") || "" };
+  });
+  check("hub_cta_preselects_contract_event", "/servicos-obras-publicas/", !preselect.missing && preselect.afterKnown === "outro"
+    && preselect.afterUnknown === "outro" && !preselect.stored.includes("contract_event"), preselect);
+}
+
 await browser.close();
 if (server) server.close();
 const report = { ok: failed === 0, generated_at: new Date().toISOString(), site_root: siteRoot === artifactRoot ? "_site" : "repo", findings };

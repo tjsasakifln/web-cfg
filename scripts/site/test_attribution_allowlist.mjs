@@ -570,6 +570,125 @@ pass("tool_to_pseo_keeps_first_touch_origem", {
   pass("pos_inb_01_storage_unavailable_still_allowlists");
 }
 
+// --- BOFU-FECHAMENTO-20260919 (MEDICAO-01): Google -> artigo -> formulario do
+// pilar. `referrer` e first-touch: o segundo salto (referrer interno) nao pode
+// substituir o referrer externo guardado, nem no sessionStorage nem no campo
+// oculto. O servidor (deriveOriginClass, inalterado) tem de classificar a
+// jornada como search_organic; antes classificava direct_or_unknown.
+{
+  const twoHopStore = {};
+  const twoHopSession = {
+    getItem: (k) => twoHopStore[k] || null,
+    setItem: (k, v) => { twoHopStore[k] = String(v); },
+    removeItem: (k) => { delete twoHopStore[k]; },
+  };
+  loadShippedScript({
+    pathname: "/conteudos/sinapi-desonerado-nao-desonerado/",
+    search: "",
+    hash: "",
+    dataset: {},
+    withForm: false,
+    session: twoHopSession,
+    referrer: "https://www.google.com/",
+  });
+  const afterArticle = JSON.parse(twoHopStore.confenge_pseo_attribution || "{}");
+  if (afterArticle.referrer !== "https://www.google.com/") fail("two_hop_article_referrer", afterArticle);
+  const pillar = loadShippedScript({
+    pathname: "/medicoes-glosas-obras-publicas/",
+    search: "",
+    hash: "#captura-pilar",
+    dataset: { routeFamily: "medicoes-glosas", assetId: "medicoes-glosas-obras-publicas" },
+    withForm: true,
+    session: twoHopSession,
+    referrer: "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+  });
+  const afterPillar = JSON.parse(twoHopStore.confenge_pseo_attribution || "{}");
+  if (afterPillar.referrer !== "https://www.google.com/") fail("two_hop_session_referrer_overwritten", afterPillar);
+  const hiddenReferrer = pillar.hidden.referrer ? pillar.hidden.referrer.value : "";
+  if (hiddenReferrer !== "https://www.google.com/") fail("two_hop_hidden_referrer_internal", hiddenReferrer);
+  const twoHop = core.validateAndNormalize({
+    nome: "QA Attr",
+    telefone: "48988344559",
+    estagio: "problema urgente em contrato",
+    jornada: "contrato",
+    consentimento: "on",
+    ...core.pickAttribution({ referrer: hiddenReferrer, route_family: "medicoes-glosas" }),
+  });
+  if (!twoHop.ok) fail("two_hop_validate", twoHop);
+  if (twoHop.lead.origin_class !== "search_organic") {
+    fail("two_hop_organic_journey_classified_as", twoHop.lead.origin_class);
+  }
+  pass("two_hop_organic_journey_search_organic", { referrer: hiddenReferrer });
+
+  // Um pouso direto (sem referrer) seguido de navegacao interna continua sem
+  // credito: o referrer interno nao vira referrer guardado.
+  const directStore = {};
+  const directSession = {
+    getItem: (k) => directStore[k] || null,
+    setItem: (k, v) => { directStore[k] = String(v); },
+    removeItem: (k) => { delete directStore[k]; },
+  };
+  loadShippedScript({ pathname: "/servicos/", search: "", hash: "", dataset: {}, withForm: false, session: directSession, referrer: "" });
+  const direct = loadShippedScript({
+    pathname: "/",
+    search: "",
+    hash: "#contato",
+    dataset: {},
+    withForm: true,
+    session: directSession,
+    referrer: "https://confenge.com.br/servicos/",
+  });
+  const directStored = JSON.parse(directStore.confenge_pseo_attribution || "{}");
+  if (directStored.referrer) fail("direct_internal_referrer_stored", directStored);
+  if (direct.hidden.referrer && direct.hidden.referrer.value) fail("direct_internal_referrer_hidden", direct.hidden.referrer.value);
+  pass("direct_then_internal_keeps_unknown");
+}
+
+// --- BOFU-FECHAMENTO-20260919 (A-05): a ferramenta de prontidao pousa no
+// formulario da home com o recorte na URL. jornada/tema ja eram lidos;
+// need_code e intent_family passam a persistir na sessao e nos campos ocultos
+// (o servidor descarta o que nao esta em ATTR_ALLOWLIST; o contexto de
+// jornada e tema e o que chega ao lead).
+{
+  const toolStore = {};
+  const toolSession = {
+    getItem: (k) => toolStore[k] || null,
+    setItem: (k, v) => { toolStore[k] = String(v); },
+    removeItem: (k) => { delete toolStore[k]; },
+  };
+  const landing = loadShippedScript({
+    pathname: "/",
+    search: "?jornada=obra&tema=Registro%20do%20constru%C3%ADdo&origem=%2Fferramentas%2Fprontidao-tecnica-obra-privada%2F&need_code=obra_edificacao_ou_documentacao&intent_family=documentar_as_built_regularizar",
+    hash: "#contato",
+    dataset: {},
+    withForm: true,
+    session: toolSession,
+    referrer: "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+  });
+  const stored = JSON.parse(toolStore.confenge_pseo_attribution || "{}");
+  if (stored.need_code !== "obra_edificacao_ou_documentacao") fail("tool_need_code_not_persisted", stored);
+  if (stored.intent_family !== "documentar_as_built_regularizar") fail("tool_intent_family_not_persisted", stored);
+  if (stored.jornada !== "obra") fail("tool_jornada", stored);
+  if (stored.tema !== "Registro do construído") fail("tool_tema", stored);
+  const h = landing.hidden;
+  if (!h.need_code || h.need_code.value !== "obra_edificacao_ou_documentacao") fail("tool_hidden_need_code", h.need_code);
+  if (!h.intent_family || h.intent_family.value !== "documentar_as_built_regularizar") fail("tool_hidden_intent_family", h.intent_family);
+  if (!h.jornada || h.jornada.value !== "obra") fail("tool_hidden_jornada", h.jornada);
+  if (!h.tema || h.tema.value !== "Registro do construído") fail("tool_hidden_tema", h.tema);
+  if (!h.origem || h.origem.value !== "/ferramentas/prontidao-tecnica-obra-privada/") fail("tool_hidden_origem", h.origem);
+  if (landing.formAttrs.action !== "/obrigado") fail("tool_journey_action", landing.formAttrs);
+  const validated = core.validateAndNormalize({
+    nome: "QA Attr",
+    telefone: "48988344559",
+    estagio: "obra ou imóvel para inspecionar ou documentar",
+    consentimento: "on",
+    ...core.pickAttribution({ jornada: h.jornada.value, tema: h.tema.value, origem: h.origem.value, need_code: h.need_code.value, intent_family: h.intent_family.value }),
+  });
+  if (!validated.ok) fail("tool_validate", validated);
+  if (validated.lead.tema !== "Registro do construído") fail("tool_lead_tema", validated.lead);
+  pass("tool_context_reaches_home_form", { tema: validated.lead.tema, origem: validated.lead.origem });
+}
+
 {
   const sparse = core.validateAndNormalize({
     nome: "QA Attr",
