@@ -218,7 +218,7 @@ def _historico_body(policy: dict) -> str:
         )
     return (
         "<h2 id=\"historico\">Histórico de versões</h2>"
-        "<p>Mudança de política gera versão nova. O histórico abaixo preserva o texto e a data de cada decisão.</p>"
+        "<p>Mudança de política gera versão nova. O histórico abaixo registra a versão, a data de vigência e o resumo de cada decisão; o texto integral de cada versão fica no registro interno versionado.</p>"
         f"<ol>{''.join(rows)}</ol>"
         f"<p>Versão vigente: <strong>{_esc(current)}</strong>. "
         "Não há prazo prometido em dias para publicar uma correção; toda correção aceita entra no histórico acima, com a data.</p>"
@@ -347,7 +347,7 @@ def render_all() -> list[Path]:
     historico = _page(
         path="/politica-editorial/historico/",
         title="Histórico da política editorial",
-        description="Histórico das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
+        description="Histórico das políticas públicas da CONFENGE: versão, data de vigência e resumo de cada decisão.",
         h1="Histórico da política editorial",
         eyebrow="Governança",
         crumbs=[

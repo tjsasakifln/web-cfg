@@ -61,10 +61,10 @@
     {
       "version": "1.4.0",
       "effective_at": "2026-09-19",
-      "summary": "Uma seção da política foi retirada por decisão editorial do fundador. Substitui a 1.3.0 sem apagá-la.",
+      "summary": "Uma seção da política foi retirada por decisão editorial do fundador; o item Leitura técnica passa a atribuir a interpretação ao responsável técnico. Substitui a 1.3.0 sem apagá-la.",
       "archive_path": "/politica-editorial/",
       "content_sha256": "04e2b94b99189ae1c396961a915058435d314fcc963c99a783b5d42f7581edbe",
-      "entry_sha256": "ccf669d23d778e108fadd213d74a32a5f8c2c118f6537f986918cd03a1a955e5"
+      "entry_sha256": "396146d8a2936179702be6059d578e84a3241743a585c6692910e9775c33bfc3"
     }
   ],
   "versions": {

@@ -2,13 +2,15 @@
   "schema": "confenge-campaign-w4-distribuicao/1.0",
   "gerado_em": "2026-09-19",
   "estado_geral": "PREPARADA, NAO_PUBLICADA para as três oportunidades externas. Autorização específica de publicação/contato pendente do owner de aquisição, conforme #707. Nenhum envio, contato ou postagem foi feito por este agente.",
-  "conexoes_internas_ja_existentes_nesta_sessao": [
+  "conexoes_internas_publicadas_nesta_campanha": [
     {
       "de": "/medicoes-glosas-obras-publicas/",
       "para": "/casos/medicao-glosa-demonstrativo/",
       "onde": "medicoes-glosas-obras-publicas/index.html:102, texto 'Ver o exemplo completo, item a item'",
-      "estado": "JA_EXISTE_EM_PRODUCAO — não é link novo desta campanha; verificado nesta sessão, não presumido"
-    },
+      "estado": "LINK_NOVO_NESTA_CAMPANHA — introduzido pelo commit 471df38e6 neste ramo; origin/main não tem esse trecho (git show origin/main:medicoes-glosas-obras-publicas/index.html | grep -c medicao-glosa-demonstrativo = 0)"
+    }
+  ],
+  "conexoes_internas_ja_existentes_antes_da_campanha": [
     {
       "de": "/casos/",
       "para": "/casos/medicao-glosa-demonstrativo/",
@@ -16,8 +18,8 @@
       "estado": "JA_EXISTE_EM_PRODUCAO"
     }
   ],
-  "rotas_alteradas_nesta_tarefa_w4": [],
-  "nota_rotas": "W4 é documentação; nenhum HTML público foi tocado. As duas conexões acima já existiam antes desta campanha e foram apenas confirmadas por leitura direta.",
+  "rotas_alteradas_nesta_tarefa_w4": ["/medicoes-glosas-obras-publicas/"],
+  "nota_rotas": "O pilar /medicoes-glosas-obras-publicas/ foi alterado nesta campanha (commit 471df38e6) para linkar ao caso; a conexão /casos/ -> /casos/medicao-glosa-demonstrativo/ já existia antes desta campanha e foi apenas confirmada por leitura direta.",
   "oportunidades_externas_preparadas": [
     {
       "id": "EXT-1",
@@ -25,7 +27,7 @@
       "publico": "visitante que já está lendo a biblioteca CONFENGE sobre medição, glosa ou aditivo em obra pública",
       "mensagem_util_rascunho": "No dossiê de medição e glosa há um exemplo completo, item a item, de como separar o que tem base contratual do que precisa de mais documento. Ele está em /casos/medicao-glosa-demonstrativo/.",
       "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (URL canônica, sem parâmetro)",
-      "regra_do_canal_a_verificar": "confirmar que o link interno já presente no pilar (medicoes-glosas-obras-publicas/index.html:102) é suficiente ou se cabe reforço em mais um artigo da biblioteca sem duplicar o link já existente",
+      "regra_do_canal_a_verificar": "confirmar que o link interno publicado nesta campanha no pilar (medicoes-glosas-obras-publicas/index.html:102) é suficiente ou se cabe reforço em mais um artigo da biblioteca sem duplicar o link já existente",
       "estado": "PREPARADA, NAO_PUBLICADA",
       "autorizacao": "pendente do owner de aquisição/conteúdo"
     },

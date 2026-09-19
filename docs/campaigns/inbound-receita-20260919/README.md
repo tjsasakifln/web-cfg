@@ -53,7 +53,7 @@ Jornada: artigo ou caso → `/medicoes-glosas-obras-publicas/` → `#exemplo-dem
 
 Ativo escolhido: `/casos/medicao-glosa-demonstrativo/`. Motivo: utilidade concreta (divide a glosa em três pedidos, method demonstrado item a item); `index,follow`; legível no celular (não avaliado com ferramenta de medição nesta tarefa, apenas leitura de estrutura); leva à oferta atual pelo pilar; sem alegação jurídica automática; defeito reproduzido nesta sessão: o `<main>` do caso não tem ação terminal própria (débito já registrado em `data/organic/public-family-registry.json:557-560`, vencendo em 2026-09-30).
 
-Correção à premissa original: o mandato descrevia o caso como tendo "CTA na home e sem links de entrada além de /casos/". Isso não é o que a leitura direta mostrou: `medicoes-glosas-obras-publicas/index.html:102` já linka para o caso ("Ver o exemplo completo, item a item"), além de `casos/index.html`. A ponte pilar→caso **já existe em produção**; não é uma conexão nova desta campanha (ver seção de distribuição abaixo e `evidence/distribuicao-preparada.json`).
+Correção à premissa original: o mandato descrevia o caso como tendo "CTA na home e sem links de entrada além de /casos/". A leitura direta mostrou o seguinte: neste ramo, `medicoes-glosas-obras-publicas/index.html:102` linka para o caso ("Ver o exemplo completo, item a item"), pelo commit `471df38e6`; `origin/main` não tem esse trecho (`git show origin/main:medicoes-glosas-obras-publicas/index.html | grep -c medicao-glosa-demonstrativo` = 0). A ponte pilar→caso é, portanto, um link novo **publicado nesta campanha**; só o link a partir de `casos/index.html` já existia antes dela (ver seção de distribuição abaixo e `evidence/distribuicao-preparada.json`).
 
 Alternativa avaliada: `/ferramentas/diagnostico-defesa-margem/` — mantida como ferramenta complementar, não descartada. Recorte PNCP de 2026-08-14, página revista em 2026-08-15 (`ferramentas/diagnostico-defesa-margem/index.html:79`). Correção à premissa original: o mandato afirmava a ferramenta "ausente" do snapshot GSC; isso é falso para o snapshot de 31/08 — ela aparece com 3 impressões, 0 cliques, posição 1.33 (`seo/gsc-2026-08-31/manual-page-snapshot.v1.json:521-527`; ver `evidence/gsc-leituras.json`).
 
@@ -107,11 +107,11 @@ Todas as afirmações abaixo distinguem fonte (arquivo verificado), hipótese ed
 
 ## Distribuição interna e externa (#707)
 
-Conexões internas já publicadas (verificadas nesta sessão, nenhuma criada por esta tarefa): ver `evidence/distribuicao-preparada.json`, bloco `conexoes_internas_ja_existentes_nesta_sessao`. Resumo: `/medicoes-glosas-obras-publicas/` → `/casos/medicao-glosa-demonstrativo/` (linha 102) e `/casos/` → `/casos/medicao-glosa-demonstrativo/` já existem em produção; não há link novo pilar→caso a registrar nesta campanha, ao contrário do que o mandato presumia.
+Conexões internas (verificadas nesta sessão): ver `evidence/distribuicao-preparada.json`, blocos `conexoes_internas_publicadas_nesta_campanha` e `conexoes_internas_ja_existentes_antes_da_campanha`. Resumo: `/medicoes-glosas-obras-publicas/` → `/casos/medicao-glosa-demonstrativo/` (linha 102) é link novo desta campanha (commit `471df38e6`; `origin/main` não tem esse trecho); `/casos/` → `/casos/medicao-glosa-demonstrativo/` já existia em produção antes desta campanha. As rotas alteradas nesta W4 incluem o pilar `/medicoes-glosas-obras-publicas/`.
 
 Até três oportunidades de distribuição **externa**, preparadas, sem destinatários nem nomes de pessoas/organizações privadas, estado `PREPARADA, NAO_PUBLICADA`, autorização específica pendente (detalhe completo em `evidence/distribuicao-preparada.json`, bloco `oportunidades_externas_preparadas`):
 
-1. Biblioteca própria/hub de conteúdos (`/conteudos/`) — reforço interno do link já existente, sem parâmetro livre.
+1. Biblioteca própria/hub de conteúdos (`/conteudos/`) — link pilar→caso publicado nesta campanha, sem parâmetro livre.
 2. Comunidade profissional de engenharia de custos/obras públicas — regra de contribuição útil a verificar antes de qualquer postagem (comunidades específicas variam; nenhuma foi identificada ou contatada nesta sessão); mensagem-rascunho no arquivo de evidência.
 3. Entidade/diretório setorial pertinente — regra de submissão a verificar; entidade específica não nomeada até decisão de contato.
 
@@ -122,6 +122,8 @@ Janela de leitura: 14 dias após a distribuição efetiva, com início/fim reais
 Estágios distinguíveis hoje, por contrato/evento já existente: `page_view` → `cta_click` (com `destination_type` quando aplicável; ausência já tratada como `legacy_unclassified`, ver matriz de achados) → `lead_form_start`/`lead_form_step`/`lead_form_submit` → `lead_persisted` → `delivery.email.status` → handoff Warmbly. Estados comerciais (oportunidade qualificada, proposta enviada, aceita, faturada, recebida) continuam de responsabilidade da Warmbly, sem vínculo pessoa↔analytics anônimo — nada disso é reimplementado ou reespecificado nesta tarefa.
 
 Quebras de série que **esta campanha** provocaria, se e quando os seis artigos e o caso passarem a levar ao pilar em vez da home: `cta_click` `destination` muda de rota "home" para rota "pilar"; `landing_page`/`tema` (quando usados) passam a chegar como o artigo de origem em vez de sempre a home. Nenhuma dessas mudanças foi feita nesta tarefa (W4 é só documentação); fica registrado como o que aconteceria, não como o que aconteceu.
+
+Quebra de série adicional, descrita por FX1 (dependência Warmbly, TAREFAS-01): distinta da mudança pilar→home acima (que segue condicional, "se e quando"), esta já se aplica a partir desta release, porque a ponte pilar→caso já está publicada neste ramo: o clique artigo→pilar passa de `content_to_service` (engajamento) a `cta_click` `form` (intenção); `tema` passa a persistir no registro do lead; `origem` continua o slug do pilar.
 
 `destination_type` sempre presente: item da issue #706/W3. Correção à premissa: já está tratado hoje via rótulo `legacy_unclassified` quando o campo está ausente (ver matriz de achados); "sempre presente" no sentido literal (nunca omitido do payload) ainda não é o comportamento atual — o campo é omitido e o consumidor rotula a ausência, o que é uma forma diferente de resolver o mesmo problema. Isso é uma constatação de W3, não uma verificação nova desta tarefa.
 
@@ -137,7 +139,7 @@ Nota honesta: os mapas usados como ponto de partida desta tarefa foram produzido
 - `conteudos/glosa-de-medicao-obra-publica/index.html:9` (`noindex,follow`).
 - `js/modules/form.js:564-566` e `grep -rn "wa\.me" js/` (refutação de F005).
 - `js/modules/nav.js:1245-1249`, `netlify/functions/lib/event-registry.json:251`, `data/revops/closed-loop-funnel.v1.json:171` (reclassificação de `legacy_unclassified` para `ja_atendido`).
-- `medicoes-glosas-obras-publicas/index.html:102,235` e `js/modules/form.js:604` (ponte pilar→caso já existente; limite real de `landing_page`/`origem`).
+- `medicoes-glosas-obras-publicas/index.html:102,235` e `js/modules/form.js:604` (ponte pilar→caso publicada nesta campanha pelo commit `471df38e6` neste ramo; `origin/main` não tem esse trecho; limite real de `landing_page`/`origem`).
 - `data/organic/public-family-registry.json:557-560` (débito já registrado do caso, `expires_at: 2026-09-30`).
 - `seo/gsc-2026-08-31/manual-page-snapshot.v1.json:137-141,193-198,200-205,521-527` e `scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/` (duas fontes GSC, correção sobre a ferramenta "ausente").
 - `inspecao-diagnostico-edificacoes/index.html:159` e `data/offers/multivertical/catalog.v2.json:996` (NBR 16747/13752 não citadas juntas na superfície pública).
