@@ -23,6 +23,7 @@ from scripts.site.authority import (
     SURFACE_TYPES,
     archived_policy_pages,
     audit_public_families,
+    check_ai_mention_absent,
     check_analysis_not_case,
     check_case_permission_class,
     check_consent_slot,
@@ -120,16 +121,19 @@ def test_matrix_names_five_surfaces_and_audit_chain():
     assert analise["permission_class"] == "not_applicable"
     assert analise["methodology"] == "required"
     assert analise["as_of"] == "required"
-    assert analise["ai_disclosure"] == "required"
     assert analise["consent"] == "not_applicable"
     assert analise["mutually_exclusive_with"] == "caso_proof"
     assert caso["consent"] == "required"
     assert caso["mutually_exclusive_with"] == "analise_tecnica_contrato"
-    assert caso["ai_disclosure"] == "recommended"
     assert check_matrix_slot_coverage(matrix) == []
+    # Decisão editorial do fundador (2026-09-19): o regime de "ai_disclosure"
+    # (required/recommended) deixa de existir na matriz e no código.
+    assert "ai_disclosure" not in REQUIRED_SLOT_KEYS
+    assert "ai_disclosure" not in matrix["required_slot_keys"]
     for spec in matrix["surfaces"].values():
         for key in REQUIRED_SLOT_KEYS:
             assert key in spec, key
+        assert "ai_disclosure" not in spec
 
 
 def test_fail_closed_author_absent():
@@ -378,10 +382,10 @@ def test_public_policies_state_owner_sla_and_are_linked_from_chrome():
     pages = policy_pages()
     assert pages["editorial"].exists()
     assert "corrections" not in pages, "a página autônoma de correções foi descontinuada"
-    assert pages["ai_use"].exists()
+    assert "ai_use" not in pages, "a página /uso-de-ia/ foi retirada (410) em 2026-09-19"
+    assert not (ROOT / "uso-de-ia").exists()
     assert pages["conflicts"].exists()
     editorial = pages["editorial"].read_text(encoding="utf-8")
-    ai = pages["ai_use"].read_text(encoding="utf-8")
     conflicts = pages["conflicts"].read_text(encoding="utf-8")
     assert "Engº Tiago Sasaki" in editorial
     # O dono da correção continua nomeado, agora no canal real.
@@ -395,17 +399,25 @@ def test_public_policies_state_owner_sla_and_are_linked_from_chrome():
     assert "10 dias úteis" not in editorial
     # A página pública NÃO precisa mais estampar o rótulo interno.
     assert "UNKNOWN" not in editorial
-    assert "inteligência artificial" in ai.lower() or "uso de ia" in ai.lower()
+    # Ausência de menção, não declaração de ausência: as páginas de política
+    # vigentes não mencionam uso nem não uso de IA, e não linkam a rota retirada.
+    assert check_ai_mention_absent(editorial) == []
+    assert check_ai_mention_absent(conflicts) == []
     assert "conflito" in conflicts.lower()
     nav = footer_authority_nav()
     assert nav == FOOTER_AUTHORITY_NAV
     for href in gov["footer_authority_paths"]:
         assert href in nav
+    assert "/uso-de-ia/" not in gov["footer_authority_paths"]
+    assert "ai_use" not in gov
+    assert all(p["id"] != "ai_use" for p in gov["policies"])
+    assert check_ai_mention_absent(nav) == []
     from scripts.pseo import html_shell
 
     assert "/politica-editorial/" in html_shell.FOOTER
     assert "/correcoes/" not in html_shell.FOOTER
-    assert "/uso-de-ia/" in html_shell.FOOTER
+    assert "/uso-de-ia/" not in html_shell.FOOTER
+    assert check_ai_mention_absent(html_shell.FOOTER) == []
     assert "/conflitos/" in html_shell.FOOTER
     for path in chrome_pages():
         html = path.read_text(encoding="utf-8")
@@ -442,14 +454,23 @@ def test_policy_version_consistency_and_visible_disclosure():
     assert "2 dias úteis" not in combined
     assert "10 dias úteis" not in combined
     assert "IA que vence" not in combined
-    # O histórico continua legível e continua dizendo o que dizia.
+    # O histórico continua legível e continua dizendo o que dizia. Desde
+    # 2026-09-19 (decisão editorial do fundador, #705) nenhuma versão antiga é
+    # servida: a 1.0.0 foi despublicada (410 em _redirects, registro em
+    # data/editorial/public-preview-route-decisions.json). O REGISTRO da 1.0.0
+    # continua íntegro no JSON e o histórico lista a versão sem link.
     archives = archived_policy_pages()
     assert archives["historico"].exists()
-    assert archives["v1.0.0"].exists()
-    historic = archives["v1.0.0"].read_text(encoding="utf-8")
-    assert "1.0.0" in historic
-    assert "2 dias úteis" in historic
-    assert "10 dias úteis" in historic
+    assert not archives["v1.0.0"].exists(), "a 1.0.0 foi despublicada em 2026-09-19"
+    assert policy["published_archives"] == []
+    historic_record = json.dumps(policy["versions"]["1.0.0"], ensure_ascii=False)
+    assert "2 dias úteis" in historic_record
+    assert "10 dias úteis" in historic_record
+    historico_html = archives["historico"].read_text(encoding="utf-8")
+    assert "<span>Versão 1.0.0</span>" in historico_html
+    assert 'href="/politica-editorial/v/1.0.0/"' not in historico_html
+    redirects = (ROOT / "_redirects").read_text(encoding="utf-8").splitlines()
+    assert "/politica-editorial/v/1.0.0 /404.html 410" in redirects
     fake = json.loads(json.dumps(policy))
     fake["current_version"] = "9.9.9"
     bumped = check_policy_version_consistency(fake, policy_pages())
@@ -544,39 +565,49 @@ def test_classify_surface_from_real_paths():
     assert classify_surface("/politica-editorial/") is None
 
 
-def test_fail_closed_missing_ai_disclosure_slot():
-    html = _fixture(
+def test_fail_closed_ai_mention_present_in_any_surface():
+    """Decisão editorial do fundador (2026-09-19): ausência de menção a IA.
+
+    O antigo regime exigia o link /uso-de-ia/ (rodapé ou na página). Agora a
+    presença do link, do rótulo ou da marcação de disclosure reprova qualquer
+    superfície; a ausência não é exigência de nenhuma declaração no lugar.
+    """
+    clean = _fixture(
         "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
         "<time datetime='2026-08-16'>16 de agosto de 2026</time>"
         "<h2>Método</h2><p>Fonte: PNCP. Limitação: não é censo.</p>"
         "<p>Como citar: CONFENGE.</p>"
-        "<a href='/correcoes/'>Correções</a>"
+        f"<a href='{CORRECTION_CHANNEL_HREF}'>Encontrou um erro?</a>"
     )
-    errors = check_required_slots(html, "ferramenta")
-    assert "ai_disclosure_absent" in errors
-    ok = html.replace("</body>", '<a href="/uso-de-ia/">Uso de IA</a></body>')
-    assert "ai_disclosure_absent" not in check_required_slots(ok, "ferramenta")
-
-
-def test_fail_closed_analysis_requires_on_page_ai_disclosure():
-    footer_only = _fixture(
-        '<p data-surface-type="analise_tecnica_contrato">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
-        "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
-        "<p>Responsável técnico: Engº Tiago Sasaki.</p>"
-        "<time datetime='2026-08-16'>16 de agosto de 2026</time>"
-        "<h2>Método</h2><p>Fonte: instrumento público. Limitação: não é parecer jurídico.</p>"
-        "<p>Não é Caso CONFENGE e não implica relação comercial com o órgão ou o contratado.</p>"
-        "<p>Como citar: CONFENGE.</p>"
-        "<a href='/correcoes/'>Correções</a>"
-        '<footer><a href="/uso-de-ia/">Uso de IA</a></footer>'
-    )
-    errors = check_required_slots(footer_only, "analise_tecnica_contrato")
-    assert "ai_disclosure_absent" in errors
-    on_page = footer_only.replace(
+    assert not [e for e in check_required_slots(clean, "ferramenta") if e.startswith("ai_")]
+    assert check_ai_mention_absent(clean) == []
+    # O antigo regime não existe mais: nenhum slot pede declaração no lugar.
+    assert "ai_disclosure_absent" not in check_required_slots(clean, "analise_tecnica_contrato")
+    # Contraprovas: link retirado no rodapé, rótulo do antigo item de rodapé,
+    # marcação de disclosure na página e negação/eufemismo.
+    footer_link = clean.replace("</body>", '<footer><a href="/uso-de-ia/">Uso de IA</a></footer></body>')
+    assert any(e.startswith("ai_mention_present") for e in check_ai_mention_absent(footer_link))
+    label_only = clean.replace("</body>", "<p>Uso de IA: assistência de redação.</p></body>")
+    assert any(e.startswith("ai_mention_present") for e in check_ai_mention_absent(label_only))
+    on_page = clean.replace(
         "<h2>Método</h2>",
-        '<p id="ai-disclosure" data-ai-disclosure="assistive">Uso de IA: assistência de redação; responsável técnico humano. Política: <a href="/uso-de-ia/">Uso de IA</a>.</p><h2>Método</h2>',
+        '<p id="ai-disclosure" data-ai-disclosure="assistive">Assistência de redação.</p><h2>Método</h2>',
     )
-    assert "ai_disclosure_absent" not in check_required_slots(on_page, "analise_tecnica_contrato")
+    assert any(e.startswith("ai_mention_present") for e in check_ai_mention_absent(on_page))
+    spelled_out = clean.replace("</body>", "<p>Sem inteligência artificial nesta página.</p></body>")
+    assert any(e.startswith("ai_mention_present") for e in check_ai_mention_absent(spelled_out))
+    negation = clean.replace("</body>", "<p>Não usamos IA.</p></body>")
+    assert any(e.startswith("ai_mention_present") for e in check_ai_mention_absent(negation))
+
+
+def test_ai_mention_gate_keeps_information_architecture_and_technical_intelligence():
+    """'IA' de arquitetura de informação e 'inteligência técnica/de mercado' não são menção."""
+    ok = _fixture(
+        "<p>Engenharia, perícias e inteligência técnica. Inteligência de mercado em "
+        '<a href="/inteligencia/">Inteligência</a> e <a href="/metodologia-inteligencia/">Metodologia</a>. '
+        "Arquitetura de informação (IA) do site.</p>"
+    )
+    assert check_ai_mention_absent(ok) == []
 
 
 def test_fail_closed_caso_confenge_without_consent():

@@ -80,12 +80,12 @@ def archetype_attr(section_id: str) -> str:
 HUB_DESCRIPTION = (
     "Análises técnicas de contratos públicos com fontes, cálculos, limites e aplicação prática."
 )
-AI_DISCLOSURE_HTML = (
-    '<p id="ai-disclosure" class="ai-disclosure" data-ai-disclosure="assistive">'
-    "Uso de IA: assistência de redação e consistência; o responsável técnico humano "
-    "assina o que está publicado. Política: "
-    '<a href="/uso-de-ia/">Uso de IA</a>.</p>'
-)
+# ADENDO EDITORIAL 2026-09-19 (EXECUTE_NOW): conteúdo público não menciona uso ou
+# não uso de ferramenta, nem por presença nem por ausência declarada. O parágrafo
+# "Uso de IA" e o link /uso-de-ia/ (retirado, 410) foram removidos do render;
+# scripts/site/authority.check_ai_mention_absent agora reprova qualquer marcação
+# data-ai-disclosure/id="ai-disclosure" nesta e em outras superfícies públicas —
+# não há mais slot obrigatório a compatibilizar aqui.
 # Hub: bloco de método em ritmo editorial (kicker com papel + h2), sem repetir o
 # rótulo da família que já abre a página; id="metodo" e authority-method são os
 # marcadores lidos por scripts/site/authority.has_visible_method.
@@ -101,7 +101,6 @@ HUB_METHOD_HTML = (
     f"{e(DISCLAIMER_PT)}</p>"
     "<p>Limitação: não é parecer jurídico, não julga irregularidade e não transforma "
     "“atípico” em “irregular”.</p>"
-    f"{AI_DISCLOSURE_HTML}"
     "<p>Como citar: CONFENGE. Análise técnica de contrato público. "
     f"https://confenge.com.br{FAMILY_PATH} (consulta em 2026-08-16).</p>"
     "</div></section>"
@@ -679,7 +678,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         f' · Fontes consultadas em <time datetime="{e(_iso(record.get("as_of")))}">{e(_iso(record.get("as_of")))}</time>'
         f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
     )
-    sections.append(f'<div class="container">{byline}{AI_DISCLOSURE_HTML}</div>')
+    sections.append(f'<div class="container">{byline}</div>')
 
     if _text(record.get("executive_summary")):
         sections.append(

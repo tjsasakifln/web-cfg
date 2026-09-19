@@ -261,7 +261,6 @@ def test_copy_gate_scope_has_no_handwritten_route_allowlist():
         "politica-editorial",
         "comercial",
         "conflitos",
-        "uso-de-ia",
     ):
         assert family in tops, f"{family} outside the derived copy scope"
 

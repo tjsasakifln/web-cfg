@@ -195,6 +195,7 @@ def test_site_ci_shape():
         "npm run test:contact-journeys",
         "npm run test:ativacao-01",
         "npm run test:probe-inventory",
+        "npm run test:ai-mention",
     ):
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")

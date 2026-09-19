@@ -170,6 +170,8 @@ jobs:
           npm run test:tools
           npm run test:tool-compute
           npm run test:nurture
+      - name: "Editorial: no AI mention on visitor surface"
+        run: npm run test:ai-mention
       - name: Contact and lead pathway gates
         run: |
           npm run test:form-funnel

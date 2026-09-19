@@ -34,7 +34,6 @@ REQUIRED_SLOT_KEYS = (
     "reviewer",
     "evidence",
     "update_history",
-    "ai_disclosure",
     "consent",
 )
 
@@ -134,7 +133,6 @@ PUBLIC_FAMILY_ROOTS = (
 
 CHROME_EXEMPT_PREFIXES = (
     "/politica-editorial/",
-    "/uso-de-ia/",
     "/conflitos/",
     "/privacidade/",
     "/termos-de-uso/",
@@ -158,7 +156,6 @@ FOOTER_AUTHORITY_NAV = (
     '<nav class="footer-authority" aria-label="Autoridade e políticas">'
     '<a href="/politica-editorial/">Política editorial</a>'
     f'<a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro?</a>'
-    '<a href="/uso-de-ia/">Uso de IA</a>'
     '<a href="/conflitos/">Conflitos</a>'
     '<a href="/privacidade/">Privacidade</a>'
     "</nav>"
@@ -555,23 +552,46 @@ def visible_permission_class(html: str) -> str | None:
     return None
 
 
-def _main_without_footer(html: str) -> str:
+# Decisão editorial do fundador (2026-09-19): a superfície pública não menciona
+# uso ou não uso de inteligência artificial. Ausência de menção, não declaração
+# de ausência: a rota /uso-de-ia/ foi retirada (410) e nenhum eufemismo,
+# negação ou anúncio de política entra no lugar. Os padrões abaixo cobrem o
+# link retirado, o rótulo do antigo item de rodapé, a marcação de disclosure
+# que o regime anterior exigia e a expressão por extenso; "IA" de arquitetura
+# de informação (public-ia-map, public_ia) e "inteligência técnica/de mercado"
+# não casam com nenhum deles.
+AI_MENTION_MARKUP_PATTERNS = (
+    re.compile(r'href="/uso-de-ia/?"', re.I),
+    re.compile(r"data-ai-disclosure=", re.I),
+    re.compile(r'id="ai-disclosure"', re.I),
+    re.compile(r'class="[^"]*\bai-disclosure\b', re.I),
+)
+AI_MENTION_TEXT_PATTERNS = (
+    re.compile(r"\buso de ia\b"),
+    re.compile(r"intelig[eê]ncia artificial"),
+    re.compile(r"\bsem ia\b"),
+    re.compile(r"\b(n[aã]o usamos|n[aã]o usa|n[aã]o utiliza(mos)?) ia\b"),
+)
+
+
+def check_ai_mention_absent(html: str) -> list[str]:
+    """Errors for any visitor-facing mention of AI use or non-use.
+
+    Contraprova das páginas de autoridade (política editorial, conflitos,
+    rodapé canônico). A varredura de toda a superfície pública é do gate
+    sitewide ``scripts/site/test_ai_mention_gate.py``; este helper não entra
+    em ``check_required_slots`` para não reprovar páginas de outro passo.
+    """
     raw = html or ""
-    cut = re.split(r"<footer\b", raw, maxsplit=1, flags=re.I)
-    return cut[0] if cut else raw
-
-
-def has_visible_ai_disclosure(html: str, *, on_page_only: bool = False) -> bool:
-    """Footer /uso-de-ia/ counts unless the surface requires on-page disclosure."""
-    scope = _main_without_footer(html) if on_page_only else (html or "")
-    if re.search(r'data-ai-disclosure="[^"]+"', scope, flags=re.I):
-        return True
-    if re.search(r'id="ai-disclosure"|class="[^"]*ai-disclosure', scope, flags=re.I):
-        return True
-    blob = _norm(_strip_tags(scope))
-    if "/uso-de-ia/" in scope or "uso de ia" in blob:
-        return True
-    return bool(re.search(r"intelig[eê]ncia artificial", blob))
+    errors: list[str] = []
+    for pattern in AI_MENTION_MARKUP_PATTERNS:
+        if pattern.search(raw):
+            errors.append(f"ai_mention_present:{pattern.pattern}")
+    blob = _norm(_strip_tags(raw))
+    for pattern in AI_MENTION_TEXT_PATTERNS:
+        if pattern.search(blob):
+            errors.append(f"ai_mention_present:{pattern.pattern}")
+    return errors
 
 
 def has_visible_consent_record(html: str) -> bool:
@@ -668,7 +688,7 @@ def check_case_not_analysis(html: str) -> list[str]:
 
 
 def check_matrix_slot_coverage(matrix: dict[str, Any] | None = None) -> list[str]:
-    """Every matrix family must name author/reviewer/evidence/update/AI/consent."""
+    """Every matrix family must name author/reviewer/evidence/update/consent."""
     m = matrix or load_matrix()
     errors: list[str] = []
     declared = tuple(m.get("required_slot_keys") or ())
@@ -728,10 +748,6 @@ def check_required_slots(
                 errors.append("citation_link_absent")
     if _is_required(spec.get("correction_link") or "") and not has_correction_link(html):
         errors.append("correction_link_absent")
-    if _is_required(spec.get("ai_disclosure") or "") and not has_visible_ai_disclosure(
-        html, on_page_only=(surface_type == "analise_tecnica_contrato")
-    ):
-        errors.append("ai_disclosure_absent")
     if _is_required(spec.get("consent") or ""):
         errors.extend(check_consent_slot(html, surface_type))
     if surface_type == "analise_tecnica_contrato":
@@ -1202,7 +1218,6 @@ def chrome_pages() -> list[Path]:
         ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
         ROOT / "metodologia-inteligencia" / "index.html",
         ROOT / "politica-editorial" / "index.html",
-        ROOT / "uso-de-ia" / "index.html",
         ROOT / "conflitos" / "index.html",
         ROOT / "casos" / "index.html",
         ROOT / "diretoria-b2g" / "index.html",
@@ -1213,7 +1228,6 @@ def chrome_pages() -> list[Path]:
 def policy_pages() -> dict[str, Path]:
     return {
         "editorial": ROOT / "politica-editorial" / "index.html",
-        "ai_use": ROOT / "uso-de-ia" / "index.html",
         "conflicts": ROOT / "conflitos" / "index.html",
     }
 

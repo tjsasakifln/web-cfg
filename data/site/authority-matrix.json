@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.1.0",
-  "updated_at": "2026-08-16",
+  "schema_version": "1.2.0",
+  "updated_at": "2026-09-19",
   "adr": "ADR-STRAT-002",
   "issue": 74,
   "audit_chain": [
@@ -17,7 +17,6 @@
     "reviewer",
     "evidence",
     "update_history",
-    "ai_disclosure",
     "consent"
   ],
   "reviewer_trigger": {
@@ -54,7 +53,6 @@
       "limitations": "recommended",
       "permission_class": "not_applicable",
       "correction_link": "required",
-      "ai_disclosure": "recommended",
       "consent": "not_applicable",
       "mutually_exclusive_with": null,
       "examples": [
@@ -77,7 +75,6 @@
       "limitations": "required",
       "permission_class": "not_applicable",
       "correction_link": "required",
-      "ai_disclosure": "recommended",
       "consent": "not_applicable",
       "mutually_exclusive_with": null,
       "examples": [
@@ -98,7 +95,6 @@
       "permission_class": "not_applicable",
       "citation_link": "required",
       "correction_link": "required",
-      "ai_disclosure": "required",
       "consent": "not_applicable",
       "mutually_exclusive_with": null,
       "examples": [
@@ -118,7 +114,6 @@
       "permission_class": "not_applicable",
       "citation_link": "required",
       "correction_link": "required",
-      "ai_disclosure": "required",
       "consent": "not_applicable",
       "mutually_exclusive_with": null,
       "examples": [
@@ -138,7 +133,6 @@
       "limitations": "required",
       "permission_class": "required",
       "correction_link": "required",
-      "ai_disclosure": "recommended",
       "consent": "required",
       "mutually_exclusive_with": "analise_tecnica_contrato",
       "examples": [
@@ -160,7 +154,6 @@
       "permission_class": "not_applicable",
       "citation_link": "required",
       "correction_link": "required",
-      "ai_disclosure": "required",
       "consent": "not_applicable",
       "mutually_exclusive_with": "caso_proof",
       "examples": [

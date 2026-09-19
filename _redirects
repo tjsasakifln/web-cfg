@@ -52,6 +52,18 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # redirected.
 /correcoes  /triagem-tecnica/#corrigir-o-site  301!
 
+# --- Retired 2026-09-19 (founder editorial decision, #705): the standalone
+# /uso-de-ia/ policy page is withdrawn from the public surface. Gone, not
+# redirected: no other page carries that content. The editorial-policy record
+# keeps the historical versions that had the section.
+/uso-de-ia /404.html 410
+/uso-de-ia/index.html /404.html 410
+# Same decision, same date: the archived policy version 1.0.0 is unpublished.
+# The record keeps its text; the history page lists the version without a
+# link. Gone, not redirected.
+/politica-editorial/v/1.0.0 /404.html 410
+/politica-editorial/v/1.0.0/index.html /404.html 410
+
 # --- Form success rewrites (pretty URLs, noindex pages) ---
 /obrigado  /obrigado.html  200
 /obrigado-contrato  /obrigado-contrato.html  200

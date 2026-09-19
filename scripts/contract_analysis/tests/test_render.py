@@ -159,8 +159,14 @@ def test_hub_and_analysis_expose_honest_authority_without_editorial_deficit():
     )
     assert "não há segundo revisor nomeado" not in analysis_html
     assert "Revisor Técnico Independente" not in analysis_html
-    assert 'id="ai-disclosure"' in analysis_html
-    assert 'data-ai-disclosure="assistive"' in analysis_html
+    # Adendo editorial do fundador (2026-09-19): ausência de menção a IA em toda a
+    # superfície pública, sem substituir por negação/eufemismo/anúncio de política.
+    assert 'id="ai-disclosure"' not in analysis_html
+    assert 'data-ai-disclosure' not in analysis_html
+    assert 'href="/uso-de-ia/"' not in analysis_html
+    assert "uso de ia" not in analysis_html.casefold()
+    # Contraprova: a assertiva acima não está vazia por acidente — o marcador
+    # existia neste HTML antes do adendo e o teste falha se ele reaparecer.
     assert "Fontes consultadas em" in analysis_html
     assert "/triagem-tecnica/#corrigir-o-site" in analysis_html
     assert rec["title"] in analysis_html
@@ -171,7 +177,10 @@ def test_hub_and_analysis_expose_honest_authority_without_editorial_deficit():
     hub = render_hub_html([], index_count=0)
     assert 'content="noindex' in hub
     assert "não há segundo revisor nomeado" not in hub
-    assert 'id="ai-disclosure"' in hub
+    assert 'id="ai-disclosure"' not in hub
+    assert 'data-ai-disclosure' not in hub
+    assert 'href="/uso-de-ia/"' not in hub
+    assert "uso de ia" not in hub.casefold()
     assert 'id="metodo"' in hub
     # Rótulo da família presente na abertura do hub (kicker); caixa alta vem do
     # papel tipográfico .t-kicker (CSS), não do texto (campanha SALTO-02, lote C).

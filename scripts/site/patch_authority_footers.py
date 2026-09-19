@@ -142,6 +142,12 @@ _PEDIR_CORRECAO_REPLACEMENT = f'<a href="{CORRECTION_CHANNEL_HREF}">Encontrou um
 # FOOTER_AUTHORITY_NAV, which no longer lists a Correções entry.
 _NAV_CORRECOES_ENTRY_RE = re.compile(r'<a href="/correcoes/">Correções</a>')
 
+# Retirada 2026-09-19 (decisão editorial do fundador): o item "Uso de IA" sai
+# da authority-policy-nav e do rodapé sem substituto. O rodapé inteiro já é
+# reescrito a partir de FOOTER_AUTHORITY_NAV; a nav inline das páginas de
+# política/confiança carrega o mesmo anchor exato e é tratada aqui.
+_NAV_USO_DE_IA_ENTRY_RE = re.compile(r'<a href="/uso-de-ia/">Uso de IA</a>')
+
 # Generic label-preserving fallback: whatever anchor text remains (e.g.
 # "Como corrigir", "Contestar ou pedir correção", "rota de correção" with a
 # data-asset-id attribute) is already plain language with no invented
@@ -156,6 +162,7 @@ _RULES: list[tuple[re.Pattern[str], str]] = [
     (_LITERAL_URL_ANCHOR_RE, _LITERAL_URL_ANCHOR_REPLACEMENT),
     (_PEDIR_CORRECAO_RE, _PEDIR_CORRECAO_REPLACEMENT),
     (_NAV_CORRECOES_ENTRY_RE, ""),
+    (_NAV_USO_DE_IA_ENTRY_RE, ""),
     (_GENERIC_HREF_RE, f'href="{CORRECTION_CHANNEL_HREF}"'),
 ]
 
@@ -235,7 +242,10 @@ def run(write: bool) -> int:
         return 0
 
     if offenders:
-        print(f"FAIL {len(offenders)} shipped file(s) still link the retired /correcoes/ route:")
+        print(
+            f"FAIL {len(offenders)} shipped file(s) carry chrome out of sync with the "
+            "canonical authority footer:"
+        )
         for rel in offenders:
             print("  ", rel)
         print("  run: python3 scripts/site/patch_authority_footers.py --write")

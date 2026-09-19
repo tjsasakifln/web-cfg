@@ -66,11 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "e9e1f19379ab8bf245f3eaf477bc1af2455ab980a1147fd87af36fd085e1ceca",
-      "rendered_content_hash_previous": "e3bcff59ca57cccc534be53183d4cfe47fb36ee8b4952bc7f90751456457b081",
+      "rendered_content_hash": "888f3f41f32ff54d46da572e327950a958e222cd5021f445cd03323a6144ad13",
+      "rendered_content_hash_previous": "e9e1f19379ab8bf245f3eaf477bc1af2455ab980a1147fd87af36fd085e1ceca",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-09-18T00:19:10Z",
-      "rendered_hash_recapture_reason": "SALTO-INSTITUCIONAL-02 (expansao da direcao 'prancha e percurso' autorizada pelo encaminhamento do proprietario em 2026-09-17, EXECUTE_NOW; ramo campaign/salto-institucional-02-expansao, bytes finais apos o aceite visual em 7183a0d6d83593b370aa6c4f3f82233c28245fda): os seis pilares B2G recompostos no esqueleto de servico do piloto (abertura em uma coluna, indice de pagina, prancha demonstrativa propria por evento, entrega nomeada, 'Duvidas, condicoes e limites', bloco unico de proximo passo com o formulario #captura-pilar byte-identico e a secao de autoria preservada); apos o aceite, aditivos passou a ter uma acao dominante no bloco de ferramenta e medicoes perdeu o ponto duplicado de 'Encontrou um erro?'; styles.css/styles-tokens.css/styles-offers.css/script.js mudaram porque a folha global trocou degrades por superficies solidas, podou seletores mortos, ganhou os blocos de rota e o script passou a abrir <details> fechado ao navegar por ancora; a pagina da analise aprovada nao mudou um byte. Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou permissao mudou. Executor: agente Claude Code; nenhuma nova aprovacao tecnica ou revisao humana independente alegada.",
+      "rendered_hash_recaptured_at": "2026-09-19T00:00:00Z",
+      "rendered_hash_recapture_reason": "adendo editorial do fundador 2026-09-19: paragrafo ai-disclosure removido do render; corpo, fontes, numeros e canonical inalterados",
+      "rendered_hash_recapture_reason_previous": "SALTO-INSTITUCIONAL-02 (expansao da direcao 'prancha e percurso' autorizada pelo encaminhamento do proprietario em 2026-09-17, EXECUTE_NOW; ramo campaign/salto-institucional-02-expansao, bytes finais apos o aceite visual em 7183a0d6d83593b370aa6c4f3f82233c28245fda): os seis pilares B2G recompostos no esqueleto de servico do piloto (abertura em uma coluna, indice de pagina, prancha demonstrativa propria por evento, entrega nomeada, 'Duvidas, condicoes e limites', bloco unico de proximo passo com o formulario #captura-pilar byte-identico e a secao de autoria preservada); apos o aceite, aditivos passou a ter uma acao dominante no bloco de ferramenta e medicoes perdeu o ponto duplicado de 'Encontrou um erro?'; styles.css/styles-tokens.css/styles-offers.css/script.js mudaram porque a folha global trocou degrades por superficies solidas, podou seletores mortos, ganhou os blocos de rota e o script passou a abrir <details> fechado ao navegar por ancora; a pagina da analise aprovada nao mudou um byte. Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou permissao mudou. Executor: agente Claude Code; nenhuma nova aprovacao tecnica ou revisao humana independente alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -508,6 +509,29 @@
       "rendered_content_hash_previous": "e3bcff59ca57cccc534be53183d4cfe47fb36ee8b4952bc7f90751456457b081",
       "rendered_content_hash": "e9e1f19379ab8bf245f3eaf477bc1af2455ab980a1147fd87af36fd085e1ceca",
       "reason": "SALTO-INSTITUCIONAL-02 (expansao da direcao 'prancha e percurso' autorizada pelo encaminhamento do proprietario em 2026-09-17, EXECUTE_NOW; ramo campaign/salto-institucional-02-expansao, bytes finais apos o aceite visual em 7183a0d6d83593b370aa6c4f3f82233c28245fda): os seis pilares B2G recompostos no esqueleto de servico do piloto (abertura em uma coluna, indice de pagina, prancha demonstrativa propria por evento, entrega nomeada, 'Duvidas, condicoes e limites', bloco unico de proximo passo com o formulario #captura-pilar byte-identico e a secao de autoria preservada); apos o aceite, aditivos passou a ter uma acao dominante no bloco de ferramenta e medicoes perdeu o ponto duplicado de 'Encontrou um erro?'; styles.css/styles-tokens.css/styles-offers.css/script.js mudaram porque a folha global trocou degrades por superficies solidas, podou seletores mortos, ganhou os blocos de rota e o script passou a abrir <details> fechado ao navegar por ancora; a pagina da analise aprovada nao mudou um byte. Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou permissao mudou. Executor: agente Claude Code; nenhuma nova aprovacao tecnica ou revisao humana independente alegada."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Adendo editorial do fundador EXECUTE_NOW, 2026-09-19",
+      "at": "2026-09-19T00:00:00Z",
+      "reviewer": "recalculo deterministico via scripts.contract_analysis.approval.rendered_content_hash sobre a pagina-fonte atual, comparado byte a byte com o HTML checado; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "e9e1f19379ab8bf245f3eaf477bc1af2455ab980a1147fd87af36fd085e1ceca",
+      "rendered_content_hash": "888f3f41f32ff54d46da572e327950a958e222cd5021f445cd03323a6144ad13",
+      "reason": "adendo editorial do fundador 2026-09-19: paragrafo ai-disclosure removido do render; corpo, fontes, numeros e canonical inalterados. scripts/contract_analysis/render.py deixou de emitir <p id=\"ai-disclosure\"> (e o parametro morto AI_DISCLOSURE_HTML foi removido); scripts/site/authority.check_ai_mention_absent agora reprova essa marcacao em toda a superficie publica. Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou permissao mudou; a pagina da analise ja estava sem o paragrafo no working tree (ajuste de outro agente por substituicao exata) e este hash apenas alinha a aprovacao ao render atual.",
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
     }
   ]
 }
