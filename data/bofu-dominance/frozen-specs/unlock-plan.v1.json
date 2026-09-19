@@ -56,9 +56,6 @@
     "aditivos-obras-publicas": [
       "h1"
     ],
-    "reequilibrio-obras-publicas": [
-      "title_og"
-    ],
     "diagnostico-b2g-360": [
       "og_title"
     ]
@@ -72,6 +69,9 @@
     ],
     "diagnostico-pre-licitacao": [
       "meta_og_schema_description"
+    ],
+    "reequilibrio-obras-publicas": [
+      "title_og"
     ]
   },
   "capture": {
@@ -165,5 +165,6 @@
     "this plan does not authorize HTML mutation",
     "the date alone does not prove core readiness",
     "a green prepare-only PR is not an index or pipeline outcome"
-  ]
+  ],
+  "title_og_applied_note_2026_09_19": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador): a substituição title_og de reequilibrio-obras-publicas foi aplicada na fonte em 2026-09-19 (title e og:title passam a coincidir com o H1); deixa de ser 'true replacement' pendente e vira no-op registrado. Escopo do plano (substituições históricas, html_mutation_authorized=false) inalterado; a manutenção da superfície comercial pública segue a decisão do fundador registrada em AGENTS.md."
 }

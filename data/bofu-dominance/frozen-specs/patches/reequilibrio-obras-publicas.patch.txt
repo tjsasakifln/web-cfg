@@ -9,6 +9,6 @@ do_not_git_apply: true
 ---DIFF---
 ---REPLACEMENT---
 <<<BEFORE
-Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE
+Reequilíbrio econômico-financeiro de obra pública | CONFENGE
 ===AFTER
 Reequilíbrio econômico-financeiro de obra pública | CONFENGE

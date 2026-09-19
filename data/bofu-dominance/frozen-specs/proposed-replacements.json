@@ -22,8 +22,10 @@
     "reequilibrio-obras-publicas": [
       {
         "block": "title_og",
-        "before": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
-        "after": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE"
+        "before": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE",
+        "after": "Reequilíbrio econômico-financeiro de obra pública | CONFENGE",
+        "applied_at": "2026-09-19",
+        "applied_by": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador): substituição aplicada na fonte; antes: 'Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE'."
       }
     ],
     "auditoria-orcamento-licitacao": [
@@ -48,5 +50,6 @@
       }
     ]
   },
-  "before_strings_rebased": "SALTO-INSTITUCIONAL-02 (2026-09-17): os pilares foram recompostos na direcao do piloto; os before-strings de aditivos (h1 com papel tipografico) e auditoria (bloco quando-nao-contratar agora como paragrafo) foram rebaseados para o markup vigente com a mesma intencao; o experimento continua PREPARE-ONLY e nao foi aplicado."
+  "before_strings_rebased": "SALTO-INSTITUCIONAL-02 (2026-09-17): os pilares foram recompostos na direcao do piloto; os before-strings de aditivos (h1 com papel tipografico) e auditoria (bloco quando-nao-contratar agora como paragrafo) foram rebaseados para o markup vigente com a mesma intencao; o experimento continua PREPARE-ONLY e nao foi aplicado.",
+  "reequilibrio-obras-publicas": null
 }
