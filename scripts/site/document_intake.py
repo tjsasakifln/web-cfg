@@ -230,7 +230,7 @@ def is_frozen(rel: str) -> bool:
 # previous sentence must be closed first, or the prefill reads as a run-on
 # ("...em cada serviço Quero solicitar um canal seguro..."; CONTEXTO-CAPTURA-08).
 SENTENCE_GLUE_RE = re.compile(
-    r"([^\s.!?:;\-\u2013\u2014\"'()\[\]])(\s+)(Quero solicitar um canal seguro para envio)"
+    r"([0-9A-Za-z\u00c0-\u00ff])(\s+)(Quero solicitar um canal seguro para envio)"
 )
 
 

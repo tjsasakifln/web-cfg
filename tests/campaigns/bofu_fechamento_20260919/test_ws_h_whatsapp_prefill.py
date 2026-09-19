@@ -72,6 +72,9 @@ def test_rewrite_copy_closes_the_previous_sentence():
     out2 = document_intake.rewrite_copy(src2)
     assert "proposta. Quero solicitar" in out2 and "proposta.. " not in out2
     assert out2 == out
+    # Markup or whitespace before the sentence is not a word to close.
+    markup = "<p>\nQuero solicitar um canal seguro para envio."
+    assert document_intake.rewrite_copy(markup) == markup
     # The repair also applies to text already rewritten by an earlier pass.
     glued = "Olá. Quero conferir o BDI desta proposta Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem."
     assert document_intake.rewrite_copy(glued) == glued.replace("proposta Quero", "proposta. Quero")
