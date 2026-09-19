@@ -1239,16 +1239,31 @@ const walk = await closedLoop.runFixture(fixture, store);
     fail("origin_class_null_promoted", noClassKeys);
   } else pass("origin_class_null_reads_indisponivel");
 
-  // A channel word in origem is refused fail-closed; a commercial class in origin_class is refused (never mapped).
-  for (const [field, value] of [["origem", "organic"], ["origem", "referral"], ["origin_class", "demonstrated_inbound"], ["origin_class", "organic"]]) {
+  // A channel word in origem (visitor-controlled via ?origem=) is not a bucket and
+  // not fatal: the row lands under ORIGEM_CHANNEL_REFUSED and the report survives.
+  for (const value of ["organic", "referral", "gsc", "Google"]) {
+    const r = closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, origem: value }], observations: [], kind: "synthetic" }).report;
+    const keys = r.by_origem.map((row) => row.key);
+    if (keys.some((k) => k.toLowerCase() === value.toLowerCase()) || !keys.includes(closedLoop.ORIGEM_CHANNEL_REFUSED) || r.counts.persisted !== 1) {
+      fail(`origem_${value}_bucketed_as_channel`, keys);
+    } else pass(`origem_${value}_relabelled_not_fatal`);
+  }
+  // A commercial class (or any non-web value) in origin_class is server-side data and IS refused (never mapped).
+  for (const value of ["demonstrated_inbound", "organic"]) {
     try {
-      closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, [field]: value }], observations: [], kind: "synthetic" });
-      fail(`${field}_${value}_admitted`);
+      closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, origin_class: value }], observations: [], kind: "synthetic" });
+      fail(`origin_class_${value}_admitted`);
     } catch (err) {
-      if (err.code === "invalid_attribution") pass(`${field}_${value}_refused`);
-      else fail(`${field}_${value}_code`, err.code || err.message);
+      if (err.code === "invalid_attribution") pass(`origin_class_${value}_refused`);
+      else fail(`origin_class_${value}_code`, err.code || err.message);
     }
   }
+  // Real route slugs and paths are never relabelled.
+  for (const value of ["entregas", "casos", "comercial/radar-decisorio", "/analise-cnpj/", "web"]) {
+    const r = closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, origem: value }], observations: [], kind: "synthetic" }).report;
+    if (!r.by_origem.some((row) => row.key === value)) fail(`origem_slug_${value}_relabelled`, r.by_origem.map((row) => row.key));
+  }
+  pass("origem_route_slugs_and_paths_kept");
 
   // Snapshot loader accepts origin_class on a synthetic lead and reports it.
   const snap = closedLoop.runSnapshot({

@@ -76,13 +76,17 @@ const SNAPSHOT_LEAD_FIELDS = new Set([
 // (data/revops/proposal-counting.v1.json web_origin_class.values). A missing
 // value on a lead persisted before the derivation shipped reads INDISPONIVEL,
 // never direct_or_unknown. `origem` is a LOCATION (route slug or same-site
-// path filled by nav.js/lead-core), never an acquisition channel: channel
-// words are refused so by_origem cannot mix paths with utm_source.
+// path filled by nav.js/lead-core), never an acquisition channel. Because
+// `?origem=` is visitor-controlled (nav.js), a channel word is not fatal: the
+// row is bucketed under ORIGEM_CHANNEL_REFUSED so by_origem never mixes paths
+// with channel names and one bad row never zeroes the report. origin_class is
+// server-derived only, so a foreign value there IS fatal (producer defect).
 const WEB_ORIGIN_CLASSES = new Set(["campaign", "search_organic", "referral", "direct_or_unknown"]);
 const ORIGIN_CLASS_UNAVAILABLE = "INDISPONIVEL";
+const ORIGEM_CHANNEL_REFUSED = "ORIGEM_CHANNEL_REFUSED";
 const ORIGEM_CHANNEL_WORDS = new Set([
-  "organic", "referral", "direct", "paid", "cpc", "ppc", "social", "email", "newsletter",
-  "display", "affiliate", "gsc", "google", "bing", "seo", "sem", "utm", "search",
+  "organic", "referral", "direct", "paid", "cpc", "ppc", "social", "newsletter",
+  "display", "affiliate", "gsc", "google", "bing", "seo", "sem", "utm",
 ]);
 const LIVE_EVIDENCE = Symbol("verified_warmbly_snapshot");
 
@@ -376,7 +380,7 @@ function assertAttributionValue(field, value) {
     return raw;
   }
   if (field === "origem" && ORIGEM_CHANNEL_WORDS.has(raw.toLowerCase())) {
-    throw codedError("invalid_attribution", "invalid_attribution:origem_channel_not_location", { field });
+    return ORIGEM_CHANNEL_REFUSED;
   }
   const pathLike = field === "origem" && (raw.startsWith("/") || /^https?:\/\//i.test(raw));
   if (field === "landing" || field === "landing_page" || field === "landing_url" || pathLike) {
@@ -1215,6 +1219,7 @@ module.exports = {
   ATTR_FIELDS,
   WEB_ORIGIN_CLASSES,
   ORIGIN_CLASS_UNAVAILABLE,
+  ORIGEM_CHANNEL_REFUSED,
   VISITOR_EVENT_MAP,
   DEFAULT_TIMEOUT_MS,
   getContract,
