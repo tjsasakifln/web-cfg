@@ -1260,6 +1260,79 @@ _reset();
   pass("attribution_encoded_pii_path");
 }
 
+// 6ab) JOR-03 / TAREFAS-01: `tema` (subject the visitor arrived with, from the article/case
+// data-tema) persists on the record as a short text; `origem` keeps its own value. A PII-like
+// tema (e-mail, phone-sized digit run) is dropped, never partially stored; absent -> null.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const base = {
+    nome: "QA Tema",
+    email: "qa-tema@example.com",
+    estagio: "medicoes-glosas-obras-publicas",
+    jornada: "contrato",
+    consentimento: "1",
+    origem: "medicoes-glosas-obras-publicas",
+    landing_page: "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+    route_family: "medicoes-glosas-obras-publicas",
+    cta_id: "pillar_hero",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  const withTema = await handler(event({
+    ...base,
+    tema: "glosa de medição obra pública",
+    idempotency_key: "tema-persist-001",
+  }, "POST", { ip: "198.51.100.61" }));
+  const withTemaData = JSON.parse(withTema.body);
+  const stored = await mem.get(withTemaData.lead_id);
+  if (withTema.statusCode !== 201 || !stored) fail("tema_persist_status", { status: withTema.statusCode, stored });
+  if (stored.tema !== "glosa de medição obra pública") fail("tema_persisted", { tema: stored.tema });
+  if (stored.origem !== "medicoes-glosas-obras-publicas") fail("tema_must_not_change_origem", { origem: stored.origem });
+  if (withTema.body.includes("tema")) fail("tema_in_public_response", withTema.body);
+
+  const longTema = "x".repeat(200);
+  const clipped = await handler(event({ ...base, tema: longTema, idempotency_key: "tema-persist-002" }, "POST", { ip: "198.51.100.62" }));
+  const clippedStored = await mem.get(JSON.parse(clipped.body).lead_id);
+  if (!clippedStored || clippedStored.tema !== "x".repeat(120)) {
+    fail("tema_clipped_to_120", { len: clippedStored?.tema?.length });
+  }
+
+  const piiCases = [
+    ["fale com maria.silva@example.com sobre a medição", "email"],
+    ["glosa medição 48 99999-9999", "phone"],
+    ["contrato do CNPJ 52407089000109", "cnpj"],
+  ];
+  for (let i = 0; i < piiCases.length; i += 1) {
+    const [tema, kind] = piiCases[i];
+    const res = await handler(event({ ...base, tema, idempotency_key: `tema-pii-${i}` }, "POST", { ip: `198.51.100.${70 + i}` }));
+    const data = JSON.parse(res.body);
+    const piiStored = await mem.get(data.lead_id);
+    if (res.statusCode !== 201 || !piiStored) fail("tema_pii_persist_status", { kind, status: res.statusCode });
+    if (piiStored.tema !== null) fail("tema_pii_not_dropped", { kind, tema: piiStored.tema });
+  }
+
+  const noTema = await handler(event({ ...base, idempotency_key: "tema-absent-001" }, "POST", { ip: "198.51.100.65" }));
+  const noTemaStored = await mem.get(JSON.parse(noTema.body).lead_id);
+  if (!noTemaStored || noTemaStored.tema !== null) fail("tema_absent_is_null", { tema: noTemaStored?.tema });
+  if (!Object.prototype.hasOwnProperty.call(noTemaStored, "tema")) fail("tema_key_missing_from_record", Object.keys(noTemaStored));
+
+  // The same sanitizer backs pickAttribution (tema is an allowlisted attribution key).
+  const picked = core.pickAttribution({ tema: "SINAPI desonerado ou não desonerado", utm_source: "gsc" });
+  if (picked.tema !== "SINAPI desonerado ou não desonerado") fail("tema_pickAttribution_text", picked);
+  if (core.pickAttribution({ tema: "joao@example.com" }).tema) fail("tema_pickAttribution_pii", picked);
+  // Handoff: tema rides in the versioned free-text next-action context of
+  // confenge.inbound.v1 (same vehicle as the deliverable), never as a new key.
+  const handoff = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const mapped = handoff.mapLeadToInboundV1(stored);
+  if (!mapped.message || !mapped.message.includes("tema=glosa de medição obra pública")) {
+    fail("tema_handoff_context", mapped.message);
+  }
+  if ("tema" in mapped) fail("tema_handoff_new_key", Object.keys(mapped));
+  const mappedNoTema = handoff.mapLeadToInboundV1(noTemaStored);
+  if (mappedNoTema.message && mappedNoTema.message.includes("tema=")) fail("tema_handoff_absent_leaks", mappedNoTema.message);
+  pass("tema_persisted_sanitized_and_null_when_absent", { lead_id: withTemaData.lead_id });
+}
+
 // 6b) onlyIfNew path: lookup miss then create-only conflict still returns 200 (no re-delivery)
 {
   const payload = {

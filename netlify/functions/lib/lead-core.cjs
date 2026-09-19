@@ -95,6 +95,7 @@ const MAX_FIELD = {
   document_intent: 40,
   intent_kind: 40,
   session_id: 32,
+  tema: 120,
 };
 
 /** Query/body keys that may persist as attribution. Everything else is dropped. */
@@ -453,6 +454,23 @@ function sanitizeAttributionValue(val, maxLen, key) {
   return s;
 }
 
+// `tema` is the short subject the visitor arrived with (data-tema of the
+// article/case CTA or ?tema= on the home): dataset/H1 text such as
+// "glosa de medição obra pública", so it keeps spaces and accents that the
+// token contract rejects. It is still an attribution dimension, never free
+// text from the visitor: control characters and angle brackets are stripped,
+// an e-mail or a digit run the size of a phone/CPF/CNPJ drops the whole value.
+function sanitizeAttributionTopic(val, maxLen) {
+  if (val == null) return "";
+  const s = stripControl(val).replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, maxLen || MAX_FIELD.tema).trim();
+  if (!s) return "";
+  if (/@/.test(s)) return "";
+  if (/\d{8,}/.test(s)) return "";
+  const compactDigits = s.replace(/(\d)[\s().\/+-]+(?=\d)/g, "$1");
+  if (/\d{10,}/.test(compactDigits)) return "";
+  return s;
+}
+
 function sanitizeAttributionLocation(val, maxLen, key) {
   if (val == null) return "";
   const raw = stripControl(val).slice(0, maxLen || 240);
@@ -498,9 +516,11 @@ function pickAttribution(data) {
     const max = MAX_FIELD[key] || 180;
     const v = key === "session_id"
       ? normalizeSessionId(src[key])
-      : ATTR_LOCATION_KEYS.has(key)
-        ? sanitizeAttributionLocation(src[key], max, key)
-        : sanitizeAttributionValue(src[key], max, key);
+      : key === "tema"
+        ? sanitizeAttributionTopic(src[key], max)
+        : ATTR_LOCATION_KEYS.has(key)
+          ? sanitizeAttributionLocation(src[key], max, key)
+          : sanitizeAttributionValue(src[key], max, key);
     if (v) out[key] = v;
   }
   return out;
@@ -996,6 +1016,10 @@ function validateAndNormalize(data) {
     mensagem: adaptiveFields ? null : clamp(data.mensagem || data.message, MAX_FIELD.mensagem) || null,
     consentimento: true,
     origem: sanitizeAttributionLocation(data.origem, MAX_FIELD.origem, "origem") || null,
+    // JOR-03 / TAREFAS-01: the subject the visitor arrived with. `origem` keeps
+    // its own semantics (route slug or attributed landing); `tema` is what the
+    // operator reads to know which article or case brought the request.
+    tema: sanitizeAttributionTopic(data.tema, MAX_FIELD.tema) || null,
     landing_page:
       sanitizeAttributionLocation(
         data.landing_page || data.landing || data.landing_url,
@@ -1472,6 +1496,7 @@ module.exports = {
   sanitizeAttributionValue,
   sanitizeAttributionLocation,
   pickAttribution,
+  sanitizeAttributionTopic,
   parseBody,
   looksLikeBinaryPayload,
   rejectFileShape,

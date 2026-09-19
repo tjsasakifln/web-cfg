@@ -323,6 +323,35 @@ for (const route of ["/quantitativos-orcamento-obras/", "/", "/conteudos/calculo
     && clicks[0].destination_type === "route" && unknown.length === 0 && diff.added.length === 1, diff);
 }
 
+// (10) JOR-02 (2026-09-19): the article CTA "Continuar pelo formulário" and the case CTA point to the
+// pillar capture anchor on ANOTHER route (/medicoes-glosas-obras-publicas/#captura-pilar). That is a
+// contact click: exactly one cta_click destination_type=form with destination_path = the pillar route,
+// never content_to_service. Contraproof: the plain pillar link (no fragment) on the same article stays
+// content_to_service with the known destination_service_id.
+for (const [route, selector, label] of [
+  ["/conteudos/glosa-de-medicao-obra-publica/", 'a[href="/medicoes-glosas-obras-publicas/#captura-pilar"]', "article"],
+  ["/casos/medicao-glosa-demonstrativo/", 'a.button-primary[href="/medicoes-glosas-obras-publicas/#captura-pilar"]', "case"],
+]) {
+  await open(page, route);
+  const diff = await clickAndDiff(page, selector);
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  const transitions = diff.added.filter((e) => e.event === "content_to_service");
+  check(`${label}_cross_route_capture_anchor_form_cta`, route, !diff.missing && clicks.length === 1
+    && clicks[0].destination_type === "form" && clicks[0].destination_path === "/medicoes-glosas-obras-publicas/"
+    && clicks[0].page_path === route && transitions.length === 0 && diff.added.length === 1
+    && piiViolations(diff.added).length === 0, diff);
+}
+{
+  const route = "/conteudos/glosa-de-medicao-obra-publica/";
+  await open(page, route);
+  const diff = await clickAndDiff(page, 'a[href="/medicoes-glosas-obras-publicas/"]');
+  const transitions = diff.added.filter((e) => e.event === "content_to_service");
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("article_plain_pillar_link_content_to_service", route, !diff.missing && transitions.length === 1
+    && transitions[0].destination_service_id === "medicoes-glosas-obras-publicas"
+    && transitions[0].destination_type === "service" && clicks.length === 0 && diff.added.length === 1, diff);
+}
+
 // (6) global negative: click every [data-event-name] on the home; commercial/retired names never appear.
 {
   await open(page, "/");

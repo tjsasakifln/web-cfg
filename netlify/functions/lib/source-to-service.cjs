@@ -11,6 +11,24 @@ const CANONICAL_DESTINATIONS = Object.freeze({ ...(SOURCE_TO_SERVICE.destination
 const ORIGIN_PREFIXES = Object.freeze({ ...(SOURCE_TO_SERVICE.origin_prefixes || {}) });
 const CHROME_PREFIXES = Object.freeze([...(SOURCE_TO_SERVICE.chrome_prefixes || [])]);
 const CONFENGE_HOSTS = new Set(["confenge.com.br", "www.confenge.com.br", "localhost", "127.0.0.1"]);
+/**
+ * Capture anchors (same pattern as CAPTURE_HASH in js/modules/nav.js). An
+ * internal href whose fragment matches is a contact click even when it changes
+ * route (JOR-02, 2026-09-19): the article CTA "/{pilar}/#captura-pilar" is
+ * cta_click destination_type=form, not content_to_service.
+ */
+const CAPTURE_HASH = /^#(contato|captura|pedido|triagem)/i;
+
+function fragmentOf(href) {
+  const raw = String(href || "");
+  const at = raw.indexOf("#");
+  return at === -1 ? "" : raw.slice(at);
+}
+
+function isCaptureHref(href) {
+  const fragment = fragmentOf(href);
+  return Boolean(fragment) && CAPTURE_HASH.test(fragment);
+}
 
 /** First-touch acquisition keys. Current need/service may evolve; these must not. */
 const FIRST_TOUCH_KEYS = Object.freeze([
@@ -120,8 +138,8 @@ function classifyTransition(input) {
   if (dest.kind === "pii" || dest.kind === "empty") {
     return { kind: dest.kind, event: null };
   }
-  if (/#contato/.test(href) || /^\/\?tema=/.test(href)) {
-    return { kind: "contact", event: "cta_click" };
+  if (isCaptureHref(href) || /^\/\?tema=/.test(href)) {
+    return { kind: "contact", event: "cta_click", destination_path: dest.path };
   }
   if (!family) {
     return { kind: "not_transition", event: null, origin_family: null, origin_path: originPath };
@@ -249,6 +267,8 @@ function mergeAttributionSession(storedPrior, incoming, opts = {}) {
 
 module.exports = {
   UNKNOWN_SERVICE,
+  CAPTURE_HASH,
+  isCaptureHref,
   CANONICAL_DESTINATIONS,
   ORIGIN_PREFIXES,
   CHROME_PREFIXES,

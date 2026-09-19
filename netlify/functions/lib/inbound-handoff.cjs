@@ -279,6 +279,11 @@ function mapLeadToInboundV1(record) {
     ["certame_stage", record.certame_stage],
     ["contract_relation", record.contract_relation],
     ["entity_class", record.entity_class],
+    // JOR-03 (2026-09-19): subject the visitor arrived with (article/case
+    // data-tema). Carried in the same versioned free-text next-action context
+    // as the deliverable, so confenge.inbound.v1 keeps its documented keys;
+    // a dedicated field is a Warmbly-side decision.
+    ["tema", record.tema],
   ]
     .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
     .map(([label, value]) => `${label}=${clampText(value, 80)}`)

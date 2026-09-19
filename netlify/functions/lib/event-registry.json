@@ -248,7 +248,7 @@
         "netlify/functions/lib/analytics-agg.cjs",
         "netlify/functions/lib/closed-loop.cjs"
       ],
-      "semantic": "Canonical CTA activation. Engagement; not a lead or pipeline. destination_type (form | anchor | route | whatsapp | email | tel) qualifies the destination: only form/whatsapp/email/tel are intent (closed-loop stage cta, analytics-agg cta_clicks); route/anchor are navigation (cta_nav_clicks); absent = legacy_unclassified, counted as intent and labelled. Since web-cfg#706 W3, an internal link whose destination path is masked for PII (e.g. a long digit run in the URL) still emits destination_type=route: it is a real route navigation, only the path is withheld, so it no longer falls into legacy_unclassified."
+      "semantic": "Canonical CTA activation. Engagement; not a lead or pipeline. destination_type (form | anchor | route | whatsapp | email | tel) qualifies the destination: only form/whatsapp/email/tel are intent (closed-loop stage cta, analytics-agg cta_clicks); route/anchor are navigation (cta_nav_clicks); absent = legacy_unclassified, counted as intent and labelled. Since web-cfg#706 W3, an internal link whose destination path is masked for PII (e.g. a long digit run in the URL) still emits destination_type=route: it is a real route navigation, only the path is withheld, so it no longer falls into legacy_unclassified. Series break 2026-09-19 (JOR-02): an internal link to ANOTHER route whose fragment is a capture anchor (#captura*, #pedido*, #triagem*; #contato* already behaved this way) counts as cta_click destination_type=form with destination_path set to the target route (before: content_to_service). This covers the article and case CTAs '/{pilar}/#captura-pilar' that replaced '/?tema=...#contato'; cta_clicks / view_to_cta / cta_to_start from that date are not comparable with the days before it."
     },
     "whatsapp_click": {
       "layer": "engagement",
@@ -314,7 +314,7 @@
         "netlify/functions/collect.cjs",
         "netlify/functions/lib/analytics-agg.cjs"
       ],
-      "semantic": "One physical click from an editorial/data/tool origin to a canonical service/offer. Carries source_path, source_asset_id, source_asset_family, destination_path, destination_service_id, cta_id, route_family, event_id. Engagement only; never a lead, qualified lead, pipeline, or won/lost. Unknown dest is UNKNOWN_SERVICE."
+      "semantic": "One physical click from an editorial/data/tool origin to a canonical service/offer. Carries source_path, source_asset_id, source_asset_family, destination_path, destination_service_id, cta_id, route_family, event_id. Engagement only; never a lead, qualified lead, pipeline, or won/lost. Unknown dest is UNKNOWN_SERVICE. Series break 2026-09-19 (JOR-02): a link whose fragment is a capture anchor of the destination route (#captura*, #contato*, #pedido*, #triagem*) is a contact click and emits cta_click destination_type=form instead of content_to_service; transitions counted before that date include those clicks."
     },
     "outbound_click": {
       "layer": "engagement",
