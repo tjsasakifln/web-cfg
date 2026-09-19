@@ -281,6 +281,9 @@ async function auditWorker() {
           [".ca-kind", "inline-flex", 4],
           [".n-grid", "grid", 0],
           [".n-card", null, 16],
+          // Home: the dark public-works row keeps ≥16px of lateral padding at every viewport
+          // (2026-09-19 regression: a same-specificity mobile rule zeroed it below 700px).
+          [".situation-row.area--b2g", "grid", 16],
         ];
         for (const [selector, display, minPadding] of primitiveRules) {
           for (const element of document.querySelectorAll(selector)) {
