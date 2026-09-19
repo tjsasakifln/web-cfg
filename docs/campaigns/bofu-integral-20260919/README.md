@@ -20,7 +20,7 @@ Mandato: implementar, testar, revisar, abrir PRs, fazer merge e publicar pela es
 | --- | --- | --- |
 | IMPLEMENTADO_E_TESTADO | Incremento 1: SIM (réplica 34/35, `evidence/replica-site-ci-70dc5f6b0.log`; único FAIL é ambiente da réplica). Incremento 2: réplica em `evidence/replica-site-ci-inc2.log` | PR #712, PR #713 |
 | INTEGRADO | Incremento 1: `b20d2b4d5` (merge commit de #712). Incremento 2: PR #713 | GitHub |
-| PUBLICADO_E_VERIFICADO | preenchido por incremento em §Publicação | `/.well-known/build-info.json` |
+| PUBLICADO_E_VERIFICADO | Incremento 1: SIM (`b20d2b4d5`, 22/22). Incremento 2: pendente | `/.well-known/build-info.json` |
 | RECEBIMENTO_COMPROVADO | PENDENTE_OPERACIONAL — ação humana mínima em §Operação (protocolo g03 A→B→C) | herdado de A06 |
 | DESCOBERTA_HABILITADA vs EXPOSICAO_OBSERVADA | HABILITADA (13/13 famílias com explicação + contato); exposição NÃO OBSERVADA (GSC mais recente committado: 2026-09-08) | §Matriz |
 | RESULTADO_COMERCIAL | AINDA_NAO_MEDIDO (Warmbly é o dono; teste sintético não é oportunidade) | #706 |
@@ -76,7 +76,8 @@ Ver PR #713. Regra aplicada: 'Exemplo demonstrativo' uma vez por prancha/bloco; 
 
 ## Publicação e verificação
 
-(preenchido por incremento após a promoção)
+- **Incremento 1:** release 35454169706 promovida (todas as etapas success); produção serve `b20d2b4d5` (`build-info` = `runtime-info`). Verificação pública 22/22 (`evidence/verificacao-publica-b20d2b4d5.txt`): regra `.situation-row.area--b2g` no CSS servido; fonte `b19be0f7` (42 208 bytes, 200); folha publicada sem `@import`; 16 rotas 200; padding medido em navegador 16/16 (320–430), 17,5 (699/700), 28 (1440), sem overflow, Archivo carregada. Predecessor saudável para reversão: `a27472bec`.
+- **Incremento 2:** PR #713 — preenchido após a promoção.
 
 ## Pendências (nenhuma fecha issue)
 
