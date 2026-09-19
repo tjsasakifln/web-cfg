@@ -159,6 +159,28 @@ for (const route of ["/", "/servicos/", "/triagem-tecnica/"]) {
     && transitions.length === 0 && diff.added.length === 1 && clicks[0].page_path === route, diff);
 }
 
+// (7a) issue #706 W3: header "Solicitar proposta" whose href is an internal
+// route masked as PII (a long digit run in the path) still carries
+// destination_type=route -- it must not silently drop the field into
+// legacy_unclassified just because the destination path itself is withheld.
+{
+  await open(page, "/");
+  const diff = await page.evaluate(async () => {
+    const before = (window.dataLayer || []).length;
+    const target = document.querySelector("a.header-cta");
+    if (!target) return { missing: true, added: [] };
+    target.setAttribute("href", "/servicos/12345678/");
+    target.addEventListener("click", (event) => event.preventDefault(), { capture: true });
+    target.click();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    const added = (window.dataLayer || []).slice(before).map((row) => JSON.parse(JSON.stringify(row)));
+    return { missing: false, added };
+  });
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("header_cta_pii_masked_route_not_legacy_unclassified", "/", !diff.missing && clicks.length === 1
+    && clicks[0].destination_type === "route" && piiViolations(diff.added).length === 0, diff);
+}
+
 // (7b) G04-02: header "Solicitar proposta" with a same-page capture anchor (private routes and the
 // readiness tool) -> exactly one cta_click destination_type=form, page_path kept, no content_to_service.
 // The /triagem-tecnica/ header stays route; a tool page whose header goes to /triagem-tecnica/ stays route.

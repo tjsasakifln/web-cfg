@@ -1089,8 +1089,16 @@
       if (hash && samePage) return isCaptureHash(hash) ? 'form' : 'anchor';
       // classifyTransition() already returned above for whatsapp/email/tel/
       // external hrefs (same pure canonicalizeDestination on the same href),
-      // so only internal/pii/empty can reach this call.
-      if (canonicalizeDestination(value).kind !== 'internal') return '';
+      // so only internal/pii/empty can reach this call. 'pii' is still an
+      // internal-route navigation whose path is masked for privacy (e.g. a
+      // long digit run in the URL): the destination stays a route, only the
+      // path is withheld, so it is honest to label it 'route' rather than
+      // silently drop destination_type (issue #706 W3: that omission used to
+      // fall into cta_click's legacy_unclassified bucket even for a plain
+      // internal link).
+      const kind = canonicalizeDestination(value).kind;
+      if (kind === 'pii') return 'route';
+      if (kind !== 'internal') return '';
       if (hash && CAPTURE_HASH.test(hash)) return 'form';
       return 'route';
     };
