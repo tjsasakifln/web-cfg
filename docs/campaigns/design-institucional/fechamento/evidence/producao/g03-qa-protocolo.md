@@ -20,12 +20,14 @@ Ordem: A → B → C. Ler o `lead_id` de cada envio antes do próximo.
 ### A — Home `#contato` · REF-FECH-20260918-A1
 
 1. Abrir `https://confenge.com.br/#contato`.
-2. Passo 1 do formulário `#formulario-contato`: `nome` = `Tiago Sasaki`; `email` = `tiago.sasaki@confenge.com.br`; `telefone` vazio; `estagio` = selecionar **"Ainda não sei qual serviço preciso, quero ser orientado"** (journey `outro`).
-3. Clicar **"Adicionar mais detalhes"** (botão, vai ao passo 2 — `mensagem` e `consentimento` só existem no passo 2).
-4. Passo 2: `mensagem` = `REF-FECH-20260918-A1 QA de recebimento pós-redesign. Pedido: confirmar recebimento deste protocolo; não é demanda técnica.`; marcar `consentimento`; demais campos vazios.
-5. Aguardar o widget Turnstile (`#turnstile-slot`) terminar (ícone verde/"Success"). Se abrir desafio interativo, resolvê-lo manualmente.
-6. Clicar **"Descrever minha situação"** (submit).
-7. Esperado: redirecionamento em ≤ 15 s para `/obrigado?receipt=lead-<27 hex>` (ou o destino da journey) com "Protocolo de recebimento: lead-…" visível. Anotar `LEAD_A=lead-…`.
+2. Painel "Contato essencial" do formulário `#formulario-contato`: `nome` = `Tiago Sasaki`; `email` = `tiago.sasaki@confenge.com.br`; `telefone` vazio; `estagio` = selecionar **"Ainda não sei qual serviço preciso, quero ser orientado"** (journey `outro`).
+3. Clicar **"Adicionar mais detalhes"** (botão secundário ao fim do painel essencial; abre o painel "Detalhes opcionais" — desde LAPIDACAO-COMERCIAL-20260918 este passo é opcional: consentimento e o botão de envio ficam fora dos dois painéis, sempre visíveis; sem detalhes, ir direto ao passo 5).
+4. Painel "Detalhes opcionais": `mensagem` = `REF-FECH-20260918-A1 QA de recebimento pós-redesign. Pedido: confirmar recebimento deste protocolo; não é demanda técnica.`; demais campos vazios. ("Voltar" devolve ao painel essencial sem perder o preenchido.)
+5. Marcar `consentimento` (caixa "Autorizo o uso destes dados…", logo abaixo do painel visível, acima do botão de envio).
+6. Aguardar o widget Turnstile (`#turnstile-slot`, entre o consentimento e o botão) terminar (ícone verde/"Success"). Se abrir desafio interativo, resolvê-lo manualmente.
+7. Clicar **"Descrever minha situação"** (submit, botão primário sempre visível abaixo do consentimento).
+8. Esperado: redirecionamento em ≤ 15 s para `/obrigado?receipt=lead-<27 hex>` (ou o destino da journey) com "Protocolo de recebimento: lead-…" visível. Anotar `LEAD_A=lead-…`.
+9. Contraprova do caminho mínimo (uma vez, sem novo envio): recarregar `/#contato`, preencher só nome, e-mail e necessidade, marcar consentimento e conferir que "Descrever minha situação" está clicável sem abrir "Adicionar mais detalhes"; ao clicar com o e-mail e o WhatsApp vazios, a mensagem "Informe um WhatsApp ou um e-mail" aparece no painel essencial (não enviar).
 
 ### B — `/medicoes-glosas-obras-publicas/#captura-pilar` · REF-FECH-20260918-B1
 

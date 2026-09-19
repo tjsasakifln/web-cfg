@@ -660,71 +660,94 @@ exports.handler = async (event) => {
   // Warmbly inbound after persist + outbox row. Failures never drop the lead
   // or change the visitor capture response. A persist-only probe was persisted
   // already terminal (SKIPPED / persist_only_probe) and never crosses.
-  if (persistOnlyProbe) {
-    safeLog("info", "synthetic_probe_persist_only", { lead_id });
-  } else {
-    try {
-      await attemptInboundHandoff(store, record);
-    } catch (err) {
-      safeLog("error", "inbound_handoff_unexpected", {
-        lead_id,
-        code: err && err.message ? String(err.message).slice(0, 80) : "error",
-      });
+  //
+  // The Warmbly calls (handoff, web-intent) and the notification channels
+  // (deliverAll) are independent: the handoff patches only `{handoff}` and
+  // writes it itself; deliverAll writes nothing. They run concurrently so the
+  // POST's worst case is siteverify + max(CONFENGE_INBOUND_TIMEOUT_MS,
+  // LEAD_DELIVERY_TIMEOUT_MS) + store (≈ 5 + 8 + 0.5 s), inside the browser's
+  // 15 s abort, instead of the serial sum (≈ 18 s, 26 s with intent_kind).
+  // The delivery `store.update` below runs only after BOTH settled, so the
+  // two store writes never overlap on a backend without a record lock.
+  const warmblyTask = async () => {
+    if (persistOnlyProbe) {
+      safeLog("info", "synthetic_probe_persist_only", { lead_id });
+      return;
     }
-
-    // Web-intent delivery (if intent_kind is set) — non-blocking
-    if (record.intent_kind) {
-      try {
-        const webIntentResult = await postWebIntentToWarmbly({
-          intent_kind: record.intent_kind,
-          email: record.email,
-          nome: record.nome,
-          company_ref: record.company_ref,
-          opportunity_id: record.opportunity_id,
-          topic: record.topic,
-          cadence: record.cadence,
-          consent_checked: record.consentimento === "on" || record.consentimento === true,
-          consent_at: record.consent_at,
-          evidence: record.evidence,
-        });
-        safeLog("info", "web_intent_delivery_attempted", {
-          lead_id,
-          intent_kind: record.intent_kind,
-          status: webIntentResult.status,
-          http: webIntentResult.http || null,
-          error: webIntentResult.last_error || null,
-        });
-      } catch (err) {
-        safeLog("error", "web_intent_delivery_unexpected", {
-          lead_id,
-          intent_kind: record.intent_kind,
-          code: err && err.message ? String(err.message).slice(0, 80) : "error",
-        });
-      }
-    }
-  }
+    await Promise.allSettled([
+      (async () => {
+        try {
+          await attemptInboundHandoff(store, record);
+        } catch (err) {
+          safeLog("error", "inbound_handoff_unexpected", {
+            lead_id,
+            code: err && err.message ? String(err.message).slice(0, 80) : "error",
+          });
+        }
+      })(),
+      (async () => {
+        // Web-intent delivery (if intent_kind is set) — non-blocking, no store write
+        if (!record.intent_kind) return;
+        try {
+          const webIntentResult = await postWebIntentToWarmbly({
+            intent_kind: record.intent_kind,
+            email: record.email,
+            nome: record.nome,
+            company_ref: record.company_ref,
+            opportunity_id: record.opportunity_id,
+            topic: record.topic,
+            cadence: record.cadence,
+            consent_checked: record.consentimento === "on" || record.consentimento === true,
+            consent_at: record.consent_at,
+            evidence: record.evidence,
+          });
+          safeLog("info", "web_intent_delivery_attempted", {
+            lead_id,
+            intent_kind: record.intent_kind,
+            status: webIntentResult.status,
+            http: webIntentResult.http || null,
+            error: webIntentResult.last_error || null,
+          });
+        } catch (err) {
+          safeLog("error", "web_intent_delivery_unexpected", {
+            lead_id,
+            intent_kind: record.intent_kind,
+            code: err && err.message ? String(err.message).slice(0, 80) : "error",
+          });
+        }
+      })(),
+    ]);
+  };
 
   // Delivery after persist — failures update status, never drop the lead
-  let delivery;
-  if (record.adaptive_intake === true) {
-    delivery = {
-      notify: { status: "skipped_adaptive" },
-      email: { status: "skipped_adaptive" },
-    };
-  } else {
+  const deliveryTask = async () => {
+    if (record.adaptive_intake === true) {
+      return {
+        notify: { status: "skipped_adaptive" },
+        email: { status: "skipped_adaptive" },
+      };
+    }
     try {
-      delivery = await deliverAll(record);
+      return await deliverAll(record);
     } catch (err) {
       safeLog("error", "delivery_unexpected", {
         lead_id,
         code: err && err.message ? String(err.message).slice(0, 80) : "error",
       });
-      delivery = {
+      return {
         notify: { status: "error" },
         email: { status: "error" },
       };
     }
-  }
+  };
+
+  const [, deliverySettled] = await Promise.allSettled([warmblyTask(), deliveryTask()]);
+  // deliveryTask never rejects (deliverAll errors are mapped above); keep the
+  // fallback so an unexpected rejection still yields a truthful "error" state.
+  const delivery =
+    deliverySettled.status === "fulfilled" && deliverySettled.value
+      ? deliverySettled.value
+      : { notify: { status: "error" }, email: { status: "error" } };
 
   // Normalize channel statuses for public non-PII surface
   const notify_status = delivery?.notify?.status || "pending";
@@ -747,6 +770,11 @@ exports.handler = async (event) => {
           ...(delivery?.email?.reason ? { reason: delivery.email.reason } : {}),
           ...(Number.isFinite(delivery?.email?.http) ? { http: delivery.email.http } : {}),
           ...(delivery?.email?.provider_id ? { provider_id: delivery.email.provider_id } : {}),
+          // Resend Idempotency-Key used for this record (lead-email/<lead_id>):
+          // a retry with the same key inside the provider's 24 h window returns
+          // the original message id instead of a second e-mail, so the
+          // operator (and the drain retry) know a resend is safe.
+          ...(delivery?.email?.idempotency_key ? { idempotency_key: delivery.email.idempotency_key } : {}),
         },
       },
       status:

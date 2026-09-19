@@ -94,7 +94,7 @@ def _mobile_carimbo(code: str, revision: str, plate_id: str, scale_lines: tuple[
     return S.title_block(
         MOBILE_W,
         MOBILE_H,
-        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo", "sem obra de cliente")),
+        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo",)),
         widths=(64, 120),
         size=MOBILE_MIN_FONT,
         id=f"{plate_id}-m-carimbo",
@@ -324,7 +324,7 @@ def p1_desktop(data: dict) -> str:
         f"Planta do recorte de {br(n['L'])} por {br(n['W'])} m com paredes W-01 a W-04, porta D-01 na parede norte, janela WN-01 e viga B-01 na parede leste, "
         f"poço hidrossanitário HS-01 a oeste. Elevação leste W-02 de {br(n['W'])} por {br(n['H'])} m: janela do peitoril {br(n['sill'])} m à verga {br(n['head_r00'])} m, "
         f"viga com fundo em {br(n['soffit'])} m, sobreposição de {br(n['overlap'])} m no estado R00. Memória: {br(n['gross'])} menos {br(n['door_area'])} da porta e "
-        f"{br(n['win_area'])} da janela igual a {br(n['net'])} m², item {n['budget_id']}. Exemplo demonstrativo, sem obra de cliente."
+        f"{br(n['win_area'])} da janela igual a {br(n['net'])} m², item {n['budget_id']}. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _provenance("private", "private_consumption"),
@@ -379,7 +379,7 @@ def p1_mobile(data: dict) -> str:
     desc = (
         f"Elevação da parede W-02 de {br(n['W'])} por {br(n['H'])} m. Janela WN-01 do peitoril {br(n['sill'])} m à verga {br(n['head_r00'])} m; "
         f"viga B-01 com fundo em {br(n['soffit'])} m; sobreposição de {br(n['overlap'])} m no estado R00. Memória: {br(n['gross'])} menos {br(n['door_area'])} "
-        f"e {br(n['win_area'])} igual a {br(n['net'])} m², item {n['budget_id']}. Exemplo demonstrativo, sem obra de cliente."
+        f"e {br(n['win_area'])} igual a {br(n['net'])} m², item {n['budget_id']}. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _provenance("private", "private_consumption"),
@@ -514,7 +514,7 @@ def p2_desktop(data: dict) -> str:
     desc = (
         f"Perfil do trecho DR-01 entre os poços MH-01 (estaca {br(n['sta1'])} m, invert {br(n['inv1'])} m) e MH-02 (estaca {br(n['sta2'])} m, invert desenhado {br(n['inv2'])} m), "
         f"comprimento {br(n['pipe_len'])} m. No estado R00 a planilha traz {br(n['inv2_sheet_r00'])} m em MH-02, divergência de {br(n['mismatch'])} m, marcada em faixa. "
-        f"Detalhe das camadas da faixa: sub-base {br(n['subbase'])} m, base {br(n['base'])} m, capa {br(n['wearing'])} m. Exemplo demonstrativo, sem obra de cliente."
+        f"Detalhe das camadas da faixa: sub-base {br(n['subbase'])} m, base {br(n['base'])} m, capa {br(n['wearing'])} m. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _provenance("infra", "infra_consumption"),
@@ -553,7 +553,7 @@ def p2_mobile(data: dict) -> str:
     title = "Prancha P2 (móvel) · Perfil de drenagem MH-01 a MH-02 · exemplo demonstrativo"
     desc = (
         f"Perfil do trecho DR-01 de {br(n['pipe_len'])} m entre MH-01 (invert {br(n['inv1'])} m) e MH-02 (invert desenhado {br(n['inv2'])} m). "
-        f"No estado R00 a planilha traz {br(n['inv2_sheet_r00'])} m, divergência de {br(n['mismatch'])} m. Exemplo demonstrativo, sem obra de cliente."
+        f"No estado R00 a planilha traz {br(n['inv2_sheet_r00'])} m, divergência de {br(n['mismatch'])} m. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _provenance("infra", "infra_consumption"),
@@ -590,7 +590,7 @@ def p3_desktop(data: dict) -> str:
         return X0 + float(Decimal(v)) * k
 
     body = [S.hatch_defs(f"{pid}-d")]
-    body.append(text(28, 72, "Alvenaria do período · premissas sintéticas · áreas em m² · o ateste permanece com o órgão contratante", size=S.FS_LABEL, weight=S.FW_LABEL))
+    body.append(text(28, 72, "Alvenaria do período · áreas em m² · o ateste permanece com o órgão contratante", size=S.FS_LABEL, weight=S.FW_LABEL))
     ys = {s_["id"]: 110 + i * 70 for i, s_ in enumerate(n["series"])}
     bar_h = 44
     top, bottom = 100, 110 + 2 * 70 + bar_h + 10
@@ -648,7 +648,7 @@ def p3_desktop(data: dict) -> str:
         f"Três barras proporcionais: executado declarado {br(s_['EXE-01']['area_m2'], 0)} m², medido no boletim {br(s_['MED-01']['area_m2'], 0)} m², "
         f"evidenciado por fotos datadas {br(s_['EVI-01']['area_m2'], 0)} m². Régua do critério contratual: área de projeção da parede. "
         f"Faixas anotadas: diferença medido × executado de {br(b1['area_m2'], 0)} m² e lacuna de prova de {br(b2['area_m2'], 0)} m². "
-        "Premissas sintéticas; exemplo demonstrativo, sem obra de cliente."
+        "Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _provenance("medicao"),
@@ -712,12 +712,12 @@ def p3_mobile(data: dict) -> str:
     body.append(callout(c2x, 62, 2, size=fs))
     body.append(text(20, 342, f"1 Diferença medido × executado: {br(b1['area_m2'], 0)} m²", size=fs))
     body.append(text(20, 358, f"2 Lacuna de prova: {br(b2['area_m2'], 0)} m²", size=fs))
-    body.append(text(20, 374, "Premissas sintéticas · ateste do órgão contratante", size=fs, fill=MUTED))
+    body.append(text(20, 374, "Ateste do órgão contratante", size=fs, fill=MUTED))
     s_ = {x["id"]: x for x in n["series"]}
     title = f"Prancha P3 (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Barras empilhadas: executado declarado {br(s_['EXE-01']['area_m2'], 0)} m², medido {br(s_['MED-01']['area_m2'], 0)} m², evidenciado por fotos {br(s_['EVI-01']['area_m2'], 0)} m²; "
-        f"diferença {br(b1['area_m2'], 0)} m² e lacuna de prova {br(b2['area_m2'], 0)} m². Régua: critério contratual, área de projeção da parede. Exemplo demonstrativo, sem obra de cliente."
+        f"diferença {br(b1['area_m2'], 0)} m² e lacuna de prova {br(b2['area_m2'], 0)} m². Régua: critério contratual, área de projeção da parede. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _provenance("medicao"),
@@ -758,7 +758,7 @@ def p4_desktop(data: dict) -> str:
     title = f"Prancha P4 · {src['title']} · exemplo demonstrativo"
     desc = (
         "Diagrama de fluxo em cinco etapas: " + " → ".join(st["label_pt_br"] for st in steps) + ". "
-        "Método comparativo ou evolutivo, conforme o caso. Sem valor monetário. Parecer preliminar não substitui a avaliação formal. Exemplo demonstrativo, sem obra de cliente."
+        "Método comparativo ou evolutivo, conforme o caso. Sem valor monetário. Parecer preliminar não substitui a avaliação formal. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _provenance("avaliacao"),
@@ -795,7 +795,7 @@ def p4_mobile(data: dict) -> str:
     title = f"Prancha P4 (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
         "Fluxo de cima para baixo em cinco etapas: " + " → ".join(st["label_pt_br"] for st in steps) + ". "
-        "Método comparativo ou evolutivo, conforme o caso. Sem valor monetário. Exemplo demonstrativo, sem obra de cliente."
+        "Método comparativo ou evolutivo, conforme o caso. Sem valor monetário. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _provenance("avaliacao"),

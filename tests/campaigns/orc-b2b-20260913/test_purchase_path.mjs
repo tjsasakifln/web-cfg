@@ -80,12 +80,18 @@ function entranceBlock(html, key) {
 // ---------------------------------------------------------------- predicates
 // Each predicate is used by a scenario and by at least one counterproof.
 
+/**
+ * The page states, affirmatively, that the offer is a contracted engineering
+ * service with a named technical responsible. Owner decision 2026-09-18
+ * (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the proposition is written on what
+ * the service IS; the former negative list ("não é software, planilha
+ * gratuita...") is not required and must not be reintroduced to satisfy this.
+ */
 export function declaresContractedService(html) {
   const body = text(html);
   return (
     /serviço de engenharia contratado/i.test(body)
-    && /não é software/i.test(body)
-    && /planilha gratuita/i.test(body)
+    && /responsável técnico/i.test(body)
   );
 }
 
@@ -123,14 +129,34 @@ export function entranceIsCanonical(html, key, expected) {
   );
 }
 
+/**
+ * Each entrance carries the visible label "Exemplo demonstrativo" in its own
+ * rendered text (tags stripped: an attribute, a class or an off-screen span
+ * does not count). Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-
+ * 20260918): the label alone identifies the demonstrative; the negative
+ * restatement ("não representa cliente, obra executada...") is superseded.
+ */
 export function entranceDeclaresDemonstrativeNature(html, key) {
   const block = entranceBlock(html, key);
-  return (
-    /exemplo demonstrativo de método/i.test(block)
-    && /não representa cliente, obra executada/i.test(block)
-    && /hipotéticos/i.test(block)
-    && /não são preço da CONFENGE/i.test(block)
+  if (!block) return false;
+  const visible = block.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  return /\bExemplo demonstrativo\b/.test(visible);
+}
+
+/**
+ * The hypothetical prices are qualified once, next to the price table they
+ * describe: the "Orçamento" section of the demonstrative page holds a table
+ * with unit prices and a paragraph saying those values are hypothetical.
+ */
+export function priceTableQualifiesHypotheticalPrices(html) {
+  const section = staticBody(html).match(
+    /<section\b[^>]*aria-labelledby="orcamento"[\s\S]*?<\/section>/i,
   );
+  if (!section) return false;
+  const block = section[0];
+  if (!/<table\b[\s\S]*?Preço un\.[\s\S]*?<\/table>/i.test(block)) return false;
+  const beforeTable = block.split(/<table\b/i)[0].replace(/<[^>]+>/g, " ");
+  return /hipotétic/i.test(beforeTable);
 }
 
 export function entranceFilesResolve(html, key, spec) {
@@ -558,19 +584,72 @@ test("contraprova: reivindicar o marcador reservado ou um resultado de cliente r
   }
 });
 
-test("contraprova: esconder a natureza demonstrativa reprova as duas entradas", () => {
+test("contraprova: esconder o rótulo visível reprova só a entrada mutada (por contexto)", () => {
   const html = read(LANDING_REL);
   for (const key of ["edificacao", "infraestrutura"]) {
     assert.ok(entranceDeclaresDemonstrativeNature(html, key), `controle passa em ${key}`);
   }
-  const mutated = html.replace(/<p class="qty-proof-disclaimer">[\s\S]*?<\/p>/g, "");
-  for (const key of ["edificacao", "infraestrutura"]) {
+  for (const [mutatedKey, otherKey] of [["edificacao", "infraestrutura"], ["infraestrutura", "edificacao"]]) {
+    const block = entranceBlock(html, mutatedKey);
+    assert.ok(/Exemplo demonstrativo/.test(block), `controle: ${mutatedKey} carrega o rótulo`);
+    const mutated = html.replace(block, block.replace(/Exemplo demonstrativo/g, ""));
+    assert.notEqual(mutated, html, "a mutação precisa ter sido aplicada");
     assert.equal(
-      entranceDeclaresDemonstrativeNature(mutated, key),
+      entranceDeclaresDemonstrativeNature(mutated, mutatedKey),
       false,
-      `remover a ressalva precisa reprovar em ${key}`,
+      `remover o rótulo precisa reprovar em ${mutatedKey}`,
     );
+    assert.ok(entranceDeclaresDemonstrativeNature(mutated, otherKey), `${otherKey} continua verde`);
   }
+  // Hiding the label in an attribute, a class or a comment is not a visible label.
+  const block = entranceBlock(html, "edificacao");
+  const hidden = html.replace(
+    block,
+    block.replace(/Exemplo demonstrativo/g, "").replace(
+      '<p class="eyebrow">',
+      '<!-- Exemplo demonstrativo --><p class="eyebrow" data-label="Exemplo demonstrativo" aria-label="Exemplo demonstrativo">',
+    ),
+  );
+  assert.equal(entranceDeclaresDemonstrativeNature(hidden, "edificacao"), false, "rótulo só em atributo não conta");
+});
+
+test("contraprova: a qualificação de preço hipotético fica na tabela de preços do demonstrativo", () => {
+  for (const spec of ENTRANCE_SPECS) {
+    const entrance = buildEntrance(spec, root);
+    const demoRel = `${entrance.url.replace(/^\//, "")}index.html`;
+    const html = read(demoRel);
+    assert.ok(priceTableQualifiesHypotheticalPrices(html), `controle passa em ${demoRel}`);
+    const section = staticBody(html).match(/<section\b[^>]*aria-labelledby="orcamento"[\s\S]*?<\/section>/i)[0];
+    const withoutQualifier = html.replace(section, section.replace(/<p>[^<]*hipotétic[^<]*<\/p>/i, ""));
+    assert.notEqual(withoutQualifier, html, "a mutação precisa ter sido aplicada");
+    assert.equal(
+      priceTableQualifiesHypotheticalPrices(withoutQualifier),
+      false,
+      `remover a qualificação da tabela precisa reprovar em ${demoRel}`,
+    );
+    const withoutTable = html.replace(section, section.replace(/<table\b[\s\S]*?<\/table>/i, ""));
+    assert.equal(priceTableQualifiesHypotheticalPrices(withoutTable), false, "sem tabela de preços não há o que qualificar");
+  }
+});
+
+test("controle positivo: duas redações afirmativas de serviço contratado passam; sem a proposição, reprova", () => {
+  const html = read(LANDING_REL);
+  assert.ok(declaresContractedService(html), "controle passa na página publicada");
+  const current = "Serviço de engenharia contratado, com responsável técnico nomeado.";
+  assert.ok(html.includes(current), "a redação publicada é a esperada pelo controle");
+  const alternatives = [
+    "Serviço de engenharia contratado: o responsável técnico assina a planilha, a memória e o orçamento.",
+    "É um serviço de engenharia contratado, com responsável técnico, ART e nota fiscal.",
+  ];
+  for (const wording of alternatives) {
+    const variant = html.replace(current, wording);
+    assert.notEqual(variant, html);
+    assert.ok(declaresContractedService(variant), `redação afirmativa aceita: ${wording}`);
+  }
+  const negativeOnly = html.replace(current, "Não é software, planilha gratuita nem execução de obra.");
+  assert.equal(declaresContractedService(negativeOnly), false, "só a lista negativa não afirma o serviço");
+  const removed = html.replace(current, "");
+  assert.equal(declaresContractedService(removed), false, "sem a proposição, reprova");
 });
 
 test("contraprova: descritor fora do contrato não vira HTML público", () => {

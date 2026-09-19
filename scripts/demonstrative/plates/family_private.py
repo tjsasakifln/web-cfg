@@ -101,7 +101,7 @@ def _legend(x: float, y: float, heading: str, items: list[tuple], *, step: float
 def _mobile_carimbo(code: str, revision: str, pid: str, scale_lines: tuple[str, str]) -> str:
     return S.title_block(
         MOBILE_W, MOBILE_H,
-        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo", "sem obra de cliente")),
+        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo",)),
         widths=(64, 120), size=FS_M, id=f"{pid}-m-carimbo",
     )
 
@@ -239,7 +239,7 @@ def p5_desktop(data: dict) -> str:
     desc = (
         f"Duas elevações da parede W-02 de {br(n['W'])} por {br(n['H'])} m. No estado R00 a verga da janela WN-01 está em {br(n['head_r00'])} m e o fundo da viga B-01 em "
         f"{br(n['soffit'])} m, sobreposição de {br(n['overlap'])} m marcada em faixa. Na revisão R01 a verga desce para {br(n['head_r01'])} m, folga de {br(n['clearance'])} m. "
-        f"Registro CF-GEO-01: {cf['location_pt_br']}; estado corrigido na revisão R01. Exemplo demonstrativo, sem obra de cliente."
+        f"Registro CF-GEO-01: {cf['location_pt_br']}; estado corrigido na revisão R01. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("private", "private_consumption"),
@@ -282,7 +282,7 @@ def p5_mobile(data: dict) -> str:
     title = "Prancha PA (móvel) · Interferência WN-01 × B-01 em R00 e R01 · exemplo demonstrativo"
     desc = (
         f"Duas elevações da parede W-02: em R00 a verga da WN-01 em {br(n['head_r00'])} m sobrepõe o fundo da viga B-01 em {br(n['soffit'])} m por {br(n['overlap'])} m; "
-        f"em R01 a verga passa a {br(n['head_r01'])} m com folga de {br(n['clearance'])} m. Registro CF-GEO-01 corrigido na revisão R01. Exemplo demonstrativo, sem obra de cliente."
+        f"em R01 a verga passa a {br(n['head_r01'])} m com folga de {br(n['clearance'])} m. Registro CF-GEO-01 corrigido na revisão R01. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("private", "private_consumption"),
@@ -370,7 +370,7 @@ def p6_desktop(data: dict) -> str:
     desc = (
         f"Elevação da parede W-02 no estado R00 com a marcação RF-01: verga da WN-01 em {br(n['head_r00'])} m invade o volume da viga B-01 com fundo em {br(n['soffit'])} m; "
         f"ação proposta: rebaixar a verga para {br(n['head_r01'])} m. Detalhe do poço HS-01 de {br(n['shaft_d'])} por {br(n['shaft_w'])} m com a marcação RF-02: vão livre interno e "
-        "diâmetros não declarados, pedido de informação. Exemplo demonstrativo, sem obra de cliente."
+        "diâmetros não declarados, pedido de informação. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("private", "private_consumption"),
@@ -421,7 +421,7 @@ def p6_mobile(data: dict) -> str:
     title = "Prancha PB (móvel) · Conferência RF-01 e RF-02 · exemplo demonstrativo"
     desc = (
         f"Elevação da parede W-02 no estado R00 com a marcação RF-01 (verga {br(n['head_r00'])} m invade a viga com fundo em {br(n['soffit'])} m; ação: verga a {br(n['head_r01'])} m em R01) "
-        "e a ficha RF-02 (HS-01 sem vão livre interno nem diâmetros; pedido de informação). Exemplo demonstrativo, sem obra de cliente."
+        "e a ficha RF-02 (HS-01 sem vão livre interno nem diâmetros; pedido de informação). Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("private", "private_consumption"),
@@ -532,7 +532,7 @@ def p7_desktop(data: dict) -> str:
     desc = (
         f"Planta da faixa PV-01 de {br(n['L'])} por {br(n['Wd'])} m com a rede DR-01 DN {br(n['dn'], 0)} de {br(n['len'])} m entre os poços MH-01 (estaca {br(n['sta1'])}, invert {br(n['inv1'])} m) "
         f"e MH-02 (estaca {br(n['sta2'])}, invert {br(n['inv2'])} m), declive geométrico {br(n['slope'], 4)} m/m. Boca de lobo IN-01 na estaca {br(n['sta_in'])} sem diâmetro nem cota declarados. "
-        f"Camadas da faixa: sub-base {br(n['sub'])}, base {br(n['base'])}, capa {br(n['cap'])} m. Exemplo demonstrativo, sem obra de cliente."
+        f"Camadas da faixa: sub-base {br(n['sub'])}, base {br(n['base'])}, capa {br(n['cap'])} m. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("infra", "infra_consumption"),
@@ -571,7 +571,7 @@ def p7_mobile(data: dict) -> str:
     title = "Prancha PC (móvel) · Rede DR-01 e faixa PV-01 · exemplo demonstrativo"
     desc = (
         f"Planta da faixa PV-01 de {br(n['L'])} por {br(n['Wd'])} m com a rede DR-01 DN {br(n['dn'], 0)} de {br(n['len'])} m entre MH-01 (invert {br(n['inv1'])} m) e MH-02 (invert {br(n['inv2'])} m); "
-        f"IN-01 sem diâmetro nem cota declarados. Exemplo demonstrativo, sem obra de cliente."
+        f"IN-01 sem diâmetro nem cota declarados. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("infra", "infra_consumption"),
@@ -701,7 +701,7 @@ def p8_desktop(data: dict) -> str:
     desc = (
         f"Elevação da fachada leste de {br(n['W'])} por {br(n['H'])} m, três pavimentos, com quatro manifestações numeradas: fissura inclinada M-01 de {br(m['M-01']['length_m'])} m, "
         f"mancha de umidade M-02 de {br(m['M-02']['width_m'])} por {br(m['M-02']['height_m'])} m, desplacamento M-03 de {br(m['M-03']['width_m'])} por {br(m['M-03']['height_m'])} m e fissura horizontal M-04 de {br(m['M-04']['length_m'])} m. "
-        "Cada item com localização, medida, o que foi visto e o exame seguinte; causa não concluída. Fachada sintética; exemplo demonstrativo, sem obra de cliente."
+        "Cada item com localização, medida, o que foi visto e o exame seguinte; causa não concluída. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("inspecao_fachada"),
@@ -739,7 +739,7 @@ def p8_mobile(data: dict) -> str:
     title = f"Prancha PD (móvel) · {n['title']} · exemplo demonstrativo"
     desc = (
         f"Elevação da fachada leste de {br(n['W'])} por {br(n['H'])} m com quatro manifestações numeradas; M-01 fissura de {br(m['M-01']['length_m'])} m e M-02 mancha de "
-        f"{br(m['M-02']['width_m'])} por {br(m['M-02']['height_m'])} m em destaque. Causa não concluída; registro de uma data. Exemplo demonstrativo, sem obra de cliente."
+        f"{br(m['M-02']['width_m'])} por {br(m['M-02']['height_m'])} m em destaque. Causa não concluída; registro de uma data. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("inspecao_fachada"),
@@ -772,7 +772,7 @@ def p9_desktop(data: dict) -> str:
     desc = (
         f"Elevação da fachada leste de {br(n['W'])} por {br(n['H'])} m com as quatro manifestações M-01 a M-04 e três quesitos: Q-01 sobre as fissuras M-01 e M-04, Q-02 sobre a mancha M-02, "
         "Q-03 sobre o desplacamento M-03, cada um com a evidência disponível e a conclusão delimitada ao que a evidência sustenta. O laudo é do perito do juízo. "
-        "Fachada sintética; exemplo demonstrativo, sem obra de cliente."
+        "Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("inspecao_fachada"),
@@ -808,7 +808,7 @@ def p9_mobile(data: dict) -> str:
     title = f"Prancha PE (móvel) · {n['title']}: quesitos · exemplo demonstrativo"
     desc = (
         f"Elevação da fachada leste de {br(n['W'])} por {br(n['H'])} m com as manifestações M-01 a M-04 e os quesitos Q-01 ({q['Q-01']['conclusion_pt_br']}), "
-        f"Q-02 ({q['Q-02']['conclusion_pt_br']}) e Q-03 ({q['Q-03']['conclusion_pt_br']}). Exemplo demonstrativo, sem obra de cliente."
+        f"Q-02 ({q['Q-02']['conclusion_pt_br']}) e Q-03 ({q['Q-03']['conclusion_pt_br']}). Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("inspecao_fachada"),
@@ -916,7 +916,7 @@ def p10_desktop(data: dict) -> str:
     desc = (
         f"Planta de um canteiro de {br(n['W'])} por {br(n['D'])} m com a edificação em execução, a circulação de pedestres, a grua e a torre de acesso, e quatro proteções coletivas numeradas: "
         f"guarda-corpo de periferia conferido, bandeja de proteção pendente, isolamento da área de içamento conferido e torre de acesso com guarda-corpo conferida; "
-        f"{br(n['sum']['checked'], 0)} conferidos e {br(n['sum']['pending'], 0)} pendente. Canteiro sintético; exemplo demonstrativo, sem obra de cliente."
+        f"{br(n['sum']['checked'], 0)} conferidos e {br(n['sum']['pending'], 0)} pendente. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("sst_canteiro"),
@@ -950,7 +950,7 @@ def p10_mobile(data: dict) -> str:
     title = f"Prancha PF (móvel) · {n['title']} · exemplo demonstrativo"
     desc = (
         f"Planta de um canteiro de {br(n['W'])} por {br(n['D'])} m com quatro proteções coletivas: guarda-corpo conferido, bandeja pendente, isolamento da grua conferido e torre de acesso conferida; "
-        f"{br(n['sum']['checked'], 0)} conferidos e {br(n['sum']['pending'], 0)} pendente. Exemplo demonstrativo, sem obra de cliente."
+        f"{br(n['sum']['checked'], 0)} conferidos e {br(n['sum']['pending'], 0)} pendente. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("sst_canteiro"),
@@ -1019,7 +1019,7 @@ def pg_desktop(data: dict) -> str:
     title = f"Prancha PG · {n['title']} · exemplo demonstrativo"
     desc = (
         "Diagrama de estrutura com quatro peças: " + ", ".join(p["label_pt_br"] for p in pieces) + ". "
-        + " ".join(n["note_lines_pt_br"]) + " Não representa cliente, obra executada nem dimensionamento concluído. Exemplo demonstrativo, sem obra de cliente."
+        + " ".join(n["note_lines_pt_br"]) + " Esquema de interfaces; o dimensionamento não está concluído. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("elaboracao"),
@@ -1043,7 +1043,7 @@ def pg_mobile(data: dict) -> str:
     title = f"Prancha PG (móvel) · {n['title']} · exemplo demonstrativo"
     desc = (
         "Quatro peças de cima para baixo: " + ", ".join(p["label_pt_br"] for p in pieces) + ". "
-        + " ".join(n["mobile_note_lines_pt_br"]) + " Exemplo demonstrativo, sem obra de cliente."
+        + " ".join(n["mobile_note_lines_pt_br"]) + " Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("elaboracao"),
@@ -1068,7 +1068,7 @@ def ph_desktop(data: dict) -> str:
     title = f"Prancha PH · {n['title']} · exemplo demonstrativo"
     desc = (
         "Diagrama de fluxo em quatro etapas: " + " → ".join(st["label_pt_br"] for st in stages) + ". "
-        + " ".join(c["text_pt_br"] for c in n["callouts"]) + " Não fixa prazo, preço, quantidade de ciclos nem cobertura de campo. Exemplo demonstrativo, sem obra de cliente."
+        + " ".join(c["text_pt_br"] for c in n["callouts"]) + " Não fixa prazo, preço, quantidade de ciclos nem cobertura de campo. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("elaboracao"),
@@ -1094,7 +1094,7 @@ def ph_mobile(data: dict) -> str:
     title = f"Prancha PH (móvel) · {n['title']} · exemplo demonstrativo"
     desc = (
         "Fluxo de cima para baixo em quatro etapas: " + " → ".join(st["label_pt_br"] for st in stages) + ". "
-        "Ciclos, prazo e preço ficam na proposta. Exemplo demonstrativo, sem obra de cliente."
+        "Ciclos, prazo e preço ficam na proposta. Exemplo demonstrativo."
     )
     return S.sheet(
         plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("elaboracao"),

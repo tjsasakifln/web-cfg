@@ -223,7 +223,7 @@ const STEP_RENDERERS = {
 export function renderPendingTrail() {
   return [
     `<div id="${SLOT_ID}" data-sample-trail-slot="canonical" data-sample-trail-state="awaiting-canonical-excerpt">`,
-    '<p class="qty-trail-disclaimer">Amostra demonstrativa. Não é orçamento válido para executar obra, não representa cliente e não fecha preço, prazo ou quantidade contratual.</p>',
+    '<p class="qty-trail-disclaimer">Exemplo demonstrativo de método, sem números canônicos publicados.</p>',
     '<ol class="qty-trail-steps">',
     ...TRAIL_STEPS.map((step, index) => {
       const n = String(index + 1).padStart(2, "0");
@@ -250,10 +250,10 @@ export function renderSampleTrail(excerpt) {
   if (isTestFixture(excerpt)) {
     throw new Error("refusing to render a test fixture as a public sample");
   }
-  const disclaimer = escapeHtml(
-    excerpt.disclaimer
-      || "Amostra demonstrativa. Não é orçamento válido para executar obra, não é preço da CONFENGE e não é SINAPI real.",
-  );
+  // Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the
+  // canonical trail identifies its source once, in the closing link; an
+  // optional excerpt.disclaimer is rendered only when the descriptor sets one.
+  const disclaimer = excerpt.disclaimer ? escapeHtml(excerpt.disclaimer) : "";
   const items = TRAIL_STEPS.map((step, index) => {
     const n = String(index + 1).padStart(2, "0");
     const inner = STEP_RENDERERS[step](excerpt[step]);
@@ -264,11 +264,11 @@ export function renderSampleTrail(excerpt) {
   );
   return [
     `${SLOT_MARK_START}<div id="${SLOT_ID}" data-sample-trail-slot="canonical" data-sample-trail-state="canonical">`,
-    `<p class="qty-trail-disclaimer">${disclaimer}</p>`,
+    disclaimer ? `<p class="qty-trail-disclaimer">${disclaimer}</p>` : "",
     '<ol class="qty-trail-steps">',
     ...items,
     "</ol>",
-    `<p class="qty-trail-link">Os números desta trilha saem do <a href="${demoHref}">exemplo demonstrativo do recorte de banheiro</a>. Preços hipotéticos daquele recorte não são preço do serviço nem SINAPI real.</p>`,
+    `<p class="qty-trail-link">Os números desta trilha saem do <a href="${demoHref}">exemplo demonstrativo do recorte de banheiro</a>, publicado com desenho, memória e planilhas.</p>`,
     `</div>${SLOT_MARK_END}`,
   ].join("");
 }

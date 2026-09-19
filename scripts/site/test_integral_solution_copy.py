@@ -365,7 +365,9 @@ def test_detector_leaves_material_truth_examples_and_enumerated_offers_alone() -
         "a devolutiva vai ao autor e os ajustes previstos seguem na mesma proposta.</p>",
         "<h1>Complementares</h1><p>A autoria arquitetônica permanece com o autor de origem.</p>",
         "<h1>Orçamento</h1><p>O serviço de R$ 5.900 e 7 dias úteis reconcilia cronograma, registros e comunicações.</p>",
-        "<h1>Orçamento</h1><p>Exemplo demonstrativo com números hipotéticos. Não é obra de cliente.</p>",
+        # Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the
+        # label alone identifies the demonstrative; a material limit may follow.
+        "<h1>Orçamento</h1><p>Exemplo demonstrativo com números hipotéticos. Quantidade não é preço.</p>",
         "<h1>Ferramenta</h1><p>A saída é uma triagem numérica, não uma conclusão jurídica.</p>",
         "<h1>Contato</h1><p>O formulário não está disponível agora. Use WhatsApp, e-mail ou telefone.</p>",
         "<h1>Inspeção</h1><p>A vistoria é indispensável e o deslocamento entra na proposta.</p>",

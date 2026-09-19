@@ -310,7 +310,7 @@
     "status": "canonical",
     "quantity_id": "Q-PAR-01",
     "budget_id": "ORC-PAR-01",
-    "disclaimer": "Amostra demonstrativa do recorte de banheiro. Não é orçamento para executar obra, não representa cliente, não é preço da CONFENGE e não é SINAPI real.",
+    "disclaimer": "",
     "demonstrative_url": "/casos/demonstrativo-projeto-privado/",
     "demonstrative_href": "/casos/demonstrativo-projeto-privado/#quantitativos",
     "element": {

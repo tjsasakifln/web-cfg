@@ -1048,13 +1048,18 @@ def test_scope_authority_guard_rejects_price_only_regressions() -> None:
 def test_synthetic_disclosure_and_private_identity_denylist() -> None:
     html = _html()
     lowered = html.casefold()
+    # LAPIDACAO-COMERCIAL-20260918: synthetic disclosure and the visible
+    # "exemplo demonstrativo" badge protect the de-identification; the former
+    # negative ("não representa cliente, licitação ou resultado real") is superseded.
     for phrase in (
         "dados sintéticos",
         "integralmente sintéticos",
-        "não representa cliente, licitação ou resultado real",
         "perfil fictício",
+        'data-permission-class="demonstrativo">exemplo demonstrativo</p>',
     ):
         assert phrase in lowered
+    assert "não representa cliente" not in lowered
+    assert "não é case de cliente" not in lowered
     for forbidden in (
         "extra construtora",
         "extra empreiteira",

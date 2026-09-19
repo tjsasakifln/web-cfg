@@ -86,6 +86,65 @@ if (step1[0].includes("faixa_contrato") || step1[0].includes("risco_em_jogo")) {
   console.error("FAIL: ICP fields must stay off step 1");
   process.exit(1);
 }
+// ---------------------------------------------------------------------------
+// LAPIDACAO-COMERCIAL-20260918 (§8.1, D1). O passo "opcional" era obrigatorio:
+// o unico botao do passo 1 era "Adicionar mais detalhes", e consentimento e
+// envio so existiam no passo 2. A propriedade: quem preencheu o essencial
+// (nome, um canal, necessidade) conclui sem abrir os detalhes. Consentimento
+// (obrigatorio) e o controle de envio ficam FORA do painel de detalhes, e o
+// painel de detalhes nao carrega nenhum campo obrigatorio.
+// Contraprova: mover <button type="submit"> ou name="consentimento" para dentro
+// de data-form-step="2", ou marcar um campo do passo 2 como required, reprova.
+// ---------------------------------------------------------------------------
+const stepFail = (name, detail) => {
+  console.error("FAIL:", name, detail === undefined ? "" : detail);
+  process.exit(1);
+};
+const step2Match = formMatch[0].match(/<fieldset\b[^>]*data-form-step="2"[\s\S]*?<\/fieldset>/);
+if (!step2Match) stepFail("form step 2 (optional details) missing");
+const step2Html = step2Match[0];
+const outsideStep2 = formMatch[0].replace(step2Html, "");
+const submitControls = [...outsideStep2.matchAll(/<button\b[^>]*type="submit"[^>]*>/g)];
+if (submitControls.length !== 1) stepFail("exactly one submit control must be reachable without the details panel", submitControls.length);
+if (/<button\b[^>]*type="submit"/.test(step2Html)) stepFail("submit control hidden inside the optional details panel");
+const consentOutside = outsideStep2.match(/<input\b[^>]*name="consentimento"[^>]*>/);
+if (!consentOutside) stepFail("consent checkbox is not reachable without the details panel");
+if (!/\brequired\b/.test(consentOutside[0])) stepFail("consent must stay required");
+if (/name="consentimento"/.test(step2Html)) stepFail("consent duplicated or hidden inside the optional details panel");
+const consentLabel = outsideStep2.match(/<label\b[^>]*for="consentimento"[\s\S]*?<\/label>/);
+if (!consentLabel || !consentLabel[0].includes('href="/privacidade/"')) stepFail("consent label must link the privacy policy");
+if (/\brequired\b/.test(step2Html)) stepFail("optional details panel carries a required control");
+const requiredNames = [...formMatch[0].matchAll(/<(?:input|select|textarea)\b[^>]*name="([^"]+)"[^>]*\brequired\b/g)].map((m) => m[1]).sort();
+if (requiredNames.join(",") !== "consentimento,estagio,nome") stepFail("required set changed", requiredNames);
+for (const name of requiredNames) {
+  if (!new RegExp(`name="${name}"`).test(outsideStep2)) stepFail("required control inside the optional panel", name);
+}
+// O botao de detalhes continua um botao (nao envia) e o painel tem volta.
+if (!/<button\b[^>]*type="button"[^>]*data-form-next=/.test(step1[0]) && !/<button\b[^>]*data-form-next=[^>]*type="button"/.test(step1[0])) {
+  stepFail("details opener must be a type=button inside step 1");
+}
+if (!/<button\b[^>]*data-form-back=/.test(step2Html)) stepFail("details panel lost its Voltar control");
+// Consentimento e envio vem DEPOIS do painel de detalhes na ordem do documento:
+// abrir os detalhes nao esconde o envio nem o consentimento.
+const step2Index = formMatch[0].indexOf(step2Html);
+if (formMatch[0].indexOf('name="consentimento"') < step2Index) stepFail("consent must follow the details panel in document order");
+if (formMatch[0].indexOf('type="submit"') < step2Index) stepFail("submit must follow the details panel in document order");
+// Metadiscurso de assistente removido: nada de "Etapa N de 2" nem passo
+// numerado no formulario; o formato de contato e dito uma vez (#contato-hint).
+if (/Etapa \d de \d/.test(formMatch[0])) stepFail("step-counter metadiscourse leaked into the form");
+if (formMatch[0].includes("form-progress")) stepFail("two-step progress indicator contradicts the optional panel");
+// Texto visivel apenas: o atributo title do campo e a mensagem nativa de
+// validacao, nao uma dica repetida na tela.
+const formVisibleText = formMatch[0].replace(/<[^>]+>/g, " ");
+const formatMentions = (formVisibleText.match(/10 ou 11 d[ií]gitos|10\/11 d[ií]gitos/g) || []).length;
+if (formatMentions !== 1) stepFail("WhatsApp format hint must appear exactly once in the visible form", formatMentions);
+if (!/<p\b[^>]*id="contato-hint"[^>]*>[^<]*(?:WhatsApp[^<]*e-mail|e-mail[^<]*WhatsApp)/i.test(formMatch[0])) {
+  stepFail("#contato-hint must name both channels next to the fields");
+}
+// Retencao e exclusao ficam em um unico lugar do formulario (o limite gerado).
+if ((formMatch[0].match(/730 dias/g) || []).length !== 1) stepFail("retention must be stated once in the form");
+if (formMatch[0].includes("form-legal")) stepFail("legacy form-legal block duplicates the generated boundary");
+
 // No visitor-facing marketing metalinguage on the conversion surface
 for (const leak of ["Sem CTA genérico", "Jornada A", "Jornada B", "Jornada C", "Risco de não agir"]) {
   if (home.includes(leak)) {
@@ -214,6 +273,144 @@ for (const key of ["field", "field_value", "native_message"]) {
     console.error("FAIL: validation PII/debug key leaked", { key, validation });
     process.exit(1);
   }
+}
+
+// ---------------------------------------------------------------------------
+// LAPIDACAO-COMERCIAL-20260918 (§8.1, D1) -- contraprova em runtime, com o
+// script.js publicado. Antes, o handler de submit interceptava o envio sempre
+// que o painel de detalhes nao estava ativo e forcava o passo 2; consentimento
+// e envio so existiam la. Agora um envio com o essencial valido e o painel de
+// detalhes fechado tem de chegar ao endpoint de lead (lead_form_submit + POST
+// /api/web/lead). Se o gate voltar, este bloco reprova.
+// ---------------------------------------------------------------------------
+{
+  const runtimeFail = (name, detail) => {
+    console.error("FAIL:", name, detail === undefined ? "" : detail);
+    process.exit(1);
+  };
+  const control = (value, extra = {}) => ({
+    value,
+    validity: { valid: true },
+    checkValidity: () => true,
+    setCustomValidity() {},
+    setAttribute() {},
+    removeAttribute() {},
+    getAttribute: () => null,
+    hasAttribute: () => false,
+    addEventListener() {},
+    focus() {},
+    classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
+    ...extra,
+  });
+  const hiddens = {};
+  const step1Panel = { classList: { toggle() {}, contains: (c) => c === "is-active" } };
+  // O painel de detalhes fica FECHADO durante todo o envio.
+  const step2Panel = { classList: { toggle() {}, contains: () => false } };
+  const submitBtn = control("", { disabled: false });
+  const els = {
+    "#nome": control("Pessoa Sintética"),
+    "#email": control("qa@example.invalid"),
+    "#telefone": control(""),
+    "#estagio": control("ainda não sei qual serviço", { options: [] }),
+    "#urgencia": control(""),
+    "#consentimento": control("", { checked: true }),
+    "#empresa": control(""),
+    "#mensagem": control(""),
+    ".form-status": { hidden: true, textContent: "", classList: { toggle() {} }, setAttribute() {}, querySelector: () => null, appendChild() {} },
+    '[data-form-step="1"]': step1Panel,
+    '[data-form-step="2"]': step2Panel,
+    '[type="submit"]': submitBtn,
+  };
+  const formMock = {
+    getAttribute(name) {
+      if (name === "data-form-multistep") return "true";
+      if (name === "data-receipt-required") return "true";
+      if (name === "name") return "diagnostico-b2g";
+      if (name === "action") return "/obrigado";
+      return null;
+    },
+    setAttribute() {},
+    dataset: {},
+    offsetHeight: 1,
+    querySelector(sel) {
+      if (sel.startsWith('input[name="')) return hiddens[sel.match(/name="([^"]+)"/)[1]] || null;
+      if (sel.startsWith('[name="')) return hiddens[sel.match(/name="([^"]+)"/)[1]] || null;
+      if (sel === "#jornada-hidden") return hiddens.jornada || null;
+      return els[sel] || null;
+    },
+    querySelectorAll(sel) {
+      if (sel === "input, select, textarea") return Object.values(els).filter((el) => el && "value" in el);
+      return [];
+    },
+    appendChild(el) { if (el && el.name) hiddens[el.name] = el; },
+    checkValidity: () => true,
+    reportValidity() {},
+    addEventListener(type, fn) { (formMock._listeners[type] ||= []).push(fn); },
+    _listeners: {},
+  };
+  const fetchCalls = [];
+  const runtimeDataLayer = [];
+  const docMock = {
+    readyState: "complete",
+    body: { getAttribute: () => null, classList: { add() {}, remove() {} } },
+    createElement: (tag) => ({ type: "", name: "", value: "", tagName: String(tag).toUpperCase(), setAttribute() {}, appendChild() {} }),
+    querySelector: (sel) => (sel.includes('form[name="diagnostico-b2g"]') ? formMock : null),
+    querySelectorAll: () => [],
+    getElementById: () => null,
+    documentElement: { scrollHeight: 2000, style: {} },
+    addEventListener() {},
+  };
+  const store = {};
+  const runtimeWindow = {
+    dataLayer: runtimeDataLayer,
+    sessionStorage: { getItem: (k) => store[k] ?? null, setItem(k, v) { store[k] = String(v); }, removeItem(k) { delete store[k]; } },
+    matchMedia: () => ({ matches: false }),
+    location: { pathname: "/", search: "", hash: "", assign() {} },
+    document: docMock,
+    addEventListener() {},
+    innerHeight: 800,
+    innerWidth: 1280,
+    scrollY: 0,
+    fetch(url, init) { fetchCalls.push({ url, init }); return new Promise(() => {}); },
+    CONFENGE_DEBUG_ANALYTICS: false,
+  };
+  runtimeWindow.window = runtimeWindow;
+  docMock.defaultView = runtimeWindow;
+  class FormDataMock {
+    constructor() { this.map = new Map([["form-name", "diagnostico-b2g"], ["nome", "Pessoa Sintética"], ["email", "qa@example.invalid"], ["estagio", "ainda não sei qual serviço"], ["consentimento", "on"]]); }
+    get(k) { return this.map.has(k) ? this.map.get(k) : null; }
+    set(k, v) { this.map.set(k, v); }
+    forEach(fn) { this.map.forEach((v, k) => fn(v, k)); }
+  }
+  const runtimeSandbox = {
+    window: runtimeWindow,
+    document: docMock,
+    console,
+    URLSearchParams,
+    sessionStorage: runtimeWindow.sessionStorage,
+    fetch: runtimeWindow.fetch,
+    navigator: {},
+    FormData: FormDataMock,
+    AbortController: class { constructor() { this.signal = {}; } abort() {} },
+    setTimeout: () => 0,
+    clearTimeout() {},
+    requestAnimationFrame: (fn) => fn(),
+  };
+  vm.createContext(runtimeSandbox);
+  vm.runInContext(code, runtimeSandbox);
+  if (formMock.dataset.formReady !== "true") runtimeFail("shipped form runtime did not bind to the home form");
+  let prevented = 0;
+  for (const fn of formMock._listeners.submit || []) fn({ type: "submit", preventDefault() { prevented += 1; } });
+  const runtimeEvents = runtimeDataLayer.map((e) => e.event);
+  if (!runtimeEvents.includes("lead_form_submit")) {
+    runtimeFail("submit with the details panel closed was swallowed by the runtime", runtimeEvents);
+  }
+  if (!fetchCalls.length || !String(fetchCalls[0].url).includes("/api/web/lead")) {
+    runtimeFail("submit with the details panel closed did not POST to the lead endpoint", fetchCalls);
+  }
+  if (prevented !== 1) runtimeFail("progressive enhancement must intercept the native submit exactly once", prevented);
+  if (!submitBtn.disabled) runtimeFail("double-submit protection missing while the POST is in flight");
+  console.log("STEP_ONE_SUBMIT_OK", JSON.stringify({ events: [...new Set(runtimeEvents)], posted: fetchCalls[0].url }));
 }
 
 // Script source must implement multi-step + journey actions

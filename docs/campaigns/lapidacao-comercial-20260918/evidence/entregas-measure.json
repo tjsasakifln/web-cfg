@@ -1,0 +1,63 @@
+{
+  "method": "prose = HTML with script/style/svg/noscript/comments stripped, tags removed, entities unescaped, whitespace collapsed; counts are case-insensitive substring matches on that prose; negatives = fixed list of negative-disclaimer phrases matched longest-first with removal (no double counting; 'sintético/demonstrativo/hipotético' are honest identification markers, reported under markers, not negatives); elements = start tags parsed from the raw HTML by html.parser (script bodies excluded, inline SVG tags included); bytes = UTF-8 size of the source file",
+  "campaign": "CONFENGE-LAPIDACAO-COMERCIAL-20260918",
+  "measured_on": "2026-09-18",
+  "base_commit": "ba0c09183",
+  "surface": "source (entregas/index.html); _site not built in this tree",
+  "routes": {
+    "/entregas/": {
+      "before": {
+        "bytes": 63591,
+        "elements": 861,
+        "prose_chars": 24881,
+        "demonstrativ": 13,
+        "markers": {
+          "demonstrativ": 13,
+          "sintétic": 3,
+          "hipotétic": 0
+        },
+        "negatives_total": 8,
+        "negatives": {
+          "sem obra executada e sem dados de cliente": 6,
+          "não representam cliente real": 1,
+          "não representam cliente": 1
+        }
+      },
+      "after": {
+        "bytes": 62437,
+        "elements": 859,
+        "prose_chars": 23779,
+        "demonstrativ": 11,
+        "markers": {
+          "demonstrativ": 11,
+          "sintétic": 1,
+          "hipotétic": 0
+        },
+        "negatives_total": 0,
+        "negatives": {}
+      },
+      "delta": {
+        "bytes": -1154,
+        "elements": -2,
+        "prose_chars": -1102,
+        "demonstrativ": -2,
+        "negatives_total": -8
+      },
+      "protected_hashes_changed": {
+        "data/commercial/first-fold-measurements.v1.json:/entregas/.html_sha256": {
+          "before": "2639fa0477bfd3dc614f77082c81e4878a197232342b6c086d85d341fc37bdc7",
+          "after": "14f9862a2bf7c3a112a0755c8d7d4f93e6883f8dbee8cccaa4feb28da6eae0d5",
+          "action": "integrator recaptures first-fold (measure --write not run here)"
+        },
+        "data/commercial/first-fold-measurements.v1.json:/entregas/.viewports[1366x768,390x844].roles.proof.text": {
+          "selector": ".offer-proof-line",
+          "before": "Consulte sem cadastro os exemplos demonstrativos e as ferramentas públicas. Dados identificados como sintéticos mostram o formato e o método; não representam cliente.",
+          "after": "Consulte sem cadastro os exemplos demonstrativos e as ferramentas públicas. Dados identificados como sintéticos mostram o formato e o método.",
+          "note": "fold text changes (one clause shorter; proof box may lose a line at 390 px); verifiable-proof link (/casos/) unchanged; hash recapture plus a fold re-read of the proof role"
+        },
+        "frozen_specs": "no frozen-spec registry covers /entregas/ (old hash found only in first-fold-measurements.v1.json)"
+      },
+      "lcp_note": "cuts are text weight inside surviving elements (2 <p> nodes removed); no claim of LCP headroom against the 2000 ms gate"
+    }
+  }
+}

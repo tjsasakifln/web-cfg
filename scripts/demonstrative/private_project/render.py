@@ -417,10 +417,10 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <div class="svc-open__grid">
 <div class="svc-open__copy">
-<p class="case-badge t-kicker" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
-<h1 class="t-service" id="case-title">Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
+<p class="case-badge t-kicker" data-permission-class="demonstrativo">Recorte de banheiro · revisão {e(rev)}</p>
+<h1 class="t-service" id="case-title">Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
-<p class="content-lead">Este recorte didático de um banheiro residencial mostra como a CONFENGE levanta quantidades, monta um extrato de orçamento, registra interferências e documenta uma revisão. Os números saem de uma fonte só: você pode refazer a conta na página, no CSV ou na planta. Não há contratante, endereço, assinatura nem número de ART.</p>
+<p class="content-lead">Este recorte didático de um banheiro residencial mostra como a CONFENGE levanta quantidades, monta um extrato de orçamento, registra interferências e documenta uma revisão. Os números saem de uma fonte só: você pode refazer a conta na página, no CSV ou na planta. Exemplo publicado para conferência: não é parecer nem orçamento para executar obra.</p>
 <dl class="svc-chain">
 <div><dt>Necessidade</dt><dd>Comparar propostas, contratar ou aceitar um número com base própria.</dd></div>
 <div><dt>Trabalho</dt><dd>Levantar, orçar, compatibilizar e revisar o mesmo recorte, com memória aberta.</dd></div>
@@ -431,7 +431,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="plate__sheet">
 {_elevation_svg(extracts, "R00")}
 </div>
-<figcaption class="plate__caption" id="case-plate-cap"><span class="t-kicker">Exemplo demonstrativo</span>Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. É a interferência CF-GEO-01, corrigida em R01.</figcaption>
+<figcaption class="plate__caption" id="case-plate-cap">Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. É a interferência CF-GEO-01, corrigida em R01.</figcaption>
 </figure>
 </div>
 <nav class="page-index" aria-label="Nesta página">
@@ -499,7 +499,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Extrato</span>
 <h2 class="t-editorial" id="orcamento">Orçamento</h2>
-<p>{e(extracts["price_disclaimer_pt_br"])} Classe de preço: hipotético. Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}. Estimativa aritmética do recorte; o valor contratado depende do caso.</p>
+<p>{e(extracts["price_disclaimer_pt_br"])} Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}.</p>
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Preço un.", "Valor", "Classe", "Qtd. ID"], budget_rows, "Extrato de orçamento hipotético, revisão " + rev)}
 <p><a href="data/orcamento.csv">Baixar orcamento.csv</a>, mesma revisão {e(rev)}.</p>
 </div>
@@ -520,7 +520,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Conferência</span>
 <h2 class="t-editorial" id="revisao">Revisão</h2>
-<p>{e(extracts["review_attribution_pt_br"])} Este recorte não é parecer para executar obra.</p>
+<p>{e(extracts["review_attribution_pt_br"])}</p>
 <div class="rv-extract">{review_html}</div>
 {_table(["ID", "Documento", "Constatação", "Base", "Ação", "Tipo"], review_rows, "Extrato de revisão, revisão " + rev)}
 <p><a href="data/revisao.csv">Baixar revisao.csv</a>, mesma revisão {e(rev)}.</p>
@@ -551,9 +551,9 @@ def render_html(extracts: dict[str, Any]) -> str:
         {
             "@type": "TechArticle",
             "@id": f"{CANONICAL_URL}#article",
-            "headline": "Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
+            "headline": "Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
             "description": "Exemplo demonstrativo de recorte de banheiro com memória de quantitativos, extrato de orçamento hipotético, registro de compatibilização e revisão aritmética.",
-            "disambiguatingDescription": "Página de exemplo demonstrativo: recorte didático sem contratante, endereço, assinatura ou ART. Números do recorte são conferíveis; preços unitários são hipotéticos.",
+            "disambiguatingDescription": "Página de exemplo demonstrativo: recorte didático com números conferíveis e preços unitários hipotéticos.",
             "inLanguage": "pt-BR",
             "url": CANONICAL_URL,
             "mainEntityOfPage": CANONICAL_URL,
@@ -565,8 +565,8 @@ def render_html(extracts: dict[str, Any]) -> str:
     ]
 
     return html_shell.page_shell(
-        title="Demonstrativo. Recorte de banheiro: quantitativos, orçamento, revisão e compatibilização | CONFENGE",
-        description="Exemplo demonstrativo de um recorte de banheiro com quantitativos conferíveis, orçamento hipotético, revisão e compatibilização. Sem contratante e sem ART.",
+        title="Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização | CONFENGE",
+        description="Exemplo demonstrativo de um recorte de banheiro com quantitativos conferíveis, orçamento hipotético, revisão e compatibilização.",
         canonical_path=PUBLIC_URL,
         robots="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
         jsonld_graph=jsonld,

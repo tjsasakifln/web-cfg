@@ -27,7 +27,7 @@
  *   GET  inbound_handoff
  *   GET  audit_inbound_requeue
  *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit: 1, approval_reference?: string }
- *   POST drain_inbound
+ *   POST drain_inbound     (Warmbly handoffs due + lead e-mail retry, same key, 24 h window)
  *   GET  search_observation
  *   POST produce_search_observation
  *   POST drain_search_observation
@@ -59,7 +59,7 @@ const {
   normalizeKind,
 } = require("./lib/record-kind.cjs");
 const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop, countPersistedContactsByServiceOrigin } = require("./lib/analytics-agg.cjs");
-const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
+const { reconcileEmailDeliveries } = require("./lib/lead-delivery.cjs");
 const { validateHistoryState } = require("./lib/gsc-history.cjs");
 const {
   persistPrivateGscSnapshot,
@@ -1163,6 +1163,20 @@ exports.handler = async (event) => {
       backlogExecutionAuthority,
       backlogSafetyGate,
     });
+    // Same drain, same consumer (revops-scheduled daily): re-attempt the lead
+    // e-mail for real records still error/pending inside Resend's 24 h
+    // idempotency window (same Idempotency-Key → original id, no duplicate).
+    // Rows outside the window, exhausted or with a payload mismatch are only
+    // counted as email_reconcile_required. Counts only; never PII.
+    let emailRetry;
+    try {
+      emailRetry = await reconcileEmailDeliveries(store, { limit });
+    } catch (err) {
+      safeLog("error", "ops_drain_email_retry_unexpected", {
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+      emailRetry = { ok: false, error: "email_retry_unexpected", email_reconcile_required: 0 };
+    }
     safeLog("info", "ops_drain_inbound", {
       attempted: result.attempted,
       delivered: result.delivered,
@@ -1172,8 +1186,18 @@ exports.handler = async (event) => {
       abort_reason: result.abort_reason,
       backlog_attempted: result.backlog_attempted,
       backlog_policy_blocked: result.backlog_policy_blocked,
+      email_attempted: emailRetry.attempted || 0,
+      email_delivered: emailRetry.delivered || 0,
+      email_retryable: emailRetry.retryable || 0,
+      email_reconcile_required: emailRetry.email_reconcile_required || 0,
+      email_configured: emailRetry.configured !== false,
     });
-    return json(200, { ok: true, ...result }, origin);
+    return json(200, {
+      ok: true,
+      ...result,
+      email_retry: emailRetry,
+      email_reconcile_required: emailRetry.email_reconcile_required || 0,
+    }, origin);
   }
 
   if (action === "search_observation" && event.httpMethod === "GET") {
@@ -1235,7 +1259,6 @@ exports.handler = async (event) => {
   }
 
   // prevent unused import lint in some bundlers
-  void deliverResendEmail;
   void isCommercialReal;
 
   return json(404, { ok: false, error: "unknown_action", action }, origin);

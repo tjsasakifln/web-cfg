@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { createHash } from "crypto";
 import { fileURLToPath } from "url";
+import { deriveFieldPurpose, markOptionalLabels } from "./form_field_purpose.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contract = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/page-contract-contratos.v1.json"), "utf8"));
@@ -80,10 +81,14 @@ function standaloneForm(item, { hub = false } = {}) {
   const slug = hub ? "servicos-obras-publicas" : item.route.slice(1, -1);
   const asset = hub ? "contract-defense-products" : `${slug}-contract-product`;
   const nextState = ctaFormContract.profiles.service_fit_review;
-  const purpose = `${nextState.field_purpose} O e-mail precisa de domínio e extensão completos.`;
+  // LAPIDACAO-COMERCIAL-20260918 (j5): the hint names the required set this
+  // form enforces and the optional labels carry the visible mark; the same
+  // helpers drive render_cta_form_next_state.mjs so both renderers agree.
+  const fields = markOptionalLabels(`${qualificationFields(item, hub)}<label>Nome do representante <input name="nome" autocomplete="name" required/></label><label>E-mail profissional <input name="email" type="email" autocomplete="email" required id="email" inputmode="email" maxlength="180" pattern="[^@\\s]+@[^@\\s]+\\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label><label>Contexto adicional <textarea name="mensagem" rows="3" maxlength="2000"></textarea></label><label class="contract-product__consent"><input name="consentimento" type="checkbox" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>`);
+  const purpose = `${deriveFieldPurpose(fields) || nextState.field_purpose} O e-mail precisa de domínio e extensão completos.`;
   return `<section class="contract-product__capture" id="captura-contrato"><div><h3>Solicitar uma proposta</h3><p>Descreva o contrato e o evento. A CONFENGE confere o escopo, os documentos mínimos e a agenda antes de informar a proposta; o envio não inicia cobrança.</p></div><form name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="${asset}-handraise" data-asset-id="${asset}" data-route-family="${slug}" data-cta-position="contract_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>${esc(nextState.pre_form_value)}</p>
 <p class="form-hint" data-field-purpose>${esc(purpose)}</p>
-<input name="offer_id" type="hidden" value=""/><input name="terms_id" type="hidden" value=""/><input name="jornada" type="hidden" value="contrato" id="jornada-hidden"/><input name="estagio" type="hidden" value="${asset}" id="estagio"/><input name="origem" type="hidden" value="${slug}"/><input name="asset_id" type="hidden" value="${asset}"/><input name="cta_id" type="hidden" value="${asset}-handraise"/><input name="route_family" type="hidden" value="${slug}"/><input name="landing_page" type="hidden" value="https://confenge.com.br/${slug}/"/>${qualificationFields(item, hub)}<label>Nome do representante <input name="nome" autocomplete="name" required/></label><label>E-mail profissional <input name="email" type="email" autocomplete="email" required id="email" inputmode="email" maxlength="180" pattern="[^@\\s]+@[^@\\s]+\\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label><label>Contexto adicional <textarea name="mensagem" rows="3" maxlength="2000"></textarea></label><label class="contract-product__consent"><input name="consentimento" type="checkbox" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label><button class="button button-primary" type="submit">Descrever meu caso</button><p class="form-status" role="status" aria-live="polite"></p>
+<input name="offer_id" type="hidden" value=""/><input name="terms_id" type="hidden" value=""/><input name="jornada" type="hidden" value="contrato" id="jornada-hidden"/><input name="estagio" type="hidden" value="${asset}" id="estagio"/><input name="origem" type="hidden" value="${slug}"/><input name="asset_id" type="hidden" value="${asset}"/><input name="cta_id" type="hidden" value="${asset}-handraise"/><input name="route_family" type="hidden" value="${slug}"/><input name="landing_page" type="hidden" value="https://confenge.com.br/${slug}/"/>${fields}<button class="button button-primary" type="submit">Descrever meu caso</button><p class="form-status" role="status" aria-live="polite"></p>
 <p class="form-hint" data-form-boundary>${esc(nextState.boundary)} Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form></section>`;
 }

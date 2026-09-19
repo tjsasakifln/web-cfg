@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="risco-margem-mobile-title risco-margem-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="risco-margem-mobile-title">Prancha P10 (móvel) · Matriz de risco por evento · exemplo demonstrativo</title>
-<desc id="risco-margem-mobile-desc">Matriz de 5 eventos: Frente liberada tarde priorizado (R$ 186 mil, com registro); R$ 395 mil com prova, R$ 94 mil parcial, R$ 12 mil sem prova. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/risco-margem.v1.json.</desc>
+<desc id="risco-margem-mobile-desc">Matriz de 5 eventos: Frente liberada tarde priorizado (R$ 186 mil, com registro); R$ 395 mil com prova, R$ 94 mil parcial, R$ 12 mil sem prova. Exemplo demonstrativo. Procedência: data/demonstrative/plates/risco-margem.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="14" font-weight="650">Matriz de risco por evento</text>
@@ -42,5 +42,5 @@
 <text x="20" y="342" font-size="12.5" fill="#5d6a7a">Com prova R$ 395 mil · parcial R$ 94 mil</text>
 <text x="20" y="360" font-size="12.5" fill="#5d6a7a">Sem prova R$ 12 mil · total R$ 501 mil</text>
 <text x="20" y="378" font-size="12.5" fill="#5d6a7a">Impacto potencial não é valor devido</text>
-<g id="risco-margem-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P10-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Eventos × decisão</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">R$ mil</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="risco-margem-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P10-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Eventos × decisão</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">R$ mil</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

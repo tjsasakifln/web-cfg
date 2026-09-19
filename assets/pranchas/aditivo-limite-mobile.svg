@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="aditivo-limite-mobile-title aditivo-limite-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="aditivo-limite-mobile-title">Prancha P5 (móvel) · Linha do tempo do contrato e o limite do art. 125 · exemplo demonstrativo</title>
-<desc id="aditivo-limite-mobile-desc">Percentual acumulado de aditivos ao longo de 24 meses: 12%, 18% e um aditivo proposto que chegaria a 27%, 2% acima do limite de 25% para obra nova. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/aditivo-limite.v1.json.</desc>
+<desc id="aditivo-limite-mobile-desc">Percentual acumulado de aditivos ao longo de 24 meses: 12%, 18% e um aditivo proposto que chegaria a 27%, 2% acima do limite de 25% para obra nova. Exemplo demonstrativo. Procedência: data/demonstrative/plates/aditivo-limite.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="14" font-weight="650">Contrato e o limite do art. 125</text>
@@ -40,6 +40,6 @@
 <text x="20" y="310" font-size="12.5">1 Aditivo proposto: 18 + 9 = 27% do valor inicial</text>
 <text x="20" y="328" font-size="12.5">2 Excesso sobre 25%: 2% · R$ 200.000 · sem direito a termo</text>
 <text x="20" y="346" font-size="12.5" fill="#5d6a7a">Meses desde a assinatura · art. 125 da Lei 14.133/2021</text>
-<text x="20" y="364" font-size="12.5" fill="#5d6a7a">Premissas sintéticas · o órgão decide o termo</text>
-<g id="aditivo-limite-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P5-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Meses × percentual</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">acumulado</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<text x="20" y="364" font-size="12.5" fill="#5d6a7a">O órgão decide o termo</text>
+<g id="aditivo-limite-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P5-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Meses × percentual</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">acumulado</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

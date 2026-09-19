@@ -43,7 +43,7 @@ CALLOUT_R = 11
 
 TITLE_BLOCK_H = 28
 FRAME_PAD = 8
-DEMO_LABEL = "Exemplo demonstrativo · sem obra de cliente"
+DEMO_LABEL = "Exemplo demonstrativo"
 
 _COLOR_RE = re.compile(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(")
 _PAINT_RE = re.compile(r"\b(?:fill|stroke|stop-color|color)=\"([^\"]+)\"")

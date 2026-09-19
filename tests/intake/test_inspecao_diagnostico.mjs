@@ -76,7 +76,10 @@ test("inspection diagnosis page ships a commercial path with honest situations a
   assert.match(main, /não misturamos inspeção privada com laudo judicial/i);
 
   assert.match(main, /Amostra didática original/);
-  assert.match(main, /Não é inspeção realizada, não é foto de cliente, não é prova de campo e não é laudo/);
+  // LAPIDACAO-COMERCIAL-20260918: "não é foto de cliente" is superseded by the
+  // "amostra didática original" identification; the material limits stay.
+  assert.match(main, /Não é inspeção realizada, não é prova de campo e não é laudo/);
+  assert.doesNotMatch(main, /foto de cliente/i);
   assert.equal(/laudo fict[ií]cio/i.test(main), false);
   assert.equal(/caso de cliente/i.test(main), false);
 });

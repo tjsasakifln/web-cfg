@@ -1,0 +1,137 @@
+{
+ "method": "prose = HTML with script/style/svg/noscript/comments stripped, tags removed, entities unescaped, whitespace collapsed; counts are case-insensitive substring matches on that prose; negatives = fixed list of negative-disclaimer phrases (see measure.py)",
+ "campaign": "CONFENGE-LAPIDACAO-COMERCIAL-20260918",
+ "measured_on": "2026-09-18",
+ "base_commit": "866a3415e",
+ "routes": {
+  "/": {
+   "before": {
+    "prose_chars": 14631,
+    "demonstrativ": 9,
+    "negatives_total": 6,
+    "negatives": {
+     "sem obra de cliente": 2,
+     "não trabalhos da confenge": 1,
+     "não resultados de clientes": 1,
+     "não obra de cliente": 1,
+     "nenhum valor de mercado é inventado": 1
+    }
+   },
+   "after": {
+    "prose_chars": 14522,
+    "demonstrativ": 8,
+    "negatives_total": 2,
+    "negatives": {
+     "não trabalhos da confenge": 1,
+     "não resultados de clientes": 1
+    }
+   }
+  },
+  "/servicos/": {
+   "before": {
+    "prose_chars": 13652,
+    "demonstrativ": 4,
+    "negatives_total": 1,
+    "negatives": {
+     "sem obra de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 13611,
+    "demonstrativ": 4,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/quantitativos-orcamento-obras/": {
+   "before": {
+    "prose_chars": 18582,
+    "demonstrativ": 10,
+    "negatives_total": 12,
+    "negatives": {
+     "não é obra de cliente": 2,
+     "não representa cliente": 3,
+     "não é software": 1,
+     "não é orçamento para executar": 2,
+     "não é preço da confenge": 1,
+     "não são preço da confenge": 2,
+     "não é sinapi": 1
+    }
+   },
+   "after": {
+    "prose_chars": 17405,
+    "demonstrativ": 6,
+    "negatives_total": 1,
+    "negatives": {
+     "não é orçamento para executar": 1
+    }
+   }
+  },
+  "/casos/demonstrativo-projeto-privado/": {
+   "before": {
+    "prose_chars": 10391,
+    "demonstrativ": 12,
+    "negatives_total": 3,
+    "negatives": {
+     "não há contratante": 1,
+     "não é revisão profissional": 1,
+     "não é parecer": 1
+    }
+   },
+   "after": {
+    "prose_chars": 10169,
+    "demonstrativ": 10,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/triagem-tecnica/": {
+   "before": {
+    "prose_chars": 6115,
+    "demonstrativ": 1,
+    "negatives_total": 0,
+    "negatives": {}
+   },
+   "after": {
+    "prose_chars": 5854,
+    "demonstrativ": 1,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/medicoes-glosas-obras-publicas/": {
+   "before": {
+    "prose_chars": 11556,
+    "demonstrativ": 4,
+    "negatives_total": 3,
+    "negatives": {
+     "não é obra de cliente": 1,
+     "não é parecer": 1,
+     "não obra de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 11441,
+    "demonstrativ": 3,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  },
+  "/entregas/": {
+   "before": {
+    "prose_chars": 24881,
+    "demonstrativ": 13,
+    "negatives_total": 0,
+    "negatives": {}
+   },
+   "after": {
+    "prose_chars": 24881,
+    "demonstrativ": 13,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  }
+ }
+}

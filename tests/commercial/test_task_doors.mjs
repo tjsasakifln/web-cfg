@@ -290,7 +290,14 @@ assert("implementation_has_one_complete_primary_card", implementation.comparison
 assert("implementation_fail_closed", implementation.terminal_capture === true && implementation.human_validation === "NOT_STARTED", implementation);
 assert("implementation_no_new_analytics_dimensions", implementation.new_analytics_dimensions === false, implementation.new_analytics_dimensions);
 assert("hero_explains_engineering_value", heroText.length >= 160 && /entreg/.test(heroText) && /engenharia/.test(heroText) && /serv/.test(heroText), heroText);
-assert("hero_synthetic_disclosure", entregas.includes("Dados identificados como sintéticos") && entregas.includes("não representam cliente"), "synthetic disclosure");
+// Decisao do proprietario 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918):
+// a identificacao "exemplos demonstrativos" (ligada a /casos/) basta na
+// abertura, com a proposicao afirmativa do que o exemplo mostra (formato e
+// metodo); a negativa que a reexplicava ("nao representam cliente") esta
+// superada e nao volta ao hero nem ao restante da pagina.
+assert("hero_demonstrative_identification", /<a href="\/casos\/">exemplos demonstrativos<\/a>/.test(heroHtml), "demonstrative identification in hero");
+assert("hero_synthetic_examples_show_format_and_method", heroHtml.includes("Dados identificados como sintéticos mostram o formato e o método."), "affirmative synthetic disclosure");
+assert("hero_superseded_negative_absent", !heroHtml.includes("não representam cliente") && !entregas.includes("não representam cliente real"), "superseded negative disclosure");
 assert("hero_public_price_band", entregas.includes("R$ 599 a R$ 3.750") && !entregas.includes("R$ 39.800"), "price range");
 assert("hero_primary_and_secondary_access", entregas.includes("Ver entregas e exemplos") && entregas.includes(">Solicitar proposta</a>"), "hero actions");
 assert("public_vitrine_has_8_cards", (entregas.match(/<article class="vitrine-item/g) || []).length === 8, (entregas.match(/<article class="vitrine-item/g) || []).length);

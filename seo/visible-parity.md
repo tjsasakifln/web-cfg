@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `98`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-20260918/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/lapidacao-clean/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -19,7 +19,7 @@
 | https://confenge.com.br/casos/ | True | — | Organization,Person,BreadcrumbList | Exemplos de entrega (demonstrativos) |
 | https://confenge.com.br/casos/aditivo-art125-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar |
 | https://confenge.com.br/casos/demonstrativo-infraestrutura/ | True | — | Organization,Person,BreadcrumbList | Exemplo demonstrativo de quantitativos e revisão para infraestrutura |
-| https://confenge.com.br/casos/demonstrativo-projeto-privado/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização |
+| https://confenge.com.br/casos/demonstrativo-projeto-privado/ | True | — | Organization,Person,BreadcrumbList | Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização |
 | https://confenge.com.br/casos/medicao-glosa-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Medição glosada: do apontamento ao pedido certo |
 | https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Transforme o diagnóstico em decisão assinada na reunião. |
 | https://confenge.com.br/casos/modelo-base-quantitativa-canonica/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Confira cada número antes de acreditar nele. |

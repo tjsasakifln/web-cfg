@@ -82,6 +82,14 @@ without manufacturing a commercial opportunity.
 - Strict historical recovery (auth): `POST /.netlify/functions/ops?action=requeue_inbound`
 - Drain due rows: `POST /.netlify/functions/ops?action=drain_inbound`
 - Daily schedule calls drain when `OPS_TOKEN` is set.
+- Since 2026-09-18 the same drain also re-attempts the lead e-mail (Resend)
+  for real rows still `delivery.email.status` `error`/`pending`, inside the
+  provider's 24 h idempotency window and with the same
+  `Idempotency-Key: lead-email/<lead_id>`; the response carries counts only
+  (`email_retry.{attempted,delivered,retryable,in_flight,deferred}` and
+  `email_reconcile_required` with `reconcile_reasons`). Rows outside the
+  window, exhausted or with a payload mismatch are reported, never re-sent.
+  Details and limits: `docs/ops/LEAD-HANDLING.md`.
 
 The authenticated response reports only `SET | UNSET` for the webhook URL and
 secret, plus the resolved contract state `READY | UNSET | BLOCKED`. It never

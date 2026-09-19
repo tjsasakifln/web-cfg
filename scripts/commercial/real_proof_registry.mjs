@@ -23,7 +23,7 @@ const RESULT_DIMENSION = /\b(economia|redu[cç][aã]o|aumento|crescimento|ganho|
 const RESULT_QUANTITY_OR_COMPARISON = /R\$\s*\d[\d.,]*|\d[\d.,]*\s*(?:%|(?:reais|mil|milh(?:a|ã)o|dias?|meses?|pontos?)\b)|\b(maior|menor|melhor|pior|acima|abaixo)\b/i;
 const CLIENT_SUBJECT = /\b(cliente|construtora|empresa)\b|\b(?:a|uma)\s+contratada\b|\b(?:o|um)\s+contratante\b/i;
 const TESTIMONIAL_CLAIM = /\b(depoimento de cliente|segundo (?:o|a) cliente|review de cliente|cliente afirmou)\b/i;
-const HONEST_NEGATION = /\b(n[aã]o (?:[ée]|h[aá]|representa|promete|existe|foi)|nenhum[ao]?|zero|sem cliente|hipot[eé]tic|sint[eé]tic|demonstrativ)\b/i;
+const HONEST_NEGATION = /\b(?:(?:n[aã]o (?:[ée]|h[aá]|representa|promete|existe|foi)|nenhum[ao]?|zero|sem cliente)\b|hipot[eé]tic\w*|sint[eé]tic\w*|demonstrativ\w*)/i;
 // The empty proof block must say HOW a real client result gets published:
 // authorization from the contracting party, an identified source and a date.
 const PUBLICATION_CONDITION_RE = /autoriza[cç][aã]o/i;

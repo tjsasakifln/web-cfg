@@ -1591,6 +1591,236 @@ for (const bodyHonoursAbort of [true, false]) {
   }
 }
 
+// 7f) A07/G1: a slow Warmbly handoff and a slow Resend at the same time cost
+// max(budget), not the sum. Scaled budgets: CONFENGE_INBOUND_TIMEOUT_MS=400,
+// LEAD_DELIVERY_TIMEOUT_MS=250 — the serial code added ≥ 650 ms after
+// persist, the concurrent code ≈ 400 ms. With production budgets (8 s / 5 s)
+// plus a 5 s siteverify, the fresh-lead lookup (≈ 0.6 s) and the store, the
+// worst case is ≈ 14 s < 15 s browser abort. The pre-persist cost is measured
+// on a baseline POST (no provider configured) and subtracted, so the
+// assertion is about the post-persist step only.
+// Both store patches must survive (handoff RETRYABLE and delivery error):
+// the delivery update runs only after both tasks settled.
+{
+  const baselineStarted = performance.now();
+  const baselineRes = await handler(
+    event({
+      nome: "Marina Baseline",
+      email: "marina.baseline@construtora.com.br",
+      estagio: "diagnostico operacao",
+      jornada: "operacao",
+      consentimento: "on",
+    }, "POST", { ip: "203.0.113.78" }),
+  );
+  const baseline = Math.round(performance.now() - baselineStarted);
+  if (baselineRes.statusCode !== 201) fail("concurrent_baseline_persist", baselineRes);
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "250";
+  process.env.CONFENGE_INBOUND_WEBHOOK_URL = "http://127.0.0.1:9/api/v1/webhooks/confenge/inbound";
+  process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = "inbound-secret-fixture-with-at-least-32-chars";
+  process.env.CONFENGE_INBOUND_TIMEOUT_MS = "400";
+  const inboundBudget = 400;
+  const deliveryBudget = 250;
+  const originalFetch = globalThis.fetch;
+  const hangs = { warmbly: 0, resend: 0 };
+  // Hangs until the caller aborts — for the Warmbly POST (inbound-handoff
+  // uses globalThis.fetch unless overridden) and for Resend alike.
+  globalThis.fetch = (url, opts) => new Promise((_resolve, reject) => {
+    if (isRequestToHost(url, "127.0.0.1")) hangs.warmbly += 1;
+    else if (isRequestToHost(url, "api.resend.com")) hangs.resend += 1;
+    if (!opts || !opts.signal) return;
+    opts.signal.addEventListener("abort", () => {
+      reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+    });
+  });
+  try {
+    const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+    if (inbound.resolveInboundConfig(process.env).ok !== true) {
+      fail("concurrent_fixture_destination_not_live", inbound.resolveInboundConfig(process.env));
+    }
+    const started = performance.now();
+    const res = await handler(
+      event({
+        nome: "Marina Diretora",
+        email: "marina.diretora@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.76" }),
+    );
+    const elapsed = Math.round(performance.now() - started);
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("concurrent_handoff_delivery_persist", data);
+    if (data.email_status !== "error") fail("concurrent_handoff_delivery_email_status", data);
+    if (hangs.warmbly !== 1 || hangs.resend !== 1) fail("concurrent_handoff_delivery_calls", hangs);
+    // Concurrent: the post-persist step is strictly below the serial sum and
+    // not shorter than the longest single budget (nothing was skipped).
+    const step = elapsed - baseline;
+    if (step >= inboundBudget + deliveryBudget) {
+      fail("concurrent_handoff_delivery_serial", { elapsed, baseline, step, serial_sum_ms: inboundBudget + deliveryBudget });
+    }
+    if (step < inboundBudget - 100) fail("concurrent_handoff_delivery_too_fast", { elapsed, baseline, step, inboundBudget });
+    const stored = await mem.get(data.lead_id);
+    if (!stored || !stored.handoff || stored.handoff.status !== "RETRYABLE" || stored.handoff.attempts !== 1) {
+      fail("concurrent_handoff_state_lost", stored && stored.handoff);
+    }
+    if (stored.delivery?.email?.status !== "error" || stored.delivery?.email?.reason !== "timeout") {
+      fail("concurrent_delivery_state_lost", stored && stored.delivery);
+    }
+    if (stored.delivery.email.idempotency_key !== `lead-email/${data.lead_id}`) {
+      fail("concurrent_delivery_idempotency_key_persisted", stored.delivery.email);
+    }
+    pass("handoff_and_delivery_concurrent_within_max_budget", {
+      elapsed_ms: elapsed,
+      baseline_ms: baseline,
+      post_persist_step_ms: step,
+      serial_sum_ms: inboundBudget + deliveryBudget,
+      lead_id: data.lead_id,
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+    delete process.env.CONFENGE_INBOUND_WEBHOOK_URL;
+    delete process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
+    delete process.env.CONFENGE_INBOUND_TIMEOUT_MS;
+  }
+}
+
+// 7g) A07/G2: every Resend POST carries `Idempotency-Key: lead-email/<lead_id>`
+// with a payload that is a pure function of the record (two sends of the same
+// record are byte-identical), and the key used is persisted with the record.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  const originalFetch = globalThis.fetch;
+  const resendCalls = [];
+  globalThis.fetch = async (url, init = {}) => {
+    if (isRequestToHost(url, "api.resend.com")) {
+      resendCalls.push({ headers: init.headers || {}, body: String(init.body || "") });
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: "resend-idem-0001" }) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "Otavio Diretor",
+        email: "otavio.diretor@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.77" }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || data.email_status !== "ok") fail("email_idempotency_key_persist", data);
+    const expectedKey = `lead-email/${data.lead_id}`;
+    if (resendCalls.length !== 1) fail("email_idempotency_key_calls", resendCalls.length);
+    if (resendCalls[0].headers["Idempotency-Key"] !== expectedKey) {
+      fail("email_idempotency_key_header", { got: resendCalls[0].headers["Idempotency-Key"], expectedKey });
+    }
+    if (expectedKey.length > 256) fail("email_idempotency_key_length", expectedKey.length);
+    const stored = await mem.get(data.lead_id);
+    if (stored.delivery?.email?.idempotency_key !== expectedKey) {
+      fail("email_idempotency_key_store", stored && stored.delivery);
+    }
+    if (JSON.stringify(data).includes("idempotency_key")) fail("email_idempotency_key_public_body", data);
+    // Deterministic payload: a second send of the stored record (what the
+    // drain retry does) produces the same header and the same bytes.
+    const { deliverResendEmail } = require(path.join(root, "netlify/functions/lib/lead-delivery.cjs"));
+    const again = await deliverResendEmail(stored);
+    if (again.status !== "ok" || again.idempotency_key !== expectedKey) fail("email_idempotency_key_direct", again);
+    if (resendCalls.length !== 2 || resendCalls[1].body !== resendCalls[0].body) {
+      fail("email_idempotency_payload_not_deterministic", { first: resendCalls[0].body.length, second: resendCalls[1] && resendCalls[1].body.length });
+    }
+    if (resendCalls[1].headers["Idempotency-Key"] !== expectedKey) fail("email_idempotency_key_header_second", resendCalls[1].headers);
+    pass("email_idempotency_key_deterministic", { lead_id: data.lead_id, key: expectedKey });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+  }
+}
+
+// 7h) A07/G2: Resend 409 classification. invalid_idempotent_request (same
+// key, different payload) is final: one call, reason=payload_mismatch, never
+// retried. concurrent_idempotent_requests (same key still in flight) is
+// retried inside the channel budget; when the other request finishes the
+// retry gets the ORIGINAL id (no second e-mail).
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  const originalFetch = globalThis.fetch;
+  const { deliverResendEmail } = require(path.join(root, "netlify/functions/lib/lead-delivery.cjs"));
+  const record = {
+    lead_id: "lead-409-classification-0001",
+    record_kind: "real",
+    received_at: "2026-09-18T12:00:00.000Z",
+    jornada: "operacao",
+    estagio: "diagnostico operacao",
+    nome: "Ana Diretora",
+    email: "ana.diretora@construtora.com.br",
+  };
+  try {
+    let calls = 0;
+    globalThis.fetch = async () => {
+      calls += 1;
+      return {
+        ok: false,
+        status: 409,
+        json: async () => ({ statusCode: 409, name: "invalid_idempotent_request", message: "same key, different payload" }),
+        text: async () => "",
+      };
+    };
+    const mismatch = await deliverResendEmail(record);
+    if (mismatch.status !== "error" || mismatch.reason !== "payload_mismatch" || mismatch.http !== 409) {
+      fail("resend_409_payload_mismatch", mismatch);
+    }
+    if (calls !== 1) fail("resend_409_payload_mismatch_retried", calls);
+
+    calls = 0;
+    globalThis.fetch = async () => {
+      calls += 1;
+      if (calls === 1) {
+        return {
+          ok: false,
+          status: 409,
+          json: async () => ({ statusCode: 409, name: "concurrent_idempotent_requests", message: "in flight" }),
+          text: async () => "",
+        };
+      }
+      return { ok: true, status: 200, json: async () => ({ id: "resend-original-id-0001" }), text: async () => "" };
+    };
+    const concurrent = await deliverResendEmail(record);
+    if (concurrent.status !== "ok" || concurrent.provider_id !== "resend-original-id-0001" || calls !== 2) {
+      fail("resend_409_concurrent_retry_gets_original", { concurrent, calls });
+    }
+
+    calls = 0;
+    globalThis.fetch = async () => {
+      calls += 1;
+      return {
+        ok: false,
+        status: 409,
+        json: async () => ({ statusCode: 409, name: "concurrent_idempotent_requests", message: "in flight" }),
+        text: async () => "",
+      };
+    };
+    const stillConcurrent = await deliverResendEmail(record);
+    if (stillConcurrent.status !== "error" || stillConcurrent.reason !== "concurrent_idempotent" || stillConcurrent.http !== 409) {
+      fail("resend_409_concurrent_exhausted", stillConcurrent);
+    }
+    if (calls !== 3) fail("resend_409_concurrent_attempts", calls);
+    pass("resend_409_idempotency_classification", { mismatch: mismatch.reason, concurrent: stillConcurrent.reason });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+  }
+}
+
 // 7b) synthetic / non-real kinds must not call Resend even when the key is set
 {
   process.env.RESEND_API_KEY = "re_test_key_must_not_send";

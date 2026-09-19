@@ -561,6 +561,12 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
         for i, s_ in enumerate(situations, start=1)
     )
     medicao = _price_terms("CFG-D18")
+    # LAPIDACAO-COMERCIAL-20260918 (D10): a 390x844 a primeira acao de contato
+    # do hub ficava a ~1170 px (item 08 do indice). A abertura ganha, abaixo do
+    # botao dominante para a oferta, a acao subordinada para o formulario da
+    # propria pagina (#captura-contrato), no mesmo padrao dos pilares
+    # (primario + secundario em .svc-open__actions), sem CSS novo e sem mover
+    # o H1, a chamada ou o botao principal.
     return (
         f"""<section aria-labelledby="hub-title" class="svc-open">
 <div class="container">
@@ -571,6 +577,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
 <div class="svc-open__actions" data-commercial-route="medicoes-glosas">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-secondary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-registrar-evento" data-cta-position="hub_services" data-event-name="cta_click" data-journey="contrato" data-route-family="servicos-obras-publicas" href="#captura-contrato">Registrar o evento no formulário</a>
 </div>
 <p class="section-proof svc-open__note">{_proof_html(meta)}</p>
 </div>
@@ -596,10 +603,10 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <div class="container">
 <span class="t-kicker">Exemplo demonstrativo</span>
 <h2 class="t-editorial" id="hub-exemplo">O que um dossiê separa: mesma parede, quatro números</h2>
-<p class="measure">Premissas sintéticas, não obra de cliente. Antes do contato, veja como o trabalho chega às suas mãos: a mesma alvenaria lida como executado declarado, medido no boletim, evidenciado por fotos datadas e a régua do critério contratual. A diferença e a lacuna de prova saem escritas; o ateste continua com o órgão contratante. O exemplo completo está na página de <a href="/medicoes-glosas-obras-publicas/#exemplo-demonstrativo">medições, glosas e pagamentos</a>.</p>
+<p class="measure">Antes do contato, veja como o trabalho chega às suas mãos: a mesma alvenaria lida como executado declarado, medido no boletim, evidenciado por fotos datadas e a régua do critério contratual. A diferença e a lacuna de prova saem escritas; o ateste continua com o órgão contratante. O exemplo completo está na página de <a href="/medicoes-glosas-obras-publicas/#exemplo-demonstrativo">medições, glosas e pagamentos</a>.</p>
 <figure class="plate plate--dominant" aria-labelledby="hub-exemplo-cap">
 <div class="plate__sheet"><!-- plate:medicao-parede --><!-- /plate --></div>
-<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Exemplo demonstrativo, com premissas sintéticas; não é obra de cliente. <b>120 m²</b> executados declarados, <b>90 m²</b> medidos no boletim, <b>80 m²</b> evidenciados por fotos datadas, e o critério contratual como régua. Cada dossiê desta página separa os quatro recortes do seu evento e diz o que a prova sustenta.</figcaption>
+<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span><b>120 m²</b> executados declarados, <b>90 m²</b> medidos no boletim, <b>80 m²</b> evidenciados por fotos datadas, e o critério contratual como régua. Cada dossiê desta página separa os quatro recortes do seu evento e diz o que a prova sustenta.</figcaption>
 </figure>
 </div>
 </section>
@@ -715,10 +722,10 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <div class="container">
 <span class="t-kicker">Exemplo demonstrativo</span>
 <h2 class="t-editorial" id="hub-exemplo">O evento no tempo do contrato: aditivo contra o limite</h2>
-<p class="measure">Premissas sintéticas, não contrato de cliente. Um contrato hipotético de obra nova, dois termos aditivos formalizados e um aditivo proposto que ultrapassa o limite de 25% do art. 125: é assim que cada evento desta página é lido, no tempo do contrato e contra a régua legal, antes de virar pedido. O exemplo completo está na página de <a href="/aditivos-obras-publicas/#exemplo-demonstrativo">aditivos e serviços extras</a>.</p>
+<p class="measure">Um contrato hipotético de obra nova, dois termos aditivos formalizados e um aditivo proposto que ultrapassa o limite de 25% do art. 125: é assim que cada evento desta página é lido, no tempo do contrato e contra a régua legal, antes de virar pedido. O exemplo completo está na página de <a href="/aditivos-obras-publicas/#exemplo-demonstrativo">aditivos e serviços extras</a>.</p>
 <figure class="plate plate--dominant" aria-labelledby="hub-exemplo-cap">
 <div class="plate__sheet"><!-- plate:aditivo-limite --><!-- /plate --></div>
-<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Exemplo demonstrativo, com premissas sintéticas; não é contrato de cliente. Dois termos formalizados somam <b>18%</b> do valor inicial atualizado; o aditivo proposto levaria o acumulado a <b>27%</b>, <b>2%</b> acima do limite de 25% para obra nova. O dossiê registra o excesso e pede revisão de escopo ou de enquadramento; a decisão sobre o termo é do órgão contratante.</figcaption>
+<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Dois termos formalizados somam <b>18%</b> do valor inicial atualizado; o aditivo proposto levaria o acumulado a <b>27%</b>, <b>2%</b> acima do limite de 25% para obra nova. O dossiê registra o excesso e pede revisão de escopo ou de enquadramento; a decisão sobre o termo é do órgão contratante.</figcaption>
 </figure>
 </div>
 </section>

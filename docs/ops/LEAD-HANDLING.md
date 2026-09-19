@@ -97,12 +97,44 @@ timestamps; nunca imprimir chaves, `to`, e-mail, telefone ou mensagem.
   `delivery.email.status=error`, `reason=timeout` (ou `timeout_after_http` +
   `http`) e sem `provider_id`. Verificar no Resend antes de qualquer reenvio
   manual.
-- Pior caso somado do POST (siteverify 5 s + handoff Warmbly 8 s + entrega
-  5 s + store) ≈ 18 s, **acima** dos 15 s do navegador: com Warmbly lento e
-  Resend lento ao mesmo tempo o visitante ainda vê a cópia de tempo esgotado
-  de um registro durável. O ciclo fecha pelo reenvio (mesma chave, recibo
-  antes do Turnstile, ~ms), não por garantia de 201 a tempo. Um único canal
-  lento cabe no orçamento (5 + 5 + store).
+- Superado em 2026-09-18 (A07, mantido como histórico): pior caso somado do
+  POST (siteverify 5 s + handoff Warmbly 8 s + entrega 5 s + store) ≈ 18 s,
+  **acima** dos 15 s do navegador; com `intent_kind` o web-intent somava mais
+  8 s em série (≈ 26 s).
+- Desde 2026-09-18 o handoff Warmbly (e o web-intent) e os canais de entrega
+  correm em paralelo depois do persist; a escrita do estado de entrega só
+  acontece depois que ambos terminam (nenhuma escrita concorrente no store).
+  Medido (teste, store em memória, orçamentos escalados 400/250 ms): o passo
+  pós-persist custa o maior orçamento, não a soma — 402 ms contra 653 ms do
+  código em série (`handoff_and_delivery_concurrent_within_max_budget` em
+  `scripts/site/test_lead_function.mjs`). Calculado, não medido, para
+  produção: siteverify 5 s + consulta de idempotência de lead novo
+  (`lead.cjs`, 4 tentativas com esperas 0,1+0,2+0,3 s ≈ 0,6 s, mais as
+  leituras do backend) + max(handoff 8 s, entrega 5 s) + persist/read-back/
+  update do store ≈ 14 s, abaixo dos 15 s do navegador; a folga depende da
+  latência real do backend e não é garantida.
+- E-mail com `Idempotency-Key: lead-email/<lead_id>` (Resend, ≤ 256 chars,
+  retido 24 h; corpo determinístico a partir do registro). A chave usada fica
+  em `delivery.email.idempotency_key`. Mesma chave + mesmo corpo → mesmo
+  `provider_id` sem novo envio; mesma chave + corpo diferente (p.ex.
+  `LEAD_NOTIFY_EMAIL` alterado dentro de 24 h) → 409 e
+  `reason=payload_mismatch`; duas requisições simultâneas → 409 e
+  `reason=concurrent_idempotent` (retentado mais tarde).
+- Reenvio do e-mail: consumidor `POST ops?action=drain_inbound` (diário via
+  `.github/workflows/revops-scheduled.yml` → `scripts/revops/scheduled_daily.mjs`).
+  Reenvia, com a MESMA chave, registros `record_kind=real` com
+  `delivery.email.status` em `{error, pending}` (pending = processo caiu entre
+  persist e entrega), `attempts < 3` e `received_at` dentro de 24 h. Um
+  timeout que na verdade enviou converge para o `provider_id` original, não
+  para um segundo e-mail. Fora da janela, tentativas esgotadas ou
+  `payload_mismatch` só contam em `email_reconcile_required` (com
+  `email_retry.reconcile_reasons`), nunca reenvio cego: conferir no Resend
+  pelo `lead_id` no assunto antes de qualquer reenvio manual.
+- Limites explícitos: janela de 24 h (a do provedor); não há exactly-once —
+  o store não tem compare-and-set, dois drains simultâneos são deduplicados
+  pelo provedor (mesmo id ou 409), a marca `retry_in_flight_at` (2 min) só
+  reduz a corrida; `timeout ≠ não enviado`. O drain nunca devolve nem registra
+  e-mail, telefone ou mensagem.
 
 ## Limite de autoridade
 

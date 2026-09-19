@@ -492,10 +492,10 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <div class="svc-open__grid">
 <div class="svc-open__copy">
-<p class="case-badge t-kicker" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
+<p class="case-badge t-kicker" data-permission-class="demonstrativo">Acesso viário e drenagem · revisão {e(rev)}</p>
 <h1 class="t-service" id="case-title">{PAGE_H1}</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
-<p class="content-lead">Este recorte ilustrativo de acesso viário e drenagem de loteamento mostra a mesma cadeia de rastreabilidade usada em edificação: desenho, dimensão, fórmula, quantidade e item de planilha, com IDs e revisão únicos. Os dados e as soluções são ilustrativos e não servem para execução. Não há contratante, terreno, sondagem, chuva de projeto, topografia, assinatura nem número de ART.</p>
+<p class="content-lead">Este recorte ilustrativo de acesso viário e drenagem de loteamento mostra a mesma cadeia de rastreabilidade usada em edificação: desenho, dimensão, fórmula, quantidade e item de planilha, com IDs e revisão únicos. Sem terreno, sondagem, chuva de projeto nem topografia, os dados e as soluções são ilustrativos e não servem para execução.</p>
 <dl class="svc-chain">
 <div><dt>Necessidade</dt><dd>Orçar ou conferir pavimento, drenagem e obras lineares antes de contratar, com base própria.</dd></div>
 <div><dt>Trabalho</dt><dd>Levantar, orçar, compatibilizar e revisar o mesmo recorte, com memória aberta e revisão única.</dd></div>
@@ -506,7 +506,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="plate__sheet">
 {_profile_svg(extracts, "R00")}
 </div>
-<figcaption class="plate__caption" id="case-plate-cap"><span class="t-kicker">Exemplo demonstrativo</span>Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
+<figcaption class="plate__caption" id="case-plate-cap">Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
 </figure>
 </div>
 <nav class="page-index" aria-label="Nesta página">
@@ -598,7 +598,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Extrato</span>
 <h2 class="t-editorial" id="orcamento">Orçamento</h2>
-<p>{e(extracts["price_disclaimer_pt_br"])} Classe de preço: hipotético. Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}. Estimativa aritmética do recorte; o valor contratado depende do caso.</p>
+<p>{e(extracts["price_disclaimer_pt_br"])} Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}.</p>
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Preço un.", "Valor", "Classe", "Qtd. ID"], budget_rows, "Extrato de orçamento hipotético, revisão " + rev)}
 <p><a href="data/orcamento.csv">Baixar orcamento.csv</a>, mesma revisão {e(rev)}.</p>
 </div>
@@ -619,7 +619,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Conferência</span>
 <h2 class="t-editorial" id="revisao">Revisão</h2>
-<p>{e(extracts["review_attribution_pt_br"])} Este recorte não é parecer para executar obra.</p>
+<p>{e(extracts["review_attribution_pt_br"])}</p>
 <div class="rv-extract">{review_html}</div>
 {_table(["ID", "Documento", "Constatação", "Base", "Ação", "Tipo"], review_rows, "Extrato de revisão, revisão " + rev)}
 <p><a href="data/revisao.csv">Baixar revisao.csv</a>, mesma revisão {e(rev)}.</p>
@@ -654,8 +654,7 @@ def render_html(extracts: dict[str, Any]) -> str:
             "description": PAGE_DESCRIPTION,
             "disambiguatingDescription": (
                 "Página de exemplo demonstrativo: recorte didático de infraestrutura e loteamento "
-                "sem contratante, endereço, assinatura ou ART. Números do recorte são conferíveis; "
-                "preços unitários são hipotéticos e não servem para execução."
+                "com números conferíveis; preços unitários são hipotéticos e não servem para execução."
             ),
             "inLanguage": "pt-BR",
             "url": CANONICAL_URL,

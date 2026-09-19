@@ -419,9 +419,10 @@ def derive(source: dict[str, Any]) -> dict[str, Any]:
         "review_findings": review_findings,
         "review_check_kind": "arithmetic_documental_coherence",
         "review_attribution_pt_br": (
-            "Conferência aritmética, documental e de coerência executada pelo "
-            "gerador deste demonstrativo. Não é revisão profissional independente, "
-            "nem revisão por cliente, equipe ou responsável técnico nomeado."
+            "Conferência aritmética, documental e de coerência, executada pelo "
+            "gerador deste demonstrativo sobre a mesma fonte dos números; "
+            "para uma obra, a revisão é contratada e assinada por responsável "
+            "técnico nomeado."
         ),
         "named_totals": named_totals,
         "client_name": source.get("client_name"),
@@ -563,11 +564,12 @@ def build_sample_trail(extracts: dict[str, Any]) -> dict[str, Any]:
         "status": "canonical",
         "quantity_id": qty["id"],
         "budget_id": budget["id"],
-        "disclaimer": (
-            "Amostra demonstrativa do recorte de banheiro. Não é orçamento para "
-            "executar obra, não representa cliente, não é preço da CONFENGE e "
-            "não é SINAPI real."
-        ),
+        # Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the
+        # trail is composed under a figure already tagged "Exemplo demonstrativo"
+        # and closes with the link to the demonstrative page; it carries no
+        # separate negative restatement. The hypothetical-price qualifier lives
+        # once, next to the price table of the demonstrative page.
+        "disclaimer": "",
         "demonstrative_url": extracts["url"],
         "demonstrative_href": f"{extracts['url']}#quantitativos",
         "element": {

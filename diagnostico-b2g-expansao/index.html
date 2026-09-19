@@ -236,7 +236,7 @@
 <p>No retorno você recebe as condições e os próximos passos pelo canal informado.</p>
 </div>
 <form id="handraise-diag" class="offer-request-form" method="post" action="/.netlify/functions/lead" data-offer-id="CFG-DIAG-EXP-v1" data-cta-id="diag-exp-handraise" data-asset-id="diagnostico-b2g-expansao" data-route-family="diagnostico-b2g-expansao" data-cta-position="offer_final" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="inline_receipt_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.</p>
-<p class="form-hint" data-field-purpose>Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<p class="form-hint" data-field-purpose>Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <h2>Conte o que sua empresa precisa avaliar</h2>
 <input type="hidden" name="offer_id" value="CFG-DIAG-EXP-v1"/>
 <input type="hidden" name="terms_id" value="CFG-TERMS-B2B-2026-08-17-v1"/>
@@ -248,11 +248,11 @@
 <input type="hidden" name="route_family" value="diagnostico-b2g-expansao"/>
 <input type="hidden" name="landing_page" value="https://confenge.com.br/diagnostico-b2g-expansao/"/>
 <label>Nome do representante <input name="nome" required autocomplete="name"/></label>
-<label>Empresa <input name="empresa" autocomplete="organization"/></label>
+<label>Empresa <span class="optional-mark">opcional</span> <input name="empresa" autocomplete="organization"/></label>
 <label>E-mail profissional <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label>
 <label>WhatsApp <input name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></label>
-<label>CNPJ <input name="cnpj" inputmode="numeric" autocomplete="off"/></label>
-<label>Mensagem <textarea name="mensagem" rows="3" maxlength="2000" placeholder="Contexto da expansão no mercado público (sem dados de proposta sigilosa)."></textarea></label>
+<label>CNPJ <span class="optional-mark">opcional</span> <input name="cnpj" inputmode="numeric" autocomplete="off"/></label>
+<label>Mensagem <span class="optional-mark">opcional</span> <textarea name="mensagem" rows="3" maxlength="2000" placeholder="Contexto da expansão no mercado público (sem dados de proposta sigilosa)."></textarea></label>
 <label><input type="checkbox" name="consentimento" value="1" required/> autorizo o uso destes dados para retorno sobre o Diagnóstico de Expansão no Mercado Público</label>
 <button class="button button-primary" type="submit" id="btn-enquadramento">Pedir retorno da CONFENGE</button>
 <p id="status" role="status"></p>

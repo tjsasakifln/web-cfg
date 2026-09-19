@@ -7,7 +7,7 @@
   "proof_id": "demo-private-project-pilot-2026-09",
   "piloto_url": "/casos/demonstrativo-projeto-privado/",
   "piloto_finding_href": "/casos/demonstrativo-projeto-privado/#CF-GEO-01",
-  "public_label": "Exemplo demonstrativo do piloto técnico. Não é obra de cliente.",
+  "public_label": "Exemplo demonstrativo do piloto técnico; não é projeto executivo.",
   "public_label_note": "CF-GEO-01 foi conferida contra R00. A revisão R01 do piloto altera a verga; essa revisão não herda a conferência. Detecção não é correção feita nem aceite do autor.",
   "finding": {
     "id": "CF-GEO-01",

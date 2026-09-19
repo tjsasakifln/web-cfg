@@ -621,7 +621,7 @@
         "dates": [
           "2026-08-03"
         ],
-        "description": "Demonstração metodológica de verificação de acréscimos e supressões (art. 125). Não é case de cliente.",
+        "description": "Exemplo demonstrativo: verificar o saldo de acréscimos e supressões do art. 125 antes de protocolar um termo aditivo.",
         "h1": "Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar",
         "has_dataset_surface": false,
         "licenses": [],
@@ -737,8 +737,8 @@
         "dates": [
           "2026-09-11"
         ],
-        "description": "Exemplo demonstrativo de um recorte de banheiro com quantitativos conferíveis, orçamento hipotético, revisão e compatibilização. Sem contratante e sem ART.",
-        "h1": "Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
+        "description": "Exemplo demonstrativo de um recorte de banheiro com quantitativos conferíveis, orçamento hipotético, revisão e compatibilização.",
+        "h1": "Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -795,7 +795,7 @@
         "dates": [
           "2026-08-03"
         ],
-        "description": "Demonstração metodológica de dossiê frente a glosa de medição. Não é case de cliente.",
+        "description": "Demonstração metodológica de dossiê frente a glosa de medição.",
         "h1": "Demonstrativo. Medição glosada: do apontamento ao pedido certo",
         "has_dataset_surface": false,
         "licenses": [],
@@ -5121,9 +5121,7 @@
       "ok": true,
       "url": "https://confenge.com.br/quantitativos-orcamento-obras/",
       "visible": {
-        "authors": [
-          "não é software, planilha gratuita nem execução de obra."
-        ],
+        "authors": [],
         "breadcrumb_names": [
           "Início",
           "Serviços e problemas",
@@ -5598,5 +5596,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-20260918/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/lapidacao-clean/_site"
 }

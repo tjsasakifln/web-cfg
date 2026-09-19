@@ -295,12 +295,17 @@ def test_deliverables_library_distinguishes_services_examples_and_priced_offers(
     assert "rol taxativo" not in text.casefold()
     assert "em validação" not in text
     assert "bloqueada" not in text
-    assert all(term in text for term in ("informações necessárias", "conteúdo entregue", "preço", "prazo"))
+    # LAPIDACAO-COMERCIAL-20260918: a abertura da vitrine nao lista mais os
+    # campos de cada oferta ("Cada oferta diz a decisao..., o conteudo entregue,
+    # ... o preco e o prazo"); informacoes necessarias, conteudo entregue, preco
+    # e prazo sao exigidos como rotulos locais em CADA cartao, abaixo.
+    assert "Cada oferta diz a decisão que ela sustenta" not in text
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
     assert len(cards) == 8, len(cards)
     assert all(
         all(f"<dt>{label}</dt>" in card for label in ("Situação", "Decisão", "Informações necessárias", "Trabalho incluído", "Saída", "Prazo"))
+        and "<span>Preço</span>" in card
         for card in cards
     )
     lengths = [

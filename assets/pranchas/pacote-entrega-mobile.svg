@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="pacote-entrega-mobile-title pacote-entrega-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="pacote-entrega-mobile-title">Prancha PG (móvel) · O que a elaboração devolve, por peça · exemplo demonstrativo</title>
-<desc id="pacote-entrega-mobile-desc">Quatro peças de cima para baixo: Plantas e cortes, Detalhes, Especificações, Memória de cálculo. Arquitetura de origem: permanece com o autor. Software e modelos: método ou insumo. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/elaboracao-complementar.v1.json.</desc>
+<desc id="pacote-entrega-mobile-desc">Quatro peças de cima para baixo: Plantas e cortes, Detalhes, Especificações, Memória de cálculo. Arquitetura de origem: permanece com o autor. Software e modelos: método ou insumo. Exemplo demonstrativo. Procedência: data/demonstrative/plates/elaboracao-complementar.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="16" font-weight="650">Peças da entrega complementar</text>
@@ -21,5 +21,5 @@
 <text x="36" y="309.6" font-size="12.5" fill="#5d6a7a">Premissas e contas conferíveis</text>
 <text x="20" y="350" font-size="12.5" fill="#5d6a7a">Arquitetura de origem: permanece com o autor.</text>
 <text x="20" y="367" font-size="12.5" fill="#5d6a7a">Software e modelos: método ou insumo.</text>
-<g id="pacote-entrega-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">PG-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Sem escala</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">diagrama</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="pacote-entrega-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">PG-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Sem escala</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">diagrama</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

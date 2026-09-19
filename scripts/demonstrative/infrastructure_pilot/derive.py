@@ -425,9 +425,10 @@ def derive(source: dict[str, Any]) -> dict[str, Any]:
         "review_findings": review_findings,
         "review_check_kind": "arithmetic_documental_coherence",
         "review_attribution_pt_br": (
-            "Conferência aritmética, documental e de coerência executada pelo "
-            "gerador deste demonstrativo. Não é revisão profissional independente, "
-            "nem revisão por cliente, equipe ou responsável técnico nomeado."
+            "Conferência aritmética, documental e de coerência, executada pelo "
+            "gerador deste demonstrativo sobre a mesma fonte dos números; "
+            "para uma obra, a revisão é contratada e assinada por responsável "
+            "técnico nomeado."
         ),
         "named_totals": named_totals,
         "client_name": source.get("client_name"),

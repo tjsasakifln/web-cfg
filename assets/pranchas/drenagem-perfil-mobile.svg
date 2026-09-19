@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="drenagem-perfil-mobile-title drenagem-perfil-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="drenagem-perfil-mobile-title">Prancha P2 (móvel) · Perfil de drenagem MH-01 a MH-02 · exemplo demonstrativo</title>
-<desc id="drenagem-perfil-mobile-desc">Perfil do trecho DR-01 de 20,00 m entre MH-01 (invert 12,80 m) e MH-02 (invert desenhado 12,35 m). No estado R00 a planilha traz 12,50 m, divergência de 0,15 m. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/infrastructure-pilot/source.v1.json, data/demonstrative/infrastructure-pilot/consumption.v1.json.</desc>
+<desc id="drenagem-perfil-mobile-desc">Perfil do trecho DR-01 de 20,00 m entre MH-01 (invert 12,80 m) e MH-02 (invert desenhado 12,35 m). No estado R00 a planilha traz 12,50 m, divergência de 0,15 m. Exemplo demonstrativo. Procedência: data/demonstrative/infrastructure-pilot/source.v1.json, data/demonstrative/infrastructure-pilot/consumption.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="16" font-weight="650">Perfil DR-01 · MH-01 a MH-02 · R00</text>
@@ -13,5 +13,5 @@
 <text x="20" y="330" font-size="12.5">1 DR-01, DN 400, declive 0,0225 m/m</text>
 <text x="20" y="346" font-size="12.5">2 MH-02: desenho 12,35 × planilha 12,50 (R00)</text>
 <text x="20" y="362" font-size="12.5" font-weight="650">Divergência 0,15 m; R01 corrige a planilha.</text>
-<g id="drenagem-perfil-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P2-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R01</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Escala exagerada</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">cotas em m</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="drenagem-perfil-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P2-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R01</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Escala exagerada</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">cotas em m</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

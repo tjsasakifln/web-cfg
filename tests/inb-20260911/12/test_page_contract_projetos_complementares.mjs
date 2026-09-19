@@ -226,7 +226,10 @@ function runShipped() {
   assert("landing_distinguishes_compat", /data-purchase="compatibilizacao"/.test(landing) && /Compatibilização entre disciplinas/.test(landing), "compat");
   assert("landing_distinguishes_parceria", /data-purchase="parceria"/.test(landing) && /Colaboração contínua/.test(landing), "parceria");
   assert("landing_hub_servicos", landing.includes('href="/servicos/#servico-projeto"'), "hub 09");
-  assert("landing_schematic_not_dimensioning", /Não representa cliente, obra executada nem dimensionamento concluído/i.test(landing), "esquema");
+  // LAPIDACAO-COMERCIAL-20260918: the material limit is "esquema, não dimensionamento";
+  // the former negative list ("Não representa cliente, obra executada...") is superseded.
+  assert("landing_schematic_not_dimensioning", /Esquema ilustrativo: o dimensionamento das instalações não está concluído/i.test(landing), "esquema");
+  assert("landing_schematic_no_client_negative", !/não representa cliente|não é obra de cliente|sem obra de cliente/i.test(textFromHtml(landing)), "negativa superada não volta");
   // VALOR-IMEDIATO-20260914: situation-first opening, use-bound delivery, labelled
   // own sample and a channel line with its commitment inside the first section.
   {
@@ -235,7 +238,9 @@ function runShipped() {
     const firstText = textFromHtml(firstSection);
     assert("landing_hero_situation_eyebrow", /class="eyebrow">Arquitetura pronta, faltam as disciplinas complementares</.test(firstSection), "eyebrow de situacao");
     assert("landing_hero_use_clause", /Você passa a ter em mãos/.test(firstText), "entrega ligada a uso");
-    assert("landing_hero_sample_labelled", /Amostra demonstrativa da matriz de interfaces[^.]{0,40}não é obra de cliente/i.test(firstText), "amostra rotulada");
+    assert("landing_hero_sample_labelled", /Amostra demonstrativa da matriz de interfaces abaixo\./i.test(firstText), "amostra rotulada");
+    // Counterproof: the label is the protected property; an unlabelled sample fails.
+    assert("landing_hero_sample_label_counterproof", !/Amostra demonstrativa/i.test(textFromHtml(firstSection.replace("Amostra demonstrativa da matriz", "Matriz"))) && /Amostra demonstrativa/i.test(firstText), "sem rotulo reprova");
     assert("landing_hero_channel_line", /wa\.me\/5548988344559/.test(firstSection) && /mailto:tiago\.sasaki@confenge\.com\.br/.test(firstSection) && /tel:\+5548988344559/.test(firstSection), "canais na abertura");
     assert("landing_hero_channel_commitment", /sem contratação nem pagamento/.test(firstText) && /o que falta reunir/.test(firstText), "compromisso do canal");
     assert("landing_hero_channels_without_fallback_attr", !/data-fallback-channel=/.test(firstSection), "canais da abertura nao duplicam os tres canais medidos");
