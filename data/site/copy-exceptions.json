@@ -41,18 +41,6 @@
     },
     {
       "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "politica-editorial/v/1.0.0/index.html",
-      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bowner\\b",
-      "path": "politica-editorial/v/1.0.0/index.html",
-      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
       "match": "\\bcfg-",
       "path": "comercial/privacidade-leads/index.html",
       "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."

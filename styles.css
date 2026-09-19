@@ -833,7 +833,7 @@ body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panor
 body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"],[data-surface-type="panorama_mercado_hub"]) main>.section:not(.lead-inline){padding:var(--space-10) 0}
 body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panorama_mercado"]) main>.lead-inline{width:min(calc(100% - 48px),50rem);margin:var(--space-8) auto}
 .ca-disclaimer{max-width:68ch;color:var(--muted);font-size:1rem;line-height:1.7}
-.ca-fixture-banner,.ca-draft-banner,.ai-disclosure{max-width:72ch;padding:var(--space-4);color:#5b4800;background:#fff8d8;border:1px solid #e3d48c;border-radius:var(--radius-sm);line-height:1.55}
+.ca-fixture-banner,.ca-draft-banner{max-width:72ch;padding:var(--space-4);color:#5b4800;background:#fff8d8;border:1px solid #e3d48c;border-radius:var(--radius-sm);line-height:1.55}
 .ca-toc{width:min(calc(100% - 48px),50rem);margin:var(--space-4) auto var(--space-2);padding:var(--space-4) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .ca-toc p{margin:0 0 var(--space-2);color:#526275;font-size:.875rem;font-weight:800}
 .ca-toc ul{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4);margin:0;padding:0;list-style:none}
