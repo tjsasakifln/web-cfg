@@ -1,0 +1,71 @@
+{
+  "schema": "confenge-campaign-w4-verificacoes/1.0",
+  "tarefa": "W4 — trilha canônica (documentação)",
+  "gerado_em": "2026-09-19",
+  "metodo": "Cada linha abaixo foi lida diretamente do arquivo nesta sessão (grep/sed/python), não copiada do mandato sem checar. Onde o mandato e a leitura direta divergem, a divergência é registrada em vez de silenciada.",
+  "comandos_executados": [
+    {
+      "cmd": "python3 scripts/site/apply_article_pillar_form.py --check",
+      "resultado": "PASS (exit 0). Saída: 'artigos alterados: 0' e 6 pendências, uma por artigo congelado: chuva-prorrogacao-prazo-obra-publica, custos-indiretos-atraso-administracao-obra, fiscal-nao-assina-medicao-obra-publica, glosa-de-medicao-obra-publica, jogo-de-planilha-aditivo-obra-publica, medicao-de-obra-publica-rejeitada. Confirma a lista dos seis artigos citada no mandato e na issue #705/#706/#707."
+    },
+    {
+      "cmd": "grep -n \"noindex,follow\" conteudos/glosa-de-medicao-obra-publica/index.html",
+      "resultado": "PASS: linha 9, <meta content=\"noindex,follow\" name=\"robots\"/>. Confirma item (e)."
+    },
+    {
+      "cmd": "sed -n '564,566p' js/modules/form.js",
+      "resultado": "PASS: a mensagem do fallback WhatsApp usa só (estagio || journey || 'contato'); nenhum campo de nome/e-mail/telefone entra no texto. Confirma a primeira metade de F005."
+    },
+    {
+      "cmd": "grep -rn \"wa\\.me\" js/",
+      "resultado": "PASS: só duas construções dinâmicas de wa.me em todo o js/ (form.js:30 base fixa; form.js:586 usa a mesma msg de estágio/jornada). Nenhuma outra rota interpola nome/e-mail/telefone. Confirma a segunda metade de F005 (links wa.me das páginas são estáticos com texto fixo por artigo, ex.: conteudos/glosa-de-medicao-obra-publica/index.html:88)."
+    },
+    {
+      "cmd": "grep -n \"cta_click\\|destinationType\" js/modules/nav.js (trecho 1225-1250)",
+      "resultado": "PASS: linhas 1245-1249 só incluem destination_type no evento quando truthy (spread condicional); um cta_click sem destino de intenção sai sem o campo."
+    },
+    {
+      "cmd": "grep -rn \"legacy_unclassified\" --include=*.js --include=*.py --include=*.json --include=*.html .",
+      "resultado": "PASS, mas contradiz a premissa do mandato: o bucket já existe e já é tratado. netlify/functions/lib/event-registry.json:251 documenta 'absent = legacy_unclassified, counted as intent and labelled'; data/revops/closed-loop-funnel.v1.json:171 tem o campo legacy_unclassified_events; docs/campaigns/design-institucional/fechamento/evidence/correcoes-revisao-consolidadas.json registra a correção já aplicada (commit 1dad38fc3) com teste 2/2 verde. Reclassificado de corrigir_agora para ja_atendido na matriz."
+    },
+    {
+      "cmd": "grep -rln \"casos/medicao-glosa-demonstrativo/\" --include=*.html .",
+      "resultado": "PASS, mas contradiz a premissa do mandato: medicoes-glosas-obras-publicas/index.html:102 já linka para /casos/medicao-glosa-demonstrativo/ ('Ver o exemplo completo, item a item'), além de casos/index.html. O caso NÃO está isolado só em /casos/; a ponte pilar→caso já existe em produção. Reclassificado na matriz."
+    },
+    {
+      "cmd": "grep -n \"landing_page\" medicoes-glosas-obras-publicas/index.html; sed -n '600,605p;845,858p' js/modules/form.js",
+      "resultado": "PASS: o campo oculto landing_page do pilar é gerado estático com o valor da própria URL do pilar (medicoes-glosas-obras-publicas/index.html:235); form.js só preenche landing_page em runtime se o campo estiver vazio (linha 604, 'if (!payload.landing_page)'), o que nunca ocorre no pilar porque o valor já vem preenchido. Logo, landing_page nunca carrega a URL do artigo de origem; somente tema/origem (query string, hoje só usada no CTA para a home, ex.: conteudos/glosa-de-medicao-obra-publica/index.html:88) ou o referrer HTTP (não capturado no payload atual) poderiam carregar esse contexto."
+    },
+    {
+      "cmd": "grep -n \"não promete\" medicoes-glosas-obras-publicas/index.html",
+      "resultado": "PASS: duas ocorrências, objetos diferentes — linha 80 'não promete recebimento' (limite do trabalho no card de escopo) e linha 228 'não promete reversão da glosa' (formulário). Não é uma frase repetida ao pé da letra; é um padrão de duas negativas adjacentes que comportam consolidação editorial mínima, não uma remoção de conteúdo."
+    },
+    {
+      "cmd": "grep -n \"NBR 16747\\|NBR 13752\" inspecao-diagnostico-edificacoes/index.html data/offers/multivertical/catalog.v2.json",
+      "resultado": "PASS: a página pública /inspecao-diagnostico-edificacoes/ não cita nenhuma das duas normas por número (distingue o objetivo em prosa, ex. linha 159: 'Isso não é projeto de reforma nem perícia de um processo'); só o contrato interno data/offers/multivertical/catalog.v2.json:996 cita 'ABNT NBR 16747 quando aplicável ao objetivo', sem citar a NBR 13752. O mandato pedia para citar onde a página já distingue as normas por número; essa citação não existe na superfície pública hoje — registrado como não atendido, não inventado."
+    },
+    {
+      "cmd": "grep -n \"laudo incontestável\\|aditivo aprovado\\|pagamento liberado\\|sigilo total\" -r --include=*.html . (excluindo node_modules, .grok, .claude, docs/, tests/)",
+      "resultado": "PASS: zero ocorrências das quatro promessas proibidas em HTML público. Confirma item (h)."
+    },
+    {
+      "cmd": "grep -n \"EESC-USP\" index.html confianca/index.html",
+      "resultado": "PASS: todas as ocorrências afirmam apenas a formação (\"Engenharia Civil pela EESC-USP\"), sem linguagem de chancela/aprovação institucional da universidade."
+    },
+    {
+      "cmd": "grep -n \"/medicoes-glosas-obras-publicas/\\|/conteudos/medicao-de-obra-publica-rejeitada/\\|/conteudos/glosa-de-medicao-obra-publica/\\|/ferramentas/diagnostico-defesa-margem/\" seo/gsc-2026-08-31/manual-page-snapshot.v1.json",
+      "resultado": "PASS, com uma correção ao mandato: linha 137-141 confirma /medicoes-glosas-obras-publicas/ com 99 impressões, 1 clique, posição 6.61; linha 193-198 confirma /conteudos/medicao-de-obra-publica-rejeitada/ com 12 impressões; linha 200-205 confirma /conteudos/glosa-de-medicao-obra-publica/ com 11 impressões. MAS a ferramenta /ferramentas/diagnostico-defesa-margem/ NÃO está ausente do snapshot: linha 521-527 mostra 3 impressões, 0 cliques, posição 1.33. O mandato afirmava 'ferramenta diagnostico-defesa-margem ausente' — isso é falso para este snapshot específico; corrigido na matriz."
+    },
+    {
+      "cmd": "find . -iname \"*gsc*\" (excluindo node_modules, .git, .claude, .grok) + leitura de scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/*",
+      "resultado": "PASS: existe fonte GSC mais recente que a de 31/08. scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/ cobre 02–08/09/2026 (extraído 11/09/2026), com Paginas.csv trazendo /medicoes-glosas-obras-publicas/: 0 cliques, 28 impressões, posição 4.79 nessa semana. meta.json marca explicitamente ready_for_product_decisions=false, historical=true, provided_aggregate=true — não é CURRENT pelo contrato de docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md. Não soma com o grão de página do snapshot de agosto (bases e períodos diferentes)."
+    }
+  ],
+  "divergencias_do_mandato_corrigidas": [
+    "ferramenta diagnostico-defesa-margem: mandato dizia 'ausente' do GSC; o snapshot de 31/08 mostra 3 impressões/0 cliques/posição 1.33 (linha 522-527).",
+    "cta_click sem destination_type -> legacy_unclassified: mandato pedia 'corrigir_agora'; já está implementado e testado (netlify/functions/lib/event-registry.json:251, data/revops/closed-loop-funnel.v1.json:171).",
+    "/casos/medicao-glosa-demonstrativo/ 'sem links de entrada além de /casos/': falso; o pilar /medicoes-glosas-obras-publicas/ já linka para o caso na linha 102.",
+    "'link novo pilar->caso' (seção 4 do mandato): não é novo, já existe em produção; a distribuição interna a registrar é a que já existe, não uma a criar nesta campanha.",
+    "NBR 16747 vs NBR 13752 na página de inspeção: o mandato pedia citar onde a página já distingue por norma; a página pública não cita nenhuma das duas normas por número hoje. Registrado como pendência editorial, não como já resolvido."
+  ]
+}
