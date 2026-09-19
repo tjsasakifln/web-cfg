@@ -353,7 +353,13 @@ for (const width of widths) {
   // (tres ancoras) e o aside de fechamento; medido 52. Apos a revisao, o
   // e-mail contextual da abertura (slot svc-open__note do piloto) leva a 53,
   // e o teto acompanha o medido (53), sem folga sem explicacao.
-  if (metrics.mainLinks > 53) errors.push(`main_links=${metrics.mainLinks}`);
+  // 53 -> 58 em 2026-09-19 (campanha BOFU-FECHAMENTO, WS-C): a frente 03
+  // ganha tres ancoras de destino (recebimento/entrega, reforma em
+  // condominio, documentacao do construido), a frente 04 o link para a
+  // avaliacao de imovel, a .contact-alt o WhatsApp contextual e o fechamento
+  // o caminho para /servicos/. Medido 58 em todas as larguras; teto igual ao
+  // medido.
+  if (metrics.mainLinks > 58) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
