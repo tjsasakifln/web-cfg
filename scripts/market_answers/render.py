@@ -336,7 +336,7 @@ def render_html(
 <p class="ma-kicker">Método (curto)</p>
 <p>{escape(method_short)}</p>
 <p>O cálculo usa o valor integral nominal do instrumento, em reais (BRL).</p>
-<p><a href="#fontes">Fontes e metodologia completa</a> · <a href="/metodologia-inteligencia/">Como a CONFENGE lê evidências</a></p>
+<p><a href="#fontes-titulo">Fontes e metodologia completa</a> · <a href="/metodologia-inteligencia/">Como a CONFENGE lê evidências</a></p>
 <p>Dados atualizados em <time datetime="{as_of}">{as_of}</time>.</p>
 <p>Fonte consultada em <time datetime="{source_as_of}">{source_as_of}</time>.</p>
 <p>{escape(copy["validity_policy"])}</p>
