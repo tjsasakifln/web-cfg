@@ -27,7 +27,7 @@ Mandato: a ressalva de #705–#707 de que a criação das issues não autorizava
 | DESCOBERTA_HABILITADA vs EXPOSICAO_OBSERVADA | HABILITAÇÃO EM ANDAMENTO / NÃO OBSERVADA | — |
 | RESULTADO_COMERCIAL | AINDA_NAO_MEDIDO | — |
 
-## Tarefa W4 — matriz de achados (documentação; nenhum HTML público tocado)
+## Matriz de achados
 
 Método: cada linha foi verificada por leitura direta do arquivo citado nesta sessão (grep/sed/leitura de JSON), não copiada do texto de origem sem checar. Divergências entre o que a issue/relatório afirmava e o que o arquivo mostra estão registradas, não silenciadas; o log completo de comandos e resultados está em `evidence/w4-verificacoes.json`.
 
@@ -144,3 +144,25 @@ Nota honesta: os mapas usados como ponto de partida desta tarefa foram produzido
 - Grep negativo de quatro promessas proibidas e verificação de EESC-USP como credencial factual.
 
 Os estados finais (concluído, publicado, verificado em produção) não são preenchidos aqui — cabem ao integrador, conforme a diretriz desta tarefa.
+
+## Adendo editorial do fundador (2026-09-19): ausência de menção a IA
+
+Diretriz: nenhum conteúdo destinado ao visitante afirma, nega, justifica ou compara a participação de inteligência artificial nos trabalhos. Regra de ausência de menção, não de declaração de ausência; nenhuma referência retirada foi substituída por negação, eufemismo, comparação ou anúncio da política. Não altera ferramentas internas, documentação operacional, instruções de agentes, registros de auditoria nem a política de rastreamento (`robots.txt` intocado, byte-idêntico).
+
+Inventário (3 leitores somente-leitura, verificado pelo integrador) e tratamento aplicado na fonte/gerador, nunca só no HTML:
+
+| Superfície | Fonte/gerador | Tratamento |
+| --- | --- | --- |
+| Rodapé institucional "Uso de IA" (89 páginas + `404.html`) | `scripts/site/authority.py` (`FOOTER_AUTHORITY_NAV`), `scripts/pseo/html_shell.py` (fallback), propagação por `scripts/site/patch_authority_footers.py --write` | item removido sem substituto; prova por word-diff: único token removido em 84 páginas só de rodapé é o âncora; `git diff` sem `header_nav`/`mobile_nav` |
+| Navegação das páginas de autoridade | `scripts/site/render_authority_pages.py` (`_nav`), `confianca/index.html` (manual) | item removido |
+| `/uso-de-ia/` (página inteira) | `data/site/editorial-policy.json` + `render_authority_pages.py` | RETIRE 410 (`_redirects`, bloco "Retired 2026-09-19 (#705)"); registro em `data/editorial/public-preview-route-decisions.json`; fora da família `legal-and-trust`, de `PUBLIC_TOP_DIRS`, de `authority-governance.json`, do sitemap; fonte preservada no JSON (versões 1.0.0–1.3.0) |
+| Política editorial | `data/site/editorial-policy.json` → versão 1.4.0 (2026-09-19) sem a seção; "interpretação humana" → "interpretação do responsável técnico"; changelog público: "Uma seção da política foi retirada por decisão editorial do fundador." | histórico 1.0.0–1.3.0 preservado no registro; `/politica-editorial/v/1.0.0/` despublicada (410) por conter o texto antigo; resumo público da 1.1.0 sem a cláusula |
+| Regime `ai_disclosure required/recommended` da matriz de autoridade | `data/site/authority-matrix.json`, `scripts/site/authority.py`, `scripts/site/test_authority_contract.py` | regime retirado; testes invertidos para exigir ausência (contraprovas: link no rodapé, rótulo, `data-ai-disclosure`, "inteligência artificial", "Não usamos IA" reprovam) |
+| Análises técnicas de contratos | `scripts/contract_analysis/render.py` (`AI_DISCLOSURE_HTML`) | parágrafo removido; `approvals.json` recapturado (hash renderizado) |
+| Páginas manuais: `especialista/tiago-jun-sasaki/`, `projetos-complementares-engenharia/`, `metodologia-inteligencia/`, `conteudos/chuva-prorrogacao-prazo-obra-publica/` | HTML manual | frase/parágrafo removidos sem substituto (a responsabilidade pela página já estava declarada ao lado) |
+| `conflitos/` "análise humana" | contrato lido por `scripts/site/conflict_gate.py` | reescrito sem contraste humano/automatizado |
+| Versão 1.3.0 → 1.4.0 nas 4 superfícies de dados (`inteligencia/`, `radar/nacional-obras-publicas/`, `metodologia-inteligencia/`, `ferramentas/limite-acrescimos-supressoes/`) | `policy_version_disclosure()` | parágrafo de versão atualizado (mesmo procedimento de `a36d34beb`) |
+
+Verificação contextual acrescentada ao mecanismo editorial existente: `scripts/site/test_ai_mention_gate.py` (`npm run test:ai-mention`, passo "Editorial: no AI mention on visitor surface" no `site-ci`, antes do build). Reutiliza `visible_text()/visible_markup()` de `public_copy_scope.py` e cobre texto visível, `title`, meta/og/twitter, `alt`/`aria-label`/`title`, JSON-LD (`name/description/text`) e `href` para `/uso-de-ia/`. Reprova afirmações de uso (IA, inteligência artificial, ChatGPT, chatbot, modelos generativos, agentes inteligentes, tecnologia cognitiva, LLM, machine learning, AI), negações/comparações ("sem IA", "não usamos IA", "100% humano", "feito por pessoas", "não é resposta de chatbot", "não divulgamos nossas ferramentas") e links à rota retirada. Lista de segurança testada: "inteligência técnica", "inteligência de mercado", `/inteligencia/`, "engenharia", "via", "dia", "perícia", "vigilância", "auditoria", "Itajaí", "materiais", "ART", "AIA". Zero exceções em `copy-exceptions.json`.
+
+Falsos positivos preservados: "IA" como arquitetura de informação (`data/site/public-ia-map.json`, `scripts/site/public_ia.py`), "inteligência técnica/de mercado", rotas `/inteligencia/` e `/metodologia-inteligencia/`.
