@@ -1,0 +1,447 @@
+{
+ "method": "playwright chromium, networkidle, UA Chrome/128, prose = innerText of main p/li/h1-h3/dd/dt/figcaption, firstCta = first visible contact-ish control by DOM top",
+ "before": "4cfa6adca",
+ "after": "6bd981197",
+ "rows": [
+  {
+   "route": "/",
+   "viewport": "390x844",
+   "docH": [
+    16642,
+    16501
+   ],
+   "proseChars": [
+    8469,
+    7797
+   ],
+   "firstCtaTop": [
+    711,
+    711
+   ],
+   "firstCtaText": [
+    "Descrever a minha situação",
+    "Descrever a minha situação"
+   ]
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "390x844",
+   "docH": [
+    14795,
+    14768
+   ],
+   "proseChars": [
+    19812,
+    19730
+   ],
+   "firstCtaTop": [
+    479,
+    479
+   ],
+   "firstCtaText": [
+    "Descrever a situação pelo WhatsApp",
+    "Descrever a situação pelo WhatsApp"
+   ]
+  },
+  {
+   "route": "/servicos/#servico-avaliacao",
+   "viewport": "390x844",
+   "docH": [
+    14795,
+    14768
+   ],
+   "proseChars": [
+    19812,
+    19730
+   ],
+   "firstCtaTop": [
+    479,
+    479
+   ],
+   "firstCtaText": [
+    "Descrever a situação pelo WhatsApp",
+    "Descrever a situação pelo WhatsApp"
+   ]
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "viewport": "390x844",
+   "docH": [
+    6493,
+    6318
+   ],
+   "proseChars": [
+    5523,
+    5262
+   ],
+   "firstCtaTop": [
+    703,
+    703
+   ],
+   "firstCtaText": [
+    "Falar pelo WhatsApp",
+    "Falar pelo WhatsApp"
+   ]
+  },
+  {
+   "route": "/entregas/",
+   "viewport": "390x844",
+   "docH": [
+    23748,
+    23339
+   ],
+   "proseChars": [
+    34195,
+    33298
+   ],
+   "firstCtaTop": [
+    633,
+    633
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/casos/demonstrativo-projeto-privado/",
+   "viewport": "390x844",
+   "docH": [
+    13483,
+    13379
+   ],
+   "proseChars": [
+    5797,
+    5669
+   ],
+   "firstCtaTop": [
+    403,
+    403
+   ],
+   "firstCtaText": [
+    "Como corrigir",
+    "Como corrigir"
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "390x844",
+   "docH": [
+    18247,
+    17552
+   ],
+   "proseChars": [
+    18413,
+    17236
+   ],
+   "firstCtaTop": [
+    762,
+    736
+   ],
+   "firstCtaText": [
+    "Solicitar proposta de orçamento",
+    "Solicitar proposta de orçamento"
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "390x844",
+   "docH": [
+    13762,
+    13762
+   ],
+   "proseChars": [
+    15351,
+    15315
+   ],
+   "firstCtaTop": [
+    756,
+    756
+   ],
+   "firstCtaText": [
+    "WhatsApp (48) 98834-4559",
+    "WhatsApp (48) 98834-4559"
+   ]
+  },
+  {
+   "route": "/servicos-obras-publicas/",
+   "viewport": "390x844",
+   "docH": [
+    14359,
+    14349
+   ],
+   "proseChars": [
+    14346,
+    14165
+   ],
+   "firstCtaTop": [
+    1170,
+    478
+   ],
+   "firstCtaText": [
+    "08\nRegistrar o evento",
+    "Registrar o evento no formulário"
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "390x844",
+   "docH": [
+    13764,
+    13763
+   ],
+   "proseChars": [
+    10720,
+    10542
+   ],
+   "firstCtaTop": [
+    456,
+    456
+   ],
+   "firstCtaText": [
+    "Descrever a medição",
+    "Descrever a medição"
+   ]
+  },
+  {
+   "route": "/#contato",
+   "viewport": "390x844",
+   "docH": [
+    null,
+    null
+   ],
+   "proseChars": [
+    null,
+    null
+   ],
+   "firstCtaTop": [
+    null,
+    null
+   ],
+   "firstCtaText": [
+    null,
+    null
+   ]
+  },
+  {
+   "route": "/",
+   "viewport": "1440x1000",
+   "docH": [
+    10412,
+    10500
+   ],
+   "proseChars": [
+    8469,
+    7797
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "1440x1000",
+   "docH": [
+    9569,
+    9540
+   ],
+   "proseChars": [
+    19812,
+    19730
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/servicos/#servico-avaliacao",
+   "viewport": "1440x1000",
+   "docH": [
+    9569,
+    9540
+   ],
+   "proseChars": [
+    19812,
+    19730
+   ],
+   "firstCtaTop": [
+    541,
+    541
+   ],
+   "firstCtaText": [
+    "Descrever a situação pelo WhatsApp",
+    "Descrever a situação pelo WhatsApp"
+   ]
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "viewport": "1440x1000",
+   "docH": [
+    4250,
+    4112
+   ],
+   "proseChars": [
+    5523,
+    5262
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/entregas/",
+   "viewport": "1440x1000",
+   "docH": [
+    13981,
+    13819
+   ],
+   "proseChars": [
+    34195,
+    33298
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/casos/demonstrativo-projeto-privado/",
+   "viewport": "1440x1000",
+   "docH": [
+    9028,
+    9003
+   ],
+   "proseChars": [
+    5797,
+    5669
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "1440x1000",
+   "docH": [
+    11646,
+    11390
+   ],
+   "proseChars": [
+    18413,
+    17236
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta de orçamento",
+    "Solicitar proposta de orçamento"
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "1440x1000",
+   "docH": [
+    8974,
+    8974
+   ],
+   "proseChars": [
+    15351,
+    15315
+   ],
+   "firstCtaTop": [
+    657,
+    657
+   ],
+   "firstCtaText": [
+    "WhatsApp (48) 98834-4559",
+    "WhatsApp (48) 98834-4559"
+   ]
+  },
+  {
+   "route": "/servicos-obras-publicas/",
+   "viewport": "1440x1000",
+   "docH": [
+    10642,
+    10679
+   ],
+   "proseChars": [
+    14346,
+    14165
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "1440x1000",
+   "docH": [
+    10142,
+    10195
+   ],
+   "proseChars": [
+    10720,
+    10542
+   ],
+   "firstCtaTop": [
+    19,
+    19
+   ],
+   "firstCtaText": [
+    "Solicitar proposta",
+    "Solicitar proposta"
+   ]
+  },
+  {
+   "route": "/#contato",
+   "viewport": "1440x1000",
+   "docH": [
+    null,
+    null
+   ],
+   "proseChars": [
+    null,
+    null
+   ],
+   "firstCtaTop": [
+    null,
+    null
+   ],
+   "firstCtaText": [
+    null,
+    null
+   ]
+  }
+ ]
+}

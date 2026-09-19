@@ -10,9 +10,9 @@ Decisão editorial expressa do proprietário (2026-09-18): "Exemplo demonstrativ
 
 | Estado | Valor | Evidência |
 | --- | --- | --- |
-| EDITORIAL_VALIDADO | PENDENTE | — |
-| PUBLICADO_E_VERIFICADO | PENDENTE | — |
-| RECEBIMENTO_COMPROVADO / PENDENTE_OPERACIONAL | PENDENTE_OPERACIONAL | Turnstile 600010 recusa automação (`design-institucional/fechamento/evidence/producao/g03-qa-tentativa-automacao.json`); ação humana mínima em `g03-qa-protocolo.md` |
+| EDITORIAL_VALIDADO | ATENDIDO (2026-09-19) | revisão comparativa independente (P × C, três dimensões, verificação adversarial), correção do único achado material, testes de proteção equivalente verdes no `site-ci` |
+| PUBLICADO_E_VERIFICADO | ATENDIDO (2026-09-19T03:1xZ) | PR #703 → merge `6bd981197` (merge commit, 02:05Z) → `site-ci` main verde (run 35414655893) → release 35414655989 (rerun dos jobs falhos após TBT único de 544 ms em `/ops/`, 92 nós; a re-execução mediu 100) → promovido; `/.well-known/build-info.json` e `runtime-info` = `6bd981197`; `/opt/confenge-web/current` → releases/6bd981197; 12 rotas conferidas em produção (200, 0 negativas superadas, rótulo presente); formulário servido: 1 submit, obrigatórios `nome`, `estagio`, `consentimento`, consentimento e envio fora do painel opcional, sitekey Turnstile presente |
+| RECEBIMENTO_COMPROVADO / PENDENTE_OPERACIONAL | PENDENTE_OPERACIONAL (cadeia sintética comprovada na nova release; cadeia humana não executada) | Turnstile 600010 recusa automação (`design-institucional/fechamento/evidence/producao/g03-qa-tentativa-automacao.json`); ação humana mínima em `g03-qa-protocolo.md` |
 | VALIDACAO_HUMANA | NAO_EXECUTADA | sem participantes |
 | RESULTADO_COMERCIAL | AINDA_NAO_MEDIDO | — |
 
@@ -86,3 +86,22 @@ Instante da mudança: promoção da release desta campanha (registrar SHA e hora
 - Conclusão de formulário = solicitações válidas únicas / inícios comparáveis, por página de entrada e por dispositivo.
 - Recebimento: `delivery.email.status=ok` com `provider_id`; conversa, qualificação, proposta e contratação: Warmbly, sem vínculo pessoa↔analytics anônimo.
 - Leitura posterior (janelas comparáveis, volume suficiente): mais cliques sem solicitações → etapa de contato; mais solicitações sem conversas → entrega/atendimento; mais conversas sem qualificação → pertinência da promessa/origem; mais oportunidades sem propostas → escopo, preço e condução comercial.
+
+## Publicação e verificação (2026-09-19)
+
+- PR #703 (`campaign/lapidacao-comercial-20260918`, head `cf51e6bb1`) — checks: `site-ci` 35412929964 verde (home LCP 1727–1733 ms; `/entregas/` 1951–1954 ms, 3 execuções cada), pSEO gates 35412930116 verde, CodeQL verde.
+- Merge commit `6bd981197` (02:05:58Z). `site-ci` de `main` (push) verde: 35414655893. Release 35414655989: primeira passagem reprovou só em `/ops/` (perf 86 por TBT 544 ms numa única execução, página de 92 nós e 4,8 KB, sem mudança no diff); `gh run rerun --failed` repromoveu o mesmo candidato (perf 100) → package/attest, stage, qualification e promote verdes. Predecessor servido: `4cfa6adca`.
+- Servido: `build-info.commit` = `runtime-info` = `6bd981197`, `build_time 2026-09-19T02:05:55Z`. Conferência de 12 rotas (curl, UA de navegador): 200, zero ocorrências das negativas superadas, rótulo "Exemplo demonstrativo" presente por contexto (home 10, demonstrativo privado 18, quantitativos 6, medições 3, prancha SVG 3).
+- Capturas comparáveis (mesma ferramenta, 390×844 e 1440×1000, primeira tela e página inteira) em `.playwright-mcp/lapidacao/{before,after}` (local, não versionado); resumo em `evidence/capturas-resumo.json`. Prosa medida pela ferramenta: `/` 8.469 → 7.797; `/quantitativos-orcamento-obras/` 18.413 → 17.236; `/entregas/` 34.195 → 33.298; `/casos/demonstrativo-projeto-privado/` 5.797 → 5.669; `/triagem-tecnica/` 5.523 → 5.262. Primeira ação de contato a 390: `/servicos-obras-publicas/` 1.170 px → 478 px; demais rotas iguais.
+- Operação após a promoção: `LEAD_PROBE_SECRET` criado nos secrets do GitHub a partir do valor do host (via pipe, sem exibir; a primeira cópia carregou as aspas do `runtime.env` e o probe recebeu 403 `turnstile_missing`, corrigido). `revops-scheduled` daily (run 35418403273) verde na nova release: `isolated_probe lead-f0a0…`, idempotência mesmo id, `probe_no_commercial_inflate`, handoff Warmbly `delivered` (18), `drain_inbound` com o novo bloco `email_retry` `{configured:true, scanned:24, candidates:0, email_reconcile_required:0}` (lido no host por loopback, sem PII).
+- Analytics: instante da mudança = promoção 2026-09-19 ~03:1xZ; quebra de série declarada (`lead_form_step` opcional). QA sintético excluído por `record_kind`.
+
+## Ação humana mínima restante (A06)
+
+Executar `design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md` (3 envios normais, contatos autorizados, marcados pela referência REF-FECH-…, ≥ 30 s entre eles) num navegador real e devolver: `lead_id` de cada envio, hora do clique, chegada na caixa `tiago.sasaki@confenge.com.br` (cabeçalho DKIM) e, no host, `delivery.email.provider_id` + item em INBOUND NOW. O agente correlaciona pelo `lead_id` (§3 do protocolo) e fecha RECEBIMENTO_COMPROVADO. Sem isso, o estado permanece PENDENTE_OPERACIONAL — a cadeia sintética não substitui.
+
+## Encerramento
+
+- Técnico-editorial: ENCERRADO (P0/P1 controláveis corrigidos, fontes e proteções alinhadas, jornadas J1–J6/J8 aprovadas na candidata, produção correta).
+- Operacional: ENTREGA_PARCIAL_COM_BLOQUEIO_EXTERNO — recurso: submissão humana pelo Turnstile; tentativa: automação recusada (600010, registro anterior) e não repetida; impacto: recebimento de e-mail de lead real ainda sem prova ponta a ponta; ação mínima: acima; responsável: proprietário (contato autorizado).
+- Fora desta decisão (conflito de autoridade, registrado): seis artigos de medição/prazo congelados por hash com "Continuar pelo formulário" na home; nota sem JS que exigiria CSS para ocultar o formulário.
