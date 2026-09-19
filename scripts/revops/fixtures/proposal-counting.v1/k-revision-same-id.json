@@ -1,0 +1,72 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "k-revision-same-id",
+  "description_pt_br": "Proposta emitida por R$ 50.000 em setembro e revisada em outubro para R$ 45.000 reutilizando o MESMO proposal_id (id estável Warmbly; supersedes_proposal_id aponta para si). Conta 4.500.000 uma vez, no mês da revisão (2026-10). A emissão original é excluída (superseded), nunca como duplicate_delivery. A repetição literal da revisão (mesmo id, evento e instante, delivery_attempt 2) é retry e sai como duplicate_delivery.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "observation_id": "prop-k-001/emitted",
+      "event": "emitted",
+      "proposal_id": "prop-k-001",
+      "opportunity_id": "opp-k-001",
+      "at": "2026-09-08T11:00:00-03:00",
+      "fee_total_cents": 5000000,
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-k-001/revised",
+      "event": "revised",
+      "proposal_id": "prop-k-001",
+      "opportunity_id": "opp-k-001",
+      "at": "2026-10-04T11:00:00-03:00",
+      "fee_total_cents": 4500000,
+      "supersedes_proposal_id": "prop-k-001",
+      "origin_class": "demonstrated_inbound"
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-k-001/revised/attempt-2",
+      "event": "revised",
+      "proposal_id": "prop-k-001",
+      "opportunity_id": "opp-k-001",
+      "at": "2026-10-04T11:00:00-03:00",
+      "fee_total_cents": 4500000,
+      "supersedes_proposal_id": "prop-k-001",
+      "origin_class": "demonstrated_inbound",
+      "delivery_attempt": 2
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 4500000,
+    "proposals_counted": 1,
+    "counted_proposal_ids": [
+      "prop-k-001"
+    ],
+    "excluded": [
+      {
+        "id": "prop-k-001/emitted",
+        "reason": "superseded"
+      },
+      {
+        "id": "prop-k-001/revised/attempt-2",
+        "reason": "duplicate_delivery"
+      }
+    ],
+    "by_close_month": {
+      "2026-10": 4500000
+    },
+    "by_origin_class": {
+      "demonstrated_inbound": 4500000,
+      "outbound_assisted": 0,
+      "mixed_or_unknown": 0,
+      "expansion_existing_client": 0,
+      "paid_or_partner": 0
+    },
+    "forbidden_pt_br": "5.000.000 em 2026-09 (emissão antiga prevalecendo sobre a revisão) ou 9.500.000 (soma) é contagem indevida."
+  }
+}

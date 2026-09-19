@@ -1,6 +1,6 @@
 /**
  * Drives scripts/revops/proposal_counting.mjs against the PROPOSED contract
- * data/revops/proposal-counting.v1.json and the ten synthetic fixtures (a)–(j).
+ * data/revops/proposal-counting.v1.json and the eleven synthetic fixtures (a)–(k).
  * Same style as test_closed_loop.mjs: plain PASS/FAIL, exit 1 on any failure.
  *
  * Counter-proofs: a contract that sums revisions, credits UNKNOWN to inbound
@@ -78,14 +78,23 @@ const CONTRACT = loadContract();
   const deltas = Array.isArray(recon.deltas) ? recon.deltas : [];
   if (deltas.length < 7) fail("reconciliation_deltas", deltas.length);
   else pass("reconciliation_deltas", String(deltas.length));
-  const closedLoopSrc = fs.readFileSync(path.join(root, "netlify/functions/lib/closed-loop.cjs"), "utf8").split("\n");
-  const line463 = closedLoopSrc[462] || "";
-  if (!/duplicate_entity.*opportunity_already_has_proposal/.test(line463)) {
-    fail("reconciliation_line_463_drifted", line463.trim());
-  } else pass("reconciliation_line_463_matches_shipped");
-  const line515 = closedLoopSrc[514] || "";
-  if (!/contract_value = .*: revenue/.test(line515)) fail("reconciliation_line_515_drifted", line515.trim());
-  else pass("reconciliation_line_515_matches_shipped");
+  // MEDICAO-07: the reconciliation section describes shipped behaviour by
+  // pattern, never by line number (an insertion above must not fail this).
+  const closedLoopSrc = fs.readFileSync(path.join(root, "netlify/functions/lib/closed-loop.cjs"), "utf8");
+  if (!/duplicate_entity"?,\s*"opportunity_already_has_proposal"/.test(closedLoopSrc)) {
+    fail("reconciliation_rc01_shipped_guard_missing");
+  } else pass("reconciliation_rc01_shipped_guard_present");
+  if (/contract_value = [^\n]*: revenue/.test(closedLoopSrc)) {
+    fail("reconciliation_rc03_contract_value_still_inherits_revenue");
+  } else pass("reconciliation_rc03_contract_value_never_inherits_revenue");
+  if (/state\.proposal\.amount\)/.test(closedLoopSrc.split("to === \"won\"")[1] || "")) {
+    fail("reconciliation_rc08_revenue_still_inherits_proposal");
+  } else pass("reconciliation_rc08_revenue_never_inherits_proposal");
+  const shippedTexts = deltas.map((d) => String(d.shipped || ""));
+  if (shippedTexts.some((t) => /closed-loop\.cjs:\d+/.test(t))) fail("reconciliation_shipped_cites_line_numbers", shippedTexts.filter((t) => /:\d+/.test(t)));
+  else pass("reconciliation_shipped_without_line_numbers");
+  if (!deltas.some((d) => d.id === "RC-08")) fail("reconciliation_rc08_missing");
+  else pass("reconciliation_rc08_present");
   const funnel = JSON.parse(fs.readFileSync(path.join(root, "data/revops/closed-loop-funnel.v1.json"), "utf8"));
   const allowed = new Set(funnel.warmbly_observation_contract.allowed_fields);
   const newFields = ["supersedes_proposal_id", "alternative_group_id", "fee_total_cents", "instalment_cents", "term_months", "origin_class"];
@@ -112,6 +121,7 @@ const expectedFixtures = [
   "h-existing-client",
   "i-canary-synthetic",
   "j-persist-failure-retry",
+  "k-revision-same-id",
 ];
 const present = fs.readdirSync(fixturesDir).filter((f) => f.endsWith(".json")).map((f) => f.replace(/\.json$/, "")).sort();
 if (!same(present, expectedFixtures)) fail("fixtures_present", present);
@@ -351,6 +361,119 @@ for (const name of expectedFixtures) {
   if (declared.by_stage.accepted !== 300000 || declared.by_stage.accepted === declared.emitted_total_cents) {
     fail("pc11_declared_amount_overridden", declared.by_stage);
   } else pass("pc11_declared_divergent_amount_not_overwritten_by_inheritance", String(declared.by_stage.accepted));
+}
+
+// --- MEDICAO-02: a revision that reuses the stable proposal_id supersedes value and month ---
+{
+  const base = (o) => ({ record_kind: "real", opportunity_id: "opp-m02", at: "2026-09-01T10:00:00-03:00", ...o });
+  const r = countProposals([
+    base({ event: "emitted", proposal_id: "prop-m02", fee_total_cents: 5000000 }),
+    base({ event: "revised", proposal_id: "prop-m02", supersedes_proposal_id: "prop-m02", at: "2026-10-04T10:00:00-03:00", fee_total_cents: 4500000 }),
+  ], CONTRACT);
+  const ok = r.emitted_total_cents === 4500000
+    && same(r.by_close_month, { "2026-10": 4500000 })
+    && r.excluded.length === 1 && r.excluded[0].reason === "superseded"
+    && !r.excluded.some((e) => e.reason === "duplicate_delivery")
+    && r.needs_decision.length === 0;
+  if (!ok) fail("revision_same_id_supersedes", { total: r.emitted_total_cents, months: r.by_close_month, excluded: r.excluded, needs_decision: r.needs_decision });
+  else pass("revision_same_id_supersedes", `${r.emitted_total_cents} @2026-10`);
+  // Literal repetition of the same emission (same id + event + at) is still a retry.
+  const retry = countProposals([
+    base({ event: "emitted", proposal_id: "prop-m02", fee_total_cents: 5000000 }),
+    base({ event: "emitted", proposal_id: "prop-m02", fee_total_cents: 5000000, delivery_attempt: 2 }),
+  ], CONTRACT);
+  if (retry.emitted_total_cents !== 5000000 || retry.excluded[0]?.reason !== "duplicate_delivery") fail("literal_retry_still_duplicate_delivery", retry.excluded);
+  else pass("literal_retry_still_duplicate_delivery");
+  // Two chained revisions on the same id: only the last one counts.
+  const chain = countProposals([
+    base({ event: "emitted", proposal_id: "prop-m02", fee_total_cents: 5000000 }),
+    base({ event: "revised", proposal_id: "prop-m02", supersedes_proposal_id: "prop-m02", at: "2026-10-04T10:00:00-03:00", fee_total_cents: 4500000 }),
+    base({ event: "revised", proposal_id: "prop-m02", supersedes_proposal_id: "prop-m02", at: "2026-11-02T10:00:00-03:00", fee_total_cents: 4000000 }),
+  ], CONTRACT);
+  if (chain.emitted_total_cents !== 4000000 || chain.proposals_counted.length !== 1 || chain.excluded.filter((e) => e.reason === "superseded").length !== 2) {
+    fail("revision_chain_last_counts", { total: chain.emitted_total_cents, excluded: chain.excluded });
+  } else pass("revision_chain_last_counts", "4000000 @2026-11");
+}
+
+// --- MEDICAO-03: instalment invoices at distinct instants are distinct stage events ---
+{
+  const base = (o) => ({ record_kind: "real", opportunity_id: "opp-m03", at: "2026-09-01T10:00:00-03:00", ...o });
+  const r = countProposals([
+    base({ event: "emitted", proposal_id: "prop-m03", fee_total_cents: 9000000, instalment_cents: 750000, term_months: 12 }),
+    base({ event: "invoiced", proposal_id: "prop-m03", amount_cents: 750000, at: "2026-10-01T09:00:00-03:00" }),
+    base({ event: "invoiced", proposal_id: "prop-m03", amount_cents: 750000, at: "2026-11-01T09:00:00-03:00" }),
+    base({ event: "invoiced", proposal_id: "prop-m03", amount_cents: 750000, at: "2026-10-01T09:00:00-03:00", delivery_attempt: 2 }),
+  ], CONTRACT);
+  const dup = r.excluded.filter((e) => e.reason === "duplicate_delivery");
+  if (r.by_stage.invoiced !== 1500000 || dup.length !== 1 || dup[0].delivery_attempt !== 2) {
+    fail("two_instalment_invoices_counted", { by_stage: r.by_stage, excluded: r.excluded });
+  } else pass("two_instalment_invoices_counted", `invoiced=${r.by_stage.invoiced} retries_excluded=${dup.length}`);
+  if (r.emitted_total_cents !== 9000000 || r.by_stage.received !== 0) fail("instalments_never_revenue", r.by_stage);
+  else pass("instalments_never_revenue_or_emission");
+}
+
+// --- MEDICAO-04: supersedes without a known target, or across opportunities, is a decision ---
+{
+  const base = (o) => ({ record_kind: "real", opportunity_id: "opp-m04", at: "2026-09-01T10:00:00-03:00", ...o });
+  const orphan = countProposals([
+    base({ event: "revised", proposal_id: "prop-m04b", supersedes_proposal_id: "prop-m04a", fee_total_cents: 4500000 }),
+  ], CONTRACT);
+  if (
+    orphan.emitted_total_cents !== 0
+    || orphan.excluded[0]?.reason !== "supersedes_target_unknown"
+    || !orphan.needs_decision.some((n) => n.reason === "supersedes_target_unknown")
+  ) fail("revision_orphan_target_needs_decision", { total: orphan.emitted_total_cents, excluded: orphan.excluded, needs_decision: orphan.needs_decision });
+  else pass("revision_orphan_target_needs_decision");
+  const cross = countProposals([
+    base({ event: "emitted", proposal_id: "prop-m04a", opportunity_id: "opp-m04-A", fee_total_cents: 1000000 }),
+    base({ event: "revised", proposal_id: "prop-m04b", opportunity_id: "opp-m04-B", supersedes_proposal_id: "prop-m04a", fee_total_cents: 2000000 }),
+  ], CONTRACT);
+  if (
+    cross.emitted_total_cents !== 0
+    || cross.excluded.length !== 2
+    || !cross.excluded.every((e) => e.reason === "supersedes_cross_scope")
+    || !cross.needs_decision.some((n) => n.reason === "supersedes_cross_scope")
+  ) fail("revision_cross_opportunity_needs_decision", { total: cross.emitted_total_cents, excluded: cross.excluded, needs_decision: cross.needs_decision });
+  else pass("revision_cross_opportunity_needs_decision");
+  // Same opportunity, different effective scope is also cross-scope.
+  const scope = countProposals([
+    base({ event: "emitted", proposal_id: "prop-m04a", scope_id: "scope-1", fee_total_cents: 1000000 }),
+    base({ event: "revised", proposal_id: "prop-m04b", scope_id: "scope-2", supersedes_proposal_id: "prop-m04a", fee_total_cents: 2000000 }),
+  ], CONTRACT);
+  if (scope.emitted_total_cents !== 0 || !scope.needs_decision.some((n) => n.reason === "supersedes_cross_scope")) {
+    fail("revision_cross_scope_needs_decision", scope);
+  } else pass("revision_cross_scope_needs_decision");
+}
+
+// --- MEDICAO-05: origin_evidence is a short token; PII-shaped values are refused everywhere ---
+{
+  const base = (o) => ({ record_kind: "real", opportunity_id: "opp-m05", at: "2026-09-01T10:00:00-03:00", event: "emitted", fee_total_cents: 100, ...o });
+  for (const [label, value] of [
+    ["url", "https://confenge.com.br/entregas/?email=x@example.com"],
+    ["email", "x@example.com"],
+    ["phone", "+55 48 99999-0000"],
+    ["path", "/entregas/"],
+    ["long", "a".repeat(65)],
+  ]) {
+    try {
+      const r = countProposals([base({ proposal_id: "prop-m05", origin_evidence: value })], CONTRACT);
+      fail(`origin_evidence_${label}_accepted`, { accepted: r.proposals_counted.length });
+    } catch (err) {
+      if (err.code === "invalid_observation" && /origin_evidence/.test(err.message)) pass(`origin_evidence_${label}_refused`);
+      else fail(`origin_evidence_${label}_code`, err.code || err.message);
+    }
+  }
+  const okToken = countProposals([base({ proposal_id: "prop-m05", origin_evidence: "lead-764fdf3765f48a03257979638b8" })], CONTRACT);
+  if (okToken.proposals_counted.length !== 1) fail("origin_evidence_token_accepted", okToken.excluded);
+  else pass("origin_evidence_token_accepted");
+  // Any other string field carrying an e-mail, phone or URL is refused too (value scan, not only key scan).
+  try {
+    countProposals([base({ proposal_id: "prop-m05", scope_id: "escopo x@example.com" })], CONTRACT);
+    fail("pii_value_in_scope_id_accepted");
+  } catch (err) {
+    if (err.code === "invalid_observation" && /pii_value/.test(err.message)) pass("pii_value_in_string_field_refused");
+    else fail("pii_value_code", err.code || err.message);
+  }
 }
 
 if (failed) {
