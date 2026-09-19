@@ -415,7 +415,17 @@ def load_jsonld(html: str) -> list[dict]:
 # (/medicoes-glosas-obras-publicas/#captura-pilar). Corpo do artigo mudou (o
 # destino do CTA é conteúdo, não cromo), então a data de revisão move nas
 # seis páginas do cluster. Fontes nao reconsultadas.
-CLUSTER_REVISION = "2026-09-18"
+# 2026-09-19. INBOUND-RECEITA-20260919 (scripts/site/apply_article_pillar_form.py
+# --write, commit f9baa2aa9): em fiscal-nao-assina-medicao-obra-publica, o link
+# "Continuar pelo formulário" do bloco de oferta (<aside class="lead-inline">,
+# dentro do article) deixou de apontar para a home e passou a apontar para o
+# formulário do pilar de medições e glosas com contexto
+# (/medicoes-glosas-obras-publicas/#captura-pilar, data-tema/data-origem). Só
+# esse fingerprint moveu; nas outras cinco páginas o corpo é o mesmo de
+# 2026-09-18 (o link do pilar no article-aside e o rodapé ficam fora do
+# <article>, logo fora do fingerprint). Corpo do artigo mudou, então a data de
+# revisão move nas seis páginas do cluster. Fontes nao reconsultadas.
+CLUSTER_REVISION = "2026-09-19"
 
 # 2026-09-08. Antes, a data em que as fontes foram consultadas era exigida igual
 # a CLUSTER_REVISION. O acoplamento estava errado e era perigoso: qualquer
@@ -545,7 +555,7 @@ def content_fingerprint(html: str) -> str:
 # changed revision date by definition.
 REVISION_BODY_SHA256: dict[str, str] = {
     "atraso-na-medicao-obra-publica": "e9eb9c67874e40d21917ad981960af2d1e8b0f4002b4f6ccdd8bac7cb0763eb1",
-    "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
+    "fiscal-nao-assina-medicao-obra-publica": "ec99bf3327e0c33a8c5844d6c5b9dc20955cd9cae2028a4db19d6c1b4d726581",
     "glosa-por-qualidade-obra-publica": "72575b1d8bd68cd8a650a38a034c4b8381a85ca61ec4936e7fd821d2a5c3aaae",
     "medicao-por-evento-obra-publica": "94dea650663b24bb0f6b2f82929ef8499055eb00044e79d55760a31acef49d53",
     "pagamento-parcial-etapa-empreitada-global": "dfde5280af8f4e7d768e17c44f615ab8ee7b72daf63ea40a25f680165f0c593c",
