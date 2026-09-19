@@ -278,10 +278,14 @@ def test_click_origin_guard_lets_the_bridge_evolve_only():
         )
         assert bridged != base
         assert _mask(bridged) == _mask(base)
-        # 2. link do pilar inserido no bloco de oferta: passa.
+        # 2. link do pilar inserido no bloco de oferta: passa. A base pode ja
+        # trazer o link do pilar (desde 2026-09-19 os artigos-origem de clique o
+        # tem em origin/main), entao a fixture insere um SEGUNDO link logo apos o
+        # WhatsApp, sem depender do que segue.
+        assert b"Conversar pelo WhatsApp</a>" in base, path
         with_pillar = base.replace(
-            b"Conversar pelo WhatsApp</a></div>",
-            b'Conversar pelo WhatsApp</a><a class="text-link" data-pillar-link="1" href="/x/">Ver <svg class="icon"><use href="#i-arrow"></use></svg></a></div>',
+            b"Conversar pelo WhatsApp</a>",
+            b'Conversar pelo WhatsApp</a><a class="text-link" data-pillar-link="1" href="/x/">Ver <svg class="icon"><use href="#i-arrow"></use></svg></a>',
             1,
         )
         assert with_pillar != base, path
