@@ -1,0 +1,45 @@
+{
+  "schema": "confenge.gsc-readout/1.0",
+  "readout_date": "2026-09-19",
+  "read_at": null,
+  "read_by": "workstream WS-I (medicao/revops), sem acesso ao host nesta execucao",
+  "executed": false,
+  "status": "INDISPONIVEL",
+  "reason": "Leitura do consumidor autenticado do host (ops?action=gsc_insights / gsc_history) nao executada neste workstream: nenhum ssh ao ec-prod. As linhas 'GSC_DURABLE_READ status=CURRENT as_of=2026-09-15' citadas em evidencia anterior (lidas 2026-09-18T19:25Z) nao estao no repositorio e nao sao reproduzidas aqui.",
+  "not_zero_pt_br": "INDISPONIVEL nao e zero: nenhuma decisao de hold (KEEP_NOINDEX) ou de produto deve ler este readout como ausencia de trafego.",
+  "host_consumer": {
+    "gsc_insights": null,
+    "gsc_history": null,
+    "response_sha256": null,
+    "command": "curl -s -H \"Authorization: Bearer $OPS_TOKEN\" \"$OPS?action=gsc_insights\" | jq '{as_of: .meta.as_of, status, source_kind: .meta.delivery_source, ready: .meta.ready_for_product_decisions, counts: .insights.counts, snapshot_sha256: .meta.snapshot_sha256}'"
+  },
+  "repository_snapshot": {
+    "path": "data/revops/gsc/insights_latest.json",
+    "sha256": "7c4d752e65d87708fcf76e05d5310dac9bfd98a846046eb21869e78475f9cff3",
+    "as_of": "2026-08-15",
+    "generated_at": "2026-08-18T14:25:23.161795+00:00",
+    "max_as_of_lag_days": 14,
+    "lag_days_on_readout_date": 35,
+    "status": "STALE",
+    "ready_for_product_decisions_declared": true,
+    "usable_for_decisions": false,
+    "counts": {
+      "queries": 20,
+      "pages": 0,
+      "lead_cohort_paths": 0
+    },
+    "page_dimension_pt_br": "page_count 0 e data/revops/gsc/daily/ ausente: a coorte pagina -> leads (unica atribuicao permitida pelo attribution_warning) nao tem grao de pagina para unir."
+  },
+  "most_recent_committed_observation": {
+    "path": "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/",
+    "window": "2026-09-02..2026-09-08",
+    "kind": "provided_aggregate",
+    "decision_grade": false,
+    "note_pt_br": "Extracao manual do fundador (2026-09-11); nao decisoria; nao substitui o consumidor durável do host."
+  },
+  "pending_pt_br": [
+    "Executar a leitura no host e regravar este arquivo (ou um novo, datado) com executed: true.",
+    "Pull com dimensao page (page_count > 0) e agenda que popule data/revops/gsc/daily/ para as analises 5/6 e a coorte pagina -> lead.",
+    "Sync local so com credenciais: enquanto history.json registrar RUN_FAILED missing_credentials, o estado e INDISPONIVEL."
+  ]
+}
