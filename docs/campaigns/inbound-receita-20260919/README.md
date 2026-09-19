@@ -20,12 +20,12 @@ Mandato: a ressalva de #705–#707 de que a criação das issues não autorizava
 
 | Estado | Valor | Evidência |
 | --- | --- | --- |
-| IMPLEMENTADO_E_TESTADO | EM ANDAMENTO | — |
-| INTEGRADO | PENDENTE | — |
-| PUBLICADO_E_VERIFICADO | PENDENTE | — |
-| RECEBIMENTO_COMPROVADO / PENDENTE_OPERACIONAL | PENDENTE_OPERACIONAL (herdado de A06 da lapidação) | Turnstile recusa automação (600010); protocolo humano em `design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md` |
-| DESCOBERTA_HABILITADA vs EXPOSICAO_OBSERVADA | HABILITAÇÃO EM ANDAMENTO / NÃO OBSERVADA | — |
-| RESULTADO_COMERCIAL | AINDA_NAO_MEDIDO | — |
+| IMPLEMENTADO_E_TESTADO | ATENDIDO (2026-09-19) | PR #708 (27 commits por frente), réplica local do `site-ci` 33/33 sobre `122902d47`, revisão adversarial com 7 achados confirmados e corrigidos; `site-ci` + `pSEO quality gates` verdes na PR |
+| INTEGRADO | ATENDIDO | merge commit `4fa3c64db` (#708); hotfixes de teste `a29eabd96` (#709: contraprova autorreferente em `main`) e `a27472bec` (#710: corrida do harness com o widget antiabuso no artefato de produção) |
+| PUBLICADO_E_VERIFICADO | ATENDIDO (2026-09-19T11:5xZ) | release 35439209267 promovida; `/.well-known/build-info.json` = `runtime-info.release_sha` = `a27472bec`; verificação pública 34/34 (`evidence/verificacao-publica-a27472bec.txt`): seis artigos → pilar com contexto, caso → pilar, pilar → caso, 410 em `/uso-de-ia/` e `/politica-editorial/v/1.0.0/`, rodapé sem "Uso de IA", sitemap sem as rotas, `robots.txt` byte-idêntico, bundle novo servido, amostra de 14 rotas sem menção a IA/contraste, 9 rotas B2G/privadas 200 |
+| RECEBIMENTO_COMPROVADO / PENDENTE_OPERACIONAL | PENDENTE_OPERACIONAL (cadeia sintética verde na nova release; cadeia humana não executada) | `revops-scheduled` daily (run 35441489601): `deploy_identity match=true`, `isolated_probe lead-9e8f…`, `probe_idempotent_same_id`, `probe_no_commercial_inflate 0→0`, `inbound_handoff_counters delivered=19 pending=0`; Turnstile recusa automação (600010) — protocolo humano em `design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md` |
+| DESCOBERTA_HABILITADA vs EXPOSICAO_OBSERVADA | HABILITADA (interna) / NÃO OBSERVADA | ligações publicadas: 6 artigos → pilares, pilar → caso, caso → formulário do pilar; 3 oportunidades externas PREPARADAS, NÃO PUBLICADAS (autorização específica pendente); nenhuma exposição medida ainda |
+| RESULTADO_COMERCIAL | AINDA_NAO_MEDIDO | leitura em Warmbly após janelas comparáveis; quebras de série registradas (§Mensuração) |
 
 ## Matriz de achados
 
@@ -175,3 +175,26 @@ Falsos positivos preservados: "IA" como arquitetura de informação (`data/site/
 - Primeira réplica (sobre `178c6827a`) reprovou em 8 passos; causas e correções: sonda nginx tratava `v/1.0.0` como arquivo (corrigida em `scripts/migration/netcup/validate-nginx.mjs`); bundle `script.js` defasado em relação a `js/modules/nav.js` (reconstruído; achado JOR-01 da revisão); regra CSS morta `.ai-disclosure`; censo do logo e baseline de desempenho com 233 rotas (regravados para 231); exceções de copy da rota retirada; `CHROME_PATH` e rebuild concorrente no ambiente da réplica (não são defeitos do candidato).
 - Revisão adversarial independente (workflow `inbound-receita-review`, 4 dimensões × 2 refutadores por achado P0/P1): confirmados JOR-01, JOR-02, JOR-03, ED-01, ED-02, ED-03, ED-04 — todos corrigidos nos commits `e32b9d8c2`, `c68e5ed30`, `bd20d86a9`; P2 assumidos: INB-SEO-01 (teste antigo exigia `/uso-de-ia/`), INB-SEO-02 (`CHROME_PREFIXES`), INB-SEO-03 (data do pilar), A2/ED-05 (contraste humano/automatizado em 15 rotas + terceira família do gate). Refutado: F005 (PII em `wa.me`). Não corrigidos por decisão: INB-SEO-05 (datas dos 4 artigos noindex, pré-existente, efeito nulo em busca).
 - `site-ci` e `pSEO quality gates` reais: PR #708.
+
+## Publicação e verificação (2026-09-19)
+
+- PR #708 (`campaign/inbound-receita-20260919`, head `9c74ff5b3`; artefato construído em `122902d47`): `site-ci` 35431639964 e 35433006506 verdes, pSEO verde. Merge commit `4fa3c64db` (09:23Z).
+- Release de `4fa3c64db` (35434558511) reprovou no gate `site-ci` de `main`: a contraprova `test_click_origin_guard_lets_the_bridge_evolve_only` montava a fixture a partir de `origin/main`, que após o merge já continha o link do pilar → PR #709 (`a29eabd96`, só teste). Release de `a29eabd96` (35436385962, duas execuções) reprovou em "Commercial visitor journeys": `next_hit_target:false` antes do clique em "Adicionar mais detalhes" e foco em `consentimento` — clique emitido durante o deslocamento de layout do widget antiabuso, presente só no artefato de produção (o `site-ci` da PR e a réplica local, 3/3, passaram) → PR #710 (`a27472bec`, harness espera botão estável e alvo do hit-test; asserção da transição mantida).
+- Release 35439209267 (`a27472bec`): preflight, `site-ci` (contexto de produção), pSEO, package/attest, stage, qualification e promote verdes. Predecessor servido: `6bd981197` (disponível para reversão pelo controlador canônico, `docs/ops/ROLLBACK.md`).
+- Verificação pública: `evidence/verificacao-publica-a27472bec.txt` (34/34). Rotina diária autorizada (run 35441489601): verde, sem inflar indicadores comerciais (QA sintético excluído por `record_kind`).
+- Equivalência documental: o merge do #709/#710 alterou apenas testes; o artefato público de `a27472bec` é o mesmo conteúdo verificado em `122902d47` (diferem só identidade/manifestos).
+
+## Ação humana mínima restante
+
+1. **A06 — recebimento humano pelo Turnstile** (herdado): executar `design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md` num navegador real (3 envios, contatos autorizados, referência REF-…), devolvendo `lead_id`, hora, chegada na caixa e `delivery.email.provider_id`. Sem isso o estado permanece PENDENTE_OPERACIONAL.
+2. **Distribuição externa (#707)**: autorizar (ou não) cada uma das três oportunidades em `evidence/distribuicao-preparada.json`; registrar início/fim reais da janela de 14 dias quando houver distribuição efetiva.
+3. **Warmbly (#706)**: decidir o campo canônico de origem da oportunidade (`origem` continua o slug do pilar; o contexto do artigo chega em `tema`, `landing_page`, `referrer` e no prefixo da mensagem) e o contrato de contagem de propostas (uma por oportunidade/escopo; revisão substitui; alternativas não somadas; total × parcela mensal; emitida/aceita/faturada/recebida; America/Sao_Paulo) — a parcela web ficou retrocompatível; fixtures (a)–(j) ficam para a PR-2 quando o contrato do snapshot for acordado.
+
+## Encerramento
+
+1. Implementado e testado: jornada B2G medição/glosa (seis artigos + caso + pilar), instrumentação web (#706) e descoberta interna (#707); adendo editorial de ausência de menção a IA com gate; recapturas coordenadas.
+2. Integrado: `4fa3c64db` + `a29eabd96` + `a27472bec` em `main`.
+3. Publicado e verificado: `a27472bec` servido e conferido (34/34).
+4. Recebimento: cadeia sintética comprovada; cadeia humana PENDENTE_OPERACIONAL (A06).
+5. Descoberta/distribuição: habilitada internamente; exposição não observada; externa preparada, não publicada.
+6. Resultado comercial: ainda não medido (sem promessa de tráfego, indexação ou receita).
