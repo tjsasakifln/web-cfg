@@ -31,6 +31,10 @@ IMPORT_RE = re.compile(
     r"""(@import\s+url\(\s*["']?)(/styles-tokens\.css)(?:[?#][^"')\s]*)?(["']?\s*\))""",
     re.IGNORECASE,
 )
+TOKENS_IMPORT_STATEMENT_RE = re.compile(
+    r"""@import\s+url\(\s*["']?/styles-tokens\.css(?:[?#][^"')\s]*)?["']?\s*\)\s*;[ \t]*\n?""",
+    re.IGNORECASE,
+)
 HASHED_CSS_HREF_RE = re.compile(
     rf"^/assets/css/(?:.*/)?[^/]+\.[0-9a-f]{{{HASH_LEN}}}\.css$",
     re.IGNORECASE,
@@ -328,6 +332,14 @@ def _validate_relocatable_css(
         )
 
 
+def _inline_tokens_import(css: str, tokens_css: str) -> str:
+    """Replace the `@import url(/styles-tokens.css);` statement with the tokens themselves."""
+    def _sub(match: "re.Match[str]") -> str:
+        return tokens_css.strip() + "\n"
+
+    return TOKENS_IMPORT_STATEMENT_RE.sub(_sub, css, count=1)
+
+
 def fingerprint_published_css(dest: Path) -> dict[str, Any]:
     """Rewrite dest HTML to content-hashed CSS; write css-assets.json.
 
@@ -411,12 +423,14 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
             continue
         path = sources[source_href]
         raw = path.read_text(encoding="utf-8")
-        rewritten = IMPORT_RE.sub(rf"\g<1>{token_href}\g<3>", raw) if token_hash else raw
-        _validate_relocatable_css(
-            rewritten,
-            source_href,
-            allowed_local_imports={_href_path(token_href)} if token_hash else set(),
-        )
+        # The tokens sheet is inlined where the source says `@import url(/styles-tokens.css)`:
+        # an @import is a serialized fetch (download the sheet, parse, then fetch the import),
+        # one extra round trip on every route's render path. Measured 2026-09-19 on /entregas/,
+        # /casos/ and /servicos/ together with the smaller identity font: simulated LCP fell from
+        # ~1950 ms to 1650-1800 ms against the 2000 ms budget. Source files keep the @import for
+        # local viewing; only the published artifact is flattened.
+        rewritten = _inline_tokens_import(raw, token_bytes.decode("utf-8")) if token_bytes else raw
+        _validate_relocatable_css(rewritten, source_href)
         data = rewritten.encode("utf-8")
         digest = short_hash(data)
         hashed_rel = _hashed_asset_rel(source_href, digest)

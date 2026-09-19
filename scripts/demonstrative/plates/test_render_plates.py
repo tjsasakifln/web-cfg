@@ -26,7 +26,7 @@ from fontTools.ttLib import TTFont  # noqa: E402
 from scripts.demonstrative.plates import render_plates as R  # noqa: E402
 from scripts.demonstrative.plates import sheet as S  # noqa: E402
 
-FONT_PATH = ROOT / "assets" / "archivo-var-latin-bf6e041e.woff2"
+FONT_PATH = ROOT / "assets" / "archivo-var-latin-b19be0f7.woff2"
 NS = "{http://www.w3.org/2000/svg}"
 NUM_RE = re.compile(r"\d+(?:[.,]\d+)?")
 PAINT_RE = re.compile(r"\b(?:fill|stroke|stop-color)=\"([^\"]+)\"")

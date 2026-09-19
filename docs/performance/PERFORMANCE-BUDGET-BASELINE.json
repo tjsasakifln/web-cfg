@@ -1,7 +1,7 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 21,
-    "asset_raw_kb_max_route": 1094.51,
+    "asset_raw_kb_max_route": 1077.56,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
     "routes_measured": 231
   },
@@ -207,8 +207,8 @@
   },
   "fonts": {
     "font_files_total": 1,
-    "font_gzip_kb_max_route": 58.69,
-    "font_gzip_kb_total": 58.69,
+    "font_gzip_kb_max_route": 41.25,
+    "font_gzip_kb_total": 41.25,
     "measured_by": "scripts/site/audit_performance.py measure_routes",
     "routes_with_font_face_rules": [
       "/",

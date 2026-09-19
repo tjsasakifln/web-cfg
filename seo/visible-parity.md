@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `96`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/inbound-clean/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/bofu-clean/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |

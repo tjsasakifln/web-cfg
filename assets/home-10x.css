@@ -342,6 +342,9 @@ html.js body[data-content-cluster="home"] main>#triagem-tecnica,html.js body[dat
 /* ── 9. Celular: ritmo mais curto sem esconder conteúdo (medido 2026-09-17) ── */
 @media (max-width:699px){
   .situation-row{padding:1rem 0 1.15rem;gap:.3rem}
+  /* A linha escura de obras públicas herda o bloco (.area--b2g) e precisa manter o respiro lateral:
+     sem esta regra, a linha acima (mesma especificidade, declarada depois) zera o padding lateral e o texto encosta na borda do fundo. */
+  .situation-row.area--b2g{padding:1.5rem clamp(1rem,2.5vw,1.75rem) 1.6rem}
   .situation-row .situation-action{min-height:44px;margin-top:.1rem}
   .area__sub{gap:.1rem .75rem;margin-top:.2rem}
   .area__sub a{min-height:44px}

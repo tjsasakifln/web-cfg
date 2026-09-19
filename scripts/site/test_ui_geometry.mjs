@@ -640,6 +640,56 @@ async function main() {
     fail("matrix_mobile_stacked_records", e.message || e);
   }
 
+  // 10b) the dark public-works row keeps its lateral breathing room at every width.
+  // Regression 2026-09-19: `.situation-row{padding:1rem 0 1.15rem}` (mobile block) had the
+  // same specificity as `.area--b2g{padding:1.5rem clamp(...)}` and was declared later, so
+  // ≤699px the text of #situacao-obras-publicas touched the edge of its navy background.
+  // Measured on computed style AND on boxes (overflow:clip could mask a clipped child).
+  try {
+    const widths = [320, 390, 430, 699, 700, 900, 1100, 1440];
+    const rows = [];
+    for (const width of widths) {
+      await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+      await page.evaluate(() => document.getElementById("situacao-obras-publicas")?.scrollIntoView({ block: "center" }));
+      const m = await page.evaluate(() => {
+        const row = document.getElementById("situacao-obras-publicas");
+        if (!row) return { missing: true };
+        const cs = getComputedStyle(row);
+        const r = row.getBoundingClientRect();
+        const kids = [...row.children].map((el) => {
+          const b = el.getBoundingClientRect();
+          return { tag: el.tagName, cls: el.className, left: b.left, right: b.right, width: b.width };
+        });
+        const plain = document.querySelector(".situation-row:not(.area--b2g)");
+        return {
+          padL: parseFloat(cs.paddingLeft), padR: parseFloat(cs.paddingRight),
+          padT: parseFloat(cs.paddingTop), padB: parseFloat(cs.paddingBottom),
+          bg: cs.backgroundColor, rowLeft: r.left, rowRight: r.right, rowWidth: r.width,
+          minChildLeft: Math.min(...kids.map((k) => k.left)), maxChildRight: Math.max(...kids.map((k) => k.right)),
+          docOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+          plainPadL: plain ? parseFloat(getComputedStyle(plain).paddingLeft) : null,
+        };
+      });
+      if (m.missing) throw new Error("#situacao-obras-publicas missing");
+      rows.push({ width, ...m });
+      // ≥16px of lateral padding (clamp(1rem,2.5vw,1.75rem) never goes below 1rem) at every width.
+      if (!(m.padL >= 15.5 && m.padR >= 15.5)) throw new Error(`lateral padding lost at ${width}px: L=${m.padL} R=${m.padR}`);
+      if (!(m.padT >= 15.5 && m.padB >= 15.5)) throw new Error(`vertical padding lost at ${width}px: T=${m.padT} B=${m.padB}`);
+      // Children stay inside the padded box: text never touches the navy edge.
+      if (m.minChildLeft < m.rowLeft + m.padL - 0.5) throw new Error(`child touches left edge at ${width}px: child=${m.minChildLeft} row=${m.rowLeft} pad=${m.padL}`);
+      if (m.maxChildRight > m.rowRight - m.padR + 0.5) throw new Error(`child spills past right padding at ${width}px: child=${m.maxChildRight} row=${m.rowRight} pad=${m.padR}`);
+      if (m.docOverflow) throw new Error(`horizontal page overflow at ${width}px`);
+      if (m.rowRight > width + 0.5) throw new Error(`row wider than viewport at ${width}px: right=${m.rowRight}`);
+      // The plain rows keep the mobile rhythm (no lateral padding) — the fix is scoped to the dark row.
+      if (width <= 699 && m.plainPadL !== 0) throw new Error(`plain situation row gained lateral padding at ${width}px: ${m.plainPadL}`);
+    }
+    console.log("   ", rows.map((r) => `${r.width}:${r.padL}/${r.padR}`).join(" "));
+    ok("b2g_situation_row_keeps_lateral_padding");
+  } catch (e) {
+    fail("b2g_situation_row_keeps_lateral_padding", e.message || e);
+  }
+
   // 11) form validation — empty multi-step form is invalid
   try {
     await page.setViewport({ width: 1024, height: 800 });

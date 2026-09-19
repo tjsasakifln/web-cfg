@@ -35,7 +35,7 @@ from scripts.site.shell_nav import shipped_html_files  # noqa: E402
 # approval, so they keep the swap fallback without the preload.
 HASH_BOUND_DECISIONS = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
 
-FONT_HREF = "/assets/archivo-var-latin-bf6e041e.woff2"
+FONT_HREF = "/assets/archivo-var-latin-b19be0f7.woff2"
 PRELOAD = (
     f'<link rel="preload" as="font" type="font/woff2" href="{FONT_HREF}" '
     'crossorigin="anonymous"/>'
