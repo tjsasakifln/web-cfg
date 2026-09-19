@@ -296,6 +296,23 @@ try {
     await page.type("#nome", syntheticName);
     await page.type("#email", syntheticEmail);
     await page.select("#estagio", scenario.stage);
+    // The anti-abuse widget is inserted into step one asynchronously in the
+    // production artifact and shifts the layout after the fields are filled.
+    // Click only once the "next" control is scrolled into view, its box has
+    // stopped moving and it is the element under its own centre; otherwise a
+    // click issued during the shift lands on a neighbouring control and the
+    // probe reports a transition failure the form did not cause.
+    await page.waitForFunction(() => {
+      const next = document.querySelector("[data-form-next]");
+      if (!next) return false;
+      next.scrollIntoView({ block: "center", behavior: "instant" });
+      const rect = next.getBoundingClientRect();
+      const key = `${Math.round(rect.top)}:${Math.round(rect.left)}`;
+      const stable = next.dataset.probeLastBox === key;
+      next.dataset.probeLastBox = key;
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return stable && Boolean(hit && (hit === next || next.contains(hit)));
+    }, { polling: 250, timeout: 15000 });
     const transitionBefore = await formStepTransitionDiagnostics(page);
     await page.click("[data-form-next]");
     try {
