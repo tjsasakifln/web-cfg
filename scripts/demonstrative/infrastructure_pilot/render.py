@@ -261,8 +261,11 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
 """
 
 
-def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
+def _profile_svg(extracts: dict[str, Any], revision: str, *, id_suffix: str = "") -> str:
     """Longitudinal invert profile of DR-01. Metres."""
+    # id_suffix keeps title/desc ids unique when the same SVG is inlined twice
+    # in one document (hero + plate); the standalone asset uses no suffix.
+    idb = f"prf-{revision}-{id_suffix}" if id_suffix else f"prf-{revision}"
     totals = extracts["named_totals"]
     x0, x1 = 10.0, 30.0
     y_up = float(totals["mh01_invert_m"])
@@ -313,9 +316,9 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
             f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 26:.1f}" font-size="{FS}" fill="{GREEN}">{br_number(y_drawn)} m</text>'
         )
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="prf-{revision}-title prf-{revision}-desc">
-<title id="prf-{revision}-title">{e(title)}</title>
-<desc id="prf-{revision}-desc">{e(desc)}</desc>
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="{idb}-title {idb}-desc">
+<title id="{idb}-title">{e(title)}</title>
+<desc id="{idb}-desc">{e(desc)}</desc>
 <line x1="{X(x0):.1f}" y1="{Y(y_min):.1f}" x2="{X(x1):.1f}" y2="{Y(y_min):.1f}" stroke="{RULE}" stroke-width="1"/>
 <line x1="{X(x0):.1f}" y1="{Y(y_max):.1f}" x2="{X(x0):.1f}" y2="{Y(y_min):.1f}" stroke="{RULE}" stroke-width="1"/>
 {sheet_line}
@@ -504,7 +507,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 </div>
 <figure class="plate plate--side" aria-labelledby="case-plate-cap">
 <div class="plate__sheet">
-{_profile_svg(extracts, "R00")}
+{_profile_svg(extracts, "R00", id_suffix="hero")}
 </div>
 <figcaption class="plate__caption" id="case-plate-cap">Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
 </figure>

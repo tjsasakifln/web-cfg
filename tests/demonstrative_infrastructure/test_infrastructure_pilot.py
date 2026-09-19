@@ -345,3 +345,37 @@ def test_derive_is_deterministic() -> None:
     assert a == b
     assert verify(source, a) == []
     assert compute(source)["pavement_area_m2"] == Decimal(a["named_totals"]["pavement_area_m2"])
+
+
+def _id_counter(html: str):
+    from collections import Counter
+
+    return Counter(re.findall(r'\bid="([^"]+)"', html))
+
+
+def test_rendered_and_shipped_html_have_no_duplicate_ids() -> None:
+    """A11Y-FRAGMENTOS-04: the R00 profile is inlined twice (hero + plate);
+    both copies carried the same title/desc ids, so the second SVG resolved
+    its accessible name to the first and the document was invalid."""
+    extracts = derive(_source())
+    for label, html in (
+        ("rendered", render_html(extracts)),
+        ("shipped", (ROOT / PUBLIC_DIR_REL / "index.html").read_text(encoding="utf-8")),
+    ):
+        duplicated = sorted(name for name, count in _id_counter(html).items() if count > 1)
+        assert not duplicated, f"{label}: id duplicado {duplicated}"
+        for match in re.finditer(r'aria-labelledby="([^"]+)"', html):
+            for ref in match.group(1).split():
+                assert f'id="{ref}"' in html, f"{label}: aria-labelledby aponta para id ausente {ref}"
+
+
+def test_hero_profile_svg_keeps_its_own_accessible_name(tmp_path: Path) -> None:
+    extracts = derive(_source())
+    html = render_html(extracts)
+    hero = html.split('<figure class="plate plate--side"', 1)[1].split("</figure>", 1)[0]
+    assert 'aria-labelledby="prf-R00-hero-title prf-R00-hero-desc"' in hero
+    assert 'id="prf-R00-hero-title"' in hero and 'id="prf-R00-hero-desc"' in hero
+    # The standalone asset keeps the unsuffixed ids.
+    written = write_outputs(tmp_path, extracts)
+    asset = written["perfil-r00"].read_text(encoding="utf-8")
+    assert 'id="prf-R00-title"' in asset and "hero" not in asset
