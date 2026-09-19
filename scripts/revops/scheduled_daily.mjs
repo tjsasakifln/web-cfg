@@ -8,6 +8,7 @@
  * Exit 0 only when all critical checks pass. Writes proof under data/revops/schedule-runs/.
  */
 import { execSync } from "child_process";
+import { randomUUID } from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -24,6 +25,10 @@ const TOKEN = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
 // a request we fire knowing it fails.
 const LEAD_PROBE_SECRET = String(process.env.LEAD_PROBE_SECRET || "");
 const LEAD_PROBE_SECRET_MIN_LENGTH = 32;
+// A real lead whose e-mail is still `error`/`pending` after this long is an
+// operator alert: the capture path never retries a timed-out send and the
+// drain retry (reconcileEmailDeliveries) only runs when this job runs.
+const EMAIL_STALE_AFTER_MS = 60 * 60 * 1000;
 const out = {
   job: "daily",
   base: BASE,
@@ -50,6 +55,20 @@ function blockedExternal(name, dependency, detail) {
   out.blocked_external.push({ name, dependency, detail });
   out.alerts.push({ name: `${name}_blocked_external`, dependency, detail });
   console.log("BLOCKED_EXTERNAL", name, `dependency=${dependency}`, detail);
+}
+
+// Real leads (pii=0 projection) whose e-mail delivery is still error/pending
+// and were received more than EMAIL_STALE_AFTER_MS ago. Pure; ids only.
+function staleEmailDeliveries(leads, nowMs) {
+  if (!Array.isArray(leads)) return [];
+  return leads.filter((l) => {
+    const email = l && l.delivery ? l.delivery.email : undefined;
+    const status = typeof email === "string" ? email : email && email.status;
+    if (status !== "error" && status !== "pending") return false;
+    const received = Date.parse((l && l.received_at) || "");
+    if (!Number.isFinite(received)) return true;
+    return nowMs - received > EMAIL_STALE_AFTER_MS;
+  });
 }
 
 const j = createOpsJsonClient({
@@ -124,7 +143,9 @@ if (LEAD_PROBE_SECRET.length < LEAD_PROBE_SECRET_MIN_LENGTH) {
     before = f.body.funnel?.counts?.lead_persisted ?? null;
   }
   const stamp = Date.now();
-  const idem = `scheduled-probe-${stamp}`;
+  // Non-derivable key, like the canonical probe (synthetic_lead_probe.mjs): a
+  // key built from Date.now() alone would be guessable by a third party.
+  const idem = `scheduled-probe-${randomUUID()}`;
   const payload = {
     nome: "SYNTHETIC-PROBE",
     email: `probe+daily-${stamp}@example.com`,
@@ -164,10 +185,12 @@ if (LEAD_PROBE_SECRET.length < LEAD_PROBE_SECRET_MIN_LENGTH) {
     body: JSON.stringify(payload),
   });
   const body2 = await res2.json().catch(() => ({}));
+  // Same contract as the canonical probe: the replay must be the stored
+  // receipt (200 + idempotent:true), never a second 201 with the same id.
   check(
     "probe_idempotent_same_id",
-    (res2.status === 200 || res2.status === 201) && body2.lead_id === body.lead_id,
-    `id1=${body.lead_id} id2=${body2.lead_id}`
+    res2.status === 200 && body2.idempotent === true && body2.lead_id === body.lead_id,
+    `http2=${res2.status} idempotent=${body2.idempotent} id1=${body.lead_id} id2=${body2.lead_id}`
   );
   if (TOKEN && before != null) {
     const f = await j("/.netlify/functions/ops?action=funnel");
@@ -198,6 +221,22 @@ if (TOKEN) {
       name: "real_leads_sla_breach",
       detail: `${breaches.length} real lead(s) need first contact`,
       lead_ids: breaches.slice(0, 10).map((l) => l.lead_id),
+    });
+  }
+  // A real lead whose e-mail never left (delivery.email error/pending) for
+  // more than EMAIL_STALE_AFTER_MS is a critical alert, not a metric: the
+  // Resend e-mail is the only operator notification when no webhook is set.
+  const staleEmail = staleEmailDeliveries(leads.body.leads, Date.now());
+  check(
+    "real_leads_email_delivered",
+    leads.body.ok === true && staleEmail.length === 0,
+    `stale_email=${staleEmail.length} threshold_ms=${EMAIL_STALE_AFTER_MS}`
+  );
+  if (staleEmail.length) {
+    out.alerts.push({
+      name: "real_leads_email_stale",
+      detail: `${staleEmail.length} real lead(s) with delivery.email error/pending for more than ${EMAIL_STALE_AFTER_MS / 60000} min`,
+      lead_ids: staleEmail.slice(0, 10).map((l) => l.lead_id),
     });
   }
 
@@ -248,6 +287,26 @@ if (TOKEN) {
     `attempted=${drain.body.attempted || 0} delivered=${drain.body.delivered || 0}`,
     { critical: false }
   );
+  // The drain re-sends the lead e-mail inside Resend's 24 h idempotency
+  // window; a row it can no longer retry (window expired, attempts exhausted,
+  // payload mismatch) is only counted there. That count must reach the
+  // operator as a critical failure, not stay buried in the drain detail.
+  // Only evaluated when the drain answered (an unreachable ops is already the
+  // non-critical inbound_handoff_drain failure above).
+  if (drain.status === 200) {
+    const reconcile = Number(drain.body.email_reconcile_required);
+    check(
+      "email_reconcile_required",
+      Number.isFinite(reconcile) && reconcile === 0,
+      `email_reconcile_required=${drain.body.email_reconcile_required} reasons=${JSON.stringify((drain.body.email_retry && drain.body.email_retry.reconcile_reasons) || {})}`
+    );
+  }
+  out.email_delivery = {
+    stale_real_leads: staleEmail.length,
+    email_reconcile_required: drain.status === 200 ? drain.body.email_reconcile_required ?? null : null,
+    email_attempted: drain.status === 200 ? drain.body.email_attempted ?? null : null,
+    email_delivered: drain.status === 200 ? drain.body.email_delivered ?? null : null,
+  };
   const soProduce = await j("/.netlify/functions/ops?action=produce_search_observation", {
     method: "POST",
     body: JSON.stringify({}),
