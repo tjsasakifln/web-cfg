@@ -5,9 +5,9 @@
  */
 @font-face{
   font-family:"Archivo Var";
-  src:url("/assets/archivo-var-latin-bf6e041e.woff2") format("woff2-variations");
+  src:url("/assets/archivo-var-latin-b19be0f7.woff2") format("woff2-variations");
   font-weight:100 900;
-  font-stretch:66% 110%;
+  font-stretch:78% 100%;
   font-style:normal;
   /* optional + preload: the face paints on first paint when the preload has
    * landed (fast/repeat visits) and never swaps late, so the hero cannot shift

@@ -258,7 +258,7 @@ def render_html(
 <meta property="og:description" content="{escape(copy["og_description"])}"/>
 <meta property="og:url" content="{escape(copy["og_url"])}"/>
 <meta property="og:image" content="{escape(copy["og_image"])}"/>
-<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link rel="stylesheet" href="/styles-tools.css"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>

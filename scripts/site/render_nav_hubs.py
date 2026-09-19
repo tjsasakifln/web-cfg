@@ -229,7 +229,7 @@ def _document(
 <meta content="{e(description)}" property="og:description"/>
 <meta content="{SITE}{url}" property="og:url"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
-<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
 <link href="/styles-hubs.css" rel="stylesheet"/>
 <link href="/assets/editorial.css" rel="stylesheet"/>

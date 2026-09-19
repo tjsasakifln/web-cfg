@@ -8,7 +8,7 @@ const puppeteer = require(process.env.PUPPETEER_CORE || path.join(ROOT, 'node_mo
 const CHROME = process.env.CHROME || path.join(process.env.HOME, '.cache/ms-playwright/chromium-1234/chrome-linux64/chrome');
 const OUT = process.argv[2] || path.join(ROOT, 'docs/campaigns/design-institucional/evidence/pranchas');
 const only = process.argv[3];
-const FONT = fs.readFileSync(path.join(ROOT, 'assets/archivo-var-latin-bf6e041e.woff2')).toString('base64');
+const FONT = fs.readFileSync(path.join(ROOT, 'assets/archivo-var-latin-b19be0f7.woff2')).toString('base64');
 (async () => {
   const browser = await puppeteer.launch({
     executablePath: CHROME,

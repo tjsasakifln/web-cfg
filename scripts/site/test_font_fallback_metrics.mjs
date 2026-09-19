@@ -25,7 +25,7 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 // 2026-09-16: the face moved from assets/home-10x.css (home only) to css/identity.css,
 // concatenated into styles.css for every route. The stack is the --sans token.
 const css = readFileSync(join(ROOT, "styles.css"), "utf8") + readFileSync(join(ROOT, "styles-tokens.css"), "utf8");
-const FONT = "assets/archivo-var-latin-bf6e041e.woff2";
+const FONT = "assets/archivo-var-latin-b19be0f7.woff2";
 
 // 1. Static contract.
 const face = css.match(/@font-face\{[^}]*font-family:"Archivo Fallback";[^}]*\}/);

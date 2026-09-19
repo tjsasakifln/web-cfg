@@ -143,7 +143,7 @@ function renderPage({ flagEnabled } = {}) {
 <meta name="robots" content="noindex,nofollow"/>
 <meta name="description" content="Canario noindex: resposta de mercado fixture e X-Ray por CNPJ. Nao e catalogo vivo."/>
 <link rel="canonical" href="https://confenge.com.br/piloto/conversao-xray/"/>
-<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link rel="stylesheet" href="/styles-tools.css"/>
 </head>

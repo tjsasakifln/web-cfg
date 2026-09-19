@@ -125,7 +125,9 @@ def test_fingerprint_rewrites_html_to_hashed_css():
         assert marker in hashed_css
         assert ".offer-context{" in hashed_css
         assert "grid-template-columns:repeat(3,minmax(0,1fr))" in hashed_css
-        assert "/assets/css/styles-tokens." in hashed_css
+        # The tokens import is flattened into the published sheet (no serialized second fetch).
+        assert "@import" not in hashed_css, hashed_css[:200]
+        assert ":root{--ink:#071a31}" in hashed_css
 
         tools_html = tools.read_text(encoding="utf-8")
         tool_hrefs = stylesheet_hrefs(tools_html)

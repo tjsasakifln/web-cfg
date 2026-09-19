@@ -62,7 +62,7 @@ Uso hoje: **inline** (`<figure class="demo-figure">` + `<figcaption>`) só em `/
 ### 1.5 Retrato do responsável técnico — ver §3
 
 ### 1.6 Tipografia
-`assets/archivo-var-latin-bf6e041e.woff2` (Archivo v2.001, Omnibus-Type, SIL OFL 1.1, licença em `assets/archivo-OFL.txt`; subconjunto latino, 58,7 KB gzip, carregada só na home via `assets/home-10x.css`). Única fonte com licença verificada no repo.
+`assets/archivo-var-latin-b19be0f7.woff2` (Archivo v2.001, Omnibus-Type, SIL OFL 1.1, licença em `assets/archivo-OFL.txt`; subconjunto latino, 58,7 KB gzip, carregada só na home via `assets/home-10x.css`). Única fonte com licença verificada no repo.
 
 ---
 

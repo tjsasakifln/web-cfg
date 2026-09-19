@@ -416,7 +416,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <meta content="#061a33" name="theme-color"/>
 <title>{e(title)}</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
 <link href="{e(canonical)}" rel="canonical"/>
 <script defer="" src="/script.js?v=fortune02"></script>
@@ -612,7 +612,7 @@ def render_opportunities_index_html(
 <meta content="#061a33" name="theme-color"/>
 <title>{e(INDEX_TITLE)}</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
 <link href="{e(canonical)}" rel="canonical"/>
 <script defer="" src="/script.js?v=fortune02"></script>

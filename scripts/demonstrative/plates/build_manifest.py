@@ -81,16 +81,16 @@ REUSED = [
         "exported_version": "500x130 · 1677038e",
     },
     {
-        "path": "assets/archivo-var-latin-bf6e041e.woff2",
+        "path": "assets/archivo-var-latin-b19be0f7.woff2",
         "kind": "fonte",
         "origin": "Archivo v2.001 (Omnibus-Type), subconjunto latino de 157 glifos gerado para o site; única fonte com licença verificada no repositório.",
         "license": "SIL Open Font License 1.1 (assets/archivo-OFL.txt)",
         "veracity": "contexto público",
         "pages": ["/ (assets/home-10x.css); as pranchas declaram font-family «Archivo Var, Arial, Helvetica, sans-serif»"],
         "editable_source": "https://github.com/Omnibus-Type/Archivo (fonte variável completa)",
-        "exported_version": "bf6e041e · latin subset",
+        "exported_version": "b19be0f7 · latin subset, wdth 78-100",
     },
-    {"path": "assets/archivo-OFL.txt", "kind": "licença", "same_as": "assets/archivo-var-latin-bf6e041e.woff2"},
+    {"path": "assets/archivo-OFL.txt", "kind": "licença", "same_as": "assets/archivo-var-latin-b19be0f7.woff2"},
 ]
 
 INADEQUATE = [
