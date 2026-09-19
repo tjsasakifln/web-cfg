@@ -1,0 +1,569 @@
+{
+ "method": "prose = HTML with script/style/svg/noscript/comments stripped, tags removed, entities unescaped, whitespace collapsed; counts are case-insensitive substring matches on that prose; negatives = the lot's fixed list (measure.py) EXTENDED with the phrases cut in this propagation lot: 'não edital de cliente','não edital nem proposta de cliente','não é edital','não é contrato de cliente','não é carteira de cliente','nenhum deles é contrato de cliente','não empresa nem órgão real','não é processo nem cliente','não é caso real','não há cliente real','não representa cliente, licitação','não é projeto executivo','não é foto de cliente','nem obra executada','não servem para execução' (overlapping patterns count twice, e.g. 'não representa cliente' + 'não representa cliente, licitação'; 'não é projeto executivo' and 'não servem para execução' are PRESERVED scope cuts and appear in 'after' on purpose)",
+ "campaign": "CONFENGE-LAPIDACAO-COMERCIAL-20260918 §3C propagation",
+ "measured_on": "2026-09-18",
+ "base_commit": "e3c97a1d0 (branch HEAD after the lot 82d6da29b)",
+ "routes": {
+  "/aditivos-obras-publicas/": {
+   "before": {
+    "prose_chars": 13037,
+    "demonstrativ": 4,
+    "negatives_total": 3,
+    "negatives": {
+     "não é parecer": 1,
+     "não obra de cliente": 1,
+     "não é contrato de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 12873,
+    "demonstrativ": 3,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  },
+  "/reequilibrio-obras-publicas/": {
+   "before": {
+    "prose_chars": 11593,
+    "demonstrativ": 4,
+    "negatives_total": 3,
+    "negatives": {
+     "não contrato de cliente": 1,
+     "não é parecer": 2
+    }
+   },
+   "after": {
+    "prose_chars": 11448,
+    "demonstrativ": 3,
+    "negatives_total": 2,
+    "negatives": {
+     "não é parecer": 2
+    }
+   }
+  },
+  "/atrasos-prorrogacao-obras-publicas/": {
+   "before": {
+    "prose_chars": 12357,
+    "demonstrativ": 5,
+    "negatives_total": 3,
+    "negatives": {
+     "não é obra de cliente": 1,
+     "não é parecer": 1,
+     "não obra de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 12230,
+    "demonstrativ": 4,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  },
+  "/auditoria-orcamento-licitacao/": {
+   "before": {
+    "prose_chars": 12576,
+    "demonstrativ": 4,
+    "negatives_total": 4,
+    "negatives": {
+     "não é parecer": 2,
+     "não edital nem proposta de cliente": 1,
+     "não é edital": 1
+    }
+   },
+   "after": {
+    "prose_chars": 12386,
+    "demonstrativ": 3,
+    "negatives_total": 2,
+    "negatives": {
+     "não é parecer": 2
+    }
+   }
+  },
+  "/defesa-tecnica-contratos-publicos/": {
+   "before": {
+    "prose_chars": 12021,
+    "demonstrativ": 5,
+    "negatives_total": 1,
+    "negatives": {
+     "não é caso de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 11892,
+    "demonstrativ": 4,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/defesa-margem-contratos-publicos/": {
+   "before": {
+    "prose_chars": 13318,
+    "demonstrativ": 5,
+    "negatives_total": 2,
+    "negatives": {
+     "não contrato de cliente": 1,
+     "não é contrato de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 13204,
+    "demonstrativ": 4,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/diagnostico-pre-licitacao/": {
+   "before": {
+    "prose_chars": 11660,
+    "demonstrativ": 4,
+    "negatives_total": 3,
+    "negatives": {
+     "não é parecer": 1,
+     "não edital de cliente": 1,
+     "não é edital": 1
+    }
+   },
+   "after": {
+    "prose_chars": 11496,
+    "demonstrativ": 3,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  },
+  "/diagnostico-b2g-360/": {
+   "before": {
+    "prose_chars": 9817,
+    "demonstrativ": 4,
+    "negatives_total": 3,
+    "negatives": {
+     "não é carteira de cliente": 1,
+     "nenhum deles é contrato de cliente": 1,
+     "não empresa nem órgão real": 1
+    }
+   },
+   "after": {
+    "prose_chars": 9643,
+    "demonstrativ": 3,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-relatorio-inteligencia-licitacoes/": {
+   "before": {
+    "prose_chars": 20897,
+    "demonstrativ": 11,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 20740,
+    "demonstrativ": 11,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-apresentacao-executiva-resultados/": {
+   "before": {
+    "prose_chars": 30042,
+    "demonstrativ": 8,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 29890,
+    "demonstrativ": 8,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-contratos-vincendos-relicitacao/": {
+   "before": {
+    "prose_chars": 25054,
+    "demonstrativ": 12,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 24897,
+    "demonstrativ": 12,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-mapeamento-concorrentes-publicos/": {
+   "before": {
+    "prose_chars": 29621,
+    "demonstrativ": 9,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 29464,
+    "demonstrativ": 9,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-base-quantitativa-canonica/": {
+   "before": {
+    "prose_chars": 26796,
+    "demonstrativ": 11,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 26639,
+    "demonstrativ": 11,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-painel-precos-obras-publicas/": {
+   "before": {
+    "prose_chars": 25866,
+    "demonstrativ": 9,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 25707,
+    "demonstrativ": 9,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-relatorio-executivo-consolidado/": {
+   "before": {
+    "prose_chars": 30497,
+    "demonstrativ": 10,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 30340,
+    "demonstrativ": 10,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/modelo-mapa-compradores-publicos/": {
+   "before": {
+    "prose_chars": 26679,
+    "demonstrativ": 11,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "não representa cliente, licitação": 1
+    }
+   },
+   "after": {
+    "prose_chars": 26522,
+    "demonstrativ": 11,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/aditivo-art125-demonstrativo/": {
+   "before": {
+    "prose_chars": 6071,
+    "demonstrativ": 9,
+    "negatives_total": 3,
+    "negatives": {
+     "não há cliente": 1,
+     "não é parecer": 1,
+     "não há cliente real": 1
+    }
+   },
+   "after": {
+    "prose_chars": 5964,
+    "demonstrativ": 9,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  },
+  "/casos/demonstrativo-infraestrutura/": {
+   "before": {
+    "prose_chars": 12609,
+    "demonstrativ": 9,
+    "negatives_total": 3,
+    "negatives": {
+     "não há contratante": 1,
+     "não é projeto executivo": 1,
+     "não servem para execução": 1
+    }
+   },
+   "after": {
+    "prose_chars": 12566,
+    "demonstrativ": 9,
+    "negatives_total": 2,
+    "negatives": {
+     "não é projeto executivo": 1,
+     "não servem para execução": 1
+    }
+   }
+  },
+  "/compatibilizacao-projetos-engenharia/": {
+   "before": {
+    "prose_chars": 13724,
+    "demonstrativ": 10,
+    "negatives_total": 3,
+    "negatives": {
+     "não é obra de cliente": 1,
+     "sem obra de cliente": 1,
+     "não é projeto executivo": 1
+    }
+   },
+   "after": {
+    "prose_chars": 13688,
+    "demonstrativ": 10,
+    "negatives_total": 1,
+    "negatives": {
+     "não é projeto executivo": 1
+    }
+   }
+  },
+  "/revisao-tecnica-projetos-engenharia/": {
+   "before": {
+    "prose_chars": 12681,
+    "demonstrativ": 4,
+    "negatives_total": 3,
+    "negatives": {
+     "não é parecer": 1,
+     "não é trabalho de cliente": 2
+    }
+   },
+   "after": {
+    "prose_chars": 12561,
+    "demonstrativ": 4,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/projetos-complementares-engenharia/": {
+   "before": {
+    "prose_chars": 14935,
+    "demonstrativ": 10,
+    "negatives_total": 2,
+    "negatives": {
+     "não é obra de cliente": 1,
+     "não representa cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 14893,
+    "demonstrativ": 10,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/parcerias-engenharia/": {
+   "before": {
+    "prose_chars": 11862,
+    "demonstrativ": 7,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 1,
+     "nem obra executada": 1
+    }
+   },
+   "after": {
+    "prose_chars": 11819,
+    "demonstrativ": 7,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/inspecao-diagnostico-edificacoes/": {
+   "before": {
+    "prose_chars": 13129,
+    "demonstrativ": 3,
+    "negatives_total": 1,
+    "negatives": {
+     "não é foto de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 13106,
+    "demonstrativ": 3,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/assistencia-tecnica-pericial-engenharia/": {
+   "before": {
+    "prose_chars": 12358,
+    "demonstrativ": 7,
+    "negatives_total": 3,
+    "negatives": {
+     "não é processo nem cliente": 2,
+     "não é caso real": 1
+    }
+   },
+   "after": {
+    "prose_chars": 12294,
+    "demonstrativ": 6,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/seguranca-trabalho-apoio-tecnico/": {
+   "before": {
+    "prose_chars": 13512,
+    "demonstrativ": 6,
+    "negatives_total": 0,
+    "negatives": {}
+   },
+   "after": {
+    "prose_chars": 13512,
+    "demonstrativ": 6,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/conteudos/comparar-propostas-execucao-obra/": {
+   "before": {
+    "prose_chars": 5438,
+    "demonstrativ": 1,
+    "negatives_total": 2,
+    "negatives": {
+     "não representa cliente": 2
+    }
+   },
+   "after": {
+    "prose_chars": 5313,
+    "demonstrativ": 1,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/conteudos/revisar-ou-refazer-orcamento-obra/": {
+   "before": {
+    "prose_chars": 4268,
+    "demonstrativ": 1,
+    "negatives_total": 1,
+    "negatives": {
+     "não representa cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 4217,
+    "demonstrativ": 1,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/": {
+   "before": {
+    "prose_chars": 13959,
+    "demonstrativ": 8,
+    "negatives_total": 2,
+    "negatives": {
+     "não trabalhos da confenge": 1,
+     "não resultados de clientes": 1
+    }
+   },
+   "after": {
+    "prose_chars": 13882,
+    "demonstrativ": 8,
+    "negatives_total": 2,
+    "negatives": {
+     "não trabalhos da confenge": 1,
+     "não resultados de clientes": 1
+    }
+   }
+  },
+  "/servicos-obras-publicas/": {
+   "before": {
+    "prose_chars": 12302,
+    "demonstrativ": 4,
+    "negatives_total": 0,
+    "negatives": {}
+   },
+   "after": {
+    "prose_chars": 12291,
+    "demonstrativ": 4,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/acompanhamento-contratos-obras/": {
+   "before": {
+    "prose_chars": 9244,
+    "demonstrativ": 4,
+    "negatives_total": 1,
+    "negatives": {
+     "não é carteira de cliente": 1
+    }
+   },
+   "after": {
+    "prose_chars": 9107,
+    "demonstrativ": 3,
+    "negatives_total": 0,
+    "negatives": {}
+   }
+  },
+  "/casos/medicao-glosa-demonstrativo/": {
+   "before": {
+    "prose_chars": 6203,
+    "demonstrativ": 10,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   },
+   "after": {
+    "prose_chars": 6169,
+    "demonstrativ": 10,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  },
+  "/casos/demonstrativo-projeto-privado/": {
+   "before": {
+    "prose_chars": 10190,
+    "demonstrativ": 10,
+    "negatives_total": 0,
+    "negatives": {}
+   },
+   "after": {
+    "prose_chars": 10274,
+    "demonstrativ": 10,
+    "negatives_total": 1,
+    "negatives": {
+     "não é parecer": 1
+    }
+   }
+  }
+ }
+}

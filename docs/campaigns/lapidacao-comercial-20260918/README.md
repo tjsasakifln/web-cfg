@@ -59,6 +59,30 @@ Método: três revisores independentes (editorial, jornadas J1–J8, integridade
 
 P2 registrados sem ação (preferência): "Quem acessa: operação CONFENGE" saiu do microtexto do formulário e continua em `/privacidade/`; "não é software, planilha gratuita" saiu do herói de quantitativos ("não executa a obra" permanece em Condições e limites).
 
-## Matriz A01–A12
+## Matriz A01–A12 (preenchida em 2026-09-18; SHA candidato = HEAD da branch de integração)
 
-(preenchida no fechamento)
+| Item | Estado | Evidência |
+| --- | --- | --- |
+| A01 Redundância | ATENDIDO | Medidas antes/depois por rota em `evidence/editorial-measure.json` e `evidence/propagation-measure.json` (prosa, "demonstrativ", negativas); trechos por rota nos commits `82d6da29b`, `209e228d2`; revisão independente confirma C melhor em 5/6 rotas do lote sem paráfrase da repetição |
+| A02 Significado | ATENDIDO | mapa de proposições acima; revisão independente: única perda material (restrição de uso do demonstrativo privado) corrigida em `209e228d2`; testes exigem os cortes de escopo ("não é projeto executivo", "não é orçamento para executar obra", "não é parecer jurídico", preço hipotético junto da tabela) |
+| A03 Demonstrativos | ATENDIDO | rótulo no `<title>`, H1, JSON-LD e `<main>` de cada caso (`test_permissioned_proof`), em cada prancha SVG (título, desc, carimbo — `test_render_plates`), ficha "Cliente: não há cliente" removida; contraprovas em `test_purchase_path.mjs` (rótulo por entrada; qualificador de preço) |
+| A04 Jornadas | ATENDIDO com exceção isolada | J1–J6, J8 PASS na revisão independente sobre C; J7 PASS para os artigos de quantitativos e FAIL pré-existente nos seis artigos de medição/prazo congelados por hash (conflito de autoridade, ver tabela acima) |
+| A05 Formulário | ATENDIDO | consentimento e envio no passo essencial; opcionais honestos; `test_form_funnel.mjs` (estrutura + runtime com o `script.js` embarcado; contraprovas: envio/consentimento/obrigatório dentro do painel reprovam; `script.js` de produção reprova); `test:ui` (foco, aria, erro por texto); sonda móvel 320/390 sem overflow |
+| A06 Recebimento | PENDENTE_OPERACIONAL | Turnstile recusa automação (600010); nenhuma submissão real executada por este agente. Ação humana mínima: `design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md` (passos A2–A9 atualizados para o formulário novo). Sonda sintética autenticada continua verde na rotina diária |
+| A07 Resiliência | ATENDIDO (limites declarados) | `8c23e455f`: handoff e entrega em paralelo (teste com Warmbly e Resend lentos ao mesmo tempo: 402 ms vs 653 ms em série no HEAD anterior; pior caso de produção calculado ≈ 14 s < 15 s), `Idempotency-Key` no Resend (24 h), reconciliação de e-mail no `drain_inbound` (consumidor: `revops-scheduled.yml` diário) com claim por tentativa, drains concorrentes → 1 envio, 409 mismatch nunca reenviado; sem exactly-once ilimitado |
+| A08 Fontes | ATENDIDO | geradores corrigidos na fonte e regenerados duas vezes com diff idêntico (`private_project`, `infrastructure_pilot`, `compose_proof_entrances`, `render_nav_hubs --check`, `render_plates --check`, `render_cta_form_next_state --check`, `render_eight_offer_contracts --check`); hashes protegidos recapturados com razão datada e `baseline_commit` alcançável |
+| A09 Qualidade técnica | ver "Execução da suíte" | réplica local do `site-ci` em clone limpo (Node 22, extra-cli contratado, `SOURCE_DATE_EPOCH`, env por passo) + `site-ci` real no PR |
+| A10 Versão servida | PENDENTE até a publicação | `/.well-known/build-info.json` deve informar o merge commit; conferência de rotas/CTAs/formulário após a promoção |
+| A11 Superioridade | ATENDIDO | revisão comparativa cega (rótulos P/C, três dimensões, verificação adversarial por achado): C melhor nos defeitos-alvo, sem regressão material após F01 |
+| A12 Mensuração | PARCIAL | eventos existentes (`lead_form_start`, `lead_form_step`, `lead_form_submit`, `cta_click` com `destination_type`); quebra de série declarada: `lead_form_step` deixa de preceder obrigatoriamente `lead_form_submit` (taxa de expansão passa a ser opcional real); definições de denominadores em §12 abaixo; nenhum efeito comercial alegado |
+
+## Mensuração (definições, sem alegação de efeito)
+
+Instante da mudança: promoção da release desta campanha (registrar SHA e hora na seção de publicação). Páginas afetadas: inventário nos commits `82d6da29b`, `209e228d2`, `2de9cf2ed`. Campanhas concorrentes: nenhuma ativa em web-cfg; outbound e cadências fora deste repositório (Warmbly).
+
+- Visita elegível: sessão mensurável por entrada (`page_view` sem QA/automação).
+- Intenção: `cta_click` com `destination_type` (navegação separada de intenção).
+- Início de formulário: `lead_form_start`; expansão opcional: `lead_form_step` (quebra de série em relação ao passo obrigatório anterior); solicitação persistida: `lead_persisted` no store (não o clique).
+- Conclusão de formulário = solicitações válidas únicas / inícios comparáveis, por página de entrada e por dispositivo.
+- Recebimento: `delivery.email.status=ok` com `provider_id`; conversa, qualificação, proposta e contratação: Warmbly, sem vínculo pessoa↔analytics anônimo.
+- Leitura posterior (janelas comparáveis, volume suficiente): mais cliques sem solicitações → etapa de contato; mais solicitações sem conversas → entrega/atendimento; mais conversas sem qualificação → pertinência da promessa/origem; mais oportunidades sem propostas → escopo, preço e condução comercial.
