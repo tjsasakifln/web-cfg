@@ -545,20 +545,7 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
-      "debt": [
-        {
-          "route": "/casos/aditivo-art125-demonstrativo/",
-          "owner_issue": 61,
-          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/medicao-glosa-demonstrativo/",
-          "owner_issue": 61,
-          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
-          "expires_at": "2026-09-30"
-        }
-      ],
+      "debt": [],
       "index_evidence": {
         "substrate": "first_party_publication",
         "not_applicable": [
@@ -738,14 +725,7 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
-      "debt": [
-        {
-          "route": "/ferramentas/matriz-atraso-obra/",
-          "owner_issue": 61,
-          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-          "expires_at": "2026-09-30"
-        }
-      ],
+      "debt": [],
       "index_evidence": {
         "substrate": "first_party_publication",
         "not_applicable": [
@@ -1219,7 +1199,7 @@
     },
     {
       "id": "inspecao-diagnostico-edificacoes",
-      "visitor_job": "Reconhecer fissura, infiltração, condição do imóvel ou recebimento, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
+      "visitor_job": "Reconhecer fissura, infiltração, recebimento ou entrega, reforma em condomínio ou documentação do construído, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {

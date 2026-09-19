@@ -1,0 +1,52 @@
+{
+  "schema": "confenge.proposal-observation/1.0",
+  "contract": "confenge.proposal-counting/1.0",
+  "contract_version": "1.0.0",
+  "kind": "synthetic",
+  "official_live": false,
+  "fixture_id": "a-organic-known",
+  "description_pt_br": "Uma proposta de honorários (R$ 12.000) para oportunidade nascida de contato web com origem comercial declarada demonstrated_inbound. Emitida 2026-09-30T23:30-03:00: fecha em 2026-09 em America/Sao_Paulo, embora seja 2026-10-01 em UTC. Aceita em outubro: by_stage.accepted é leitura paralela, nunca somada a emitted.",
+  "observations": [
+    {
+      "record_kind": "real",
+      "event": "emitted",
+      "proposal_id": "prop-a-001",
+      "opportunity_id": "opp-a-001",
+      "at": "2026-09-30T23:30:00-03:00",
+      "fee_total_cents": 1200000,
+      "contract_value_cents": 85000000,
+      "origin_class": "demonstrated_inbound",
+      "origin_evidence": "lead-web-search_organic"
+    },
+    {
+      "record_kind": "real",
+      "event": "accepted",
+      "proposal_id": "prop-a-001",
+      "opportunity_id": "opp-a-001",
+      "at": "2026-10-06T10:00:00-03:00"
+    }
+  ],
+  "expected": {
+    "emitted_total_cents": 1200000,
+    "proposals_counted": 1,
+    "excluded": [],
+    "by_origin_class": {
+      "demonstrated_inbound": 1200000,
+      "outbound_assisted": 0,
+      "mixed_or_unknown": 0,
+      "expansion_existing_client": 0,
+      "paid_or_partner": 0
+    },
+    "by_stage": {
+      "emitted": 1200000,
+      "accepted": 1200000,
+      "invoiced": 0,
+      "received": 0
+    },
+    "by_close_month": {
+      "2026-09": 1200000
+    },
+    "contract_value_total_cents": 85000000,
+    "not_summed_pt_br": "emitted + accepted = 2.400.000 seria contagem indevida; o indicador é 1.200.000."
+  }
+}

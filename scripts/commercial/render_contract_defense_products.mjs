@@ -84,8 +84,21 @@ function standaloneForm(item, { hub = false } = {}) {
   // LAPIDACAO-COMERCIAL-20260918 (j5): the hint names the required set this
   // form enforces and the optional labels carry the visible mark; the same
   // helpers drive render_cta_form_next_state.mjs so both renderers agree.
-  const fields = markOptionalLabels(`${qualificationFields(item, hub)}<label>Nome do representante <input name="nome" autocomplete="name" required/></label><label>E-mail profissional <input name="email" type="email" autocomplete="email" required id="email" inputmode="email" maxlength="180" pattern="[^@\\s]+@[^@\\s]+\\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label><label>Contexto adicional <textarea name="mensagem" rows="3" maxlength="2000"></textarea></label><label class="contract-product__consent"><input name="consentimento" type="checkbox" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>`);
-  const purpose = `${deriveFieldPurpose(fields) || nextState.field_purpose} O e-mail precisa de domínio e extensão completos.`;
+  // INBOUND-RECEITA-20260919 (W3, hub only): the hub form accepts one return
+  // channel, WhatsApp or e-mail, as lead-core.cjs already does (`!telefone &&
+  // !email` is the only channel rule server side); the route forms keep the
+  // e-mail-required contract they were frozen with.
+  const emailInput = hub
+    ? '<input name="email" type="email" autocomplete="email" id="email" inputmode="email" maxlength="180" pattern="[^@\\s]+@[^@\\s]+\\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/>'
+    : '<input name="email" type="email" autocomplete="email" required id="email" inputmode="email" maxlength="180" pattern="[^@\\s]+@[^@\\s]+\\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/>';
+  const phoneField = hub
+    ? '<label>WhatsApp <input name="telefone" id="telefone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" pattern="(\\+?55[\\s.\\-]?)?\\(?\\d{2}\\)?[\\s.\\-]?9?\\d{4}[\\s.\\-]?\\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></label>'
+    : "";
+  const fields = markOptionalLabels(`${qualificationFields(item, hub)}<label>Nome do representante <input name="nome" autocomplete="name" required/></label><label>E-mail profissional ${emailInput}</label>${phoneField}<label>Contexto adicional <textarea name="mensagem" rows="3" maxlength="2000"></textarea></label><label class="contract-product__consent"><input name="consentimento" type="checkbox" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>`);
+  const channelNote = hub
+    ? "WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos."
+    : "O e-mail precisa de domínio e extensão completos.";
+  const purpose = `${deriveFieldPurpose(fields) || nextState.field_purpose} ${channelNote}`;
   return `<section class="contract-product__capture" id="captura-contrato"><div><h3>Solicitar uma proposta</h3><p>Descreva o contrato e o evento. A CONFENGE confere o escopo, os documentos mínimos e a agenda antes de informar a proposta; o envio não inicia cobrança.</p></div><form name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="${asset}-handraise" data-asset-id="${asset}" data-route-family="${slug}" data-cta-position="contract_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>${esc(nextState.pre_form_value)}</p>
 <p class="form-hint" data-field-purpose>${esc(purpose)}</p>
 <input name="offer_id" type="hidden" value=""/><input name="terms_id" type="hidden" value=""/><input name="jornada" type="hidden" value="contrato" id="jornada-hidden"/><input name="estagio" type="hidden" value="${asset}" id="estagio"/><input name="origem" type="hidden" value="${slug}"/><input name="asset_id" type="hidden" value="${asset}"/><input name="cta_id" type="hidden" value="${asset}-handraise"/><input name="route_family" type="hidden" value="${slug}"/><input name="landing_page" type="hidden" value="https://confenge.com.br/${slug}/"/>${fields}<button class="button button-primary" type="submit">Descrever meu caso</button><p class="form-status" role="status" aria-live="polite"></p>

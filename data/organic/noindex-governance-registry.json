@@ -201,14 +201,14 @@
       "reason_code": "deferred_by_decision_record",
       "owner_issue": 251,
       "review_at": "2026-09-20",
-      "note": "REMEDIABLE: as 7 rotas de /piloto/ofertas/ estao entre as 24 URLs enumeradas com decision DEFER em data/offers/piloto-checkout-decision.v1.json (CFG-PILOTO-CHECKOUT-2026-08-24, activation_authorized false, review_on 2026-09-20). Checkout so em Sandbox, flags desligadas, sem chamada Asaas real. review_at espelha o review_on do registro de decisao."
+      "note": "SUPERADO NA SUPERFICIE PUBLICA em 2026-09-09: decisao RETIRE_410_PRESERVE_INTERNAL para as 24 rotas de /piloto/ (grupo pilot-preview em data/editorial/public-preview-route-decisions.json), servida como 410 por _redirects (/piloto e /piloto/*); a fonte piloto/ fica fora de PUBLIC_TOP_DIRS e continua versionada so para testes. As 7 rotas de /piloto/ofertas/ nao voltam ao indice por revisao de data: a decisao DEFER CFG-PILOTO-CHECKOUT-2026-08-24 (data/offers/piloto-checkout-decision.v1.json, review_on 2026-09-20, activation_authorized false, checkout so em Sandbox) segue valendo apenas para o ativo interno; qualquer retorno publico exige nova decisao versionada, URL a URL. review_at mantido por uniformidade do esquema (nenhum consumidor o le); reason_code mantido porque o registro nao possui codigo para namespace retirado (410)."
     },
     {
       "family_id": "piloto-preview",
       "reason_code": "deferred_by_decision_record",
       "owner_issue": 251,
       "review_at": "2026-09-20",
-      "note": "REMEDIABLE: as demais 17 rotas de /piloto/ estao no mesmo registro de decisao DEFER, que declara robots_rule 'Disallow: /piloto/' e robots.txt aplica. Ativo reversivel preservado enquanto a decisao pai (#88) continua VALIDATE. review_at espelha o review_on do registro de decisao."
+      "note": "SUPERADO NA SUPERFICIE PUBLICA em 2026-09-09: decisao RETIRE_410_PRESERVE_INTERNAL para as 24 rotas de /piloto/ (grupo pilot-preview em data/editorial/public-preview-route-decisions.json), servida como 410 por _redirects (/piloto e /piloto/*); robots.txt ja nao carrega Disallow: /piloto/ (a resposta 410 dispensa a regra); a fonte piloto/ fica fora de PUBLIC_TOP_DIRS e continua versionada so para testes. As demais 17 rotas nao voltam ao indice por revisao de data: a decisao pai (#88) e o DEFER de 2026-08-24 (review_on 2026-09-20) valem apenas para o ativo interno preservado; qualquer retorno publico exige nova decisao versionada, URL a URL. review_at mantido por uniformidade do esquema (nenhum consumidor o le); reason_code mantido porque o registro nao possui codigo para namespace retirado (410)."
     },
     {
       "family_id": "market-answer-canary",

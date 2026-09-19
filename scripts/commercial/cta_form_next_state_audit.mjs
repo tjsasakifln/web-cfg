@@ -100,7 +100,11 @@ function actionHtml(html) {
   return body
     .replace(/<header\b(?=[^>]*\bclass=["'][^"']*\bsite-header\b)[^>]*>[\s\S]*?<\/header>/gi, " ")
     .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, " ")
-    .replace(/<aside\b(?=[^>]*\bclass=["'][^"']*\bcontact-float\b)[^>]*>[\s\S]*?<\/aside>/gi, " ");
+    .replace(/<aside\b(?=[^>]*\bclass=["'][^"']*\bcontact-float\b)[^>]*>[\s\S]*?<\/aside>/gi, " ")
+    // <noscript> is the no-JS fallback (BOFU-INTEGRAL-20260919: the shared no-JS note beside
+    // each capture form). It never renders on the surface this census describes, so its
+    // WhatsApp/e-mail links are not declared CTAs — they would only inflate the count.
+    .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, " ");
 }
 
 function commercialActions(html, profile) {
