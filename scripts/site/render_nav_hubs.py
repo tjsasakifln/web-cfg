@@ -154,7 +154,14 @@ def _situation_block(situation: dict[str, Any], *, start: int) -> str:
             f'<p>{e(row["blurb"])}</p>'
             f'<div class="contact-actions"><a class="list-ruled__action" href="{e(row["url"])}">'
             + ("Descrever pelo WhatsApp" if row["url"].startswith("https://wa.me/") else "Ver a página")
-            + ' <svg class="icon"><use href="#i-arrow"></use></svg></a></div></article></li>'
+            + ' <svg class="icon"><use href="#i-arrow"></use></svg></a>'
+            + (
+                f' <a class="list-ruled__action" href="{e(row["form_anchor"])}">Registrar no formulário '
+                '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
+                if row.get("form_anchor")
+                else ""
+            )
+            + "</div></article></li>"
             for i, row in enumerate(situation["rows"])
         )
     )
@@ -451,19 +458,36 @@ def _services_situations() -> list[dict[str, Any]]:
             "id": "situacao-orgao",
             "short": "Órgão público",
             "title": "Órgão público planejando a contratação de uma obra",
+            # BOFU-INTEGRAL-20260919: the órgão sees what the proposal can name for the
+            # object (Lei 14.133/2021, fase preparatória), the limits, and two channels.
             "work": (
-                "Do lado do órgão, estruturamos tecnicamente a contratação: escopo, orçamento e "
-                "memória de referência, critérios de medição e matriz de risco, para planejar o "
-                "certame. Não atuamos para contratante e contratada no mesmo contrato."
+                "Do lado do órgão, estruturamos tecnicamente a fase preparatória da contratação, "
+                "no rito da Lei 14.133/2021, com a IN SEGES 58/2022 e a IN SEGES 81/2022 como "
+                "referência quando aplicáveis ao objeto. A proposta nomeia, para o objeto, quais "
+                "módulos técnicos entram: DOD ou DFD (conforme a nomenclatura do ente), ETP, termo "
+                "de referência ou projeto, quantitativos, orçamento de referência, cronograma, "
+                "critérios de medição, matriz de riscos; sem peça implícita: capacidade, campo e "
+                "responsabilidade profissional são confirmados antes do aceite técnico. Cada módulo "
+                "entra com premissas, levantamentos de campo e limites registrados; a ART cobre cada "
+                "módulo de engenharia efetivamente produzido, e não há ART de ato administrativo. O "
+                "trabalho não é parecer jurídico nem ato administrativo: aprovação, assinatura e "
+                "decisão continuam com a autoridade do órgão, e o êxito do certame não é prometido. "
+                "Não atuamos para contratante e contratada no mesmo contrato; o conflito é "
+                "verificado antes da proposta."
             ),
             "rows": [
                 {
                     "url": _whatsapp("orgao_planejamento"),
                     "title": "Conversar sobre a contratação que o órgão planeja",
                     "blurb": (
-                        "Sem formulário: descreva o objeto e a fase pelo WhatsApp. A resposta "
-                        "nomeia o trabalho, o que o órgão recebe e o que falta reunir."
+                        "Descreva o objeto, o estágio do planejamento e, se souber, o regulamento "
+                        "ou a origem do recurso, pelo WhatsApp ou pelo formulário desta página (em "
+                        '"Evento observado", escolha "Outro evento contratual" e descreva a '
+                        "contratação no contexto). Contexto incompleto não impede o contato. A "
+                        "resposta nomeia os módulos que o objeto pede, o que o órgão recebe e o que "
+                        "falta reunir; o valor sai na proposta, depois da leitura do caso."
                     ),
+                    "form_anchor": "#captura-contrato",
                 },
             ],
         },
