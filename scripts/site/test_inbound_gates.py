@@ -951,19 +951,26 @@ def test_registered_debt_is_route_exact_and_never_absorbs_a_sibling():
     with tempfile.TemporaryDirectory(prefix="confenge-family-gate-") as tmp:
         tmp_path = Path(tmp)
         _green_fixture_root(tmp_path)
-        # This child tool still carries exact debt under #290.
+        # BOFU-INTEGRAL-20260919: /ferramentas/matriz-atraso-obra/ paid its debt
+        # with a contextual WhatsApp/e-mail block inside <main>, so the registered
+        # route passes on its own rendered action (no exemption in play).
         registered = ROOT / "ferramentas" / "matriz-atraso-obra" / "index.html"
         target = tmp_path / "ferramentas" / "matriz-atraso-obra" / "index.html"
         target.parent.mkdir(parents=True)
-        target.write_text(registered.read_text(encoding="utf-8"), encoding="utf-8")
+        paid = registered.read_text(encoding="utf-8")
+        target.write_text(paid, encoding="utf-8")
         report = gate_conversion(tmp_path)
         assert report.ok, [f for f in report.findings if f.severity == "error"][:5]
-        assert any(f.reason == "terminal_action_debt" for f in report.findings)
+        assert not any(f.reason == "terminal_action_debt" for f in report.findings)
 
-        # Same family, same rendered action, route that nobody registered.
+        # Same family, same page minus its contextual contact (the pre-payment
+        # shape), on a route that nobody registered: the family carries no
+        # exemption the sibling could inherit.
+        unpaid = re.sub(r'<a\b[^>]*href="(?:https://wa\.me/|mailto:)[^"]*"[^>]*>[\s\S]*?</a>', "", paid)
+        assert unpaid != paid
         sibling = tmp_path / "ferramentas" / "nao-registrada" / "index.html"
         sibling.parent.mkdir(parents=True)
-        sibling.write_text(registered.read_text(encoding="utf-8"), encoding="utf-8")
+        sibling.write_text(unpaid, encoding="utf-8")
         report = gate_conversion(tmp_path)
         assert report.ok is False
         assert any(f.reason == "missing_terminal_action" for f in report.findings)
@@ -1072,12 +1079,13 @@ def test_report_lists_every_exempt_route_with_its_reason():
         "/ferramentas/",
         "/ferramentas/limite-acrescimos-supressoes/",
         "/ferramentas/checklist-reequilibrio/",
-    ):
-        assert route not in debt_routes, route
-    for route in (
+        # BOFU-INTEGRAL-20260919: paid with a contextual action inside <main>.
         "/ferramentas/matriz-atraso-obra/",
         "/casos/aditivo-art125-demonstrativo/",
+        "/casos/medicao-glosa-demonstrativo/",
     ):
+        assert route not in debt_routes, route
+    for route in ("/metodologia-inteligencia/",):
         assert route in debt_routes, route
     for route in (
         "/casos/modelo-apresentacao-executiva-resultados/",
