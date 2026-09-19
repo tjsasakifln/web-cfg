@@ -1,0 +1,341 @@
+{
+ "rows": [
+  {
+   "intent_family": "projetar_revisar_compatibilizar",
+   "need_wording": "Preciso elaborar, completar, revisar ou compatibilizar projetos de engenharia antes da obra. (intent-family-matrix.v1.json: terminal REQUEST_SCOPE_REVIEW; offers complementary_engineering_project_review, bim_coordination_clash_register, private_project_technical_readiness_assessment)",
+   "routes": [
+    "/projetos-complementares-engenharia/",
+    "/revisao-tecnica-projetos-engenharia/",
+    "/compatibilizacao-projetos-engenharia/",
+    "/servicos/#servico-projeto",
+    "/servicos/#servico-revisao",
+    "/servicos/#servico-compatibilizacao",
+    "/parcerias-engenharia/",
+    "/triagem-tecnica/#projetos"
+   ],
+   "solution_explained": "YES on all three routes. Sequence present: situation/hero (projetos-complementares-engenharia/index.html:70-86 'Em 30 segundos', 'Quem assina'), deliverables (L151-158: plantas/cortes, especificações+memória, matriz de escopo/autoria/interfaces), conduction (L222-228 'Delimitar o escopo → Produzir → Devolver versões e pendências'), conditions/limits (L241-246), contact (L275-287). Revisão: three depths (revisao-tecnica-projetos-engenharia/index.html:185-187), proposal scope (L208-214), conditions (L227), contact (L264-282). Compatibilização: apontamento types (compatibilizacao-projetos-engenharia/index.html:177-183), before/during/delivery (L204-217), conditions (L251), contact (L269-287).",
+   "delivery_explained": "YES. Projetos: 'Documentação da disciplina contratada' with formats PDF/models and revision control (L151-158,192-193); use: 'para um terceiro conferir', orçar/coordenar/executar (L127). Revisão: 'Um relatório para decidir o que ajustar, o que devolver ao autor e o que pode avançar' (L181-187). Compat: registro de interferências with encaminhamento ao autor (L177-183,217).",
+   "proof": "Demonstrative plates inline on each route (projetos L116-127 pranchas PC/PG/PH 'Exemplo demonstrativo'; revisao L108-117 prancha PB + CSV /casos/demonstrativo-projeto-privado/data/revisao.csv; compat L106-140 prancha PA CF-GEO-01/CF-INFO-01) plus links to /casos/demonstrativo-infraestrutura/ and /casos/demonstrativo-projeto-privado/ (projetos L127; revisao L117; compat L122,169). Labelled 'Exemplo demonstrativo'; no client case claimed.",
+   "terminal_action": "WhatsApp/e-mail/phone ('Três canais diretos') inside <main>: projetos L276-280 (wa.me L76,L278); revisao L265-269 (wa.me L76,L267); compat L270-274 (wa.me L76,L272). No <form> on any of the three (grep '<form' = 0). Registry family terminal capture_form_or_whatsapp satisfied (public-family-registry.json families complementary-engineering-elaboration, private-engineering-project-review, engineering-projects-coordination-clash).",
+   "form_or_contact": "On-page contact (WhatsApp prefilled text + mailto + tel). In-page anchors #contato-revisao (revisao L49,58,75,97,197); compat/projetos link to /triagem-tecnica/ as secondary (projetos L294; compat L289). No cross-route form.",
+   "responsible_named": "YES: 'Tiago Sasaki, Engenheiro Civil pela EESC-USP, registro profissional ativo no CREA' (projetos L86,122; revisao L86; compat L85,120). 'Não assinamos projeto de terceiros' (revisao L86). ART framed as confirmed per scope (projetos L85).",
+   "indexability": "All three: <meta name=robots content='index,follow,max-image-preview:large,...'> (each index.html:8), self canonical (each :10), present in sitemap.xml.",
+   "distinctions": "Elaborar vs revisar vs compatibilizar drawn explicitly: projetos L206-213 ('Elaborar, revisar e compatibilizar são etapas com nome próprio; a proposta combina as que o seu pacote pede'); compat L230; revisao L183 (compat) 'Conferir se uma viga está dimensionada não é conferir se ela cruza'. Autoria arquitetônica excluded (projetos L191,228).",
+   "gap_summary": "No material gap. Optional: none of the three routes links to /casos/ demonstratives for as-built/readiness (adjacent intents) — not required."
+  },
+  {
+   "intent_family": "orcar_planejar_decidir",
+   "need_wording": "Preciso levantar quantidades, revisar custos ou testar a viabilidade técnica da obra. (terminal REQUEST_SCOPE_REVIEW; offers quantity_takeoff_budgeting, budget_audit_feasibility, private_project_technical_readiness_assessment; disambiguation: quantitativos de obra vs auditoria da planilha do edital são compras distintas; oferta mixed público/privado)",
+   "routes": [
+    "/quantitativos-orcamento-obras/",
+    "/servicos/#servico-orcamento",
+    "/auditoria-orcamento-licitacao/ (edital planilha audit, B2G side)",
+    "/ferramentas/prontidao-tecnica-obra-privada/",
+    "/triagem-tecnica/#quantitativos",
+    "/conteudos/documentos-para-levantamento-quantitativos/, /conteudos/comparar-propostas-execucao-obra/, /conteudos/revisar-ou-refazer-orcamento-obra/ (registry family private-engineering-quantities-budget)"
+   ],
+   "solution_explained": "YES. quantitativos-orcamento-obras/index.html: hero+30s (L70-95), three services with 'Chega às suas mãos'/'Serve para'/'Limite' (L138-175), conduction (L200-206 'Delimitar → Levantar e conferir → Compor ou revisar'), effort factors 'sem tabela de preço inventada' (L232-243), conditions (L255-259 obra privada vs obra pública), contact (L298-318).",
+   "delivery_explained": "YES: planilha de quantitativos ligada à planta+memória (L138-145); planilha orçamentária com composições abertas, data-base, referências (L153-160); revisão número por número (L167-175). Uses stated per item (comparar propostas, decidir investir/contratar/licitar, aceitar/recusar um número).",
+   "proof": "Plate P1 (L114) + full quantitativos.csv rendered line by line (L218-219) + two open demonstrative cases with CSVs: /casos/demonstrativo-projeto-privado/#quantitativos and /casos/demonstrativo-infraestrutura/#quantitativos (L121,224). Cases say 'Valores hipotéticos... Não são SINAPI... nem preço da CONFENGE' (casos/demonstrativo-projeto-privado/index.html:241).",
+   "terminal_action": "WhatsApp/e-mail/phone in <main> (L300-304; wa.me L76,L302); anchor #triagem-quantitativos (L49,58,75,97,189). No <form> (grep=0). Registry capture_form_or_whatsapp satisfied.",
+   "form_or_contact": "On-page contact; /servicos/#servico-orcamento sends to /quantitativos-orcamento-obras/#triagem-quantitativos (servicos/index.html:149) — cross-route anchor from hub to landing.",
+   "responsible_named": "YES: L85 'Quem assina Tiago Sasaki... CREA'; L119; L285. ART+NF 'no escopo contratado' (L85).",
+   "indexability": "index,follow (L8), self canonical (L10), in sitemap.xml.",
+   "distinctions": "Quantitativo vs orçamento vs revisão explicit (L138-175, incl. 'Limite: Sozinho, não inclui o preço de cada item'). Público vs privado (L206, L258-259: 'Obra privada... não pedimos campos de licitação'; 'Obra pública... orçamento de referência, edital, critérios de medição'). Audit of the edital planilha for a bidder is a separate route /auditoria-orcamento-licitacao/ (auditoria-orcamento-licitacao/index.html:80 'atende a empresa contratada ou proponente'); quantitativos page does not link to it (grep href=/auditoria-orcamento-licitacao/ = 0; only mentions 'edital e orçamento de referência em obra pública' L239,259).",
+   "gap_summary": "Minor: no explicit bridge from /quantitativos-orcamento-obras/ to /auditoria-orcamento-licitacao/ for 'auditar a planilha do edital' (the matrix's own distinct purchase). Viabilidade técnica (budget_audit_feasibility 'viabilidade') appears only as readiness tool /ferramentas/prontidao-tecnica-obra-privada/; not named on the pillar. Both are copy additions, no route."
+  },
+  {
+   "intent_family": "inspecionar_diagnosticar",
+   "need_wording": "Preciso entender uma fissura, infiltração, falha ou condição da edificação antes de decidir o reparo. (terminal REQUEST_TECHNICAL_TRIAGE; offers building_inspection_pathology, pre_litigation_technical_screening)",
+   "routes": [
+    "/inspecao-diagnostico-edificacoes/",
+    "/servicos/#servico-diagnostico",
+    "/triagem-tecnica/#obra-imovel",
+    "/ (situação 03, index.html:122-205)"
+   ],
+   "solution_explained": "YES. inspecao-diagnostico-edificacoes/index.html: hero (L64-80), deliverables (L126-132), situations (L153-159), etapas encadeadas (L168-175), conduction (L184-191 'Delimitar a pergunta → Acessar → Registrar → Analisar e encaminhar'), how to contract + risco imediato (L200-213), conditions (L223-234), contact (L245-257).",
+   "delivery_explained": "YES: 'Relatório de inspeção e condição' (objeto, data, acesso, manifestações com foto e croqui) 'Serve para registrar o estado do imóvel em uma data, na entrega, no recebimento ou antes de um...' (L130); 'Hipóteses e aprofundamento' (L131); 'Encaminhamento da solução' incl. proposta das etapas seguintes (L132).",
+   "proof": "Inline plate PD, fachada sintética FA-L, four manifestações, labelled 'Exemplo demonstrativo / Amostra didática original' (L104-114). No /casos/ entry for inspection (caso_link only footer L274).",
+   "terminal_action": "WhatsApp/e-mail/phone in <main> (L246-250; wa.me L70,L248); anchor #contato-inspecao (L43,52,69,94,142). No <form>. REQUEST_TECHNICAL_TRIAGE realised as 'Descreva a edificação; a resposta nomeia o serviço, o relatório e o que falta reunir' (L245) and 'informa se a visita será necessária antes da proposta' (L257).",
+   "form_or_contact": "On-page contact; hub /servicos/ links cross-route to /inspecao-diagnostico-edificacoes/#contato-inspecao (servicos/index.html:165).",
+   "responsible_named": "YES: L80 'Tiago Sasaki... CREA', L117, L234. Visit/local/ART 'combinados na proposta' (L223).",
+   "indexability": "index,follow (L8), self canonical (L10), in sitemap.xml.",
+   "distinctions": "Inspeção vs diagnóstico vs projeto de reparo vs perícia/assistência drawn in prose (L168-175: 'Hipótese não é causa única'; 'não misturamos inspeção privada com laudo judicial no mesmo documento. A perícia do juízo é do perito nomeado pelo juiz'). Recebimento: Situação 03 (L159) 'Isso não é projeto de reforma nem perícia de um processo'. Value questions routed to /servicos/#servico-avaliacao (L169). NO norm cited: neither NBR 16747 nor NBR 13752 appears in any public HTML (grep over repo: only data/offers/multivertical/catalog.v2.json:996 'ABNT NBR 16747 quando aplicável'); README already logs this pendency (docs/campaigns/inbound-receita-20260919/README.md, note after Matriz de achados).",
+   "gap_summary": "Editorial: causal-investigation distinction is prose-only, no NBR 16747 (inspeção) / NBR 13752 (perícia) named. Catalog readiness for building_inspection_pathology is CAPACITY_UNKNOWN / WITHHELD_CAPACITY, field visit included_by_default (catalog.v2.json) — page already conditions visit on proposal (L189,223). No /casos/ demonstrative (plate only)."
+  },
+  {
+   "intent_family": "receber_entregar_reformar",
+   "need_wording": "Preciso vistoriar recebimento, entrega ou reforma e registrar o que deve ser corrigido. (terminal REQUEST_SCOPE_REVIEW; offers renovation_plan_condo_review [NBR 16280], building_inspection_pathology, asbuilt_document_reconciliation; disambiguation: recebimento, inspeção e plano de reforma são decisões diferentes)",
+   "routes": [
+    "/inspecao-diagnostico-edificacoes/ (Situação 03 'Condição do imóvel ou recebimento', L159; deliverable use 'na entrega, no recebimento' L130; hero L63,77,256)",
+    "/servicos/#servico-diagnostico (servicos/index.html:160 lists 'recebimento, reforma')",
+    "/triagem-tecnica/#obra-imovel (L87 'vistoria de recebimento')",
+    "/ form option 'obra ou imóvel para inspecionar, diagnosticar ou documentar' (index.html form #estagio)"
+   ],
+   "solution_explained": "PARTIAL. Recebimento/entrega is covered as one situation of the inspection route with the same relatório de condição (L130,159). 'Reforma' appears on that route only as an exclusion ('não é projeto de reforma', L159) and on /servicos/ as a trigger word (L160); no explanation of a plano/parecer de reforma or revisão condominial anywhere (grep 'reforma' across public route HTML: only inspecao L159, servicos L160, quantitativos L258 'Reforma de casa', aditivos/guias B2G contexts).",
+   "delivery_explained": "For recebimento: yes, via relatório de inspeção e condição 'anotar o que deve ser corrigido na entrega ou no recebimento' (L159, L130). For reforma (renovation_plan_condo_review deliverables 'parecer ou plano de reforma no recorte; lista de interferências e cuidados em áreas comuns; pendências documentais do autor da intervenção' — catalog.v2.json offer renovation_plan_condo_review): NOT explained on any public route. NBR 16280 appears only in catalog.v2.json, never in public HTML.",
+   "proof": "None specific. Inspection plate (fachada FA-L) is about pathologies, not a recebimento checklist or reform review. No /casos/ demonstrative.",
+   "terminal_action": "Inherited from inspection route: WhatsApp/e-mail/phone in <main> (L246-250). Matrix terminal for this family is REQUEST_SCOPE_REVIEW while the inspection route is framed as REQUEST_TECHNICAL_TRIAGE ('a resposta nomeia o serviço, o relatório e o que falta reunir' L245) — functionally equivalent on-page, not distinguished.",
+   "form_or_contact": "On-page (inspection route) / home form option / triagem WhatsApp. No dedicated anchor for recebimento or reforma.",
+   "responsible_named": "YES via inspection route (L80,117,234). Catalog says technical responsibility for renovation review 'a confirmar antes da contratação' and 'não assume ART de projeto de terceiro' — not stated publicly because the offer is not surfaced.",
+   "indexability": "Served only inside indexable /inspecao-diagnostico-edificacoes/ (index,follow, canonical self, in sitemap); no own URL or anchor id for recebimento/reforma (grep id= on that route: only #contato-inspecao anchors).",
+   "distinctions": "Recebimento vs inspeção vs perícia drawn (L159,168-175). Recebimento vs plano de reforma NOT drawn (reforma only excluded). Recebimento vs as-built NOT drawn (as-built absent from public HTML).",
+   "gap_summary": "GAP (partial): recebimento/entrega covered as a sub-situation; 'reforma' (renovation_plan_condo_review, NBR 16280) has zero public explanation; family's own disambiguation ('recebimento, inspeção e plano de reforma são decisões diferentes') is not rendered. Catalog readiness renovation_plan_condo_review = CAPACITY_UNKNOWN / WITHHELD_CAPACITY, price NOT_PUBLIC."
+  },
+  {
+   "intent_family": "documentar_as_built_regularizar",
+   "need_wording": "Preciso registrar o que foi construído e organizar a documentação técnica que falta. (terminal REQUEST_SCOPE_REVIEW; offers asbuilt_document_reconciliation, private_project_technical_readiness_assessment; disambiguation: não promete regularização, aprovação ou assinatura por terceiro)",
+   "routes": [],
+   "solution_explained": "NO. No public route, section or anchor explains this need. grep -i 'as.built' over public index.html files (excluding docs/tests/node_modules/_site) returns no service route; the only hits are incidental: content-index.json entry V030 (a /conteudos/ B2G article title about medição vs as-built) and medicoes-glosas-obras-publicas/index.html:147 listing 'as built' as an evidence source for measurement. 'regulariz' in public HTML appears only in quantitativos-orcamento-obras/index.html and Lei 14.133 articles (B2G context), not as this family's service.",
+   "delivery_explained": "NO. Catalog deliverables ('matriz de reconciliação projeto × construído × documento; lista de lacunas e evidências ainda necessárias; recomendação de as-built, regularização ou aceite com ressalva' — catalog.v2.json offer asbuilt_document_reconciliation) are not rendered anywhere public.",
+   "proof": "None. /casos/demonstrativo-infraestrutura/ and /casos/demonstrativo-projeto-privado/ cover quantitativos/orçamento/compatibilização/revisão only (H2 list casos/demonstrativo-infraestrutura/index.html:276-323).",
+   "terminal_action": "Only generic: /triagem-tecnica/#obra-imovel wording 'Obra ou imóvel para inspecionar ou documentar' (triagem-tecnica/index.html:87) and home form option 'Obra ou imóvel para inspecionar, diagnosticar ou documentar' (index.html form #estagio option data-journey=obra). Neither names as-built/regularização.",
+   "form_or_contact": "Generic home form (/#contato) and triagem WhatsApp; nothing contextual.",
+   "responsible_named": "Not applicable on public surface. Catalog: 'ART quando o produto for documento técnico de as-built ou reconciliação'; 'not_promised_for: alvará, habite-se como ato do órgão'; responsible 'a confirmar antes da contratação'.",
+   "indexability": "N/A — no surface. Any future surface would need a public-family-registry.json entry (fail-closed).",
+   "distinctions": "As-built vs recebimento vs inspeção: NOT drawn anywhere public (as-built absent). Matrix places family in canonical_service_family building_condition_documentation together with inspecionar_diagnosticar and receber_entregar_reformar.",
+   "gap_summary": "FULL GAP: zero public surface for a declared intent family. Offer asbuilt_document_reconciliation readiness MODELED / MODEL_ONLY, price NOT_PUBLIC, field check only if proposal includes (catalog.v2.json)."
+  },
+  {
+   "intent_family": "avaliar_imovel",
+   "need_wording": "Preciso de um valor de imóvel para uma finalidade e uma data definidas. (terminal REQUEST_FORMAL_VALUATION_SCOPE; offers urban_property_valuation, preliminary_property_opinion; disambiguation: parecer preliminar não substitui avaliação formal; rural/exterior/massa = GAP)",
+   "routes": [
+    "/servicos/#servico-avaliacao (servicos/index.html:173-209, article.corporate-service-row--feature)",
+    "/ situação 04 'Preciso do valor de um imóvel' → /servicos/#servico-avaliacao (index.html:158, 252)",
+    "/triagem-tecnica/#pericia-avaliacao (L89)",
+    "/inspecao-diagnostico-edificacoes/ L169 and /assistencia-tecnica-pericial-engenharia/ L150,185 (cross-links into the section)"
+   ],
+   "solution_explained": "YES within the section, no own page: situation (L176 'negociar, partilhar, dar em garantia ou registrar... finalidade e data definidas'), method/assumptions (L188 'método comparativo ou evolutivo... premissas escritas, cada dado e fonte citado e datado, conclusão delimitada'), deliverable (L189), conditions/exclusions (L191 'Fora desta oferta: imóvel rural, imóvel no exterior e avaliação em massa'), pre-acceptance checks (L193-198 objeto/finalidade e data-base/vistoria/independência), contact inside the section (L177-178).",
+   "delivery_explained": "YES: 'Laudo ou parecer de avaliação para negociar com um número que a outra parte consegue conferir, partilhar sem discutir a base, dar em garantia com fundamento ou registrar. Parecer preliminar não substitui a avaliação formal.' (L189).",
+   "proof": "Plate P4 'Estrutura da análise · sem valor de mercado' (L180-183: objeto, finalidade e data, método, dados e fontes, conclusão delimitada), labelled 'exemplo demonstrativo' in alt. No /casos/ demonstrative, no numeric example. NBR 14653 not cited publicly (only catalog.v2.json refs 'ABNT NBR 14653 na parte aplicável').",
+   "terminal_action": "WhatsApp prefilled 'Preciso de avaliação de imóvel.' + mailto subject 'Avaliação de imóvel' inside the section (L178), in <main>. 'Pessoa física não precisa informar CNPJ para começar' (L177). Registry family servicos-corporativos capture_form_or_whatsapp satisfied.",
+   "form_or_contact": "On-section WhatsApp + e-mail; no form. Home and triagem route to the anchor (cross-route anchor).",
+   "responsible_named": "At /servicos/ page level: L278 'Tiago Sasaki, Engenheiro Civil... CREA, responde tecnicamente pela CONFENGE, CNPJ 52.407.089/0001-09'. Section: 'Atribuição e ART: laudo emitido no escopo e na atribuição contratados' (L191).",
+   "indexability": "No own URL: canonical is https://confenge.com.br/servicos/ (servicos/index.html:10), robots index,follow (L8), /servicos/ in sitemap. Fragment #servico-avaliacao is not a sitemap entry and cannot rank on its own.",
+   "distinctions": "Preliminar vs formal drawn (L189). Avaliação vs assistência em disputa drawn (L213 '/servicos/#servico-pericia: Quando a disputa é de valor, veja avaliação'; assistencia route L150,185). Independence/conflict stated (L198).",
+   "gap_summary": "No dedicated indexable route; no norm named; no demonstrative case. Blockers recorded: catalog urban_property_valuation readiness WITHHELD / wave WITHHELD_PROOF, preliminary_property_opinion MODELED / MODEL_ONLY, both price NOT_PUBLIC (catalog.v2.json); docs/campaigns/design-institucional/expansao/matriz-rotas.json row /servicos/: impediment 'avaliacoes imobiliarias sem URL propria: superficie autorizada e a secao #servico-avaliacao (decisao do proprietario pendente sobre familia nova)'; docs/campaigns/2026-09-13-solucao-integral.md:77 'Não há landing própria nesta publicação'."
+  },
+  {
+   "intent_family": "produzir_prova_tecnica",
+   "need_wording": "Preciso organizar prova técnica ou assistência de engenharia para uma disputa. (terminal REQUEST_CONFLICT_CHECK; offers pre_litigation_technical_screening, civil_building_technical_assistance, urban_property_valuation)",
+   "routes": [
+    "/assistencia-tecnica-pericial-engenharia/",
+    "/servicos/#servico-pericia",
+    "/triagem-tecnica/#pericia-avaliacao",
+    "/ situação 05 (index.html:122-205 → /assistencia-tecnica-pericial-engenharia/)"
+   ],
+   "solution_explained": "YES. assistencia-tecnica-pericial-engenharia/index.html: hero/30s (L65-81), deliverables (L149-155), roles (L176-183), conduction (L193-199 'Delimitar objeto e papel → Organizar o que existe → Produzir o escopo contratado'), how to prepare (L208 'Prepare a pergunta; não envie o processo agora'), conditions (L223-234), contact (L245-257).",
+   "delivery_explained": "YES: 'Leitura e organização de evidências', 'Quesitos e pontos técnicos', 'Acompanhamento e manifestação técnica (crítica de laudo de terceiro, acompanhamento de vistoria, relatório com método)' (L153-155), 'Prova organizada para quem precisa decidir' (L149).",
+   "proof": "Inline plate PE fachada FA-L with quesitos Q-01..Q-03 'Exemplo demonstrativo, original e sintético' (L105-114, L140 'sem validação assinada'). No /casos/ entry.",
+   "terminal_action": "WhatsApp/e-mail/phone in <main> (L246-250; wa.me L71,L248); anchor #contato-assistencia (L44,53,70,94,165). REQUEST_CONFLICT_CHECK rendered: 'A resposta combina a verificação de conflito e, só depois, o canal para os documentos' (L257); 'Sem... peça, laudo ou nome de parte neste primeiro contato' (L73).",
+   "form_or_contact": "On-page; hub cross-route anchor /servicos/#servico-pericia → /assistencia-tecnica-pericial-engenharia/#contato-assistencia (servicos/index.html:218).",
+   "responsible_named": "YES: L81 'Tiago Sasaki... CREA', L117, L229.",
+   "indexability": "index,follow (L8), self canonical (L10), in sitemap.xml.",
+   "distinctions": "Assistente da parte vs perito do juízo vs inspeção vs advocacia (L176-183: 'A CONFENGE não vende essa nomeação'; 'não protocola, não assina peça jurídica'). Labor SST disputes routed to /seguranca-trabalho-apoio-tecnico/ (L185). Valor → avaliação in same proposal (L150,185). Inspection route reciprocates (inspecao L175).",
+   "gap_summary": "No material gap. pre_litigation_technical_screening ('Triagem Técnica Pré-Litígio') not named as a distinct first step on the page — copy detail, no route. NBR 13752 not cited anywhere public."
+  },
+  {
+   "intent_family": "assistencia_trabalhista_sst",
+   "need_wording": "Preciso de suporte técnico de SST em uma reclamação ou perícia trabalhista. (terminal REQUEST_CONFLICT_CHECK; offer labor_sst_technical_assistance; disambiguation: não é advocacia, ato médico nem perícia do juízo; análise preventiva é outra família)",
+   "routes": [
+    "/seguranca-trabalho-apoio-tecnico/ (L64 hero 'Documento exigido, risco ou disputa trabalhista'; L66; L78; L213 'Reclamação trabalhista com componente de SST é atendida pela assistência técnica da parte, combinada com este diagnóstico')",
+    "/assistencia-tecnica-pericial-engenharia/ L185 ('Discussão trabalhista de insalubridade ou periculosidade é atendida pelo apoio técnico de segurança do trabalho, com a assistência técnica correspondente')",
+    "/servicos/#servico-sst (servicos/index.html:229 'inclusive quando existe uma discussão trabalhista com componente técnico')"
+   ],
+   "solution_explained": "PARTIAL. The need is recognised as a trigger on the SST route (L64-66, L78, L213) and cross-referenced from the assistance route (L185), but the labor-assistance work itself is described only as 'combina este diagnóstico com a assistência técnica da parte'; no dedicated section with sequence.",
+   "delivery_explained": "NO. Catalog deliverables ('quesitos e pontos técnicos da parte; análise de PGR, LTCAT, PPRA histórico, AET e laudos de terceiro no corpus; crítica fundamentada de laudo pericial' — catalog.v2.json offer labor_sst_technical_assistance) are not rendered. The SST route's deliverables (L152-154) are the preventive diagnosis. 'Laudo pontual: insalubridade ou periculosidade' (L182) is the closest, framed as engineering question, not as party assistance.",
+   "proof": "None for labor assistance. SST plate PF is a canteiro checklist (L104-114), assistance plate PE is building fachada (assistencia L111).",
+   "terminal_action": "Inherited: SST route WhatsApp/e-mail/phone in <main> (L246-250), 'não envie peças do processo no primeiro contato' (L213), 'verificação de conflito quando o escopo exigir' (L257), 'Conflito entre empregador e empregado no mesmo caso é verificado antes de material sensível' (L195). REQUEST_CONFLICT_CHECK thus honoured on the SST page.",
+   "form_or_contact": "On-page (SST route #contato-sst). Cross-reference loop: assistance page → SST page (L185); SST page → assistance 'combinada' (L213,234). Contact ends on SST page.",
+   "responsible_named": "SST route L81,117,228 (Tiago Sasaki, CREA). Catalog note: 'Medições ambientais de higiene ocupacional exigem higienista ou método declarado; não são assumidas como internas' and responsible 'a confirmar antes da contratação' — SST page says 'o profissional habilitado que responde por ela' (L154), no labor-specific statement.",
+   "indexability": "Served inside indexable /seguranca-trabalho-apoio-tecnico/ (index,follow L8, canonical L10, in sitemap); no own anchor id for the labor situation.",
+   "distinctions": "Preventive SST vs labor dispute drawn as trigger (L64-66) and pointer (L213); advocacia/perito do juízo/ato médico exclusions present on SST (L222 'nenhum ato médico') and assistance (L180-183). Empregado vs empregador conflict gate stated (L195).",
+   "gap_summary": "PARTIAL GAP: no explanation of what the party receives in a labor SST dispute (quesitos, análise de PGR/LTCAT/AET, crítica de laudo). Catalog readiness MODELED / MODEL_ONLY, price NOT_PUBLIC; exclusions 'não emite PGR ou LTCAT nesta SKU; não garante adicional ou improcedência'."
+  },
+  {
+   "intent_family": "organizar_sst",
+   "need_wording": "Preciso saber quais riscos e documentos de SST se aplicam e o que precisa ser atualizado. (terminal REQUEST_SST_SCOPE; offers sst_risk_documentation_diagnosis, sst_pgr_ltcat_aet_inputs, sst_insalubrity_perilousness_analysis, sst_preventive_audit)",
+   "routes": [
+    "/seguranca-trabalho-apoio-tecnico/",
+    "/servicos/#servico-sst",
+    "/triagem-tecnica/#sst",
+    "/ situação 06"
+   ],
+   "solution_explained": "YES. seguranca-trabalho-apoio-tecnico/index.html: hero/30s (L65-81), deliverables (L148-154), PGR/LTCAT/AET/laudo finalidade-insumo-responsabilidade (L175-182), conduction (L191-197 'Delimitar → Ler documentos existentes e lacunas → Produzir com responsabilidade'), what to send (L206 'não envie dados de trabalhador agora'), conditions (L222-234), contact (L245-257).",
+   "delivery_explained": "YES: 'Diagnóstico dos documentos existentes', 'Levantamento de atividades e agentes', 'Relatório de encaminhamento e documentos nomeados... a produção das peças nomeadas na proposta é conduzida pela CONFENGE até a entrega. Serve para manter os registros em dia' (L152-154).",
+   "proof": "Inline plate PF canteiro CT-01, four proteções coletivas, 'Exemplo demonstrativo, original e sintético' (L104-114, L139); disclaimer L233 'não apresentam o diagnóstico como PGR, LTCAT, AET ou laudo concluído'. No /casos/.",
+   "terminal_action": "WhatsApp/e-mail/phone in <main> (L246-250; wa.me L71,L248); anchor #contato-sst (L44,53,70,94,164). REQUEST_SST_SCOPE rendered as 'Descreva o estabelecimento; confirmamos o escopo, o que falta reunir e preparamos a proposta' (L245).",
+   "form_or_contact": "On-page; hub cross-route anchor servicos/index.html:234 → /seguranca-trabalho-apoio-tecnico/#contato-sst.",
+   "responsible_named": "YES: L81,117,228 (Tiago Sasaki, CREA). Per-document: 'o profissional habilitado que responde por ela' (L154), 'atribuição profissional e responsável técnico confirmados na proposta, antes do aceite técnico' (triagem L90).",
+   "indexability": "index,follow (L8), self canonical (L10), in sitemap.xml.",
+   "distinctions": "PGR vs LTCAT vs AET vs laudo pontual explicit (L175-182 'Nome de documento não substitui finalidade, insumos e responsabilidade'); 'nenhum ato médico e nenhum pacote' (L222); preventive vs labor dispute (L64-66, L213).",
+   "gap_summary": "No material gap. sst_preventive_audit ('Auditoria Preventiva') not named as a distinct unit — copy only."
+  },
+  {
+   "intent_family": "planejar_contratacao_publica",
+   "need_wording": "O ente precisa organizar tecnicamente uma contratação de obra ou serviço de engenharia. (terminal REQUEST_PUBLIC_ENTITY_PLANNING_SCOPE; offer public_works_technical_procurement_planning; disambiguation: apoio ao ente, não consultoria ao licitante, não parecer jurídico)",
+   "routes": [
+    "/servicos-obras-publicas/ item 06 'Órgão público planejando a contratação de uma obra' (index.html:113, rendered block items 47-52 of that line; tab list L84 '06 Órgão público')",
+    "/servicos/#servico-obras-publicas (servicos/index.html:243-249: 'órgãos que precisam estruturar tecnicamente uma contratação sem misturar os dois papéis'; link 'Conversar sobre planejamento de órgão público' → /triagem-tecnica/#planejamento-publico)",
+    "/triagem-tecnica/#planejamento-publico (triagem-tecnica/index.html:91)",
+    "/ (index.html:317 'Órgão público preparando uma obra? Descreva a necessidade' → /triagem-tecnica/#planejamento-publico; form #estagio option 'planejamento de órgão público' data-journey=orgao)"
+   ],
+   "solution_explained": "PARTIAL (one paragraph + CTA). /servicos-obras-publicas/ L113 block: 'Do lado do órgão, estruturamos tecnicamente a contratação: escopo, orçamento e memória de referência, critérios de medição e matriz de risco, para planejar o certame. Não atuamos para contratante e contratada no mesmo contrato.' + 'Sem formulário: descreva o objeto e a fase pelo WhatsApp. A resposta nomeia o trabalho, o que o órgão recebe e o que falta reunir.' No sequence (method, proof, conditions) for the ente.",
+   "delivery_explained": "Summarily: escopo, orçamento e memória de referência, critérios de medição, matriz de risco (servicos-obras-publicas L113; triagem L91; servicos L247 'para planejar a contratação'). Catalog deliverables ('matriz de aplicabilidade DOD/DFD, ETP, TR/projeto, quantitativos, orçamento, cronograma, medição e riscos; módulos técnicos contratados, sem peça implícita; registro de premissas, campo e limites'; method Lei 14.133/2021 fase preparatória, IN SEGES 58/2022 e 81/2022) not rendered.",
+   "proof": "None for the ente side. Plates/cases on /servicos-obras-publicas/ and pillars are contratada-side (dossiê de medição, aditivo).",
+   "terminal_action": "WhatsApp prefilled 'Sou de um órgão público planejando a contratação de uma obra e quero estruturar escopo, orçamento e critérios de medição.' inside <main> of /servicos-obras-publicas/ (L113 href); triagem WhatsApp (L68) with li#planejamento-publico context; home form option. No form field/journey specific to ente beyond the #estagio option.",
+   "form_or_contact": "On-page WhatsApp (servicos-obras-publicas) / cross-route anchors from /servicos/ and home to /triagem-tecnica/#planejamento-publico.",
+   "responsible_named": "Route-level only: /servicos-obras-publicas/ has no in-main 'Sasaki/CREA' line (scan resp=none in main); /servicos/ L278; triagem L66. Catalog: 'ART por módulo de engenharia efetivamente produzido; não há ART de ato administrativo'; responsible 'a confirmar antes da contratação'.",
+   "indexability": "Served inside indexable /servicos-obras-publicas/ (index,follow L8, canonical L10, in sitemap) and /servicos/, /triagem-tecnica/; no own URL, no anchor id on /servicos-obras-publicas/ for the ente block (tab '06 Órgão público' L84 — id UNVERIFIED).",
+   "distinctions": "Órgão vs licitante vs contratada drawn: 'Não atuamos para contratante e contratada no mesmo contrato' (servicos-obras-publicas L113; triagem L91); 'sem misturar os dois papéis no mesmo certame' (servicos L245); bidder pillars state 'A CONFENGE atende a empresa proponente. A comissão do órgão... decide' (diagnostico-pre-licitacao L79; auditoria L80).",
+   "gap_summary": "PARTIAL GAP: no deliverable list, method, proof or conditions for the ente; WhatsApp-only. Blockers: catalog readiness WITHHELD / MODEL_ONLY, price NOT_PUBLIC, exclusion 'página pública #588 nesta onda'; gaps.v1.json GAP_ISSUE_588_PUBLICATION 'money page #588 permanece fora de publicação nesta onda'."
+  },
+  {
+   "intent_family": "decidir_disputar_licitacao",
+   "need_wording": "A empresa precisa decidir se disputa e preparar uma proposta de obra pública. (terminal REQUEST_B2G_FIT; representative offer_ids CFG-D01, D12, D14, D16, D49; B2G authority data/commercial/deliverables-registry.v1.json + data/offers/catalog.snapshot.json)",
+   "routes": [
+    "/diagnostico-pre-licitacao/",
+    "/auditoria-orcamento-licitacao/",
+    "/bid-room-licitacoes-obras/",
+    "/diagnostico-b2g-expansao/ (R$ 8.000)",
+    "/diretoria-b2g/ (cadência; R$ 20.000/mês etc.)",
+    "/entregas/ (8 priced analyses R$ 599–3.750)",
+    "/servicos-obras-publicas/ tab 01 Edital (L84,113 items 01-02)",
+    "/servicos/#servico-obras-publicas",
+    "/ situação 07 → /bid-room-licitacoes-obras/ (index.html:122-205)"
+   ],
+   "solution_explained": "YES on pillars. diagnostico-pre-licitacao/index.html: hero (L72-79 'Limite: atende a empresa proponente'), checklist plate (L98-104), service (L111), when it enters (L132), what is read (L143-157), guias (L190), conditions (L206), form (L217). auditoria-orcamento-licitacao: same structure (L73-229). bid-room: test/plan/price/steps/what enters-not (L96-231), how to verify (L246), FAQ (L260), form (L279-280).",
+   "delivery_explained": "YES: diagnóstico pré-licitação e revisão de proposta (diag-pre L111-157: habilitação, acervo, orçamento, prazo); auditoria de orçamento/BDI/SINAPI item a item (auditoria L99-156); bid-room 'O que entra' list (L188-200: leitura crítica do edital, habilitação, orçamento/BDI/cronograma, matriz de riscos, checklist de protocolo).",
+   "proof": "Demonstrative plates: diag-pre L104 'Exemplo demonstrativo · Licitação de obra' (acervo 5.200 de 8.000 m²); auditoria L99 'Referência e proposta, item a item'. bid-room and diretoria link /casos/modelo-relatorio-inteligencia-licitacoes/ (bid-room L68,275; diretoria L322); diag-expansão links /casos/modelo-mapa-compradores-publicos/ (L72); /entregas/ links eight /casos/modelo-* (L137-284).",
+   "terminal_action": "On-page persisted forms in <main>: diag-pre #captura-pilar (L217), auditoria #captura-pilar (L229), bid-room form action=/.netlify/functions/lead (L280), diretoria form data-offer-id=CFG-DIRB2G-FLEX-v1 (L334), diag-expansão form CFG-DIAG-EXP-v1 (L238), /entregas/ form (L325). WhatsApp also in main (diag-pre L74,124; bid-room L86,311). Registry: service-pillars capture_form; entregas capture_form.",
+   "form_or_contact": "On-page forms (no cross-route dependence). /servicos-obras-publicas/ hub links each pillar ('Ver a página', L113).",
+   "responsible_named": "YES: 'Engenharia por Engº Tiago Sasaki' (diag-pre L75; auditoria L76), 'Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki · Referência: 15 de agosto de 2026' (diag-pre L223; auditoria L235), bid-room L255, diretoria L302, diag-expansão L206.",
+   "indexability": "All: index,follow (each :8), self canonical (each :10), in sitemap.xml (diag-pre, auditoria, bid-room, diretoria, diag-expansão, entregas).",
+   "distinctions": "Licitante vs órgão drawn on diag-pre L79 ('atende a empresa proponente. A comissão do órgão público contratante decide habilitação, julgamento e resultado') and auditoria L80; bid-room only lists 'Influência junto à Administração' under 'O que não entra' (L209) — no explicit 'não atendemos o órgão no mesmo certame' clause (grep órgão/comissão/certame on bid-room: L135 price note, L209 only). Prices: bid-room 'valor apresentado na proposta' (L135); diretoria R$ 20.000/15.000/12.500 (L139-141); diag-expansão R$ 8.000 (L70); entregas R$ 599–3.750 (L78,121-268) — published per catalog.snapshot / deliverables registry (not re-verified here: UNVERIFIED).",
+   "gap_summary": "No coverage gap. Minor: /bid-room-licitacoes-obras/ lacks the explicit órgão-vs-licitante conflict clause present on the other bidder pillars."
+  },
+  {
+   "intent_family": "executar_proteger_contrato_publico",
+   "need_wording": "A empresa precisa registrar, calcular ou decidir antes de perder prazo, caixa, margem ou prova no contrato público. (terminal REQUEST_B2G_FIT; representative offer_ids CFG-D17..D25, D42; disambiguation: não promete deferimento, pagamento, reequilíbrio ou vitória)",
+   "routes": [
+    "/medicoes-glosas-obras-publicas/",
+    "/aditivos-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/defesa-margem-contratos-publicos/",
+    "/acompanhamento-contratos-obras/",
+    "/diagnostico-b2g-360/",
+    "/servicos-obras-publicas/ tabs 02-05 (L84,113)",
+    "/casos/medicao-glosa-demonstrativo/, /casos/aditivo-art125-demonstrativo/ (proof)",
+    "/ situação 07 (index.html:122-205)",
+    "/ferramentas/* (limite-acrescimos-supressoes, checklist-reequilibrio, matriz-atraso-obra, diagnostico-defesa-margem)"
+   ],
+   "solution_explained": "YES. medicoes-glosas-obras-publicas/index.html: hero+Limite (L73-80), plate 'Mesma parede, quatro números' (L99-107), dossiê (L114-127), when it enters (L135-138), executado/medido/contratado/evidenciado (L144-147), what is read (L158-161), guias (L199), conditions (L218), form (L228-239). Same template on aditivos (L74-234), reequilíbrio (L73-216), atrasos (L75-254), defesa técnica (L75-255), defesa margem (L69-305), acompanhamento (L74-236), diagnóstico 360 (L63-254).",
+   "delivery_explained": "YES with published price/prazo where authorized: Dossiê de Medição, Glosa e Pagamento R$ 4.900, 5 dias úteis (servicos-obras-publicas L76; medicoes L114); Dossiê de Aditivo e Serviço Extra (aditivos L114); Dossiê de Atraso e Prorrogação R$ 5.900, 7 dias úteis (atrasos L232,241); Subsídio Técnico para Notificação ou Sanção R$ 6.900, 5 dias úteis (defesa-tecnica L232,242); Diagnóstico de Riscos à Margem R$ 2.900, 5 dias úteis (defesa-margem L77,255); acompanhamento 'Mensalidade fixa, confirmada na primeira conversa' (L188); reequilíbrio 'Análise de viabilidade e estruturação de pleito' (L140). Price authorization states not re-verified against catalog.snapshot.json here (UNVERIFIED).",
+   "proof": "/casos/medicao-glosa-demonstrativo/ linked from medicoes L100 ('Ver o exemplo completo, item a item', published this campaign per README §Jornada piloto); /casos/aditivo-art125-demonstrativo/ exists (index,follow, sitemap) but /aditivos-obras-publicas/ does NOT link it (grep aditivo-art125-demonstrativo in aditivos/index.html = 0; only casos/index.html links it); inline plates on every pillar ('Exemplo demonstrativo · Obra pública': aditivos L107; atrasos L107; defesa-margem L108); /casos/modelo-relatorio-executivo-consolidado/ (defesa-tecnica L78; defesa-margem L75), /casos/modelo-contratos-vincendos-relicitacao/ (acompanhamento L77).",
+   "terminal_action": "On-page persisted forms in <main> on all eight pillars: medicoes form action=/.netlify/functions/lead (L233, #captura-pilar L228), aditivos L228, reequilíbrio L210, atrasos L243, defesa-tecnica L244, defesa-margem L260, acompanhamento L230, diag-360 L248; WhatsApp also in main. Registry service-pillars capture_form satisfied. Debt routes: /casos/medicao-glosa-demonstrativo/ <main> (L40-145) ends with cross-route anchor '/medicoes-glosas-obras-publicas/#captura-pilar' (L133-145 hrefs), no form/wa.me in main; /casos/aditivo-art125-demonstrativo/ <main> (L40-168) ends with '/#contato' (L157-168 hrefs). Siblings /casos/demonstrativo-infraestrutura/ (wa.me L352 in main) and /casos/demonstrativo-projeto-privado/ (wa.me L306 in main) comply and are not in the exemption list.",
+   "form_or_contact": "Pillars: on-page. Demonstrative cases medição/aditivo: cross-route anchor only (debt).",
+   "responsible_named": "YES: 'Engenharia por Engº Tiago Sasaki' (medicoes L76; aditivos L77; reequilíbrio L76) and footer-of-main 'Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki · Referência: 15 de agosto de 2026' (medicoes L239; aditivos L234; reequilíbrio L216; atrasos L254; defesa-tecnica L255; defesa-margem L305; acompanhamento L236; diag-360 L254); 'Quem assina Engº Tiago Sasaki, Engenharia Civil pela EESC-USP, fiscalização e gestão contratual' (atrasos L85; defesa-tecnica L85; acompanhamento L84; defesa-margem L85). Cases: 'Responsável técnico: Engº Tiago Sasaki · Exemplo demonstrativo, com números hipotéticos' (medicao-glosa L48; aditivo L48).",
+   "indexability": "All eight pillars and both cases: index,follow (each :8), self canonical (each :10 / cases :9), in sitemap.xml. /casos/ hub index,follow, canonical, sitemap.",
+   "distinctions": "Execução vs órgão explicit: 'A CONFENGE atende a empresa contratada. O órgão público contratante decide o ateste, a liquidação e o pagamento; a análise técnica não é petição jurídica e não promete recebimento' (medicoes L80); aditivos L81 ('decide se formaliza o termo... não promete deferimento'); reequilíbrio L80 ('decide o deferimento'); atrasos L85,225 and defesa-tecnica L85,115 (advogado assina/protocola); acompanhamento L217 ('não assume a gestão do contrato'); defesa-margem L248 ('o jurídico assina e a CONFENGE não representa'). Execução vs licitação: separate pillars, hub tabs (servicos-obras-publicas L84).",
+   "gap_summary": "Coverage complete. Debts: /casos/medicao-glosa-demonstrativo/ and /casos/aditivo-art125-demonstrativo/ lack in-<main> terminal action, exempt until 2026-09-30 (public-family-registry.json:548-560, owner_issue 61; INBOUND-GATES-REPORT.json exemptions, expired:false as of 2026-09-16 commit). Also /ferramentas/matriz-atraso-obra/ 2026-09-30 (registry :740-746) and /metodologia-inteligencia/ 2026-10-31 (:462-468). Editorial: medicoes L80 vs L228 duplicated 'não promete' (README matriz de achados); aditivos pillar does not link its own demonstrative case."
+  },
+  {
+   "intent_family": "outra_demanda_tecnica",
+   "need_wording": "Tenho outra demanda de engenharia e quero conversar sobre o serviço necessário. (terminal NEEDS_CONTEXT; no offers; disambiguation: coletar somente contexto mínimo, não inventar competência/preço/SKU, registrar GAP)",
+   "routes": [
+    "/triagem-tecnica/",
+    "/ form #formulario-contato options 'Ainda não sei qual serviço preciso, quero ser orientado' and 'Outra necessidade' (index.html:394ff, data-journey=outro)",
+    "/servicos/ L289-296 ('Descreva a situação. A resposta nomeia o serviço, a entrega e o que falta reunir')",
+    "/ situação chooser L200-205 'Não se reconheceu em nenhuma, ou a sua mistura duas? Conte do seu jeito' → #triagem-tecnica"
+   ],
+   "solution_explained": "YES for a NEEDS_CONTEXT surface: triagem-tecnica/index.html L60-61 'Conte a situação do seu jeito. Nós nomeamos o serviço... A resposta diz o trabalho que assumimos, o que você recebe e o que falta para a proposta'; situations list L86-91; 'O que dizer no primeiro contato' L97-104 (situação, decisão/prazo, cidade/UF só se houver vistoria). No promise of capacity; 'sem prazo prometido em dias' (L113).",
+   "delivery_explained": "By design none (NEEDS_CONTEXT): page promises only that the reply names the work, the deliverable and what is missing (L61).",
+   "proof": "Not applicable; page links /casos/ in footer only (L122).",
+   "terminal_action": "WhatsApp/e-mail/phone in <main> (L65-70, wa.me L68 data-asset-id technical_triage_v1). Home form persisted to /.netlify/functions/lead via data-capture-form (index.html:394) with 'outro' journey. Registry family triagem-tecnica capture_form_or_whatsapp satisfied.",
+   "form_or_contact": "On-page channels (triagem) and on-page form (home). No cross-route dependence.",
+   "responsible_named": "YES: 'O contato é direto com o Engº Tiago Sasaki, Engenharia Civil pela EESC-USP, registro profissional ativo no CREA' (L66); L113.",
+   "indexability": "index,follow (L8), canonical https://confenge.com.br/triagem-tecnica/ (L9), in sitemap.xml.",
+   "distinctions": "Lists the six recognised situations with their boundaries (L86-91) so that 'outra' is residual; national availability conditional wording present on service routes (e.g. projetos L246) — on triagem itself UNVERIFIED.",
+   "gap_summary": "No gap. GAP registration (gaps.v1.json GAP_UNMAPPED) is internal; the public surface correctly collects minimal context only."
+  }
+ ],
+ "gaps": [
+  {
+   "intent_family": "documentar_as_built_regularizar",
+   "gap": "Zero public surface: no route, section, anchor or copy explains as-built reconciliation / missing technical documentation; the family's public_wording is not recognisable anywhere a visitor lands.",
+   "evidence": "grep -rli 'as.built' over public index.html returns no service route (only content-index.json V030 article title and medicoes-glosas-obras-publicas/index.html:147 as an evidence source); intent-family-matrix.v1.json family documentar_as_built_regularizar (offers asbuilt_document_reconciliation, private_project_technical_readiness_assessment); catalog.v2.json offer asbuilt_document_reconciliation readiness MODELED / wave MODEL_ONLY, price NOT_PUBLIC, deliverables 'matriz de reconciliação projeto × construído × documento; lista de lacunas; recomendação de as-built, regularização ou aceite com ressalva'; catalog publication block catalog_public:false, prices_public:false, professional_claims_authorized:false.",
+   "proposed_minimal_fix": "Add one situation card to /inspecao-diagnostico-edificacoes/ (same canonical_service_family building_condition_documentation) — 'Situação 04: Registrar o que foi construído e a documentação que falta' — stating the modeled deliverable (matriz projeto × construído × documento, lista de lacunas, recomendação de as-built/regularização/aceite com ressalva), that field check enters only if the proposal includes it, that regularização/habite-se are acts of the órgão and not promised, no price, responsibility confirmed before technical acceptance; add an id anchor and wire /triagem-tecnica/#obra-imovel and the home form option 'inspecionar, diagnosticar ou documentar' to it; extend registry family inspecao-diagnostico-edificacoes visitor_job wording. Also point /projetos-complementares-engenharia/ adjacent-intent copy to that anchor.",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "receber_entregar_reformar",
+   "gap": "Recebimento/entrega is only a sub-situation of the inspection route; 'reforma' appears solely as an exclusion; the family's own disambiguation ('recebimento, inspeção e plano de reforma são decisões diferentes') and the renovation_plan_condo_review deliverable are not rendered; NBR 16280 never cited publicly.",
+   "evidence": "inspecao-diagnostico-edificacoes/index.html:159 ('Condição do imóvel ou recebimento... Isso não é projeto de reforma nem perícia'), :130; servicos/index.html:160 (trigger words only); triagem-tecnica/index.html:87; grep 'reforma' across public route HTML finds no explanation of a reform review; NBR 16280 only in data/offers/multivertical/catalog.v2.json (offer renovation_plan_condo_review: deliverables 'parecer ou plano de reforma no recorte; lista de interferências e cuidados em áreas comuns; pendências documentais do autor da intervenção'; readiness CAPACITY_UNKNOWN / WITHHELD_CAPACITY; price NOT_PUBLIC).",
+   "proposed_minimal_fix": "On /inspecao-diagnostico-edificacoes/, split Situação 03 into 'Recebimento ou entrega' (vistoria com lista do que corrigir; NBR 16747 named as the inspection reference the catalog already registers) and a new 'Reforma ou intervenção em condomínio' card explaining the modeled parecer/plano de reforma and the pendências do autor da intervenção, naming NBR 16280 as reference 'quando aplicável', without price, capacity or ART promise, with 'visita só se a proposta incluir local e propósito'; add the family disambiguation sentence; give both an anchor id; extend the /servicos/#servico-diagnostico card and triagem li#obra-imovel wording. Same route — the visitor job (registrar o que corrigir) shares the inspection deliverable.",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "assistencia_trabalhista_sst",
+   "gap": "Labor-dispute SST assistance is recognised only as a trigger and a cross-reference loop between the SST and assistance routes; what the party receives (quesitos, análise de PGR/LTCAT/AET, crítica de laudo) is never explained; no anchor for the situation.",
+   "evidence": "seguranca-trabalho-apoio-tecnico/index.html:64-66, :78, :213 ('Reclamação trabalhista com componente de SST é atendida pela assistência técnica da parte, combinada com este diagnóstico'), :195 (conflict gate empregador/empregado), :257; assistencia-tecnica-pericial-engenharia/index.html:185 (routes labor SST back to the SST page); catalog.v2.json offer labor_sst_technical_assistance deliverables 'quesitos e pontos técnicos da parte; análise de PGR, LTCAT, PPRA histórico, AET e laudos de terceiro; crítica fundamentada de laudo pericial', readiness MODELED / MODEL_ONLY, price NOT_PUBLIC, note 'medições ambientais exigem higienista ou método declarado', exclusions 'não emite PGR ou LTCAT nesta SKU; não garante adicional ou improcedência'.",
+   "proposed_minimal_fix": "Add a short block with id (e.g. #assistencia-trabalhista) on /seguranca-trabalho-apoio-tecnico/ after the PGR/LTCAT/AET section: situation (reclamação ou perícia trabalhista com componente de SST), the three modeled deliverables, boundaries (não é advocacia, ato médico nem perícia do juízo; não emite PGR/LTCAT nesta unidade; medições de higiene ocupacional só com profissional/método declarados; não garante adicional ou improcedência), conflict check before documents, contact via existing #contato-sst. Point assistencia-tecnica-pericial-engenharia/index.html:185 and servicos/index.html:229 to that anchor. No price, no credential claim.",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "planejar_contratacao_publica",
+   "gap": "Ente-side need has only a one-paragraph WhatsApp block and a triagem list item: no deliverable list, method (Lei 14.133 fase preparatória), proof, conditions or named responsibility for the órgão; the órgão-vs-licitante rule is present but the visitor cannot see what the ente receives.",
+   "evidence": "servicos-obras-publicas/index.html:113 (block 'Órgão público planejando a contratação de uma obra... escopo, orçamento e memória de referência, critérios de medição e matriz de risco... Não atuamos para contratante e contratada no mesmo contrato'; WhatsApp-only CTA), :84 (tab '06 Órgão público'); servicos/index.html:243-249; triagem-tecnica/index.html:91; index.html:317 and form option 'planejamento de órgão público'; catalog.v2.json offer public_works_technical_procurement_planning (deliverables 'matriz de aplicabilidade DOD/DFD, ETP, TR/projeto, quantitativos, orçamento, cronograma, medição e riscos; módulos técnicos contratados, sem peça implícita'; method Lei 14.133/2021 fase preparatória; readiness WITHHELD / MODEL_ONLY; price NOT_PUBLIC; exclusion 'página pública #588 nesta onda'); gaps.v1.json GAP_ISSUE_588_PUBLICATION 'money page #588 permanece fora de publicação nesta onda'.",
+   "proposed_minimal_fix": "Deepen the existing órgão block on /servicos-obras-publicas/ (give it an id, e.g. #orgao-publico, and target it from /servicos/, home L317 and triagem li#planejamento-publico instead of the bare triagem anchor): list the modeled deliverables as a matriz de aplicabilidade (DOD/DFD, ETP, TR/projeto, quantitativos, orçamento de referência, cronograma, critérios de medição, matriz de riscos) 'módulos nomeados na proposta, sem peça implícita', name Lei 14.133/2021 fase preparatória as method, state 'não é parecer jurídico nem ato administrativo; não promete êxito do certame; conflito verificado antes da proposta', ART por módulo produzido, keep WhatsApp + add the shared lead form journey 'orgao' already present on the home form. No price. A dedicated route is excluded by GAP_ISSUE_588_PUBLICATION and the offer's own exclusion until the owner lifts #588.",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "avaliar_imovel",
+   "gap": "No indexable URL of its own (fragment of /servicos/, canonical /servicos/), no norm named (NBR 14653 only in catalog), no demonstrative example beyond the structure plate; the distinct visitor job (valor para finalidade e data) cannot rank or be deep-linked as a page.",
+   "evidence": "servicos/index.html:173-209 (article#servico-avaliacao with situation, plate P4 'Estrutura da análise · sem valor de mercado' L180-183, method L188, deliverable L189, exclusions L191, pre-acceptance L193-198, WhatsApp+mailto L178), :10 canonical https://confenge.com.br/servicos/; index.html:158,252 and triagem-tecnica/index.html:89 route to the fragment; catalog.v2.json offers urban_property_valuation (readiness WITHHELD / WITHHELD_PROOF, NBR 14653, price NOT_PUBLIC) and preliminary_property_opinion (MODELED / MODEL_ONLY); docs/campaigns/design-institucional/expansao/matriz-rotas.json impediment 'avaliacoes imobiliarias sem URL propria: superficie autorizada e a secao #servico-avaliacao (decisao do proprietario pendente sobre familia nova)'; docs/campaigns/2026-09-13-solucao-integral.md:77.",
+   "proposed_minimal_fix": "Keep the section as the authorized surface. Minimal copy fixes inside it: name 'ABNT NBR 14653 na parte aplicável' as the method reference (already registered in the catalog, class 'method' proof per public-service-page-contract.v1.json), state that preliminary opinion is a different unit with explicit 'não equivale a avaliação formal NBR 14653', and add a demonstrative (hypothetical, labelled) five-part extract or a /casos/ demonstrativo of the structure without market values. A dedicated route (distinct visitor job, would need a new public-family-registry.json family and sitemap entry) is justified in principle but blocked by the pending owner decision and WITHHELD_PROOF readiness; record as decision request, not as a change.",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "inspecionar_diagnosticar",
+   "gap": "Distinction inspection/diagnosis vs causal investigation (perícia) is prose-only; NBR 16747 and NBR 13752 are not named on any public route, although the catalog registers NBR 16747 for the inspection offer.",
+   "evidence": "inspecao-diagnostico-edificacoes/index.html:159,168-175; grep 'NBR 16747|NBR 13752' over repo: only data/offers/multivertical/catalog.v2.json:996 (NBR 16747), NBR 13752 nowhere; docs/campaigns/inbound-receita-20260919/README.md note after 'Matriz de achados' already logs this as pendência editorial (Brief 2).",
+   "proposed_minimal_fix": "In the 'Etapas que se encadeiam' block (L168-175) add the norm references as method proof: 'Inspeção: ABNT NBR 16747 quando aplicável ao objetivo' and 'Perícia: ABNT NBR 13752 é o método da perícia de engenharia; aqui entra como assistência da parte' — wording as 'quando aplicável', no claim of certification. Requires hash recapture chain for the route per memory rules (not executed here).",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "executar_proteger_contrato_publico",
+   "gap": "Two demonstrative cases used as proof lack an in-<main> terminal action and are covered by route-exact debts expiring 2026-09-30; after expiry the fail-closed gate rejects the build.",
+   "evidence": "data/organic/public-family-registry.json:548-560 (family casos debts /casos/aditivo-art125-demonstrativo/ and /casos/medicao-glosa-demonstrativo/, owner_issue 61, expires_at 2026-09-30, reason 'Demonstrativo da família /casos/ sem ação terminal no <main>'); debt_policy :38 'depois de expires_at o gate reprova'; docs/seo/INBOUND-GATES-REPORT.json gates.conversion.stats.exemptions (expired:false at commit 2026-09-16); casos/medicao-glosa-demonstrativo/index.html:133-145 (only hrefs to /medicoes-glosas-obras-publicas/#captura-pilar etc.); casos/aditivo-art125-demonstrativo/index.html:157-168 (href /#contato); compliant siblings casos/demonstrativo-infraestrutura/index.html:352 and casos/demonstrativo-projeto-privado/index.html:306 carry wa.me inside <main>.",
+   "proposed_minimal_fix": "Before 2026-09-30, copy the sibling pattern: add a contextual WhatsApp link (prefilled with 'medição glosada' / 'aditivo art. 125') inside <main> of both cases next to the existing cross-route anchor (satisfies capture_form_or_whatsapp without adding a form), and make /aditivos-obras-publicas/ link /casos/aditivo-art125-demonstrativo/ as /medicoes-glosas-obras-publicas/:100 already does for its case. Alternatively renew the debt with a dated reason — same registry entries. Same deadline applies to /ferramentas/matriz-atraso-obra/ (registry :740-746).",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "decidir_disputar_licitacao",
+   "gap": "/bid-room-licitacoes-obras/ does not state the órgão-vs-licitante conflict rule that its sibling bidder pillars carry.",
+   "evidence": "bid-room-licitacoes-obras/index.html: grep órgão/comissão/certame yields only L135 (pricing note) and L209 ('Influência junto à Administração' in 'O que não entra'); diagnostico-pre-licitacao/index.html:79 and auditoria-orcamento-licitacao/index.html:80 carry 'A CONFENGE atende a empresa proponente. A comissão do órgão público contratante decide...'.",
+   "proposed_minimal_fix": "Add the same one-sentence 'Limite' clause to the bid-room hero/conditions ('atende a empresa licitante; não atua para o órgão no mesmo certame; a comissão decide habilitação, julgamento e resultado'). Copy only.",
+   "creates_new_route": false
+  },
+  {
+   "intent_family": "orcar_planejar_decidir",
+   "gap": "The matrix's own distinct purchase 'auditoria da planilha do edital' is not bridged from the private pillar to /auditoria-orcamento-licitacao/, and 'viabilidade técnica' is not named on the pillar.",
+   "evidence": "quantitativos-orcamento-obras/index.html: grep href=/auditoria-orcamento-licitacao/ = 0; L239,259 mention 'edital e orçamento de referência em obra pública' without a link; intent-family-matrix.v1.json disambiguation 'Levantamento de quantitativos de uma obra e auditoria da planilha do edital são compras distintas'; /ferramentas/prontidao-tecnica-obra-privada/ is the readiness surface (registry family prontidao-tecnica-obra-privada).",
+   "proposed_minimal_fix": "In the 'Obra pública' condition card (L259) add a link 'Para conferir a planilha de um edital como licitante, ver auditoria de orçamento e BDI' → /auditoria-orcamento-licitacao/, and in the 'Três decisões' block (L275) name viabilidade/prontidão with the link to /ferramentas/prontidao-tecnica-obra-privada/. Copy only.",
+   "creates_new_route": false
+  }
+ ],
+ "notes": [
+  "Scope: READ-ONLY inspection of the working tree at branch campaign/bofu-integral-20260919 (= origin/main 3cf3c4b47 per task); production identity (a27472bec) not re-verified in this session — UNVERIFIED beyond README statement.",
+  "Route set verified by reading index.html of: /, /servicos/, /triagem-tecnica/, /projetos-complementares-engenharia/, /revisao-tecnica-projetos-engenharia/, /compatibilizacao-projetos-engenharia/, /quantitativos-orcamento-obras/, /inspecao-diagnostico-edificacoes/, /assistencia-tecnica-pericial-engenharia/, /seguranca-trabalho-apoio-tecnico/, /servicos-obras-publicas/, /medicoes-glosas-obras-publicas/, /aditivos-obras-publicas/, /reequilibrio-obras-publicas/, /atrasos-prorrogacao-obras-publicas/, /defesa-tecnica-contratos-publicos/, /defesa-margem-contratos-publicos/, /acompanhamento-contratos-obras/, /diagnostico-b2g-360/, /diagnostico-b2g-expansao/, /diagnostico-pre-licitacao/, /auditoria-orcamento-licitacao/, /bid-room-licitacoes-obras/, /diretoria-b2g/, /entregas/, /casos/ and its four demonstrativos. Sitemap presence checked against sitemap.xml (90 <loc>). Not read: /parcerias-engenharia/, /problemas-que-resolvemos/, /ferramentas/*, /conteudos/* (listed in routes only where the registry names them).",
+  "Line numbers cite the source index.html in the working tree (source, not _site/); the build may renumber. Content of /analise-cnpj/r/ runtime surface not inspected.",
+  "Catalog constraint applying to every proposed fix: data/offers/multivertical/catalog.v2.json publication = {catalog_public:false, prices_public:false, professional_claims_authorized:false, html_routes:[]}, 'modeling_is_not_publishing'. All multivertical offers have price_model.publication NOT_PUBLIC. Fixes therefore describe modeled deliverables and boundaries only; none may publish price, capacity, credential or ART guarantee. Readiness states cited: building_inspection_pathology CAPACITY_UNKNOWN/WITHHELD_CAPACITY; renovation_plan_condo_review CAPACITY_UNKNOWN/WITHHELD_CAPACITY; asbuilt_document_reconciliation MODELED/MODEL_ONLY; labor_sst_technical_assistance MODELED/MODEL_ONLY; urban_property_valuation WITHHELD/WITHHELD_PROOF; preliminary_property_opinion MODELED/MODEL_ONLY; public_works_technical_procurement_planning WITHHELD/MODEL_ONLY.",
+  "Apparent contradiction noted, not resolved here: catalog.v2.json publication.html_routes is [] while seven multivertical routes are published and indexable; the publishing authority is the founder decisions recorded in AGENTS.md (2026-09-09, 2026-09-13) and docs/campaigns/2026-09-13-solucao-integral.md / 2026-09-14-valor-imediato.md, not the catalog block. Treat the catalog block as stale relative to publication, or as intentionally separate (modeling vs publishing) — UNVERIFIED which.",
+  "Registry debts (data/organic/public-family-registry.json, as_of 2026-09-16, fail_closed): /casos/aditivo-art125-demonstrativo/ 2026-09-30 (:548-553); /casos/medicao-glosa-demonstrativo/ 2026-09-30 (:554-560); /ferramentas/matriz-atraso-obra/ 2026-09-30 (:740-746, tool form posts to itself, no lead form/wa.me); /metodologia-inteligencia/ 2026-10-31 (:462-468). debt_policy (:38): after expires_at the gate fails. INBOUND-GATES-REPORT.json (last commit 2026-09-16) lists the same four with expired:false; /confianca/ is trust_or_legal permanent exemption, not a debt. Eleven days remain on three debts.",
+  "All seven multivertical landings (projetos, revisão, compatibilização, quantitativos, inspeção, assistência, SST) have NO <form>; terminal action is WhatsApp/e-mail/phone inside <main>, which the registry accepts as capture_form_or_whatsapp. All B2G pillars and /entregas/, /casos/ hub, /diretoria-b2g/, /diagnostico-b2g-expansao/ have persisted forms (action=/.netlify/functions/lead) in <main>.",
+  "B2G price/prazo values quoted (R$ 4.900, 5.900, 6.900, 2.900, 8.000, 20.000/15.000/12.500, 599–3.750) are as rendered in the HTML; their authorization state in data/offers/catalog.snapshot.json and data/commercial/deliverables-registry.v1.json was not re-verified in this session (UNVERIFIED).",
+  "Home form (index.html:394, form#formulario-contato) already carries journeys for every family including 'planejamento de órgão público' (data-journey=orgao), 'obra ou imóvel para inspecionar, diagnosticar ou documentar' (obra) and 'Ainda não sei / Outra necessidade' (outro); so routing for the gap families exists at the capture layer, the gap is in explanation (need→solution→deliverable→proof) on the public page, not in capture.",
+  "Stale worktrees under .claude/worktrees/ contain older copies of some routes with data-intent-family attributes; ignored — the canonical public HTML at repo root has no intent_family attribute (grep = 0 outside worktrees)."
+ ]
+}
