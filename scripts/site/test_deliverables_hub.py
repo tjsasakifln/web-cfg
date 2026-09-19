@@ -853,20 +853,47 @@ def _schema_blocks() -> list[str]:
     return blocks
 
 
+def _assert_schema_veracity(block: str) -> None:
+    text = re.sub(r"<[^>]+>", " ", block)
+    # Identificacao inequivoca, proxima e legivel -- no proprio bloco. Decisao
+    # do proprietario 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): o
+    # rotulo basta para identificar o esquema; a negativa que o reexplicava
+    # ("sem obra executada e sem dados de cliente", repetida em cada bloco e na
+    # legenda da prancha) esta superada e nao volta.
+    assert "Esquema ilustrativo da entrega" in block, block[:160]
+    assert "sem obra executada e sem dados de cliente" not in text, text[:200]
+    assert "sem dados de cliente" not in text, text[:200]
+    # Nada que simule trabalho executado ou responsabilidade assumida.
+    for forbidden in ("ART ", "CREA-", "assinado por", "carimbo", "aprovado em",
+                      "cliente:", "contratante:", "obra executada em"):
+        assert forbidden.casefold() not in text.casefold(), (forbidden, text[:200])
+    # Sem numeros que pareçam medicao ou calculo de um trabalho real.
+    assert not re.search(r"\b\d+[,.]\d+\s*(?:m²|m2|m³|m3|kN|MPa|kg)\b", text), text[:200]
+
+
 def test_schema_veracity_acceptance() -> None:
     """VERACIDADE: o esquema nunca pode passar por experiencia ou caso de cliente."""
     for block in _schema_blocks():
-        text = re.sub(r"<[^>]+>", " ", block)
-        # Identificacao inequivoca, proxima e legivel -- no proprio bloco.
-        assert "Esquema ilustrativo da entrega" in block, block[:160]
-        # A informacao material que impede sugerir cliente, execucao ou validacao.
-        assert "sem obra executada e sem dados de cliente" in text, text[:200]
-        # Nada que simule trabalho executado ou responsabilidade assumida.
-        for forbidden in ("ART ", "CREA-", "assinado por", "carimbo", "aprovado em",
-                          "cliente:", "contratante:", "obra executada em"):
-            assert forbidden.casefold() not in text.casefold(), (forbidden, text[:200])
-        # Sem numeros que pareçam medicao ou calculo de um trabalho real.
-        assert not re.search(r"\b\d+[,.]\d+\s*(?:m²|m2|m³|m3|kN|MPa|kg)\b", text), text[:200]
+        _assert_schema_veracity(block)
+
+
+def test_schema_veracity_counterproof() -> None:
+    """Contraprova: tirar o rotulo de UM bloco reprova so aquele bloco; devolver a
+    negativa superada tambem reprova."""
+    blocks = _schema_blocks()
+    stripped = blocks[0].replace("Esquema ilustrativo da entrega", "Como a entrega se organiza")
+    assert stripped != blocks[0]
+    with pytest.raises(AssertionError):
+        _assert_schema_veracity(stripped)
+    for other in blocks[1:]:
+        _assert_schema_veracity(other)
+    relapsed = blocks[0].replace(
+        "Para que serve cada peça.",
+        "Para que serve cada peça. Modelo do conteúdo, sem obra executada e sem dados de cliente.",
+    )
+    assert relapsed != blocks[0]
+    with pytest.raises(AssertionError):
+        _assert_schema_veracity(relapsed)
 
 
 def test_schema_communication_acceptance() -> None:
