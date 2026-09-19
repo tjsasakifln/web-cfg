@@ -563,8 +563,12 @@ RESSALVA_ROUTES = (
     "casos/aditivo-art125-demonstrativo/index.html",
 )
 # Rotas com prancha e tabela em que o rótulo demonstrativo é contado por prova.
-# As quatro rotas de projeto/orçamento citam o "recorte demonstrativo" como
-# referência cruzada, não como ressalva repetida; ficam fora até haver achado.
+# As quatro rotas de projeto/orçamento (projetos complementares, revisão,
+# compatibilização, quantitativos) ficam fora das duas regras genéricas: citam
+# o "recorte demonstrativo" como referência cruzada, e as duas frases
+# repetidas que a regra 1 apontou em projetos complementares ('a autoria
+# arquitetônica permanece com o autor de origem', 'consulta com mais de uma
+# disciplina é acolhida') não são achado desta campanha. Entram quando houver.
 LABEL_DENSITY_ROUTES = RESSALVA_ROUTES[:3]
 # Frases de identidade/consentimento que a matriz de autoridade e a política de
 # privacidade exigem em mais de um bloco (Em 30 segundos, Condições e limites,

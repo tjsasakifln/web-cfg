@@ -66,7 +66,9 @@ function changedSinceBase(rel) { return gitBlobSha(rel) !== BASE_BLOBS[rel]; }
 const pendingUntilClosure = [];
 const homeHtml = readFileSync(join(root, "index.html"), "utf8");
 // B-02 (WS-E) + WS-B/WS-D: a disputa trabalhista com componente de SST entra
-// pela situação de SST da home e cai no bloco próprio da landing de SST.
+// pela situação de SST da home e cai no bloco próprio da landing de SST. O
+// bloco tem WhatsApp e e-mail próprios (journey_direct_next_step); os três
+// canais diretos continuam exigidos na rota inteira, não no fragmento.
 if (changedSinceBase("index.html")) {
   journeys.push({ id: "assistencia_trabalhista", direct: "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista", homeAnchor: "situacao-sst", homeSelector: 'a[href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"]' });
 } else {
@@ -302,7 +304,7 @@ try {
       required("journey_direct_status", response?.status() === 200, String(response?.status()), context);
       if (fragment) required("journey_direct_fragment", await page.$(fragment).then(Boolean), fragment, context);
       required("journey_direct_next_step", data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean), JSON.stringify(data), context);
-      if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/seguranca-trabalho-apoio-tecnico/", "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"].includes(journey.direct)) {
+      if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/seguranca-trabalho-apoio-tecnico/"].includes(journey.direct)) {
         required("journey_withheld_has_three_direct_channels", Object.values(data.channels).every(Boolean) && !data.activeForm, JSON.stringify(data), context);
       }
       required("journey_no_required_cnpj", data.cnpjRequired === 0, JSON.stringify(data), context);
