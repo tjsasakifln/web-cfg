@@ -452,7 +452,7 @@ def public_policy_body(contract: dict[str, Any] | None = None) -> str:
 <h2 id="resultados">O que cada resultado desta etapa significa</h2>
 <ul>
 <li><strong>Demanda não aceita.</strong> Há impedimento nos critérios acima: dever público no mesmo caso, risco de uso de informação não pública, papéis periciais incompatíveis, pedido de uso de cargo ou influência, ou relação pessoal ou financeira que não pode ser reduzida. A CONFENGE recusa e não pede documentos.</li>
-<li><strong>Análise humana necessária.</strong> Há sinal que depende de leitura do caso concreto, como relação relevante com medida de mitigação possível ou mudança de papel depois de uma análise anterior. Tiago Jun Sasaki conclui a verificação antes de qualquer documento.</li>
+<li><strong>Análise necessária.</strong> Há sinal que depende de leitura do caso concreto, como relação relevante com medida de mitigação possível ou mudança de papel depois de uma análise anterior. Tiago Jun Sasaki conclui a verificação antes de qualquer documento.</li>
 <li><strong>Faltam informações.</strong> Uma resposta essencial ficou em “não sei informar”. A triagem é retomada quando o dado existir, sem envio de documento nesse intervalo.</li>
 </ul>
 <p>Impedimento se verifica por caso, não por área: perícia, avaliação de imóvel, engenharia e documentação privada, segurança do trabalho e contratos públicos passam pelos mesmos critérios.</p>
@@ -488,7 +488,7 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
 <h2 id="primeira-etapa">Primeira etapa da triagem</h2>
 <p>Responda sem identificar pessoas, órgãos, processos ou contratos. A página informa apenas se a demanda precisa ser recusada, revista ou retomada com mais informações.</p>
 <noscript>
-<p class="form-note" data-conflict-gate-fallback="REVIEW_REQUIRED">Não foi possível concluir aqui. Não envie documentos; solicite análise humana.</p>
+<p class="form-note" data-conflict-gate-fallback="REVIEW_REQUIRED">Não foi possível concluir aqui. Não envie documentos; solicite análise da CONFENGE.</p>
 </noscript>
 <form class="contact-form" id="conflict-gate-form" method="post" action="#primeira-etapa" data-conflict-gate-version="{version}" data-conflict-gate-hash="{digest}" novalidate="">
 <input name="conflict_gate_version" type="hidden" value="{version}"/>
@@ -746,7 +746,7 @@ def client_runtime_js(contract: dict[str, Any] | None = None) -> str:
     var labels = {
       CLEAR: "sem sinal neste recorte",
       CLEAR_WITH_DISCLOSURE: "segue com condição registrada",
-      REVIEW_REQUIRED: "análise humana necessária",
+      REVIEW_REQUIRED: "análise necessária",
       DECLINE: "demanda não aceita",
       UNKNOWN: "faltam informações"
     };

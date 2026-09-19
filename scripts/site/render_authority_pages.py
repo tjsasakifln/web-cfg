@@ -39,6 +39,7 @@ UPDATED_BR = {
     "2026-09-05": "5 de setembro de 2026",
     "2026-09-07": "7 de setembro de 2026",
     "2026-09-09": "9 de setembro de 2026",
+    "2026-09-19": "19 de setembro de 2026",
 }
 
 
@@ -62,7 +63,6 @@ def _nav() -> str:
     return (
         '<nav class="authority-policy-nav" aria-label="Políticas de autoridade">'
         '<a href="/politica-editorial/">Editorial</a>'
-        '<a href="/uso-de-ia/">Uso de IA</a>'
         '<a href="/conflitos/">Conflitos</a>'
         '<a href="/metodologia-inteligencia/">Metodologia</a>'
         '<a href="/politica-editorial/historico/">Histórico</a>'
@@ -218,7 +218,7 @@ def _historico_body(policy: dict) -> str:
         )
     return (
         "<h2 id=\"historico\">Histórico de versões</h2>"
-        "<p>Mudança de política gera versão nova. O histórico abaixo preserva o texto e a data de cada decisão.</p>"
+        "<p>Mudança de política gera versão nova. O histórico abaixo registra a versão, a data de vigência e o resumo de cada decisão; o texto integral de cada versão fica no registro interno versionado.</p>"
         f"<ol>{''.join(rows)}</ol>"
         f"<p>Versão vigente: <strong>{_esc(current)}</strong>. "
         "Não há prazo prometido em dias para publicar uma correção; toda correção aceita entra no histórico acima, com a data.</p>"
@@ -231,6 +231,9 @@ def _archive_body(entry: dict, version_rec: dict) -> str:
         f"<p>Prazo então registrado: {_esc(version_rec.get('prazo_then') or version_rec.get('prazo') or 'não informado')}.</p>",
     ]
     pages = version_rec.get("pages") or {}
+    # Versões históricas são registro: o texto de cada seção publicada à
+    # época permanece como estava (inclusive seções que a política vigente
+    # não tem mais). Só o chrome (nav, rodapé) segue a superfície atual.
     for key in ("editorial", "corrections", "ai_use", "conflicts"):
         spec = pages.get(key) or {}
         title = spec.get("title") or key
@@ -344,7 +347,7 @@ def render_all() -> list[Path]:
     historico = _page(
         path="/politica-editorial/historico/",
         title="Histórico da política editorial",
-        description="Histórico das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
+        description="Histórico das políticas públicas da CONFENGE: versão, data de vigência e resumo de cada decisão.",
         h1="Histórico da política editorial",
         eyebrow="Governança",
         crumbs=[

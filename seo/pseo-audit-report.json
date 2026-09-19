@@ -21,8 +21,8 @@
       }
     },
     "determinism": {
-      "first_hash": "bbfe988573a422aa1b3388c9576fef6a0443d7ed48a3b23d7099ad270a4466fd",
-      "second_hash": "bbfe988573a422aa1b3388c9576fef6a0443d7ed48a3b23d7099ad270a4466fd",
+      "first_hash": "d628af72b34281573556e153321b0fccd53cc239d67bb95696eef7a33877badc",
+      "second_hash": "d628af72b34281573556e153321b0fccd53cc239d67bb95696eef7a33877badc",
       "deterministic": true,
       "page_count": 14
     },
@@ -43,7 +43,7 @@
     "regression": {
       "conteudos_pages": 128,
       "missing_pillars": [],
-      "main_sitemap_urls": 92,
+      "main_sitemap_urls": 90,
       "ok": true
     },
     "data_forbidden": {

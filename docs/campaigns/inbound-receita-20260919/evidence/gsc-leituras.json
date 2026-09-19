@@ -1,0 +1,63 @@
+{
+  "schema": "confenge-campaign-w4-gsc-leituras/1.0",
+  "gerado_em": "2026-09-19",
+  "aviso": "Agregado de Search Console. Impressão/clique não é intenção de compra nem prova causal de página→lead. Duas fontes abaixo são independentes, com períodos e status diferentes; não somar linhas entre elas.",
+  "fonte_a": {
+    "arquivo": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json",
+    "tipo": "MANUAL_GSC_SNAPSHOT",
+    "propriedade": "sc-domain:confenge.com.br",
+    "periodo": "2026-08-02 a 2026-08-29",
+    "reportado_em": "2026-08-31",
+    "status_contrato": "não avaliado neste documento contra CURRENT/STALE/UNKNOWN de docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md; é o snapshot manual que o mandato pediu para citar",
+    "linhas_da_pagina": [
+      {"path": "/medicoes-glosas-obras-publicas/", "impressoes": 99, "cliques": 1, "ctr": 0.0101, "posicao": 6.61, "arquivo_linha": "137-141"},
+      {"path": "/conteudos/medicao-de-obra-publica-rejeitada/", "impressoes": 12, "cliques": 1, "ctr": 0.0833, "posicao": 5.58, "arquivo_linha": "193-198"},
+      {"path": "/conteudos/glosa-de-medicao-obra-publica/", "impressoes": 11, "cliques": 1, "ctr": 0.0909, "posicao": 4.55, "arquivo_linha": "200-205"},
+      {"path": "/ferramentas/diagnostico-defesa-margem/", "impressoes": 3, "cliques": 0, "ctr": 0.0, "posicao": 1.33, "arquivo_linha": "521-527"}
+    ],
+    "correcao_ao_mandato": "O mandato afirmava a ferramenta diagnostico-defesa-margem ausente deste snapshot. É falso: ela aparece com 3 impressões, 0 cliques, posição 1.33.",
+    "tensao_nao_resolvida": "conteudos/glosa-de-medicao-obra-publica/index.html tem <meta robots noindex,follow> (linha 9) mas aparece no snapshot com 11 impressões e 1 clique no período. Duas leituras possíveis, nenhuma confirmada aqui: (1) o noindex é posterior à janela observada; (2) o Google ainda não recrawleou para aplicar o noindex. Não afirmar qual."
+  },
+  "fonte_b": {
+    "arquivo": "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/",
+    "tipo": "provided_aggregate (founder_provided_baseline)",
+    "periodo": "2026-09-02 a 2026-09-08",
+    "extraido_em": "2026-09-11",
+    "status_contrato": "ready_for_product_decisions=false, historical=true, provided_aggregate=true, live_baseline_invented=false — NÃO é CURRENT pelo contrato de docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md; é fixture histórico de leitura interna, não decisão de produto",
+    "grao_pagina_paginas_csv": [
+      {"path": "/medicoes-glosas-obras-publicas/", "cliques": 0, "impressoes": 28, "ctr": "0%", "posicao": 4.79}
+    ],
+    "limitacoes_declaradas": [
+      "grão de página (215 impressões) não soma com o grão de propriedade (176 impressões, Grafico.csv) — agregações diferentes, README do fixture é explícito sobre isso",
+      "rótulos de consulta em Consultas.csv não são termos de busca observados (query_labels_are_not_observed_search_terms=true)",
+      "não cobre os seis artigos congelados nem a ferramenta diagnostico-defesa-margem nas linhas retornadas",
+      "amostra semanal curta (7 dias); não comparável diretamente ao snapshot de 28 dias da fonte A sem normalizar período"
+    ]
+  },
+  "consumidor_durvel_existente": {
+    "arquivo": "data/ops/gsc-insights.json",
+    "as_of": "2026-08-15",
+    "counts_pages": 0,
+    "nota": "Consumidor durável documentado em docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md; no momento desta leitura, pages=0 nesse arquivo — não é a fonte usada para as linhas acima, que vieram diretamente dos arquivos de snapshot/fixture citados."
+  },
+  "duas_a_tres_consultas_de_intencao_hipoteses": [
+    {
+      "consulta_hipotese": "como contestar glosa de medição em obra pública",
+      "situacao_compravel": "gestor de contrato ou fiscal buscando fundamentar contestação técnica de glosa recebida",
+      "evidencia_gsc": "não há linha de consulta (query) para este termo em nenhuma das duas fontes; as fontes trazem grão de página, não de consulta, para as rotas relevantes. Ausência de dado, não volume zero comprovado.",
+      "limite": "hipótese editorial, não validada por consulta observada"
+    },
+    {
+      "consulta_hipotese": "medição rejeitada obra pública o que fazer",
+      "situacao_compravel": "empresa contratada após medição rejeitada pela fiscalização, decidindo se recorre tecnicamente",
+      "evidencia_gsc": "página correspondente (/conteudos/medicao-de-obra-publica-rejeitada/) tem 12 impressões/1 clique no período 02-29/08 (fonte A); sem dado de consulta associada",
+      "limite": "hipótese editorial apoiada só em impressão de página, não em termo de busca"
+    },
+    {
+      "consulta_hipotese": "diagnóstico defesa de margem contrato público",
+      "situacao_compravel": "empresa acompanhando aditivos/reequilíbrio de contrato específico via identificador PNCP",
+      "evidencia_gsc": "ferramenta tem 3 impressões/0 cliques/posição 1.33 no período 02-29/08 (fonte A); posição alta com impressão muito baixa sugere pouco volume de busca no termo correspondente, não necessariamente baixo interesse comercial",
+      "limite": "hipótese editorial; amostra de 3 impressões é insuficiente para qualquer conclusão de demanda"
+    }
+  ]
+}

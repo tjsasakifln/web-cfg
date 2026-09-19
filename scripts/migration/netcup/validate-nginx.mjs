@@ -40,7 +40,11 @@ try {
   const goneProbes = contract.routes.filter(rule => rule.action === "gone").map(rule =>
     rule.from.match === "prefix" ? rule.from.path.replace(/\*$/, "__retired_existing__/") : rule.from.path);
   for (const route of goneProbes) {
-    const target = resolve(seededSite, "." + route, extname(route) ? "" : "index.html");
+    // A directory route may carry dots in its last segment (e.g. a policy
+    // archive "/politica-editorial/v/1.0.0"): only a real file extension marks
+    // a file probe, otherwise the probe is the directory's index.html.
+    const isFileProbe = /\.(?:html?|xml|txt|json|js|mjs|css|pdf|svg|png|jpe?g|webp|avif|ico|woff2?)$/i.test(route);
+    const target = resolve(seededSite, "." + route, isFileProbe ? "" : "index.html");
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, "<h1>RETIRED_FILE_MUST_NEVER_BE_SERVED</h1>", "utf8");
   }

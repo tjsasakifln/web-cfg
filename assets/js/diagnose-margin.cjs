@@ -552,7 +552,7 @@ function explainDiagnosis(diagnosis) {
   const unknown = `${d.unknown_count || 0} campo(s) ou família(s) de evento permanecem desconhecidos (UNKNOWN). Ausência no recorte não prova que o evento não ocorreu.`;
   return {
     job: "Ler o que o recorte público já mostra sobre um contrato e o que continua sem informação.",
-    decision: "Separar fato oficial, derivado e desconhecido antes de pedir segunda leitura humana.",
+    decision: "Separar fato oficial, derivado e desconhecido antes de pedir segunda leitura do responsável técnico.",
     layers: { fato, calculo, inferencia, unknown },
     cta: {
       branch: "segunda_leitura",

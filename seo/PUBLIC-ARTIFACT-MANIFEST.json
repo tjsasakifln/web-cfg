@@ -49,8 +49,7 @@
     "servicos/",
     "servicos-obras-publicas/",
     "termos-de-uso/",
-    "triagem-tecnica/",
-    "uso-de-ia/"
+    "triagem-tecnica/"
   ],
   "root_files": [
     "01ce18c7219b7c7dcb2ab06e226c2681.txt",
@@ -81,7 +80,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 229,
+  "html_route_count": 227,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -297,7 +296,6 @@
     "/parcerias-engenharia/",
     "/politica-editorial/historico/",
     "/politica-editorial/",
-    "/politica-editorial/v/1.0.0/",
     "/privacidade/",
     "/problemas-que-resolvemos/",
     "/projetos-complementares-engenharia/",
@@ -310,11 +308,10 @@
     "/servicos/",
     "/servicos-obras-publicas/",
     "/termos-de-uso/",
-    "/triagem-tecnica/",
-    "/uso-de-ia/"
+    "/triagem-tecnica/"
   ],
-  "generated_at": "2026-09-19T00:11:15Z",
-  "public_artifact_hash": "461335397826ed4ddbd6ea913e60186719ed5ba5fd8e0190e399bf7c7c221ea5",
+  "generated_at": "2026-09-19T08:16:33Z",
+  "public_artifact_hash": "f7555c4f0af85c1511436795b21f8fa3d14a126af362290953b4705b91d59490",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -364,8 +361,7 @@
     "servicos/",
     "servicos-obras-publicas/",
     "termos-de-uso/",
-    "triagem-tecnica/",
-    "uso-de-ia/"
+    "triagem-tecnica/"
   ],
   "copied_files": [
     "01ce18c7219b7c7dcb2ab06e226c2681.txt",
@@ -396,15 +392,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 219,
+  "promoted_navigation_files": 217,
   "navigation_audit": {
-    "audited_files": 230,
-    "audited_blocks": 458,
+    "audited_files": 228,
+    "audited_blocks": 454,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 234,
-    "html_rewritten": 186,
-    "fields_removed": 790
+    "html_scanned": 232,
+    "html_rewritten": 184,
+    "fields_removed": 782
   }
 }

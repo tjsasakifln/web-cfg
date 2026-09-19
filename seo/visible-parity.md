@@ -1,9 +1,9 @@
 # Visible parity
 
 - ok: `True`
-- pages: `98`
+- pages: `96`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/lapidacao-clean/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/inbound-clean/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -91,7 +91,6 @@
 | https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Encaminhe a parte de engenharia que falta no seu pacote e siga com o seu cliente. |
 | https://confenge.com.br/politica-editorial/ | True | — | Organization,Person,BreadcrumbList | Política editorial |
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
-| https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
 | https://confenge.com.br/projetos-complementares-engenharia/ | True | — | BreadcrumbList | Projetos complementares de engenharia |
@@ -104,4 +103,3 @@
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Serviços de engenharia para obras públicas e privadas |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
 | https://confenge.com.br/triagem-tecnica/ | True | — |  | Conte a situação do seu jeito. Nós nomeamos o serviço. |
-| https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso de inteligência artificial |

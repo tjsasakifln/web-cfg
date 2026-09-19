@@ -1089,10 +1089,35 @@
       if (hash && samePage) return isCaptureHash(hash) ? 'form' : 'anchor';
       // classifyTransition() already returned above for whatsapp/email/tel/
       // external hrefs (same pure canonicalizeDestination on the same href),
-      // so only internal/pii/empty can reach this call.
-      if (canonicalizeDestination(value).kind !== 'internal') return '';
+      // so only internal/pii/empty can reach this call. 'pii' is still an
+      // internal-route navigation whose path is masked for privacy (e.g. a
+      // long digit run in the URL): the destination stays a route, only the
+      // path is withheld, so it is honest to label it 'route' rather than
+      // silently drop destination_type (issue #706 W3: that omission used to
+      // fall into cta_click's legacy_unclassified bucket even for a plain
+      // internal link).
+      const kind = canonicalizeDestination(value).kind;
+      if (kind === 'pii') return 'route';
+      if (kind !== 'internal') return '';
       if (hash && CAPTURE_HASH.test(hash)) return 'form';
       return 'route';
+    };
+    // JOR-02 (2026-09-19): um link interno para OUTRA rota cuja ancora e de
+    // captura (#captura-pilar, #contato*, #pedido*, #triagem*) e um clique de
+    // contato, nao uma transicao de conteudo para servico: o visitante pediu o
+    // formulario do pilar, e o closed-loop conta no estagio 'cta' (cta_click
+    // destination_type=form), como o '/?tema=...#contato' contava antes da
+    // migracao dos artigos. So o padrao do hash decide: o alvo esta em outra
+    // pagina, entao nao ha DOM para inspecionar. Ancoras da propria pagina
+    // (href iniciado por '#') seguem o caminho de isCaptureHash.
+    const isCrossRouteCaptureHref = (rawHref) => {
+      const value = String(rawHref || '').trim();
+      const hashAt = value.indexOf('#');
+      if (hashAt <= 0) return false;
+      if (!CAPTURE_HASH.test(value.slice(hashAt))) return false;
+      const beforeHash = value.slice(0, hashAt);
+      if (beforeHash === pagePath || beforeHash === pagePath.replace(/\/$/, '')) return false;
+      return canonicalizeDestination(value).kind === 'internal';
     };
     // G04-01/G04-03: CTAs de navegacao reconhecidos por classe (sem editar o
     // HTML): o 'Solicitar proposta' do cabecalho e os links de situacao da home
@@ -1185,7 +1210,8 @@
         });
         return;
       }
-      if (classified.kind === 'contact') {
+      const crossRouteCapture = classified.kind !== 'contact' && isCrossRouteCaptureHref(href);
+      if (classified.kind === 'contact' || crossRouteCapture) {
         track('service_cta_click', {
           ...base,
           cta_label: label,
@@ -1194,6 +1220,21 @@
           source_page_type: sourcePageType,
           cta_id: withCta.cta_id,
           route_family: withCta.route_family,
+          // Rota do formulario pedido (sem query nem hash) e, quando a origem e
+          // editorial/caso/hub, a mesma atribuicao de ativo que o
+          // content_to_service carregava: o operador sabe qual artigo levou ao
+          // formulario de qual pilar.
+          ...(crossRouteCapture ? {
+            destination_path: canonicalizeDestination(href).path,
+            ...(classified.kind === 'transition' ? {
+              source_path: classified.source_path,
+              source_asset_id: classified.source_asset_id,
+              source_asset_family: classified.source_asset_family,
+              asset_id: classified.source_asset_id,
+              asset_family: classified.source_asset_family,
+              destination_service_id: classified.destination_service_id,
+            } : { asset_id: withCta.asset_id }),
+          } : {}),
         });
         return;
       }

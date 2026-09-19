@@ -153,7 +153,6 @@ def test_authorship_and_delegated_review_provenance_are_explicit_not_human_washe
     assert "Autoria editorial:</strong> Biblioteca técnica CONFENGE" in html
     assert "Autoridade de decisão:</strong> Tiago Sasaki" in html
     assert re.search(r"elaborado sob delegação de Tiago Sasaki", html)
-    assert 'href="/uso-de-ia/"' in html
     assert "Não houve revisão humana manual nem segundo revisor independente" not in html
     assert not re.search(r"revisado por (?:um )?revisor (?:humano|independente)", html, re.I)
     assert "Autor e responsável técnico pelo conteúdo" not in html

@@ -42,6 +42,33 @@ for (const id of ["contrato", "edital", "operacao"]) {
   } else console.log("PASS messages", id, n);
 }
 
+// Jornada piloto (INBOUND-RECEITA-20260919, W2): o CTA do caso de medição
+// glosada leva o visitante com contexto até a captura do pilar, não à home
+// genérica; e o pilar linka de volta o caso completo a partir do exemplo
+// demonstrativo.
+const medicaoCaseHtml = readFileSync(
+  resolve(ROOT, "casos/medicao-glosa-demonstrativo/index.html"),
+  "utf8",
+);
+if (
+  medicaoCaseHtml.includes('href="/#contato"') ||
+  !medicaoCaseHtml.includes('href="/medicoes-glosas-obras-publicas/#captura-pilar"') ||
+  !/data-tema="[^"]+"/.test(medicaoCaseHtml) ||
+  !medicaoCaseHtml.includes('data-origem="/casos/medicao-glosa-demonstrativo/"')
+) {
+  console.error("FAIL medicao_case_cta_contexto");
+  fail++;
+} else console.log("PASS medicao_case_cta_contexto");
+
+const medicaoPilarHtml = readFileSync(
+  resolve(ROOT, "medicoes-glosas-obras-publicas/index.html"),
+  "utf8",
+);
+if (!medicaoPilarHtml.includes('href="/casos/medicao-glosa-demonstrativo/"')) {
+  console.error("FAIL medicao_pilar_link_para_caso");
+  fail++;
+} else console.log("PASS medicao_pilar_link_para_caso");
+
 const caseHtml = readFileSync(resolve(ROOT, "casos/aditivo-art125-demonstrativo/index.html"), "utf8");
 if (!/DEMONSTRATIVO|NÃO É CASE/i.test(caseHtml)) {
   console.error("FAIL case label");

@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
-    "asset_files_max_route": 22,
-    "asset_raw_kb_max_route": 1094.41,
+    "asset_files_max_route": 21,
+    "asset_raw_kb_max_route": 1094.51,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 233
+    "routes_measured": 231
   },
   "budget": {
     "cls_max": 0.05,
@@ -16,7 +16,7 @@
   },
   "cls": {
     "measured_by": "headless Chrome, npm run test:lighthouse, committed to docs/lighthouse-runs/",
-    "observed_max": 0.01278846585794431,
+    "observed_max": 0.02028126743991168,
     "per_route": [
       {
         "cls": 0.0,
@@ -35,7 +35,7 @@
         "route": "/analise-cnpj/"
       },
       {
-        "cls": 0.01278846585794431,
+        "cls": 0.02028126743991168,
         "route": "/analise-cnpj/r/"
       },
       {
@@ -428,7 +428,6 @@
       "/parcerias-engenharia/",
       "/politica-editorial/",
       "/politica-editorial/historico/",
-      "/politica-editorial/v/1.0.0/",
       "/privacidade/",
       "/problemas-que-resolvemos/",
       "/projetos-complementares-engenharia/",
@@ -441,8 +440,7 @@
       "/servicos-obras-publicas/",
       "/servicos/",
       "/termos-de-uso/",
-      "/triagem-tecnica/",
-      "/uso-de-ia/"
+      "/triagem-tecnica/"
     ],
     "routes_with_font_files": [
       "/",
@@ -662,7 +660,6 @@
       "/parcerias-engenharia/",
       "/politica-editorial/",
       "/politica-editorial/historico/",
-      "/politica-editorial/v/1.0.0/",
       "/privacidade/",
       "/problemas-que-resolvemos/",
       "/projetos-complementares-engenharia/",
@@ -675,8 +672,7 @@
       "/servicos-obras-publicas/",
       "/servicos/",
       "/termos-de-uso/",
-      "/triagem-tecnica/",
-      "/uso-de-ia/"
+      "/triagem-tecnica/"
     ]
   },
   "generated_by": "npm run audit:performance -- --write-baseline",

@@ -1,0 +1,69 @@
+{
+  "schema": "confenge-campaign-w4-distribuicao/1.0",
+  "gerado_em": "2026-09-19",
+  "estado_geral": "PREPARADA, NAO_PUBLICADA para as três oportunidades externas. Autorização específica de publicação/contato pendente do owner de aquisição, conforme #707. Nenhum envio, contato ou postagem foi feito por este agente.",
+  "conexoes_internas_publicadas_nesta_campanha": [
+    {
+      "de": "/medicoes-glosas-obras-publicas/",
+      "para": "/casos/medicao-glosa-demonstrativo/",
+      "onde": "medicoes-glosas-obras-publicas/index.html:102, texto 'Ver o exemplo completo, item a item'",
+      "estado": "LINK_NOVO_NESTA_CAMPANHA — introduzido pelo commit 471df38e6 neste ramo; origin/main não tem esse trecho (git show origin/main:medicoes-glosas-obras-publicas/index.html | grep -c medicao-glosa-demonstrativo = 0)"
+    }
+  ],
+  "conexoes_internas_ja_existentes_antes_da_campanha": [
+    {
+      "de": "/casos/",
+      "para": "/casos/medicao-glosa-demonstrativo/",
+      "onde": "casos/index.html",
+      "estado": "JA_EXISTE_EM_PRODUCAO"
+    }
+  ],
+  "rotas_alteradas_nesta_tarefa_w4": ["/medicoes-glosas-obras-publicas/"],
+  "nota_rotas": "O pilar /medicoes-glosas-obras-publicas/ foi alterado nesta campanha (commit 471df38e6) para linkar ao caso; a conexão /casos/ -> /casos/medicao-glosa-demonstrativo/ já existia antes desta campanha e foi apenas confirmada por leitura direta.",
+  "oportunidades_externas_preparadas": [
+    {
+      "id": "EXT-1",
+      "canal": "biblioteca própria / hub de conteúdos (/conteudos/)",
+      "publico": "visitante que já está lendo a biblioteca CONFENGE sobre medição, glosa ou aditivo em obra pública",
+      "mensagem_util_rascunho": "No dossiê de medição e glosa há um exemplo completo, item a item, de como separar o que tem base contratual do que precisa de mais documento. Ele está em /casos/medicao-glosa-demonstrativo/.",
+      "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (URL canônica, sem parâmetro)",
+      "regra_do_canal_a_verificar": "confirmar que o link interno publicado nesta campanha no pilar (medicoes-glosas-obras-publicas/index.html:102) é suficiente ou se cabe reforço em mais um artigo da biblioteca sem duplicar o link já existente",
+      "estado": "PREPARADA, NAO_PUBLICADA",
+      "autorizacao": "pendente do owner de aquisição/conteúdo"
+    },
+    {
+      "id": "EXT-2",
+      "canal": "comunidade profissional de engenharia de custos/obras públicas",
+      "publico": "engenheiros e gestores de contrato que discutem medição, glosa e aditivo em fóruns/grupos profissionais do setor",
+      "regra_a_verificar": "cada comunidade tem regra própria de contribuição (algumas proíbem link comercial direto, outras exigem que o conteúdo responda a uma dúvida concreta do tópico antes de linkar); é preciso localizar e ler a regra da comunidade específica antes de qualquer postagem — não presumido aqui",
+      "mensagem_util_rascunho": "Em resposta a uma dúvida concreta sobre como separar glosa de medição fundamentada de glosa sem base contratual: publicamos um exemplo demonstrativo, item a item, de como essa separação é feita tecnicamente. Sem promessa de recuperação de valor, só o método aplicado a um caso hipotético: [link].",
+      "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (sem parâmetro livre)",
+      "estado": "PREPARADA, NAO_PUBLICADA",
+      "autorizacao": "pendente do owner de aquisição; nenhum nome de pessoa ou organização privada é citado aqui"
+    },
+    {
+      "id": "EXT-3",
+      "canal": "entidade/diretório setorial pertinente (ex.: associação ou diretório ligado a engenharia de custos ou fiscalização de obras públicas)",
+      "publico": "profissionais e gestores associados que acompanham o diretório/entidade em busca de referências técnicas",
+      "regra_a_verificar": "confirmar se a entidade aceita submissão de conteúdo/link de terceiros, e sob qual formato (artigo, referência, biblioteca) — regra específica da entidade ainda não verificada nesta sessão",
+      "mensagem_util_rascunho": "Sugestão de referência técnica para o diretório: um exemplo demonstrativo público de leitura de medição e glosa em contrato de obra pública, com separação explícita entre fato contratual e cálculo (https://confenge.com.br/casos/medicao-glosa-demonstrativo/). Não é caso de cliente nem promessa de resultado.",
+      "destino_rastreavel": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/ (sem parâmetro livre)",
+      "estado": "PREPARADA, NAO_PUBLICADA",
+      "autorizacao": "pendente do owner de aquisição; entidade específica não nomeada até a decisão de contato"
+    }
+  ],
+  "janela_de_leitura": {
+    "duracao": "14 dias após a distribuição efetiva",
+    "inicio_real": null,
+    "fim_real": null,
+    "nota": "início/fim ainda não existem porque nenhuma distribuição externa foi executada; a interpretar somente após a distribuição real, por estágio"
+  },
+  "interpretacao_por_estagio_resumo_da_issue_707": [
+    "sem exposição suficiente: revisar distribuição/indexação, não declarar rejeição da oferta",
+    "exposição sem uso: revisar correspondência entre promessa e conteúdo",
+    "uso sem contato: revisar ponte para o trabalho comercial e clareza da entrega",
+    "contato sem qualificação: investigar intenção e necessidade, sem recusar automaticamente por porte",
+    "qualificação sem proposta: investigar escopo, capacidade, preço e atendimento",
+    "amostra pequena: resultado inconclusivo, com próximo teste delimitado, não narrativa de sucesso"
+  ]
+}

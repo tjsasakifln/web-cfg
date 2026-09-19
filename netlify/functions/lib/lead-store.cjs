@@ -725,6 +725,7 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     mensagem: lead.mensagem,
     consentimento: true,
     origem: lead.origem,
+    tema: lead.tema || null,
     landing_page: lead.landing_page,
     landing_url: lead.landing_url || lead.landing_page || null,
     referrer: lead.referrer,

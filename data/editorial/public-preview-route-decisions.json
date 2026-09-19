@@ -107,6 +107,38 @@
         "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"
       ],
       "reason": "O registro de aprovação individual está vazio. DATA_READY autoriza processamento, não publicação; a página declara rascunho sem revisão humana confirmada e expõe estados do produtor."
+    },
+    {
+      "id": "uso-de-ia-policy-page",
+      "source_root": "data/site/editorial-policy.json",
+      "source_preservation": "O texto da página permanece no registro versionado (versions 1.0.0 a 1.3.0, pages.ai_use), conferido por hash; a versão vigente 1.4.0 não tem a seção. Nenhuma outra página pública carrega esse conteúdo.",
+      "public_decision": "RETIRE_410_PRESERVE_INTERNAL",
+      "runtime_rules": [
+        "/uso-de-ia",
+        "/uso-de-ia/index.html"
+      ],
+      "routes": [
+        "/uso-de-ia/"
+      ],
+      "declared_at": "2026-09-19",
+      "owner_issue": 705,
+      "reason": "Decisão editorial do fundador de 2026-09-19 (adendo à campanha #705): a superfície pública não trata do tema dessa página. Retirada sem redirecionamento, sem substituto e sem nota pública sobre a retirada."
+    },
+    {
+      "id": "editorial-policy-archive-1.0.0",
+      "source_root": "data/site/editorial-policy.json",
+      "source_preservation": "O texto integral da versão 1.0.0 permanece em versions['1.0.0'] e no changelog, conferido por hash (content_sha256/entry_sha256). /politica-editorial/historico/ continua listando a versão, sem link para página arquivada; published_archives fica vazio.",
+      "public_decision": "RETIRE_410_PRESERVE_INTERNAL",
+      "runtime_rules": [
+        "/politica-editorial/v/1.0.0",
+        "/politica-editorial/v/1.0.0/index.html"
+      ],
+      "routes": [
+        "/politica-editorial/v/1.0.0/"
+      ],
+      "declared_at": "2026-09-19",
+      "owner_issue": 705,
+      "reason": "Mesma decisão editorial do fundador de 2026-09-19: a única versão antiga publicada reproduzia a seção retirada e não pode ser reescrita (o registro histórico é imutável). Despublicada com 410; o registro interno é preservado."
     }
   ],
   "counterproof": {

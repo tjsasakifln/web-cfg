@@ -53,7 +53,7 @@
   };
   const CHROME_PREFIXES = [
     '/especialista/', '/politica-editorial/', '/privacidade/', '/termos-de-uso/',
-    '/uso-de-ia/', '/conflitos/', '/imprensa/',
+    '/conflitos/', '/imprensa/',
     '/nurture/', '/ops/', '/comercial/', '/obrigado',
   ];
   const EVENT_ALIASES = {

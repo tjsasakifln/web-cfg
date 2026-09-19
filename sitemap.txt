@@ -82,7 +82,6 @@ https://confenge.com.br/nurture/
 https://confenge.com.br/parcerias-engenharia/
 https://confenge.com.br/politica-editorial/
 https://confenge.com.br/politica-editorial/historico/
-https://confenge.com.br/politica-editorial/v/1.0.0/
 https://confenge.com.br/privacidade/
 https://confenge.com.br/problemas-que-resolvemos/
 https://confenge.com.br/projetos-complementares-engenharia/
@@ -95,4 +94,3 @@ https://confenge.com.br/servicos/
 https://confenge.com.br/servicos-obras-publicas/
 https://confenge.com.br/termos-de-uso/
 https://confenge.com.br/triagem-tecnica/
-https://confenge.com.br/uso-de-ia/

@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 98,
+  "page_count": 96,
   "pages": [
     {
       "claimed": {
@@ -1695,7 +1695,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "descriptions": [
           "Como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir processamento da medição, glosa e pagamento."
@@ -1741,7 +1741,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
         "h1": "Atraso na medição de obra pública: onde o processo travou?",
@@ -1834,7 +1834,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "descriptions": [
           "Triagem de suspender ou só notificar: dois meses da nota fiscal, exceções do § 3º e risco de sanção por parada precoce."
@@ -1880,7 +1880,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "description": "Nota fiscal emitida e despesa liquidada sem pagamento: o art. 137 da Lei 14.133 trata extinção após dois meses, não paralisação automática no primeiro atraso.",
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
@@ -2577,7 +2577,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "descriptions": [
           "Nas 48 horas da recusa de ateste: protocolo, recado transcrito e ofício pedindo o item que impede a assinatura."
@@ -2623,7 +2623,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "description": "O fiscal recusou assinar o boletim. Nas 48 horas seguintes, registre a recusa, preserve a prova de execução e peça objeção objetiva, sem admitir culpa para destravar.",
         "h1": "Fiscal não assina medição: o que fazer nas primeiras 48h",
@@ -2646,7 +2646,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "descriptions": [
           "Como recortar o trecho com ensaio desconforme e pedir o restante da linha sem controvérsia de qualidade."
@@ -2692,7 +2692,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "description": "Um defeito de qualidade autoriza cortar o trecho em desconformidade, não o boletim inteiro. Exija localização, ensaio e o valor do trecho afetado.",
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
@@ -2852,7 +2852,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "descriptions": [
           "Evento paga o marco; quantitativo paga a unidade. O art. 46, § 9º, veda remunerar preço global como planilha unitária."
@@ -2898,7 +2898,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "description": "No preço global, o contrato pode medir por marco de resultado, não por m³. Compare a prova de evento com a prova de quantitativo antes de precificar o caixa.",
         "h1": "Medição por evento ou quantitativo: o que muda",
@@ -2989,7 +2989,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "descriptions": [
           "Triagem da etapa incompleta no preço global: avanço de campo não cria submarco, e o art. 145 depende da parcela contratual."
@@ -3035,7 +3035,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-18"
+          "2026-09-19"
         ],
         "description": "Etapa incompleta em empreitada global não é pagamento antecipado. Confira o eventograma, a meta de resultado e o que o contrato admite medir proporcionalmente.",
         "h1": "Pagamento parcial em empreitada global: quando vale",
@@ -4086,7 +4086,7 @@
           "2026-08-15",
           "2027-01-10"
         ],
-        "description": "Leitura factual de um contrato público: identificação, valor, vigência, eventos, fontes e o que ainda precisa de conferência humana. Sem cadastro.",
+        "description": "Leitura factual de um contrato público: identificação, valor, vigência, eventos, fontes e o que ainda pede conferência do responsável técnico. Sem cadastro.",
         "h1": "Diagnóstico de Defesa de Margem em Contratos Públicos",
         "has_dataset_surface": true,
         "licenses": [],
@@ -4627,7 +4627,7 @@
         "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
         "dates": [
           "2026-08-15",
-          "2026-09-11"
+          "2026-09-19"
         ],
         "description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.",
         "h1": "Medições, glosas e pagamentos em obras públicas",
@@ -4828,7 +4828,7 @@
         ],
         "canonical": "https://confenge.com.br/politica-editorial/",
         "dates": [
-          "2026-09-09"
+          "2026-09-19"
         ],
         "description": "Como a CONFENGE decide o que publica: fontes, autoria, revisão, atualização, correção e retirada.",
         "h1": "Política editorial",
@@ -4888,72 +4888,16 @@
           "2026-08-15",
           "2026-08-16",
           "2026-09-07",
-          "2026-09-09"
+          "2026-09-09",
+          "2026-09-19"
         ],
-        "description": "Histórico das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
+        "description": "Histórico das políticas públicas da CONFENGE: versão, data de vigência e resumo de cada decisão.",
         "h1": "Histórico da política editorial",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Histórico da política editorial | CONFENGE",
-        "versions": []
-      }
-    },
-    {
-      "claimed": {
-        "authors": [],
-        "breadcrumbs": [
-          "Início",
-          "Versão 1.0.0"
-        ],
-        "dataset_names": [],
-        "dates": [],
-        "descriptions": [],
-        "downloads": [],
-        "has_dataset_type": false,
-        "has_false_case_type": false,
-        "headlines": [],
-        "licenses": [],
-        "organizations": [
-          "CONFENGE"
-        ],
-        "people": [
-          "Tiago Sasaki"
-        ],
-        "reviewers": [],
-        "types": [
-          "Organization",
-          "Person",
-          "BreadcrumbList"
-        ],
-        "versions": []
-      },
-      "defects": [],
-      "fixture_only": false,
-      "index_intent": true,
-      "ok": true,
-      "url": "https://confenge.com.br/politica-editorial/v/1.0.0/",
-      "visible": {
-        "authors": [
-          "Engº Tiago Sasaki",
-          "Tiago Jun Sasaki"
-        ],
-        "breadcrumb_names": [
-          "Início",
-          "Versão 1.0.0"
-        ],
-        "canonical": "https://confenge.com.br/politica-editorial/v/1.0.0/",
-        "dates": [
-          "2026-08-15"
-        ],
-        "description": "Primeira publicação das políticas públicas (#78). Registrava prazos de 2 e 10 dias úteis sem série medida.",
-        "h1": "Política editorial 1.0.0",
-        "has_dataset_surface": false,
-        "licenses": [],
-        "permission_class": "demonstrativo",
-        "reviewers": [],
-        "title": "Política editorial 1.0.0 (histórica) | CONFENGE",
         "versions": []
       }
     },
@@ -5537,64 +5481,7 @@
         "title": "Contato e triagem técnica | CONFENGE",
         "versions": []
       }
-    },
-    {
-      "claimed": {
-        "authors": [],
-        "breadcrumbs": [
-          "Início",
-          "Uso de inteligência artificial"
-        ],
-        "dataset_names": [],
-        "dates": [],
-        "descriptions": [],
-        "downloads": [],
-        "has_dataset_type": false,
-        "has_false_case_type": false,
-        "headlines": [],
-        "licenses": [],
-        "organizations": [
-          "CONFENGE"
-        ],
-        "people": [
-          "Tiago Sasaki"
-        ],
-        "reviewers": [],
-        "types": [
-          "Organization",
-          "Person",
-          "BreadcrumbList"
-        ],
-        "versions": []
-      },
-      "defects": [],
-      "fixture_only": false,
-      "index_intent": true,
-      "ok": true,
-      "url": "https://confenge.com.br/uso-de-ia/",
-      "visible": {
-        "authors": [
-          "Engº Tiago Sasaki",
-          "Tiago Jun Sasaki"
-        ],
-        "breadcrumb_names": [
-          "Início",
-          "Uso de inteligência artificial"
-        ],
-        "canonical": "https://confenge.com.br/uso-de-ia/",
-        "dates": [
-          "2026-09-09"
-        ],
-        "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto.",
-        "h1": "Uso de inteligência artificial",
-        "has_dataset_surface": false,
-        "licenses": [],
-        "permission_class": "demonstrativo",
-        "reviewers": [],
-        "title": "Uso de IA | CONFENGE",
-        "versions": []
-      }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/lapidacao-clean/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/inbound-clean/_site"
 }

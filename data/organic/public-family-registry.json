@@ -235,7 +235,7 @@
     },
     {
       "id": "legal-and-trust",
-      "visitor_job": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+      "visitor_job": "Conferir termos, privacidade, política de conflitos, correções e contato de imprensa antes de confiar na CONFENGE.",
       "profile": "trust_or_legal",
       "terminal_action": "none",
       "exemption_reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
@@ -244,7 +244,6 @@
           "/privacidade/",
           "/termos-de-uso/",
           "/conflitos/",
-          "/uso-de-ia/",
           "/imprensa/",
           "/confianca/"
         ]
@@ -262,7 +261,7 @@
         "not_applicable": [
           "citable_source"
         ],
-        "reason": "Documento legal e de confiança da própria CONFENGE (termos, conflitos, correções, uso de IA, imprensa). A página é o instrumento, não um relato sobre um registro de terceiro; a mesma razão pela qual specific_value já é inaplicável ao perfil trust_or_legal.",
+        "reason": "Documento legal e de confiança da própria CONFENGE (termos, conflitos, correções, imprensa). A página é o instrumento, não um relato sobre um registro de terceiro; a mesma razão pela qual specific_value já é inaplicável ao perfil trust_or_legal.",
         "authority": [
           "data/organic/public-family-registry.json (profile_rules.trust_or_legal)",
           "/politica-editorial/",

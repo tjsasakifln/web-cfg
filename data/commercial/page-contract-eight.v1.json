@@ -24,7 +24,7 @@
   ],
   "forbidden_limit_rule": "A 331 determina não limitar por contagem de folhas. Qualquer limite de escopo escrito nessa unidade reprova o gate.",
   "unknown_rule": "ausência de dado vira UNKNOWN",
-  "human_decision_rule": "classificação automática nunca encerra decisão humana",
+  "human_decision_rule": "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
   "public_copy_overrides": {
     "ausência de dado vira UNKNOWN": "ausência de dado aparece como NÃO INFORMADO",
     "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg": "toda fonte pública tem origem e versão registradas antes da análise",
@@ -41,7 +41,7 @@
     "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
     "não promete edital futuro, vitória, preço vencedor ou demanda",
     "ausência de dado vira UNKNOWN",
-    "classificação automática nunca encerra decisão humana",
+    "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
     "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
   ],
   "package": {
@@ -138,7 +138,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": false,
@@ -185,7 +185,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,
@@ -232,7 +232,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,
@@ -279,7 +279,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,
@@ -326,7 +326,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,
@@ -373,7 +373,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,
@@ -420,7 +420,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,
@@ -467,7 +467,7 @@
         "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
         "não promete edital futuro, vitória, preço vencedor ou demanda",
         "ausência de dado vira UNKNOWN",
-        "classificação automática nunca encerra decisão humana",
+        "a classificação não encerra a decisão: o responsável técnico confirma o enquadramento",
         "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
       ],
       "in_package": true,

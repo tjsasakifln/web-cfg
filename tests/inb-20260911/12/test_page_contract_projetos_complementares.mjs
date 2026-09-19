@@ -121,7 +121,6 @@ function landingContractOpts() {
       "/conteudos/como-contratar-projetos-complementares/",
       "/especialista/tiago-jun-sasaki/",
       "/confianca/",
-      "/uso-de-ia/",
     ],
     requiredSrc: [
       "/assets/projetos-complementares-engenharia/pacote-entrega.svg",

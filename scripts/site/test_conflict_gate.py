@@ -388,7 +388,10 @@ def test_rendered_conflitos_covers_nuclei_min_data_and_fail_closed_copy():
     assert "cargo público" in lower or "cargo publico" in lower
     assert "independência" in lower or "independencia" in lower
     assert "não um parecer jurídico geral" in lower or "nao um parecer juridico geral" in lower
-    assert "revisão humana" in lower or "revisao humana" in lower or "análise humana" in lower
+    # Adendo editorial do fundador (2026-09-19): a página nomeia o resultado
+    # sem contrastar participação humana e automatizada.
+    assert "análise necessária" in lower or "analise necessaria" in lower
+    assert "humana" not in lower
     assert "informação suficiente" in lower or "informacao suficiente" in lower
     assert 'data-conflict-gate-fallback="REVIEW_REQUIRED"' in html
     assert 'type="file"' not in lower

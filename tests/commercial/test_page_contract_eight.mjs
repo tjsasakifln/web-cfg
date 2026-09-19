@@ -124,7 +124,7 @@ const REQUIRED_DENIALS = [
   ["nega_saas", /não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente/],
   ["nega_promessa", /não promete edital futuro, vitória, preço vencedor ou demanda/],
   ["exige_unknown", /ausência de dado vira UNKNOWN/],
-  ["exige_decisao_humana", /classificação automática nunca encerra decisão humana/],
+  ["exige_decisao_do_responsavel_tecnico", /a classificação não encerra a decisão: o responsável técnico confirma o enquadramento/],
 ];
 
 // escopo não pode ser limitado por contagem de folhas

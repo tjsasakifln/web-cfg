@@ -29,26 +29,49 @@ reescreve; ``seo/scripts/bulk_seo_upgrade.py`` foi um passe único de
    de <slug de palavra-chave> (licitação, contrato ou obra pública).``) vira
    frase natural com o título do artigo. Mensagens escritas à mão ficam.
 
-Rotas congeladas por hash (canário de medições e irmãs) nunca são tocadas.
+Rotas congeladas por hash (canário de medições e irmãs, aprovação ligada a
+``material_hash``) não são tocadas por ``--write``; ``--check`` as lista como
+pendência. Campanha INBOUND-RECEITA-20260919 (decisão do fundador EXECUTE_NOW,
+2026-09-19): ``--write --include-hash-bound`` aplica a mesma transformação a
+elas e imprime, por artigo, qual registro precisa de recaptura (o novo sha256
+sai junto). Os registros em si não são editados aqui.
+
+Contexto de atribuição (mesma campanha): ``js/modules/nav.js`` só grava
+``tema``/``origem``/``jornada`` a partir do ``dataset`` do link clicado. Os
+artigos antigos carregavam esse contexto na query da home
+(``/?tema=…&origem=…#contato``) sem ``data-*``; trocar só o href perderia o
+contexto no pilar. Quando o link não traz ``data-tema``/``data-origem``, a
+transformação os deriva (``?tema=`` decodificado do href antigo, senão o H1;
+``/conteudos/<slug>/``) e acrescenta ``data-cta-position="form"`` e
+``data-journey`` (``?jornada=`` do href antigo, senão ``contrato``) apenas
+quando ausentes, no mesmo formato dos artigos já convertidos.
 
 Uso:
     python3 scripts/site/apply_article_pillar_form.py --write
+    python3 scripts/site/apply_article_pillar_form.py --write --include-hash-bound
     python3 scripts/site/apply_article_pillar_form.py --check
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html as html_lib
 import json
 import re
 import sys
 from pathlib import Path
-from urllib.parse import quote, unquote
+from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTICLES = ROOT / "conteudos"
 SERVICE_MAP = ROOT / "data/organic/content-service-map.json"
 CANARY_CONTRACT = ROOT / "docs/evidence/389-measurement-glosa-canary/canary-contract.json"
+STRIKING_DISTANCE = ROOT / "data/editorial/striking-distance-noindex.v1.json"
+# Rótulos dos registros que pinam o hash de um artigo (impressos por
+# --include-hash-bound para o agente de recaptura).
+REG_CANARY = "docs/evidence/389-measurement-glosa-canary/canary-contract.json (canary.after_sha256)"
+REG_CANARY_SIBLING = "docs/evidence/389-measurement-glosa-canary/canary-contract.json (frozen_siblings[].sha256)"
+REG_STRIKING = "data/editorial/striking-distance-noindex.v1.json (urls[].approval.material_hash)"
 WA_BASE = "https://wa.me/5548988344559"
 
 PILLAR_ANCHOR = "#captura-pilar"
@@ -74,6 +97,8 @@ FORM_LINK_RE = re.compile(
 RESIDUAL_FORM_RE = re.compile(
     r'<a [^>]*href="/(?:\?[^"#]*)?(?:#[^"]*)?"[^>]*>' + re.escape(FORM_LABEL) + r"</a>"
 )
+DEFAULT_CTA_POSITION = "form"
+DEFAULT_JOURNEY = "contrato"
 TEMA_PRINCIPAL_RE = re.compile(r'<strong>Tema principal</strong><a href="(?P<href>/[a-z0-9-]+/)"')
 ASIDE_CARD_RE = re.compile(
     r'(<aside class="article-aside"><div class="aside-card">.*?<a class="button button-primary"[^>]*href="https://wa\.me/[^"]*"[^>]*>[^<]*</a>)(?P<existing>(?:<a class="text-link" data-pillar-link="1"[^>]*>.*?</a>)?)(</div>)',
@@ -82,39 +107,57 @@ ASIDE_CARD_RE = re.compile(
 WA_HREF_RE = re.compile(r'href="(https://wa\.me/5548988344559\?text=[^"]+)"')
 
 
-def frozen_articles() -> set[str]:
-    """Artigos com hash congelado: canário de medições e irmãs (issue #389)."""
+def frozen_reasons() -> dict[str, list[str]]:
+    """Artigos com hash congelado e o(s) registro(s) que pinam cada um.
+
+    Autoridades reconhecidas:
+
+    * canário de medições #389 e irmãs (``canary-contract.json``:
+      ``canary.after_sha256`` e ``frozen_siblings[].sha256``);
+    * aprovação delegada do dono ligada ao ``material_hash`` do HTML
+      (``striking-distance-noindex.v1.json``): qualquer byte exige nova
+      aprovação com hash, não um agente.
+
+    2026-09-19 (INBOUND-RECEITA-20260919): o par
+    ``custos-indiretos-atraso-administracao-obra`` /
+    ``jogo-de-planilha-aditivo-obra-publica`` saiu daqui. Entrou em 2026-09-18
+    como remendo porque ``--write`` os tocou e quebrou o pin byte a byte de
+    ``scripts/organic/tests/test_inb08_owned_routes.py::CLICK_ORIGIN``. Esse
+    pin agora mascara as três superfícies da ponte artigo→pilar (link do
+    formulário, link do pilar no bloco de oferta, texto do WhatsApp) e continua
+    pinando o corpo byte a byte contra ``origin/main``: a ponte de contato não
+    é reescrita do guia. Sem hash externo, os dois voltam ao fluxo normal de
+    ``--write``; o pin mascarado é a guarda que resta ao corpo deles.
+    ``fiscal-nao-assina-medicao-obra-publica`` também está em ``CLICK_ORIGIN``
+    e no cluster de medição, mas entra aqui pelo canário #389.
+    """
+    out: dict[str, list[str]] = {}
+
+    def add(slug: str, reason: str) -> None:
+        out.setdefault(slug, []).append(reason)
+
     contract = json.loads(CANARY_CONTRACT.read_text(encoding="utf-8"))
-    out: set[str] = set()
     canary = contract.get("canary") or {}
     canary_path = canary.get("path") or ""
     if canary_path.startswith("/conteudos/"):
-        out.add(canary_path.strip("/").split("/")[-1])
+        add(canary_path.strip("/").split("/")[-1], REG_CANARY)
     for sib in contract.get("frozen_siblings") or []:
         p = str(sib.get("path") or "")
         if p.startswith("conteudos/"):
-            out.add(p.split("/")[1])
-    # Canário de distância de indexação (#striking-distance): a aprovação
-    # delegada do dono está ligada ao material_hash do HTML; qualquer byte
-    # exige nova aprovação com hash, não um agente. Fica congelado.
-    striking = ROOT / "data/editorial/striking-distance-noindex.v1.json"
-    if striking.is_file():
-        for row in (json.loads(striking.read_text(encoding="utf-8")).get("urls") or []):
+            add(p.split("/")[1], REG_CANARY_SIBLING)
+    if STRIKING_DISTANCE.is_file():
+        for row in (json.loads(STRIKING_DISTANCE.read_text(encoding="utf-8")).get("urls") or []):
             approval = row.get("approval") or {}
             path = str(row.get("path") or "")
             if approval.get("material_hash") and path.startswith("/conteudos/"):
-                out.add(path.strip("/").split("/")[-1])
-    # CLICK_ORIGIN (scripts/organic/tests/test_inb08_owned_routes.py): três
-    # artigos com clique real no GSC ficam pinados byte a byte contra
-    # origin/main (só a data de revisão do cluster de medição pode mover em
-    # fiscal-nao-assina-medicao-obra-publica, que já entra acima como sibling
-    # do canário #389). 2026-09-18: custos-indiretos-atraso-administracao-obra
-    # e jogo-de-planilha-aditivo-obra-publica foram tocados por engano por
-    # --write e quebraram esse teste; revertidos para origin/main e congelados
-    # aqui para que --check volte a listar pendência em vez de reescrever.
-    out.add("custos-indiretos-atraso-administracao-obra")
-    out.add("jogo-de-planilha-aditivo-obra-publica")
+                add(path.strip("/").split("/")[-1], REG_STRIKING)
     return out
+
+
+def frozen_articles() -> set[str]:
+    """Artigos com hash congelado (ver ``frozen_reasons``). Consumido também por
+    ``scripts/site/inbound_first_remediate.article_form_target``."""
+    return set(frozen_reasons())
 
 
 def service_map() -> tuple[dict[str, str], dict[str, str]]:
@@ -169,6 +212,34 @@ def form_target(slug: str, html: str, overrides: dict[str, str]) -> str | None:
     return None
 
 
+def _attr_present(name: str, *chunks: str) -> bool:
+    return any(re.search(rf'(?:^|\s){re.escape(name)}=', c) for c in chunks)
+
+
+def _derive_context(slug: str, html: str, old_href: str, attrs: str, tail: str) -> tuple[str, str]:
+    """Completa o contexto de atribuição do link do formulário quando ausente.
+
+    O href antigo (``/?tema=…&amp;origem=…#contato``) levava o contexto na
+    query da home; no pilar ele só chega pelo ``dataset`` do link clicado
+    (``js/modules/nav.js``). Ordem dos atributos igual à dos artigos já
+    convertidos: ``data-cta-position``/``data-journey`` antes do ``href``,
+    ``data-tema``/``data-origem`` depois. Nada presente é reescrito.
+    """
+    query = parse_qs(urlsplit(html_lib.unescape(old_href)).query)
+    if not _attr_present("data-cta-position", attrs, tail):
+        attrs += f' data-cta-position="{DEFAULT_CTA_POSITION}"'
+    if not _attr_present("data-journey", attrs, tail):
+        journey = (query.get("jornada") or [DEFAULT_JOURNEY])[0].strip() or DEFAULT_JOURNEY
+        attrs += f' data-journey="{html_lib.escape(journey, quote=True)}"'
+    if not _attr_present("data-tema", attrs, tail):
+        tema = (query.get("tema") or [""])[0].strip() or article_h1(html)
+        if tema:
+            tail += f' data-tema="{html_lib.escape(tema, quote=True)}"'
+    if not _attr_present("data-origem", attrs, tail):
+        tail += f' data-origem="/conteudos/{slug}/"'
+    return attrs, tail
+
+
 def transform(slug: str, html: str, overrides: dict[str, str], labels: dict[str, str]) -> tuple[str, list[str]]:
     """Devolve (html transformado, pendências). Idempotente."""
     notes: list[str] = []
@@ -188,6 +259,7 @@ def transform(slug: str, html: str, overrides: dict[str, str], labels: dict[str,
             def _repl(m: re.Match[str]) -> str:
                 attrs = m.group("attrs")
                 tail = m.group("tail")
+                attrs, tail = _derive_context(slug, out, m.group("href"), attrs, tail)
                 return f'<a class="button button-secondary"{attrs} href="{target}"{tail}>{FORM_LABEL}</a>'
 
             out = FORM_LINK_RE.sub(_repl, out)
@@ -227,16 +299,18 @@ def transform(slug: str, html: str, overrides: dict[str, str], labels: dict[str,
     return out, notes
 
 
-def run(write: bool) -> int:
+def run(write: bool, include_hash_bound: bool = False) -> int:
     overrides, labels = service_map()
-    frozen = frozen_articles()
+    reasons = frozen_reasons()
     changed: list[str] = []
     pending: list[str] = []
     residual: list[str] = []
+    recapture: list[str] = []
     for page in sorted(ARTICLES.glob("*/index.html")):
         slug = page.parent.name
         html = page.read_text(encoding="utf-8")
-        if slug in frozen:
+        hash_bound = slug in reasons
+        if hash_bound and not (write and include_hash_bound):
             if home_form_link(html):
                 pending.append(f"{slug}: congelado por hash (canário #389 ou aprovação hash-bound); ainda envia o formulário à home")
             continue
@@ -247,12 +321,17 @@ def run(write: bool) -> int:
             changed.append(slug)
             if write:
                 page.write_text(new, encoding="utf-8")
+            if hash_bound:
+                digest = hashlib.sha256(new.encode("utf-8")).hexdigest()
+                recapture.append(f"{slug}: sha256 novo {digest}; recapturar em: " + "; ".join(reasons[slug]))
         if home_form_link(new):
             residual.append(slug)
     mode = "write" if write else "check"
     print(f"[{mode}] artigos alterados: {len(changed)}")
     for p in pending:
         print(f"  pendência: {p}")
+    for r in recapture:
+        print(f"  recaptura obrigatória: {r}")
     if not write and changed:
         print("  desatualizados: " + ", ".join(changed))
         print("  rode: python3 scripts/site/apply_article_pillar_form.py --write")
@@ -268,8 +347,15 @@ def main(argv: list[str] | None = None) -> int:
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--write", action="store_true")
     g.add_argument("--check", action="store_true")
+    ap.add_argument(
+        "--include-hash-bound",
+        action="store_true",
+        help="com --write: transforma também os artigos congelados por hash e imprime a obrigação de recaptura",
+    )
     a = ap.parse_args(argv)
-    return run(write=a.write)
+    if a.include_hash_bound and not a.write:
+        ap.error("--include-hash-bound só vale com --write")
+    return run(write=a.write, include_hash_bound=a.include_hash_bound)
 
 
 if __name__ == "__main__":

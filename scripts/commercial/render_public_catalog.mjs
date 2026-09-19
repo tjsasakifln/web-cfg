@@ -290,7 +290,7 @@ const STATE = {
   },
   VALIDATE: {
     label: "Em validação",
-    explanation: "Preço-piloto. Não há compra imediata; escopo, capacidade e aderência passam por revisão humana.",
+    explanation: "Preço-piloto. Não há compra imediata; escopo, capacidade e aderência passam pela revisão do responsável técnico.",
   },
   BLOCKED: {
     label: "Indisponível",

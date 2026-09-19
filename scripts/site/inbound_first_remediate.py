@@ -744,7 +744,12 @@ def filter_related_links(html: str, indexable: dict[str, bool]) -> str:
 )
 
 
-LEAD_INLINE_RE = re.compile(r'<section class="lead-inline"[^>]*>.*?</section>', re.S)
+# 2026-09-19 (INBOUND-RECEITA-20260919): o bloco pode ser <section> ou <aside>
+# (fiscal-nao-assina-medicao-obra-publica usa <aside class="lead-inline">). Sem o
+# <aside>, ``lead_inline_points_to_pillar`` devolvia False e o remediador
+# regenerava o bloco, devolvendo o formulário à home.
+LEAD_INLINE_RE = re.compile(r'<(section|aside) class="lead-inline"[^>]*>.*?</\1>', re.S)
+EXISTING_FORM_HREF_RE = re.compile(r'<a [^>]*href="([^"]+)"[^>]*>Continuar pelo formulário</a>')
 
 
 def article_form_target(origem: str, html: str) -> str:
@@ -753,12 +758,17 @@ def article_form_target(origem: str, html: str) -> str:
     ``path_overrides`` do content-service-map, com ``#captura-pilar`` presente
     no pilar); só sem pilar cai na home (``/#contato``)."""
     slug = origem.strip("/").split("/")[-1] if origem.startswith("/conteudos/") else ""
-    # Congelados pelo canário #389: mesmo destino que o remediador escrevia antes.
     if slug and slug not in frozen_articles():
         overrides, _labels = service_map()
         target = form_target(slug, html, overrides)
         if target:
             return target
+    # Protegidos por hash (canário #389 e irmãs, aprovação hash-bound): o destino
+    # já escrito no artigo prevalece; desde 2026-09-19 ele é o pilar, e reescrever
+    # a home aqui reintroduziria o defeito que a campanha corrigiu.
+    m = EXISTING_FORM_HREF_RE.search(html)
+    if m and not re.fullmatch(r"/(?:\?[^#]*)?(?:#contato)?", html_lib.unescape(m.group(1))):
+        return html_lib.unescape(m.group(1))
     return "/#contato"
 
 
