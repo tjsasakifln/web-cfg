@@ -1228,6 +1228,39 @@ _reset();
   _reset();
 }
 
+// 6aa) A paid Radar order binds its normalized purchase parameters to the key.
+{
+  const payload = {
+    nome: "QA Radar Material",
+    email: "qa-radar-material@example.com",
+    estagio: "radar-decisorio-parametros",
+    jornada: "edital",
+    consentimento: "1",
+    cnpj: "52.407.089/0001-09",
+    radar_recorte: "cidade_base",
+    radar_uf: "SC",
+    radar_cidade_base: "Florianópolis",
+    radar_raio_km: "80",
+    radar_segmentos: ["edificacoes-publicas", "saneamento-hidraulica"],
+    radar_acervo_tecnico: "Acervo técnico em edificações e saneamento para contratos públicos.",
+    radar_email_entrega: "qa-radar-material@example.com",
+    idempotency_key: "fixed-radar-material-key-001",
+  };
+  const headers = { "Idempotency-Key": payload.idempotency_key };
+  const first = await handler(event(payload, "POST", headers));
+  const replay = await handler(event(payload, "POST", headers));
+  const changed = await handler(event({ ...payload, radar_raio_km: "120" }, "POST", headers));
+  const replayBody = JSON.parse(replay.body);
+  const changedBody = JSON.parse(changed.body);
+  if (first.statusCode !== 201 || replay.statusCode !== 200 || replayBody.idempotent !== true) {
+    fail("radar_idempotency_exact_replay", { first: first.statusCode, replay: replay.statusCode, replayBody });
+  }
+  if (changed.statusCode !== 409 || changedBody.error !== "idempotency_conflict") {
+    fail("radar_idempotency_material_conflict", { status: changed.statusCode, changedBody });
+  } else pass("radar_idempotency_material_conflict");
+  _reset();
+}
+
 // 6b) Attribution cannot become a side-channel for PII in receipts/logs/analytics.
 {
   const marker = "private-person@example.com";

@@ -93,12 +93,31 @@ const STANDARD_IDEMPOTENCY_MATERIAL_FIELDS = Object.freeze([
   "faixa_contrato", "risco_em_jogo", "frequencia", "maturidade_documental",
   "capacidade_interna", "public_contract_id", "public_entity_id", "public_id_slug",
   "cnpj", "offer_id", "terms_id", "document_intent", "intent_kind", "canal_seguro",
+  "radar_params",
 ]);
 
 function standardIdempotencyMaterialHash(lead) {
   if (!lead || lead.adaptive_intake === true) return null;
   const material = {};
   for (const field of STANDARD_IDEMPOTENCY_MATERIAL_FIELDS) {
+    if (field === "radar_params" && lead.radar_params) {
+      const radar = lead.radar_params;
+      material[field] = {
+        schema: radar.schema || "",
+        offer_id: radar.offer_id || "",
+        cnpj: radar.cnpj || "",
+        recorte: radar.recorte || "",
+        uf: radar.uf || "",
+        cidade_base: radar.cidade_base || "",
+        raio_km: radar.raio_km == null ? null : radar.raio_km,
+        segmentos: Array.isArray(radar.segmentos)
+          ? [...new Set(radar.segmentos.map(String))].sort()
+          : [],
+        acervo_tecnico: radar.acervo_tecnico || "",
+        email_entrega: radar.email_entrega || "",
+      };
+      continue;
+    }
     material[field] = Object.prototype.hasOwnProperty.call(lead, field) ? lead[field] : null;
   }
   return crypto.createHash("sha256").update(JSON.stringify(material)).digest("hex");

@@ -52,6 +52,18 @@ function classifyFreshness({ asOf, producedAt, ingestedAt }, now) {
   return { status: "CURRENT", reason_codes: [] };
 }
 
+function sameInstant(left, right) {
+  const leftMs = Date.parse(left || "");
+  const rightMs = Date.parse(right || "");
+  return Number.isFinite(leftMs) && Number.isFinite(rightMs) && leftMs === rightMs;
+}
+
+function sourceObservation(history, manifestSha256, asOf) {
+  return (history?.observations || []).find((observation) =>
+    observation.snapshot_sha256 === manifestSha256 && observation.as_of === asOf
+  ) || null;
+}
+
 function versionId(snapshotSha256) {
   return `${VERSION_PREFIX}${snapshotSha256}`;
 }
@@ -80,14 +92,18 @@ function matchesHistoryProvenance({ manifestSha256, asOf, producedAt }, history)
   if (!hasSnapshot && !hasNoSnapshot) return false;
   const lastAttempt = history?.last_attempt;
   if (hasNoSnapshot) {
-    return lastAttempt?.snapshot_sha256 == null && lastAttempt?.as_of == null;
+    return lastAttempt?.snapshot_sha256 == null &&
+      lastAttempt?.as_of == null &&
+      sameInstant(lastAttempt?.attempted_at, producedAt);
   }
+  const observation = sourceObservation(history, manifestSha256, asOf);
   return lastAttempt?.snapshot_sha256 === manifestSha256 &&
     lastAttempt?.as_of === asOf &&
-    history.observations.some((observation) =>
-      observation.snapshot_sha256 === manifestSha256 &&
-      observation.as_of === asOf &&
-      observation.observed_at === producedAt
+    sameInstant(lastAttempt?.attempted_at, producedAt) &&
+    Boolean(observation) &&
+    (
+      lastAttempt?.outcome === "SNAPSHOT_REPEATED" ||
+      sameInstant(observation.observed_at, producedAt)
     );
 }
 
@@ -116,8 +132,19 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
   }, snapshot.history)) {
     return { ok: false, status: "UNKNOWN", error: "gsc_private_snapshot_provenance_mismatch" };
   }
+  const observation = sourceObservation(snapshot.history, snapshot.manifest_sha256, snapshot.as_of);
+  if (
+    snapshot.manifest_sha256 &&
+    (!observation || !sameInstant(snapshot.source_observed_at, observation.observed_at))
+  ) {
+    return { ok: false, status: "UNKNOWN", error: "gsc_private_snapshot_source_observation_mismatch" };
+  }
   const freshness = classifyFreshness(
-    { asOf: snapshot.as_of, producedAt: snapshot.produced_at, ingestedAt: snapshot.ingested_at },
+    {
+      asOf: snapshot.as_of,
+      producedAt: snapshot.source_observed_at || snapshot.produced_at,
+      ingestedAt: snapshot.ingested_at,
+    },
     now,
   );
   if (!snapshot.insights) {
@@ -140,13 +167,20 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
       reason_codes: snapshot.history.readiness?.reason_codes || ["producer_not_ready"],
     };
   }
+  const repeatedHistoryBinding =
+    snapshot.content_carried_forward === true &&
+    snapshot.history.last_attempt?.outcome === "SNAPSHOT_REPEATED" &&
+    snapshot.insights?.history_state_sha256 === snapshot.history.parent_state_sha256;
   if (
     !SHA256_RE.test(String(snapshot.manifest_sha256 || "")) ||
     !SHA256_RE.test(String(snapshot.content_sha256 || "")) ||
     sha256(JSON.stringify(snapshot.insights)) !== snapshot.content_sha256 ||
     snapshot.insights.as_of !== snapshot.as_of ||
     snapshot.insights.snapshot_sha256 !== snapshot.manifest_sha256 ||
-    snapshot.insights.history_state_sha256 !== snapshot.history_state_sha256 ||
+    (
+      snapshot.insights.history_state_sha256 !== snapshot.history_state_sha256 &&
+      !repeatedHistoryBinding
+    ) ||
     snapshot.history.last_known_good?.snapshot_sha256 !== snapshot.manifest_sha256 ||
     snapshot.history.last_known_good?.as_of !== snapshot.as_of
   ) {
@@ -161,7 +195,7 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
   return { ok: true, status: freshness.status, freshness, reason_codes: freshness.reason_codes };
 }
 
-function buildSnapshot({ producer, history, insights }, { now }) {
+function buildSnapshot({ producer, history, insights, content_carried_forward = false }, { now }) {
   const historyValidation = validateHistoryState(history, { now: now.getTime() });
   if (!historyValidation.ok) throw new Error(historyValidation.error || "gsc_private_history_invalid");
   if (
@@ -195,6 +229,7 @@ function buildSnapshot({ producer, history, insights }, { now }) {
     throw new Error("gsc_private_partial_snapshot_invalid");
   }
   const asOf = producer.as_of || null;
+  const observation = sourceObservation(history, producer.manifest_sha256, asOf);
   const snapshot = {
     schema_version: SNAPSHOT_SCHEMA_VERSION,
     manifest_schema_version: producer.manifest_schema_version,
@@ -202,6 +237,7 @@ function buildSnapshot({ producer, history, insights }, { now }) {
     as_of: asOf,
     source: producer.source,
     produced_at: producer.produced_at,
+    source_observed_at: observation?.observed_at || producer.produced_at,
     ingested_at: now.toISOString(),
     content_sha256: insights ? sha256(JSON.stringify(insights)) : null,
     history_state_sha256: history.state_sha256,
@@ -211,6 +247,7 @@ function buildSnapshot({ producer, history, insights }, { now }) {
     ),
     history,
     insights,
+    content_carried_forward: content_carried_forward === true,
   };
   const sealed = seal(snapshot, "snapshot_sha256");
   const validation = validateSnapshot(sealed, { now });
@@ -243,7 +280,35 @@ async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}
   if (previousPointer && !previousPointerValidation.ok) {
     throw new Error(previousPointerValidation.error);
   }
-  const snapshot = buildSnapshot(input, { now });
+  let previousCurrent = null;
+  if (previousPointerValidation.ok && previousPointer.current_snapshot_sha256) {
+    previousCurrent = await store.getSystemRecord(
+      versionId(previousPointer.current_snapshot_sha256),
+    );
+    const previousCurrentValidation = validateSnapshot(previousCurrent, { now });
+    if (!previousCurrentValidation.ok) {
+      throw new Error(previousCurrentValidation.error);
+    }
+  }
+  let effectiveInput = { ...input, content_carried_forward: false };
+  if (!input.insights && input.history?.readiness?.ready_for_product_decisions === true) {
+    const repeated = input.history.last_attempt?.outcome === "SNAPSHOT_REPEATED";
+    if (
+      !repeated ||
+      !previousCurrent?.insights ||
+      previousCurrent.manifest_sha256 !== input.producer?.manifest_sha256 ||
+      previousCurrent.as_of !== input.producer?.as_of ||
+      previousCurrent.history_state_sha256 !== input.history.parent_state_sha256
+    ) {
+      throw new Error("gsc_private_repeated_snapshot_carry_forward_invalid");
+    }
+    effectiveInput = {
+      ...input,
+      insights: previousCurrent.insights,
+      content_carried_forward: true,
+    };
+  }
+  const snapshot = buildSnapshot(effectiveInput, { now });
   if (previousPointerValidation.ok) {
     const latest = await store.getSystemRecord(versionId(previousPointer.latest_snapshot_sha256));
     const latestValidation = validateSnapshot(latest, { now });
@@ -257,8 +322,10 @@ async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}
       latest.as_of === snapshot.as_of &&
       latest.source === snapshot.source &&
       latest.produced_at === snapshot.produced_at &&
+      latest.source_observed_at === snapshot.source_observed_at &&
       latest.content_sha256 === snapshot.content_sha256 &&
-      latest.history_state_sha256 === snapshot.history_state_sha256
+      latest.history_state_sha256 === snapshot.history_state_sha256 &&
+      latest.content_carried_forward === snapshot.content_carried_forward
     ) {
       const read = await readPrivateGscSnapshot(store, { now });
       if (
@@ -272,7 +339,8 @@ async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}
         ok: true,
         status: read.status,
         promoted: false,
-        contains_insights: Boolean(input.insights),
+        contains_insights: Boolean(latest.insights),
+        content_carried_forward: latest.content_carried_forward === true,
         idempotent: true,
         schema_version: SNAPSHOT_SCHEMA_VERSION,
         snapshot_sha256: latest.snapshot_sha256,
@@ -311,6 +379,7 @@ async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}
     status: read.status,
     promoted,
     contains_insights: Boolean(snapshot.insights),
+    content_carried_forward: snapshot.content_carried_forward === true,
     schema_version: SNAPSHOT_SCHEMA_VERSION,
     snapshot_sha256: snapshot.snapshot_sha256,
     producer_manifest_sha256: snapshot.manifest_sha256,

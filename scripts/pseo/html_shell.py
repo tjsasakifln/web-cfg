@@ -322,6 +322,7 @@ def page_shell(
     extra_head: str = "",
     data_attrs: dict[str, str] | None = None,
     author_name: str | None = None,
+    footer_html: str | None = None,
 ) -> str:
     canonical = f"{SITE}{canonical_path}"
     og_t = og_title or title
@@ -374,7 +375,7 @@ def page_shell(
 <main id="conteudo">
 {body_main}
 </main>
-{FOOTER}
+{footer_html if footer_html is not None else FOOTER}
 <aside class="contact-float" aria-label="Contato rápido"><a aria-label="Falar com a CONFENGE pelo WhatsApp" class="whatsapp-float" data-cta-position="float" data-content-cluster="pseo" href="{e(wa_link(wa_message))}" rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg></a></aside>
 </body>
 </html>
@@ -382,7 +383,16 @@ def page_shell(
     try:
         from scripts.site.shell_nav import load_brand, sync_text  # noqa: PLC0415
 
-        return sync_text(document, load_brand(), canonical_path)
+        synced = sync_text(document, load_brand(), canonical_path)
+        if footer_html is not None:
+            synced = re.sub(
+                r'<footer class="site-footer">.*?</footer>',
+                lambda _match: footer_html,
+                synced,
+                count=1,
+                flags=re.DOTALL,
+            )
+        return synced
     except Exception:  # noqa: BLE001
         return document
 

@@ -139,6 +139,21 @@ function validInsights(history) {
   };
 }
 
+function repeatedHistory(current, attemptedAt = "2026-08-29T12:05:00.002Z") {
+  const repeated = structuredClone(current);
+  repeated.parent_state_sha256 = current.state_sha256;
+  repeated.updated_at = attemptedAt;
+  repeated.last_attempt = {
+    ...repeated.last_attempt,
+    attempted_at: attemptedAt,
+    run_id: "run-repeated",
+    outcome: "SNAPSHOT_REPEATED",
+    reason_codes: ["snapshot_repeated"],
+  };
+  repeated.state_sha256 = historyHash(repeated);
+  return repeated;
+}
+
 function preThresholdHistory() {
   const current = validHistory();
   const first = structuredClone(current.observations[0]);
@@ -414,6 +429,60 @@ test("CURRENT survives a consumer restart with equal producer and consumer manif
   assert.equal(repeated.idempotent, true);
   assert.equal(repeated.promoted, false);
   assert.equal(repeated.contains_insights, true);
+});
+
+test("a ready repeated snapshot advances history and carries the exact known insights", async () => {
+  const records = new Map();
+  const store = new MemorySystemStore(records);
+  const firstHistory = validHistory();
+  const first = await persistPrivateGscSnapshot(
+    store,
+    { producer: producer(), history: firstHistory, insights: validInsights(firstHistory) },
+    { now: NOW },
+  );
+  const repeatAt = "2026-08-29T12:05:00.002Z";
+  const repeatHistory = repeatedHistory(firstHistory, repeatAt);
+  const repeated = await persistPrivateGscSnapshot(
+    store,
+    {
+      producer: { ...producer(), produced_at: repeatAt },
+      history: repeatHistory,
+      insights: null,
+    },
+    { now: new Date("2026-08-29T12:05:01Z") },
+  );
+
+  assert.equal(repeated.status, "CURRENT");
+  assert.equal(repeated.promoted, true);
+  assert.equal(repeated.content_carried_forward, true);
+  assert.equal(repeated.content_sha256, first.content_sha256);
+  assert.equal(repeated.history_state_sha256, repeatHistory.state_sha256);
+  assert.notEqual(repeated.snapshot_sha256, first.snapshot_sha256);
+
+  const consumed = await readPrivateGscSnapshot(store, {
+    now: new Date("2026-08-29T12:05:01Z"),
+  });
+  assert.equal(consumed.status, "CURRENT");
+  assert.equal(consumed.meta.history_state_sha256, repeatHistory.state_sha256);
+  assert.equal(consumed.meta.latest_attempt_produced_at, repeatAt);
+  assert.equal(consumed.meta.latest_attempt_source_freshness.status, "CURRENT");
+  assert.equal(consumed.meta.snapshot_content_sha256, first.content_sha256);
+  assert.equal(consumed.insights.history_state_sha256, firstHistory.state_sha256);
+
+  const bypassStore = new MemorySystemStore(new Map(records));
+  await assert.rejects(
+    persistPrivateGscSnapshot(
+      bypassStore,
+      {
+        producer: { ...producer(), produced_at: repeatAt },
+        history: repeatHistory,
+        insights: validInsights(firstHistory),
+        content_carried_forward: true,
+      },
+      { now: new Date("2026-08-29T12:05:01Z") },
+    ),
+    /gsc_private_snapshot_provenance_mismatch/,
+  );
 });
 
 test("storage and scheduled verifier share freshness boundary vectors", async () => {

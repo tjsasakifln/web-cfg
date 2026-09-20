@@ -439,6 +439,41 @@ else {
   });
   if (alert.ok || alert.email_reconcile_required !== 1) fail("hourly_inbound_drain_reconcile_alert", alert);
   else pass("hourly_inbound_drain_reconcile_alert");
+  const emailFailure = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({
+        ok: true,
+        attempted: 1,
+        delivered: 0,
+        email_reconcile_required: 0,
+        email_retry: { ok: false, error: "email_retry_unexpected" },
+      }),
+    }),
+  });
+  if (emailFailure.ok || emailFailure.email_retry_ok !== false) fail("hourly_inbound_drain_email_failure", emailFailure);
+  else pass("hourly_inbound_drain_email_failure");
+  const aborted = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({
+        ok: true,
+        attempted: 1,
+        delivered: 0,
+        retryable: 1,
+        aborted: true,
+        abort_reason: "abnormal_retryable_rate",
+        email_reconcile_required: 0,
+        email_retry: { ok: true },
+      }),
+    }),
+  });
+  if (aborted.ok || !aborted.aborted || aborted.retryable !== 1) fail("hourly_inbound_drain_abort", aborted);
+  else pass("hourly_inbound_drain_abort");
 }
 
 {

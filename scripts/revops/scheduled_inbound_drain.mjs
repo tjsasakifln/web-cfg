@@ -15,13 +15,31 @@ export async function runInboundDrain({
   });
   const body = response.body || {};
   const reconcile = Number(body.email_reconcile_required);
+  const retryable = Number(body.retryable || 0);
+  const blocked = Number(body.blocked || 0);
+  const dead = Number(body.dead || 0);
+  const emailRetryOk = body.email_retry?.ok !== false;
   return {
-    ok: response.status === 200 && body.ok === true && Number.isFinite(reconcile) && reconcile === 0,
+    ok: response.status === 200
+      && body.ok === true
+      && body.aborted !== true
+      && emailRetryOk
+      && Number.isFinite(reconcile)
+      && reconcile === 0
+      && retryable === 0
+      && blocked === 0
+      && dead === 0,
     status: response.status,
     attempted: Number(body.attempted || 0),
     delivered: Number(body.delivered || 0),
+    retryable,
+    blocked,
+    dead,
+    aborted: body.aborted === true,
+    abort_reason: body.abort_reason || null,
     email_attempted: Number(body.email_attempted || 0),
     email_delivered: Number(body.email_delivered || 0),
+    email_retry_ok: emailRetryOk,
     email_reconcile_required: Number.isFinite(reconcile) ? reconcile : null,
   };
 }

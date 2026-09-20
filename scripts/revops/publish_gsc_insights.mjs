@@ -142,6 +142,13 @@ function sameInstant(left, right) {
   return Number.isFinite(leftMs) && Number.isFinite(rightMs) && leftMs === rightMs;
 }
 
+function producerTimesBelongToSameAttempt(attemptedAt, syncAt) {
+  const attemptedMs = Date.parse(attemptedAt || "");
+  const syncMs = Date.parse(syncAt || "");
+  const deltaMs = attemptedMs - syncMs;
+  return Number.isFinite(deltaMs) && deltaMs >= 0 && deltaMs <= 5000;
+}
+
 export function validateProducerHistory(syncState, history) {
   const hasProducerSnapshot = /^[a-f0-9]{64}$/.test(String(syncState.manifest_sha256 || "")) &&
     /^\d{4}-\d{2}-\d{2}$/.test(String(syncState.as_of || ""));
@@ -152,7 +159,10 @@ export function validateProducerHistory(syncState, history) {
   const lastAttemptMatches =
     history.last_attempt?.snapshot_sha256 === syncState.manifest_sha256 &&
     history.last_attempt?.as_of === syncState.as_of &&
-    sameInstant(history.last_attempt?.attempted_at, syncState.last_sync_at);
+    producerTimesBelongToSameAttempt(
+      history.last_attempt?.attempted_at,
+      syncState.last_sync_at,
+    );
   const matchingObservation = hasProducerSnapshot && history.observations.some((observation) =>
     observation.snapshot_sha256 === syncState.manifest_sha256 &&
     observation.as_of === syncState.as_of &&
@@ -244,7 +254,9 @@ export async function publish({
     manifest_schema_version: syncState.manifest_schema_version,
     manifest_sha256: hasProducerSnapshot ? syncState.manifest_sha256 : null,
     as_of: hasProducerSnapshot ? syncState.as_of : null,
-    produced_at: syncState.last_sync_at,
+    // The durable history attempt is authoritative. last_sync_at is recorded
+    // immediately before the history transition and may differ by milliseconds.
+    produced_at: history.last_attempt?.attempted_at,
     source: "search_analytics_api",
   };
   const endpoint = `${baseUrl.replace(/\/$/, "")}/.netlify/functions/ops`;
@@ -285,11 +297,13 @@ export async function publish({
   }
   const get = await fetchImpl(`${endpoint}?action=gsc_insights`, { headers });
   const read = await responseJson(get);
-  const expectedStatus = expected ? "CURRENT" : history.readiness.status;
+  const readyHistory = history.readiness?.ready_for_product_decisions === true;
+  const allowedStatuses = readyHistory ? ["CURRENT", "STALE"] : ["UNKNOWN"];
   if (
     !get.ok ||
-    read.ok !== (expectedStatus === "CURRENT") ||
-    read.status !== expectedStatus ||
+    read.ok !== (read.status === "CURRENT") ||
+    !allowedStatuses.includes(read.status) ||
+    posted.status !== read.status ||
     read.meta?.delivery_source !== "durable_store" ||
     read.meta?.history_state_sha256 !== history.state_sha256 ||
     read.meta?.ready_for_product_decisions !== history.readiness.ready_for_product_decisions ||
