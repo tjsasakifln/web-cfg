@@ -418,15 +418,6 @@ def test_home_triage_section_frames_every_family_before_public_works() -> None:
     assert "Não envie documentos sensíveis" in text, text
 
 
-def _with_evento(destination: str) -> str:
-    """Variante do destino do formulario com o evento do orgao pre-selecionado
-    pela URL (?evento=planejamento_contratacao#captura-contrato)."""
-    if not destination.endswith("#captura-contrato"):
-        return destination
-    path, _, frag = destination.partition("#")
-    return f"{path}?evento=planejamento_contratacao#{frag}"
-
-
 def _public_entity_form_destination() -> str:
     """Destino persistido do orgao: o formulario do hub quando ele nomeia o
     evento do orgao (PUBLICAS-01); ate la, a secao #situacao-orgao, que
@@ -447,9 +438,11 @@ def test_home_public_entity_paragraph_points_to_the_persisted_channel() -> None:
     pular a instrucao enquanto o formulario nao nomeia o evento do orgao."""
     b2g = _section(_home(), r'id="obras-publicas"')
     destination = _public_entity_form_destination()
-    # O CTA de outra rota chega ao formulario do hub com ?evento= (nav.js
-    # pre-seleciona a opcao do orgao; BOFU-FECHAMENTO-20260919, PUBLICAS-02).
-    assert f'href="{destination}"' in b2g or f'href="{_with_evento(destination)}"' in b2g, destination
+    assert f'href="{destination}"' in b2g, destination
+    if destination.endswith("#captura-contrato"):
+        # O CTA de outra rota leva o evento do orgao em data-* (href canonico,
+        # sem query string); nav.js aplica na chegada via sessionStorage.
+        assert f'href="{destination}" data-contract-event="planejamento_contratacao"' in b2g
     if destination.endswith("#situacao-orgao"):
         assert 'href="/servicos-obras-publicas/#captura-contrato"' not in b2g
 
@@ -462,7 +455,9 @@ def test_triage_public_entity_item_has_whatsapp_and_form() -> None:
     item = _triage_item("planejamento-publico")
     hrefs = re.findall(r'href="([^"]+)"', item)
     destination = _public_entity_form_destination()
-    assert destination in hrefs or _with_evento(destination) in hrefs, hrefs
+    assert destination in hrefs, hrefs
+    if destination.endswith("#captura-contrato"):
+        assert f'href="{destination}" data-contract-event="planejamento_contratacao"' in item
     if destination.endswith("#situacao-orgao"):
         assert "/servicos-obras-publicas/#captura-contrato" not in hrefs, hrefs
     expected = json.loads(WHATSAPP_MESSAGES.read_text(encoding="utf-8"))["messages"]["orgao_planejamento"]

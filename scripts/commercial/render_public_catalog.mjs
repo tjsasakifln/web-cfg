@@ -438,7 +438,7 @@ function renderDecisionNav(published) {
   // is part of the contract (the link is inline-flex: whitespace between flex
   // items is not rendered). BOFU-FECHAMENTO-20260919, A11Y-FRAGMENTOS-06.
   const decisions = published.map((entry) =>
-    `<li><a aria-label="${entry.catalog_number} ${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])} ${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span aria-hidden="true">${entry.catalog_number}</span> ${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
+    `<li><a aria-label="${entry.catalog_number} ${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])} ${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span>${entry.catalog_number}</span> ${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
   ).join("");
   return `<nav class="offer-decision-nav page-index" aria-label="Escolher análise para obra pública pela decisão"><span class="page-index__label" id="examples-nav-title">Escolha pela decisão que está na mesa</span><ol>${decisions}</ol></nav>`;
 }

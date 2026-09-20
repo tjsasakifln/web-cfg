@@ -609,6 +609,7 @@
       const a = event.target && event.target.closest && event.target.closest('a[href]');
       if (!a || !a.dataset) return;
       applyDatasetToForm(a);
+      rememberPreselectForRoute(a);
       const prior = readStoredPseo();
       const incoming = {};
       let wrote = false;
@@ -652,14 +653,40 @@
       || sanitizeAttr(searchParams.get('origem') || hashParams.get('origem'), 'origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
-    // BOFU-FECHAMENTO-20260919 (PUBLICAS-02): um CTA de OUTRA rota chega com
-    // ?evento=<valor> (ou #captura-contrato?evento=) e pre-seleciona o evento
-    // do formulario desta pagina pelo mesmo caminho do CTA local: so um valor
-    // que exista como <option>; nada persiste em sessionStorage.
-    const eventoFromUrl = searchParams.get('evento') || hashParams.get('evento');
-    if (eventoFromUrl && /^[a-z_]{1,64}$/.test(String(eventoFromUrl))) {
-      applyDatasetToForm({ dataset: { contractEvent: String(eventoFromUrl) } });
-    }
+    // BOFU-FECHAMENTO-20260919 (PUBLICAS-02): um CTA de OUTRA rota com
+    // data-contract-event guarda {rota-alvo, evento} em sessionStorage no
+    // clique (o href interno fica canonico, sem query string, como manda
+    // scripts/organic/canonical_hrefs.py); na chegada, se a rota confere, o
+    // evento e aplicado pelo mesmo caminho do CTA local (so valor que exista
+    // como <option>) e o registro e apagado. Registro fora da rota alvo ou
+    // com mais de 30 min e descartado.
+    const PRESELECT_STORAGE_KEY = 'confenge_form_preselect';
+    const normalizePath = (p) => String(p || '/').replace(/\/?$/, '/');
+    const readPreselect = () => {
+      try {
+        const raw = sessionStorage.getItem(PRESELECT_STORAGE_KEY);
+        sessionStorage.removeItem(PRESELECT_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') return null;
+        if (normalizePath(parsed.path) !== normalizePath(window.location.pathname)) return null;
+        if (!/^[a-z_]{1,64}$/.test(String(parsed.contract_event || ''))) return null;
+        if (Date.now() - Number(parsed.saved_at || 0) > 30 * 60 * 1000) return null;
+        return parsed;
+      } catch (_) { return null; }
+    };
+    const rememberPreselectForRoute = (a) => {
+      const value = a && a.dataset ? a.dataset.contractEvent : '';
+      if (!value || !/^[a-z_]{1,64}$/.test(String(value))) return;
+      let target = '';
+      try { target = new URL(a.getAttribute('href') || '', window.location.href).pathname; } catch (_) { return; }
+      if (!target || normalizePath(target) === normalizePath(window.location.pathname)) return;
+      try {
+        sessionStorage.setItem(PRESELECT_STORAGE_KEY, JSON.stringify({ path: normalizePath(target), contract_event: String(value), saved_at: Date.now() }));
+      } catch (_) { /* private mode */ }
+    };
+    const preselect = readPreselect();
+    if (preselect) applyDatasetToForm({ dataset: { contractEvent: preselect.contract_event } });
     const ensureHidden = (fname, fval, force = false) => {
       if (!form || fval == null || fval === '') return;
       let input = form.querySelector(`input[name="${fname}"]`);

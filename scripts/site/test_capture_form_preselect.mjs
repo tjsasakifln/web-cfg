@@ -44,7 +44,7 @@ function control(name, tag, value, options) {
   return el;
 }
 
-function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptions = null, search = "", hash = "" }) {
+function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptions = null, search = "", hash = "", pathname = "/servicos-obras-publicas/", initialStore = {} }) {
   const fields = {
     contract_event: control("contract_event", "SELECT", "", contractOptions),
     estagio: estagioSelectOptions
@@ -85,7 +85,7 @@ function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptio
     body: { classList: { remove() {}, add() {} }, dataset: {}, getAttribute: () => null },
     referrer: "",
   };
-  const store = {};
+  const store = { ...initialStore };
   const sessionStorage = {
     getItem: (k) => store[k] || null,
     setItem: (k, v) => { store[k] = String(v); },
@@ -94,7 +94,7 @@ function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptio
   const windowObj = {
     dataLayer: [],
     matchMedia: () => ({ matches: false }),
-    location: { pathname: "/servicos-obras-publicas/", search, hash },
+    location: { pathname, search, hash, href: `https://confenge.com.br${pathname}${search}${hash}` },
     document,
     addEventListener: () => {},
     innerHeight: 800,
@@ -103,7 +103,7 @@ function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptio
     crypto: { randomUUID: () => "00000000-0000-4000-8000-000000000099" },
   };
   windowObj.window = windowObj;
-  const sandbox = { window: windowObj, document, console, URLSearchParams, sessionStorage, Event: class { constructor(type) { this.type = type; } } };
+  const sandbox = { window: windowObj, document, console, URLSearchParams, URL, sessionStorage, Event: class { constructor(type) { this.type = type; } } };
   vm.createContext(sandbox);
   vm.runInContext(script, sandbox);
   const clicks = docListeners.filter((l) => l.type === "click").map((l) => l.fn);
@@ -156,19 +156,32 @@ function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptio
   expect("missing_option_leaves_select_empty", legacy.fields.contract_event.value === "", legacy.fields.contract_event.value);
 }
 
-// --- PUBLICAS-02: CTA de outra rota chega por ?evento= ---------------------------
+// --- PUBLICAS-02: CTA de outra rota (data-contract-event -> sessionStorage) ------
 {
-  const fromUrl = loadHub({ contractOptions: ["", "risco_margem", "outro", "planejamento_contratacao"], search: "?evento=planejamento_contratacao", hash: "#captura-contrato" });
-  expect("contract_event_preselected_from_url_query", fromUrl.fields.contract_event.value === "planejamento_contratacao", fromUrl.fields.contract_event.value);
-  expect("url_query_change_dispatched", fromUrl.fields.contract_event.events.includes("change"), fromUrl.fields.contract_event.events.join(","));
-  const fromHash = loadHub({ contractOptions: ["", "risco_margem", "planejamento_contratacao"], hash: "#captura-contrato?evento=planejamento_contratacao" });
-  expect("contract_event_preselected_from_hash_query", fromHash.fields.contract_event.value === "planejamento_contratacao", fromHash.fields.contract_event.value);
-  const bogus = loadHub({ contractOptions: ["", "risco_margem", "planejamento_contratacao"], search: "?evento=evento_inventado" });
-  expect("url_unknown_option_rejected", bogus.fields.contract_event.value === "", bogus.fields.contract_event.value);
-  const injected = loadHub({ contractOptions: ["", "planejamento_contratacao"], search: "?evento=<script>x" });
-  expect("url_non_token_ignored", injected.fields.contract_event.value === "", injected.fields.contract_event.value);
-  const stored = JSON.parse(fromUrl.store.confenge_pseo_attribution || "{}");
-  expect("url_evento_not_persisted_as_attribution", !("evento" in stored) && !("contract_event" in stored), Object.keys(stored).join(","));
+  // Home: clique num link canonico (sem query string) para o hub com o evento em data-*.
+  const home = loadHub({ contractOptions: ["", "outro"], pathname: "/", estagioSelectOptions: ["x"] });
+  home.click({ contractEvent: "planejamento_contratacao" }, "/servicos-obras-publicas/#captura-contrato");
+  const saved = JSON.parse(home.store.confenge_form_preselect || "null");
+  expect("cross_route_preselect_saved_on_click", Boolean(saved) && saved.path === "/servicos-obras-publicas/" && saved.contract_event === "planejamento_contratacao", JSON.stringify(saved));
+  expect("cross_route_preselect_not_in_attribution", !("contract_event" in JSON.parse(home.store.confenge_pseo_attribution || "{}")));
+  // Chegada ao hub: o evento e aplicado e o registro apagado.
+  const hub = loadHub({ contractOptions: ["", "risco_margem", "outro", "planejamento_contratacao"], initialStore: { confenge_form_preselect: JSON.stringify(saved) } });
+  expect("contract_event_preselected_on_arrival", hub.fields.contract_event.value === "planejamento_contratacao", hub.fields.contract_event.value);
+  expect("arrival_change_dispatched", hub.fields.contract_event.events.includes("change"), hub.fields.contract_event.events.join(","));
+  expect("preselect_record_consumed", !("confenge_form_preselect" in hub.store), Object.keys(hub.store).join(","));
+  // Rota diferente da alvo: descartado sem aplicar.
+  const other = loadHub({ contractOptions: ["", "planejamento_contratacao"], pathname: "/defesa-margem-contratos-publicos/", initialStore: { confenge_form_preselect: JSON.stringify(saved) } });
+  expect("preselect_ignored_on_other_route", other.fields.contract_event.value === "" && !("confenge_form_preselect" in other.store), other.fields.contract_event.value);
+  // Registro velho (>30 min) descartado.
+  const stale = loadHub({ contractOptions: ["", "planejamento_contratacao"], initialStore: { confenge_form_preselect: JSON.stringify({ ...saved, saved_at: 1 }) } });
+  expect("preselect_stale_discarded", stale.fields.contract_event.value === "", stale.fields.contract_event.value);
+  // Valor fora do allowlist de options ou fora do padrao de token nunca entra.
+  const bogus = loadHub({ contractOptions: ["", "risco_margem"], initialStore: { confenge_form_preselect: JSON.stringify({ ...saved, contract_event: "<script>x" }) } });
+  expect("preselect_non_token_rejected", bogus.fields.contract_event.value === "", bogus.fields.contract_event.value);
+  // Clique local (mesma rota) nao grava registro entre rotas.
+  const local = loadHub({ contractOptions: ["", "planejamento_contratacao"] });
+  local.click({ contractEvent: "planejamento_contratacao" }, "#captura-contrato");
+  expect("same_route_click_does_not_persist", !("confenge_form_preselect" in local.store), Object.keys(local.store).join(","));
 }
 
 // --- A-08: hashNeeds ⊆ NEEDS do servidor ---------------------------------------
