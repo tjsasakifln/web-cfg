@@ -803,9 +803,19 @@ def test_ressalva_route_lists_are_explicit_and_disjoint() -> None:
     assert not set(RESSALVA_ROUTES) & set(RESSALVA_ROUTES_DEFERRED), "rota nas duas listas"
     for rel in RESSALVA_ROUTES + RESSALVA_ROUTES_DEFERRED:
         assert (ROOT / rel).is_file(), rel
+    # A exclusão é evidenciada, não tautológica: com a rota adiada dentro da
+    # lista, a regra 1 tem de apontar algo. Quando deixar de apontar, a
+    # exclusão perdeu o motivo e a rota deve ir para RESSALVA_ROUTES.
+    original = globals()["RESSALVA_ROUTES"]
+    try:
+        globals()["RESSALVA_ROUTES"] = original + RESSALVA_ROUTES_DEFERRED
+        for rel in RESSALVA_ROUTES_DEFERRED:
+            html = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+            assert redundancy_problems(rel, html), f"{rel}: regra 1 já não aponta nada; mover para RESSALVA_ROUTES"
+    finally:
+        globals()["RESSALVA_ROUTES"] = original
     for rel in RESSALVA_ROUTES_DEFERRED:
-        html = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
-        assert redundancy_problems(rel, html) == [], f"{rel}: rota adiada não pode ser avaliada"
+        assert redundancy_problems(rel, "<main><p>x</p></main>") == [], f"{rel}: rota adiada está sendo avaliada"
 
 
 def test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone() -> None:
