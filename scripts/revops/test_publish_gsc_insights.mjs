@@ -8,6 +8,7 @@ import {
   publish,
   restoreHistory,
   rollback,
+  validateProducerHistory,
   validatePublishable,
   validateSyncProvenance,
 } from "./publish_gsc_insights.mjs";
@@ -150,6 +151,31 @@ const syncState = {
   manifest_sha256: history.last_known_good.snapshot_sha256,
 };
 check("current_sync_provenance", validateSyncProvenance(insights, syncState, history));
+const repeatedAttemptAt = new Date(now.getTime() + 60_000).toISOString();
+const repeatedHistory = structuredClone(history);
+repeatedHistory.last_attempt = {
+  ...repeatedHistory.last_attempt,
+  attempted_at: repeatedAttemptAt,
+  outcome: "SNAPSHOT_REPEATED",
+  reason_codes: ["snapshot_repeated"],
+};
+check(
+  "repeated_snapshot_accepts_existing_observation",
+  validateProducerHistory({ ...syncState, last_sync_at: repeatedAttemptAt }, repeatedHistory).hasProducerSnapshot,
+);
+try {
+  validateProducerHistory(
+    { ...syncState, last_sync_at: new Date(now.getTime() + 120_000).toISOString() },
+    repeatedHistory,
+  );
+  check("repeated_snapshot_requires_latest_attempt_time", false);
+} catch (error) {
+  check(
+    "repeated_snapshot_requires_latest_attempt_time",
+    error.message === "gsc_sync_producer_history_mismatch",
+    error.message,
+  );
+}
 for (const [name, patch] of [
   ["fixture_snapshot_rejected", { fixture: true }],
   ["invented_baseline_rejected", { live_baseline_invented: true }],

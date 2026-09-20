@@ -3,6 +3,7 @@ from pathlib import Path
 from scripts.pseo.build_site import (
     atomize_visible_currency,
     ensure_progressive_enhancement_marker,
+    fingerprint_main_script,
     mark_visible_opaque_tokens,
     normalize_responsive_public_html,
 )
@@ -111,3 +112,38 @@ def test_public_normalization_preserves_non_visible_contracts(tmp_path: Path) ->
     }
     assert "<p>R$&nbsp;2.900</p>" in rendered
     assert '{"price":"R$ 2.900"}' in rendered
+
+
+def test_main_script_fingerprint_replaces_stale_and_missing_queries(tmp_path: Path) -> None:
+    (tmp_path / "script.js").write_bytes(b"console.log('release-a');\n")
+    (tmp_path / "index.html").write_text(
+        '<script defer src="/script.js?v=fortune04"></script>', encoding="utf-8"
+    )
+    nested = tmp_path / "servico"
+    nested.mkdir()
+    (nested / "index.html").write_text(
+        "<script defer src='/script.js'></script>", encoding="utf-8"
+    )
+
+    report = fingerprint_main_script(tmp_path)
+
+    assert report["algorithm"] == "sha256-16"
+    assert report["files"] == 2
+    assert report["references"] == 2
+    assert report["src"].startswith("/script.js?v=")
+    assert report["src"] in (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert report["src"] in (nested / "index.html").read_text(encoding="utf-8")
+    assert fingerprint_main_script(tmp_path) == report
+
+
+def test_main_script_fingerprint_changes_with_bundle_bytes(tmp_path: Path) -> None:
+    script = tmp_path / "script.js"
+    page = tmp_path / "index.html"
+    script.write_bytes(b"release-a")
+    page.write_text('<script src="/script.js"></script>', encoding="utf-8")
+    first = fingerprint_main_script(tmp_path)
+    script.write_bytes(b"release-b")
+    second = fingerprint_main_script(tmp_path)
+
+    assert first["fingerprint"] != second["fingerprint"]
+    assert second["src"] in page.read_text(encoding="utf-8")

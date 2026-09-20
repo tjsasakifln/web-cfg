@@ -84,6 +84,32 @@ function adaptiveIdempotencyMaterialHash(lead) {
   return crypto.createHash("sha256").update(JSON.stringify(material)).digest("hex");
 }
 
+const STANDARD_IDEMPOTENCY_MATERIAL_FIELDS = Object.freeze([
+  "nome", "telefone", "email", "empresa", "estagio", "jornada", "urgencia",
+  "mensagem", "consentimento", "deliverable_id", "analysis_cutoff",
+  "opportunity_deadline", "contract_event", "contract_stage", "procurement_object",
+  "procurement_stage", "procurement_regulation", "funding_source",
+  "contract_value_band", "lot_count", "execution_regime", "decision_intent",
+  "faixa_contrato", "risco_em_jogo", "frequencia", "maturidade_documental",
+  "capacidade_interna", "public_contract_id", "public_entity_id", "public_id_slug",
+  "cnpj", "offer_id", "terms_id", "document_intent", "intent_kind", "canal_seguro",
+]);
+
+function standardIdempotencyMaterialHash(lead) {
+  if (!lead || lead.adaptive_intake === true) return null;
+  const material = {};
+  for (const field of STANDARD_IDEMPOTENCY_MATERIAL_FIELDS) {
+    material[field] = Object.prototype.hasOwnProperty.call(lead, field) ? lead[field] : null;
+  }
+  return crypto.createHash("sha256").update(JSON.stringify(material)).digest("hex");
+}
+
+function idempotencyMaterialHashFor(lead) {
+  return lead && lead.adaptive_intake === true
+    ? adaptiveIdempotencyMaterialHash(lead)
+    : standardIdempotencyMaterialHash(lead);
+}
+
 function setStoreForTests(store) {
   _storeOverride = store;
 }
@@ -268,7 +294,7 @@ exports.handler = async (event) => {
     lead.idempotency_key;
   const idemKey = idempotencyKeyFor(lead, headerIdem || null);
   lead.idempotency_key = idemKey;
-  const idempotencyMaterialHash = adaptiveIdempotencyMaterialHash(lead);
+  const idempotencyMaterialHash = idempotencyMaterialHashFor(lead);
 
   // Deterministic id from idempotency key — same key always same lead_id even if
   // the idempotency map read is eventually consistent on first retry.
@@ -276,13 +302,14 @@ exports.handler = async (event) => {
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const idempotentOk = (rec) => {
-    if (
-      idempotencyMaterialHash &&
-      rec &&
-      (rec.adaptive_intake !== true ||
-        !rec.idempotency_material_hash ||
-        rec.idempotency_material_hash !== idempotencyMaterialHash)
-    ) {
+    const storedMaterialHash = rec && rec.adaptive_intake === true
+      ? rec.idempotency_material_hash
+      : rec && (rec.idempotency_material_hash || standardIdempotencyMaterialHash(rec));
+    if (idempotencyMaterialHash && rec && (
+      Boolean(rec.adaptive_intake) !== Boolean(lead.adaptive_intake) ||
+      !storedMaterialHash ||
+      storedMaterialHash !== idempotencyMaterialHash
+    )) {
       return {
         statusCode: 409,
         headers,

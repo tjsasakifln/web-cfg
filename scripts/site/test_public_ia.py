@@ -229,6 +229,9 @@ def test_footer_is_not_a_taxonomy_dump():
     assert "Inteligência" not in rendered
     assert "Metodologia" not in rendered
     assert rendered.count("<a ") <= 16
+    assert "Perícias e avaliações" not in rendered
+    assert '<a href="/#situacao-pericia">Perícias e disputas</a>' in rendered
+    assert '<a href="/#situacao-avaliacao">Avaliação de imóvel</a>' in rendered
 
 
 def _assert_national_service_is_conditioned(rendered: str) -> None:

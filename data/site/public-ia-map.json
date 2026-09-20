@@ -184,8 +184,12 @@
             "href": "/#situacao-projeto"
           },
           {
-            "label": "Perícias e avaliações",
+            "label": "Perícias e disputas",
             "href": "/#situacao-pericia"
+          },
+          {
+            "label": "Avaliação de imóvel",
+            "href": "/#situacao-avaliacao"
           },
           {
             "label": "Segurança do trabalho",

@@ -136,6 +136,38 @@ export function validateSyncProvenance(insights, syncState, history) {
   return true;
 }
 
+function sameInstant(left, right) {
+  const leftMs = Date.parse(left || "");
+  const rightMs = Date.parse(right || "");
+  return Number.isFinite(leftMs) && Number.isFinite(rightMs) && leftMs === rightMs;
+}
+
+export function validateProducerHistory(syncState, history) {
+  const hasProducerSnapshot = /^[a-f0-9]{64}$/.test(String(syncState.manifest_sha256 || "")) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(String(syncState.as_of || ""));
+  const hasPartialProducerSnapshot = Boolean(syncState.manifest_sha256) !== Boolean(syncState.as_of);
+  if (hasPartialProducerSnapshot || ((!hasProducerSnapshot) && (syncState.manifest_sha256 || syncState.as_of))) {
+    throw new Error("gsc_sync_producer_manifest_invalid");
+  }
+  const lastAttemptMatches =
+    history.last_attempt?.snapshot_sha256 === syncState.manifest_sha256 &&
+    history.last_attempt?.as_of === syncState.as_of &&
+    sameInstant(history.last_attempt?.attempted_at, syncState.last_sync_at);
+  const matchingObservation = hasProducerSnapshot && history.observations.some((observation) =>
+    observation.snapshot_sha256 === syncState.manifest_sha256 &&
+    observation.as_of === syncState.as_of &&
+    (history.last_attempt?.outcome === "SNAPSHOT_REPEATED" || sameInstant(observation.observed_at, syncState.last_sync_at))
+  );
+  if (
+    (hasProducerSnapshot && (!lastAttemptMatches || !matchingObservation)) ||
+    (!hasProducerSnapshot &&
+      (history.last_attempt?.snapshot_sha256 != null || history.last_attempt?.as_of != null))
+  ) {
+    throw new Error("gsc_sync_producer_history_mismatch");
+  }
+  return { hasProducerSnapshot };
+}
+
 export async function restoreHistory({
   output = DEFAULT_HISTORY_STATE,
   baseUrl,
@@ -206,27 +238,7 @@ export async function publish({
     expected = validatePublishable(insights);
     validateSyncProvenance(insights, syncState, history);
   }
-  const hasProducerSnapshot = /^[a-f0-9]{64}$/.test(String(syncState.manifest_sha256 || "")) &&
-    /^\d{4}-\d{2}-\d{2}$/.test(String(syncState.as_of || ""));
-  const hasPartialProducerSnapshot = Boolean(syncState.manifest_sha256) !== Boolean(syncState.as_of);
-  if (hasPartialProducerSnapshot || ((!hasProducerSnapshot) && (syncState.manifest_sha256 || syncState.as_of))) {
-    throw new Error("gsc_sync_producer_manifest_invalid");
-  }
-  const matchingObservation = hasProducerSnapshot && history.observations.some((observation) =>
-    observation.snapshot_sha256 === syncState.manifest_sha256 &&
-    observation.as_of === syncState.as_of &&
-    observation.observed_at === syncState.last_sync_at
-  );
-  if (
-    (hasProducerSnapshot &&
-      (history.last_attempt?.snapshot_sha256 !== syncState.manifest_sha256 ||
-        history.last_attempt?.as_of !== syncState.as_of ||
-        !matchingObservation)) ||
-    (!hasProducerSnapshot &&
-      (history.last_attempt?.snapshot_sha256 != null || history.last_attempt?.as_of != null))
-  ) {
-    throw new Error("gsc_sync_producer_history_mismatch");
-  }
+  const { hasProducerSnapshot } = validateProducerHistory(syncState, history);
   const producer = {
     schema_version: syncState.schema_version,
     manifest_schema_version: syncState.manifest_schema_version,
