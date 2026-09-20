@@ -90,10 +90,10 @@ from sanitized server fields, never PII:
 
 | Label | Source | When |
 | --- | --- | --- |
-| `situação declarada=<estagio>` | stored `estagio` (the situation the visitor chose on the home, or the server-derived `planejamento-contratacao-publica`) | every lead whose `estagio` is not the route/asset id itself and not the `/entregas/` service family (which keeps `família de serviço=`) |
+| `situação declarada=<estagio>` | stored `estagio` (the situation the visitor chose on the home, or the server-derived `planejamento-contratacao-publica`; the pre-filled contracting-authority `estagio` is dropped back to the form's `asset_id` when the visitor picks a contractor event instead) | every lead whose `estagio` is not the route/asset id itself and not the `/entregas/` service family (which keeps `família de serviço=`) |
 | `lado=orgao_contratante` | `contract_event=planejamento_contratacao` | the contracting authority declared itself on `/servicos-obras-publicas/#captura-contrato` |
 | `objeto=`, `estágio da contratação=`, `regulamento=`, `origem do recurso=` | optional `procurement_object`, `procurement_stage` (enum), `procurement_regulation`, `funding_source` (enum) | present only when the visitor filled them; `procurement_object` / `procurement_regulation` are sanitized like `tema` (no e-mail, no long digit runs) |
-| `entrega=CFG-Dnn` on the frozen pillars | derived in `lead-core.cjs` from the route slug (`estagio`/`asset_id`/landing path) via `deliverables-registry.v1.json` when the form posts no `deliverable_id` | the eight pillar forms without a hidden `deliverable_id`; a posted value always wins; the derived id never opens product qualification, so a pillar hand-raise stays free of `qualification_gaps` |
+| `entrega=CFG-Dnn` on the frozen pillars | derived in `lead-core.cjs` from the form's pre-rendered identity only (`estagio`/`asset_id`/`route_family`, never `landing_page`/`landing_url`, which are first-touch attribution) via `deliverables-registry.v1.json` when the form posts no `deliverable_id` | the eight pillar forms without a hidden `deliverable_id`; a posted value always wins; the derived id never opens product qualification, so a pillar hand-raise stays free of `qualification_gaps` |
 
 The órgão keeps `journey=contrato` (no `orgao` journey in `ALLOWED_JOURNEYS`;
 decision P-3): the side is the structured event above, and the situation is the
