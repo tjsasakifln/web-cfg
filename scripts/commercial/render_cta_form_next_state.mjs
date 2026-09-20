@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildInventory } from "./cta_form_next_state_audit.mjs";
 import { deriveFieldPurpose, markOptionalLabels } from "./form_field_purpose.mjs";
+import { ensureNojsNote, pageHasOwnNojsNote } from "./form_nojs_note.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contract = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/cta-form-next-state.v1.json"), "utf8"));
@@ -131,7 +132,7 @@ function constrainContact(body, runtime, ensurePhoneTouchTarget) {
   return next;
 }
 
-function constrainSharedSelectors(body, runtime) {
+function constrainSharedSelectors(body, runtime, pageHtml = "") {
   if (runtime !== "shared_lead_form_v1") return body;
   let next = body.replace(
     /<input\b(?=[^>]*\bname=["']jornada["'])[^>]*>/i,
@@ -141,6 +142,16 @@ function constrainSharedSelectors(body, runtime) {
     /<(?:input|select)\b(?=[^>]*\bname=["']estagio["'])[^>]*>/i,
     (tag) => /\bid=["']/i.test(tag) ? tag : setInputAttr(tag, "id", "estagio"),
   );
+  // CONTEXTO-CAPTURA-07 (BOFU-FECHAMENTO-20260919): o runtime pre-preenche
+  // `textarea#mensagem` com o tema do CTA de origem (js/modules/nav.js). Um
+  // textarea de mensagem sem id perdia o pre-preenchimento visivel; o id so
+  // entra quando a pagina ainda nao o usa em outro controle.
+  if (!/\bid=["']mensagem["']/i.test(pageHtml)) {
+    next = next.replace(
+      /<textarea\b(?=[^>]*\bname=["']mensagem["'])[^>]*>/i,
+      (tag) => /\bid=["']/i.test(tag) ? tag : setInputAttr(tag, "id", "mensagem"),
+    );
+  }
   return next;
 }
 
@@ -230,7 +241,7 @@ function relocateDeliveryContract(html) {
   );
 }
 
-function renderForm(full, open, body, surface) {
+function renderForm(full, open, body, surface, pageHtml) {
   const profileId = profileFor(surface);
   const profile = contract.profiles[profileId];
   const runtime = runtimeProfile(open);
@@ -240,9 +251,15 @@ function renderForm(full, open, body, surface) {
   nextOpen = setAttr(nextOpen, "data-runtime-profile", runtime);
   nextOpen = setAttr(nextOpen, "data-receipt-required", "true");
   const ensurePhoneTouchTarget = profileId === "configured_delivery_request";
-  let nextBody = constrainSharedSelectors(constrainContact(body, runtime, ensurePhoneTouchTarget), runtime);
+  let nextBody = constrainSharedSelectors(constrainContact(body, runtime, ensurePhoneTouchTarget), runtime, pageHtml);
+  // CONTEXTO-CAPTURA-05 (BOFU-FECHAMENTO-20260919): todo formulario ativo
+  // explica o caso sem JavaScript dentro de <noscript>, com os canais que a
+  // propria pagina publica (scripts/commercial/form_nojs_note.mjs). A home
+  // mantem a nota propria alternada por CSS e nao e tocada.
+  const withNojsNote = (source) => (pageHasOwnNojsNote(pageHtml) ? source : ensureNojsNote(source, pageHtml));
   if (profileId === "delivery_selection") {
     nextBody = removeMarker(removeMarker(removeMarker(nextBody, "data-form-value"), "data-field-purpose"), "data-form-boundary");
+    nextBody = withNojsNote(nextBody);
     nextBody = updateSubmit(nextBody, profileId);
     return `${nextOpen}${nextBody}</form>`;
   }
@@ -272,6 +289,7 @@ function renderForm(full, open, body, surface) {
     runtime === "adaptive_intake_standalone_v1" ? 'id="contato-hint"' : "",
   );
   nextBody = replaceMarker(nextBody, "data-form-value", profile.pre_form_value, "form-hint");
+  nextBody = withNojsNote(nextBody);
   nextBody = updateSubmit(nextBody, profileId);
   nextBody = appendBoundary(nextBody, profile.boundary);
   return `${nextOpen}${nextBody}</form>`;
@@ -285,7 +303,7 @@ function renderFile(html, surface) {
     const id = attrValue(attrs, "id");
     if (!["/.netlify/functions/lead", "/api/web/lead"].includes(action) && id !== "formulario-contato") return full;
     matched += 1;
-    return renderForm(full, open, body, surface);
+    return renderForm(full, open, body, surface, html);
   });
   if (matched !== 1) throw new Error(`CTA_FORM_RENDER_COUNT: ${surface.route} count=${matched}`);
   const actions = updateMainActions(next);

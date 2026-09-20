@@ -74,7 +74,7 @@
     "test:copy-contract": "node tests/commercial/test_copy_contract.mjs",
     "test:value-first-copy": "node tests/commercial/test_value_first_copy.mjs",
     "report:value-first-copy": "node scripts/commercial/value_first_copy_audit.mjs --ref 583d2d88e5f5b83cd774d9366deaf9d03fe0a19a --write docs/commercial/value-first-copy-baseline-583d2d88e.json",
-    "test:cta-form-next-state": "node tests/commercial/test_cta_form_next_state.mjs && node scripts/commercial/render_cta_form_next_state.mjs --check",
+    "test:cta-form-next-state": "node tests/commercial/test_cta_form_next_state.mjs && node scripts/commercial/render_cta_form_next_state.mjs --check && python3 scripts/site/apply_form_nojs_note.py --check",
     "report:cta-form-next-state": "node scripts/commercial/cta_form_next_state_audit.mjs --write docs/commercial/cta-form-next-state-inventory.json",
     "evidence:cta-form-next-state": "node scripts/site/capture_issue_532_form_states.mjs",
     "test:page-contract-integridade": "node tests/commercial/test_page_contract_integridade.mjs",
