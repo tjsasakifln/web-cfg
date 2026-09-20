@@ -44,7 +44,7 @@ function control(name, tag, value, options) {
   return el;
 }
 
-function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptions = null }) {
+function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptions = null, search = "", hash = "" }) {
   const fields = {
     contract_event: control("contract_event", "SELECT", "", contractOptions),
     estagio: estagioSelectOptions
@@ -94,7 +94,7 @@ function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptio
   const windowObj = {
     dataLayer: [],
     matchMedia: () => ({ matches: false }),
-    location: { pathname: "/servicos-obras-publicas/", search: "", hash: "" },
+    location: { pathname: "/servicos-obras-publicas/", search, hash },
     document,
     addEventListener: () => {},
     innerHeight: 800,
@@ -154,6 +154,21 @@ function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptio
   const legacy = loadHub({ contractOptions: ["", "risco_margem", "outro"] });
   legacy.click({ contractEvent: "planejamento_contratacao" });
   expect("missing_option_leaves_select_empty", legacy.fields.contract_event.value === "", legacy.fields.contract_event.value);
+}
+
+// --- PUBLICAS-02: CTA de outra rota chega por ?evento= ---------------------------
+{
+  const fromUrl = loadHub({ contractOptions: ["", "risco_margem", "outro", "planejamento_contratacao"], search: "?evento=planejamento_contratacao", hash: "#captura-contrato" });
+  expect("contract_event_preselected_from_url_query", fromUrl.fields.contract_event.value === "planejamento_contratacao", fromUrl.fields.contract_event.value);
+  expect("url_query_change_dispatched", fromUrl.fields.contract_event.events.includes("change"), fromUrl.fields.contract_event.events.join(","));
+  const fromHash = loadHub({ contractOptions: ["", "risco_margem", "planejamento_contratacao"], hash: "#captura-contrato?evento=planejamento_contratacao" });
+  expect("contract_event_preselected_from_hash_query", fromHash.fields.contract_event.value === "planejamento_contratacao", fromHash.fields.contract_event.value);
+  const bogus = loadHub({ contractOptions: ["", "risco_margem", "planejamento_contratacao"], search: "?evento=evento_inventado" });
+  expect("url_unknown_option_rejected", bogus.fields.contract_event.value === "", bogus.fields.contract_event.value);
+  const injected = loadHub({ contractOptions: ["", "planejamento_contratacao"], search: "?evento=<script>x" });
+  expect("url_non_token_ignored", injected.fields.contract_event.value === "", injected.fields.contract_event.value);
+  const stored = JSON.parse(fromUrl.store.confenge_pseo_attribution || "{}");
+  expect("url_evento_not_persisted_as_attribution", !("evento" in stored) && !("contract_event" in stored), Object.keys(stored).join(","));
 }
 
 // --- A-08: hashNeeds ⊆ NEEDS do servidor ---------------------------------------

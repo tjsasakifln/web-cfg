@@ -652,6 +652,14 @@
       || sanitizeAttr(searchParams.get('origem') || hashParams.get('origem'), 'origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
+    // BOFU-FECHAMENTO-20260919 (PUBLICAS-02): um CTA de OUTRA rota chega com
+    // ?evento=<valor> (ou #captura-contrato?evento=) e pre-seleciona o evento
+    // do formulario desta pagina pelo mesmo caminho do CTA local: so um valor
+    // que exista como <option>; nada persiste em sessionStorage.
+    const eventoFromUrl = searchParams.get('evento') || hashParams.get('evento');
+    if (eventoFromUrl && /^[a-z_]{1,64}$/.test(String(eventoFromUrl))) {
+      applyDatasetToForm({ dataset: { contractEvent: String(eventoFromUrl) } });
+    }
     const ensureHidden = (fname, fval, force = false) => {
       if (!form || fval == null || fval === '') return;
       let input = form.querySelector(`input[name="${fname}"]`);
