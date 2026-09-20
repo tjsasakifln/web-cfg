@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -13,7 +14,7 @@ import {
 import { evaluateConsumerPayload } from "./verify_gsc_freshness.mjs";
 
 const require = createRequire(import.meta.url);
-const { historyHash, observationHash } = require("../../netlify/functions/lib/gsc-history.cjs");
+const { canonicalJson, historyHash, observationHash } = require("../../netlify/functions/lib/gsc-history.cjs");
 const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 
 const NOW = new Date("2026-08-29T12:00:00Z");
@@ -136,6 +137,15 @@ function validInsights(history) {
       ],
       legacy_entity_demand_still_ranking: [],
     },
+  };
+}
+
+function sealForTest(value, field) {
+  const unsigned = { ...value };
+  delete unsigned[field];
+  return {
+    ...unsigned,
+    [field]: crypto.createHash("sha256").update(canonicalJson(unsigned)).digest("hex"),
   };
 }
 
@@ -440,6 +450,23 @@ test("a ready repeated snapshot advances history and carries the exact known ins
     { producer: producer(), history: firstHistory, insights: validInsights(firstHistory) },
     { now: NOW },
   );
+  const pointer = records.get("gsc-private-current-v1");
+  const initialId = `gsc-private-snapshot-v1:${pointer.current_snapshot_sha256}`;
+  const legacyUnsigned = structuredClone(records.get(initialId));
+  delete legacyUnsigned.source_observed_at;
+  delete legacyUnsigned.content_carried_forward;
+  const legacySnapshot = sealForTest(legacyUnsigned, "snapshot_sha256");
+  const legacyId = `gsc-private-snapshot-v1:${legacySnapshot.snapshot_sha256}`;
+  records.delete(initialId);
+  records.set(legacyId, legacySnapshot);
+  records.set("gsc-private-current-v1", sealForTest({
+    ...pointer,
+    current_snapshot_sha256: legacySnapshot.snapshot_sha256,
+    latest_snapshot_sha256: legacySnapshot.snapshot_sha256,
+  }, "pointer_sha256"));
+  const legacyRead = await readPrivateGscSnapshot(store, { now: NOW });
+  assert.equal(legacyRead.status, "CURRENT");
+  assert.equal(legacyRead.meta.snapshot_sha256, legacySnapshot.snapshot_sha256);
   const repeatAt = "2026-08-29T12:05:00.002Z";
   const repeatHistory = repeatedHistory(firstHistory, repeatAt);
   const repeated = await persistPrivateGscSnapshot(

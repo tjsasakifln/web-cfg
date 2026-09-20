@@ -133,16 +133,17 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
     return { ok: false, status: "UNKNOWN", error: "gsc_private_snapshot_provenance_mismatch" };
   }
   const observation = sourceObservation(snapshot.history, snapshot.manifest_sha256, snapshot.as_of);
+  const sourceObservedAt = snapshot.source_observed_at || snapshot.produced_at;
   if (
     snapshot.manifest_sha256 &&
-    (!observation || !sameInstant(snapshot.source_observed_at, observation.observed_at))
+    (!observation || !sameInstant(sourceObservedAt, observation.observed_at))
   ) {
     return { ok: false, status: "UNKNOWN", error: "gsc_private_snapshot_source_observation_mismatch" };
   }
   const freshness = classifyFreshness(
     {
       asOf: snapshot.as_of,
-      producedAt: snapshot.source_observed_at || snapshot.produced_at,
+      producedAt: sourceObservedAt,
       ingestedAt: snapshot.ingested_at,
     },
     now,
