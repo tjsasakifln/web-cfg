@@ -31,6 +31,13 @@
       "findings": [
         {
           "gate": "conversion",
+          "path": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+          "reason": "capture_whatsapp_exempt",
+          "excerpt": "/casos/modelo-relatorio-inteligencia-licitacoes/ issue=#705 dated=2026-09-19 expires_at=none",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
           "path": "comercial/privacidade-leads/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
@@ -39,13 +46,6 @@
         {
           "gate": "conversion",
           "path": "comercial/termos-diagnostico-b2g/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "compatibilizacao-projetos-engenharia/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -88,6 +88,13 @@
         {
           "gate": "conversion",
           "path": "diagnostico-pre-licitacao/index.html",
+          "reason": "capture_nojs_note_debt",
+          "excerpt": "/diagnostico-pre-licitacao/ issue=#705 dated=2026-09-19 expires_at=2026-10-19",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-pre-licitacao/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -97,6 +104,27 @@
           "path": "especialista/tiago-jun-sasaki/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "capture_whatsapp_debt",
+          "excerpt": "/ferramentas/checklist-reequilibrio/ issue=#705 dated=2026-09-19 expires_at=2026-10-19",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/diagnostico-defesa-margem/index.html",
+          "reason": "capture_whatsapp_debt",
+          "excerpt": "/ferramentas/diagnostico-defesa-margem/ issue=#705 dated=2026-09-19 expires_at=2026-10-19",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "ferramentas/limite-acrescimos-supressoes/index.html",
+          "reason": "capture_whatsapp_debt",
+          "excerpt": "/ferramentas/limite-acrescimos-supressoes/ issue=#705 dated=2026-09-19 expires_at=2026-10-19",
           "severity": "warn"
         },
         {
@@ -115,35 +143,7 @@
         },
         {
           "gate": "conversion",
-          "path": "projetos-complementares-engenharia/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "quantitativos-orcamento-obras/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "revisao-tecnica-projetos-engenharia/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "seguranca-trabalho-apoio-tecnico/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "servicos/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -186,6 +186,63 @@
           "covered": 10,
           "total": 10,
           "coverage": 1.0
+        },
+        "capture_route_channels": {
+          "covered": 31,
+          "total": 31,
+          "coverage": 1.0,
+          "exemptions": [
+            {
+              "route": "/diagnostico-pre-licitacao/",
+              "family": null,
+              "kind": "capture_nojs_note_debt",
+              "reason": "pilar protegido por hash sem a nota <noscript>; entra na recaptura dos pilares",
+              "owner_issue": 705,
+              "dated": "2026-09-19",
+              "expires_at": "2026-10-19",
+              "expired": false
+            },
+            {
+              "route": "/ferramentas/checklist-reequilibrio/",
+              "family": null,
+              "kind": "capture_whatsapp_debt",
+              "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
+              "owner_issue": 705,
+              "dated": "2026-09-19",
+              "expires_at": "2026-10-19",
+              "expired": false
+            },
+            {
+              "route": "/ferramentas/diagnostico-defesa-margem/",
+              "family": null,
+              "kind": "capture_whatsapp_debt",
+              "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
+              "owner_issue": 705,
+              "dated": "2026-09-19",
+              "expires_at": "2026-10-19",
+              "expired": false
+            },
+            {
+              "route": "/ferramentas/limite-acrescimos-supressoes/",
+              "family": null,
+              "kind": "capture_whatsapp_debt",
+              "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
+              "owner_issue": 705,
+              "dated": "2026-09-19",
+              "expires_at": "2026-10-19",
+              "expired": false
+            },
+            {
+              "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+              "family": null,
+              "kind": "capture_whatsapp_exempt",
+              "reason": "scripts/site/test_report_model_599.py veta wa.me no modelo D01; a ação comercial única é /comercial/radar-decisorio/ e o e-mail fica ao lado do formulário",
+              "owner_issue": 705,
+              "dated": "2026-09-19",
+              "expires_at": null,
+              "expired": false
+            }
+          ]
         },
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
@@ -411,6 +468,13 @@
         },
         {
           "gate": "archetype_editorial_ready",
+          "path": "conteudos/comparar-propostas-execucao-obra/index.html",
+          "reason": "archetype_cta_subordinate_failed",
+          "excerpt": "family=private-engineering-quantities-budget 1/4 sampled pages fail: /quantitativos-orcamento-obras/: 8 CTAs in <main> for 2866 words (max 7)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
           "path": "acompanhamento-contratos-obras/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=service-pillars 1/6 sampled pages fail: /bid-room-licitacoes-obras/: 2 concrete specifics (min 3)",
@@ -427,7 +491,7 @@
           "gate": "archetype_editorial_ready",
           "path": "acompanhamento-contratos-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=service-pillars 2/6 sampled pages fail: /acompanhamento-contratos-obras/: 4 CTAs in <main> for 1325 words (max 3); /atrasos-prorrogacao-obras-publicas/: 5 CTAs in <main> for 1746 words (max 4)",
+          "excerpt": "family=service-pillars 2/6 sampled pages fail: /acompanhamento-contratos-obras/: 4 CTAs in <main> for 1325 words (max 3); /atrasos-prorrogacao-obras-publicas/: 5 CTAs in <main> for 1743 words (max 4)",
           "severity": "warn"
         },
         {
@@ -602,7 +666,7 @@
           "gate": "archetype_editorial_ready",
           "path": "entregas/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3564 words (max 8)",
+          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 30 CTAs in <main> for 3660 words (max 9)",
           "severity": "warn"
         },
         {
@@ -714,7 +778,7 @@
           "gate": "archetype_editorial_ready",
           "path": "compatibilizacao-projetos-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=engineering-projects-coordination-clash 1/1 sampled pages fail: /compatibilizacao-projetos-engenharia/: 10 CTAs in <main> for 2083 words (max 5)",
+          "excerpt": "family=engineering-projects-coordination-clash 1/1 sampled pages fail: /compatibilizacao-projetos-engenharia/: 10 CTAs in <main> for 2093 words (max 5)",
           "severity": "warn"
         },
         {
@@ -742,7 +806,7 @@
           "gate": "archetype_editorial_ready",
           "path": "revisao-tecnica-projetos-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: 9 CTAs in <main> for 1888 words (max 4)",
+          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: 9 CTAs in <main> for 1898 words (max 4)",
           "severity": "warn"
         },
         {
@@ -770,7 +834,7 @@
           "gate": "archetype_editorial_ready",
           "path": "projetos-complementares-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=complementary-engineering-elaboration 1/1 sampled pages fail: /projetos-complementares-engenharia/: 6 CTAs in <main> for 2185 words (max 5)",
+          "excerpt": "family=complementary-engineering-elaboration 1/1 sampled pages fail: /projetos-complementares-engenharia/: 9 CTAs in <main> for 2195 words (max 5)",
           "severity": "warn"
         },
         {
@@ -791,7 +855,7 @@
           "gate": "archetype_editorial_ready",
           "path": "inspecao-diagnostico-edificacoes/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=inspecao-diagnostico-edificacoes 1/1 sampled pages fail: /inspecao-diagnostico-edificacoes/: 7 CTAs in <main> for 2291 words (max 5)",
+          "excerpt": "family=inspecao-diagnostico-edificacoes 1/1 sampled pages fail: /inspecao-diagnostico-edificacoes/: 13 CTAs in <main> for 2693 words (max 6)",
           "severity": "warn"
         },
         {
@@ -805,7 +869,7 @@
           "gate": "archetype_editorial_ready",
           "path": "assistencia-tecnica-pericial-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=assistencia-tecnica-pericial-engenharia 1/1 sampled pages fail: /assistencia-tecnica-pericial-engenharia/: 6 CTAs in <main> for 1898 words (max 4)",
+          "excerpt": "family=assistencia-tecnica-pericial-engenharia 1/1 sampled pages fail: /assistencia-tecnica-pericial-engenharia/: 9 CTAs in <main> for 1817 words (max 4)",
           "severity": "warn"
         },
         {
@@ -819,7 +883,7 @@
           "gate": "archetype_editorial_ready",
           "path": "seguranca-trabalho-apoio-tecnico/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 7 CTAs in <main> for 2461 words (max 6)",
+          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 11 CTAs in <main> for 2593 words (max 6)",
           "severity": "warn"
         }
       ],
@@ -881,7 +945,8 @@
               "/quantitativos-orcamento-obras/"
             ],
             "blocking": [
-              "specific_value"
+              "specific_value",
+              "cta_subordinate"
             ],
             "material": []
           },

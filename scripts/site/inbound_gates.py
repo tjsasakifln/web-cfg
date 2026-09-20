@@ -1171,6 +1171,168 @@ def _has_contextual_direct_contact(main: str, route: str) -> bool:
     return False
 
 
+# --- Capture routes: direct channels beside the form and the no-JS note ---
+# BOFU-FECHAMENTO-20260919 (CONTEXTO-CAPTURA-01/-05/-06). Every indexable route
+# whose <main> publishes an active capture form must also publish, outside
+# <noscript>: a wa.me link in <main>, a mailto: link on the page (the footer of
+# every route carries the address) and the no-JS note that names a channel
+# ("Sem JavaScript, este formulário não envia…", written by
+# scripts/commercial/form_nojs_note.mjs inside the form, or the home's own
+# .form-nojs-note toggled by CSS). Before this rule /analise-cnpj/ had no
+# channel at all and 14 generated forms had no note.
+#
+# Exceptions are route-exact, dated, owned by an issue and reported on every
+# run in stats["exemptions"]; a dated one expires, and one whose route already
+# publishes the channel is reported for removal. They mirror the decisions in
+# tests/campaigns/bofu_fechamento_20260919/test_ws_a_orgao_hub_canais.py.
+CAPTURE_FORM_ACTION_RE = re.compile(
+    r'(?is)<form\b(?=[^>]*\b(?:action=["\'](?:/\.netlify/functions/lead|/api/web/lead)["\']'
+    r'|id=["\']formulario-contato["\']))[^>]*>(.*?)</form\s*>'
+)
+NOJS_NOTE_TEXT = "Sem JavaScript, este formulário não envia"
+CAPTURE_WHATSAPP_EXCEPTIONS: dict[str, dict[str, Any]] = {
+    "/casos/modelo-relatorio-inteligencia-licitacoes/": {
+        "kind": "capture_whatsapp_exempt",
+        "dated": "2026-09-19",
+        "owner_issue": 705,
+        "expires_at": None,
+        "reason": (
+            "scripts/site/test_report_model_599.py veta wa.me no modelo D01; a ação comercial "
+            "única é /comercial/radar-decisorio/ e o e-mail fica ao lado do formulário"
+        ),
+    },
+    "/ferramentas/checklist-reequilibrio/": {
+        "kind": "capture_whatsapp_debt",
+        "dated": "2026-09-19",
+        "owner_issue": 705,
+        "expires_at": "2026-10-19",
+        "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
+    },
+    "/ferramentas/diagnostico-defesa-margem/": {
+        "kind": "capture_whatsapp_debt",
+        "dated": "2026-09-19",
+        "owner_issue": 705,
+        "expires_at": "2026-10-19",
+        "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
+    },
+    "/ferramentas/limite-acrescimos-supressoes/": {
+        "kind": "capture_whatsapp_debt",
+        "dated": "2026-09-19",
+        "owner_issue": 705,
+        "expires_at": "2026-10-19",
+        "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
+    },
+}
+# Pilar preso por hash (unlock-plan.v1.json, html_mutation_authorized=false):
+# a nota entra na cadeia de recaptura, não por este gate. Expira com a data;
+# deixa de valer assim que a mutação de HTML for autorizada.
+CAPTURE_NOJS_NOTE_EXCEPTIONS: dict[str, dict[str, Any]] = {
+    "/diagnostico-pre-licitacao/": {
+        "kind": "capture_nojs_note_debt",
+        "dated": "2026-09-19",
+        "owner_issue": 705,
+        "expires_at": "2026-10-19",
+        "reason": "pilar protegido por hash sem a nota <noscript>; entra na recaptura dos pilares",
+    },
+}
+
+
+def _strip_noscript(html: str) -> str:
+    return re.sub(r"(?is)<noscript\b[^>]*>.*?</noscript\s*>", " ", html)
+
+
+def _html_mutation_authorized() -> bool:
+    try:
+        plan = json.loads(
+            (ROOT / "data/bofu-dominance/frozen-specs/unlock-plan.v1.json").read_text(encoding="utf-8")
+        )
+    except (OSError, ValueError):
+        return True
+    return plan.get("html_mutation_authorized") is True
+
+
+def _capture_route_findings(
+    rel_path: str,
+    route: str,
+    html: str,
+    main: str,
+    today: date,
+) -> tuple[list[Finding], list[dict[str, Any]], bool]:
+    """Return ``(findings, exemptions, is_capture_route)`` for one indexable page."""
+    main_visible = _strip_noscript(main)
+    forms = list(CAPTURE_FORM_ACTION_RE.finditer(main_visible))
+    if not forms:
+        return [], [], False
+    findings: list[Finding] = []
+    exemptions: list[dict[str, Any]] = []
+    page_visible = _strip_noscript(html)
+    has_wa = bool(re.search(r'(?is)<a\b[^>]+href=["\']https://wa\.me/', main_visible))
+    has_mail = bool(re.search(r'(?is)<a\b[^>]+href=["\']mailto:', page_visible))
+    page_own_note = bool(re.search(r'<p class="form-nojs-note"', page_visible))
+    notes_ok = True
+    for form in CAPTURE_FORM_ACTION_RE.finditer(main):
+        body = form.group(1)
+        in_form = re.search(
+            r'(?is)<noscript>\s*<p class="form-hint form-nojs-note">[^<]*'
+            r'<a href="(?:https://wa\.me/|mailto:)[^"]+">',
+            body,
+        )
+        if not ((in_form and NOJS_NOTE_TEXT in body) or page_own_note):
+            notes_ok = False
+
+    def _exception(table: dict[str, dict[str, Any]], satisfied: bool, missing_reason: str) -> None:
+        entry = table.get(route)
+        if entry is None:
+            if not satisfied:
+                findings.append(Finding(gate="conversion", path=rel_path, reason=missing_reason))
+            return
+        if satisfied:
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=rel_path,
+                    reason="capture_exception_satisfied_remove_it",
+                    excerpt=f"{route} {entry['kind']} issue=#{entry['owner_issue']}",
+                    severity="warn",
+                )
+            )
+            return
+        expires = _as_date(entry["expires_at"]) if entry.get("expires_at") else None
+        expired = expires is not None and today > expires
+        if entry["kind"] == "capture_nojs_note_debt" and _html_mutation_authorized():
+            expired = True
+        exemptions.append(
+            {
+                "route": route,
+                "family": None,
+                "kind": entry["kind"],
+                "reason": entry["reason"],
+                "owner_issue": entry["owner_issue"],
+                "dated": entry["dated"],
+                "expires_at": expires.isoformat() if expires else None,
+                "expired": expired,
+            }
+        )
+        findings.append(
+            Finding(
+                gate="conversion",
+                path=rel_path,
+                reason=f"{entry['kind']}_expired" if expired else entry["kind"],
+                excerpt=(
+                    f"{route} issue=#{entry['owner_issue']} dated={entry['dated']}"
+                    f" expires_at={expires.isoformat() if expires else 'none'}"
+                ),
+                severity="error" if expired else "warn",
+            )
+        )
+
+    _exception(CAPTURE_WHATSAPP_EXCEPTIONS, has_wa, "capture_route_missing_whatsapp")
+    if not has_mail:
+        findings.append(Finding(gate="conversion", path=rel_path, reason="capture_route_missing_email"))
+    _exception(CAPTURE_NOJS_NOTE_EXCEPTIONS, notes_ok, "capture_route_missing_nojs_note")
+    return findings, exemptions, True
+
+
 def _priced_offer_findings(
     page: Path,
     base: Path,
@@ -1741,6 +1903,9 @@ def gate_conversion(
     terminal_debt = 0
     priced_capture_total = 0
     priced_capture_covered = 0
+    capture_route_total = 0
+    capture_route_covered = 0
+    capture_exemption_rows: list[dict[str, Any]] = []
     exemptions: list[dict[str, Any]] = []
     _, registered_priced_offers = priced_action_registry()
     pii_re = re.compile(
@@ -1750,14 +1915,31 @@ def gate_conversion(
 
     # Pass 1: census of indexable public routes (sitewide, derived, never a list).
     pages: list[tuple[Path, str, str, str]] = []
+    noindex_pages: list[tuple[Path, str, str, str]] = []
     for p in _conversion_files(base):
         html = p.read_text(encoding="utf-8", errors="replace")
-        if not is_indexable_html(html):
-            continue
         rel = p.relative_to(base)
         route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
+        if not is_indexable_html(html):
+            noindex_pages.append((p, html, route, _main_html(html)))
+            continue
         pages.append((p, html, route, _main_html(html)))
     indexable_routes = {route for _, _, route, _ in pages}
+
+    # A capture form on a noindex visitor route (/analise-cnpj/, the Radar
+    # configuration step) is still a form a visitor fills: it keeps the same
+    # channel and no-JS contract even though the family/terminal contract
+    # below only governs indexable routes.
+    for p, html, route, main in noindex_pages:
+        capture_findings_page, capture_exemptions, is_capture_route = _capture_route_findings(
+            str(p.relative_to(base)), route, html, main, today
+        )
+        findings.extend(capture_findings_page)
+        capture_exemption_rows.extend(capture_exemptions)
+        if is_capture_route:
+            capture_route_total += 1
+            if not any(f.severity == "error" for f in capture_findings_page):
+                capture_route_covered += 1
 
     registry = load_family_registry()
     families = registry.get("families") or []
@@ -1803,6 +1985,15 @@ def gate_conversion(
             findings.extend(priced_findings)
             if not priced_findings:
                 priced_capture_covered += 1
+        capture_findings_page, capture_exemptions, is_capture_route = _capture_route_findings(
+            str(p.relative_to(base)), route, html, main, today
+        )
+        findings.extend(capture_findings_page)
+        capture_exemption_rows.extend(capture_exemptions)
+        if is_capture_route:
+            capture_route_total += 1
+            if not any(f.severity == "error" for f in capture_findings_page):
+                capture_route_covered += 1
         has_linked_capture_route = _has_linked_capture_route(base, main)
         service_transition_destinations = _service_transition_destinations(
             main, set(service_routes)
@@ -2115,6 +2306,19 @@ def gate_conversion(
                 "coverage": round(priced_capture_covered / priced_capture_total, 4)
                 if priced_capture_total
                 else 0.0,
+            },
+            # BOFU-FECHAMENTO-20260919: wa.me in <main>, mailto on the page and
+            # the no-JS note on every indexable route with an active form.
+            "capture_route_channels": {
+                "covered": capture_route_covered,
+                "total": capture_route_total,
+                "coverage": round(capture_route_covered / capture_route_total, 4)
+                if capture_route_total
+                else 0.0,
+                # Route-exact, dated, issue-owned; reported on every run. Kept
+                # apart from the family/terminal-action exemptions above so the
+                # terminal_action statistics keep their meaning.
+                "exemptions": sorted(capture_exemption_rows, key=lambda e: (e["kind"], e["route"])),
             },
             "family_registry": {
                 "path": FAMILY_REGISTRY_REL,
