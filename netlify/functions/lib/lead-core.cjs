@@ -1110,7 +1110,11 @@ function validateAndNormalize(data) {
     && informedEstagio === ESTAGIO_PLANEJAMENTO_CONTRATACAO
     && Boolean(contractEventEffective)
     && contractEventEffective !== CONTRACT_EVENT_PLANNING;
-  const demotedEstagio = stickyPlanningEstagio ? clamp(data.asset_id, MAX_FIELD.estagio) : informedEstagio;
+  // Mesmo sanitizador do `asset_id` gravado, para o registro nao ficar com
+  // estagio != asset_id quando o sanitizador descarta algo.
+  const demotedEstagio = stickyPlanningEstagio
+    ? sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id")
+    : informedEstagio;
   const estagioDefaulted = estagioMissing || (stickyPlanningEstagio && !demotedEstagio);
   const estagio = planningSide
     ? ESTAGIO_PLANEJAMENTO_CONTRATACAO
