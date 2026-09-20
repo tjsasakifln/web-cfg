@@ -4452,7 +4452,7 @@
         ],
         "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
         "dates": [],
-        "description": "Relatório de inspeção e condição de fissura, infiltração, recebimento ou reforma: o que existe, o que a evidência sustenta e a solução encadeada na proposta.",
+        "description": "Relatório de inspeção e condição de fissura, infiltração, recebimento, reforma ou documentação do construído (as-built): o que existe, o que a evidência sustenta e a solução encadeada na proposta.",
         "h1": "Inspeção e diagnóstico de edificações",
         "has_dataset_surface": false,
         "licenses": [],
@@ -5485,5 +5485,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/bofu-clean/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/bofu-fechamento-clean/_site"
 }
