@@ -291,6 +291,15 @@ def test_page_shell_output_is_idempotent_with_shell_nav():
     assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html
 
 
+def test_hash_bound_editorial_canary_is_not_rewritten_by_shell_sync():
+    from scripts.site.shell_nav import HASH_BOUND_EDITORIAL_FILES, shipped_html_files
+
+    protected = "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html"
+    mutable = {path.relative_to(ROOT).as_posix() for path in shipped_html_files()}
+    assert protected in HASH_BOUND_EDITORIAL_FILES
+    assert protected not in mutable
+
+
 # ---------------------------------------------------------------------------
 # CONFENGE-BOFU-FECHAMENTO-20260919 (WS-B). Sub-situacoes: fragmentos das
 # landings de situacao que o hub /servicos/ publica como entrada propria

@@ -55,6 +55,7 @@ from scripts.site.public_ia import (  # noqa: E402
 
 BRAND_PATH = ROOT / "data" / "site" / "brand.json"
 PUBLIC_FAMILY_REGISTRY_PATH = ROOT / "data" / "organic" / "public-family-registry.json"
+EDITORIAL_DECISIONS_PATH = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
 
 # Directories that never ship a visitor shell.
 SKIP_DIR_PARTS = frozenset(
@@ -129,6 +130,24 @@ def _frozen_shell_files() -> frozenset[str]:
 
 
 FROZEN_SHELL_FILES = _frozen_shell_files()
+
+
+def _hash_bound_editorial_files() -> frozenset[str]:
+    """Keep approved editorial material byte-identical until reapproval."""
+    try:
+        decisions = json.loads(EDITORIAL_DECISIONS_PATH.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - a missing register protects nothing here
+        return frozenset()
+    return frozenset(
+        row["html"]
+        for row in decisions.get("urls") or []
+        if row.get("approve_cli_indexable") is True
+        and isinstance(row.get("approval"), dict)
+        and str(row["approval"].get("material_hash") or "").startswith("sha256:")
+    )
+
+
+HASH_BOUND_EDITORIAL_FILES = _hash_bound_editorial_files()
 
 DESKTOP_NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*\bdesktop-nav\b[^"]*"[^>]*>)(.*?)(</nav>)',
@@ -300,14 +319,14 @@ def shipped_html_files() -> list[Path]:
         rel = path.relative_to(ROOT)
         if any(part in SKIP_DIR_PARTS for part in rel.parts):
             continue
-        if rel.as_posix() in FROZEN_SHELL_FILES:
+        if rel.as_posix() in FROZEN_SHELL_FILES or rel.as_posix() in HASH_BOUND_EDITORIAL_FILES:
             continue
         out.append(path)
     return out
 
 
 def _shell_sync_files() -> list[Path]:
-    """Mutable pages plus pinned pillars eligible for footer-only corrections."""
+    """Mutable pages plus BOFU pillars eligible for footer-only corrections."""
     paths = set(shipped_html_files())
     paths.update(ROOT / rel for rel in FROZEN_SHELL_FILES if (ROOT / rel).is_file())
     return sorted(paths)
