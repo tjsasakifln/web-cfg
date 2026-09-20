@@ -225,6 +225,19 @@ def is_frozen(rel: str) -> bool:
     return normalized in FROZEN_RELATIVE_PATHS or normalized in HASH_BOUND_LIE_PATHS
 
 
+# A capitalised replacement starts a new sentence. When the phrase it replaces
+# sat mid-sentence ("...em cada serviço Posso enviar edital e planilha"), the
+# previous sentence must be closed first, or the prefill reads as a run-on
+# ("...em cada serviço Quero solicitar um canal seguro..."; CONTEXTO-CAPTURA-08).
+SENTENCE_GLUE_RE = re.compile(
+    r"([0-9A-Za-z\u00c0-\u00ff])(\s+)(Quero solicitar um canal seguro para envio)"
+)
+
+
+def _close_previous_sentence(text: str) -> str:
+    return SENTENCE_GLUE_RE.sub(r"\1.\2\3", text)
+
+
 def rewrite_copy(text: str) -> str:
     out = text
     for old, new in CTA_REPLACEMENTS:
@@ -232,7 +245,7 @@ def rewrite_copy(text: str) -> str:
     for old, new in BODY_REPLACEMENTS:
         out = out.replace(old, new)
         out = out.replace(old.lower(), new.lower() if old[0].islower() else new)
-    return out
+    return _close_previous_sentence(out)
 
 
 def _rewrite_query_component(encoded: str) -> str:
