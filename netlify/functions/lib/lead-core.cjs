@@ -212,6 +212,11 @@ function assertDeliverableSelection(raw) {
 // do registro, para o lead que chega de um pilar sem `deliverable_id` oculto.
 // Chave: slug da rota (`/medicoes-glosas-obras-publicas/` -> o mesmo valor que
 // o formulario grava em estagio/asset_id). BLOCKED nunca e derivado.
+// Nunca a partir de `landing_page`/`landing_url`: sao atribuicao de PRIMEIRO
+// toque (nav.js mergeFirstTouch) e o hidden `landing_page` e forcado em todo
+// formulario a partir da sessao, entao apontavam para a pagina em que a
+// sessao comecou, nao para a rota do formulario (aditivos chegava como o
+// Dossie de Medicao; a home e o hub 'ainda nao sei' chegavam com entrega).
 let DELIVERABLE_ID_BY_ROUTE_SLUG = new Map();
 try {
   const registry = require("../../../data/commercial/deliverables-registry.v1.json");
@@ -240,7 +245,7 @@ function routeSlugOf(value) {
 
 function deriveDeliverableIdFromRoute(lead) {
   if (!lead || typeof lead !== "object") return "";
-  for (const candidate of [lead.landing_page, lead.landing_url, lead.estagio, lead.asset_id, lead.route_family]) {
+  for (const candidate of [lead.estagio, lead.asset_id, lead.route_family]) {
     const slug = routeSlugOf(candidate);
     if (slug && DELIVERABLE_ID_BY_ROUTE_SLUG.has(slug)) return DELIVERABLE_ID_BY_ROUTE_SLUG.get(slug);
   }
@@ -512,7 +517,12 @@ function assertContractDefenseQualification(data, deliverableId) {
       public_contract_id: publicContractId,
       contract_event: contractEvent,
       opportunity_deadline: deadline,
-      contract_stage: planning ? (CONTRACT_STAGES.has(contractStage) ? contractStage : null) : contractStage,
+      // Orgao: nao ha contrato, entao o padrao UNKNOWN do <select> (e o vazio)
+      // nao viram "estagio contratual=UNKNOWN" no handoff; so um estagio
+      // real informado e persistido.
+      contract_stage: planning
+        ? (CONTRACT_STAGES.has(contractStage) && contractStage !== "UNKNOWN" ? contractStage : null)
+        : contractStage,
     },
   };
 }
@@ -1081,7 +1091,7 @@ function validateAndNormalize(data) {
   // estágio, o registro recebe o mesmo valor que a home oferece a quem quer
   // ser orientado e é marcado NEEDS_CONTEXT. Contato e consentimento continuam
   // obrigatórios abaixo; a jornada é derivada do valor efetivo.
-  const estagioDefaulted = !adaptiveFields && !informedEstagio;
+  const estagioMissing = !adaptiveFields && !informedEstagio;
   // Decisao C1 (BOFU-FECHAMENTO-20260919): o evento `planejamento_contratacao`
   // identifica o lado contratante; o estagio gravado passa a ser o do orgao,
   // e nao o asset id oculto do hub, para o handoff, o e-mail e o by_service
@@ -1089,9 +1099,22 @@ function validateAndNormalize(data) {
   const contractEventEffective = contractCheck.qualification?.contract_event
     || (gapFallback ? rawEnum(data.contract_event, CONTRACT_EVENTS, MAX_FIELD.contract_event) : "");
   const planningSide = !adaptiveFields && contractEventEffective === CONTRACT_EVENT_PLANNING;
+  // Estagio "pegajoso": o CTA do bloco do orgao grava o hidden
+  // `planejamento-contratacao-publica`; se o visitante troca depois o evento
+  // por um da contratada, o estagio do orgao nao pode seguir no registro (o
+  // handoff diria "situacao declarada" do orgao e by_service contaria o lado
+  // errado). Com um evento efetivo que nao e o do orgao, recai na identidade
+  // do formulario (asset_id) ou no padrao de quem ainda nao sabe. Evento
+  // ausente ou invalido nao rebaixa: o que o visitante declarou fica.
+  const stickyPlanningEstagio = !adaptiveFields
+    && informedEstagio === ESTAGIO_PLANEJAMENTO_CONTRATACAO
+    && Boolean(contractEventEffective)
+    && contractEventEffective !== CONTRACT_EVENT_PLANNING;
+  const demotedEstagio = stickyPlanningEstagio ? clamp(data.asset_id, MAX_FIELD.estagio) : informedEstagio;
+  const estagioDefaulted = estagioMissing || (stickyPlanningEstagio && !demotedEstagio);
   const estagio = planningSide
     ? ESTAGIO_PLANEJAMENTO_CONTRATACAO
-    : (estagioDefaulted ? ESTAGIO_UNKNOWN_SERVICE : informedEstagio);
+    : (estagioDefaulted ? ESTAGIO_UNKNOWN_SERVICE : demotedEstagio);
   const jornada = adaptiveFields
     ? adaptiveFields.jornada
     : normalizeJourney(familyStage ? "" : data.jornada || data.journey, estagio);

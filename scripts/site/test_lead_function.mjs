@@ -3420,7 +3420,65 @@ for (const bodyHonoursAbort of [true, false]) {
   if (explicit.lead.deliverable_id !== "CFG-D21" || none.lead.deliverable_id !== null || homeLead.lead.deliverable_id !== null) {
     fail("wsa_pillar_deliverable_precedence", { explicit: explicit.lead.deliverable_id, none: none.lead.deliverable_id, home: homeLead.lead.deliverable_id });
   }
-  pass("wsa_pillar_deliverable_derived_from_route", { routes: 8 });
+  // Rodada de correcao: `landing_page`/`landing_url` sao atribuicao de
+  // primeiro toque (nav.js forca o hidden a partir da sessao); a entrega vem
+  // SO da identidade pre-renderizada do formulario. Antes, o pilar de
+  // aditivos com sessao iniciada em medicoes chegava como CFG-D18, a home
+  // 'nao sei' chegava com CFG-D22 e o hub 'ainda nao sei qual entrega' com
+  // evento reajuste chegava com CFG-D18 contradizendo o visitante.
+  const crossPillar = core.validateAndNormalize({
+    nome: "QA Pilar", email: "qa-pilar@example.com", consentimento: "1", jornada: "contrato",
+    estagio: "aditivos-obras-publicas", route_family: "aditivos", asset_id: "aditivos-obras-publicas", origem: "aditivos-obras-publicas",
+    landing_page: "/medicoes-glosas-obras-publicas/", landing_url: "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+  });
+  const homeFromPillar = core.validateAndNormalize({
+    nome: "QA", email: "qa@example.com", consentimento: "1", estagio: "ainda não sei qual serviço", route_family: "home",
+    landing_page: "/reequilibrio-obras-publicas/", landing_url: "https://confenge.com.br/reequilibrio-obras-publicas/",
+  });
+  const hubUnsure = core.validateAndNormalize({
+    ...hub, contract_event: "reajuste", contract_stage: "identificado",
+    landing_page: "/medicoes-glosas-obras-publicas/", landing_url: "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+  });
+  const hubUnsureMessage = inbound.mapLeadToInboundV1({ ...hubUnsure.lead, lead_id: "lead-qa-hub" }).message || "";
+  if (crossPillar.lead.deliverable_id !== "CFG-D19" || homeFromPillar.lead.deliverable_id !== null
+      || hubUnsure.lead.deliverable_id !== null || /entrega=/.test(hubUnsureMessage)) {
+    fail("wsa_deliverable_never_from_landing_page", {
+      crossPillar: crossPillar.lead.deliverable_id, home: homeFromPillar.lead.deliverable_id, hub: hubUnsure.lead.deliverable_id, hubUnsureMessage,
+    });
+  }
+  pass("wsa_pillar_deliverable_derived_from_route", { routes: 8, landing_page_ignored: 3 });
+
+  // (d2) Estagio pegajoso do CTA do orgao: hidden `planejamento-contratacao-
+  // publica` + evento da contratada -> recai na identidade do formulario
+  // (asset_id), sem 'situacao declarada' do orgao no handoff; sem asset_id,
+  // recai no padrao de quem ainda nao sabe e e marcado NEEDS_CONTEXT. Evento
+  // ausente ou invalido nao rebaixa o que o visitante declarou.
+  const sticky = core.validateAndNormalize({ ...hub, estagio: "planejamento-contratacao-publica", contract_event: "reajuste", contract_stage: "identificado" });
+  const stickyMessage = inbound.mapLeadToInboundV1({ ...sticky.lead, lead_id: "lead-qa-sticky" }).message || "";
+  const stickyNoAsset = core.validateAndNormalize({ ...hub, asset_id: "", estagio: "planejamento-contratacao-publica", contract_event: "reajuste", contract_stage: "identificado" });
+  const stickyNoEvent = core.validateAndNormalize({ ...hub, estagio: "planejamento-contratacao-publica" });
+  if (!sticky.ok || sticky.lead.estagio !== "contract-defense-products" || sticky.lead.jornada !== "contrato"
+      || sticky.lead.qualification_gaps || /situação declarada=|lado=/.test(stickyMessage)
+      || stickyNoAsset.lead.estagio !== core.ESTAGIO_UNKNOWN_SERVICE || stickyNoAsset.lead.qualification_state !== "NEEDS_CONTEXT"
+      || stickyNoEvent.lead.estagio !== "planejamento-contratacao-publica") {
+    fail("wsa_sticky_planning_estagio_demoted", {
+      sticky: sticky.lead.estagio, jornada: sticky.lead.jornada, stickyMessage,
+      noAsset: [stickyNoAsset.lead.estagio, stickyNoAsset.lead.qualification_state], noEvent: stickyNoEvent.lead.estagio,
+    });
+  }
+  pass("wsa_sticky_planning_estagio_demoted");
+
+  // (d3) Orgao com o <select contract_stage> no padrao UNKNOWN: nao ha
+  // contrato, entao o registro e o handoff nao carregam 'estagio contratual'.
+  const planningUnknown = core.validateAndNormalize({ ...hub, contract_event: "planejamento_contratacao", contract_stage: "UNKNOWN" });
+  const planningUnknownMessage = inbound.mapLeadToInboundV1({ ...planningUnknown.lead, lead_id: "lead-qa-orgao" }).message || "";
+  const planningInformed = core.validateAndNormalize({ ...hub, contract_event: "planejamento_contratacao", contract_stage: "identificado" });
+  if (!planningUnknown.ok || planningUnknown.lead.contract_stage !== null || planningUnknown.lead.qualification_gaps
+      || /estágio contratual=/.test(planningUnknownMessage) || !planningUnknownMessage.includes("lado=orgao_contratante")
+      || planningInformed.lead.contract_stage !== "identificado") {
+    fail("wsa_planning_contract_stage_unknown_is_null", { stage: planningUnknown.lead.contract_stage, planningUnknownMessage, informed: planningInformed.lead.contract_stage });
+  }
+  pass("wsa_planning_contract_stage_unknown_is_null");
 
   // (e) CONTEXTO-CAPTURA-02: POST nativo (urlencoded, Accept text/html, sem
   // token) recebe 4xx text/html com os canais; nada e persistido; o cliente
