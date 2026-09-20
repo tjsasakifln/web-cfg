@@ -99,12 +99,18 @@ function contractEventSelect(item, select) {
   return `<label>Evento observado <select name="contract_event" required><option value="">Selecione</option>${options}</select></label>`;
 }
 
+// A instrucao "Se for orgao contratante" e ligada aos quatro controles por
+// aria-describedby: o leitor de tela recebe o sinal de que o campo e so do
+// orgao ao focar cada um, nao apenas ao ler o paragrafo na ordem do DOM.
+const PROCUREMENT_HINT_ID = "procurement-hint";
+
 function procurementFields() {
+  const describedBy = `aria-describedby="${PROCUREMENT_HINT_ID}"`;
   return `
-<p class="form-hint">Se for órgão contratante: os quatro campos abaixo ajudam a nomear os módulos da fase preparatória. Todos opcionais.</p>
-<label>Objeto da contratação <span class="field-optional">(opcional)</span> <input name="procurement_object" maxlength="120"/></label>
-<div class="contract-product-form__row"><label>Etapa da preparação <span class="field-optional">(opcional)</span> <select name="procurement_stage"><option value="">Selecione</option><option value="dfd_etp">DFD, DOD ou ETP</option><option value="termo_referencia_projeto">Termo de referência ou projeto</option><option value="orcamento_referencia">Orçamento de referência</option><option value="edital_minuta">Minuta de edital</option><option value="nao_sei">Ainda não sei</option></select></label><label>Origem do recurso <span class="field-optional">(opcional)</span> <select name="funding_source"><option value="">Selecione</option><option value="recurso_proprio">Recurso próprio</option><option value="transferencia_uniao">Transferência da União</option><option value="transferencia_estado">Transferência do Estado</option><option value="financiamento">Financiamento</option><option value="nao_sei">Ainda não sei</option></select></label></div>
-<label>Regulamento aplicável <span class="field-optional">(opcional)</span> <input name="procurement_regulation" maxlength="80" placeholder="Lei 14.133/2021, Lei 13.303/2016, RDC"/></label>`;
+<p class="form-hint" id="${PROCUREMENT_HINT_ID}">Se for órgão contratante: os quatro campos abaixo ajudam a nomear os módulos da fase preparatória. Todos opcionais.</p>
+<label>Objeto da contratação <span class="field-optional">(opcional)</span> <input name="procurement_object" maxlength="120" ${describedBy}/></label>
+<div class="contract-product-form__row"><label>Etapa da preparação <span class="field-optional">(opcional)</span> <select name="procurement_stage" ${describedBy}><option value="">Selecione</option><option value="dfd_etp">DFD, DOD ou ETP</option><option value="termo_referencia_projeto">Termo de referência ou projeto</option><option value="orcamento_referencia">Orçamento de referência</option><option value="edital_minuta">Minuta de edital</option><option value="nao_sei">Ainda não sei</option></select></label><label>Origem do recurso <span class="field-optional">(opcional)</span> <select name="funding_source" ${describedBy}><option value="">Selecione</option><option value="recurso_proprio">Recurso próprio</option><option value="transferencia_uniao">Transferência da União</option><option value="transferencia_estado">Transferência do Estado</option><option value="financiamento">Financiamento</option><option value="nao_sei">Ainda não sei</option></select></label></div>
+<label>Regulamento aplicável <span class="field-optional">(opcional)</span> <input name="procurement_regulation" maxlength="80" placeholder="Lei 14.133/2021, Lei 13.303/2016, RDC" ${describedBy}/></label>`;
 }
 
 function qualificationFields(item, select = false) {

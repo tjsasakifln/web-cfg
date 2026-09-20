@@ -77,12 +77,18 @@ def test_orgao_instruction_names_the_own_option_and_cta_preselects() -> None:
     assert '<option value="planejamento_contratacao">Órgão planejando a contratação de obra ou serviço</option>' in select.group(0)
     # Os quatro campos preparatórios existem, são opcionais e visíveis sem JS (labels no grid, sem fieldset).
     form = re.search(r'<form\b[^>]*data-cta-id="contract-defense-products-handraise"[^>]*>[\s\S]*?</form>', html).group(0)
+    # Rodada de correção: a instrução "Se for órgão contratante" é ligada a cada
+    # controle por aria-describedby, para o leitor de tela receber o sinal de
+    # que o campo é só do órgão ao focar o campo (não só ao ler o parágrafo).
+    hint = re.search(r'<p class="form-hint" id="procurement-hint">Se for órgão contratante[^<]*</p>', form)
+    assert hint, "instrução do órgão sem id procurement-hint"
+    assert html.count('id="procurement-hint"') == 1
     for name in ("procurement_object", "procurement_stage", "procurement_regulation", "funding_source"):
         control = re.search(rf'<(?:input|select)\b[^>]*\bname="{name}"[^>]*>', form)
         assert control, name
         assert "required" not in control.group(0), name
+        assert 'aria-describedby="procurement-hint"' in control.group(0), name
     assert "<fieldset" not in form
-    assert "Se for órgão contratante" in form
     assert '<textarea name="mensagem" id="mensagem"' in form
 
 
