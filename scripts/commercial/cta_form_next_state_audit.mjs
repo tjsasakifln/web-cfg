@@ -295,6 +295,54 @@ function captureForms(html, contract) {
     });
 }
 
+/**
+ * Tool forms (BOFU-FECHAMENTO-20260919, L1-a): every <form> on a visitor page
+ * that is not a lead capture (no lead endpoint, not the home form). They run
+ * in the browser, persist nothing, and the census used to leave them out, so
+ * nobody checked what a visitor without JavaScript sees. Each one is classified
+ * `tool_form` with the evidence of its no-JS degradation:
+ *  - `noscript_note`: a <noscript> message on the page explains the case;
+ *  - `runtime_status`: the tools pattern (data-tool-runtime-status message +
+ *    controls disabled until the runtime enables them);
+ *  - `none`: the form renders as if it worked and does nothing.
+ * Never counted in `declared_ctas`; the recorded contract stays WS-A's.
+ */
+const LEAD_ACTIONS = new Set(["/.netlify/functions/lead", "/api/web/lead"]);
+
+export function toolForms(html, route) {
+  const source = String(html);
+  const isLeadForm = (attrs) => LEAD_ACTIONS.has(attrValue(attrs, "action")) || attrValue(attrs, "id") === "formulario-contato";
+  // The capture form beside a tool carries its own <noscript> note; it must
+  // not vouch for the tool. Only <noscript> outside lead forms counts here.
+  const outsideLeadForms = source.replace(/<form\b([^>]*)>[\s\S]*?<\/form>/gi, (block, attrs) => (isLeadForm(attrs) ? " " : block));
+  const noscripts = [...outsideLeadForms.matchAll(/<noscript\b[^>]*>([\s\S]*?)<\/noscript>/gi)].map((m) => visibleText(m[1]));
+  const noscriptNote = noscripts.some((text) => /JavaScript|n[aã]o foi poss[ií]vel concluir/i.test(text));
+  return [...source.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi)]
+    .map((match) => ({ attrs: match[1], body: match[2] }))
+    .filter(({ attrs }) => !isLeadForm(attrs))
+    .map(({ attrs, body }) => {
+      const id = attrValue(attrs, "id");
+      const fieldsDisabled = /<fieldset\b(?=[^>]*\bdata-tool-runtime-fields\b)[^>]*\bdisabled\b/i.test(body);
+      const submitDisabled = [...body.matchAll(/<button\b([^>]*)>/gi)]
+        .some((m) => (attrValue(m[1], "type") || "submit") === "submit" && hasBooleanAttr(m[1], "disabled"));
+      // A visible status the page renders until the runtime enables the
+      // controls (ferramentas: [data-tool-runtime-status]; prontidao: .pptr-runtime).
+      const statusMessage = /\bdata-tool-runtime-status\b/i.test(source)
+        || /<p\b[^>]*\brole=["']status["'][^>]*>[^<]*JavaScript/i.test(source);
+      const runtimeStatus = statusMessage && (fieldsDisabled || submitDisabled);
+      const degradation = noscriptNote ? "noscript_note" : runtimeStatus ? "runtime_status" : "none";
+      return {
+        route,
+        form_id: id,
+        form_class: attrValue(attrs, "class"),
+        kind: "tool_form",
+        action: attrValue(attrs, "action"),
+        method: (attrValue(attrs, "method") || "get").toLowerCase(),
+        nojs_degradation: degradation,
+      };
+    });
+}
+
 export function buildInventory() {
   const contract = readJson("data/commercial/cta-form-next-state.v1.json");
   const familyRegistry = readJson("data/organic/public-family-registry.json");
@@ -348,6 +396,12 @@ export function buildInventory() {
     .filter((entry) => entry.forms.length > 0);
   const routes = [...new Set(surfaces.map((entry) => entry.route))].sort();
   const protectedWithCapture = routes.filter((route) => protectedRoutes.has(route));
+  // L1-a: sitewide census of tool forms on visitor pages (the noindex pilot
+  // and nurture trees are not visitor surfaces), kept apart from the capture
+  // surfaces and never added to declared_ctas.
+  const tool_forms = files
+    .filter((relative) => !/^(?:piloto|nurture)\//.test(relative))
+    .flatMap((relative) => toolForms(fs.readFileSync(path.join(root, relative), "utf8"), routeFromFile(relative)));
   const problems = [...derived.problems];
   for (const entry of surfaces) {
     if (entry.forms.length !== 1) {
@@ -379,6 +433,7 @@ export function buildInventory() {
       problems,
     },
     surfaces,
+    tool_forms,
   };
 }
 

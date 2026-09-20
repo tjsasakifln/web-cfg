@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import re
 import sys
+import unicodedata
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -87,6 +89,137 @@ def has_accessible_label(html: str, field_id: str) -> bool:
     return any(tag in label for label in re.findall(r"<label\b[^>]*>[\s\S]*?</label>", html, re.I))
 
 
+# --- WCAG 2.5.3 label in name, static (BOFU-FECHAMENTO-20260919, A11Y-FRAGMENTOS-06).
+# axe's ``label-content-name-mismatch`` is tagged experimental and stays off
+# under a tag-only ``runOnly``; it also runs only on the sampled routes of the
+# built artifact. This check reads every visitor page of the source tree: an
+# ``<a>``/``<button>`` whose accessible name comes from ``aria-label`` or
+# ``aria-labelledby`` must contain its visible text (aria-hidden subtrees
+# removed, image alt excluded) so a voice user can say what they see.
+# Below this count the control census is not the public surface (~690 named
+# controls on 2026-09-19).
+LABEL_IN_NAME_MIN_CONTROLS = 300
+_VOID_TAGS = frozenset(
+    {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+)
+_INLINE_BLOCK_TAGS = frozenset({"span", "div", "p", "li", "strong", "em", "small", "b", "i", "time", "br"})
+_NAME_PUNCTUATION_RE = re.compile(r"[–—\-·•:;,.!?()\[\]\"“”‘’'…»«›‹→←↗↘]+")
+
+
+class _Node:
+    __slots__ = ("tag", "attrs", "children", "parent", "text")
+
+    def __init__(self, tag: str, attrs: list[tuple[str, str | None]], parent: "_Node | None") -> None:
+        self.tag = tag
+        self.attrs = {name.lower(): (value or "") for name, value in attrs}
+        self.parent = parent
+        self.children: list[_Node] = []
+        self.text: str | None = None
+
+
+class _TreeParser(HTMLParser):
+    """Minimal element tree: enough to walk a control's subtree and resolve ids."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.root = _Node("#root", [], None)
+        self.current = self.root
+        self.nodes: list[_Node] = []
+        self.ids: dict[str, _Node] = {}
+
+    def _open(self, tag: str, attrs: list[tuple[str, str | None]]) -> _Node:
+        node = _Node(tag.lower(), attrs, self.current)
+        self.current.children.append(node)
+        self.nodes.append(node)
+        element_id = node.attrs.get("id", "").strip()
+        if element_id and element_id not in self.ids:
+            self.ids[element_id] = node
+        return node
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        node = self._open(tag, attrs)
+        if node.tag not in _VOID_TAGS:
+            self.current = node
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self._open(tag, attrs)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        node: _Node | None = self.current
+        while node is not None and node.tag != tag:
+            node = node.parent
+        if node is not None and node.parent is not None:
+            self.current = node.parent
+
+    def handle_data(self, data: str) -> None:
+        text = _Node("#text", [], self.current)
+        text.text = data
+        self.current.children.append(text)
+
+
+def normalize_name(value: str) -> str:
+    value = unicodedata.normalize("NFKC", value or "").replace(" ", " ")
+    value = re.sub(r"\s+", " ", value).strip().casefold()
+    value = _NAME_PUNCTUATION_RE.sub(" ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def _at_visible_text(node: _Node, *, root: bool = True) -> str:
+    """Text assistive technology renders inside a control: aria-hidden removed, alt excluded."""
+    if node.tag == "#text":
+        return node.text or ""
+    if node.attrs.get("aria-hidden") == "true" or node.tag in {"script", "style", "template", "img"}:
+        return ""
+    if node.tag == "svg":
+        titles = " ".join(
+            "".join(part.text or "" for part in child.children if part.tag == "#text")
+            for child in node.children
+            if child.tag == "title"
+        )
+        return titles + (" " + node.attrs["aria-label"] if node.attrs.get("aria-label") else "")
+    if not root and node.attrs.get("aria-label"):
+        return " " + node.attrs["aria-label"] + " "
+    out = "".join(_at_visible_text(child, root=False) for child in node.children)
+    return f" {out} " if node.tag in _INLINE_BLOCK_TAGS else out
+
+
+def label_in_name_findings(html: str) -> tuple[list[str], int]:
+    """Return ``(problems, named_controls_examined)`` for one document."""
+    parser = _TreeParser()
+    parser.feed(html or "")
+    parser.close()
+    problems: list[str] = []
+    examined = 0
+    for node in parser.nodes:
+        is_control = node.tag == "button" or (node.tag == "a" and "href" in node.attrs)
+        if not is_control:
+            continue
+        labelledby = node.attrs.get("aria-labelledby", "").strip()
+        aria_label = node.attrs.get("aria-label", "").strip()
+        if labelledby:
+            source = "aria-labelledby"
+            name = " ".join(
+                _at_visible_text(parser.ids[ref]) if ref in parser.ids else ""
+                for ref in labelledby.split()
+            )
+        elif aria_label:
+            source = "aria-label"
+            name = aria_label
+        else:
+            continue
+        examined += 1
+        visible = normalize_name(_at_visible_text(node))
+        if not visible:
+            continue  # icon-only control: 2.5.3 does not apply
+        if visible not in normalize_name(name):
+            problems.append(
+                f"label in name: <{node.tag}> {source}=\"{name.strip()[:80]}\" "
+                f"does not contain visible text \"{visible[:80]}\""
+            )
+    return problems, examined
+
+
 def relative_luminance(hex_color: str) -> float:
     value = hex_color.removeprefix("#")
     if len(value) == 3:
@@ -136,8 +269,16 @@ def contrast_contract(root: Path = ROOT) -> tuple[list[str], list[str]]:
 
 
 def check_page(path: Path) -> list[str]:
+    errors, _ = check_page_with_census(path)
+    return errors
+
+
+def check_page_with_census(path: Path) -> tuple[list[str], int]:
+    """Errors of one page plus the number of named controls examined for 2.5.3."""
     html = path.read_text(encoding="utf-8")
     errors = []
+    label_problems, named_controls = label_in_name_findings(html)
+    errors.extend(label_problems)
     if 'lang="pt-BR"' not in html and "lang='pt-BR'" not in html:
         errors.append("missing lang")
     if 'href="#conteudo"' not in html and "skip-link" not in html:
@@ -163,7 +304,7 @@ def check_page(path: Path) -> list[str]:
                 errors.append(f"form field labeling: {field}")
         if find_form_field(html, "consentimento") and not has_accessible_label(html, "consentimento"):
             errors.append("form field labeling: consentimento")
-    return errors
+    return errors, named_controls
 
 
 def main() -> int:
@@ -178,17 +319,28 @@ def main() -> int:
     pages = accessibility_pages(ROOT)
     if len(pages) < 100:
         failures.append(f"accessibility census collapsed: {len(pages)}")
+    named_controls = 0
     for p in pages:
-        errs = check_page(p)
+        errs, examined = check_page_with_census(p)
+        named_controls += examined
         for e in errs:
             failures.append(f"{p.relative_to(ROOT)}: {e}")
+    if named_controls < LABEL_IN_NAME_MIN_CONTROLS:
+        failures.append(
+            f"label-in-name census collapsed: {named_controls} named controls examined,"
+            f" expected >= {LABEL_IN_NAME_MIN_CONTROLS}"
+        )
     if failures:
         print("FAIL accessibility static audit")
         for f in failures:
             print(" -", f)
         return 1
     print("OK audit:accessibility")
-    print("checks: landmarks, skip-link, lang, form labels, consent, reduced-motion, focus, contrast")
+    print(
+        "checks: landmarks, skip-link, lang, form labels, consent, reduced-motion, focus, contrast,"
+        " label-in-name (WCAG 2.5.3)"
+    )
+    print(f"label-in-name: {named_controls} named <a>/<button> controls examined across {len(pages)} pages")
     print("contrast >= 5.0:1:", ", ".join(contrast_evidence))
     return 0
 

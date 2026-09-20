@@ -836,15 +836,22 @@ def test_linked_capture_route_is_terminal_only_with_the_full_contract():
         'href="/comercial/radar-teste/">Configurar pedido</a>'
         '<span data-journey="edital"></span>'
     )
+    # BOFU-FECHAMENTO-20260919: a capture form, indexable or not, also carries
+    # the direct channels and the no-JS note (capture_route_* findings).
     capture = (
         '<!doctype html><html><head><meta name="robots" content="noindex,nofollow">'
         '</head><body><main><form method="post" action="/.netlify/functions/lead" '
         'data-cta-id="radar-order-form" data-asset-id="radar-order" '
         'data-route-family="radar" data-cta-position="order">'
+        '<noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. '
+        'Use o <a href="https://wa.me/5548999999999">WhatsApp</a> ou o '
+        '<a href="mailto:contato@example.test">e-mail</a> ao lado.</p></noscript>'
         '<input name="nome"><input name="estagio"><input name="jornada">'
         '<input name="origem"><input name="asset_id"><input name="cta_id">'
         '<input name="route_family"><input type="checkbox" name="consentimento" required>'
-        '</form></main></body></html>'
+        '</form><ul class="contact-alt"><li><a href="https://wa.me/5548999999999?text=Radar">'
+        'Conversar sobre o radar</a></li><li><a href="mailto:contato@example.test">'
+        'Enviar por e-mail</a></li></ul></main></body></html>'
     )
     with tempfile.TemporaryDirectory(prefix="confenge-capture-route-") as tmp:
         tmp_path = Path(tmp)

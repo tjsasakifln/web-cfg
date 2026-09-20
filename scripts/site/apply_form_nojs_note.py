@@ -18,7 +18,10 @@ eles, os canais canônicos de ``data/site/brand.json``).
 
 Fora do escopo, sempre: páginas presas por hash (``font_preload.hash_bound_pages``
 e ``BYTE_PINNED_ARTICLES``), ``/piloto/*``, ``/nurture/`` e a home (fonte do
-padrão; pertence ao integrador).
+padrão; pertence ao integrador). Desde 2026-09-19 (BOFU-FECHAMENTO), os
+formulários gerados recebem a mesma nota pelo normalizador comum
+``scripts/commercial/render_cta_form_next_state.mjs``; aqui só se verifica que
+nenhum formulário de captura ficou sem ela.
 
 Uso:
   python3 scripts/site/apply_form_nojs_note.py --check   # lista o que mudaria; sai 1 se houver pendência
@@ -56,21 +59,35 @@ DEFAULT_WA_TEXT = (
 
 EXCLUDED_PREFIXES = ("piloto/", "nurture/")
 EXCLUDED_EXACT = frozenset({"index.html"})
-# Formulários cujo bloco é escrito por um gerador com paridade byte a byte em CI
-# (slot renderers). Inserir a nota aqui quebraria a paridade; a nota entra por
-# esses geradores, não por esta transformação. Pendência registrada em
-# docs/campaigns/bofu-integral-20260919/README.md.
-GENERATOR_OWNED = frozenset(
-    {
-        "analise-cnpj/index.html",  # scripts/live_intelligence/render.py
-        "analise-cnpj/r/index.html",
-        "diagnostico-b2g-expansao/index.html",  # scripts/offers/contractual_claims.cjs
-        "diagnostico-pre-licitacao/index.html",  # scripts/commercial/render_licitacao_products.mjs
-        "entregas/index.html",  # scripts/commercial/render_public_catalog.mjs
-        "servicos-obras-publicas/index.html",  # scripts/commercial/render_contract_defense_products.mjs
-    }
-)
-GENERATOR_OWNED_PREFIXES = ("casos/modelo-",)  # scripts/offers/render.cjs
+# BOFU-FECHAMENTO-20260919 (CONTEXTO-CAPTURA-05): os formulários gerados
+# (servicos-obras-publicas, diagnostico-pre-licitacao, diagnostico-b2g-expansao,
+# entregas, analise-cnpj e /r/, casos/modelo-*) recebem a nota pelo normalizador
+# comum ``scripts/commercial/render_cta_form_next_state.mjs`` (fonte única:
+# ``scripts/commercial/form_nojs_note.mjs``, também usada por
+# ``render_contract_defense_products.mjs``). Nenhuma exceção de gerador resta:
+# este ``--check`` cobre todos os formulários de captura fora das páginas presas
+# por hash, e roda em ``npm run test:cta-form-next-state``.
+GENERATOR_OWNED: frozenset[str] = frozenset()
+GENERATOR_OWNED_PREFIXES: tuple[str, ...] = ()
+
+
+def _frozen_pillar_pages() -> frozenset[str]:
+    """Os seis pilares presos por hash (``unlock-plan.v1.json``) enquanto a mutação
+    de HTML não está autorizada: a nota não entra neles por este aplicador nem
+    pelo normalizador. Pendência datada 2026-09-19 (BOFU-FECHAMENTO, #705) para
+    ``diagnostico-pre-licitacao/index.html``, o único ainda sem a nota."""
+    try:
+        plan = json.loads(
+            (ROOT / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json").read_text(encoding="utf-8")
+        )
+    except Exception:  # noqa: BLE001 — sem o plano, nada é considerado congelado
+        return frozenset()
+    authorized = plan.get("html_mutation_authorized") is True and all(
+        entry.get("state") == "READY" for entry in plan.get("preconditions_all_required") or []
+    )
+    if authorized:
+        return frozenset()
+    return frozenset(f"{slug}/index.html" for slug in plan.get("protected_pillars") or [])
 
 FORM_OPEN_RE = re.compile(r"<form\b[^>]*>", re.IGNORECASE)
 FORM_CLOSE_RE = re.compile(r"</form\s*>", re.IGNORECASE)
@@ -156,7 +173,7 @@ def transform(html: str) -> str:
 
 
 def excluded(rel: str, bound: set[str] | None = None) -> bool:
-    bound = hash_bound_pages() | set(BYTE_PINNED_ARTICLES) if bound is None else bound
+    bound = hash_bound_pages() | set(BYTE_PINNED_ARTICLES) | _frozen_pillar_pages() if bound is None else bound
     if rel in bound or rel in EXCLUDED_EXACT or rel in GENERATOR_OWNED:
         return True
     return rel.startswith(EXCLUDED_PREFIXES) or rel.startswith(GENERATOR_OWNED_PREFIXES)
@@ -164,7 +181,7 @@ def excluded(rel: str, bound: set[str] | None = None) -> bool:
 
 def candidate_files(root: Path | None = None) -> list[tuple[str, Path]]:
     base = root or ROOT
-    bound = hash_bound_pages() | set(BYTE_PINNED_ARTICLES)
+    bound = hash_bound_pages() | set(BYTE_PINNED_ARTICLES) | _frozen_pillar_pages()
     out: list[tuple[str, Path]] = []
     for path in visitor_facing_html_files(base):
         rel = path.relative_to(base).as_posix()

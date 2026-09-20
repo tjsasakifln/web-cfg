@@ -141,6 +141,19 @@ def _need_rows(rows: list[dict[str, str]], *, start: int = 1) -> str:
     )
 
 
+def _form_preselect_attrs(row: dict[str, Any]) -> str:
+    """data-contract-event / data-estagio do CTA que leva ao formulário da própria
+    página: o bundle (js/modules/nav.js, DATASET_TO_FIELD) pré-seleciona o
+    evento no <select> e grava o estágio no hidden; sem JavaScript, o servidor
+    deriva o mesmo estágio do evento escolhido."""
+    attrs = ""
+    if row.get("form_contract_event"):
+        attrs += f' data-contract-event="{e(row["form_contract_event"])}"'
+    if row.get("form_estagio"):
+        attrs += f' data-estagio="{e(row["form_estagio"])}"'
+    return attrs
+
+
 def _situation_block(situation: dict[str, Any], *, start: int) -> str:
     """One contract event as a group of the ruled index: the situation, the work
     assumed, and one ruled row per path."""
@@ -156,7 +169,7 @@ def _situation_block(situation: dict[str, Any], *, start: int) -> str:
             + ("Descrever pelo WhatsApp" if row["url"].startswith("https://wa.me/") else "Ver a página")
             + ' <svg class="icon"><use href="#i-arrow"></use></svg></a>'
             + (
-                f' <a class="list-ruled__action" href="{e(row["form_anchor"])}">Registrar no formulário '
+                f' <a class="list-ruled__action"{_form_preselect_attrs(row)} href="{e(row["form_anchor"])}">Registrar no formulário '
                 '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
                 if row.get("form_anchor")
                 else ""
@@ -479,15 +492,22 @@ def _services_situations() -> list[dict[str, Any]]:
                 {
                     "url": _whatsapp("orgao_planejamento"),
                     "title": "Conversar sobre a contratação que o órgão planeja",
+                    # BOFU-FECHAMENTO-20260919 (FAMILIAS-PUBLICAS-01 / HOME-HUB-05): o
+                    # formulario do hub tem a opcao propria do orgao e campos opcionais da
+                    # fase preparatoria; o CTA pre-seleciona o evento (data-contract-event,
+                    # js/modules/nav.js) e o servidor grava o mesmo estagio sem JavaScript.
                     "blurb": (
-                        "Descreva o objeto, o estágio do planejamento e, se souber, o regulamento "
+                        "Descreva o objeto, a etapa da preparação e, se souber, o regulamento "
                         "ou a origem do recurso, pelo WhatsApp ou pelo formulário desta página (em "
-                        '"Evento observado", escolha "Outro evento contratual" e descreva a '
-                        "contratação no contexto). Contexto incompleto não impede o contato. A "
-                        "resposta nomeia os módulos que o objeto pede, o que o órgão recebe e o que "
-                        "falta reunir; o valor sai na proposta, depois da leitura do caso."
+                        '"Evento observado", escolha "Órgão planejando a contratação de obra ou '
+                        'serviço"; os campos da fase preparatória são opcionais). Contexto '
+                        "incompleto não impede o contato. A resposta nomeia os módulos que o objeto "
+                        "pede, o que o órgão recebe e o que falta reunir; o valor sai na proposta, "
+                        "depois da leitura do caso."
                     ),
                     "form_anchor": "#captura-contrato",
+                    "form_contract_event": "planejamento_contratacao",
+                    "form_estagio": "planejamento-contratacao-publica",
                 },
             ],
         },
@@ -544,6 +564,17 @@ def _other_needs() -> list[dict[str, str]]:
             "blurb": (
                 "Radar de licitações, mapa de órgãos, concorrentes e referências de preço, "
                 "cada uma com exemplo demonstrativo para consultar antes de pedir."
+            ),
+        },
+        {
+            # BOFU-FECHAMENTO-20260919 (HOME-HUB-08): a contratada com demanda combinada
+            # (projeto executivo, quantitativos da proposta, inspeção, PGR do canteiro)
+            # tinha saída só pelo cabeçalho; a proposta é uma, com responsável nomeado.
+            "url": "/servicos/",
+            "title": "A obra do contrato também precisa de projeto, quantitativos, inspeção ou SST",
+            "blurb": (
+                "Serviços de engenharia: projeto, quantitativos e orçamento, inspeção ou "
+                "segurança do trabalho entram na mesma proposta, com um responsável nomeado."
             ),
         },
     ]
@@ -604,6 +635,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <a class="button button-secondary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-registrar-evento" data-cta-position="hub_services" data-event-name="cta_click" data-journey="contrato" data-route-family="servicos-obras-publicas" href="#captura-contrato">Registrar o evento no formulário</a>
 </div>
 <p class="section-proof svc-open__note">{_proof_html(meta)}</p>
+<p class="t-caption">Órgão que planeja a contratação: estruturamos a fase preparatória; veja o bloco <a href="#situacao-orgao">Órgão público</a>.</p>
 </div>
 <aside class="aside-note" aria-labelledby="hub-route-title">
 <h2 id="hub-route-title">Medição glosada ou retida</h2>
@@ -640,7 +672,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <span class="t-kicker">Serviços por evento contratual</span>
 <div>
 <h2 class="t-editorial" id="hub-situacoes">Em que ponto do contrato você está?</h2>
-<p>Cada situação diz o que assumimos, o que chega às suas mãos e para que serve. Preço e prazo de cada dossiê estão publicados uma vez, em <a href="#captura-contrato">Registrar o evento</a>; nos demais, a proposta nomeia o valor depois da leitura do caso.</p>
+<p>Cada situação diz o que assumimos, o que chega às suas mãos e para que serve. Preço e prazo de cada dossiê estão publicados uma vez, em <a href="#contract-products-title">Sete eventos contratuais</a>, e o pedido vai por <a href="#captura-contrato">Registrar o evento</a>; nos demais, a proposta nomeia o valor depois da leitura do caso.</p>
 </div>
 </div>
 <ol class="list-ruled list-ruled--areas">{situations_html}</ol>

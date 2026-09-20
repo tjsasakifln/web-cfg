@@ -969,8 +969,12 @@ def _capability_group(html: str, index: str) -> str:
 
 
 def _assert_decision_nav_names_match_visible_text(html: str) -> None:
-    """WCAG 2.5.3: the accessible name starts with the visible label; the
-    ordinal is decorative and hidden from assistive technology."""
+    """WCAG 2.5.3: the accessible name starts with everything the link renders,
+    ordinal included ("01 Onde disputar?"), then the decision question. The
+    ordinal stays aria-hidden (decorative for a screen reader, whose name comes
+    from aria-label) but axe's label-content-name-mismatch counts it as visible
+    text and concatenates text runs, so a space follows the ordinal
+    (BOFU-FECHAMENTO-20260919, WS-G: 8 serious nodes with the rule enabled)."""
     nav = re.search(r'<nav class="offer-decision-nav[^"]*".*?</nav>', html, re.S)
     assert nav, "decision nav missing"
     links = re.findall(r"<a\b([^>]*)>(.*?)</a>", nav.group(0), re.S)
@@ -980,11 +984,12 @@ def _assert_decision_nav_names_match_visible_text(html: str) -> None:
         label = _DECISION_NAV_LABELS[number]
         aria = re.search(r'aria-label="([^"]*)"', attrs)
         assert aria, f"decision link {number} lost its aria-label"
-        assert aria.group(1).startswith(label + " "), (number, aria.group(1))
-        assert len(aria.group(1)) > len(label) + 1, (number, aria.group(1))
-        assert f'<span aria-hidden="true">{number}</span>' in inner, (number, inner)
-        visible = _visible_text(re.sub(r'<span aria-hidden="true">.*?</span>', "", inner))
-        assert visible == label.casefold(), (number, visible)
+        assert aria.group(1).startswith(f"{number} {label} "), (number, aria.group(1))
+        assert len(aria.group(1)) > len(f"{number} {label}") + 1, (number, aria.group(1))
+        assert f'<span aria-hidden="true">{number}</span> ' in inner, (number, inner)
+        rendered = _visible_text(re.sub(r'<span aria-hidden="true">(.*?)</span>', r"\1", inner))
+        assert rendered == f"{number} {label}".casefold(), (number, rendered)
+        assert rendered in aria.group(1).casefold(), (number, rendered, aria.group(1))
 
 
 def test_decision_nav_accessible_names_start_with_the_visible_label() -> None:

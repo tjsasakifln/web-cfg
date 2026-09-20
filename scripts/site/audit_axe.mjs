@@ -148,6 +148,11 @@ for (const viewport of VIEWPORTS) {
           type: "tag",
           values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"],
         },
+        // WCAG 2.5.3 (label in name) ships in axe-core as an experimental rule,
+        // disabled by default; a tag-only runOnly never re-enables it, so the
+        // 8 "serious" nodes on /entregas/ (2026-09-19) were invisible here.
+        // The static twin runs sitewide in scripts/site/audit_accessibility.py.
+        rules: { "label-content-name-mismatch": { enabled: true } },
       });
     });
     const counts = { critical: 0, serious: 0, moderate: 0, minor: 0 };

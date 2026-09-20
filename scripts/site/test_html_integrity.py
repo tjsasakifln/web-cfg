@@ -12,7 +12,12 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.site.html_integrity import audit_html, audit_surface, source_html_files  # noqa: E402
+from scripts.site.html_integrity import (  # noqa: E402
+    IDENTITY_CENSUS_MIN_HTML_FILES,
+    audit_html,
+    audit_surface,
+    source_html_files,
+)
 from scripts.site.svg_sprite import ensure_sprite  # noqa: E402
 
 
@@ -201,6 +206,94 @@ def test_sprite_writer_refuses_an_unknown_reference(tmp: Path) -> None:
         raise AssertionError("ensure_sprite accepted an unknown symbol id")
 
 
+# --- Document identity (BOFU-FECHAMENTO-20260919, A11Y-FRAGMENTOS-06) ---
+# Fixtures are the counter-proof: each one must be reported, and the finding
+# must name the offending reference, not only the page.
+
+FIXTURES = ROOT / "scripts/site/fixtures/html_integrity"
+
+
+def details(path: Path, code: str, **kwargs) -> set[str]:
+    findings, _, _ = audit_html(path, **kwargs)
+    return {finding.detail for finding in findings if finding.code == code}
+
+
+def test_fragment_without_target_fails_closed(tmp: Path) -> None:
+    path = FIXTURES / "fragment-missing.html"
+    observed = details(path, "fragment_target_missing")
+    # "#top" scrolls to the document start by specification; "#" carries no fragment.
+    assert observed == {"href=#entregas"}, observed
+
+
+def test_aria_idref_without_id_fails_closed(tmp: Path) -> None:
+    path = FIXTURES / "aria-idref-missing.html"
+    observed = details(path, "aria_idref_undefined")
+    assert observed == {
+        "aria-controls=painel-inexistente",
+        "aria-describedby=ajuda-email",
+    }, observed
+
+
+def test_duplicate_id_fails_closed(tmp: Path) -> None:
+    path = FIXTURES / "duplicate-id.html"
+    observed = details(path, "duplicate_id")
+    assert observed == {"#captura x2"}, observed
+    # The fragment link resolves (an id exists); the duplicate is the defect.
+    assert details(path, "fragment_target_missing") == set()
+
+
+def test_cross_page_fragment_resolves_against_the_census(tmp: Path) -> None:
+    """``/rota/#frag`` is checked on the destination page of the same surface."""
+    import shutil
+
+    for name in ("origem", "destino"):
+        target = tmp / "cross" / name
+        target.mkdir(parents=True, exist_ok=True)
+        shutil.copy(FIXTURES / "cross-page" / name / "index.html", target / "index.html")
+    report = audit_surface(tmp / "cross", surface="artifact")
+    observed = {
+        finding["detail"]
+        for finding in report["findings"]
+        if finding["code"] == "fragment_target_missing"
+    }
+    assert observed == {
+        "href=/destino/#nao-existe -> destino/index.html",
+        "href=https://confenge.com.br/destino/#nao-existe-canonico -> destino/index.html",
+        "href=../destino/#nao-existe-relativo -> destino/index.html",
+    }, observed
+    assert report["identity"]["fragment_links"] == 5, report["identity"]
+    # Alone, the origin page cannot see the destination: nothing is invented.
+    assert details(tmp / "cross" / "origem" / "index.html", "fragment_target_missing") == set()
+
+
+def test_identity_clean_document_reports_nothing(tmp: Path) -> None:
+    path = tmp / "identity-clean.html"
+    path.write_text(
+        document(
+            '<nav><a href="#metodo">Método</a></nav>'
+            '<h2 id="metodo">Método</h2>'
+            '<section aria-labelledby="t"><h3 id="t">Bloco</h3>'
+            '<button type="button" aria-controls="p" aria-expanded="false">Abrir</button>'
+            '<div id="p" hidden></div></section>'
+            '<template><p id="metodo">Só no template, fora do documento.</p></template>'
+        ),
+        encoding="utf-8",
+    )
+    observed = codes(path)
+    assert not observed & {"duplicate_id", "aria_idref_undefined", "fragment_target_missing"}, observed
+
+
+def test_identity_census_collapse_fails_closed(tmp: Path) -> None:
+    """Many pages with almost no fragment links or idrefs is a parser regression, not a clean site."""
+    base = tmp / "collapse"
+    for index in range(IDENTITY_CENSUS_MIN_HTML_FILES):
+        page = base / "conteudos" / f"pagina-{index}" / "index.html"
+        page.parent.mkdir(parents=True)
+        page.write_text(document(f"<h1>Página {index}</h1>"), encoding="utf-8")
+    report = audit_surface(base, surface="source")
+    assert {f["code"] for f in report["findings"]} == {"identity_census_collapsed"}, report["findings"]
+
+
 
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="confenge-html-integrity-") as directory:
@@ -216,6 +309,12 @@ def main() -> int:
         test_symbol_defined_in_the_same_document_passes(tmp)
         test_sprite_writer_is_idempotent_and_adds_only_what_is_used(tmp)
         test_sprite_writer_refuses_an_unknown_reference(tmp)
+        test_fragment_without_target_fails_closed(tmp)
+        test_aria_idref_without_id_fails_closed(tmp)
+        test_duplicate_id_fails_closed(tmp)
+        test_cross_page_fragment_resolves_against_the_census(tmp)
+        test_identity_clean_document_reports_nothing(tmp)
+        test_identity_census_collapse_fails_closed(tmp)
     print("HTML_INTEGRITY_TESTS_OK")
     return 0
 
