@@ -5267,5 +5267,79 @@
         }
       ]
     }
+  ],
+  "tool_forms": [
+    {
+      "route": "/analise-cnpj/",
+      "form_id": "cnpj-form",
+      "form_class": "contact-form",
+      "kind": "tool_form",
+      "action": "/api/web/live-intelligence-analyze",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/conflitos/",
+      "form_id": "conflict-gate-form",
+      "form_class": "contact-form",
+      "kind": "tool_form",
+      "action": "#primeira-etapa",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "form_id": "",
+      "form_class": "breakout-tool",
+      "kind": "tool_form",
+      "action": "#",
+      "method": "get",
+      "nojs_degradation": "none"
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "form_id": "f",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/checklist-reequilibrio/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "form_id": "lookup",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/diagnostico-defesa-margem/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "form_id": "limite-form",
+      "form_class": "tool-form tool-workflow",
+      "kind": "tool_form",
+      "action": "/ferramentas/limite-acrescimos-supressoes/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "form_id": "f",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/matriz-atraso-obra/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "form_id": "diagnostico",
+      "form_class": "pptr-form",
+      "kind": "tool_form",
+      "action": "#",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    }
   ]
 }
