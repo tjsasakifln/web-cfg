@@ -736,9 +736,9 @@
       "page_kind": "serviço",
       "question_answered": "Qual valor, para qual finalidade e em qual data, com método declarado?",
       "business_context": "private",
-      "primary_url": "/servicos/#servico-pericia",
-      "proposed_primary_url": "/servicos/#servico-pericia",
-      "source_of_truth": "/servicos/#servico-pericia",
+      "primary_url": "/servicos/#servico-avaliacao",
+      "proposed_primary_url": "/servicos/#servico-avaliacao",
+      "source_of_truth": "/servicos/#servico-avaliacao",
       "requested_alias": null,
       "supporting_urls": [
         "/servicos/"
@@ -958,7 +958,7 @@
       "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
-        "destination": "/servicos-obras-publicas/#captura-contrato"
+        "destination": "/servicos-obras-publicas/#situacao-orgao"
       },
       "decision": "ENRICH",
       "function_differentiation": "Apoio técnico ao ente contratante, não consultoria ao licitante no mesmo certame.",
