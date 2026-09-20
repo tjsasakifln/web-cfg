@@ -370,7 +370,7 @@ const walk = await closedLoop.runFixture(fixture, store);
       lead_id: event.visitor_stage === "persisted" || event.event === "lead_persisted" ? secondLeadId : undefined,
       route_family: "segunda-rota",
       offer_id: "segunda-oferta",
-      origem: "referral",
+      origem: "/segunda-rota/",
     },
   }));
   const secondLead = {
@@ -381,7 +381,7 @@ const walk = await closedLoop.runFixture(fixture, store);
     landing_page: "/segunda-rota/",
     route_family: "segunda-rota",
     offer_id: "segunda-oferta",
-    origem: "referral",
+    origem: "/segunda-rota/",
   };
   const admitted = closedLoop.admitVisitorEvents([...fixture.events, ...secondEvents]).admitted;
   const report = closedLoop.reconcileClosedLoop({
@@ -420,7 +420,7 @@ const walk = await closedLoop.runFixture(fixture, store);
     || conditions.outbound_click.destination_type.join(",") !== "tel"
     || FUNNEL.visitor_event_map.email_click !== "cta"
     || FUNNEL.visitor_event_map.outbound_click !== "cta"
-    || FUNNEL.schema_version !== "1.1.0"
+    || FUNNEL.schema_version !== "1.2.0"
   ) {
     fail("visitor_stage_conditions_contract", { conditions, map: FUNNEL.visitor_event_map, version: FUNNEL.schema_version });
   } else pass("visitor_stage_conditions_contract", FUNNEL.schema_version);
@@ -1137,6 +1137,161 @@ const walk = await closedLoop.runFixture(fixture, store);
   else pass("contract_not_derived");
   if (rec.observed.qualified_lead !== "UNKNOWN") fail("contract_observed_unknown", rec.observed);
   else pass("contract_qualified_unknown_without_warmbly");
+}
+
+// --- MEDICAO-07: a second proposal on the same opportunity is refused (RC-01, executable) ---
+{
+  const q = fixture.observations.find((o) => o.stage === "qualified");
+  const p = fixture.observations.find((o) => o.stage === "proposal");
+  const w = fixture.observations.find((o) => o.stage === "won");
+  const state0 = { lead: { ...fixture.lead }, opportunity: null, proposal: null, sale: null };
+  const s1 = closedLoop.applyObservation(state0, q);
+  const s2 = closedLoop.applyObservation(s1, p);
+  try {
+    closedLoop.applyObservation(s2, {
+      ...p,
+      proposal_id: closedLoop.mintStableId("proposal", "closed-loop-second-proposal"),
+      amount: 15000,
+      at: "2026-08-02T14:00:00.000Z",
+    });
+    fail("second_proposal_same_opportunity_accepted");
+  } catch (err) {
+    if (err.code === "duplicate_entity" && /opportunity_already_has_proposal/.test(err.message)) {
+      pass("second_proposal_same_opportunity_rejected", err.message);
+    } else fail("second_proposal_code", err.code || err.message);
+  }
+
+  // --- MEDICAO-06 (RC-08): won without declared revenue never inherits the proposal amount ---
+  const { revenue: _r, revenue_received: _rr, contract_value: _cv, ...wonWithoutRevenue } = w;
+  try {
+    const s3 = closedLoop.applyObservation(s2, wonWithoutRevenue);
+    fail("won_without_revenue_inherits_proposal", {
+      revenue_received: s3.lead.revenue_received,
+      contract_value: s3.lead.contract_value,
+      proposal_amount: s2.proposal.amount,
+    });
+  } catch (err) {
+    if (err.code === "invalid_revenue" && /revenue_not_declared/.test(err.message)) pass("won_without_revenue_refused", err.message);
+    else fail("won_without_revenue_code", err.code || err.message);
+  }
+  // Declared revenue still works; contract_value absent stays absent (RC-03), never copies revenue.
+  const s3 = closedLoop.applyObservation(s2, { ...wonWithoutRevenue, revenue: 18000 });
+  if (s3.lead.revenue_received !== 18000) fail("won_declared_revenue", s3.lead.revenue_received);
+  else if (s3.lead.contract_value !== null) fail("contract_value_inherited_from_revenue", s3.lead.contract_value);
+  else pass("won_declared_revenue_contract_value_stays_null");
+  const s3cv = closedLoop.applyObservation(s2, { ...wonWithoutRevenue, revenue: 18000, contract_value: 250000 });
+  if (s3cv.lead.contract_value !== 250000 || s3cv.lead.revenue_received !== 18000) fail("contract_value_explicit", s3cv.lead);
+  else pass("contract_value_explicit_kept_separate_from_revenue");
+}
+
+// --- MEDICAO-09/10: origin_class rides the snapshot and the report; origem is a location, never a channel ---
+{
+  const attrFields = FUNNEL.attribution_fields || [];
+  if (!attrFields.includes("origin_class")) fail("attribution_fields_missing_origin_class", attrFields);
+  else pass("attribution_fields_has_origin_class");
+  const src = fs.readFileSync(path.join(root, "netlify/functions/lib/closed-loop.cjs"), "utf8");
+  const m = src.match(/const SNAPSHOT_LEAD_FIELDS = new Set\(\[([\s\S]*?)\]\)/);
+  const snapshotFields = m ? (m[1].match(/"([^"]+)"/g) || []).map((x) => x.replace(/"/g, "")) : [];
+  if (!snapshotFields.includes("origin_class")) fail("snapshot_lead_fields_missing_origin_class", snapshotFields);
+  else pass("snapshot_lead_fields_has_origin_class");
+
+  // Fixture lead carries a web origin_class and a location-shaped origem.
+  if (!["campaign", "search_organic", "referral", "direct_or_unknown"].includes(fixture.lead.origin_class)) {
+    fail("fixture_lead_origin_class", fixture.lead.origin_class);
+  } else pass("fixture_lead_origin_class", fixture.lead.origin_class);
+  if (/^(organic|referral|direct|paid|cpc|social|email)$/i.test(String(fixture.lead.origem || ""))) {
+    fail("fixture_origem_is_channel_not_location", fixture.lead.origem);
+  } else pass("fixture_origem_is_location", fixture.lead.origem);
+
+  // A lead with origem '/entregas/' and utm_source 'gsc' lands in by_origem['/entregas/'], never in a 'gsc' bucket.
+  const leadRoute = {
+    ...fixture.lead,
+    origem: "/entregas/",
+    utm_source: "gsc",
+    utm_medium: null,
+    origin_class: "search_organic",
+  };
+  const report = closedLoop.reconcileClosedLoop({
+    events: closedLoop.admitVisitorEvents(fixture.events).admitted,
+    leads: [leadRoute],
+    observations: fixture.observations,
+    kind: "synthetic",
+  }).report;
+  const origemKeys = report.by_origem.map((r) => r.key);
+  if (!origemKeys.includes("/entregas/") || origemKeys.includes("gsc") || origemKeys.includes("organic")) {
+    fail("by_origem_mixes_utm_source", origemKeys);
+  } else pass("by_origem_is_route_only", origemKeys.join(","));
+  const originClassRows = Array.isArray(report.by_origin_class) ? report.by_origin_class : [];
+  const organicRow = originClassRows.find((r) => r.key === "search_organic");
+  if (!organicRow || organicRow.persisted !== 1 || organicRow.won !== 1) fail("by_origin_class_missing_or_wrong", originClassRows);
+  else pass("by_origin_class_search_organic_row", JSON.stringify(organicRow));
+
+  // A lead without origin_class (persisted before 2026-09-19) reads INDISPONIVEL, never direct_or_unknown.
+  const { origin_class: _oc, ...leadWithoutClass } = fixture.lead;
+  const reportNoClass = closedLoop.reconcileClosedLoop({
+    events: [],
+    leads: [leadWithoutClass],
+    observations: [],
+    kind: "synthetic",
+  }).report;
+  const noClassKeys = (reportNoClass.by_origin_class || []).map((r) => r.key);
+  if (!noClassKeys.includes("INDISPONIVEL") || noClassKeys.includes("direct_or_unknown")) {
+    fail("origin_class_null_promoted", noClassKeys);
+  } else pass("origin_class_null_reads_indisponivel");
+
+  // A channel word in origem (visitor-controlled via ?origem=) is not a bucket and
+  // not fatal: the row lands under ORIGEM_CHANNEL_REFUSED and the report survives.
+  for (const value of ["organic", "referral", "gsc", "Google"]) {
+    const r = closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, origem: value }], observations: [], kind: "synthetic" }).report;
+    const keys = r.by_origem.map((row) => row.key);
+    if (keys.some((k) => k.toLowerCase() === value.toLowerCase()) || !keys.includes(closedLoop.ORIGEM_CHANNEL_REFUSED) || r.counts.persisted !== 1) {
+      fail(`origem_${value}_bucketed_as_channel`, keys);
+    } else pass(`origem_${value}_relabelled_not_fatal`);
+  }
+  // A commercial class (or any non-web value) in origin_class is server-side data and IS refused (never mapped).
+  for (const value of ["demonstrated_inbound", "organic"]) {
+    try {
+      closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, origin_class: value }], observations: [], kind: "synthetic" });
+      fail(`origin_class_${value}_admitted`);
+    } catch (err) {
+      if (err.code === "invalid_attribution") pass(`origin_class_${value}_refused`);
+      else fail(`origin_class_${value}_code`, err.code || err.message);
+    }
+  }
+  // Real route slugs and paths are never relabelled.
+  for (const value of ["entregas", "casos", "comercial/radar-decisorio", "/analise-cnpj/", "web"]) {
+    const r = closedLoop.reconcileClosedLoop({ events: [], leads: [{ ...fixture.lead, origem: value }], observations: [], kind: "synthetic" }).report;
+    if (!r.by_origem.some((row) => row.key === value)) fail(`origem_slug_${value}_relabelled`, r.by_origem.map((row) => row.key));
+  }
+  pass("origem_route_slugs_and_paths_kept");
+
+  // Snapshot loader accepts origin_class on a synthetic lead and reports it.
+  const snap = closedLoop.runSnapshot({
+    schema: "confenge.closed-loop-snapshot/1.0",
+    schema_version: "1.0.0",
+    kind: "synthetic_warmbly_snapshot",
+    official_live: false,
+    source: "CONFENGE_WEB",
+    commercial_owner: "warmbly",
+    generated_at: "2026-08-08T11:00:00.000Z",
+    events: fixture.events,
+    leads: [{
+      record_kind: "synthetic",
+      lead_id: fixture.lead.lead_id,
+      session_id: fixture.lead.session_id,
+      received_at: fixture.lead.received_at,
+      landing_page: fixture.lead.landing_page,
+      route_family: fixture.lead.route_family,
+      cta_id: fixture.lead.cta_id,
+      jornada: fixture.lead.jornada,
+      origem: fixture.lead.origem,
+      origin_class: "referral",
+    }],
+    observations: fixture.observations,
+  });
+  const snapRow = (snap.report.by_origin_class || []).find((r) => r.key === "referral");
+  if (!snapRow || snapRow.won !== 1) fail("snapshot_origin_class_not_reported", snap.report.by_origin_class);
+  else pass("snapshot_origin_class_reported");
 }
 
 if (failed) {

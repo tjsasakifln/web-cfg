@@ -635,6 +635,8 @@ function readyGscHistory(asOf, nowIso) {
       jornada: "edital",
       origem: "web",
       utm_source: "google",
+      // lead-core derives origin_class before buildLeadRecord (UTM present => campaign)
+      origin_class: "campaign",
       landing_page: "/",
       consentimento: "true",
       empresa: "R",
@@ -788,6 +790,108 @@ function readyGscHistory(asOf, nowIso) {
   else pass("ops_funnel_real_only", funnelBody.funnel.n);
   if (funnelBody.system_health?.synthetic_leads < 1) fail("ops_system_health", funnelBody.system_health);
   else pass("ops_system_health_has_synthetic");
+  // MEDICAO-08: the funnel segments by web origin class and by CTA; the real
+  // lead above carries utm_source=google (=> campaign) and no cta_id.
+  const byOriginClass = funnelBody.by_origin_class || {};
+  const byCta = funnelBody.by_cta || {};
+  const realOriginClass = (await globalMemory.get("ops-real"))?.origin_class || null;
+  if (realOriginClass !== "campaign") fail("ops_real_lead_origin_class_stored", realOriginClass);
+  else if (!byOriginClass[realOriginClass] || byOriginClass[realOriginClass].lead_persisted !== 1) {
+    fail("ops_funnel_by_origin_class", { realOriginClass, byOriginClass });
+  } else pass("ops_funnel_by_origin_class", `${realOriginClass}=${byOriginClass[realOriginClass].lead_persisted}`);
+  if (Object.keys(byOriginClass).some((k) => k === "unknown" || k === "organic")) fail("ops_funnel_origin_class_label", Object.keys(byOriginClass));
+  else pass("ops_funnel_origin_class_labels_honest");
+  if (!byCta.unknown || byCta.unknown.lead_persisted !== 1) fail("ops_funnel_by_cta", byCta);
+  else pass("ops_funnel_by_cta", JSON.stringify(Object.keys(byCta)));
+  const crossed = funnelBody.by_origin_class_x_cta || {};
+  if (!crossed[`${realOriginClass}|unknown`] || crossed[`${realOriginClass}|unknown`].lead_persisted !== 1) fail("ops_funnel_origin_class_x_cta", crossed);
+  else pass("ops_funnel_origin_class_x_cta");
+  // Synthetic rows never enter the segmentation.
+  const totalSegmented = Object.values(byOriginClass).reduce((a, r) => a + (r.lead_persisted || 0), 0);
+  if (totalSegmented !== 1) fail("ops_funnel_segmentation_real_only", totalSegmented);
+  else pass("ops_funnel_segmentation_real_only");
+
+  // A06-RECEBIMENTO-02: a real-looking QA submission (no probe signals) can be
+  // reclassified explicitly by an authenticated operator, with snapshot,
+  // audit and rollback. The automatic backfill must keep it (proof that the
+  // explicit path is necessary).
+  const opsPost = (action, body, headers = { authorization: "Bearer " + "z".repeat(24) }) => ops.handler({
+    httpMethod: "POST",
+    headers: { ...headers, "content-type": "application/json" },
+    queryStringParameters: { action },
+    rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}`,
+    body: JSON.stringify(body),
+  });
+  const opsGet = (action, extra = {}) => ops.handler({
+    httpMethod: "GET",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action, ...extra },
+    rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}`,
+  });
+  const dry = JSON.parse((await opsPost("backfill_record_kind", { dry_run: true })).body || "{}");
+  if (!dry.ok || (dry.candidates || []).some((c) => c.lead_id === "ops-real")) fail("backfill_would_mark_real_qa", dry.candidates);
+  else pass("backfill_keeps_signal_free_qa_as_real", `candidates=${dry.candidate_count}`);
+
+  const unauthSet = await opsPost("set_record_kind", { lead_id: "ops-real", to: "qa", reason: "x" }, {});
+  if (unauthSet.statusCode !== 401) fail("set_record_kind_unauthenticated", unauthSet.statusCode);
+  else pass("set_record_kind_requires_auth");
+  for (const [label, body] of [
+    ["to_real", { lead_id: "ops-real", to: "real", reason: "qa pos-aceite", approval_reference: "g03" }],
+    ["to_spam", { lead_id: "ops-real", to: "spam", reason: "qa pos-aceite", approval_reference: "g03" }],
+    ["no_reason", { lead_id: "ops-real", to: "qa", approval_reference: "g03" }],
+    ["no_approval", { lead_id: "ops-real", to: "qa", reason: "qa pos-aceite" }],
+    ["no_lead", { to: "qa", reason: "qa pos-aceite", approval_reference: "g03" }],
+  ]) {
+    const res = await opsPost("set_record_kind", body);
+    if (res.statusCode !== 400) fail(`set_record_kind_${label}_accepted`, res.statusCode + " " + res.body);
+    else pass(`set_record_kind_${label}_refused`);
+  }
+  const missing = await opsPost("set_record_kind", { lead_id: "ops-nope", to: "qa", reason: "qa pos-aceite", approval_reference: "g03" });
+  if (missing.statusCode !== 404) fail("set_record_kind_missing_lead", missing.statusCode);
+  else pass("set_record_kind_missing_lead_404");
+
+  const set = await opsPost("set_record_kind", {
+    lead_id: "ops-real",
+    to: "qa",
+    reason: "protocolo g03 §7 baixa pós-QA",
+    approval_reference: "g03-2026-09-19",
+    actor: "operador-ops",
+  });
+  const setBody = JSON.parse(set.body || "{}");
+  if (set.statusCode !== 200 || !setBody.ok || !setBody.snapshot_id) fail("set_record_kind_apply", set.statusCode + " " + set.body);
+  else pass("set_record_kind_applied", setBody.snapshot_id);
+  const afterSet = await globalMemory.get("ops-real");
+  const lastAudit = (afterSet.audit || []).slice(-1)[0] || {};
+  if (
+    afterSet.record_kind !== "qa"
+    || afterSet.next_action !== "exclude_from_commercial"
+    || lastAudit.event !== "record_kind" || lastAudit.from !== "real" || lastAudit.to !== "qa"
+    || lastAudit.actor === "system" || lastAudit.actor !== "operador-ops"
+    || !/g03-2026-09-19/.test(String(lastAudit.note || ""))
+  ) fail("set_record_kind_record_state", { record_kind: afterSet.record_kind, next_action: afterSet.next_action, lastAudit });
+  else pass("set_record_kind_audited_by_operator", lastAudit.actor);
+  const realAfter = JSON.parse((await opsGet("leads", { kind: "real" })).body || "{}");
+  const qaAfter = JSON.parse((await opsGet("leads", { kind: "qa" })).body || "{}");
+  if (realAfter.count !== 0 || realAfter.counts_by_kind?.real !== 0) fail("set_record_kind_real_count", realAfter.counts_by_kind);
+  else pass("set_record_kind_real_count_minus_one");
+  if (qaAfter.count !== 1 || !(qaAfter.leads || []).some((l) => l.lead_id === "ops-real")) fail("set_record_kind_qa_list", qaAfter);
+  else pass("set_record_kind_qa_listed");
+  const funnelAfter = JSON.parse((await opsGet("funnel")).body || "{}");
+  if (funnelAfter.funnel?.n !== 0) fail("set_record_kind_funnel_excludes_qa", funnelAfter.funnel);
+  else pass("set_record_kind_funnel_excludes_qa");
+  const again = await opsPost("set_record_kind", { lead_id: "ops-real", to: "qa", reason: "repetido", approval_reference: "g03" });
+  if (again.statusCode !== 409) fail("set_record_kind_repeat", again.statusCode + " " + again.body);
+  else pass("set_record_kind_repeat_conflict");
+
+  const rb = await opsPost("rollback_record_kind", { snapshot_id: setBody.snapshot_id, actor: "operador-ops" });
+  const rbBody = JSON.parse(rb.body || "{}");
+  const restored = await globalMemory.get("ops-real");
+  if (rb.statusCode !== 200 || rbBody.restored !== 1 || restored.record_kind !== "real" || restored.next_action !== "first_contact") {
+    fail("set_record_kind_rollback", { status: rb.statusCode, body: rbBody, record_kind: restored.record_kind, next_action: restored.next_action });
+  } else pass("set_record_kind_rollback_restores_real");
+  const realRestored = JSON.parse((await opsGet("leads", { kind: "real" })).body || "{}");
+  if (realRestored.count !== 1) fail("set_record_kind_rollback_count", realRestored.count);
+  else pass("set_record_kind_rollback_count_restored");
 
   const gscOk = await ops.handler({
     httpMethod: "GET",

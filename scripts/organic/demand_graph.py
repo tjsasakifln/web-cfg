@@ -6,16 +6,84 @@ queries vary textually.
 
 from __future__ import annotations
 
+import json
+from datetime import date
+from pathlib import Path
 from typing import Any
 
-DEMAND_INPUTS: list[dict[str, Any]] = [
-    {
+ROOT = Path(__file__).resolve().parents[2]
+GSC_INSIGHTS_PATH = "data/revops/gsc/insights_latest.json"
+# Same window as scripts/revops/gsc_history.py MAX_AS_OF_LAG_DAYS.
+GSC_MAX_AS_OF_LAG_DAYS = 14
+
+
+def _read_gsc_insights(path: Path | None = None) -> dict[str, Any] | None:
+    target = Path(path) if path is not None else ROOT / GSC_INSIGHTS_PATH
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def gsc_input_freshness(now: date | None = None, path: Path | None = None) -> dict[str, Any]:
+    """MEDICAO-11 (c): freshness of the GSC input is re-evaluated on read.
+
+    The file carries a frozen ``ready_for_product_decisions`` flag; only the
+    lag between its ``as_of`` and today decides whether it is usable. A
+    missing or unreadable file is UNKNOWN, never zero.
+    """
+    today = now or date.today()
+    payload = _read_gsc_insights(path)
+    as_of_raw = payload.get("as_of") if payload else None
+    try:
+        as_of = date.fromisoformat(str(as_of_raw)) if as_of_raw else None
+    except ValueError:
+        as_of = None
+    declared = bool(payload.get("ready_for_product_decisions")) if payload else False
+    if as_of is None:
+        return {
+            "status": "UNKNOWN",
+            "as_of": None,
+            "evaluated_on": today.isoformat(),
+            "lag_days": None,
+            "max_as_of_lag_days": GSC_MAX_AS_OF_LAG_DAYS,
+            "ready_for_product_decisions_declared": declared,
+            "usable_for_decisions": False,
+            "reason": "gsc_insights_missing_or_unreadable",
+        }
+    lag_days = (today - as_of).days
+    status = "STALE" if lag_days > GSC_MAX_AS_OF_LAG_DAYS else "CURRENT"
+    return {
+        "status": status,
+        "as_of": as_of.isoformat(),
+        "evaluated_on": today.isoformat(),
+        "lag_days": lag_days,
+        "max_as_of_lag_days": GSC_MAX_AS_OF_LAG_DAYS,
+        "ready_for_product_decisions_declared": declared,
+        "usable_for_decisions": status == "CURRENT" and declared,
+        "reason": None if status == "CURRENT" else "as_of_older_than_max_lag",
+    }
+
+
+def _gsc_current_input(now: date | None = None) -> dict[str, Any]:
+    freshness = gsc_input_freshness(now=now)
+    return {
         "id": "gsc-current",
         "kind": "google_search_console",
-        "path": "data/revops/gsc/insights_latest.json",
-        "as_of": "2026-07-30",
-        "limitations": "Aggregate search evidence; never joined query-to-lead.",
-    },
+        "path": GSC_INSIGHTS_PATH,
+        # Read from the file, never hard-coded (drift: 2026-07-30 declared vs 2026-08-15 stored).
+        "as_of": freshness["as_of"],
+        "freshness": freshness,
+        "limitations": "Aggregate search evidence; never joined query-to-lead. Freshness re-evaluated on read; STALE/UNKNOWN is not zero.",
+    }
+
+
+def demand_inputs(now: date | None = None) -> list[dict[str, Any]]:
+    return [_gsc_current_input(now=now), *STATIC_DEMAND_INPUTS]
+
+
+STATIC_DEMAND_INPUTS: list[dict[str, Any]] = [
     {
         "id": "smartlic-historical",
         "kind": "pending_migration_evidence",
@@ -54,6 +122,10 @@ DEMAND_INPUTS: list[dict[str, Any]] = [
         "limitations": "No versioned ticket, close-rate or contribution-margin baseline was available.",
     },
 ]
+
+# Backwards-compatible module-level view (evaluated at import time; callers
+# that need a fresh evaluation use demand_inputs()/demand_map(now=...)).
+DEMAND_INPUTS: list[dict[str, Any]] = demand_inputs()
 
 STAGE_BY_INTENT = {
     "tofu": "problem_awareness",
@@ -285,7 +357,7 @@ DEMAND_NODES: list[dict[str, Any]] = [
 ]
 
 
-def demand_map() -> dict[str, Any]:
+def demand_map(now: date | None = None) -> dict[str, Any]:
     """Export demand graph as versioned artifact structure."""
     by_cluster: dict[str, list[str]] = {}
     by_intent: dict[str, list[str]] = {}
@@ -327,7 +399,7 @@ def demand_map() -> dict[str, Any]:
     graph = {
         "schema_version": "organic-demand-v2",
         "model": "query/problem → user job → ICP → stage → asset → unique utility → evidence → CTA → CONFENGE offer → success metric",
-        "inputs": DEMAND_INPUTS,
+        "inputs": demand_inputs(now=now),
         "nodes": nodes,
         "by_cluster": by_cluster,
         "by_intent": by_intent,
