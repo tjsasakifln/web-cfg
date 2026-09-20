@@ -80,6 +80,12 @@ const MAX_FIELD = {
   opportunity_deadline: 10,
   contract_event: 32,
   contract_stage: 24,
+  // BOFU-FECHAMENTO-20260919 (FAMILIAS-PUBLICAS-01): campos opcionais da fase
+  // preparatoria, preenchidos pelo orgao contratante no hub de obras publicas.
+  procurement_object: 120,
+  procurement_stage: 32,
+  procurement_regulation: 80,
+  funding_source: 32,
   contract_value_band: 24,
   lot_count: 4,
   execution_regime: 40,
@@ -200,6 +206,45 @@ function assertDeliverableSelection(raw) {
     };
   }
   return { ok: true, deliverable_id: id };
+}
+
+// FAMILIAS-PUBLICAS-05 (BOFU-FECHAMENTO-20260919): rota publicada -> entrega
+// do registro, para o lead que chega de um pilar sem `deliverable_id` oculto.
+// Chave: slug da rota (`/medicoes-glosas-obras-publicas/` -> o mesmo valor que
+// o formulario grava em estagio/asset_id). BLOCKED nunca e derivado.
+let DELIVERABLE_ID_BY_ROUTE_SLUG = new Map();
+try {
+  const registry = require("../../../data/commercial/deliverables-registry.v1.json");
+  DELIVERABLE_ID_BY_ROUTE_SLUG = new Map(
+    (registry.deliverables || [])
+      .filter((entry) => entry.route && entry.public_state !== "BLOCKED")
+      .map((entry) => [String(entry.route).replace(/^\/+|\/+$/g, ""), entry.deliverable_id]),
+  );
+} catch {
+  DELIVERABLE_ID_BY_ROUTE_SLUG = new Map();
+}
+
+function routeSlugOf(value) {
+  let text = String(value || "").trim();
+  if (!text) return "";
+  if (/^https?:\/\//i.test(text)) {
+    try {
+      text = new URL(text).pathname;
+    } catch {
+      return "";
+    }
+  }
+  text = text.split(/[?#]/)[0];
+  return text.replace(/^\/+|\/+$/g, "");
+}
+
+function deriveDeliverableIdFromRoute(lead) {
+  if (!lead || typeof lead !== "object") return "";
+  for (const candidate of [lead.landing_page, lead.landing_url, lead.estagio, lead.asset_id, lead.route_family]) {
+    const slug = routeSlugOf(candidate);
+    if (slug && DELIVERABLE_ID_BY_ROUTE_SLUG.has(slug)) return DELIVERABLE_ID_BY_ROUTE_SLUG.get(slug);
+  }
+  return "";
 }
 
 // The catalogue hub captures an initial hand-raise, not the qualification
@@ -378,6 +423,14 @@ function assertEightProductQualification(data, deliverableId) {
 const CONTRACT_DEFENSE_IDS = new Set([
   "CFG-D17", "CFG-D18", "CFG-D19", "CFG-D20", "CFG-D21", "CFG-D22", "CFG-D23",
 ]);
+// BOFU-FECHAMENTO-20260919 (FAMILIAS-PUBLICAS-01, decisao C1): o orgao que
+// planeja a contratacao entra pelo MESMO formulario do hub como evento
+// estruturado `planejamento_contratacao` (lado contratante). Nao ha contrato
+// nem estagio de evento; a jornada continua `contrato` e o estagio gravado e
+// `planejamento-contratacao-publica`, que o CTA do bloco do orgao tambem
+// escreve no hidden via data-estagio (js/modules/nav.js, DATASET_TO_FIELD).
+const CONTRACT_EVENT_PLANNING = "planejamento_contratacao";
+const ESTAGIO_PLANEJAMENTO_CONTRATACAO = "planejamento-contratacao-publica";
 const CONTRACT_EVENTS = new Set([
   "risco_margem",
   "medicao_glosa_pagamento",
@@ -386,17 +439,43 @@ const CONTRACT_EVENTS = new Set([
   "reajuste",
   "reequilibrio",
   "notificacao_sancao",
+  CONTRACT_EVENT_PLANNING,
   "outro",
 ]);
 const CONTRACT_STAGES = new Set([
   "identificado", "documentando", "quantificando", "em_resposta", "UNKNOWN",
 ]);
+// Campos OPCIONAIS da fase preparatoria (enum fechado ou texto curto
+// sanitizado como tema). Nunca entram em analytics; viajam no texto
+// versionado do handoff com rotulo e ficam no registro durvel.
+const PROCUREMENT_STAGES = new Set([
+  "dfd_etp", "termo_referencia_projeto", "orcamento_referencia", "edital_minuta", "nao_sei",
+]);
+const FUNDING_SOURCES = new Set([
+  "recurso_proprio", "transferencia_uniao", "transferencia_estado", "financiamento", "nao_sei",
+]);
+
+function procurementContext(data) {
+  const stage = clamp(data.procurement_stage, MAX_FIELD.procurement_stage);
+  const funding = clamp(data.funding_source, MAX_FIELD.funding_source);
+  return {
+    procurement_object: sanitizeAttributionTopic(data.procurement_object, MAX_FIELD.procurement_object) || null,
+    procurement_stage: PROCUREMENT_STAGES.has(stage) ? stage : null,
+    procurement_regulation: sanitizeAttributionTopic(data.procurement_regulation, MAX_FIELD.procurement_regulation) || null,
+    funding_source: FUNDING_SOURCES.has(funding) ? funding : null,
+  };
+}
 
 function assertContractDefenseQualification(data, deliverableId) {
   const publicContractId = clamp(data.public_contract_id, MAX_FIELD.public_contract_id);
   const contractEvent = clamp(data.contract_event, MAX_FIELD.contract_event);
   const deadline = clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline);
-  const contractStage = clamp(data.contract_stage, MAX_FIELD.contract_stage);
+  // FAMILIAS-PUBLICAS-04: o estagio do evento e publicado como opcional
+  // ("Ainda nao sei"). Vazio com evento valido e o mesmo que UNKNOWN; antes,
+  // um pedido completo que nao tocava o campo chegava como lacuna "invalid".
+  const informedStage = clamp(data.contract_stage, MAX_FIELD.contract_stage);
+  const planning = contractEvent === CONTRACT_EVENT_PLANNING;
+  const contractStage = informedStage || (CONTRACT_EVENTS.has(contractEvent) && !planning ? "UNKNOWN" : "");
   // O hub de obras publicas aceita "ainda nao sei qual entrega" (entrega
   // vazia) e ainda assim publica evento e estagio como obrigatorios: o que o
   // visitante informou tem de ser validado e persistido, nao descartado.
@@ -411,10 +490,13 @@ function assertContractDefenseQualification(data, deliverableId) {
   // identificador com 3+ caracteres e um prazo valido e seguro.
   const safeDays = deadline ? businessDaysUntil(deadline) : null;
   const minDays = deliverableId === "CFG-D23" ? 5 : 1;
+  // Orgao planejando a contratacao: nao ha contrato assinado nem estagio de
+  // evento, entao nenhum dos dois e exigido e nenhuma lacuna e registrada.
+  // Um estagio informado fora do enum e descartado, nao vetado.
   if (
     (publicContractId && publicContractId.length < 3) ||
     !CONTRACT_EVENTS.has(contractEvent) ||
-    !CONTRACT_STAGES.has(contractStage) ||
+    (!planning && !CONTRACT_STAGES.has(contractStage)) ||
     (deadline && safeDays < minDays)
   ) {
     return {
@@ -430,7 +512,7 @@ function assertContractDefenseQualification(data, deliverableId) {
       public_contract_id: publicContractId,
       contract_event: contractEvent,
       opportunity_deadline: deadline,
-      contract_stage: contractStage,
+      contract_stage: planning ? (CONTRACT_STAGES.has(contractStage) ? contractStage : null) : contractStage,
     },
   };
 }
@@ -1000,7 +1082,16 @@ function validateAndNormalize(data) {
   // ser orientado e é marcado NEEDS_CONTEXT. Contato e consentimento continuam
   // obrigatórios abaixo; a jornada é derivada do valor efetivo.
   const estagioDefaulted = !adaptiveFields && !informedEstagio;
-  const estagio = estagioDefaulted ? ESTAGIO_UNKNOWN_SERVICE : informedEstagio;
+  // Decisao C1 (BOFU-FECHAMENTO-20260919): o evento `planejamento_contratacao`
+  // identifica o lado contratante; o estagio gravado passa a ser o do orgao,
+  // e nao o asset id oculto do hub, para o handoff, o e-mail e o by_service
+  // distinguirem orgao e contratada. Vale com ou sem o CTA que pre-preenche.
+  const contractEventEffective = contractCheck.qualification?.contract_event
+    || (gapFallback ? rawEnum(data.contract_event, CONTRACT_EVENTS, MAX_FIELD.contract_event) : "");
+  const planningSide = !adaptiveFields && contractEventEffective === CONTRACT_EVENT_PLANNING;
+  const estagio = planningSide
+    ? ESTAGIO_PLANEJAMENTO_CONTRATACAO
+    : (estagioDefaulted ? ESTAGIO_UNKNOWN_SERVICE : informedEstagio);
   const jornada = adaptiveFields
     ? adaptiveFields.jornada
     : normalizeJourney(familyStage ? "" : data.jornada || data.journey, estagio);
@@ -1146,6 +1237,7 @@ function validateAndNormalize(data) {
       productQualification?.contract_stage
       || (gapFallback ? rawEnum(data.contract_stage, CONTRACT_STAGES, MAX_FIELD.contract_stage) : "")
       || null,
+    ...(adaptiveFields ? {} : procurementContext(data)),
     contract_value_band:
       productQualification?.contract_value_band
       || (gapFallback ? rawEnum(data.contract_value_band, CONTRACT_VALUE_BANDS, MAX_FIELD.contract_value_band) : "")
@@ -1202,6 +1294,13 @@ function validateAndNormalize(data) {
 
   // Server-derived, from sanitized fields only; see deriveOriginClass.
   lead.origin_class = deriveOriginClass(lead);
+  // FAMILIAS-PUBLICAS-05: os pilares congelados capturam sem deliverable_id
+  // oculto; a entrega e derivada da rota (registro), so para o registro e o
+  // handoff, DEPOIS das qualificacoes de produto (que continuam lendo apenas
+  // o id postado: um pilar sem campos de evento nao vira lacuna).
+  if (!lead.deliverable_id && !adaptiveFields) {
+    lead.deliverable_id = deriveDeliverableIdFromRoute(lead) || null;
+  }
 
   if (adaptiveFields) {
     lead.adaptive_intake = true;
@@ -1439,6 +1538,64 @@ function corsHeaders(origin) {
   };
 }
 
+// CONTEXTO-CAPTURA-02 (BOFU-FECHAMENTO-20260919): sem JavaScript (ou com o
+// bundle bloqueado), o navegador faz o POST nativo do formulario e recebia o
+// JSON cru de erro como pagina. Uma requisicao que chega como envio nativo --
+// urlencoded (ou sem content-type) ou pedindo text/html -- e SEM o token do
+// Turnstile (que so existe com JavaScript) recebe um 4xx text/html minimo com
+// os canais fixos do site. Clientes JS (JSON, ou token presente) continuam
+// recebendo exatamente a resposta JSON de antes. Nada do corpo enviado e
+// devolvido; os canais vem de data/site/brand.json, nunca da requisicao.
+let BRAND_CHANNELS = { whatsapp_base: "https://wa.me/5548988344559", email: "tiago.sasaki@confenge.com.br" };
+try {
+  const brand = require("../../../data/site/brand.json");
+  const contact = (brand && brand.contact) || {};
+  BRAND_CHANNELS = {
+    whatsapp_base: String(contact.whatsapp_base || BRAND_CHANNELS.whatsapp_base),
+    email: String(contact.email || BRAND_CHANNELS.email),
+  };
+} catch {
+  /* canais canonicos acima */
+}
+const NATIVE_FORM_WA_TEXT = "Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.";
+
+function isNativeFormRequest(event, data) {
+  const headers = (event && event.headers) || {};
+  const pick = (name) => String(headers[name] || headers[name.toLowerCase()] || headers[name.replace(/(^|-)([a-z])/g, (m, sep, ch) => sep + ch.toUpperCase())] || "").toLowerCase();
+  const contentType = pick("content-type");
+  const accept = pick("accept");
+  const hasToken = Boolean(data && (data["cf-turnstile-response"] || data.turnstile_token));
+  if (hasToken) return false;
+  if (accept.includes("application/json")) return false;
+  const nativeBody = !contentType || contentType.includes("application/x-www-form-urlencoded");
+  const wantsHtml = accept.includes("text/html");
+  return nativeBody || wantsHtml;
+}
+
+function nativeFormFallbackResponse(headers) {
+  const wa = `${BRAND_CHANNELS.whatsapp_base}?text=${NATIVE_FORM_WA_TEXT}`;
+  const mail = `mailto:${BRAND_CHANNELS.email}`;
+  const escape = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+  const body = [
+    "<!doctype html>",
+    '<html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>',
+    '<meta name="robots" content="noindex,nofollow"/>',
+    "<title>Pedido não enviado por este caminho | CONFENGE</title>",
+    "<style>body{font-family:system-ui,sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.6;color:#111}a{color:#0b4f8a}</style>",
+    "</head><body>",
+    "<h1>O formulário não conseguiu registrar o pedido</h1>",
+    "<p>Neste navegador, o envio pelo formulário não conclui nem devolve protocolo. Fale pelo WhatsApp ou pelo e-mail: chegam direto e valem o mesmo.</p>",
+    `<p><a href="${escape(wa)}">Falar pelo WhatsApp</a> · <a href="${escape(mail)}">${escape(BRAND_CHANNELS.email)}</a></p>`,
+    '<p><a href="https://confenge.com.br/">Voltar ao site</a></p>',
+    "</body></html>",
+  ].join("\n");
+  return {
+    statusCode: 400,
+    headers: { ...(headers || {}), "Content-Type": "text/html; charset=utf-8" },
+    body,
+  };
+}
+
 /** Public response whitelist — never include channels, topics, tokens, PII. */
 function publicSuccessBody({
   lead_id,
@@ -1593,6 +1750,11 @@ module.exports = {
   corsHeaders,
   publicSuccessBody,
   publicErrorBody,
+  isNativeFormRequest,
+  nativeFormFallbackResponse,
+  deriveDeliverableIdFromRoute,
+  CONTRACT_EVENT_PLANNING,
+  ESTAGIO_PLANEJAMENTO_CONTRATACAO,
   redactSensitiveText,
   sanitizeLogFields,
   safeLog,

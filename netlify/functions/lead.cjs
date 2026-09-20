@@ -22,6 +22,8 @@ const {
   corsHeaders,
   publicSuccessBody,
   publicErrorBody,
+  isNativeFormRequest,
+  nativeFormFallbackResponse,
   safeLog,
   retentionPolicy,
 } = require("./lib/lead-core.cjs");
@@ -158,6 +160,15 @@ exports.handler = async (event) => {
         }),
       ),
     };
+  }
+  // CONTEXTO-CAPTURA-02: envio nativo do formulario (sem JavaScript, logo sem
+  // token do Turnstile) recebe uma pagina minima com os canais, nao JSON cru.
+  // Nada e persistido por este caminho; o Turnstile continua obrigatorio e a
+  // resposta JSON dos clientes JS nao muda. Depois do honeypot (bot continua
+  // recebendo o 200 silencioso) e antes de qualquer detalhe de validacao.
+  if (!originCheck.probe && isNativeFormRequest(event, parsed.data)) {
+    safeLog("warn", "native_form_fallback", {});
+    return nativeFormFallbackResponse(headers);
   }
   if (!validated.ok) {
     return {

@@ -3303,6 +3303,166 @@ for (const bodyHonoursAbort of [true, false]) {
   pass("origin_class_handler_no_leak", { stored_origin_class: stored.origin_class });
 }
 
+// BOFU-FECHAMENTO-20260919 (WS-A): orgao contratante no hub, estagio opcional
+// da contratada, entrega derivada da rota nos pilares e envio nativo sem JS.
+// Contraprovas: cada bloco reprovava no estado anterior (rawEnum descartava
+// `planejamento_contratacao`; `contract_stage=""` virava lacuna; pilar sem
+// deliverable_id chegava sem `entrega=`; POST urlencoded devolvia JSON cru).
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const hub = {
+    nome: "QA Orgao Contratante",
+    email: "qa-orgao@example.com",
+    consentimento: "1",
+    origem: "servicos-obras-publicas",
+    estagio: "contract-defense-products",
+    jornada: "contrato",
+    asset_id: "contract-defense-products",
+    route_family: "servicos-obras-publicas",
+    cta_id: "contract-defense-products-handraise",
+    landing_page: "https://confenge.com.br/servicos-obras-publicas/",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  // (a) Orgao: evento estruturado + campos preparatorios opcionais, sem
+  // contrato e sem estagio de evento -> recebido sem lacuna, lado no handoff.
+  const orgao = await handler(event({
+    ...hub,
+    contract_event: "planejamento_contratacao",
+    procurement_object: "Reforma de escola municipal",
+    procurement_stage: "dfd_etp",
+    procurement_regulation: "Lei 14.133",
+    funding_source: "transferencia_uniao",
+    idempotency_key: "wsa-orgao-planejamento-001",
+  }, "POST", { ip: "203.0.113.240" }));
+  const orgaoData = JSON.parse(orgao.body);
+  const orgaoStored = orgaoData.lead_id ? await mem.get(orgaoData.lead_id) : null;
+  if (orgao.statusCode !== 201 || !orgaoStored) fail("wsa_orgao_planejamento_received", { status: orgao.statusCode, orgaoData });
+  if (orgaoStored.contract_event !== "planejamento_contratacao" || orgaoStored.contract_stage !== null
+      || orgaoStored.qualification_gaps || orgaoStored.qualification_state
+      || orgaoStored.jornada !== "contrato" || orgaoStored.estagio !== "planejamento-contratacao-publica"
+      || orgaoStored.procurement_stage !== "dfd_etp" || orgaoStored.procurement_regulation !== "Lei 14.133"
+      || orgaoStored.procurement_object !== "Reforma de escola municipal" || orgaoStored.funding_source !== "transferencia_uniao") {
+    fail("wsa_orgao_planejamento_persisted", orgaoStored);
+  }
+  const orgaoMessage = inbound.mapLeadToInboundV1(orgaoStored).message || "";
+  for (const needle of ["lado=orgao_contratante", "estágio da contratação=dfd_etp", "evento contratual=planejamento_contratacao",
+    "situação declarada=planejamento-contratacao-publica", "objeto=Reforma de escola municipal", "regulamento=Lei 14.133", "origem do recurso=transferencia_uniao"]) {
+    if (!orgaoMessage.includes(needle)) fail("wsa_orgao_handoff_context", { needle, orgaoMessage });
+  }
+  if (Object.keys(orgaoData).some((key) => /procurement|funding|contract_event/.test(key))) fail("wsa_orgao_public_response_whitelist", orgaoData);
+  pass("wsa_orgao_planejamento_sem_lacuna", { lead_id: orgaoData.lead_id });
+
+  // (b) Enum fechado: texto livre em procurement_stage/funding_source vira null;
+  // objeto/regulamento nao carregam e-mail nem digitos em serie (sem PII).
+  const closed = core.validateAndNormalize({
+    ...hub,
+    contract_event: "planejamento_contratacao",
+    procurement_stage: "texto livre",
+    funding_source: "outro texto",
+    procurement_object: "objeto com qa@example.com",
+    procurement_regulation: "regulamento 48988344559",
+  });
+  if (!closed.ok || closed.lead.procurement_stage !== null || closed.lead.funding_source !== null
+      || closed.lead.procurement_object !== null || closed.lead.procurement_regulation !== null || closed.lead.qualification_gaps) {
+    fail("wsa_procurement_enum_closed", closed.lead);
+  }
+  pass("wsa_procurement_enum_closed");
+
+  // (c) FAMILIAS-PUBLICAS-04: estagio vazio + evento valido = UNKNOWN, sem lacuna.
+  const emptyStage = core.validateAndNormalize({
+    ...hub, deliverable_id: "CFG-D20", contract_event: "atraso_prorrogacao", contract_stage: "",
+  });
+  if (!emptyStage.ok || emptyStage.lead.contract_stage !== "UNKNOWN" || emptyStage.lead.qualification_gaps || emptyStage.lead.qualification_state) {
+    fail("wsa_contract_stage_empty_is_unknown", emptyStage.lead);
+  }
+  // O estagio informado continua valendo; texto livre continua lacuna.
+  const informed = core.validateAndNormalize({ ...hub, contract_event: "reajuste", contract_stage: "quantificando" });
+  const invalid = core.validateAndNormalize({ ...hub, contract_event: "reajuste", contract_stage: "estagio_livre" });
+  if (informed.lead.contract_stage !== "quantificando" || !invalid.lead.qualification_gaps?.includes("contract_qualification_invalid")) {
+    fail("wsa_contract_stage_informed_or_invalid", { informed: informed.lead.contract_stage, invalid: invalid.lead.qualification_gaps });
+  }
+  pass("wsa_contract_stage_empty_is_unknown");
+
+  // (d) FAMILIAS-PUBLICAS-05: pilar congelado sem deliverable_id oculto ->
+  // entrega derivada da rota para o registro e o handoff, SEM abrir a
+  // qualificacao de produto (nenhuma lacuna num pilar sem campos de evento).
+  const pillar = core.validateAndNormalize({
+    nome: "QA Pilar", email: "qa-pilar@example.com", consentimento: "1", jornada: "contrato",
+    estagio: "medicoes-glosas-obras-publicas", route_family: "medicoes-glosas",
+    asset_id: "medicoes-glosas-obras-publicas", origem: "medicoes-glosas-obras-publicas",
+    landing_page: "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+  });
+  if (!pillar.ok || pillar.lead.deliverable_id !== "CFG-D18" || pillar.lead.qualification_gaps || pillar.lead.qualification_state) {
+    fail("wsa_pillar_deliverable_derived_without_gap", pillar.lead);
+  }
+  if (!(inbound.mapLeadToInboundV1({ ...pillar.lead, lead_id: "lead-qa-pilar" }).message || "").includes("entrega=CFG-D18")) {
+    fail("wsa_pillar_handoff_entrega", inbound.mapLeadToInboundV1({ ...pillar.lead, lead_id: "lead-qa-pilar" }).message);
+  }
+  for (const [slug, expected] of [
+    ["aditivos-obras-publicas", "CFG-D19"], ["reequilibrio-obras-publicas", "CFG-D22"],
+    ["auditoria-orcamento-licitacao", "CFG-D14"], ["diagnostico-pre-licitacao", "CFG-D12"],
+    ["diagnostico-b2g-360", "CFG-D24"], ["acompanhamento-contratos-obras", "CFG-D25"], ["bid-room-licitacoes-obras", "CFG-D16"],
+  ]) {
+    const check = core.validateAndNormalize({
+      nome: "QA Pilar", email: "qa-pilar@example.com", consentimento: "1", jornada: "contrato",
+      estagio: slug, route_family: slug, asset_id: slug, origem: slug,
+    });
+    if (!check.ok || check.lead.deliverable_id !== expected || check.lead.qualification_gaps) {
+      fail("wsa_pillar_deliverable_derived_each", { slug, expected, lead: check.lead });
+    }
+  }
+  // Valor postado prevalece; rotas sem entrega no registro nao derivam nada.
+  const explicit = core.validateAndNormalize({ ...hub, deliverable_id: "CFG-D21", contract_event: "reajuste", contract_stage: "identificado", estagio: "medicoes-glosas-obras-publicas" });
+  const none = core.validateAndNormalize({ ...hub, contract_event: "reajuste", contract_stage: "identificado" });
+  const homeLead = core.validateAndNormalize({ nome: "QA", email: "qa@example.com", consentimento: "1", estagio: "contrato em execução", jornada: "contrato", route_family: "home" });
+  if (explicit.lead.deliverable_id !== "CFG-D21" || none.lead.deliverable_id !== null || homeLead.lead.deliverable_id !== null) {
+    fail("wsa_pillar_deliverable_precedence", { explicit: explicit.lead.deliverable_id, none: none.lead.deliverable_id, home: homeLead.lead.deliverable_id });
+  }
+  pass("wsa_pillar_deliverable_derived_from_route", { routes: 8 });
+
+  // (e) CONTEXTO-CAPTURA-02: POST nativo (urlencoded, Accept text/html, sem
+  // token) recebe 4xx text/html com os canais; nada e persistido; o cliente
+  // JS (JSON) continua recebendo o JSON de validacao de antes.
+  const before = mem.map.size;
+  const native = await handler({
+    httpMethod: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      origin: "https://confenge.com.br",
+      "user-agent": "confenge-lead-test/1.0",
+      "x-forwarded-for": "203.0.113.241",
+    },
+    body: "nome=QA+Nativo&email=qa-nativo%40example.com&consentimento=1&estagio=contrato+em+execu%C3%A7%C3%A3o&jornada=contrato",
+  });
+  const nativeType = String(native.headers["Content-Type"] || native.headers["content-type"] || "");
+  if (native.statusCode < 400 || native.statusCode >= 500 || !nativeType.startsWith("text/html")
+      || !native.body.includes("wa.me/") || !native.body.includes("mailto:") || /qa-nativo|QA Nativo/.test(native.body)
+      || mem.map.size !== before) {
+    fail("wsa_native_form_post_html_fallback", { status: native.statusCode, nativeType, size: [before, mem.map.size], body: native.body.slice(0, 200) });
+  }
+  const acceptHtmlJson = await handler(event({ nome: "Q" }, "POST", { accept: "text/html" }));
+  const jsonClient = await handler(event({ nome: "Q" }, "POST", { ip: "203.0.113.242" }));
+  const jsonType = String(jsonClient.headers["Content-Type"] || "");
+  if (jsonClient.statusCode !== 400 || !jsonType.startsWith("application/json") || JSON.parse(jsonClient.body).error !== "validation") {
+    fail("wsa_json_client_unchanged", { status: jsonClient.statusCode, jsonType, body: jsonClient.body });
+  }
+  // JSON body pedindo text/html sem token tambem e tratado como envio nativo.
+  if (!String(acceptHtmlJson.headers["Content-Type"] || "").startsWith("text/html")) {
+    fail("wsa_accept_html_without_token_is_native", acceptHtmlJson.headers);
+  }
+  // Com token do Turnstile (cliente JS), urlencoded continua no caminho JSON.
+  const withToken = await handler({
+    httpMethod: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded", origin: "https://confenge.com.br", "user-agent": "t", "x-forwarded-for": "203.0.113.243" },
+    body: "nome=Q&turnstile_token=tok",
+  });
+  if (!String(withToken.headers["Content-Type"] || "").startsWith("application/json")) fail("wsa_urlencoded_with_token_stays_json", withToken.headers);
+  pass("wsa_native_form_post_html_fallback", { status: native.statusCode });
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {
