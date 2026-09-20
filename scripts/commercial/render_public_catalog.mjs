@@ -431,8 +431,14 @@ function renderOfferLadder(contract) {
 }
 
 function renderDecisionNav(published) {
+  // WCAG 2.5.3 (label in name): the accessible name starts with everything the
+  // link renders, ordinal included ("01 Onde disputar?"), then the decision
+  // question. axe's label-content-name-mismatch counts the aria-hidden ordinal
+  // as visible text and concatenates text runs, so the space after the ordinal
+  // is part of the contract (the link is inline-flex: whitespace between flex
+  // items is not rendered). BOFU-FECHAMENTO-20260919, A11Y-FRAGMENTOS-06.
   const decisions = published.map((entry) =>
-    `<li><a aria-label="${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])} ${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span aria-hidden="true">${entry.catalog_number}</span>${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
+    `<li><a aria-label="${entry.catalog_number} ${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])} ${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span aria-hidden="true">${entry.catalog_number}</span> ${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
   ).join("");
   return `<nav class="offer-decision-nav page-index" aria-label="Escolher análise para obra pública pela decisão"><span class="page-index__label" id="examples-nav-title">Escolha pela decisão que está na mesa</span><ol>${decisions}</ol></nav>`;
 }
