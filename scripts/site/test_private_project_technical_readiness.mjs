@@ -75,7 +75,7 @@ const {
 
 expect("twins_identical", readFileSync(jsPath, "utf8") === readFileSync(enginePath, "utf8"));
 expect("engine_id", ENGINE_ID === "private_project_technical_readiness_v1");
-expect("engine_version", ENGINE_VERSION === "1.2.0");
+expect("engine_version", ENGINE_VERSION === "1.3.0");
 expect("asset_id", ASSET_ID === ENGINE_ID);
 expect("nucleus", NUCLEUS === "building_engineering_documentation");
 expect("offer", OFFER_CANDIDATE === "private_project_technical_readiness_assessment");
@@ -384,15 +384,18 @@ const FIXTURE_MAP = {
 };
 
 {
-  expect("routing_table_three_paths", ROUTING_TABLE.length === 3);
+  // BOFU-FECHAMENTO-20260919 (A-02): quarta rota, documentação do construído
+  // (purchase documentar-as-built). Cobertura nova em
+  // scripts/site/test_private_readiness_asbuilt_route.mjs.
+  expect("routing_table_four_paths", ROUTING_TABLE.length === 4);
   expect(
     "routing_ids",
-    ROUTING_TABLE.map((row) => row.id).join(",") === "orcamento,compatibilizacao,revisao",
+    ROUTING_TABLE.map((row) => row.id).join(",") === "orcamento,compatibilizacao,revisao,documentacao",
   );
   expect(
     "routing_offer_ids",
     ROUTING_TABLE.map((row) => row.offer_id).join(",") ===
-      "quantity_takeoff_budgeting,bim_coordination_clash_register,complementary_engineering_project_review",
+      "quantity_takeoff_budgeting,bim_coordination_clash_register,complementary_engineering_project_review,asbuilt_document_reconciliation",
   );
 }
 
@@ -633,7 +636,10 @@ const FIXTURE_MAP = {
   expect("contact_need_code", ctx.need_code === "obra_edificacao_ou_documentacao");
   expect("contact_offer_id_only", ctx.offer_candidate_id === "quantity_takeoff_budgeting");
   expect("contact_no_answers", !ctxBlob.includes("takeoff_ligado") && !ctxBlob.includes("\"nenhum\"") && !ctxBlob.includes("work_stage"));
-  expect("contact_href_triagem", href.startsWith("/triagem-tecnica/"));
+  // BOFU-FECHAMENTO-20260919 (A-05): o pedido de conversa pousa no formulário
+  // da home com jornada/tema (a triagem não tem formulário).
+  expect("contact_href_home_form", href.startsWith("/?") && href.endsWith("#contato"));
+  expect("contact_href_journey_topic", /[?&]jornada=orcamento(&|$)/.test(href) && /[?&]tema=/.test(href));
   expect("contact_href_no_answers", !href.includes("takeoff_ligado") && !href.includes("work_stage") && !href.includes("nenhum"));
   for (const id of QUESTION_IDS) {
     expect("contact_no_qid_" + id, !Object.prototype.hasOwnProperty.call(ctx, id));

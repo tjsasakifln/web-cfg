@@ -7,7 +7,7 @@
   "use strict";
 
   var ENGINE_ID = "private_project_technical_readiness_v1";
-  var ENGINE_VERSION = "1.2.0";
+  var ENGINE_VERSION = "1.3.0";
   var ASSET_ID = "private_project_technical_readiness_v1";
   var NUCLEUS = "building_engineering_documentation";
   var OFFER_CANDIDATE = "private_project_technical_readiness_assessment";
@@ -200,23 +200,42 @@
   var ROUTE_ORCAMENTO = "orcamento";
   var ROUTE_COMPAT = "compatibilizacao";
   var ROUTE_REVISAO = "revisao";
+  var ROUTE_DOCUMENTACAO = "documentacao";
   var ROUTE_ESCOPO = "escopo";
   var HUMAN_CONTACT_PATH = "/triagem-tecnica/";
   // POS-REDESIGN-FECHAMENTO-20260918 (G02-07): a triagem separou quantitativos
   // e orçamento (#quantitativos) de inspeção (#obra-imovel). A ferramenta
-  // encaminha para três recortes (orçamento, revisão, compatibilização), então
-  // nenhum item fixo é o certo: o contato pousa no topo da triagem.
+  // encaminha para recortes distintos, então nenhum item fixo é o certo: a
+  // alternativa humana pousa no topo da triagem (sem formulário).
   var HUMAN_CONTACT_HASH = "";
+  // BOFU-FECHAMENTO-20260919 (A-05): o pedido de conversa de escopo pousa no
+  // formulário da home com o contrato que o runtime (js/modules/nav.js) lê:
+  // ?jornada= (situação da home), ?tema= (nome público do encaminhamento),
+  // ?origem= (esta ferramenta) e #contato. A triagem não tem formulário e
+  // descartava o recorte. intent_family segue como contexto. need_code NÃO
+  // vai na URL: o runtime da home materializa toda chave lida como campo
+  // oculto de todos os formulários da sessão, e o servidor trata need_code
+  // como gatilho da triagem adaptativa (rejeitaria o lead inteiro).
+  // offer_candidate_id/route_id/source_origin_* ficam só no contexto local
+  // (analytics e contact_context); nenhum consumidor os lê na URL da home.
+  var CONTACT_FORM_PATH = "/";
+  var CONTACT_FORM_HASH = "contato";
+  var TOOL_PATH = "/ferramentas/prontidao-tecnica-obra-privada/";
+  var JOURNEY_BY_INTENT_FAMILY = Object.freeze({
+    orcar_planejar_decidir: "orcamento",
+    projetar_revisar_compatibilizar: "projeto",
+    documentar_as_built_regularizar: "obra",
+  });
+  var SCOPE_CONVERSATION_JOURNEY = "outro";
+  var SCOPE_CONVERSATION_TOPIC = "conversa de escopo sobre a prontidão técnica de uma obra privada";
   var NEED_CODE = "obra_edificacao_ou_documentacao";
   var ROUTE_FAMILY = "prontidao-tecnica-obra-privada";
   var DESTINATION_MAP_SCHEMA = "confenge.canonical-destination-map/1.0";
   var CONTACT_QUERY_KEYS = Object.freeze([
-    "need_code",
-    "offer_candidate_id",
+    "jornada",
+    "tema",
+    "origem",
     "intent_family",
-    "route_id",
-    "source_origin_asset_id",
-    "source_origin_route_family",
   ]);
 
   var ROUTING_TABLE = Object.freeze([
@@ -250,6 +269,23 @@
       why: "O conjunto de projetos recebido está incompleto, sem controle de revisão ou sem responsável por disciplina. Convém revisar o que chegou antes de orçar ou executar.",
       next: "Pedir revisão do projeto recebido para localizar inconsistências e o que falta documentar.",
     }),
+    // BOFU-FECHAMENTO-20260919 (A-02): aceitar entrega, operar ou retomar com
+    // as-built ou pacote de entrega em lacuna bloqueava a decisão e a tabela
+    // não tinha caminho: "nenhuma contratação é sugerida". A compra
+    // documentar-as-built (purchase-route-map, offer asbuilt_document_
+    // reconciliation) responde a esse domínio. O mapa canônico de destinos
+    // não carrega âncoras (#), por isso a rota publica o destino direto.
+    Object.freeze({
+      id: ROUTE_DOCUMENTACAO,
+      domain_id: "asbuilt_handover_operations",
+      offer_id: "asbuilt_document_reconciliation",
+      purchase_id: "documentar-as-built",
+      intent_family: "documentar_as_built_regularizar",
+      public_name: "Registro do construído e documentação que falta",
+      why: "Projeto, execução e documentos não batem entre si, ou o as-built e o pacote de entrega não existem na revisão atual. Aceitar a entrega, operar ou retomar assim deixa manutenção e pendências sem mapa.",
+      next: "Pedir a reconciliação projeto, construído e documento do recorte: as-built na revisão atual, lista de lacunas e evidências que ainda faltam. Alvará, habite-se e regularização são atos do órgão e não entram nessa etapa.",
+      href: "/inspecao-diagnostico-edificacoes/#documentacao-as-built",
+    }),
   ]);
 
   function routingRowById(id) {
@@ -269,20 +305,26 @@
       public_name: row.public_name,
       why: row.why,
       next: row.next,
+      href: row.href || null,
     };
     var extraKeys = extra ? Object.keys(extra) : [];
     for (var i = 0; i < extraKeys.length; i += 1) out[extraKeys[i]] = extra[extraKeys[i]];
     return out;
   }
 
+  // Toda ordem lista todas as rotas: uma rota disparada fora da ordem deixava
+  // o encaminhamento principal nulo mesmo com lacuna declarada.
   function primaryOrderForDecision(decision) {
     if (decision === "iniciar_execucao" || decision === "contratar_execucao") {
-      return [ROUTE_COMPAT, ROUTE_ORCAMENTO, ROUTE_REVISAO];
+      return [ROUTE_COMPAT, ROUTE_ORCAMENTO, ROUTE_REVISAO, ROUTE_DOCUMENTACAO];
     }
     if (decision === "contratar_projeto") {
-      return [ROUTE_REVISAO, ROUTE_COMPAT, ROUTE_ORCAMENTO];
+      return [ROUTE_REVISAO, ROUTE_COMPAT, ROUTE_ORCAMENTO, ROUTE_DOCUMENTACAO];
     }
-    return [ROUTE_ORCAMENTO, ROUTE_REVISAO, ROUTE_COMPAT];
+    if (decision === "aceitar_entrega" || decision === "operar_manter" || decision === "retomar_obra") {
+      return [ROUTE_DOCUMENTACAO, ROUTE_ORCAMENTO, ROUTE_REVISAO, ROUTE_COMPAT];
+    }
+    return [ROUTE_ORCAMENTO, ROUTE_REVISAO, ROUTE_COMPAT, ROUTE_DOCUMENTACAO];
   }
 
   function justifyPrimary(primaryId, triggeredIds, decision) {
@@ -356,6 +398,12 @@
     var scopeConversation = false;
     var summaryNext = "";
     var designMissing = answers.design_set === "nenhum";
+    // Lacuna que bloqueia a decisão declarada em tema sem rota própria
+    // (decisão e escopo; mudanças, execução e medição; ART e inspeções).
+    var blockingUnrouted = false;
+    for (i = 0; i < domains.length; i += 1) {
+      if (domains[i].status === GAP && domains[i].priority === PRIORITY_BLOCKING) blockingUnrouted = true;
+    }
     if (primary) {
       summaryNext = primary.next;
     } else if (unknownCommercial > 0) {
@@ -364,8 +412,11 @@
     } else if (designMissing) {
       scopeConversation = true;
       summaryNext = "Não há conjunto de projetos localizado. Isso não classifica um projeto como defeituoso. Uma conversa de escopo esclarece se falta elaborar a disciplina ou localizar o que já existe.";
+    } else if (blockingUnrouted) {
+      scopeConversation = true;
+      summaryNext = "Há lacuna que bloqueia a decisão declarada em um tema que esta leitura não liga a um serviço específico. Uma conversa de escopo esclarece o recorte. Esta leitura não é um diagnóstico conclusivo.";
     } else {
-      summaryNext = "As respostas não apontam lacuna nos caminhos de orçamento, revisão ou compatibilização. Nenhuma contratação é sugerida. O resultado completo continua disponível, sem contato.";
+      summaryNext = "As respostas não apontam lacuna que peça um trabalho de engenharia agora. Nenhuma contratação é sugerida. O resultado completo continua disponível, sem contato.";
     }
 
     var justification = primary
@@ -518,13 +569,18 @@
   function buildContactContext(result) {
     var routing = result && result.routing ? result.routing : {};
     var primary = routing.primary || null;
+    var intentFamily = primary && primary.intent_family ? primary.intent_family : "";
     return {
       source_origin_asset_id: ASSET_ID,
       source_origin_route_family: ROUTE_FAMILY,
       need_code: NEED_CODE,
       offer_candidate_id: primary && primary.offer_id ? primary.offer_id : "",
-      intent_family: primary && primary.intent_family ? primary.intent_family : "",
+      intent_family: intentFamily,
       route_id: primary && primary.id ? primary.id : ROUTE_ESCOPO,
+      // Contrato lido pelo formulário da home: situação, tema e origem.
+      jornada: JOURNEY_BY_INTENT_FAMILY[intentFamily] || SCOPE_CONVERSATION_JOURNEY,
+      tema: primary && primary.public_name ? primary.public_name : SCOPE_CONVERSATION_TOPIC,
+      origem: TOOL_PATH,
     };
   }
 
@@ -538,7 +594,7 @@
       if (value) params.push(encodeURIComponent(key) + "=" + encodeURIComponent(String(value)));
     }
     var query = params.length ? "?" + params.join("&") : "";
-    return HUMAN_CONTACT_PATH + query + (HUMAN_CONTACT_HASH ? "#" + HUMAN_CONTACT_HASH : "");
+    return CONTACT_FORM_PATH + query + (CONTACT_FORM_HASH ? "#" + CONTACT_FORM_HASH : "");
   }
 
   function summarizeReadiness(result) {
@@ -1024,6 +1080,9 @@
     ROUTING_TABLE: ROUTING_TABLE,
     DESTINATION_MAP_SCHEMA: DESTINATION_MAP_SCHEMA,
     CONTACT_QUERY_KEYS: CONTACT_QUERY_KEYS,
+    JOURNEY_BY_INTENT_FAMILY: JOURNEY_BY_INTENT_FAMILY,
+    CONTACT_FORM_PATH: CONTACT_FORM_PATH,
+    CONTACT_FORM_HASH: CONTACT_FORM_HASH,
     NEED_CODE: NEED_CODE,
     ROUTE_FAMILY: ROUTE_FAMILY,
     buildAnalyticsEvent: buildAnalyticsEvent,

@@ -97,8 +97,11 @@
     add(wrap, "p", "", "Por que importa: " + (justification || route.why));
     add(wrap, "p", "", "Próximo passo: " + route.next);
     var dest = destinationFor(route);
-    if (dest.present && dest.href) {
-      addLink(wrap, dest.href, "button", "Abrir o serviço: " + route.public_name.toLowerCase(), {
+    // O mapa canônico de destinos não carrega âncoras; uma rota pode publicar
+    // o destino direto (route.href) quando o mapa não a resolve (A-02).
+    var href = dest.present && dest.href ? dest.href : (route.href || "");
+    if (href) {
+      addLink(wrap, href, "button", "Abrir o serviço: " + route.public_name.toLowerCase(), {
         "data-tool-to-offer": route.offer_id,
         "data-tool-to-purchase": route.purchase_id || "",
       });
