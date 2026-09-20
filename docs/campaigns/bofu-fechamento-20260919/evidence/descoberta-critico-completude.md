@@ -1,0 +1,142 @@
+# Crítico de completude — BOFU fechamento 2026-09-19 (base fedb4768b = produção)
+
+Método: leitura dos 9 relatórios (73 achados: 1 P0, 26 P1, 44 P2, 2 JA_CORRIGIDO), README da campanha anterior (matriz de 13 famílias + 6 pendências), varredura própria das 96 rotas do sitemap + `/analise-cnpj/r/` + 4 páginas `/obrigado*` (`/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/b18344bb-83c3-4ff1-92ac-8e41aaa0a000/scratchpad/critic/sweep.json`) e 11 verificações no artefato servido. Nenhum arquivo do repositório editado; nenhum build/remediate/commit. Texto integral também em `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/b18344bb-83c3-4ff1-92ac-8e41aaa0a000/scratchpad/critic/critico-completude.md`.
+
+## LACUNAS
+
+### L1. Censo de formulários: completo para captura de lead, cego para formulários de ferramenta
+Reconciliação (varredura servida): 37 `<form>` em 34 rotas. Destes, 30 são captura de lead = os 32 do censo menos `/comercial/radar-decisorio/` e `/analise-cnpj/` (fora do sitemap, fora da varredura). O censo está **completo para captura de lead**. Ficam fora dele 7 formulários de ferramenta em 6 rotas: `/conflitos/#conflict-gate-form` (gate de conflito, `action="#primeira-etapa"`; noscript=1, wa 1, mailto 1), `/ferramentas/matriz-atraso-obra/#f` (POST para a própria rota; **noscript=0**, wa 1, mailto 2), `/conteudos/sinapi-desonerado-nao-desonerado/ form.breakout-tool` (GET `#`; noscript=0), `/ferramentas/checklist-reequilibrio/#f`, `/ferramentas/diagnostico-defesa-margem/#lookup`, `/ferramentas/limite-acrescimos-supressoes/#limite-form`, `/ferramentas/prontidao-tecnica-obra-privada/#diagnostico` (noscript=1 nessas rotas vem do formulário de captura vizinho). Para as ferramentas ninguém verificou degradação sem JS (a home mostra noscript=0 porque usa `.form-nojs-note` gatada por `.no-js`; não é defeito novo). `/conflitos/` é a ação terminal `REQUEST_CONFLICT_CHECK` de produzir_prova_tecnica (citada por B-05) e ponte real do bloco `#assistencia-trabalhista`; nenhum leitor o auditou. Item novo **L1-a** (WS-G): classificar os 7 como `tool_form` em `scripts/commercial/cta_form_next_state_audit.mjs` com asserção "sem JS: mensagem visível ou degradação explícita"; contraprova: censo atual não os lista; `matriz-atraso-obra` e o breakout-tool reprovam.
+
+### L2. Família decidir_disputar_licitacao sem registro de verificação
+Nenhum leitor produziu achado nem verificação positiva (como A-09) para `/diagnostico-pre-licitacao/`, `/auditoria-orcamento-licitacao/`, `/bid-room-licitacoes-obras/` na cadeia dor→solução→entrega→prova→contato; só aparecem em CONTEXTO-05 (noscript) e PUBLICAS-05 (deliverable_id). O mesmo vazio vale para dor/prova por pilar dos 8 pilares de executar_proteger_contrato_publico (só formulários e ressalvas foram lidos). Registrar "verificado, sem defeito" ou achados.
+
+### L3. Páginas `/obrigado*` (fim de "contexto preservado até o atendimento") não auditadas
+Verificado agora: `/obrigado` e `/obrigado-contrato` carregam `receipt-id`, `data-journey` e WhatsApp com jornada. Não existe `/obrigado` do órgão: `nav.js` mapeia `orgao → /obrigado` (genérico, `data-journey="operacao"`); ao decidir a jornada do órgão (WS-A) definir também a confirmação.
+
+### L4. Mínimo de contato — um formulário sem classificação
+`/ferramentas/limite-acrescimos-supressoes/#cfg-d19-form` exige `public_contract_id`, `opportunity_deadline`, `contract_stage` além de nome+consentimento. CONTEXTO lista como "exige mais" sem dizer se o perfil autoriza (casos/modelo-* e radar têm perfil declarado). Confirmar `data-runtime-profile`/`field_purpose` no contrato ou registrar exceção datada.
+
+### L5. Itens do mandato cobertos (mapa)
+13 famílias: projetar/orcar (A-09 OK), inspecionar (A-01/03, RESSALVAS-03/04), receber_entregar_reformar e documentar_as_built (A-01..04, HOME-HUB-01..03), avaliar_imovel (B-03..06, HOME-HUB-10/11), produzir_prova (B-09/10, RESSALVAS-05), assistencia_trabalhista_sst (B-02/07), organizar_sst (B-08, RESSALVAS-01/02), planejar_contratacao_publica (PUBLICAS-01..06, HOME-HUB-05/06, CTX-04), decidir_disputar (L2), executar_proteger (PUBLICAS-04/05/07, RESSALVAS-08/09), outra_demanda (B-11). Home/hub explicitando recebimento/reforma/as-built: A-04 ≡ HOME-HUB-01, HOME-HUB-02/03. Demandas combinadas: A-06, HOME-HUB-08; combinação B2G+B2G (glosa+aditivo no mesmo contrato: `contract_event` é único) sem achado — P2 a registrar. Intenção própria do órgão com campos e prefill: PUBLICAS-01/03. Contexto preservado: CTX-03, PUBLICAS-05/07, A-05. Quem não sabe nomear: B-11. 8 links WCAG 2.5.3: A11Y-01. `#fontes`: A11Y-02. Nomes/fragmentos no artefato inteiro: A11Y-03..06. Ressalvas SST: RESSALVAS-01/02 ≡ B-08. Alternativas padronizadas: CTX-01/05/06 (+L1). JS desligado vs falha de script: CTX-02. A06 timeout/retry/idempotência: A06-01/04/05/06/07. QA identificado fora das métricas: A06-02. Contrato Warmbly: CTX-03, PUBLICAS-01(6), MEDICAO-08/09 — nenhum leitor comparou `docs/ops/WARMBLY-INBOUND.md` com o que `mapLeadToInboundV1` emite (coberto só por `test_inbound_handoff`). GSC datado: MEDICAO-11.
+
+### L6. Menores
+- `/ferramentas/` (hub) sem WhatsApp (mailto 1), sem formulário — P2.
+- B-02 não registrou que `#assistencia-trabalhista` já liga a `/conflitos/`; a correção deve manter esse link.
+- `/analise-cnpj/` sem `noindex` e fora do sitemap (CTX-01): decisão de indexabilidade não consta no registro de famílias.
+
+## AMOSTRAGEM (artefato servido, fedb4768b, 2026-09-19)
+
+| # | Achado | Verificação no servido | Resultado |
+| --- | --- | --- | --- |
+| 1 | FAMILIAS-PUBLICAS-01 (P0) | `/servicos-obras-publicas/`: string exata `escolha &quot;Outro evento contratual&quot;` = 1; `select[name=contract_event]` = `['', risco_margem, medicao_glosa_pagamento, mudanca_escopo, atraso_prorrogacao, reajuste, reequilibrio, notificacao_sancao, outro]`; `lead-core.cjs:598 ALLOWED_JOURNEYS` sem `orgao`; `nav.js:61 journey:'orgao'` | REPRODUZIDO_EM_PRODUCAO |
+| 2 | FAMILIAS-PRIVADAS-A-01 (P1) | `/inspecao-diagnostico-edificacoes/`: 2 `wa.me`, **1** prefill distinto | REPRODUZIDO_EM_PRODUCAO |
+| 3 | HOME-HUB-01 ≡ A-04 (P1) | Home: `inspecao-diagnostico-edificacoes/#…` = 0; `<h3>Tenho infiltração, fissura, mofo ou dano no imóvel</h3>` | REPRODUZIDO_EM_PRODUCAO |
+| 4 | CONTEXTO-CAPTURA-01 (P1) | `/analise-cnpj/` e `/r/`: wa.me/mailto/tel = 0, `<noscript>` = 0 (única rota da varredura sem canal) | REPRODUZIDO_EM_PRODUCAO |
+| 5 | A11Y-FRAGMENTOS-01 (P1) | `/entregas/`: 8 `<a aria-label="…" href="#entrega-0n">`, ex. `aria-label="Quais editais abertos vale disputar?"` com visível `01 Onde disputar?` | REPRODUZIDO_EM_PRODUCAO |
+| 6 | FAMILIAS-PRIVADAS-B-01 ≡ HOME-HUB-11 (P1) + CTX-06 | `/entregas/`: "Laudo pericial, parecer de assistente técnico ou laudo de avaliação…" presente; `wa.me` = 0 | REPRODUZIDO_EM_PRODUCAO |
+| 7 | FAMILIAS-PUBLICAS-02 (P1) | `/triagem-tecnica/ li#planejamento-publico` hrefs = `['/servicos-obras-publicas/']`; `<form>` = 0 | REPRODUZIDO_EM_PRODUCAO |
+| 8 | MEDICAO-01 (P1) | `script.js` servido: `S=["origem","origin_url","landing_url","landing_page","utm_*"]` sem `referrer`; `B.referrer=` sobrescrito por página | REPRODUZIDO_EM_PRODUCAO |
+| 9 | RESSALVAS-01 (P1) | `/seguranca-trabalho-apoio-tecnico/`: `ato médico` = 9 | REPRODUZIDO_EM_PRODUCAO |
+| 10 | FAMILIAS-PRIVADAS-B-02 (P1) | bloco `id="assistencia-trabalhista"` (não é `<section>` própria; janela de 6 kB): wa.me = 0, figure/table = 0; hrefs `/conflitos/`, `#contato-sst`, `/assistencia-…/` | REPRODUZIDO_EM_PRODUCAO (com a precisão acima) |
+| 11 | CONTEXTO-CAPTURA-02 (P1) | POST urlencoded vazio com `Accept: text/html` → `HTTP 400 CT=application/json` (sem dados; não repetir) | REPRODUZIDO_EM_PRODUCAO |
+
+Nenhum amostrado falhou em reproduzir. NAO_REPRODUZIDO pelos próprios leitores (código, não superfície): A06-01/02/04..08, MEDICAO-02..11, PUBLICAS-06, A-09 — mantidos.
+
+## CONFLITOS
+
+### C1. Três nomes para o mesmo enum e dois modelos de jornada do órgão (contradição real)
+PUBLICAS-01 → `contract_event='planejamento_contratacao'` + 4 campos opcionais (servidor; `jornada` segue `contrato`); HOME-HUB-05 → `'planejamento_orgao'` só opção; CTX-04 → opção com `data-journey="orgao"` e script inline trocando o hidden `jornada`. **CTX-04 como escrito envia valor que o servidor descarta** (`ALLOWED_JOURNEYS` sem `orgao` → `normalizeJourney` → `outro`, PUBLICAS-03). Decisão única em WS-A: valor `planejamento_contratacao`, jornada `contrato` + evento como sinal estruturado, `estagio` = `planejamento-contratacao-publica`; home (`nav.js`) envia `outro`+`estagio`, ou `orgao` só se `ALLOWED_JOURNEYS`/Warmbly aceitarem (P-3). Rótulo da opção da home sem "fiscalização".
+
+### C2. `servicos-obras-publicas/index.html` tem dois geradores
+`render_nav_hubs.py` (PUBLICAS-01 copy, HOME-HUB-05/06/07/08, PUBLICAS-06) e `render_contract_defense_products.mjs` (PUBLICAS-01 campos, -04, -07, CTX-04/-07), que também escreve `defesa-margem`, `atrasos-prorrogacao`, `defesa-tecnica` (PUBLICAS-04, RESSALVAS-09 via `page-contract-contratos.v1.json`). Um único workstream roda os dois.
+
+### C3. Mesmo texto reescrito por dois leitores
+- `/entregas/` frente 04: B-01 vs HOME-HUB-11 → um texto em WS-C, com link para `/servicos/#servico-avaliacao`.
+- `/seguranca-trabalho-apoio-tecnico/`: B-08 vs RESSALVAS-01/02 — compatíveis, um editor: RESSALVAS-01/02 + item (c) de B-08 (dd Cliente → "Nenhum").
+- `/assistencia-tecnica-pericial-engenharia/`: B-09 vs RESSALVAS-05 → um editor.
+- `/inspecao-diagnostico-edificacoes/`: A-01 (acrescenta contatos) + A-03(b) (entregas 04-06 + prova) + RESSALVAS-03/04 (corta) → um editor; resultado líquido não pode reintroduzir a frase de limite duplicada.
+- Duplicatas: `textarea id="mensagem"` PUBLICAS-07 ≡ CTX-07; `estagio` no handoff CTX-03 ≡ PUBLICAS-03; órgão PUBLICAS-01 ≡ HOME-HUB-05 ≡ CTX-04; home imóvel A-04 ≡ HOME-HUB-01.
+
+### C4. Arquivos compartilhados que virariam conflito de merge
+- `js/modules/*` → `script.js` (um bundle, um rebuild): A-02, A-05, B-05, PUBLICAS-01(3)/03, CTX-02, MEDICAO-01, A06-06.
+- `index.html` (cadeia de recaptura HTML-only da home uma vez): A-04, B-05, B-07, B-11, HOME-HUB-01/09/10, PUBLICAS-02/03, CTX-02.
+- `entregas/index.html`: B-01, HOME-HUB-03/04/11, A11Y-01, CTX-05, CTX-06.
+- Testes compartilhados: `test_contact_journeys.mjs` (10 achados, 5 áreas), `test_home_conversion_contract.py`, `test_integral_solution_copy.py`, `html_integrity.py`, `inbound_gates.py`, `test_lead_function.mjs`, `test_inbound_handoff.mjs`. Regra: cada WS cria o **seu** arquivo de teste novo; os existentes só pelo WS dono indicado abaixo.
+- Censo de CTAs: `cta_form_next_state_audit.mjs:132-134` conta link com `data-cta-id`/posição/wa.me/mailto/âncora → **qualquer** `data-cta-id`, wa.me ou campo novo (A-01, A-07, B-02, B-06, CTX-01/06, PUBLICAS-01/05) muda `expected_declared_ctas=198`. Só WS-A regrava `cta-form-next-state.v1.json` + inventário, por último, com nota datada.
+- Pilares congelados: PUBLICAS-05 (hidden `deliverable_id` em 8 pilares) vs RESSALVAS-08 (texto em reequilíbrio/aditivos) → adotar a alternativa de PUBLICAS-05 **sem HTML** (derivar em `lead-core.cjs`), deixando RESSALVAS-08 como única edição nos congelados (uma cadeia).
+
+## WORKSTREAMS PROPOSTOS (arquivos disjuntos)
+
+Ordem de merge: WS-D → WS-B → WS-C → WS-E → WS-F → WS-H → **WS-A (serializado, último; rebase + regeneração dos hubs, passe do normalizador e censo)** → WS-G (gates). WS-I e WS-J independentes (não tocam HTML público).
+
+### WS-A — Órgão contratante, formulários gerados, servidor de lead, censo (SERIALIZADO)
+Arquivos: `scripts/site/render_nav_hubs.py`, `scripts/commercial/render_contract_defense_products.mjs`, `scripts/commercial/render_cta_form_next_state.mjs`, `scripts/commercial/cta_form_next_state_audit.mjs`, `scripts/site/apply_form_nojs_note.py`, `scripts/commercial/render_eight_offer_contracts.mjs`, `servicos-obras-publicas/index.html`, `problemas-que-resolvemos/index.html` (regen), `defesa-margem-contratos-publicos/index.html`, `atrasos-prorrogacao-obras-publicas/index.html`, `defesa-tecnica-contratos-publicos/index.html`, `data/commercial/page-contract-contratos.v1.json`, `data/commercial/cta-form-next-state.v1.json`, `docs/commercial/cta-form-next-state-inventory.json`, `netlify/functions/lib/lead-core.cjs`, `netlify/functions/lib/inbound-handoff.cjs`, `netlify/functions/lib/lead-store.cjs`, `netlify/functions/lead.cjs`, `analise-cnpj/index.html`, `analise-cnpj/r/index.html`, `diagnostico-pre-licitacao/index.html`, `diagnostico-b2g-expansao/index.html`, `casos/modelo-*/index.html`, `scripts/site/test_lead_function.mjs`, `scripts/site/test_inbound_handoff.mjs`, `tests/commercial/test_cta_form_next_state.mjs`, `docs/ops/WARMBLY-INBOUND.md`, `data/site/whatsapp-messages.json`.
+Caminhos reescritos pelo passe final do normalizador (`render_cta_form_next_state.mjs` itera `buildInventory().surfaces` = as 31 rotas de captura): `index.html`, `entregas/index.html`, `servicos-obras-publicas/index.html`, os 11 pilares/ofertas `*-handraise`, `diagnostico-pre-licitacao/`, `diagnostico-b2g-expansao/`, `diretoria-b2g/`, `casos/index.html`, `casos/modelo-*/` ×8, `analise-cnpj/` ×2, `ferramentas/{checklist-reequilibrio,diagnostico-defesa-margem,limite-acrescimos-supressoes}/`, `comercial/radar-decisorio/`, `nurture/`. Regra: WS-B/C/E/F editam **prosa e blocos fora do `<form>`** desses arquivos; só o passe final de WS-A reescreve o bloco `<form>` (nota `<noscript>`, `data-field-purpose`, `id` da textarea) e regrava o censo; `--check` do normalizador é o gate.
+Achados: PUBLICAS-01 (P0), -03 (servidor), -04, -05 (derivação em lead-core), -07, HOME-HUB-05/06/07/08/12(regen), CTX-01, -02 (só servidor: 4xx `text/html` mínimo com canais), -03, -04 (fundido), -05, -06, -07, RESSALVAS-09, L1-a (censo), L4.
+Restrições: campos opcionais do órgão como `<label>` simples no grid existente (**`<fieldset>` exige CSS — evitar**; só `editorial*.css` estilizam fieldset), visíveis sem JS; pré-seleção pelo CTA fica em WS-D; exceção datada à invariante "no new field" com issue; `render_nav_hubs.py` re-executado após WS-B (brand.json).
+Contraprovas: `test_lead_function.mjs` payload `contract_event='planejamento_contratacao'` sem `contract_stage` → ok, sem gap, handoff com `lado=orgao_contratante`; `contract_stage=''` + evento válido → `UNKNOWN` sem gap; `mapLeadToInboundV1({jornada:'contrato',estagio:'problema urgente em contrato',route_family:'home'})` contém o estagio; lead `route_family:'medicoes-glosas'` sem deliverable_id → `entrega=CFG-D18`; `grep 'escolha "Outro evento contratual"'` = 0; `test_cta_form_next_state`: todo formulário ativo com `<noscript>`/`.form-nojs-note`, `textarea[name=mensagem]` com `id`, `declared_ctas == expected` regravado; `inbound_gates.py::gate_conversion`: toda rota com formulário tem wa.me + mailto no `<main>` (hoje reprova `/entregas/`, `/analise-cnpj/*`, `modelo-relatorio-inteligencia-licitacoes`); POST urlencoded `Accept: text/html` → `text/html` com `wa.me`.
+
+### WS-B — Home, contratos de IA, `/servicos/`, `/triagem-tecnica/` (recaptura da home uma vez)
+Arquivos: `index.html`, `data/site/brand.json`, `data/site/public-ia-map.json`, `scripts/site/public_ia.py`, `scripts/site/hub_link_matrix.json`, `servicos/index.html`, `triagem-tecnica/index.html`, `data/organic/public-family-registry.json` (só `visitor_job` de SST; famílias novas = pendência), `data/bofu-dominance/core/purchase-route-map.v1.json`, `scripts/site/test_home_conversion_contract.py`, `scripts/site/test_public_ia.py`, `scripts/site/test_copy_gates.py`.
+Achados: A-04 ≡ HOME-HUB-01 (`.area__sub` existe em `home-10x.css:84` — **sem CSS**), HOME-HUB-02, -09, -12 (dado `problem_clusters`; hub regenerado por WS-A), B-03 (mínimo: finalidades na seção), B-04, B-06 (âncoras de `/servicos/`), B-07, B-11, PUBLICAS-02 (home → destino persistido; li da triagem com wa.me `orgao_planejamento` + link ao formulário), PUBLICAS-03 (rótulo), B-05 (só `<option>` da home e li da triagem — **depende de WS-D ter criado `HOME_SITUATIONS['avaliação de imóvel']`**), RESSALVAS-10. HOME-HUB-10 (rodapé via `scripts/pseo/html_shell.py`) fica **fora**: regenera todas as rotas geradas → P-13.
+Contraprovas: `test_home_conversion_contract.py`: `li#situacao-obra-imovel` com 3 hrefs de âncora e texto `receb`/`reform`/`construído`; `li#situacao-obras-publicas h3` com `edital` e `órgão`; `section#triagem-tecnica` não abre com "Em obra pública"; toda `option[data-journey]` tem entrada no bundle; `test_public_ia.py`: `#assistencia-trabalhista` em `public-ia-map.json`; H3 de `#servico-diagnostico` com `receb`+`reform` e sem "registro do imóvel"; em `article.corporate-service-row` o 1º wa.me vem depois do último `.conditions`; hrefs de `li#planejamento-publico` contêm wa.me ou formulário.
+
+### WS-C — `/entregas/` (gerador do catálogo; recaptura de `/entregas/` uma vez; LCP a ~150 ms do teto — sem carga nova)
+Arquivos: `scripts/commercial/render_public_catalog.mjs`, `entregas/index.html` (blocos GENERATED + herói/fechamento/contact-alt; **não** o bloco `<form>`), `scripts/site/test_deliverables_hub.py`.
+Achados: B-01 ≡ HOME-HUB-11 (texto único: "Manifestação técnica da parte — evidências organizadas, quesitos e crítica de laudo de terceiro — ou laudo de avaliação de imóvel" + links assistência e `/servicos/#servico-avaliacao`), HOME-HUB-03, -04, A11Y-01, CTX-06 (wa.me na `.contact-alt`).
+Contraprovas: `test_deliverables_hub.py`: cada `.offer-decision-nav a` tem `aria-label` iniciando pelo texto visível e `<span aria-hidden="true">`; frente 03 com href `#recebimento-entrega`; frente 04 sem "Laudo pericial" não qualificado e com href `/servicos/#servico-avaliacao`; `page_close` com `href="/servicos/"`; `dl` "Em 30 segundos" cita "proposta" antes do preço; `main` contém wa.me; `render_public_catalog --check` byte a byte.
+
+### WS-D — Bundle `js/modules` + runtimes de ferramenta (um rebuild de `script.js`)
+Arquivos: `js/modules/nav.js`, `js/modules/form.js`, `js/modules/canonical-destination-map.js`, `script.js` (via `build_script_modules.mjs --write`), `assets/js/private-project-technical-readiness.js`, `assets/js/adaptive-intake.js`, `ferramentas/prontidao-tecnica-obra-privada/app.js`, `ferramentas/prontidao-tecnica-obra-privada/index.html`, `scripts/site/test_attribution_allowlist.mjs`, `seo/scripts/test_form_funnel.mjs`, `scripts/site/test_event_semantics.mjs`.
+Achados: MEDICAO-01, A-02, A-05, A-08 (`hashNeeds.projetos`), B-05 (`HOME_SITUATIONS`/`JOURNEY_ACTIONS.avaliacao`), PUBLICAS-01(3) (pré-seleção via `data-contract-event` no padrão `DATASET_TO_ATTR`; `need_code`/`intent_family` em `PSEO_ATTR_KEYS`), PUBLICAS-03 (cliente conforme C1), A06-06, A06-01 (só a alternativa barata: front invalida a chave quando o hash dos campos materiais mudou — sem tocar `lead.cjs`).
+Fora (CSS): CTX-02 lado cliente — `.form-nojs-note` é gatada por `.no-js` em CSS (`home-10x.css:317-318`) e a troca `no-js→js` está inline em 3 732 HTML → exigiria CSS ou regeneração massiva; cobrir pelo servidor (WS-A).
+Contraprovas: `test_attribution_allowlist.mjs` dois saltos referrer google → interno → `origin_class==='search_organic'` (hoje `direct_or_unknown`); teste Node de prontidão: `aceitar_entrega`+`asbuilt='nenhum'` → `routing.primary.intent_family==='documentar_as_built_regularizar'`, `buildContactHref` contém `jornada=`/`tema=`; `test_form_funnel`: AbortError → mesmo `Idempotency-Key` + `turnstile.reset` 1×; edição de `#mensagem` após timeout → chave nova; `test_event_semantics`: `HOME_SITUATIONS['avaliação de imóvel'].route==='/servicos/#servico-avaliacao'`.
+
+### WS-E — Rotas privadas manuais, casos e ressalvas (texto + canais; sem CSS)
+Arquivos: `inspecao-diagnostico-edificacoes/index.html`, `seguranca-trabalho-apoio-tecnico/index.html`, `assistencia-tecnica-pericial-engenharia/index.html`, `projetos-complementares-engenharia/index.html`, `revisao-tecnica-projetos-engenharia/index.html`, `compatibilizacao-projetos-engenharia/index.html`, `quantitativos-orcamento-obras/index.html`, `casos/index.html`, `casos/medicao-glosa-demonstrativo/index.html`, `casos/aditivo-art125-demonstrativo/index.html`, `data/demonstrative/plates/` (só se A-03(b) publicar prova nova, rotulada uma vez), `scripts/site/test_integral_solution_copy.py`, `scripts/site/test_contact_journeys.mjs` (**único dono**). Também dono das edições em `test_contact_journeys.mjs` pedidas por WS-B (remover `/triagem-tecnica/#planejamento-publico` da tolerância da linha 258; cenário `pf_avaliacao_partilha`; jornada `assistencia_trabalhista` a partir de `li#situacao-sst`), aplicadas depois de WS-B/WS-D.
+Achados: A-01, A-03(b) (mínimo na rota; rota própria = P-5), A-06, A-07, A-08 (remoção da tag `<script adaptive-intake>` nas 6 páginas enquanto WITHHELD), B-02 (manter link `/conflitos/`), B-06 (heróis SST/assistência), B-08 ≡ RESSALVAS-01/02, B-09 ≡ RESSALVAS-05, B-10, RESSALVAS-03/04/06/07. `data-cta-id` novos permitidos; censo regravado por WS-A.
+Contraprovas: `test_contact_journeys.mjs`: em `/inspecao-…/` cada `li#recebimento-entrega|#reforma-condominio|#documentacao-as-built` tem wa.me cujo `text=` cita recebimento/reforma/construído e ≥4 prefills distintos (hoje 1); jornada `assistencia_trabalhista` com figure/table rotulada + wa.me "trabalhista" no bloco; link "escrever com calma" das 5 rotas resolve para página com `<form>` ou leva `tema=`; todo wa.me/mailto/tel em `.svc-open` com `data-cta-id`. `test_integral_solution_copy.py`: sentença normalizada ≥8 palavras repetida em >1 `<section>` reprova; "Exemplo demonstrativo" por seção ≤ nº de figure/table; `ato médico` ≤2, `perito/perícia do juízo` ≤4 no `<main>`; `li h3` "pré-litígio" em `#entrega` da assistência; `#entrega` da inspeção com h3 recebimento/reforma/construído; `#servico-avaliacao` cita partilha/garantia/desapropriação (texto em WS-B; ordem WS-B antes de WS-E).
+
+### WS-F — Pilares congelados (uma cadeia: approvals → canário #389 → frozen specs → primeira dobra)
+Arquivos: `reequilibrio-obras-publicas/index.html`, `aditivos-obras-publicas/index.html`, `data/bofu-dominance/frozen-specs/*` (recaptura), approvals (hash).
+Achados: RESSALVAS-08. Contraprova: `/promete deferimento|promessa de deferimento/` ≤2 por rota (hoje 4); FL-08/success_boundary cobertos por L112 e FAQ.
+
+### WS-H — Geradores de a11y e conteúdo
+Arquivos: `scripts/market_answers/render.py`, `inteligencia/valor-tipico-contratos-pavimentacao/index.html`, `scripts/demonstrative/infrastructure_pilot/render.py`, `scripts/demonstrative/private_project/render.py`, `casos/demonstrativo-infraestrutura/index.html`, `casos/demonstrativo-projeto-privado/index.html`, `conteudos/index.html`, `scripts/site/document_intake.py`, os 9 `conteudos/*/index.html` de CTX-08, `tests/market_answers/`, `tests/demonstrative_infrastructure/`.
+Achados: A11Y-02, -03, -04, -05, CTX-08. Contraprovas: render dos três geradores sem `href="#x"` órfão e sem id duplicado; `conteudos/index.html` com `id="dir-title"`; wa.me decodificado sem `[a-záéíóúç] Quero solicitar`.
+
+### WS-G — Gates (fecha depois de todos)
+Arquivos: `scripts/site/audit_axe.mjs`, `scripts/site/audit_accessibility.py`, `scripts/site/html_integrity.py`, `scripts/site/test_html_integrity.py`, `scripts/site/fixtures/**` (novas), `scripts/site/inbound_gates.py`, `package.json` (testes novos + `apply_form_nojs_note.py --check`), `.github/workflows/site-ci.yml`.
+Achados: A11Y-06, CTX-05 (CI), CTX-01/06 (gate), L1-a. Contraprovas: fixtures `label-name-mismatch`, `fragment-missing`, `aria-idref-missing`, `duplicate-id` reprovam; `audit_axe` com `label-content-name-mismatch` ligada reprova `/entregas/` antes de WS-C e passa depois; `/entregas/` em `coverage.axe.routes`.
+
+### WS-I — Medição/RevOps (sem HTML público)
+Arquivos: `scripts/revops/proposal_counting.mjs`, `scripts/revops/test_proposal_counting.mjs`, `scripts/revops/fixtures/**`, `data/revops/proposal-counting.v1.json`, `netlify/functions/lib/closed-loop.cjs`, `scripts/revops/test_closed_loop.mjs`, `data/revops/closed-loop-funnel.v1.json`, `scripts/revops/closed_loop_report.mjs`, `scripts/revops/export_leads.mjs`, `scripts/revops/test_privacy.mjs`, `netlify/functions/ops.cjs` (só `funnel by_origin_class×by_cta`; `set_record_kind` após P-9), `netlify/functions/lib/record-kind.cjs`, `scripts/revops/test_lead_stages.mjs`, `scripts/organic/demand_graph.py`, `scripts/revops/search_demand_observatory.py`, `scripts/revops/test_gsc_freshness_probe.mjs`, `data/revops/gsc/readouts/`.
+Achados: MEDICAO-02..11, A06-02. `inbound-handoff.cjs` **não** é deste WS. Contraprovas: os `counter_*.mjs/cjs` do scratchpad promovidos a testes (`revision_same_id_supersedes`, `two_instalment_invoices_counted`, `won_without_revenue_refused`, `export_has_journey_columns`, `snapshot_lead_fields_has_origin_class`); `insights_latest.json` com now=2026-09-19 → STALE.
+
+### WS-J — Operação A06 (docs + agenda; sem HTML)
+Arquivos: `docs/campaigns/design-institucional/fechamento/evidence/producao/g03-qa-protocolo.md`, `…/prontidao-operacional-fedb4768b.json`, `docs/campaigns/bofu-integral-20260919/README.md`, `scripts/revops/scheduled_daily.mjs`, `deploy/netcup/schedules/schedule-contract.json`, `.github/workflows/revops-scheduled.yml`, `scripts/site/synthetic_lead_probe.mjs`, `netlify/functions/lib/lead-delivery.cjs`, novo `scripts/site/test_lead_turnstile_timeout.mjs` (em vez de editar `test_lead_function.mjs`, que é de WS-A).
+Achados: A06-03, -04 (agenda = P-10), -05, -07, -08. Contraprovas: `scheduled_daily` com `email_reconcile_required:1` → `ok=false`; sonda inline com servidor fake 201/201 mesmo `lead_id` → FALHA; protocolo sem `pii=1` e com SHA = build-info servido.
+
+### Nota subordinada — itens que exigiriam CSS (evitar) ou cadeia de recaptura
+- CSS: `<fieldset>` do órgão (PUBLICAS-01) → labels simples; CTX-02 lado cliente (`.no-js` gating) → só servidor; prova nova em A-03(b) reusa `figure.plate`/`table` existentes.
+- Home e `/entregas/`: texto muda → cadeia HTML-only (approvals `rendered_content_hash`, frozen specs, primeira dobra, baselines) uma vez por WS; `/entregas/` sem bytes além do necessário (LCP).
+
+## PENDÊNCIAS_DO_PROPRIETÁRIO (registrar, não bloquear)
+
+| # | Item | Origem | Estado no README anterior |
+| --- | --- | --- | --- |
+| P-1 | Passagem humana A06 (protocolo g03 re-datado para fedb4768b; sonda sintética contra o SHA atual antes do envio) | A06-03/08 | já registrada (1) |
+| P-2 | Rota própria `/avaliacao-imoveis/` (família nova + sitemap + catálogo sai de WITHHELD_PROOF) | B-03 | já registrada (2) |
+| P-3 | Jornada do órgão: `orgao` em `ALLOWED_JOURNEYS`/contrato Warmbly ou `contrato`+evento; campo "lado" no confenge.inbound.v1; página de confirmação própria | PUBLICAS-01(6)/03, CTX-04, L3 | nova (desdobra 5) |
+| P-4 | Rota própria para o ente contratante — VALIDATE, não EXECUTE_NOW; gatilho: ≥1 contato real do lado do ente ou impressões GSC; exemplo demonstrativo do lado do ente | PUBLICAS-06 | nova |
+| P-5 | Rotas próprias `/vistoria-recebimento-reforma-imovel/` e `/documentacao-construido-as-built/` vs mínimo na rota atual (WS-E aplica o mínimo) | A-03 | nova |
+| P-6 | Exceção datada à invariante "no new field" (campos opcionais do órgão) com issue | PUBLICAS-01(4) | nova |
+| P-7 | Nota sem JS nas páginas de gerador — resolvida por WS-A se aprovado o normalizador | CTX-05 | já registrada (3) |
+| P-8 | Contrato de contagem: aceite Warmbly (revisão mesmo id, faturas parciais, supersedes órfão, RC-08 revenue) + campo canônico de origem + `origin_class` no snapshot | MEDICAO-02..09 | já registrada (5), ampliada |
+| P-9 | Nova ação ops `set_record_kind` (baixa pós-QA); §7 no protocolo | A06-02 | nova |
+| P-10 | Agenda: timer horário `inbound-drain` no host ou 2º cron GH (janela Resend 24 h vs drift +3 h) | A06-04 | nova |
+| P-11 | Idempotência material no servidor (409 em conteúdo editado) — muda resposta pública; WS-D aplica só o lado cliente | A06-01 | nova |
+| P-12 | Readout GSC datado no repositório (host as_of 2026-09-15; `daily/` vazio = INDISPONÍVEL) | MEDICAO-11 | já registrada (6) |
+| P-13 | Rodapé sitewide "Perícias e avaliações" → separar (regenera todas as rotas via `html_shell.py`) | HOME-HUB-10 | nova, ciclo próprio |
+| P-14 | Indexabilidade de `/analise-cnpj/` (sem noindex, fora do sitemap) e classificação de `limite-acrescimos` (campos além do mínimo) | CTX-01, L4 | nova |
+| P-15 | NBR 13752 no público só após registro no catálogo | README | já registrada (4) |
