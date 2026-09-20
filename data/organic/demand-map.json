@@ -8,16 +8,12 @@
       "path": "data/revops/gsc/insights_latest.json",
       "as_of": "2026-08-15",
       "freshness": {
-        "status": "STALE",
         "as_of": "2026-08-15",
-        "evaluated_on": "2026-09-19",
-        "lag_days": 35,
         "max_as_of_lag_days": 14,
         "ready_for_product_decisions_declared": true,
-        "usable_for_decisions": false,
-        "reason": "as_of_older_than_max_lag"
+        "evaluated": "on_read"
       },
-      "limitations": "Aggregate search evidence; never joined query-to-lead. Freshness re-evaluated on read; STALE/UNKNOWN is not zero."
+      "limitations": "Aggregate search evidence; never joined query-to-lead. Freshness re-evaluated on read (gsc_input_freshness); STALE/UNKNOWN is not zero."
     },
     {
       "id": "smartlic-historical",

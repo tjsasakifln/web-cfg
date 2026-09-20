@@ -44,7 +44,13 @@ def test_missing_gsc_file_is_unknown_not_zero(tmp_path):
     assert missing["usable_for_decisions"] is False
 
 
-def test_demand_map_carries_freshness_on_the_gsc_input():
+def test_demand_map_carries_the_freshness_policy_but_no_evaluation_date():
+    """The tracked artifact is hashed by the buyer decision map: a field that
+    changes with the calendar (evaluated_on, lag_days, status) would make every
+    regeneration drift (site-ci 2026-09-20 reproved source_contract_hash_drift)."""
     row = _gsc_input(demand_graph.demand_map(now=date(2026, 9, 19)))
-    assert row["freshness"]["status"] == "STALE"
-    assert row["freshness"]["evaluated_on"] == "2026-09-19"
+    assert row["freshness"]["max_as_of_lag_days"] == 14
+    assert row["freshness"]["evaluated"] == "on_read"
+    for key in demand_graph.FRESHNESS_EVALUATED_FIELDS:
+        assert key not in row["freshness"], key
+    assert demand_graph.demand_map(now=date(2026, 9, 19)) == demand_graph.demand_map(now=date(2026, 12, 1))

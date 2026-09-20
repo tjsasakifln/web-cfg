@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "found": 40,
+  "found": 52,
   "service_pages": 13,
-  "html_scanned": 331,
+  "html_scanned": 337,
   "svg_files_scanned": 56,
   "svg_paths_checked": 3750,
   "svg_path_fixtures": [
@@ -40,7 +40,7 @@
   "svg_path_parser_regressions": 15,
   "svg_path_extraction_regressions": 23,
   "earliest_safe_action_at": "2026-09-16",
-  "audit_date": "2026-09-19",
+  "audit_date": "2026-09-20",
   "warnings": [],
   "issues": []
 }

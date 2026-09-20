@@ -66,16 +66,25 @@ def gsc_input_freshness(now: date | None = None, path: Path | None = None) -> di
     }
 
 
+# Fields of gsc_input_freshness() that depend on the evaluation date. They
+# never enter the tracked artifact (data/organic/demand-map.json is hashed by
+# data/bofu-dominance/core/buyer-decision-map.v1.json): the exported map only
+# carries the policy; consumers call gsc_input_freshness() at read time.
+FRESHNESS_EVALUATED_FIELDS = ("status", "evaluated_on", "lag_days", "usable_for_decisions", "reason")
+
+
 def _gsc_current_input(now: date | None = None) -> dict[str, Any]:
     freshness = gsc_input_freshness(now=now)
+    policy = {k: v for k, v in freshness.items() if k not in FRESHNESS_EVALUATED_FIELDS}
+    policy["evaluated"] = "on_read"
     return {
         "id": "gsc-current",
         "kind": "google_search_console",
         "path": GSC_INSIGHTS_PATH,
         # Read from the file, never hard-coded (drift: 2026-07-30 declared vs 2026-08-15 stored).
         "as_of": freshness["as_of"],
-        "freshness": freshness,
-        "limitations": "Aggregate search evidence; never joined query-to-lead. Freshness re-evaluated on read; STALE/UNKNOWN is not zero.",
+        "freshness": policy,
+        "limitations": "Aggregate search evidence; never joined query-to-lead. Freshness re-evaluated on read (gsc_input_freshness); STALE/UNKNOWN is not zero.",
     }
 
 

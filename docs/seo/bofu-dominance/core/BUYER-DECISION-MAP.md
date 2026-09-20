@@ -84,7 +84,7 @@ The two URL gaps are deliberately absent from this controllable queue: `bid-read
 |---|---|
 | `data/bofu-dominance/core/intent-registry.v2.json` | `6abc9fe2d63d88a675121c2a854ca15c4d687c65e3defa59e87d2b7fcfa61a69` |
 | `data/organic/bofu-intent-matrix.json` | `c8a8c7f0e1d73144f9b3f8f938e12e7f70122b7c87e3af01ca3ea1c57de78409` |
-| `data/organic/demand-map.json` | `07ac095028b8295406b6151eb114cddb3d5f390ea690f1c81fdf5a55bbb3433a` |
+| `data/organic/demand-map.json` | `ad85b6fdb44871ac5d47b9acd2941598ea0fba31932d5419534803709860a2b4` |
 | `data/organic/content-service-map.json` | `7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef` |
 | `data/organic/public-family-registry.json` | `5a138ae1be79a1f6f725d3ab187192e222c8e05693c09173bec15e6a71462ce1` |
 | `data/bofu-dominance/frozen-specs/query-ownership.json` | `fe4948670e8b1e01fc96cb29e21686e6a78389a3df713044375f79941627c6a2` |

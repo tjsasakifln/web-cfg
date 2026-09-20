@@ -369,7 +369,10 @@ def test_whatsapp_contract_is_specific_per_deliverable() -> None:
         html = _html(slug)
         offer_id = f"handraise-{slug}-v1"
         links = re.findall(r'href="(https://wa\.me/5548988344559\?text=[^"]+)"', html)
-        assert len(links) == 5, (slug, len(links))
+        # 5 CTAs + the no-JavaScript note next to the form, which repeats the
+        # page's own WhatsApp prefill (BOFU-FECHAMENTO-20260919, form_nojs_note.mjs).
+        assert len(links) == 6, (slug, len(links))
+        assert html.count('<p class="form-hint form-nojs-note">') == 1, slug
         expected = _message(subject, price)
         for link in links:
             parsed = urlparse(link)
@@ -388,6 +391,10 @@ def test_whatsapp_contract_is_specific_per_deliverable() -> None:
         tags = re.findall(
             r'<a\b[^>]*href="https://wa\.me/5548988344559\?text=[^"]+"[^>]*>', html
         )
+        # The no-JavaScript note's link is a plain fallback (no offer dataset).
+        note_tags = [tag for tag in tags if "data-offer-id" not in tag]
+        assert len(note_tags) == 1 and 'data-cta-id' not in note_tags[0], (slug, note_tags)
+        tags = [tag for tag in tags if tag not in note_tags]
         assert len(tags) == 5, slug
         for tag in tags:
             assert f'data-next-action-id="{action_id}"' in tag, slug
@@ -449,8 +456,8 @@ def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
         assert set(re.findall(r"R\$ [\d.]*\d", band_html)) == {price, "R$ 8.000"}, slug
         assert 'href="/diagnostico-b2g-expansao/"' in band_html, slug
         assert "em até 60 dias, sem acúmulo" in band_html, slug
-        # WhatsApp is not replaced.
-        assert html.count("wa.me/5548988344559") == 5, slug
+        # WhatsApp is not replaced (5 CTAs + the no-JavaScript note).
+        assert html.count("wa.me/5548988344559") == 6, slug
 
 
 def test_analytics_identifiers_are_stable_and_pii_free() -> None:
