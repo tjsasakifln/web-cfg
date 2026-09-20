@@ -82,6 +82,26 @@ Scope and limits today:
   `direct_or_unknown`. Expect that class to dominate; it means "no evidence",
   not "direct traffic", and it contributes zero to any inbound reading.
 
+### Next-action context in `message` (BOFU-FECHAMENTO-20260919, WS-A)
+
+The `confenge.inbound.v1` body is unchanged; the versioned free-text
+`message` ("Contexto do próximo passo: …") carries three additions, all
+from sanitized server fields, never PII:
+
+| Label | Source | When |
+| --- | --- | --- |
+| `situação declarada=<estagio>` | stored `estagio` (the situation the visitor chose on the home, or the server-derived `planejamento-contratacao-publica`) | every lead whose `estagio` is not the route/asset id itself and not the `/entregas/` service family (which keeps `família de serviço=`) |
+| `lado=orgao_contratante` | `contract_event=planejamento_contratacao` | the contracting authority declared itself on `/servicos-obras-publicas/#captura-contrato` |
+| `objeto=`, `estágio da contratação=`, `regulamento=`, `origem do recurso=` | optional `procurement_object`, `procurement_stage` (enum), `procurement_regulation`, `funding_source` (enum) | present only when the visitor filled them; `procurement_object` / `procurement_regulation` are sanitized like `tema` (no e-mail, no long digit runs) |
+| `entrega=CFG-Dnn` on the frozen pillars | derived in `lead-core.cjs` from the route slug (`estagio`/`asset_id`/landing path) via `deliverables-registry.v1.json` when the form posts no `deliverable_id` | the eight pillar forms without a hidden `deliverable_id`; a posted value always wins; the derived id never opens product qualification, so a pillar hand-raise stays free of `qualification_gaps` |
+
+The órgão keeps `journey=contrato` (no `orgao` journey in `ALLOWED_JOURNEYS`;
+decision P-3): the side is the structured event above, and the situation is the
+stored `estagio`. A dedicated Warmbly field for the side, the situation or the
+procurement context remains a Warmbly decision; nothing here pre-empts it. The
+orphan labels `certame_stage`, `contract_relation` and `entity_class` (unfilled
+since MV-09) left the vector on 2026-09-19.
+
 ## Env
 
 See [ENV-VARS.md](./ENV-VARS.md). Required on both sides for a live handoff:
