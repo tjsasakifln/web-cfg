@@ -298,7 +298,12 @@ export async function publish({
   const get = await fetchImpl(`${endpoint}?action=gsc_insights`, { headers });
   const read = await responseJson(get);
   const readyHistory = history.readiness?.ready_for_product_decisions === true;
-  const allowedStatuses = readyHistory ? ["CURRENT", "STALE"] : ["UNKNOWN"];
+  const expectedCarryForward = !expected &&
+    readyHistory &&
+    history.last_attempt?.outcome === "SNAPSHOT_REPEATED";
+  const allowedStatuses = readyHistory
+    ? ["CURRENT", "STALE"]
+    : (history.readiness?.status === "STALE" ? ["STALE"] : ["UNKNOWN"]);
   if (
     !get.ok ||
     read.ok !== (read.status === "CURRENT") ||
@@ -307,6 +312,8 @@ export async function publish({
     read.meta?.delivery_source !== "durable_store" ||
     read.meta?.history_state_sha256 !== history.state_sha256 ||
     read.meta?.ready_for_product_decisions !== history.readiness.ready_for_product_decisions ||
+    posted.content_carried_forward !== expectedCarryForward ||
+    read.meta?.content_carried_forward !== expectedCarryForward ||
     (hasProducerSnapshot &&
       (read.meta?.latest_attempt_manifest_sha256 !== producer.manifest_sha256 ||
         read.meta?.latest_attempt_as_of !== producer.as_of ||
@@ -327,10 +334,15 @@ export async function publish({
     ok: read.status === "CURRENT",
     status: read.status,
     durable: true,
-    promoted: Boolean(expected),
+    promoted: posted.promoted === true,
+    durable_snapshot_promoted: posted.promoted === true,
+    insights_regenerated: Boolean(expected),
+    content_carried_forward: posted.content_carried_forward === true,
     as_of: read.meta?.as_of || history.readiness.freshness_as_of || null,
     content_sha256: read.meta?.snapshot_content_sha256 || null,
     history_state_sha256: history.state_sha256,
+    delivered_history_state_sha256: read.meta?.delivered_history_state_sha256 || null,
+    source_history_state_sha256: read.meta?.source_history_state_sha256 || null,
     snapshot_sha256:
       posted.snapshot_sha256 ||
       read.meta?.latest_attempt_snapshot_sha256 ||

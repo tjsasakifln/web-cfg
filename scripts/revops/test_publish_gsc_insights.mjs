@@ -289,6 +289,8 @@ const fakeFetch = async (url, options = {}) => {
         ok: true,
         durable: true,
         status: "CURRENT",
+        promoted: true,
+        content_carried_forward: false,
         content_sha256: contentHash(body.insights),
         history_state_sha256: body.history.state_sha256,
         producer_manifest_sha256: body.producer.manifest_sha256,
@@ -322,6 +324,9 @@ const fakeFetch = async (url, options = {}) => {
         content_sha256: sha,
         snapshot_content_sha256: sha,
         history_state_sha256: history.state_sha256,
+        delivered_history_state_sha256: history.state_sha256,
+        source_history_state_sha256: history.state_sha256,
+        content_carried_forward: false,
         ready_for_product_decisions: true,
         producer_manifest_sha256: syncState.manifest_sha256,
         consumer_manifest_sha256: syncState.manifest_sha256,
@@ -421,12 +426,112 @@ check("publisher_as_of_parity", proof.producer_as_of === proof.consumer_as_of &&
   check(
     "repeated_snapshot_publish_persist_readback",
     repeatedProof.status === "CURRENT" &&
-      repeatedProof.promoted === false &&
+      repeatedProof.promoted === true &&
+      repeatedProof.durable_snapshot_promoted === true &&
+      repeatedProof.insights_regenerated === false &&
+      repeatedProof.content_carried_forward === true &&
       repeatedProof.history_state_sha256 === repeated.state_sha256 &&
       repeatedProof.content_sha256 === contentHash(insights) &&
       repeatedProof.producer_as_of === syncState.as_of &&
       repeatedProof.consumer_as_of === syncState.as_of,
     repeatedProof,
+  );
+}
+
+// A failed attempt is still durably published and proven against the latest
+// history while the previously current insights remain available read-only.
+{
+  const store = new MemorySystemStore();
+  await persistPrivateGscSnapshot(
+    store,
+    {
+      producer: {
+        schema_version: syncState.schema_version,
+        manifest_schema_version: syncState.manifest_schema_version,
+        manifest_sha256: syncState.manifest_sha256,
+        as_of: syncState.as_of,
+        produced_at: history.last_attempt.attempted_at,
+        source: "search_analytics_api",
+      },
+      history,
+      insights,
+    },
+    { now },
+  );
+  const failedAt = new Date(now.getTime() + 180_002).toISOString();
+  const failedSyncAt = new Date(now.getTime() + 180_000).toISOString();
+  const failedHistory = structuredClone(history);
+  failedHistory.parent_state_sha256 = history.state_sha256;
+  failedHistory.updated_at = failedAt;
+  failedHistory.last_attempt = {
+    attempted_at: failedAt,
+    run_id: "run-failed-real-shape",
+    outcome: "RUN_FAILED",
+    as_of: null,
+    snapshot_sha256: null,
+    reason_codes: ["dependency_unavailable", "last_known_good_available"],
+  };
+  failedHistory.readiness = {
+    ...failedHistory.readiness,
+    ready_for_product_decisions: false,
+    status: "STALE",
+    access_mode: "READ_ONLY",
+    reason_codes: ["dependency_unavailable", "last_known_good_available"],
+  };
+  failedHistory.state_sha256 = historyHash(failedHistory);
+  const failedSync = {
+    ...syncState,
+    as_of: null,
+    manifest_sha256: null,
+    last_sync_at: failedSyncAt,
+    promote_insights: false,
+    ready_for_product_decisions: false,
+    history_state_sha256: failedHistory.state_sha256,
+  };
+  const failedStatePath = path.join(tmp, "last_sync_failed.json");
+  const failedHistoryPath = path.join(tmp, "history_failed.json");
+  fs.writeFileSync(failedStatePath, JSON.stringify(failedSync), "utf8");
+  fs.writeFileSync(failedHistoryPath, JSON.stringify(failedHistory), "utf8");
+  const ingestNow = new Date(Date.parse(failedAt) + 1000);
+  const integratedFetch = async (url, options = {}) => {
+    if (url.includes("gsc_insights_ingest")) {
+      const receipt = await persistPrivateGscSnapshot(
+        store,
+        JSON.parse(options.body),
+        { now: ingestNow },
+      );
+      return new Response(JSON.stringify(receipt), { status: 200 });
+    }
+    if (url.includes("gsc_history")) {
+      return new Response(
+        JSON.stringify(await readPrivateGscHistory(store, { now: ingestNow })),
+        { status: 200 },
+      );
+    }
+    return new Response(
+      JSON.stringify(await readPrivateGscSnapshot(store, { now: ingestNow })),
+      { status: 200 },
+    );
+  };
+  const failedProof = await publish({
+    input,
+    syncStatePath: failedStatePath,
+    historyStatePath: failedHistoryPath,
+    baseUrl: "https://confenge.com.br",
+    token: "test-token-at-least-16-chars",
+    fetchImpl: integratedFetch,
+  });
+  check(
+    "failed_snapshot_publish_persist_readback",
+    failedProof.status === "STALE" &&
+      failedProof.ok === false &&
+      failedProof.durable === true &&
+      failedProof.promoted === false &&
+      failedProof.insights_regenerated === false &&
+      failedProof.content_carried_forward === false &&
+      failedProof.history_state_sha256 === failedHistory.state_sha256 &&
+      failedProof.delivered_history_state_sha256 === history.state_sha256,
+    failedProof,
   );
 }
 
@@ -492,8 +597,13 @@ const preThresholdProof = await publish({
         ok: true,
         durable: true,
         status: "UNKNOWN",
+        promoted: false,
+        content_carried_forward: false,
         content_sha256: null,
         history_state_sha256: preThresholdHistory.state_sha256,
+        delivered_history_state_sha256: null,
+        source_history_state_sha256: null,
+        content_carried_forward: false,
         snapshot_sha256: preThresholdSnapshotSha,
         producer_manifest_sha256: preThresholdPosted.producer.manifest_sha256,
         consumer_manifest_sha256: preThresholdPosted.producer.manifest_sha256,
@@ -521,6 +631,7 @@ const preThresholdProof = await publish({
         as_of: preThresholdSync.as_of,
         delivery_source: "durable_store",
         history_state_sha256: preThresholdHistory.state_sha256,
+        content_carried_forward: false,
         ready_for_product_decisions: false,
         latest_attempt_snapshot_sha256: preThresholdSnapshotSha,
         latest_attempt_manifest_sha256: preThresholdSync.manifest_sha256,

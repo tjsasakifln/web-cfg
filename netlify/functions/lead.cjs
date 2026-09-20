@@ -323,7 +323,11 @@ exports.handler = async (event) => {
   const idempotentOk = (rec) => {
     const storedMaterialHash = rec && rec.adaptive_intake === true
       ? rec.idempotency_material_hash
-      : rec && (rec.idempotency_material_hash || standardIdempotencyMaterialHash(rec));
+      : rec && (
+        rec.radar_params
+          ? standardIdempotencyMaterialHash(rec)
+          : (rec.idempotency_material_hash || standardIdempotencyMaterialHash(rec))
+      );
     if (idempotencyMaterialHash && rec && (
       Boolean(rec.adaptive_intake) !== Boolean(lead.adaptive_intake) ||
       !storedMaterialHash ||

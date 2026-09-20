@@ -14,17 +14,19 @@ export async function runInboundDrain({
     body: JSON.stringify({ limit: 20 }),
   });
   const body = response.body || {};
-  const reconcile = Number(body.email_reconcile_required);
-  const retryable = Number(body.retryable || 0);
-  const blocked = Number(body.blocked || 0);
-  const dead = Number(body.dead || 0);
-  const emailRetryOk = body.email_retry?.ok !== false;
+  const reconcile = Number.isInteger(body.email_reconcile_required) &&
+    body.email_reconcile_required >= 0
+    ? body.email_reconcile_required
+    : null;
+  const retryable = Number.isInteger(body.retryable) && body.retryable >= 0 ? body.retryable : null;
+  const blocked = Number.isInteger(body.blocked) && body.blocked >= 0 ? body.blocked : null;
+  const dead = Number.isInteger(body.dead) && body.dead >= 0 ? body.dead : null;
+  const emailRetryOk = body.email_retry?.ok === true;
   return {
     ok: response.status === 200
       && body.ok === true
-      && body.aborted !== true
+      && body.aborted === false
       && emailRetryOk
-      && Number.isFinite(reconcile)
       && reconcile === 0
       && retryable === 0
       && blocked === 0
@@ -40,7 +42,7 @@ export async function runInboundDrain({
     email_attempted: Number(body.email_attempted || 0),
     email_delivered: Number(body.email_delivered || 0),
     email_retry_ok: emailRetryOk,
-    email_reconcile_required: Number.isFinite(reconcile) ? reconcile : null,
+    email_reconcile_required: reconcile,
   };
 }
 

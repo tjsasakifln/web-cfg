@@ -422,7 +422,17 @@ else {
       calls.push({ url, options });
       return {
         status: 200,
-        json: async () => ({ ok: true, attempted: 2, delivered: 2, email_reconcile_required: 0 }),
+        json: async () => ({
+          ok: true,
+          attempted: 2,
+          delivered: 2,
+          retryable: 0,
+          blocked: 0,
+          dead: 0,
+          aborted: false,
+          email_retry: { ok: true },
+          email_reconcile_required: 0,
+        }),
       };
     },
   });
@@ -474,6 +484,38 @@ else {
   });
   if (aborted.ok || !aborted.aborted || aborted.retryable !== 1) fail("hourly_inbound_drain_abort", aborted);
   else pass("hourly_inbound_drain_abort");
+  const incomplete = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({ ok: true, attempted: 0, delivered: 0, email_reconcile_required: 0 }),
+    }),
+  });
+  if (incomplete.ok || incomplete.retryable !== null || incomplete.email_retry_ok !== false) {
+    fail("hourly_inbound_drain_schema_drift", incomplete);
+  } else pass("hourly_inbound_drain_schema_drift");
+  const malformedReconcile = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({
+        ok: true,
+        attempted: 0,
+        delivered: 0,
+        retryable: 0,
+        blocked: 0,
+        dead: 0,
+        aborted: false,
+        email_retry: { ok: true },
+        email_reconcile_required: "0",
+      }),
+    }),
+  });
+  if (malformedReconcile.ok || malformedReconcile.email_reconcile_required !== null) {
+    fail("hourly_inbound_drain_reconcile_schema", malformedReconcile);
+  } else pass("hourly_inbound_drain_reconcile_schema");
 }
 
 {

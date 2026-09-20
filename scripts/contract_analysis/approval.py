@@ -392,11 +392,13 @@ def rendered_content_hash(
         public_root = Path(tmp)
         page = public_root / relative
         page.parent.mkdir(parents=True, exist_ok=True)
-        page.write_text(html or "", encoding="utf-8")
+        page.write_bytes((html or "").replace("\r\n", "\n").encode("utf-8"))
         for name in ("styles.css", "styles-tokens.css", "styles-tools.css", "styles-offers.css"):
             source = css_root / name
             if source.is_file():
-                shutil.copy2(source, public_root / name)
+                # Approval hashes are platform-independent. Git stores these
+                # sources with LF, while a Windows checkout may expose CRLF.
+                (public_root / name).write_bytes(source.read_bytes().replace(b"\r\n", b"\n"))
         from scripts.pseo.public_artifact import finalize_public_artifact
 
         finalize_public_artifact(public_root)

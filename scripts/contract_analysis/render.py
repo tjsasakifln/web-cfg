@@ -40,16 +40,27 @@ from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 PUBLIC_DIR = Path(FAMILY_SLUG)
 SITEMAP_NAME = "sitemap-analises-contratos.xml"
 
-# The active canary approval is byte-bound to this footer. Sitewide shell
-# changes must not silently alter already approved editorial material. A new
-# footer reaches this route only through a fresh individual approval.
-APPROVED_CANARY_FOOTER = """<footer class="site-footer">
-<div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos.</p></div>
-<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil, conforme escopo, local e modalidade definidos na proposta.</span></div>
-</div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
-</footer>"""
+LEGACY_CANARY_APPROVAL = {
+    "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+    "approved_at": "2026-08-20T12:13:43Z",
+    "token": "OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V2_2026_08_20",
+}
+LEGACY_CANARY_SNAPSHOT = (
+    Path(__file__).parent
+    / "snapshots"
+    / "approved-canary-13ec615146b3d348190a9b0b9148831e.html"
+)
+
+
+def _legacy_canary_snapshot(record: dict[str, Any]) -> str | None:
+    """Return only the immutable artifact bound to the historic approval."""
+    approval = find_approval(record)
+    if approval is None or any(
+        str(approval.get(key) or "") != value
+        for key, value in LEGACY_CANARY_APPROVAL.items()
+    ):
+        return None
+    return LEGACY_CANARY_SNAPSHOT.read_text(encoding="utf-8")
 
 # One archetype per top-level narrative block of an analysis page. The label
 # names the editorial job the block performs, so the archetype and skeleton
@@ -597,6 +608,10 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     if not record.get("material_hash"):
         record = dict(record)
         record["material_hash"] = material_hash(record)
+    if decision.indexable:
+        legacy_snapshot = _legacy_canary_snapshot(record)
+        if legacy_snapshot is not None:
+            return legacy_snapshot
     title = _text(record.get("title")) or "Análise técnica de contrato público"
     description = _public_prose(record.get("meta_description") or record.get("executive_summary"))
     if len(description) > 160:
@@ -796,7 +811,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "cta-id": "analise-tecnica-contextual",
         },
         author_name=author_name,
-        footer_html=APPROVED_CANARY_FOOTER if find_approval(record) is not None else None,
+        footer_html=None,
     )
 
 

@@ -1248,6 +1248,9 @@ _reset();
   };
   const headers = { "Idempotency-Key": payload.idempotency_key };
   const first = await handler(event(payload, "POST", headers));
+  const firstBody = JSON.parse(first.body);
+  const legacyStored = await mem.get(firstBody.lead_id);
+  await mem.put({ ...legacyStored, idempotency_material_hash: "0".repeat(64) });
   const replay = await handler(event(payload, "POST", headers));
   const changed = await handler(event({ ...payload, radar_raio_km: "120" }, "POST", headers));
   const replayBody = JSON.parse(replay.body);
@@ -3367,6 +3370,7 @@ for (const bodyHonoursAbort of [true, false]) {
   if (stored.origin_class !== "search_organic") {
     fail("origin_class_store_value", stored.origin_class);
   }
+  const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
   const forwardedOrigin = inbound.mapLeadToInboundV1(stored);
   if (forwardedOrigin.web_origin_class !== "search_organic" || Object.prototype.hasOwnProperty.call(forwardedOrigin, "origin_class")) {
     fail("origin_class_handoff_evidence_not_commercial_class", forwardedOrigin);
