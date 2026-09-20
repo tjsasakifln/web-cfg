@@ -630,6 +630,35 @@ def chrome_hrefs(ia: dict[str, Any] | None = None) -> list[str]:
     return hrefs
 
 
+def _sub_situation_errors(row: dict[str, Any], root: Path | None = None) -> list[str]:
+    """CONFENGE-BOFU-FECHAMENTO-20260919 (B-07). Uma sub-situacao e um fragmento
+    da landing da propria situacao (recebimento, reforma em condominio,
+    as-built, reclamacao trabalhista, orgao que planeja a contratacao) que o
+    hub e a home publicam como entrada propria. Ela nao cria situacao nova
+    nem segunda taxonomia: vive dentro da linha e aponta so para a landing
+    dessa linha, com o fragmento existente no destino."""
+    base = root or ROOT
+    errors: list[str] = []
+    landing = str(row.get("href") or "").split("#", 1)[0]
+    seen: set[str] = set()
+    for sub in row.get("sub_situations") or []:
+        if not isinstance(sub, dict) or not sub.get("label") or not sub.get("href"):
+            errors.append(f"incomplete sub-situation in {row.get('id')!r}: {sub!r}")
+            continue
+        href = str(sub["href"])
+        path, _, fragment = href.partition("#")
+        if landing == "/servicos/" or path != landing or not fragment:
+            errors.append(f"sub-situation off its landing in {row.get('id')!r}: {href}")
+            continue
+        if href in seen:
+            errors.append(f"duplicate sub-situation in {row.get('id')!r}: {href}")
+        seen.add(href)
+        page = base / path.strip("/") / "index.html"
+        if not page.is_file() or not re.search(rf'\bid="{re.escape(fragment)}"', page.read_text(encoding="utf-8")):
+            errors.append(f"sub-situation fragment missing in {row.get('id')!r}: {href}")
+    return errors
+
+
 def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
     data = ia or load_ia_map()
     errors: list[str] = []
@@ -725,6 +754,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
                 errors.append("occupational-safety situation must resolve to its service explanation")
         elif _path_with_slash(_normalize_route(str(row.get("href") or ""))) != "/triagem-tecnica/":
             errors.append(f"unpublished situation must fail closed to triage: {row.get('id')}")
+        errors.extend(_sub_situation_errors(row))
     footer_count = 0
     for column in (data.get("footer") or {}).get("columns") or []:
         footer_count += len(column.get("links") or [])

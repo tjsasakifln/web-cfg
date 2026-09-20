@@ -205,6 +205,19 @@
       "release_unit": "CORE"
     },
     {
+      "id": "servicos-sst-assistencia-trabalhista",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista",
+      "marker": "servicos-sst-assistencia-trabalhista",
+      "label": "Reclamação trabalhista com componente de SST",
+      "intent_family": "assistencia_trabalhista_sst",
+      "offer_id": "labor_sst_technical_assistance",
+      "provider_campaign": "14",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
       "id": "servicos-avaliacao",
       "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
@@ -579,6 +592,12 @@
       "start": "/servicos/",
       "goal": "/servicos/#servico-avaliacao",
       "max_hops": 0
+    },
+    {
+      "id": "servico-sst-assistencia-trabalhista",
+      "start": "/servicos/",
+      "goal": "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista",
+      "max_hops": 1
     },
     {
       "id": "conteudo-revisao",
