@@ -4300,7 +4300,7 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "/servicos-obras-publicas/?evento=planejamento_contratacao#captura-contrato",
+          "href": "/servicos-obras-publicas/#captura-contrato",
           "stage": "register_context",
           "commitment": "medium",
           "current_label": "registre a necessidade no formulário",
