@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 205
+    "expected_declared_ctas": 206
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 205,
+    "declared_ctas": 206,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4291,6 +4291,21 @@
           "current_label": "Dossiê de Medição, Glosa e Pagamento",
           "useful_next_state": "Abre o destino declarado por “Dossiê de Medição, Glosa e Pagamento” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "/servicos-obras-publicas/?evento=planejamento_contratacao#captura-contrato",
+          "stage": "register_context",
+          "commitment": "medium",
+          "current_label": "registre a necessidade no formulário",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
           "event_semantics": [
