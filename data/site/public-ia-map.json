@@ -29,7 +29,7 @@
     },
     {
       "id": "building_diagnosis",
-      "label": "Tenho infiltração ou fissura, vou receber ou reformar um imóvel, ou preciso documentar o construído",
+      "label": "Infiltração ou fissura, imóvel a receber ou reformar, construído a documentar",
       "visitor_language": "Preciso entender uma infiltração ou fissura, receber ou reformar um imóvel, ou documentar o que foi construído",
       "href": "/inspecao-diagnostico-edificacoes/",
       "index_state": "service_hub_index",
@@ -77,7 +77,7 @@
     },
     {
       "id": "public_works_b2g",
-      "label": "Edital para decidir, medição glosada ou custo fora da curva em contrato público, ou órgão estruturando a contratação",
+      "label": "Edital para decidir, medição glosada ou custo fora da curva; órgão planejando a obra",
       "visitor_language": "Preciso decidir um edital, sustentar uma medição ou proteger margem em contrato público, ou estruturar a contratação do lado do órgão",
       "href": "/servicos-obras-publicas/",
       "index_state": "index",

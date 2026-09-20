@@ -11,7 +11,6 @@ import { createServer } from "node:http";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
-import { createHash } from "node:crypto";
 import puppeteer from "puppeteer-core";
 import { privateRouteChannelProblems } from "./test_private_route_channels.mjs";
 
@@ -56,30 +55,28 @@ const journeys = [
   ["avaliacao_imovel", "/servicos/#servico-avaliacao", "situacao-avaliacao", ".situation-action[href]"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "situacao-sst", ".situation-action[href]"],
 ].map(([id, direct, homeAnchor, homeSelector]) => ({ id, direct, homeAnchor, homeSelector }));
-// CONFENGE-BOFU-FECHAMENTO-20260919. Blobs da base fedb4768b dos arquivos que
-// outro workstream (WS-B/WS-D) altera. As jornadas e cenários abaixo só entram
-// quando o arquivo alvo tiver mudado em relação à base; até lá ficam
-// registrados como pendentes no relatório, sem reprovar por trabalho alheio.
-const BASE_BLOBS = { "index.html": "a8d89a38daa53e863491e530621f266d28999013", "servicos/index.html": "9451174ec55e3cecd41c5c3b98ac915798e5cdab" };
-function gitBlobSha(rel) { const body = readFileSync(join(root, rel)); return createHash("sha1").update(`blob ${body.length}\0`).update(body).digest("hex"); }
-function changedSinceBase(rel) { return gitBlobSha(rel) !== BASE_BLOBS[rel]; }
+// CONFENGE-BOFU-FECHAMENTO-20260919 (fechamento): as jornadas e cenários que
+// dependiam de outro workstream entram pelo que a home publica, não pelo estado
+// de uma base git (contraprovas contra origin/main quebram após o merge).
 const pendingUntilClosure = [];
 const homeHtml = readFileSync(join(root, "index.html"), "utf8");
 // B-02 (WS-E) + WS-B/WS-D: a disputa trabalhista com componente de SST entra
 // pela situação de SST da home e cai no bloco próprio da landing de SST. O
 // bloco tem WhatsApp e e-mail próprios (journey_direct_next_step); os três
 // canais diretos continuam exigidos na rota inteira, não no fragmento.
-if (changedSinceBase("index.html")) {
+if (homeHtml.includes('href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"')) {
   journeys.push({ id: "assistencia_trabalhista", direct: "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista", homeAnchor: "situacao-sst", homeSelector: 'a[href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"]' });
 } else {
-  pendingUntilClosure.push("journey assistencia_trabalhista (li#situacao-sst -> /seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista): home ainda na base fedb4768b");
+  pendingUntilClosure.push("journey assistencia_trabalhista (li#situacao-sst -> /seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista): home sem o link");
 }
 // Compact variation matrix for the real home form. This is deliberately not
 // a cartesian product: each row represents a visitor need and, together, the
 // rows cover the material inclusion risks without generating fake leads.
 const intakeScenarios = [
   { id: "pf_reforma_sem_orcamento", audience: "pessoa_fisica", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "inspeção", "registro"] },
-  { id: "pf_avaliacao_com_referencia", audience: "pessoa_fisica", size: "pequeno", budget: "conhecido", docs: "disponiveis", stage: "perícia, assistência técnica ou avaliação", journey: "pericia", route: "/servicos/#servico-pericia", nextTerms: ["provado", "avaliado", "papel técnico"] },
+  // BOFU-FECHAMENTO-20260919 (B-05): a avaliação saiu desta opção e virou
+  // situação própria (cenário pf_avaliacao_partilha abaixo); aqui fica a perícia.
+  { id: "pf_pericia_com_referencia", audience: "pessoa_fisica", size: "pequeno", budget: "conhecido", docs: "disponiveis", stage: "perícia, assistência técnica ou avaliação", journey: "pericia", route: "/servicos/#servico-pericia", nextTerms: ["provado", "papel técnico"] },
   { id: "profissional_compatibilizacao", audience: "profissional", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/servicos/#servico-projeto", nextTerms: ["finalidade", "projeto", "compatibilizar"] },
   { id: "profissional_disciplina_nao_listada", audience: "profissional", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "outro", journey: "outro", route: "/servicos/", nextTerms: ["situação", "trabalho de engenharia", "próximo passo"] },
   { id: "condominio_anomalia", audience: "condominio", size: "grande", budget: "desconhecido", docs: "disponiveis", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "diagnóstico", "local"] },
@@ -94,7 +91,8 @@ const intakeScenarios = [
 // opção com data-journey="avaliacao"; o texto da opção é lido do HTML.
 {
   const option = homeHtml.match(/<option\b[^>]*value="([^"]+)"[^>]*data-journey="avaliacao"[^>]*>/i) || homeHtml.match(/<option\b[^>]*data-journey="avaliacao"[^>]*value="([^"]+)"[^>]*>/i);
-  if (changedSinceBase("index.html") && option) {
+  // Não depende do estado de origin/main: a opção publicada é a evidência.
+  if (option) {
     intakeScenarios.push({ id: "pf_avaliacao_partilha", audience: "pessoa_fisica", size: "pequeno", budget: "desconhecido", docs: "disponiveis", stage: option[1], journey: "avaliacao", route: "/servicos/#servico-avaliacao", nextTerms: ["avalia"] });
   } else {
     pendingUntilClosure.push("intake pf_avaliacao_partilha: home sem opção data-journey=\"avaliacao\" (WS-B)");
