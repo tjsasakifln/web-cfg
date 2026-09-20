@@ -562,14 +562,32 @@ RESSALVA_ROUTES = (
     "casos/medicao-glosa-demonstrativo/index.html",
     "casos/aditivo-art125-demonstrativo/index.html",
 )
-# Rotas com prancha e tabela em que o rótulo demonstrativo é contado por prova.
-# As quatro rotas de projeto/orçamento (projetos complementares, revisão,
-# compatibilização, quantitativos) ficam fora das duas regras genéricas: citam
-# o "recorte demonstrativo" como referência cruzada, e as duas frases
-# repetidas que a regra 1 apontou em projetos complementares ('a autoria
-# arquitetônica permanece com o autor de origem', 'consulta com mais de uma
-# disciplina é acolhida') não são achado desta campanha. Entram quando houver.
-LABEL_DENSITY_ROUTES = RESSALVA_ROUTES[:3]
+# Rotas com prancha e tabela em que o rótulo demonstrativo é contado por prova
+# (regra 2). Lista explícita: as rotas de /casos/ têm regras próprias abaixo.
+LABEL_DENSITY_ROUTES = (
+    "inspecao-diagnostico-edificacoes/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "assistencia-tecnica-pericial-engenharia/index.html",
+)
+# Exclusão registrada (2026-09-19, campanha CONFENGE-BOFU-FECHAMENTO-20260919,
+# WS-E; decisão pendente do dono do fechamento): as quatro rotas de
+# projeto/orçamento ficam fora das regras 1 e 2. Citam o "recorte demonstrativo"
+# como referência cruzada e a regra 1, rodada nelas em 2026-09-19, devolve 15
+# achados, a maioria linha de tabela demonstrativa ('d 01 1 68 m e wn 01 0 56 m',
+# 'quantitativos csv orcamento csv ...', extrato de revisão) e não ressalva
+# repetida. Só projetos complementares tem repetições de prosa ('a autoria
+# arquitetônica permanece com o autor de origem' herói+amostra; 'consulta com
+# mais de uma disciplina é acolhida' herói+método; 'pacote incompleto não impede
+# o primeiro contato; o canal seguro para arquivos vem depois' 2x em
+# #escopo-interfaces). Caminhos: corrigir a prosa e mover a rota para
+# RESSALVA_ROUTES, ou manter aqui com issue. Ao mover, remova daqui: o teste
+# abaixo reprova rota nas duas listas.
+RESSALVA_ROUTES_DEFERRED = (
+    "projetos-complementares-engenharia/index.html",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "compatibilizacao-projetos-engenharia/index.html",
+    "quantitativos-orcamento-obras/index.html",
+)
 # Frases de identidade/consentimento que a matriz de autoridade e a política de
 # privacidade exigem em mais de um bloco (Em 30 segundos, Condições e limites,
 # nota de fronteira do contato). Não são ressalva comercial.
@@ -779,6 +797,17 @@ def redundancy_findings(root: Path) -> list[str]:
     return out
 
 
+def test_ressalva_route_lists_are_explicit_and_disjoint() -> None:
+    """A exclusão das rotas de projeto/orçamento é dado do gate, não comentário."""
+    assert set(LABEL_DENSITY_ROUTES) <= set(RESSALVA_ROUTES), LABEL_DENSITY_ROUTES
+    assert not set(RESSALVA_ROUTES) & set(RESSALVA_ROUTES_DEFERRED), "rota nas duas listas"
+    for rel in RESSALVA_ROUTES + RESSALVA_ROUTES_DEFERRED:
+        assert (ROOT / rel).is_file(), rel
+    for rel in RESSALVA_ROUTES_DEFERRED:
+        html = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+        assert redundancy_problems(rel, html) == [], f"{rel}: rota adiada não pode ser avaliada"
+
+
 def test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone() -> None:
     """Contra-prova sintética: repetição reprova; uma afirmação por contexto passa."""
     rel = "seguranca-trabalho-apoio-tecnico/index.html"
@@ -816,6 +845,7 @@ def main() -> int:
         test_coverage_refuses_a_smaller_universe,
         test_contact_paths_reject_public_only_invitation_and_budget_as_inspection,
         test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone,
+        test_ressalva_route_lists_are_explicit_and_disjoint,
     ):
         test()
         print(f"OK {test.__name__}")

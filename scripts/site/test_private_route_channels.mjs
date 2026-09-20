@@ -26,6 +26,16 @@ const PRIVATE_ROUTES = [
   "compatibilizacao-projetos-engenharia",
   "quantitativos-orcamento-obras",
 ];
+// A-06: rotas sem o caminho "escrever com calma" por decisão registrada. A nota
+// de contato de cada uma tem outra função e é asserida aqui pelo texto e pelo
+// destino; qualquer rota fora desta lista precisa ter o link para o formulário.
+const CALM_PATH_EXCEPTIONS = {
+  // 2026-09-19 (WS-E): a nota encaminha a situação que não é de quantitativos
+  // nem de orçamento ao contato geral; o herói já tem os três canais diretos.
+  // Se o fechamento decidir dar à rota o mesmo caminho para o formulário da
+  // home, remover a entrada e a asserção passa a exigir o link.
+  "quantitativos-orcamento-obras": { href: "/triagem-tecnica/", text: /n[ãa]o [ée] de quantitativos nem de or[çc]amento/i },
+};
 // A-01: cada situação da inspeção sai com a sua própria mensagem.
 const INSPECTION_SITUATIONS = [
   ["recebimento-entrega", /recebimento|entrega/i],
@@ -84,8 +94,20 @@ export function privateRouteChannelProblems(root = here) {
     for (const a of anchors(main).filter(a => /href="(?:https:\/\/wa\.me\/|mailto:)/i.test(a))) {
       if (!attr(a, "data-cta-id")) problems.push(`/${route}/: WhatsApp ou e-mail em <main> sem data-cta-id: ${attr(a, "href")?.slice(0, 60)}`);
     }
-    // A-06: "escrever com calma" leva a formulário ou carrega o tema.
-    const calm = anchors(main.match(/<p class="contact-note">Se preferir escrever com calma[\s\S]*?<\/p>/i)?.[0] || "");
+    // A-06: "escrever com calma" leva a formulário ou carrega o tema. O laço
+    // nunca é vazio em silêncio: a rota tem o link ou está em CALM_PATH_EXCEPTIONS.
+    const calmNote = main.match(/<p class="contact-note">Se preferir escrever com calma[\s\S]*?<\/p>/i)?.[0] || "";
+    const calm = anchors(calmNote);
+    const exception = CALM_PATH_EXCEPTIONS[route];
+    if (exception) {
+      if (calm.length) problems.push(`/${route}/: tem 'escrever com calma' mas está em CALM_PATH_EXCEPTIONS (remover a exceção)`);
+      const note = main.match(/<p class="contact-note">[\s\S]*?<\/p>/i)?.[0] || "";
+      const noteHrefs = anchors(note).map(a => attr(a, "href"));
+      if (!exception.text.test(note.replace(/<[^>]+>/g, " "))) problems.push(`/${route}/: nota de contato sem o texto registrado em CALM_PATH_EXCEPTIONS`);
+      if (!noteHrefs.includes(exception.href)) problems.push(`/${route}/: nota de contato não leva a ${exception.href} (${noteHrefs.join(", ") || "sem link"})`);
+    } else if (!calm.length) {
+      problems.push(`/${route}/: sem link 'escrever com calma' e sem exceção registrada`);
+    }
     for (const a of calm) {
       const href = attr(a, "href") || "";
       const path = href.replace(/[?#].*$/, "");
