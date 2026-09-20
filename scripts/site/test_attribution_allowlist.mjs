@@ -645,10 +645,23 @@ pass("tool_to_pseo_keeps_first_touch_origem", {
 }
 
 // --- BOFU-FECHAMENTO-20260919 (A-05): a ferramenta de prontidao pousa no
-// formulario da home com o recorte na URL. jornada/tema ja eram lidos;
-// need_code e intent_family passam a persistir na sessao e nos campos ocultos
-// (o servidor descarta o que nao esta em ATTR_ALLOWLIST; o contexto de
-// jornada e tema e o que chega ao lead).
+// formulario da home com o recorte na URL. jornada/tema/origem ja eram lidos;
+// intent_family passa a persistir na sessao e nos campos ocultos. need_code
+// NAO pode entrar em PSEO_ATTR_KEYS: form.js POSTa todos os campos ocultos
+// (FormData, sem filtro) e, no servidor, adaptive-intake.isAdaptivePayload
+// desvia qualquer payload com need_code para a triagem adaptativa (422/503),
+// derrubando o lead inteiro. O payload validado aqui e o equivalente ao
+// FormData real: TODOS os campos ocultos materializados pelo bundle.
+const toolSearch = "?jornada=obra&tema=Registro%20do%20constru%C3%ADdo&origem=%2Fferramentas%2Fprontidao-tecnica-obra-privada%2F&need_code=obra_edificacao_ou_documentacao&intent_family=documentar_as_built_regularizar";
+const HOME_LEAD_BASE = Object.freeze({
+  nome: "QA Attr",
+  telefone: "48988344559",
+  estagio: "obra ou imóvel para inspecionar ou documentar",
+  consentimento: "on",
+});
+const hiddenAsFormData = (hidden) => Object.fromEntries(
+  Object.entries(hidden).map(([name, el]) => [name, el && el.value != null ? String(el.value) : ""]),
+);
 {
   const toolStore = {};
   const toolSession = {
@@ -658,35 +671,57 @@ pass("tool_to_pseo_keeps_first_touch_origem", {
   };
   const landing = loadShippedScript({
     pathname: "/",
-    search: "?jornada=obra&tema=Registro%20do%20constru%C3%ADdo&origem=%2Fferramentas%2Fprontidao-tecnica-obra-privada%2F&need_code=obra_edificacao_ou_documentacao&intent_family=documentar_as_built_regularizar",
+    search: toolSearch,
     hash: "#contato",
     dataset: {},
     withForm: true,
     session: toolSession,
     referrer: "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
   });
+  const h = landing.hidden;
+  // Equivalente ao FormData do navegador: campos visiveis + TODOS os ocultos.
+  const posted = { ...HOME_LEAD_BASE, ...hiddenAsFormData(h) };
+  const validated = core.validateAndNormalize(posted);
+  if (!validated.ok) fail("tool_formdata_rejected_by_server", { status: validated.status, error: validated.error, posted_keys: Object.keys(posted) });
   const stored = JSON.parse(toolStore.confenge_pseo_attribution || "{}");
-  if (stored.need_code !== "obra_edificacao_ou_documentacao") fail("tool_need_code_not_persisted", stored);
+  if ("need_code" in stored) fail("tool_need_code_persisted_in_session", stored);
   if (stored.intent_family !== "documentar_as_built_regularizar") fail("tool_intent_family_not_persisted", stored);
   if (stored.jornada !== "obra") fail("tool_jornada", stored);
   if (stored.tema !== "Registro do construído") fail("tool_tema", stored);
-  const h = landing.hidden;
-  if (!h.need_code || h.need_code.value !== "obra_edificacao_ou_documentacao") fail("tool_hidden_need_code", h.need_code);
+  if (h.need_code) fail("tool_hidden_need_code_materialized", h.need_code);
   if (!h.intent_family || h.intent_family.value !== "documentar_as_built_regularizar") fail("tool_hidden_intent_family", h.intent_family);
   if (!h.jornada || h.jornada.value !== "obra") fail("tool_hidden_jornada", h.jornada);
   if (!h.tema || h.tema.value !== "Registro do construído") fail("tool_hidden_tema", h.tema);
   if (!h.origem || h.origem.value !== "/ferramentas/prontidao-tecnica-obra-privada/") fail("tool_hidden_origem", h.origem);
   if (landing.formAttrs.action !== "/obrigado") fail("tool_journey_action", landing.formAttrs);
-  const validated = core.validateAndNormalize({
-    nome: "QA Attr",
-    telefone: "48988344559",
-    estagio: "obra ou imóvel para inspecionar ou documentar",
-    consentimento: "on",
-    ...core.pickAttribution({ jornada: h.jornada.value, tema: h.tema.value, origem: h.origem.value, need_code: h.need_code.value, intent_family: h.intent_family.value }),
-  });
-  if (!validated.ok) fail("tool_validate", validated);
   if (validated.lead.tema !== "Registro do construído") fail("tool_lead_tema", validated.lead);
-  pass("tool_context_reaches_home_form", { tema: validated.lead.tema, origem: validated.lead.origem });
+  if (validated.lead.origem !== "/ferramentas/prontidao-tecnica-obra-privada/") fail("tool_lead_origem", validated.lead);
+  pass("tool_context_reaches_home_form", { tema: validated.lead.tema, origem: validated.lead.origem, posted: Object.keys(posted).length });
+}
+
+// Invariante: nenhuma chave de PSEO_ATTR_KEYS (todas viram campo oculto e vao
+// no POST de todo formulario da sessao) pode derrubar um lead valido da home.
+// Cobre o conjunto inteiro de gatilhos de adaptive-intake.isAdaptivePayload
+// (need_code, intake_version, intake_contract_version, form-name, intake_mode
+// e a flag do intake), nao so a chave que causou o defeito.
+{
+  const probe = loadShippedScript({ pathname: "/", search: "", hash: "", dataset: {}, withForm: false, session: {
+    getItem: () => null, setItem() {}, removeItem() {},
+  } });
+  const allowlist = probe.sandbox.window.confengeAttribution && probe.sandbox.window.confengeAttribution.ALLOWLIST;
+  if (!Array.isArray(allowlist) || allowlist.length < 10) fail("pseo_allowlist_exposed", allowlist);
+  const ADAPTIVE_TRIGGERS = ["need_code", "intake_version", "intake_contract_version", "intake_mode", "form-name", "adaptive_intake"];
+  for (const trigger of ADAPTIVE_TRIGGERS) {
+    if (allowlist.includes(trigger)) fail(`pseo_allowlist_contains_adaptive_trigger_${trigger}`, allowlist);
+  }
+  const broken = [];
+  for (const key of allowlist) {
+    const sample = key.endsWith("_url") || key === "referrer" ? "https://www.google.com/" : `qa_${key.replace(/[^a-z0-9]/gi, "_")}`;
+    const out = core.validateAndNormalize({ ...HOME_LEAD_BASE, jornada: "obra", [key]: sample });
+    if (!out.ok) broken.push({ key, status: out.status, error: out.error });
+  }
+  if (broken.length) fail("pseo_allowlist_key_rejects_home_lead", broken);
+  pass("pseo_allowlist_keys_keep_home_lead_ok", { keys: allowlist.length });
 }
 
 {

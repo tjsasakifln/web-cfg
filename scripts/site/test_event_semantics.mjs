@@ -428,8 +428,10 @@ for (const [route, selector, label] of [
 
 // BOFU-FECHAMENTO-20260919 (WS-D). Bundle sobre o HTML real:
 //  B-05  o resolvedor da home conhece 'avaliação de imóvel' com jornada propria;
-//  A-05  a URL da ferramenta de prontidao (jornada/tema/need_code/intent_family)
-//        chega aos campos ocultos e ao select da home;
+//  A-05  a URL da ferramenta de prontidao (jornada/tema/intent_family) chega
+//        aos campos ocultos e ao select da home; need_code na URL NAO vira
+//        campo oculto (o servidor o trata como gatilho da triagem adaptativa
+//        e rejeitaria o lead inteiro);
 //  PUBLICAS-01(3) um CTA da propria pagina com data-contract-event pre-seleciona
 //        o evento no formulario do hub de obras publicas (option existente).
 {
@@ -448,7 +450,7 @@ for (const [route, selector, label] of [
   }));
   check("home_situation_avaliacao_declared", "/", Boolean(tool.situation) && tool.situation.journey === "avaliacao"
     && tool.situation.route === "/servicos/#servico-avaliacao" && tool.journeyAction === "/obrigado", tool);
-  check("tool_context_reaches_home_form", "/", tool.needCode === "obra_edificacao_ou_documentacao"
+  check("tool_context_reaches_home_form", "/", tool.needCode === null
     && tool.intentFamily === "documentar_as_built_regularizar" && tool.jornada === "obra"
     && tool.estagio === "obra ou imóvel para inspecionar ou documentar"
     && /Registro do construído/.test(tool.mensagem)

@@ -44,10 +44,12 @@ function control(name, tag, value, options) {
   return el;
 }
 
-function loadHub({ contractOptions, withEstagioHidden = true }) {
+function loadHub({ contractOptions, withEstagioHidden = true, estagioSelectOptions = null }) {
   const fields = {
     contract_event: control("contract_event", "SELECT", "", contractOptions),
-    estagio: withEstagioHidden ? control("estagio", "INPUT", "contract-defense-products") : null,
+    estagio: estagioSelectOptions
+      ? control("estagio", "SELECT", estagioSelectOptions[0], estagioSelectOptions)
+      : (withEstagioHidden ? control("estagio", "INPUT", "contract-defense-products") : null),
     jornada: control("jornada", "INPUT", "contrato"),
   };
   const hidden = {};
@@ -58,6 +60,8 @@ function loadHub({ contractOptions, withEstagioHidden = true }) {
       if (m) return hidden[m[1]] || (fields[m[1]] && fields[m[1]].tagName === "INPUT" ? fields[m[1]] : null);
       const f = s.match(/^select\[name="([^"]+)"\], input\[type="hidden"\]\[name="\1"\]$/);
       if (f) return fields[f[1]] || null;
+      const hiddenOnly = s.match(/^input\[type="hidden"\]\[name="([^"]+)"\]$/);
+      if (hiddenOnly) return fields[hiddenOnly[1]] && fields[hiddenOnly[1]].tagName === "INPUT" ? fields[hiddenOnly[1]] : null;
       if (s === "#estagio") return fields.estagio;
       if (s === "#jornada-hidden") return fields.jornada;
       return null;
@@ -131,6 +135,19 @@ function loadHub({ contractOptions, withEstagioHidden = true }) {
   // O campo de formulario nao vira atribuicao de sessao.
   const stored = JSON.parse(hub.store.confenge_pseo_attribution || "{}");
   expect("contract_event_not_persisted_as_attribution", !("contract_event" in stored) && !("estagio" in stored), Object.keys(stored).join(","));
+}
+{
+  // Home: #estagio e um <select> ligado ao resolvedor de situacao. Um CTA
+  // com data-estagio NAO pode selecionar nem disparar 'change' nele (isso
+  // reclassificaria a jornada escolhida pelo visitante); so o hidden dos
+  // hubs/pilares recebe o valor.
+  const home = loadHub({
+    contractOptions: ["", "outro"],
+    estagioSelectOptions: ["obra ou imóvel para inspecionar ou documentar", "planejamento-contratacao-publica"],
+  });
+  home.click({ estagio: "planejamento-contratacao-publica" });
+  expect("home_estagio_select_not_preselected_by_cta", home.fields.estagio.value === "obra ou imóvel para inspecionar ou documentar", home.fields.estagio.value);
+  expect("home_estagio_select_no_change_event", home.fields.estagio.events.length === 0, home.fields.estagio.events.join(","));
 }
 {
   // Formulario de hoje (sem a option do orgao): o CTA nao forca nada.

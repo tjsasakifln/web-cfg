@@ -342,9 +342,14 @@
       'analysis_id', 'evidence_pack_version', 'asset_family', 'query_class',
       'jornada', 'tema', 'snap', 'intent_kind',
       // BOFU-FECHAMENTO-20260919 (A-05): a ferramenta de prontidao entrega o
-      // recorte (need_code, intent_family) na URL do formulario; sem estas
-      // chaves o contexto era descartado no pouso.
-      'need_code', 'intent_family',
+      // recorte (intent_family) na URL do formulario; sem esta chave o contexto
+      // era descartado no pouso. Toda chave desta lista vira campo oculto em
+      // TODO formulario da sessao e vai no POST sem filtro (form.js/FormData),
+      // por isso NUNCA incluir aqui um gatilho da triagem adaptativa do
+      // servidor (need_code, intake_version, intake_contract_version,
+      // intake_mode): adaptive-intake.isAdaptivePayload desviaria o lead da
+      // home/pilares para a triagem e o rejeitaria inteiro (422/503).
+      'intent_family',
     ];
     // BOFU-FECHAMENTO-20260919 (MEDICAO-01): `referrer` e first-touch. Antes
     // ficava fora desta lista e era reescrito a cada salto interno: Google ->
@@ -574,9 +579,12 @@
     // ouvinte de #estagio do formulario reclassificaria a jornada declarada
     // no HTML, p. ex. contrato -> outro no hub). Outros controles nao sao
     // tocados. Nada persiste entre rotas: o alvo e o formulario desta pagina.
+    // Seletores por campo: `estagio` so no hidden dos hubs/pilares. Na home
+    // #estagio e um <select> ligado ao resolvedor de situacao: um 'change'
+    // vindo de um CTA com data-estagio reclassificaria a jornada escolhida.
     const DATASET_TO_FIELD = {
-      contractEvent: 'contract_event',
-      estagio: 'estagio',
+      contractEvent: 'select[name="contract_event"], input[type="hidden"][name="contract_event"]',
+      estagio: 'input[type="hidden"][name="estagio"]',
     };
     const applyDatasetToForm = (a) => {
       if (!form || !a || !a.dataset) return;
@@ -584,8 +592,7 @@
         const raw = a.dataset[camel];
         if (!raw) return;
         const value = String(raw).slice(0, 120);
-        const fname = DATASET_TO_FIELD[camel];
-        const field = form.querySelector(`select[name="${fname}"], input[type="hidden"][name="${fname}"]`);
+        const field = form.querySelector(DATASET_TO_FIELD[camel]);
         if (!field) return;
         const tag = String(field.tagName || '').toUpperCase();
         if (tag === 'SELECT') {

@@ -78,7 +78,10 @@ function presentAnswers(overrides = {}) {
   expect("contact_href_journey_obra", /[?&]jornada=obra(&|$|#)/.test(href), href);
   expect("contact_href_tema_public_name", /[?&]tema=Registro%20do%20constru/.test(href), href);
   expect("contact_href_origem_tool", /[?&]origem=%2Fferramentas%2Fprontidao-tecnica-obra-privada%2F/.test(href), href);
-  expect("contact_href_keeps_need_code", /[?&]need_code=obra_edificacao_ou_documentacao/.test(href), href);
+  // need_code fora da URL: o runtime da home transformaria a chave em campo
+  // oculto de todos os formularios e o servidor (isAdaptivePayload) rejeitaria
+  // o lead inteiro. O recorte viaja em jornada/tema/origem/intent_family.
+  expect("contact_href_without_need_code", !/[?&#]need_code=/.test(href), href);
   expect("contact_href_keeps_intent_family", /[?&]intent_family=documentar_as_built_regularizar/.test(href), href);
   expect("contact_href_no_answers", !/nenhum|work_stage|asbuilt=/.test(href), href);
   expect("contact_href_no_pii_keys", !/nome|email|telefone|mensagem/.test(href), href);
@@ -104,7 +107,7 @@ function presentAnswers(overrides = {}) {
   const scopeHref = E.buildContactHref(unknown.contact_context);
   expect("contact_href_scope_journey_outro", /[?&]jornada=outro(&|$|#)/.test(scopeHref), scopeHref);
   expect("contact_href_scope_tema", /[?&]tema=conversa%20de%20escopo/.test(scopeHref), scopeHref);
-  const homeKeys = ["jornada", "tema", "origem", "need_code", "intent_family"];
+  const homeKeys = ["jornada", "tema", "origem", "intent_family"];
   expect("contact_query_keys_are_the_home_contract", E.CONTACT_QUERY_KEYS.join(",") === homeKeys.join(","), E.CONTACT_QUERY_KEYS.join(","));
 }
 

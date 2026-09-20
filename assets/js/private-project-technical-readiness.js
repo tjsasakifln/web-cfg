@@ -212,7 +212,12 @@
   // formulário da home com o contrato que o runtime (js/modules/nav.js) lê:
   // ?jornada= (situação da home), ?tema= (nome público do encaminhamento),
   // ?origem= (esta ferramenta) e #contato. A triagem não tem formulário e
-  // descartava o recorte. need_code/intent_family seguem como contexto.
+  // descartava o recorte. intent_family segue como contexto. need_code NÃO
+  // vai na URL: o runtime da home materializa toda chave lida como campo
+  // oculto de todos os formulários da sessão, e o servidor trata need_code
+  // como gatilho da triagem adaptativa (rejeitaria o lead inteiro).
+  // offer_candidate_id/route_id/source_origin_* ficam só no contexto local
+  // (analytics e contact_context); nenhum consumidor os lê na URL da home.
   var CONTACT_FORM_PATH = "/";
   var CONTACT_FORM_HASH = "contato";
   var TOOL_PATH = "/ferramentas/prontidao-tecnica-obra-privada/";
@@ -230,7 +235,6 @@
     "jornada",
     "tema",
     "origem",
-    "need_code",
     "intent_family",
   ]);
 
