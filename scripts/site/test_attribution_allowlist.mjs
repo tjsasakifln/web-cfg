@@ -570,6 +570,160 @@ pass("tool_to_pseo_keeps_first_touch_origem", {
   pass("pos_inb_01_storage_unavailable_still_allowlists");
 }
 
+// --- BOFU-FECHAMENTO-20260919 (MEDICAO-01): Google -> artigo -> formulario do
+// pilar. `referrer` e first-touch: o segundo salto (referrer interno) nao pode
+// substituir o referrer externo guardado, nem no sessionStorage nem no campo
+// oculto. O servidor (deriveOriginClass, inalterado) tem de classificar a
+// jornada como search_organic; antes classificava direct_or_unknown.
+{
+  const twoHopStore = {};
+  const twoHopSession = {
+    getItem: (k) => twoHopStore[k] || null,
+    setItem: (k, v) => { twoHopStore[k] = String(v); },
+    removeItem: (k) => { delete twoHopStore[k]; },
+  };
+  loadShippedScript({
+    pathname: "/conteudos/sinapi-desonerado-nao-desonerado/",
+    search: "",
+    hash: "",
+    dataset: {},
+    withForm: false,
+    session: twoHopSession,
+    referrer: "https://www.google.com/",
+  });
+  const afterArticle = JSON.parse(twoHopStore.confenge_pseo_attribution || "{}");
+  if (afterArticle.referrer !== "https://www.google.com/") fail("two_hop_article_referrer", afterArticle);
+  const pillar = loadShippedScript({
+    pathname: "/medicoes-glosas-obras-publicas/",
+    search: "",
+    hash: "#captura-pilar",
+    dataset: { routeFamily: "medicoes-glosas", assetId: "medicoes-glosas-obras-publicas" },
+    withForm: true,
+    session: twoHopSession,
+    referrer: "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+  });
+  const afterPillar = JSON.parse(twoHopStore.confenge_pseo_attribution || "{}");
+  if (afterPillar.referrer !== "https://www.google.com/") fail("two_hop_session_referrer_overwritten", afterPillar);
+  const hiddenReferrer = pillar.hidden.referrer ? pillar.hidden.referrer.value : "";
+  if (hiddenReferrer !== "https://www.google.com/") fail("two_hop_hidden_referrer_internal", hiddenReferrer);
+  const twoHop = core.validateAndNormalize({
+    nome: "QA Attr",
+    telefone: "48988344559",
+    estagio: "problema urgente em contrato",
+    jornada: "contrato",
+    consentimento: "on",
+    ...core.pickAttribution({ referrer: hiddenReferrer, route_family: "medicoes-glosas" }),
+  });
+  if (!twoHop.ok) fail("two_hop_validate", twoHop);
+  if (twoHop.lead.origin_class !== "search_organic") {
+    fail("two_hop_organic_journey_classified_as", twoHop.lead.origin_class);
+  }
+  pass("two_hop_organic_journey_search_organic", { referrer: hiddenReferrer });
+
+  // Um pouso direto (sem referrer) seguido de navegacao interna continua sem
+  // credito: o referrer interno nao vira referrer guardado.
+  const directStore = {};
+  const directSession = {
+    getItem: (k) => directStore[k] || null,
+    setItem: (k, v) => { directStore[k] = String(v); },
+    removeItem: (k) => { delete directStore[k]; },
+  };
+  loadShippedScript({ pathname: "/servicos/", search: "", hash: "", dataset: {}, withForm: false, session: directSession, referrer: "" });
+  const direct = loadShippedScript({
+    pathname: "/",
+    search: "",
+    hash: "#contato",
+    dataset: {},
+    withForm: true,
+    session: directSession,
+    referrer: "https://confenge.com.br/servicos/",
+  });
+  const directStored = JSON.parse(directStore.confenge_pseo_attribution || "{}");
+  if (directStored.referrer) fail("direct_internal_referrer_stored", directStored);
+  if (direct.hidden.referrer && direct.hidden.referrer.value) fail("direct_internal_referrer_hidden", direct.hidden.referrer.value);
+  pass("direct_then_internal_keeps_unknown");
+}
+
+// --- BOFU-FECHAMENTO-20260919 (A-05): a ferramenta de prontidao pousa no
+// formulario da home com o recorte na URL. jornada/tema/origem ja eram lidos;
+// intent_family passa a persistir na sessao e nos campos ocultos. need_code
+// NAO pode entrar em PSEO_ATTR_KEYS: form.js POSTa todos os campos ocultos
+// (FormData, sem filtro) e, no servidor, adaptive-intake.isAdaptivePayload
+// desvia qualquer payload com need_code para a triagem adaptativa (422/503),
+// derrubando o lead inteiro. O payload validado aqui e o equivalente ao
+// FormData real: TODOS os campos ocultos materializados pelo bundle.
+const toolSearch = "?jornada=obra&tema=Registro%20do%20constru%C3%ADdo&origem=%2Fferramentas%2Fprontidao-tecnica-obra-privada%2F&need_code=obra_edificacao_ou_documentacao&intent_family=documentar_as_built_regularizar";
+const HOME_LEAD_BASE = Object.freeze({
+  nome: "QA Attr",
+  telefone: "48988344559",
+  estagio: "obra ou imóvel para inspecionar ou documentar",
+  consentimento: "on",
+});
+const hiddenAsFormData = (hidden) => Object.fromEntries(
+  Object.entries(hidden).map(([name, el]) => [name, el && el.value != null ? String(el.value) : ""]),
+);
+{
+  const toolStore = {};
+  const toolSession = {
+    getItem: (k) => toolStore[k] || null,
+    setItem: (k, v) => { toolStore[k] = String(v); },
+    removeItem: (k) => { delete toolStore[k]; },
+  };
+  const landing = loadShippedScript({
+    pathname: "/",
+    search: toolSearch,
+    hash: "#contato",
+    dataset: {},
+    withForm: true,
+    session: toolSession,
+    referrer: "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+  });
+  const h = landing.hidden;
+  // Equivalente ao FormData do navegador: campos visiveis + TODOS os ocultos.
+  const posted = { ...HOME_LEAD_BASE, ...hiddenAsFormData(h) };
+  const validated = core.validateAndNormalize(posted);
+  if (!validated.ok) fail("tool_formdata_rejected_by_server", { status: validated.status, error: validated.error, posted_keys: Object.keys(posted) });
+  const stored = JSON.parse(toolStore.confenge_pseo_attribution || "{}");
+  if ("need_code" in stored) fail("tool_need_code_persisted_in_session", stored);
+  if (stored.intent_family !== "documentar_as_built_regularizar") fail("tool_intent_family_not_persisted", stored);
+  if (stored.jornada !== "obra") fail("tool_jornada", stored);
+  if (stored.tema !== "Registro do construído") fail("tool_tema", stored);
+  if (h.need_code) fail("tool_hidden_need_code_materialized", h.need_code);
+  if (!h.intent_family || h.intent_family.value !== "documentar_as_built_regularizar") fail("tool_hidden_intent_family", h.intent_family);
+  if (!h.jornada || h.jornada.value !== "obra") fail("tool_hidden_jornada", h.jornada);
+  if (!h.tema || h.tema.value !== "Registro do construído") fail("tool_hidden_tema", h.tema);
+  if (!h.origem || h.origem.value !== "/ferramentas/prontidao-tecnica-obra-privada/") fail("tool_hidden_origem", h.origem);
+  if (landing.formAttrs.action !== "/obrigado") fail("tool_journey_action", landing.formAttrs);
+  if (validated.lead.tema !== "Registro do construído") fail("tool_lead_tema", validated.lead);
+  if (validated.lead.origem !== "/ferramentas/prontidao-tecnica-obra-privada/") fail("tool_lead_origem", validated.lead);
+  pass("tool_context_reaches_home_form", { tema: validated.lead.tema, origem: validated.lead.origem, posted: Object.keys(posted).length });
+}
+
+// Invariante: nenhuma chave de PSEO_ATTR_KEYS (todas viram campo oculto e vao
+// no POST de todo formulario da sessao) pode derrubar um lead valido da home.
+// Cobre o conjunto inteiro de gatilhos de adaptive-intake.isAdaptivePayload
+// (need_code, intake_version, intake_contract_version, form-name, intake_mode
+// e a flag do intake), nao so a chave que causou o defeito.
+{
+  const probe = loadShippedScript({ pathname: "/", search: "", hash: "", dataset: {}, withForm: false, session: {
+    getItem: () => null, setItem() {}, removeItem() {},
+  } });
+  const allowlist = probe.sandbox.window.confengeAttribution && probe.sandbox.window.confengeAttribution.ALLOWLIST;
+  if (!Array.isArray(allowlist) || allowlist.length < 10) fail("pseo_allowlist_exposed", allowlist);
+  const ADAPTIVE_TRIGGERS = ["need_code", "intake_version", "intake_contract_version", "intake_mode", "form-name", "adaptive_intake"];
+  for (const trigger of ADAPTIVE_TRIGGERS) {
+    if (allowlist.includes(trigger)) fail(`pseo_allowlist_contains_adaptive_trigger_${trigger}`, allowlist);
+  }
+  const broken = [];
+  for (const key of allowlist) {
+    const sample = key.endsWith("_url") || key === "referrer" ? "https://www.google.com/" : `qa_${key.replace(/[^a-z0-9]/gi, "_")}`;
+    const out = core.validateAndNormalize({ ...HOME_LEAD_BASE, jornada: "obra", [key]: sample });
+    if (!out.ok) broken.push({ key, status: out.status, error: out.error });
+  }
+  if (broken.length) fail("pseo_allowlist_key_rejects_home_lead", broken);
+  pass("pseo_allowlist_keys_keep_home_lead_ok", { keys: allowlist.length });
+}
+
 {
   const sparse = core.validateAndNormalize({
     nome: "QA Attr",

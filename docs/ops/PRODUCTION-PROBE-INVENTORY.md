@@ -46,6 +46,7 @@ and the RevOps run artifacts.
 | `pseo:verify:release` | `scripts/pseo/verify_release.py` | GET on the public origin | none | READ_ONLY |
 | `test:production-cutover` | `scripts/site/test_production_cutover.mjs` | GET on `https://confenge.com.br` (or `--resolve` origin IP) | none | READ_ONLY |
 | `test:production-cutover:local` | `scripts/site/test_production_cutover.mjs http://127.0.0.1:8765` | localhost only | none | READ_ONLY |
+| `test:synthetic-probe-page-context` | `scripts/site/test_synthetic_lead_probe_page_context.mjs` | spawns `synthetic_lead_probe.mjs` against a local `http.createServer` on 127.0.0.1 that records the payload; asserts `PROBE_PAGE_PATH`/route context reach the body; no request leaves localhost (BOFU-FECHAMENTO-20260919, A06) | none | READ_ONLY |
 | `test:redirects:prod` | `scripts/site/test_redirects.mjs https://confenge.com.br` | GET with `redirect: "manual"` | none | READ_ONLY |
 | `test:entity-gone:prod` | `scripts/site/test_entity_gone_prod.mjs https://confenge.com.br` | GET pages, `robots.txt`, `/conteudos/` | none | READ_ONLY |
 | `test:prod-build-info` | `scripts/site/test_prod_build_info.mjs` | GET `/.well-known/build-info.json`, `/.well-known/pseo-build.json` | none | READ_ONLY |

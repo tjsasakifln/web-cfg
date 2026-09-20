@@ -19,7 +19,20 @@ const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
 const { createStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
-export const SCHEMA_VERSION = "1.0.0";
+// 1.1.0 (2026-09-19, MEDICAO-08): journey columns cta_id, route_family,
+// asset_id, tema and origin_class_status so the export answers "which CTA,
+// route and topic produced the leads of each origin class" without touching
+// the Warmbly handoff body (confenge.inbound.v1 stays as documented).
+export const SCHEMA_VERSION = "1.1.0";
+
+// origin_class is derived at persist time since 2026-09-19 13:36 -03
+// (lead-core.cjs deriveOriginClass). Earlier rows have no value: that reads
+// INDISPONIVEL, never direct_or_unknown and never organic.
+export const ORIGIN_CLASS_STATUS = Object.freeze({ derived: "DERIVED", unavailable: "INDISPONIVEL" });
+
+export function originClassStatus(lead) {
+  return lead && lead.origin_class ? ORIGIN_CLASS_STATUS.derived : ORIGIN_CLASS_STATUS.unavailable;
+}
 
 export function parseArgs(argv = process.argv.slice(2)) {
   const out = {
@@ -76,6 +89,13 @@ export function toExportRecord(lead) {
     utm_medium: lead.utm_medium || null,
     utm_campaign: lead.utm_campaign || null,
     origin_class: lead.origin_class || null,
+    origin_class_status: originClassStatus(lead),
+    // Journey columns (MEDICAO-08): which CTA, route family, asset and topic
+    // produced the lead. All are sanitized tokens/topics at persist time.
+    cta_id: lead.cta_id || null,
+    route_family: lead.route_family || null,
+    asset_id: lead.asset_id || null,
+    tema: lead.tema || null,
     content_cluster: lead.content_cluster || null,
     session_id: lead.session_id || null,
     // Contact fields included in file artifact only (ops-side). Not printed to stdout by default.

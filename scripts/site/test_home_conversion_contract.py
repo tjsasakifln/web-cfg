@@ -79,7 +79,16 @@ def _visible(fragment: str) -> str:
 # gerado). As invariantes estruturais seguem identicas: 23 controles, 3
 # obrigatorios (nome, estagio, consentimento), action /obrigado, sem upload.
 # Gate executavel da propriedade: seo/scripts/test_form_funnel.mjs.
-CAPTURE_FORM_SHA256 = "f00a47798ca006bf2513cc0b2016167d86173b0368dec18600b81fed5f4cd16b"
+# 2026-09-19 (CONFENGE-BOFU-FECHAMENTO-20260919, WS-B: PUBLICAS-03 + B-05).
+# Duas opcoes do select mudaram: o rotulo do orgao publico deixou de prometer
+# "projeto ou fiscalizacao do lado do orgao" (oferta nao publicada; value e
+# data-journey intactos) e a avaliacao de imovel ganhou opcao propria
+# (value "avaliação de imóvel", data-journey "avaliacao"), separada da pericia
+# porque as duas familias tem acoes terminais distintas na matriz de intencao.
+# As invariantes estruturais seguem identicas: 23 controles, 3 obrigatorios,
+# action /obrigado, sem upload. A entrada HOME_SITUATIONS do bundle e
+# verificada por seo/scripts/test_form_funnel.mjs.
+CAPTURE_FORM_SHA256 = "72c6aa7b375e23d389d09c11cfe04c77e7991f8b8a5570e11387aee5da219948"
 
 
 def _home() -> str:
@@ -326,3 +335,276 @@ def test_stage_options_sharing_a_journey_list_the_neutral_one_first() -> None:
             assert "urgente" not in attrs_list[0].lower(), (journey, attrs_list[0])
     assert 'value="contrato em execução"' in by_journey["contrato"][0]
     assert "data-journey-default" not in form
+
+
+# ---------------------------------------------------------------------------
+# CONFENGE-BOFU-FECHAMENTO-20260919 (WS-B). Cada teste abaixo reprovava no
+# HTML servido em fedb4768b e descreve a propriedade que a correcao protege.
+# ---------------------------------------------------------------------------
+TRIAGE = ROOT / "triagem-tecnica" / "index.html"
+REGISTRY = ROOT / "data" / "organic" / "public-family-registry.json"
+PURCHASE_MAP = ROOT / "data" / "bofu-dominance" / "core" / "purchase-route-map.v1.json"
+WHATSAPP_MESSAGES = ROOT / "data" / "site" / "whatsapp-messages.json"
+B2G_HUB = ROOT / "servicos-obras-publicas" / "index.html"
+SITEMAP = ROOT / "sitemap.xml"
+TAXONOMY = ROOT / "data" / "corporate" / "taxonomy.v1.json"
+OFFER_CATALOG = ROOT / "data" / "offers" / "multivertical" / "catalog.v2.json"
+# PUBLICAS-01 (WS-A): enquanto o formulario do hub nao oferece o evento do
+# orgao, o lead do orgao so se distingue da contratada se o visitante passar
+# pela instrucao "em Evento observado, escolha Outro evento contratual", que
+# vive em #situacao-orgao. Quando a opcao existir, o destino direto passa a
+# ser aceito e este guarda se relaxa sozinho.
+PUBLIC_ENTITY_EVENT_OPTION = 'value="planejamento_contratacao"'
+
+
+def _situation_row(html: str, row_id: str) -> str:
+    match = re.search(rf'<li class="situation-row[^"]*" id="{row_id}">[\s\S]*?</li>', html)
+    assert match, row_id
+    return match.group(0)
+
+
+def _triage_item(item_id: str) -> str:
+    html = TRIAGE.read_text(encoding="utf-8")
+    match = re.search(rf'<li id="{item_id}">[\s\S]*?</li>', html)
+    assert match, item_id
+    return match.group(0)
+
+
+def _services_article(row_id: str) -> str:
+    html = SERVICES.read_text(encoding="utf-8")
+    match = re.search(rf'<article class="corporate-service-row[^"]*" id="{row_id}"[\s\S]*?</article>', html)
+    assert match, row_id
+    return match.group(0)
+
+
+def test_home_property_row_names_receiving_reform_and_as_built() -> None:
+    """HOME-HUB-01 / A-04. Quem vai receber um imovel, reformar em condominio
+    ou documentar o construido nao se reconhecia na linha 03: o titulo so
+    falava de infiltracao e o unico link ia a landing sem ancora."""
+    row = _situation_row(_home(), "situacao-obra-imovel")
+    for anchor in ("#recebimento-entrega", "#reforma-condominio", "#documentacao-as-built"):
+        assert f'href="/inspecao-diagnostico-edificacoes/{anchor}"' in row, anchor
+    text = _visible(row).casefold()
+    for term in ("receb", "reform", "construído"):
+        assert term in text, term
+
+
+def test_home_public_works_row_names_edital_and_public_entity() -> None:
+    """HOME-HUB-09. Licitante e orgao nao se reconheciam no h3 da linha 07."""
+    row = _situation_row(_home(), "situacao-obras-publicas")
+    heading = _visible(re.search(r"<h3>[\s\S]*?</h3>", row).group(0)).casefold()
+    assert "edital" in heading, heading
+    assert "órgão" in heading, heading
+
+
+def test_home_sst_row_links_the_labor_dispute_entry() -> None:
+    """B-07 (3). O advogado trabalhista nao chegava a #assistencia-trabalhista
+    em duas escolhas a partir da home."""
+    row = _situation_row(_home(), "situacao-sst")
+    assert 'href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"' in row
+
+
+def test_home_triage_section_frames_every_family_before_public_works() -> None:
+    """B-11. O unico paragrafo de expectativa de #triagem-tecnica abria com
+    "Em obra publica": a consultoria inteira era enquadrada pela vertical."""
+    triage = _section(_home(), r'id="triagem-tecnica"')
+    intro = re.search(r'<h2 class="t-editorial" id="triage-title">[\s\S]*?</h2>\s*<p>([\s\S]*?)</p>', triage)
+    assert intro, "triage intro paragraph missing"
+    text = _visible(intro.group(1)).strip()
+    assert "sem saber o nome do serviço" in text, text
+    assert not text.startswith("Em obra pública"), text
+    # O prazo publicado de obra publica continua na pagina (condicao material).
+    assert "1 dia útil" in text, text
+    assert "Não envie documentos sensíveis" in text, text
+
+
+def _public_entity_form_destination() -> str:
+    """Destino persistido do orgao: o formulario do hub quando ele nomeia o
+    evento do orgao (PUBLICAS-01); ate la, a secao #situacao-orgao, que
+    carrega a instrucao e o botao 'Registrar no formulario'."""
+    hub = B2G_HUB.read_text(encoding="utf-8")
+    form = re.search(r"<form\b[\s\S]*?</form>", hub).group(0)
+    if PUBLIC_ENTITY_EVENT_OPTION in form:
+        return "/servicos-obras-publicas/#captura-contrato"
+    section = re.search(r'id="situacao-orgao"[\s\S]*?</ol>', hub).group(0)
+    assert "Outro evento contratual" in section
+    assert 'href="#captura-contrato"' in section
+    return "/servicos-obras-publicas/#situacao-orgao"
+
+
+def test_home_public_entity_paragraph_points_to_the_persisted_channel() -> None:
+    """PUBLICAS-02. 'descreva a necessidade' levava a um item da triagem sem
+    canal; o orgao precisa chegar ao formulario persistido do hub, mas nunca
+    pular a instrucao enquanto o formulario nao nomeia o evento do orgao."""
+    b2g = _section(_home(), r'id="obras-publicas"')
+    destination = _public_entity_form_destination()
+    assert f'href="{destination}"' in b2g, destination
+    if destination.endswith("#captura-contrato"):
+        # O CTA de outra rota leva o evento do orgao em data-* (href canonico,
+        # sem query string); nav.js aplica na chegada via sessionStorage.
+        assert f'href="{destination}" data-contract-event="planejamento_contratacao"' in b2g
+    if destination.endswith("#situacao-orgao"):
+        assert 'href="/servicos-obras-publicas/#captura-contrato"' not in b2g
+
+
+def test_triage_public_entity_item_has_whatsapp_and_form() -> None:
+    """PUBLICAS-02. O li#planejamento-publico so tinha '/servicos-obras-publicas/'
+    enquanto os irmaos traziam wa.me com mensagem pronta."""
+    from urllib.parse import unquote
+
+    item = _triage_item("planejamento-publico")
+    hrefs = re.findall(r'href="([^"]+)"', item)
+    destination = _public_entity_form_destination()
+    assert destination in hrefs, hrefs
+    if destination.endswith("#captura-contrato"):
+        assert f'href="{destination}" data-contract-event="planejamento_contratacao"' in item
+    if destination.endswith("#situacao-orgao"):
+        assert "/servicos-obras-publicas/#captura-contrato" not in hrefs, hrefs
+    expected = json.loads(WHATSAPP_MESSAGES.read_text(encoding="utf-8"))["messages"]["orgao_planejamento"]
+    texts = [unquote(h.split("text=", 1)[1]) for h in hrefs if h.startswith("https://wa.me/") and "text=" in h]
+    assert expected in texts, texts
+
+
+def test_purchase_map_terminals_follow_the_persisted_channels() -> None:
+    """PUBLICAS-02 + B-05. O mapa de compra apontava o orgao para a triagem
+    sem canal e a avaliacao para o item fundido com pericia."""
+    doc = json.loads(PURCHASE_MAP.read_text(encoding="utf-8"))
+    rows = {row["purchase_id"]: row for row in doc["purchases"]}
+    assert rows["planejar-contratacao-publica"]["terminal_contact"]["destination"] == _public_entity_form_destination()
+    assert rows["avaliar-imovel"]["terminal_contact"]["destination"] == "/triagem-tecnica/#avaliacao-imovel"
+    # A compra de avaliacao apontava primary_url/source_of_truth para a
+    # pericia (#servico-pericia) enquanto o terminal ja era a avaliacao.
+    for key in ("primary_url", "proposed_primary_url", "source_of_truth"):
+        assert rows["avaliar-imovel"][key] == "/servicos/#servico-avaliacao", key
+
+
+def test_home_select_separates_valuation_and_drops_unpublished_inspection_promise() -> None:
+    """PUBLICAS-03 + B-05. O rotulo do orgao prometia 'fiscalizacao do lado do
+    orgao' (oferta nao publicada) e a avaliacao de imovel so existia fundida
+    com pericia, recebendo orientacao de disputa. A entrada correspondente em
+    HOME_SITUATIONS (bundle) e verificada por seo/scripts/test_form_funnel.mjs."""
+    html = _home()
+    block = re.search(r'<select\b[^>]*id="estagio"[\s\S]*?</select>', html).group(0)
+    orgao = re.search(r'<option value="planejamento de órgão público"[^>]*>([^<]*)</option>', block)
+    assert orgao, "public entity option missing"
+    assert "fiscaliza" not in orgao.group(1).casefold(), orgao.group(1)
+    assert "órgão público" in orgao.group(1).casefold(), orgao.group(1)
+    assert '<option value="avaliação de imóvel" data-journey="avaliacao">' in block
+    pericia = re.search(r'<option value="perícia, assistência técnica ou avaliação"[^>]*>([^<]*)</option>', block)
+    assert pericia, "dispute option missing"
+    assert "avalia" not in pericia.group(1).casefold(), pericia.group(1)
+
+
+def test_triage_separates_valuation_from_dispute_and_names_labor_sst() -> None:
+    """B-05 (triagem) + B-07 (4)."""
+    valuation = _triage_item("avaliacao-imovel")
+    assert 'href="/servicos/#servico-avaliacao"' in valuation
+    assert "https://wa.me/" in valuation
+    valuation_text = _visible(valuation).casefold()
+    assert "partilha" in valuation_text
+    assert "processo" not in valuation_text
+    dispute = _triage_item("pericia-avaliacao")
+    assert "https://wa.me/" in dispute
+    sst = _triage_item("sst")
+    assert 'href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"' in sst
+    assert "trabalhista" in _visible(sst).casefold()
+
+
+def test_sst_family_visitor_job_covers_labor_dispute_evidence() -> None:
+    """B-07 (1)."""
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    row = next(r for r in registry["families"] if r.get("id") == "seguranca-trabalho-apoio-tecnico")
+    assert "reclamação trabalhista" in row["visitor_job"].casefold(), row["visitor_job"]
+
+
+def test_services_rows_close_with_contact_after_conditions() -> None:
+    """B-04. Em #servico-avaliacao o WhatsApp vinha antes de 'Fora desta
+    oferta'; quem tem imovel rural acionava o canal antes de ler a exclusao."""
+    html = SERVICES.read_text(encoding="utf-8")
+    checked = 0
+    for article in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', html):
+        row_id = re.search(r'id="([^"]+)"', article).group(1)
+        conditions = [m.end() for m in re.finditer(r'class="conditions', article)]
+        whatsapp = [m.start() for m in re.finditer(r'href="https://wa\.me/', article)]
+        if not conditions or not whatsapp:
+            continue
+        assert whatsapp[0] > conditions[-1], row_id
+        checked += 1
+    assert checked >= 1
+
+
+def test_services_contact_anchors_declare_a_cta_id() -> None:
+    """B-06. As ancoras wa.me/mailto das linhas de servico disparavam
+    whatsapp_click com cta_id 'unspecified': a familia avaliar_imovel nao era
+    segmentavel. So as linhas (article.corporate-service-row) segmentam por
+    nucleo; heroi e faixa de contato ficam sem data-cta-id para o subgate
+    cta_subordinate de inbound_gates (max(3, palavras // 400) = 5 em
+    /servicos/) nao virar divida comercial anonima."""
+    html = SERVICES.read_text(encoding="utf-8")
+    main = re.search(r"<main[\s\S]*?</main>", html).group(0)
+    missing = []
+    for article in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', main):
+        for attrs in re.findall(r"<a\b([^>]*)>", article):
+            href = re.search(r'href="([^"]+)"', attrs)
+            if not href:
+                continue
+            if not (href.group(1).startswith("https://wa.me/") or href.group(1).startswith("mailto:")):
+                continue
+            cta = re.search(r'data-cta-id="([^"]*)"', attrs)
+            if not cta or not cta.group(1).strip():
+                missing.append(href.group(1)[:60])
+    assert not missing, missing
+    declared = re.findall(r"<a\b[^>]*\bdata-cta-id=", main)
+    words = len(re.findall(r"\w+", _visible(main)))
+    assert len(declared) <= max(3, words // 400), (len(declared), words)
+
+
+def test_services_valuation_names_the_taxonomy_purposes() -> None:
+    """B-03 (minimo sem rota propria): finalidades nomeadas pela taxonomia
+    (property_valuation.triggers) e pelo catalogo (urban_property_valuation
+    .supported_decision), e nenhuma finalidade que os contratos donos nao
+    nomeiam: 'revisar aluguel' entrou sem constar em contrato algum."""
+    taxonomy = json.loads(TAXONOMY.read_text(encoding="utf-8"))
+    catalog = json.loads(OFFER_CATALOG.read_text(encoding="utf-8"))
+    owner_text = json.dumps(taxonomy, ensure_ascii=False) + json.dumps(catalog, ensure_ascii=False)
+    owner_text = owner_text.casefold()
+    for term in ("partilha", "garantia", "desapropriação"):
+        assert term in owner_text, term
+    for page in (_services_article("servico-avaliacao"), _triage_item("avaliacao-imovel")):
+        text = _visible(page).casefold()
+        for term in ("partilha", "garantia", "desapropriação"):
+            assert term in text, term
+        for unregistered in ("aluguel", "locação", "revisional"):
+            assert (unregistered in text) <= (unregistered in owner_text), unregistered
+
+
+def test_services_hub_does_not_repeat_its_own_conditions() -> None:
+    """RESSALVAS-10. 'ART' duas vezes na mesma frase, a lista de aceite
+    repetida em tres secoes e 'nao sao o mesmo trabalho' na disputa."""
+    html = SERVICES.read_text(encoding="utf-8")
+    for sentence in re.split(r"(?<=[.!?])\s+", _visible(_services_article("servico-avaliacao"))):
+        assert len(re.findall(r"\bART\b", sentence)) <= 1, sentence.strip()
+    assert "não são o mesmo trabalho" not in html
+    boundary = _visible(re.search(r'id="services-boundary-title"[\s\S]*?</p>', html).group(0))
+    # A frase antiga inteira (lista repetida e 'antes de assumirmos a
+    # responsabilidade') sai; o referente da confirmacao nacional continua a
+    # capacidade profissional, nao o conteudo da proposta (AGENTS.md).
+    assert "atividade de campo, responsável técnico, ART e eventuais registros ou vistos são confirmados" not in html
+    assert re.search(r"responsável técnico, registro profissional e ART são confirmados[^.]*em todo o Brasil", boundary), boundary
+    assert "responsabilidade, confirmados para o objeto" not in boundary, boundary
+    assert html.count("Local, atribuição, visita e ART, quando aplicáveis, são confirmados antes do aceite técnico") == 1
+
+
+def test_triage_sitemap_lastmod_matches_the_html_signal() -> None:
+    """Regressao apontada na revisao: dateModified/'Pagina revista em' de
+    /triagem-tecnica/ subiram para 2026-09-19 sem o lastmod do sitemap
+    (fora do WS-B), reprovando scripts/organic/sitemap_graph.py. O bump de data
+    pertence ao fechamento, junto com o sitemap."""
+    html = TRIAGE.read_text(encoding="utf-8")
+    modified = re.search(r'"dateModified"\s*:\s*"([^"]+)"', html).group(1)
+    visible = re.search(r'Página revista em <time datetime="([^"]+)">', html).group(1)
+    assert visible == modified, (visible, modified)
+    sitemap = SITEMAP.read_text(encoding="utf-8")
+    entry = re.search(r"<url>\s*<loc>https://confenge.com.br/triagem-tecnica/</loc>[\s\S]*?</url>", sitemap).group(0)
+    lastmod = re.search(r"<lastmod>([^<]+)</lastmod>", entry).group(1)
+    assert lastmod == modified, (lastmod, modified)

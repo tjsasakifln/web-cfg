@@ -1,0 +1,158 @@
+{
+  "frente": "PRONTIDAO_OPERACIONAL",
+  "campanha": "CONFENGE-BOFU-FECHAMENTO-20260919",
+  "coletado_em": "2026-09-19T23:11Z",
+  "release": {
+    "commit": "fedb4768b2fcafb28ba70f3153006a4dbe9fc1e6",
+    "artifact_hash": "2b2de021c0fd0f086868c204d9bad0c15a3bf413ad2d46d973e298be50109233",
+    "build_time": "2026-09-19T19:54:34Z",
+    "predecessor": "4cfa6adca",
+    "snapshot_anterior": "prontidao-operacional-4cfa6adca.json"
+  },
+  "metodo": "Somente GET publicos, sem segredo, a partir de uma estacao de trabalho (curl): /.well-known/build-info.json, /.well-known/runtime-info.json, ops?action=health (nao autenticado), health publico do webhook Warmbly e as tres rotas de captura do protocolo. Nenhum ssh, nenhum formulario enviado, nenhum e-mail enviado, nenhuma sonda, nenhuma escrita em store, Warmbly ou Resend. Os itens que exigem o host (Resend, contadores do ops autenticado, systemd, psql do Warmbly, env do runtime) ficam marcados INDISPONIVEL_SEM_SSH com o comando exato a executar ANTES do primeiro envio do QA; o protocolo g03-qa-protocolo.md le esses 'valores anteriores' no host, nunca deste arquivo.",
+  "resultado": "PARCIAL_SEM_SSH",
+  "1_resend_dominio": {
+    "status": "INDISPONIVEL_SEM_SSH",
+    "comando": "ssh ec-prod 'set -a; . /etc/confenge-web/runtime.env; set +a; curl -s -H \"Authorization: Bearer $RESEND_API_KEY\" https://api.resend.com/domains/a75ceeb3-52aa-4ae6-8f9c-26f3d82489ea | jq \"{name,status,region,records:[.records[]|{record,type,name,status}]}\"'",
+    "esperado": "status=verified; DKIM/SPF verified (valor em 2026-09-18T19:45Z: verified)",
+    "ok": null
+  },
+  "2_ops_host_127.0.0.1:18100": {
+    "health_publico_https://confenge.com.br/.netlify/functions/ops?action=health": {
+      "http": 200,
+      "ok": true,
+      "service": "confenge-ops",
+      "storage": {"ok": true, "backend": "filesystem", "code": null},
+      "auth_configured": true,
+      "ts": "2026-09-19T23:11:09.174Z"
+    },
+    "inbound_handoff": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod 'set -a; . /etc/confenge-web/runtime.env; set +a; curl -s -H \"Authorization: Bearer $OPS_TOKEN\" \"http://127.0.0.1:18100/.netlify/functions/ops?action=inbound_handoff\" | jq \"{counters,configuration,safety_gate}\"'",
+      "uso": "valor anterior de counters.persisted_leads e counters.delivered para o §3.2 do protocolo; ler imediatamente antes do envio A",
+      "esperado": "configuration.contract=READY, destination_fingerprint=WARMBLY_PRODUCTION_V1, safety_gate.auto_send_off=true, dispatch_attempted=false"
+    },
+    "leads": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod 'set -a; . /etc/confenge-web/runtime.env; set +a; curl -s -H \"Authorization: Bearer $OPS_TOKEN\" \"http://127.0.0.1:18100/.netlify/functions/ops?action=leads&kind=real&pii=0\" | jq \"{count,sla_breaches,counts_by_kind,delivery_email:[.leads[].delivery.email]|group_by(.)|map({key:.[0],n:length})}\"'",
+      "uso": "valor anterior de count e counts_by_kind.real/synthetic para o §3.6 do protocolo; lista leads reais com delivery.email error/pending (alerta real_leads_email_stale do scheduled_daily)",
+      "nota": "A projecao pii=0 de action=lead ja devolve delivery.email_provider_id/email_http/email_reason/email_idempotency_key (lead-stages.cjs publicDeliveryProjection, commit 505c833ab, contido em fedb4768b); o protocolo nao usa pii=1."
+    },
+    "drain_inbound_email_reconcile_required": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod 'set -a; . /etc/confenge-web/runtime.env; set +a; curl -s -X POST -H \"Authorization: Bearer $OPS_TOKEN\" -H \"Content-Type: application/json\" -d \"{\\\"limit\\\":20}\" \"http://127.0.0.1:18100/.netlify/functions/ops?action=drain_inbound\" | jq \"{ok,attempted,delivered,email_attempted,email_delivered,email_reconcile_required,reconcile_reasons:.email_retry.reconcile_reasons}\"'",
+      "esperado": "email_reconcile_required=0 (check critico do scheduled_daily desde esta campanha)"
+    }
+  },
+  "3_runtime_servido": {
+    "edge_https://confenge.com.br/.well-known/build-info.json": {
+      "http": 200, "cf_cache_status": "DYNAMIC", "date": "Sat, 19 Sep 2026 23:11:08 GMT",
+      "commit": "fedb4768b2fcafb28ba70f3153006a4dbe9fc1e6",
+      "artifact_hash": "2b2de021c0fd0f086868c204d9bad0c15a3bf413ad2d46d973e298be50109233",
+      "build_time": "2026-09-19T19:54:34Z",
+      "manifest_hash": "1da06c94977dab58b89f7862ccef31f3880cae7bb2e6051a2becf4a99c7ab48e",
+      "environment": "production",
+      "schema_version": "1.2.0"
+    },
+    "edge_https://confenge.com.br/.well-known/runtime-info.json": {
+      "http": 200, "cf_cache_status": "DYNAMIC",
+      "release_sha": "fedb4768b2fcafb28ba70f3153006a4dbe9fc1e6",
+      "build_timestamp": "2026-09-19T19:54:34.000Z",
+      "public_artifact_hash": "2b2de021c0fd0f086868c204d9bad0c15a3bf413ad2d46d973e298be50109233",
+      "release_bundle_hash": "32e6f435d850b32e2f0214f970b19832e76a4520e8440ec0f03890ebd08871fe",
+      "node_version": "v22.23.2",
+      "storage_backend": "filesystem",
+      "host_architecture_version": "confenge-nginx-node/v2",
+      "profile": "netcup-production",
+      "contract_version": "confenge-portable-runtime/v2"
+    },
+    "identidade_borda": {
+      "build_info_commit_igual_runtime_info_release_sha": true,
+      "build_info_artifact_igual_runtime_info_public_artifact_hash": true,
+      "processo_node_serve_a_release_promovida": true,
+      "prova": "runtime-info.json e gerado pelo processo Node em execucao (nao e estatico); release_sha e public_artifact_hash iguais ao build-info servido pelo nginx provam que o runtime reiniciou na release fedb4768b."
+    },
+    "host_http://127.0.0.1:18100/.well-known/runtime-info.json": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod 'curl -s http://127.0.0.1:18100/.well-known/runtime-info.json | jq \"{release_sha,public_artifact_hash}\"'",
+      "esperado": "identico a borda (fedb4768b… / 2b2de021…)"
+    },
+    "systemd_confenge-web-runtime": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod 'systemctl show confenge-web-runtime -p ActiveState,SubState,MainPID,NRestarts,ExecMainStartTimestamp; journalctl -u confenge-web-runtime -o short-iso -n 15 --no-pager'",
+      "esperado": "active/running; ExecMainStartTimestamp (UTC) > 2026-09-19T19:54:34Z; journal sem erro; durable_store_failed=false"
+    },
+    "ok": true
+  },
+  "4_warmbly": {
+    "health_publico_https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/health": {
+      "http": 200,
+      "status": "READY",
+      "auto_send_enabled": false,
+      "dispatch_attempted": false,
+      "reasons": [],
+      "accepted_event_versions": ["confenge.commercial_event.v1", "confenge.search_observation.v1", "CONFENGE_WEB_INTENT/1.0", "CONFENGE_OPPORTUNITY_EVENT/1.0", "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904"]
+    },
+    "health_http://127.0.0.1:8080/health": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod 'curl -s http://127.0.0.1:8080/health; docker ps --format \"{{.Names}} {{.Status}}\" | grep warmbly-confenge'"
+    },
+    "outreach_inbound_leads_por_status": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod \"docker exec warmbly-confenge-postgres-1 psql -U warmbly -d warmbly_dev -At -F'|' -c \\\"select count(*), status from outreach_inbound_leads group by status order by status\\\"\"",
+      "uso": "valor anterior de OPEN/SUPPRESSED para o §3.6 do protocolo; ler imediatamente antes do envio A"
+    },
+    "identidade_qa": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comando": "ssh ec-prod \"docker exec warmbly-confenge-postgres-1 psql -U warmbly -d warmbly_dev -At -c \\\"select count(*) from outreach_inbound_leads where lead_email = '<e-mail do QA, ver protocolo §0>'\\\"\"",
+      "nota": "Em 2026-09-18 o QA ainda nao tinha linhas; se o QA de 4cfa6adca chegou a ser executado, B1/C1 e os novos envios podem receber dedupe_of_lead_id dentro da janela de 24 h (inbound.go:16) — comportamento esperado, nao defeito."
+    },
+    "ok": true
+  },
+  "5_env_runtime": {
+    "fonte": "/etc/confenge-web/runtime.env (somente presenca SET/UNSET; nenhum valor)",
+    "status": "INDISPONIVEL_SEM_SSH",
+    "comando": "ssh ec-prod 'for k in LEAD_REQUIRE_TURNSTILE LEAD_REQUIRE_ORIGIN LEAD_DELIVERY_TIMEOUT_MS RESEND_API_KEY OPS_TOKEN TURNSTILE_SECRET_KEY CONFENGE_INBOUND_WEBHOOK_SECRET CONFENGE_INBOUND_WEBHOOK_URL LEAD_PROBE_SECRET LEAD_NOTIFY_EMAIL LEAD_FROM_EMAIL OPS_WEBHOOK_URL NTFY_URL; do if grep -q \"^$k=.\" /etc/confenge-web/runtime.env; then echo \"$k=SET\"; else echo \"$k=UNSET\"; fi; done'",
+    "esperado": "LEAD_REQUIRE_TURNSTILE=SET(1), LEAD_REQUIRE_ORIGIN=SET(1), RESEND_API_KEY=SET, OPS_TOKEN=SET, TURNSTILE_SECRET_KEY=SET, CONFENGE_INBOUND_WEBHOOK_SECRET=SET, LEAD_PROBE_SECRET=SET, LEAD_NOTIFY_EMAIL=SET, LEAD_FROM_EMAIL=SET; LEAD_DELIVERY_TIMEOUT_MS UNSET => 5000 ms (lead-delivery.cjs)",
+    "evidencia_publica_indireta": "Turnstile obrigatorio e verificavel na borda: o slot #turnstile-slot esta nas tres rotas (item 6) e a automacao registrada em g03-qa-tentativa-automacao.json foi rejeitada em 4cfa6adca."
+  },
+  "6_formularios_publicos_fedb4768b": {
+    "A_home_#contato": {
+      "http": 200, "ancora_presente": true, "form_id": "formulario-contato",
+      "hidden": ["jornada (id jornada-hidden, value vazio ate a escolha do estagio)", "origem=/"],
+      "submit": "Descrever minha situação", "turnstile": "slot #turnstile-slot presente"
+    },
+    "B_/medicoes-glosas-obras-publicas/#captura-pilar": {
+      "http": 200, "ancora_presente": true, "form": "pillar-capture-form", "action": "/.netlify/functions/lead",
+      "cta_id": "medicoes-glosas-obras-publicas-handraise", "asset_id": "medicoes-glosas-obras-publicas", "route_family": "medicoes-glosas",
+      "hidden": ["jornada=contrato", "estagio=medicoes-glosas-obras-publicas", "origem=medicoes-glosas-obras-publicas", "asset_id", "cta_id", "route_family"],
+      "submit": "Descrever a medição", "turnstile": "slot #turnstile-slot presente"
+    },
+    "C_/entregas/#captura-entregas": {
+      "http": 200, "ancora_presente": true, "form": "pillar-capture-form", "action": "/.netlify/functions/lead",
+      "cta_id": "entregas-hub-handraise", "asset_id": "entregas-exemplos-hub", "route_family": "entregas", "data_journey": "operacao",
+      "hidden": ["jornada=operacao", "estagio=entregas-exemplos-hub", "origem=entregas", "asset_id", "cta_id", "route_family"],
+      "submit": "Saber qual entrega resolve a minha pergunta", "turnstile": "slot #turnstile-slot presente"
+    },
+    "sonda_de_contexto_pendente": {
+      "status": "INDISPONIVEL_SEM_SSH",
+      "comandos": [
+        "ssh ec-prod 'cd /opt/confenge-web/current && set -a; . /etc/confenge-web/runtime.env; set +a; EXPECTED_SHA=fedb4768b2fcafb28ba70f3153006a4dbe9fc1e6 PROBE_PAGE_PATH=/medicoes-glosas-obras-publicas/ PROBE_ORIGEM=medicoes-glosas-obras-publicas PROBE_ASSET_ID=medicoes-glosas-obras-publicas PROBE_CTA_ID=medicoes-glosas-obras-publicas-handraise PROBE_ROUTE_FAMILY=medicoes-glosas PROBE_JORNADA=contrato PROBE_ESTAGIO=medicoes-glosas-obras-publicas npm run probe:lead:prod'",
+        "ssh ec-prod 'cd /opt/confenge-web/current && set -a; . /etc/confenge-web/runtime.env; set +a; EXPECTED_SHA=fedb4768b2fcafb28ba70f3153006a4dbe9fc1e6 PROBE_PAGE_PATH=/entregas/ PROBE_ORIGEM=entregas PROBE_ASSET_ID=entregas-exemplos-hub PROBE_CTA_ID=entregas-hub-handraise PROBE_ROUTE_FAMILY=entregas PROBE_JORNADA=operacao PROBE_ESTAGIO=entregas-exemplos-hub npm run probe:lead:prod'"
+      ],
+      "guardar": "so a saida agregada (state, receipt_sha256, checks, page_context, served_form, persisted_context); record_kind=synthetic, e-mail skipped; nao substitui o envio humano",
+      "nota": "PROBE_PAGE_PATH exige que o release no host contenha a sonda desta campanha (served_form_context_persisted); em fedb4768b a sonda ainda aceita o contexto sem cruzar com o formulario servido."
+    },
+    "regra_servidor": "lead-core.cjs exige telefone OU email; rate limit 8/IP e 12/fingerprint por 10 min (lead-rate-limit.cjs) — 3 envios cabem."
+  },
+  "classificacao_esperada_qa": {
+    "record_kind_esperado_web_cfg": "real",
+    "motivo": "record-kind.cjs: confenge.com.br nao esta em RESERVED_TEST_EMAIL_DOMAINS; nome nao casa SYNTHETIC_NAME_RE/QA_NAME_RE; local-part nao casa ^probe|^qa|^test|synthetic; 'REF-A06-20260919-A1' nao casa /\\[qa\\]|synthetic|do not contact|probe only/; sem utm; UA de navegador real.",
+    "warmbly_skip_esperado": "vazio (skip.go: tokens synthetic|qa|internal|synthetic-inbound ausentes) -> entra em INBOUND NOW sem include_synthetic"
+  },
+  "ressalvas": [
+    {"severidade": "MEDIA", "onde": "este snapshot", "descricao": "Coletado sem ssh: Resend, contadores autenticados do ops, systemd, psql do Warmbly e env do runtime nao foram lidos. O protocolo le os valores anteriores no host imediatamente antes do envio A (comandos acima) e os grava em g03-qa-resultado-fedb4768b.json."},
+    {"severidade": "MEDIA", "onde": "revops-scheduled daily", "descricao": "A ultima run diaria registrada (35448519033, 2026-09-19 14:22Z) leu deploy_identity live=a27472bec… match=false: a sonda diaria ainda nao bateu em fedb4768b. Executar a sonda sintetica contra fedb4768b (gh workflow run revops-scheduled.yml -f job=daily, ou os comandos de sonda_de_contexto_pendente) antes do envio A."},
+    {"severidade": "BAIXA", "onde": "Warmbly dedupe 24h", "descricao": "B1 e C1 serao marcados dedupe_of_lead_id=A1 por identidade; comportamento esperado, nao defeito."}
+  ]
+}

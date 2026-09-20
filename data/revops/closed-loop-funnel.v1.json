@@ -1,6 +1,6 @@
 {
   "schema": "confenge.closed-loop-funnel/1.0",
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "source": "CONFENGE_WEB",
   "commercial_owner": "warmbly",
   "warmbly_observation_contract": {
@@ -202,7 +202,8 @@
     "cta_id",
     "journey",
     "offer_id",
-    "origem"
+    "origem",
+    "origin_class"
   ],
   "notes_pt_br": {
     "raw_vs_qualified": "Mensagem ou lead persistido não é oportunidade qualificada. Qualificação, proposta e venda são observações Warmbly unidas por IDs estáveis.",
@@ -211,6 +212,7 @@
     "destination_type": "cta_click.destination_type: form | anchor | route | whatsapp | email | tel. So form/whatsapp/email/tel contam como 'cta'.",
     "visitor_stage_conditions": "G04-01: cta_click so entra no estagio 'cta' quando o destino e de intencao (form, whatsapp, email, tel); destination_type 'route' ou 'anchor' e navegacao, nao intencao. outbound_click so conta como cta quando o destino e telefone; externo nao conta. Evento cta_click sem destination_type e legado nao classificado (legacy_unclassified): conta no estagio 'cta' com rotulo counts.cta_legacy_unclassified, para nao zerar a serie view_to_cta, e nunca promove a lead.",
     "quebra_de_serie_2026_09_19": "JOR-02: o link de artigo ou caso para a ancora de captura de outra rota (/{pilar}/#captura-pilar; tambem #pedido-* e #triagem-*; #contato-* ja contava assim) passa a emitir cta_click destination_type=form (estagio 'cta', agregados cta_clicks/view_to_cta/cta_to_start), como o antigo '/?tema=...#contato'. Antes desta data esses cliques eram content_to_service (engajamento) e nao entravam no estagio 'cta': as series de cta a partir de 2026-09-19 nao sao comparaveis com os dias anteriores. Semantica registrada em netlify/functions/lib/event-registry.json (cta_click, content_to_service).",
-    "contagem_de_propostas_2026_09_19": "#706 (W7): a regra de contagem de propostas (uma canônica por oportunidade/escopo, revisão substitui, reenvio não emite, alternativas contam pela canônica, total × parcela, estágios não somados, fechamento America/Sao_Paulo, classes de origem com desconhecido = zero) está em data/revops/proposal-counting.v1.json, status PROPOSED, official_live false, à espera de aceite Warmbly. Este contrato closed-loop não muda: continua uma proposta escalar por oportunidade (duplicate_entity em closed-loop.cjs:463) e allowed_fields sem os campos novos; a seção reconciliation do contrato proposto lista o que a Warmbly precisa aceitar antes de o indicador se mover."
+    "contagem_de_propostas_2026_09_19": "#706 (W7): a regra de contagem de propostas (uma canônica por oportunidade/escopo, revisão substitui, reenvio não emite, alternativas contam pela canônica, total × parcela, estágios não somados, fechamento America/Sao_Paulo, classes de origem com desconhecido = zero) está em data/revops/proposal-counting.v1.json, status PROPOSED, official_live false, à espera de aceite Warmbly. Este contrato closed-loop não muda: continua uma proposta escalar por oportunidade (duplicate_entity opportunity_already_has_proposal em applyObservation) e allowed_fields sem os campos novos; a seção reconciliation do contrato proposto lista o que a Warmbly precisa aceitar antes de o indicador se mover.",
+    "origem_vs_origin_class_2026_09_19": "MEDICAO-09/10 (schema_version 1.2.0): `origem` é LOCAL de origem (slug de rota ou caminho do próprio site, preenchido por nav.js/lead-core); nunca canal de aquisição. Palavras de canal (organic, referral, direct, paid, cpc, social, gsc, google...) em `origem` — campo que o visitante pode influenciar via ?origem= — não viram bucket: a linha cai em ORIGEM_CHANNEL_REFUSED sem derrubar o relatório, e utm_source nunca substitui `origem` em by_origem. Valor não-web em origin_class (derivado só no servidor) é recusado com invalid_attribution. A fonte de aquisição web é `origin_class` (campaign | search_organic | referral | direct_or_unknown), derivada no servidor em lead-core e agregada em by_origin_class; lead sem o campo (persistido antes de 2026-09-19) aparece como INDISPONIVEL, nunca como direct_or_unknown. A classe web é evidência, não a classe comercial: demonstrated_inbound continua sendo declarada só pela Warmbly (proposal-counting.v1.json RC-07)."
   }
 }

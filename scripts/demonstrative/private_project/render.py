@@ -239,8 +239,11 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
 """
 
 
-def _elevation_svg(extracts: dict[str, Any], revision: str) -> str:
+def _elevation_svg(extracts: dict[str, Any], revision: str, *, id_suffix: str = "") -> str:
     """East wall elevation: window vs beam, metres."""
+    # id_suffix keeps title/desc ids unique when the same SVG is inlined twice
+    # in one document (hero + plate); the standalone asset uses no suffix.
+    idb = f"elv-{revision}-{id_suffix}" if id_suffix else f"elv-{revision}"
     room = extracts["room"]
     wall_len = float(room["interior_width_m"])
     wall_h = float(room["ceiling_height_m"])
@@ -276,9 +279,9 @@ def _elevation_svg(extracts: dict[str, Any], revision: str) -> str:
     else:
         desc += f" Folga de {br_number(extracts['named_totals']['r01_clearance_m'])} m."
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="Archivo Var, Arial, Helvetica, sans-serif" aria-labelledby="elv-{revision}-title elv-{revision}-desc">
-<title id="elv-{revision}-title">{e(title)}</title>
-<desc id="elv-{revision}-desc">{e(desc)} Exemplo demonstrativo.</desc>
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="Archivo Var, Arial, Helvetica, sans-serif" aria-labelledby="{idb}-title {idb}-desc">
+<title id="{idb}-title">{e(title)}</title>
+<desc id="{idb}-desc">{e(desc)} Exemplo demonstrativo.</desc>
 <rect x="{X(0):.1f}" y="{Y(wall_h):.1f}" width="{px(wall_len):.1f}" height="{px(wall_h):.1f}" fill="#ffffff" stroke="#071a31" stroke-width="2"/>
 <rect x="{X(0):.1f}" y="{Y(wall_h):.1f}" width="{px(wall_len):.1f}" height="{px(beam_depth):.1f}" fill="#ced62a" fill-opacity="0.35" stroke="#071a31" stroke-width="0.6"/>
 <text x="{X(wall_len / 2):.1f}" y="{Y(soffit + beam_depth / 2) + 4:.1f}" text-anchor="middle" font-size="11" font-weight="650" fill="#071a31">B-01 fundo {br_number(soffit)} m</text>
@@ -429,7 +432,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 </div>
 <figure class="plate plate--side" aria-labelledby="case-plate-cap">
 <div class="plate__sheet">
-{_elevation_svg(extracts, "R00")}
+{_elevation_svg(extracts, "R00", id_suffix="hero")}
 </div>
 <figcaption class="plate__caption" id="case-plate-cap">Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. É a interferência CF-GEO-01, corrigida em R01.</figcaption>
 </figure>

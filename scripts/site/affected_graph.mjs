@@ -36,6 +36,8 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:integrity-promotion-gate",
   "test:logo-contract",
   "test:wave1-fields",
+  // Sitewide capture-route channel gate and tool-form census (WS-G, 2026-09-19).
+  "test:bofu-fechamento-20260919",
 ]);
 
 const PUBLIC_SURFACE_PREFIXES = Object.freeze([
@@ -1434,6 +1436,45 @@ export const SUITE_GRAPH = Object.freeze({
     ],
     artifacts: [],
     surfaces: [],
+  },
+  // BOFU-FECHAMENTO-20260919 (WS-G): the campaign's tests that had no npm
+  // script: capture pre-selection, private readiness as-built route, Turnstile
+  // timeout, synthetic probe page context, G03 protocol identity, the
+  // campaign pytest folder, unique ids of the private demonstrative, the tool
+  // forms no-JS census and the capture-route channel gate.
+  "test:bofu-fechamento-20260919": {
+    producers: [
+      "scripts/site/test_capture_form_preselect.mjs",
+      "scripts/site/test_private_readiness_asbuilt_route.mjs",
+      "scripts/site/test_lead_turnstile_timeout.mjs",
+      "scripts/site/test_synthetic_lead_probe_page_context.mjs",
+      "scripts/site/test_g03_qa_protocol_identity.mjs",
+      "scripts/site/synthetic_lead_probe.mjs",
+      "scripts/site/test_capture_route_channels_gate.py",
+      "scripts/site/inbound_gates.py",
+      "scripts/commercial/cta_form_next_state_audit.mjs",
+      "tests/commercial/test_tool_forms_nojs.mjs",
+      "tests/campaigns/bofu_fechamento_20260919/",
+      "tests/demonstrative/test_private_project_unique_ids.py",
+      "netlify/functions/lead.cjs",
+      "netlify/functions/lib/",
+      "assets/js/adaptive-intake.js",
+      "js/modules/",
+      "script.js",
+      "docs/ops/",
+    ],
+    artifacts: ["docs/commercial/cta-form-next-state-inventory.json"],
+    surfaces: [
+      "/",
+      "/servicos-obras-publicas/",
+      "/entregas/",
+      "/analise-cnpj/",
+      "/casos/",
+      "/conflitos/",
+      "/ferramentas/",
+      "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "/inspecao-diagnostico-edificacoes/",
+    ],
   },
   "test:visible-parity": {
     producers: [

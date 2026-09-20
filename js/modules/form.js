@@ -134,6 +134,44 @@
         return key;
       };
       ensureReceiptIdempotency();
+      // BOFU-FECHAMENTO-20260919 (A06-01, lado do cliente). A chave sobrevive
+      // ao timeout de proposito (reenviar o MESMO pedido nao duplica), mas o
+      // servidor responde 200 idempotente com o recibo antigo mesmo quando o
+      // visitante editou a mensagem depois de "Não recebemos a confirmação".
+      // O conteudo editado era descartado em silencio. Aqui a chave e ligada
+      // ao hash dos campos materiais no momento do envio: se eles mudaram
+      // desde o ultimo POST, uma chave nova e cunhada. Campos iguais ->
+      // mesma chave (A06-06). O hash fica so nesta sessao; nunca e enviado.
+      const MATERIAL_FIELDS = [
+        'nome', 'telefone', 'email', 'empresa', 'mensagem', 'estagio',
+        'deliverable_id', 'consentimento',
+      ];
+      const materialStorageKey = () => `${receiptStorageKey()}:material`;
+      const materialHash = (payload) => {
+        const text = MATERIAL_FIELDS
+          .map((k) => String(payload && payload[k] != null ? payload[k] : '').trim())
+          .join('\u001f');
+        let h = 2166136261;
+        for (let i = 0; i < text.length; i += 1) {
+          h ^= text.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return `m-${(h >>> 0).toString(16)}`;
+      };
+      const idempotencyKeyFor = (payload) => {
+        let key = ensureReceiptIdempotency();
+        if (!receiptRequired) return key;
+        const current = materialHash(payload);
+        let previous = '';
+        try { previous = sessionStorage.getItem(materialStorageKey()) || ''; } catch (_) { /* private mode */ }
+        if (previous && previous !== current) {
+          key = newIdempotencyKey();
+          ensureHidden('idempotency_key', key, true);
+          try { sessionStorage.setItem(receiptStorageKey(), key); } catch (_) { /* private mode */ }
+        }
+        try { sessionStorage.setItem(materialStorageKey(), current); } catch (_) { /* private mode */ }
+        return key;
+      };
 
       const showFormStatus = (msg, kind) => {
         if (!statusEl) return;
@@ -537,7 +575,10 @@
                 sessionStorage.setItem('confenge_last_receipt', protocol);
                 sessionStorage.setItem('confenge_last_receipt_destination', dest);
               }
-              if (receiptRequired) sessionStorage.removeItem(receiptStorageKey());
+              if (receiptRequired) {
+                sessionStorage.removeItem(receiptStorageKey());
+                sessionStorage.removeItem(materialStorageKey());
+              }
             } catch (_) { /* private mode */ }
             const q = protocol
               ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(protocol)}`
@@ -594,9 +635,11 @@
               statusEl.appendChild(wa);
             }
           };
-          // Idempotency key for double-submit protection (server-side)
-          payload.idempotency_key = payload.idempotency_key
-            || ensureReceiptIdempotency()
+          // Idempotency key for double-submit protection (server-side). The
+          // decided key overrides the hidden input copied by FormData: after a
+          // timeout, edited material fields get a fresh key (A06-01).
+          payload.idempotency_key = idempotencyKeyFor(payload)
+            || payload.idempotency_key
             || `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
           // Request-processing consent is `consentimento`. Analytics/marketing
           // denial, blocked storage, or missing cookies must not stop this POST.

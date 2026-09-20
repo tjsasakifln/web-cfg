@@ -702,6 +702,12 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     opportunity_deadline: lead.opportunity_deadline || null,
     contract_event: lead.contract_event || null,
     contract_stage: lead.contract_stage || null,
+    // BOFU-FECHAMENTO-20260919 (FAMILIAS-PUBLICAS-01): contexto opcional da
+    // fase preparatoria, quando o pedido e do orgao contratante.
+    procurement_object: lead.procurement_object || null,
+    procurement_stage: lead.procurement_stage || null,
+    procurement_regulation: lead.procurement_regulation || null,
+    funding_source: lead.funding_source || null,
     contract_value_band: lead.contract_value_band || null,
     lot_count: lead.lot_count || null,
     execution_regime: lead.execution_regime || null,

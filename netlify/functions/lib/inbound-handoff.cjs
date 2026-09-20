@@ -229,13 +229,36 @@ function mapLeadToInboundV1(record) {
     && String(record.estagio || "") !== "entregas-exemplos-hub"
     ? clampText(record.estagio, 120)
     : "";
+  // CONTEXTO-CAPTURA-03 / FAMILIAS-PUBLICAS-03 (BOFU-FECHAMENTO-20260919): a
+  // situacao que o visitante declarou (o `estagio` da home, ou o derivado do
+  // orgao) chegava a Warmbly so como jornada. Vai no mesmo texto versionado,
+  // sem PII, sempre que existe e nao repete a rota/asset (nos pilares e nos
+  // hubs o estagio e o proprio asset id) nem a familia de servico acima.
+  const declaredStage = clampText(record.estagio, 120);
+  const declaredSituation = declaredStage
+    && !serviceFamily
+    && declaredStage !== String(record.asset_id || "")
+    && declaredStage !== String(record.route_family || "")
+    && declaredStage !== "entregas-exemplos-hub"
+    ? declaredStage
+    : "";
+  // FAMILIAS-PUBLICAS-01: lado contratante e contexto da fase preparatoria.
+  const contractingSide = String(record.contract_event || "") === "planejamento_contratacao"
+    ? "orgao_contratante"
+    : "";
   const qualification = [
     ["situação", record.jornada],
+    ["situação declarada", declaredSituation],
     ["entrega", deliverableId],
     ["família de serviço", serviceFamily],
     ["prazo", record.opportunity_deadline],
     ["evento contratual", record.contract_event],
     ["estágio contratual", record.contract_stage],
+    ["lado", contractingSide],
+    ["objeto", record.procurement_object],
+    ["estágio da contratação", record.procurement_stage],
+    ["regulamento", record.procurement_regulation],
+    ["origem do recurso", record.funding_source],
     ["decisão", record.decision_intent],
     ["data de corte", record.analysis_cutoff],
     ["faixa de valor", record.contract_value_band],
@@ -276,9 +299,10 @@ function mapLeadToInboundV1(record) {
     ["establishment_class", record.establishment_class],
     ["risk_class", record.risk_class],
     ["sst_doc_class", record.sst_doc_class],
-    ["certame_stage", record.certame_stage],
-    ["contract_relation", record.contract_relation],
-    ["entity_class", record.entity_class],
+    // certame_stage / contract_relation / entity_class saíram em
+    // BOFU-FECHAMENTO-20260919: nenhum formulário os preenche desde MV-09
+    // (dbf931d7b removeu os enums de adaptive-intake); o lado contratante
+    // agora é declarado por `lado` acima, a partir do evento estruturado.
     // JOR-03 (2026-09-19): subject the visitor arrived with (article/case
     // data-tema). Carried in the same versioned free-text next-action context
     // as the deliverable, so confenge.inbound.v1 keeps its documented keys;

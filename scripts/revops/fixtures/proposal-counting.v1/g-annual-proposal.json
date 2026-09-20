@@ -5,7 +5,7 @@
   "kind": "synthetic",
   "official_live": false,
   "fixture_id": "g-annual-proposal",
-  "description_pt_br": "Proposta anual de R$ 90.000 em 12 parcelas de R$ 7.500. Conta 9.000.000 proposto uma vez, em 2026-09; visão de parcelas mostra 750.000/mês. Nenhum dos dois é receita: by_stage.received é 0 até haver recebimento; um recebimento parcial de 750.000 em outubro aparece só em received.",
+  "description_pt_br": "Proposta anual de R$ 90.000 em 12 parcelas de R$ 7.500. Conta 9.000.000 proposto uma vez, em 2026-09; visão de parcelas mostra 750.000/mês. Nenhum dos dois é receita: by_stage.received é 0 até haver recebimento. Duas faturas mensais (invoiced) em instantes distintos são eventos distintos e somam 1.500.000 em by_stage.invoiced; a repetição literal da 1ª fatura (mesmo instante, delivery_attempt 2) é retry e sai como duplicate_delivery. Um recebimento parcial de 750.000 em outubro aparece só em received.",
   "observations": [
     {
       "record_kind": "real",
@@ -31,6 +31,26 @@
       "proposal_id": "prop-g-001",
       "opportunity_id": "opp-g-001",
       "at": "2026-10-01T09:00:00-03:00",
+      "amount_cents": 750000,
+      "observation_id": "prop-g-001/invoiced/2026-10"
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-g-001/invoiced/2026-10/attempt-2",
+      "event": "invoiced",
+      "proposal_id": "prop-g-001",
+      "opportunity_id": "opp-g-001",
+      "at": "2026-10-01T09:00:00-03:00",
+      "amount_cents": 750000,
+      "delivery_attempt": 2
+    },
+    {
+      "record_kind": "real",
+      "observation_id": "prop-g-001/invoiced/2026-11",
+      "event": "invoiced",
+      "proposal_id": "prop-g-001",
+      "opportunity_id": "opp-g-001",
+      "at": "2026-11-01T09:00:00-03:00",
       "amount_cents": 750000
     },
     {
@@ -45,14 +65,19 @@
   "expected": {
     "emitted_total_cents": 9000000,
     "proposals_counted": 1,
-    "excluded": [],
+    "excluded": [
+      {
+        "id": "prop-g-001/invoiced/2026-10/attempt-2",
+        "reason": "duplicate_delivery"
+      }
+    ],
     "by_close_month": {
       "2026-09": 9000000
     },
     "by_stage": {
       "emitted": 9000000,
       "accepted": 9000000,
-      "invoiced": 750000,
+      "invoiced": 1500000,
       "received": 750000
     },
     "instalment_view": {
@@ -67,6 +92,6 @@
         }
       ]
     },
-    "forbidden_pt_br": "750.000 como valor proposto, 9.750.000 (total + parcela) ou qualquer valor como receita antes de received é contagem indevida."
+    "forbidden_pt_br": "750.000 como valor proposto, 9.750.000 (total + parcela), 750.000 em invoiced (2ª fatura descartada como retry) ou qualquer valor como receita antes de received é contagem indevida."
   }
 }

@@ -7,6 +7,7 @@ import path from "path";
 import { createHash } from "crypto";
 import { fileURLToPath } from "url";
 import { deriveFieldPurpose, markOptionalLabels } from "./form_field_purpose.mjs";
+import { buildNojsNote, pageChannels } from "./form_nojs_note.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contract = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/page-contract-contratos.v1.json"), "utf8"));
@@ -65,19 +66,68 @@ function isHeldProtected(item, current) {
   return true;
 }
 
+// FAMILIAS-PUBLICAS-04 (BOFU-FECHAMENTO-20260919): cada pilar pre-seleciona
+// o evento da propria pagina; a troca continua livre.
+const EVENT_BY_DELIVERABLE = {
+  "CFG-D17": "risco_margem",
+  "CFG-D20": "atraso_prorrogacao",
+  "CFG-D23": "notificacao_sancao",
+};
+// FAMILIAS-PUBLICAS-01 (decisao C1): o orgao contratante entra pelo mesmo
+// formulario do hub com um evento proprio e campos OPCIONAIS da fase
+// preparatoria, como <label> simples no grid (sem fieldset, sem CSS novo),
+// visiveis sem JavaScript. Enums fechados = netlify/functions/lib/lead-core.cjs.
+const CONTRACT_EVENT_PLANNING = "planejamento_contratacao";
+const CONTRACT_EVENT_OPTIONS = [
+  ["risco_margem", "Risco à margem"],
+  ["medicao_glosa_pagamento", "Medição, glosa ou pagamento"],
+  ["mudanca_escopo", "Mudança de escopo ou serviço extra"],
+  ["atraso_prorrogacao", "Atraso ou prorrogação"],
+  ["reajuste", "Reajuste contratual"],
+  ["reequilibrio", "Reequilíbrio"],
+  ["notificacao_sancao", "Notificação ou sanção"],
+  [CONTRACT_EVENT_PLANNING, "Órgão planejando a contratação de obra ou serviço"],
+  ["outro", "Outro evento contratual"],
+];
+
+function contractEventSelect(item, select) {
+  const preselected = !select && item ? EVENT_BY_DELIVERABLE[item.deliverable_id] || "" : "";
+  const options = CONTRACT_EVENT_OPTIONS
+    .filter(([value]) => select || value !== CONTRACT_EVENT_PLANNING)
+    .map(([value, label]) => `<option value="${value}"${value === preselected ? " selected" : ""}>${esc(label)}</option>`)
+    .join("");
+  return `<label>Evento observado <select name="contract_event" required><option value="">Selecione</option>${options}</select></label>`;
+}
+
+// A instrucao "Se for orgao contratante" e ligada aos quatro controles por
+// aria-describedby: o leitor de tela recebe o sinal de que o campo e so do
+// orgao ao focar cada um, nao apenas ao ler o paragrafo na ordem do DOM.
+const PROCUREMENT_HINT_ID = "procurement-hint";
+
+function procurementFields() {
+  const describedBy = `aria-describedby="${PROCUREMENT_HINT_ID}"`;
+  return `
+<p class="form-hint" id="${PROCUREMENT_HINT_ID}">Se for órgão contratante: os quatro campos abaixo ajudam a nomear os módulos da fase preparatória. Todos opcionais.</p>
+<label>Objeto da contratação <span class="field-optional">(opcional)</span> <input name="procurement_object" maxlength="120" ${describedBy}/></label>
+<div class="contract-product-form__row"><label>Etapa da preparação <span class="field-optional">(opcional)</span> <select name="procurement_stage" ${describedBy}><option value="">Selecione</option><option value="dfd_etp">DFD, DOD ou ETP</option><option value="termo_referencia_projeto">Termo de referência ou projeto</option><option value="orcamento_referencia">Orçamento de referência</option><option value="edital_minuta">Minuta de edital</option><option value="nao_sei">Ainda não sei</option></select></label><label>Origem do recurso <span class="field-optional">(opcional)</span> <select name="funding_source" ${describedBy}><option value="">Selecione</option><option value="recurso_proprio">Recurso próprio</option><option value="transferencia_uniao">Transferência da União</option><option value="transferencia_estado">Transferência do Estado</option><option value="financiamento">Financiamento</option><option value="nao_sei">Ainda não sei</option></select></label></div>
+<label>Regulamento aplicável <span class="field-optional">(opcional)</span> <input name="procurement_regulation" maxlength="80" placeholder="Lei 14.133/2021, Lei 13.303/2016, RDC" ${describedBy}/></label>`;
+}
+
 function qualificationFields(item, select = false) {
   const deliverable = select
     ? `<label>Entrega mais próxima <select name="deliverable_id"><option value="">Ainda não sei qual entrega, quero orientação</option>${contract.items.map((entry) => `<option value="${entry.deliverable_id}">${esc(entry.public_name_pt_br)}</option>`).join("")}</select></label>`
     : `<input name="deliverable_id" type="hidden" value="${item.deliverable_id}"/>`;
+  // FAMILIAS-PUBLICAS-04: o estagio e opcional; "Ainda nao sei" e UNKNOWN,
+  // sem a duplicata "Ainda nao definido" que produzia estados diferentes.
   return `${FIELDS_START}
 ${deliverable}
 <label>Identificador do contrato <span class="field-optional">(opcional)</span> <input name="public_contract_id" maxlength="80"/></label>
-<label>Evento observado <select name="contract_event" required><option value="">Selecione</option><option value="risco_margem">Risco à margem</option><option value="medicao_glosa_pagamento">Medição, glosa ou pagamento</option><option value="mudanca_escopo">Mudança de escopo ou serviço extra</option><option value="atraso_prorrogacao">Atraso ou prorrogação</option><option value="reajuste">Reajuste contratual</option><option value="reequilibrio">Reequilíbrio</option><option value="notificacao_sancao">Notificação ou sanção</option><option value="outro">Outro evento contratual</option></select></label>
-<div class="contract-product-form__row"><label>Prazo da decisão ou resposta <span class="field-optional">(opcional)</span> <input name="opportunity_deadline" type="date"/></label><label>Estágio do evento <span class="field-optional">(se souber)</span> <select name="contract_stage"><option value="">Ainda não sei</option><option value="identificado">Identificado</option><option value="documentando">Documentando</option><option value="quantificando">Quantificando</option><option value="em_resposta">Em resposta formal</option><option value="UNKNOWN">Ainda não definido</option></select></label></div>
+${contractEventSelect(item, select)}
+<div class="contract-product-form__row"><label>Prazo da decisão ou resposta <span class="field-optional">(opcional)</span> <input name="opportunity_deadline" type="date"/></label><label>Estágio do evento <span class="field-optional">(se souber)</span> <select name="contract_stage"><option value="UNKNOWN">Ainda não sei</option><option value="identificado">Identificado</option><option value="documentando">Documentando</option><option value="quantificando">Quantificando</option><option value="em_resposta">Em resposta formal</option></select></label></div>${select ? procurementFields() : ""}
 ${FIELDS_END}`;
 }
 
-function standaloneForm(item, { hub = false } = {}) {
+function standaloneForm(item, { hub = false, pageHtml = "" } = {}) {
   const slug = hub ? "servicos-obras-publicas" : item.route.slice(1, -1);
   const asset = hub ? "contract-defense-products" : `${slug}-contract-product`;
   const nextState = ctaFormContract.profiles.service_fit_review;
@@ -94,28 +144,40 @@ function standaloneForm(item, { hub = false } = {}) {
   const phoneField = hub
     ? '<label>WhatsApp <input name="telefone" id="telefone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" pattern="(\\+?55[\\s.\\-]?)?\\(?\\d{2}\\)?[\\s.\\-]?9?\\d{4}[\\s.\\-]?\\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></label>'
     : "";
-  const fields = markOptionalLabels(`${qualificationFields(item, hub)}<label>Nome do representante <input name="nome" autocomplete="name" required/></label><label>E-mail profissional ${emailInput}</label>${phoneField}<label>Contexto adicional <textarea name="mensagem" rows="3" maxlength="2000"></textarea></label><label class="contract-product__consent"><input name="consentimento" type="checkbox" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>`);
+  // FAMILIAS-PUBLICAS-01: no hub, quem responde pode ser o orgao ou a
+  // contratada. CONTEXTO-CAPTURA-07: textarea#mensagem recebe o pre-preenchimento
+  // do tema (js/modules/nav.js), como nos pilares.
+  const nameLabel = hub ? "Nome de quem responde pelo pedido" : "Nome do representante";
+  const fields = markOptionalLabels(`${qualificationFields(item, hub)}<label>${nameLabel} <input name="nome" autocomplete="name" required/></label><label>E-mail profissional ${emailInput}</label>${phoneField}<label>Contexto adicional <textarea name="mensagem" id="mensagem" rows="3" maxlength="2000"></textarea></label><label class="contract-product__consent"><input name="consentimento" type="checkbox" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>`);
   const channelNote = hub
     ? "WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos."
     : "O e-mail precisa de domínio e extensão completos.";
   const purpose = `${deriveFieldPurpose(fields) || nextState.field_purpose} ${channelNote}`;
-  return `<section class="contract-product__capture" id="captura-contrato"><div><h3>Solicitar uma proposta</h3><p>Descreva o contrato e o evento. A CONFENGE confere o escopo, os documentos mínimos e a agenda antes de informar a proposta; o envio não inicia cobrança.</p></div><form name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="${asset}-handraise" data-asset-id="${asset}" data-route-family="${slug}" data-cta-position="contract_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>${esc(nextState.pre_form_value)}</p>
+  const intro = hub
+    ? "Descreva o contrato e o evento, ou a contratação que o órgão planeja. A CONFENGE confere o escopo, os documentos mínimos e a agenda antes de informar a proposta; o envio não inicia cobrança."
+    : "Descreva o contrato e o evento. A CONFENGE confere o escopo, os documentos mínimos e a agenda antes de informar a proposta; o envio não inicia cobrança.";
+  // CONTEXTO-CAPTURA-05: a mesma nota <noscript> que o normalizador
+  // (render_cta_form_next_state.mjs) escreve, pela mesma fonte, para os dois
+  // --check concordarem byte a byte.
+  const nojsNote = buildNojsNote(pageChannels(pageHtml));
+  return `<section class="contract-product__capture" id="captura-contrato"><div><h3>Solicitar uma proposta</h3><p>${intro}</p></div><form name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="${asset}-handraise" data-asset-id="${asset}" data-route-family="${slug}" data-cta-position="contract_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>${esc(nextState.pre_form_value)}</p>
 <p class="form-hint" data-field-purpose>${esc(purpose)}</p>
+${nojsNote}
 <input name="offer_id" type="hidden" value=""/><input name="terms_id" type="hidden" value=""/><input name="jornada" type="hidden" value="contrato" id="jornada-hidden"/><input name="estagio" type="hidden" value="${asset}" id="estagio"/><input name="origem" type="hidden" value="${slug}"/><input name="asset_id" type="hidden" value="${asset}"/><input name="cta_id" type="hidden" value="${asset}-handraise"/><input name="route_family" type="hidden" value="${slug}"/><input name="landing_page" type="hidden" value="https://confenge.com.br/${slug}/"/>${fields}<button class="button button-primary" type="submit">Descrever meu caso</button><p class="form-status" role="status" aria-live="polite"></p>
 <p class="form-hint" data-form-boundary>${esc(nextState.boundary)} Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form></section>`;
 }
 
-function routeBlock(item, hasForm) {
+function routeBlock(item, hasForm, pageHtml = "") {
   const startCondition = item.safe_deadline_gate?.statement_pt_br || `Os ${item.sla_business_days} dias úteis começam quando a CONFENGE confirma o recebimento do contrato assinado, dos anexos vigentes e dos registros necessários para a análise. A data de entrega é informada nesse retorno.`;
   const priceLabel = item.public_price_label_pt_br || "Preço";
   const availability = item.availability_statement_pt_br || "A contratação é confirmada por proposta após a conferência do escopo, dos documentos e da agenda.";
   return `${ROUTE_START}
-<section class="contract-product" aria-labelledby="contract-product-${item.item}"><div class="container"><header><p class="eyebrow">Entrega com escopo, preço e prazo</p><h2 id="contract-product-${item.item}">${esc(item.public_name_pt_br)}</h2><p>${esc(item.value_line_pt_br)}</p></header><dl class="contract-product__lockup"><div><dt>${esc(priceLabel)}</dt><dd>${price(item.pilot_price_cents)}</dd></div><div><dt>Prazo de entrega</dt><dd>${item.sla_business_days} dias úteis</dd></div><div><dt>Unidade</dt><dd>${esc(item.scope_unit_pt_br)}</dd></div></dl><p>O preço cobre a leitura delimitada dessa unidade de trabalho, a conferência dos documentos mínimos e a entrega descrita abaixo. ${esc(availability)}</p><dl class="contract-product__terms"><div><dt>O que precisamos receber</dt><dd><p>${esc(item.minimum_document_pt_br)}</p></dd></div><div><dt>O que você recebe</dt><dd><p>${esc(publicEvidence(item.output_pt_br))}</p></dd></div><div><dt>Limites do trabalho</dt><dd>${list(item.not_included_pt_br)}</dd></div><div><dt>Quando o prazo começa</dt><dd><p>${esc(startCondition)}</p><p>${esc(item.legal_boundary.statement_pt_br)}</p></dd></div></dl><article class="contract-product__example" aria-label="Exemplo sintético do método"><span class="t-kicker">Exemplo sintético do método</span><p data-evidence-grade="EVENT"><strong>Evento demonstrativo</strong> Uma divergência é registrada em um contrato hipotético.</p><p data-evidence-grade="FACT"><strong>Fato documentado</strong> ${esc(publicEvidence(item.evidence_grades.FACT))}</p><p data-evidence-grade="CALCULATION"><strong>Cálculo reproduzível</strong> ${esc(publicEvidence(item.evidence_grades.CALCULATION))}</p><p data-evidence-grade="INFERENCE"><strong>Interpretação técnica</strong> ${esc(publicEvidence(item.evidence_grades.INFERENCE))}</p><p data-evidence-grade="UNKNOWN"><strong>Informação não localizada</strong> ${esc(publicEvidence(item.evidence_grades.UNKNOWN))}</p><p data-evidence-grade="DECISION"><strong>Uso prático</strong> ${esc(item.decision_question_pt_br)}</p></article>${hasForm ? '<p class="contract-product__action"><a class="text-link" href="#captura-pilar">Solicitar proposta para este caso <svg class="icon"><use href="#i-arrow"></use></svg></a></p>' : standaloneForm(item)}</div></section>
+<section class="contract-product" aria-labelledby="contract-product-${item.item}"><div class="container"><header><p class="eyebrow">Entrega com escopo, preço e prazo</p><h2 id="contract-product-${item.item}">${esc(item.public_name_pt_br)}</h2><p>${esc(item.value_line_pt_br)}</p></header><dl class="contract-product__lockup"><div><dt>${esc(priceLabel)}</dt><dd>${price(item.pilot_price_cents)}</dd></div><div><dt>Prazo de entrega</dt><dd>${item.sla_business_days} dias úteis</dd></div><div><dt>Unidade</dt><dd>${esc(item.scope_unit_pt_br)}</dd></div></dl><p>O preço cobre a leitura delimitada dessa unidade de trabalho, a conferência dos documentos mínimos e a entrega descrita abaixo. ${esc(availability)}</p><dl class="contract-product__terms"><div><dt>O que precisamos receber</dt><dd><p>${esc(item.minimum_document_pt_br)}</p></dd></div><div><dt>O que você recebe</dt><dd><p>${esc(publicEvidence(item.output_pt_br))}</p></dd></div><div><dt>Limites do trabalho</dt><dd>${list(item.not_included_pt_br)}</dd></div><div><dt>Quando o prazo começa</dt><dd><p>${esc(startCondition)}</p><p>${esc(item.legal_boundary.statement_pt_br)}</p></dd></div></dl><article class="contract-product__example" aria-label="Exemplo sintético do método"><span class="t-kicker">Exemplo sintético do método</span><p data-evidence-grade="EVENT"><strong>Evento demonstrativo</strong> Uma divergência é registrada em um contrato hipotético.</p><p data-evidence-grade="FACT"><strong>Fato documentado</strong> ${esc(publicEvidence(item.evidence_grades.FACT))}</p><p data-evidence-grade="CALCULATION"><strong>Cálculo reproduzível</strong> ${esc(publicEvidence(item.evidence_grades.CALCULATION))}</p><p data-evidence-grade="INFERENCE"><strong>Interpretação técnica</strong> ${esc(publicEvidence(item.evidence_grades.INFERENCE))}</p><p data-evidence-grade="UNKNOWN"><strong>Informação não localizada</strong> ${esc(publicEvidence(item.evidence_grades.UNKNOWN))}</p><p data-evidence-grade="DECISION"><strong>Uso prático</strong> ${esc(item.decision_question_pt_br)}</p></article>${hasForm ? '<p class="contract-product__action"><a class="text-link" href="#captura-pilar">Solicitar proposta para este caso <svg class="icon"><use href="#i-arrow"></use></svg></a></p>' : standaloneForm(item, { pageHtml })}</div></section>
 ${ROUTE_END}`;
 }
 
-function hubBlock() {
+function hubBlock(pageHtml) {
   const cards = contract.items.map((item) => {
     const slug = item.route?.replace(/^\/|\/$/g, "");
     const dedicatedRouteAvailable = item.route && !heldProtectedSlugs.has(slug);
@@ -125,7 +187,7 @@ function hubBlock() {
     return `<article class="contract-products-hub__card" id="entrega-${item.item}"><h3>${esc(item.public_name_pt_br)}</h3><p>${esc(item.value_line_pt_br)}</p><dl><div><dt>${esc(item.public_price_label_pt_br || "Preço")}</dt><dd>${price(item.pilot_price_cents)}</dd></div><div><dt>Prazo de entrega</dt><dd>${item.sla_business_days} dias úteis</dd></div></dl>${action}</article>`;
   }).join("");
   return `${HUB_START}
-<section class="contract-products-hub" aria-labelledby="contract-products-title"><div class="container"><header><p class="eyebrow">Escolha pelo evento que exige decisão</p><h2 id="contract-products-title">Sete eventos contratuais, cada um com um documento para agir</h2><p>O dossiê concentra contrato, registros e cálculo numa saída delimitada para a direção, a engenharia e o jurídico usarem sem reconstruir o caso do zero.</p></header><div class="contract-products-hub__grid">${cards}</div><aside class="contract-products-hub__rules" aria-label="Crédito, urgência e limites"><p>${esc(contract.common_rules.credit_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.urgency_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.public_sources_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.obligation_rule.statement_pt_br)}</p></aside>${standaloneForm(null, { hub: true })}</div></section>
+<section class="contract-products-hub" aria-labelledby="contract-products-title"><div class="container"><header><p class="eyebrow">Escolha pelo evento que exige decisão</p><h2 id="contract-products-title">Sete eventos contratuais, cada um com um documento para agir</h2><p>O dossiê concentra contrato, registros e cálculo numa saída delimitada para a direção, a engenharia e o jurídico usarem sem reconstruir o caso do zero.</p></header><div class="contract-products-hub__grid">${cards}</div><aside class="contract-products-hub__rules" aria-label="Crédito, urgência e limites"><p>${esc(contract.common_rules.credit_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.urgency_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.public_sources_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.obligation_rule.statement_pt_br)}</p></aside>${standaloneForm(null, { hub: true, pageHtml })}</div></section>
 ${HUB_END}`;
 }
 
@@ -142,7 +204,7 @@ for (const item of contract.items.filter((entry) => entry.page_file)) {
     ? current.match(/<form\b[^>]*action="\/\.netlify\/functions\/lead"[^>]*>/i)
     : null;
   let next = ensureCss(current);
-  next = replaceBlock(next, ROUTE_START, ROUTE_END, routeBlock(item, Boolean(formMatch)), formMatch ? '<section class="section pillar-capture"' : "</main>");
+  next = replaceBlock(next, ROUTE_START, ROUTE_END, routeBlock(item, Boolean(formMatch), current), formMatch ? '<section class="section pillar-capture"' : "</main>");
   if (formMatch) {
     const fields = qualificationFields(item);
     if (next.includes(FIELDS_START)) next = replaceBlock(next, FIELDS_START, FIELDS_END, fields, "unused");
@@ -153,7 +215,7 @@ for (const item of contract.items.filter((entry) => entry.page_file)) {
 const hubPath = path.join(root, "servicos-obras-publicas/index.html");
 const hubCurrent = fs.readFileSync(hubPath, "utf8");
 let hubNext = ensureCss(hubCurrent);
-hubNext = replaceBlock(hubNext, HUB_START, HUB_END, hubBlock(), "</main>");
+hubNext = replaceBlock(hubNext, HUB_START, HUB_END, hubBlock(hubCurrent), "</main>");
 updates.push({ absolute: hubPath, current: hubCurrent, next: hubNext });
 
 if (process.argv.includes("--check")) {

@@ -41,7 +41,7 @@
     },
     {
       "path": "data/organic/demand-map.json",
-      "sha256": "8002daa6863981324692bda3de6fe99f93dcf98ae86a98d4d19a52d7b9321a06"
+      "sha256": "ad85b6fdb44871ac5d47b9acd2941598ea0fba31932d5419534803709860a2b4"
     },
     {
       "path": "data/organic/content-service-map.json",
@@ -49,7 +49,7 @@
     },
     {
       "path": "data/organic/public-family-registry.json",
-      "sha256": "e6c4e6bb8f1e5f0b3f85c9c5d32e13c752733cef9a433a89a7fe385fb30ac5c8"
+      "sha256": "5a138ae1be79a1f6f725d3ab187192e222c8e05693c09173bec15e6a71462ce1"
     },
     {
       "path": "data/bofu-dominance/frozen-specs/query-ownership.json",

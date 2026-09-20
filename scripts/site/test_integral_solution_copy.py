@@ -546,6 +546,301 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
     assert contact_path_problems("conteudos/index.html", new_hub) == [], contact_path_problems("conteudos/index.html", new_hub)
 
 
+# --- ressalvas: uma afirmação por contexto (CONFENGE-BOFU-FECHAMENTO-20260919, WS-E) --------
+#
+# Achados FAMILIAS-PRIVADAS-B-08/B-09/B-10, A-03(b) e RESSALVAS-01..07: a mesma
+# ressalva, o mesmo rótulo demonstrativo e a mesma condição repetidos em várias
+# seções da mesma rota. O limite material continua uma vez por contexto; o que
+# reprova é a repetição. Escopo restrito às rotas manuais deste workstream:
+# regra nova não pode ficar vermelha em arquivo de outro dono.
+
+RESSALVA_ROUTES = (
+    "inspecao-diagnostico-edificacoes/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "assistencia-tecnica-pericial-engenharia/index.html",
+    "casos/index.html",
+    "casos/medicao-glosa-demonstrativo/index.html",
+    "casos/aditivo-art125-demonstrativo/index.html",
+)
+# Rotas com prancha e tabela em que o rótulo demonstrativo é contado por prova
+# (regra 2). Lista explícita: as rotas de /casos/ têm regras próprias abaixo.
+LABEL_DENSITY_ROUTES = (
+    "inspecao-diagnostico-edificacoes/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "assistencia-tecnica-pericial-engenharia/index.html",
+)
+# Exclusão registrada (2026-09-19, campanha CONFENGE-BOFU-FECHAMENTO-20260919,
+# WS-E; decisão pendente do dono do fechamento): as quatro rotas de
+# projeto/orçamento ficam fora das regras 1 e 2. Citam o "recorte demonstrativo"
+# como referência cruzada e a regra 1, rodada nelas em 2026-09-19, devolve 15
+# achados, a maioria linha de tabela demonstrativa ('d 01 1 68 m e wn 01 0 56 m',
+# 'quantitativos csv orcamento csv ...', extrato de revisão) e não ressalva
+# repetida. Só projetos complementares tem repetições de prosa ('a autoria
+# arquitetônica permanece com o autor de origem' herói+amostra; 'consulta com
+# mais de uma disciplina é acolhida' herói+método; 'pacote incompleto não impede
+# o primeiro contato; o canal seguro para arquivos vem depois' 2x em
+# #escopo-interfaces). Caminhos: corrigir a prosa e mover a rota para
+# RESSALVA_ROUTES, ou manter aqui com issue. Ao mover, remova daqui: o teste
+# abaixo reprova rota nas duas listas.
+RESSALVA_ROUTES_DEFERRED = (
+    "projetos-complementares-engenharia/index.html",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "compatibilizacao-projetos-engenharia/index.html",
+    "quantitativos-orcamento-obras/index.html",
+)
+# Frases de identidade/consentimento que a matriz de autoridade e a política de
+# privacidade exigem em mais de um bloco (Em 30 segundos, Condições e limites,
+# nota de fronteira do contato). Não são ressalva comercial.
+REPEAT_ALLOWED = (
+    "engenheiro civil",
+    "art e nota fiscal",
+    "politica de privacidade",
+    "retencao de ate 730 dias",
+    # dica funcional de interface, uma por tabela
+    "deslize a tabela",
+)
+MIN_SENTENCE_WORDS = 5
+
+
+def _main_html(html: str) -> str:
+    m = re.search(r"<main\b[^>]*>([\s\S]*?)</main>", html, re.I)
+    return m.group(1) if m else html
+
+
+def _visible(fragment: str) -> str:
+    text = re.sub(r"<(script|style|noscript|svg)\b[^>]*>[\s\S]*?</\1>", " ", fragment, flags=re.I)
+    text = re.sub(r"<!--[\s\S]*?-->", " ", text)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return " ".join(html_lib.unescape(text).split())
+
+
+def _top_sections(main: str) -> list[tuple[str, str]]:
+    """Blocos <section> de primeiro nível de <main>: (id, html)."""
+    out: list[tuple[str, str]] = []
+    depth = 0
+    start = -1
+    for m in re.finditer(r"<section\b[^>]*>|</section>", main, re.I):
+        if m.group(0).lower().startswith("<section"):
+            if depth == 0:
+                start = m.start()
+            depth += 1
+        else:
+            depth -= 1
+            if depth == 0 and start >= 0:
+                block = main[start : m.end()]
+                sid = re.search(r'\bid="([^"]+)"', block[: block.find(">")])
+                out.append((sid.group(1) if sid else f"section-{len(out) + 1}", block))
+                start = -1
+    return out
+
+
+def _norm_sentences(text: str) -> list[str]:
+    rows: list[str] = []
+    for raw in re.split(r"(?<=[.!?;:])\s+", text):
+        norm = " ".join(re.sub(r"[^a-z0-9 ]+", " ", _strip(raw)).split())
+        if len(norm.split()) >= MIN_SENTENCE_WORDS:
+            rows.append(norm)
+    return rows
+
+
+def _proof_count(section: str) -> int:
+    figures = len(re.findall(r"<figure\b", section, re.I))
+    without_figures = re.sub(r"<figure\b[^>]*>[\s\S]*?</figure>", " ", section, flags=re.I)
+    tables_outside = len(re.findall(r"<table\b", without_figures, re.I))
+    return figures + tables_outside
+
+
+def _count(pattern: str, text: str) -> int:
+    return len(re.findall(pattern, text, re.I))
+
+
+def redundancy_problems(rel: str, html: str) -> list[str]:
+    if rel not in RESSALVA_ROUTES:
+        return []
+    problems: list[str] = []
+    main = _main_html(html)
+    sections = _top_sections(main)
+    main_text = _visible(main)
+
+    # 1. Frase idêntica (>= 5 palavras normalizadas) repetida dentro da mesma
+    #    seção ou em mais de uma seção.
+    seen: dict[str, set[str]] = {}
+    for sid, block in sections:
+        rows = _norm_sentences(_visible(block))
+        for sentence in set(rows):
+            if any(tok in sentence for tok in REPEAT_ALLOWED):
+                continue
+            seen.setdefault(sentence, set()).add(sid)
+            if rows.count(sentence) > 1:
+                problems.append(f"{rel}#{sid}: frase repetida {rows.count(sentence)}x na mesma seção: {sentence[:110]!r}")
+    for sentence, sids in sorted(seen.items()):
+        if len(sids) > 1:
+            problems.append(f"{rel}: frase repetida em {sorted(sids)}: {sentence[:110]!r}")
+
+    if rel in LABEL_DENSITY_ROUTES:
+        # 2. Rótulo demonstrativo uma vez por prova: ocorrências visíveis de
+        #    'demonstrativ' por seção <= nº de figure/table (mínimo 1: a
+        #    ressalva 'amostra desta página' de Condições e limites).
+        for sid, block in sections:
+            labels = _count(r"demonstrativ", _visible(block))
+            allowed = max(1, _proof_count(block))
+            if labels > allowed:
+                problems.append(f"{rel}#{sid}: {labels} rótulos demonstrativos para {allowed} prova(s)")
+
+    if rel == "seguranca-trabalho-apoio-tecnico/index.html":
+        # RESSALVAS-01: limite material uma vez por contexto (tabela do método +
+        # Condições e limites).
+        n = _count(r"ato m[eé]dico", main_text)
+        if n > 2:
+            problems.append(f"{rel}: 'ato médico' {n}x no <main> (máximo 2)")
+    if rel == "assistencia-tecnica-pericial-engenharia/index.html":
+        # RESSALVAS-05: a distinção de papéis fica inteira no herói e em #distincoes.
+        n = _count(r"per[íi]to do ju[íi]zo|per[íi]cia do ju[íi]zo", main_text)
+        if n > 4:
+            problems.append(f"{rel}: 'perito/perícia do juízo' {n}x no <main> (máximo 4)")
+        # B-09: verificação de conflito em no máximo quatro seções com função
+        # distinta (condição em Em 30 segundos, passo 1 do método, instrução em
+        # como contratar, sequência do contato).
+        with_conflict = [
+            sid for sid, block in sections
+            if re.search(r"verific\w*[^.]{0,80}conflito|conflito[^.]{0,80}verific", _visible(block), re.I)
+        ]
+        if len(with_conflict) > 4:
+            problems.append(f"{rel}: verificação de conflito em {len(with_conflict)} seções {with_conflict} (máximo 4)")
+        # B-10: a triagem pré-litígio é um pedido nomeado, não só prosa do método.
+        entrega = next((block for sid, block in sections if sid == "entrega"), "")
+        if not re.search(r"<li\b[^>]*>[\s\S]*?<h3\b[^>]*>[^<]*pr[ée]-lit[íi]gio", entrega, re.I):
+            problems.append(f"{rel}#entrega: sem item (li h3) 'pré-litígio'")
+    if rel == "inspecao-diagnostico-edificacoes/index.html":
+        # A-03(b): recebimento, reforma e o construído são pedidos nomeados em
+        # #entrega, nomeados na descrição e provados por uma amostra rotulada.
+        entrega = next((block for sid, block in sections if sid == "entrega"), "")
+        h3s = " | ".join(_visible(h) for h in re.findall(r"<h3\b[^>]*>[\s\S]*?</h3>", entrega, re.I))
+        for term in ("recebimento", "reforma", "constru[íi]do"):
+            if not re.search(term, h3s, re.I):
+                problems.append(f"{rel}#entrega: nenhum h3 nomeia '{term}'")
+        desc = re.search(r'<meta\s+content="([^"]*)"\s+name="description"', html, re.I)
+        if not desc or not re.search(r"constru[íi]do|as-built", desc.group(1), re.I):
+            problems.append(f"{rel}: meta description não nomeia o construído/as-built")
+        captions = [
+            _visible(c)
+            for c in re.findall(r"<figcaption\b[^>]*>[\s\S]*?</figcaption>", main, re.I)
+        ]
+        if not any(
+            re.search(r"demonstrativ", c, re.I) and re.search(r"recebimento|reforma|as-built|constru[íi]do", c, re.I)
+            for c in captions
+        ):
+            problems.append(f"{rel}: nenhuma figure/table rotulada cita recebimento, reforma ou as-built")
+    if rel == "casos/index.html":
+        # RESSALVAS-06: a ressalva sintética (hipotético) em no máximo duas
+        # seções: topo e prova-autorizada.
+        with_hypo = [sid for sid, block in sections if re.search(r"hipot[ée]tic", _visible(block), re.I)]
+        if len(with_hypo) > 2:
+            problems.append(f"{rel}: ressalva 'hipotético' em {len(with_hypo)} seções {with_hypo} (máximo 2)")
+    if rel in ("casos/medicao-glosa-demonstrativo/index.html", "casos/aditivo-art125-demonstrativo/index.html"):
+        # RESSALVAS-07: cabeçalho (badge + h1) com no máximo dois rótulos;
+        # Limitação com um só item de ressalva sintética.
+        head = re.search(r'<div class="svc-open__copy">([\s\S]*?)</div>', main, re.I)
+        n = _count(r"demonstrativ", _visible(head.group(1) if head else ""))
+        if n > 2:
+            problems.append(f"{rel}: {n} rótulos demonstrativos no cabeçalho (máximo 2: selo e título)")
+        limit = re.search(r"<h3>Limita[çc][ãa]o</h3>\s*<ul>([\s\S]*?)</ul>", main, re.I)
+        items = re.findall(r"<li\b[^>]*>[\s\S]*?</li>", limit.group(1) if limit else "", re.I)
+        synthetic = [i for i in items if re.search(r"demonstrativ|ilustrativ|hipot", _visible(i), re.I)]
+        if len(synthetic) > 1:
+            problems.append(f"{rel}: Limitação com {len(synthetic)} itens de ressalva sintética (máximo 1)")
+    return problems
+
+
+# Asserções que dependem de outro workstream da mesma campanha (WS-B, texto de
+# /servicos/#servico-avaliacao). Só reprovam quando o arquivo alvo tiver mudado
+# em relação à base fedb4768b; até lá ficam registradas como pendentes.
+BASE_BLOBS = {"servicos/index.html": "9451174ec55e3cecd41c5c3b98ac915798e5cdab"}
+
+
+def _git_blob_sha(path: Path) -> str:
+    import hashlib
+
+    body = path.read_bytes()
+    return hashlib.sha1(b"blob %d\0" % len(body) + body).hexdigest()
+
+
+def cross_workstream_problems(root: Path) -> tuple[list[str], list[str]]:
+    """(problemas, pendências)."""
+    problems: list[str] = []
+    pending: list[str] = []
+    servicos = root / "servicos/index.html"
+    if not servicos.is_file():
+        return problems, pending
+    if _git_blob_sha(servicos) == BASE_BLOBS["servicos/index.html"]:
+        pending.append("servicos/index.html#servico-avaliacao: partilha/garantia/desapropriação (WS-B) — arquivo ainda na base fedb4768b")
+        return problems, pending
+    main = _main_html(servicos.read_text(encoding="utf-8", errors="replace"))
+    section = next((block for sid, block in _top_sections(main) if sid == "servico-avaliacao"), "")
+    if not section:
+        # a âncora pode ser um bloco interno (li/article) de uma seção maior
+        m = re.search(r'<[a-z]+\b[^>]*id="servico-avaliacao"[^>]*>[\s\S]{0,4000}', main, re.I)
+        section = m.group(0) if m else ""
+    if not re.search(r"partilha|garantia|desapropria", _visible(section), re.I):
+        problems.append("servicos/index.html#servico-avaliacao: não cita partilha, garantia ou desapropriação")
+    return problems, pending
+
+
+def redundancy_findings(root: Path) -> list[str]:
+    out: list[str] = []
+    for rel in RESSALVA_ROUTES:
+        path = root / rel
+        if not path.is_file():
+            out.append(f"{rel}: ausente em {root}")
+            continue
+        out.extend(redundancy_problems(rel, path.read_text(encoding="utf-8", errors="replace")))
+    return out
+
+
+def test_ressalva_route_lists_are_explicit_and_disjoint() -> None:
+    """A exclusão das rotas de projeto/orçamento é dado do gate, não comentário."""
+    assert set(LABEL_DENSITY_ROUTES) <= set(RESSALVA_ROUTES), LABEL_DENSITY_ROUTES
+    assert not set(RESSALVA_ROUTES) & set(RESSALVA_ROUTES_DEFERRED), "rota nas duas listas"
+    for rel in RESSALVA_ROUTES + RESSALVA_ROUTES_DEFERRED:
+        assert (ROOT / rel).is_file(), rel
+    # A exclusão é evidenciada, não tautológica: com a rota adiada dentro da
+    # lista, a regra 1 tem de apontar algo. Quando deixar de apontar, a
+    # exclusão perdeu o motivo e a rota deve ir para RESSALVA_ROUTES.
+    original = globals()["RESSALVA_ROUTES"]
+    try:
+        globals()["RESSALVA_ROUTES"] = original + RESSALVA_ROUTES_DEFERRED
+        for rel in RESSALVA_ROUTES_DEFERRED:
+            html = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+            assert redundancy_problems(rel, html), f"{rel}: regra 1 já não aponta nada; mover para RESSALVA_ROUTES"
+    finally:
+        globals()["RESSALVA_ROUTES"] = original
+    for rel in RESSALVA_ROUTES_DEFERRED:
+        assert redundancy_problems(rel, "<main><p>x</p></main>") == [], f"{rel}: rota adiada está sendo avaliada"
+
+
+def test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone() -> None:
+    """Contra-prova sintética: repetição reprova; uma afirmação por contexto passa."""
+    rel = "seguranca-trabalho-apoio-tecnico/index.html"
+    repeated = (
+        "<main><section id=\"a\"><p>Dependência de médico do trabalho ou de higienista fica explícita quando o escopo a exigir.</p></section>"
+        "<section id=\"b\"><p>Dependência de médico do trabalho ou de higienista fica explícita quando o escopo a exigir.</p></section></main>"
+    )
+    got = redundancy_problems(rel, repeated)
+    assert any("frase repetida" in g for g in got), got
+    single = repeated.replace("<section id=\"b\"><p>Dependência de médico do trabalho ou de higienista fica explícita quando o escopo a exigir.</p>", "<section id=\"b\"><p>Peça ausente permanece ausente.</p>")
+    assert not any("frase repetida" in g for g in redundancy_problems(rel, single)), redundancy_problems(rel, single)
+    labels = (
+        "<main><section id=\"amostra\"><p>Exemplo demonstrativo: um canteiro.</p><figure><figcaption><span class=\"tag\">Exemplo demonstrativo</span></figcaption></figure>"
+        "<dl><dd>Exemplo demonstrativo</dd></dl></section></main>"
+    )
+    assert any("rótulos demonstrativos" in g for g in redundancy_problems(rel, labels)), redundancy_problems(rel, labels)
+    one_label = labels.replace("<p>Exemplo demonstrativo: um canteiro.</p>", "<p>Um canteiro sintético.</p>").replace("<dd>Exemplo demonstrativo</dd>", "<dd>Nenhum</dd>")
+    assert not any("rótulos demonstrativos" in g for g in redundancy_problems(rel, one_label)), redundancy_problems(rel, one_label)
+    dense = "<main><section id=\"x\"><p>Não inclui ato médico.</p><p>Nem ato médico.</p><p>Sem ato médico.</p></section></main>"
+    assert any("ato médico" in g for g in redundancy_problems(rel, dense)), redundancy_problems(rel, dense)
+    assert not redundancy_problems("servicos/index.html", repeated), "regra restrita às rotas do workstream"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -559,6 +854,8 @@ def main() -> int:
         test_enumeration_rule_is_the_contract_rule,
         test_coverage_refuses_a_smaller_universe,
         test_contact_paths_reject_public_only_invitation_and_budget_as_inspection,
+        test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone,
+        test_ressalva_route_lists_are_explicit_and_disjoint,
     ):
         test()
         print(f"OK {test.__name__}")
@@ -583,6 +880,11 @@ def main() -> int:
         )
     bad = [f"coverage: {problem}" for problem in coverage]
     bad.extend(f"contact: {problem}" for problem in contact_path_findings(args.root))
+    bad.extend(f"ressalvas: {problem}" for problem in redundancy_findings(args.root))
+    cross_problems, cross_pending = cross_workstream_problems(args.root)
+    bad.extend(f"ws-b: {problem}" for problem in cross_problems)
+    for row in cross_pending:
+        print(f"PENDING (a ligar no fechamento): {row}")
     for rel, hits in sorted(found.items()):
         for rule_id, snippets in sorted(hits.items()):
             for snippet in snippets:

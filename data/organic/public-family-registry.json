@@ -1289,7 +1289,7 @@
     },
     {
       "id": "seguranca-trabalho-apoio-tecnico",
-      "visitor_job": "Enquadrar diagnóstico e apoio técnico de segurança do trabalho, distinguir PGR, LTCAT, AET e laudos, e solicitar retorno com dados mínimos, sem dados de trabalhador no primeiro contato.",
+      "visitor_job": "Enquadrar diagnóstico e apoio técnico de segurança do trabalho, distinguir PGR, LTCAT, AET e laudos, ou organizar a evidência de SST do lado da parte em reclamação trabalhista, e solicitar retorno com dados mínimos, sem dados de trabalhador no primeiro contato.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {

@@ -89,7 +89,11 @@ const keys = query
 const allowed = new Set(E.CONTACT_QUERY_KEYS);
 expect("contact_keys_subset", keys.every((key) => allowed.has(key)), keys.join(","));
 expect("contact_no_answers", !href.includes("nenhum") && !href.includes("work_stage"));
-expect("contact_need_code", /need_code=obra_edificacao_ou_documentacao/.test(href));
+// BOFU-FECHAMENTO-20260919 (WS-D, P0): need_code fica fora da URL de contato.
+// O runtime da home materializa toda chave lida como campo oculto de todos os
+// formularios e o servidor (adaptive-intake.isAdaptivePayload) trata need_code
+// como gatilho da triagem adaptativa, rejeitando o lead inteiro.
+expect("contact_no_need_code", !/[?&#]need_code=/.test(href), href);
 expect("no_force_tool", /Não é obrigatório passar por esta leitura/.test(html));
 
 if (failed) {

@@ -349,6 +349,10 @@ for (const key of ["field", "field_value", "native_message"]) {
     _listeners: {},
   };
   const fetchCalls = [];
+  // BOFU-FECHAMENTO-20260919 (A06-06/A06-01): cada POST recebe um controlador
+  // explicito: a 1a tentativa estoura o prazo (AbortError), a 2a repete o
+  // MESMO pedido, a 3a vem depois de editar a mensagem, a 4a confirma.
+  const fetchOutcomes = [];
   const runtimeDataLayer = [];
   const docMock = {
     readyState: "complete",
@@ -372,12 +376,16 @@ for (const key of ["field", "field_value", "native_message"]) {
     innerWidth: 1280,
     scrollY: 0,
     fetch(url, init) { fetchCalls.push({ url, init }); return new Promise(() => {}); },
+    turnstile: { resets: 0, reset() { this.resets += 1; } },
     CONFENGE_DEBUG_ANALYTICS: false,
   };
   runtimeWindow.window = runtimeWindow;
   docMock.defaultView = runtimeWindow;
+  const assigned = [];
+  runtimeWindow.location.assign = (url) => { assigned.push(url); };
+  const formValues = new Map([["form-name", "diagnostico-b2g"], ["nome", "Pessoa Sintética"], ["email", "qa@example.invalid"], ["estagio", "ainda não sei qual serviço"], ["consentimento", "on"]]);
   class FormDataMock {
-    constructor() { this.map = new Map([["form-name", "diagnostico-b2g"], ["nome", "Pessoa Sintética"], ["email", "qa@example.invalid"], ["estagio", "ainda não sei qual serviço"], ["consentimento", "on"]]); }
+    constructor() { this.map = new Map(formValues); }
     get(k) { return this.map.has(k) ? this.map.get(k) : null; }
     set(k, v) { this.map.set(k, v); }
     forEach(fn) { this.map.forEach((v, k) => fn(v, k)); }
@@ -411,6 +419,83 @@ for (const key of ["field", "field_value", "native_message"]) {
   if (prevented !== 1) runtimeFail("progressive enhancement must intercept the native submit exactly once", prevented);
   if (!submitBtn.disabled) runtimeFail("double-submit protection missing while the POST is in flight");
   console.log("STEP_ONE_SUBMIT_OK", JSON.stringify({ events: [...new Set(runtimeEvents)], posted: fetchCalls[0].url }));
+
+  // -------------------------------------------------------------------------
+  // BOFU-FECHAMENTO-20260919 (A06-06, A06-01 lado do cliente). Cenario do
+  // protocolo "Não recebemos a confirmação": o primeiro POST estoura o prazo.
+  //  (a) o reenvio do MESMO pedido leva o MESMO Idempotency-Key (nao duplica),
+  //      o token Turnstile e renovado uma vez por falha e a chave continua na
+  //      sessao (so o recibo a apaga);
+  //  (b) editar a mensagem depois do timeout cunha uma chave NOVA: antes, o
+  //      servidor respondia 200 idempotente com o recibo antigo e o texto
+  //      editado era descartado em silencio;
+  //  (c) o recibo confirmado apaga a chave e navega para /obrigado?receipt=.
+  // -------------------------------------------------------------------------
+  const settle = async () => { for (let i = 0; i < 8; i += 1) await new Promise((r) => setImmediate(r)); };
+  const submitOnce = async () => {
+    for (const fn of formMock._listeners.submit || []) fn({ type: "submit", preventDefault() {} });
+    await settle();
+  };
+  // Só os POST de lead contam: o flush de analytics também usa fetch.
+  const leadCalls = () => fetchCalls.filter((c) => String(c.url).includes("/api/web/lead"));
+  const keyOf = (call) => (call && call.init && call.init.headers && call.init.headers["Idempotency-Key"]) || "";
+  const bodyKeyOf = (call) => { try { return JSON.parse(call.init.body).idempotency_key || ""; } catch (_) { return ""; } };
+  const receiptKeys = () => Object.keys(store).filter((k) => k.startsWith("confenge_idem:") && !k.endsWith(":material"));
+  // O primeiro POST (acima) ficou pendente para sempre; aqui comeca a sequencia
+  // com resultados controlados. Um controlador por tentativa.
+  fetchCalls.length = 0;
+  const outcomeFor = (url) => (String(url).includes("/api/web/lead") ? fetchOutcomes.shift() : null);
+  runtimeWindow.fetch = (url, init) => {
+    fetchCalls.push({ url, init });
+    const outcome = outcomeFor(url);
+    if (!outcome) return new Promise(() => {});
+    if (outcome.reject) return Promise.reject(outcome.reject);
+    return Promise.resolve({ status: outcome.status, json: async () => outcome.body });
+  };
+  runtimeSandbox.fetch = runtimeWindow.fetch;
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  if (leadCalls().length !== 1) runtimeFail("timeout scenario: first POST missing", leadCalls().length);
+  const firstKey = keyOf(leadCalls()[0]);
+  if (!/^fe-/.test(firstKey) || bodyKeyOf(leadCalls()[0]) !== firstKey) runtimeFail("idempotency key must ride the header and the body", { firstKey, body: bodyKeyOf(leadCalls()[0]) });
+  if (runtimeWindow.turnstile.resets !== 1) runtimeFail("turnstile must be reset exactly once after the timeout", runtimeWindow.turnstile.resets);
+  if (!/pode ter sido registrado/.test(els[".form-status"].textContent)) runtimeFail("timeout wording must not claim nothing was written", els[".form-status"].textContent);
+  if (!receiptKeys().length || store[receiptKeys()[0]] !== firstKey) runtimeFail("receipt key must survive the timeout in sessionStorage", store);
+  if (submitBtn.disabled) runtimeFail("submit must be re-enabled after the timeout");
+  const backendErrors = runtimeDataLayer.filter((e) => e.event === "lead_form_backend_error");
+  if (backendErrors.length !== 1 || backendErrors[0].error_code !== "timeout") runtimeFail("timeout must be tracked once as lead_form_backend_error/timeout", backendErrors);
+
+  // (a) mesmo pedido, mesma chave.
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  if (leadCalls().length !== 2) runtimeFail("retry did not POST", leadCalls().length);
+  if (keyOf(leadCalls()[1]) !== firstKey) runtimeFail("retry of the same request must reuse the Idempotency-Key", { first: firstKey, retry: keyOf(leadCalls()[1]) });
+  if (runtimeWindow.turnstile.resets !== 2) runtimeFail("each timeout renews the turnstile token once", runtimeWindow.turnstile.resets);
+
+  // (b) mensagem editada depois do timeout -> chave nova.
+  formValues.set("mensagem", "Contexto editado depois do timeout.");
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  if (leadCalls().length !== 3) runtimeFail("edited retry did not POST", leadCalls().map(keyOf));
+  const editedKey = keyOf(leadCalls()[2]);
+  if (!/^fe-/.test(editedKey) || editedKey === firstKey) runtimeFail("editing a material field after the timeout must mint a new Idempotency-Key", { firstKey, editedKey });
+  if (bodyKeyOf(leadCalls()[2]) !== editedKey) runtimeFail("new key must ride the body too", { header: editedKey, body: bodyKeyOf(leadCalls()[2]) });
+  if (store[receiptKeys()[0]] !== editedKey) runtimeFail("sessionStorage must hold the new key", store);
+  // Reenvio sem nova edicao volta a reusar a chave (nao duplica).
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  if (keyOf(leadCalls()[3]) !== editedKey) runtimeFail("unchanged retry after the edit must reuse the edited key", { editedKey, again: keyOf(leadCalls()[3]) });
+
+  // (c) recibo confirmado: chave apagada, navegacao com o protocolo.
+  fetchOutcomes.push({ status: 200, body: { ok: true, lead_id: "lead-0123456789abcdef0123456789a", idempotent: true } });
+  await submitOnce();
+  if (assigned.length !== 1 || !/^\/obrigado\?receipt=lead-0123456789abcdef0123456789a$/.test(assigned[0])) runtimeFail("confirmed receipt must navigate to /obrigado?receipt=", assigned);
+  if (receiptKeys().length) runtimeFail("receipt must clear the idempotency key from sessionStorage", receiptKeys());
+  if (Object.keys(store).some((k) => k.endsWith(":material"))) runtimeFail("receipt must clear the material hash too", Object.keys(store));
+  const persisted = runtimeDataLayer.filter((e) => e.event === "lead_persisted");
+  if (persisted.length !== 1 || persisted[0].lead_id !== "lead-0123456789abcdef0123456789a") runtimeFail("lead_persisted must carry the receipt", runtimeDataLayer.map((e) => e.event));
+  if (JSON.stringify(runtimeDataLayer).includes("Contexto editado")) runtimeFail("message text leaked into analytics");
+  console.log("TIMEOUT_RETRY_OK", JSON.stringify({ first: firstKey, edited: editedKey, resets: runtimeWindow.turnstile.resets, assigned: assigned[0] }));
 }
 
 // Script source must implement multi-step + journey actions
@@ -597,6 +682,32 @@ if (projeto.journey === orcamento.journey || projeto.route === orcamento.route) 
 }
 if (/orçamento|orcamento/i.test(projeto.route)) {
   situationFail("projeto routed to the orçamento page", projeto.route);
+}
+
+// BOFU-FECHAMENTO-20260919 (B-05). Avaliacao de imovel e uma familia propria
+// (REQUEST_FORMAL_VALUATION_SCOPE), nao um caso de pericia. O resolvedor tem
+// de conhecer a situacao 'avaliação de imóvel' com jornada propria, destino
+// generico de confirmacao, link para a secao de avaliacao e orientacao sem o
+// vocabulario de disputa (processo, dados medicos, partes). A opcao no <select>
+// da home e responsabilidade do workstream da home; o bundle vai na frente.
+{
+  const avaliacao = homeSituation("avaliação de imóvel");
+  if (!avaliacao) situationFail("avaliação de imóvel has no declared situation in the bundle");
+  if (avaliacao.journey !== "avaliacao") situationFail("avaliação de imóvel must own its journey", avaliacao.journey);
+  if (avaliacao.ladder !== false) situationFail("avaliação de imóvel must stay off the public-works ladder");
+  if (avaliacao.route !== "/servicos/#servico-avaliacao") situationFail("avaliação de imóvel must open the valuation section", avaliacao.route);
+  if (/processo|dados médicos|partes/i.test(String(avaliacao.detail))) situationFail("avaliação de imóvel carries dispute guidance", avaliacao.detail);
+  if (!/finalidade/i.test(String(avaliacao.detail)) || !/data-base/i.test(String(avaliacao.detail))) situationFail("avaliação de imóvel must ask for purpose and base date", avaliacao.detail);
+  if (!/avaliação de imóvel/i.test(String(avaliacao.whatsapp))) situationFail("avaliação de imóvel WhatsApp prefill must name the valuation", avaliacao.whatsapp);
+  if (stageToJourney("avaliação de imóvel") !== "avaliacao") situationFail("stageToJourney disagrees with the valuation situation", stageToJourney("avaliação de imóvel"));
+  if (journeyActions.avaliacao !== "/obrigado") situationFail("avaliacao journey must confirm on the generic page", journeyActions.avaliacao);
+  const pericia = homeSituation("perícia, assistência técnica ou avaliação");
+  if (!pericia || pericia.route !== "/servicos/#servico-pericia") situationFail("perícia situation lost its section", pericia);
+  if (/avalia/i.test(String(pericia.route_label)) || /avalia/i.test(String(pericia.whatsapp))) {
+    situationFail("perícia situation still merges valuation into its copy", { route_label: pericia.route_label, whatsapp: pericia.whatsapp });
+  }
+  if (!/servico-avaliacao/.test(fs.readFileSync(path.join(root, "servicos/index.html"), "utf8"))) situationFail("/servicos/#servico-avaliacao anchor missing");
+  console.log("VALUATION_SITUATION_OK", JSON.stringify({ journey: avaliacao.journey, route: avaliacao.route }));
 }
 
 // A escada B2G tem de ser separavel do resto do formulario, e as superficies

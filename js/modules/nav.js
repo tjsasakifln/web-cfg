@@ -37,15 +37,32 @@
         whatsapp: 'Olá, Tiago. Tenho uma obra ou imóvel para inspecionar, diagnosticar ou documentar e quero explicar a situação.',
         placeholder: 'O que aparece na obra ou no imóvel e para que o registro vai servir.',
       },
+      // BOFU-FECHAMENTO-20260919 (B-05): pericia/assistencia e avaliacao de
+      // imovel sao familias distintas (REQUEST_CONFLICT_CHECK vs
+      // REQUEST_FORMAL_VALUATION_SCOPE). Quem quer avaliar um imovel nao
+      // recebe orientacao de disputa (processo, dados medicos, partes) nem o
+      // link da secao de pericia. A chave abaixo e o value da <option> da
+      // home; a opcao 'avaliação de imóvel' e adicionada ao HTML pelo
+      // workstream da home (o resolvedor ja a reconhece).
       'perícia, assistência técnica ou avaliação': {
         journey: 'pericia',
         ladder: false,
-        next_step: 'Conte o que precisa ser provado ou avaliado e em que papel técnico você precisa de apoio. A resposta diz se a CONFENGE pode atuar nesse papel e o que seria necessário.',
+        next_step: 'Conte o que precisa ser provado e em que papel técnico você precisa de apoio. A resposta diz se a CONFENGE pode atuar nesse papel e o que seria necessário.',
         detail: 'Nesta etapa não envie documentos, número de processo, dados médicos nem nomes das partes.',
         route: '/servicos/#servico-pericia',
-        route_label: 'Ver perícia, assistência técnica e avaliação',
-        whatsapp: 'Olá, Tiago. Preciso de perícia, assistência técnica ou avaliação e quero explicar a situação.',
-        placeholder: 'O que precisa ser provado ou avaliado e em que papel técnico você precisa de apoio.',
+        route_label: 'Ver perícia e assistência técnica',
+        whatsapp: 'Olá, Tiago. Preciso de perícia ou assistência técnica e quero explicar a situação.',
+        placeholder: 'O que precisa ser provado e em que papel técnico você precisa de apoio.',
+      },
+      'avaliação de imóvel': {
+        journey: 'avaliacao',
+        ladder: false,
+        next_step: 'Conte a finalidade da avaliação, o tipo de imóvel e a data-base. A resposta diz qual trabalho de avaliação atende, o que você recebe e o que precisa ser levantado.',
+        detail: 'Nesta etapa não envie matrícula, endereço completo nem documentos do imóvel; diga a finalidade e a data-base.',
+        route: '/servicos/#servico-avaliacao',
+        route_label: 'Ver avaliação de imóvel',
+        whatsapp: 'Olá, Tiago. Preciso de avaliação de imóvel e quero explicar a finalidade.',
+        placeholder: 'A finalidade da avaliação, o tipo de imóvel e a data-base.',
       },
       'segurança do trabalho': {
         journey: 'sst',
@@ -324,9 +341,22 @@
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
       'analysis_id', 'evidence_pack_version', 'asset_family', 'query_class',
       'jornada', 'tema', 'snap', 'intent_kind',
+      // BOFU-FECHAMENTO-20260919 (A-05): a ferramenta de prontidao entrega o
+      // recorte (intent_family) na URL do formulario; sem esta chave o contexto
+      // era descartado no pouso. Toda chave desta lista vira campo oculto em
+      // TODO formulario da sessao e vai no POST sem filtro (form.js/FormData),
+      // por isso NUNCA incluir aqui um gatilho da triagem adaptativa do
+      // servidor (need_code, intake_version, intake_contract_version,
+      // intake_mode): adaptive-intake.isAdaptivePayload desviaria o lead da
+      // home/pilares para a triagem e o rejeitaria inteiro (422/503).
+      'intent_family',
     ];
+    // BOFU-FECHAMENTO-20260919 (MEDICAO-01): `referrer` e first-touch. Antes
+    // ficava fora desta lista e era reescrito a cada salto interno: Google ->
+    // artigo -> formulario do pilar chegava ao servidor com o referrer do
+    // proprio confenge.com.br e origin_class=direct_or_unknown.
     const FIRST_TOUCH_KEYS = [
-      'origem', 'origin_url', 'landing_url', 'landing_page',
+      'origem', 'origin_url', 'landing_url', 'landing_page', 'referrer',
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
     ];
     const UTM_KEYS = FIRST_TOUCH_KEYS.filter((k) => k.startsWith('utm_'));
@@ -335,15 +365,17 @@
       const h = String(host || '').toLowerCase().replace(/^www\./, '').replace(/:\d+$/, '');
       return h === 'confenge.com.br' || h === 'localhost' || h === '127.0.0.1';
     };
+    const referrerHostName = (raw) => {
+      try {
+        if (typeof URL === 'function') return new URL(raw).hostname;
+      } catch (_) { /* fall through */ }
+      const m = /^https?:\/\/([^/?#:]+)/i.exec(raw);
+      return m ? m[1] : '';
+    };
     const isInternalReferrer = (ref) => {
       const raw = String(ref || '');
       if (!raw) return false;
-      try {
-        const u = new URL(raw);
-        return isConfengeHostName(u.hostname);
-      } catch (_) {
-        return false;
-      }
+      return isConfengeHostName(referrerHostName(raw));
     };
     const mergeFirstTouch = (prior, incoming, opts) => {
       const stored = prior && typeof prior === 'object' ? prior : {};
@@ -500,7 +532,10 @@
       storedPrior.correlation_id,
       newCorrelationId(),
     );
-    if (!fromUrl.referrer) {
+    // Um referrer do proprio site nao e origem: nao entra na sessao nem no
+    // campo oculto (fromUrl vence storedPseo ao preencher o formulario), para
+    // que o referrer externo guardado no primeiro salto chegue ao servidor.
+    if (!fromUrl.referrer && !internalNav) {
       try { fromUrl.referrer = sanitizeAttr(document.referrer || '', 'referrer'); } catch (_) { /* ignore */ }
     }
     writeStoredPseo(mergeFirstTouch(storedPrior, fromUrl, { internalReferrer: internalNav }));
@@ -536,9 +571,45 @@
       ctaPosition: 'cta_position',
       snap: 'snap',
     };
+    // BOFU-FECHAMENTO-20260919 (PUBLICAS-01): um CTA da propria pagina pode
+    // pre-selecionar um campo do formulario de captura (mesmo padrao de
+    // DATASET_TO_ATTR, mas para campos de formulario, nao para atribuicao).
+    // <select>: so um valor que exista como <option>, com 'change' para a UI
+    // dependente reagir; <input type=hidden>: valor gravado sem 'change' (o
+    // ouvinte de #estagio do formulario reclassificaria a jornada declarada
+    // no HTML, p. ex. contrato -> outro no hub). Outros controles nao sao
+    // tocados. Nada persiste entre rotas: o alvo e o formulario desta pagina.
+    // Seletores por campo: `estagio` so no hidden dos hubs/pilares. Na home
+    // #estagio e um <select> ligado ao resolvedor de situacao: um 'change'
+    // vindo de um CTA com data-estagio reclassificaria a jornada escolhida.
+    const DATASET_TO_FIELD = {
+      contractEvent: 'select[name="contract_event"], input[type="hidden"][name="contract_event"]',
+      estagio: 'input[type="hidden"][name="estagio"]',
+    };
+    const applyDatasetToForm = (a) => {
+      if (!form || !a || !a.dataset) return;
+      Object.keys(DATASET_TO_FIELD).forEach((camel) => {
+        const raw = a.dataset[camel];
+        if (!raw) return;
+        const value = String(raw).slice(0, 120);
+        const field = form.querySelector(DATASET_TO_FIELD[camel]);
+        if (!field) return;
+        const tag = String(field.tagName || '').toUpperCase();
+        if (tag === 'SELECT') {
+          const opt = [...(field.options || [])].find((o) => o.value === value);
+          if (!opt) return;
+          field.value = value;
+          try { field.dispatchEvent(new Event('change', { bubbles: true })); } catch (_) { /* no Event ctor */ }
+          return;
+        }
+        field.value = value;
+      });
+    };
     document.addEventListener('click', (event) => {
       const a = event.target && event.target.closest && event.target.closest('a[href]');
       if (!a || !a.dataset) return;
+      applyDatasetToForm(a);
+      rememberPreselectForRoute(a);
       const prior = readStoredPseo();
       const incoming = {};
       let wrote = false;
@@ -582,6 +653,40 @@
       || sanitizeAttr(searchParams.get('origem') || hashParams.get('origem'), 'origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
+    // BOFU-FECHAMENTO-20260919 (PUBLICAS-02): um CTA de OUTRA rota com
+    // data-contract-event guarda {rota-alvo, evento} em sessionStorage no
+    // clique (o href interno fica canonico, sem query string, como manda
+    // scripts/organic/canonical_hrefs.py); na chegada, se a rota confere, o
+    // evento e aplicado pelo mesmo caminho do CTA local (so valor que exista
+    // como <option>) e o registro e apagado. Registro fora da rota alvo ou
+    // com mais de 30 min e descartado.
+    const PRESELECT_STORAGE_KEY = 'confenge_form_preselect';
+    const normalizePath = (p) => String(p || '/').replace(/\/?$/, '/');
+    const readPreselect = () => {
+      try {
+        const raw = sessionStorage.getItem(PRESELECT_STORAGE_KEY);
+        sessionStorage.removeItem(PRESELECT_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') return null;
+        if (normalizePath(parsed.path) !== normalizePath(window.location.pathname)) return null;
+        if (!/^[a-z_]{1,64}$/.test(String(parsed.contract_event || ''))) return null;
+        if (Date.now() - Number(parsed.saved_at || 0) > 30 * 60 * 1000) return null;
+        return parsed;
+      } catch (_) { return null; }
+    };
+    const rememberPreselectForRoute = (a) => {
+      const value = a && a.dataset ? a.dataset.contractEvent : '';
+      if (!value || !/^[a-z_]{1,64}$/.test(String(value))) return;
+      let target = '';
+      try { target = new URL(a.getAttribute('href') || '', window.location.href).pathname; } catch (_) { return; }
+      if (!target || normalizePath(target) === normalizePath(window.location.pathname)) return;
+      try {
+        sessionStorage.setItem(PRESELECT_STORAGE_KEY, JSON.stringify({ path: normalizePath(target), contract_event: String(value), saved_at: Date.now() }));
+      } catch (_) { /* private mode */ }
+    };
+    const preselect = readPreselect();
+    if (preselect) applyDatasetToForm({ dataset: { contractEvent: preselect.contract_event } });
     const ensureHidden = (fname, fval, force = false) => {
       if (!form || fval == null || fval === '') return;
       let input = form.querySelector(`input[name="${fname}"]`);
@@ -603,6 +708,7 @@
       orcamento: '/obrigado',
       obra: '/obrigado',
       pericia: '/obrigado',
+      avaliacao: '/obrigado',
       sst: '/obrigado',
       orgao: '/obrigado',
       outro: '/obrigado',

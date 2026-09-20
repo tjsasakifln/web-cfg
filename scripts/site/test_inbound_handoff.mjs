@@ -1496,4 +1496,46 @@ try {
   pass("pos_inb_01_missing_credential_is_specific_state");
 }
 
+// BOFU-FECHAMENTO-20260919 (WS-A, CONTEXTO-CAPTURA-03 / FAMILIAS-PUBLICAS-03 /
+// FAMILIAS-PUBLICAS-01): a situacao declarada pelo visitante e o lado do
+// orgao contratante chegam a Warmbly no texto versionado. Contraprova: antes,
+// `estagio` so entrava com route_family=entregas e nenhum rotulo dizia o lado.
+{
+  const { mapLeadToInboundV1 } = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const base = { lead_id: "lead-qa-declared", consentimento: true, nome: "QA", email: "qa@example.com" };
+  const urgent = mapLeadToInboundV1({ ...base, jornada: "contrato", estagio: "problema urgente em contrato", route_family: "home", deliverable_id: null });
+  if (!urgent.message || !urgent.message.includes("situação=contrato") || !urgent.message.includes("situação declarada=problema urgente em contrato")) {
+    fail("handoff_declared_situation_home_contract", urgent.message);
+  }
+  const orgaoHome = mapLeadToInboundV1({ ...base, jornada: "outro", estagio: "planejamento de órgão público", route_family: "home", deliverable_id: null });
+  if (!orgaoHome.message || !orgaoHome.message.includes("situação declarada=planejamento de órgão público")) {
+    fail("handoff_declared_situation_home_orgao", orgaoHome.message);
+  }
+  // Pilares e hubs: o estagio e o proprio asset id -> nao se repete.
+  const pillar = mapLeadToInboundV1({ ...base, jornada: "contrato", estagio: "medicoes-glosas-obras-publicas", asset_id: "medicoes-glosas-obras-publicas", route_family: "medicoes-glosas", deliverable_id: "CFG-D18" });
+  if (!pillar.message.includes("entrega=CFG-D18") || pillar.message.includes("situação declarada=")) {
+    fail("handoff_declared_situation_not_repeated_on_pillar", pillar.message);
+  }
+  // /entregas/: a familia de servico continua sendo o unico rotulo do estagio.
+  const family = mapLeadToInboundV1({ ...base, jornada: "outro", route_family: "entregas", estagio: "perícia, assistência técnica ou avaliação", deliverable_id: null });
+  if (!family.message.includes("família de serviço=perícia, assistência técnica ou avaliação") || family.message.includes("situação declarada=")) {
+    fail("handoff_declared_situation_not_duplicating_service_family", family.message);
+  }
+  // Orgao contratante pelo hub: lado + contexto preparatorio com rotulo, sem PII.
+  const orgaoHub = mapLeadToInboundV1({
+    ...base, jornada: "contrato", estagio: "planejamento-contratacao-publica", asset_id: "contract-defense-products",
+    route_family: "servicos-obras-publicas", contract_event: "planejamento_contratacao", contract_stage: null,
+    procurement_object: "Reforma de escola municipal", procurement_stage: "dfd_etp", procurement_regulation: "Lei 14.133", funding_source: "transferencia_uniao",
+  });
+  for (const needle of ["lado=orgao_contratante", "objeto=Reforma de escola municipal", "estágio da contratação=dfd_etp", "regulamento=Lei 14.133", "origem do recurso=transferencia_uniao", "situação declarada=planejamento-contratacao-publica"]) {
+    if (!orgaoHub.message.includes(needle)) fail("handoff_orgao_contratante_context", { needle, message: orgaoHub.message });
+  }
+  const contratada = mapLeadToInboundV1({ ...base, jornada: "contrato", estagio: "contract-defense-products", asset_id: "contract-defense-products", route_family: "servicos-obras-publicas", contract_event: "reajuste", contract_stage: "UNKNOWN" });
+  if (contratada.message.includes("lado=") || contratada.message.includes("situação declarada=")) fail("handoff_contratada_has_no_side_label", contratada.message);
+  // Rotulos orfaos (nenhum formulario os preenche desde MV-09) sairam do vetor.
+  const orphan = mapLeadToInboundV1({ ...base, jornada: "contrato", certame_stage: "x", contract_relation: "y", entity_class: "z" });
+  if (/certame_stage=|contract_relation=|entity_class=/.test(orphan.message || "")) fail("handoff_orphan_labels_removed", orphan.message);
+  pass("handoff_declared_situation_and_contracting_side");
+}
+
 console.log("INBOUND_HANDOFF_OK", JSON.stringify({ tests: results.length }));

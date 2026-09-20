@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-09-11",
+  "updated_at": "2026-09-19",
   "purpose": "Source of truth for the corporate situation chooser, compact global chrome, protected public-works vertical, hub roles, and route → job → parent → next action → index state.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -29,10 +29,24 @@
     },
     {
       "id": "building_diagnosis",
-      "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
-      "visitor_language": "Preciso entender uma infiltração ou fissura, ou registrar a condição do imóvel",
+      "label": "Infiltração ou fissura, imóvel a receber ou reformar, construído a documentar",
+      "visitor_language": "Preciso entender uma infiltração ou fissura, receber ou reformar um imóvel, ou documentar o que foi construído",
       "href": "/inspecao-diagnostico-edificacoes/",
-      "index_state": "service_hub_index"
+      "index_state": "service_hub_index",
+      "sub_situations": [
+        {
+          "label": "Receber ou entregar a obra",
+          "href": "/inspecao-diagnostico-edificacoes/#recebimento-entrega"
+        },
+        {
+          "label": "Reforma em condomínio",
+          "href": "/inspecao-diagnostico-edificacoes/#reforma-condominio"
+        },
+        {
+          "label": "Documentar o construído",
+          "href": "/inspecao-diagnostico-edificacoes/#documentacao-as-built"
+        }
+      ]
     },
     {
       "id": "property_valuation",
@@ -53,14 +67,26 @@
       "label": "Preciso de um documento de segurança do trabalho",
       "visitor_language": "Preciso responder a uma exigência de documento de segurança do trabalho",
       "href": "/seguranca-trabalho-apoio-tecnico/",
-      "index_state": "service_hub_index"
+      "index_state": "service_hub_index",
+      "sub_situations": [
+        {
+          "label": "Reclamação trabalhista com componente de SST",
+          "href": "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"
+        }
+      ]
     },
     {
       "id": "public_works_b2g",
-      "label": "Medição glosada ou pagamento travado em contrato público",
-      "visitor_language": "Preciso decidir ou proteger margem em uma licitação ou contrato público",
+      "label": "Edital para decidir, medição glosada ou custo fora da curva; órgão planejando a obra",
+      "visitor_language": "Preciso decidir um edital, sustentar uma medição ou proteger margem em contrato público, ou estruturar a contratação do lado do órgão",
       "href": "/servicos-obras-publicas/",
-      "index_state": "index"
+      "index_state": "index",
+      "sub_situations": [
+        {
+          "label": "Órgão planejando a contratação",
+          "href": "/servicos-obras-publicas/#situacao-orgao"
+        }
+      ]
     }
   ],
   "breadcrumb_labels": {

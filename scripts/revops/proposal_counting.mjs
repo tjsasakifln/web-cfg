@@ -150,6 +150,29 @@ function observationId(obs, index) {
 }
 
 const PII_KEYS = new Set(["nome", "name", "email", "telefone", "phone", "cnpj", "cpf", "mensagem", "message", "note", "free_text", "description", "url", "referrer"]);
+// MEDICAO-05: keys are not enough — values are scanned too. `origin_evidence`
+// is a short token (lead_id, campaign id), never a URL, path or identifier.
+const ORIGIN_EVIDENCE_RE = /^[a-z0-9_.:-]{1,64}$/i;
+// Phone runs are bounded by non-alphanumerics so a hex token (lead_id) with an
+// embedded digit run is not mistaken for a number.
+const PII_VALUE_RE = /@|https?:\/\/|www\.|(?<![a-z0-9])\+?\d[\d\s().-]{8,}\d(?![a-z0-9])/i;
+// Timestamps are the only string field allowed to look like a long digit run.
+const VALUE_SCAN_EXEMPT = new Set(["at"]);
+
+function assertNoPiiValues(raw, id) {
+  for (const [key, value] of Object.entries(raw)) {
+    if (VALUE_SCAN_EXEMPT.has(key)) continue;
+    const values = Array.isArray(value) ? value.map((v) => (v && typeof v === "object" ? Object.values(v) : v)).flat() : [value];
+    for (const v of values) {
+      if (typeof v === "string" && PII_VALUE_RE.test(v)) {
+        throw codedError("invalid_observation", `pii_value_admitted:${key}`, { observation: id, field: key });
+      }
+    }
+  }
+  if (raw.origin_evidence != null && !ORIGIN_EVIDENCE_RE.test(String(raw.origin_evidence))) {
+    throw codedError("invalid_observation", "origin_evidence_token_required", { observation: id, field: "origin_evidence" });
+  }
+}
 
 function normalizeObservation(raw, index) {
   const id = observationId(raw, index);
@@ -157,6 +180,7 @@ function normalizeObservation(raw, index) {
   for (const key of Object.keys(raw)) {
     if (PII_KEYS.has(key)) throw codedError("pii_key_admitted", `proposal_observation_pii_key:${key}`, { observation: id });
   }
+  assertNoPiiValues(raw, id);
   if (!EVENTS.includes(raw.event)) throw codedError("invalid_event", `event:${raw.event}`, { observation: id });
   if (!raw.proposal_id || !raw.opportunity_id) {
     throw codedError("invalid_observation", "proposal_id_and_opportunity_id_required", { observation: id });
@@ -190,6 +214,7 @@ function normalizeObservation(raw, index) {
       }))
       : [],
     origin_class: raw.origin_class == null ? null : String(raw.origin_class),
+    origin_evidence: raw.origin_evidence == null ? null : String(raw.origin_evidence),
     delivery_attempt: raw.delivery_attempt == null ? 1 : Number(raw.delivery_attempt),
   };
 }
@@ -230,20 +255,20 @@ export function countProposals(observations, contract, options = {}) {
     else live.push(obs);
   }
 
-  // PC-03 / PC-10: resend is not an emission; repeated delivery of the same
-  // observation (retry after a persist failure) counts once. Partial receipts
-  // are distinct events when their instants differ.
+  // PC-03 / PC-10: resend is not an emission. A retry is the LITERAL
+  // repetition of (proposal_id, event, at): only that is duplicate_delivery
+  // (MEDICAO-02/03). Distinct instants of the same event are distinct
+  // observations — a revision reusing the stable id, an instalment invoice, a
+  // partial receipt.
   const seen = new Set();
-  const emissions = new Map();
+  const emissionsByProposal = new Map(); // proposal_id -> [emission observations, in order]
   const stageEvents = [];
   for (const obs of live) {
     if (obs.event === "resent") {
       exclude(obs, "resend_not_emission");
       continue;
     }
-    const key = obs.event === "received"
-      ? `${obs.proposal_id}|received|${obs.at}`
-      : `${obs.proposal_id}|${obs.event}`;
+    const key = `${obs.proposal_id}|${obs.event}|${obs.at}`;
     if (seen.has(key)) {
       exclude(obs, "duplicate_delivery", { delivery_attempt: obs.delivery_attempt });
       continue;
@@ -258,25 +283,58 @@ export function countProposals(observations, contract, options = {}) {
         exclude(obs, "revision_without_supersedes");
         continue;
       }
-      if (emissions.has(obs.proposal_id)) {
-        exclude(obs, "duplicate_delivery", { note: "proposal_id_already_emitted" });
-        continue;
-      }
-      emissions.set(obs.proposal_id, obs);
+      if (!emissionsByProposal.has(obs.proposal_id)) emissionsByProposal.set(obs.proposal_id, []);
+      emissionsByProposal.get(obs.proposal_id).push(obs);
     } else {
       stageEvents.push(obs);
     }
   }
 
-  // PC-02: revision supersedes, never sums.
-  const superseded = new Map();
-  for (const obs of emissions.values()) {
-    if (obs.supersedes_proposal_id) superseded.set(obs.supersedes_proposal_id, obs.proposal_id);
+  // PC-02: revision supersedes, never sums. A revision may reuse the stable
+  // proposal_id (supersedes_proposal_id === proposal_id) or name a new one.
+  // The target must exist in the input and share opportunity + scope;
+  // otherwise the chain is a decision, never a silent count (MEDICAO-04).
+  const allEmissions = [...emissionsByProposal.values()].flat();
+  const excludedObs = new Set(); // by object identity: derived ids may repeat inside a chain
+  const supersededBy = new Map(); // observation object -> superseding proposal_id
+  for (const obs of allEmissions) {
+    if (obs.event !== "revised") continue;
+    const targetId = obs.supersedes_proposal_id;
+    const sameId = targetId === obs.proposal_id;
+    const candidates = (emissionsByProposal.get(targetId) || []).filter((t) => t !== obs && (!sameId || t.atMs < obs.atMs));
+    if (!candidates.length) {
+      exclude(obs, "supersedes_target_unknown", { supersedes_proposal_id: targetId });
+      excludedObs.add(obs);
+      needsDecision.push({ reason: "supersedes_target_unknown", proposal_ids: [obs.proposal_id], supersedes_proposal_id: targetId });
+      continue;
+    }
+    const crossScope = candidates.filter((t) => t.opportunity_id !== obs.opportunity_id || (t.scope_id || "") !== (obs.scope_id || ""));
+    if (crossScope.length) {
+      exclude(obs, "supersedes_cross_scope", { supersedes_proposal_id: targetId });
+      excludedObs.add(obs);
+      for (const t of crossScope) {
+        if (!excludedObs.has(t)) {
+          exclude(t, "supersedes_cross_scope", { by: obs.proposal_id });
+          excludedObs.add(t);
+        }
+      }
+      needsDecision.push({ reason: "supersedes_cross_scope", proposal_ids: [...new Set([targetId, obs.proposal_id])] });
+      continue;
+    }
+    for (const t of candidates) {
+      if (!supersededBy.has(t)) supersededBy.set(t, obs.proposal_id);
+    }
   }
   let candidates = [];
-  for (const obs of emissions.values()) {
-    if (superseded.has(obs.proposal_id)) exclude(obs, "superseded", { by: superseded.get(obs.proposal_id) });
-    else candidates.push(obs);
+  const emissions = new Map(); // proposal_id -> counting emission (latest of the chain)
+  for (const obs of allEmissions) {
+    if (excludedObs.has(obs)) continue;
+    if (supersededBy.has(obs)) {
+      exclude(obs, "superseded", { by: supersededBy.get(obs) });
+      continue;
+    }
+    candidates.push(obs);
+    emissions.set(obs.proposal_id, obs);
   }
 
   // PC-04: exclusive alternatives count once, by canonical flag only.

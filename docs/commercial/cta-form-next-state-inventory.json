@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 198
+    "expected_declared_ctas": 206
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 198,
+    "declared_ctas": 206,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -2177,6 +2177,21 @@
           ]
         },
         {
+          "cta_id": "",
+          "position": "offer_capture_alt",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Relat%C3%B3rio%20de%20intelig%C3%AAncia%20de%20licita%C3%A7%C3%B5es",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "envie o pedido por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
           "cta_id": "report-599-mobile",
           "position": "report_mobile_sticky",
           "href": "/comercial/radar-decisorio/",
@@ -3417,7 +3432,7 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
@@ -3862,6 +3877,21 @@
         {
           "cta_id": "",
           "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20a%20biblioteca%20de%20entregas%20e%20quero%20saber%20qual%20entrega%20resolve%20a%20minha%20pergunta.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Perguntar qual entrega resolve a sua decisão pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
           "href": "mailto:tiago.sasaki@confenge.com.br?subject=Entregas%20de%20engenharia",
           "stage": "talk",
           "commitment": "medium",
@@ -3872,6 +3902,21 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "email_click"
+          ]
+        },
+        {
+          "cta_id": "deliverables-final-services",
+          "position": "page_close",
+          "href": "/servicos/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver serviços por situação",
+          "useful_next_state": "Abre o destino declarado por “Ver serviços por situação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {
@@ -4246,6 +4291,21 @@
           "current_label": "Dossiê de Medição, Glosa e Pagamento",
           "useful_next_state": "Abre o destino declarado por “Dossiê de Medição, Glosa e Pagamento” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "/servicos-obras-publicas/#captura-contrato",
+          "stage": "register_context",
+          "commitment": "medium",
+          "current_label": "registre a necessidade no formulário",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
           "event_semantics": [
@@ -4726,7 +4786,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: evento observado, nome de quem responde pelo pedido, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "contract_event",
@@ -4739,6 +4799,10 @@
               "public_contract_id",
               "opportunity_deadline",
               "contract_stage",
+              "procurement_object",
+              "procurement_stage",
+              "funding_source",
+              "procurement_regulation",
               "email",
               "telefone",
               "mensagem"
@@ -4997,13 +5061,44 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
         }
       ],
-      "actions": []
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "company_capture_alt",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp sobre a decisão",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "company_capture_alt",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=An%C3%A1lise%20de%20CNPJ",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar a decisão por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "email_click"
+          ]
+        }
+      ]
     },
     {
       "route": "/analise-cnpj/r/",
@@ -5062,13 +5157,44 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
         }
       ],
-      "actions": []
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "company_capture_alt",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp sobre a decisão",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "company_capture_alt",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=An%C3%A1lise%20de%20CNPJ",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar a decisão por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "email_click"
+          ]
+        }
+      ]
     },
     {
       "route": "/comercial/radar-decisorio/",
@@ -5155,6 +5281,80 @@
           ]
         }
       ]
+    }
+  ],
+  "tool_forms": [
+    {
+      "route": "/analise-cnpj/",
+      "form_id": "cnpj-form",
+      "form_class": "contact-form",
+      "kind": "tool_form",
+      "action": "/api/web/live-intelligence-analyze",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/conflitos/",
+      "form_id": "conflict-gate-form",
+      "form_class": "contact-form",
+      "kind": "tool_form",
+      "action": "#primeira-etapa",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "form_id": "",
+      "form_class": "breakout-tool",
+      "kind": "tool_form",
+      "action": "#",
+      "method": "get",
+      "nojs_degradation": "none"
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "form_id": "f",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/checklist-reequilibrio/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "form_id": "lookup",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/diagnostico-defesa-margem/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "form_id": "limite-form",
+      "form_class": "tool-form tool-workflow",
+      "kind": "tool_form",
+      "action": "/ferramentas/limite-acrescimos-supressoes/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "form_id": "f",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/matriz-atraso-obra/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "form_id": "diagnostico",
+      "form_class": "pptr-form",
+      "kind": "tool_form",
+      "action": "#",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
     }
   ]
 }

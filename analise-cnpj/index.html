@@ -59,6 +59,7 @@
 <p class="form-hint" id="cnpj-hint">Somente o CNPJ. O número não é gravado, não entra na URL do resultado e não entra em nenhum evento de analytics. O resultado ganha um endereço próprio, identificado por um código aleatório do qual o CNPJ não pode ser deduzido.</p>
 <button class="button button-primary button-lg" id="cnpj-submit" type="submit">Analisar perfil contratual</button>
 </form>
+<noscript><p class="form-hint form-nojs-note">Sem JavaScript, a consulta e o formulário desta página não funcionam. Fale pelo <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.">WhatsApp</a> ou pelo <a href="mailto:tiago.sasaki@confenge.com.br?subject=An%C3%A1lise%20de%20CNPJ">e-mail</a>.</p></noscript>
 <div class="form-status" id="analise-status" role="status" aria-live="polite" hidden></div>
 </section>
 
@@ -93,6 +94,7 @@
 <h2 id="pedido-titulo">Registrar o pedido</h2>
 <form class="contact-form" id="intel-lead-form" novalidate method="post" action="/api/web/lead" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.</p>
 <p class="form-hint" data-field-purpose>Obrigatórios: nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. Use o <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.">WhatsApp</a> ou o <a href="mailto:tiago.sasaki@confenge.com.br?subject=An%C3%A1lise%20de%20CNPJ">e-mail</a> ao lado.</p></noscript>
 <input id="intel-intent-kind" name="intent_kind" type="hidden" value=""/>
 <input id="intel-analysis-id" name="analysis_id" type="hidden" value=""/>
 <input name="origem" type="hidden" value="/analise-cnpj/"/>
@@ -116,6 +118,10 @@
 <p class="form-hint" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 <div class="form-status" id="pedido-status" role="status" aria-live="polite" hidden></div>
+<ul class="contact-alt">
+<li><a data-cta-position="company_capture_alt" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o." rel="noopener" target="_blank">Falar pelo WhatsApp sobre a decisão</a></li>
+<li><a data-cta-position="company_capture_alt" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=An%C3%A1lise%20de%20CNPJ">Enviar a decisão por e-mail</a></li>
+</ul>
 <div class="form-legal">
 <p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
 <p class="form-note" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>

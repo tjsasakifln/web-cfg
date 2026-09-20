@@ -86,6 +86,66 @@ for (const form of forms) {
   }
 }
 
+// BOFU-FECHAMENTO-20260919 (WS-A): (CONTEXTO-CAPTURA-05) todo formulario ativo
+// explica o caso sem JavaScript -- nota <noscript> escrita pelo normalizador
+// comum (scripts/commercial/form_nojs_note.mjs) ou, na home, a nota propria
+// alternada por CSS ao lado do formulario; (CONTEXTO-CAPTURA-07) toda textarea
+// de mensagem do runtime compartilhado tem id="mensagem" para o pre-preenchimento
+// do tema; (FAMILIAS-PUBLICAS-01) o hub aceita o orgao contratante com os quatro
+// campos opcionais da fase preparatoria, autorizados pela excecao datada da
+// politica de campos. Antes: 14 formularios sem nota; hub sem id e sem opcao.
+const NOJS_NOTE_TEXT = "Sem JavaScript, este formulário não envia";
+// Pilares congelados (unlock-plan, html_mutation_authorized=false) que ainda nao
+// publicam a nota: pendencia datada 2026-09-19 (BOFU-FECHAMENTO, #705); o
+// normalizador nao os toca ate a cadeia de recaptura. Um pilar que ganhar a
+// nota sai daqui pela propria assercao (a lista e exata, nao um allowlist aberto).
+const frozenWithoutNote = new Set(
+  unlockPlan.html_mutation_authorized === true ? [] : ["/diagnostico-pre-licitacao/"],
+);
+for (const surface of report.surfaces) {
+  const html = fs.readFileSync(surface.file, "utf8");
+  const withoutNoscript = html.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, " ");
+  const pageOwnNote = /<p class="form-nojs-note">/.test(withoutNoscript);
+  if (frozenWithoutNote.has(surface.route)) {
+    assert.ok(unlockPlan.protected_pillars.includes(surface.route.replaceAll("/", "")), `${surface.route}: carve-out only for a protected pillar`);
+    assert.ok(!html.includes(NOJS_NOTE_TEXT), `${surface.route}: note published; remove the carve-out`);
+    continue;
+  }
+  const forms = [...html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi)]
+    .filter((m) => /\baction=["'](?:\/\.netlify\/functions\/lead|\/api\/web\/lead)["']/i.test(m[1]) || /\bid=["']formulario-contato["']/i.test(m[1]));
+  assert.ok(forms.length >= 1, `${surface.route}: capture form`);
+  for (const form of forms) {
+    const noscriptNote = /<noscript>\s*<p class="form-hint form-nojs-note">/.test(form[2]) && form[2].includes(NOJS_NOTE_TEXT);
+    assert.ok(noscriptNote || pageOwnNote, `${surface.route}: no-JS note (noscript or page-level .form-nojs-note)`);
+    if (noscriptNote) {
+      assert.match(form[2], /<noscript>\s*<p class="form-hint form-nojs-note">[^<]*<a href="(?:https:\/\/wa\.me\/|mailto:)[^"]+">/, `${surface.route}: no-JS note names a channel`);
+    }
+    // O componente compartilhado (name="diagnostico-confenge") e o que o
+    // bundle pre-preenche; /analise-cnpj/ usa ids proprios (intel-*) do seu runtime.
+    if (/\bdata-runtime-profile=["']shared_lead_form_v1["']/.test(form[1]) && /\bname=["']diagnostico-confenge["']/.test(form[1])) {
+      const textarea = form[2].match(/<textarea\b(?=[^>]*\bname=["']mensagem["'])[^>]*>/i);
+      if (textarea) assert.match(textarea[0], /\bid=["']mensagem["']/, `${surface.route}: textarea#mensagem`);
+    }
+  }
+}
+const hubForm = report.surfaces.find((surface) => surface.route === "/servicos-obras-publicas/")?.forms[0];
+const sourceContract = JSON.parse(fs.readFileSync("data/commercial/cta-form-next-state.v1.json", "utf8"));
+const authorizedNewFields = (sourceContract.field_purpose_policy.authorized_new_fields || [])
+  .find((entry) => entry.route === "/servicos-obras-publicas/");
+assert.ok(authorizedNewFields && authorizedNewFields.required === false, "orgao fields: dated exception in field_purpose_policy");
+for (const field of authorizedNewFields.fields) {
+  assert.ok(hubForm.field_purpose.optional.includes(field), `hub: optional ${field}`);
+  assert.ok(!hubForm.field_purpose.required.includes(field), `hub: ${field} never required`);
+}
+assert.equal(sourceContract.field_purpose_policy.no_new_fields, true);
+assert.match(sourceContract.invariants.find((line) => line.startsWith("No file upload")), /Excecao datada 2026-09-19/, "invariant keeps history and the dated exception");
+const hubHtml = fs.readFileSync("servicos-obras-publicas/index.html", "utf8");
+assert.match(hubHtml, /<option value="planejamento_contratacao">Órgão planejando a contratação de obra ou serviço<\/option>/);
+// Nenhum campo fora da lista autorizada entrou no formulario do hub.
+const hubFieldNames = new Set([...hubForm.field_purpose.required, ...hubForm.field_purpose.optional]);
+const knownHubFields = new Set(["deliverable_id", "public_contract_id", "contract_event", "opportunity_deadline", "contract_stage", "nome", "email", "telefone", "mensagem", "consentimento", "email_or_whatsapp", ...authorizedNewFields.fields]);
+for (const name of hubFieldNames) assert.ok(knownHubFields.has(name), `hub: unexpected field ${name}`);
+
 const adaptivePage = fs.readFileSync("triagem-tecnica/index.html", "utf8");
 const adaptiveRuntime = fs.readFileSync("assets/js/adaptive-intake.js", "utf8");
 // 2026-09-08. Estas tres assercoes exigiam os atributos do formulario

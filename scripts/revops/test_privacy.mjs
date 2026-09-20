@@ -502,6 +502,46 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cn
   }
 }
 
+// --- MEDICAO-08: the ops export answers "which CTA / route / topic produced this lead" without new PII ---
+{
+  const { toExportRecord, SCHEMA_VERSION } = await import("./export_leads.mjs");
+  const lead = {
+    lead_id: "lead-764fdf3765f48a03257979638b8",
+    session_id: "sess-8e0bdd75a33225d8ec95d98843f",
+    record_kind: "synthetic",
+    received_at: "2026-09-19T12:00:00.000Z",
+    jornada: "contrato",
+    cta_id: "pillar_hero",
+    route_family: "medicoes-glosas",
+    asset_id: "medicoes-glosas",
+    tema: "glosa de medicao",
+    origin_class: "search_organic",
+    referrer: "https://www.google.com/",
+    landing_page: "/medicoes-glosas/",
+  };
+  const rec = toExportRecord(lead);
+  const missing = ["cta_id", "route_family", "asset_id", "tema", "origin_class", "origin_class_status"].filter((k) => !(k in rec));
+  if (missing.length) fail("export_missing_journey_columns", missing);
+  else pass("export_has_journey_columns", `schema_version=${SCHEMA_VERSION}`);
+  if (rec.cta_id !== "pillar_hero" || rec.route_family !== "medicoes-glosas" || rec.tema !== "glosa de medicao" || rec.origin_class !== "search_organic") {
+    fail("export_journey_values", rec);
+  } else pass("export_journey_values_carried");
+  if (rec.origin_class_status !== "DERIVED") fail("export_origin_class_status_derived", rec.origin_class_status);
+  else pass("export_origin_class_status_derived");
+  // A lead persisted before the derivation shipped reads INDISPONIVEL, never direct_or_unknown.
+  const { origin_class: _oc, ...legacy } = lead;
+  const legacyRec = toExportRecord(legacy);
+  if (legacyRec.origin_class !== null || legacyRec.origin_class_status !== "INDISPONIVEL") {
+    fail("export_origin_class_null_promoted", { origin_class: legacyRec.origin_class, status: legacyRec.origin_class_status });
+  } else pass("export_origin_class_null_reads_indisponivel");
+  // The new columns never carry free text, e-mail, phone or a full URL.
+  const journeyBlob = JSON.stringify({ cta_id: rec.cta_id, route_family: rec.route_family, asset_id: rec.asset_id, tema: rec.tema, origin_class: rec.origin_class });
+  if (PII_SCAN.test(journeyBlob) || /https?:\/\//.test(journeyBlob)) fail("export_journey_columns_pii", journeyBlob);
+  else pass("export_journey_columns_no_pii");
+  if (!/^\d+\.\d+\.\d+$/.test(SCHEMA_VERSION) || SCHEMA_VERSION === "1.0.0") fail("export_schema_version_not_bumped", SCHEMA_VERSION);
+  else pass("export_schema_version_bumped", SCHEMA_VERSION);
+}
+
 if (failed) {
   console.error(`\n${failed} failure(s)`);
   process.exit(1);
