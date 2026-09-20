@@ -95,10 +95,22 @@ for (const form of forms) {
 // campos opcionais da fase preparatoria, autorizados pela excecao datada da
 // politica de campos. Antes: 14 formularios sem nota; hub sem id e sem opcao.
 const NOJS_NOTE_TEXT = "Sem JavaScript, este formulário não envia";
+// Pilares congelados (unlock-plan, html_mutation_authorized=false) que ainda nao
+// publicam a nota: pendencia datada 2026-09-19 (BOFU-FECHAMENTO, #705); o
+// normalizador nao os toca ate a cadeia de recaptura. Um pilar que ganhar a
+// nota sai daqui pela propria assercao (a lista e exata, nao um allowlist aberto).
+const frozenWithoutNote = new Set(
+  unlockPlan.html_mutation_authorized === true ? [] : ["/diagnostico-pre-licitacao/"],
+);
 for (const surface of report.surfaces) {
   const html = fs.readFileSync(surface.file, "utf8");
   const withoutNoscript = html.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, " ");
   const pageOwnNote = /<p class="form-nojs-note">/.test(withoutNoscript);
+  if (frozenWithoutNote.has(surface.route)) {
+    assert.ok(unlockPlan.protected_pillars.includes(surface.route.replaceAll("/", "")), `${surface.route}: carve-out only for a protected pillar`);
+    assert.ok(!html.includes(NOJS_NOTE_TEXT), `${surface.route}: note published; remove the carve-out`);
+    continue;
+  }
   const forms = [...html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi)]
     .filter((m) => /\baction=["'](?:\/\.netlify\/functions\/lead|\/api\/web\/lead)["']/i.test(m[1]) || /\bid=["']formulario-contato["']/i.test(m[1]));
   assert.ok(forms.length >= 1, `${surface.route}: capture form`);

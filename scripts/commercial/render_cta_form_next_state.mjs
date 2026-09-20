@@ -11,6 +11,16 @@ import { ensureNojsNote, pageHasOwnNojsNote } from "./form_nojs_note.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contract = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/cta-form-next-state.v1.json"), "utf8"));
+// Mesma autoridade de render_contract_defense_products.mjs: enquanto o plano de
+// desbloqueio nao autoriza mutacao de HTML, os seis pilares congelados nao
+// recebem a nota <noscript> por este passe (a insercao e a unica transformacao
+// nova deste normalizador que os alcancaria; as demais ja eram no-op neles).
+// Cinco ja publicam a nota; /diagnostico-pre-licitacao/ fica registrado como
+// pendencia datada (2026-09-19, BOFU-FECHAMENTO, #705) ate a cadeia de recaptura.
+const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"), "utf8"));
+const mutationAuthorized = unlockPlan.html_mutation_authorized === true
+  && (unlockPlan.preconditions_all_required || []).every((entry) => entry.state === "READY");
+const heldProtectedRoutes = new Set(mutationAuthorized ? [] : (unlockPlan.protected_pillars || []).map((slug) => `/${slug}/`));
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -256,7 +266,9 @@ function renderForm(full, open, body, surface, pageHtml) {
   // explica o caso sem JavaScript dentro de <noscript>, com os canais que a
   // propria pagina publica (scripts/commercial/form_nojs_note.mjs). A home
   // mantem a nota propria alternada por CSS e nao e tocada.
-  const withNojsNote = (source) => (pageHasOwnNojsNote(pageHtml) ? source : ensureNojsNote(source, pageHtml));
+  const withNojsNote = (source) => (
+    pageHasOwnNojsNote(pageHtml) || heldProtectedRoutes.has(surface.route) ? source : ensureNojsNote(source, pageHtml)
+  );
   if (profileId === "delivery_selection") {
     nextBody = removeMarker(removeMarker(removeMarker(nextBody, "data-form-value"), "data-field-purpose"), "data-form-boundary");
     nextBody = withNojsNote(nextBody);

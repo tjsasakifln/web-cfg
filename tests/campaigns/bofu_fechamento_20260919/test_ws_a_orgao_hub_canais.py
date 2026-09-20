@@ -36,14 +36,14 @@ CONTRATOS = ROOT / "data/commercial/page-contract-contratos.v1.json"
 # scripts/site/test_report_model_599.py veta wa.me na página; o canal direto
 # possível ali é o e-mail ao lado do formulário.
 WHATSAPP_EXEMPT_ROUTES = {
-    "/casos/modelo-relatorio-inteligencia-licitacoes/": "2026-09-19: test_report_model_599 veta wa.me; rota comercial única do Radar; e-mail ao lado do formulário",
+    "/casos/modelo-relatorio-inteligencia-licitacoes/": "2026-09-19, #705: test_report_model_599 veta wa.me; rota comercial única do Radar; e-mail ao lado do formulário",
     # Pendência datada (2026-09-19, fora do escopo de WS-A; família `ferramentas`,
     # capture_form_or_whatsapp): as três ferramentas só publicam os canais na nota
     # <noscript> e no rodapé (e-mail). Registrar no fechamento; retirar daqui ao
     # publicar o canal ao lado do formulário de segunda leitura.
-    "/ferramentas/checklist-reequilibrio/": "2026-09-19: pendência — canal só no rodapé e no noscript",
-    "/ferramentas/diagnostico-defesa-margem/": "2026-09-19: pendência — canal só no rodapé e no noscript",
-    "/ferramentas/limite-acrescimos-supressoes/": "2026-09-19: pendência — canal só no rodapé e no noscript",
+    "/ferramentas/checklist-reequilibrio/": "2026-09-19, #705: pendência — canal só no rodapé e no noscript",
+    "/ferramentas/diagnostico-defesa-margem/": "2026-09-19, #705: pendência — canal só no rodapé e no noscript",
+    "/ferramentas/limite-acrescimos-supressoes/": "2026-09-19, #705: pendência — canal só no rodapé e no noscript",
 }
 
 
