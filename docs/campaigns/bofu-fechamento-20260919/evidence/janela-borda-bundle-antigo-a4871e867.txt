@@ -1,0 +1,10 @@
+OK   home: bundle antigo carregado
+OK   home: sem erro de página ao escolher avaliação
+OK   home: botão de envio habilitado e visível — {"disabled":false,"jornada":"outro","estagio":"avaliação de imóvel","submitVisible":true}
+OK   home: jornada oculta com valor — outro
+OK   home: formulário válido com o mínimo (avaliação)
+OK   home: ainda sem erro de página
+OK   hub: sem erro de página com a opção do órgão
+OK   hub: option do órgão selecionável — {"has":true,"val":"planejamento_contratacao"}
+OK   entregas: sem erro de página
+SUMMARY ok=9 fail=0

@@ -1,0 +1,52 @@
+OK   build-info.commit = a4871e8672e4c5c27b1f80d4e0c2ccb1e989cd89
+OK   runtime-info.release_sha = a4871e8672e4c5c27b1f80d4e0c2ccb1e989cd89
+OK   artifact_hash.build=runtime = 384d9ed2cf161650ebfdae992c180909d31a764d632a73a851d231a302709cf4
+OK   http / = 200
+OK   http /servicos/ = 200
+OK   http /entregas/ = 200
+OK   http /inspecao-diagnostico-edificacoes/ = 200
+OK   http /seguranca-trabalho-apoio-tecnico/ = 200
+OK   http /assistencia-tecnica-pericial-engenharia/ = 200
+OK   http /servicos-obras-publicas/ = 200
+OK   http /problemas-que-resolvemos/ = 200
+OK   http /triagem-tecnica/ = 200
+OK   http /analise-cnpj/ = 200
+OK   http /casos/ = 200
+OK   http /casos/modelo-base-quantitativa-canonica/ = 200
+OK   http /inteligencia/valor-tipico-contratos-pavimentacao/ = 200
+OK   http /conteudos/ = 200
+OK   http /casos/demonstrativo-infraestrutura/ = 200
+OK   http /ferramentas/prontidao-tecnica-obra-privada/ = 200
+OK   http /defesa-tecnica-contratos-publicos/ = 200
+OK   entregas 8 nomes acessíveis começam pelo texto visível = 8
+OK   entregas label antigo ausente = 0
+OK   entregas wa.me presente (>=1) = 1
+OK   entregas frente03 -> recebimento = 1
+OK   pavimentacao href=#fontes ausente = 0
+OK   pavimentacao fontes-titulo href+id = 1/1
+OK   hub option planejamento_contratacao = 1
+OK   hub instrução 'Outro evento contratual' ausente = 0
+OK   hub campo procurement_object = 1
+OK   hub campo procurement_stage = 1
+OK   hub campo procurement_regulation = 1
+OK   hub campo funding_source = 1
+OK   hub CTA data-contract-event (>=1) = 1
+OK   hub textarea#mensagem = 1
+OK   hub nota sem JS = 1
+OK   home -> hub form com evento = 1
+OK   home h3 imóvel = 1
+OK   home -> as-built = 1
+OK   home option avaliacao = 1
+OK   home sem query ?evento= = 0
+OK   home -> assistencia trabalhista = 1
+OK   triagem li avaliacao-imovel = 1
+OK   triagem -> hub form com evento = 1
+OK   inspecao prefills distintos (>=4) = 1
+OK   sst 'ato médico' <=2 = 1
+OK   analise-cnpj wa.me (>=1) = 1
+OK   analise-cnpj noscript (>=1) = 1
+OK   modelo nota sem JS = 1
+OK   problemas cluster reajuste (>=1) = 1
+OK   script.js com preselect entre rotas = 1
+OK   sem menção a IA (amostra) = 0
+SUMMARY ok=51 fail=0

@@ -1,0 +1,37 @@
+OK   home: CTA do órgão presente
+BLOCKED POST https://confenge.com.br/api/web/collect
+BLOCKED POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/986042386:1789881008:UuMJIbutp7gbaNoIrdaQGodC8Qv0jIvs-9XnlILLwtw/a3de76580bdcee1b/diQj5zdBJXAZ1NvpvqOm16w8TUW4WFWBE5g.fJOAgkE-1789882479-1.2.1.1-cUgTUvONTevWZSm.02Ria_BlGIZfNu5fXXLByCIG0iSDHU0qj2ejnxqIjg8rvKbd
+FAIL hub: contract_event pré-selecionado na chegada
+OK   hub: registro de preselect consumido — null
+BLOCKED POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/986042386:1789881008:UuMJIbutp7gbaNoIrdaQGodC8Qv0jIvs-9XnlILLwtw/a3de76580bdcee1b/diQj5zdBJXAZ1NvpvqOm16w8TUW4WFWBE5g.fJOAgkE-1789882479-1.2.1.1-cUgTUvONTevWZSm.02Ria_BlGIZfNu5fXXLByCIG0iSDHU0qj2ejnxqIjg8rvKbd
+OK   hub: campos preparatórios presentes — procurement_object,procurement_stage,funding_source,procurement_regulation
+OK   hub: URL canônica sem query — https://confenge.com.br/servicos-obras-publicas/#captura-contrato
+OK   hub 390: sem overflow horizontal
+BLOCKED POST https://confenge.com.br/api/web/collect
+OK   entregas: 8 links — 8
+OK   entregas: nome acessível começa pelo texto visível — {"visible":"01 Onde disputar?","label":"01 Onde disputar? Quais editais abertos vale disputar?"}
+OK   entregas: Enter no link leva ao fragmento — https://confenge.com.br/entregas/#entrega-01
+OK   entregas: #entrega-01 existe
+BLOCKED POST https://confenge.com.br/api/web/collect
+BLOCKED POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/986042386:1789881008:UuMJIbutp7gbaNoIrdaQGodC8Qv0jIvs-9XnlILLwtw/a3de76666f9e03da/.IgUfuJKnRpOnLMCZIEm1QwNLOblu39lIfePjpZYELw-1789882481-1.2.1.1-EQohwEmc1mfT.JMPEvsJJfVF4642XRrlFS_JaPfZSVQ4ZHqPvvIh5Stzifnv.HIN
+BLOCKED POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/986042386:1789881008:UuMJIbutp7gbaNoIrdaQGodC8Qv0jIvs-9XnlILLwtw/a3de76666f9e03da/.IgUfuJKnRpOnLMCZIEm1QwNLOblu39lIfePjpZYELw-1789882481-1.2.1.1-EQohwEmc1mfT.JMPEvsJJfVF4642XRrlFS_JaPfZSVQ4ZHqPvvIh5Stzifnv.HIN
+OK   home: option avaliacao — avaliação de imóvel
+BLOCKED POST https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/fo/986042386:1789881008:UuMJIbutp7gbaNoIrdaQGodC8Qv0jIvs-9XnlILLwtw/a3de76666f9e03da/.IgUfuJKnRpOnLMCZIEm1QwNLOblu39lIfePjpZYELw-1789882481-1.2.1.1-EQohwEmc1mfT.JMPEvsJJfVF4642XRrlFS_JaPfZSVQ4ZHqPvvIh5Stzifnv.HIN
+FAIL home 320: próximo passo contextual da avaliação
+OK   home 320: sem overflow horizontal
+BLOCKED POST https://confenge.com.br/api/web/collect
+OK   inspecao: WhatsApp próprio do as-built — https://wa.me/5548988344559?text=Olá, Tiago. Preciso registrar o que foi constru
+BLOCKED POST https://confenge.com.br/api/web/collect
+OK   pavimentacao: link de fontes aponta a id existente — Fontes e metodologia completa
+BLOCKED POST https://confenge.com.br/api/web/collect
+OK   modelo (JS off): nota sem JS visível com canais
+SUMMARY ok=14 fail=2
+OK   bundle servido pela origem contém preselect
+OK   hub: contract_event pré-selecionado na chegada
+OK   hub: registro de preselect consumido
+OK   hub: atribuição sem contract_event
+OK   hub: select focável por teclado
+OK   home 320: próximo passo contextual da avaliação — Conte a finalidade da avaliação, o tipo de imóvel e a data-base. A res
+OK   home 320: rota da avaliação — /servicos/#servico-avaliacao
+OK   home 1440: sem overflow horizontal
+SUMMARY ok=8 fail=0
