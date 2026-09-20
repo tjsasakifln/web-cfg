@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from urllib.parse import unquote
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -938,3 +939,104 @@ def test_every_announced_family_has_its_own_distinguishable_schema() -> None:
               for t in re.findall(r'class="capability-group__schema-title">([\s\S]*?)</summary>', html)]
     assert len(titles) == 5, titles
     assert len(set(titles)) == 5, titles
+
+
+# ---------------------------------------------------------------------------
+# BOFU-FECHAMENTO-20260919: indice acessivel, frentes 03/04 e fechamento sem
+# beco B2G (A11Y-FRAGMENTOS-01, HOME-HUB-03/04/11, B-01, CTX-06)
+# ---------------------------------------------------------------------------
+
+_DECISION_NAV_LABELS = {
+    "01": "Onde disputar?",
+    "02": "Fontes dos números?",
+    "03": "O que decidir?",
+    "04": "Órgãos prioritários?",
+    "05": "Contratos a vencer?",
+    "06": "Mapa dos concorrentes?",
+    "07": "Escala dos contratos?",
+    "08": "Onde alocar?",
+}
+
+
+def _capability_group(html: str, index: str) -> str:
+    match = re.search(
+        rf'<li><span class="list-ruled__index">{index}</span><article class="capability-group">(.*?)</article></li>',
+        html,
+        re.S,
+    )
+    assert match, f"capability group {index} missing"
+    return match.group(1)
+
+
+def _assert_decision_nav_names_match_visible_text(html: str) -> None:
+    """WCAG 2.5.3: the accessible name starts with the visible label; the
+    ordinal is decorative and hidden from assistive technology."""
+    nav = re.search(r'<nav class="offer-decision-nav[^"]*".*?</nav>', html, re.S)
+    assert nav, "decision nav missing"
+    links = re.findall(r"<a\b([^>]*)>(.*?)</a>", nav.group(0), re.S)
+    assert len(links) == 8, len(links)
+    for attrs, inner in links:
+        number = re.search(r'href="#entrega-(\d\d)"', attrs).group(1)
+        label = _DECISION_NAV_LABELS[number]
+        aria = re.search(r'aria-label="([^"]*)"', attrs)
+        assert aria, f"decision link {number} lost its aria-label"
+        assert aria.group(1).startswith(label + " "), (number, aria.group(1))
+        assert len(aria.group(1)) > len(label) + 1, (number, aria.group(1))
+        assert f'<span aria-hidden="true">{number}</span>' in inner, (number, inner)
+        visible = _visible_text(re.sub(r'<span aria-hidden="true">.*?</span>', "", inner))
+        assert visible == label.casefold(), (number, visible)
+
+
+def test_decision_nav_accessible_names_start_with_the_visible_label() -> None:
+    _assert_decision_nav_names_match_visible_text(_html())
+
+
+def _assert_front_03_names_reception_reform_and_as_built(html: str) -> None:
+    group = _capability_group(html, "03")
+    for fragment in ("recebimento-entrega", "reforma-condominio", "documentacao-as-built"):
+        assert f'href="/inspecao-diagnostico-edificacoes/#{fragment}"' in group, fragment
+    assert 'href="/inspecao-diagnostico-edificacoes/"' in group
+
+
+def test_front_03_reaches_reception_reform_and_as_built() -> None:
+    _assert_front_03_names_reception_reform_and_as_built(_html())
+
+
+def _assert_front_04_is_the_party_role_with_valuation_link(html: str) -> None:
+    group = _capability_group(html, "04")
+    body = re.search(r"<h3>.*?</h3><p>(.*?)</p>", group, re.S).group(1)
+    # "Laudo pericial" e a peca do perito do juizo, que a CONFENGE nao vende.
+    assert "laudo pericial" not in body.casefold(), body
+    assert "da parte" in body, body
+    assert "laudo de avaliação de imóvel" in body, body
+    assert 'href="/servicos/#servico-avaliacao"' in group
+    assert 'href="/assistencia-tecnica-pericial-engenharia/"' in group
+
+
+def test_front_04_names_the_party_role_and_links_valuation() -> None:
+    _assert_front_04_is_the_party_role_with_valuation_link(_html())
+
+
+def _assert_hub_closes_for_private_demand_too(html: str) -> None:
+    aside = re.search(r'<h2 id="entregas-check-title">.*?</dl>', html, re.S)
+    assert aside, "'Em 30 segundos' missing"
+    text = _visible_text(aside.group(0))
+    assert "proposta" in text and "r$ 599" in text
+    assert text.index("proposta") < text.index("r$ 599"), text
+    close = re.search(r'<ul class="contact-alt">(.*?)</ul>', html, re.S)
+    assert close, "contact-alt missing"
+    close_links = re.findall(r'<a\b[^>]*data-cta-position="page_close"[^>]*>', close.group(1))
+    assert any('href="/servicos/"' in link for link in close_links), close_links
+    assert any('href="/diagnostico-b2g-expansao/"' in link for link in close_links), close_links
+    main = re.search(r'<main id="conteudo">(.*?)</main>', html, re.S).group(1)
+    whatsapp = re.findall(
+        r'<a\b[^>]*href="https://wa\.me/5548988344559\?text=([^"]+)"[^>]*>', close.group(1)
+    )
+    assert whatsapp, "contact-alt has no contextual WhatsApp channel"
+    assert len(unquote(whatsapp[0])) >= 20
+    assert "wa.me/5548988344559" in main
+    assert "mailto:tiago.sasaki@confenge.com.br" in close.group(1)
+
+
+def test_hub_closes_for_private_demand_too() -> None:
+    _assert_hub_closes_for_private_demand_too(_html())
