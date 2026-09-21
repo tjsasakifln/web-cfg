@@ -61,6 +61,7 @@ ORIGIN_MAIN_PINNED_EDITORIAL_FILES = frozenset(
     {
         "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
         "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+        "diagnostico-pre-licitacao/index.html",
     }
 )
 
