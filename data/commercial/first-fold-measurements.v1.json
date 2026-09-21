@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-21T00:25:21.935Z",
+  "measured_at": "2026-09-21T00:35:55.677Z",
   "measured_on": "2026-09-21",
-  "commit_sha": "8bafb726153b849f97651bd6d18e586d3da6abb0",
+  "commit_sha": "cb4445bc8219e811a12f00135f811a56d666f6bd",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -21,7 +21,7 @@
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
     "atrasos-prorrogacao-obras-publicas/index.html": "1007d73bbc77a643f601dafdabdb22e1304a14999bf511502dfd45f227577cf8",
-    "auditoria-orcamento-licitacao/index.html": "faaa0d8a701ec980a2e793bfa698c515b442eddbf2f20c104670b1b0032b1b96",
+    "auditoria-orcamento-licitacao/index.html": "4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3",
     "bid-room-licitacoes-obras/index.html": "f0abd64f9cb582231d76858d3234ae08e5ebe218b6b38292d554ee70f65f364c",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "da5beee0e55947a8be026ff4fb732e9602f4df32217f073a90ec902eba35e0b8",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
@@ -41,7 +41,7 @@
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
     "defesa-margem-contratos-publicos/index.html": "2163072f090cd242060c4a16eb8c87f75eccdd2f822bb409c6380f108541a2d3",
     "defesa-tecnica-contratos-publicos/index.html": "8e13a1a8a39be648160fbedba61e45669a0329d38a15faf80d64186ec49754a8",
-    "diagnostico-b2g-360/index.html": "da5f78098f7e19c25824aefbfd7448333c5e16353f0963bd126c1d87022b8dcc",
+    "diagnostico-b2g-360/index.html": "7d0146da91188a268e490b18d4ff4ce846cecbb98ea26f08449011bf03e9f832",
     "diagnostico-b2g-expansao/index.html": "89f362cd48b1d44ac90863466e6a41c4e7942fe69bcd209b67d01f12171a97c6",
     "diagnostico-pre-licitacao/index.html": "12afa9caae7ae91f09bf641c6c1e95683add7945dc0673869e48676e803df731",
     "diretoria-b2g/index.html": "6426103db80f64f2729e77d09d07e6983e087892937d3ed434a2f9399066b7a4",
@@ -1348,7 +1348,7 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "faaa0d8a701ec980a2e793bfa698c515b442eddbf2f20c104670b1b0032b1b96",
+      "html_sha256": "4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3",
       "measured_on": "2026-09-21",
       "viewports": {
         "1366x768": {
@@ -3047,7 +3047,7 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "html_sha256": "da5f78098f7e19c25824aefbfd7448333c5e16353f0963bd126c1d87022b8dcc",
+      "html_sha256": "7d0146da91188a268e490b18d4ff4ce846cecbb98ea26f08449011bf03e9f832",
       "measured_on": "2026-09-21",
       "viewports": {
         "1366x768": {
