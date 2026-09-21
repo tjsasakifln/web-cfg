@@ -441,6 +441,47 @@ test("CURRENT survives a consumer restart with equal producer and consumer manif
   assert.equal(repeated.contains_insights, true);
 });
 
+test("a legacy snapshot accepts the historical sync-to-attempt timing gap", async () => {
+  const records = new Map();
+  const store = new MemorySystemStore(records);
+  const history = validHistory();
+  await persistPrivateGscSnapshot(
+    store,
+    { producer: producer(), history, insights: validInsights(history) },
+    { now: NOW },
+  );
+
+  const pointer = records.get("gsc-private-current-v1");
+  const initialId = `gsc-private-snapshot-v1:${pointer.current_snapshot_sha256}`;
+  const legacyUnsigned = structuredClone(records.get(initialId));
+  delete legacyUnsigned.source_observed_at;
+  delete legacyUnsigned.content_carried_forward;
+  delete legacyUnsigned.content_source_snapshot_sha256;
+  delete legacyUnsigned.content_source_history_state_sha256;
+  legacyUnsigned.history.updated_at = "2026-08-29T12:00:00.002Z";
+  legacyUnsigned.history.last_attempt.attempted_at = "2026-08-29T12:00:00.002Z";
+  legacyUnsigned.history.state_sha256 = historyHash(legacyUnsigned.history);
+  legacyUnsigned.history_state_sha256 = legacyUnsigned.history.state_sha256;
+  legacyUnsigned.insights.history_state_sha256 = legacyUnsigned.history.state_sha256;
+  legacyUnsigned.content_sha256 = crypto
+    .createHash("sha256")
+    .update(JSON.stringify(legacyUnsigned.insights))
+    .digest("hex");
+  const legacySnapshot = sealForTest(legacyUnsigned, "snapshot_sha256");
+  const legacyId = `gsc-private-snapshot-v1:${legacySnapshot.snapshot_sha256}`;
+  records.delete(initialId);
+  records.set(legacyId, legacySnapshot);
+  records.set("gsc-private-current-v1", sealForTest({
+    ...pointer,
+    current_snapshot_sha256: legacySnapshot.snapshot_sha256,
+    latest_snapshot_sha256: legacySnapshot.snapshot_sha256,
+  }, "pointer_sha256"));
+
+  const consumed = await readPrivateGscSnapshot(store, { now: NOW });
+  assert.equal(consumed.status, "CURRENT");
+  assert.equal(consumed.meta.snapshot_sha256, legacySnapshot.snapshot_sha256);
+});
+
 test("a ready repeated snapshot advances history and carries the exact known insights", async () => {
   const records = new Map();
   const store = new MemorySystemStore(records);
