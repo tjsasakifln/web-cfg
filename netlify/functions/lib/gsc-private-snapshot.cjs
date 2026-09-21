@@ -88,7 +88,7 @@ function validatePointer(pointer) {
 function matchesHistoryProvenance(
   { manifestSha256, asOf, producedAt },
   history,
-  { allowLegacyFailureTiming = false } = {},
+  { allowLegacyAttemptTiming = false } = {},
 ) {
   const hasSnapshot = SHA256_RE.test(String(manifestSha256 || "")) &&
     /^\d{4}-\d{2}-\d{2}$/.test(String(asOf || ""));
@@ -100,13 +100,16 @@ function matchesHistoryProvenance(
       lastAttempt?.as_of == null &&
       (
         sameInstant(lastAttempt?.attempted_at, producedAt) ||
-        allowLegacyFailureTiming
+        allowLegacyAttemptTiming
       );
   }
   const observation = sourceObservation(history, manifestSha256, asOf);
   return lastAttempt?.snapshot_sha256 === manifestSha256 &&
     lastAttempt?.as_of === asOf &&
-    sameInstant(lastAttempt?.attempted_at, producedAt) &&
+    (
+      sameInstant(lastAttempt?.attempted_at, producedAt) ||
+      allowLegacyAttemptTiming
+    ) &&
     Boolean(observation) &&
     (
       lastAttempt?.outcome === "SNAPSHOT_REPEATED" ||
@@ -138,7 +141,7 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
     manifestSha256: snapshot.manifest_sha256,
     asOf: snapshot.as_of,
     producedAt: snapshot.produced_at,
-  }, snapshot.history, { allowLegacyFailureTiming: legacySnapshot })) {
+  }, snapshot.history, { allowLegacyAttemptTiming: legacySnapshot })) {
     return { ok: false, status: "UNKNOWN", error: "gsc_private_snapshot_provenance_mismatch" };
   }
   const observation = sourceObservation(snapshot.history, snapshot.manifest_sha256, snapshot.as_of);
