@@ -3,7 +3,7 @@
   "issue": "#327",
   "measured_at": "2026-09-21T00:35:55.677Z",
   "measured_on": "2026-09-21",
-  "commit_sha": "cb4445bc8219e811a12f00135f811a56d666f6bd",
+  "commit_sha": "424dc62642cdd7668ba82c8eada6fc1db6e845b4",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
