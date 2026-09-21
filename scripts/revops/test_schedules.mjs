@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { tmpdir } from "os";
 import { createHash } from "crypto";
 import { createOpsJsonClient } from "./ops_fetch.mjs";
+import { runInboundDrain } from "./scheduled_inbound_drain.mjs";
 import {
   commercialFunnelSummary,
   inboundAuditSummary,
@@ -378,6 +379,8 @@ else {
   else pass("daily_cron");
   if (!y.includes("0 12 * * 1")) fail("weekly_cron");
   else pass("weekly_cron");
+  if (!y.includes("17 * * * *") || !y.includes("scheduled_inbound_drain.mjs")) fail("hourly_inbound_drain");
+  else pass("hourly_inbound_drain");
   if (!y.includes("scheduled_daily.mjs")) fail("daily_entry");
   else pass("daily_entry");
   if (!y.includes("inbound_counters_proof.mjs") || !y.includes("inbound-proof")) {
@@ -411,6 +414,111 @@ else {
 }
 
 {
+  const calls = [];
+  const result = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      return {
+        status: 200,
+        json: async () => ({
+          ok: true,
+          attempted: 2,
+          delivered: 2,
+          retryable: 0,
+          blocked: 0,
+          dead: 0,
+          aborted: false,
+          email_retry: { ok: true },
+          email_reconcile_required: 0,
+        }),
+      };
+    },
+  });
+  if (!result.ok || result.attempted !== 2 || calls.length !== 1 || calls[0].options.method !== "POST") {
+    fail("hourly_inbound_drain_success_contract", { result, calls: calls.length });
+  } else pass("hourly_inbound_drain_success_contract");
+  const alert = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({ ok: true, attempted: 0, delivered: 0, email_reconcile_required: 1 }),
+    }),
+  });
+  if (alert.ok || alert.email_reconcile_required !== 1) fail("hourly_inbound_drain_reconcile_alert", alert);
+  else pass("hourly_inbound_drain_reconcile_alert");
+  const emailFailure = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({
+        ok: true,
+        attempted: 1,
+        delivered: 0,
+        email_reconcile_required: 0,
+        email_retry: { ok: false, error: "email_retry_unexpected" },
+      }),
+    }),
+  });
+  if (emailFailure.ok || emailFailure.email_retry_ok !== false) fail("hourly_inbound_drain_email_failure", emailFailure);
+  else pass("hourly_inbound_drain_email_failure");
+  const aborted = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({
+        ok: true,
+        attempted: 1,
+        delivered: 0,
+        retryable: 1,
+        aborted: true,
+        abort_reason: "abnormal_retryable_rate",
+        email_reconcile_required: 0,
+        email_retry: { ok: true },
+      }),
+    }),
+  });
+  if (aborted.ok || !aborted.aborted || aborted.retryable !== 1) fail("hourly_inbound_drain_abort", aborted);
+  else pass("hourly_inbound_drain_abort");
+  const incomplete = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({ ok: true, attempted: 0, delivered: 0, email_reconcile_required: 0 }),
+    }),
+  });
+  if (incomplete.ok || incomplete.retryable !== null || incomplete.email_retry_ok !== false) {
+    fail("hourly_inbound_drain_schema_drift", incomplete);
+  } else pass("hourly_inbound_drain_schema_drift");
+  const malformedReconcile = await runInboundDrain({
+    token: "unit-test-token",
+    base: "https://confenge.test",
+    fetchImpl: async () => ({
+      status: 200,
+      json: async () => ({
+        ok: true,
+        attempted: 0,
+        delivered: 0,
+        retryable: 0,
+        blocked: 0,
+        dead: 0,
+        aborted: false,
+        email_retry: { ok: true },
+        email_reconcile_required: "0",
+      }),
+    }),
+  });
+  if (malformedReconcile.ok || malformedReconcile.email_reconcile_required !== null) {
+    fail("hourly_inbound_drain_reconcile_schema", malformedReconcile);
+  } else pass("hourly_inbound_drain_reconcile_schema");
+}
+
+{
   const daily = readFileSync(resolve(ROOT, "scripts/revops/scheduled_daily.mjs"), "utf8");
   if (!daily.includes("produce_search_observation") || !daily.includes("drain_search_observation")) {
     fail("daily_search_observation");
@@ -426,6 +534,7 @@ else {
 // 2) Entry scripts exist
 for (const rel of [
   "scripts/revops/scheduled_daily.mjs",
+  "scripts/revops/scheduled_inbound_drain.mjs",
   "scripts/revops/inbound_counters_proof.mjs",
   "scripts/revops/ops_fetch.mjs",
   "scripts/revops/scheduled_nurture.mjs",

@@ -8,12 +8,37 @@ import {
   publish,
   restoreHistory,
   rollback,
+  validateProducerHistory,
   validatePublishable,
   validateSyncProvenance,
 } from "./publish_gsc_insights.mjs";
 
 const require = createRequire(import.meta.url);
 const { historyHash, observationHash, validateHistoryState } = require("../../netlify/functions/lib/gsc-history.cjs");
+const {
+  persistPrivateGscSnapshot,
+  readPrivateGscHistory,
+  readPrivateGscSnapshot,
+} = require("../../netlify/functions/lib/gsc-private-snapshot.cjs");
+
+class MemorySystemStore {
+  constructor() {
+    this.records = new Map();
+  }
+  async getSystemRecord(id) {
+    return structuredClone(this.records.get(id) || null);
+  }
+  async putSystemRecord(id, value, { onlyIfNew = false } = {}) {
+    if (onlyIfNew && this.records.has(id)) {
+      const error = new Error("already_exists");
+      error.code = "ALREADY_EXISTS";
+      error.existing = structuredClone(this.records.get(id));
+      throw error;
+    }
+    this.records.set(id, structuredClone(value));
+    return value;
+  }
+}
 
 let failed = 0;
 function check(name, condition, detail = "") {
@@ -150,6 +175,32 @@ const syncState = {
   manifest_sha256: history.last_known_good.snapshot_sha256,
 };
 check("current_sync_provenance", validateSyncProvenance(insights, syncState, history));
+const repeatedSyncAt = new Date(now.getTime() + 60_000).toISOString();
+const repeatedAttemptAt = new Date(now.getTime() + 60_002).toISOString();
+const repeatedHistory = structuredClone(history);
+repeatedHistory.last_attempt = {
+  ...repeatedHistory.last_attempt,
+  attempted_at: repeatedAttemptAt,
+  outcome: "SNAPSHOT_REPEATED",
+  reason_codes: ["snapshot_repeated"],
+};
+check(
+  "repeated_snapshot_accepts_existing_observation",
+  validateProducerHistory({ ...syncState, last_sync_at: repeatedSyncAt }, repeatedHistory).hasProducerSnapshot,
+);
+try {
+  validateProducerHistory(
+    { ...syncState, last_sync_at: new Date(now.getTime() + 120_000).toISOString() },
+    repeatedHistory,
+  );
+  check("repeated_snapshot_requires_latest_attempt_time", false);
+} catch (error) {
+  check(
+    "repeated_snapshot_requires_latest_attempt_time",
+    error.message === "gsc_sync_producer_history_mismatch",
+    error.message,
+  );
+}
 for (const [name, patch] of [
   ["fixture_snapshot_rejected", { fixture: true }],
   ["invented_baseline_rejected", { live_baseline_invented: true }],
@@ -238,6 +289,8 @@ const fakeFetch = async (url, options = {}) => {
         ok: true,
         durable: true,
         status: "CURRENT",
+        promoted: true,
+        content_carried_forward: false,
         content_sha256: contentHash(body.insights),
         history_state_sha256: body.history.state_sha256,
         producer_manifest_sha256: body.producer.manifest_sha256,
@@ -271,6 +324,9 @@ const fakeFetch = async (url, options = {}) => {
         content_sha256: sha,
         snapshot_content_sha256: sha,
         history_state_sha256: history.state_sha256,
+        delivered_history_state_sha256: history.state_sha256,
+        source_history_state_sha256: history.state_sha256,
+        content_carried_forward: false,
         ready_for_product_decisions: true,
         producer_manifest_sha256: syncState.manifest_sha256,
         consumer_manifest_sha256: syncState.manifest_sha256,
@@ -302,6 +358,182 @@ check("publisher_read_after_write_proof", proof.ok && proof.status === "CURRENT"
 check("publisher_history_read_after_write", proof.history_state_sha256 === history.state_sha256);
 check("publisher_manifest_hash_parity", proof.producer_manifest_sha256 === proof.consumer_manifest_sha256 && proof.consumer_manifest_sha256 === syncState.manifest_sha256);
 check("publisher_as_of_parity", proof.producer_as_of === proof.consumer_as_of && proof.consumer_as_of === syncState.as_of);
+
+// Real repeated-snapshot shape: sync and history timestamps come from two
+// consecutive clock reads, while the durable consumer must carry forward the
+// exact last known insights and advance only the history envelope.
+{
+  const store = new MemorySystemStore();
+  await persistPrivateGscSnapshot(
+    store,
+    {
+      producer: {
+        schema_version: syncState.schema_version,
+        manifest_schema_version: syncState.manifest_schema_version,
+        manifest_sha256: syncState.manifest_sha256,
+        as_of: syncState.as_of,
+        produced_at: history.last_attempt.attempted_at,
+        source: "search_analytics_api",
+      },
+      history,
+      insights,
+    },
+    { now },
+  );
+  const repeated = structuredClone(history);
+  repeated.parent_state_sha256 = history.state_sha256;
+  repeated.updated_at = repeatedAttemptAt;
+  repeated.last_attempt = {
+    ...repeated.last_attempt,
+    attempted_at: repeatedAttemptAt,
+    run_id: "run-repeated-real-shape",
+    outcome: "SNAPSHOT_REPEATED",
+    reason_codes: ["snapshot_repeated"],
+  };
+  repeated.state_sha256 = historyHash(repeated);
+  const repeatedSync = {
+    ...syncState,
+    last_sync_at: repeatedSyncAt,
+    promote_insights: false,
+    history_state_sha256: repeated.state_sha256,
+  };
+  const repeatedStatePath = path.join(tmp, "last_sync_repeated.json");
+  const repeatedHistoryPath = path.join(tmp, "history_repeated.json");
+  fs.writeFileSync(repeatedStatePath, JSON.stringify(repeatedSync), "utf8");
+  fs.writeFileSync(repeatedHistoryPath, JSON.stringify(repeated), "utf8");
+  const ingestNow = new Date(Date.parse(repeatedAttemptAt) + 1000);
+  const integratedFetch = async (url, options = {}) => {
+    if (url.includes("gsc_insights_ingest")) {
+      const body = JSON.parse(options.body);
+      const receipt = await persistPrivateGscSnapshot(store, body, { now: ingestNow });
+      return new Response(JSON.stringify(receipt), { status: 200 });
+    }
+    if (url.includes("gsc_history")) {
+      const result = await readPrivateGscHistory(store, { now: ingestNow });
+      return new Response(JSON.stringify(result), { status: 200 });
+    }
+    const result = await readPrivateGscSnapshot(store, { now: ingestNow });
+    return new Response(JSON.stringify(result), { status: 200 });
+  };
+  const repeatedProof = await publish({
+    input,
+    syncStatePath: repeatedStatePath,
+    historyStatePath: repeatedHistoryPath,
+    baseUrl: "https://confenge.com.br",
+    token: "test-token-at-least-16-chars",
+    fetchImpl: integratedFetch,
+  });
+  check(
+    "repeated_snapshot_publish_persist_readback",
+    repeatedProof.status === "CURRENT" &&
+      repeatedProof.promoted === true &&
+      repeatedProof.durable_snapshot_promoted === true &&
+      repeatedProof.insights_regenerated === false &&
+      repeatedProof.content_carried_forward === true &&
+      repeatedProof.history_state_sha256 === repeated.state_sha256 &&
+      repeatedProof.content_sha256 === contentHash(insights) &&
+      repeatedProof.producer_as_of === syncState.as_of &&
+      repeatedProof.consumer_as_of === syncState.as_of,
+    repeatedProof,
+  );
+}
+
+// A failed attempt is still durably published and proven against the latest
+// history while the previously current insights remain available read-only.
+{
+  const store = new MemorySystemStore();
+  await persistPrivateGscSnapshot(
+    store,
+    {
+      producer: {
+        schema_version: syncState.schema_version,
+        manifest_schema_version: syncState.manifest_schema_version,
+        manifest_sha256: syncState.manifest_sha256,
+        as_of: syncState.as_of,
+        produced_at: history.last_attempt.attempted_at,
+        source: "search_analytics_api",
+      },
+      history,
+      insights,
+    },
+    { now },
+  );
+  const failedAt = new Date(now.getTime() + 180_002).toISOString();
+  const failedSyncAt = new Date(now.getTime() + 180_000).toISOString();
+  const failedHistory = structuredClone(history);
+  failedHistory.parent_state_sha256 = history.state_sha256;
+  failedHistory.updated_at = failedAt;
+  failedHistory.last_attempt = {
+    attempted_at: failedAt,
+    run_id: "run-failed-real-shape",
+    outcome: "RUN_FAILED",
+    as_of: null,
+    snapshot_sha256: null,
+    reason_codes: ["dependency_unavailable", "last_known_good_available"],
+  };
+  failedHistory.readiness = {
+    ...failedHistory.readiness,
+    ready_for_product_decisions: false,
+    status: "STALE",
+    access_mode: "READ_ONLY",
+    reason_codes: ["dependency_unavailable", "last_known_good_available"],
+  };
+  failedHistory.state_sha256 = historyHash(failedHistory);
+  const failedSync = {
+    ...syncState,
+    as_of: null,
+    manifest_sha256: null,
+    last_sync_at: failedSyncAt,
+    promote_insights: false,
+    ready_for_product_decisions: false,
+    history_state_sha256: failedHistory.state_sha256,
+  };
+  const failedStatePath = path.join(tmp, "last_sync_failed.json");
+  const failedHistoryPath = path.join(tmp, "history_failed.json");
+  fs.writeFileSync(failedStatePath, JSON.stringify(failedSync), "utf8");
+  fs.writeFileSync(failedHistoryPath, JSON.stringify(failedHistory), "utf8");
+  const ingestNow = new Date(Date.parse(failedAt) + 1000);
+  const integratedFetch = async (url, options = {}) => {
+    if (url.includes("gsc_insights_ingest")) {
+      const receipt = await persistPrivateGscSnapshot(
+        store,
+        JSON.parse(options.body),
+        { now: ingestNow },
+      );
+      return new Response(JSON.stringify(receipt), { status: 200 });
+    }
+    if (url.includes("gsc_history")) {
+      return new Response(
+        JSON.stringify(await readPrivateGscHistory(store, { now: ingestNow })),
+        { status: 200 },
+      );
+    }
+    return new Response(
+      JSON.stringify(await readPrivateGscSnapshot(store, { now: ingestNow })),
+      { status: 200 },
+    );
+  };
+  const failedProof = await publish({
+    input,
+    syncStatePath: failedStatePath,
+    historyStatePath: failedHistoryPath,
+    baseUrl: "https://confenge.com.br",
+    token: "test-token-at-least-16-chars",
+    fetchImpl: integratedFetch,
+  });
+  check(
+    "failed_snapshot_publish_persist_readback",
+    failedProof.status === "STALE" &&
+      failedProof.ok === false &&
+      failedProof.durable === true &&
+      failedProof.promoted === false &&
+      failedProof.insights_regenerated === false &&
+      failedProof.content_carried_forward === false &&
+      failedProof.history_state_sha256 === failedHistory.state_sha256 &&
+      failedProof.delivered_history_state_sha256 === history.state_sha256,
+    failedProof,
+  );
+}
 
 const firstObservation = structuredClone(observations[0]);
 let preThresholdHistory = {
@@ -365,8 +597,13 @@ const preThresholdProof = await publish({
         ok: true,
         durable: true,
         status: "UNKNOWN",
+        promoted: false,
+        content_carried_forward: false,
         content_sha256: null,
         history_state_sha256: preThresholdHistory.state_sha256,
+        delivered_history_state_sha256: null,
+        source_history_state_sha256: null,
+        content_carried_forward: false,
         snapshot_sha256: preThresholdSnapshotSha,
         producer_manifest_sha256: preThresholdPosted.producer.manifest_sha256,
         consumer_manifest_sha256: preThresholdPosted.producer.manifest_sha256,
@@ -394,6 +631,7 @@ const preThresholdProof = await publish({
         as_of: preThresholdSync.as_of,
         delivery_source: "durable_store",
         history_state_sha256: preThresholdHistory.state_sha256,
+        content_carried_forward: false,
         ready_for_product_decisions: false,
         latest_attempt_snapshot_sha256: preThresholdSnapshotSha,
         latest_attempt_manifest_sha256: preThresholdSync.manifest_sha256,

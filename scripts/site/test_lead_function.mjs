@@ -1194,7 +1194,77 @@ _reset();
   pass("idempotency", { lead_id: d1.lead_id, second_status: r2.statusCode, idempotent: d2.idempotent });
 }
 
-// 6a) Attribution cannot become a side-channel for PII in receipts/logs/analytics.
+// 6a) Reusing a normal-form key with changed commercial material is a conflict.
+{
+  const payload = {
+    nome: "QA Material",
+    email: "qa-material@example.com",
+    estagio: "contrato em análise",
+    jornada: "contrato",
+    mensagem: "Preciso revisar uma medição.",
+    consentimento: "1",
+    idempotency_key: "fixed-material-key-001",
+  };
+  const first = await handler(event(payload, "POST", { "Idempotency-Key": payload.idempotency_key }));
+  const replay = await handler(event(payload, "POST", { "Idempotency-Key": payload.idempotency_key }));
+  const changed = await handler(event({
+    ...payload,
+    mensagem: "Preciso revisar um aditivo.",
+  }, "POST", { "Idempotency-Key": payload.idempotency_key }));
+  const firstBody = JSON.parse(first.body);
+  const replayBody = JSON.parse(replay.body);
+  const changedBody = JSON.parse(changed.body);
+  const stored = firstBody.lead_id ? await mem.get(firstBody.lead_id) : null;
+  if (first.statusCode !== 201 || replay.statusCode !== 200 || replayBody.idempotent !== true) {
+    fail("standard_idempotency_exact_replay", { first: first.statusCode, replay: replay.statusCode, replayBody });
+  }
+  if (changed.statusCode !== 409 || changedBody.error !== "idempotency_conflict") {
+    fail("standard_idempotency_material_conflict", { status: changed.statusCode, changedBody });
+  }
+  if (!stored?.idempotency_material_hash || stored.idempotency_material_hash.length !== 64) {
+    fail("standard_idempotency_material_hash_persisted", stored?.idempotency_material_hash);
+  }
+  pass("standard_idempotency_material_conflict", { lead_id: firstBody.lead_id });
+  _reset();
+}
+
+// 6aa) A paid Radar order binds its normalized purchase parameters to the key.
+{
+  const payload = {
+    nome: "QA Radar Material",
+    email: "qa-radar-material@example.com",
+    estagio: "radar-decisorio-parametros",
+    jornada: "edital",
+    consentimento: "1",
+    cnpj: "52.407.089/0001-09",
+    radar_recorte: "cidade_base",
+    radar_uf: "SC",
+    radar_cidade_base: "Florianópolis",
+    radar_raio_km: "80",
+    radar_segmentos: ["edificacoes-publicas", "saneamento-hidraulica"],
+    radar_acervo_tecnico: "Acervo técnico em edificações e saneamento para contratos públicos.",
+    radar_email_entrega: "qa-radar-material@example.com",
+    idempotency_key: "fixed-radar-material-key-001",
+  };
+  const headers = { "Idempotency-Key": payload.idempotency_key };
+  const first = await handler(event(payload, "POST", headers));
+  const firstBody = JSON.parse(first.body);
+  const legacyStored = await mem.get(firstBody.lead_id);
+  await mem.put({ ...legacyStored, idempotency_material_hash: "0".repeat(64) });
+  const replay = await handler(event(payload, "POST", headers));
+  const changed = await handler(event({ ...payload, radar_raio_km: "120" }, "POST", headers));
+  const replayBody = JSON.parse(replay.body);
+  const changedBody = JSON.parse(changed.body);
+  if (first.statusCode !== 201 || replay.statusCode !== 200 || replayBody.idempotent !== true) {
+    fail("radar_idempotency_exact_replay", { first: first.statusCode, replay: replay.statusCode, replayBody });
+  }
+  if (changed.statusCode !== 409 || changedBody.error !== "idempotency_conflict") {
+    fail("radar_idempotency_material_conflict", { status: changed.statusCode, changedBody });
+  } else pass("radar_idempotency_material_conflict");
+  _reset();
+}
+
+// 6b) Attribution cannot become a side-channel for PII in receipts/logs/analytics.
 {
   const marker = "private-person@example.com";
   const originalLog = console.log;
@@ -3299,6 +3369,11 @@ for (const bodyHonoursAbort of [true, false]) {
   // buildLeadRecord (lead-store.cjs) now persists origin_class in the durable row.
   if (stored.origin_class !== "search_organic") {
     fail("origin_class_store_value", stored.origin_class);
+  }
+  const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const forwardedOrigin = inbound.mapLeadToInboundV1(stored);
+  if (forwardedOrigin.web_origin_class !== "search_organic" || Object.prototype.hasOwnProperty.call(forwardedOrigin, "origin_class")) {
+    fail("origin_class_handoff_evidence_not_commercial_class", forwardedOrigin);
   }
   pass("origin_class_handler_no_leak", { stored_origin_class: stored.origin_class });
 }

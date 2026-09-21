@@ -112,13 +112,13 @@ def test_execute_set_matches_ready_redirects():
 def test_execute_set_names_a_review_date_for_every_hold():
     execute = json.loads((INVENTORY_PATH.parent / "execute-set.v2.json").read_text(encoding="utf-8"))
     assert len(execute["holds"]) == 54
-    assert {row["review_date"] for row in execute["holds"]} == {"2026-09-20"}
+    assert {row["review_date"] for row in execute["holds"]} == {"2026-10-19"}
 
 
 def test_hold_review_date_expires_against_injected_current_date():
     from datetime import date
 
-    report = validate_inventory(load_inventory(), today=date(2026, 9, 21))
+    report = validate_inventory(load_inventory(), today=date(2026, 10, 20))
     assert not report["ok"]
     assert any("review_date is already stale" in item for item in report["errors"])
 

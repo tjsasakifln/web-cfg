@@ -31,7 +31,7 @@ from legacy_equity.inventory import (  # noqa: E402
 LEGACY_ORIGIN = "https://smartlic.tech"
 CONFENGE = "https://confenge.com.br"
 STABLE_GENERATED_AT = "2026-08-24T00:00:00Z"
-HOLD_REVIEW_DATE = "2026-09-20"
+HOLD_REVIEW_DATE = "2026-10-19"
 
 QUERY_RULE = DEFAULT_QUERY_STRING_POLICY
 

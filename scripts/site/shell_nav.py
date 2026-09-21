@@ -55,6 +55,20 @@ from scripts.site.public_ia import (  # noqa: E402
 
 BRAND_PATH = ROOT / "data" / "site" / "brand.json"
 PUBLIC_FAMILY_REGISTRY_PATH = ROOT / "data" / "organic" / "public-family-registry.json"
+EDITORIAL_DECISIONS_PATH = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
+CONTRACT_ANALYSIS_APPROVALS_PATH = ROOT / "data" / "editorial" / "contract-analysis" / "approvals.json"
+ORIGIN_MAIN_PINNED_FILES = frozenset(
+    {
+        "aditivos-obras-publicas/index.html",
+        "auditoria-orcamento-licitacao/index.html",
+        "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
+        "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+        "diagnostico-b2g-360/index.html",
+        "diagnostico-pre-licitacao/index.html",
+        "medicoes-glosas-obras-publicas/index.html",
+        "reequilibrio-obras-publicas/index.html",
+    }
+)
 
 # Directories that never ship a visitor shell.
 SKIP_DIR_PARTS = frozenset(
@@ -129,6 +143,55 @@ def _frozen_shell_files() -> frozenset[str]:
 
 
 FROZEN_SHELL_FILES = _frozen_shell_files()
+
+
+def _hash_bound_editorial_files() -> frozenset[str]:
+    """Keep approved editorial material byte-identical until reapproval."""
+    protected: set[str] = set(ORIGIN_MAIN_PINNED_FILES)
+    try:
+        decisions = json.loads(EDITORIAL_DECISIONS_PATH.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - a missing register protects nothing here
+        decisions = {}
+    protected.update(
+        row["html"]
+        for row in decisions.get("urls") or []
+        if row.get("approve_cli_indexable") is True
+        and isinstance(row.get("approval"), dict)
+        and str(row["approval"].get("material_hash") or "").startswith("sha256:")
+    )
+    try:
+        contract_approvals = json.loads(CONTRACT_ANALYSIS_APPROVALS_PATH.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - a missing register protects nothing here
+        contract_approvals = {}
+    for approval in contract_approvals.get("approvals") or []:
+        canonical_url = str(approval.get("canonical_url") or "")
+        rendered_hash = str(approval.get("rendered_content_hash") or "")
+        if (
+            approval.get("state") == "PUBLISHABLE_INDEX"
+            and approval.get("withdrawn") is not True
+            and canonical_url.startswith("/")
+            and re.fullmatch(r"[a-f0-9]{64}", rendered_hash)
+        ):
+            protected.add(f"{canonical_url.strip('/')}/index.html")
+    for contract_path in (ROOT / "docs" / "evidence").glob("**/canary-contract.json"):
+        try:
+            contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001 - malformed evidence protects no extra path here
+            continue
+        canary = contract.get("canary") or {}
+        canary_hash = str(canary.get("after_sha256") or contract.get("after_sha256") or "")
+        if canary_hash.startswith("sha256:"):
+            if canary.get("source"):
+                protected.add(canary["source"])
+        elif canary.get("source") and re.fullmatch(r"[a-f0-9]{64}", canary_hash):
+            protected.add(canary["source"])
+        for sibling in contract.get("frozen_siblings") or []:
+            if sibling.get("path") and re.fullmatch(r"[a-f0-9]{64}", str(sibling.get("sha256") or "")):
+                protected.add(sibling["path"])
+    return frozenset(protected)
+
+
+HASH_BOUND_EDITORIAL_FILES = _hash_bound_editorial_files()
 
 DESKTOP_NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*\bdesktop-nav\b[^"]*"[^>]*>)(.*?)(</nav>)',
@@ -300,16 +363,17 @@ def shipped_html_files() -> list[Path]:
         rel = path.relative_to(ROOT)
         if any(part in SKIP_DIR_PARTS for part in rel.parts):
             continue
-        if rel.as_posix() in FROZEN_SHELL_FILES:
+        if rel.as_posix() in FROZEN_SHELL_FILES or rel.as_posix() in HASH_BOUND_EDITORIAL_FILES:
             continue
         out.append(path)
     return out
 
 
 def _shell_sync_files() -> list[Path]:
-    """Mutable pages plus pinned pillars eligible for footer-only corrections."""
+    """Mutable pages plus BOFU pillars eligible for footer-only corrections."""
     paths = set(shipped_html_files())
     paths.update(ROOT / rel for rel in FROZEN_SHELL_FILES if (ROOT / rel).is_file())
+    paths.difference_update(ROOT / rel for rel in HASH_BOUND_EDITORIAL_FILES)
     return sorted(paths)
 
 

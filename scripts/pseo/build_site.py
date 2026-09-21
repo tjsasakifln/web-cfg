@@ -13,6 +13,7 @@ Order (fail-closed on critical):
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -402,6 +403,9 @@ _TURNSTILE_WIDGET_RE = re.compile(
 )
 _CURRENCY_BREAKABLE_GAP_RE = re.compile(r"R\$[\t\r\n ]+(?=\d)")
 _NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','js');</script>"
+_MAIN_SCRIPT_SRC_RE = re.compile(
+    r'(?is)(<script\b[^>]*\bsrc=["\'])/script\.js(?:\?[^"\']*)?(["\'])'
+)
 
 
 def _has_behaviour_script(html: str) -> bool:
@@ -574,6 +578,37 @@ def normalize_responsive_public_html(public_root: Path) -> dict[str, int]:
         "currency_files": currency_files,
         "opaque_token_files": opaque_token_files,
         "marker_files": marker_files,
+    }
+
+
+def fingerprint_main_script(public_root: Path) -> dict[str, str | int]:
+    """Bind every artifact HTML reference to the exact /script.js bytes."""
+    script_path = public_root / "script.js"
+    if not script_path.is_file():
+        raise RuntimeError("main_script_missing_from_public_artifact")
+    fingerprint = hashlib.sha256(script_path.read_bytes()).hexdigest()[:16]
+    versioned_src = f"/script.js?v={fingerprint}"
+    files = 0
+    references = 0
+    for path in sorted(public_root.rglob("*.html")):
+        raw = path.read_text(encoding="utf-8")
+        rewritten, count = _MAIN_SCRIPT_SRC_RE.subn(
+            lambda match: f"{match.group(1)}{versioned_src}{match.group(2)}",
+            raw,
+        )
+        if count:
+            references += count
+            files += 1
+            if rewritten != raw:
+                path.write_text(rewritten, encoding="utf-8")
+    if references == 0:
+        raise RuntimeError("main_script_unreferenced_in_public_artifact")
+    return {
+        "algorithm": "sha256-16",
+        "fingerprint": fingerprint,
+        "src": versioned_src,
+        "files": files,
+        "references": references,
     }
 
 
@@ -830,6 +865,12 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001
         errors.append(f"turnstile_publish_config_failed:{exc}")
 
+    main_script_fingerprint: dict[str, str | int] = {}
+    try:
+        main_script_fingerprint = fingerprint_main_script(ROOT / PUBLIC_DIR_NAME)
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"main_script_fingerprint_failed:{exc}")
+
     # Minify the PUBLIC copies of the tool scripts (_site/assets/js/*.js only;
     # source assets/js/ stays readable and untouched) before the publish tree
     # is hashed below. Fail-closed like the em-dash scrub: an unminified
@@ -942,6 +983,7 @@ def main(argv: list[str] | None = None) -> int:
         "visible_parity": parity_summary,
         "prototype_isolation": prototype_isolation,
         "turnstile": turnstile_config,
+        "main_script_fingerprint": main_script_fingerprint,
         "responsive_html": responsive_html,
         "public_artifact": {
             "assembled": True,

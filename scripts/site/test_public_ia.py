@@ -229,6 +229,9 @@ def test_footer_is_not_a_taxonomy_dump():
     assert "Inteligência" not in rendered
     assert "Metodologia" not in rendered
     assert rendered.count("<a ") <= 16
+    assert "Perícias e avaliações" not in rendered
+    assert '<a href="/#situacao-pericia">Perícias e disputas</a>' in rendered
+    assert '<a href="/#situacao-avaliacao">Avaliação de imóvel</a>' in rendered
 
 
 def _assert_national_service_is_conditioned(rendered: str) -> None:
@@ -286,6 +289,23 @@ def test_page_shell_output_is_idempotent_with_shell_nav():
     assert "Serviços e problemas" in html
     assert "Obras públicas" in html
     assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html
+
+
+def test_hash_bound_editorial_canary_is_not_rewritten_by_shell_sync():
+    from scripts.site.shell_nav import HASH_BOUND_EDITORIAL_FILES, _shell_sync_files
+
+    protected = {
+        "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+        "conteudos/atraso-na-medicao-obra-publica/index.html",
+        "conteudos/glosa-de-medicao-obra-publica/index.html",
+        "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+        "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+        "medicoes-glosas-obras-publicas/index.html",
+        "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+    }
+    mutable = {path.relative_to(ROOT).as_posix() for path in _shell_sync_files()}
+    assert protected <= HASH_BOUND_EDITORIAL_FILES
+    assert protected.isdisjoint(mutable)
 
 
 # ---------------------------------------------------------------------------

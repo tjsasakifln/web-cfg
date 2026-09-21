@@ -181,6 +181,10 @@ function mapLeadToInboundV1(record) {
   if (assetId) body.asset_id = assetId;
   const ctaId = clampText(record.cta_id, 120);
   if (ctaId) body.cta_id = ctaId;
+  const webOriginClass = clampText(record.origin_class, 40);
+  if (["campaign", "search_organic", "referral", "direct_or_unknown"].includes(webOriginClass)) {
+    body.web_origin_class = webOriginClass;
+  }
 
   const landing = sanitizeUrl(record.landing_url || record.landing_page, { allowPath: true });
   if (landing) body.landing_url = landing;

@@ -1,7 +1,8 @@
 # Primary operational scheduler for CONFENGE RevOps.
 # One mechanism: GitHub Actions (versioned, testable, secrets in env).
 #
-# Daily (11:15 UTC ≈ 08:15 America/Sao_Paulo):
+# Hourly (minute 17): inbound handoff and lead email drain, with reconciliation alert
+# Daily (11:15 UTC, 08:15 America/Sao_Paulo):
 #   health, isolated probe, GSC sync, analytics, uncontacted reals,
 #   Resend/storage signals, deploy-vs-main, critical URLs, nurture tick
 # Weekly (Monday 12:00 UTC):
@@ -12,6 +13,8 @@ name: revops-scheduled
 
 on:
   schedule:
+    # Hourly inbound and email drain
+    - cron: "17 * * * *"
     # Daily ops — 11:15 UTC
     - cron: "15 11 * * *"
     # Weekly report — Mondays 12:00 UTC
@@ -29,6 +32,7 @@ on:
           - nurture
           - gsc
           - inbound-proof
+          - inbound-drain
           - all
 
 concurrency:
@@ -36,6 +40,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  inbound_drain:
+    name: inbound-email-drain
+    if: >
+      github.event_name == 'schedule' && github.event.schedule == '17 * * * *'
+      || github.event_name == 'workflow_dispatch' && (github.event.inputs.job == 'inbound-drain' || github.event.inputs.job == 'all')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+      - name: Drain inbound handoff and lead email queue
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+        run: node scripts/revops/scheduled_inbound_drain.mjs
+
   daily:
     name: daily-ops
     if: >

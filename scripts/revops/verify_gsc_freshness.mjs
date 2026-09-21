@@ -66,6 +66,11 @@ export function evaluateConsumerPayload(payload, { now = new Date() } = {}) {
   }
   const producerManifest = String(meta.producer_manifest_sha256 || "");
   const consumerManifest = String(meta.consumer_manifest_sha256 || "");
+  const contentCarriedForward = meta.content_carried_forward === true;
+  const sourceHistoryStateSha256 = String(meta.source_history_state_sha256 || "");
+  const historyParentStateSha256 = String(meta.history_parent_state_sha256 || "");
+  const deliveredHistoryStateSha256 = String(meta.delivered_history_state_sha256 || "");
+  const sourceSnapshotSha256 = String(meta.source_snapshot_sha256 || "");
   if (
     !SHA256_RE.test(producerManifest) ||
     producerManifest !== consumerManifest ||
@@ -76,7 +81,15 @@ export function evaluateConsumerPayload(payload, { now = new Date() } = {}) {
   if (
     !SHA256_RE.test(String(meta.snapshot_sha256 || "")) ||
     !SHA256_RE.test(String(meta.history_state_sha256 || "")) ||
-    insights.history_state_sha256 !== meta.history_state_sha256 ||
+    !SHA256_RE.test(deliveredHistoryStateSha256) ||
+    insights.history_state_sha256 !== deliveredHistoryStateSha256 ||
+    !SHA256_RE.test(sourceHistoryStateSha256) ||
+    !SHA256_RE.test(sourceSnapshotSha256) ||
+    (
+      contentCarriedForward
+        ? !SHA256_RE.test(historyParentStateSha256)
+        : sourceHistoryStateSha256 !== deliveredHistoryStateSha256
+    ) ||
     !SHA256_RE.test(String(meta.content_sha256 || "")) ||
     !SHA256_RE.test(String(meta.snapshot_content_sha256 || "")) ||
     sha256(JSON.stringify(insights)) !== meta.content_sha256 ||

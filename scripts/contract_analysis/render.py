@@ -18,7 +18,7 @@ from scripts.contract_analysis import (
     ROUTE_FAMILY,
     SINGULAR_COMPARABLE_REASON,
 )
-from scripts.contract_analysis.approval import material_hash
+from scripts.contract_analysis.approval import find_approval, material_hash
 from scripts.contract_analysis.attribution import attribution_payload
 from scripts.contract_analysis.gate import PublicationDecision
 from scripts.contract_analysis.graph import related_assets
@@ -39,6 +39,28 @@ from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
 PUBLIC_DIR = Path(FAMILY_SLUG)
 SITEMAP_NAME = "sitemap-analises-contratos.xml"
+
+LEGACY_CANARY_APPROVAL = {
+    "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+    "approved_at": "2026-08-20T12:13:43Z",
+    "token": "OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V2_2026_08_20",
+}
+LEGACY_CANARY_SNAPSHOT = (
+    Path(__file__).parent
+    / "snapshots"
+    / "approved-canary-13ec615146b3d348190a9b0b9148831e.html"
+)
+
+
+def _legacy_canary_snapshot(record: dict[str, Any]) -> str | None:
+    """Return only the immutable artifact bound to the historic approval."""
+    approval = find_approval(record)
+    if approval is None or any(
+        str(approval.get(key) or "") != value
+        for key, value in LEGACY_CANARY_APPROVAL.items()
+    ):
+        return None
+    return LEGACY_CANARY_SNAPSHOT.read_text(encoding="utf-8")
 
 # One archetype per top-level narrative block of an analysis page. The label
 # names the editorial job the block performs, so the archetype and skeleton
@@ -586,6 +608,10 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     if not record.get("material_hash"):
         record = dict(record)
         record["material_hash"] = material_hash(record)
+    if decision.indexable:
+        legacy_snapshot = _legacy_canary_snapshot(record)
+        if legacy_snapshot is not None:
+            return legacy_snapshot
     title = _text(record.get("title")) or "Análise técnica de contrato público"
     description = _public_prose(record.get("meta_description") or record.get("executive_summary"))
     if len(description) > 160:
@@ -785,6 +811,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "cta-id": "analise-tecnica-contextual",
         },
         author_name=author_name,
+        footer_html=None,
     )
 
 

@@ -136,6 +136,48 @@ export function validateSyncProvenance(insights, syncState, history) {
   return true;
 }
 
+function sameInstant(left, right) {
+  const leftMs = Date.parse(left || "");
+  const rightMs = Date.parse(right || "");
+  return Number.isFinite(leftMs) && Number.isFinite(rightMs) && leftMs === rightMs;
+}
+
+function producerTimesBelongToSameAttempt(attemptedAt, syncAt) {
+  const attemptedMs = Date.parse(attemptedAt || "");
+  const syncMs = Date.parse(syncAt || "");
+  const deltaMs = attemptedMs - syncMs;
+  return Number.isFinite(deltaMs) && deltaMs >= 0 && deltaMs <= 5000;
+}
+
+export function validateProducerHistory(syncState, history) {
+  const hasProducerSnapshot = /^[a-f0-9]{64}$/.test(String(syncState.manifest_sha256 || "")) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(String(syncState.as_of || ""));
+  const hasPartialProducerSnapshot = Boolean(syncState.manifest_sha256) !== Boolean(syncState.as_of);
+  if (hasPartialProducerSnapshot || ((!hasProducerSnapshot) && (syncState.manifest_sha256 || syncState.as_of))) {
+    throw new Error("gsc_sync_producer_manifest_invalid");
+  }
+  const lastAttemptMatches =
+    history.last_attempt?.snapshot_sha256 === syncState.manifest_sha256 &&
+    history.last_attempt?.as_of === syncState.as_of &&
+    producerTimesBelongToSameAttempt(
+      history.last_attempt?.attempted_at,
+      syncState.last_sync_at,
+    );
+  const matchingObservation = hasProducerSnapshot && history.observations.some((observation) =>
+    observation.snapshot_sha256 === syncState.manifest_sha256 &&
+    observation.as_of === syncState.as_of &&
+    (history.last_attempt?.outcome === "SNAPSHOT_REPEATED" || sameInstant(observation.observed_at, syncState.last_sync_at))
+  );
+  if (
+    (hasProducerSnapshot && (!lastAttemptMatches || !matchingObservation)) ||
+    (!hasProducerSnapshot &&
+      (history.last_attempt?.snapshot_sha256 != null || history.last_attempt?.as_of != null))
+  ) {
+    throw new Error("gsc_sync_producer_history_mismatch");
+  }
+  return { hasProducerSnapshot };
+}
+
 export async function restoreHistory({
   output = DEFAULT_HISTORY_STATE,
   baseUrl,
@@ -206,33 +248,15 @@ export async function publish({
     expected = validatePublishable(insights);
     validateSyncProvenance(insights, syncState, history);
   }
-  const hasProducerSnapshot = /^[a-f0-9]{64}$/.test(String(syncState.manifest_sha256 || "")) &&
-    /^\d{4}-\d{2}-\d{2}$/.test(String(syncState.as_of || ""));
-  const hasPartialProducerSnapshot = Boolean(syncState.manifest_sha256) !== Boolean(syncState.as_of);
-  if (hasPartialProducerSnapshot || ((!hasProducerSnapshot) && (syncState.manifest_sha256 || syncState.as_of))) {
-    throw new Error("gsc_sync_producer_manifest_invalid");
-  }
-  const matchingObservation = hasProducerSnapshot && history.observations.some((observation) =>
-    observation.snapshot_sha256 === syncState.manifest_sha256 &&
-    observation.as_of === syncState.as_of &&
-    observation.observed_at === syncState.last_sync_at
-  );
-  if (
-    (hasProducerSnapshot &&
-      (history.last_attempt?.snapshot_sha256 !== syncState.manifest_sha256 ||
-        history.last_attempt?.as_of !== syncState.as_of ||
-        !matchingObservation)) ||
-    (!hasProducerSnapshot &&
-      (history.last_attempt?.snapshot_sha256 != null || history.last_attempt?.as_of != null))
-  ) {
-    throw new Error("gsc_sync_producer_history_mismatch");
-  }
+  const { hasProducerSnapshot } = validateProducerHistory(syncState, history);
   const producer = {
     schema_version: syncState.schema_version,
     manifest_schema_version: syncState.manifest_schema_version,
     manifest_sha256: hasProducerSnapshot ? syncState.manifest_sha256 : null,
     as_of: hasProducerSnapshot ? syncState.as_of : null,
-    produced_at: syncState.last_sync_at,
+    // The durable history attempt is authoritative. last_sync_at is recorded
+    // immediately before the history transition and may differ by milliseconds.
+    produced_at: history.last_attempt?.attempted_at,
     source: "search_analytics_api",
   };
   const endpoint = `${baseUrl.replace(/\/$/, "")}/.netlify/functions/ops`;
@@ -273,14 +297,23 @@ export async function publish({
   }
   const get = await fetchImpl(`${endpoint}?action=gsc_insights`, { headers });
   const read = await responseJson(get);
-  const expectedStatus = expected ? "CURRENT" : history.readiness.status;
+  const readyHistory = history.readiness?.ready_for_product_decisions === true;
+  const expectedCarryForward = !expected &&
+    readyHistory &&
+    history.last_attempt?.outcome === "SNAPSHOT_REPEATED";
+  const allowedStatuses = readyHistory
+    ? ["CURRENT", "STALE"]
+    : (history.readiness?.status === "STALE" ? ["STALE"] : ["UNKNOWN"]);
   if (
     !get.ok ||
-    read.ok !== (expectedStatus === "CURRENT") ||
-    read.status !== expectedStatus ||
+    read.ok !== (read.status === "CURRENT") ||
+    !allowedStatuses.includes(read.status) ||
+    posted.status !== read.status ||
     read.meta?.delivery_source !== "durable_store" ||
     read.meta?.history_state_sha256 !== history.state_sha256 ||
     read.meta?.ready_for_product_decisions !== history.readiness.ready_for_product_decisions ||
+    posted.content_carried_forward !== expectedCarryForward ||
+    read.meta?.content_carried_forward !== expectedCarryForward ||
     (hasProducerSnapshot &&
       (read.meta?.latest_attempt_manifest_sha256 !== producer.manifest_sha256 ||
         read.meta?.latest_attempt_as_of !== producer.as_of ||
@@ -301,10 +334,15 @@ export async function publish({
     ok: read.status === "CURRENT",
     status: read.status,
     durable: true,
-    promoted: Boolean(expected),
+    promoted: posted.promoted === true,
+    durable_snapshot_promoted: posted.promoted === true,
+    insights_regenerated: Boolean(expected),
+    content_carried_forward: posted.content_carried_forward === true,
     as_of: read.meta?.as_of || history.readiness.freshness_as_of || null,
     content_sha256: read.meta?.snapshot_content_sha256 || null,
     history_state_sha256: history.state_sha256,
+    delivered_history_state_sha256: read.meta?.delivered_history_state_sha256 || null,
+    source_history_state_sha256: read.meta?.source_history_state_sha256 || null,
     snapshot_sha256:
       posted.snapshot_sha256 ||
       read.meta?.latest_attempt_snapshot_sha256 ||

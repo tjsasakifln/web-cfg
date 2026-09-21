@@ -516,16 +516,25 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cn
     asset_id: "medicoes-glosas",
     tema: "glosa de medicao",
     origin_class: "search_organic",
+    procurement_object: "Reforma de escola municipal",
+    procurement_stage: "dfd_etp",
+    procurement_regulation: "Lei 14.133",
+    funding_source: "transferencia_uniao",
     referrer: "https://www.google.com/",
     landing_page: "/medicoes-glosas/",
   };
   const rec = toExportRecord(lead);
-  const missing = ["cta_id", "route_family", "asset_id", "tema", "origin_class", "origin_class_status"].filter((k) => !(k in rec));
+  const missing = ["cta_id", "route_family", "asset_id", "tema", "origin_class", "origin_class_status",
+    "procurement_object", "procurement_stage", "procurement_regulation", "funding_source"].filter((k) => !(k in rec));
   if (missing.length) fail("export_missing_journey_columns", missing);
   else pass("export_has_journey_columns", `schema_version=${SCHEMA_VERSION}`);
   if (rec.cta_id !== "pillar_hero" || rec.route_family !== "medicoes-glosas" || rec.tema !== "glosa de medicao" || rec.origin_class !== "search_organic") {
     fail("export_journey_values", rec);
   } else pass("export_journey_values_carried");
+  if (rec.procurement_object !== lead.procurement_object || rec.procurement_stage !== lead.procurement_stage
+      || rec.procurement_regulation !== lead.procurement_regulation || rec.funding_source !== lead.funding_source) {
+    fail("export_has_public_authority_context", rec);
+  } else pass("export_has_public_authority_context");
   if (rec.origin_class_status !== "DERIVED") fail("export_origin_class_status_derived", rec.origin_class_status);
   else pass("export_origin_class_status_derived");
   // A lead persisted before the derivation shipped reads INDISPONIVEL, never direct_or_unknown.

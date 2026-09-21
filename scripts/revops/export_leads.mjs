@@ -19,11 +19,9 @@ const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
 const { createStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
-// 1.1.0 (2026-09-19, MEDICAO-08): journey columns cta_id, route_family,
-// asset_id, tema and origin_class_status so the export answers "which CTA,
-// route and topic produced the leads of each origin class" without touching
-// the Warmbly handoff body (confenge.inbound.v1 stays as documented).
-export const SCHEMA_VERSION = "1.1.0";
+// 1.2.0 (2026-09-20): adds the four sanitized public-authority preparation
+// fields so an ops export preserves declared procurement context.
+export const SCHEMA_VERSION = "1.2.0";
 
 // origin_class is derived at persist time since 2026-09-19 13:36 -03
 // (lead-core.cjs deriveOriginClass). Earlier rows have no value: that reads
@@ -98,6 +96,10 @@ export function toExportRecord(lead) {
     tema: lead.tema || null,
     content_cluster: lead.content_cluster || null,
     session_id: lead.session_id || null,
+    procurement_object: lead.procurement_object || null,
+    procurement_stage: lead.procurement_stage || null,
+    procurement_regulation: lead.procurement_regulation || null,
+    funding_source: lead.funding_source || null,
     // Contact fields included in file artifact only (ops-side). Not printed to stdout by default.
     nome: lead.nome || null,
     email: lead.email || null,

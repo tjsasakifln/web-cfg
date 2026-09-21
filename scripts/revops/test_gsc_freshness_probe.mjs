@@ -54,6 +54,24 @@ test("manifest disagreement is UNKNOWN even when the producer claims CURRENT", (
   assert.deepEqual(result.reason_codes, ["manifest_hash_mismatch"]);
 });
 
+test("carried content is CURRENT only with explicit source and parent bindings", () => {
+  const carried = structuredClone(current);
+  carried.meta.content_carried_forward = true;
+  carried.meta.source_history_state_sha256 = "b".repeat(64);
+  carried.meta.history_parent_state_sha256 = "e".repeat(64);
+  carried.meta.source_snapshot_sha256 = "f".repeat(64);
+  const accepted = evaluateConsumerPayload(carried, {
+    now: new Date("2026-08-29T12:20:39Z"),
+  });
+  assert.equal(accepted.status, "CURRENT");
+  delete carried.meta.history_parent_state_sha256;
+  const rejected = evaluateConsumerPayload(carried, {
+    now: new Date("2026-08-29T12:20:39Z"),
+  });
+  assert.equal(rejected.status, "UNKNOWN");
+  assert.deepEqual(rejected.reason_codes, ["snapshot_integrity_mismatch"]);
+});
+
 test("live probe performs one authenticated GET and evaluates only the private consumer response", async () => {
   const requests = [];
   const result = await probePrivateConsumer({
