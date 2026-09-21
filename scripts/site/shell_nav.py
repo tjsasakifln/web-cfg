@@ -60,8 +60,10 @@ CONTRACT_ANALYSIS_APPROVALS_PATH = ROOT / "data" / "editorial" / "contract-analy
 ORIGIN_MAIN_PINNED_FILES = frozenset(
     {
         "aditivos-obras-publicas/index.html",
+        "auditoria-orcamento-licitacao/index.html",
         "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
         "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+        "diagnostico-b2g-360/index.html",
         "diagnostico-pre-licitacao/index.html",
         "medicoes-glosas-obras-publicas/index.html",
         "reequilibrio-obras-publicas/index.html",
