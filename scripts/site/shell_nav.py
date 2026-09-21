@@ -57,11 +57,14 @@ BRAND_PATH = ROOT / "data" / "site" / "brand.json"
 PUBLIC_FAMILY_REGISTRY_PATH = ROOT / "data" / "organic" / "public-family-registry.json"
 EDITORIAL_DECISIONS_PATH = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
 CONTRACT_ANALYSIS_APPROVALS_PATH = ROOT / "data" / "editorial" / "contract-analysis" / "approvals.json"
-ORIGIN_MAIN_PINNED_EDITORIAL_FILES = frozenset(
+ORIGIN_MAIN_PINNED_FILES = frozenset(
     {
+        "aditivos-obras-publicas/index.html",
         "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
         "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
         "diagnostico-pre-licitacao/index.html",
+        "medicoes-glosas-obras-publicas/index.html",
+        "reequilibrio-obras-publicas/index.html",
     }
 )
 
@@ -142,7 +145,7 @@ FROZEN_SHELL_FILES = _frozen_shell_files()
 
 def _hash_bound_editorial_files() -> frozenset[str]:
     """Keep approved editorial material byte-identical until reapproval."""
-    protected: set[str] = set(ORIGIN_MAIN_PINNED_EDITORIAL_FILES)
+    protected: set[str] = set(ORIGIN_MAIN_PINNED_FILES)
     try:
         decisions = json.loads(EDITORIAL_DECISIONS_PATH.read_text(encoding="utf-8"))
     except Exception:  # noqa: BLE001 - a missing register protects nothing here
