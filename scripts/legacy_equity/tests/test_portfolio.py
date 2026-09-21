@@ -48,7 +48,7 @@ def test_review_date_expires_against_injected_current_date():
     execute = load_json(EXECUTE_SET_PATH)
     from datetime import date
 
-    report = evaluate_portfolio(data, execute, today=date(2026, 9, 21))
+    report = evaluate_portfolio(data, execute, today=date(2026, 10, 20))
     assert not report["ok"]
     assert "hold_review_date_stale" in report["fails"]
 

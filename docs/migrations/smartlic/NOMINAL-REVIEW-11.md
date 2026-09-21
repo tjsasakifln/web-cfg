@@ -2,7 +2,7 @@
 
 Reviewed 2026-08-16 against local HTML in this checkout and live GET of `https://confenge.com.br/...` (see implementer scratch). Human accept of this set is still required. This file is the review packet, not an approval.
 
-Inventory pin: `35aca764cc455fea3031286700e0310315c9bff34fcf41b883cb53e8f9277698`
+Inventory pin: `9e0679be0989768c2d374432427dcd6c37db9d46a5f05a640e9562e5a055785c`
 
 None of the 11 targets is `https://confenge.com.br/` or `/consultoria-b2g/`. Unique destinations: 6.
 

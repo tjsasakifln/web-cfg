@@ -7,7 +7,7 @@
   "donor_host": "smartlic.tech",
   "rule": "SmartLic is donor, URL-specific migration bridge and sunset evidence only. Classification never authorizes a SmartLic public runtime or a new capability.",
   "classes": ["PORT_TO_WEB_CFG", "REIMPLEMENT", "MIGRATION_ONLY", "DEFER", "DROP"],
-  "hold_review_date": "2026-09-20",
+  "hold_review_date": "2026-10-19",
   "capabilities": [
     {
       "id": "margin-defense-suite",
