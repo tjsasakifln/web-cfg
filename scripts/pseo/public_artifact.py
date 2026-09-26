@@ -315,7 +315,7 @@ def finalize_public_artifact(
         raw = html_path.read_text(encoding="utf-8")
         cleaned = scrub_html(raw)
         if cleaned != raw:
-            html_path.write_text(cleaned, encoding="utf-8")
+            html_path.write_text(cleaned, encoding="utf-8", newline="\n")
             scrubbed += 1
 
     structured_identity = sanitize_tree(Path(dest))
@@ -358,6 +358,7 @@ def finalize_public_artifact(
         headers_path.write_text(
             apply_artifact_csp_hashes(headers_path.read_text(encoding="utf-8"), Path(dest)),
             encoding="utf-8",
+            newline="\n",
         )
     return {
         "scrubbed_html_files": scrubbed,

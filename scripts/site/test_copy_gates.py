@@ -414,6 +414,28 @@ def test_whatsapp_float_in_landmark():
         assert 'aria-label="Contato rápido"' in text or "Contato rápido" in text
 
 
+def test_conversion_routes_name_price_scope_and_next_step():
+    """High-intent pages state the commercial distinction and requested action."""
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "Algumas ofertas de inteligência têm preço publicado" in home
+    assert "Os demais serviços de engenharia seguem por proposta" in home
+
+    quantities = (
+        ROOT / "quantitativos-orcamento-obras" / "index.html"
+    ).read_text(encoding="utf-8")
+    assert "Como definimos honorários e prazo" in quantities
+    assert "Quando a contratação externa é racional" in quantities
+    assert "segunda leitura independente" in quantities
+
+    sinapi = (
+        ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
+    ).read_text(encoding="utf-8")
+    assert sinapi.count("Pedir proposta de revisão do orçamento") >= 4
+    assert sinapi.count(
+        "Quero%20pedir%20uma%20proposta%20de%20revis%C3%A3o%20do%20or%C3%A7amento"
+    ) >= 2
+
+
 def test_checkout_return_does_not_claim_payment_or_premature_service_start():
     """A provider return URL is not proof of payment or authorization to start."""
 
@@ -721,6 +743,7 @@ if __name__ == "__main__":
         test_concordance_and_forbidden_microcopy,
         test_public_surfaces_have_no_prose_em_dashes,
         test_whatsapp_float_in_landmark,
+        test_conversion_routes_name_price_scope_and_next_step,
         test_visitor_offer_context_has_no_internal_labels,
         test_hero_proof_credentials_list_still_present,
         test_public_backstage_language_absent,
