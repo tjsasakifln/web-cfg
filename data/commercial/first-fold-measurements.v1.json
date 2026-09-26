@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-26T17:06:29.889Z",
+  "measured_at": "2026-09-26T20:28:11.346Z",
   "measured_on": "2026-09-26",
-  "commit_sha": "efc8c81a939bb581fa99dfcef7cf6a84226ad3d7",
+  "commit_sha": "060fbadcf55fe67e2850c42d78c8230b1337e190",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -51,7 +51,7 @@
     "medicoes-glosas-obras-publicas/index.html": "2a1433dd763088013717607a981de8fc25f63dc4e80bbbd879d436793ff25b1b",
     "problemas-que-resolvemos/index.html": "713004f98ff59450633fbb1a445d2db19efc7e3263849db3d78e9d5527ca7d4b",
     "reequilibrio-obras-publicas/index.html": "67ce169a619744a2ac45cad85d1112802e611c961d7c1ed3aa89a34137b123bc",
-    "script.js": "b676869339ac16e931855b9363642968ed219412aaf2c258f32bf698c8363a84",
+    "script.js": "62bbc8f04f49c062c55799f5fda1ab190d4c0aa34622d09547623d954586c471",
     "servicos-obras-publicas/index.html": "644ef4e704e9430e5f0db1e779832e235c5179f98338c14dcac6bfefff19eac5",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
