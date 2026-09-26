@@ -1,0 +1,59 @@
+{
+  "schema": "confenge.multivertical-attribution-conservation/1.0",
+  "contract_id": "CONFENGE_MULTIVERTICAL_ATTRIBUTION/1.0.0-draft.20260904",
+  "campaign_id": 13,
+  "owner_issue": "#336",
+  "source": "CONFENGE_WEB",
+  "fail_closed": true,
+  "rules": [
+    {
+      "id": "source_is_confenge_web",
+      "statement": "Every admitted public event carries source=CONFENGE_WEB. No other public source identity."
+    },
+    {
+      "id": "absence_is_unknown",
+      "statement": "Missing Warmbly evidence stays UNKNOWN. Absence is never numeric zero and never a client-derived QCO."
+    },
+    {
+      "id": "layers_do_not_promote",
+      "statement": "page_view, engagement, completion and lead never become qualified_lead, qco, proposal, pipeline, won, lost or revenue."
+    },
+    {
+      "id": "qco_is_downstream_readback",
+      "statement": "QCO, proposal and revenue are readback from the downstream owner. Client-side is not a source of truth."
+    },
+    {
+      "id": "alias_is_not_a_second_count",
+      "statement": "Documented aliases rewrite to one canonical name in the same layer. They are not a second count."
+    },
+    {
+      "id": "event_id_idempotent",
+      "statement": "The same event_id is a replay, not a new observation."
+    },
+    {
+      "id": "nucleus_conservation",
+      "statement": "A session keeps one nucleus_id or unknown. Switching nucleus is a new classification event, not a silent overwrite of the original landing nucleus."
+    },
+    {
+      "id": "b2g_not_removed",
+      "statement": "public_works_b2g remains a first-class nucleus. Multi-vertical expansion does not drop B2G attribution."
+    },
+    {
+      "id": "ctr_is_not_value",
+      "statement": "CTR, screen time and praise are not willingness to pay and are not QCO."
+    },
+    {
+      "id": "wtp_does_not_replace_341",
+      "statement": "Human protocol reactions to published price do not replace #341, which requires real proposals, deliveries and margin."
+    },
+    {
+      "id": "no_outbound_auto_send",
+      "statement": "outbound_eligible=false and auto_send=false. Measurement does not authorize dispatch."
+    }
+  ],
+  "join": {
+    "public_to_receipt": ["session_id", "lead_id"],
+    "downstream_only": ["opportunity_id", "proposal_id", "sale_id"],
+    "pii_join_forbidden": true
+  }
+}
