@@ -1,0 +1,28 @@
+{
+  "schema": "confenge.campaign-coverage-matrix/1.0",
+  "campaign": "CONFENGE_SST_REVENUE_ENGINE/1.0",
+  "as_of": "2026-09-26",
+  "matrix_contract": "data/corporate/intent-family-matrix.v1.json",
+  "family_count": 13,
+  "rows": [
+    {"intent_family":"projetar_revisar_compatibilizar","terminal_action":"REQUEST_SCOPE_REVIEW","before":"canonical private project routes active","after":"unchanged, checked for overlap","owner":"engineering_projects_coordination","campaign_effect":"no new SST route or keyword overlap"},
+    {"intent_family":"orcar_planejar_decidir","terminal_action":"REQUEST_SCOPE_REVIEW","before":"quantitativos and budget route active, SINAPI content supports reference intent","after":"unchanged and explicitly checked","owner":"cost_planning_feasibility","campaign_effect":"SST copy does not absorb quantitativos, budget, SINAPI or SICRO purchase intent"},
+    {"intent_family":"inspecionar_diagnosticar","terminal_action":"REQUEST_TECHNICAL_TRIAGE","before":"building inspection route active","after":"unchanged, field inspection kept distinct","owner":"building_condition_documentation","campaign_effect":"remote SST scope stops when real site condition requires field evidence"},
+    {"intent_family":"receber_entregar_reformar","terminal_action":"REQUEST_SCOPE_REVIEW","before":"private building journey active","after":"unchanged, checked in private journey coverage","owner":"building_condition_documentation","campaign_effect":"no SST cross-routing"},
+    {"intent_family":"documentar_as_built_regularizar","terminal_action":"REQUEST_SCOPE_REVIEW","before":"private documentation journey active","after":"unchanged, checked in private journey coverage","owner":"building_condition_documentation","campaign_effect":"documentary wording limited to occupational safety"},
+    {"intent_family":"avaliar_imovel","terminal_action":"REQUEST_FORMAL_VALUATION_SCOPE","before":"valuation journey active","after":"unchanged, checked in private journey coverage","owner":"property_valuation","campaign_effect":"no valuation overlap"},
+    {"intent_family":"produzir_prova_tecnica","terminal_action":"REQUEST_CONFLICT_CHECK","before":"technical dispute route active","after":"unchanged, SST labor assistance remains an adjacent subintent","owner":"technical_evidence_disputes","campaign_effect":"building disputes continue on their own route"},
+    {"intent_family":"assistencia_trabalhista_sst","terminal_action":"REQUEST_CONFLICT_CHECK","before":"section inside the SST canonical route","after":"retained below preventive and documentary purchase sections","owner":"technical_evidence_disputes","campaign_effect":"distinct CTA and conflict gate retained without creating a competing URL"},
+    {"intent_family":"organizar_sst","terminal_action":"REQUEST_SST_SCOPE","canonical_route":"/seguranca-trabalho-apoio-tecnico/","indexability":"index,follow","before":"canonical SST route broad and method first","after":"problem first SST hub enriched for PGR review, NR 18 and remote documentation","owner":"occupational_safety","campaign_effect":"primary campaign change, one canonical route"},
+    {"intent_family":"planejar_contratacao_publica","terminal_action":"REQUEST_PUBLIC_ENTITY_PLANNING_SCOPE","before":"public owner journey active","after":"unchanged and protected","owner":"public_procurement_owner","campaign_effect":"SST page does not present public procurement planning"},
+    {"intent_family":"decidir_disputar_licitacao","terminal_action":"REQUEST_B2G_FIT","before":"B2G bidder journey active","after":"unchanged and protected","owner":"public_bidder_decision","campaign_effect":"no SST or private CTA redirects this intent"},
+    {"intent_family":"executar_proteger_contrato_publico","terminal_action":"REQUEST_B2G_FIT","before":"public contract execution journey active","after":"unchanged and protected","owner":"public_contract_execution","campaign_effect":"no overlap with SST documentary service"},
+    {"intent_family":"outra_demanda_tecnica","terminal_action":"NEEDS_CONTEXT","before":"NEEDS_CONTEXT fallback active","after":"unchanged","owner":null,"campaign_effect":"unknown needs remain contextual and no new competency is invented"}
+  ],
+  "explicit_checks": {
+    "quantitativos":"covered in orcar_planejar_decidir",
+    "sinapi":"reference content remains under cost planning, not SST",
+    "private_journeys":["projetar_revisar_compatibilizar","orcar_planejar_decidir","inspecionar_diagnosticar","receber_entregar_reformar","documentar_as_built_regularizar","avaliar_imovel","produzir_prova_tecnica","assistencia_trabalhista_sst","organizar_sst"],
+    "public_journeys":["planejar_contratacao_publica","decidir_disputar_licitacao","executar_proteger_contrato_publico"]
+  }
+}

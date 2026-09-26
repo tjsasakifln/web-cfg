@@ -1284,6 +1284,12 @@
       const offerId = el.getAttribute(A_OFFER) || '';
       const ctaKind = ctaKindFromEl(el);
       const withCta = attrsWithCta(el, ctaKind);
+      const commercialJourney = el.getAttribute('data-journey')
+        || form?.querySelector('#jornada-hidden')?.value
+        || editorialJourney
+        || '';
+      const commercialTopic = el.getAttribute('data-tema')
+        || (isEditorial ? editorialTopic.slice(0, 120) : '');
       if (classified.kind === 'whatsapp') {
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
@@ -1292,7 +1298,8 @@
           correlation_id: whatsappProtocol,
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
-          journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
+          journey: commercialJourney,
+          topic: commercialTopic,
           ...withCta,
         });
         return;
@@ -1303,7 +1310,8 @@
           ...editorialBase,
           cta_label: label || 'email',
           destination_type: 'email',
-          journey: isEditorial ? editorialJourney : undefined,
+          journey: commercialJourney,
+          topic: commercialTopic,
           ...withCta,
         });
         return;
@@ -1312,6 +1320,10 @@
         track('outbound_click', {
           ...base,
           destination_type: classified.kind,
+          ...(classified.kind === 'tel' ? {
+            journey: commercialJourney,
+            topic: commercialTopic,
+          } : {}),
           ...attrsWithCta(el, classified.kind === 'tel' ? ctaKind : ''),
         });
         return;

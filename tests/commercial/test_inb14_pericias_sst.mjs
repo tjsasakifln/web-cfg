@@ -247,9 +247,21 @@ const specA = {
 };
 
 const specB = {
-  h1: "Apoio técnico de segurança do trabalho",
+  h1: "Documentação de segurança do trabalho organizada remotamente",
   canonical: "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
-  must: ["PGR", "LTCAT", "AET", "finalidade", "insumos", "responsabilidade"],
+  must: [
+    "PGR",
+    "LTCAT",
+    "AET",
+    "finalidade",
+    "insumos",
+    "responsabilidade",
+    "PGR de canteiro",
+    "psicossociais relacionados ao trabalho",
+    "O eSocial recebe eventos, não o PGR em si",
+    "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
+    "ART quando aplicável ao serviço contratado",
+  ],
   mustRe: [
     /n[aã]o s[aã]o sin[oô]nimos|n[aã]o s[aã]o intercambi[aá]veis|n[aã]o s[aã]o o mesmo documento/i,
     /ato m[eé]dico/i,
