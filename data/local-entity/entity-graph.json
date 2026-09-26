@@ -1,23 +1,21 @@
 {
   "campaign": "CONFENGE-WEB-LOCAL-ENTITY-SEARCH-02",
-  "as_of": "2026-08-19",
+  "as_of": "2026-09-26",
   "decision_state": "VALIDATE",
   "organization": {
     "@type": "Organization",
     "@id": "https://confenge.com.br/#organization",
     "name": "CONFENGE",
-    "legalName": "CONFENGE",
     "url": "https://confenge.com.br/",
     "logo": "https://confenge.com.br/assets/logo-confenge.png",
     "image": "https://confenge.com.br/assets/og-confenge.jpg",
-    "description": "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho, para clientes privados e públicos, com especialidade em licitações e contratos de obras públicas.",
+    "description": "Serviços de engenharia, perícias e inteligência técnica para empresas, profissionais e órgãos públicos.",
     "areaServed": {
       "@type": "Country",
       "name": "Brasil"
     },
     "email": "tiago.sasaki@confenge.com.br",
     "telephone": "+55-48-98834-4559",
-    "taxID": "52.407.089/0001-09",
     "founder": {
       "@id": "https://confenge.com.br/#tiago"
     },
@@ -31,50 +29,50 @@
         "pt-BR",
         "en"
       ]
-    }
+    },
+    "legalName": "Confenge Serviços de Desenhos Técnicos Ltda",
+    "taxID": "52.407.089/0001-09"
   },
   "person": {
     "@type": "Person",
     "@id": "https://confenge.com.br/#tiago",
-    "name": "Engº Tiago Sasaki",
     "image": "https://confenge.com.br/assets/tiago-sasaki-foto-v11-sem-fundo.png",
     "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
-    "sameAs": [
-      "https://github.com/tjsasakifln"
-    ],
-    "jobTitle": "Engenheiro Civil",
     "worksFor": {
       "@id": "https://confenge.com.br/#organization"
     },
+    "knowsAbout": [
+      "Engenharia Civil",
+      "Engenharia de Segurança do Trabalho",
+      "Gerenciamento de riscos ocupacionais",
+      "PGR ocupacional e PGR de canteiro",
+      "Fiscalização e gestão de contratos de obras",
+      "Orçamentação com referências oficiais",
+      "Licitações e execução sob a Lei nº 14.133/2021"
+    ],
+    "name": "Tiago Jun Sasaki",
+    "sameAs": [
+      "https://github.com/tjsasakifln"
+    ],
+    "jobTitle": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
     "alumniOf": {
       "@type": "CollegeOrUniversity",
       "name": "Universidade de São Paulo"
-    },
-    "knowsAbout": [
-      "Licitações de obras públicas",
-      "Gestão de contratos públicos",
-      "Orçamentação de obras",
-      "SINAPI",
-      "SICRO",
-      "BDI",
-      "Aditivos",
-      "Reequilíbrio econômico-financeiro",
-      "Fiscalização e medição de obras",
-      "Lei 14.133/2021"
-    ]
+    }
   },
   "raw_types": [
     "BreadcrumbList",
     "ContactPoint",
     "Organization",
     "Person",
+    "ProfessionalService",
     "ProfilePage"
   ],
   "canonical_ids": {
     "organization": "https://confenge.com.br/#organization",
     "person": "https://confenge.com.br/#tiago"
   },
-  "proof_limitation": "data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+  "proof_limitation": "Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
   "claims": [
     {
       "id": "org-id",
@@ -103,33 +101,33 @@
       "entity": "Person",
       "field": "credentials",
       "value": "Universidade de São Paulo",
-      "status": "SELF_DECLARED",
-      "basis": "proof.json self_attested_public + specialist JSON-LD alumniOf",
-      "third_party_verified": false,
-      "notes": "Engenharia Civil / EESC-USP is published owned copy. proof.json VERIFIED + perfil-publico-especialista is remapped to SELF_DECLARED. No diploma, CREA number, or third-party badge is in-repo.",
-      "as_of": "2026-08-19"
+      "status": "VERIFIED",
+      "basis": "credential-registry:person-civil-eesc-usp source_class=official_primary_document",
+      "third_party_verified": true,
+      "notes": "Engenharia Civil / EESC-USP is backed by the canonical personal credential record. This does not publish a diploma image or a registry number.",
+      "as_of": "2026-09-26"
     },
     {
       "id": "person-jobTitle",
       "entity": "Person",
       "field": "credentials",
-      "value": "Engenheiro Civil",
-      "status": "SELF_DECLARED",
-      "basis": "specialist JSON-LD jobTitle + brand.json person.jobTitle",
-      "third_party_verified": false,
-      "notes": "Job title is institutional copy, not a licensed credential record.",
-      "as_of": "2026-08-19"
+      "value": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
+      "status": "VERIFIED",
+      "basis": "credential-registry:person-titles-civil-sst source_class=official_professional_registry",
+      "third_party_verified": true,
+      "notes": "The public Civil and Occupational Safety Engineering titles are attested by the CREA record in the canonical credential registry.",
+      "as_of": "2026-09-26"
     },
     {
       "id": "person-credential-crea",
       "entity": "Person",
       "field": "credentials",
-      "value": null,
-      "status": "NOT_PUBLIC",
-      "basis": "absent_from_public_proof",
-      "third_party_verified": false,
-      "notes": "CREA number, badge, rating and years-of-experience figures are not public proof records. Do not invent.",
-      "as_of": "2026-08-19"
+      "value": "Registro profissional ativo no CREA",
+      "status": "VERIFIED",
+      "basis": "credential-registry:person-crea-active source_class=official_professional_registry",
+      "third_party_verified": true,
+      "notes": "Active professional registration is verified and may be stated without publishing the CREA or RNP identifiers. Badges, ratings and experience figures remain outside this claim.",
+      "as_of": "2026-09-26"
     },
     {
       "id": "person-hasCredential",
@@ -139,7 +137,7 @@
       "status": "NOT_PUBLIC",
       "basis": "absent_jsonld",
       "third_party_verified": false,
-      "notes": "No schema.org hasCredential node is published. Inventing one is a defect.",
+      "notes": "No schema.org hasCredential node is published because private CREA and RNP identifiers are intentionally excluded. Inventing one is a defect.",
       "as_of": "2026-08-19"
     },
     {
@@ -158,16 +156,13 @@
       "entity": "Person",
       "field": "knowsAbout",
       "value": [
-        "Licitações de obras públicas",
-        "Gestão de contratos públicos",
-        "Orçamentação de obras",
-        "SINAPI",
-        "SICRO",
-        "BDI",
-        "Aditivos",
-        "Reequilíbrio econômico-financeiro",
-        "Fiscalização e medição de obras",
-        "Lei 14.133/2021"
+        "Engenharia Civil",
+        "Engenharia de Segurança do Trabalho",
+        "Gerenciamento de riscos ocupacionais",
+        "PGR ocupacional e PGR de canteiro",
+        "Fiscalização e gestão de contratos de obras",
+        "Orçamentação com referências oficiais",
+        "Licitações e execução sob a Lei nº 14.133/2021"
       ],
       "status": "SELF_DECLARED",
       "basis": "specialist JSON-LD knowsAbout",
@@ -291,17 +286,6 @@
       "as_of": "2026-08-19"
     },
     {
-      "id": "proof:proof-usp-civil",
-      "entity": "ProofRecord",
-      "field": "credentials",
-      "value": "Engenharia Civil pela USP (EESC-USP)",
-      "status": "SELF_DECLARED",
-      "basis": "proof.json source=perfil-publico-especialista verification_class=self_attested_public",
-      "third_party_verified": false,
-      "notes": "Publicado em especialista/tiago-jun-sasaki e materiais institucionais. Sem diploma digital de terceiro anexado neste repositório. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
-      "as_of": "2026-08-19"
-    },
-    {
       "id": "proof:proof-private-public",
       "entity": "ProofRecord",
       "field": "credentials",
@@ -309,7 +293,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=perfil-publico-especialista verification_class=self_attested_public",
       "third_party_verified": false,
-      "notes": "Fato biográfico já publicado no site. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Fato biográfico já publicado no site. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -320,7 +304,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=perfil-publico-especialista verification_class=self_attested_public",
       "third_party_verified": false,
-      "notes": "Experiência em fiscalização e gestão de contratos públicos. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Experiência em fiscalização e gestão de contratos públicos. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -331,7 +315,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=operacao-remota-declarada verification_class=operational_declared",
       "third_party_verified": false,
-      "notes": "Atuação remota nacional declarada no site e formulários. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Atuação remota nacional declarada no site e formulários. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -342,7 +326,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=conteudo-tecnico-publicado verification_class=content_published",
       "third_party_verified": false,
-      "notes": "Biblioteca técnica e páginas-pilar tratam a Lei 14.133. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Biblioteca técnica e páginas-pilar tratam a Lei 14.133. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -353,7 +337,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=conteudo-tecnico-publicado verification_class=content_published",
       "third_party_verified": false,
-      "notes": "Cluster auditoria-orcamento e guias técnicos publicados. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Cluster auditoria-orcamento e guias técnicos publicados. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -364,7 +348,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=operacao-interna verification_class=operational_declared",
       "third_party_verified": false,
-      "notes": "Pode ser descrito como sistema proprietário de inteligência; não expor nome extra-cli ao público. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Pode ser descrito como sistema proprietário de inteligência; não expor nome extra-cli ao público. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -375,7 +359,7 @@
       "status": "NOT_PUBLIC",
       "basis": "proof.json source=n/a verification_class=None",
       "third_party_verified": false,
-      "notes": "Bloqueado sem autorização formal do cliente. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Bloqueado sem autorização formal do cliente. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -386,7 +370,7 @@
       "status": "UNKNOWN",
       "basis": "proof.json source=n/a verification_class=None",
       "third_party_verified": false,
-      "notes": "Exige evidência e aprovação editorial antes de qualquer publicação. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Exige evidência e aprovação editorial antes de qualquer publicação. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -397,7 +381,7 @@
       "status": "UNKNOWN",
       "basis": "proof.json source=n/a verification_class=None",
       "third_party_verified": false,
-      "notes": "Não publicar sem evidência verificável e autorização. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Não publicar sem evidência verificável e autorização. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -408,7 +392,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=registro-operacional-confenge verification_class=data_backed_internal",
       "third_party_verified": false,
-      "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.national_records_available = 4479442 contrato_id deduplicados, dataset_hash 0d8757f7, corte de 01/08/2026. Desses, 54.055 estão confirmados como obra ou serviço de engenharia (denominators.aec_confirmed_contracts). O número publicado é o volume da base disponível para análise, não a carteira de clientes nem o recorte de engenharia. O inventário nacional permanece PENDING/QUALITY_ELIGIBLE para findings editoriais; publicar a escala da base não depende dessa promoção. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.national_records_available = 4479442 contrato_id deduplicados, dataset_hash 0d8757f7, corte de 01/08/2026. Desses, 54.055 estão confirmados como obra ou serviço de engenharia (denominators.aec_confirmed_contracts). O número publicado é o volume da base disponível para análise, não a carteira de clientes nem o recorte de engenharia. O inventário nacional permanece PENDING/QUALITY_ELIGIBLE para findings editoriais; publicar a escala da base não depende dessa promoção. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -419,7 +403,7 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=registro-operacional-confenge verification_class=data_backed_internal",
       "third_party_verified": false,
-      "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.aec_confirmed_contracts = 54055, dataset_hash 0d8757f7, corte de 01/08/2026. Confirmado significa classificado em multiplas camadas como obra ou servico de engenharia; classified_share_note do proprio inventario declara que so objetos aec_confirmed entram em agregados publicos. Este e o recorte relevante ao ICP: publicar 4,48 milhoes sem ele convida a leitura de que existem 4,48 milhoes de contratos de engenharia. Nao e carteira de clientes. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.aec_confirmed_contracts = 54055, dataset_hash 0d8757f7, corte de 01/08/2026. Confirmado significa classificado em multiplas camadas como obra ou servico de engenharia; classified_share_note do proprio inventario declara que so objetos aec_confirmed entram em agregados publicos. Este e o recorte relevante ao ICP: publicar 4,48 milhoes sem ele convida a leitura de que existem 4,48 milhoes de contratos de engenharia. Nao e carteira de clientes. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     },
     {
@@ -430,14 +414,26 @@
       "status": "SELF_DECLARED",
       "basis": "proof.json source=registro-profissional-titular verification_class=owner_declared",
       "third_party_verified": false,
-      "notes": "Volume acumulado de obra pública sob análise técnica do titular ao longo da trajetória profissional, somando iniciativa privada e Administração Pública. Declarado pelo próprio em 2026-08-30. É volume analisado, não é valor recuperado, economizado nem resultado assegurado a cliente. Sem lastro documental neste repositório: é declaração do titular, e é por isso que a verification_class é self_attested_owner e não uma classe verificada por terceiro. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "notes": "Volume acumulado de obra pública sob análise técnica do titular ao longo da trajetória profissional, somando iniciativa privada e Administração Pública. Declarado pelo próprio em 2026-08-30. É volume analisado, não é valor recuperado, economizado nem resultado assegurado a cliente. Sem lastro documental neste repositório: é declaração do titular, e é por isso que a verification_class é self_attested_owner e não uma classe verificada por terceiro. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-metodo-limites-publicados",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Método e limites de atuação publicados pela CONFENGE",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=conteudo-institucional-publicado verification_class=content_published",
+      "third_party_verified": false,
+      "notes": "Fato observável na superfície própria: /confianca/ identifica método, critérios de prova, limites e exemplos de entrega. Não constitui credencial externa nem resultado de cliente. Legacy non-credential claims in data/site/proof.json that use self-attested classes remain SELF_DECLARED. Personal professional credentials are classified separately from data/site/credential-registry.json and may be VERIFIED only when backed by an official source there. NAP, reviews, cases and track record are never upgraded by a credential record.",
       "as_of": "2026-08-19"
     }
   ],
   "claim_statuses": [
     "NOT_PUBLIC",
     "SELF_DECLARED",
-    "UNKNOWN"
+    "UNKNOWN",
+    "VERIFIED"
   ],
   "graph_fields_present": [
     "@id",
@@ -450,5 +446,7 @@
     "worksFor"
   ],
   "self_attested_not_upgraded": true,
-  "third_party_verified_count": 0
+  "third_party_verified_count": 3,
+  "credential_registry_verified_count": 9,
+  "legacy_third_party_verified_count": 0
 }

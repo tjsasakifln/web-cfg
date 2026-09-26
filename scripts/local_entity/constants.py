@@ -157,8 +157,9 @@ GSC_LIVE_BLOCKED = {
 }
 
 PROOF_LIMITATION = (
-    "data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista "
-    "(or other self-attested classes) are circular self-attestation from owned copy. "
-    "This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for "
-    "independent third-party evidence committed in-repo; none is present for identity/NAP/CREA."
+    "Legacy non-credential claims in data/site/proof.json that use self-attested classes "
+    "remain SELF_DECLARED. Personal professional credentials are classified separately "
+    "from data/site/credential-registry.json and may be VERIFIED only when backed by an "
+    "official source there. NAP, reviews, cases and track record are never upgraded by a "
+    "credential record."
 )
