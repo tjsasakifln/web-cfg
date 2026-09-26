@@ -32,7 +32,7 @@ Tests: `python3 -m pytest tests/local_entity -q`
 
 Every identity claim is `VERIFIED` | `SELF_DECLARED` | `UNKNOWN` | `NOT_PUBLIC`.
 
-`data/site/proof.json` `VERIFIED` + `perfil-publico-especialista` is circular self-attestation. This campaign remaps those records to `SELF_DECLARED`. Campaign `VERIFIED` is reserved for independent third-party evidence committed in-repo. None is present for street address, CREA, ratings or `sameAs` profiles.
+Legacy self-attested records in `data/site/proof.json` remain `SELF_DECLARED`. Personal professional credentials are classified separately from `data/site/credential-registry.json` and become campaign `VERIFIED` only when that canonical registry identifies an official source. No credential record authorizes a street address, rating, case, track record or invented `sameAs` profile, and private CREA/RNP identifiers remain outside public projection.
 
 Public phone, email and CNPJ already on `/especialista/tiago-jun-sasaki/` are existing public contact, not a new PII leak.
 

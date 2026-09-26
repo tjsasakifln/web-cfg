@@ -77,6 +77,44 @@ def test_registry_is_valid_and_every_claim_has_source_status():
         assert "rollback" in claim
 
 
+def test_all_nine_personal_credentials_are_verified_by_official_sources():
+    registry = load_registry()
+    final_sources = {
+        "official_judicial_registry",
+        "official_primary_document",
+        "official_professional_registry",
+    }
+    credentials = [
+        claim
+        for claim in registry["claims"]
+        if claim.get("entity") == "person" and claim.get("claim_category") == "credential"
+    ]
+    assert len(credentials) == 9
+    assert {claim["status"] for claim in credentials} == {"VERIFIED"}
+    assert all(claim["source_class"] in final_sources for claim in credentials)
+    assert not any(claim["status"] == "SELF_ATTESTED" for claim in credentials)
+
+
+def test_personal_credential_temporal_fields_fail_closed():
+    registry = load_registry()
+    for field, value in (
+        ("as_of", "invalid"),
+        ("recheck_after", "invalid"),
+        ("recheck_after", None),
+        ("expires_at", "invalid"),
+    ):
+        invalid = copy.deepcopy(registry)
+        claim = next(
+            c for c in invalid["claims"] if c["id"] == "person-titles-civil-sst"
+        )
+        if value is None:
+            claim.pop(field, None)
+        else:
+            claim[field] = value
+        errors = validate_registry(invalid)
+        assert any("credential_" in error and claim["id"] in error for error in errors)
+
+
 def test_verified_cnpj_projects_to_visible_and_schema_together():
     registry = load_registry()
     for surface in OWNED_SURFACES:
@@ -398,7 +436,7 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         assert audit_html(sanitized, relative_path=path.relative_to(ROOT).as_posix()) == []
         assert '"legalName":"Confenge Serviços de Desenhos Técnicos Ltda"' in sanitized
         assert '"taxID":"52.407.089/0001-09"' in sanitized
-        # The owner-attested registration ships; the WITHHELD *number* does not.
+        # The officially verified active-registration claim ships; private identifiers do not.
         assert "Registro profissional ativo no CREA" in visible_text_of(html)
         assert not re.search(CREA_NUMBER_RE, sanitized)
         assert "166954-1" not in sanitized and "205402-8" not in sanitized

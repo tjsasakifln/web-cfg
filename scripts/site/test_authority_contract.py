@@ -330,11 +330,12 @@ def test_specialist_credentials_are_subset_of_public_verified_proof():
     html = path.read_text(encoding="utf-8")
     errors = check_credentials_against_proof(html)
     assert not errors, errors
-    # Do not invent stronger verification than proof.json already allows.
+    # Professional credentials come from their canonical official-source registry;
+    # the legacy proof catalog remains limited to non-credential claims.
     proof = load_proof()
-    assert "self-attested" in proof.get("verification_limitation", "").lower() or (
-        "self_attested" in json.dumps(proof)
-    )
+    assert proof.get("scope") == "legacy_noncredential_claims"
+    assert proof.get("canonical_credential_registry") == "data/site/credential-registry.json"
+    assert "credential-registry.json" in proof.get("verification_limitation", "")
     crea_claims = [
         claim
         for claim in load_registry()["claims"]

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.site.brand import load_brand, load_proof
+from scripts.site.credential_registry import load_registry
 
 from scripts.local_entity.census import build_census, load_search_baseline
 from scripts.local_entity.classify import classify_graph
@@ -51,7 +52,7 @@ def primary_observables(bundle: dict[str, Any]) -> dict[str, Any]:
     return {
         "campaign": CAMPAIGN,
         "decision_state": DECISION_STATE,
-        "as_of": CAMPAIGN_AS_OF,
+        "as_of": classified.get("as_of", CAMPAIGN_AS_OF),
         "claim_statuses": statuses,
         "census_channels": channels,
         "gsc_live_status": gsc.get("status"),
@@ -61,6 +62,12 @@ def primary_observables(bundle: dict[str, Any]) -> dict[str, Any]:
         "invented_nap": False,
         "invented_review": False,
         "third_party_verified_count": classified.get("third_party_verified_count"),
+        "credential_registry_verified_count": classified.get(
+            "credential_registry_verified_count"
+        ),
+        "legacy_third_party_verified_count": classified.get(
+            "legacy_third_party_verified_count"
+        ),
         "self_attested_not_upgraded": classified.get("self_attested_not_upgraded"),
     }
 
@@ -78,6 +85,8 @@ def format_observables(obs: dict[str, Any]) -> str:
         f"invented_nap: {str(obs['invented_nap']).lower()}",
         f"invented_review: {str(obs['invented_review']).lower()}",
         f"third_party_verified_count: {obs['third_party_verified_count']}",
+        f"credential_registry_verified_count: {obs['credential_registry_verified_count']}",
+        f"legacy_third_party_verified_count: {obs['legacy_third_party_verified_count']}",
         f"self_attested_not_upgraded: {str(obs['self_attested_not_upgraded']).lower()}",
     ]
     return "\n".join(lines) + "\n"
@@ -90,6 +99,7 @@ def run_campaign(
     home_html: str | None = None,
     proof: dict[str, Any] | None = None,
     brand: dict[str, Any] | None = None,
+    credential_registry: dict[str, Any] | None = None,
     census_rows: list[dict[str, Any]] | None = None,
     gsc_live: dict[str, Any] | None = None,
     out_dir: Path | None = None,
@@ -101,13 +111,23 @@ def run_campaign(
     canonical_home = home_html if home_html is not None else load_home_html(root)
     proof_doc = proof if proof is not None else load_proof()
     brand_doc = brand if brand is not None else load_brand()
+    registry_doc = (
+        credential_registry
+        if credential_registry is not None
+        else load_registry(root / "data" / "site" / "credential-registry.json")
+    )
     graph = extract_entity_graph(html)
     home_graph = extract_entity_graph(canonical_home)
     honesty = audit_graph_honesty(graph, html)
     require_clean(honesty, "honesty")
     home_honesty = audit_graph_honesty(home_graph, canonical_home)
     require_clean(home_honesty, "home_honesty")
-    classified = classify_graph(graph, proof=proof_doc, brand=brand_doc)
+    classified = classify_graph(
+        graph,
+        proof=proof_doc,
+        brand=brand_doc,
+        credential_registry=registry_doc,
+    )
     baseline = load_search_baseline(root)
     census = build_census(rows=census_rows, gsc_live=gsc_live, search_baseline=baseline)
     decision = decide_surface(classified=classified, graph=graph, honesty_errors=honesty)
@@ -129,7 +149,7 @@ def run_campaign(
     require_clean(validate_bundle(bundle), "bundle")
     snapshot = {
         "campaign": CAMPAIGN,
-        "as_of": CAMPAIGN_AS_OF,
+        "as_of": classified.get("as_of", CAMPAIGN_AS_OF),
         "decision_state": DECISION_STATE,
         "organization": graph.get("organization"),
         "person": graph.get("person"),
@@ -139,8 +159,14 @@ def run_campaign(
         "claims": classified.get("claims"),
         "claim_statuses": classified.get("claim_statuses"),
         "graph_fields_present": classified.get("graph_fields_present"),
-        "self_attested_not_upgraded": True,
+        "self_attested_not_upgraded": classified.get("self_attested_not_upgraded"),
         "third_party_verified_count": classified.get("third_party_verified_count"),
+        "credential_registry_verified_count": classified.get(
+            "credential_registry_verified_count"
+        ),
+        "legacy_third_party_verified_count": classified.get(
+            "legacy_third_party_verified_count"
+        ),
     }
     campaign_meta = {
         "campaign": CAMPAIGN,

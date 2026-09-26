@@ -30,6 +30,7 @@ def test_run_campaign_on_real_specialist(tmp_path: Path) -> None:
     assert first["observables"] == second["observables"]
     obs = first["observables"]
     assert obs["campaign"] == CAMPAIGN
+    assert obs["as_of"] == "2026-09-26"
     assert set(obs["claim_statuses"]) <= CLAIM_STATUSES
     assert set(obs["census_channels"]) == CENSUS_CHANNELS
     assert obs["gsc_live_status"] in {"BLOCKED", "UNKNOWN"}
@@ -39,9 +40,15 @@ def test_run_campaign_on_real_specialist(tmp_path: Path) -> None:
     assert obs["invented_nap"] is False
     assert obs["invented_review"] is False
     assert obs["self_attested_not_upgraded"] is True
+    assert obs["third_party_verified_count"] == 3
+    assert obs["credential_registry_verified_count"] == 9
+    assert obs["legacy_third_party_verified_count"] == 0
+    assert first["artifacts"]["entity-graph.json"]["as_of"] == "2026-09-26"
     text = format_observables(obs)
     assert "ready_for_product_decisions: false" in text
     assert "new_public_landing_created: false" in text
+    assert "credential_registry_verified_count: 9" in text
+    assert "legacy_third_party_verified_count: 0" in text
     errors = validate_bundle(
         {
             "graph": first["graph"],

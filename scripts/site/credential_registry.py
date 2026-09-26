@@ -206,6 +206,13 @@ def validate_registry(registry: dict[str, Any]) -> list[str]:
             errors.append(f"projectable_without_source:{cid}")
         if is_projectable(claim) and not (claim.get("allowed_wording") or []):
             errors.append(f"projectable_without_wording:{cid}")
+        if claim.get("entity") == "person" and claim.get("claim_category") == "credential":
+            if _parse_day(claim.get("as_of")) is None:
+                errors.append(f"credential_as_of_invalid:{cid}")
+            if _parse_day(claim.get("recheck_after")) is None:
+                errors.append(f"credential_recheck_after_invalid:{cid}")
+            if claim.get("expires_at") and _parse_day(claim.get("expires_at")) is None:
+                errors.append(f"credential_expires_at_invalid:{cid}")
     return errors
 
 
