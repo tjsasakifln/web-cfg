@@ -8,10 +8,29 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../.
 const pagePath = path.join(root, "seguranca-trabalho-apoio-tecnico/index.html");
 const page = fs.readFileSync(pagePath, "utf8");
 
+function stripRawTextElements(html, tagName) {
+  const lower = html.toLowerCase();
+  const opening = `<${tagName}`;
+  const closing = `</${tagName}`;
+  let cursor = 0;
+  let clean = "";
+  while (cursor < html.length) {
+    const openAt = lower.indexOf(opening, cursor);
+    if (openAt < 0) return clean + html.slice(cursor);
+    const openEnd = lower.indexOf(">", openAt + opening.length);
+    if (openEnd < 0) return clean + html.slice(cursor, openAt);
+    const closeAt = lower.indexOf(closing, openEnd + 1);
+    if (closeAt < 0) return clean + html.slice(cursor, openAt);
+    const closeEnd = lower.indexOf(">", closeAt + closing.length);
+    if (closeEnd < 0) return clean + html.slice(cursor, openAt);
+    clean += `${html.slice(cursor, openAt)} `;
+    cursor = closeEnd + 1;
+  }
+  return clean;
+}
+
 function visibleText(html) {
-  return html
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ")
+  return stripRawTextElements(stripRawTextElements(html, "script"), "style")
     .replace(/<[^>]+>/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
