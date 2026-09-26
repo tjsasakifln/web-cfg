@@ -30,7 +30,7 @@ Gatilho para nova página: evidência conjunta de intenção de compra distinta,
 
 ## Limites regulatórios incorporados
 
-- PGR é processo contínuo. A avaliação é revista em regra a cada dois anos, podendo chegar a três anos na hipótese normativa de certificação aplicável. A página também nomeia implementação das medidas, mudança ou inovação, inadequação, insuficiência ou ineficácia, acidente ou doença, alteração legal e solicitação justificada dos trabalhadores ou da CIPA como gatilhos. Não usa validade universal ou simples vencimento.
+- PGR é processo contínuo. A avaliação é revista em regra a cada dois anos, podendo chegar a três anos na hipótese normativa de certificação aplicável. A página também nomeia implementação das medidas, mudanças que criem novos riscos ou modifiquem os existentes, inadequação, insuficiência ou ineficácia, acidente ou doença, alteração legal e solicitação justificada dos trabalhadores ou da CIPA como gatilhos. Não usa validade universal ou simples vencimento.
 - A organização permanece responsável por implementar e manter o gerenciamento de riscos.
 - PGR de canteiro acompanha a etapa da obra e observa a habilitação e a exceção específica previstas na NR 18.
 - LTCAT é expedido por médico do trabalho ou engenheiro de segurança do trabalho.
