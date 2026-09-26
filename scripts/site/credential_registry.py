@@ -26,6 +26,17 @@ PERMISSIONED_PROOF_PATH = ROOT / "data" / "site" / "permissioned-proof-registry.
 
 STATUSES = frozenset({"VERIFIED", "SELF_ATTESTED", "WITHHELD", "EXPIRED", "UNKNOWN"})
 PROJECTABLE_STATUSES = frozenset({"VERIFIED", "SELF_ATTESTED"})
+FINAL_OFFICIAL_PERSONAL_CREDENTIAL_SOURCES = frozenset(
+    {
+        "official_judicial_registry",
+        "official_primary_document",
+        "official_professional_registry",
+    }
+)
+# These are identifiers retained only as an audit trail.  Their public status
+# must not depend on mutable presentation controls such as never_project or
+# projection_surfaces.
+PRIVATE_PERSONAL_CREDENTIAL_IDS = frozenset({"person-crea-sc", "person-rnp"})
 OWNED_SURFACES = ("/confianca/", "/especialista/tiago-jun-sasaki/")
 OWNED_RELATIVE_PATHS = frozenset(
     {
@@ -206,9 +217,18 @@ def validate_registry(registry: dict[str, Any]) -> list[str]:
             errors.append(f"projectable_without_source:{cid}")
         if is_projectable(claim) and not (claim.get("allowed_wording") or []):
             errors.append(f"projectable_without_wording:{cid}")
-        if claim.get("entity") == "person" and claim.get("claim_category") == "credential":
-            if _parse_day(claim.get("as_of")) is None:
+        if _is_personal_credential(claim):
+            as_of = _parse_day(claim.get("as_of"))
+            if as_of is None:
                 errors.append(f"credential_as_of_invalid:{cid}")
+            elif as_of > _today():
+                errors.append(f"credential_as_of_future:{cid}")
+            if (
+                claim.get("status") == "VERIFIED"
+                and claim.get("source_class")
+                not in FINAL_OFFICIAL_PERSONAL_CREDENTIAL_SOURCES
+            ):
+                errors.append(f"credential_verified_source_invalid:{cid}")
             if _parse_day(claim.get("recheck_after")) is None:
                 errors.append(f"credential_recheck_after_invalid:{cid}")
             if claim.get("expires_at") and _parse_day(claim.get("expires_at")) is None:
@@ -237,11 +257,50 @@ def _today(now: date | datetime | str | None = None) -> date:
     return parsed or date.today()
 
 
+def _is_personal_credential(claim: dict[str, Any]) -> bool:
+    return (
+        claim.get("entity") == "person"
+        and claim.get("claim_category") == "credential"
+    )
+
+
+def _is_private_personal_credential(claim: dict[str, Any]) -> bool:
+    return _is_personal_credential(claim) and (
+        str(claim.get("id") or "") in PRIVATE_PERSONAL_CREDENTIAL_IDS
+        or claim.get("private") is True
+    )
+
+
+def _is_current_verified_personal_credential(
+    claim: dict[str, Any], now: date | datetime | str | None = None
+) -> bool:
+    """Match the classifier's proof predicate before public projection."""
+    if claim.get("status") != "VERIFIED" or claim.get("revoked") is True:
+        return False
+    if claim.get("source_class") not in FINAL_OFFICIAL_PERSONAL_CREDENTIAL_SOURCES:
+        return False
+    as_of = _parse_day(claim.get("as_of"))
+    if as_of is None or as_of > _today(now):
+        return False
+    recheck = _parse_day(claim.get("recheck_after"))
+    if recheck is None or _today(now) > recheck:
+        return False
+    expires_value = claim.get("expires_at")
+    expires = _parse_day(expires_value)
+    if expires_value and expires is None:
+        return False
+    return not expires or _today(now) <= expires
+
+
 def is_projectable(claim: dict[str, Any], now: date | datetime | str | None = None) -> bool:
+    if _is_private_personal_credential(claim):
+        return False
     if claim.get("never_project"):
         return False
     if claim.get("revoked"):
         return False
+    if _is_personal_credential(claim):
+        return _is_current_verified_personal_credential(claim, now=now)
     status = claim.get("status")
     if status not in PROJECTABLE_STATUSES:
         return False

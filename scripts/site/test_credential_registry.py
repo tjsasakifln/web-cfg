@@ -115,6 +115,36 @@ def test_personal_credential_temporal_fields_fail_closed():
         assert any("credential_" in error and claim["id"] in error for error in errors)
 
 
+def test_personal_verified_credential_rejects_owner_attested_source():
+    registry = copy.deepcopy(load_registry())
+    claim = next(c for c in registry["claims"] if c["id"] == "person-titles-civil-sst")
+    claim["source_class"] = "owner_attested_public"
+
+    assert f"credential_verified_source_invalid:{claim['id']}" in validate_registry(registry)
+    assert not is_projectable(claim)
+
+
+def test_personal_credential_future_as_of_fails_validation_and_projection():
+    registry = copy.deepcopy(load_registry())
+    claim = next(c for c in registry["claims"] if c["id"] == "person-titles-civil-sst")
+    claim["as_of"] = "2099-01-01"
+
+    assert f"credential_as_of_future:{claim['id']}" in validate_registry(registry)
+    assert not is_projectable(claim)
+
+
+def test_private_crea_identifier_never_projects_when_presentation_controls_change():
+    registry = copy.deepcopy(load_registry())
+    claim = next(c for c in registry["claims"] if c["id"] == "person-crea-sc")
+    claim.pop("never_project", None)
+    claim["projection_surfaces"] = ["/confianca/"]
+
+    assert not is_projectable(claim)
+    projection = project(registry, "/confianca/")
+    assert claim["id"] not in projection.claim_ids
+    assert "166954-1" not in projection.visible_text
+
+
 def test_verified_cnpj_projects_to_visible_and_schema_together():
     registry = load_registry()
     for surface in OWNED_SURFACES:
