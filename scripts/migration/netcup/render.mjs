@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { HostContractError } from "./lib/contract.mjs";
 import { writeRenderedContract } from "./lib/nginx.mjs";
@@ -16,7 +17,7 @@ function requiredValue(argv, index, flag) {
 
 function args(argv) {
   const parsed = {
-    root: resolve(new URL("../../..", import.meta.url).pathname),
+    root: resolve(fileURLToPath(new URL("../../..", import.meta.url))),
     output: null,
   };
   for (let index = 0; index < argv.length; index += 1) {

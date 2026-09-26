@@ -138,18 +138,45 @@ def related(items: list[tuple[str, str, str]], hub: tuple[str, str]) -> str:
     )
 
 
-def cta(slug: str, journey: str, theme: str, wa: str, heading: str, body: str, wa_label: str) -> str:
+def cta(
+    slug: str,
+    journey: str,
+    theme: str,
+    wa: str,
+    heading: str,
+    body: str,
+    wa_label: str,
+    proposal_label: str | None = None,
+) -> str:
     from urllib.parse import quote
 
+    visible_heading = proposal_label or "Solicitar canal seguro para envio"
+    visible_wa_label = proposal_label or "Solicitar canal seguro para envio no WhatsApp"
+    proposal_action = (
+        proposal_label.replace("Pedir proposta", "pedir uma proposta", 1)
+        if proposal_label
+        else ""
+    )
+    action_request = (
+        f"Quero {proposal_action}."
+        if proposal_action
+        else "Quero solicitar um canal seguro para envio."
+    )
     safe_message = (
-        f"{wa.rstrip('.')} Quero solicitar um canal seguro para envio. "
+        f"{wa.rstrip('.')}. {action_request} "
         "Não anexe arquivo nesta mensagem."
     )
     wa_url = "https://wa.me/5548988344559?text=" + quote(safe_message)
     form = (
         f"/?jornada={journey}&amp;tema={quote(theme)}&amp;origem=/conteudos/{slug}/#contato"
     )
-    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>Solicitar canal seguro para envio</strong><p>{body} Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">Solicitar canal seguro para envio no WhatsApp</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{form}">Continuar pelo formulário</a></div></section>"""
+    document_step = (
+        "Solicitar canal seguro para envio fica para a etapa seguinte, quando a "
+        "CONFENGE abre o canal para a documentação."
+        if proposal_label
+        else "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
+    )
+    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>{visible_heading}</strong><p>{body} {document_step}</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">{visible_wa_label}</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{form}">Continuar pelo formulário</a></div></section>"""
 
 
 def decision(wa: str, body: str) -> str:
@@ -1369,6 +1396,7 @@ def patch_sinapi(html: str) -> str:
             "Solicitar canal seguro para envio",
             "Confrontamos edital, data-base, encargos e BDI sem misturar tabelas.",
             "Solicitar canal seguro para envio no WhatsApp",
+            "Pedir proposta de revisão do orçamento",
         ),
         html,
         count=1,
