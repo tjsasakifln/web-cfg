@@ -17,13 +17,12 @@
  */
 import { createServer } from "node:http";
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
-import { firstFoldInputHashes, firstFoldIdentityProblems } from "./first_fold_identity.mjs";
+import { firstFoldFileHash, firstFoldInputHashes, firstFoldIdentityProblems } from "./first_fold_identity.mjs";
 import {
   DESKTOP_VIEWPORT,
   MOBILE_VIEWPORT,
@@ -201,7 +200,7 @@ try {
     const desktop = perViewport[DESKTOP_VIEWPORT];
     const routeMeasurement = {
       route,
-      html_sha256: createHash("sha256").update(readFileSync(join(SITE_ROOT, route, "index.html"))).digest("hex"),
+      html_sha256: firstFoldFileHash(join(SITE_ROOT, route, "index.html")),
       measured_on: today,
       viewports: perViewport,
       category_repetition: categoryRepetition({

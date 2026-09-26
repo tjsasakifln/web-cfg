@@ -259,7 +259,7 @@ def sanitize_tree(root: Path) -> dict[str, int]:
             rel = path.name
         cleaned, removed = sanitize_html(raw, relative_path=rel)
         if removed:
-            path.write_text(cleaned, encoding="utf-8")
+            path.write_text(cleaned, encoding="utf-8", newline="\n")
             rewritten += 1
             fields_removed += removed
     return {"html_scanned": scanned, "html_rewritten": rewritten, "fields_removed": fields_removed}

@@ -66,6 +66,28 @@ def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+_TEXT_HASH_SUFFIXES = {".json", ".md", ".txt"}
+
+
+def file_matches_sha256(path: Path, expected: str) -> bool:
+    """Verify producer bytes while tolerating Git's CRLF checkout conversion.
+
+    The producer signs LF bytes. Git may materialize tracked text files with
+    CRLF on Windows, although their normalized repository content is
+    unchanged. Only that exact line-ending conversion is accepted as an
+    alternative digest; every other byte change remains fail-closed.
+    """
+    raw = path.read_bytes()
+    expected = expected.strip().lower()
+    if hashlib.sha256(raw).hexdigest() == expected:
+        return True
+    return (
+        path.suffix.lower() in _TEXT_HASH_SUFFIXES
+        and b"\r\n" in raw
+        and hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest() == expected
+    )
+
+
 def sha256sums_path(directory: Path) -> Path | None:
     """Producer 1.1 writes SHA256SUMS.txt; 1.0 writes SHA256SUMS. Accept either."""
     txt = directory / "SHA256SUMS.txt"
@@ -96,8 +118,7 @@ def verify_sha256sums(directory: Path) -> tuple[bool, list[str]]:
         if not target.is_file():
             reasons.append(f"sha256sums_missing:{rel}")
             continue
-        actual = file_sha256(target)
-        if actual != digest.lower():
+        if not file_matches_sha256(target, digest):
             reasons.append(f"sha256sums_mismatch:{rel}")
     return not reasons, reasons
 
@@ -157,13 +178,12 @@ def verify_ready_document(directory: Path, ready: dict[str, Any]) -> tuple[bool,
     manifest_path = directory / "manifest.json"
     if not manifest_path.is_file():
         return False, reasons + ["manifest_absent"]
-    manifest_sha = file_sha256(manifest_path)
     declared_sha = str(
         ready.get("manifest_sha256") or ready.get("manifest_sha") or ready.get("manifest_hash") or ""
     ).strip()
     if not declared_sha:
         reasons.append("ready_manifest_sha_absent")
-    elif declared_sha != manifest_sha:
+    elif not file_matches_sha256(manifest_path, declared_sha):
         reasons.append("ready_manifest_sha_mismatch")
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

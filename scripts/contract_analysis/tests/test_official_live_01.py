@@ -76,6 +76,23 @@ def test_official_pack_verifies_with_shipped_handoff(tmp_path, monkeypatch):
     assert result["analysis_ids"] == [AUTHORIZED_ANALYSIS_ID]
 
 
+def test_sha256sums_accepts_only_git_crlf_conversion(tmp_path):
+    text = tmp_path / "README.md"
+    text.write_bytes(b"linha um\r\nlinha dois\r\n")
+    expected = hashlib.sha256(b"linha um\nlinha dois\n").hexdigest()
+    (tmp_path / "SHA256SUMS.txt").write_text(
+        f"{expected}  README.md\n",
+        encoding="utf-8",
+    )
+    ok, reasons = verify_sha256sums(tmp_path)
+    assert ok is True, reasons
+
+    text.write_bytes(b"linha um\r\nlinha alterada\r\n")
+    ok, reasons = verify_sha256sums(tmp_path)
+    assert ok is False
+    assert reasons == ["sha256sums_mismatch:README.md"]
+
+
 def test_semantically_mutated_manifest_cannot_remain_handoff_ready(tmp_path, monkeypatch):
     dest = _stage_rendezvous(tmp_path)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))

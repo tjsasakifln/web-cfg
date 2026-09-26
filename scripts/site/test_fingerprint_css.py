@@ -112,6 +112,7 @@ def test_fingerprint_rewrites_html_to_hashed_css():
         report = fingerprint_published_css(dest)
 
         html = page.read_text(encoding="utf-8")
+        assert b"\r\n" not in page.read_bytes()
         hrefs = stylesheet_hrefs(html)
         assert hrefs, "no stylesheet href after fingerprint"
         assert not html_uses_unversioned_styles(html), hrefs

@@ -416,7 +416,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
         cleaned = scrub_html(raw)
         if args.write and cleaned != raw:
-            path.write_text(cleaned, encoding="utf-8")
+            path.write_text(cleaned, encoding="utf-8", newline="\n")
             changed += 1
 
         if args.check:

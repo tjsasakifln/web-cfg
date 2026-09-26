@@ -216,7 +216,7 @@ def version_commercial_media_references(
             updated, count = _rewrite_text(updated, asset)
             replaced_here += count
         if updated != original:
-            path.write_text(updated, encoding="utf-8")
+            path.write_text(updated, encoding="utf-8", newline="\n")
             rewritten_files.add(path.relative_to(dest).as_posix())
         replacements += replaced_here
 
@@ -233,6 +233,7 @@ def version_commercial_media_references(
         manifest_path.write_text(
             json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
     return {
         **payload,

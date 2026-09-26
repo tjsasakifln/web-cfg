@@ -377,7 +377,7 @@ def promote_public_navigation_tree(site_root: Path) -> int:
         after = promote_public_navigation(before, relative_path=relative_path)
         if after == before:
             continue
-        html_path.write_text(after, encoding="utf-8")
+        html_path.write_text(after, encoding="utf-8", newline="\n")
         changed += 1
     return changed
 

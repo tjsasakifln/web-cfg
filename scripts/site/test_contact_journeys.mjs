@@ -11,10 +11,11 @@ import { createServer } from "node:http";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { privateRouteChannelProblems } from "./test_private_route_channels.mjs";
 
-const root = resolve(new URL("../..", import.meta.url).pathname);
+const root = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const site = resolve(process.env.SITE_ROOT || join(root, "_site"));
 const reportDir = resolve(process.env.CONTACT_JOURNEY_REPORT_DIR || join(root, "build/reports/contact-journeys"));
 const chrome = process.env.CHROME_PATH || process.env.CHROME;

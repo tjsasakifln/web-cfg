@@ -468,7 +468,10 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
         for start, end, new in reversed(replacements):
             updated = updated[:start] + new + updated[end:]
         if updated != text:
-            html_path.write_text(updated, encoding="utf-8")
+            # Keep the publish artifact byte-stable across Linux and Windows.
+            # Path.write_text() otherwise applies the platform newline policy,
+            # which changes approval hashes for identical rendered content.
+            html_path.write_bytes(updated.replace("\r\n", "\n").encode("utf-8"))
             html_rewritten += 1
 
     persisted_rewrites = html_rewritten

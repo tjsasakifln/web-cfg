@@ -25,8 +25,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
-import { firstFoldInputHashes, firstFoldIdentityProblems } from "../../scripts/site/first_fold_identity.mjs";
+import { firstFoldFileHash, firstFoldHash, firstFoldInputHashes, firstFoldIdentityProblems } from "../../scripts/site/first_fold_identity.mjs";
 import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 import {
   DESKTOP_VIEWPORT,
@@ -405,10 +404,12 @@ assert("evidence_source_commit_is_reachable", sourceCommitReachable, evidence.co
 const actualInputHashes = firstFoldInputHashes(root, census.map(row => row.route));
 const identityProblems = firstFoldIdentityProblems(evidence, actualInputHashes);
 assert("evidence_is_clean_and_bound_to_current_inputs", identityProblems.length === 0, identityProblems);
+assert("identity_normalizes_checkout_crlf_for_text", firstFoldHash(Buffer.from("a\r\nb\r\n"), "fixture.html") === firstFoldHash(Buffer.from("a\nb\n"), "fixture.html"), "text checkout EOLs must share an identity");
+assert("identity_keeps_binary_bytes_exact", firstFoldHash(Buffer.from([0, 13, 10]), "fixture.woff2") !== firstFoldHash(Buffer.from([0, 10]), "fixture.woff2"), "binary bytes must not be normalized");
 assert("identity_rejects_dirty_measurement", firstFoldIdentityProblems({ surface: "source", tree_dirty: true, input_hashes: actualInputHashes }, actualInputHashes).includes("first_fold_dirty_source_evidence"), "dirty source negative seed");
 assert("identity_rejects_changed_input", firstFoldIdentityProblems({ ...evidence, input_hashes: { ...actualInputHashes, "index.html": "0".repeat(64) } }, actualInputHashes).some(problem => problem === "first_fold_input_changed:index.html"), "changed HTML negative seed");
 for (const row of evidence.routes || []) {
-  const currentHash = createHash("sha256").update(fs.readFileSync(routeToFile(row.route))).digest("hex");
+  const currentHash = firstFoldFileHash(routeToFile(row.route));
   assert(`evidence_${row.route}_html_bytes_match`, row.html_sha256 === currentHash, [row.html_sha256, currentHash]);
 }
 assert("evidence_records_a_measurement_date", /^\d{4}-\d{2}-\d{2}$/.test(evidence.measured_on || ""), evidence.measured_on);

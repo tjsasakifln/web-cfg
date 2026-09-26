@@ -1146,7 +1146,9 @@ def _has_contextual_direct_contact(main: str, route: str) -> bool:
     shared client records whatsapp_click/email_click, never lead_persisted.
     An arbitrary external link, placeholder or footer contact is insufficient.
     """
-    contact = json.loads((ROOT / "data/site/brand.json").read_text())["contact"]
+    contact = json.loads(
+        (ROOT / "data/site/brand.json").read_text(encoding="utf-8")
+    )["contact"]
     for anchor in re.findall(r"(?is)<a\b[^>]*>.*?</a>", main):
         tag = anchor.split(">", 1)[0]
         if re.search(r'\b(?:hidden|inert|disabled)\b|aria-disabled=["\']true', tag, re.I):
