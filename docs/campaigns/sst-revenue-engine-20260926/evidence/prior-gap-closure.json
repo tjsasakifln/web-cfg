@@ -1,0 +1,18 @@
+{
+  "schema": "confenge.prior-campaign-gap-closure/1.0",
+  "campaign": "CONFENGE_SST_REVENUE_ENGINE/1.0",
+  "source": "Slack thread in cfg-08-produtos-dados, parent 1790447098.485679, reply 1790447771.114899",
+  "as_of": "2026-09-26",
+  "gaps": [
+    {"id":"G03","state":"PENDING_HUMAN","owner":"authorized human operator","closed":false,"reason":"Turnstile and real receipt passage cannot be automated or bypassed","resume_when":"human test correlates browser receipt, persistence, notification and operation"},
+    {"id":"FAMILY_COVERAGE_MATRIX","state":"CLOSED_IN_REPOSITORY","owner":"this campaign","closed":true,"evidence":"coverage-matrix.json"},
+    {"id":"ISSUE_705","source_locator":"docs/campaigns/bofu-fechamento-20260919/README.md and GitHub #705","state":"PENDING_POST_RELEASE_RECONCILIATION","owner":"inbound implementation","closed":false,"resume_when":"PR, release SHA and production evidence exist"},
+    {"id":"ISSUE_706","source_locator":"docs/campaigns/bofu-fechamento-20260919/README.md and GitHub #706","state":"NOT_YET_MEASURED","owner":"Warmbly measurement contract","closed":false,"resume_when":"post-publication observation window and valid proposal counting are available"},
+    {"id":"ISSUE_707","source_locator":"docs/campaigns/bofu-fechamento-20260919/README.md and GitHub #707","state":"PENDING_OWNER_DISTRIBUTION_DECISION","owner":"founder and distribution owner","closed":false,"resume_when":"an external distribution action is explicitly approved and actually occurs"},
+    {"id":"COMMERCIAL_RESULT","source_locator":"Slack gap and GitHub #706","state":"NOT_YET_MEASURED","owner":"issue 706 and Warmbly reconciliation","closed":false,"resume_when":"post-publication observation window and valid proposal counting are available"},
+    {"id":"EVALUATION_OWN_ROUTE","source_locator":"docs/campaigns/bofu-fechamento-20260919/README.md P-2","state":"OWNER_DECISION_OUTSIDE_SST_SCOPE","owner":"founder","closed":false,"resume_when":"distinct valuation route is approved with family, sitemap and proof contract"},
+    {"id":"NO_JS_PRE_BID_NOTE","source_locator":"docs/campaigns/bofu-fechamento-20260919/README.md P-7","state":"PENDING_NEXT_UNLOCK","owner":"next inbound cycle","closed":false,"resume_when":"frozen pre-bid pillar is unlocked"},
+    {"id":"NBR_13752_PUBLICATION_GATE","source_locator":"docs/campaigns/bofu-fechamento-20260919/README.md P-15","state":"GATED_BY_CATALOG","owner":"technical owner","closed":false,"resume_when":"the standard is registered in the assistance offer catalog before public use"},
+    {"id":"GSC_KEEP_NOINDEX_READOUT","source_locator":"docs/campaigns/bofu-integral-20260919/README.md item 6 and fechamento P-12","state":"PENDING_HOST_READOUT","owner":"owner or ops","closed":false,"resume_when":"a fresh host readout with page dimension covers the KEEP_NOINDEX cohort"}
+  ]
+}

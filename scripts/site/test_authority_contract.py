@@ -302,15 +302,17 @@ def test_specialist_page_shows_sameas_and_as_of():
     """#74 VALIDATE: specialist HTML keeps a verifiable public identity signal."""
     path = ROOT / "especialista" / "tiago-jun-sasaki" / "index.html"
     html = path.read_text(encoding="utf-8")
+    registry = load_registry()
+    as_of = registry["as_of"]
     assert path.is_file()
     assert "sameAs" in html
     assert "https://github.com/tjsasakifln" in html
-    assert 'data-credential-as-of="2026-09-04"' in html
-    assert 'datetime="2026-09-05"' in html
+    assert f'data-credential-as-of="{as_of}"' in html
+    assert f'"dateModified":"{as_of}"' in html
     assert "EESC-USP" in html or "Universidade de São Paulo" in html
     crea_claims = [
         claim
-        for claim in load_registry()["claims"]
+        for claim in registry["claims"]
         if "crea" in str(claim.get("id", "")).lower()
     ]
     if any(is_projectable(claim) for claim in crea_claims):

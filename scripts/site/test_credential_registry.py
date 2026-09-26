@@ -88,14 +88,12 @@ def test_verified_cnpj_projects_to_visible_and_schema_together():
         assert projection_defects(proj) == []
 
 
-def test_withheld_unknown_expired_revoked_do_not_project():
+def test_nonpublic_unknown_expired_revoked_do_not_project():
     registry = load_registry()
     withheld_ids = [
         "org-crea-pj",
         "person-crea-sc",
         "person-rnp",
-        "person-titles-civil-sst",
-        "person-sst-engineer",
         "person-cptec-registration",
         "person-cptec-work-count",
         "person-postgrad-valuations",
@@ -106,8 +104,8 @@ def test_withheld_unknown_expired_revoked_do_not_project():
         for cid in withheld_ids:
             assert cid not in proj.claim_ids
         blob = proj.visible_text + json.dumps(proj.schema_nodes, ensure_ascii=False)
-        # The owner-attested "Registro profissional ativo no CREA" projects; a
-        # registration NUMBER, which no reproducible public source backs, does not.
+        # The verified active-registration claim projects. Identifiers and unrelated
+        # credentials remain intentionally absent from these public surfaces.
         assert not re.search(CREA_NUMBER_RE, blob)
         assert "CREA-SC" not in blob
         assert "166954-1" not in blob
@@ -128,13 +126,13 @@ def test_withheld_unknown_expired_revoked_do_not_project():
             assert proj.schema_org.get("taxID") != "52.407.089/0001-09", label
 
 
-def test_withheld_aliases_are_rejected_anywhere_in_visible_page_content():
+def test_nonprojectable_aliases_are_rejected_anywhere_in_visible_page_content():
     registry = load_registry()
     clean = '<main><p>Responsável pela página: Tiago Jun Sasaki.</p></main>'
-    poisoned = '<main><p>Responsável técnico: Tiago Jun Sasaki.</p></main>'
+    poisoned = '<main><p>6 trabalhos registrados na consulta pública do CPTEC/TJSC.</p></main>'
     assert withheld_visible_claim_errors(clean, registry) == []
     errors = withheld_visible_claim_errors(poisoned, registry)
-    assert any(error.startswith("withheld_claim_visible:person-technical-link:") for error in errors)
+    assert any(error.startswith("withheld_claim_visible:person-cptec-work-count:") for error in errors)
     for path in (CONFIANCA, ESPECIALISTA, ROOT / "ferramentas/prontidao-tecnica-obra-privada/index.html"):
         assert withheld_visible_claim_errors(path.read_text(encoding="utf-8"), registry) == [], path
 
@@ -261,6 +259,7 @@ def test_cptec_registration_is_not_court_appointment():
         revoked=False,
         withheld_reason=None,
         never_project=False,
+        projection_surfaces=["/especialista/tiago-jun-sasaki/"],
     )
     proj = project(verified, "/especialista/tiago-jun-sasaki/")
     assert "person-cptec-registration" in proj.claim_ids
@@ -381,7 +380,7 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         assert org.get("legalName") == "Confenge Serviços de Desenhos Técnicos Ltda"
         assert org.get("taxID") == "52.407.089/0001-09"
         person = next(n for n in nodes if "Person" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")]))
-        assert person.get("jobTitle") == "Engenheiro Civil"
+        assert person.get("jobTitle") == "Engenheiro Civil e Engenheiro de Segurança do Trabalho"
         if surface == "/especialista/tiago-jun-sasaki/":
             assert "https://github.com/tjsasakifln" in json.dumps(person.get("sameAs") or [])
         else:
@@ -406,24 +405,30 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         assert check_credentials_against_proof(html) == []
 
 
-def test_owner_attested_claims_ship_without_leaking_the_withheld_number():
-    """The owner is the source for facts about himself; the number stays withheld."""
+def test_verified_crea_claims_ship_without_leaking_nonpublic_identifiers():
+    """Official credentials project only where the registry allows them."""
     registry = load_registry()
-    for cid in ("person-crea-active", "person-analyzed-volume"):
+    for cid in ("person-crea-active", "person-titles-civil-sst", "person-sst-engineer"):
         claim = next(c for c in registry["claims"] if c["id"] == cid)
-        assert claim["status"] == "SELF_ATTESTED"
+        assert claim["status"] == "VERIFIED"
         assert is_projectable(claim)
-        assert claim["as_of"] == "2026-09-07"
-        # No fabricated document: the source is the named owner, not a file.
-        assert "Tiago Jun Sasaki" in claim["source_reference"]["label"]
-    # The numbered rows stay withheld as audit trail.
-    for cid in ("person-crea-sc", "org-crea-pj", "person-rnp"):
-        assert not is_projectable(next(c for c in registry["claims"] if c["id"] == cid))
+        assert claim["as_of"] == "2026-09-26"
+        assert "CREA" in claim["source_reference"]["label"]
+    # Verified identifiers exist in the registry but have no public projection.
+    for cid in ("person-crea-sc", "person-rnp"):
+        claim = next(c for c in registry["claims"] if c["id"] == cid)
+        assert claim["status"] == "VERIFIED"
+        assert claim["projection_surfaces"] == []
+    assert not is_projectable(next(c for c in registry["claims"] if c["id"] == "org-crea-pj"))
+    volume = next(c for c in registry["claims"] if c["id"] == "person-analyzed-volume")
+    assert volume["status"] == "SELF_ATTESTED"
     for surface in OWNED_SURFACES:
         proj = project(registry, surface)
         assert "person-crea-active" in proj.claim_ids
+        assert "person-titles-civil-sst" in proj.claim_ids
         assert "person-analyzed-volume" in proj.claim_ids
         assert "Registro profissional ativo no CREA" in proj.visible_text
+        assert "Engenheiro Civil e Engenheiro de Segurança do Trabalho" in proj.visible_text
         assert "Mais de R$ 700 milhões em obras e projetos analisados" in proj.visible_text
         assert "166954-1" not in proj.visible_text
         assert "205402-8" not in proj.visible_text
@@ -431,6 +436,17 @@ def test_owner_attested_claims_ship_without_leaking_the_withheld_number():
         low = proj.visible_text.lower()
         for forbidden in ("economizad", "recuperad", "obras entregues", "obras executadas"):
             assert forbidden not in low
+
+
+def test_sst_route_manual_title_is_guarded_by_registry_revocation():
+    """A manual commercial surface must fail closed if the verified title is revoked."""
+    registry = load_registry()
+    sst = ROOT / "seguranca-trabalho-apoio-tecnico" / "index.html"
+    html = sst.read_text(encoding="utf-8")
+    assert withheld_visible_claim_errors(html, registry) == []
+    revoked = revoke_claim(copy.deepcopy(registry), "person-titles-civil-sst")
+    errors = withheld_visible_claim_errors(html, revoked)
+    assert any(error.startswith("withheld_claim_visible:person-titles-civil-sst:") for error in errors)
 
 
 def test_self_deprecating_framing_fails_the_projection():

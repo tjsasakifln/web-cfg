@@ -98,7 +98,11 @@ STOREFRONT_PATTERNS = (
 # against the engineer who signs the work: a public registry and the named
 # professional are two sources, not a strong claim and a weak one. Issue #638.
 SOURCE_LABELS = {
-    "VERIFIED": "Fonte: registro público",
+    "official_public_registry": "Fonte: registro público oficial",
+    "official_professional_registry": "Fonte: registro profissional oficial",
+    "official_judicial_registry": "Fonte: cadastro judicial oficial",
+    "official_primary_document": "Fonte: documento oficial",
+    "official_public_url": "Fonte: URL pública verificada",
     "SELF_ATTESTED": "Fonte: Tiago Jun Sasaki",
 }
 
@@ -401,6 +405,7 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
         "org-cnae-servicos-engenharia",
         "person-legal-name",
         "person-civil-eesc-usp",
+        "person-titles-civil-sst",
         "person-crea-active",
         "person-analyzed-volume",
         "person-github",
@@ -409,6 +414,7 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
     order_especialista = (
         "person-legal-name",
         "person-civil-eesc-usp",
+        "person-titles-civil-sst",
         "person-crea-active",
         "person-analyzed-volume",
         "person-github",
@@ -474,7 +480,9 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             f"{escape(wording)}</span>"
             f"{extra}"
         )
-        status_label = SOURCE_LABELS.get(str(claim.get("status") or ""))
+        status_label = SOURCE_LABELS.get(str(claim.get("source_class") or ""))
+        if not status_label:
+            status_label = SOURCE_LABELS.get(str(claim.get("status") or ""))
         if status_label:
             desc += f' <small class="credential-source">{escape(status_label)}</small>'
         rows.append((term, desc, claim))
@@ -516,8 +524,8 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         f'<p class="credential-as-of">Consulta pública conferida em '
         f'<time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>. '
         "Os dados da pessoa jurídica vêm da consulta pública de CNPJ da Receita Federal. "
-        "Formação, registro profissional e histórico de obras e projetos analisados são "
-        "informados por Tiago Jun Sasaki, que assina os trabalhos.</p>"
+        "Formação, títulos e registro profissional vêm dos documentos ou registros oficiais indicados. "
+        "O histórico de obras e projetos analisados é informado por Tiago Jun Sasaki.</p>"
         "</section>"
     )
 
@@ -965,6 +973,7 @@ def _patch_jsonld(payload: Any, proj: Projection) -> None:
     org = next((n for n in nodes if "Organization" in _types(n)), None)
     person = next((n for n in nodes if "Person" in _types(n)), None)
     service = next((n for n in nodes if "ProfessionalService" in _types(n)), None)
+    webpage = next((n for n in nodes if "WebPage" in _types(n)), None)
 
     if org is not None:
         for key in MANAGED_ORG_KEYS:
@@ -974,6 +983,8 @@ def _patch_jsonld(payload: Any, proj: Projection) -> None:
         for key in MANAGED_PERSON_KEYS:
             person.pop(key, None)
         person.update(copy.deepcopy(proj.schema_person))
+    if webpage is not None:
+        webpage["dateModified"] = proj.as_of
     if proj.schema_service:
         body = copy.deepcopy(proj.schema_service)
         body.setdefault("@type", "ProfessionalService")
