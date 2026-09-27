@@ -1,6 +1,7 @@
 # Fechamento da campanha SST Conversion Correction 2.0
 
 Data de execução: 26/09/2026
+Data de encerramento: 27/09/2026
 
 Repositório: `web-cfg`
 
@@ -95,7 +96,7 @@ Assistência em disputa não aparece no hero, na proposta central ou nos CTAs de
 
 ## 8. Home, formulário e canais
 
-A home agora apresenta a dor “minha equipe não consegue mais administrar a documentação de SST”, explica a execução remota e liga o visitante ao hub e às quatro compras específicas.
+A home agora apresenta o título “Quero terceirizar a documentação de SST” e explica que, quando a equipe não consegue mais administrar essa frente, a CONFENGE terceiriza remotamente a documentação; a entrada liga o visitante ao hub e às quatro compras específicas.
 
 O formulário geral permanece leve. Quando SST é selecionado, mostra somente estas opções finitas:
 
@@ -156,8 +157,9 @@ Resultados já confirmados nesta revisão:
 - WhatsApp: 52 links encontrados, zero warning;
 - shell, navegação, JSON-LD e módulos do bundle: sincronizados;
 - build final (`npm run build:site`): **PASS**; artefato público com 568 arquivos, zero finding, SEO sem erro e paridade visível 100/100.
+- validação final em Ubuntu no merge: pSEO, CodeQL, site-ci, required execution evidence e os nove jobs do workflow de release concluíram com sucesso; Lighthouse terminou em `MEASURED_PASS`.
 
-A tentativa do agregador `npm test` no checkout Windows avançou pelos gates iniciais e foi interrompida no `pseo:test` por duas integrações com o repositório vizinho `extra-cli`, cujo `os.fsync` retorna `Bad file descriptor` nesse ambiente. A terceira falha observada, separador de caminho no censo público, foi corrigida e o caso Turnstile passou isoladamente. O repositório vizinho, já com mudanças alheias, não foi alterado; os checks obrigatórios do PR em Ubuntu permanecem como autoridade integral da suíte.
+A tentativa do agregador `npm test` no checkout Windows avançou pelos gates iniciais e foi interrompida no `pseo:test` por duas integrações com o repositório vizinho `extra-cli`, cujo `os.fsync` retorna `Bad file descriptor` nesse ambiente. A terceira falha observada, separador de caminho no censo público, foi corrigida e o caso Turnstile passou isoladamente. O repositório vizinho, já com mudanças alheias, não foi alterado; os checks obrigatórios do PR e a cadeia de release em Ubuntu concluíram com sucesso e são a autoridade integral da suíte.
 
 Correções de infraestrutura encontradas pelos gates:
 
@@ -182,13 +184,15 @@ Correções de infraestrutura encontradas pelos gates:
 
 ## 13. Deploy e produção
 
-- PR: [#725](https://github.com/tjsasakifln/web-cfg/pull/725)
-- SHA mesclado: **PENDENTE**
-- workflow de release: **PENDENTE**
-- SHA servido em `/.well-known/build-info.json`: **PENDENTE**
-- validação direta de home, hub, quatro BOFU, perfil, confiança, serviços, entregas, formulário, WhatsApp, footer, mobile, metadata e sitemap: **PENDENTE**
-- buscas pós-deploy: **PENDENTE**
+- PR: [#725](https://github.com/tjsasakifln/web-cfg/pull/725), mesclado em 27/09/2026.
+- SHA mesclado e publicado: `2d7faa236a4b2c281290c7556251bf191fcc7236`.
+- workflow de release: [netcup-release 36295127064](https://github.com/tjsasakifln/web-cfg/actions/runs/36295127064), concluído com sucesso nos nove jobs; promoção atômica em 27/09/2026 às 05:24:58 UTC, sem rollback.
+- identidade servida: `/.well-known/build-info.json` e `/.well-known/runtime-info.json` confirmam o SHA publicado; hash do artefato `68d4ccd23eeb299afccca4f2e2610930b4ada15bef0cd9d850eafd418e4241ba` e bundle de release `d8b846b6e68ad127c258dbe39da57831e0948e52dec161d9416b4bc286a96971`.
+- aceitação pós-promoção: `/healthz` e `/ready` responderam 200; 537/537 HTMLs servidos foram reconciliados com o digest do artefato, sem erro; runtime acceptance passou em modo `official_live_lighthouse`; evidência pós-promoção no artefato `10924790679` do workflow.
+- validação direta: home, hub SST, quatro BOFU, perfil, confiança, serviços, entregas e triagem responderam 200 com canonical exato; a 404 personalizada respondeu 404; o sitemap lista as cinco rotas SST.
+- validação de conversão e mobile: nas cinco rotas SST, 390x844 e 1440x1000 apresentaram CTA principal visível, WhatsApp contextual, footer, zero overflow e zero `pageerror`. No hub, o clique principal emitiu `sst_cta_click`; nas quatro BOFU, emitiu também o evento específico de cada oferta. Na home 390x844, selecionar SST revelou as sete opções finitas, sem `inert` ou `aria-hidden`, persistiu a jornada `sst` e emitiu `sst_form_start`.
+- buscas pós-deploy em 27/09/2026: as consultas `site:confenge.com.br segurança do trabalho`, `site:confenge.com.br PGR`, `site:confenge.com.br "Uso de IA"`, `site:confenge.com.br "Engenheiro de Segurança do Trabalho"` e as quatro URLs BOFU ainda refletiam crawls anteriores. O índice mostrava títulos ou copy anteriores da home, do hub e do perfil e ainda não mostrava as novas BOFU. Resultados em cache com “Uso de IA” ainda exibiam trechos históricos de superfícies de governança ou análises editoriais; a leitura direta dessas URLs e das superfícies comerciais SST publicadas confirmou zero ocorrência visível no conteúdo atualmente servido. Isso é atraso de recrawl, não conteúdo antigo ainda servido.
 
 ## 14. Lacunas restantes
 
-Não há lacuna funcional conhecida no código local. Permanecem somente os gates externos que dependem do merge e da publicação: checks do PR, release em produção, confirmação do SHA servido, smoke de URLs ao vivo e observação do índice do buscador. Cache de buscador será registrado separadamente de conteúdo efetivamente publicado.
+Não há lacuna funcional ou de publicação conhecida. Resta somente observar a propagação do índice do buscador e registrar quando títulos, snippets e as quatro novas BOFU forem recrawleados. Até lá, resultados em cache devem continuar separados do conteúdo efetivamente servido, cuja identidade e conteúdo já foram validados no SHA publicado.
