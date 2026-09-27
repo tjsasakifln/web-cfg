@@ -17,6 +17,11 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "purchase_id": "compatibilizacao-projetos"
     },
+    "sst_risk_documentation_diagnosis": {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "intent_family": "organizar_sst",
+      "purchase_id": "organizar-sst"
+    },
     "private_project_technical_readiness_assessment": {
       "path": "/ferramentas/prontidao-tecnica-obra-privada/",
       "intent_family": "orcar_planejar_decidir",
@@ -68,6 +73,11 @@
       "path": "/casos/",
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": null
+    },
+    "organizar-sst": {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "intent_family": "organizar_sst",
+      "offer_id": "sst_risk_documentation_diagnosis"
     },
     "outra-demanda-tecnica": {
       "path": "/triagem-tecnica/",
