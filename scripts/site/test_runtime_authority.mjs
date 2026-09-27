@@ -13,7 +13,6 @@
  */
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import test from "node:test";
@@ -23,6 +22,7 @@ import {
   AUTHORITY_PATH,
   ROOT,
   SCAN_POLICY_PATH,
+  canonicalTextSha256,
   compareRuntimeAuthority,
   enumerateScannedFiles,
   findForbiddenProductionInstructions,
@@ -88,6 +88,11 @@ root:
   assert.deepEqual(doc.root.empty, []);
   assert.equal(doc.root.flag, true);
   assert.equal(doc.root.missing, null);
+});
+
+test("historical text hashes are stable across LF and CRLF checkouts", () => {
+  assert.equal(canonicalTextSha256("one\ntwo\n"), canonicalTextSha256("one\r\ntwo\r\n"));
+  assert.notEqual(canonicalTextSha256("one\ntwo\n"), canonicalTextSha256("one\nchanged\n"));
 });
 
 test("matching fixture passes through the shipped compare function", () => {
@@ -337,7 +342,7 @@ test("every exception is justified, typed and — when historical — content pi
     assert.ok(String(item.reason || "").length > 30, `${item.path}: exception without a real reason`);
     if (item.kind === "historical_record") {
       assert.match(String(item.sha256), /^[0-9a-f]{64}$/, `${item.path}: historical exception is unpinned`);
-      const actual = createHash("sha256").update(readFileSync(join(ROOT, item.path))).digest("hex");
+      const actual = canonicalTextSha256(readFileSync(join(ROOT, item.path), "utf8"));
       assert.equal(actual, item.sha256, `${item.path}: pinned hash does not match the file`);
     }
   }
@@ -376,7 +381,7 @@ test("an exception that no longer earns its keep fails the register audit", () =
     kind: "historical_record",
     reason: "a plausible sounding reason that is long enough to pass the shape check",
     owner: "tjsasakifln",
-    sha256: createHash("sha256").update(readFileSync(AUTHORITY_PATH)).digest("hex"),
+    sha256: canonicalTextSha256(readFileSync(AUTHORITY_PATH, "utf8")),
   });
   const scan = scanOperatorDocs({ policy });
   assert.equal(scan.ok, false);

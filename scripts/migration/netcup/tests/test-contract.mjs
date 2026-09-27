@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -25,8 +26,8 @@ import {
 } from "../lib/nginx.mjs";
 import { sitemapUrlSet } from "../lib/html-seo.mjs";
 
-const ROOT = resolve(new URL("../../../..", import.meta.url).pathname);
-const FIXTURES = resolve(new URL("fixtures", import.meta.url).pathname);
+const ROOT = fileURLToPath(new URL("../../../..", import.meta.url));
+const FIXTURES = fileURLToPath(new URL("fixtures/", import.meta.url));
 
 function fixture(name) {
   return readFileSync(resolve(FIXTURES, name), "utf8");

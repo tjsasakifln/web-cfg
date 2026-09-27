@@ -56,20 +56,8 @@ const journeys = [
   ["avaliacao_imovel", "/servicos/#servico-avaliacao", "situacao-avaliacao", ".situation-action[href]"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "situacao-sst", ".situation-action[href]"],
 ].map(([id, direct, homeAnchor, homeSelector]) => ({ id, direct, homeAnchor, homeSelector }));
-// CONFENGE-BOFU-FECHAMENTO-20260919 (fechamento): as jornadas e cenários que
-// dependiam de outro workstream entram pelo que a home publica, não pelo estado
-// de uma base git (contraprovas contra origin/main quebram após o merge).
 const pendingUntilClosure = [];
 const homeHtml = readFileSync(join(root, "index.html"), "utf8");
-// B-02 (WS-E) + WS-B/WS-D: a disputa trabalhista com componente de SST entra
-// pela situação de SST da home e cai no bloco próprio da landing de SST. O
-// bloco tem WhatsApp e e-mail próprios (journey_direct_next_step); os três
-// canais diretos continuam exigidos na rota inteira, não no fragmento.
-if (homeHtml.includes('href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"')) {
-  journeys.push({ id: "assistencia_trabalhista", direct: "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista", homeAnchor: "situacao-sst", homeSelector: 'a[href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"]' });
-} else {
-  pendingUntilClosure.push("journey assistencia_trabalhista (li#situacao-sst -> /seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista): home sem o link");
-}
 // Compact variation matrix for the real home form. This is deliberately not
 // a cartesian product: each row represents a visitor need and, together, the
 // rows cover the material inclusion risks without generating fake leads.

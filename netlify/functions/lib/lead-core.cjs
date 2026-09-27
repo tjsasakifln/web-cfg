@@ -687,7 +687,7 @@ function pickAttribution(data) {
   return out;
 }
 
-const ALLOWED_JOURNEYS = new Set(["contrato", "edital", "operacao", "conteudo", "pseo", "outro"]);
+const ALLOWED_JOURNEYS = new Set(["contrato", "edital", "operacao", "conteudo", "pseo", "sst", "outro"]);
 const ALLOWED_ORIGINS = new Set([
   "https://confenge.com.br",
   "https://www.confenge.com.br",
@@ -732,6 +732,9 @@ function normalizeJourney(raw, estagio) {
   if (/edital|proposta|licita/.test(e)) return "edital";
   if (/contrato|glosa|medi[cç][aã]o|aditivo|reequil|atraso|san[cç]/.test(e)) return "contrato";
   if (/diagn[oó]stico|opera[cç][aã]o|diretoria|b2g/.test(e)) return "operacao";
+  // SST is an explicit public journey. Preserve its hidden value and recover it
+  // from the finite home stage if progressive enhancement did not write one.
+  if (/seguran[cç]a do trabalho|\bsst\b/.test(e)) return "sst";
   // Sem sinal, nao adivinhe: classificar como "operacao" rebaixava em silencio
   // um contrato urgente para a jornada de menor urgencia.
   return "outro";

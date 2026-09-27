@@ -65,7 +65,10 @@ if (!formMatch) {
   console.error("FAIL: home form missing");
   process.exit(1);
 }
-const step1 = formMatch[0].match(/data-form-step="1"[\s\S]*?<\/fieldset>/);
+// Step 1 may contain semantic sub-fieldsets (for example the conditional SST
+// selector), so stop at the next top-level form step instead of the first
+// nested </fieldset>.
+const step1 = formMatch[0].match(/<fieldset\b[^>]*data-form-step="1"[\s\S]*?(?=<fieldset\b[^>]*data-form-step="2")/);
 if (!step1) {
   console.error("FAIL: form step 1 missing");
   process.exit(1);

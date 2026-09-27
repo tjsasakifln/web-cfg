@@ -1,11 +1,17 @@
 {
   "schema": "confenge.public-intent-matrix/1.0",
   "contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
-  "effective_at": "2026-09-09",
+  "effective_at": "2026-09-26",
   "routing_rule": "A situação e a decisão definem a família. A audiência é somente exemplo e nunca resolve rota ou oferta.",
   "operational_domains_note": "Os cinco núcleos da taxonomia são agrupamentos internos. Os nomes abaixo são famílias canônicas de serviço e situações públicas; não são sub-marcas.",
   "offer_id_semantics": {
     "default": "exhaustive_for_modeled_multivertical_offers",
+    "sst_remote_publication": {
+      "applies_to_intent_family": "organizar_sst",
+      "commercial_portfolio_authority": "data/commercial/sst-remote-portfolio.v1.json",
+      "commercial_portfolio_contract": "CONFENGE_SST_REMOTE_PORTFOLIO/1.0.0",
+      "consumer_rule": "A publicação SST deve obedecer às classes REMOTO_COMERCIALIZAVEL, REMOTO_CONDICIONAL e NAO_OFERTAR_NESTA_VERTICAL. Os offer_ids modelados não autorizam atividade presencial, ato médico, diagnóstico como produto principal ou módulo sem evidência suficiente."
+    },
     "retained_b2g": {
       "mode": "representative_entry_points_plus_complete_typed_authority",
       "applies_to_intent_families": ["decidir_disputar_licitacao", "executar_proteger_contrato_publico"],
@@ -114,13 +120,13 @@
     },
     {
       "intent_family": "organizar_sst",
-      "public_wording": "Preciso saber quais riscos e documentos de SST se aplicam e o que precisa ser atualizado.",
+      "public_wording": "Preciso elaborar, revisar ou organizar a documentação de SST e quero transferir essa frente documental para um responsável técnico.",
       "canonical_service_family": "occupational_safety",
       "offer_ids": ["sst_risk_documentation_diagnosis", "sst_pgr_ltcat_aet_inputs", "sst_insalubrity_perilousness_analysis", "sst_preventive_audit"],
       "audience_examples": ["empresas", "gestores de obra", "RH", "SESMT"],
       "terminal_action": "REQUEST_SST_SCOPE",
       "adjacent_intents": ["assistencia_trabalhista_sst"],
-      "disambiguation": "PGR, LTCAT e AET não são sinônimos nem pacote automático. Atos médicos e disciplinas externas exigem profissional nominal e escopo próprio."
+      "disambiguation": "A família vende execução documental remota, com elaboração e revisão dos documentos contratados. PGR, LTCAT e AET não são sinônimos nem pacote automático. Atividades presenciais obrigatórias ficam fora desta oferta, e atos médicos permanecem com profissional de saúde legalmente habilitado."
     },
     {
       "intent_family": "planejar_contratacao_publica",

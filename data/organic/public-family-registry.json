@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-09-16",
+  "as_of": "2026-09-26",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -1289,7 +1289,7 @@
     },
     {
       "id": "seguranca-trabalho-apoio-tecnico",
-      "visitor_job": "Enquadrar diagnóstico e apoio técnico de segurança do trabalho, distinguir PGR, LTCAT, AET e laudos, ou organizar a evidência de SST do lado da parte em reclamação trabalhista, e solicitar retorno com dados mínimos, sem dados de trabalhador no primeiro contato.",
+      "visitor_job": "Contratar a elaboração, revisão ou organização remota de documentação de SST, escolher entre PGR novo, revisão de PGR, documentação de obra e terceirização documental, e iniciar o contato sem enviar dados de trabalhador.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -1299,8 +1299,12 @@
       },
       "value_first_header_cta": {
         "mode": "local_fragment_before_contact",
-        "label": "Conversar sobre o apoio técnico",
-        "href": "#contato-sst"
+        "label": "Resolver minha documentação de SST",
+        "href": "#contato-sst",
+        "desktop_cta_id": "sst-hub-header",
+        "mobile_cta_id": "sst-hub-mobile",
+        "journey": "sst",
+        "tema": "Execução documental remota de SST"
       },
       "capture_availability": {
         "mode": "external_authority_fail_closed",
@@ -1319,8 +1323,8 @@
         "copy": "full",
         "accessibility": "full"
       },
-      "declared_at": "2026-09-11",
-      "owner_issue": 20260911,
+      "declared_at": "2026-09-26",
+      "owner_issue": 20260926,
       "debt": [],
       "index_evidence": {
         "substrate": "first_party_publication",
@@ -1328,15 +1332,67 @@
           "official_live",
           "citable_source"
         ],
-        "reason": "Página comercial de primeira parte sobre diagnóstico e apoio técnico de SST da própria CONFENGE; não representa registro externo, ato médico, pacote PGR/LTCAT/AET, preço, prazo ou título profissional não projetável.",
+        "reason": "Hub e páginas comerciais de primeira parte sobre execução documental remota de SST pela CONFENGE; não representam registro externo, atividade presencial, ato médico, preço ou prazo não autorizado.",
         "authority": [
           "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
           "data/corporate/commercial-constitution.v1.json",
           "data/corporate/intent-family-matrix.v1.json"
         ],
-        "declared_at": "2026-09-11",
-        "owner_issue": 20260911
+        "declared_at": "2026-09-26",
+        "owner_issue": 20260926
       }
+    },
+    {
+      "id": "elaboracao-pgr",
+      "visitor_job": "Contratar a elaboração remota de um PGR e receber Inventário de Riscos, Plano de Ação e os elementos documentais definidos na proposta.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/elaboracao-pgr/"]},
+      "value_first_header_cta": {"mode": "local_fragment_before_contact", "label": "Solicitar elaboração do PGR", "href": "#contato-pgr", "desktop_cta_id": "pgr-header", "mobile_cta_id": "pgr-mobile", "journey": "sst", "tema": "Elaboração remota de PGR"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-26",
+      "owner_issue": 20260926,
+      "debt": [],
+      "index_evidence": {"substrate": "first_party_publication", "not_applicable": ["official_live", "citable_source"], "reason": "Página comercial de primeira parte para elaboração documental remota de PGR.", "authority": ["data/commercial/sst-remote-portfolio.v1.json", "data/corporate/intent-family-matrix.v1.json"], "declared_at": "2026-09-26", "owner_issue": 20260926}
+    },
+    {
+      "id": "revisao-atualizacao-pgr",
+      "visitor_job": "Revisar um PGR existente e receber a versão atualizada dentro do escopo contratado.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/revisao-atualizacao-pgr/"]},
+      "value_first_header_cta": {"mode": "local_fragment_before_contact", "label": "Enviar meu PGR para revisão", "href": "#contato-revisao", "desktop_cta_id": "pgr-review-header", "mobile_cta_id": "pgr-review-mobile", "journey": "sst", "tema": "Revisão ou atualização do PGR ocupacional"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-26",
+      "owner_issue": 20260926,
+      "debt": [],
+      "index_evidence": {"substrate": "first_party_publication", "not_applicable": ["official_live", "citable_source"], "reason": "Página comercial de primeira parte para revisão documental remota de PGR.", "authority": ["data/commercial/sst-remote-portfolio.v1.json", "data/corporate/intent-family-matrix.v1.json"], "declared_at": "2026-09-26", "owner_issue": 20260926}
+    },
+    {
+      "id": "pgr-documentacao-sst-obras",
+      "visitor_job": "Contratar PGR e documentação remota de SST para uma obra conforme etapas e métodos executivos informados.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/pgr-documentacao-sst-obras/"]},
+      "value_first_header_cta": {"mode": "local_fragment_before_contact", "label": "Organizar a documentação da obra", "href": "#contato-obra", "desktop_cta_id": "sst-obra-header", "mobile_cta_id": "sst-obra-mobile", "journey": "sst", "tema": "PGR e documentação remota de SST para obra"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-26",
+      "owner_issue": 20260926,
+      "debt": [],
+      "index_evidence": {"substrate": "first_party_publication", "not_applicable": ["official_live", "citable_source"], "reason": "Página comercial de primeira parte para documentação remota de SST em obras.", "authority": ["data/commercial/sst-remote-portfolio.v1.json", "data/corporate/intent-family-matrix.v1.json"], "declared_at": "2026-09-26", "owner_issue": 20260926}
+    },
+    {
+      "id": "terceirizacao-documentacao-sst",
+      "visitor_job": "Transferir uma demanda documental recorrente ou acumulada de SST para um braço técnico externo.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/terceirizacao-documentacao-sst/"]},
+      "value_first_header_cta": {"mode": "local_fragment_before_contact", "label": "Passar essa frente para a CONFENGE", "href": "#contato-terceirizacao", "desktop_cta_id": "sst-outsourcing-header", "mobile_cta_id": "sst-outsourcing-mobile", "journey": "sst", "tema": "Organização remota da rotina documental de SST"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-26",
+      "owner_issue": 20260926,
+      "debt": [],
+      "index_evidence": {"substrate": "first_party_publication", "not_applicable": ["official_live", "citable_source"], "reason": "Página comercial de primeira parte para terceirização da execução documental remota de SST.", "authority": ["data/commercial/sst-remote-portfolio.v1.json", "data/corporate/intent-family-matrix.v1.json"], "declared_at": "2026-09-26", "owner_issue": 20260926}
     }
   ]
 }

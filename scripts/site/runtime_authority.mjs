@@ -18,6 +18,16 @@ export const FIXTURE_DIR = join(ROOT, "scripts/site/fixtures/runtime-authority")
 export const SCAN_POLICY_PATH = join(ROOT, "data/ops/runtime-authority-scan.json");
 
 /**
+ * Hash reviewed text independently of Git's checkout line-ending policy.
+ * Repository pins are authored from LF blobs, while Windows worktrees may
+ * materialize the same tracked text as CRLF when core.autocrlf is enabled.
+ */
+export function canonicalTextSha256(text) {
+  const canonical = String(text).replaceAll("\r\n", "\n");
+  return createHash("sha256").update(canonical, "utf8").digest("hex");
+}
+
+/**
  * The scan inventory is derived from the repository, not from a curated file
  * list. `loadScanPolicy` only supplies detection rules, benign contexts and the
  * minimal exception register — never the set of files that get looked at.
@@ -195,10 +205,10 @@ export function scanOperatorDocs({ root = ROOT, policy = loadScanPolicy(root) } 
     }
     used.add(rel);
     if (exception.kind === "historical_record") {
-      // A historical record is honoured only for the exact bytes that were
-      // reviewed. Any later edit invalidates the pin and the file goes back to
-      // being a live surface, so the register can never quietly cover new text.
-      const digest = createHash("sha256").update(text, "utf8").digest("hex");
+      // A historical record is honoured only for the exact canonical text that
+      // was reviewed. Checkout-only CRLF conversion is ignored; any substantive
+      // edit invalidates the pin and makes the file a live surface again.
+      const digest = canonicalTextSha256(text);
       if (digest !== exception.sha256) {
         registerFailures.push({
           file: rel,

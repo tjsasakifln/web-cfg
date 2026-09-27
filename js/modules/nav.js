@@ -755,6 +755,7 @@
         const opt = [...stage.options].find((o) => o.dataset.journey === j);
         if (opt) stage.value = opt.value;
       }
+      try { form.dispatchEvent(new Event('confenge:journeychange')); } catch (_) { /* no Event ctor */ }
     };
     if (form) {
       const sessionId = typeof window.confengeSessionId === 'function'
@@ -1080,6 +1081,68 @@
     const A_ASSET_ID = 'data-asset-id';
     const A_ASSET_FAMILY = 'data-asset-family';
     const A_ROUTE_FAMILY = 'data-route-family';
+    const A_JOURNEY = 'data-journey';
+    const A_TEMA = 'data-tema';
+    // SST corrective campaign: use only declared, finite route families.  This
+    // makes the instrumentation safe for pages added by the campaign without
+    // reading labels, href query strings, or form values.
+    const SST_ROUTE_FAMILIES = {
+      'elaboracao-pgr': 'pgr_cta',
+      'revisao-atualizacao-pgr': 'pgr_review_cta',
+      'pgr-documentacao-sst-obras': 'sst_obra_cta',
+      'terceirizacao-documentacao-sst': 'sst_outsourcing_cta',
+      hub: '',
+    };
+    // The published SST hub retains its existing route-family identifier.
+    // Convert that known identifier to the campaign's finite `hub` family;
+    // no arbitrary route family is treated as SST.
+    const SST_ROUTE_ALIASES = {
+      'seguranca-trabalho-apoio-tecnico': 'hub',
+    };
+    const sstRouteFamilyFromPath = (path) => {
+      const normalized = String(path || '').replace(/^\/+|\/+$/g, '');
+      const family = SST_ROUTE_ALIASES[normalized] || normalized;
+      return Object.prototype.hasOwnProperty.call(SST_ROUTE_FAMILIES, family) ? family : '';
+    };
+    const sstRouteFamily = (node) => {
+      // BOFU routes retain the hub's legacy body family during the migration.
+      // The exact pathname is authoritative for those four finite routes, so
+      // their family CTA series cannot be collapsed into the hub.
+      const pathFamily = sstRouteFamilyFromPath(pagePath);
+      if (pathFamily && pathFamily !== 'hub') return pathFamily;
+      const declared = node?.getAttribute?.(A_ROUTE_FAMILY)
+        || document.body?.getAttribute(A_ROUTE_FAMILY) || '';
+      const family = SST_ROUTE_ALIASES[declared] || declared;
+      if (Object.prototype.hasOwnProperty.call(SST_ROUTE_FAMILIES, family)) return family;
+      return pathFamily;
+    };
+    const sstContext = (node) => {
+      const journey = node?.getAttribute?.(A_JOURNEY)
+        || document.body?.getAttribute(A_JOURNEY) || '';
+      return journey === 'sst' || !!sstRouteFamily(node);
+    };
+    const sstProps = (node, extra = {}) => {
+      if (!sstContext(node)) return null;
+      const routeFamily = sstRouteFamily(node);
+      const tema = node?.getAttribute?.(A_TEMA) || document.body?.getAttribute(A_TEMA) || '';
+      return {
+        page_path: pagePath,
+        journey: 'sst',
+        route_family: routeFamily,
+        ...(tema ? { tema: String(tema).slice(0, 80) } : {}),
+        ...extra,
+      };
+    };
+    const trackSstCta = (node, classified, withCta) => {
+      const props = sstProps(node, {
+        cta_id: withCta.cta_id,
+      });
+      if (!props) return;
+      track('sst_cta_click', props);
+      if (classified.kind === 'whatsapp') track('sst_whatsapp_click', props);
+      const familyEvent = SST_ROUTE_FAMILIES[props.route_family];
+      if (familyEvent) track(familyEvent, props);
+    };
 
     // Service / offer page view
     if (document.body?.getAttribute(A_CLUSTER) === 'offer'
@@ -1290,6 +1353,13 @@
         || '';
       const commercialTopic = el.getAttribute('data-tema')
         || (isEditorial ? editorialTopic.slice(0, 120) : '');
+      // This emits only a parallel SST series; the generic click event below
+      // remains authoritative for all existing funnels.
+      const isDeclaredCta = !!(withCta.cta_id || el.getAttribute(A_EVENT_NAME)
+        || isHeaderCta(el) || isSituationAction(el) || isFormSubmitCta(el));
+      if (sstContext(el) && (isDeclaredCta || classified.kind === 'whatsapp')) {
+        trackSstCta(el, classified, withCta);
+      }
       if (classified.kind === 'whatsapp') {
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
@@ -1445,6 +1515,114 @@
       if (!isHeaderCta(el) && !isCaptureHash(anchorHref)) return;
       el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
     });
+
+    // SST campaign views and form lifecycle are intentionally parallel to the
+    // generic page/form events. No form field, label, message or attachment is
+    // observed: only the finite route family, CTA id and declared topic pass.
+    const sstPageProps = sstProps(document.body);
+    if (sstPageProps) track('sst_page_view', sstPageProps);
+    if (form) {
+      let sstFormStarted = false;
+      // The corporate home starts generic, then sets its finite journey through
+      // #jornada-hidden or the selected #estagio option. Read only that finite
+      // classification; never read any contact, free-text or document field.
+      const sstFormJourney = () => {
+        const journey = form.querySelector('#jornada-hidden, input[name="jornada"]');
+        if (journey && journey.value === 'sst') return true;
+        const stage = form.querySelector('#estagio');
+        const selected = stage && stage.options && stage.options[stage.selectedIndex];
+        return !!(selected && selected.dataset && selected.dataset.journey === 'sst');
+      };
+      const sstFormProps = () => {
+        if (!sstFormJourney()) return null;
+        const tema = form.getAttribute(A_TEMA) || document.body?.getAttribute(A_TEMA) || '';
+        const projectedRoute = form.querySelector('input[name="route_family"]')?.value || '';
+        return {
+          page_path: pagePath,
+          journey: 'sst',
+          route_family: Object.prototype.hasOwnProperty.call(SST_ROUTE_FAMILIES, projectedRoute)
+            ? projectedRoute : sstRouteFamily(form),
+          ...(tema ? { tema: String(tema).slice(0, 80) } : {}),
+          cta_id: form.getAttribute(A_CTA_ID) || '',
+        };
+      };
+      const SST_NEED_PROJECTION = {
+        elaborar_pgr: { tema: 'elaboracao-pgr', route_family: 'elaboracao-pgr' },
+        revisar_pgr: { tema: 'revisao-atualizacao-pgr', route_family: 'revisao-atualizacao-pgr' },
+        obra: { tema: 'pgr-documentacao-sst-obras', route_family: 'pgr-documentacao-sst-obras' },
+        terceirizar_documentacao: { tema: 'terceirizacao-documentacao-sst', route_family: 'terceirizacao-documentacao-sst' },
+      };
+      const clearSstNeedProjection = () => {
+        ['tema', 'route_family'].forEach((name) => {
+          const input = form.querySelector(`input[name="${name}"]`);
+          if (!input || !input.dataset.sstNeedProjection) return;
+          if (input.value === input.dataset.sstNeedProjection) {
+            input.value = input.dataset.sstNeedPrior || '';
+          }
+          delete input.dataset.sstNeedProjection;
+          delete input.dataset.sstNeedPrior;
+        });
+      };
+      const projectSstNeed = () => {
+        const choice = form.querySelector('#sst-necessidade');
+        const projection = choice && SST_NEED_PROJECTION[choice.value];
+        if (!projection) {
+          clearSstNeedProjection();
+          return;
+        }
+        Object.entries(projection).forEach(([name, value]) => {
+          ensureHidden(name, value);
+          const input = form.querySelector(`input[name="${name}"]`);
+          if (!input) return;
+          if (!input.dataset.sstNeedProjection) input.dataset.sstNeedPrior = input.value || '';
+          input.value = value;
+          input.dataset.sstNeedProjection = value;
+        });
+      };
+      const syncSstNeed = () => {
+        const active = sstFormJourney();
+        form.querySelectorAll('[data-sst-need]').forEach((need) => {
+          need.hidden = !active;
+          if (active) {
+            need.removeAttribute('inert');
+            need.removeAttribute('aria-hidden');
+          } else {
+            need.setAttribute('inert', '');
+            need.setAttribute('aria-hidden', 'true');
+          }
+        });
+        if (active) projectSstNeed();
+        else clearSstNeedProjection();
+      };
+      const trackSstFormStart = () => {
+        if (sstFormStarted) return;
+        const props = sstFormProps();
+        if (!props) return;
+        sstFormStarted = true;
+        track('sst_form_start', props);
+      };
+      form.addEventListener('focusin', trackSstFormStart);
+      // Selecting SST after focusing a generic home form is also the start of
+      // the SST journey. The once guard preserves exactly one start event.
+      const stage = form.querySelector('#estagio');
+      if (stage) stage.addEventListener('change', () => {
+        syncSstNeed();
+        trackSstFormStart();
+      });
+      form.addEventListener('confenge:journeychange', syncSstNeed);
+      const sstNeed = form.querySelector('#sst-necessidade');
+      if (sstNeed) sstNeed.addEventListener('change', () => {
+        if (sstFormJourney()) projectSstNeed();
+      });
+      // applyJourneyToForm() has already handled URL/session preselection by
+      // this point, so the initial state also covers direct SST landings.
+      syncSstNeed();
+      form.addEventListener('submit', () => {
+        if (typeof form.checkValidity === 'function' && !form.checkValidity()) return;
+        const props = sstFormProps();
+        if (props) track('sst_form_submit', props);
+      });
+    }
 
     // Offer page view + comparison section view (once)
     if (document.body?.getAttribute(A_OFFER)) {

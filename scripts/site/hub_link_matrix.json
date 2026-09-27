@@ -197,22 +197,9 @@
       "hub": "/servicos/",
       "href": "/seguranca-trabalho-apoio-tecnico/",
       "marker": "servicos-sst-landing",
-      "label": "Apoio técnico de segurança do trabalho",
+      "label": "Documentação remota de segurança do trabalho",
       "intent_family": "organizar_sst",
       "offer_id": "sst_risk_documentation_diagnosis",
-      "provider_campaign": "14",
-      "satisfaction": "ALREADY_SATISFIED",
-      "release_unit": "CORE"
-    },
-    {
-      "id": "servicos-sst-assistencia-trabalhista",
-      "kind": "REQUIRED_LINK",
-      "hub": "/servicos/",
-      "href": "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista",
-      "marker": "servicos-sst-assistencia-trabalhista",
-      "label": "Reclamação trabalhista com componente de SST",
-      "intent_family": "assistencia_trabalhista_sst",
-      "offer_id": "labor_sst_technical_assistance",
       "provider_campaign": "14",
       "satisfaction": "ALREADY_SATISFIED",
       "release_unit": "CORE"
@@ -353,7 +340,7 @@
       "hub": "/conteudos/",
       "href": "/seguranca-trabalho-apoio-tecnico/",
       "marker": "need-sst",
-      "label": "Apoio técnico de segurança do trabalho",
+      "label": "Documentação remota de segurança do trabalho",
       "intent_family": "organizar_sst",
       "offer_id": "sst_risk_documentation_diagnosis",
       "provider_campaign": "14",
@@ -592,12 +579,6 @@
       "start": "/servicos/",
       "goal": "/servicos/#servico-avaliacao",
       "max_hops": 0
-    },
-    {
-      "id": "servico-sst-assistencia-trabalhista",
-      "start": "/servicos/",
-      "goal": "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista",
-      "max_hops": 1
     },
     {
       "id": "conteudo-revisao",

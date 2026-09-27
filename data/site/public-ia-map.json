@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-09-19",
+  "updated_at": "2026-09-26",
   "purpose": "Source of truth for the corporate situation chooser, compact global chrome, protected public-works vertical, hub roles, and route → job → parent → next action → index state.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -64,16 +64,10 @@
     },
     {
       "id": "occupational_safety",
-      "label": "Preciso de um documento de segurança do trabalho",
-      "visitor_language": "Preciso responder a uma exigência de documento de segurança do trabalho",
+      "label": "Minha equipe não consegue mais administrar a documentação de SST",
+      "visitor_language": "Quero transferir a elaboração, a revisão ou a organização documental de SST para um responsável técnico",
       "href": "/seguranca-trabalho-apoio-tecnico/",
-      "index_state": "service_hub_index",
-      "sub_situations": [
-        {
-          "label": "Reclamação trabalhista com componente de SST",
-          "href": "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"
-        }
-      ]
+      "index_state": "service_hub_index"
     },
     {
       "id": "public_works_b2g",
@@ -109,7 +103,11 @@
     "/parcerias-engenharia/": "Parcerias de engenharia",
     "/inspecao-diagnostico-edificacoes/": "Inspeção e diagnóstico de edificações",
     "/assistencia-tecnica-pericial-engenharia/": "Assistência técnica em disputas",
-    "/seguranca-trabalho-apoio-tecnico/": "Apoio técnico de SST",
+    "/seguranca-trabalho-apoio-tecnico/": "Documentação de SST",
+    "/elaboracao-pgr/": "Elaboração de PGR",
+    "/revisao-atualizacao-pgr/": "Revisão e atualização de PGR",
+    "/pgr-documentacao-sst-obras/": "PGR e documentação de SST para obras",
+    "/terceirizacao-documentacao-sst/": "Terceirização documental de SST",
     "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada"
   },
   "quality_baseline": {
@@ -603,6 +601,26 @@
       "prefix": "/seguranca-trabalho-apoio-tecnico/",
       "parent": "/servicos/",
       "exact": true
+    },
+    {
+      "prefix": "/elaboracao-pgr/",
+      "parent": "/seguranca-trabalho-apoio-tecnico/",
+      "exact": true
+    },
+    {
+      "prefix": "/revisao-atualizacao-pgr/",
+      "parent": "/seguranca-trabalho-apoio-tecnico/",
+      "exact": true
+    },
+    {
+      "prefix": "/pgr-documentacao-sst-obras/",
+      "parent": "/seguranca-trabalho-apoio-tecnico/",
+      "exact": true
+    },
+    {
+      "prefix": "/terceirizacao-documentacao-sst/",
+      "parent": "/seguranca-trabalho-apoio-tecnico/",
+      "exact": true
     }
   ],
   "active_header": [
@@ -716,6 +734,22 @@
     },
     {
       "prefix": "/seguranca-trabalho-apoio-tecnico/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/elaboracao-pgr/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/revisao-atualizacao-pgr/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/pgr-documentacao-sst-obras/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/terceirizacao-documentacao-sst/",
       "href": "/servicos/"
     },
     {

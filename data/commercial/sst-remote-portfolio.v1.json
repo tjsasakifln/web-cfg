@@ -1,0 +1,71 @@
+{
+  "schema": "confenge.sst-remote-portfolio/1.0",
+  "contract": "CONFENGE_SST_REMOTE_PORTFOLIO/1.0.0",
+  "effective_at": "2026-09-26",
+  "decision_state": "EXECUTE_NOW",
+  "owner": "web-cfg",
+  "canonical_intent_family": "organizar_sst",
+  "canonical_hub": "/seguranca-trabalho-apoio-tecnico/",
+  "commercial_rule": "A vertical oferece somente a parcela documental de SST que a CONFENGE pode elaborar ou revisar remotamente com evidências suficientes. Atividade presencial obrigatória não é vendida como parte deste escopo.",
+  "evidence_rule": "Nenhum documento é concluído a partir de suposição. A proposta identifica os dados, registros, projetos, fotografias, vídeos, declarações técnicas e avaliações existentes necessários para sustentar cada entrega.",
+  "classes": {
+    "REMOTO_COMERCIALIZAVEL": {
+      "definition": "Entrega documental que pode ser contratada e executada remotamente quando os insumos definidos na proposta forem suficientes.",
+      "items": [
+        {"id":"pgr_elaboracao","name":"Elaboração de PGR","outputs":["Inventário de Riscos Ocupacionais","Plano de Ação","documento digital organizado"],"route":"/elaboracao-pgr/"},
+        {"id":"pgr_revisao","name":"Revisão e atualização de PGR","outputs":["versão revisada do Inventário de Riscos","Plano de Ação atualizado","registro das alterações realizadas"],"route":"/revisao-atualizacao-pgr/"},
+        {"id":"pgr_obra","name":"PGR e documentação de SST para obras","outputs":["PGR da obra","Inventário de Riscos","Plano de Ação","documentos complementares contratados"],"route":"/pgr-documentacao-sst-obras/"},
+        {"id":"sst_terceirizacao_documental","name":"Terceirização e organização documental de SST","outputs":["inventário documental","fila priorizada de produção e revisão","documentos contratados","controle de versões e pendências"],"route":"/terceirizacao-documentacao-sst/"},
+        {"id":"ordens_servico","name":"Ordens de Serviço de SST","outputs":["ordens de serviço digitais por função ou atividade"]},
+        {"id":"procedimentos_sst","name":"Procedimentos de SST","outputs":["procedimentos digitais baseados no método de trabalho informado"]},
+        {"id":"apr","name":"Análise Preliminar de Risco","outputs":["APR para atividade e condições declaradas"]},
+        {"id":"permissao_trabalho_documental","name":"Documentação de Permissão de Trabalho","outputs":["modelo e fluxo documental compatíveis com a atividade informada"]},
+        {"id":"matrizes_registros","name":"Matrizes e registros documentais","outputs":["matrizes de risco, responsabilidade, treinamento ou controle definidas no contrato"]}
+      ]
+    },
+    "REMOTO_CONDICIONAL": {
+      "definition": "Entrega que só pode entrar na proposta remota quando o cliente já possui evidências técnicas atuais, representativas e suficientes, inclusive avaliações de campo quando exigidas.",
+      "items": [
+        {"id":"ltcat_com_dados_existentes","name":"LTCAT baseado em evidências existentes","condition":"inspeções, histórico e avaliações ambientais tecnicamente suficientes, atuais e rastreáveis, sem nova atividade de campo pela CONFENGE"},
+        {"id":"aet_com_evidencias_existentes","name":"Análise Ergonômica do Trabalho baseada em evidências existentes","condition":"descrição do trabalho real, participação documentada, registros e validação compatíveis com o método, sem substituir observação presencial obrigatória"},
+        {"id":"insalubridade_periculosidade_com_dados_existentes","name":"Análise técnica de insalubridade ou periculosidade com dados existentes","condition":"pergunta delimitada e avaliações qualitativas ou quantitativas já disponíveis e adequadas ao agente e à norma aplicável"},
+        {"id":"laudo_parecer_documental","name":"Laudo ou parecer documental de SST","condition":"a conclusão precisa ser sustentada integralmente pelo acervo técnico recebido e pela atribuição profissional aplicável"}
+      ]
+    },
+    "NAO_OFERTAR_NESTA_VERTICAL": {
+      "definition": "Atividade que depende materialmente de presença da CONFENGE, ensaio próprio ou ato de saúde ocupacional. Deve permanecer fora das páginas e propostas desta vertical remota.",
+      "items": [
+        "nova dosimetria de ruído executada pela CONFENGE",
+        "medição de calor, vibração ou agentes químicos executada pela CONFENGE",
+        "amostragem ambiental",
+        "vistoria física de máquinas",
+        "inspeção elétrica presencial",
+        "inspeção de equipamentos enquadrados na NR 13",
+        "vistoria de sistemas de ancoragem",
+        "inspeção física de canteiro",
+        "levantamento presencial",
+        "treinamento presencial",
+        "PCMSO",
+        "ASO",
+        "exames ocupacionais",
+        "diagnóstico, aptidão ou nexo clínico",
+        "qualquer outro ato médico",
+        "qualquer serviço que obrigatoriamente dependa de atuação presencial da CONFENGE"
+      ]
+    }
+  },
+  "commercial_routes": [
+    {"route":"/seguranca-trabalho-apoio-tecnico/","role":"hub","primary_job":"Escolher a forma de transferir a demanda documental de SST para a CONFENGE."},
+    {"route":"/elaboracao-pgr/","role":"bofu","primary_job":"Contratar a elaboração remota de um PGR a partir das informações e evidências disponíveis."},
+    {"route":"/revisao-atualizacao-pgr/","role":"bofu","primary_job":"Revisar um PGR existente e receber a versão atualizada dentro do escopo contratado."},
+    {"route":"/pgr-documentacao-sst-obras/","role":"bofu","primary_job":"Organizar o PGR e a documentação remota de SST de uma obra conforme suas etapas declaradas."},
+    {"route":"/terceirizacao-documentacao-sst/","role":"bofu","primary_job":"Transferir uma demanda documental recorrente ou acumulada de SST para um braço técnico externo."}
+  ],
+  "medical_boundary": "PCMSO, ASO, exames, diagnóstico, aptidão e nexo clínico permanecem com profissional de saúde legalmente habilitado e nunca são incluídos nesta vertical.",
+  "official_references": [
+    {"title":"NR 1 vigente","url":"https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/nr-1"},
+    {"title":"Programa de Gerenciamento de Riscos no Ministério do Trabalho e Emprego","url":"https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/pgr"},
+    {"title":"NR 18 vigente","url":"https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadoras/normas-regulamentadoras-vigentes/NR18atualizada2026I.pdf"},
+    {"title":"Lei 6.496, ART","url":"https://www.planalto.gov.br/ccivil_03/leis/l6496.htm"}
+  ]
+}

@@ -281,11 +281,11 @@ def artifact_index_routes(artifact_root: Path) -> list[str]:
 
 def visitor_facing_relpaths(root: Path | None = None) -> list[str]:
     base = root or ROOT
-    return [str(p.relative_to(base)) for p in visitor_facing_html_files(base)]
+    return [p.relative_to(base).as_posix() for p in visitor_facing_html_files(base)]
 
 
 def relpath(path: Path, root: Path | None = None) -> str:
-    return str(Path(path).relative_to(root or ROOT))
+    return Path(path).relative_to(root or ROOT).as_posix()
 
 
 def route_for(rel: str) -> str:

@@ -879,7 +879,7 @@
       "serp_sample": null,
       "purchase_id": "organizar-sst",
       "campaign_owner": "INB-01",
-      "visitor_job": "Saber quais riscos e documentos de SST se aplicam e o que precisa ser atualizado.",
+      "visitor_job": "Transferir a elaboração, revisão ou organização da documentação de SST para um responsável técnico.",
       "seed_query_hypothesis": {
         "query": "PGR LTCAT engenharia de segurança",
         "status": "HYPOTHESIS",
@@ -890,11 +890,12 @@
       "intent_family": "organizar_sst",
       "offer_id": "sst_risk_documentation_diagnosis",
       "page_kind": "serviço",
-      "question_answered": "Quais documentos de SST se aplicam a esta operação e o que falta atualizar?",
+      "question_answered": "Como a CONFENGE assume remotamente a documentação de SST contratada?",
       "business_context": "mixed",
-      "primary_url": "/servicos/#servico-sst",
+      "primary_url": "/seguranca-trabalho-apoio-tecnico/",
       "proposed_primary_url": "/seguranca-trabalho-apoio-tecnico/",
-      "source_of_truth": "/servicos/#servico-sst",
+      "source_of_truth": "/seguranca-trabalho-apoio-tecnico/",
+      "commercial_portfolio_authority": "data/commercial/sst-remote-portfolio.v1.json",
       "requested_alias": null,
       "supporting_urls": [
         "/servicos/"
@@ -905,7 +906,7 @@
         "destination": "/triagem-tecnica/#sst"
       },
       "decision": "ENRICH",
-      "function_differentiation": "Diagnóstico e documentos preventivos de SST, não assistência em reclamação trabalhista.",
+      "function_differentiation": "Execução documental remota de SST, não assistência em reclamação trabalhista.",
       "requested_indexability": "index,follow",
       "release_unit": "CORE",
       "publication_cohort": {

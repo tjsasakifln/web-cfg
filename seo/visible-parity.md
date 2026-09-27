@@ -1,9 +1,9 @@
 # Visible parity
 
 - ok: `True`
-- pages: `96`
+- pages: `100`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/bofu-fechamento-clean/_site`
+- site_root: `_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -71,6 +71,7 @@
 | https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/diagnostico-pre-licitacao/ | True | — | Organization,Person,BreadcrumbList | Diagnóstico pré-licitação para obras públicas |
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
+| https://confenge.com.br/elaboracao-pgr/ | True | — | BreadcrumbList | Seu PGR pronto, sem colocar o RH para coordenar a elaboração |
 | https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Entregas de engenharia. Veja o conteúdo e para que ele serve. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Engº Tiago Sasaki |
 | https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | Ferramentas de decisão para contratos, obras públicas e obras privadas |
@@ -89,6 +90,7 @@
 | https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido |
 | https://confenge.com.br/nurture/ | True | — |  | Cinco e-mails úteis, não newsletter genérica |
 | https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Encaminhe a parte de engenharia que falta no seu pacote e siga com o seu cliente. |
+| https://confenge.com.br/pgr-documentacao-sst-obras/ | True | — | BreadcrumbList | PGR e documentação de SST que acompanham as etapas da obra |
 | https://confenge.com.br/politica-editorial/ | True | — | Organization,Person,BreadcrumbList | Política editorial |
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
@@ -97,9 +99,11 @@
 | https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Quantitativos e orçamento de obras |
 | https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar de obras públicas: método aberto e demanda observada | Radar de obras públicas: método aberto e demanda observada |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
+| https://confenge.com.br/revisao-atualizacao-pgr/ | True | — | BreadcrumbList | Seu PGR mudou junto com a operação? |
 | https://confenge.com.br/revisao-tecnica-projetos-engenharia/ | True | — | BreadcrumbList | Revisão técnica de projetos de engenharia |
-| https://confenge.com.br/seguranca-trabalho-apoio-tecnico/ | True | — | BreadcrumbList | Apoio técnico de segurança do trabalho |
+| https://confenge.com.br/seguranca-trabalho-apoio-tecnico/ | True | — | BreadcrumbList | Passe a documentação de SST para quem vai executar |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Serviços de engenharia para obras públicas e privadas |
+| https://confenge.com.br/terceirizacao-documentacao-sst/ | True | — | BreadcrumbList | Sua equipe não precisa administrar sozinha a documentação de SST |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
 | https://confenge.com.br/triagem-tecnica/ | True | — |  | Conte a situação do seu jeito. Nós nomeamos o serviço. |

@@ -308,6 +308,7 @@ function renderForm(full, open, body, surface, pageHtml) {
 }
 
 function renderFile(html, surface) {
+  const newline = html.includes("\r\n") ? "\r\n" : "\n";
   let matched = 0;
   const next = html.replace(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi, (full, attrs, body) => {
     const open = `<form${attrs}>`;
@@ -319,7 +320,8 @@ function renderFile(html, surface) {
   });
   if (matched !== 1) throw new Error(`CTA_FORM_RENDER_COUNT: ${surface.route} count=${matched}`);
   const actions = updateMainActions(next);
-  return profileFor(surface) === "delivery_selection" ? relocateDeliveryContract(actions) : actions;
+  const rendered = profileFor(surface) === "delivery_selection" ? relocateDeliveryContract(actions) : actions;
+  return rendered.replace(/\r?\n/g, newline);
 }
 
 const inventory = buildInventory();

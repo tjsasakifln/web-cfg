@@ -268,7 +268,8 @@ def test_real_pages_pass_surface_gates_and_schema_mirror():
     for kind, path in pages.items():
         assert path.exists(), path
         html = path.read_text(encoding="utf-8")
-        assert classify_surface("/" + str(path.relative_to(ROOT)).replace("index.html", ""), html) == kind
+        relative_url = "/" + path.relative_to(ROOT).as_posix().removesuffix("index.html")
+        assert classify_surface(relative_url, html) == kind
         errors = check_required_slots(html, kind, matrix=matrix)
         assert not errors, f"{path}: {errors}"
         schema_errors = check_schema_mirrors_visible(html)

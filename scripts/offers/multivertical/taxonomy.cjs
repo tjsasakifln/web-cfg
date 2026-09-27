@@ -87,7 +87,8 @@ function loadTaxonomy(options = {}) {
   if (!fs.existsSync(sourcePath)) {
     throw new Error("taxonomy_missing");
   }
-  const loaded = assertTaxonomyShape(readJson(sourcePath), path.relative(root, sourcePath));
+  const portableSourcePath = path.relative(root, sourcePath).split(path.sep).join("/");
+  const loaded = assertTaxonomyShape(readJson(sourcePath), portableSourcePath);
   loaded.replaceable_fixture = !campaign02;
   if (pin) {
     if (pin.contract && pin.contract !== loaded.contract) {

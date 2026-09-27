@@ -31,6 +31,12 @@
     },
     "note": "IDs, nomes públicos e centavos das 54 entregas e do checkout congelado são referenciados, não reescritos. #587 entra como oferta nova modelada, sem virar CFG-D55 nesta campanha."
   },
+  "occupational_safety_authority": {
+    "commercial_portfolio": "data/commercial/sst-remote-portfolio.v1.json",
+    "contract": "CONFENGE_SST_REMOTE_PORTFOLIO/1.0.0",
+    "effective_at": "2026-09-26",
+    "rule": "Nas superfícies públicas de SST, o portfólio remoto prevalece sobre semântica histórica dos IDs modelados. Diagnóstico é etapa de enquadramento, não produto principal; atividade presencial obrigatória e ato médico ficam fora desta vertical."
+  },
   "offers": [
     {
       "offer_id": "pre_litigation_technical_screening",
@@ -1369,24 +1375,24 @@
     },
     {
       "offer_id": "sst_risk_documentation_diagnosis",
-      "public_name": "Diagnóstico de Riscos e Documentação de SST",
+      "public_name": "Organização Documental de SST",
       "nucleus_id": "occupational_safety",
-      "buyer_job": "Saber quais riscos e quais documentos de SST existem, faltam ou estão vencidos antes de produzir peças.",
+      "buyer_job": "Transferir a elaboração, revisão ou organização da documentação de SST para a CONFENGE, dentro do escopo remoto contratado.",
       "icp": [
         "empregador",
         "SESMT",
         "RH de empresa com campo ou canteiro"
       ],
-      "trigger_why_now": "Há fiscalização, onboarding, mudança de processo ou dúvida sobre o acervo de SST.",
-      "supported_decision": "Produzir, atualizar ou recusar documentos; chamar médico ou higienista quando faltar atribuição.",
+      "trigger_why_now": "A equipe precisa elaborar ou revisar PGR, organizar documentos de obra ou absorver uma demanda documental acumulada.",
+      "supported_decision": "Quais documentos serão elaborados ou revisados, quais evidências sustentam a entrega e o que fica fora do escopo remoto.",
       "unit_of_work": "um estabelecimento ou frente e um acervo de SST",
       "deliverables": [
-        "diagnóstico do acervo e dos riscos declarados",
-        "matriz de peças existentes, vencidas e ausentes",
-        "encaminhamento para PGR/LTCAT/AET ou para assistência técnica, sem misturar SKUs"
+        "análise do material disponível para delimitar o escopo documental contratado",
+        "documentação de SST elaborada ou revisada no escopo contratado",
+        "arquivos digitais organizados, com ART quando aplicável e nota fiscal"
       ],
       "exclusions": [
-        "produção de PGR/LTCAT/AET nesta SKU",
+        "atividades presenciais, ensaios ou medições não disponíveis no escopo remoto",
         "ato de médico do trabalho",
         "assistência em reclamação trabalhista nesta SKU",
         "certificação ISO como organismo"
@@ -1398,18 +1404,18 @@
       ],
       "inspection_field_rule": {
         "included_by_default": false,
-        "when_required": "walkthrough só se a proposta incluir local; sem campo o diagnóstico é documental",
-        "output": "registro de walkthrough"
+        "when_required": "atividade presencial obrigatória fica fora do escopo remoto",
+        "output": "não aplicável a esta unidade documental remota"
       },
       "method_standard": {
         "applicable": true,
         "refs": [
           "NRs aplicáveis ao recorte"
         ],
-        "note": "O diagnóstico não substitui o PGR."
+        "note": "A análise inicial delimita a proposta; o produto contratado é a documentação elaborada ou revisada, não um diagnóstico autônomo."
       },
       "technical_responsibility": {
-        "art_rule": "ART do diagnóstico de engenharia de SST quando houver relatório técnico; não cobre ato médico.",
+        "art_rule": "ART quando aplicável ao documento técnico contratado; não cobre ato médico.",
         "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "ato médico",
@@ -1445,15 +1451,16 @@
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
-      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "paid_triage_rule": "Não há triagem paga autônoma nesta oferta. A análise inicial delimita os documentos, insumos e limites da proposta sem substituir a entrega contratada.",
       "acceptance_criteria": [
         "peças ausentes não são inventadas",
-        "dependências de médico e higienista estão explícitas"
+        "dependências de médico e higienista estão explícitas",
+        "cada documento contratado é entregue em arquivo digital organizado"
       ],
       "proof_classes": [
         "method_structure"
       ],
-      "conflict_gate": "Não diagnosticar o mesmo estabelecimento para empregado e empregador em conflito sem disclosure.",
+      "conflict_gate": "Não produzir documentação preventiva e assistir a parte contrária no mesmo estabelecimento em conflito sem recusa ou disclosure adequado.",
       "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
       "legitimate_cross_sell": [
         "sst_pgr_ltcat_aet_inputs",
@@ -1461,7 +1468,7 @@
         "labor_sst_technical_assistance"
       ],
       "disqualification": [
-        "pedido de PGR nesta unidade",
+        "pedido de atividade presencial obrigatória como parte desta oferta remota",
         "pedido de laudo médico interno"
       ],
       "readiness": "MODELED",
@@ -1469,9 +1476,9 @@
     },
     {
       "offer_id": "sst_pgr_ltcat_aet_inputs",
-      "public_name": "PGR, LTCAT, AET e Insumos Técnicos",
+      "public_name": "PGR e Módulos Documentais de SST",
       "nucleus_id": "occupational_safety",
-      "buyer_job": "Obter as peças de SST aplicáveis ao estabelecimento, com módulos nominados e matriz de aplicabilidade.",
+      "buyer_job": "Contratar PGR e, quando as evidências existentes forem suficientes, outros módulos documentais de SST nominados na proposta.",
       "icp": [
         "empregador",
         "SESMT",
@@ -1493,14 +1500,14 @@
         "software de eSocial"
       ],
       "minimum_documents": [
-        "inventário de riscos ou diagnóstico prévio",
+        "inventário de riscos ou acervo de SST existente",
         "layout e funções",
         "histórico de LTCAT/PGR"
       ],
       "inspection_field_rule": {
         "included_by_default": false,
-        "when_required": "campo e medições só nos módulos que a proposta listar",
-        "output": "registros de campo dos módulos contratados"
+        "when_required": "atividade de campo ou nova medição obrigatória é identificada antes da contratação e fica fora desta oferta remota",
+        "output": "uso documentado de avaliações existentes quando atuais, representativas e suficientes"
       },
       "method_standard": {
         "applicable": true,
@@ -1546,10 +1553,10 @@
         "currency": "BRL",
         "basis": "proposal_after_scope",
         "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
-        "ticket_class": "field_inspection",
+        "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
-      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "paid_triage_rule": "Não há triagem paga autônoma nesta oferta. O enquadramento inicial define módulos, evidências, preço e prazo antes da execução documental.",
       "acceptance_criteria": [
         "cada módulo está na matriz de aplicabilidade",
         "parceiro de atribuição ausente impede o módulo, não o silencia"
@@ -1567,8 +1574,8 @@
         "pedido de pacote ilimitado",
         "módulo médico sem profissional disponível"
       ],
-      "readiness": "CAPACITY_UNKNOWN",
-      "wave_class": "WITHHELD_CAPACITY"
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
     },
     {
       "offer_id": "sst_insalubrity_perilousness_analysis",
