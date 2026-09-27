@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "defa4fd7f55dfd1849d5589b39e0a0b183a6b800",
-  "recaptured_at": "2026-09-26T20:15:15Z",
-  "recapture_reason": "SST-REVENUE-ENGINE-20260926, campanha autorizada pelo fundador, sobre defa4fd7f55dfd1849d5589b39e0a0b183a6b800: script.js reconstruído de js/modules/nav.js para que interações diretas de SST por WhatsApp, e-mail e telefone preservem jornada e tema na atribuição. sitemap.xml e sitemap-index.xml mudaram apenas para registrar lastmod 2026-09-26 das superfícies públicas alteradas. Nenhum dos seis pilares B2G congelados, preço, checkout, robots, canonical, redirect ou política de submissão mudou. A revisão adversarial independente não encontrou achados P0, P1 ou P2. A procedência anterior permanece verificável no baseline 4fd51060514fea285e30b2bf1e048f912e24e331 e no fechamento 8d354e4ee2fcea8aeff61aa518530b848b4cbfee.",
+  "baseline_commit": "dafcaafef991e845f1855e65de9192b62dc4d087",
+  "recaptured_at": "2026-09-27T01:41:54Z",
+  "recapture_reason": "SST-CONVERSION-CORRECTION-20260926 (EXECUTE_NOW do fundador), sobre dafcaafef991e845f1855e65de9192b62dc4d087: recaptura revisada do runtime compartilhado após a inclusão das cinco superfícies SST remotas. js/modules/analytics.js passou a autorizar os eventos SST e os quatro CTAs BOFU; script.js foi reconstruído da fonte para classificar a família SST e preservar journey/tema nos canais diretos; sitemap.xml e sitemap.txt passaram a listar as quatro rotas BOFU e lastmod 2026-09-26. Os seis pilares B2G congelados, CSS, robots, sitemap-index, redirects e content-service-map permanecem byte-idênticos ao baseline anterior defa4fd7f55dfd1849d5589b39e0a0b183a6b800. Recaptura executada em checkout LF para equivalência com Ubuntu/CI; nenhum preço, checkout, canonical ou política de submissão foi alterado.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "8ff9e822a36bb86a69f6a57d18361ab283ffea8e9f488ecda90834af56dcf7f4",
@@ -20,22 +20,23 @@
     "auditoria-orcamento-licitacao/index.html": "4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3",
     "diagnostico-b2g-360/index.html": "7d0146da91188a268e490b18d4ff4ce846cecbb98ea26f08449011bf03e9f832",
     "diagnostico-pre-licitacao/index.html": "12afa9caae7ae91f09bf641c6c1e95683add7945dc0673869e48676e803df731",
-    "script.js": "62bbc8f04f49c062c55799f5fda1ab190d4c0aa34622d09547623d954586c471",
+    "script.js": "c6d3f80158f9f56a8214dd35c60bba532f798b642bdd2735068b1e57c918bd56",
     "styles.css": "4a4e4b140fde38853de5b99c73541828a0253430c0a24bcf0238a4836162aa06",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-    "sitemap.xml": "9bc0e24550868cec4e93b6aa6005655c4e38f739b6b1e04e61f7c8f135adb7ef",
-    "sitemap.txt": "065d02303f71ea73b3b02dedacf3104b2773caf676a130fe6a68ad7636432f0c",
+    "sitemap.xml": "9b77c8bee84d755ba656ba78e2a9f97e41e267a4668c3352febda19b0c779c50",
+    "sitemap.txt": "65139099bfa9ad34fb794c0b222110001b59724bfb5b3c0b02957bbc52a3ff50",
     "sitemap-index.xml": "f1bea75c4c4e266eef591b5374498cbe8c21c3bc5edaba03741b37352b0aadb4",
     "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "f201091861b9f96858f81af544e7a1bd506c8b62da37cad96297d64e4df9f9f6"
+    "js/modules/analytics.js": "f0fd11a945e10a9e7694101bbe8c00337c98ec169440e01995e9f12d5fe57828"
   },
   "recapture_diff_lines_vs_origin_main": [
+    "js/modules/analytics.js",
     "script.js",
-    "sitemap.xml",
-    "sitemap-index.xml"
+    "sitemap.txt",
+    "sitemap.xml"
   ],
-  "previous_baseline_commit": "4fd51060514fea285e30b2bf1e048f912e24e331"
+  "previous_baseline_commit": "defa4fd7f55dfd1849d5589b39e0a0b183a6b800"
 }
