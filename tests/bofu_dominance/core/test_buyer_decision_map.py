@@ -9,6 +9,7 @@ import subprocess
 from scripts.bofu_dominance.core.buyer_decision_map import (
     MapValidationReport,
     _derive_manual_page_mapping_authority,
+    _sha256_file,
     _validate_manual_gsc_source_manifest,
     _validate_reconciled_authorities,
     check_report,
@@ -44,6 +45,14 @@ def _manual_snapshot() -> dict:
 
 def _manual_source_manifest() -> dict:
     return _json("seo/gsc-2026-08-31/source-manifest.v1.json")
+
+
+def test_source_contract_hash_is_stable_across_lf_and_crlf(tmp_path):
+    lf = tmp_path / "lf.json"
+    crlf = tmp_path / "crlf.json"
+    lf.write_bytes(b'{"contract":"same"}\n')
+    crlf.write_bytes(b'{"contract":"same"}\r\n')
+    assert _sha256_file(lf) == _sha256_file(crlf)
 
 
 def test_projection_covers_every_buyer_job_with_one_owner_or_gap():

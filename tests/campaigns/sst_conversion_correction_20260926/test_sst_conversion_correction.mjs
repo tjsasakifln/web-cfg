@@ -14,7 +14,12 @@ const routes = [
 ];
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const pages = new Map(routes.map(([route, file]) => [route, read(file)]));
-const visible = (html) => html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+const visible = (html) => html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+test("visible-copy checks ignore script and style bodies with valid closing-tag whitespace", () => {
+  const html = '<p>Oferta publicada</p><script>visita talvez necessária</script ><style>.fake{content:"diagnóstico"}</style >';
+  assert.equal(visible(html), "Oferta publicada");
+});
 
 function commercialViolations(html) {
   const text = visible(html);

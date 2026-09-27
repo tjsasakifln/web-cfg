@@ -130,7 +130,14 @@ jobs:
               "/radar/",
               "/inteligencia/cenarios/",
           ]
-          must_200 = hubs + seeds + [
+          sst_conversion_routes = [
+              "/seguranca-trabalho-apoio-tecnico/",
+              "/elaboracao-pgr/",
+              "/revisao-atualizacao-pgr/",
+              "/pgr-documentacao-sst-obras/",
+              "/terceirizacao-documentacao-sst/",
+          ]
+          must_200 = hubs + seeds + sst_conversion_routes + [
               "/sitemap-index.xml",
               "/sitemap-inteligencia.xml",
               "/robots.txt",

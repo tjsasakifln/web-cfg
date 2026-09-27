@@ -49,7 +49,7 @@
     },
     {
       "path": "data/organic/public-family-registry.json",
-      "sha256": "5a138ae1be79a1f6f725d3ab187192e222c8e05693c09173bec15e6a71462ce1"
+      "sha256": "06f0d0c58aec56f5835bfbbe01a783844a2df0fa7389e78132b8963ac47ac5ff"
     },
     {
       "path": "data/bofu-dominance/frozen-specs/query-ownership.json",

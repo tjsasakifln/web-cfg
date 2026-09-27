@@ -51,4 +51,6 @@ test("profile and trust disclose the verified dual engineering role without extr
     assert.match(page, /Engenheiro Civil e Engenheiro de Segurança do Trabalho/);
     assert.match(page, /\/seguranca-trabalho-apoio-tecnico\//);
   }
+  const profile = read("especialista/tiago-jun-sasaki/index.html");
+  assert.match(profile, /data-cta-id="perfil-sst-whatsapp"[^>]*data-journey="sst"[^>]*data-route-family="seguranca-trabalho-apoio-tecnico"[^>]*data-tema="sst_perfil"[^>]*href="https:\/\/wa\.me\//);
 });

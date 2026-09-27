@@ -140,7 +140,7 @@ O resolvedor usa somente as cinco famílias finitas. O bundle entregue (`script.
 
 Resultados já confirmados nesta revisão:
 
-- campanha SST, cross-site, analytics e legado: 25/25;
+- campanha SST, cross-site, analytics e legado: 26/26;
 - contrato regulatório/comercial INB14: 119/119;
 - catálogo multivertical: 1481/1481;
 - consistência de contratos comerciais: 521/521;
@@ -167,7 +167,12 @@ Correções de infraestrutura encontradas pelos gates:
 - preservação de CRLF/LF pelo renderizador do contrato de formulário;
 - teste do passo 1 preparado para `fieldset` semântico aninhado;
 - stubs do teste pSEO atualizados para elementos DOM usados pela seleção SST;
-- quatro novas rotas incluídas no artefato público.
+- quatro novas rotas incluídas no artefato público;
+- hash da autoridade BOFU tornado estável entre LF e CRLF, com teste de regressão 34/34;
+- expectativa do teste de lead atualizada para a jornada `sst` persistida por `SERV-SST`;
+- remoção de `script` e `style` nos testes de cópia visível endurecida para aceitar espaço válido no fechamento da tag, com regressão dedicada;
+- CTA terminal de WhatsApp restaurado dentro do conteúdo principal do perfil e validado pelo gate inbound;
+- smoke CI do `_site` ampliado para exigir HTTP 200 das cinco rotas SST.
 
 ## 12. Evidência visual
 
@@ -177,7 +182,7 @@ Correções de infraestrutura encontradas pelos gates:
 
 ## 13. Deploy e produção
 
-- PR: **PENDENTE**
+- PR: [#725](https://github.com/tjsasakifln/web-cfg/pull/725)
 - SHA mesclado: **PENDENTE**
 - workflow de release: **PENDENTE**
 - SHA servido em `/.well-known/build-info.json`: **PENDENTE**
