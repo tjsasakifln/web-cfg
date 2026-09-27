@@ -1,7 +1,7 @@
 {
   "schema_version": "2.1.0",
-  "captured_at": "2026-09-27T00:38:11.561Z",
-  "commit_sha": "f337d010f588872923253a592f0949caf2478b40",
+  "captured_at": "2026-09-27T01:19:04.150Z",
+  "commit_sha": "a97834b32b8954f1c2966c371edbe846b7408a67",
   "tree_dirty": true,
   "base_url": "http://127.0.0.1:8792",
   "output_dir": "docs\\campaigns\\sst-conversion-correction-20260926\\evidence\\after",
@@ -513,8 +513,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 79481,
-      "sha256": "9b5d6411b20c1447a1b3d85b92587e222d3098cf5bd529b4c86ffb5e5ec5d169"
+      "bytes": 83494,
+      "sha256": "35250dc89f7cbd953181a4a6f09e6d5bd65ba7db36106f93f2eec3cbeaa1bd13"
     },
     {
       "file": "especialistatiago-jun-sasaki-430x932.png",
@@ -528,8 +528,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 98729,
-      "sha256": "ba05a9d079ae6c76b9543abdf6c7d96acfcdc6d7aef875b59f0203c51691b1ca"
+      "bytes": 94687,
+      "sha256": "895a80128b15a26c66dad571c87a6eebce28e6fe9570182873c346326316148d"
     },
     {
       "file": "especialistatiago-jun-sasaki-768x1024.png",
@@ -543,8 +543,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 158792,
-      "sha256": "36967b3e35364df914c8730ee1f0fcbea2860afdb56957ae6876260925655f60"
+      "bytes": 148656,
+      "sha256": "2781f0a18f51db63f3746996598b74861e96e0189b72f2991ea571c3482e5f50"
     },
     {
       "file": "especialistatiago-jun-sasaki-1440x1000.png",
@@ -558,8 +558,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 254330,
-      "sha256": "72cfad908c22b2338d8f15eaa38589cd8495a18b771dd236b63e6690be88f415"
+      "bytes": 260517,
+      "sha256": "a7309bbd08c27c2f89a4644fa8cebafe0e226eb481f352421f5c8bd72f8522e0"
     },
     {
       "file": "confianca-390x844.png",
