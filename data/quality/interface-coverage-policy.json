@@ -297,6 +297,26 @@
         "family_id": "seguranca-trabalho-apoio-tecnico",
         "route": "/seguranca-trabalho-apoio-tecnico/",
         "reason": "single-route occupational-safety technical-support landing"
+      },
+      {
+        "family_id": "elaboracao-pgr",
+        "route": "/elaboracao-pgr/",
+        "reason": "single-route BOFU landing for remote PGR preparation"
+      },
+      {
+        "family_id": "revisao-atualizacao-pgr",
+        "route": "/revisao-atualizacao-pgr/",
+        "reason": "single-route BOFU landing for remote PGR review and update"
+      },
+      {
+        "family_id": "pgr-documentacao-sst-obras",
+        "route": "/pgr-documentacao-sst-obras/",
+        "reason": "single-route BOFU landing for construction-site PGR and SST documentation"
+      },
+      {
+        "family_id": "terceirizacao-documentacao-sst",
+        "route": "/terceirizacao-documentacao-sst/",
+        "reason": "single-route BOFU landing for outsourced remote SST documentation"
       }
     ],
     "additional_pages": [

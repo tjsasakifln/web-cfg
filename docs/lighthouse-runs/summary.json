@@ -1,10 +1,10 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-09-19T00:36:17.130Z",
+  "generated_at": "2026-09-27T02:12:25.147Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
-    "public_route_count": 234,
-    "family_count": 45,
+    "public_route_count": 236,
+    "family_count": 49,
     "families": [
       {
         "id": "triagem-tecnica",
@@ -80,9 +80,9 @@
       },
       {
         "id": "legal-and-trust",
-        "label": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+        "label": "Conferir termos, privacidade, política de conflitos, correções e contato de imprensa antes de confiar na CONFENGE.",
         "kind": "canonical",
-        "route_count": 6,
+        "route_count": 5,
         "lighthouse_representative": "/termos-de-uso/",
         "representative_reason": "indexable legal document representative",
         "image_gate": false,
@@ -106,7 +106,7 @@
         "id": "politica-editorial",
         "label": "Auditar a política editorial vigente e o seu histórico versionado.",
         "kind": "canonical",
-        "route_count": 3,
+        "route_count": 2,
         "lighthouse_representative": "/politica-editorial/",
         "representative_reason": "current indexable editorial-policy document",
         "image_gate": false,
@@ -512,7 +512,7 @@
       },
       {
         "id": "inspecao-diagnostico-edificacoes",
-        "label": "Reconhecer fissura, infiltração, condição do imóvel ou recebimento, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
+        "label": "Reconhecer fissura, infiltração, recebimento ou entrega, reforma em condomínio ou documentação do construído, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/inspecao-diagnostico-edificacoes/",
@@ -536,11 +536,59 @@
       },
       {
         "id": "seguranca-trabalho-apoio-tecnico",
-        "label": "Enquadrar diagnóstico e apoio técnico de segurança do trabalho, distinguir PGR, LTCAT, AET e laudos, e solicitar retorno com dados mínimos, sem dados de trabalhador no primeiro contato.",
+        "label": "Contratar a elaboração, revisão ou organização remota de documentação de SST, escolher entre PGR novo, revisão de PGR, documentação de obra e terceirização documental, e iniciar o contato sem enviar dados de trabalhador.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/seguranca-trabalho-apoio-tecnico/",
         "representative_reason": "single-route occupational-safety technical-support landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "elaboracao-pgr",
+        "label": "Contratar a elaboração remota de um PGR e receber Inventário de Riscos, Plano de Ação e os elementos documentais definidos na proposta.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/elaboracao-pgr/",
+        "representative_reason": "single-route BOFU landing for remote PGR preparation",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "revisao-atualizacao-pgr",
+        "label": "Revisar um PGR existente e receber a versão atualizada dentro do escopo contratado.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/revisao-atualizacao-pgr/",
+        "representative_reason": "single-route BOFU landing for remote PGR review and update",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "pgr-documentacao-sst-obras",
+        "label": "Contratar PGR e documentação remota de SST para uma obra conforme etapas e métodos executivos informados.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/pgr-documentacao-sst-obras/",
+        "representative_reason": "single-route BOFU landing for construction-site PGR and SST documentation",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "terceirizacao-documentacao-sst",
+        "label": "Transferir uma demanda documental recorrente ou acumulada de SST para um braço técnico externo.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/terceirizacao-documentacao-sst/",
+        "representative_reason": "single-route BOFU landing for outsourced remote SST documentation",
         "image_gate": false,
         "seo_exempt": false,
         "seo_exempt_reason": null,
@@ -622,6 +670,10 @@
       "/inspecao-diagnostico-edificacoes/",
       "/assistencia-tecnica-pericial-engenharia/",
       "/seguranca-trabalho-apoio-tecnico/",
+      "/elaboracao-pgr/",
+      "/revisao-atualizacao-pgr/",
+      "/pgr-documentacao-sst-obras/",
+      "/terceirizacao-documentacao-sst/",
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
@@ -671,6 +723,10 @@
       "/inspecao-diagnostico-edificacoes/",
       "/assistencia-tecnica-pericial-engenharia/",
       "/seguranca-trabalho-apoio-tecnico/",
+      "/elaboracao-pgr/",
+      "/revisao-atualizacao-pgr/",
+      "/pgr-documentacao-sst-obras/",
+      "/terceirizacao-documentacao-sst/",
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
@@ -722,7 +778,7 @@
       "/ops/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "not_sampled_count": 187,
+    "not_sampled_count": 185,
     "not_sampled": [
       {
         "route": "/aditivos-obras-publicas/",
@@ -1635,11 +1691,6 @@
         "reason": "template semantics represented by /politica-editorial/ for family politica-editorial"
       },
       {
-        "route": "/politica-editorial/v/1.0.0/",
-        "family": "politica-editorial",
-        "reason": "template semantics represented by /politica-editorial/ for family politica-editorial"
-      },
-      {
         "route": "/privacidade/",
         "family": "legal-and-trust",
         "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
@@ -1653,11 +1704,6 @@
         "route": "/reequilibrio-obras-publicas/",
         "family": "service-pillars",
         "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
-      },
-      {
-        "route": "/uso-de-ia/",
-        "family": "legal-and-trust",
-        "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
       }
     ],
     "thresholds": {
@@ -8163,6 +8209,386 @@
       "font_display_score": 1,
       "benchmark_index": 2633,
       "seo_exempt": true
+    },
+    {
+      "path": "/elaboracao-pgr/",
+      "run": 1,
+      "performance": 99,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1673.4146,
+      "cls": 0,
+      "tbt_ms": 117,
+      "longest_own_task_ms": 167,
+      "fcp_ms": 904.2764,
+      "si_ms": 904.2764,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 224,
+      "total_byte_weight": 123448,
+      "content_byte_weight": 121583,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/elaboracao-pgr/",
+          "transfer_size": 5383,
+          "resource_size": 15936,
+          "content_bytes": 5152,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.31ee3cdd36a2.css",
+          "transfer_size": 21675,
+          "resource_size": 105401,
+          "content_bytes": 21460,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.50404a7d507e.css",
+          "transfer_size": 8192,
+          "resource_size": 43994,
+          "content_bytes": 7977,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=c6d3f80158f9f56a",
+          "transfer_size": 27519,
+          "resource_size": 87488,
+          "content_bytes": 27290,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 2.1382000000000003,
+      "lcp_observed_rtt_ms": 0.1308,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 200,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 1542,
+      "seo_exempt": false
+    },
+    {
+      "path": "/revisao-atualizacao-pgr/",
+      "run": 1,
+      "performance": 99,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1656.6277,
+      "cls": 0,
+      "tbt_ms": 101,
+      "longest_own_task_ms": 151,
+      "fcp_ms": 903.7518,
+      "si_ms": 903.7518,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 232,
+      "total_byte_weight": 123565,
+      "content_byte_weight": 121700,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/revisao-atualizacao-pgr/",
+          "transfer_size": 5500,
+          "resource_size": 16414,
+          "content_bytes": 5269,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.31ee3cdd36a2.css",
+          "transfer_size": 21675,
+          "resource_size": 105401,
+          "content_bytes": 21460,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.50404a7d507e.css",
+          "transfer_size": 8192,
+          "resource_size": 43994,
+          "content_bytes": 7977,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=c6d3f80158f9f56a",
+          "transfer_size": 27519,
+          "resource_size": 87488,
+          "content_bytes": 27290,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.8759,
+      "lcp_observed_rtt_ms": 0.11009999999999999,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2518.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/pgr-documentacao-sst-obras/",
+      "run": 1,
+      "performance": 99,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1661.99505,
+      "cls": 0,
+      "tbt_ms": 103,
+      "longest_own_task_ms": 153,
+      "fcp_ms": 905.9966999999999,
+      "si_ms": 905.9966999999999,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 237,
+      "total_byte_weight": 123633,
+      "content_byte_weight": 121768,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/pgr-documentacao-sst-obras/",
+          "transfer_size": 5568,
+          "resource_size": 17139,
+          "content_bytes": 5337,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.31ee3cdd36a2.css",
+          "transfer_size": 21675,
+          "resource_size": 105401,
+          "content_bytes": 21460,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.50404a7d507e.css",
+          "transfer_size": 8192,
+          "resource_size": 43994,
+          "content_bytes": 7977,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=c6d3f80158f9f56a",
+          "transfer_size": 27519,
+          "resource_size": 87488,
+          "content_bytes": 27290,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 2.99835,
+      "lcp_observed_rtt_ms": 0.09465,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2318,
+      "seo_exempt": false
+    },
+    {
+      "path": "/terceirizacao-documentacao-sst/",
+      "run": 1,
+      "performance": 99,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1653.4883999999997,
+      "cls": 0,
+      "tbt_ms": 95,
+      "longest_own_task_ms": 145,
+      "fcp_ms": 903.4884,
+      "si_ms": 903.4884,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 230,
+      "total_byte_weight": 123630,
+      "content_byte_weight": 121765,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/terceirizacao-documentacao-sst/",
+          "transfer_size": 5565,
+          "resource_size": 16953,
+          "content_bytes": 5334,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.31ee3cdd36a2.css",
+          "transfer_size": 21675,
+          "resource_size": 105401,
+          "content_bytes": 21460,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.50404a7d507e.css",
+          "transfer_size": 8192,
+          "resource_size": 43994,
+          "content_bytes": 7977,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=c6d3f80158f9f56a",
+          "transfer_size": 27519,
+          "resource_size": 87488,
+          "content_bytes": 27290,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.7442000000000002,
+      "lcp_observed_rtt_ms": 0.08879999999999999,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2392,
+      "seo_exempt": false
     }
   ],
   "evaluation": {
@@ -8183,5 +8609,17 @@
   },
   "terminal_state": "MEASURED_PASS",
   "fatal": null,
-  "unmeasured": []
+  "unmeasured": [],
+  "evidence_provenance": {
+    "kind": "measured-matrix-extension",
+    "retained_matrix_generated_at": "2026-09-19T00:36:17.130Z",
+    "extension_generated_at": "2026-09-27T02:12:25.147Z",
+    "extension_routes": [
+      "/elaboracao-pgr/",
+      "/revisao-atualizacao-pgr/",
+      "/pgr-documentacao-sst-obras/",
+      "/terceirizacao-documentacao-sst/"
+    ],
+    "note": "Temporary fail-closed bridge: retains the last passing committed matrix and adds real local measurements for the four new SST representatives. The Linux CI runner must replace this with a full fresh matrix before release."
+  }
 }
