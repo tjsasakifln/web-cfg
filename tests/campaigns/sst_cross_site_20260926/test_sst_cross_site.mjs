@@ -10,7 +10,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 test("home presents SST as remote documentary execution and routes to the hub", () => {
   const home = read("index.html");
   assert.match(home, /"jobTitle":"Engenheiro Civil e Engenheiro de Segurança do Trabalho"/);
-  assert.match(home, /Elaboração, revisão e organização remota da documentação de SST/);
+  assert.match(home, /Se sua equipe não consegue mais administrar, terceirizamos remotamente a documentação de SST/);
   assert.match(home, /documento técnico digital, responsável identificado, ART quando aplicável e nota fiscal/);
   assert.match(home, /href="\/seguranca-trabalho-apoio-tecnico\/"/);
   assert.doesNotMatch(home, /situacao-sst[\s\S]{0,1500}assistencia-trabalhista/);
