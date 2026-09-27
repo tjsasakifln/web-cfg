@@ -333,7 +333,7 @@ def test_home_jsonld_matches_corporate_positioning_and_preserves_b2g_services():
     org = next(n for n in graph if n.get("@type") == "Organization")
     person = next(n for n in graph if n.get("@type") == "Person")
     assert org["description"] == load_brand()["positioning"]["org_description"]
-    assert person["jobTitle"] == "Engenheiro Civil"
+    assert person["jobTitle"] == "Engenheiro Civil e Engenheiro de Segurança do Trabalho"
     assert "consultor B2G" not in person["jobTitle"]
     service_urls = {n.get("url") for n in graph if n.get("@type") == "Service"}
     assert "https://confenge.com.br/diretoria-b2g/" in service_urls
