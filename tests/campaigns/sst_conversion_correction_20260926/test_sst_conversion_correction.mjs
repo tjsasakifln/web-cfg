@@ -14,10 +14,10 @@ const routes = [
 ];
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const pages = new Map(routes.map(([route, file]) => [route, read(file)]));
-const visible = (html) => html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+const visible = (html) => html.replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, " ").replace(/<style\b[^>]*>[\s\S]*?<\/style\b[^>]*>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 
-test("visible-copy checks ignore script and style bodies with valid closing-tag whitespace", () => {
-  const html = '<p>Oferta publicada</p><script>visita talvez necessária</script ><style>.fake{content:"diagnóstico"}</style >';
+test("visible-copy checks ignore browser-tolerated script and style closing tags", () => {
+  const html = '<p>Oferta publicada</p><script>visita talvez necessária</script\t\n bar><style>.fake{content:"diagnóstico"}</style trailing>';
   assert.equal(visible(html), "Oferta publicada");
 });
 
