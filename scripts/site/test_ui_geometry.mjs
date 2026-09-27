@@ -480,6 +480,9 @@ async function main() {
   try {
     await page.setViewport({ width: 390, height: 844 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+    await page.evaluate(() => {
+      window.__uiGeometryInertBaseline = [...document.querySelectorAll("[inert]")];
+    });
     await page.click(".menu-toggle");
     const open = await page.evaluate(() => document.querySelector(".menu-toggle").getAttribute("aria-expanded"));
     if (open !== "true") throw new Error("menu did not open");
@@ -497,14 +500,22 @@ async function main() {
     });
     if (leaked.length) throw new Error(`focusable elements outside the open dialog are not inert: ${leaked.join(", ")}`);
     await page.mouse.click(box.x, box.y);
-    const after = await page.evaluate(() => ({
-      expanded: document.querySelector(".menu-toggle").getAttribute("aria-expanded"),
-      focusOnToggle: document.activeElement === document.querySelector(".menu-toggle"),
-      inertLeft: document.querySelectorAll("[inert]").length,
-    }));
+    const after = await page.evaluate(() => {
+      const describe = (el) => `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ""}${el.className ? `.${String(el.className).trim().split(/\s+/).join(".")}` : ""}`;
+      const baseline = new Set(window.__uiGeometryInertBaseline || []);
+      const current = new Set(document.querySelectorAll("[inert]"));
+      return {
+        expanded: document.querySelector(".menu-toggle").getAttribute("aria-expanded"),
+        focusOnToggle: document.activeElement === document.querySelector(".menu-toggle"),
+        missingBaseline: [...baseline].filter((el) => !current.has(el)).map(describe),
+        leakedMenuInert: [...current].filter((el) => !baseline.has(el)).map(describe),
+      };
+    });
     if (after.expanded !== "false") throw new Error("tap on the toggle did not close the menu");
     if (!after.focusOnToggle) throw new Error("focus did not return to the toggle after tapping it");
-    if (after.inertLeft !== 0) throw new Error(`inert left behind: ${after.inertLeft}`);
+    if (after.missingBaseline.length || after.leakedMenuInert.length) {
+      throw new Error(`menu inert drift: missing=${after.missingBaseline.join(",") || "none"}; leaked=${after.leakedMenuInert.join(",") || "none"}`);
+    }
     // Abrir pelo teclado (Enter no botao) nao pode fechar no mesmo evento.
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     await page.focus(".menu-toggle");

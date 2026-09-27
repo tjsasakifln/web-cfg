@@ -64,7 +64,7 @@
     },
     {
       "id": "occupational_safety",
-      "label": "Minha equipe não consegue mais administrar a documentação de SST",
+      "label": "Quero terceirizar a documentação de SST",
       "visitor_language": "Quero transferir a elaboração, a revisão ou a organização documental de SST para um responsável técnico",
       "href": "/seguranca-trabalho-apoio-tecnico/",
       "index_state": "service_hub_index"
