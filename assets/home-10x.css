@@ -18,6 +18,7 @@ body[data-content-cluster="home"] .hero-copy{padding:0}
 body[data-content-cluster="home"] .hero-actions{margin-bottom:.6rem}
 body[data-content-cluster="home"] .hero-proof{padding-top:.5rem;gap:.3rem 1.1rem}
 body[data-content-cluster="home"] .hero-proof li{gap:.3rem}
+body[data-content-cluster="home"] .hero-proof li>span:last-child{display:block}
 
 /* ── 0. Camada editorial (assets/editorial.css) copiada aqui pela build_css.py: a home
  * carrega duas folhas (styles.css + esta), como antes; uma terceira folha bloqueante

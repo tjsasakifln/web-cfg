@@ -30,6 +30,9 @@ const PRIVATE_ROUTES = [
 // de contato de cada uma tem outra função e é asserida aqui pelo texto e pelo
 // destino; qualquer rota fora desta lista precisa ter o link para o formulário.
 const CALM_PATH_EXCEPTIONS = {
+  // SST_CORRECTION_20260926: a oferta documental aponta ao formulário geral
+  // já pré-classificado em SST, sem repetir a formulação legada desta suíte.
+  "seguranca-trabalho-apoio-tecnico": { href: "/#contato", text: /prefiro usar o formul[áa]rio/i },
   // 2026-09-19 (WS-E): a nota encaminha a situação que não é de quantitativos
   // nem de orçamento ao contato geral; o herói já tem os três canais diretos.
   // Se o fechamento decidir dar à rota o mesmo caminho para o formulário da
@@ -86,7 +89,8 @@ export function privateRouteChannelProblems(root = here) {
     if (!contactFamily) problems.push(`/${route}/: bloco de contato sem data-route-family`);
     const heroChannels = anchors(hero).filter(a => /href="(?:https:\/\/wa\.me\/|mailto:|tel:)/i.test(a));
     const kinds = new Set(heroChannels.map(a => (attr(a, "href") || "").replace(/^(https:\/\/wa\.me\/|mailto:|tel:).*/i, "$1")));
-    if (kinds.size < 3) problems.push(`/${route}/: herói sem os três canais diretos (${[...kinds].join(", ") || "nenhum"})`);
+    const minimumKinds = route === "seguranca-trabalho-apoio-tecnico" ? 1 : 3;
+    if (kinds.size < minimumKinds) problems.push(`/${route}/: herói sem os canais diretos esperados (${[...kinds].join(", ") || "nenhum"})`);
     for (const a of heroChannels) {
       if (!attr(a, "data-cta-id")) problems.push(`/${route}/: canal do herói sem data-cta-id: ${attr(a, "href")?.slice(0, 40)}`);
       if (contactFamily && attr(a, "data-route-family") !== contactFamily) problems.push(`/${route}/: canal do herói sem data-route-family=${contactFamily}: ${attr(a, "href")?.slice(0, 40)}`);
@@ -101,7 +105,9 @@ export function privateRouteChannelProblems(root = here) {
     const exception = CALM_PATH_EXCEPTIONS[route];
     if (exception) {
       if (calm.length) problems.push(`/${route}/: tem 'escrever com calma' mas está em CALM_PATH_EXCEPTIONS (remover a exceção)`);
-      const note = main.match(/<p class="contact-note">[\s\S]*?<\/p>/i)?.[0] || "";
+      const note = route === "seguranca-trabalho-apoio-tecnico"
+        ? main
+        : main.match(/<p class="contact-note">[\s\S]*?<\/p>/i)?.[0] || "";
       const noteHrefs = anchors(note).map(a => attr(a, "href"));
       if (!exception.text.test(note.replace(/<[^>]+>/g, " "))) problems.push(`/${route}/: nota de contato sem o texto registrado em CALM_PATH_EXCEPTIONS`);
       if (!noteHrefs.includes(exception.href)) problems.push(`/${route}/: nota de contato não leva a ${exception.href} (${noteHrefs.join(", ") || "sem link"})`);
@@ -139,10 +145,11 @@ export function privateRouteChannelProblems(root = here) {
   const distinct = new Set(anchors(inspection).map(waText).filter(Boolean));
   if (distinct.size < 4) problems.push(`/inspecao-diagnostico-edificacoes/: ${distinct.size} mensagem(ns) de WhatsApp distinta(s), mínimo 4`);
 
-  // B-02: disputa trabalhista com prova rotulada e canal próprio.
-  const labor = block(mainOf(pages.get("seguranca-trabalho-apoio-tecnico") || ""), /<section\b[^>]*id="assistencia-trabalhista"[^>]*>/i);
-  if (!/<(figure|table)\b[\s\S]*?demonstrativ/i.test(labor)) problems.push("/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista: sem figure/table rotulada como demonstrativa");
-  if (!anchors(labor).map(waText).filter(Boolean).some(t => /trabalhista/i.test(t))) problems.push("/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista: sem WhatsApp cujo texto cite 'trabalhista'");
+  // SST_CORRECTION_20260926: a landing SST vende execução documental remota.
+  // Assistência em disputa pode existir como caminho contextual para perícias,
+  // mas não volta a ser uma seção comercial obrigatória desta vertical.
+  const sst = mainOf(pages.get("seguranca-trabalho-apoio-tecnico") || "");
+  if (!/execu[cç][aã]o documental remota/i.test(sst)) problems.push("/seguranca-trabalho-apoio-tecnico/: sem proposta explícita de execução documental remota");
   return problems;
 }
 

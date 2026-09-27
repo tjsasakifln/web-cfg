@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 96,
+  "page_count": 100,
   "pages": [
     {
       "claimed": {
@@ -1427,8 +1427,8 @@
         ],
         "canonical": "https://confenge.com.br/confianca/",
         "dates": [
-          "2026-09-04",
-          "2026-09-05"
+          "2026-09-05",
+          "2026-09-26"
         ],
         "description": "Confira quem é a CONFENGE, quem conduz os trabalhos, como a responsabilidade profissional é definida e quais evidências sustentam cada afirmação.",
         "h1": "Quem responde pela CONFENGE",
@@ -3831,6 +3831,58 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "Elaboração de PGR"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/elaboracao-pgr/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "Elaboração de PGR"
+        ],
+        "canonical": "https://confenge.com.br/elaboracao-pgr/",
+        "dates": [
+          "2026-09-26"
+        ],
+        "description": "Contrate a elaboração remota do PGR da sua empresa com Inventário de Riscos, Plano de Ação, responsável técnico, entrega digital, ART quando aplicável e nota fiscal.",
+        "h1": "Seu PGR pronto, sem colocar o RH para coordenar a elaboração",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Elaboração de PGR remoto para empresas | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
           "Entregas"
         ],
         "dataset_names": [],
@@ -3920,16 +3972,16 @@
         ],
         "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
         "dates": [
-          "2026-09-04",
-          "2026-09-05"
+          "2026-09-05",
+          "2026-09-26"
         ],
-        "description": "Tiago Jun Sasaki, engenheiro civil formado pela EESC-USP, com registro profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos analisados.",
+        "description": "Tiago Jun Sasaki, Engenheiro Civil e Engenheiro de Segurança do Trabalho, com títulos e registro profissional verificados e mais de R$ 700 milhões em obras e projetos analisados.",
         "h1": "Engº Tiago Sasaki",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Tiago Jun Sasaki | Engenheiro Civil | CONFENGE",
+        "title": "Tiago Jun Sasaki | Engenheiro Civil e de Segurança do Trabalho | CONFENGE",
         "versions": []
       }
     },
@@ -4788,6 +4840,58 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "SST para obras"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/pgr-documentacao-sst-obras/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "SST para obras"
+        ],
+        "canonical": "https://confenge.com.br/pgr-documentacao-sst-obras/",
+        "dates": [
+          "2026-09-26"
+        ],
+        "description": "Organize remotamente o PGR e a documentação de SST da obra conforme etapas, métodos executivos e evidências fornecidas, com responsável técnico e entrega digital.",
+        "h1": "PGR e documentação de SST que acompanham as etapas da obra",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "PGR e documentação de SST para obras | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
           "Política editorial"
         ],
         "dataset_names": [],
@@ -5219,6 +5323,58 @@
         "breadcrumbs": [
           "Início",
           "Serviços e problemas",
+          "Documentação de SST",
+          "Revisão e atualização de PGR"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/revisao-atualizacao-pgr/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "Revisão e atualização de PGR"
+        ],
+        "canonical": "https://confenge.com.br/revisao-atualizacao-pgr/",
+        "dates": [
+          "2026-09-26"
+        ],
+        "description": "Envie seu PGR existente para revisão remota. A CONFENGE verifica mudanças, corrige o escopo contratado e entrega a versão revisada com ART quando aplicável e nota fiscal.",
+        "h1": "Seu PGR mudou junto com a operação?",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Revisão e atualização de PGR existente | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
           "Revisão técnica de projetos"
         ],
         "dataset_names": [],
@@ -5267,7 +5423,7 @@
         "breadcrumbs": [
           "Início",
           "Serviços e problemas",
-          "Apoio técnico de SST"
+          "Documentação de SST"
         ],
         "dataset_names": [],
         "dates": [],
@@ -5295,17 +5451,19 @@
         "breadcrumb_names": [
           "Início",
           "Serviços e problemas",
-          "Apoio técnico de SST"
+          "Documentação de SST"
         ],
         "canonical": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
-        "dates": [],
-        "description": "Relatório do que existe, falta e se aplica em SST, com quem assina cada peça. PGR, LTCAT e AET não são o mesmo documento nem um pacote automático.",
-        "h1": "Apoio técnico de segurança do trabalho",
+        "dates": [
+          "2026-09-26"
+        ],
+        "description": "Passe a elaboração, revisão e organização documental de SST para a CONFENGE. Execução remota, entrega digital, responsável técnico, ART quando aplicável e nota fiscal.",
+        "h1": "Passe a documentação de SST para quem vai executar",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Apoio técnico de segurança do trabalho | CONFENGE",
+        "title": "Documentação de Segurança do Trabalho remota | CONFENGE",
         "versions": []
       }
     },
@@ -5406,6 +5564,58 @@
     {
       "claimed": {
         "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "Terceirização documental"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/terceirizacao-documentacao-sst/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Documentação de SST",
+          "Terceirização documental"
+        ],
+        "canonical": "https://confenge.com.br/terceirizacao-documentacao-sst/",
+        "dates": [
+          "2026-09-26"
+        ],
+        "description": "Use a CONFENGE como braço técnico externo para organizar, elaborar e revisar remotamente a documentação de SST acumulada ou recorrente da sua empresa.",
+        "h1": "Sua equipe não precisa administrar sozinha a documentação de SST",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Terceirização da documentação de SST | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
         "breadcrumbs": [],
         "dataset_names": [],
         "dates": [],
@@ -5485,5 +5695,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/bofu-fechamento-clean/_site"
+  "site_root": "_site"
 }

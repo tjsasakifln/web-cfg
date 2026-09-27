@@ -74,6 +74,14 @@
       ],
       "semantic": "Offer or service page impression. Same layer as page_view; not a lead."
     },
+    "sst_page_view": {
+      "layer": "page_view",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "SST corrective-campaign page impression for a declared SST journey or finite SST route family. Additive to page_view; never a lead."
+    },
     "editorial_page_view": {
       "layer": "page_view",
       "owner": "web-cfg",
@@ -249,6 +257,54 @@
         "netlify/functions/lib/closed-loop.cjs"
       ],
       "semantic": "Canonical CTA activation. Engagement; not a lead or pipeline. destination_type (form | anchor | route | whatsapp | email | tel) qualifies the destination: only form/whatsapp/email/tel are intent (closed-loop stage cta, analytics-agg cta_clicks); route/anchor are navigation (cta_nav_clicks); absent = legacy_unclassified, counted as intent and labelled. Since web-cfg#706 W3, an internal link whose destination path is masked for PII (e.g. a long digit run in the URL) still emits destination_type=route: it is a real route navigation, only the path is withheld, so it no longer falls into legacy_unclassified. Series break 2026-09-19 (JOR-02): an internal link to ANOTHER route whose fragment is a capture anchor (#captura*, #pedido*, #triagem*; #contato* already behaved this way) counts as cta_click destination_type=form with destination_path set to the target route (before: content_to_service). This covers the article and case CTAs '/{pilar}/#captura-pilar' that replaced '/?tema=...#contato'; cta_clicks / view_to_cta / cta_to_start from that date are not comparable with the days before it."
+    },
+    "sst_cta_click": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "One declared CTA activation in the SST corrective campaign. Additive to generic CTA/contact events; carries only finite route family, CTA id and declared topic."
+    },
+    "sst_whatsapp_click": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "One SST CTA activation whose destination is WhatsApp. Additive to whatsapp_click; never captures message content or contact details."
+    },
+    "pgr_cta": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "SST CTA on route family elaboracao-pgr. Additive to sst_cta_click and generic CTA events."
+    },
+    "pgr_review_cta": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "SST CTA on route family revisao-atualizacao-pgr. Additive to sst_cta_click and generic CTA events."
+    },
+    "sst_obra_cta": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "SST CTA on route family pgr-documentacao-sst-obras. Additive to sst_cta_click and generic CTA events."
+    },
+    "sst_outsourcing_cta": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "SST CTA on route family terceirizacao-documentacao-sst. Additive to sst_cta_click and generic CTA events."
     },
     "whatsapp_click": {
       "layer": "engagement",
@@ -568,6 +624,14 @@
       ],
       "semantic": "First focus on a lead form. Not a lead."
     },
+    "sst_form_start": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "First focus on an SST campaign form. Additive to lead_form_start; no field name, value or form content is captured."
+    },
     "lead_form_step": {
       "layer": "engagement",
       "owner": "web-cfg",
@@ -614,6 +678,14 @@
         "netlify/functions/lib/analytics-agg.cjs"
       ],
       "semantic": "Valid form submit attempt. Not persist and not a lead."
+    },
+    "sst_form_submit": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["js/modules/nav.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Valid SST campaign form submit attempt. Additive to lead_form_submit; not persistence or a lead."
     },
     "lead_form_backend_error": {
       "layer": "engagement",

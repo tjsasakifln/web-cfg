@@ -66,7 +66,7 @@ function makeDoc(formFields = {}) {
       if (!form._focusables || form._focusables.length === 0) {
         form._focusables = [makeFocusable(), makeFocusable()];
       }
-      if (sel === "[data-form-next]" || sel === "[data-form-back]" || sel === "[data-step-indicator]") {
+      if (sel === "[data-form-next]" || sel === "[data-form-back]" || sel === "[data-step-indicator]" || sel === "[data-sst-need]") {
         return [];
       }
       return form._focusables;
@@ -98,7 +98,7 @@ function makeDoc(formFields = {}) {
     readyState: "complete",
     body,
     createElement(tag) {
-      return { type: "", name: "", value: "", tagName: String(tag).toUpperCase() };
+      return { type: "", name: "", value: "", dataset: {}, tagName: String(tag).toUpperCase() };
     },
     querySelector(sel) {
       // Match script.js: form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]

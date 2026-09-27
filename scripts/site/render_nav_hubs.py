@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the two task-first navigation hubs from data/site/brand.json.
+"""Render task-first navigation hubs from data/site/brand.json.
 
 Issue #183: the header labels "Serviços" and "Problemas que resolvemos" used to
 point at home anchors (/#ofertas, /#jornadas), which drops a visitor who arrived
@@ -222,6 +222,49 @@ def _jsonld(
         + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         + "</script>"
     )
+
+
+def _sync_corporate_services_jsonld(text: str) -> str:
+    """Project the canonical SST route label into /servicos/ ItemList JSON-LD."""
+    route = "/seguranca-trabalho-apoio-tecnico/"
+    label = str((load_ia_map().get("breadcrumb_labels") or {}).get(route) or "")
+    if not label:
+        raise ValueError(f"canonical breadcrumb label missing for {route}")
+    target = f"{SITE}{route}"
+    matches = 0
+
+    def sync_block(match: re.Match[str]) -> str:
+        nonlocal matches
+        payload = json.loads(match.group(2))
+
+        def walk(node: Any) -> None:
+            nonlocal matches
+            if isinstance(node, dict):
+                if node.get("@type") == "ListItem" and node.get("url") == target:
+                    node["name"] = label
+                    matches += 1
+                for value in node.values():
+                    walk(value)
+            elif isinstance(node, list):
+                for value in node:
+                    walk(value)
+
+        walk(payload)
+        return (
+            match.group(1)
+            + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+            + match.group(3)
+        )
+
+    updated = re.sub(
+        r'(<script\b[^>]*type="application/ld\+json"[^>]*>)([\s\S]*?)(</script>)',
+        sync_block,
+        text,
+        flags=re.IGNORECASE,
+    )
+    if matches != 1:
+        raise ValueError(f"expected one SST ItemList entry in /servicos/, found {matches}")
+    return updated
 
 
 def _document(
@@ -833,6 +876,14 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 def render_pages() -> dict[str, str]:
     brand = load_brand()
     out: dict[str, str] = {}
+
+    corporate_meta = hub(brand, "corporate_services")
+    corporate_path = ROOT / corporate_meta["url"].strip("/") / "index.html"
+    if not corporate_path.is_file():
+        raise ValueError(f"corporate services page missing: {corporate_path}")
+    out[corporate_meta["url"]] = _sync_corporate_services_jsonld(
+        corporate_path.read_text(encoding="utf-8")
+    )
 
     services_meta = hub(brand, "services")
     body, items = _services_body(brand)

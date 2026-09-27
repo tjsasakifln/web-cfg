@@ -41,7 +41,7 @@ function anchorAttributes(html) {
   return [...html.matchAll(/<a\b([^>]*)>/gi)].map((match) => match[1]);
 }
 
-test("one canonical SST route owns the purchase intent", () => {
+test("the SST hub keeps its canonical authority inside the expanded route family", () => {
   const registry = JSON.parse(fs.readFileSync(path.join(root, "data/organic/public-family-registry.json"), "utf8"));
   const pageRows = (registry.families || registry.routes || registry.pages || []).filter((row) =>
     JSON.stringify(row).includes("/seguranca-trabalho-apoio-tecnico/"),
@@ -54,20 +54,17 @@ test("one canonical SST route owns the purchase intent", () => {
 test("problem first sections and remote boundary are visible", () => {
   const text = visibleText(page);
   for (const expected of [
-    "Documentação de segurança do trabalho organizada remotamente",
-    "Revisar ou atualizar o PGR ocupacional",
-    "PGR de canteiro precisa acompanhar a etapa da obra",
-    "podendo chegar a três anos na hipótese normativa aplicável",
-    "depois da implementação das medidas de prevenção",
-    "solicitação justificada dos trabalhadores ou da CIPA",
-    "O trabalho pode começar a distância. O método decide até onde ele pode ir.",
+    "Passe a documentação de SST para quem vai executar",
+    "execução documental remota",
+    "O programa da obra precisa acompanhar as etapas executivas",
+    "PGR, LTCAT e AET não são sinônimos",
     "fatores ergonômicos e psicossociais relacionados ao trabalho",
     "O eSocial recebe eventos, não o PGR em si",
     "ART quando aplicável ao serviço contratado",
   ]) {
     assert.ok(text.includes(expected), expected);
   }
-  for (const id of ["situacoes-sst", "pgr-obras", "trabalho-remoto", "documentos-sst", "duvidas-sst", "contato-sst"]) {
+  for (const id of ["escolher-servico", "pgr-obras", "escopo-remoto", "documentos-sst", "amostra-disponivel", "contato-sst"]) {
     assert.match(page, new RegExp(`id="${id}"`));
   }
 });
@@ -89,19 +86,18 @@ test("contextual CTAs preserve route, journey and distinct topics", () => {
   assert.ok(topics.has("Revisão ou atualização do PGR ocupacional"));
   assert.ok(topics.has("PGR de canteiro NR 18"));
   assert.ok(topics.has("Organização remota da rotina documental de SST"));
-  assert.ok(topics.has("Exigência de documento de SST"));
+  assert.ok(topics.has("Elaboração remota de PGR"));
   assert.match(page, /data-origem="\/seguranca-trabalho-apoio-tecnico\/"/);
 });
 
-test("every direct SST channel carries journey and topic into analytics", () => {
-  const direct = anchorAttributes(page).filter(
-    (attrs) => /data-route-family="seguranca-trabalho-apoio-tecnico"/.test(attrs)
-      && /href="(?:https:\/\/wa\.me\/|mailto:|tel:)/.test(attrs),
-  );
-  assert.ok(direct.length >= 9, direct.length);
+test("the three direct fallback channels carry journey and topic into analytics", () => {
+  const direct = anchorAttributes(page).filter((attrs) => /data-fallback-channel=/.test(attrs));
+  assert.equal(direct.length, 3, direct.length);
+  assert.deepEqual(new Set(direct.map((attrs) => attrs.match(/data-fallback-channel="([^"]+)"/)?.[1])), new Set(["whatsapp", "email", "phone"]));
   for (const attrs of direct) {
     assert.match(attrs, /data-journey="sst"/);
     assert.match(attrs, /data-tema="[^"]+"/);
+    assert.match(attrs, /data-route-family="seguranca-trabalho-apoio-tecnico"/);
   }
   const nav = fs.readFileSync(path.join(root, "js/modules/nav.js"), "utf8");
   assert.match(nav, /const commercialTopic = el\.getAttribute\('data-tema'\)/);
@@ -114,8 +110,8 @@ test("page keeps sensitive data and health acts out of first contact", () => {
   assert.doesNotMatch(page, /<form\b/i);
   assert.doesNotMatch(page, /type=["']file["']/i);
   const text = visibleText(page);
-  assert.ok(text.includes("Não envie arquivo, nome de trabalhador, CPF, exame ou atestado no primeiro contato."));
-  assert.ok(text.includes("Exame, ASO, PCMSO, diagnóstico, aptidão e nexo clínico"));
+  assert.ok(text.includes("Não envie nomes de trabalhadores, CPF, exames, atestados ou dados médicos no primeiro contato."));
+  assert.ok(text.includes("PCMSO, ASO, exames, diagnóstico, aptidão e nexo clínico"));
 });
 
 test("regulatory overclaims remain rejected", () => {

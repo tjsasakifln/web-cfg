@@ -140,7 +140,8 @@ def test_representative_authority_pages_pass_visible_parity():
             continue
         parity = compare_visible_parity(
             html,
-            url="https://confenge.com.br/" + str(path.relative_to(ROOT)).replace("index.html", ""),
+            url="https://confenge.com.br/"
+            + path.relative_to(ROOT).as_posix().removesuffix("index.html"),
         )
         assert parity["ok"], f"{kind} {path}: {parity['defects']}"
 
@@ -244,6 +245,8 @@ def test_scan_site_artifact_is_deterministic():
     a = json.dumps(first, ensure_ascii=False, indent=2, sort_keys=True)
     b = json.dumps(second, ensure_ascii=False, indent=2, sort_keys=True)
     assert a == b
+    assert first["site_root"] == ("_site" if site.name == "_site" else ".")
+    assert "\\" not in first["site_root"]
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
-    "asset_files_max_route": 21,
-    "asset_raw_kb_max_route": 1077.56,
+    "asset_files_max_route": 20,
+    "asset_raw_kb_max_route": 1085.51,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 231
+    "routes_measured": 235
   },
   "budget": {
     "cls_max": 0.05,
@@ -380,6 +380,7 @@
       "/diagnostico-b2g-expansao/obrigado/",
       "/diagnostico-pre-licitacao/",
       "/diretoria-b2g/",
+      "/elaboracao-pgr/",
       "/entregas/",
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
@@ -426,6 +427,7 @@
       "/obrigado-operacao.html",
       "/obrigado.html",
       "/parcerias-engenharia/",
+      "/pgr-documentacao-sst-obras/",
       "/politica-editorial/",
       "/politica-editorial/historico/",
       "/privacidade/",
@@ -435,10 +437,12 @@
       "/radar/",
       "/radar/nacional-obras-publicas/",
       "/reequilibrio-obras-publicas/",
+      "/revisao-atualizacao-pgr/",
       "/revisao-tecnica-projetos-engenharia/",
       "/seguranca-trabalho-apoio-tecnico/",
       "/servicos-obras-publicas/",
       "/servicos/",
+      "/terceirizacao-documentacao-sst/",
       "/termos-de-uso/",
       "/triagem-tecnica/"
     ],
@@ -612,6 +616,7 @@
       "/diagnostico-b2g-expansao/obrigado/",
       "/diagnostico-pre-licitacao/",
       "/diretoria-b2g/",
+      "/elaboracao-pgr/",
       "/entregas/",
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
@@ -658,6 +663,7 @@
       "/obrigado-operacao.html",
       "/obrigado.html",
       "/parcerias-engenharia/",
+      "/pgr-documentacao-sst-obras/",
       "/politica-editorial/",
       "/politica-editorial/historico/",
       "/privacidade/",
@@ -667,10 +673,12 @@
       "/radar/",
       "/radar/nacional-obras-publicas/",
       "/reequilibrio-obras-publicas/",
+      "/revisao-atualizacao-pgr/",
       "/revisao-tecnica-projetos-engenharia/",
       "/seguranca-trabalho-apoio-tecnico/",
       "/servicos-obras-publicas/",
       "/servicos/",
+      "/terceirizacao-documentacao-sst/",
       "/termos-de-uso/",
       "/triagem-tecnica/"
     ]

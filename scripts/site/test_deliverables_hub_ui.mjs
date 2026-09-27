@@ -359,7 +359,12 @@ for (const width of widths) {
   // avaliacao de imovel, a .contact-alt o WhatsApp contextual e o fechamento
   // o caminho para /servicos/. Medido 58 em todas as larguras; teto igual ao
   // medido.
-  if (metrics.mainLinks > 58) errors.push(`main_links=${metrics.mainLinks}`);
+  // 58 -> 62 em 2026-09-27 (campanha SST-CONVERSION-CORRECTION): a frente 05
+  // preserva a entrada do hub e acrescenta as quatro compras BOFU exigidas
+  // pelo contrato cross-site: elaborar PGR, revisar PGR, SST para obra e
+  // terceirizar documentacao. Medido 62 em todas as larguras; teto igual ao
+  // medido, sem folga implicita.
+  if (metrics.mainLinks > 62) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.

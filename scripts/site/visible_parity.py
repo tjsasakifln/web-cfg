@@ -987,9 +987,13 @@ def scan_site_artifact(
             continue
         pages.append(compare_visible_parity(html, url=url))
     pages.sort(key=lambda p: p.get("url") or "")
+    try:
+        report_root = site_root.resolve().relative_to(ROOT.resolve()).as_posix() or "."
+    except ValueError:
+        report_root = site_root.resolve().as_posix()
     return {
         "ok": all(p.get("ok") for p in pages),
-        "site_root": str(site_root),
+        "site_root": report_root,
         "page_count": len(pages),
         "defect_count": sum(len(p.get("defects") or []) for p in pages),
         "pages": pages,

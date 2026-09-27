@@ -1,9 +1,9 @@
 {
   "schema_version": "1.1.0",
   "campaign": "CONFENGE-MV-04-CORPORATE-SHELL-20260905",
-  "updated_at": "2026-09-05",
+  "updated_at": "2026-09-26",
   "person": {
-    "jobTitle": "Engenheiro Civil",
+    "jobTitle": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
@@ -130,9 +130,9 @@
     },
     {
       "id": "occupational_safety",
-      "label": "Preciso de um documento de segurança do trabalho",
-      "summary": "Quando a empresa precisa saber quais documentos de risco ocupacional se aplicam, o que falta e quem pode produzir cada peça.",
-      "deliverables": "Diagnóstico do que se aplica e o documento de SST nomeado na proposta, com profissional habilitado por módulo; exames e atos médicos ficam fora.",
+      "label": "Quero terceirizar a documentação de SST",
+      "summary": "Quando RH, engenharia, administrativo ou SESMT precisam tirar da fila a elaboração, a revisão ou a organização dos documentos de SST.",
+      "deliverables": "Execução documental remota dentro do escopo contratado, com arquivos finais organizados, responsável técnico identificado, ART quando aplicável e nota fiscal; exames e atos médicos ficam fora.",
       "href": "/seguranca-trabalho-apoio-tecnico/",
       "index_state": "service_hub_index"
     },

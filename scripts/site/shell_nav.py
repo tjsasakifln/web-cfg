@@ -415,14 +415,30 @@ def declared_value_first_cta(
         raise ValueError(f"{current}: unsupported value-first CTA mode")
     href = str(spec.get("href") or "")
     label = str(spec.get("label") or "")
+    cta_id = str((spec.get("mobile_cta_id") if mobile else spec.get("desktop_cta_id")) or "")
+    journey = str(spec.get("journey") or "")
+    tema = str(spec.get("tema") or "")
     if not re.fullmatch(r"#[A-Za-z][\w:.-]*", href) or not label:
         raise ValueError(f"{current}: invalid value-first CTA label or href")
+    has_analytics_context = bool(cta_id or journey or tema)
+    if has_analytics_context and (
+        not re.fullmatch(r"[a-z0-9][a-z0-9-]*", cta_id) or not journey or not tema
+    ):
+        raise ValueError(f"{current}: incomplete value-first CTA analytics context")
     target = re.escape(href[1:])
     if not re.search(rf'\bid=["\']{target}["\']', text):
         raise ValueError(f"{current}: value-first CTA target is absent")
     classes = "button button-primary" + ("" if mobile else " header-cta")
+    analytics = ""
+    if has_analytics_context:
+        analytics = (
+            f'data-cta-id="{html_lib.escape(cta_id, quote=True)}" '
+            f'data-cta-position="{"mobile-menu" if mobile else "header"}" '
+            f'data-event-name="cta_click" data-journey="{html_lib.escape(journey, quote=True)}" '
+            f'data-tema="{html_lib.escape(tema, quote=True)}" '
+        )
     return (
-        f'<a class="{classes}" data-value-first-cta="true" '
+        f'<a class="{classes}" {analytics}data-value-first-cta="true" '
         f'href="{html_lib.escape(href, quote=True)}">'
         f"{html_lib.escape(label)}</a>"
     )

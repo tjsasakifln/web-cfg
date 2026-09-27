@@ -1083,7 +1083,7 @@ _reset();
     ["SERV-ORCAMENTO", ["quantitativos ou orçamento", "outro"]],
     ["SERV-DIAGNOSTICO", ["obra ou imóvel para inspecionar ou documentar", "outro"]],
     ["SERV-PERICIA", ["perícia, assistência técnica ou avaliação", "outro"]],
-    ["SERV-SST", ["segurança do trabalho", "outro"]],
+    ["SERV-SST", ["segurança do trabalho", "sst"]],
   ]);
   let n = 0;
   for (const [id, [stage, journey]] of expected) {

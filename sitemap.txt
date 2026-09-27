@@ -62,6 +62,7 @@ https://confenge.com.br/diagnostico-b2g-360/
 https://confenge.com.br/diagnostico-b2g-expansao/
 https://confenge.com.br/diagnostico-pre-licitacao/
 https://confenge.com.br/diretoria-b2g/
+https://confenge.com.br/elaboracao-pgr/
 https://confenge.com.br/entregas/
 https://confenge.com.br/especialista/tiago-jun-sasaki/
 https://confenge.com.br/ferramentas/
@@ -80,6 +81,7 @@ https://confenge.com.br/medicoes-glosas-obras-publicas/
 https://confenge.com.br/metodologia-inteligencia/
 https://confenge.com.br/nurture/
 https://confenge.com.br/parcerias-engenharia/
+https://confenge.com.br/pgr-documentacao-sst-obras/
 https://confenge.com.br/politica-editorial/
 https://confenge.com.br/politica-editorial/historico/
 https://confenge.com.br/privacidade/
@@ -88,9 +90,11 @@ https://confenge.com.br/projetos-complementares-engenharia/
 https://confenge.com.br/quantitativos-orcamento-obras/
 https://confenge.com.br/radar/nacional-obras-publicas/
 https://confenge.com.br/reequilibrio-obras-publicas/
+https://confenge.com.br/revisao-atualizacao-pgr/
 https://confenge.com.br/revisao-tecnica-projetos-engenharia/
 https://confenge.com.br/seguranca-trabalho-apoio-tecnico/
 https://confenge.com.br/servicos/
 https://confenge.com.br/servicos-obras-publicas/
+https://confenge.com.br/terceirizacao-documentacao-sst/
 https://confenge.com.br/termos-de-uso/
 https://confenge.com.br/triagem-tecnica/

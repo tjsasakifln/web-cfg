@@ -338,6 +338,6 @@
   },
   "exception_kinds": {
     "detector_self_reference": "The gate's own module, its regression test and this rule file necessarily contain the strings the gate rejects. No content pin: these files are meant to change whenever the rules change.",
-    "historical_record": "A dated record of a past observation, release or decision. Its value is that it says what was true then, so rewriting it would falsify the record. Honoured only for the exact reviewed bytes (sha256); any edit re-arms the gate on that file."
+    "historical_record": "A dated record of a past observation, release or decision. Its value is that it says what was true then, so rewriting it would falsify the record. Honoured only for the exact reviewed canonical UTF-8 text (sha256); checkout-only LF/CRLF conversion is ignored, while any material edit re-arms the gate on that file."
   }
 }

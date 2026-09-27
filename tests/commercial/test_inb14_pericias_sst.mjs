@@ -247,7 +247,7 @@ const specA = {
 };
 
 const specB = {
-  h1: "Documentação de segurança do trabalho organizada remotamente",
+  h1: "Passe a documentação de SST para quem vai executar",
   canonical: "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
   must: [
     "PGR",
@@ -264,7 +264,7 @@ const specB = {
   ],
   mustRe: [
     /n[aã]o s[aã]o sin[oô]nimos|n[aã]o s[aã]o intercambi[aá]veis|n[aã]o s[aã]o o mesmo documento/i,
-    /ato m[eé]dico/i,
+    /atos? m[eé]dicos?/i,
   ],
   forbidRe: [
     /PGR incluso no pacote/i,
@@ -278,7 +278,7 @@ let htmlB = read("seguranca-trabalho-apoio-tecnico/index.html");
 if (MUTATE) {
   htmlA = mutate(htmlA);
   htmlB = htmlB.replace(
-    /"name":"Apoio técnico de segurança do trabalho"/,
+    /"name":"Documentação de SST"/,
     '"name":"PGR incluso no pacote com ato médico"',
   );
 }

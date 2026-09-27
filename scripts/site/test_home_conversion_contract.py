@@ -85,10 +85,10 @@ def _visible(fragment: str) -> str:
 # data-journey intactos) e a avaliacao de imovel ganhou opcao propria
 # (value "avaliação de imóvel", data-journey "avaliacao"), separada da pericia
 # porque as duas familias tem acoes terminais distintas na matriz de intencao.
-# As invariantes estruturais seguem identicas: 23 controles, 3 obrigatorios,
+# As invariantes estruturais seguem identicas: 24 controles, 3 obrigatorios,
 # action /obrigado, sem upload. A entrada HOME_SITUATIONS do bundle e
 # verificada por seo/scripts/test_form_funnel.mjs.
-CAPTURE_FORM_SHA256 = "72c6aa7b375e23d389d09c11cfe04c77e7991f8b8a5570e11387aee5da219948"
+CAPTURE_FORM_SHA256 = "153a576f12cd5c8897fc6e9191674e3aa2fad5f7d3791e0004495bbceef24350"
 
 
 def _home() -> str:
@@ -215,7 +215,8 @@ def test_corporate_triage_is_safe_and_capture_form_is_reviewed() -> None:
     assert re.findall(r'<form[^>]*action="([^"]*)"', body) == ["/obrigado"]
     assert 'method="POST"' in body and 'name="diagnostico-b2g"' in body
     controls = sorted(re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"', body))
-    assert len(controls) == 23, controls
+    assert len(controls) == 24, controls
+    assert "sst_necessidade" in controls
     required = sorted(re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"[^>]*required', body))
     assert len(required) == 3, required
     assert 'type="file"' not in body.lower()
@@ -397,11 +398,21 @@ def test_home_public_works_row_names_edital_and_public_entity() -> None:
     assert "órgão" in heading, heading
 
 
-def test_home_sst_row_links_the_labor_dispute_entry() -> None:
-    """B-07 (3). O advogado trabalhista nao chegava a #assistencia-trabalhista
-    em duas escolhas a partir da home."""
+def test_home_sst_row_exposes_the_documental_purchase_paths() -> None:
+    """A entrada SST apresenta a dor operacional e as quatro compras BOFU,
+    sem misturar a assistência em litígio na proposta documental."""
     row = _situation_row(_home(), "situacao-sst")
-    assert 'href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"' in row
+    text = _visible(row).casefold()
+    assert "não consegue mais administrar" in text
+    assert "remotamente" in text
+    for route in (
+        "/elaboracao-pgr/",
+        "/revisao-atualizacao-pgr/",
+        "/pgr-documentacao-sst-obras/",
+        "/terceirizacao-documentacao-sst/",
+    ):
+        assert f'href="{route}"' in row, route
+    assert "assistencia-trabalhista" not in row
 
 
 def test_home_triage_section_frames_every_family_before_public_works() -> None:
@@ -495,8 +506,8 @@ def test_home_select_separates_valuation_and_drops_unpublished_inspection_promis
     assert "avalia" not in pericia.group(1).casefold(), pericia.group(1)
 
 
-def test_triage_separates_valuation_from_dispute_and_names_labor_sst() -> None:
-    """B-05 (triagem) + B-07 (4)."""
+def test_triage_separates_valuation_dispute_and_documental_sst() -> None:
+    """Avaliação, disputa e a oferta documental remota de SST não se confundem."""
     valuation = _triage_item("avaliacao-imovel")
     assert 'href="/servicos/#servico-avaliacao"' in valuation
     assert "https://wa.me/" in valuation
@@ -506,15 +517,19 @@ def test_triage_separates_valuation_from_dispute_and_names_labor_sst() -> None:
     dispute = _triage_item("pericia-avaliacao")
     assert "https://wa.me/" in dispute
     sst = _triage_item("sst")
-    assert 'href="/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista"' in sst
-    assert "trabalhista" in _visible(sst).casefold()
+    assert 'href="/seguranca-trabalho-apoio-tecnico/"' in sst
+    assert "remotamente" in _visible(sst).casefold()
+    assert "trabalhista" not in _visible(sst).casefold()
 
 
-def test_sst_family_visitor_job_covers_labor_dispute_evidence() -> None:
-    """B-07 (1)."""
+def test_sst_family_visitor_job_covers_the_remote_documental_purchase() -> None:
+    """A família SST descreve o trabalho de compra desta vertical."""
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
     row = next(r for r in registry["families"] if r.get("id") == "seguranca-trabalho-apoio-tecnico")
-    assert "reclamação trabalhista" in row["visitor_job"].casefold(), row["visitor_job"]
+    visitor_job = row["visitor_job"].casefold()
+    for term in ("elaboração", "revisão", "remota", "pgr", "obra", "terceirização"):
+        assert term in visitor_job, (term, row["visitor_job"])
+    assert "reclamação trabalhista" not in visitor_job
 
 
 def test_services_rows_close_with_contact_after_conditions() -> None:

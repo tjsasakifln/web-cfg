@@ -4182,6 +4182,7 @@
             "optional": [
               "telefone",
               "email",
+              "sst_necessidade",
               "mensagem",
               "empresa",
               "urgencia",

@@ -311,9 +311,9 @@ def test_hash_bound_editorial_canary_is_not_rewritten_by_shell_sync():
 # ---------------------------------------------------------------------------
 # CONFENGE-BOFU-FECHAMENTO-20260919 (WS-B). Sub-situacoes: fragmentos das
 # landings de situacao que o hub /servicos/ publica como entrada propria
-# (recebimento, reforma em condominio, as-built, reclamacao trabalhista,
-# orgao que planeja a contratacao). Antes, #assistencia-trabalhista nao
-# existia em contrato algum: so o hub e a propria rota o citavam.
+# (recebimento, reforma em condominio, as-built e orgao que planeja a
+# contratacao). A assistencia trabalhista de SST deixou de ser sub-situacao
+# comercial: ela permanece apenas como caminho contextual para pericias.
 # ---------------------------------------------------------------------------
 import re as _re
 
@@ -369,7 +369,7 @@ def test_hub_fragments_on_situation_landings_are_declared_sub_situations():
         if href not in declared:
             undeclared.append(href)
     assert not undeclared, undeclared
-    assert "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista" in declared
+    assert "/seguranca-trabalho-apoio-tecnico/#assistencia-trabalhista" not in declared
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     for href, sub in declared.items():
         path, fragment = href.split("#", 1)

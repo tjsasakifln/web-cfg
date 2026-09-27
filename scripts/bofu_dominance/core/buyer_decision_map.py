@@ -236,7 +236,10 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 
 def _sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # Pins describe tracked UTF-8 contracts, not a checkout's newline policy.
+    # Git may materialize the same LF blob as CRLF on Windows.
+    canonical = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(canonical).hexdigest()
 
 
 def _strictly_matches(actual: Any, expected: Any) -> bool:
