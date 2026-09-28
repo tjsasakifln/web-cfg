@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - inventory
+          - root_probe
 
 permissions:
   contents: read
@@ -123,3 +124,38 @@ jobs:
           echo '=== noninteractive sudo rules ==='
           sudo -n -l 2>&1 || true
           REMOTE
+
+  root_probe:
+    name: Probe authorized root SSH
+    if: inputs.operation == 'root_probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: netcup-stage
+    steps:
+      - name: Configure pinned SSH identity
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 0700 "$RUNNER_TEMP/quickly-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/quickly-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/quickly-ssh/id_ed25519" "$RUNNER_TEMP/quickly-ssh/known_hosts"
+
+      - name: Test root identity without changing the host
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+        run: |
+          set -euo pipefail
+          ssh \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts" \
+            -p "$NETCUP_DEPLOY_PORT" \
+            -i "$RUNNER_TEMP/quickly-ssh/id_ed25519" \
+            "root@$NETCUP_DEPLOY_HOST" 'id -u; hostname; test -d /opt'
