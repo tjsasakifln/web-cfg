@@ -91,7 +91,7 @@ jobs:
             | awk '{print $1}' \
             | grep -Ei 'docker|nginx|caddy|traefik|warmbly|extra|confenge|quickly' || true
           echo '=== opt directories ==='
-          find /opt -maxdepth 2 -mindepth 1 -type d -printf '%p\n' 2>/dev/null | sort | head -n 250
+          find /opt -maxdepth 2 -mindepth 1 -type d -printf '%p\n' 2>/dev/null | sort | head -n 250 || true
           echo '=== protected project presence ==='
           for path in /opt/confenge-web /opt/extra-consultoria /opt/warmbly-confenge /opt/quickly-confenge; do
             if [ -e "$path" ]; then
@@ -117,7 +117,7 @@ jobs:
           echo '=== proxy configuration names ==='
           find /etc/nginx /etc/caddy /opt -maxdepth 3 -type f \
             \( -name '*.conf' -o -name 'Caddyfile' -o -name 'docker-compose.yml' -o -name 'compose.yml' \) \
-            -printf '%p\n' 2>/dev/null | sort | head -n 250
+            -printf '%p\n' 2>/dev/null | sort | head -n 250 || true
           echo '=== proxy validation ==='
           sudo -n nginx -t 2>&1 || nginx -t 2>&1 || true
           echo '=== noninteractive sudo rules ==='
