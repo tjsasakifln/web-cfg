@@ -12,6 +12,8 @@ on:
           - inventory
           - root_probe
           - capabilities
+          - temp_key_install
+          - temp_key_remove
           - deploy_quickly
       source_ref:
         description: Immutable Quickly fork commit SHA containing deploy/confenge
@@ -19,6 +21,10 @@ on:
         type: string
       image_ref:
         description: Immutable ghcr.io/tjsasakifln/quickly-confenge image digest
+        required: false
+        type: string
+      public_key:
+        description: Temporary reconciliation SSH public key (never the private key)
         required: false
         type: string
 
@@ -228,6 +234,127 @@ jobs:
           echo '=== public-edge includes ==='
           grep -RInE 'include|proxy_pass|server_name|listen' /etc/nginx/nginx.conf /etc/nginx/conf.d \
             /etc/nginx/confenge-public-edge 2>/dev/null | head -n 300 || true
+          REMOTE
+
+  temporary_reconciliation_key:
+    name: Manage temporary reconciliation SSH key
+    if: inputs.operation == 'temp_key_install' || inputs.operation == 'temp_key_remove'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: netcup-production
+    steps:
+      - name: Validate temporary public key
+        env:
+          TEMP_PUBLIC_KEY: ${{ inputs.public_key }}
+        run: |
+          set -euo pipefail
+          expected_comment='codex-quickly-reconcile-20260928'
+          test -n "$TEMP_PUBLIC_KEY"
+          [[ "$TEMP_PUBLIC_KEY" != *$'\n'* && "$TEMP_PUBLIC_KEY" != *$'\r'* ]] || {
+            echo 'public_key must contain exactly one line.' >&2
+            exit 1
+          }
+          [[ "$TEMP_PUBLIC_KEY" =~ ^ssh-ed25519[[:space:]][A-Za-z0-9+/]+={0,3}[[:space:]]$expected_comment$ ]] || {
+            echo 'public_key must be an Ed25519 key with the dedicated reconciliation comment.' >&2
+            exit 1
+          }
+          umask 077
+          printf '%s\n' "$TEMP_PUBLIC_KEY" > "$RUNNER_TEMP/reconciliation-key.pub"
+          ssh-keygen -lf "$RUNNER_TEMP/reconciliation-key.pub"
+
+      - name: Configure pinned SSH identity
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for required in NETCUP_DEPLOY_HOST NETCUP_DEPLOY_PORT NETCUP_DEPLOY_USER \
+                          NETCUP_SSH_PRIVATE_KEY NETCUP_SSH_KNOWN_HOSTS; do
+            test -n "${!required}" || { echo "missing required value: $required" >&2; exit 1; }
+          done
+          install -d -m 0700 "$RUNNER_TEMP/quickly-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/quickly-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/quickly-ssh/id_ed25519" "$RUNNER_TEMP/quickly-ssh/known_hosts"
+          known_host="$NETCUP_DEPLOY_HOST"
+          if [ "$NETCUP_DEPLOY_PORT" != "22" ]; then
+            known_host="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
+          fi
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/quickly-ssh/known_hosts" >/dev/null
+
+      - name: Upload key material and apply requested operation
+        env:
+          KEY_OPERATION: ${{ inputs.operation }}
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts"
+            -p "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          )
+          scp_options=(
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts"
+            -P "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          )
+          target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
+          remote_key="/opt/quickly-confenge/.codex-reconciliation-key-${GITHUB_RUN_ID}.pub"
+          cleanup_remote_public_key() {
+            ssh "${ssh_options[@]}" "$target" "rm -f -- '$remote_key'" >/dev/null 2>&1 || true
+          }
+          trap cleanup_remote_public_key EXIT
+          scp "${scp_options[@]}" "$RUNNER_TEMP/reconciliation-key.pub" "$target:$remote_key"
+          ssh "${ssh_options[@]}" "$target" \
+            "KEY_OPERATION='$KEY_OPERATION' REMOTE_KEY='$remote_key' bash -se" <<'REMOTE'
+          set -euo pipefail
+          test "$(id -un)" = 'confenge-deploy'
+          test -r "$REMOTE_KEY"
+          key=$(tr -d '\r\n' < "$REMOTE_KEY")
+          rm -f -- "$REMOTE_KEY"
+          [[ "$key" =~ ^ssh-ed25519[[:space:]][A-Za-z0-9+/]+={0,3}[[:space:]]codex-quickly-reconcile-20260928$ ]]
+
+          install -d -m 0700 "$HOME/.ssh"
+          authorized_keys="$HOME/.ssh/authorized_keys"
+          touch "$authorized_keys"
+          chmod 0600 "$authorized_keys"
+          marker='codex-quickly-reconcile-20260928'
+
+          replace_dedicated_key() {
+            replacement=$(mktemp "$HOME/.ssh/authorized_keys.XXXXXX")
+            awk -v marker="$marker" '$0 !~ ("[[:space:]]" marker "$") { print }' \
+              "$authorized_keys" > "$replacement"
+            if [ "$KEY_OPERATION" = 'temp_key_install' ]; then
+              expiry=$(date -u -d '+4 hours' '+%Y%m%d%H%M%SZ')
+              printf 'restrict,expiry-time="%s" %s\n' "$expiry" "$key" >> "$replacement"
+            fi
+            chmod 0600 "$replacement"
+            mv -f -- "$replacement" "$authorized_keys"
+          }
+
+          case "$KEY_OPERATION" in
+            temp_key_install)
+              replace_dedicated_key
+              count=$(awk -v marker="$marker" '$0 ~ ("[[:space:]]" marker "$") { count++ } END { print count + 0 }' "$authorized_keys")
+              test "$count" -eq 1
+              echo 'Temporary reconciliation key installed with a four-hour authentication expiry.'
+              ;;
+            temp_key_remove)
+              replace_dedicated_key
+              count=$(awk -v marker="$marker" '$0 ~ ("[[:space:]]" marker "$") { count++ } END { print count + 0 }' "$authorized_keys")
+              test "$count" -eq 0
+              echo 'Temporary reconciliation key removed.'
+              ;;
+            *)
+              echo 'Unsupported key operation.' >&2
+              exit 1
+              ;;
+          esac
           REMOTE
 
   deploy_quickly:
