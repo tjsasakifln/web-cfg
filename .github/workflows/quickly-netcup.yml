@@ -253,7 +253,7 @@ jobs:
           }
 
       - name: Fetch the exact Quickly deployment bundle
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           repository: tjsasakifln/Quickly
           ref: ${{ inputs.source_ref }}
@@ -323,7 +323,7 @@ jobs:
             printf 'POSTGRES_PASSWORD=%s\n' "$QUICKLY_POSTGRES_PASSWORD"
             printf 'QUICKLY_SECRET_KEY=%s\n' "$QUICKLY_SECRET_KEY"
             printf 'QUICKLY_ENCRYPTION_KEY=%s\n' "$QUICKLY_ENCRYPTION_KEY"
-            printf '%s\n' 'QUICKLY_BOOTSTRAP_ADMIN_USERNAME=tiago_sasaki'
+            printf '%s\n' 'QUICKLY_BOOTSTRAP_ADMIN_USERNAME=tiago.sasaki'
             printf '%s\n' 'QUICKLY_BOOTSTRAP_ADMIN_EMAIL=tiago.sasaki@confenge.com.br'
             printf 'QUICKLY_BOOTSTRAP_ADMIN_PASSWORD=%s\n' "$QUICKLY_ADMIN_PASSWORD"
           } > "$RUNNER_TEMP/quickly.env"
@@ -386,6 +386,13 @@ jobs:
           chmod 0600 "$temp_env"
           mv "$temp_env" .env
           docker compose --project-name quickly-confenge --env-file .env -f compose.yml up -d --force-recreate app
+          app_id=$(docker compose --project-name quickly-confenge --env-file .env -f compose.yml ps -q app)
+          test -n "$app_id"
+          if docker inspect "$app_id" --format '{{range .Config.Env}}{{println .}}{{end}}' \
+            | grep -q '^QUICKLY_BOOTSTRAP_ADMIN_'; then
+            echo 'Bootstrap credentials remained in the recreated container environment.' >&2
+            exit 1
+          fi
           for attempt in $(seq 1 12); do
             if curl --fail --silent --show-error http://127.0.0.1:19080/api/auth/setup-status >/dev/null; then
               break
