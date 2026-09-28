@@ -11,6 +11,7 @@ on:
         options:
           - inventory
           - root_probe
+          - capabilities
 
 permissions:
   contents: read
@@ -159,3 +160,63 @@ jobs:
             -p "$NETCUP_DEPLOY_PORT" \
             -i "$RUNNER_TEMP/quickly-ssh/id_ed25519" \
             "root@$NETCUP_DEPLOY_HOST" 'id -u; hostname; test -d /opt'
+
+  capabilities:
+    name: Inspect deploy-user capabilities
+    if: inputs.operation == 'capabilities'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: netcup-stage
+    steps:
+      - name: Configure pinned SSH identity
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 0700 "$RUNNER_TEMP/quickly-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/quickly-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/quickly-ssh/id_ed25519" "$RUNNER_TEMP/quickly-ssh/known_hosts"
+
+      - name: Inspect only paths and capabilities relevant to an isolated deploy
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts"
+            -p "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          )
+          ssh "${ssh_options[@]}" "$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+          echo '=== home and groups ==='
+          printf 'home=%s\n' "$HOME"
+          id
+          getent passwd "$(id -un)" | cut -d: -f1,6,7
+          echo '=== relevant permissions ==='
+          for path in /opt /opt/confenge-web /opt/confenge-web/shared /opt/confenge-web/pending-nginx \
+                      /etc/nginx /etc/nginx/conf.d /etc/nginx/confenge-public-edge /run/docker.sock; do
+            stat -c '%A|%U|%G|%n' "$path" 2>/dev/null || printf 'missing|%s\n' "$path"
+            test -w "$path" && printf 'writable|%s\n' "$path" || true
+          done
+          echo '=== rootless container prerequisites ==='
+          for tool in dockerd-rootless-setuptool.sh dockerd-rootless.sh rootlesskit newuidmap newgidmap podman slirp4netns; do
+            command -v "$tool" || true
+          done
+          grep -E "^$(id -un):" /etc/subuid /etc/subgid 2>/dev/null || true
+          loginctl show-user "$(id -un)" -p Linger -p State -p RuntimePath 2>/dev/null || true
+          echo '=== existing runtime unit ==='
+          systemctl cat confenge-web-runtime.service 2>/dev/null || true
+          echo '=== active nginx conf content ==='
+          sed -n '1,240p' /etc/nginx/conf.d/confenge-web-http.conf 2>/dev/null || true
+          sed -n '1,260p' /etc/nginx/conf.d/confenge-web-origin.conf 2>/dev/null || true
+          echo '=== public-edge includes ==='
+          grep -RInE 'include|proxy_pass|server_name|listen' /etc/nginx/nginx.conf /etc/nginx/conf.d \
+            /etc/nginx/confenge-public-edge 2>/dev/null | head -n 300 || true
+          REMOTE
