@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       operation:
-        description: Read-only Quickly/Netcup operation
+        description: Quickly/Netcup operation
         required: true
         default: inventory
         type: choice
@@ -12,6 +12,15 @@ on:
           - inventory
           - root_probe
           - capabilities
+          - deploy_quickly
+      source_ref:
+        description: Immutable Quickly fork commit SHA containing deploy/confenge
+        required: false
+        type: string
+      image_ref:
+        description: Immutable ghcr.io/tjsasakifln/quickly-confenge image digest
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -219,4 +228,170 @@ jobs:
           echo '=== public-edge includes ==='
           grep -RInE 'include|proxy_pass|server_name|listen' /etc/nginx/nginx.conf /etc/nginx/conf.d \
             /etc/nginx/confenge-public-edge 2>/dev/null | head -n 300 || true
+          REMOTE
+
+  deploy_quickly:
+    name: Deploy isolated Quickly service
+    if: inputs.operation == 'deploy_quickly'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: netcup-production
+    steps:
+      - name: Validate immutable deploy inputs
+        env:
+          SOURCE_REF: ${{ inputs.source_ref }}
+          IMAGE_REF: ${{ inputs.image_ref }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_REF" =~ ^[0-9a-f]{40}$ ]] || {
+            echo 'source_ref must be a full 40-character commit SHA.' >&2
+            exit 1
+          }
+          [[ "$IMAGE_REF" =~ ^ghcr\.io/tjsasakifln/quickly-confenge@sha256:[0-9a-f]{64}$ ]] || {
+            echo 'image_ref must be the immutable Quickly Confenge GHCR digest.' >&2
+            exit 1
+          }
+
+      - name: Fetch the exact Quickly deployment bundle
+        uses: actions/checkout@v4
+        with:
+          repository: tjsasakifln/Quickly
+          ref: ${{ inputs.source_ref }}
+          path: quickly-source
+          persist-credentials: false
+
+      - name: Package only the deployment bundle
+        run: |
+          set -euo pipefail
+          test -f quickly-source/deploy/confenge/compose.yml
+          test -f quickly-source/deploy/confenge/scripts/bootstrap-admin.sh
+          tar \
+            --directory=quickly-source/deploy/confenge \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='app-backups' \
+            --create --gzip --file="$RUNNER_TEMP/quickly-confenge-bundle.tgz" .
+          tar -tzf "$RUNNER_TEMP/quickly-confenge-bundle.tgz" >/dev/null
+
+      - name: Configure pinned SSH identity
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$NETCUP_DEPLOY_HOST"
+          test -n "$NETCUP_DEPLOY_PORT"
+          test -n "$NETCUP_DEPLOY_USER"
+          test -n "$NETCUP_SSH_PRIVATE_KEY"
+          test -n "$NETCUP_SSH_KNOWN_HOSTS"
+          install -d -m 0700 "$RUNNER_TEMP/quickly-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/quickly-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/quickly-ssh/id_ed25519" "$RUNNER_TEMP/quickly-ssh/known_hosts"
+          known_host="$NETCUP_DEPLOY_HOST"
+          if [ "$NETCUP_DEPLOY_PORT" != "22" ]; then
+            known_host="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
+          fi
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/quickly-ssh/known_hosts" >/dev/null
+
+      - name: Create secret environment file without logging values
+        env:
+          IMAGE_REF: ${{ inputs.image_ref }}
+          QUICKLY_ADMIN_PASSWORD: ${{ secrets.QUICKLY_ADMIN_PASSWORD }}
+          QUICKLY_ENCRYPTION_KEY: ${{ secrets.QUICKLY_ENCRYPTION_KEY }}
+          QUICKLY_POSTGRES_PASSWORD: ${{ secrets.QUICKLY_POSTGRES_PASSWORD }}
+          QUICKLY_SECRET_KEY: ${{ secrets.QUICKLY_SECRET_KEY }}
+        run: |
+          set -euo pipefail
+          for required in IMAGE_REF QUICKLY_ADMIN_PASSWORD QUICKLY_ENCRYPTION_KEY QUICKLY_POSTGRES_PASSWORD QUICKLY_SECRET_KEY; do
+            test -n "${!required}" || { echo "missing required value: $required" >&2; exit 1; }
+            [[ "${!required}" != *$'\n'* && "${!required}" != *$'\r'* ]] || {
+              echo "invalid newline in $required" >&2
+              exit 1
+            }
+          done
+          umask 077
+          {
+            printf 'QUICKLY_IMAGE=%s\n' "$IMAGE_REF"
+            printf '%s\n' 'BASE_URL=https://campanhas.confenge.com.br'
+            printf '%s\n' 'CORS_ORIGINS=https://campanhas.confenge.com.br'
+            printf '%s\n' 'POSTGRES_DB=quickly'
+            printf '%s\n' 'POSTGRES_USER=quickly'
+            printf 'POSTGRES_PASSWORD=%s\n' "$QUICKLY_POSTGRES_PASSWORD"
+            printf 'QUICKLY_SECRET_KEY=%s\n' "$QUICKLY_SECRET_KEY"
+            printf 'QUICKLY_ENCRYPTION_KEY=%s\n' "$QUICKLY_ENCRYPTION_KEY"
+            printf '%s\n' 'QUICKLY_BOOTSTRAP_ADMIN_USERNAME=tiago_sasaki'
+            printf '%s\n' 'QUICKLY_BOOTSTRAP_ADMIN_EMAIL=tiago.sasaki@confenge.com.br'
+            printf 'QUICKLY_BOOTSTRAP_ADMIN_PASSWORD=%s\n' "$QUICKLY_ADMIN_PASSWORD"
+          } > "$RUNNER_TEMP/quickly.env"
+          chmod 0600 "$RUNNER_TEMP/quickly.env"
+
+      - name: Upload bundle and sealed environment file
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts"
+            -P "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          )
+          target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
+          ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts" \
+            -p "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/quickly-ssh/id_ed25519" \
+            "$target" 'test -d /opt/quickly-confenge && test -w /opt/quickly-confenge'
+          scp "${ssh_options[@]}" "$RUNNER_TEMP/quickly-confenge-bundle.tgz" \
+            "$RUNNER_TEMP/quickly.env" "$target:/opt/quickly-confenge/"
+
+      - name: Deploy and bootstrap locally on the VPS
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/quickly-ssh/known_hosts"
+            -p "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/quickly-ssh/id_ed25519"
+          )
+          ssh "${ssh_options[@]}" "$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+          deploy_root=/opt/quickly-confenge
+          cd "$deploy_root"
+          test -f quickly-confenge-bundle.tgz
+          test -f quickly.env
+          tar --extract --gzip --file=quickly-confenge-bundle.tgz --no-same-owner
+          install -m 0600 quickly.env .env
+          rm -f quickly-confenge-bundle.tgz quickly.env
+          install -d -m 0700 app-backups
+          docker compose --project-name quickly-confenge --env-file .env -f compose.yml pull db app
+          docker compose --project-name quickly-confenge --env-file .env -f compose.yml up -d
+          for attempt in $(seq 1 24); do
+            if curl --fail --silent --show-error http://127.0.0.1:19080/api/auth/setup-status >/dev/null; then
+              break
+            fi
+            test "$attempt" -lt 24 || { echo 'Quickly did not become ready on loopback.' >&2; exit 1; }
+            sleep 5
+          done
+          ./scripts/bootstrap-admin.sh
+          temp_env=$(mktemp .env.bootstrap.XXXXXX)
+          awk '!/^QUICKLY_BOOTSTRAP_ADMIN_/' .env > "$temp_env"
+          chmod 0600 "$temp_env"
+          mv "$temp_env" .env
+          docker compose --project-name quickly-confenge --env-file .env -f compose.yml up -d --force-recreate app
+          for attempt in $(seq 1 12); do
+            if curl --fail --silent --show-error http://127.0.0.1:19080/api/auth/setup-status >/dev/null; then
+              break
+            fi
+            test "$attempt" -lt 12 || { echo 'Quickly did not restart cleanly after bootstrap cleanup.' >&2; exit 1; }
+            sleep 5
+          done
+          docker compose --project-name quickly-confenge --env-file .env -f compose.yml ps
           REMOTE
