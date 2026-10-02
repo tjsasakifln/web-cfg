@@ -8,7 +8,7 @@
     "constitution_contract": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",
     "constitution_hash": "sha256:9126a653eab72c1c6992e5d62226b75d23be88c459d7115a78f85363b0eadb74",
     "intent_matrix_contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
-    "intent_matrix_hash": "sha256:3c4a8e455819076dc735338296787810c03dfbd7c2076117f6f3ace8d4338c86",
+    "intent_matrix_hash": "sha256:da6c0e5d586ab5d8cfe8f01b528e94a6638a8f146274c719fc47e422394851d0",
     "page_contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
     "page_contract_hash": "sha256:695e6ce3018b9445a373cf48496936e6b53a5cc70a613de712f64b2a8c241764",
     "price_gate_projection": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
