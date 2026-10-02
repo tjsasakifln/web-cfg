@@ -449,6 +449,7 @@ jobs:
             --required-step "Rendered first-fold measurement on exact artifact" \
             --required-step "Preserve mandatory first-fold evidence" \
             --required-step "axe accessibility" \
+            --required-step "Lighthouse local (_site)" \
             --required-step "Playwright checklist on _site"
 
   site_ci:

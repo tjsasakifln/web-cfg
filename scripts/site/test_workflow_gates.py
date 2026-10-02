@@ -261,10 +261,17 @@ def test_site_ci_shape():
     if lighthouse_step is None:
         errors.append("site-ci must keep the canonical Lighthouse step")
     else:
-        stale_at = lighthouse_step.find("rm -f docs/lighthouse-runs/summary.json")
-        measure_at = lighthouse_step.find("npm run test:lighthouse\n")
-        verify_at = lighthouse_step.find("LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates")
-        performance_at = lighthouse_step.find("npm run audit:performance")
+        if re.search(r"(?m)^\s+if\s*:", lighthouse_step):
+            errors.append("the canonical Lighthouse step may not be conditional or skipped")
+
+        def executable_line_at(command: str) -> int:
+            match = re.search(rf"(?m)^\s+{re.escape(command)}\s*$", lighthouse_step)
+            return match.start() if match else -1
+
+        stale_at = executable_line_at("rm -f docs/lighthouse-runs/summary.json")
+        measure_at = executable_line_at("npm run test:lighthouse")
+        verify_at = executable_line_at("LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates")
+        performance_at = executable_line_at("npm run audit:performance")
         if not (0 <= stale_at < measure_at < verify_at < performance_at):
             errors.append(
                 "site-ci must remove stale Lighthouse evidence, measure the built artifact, "
@@ -748,6 +755,7 @@ def test_required_execution_evidence_fails_closed_after_the_gate_job():
         '--required-step "Playwright checklist on _site"',
         '--required-step "Rendered first-fold measurement on exact artifact"',
         '--required-step "Preserve mandatory first-fold evidence"',
+        '--required-step "Lighthouse local (_site)"',
     )
     for needle in required:
         if needle not in (workflow if needle == "actions: read" else evidence):
@@ -770,6 +778,26 @@ def test_required_execution_evidence_fails_closed_after_the_gate_job():
             assert "must measure the exact rendered artifact" in str(error)
         else:
             raise AssertionError("removed first-fold measurement command escaped the workflow gate")
+
+    lighthouse_marker = "- name: Lighthouse local (_site)\n"
+    with patch.dict(
+        globals(),
+        {
+            "_read": lambda file: original_read(file).replace(
+                lighthouse_marker,
+                lighthouse_marker + "        if: false\n",
+                1,
+            )
+            if file == SITE_CI
+            else original_read(file)
+        },
+    ):
+        try:
+            test_site_ci_shape()
+        except AssertionError as error:
+            assert "may not be conditional or skipped" in str(error)
+        else:
+            raise AssertionError("a skipped canonical Lighthouse measurement escaped the workflow gate")
 
 
 def test_deliberate_force_fail_env():

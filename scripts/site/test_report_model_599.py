@@ -46,7 +46,25 @@ def _visible_text(markup: str) -> str:
         markup,
         flags=re.IGNORECASE | re.DOTALL,
     )
-    without_tags = re.sub(r"<[^>]+>", " ", without_hidden_blocks)
+    main = re.search(
+        r"<main\b[^>]*>(?P<content>.*?)</main>",
+        without_hidden_blocks,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    scope_markup = main.group("content") if main else without_hidden_blocks
+    without_navigation = re.sub(
+        r"<nav\b[^>]*>.*?</nav>",
+        " ",
+        scope_markup,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    without_skip_links = re.sub(
+        r'<a\b[^>]*\bclass=(?:"[^"]*\bskip-link\b[^"]*"|\'[^\']*\bskip-link\b[^\']*\')[^>]*>.*?</a>',
+        " ",
+        without_navigation,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    without_tags = re.sub(r"<[^>]+>", " ", without_skip_links)
     return " ".join(unescape(without_tags).casefold().split())
 
 
@@ -896,6 +914,29 @@ def test_search_volume_and_depth_match_the_commercial_scope() -> None:
         assert false_promise.casefold() not in visible
 
     _assert_no_scope_contradictions(visible)
+
+
+def test_scope_visible_text_ignores_navigation_concatenation_without_hiding_content() -> None:
+    markup = """
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header><nav><a>Empresa</a></nav></header>
+    <main id="conteudo">
+      <nav class="breadcrumbs"><a>Entregas</a><span>/</span><span>Radar de Licitações Prioritárias</span></nav>
+      <p>A CONFENGE busca os editais abertos dentro do raio de atuação da empresa.</p>
+    </main>
+    <footer><a>Empresa</a></footer>
+    """
+
+    visible = _visible_text(markup)
+
+    assert "empresa entregas radar de licitações prioritárias" not in visible
+    _assert_no_scope_contradictions(visible)
+
+    real_contradiction = _visible_text(
+        "<main><p>A empresa entrega a relação de oportunidades.</p></main>"
+    )
+    with pytest.raises(AssertionError):
+        _assert_no_scope_contradictions(real_contradiction)
 
 
 @pytest.mark.parametrize(
