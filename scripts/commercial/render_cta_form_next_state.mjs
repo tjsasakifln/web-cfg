@@ -21,6 +21,7 @@ const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominan
 const mutationAuthorized = unlockPlan.html_mutation_authorized === true
   && (unlockPlan.preconditions_all_required || []).every((entry) => entry.state === "READY");
 const heldProtectedRoutes = new Set(mutationAuthorized ? [] : (unlockPlan.protected_pillars || []).map((slug) => `/${slug}/`));
+const canonicalText = (value) => value.replaceAll("\r\n", "\n");
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -327,7 +328,7 @@ function renderFile(html, surface) {
 const inventory = buildInventory();
 const updates = inventory.surfaces.map((surface) => {
   const absolute = path.join(root, surface.file);
-  const current = fs.readFileSync(absolute, "utf8");
+  const current = canonicalText(fs.readFileSync(absolute, "utf8"));
   return { absolute, current, next: renderFile(current, surface) };
 });
 
