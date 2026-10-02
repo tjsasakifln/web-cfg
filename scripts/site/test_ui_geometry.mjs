@@ -220,10 +220,11 @@ async function main() {
     // 47da03b64 measured 6.921px, the pilot 10.272px (scrollHeight at load, with the
     // measured contain-intrinsic-size estimates). The 390 ceiling is unchanged (12.3k).
     if (m1440.h > 10500) throw new Error(`1440 height ${m1440.h} still too long (>10500)`);
-    // 390: 14500 -> 17000 for the same reason (production 11.591px rendered; pilot
-    // 16.384px rendered after the mobile rhythm pass; the plates are reframed for
-    // phones, not shrunk, so each adds ~420px of drawing).
-    if (m390.h > 17000) throw new Error(`390 height ${m390.h} still too long (>17000)`);
+    // 390: 17000 -> 18500 after the project-practices section became part of the
+    // public home architecture. The section contributes roughly 1.2k px at this
+    // viewport and keeps all four disciplines directly discoverable without
+    // shrinking functional copy below the 14px accessibility floor.
+    if (m390.h > 18500) throw new Error(`390 height ${m390.h} still too long (>18500)`);
     // 2026-09-17 (salto institucional): the count is now every rendered prose
     // text node outside <svg> (the previous innerText read skipped sections under
     // content-visibility:auto and counted drawing annotations). Measured with this
@@ -233,10 +234,12 @@ async function main() {
     // 47da03b64 = 8.799 chars; pilot = 11.631 chars. The ceiling is set from
     // the composition, not from the result: baseline 8.799 + one Entregas block
     // (three samples with need, work and document, ~2.2k) + after-send steps
-    // and responsibility credentials (~1k) = 12.000. The section/archetype
+    // and responsibility credentials (~1k) = 12.000. The project-practices
+    // architecture adds four concise discipline descriptions plus its scope
+    // note (~1k), so the recaptured ceiling is 13.500. The section/archetype
     // gates, not this number, are what keep the home from becoming a wall of
     // text.
-    if (m1440.chars > 12000) throw new Error(`visible chars ${m1440.chars} not reduced enough`);
+    if (m1440.chars > 13500) throw new Error(`visible chars ${m1440.chars} not reduced enough`);
     ok(`home_height_text_cta (${m1440.h}px/1440, ${m390.h}px/390, ${m1440.chars} chars, ${m1440.primary} primary)`);
   } catch (e) {
     fail("home_height_text_cta", e.message || e);
@@ -600,7 +603,7 @@ async function main() {
       return {
         h1: !!document.querySelector("#hero-title"),
         situations: document.querySelectorAll(".situation-row").length,
-        heroServicesPath: !!document.querySelector('.hero a[href^="/servicos/"]'),
+        heroProjectPath: !!document.querySelector('.hero a[href="/projetos/"]'),
         serviceDestinations: new Set(situationDestinations).size,
         directChannels: document.querySelectorAll(
           'a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]',
@@ -615,7 +618,7 @@ async function main() {
     if (
       !nojs.h1
       || nojs.situations !== EXPECTED_SITUATIONS
-      || !nojs.heroServicesPath
+      || !nojs.heroProjectPath
       || nojs.serviceDestinations !== EXPECTED_SITUATIONS
       || nojs.directChannels < 2
       || !nojs.deliveryExplained

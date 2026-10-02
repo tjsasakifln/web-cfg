@@ -373,11 +373,11 @@ body[data-content-cluster="home"] .opening h1{max-width:15ch;font-size:clamp(2.3
 body[data-content-cluster="home"] .opening__lead{max-width:57ch;font-size:clamp(1rem,.95rem + .25vw,1.14rem);line-height:1.55}
 body[data-content-cluster="home"] .opening .hero-deliverable{max-width:58ch;margin:.9rem 0 1.1rem;padding:.85rem 0 0;font-size:.94rem}
 body[data-content-cluster="home"] .opening .hero-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem 1rem;padding-top:.85rem}
-body[data-content-cluster="home"] .opening .hero-proof li{font-size:.75rem;line-height:1.4}
+body[data-content-cluster="home"] .opening .hero-proof li{font-size:14px;line-height:1.4}
 body[data-content-cluster="home"] .opening .proof-mark{font-family:var(--sans-narrow);font-size:.69rem;letter-spacing:.06em}
 body[data-content-cluster="home"] .opening .plate__sheet{padding:.4rem;background:#f7f9f8;border-color:#b7c7bd;box-shadow:0 18px 44px rgba(7,26,49,.08)}
 body[data-content-cluster="home"] .opening .plate__sheet img{max-height:none}
-body[data-content-cluster="home"] .opening .plate__caption{max-width:54ch;font-size:.78rem}
+body[data-content-cluster="home"] .opening .plate__caption{max-width:54ch;font-size:.8rem}
 .project-practices{padding:clamp(3.5rem,7vw,7rem) 0;background:#071a31;color:#d5dde6}
 .project-practices h2,.project-practices h3{color:#fff}
 .project-practices .eyebrow{color:#e7efae}
@@ -403,13 +403,13 @@ body[data-content-cluster="home"] .opening .plate__caption{max-width:54ch;font-s
 @media (max-width:699px){
   body[data-content-cluster="home"] .opening{padding-top:1.2rem}
   body[data-content-cluster="home"] .opening h1{font-size:clamp(2rem,1.5rem + 2vw,2.6rem);margin-bottom:.55rem}
-  body[data-content-cluster="home"] .opening__lead{font-size:.94rem;line-height:1.45;margin-bottom:.55rem}
+  body[data-content-cluster="home"] .opening__lead{font-size:1rem;line-height:1.45;margin-bottom:.55rem}
   body[data-content-cluster="home"] .opening .hero-deliverable{display:none}
   body[data-content-cluster="home"] .opening .hero-actions{margin:.65rem 0 .45rem;gap:.3rem 1rem}
   body[data-content-cluster="home"] .opening .button-lg{min-height:46px;padding-inline:1rem;font-size:.85rem}
   body[data-content-cluster="home"] .opening .hero-secondary{min-height:32px;font-size:.82rem;justify-content:flex-start}
   body[data-content-cluster="home"] .opening .hero-proof{grid-template-columns:1fr 1fr;gap:.3rem .65rem;padding-top:.45rem}
-  body[data-content-cluster="home"] .opening .hero-proof li{font-size:.66rem;line-height:1.28}
+  body[data-content-cluster="home"] .opening .hero-proof li{font-size:14px;line-height:1.28}
   body[data-content-cluster="home"] .opening .hero-proof li:last-child{grid-column:1 / -1}
   body[data-content-cluster="home"] .opening .hero-figure{margin-top:.15rem}
   .project-practices{padding:3.5rem 0}
@@ -426,8 +426,14 @@ body[data-content-cluster="home"] .opening .plate__caption{max-width:54ch;font-s
   body[data-content-cluster="home"] .opening__lead{max-width:60ch;font-size:1rem;line-height:1.43;margin-bottom:.65rem}
   body[data-content-cluster="home"] .opening .hero-actions{margin:.2rem 0 .55rem;gap:.65rem 1.15rem}
   body[data-content-cluster="home"] .opening .button-lg{min-height:48px;padding-inline:1.15rem;font-size:.9rem}
-  body[data-content-cluster="home"] .opening .hero-secondary{min-height:40px;font-size:.86rem}
+  body[data-content-cluster="home"] .opening .hero-secondary{min-height:40px;font-size:14px}
   body[data-content-cluster="home"] .opening .hero-deliverable{margin:.35rem 0 .55rem;padding-top:.5rem;font-size:.78rem;line-height:1.35}
   body[data-content-cluster="home"] .opening .hero-proof{padding-top:.5rem;gap:.25rem .75rem}
-  body[data-content-cluster="home"] .opening .hero-proof li{font-size:.68rem;line-height:1.28}
+  body[data-content-cluster="home"] .opening .hero-proof li{font-size:14px;line-height:1.28}
+  body[data-content-cluster="home"] .corporate-situations,
+  body[data-content-cluster="home"] #entregas-demonstrativas,
+  body[data-content-cluster="home"] #responsabilidade,
+  body[data-content-cluster="home"] .b2g-vertical{padding-block:2.9rem}
+  body[data-content-cluster="home"] .project-practices{padding-block:4rem}
+  body[data-content-cluster="home"] .contact-section{padding-bottom:3rem}
 }
