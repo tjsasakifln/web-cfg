@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 20,
-    "asset_raw_kb_max_route": 1085.51,
+    "asset_raw_kb_max_route": 1086.64,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 235
+    "routes_measured": 248
   },
   "budget": {
     "cls_max": 0.05,
@@ -100,6 +100,10 @@
       },
       {
         "cls": 0.0,
+        "route": "/elaboracao-pgr/"
+      },
+      {
+        "cls": 0.0,
         "route": "/entregas/"
       },
       {
@@ -160,6 +164,10 @@
       },
       {
         "cls": 0.0,
+        "route": "/pgr-documentacao-sst-obras/"
+      },
+      {
+        "cls": 0.0,
         "route": "/politica-editorial/"
       },
       {
@@ -180,6 +188,10 @@
       },
       {
         "cls": 0.0,
+        "route": "/revisao-atualizacao-pgr/"
+      },
+      {
+        "cls": 0.0,
         "route": "/revisao-tecnica-projetos-engenharia/"
       },
       {
@@ -196,6 +208,10 @@
       },
       {
         "cls": 0.0,
+        "route": "/terceirizacao-documentacao-sst/"
+      },
+      {
+        "cls": 0.0,
         "route": "/termos-de-uso/"
       },
       {
@@ -203,7 +219,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 46
+    "routes_measured": 50
   },
   "fonts": {
     "font_files_total": 1,
@@ -239,6 +255,7 @@
       "/comercial/privacidade-leads/",
       "/comercial/radar-decisorio/",
       "/comercial/termos-diagnostico-b2g/",
+      "/como-trabalhamos/",
       "/compatibilizacao-projetos-engenharia/",
       "/confianca/",
       "/conflitos/",
@@ -380,7 +397,9 @@
       "/diagnostico-b2g-expansao/obrigado/",
       "/diagnostico-pre-licitacao/",
       "/diretoria-b2g/",
+      "/edificacoes/",
       "/elaboracao-pgr/",
+      "/empresa/",
       "/entregas/",
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
@@ -432,7 +451,16 @@
       "/politica-editorial/historico/",
       "/privacidade/",
       "/problemas-que-resolvemos/",
+      "/projeto-eletrico/",
+      "/projeto-estrutura-metalica/",
+      "/projeto-estrutural-concreto-armado/",
+      "/projeto-hidrossanitario/",
       "/projetos-complementares-engenharia/",
+      "/projetos/",
+      "/projetos/coordenacao-multidisciplinar/",
+      "/projetos/estruturas/",
+      "/projetos/infraestrutura/",
+      "/projetos/instalacoes/",
       "/quantitativos-orcamento-obras/",
       "/radar/",
       "/radar/nacional-obras-publicas/",
@@ -443,6 +471,7 @@
       "/servicos-obras-publicas/",
       "/servicos/",
       "/terceirizacao-documentacao-sst/",
+      "/terceirizacao-projetos-engenharia/",
       "/termos-de-uso/",
       "/triagem-tecnica/"
     ],
@@ -475,6 +504,7 @@
       "/comercial/privacidade-leads/",
       "/comercial/radar-decisorio/",
       "/comercial/termos-diagnostico-b2g/",
+      "/como-trabalhamos/",
       "/compatibilizacao-projetos-engenharia/",
       "/confianca/",
       "/conflitos/",
@@ -616,7 +646,9 @@
       "/diagnostico-b2g-expansao/obrigado/",
       "/diagnostico-pre-licitacao/",
       "/diretoria-b2g/",
+      "/edificacoes/",
       "/elaboracao-pgr/",
+      "/empresa/",
       "/entregas/",
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
@@ -668,7 +700,16 @@
       "/politica-editorial/historico/",
       "/privacidade/",
       "/problemas-que-resolvemos/",
+      "/projeto-eletrico/",
+      "/projeto-estrutura-metalica/",
+      "/projeto-estrutural-concreto-armado/",
+      "/projeto-hidrossanitario/",
       "/projetos-complementares-engenharia/",
+      "/projetos/",
+      "/projetos/coordenacao-multidisciplinar/",
+      "/projetos/estruturas/",
+      "/projetos/infraestrutura/",
+      "/projetos/instalacoes/",
       "/quantitativos-orcamento-obras/",
       "/radar/",
       "/radar/nacional-obras-publicas/",
@@ -679,6 +720,7 @@
       "/servicos-obras-publicas/",
       "/servicos/",
       "/terceirizacao-documentacao-sst/",
+      "/terceirizacao-projetos-engenharia/",
       "/termos-de-uso/",
       "/triagem-tecnica/"
     ]
