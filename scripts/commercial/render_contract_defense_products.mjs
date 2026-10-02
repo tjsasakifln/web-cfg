@@ -23,6 +23,7 @@ const FIELDS_START = "<!-- GENERATED:CONTRACT-DEFENSE-FIELDS:START -->";
 const FIELDS_END = "<!-- GENERATED:CONTRACT-DEFENSE-FIELDS:END -->";
 const HUB_START = "<!-- GENERATED:CONTRACT-DEFENSE-HUB:START -->";
 const HUB_END = "<!-- GENERATED:CONTRACT-DEFENSE-HUB:END -->";
+const canonicalText = (value) => value.replaceAll("\r\n", "\n");
 
 const esc = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 const list = (values) => `<ul>${values.map((value) => `<li>${esc(value)}</li>`).join("")}</ul>`;
@@ -194,7 +195,7 @@ ${HUB_END}`;
 const updates = [];
 for (const item of contract.items.filter((entry) => entry.page_file)) {
   const absolute = path.join(root, item.page_file);
-  const current = fs.readFileSync(absolute, "utf8");
+  const current = canonicalText(fs.readFileSync(absolute, "utf8"));
   if (isHeldProtected(item, current)) {
     updates.push({ absolute, current, next: current, held: true });
     continue;
@@ -213,7 +214,7 @@ for (const item of contract.items.filter((entry) => entry.page_file)) {
   updates.push({ absolute, current, next });
 }
 const hubPath = path.join(root, "servicos-obras-publicas/index.html");
-const hubCurrent = fs.readFileSync(hubPath, "utf8");
+const hubCurrent = canonicalText(fs.readFileSync(hubPath, "utf8"));
 let hubNext = ensureCss(hubCurrent);
 hubNext = replaceBlock(hubNext, HUB_START, HUB_END, hubBlock(hubCurrent), "</main>");
 updates.push({ absolute: hubPath, current: hubCurrent, next: hubNext });

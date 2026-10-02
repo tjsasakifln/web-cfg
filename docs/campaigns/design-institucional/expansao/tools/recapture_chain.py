@@ -13,7 +13,8 @@ build:site, commit das saídas rastreadas.
     python3 docs/campaigns/design-institucional/expansao/tools/recapture_chain.py --baseline <sha> --reason "<motivo>"
 """
 from __future__ import annotations
-import argparse, hashlib, json, subprocess, sys
+import argparse, hashlib, json, subprocess, sys, tarfile, tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -21,25 +22,67 @@ ROOT = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(ROOT))
 
 
-def sha(rel: str) -> str:
-    return hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()
+def sha(rel: str, *, root: Path = ROOT) -> str:
+    return hashlib.sha256((root / rel).read_bytes()).hexdigest()
+
+
+@contextmanager
+def committed_snapshot(baseline: str):
+    """Materialize the reviewed Git bytes independently of checkout EOL policy.
+
+    On Windows, Git can expose a tracked LF blob as CRLF in the working tree.
+    Evidence hashes must attest the named commit, not that platform-specific
+    checkout representation.  Reading from ``git archive`` also makes the
+    baseline argument operational rather than merely descriptive.
+    """
+    try:
+        resolved = subprocess.check_output(
+            ["git", "-C", str(ROOT), "rev-parse", "--verify", f"{baseline}^{{commit}}"],
+            text=True,
+        ).strip()
+    except subprocess.CalledProcessError as exc:
+        raise SystemExit(f"baseline is not a reachable commit: {baseline}") from exc
+    ancestor = subprocess.run(
+        ["git", "-C", str(ROOT), "merge-base", "--is-ancestor", resolved, "HEAD"],
+        check=False,
+    )
+    if ancestor.returncode != 0:
+        raise SystemExit(f"baseline is not an ancestor of HEAD: {resolved}")
+
+    with tempfile.TemporaryDirectory(prefix="confenge-recapture-") as tmp:
+        temp_root = Path(tmp)
+        archive = temp_root / "baseline.tar"
+        snapshot = temp_root / "tree"
+        snapshot.mkdir()
+        subprocess.run(
+            ["git", "-C", str(ROOT), "archive", "--format=tar", f"--output={archive}", resolved],
+            check=True,
+        )
+        with tarfile.open(archive, "r") as bundle:
+            bundle.extractall(snapshot, filter="data")
+        yield snapshot, resolved
 
 
 def now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def step_approvals(reason: str) -> None:
+def step_approvals(reason: str, source_root: Path) -> None:
     from scripts.contract_analysis.approval import rendered_content_hash
     p = ROOT / "data/editorial/contract-analysis/approvals.json"
-    doc = json.loads(p.read_text(encoding="utf-8"))
+    source = source_root / "data/editorial/contract-analysis/approvals.json"
+    doc = json.loads(source.read_text(encoding="utf-8"))
     changed = 0
     for rec in doc["approvals"]:
         if rec.get("withdrawn") or rec.get("state") != "PUBLISHABLE_INDEX":
             continue
         slug = rec["canonical_url"].strip("/").split("/")[-1]
-        page = ROOT / "analises-contratos-publicos" / slug / "index.html"
-        new = rendered_content_hash(page.read_text(encoding="utf-8"), record={"slug": slug}, root=ROOT)
+        page = source_root / "analises-contratos-publicos" / slug / "index.html"
+        new = rendered_content_hash(
+            page.read_text(encoding="utf-8"),
+            record={"slug": slug},
+            root=source_root,
+        )
         if rec.get("rendered_content_hash") == new:
             continue
         prev = rec.get("rendered_content_hash")
@@ -60,9 +103,9 @@ def step_approvals(reason: str) -> None:
     print(f"approvals: {changed} registro(s) recapturado(s)")
 
 
-def step_frozen(baseline: str, reason: str) -> None:
+def step_frozen(baseline: str, reason: str, source_root: Path) -> None:
     from scripts.bofu_dominance.frozen_specs.materialize import materialize
-    materialize()
+    materialize(root=source_root)
     p = ROOT / "data/bofu-dominance/frozen-specs/hashes.json"
     doc = json.loads(p.read_text(encoding="utf-8"))
     doc["baseline_commit"] = baseline
@@ -72,10 +115,10 @@ def step_frozen(baseline: str, reason: str) -> None:
     print("frozen specs: materializados; baseline", baseline)
 
 
-def step_single_route() -> None:
+def step_single_route(source_root: Path) -> None:
     p = ROOT / "data/organic/single-commercial-route.v1.json"
-    doc = json.loads(p.read_text(encoding="utf-8"))
-    text = p.read_text(encoding="utf-8")
+    source = source_root / "data/organic/single-commercial-route.v1.json"
+    doc = json.loads(source.read_text(encoding="utf-8"))
     pillar = doc["route"] if isinstance(doc.get("route"), dict) else None
     # localizar o objeto com file/expected_sha256
     def walk(o):
@@ -89,7 +132,7 @@ def step_single_route() -> None:
                 yield from walk(v)
     n = 0
     for obj in walk(doc):
-        live = sha(obj["file"])
+        live = sha(obj["file"], root=source_root)
         if obj["expected_sha256"] != live:
             obj["expected_sha256"] = live
             n += 1
@@ -97,13 +140,14 @@ def step_single_route() -> None:
     print(f"single-commercial-route: {n} hash(es) atualizado(s)")
 
 
-def step_canary(reason: str) -> None:
+def step_canary(reason: str, source_root: Path) -> None:
     p = ROOT / "docs/evidence/389-measurement-glosa-canary/canary-contract.json"
-    doc = json.loads(p.read_text(encoding="utf-8"))
+    source = source_root / "docs/evidence/389-measurement-glosa-canary/canary-contract.json"
+    doc = json.loads(source.read_text(encoding="utf-8"))
     today = now()[:10]
     n = 0
     for sib in doc["frozen_siblings"]:
-        live = sha(sib["path"])
+        live = sha(sib["path"], root=source_root)
         if sib["sha256"] != live:
             sib["sha256"] = live
             n += 1
@@ -111,7 +155,7 @@ def step_canary(reason: str) -> None:
         doc["frozen_siblings_recaptured_at"] = today
         doc["frozen_siblings_recapture_reason"] = reason + " Anterior: " + doc.get("frozen_siblings_recapture_reason", "")
     page = doc["canary"]["source"]
-    live = sha(page)
+    live = sha(page, root=source_root)
     if doc["canary"].get("after_sha256") != live:
         doc["canary"]["after_sha256_previous"] = doc["canary"].get("after_sha256")
         doc["canary"]["after_sha256"] = live
@@ -129,10 +173,11 @@ def main() -> int:
     ap.add_argument("--skip", default="")
     a = ap.parse_args()
     skip = set(a.skip.split(","))
-    if "approvals" not in skip: step_approvals(a.reason)
-    if "frozen" not in skip: step_frozen(a.baseline, a.reason)
-    if "single" not in skip: step_single_route()
-    if "canary" not in skip: step_canary(a.reason)
+    with committed_snapshot(a.baseline) as (source_root, resolved):
+        if "approvals" not in skip: step_approvals(a.reason, source_root)
+        if "frozen" not in skip: step_frozen(resolved, a.reason, source_root)
+        if "single" not in skip: step_single_route(source_root)
+        if "canary" not in skip: step_canary(a.reason, source_root)
     return 0
 
 

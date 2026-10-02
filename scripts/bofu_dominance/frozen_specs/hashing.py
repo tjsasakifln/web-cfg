@@ -29,12 +29,22 @@ _RENDERING_COLLATERAL = frozenset(
 )
 
 
+def canonical_text_bytes(data: bytes) -> bytes:
+    """Return repository-canonical bytes for tracked text evidence.
+
+    Git stores these protected surfaces with LF. A Windows checkout may expose
+    the same blobs with CRLF, which must not create a different evidence hash.
+    No other byte transformation is accepted.
+    """
+    return data.replace(b"\r\n", b"\n")
+
+
 def content_sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(canonical_text_bytes(path.read_bytes())).hexdigest()
 
 
 def sha256_bytes(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
+    return hashlib.sha256(canonical_text_bytes(data)).hexdigest()
 
 
 def forbidden_path_hashes(root: Path | None = None) -> dict[str, str]:
