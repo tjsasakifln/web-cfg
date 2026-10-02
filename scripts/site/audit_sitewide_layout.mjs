@@ -1,7 +1,7 @@
 /**
  * Rendered sitewide layout audit for the public CONFENGE artifact.
  *
- * Default: every route in seo/PUBLIC-ARTIFACT-MANIFEST.json at the six
+ * Default: every route in seo/PUBLIC-ARTIFACT-MANIFEST.json at the seven
  * production acceptance widths. Set LAYOUT_AUDIT_SCOPE=critical for the
  * shared-component regression set, or LAYOUT_AUDIT_ROUTES=/a/,/b/ for an
  * explicit cohort. An optional base URL is the first CLI argument.
@@ -28,7 +28,17 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const PORT = Number(process.env.LAYOUT_AUDIT_PORT || 8796);
 const CHROME = resolveChromePath();
 const SITE_ROOT = resolveSiteRoot();
-const VIEWPORTS = [360, 390, 768, 1024, 1366, 1440, 1920];
+const DEFAULT_VIEWPORTS = [360, 390, 768, 1024, 1366, 1440, 1920];
+const viewportOverride = String(process.env.LAYOUT_AUDIT_VIEWPORTS || "").trim();
+const viewportTokens = viewportOverride ? viewportOverride.split(",").map((value) => value.trim()) : [];
+if (viewportTokens.some((value) => !/^[1-9]\d*$/.test(value))) {
+  throw new Error(`invalid LAYOUT_AUDIT_VIEWPORTS: ${viewportOverride}`);
+}
+const configuredViewports = viewportTokens.map(Number);
+if (new Set(configuredViewports).size !== configuredViewports.length) {
+  throw new Error(`duplicate LAYOUT_AUDIT_VIEWPORTS: ${viewportOverride}`);
+}
+const VIEWPORTS = configuredViewports.length ? configuredViewports : DEFAULT_VIEWPORTS;
 const CRITICAL_ROUTES = [
   "/",
   "/acompanhamento-contratos-obras/",
@@ -99,6 +109,51 @@ function publicRoutes() {
   if (explicit.length) return explicit;
   if (process.env.LAYOUT_AUDIT_SCOPE === "critical") return CRITICAL_ROUTES;
   return loadManifestRoutes();
+}
+
+// This function is deliberately self-contained so the rendered-route audit
+// and its browser fixture exercise exactly the same DOM detection logic.
+function headingTextClippingFindings() {
+  return [...document.querySelectorAll("h1")]
+    .flatMap((heading) => {
+      const style = getComputedStyle(heading);
+      const box = heading.getBoundingClientRect();
+      if (style.display === "none" || style.visibility === "hidden" || !box.width || !box.height) return [];
+      const clipBoxes = [{ left: 0, right: window.innerWidth }];
+      for (let ancestor = heading; ancestor && ancestor !== document.documentElement; ancestor = ancestor.parentElement) {
+        const ancestorStyle = getComputedStyle(ancestor);
+        if (["hidden", "clip"].includes(ancestorStyle.overflowX)) {
+          const ancestorBox = ancestor.getBoundingClientRect();
+          clipBoxes.push({ left: ancestorBox.left, right: ancestorBox.right });
+        }
+      }
+      const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+      let textNode;
+      let rangeOverflowRect = false;
+      while ((textNode = walker.nextNode())) {
+        if (!textNode.nodeValue.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(textNode);
+        for (const rect of range.getClientRects()) {
+          if (rect.width > 0 && clipBoxes.some((clipBox) => (
+            rect.left < clipBox.left - 1 || rect.right > clipBox.right + 1
+          ))) {
+            rangeOverflowRect = true;
+            break;
+          }
+        }
+        if (rangeOverflowRect) break;
+      }
+      return rangeOverflowRect ? [{
+        text: (heading.innerText || heading.textContent || "").replace(/\s+/g, " ").trim().slice(0, 120),
+        scrollWidth: Math.round(heading.scrollWidth),
+        clientWidth: Math.round(heading.clientWidth),
+        headingRight: Math.round(box.right),
+        viewportWidth: window.innerWidth,
+        rangeOverflow: rangeOverflowRect,
+      }] : [];
+    })
+    .slice(0, 5);
 }
 
 function authorityGatedCaptureFor(family) {
@@ -180,6 +235,24 @@ const browser = await puppeteer.launch({
   headless: true,
   args: ["--no-sandbox", "--disable-gpu", "--font-render-hinting=none"],
 });
+
+const headingDetectorProbe = await browser.newPage();
+await headingDetectorProbe.setViewport({ width: 320, height: 200, deviceScaleFactor: 1 });
+await headingDetectorProbe.setContent(`
+  <main style="width:120px;overflow:hidden"><h1 style="white-space:nowrap">Título deliberadamente longo para a sonda</h1></main>
+`);
+const clippedProbe = await headingDetectorProbe.evaluate(headingTextClippingFindings);
+const clippedProbeHasNoDocumentOverflow = await headingDetectorProbe.evaluate(
+  () => document.documentElement.scrollWidth === document.documentElement.clientWidth,
+);
+await headingDetectorProbe.setContent(`<main style="width:120px;overflow:hidden"><h1>Título curto</h1></main>`);
+const safeProbe = await headingDetectorProbe.evaluate(headingTextClippingFindings);
+await headingDetectorProbe.close();
+if (!clippedProbe.length || !clippedProbeHasNoDocumentOverflow || safeProbe.length) {
+  await browser.close();
+  if (server) server.close();
+  throw new Error(`heading clipping detector fixture failed: clipped=${clippedProbe.length} documentOverflow=${!clippedProbeHasNoDocumentOverflow} safe=${safeProbe.length}`);
+}
 
 const tasks = [];
 for (const width of VIEWPORTS) {
@@ -459,6 +532,8 @@ async function auditWorker() {
         return problems;
       }, width);
       issues.push(...rendered);
+      const clippedHeadings = await page.evaluate(headingTextClippingFindings);
+      if (clippedHeadings.length) issues.push({ code: "heading_text_clipping", detail: clippedHeadings });
       const contract = routeContracts.get(route);
       if (!contract || contract.error) {
         throw new Error(`public contract unavailable for ${route}: ${contract?.error || "missing census entry"}`);
