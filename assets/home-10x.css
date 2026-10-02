@@ -402,7 +402,7 @@ body[data-content-cluster="home"] .opening .plate__caption{max-width:54ch;font-s
 }
 @media (max-width:699px){
   body[data-content-cluster="home"] .opening{padding-top:1.2rem}
-  body[data-content-cluster="home"] .opening h1{font-size:clamp(2rem,1.5rem + 2vw,2.6rem);margin-bottom:.55rem}
+  body[data-content-cluster="home"] .opening h1{max-width:min(17.5rem,100%);font-size:clamp(2rem,1.5rem + 2vw,2.6rem);margin-bottom:.55rem}
   body[data-content-cluster="home"] .opening__lead{font-size:1rem;line-height:1.45;margin-bottom:.55rem}
   body[data-content-cluster="home"] .opening .hero-deliverable{display:none}
   body[data-content-cluster="home"] .opening .hero-actions{margin:.65rem 0 .45rem;gap:.3rem 1rem}

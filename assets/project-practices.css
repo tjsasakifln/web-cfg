@@ -50,7 +50,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-hero__visual { position: relative; margin: 0; }
 .pp-hero__visual::before { content: ""; position: absolute; inset: -22px 22px 22px -22px; border: 1px solid var(--pp-line); z-index: -1; }
 .pp-hero__visual img { width: 100%; height: auto; display: block; border: 1px solid #9cabb1; background: #edf2f3; }
-.pp-hero__visual figcaption, .pp-demo figcaption { padding-top: .75rem; color: var(--pp-muted); font-size: .78rem; line-height: 1.45; }
+.pp-hero__visual figcaption, .pp-demo figcaption { padding-top: .75rem; color: var(--pp-muted); font-size: .8rem; line-height: 1.45; }
 .pp-hero__visual figcaption span, .pp-demo figcaption span { display: block; color: var(--pp-accent-dark); font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
 
 .pp-index { min-height: 72px; display: flex; align-items: center; gap: 0; border-block: 1px solid var(--pp-line); overflow-x: auto; scrollbar-width: thin; }
