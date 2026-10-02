@@ -193,8 +193,13 @@
       "bridges": [
         {
           "position": "header_nav",
+          "href": "/projetos/",
+          "text": "Projetos"
+        },
+        {
+          "position": "header_nav",
           "href": "/servicos/",
-          "text": "Serviços e problemas"
+          "text": "Serviços"
         },
         {
           "position": "header_nav",
@@ -203,13 +208,23 @@
         },
         {
           "position": "header_nav",
-          "href": "/conteudos/",
-          "text": "Biblioteca"
+          "href": "/como-trabalhamos/",
+          "text": "Como trabalhamos"
+        },
+        {
+          "position": "header_nav",
+          "href": "/empresa/",
+          "text": "Empresa"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/projetos/",
+          "text": "Projetos"
         },
         {
           "position": "mobile_nav",
           "href": "/servicos/",
-          "text": "Serviços e problemas"
+          "text": "Serviços"
         },
         {
           "position": "mobile_nav",
@@ -218,8 +233,13 @@
         },
         {
           "position": "mobile_nav",
-          "href": "/conteudos/",
-          "text": "Biblioteca"
+          "href": "/como-trabalhamos/",
+          "text": "Como trabalhamos"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/empresa/",
+          "text": "Empresa"
         },
         {
           "position": "pillar_hero",
@@ -251,8 +271,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "12afa9caae7ae91f09bf641c6c1e95683add7945dc0673869e48676e803df731",
-    "bytes": 33776,
+    "content_sha256": "af255391007247bafae8d6c4bfdfc83d7f17067ab9f691110494602a66e1a56e",
+    "bytes": 34262,
     "noindex": false
   }
 }
