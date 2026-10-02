@@ -111,8 +111,6 @@ jobs:
           npm run test:design
           npm run audit:accessibility
           npm run test:skip-link
-          npm run test:lighthouse-gates
-          npm run audit:performance
           npm run pseo:test
           npm run organic:test
           npm run test:diagnose-margin
@@ -313,8 +311,12 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           LH_HOME_RUNS: "3"
         run: |
+          # Never let committed evidence satisfy this run. The canonical
+          # measurement below must create the summary that its gates inspect.
+          rm -f docs/lighthouse-runs/summary.json
           npm run test:lighthouse
           LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates
+          npm run audit:performance
         continue-on-error: false
       - name: Tools UI/UX E2E
         env:

@@ -253,6 +253,31 @@ def test_site_ci_shape():
         errors.append("site-ci must preserve mandatory first-fold evidence and reject its absence")
     if 'LH_HOME_RUNS: "3"' not in text:
         errors.append("site-ci must run the #185 home Lighthouse gate three times")
+    build_at = text.find("- name: Build public site")
+    lighthouse_at = text.find("- name: Lighthouse local (_site)")
+    if not (0 <= build_at < lighthouse_at):
+        errors.append("site-ci must build the exact public artifact before measuring it with Lighthouse")
+    lighthouse_step = _step_block(text, "Lighthouse local (_site)")
+    if lighthouse_step is None:
+        errors.append("site-ci must keep the canonical Lighthouse step")
+    else:
+        stale_at = lighthouse_step.find("rm -f docs/lighthouse-runs/summary.json")
+        measure_at = lighthouse_step.find("npm run test:lighthouse\n")
+        verify_at = lighthouse_step.find("LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates")
+        performance_at = lighthouse_step.find("npm run audit:performance")
+        if not (0 <= stale_at < measure_at < verify_at < performance_at):
+            errors.append(
+                "site-ci must remove stale Lighthouse evidence, measure the built artifact, "
+                "then verify and audit the fresh raw evidence"
+            )
+    if text.count("npm run test:lighthouse-gates") != 1:
+        errors.append(
+            "site-ci must validate Lighthouse gates exactly once, after the canonical measurement"
+        )
+    if text.count("npm run audit:performance") != 1:
+        errors.append(
+            "site-ci must audit performance exactly once, after the canonical measurement"
+        )
     for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates", "npm run audit:performance"):
         if needle not in text:
             errors.append(f"site-ci missing adversarial UI gate: {needle}")

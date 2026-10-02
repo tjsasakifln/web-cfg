@@ -143,6 +143,6 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     if href.startswith("#"):
         assert f'id="{href[1:]}"' in html
     else:
-        assert href == "/servicos/"
-        assert (HOME.parent / "servicos/index.html").is_file()
-    assert re.search(r"servi[çc]o|situa[çc][aã]o|necessidade|projeto", primary.group(2), re.I)
+        assert href == "/triagem-tecnica/"
+        assert (HOME.parent / "triagem-tecnica/index.html").is_file()
+    assert re.search(r"servi[çc]o|situa[çc][aã]o|necessidade|projeto|escopo", primary.group(2), re.I)
