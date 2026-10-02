@@ -1,58 +1,58 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-27T03:32:02.960Z",
-  "measured_on": "2026-09-27",
-  "commit_sha": "3f2b7ad299351cda07877ad7f612c2efd2d48887",
+  "measured_at": "2026-10-02T16:34:58.954Z",
+  "measured_on": "2026-10-02",
+  "commit_sha": "a5bce72a0da3b73e3a19b55937db3cc925b3e02f",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
     "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
     "@control/scripts/site/measure_first_fold.mjs": "9b65d53377cc98fda527283416dadabade5c5b37d2e33c0b68b2a32d6f1110ab",
-    "acompanhamento-contratos-obras/index.html": "04b3320f64b1f2ec45a467534b54721691f85891791648262c2ccca3e4e386dd",
-    "aditivos-obras-publicas/index.html": "8ff9e822a36bb86a69f6a57d18361ab283ffea8e9f488ecda90834af56dcf7f4",
+    "acompanhamento-contratos-obras/index.html": "03018a0b5f1c6a38a82a3fb5eced54e5ae9a4f109ab619e55ea6f86d1cfa592a",
+    "aditivos-obras-publicas/index.html": "a67d5529545208d966b3621c3e2fea47e6ee9beef61a3a4e91f18b71edfb9c3e",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "1525f5ccb3a60585645aa2c215e1117fdbe5911e5621f540be10806e6769b4cd",
+    "assets/home-10x.css": "f9c435b1a23aff89ff2a648e36f6ede2b06de4372ac876f2a44d8cb831ff39b0",
     "assets/home-base.css": "5daf95b910c1f2bb765320f3b0c8391225a3d26e87bfd25609330998d9110186",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
-    "atrasos-prorrogacao-obras-publicas/index.html": "1007d73bbc77a643f601dafdabdb22e1304a14999bf511502dfd45f227577cf8",
-    "auditoria-orcamento-licitacao/index.html": "4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3",
-    "bid-room-licitacoes-obras/index.html": "f0abd64f9cb582231d76858d3234ae08e5ebe218b6b38292d554ee70f65f364c",
-    "casos/modelo-apresentacao-executiva-resultados/index.html": "da5beee0e55947a8be026ff4fb732e9602f4df32217f073a90ec902eba35e0b8",
+    "atrasos-prorrogacao-obras-publicas/index.html": "1a42f209face577d4a3c251b6701b94b12480746cb8338508ac9871e291ec7bb",
+    "auditoria-orcamento-licitacao/index.html": "b0b798dafe581191544d30a199a8758d9b5f5e51b1f20183cceb61b4869878dc",
+    "bid-room-licitacoes-obras/index.html": "153c6f3633dd59a41559c76b9c8415bf938012a8da76e37a415a33ba3a63b668",
+    "casos/modelo-apresentacao-executiva-resultados/index.html": "7d708a3c37a1c3044a7602b78fde684f22f06b8cb25b8d596533fd84de9e78f6",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
-    "casos/modelo-base-quantitativa-canonica/index.html": "5046ea49e245dada80cdad7d52fca5bb1e3a176a80f13b3d39eea4de37239021",
+    "casos/modelo-base-quantitativa-canonica/index.html": "a7501ea5af527a6b61b5c438bcb12774d63f0204481df67ef9b1ea2b5ffcb102",
     "casos/modelo-base-quantitativa-canonica/styles.css": "c8d0c0fcc67bb3ff7368e313a7eb7978728dd012668bbd57c6d4584fd3331d83",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html": "61b7d772b37a9255cc45a386dbc556cb47bc730395c637e595ed2baa723ba7e8",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": "2f680b84c21d49969d730b2cf3c091bedf0c071230e0f812652db9a2fd2d5a5d",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
-    "casos/modelo-mapa-compradores-publicos/index.html": "44d56fa7bf040c02bf2e22261435015709f4f84b0b58c8dfa4fcb892ff89be80",
+    "casos/modelo-mapa-compradores-publicos/index.html": "c3cd4260fb35c1a578c944ea97a7169c20aea4809469309ea9c8460f334f0ed5",
     "casos/modelo-mapa-compradores-publicos/styles.css": "f6eda4b508c8e46e4a5274bd0ac16046c053791ffe13efd82c75cfa9d272e815",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "f6fb8775bc64a0252c07a2a59717d246f72ed0373d82504ed418689a96c6a9ac",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "5d0e73663a59a621028d6317f9365f521af0b72aa5c5726e10517e51747c320b",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
-    "casos/modelo-painel-precos-obras-publicas/index.html": "16f4a16fd63bd55457c8a8c97053d7a27ce588d575263db77e195b1f805d39d2",
+    "casos/modelo-painel-precos-obras-publicas/index.html": "b80185ff6ee21b2d34937466f645c9179b8052f181c38610bb2b3062de97ede2",
     "casos/modelo-painel-precos-obras-publicas/styles.css": "eddc3b734030a33898728fe41affb4c3bce7ccee5338d13ff05a8cbf7d669e6a",
-    "casos/modelo-relatorio-executivo-consolidado/index.html": "073bcd6d0adbb4ae32f64878c6e372790d734901bfaea9535577d6d5f37d7b2e",
+    "casos/modelo-relatorio-executivo-consolidado/index.html": "2a3fe72be19297c9708339248d44058ef71d2eb4c9de543e31b765e18afa48aa",
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "8cebfff20ada9576d8efe273bcf8d53016905f8dc31445f4fe1d1aa63aea4537",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "d14a17a3e3b9ad4f47472946f1733894d0c35064b0a713bc2569d5910b6587c3",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
-    "defesa-margem-contratos-publicos/index.html": "2163072f090cd242060c4a16eb8c87f75eccdd2f822bb409c6380f108541a2d3",
-    "defesa-tecnica-contratos-publicos/index.html": "8e13a1a8a39be648160fbedba61e45669a0329d38a15faf80d64186ec49754a8",
-    "diagnostico-b2g-360/index.html": "7d0146da91188a268e490b18d4ff4ce846cecbb98ea26f08449011bf03e9f832",
-    "diagnostico-b2g-expansao/index.html": "89f362cd48b1d44ac90863466e6a41c4e7942fe69bcd209b67d01f12171a97c6",
-    "diagnostico-pre-licitacao/index.html": "12afa9caae7ae91f09bf641c6c1e95683add7945dc0673869e48676e803df731",
-    "diretoria-b2g/index.html": "6426103db80f64f2729e77d09d07e6983e087892937d3ed434a2f9399066b7a4",
-    "entregas/index.html": "e39084ae65b2286f93631f559c8cc55100def61540eafa631f81575d3769c8e9",
+    "defesa-margem-contratos-publicos/index.html": "7bc289463e8403a5273604aeceb0635f61a38517df191369be26c4f4cfa19892",
+    "defesa-tecnica-contratos-publicos/index.html": "b9a24da73e7bbc8fb86ae26eb1a992d59c49c6e592589af3f60d79fa97426407",
+    "diagnostico-b2g-360/index.html": "5672708ea87e83feb08ceca07433bb075064b220c2c7ec82373021714cbe24cc",
+    "diagnostico-b2g-expansao/index.html": "a30bad14b1341ecf330b88bba70a265a377ae1b9117b21217c3b416f3b4b6bed",
+    "diagnostico-pre-licitacao/index.html": "af255391007247bafae8d6c4bfdfc83d7f17067ab9f691110494602a66e1a56e",
+    "diretoria-b2g/index.html": "9af2103bc48ff5d4a19a70dce0cb1097cda86df1966d8b77e497b86f0b9f2e21",
+    "entregas/index.html": "1aca7010eb64cb52031220e9ad8c8984cec60722d79961d44a4e05de756b3e84",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "92beec4a8ab24f21ca41aa3763485f23ac55059cd9c440461c281e951645855b",
-    "medicoes-glosas-obras-publicas/index.html": "2a1433dd763088013717607a981de8fc25f63dc4e80bbbd879d436793ff25b1b",
-    "problemas-que-resolvemos/index.html": "713004f98ff59450633fbb1a445d2db19efc7e3263849db3d78e9d5527ca7d4b",
-    "reequilibrio-obras-publicas/index.html": "67ce169a619744a2ac45cad85d1112802e611c961d7c1ed3aa89a34137b123bc",
-    "script.js": "c6d3f80158f9f56a8214dd35c60bba532f798b642bdd2735068b1e57c918bd56",
-    "servicos-obras-publicas/index.html": "644ef4e704e9430e5f0db1e779832e235c5179f98338c14dcac6bfefff19eac5",
+    "index.html": "c04cb6dfb57aa4f2adf078bd20d42c1847b9ce2011b38a56fb7238f06a98328c",
+    "medicoes-glosas-obras-publicas/index.html": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+    "problemas-que-resolvemos/index.html": "586f64577b47a72ee571b359a19fe018bbc7bd0d95f3c0616825024333c04086",
+    "reequilibrio-obras-publicas/index.html": "1aeb651fb81e2cc261bbb11aa2dd0c51dfdc5d2b329992fa915a70e5c4bd587e",
+    "script.js": "5ce07c67069def8e926808f6fbb153ae59cf8c2f6f66787dfb1e142e8b3ee407",
+    "servicos-obras-publicas/index.html": "fd358af08a7ab9dd7985d9014a278733b326ab9385914e2f46b093fbe6dfdd04",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
@@ -104,8 +104,8 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "92beec4a8ab24f21ca41aa3763485f23ac55059cd9c440461c281e951645855b",
-      "measured_on": "2026-09-27",
+      "html_sha256": "c04cb6dfb57aa4f2adf078bd20d42c1847b9ce2011b38a56fb7238f06a98328c",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -113,82 +113,82 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 145,
-                "bottom": 165,
+                "top": 105,
+                "bottom": 124,
                 "left": 83,
-                "right": 688,
-                "width": 605,
+                "right": 693,
+                "width": 610,
                 "height": 20
               },
-              "text": "Engenharia, Perícias e Inteligência Técnica"
+              "text": "Engenharia, Perícias e Inteligência Técnica · Projetos coordenados"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 177,
-                "bottom": 501,
+                "top": 136,
+                "bottom": 342,
                 "left": 83,
-                "right": 688,
-                "width": 605,
-                "height": 324
+                "right": 651,
+                "width": 568,
+                "height": 206
               },
-              "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+              "text": "Estruturas, instalações e infraestrutura desenvolvidas de forma coordenada."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 123,
-                "bottom": 238,
-                "left": 736,
-                "right": 1283,
-                "width": 547,
-                "height": 115
+                "top": 351,
+                "bottom": 466,
+                "left": 83,
+                "right": 633,
+                "width": 550,
+                "height": 114
               },
-              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
+              "text": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos "
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 446,
-                "bottom": 501,
-                "left": 736,
-                "right": 1283,
-                "width": 547,
-                "height": 54
+                "top": 601,
+                "bottom": 651,
+                "left": 83,
+                "right": 693,
+                "width": 610,
+                "height": 50
               },
-              "text": "·Engenharia Civil pela EESC-USP e Engenharia de Segurança do Trabalho ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
+              "text": "01Confenge Serviços de Desenhos Técnicos Ltda 02CNPJ 52.407.089/0001-09 03Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 390,
-                "bottom": 434,
-                "left": 736,
-                "right": 994,
-                "width": 258,
-                "height": 44
+                "top": 476,
+                "bottom": 524,
+                "left": 83,
+                "right": 337,
+                "width": 254,
+                "height": 48
               },
-              "text": "Ver serviços por situação"
+              "text": "Solicitar avaliação do escopo"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Ver serviços por situação",
-              "href": "/servicos/",
+              "text": "Solicitar avaliação do escopo",
+              "href": "/triagem-tecnica/",
               "box": {
-                "top": 390,
-                "bottom": 434,
-                "left": 736,
-                "right": 994,
-                "width": 258,
-                "height": 44
+                "top": 476,
+                "bottom": 524,
+                "left": 83,
+                "right": 337,
+                "width": 254,
+                "height": 48
               }
             }
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Descrever a minha situação",
-              "href": "/triagem-tecnica/"
+              "text": "Ver áreas de projeto",
+              "href": "/projetos/"
             }
           ],
           "verifiable_proof": {
@@ -203,82 +203,82 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 81,
-                "bottom": 101,
+                "top": 80,
+                "bottom": 119,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 20
+                "height": 39
               },
-              "text": "Engenharia, Perícias e Inteligência Técnica"
+              "text": "Engenharia, Perícias e Inteligência Técnica · Projetos coordenados"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 113,
-                "bottom": 288,
+                "top": 131,
+                "bottom": 304,
                 "left": 18,
-                "right": 328,
-                "width": 309,
-                "height": 176
+                "right": 303,
+                "width": 285,
+                "height": 173
               },
-              "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+              "text": "Estruturas, instalações e infraestrutura desenvolvidas de forma coordenada."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 306,
-                "bottom": 455,
+                "top": 313,
+                "bottom": 466,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 149
+                "height": 153
               },
-              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
+              "text": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos "
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 728,
-                "bottom": 826,
+                "top": 566,
+                "bottom": 660,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 98
+                "height": 94
               },
-              "text": "·Engenharia Civil pela EESC-USP e Engenharia de Segurança do Trabalho ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
+              "text": "01Confenge Serviços de Desenhos Técnicos Ltda 02CNPJ 52.407.089/0001-09 03Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 614,
-                "bottom": 658,
+                "top": 476,
+                "bottom": 522,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 44
+                "height": 46
               },
-              "text": "Ver serviços por situação"
+              "text": "Solicitar avaliação do escopo"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Ver serviços por situação",
-              "href": "/servicos/",
+              "text": "Solicitar avaliação do escopo",
+              "href": "/triagem-tecnica/",
               "box": {
-                "top": 614,
-                "bottom": 658,
+                "top": 476,
+                "bottom": 522,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 44
+                "height": 46
               }
             }
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Descrever a minha situação",
-              "href": "/triagem-tecnica/"
+              "text": "Ver áreas de projeto",
+              "href": "/projetos/"
             }
           ],
           "verifiable_proof": {
@@ -292,36 +292,37 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
+          "coordenados",
+          "engenharia",
           "inteligencia",
           "pericias",
+          "projetos",
           "tecnica"
         ],
         "lead_new": [
-          "avaliar",
-          "calculamos",
+          "assumimos",
           "comparar",
-          "completar",
-          "conferimos",
           "conferir",
-          "entender",
-          "glosa",
-          "imovel",
-          "infiltracao",
-          "levantamos",
-          "obra",
-          "privada",
+          "contratacao",
+          "coordenamos",
+          "decidir",
+          "empreendimentos",
+          "escopo",
+          "exigir",
+          "interfaces",
+          "preciso",
+          "privados",
+          "projetamos",
           "projeto",
           "propostas",
-          "publica",
-          "responder",
-          "responsabilidade"
+          "publicos"
         ]
       }
     },
     {
       "route": "/entregas/",
-      "html_sha256": "e39084ae65b2286f93631f559c8cc55100def61540eafa631f81575d3769c8e9",
-      "measured_on": "2026-09-27",
+      "html_sha256": "1aca7010eb64cb52031220e9ad8c8984cec60722d79961d44a4e05de756b3e84",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -526,8 +527,8 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "644ef4e704e9430e5f0db1e779832e235c5179f98338c14dcac6bfefff19eac5",
-      "measured_on": "2026-09-27",
+      "html_sha256": "fd358af08a7ab9dd7985d9014a278733b326ab9385914e2f46b093fbe6dfdd04",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -724,8 +725,8 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "713004f98ff59450633fbb1a445d2db19efc7e3263849db3d78e9d5527ca7d4b",
-      "measured_on": "2026-09-27",
+      "html_sha256": "586f64577b47a72ee571b359a19fe018bbc7bd0d95f3c0616825024333c04086",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -922,8 +923,8 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "html_sha256": "89f362cd48b1d44ac90863466e6a41c4e7942fe69bcd209b67d01f12171a97c6",
-      "measured_on": "2026-09-27",
+      "html_sha256": "a30bad14b1341ecf330b88bba70a265a377ae1b9117b21217c3b416f3b4b6bed",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1132,8 +1133,8 @@
     },
     {
       "route": "/diagnostico-pre-licitacao/",
-      "html_sha256": "12afa9caae7ae91f09bf641c6c1e95683add7945dc0673869e48676e803df731",
-      "measured_on": "2026-09-27",
+      "html_sha256": "af255391007247bafae8d6c4bfdfc83d7f17067ab9f691110494602a66e1a56e",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1348,8 +1349,8 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "4e569182114bda6b972e5b01cd4fc5029a95d33d281b60ce427e95c739dbb3b3",
-      "measured_on": "2026-09-27",
+      "html_sha256": "b0b798dafe581191544d30a199a8758d9b5f5e51b1f20183cceb61b4869878dc",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1565,8 +1566,8 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "f0abd64f9cb582231d76858d3234ae08e5ebe218b6b38292d554ee70f65f364c",
-      "measured_on": "2026-09-27",
+      "html_sha256": "153c6f3633dd59a41559c76b9c8415bf938012a8da76e37a415a33ba3a63b668",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1773,8 +1774,8 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "2163072f090cd242060c4a16eb8c87f75eccdd2f822bb409c6380f108541a2d3",
-      "measured_on": "2026-09-27",
+      "html_sha256": "7bc289463e8403a5273604aeceb0635f61a38517df191369be26c4f4cfa19892",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1982,8 +1983,8 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "2a1433dd763088013717607a981de8fc25f63dc4e80bbbd879d436793ff25b1b",
-      "measured_on": "2026-09-27",
+      "html_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2195,8 +2196,8 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "8ff9e822a36bb86a69f6a57d18361ab283ffea8e9f488ecda90834af56dcf7f4",
-      "measured_on": "2026-09-27",
+      "html_sha256": "a67d5529545208d966b3621c3e2fea47e6ee9beef61a3a4e91f18b71edfb9c3e",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2409,8 +2410,8 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "1007d73bbc77a643f601dafdabdb22e1304a14999bf511502dfd45f227577cf8",
-      "measured_on": "2026-09-27",
+      "html_sha256": "1a42f209face577d4a3c251b6701b94b12480746cb8338508ac9871e291ec7bb",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2622,8 +2623,8 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "67ce169a619744a2ac45cad85d1112802e611c961d7c1ed3aa89a34137b123bc",
-      "measured_on": "2026-09-27",
+      "html_sha256": "1aeb651fb81e2cc261bbb11aa2dd0c51dfdc5d2b329992fa915a70e5c4bd587e",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2838,8 +2839,8 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "8e13a1a8a39be648160fbedba61e45669a0329d38a15faf80d64186ec49754a8",
-      "measured_on": "2026-09-27",
+      "html_sha256": "b9a24da73e7bbc8fb86ae26eb1a992d59c49c6e592589af3f60d79fa97426407",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3047,8 +3048,8 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "html_sha256": "7d0146da91188a268e490b18d4ff4ce846cecbb98ea26f08449011bf03e9f832",
-      "measured_on": "2026-09-27",
+      "html_sha256": "5672708ea87e83feb08ceca07433bb075064b220c2c7ec82373021714cbe24cc",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3268,8 +3269,8 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "04b3320f64b1f2ec45a467534b54721691f85891791648262c2ccca3e4e386dd",
-      "measured_on": "2026-09-27",
+      "html_sha256": "03018a0b5f1c6a38a82a3fb5eced54e5ae9a4f109ab619e55ea6f86d1cfa592a",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3479,8 +3480,8 @@
     },
     {
       "route": "/diretoria-b2g/",
-      "html_sha256": "6426103db80f64f2729e77d09d07e6983e087892937d3ed434a2f9399066b7a4",
-      "measured_on": "2026-09-27",
+      "html_sha256": "9af2103bc48ff5d4a19a70dce0cb1097cda86df1966d8b77e497b86f0b9f2e21",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3685,8 +3686,8 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "html_sha256": "8cebfff20ada9576d8efe273bcf8d53016905f8dc31445f4fe1d1aa63aea4537",
-      "measured_on": "2026-09-27",
+      "html_sha256": "d14a17a3e3b9ad4f47472946f1733894d0c35064b0a713bc2569d5910b6587c3",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3895,8 +3896,8 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "html_sha256": "5046ea49e245dada80cdad7d52fca5bb1e3a176a80f13b3d39eea4de37239021",
-      "measured_on": "2026-09-27",
+      "html_sha256": "a7501ea5af527a6b61b5c438bcb12774d63f0204481df67ef9b1ea2b5ffcb102",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4105,8 +4106,8 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "html_sha256": "da5beee0e55947a8be026ff4fb732e9602f4df32217f073a90ec902eba35e0b8",
-      "measured_on": "2026-09-27",
+      "html_sha256": "7d708a3c37a1c3044a7602b78fde684f22f06b8cb25b8d596533fd84de9e78f6",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4317,8 +4318,8 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "html_sha256": "44d56fa7bf040c02bf2e22261435015709f4f84b0b58c8dfa4fcb892ff89be80",
-      "measured_on": "2026-09-27",
+      "html_sha256": "c3cd4260fb35c1a578c944ea97a7169c20aea4809469309ea9c8460f334f0ed5",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4529,8 +4530,8 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "html_sha256": "61b7d772b37a9255cc45a386dbc556cb47bc730395c637e595ed2baa723ba7e8",
-      "measured_on": "2026-09-27",
+      "html_sha256": "2f680b84c21d49969d730b2cf3c091bedf0c071230e0f812652db9a2fd2d5a5d",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4742,8 +4743,8 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "html_sha256": "f6fb8775bc64a0252c07a2a59717d246f72ed0373d82504ed418689a96c6a9ac",
-      "measured_on": "2026-09-27",
+      "html_sha256": "5d0e73663a59a621028d6317f9365f521af0b72aa5c5726e10517e51747c320b",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4950,8 +4951,8 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "html_sha256": "16f4a16fd63bd55457c8a8c97053d7a27ce588d575263db77e195b1f805d39d2",
-      "measured_on": "2026-09-27",
+      "html_sha256": "b80185ff6ee21b2d34937466f645c9179b8052f181c38610bb2b3062de97ede2",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -5164,8 +5165,8 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "html_sha256": "073bcd6d0adbb4ae32f64878c6e372790d734901bfaea9535577d6d5f37d7b2e",
-      "measured_on": "2026-09-27",
+      "html_sha256": "2a3fe72be19297c9708339248d44058ef71d2eb4c9de543e31b765e18afa48aa",
+      "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
