@@ -12,6 +12,7 @@ from scripts.site.public_ia import (
     MAX_HEADER_DESTINATIONS,
     audit_orphans,
     audit_primary_nav_hygiene,
+    active_header_href,
     breadcrumb_trail,
     first_viewport_names_journey,
     footer_columns_html,
@@ -90,6 +91,19 @@ def test_brand_header_mirrors_ia_map():
     brand_labels = [item["label"] for item in nav_items(load_brand())]
     ia_labels = [item["label"] for item in header_items()]
     assert brand_labels == ia_labels
+
+
+def test_project_content_does_not_inherit_the_public_works_header_branch():
+    """Specific project-content routes override the generic B2G content rule."""
+    assert (
+        active_header_href("/conteudos/como-contratar-projetos-complementares/")
+        == "/projetos/"
+    )
+    # Negative control: the broad rule still owns public-works content.
+    assert (
+        active_header_href("/conteudos/ata-reuniao-ordem-servico-obra-publica/")
+        == "/servicos-obras-publicas/"
+    )
 
 
 def test_each_hub_has_exactly_one_role():

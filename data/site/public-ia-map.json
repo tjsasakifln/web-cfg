@@ -833,6 +833,26 @@
       "href": "/servicos-obras-publicas/"
     },
     {
+      "prefix": "/conteudos/quando-compatibilizar-projetos/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/conteudos/como-contratar-projetos-complementares/",
+      "href": "/projetos/"
+    },
+    {
       "prefix": "/conteudos/",
       "href": "/servicos-obras-publicas/"
     },
