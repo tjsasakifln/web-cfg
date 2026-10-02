@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-02T17:03:09.699Z",
+  "measured_at": "2026-10-02T17:19:16.531Z",
   "measured_on": "2026-10-02",
-  "commit_sha": "a93cd4f210f06db97f94eb8bb49bfdc6b899ea63",
+  "commit_sha": "a036a299e9fd6392c8275594246fa5395e7f7f61",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -15,7 +15,7 @@
     "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "23dd76552766da9a2944446f7e9e21a974e73ecac0077068c4c9b508de97e037",
+    "assets/home-10x.css": "4e806236598e64ec7d45ea54f8423564f113c456bae96b7d3957a563fde12953",
     "assets/home-base.css": "5daf95b910c1f2bb765320f3b0c8391225a3d26e87bfd25609330998d9110186",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
@@ -218,8 +218,8 @@
                 "top": 131,
                 "bottom": 304,
                 "left": 18,
-                "right": 303,
-                "width": 285,
+                "right": 298,
+                "width": 280,
                 "height": 173
               },
               "text": "Estruturas, instalações e infraestrutura desenvolvidas de forma coordenada."
