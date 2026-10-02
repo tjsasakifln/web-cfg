@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
-from scripts.site.public_ia import header_items
+from scripts.site.public_ia import active_header_href, header_items
 from scripts.site.public_navigation import (
     CANONICAL_CTA,
     FROZEN_NAV_HTML_PATHS,
@@ -541,13 +541,20 @@ def test_hub_and_report_share_the_versioned_delivery_scope() -> None:
     hub_text = _visible_text(hub_main.group(0) + d01_credit.group(1))
     report_text = _visible_text(report_main.group(0))
 
-    for phrase in (
+    required_hub_scope = (
         "editais abertos localizados pela confenge",
         "a confenge busca os editais abertos no raio informado",
         "a quantidade depende das licitações publicadas",
         "a profundidade é a máxima permitida pelas informações da empresa",
-    ):
+    )
+
+    for phrase in required_hub_scope:
         assert phrase in hub_text
+
+    # A origem dos editais é uma limitação material do próprio D01, não
+    # uma menção incidental em outra parte do hub.
+    d01_scope_text = _visible_text(d01_credit.group(1))
+    assert required_hub_scope[0] in d01_scope_text
 
     for text in (hub_text, report_text):
         _assert_no_scope_contradictions(text)
@@ -700,10 +707,15 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
             for anchor in navigation
         )
         assert '/#ofertas' not in block and '/#jornadas' not in block
-        # A página de ferramentas não é uma das cinco entradas corporativas
-        # promovidas; portanto não há item ativo inventado no cabeçalho.
+        # A IA vigente classifica ferramentas na vertical protegida de obras
+        # públicas. A nova entrada de cabeçalho precisa, portanto, ficar ativa
+        # em vez de o promotor inventar uma sexta entrada ou deixar a rota sem
+        # contexto. A contraprova é a igualdade exata com a regra de IA.
         current = [anchor for anchor in navigation if 'aria-current="page"' in anchor]
-        assert current == []
+        active_href = active_header_href("/ferramentas/")
+        assert active_href == "/servicos-obras-publicas/"
+        assert len(current) == 1
+        assert f'href="{active_href}"' in current[0]
         if index == 1:
             assert CANONICAL_CTA[0] in block
             assert f'href="{CANONICAL_CTA[1]}"' in block

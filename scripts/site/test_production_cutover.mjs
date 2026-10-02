@@ -90,11 +90,12 @@ const origin = createOriginClient({
   hostHeader: OPTIONS.host,
   resolveIp: OPTIONS.resolveIp,
 });
-/** Semantic fragments required in the corporate H1; wording may keep evolving.
- * VALOR-IMEDIATO-20260914: o H1 nomeia engenharia e um verbo de trabalho
- * assumido (o que fazemos por quem chega), nao mais a enumeracao de servicos. */
-const EXPECTED_H1_TERMS = ["engenharia"];
-const EXPECTED_H1_WORK_VERB = /\b(?:assumimos|levantamos|conferimos|assinamos|calculamos|projetamos)\b/;
+/** The corporate H1 must state the new project focus precisely: an execution
+ * verb and the three coordinated fronts.  This is more specific than the
+ * former generic "engenharia" requirement and keeps the check tied to the
+ * visitor-facing positioning rather than an exact copy string. */
+const EXPECTED_H1_TERMS = ["estruturas", "instalações", "infraestrutura"];
+const EXPECTED_H1_WORK_VERB = /\b(?:projetamos|desenvolvemos)\b/;
 const EXPECTED_SITUATIONS = JSON.parse(readFileSync(new URL("../../data/site/brand.json", import.meta.url), "utf8")).service_situations.length;
 const RETIRED = [
   "Oito momentos em que",

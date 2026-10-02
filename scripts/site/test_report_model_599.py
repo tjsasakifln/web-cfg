@@ -46,25 +46,41 @@ def _visible_text(markup: str) -> str:
         markup,
         flags=re.IGNORECASE | re.DOTALL,
     )
-    main = re.search(
-        r"<main\b[^>]*>(?P<content>.*?)</main>",
+    top_navigation = re.compile(
+        r'<nav\b[^>]*\bclass=(?:"[^"]*\b(?:desktop-nav|mobile-nav)\b[^"]*"|\'[^\']*\b(?:desktop-nav|mobile-nav)\b[^\']*\')[^>]*>(?P<content>.*?)</nav>',
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    anchor = re.compile(r"<a\b[^>]*>.*?</a>", flags=re.IGNORECASE | re.DOTALL)
+
+    def preserve_top_navigation_ctas(match: re.Match[str]) -> str:
+        def keep_button(candidate: re.Match[str]) -> str:
+            tag = candidate.group(0)
+            classes = re.search(
+                r"\bclass\s*=\s*(['\"])(?P<value>.*?)\1",
+                tag,
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+            if classes and "button" in classes.group("value").casefold().split():
+                return tag
+            return " "
+
+        return anchor.sub(keep_button, match.group("content"))
+
+    without_chrome = top_navigation.sub(
+        preserve_top_navigation_ctas,
         without_hidden_blocks,
-        flags=re.IGNORECASE | re.DOTALL,
     )
-    scope_markup = main.group("content") if main else without_hidden_blocks
-    without_navigation = re.sub(
-        r"<nav\b[^>]*>.*?</nav>",
-        " ",
-        scope_markup,
-        flags=re.IGNORECASE | re.DOTALL,
-    )
-    without_skip_links = re.sub(
+    for pattern in (
+        r'<nav\b[^>]*\bclass=(?:"[^"]*\bbreadcrumbs\b[^"]*"|\'[^\']*\bbreadcrumbs\b[^\']*\')[^>]*>.*?</nav>',
         r'<a\b[^>]*\bclass=(?:"[^"]*\bskip-link\b[^"]*"|\'[^\']*\bskip-link\b[^\']*\')[^>]*>.*?</a>',
-        " ",
-        without_navigation,
-        flags=re.IGNORECASE | re.DOTALL,
-    )
-    without_tags = re.sub(r"<[^>]+>", " ", without_skip_links)
+    ):
+        without_chrome = re.sub(
+            pattern,
+            " ",
+            without_chrome,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+    without_tags = re.sub(r"<[^>]+>", " ", without_chrome)
     return " ".join(unescape(without_tags).casefold().split())
 
 
@@ -916,27 +932,64 @@ def test_search_volume_and_depth_match_the_commercial_scope() -> None:
     _assert_no_scope_contradictions(visible)
 
 
-def test_scope_visible_text_ignores_navigation_concatenation_without_hiding_content() -> None:
+def test_scope_visible_text_ignores_structural_navigation_without_hiding_commercial_actions() -> None:
     markup = """
-    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <header><nav><a>Empresa</a></nav></header>
-    <main id="conteudo">
-      <nav class="breadcrumbs"><a>Entregas</a><span>/</span><span>Radar de Licitações Prioritárias</span></nav>
+    <a class='skip-link' href='#conteudo'>Pular para o conteúdo</a>
+    <header class='site-header'><nav class='desktop-nav'><a>Empresa</a></nav><a class='button'>Pedir análise</a></header>
+    <nav class='mobile-nav'><a>Empresa</a><a class='button'>Solicitar proposta</a></nav>
+    <main id='conteudo'>
+      <nav class='breadcrumbs'><a>Entregas</a><span>/</span><span>Radar de Licitações Prioritárias</span></nav>
       <p>A CONFENGE busca os editais abertos dentro do raio de atuação da empresa.</p>
     </main>
-    <footer><a>Empresa</a></footer>
+    <footer class='site-footer'><a>Empresa</a></footer>
     """
 
     visible = _visible_text(markup)
 
+    assert "pedir análise" in visible and "solicitar proposta" in visible
     assert "empresa entregas radar de licitações prioritárias" not in visible
     _assert_no_scope_contradictions(visible)
 
-    real_contradiction = _visible_text(
-        "<main><p>A empresa entrega a relação de oportunidades.</p></main>"
-    )
     with pytest.raises(AssertionError):
-        _assert_no_scope_contradictions(real_contradiction)
+        _assert_no_scope_contradictions(
+            _visible_text(
+                markup
+                + "<header class=\"site-header\">"
+                "A empresa entrega a relação de oportunidades.</header>"
+            )
+        )
+    with pytest.raises(AssertionError):
+        _assert_no_scope_contradictions(
+            _visible_text(
+                markup
+                + "<footer class=\"site-footer\">"
+                "A empresa entrega a relação de oportunidades.</footer>"
+            )
+        )
+    with pytest.raises(AssertionError):
+        _assert_no_scope_contradictions(
+            _visible_text(
+                markup
+                + "<nav class='mobile-nav'><a>Empresa</a><a class='button'>"
+                "A empresa entrega a relação de oportunidades.</a></nav>"
+            )
+        )
+    with pytest.raises(AssertionError):
+        _assert_no_scope_contradictions(
+            _visible_text(
+                markup
+                + "<nav class=\"report-actions\">"
+                "A empresa entrega a relação de oportunidades.</nav>"
+            )
+        )
+    with pytest.raises(AssertionError):
+        _assert_no_scope_contradictions(
+            _visible_text(
+                markup
+                + "<aside class=\"report-mobile-action\">"
+                "A empresa entrega a relação de oportunidades.</aside>"
+            )
+        )
 
 
 @pytest.mark.parametrize(
