@@ -30,6 +30,7 @@ from scripts.bofu_dominance.frozen_specs.hashing import (
     forbidden_drift,
     forbidden_drift_policy,
     forbidden_path_hashes,
+    sha256_bytes,
 )
 from scripts.bofu_dominance.frozen_specs.patch import apply_frozen_patch, parse_patch
 from scripts.bofu_dominance.frozen_specs.snapshot import snapshot_pillar, snapshot_six
@@ -37,6 +38,12 @@ from scripts.bofu_dominance.frozen_specs.spec import load_spec, load_specs, vali
 
 FROZEN_NOW = date(2026, 8, 19)
 PRE_RECAPTURE = Path(__file__).with_name("fixtures") / "pre-recapture-hashes.json"
+
+
+def test_content_hash_is_stable_across_windows_checkout_eol():
+    assert sha256_bytes(b"first\nsecond\n") == sha256_bytes(
+        b"first\r\nsecond\r\n"
+    )
 
 
 def _copy_forbidden_tree(target: Path) -> None:

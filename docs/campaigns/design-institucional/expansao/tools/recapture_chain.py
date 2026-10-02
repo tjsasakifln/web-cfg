@@ -13,7 +13,7 @@ build:site, commit das saídas rastreadas.
     python3 docs/campaigns/design-institucional/expansao/tools/recapture_chain.py --baseline <sha> --reason "<motivo>"
 """
 from __future__ import annotations
-import argparse, hashlib, json, subprocess, sys, tarfile, tempfile
+import argparse, json, subprocess, sys, tarfile, tempfile
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,7 +23,9 @@ sys.path.insert(0, str(ROOT))
 
 
 def sha(rel: str, *, root: Path = ROOT) -> str:
-    return hashlib.sha256((root / rel).read_bytes()).hexdigest()
+    from scripts.bofu_dominance.frozen_specs.hashing import sha256_bytes
+
+    return sha256_bytes((root / rel).read_bytes())
 
 
 @contextmanager

@@ -8,7 +8,11 @@ from pathlib import Path
 from typing import Any
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS, html_path
-from scripts.bofu_dominance.frozen_specs.hashing import content_sha256, sha256_bytes
+from scripts.bofu_dominance.frozen_specs.hashing import (
+    canonical_text_bytes,
+    content_sha256,
+    sha256_bytes,
+)
 
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
@@ -169,7 +173,7 @@ def snapshot_pillar(slug: str, root: Path | None = None) -> dict[str, Any]:
         html, rel=pillar["html_rel"], slug=slug, path=pillar["path"]
     )
     snap["content_sha256"] = content_sha256(path)
-    snap["bytes"] = path.stat().st_size
+    snap["bytes"] = len(canonical_text_bytes(path.read_bytes()))
     return snap
 
 
