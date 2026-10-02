@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-02T16:34:58.954Z",
+  "measured_at": "2026-10-02T17:03:09.699Z",
   "measured_on": "2026-10-02",
-  "commit_sha": "a5bce72a0da3b73e3a19b55937db3cc925b3e02f",
+  "commit_sha": "a93cd4f210f06db97f94eb8bb49bfdc6b899ea63",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -15,7 +15,7 @@
     "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "f9c435b1a23aff89ff2a648e36f6ede2b06de4372ac876f2a44d8cb831ff39b0",
+    "assets/home-10x.css": "23dd76552766da9a2944446f7e9e21a974e73ecac0077068c4c9b508de97e037",
     "assets/home-base.css": "5daf95b910c1f2bb765320f3b0c8391225a3d26e87bfd25609330998d9110186",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
@@ -47,7 +47,7 @@
     "diretoria-b2g/index.html": "9af2103bc48ff5d4a19a70dce0cb1097cda86df1966d8b77e497b86f0b9f2e21",
     "entregas/index.html": "1aca7010eb64cb52031220e9ad8c8984cec60722d79961d44a4e05de756b3e84",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "c04cb6dfb57aa4f2adf078bd20d42c1847b9ce2011b38a56fb7238f06a98328c",
+    "index.html": "020f45f5761c45f370509377d5636ecccd609f9d4941ebb38139d4be18723b5d",
     "medicoes-glosas-obras-publicas/index.html": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
     "problemas-que-resolvemos/index.html": "586f64577b47a72ee571b359a19fe018bbc7bd0d95f3c0616825024333c04086",
     "reequilibrio-obras-publicas/index.html": "1aeb651fb81e2cc261bbb11aa2dd0c51dfdc5d2b329992fa915a70e5c4bd587e",
@@ -104,7 +104,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "c04cb6dfb57aa4f2adf078bd20d42c1847b9ce2011b38a56fb7238f06a98328c",
+      "html_sha256": "020f45f5761c45f370509377d5636ecccd609f9d4941ebb38139d4be18723b5d",
       "measured_on": "2026-10-02",
       "viewports": {
         "1366x768": {
@@ -149,8 +149,8 @@
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 601,
-                "bottom": 651,
+                "top": 618,
+                "bottom": 668,
                 "left": 83,
                 "right": 693,
                 "width": 610,
@@ -228,19 +228,19 @@
               "selector": ".hero-lead",
               "box": {
                 "top": 313,
-                "bottom": 466,
+                "bottom": 475,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 153
+                "height": 162
               },
               "text": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos "
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 566,
-                "bottom": 660,
+                "top": 576,
+                "bottom": 670,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -251,8 +251,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 476,
-                "bottom": 522,
+                "top": 486,
+                "bottom": 532,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -266,8 +266,8 @@
               "text": "Solicitar avaliação do escopo",
               "href": "/triagem-tecnica/",
               "box": {
-                "top": 476,
-                "bottom": 522,
+                "top": 486,
+                "bottom": 532,
                 "left": 18,
                 "right": 372,
                 "width": 353,
