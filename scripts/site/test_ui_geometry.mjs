@@ -894,25 +894,25 @@ async function main() {
     fail("journey_cta_binds_form", e.message || e);
   }
 
-  // 13) The primary CTA lands on a substantive service explanation and that
-  // destination offers contextual contact. It need not force a generic form.
+  // 13) The primary CTA opens triage that proves the context, available
+  // channels and the next step before any proposal is implied.
   try {
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const href = await page.$eval(".hero .button-primary", (el) => el.getAttribute("href"));
-    if (href !== "/servicos/") throw new Error(`hero CTA href ${href}`);
+    if (href !== "/triagem-tecnica/") throw new Error(`hero CTA href ${href}`);
     await page.goto(`${BASE}${href}`, { waitUntil: "networkidle0" });
     const destination = await page.evaluate(() => ({
       h1: Boolean(document.querySelector("main h1")),
-      services: document.querySelectorAll('[id^="servico-"]').length,
-      substantial: (document.querySelector("main")?.innerText || "").trim().length >= 1800,
-      contact: Boolean(document.querySelector('main a[href^="/triagem-tecnica/"]')),
+      context: /o que precisa decidir|produzir|revisar|resolver/i.test(document.querySelector("main")?.innerText || ""),
+      channels: Boolean(document.querySelector('main a[href^="https://wa.me/"], main a[href^="mailto:"], main a[href^="tel:"]')),
+      nextStep: /o que acontece depois|dados mínimos|proposta/i.test(document.querySelector("main")?.innerText || ""),
     }));
-    if (!destination.h1 || destination.services < 5 || !destination.substantial || !destination.contact) {
-      throw new Error(`hero destination does not explain service and next step: ${JSON.stringify(destination)}`);
+    if (!destination.h1 || !destination.context || !destination.channels || !destination.nextStep) {
+      throw new Error(`hero triage lacks context, channels, or next step: ${JSON.stringify(destination)}`);
     }
-    ok("primary_cta_explains_service_then_contact");
+    ok("primary_cta_opens_contextual_triage");
   } catch (e) {
-    fail("primary_cta_explains_service_then_contact", e.message || e);
+    fail("primary_cta_opens_contextual_triage", e.message || e);
   }
 
   // 13b) A real same-page discovery link must reveal its promised situation

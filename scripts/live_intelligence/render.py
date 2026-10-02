@@ -146,22 +146,24 @@ SHELL_HEADER = '''<header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
-<a data-cta-position="header_nav" href="/bid-room-licitacoes-obras/" style="min-height:44px">Edital e proposta</a>
-<a data-cta-position="header_nav" href="/problemas-que-resolvemos/" style="min-height:44px">Contrato sob pressão</a>
-<a data-cta-position="header_nav" href="/diretoria-b2g/" style="min-height:44px">Operação recorrente</a>
-<a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
 </nav>
-<a class="button button-primary header-cta" href="/#formulario-contato">Analisar meu caso</a>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
 </button>
 </div>
 <nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
-<a data-cta-position="mobile_nav" href="/bid-room-licitacoes-obras/" style="min-height:44px">Edital e proposta</a>
-<a data-cta-position="mobile_nav" href="/problemas-que-resolvemos/" style="min-height:44px">Contrato sob pressão</a>
-<a data-cta-position="mobile_nav" href="/diretoria-b2g/" style="min-height:44px">Operação recorrente</a>
-<a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-<a class="button button-primary" href="/#formulario-contato">Analisar meu caso</a>
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
 </header>
 '''

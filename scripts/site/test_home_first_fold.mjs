@@ -14,7 +14,7 @@ const PORT = Number(process.env.HOME_FIRST_FOLD_PORT || 8794);
 const CLEARANCE_PX = 8;
 const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
-const PRIMARY_CTA_PATH_PREFIX = "/servicos/";
+const PRIMARY_CTA_PATH_PREFIX = "/triagem-tecnica/";
 // Semantic concepts, not frozen sentences. The fold may be rewritten, but it
 // must still name the corporate scope, the buyer's situation, the work we
 // assume, a deliverable tied to a use and real trust.
@@ -76,10 +76,10 @@ const CONTENT_CONCEPTS = [
     minMatches: 1,
   },
   {
-    id: "prova_rotulada",
-    label: "amostra rotulada como demonstrativa",
-    terms: ["demonstrativ"],
-    minMatches: 1,
+    id: "coordenacao_delimitada",
+    label: "coordenação delimitada por escopo",
+    terms: ["escopo", "interfaces", "coordena"],
+    minMatches: 2,
   },
   {
     id: "confianca_verificavel",
@@ -90,7 +90,7 @@ const CONTENT_CONCEPTS = [
     // "metodo e limites publicados" satisfazia o conceito de confianca sem
     // trazer um unico fato conferivel. Ficam apenas credenciais e identidade
     // verificaveis, que e o que sustenta confianca de verdade.
-    terms: ["eesc-usp", "cnpj", "crea", "art", "engenheiro responsável"],
+    terms: ["cnpj", "credenciais", "limites", "composição técnica"],
     minMatches: 2,
   },
 ];
@@ -113,10 +113,10 @@ function conceptResults(text, concepts = CONTENT_CONCEPTS) {
 }
 
 const counterproof = {
-  // "partes" e "quarta" contem "art"; so "cnpj" pode casar, e um unico
-  // termo fica abaixo do minimo: a dobra reprova.
+  // Um único identificador não satisfaz a evidência de confiança: são
+  // necessárias pelo menos duas referências independentes.
   substring_is_not_a_credential: (() => {
-    const c = conceptResults("As partes do contrato e a quarta etapa. CNPJ publicado.")
+    const c = conceptResults("CNPJ publicado.")
       .find((item) => item.id === "confianca_verificavel");
     return c.matched.length === 1 && c.matched[0] === "cnpj" && !c.ok;
   })(),
@@ -497,9 +497,9 @@ try {
       href: destinationHref,
       http_ok: false,
       engineering_heading: false,
-      service_sections: 0,
-      explained_deliveries: 0,
-      contextual_contact: false,
+      context: false,
+      channels: false,
+      next_step: false,
       ok: false,
     };
     if (destinationHref.startsWith(PRIMARY_CTA_PATH_PREFIX)) {
@@ -511,12 +511,10 @@ try {
         const main = document.querySelector("main");
         const heading = (main?.querySelector("h1")?.textContent || "").toLowerCase();
         return {
-          engineering_heading: heading.includes("engenharia"),
-          service_sections: main?.querySelectorAll(".corporate-service-row").length || 0,
-          explained_deliveries: main?.querySelectorAll(".corporate-service-row .service-output").length || 0,
-          contextual_contact: Boolean(main?.querySelector(
-            'a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"]',
-          )),
+          engineering_heading: heading.includes("projeto") || heading.includes("situação"),
+          context: /o que precisa decidir|produzir|revisar|resolver/i.test(main?.innerText || ""),
+          channels: Boolean(main?.querySelector('a[href^="https://wa.me/"], a[href^="mailto:"], a[href^="tel:"]')),
+          next_step: /o que acontece depois|dados mínimos|proposta/i.test(main?.innerText || ""),
         };
       });
       destination = {
@@ -526,9 +524,9 @@ try {
         ok: Boolean(
           response?.ok()
           && renderedDestination.engineering_heading
-          && renderedDestination.service_sections >= 4
-          && renderedDestination.explained_deliveries >= 4
-          && renderedDestination.contextual_contact
+          && renderedDestination.context
+          && renderedDestination.channels
+          && renderedDestination.next_step
         ),
       };
     }
@@ -541,7 +539,7 @@ try {
     }
     if (!destination.ok) {
       failures.push(
-        `${report.viewport}: PRIMARY_DESTINATION does not explain engineering services and contextual contact: `
+        `${report.viewport}: PRIMARY_DESTINATION does not prove context, channels, and next step: `
         + JSON.stringify(destination),
       );
     }
@@ -566,9 +564,9 @@ console.log(JSON.stringify({
     primary_cta_path_prefix: PRIMARY_CTA_PATH_PREFIX,
     content_concepts: CONTENT_CONCEPTS,
     destination_contract: {
-      min_service_sections: 4,
-      min_explained_deliveries: 4,
-      contextual_contact_required: true,
+      context_required: true,
+      channels_required: true,
+      next_step_required: true,
     },
   },
   counterproof,

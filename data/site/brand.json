@@ -1,18 +1,18 @@
 {
   "schema_version": "1.1.0",
   "campaign": "CONFENGE-MV-04-CORPORATE-SHELL-20260905",
-  "updated_at": "2026-09-26",
+  "updated_at": "2026-10-02",
   "person": {
     "jobTitle": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
-    "short": "Projetos e serviços de engenharia para obras públicas e privadas.",
-    "long": "A CONFENGE elabora e revisa projetos, compatibiliza disciplinas, levanta quantitativos, prepara orçamentos e produz análises técnicas para obras públicas e privadas. Cada trabalho tem conteúdo, finalidade e responsabilidade definidos antes da proposta.",
-    "tagline": "Projetos e serviços de engenharia para obras públicas e privadas.",
+    "short": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
+    "long": "A CONFENGE desenvolve e coordena projetos de estruturas, instalações e infraestrutura, além de revisão, compatibilização, quantitativos, orçamento e análises técnicas. Para cada objeto, estrutura as disciplinas e os profissionais habilitados conforme o escopo, as interfaces e a responsabilidade técnica definidos antes da proposta.",
+    "tagline": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
-    "org_description": "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho, para clientes privados e públicos, com especialidade em licitações e contratos de obras públicas.",
-    "footer_blurb": "Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos."
+    "org_description": "Engenharia, perícias e inteligência técnica: projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho para clientes privados e públicos. Obras públicas permanecem uma frente especializada.",
+    "footer_blurb": "Projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -24,18 +24,18 @@
     "site": "https://confenge.com.br"
   },
   "hero": {
-    "eyebrow": "Engenharia, Perícias e Inteligência Técnica",
-    "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
-    "h1_html": "Assumimos a parte de engenharia <span class=\"type-serif\">que falta para você orçar, contratar ou decidir.</span>",
-    "subheadline": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica.",
-    "cta_primary": "Ver serviços por situação",
-    "cta_secondary": "Descrever a minha situação",
+    "eyebrow": "Engenharia, Perícias e Inteligência Técnica · Projetos coordenados",
+    "h1": "Estruturas, instalações e infraestrutura desenvolvidas de forma coordenada.",
+    "h1_html": "Estruturas, instalações e infraestrutura <span class=\"type-serif\">desenvolvidas de forma coordenada.</span>",
+    "subheadline": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos a frente técnica que transforma escopo em referência comum.",
+    "cta_primary": "Solicitar avaliação do escopo",
+    "cta_secondary": "Ver áreas de projeto",
     "cta_secondary_wa": "Olá, Tiago. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
-    "microcopy": "Conversa técnica no primeiro contato: a resposta nomeia o serviço, o que você recebe e o que falta reunir.",
-    "meta_title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
-    "meta_description": "Engenharia para orçar a obra, completar ou conferir o projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa, em obra pública ou privada.",
-    "og_title": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
-    "og_description": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, a CONFENGE levanta, calcula, confere e assume a responsabilidade técnica pelo que falta."
+    "microcopy": "No primeiro contato, enquadramos o escopo, os canais e a próxima etapa antes da proposta.",
+    "meta_title": "CONFENGE | Projetos de estruturas, instalações e infraestrutura",
+    "meta_description": "Projetos coordenados de estruturas, instalações e infraestrutura para empreendimentos públicos e privados, com escopo, interfaces e responsabilidade técnica definidos antes da proposta.",
+    "og_title": "Estruturas, instalações e infraestrutura desenvolvidas de forma coordenada.",
+    "og_description": "A CONFENGE estrutura e coordena as disciplinas e interfaces do empreendimento para transformar escopo em referência comum antes de orçar, contratar, aprovar ou executar."
   },
   "journeys": [
     {
@@ -148,7 +148,11 @@
   "navigation": {
     "desktop": [
       {
-        "label": "Serviços e problemas",
+        "label": "Projetos",
+        "href": "/projetos/"
+      },
+      {
+        "label": "Serviços",
         "href": "/servicos/"
       },
       {
@@ -156,8 +160,12 @@
         "href": "/servicos-obras-publicas/"
       },
       {
-        "label": "Biblioteca",
-        "href": "/conteudos/"
+        "label": "Como trabalhamos",
+        "href": "/como-trabalhamos/"
+      },
+      {
+        "label": "Empresa",
+        "href": "/empresa/"
       }
     ],
     "cta": {

@@ -309,7 +309,10 @@ def test_specialist_page_shows_sameas_and_as_of():
     assert "sameAs" in html
     assert "https://github.com/tjsasakifln" in html
     assert f'data-credential-as-of="{as_of}"' in html
-    assert f'"dateModified":"{as_of}"' in html
+    page_modified = re.search(r'"dateModified":"(\d{4}-\d{2}-\d{2})"', html)
+    assert page_modified, "specialist page must expose schema dateModified"
+    assert page_modified.group(1) >= as_of, "page revision cannot predate credential snapshot"
+    assert f'<time datetime="{page_modified.group(1)}">' in html
     assert "EESC-USP" in html or "Universidade de São Paulo" in html
     crea_claims = [
         claim

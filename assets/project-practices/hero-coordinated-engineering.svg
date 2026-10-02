@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Coordenação de engenharia entre disciplinas</title>
+  <desc id="desc">Diagrama técnico demonstrativo mostrando estrutura, instalações e infraestrutura convergindo para coordenação de projeto.</desc>
+  <rect width="1200" height="760" fill="#f7f9f8"/>
+  <g fill="none" stroke="#cad5d0" stroke-width="1">
+    <path d="M80 92H1120M80 188H1120M80 284H1120M80 380H1120M80 476H1120M80 572H1120M80 668H1120"/>
+    <path d="M120 52V708M240 52V708M360 52V708M480 52V708M600 52V708M720 52V708M840 52V708M960 52V708M1080 52V708"/>
+  </g>
+  <g font-family="Arial, sans-serif" fill="#071a31">
+    <text x="80" y="55" font-size="17" font-weight="700" letter-spacing="2">CONFENGE / COORDENAÇÃO DE PROJETO</text>
+    <text x="80" y="82" font-size="13" fill="#526275">DIAGRAMA DEMONSTRATIVO · DISCIPLINAS DEFINIDAS CONFORME O ESCOPO</text>
+  </g>
+  <g fill="#fff" stroke="#071a31" stroke-width="2">
+    <rect x="80" y="150" width="270" height="122" rx="4"/>
+    <rect x="80" y="340" width="270" height="122" rx="4"/>
+    <rect x="80" y="530" width="270" height="122" rx="4"/>
+    <rect x="465" y="218" width="300" height="366" rx="4" fill="#e9f1e9" stroke="#2d6f2d" stroke-width="3"/>
+    <rect x="880" y="260" width="240" height="282" rx="4"/>
+  </g>
+  <g font-family="Arial, sans-serif" fill="#071a31">
+    <text x="105" y="187" font-size="13" font-weight="700" letter-spacing="1.5">ESTRUTURAS</text>
+    <text x="105" y="217" font-size="21" font-weight="700">Cargas e sistema</text>
+    <text x="105" y="243" font-size="15">Concepção · detalhamento</text>
+    <text x="105" y="377" font-size="13" font-weight="700" letter-spacing="1.5">INSTALAÇÕES</text>
+    <text x="105" y="407" font-size="21" font-weight="700">Sistemas prediais</text>
+    <text x="105" y="433" font-size="15">Elétrica · hidráulica · especiais</text>
+    <text x="105" y="567" font-size="13" font-weight="700" letter-spacing="1.5">INFRAESTRUTURA</text>
+    <text x="105" y="597" font-size="21" font-weight="700">Implantação e redes</text>
+    <text x="105" y="623" font-size="15">Drenagem · acessos · conexões</text>
+    <text x="500" y="260" font-size="13" font-weight="700" letter-spacing="1.5" fill="#2d6f2d">COORDENAÇÃO MULTIDISCIPLINAR</text>
+    <text x="500" y="306" font-size="29" font-weight="700">Projeto</text>
+    <text x="500" y="340" font-size="29" font-weight="700">coordenado</text>
+    <text x="500" y="383" font-size="15">• escopo e interfaces</text>
+    <text x="500" y="415" font-size="15">• especialistas por disciplina</text>
+    <text x="500" y="447" font-size="15">• pendências e decisões</text>
+    <text x="500" y="479" font-size="15">• pranchas e documentação</text>
+    <text x="500" y="511" font-size="15">• responsabilidades confirmadas</text>
+    <text x="908" y="302" font-size="13" font-weight="700" letter-spacing="1.5">ENTREGAS</text>
+    <text x="908" y="345" font-size="22" font-weight="700">Base técnica</text>
+    <text x="908" y="382" font-size="15">para orçar</text>
+    <text x="908" y="412" font-size="15">para contratar</text>
+    <text x="908" y="442" font-size="15">para aprovar</text>
+    <text x="908" y="472" font-size="15">para executar</text>
+  </g>
+  <g fill="none" stroke="#2d6f2d" stroke-width="3" stroke-linecap="round">
+    <path d="M350 211H444"/><path d="M350 401H444"/><path d="M350 591H444"/><path d="M765 401H855"/>
+  </g>
+  <g fill="#2d6f2d">
+    <path d="M444 211l-14-8v16zM444 401l-14-8v16zM444 591l-14-8v16zM855 401l-14-8v16z"/>
+  </g>
+  <g font-family="Arial, sans-serif" fill="#526275"><text x="80" y="720" font-size="12">CONFENGE · representação conceitual para apresentação de práticas. Não representa projeto, cliente ou obra específica.</text></g>
+</svg>

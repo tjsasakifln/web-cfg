@@ -9,7 +9,7 @@ import {
 const repo = runGate();
 assert.deepEqual(repo.errors, [], `repository gate failed: ${repo.errors.join("; ")}`);
 assert.equal(repo.hits.length, 0, "DEFER repository must ship zero external analytics runtime");
-const scanned = runtimeFiles();
+const scanned = runtimeFiles().map((file) => file.replaceAll("\\", "/"));
 assert(
   scanned.some((file) => file.endsWith("scripts/pseo/build_site.py")) &&
     scanned.some((file) => file.endsWith(".github/workflows/site-ci.yml")) &&

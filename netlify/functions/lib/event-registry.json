@@ -1071,6 +1071,12 @@
       "same_layer": true,
       "semantic": "Service/form CTA. Rewrite to cta_click with cta_kind=service."
     },
+    "project_cta_click": {
+      "canonical": "cta_click",
+      "rule": "rewrite",
+      "same_layer": true,
+      "semantic": "Projects architecture CTA. Rewrite to cta_click with cta_kind=project; it records intent to begin commercial triage, not a persisted lead."
+    },
     "offer_cta_click": {
       "canonical": "cta_click",
       "rule": "rewrite",
@@ -1221,6 +1227,7 @@
   "cta_kind_from_alias": {
     "service_cta": "service",
     "service_cta_click": "service",
+    "project_cta_click": "project",
     "offer_cta_click": "offer",
     "diagnostic_cta_click": "diagnostic",
     "critical_decision_cta_click": "critical_decision",
@@ -1250,7 +1257,18 @@
       "/revisao-tecnica-projetos-engenharia/": "revisao-tecnica-projetos-engenharia",
       "/parcerias-engenharia/": "parcerias-engenharia",
       "/inspecao-diagnostico-edificacoes/": "inspecao-diagnostico-edificacoes",
-      "/seguranca-trabalho-apoio-tecnico/": "seguranca-trabalho-apoio-tecnico"
+      "/seguranca-trabalho-apoio-tecnico/": "seguranca-trabalho-apoio-tecnico",
+      "/projetos/": "engineering-projects",
+      "/projetos/estruturas/": "engineering-projects-structures",
+      "/projetos/instalacoes/": "engineering-projects-installations",
+      "/projetos/infraestrutura/": "engineering-projects-infrastructure",
+      "/projetos/coordenacao-multidisciplinar/": "engineering-projects-coordination",
+      "/edificacoes/": "engineering-projects-buildings",
+      "/terceirizacao-projetos-engenharia/": "engineering-projects-outsourcing",
+      "/projeto-estrutural-concreto-armado/": "structural-project-concrete",
+      "/projeto-estrutura-metalica/": "structural-project-steel",
+      "/projeto-eletrico/": "installation-project-electrical",
+      "/projeto-hidrossanitario/": "installation-project-hydrosanitary"
     },
     "origin_prefixes": {
       "/conteudos/": "editorial",
@@ -1262,6 +1280,10 @@
       "/casos/": "case",
       "/servicos-obras-publicas/": "hub",
       "/servicos/": "hub",
+      "/projetos/": "hub",
+      "/edificacoes/": "hub",
+      "/como-trabalhamos/": "institutional",
+      "/empresa/": "institutional",
       "/problemas-que-resolvemos/": "hub",
       "/inteligencia/": "data",
       "/radar/": "data",

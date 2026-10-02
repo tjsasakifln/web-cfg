@@ -317,8 +317,8 @@ def main() -> int:
         "/bid-room-licitacoes-obras/": services["url"],
         "/diretoria-b2g/": services["url"],
         "/defesa-tecnica-contratos-publicos/": services["url"],
-        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
-        "/ferramentas/limite-acrescimos-supressoes/": "/conteudos/",
+        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": services["url"],
+        "/ferramentas/limite-acrescimos-supressoes/": services["url"],
     }
     for current, active in active_cases.items():
         path = ROOT / current.strip("/") / "index.html"

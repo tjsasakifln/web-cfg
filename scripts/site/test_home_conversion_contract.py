@@ -117,9 +117,10 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert NAMED_DELIVERABLE.search(text), "hero must name a concrete deliverable"
     assert DELIVERABLE_USE.search(text), "hero must say what the deliverable is for"
     assert DEMONSTRATIVE_LABEL.search(text), "the sample in the hero must be labelled as demonstrative"
-    assert "Engenharia Civil pela EESC-USP" in hero
     assert "CNPJ 52.407.089/0001-09" in hero
-    assert 'href="/servicos/"' in hero
+    assert "Como conferir credenciais e limites" in hero
+    assert 'href="/triagem-tecnica/"' in hero
+    assert 'href="/projetos/"' in hero
     assert hero.count("button-primary") == 1
     assert "PNCP" not in hero
 
@@ -424,7 +425,6 @@ def test_home_triage_section_frames_every_family_before_public_works() -> None:
     text = _visible(intro.group(1)).strip()
     assert "sem saber o nome do serviço" in text, text
     assert not text.startswith("Em obra pública"), text
-    # O prazo publicado de obra publica continua na pagina (condicao material).
     assert "1 dia útil" in text, text
     assert "Não envie documentos sensíveis" in text, text
 

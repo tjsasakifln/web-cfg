@@ -32,6 +32,8 @@ const ROUTES = [
   { family: "tool", path: "/ferramentas/diagnostico-defesa-margem/" },
   { family: "case", path: "/casos/aditivo-art125-demonstrativo/" },
   { family: "specialist", path: "/especialista/tiago-jun-sasaki/" },
+  { family: "engineering_projects_hub", path: "/projetos/" },
+  { family: "engineering_project_bofu", path: "/projeto-estrutura-metalica/" },
 ];
 
 if (!BASE_ARG && SITE_ROOT === ROOT) {
@@ -232,14 +234,16 @@ async function renderedGeometry(page, route, width) {
       return {
         width: Math.round(box.width * 10) / 10,
         height: Math.round(box.height * 10) / 10,
+        top: Math.round(box.top * 10) / 10,
+        bottom: Math.round(box.bottom * 10) / 10,
         href: (element.getAttribute("href") || "").trim(),
       };
     };
-    const header = document.querySelector(".site-header");
+    const header = document.querySelector(".site-header,.pp-header");
     const headerStyle = header ? getComputedStyle(header) : null;
     const headerColor = headerStyle?.backgroundColor.match(/[\d.]+/g)?.map(Number) || [];
     const headerAlpha = headerColor.length >= 4 ? headerColor[3] : 1;
-    const desktopLinks = [...document.querySelectorAll(".desktop-nav a")]
+    const desktopLinks = [...document.querySelectorAll(".desktop-nav a,.pp-nav a")]
       .map((element) => ({ text: element.textContent.trim(), box: boxOf(element) }))
       .filter(({ box }) => box);
     return {
@@ -256,8 +260,9 @@ async function renderedGeometry(page, route, width) {
         color: headerStyle.backgroundColor,
         box: boxOf(header),
       } : null,
-      headerCta: boxOf(document.querySelector(".header-cta")),
-      toggle: boxOf(document.querySelector(".menu-toggle")),
+      headerCta: boxOf(document.querySelector(".header-cta,.pp-header > .pp-container > .pp-button")),
+      heroCta: boxOf(document.querySelector(".pp-hero .pp-button")),
+      toggle: boxOf(document.querySelector(".menu-toggle,.pp-mobile summary")),
       desktopLinks,
       hiddenDeliverableFacts: [...document.querySelectorAll(".eight-hub__item dl,.eight-hub__common")]
         .filter((element) => !visible(element)).length,
@@ -272,9 +277,13 @@ async function renderedGeometry(page, route, width) {
   if (route.family === "deliverables" && metrics.hiddenDeliverableFacts) {
     errors.push({ code: "deliverable_substance_hidden", detail: metrics.hiddenDeliverableFacts });
   }
+  if (width === 390 && route.family.startsWith("engineering_project")
+      && (!metrics.heroCta || metrics.heroCta.bottom > viewportHeight(width))) {
+    errors.push({ code: "project_hero_cta_below_first_viewport", detail: metrics.heroCta });
+  }
 
   const atLeast44 = (box) => Boolean(box && box.width >= 44 && box.height >= 44);
-  if (width > 900) {
+  if (metrics.desktopLinks.length) {
     if (!atLeast44(metrics.headerCta) || !metrics.headerCta.href) {
       errors.push({ code: "header_cta_unavailable", detail: metrics.headerCta });
     }
@@ -288,10 +297,10 @@ async function renderedGeometry(page, route, width) {
 
   if (metrics.toggle) {
     if (width === 390) {
-      await page.focus(".menu-toggle");
+      await page.focus(".menu-toggle,.pp-mobile summary");
       await page.keyboard.press("Enter");
     } else {
-      await page.click(".menu-toggle");
+      await page.click(".menu-toggle,.pp-mobile summary");
     }
     const menu = await page.evaluate(() => {
       const visible = (element) => {
@@ -309,11 +318,13 @@ async function renderedGeometry(page, route, width) {
           text: element.textContent.trim(),
         };
       };
-      const toggle = document.querySelector(".menu-toggle");
+      const toggle = document.querySelector(".menu-toggle,.pp-mobile summary");
+      const nativeDetails = toggle?.closest("details");
       return {
-        expanded: toggle?.getAttribute("aria-expanded") || "",
-        cta: boxOf(document.querySelector(".mobile-nav .button")),
-        links: [...document.querySelectorAll(".mobile-nav a")].map(boxOf).filter(Boolean),
+        expanded: nativeDetails ? String(nativeDetails.open) : (toggle?.getAttribute("aria-expanded") || ""),
+        nativeDetails: Boolean(nativeDetails),
+        cta: boxOf(document.querySelector(".mobile-nav .button,.pp-mobile nav a[data-value-first-cta]")),
+        links: [...document.querySelectorAll(".mobile-nav a,.pp-mobile nav a")].map(boxOf).filter(Boolean),
       };
     });
     if (menu.expanded !== "true") errors.push({ code: "menu_did_not_open", detail: menu.expanded });
@@ -322,16 +333,23 @@ async function renderedGeometry(page, route, width) {
     if (undersized.length) errors.push({ code: "mobile_menu_target_below_44", detail: undersized });
     if (width === 390) {
       await page.keyboard.press("Escape");
-      const expanded = await page.$eval(".menu-toggle", (element) => element.getAttribute("aria-expanded"));
+      const expanded = await page.$eval(".menu-toggle,.pp-mobile summary", (element) => {
+        const nativeDetails = element.closest("details");
+        if (nativeDetails) {
+          element.click();
+          return String(nativeDetails.open);
+        }
+        return element.getAttribute("aria-expanded");
+      });
       if (expanded !== "false") errors.push({ code: "menu_escape_failed", detail: expanded });
     } else {
-      await page.click(".menu-toggle");
+      await page.click(".menu-toggle,.pp-mobile summary");
     }
   }
 
   if ([390, 901, 1024, 1440].includes(width)) {
     const sticky = await page.evaluate(async () => {
-      const header = document.querySelector(".site-header");
+      const header = document.querySelector(".site-header,.pp-header");
       if (!header) return { ghost: false, anchorCollision: null };
       window.scrollTo({ top: Math.min(360, document.documentElement.scrollHeight - innerHeight), behavior: "instant" });
       await new Promise((done) => setTimeout(done, 50));
@@ -469,20 +487,21 @@ try {
           };
         };
         return {
-          headerCta: visibleBox(document.querySelector(".header-cta")),
-          menuCta: visibleBox(document.querySelector(".mobile-nav .button")),
-          navLinks: [...document.querySelectorAll(".mobile-nav a")].map(visibleBox).filter(Boolean),
+          headerCta: visibleBox(document.querySelector(".header-cta,.pp-header > .pp-container > .pp-button")),
+          menuCta: visibleBox(document.querySelector(".mobile-nav .button,.pp-mobile nav a[data-value-first-cta]")),
+          heroCta: visibleBox(document.querySelector(".pp-hero .pp-button")),
+          navLinks: [...document.querySelectorAll(".mobile-nav a,.pp-mobile nav a")].map(visibleBox).filter(Boolean),
           mainChars: ((document.querySelector("main") || document.body).innerText || "").replace(/\s+/g, " ").trim().length,
           hiddenDeliverableFacts: [...document.querySelectorAll(".eight-hub__item dl,.eight-hub__common")]
             .filter((element) => getComputedStyle(element).display === "none").length,
         };
       });
-      const cta = noJs.headerCta || noJs.menuCta;
+      const cta = noJs.headerCta || noJs.menuCta || noJs.heroCta;
       if (!response || response.status() >= 400) {
         failures.push({ family: route.family, route: route.path, width: 390, mode: "js-off", code: "http_status", detail: response?.status() || 0 });
       }
       if (!cta || cta.width < 44 || cta.height < 44 || !cta.href) {
-        failures.push({ family: route.family, route: route.path, width: 390, mode: "js-off", code: "js_off_commercial_cta_unavailable", detail: { headerCta: noJs.headerCta, menuCta: noJs.menuCta } });
+        failures.push({ family: route.family, route: route.path, width: 390, mode: "js-off", code: "js_off_commercial_cta_unavailable", detail: { headerCta: noJs.headerCta, menuCta: noJs.menuCta, heroCta: noJs.heroCta } });
       }
       const undersized = noJs.navLinks.filter((box) => box.width < 44 || box.height < 44);
       if (undersized.length) {

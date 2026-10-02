@@ -58,7 +58,8 @@ def test_home_has_canonical_copy():
     brand = load_brand()
     hero = brand["hero"]
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert hero["h1"] in html
+    visible = re.sub(r"\s+", " ", _visible_home_text(html)).strip()
+    assert hero["h1"] in visible
     assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Engenharia, Perícias e Inteligência Técnica" in html
     assert brand["positioning"]["org_description"] in html
@@ -78,10 +79,12 @@ def test_home_has_canonical_copy():
     # Corporate chooser uses customer situations and keeps the B2G intake intact.
     # VALOR-IMEDIATO-20260914: os rotulos das situacoes e o rotulo do primario
     # saem do contrato (brand.json), nao de literais duplicados aqui; o rotulo
-    # do primario declara o destino (/servicos/).
+    # do primário declara a avaliação do escopo, sem pré-classificar serviço.
     assert "Segurança do trabalho" in html
     assert hero["cta_primary"] in html
-    assert re.search(r"servi[çc]os|situa[çc]", hero["cta_primary"], re.I), hero["cta_primary"]
+    assert re.search(r"avalia[çc][ãa]o|escopo", hero["cta_primary"], re.I), hero["cta_primary"]
+    assert 'href="/triagem-tecnica/"' in html
+    assert 'href="/projetos/"' in html
     assert 'href="/servicos/#servico-projeto"' in html
     assert "Contrato sob pressão" in html
     assert "Edital e proposta" in html

@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-09-09",
+  "updated_at": "2026-10-02",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry. Package families use real artifact representatives; the official-live opportunity overlay has an exact runtime owner contract and mandatory SHA-bound post-stage Lighthouse evidence, never a virtual fixture representative.",
   "axe": {
     "viewports": [
@@ -55,14 +55,19 @@
       "seo": 95
     },
     "thresholds_note": "#293 widens coverage only. Any change to these numbers belongs to a different issue.",
-    "canonical_representatives": [
-      {
-        "family_id": "home",
-        "route": "/",
-        "reason": "single-route canonical family"
-      },
-      {
-        "family_id": "servicos-corporativos",
+      "canonical_representatives": [
+        {
+          "family_id": "home",
+          "route": "/",
+          "reason": "single-route canonical family"
+        },
+        {
+          "family_id": "engineering-projects-commercial-architecture",
+          "route": "/projetos/",
+          "reason": "canonical hub for the multidisciplinary engineering-project architecture and its shared responsive project-page system"
+        },
+        {
+          "family_id": "servicos-corporativos",
         "route": "/servicos/",
         "reason": "single-route corporate services hub and primary multivertical decision path"
       },

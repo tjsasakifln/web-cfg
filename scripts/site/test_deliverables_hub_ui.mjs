@@ -138,7 +138,7 @@ for (const width of widths) {
     const archetypes = [...document.querySelectorAll('main > [data-section-archetype]')]
       .map((element) => element.getAttribute('data-section-archetype'));
     const primaries = document.querySelectorAll('main .button-primary').length;
-    const desktopDeliverables = document.querySelector('.desktop-nav a[href="/conteudos/"]');
+    const desktopProjects = document.querySelector('.desktop-nav a[href="/projetos/"]');
     const footerDeliverables = document.querySelector('footer a[href="/entregas/"]');
     const offerCards = [...document.querySelectorAll('article.vitrine-item[data-primary-offer="true"]')];
     const capabilityRows = [...document.querySelectorAll(".capability-item")];
@@ -220,8 +220,8 @@ for (const width of widths) {
         shortSummaries: [...document.querySelectorAll(".capability-group>summary")]
           .filter((summary) => summary.getBoundingClientRect().height < 44).length,
       },
-      navDeliverables: desktopDeliverables?.textContent?.trim() || "",
-      navCurrent: desktopDeliverables?.getAttribute("aria-current") || "",
+      navProjects: desktopProjects?.textContent?.trim() || "",
+      navCurrent: desktopProjects?.getAttribute("aria-current") || "",
       footerDeliverables: footerDeliverables?.textContent?.trim() || "",
       emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
       overflowOffenders: [...document.querySelectorAll("body *")]
@@ -369,21 +369,21 @@ for (const width of widths) {
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
-  if (metrics.navDeliverables !== "Biblioteca" || metrics.footerDeliverables !== "Entregas") errors.push("nav_contract");
+  if (metrics.navProjects !== "Projetos" || metrics.footerDeliverables !== "Entregas") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 
   if (width <= 900) {
     await page.click(".menu-toggle");
     const mobile = await page.evaluate(() => {
       const menu = document.querySelector(".mobile-nav");
-      const link = menu?.querySelector('a[href="/conteudos/"]');
+      const link = menu?.querySelector('a[href="/projetos/"]');
       return {
         expanded: document.querySelector(".menu-toggle")?.getAttribute("aria-expanded"),
         linkVisible: Boolean(link && link.getBoundingClientRect().height >= 44),
         linkText: link?.textContent?.trim() || "",
       };
     });
-    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Biblioteca") {
+    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Projetos") {
       errors.push("mobile_nav");
     }
     await page.click(".menu-toggle");
@@ -516,8 +516,8 @@ for (const { route, expectedNav } of [
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       nav,
       navLabels: nav.map(({ text }) => text),
-      corporateServicesPath: currentRoute === "/"
-        ? Boolean(document.querySelector('main a[href="/servicos/"]'))
+      corporateProjectsPath: currentRoute === "/"
+        ? Boolean(document.querySelector('main a[href="/projetos/"]'))
         : null,
       sections: currentRoute === "/" ? document.querySelectorAll("main > section").length : null,
     };
@@ -529,7 +529,7 @@ for (const { route, expectedNav } of [
     errors.push(`nav_order=${JSON.stringify(metrics.navLabels)}`);
   }
   if (expectedNav === promotedNav) {
-    if (metrics.nav.filter(({ href }) => href === "/conteudos/").length !== 1) errors.push("contents_nav_missing");
+    if (metrics.nav.filter(({ href }) => href === "/projetos/").length !== 1) errors.push("projects_nav_missing");
     if (metrics.nav.some(({ href }) => href === "/ferramentas/")) errors.push("tools_nav_not_consolidated");
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("entregas_still_in_header");
   } else {
@@ -537,10 +537,10 @@ for (const { route, expectedNav } of [
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");
   }
   // VALOR-IMEDIATO-20260914: a home tem entre 5 e 8 blocos narrativos (a
-  // contagem exata era numero magico e impedia retirar secoes genericas); o
-  // caminho para /servicos/ continua obrigatorio.
-  if (route === "/" && (!metrics.corporateServicesPath || metrics.sections < 5 || metrics.sections > 8)) {
-    errors.push(`home_corporate_path_contract sections=${metrics.sections}`);
+  // contagem exata era numero magico e impedia retirar secoes genéricas); o
+  // caminho de descoberta de projetos continua acessível na home.
+  if (route === "/" && (!metrics.corporateProjectsPath || metrics.sections < 5 || metrics.sections > 8)) {
+    errors.push(`home_projects_path_contract sections=${metrics.sections}`);
   }
   if (route === "/" && screenshotDir) {
     const situations = await page.$('#situacoes');

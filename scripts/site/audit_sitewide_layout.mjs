@@ -51,6 +51,8 @@ const CRITICAL_ROUTES = [
   "/entregas/",
   "/casos/",
   "/especialista/tiago-jun-sasaki/",
+  "/projetos/",
+  "/projeto-estrutura-metalica/",
 ];
 
 const MIME = {

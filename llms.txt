@@ -1,5 +1,5 @@
 # CONFENGE
-> Projetos e serviços de engenharia para obras públicas e privadas.
+> Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.
 
 Site: https://confenge.com.br/
 Serviços: https://confenge.com.br/servicos/
@@ -10,6 +10,11 @@ Atendimento técnico: Engº Tiago Sasaki, Engenheiro Civil pela EESC-USP. A resp
 
 ## O que a CONFENGE faz
 A CONFENGE elabora e revisa projetos, compatibiliza disciplinas, levanta quantitativos, prepara orçamentos, inspeciona edificações e produz laudos, perícias, avaliações, pareceres e análises técnicas. O trabalho atende pessoas físicas, profissionais, condomínios, empresas e órgãos públicos conforme a necessidade, a fase, o local, os documentos disponíveis e a atribuição profissional confirmada.
+
+- Áreas de projeto: https://confenge.com.br/projetos/
+  Estruturas, instalações, infraestrutura e coordenação multidisciplinar, com escopo, interfaces e responsabilidade técnica confirmados antes da contratação.
+- Como trabalhamos: https://confenge.com.br/como-trabalhamos/
+  Processo de enquadramento, desenvolvimento, coordenação, verificação e emissão das entregas de engenharia.
 
 - Projetos, revisão e compatibilização: https://confenge.com.br/servicos/#servico-projeto
   Trabalho: cálculos, dimensionamento, revisão de critérios e conferência das interfaces entre disciplinas.

@@ -128,11 +128,13 @@ SVG_SPRITE = """<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
 
 def _build_header() -> str:
     brand = _brand_safe()
-    # Corporate situation-first shell (fallback matches data/site/brand.json).
+    # Corporate project-first shell (fallback matches data/site/brand.json).
     nav = (brand.get("navigation") or {}).get("desktop") or [
-        {"label": "Serviços e problemas", "href": "/#situacoes"},
+        {"label": "Projetos", "href": "/projetos/"},
+        {"label": "Serviços", "href": "/servicos/"},
         {"label": "Obras públicas", "href": "/servicos-obras-publicas/"},
-        {"label": "Biblioteca", "href": "/conteudos/"},
+        {"label": "Como trabalhamos", "href": "/como-trabalhamos/"},
+        {"label": "Empresa", "href": "/empresa/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
         "label": "Solicitar proposta",

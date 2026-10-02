@@ -1201,6 +1201,7 @@
       proof_expand: 1,
       comparison_view: 1,
       cta_click: 1,
+      project_cta_click: 1,
     };
     const attrOrBody = (el, attr) => el.getAttribute(attr) || document.body?.getAttribute(attr) || '';
     const attrsFromEl = (el) => ({
@@ -1400,14 +1401,22 @@
       }
       const crossRouteCapture = classified.kind !== 'contact' && isCrossRouteCaptureHref(href);
       if (classified.kind === 'contact' || crossRouteCapture) {
-        track('service_cta_click', {
+        const declaredEvent = el.getAttribute(A_EVENT_NAME) || '';
+        const contactEvent = declaredEvent !== 'cta_click'
+          && namedAllowed[declaredEvent]
+          && /cta_click$/.test(declaredEvent)
+          ? declaredEvent
+          : 'service_cta_click';
+        const destinationType = declaredEvent === 'project_cta_click' && href.startsWith('#')
+          ? 'anchor'
+          : 'form';
+        track(contactEvent, {
           ...base,
           cta_label: label,
-          destination_type: 'form',
+          destination_type: destinationType,
           offer_id: offerId,
           source_page_type: sourcePageType,
-          cta_id: withCta.cta_id,
-          route_family: withCta.route_family,
+          ...withCta,
           // Rota do formulario pedido (sem query nem hash) e, quando a origem e
           // editorial/caso/hub, a mesma atribuicao de ativo que o
           // content_to_service carregava: o operador sabe qual artigo levou ao

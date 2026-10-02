@@ -724,9 +724,10 @@ def test_hub_problem_first_structure():
 def test_home_nav_and_hierarchy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert EXPECTED_CTA in home
-    assert "Serviços e problemas" in home
+    assert "Projetos" in home
     assert "Obras públicas" in home
-    assert "Biblioteca" in home
+    assert "Como trabalhamos" in home
+    assert "Empresa" in home
     assert "Edital e proposta" in home
     assert "Contrato sob pressão" in home
     assert "Operação recorrente" in home
@@ -1082,15 +1083,15 @@ def test_home_form_anchor_reveals_fields():
         re.I,
     )
     assert hero, "home hero primary CTA missing"
-    assert hero.group(1) == "/servicos/", hero.group(1)
-    assert (ROOT / "servicos" / "index.html").is_file()
+    assert hero.group(1) == "/triagem-tecnica/", hero.group(1)
+    assert (ROOT / "triagem-tecnica" / "index.html").is_file()
     hero_text = re.sub(r"<[^>]+>", " ", hero_section.group(0))
     # VALOR-IMEDIATO-20260914: o hero explica a situacao e o trabalho antes de
     # preservar os caminhos de contato; a enumeracao nao e mais exigida, a
     # entrega nomeada e o alcance publico e privado continuam.
-    assert re.search(r"projetos?|propostas|infiltra[çc][ãa]o|im[óo]vel|glosa", hero_text, re.I)
+    assert re.search(r"estruturas|instalações|infraestrutura|propostas|projeto", hero_text, re.I)
     assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", hero_text, re.I)
-    assert re.search(r"\b(?:assumimos|levantamos|calculamos|conferimos|assinamos)\b", hero_text, re.I)
+    assert re.search(r"\b(?:assumimos|projetamos|coordenamos)\b", hero_text, re.I)
     assert re.search(r"plantas|memórias? de cálculo|planilhas?|laudos?|pareceres?|relatórios?", hero_text, re.I)
     assert 'id="situacoes"' in html
     header_cta = re.search(

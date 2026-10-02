@@ -36,16 +36,16 @@ def test_ia_contract_is_valid_without_html():
     errors = validate_contract()
     assert errors == []
     items = header_items()
-    assert len(items) == 3
+    assert len(items) == 5
     assert len(items) <= MAX_HEADER_DESTINATIONS
     assert header_cta()["href"] == "/triagem-tecnica/"
     labels = " ".join(item["label"].lower() for item in items)
     assert "b2g" not in labels
     assert all(
         phrase in labels
-        for phrase in ("serviços e problemas", "obras públicas", "biblioteca")
+        for phrase in ("projetos", "serviços", "obras públicas", "como trabalhamos", "empresa")
     )
-    assert "biblioteca" in labels
+    assert "projetos" in labels
     assert "ferramentas" not in labels
     ia = load_ia_map()
     situations = ia["service_situations"]
@@ -191,7 +191,7 @@ def test_sync_text_applies_global_corporate_shell_after_mv09_activation():
 </main></body></html>"""
     updated = sync_text(html, brand, route)
     assert updated != html
-    assert "Serviços e problemas" in updated
+    assert "Projetos" in updated
     assert "/servicos-obras-publicas/" in updated
     assert load_ia_map()["rollout"]["shell_scope"] == "global"
 
@@ -286,7 +286,7 @@ def test_page_shell_output_is_idempotent_with_shell_nav():
         wa_message="Olá",
     )
     assert 'class="desktop-nav"' in html
-    assert "Serviços e problemas" in html
+    assert "Projetos" in html
     assert "Obras públicas" in html
     assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html
 

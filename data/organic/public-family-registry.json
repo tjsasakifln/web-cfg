@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-09-26",
+  "as_of": "2026-10-02",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -1393,6 +1393,66 @@
       "owner_issue": 20260926,
       "debt": [],
       "index_evidence": {"substrate": "first_party_publication", "not_applicable": ["official_live", "citable_source"], "reason": "Página comercial de primeira parte para terceirização da execução documental remota de SST.", "authority": ["data/commercial/sst-remote-portfolio.v1.json", "data/corporate/intent-family-matrix.v1.json"], "declared_at": "2026-09-26", "owner_issue": 20260926}
+    },
+    {
+      "id": "engineering-projects-commercial-architecture",
+      "visitor_job": "Entender como contratar projetos de estruturas, instalações, infraestrutura ou coordenação multidisciplinar; reconhecer o tipo de empreendimento e iniciar uma triagem técnica contextualizada para receber uma proposta de escopo adequado.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/projetos/",
+          "/projetos/estruturas/",
+          "/projetos/instalacoes/",
+          "/projetos/infraestrutura/",
+          "/projetos/coordenacao-multidisciplinar/",
+          "/edificacoes/",
+          "/como-trabalhamos/",
+          "/empresa/",
+          "/terceirizacao-projetos-engenharia/",
+          "/projeto-estrutural-concreto-armado/",
+          "/projeto-estrutura-metalica/",
+          "/projeto-eletrico/",
+          "/projeto-hidrossanitario/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Solicitar avaliação do escopo",
+        "href": "#contato-projetos",
+        "desktop_cta_id": "project-header",
+        "mobile_cta_id": "project-header-mobile",
+        "journey": "projetos",
+        "tema": "Projetos de engenharia e coordenação multidisciplinar"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": ["whatsapp", "email", "telephone"],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-10-02",
+      "owner_issue": 611,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": ["official_live", "citable_source"],
+        "reason": "Páginas comerciais de primeira parte sobre a capacidade atual da CONFENGE de estruturar e coordenar projetos conforme objeto, escopo e responsabilidade técnica; não representam case de cliente, equipe fixa, habilitação irrestrita, preço ou prazo não autorizado.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "docs/architecture/ADR-STRAT-004-commercial-constitution-and-finite-portfolio.md",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
+        "declared_at": "2026-10-02",
+        "owner_issue": 611
+      }
     }
   ]
 }

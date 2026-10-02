@@ -535,8 +535,11 @@ def test_hub_and_report_share_the_versioned_delivery_scope() -> None:
         full_html,
     )
     assert d01_credit, "D01 scope disclosure missing"
-    hub_text = _visible_text(hub_scope_html + d01_credit.group(1))
-    report_text = _visible_text(_html(REPORT))
+    hub_main = re.search(r"(?is)<main\b[^>]*>.*?</main>", hub_scope_html)
+    report_main = re.search(r"(?is)<main\b[^>]*>.*?</main>", _html(REPORT))
+    assert hub_main and report_main, "scope linter requires the visitor main content"
+    hub_text = _visible_text(hub_main.group(0) + d01_credit.group(1))
+    report_text = _visible_text(report_main.group(0))
 
     for phrase in (
         "editais abertos localizados pela confenge",
@@ -697,11 +700,10 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
             for anchor in navigation
         )
         assert '/#ofertas' not in block and '/#jornadas' not in block
-        current = [
-            anchor for anchor in navigation if 'aria-current="page"' in anchor
-        ]
-        assert len(current) == 1
-        assert 'href="/conteudos/"' in current[0]
+        # A página de ferramentas não é uma das cinco entradas corporativas
+        # promovidas; portanto não há item ativo inventado no cabeçalho.
+        current = [anchor for anchor in navigation if 'aria-current="page"' in anchor]
+        assert current == []
         if index == 1:
             assert CANONICAL_CTA[0] in block
             assert f'href="{CANONICAL_CTA[1]}"' in block
@@ -803,7 +805,7 @@ def test_asset_identifiers_are_stable_and_do_not_contain_pii() -> None:
 
     home = _html(ROOT / "index.html")
     primary = re.search(
-        r'<a\b[^>]*data-cta-position="hero"[^>]*href="/servicos/"[^>]*>',
+        r'<a\b[^>]*data-cta-position="hero"[^>]*href="/triagem-tecnica/"[^>]*>',
         home,
     )
     assert primary and 'data-event-name="cta_click"' in primary.group(0)

@@ -18,9 +18,13 @@ import { resolveChromePath } from "./resolve_chrome.mjs";
 const root = path.resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const externalBase = process.argv[2];
 const artifactRoot = path.join(root, "_site");
-const siteRoot = !externalBase && fs.existsSync(path.join(artifactRoot, "index.html"))
-  ? artifactRoot
-  : root;
+const configuredSiteRoot = String(process.env.SITE_ROOT || "").trim();
+const explicitRoot = configuredSiteRoot ? path.resolve(root, configuredSiteRoot) : "";
+const siteRoot = !externalBase && explicitRoot && fs.existsSync(path.join(explicitRoot, "index.html"))
+  ? explicitRoot
+  : !externalBase && fs.existsSync(path.join(artifactRoot, "index.html"))
+    ? artifactRoot
+    : root;
 const port = Number(process.env.EVENT_SEMANTICS_PORT || 8797);
 const reportPath = String(process.env.EVENT_SEMANTICS_REPORT || "").trim();
 const PII_PARAM_PATTERN = /address|arquivo|attach|cnpj|company|cpf|document|edital|email|empresa|endereco|comment|description|field|file|text|name|nome|message|mensagem|note|phone|query|search|tel|whatsapp/;
@@ -108,14 +112,28 @@ const page = await browser.newPage();
 page.setDefaultTimeout(20000);
 await page.evaluateOnNewDocument(() => { window.CONFENGE_DEBUG_ANALYTICS = false; });
 
-// (1) home hero "Ver serviços por situação" -> exactly one cta_click destination_type=route.
+// (1) home hero assessment CTA -> exactly one cta_click destination_type=route.
 {
   await open(page, "/");
-  const diff = await clickAndDiff(page, 'a[data-event-name="cta_click"][href="/servicos/"]');
+  const diff = await clickAndDiff(page, '.hero a[data-event-name="cta_click"][href="/triagem-tecnica/"]');
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   const others = diff.added.filter((e) => /^(whatsapp_click|lead_form_|content_to_service)/.test(e.event));
   check("home_hero_route_cta", "/", !diff.missing && clicks.length === 1 && clicks[0].destination_type === "route"
     && clicks[0].cta_position === "hero" && others.length === 0 && piiViolations(diff.added).length === 0, diff);
+}
+
+// Project pages keep their own finite click alias and page-view cluster.
+{
+  await open(page, "/projeto-eletrico/");
+  const pageView = await page.evaluate(() => (window.dataLayer || [])
+    .filter((row) => row.event === "page_view").at(-1) || null);
+  const diff = await clickAndDiff(page, '.pp-hero a[data-event-name="project_cta_click"]');
+  const clicks = diff.added.filter((event) => event.event === "cta_click");
+  check("project_page_view_cluster", "/projeto-eletrico/", pageView?.content_cluster === "engineering-projects", pageView);
+  check("project_cta_alias", "/projeto-eletrico/", !diff.missing && clicks.length === 1
+    && clicks[0].alias_from === "project_cta_click" && clicks[0].cta_kind === "project"
+    && clicks[0].cta_position === "hero" && clicks[0].destination_type === "anchor"
+    && piiViolations(diff.added).length === 0, diff);
 }
 
 // (11) home situation link (no data-event-name) -> cta_click route with its own cta_id.

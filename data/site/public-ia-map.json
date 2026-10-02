@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-09-26",
+  "updated_at": "2026-10-02",
   "purpose": "Source of truth for the corporate situation chooser, compact global chrome, protected public-works vertical, hub roles, and route → job → parent → next action → index state.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -84,6 +84,19 @@
     }
   ],
   "breadcrumb_labels": {
+    "/projetos/": "Projetos",
+    "/projetos/estruturas/": "Estruturas",
+    "/projetos/instalacoes/": "Instalações",
+    "/projetos/infraestrutura/": "Infraestrutura",
+    "/projetos/coordenacao-multidisciplinar/": "Coordenação multidisciplinar",
+    "/edificacoes/": "Edificações",
+    "/como-trabalhamos/": "Como trabalhamos",
+    "/empresa/": "Empresa",
+    "/terceirizacao-projetos-engenharia/": "Terceirização de projetos",
+    "/projeto-estrutural-concreto-armado/": "Projeto estrutural em concreto armado",
+    "/projeto-estrutura-metalica/": "Projeto de estrutura metálica",
+    "/projeto-eletrico/": "Projeto elétrico",
+    "/projeto-hidrossanitario/": "Projeto hidrossanitário",
     "/quantitativos-orcamento-obras/": "Quantitativos e orçamento",
     "/servicos-obras-publicas/": "Obras públicas",
     "/problemas-que-resolvemos/": "Contrato sob pressão",
@@ -152,7 +165,12 @@
   "header": {
     "destinations": [
       {
-        "label": "Serviços e problemas",
+        "label": "Projetos",
+        "href": "/projetos/",
+        "surface": "engineering_projects_hub"
+      },
+      {
+        "label": "Serviços",
         "href": "/servicos/",
         "surface": "corporate_services_hub"
       },
@@ -162,9 +180,14 @@
         "vertical": "public_works_b2g"
       },
       {
-        "label": "Biblioteca",
-        "href": "/conteudos/",
-        "hub": "conteudos"
+        "label": "Como trabalhamos",
+        "href": "/como-trabalhamos/",
+        "surface": "engineering_method"
+      },
+      {
+        "label": "Empresa",
+        "href": "/empresa/",
+        "surface": "company"
       }
     ],
     "cta": {
@@ -241,6 +264,38 @@
     ]
   },
   "hubs": [
+    {
+      "id": "projetos",
+      "route": "/projetos/",
+      "role": "solucao_comercial",
+      "label": "Projetos",
+      "next_action": "/triagem-tecnica/",
+      "index_state": "index"
+    },
+    {
+      "id": "edificacoes",
+      "route": "/edificacoes/",
+      "role": "solucao_comercial",
+      "label": "Edificações",
+      "next_action": "/triagem-tecnica/",
+      "index_state": "index"
+    },
+    {
+      "id": "como-trabalhamos",
+      "route": "/como-trabalhamos/",
+      "role": "institucional",
+      "label": "Como trabalhamos",
+      "next_action": "/triagem-tecnica/",
+      "index_state": "index"
+    },
+    {
+      "id": "empresa",
+      "route": "/empresa/",
+      "role": "institucional",
+      "label": "Empresa",
+      "next_action": "/triagem-tecnica/",
+      "index_state": "index"
+    },
     {
       "id": "servicos-corporativo",
       "route": "/servicos/",
@@ -381,6 +436,55 @@
     {
       "prefix": "/servicos/",
       "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/projetos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/projetos/",
+      "parent": "/projetos/"
+    },
+    {
+      "prefix": "/edificacoes/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/como-trabalhamos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/empresa/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/terceirizacao-projetos-engenharia/",
+      "parent": "/projetos/",
+      "exact": true
+    },
+    {
+      "prefix": "/projeto-estrutural-concreto-armado/",
+      "parent": "/projetos/",
+      "exact": true
+    },
+    {
+      "prefix": "/projeto-estrutura-metalica/",
+      "parent": "/projetos/",
+      "exact": true
+    },
+    {
+      "prefix": "/projeto-eletrico/",
+      "parent": "/projetos/",
+      "exact": true
+    },
+    {
+      "prefix": "/projeto-hidrossanitario/",
+      "parent": "/projetos/",
       "exact": true
     },
     {
@@ -625,6 +729,42 @@
   ],
   "active_header": [
     {
+      "prefix": "/projetos/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/edificacoes/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/terceirizacao-projetos-engenharia/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/projeto-estrutural-concreto-armado/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/projeto-estrutura-metalica/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/projeto-eletrico/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/projeto-hidrossanitario/",
+      "href": "/projetos/"
+    },
+    {
+      "prefix": "/como-trabalhamos/",
+      "href": "/como-trabalhamos/"
+    },
+    {
+      "prefix": "/empresa/",
+      "href": "/empresa/"
+    },
+    {
       "prefix": "/servicos/",
       "href": "/servicos/"
     },
@@ -694,23 +834,27 @@
     },
     {
       "prefix": "/conteudos/",
-      "href": "/conteudos/"
+      "href": "/servicos-obras-publicas/"
     },
     {
       "prefix": "/guias-contratos-obras/",
-      "href": "/conteudos/"
+      "href": "/servicos-obras-publicas/"
     },
     {
       "prefix": "/lei-14133-obras/",
-      "href": "/conteudos/"
+      "href": "/servicos-obras-publicas/"
     },
     {
       "prefix": "/jurisprudencia-contratos-obras/",
-      "href": "/conteudos/"
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "href": "/servicos/"
     },
     {
       "prefix": "/ferramentas/",
-      "href": "/conteudos/"
+      "href": "/servicos-obras-publicas/"
     },
     {
       "prefix": "/compatibilizacao-projetos-engenharia/",

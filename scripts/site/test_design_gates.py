@@ -501,16 +501,11 @@ def test_primary_cta_not_spam():
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
-    assert hero_html.count('href="/servicos/"') == 1
-    # Regra substituida (campanha 2026-09-10): o caminho secundario do heroi
-    # deixou de ser preso a ancora de UMA disciplina. Prender "#projetos" ali
-    # reclassificava como projeto todo visitante que chega por pericia,
-    # avaliacao, inspecao ou seguranca do trabalho, na primeira dobra e antes de
-    # ler qualquer explicacao. O que continua exigido: o heroi tem de oferecer um
-    # caminho de contato, e ele tem de levar a triagem.
-    secondary = re.findall(r'href="(/triagem-tecnica/[^"]*)"', hero_html)
-    assert len(secondary) == 1, secondary
-    assert secondary[0] in ("/triagem-tecnica/", "/triagem-tecnica/#projetos"), secondary
+    assert hero_html.count('href="/triagem-tecnica/"') == 1
+    # A ação principal abre a avaliação do escopo. A secundária é descoberta
+    # de áreas, não um segundo caminho de captura concorrente.
+    secondary = re.findall(r'href="(/projetos/)"', hero_html)
+    assert secondary == ["/projetos/"], secondary
     assert "EESC-USP" in html
 
 
@@ -528,26 +523,24 @@ def test_home_five_second_clarity():
     # a uso + alcance publico e privado (ver test_home_conversion_contract).
     assert "engenharia, perícias e inteligência técnica" in fold_lower
     assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", fold_lower), fold_lower[:300]
-    assert re.search(r"comparar propostas|conferir um projeto|infiltra[çc][ãa]o|avaliar um im[óo]vel|glosa", fold_lower)
-    assert re.search(r"\b(?:assumimos|levantamos|calculamos|conferimos|assinamos)\b", fold_lower)
-    assert re.search(r"planilha|projeto|laudo|relat[óo]rio", fold_lower)
+    assert re.search(r"estruturas|instalações|infraestrutura", fold_lower)
+    assert re.search(r"\b(?:assumimos|projetamos|coordenamos)\b", fold_lower)
+    assert re.search(r"pranchas|projeto|memória|modelos", fold_lower)
     assert re.search(r"\b(?:comparar|contratar|decidir|or[çc]ar)\b", fold_lower)
     # True microproofs and an explicit limits path.
-    assert "eesc-usp" in fold_lower
-    assert "52.407.089/0001-09" in fold_lower
+    assert "cnpj 52.407.089/0001-09" in fold_lower
+    assert "credenciais e limites" in fold_lower
     # Regra substituida: o microproof deixou de liderar pelo METODO. O que
     # continua exigido -- e verificado de forma mais forte -- e que a primeira
     # dobra traga fatos conferiveis e um caminho para conferi-los.
     assert "/confianca/" in fold, "a primeira dobra precisa do caminho de verificacao"
-    assert "limites" in fold_lower or "credenciais" in fold_lower
+    assert "limites" in fold_lower
     # Comprehensible next actions: the primary label is the canonical one and
     # declares its destination.
     assert _brand()["hero"]["cta_primary"].lower() in fold_lower
-    assert 'href="/servicos/"' in fold
-    # O rotulo do caminho secundario nao e mais congelado numa disciplina; o
-    # que se exige e que ele convide a descrever a situacao e leve a triagem.
-    assert re.search(r'href="/triagem-tecnica/', fold), fold_lower[:200]
-    assert re.search(r"(situa[çc][ãa]o|projeto|conversar|descrever)", fold_lower)
+    assert 'href="/triagem-tecnica/"' in fold
+    assert 'href="/projetos/"' in fold
+    assert "solicitar avaliação do escopo" in fold_lower
     # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
     # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
     # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
@@ -567,8 +560,8 @@ def test_home_decision_fold_hierarchy():
     h1 = re.search(r'<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)</h1>', hero_html)
     assert h1, "hero h1 missing"
     h1_text = re.sub(r"<[^>]+>", " ", h1.group(1)).lower()
-    assert "engenharia" in h1_text
-    assert re.search(r"\b(?:assumimos|levantamos|conferimos|assinamos|projetamos|calculamos)\b", h1_text), h1_text
+    assert re.search(r"estruturas|instalações|infraestrutura", h1_text), h1_text
+    assert "coordenada" in h1_text, h1_text
     assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", hero_html, re.I)
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html

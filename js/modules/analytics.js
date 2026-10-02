@@ -35,6 +35,17 @@
     '/parcerias-engenharia/': 'parcerias-engenharia',
     '/inspecao-diagnostico-edificacoes/': 'inspecao-diagnostico-edificacoes',
     '/seguranca-trabalho-apoio-tecnico/': 'seguranca-trabalho-apoio-tecnico',
+    '/projetos/': 'engineering-projects',
+    '/projetos/estruturas/': 'engineering-projects-structures',
+    '/projetos/instalacoes/': 'engineering-projects-installations',
+    '/projetos/infraestrutura/': 'engineering-projects-infrastructure',
+    '/projetos/coordenacao-multidisciplinar/': 'engineering-projects-coordination',
+    '/edificacoes/': 'engineering-projects-buildings',
+    '/terceirizacao-projetos-engenharia/': 'engineering-projects-outsourcing',
+    '/projeto-estrutural-concreto-armado/': 'structural-project-concrete',
+    '/projeto-estrutura-metalica/': 'structural-project-steel',
+    '/projeto-eletrico/': 'installation-project-electrical',
+    '/projeto-hidrossanitario/': 'installation-project-hydrosanitary',
   };
   const ORIGIN_PREFIXES = {
     '/conteudos/': 'editorial',
@@ -46,6 +57,10 @@
     '/casos/': 'case',
     '/servicos-obras-publicas/': 'hub',
     '/servicos/': 'hub',
+    '/projetos/': 'hub',
+    '/edificacoes/': 'hub',
+    '/como-trabalhamos/': 'institutional',
+    '/empresa/': 'institutional',
     '/problemas-que-resolvemos/': 'hub',
     '/inteligencia/': 'data',
     '/radar/': 'data',
@@ -62,6 +77,7 @@
     service_view: 'service_page_view',
     service_cta: 'cta_click',
     service_cta_click: 'cta_click',
+    project_cta_click: 'cta_click',
     offer_cta_click: 'cta_click',
     diagnostic_cta_click: 'cta_click',
     critical_decision_cta_click: 'cta_click',
@@ -80,6 +96,7 @@
   };
   const EVENT_CTA_KIND = {
     service_cta_click: 'service',
+    project_cta_click: 'project',
     offer_cta_click: 'offer',
     diagnostic_cta_click: 'diagnostic',
     critical_decision_cta_click: 'critical_decision',
@@ -399,6 +416,11 @@
 
   const clusterFromPath = (path) => {
     const p = path || '';
+    if (p.includes('/projetos') || p.includes('/projeto-')
+      || p.includes('/edificacoes') || p.includes('/terceirizacao-projetos-engenharia')
+      || p.includes('/como-trabalhamos') || p.includes('/empresa')) {
+      return 'engineering-projects';
+    }
     if (p.includes('/diretoria-b2g')) return 'offer-diretoria-b2g';
     if (p.includes('/diagnostico-b2g-360')) return 'offer-diagnostico-b2g';
     if (p.includes('/bid-room-licitacoes-obras')) return 'offer-bid-room';
