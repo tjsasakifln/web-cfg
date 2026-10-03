@@ -306,13 +306,16 @@ def test_specialist_page_shows_sameas_and_as_of():
     registry = load_registry()
     as_of = registry["as_of"]
     assert path.is_file()
-    assert "sameAs" in html
-    assert "https://github.com/tjsasakifln" in html
+    github = next(claim for claim in registry["claims"] if claim["id"] == "person-github")
+    if "/especialista/tiago-jun-sasaki/" in github.get("projection_surfaces", []) and is_projectable(github):
+        assert "sameAs" in html and "https://github.com/tjsasakifln" in html
+    else:
+        assert "https://github.com/tjsasakifln" not in html, "internal identity evidence must not be projected"
     assert f'data-credential-as-of="{as_of}"' in html
     page_modified = re.search(r'"dateModified":"(\d{4}-\d{2}-\d{2})"', html)
     assert page_modified, "specialist page must expose schema dateModified"
     assert page_modified.group(1) >= as_of, "page revision cannot predate credential snapshot"
-    assert f'<time datetime="{page_modified.group(1)}">' in html
+    assert re.search(rf'<time\b[^>]*datetime="{page_modified.group(1)}"[^>]*>', html)
     assert "EESC-USP" in html or "Universidade de São Paulo" in html
     crea_claims = [
         claim
@@ -355,19 +358,14 @@ def test_specialist_credentials_are_subset_of_public_verified_proof():
 
 
 def test_home_credentials_are_subset_of_public_verified_proof():
-    """A home tambem afirma credencial, e ate agora ninguem conferia.
-
-    extract_credential_claim_texts ancorava em `<ul class="`, e a home escreve
-    `<ul aria-label="..." class="hero-proof">`: a lista voltava vazia e o gate
-    passava por ausencia de entrada, nao por lastro. Com o padrao corrigido a
-    home entra no mesmo contrato do perfil do especialista, e as quatro
-    afirmacoes da primeira dobra precisam existir em data/site/proof.json.
-    """
+    """Leadership claims in the institutional company prose remain backed;
+    their position and markup are editorial, while empty extraction fails."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     claims = extract_credential_claim_texts(html)
     assert claims, "home credential claims must be extractable, not silently empty"
     errors = check_credentials_against_proof(html)
     assert not errors, errors
+    assert check_credentials_against_proof(html.replace("Engenharia Civil pela EESC-USP", "Certificação internacional")), "invented credential must fail"
 
 
 def test_demonstrative_cases_and_zero_approved_clients():

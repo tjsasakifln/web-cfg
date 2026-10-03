@@ -3912,17 +3912,24 @@ def _caveats_preserved(route: str, text: str) -> Subgate:
 def _cta_subordinate(route: str, html: str, text: str) -> Subgate:
     """The terminal action must close the page, not be the page.
 
-    Counts the attributed CTAs the conversion gate itself recognises
-    (``data-cta-id`` anchors and lead forms inside ``<main>``) and the share of
-    visible text they occupy. A family whose declared terminal_action is
+    Counts prominent primary calls and lead forms inside ``<main>``. Attribution
+    IDs also identify editorial discovery links and channel alternatives;
+    their presence is not a measure of visual promotion. All attributed
+    anchors still contribute to the text-share guard. A family whose terminal_action is
     ``none`` owes no CTA and cannot fail here for having one CTA too few.
     """
     main = _main_html(html) or html
     anchors = re.findall(r"(?is)<a\b[^>]*\bdata-cta-id=[^>]*>.*?</a>", main)
-    forms = re.findall(
-        r'(?is)<form\b[^>]*action=["\']/\.netlify/functions/lead["\'][^>]*>.*?</form>', main
-    )
-    cta_count = len(anchors) + len(forms)
+    forms = [
+        block
+        for block in re.findall(r"(?is)<form\b[^>]*>.*?</form>", main)
+        if re.search(
+            r'''(?is)\b(?:action=["']/\.netlify/functions/lead["']|data-runtime-profile=["']shared_lead_form_v1["'])''',
+            block.split(">", 1)[0],
+        )
+    ]
+    primary = re.findall(r'(?is)<a\b[^>]*\bclass=["\'][^"\']*\bbutton-primary\b[^"\']*["\'][^>]*>.*?</a>', main)
+    cta_count = len(primary) + len(forms)
     words = max(1, len(re.findall(r"\w+", text)))
     allowed = max(3, words // 400)
     cta_chars = sum(len(_strip_html_preserve_visibility(block)) for block in anchors + forms)

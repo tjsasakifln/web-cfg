@@ -813,6 +813,10 @@ def extract_credential_claim_texts(html: str) -> list[str]:
         # o padrao anterior, ancorado em `<ul class="`, a lista de credenciais
         # da home nunca era extraida: o gate passava por vazio, nao por acerto.
         r'<ul[^>]*\bclass="[^"]*\b(?:hero-proof|profile-list)\b[^"]*"[^>]*>(.*?)</ul>',
+        # Institutional home: leadership credentials are prose in the company
+        # definition list, rather than mandatory badges in the first fold.
+        r'<dt>Forma[çc][ãa]o da lideran[çc]a</dt>\s*<dd>(.*?)</dd>',
+        r'<dt>Experi[êe]ncia</dt>\s*<dd>(.*?)</dd>',
         r'data-credential="([^"]+)"',
     ):
         for m in re.finditer(pat, html or "", flags=re.I | re.S):

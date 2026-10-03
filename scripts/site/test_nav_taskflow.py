@@ -491,14 +491,21 @@ def main() -> int:
     if len({row.get("href") for row in situations}) != len(situations):
         failures.append("service situations share a destination")
     for situation in situations:
-        label = str(situation.get("label") or "")
         href = str(situation.get("href") or "")
-        if label not in home:
-            failures.append(f"home chooser misses {label!r}")
         if not public_target_exists(href):
-            failures.append(f"situation target missing: {label!r} -> {href!r}")
-    if home.count('class="situation-row') != len(situations):
-        failures.append("home chooser must contain one row per contract situation")
+            failures.append(f"situation target missing: {situation.get('id')!r} -> {href!r}")
+    expected_discovery = {
+        "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/",
+        "/projetos/coordenacao-multidisciplinar/", "/quantitativos-orcamento-obras/",
+        "/revisao-tecnica-projetos-engenharia/", "/servicos/#areas",
+        "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/",
+    }
+    discovery = re.findall(r'<a\b(?=[^>]*data-cta-id="home-(?:project-[^"]+|private-quantities-budget|service-[^"]+)")[^>]*href="([^"]+)"', home)
+    if len(discovery) != len(expected_discovery) or set(discovery) != expected_discovery:
+        failures.append(f"home institutional discovery differs: {discovery}")
+    for href in discovery:
+        if not public_target_exists(href):
+            failures.append(f"home discovery target missing: {href!r}")
     if 'href="/servicos-obras-publicas/"' not in home:
         failures.append("public-works vertical lost its canonical entry")
 

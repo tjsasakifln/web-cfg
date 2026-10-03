@@ -716,7 +716,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         elif row.get("id") == "project_delivery":
             if (
                 row.get("index_state") != "service_hub_index"
-                or row.get("href") != "/servicos/#servico-projeto"
+                or row.get("href") != "/projetos/"
                 or not row.get("scope")
             ):
                 errors.append("project situation must resolve to the project service explanation")

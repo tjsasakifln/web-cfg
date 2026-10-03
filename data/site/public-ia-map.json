@@ -124,12 +124,17 @@
     "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada"
   },
   "quality_baseline": {
-    "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
-    "measured_at": "2026-08-29",
-    "indexable_routes": 75,
-    "orphan_count": 1,
-    "avg_click_depth": 1.8243243243243243,
-    "max_click_depth": 5
+    "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
+    "source_worktree": "uncommitted campaign candidate; file bytes recorded in navigation-depth evidence",
+    "measured_at": "2026-10-03T21:33:57+00:00",
+    "indexable_routes": 113,
+    "orphan_count": 0,
+    "avg_click_depth": 1.9469026548672566,
+    "max_click_depth": 3,
+    "authority": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+    "evidence": "docs/campaigns/evidence/2026-10-03/navigation-depth.json",
+    "actor": "codex_autonomous",
+    "reason": "75 historic indexable routes (74 reachable) expanded to 113 reachable; maximum depth improved from 5 to 3. Preserve prior measurement and zero-orphan/4-task gates; use current census as the regression baseline."
   },
   "hub_roles": [
     "solucao_comercial",
@@ -978,6 +983,16 @@
       "label": "ofertas B2G individuais no rodapé corporativo",
       "href": "/servicos-obras-publicas/",
       "reason": "A vertical Obras públicas e seu hub preservado cobrem a descoberta sem transformar o rodapé em catálogo."
+    }
+  ],
+  "quality_baseline_history": [
+    {
+      "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
+      "measured_at": "2026-08-29",
+      "indexable_routes": 75,
+      "orphan_count": 1,
+      "avg_click_depth": 1.8243243243243243,
+      "max_click_depth": 5
     }
   ]
 }

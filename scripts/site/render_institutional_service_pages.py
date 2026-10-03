@@ -85,7 +85,7 @@ def render_hero(page: dict, document: str) -> str:
 <a class="button button-primary button-lg" data-cta-id="{esc(page['route'])}-hero-proposal" data-cta-position="hero" {attr} href="#{esc(contact_id)}">{esc(hero['cta'])} <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="hero-secondary" data-cta-id="{esc(page['route'])}-hero-whatsapp" data-cta-position="hero" {attr} href="{esc(whatsapp)}" rel="noopener" target="_blank">WhatsApp (48) 98834-4559</a>
 </div>
-<p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Se preferir, use a <a data-cta-id="{esc(page['route'])}-hero-calm" {attr} href="/triagem-tecnica/">triagem para escrever com calma</a>.</p>
+<p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Você também pode <a data-cta-id="{esc(page['route'])}-hero-calm" {attr} href="/triagem-tecnica/">solicitar proposta pelos canais disponíveis</a>.</p>
 </div>
 <aside class="aside-note" aria-labelledby="service-signal-title">
 <h2 id="service-signal-title">{esc(hero['signal_title'])}</h2><dl>{signals}</dl>

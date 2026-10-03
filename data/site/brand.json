@@ -1,14 +1,14 @@
 {
   "schema_version": "1.1.0",
   "campaign": "CONFENGE-MV-04-CORPORATE-SHELL-20260905",
-  "updated_at": "2026-10-02",
+  "updated_at": "2026-10-03",
   "person": {
     "jobTitle": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
     "short": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
-    "long": "A CONFENGE desenvolve e coordena projetos de estruturas, instalações e infraestrutura, além de revisão, compatibilização, quantitativos, orçamento e análises técnicas. Para cada objeto, estrutura as disciplinas e os profissionais habilitados conforme o escopo, as interfaces e a responsabilidade técnica definidos antes da proposta.",
+    "long": "A CONFENGE desenvolve e coordena projetos de estruturas, instalações e infraestrutura, além de revisão, compatibilização, quantitativos, orçamento e análises técnicas. Organiza as disciplinas e os profissionais habilitados para o empreendimento, construindo a proposta a partir do objetivo e das informações disponíveis.",
     "tagline": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
     "org_description": "Engenharia, perícias e inteligência técnica: projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho para clientes privados e públicos. Obras públicas permanecem uma frente especializada.",
@@ -33,9 +33,9 @@
     "cta_secondary_wa": "Olá, CONFENGE. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
     "microcopy": "Estruturas · Instalações · Infraestrutura · Coordenação multidisciplinar",
     "meta_title": "CONFENGE | Projetos de estruturas, instalações e infraestrutura",
-    "meta_description": "Projetos coordenados de estruturas, instalações e infraestrutura para empreendimentos públicos e privados, com escopo, interfaces e responsabilidade técnica definidos antes da proposta.",
+    "meta_description": "Projetos de estruturas, instalações e infraestrutura para edificações e indústria, com coordenação multidisciplinar. Converse sobre o empreendimento e solicite proposta.",
     "og_title": "Projetamos estruturas, instalações e infraestrutura de forma coordenada.",
-    "og_description": "A CONFENGE estrutura e coordena as disciplinas e interfaces do empreendimento para transformar escopo em referência comum antes de orçar, contratar, aprovar ou executar."
+    "og_description": "A CONFENGE elabora projetos e coordena as disciplinas do empreendimento, da concepção à documentação para execução. Solicite proposta com o contexto disponível."
   },
   "journeys": [
     {
@@ -92,7 +92,7 @@
       "label": "Preciso completar, conferir ou compatibilizar um projeto",
       "summary": "Quando falta uma disciplina, o projeto recebido precisa ser conferido ou as disciplinas precisam conviver sem interferência antes de aprovar, contratar ou executar.",
       "deliverables": "Plantas, cálculos e memória da disciplina contratada; relatório do que está inconsistente e o que volta ao autor; registro das interferências com o ajuste combinado.",
-      "href": "/servicos/#servico-projeto",
+      "href": "/projetos/",
       "index_state": "service_hub_index",
       "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento têm situação e destino próprios."
     },

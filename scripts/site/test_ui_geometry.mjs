@@ -21,18 +21,16 @@ const SITE_ROOT = resolveSiteRoot(ROOT);
 const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
-// VALOR-IMEDIATO-20260914. A home tem uma linha por situacao do contrato
-// (brand.json = public-ia-map.json); a contagem deixa de ser o numero magico
-// 5 e o destino de cada linha e o do contrato (hub ou landing publicada).
-const SERVICE_SITUATIONS = (() => {
-  const brand = JSON.parse(readFileSync(join(ROOT, "data/site/brand.json"), "utf8")).service_situations;
-  const ia = JSON.parse(readFileSync(join(ROOT, "data/site/public-ia-map.json"), "utf8")).service_situations;
-  if (JSON.stringify(brand.map((r) => [r.id, r.href])) !== JSON.stringify(ia.map((r) => [r.id, r.href]))) {
-    throw new Error("brand.json and public-ia-map.json disagree on service situations");
-  }
-  return brand;
-})();
-const EXPECTED_SITUATIONS = SERVICE_SITUATIONS.length;
+// Current institutional discovery paths; legacy situation aliases remain URL
+// compatibility only. Geometry must protect the visible project/service links.
+const HOME_DISCOVERY_SELECTOR = ".home-capability-list a[href], .home-coordination a[href], .home-service-links a[href]";
+const HOME_DISCOVERY = [
+  "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/",
+  "/projetos/coordenacao-multidisciplinar/", "/quantitativos-orcamento-obras/",
+  "/revisao-tecnica-projetos-engenharia/", "/servicos/#areas",
+  "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/",
+];
+const EXPECTED_DISCOVERY = HOME_DISCOVERY.length;
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -587,122 +585,44 @@ async function main() {
     fail("journey_default_stage_is_neutral", e.message || e);
   }
 
-  // 9) no-JS essential content
+  // 9) Core engineering and contact survive without JavaScript.
   try {
     await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    const nojs = await page.evaluate(() => {
-      const heroDelivery = (document.querySelector(".hero-deliverable")?.textContent || "")
-        .replace(/\s+/g, " ")
-        .trim();
-      // Cada linha de situacao aponta, sem JS, para uma explicacao interna do
-      // servico (hub ou landing), nunca para um contato generico.
-      const situationDestinations = [...document.querySelectorAll(".situation-row .situation-action[href]")]
-        .map((el) => el.getAttribute("href") || "")
-        .filter((href) => href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/triagem-tecnica/"));
+    const nojs = await page.evaluate((selector) => {
+      const delivery = document.querySelector(".home-deliverables")?.textContent || "";
       return {
-        h1: !!document.querySelector("#hero-title"),
-        situations: document.querySelectorAll(".situation-row").length,
-        heroProjectPath: !!document.querySelector('.hero a[href="/projetos/"]'),
-        serviceDestinations: new Set(situationDestinations).size,
-        directChannels: document.querySelectorAll(
-          'a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]',
-        ).length,
-        deliveryExplained:
-          heroDelivery.length >= 120
-          && /(planta|projeto|memória|planilha|quantidade)/i.test(heroDelivery)
-          && /(orçamento|laudo|parecer|relatório|propostas)/i.test(heroDelivery),
+        h1: Boolean(document.querySelector("#hero-title")),
+        projectPath: Boolean(document.querySelector('.hero a[href="/projetos/"]')),
+        paths: [...document.querySelectorAll(selector)].map(a => a.getAttribute("href")),
+        channels: document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]').length,
+        deliveryExplained: /(desenhos|modelos|memórias|planilhas)/i.test(delivery) && /(execução|operação|contratação)/i.test(delivery),
       };
-    });
+    }, HOME_DISCOVERY_SELECTOR);
     await page.setJavaScriptEnabled(true);
-    if (
-      !nojs.h1
-      || nojs.situations !== EXPECTED_SITUATIONS
-      || !nojs.heroProjectPath
-      || nojs.serviceDestinations !== EXPECTED_SITUATIONS
-      || nojs.directChannels < 2
-      || !nojs.deliveryExplained
-    ) throw new Error(JSON.stringify(nojs));
+    if (!nojs.h1 || !nojs.projectPath || nojs.channels < 2 || !nojs.deliveryExplained || JSON.stringify(nojs.paths) !== JSON.stringify(HOME_DISCOVERY)) throw new Error(JSON.stringify(nojs));
     ok("essential_content_without_js");
-  } catch (e) {
-    await page.setJavaScriptEnabled(true);
-    fail("essential_content_without_js", e.message || e);
-  }
+  } catch (e) { await page.setJavaScriptEnabled(true); fail("essential_content_without_js", e.message || e); }
 
-  // 10) corporate situation rows stack on mobile.
+  // 10) Every discovery path remains visible and usable on narrow screens.
   try {
-    await page.setViewport({ width: 390, height: 844 });
-    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    const matrix = await page.evaluate(() => {
-      const paths = document.querySelectorAll(".situation-row");
-      const grid = document.querySelector(".situation-list");
-      return {
-        cardCount: paths.length,
-        gridDisplay: grid ? getComputedStyle(grid).display : "missing",
-        labels: [...paths].map((p) => (p.querySelector("h3")?.textContent || "").trim()).filter(Boolean),
-      };
-    });
-    if (matrix.cardCount !== EXPECTED_SITUATIONS) throw new Error(`expected ${EXPECTED_SITUATIONS} situation paths, got ${matrix.cardCount}`);
-    if (matrix.gridDisplay === "none") throw new Error("situation paths hidden on mobile");
-    // Os rotulos sao os do contrato de situacoes, nao literais duplicados.
-    const expected = SERVICE_SITUATIONS.map((row) => row.label);
-    for (const label of expected) {
-      if (!matrix.labels.includes(label)) throw new Error(`missing door ${label}: ${JSON.stringify(matrix.labels)}`);
-    }
-    ok("matrix_mobile_stacked_records");
-  } catch (e) {
-    fail("matrix_mobile_stacked_records", e.message || e);
-  }
-
-  // 10b) the dark public-works row keeps its lateral breathing room at every width.
-  // Regression 2026-09-19: `.situation-row{padding:1rem 0 1.15rem}` (mobile block) had the
-  // same specificity as `.area--b2g{padding:1.5rem clamp(...)}` and was declared later, so
-  // ≤699px the text of #situacao-obras-publicas touched the edge of its navy background.
-  // Measured on computed style AND on boxes (overflow:clip could mask a clipped child).
-  try {
-    const widths = [320, 390, 430, 699, 700, 900, 1100, 1440];
-    const rows = [];
-    for (const width of widths) {
+    for (const width of [320, 390, 430, 699, 700, 900, 1100, 1440]) {
       await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
       await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-      await page.evaluate(() => document.getElementById("situacao-obras-publicas")?.scrollIntoView({ block: "center" }));
-      const m = await page.evaluate(() => {
-        const row = document.getElementById("situacao-obras-publicas");
-        if (!row) return { missing: true };
-        const cs = getComputedStyle(row);
-        const r = row.getBoundingClientRect();
-        const kids = [...row.children].map((el) => {
-          const b = el.getBoundingClientRect();
-          return { tag: el.tagName, cls: el.className, left: b.left, right: b.right, width: b.width };
-        });
-        const plain = document.querySelector(".situation-row:not(.area--b2g)");
-        return {
-          padL: parseFloat(cs.paddingLeft), padR: parseFloat(cs.paddingRight),
-          padT: parseFloat(cs.paddingTop), padB: parseFloat(cs.paddingBottom),
-          bg: cs.backgroundColor, rowLeft: r.left, rowRight: r.right, rowWidth: r.width,
-          minChildLeft: Math.min(...kids.map((k) => k.left)), maxChildRight: Math.max(...kids.map((k) => k.right)),
-          docOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
-          plainPadL: plain ? parseFloat(getComputedStyle(plain).paddingLeft) : null,
-        };
+      const rows = await page.evaluate((selector) => [...document.querySelectorAll(selector)].map(a => {
+        const r = a.getBoundingClientRect(), cs = getComputedStyle(a);
+        return { href: a.getAttribute("href"), label: a.textContent.trim(), width: r.width, height: r.height, left: r.left, right: r.right, visible: cs.display !== "none" && cs.visibility !== "hidden" };
+      }), HOME_DISCOVERY_SELECTOR);
+      if (JSON.stringify(rows.map(r => r.href)) !== JSON.stringify(HOME_DISCOVERY)) throw new Error(`discovery routes at ${width}: ${JSON.stringify(rows)}`);
+      for (const row of rows) if (!row.visible || !row.label || row.width < 44 || row.height < 43.5 || row.left < -0.5 || row.right > width + 0.5) throw new Error(`unusable discovery at ${width}: ${JSON.stringify(row)}`);
+      const panel = await page.evaluate(() => {
+        const container = document.querySelector(".home-proposal .container"), r = container.getBoundingClientRect(), cs = getComputedStyle(container);
+        return { left: r.left, right: r.right, padL: parseFloat(cs.paddingLeft), padR: parseFloat(cs.paddingRight), children: [...container.children].map(el => ({ left: el.getBoundingClientRect().left, right: el.getBoundingClientRect().right })) };
       });
-      if (m.missing) throw new Error("#situacao-obras-publicas missing");
-      rows.push({ width, ...m });
-      // ≥16px of lateral padding (clamp(1rem,2.5vw,1.75rem) never goes below 1rem) at every width.
-      if (!(m.padL >= 15.5 && m.padR >= 15.5)) throw new Error(`lateral padding lost at ${width}px: L=${m.padL} R=${m.padR}`);
-      if (!(m.padT >= 15.5 && m.padB >= 15.5)) throw new Error(`vertical padding lost at ${width}px: T=${m.padT} B=${m.padB}`);
-      // Children stay inside the padded box: text never touches the navy edge.
-      if (m.minChildLeft < m.rowLeft + m.padL - 0.5) throw new Error(`child touches left edge at ${width}px: child=${m.minChildLeft} row=${m.rowLeft} pad=${m.padL}`);
-      if (m.maxChildRight > m.rowRight - m.padR + 0.5) throw new Error(`child spills past right padding at ${width}px: child=${m.maxChildRight} row=${m.rowRight} pad=${m.padR}`);
-      if (m.docOverflow) throw new Error(`horizontal page overflow at ${width}px`);
-      if (m.rowRight > width + 0.5) throw new Error(`row wider than viewport at ${width}px: right=${m.rowRight}`);
-      // The plain rows keep the mobile rhythm (no lateral padding) — the fix is scoped to the dark row.
-      if (width <= 699 && m.plainPadL !== 0) throw new Error(`plain situation row gained lateral padding at ${width}px: ${m.plainPadL}`);
+      if (panel.left + panel.padL < 15.5 || width - panel.right + panel.padR < 15.5 || panel.children.some(r => r.left < panel.left + panel.padL - 1 || r.right > panel.right - panel.padR + 1)) throw new Error(`proposal panel breathing room at ${width}: ${JSON.stringify(panel)}`);
     }
-    console.log("   ", rows.map((r) => `${r.width}:${r.padL}/${r.padR}`).join(" "));
-    ok("b2g_situation_row_keeps_lateral_padding");
-  } catch (e) {
-    fail("b2g_situation_row_keeps_lateral_padding", e.message || e);
-  }
+    ok("institutional_discovery_mobile_geometry_and_panel_padding");
+  } catch (e) { fail("institutional_discovery_mobile_geometry_and_panel_padding", e.message || e); }
 
   // 11) form validation — empty multi-step form is invalid
   try {
@@ -746,12 +666,8 @@ async function main() {
     const hit = leaks.filter((p) => lower.includes(p));
     if (hit.length) throw new Error(hit.join(", "));
     if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
-    // VALOR-IMEDIATO-20260914: o seletor de situacoes tem eyebrow e titulo
-    // que convidam o visitante a se reconhecer numa situacao (propriedade), em
-    // vez das duas frases literais da versao anterior.
-    const chooser = html.match(/<section\b[^>]*id="situacoes"[\s\S]*?<\/header>/i)?.[0] || "";
-    if (!/<p class="eyebrow">[^<]*(?:situa[çc][ãa]o|precisa)[^<]*<\/p>/i.test(chooser)) throw new Error("missing situation chooser eyebrow");
-    if (!/<h2 id="situations-title">[^<]*(?:situa[çc][õo]es|reconhece|parece com a sua)[^<]*<\/h2>/i.test(chooser)) throw new Error("missing situation chooser title");
+    const opening = html.match(/<section\b[^>]*id="competencias"[\s\S]*?<\/header>/i)?.[0] || "";
+    if (!/Competências de projeto/i.test(opening) || !/<h2\b[^>]*id="competencias-title"/i.test(opening)) throw new Error("missing institutional discipline hierarchy");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
@@ -770,16 +686,16 @@ async function main() {
       const rep = await page.evaluate(() => {
         const overflow =
           document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
-        const title = document.querySelector("#situations-title");
-        const firstCard = document.querySelector(".situation-row");
-        const firstCta = document.querySelector(".situation-row .situation-action");
+        const title = document.querySelector("#competencias-title");
+        const firstCard = document.querySelector(".home-capability-list article");
+        const firstCta = document.querySelector(".home-capability-list__label a");
         const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
         const header = document.querySelector(".site-header");
         const titleLines = title
           ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
           : 0;
         const titleFs = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
-        const bodyP = document.querySelector(".situation-row p");
+        const bodyP = document.querySelector(".home-capability-list article p");
         const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
         const ctaBox = firstCta ? firstCta.getBoundingClientRect() : null;
         const floatBox = floatEl ? floatEl.getBoundingClientRect() : null;
@@ -791,7 +707,7 @@ async function main() {
           const ctaArea = Math.max(1, ctaBox.width * ctaBox.height);
           floatObscuresCta = overlapArea / ctaArea > 0.35;
         }
-        const container = document.querySelector(".corporate-situations .container") || document.querySelector(".container");
+        const container = document.querySelector(".home-capabilities .container") || document.querySelector(".container");
         const padLeft = container ? container.getBoundingClientRect().left : 0;
         return {
           overflow,
@@ -799,7 +715,7 @@ async function main() {
           titleFs,
           bodyFs,
           headerH: header ? header.getBoundingClientRect().height : 0,
-          cardCount: document.querySelectorAll(".situation-row").length,
+          cardCount: document.querySelectorAll(".home-capability-list article").length,
           ctaW: ctaBox?.width || 0,
           ctaH: ctaBox?.height || 0,
           ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,
@@ -810,7 +726,7 @@ async function main() {
       });
       reports.push({ w, h, ...rep });
       if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
-      if (rep.cardCount !== EXPECTED_SITUATIONS) throw new Error(`${w}: expected ${EXPECTED_SITUATIONS} situation rows, saw ${rep.cardCount}`);
+      if (rep.cardCount !== 3) throw new Error(`${w}: expected 3 discipline rows, saw ${rep.cardCount}`);
       if (rep.titleLines > 4) throw new Error(`${w}: situations title ${rep.titleLines} lines > 4`);
       if (rep.titleFs > 36) throw new Error(`${w}: situations title font ${rep.titleFs}px too large`);
       if (rep.bodyFs < 16 || rep.bodyFs > 20) throw new Error(`${w}: body font ${rep.bodyFs}px outside 16–20`);
@@ -825,98 +741,35 @@ async function main() {
     fail("journeys_mobile_hierarchy", e.message || e);
   }
 
-  // 12c) Each situation must land on an explanation of the promised service;
-  // the destination, not a generic form, owns the path to contextual contact.
-  //
-  // VALOR-IMEDIATO-20260914. A versao anterior exigia que as quatro primeiras
-  // situacoes apontassem para /servicos/#servico-* e que a quinta fosse obras
-  // publicas: obrigava quem chega com infiltracao, disputa ou exigencia de SST
-  // a passar pelo hub mesmo com a landing publicada. A propriedade legitima:
-  // cada situacao do contrato tem destino proprio (hub ou landing) que
-  // explica o trabalho e a entrega e oferece contato contextual; projeto
-  // continua alcancando quantitativos; obra publica mantem o hub canonico.
+  // 12c) Discipline/service discovery leads to substantive explanation and contact.
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
-    const routes = await page.evaluate(() =>
-      [...document.querySelectorAll(".situation-row .situation-action")].map((el) => ({
-        id: el.closest(".situation-row")?.id || "",
-        label: (el.textContent || "").replace(/\s+/g, " ").trim(),
-        href: el.getAttribute("href") || "",
-      })),
-    );
-    if (routes.length !== EXPECTED_SITUATIONS) throw new Error(`expected ${EXPECTED_SITUATIONS} situation routes: ${JSON.stringify(routes)}`);
-    const contractHrefs = SERVICE_SITUATIONS.map((row) => row.href);
-    if (JSON.stringify(routes.map((r) => r.href)) !== JSON.stringify(contractHrefs)) {
-      throw new Error(`situation routes diverge from the contract: ${JSON.stringify(routes.map((r) => r.href))} != ${JSON.stringify(contractHrefs)}`);
-    }
-    if (new Set(routes.map((item) => item.href)).size !== routes.length) {
-      throw new Error(`distinct needs collapse to one destination: ${JSON.stringify(routes)}`);
-    }
-    const projectRoute = routes.find((item) => item.id === "situacao-projeto");
-    if (!projectRoute || !projectRoute.href.startsWith("/servicos/#servico-projeto")) {
-      throw new Error(`situacao de projeto sem destino de projeto: ${JSON.stringify(projectRoute)}`);
-    }
-    const publicRoute = routes.find((item) => item.id === "situacao-obras-publicas");
-    if (!publicRoute || publicRoute.href !== "/servicos-obras-publicas/") {
-      throw new Error(`B2G route lost its canonical hub: ${JSON.stringify(publicRoute)}`);
-    }
-    for (const item of routes) {
-      const [pathname, fragment] = item.href.split("#");
-      await page.goto(`${BASE}${pathname}`, { waitUntil: "networkidle0" });
-      const destination = await page.evaluate((id) => {
-        const scope = id ? document.getElementById(id) : document.querySelector("main");
-        const text = (scope?.textContent || "").replace(/\s+/g, " ").trim();
-        const contact = 'a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"], a[href^="mailto:"]';
-        return {
-          exists: Boolean(scope),
-          substantial: id ? text.length >= 300 : text.length >= 1800,
-          explainsWorkAndDelivery: id
-            ? /o que assumimos/i.test(text) && /passa a ter/i.test(text)
-            : /(assumimos|levantamos|conferimos|elaboramos|inspecionamos|organizamos|diagnosticamos|avaliamos|lemos|analisamos)/i.test(text) && /(recebe|passa a ter|entrega)/i.test(text),
-          hasContextualContact: Boolean(scope?.querySelector(contact)),
-          reachesQuantities: Boolean(
-            scope?.querySelector('a[href^="/quantitativos-orcamento-obras/"]'),
-          ),
-        };
-      }, fragment || "");
-      if (
-        !destination.exists
-        || !destination.substantial
-        || !destination.explainsWorkAndDelivery
-        || !destination.hasContextualContact
-      ) {
-        throw new Error(`${item.href}: incomplete promise → destination → contact chain ${JSON.stringify(destination)}`);
-      }
-      if (fragment === "servico-projeto" && !destination.reachesQuantities) {
-        throw new Error(`${item.href}: project path lost the distinct quantities destination`);
-      }
+    const routes = await page.evaluate(selector => [...document.querySelectorAll(selector)].map(a => a.getAttribute("href")), HOME_DISCOVERY_SELECTOR);
+    if (JSON.stringify(routes) !== JSON.stringify(HOME_DISCOVERY) || new Set(routes).size !== EXPECTED_DISCOVERY) throw new Error(`discovery contract diverged: ${JSON.stringify(routes)}`);
+    for (const href of routes) {
+      const response = await page.goto(`${BASE}${href}`, { waitUntil: "networkidle0" });
+      const destination = await page.evaluate(() => {
+        const main = document.querySelector("main"), text = main?.innerText || "";
+        return { substantial: text.length >= 1800, work: /elabora|concepção|dimensionamento|coordena|inspeciona|analisa|levantamento|quantitativo|documentação/i.test(text), delivery: /entrega|documentos|desenhos|planilha|projeto|relatório/i.test(text), contact: Boolean(main?.querySelector('a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"], a[href^="mailto:"], form')) };
+      });
+      if (response?.status() !== 200 || !Object.values(destination).every(Boolean)) throw new Error(`${href}: incomplete explanation/contact ${JSON.stringify(destination)}`);
     }
     ok("journey_cta_binds_form");
-  } catch (e) {
-    fail("journey_cta_binds_form", e.message || e);
-  }
+  } catch (e) { fail("journey_cta_binds_form", e.message || e); }
 
-  // 13) The primary CTA opens triage that proves the context, available
-  // channels and the next step before any proposal is implied.
+  // 13) The primary action reaches the working proposal form with minimal input.
   try {
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    const href = await page.$eval(".hero .button-primary", (el) => el.getAttribute("href"));
-    if (href !== "/triagem-tecnica/") throw new Error(`hero CTA href ${href}`);
-    await page.goto(`${BASE}${href}`, { waitUntil: "networkidle0" });
-    const destination = await page.evaluate(() => ({
-      h1: Boolean(document.querySelector("main h1")),
-      context: /o que precisa decidir|produzir|revisar|resolver/i.test(document.querySelector("main")?.innerText || ""),
-      channels: Boolean(document.querySelector('main a[href^="https://wa.me/"], main a[href^="mailto:"], main a[href^="tel:"]')),
-      nextStep: /o que acontece depois|dados mínimos|proposta/i.test(document.querySelector("main")?.innerText || ""),
-    }));
-    if (!destination.h1 || !destination.context || !destination.channels || !destination.nextStep) {
-      throw new Error(`hero triage lacks context, channels, or next step: ${JSON.stringify(destination)}`);
-    }
-    ok("primary_cta_opens_contextual_triage");
-  } catch (e) {
-    fail("primary_cta_opens_contextual_triage", e.message || e);
-  }
+    const href = await page.$eval(".hero .button-primary", a => a.getAttribute("href"));
+    if (href !== "#contato") throw new Error(`hero CTA href ${href}`);
+    const destination = await page.evaluate(() => {
+      const contact = document.querySelector("#contato"), form = contact?.querySelector("#formulario-contato");
+      return { heading: /proposta/i.test(contact?.querySelector("h2")?.textContent || ""), form: Boolean(form && form.getAttribute("method") === "POST" && form.getAttribute("action") === "/obrigado"), context: Boolean(form?.querySelector('select[name="estagio"]')), channel: Boolean(contact?.querySelector('a[href^="https://wa.me/"], a[href^="mailto:"]')), noUpload: !form?.querySelector('input[type="file"]') };
+    });
+    if (!Object.values(destination).every(Boolean)) throw new Error(JSON.stringify(destination));
+    ok("primary_cta_reaches_proposal_form");
+  } catch (e) { fail("primary_cta_reaches_proposal_form", e.message || e); }
 
   // 13b) A real same-page discovery link must reveal its promised situation
   // under the sticky header. This keeps fragment navigation covered without
@@ -937,11 +790,11 @@ async function main() {
       });
       await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
       await page.evaluate(() => window.scrollTo(0, 0));
-      await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
+      await page.evaluate(() => document.querySelector('.home-proposal a[href="#contato"]').click());
       await new Promise((r) => setTimeout(r, 2600));
       const rep = await page.evaluate(() => {
-        const target = document.querySelector("#situacao-projeto");
-        const title = target?.querySelector("h3");
+        const target = document.querySelector("#contato");
+        const title = target?.querySelector("h2");
         const header = document.querySelector(".site-header");
         const box = (el) => {
           const r = el.getBoundingClientRect();
@@ -956,7 +809,7 @@ async function main() {
         };
       });
       const visible = (b) => b && b.top >= rep.headerBottom - 1 && b.bottom <= rep.viewport;
-      if (rep.hash !== "#situacao-projeto") {
+      if (rep.hash !== "#contato") {
         throw new Error(`${size.w}px: fragment lost (${rep.hash || "empty"})`);
       }
       if (!visible(rep.title)) {
@@ -976,7 +829,7 @@ async function main() {
     await page.setViewport({ width: 390, height: 844, isMobile: false, hasTouch: false });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
+    await page.evaluate(() => document.querySelector('.home-proposal a[href="#contato"]').click());
     await new Promise((r) => setTimeout(r, 50));
     await page.mouse.move(195, 422);
     await page.mouse.wheel({ deltaY: -1200 });
@@ -984,8 +837,8 @@ async function main() {
     const manualY = await page.evaluate(() => window.scrollY);
     await new Promise((r) => setTimeout(r, 1800));
     const afterManual = await page.evaluate(() => {
-      const target = document.querySelector("#situacao-projeto");
-      const title = target.querySelector("h3");
+      const target = document.querySelector("#contato");
+      const title = target.querySelector("h2");
       const offset = Math.max(
         parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
         parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
@@ -1017,14 +870,14 @@ async function main() {
     await page.evaluate(async () => {
       window.dataLayer = [];
       window.scrollTo(0, 0);
-      document.querySelector('footer a[href="/#situacao-projeto"]').click();
+      document.querySelector('.home-proposal a[href="#contato"]').click();
       await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-      window.location.hash = "#triagem-tecnica";
+      window.location.hash = "#competencias";
     });
     await new Promise((r) => setTimeout(r, 2600));
     const competing = await page.evaluate(() => {
-      const target = document.querySelector("#triagem-tecnica");
-      const title = document.querySelector("#triage-title");
+      const target = document.querySelector("#competencias");
+      const title = document.querySelector("#competencias-title");
       const header = document.querySelector(".site-header");
       const targetOffset = Math.max(
         parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
@@ -1040,11 +893,11 @@ async function main() {
         headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
         viewport: window.innerHeight,
         staleFirstArrival: (window.dataLayer || []).some(
-          (event) => event.event === "cta_view" && event.cta_id === "situacao-projeto"
+          (event) => event.event === "cta_view" && event.cta_id === "contato"
         ),
       };
     });
-    if (competing.hash !== "#triagem-tecnica") {
+    if (competing.hash !== "#competencias") {
       throw new Error(`latest fragment lost: ${JSON.stringify(competing)}`);
     }
     if (Math.abs(competing.y - competing.targetY) > 3) {
@@ -1073,14 +926,14 @@ async function main() {
       html.scrollTop = 0;
       html.style.scrollBehavior = prev;
     });
-    await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
-    await page.waitForFunction(() => window.location.hash === "#situacao-projeto");
+    await page.evaluate(() => document.querySelector('.home-proposal a[href="#contato"]').click());
+    await page.waitForFunction(() => window.location.hash === "#contato");
     await page.evaluate(() => window.history.back());
     await page.waitForFunction(() => window.location.hash === "");
     await new Promise((r) => setTimeout(r, 1800));
     const backed = await page.evaluate(() => {
-      const target = document.querySelector("#situacao-projeto");
-      const title = target.querySelector("h3");
+      const target = document.querySelector("#contato");
+      const title = target.querySelector("h2");
       const offset = Math.max(
         parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
         parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
@@ -1093,7 +946,7 @@ async function main() {
         targetY,
         titleVisible: titleBox.top < window.innerHeight && titleBox.bottom > 0,
         staleFirstArrival: (window.dataLayer || []).some(
-          (event) => event.event === "cta_view" && event.cta_id === "situacao-projeto"
+          (event) => event.event === "cta_view" && event.cta_id === "contato"
         ),
       };
     });
@@ -1370,7 +1223,7 @@ async function main() {
       );
       if (path.includes("obrigado")) {
         const okLabel = labels.some((l) =>
-          /whatsapp|voltar|falar com a confenge|diagnosticar|edital|documentos|agilizar|canal seguro/i.test(l)
+          /whatsapp|voltar|falar com a confenge|diagnosticar|edital|documentos|agilizar|canal seguro|solicitar proposta|conversar sobre a proposta/i.test(l)
         );
         if (!okLabel) throw new Error(`obrigado CTAs: ${labels.join(" | ")}`);
         const hasSuccess = await page.$('[data-lead-success="1"]');
@@ -1384,7 +1237,7 @@ async function main() {
         // destino tem de coincidir, entao "descrever a situacao" entra na
         // familia. A propriedade -- a pagina de quem assina oferece um caminho
         // de atendimento nomeado -- continua exigida.
-        if (!labels.some((l) => /diagnosticar|solicitar diagnóstico|descrever a situação|explicar minha demanda|falar com a confenge|contato/i.test(l))) {
+        if (!labels.some((l) => /diagnosticar|solicitar diagnóstico|descrever a situação|explicar minha demanda|falar com a confenge|contato|solicitar proposta|conversar sobre o projeto/i.test(l))) {
           throw new Error(`specialist missing primary family: ${labels.join(" | ")}`);
         }
         if (labels.some((l) => /analisar meu cenário|apresentar uma demanda/i.test(l))) {
@@ -1397,26 +1250,15 @@ async function main() {
     fail("thankyou_specialist_cta_family", e.message || e);
   }
 
-  // 22) all five situation paths are usable on mobile without JavaScript.
+  // 22) All institutional discovery paths are usable without JavaScript.
   try {
-    await page.setViewport({ width: 390, height: 844 });
-    await page.setJavaScriptEnabled(false);
+    await page.setViewport({ width: 390, height: 844 }); await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    const journey = await page.evaluate(() => {
-      const phases = [...document.querySelectorAll(".situation-row")];
-      return {
-        count: phases.length,
-        allVisible: phases.every((p) => getComputedStyle(p).display !== "none"),
-        actions: document.querySelectorAll(".situation-row .situation-action").length,
-      };
-    });
+    const rows = await page.evaluate(selector => [...document.querySelectorAll(selector)].map(a => { const r = a.getBoundingClientRect(); return { href: a.getAttribute("href"), visible: r.width > 0 && r.height >= 43.5 && getComputedStyle(a).visibility !== "hidden" }; }), HOME_DISCOVERY_SELECTOR);
     await page.setJavaScriptEnabled(true);
-    if (journey.count !== EXPECTED_SITUATIONS || journey.actions !== EXPECTED_SITUATIONS || !journey.allVisible) throw new Error(JSON.stringify(journey));
-    ok("journey_mobile_four_phases_visible");
-  } catch (e) {
-    await page.setJavaScriptEnabled(true);
-    fail("journey_mobile_four_phases_visible", e.message || e);
-  }
+    if (JSON.stringify(rows.map(r => r.href)) !== JSON.stringify(HOME_DISCOVERY) || rows.some(r => !r.visible)) throw new Error(JSON.stringify(rows));
+    ok("institutional_discovery_without_js");
+  } catch (e) { await page.setJavaScriptEnabled(true); fail("institutional_discovery_without_js", e.message || e); }
 
   // 23) images with dimensions (CLS guard) on home
   try {

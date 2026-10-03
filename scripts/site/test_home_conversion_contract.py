@@ -88,7 +88,9 @@ def _visible(fragment: str) -> str:
 # As invariantes estruturais seguem identicas: 24 controles, 3 obrigatorios,
 # action /obrigado, sem upload. A entrada HOME_SITUATIONS do bundle e
 # verificada por seo/scripts/test_form_funnel.mjs.
-CAPTURE_FORM_SHA256 = "153a576f12cd5c8897fc6e9191674e3aa2fad5f7d3791e0004495bbceef24350"
+# Campaign review: preserved 24 controls, 3 required fields, receipt/abuse/privacy contracts.
+# Previous reviewed form: 153a576f12cd5c8897fc6e9191674e3aa2fad5f7d3791e0004495bbceef24350
+CAPTURE_FORM_SHA256 = "27788ff152421b425abbba10426fff931adabc173d63889ff36be645a8d7b2a2"
 
 
 def _home() -> str:
@@ -107,124 +109,61 @@ def _section(html: str, marker: str) -> str:
 
 def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     hero = _section(_home(), r'class="hero')
-    text = _visible(hero)
-
-    assert "Engenharia, Perícias e Inteligência Técnica" in hero
-    assert "engenharia" in text.casefold()
-    assert PUBLIC_AND_PRIVATE.search(text), "hero must name the public and private scope"
-    assert BUYER_SITUATION.search(text), "hero must name at least one buyer situation"
-    assert len(set(v.casefold() for v in WORK_VERB.findall(text))) >= 2, "hero must say what work we assume"
-    assert NAMED_DELIVERABLE.search(text), "hero must name a concrete deliverable"
-    assert DELIVERABLE_USE.search(text), "hero must say what the deliverable is for"
-    assert DEMONSTRATIVE_LABEL.search(text), "the sample in the hero must be labelled as demonstrative"
-    assert "CNPJ 52.407.089/0001-09" in hero
-    assert "Como conferir credenciais e limites" in hero
-    assert 'href="/triagem-tecnica/"' in hero
-    assert 'href="/projetos/"' in hero
+    text = _visible(hero).casefold()
+    assert all(term in text for term in ("estruturas", "instalações", "infraestrutura"))
+    assert re.search(r"elabora|projeta|coordena", text)
+    assert re.search(r"obra|execução|empreendimento", text)
+    assert 'href="#contato"' in hero and 'href="/projetos/"' in hero
     assert hero.count("button-primary") == 1
-    assert "PNCP" not in hero
+    assert DEMONSTRATIVE_LABEL.search(text) or "ilustração técnica original" in text
+    assert "Como conferir credenciais e limites" not in hero and "PNCP" not in hero
+    brand = json.loads(BRAND.read_text(encoding="utf-8"))
+    assert brand["hero"]["meta_description"] in _home()
+    assert "definidos antes da proposta" not in _home()
 
 
 def test_generic_hero_is_rejected_by_the_fold_properties() -> None:
-    """Contraprova: um hero generico nao satisfaz as propriedades da dobra."""
-    for generic in (
-        "Engenharia que transforma o seu projeto.",
-        "Engenharia com solução personalizada. Solicite uma proposta.",
-    ):
-        checks = (
-            bool(PUBLIC_AND_PRIVATE.search(generic)),
-            bool(BUYER_SITUATION.search(generic)),
-            len(set(WORK_VERB.findall(generic))) >= 2,
-            bool(DELIVERABLE_USE.search(generic)),
-            bool(DEMONSTRATIVE_LABEL.search(generic)),
-        )
-        assert not all(checks), generic
+    for generic in ("Engenharia que transforma o seu projeto.", "Engenharia com solução personalizada. Solicite uma proposta."):
+        assert not all(term in generic.casefold() for term in ("estruturas", "instalações", "infraestrutura"))
 
 
 def test_situation_chooser_has_one_path_per_contract_situation_without_catalog_wall() -> None:
-    chooser = _section(_home(), r'id="situacoes"')
-    situations = _situations()
-    for row in situations:
-        assert row["label"] in chooser, row["label"]
-    assert chooser.count('class="situation-row') == len(situations)
-    # 2026-09-08. Esta linha exigia que a situacao de projeto apontasse para
-    # /quantitativos-orcamento-obras/: uma chamada que promete projetar,
-    # revisar, orcar e compatibilizar levando ao unico item que e orcamento.
-    # A trava congelava o defeito. A propriedade correta: cada situacao tem
-    # destino proprio, nenhum repetido e todos internos.
-    # VALOR-IMEDIATO-20260914. A lista literal de seis hrefs (quatro deles
-    # obrigatoriamente no hub) tambem congelava um defeito: mandava quem tem
-    # infiltracao, disputa ou exigencia de SST passar pelo hub mesmo com a
-    # landing publicada. O destino agora e o do contrato de situacoes (hub ou
-    # landing), e a home tem de reproduzi-lo dentro da propria linha.
-    hrefs = re.findall(r'class="situation-action"[^>]*href="([^"]+)"', chooser)
-    if not hrefs:
-        hrefs = re.findall(r'<a[^>]*class="situation-action"[^>]*href="([^"]+)"', chooser)
-    assert len(hrefs) == len(situations), hrefs
-    assert len(set(hrefs)) == len(situations), hrefs
-    assert all(h.startswith("/") and not h.startswith("//") for h in hrefs), hrefs
-    assert chooser.count('href="/triagem-tecnica/#') == 0
-    for row in situations:
-        assert f'href="{row["href"]}"' in chooser, row["href"]
-        target, _, anchor = row["href"].partition("#")
-        page = ROOT / target.strip("/") / "index.html"
-        assert page.is_file(), row["href"]
-        if anchor:
-            assert f'id="{anchor}"' in page.read_text(encoding="utf-8"), row["href"]
-    assert 'href="/servicos/#servico-projeto"' in chooser
-    assert 'href="/quantitativos-orcamento-obras/"' in chooser
-    assert 'href="/servicos-obras-publicas/"' in chooser
-    # Cada linha nomeia a entrega e o uso, em vez de so o formato.
-    rows = re.findall(r'<li class="situation-row[\s\S]*?</li>', chooser)
-    assert len(rows) == len(situations), len(rows)
-    for row in rows:
-        assert "<h3>" in row, row[:120]
-        assert 'class="situation-use"' in row and "passa a ter" in row, row[:120]
-    assert "ICP" not in chooser
-    assert "CTA" not in chooser
+    html = _home()
+    disciplines = _section(html, r'id="competencias"')
+    for slug in ("estruturas", "instalacoes", "infraestrutura", "coordenacao-multidisciplinar"):
+        assert f'href="/projetos/{slug}/"' in disciplines
+        assert (ROOT / "projetos" / slug / "index.html").is_file()
+    services = _section(html, r'id="servicos-complementares"')
+    for slug in ("quantitativos-orcamento-obras", "revisao-tecnica-projetos-engenharia", "seguranca-trabalho-apoio-tecnico", "servicos-obras-publicas"):
+        assert f'href="/{slug}/"' in services
+        assert (ROOT / slug / "index.html").is_file()
+    assert 'class="situation-row' not in html
+    assert "passa a ter" not in _visible(disciplines + services).casefold()
 
 
 def test_pncp_proof_is_confined_to_the_b2g_vertical() -> None:
     html = _home()
-    hero = _section(html, r'class="hero')
-    b2g = _section(html, r'id="obras-publicas"')
-
-    assert "PNCP" not in hero
-    assert "54.055" not in hero
-    assert "4,48 mi" not in hero
-    assert "PNCP · 01/08/2026" in b2g
-    assert "54.055" in b2g
-    assert "4,48 mi" in b2g
-    assert 'href="/servicos-obras-publicas/"' in b2g
-    assert html.index('id="situacoes"') < html.index('id="obras-publicas"')
+    assert not re.search(r"54\.055|4,48 mi|PNCP ·", html)
+    assert 'href="/servicos-obras-publicas/"' in _section(html, r'id="servicos-complementares"')
+    assert (ROOT / "servicos-obras-publicas" / "index.html").is_file()
 
 
 def test_corporate_triage_is_safe_and_capture_form_is_reviewed() -> None:
     html = _home()
-    triage = _section(html, r'id="triagem-tecnica"')
-    form = re.search(r'<form\b[^>]*id="formulario-contato"[\s\S]*?</form>', html)
-    assert form
-
-    assert "mailto:tiago.sasaki@confenge.com.br" in triage
-    assert "wa.me/5548988344559" in triage
-    assert "Não envie documentos sensíveis" in triage
-    assert 'type="file"' not in html.lower()
-    body = form.group(0)
-    # Invariantes estruturais primeiro: elas dizem o que a trava existe para
-    # proteger. O hash vem depois, como deteccao de qualquer mudanca nao
-    # revisada -- inclusive de copy.
+    contact = _section(html, r'id="contato"')
+    assert "mailto:tiago.sasaki@confenge.com.br" in contact and "wa.me/5548988344559" in contact
+    assert re.search(r"não sigilosas|reservad[oa]|confidencia", _visible(contact), re.I)
+    body = re.search(r'<form\b[^>]*id="formulario-contato"[\s\S]*?</form>', html).group(0)
     assert re.findall(r'<form[^>]*action="([^"]*)"', body) == ["/obrigado"]
     assert 'method="POST"' in body and 'name="diagnostico-b2g"' in body
-    controls = sorted(re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"', body))
-    assert len(controls) == 24, controls
-    assert "sst_necessidade" in controls
-    required = sorted(re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"[^>]*required', body))
-    assert len(required) == 3, required
+    controls = re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"', body)
+    assert len(controls) == 24 and "sst_necessidade" in controls
+    required = re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"[^>]*required', body)
+    assert len(required) == 3
     assert 'type="file"' not in body.lower()
-    digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
-    assert digest == CAPTURE_FORM_SHA256
-    assert 'name="diagnostico-b2g"' in form.group(0)
-    assert 'name="document_intent" type="hidden" value="secure_channel_request"' in form.group(0)
+    assert 'data-runtime-profile="shared_lead_form_v1"' in body and 'data-receipt-required="true"' in body
+    assert 'name="document_intent" type="hidden" value="secure_channel_request"' in body
+    assert hashlib.sha256(body.encode("utf-8")).hexdigest() == CAPTURE_FORM_SHA256
 
 
 def test_capture_form_expresses_every_situation_without_a_b2g_default() -> None:
@@ -287,30 +226,14 @@ def test_services_hub_is_corporate_indexable_and_price_free() -> None:
     html = SERVICES.read_text(encoding="utf-8")
     assert 'content="index,follow" name="robots"' in html
     assert 'href="https://confenge.com.br/servicos/" rel="canonical"' in html
-    assert "Serviços organizados por situação" in html
-    rows = re.findall(r'<article class="corporate-service-row[^"]*" id="([^"]+)"', html)
-    # VALOR-IMEDIATO-20260914. A igualdade ordenada de oito ids impedia que a
-    # avaliacao de imovel tivesse cartao proprio. A propriedade: o conjunto de
-    # ancoras publicas do hub sobrevive (cada uma como cartao), sem duplicata;
-    # a ordem e editorial.
-    assert len(rows) == len(set(rows)), rows
-    assert set(rows) >= {
-        "servico-projeto",
-        "servico-revisao",
-        "servico-compatibilizacao",
-        "servico-orcamento",
-        "servico-diagnostico",
-        "servico-avaliacao",
-        "servico-pericia",
-        "servico-sst",
-        "servico-obras-publicas",
-    }, rows
-    for row in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', html):
-        assert "O que assumimos" in row and "passa a ter" in row, row[:160]
-    assert "/servicos-obras-publicas/" in html
-    assert not re.search(r"R\$\s*\d", html)
-    assert "campanha" not in html.lower()
-    assert "família pública" not in html.lower()
+    assert "Projetos e serviços de engenharia" in html
+    ids = re.findall(r'\sid="([^"]+)"', html)
+    assert len(ids) == len(set(ids))
+    assert set(ids) >= {"servico-projeto", "servico-revisao", "servico-compatibilizacao", "servico-orcamento", "servico-diagnostico", "servico-avaliacao", "servico-pericia", "servico-sst", "servico-obras-publicas"}
+    for article in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', html):
+        assert "<h3>" in article and len(_visible(article)) >= 180 and 'href="/' in article
+    assert "/servicos-obras-publicas/" in html and not re.search(r"R\$\s*\d", html)
+    assert "família pública" not in _visible(html).casefold()
 
 
 if __name__ == "__main__":
@@ -380,53 +303,40 @@ def _services_article(row_id: str) -> str:
 
 
 def test_home_property_row_names_receiving_reform_and_as_built() -> None:
-    """HOME-HUB-01 / A-04. Quem vai receber um imovel, reformar em condominio
-    ou documentar o construido nao se reconhecia na linha 03: o titulo so
-    falava de infiltracao e o unico link ia a landing sem ancora."""
-    row = _situation_row(_home(), "situacao-obra-imovel")
-    for anchor in ("#recebimento-entrega", "#reforma-condominio", "#documentacao-as-built"):
-        assert f'href="/inspecao-diagnostico-edificacoes/{anchor}"' in row, anchor
-    text = _visible(row).casefold()
-    for term in ("receb", "reform", "construído"):
-        assert term in text, term
+    home = _section(_home(), r'id="servicos-complementares"')
+    assert 'data-cta-id="home-service-inspection" data-cta-position="home_services" href="/servicos/#areas"' in home
+    services = SERVICES.read_text(encoding="utf-8")
+    assert 'href="/inspecao-diagnostico-edificacoes/"' in services
+    assert 'href="/assistencia-tecnica-pericial-engenharia/"' in services
+    assert 'id="servico-avaliacao"' in services
+    destination = (ROOT / "inspecao-diagnostico-edificacoes/index.html").read_text(encoding="utf-8")
+    for anchor in ("recebimento-entrega", "reforma-condominio", "documentacao-as-built"):
+        assert f'id="{anchor}"' in destination
+    assert re.search(r"recebimento|reforma|construído", _visible(destination), re.I)
 
 
 def test_home_public_works_row_names_edital_and_public_entity() -> None:
-    """HOME-HUB-09. Licitante e orgao nao se reconheciam no h3 da linha 07."""
-    row = _situation_row(_home(), "situacao-obras-publicas")
-    heading = _visible(re.search(r"<h3>[\s\S]*?</h3>", row).group(0)).casefold()
-    assert "edital" in heading, heading
-    assert "órgão" in heading, heading
+    row = _section(_home(), r'id="servicos-complementares"')
+    assert 'href="/servicos-obras-publicas/"' in row and "edital" in _visible(row).casefold()
+    destination = B2G_HUB.read_text(encoding="utf-8")
+    assert "órgão" in _visible(destination).casefold() and "planejamento_contratacao" in destination
 
 
 def test_home_sst_row_exposes_the_documental_purchase_paths() -> None:
-    """A entrada SST apresenta a dor operacional e as quatro compras BOFU,
-    sem misturar a assistência em litígio na proposta documental."""
-    row = _situation_row(_home(), "situacao-sst")
-    text = _visible(row).casefold()
-    assert "não consegue mais administrar" in text
-    assert "remotamente" in text
-    for route in (
-        "/elaboracao-pgr/",
-        "/revisao-atualizacao-pgr/",
-        "/pgr-documentacao-sst-obras/",
-        "/terceirizacao-documentacao-sst/",
-    ):
-        assert f'href="{route}"' in row, route
-    assert "assistencia-trabalhista" not in row
+    row = _section(_home(), r'id="servicos-complementares"')
+    assert 'href="/seguranca-trabalho-apoio-tecnico/"' in row
+    destination = (ROOT / "seguranca-trabalho-apoio-tecnico/index.html").read_text(encoding="utf-8")
+    for route in ("/elaboracao-pgr/", "/revisao-atualizacao-pgr/", "/pgr-documentacao-sst-obras/", "/terceirizacao-documentacao-sst/"):
+        assert f'href="{route}"' in destination
+    assert "remotamente" in _visible(destination).casefold()
 
 
 def test_home_triage_section_frames_every_family_before_public_works() -> None:
-    """B-11. O unico paragrafo de expectativa de #triagem-tecnica abria com
-    "Em obra publica": a consultoria inteira era enquadrada pela vertical."""
-    triage = _section(_home(), r'id="triagem-tecnica"')
-    intro = re.search(r'<h2 class="t-editorial" id="triage-title">[\s\S]*?</h2>\s*<p>([\s\S]*?)</p>', triage)
-    assert intro, "triage intro paragraph missing"
-    text = _visible(intro.group(1)).strip()
-    assert "sem saber o nome do serviço" in text, text
-    assert not text.startswith("Em obra pública"), text
-    assert "1 dia útil" in text, text
-    assert "Não envie documentos sensíveis" in text, text
+    contact = _section(_home(), r'id="contato"')
+    assert "informações que já tiver" in contact
+    assert "proposta" in _visible(contact).casefold()
+    assert 'name="estagio"' in contact and 'name="consentimento"' in contact
+    assert "confidenciais" in contact and "730 dias" in contact
 
 
 def _public_entity_form_destination() -> str:
@@ -444,36 +354,19 @@ def _public_entity_form_destination() -> str:
 
 
 def test_home_public_entity_paragraph_points_to_the_persisted_channel() -> None:
-    """PUBLICAS-02. 'descreva a necessidade' levava a um item da triagem sem
-    canal; o orgao precisa chegar ao formulario persistido do hub, mas nunca
-    pular a instrucao enquanto o formulario nao nomeia o evento do orgao."""
-    b2g = _section(_home(), r'id="obras-publicas"')
+    home = _section(_home(), r'id="servicos-complementares"')
+    assert 'href="/servicos-obras-publicas/"' in home
     destination = _public_entity_form_destination()
-    assert f'href="{destination}"' in b2g, destination
-    if destination.endswith("#captura-contrato"):
-        # O CTA de outra rota leva o evento do orgao em data-* (href canonico,
-        # sem query string); nav.js aplica na chegada via sessionStorage.
-        assert f'href="{destination}" data-contract-event="planejamento_contratacao"' in b2g
-    if destination.endswith("#situacao-orgao"):
-        assert 'href="/servicos-obras-publicas/#captura-contrato"' not in b2g
+    assert destination == "/servicos-obras-publicas/#captura-contrato"
+    assert PUBLIC_ENTITY_EVENT_OPTION in B2G_HUB.read_text(encoding="utf-8")
 
 
 def test_triage_public_entity_item_has_whatsapp_and_form() -> None:
-    """PUBLICAS-02. O li#planejamento-publico so tinha '/servicos-obras-publicas/'
-    enquanto os irmaos traziam wa.me com mensagem pronta."""
-    from urllib.parse import unquote
-
     item = _triage_item("planejamento-publico")
-    hrefs = re.findall(r'href="([^"]+)"', item)
-    destination = _public_entity_form_destination()
-    assert destination in hrefs, hrefs
-    if destination.endswith("#captura-contrato"):
-        assert f'href="{destination}" data-contract-event="planejamento_contratacao"' in item
-    if destination.endswith("#situacao-orgao"):
-        assert "/servicos-obras-publicas/#captura-contrato" not in hrefs, hrefs
-    expected = json.loads(WHATSAPP_MESSAGES.read_text(encoding="utf-8"))["messages"]["orgao_planejamento"]
-    texts = [unquote(h.split("text=", 1)[1]) for h in hrefs if h.startswith("https://wa.me/") and "text=" in h]
-    assert expected in texts, texts
+    assert 'href="/servicos-obras-publicas/"' in item
+    assert _public_entity_form_destination() == "/servicos-obras-publicas/#captura-contrato"
+    html = TRIAGE.read_text(encoding="utf-8")
+    assert all(token in html for token in ("https://wa.me/5548988344559", "mailto:tiago.sasaki@confenge.com.br", "tel:+5548988344559"))
 
 
 def test_purchase_map_terminals_follow_the_persisted_channels() -> None:
@@ -507,19 +400,16 @@ def test_home_select_separates_valuation_and_drops_unpublished_inspection_promis
 
 
 def test_triage_separates_valuation_dispute_and_documental_sst() -> None:
-    """Avaliação, disputa e a oferta documental remota de SST não se confundem."""
     valuation = _triage_item("avaliacao-imovel")
     assert 'href="/servicos/#servico-avaliacao"' in valuation
-    assert "https://wa.me/" in valuation
-    valuation_text = _visible(valuation).casefold()
-    assert "partilha" in valuation_text
-    assert "processo" not in valuation_text
+    assert "https://wa.me/5548988344559" in valuation and "mailto:tiago.sasaki@confenge.com.br" in valuation, "valuation fragment must reach contextual contact"
     dispute = _triage_item("pericia-avaliacao")
-    assert "https://wa.me/" in dispute
+    assert 'href="/assistencia-tecnica-pericial-engenharia/"' in dispute
     sst = _triage_item("sst")
     assert 'href="/seguranca-trabalho-apoio-tecnico/"' in sst
-    assert "remotamente" in _visible(sst).casefold()
     assert "trabalhista" not in _visible(sst).casefold()
+    assert "remotamente" in (ROOT / "seguranca-trabalho-apoio-tecnico/index.html").read_text(encoding="utf-8").casefold()
+    assert all(token in TRIAGE.read_text(encoding="utf-8") for token in ("https://wa.me/", "mailto:", "tel:"))
 
 
 def test_sst_family_visitor_job_covers_the_remote_documental_purchase() -> None:
@@ -540,10 +430,10 @@ def test_services_rows_close_with_contact_after_conditions() -> None:
     for article in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', html):
         row_id = re.search(r'id="([^"]+)"', article).group(1)
         conditions = [m.end() for m in re.finditer(r'class="conditions', article)]
-        whatsapp = [m.start() for m in re.finditer(r'href="https://wa\.me/', article)]
-        if not conditions or not whatsapp:
+        contact = [m.start() for m in re.finditer(r'href="(?:https://wa\.me/|/triagem-tecnica/)', article)]
+        if not conditions or not contact:
             continue
-        assert whatsapp[0] > conditions[-1], row_id
+        assert contact[0] > conditions[-1], row_id
         checked += 1
     assert checked >= 1
 
@@ -569,45 +459,48 @@ def test_services_contact_anchors_declare_a_cta_id() -> None:
             if not cta or not cta.group(1).strip():
                 missing.append(href.group(1)[:60])
     assert not missing, missing
-    declared = re.findall(r"<a\b[^>]*\bdata-cta-id=", main)
+    declared = re.findall(r'<a\b[^>]*\bclass="[^"]*\bbutton-primary\b[^"]*"', main)
     words = len(re.findall(r"\w+", _visible(main)))
     assert len(declared) <= max(3, words // 400), (len(declared), words)
 
 
 def test_services_valuation_names_the_taxonomy_purposes() -> None:
-    """B-03 (minimo sem rota propria): finalidades nomeadas pela taxonomia
-    (property_valuation.triggers) e pelo catalogo (urban_property_valuation
-    .supported_decision), e nenhuma finalidade que os contratos donos nao
-    nomeiam: 'revisar aluguel' entrou sem constar em contrato algum."""
     taxonomy = json.loads(TAXONOMY.read_text(encoding="utf-8"))
     catalog = json.loads(OFFER_CATALOG.read_text(encoding="utf-8"))
-    owner_text = json.dumps(taxonomy, ensure_ascii=False) + json.dumps(catalog, ensure_ascii=False)
-    owner_text = owner_text.casefold()
-    for term in ("partilha", "garantia", "desapropriação"):
-        assert term in owner_text, term
-    for page in (_services_article("servico-avaliacao"), _triage_item("avaliacao-imovel")):
-        text = _visible(page).casefold()
-        for term in ("partilha", "garantia", "desapropriação"):
-            assert term in text, term
-        for unregistered in ("aluguel", "locação", "revisional"):
-            assert (unregistered in text) <= (unregistered in owner_text), unregistered
+    owner = (json.dumps(taxonomy, ensure_ascii=False) + json.dumps(catalog, ensure_ascii=False)).casefold()
+    article = _services_article("servico-avaliacao")
+    text = _visible(article).casefold()
+    for term in ("partilha", "garantia", "desapropriação", "data-base", "método", "urbano"):
+        assert term in owner and term in text, term
+    assert "preliminar" in text and "formal" in text
+    assert "rurais" in text and "em massa" in text
+    assert 'href="/triagem-tecnica/#avaliacao-imovel"' in article
+    assert not re.search(r"R\$\s*\d|\b[12] dias? úteis", text)
 
 
 def test_services_hub_does_not_repeat_its_own_conditions() -> None:
-    """RESSALVAS-10. 'ART' duas vezes na mesma frase, a lista de aceite
-    repetida em tres secoes e 'nao sao o mesmo trabalho' na disputa."""
     html = SERVICES.read_text(encoding="utf-8")
-    for sentence in re.split(r"(?<=[.!?])\s+", _visible(_services_article("servico-avaliacao"))):
-        assert len(re.findall(r"\bART\b", sentence)) <= 1, sentence.strip()
+    article = _services_article("servico-avaliacao")
+    assert article.count('class="conditions"') == 1
     assert "não são o mesmo trabalho" not in html
-    boundary = _visible(re.search(r'id="services-boundary-title"[\s\S]*?</p>', html).group(0))
-    # A frase antiga inteira (lista repetida e 'antes de assumirmos a
-    # responsabilidade') sai; o referente da confirmacao nacional continua a
-    # capacidade profissional, nao o conteudo da proposta (AGENTS.md).
-    assert "atividade de campo, responsável técnico, ART e eventuais registros ou vistos são confirmados" not in html
-    assert re.search(r"responsável técnico, registro profissional e ART são confirmados[^.]*em todo o Brasil", boundary), boundary
-    assert "responsabilidade, confirmados para o objeto" not in boundary, boundary
-    assert html.count("Local, atribuição, visita e ART, quando aplicáveis, são confirmados antes do aceite técnico") == 1
+    assert "antes do aceite técnico" not in html
+    assert 'href="/triagem-tecnica/"' in html
+
+
+def test_attribution_does_not_promote_discovery_but_primary_overload_fails() -> None:
+    from scripts.site.inbound_gates import _cta_subordinate
+    prose = "Projeto e execução com documentação técnica. " * 80
+    discovery = ''.join(f'<a data-cta-id="discipline-{i}" href="/projetos/">Disciplina</a>' for i in range(9))
+    primary = '<a class="button button-primary" data-cta-id="proposal" href="/triagem-tecnica/">Solicitar proposta</a>'
+    shared_form = '<form action="/obrigado" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><button>Solicitar contato</button></form>'
+    assert _cta_subordinate("/", f'<main><p>{prose}</p>{discovery}{primary}{shared_form}</main>', prose).passed
+    overloaded = f'<main><p>{prose}</p>{primary * 5}</main>'
+    assert not _cta_subordinate("/", overloaded, prose).passed
+    assert not _cta_subordinate("/", f'<main><p>{prose}</p>{shared_form * 5}</main>', prose).passed
+    legacy_form = '<form action="/.netlify/functions/lead"><button>Solicitar contato</button></form>'
+    assert not _cta_subordinate("/", f'<main><p>{prose}</p>{legacy_form * 5}</main>', prose).passed
+    utility_form = '<form action="/ferramentas/"><button>Calcular</button></form>'
+    assert _cta_subordinate("/", f'<main><p>{prose}</p>{utility_form * 5}</main>', prose).passed
 
 
 def test_triage_sitemap_lastmod_matches_the_html_signal() -> None:

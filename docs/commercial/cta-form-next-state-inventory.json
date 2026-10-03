@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 201
+    "expected_declared_ctas": 210
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 201,
+    "declared_ctas": 210,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4246,6 +4246,141 @@
           "commitment": "low",
           "current_label": "Conhecer os projetos",
           "useful_next_state": "Abre o destino declarado por “Conhecer os projetos” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-structures",
+          "position": "capabilities",
+          "href": "/projetos/estruturas/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver especialidade",
+          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-installations",
+          "position": "capabilities",
+          "href": "/projetos/instalacoes/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver especialidade",
+          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-infrastructure",
+          "position": "capabilities",
+          "href": "/projetos/infraestrutura/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver especialidade",
+          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-coordination",
+          "position": "capabilities",
+          "href": "/projetos/coordenacao-multidisciplinar/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Entender a coordenação",
+          "useful_next_state": "Abre o destino declarado por “Entender a coordenação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-private-quantities-budget",
+          "position": "home_services",
+          "href": "/quantitativos-orcamento-obras/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Quantitativos e orçamentos Levantamento, memória e base para comparar ou contratar.",
+          "useful_next_state": "Abre o destino declarado por “Quantitativos e orçamentos Levantamento, memória e base para comparar ou contratar.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-service-review",
+          "position": "home_services",
+          "href": "/revisao-tecnica-projetos-engenharia/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Revisão e compatibilização Análise de projetos recebidos e tratamento de interferências.",
+          "useful_next_state": "Abre o destino declarado por “Revisão e compatibilização Análise de projetos recebidos e tratamento de interferências.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-service-inspection",
+          "position": "home_services",
+          "href": "/servicos/#areas",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Inspeções, avaliações e perícias Leitura da condição, avaliação e suporte técnico em disputas.",
+          "useful_next_state": "Abre o destino declarado por “Inspeções, avaliações e perícias Leitura da condição, avaliação e suporte técnico em disputas.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-service-sst",
+          "position": "home_services",
+          "href": "/seguranca-trabalho-apoio-tecnico/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Segurança do trabalho Elaboração, revisão e organização de documentação técnica de SST.",
+          "useful_next_state": "Abre o destino declarado por “Segurança do trabalho Elaboração, revisão e organização de documentação técnica de SST.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-service-public-works",
+          "position": "home_services",
+          "href": "/servicos-obras-publicas/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Obras públicas Planejamento da contratação, edital, proposta e suporte ao contrato em execução.",
+          "useful_next_state": "Abre o destino declarado por “Obras públicas Planejamento da contratação, edital, proposta e suporte ao contrato em execução.” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",

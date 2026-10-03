@@ -110,3 +110,40 @@ Status de publicação desta campanha: **PENDING_PROTECTED_RELEASE**. Este
 registro substitui a comunicação comercial das campanhas anteriores, sem
 apagar suas decisões, evidências históricas ou limitações observadas. Não há
 afirmação de ganho de conversão sem dados posteriores à publicação.
+
+
+## Conciliação final dos contratos de interface
+
+A terceira execução protegida apontou dois contratos antigos de apresentação:
+credenciais da home antes localizadas no herói e textos literais da triagem.
+Os testes agora conferem as credenciais reais na seção Empresa, respeitam a
+projeção pública autorizada da identidade e validam o contexto incompleto,
+os canais reais e as condições técnicas, sem exigir as frases substituídas.
+O formulário, sua persistência, consentimento e controles permanecem cobertos.
+
+A revisão técnica independente preservou a avaliação de imóvel como caminho
+com finalidade, data-base, método e documentos, conforme taxonomia existente,
+condicionando habilitação/ART ao ato e à atribuição. Sua triagem oferece
+WhatsApp e e-mail próprios. A revisão não habilita produto retido, preço,
+prazo ou prova de cliente. Os serviços explicam o pedido de proposta com
+contexto disponível e reservam o canal de documentos confidenciais.
+
+A home conserva nove destinos editoriais visíveis, agora com atribuição
+explícita. O auditor canônico apurou 210 chamadas em 31 rotas de captura.
+Descoberta editorial não é tratada como promoção primária; o gate de excesso
+continua contando botões primários e formulários compartilhados ou legados,
+com negativos independentes para excesso de ambos. A geometria exige 44 px
+de alvo também nos links de disciplinas e coordenação. Os testes de eventos,
+navegação sem JavaScript e fragmentos usam os destinos efetivamente exibidos.
+A medição de primeira tela será novamente vinculada ao checkpoint final limpo.
+
+
+A navegação final foi medida sobre as 113 rotas indexáveis: nenhuma órfã,
+19 páginas em um salto, 78 em dois e 15 em três, além da home; média de
+1,9469026548672566 e máximo de 3. A medição histórica de agosto cobria
+75 rotas, com uma órfã e máximo de 5; sua média de 1,8243243243243243 não
+compara o mesmo conjunto. O novo baseline deriva do censo expandido, conserva
+a medição anterior e os bytes de origem em navigation-depth.json, mantém
+zero órfãos e as quatro tarefas verificadas e estreita o máximo de 5 para 3.
+O rodapé isolado do gerador acompanha a navegação institucional atual; as
+condições materiais continuam nas explicações dos serviços e na proposta.
