@@ -45,6 +45,9 @@ HEX256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_HTML = re.compile(r"^[A-Za-z0-9._/-]+\.html$")
 SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/-]+$")
 NONPUBLIC_CONFIG_FILES = frozenset({"_headers", "_redirects"})
+EXACT_ASSET_CONTENT_TYPES = {
+    "favicon.ico": frozenset({"image/x-icon", "image/vnd.microsoft.icon"}),
+}
 OVERLAY_NON_HTML_FILES = frozenset({
     "sitemap-index.xml", "sitemap-oportunidades.xml",
     ".well-known/live-intelligence-overlay.json",
@@ -1014,11 +1017,18 @@ def verify_non_html_assets(
         entry, body = fetcher(base + request_path, timeout)
         headers = entry.get("headers") or {}
         digest = hashlib.sha256(body).hexdigest() if body is not None else None
+        expected_content_types = EXACT_ASSET_CONTENT_TYPES.get(rel)
+        observed_content_type = str(headers.get("content-type") or "").split(";", 1)[0].strip().lower()
+        content_type_ok = (
+            expected_content_types is None
+            or observed_content_type in expected_content_types
+        )
         transport_ok = (
             entry.get("error") is None and entry.get("status") == status
             and entry.get("location") is None and body is not None
             and str(headers.get("content-encoding") or "identity").lower() == "identity"
             and (body is None or entry.get("sha256") == digest)
+            and content_type_ok
         )
         edge: dict[str, Any] = {}
         if transport_ok and rel == EDGE_MANAGED_ROBOTS and not protected:
@@ -1033,6 +1043,9 @@ def verify_non_html_assets(
             "expected_sha256": expected, "http_sha256": digest,
             "bytes": len(body) if body is not None else None,
             "headers": headers, "location": entry.get("location"),
+            "expected_content_types": sorted(expected_content_types or []),
+            "content_type": observed_content_type or None,
+            "content_type_ok": content_type_ok,
             "config_body_withheld": protected and ok,
             "edge_contract": edge or None,
             "ok": ok, "error": entry.get("error"),

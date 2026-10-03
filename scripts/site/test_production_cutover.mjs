@@ -121,6 +121,14 @@ function localArtifact(rel) {
   return null;
 }
 
+function localArtifactBytes(rel) {
+  const sitePath = resolve(ROOT, "_site", rel);
+  const srcPath = resolve(ROOT, rel);
+  if (existsSync(sitePath)) return readFileSync(sitePath);
+  if (existsSync(srcPath)) return readFileSync(srcPath);
+  return null;
+}
+
 async function fetchText(path) {
   const res = await origin.request(path);
   return {
@@ -259,6 +267,32 @@ ok("css_200", css.status === 200 && css.body.length > 1000, `css status=${css.st
 ok("js_200", js.status === 200 && js.body.length > 1000, `js status=${js.status} len=${js.body.length}`);
 ok("css_has_contact_float", css.body.includes("contact-float"), "contact-float styles missing");
 ok("css_has_whatsapp_float", css.body.includes("whatsapp-float"), "whatsapp-float styles missing");
+
+if (OPTIONS.phase === "baseline") {
+  console.log("SKIP favicon fallback (new candidate contract)");
+} else {
+  const favicon = await origin.request("/favicon.ico");
+  const localFavicon = localArtifactBytes("favicon.ico");
+  ok(
+    "favicon_200",
+    favicon.status === 200 && favicon.body.length > 0,
+    `status=${favicon.status} bytes=${favicon.body.length}`
+  );
+  ok(
+    "favicon_image_content_type",
+    /^image\/(?:x-icon|vnd\.microsoft\.icon)(?:;|$)/i.test(favicon.headers["content-type"] || ""),
+    `content-type=${favicon.headers["content-type"] || ""}`
+  );
+  if (localFavicon) {
+    ok(
+      "favicon_sha256_matches_artifact",
+      sha256(favicon.body) === sha256(localFavicon),
+      `live=${sha256(favicon.body)} local=${sha256(localFavicon)}`
+    );
+  } else {
+    ok("favicon_local_artifact_present", false, "no local favicon.ico");
+  }
+}
 
 const offerPage = await fetchText("/diretoria-b2g/");
 const sheetHrefs = [...offerPage.body.matchAll(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi)]

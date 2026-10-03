@@ -14,6 +14,25 @@ sys.path.insert(0, str(ROOT))
 
 
 class TestPublicArtifact(unittest.TestCase):
+    def test_favicon_is_a_real_multisize_ico(self):
+        payload = (ROOT / "favicon.ico").read_bytes()
+        self.assertGreaterEqual(len(payload), 6 + (2 * 16))
+        self.assertEqual(payload[:4], b"\x00\x00\x01\x00")
+        image_count = int.from_bytes(payload[4:6], "little")
+        self.assertGreaterEqual(image_count, 2)
+        dimensions: set[tuple[int, int]] = set()
+        for index in range(image_count):
+            start = 6 + (index * 16)
+            entry = payload[start : start + 16]
+            self.assertEqual(len(entry), 16)
+            dimensions.add((entry[0] or 256, entry[1] or 256))
+            size = int.from_bytes(entry[8:12], "little")
+            offset = int.from_bytes(entry[12:16], "little")
+            self.assertGreater(size, 0)
+            self.assertGreaterEqual(offset, 6 + (image_count * 16))
+            self.assertLessEqual(offset + size, len(payload))
+        self.assertTrue({(16, 16), (32, 32)} <= dimensions)
+
     def test_assemble_and_audit_allowlist(self):
         from scripts.pseo.public_artifact import (
             PUBLIC_DIR_NAME,
@@ -37,6 +56,22 @@ class TestPublicArtifact(unittest.TestCase):
             site = Path(dest_name)
             self.assertTrue(site.is_dir())
             self.assertTrue((site / "index.html").exists())
+            self.assertEqual(
+                (site / "favicon.ico").read_bytes(),
+                (ROOT / "favicon.ico").read_bytes(),
+            )
+            triage = (site / "triagem-tecnica" / "index.html").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn(
+                '<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png">',
+                triage,
+            )
+            self.assertIn(
+                '<link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">',
+                triage,
+            )
+            self.assertIn('<link href="/manifest.webmanifest" rel="manifest">', triage)
             self.assertFalse((site / "data").exists())
             self.assertFalse((site / "seo").exists())
             self.assertFalse((site / "scripts").exists())

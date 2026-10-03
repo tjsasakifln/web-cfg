@@ -1,4 +1,5 @@
 # No git content filters — build identity from deploy env
+*.ico binary
 *.html text eol=lf
 data/offers/flags.json text eol=lf
 data/migration/smartlic-confenge/manifesto.v1.json text eol=lf

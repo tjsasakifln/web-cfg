@@ -125,6 +125,7 @@ PUBLIC_ROOT_FILES = frozenset(
         "robots.txt",
         "_redirects",
         "_headers",
+        "favicon.ico",
         "manifest.webmanifest",
         "feed.xml",
         "llms.txt",

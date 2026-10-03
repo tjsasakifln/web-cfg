@@ -554,6 +554,45 @@ def test_non_html_http_bytes_cannot_be_normalized_or_served_from_old_cache(tmp_p
     assert report["non_html_assets"]["passed"] == 0
 
 
+@pytest.mark.parametrize(
+    "content_type,accepted",
+    [
+        ("image/x-icon", True),
+        ("image/vnd.microsoft.icon", True),
+        ("image/x-icon; charset=binary", True),
+        ("application/octet-stream", False),
+        ("image/png", False),
+        ("", False),
+    ],
+)
+def test_favicon_requires_an_exact_ico_content_type(tmp_path, content_type, accepted):
+    fixture = _fixture(tmp_path)
+    favicon = b"\x00\x00\x01\x00fixture-ico"
+    (fixture["site"] / "favicon.ico").write_bytes(favicon)
+    inventory = json.loads(fixture["inventory"].read_text(encoding="utf-8"))
+    inventory["non_html_sha256"]["favicon.ico"] = hashlib.sha256(favicon).hexdigest()
+    fixture["inventory"].write_text(json.dumps(inventory), encoding="utf-8")
+    delegate = _asset_fetcher(fixture)
+
+    def fetch(url, timeout):
+        entry, body = delegate(url, timeout)
+        if url.endswith("/favicon.ico"):
+            entry["headers"]["content-type"] = content_type
+        return entry, body
+
+    report = _run(tmp_path, fixture, asset_fetcher=fetch)
+    assert report["ok"] is accepted, report["errors"]
+    asset_report = json.loads(
+        Path(report["evidence_files"]["non_html_assets"]).read_text(encoding="utf-8")
+    )
+    favicon_result = next(
+        row
+        for row in asset_report["results"]
+        if row["path"] == "favicon.ico"
+    )
+    assert favicon_result["content_type_ok"] is accepted
+
+
 def test_only_declared_non_html_overlay_changes_are_accepted(tmp_path):
     fixture = _fixture(tmp_path)
     site = fixture["site"]
@@ -1342,7 +1381,7 @@ def test_incomplete_read_without_declared_length_reports_no_declared_length():
 
 _MANAGED_PREFIX = (
     Path(__file__).resolve().parent / "testdata" / "robots-managed-prefix.txt"
-).read_bytes()
+).read_text(encoding="utf-8").encode("utf-8")
 _PACKAGE_ROBOTS = acceptance.ROOT / "_site" / "robots.txt"
 # O gate npm e o CI pos-build exigem o pacote: pular o modulo sairia verde.
 if os.environ.get("ROBOTS_PACKAGE_REQUIRED") == "1" and not _PACKAGE_ROBOTS.is_file():
