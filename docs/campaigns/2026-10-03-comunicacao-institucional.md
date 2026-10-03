@@ -199,3 +199,7 @@ hub; as demais entradas explicam o serviço no hub, que mantém as quatro
 frentes PGR e três canais terminais atribuídos. O teste usa o conteúdo principal
 e a âncora real, rejeitando substituição pelo rodapé e metadados em filhos.
 Os seis testes de integração e a cadeia completa de correção SST passaram.
+O auditor canônico registra 211 chamadas declaradas nas mesmas 31 superfícies
+com formulário: a diferença é o link existente de SST em Entregas, agora
+atribuído. O histórico de 210 permanece na nota e todos os controles materiais
+de next-state/v1 e a verificação de regeneração passaram.

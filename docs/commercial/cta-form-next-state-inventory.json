@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 210
+    "expected_declared_ctas": 211
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 210,
+    "declared_ctas": 211,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -3497,6 +3497,21 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "deliverables-sst-hub",
+          "position": "",
+          "href": "/seguranca-trabalho-apoio-tecnico/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Resolver documentação de SST",
+          "useful_next_state": "Abre o destino declarado por “Resolver documentação de SST” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {
