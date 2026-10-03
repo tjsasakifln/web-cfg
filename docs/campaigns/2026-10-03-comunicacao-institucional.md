@@ -86,6 +86,16 @@ serviços passaram a usar um parser HTML, e o perfil técnico recebeu os três
 canais diretos no fechamento. Essas correções seguem os mesmos gates
 protegidos antes da publicação.
 
+A segunda execução já encerrou o CodeQL sem alertas. Foram conciliadas as
+referências derivadas do catálogo corporativo e os testes BOFU de navegação e
+pontuação: a página de obras públicas volta a oferecer acesso direto aos
+documentos e condições existentes. A promoção focal de medições na home da
+issue #390 fica preservada como histórico e supersedida pelo portfólio de
+projetos; a transferência canônica continua no hub e no artigo correspondente.
+As seis páginas B2G revisadas recebem novo checkpoint de integridade pela
+cadeia existente, sem recapturar aprovações factuais nem o canário já válido.
+O novo índice exige repetição da medição real de primeira tela.
+
 Baseline servido: `c7d2d0a42ebb531efc0547b34f2f38b4077ee45e`, publicado pelo
 [release 37095012142](https://github.com/tjsasakifln/web-cfg/actions/runs/37095012142).
 O pacote imutável foi recuperado e seu SHA-256 confirmado:

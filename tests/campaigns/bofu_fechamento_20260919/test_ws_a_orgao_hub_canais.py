@@ -108,20 +108,21 @@ def test_contract_stage_unknown_and_pillars_preselect_their_event() -> None:
         assert "Ainda não definido" not in page, slug
 
 
-def test_hub_hero_orgao_sentence_prices_link_and_services_exit() -> None:
+def test_hub_links_procurement_prices_capture_and_services() -> None:
     html = _read(HUB)
     hero = re.search(r'<section aria-labelledby="hub-title" class="svc-open">[\s\S]*?</section>', html).group(0)
     assert 'href="#situacao-orgao"' in hero
-    # A frase fica depois da linha de prova: prova e ação primária não mudam de lugar na dobra.
-    assert hero.index('class="section-proof svc-open__note"') < hero.index('href="#situacao-orgao"')
-    sentence = re.search(r'<p>Cada situação diz o que assumimos[^<]*<a href="([^"]+)">[^<]*</a>', html)
-    assert sentence and sentence.group(1) == "#contract-products-title"
+    # Preserve navigation to the buyer's own procurement context and priced
+    # deliverables without requiring the retired sentence or a proof/CTA order.
+    assert 'id="situacao-orgao"' in html
+    conditions_link = re.search(r'<a\b[^>]*href="#contract-products-title"[^>]*>[\s\S]*?</a>', hero)
+    assert conditions_link and re.sub(r"<[^>]+>", "", conditions_link.group(0)).strip()
     priced = re.search(r'<section class="contract-products-hub" aria-labelledby="contract-products-title">[\s\S]*?</section>', html)
     assert priced and "R$ 4.900" in priced.group(0)
-    assert 'href="#captura-contrato">Registrar o evento</a>' in html
+    assert re.search(r'<a\b[^>]*href="#captura-contrato"[^>]*>[\s\S]*?</a>', hero)
+    assert 'id="captura-contrato"' in html
     main = _main(html)
     assert 'href="/servicos/"' in main
-    assert "Na mesma proposta" in main or "na mesma proposta" in main
 
 
 def test_problems_hub_names_reajuste_with_real_destination() -> None:

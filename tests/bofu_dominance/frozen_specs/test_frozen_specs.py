@@ -204,9 +204,11 @@ def test_entry_twice_html_mutation_false():
     assert second["html_mutation"] is False
     assert first["apply_refused_before_gate"] is True
     assert second["apply_refused_before_gate"] is True
-    assert first["forbidden_unchanged"] is False
+    # The current reviewed checkpoint must agree. Historical changes remain
+    # in Git; tamper fixtures below still require protected drift to fail.
+    assert first["forbidden_unchanged"] is True
     assert first["forbidden_action_required"] is False
-    assert first["historical_drift_detected"] is True
+    assert first["historical_drift_detected"] is False
     assert first["pillar_count"] == 6
     assert all(item["ok"] for item in first["specs"])
     snaps = snapshot_six(ROOT)

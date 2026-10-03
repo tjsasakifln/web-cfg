@@ -24,7 +24,7 @@ from scripts.site import document_intake  # noqa: E402
 WA_RE = re.compile(r"""https://wa\.me/\d+\?text=([^"'>\s]+)""", re.I)
 # A lower-case letter, digit or accented letter followed by the new sentence
 # without any closing punctuation.
-RUN_ON_RE = re.compile(r"[a-z0-9áéíóúçãõâêôàü] Quero solicitar")
+RUN_ON_RE = re.compile(r"[a-z0-9áéíóúçãõâêôàü] (?:Quero solicitar|Posso enviar)")
 
 AFFECTED = (
     "conteudos/sinapi-ou-sicro-obra-publica/index.html",
@@ -65,16 +65,21 @@ def test_no_source_page_glues_the_secure_channel_request():
 def test_rewrite_copy_closes_the_previous_sentence():
     src = "Olá. Quero conferir o BDI desta proposta Posso enviar edital e planilha."
     out = document_intake.rewrite_copy(src)
-    assert "proposta. Quero solicitar um canal seguro para envio." in out
+    # Non-confidential references may use the existing live channels; the
+    # authorized company copy no longer forces a secure-channel request.
+    assert "proposta. Posso enviar edital e planilha." in out
     assert not RUN_ON_RE.search(out)
     # Already-punctuated input is untouched beyond the intended replacement.
     src2 = "Olá. Quero conferir o BDI desta proposta. Posso enviar edital e planilha."
     out2 = document_intake.rewrite_copy(src2)
-    assert "proposta. Quero solicitar" in out2 and "proposta.. " not in out2
+    assert "proposta. Posso enviar" in out2 and "proposta.. " not in out2
     assert out2 == out
     # Markup or whitespace before the sentence is not a word to close.
     markup = "<p>\nQuero solicitar um canal seguro para envio."
-    assert document_intake.rewrite_copy(markup) == markup
+    assert document_intake.rewrite_copy(markup) == "<p>\nQuero solicitar uma proposta."
     # The repair also applies to text already rewritten by an earlier pass.
     glued = "Olá. Quero conferir o BDI desta proposta Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem."
-    assert document_intake.rewrite_copy(glued) == glued.replace("proposta Quero", "proposta. Quero")
+    repaired = document_intake.rewrite_copy(glued)
+    assert "proposta. Quero solicitar uma proposta." in repaired
+    assert "Para material confidencial, combinamos o envio reservado." in repaired
+    assert not RUN_ON_RE.search(repaired)

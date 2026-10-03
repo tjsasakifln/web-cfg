@@ -693,7 +693,8 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <ol>
 {index_html}
 <li><a href="#hub-outras"><span>{len(situations) + 1:02d}</span>Outras necessidades</a></li>
-<li><a href="#captura-contrato"><span>{len(situations) + 2:02d}</span>Registrar o evento</a></li>
+<li><a href="#contract-products-title"><span>{len(situations) + 2:02d}</span>Documentos e condições</a></li>
+<li><a href="#captura-contrato"><span>{len(situations) + 3:02d}</span>Registrar o evento</a></li>
 </ol>
 </nav>
 </div>
