@@ -1,6 +1,6 @@
 # Notas de implementação — projetos de engenharia
 
-Estado: em execução
+Estado: implementação integrada à campanha institucional de 2026-10-03
 Decisão: `P0 / EXECUTE_NOW`
 Frente executiva: `INBOUND_ENGINE / REVENUE_NOW`
 Horizonte de primeira evidência: 30 dias
@@ -36,3 +36,19 @@ Se a superfície pública tornar projetos de estruturas, instalações, infraest
 ## Critério de encerramento
 
 Esta nota só passa a `concluído` quando o commit final estiver servido por `https://confenge.com.br/`, os checks de CI e deploy estiverem verdes e a validação pós-publicação confirmar rotas, assets, navegação, CTAs, captura, eventos, metadados, sitemap, robots, 404 e fluxos críticos.
+
+## Conciliação de 2026-10-03
+
+A implementação de projetos foi incorporada e revisada pela campanha
+[Comunicação institucional, competência e conversão](../2026-10-03-comunicacao-institucional.md).
+Esta campanha passa a governar a comunicação, os geradores e os critérios de
+aceite, incluindo o teste de persistência, encaminhamento e recebimento do
+contato. Não há execução editorial paralela pendente desta frente.
+As decisões e evidências anteriores permanecem históricas; os identificadores
+da linha de base acima não representam a versão da campanha atual.
+
+No checkpoint deste registro, a publicação protegida da PR #729 está pendente.
+O resultado público e o encerramento dependem do release Netcup da revisão
+integrada e de sua verificação em produção. O registro final da campanha
+atual deve identificar o SHA efetivamente servido, horário, provas de contato
+e recuperação; esta conciliação não inventa uma verificação anterior.
