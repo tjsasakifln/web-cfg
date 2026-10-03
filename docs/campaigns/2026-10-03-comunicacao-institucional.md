@@ -147,3 +147,26 @@ a medição anterior e os bytes de origem em navigation-depth.json, mantém
 zero órfãos e as quatro tarefas verificadas e estreita o máximo de 5 para 3.
 O rodapé isolado do gerador acompanha a navegação institucional atual; as
 condições materiais continuam nas explicações dos serviços e na proposta.
+
+A auditoria canônica do contrato de redação foi recapturada no checkout limpo
+8832d49612ddb9b2bfeeb18d4f38daf0accfe960: 23 rotas, 26 trechos de
+condições, zero violações e zero prova social estruturada; as 54 entregas,
+as oito ofertas públicas e as 120 cláusulas únicas permanecem intactas.
+O registro de 25 condições é conservado como histórico. Não houve mudança
+no scanner, nos limites de aceitação nem no estado de revisão humana.
+
+A quarta execução protegida também encontrou contratos literais anteriores
+à campanha nos artigos. A comparação dos três artigos de origem de clique
+projeta somente a saudação institucional, a frase exata de orientação sobre
+documentos e o wordCount derivado, que é recalculado independentemente.
+Quantidade de ocorrências, destinatário, restante da mensagem, título,
+corpo técnico, fontes e canonical seguem pinados; os negativos rejeitam
+conteúdo novo, contagem inventada e promessa de envio automático.
+Os nove artigos de orçamento passam a verificar a ação de proposta real,
+o WhatsApp institucional, a orientação de material confidencial e envio
+reservado e o formulário no pilar correto. Datas e exemplos técnicos
+permanecem verificados. A distinção entre empresa contratada e órgão público
+é exigida no bloco de responsabilidade, com negativo para a remoção de cada
+parte. Os 18 testes orgânicos passaram sem alterar os artigos publicados.
+Os quatro testes do caso demonstrativo da home e o gate de adequação da
+oferta também passaram, usando as competências efetivamente exibidas.

@@ -1,0 +1,201 @@
+{
+  "schema": "confenge.copy-contract-audit-evidence/1.0",
+  "measured_at": "2026-10-03T21:47:46.593Z",
+  "source_git_head": "8832d49612ddb9b2bfeeb18d4f38daf0accfe960",
+  "source_tree_dirty": false,
+  "actor": "codex_autonomous",
+  "authority": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+  "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
+  "ok": true,
+  "metrics": {
+    "deliverables": 54,
+    "public_deliverables": 8,
+    "clauses_per_deliverable": 15,
+    "clause_instances": 810,
+    "public_clause_instances": 120,
+    "clause_bodies_unique": 120,
+    "clause_body_duplicates": 0,
+    "titleless_unique": 54,
+    "routes_derived": 23,
+    "language_boundaries": 26,
+    "language_observations": 0,
+    "language_violations": 0,
+    "structured_social_proof_hits": 0
+  },
+  "problems": [],
+  "language": {
+    "violations": [],
+    "observations": [],
+    "boundaries": [
+      {
+        "route": "/auditoria-orcamento-licitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantimos",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/auditoria-orcamento-licitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantimos",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/bid-room-licitacoes-obras/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantido",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-mapa-compradores-publicos/",
+        "forbidden_id": "FL-08",
+        "matched": "garantida",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/casos/modelo-relatorio-executivo-consolidado/",
+        "forbidden_id": "FL-08",
+        "matched": "garantida",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "forbidden_id": "FL-08",
+        "matched": "garantias",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "forbidden_id": "FL-08",
+        "matched": "garantida",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/defesa-margem-contratos-publicos/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/diagnostico-b2g-360/",
+        "forbidden_id": "FL-08",
+        "matched": "garantidos",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/diagnostico-b2g-360/",
+        "forbidden_id": "FL-08",
+        "matched": "garantida",
+        "exemption": "explicit_negation"
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/diagnostico-pre-licitacao/",
+        "forbidden_id": "FL-08",
+        "matched": "garantias",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/diretoria-b2g/",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "market_institute"
+      },
+      {
+        "route": "/entregas/catalog-data.js",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "explicit_exclusion"
+      },
+      {
+        "route": "/entregas/catalog-data.js",
+        "forbidden_id": "FL-08",
+        "matched": "garantia",
+        "exemption": "explicit_exclusion"
+      }
+    ]
+  },
+  "previous_measurement": {
+    "measured_at": "2026-09-09",
+    "measured_against": "EXECUTE_NOW commercial revision, a36d34beb public route registry; withdrawn previews remain preserved internally",
+    "live_measurement": {
+      "routes_derived": 23,
+      "language_boundaries": 25,
+      "language_observations": 0,
+      "language_violations": 0,
+      "structured_social_proof_hits": 0,
+      "clause_bodies_unique": 120,
+      "clause_body_duplicates": 0
+    }
+  }
+}

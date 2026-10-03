@@ -74,6 +74,34 @@ def _inventory_rows() -> dict[str, dict]:
     return rows
 
 
+def _proposal_cta_failures(html: str, service_path: str) -> list[str]:
+    """Verify actual proposal channels without promising attachment receipt."""
+    match = re.search(r'<section class="lead-inline" id="diagnostico-confenge".*?</section>', html, re.S)
+    if not match:
+        return ["missing_proposal_block"]
+    block = match.group(0)
+    decoded = unquote(block)
+    fails = []
+    primary = re.search(r'<a\b(?=[^>]*class="button button-primary")(?=[^>]*href="([^"]+)")[^>]*>(.*?)</a>', block, re.S)
+    if not primary or not re.search(r"(?:solicitar|pedir).*proposta", visible_text(primary.group(2)), re.I):
+        fails.append("missing_proposal_action")
+    if not primary or not primary.group(1).startswith("https://wa.me/5548988344559?text="):
+        fails.append("missing_institutional_whatsapp")
+    message = unquote(primary.group(1)).lower() if primary else ""
+    if "olá, confenge." not in message:
+        fails.append("missing_institutional_whatsapp")
+    if "proposta" not in message or "material confidencial" not in message or "envio reservado" not in message:
+        fails.append("missing_proposal_message_context")
+    secondary = re.search(r'<a\b(?=[^>]*class="button button-secondary")(?=[^>]*href="([^"]+)")[^>]*>(.*?)</a>', block, re.S)
+    if not secondary or secondary.group(1) != service_path + "#captura-pilar" or visible_text(secondary.group(2)) != "Continuar pelo formulário":
+        fails.append("missing_contextual_form")
+    if "material confidencial" not in decoded or "envio reservado" not in decoded:
+        fails.append("missing_confidential_guidance")
+    if re.search(r'<input\b[^>]*type=["\']file["\']|arquivo (?:foi |já )?enviado|upload (?:concluído|automático)|>Enviar (?:planilha|minuta|matriz|cláusula|diligência)[^<]*<', decoded, re.I):
+        fails.append("false_attachment_channel")
+    return fails
+
+
 def test_inventory_covers_nine_keep_urls():
     rows = _inventory_rows()
     source_manifest = json.loads(
@@ -238,20 +266,34 @@ def test_metadata_canonical_schema_and_cta():
         article_schema = next(node for node in graph if node.get("@type") == "Article")
         assert article_schema["wordCount"] == len(visible_text(article_html.group(0)).split()), slug
 
-        cta = re.search(
-            r'<section class="lead-inline" id="diagnostico-confenge".*?</section>',
-            html,
-            flags=re.S,
-        )
-        assert cta, slug
-        decoded_cta = unquote(cta.group(0))
-        assert "Solicitar canal seguro para envio" in decoded_cta, slug
-        assert "Não anexe arquivo nesta mensagem" in decoded_cta, slug
-        assert not re.search(
-            r">Enviar (?:planilha|minuta|matriz|cláusula|diligência)[^<]*<",
-            decoded_cta,
-            flags=re.I,
-        ), slug
+        assert not _proposal_cta_failures(html, row["service_path"]), slug
+
+
+def test_proposal_cta_rejects_lost_action_privacy_form_or_false_upload():
+    row = _inventory_rows()["administracao-local-orcamento-obra-publica"]
+    html = read_shipped_html(row["slug"])
+    assert not _proposal_cta_failures(html, row["service_path"])
+    decoded_html = unquote(html)
+    mutations = (
+        ("Solicitar proposta no WhatsApp", "Abrir conversa", "missing_proposal_action"),
+        ("Olá, CONFENGE.", "Olá, Tiago.", "missing_institutional_whatsapp"),
+        ("material confidencial", "material comum", "missing_confidential_guidance"),
+        ("envio reservado", "envio comum", "missing_confidential_guidance"),
+        ("Continuar pelo formulário", "Outro destino", "missing_contextual_form"),
+        (row["service_path"] + "#captura-pilar", "/#contato", "missing_contextual_form"),
+        ("</section>", '<input type="file"></section>', "false_attachment_channel"),
+    )
+    for old, new, expected in mutations:
+        assert old in decoded_html
+        # Limit injected file input to the audited contact block.
+        if old == "</section>":
+            block = re.search(r'<section class="lead-inline" id="diagnostico-confenge".*?</section>', decoded_html, re.S)
+            assert block
+            changed = decoded_html.replace(block.group(0), block.group(0).replace(old, new), 1)
+        else:
+            changed = decoded_html.replace(old, new)
+        assert changed != decoded_html
+        assert expected in _proposal_cta_failures(changed, row["service_path"]), expected
 
 
 def test_revalidated_source_manifest_has_freshness_and_limitations():

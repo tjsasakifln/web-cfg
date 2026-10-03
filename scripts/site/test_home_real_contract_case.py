@@ -17,7 +17,7 @@ def test_home_is_institutional_and_does_not_use_pncp_as_client_proof():
     assert "R$ 18.293.629,80" not in html
     assert "pncp.gov.br/app/contratos/" not in html
     assert "<dt>1% do valor</dt>" not in html
-    assert 'data-section-archetype="journey_paths"' in html
+    assert 'id="competencias"' in html
     assert 'href="/projetos/"' in html
     assert 'href="/servicos/"' in html
     assert not re.search(
@@ -28,11 +28,13 @@ def test_home_is_institutional_and_does_not_use_pncp_as_client_proof():
 def test_home_has_accessible_institutional_paths_instead_of_market_selector():
     html = HOME.read_text(encoding="utf-8")
     journeys = re.search(
-        r'<section[^>]+data-section-archetype="journey_paths"[\s\S]*?</section>',
+        r'<section[^>]+id="competencias"[\s\S]*?</section>',
         html,
     )
     assert journeys
     assert journeys.group(0).count("<article") >= 3
+    for href in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/"):
+        assert f'href="{href}"' in journeys.group(0), href
     assert 'role="tab"' not in journeys.group(0)
     assert 'role="tabpanel"' not in journeys.group(0)
     assert "autoplay" not in journeys.group(0).lower()
@@ -75,4 +77,4 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     else:
         assert href == "/triagem-tecnica/"
         assert (HOME.parent / "triagem-tecnica/index.html").is_file()
-    assert re.search(r"servi[çc]o|situa[çc][aã]o|necessidade|projeto|escopo", primary.group(2), re.I)
+    assert re.search(r"proposta|servi[çc]o|situa[çc][aã]o|necessidade|projeto|escopo", primary.group(2), re.I)

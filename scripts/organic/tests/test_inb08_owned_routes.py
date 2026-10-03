@@ -20,6 +20,8 @@ from scripts.organic.service_map import extract_bridge_service, html_has_commerc
 from scripts.organic.sinapi_snippet import CANONICAL_TITLE, parse_title
 from scripts.site.inbound_gates import is_indexable_html
 from scripts.site.public_copy_scope import visible_text
+from scripts.site.sync_article_word_counts import sync_word_count
+from scripts.site.document_intake import BODY_REPLACEMENTS
 
 SITE = "https://confenge.com.br"
 MEDICOES = ROOT / "medicoes-glosas-obras-publicas" / "index.html"
@@ -84,7 +86,9 @@ def evaluate_owned_html(html_by_route: dict[str, str]) -> dict:
         fails.append("medicoes_missing_deliverable_name")
     if "petição jurídica" not in med_text:
         fails.append("medicoes_missing_legal_boundary")
-    if "empresa contratada" not in med_text or "órgão público contratante" not in med_text:
+    responsibility = re.search(r'<details\b[^>]*id="responsabilidade-servico"[^>]*>.*?</details>', medicoes, re.S)
+    party_text = visible_text(responsibility.group(0)).lower() if responsibility else ""
+    if "empresa contratada" not in party_text or "órgão público" not in party_text:
         fails.append("medicoes_missing_party_distinction")
     if "sem o conjunto completo" not in med_text:
         fails.append("medicoes_missing_incomplete_start")
@@ -151,6 +155,19 @@ def test_mutation_dropping_four_way_distinction_fails():
     assert any(item.startswith("medicoes_missing_") for item in report["fails"]), report["fails"]
 
 
+def test_mutation_removing_either_responsible_party_fails():
+    for party in ("empresa contratada", "órgão público"):
+        pages = _load()
+        html = pages["/medicoes-glosas-obras-publicas/"]
+        block = re.search(r'<details\b[^>]*id="responsabilidade-servico"[^>]*>.*?</details>', html, re.S)
+        assert block and party in block.group(0)
+        pages["/medicoes-glosas-obras-publicas/"] = html.replace(
+            block.group(0), block.group(0).replace(party, "parte removida"), 1
+        )
+        report = evaluate_owned_html(pages)
+        assert report["fails"] == ["medicoes_missing_party_distinction"], report
+
+
 def test_mutation_injecting_receipt_promise_fails():
     pages = _load()
     pages["/medicoes-glosas-obras-publicas/"] += (
@@ -182,12 +199,16 @@ _REVISION_SURFACES = re.compile(
 # As três superfícies da ponte artigo→pilar. Cada uma colapsa num marcador
 # constante, elemento inteiro (não só atributo): o link do pilar no bloco de
 # oferta não existe em origin/main, e o conjunto de atributos do link do
-# formulário muda, não só valores. No WhatsApp só o texto pré-preenchido
-# (``?text=``) é mascarado: número e rótulo visível continuam pinados.
+# formulário muda, não só valores. Na campanha institucional, só o nome
+# após a saudação WhatsApp autorizada é projetado; destinatário e restante
+# da mensagem continuam pinados.
 _FORM_LABEL = "Continuar pelo formulário".encode("utf-8")
 _BRIDGE_FORM = re.compile(rb'<a class="button button-secondary"[^>]*>' + _FORM_LABEL + rb"</a>")
 _BRIDGE_PILLAR = re.compile(rb'<a class="text-link" data-pillar-link="1"[^>]*>.*?</a>', re.S)
-_BRIDGE_WA = re.compile(rb'(href="https://wa\.me/5548988344559)\?text=[^"]*(")')
+_BRIDGE_WA = re.compile(rb'(href="https://wa\.me/5548988344559\?text=Ol%C3%A1%2C%20)(?:Tiago|CONFENGE)([^"]*")')
+_WORD_COUNT = re.compile(rb'("wordCount"\s*:\s*)\d+')
+_LEGACY_INTAKE = "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
+_CURRENT_INTAKE = dict(BODY_REPLACEMENTS)[_LEGACY_INTAKE]
 
 
 def _mask_revision_date(html: bytes) -> bytes:
@@ -199,12 +220,25 @@ def _mask_bridge(html: bytes) -> bytes:
     """Colapsa a ponte de contato artigo→pilar; o corpo do guia fica pinado."""
     html = _BRIDGE_FORM.sub(b"@PONTE_FORMULARIO@", html)
     html = _BRIDGE_PILLAR.sub(b"", html)
-    html = _BRIDGE_WA.sub(rb"\1?text=@PONTE_WA@\2", html)
+    html = _BRIDGE_WA.sub(rb"\1@INSTITUTIONAL_GREETING@\2", html)
     return html
 
 
 def _mask(html: bytes) -> bytes:
+    html = html.replace(_LEGACY_INTAKE.encode("utf-8"), _CURRENT_INTAKE.encode("utf-8"))
+    html = _WORD_COUNT.sub(rb"\1@DERIVED_WORD_COUNT@", html)
     return _mask_bridge(_mask_revision_date(html))
+
+
+def _click_origin_equal(live: bytes, base: bytes) -> bool:
+    """Allow presentation projection only with a truthful live word count."""
+    text = live.decode("utf-8")
+    return (
+        len(_WORD_COUNT.findall(live)) == len(_WORD_COUNT.findall(base)) == 1
+        and len(_BRIDGE_WA.findall(live)) == len(_BRIDGE_WA.findall(base))
+        and sync_word_count(text) == text
+        and _mask(live) == _mask(base)
+    )
 
 
 def _base(path: Path) -> bytes:
@@ -236,7 +270,12 @@ def test_click_origin_articles_match_origin_main():
         rel = path.relative_to(ROOT).as_posix()
         base = _base(path)
         live = path.read_bytes()
-        assert _mask(live) == _mask(base), rel
+        expected_greetings = (4, 4, 3)[CLICK_ORIGIN.index(path)]
+        expected_intake = (1, 1, 0)[CLICK_ORIGIN.index(path)]
+        assert len(_BRIDGE_WA.findall(base)) == len(_BRIDGE_WA.findall(live)) == expected_greetings, rel
+        assert base.count(_LEGACY_INTAKE.encode("utf-8")) == expected_intake, rel
+        assert live.count(_CURRENT_INTAKE.encode("utf-8")) == expected_intake, rel
+        assert _click_origin_equal(live, base), rel
         # A máscara precisa ter encontrado a ponte, senão não é a ponte que evoluiu.
         assert _mask(live).count(b"@PONTE_FORMULARIO@") == 1, rel
         html = live.decode("utf-8")
@@ -259,6 +298,22 @@ def test_click_origin_guard_still_rejects_a_body_change():
     body = base.replace(b"<p>", b"<p>Texto novo. ", 1)
     assert body != base
     assert _mask(body) != _mask(base)
+
+
+def test_click_origin_projection_rejects_invented_count_or_other_changes():
+    path = CLICK_ORIGIN[0]
+    live, base = path.read_bytes(), _base(path)
+    assert _click_origin_equal(live, base)
+    corrupt_count = _WORD_COUNT.sub(lambda m: m.group(1) + b"999999", live, count=1)
+    assert _mask(corrupt_count) == _mask(live)
+    assert not _click_origin_equal(corrupt_count, base)
+    for old, new in (
+        (_CURRENT_INTAKE.encode("utf-8"), b"Seu arquivo foi enviado automaticamente."),
+        (b'"@type":"Article"', b'"@type":"Advertorial"'),
+    ):
+        changed = live.replace(old, new, 1)
+        assert changed != live
+        assert not _click_origin_equal(changed, base)
 
 
 def test_click_origin_guard_lets_the_bridge_evolve_only():
@@ -290,12 +345,14 @@ def test_click_origin_guard_lets_the_bridge_evolve_only():
         )
         assert with_pillar != base, path
         assert _mask(with_pillar) == _mask(base)
-        # 3. texto do WhatsApp em frase natural: passa; número trocado: reprova.
+        # 3. saudação institucional passa; restante da mensagem e número ficam pinados.
         wa = _BRIDGE_WA.search(base)
         assert wa, path
-        natural = base.replace(wa.group(0), wa.group(1) + b"?text=Ol%C3%A1" + wa.group(2), 1)
+        natural = base.replace(wa.group(0), wa.group(1) + b"CONFENGE" + wa.group(2), 1)
         assert natural != base
         assert _mask(natural) == _mask(base)
+        changed_message = base.replace(wa.group(0), wa.group(1) + b"CONFENGE.%20Outra%20mensagem" + wa.group(2), 1)
+        assert _mask(changed_message) != _mask(base)
         other_number = base.replace(b"wa.me/5548988344559", b"wa.me/5500000000000", 1)
         assert _mask(other_number) != _mask(base)
         # 4. rótulo do formulário trocado: o marcador não casa e reprova.
