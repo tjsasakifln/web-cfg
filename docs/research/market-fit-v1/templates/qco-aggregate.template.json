@@ -1,7 +1,7 @@
 {
-  "schema": "confenge.market-fit-qco-aggregate/1.0",
+  "schema": "confenge.market-fit-qco-aggregate/1.1",
   "template": true,
-  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
+  "protocol_version": "CFG-MARKET-FIT-2026-09-04-v3",
   "run_id": null,
   "status": "NOT_STARTED",
   "source": "CONFENGE_WEB",
@@ -24,6 +24,13 @@
     "deliveries_with_positive_margin": 0,
     "deliveries_with_forbidden_claim": 0
   },
+  "by_nucleus": [
+    { "nucleus_id": "building_engineering_documentation", "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "nucleus_id": "expert_evidence_assistance", "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "nucleus_id": "property_valuation", "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "nucleus_id": "occupational_safety", "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "nucleus_id": "public_works_b2g", "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null }
+  ],
   "by_deliverable": [
     { "deliverable_id": "CFG-D01", "price_version": null, "price_displayed_cents": 59900, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
     { "deliverable_id": "CFG-D12", "price_version": null, "price_displayed_cents": 190000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
@@ -36,6 +43,7 @@
   ],
   "contains_individual_records": false,
   "contains_pii": false,
+  "client_side_qco": false,
   "review": {
     "operator_role": null,
     "second_reviewer_role": null,

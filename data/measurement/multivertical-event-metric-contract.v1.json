@@ -1,0 +1,274 @@
+{
+  "schema": "confenge.multivertical-event-metric-contract/1.0",
+  "contract_id": "CONFENGE_MULTIVERTICAL_MEASUREMENT/1.0.0-draft.20260904",
+  "campaign_id": 13,
+  "owner_issue": "#336",
+  "umbrella_issue": "#577",
+  "related_issues": ["#341", "#580"],
+  "authority": "semantics_only_not_runtime",
+  "runtime_owner": "campaign_08",
+  "implementation_forbidden_in_this_contract": true,
+  "client_side_is_not_source_of_truth_for": ["qco", "proposal", "revenue", "margin", "won", "lost"],
+  "north_star": "qualified_commercial_opportunity_per_nucleus_joined_to_downstream_proposal_and_revenue",
+  "source": "CONFENGE_WEB",
+  "fail_closed": true,
+  "unknown_is_not_zero": true,
+  "second_source_of_truth_forbidden": true,
+  "nuclei": [
+    "expert_evidence_assistance",
+    "property_valuation",
+    "building_engineering_documentation",
+    "occupational_safety",
+    "public_works_b2g"
+  ],
+  "dimensions": {
+    "source_landing_family": {
+      "required": true,
+      "closed_enum": [
+        "home",
+        "nucleus_hub",
+        "service_pillar",
+        "tool",
+        "editorial",
+        "legal_trust",
+        "b2g_catalog",
+        "local_canary",
+        "unknown"
+      ],
+      "semantic": "Public landing family of the session entry. Class, not a free-text URL.",
+      "unknown_allowed": true
+    },
+    "source_asset": {
+      "required": true,
+      "value_type": "versioned_asset_id",
+      "free_text_url_forbidden": true,
+      "unknown_allowed": true,
+      "semantic": "Versioned public asset identity that originated the session. Never a pasted URL or title."
+    },
+    "nucleus_id": {
+      "required": true,
+      "closed_enum": [
+        "expert_evidence_assistance",
+        "property_valuation",
+        "building_engineering_documentation",
+        "occupational_safety",
+        "public_works_b2g",
+        "unknown"
+      ],
+      "unknown_allowed": true,
+      "semantic": "One of the five corporate nuclei, or unknown until classified."
+    },
+    "offer_candidate": {
+      "required": true,
+      "value_type": "versioned_offer_id",
+      "unknown_allowed": true,
+      "example_test_only": "private_project_technical_readiness_assessment",
+      "semantic": "Candidate offer identity from the versioned catalog. Not a free-text request."
+    },
+    "city_service_area_class": {
+      "required": true,
+      "closed_enum": [
+        "greater_florianopolis",
+        "santa_catarina_other",
+        "brazil_other",
+        "unknown"
+      ],
+      "address_forbidden": true,
+      "unknown_allowed": true,
+      "semantic": "Service-area class. Never a street address, CEP, or site location text."
+    },
+    "urgency": {
+      "required": true,
+      "closed_enum": [
+        "immediate_deadline",
+        "scheduled_decision",
+        "exploratory",
+        "unknown"
+      ],
+      "unknown_allowed": true
+    },
+    "decision_role": {
+      "required": true,
+      "closed_enum": [
+        "owner_partner_director",
+        "technical_responsible",
+        "legal_counsel",
+        "party_to_dispute",
+        "public_buyer",
+        "manager_sst",
+        "unknown"
+      ],
+      "unknown_allowed": true
+    },
+    "why_now_class": {
+      "required": true,
+      "closed_enum": [
+        "deadline",
+        "dispute_or_claim",
+        "inspection_or_audit",
+        "bid_or_proposal",
+        "incident",
+        "investment_or_transaction",
+        "unknown"
+      ],
+      "unknown_allowed": true,
+      "semantic": "Closed why-now class. Not a free-text motive."
+    },
+    "triage_start": {
+      "required": true,
+      "event": true,
+      "layer": "engagement",
+      "admission": "web_cfg_producer",
+      "not_qco": true
+    },
+    "triage_complete": {
+      "required": true,
+      "event": true,
+      "layer": "engagement",
+      "admission": "web_cfg_producer",
+      "not_qco": true
+    },
+    "handoff": {
+      "required": true,
+      "closed_enum": ["accepted", "rejected", "unknown"],
+      "unknown_allowed": true,
+      "semantic": "Transport/handoff receipt class. Not a commercial qualification."
+    },
+    "conflict_state_class": {
+      "required": true,
+      "closed_enum": ["none_declared", "check_required", "blocked", "unknown"],
+      "unknown_allowed": true,
+      "detailed_conflict_reason_forbidden": true
+    },
+    "qualification_state": {
+      "required": true,
+      "closed_enum": [
+        "NEEDS_CONTEXT",
+        "POTENTIAL_FIT",
+        "CONFLICT_CHECK_REQUIRED",
+        "DOCUMENT_GAP",
+        "CAPACITY_REVIEW",
+        "PARTNER_REQUIRED",
+        "OUT_OF_SCOPE",
+        "QCO",
+        "UNKNOWN"
+      ],
+      "unknown_allowed": true,
+      "qco_value_is_not_client_emittable": true
+    },
+    "qco": {
+      "required": true,
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true,
+      "collect_emit_forbidden": true,
+      "derived_from_earlier_layer_forbidden": true
+    },
+    "proposal": {
+      "required": true,
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true,
+      "collect_emit_forbidden": true
+    },
+    "commercial_outcome": {
+      "required": true,
+      "closed_enum": ["won", "lost", "unknown"],
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "unknown_allowed": true,
+      "client_emit_forbidden": true
+    },
+    "revenue_margin": {
+      "required": true,
+      "admission": "observed_only_aggregate_reference",
+      "owner": "warmbly",
+      "client_emit_forbidden": true,
+      "individual_amount_forbidden": true,
+      "semantic": "Aggregate downstream-owner reference only. Never a visitor-entered value and never a client-side metric."
+    }
+  },
+  "events": {
+    "triage_start": {
+      "layer": "engagement",
+      "admission": "web_cfg_producer",
+      "owner": "web-cfg",
+      "not_a": ["lead", "qualified_lead", "qco", "proposal", "pipeline"]
+    },
+    "triage_complete": {
+      "layer": "engagement",
+      "admission": "web_cfg_producer",
+      "owner": "web-cfg",
+      "not_a": ["lead", "qualified_lead", "qco", "proposal", "pipeline"]
+    },
+    "handoff_accepted": {
+      "layer": "lead",
+      "admission": "web_cfg_producer",
+      "owner": "web-cfg",
+      "not_a": ["qco", "proposal", "pipeline"]
+    },
+    "handoff_rejected": {
+      "layer": "lead",
+      "admission": "web_cfg_producer",
+      "owner": "web-cfg",
+      "not_a": ["qco", "proposal", "pipeline"]
+    },
+    "handoff_unknown": {
+      "layer": "lead",
+      "admission": "web_cfg_producer",
+      "owner": "web-cfg",
+      "not_a": ["qco", "proposal", "pipeline"]
+    },
+    "qco": {
+      "layer": "qualified_lead",
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true
+    },
+    "proposal": {
+      "layer": "pipeline",
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true
+    },
+    "won": {
+      "layer": "pipeline",
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true
+    },
+    "lost": {
+      "layer": "pipeline",
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true
+    },
+    "outcome_unknown": {
+      "layer": "pipeline",
+      "admission": "observed_only",
+      "owner": "warmbly",
+      "client_emit_forbidden": true
+    },
+    "revenue_margin_aggregate_ref": {
+      "layer": "pipeline",
+      "admission": "observed_only_aggregate_reference",
+      "owner": "warmbly",
+      "client_emit_forbidden": true
+    }
+  },
+  "producers_that_cannot_emit_observed_only": [
+    "confengeTrack",
+    "collect",
+    "browser",
+    "form",
+    "js"
+  ],
+  "join_keys_non_pii": ["session_id", "lead_id", "opportunity_id", "proposal_id", "sale_id", "event_id"],
+  "invariants": {
+    "outbound_eligible": false,
+    "auto_send": false,
+    "source": "CONFENGE_WEB",
+    "pii_in_analytics": false,
+    "web_cfg_is_crm": false
+  }
+}
