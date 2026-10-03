@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-03T19:21:12.696Z",
+  "measured_at": "2026-10-03T20:34:33.432Z",
   "measured_on": "2026-10-03",
-  "commit_sha": "54020fb106b337b91c85ce00e4f589e79d4b5466",
+  "commit_sha": "a78b0944f18bf4337da6054f46826e9b4e23f78d",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -52,7 +52,7 @@
     "problemas-que-resolvemos/index.html": "c6d138be9e1896eeb0128b7384582ae0e6a98b1a77e70e4fcc70bbce0f36e718",
     "reequilibrio-obras-publicas/index.html": "f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833",
     "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
-    "servicos-obras-publicas/index.html": "28fd9fd5c2ca2496fbc7318ffdc41e929f0d565862ce78432af842d1ed48934d",
+    "servicos-obras-publicas/index.html": "824425f8dbb76ffe132420bdbf18a7218d193ea001296f8d8b0bb155e88c5218",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
@@ -514,7 +514,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "28fd9fd5c2ca2496fbc7318ffdc41e929f0d565862ce78432af842d1ed48934d",
+      "html_sha256": "824425f8dbb76ffe132420bdbf18a7218d193ea001296f8d8b0bb155e88c5218",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
