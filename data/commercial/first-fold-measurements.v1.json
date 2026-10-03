@@ -1,16 +1,16 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-03T19:13:06.253Z",
+  "measured_at": "2026-10-03T19:21:12.696Z",
   "measured_on": "2026-10-03",
-  "commit_sha": "8cc14cec9ba5594e638e536bbc405947b9eb1265",
+  "commit_sha": "54020fb106b337b91c85ce00e4f589e79d4b5466",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
     "@control/scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
     "@control/scripts/site/measure_first_fold.mjs": "e1637d957ea1275998261e00e022825f89548cefb555b6406ae55a15af0a786a",
     "acompanhamento-contratos-obras/index.html": "2f331ea8ff902f8c7a5c8f28be9d9a607d857ed931eb1447e31774d8c98f808d",
-    "aditivos-obras-publicas/index.html": "37824a818d780406bbce9672113457ecb67a065c4b10982b27ed8a9057f3134a",
+    "aditivos-obras-publicas/index.html": "3de8a9bb491c1ceb121fd481f9844c9b86012443cc1f80df3e903a9fe26228dc",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
@@ -21,7 +21,7 @@
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
     "atrasos-prorrogacao-obras-publicas/index.html": "70a4546c35a49fe73f9c0dab17d7be96ffe21eace4f44c28ab0717113c432145",
-    "auditoria-orcamento-licitacao/index.html": "de7ac7703edf75692aff3f820abc808b1c3408850390f9d96920d8316f38680f",
+    "auditoria-orcamento-licitacao/index.html": "b79d7dc15f8a653db2b29369a76bac1c19a5537ddc13da541316d04085bc18d7",
     "bid-room-licitacoes-obras/index.html": "18c882f10f1212f1632d77a9ca488b6996017f930deb36c2ab05aaaa952e87c5",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "53e66133c3329c274fc38810c09eed3f1a91782ee7d117d6ae2a7e9eb0553835",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
@@ -41,16 +41,16 @@
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
     "defesa-margem-contratos-publicos/index.html": "fbaa53dd088194ad74701915dfbfc7569a9f12285ef43c99259d77147baeb7e7",
     "defesa-tecnica-contratos-publicos/index.html": "b631647a367578aff84c70892b767d8dc17ab3654d945a98b6e585f5c109af44",
-    "diagnostico-b2g-360/index.html": "f96eda0284cc16fdbd925eb81919a574c0ff19fac7dc0ab88c5aa2084c0f9354",
+    "diagnostico-b2g-360/index.html": "db04ad9a492c9f261f08e76e9a8904a89104d33e76a6dd615deb1d1ae2d38f5f",
     "diagnostico-b2g-expansao/index.html": "bd9888951458ebce6342011b6666b5b14a6e7785efdd065c1bb4f41d5fa921c9",
-    "diagnostico-pre-licitacao/index.html": "5caf1fd39b40b0b3710f4c2b401d3f28d892c05229bb7fcda1206461c661803e",
+    "diagnostico-pre-licitacao/index.html": "dde8951f37ddbdf3aef22ba2829c35b184fabb087e04edddd6b57334a331839f",
     "diretoria-b2g/index.html": "5d3e9299c2a41ada5e6a0780589c518e75c03f245592a4c35ad21e6f844dba5d",
     "entregas/index.html": "3718911cf0a8eb581e5cfd9982f1f5af0de385dd4fb1e4d0c9aecc471991c813",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
     "index.html": "eaf68520fd8403830ac0b4c0feeae05e707d7cd3a8163e586d8ce55dcfceaf3f",
-    "medicoes-glosas-obras-publicas/index.html": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
+    "medicoes-glosas-obras-publicas/index.html": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
     "problemas-que-resolvemos/index.html": "c6d138be9e1896eeb0128b7384582ae0e6a98b1a77e70e4fcc70bbce0f36e718",
-    "reequilibrio-obras-publicas/index.html": "e0cfa98560b7ce20559f98ce4f840323de430dd75513d3f03a9d3d0cdae24e7f",
+    "reequilibrio-obras-publicas/index.html": "f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833",
     "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
     "servicos-obras-publicas/index.html": "28fd9fd5c2ca2496fbc7318ffdc41e929f0d565862ce78432af842d1ed48934d",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
@@ -1096,7 +1096,7 @@
     },
     {
       "route": "/diagnostico-pre-licitacao/",
-      "html_sha256": "5caf1fd39b40b0b3710f4c2b401d3f28d892c05229bb7fcda1206461c661803e",
+      "html_sha256": "dde8951f37ddbdf3aef22ba2829c35b184fabb087e04edddd6b57334a331839f",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -1141,8 +1141,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 419,
-                "bottom": 554,
+                "top": 361,
+                "bottom": 496,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -1153,8 +1153,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1168,8 +1168,8 @@
               "text": "Descrever a licitação",
               "href": "#captura-pilar",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1227,8 +1227,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 633,
-                "bottom": 801,
+                "top": 459,
+                "bottom": 627,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1239,8 +1239,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 459,
-                "bottom": 503,
+                "top": 651,
+                "bottom": 695,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1254,8 +1254,8 @@
               "text": "Descrever a licitação",
               "href": "#captura-pilar",
               "box": {
-                "top": 459,
-                "bottom": 503,
+                "top": 651,
+                "bottom": 695,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1304,7 +1304,7 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "de7ac7703edf75692aff3f820abc808b1c3408850390f9d96920d8316f38680f",
+      "html_sha256": "b79d7dc15f8a653db2b29369a76bac1c19a5537ddc13da541316d04085bc18d7",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -1349,8 +1349,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 419,
-                "bottom": 554,
+                "top": 361,
+                "bottom": 496,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -1361,8 +1361,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 328,
                 "width": 245,
@@ -1376,8 +1376,8 @@
               "text": "Descrever o orçamento",
               "href": "#captura-pilar",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 328,
                 "width": 245,
@@ -1435,8 +1435,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 600,
-                "bottom": 768,
+                "top": 426,
+                "bottom": 594,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1447,8 +1447,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 426,
-                "bottom": 470,
+                "top": 618,
+                "bottom": 662,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1462,8 +1462,8 @@
               "text": "Descrever o orçamento",
               "href": "#captura-pilar",
               "box": {
-                "top": 426,
-                "bottom": 470,
+                "top": 618,
+                "bottom": 662,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1914,7 +1914,7 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
+      "html_sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -1959,8 +1959,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 419,
-                "bottom": 554,
+                "top": 361,
+                "bottom": 496,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -1971,8 +1971,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1986,8 +1986,8 @@
               "text": "Descrever a medição",
               "href": "#captura-pilar",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -2045,8 +2045,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 607,
-                "bottom": 775,
+                "top": 433,
+                "bottom": 601,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2057,8 +2057,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 433,
-                "bottom": 477,
+                "top": 625,
+                "bottom": 669,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2072,8 +2072,8 @@
               "text": "Descrever a medição",
               "href": "#captura-pilar",
               "box": {
-                "top": 433,
-                "bottom": 477,
+                "top": 625,
+                "bottom": 669,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2119,7 +2119,7 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "37824a818d780406bbce9672113457ecb67a065c4b10982b27ed8a9057f3134a",
+      "html_sha256": "3de8a9bb491c1ceb121fd481f9844c9b86012443cc1f80df3e903a9fe26228dc",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -2164,8 +2164,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 480,
-                "bottom": 615,
+                "top": 418,
+                "bottom": 553,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -2176,8 +2176,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 418,
-                "bottom": 462,
+                "top": 577,
+                "bottom": 621,
                 "left": 83,
                 "right": 298,
                 "width": 215,
@@ -2191,8 +2191,8 @@
               "text": "Descrever o aditivo",
               "href": "#captura-pilar",
               "box": {
-                "top": 418,
-                "bottom": 462,
+                "top": 577,
+                "bottom": 621,
                 "left": 83,
                 "right": 298,
                 "width": 215,
@@ -2250,8 +2250,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 686,
-                "bottom": 854,
+                "top": 512,
+                "bottom": 680,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2262,8 +2262,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 512,
-                "bottom": 556,
+                "top": 704,
+                "bottom": 748,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2277,8 +2277,8 @@
               "text": "Descrever o aditivo",
               "href": "#captura-pilar",
               "box": {
-                "top": 512,
-                "bottom": 556,
+                "top": 704,
+                "bottom": 748,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2286,12 +2286,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Ver os 3 guias",
-              "href": "#guias"
-            }
-          ],
+          "secondary_actions_in_fold": [],
           "horizontal_overflow": false
         }
       },
@@ -2530,7 +2525,7 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "e0cfa98560b7ce20559f98ce4f840323de430dd75513d3f03a9d3d0cdae24e7f",
+      "html_sha256": "f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -2575,8 +2570,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 448,
-                "bottom": 610,
+                "top": 390,
+                "bottom": 552,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -2587,8 +2582,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 576,
+                "bottom": 620,
                 "left": 83,
                 "right": 290,
                 "width": 207,
@@ -2602,8 +2597,8 @@
               "text": "Descrever o pleito",
               "href": "#captura-pilar",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 576,
+                "bottom": 620,
                 "left": 83,
                 "right": 290,
                 "width": 207,
@@ -2661,8 +2656,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 660,
-                "bottom": 852,
+                "top": 485,
+                "bottom": 677,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2673,8 +2668,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 485,
-                "bottom": 529,
+                "top": 701,
+                "bottom": 745,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2688,8 +2683,8 @@
               "text": "Descrever o pleito",
               "href": "#captura-pilar",
               "box": {
-                "top": 485,
-                "bottom": 529,
+                "top": 701,
+                "bottom": 745,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2697,12 +2692,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Ler a resposta direta",
-              "href": "#resposta"
-            }
-          ],
+          "secondary_actions_in_fold": [],
           "horizontal_overflow": false
         }
       },
@@ -2939,7 +2929,7 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "html_sha256": "f96eda0284cc16fdbd925eb81919a574c0ff19fac7dc0ab88c5aa2084c0f9354",
+      "html_sha256": "db04ad9a492c9f261f08e76e9a8904a89104d33e76a6dd615deb1d1ae2d38f5f",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -2984,8 +2974,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 504,
-                "bottom": 639,
+                "top": 390,
+                "bottom": 525,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -2996,8 +2986,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 549,
+                "bottom": 593,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3011,8 +3001,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 549,
+                "bottom": 593,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3070,8 +3060,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 742,
-                "bottom": 910,
+                "top": 482,
+                "bottom": 650,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3082,8 +3072,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 482,
-                "bottom": 526,
+                "top": 674,
+                "bottom": 718,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3097,8 +3087,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 482,
-                "bottom": 526,
+                "top": 674,
+                "bottom": 718,
                 "left": 18,
                 "right": 372,
                 "width": 353,

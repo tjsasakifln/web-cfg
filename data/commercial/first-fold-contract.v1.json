@@ -117,7 +117,7 @@
       "measurement": {
         "date": "2026-10-03",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=241; substância técnica de y=419 a y=554; ação primária inteira de y=361 a y=405 em 1366x768, e de y=459 a y=503 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=241; substância técnica de y=361 a y=496; ação primária inteira de y=520 a y=564 em 1366x768, e de y=651 a y=695 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -127,7 +127,7 @@
       "measurement": {
         "date": "2026-10-03",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=241; substância técnica de y=419 a y=554; ação primária inteira de y=361 a y=405 em 1366x768, e de y=426 a y=470 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=241; substância técnica de y=361 a y=496; ação primária inteira de y=520 a y=564 em 1366x768, e de y=618 a y=662 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -157,18 +157,17 @@
       "measurement": {
         "date": "2026-10-03",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=241; substância técnica de y=419 a y=554; ação primária inteira de y=361 a y=405 em 1366x768, e de y=433 a y=477 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=241; substância técnica de y=361 a y=496; ação primária inteira de y=520 a y=564 em 1366x768, e de y=625 a y=669 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/aditivos-obras-publicas/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
         "date": "2026-10-03",
-        "viewport": "390x844",
-        "finding": "H1 de y=191 a y=291 em 1366x768; substância técnica de y=686 a y=854 em 390x844, fora da dobra de 844",
-        "blocker": "EXECUTE_NOW 2026-09-09: corrigir e medir; o congelamento editorial não autoriza manter uma falha pública"
+        "viewport": "1366x768",
+        "finding": "H1 de y=191 a y=291; substância técnica de y=418 a y=553; ação primária inteira de y=577 a y=621 em 1366x768, e de y=704 a y=748 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -184,12 +183,11 @@
     {
       "route": "/reequilibrio-obras-publicas/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
         "date": "2026-10-03",
-        "viewport": "390x844",
-        "finding": "H1 de y=191 a y=241 em 1366x768; substância técnica de y=660 a y=852 em 390x844, fora da dobra de 844",
-        "blocker": "EXECUTE_NOW 2026-09-09: corrigir e medir; o congelamento editorial não autoriza manter uma falha pública"
+        "viewport": "1366x768",
+        "finding": "H1 de y=191 a y=241; substância técnica de y=390 a y=552; ação primária inteira de y=576 a y=620 em 1366x768, e de y=701 a y=745 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -205,12 +203,11 @@
     {
       "route": "/diagnostico-b2g-360/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
         "date": "2026-10-03",
-        "viewport": "390x844",
-        "finding": "H1 de y=191 a y=241 em 1366x768; substância técnica de y=742 a y=910 em 390x844, fora da dobra de 844",
-        "blocker": "EXECUTE_NOW 2026-09-09: corrigir e medir; o congelamento editorial não autoriza manter uma falha pública"
+        "viewport": "1366x768",
+        "finding": "H1 de y=191 a y=241; substância técnica de y=390 a y=525; ação primária inteira de y=549 a y=593 em 1366x768, e de y=674 a y=718 em 390x844, dentro da dobra nos dois"
       }
     },
     {
