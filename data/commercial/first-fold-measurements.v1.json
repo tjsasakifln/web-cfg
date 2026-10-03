@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-03T21:39:23.273Z",
+  "measured_at": "2026-10-03T23:05:50.235Z",
   "measured_on": "2026-10-03",
-  "commit_sha": "b7b5d08ea5a23988298a9953aacbea269b01a7cb",
+  "commit_sha": "33c0364fcb079ef7f253024b43e8f0012c15498b",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -15,7 +15,7 @@
     "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "15d19a0f372c73f641bce7c59f3261eec22b08b053d6b28d4f3ccde92bff2e4b",
+    "assets/home-10x.css": "c4fb35a7fcd9747923ab0e1d9ae6313b96b9a35009f793a65358cda8bd984312",
     "assets/home-base.css": "5daf95b910c1f2bb765320f3b0c8391225a3d26e87bfd25609330998d9110186",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
@@ -45,9 +45,9 @@
     "diagnostico-b2g-expansao/index.html": "bd9888951458ebce6342011b6666b5b14a6e7785efdd065c1bb4f41d5fa921c9",
     "diagnostico-pre-licitacao/index.html": "dde8951f37ddbdf3aef22ba2829c35b184fabb087e04edddd6b57334a331839f",
     "diretoria-b2g/index.html": "5d3e9299c2a41ada5e6a0780589c518e75c03f245592a4c35ad21e6f844dba5d",
-    "entregas/index.html": "3718911cf0a8eb581e5cfd9982f1f5af0de385dd4fb1e4d0c9aecc471991c813",
+    "entregas/index.html": "c02697308ae2fe7ec7201793c25732c335969043a44baebcfd36c3d1e74df25c",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "145b68c970caddb3a0aa2d96cac6911c604a4882910b83054052422e83c20a5b",
+    "index.html": "f5de89b12c1810e254f6f0e88be4bbffd3a5790b1226598d589a7065baed3df8",
     "medicoes-glosas-obras-publicas/index.html": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
     "problemas-que-resolvemos/index.html": "c6d138be9e1896eeb0128b7384582ae0e6a98b1a77e70e4fcc70bbce0f36e718",
     "reequilibrio-obras-publicas/index.html": "f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833",
@@ -109,7 +109,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "145b68c970caddb3a0aa2d96cac6911c604a4882910b83054052422e83c20a5b",
+      "html_sha256": "f5de89b12c1810e254f6f0e88be4bbffd3a5790b1226598d589a7065baed3df8",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
@@ -316,7 +316,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "3718911cf0a8eb581e5cfd9982f1f5af0de385dd4fb1e4d0c9aecc471991c813",
+      "html_sha256": "c02697308ae2fe7ec7201793c25732c335969043a44baebcfd36c3d1e74df25c",
       "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
