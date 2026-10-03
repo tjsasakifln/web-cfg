@@ -141,7 +141,7 @@
         128,
         291
       ],
-      "expected_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+      "expected_sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
       "expected_sha256_note": "Bytes derivados da campanha institucional, revisados autonomamente e vinculados ao canário #389. A recaptura preserva fatos, fontes, termos e controles; não alega nova aprovação humana.",
       "expected_sha256_recaptured_at": "2026-10-03",
       "expected_sha256_recapture_reason": "CONFENGE-CAMPANHA-AQUISICAO-20261003: aberturas específicas de engenharia, responsabilidades acessíveis, saudação institucional e hierarquia medida de primeira tela; preços, prazos, entregáveis, fontes, canonical, robots e formulário protegidos pelos contratos vigentes. A revisão humana factual anterior permanece histórica.",

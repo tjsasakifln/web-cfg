@@ -215,17 +215,16 @@ def test_entry_twice_html_mutation_false():
     assert len(snaps) == 6
 
 
-def test_historical_forbidden_hashes_remain_auditable_after_freeze_revocation():
+def test_reviewed_forbidden_checkpoint_matches_current_protected_bytes():
     baseline = committed_forbidden_hashes(ROOT)
     hashes = forbidden_path_hashes(ROOT)
     drift = forbidden_drift(ROOT)
-    assert drift
-    assert set(drift).issubset(set(FORBIDDEN_RELATIVE_PATHS))
+    assert drift == {}
     for rel in FORBIDDEN_RELATIVE_PATHS:
         path = ROOT / rel
         assert path.is_file(), rel
         assert len(baseline[rel]) == 64
-        assert hashes[rel] == content_sha256(path)
+        assert baseline[rel] == hashes[rel] == content_sha256(path)
 
 
 def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_git():
