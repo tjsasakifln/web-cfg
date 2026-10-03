@@ -340,7 +340,7 @@
   "devDependencies": {
     "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
-    "lighthouse": "^13.4.1",
+    "lighthouse": "^13.5.0",
     "puppeteer-core": "^25.8.0",
     "terser": "^5.50.0"
   },
