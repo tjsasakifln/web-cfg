@@ -147,15 +147,33 @@ test("the demonstrative table remains keyboard accessible on narrow screens", ()
   assert.match(wrapper, /aria-label="[^"]+"/);
 });
 
-test("the service directory projects the canonical SST label into JSON-LD", () => {
-  const services = read("servicos/index.html");
+function assertDirectorySstProjection(services) {
   assert.doesNotMatch(services, /Apoio técnico de segurança do trabalho/);
   const blocks = [...services.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
     .map((match) => JSON.parse(match[1]));
-  const entries = blocks.flatMap((block) => block["@graph"] || [])
-    .flatMap((node) => node.mainEntity?.itemListElement || []);
-  const sst = entries.find((entry) => entry.url === "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/");
-  assert.equal(sst?.name, "Documentação de SST");
+  const entries = blocks.flatMap((block) => block["@graph"] || [block])
+    .flatMap((node) => node["@type"] === "ItemList" ? node.itemListElement || [] : node.mainEntity?.itemListElement || []);
+  const sst = entries.filter((entry) => entry.url === "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/");
+  assert.equal(sst.length, 1);
+  const labels = [...services.matchAll(/<a\b[^>]*href="\/seguranca-trabalho-apoio-tecnico\/"[^>]*>([\s\S]*?)<\/a>/g)].map((match) => visible(match[1]));
+  assert.ok(labels.length > 0);
+  assert.ok(labels.every((label) => label === sst[0].name));
+  assert.match(sst[0].name, /SST|segurança do trabalho/i);
+}
+
+test("the service directory projects its actual SST entry consistently into JSON-LD", () => {
+  assertDirectorySstProjection(read("servicos/index.html"));
+});
+
+test("SST directory projection rejects missing or invented structured entries", () => {
+  const services = read("servicos/index.html");
+  for (const [old, replacement] of [
+    ['"name":"Segurança do trabalho"', '"name":"Medicina ocupacional"'],
+    ['"url":"https://confenge.com.br/seguranca-trabalho-apoio-tecnico/"', '"url":"https://confenge.com.br/x/"'],
+  ]) {
+    assert.ok(services.includes(old));
+    assert.throws(() => assertDirectorySstProjection(services.replaceAll(old, replacement)), assert.AssertionError);
+  }
 });
 
 test("portfolio is exhaustive about remote, conditional and excluded work", () => {

@@ -17,6 +17,7 @@ import { fileURLToPath } from "url";
 
 import { HOST_ARCHITECTURE_VERSION } from "../migration/netcup/lib/contract.mjs";
 import { createOriginClient } from "../migration/netcup/lib/origin-client.mjs";
+import { evaluateHomeAcquisition } from "./home_acquisition_contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -90,13 +91,6 @@ const origin = createOriginClient({
   hostHeader: OPTIONS.host,
   resolveIp: OPTIONS.resolveIp,
 });
-/** The corporate H1 must state the new project focus precisely: an execution
- * verb and the three coordinated fronts.  This is more specific than the
- * former generic "engenharia" requirement and keeps the check tied to the
- * visitor-facing positioning rather than an exact copy string. */
-const EXPECTED_H1_TERMS = ["estruturas", "instalações", "infraestrutura"];
-const EXPECTED_H1_WORK_VERB = /\b(?:projetamos|desenvolvemos)\b/;
-const EXPECTED_SITUATIONS = JSON.parse(readFileSync(new URL("../../data/site/brand.json", import.meta.url), "utf8")).service_situations.length;
 const RETIRED = [
   "Oito momentos em que",
   "Todo o conteúdo permanece legível sem JavaScript",
@@ -244,15 +238,14 @@ if (OPTIONS.expectedRuntimeIdentity) {
 // Home architecture
 const home = await fetchText("/");
 ok("home_200", home.status === 200, `status=${home.status}`);
-const homeH1 = home.body.match(/<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || "";
-const homeH1Text = homeH1.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
+const homeContract = evaluateHomeAcquisition(home.body);
 ok(
   "home_h1_service_scope",
-  EXPECTED_H1_TERMS.every((term) => homeH1Text.includes(term)) && EXPECTED_H1_WORK_VERB.test(homeH1Text),
-  "corporate H1 must name engineering and the work assumed",
+  homeContract.headingScope && homeContract.executionScope,
+  "opening must name engineering projects and explicitly assume the three coordinated fronts",
 );
-const situationRows = (home.body.match(/class="[^"]*\bsituation-row\b/g) || []).length;
-ok("situation_paths_match_contract", situationRows === EXPECTED_SITUATIONS, `situation rows=${situationRows} expected=${EXPECTED_SITUATIONS}`);
+ok("corporate_paths_match_contract", homeContract.discoveryPaths, "nine attributed discipline and service destinations required");
+ok("home_proposal_reaches_persisted_intake", homeContract.proposalPath, "hero proposal must reach the shared receipt-dependent form");
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;
 ok("narrative_blocks_within_range", blocks >= 5 && blocks <= 8, `archetypes=${blocks}`);
 for (const phrase of RETIRED) {
@@ -359,7 +352,9 @@ ok(
   loc === "/servicos/",
   `loc=${loc}`
 );
-ok("fragment_situacoes", home.body.includes('id="situacoes"'), "missing id");
+for (const id of ["competencias", "servicos-complementares", "contato"]) {
+  ok(`fragment_${id}`, home.body.includes(`id="${id}"`), "missing corporate destination");
+}
 
 // 410
 for (const path of ["/vision", "/nexgen", "/avcbclcb"]) {

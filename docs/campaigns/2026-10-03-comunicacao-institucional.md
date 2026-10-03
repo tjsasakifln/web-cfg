@@ -179,3 +179,23 @@ Os 51 testes da biblioteca e modelos passaram. As mensagens dos modelos só
 trocam a saudação para CONFENGE, mantendo intenção, assunto, preço e número.
 O inventário exige 46 arquivos, 28 bibliotecas e os mesmos 16 handlers, incluindo
 explicitamente qa-email como biblioteca; seus três testes passaram.
+
+O salto nativo para contato revelou deslocamento causado pelas estimativas de
+altura da home anterior. A sequência institucional agora é renderizada sem
+essas estimativas: a matriz passou em 224 combinações de rota e largura, de
+320 a 1920 px, mais 14 verificações sem JavaScript. O contrato de publicação
+exige a abertura de engenharia, nove caminhos atribuídos e a ação de proposta
+até um formulário com persistência, AJAX e atribuição sem PII. Seus 20 testes
+passaram, incluindo negativos para atributo parecido, evento no filho e
+formulário incompatível. Os contratos SST verificam a orientação real sobre
+material reservado, as datas estruturadas e o item visível na home; os 10 e
+12 testes focados passaram, mantendo os limites técnicos e comerciais.
+A medição de primeira tela vinculada a b7b5d08 é conservada como histórico
+antes da medição deste novo checkpoint de CSS.
+
+Cinco entradas contextuais de SST conservam evento e intenção declarados na
+home, serviços, entregas, triagem e liderança. O perfil chega ao contato do
+hub; as demais entradas explicam o serviço no hub, que mantém as quatro
+frentes PGR e três canais terminais atribuídos. O teste usa o conteúdo principal
+e a âncora real, rejeitando substituição pelo rodapé e metadados em filhos.
+Os seis testes de integração e a cadeia completa de correção SST passaram.

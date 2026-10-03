@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
+import { evaluateHomeAcquisition } from "../../../site/home_acquisition_contract.mjs";
 
 import {
   HostContractError,
@@ -402,6 +403,37 @@ test("production cutover keeps valuable checks and adds host-neutral identities"
   assert.doesNotMatch(source, /arg\s*===\s*["']--insecure|args\.push\([^\n]*--insecure/);
   const originClient = readFileSync(resolve(ROOT, "scripts/migration/netcup/lib/origin-client.mjs"), "utf8");
   assert.doesNotMatch(originClient, /args\.push\([^\n]*(?:--insecure|["']-k["'])/);
+});
+
+test("production home acceptance requires project scope, attributed paths and persisted proposal", () => {
+  const html = readFileSync(resolve(ROOT, "index.html"), "utf8");
+  assert.deepEqual(evaluateHomeAcquisition(html), {
+    headingScope: true, executionScope: true, discoveryPaths: true, proposalPath: true,
+  });
+  for (const [old, replacement, field] of [
+    ["Engenharia de projeto para decisões", "Serviços para decisões", "headingScope"],
+    ["A CONFENGE elabora e coordena projetos", "A CONFENGE apresenta serviços", "executionScope"],
+    ["estruturas, instalações e infraestrutura", "disciplinas diversas", "executionScope"],
+    ['data-cta-id="home-project-structures"', 'data-cta-id="outro"', "discoveryPaths"],
+    ['href="/servicos/#areas"', 'href="/x/"', "discoveryPaths"],
+    ['data-cta-position="home_services"', 'data-cta-position="outro"', "discoveryPaths"],
+    ['href="#contato"', 'href="/triagem-tecnica/"', "proposalPath"],
+    ['data-receipt-required="true"', 'data-receipt-required="false"', "proposalPath"],
+    ['data-ajax="true"', 'data-ajax="false"', "proposalPath"],
+    ['data-capture-form', 'data-capture-form-disabled', "proposalPath"],
+    ['name="diagnostico-b2g"', 'name="outro"', "proposalPath"],
+    ['data-cta-position="hero"', 'data-cta-position="hero" data-email="test@example.invalid"', "proposalPath"],
+  ]) {
+    assert.ok(html.includes(old), old);
+    assert.equal(evaluateHomeAcquisition(html.replaceAll(old, replacement))[field], false, field);
+  }
+  for (const [id, field] of [["home-project-structures", "discoveryPaths"], [null, "proposalPath"]]) {
+    const anchor = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0])
+      .find((value) => id ? value.includes(`data-cta-id="${id}"`) : value.includes('data-cta-position="hero"') && value.includes("button-primary"));
+    assert.ok(anchor);
+    const moved = anchor.replace('data-event-name="cta_click"', '').replace(">", '><span data-event-name="cta_click"></span>');
+    assert.equal(evaluateHomeAcquisition(html.replace(anchor, moved))[field], false, field);
+  }
 });
 
 // A default_type carrying "; charset=utf-8" is compared whole against gzip_types,
