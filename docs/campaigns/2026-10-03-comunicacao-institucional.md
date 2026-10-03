@@ -207,3 +207,9 @@ O template do catálogo público também conserva essa atribuição de SST,
 byte a byte com a âncora publicada; seu check registra 54 entregas e oito
 ofertas sem drift. A suíte completa de contratos comerciais passou depois
 desta conciliação, sem nova alteração de HTML, CSS ou medição de primeira tela.
+As quatro novas entradas contextuais de SST também declaram a posição do
+clique; a home já conservava home_services. O helper exige a posição exata
+por ID e rejeita sua remoção. Catálogo e inventário acompanham o metadado;
+os 35 testes da biblioteca, seis de integração SST e o gate next-state/v1
+passaram. A evidência limpa de 33c0364 fica preservada antes da recaptura
+do novo checkpoint de HTML.

@@ -8,6 +8,13 @@ import { parse } from "parse5";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const hubRoute = "/seguranca-trabalho-apoio-tecnico/";
+const entryPositions = {
+  "home-service-sst": "home_services",
+  "services-sst-hub": "service_directory",
+  "triage-sst-hub": "contact_directory",
+  "deliverables-sst-hub": "capabilities",
+  "profile-sst-hub": "profile_scope",
+};
 const attr = (node, name) => node?.attrs?.find((item) => item.name === name)?.value;
 const text = (node) => node?.nodeName === "#text" ? node.value : (node?.childNodes || []).map(text).join(" ");
 const nodes = (node) => [node, ...(node?.childNodes || []).flatMap(nodes)];
@@ -25,6 +32,8 @@ function assertSstEntry(html, id, scopeId, fragment = "") {
   const entry = matches[0];
   assert.equal(attr(entry, "href"), hubRoute + fragment);
   assert.equal(attr(entry, "data-event-name"), "cta_click");
+  assert.ok(entryPositions[id], "SST entry has a declared stable position");
+  assert.equal(attr(entry, "data-cta-position"), entryPositions[id]);
   assert.equal(attr(entry, "data-journey"), "sst");
   assert.equal(attr(entry, "data-route-family"), "seguranca-trabalho-apoio-tecnico");
   assert.match(attr(entry, "data-tema") || "", /SST|Segurança do Trabalho/i);
@@ -115,6 +124,7 @@ test("SST entrance contract rejects footer substitutes and missing or misplaced 
     tag.replace('data-route-family="seguranca-trabalho-apoio-tecnico"', 'data-route-family="triagem-tecnica"'),
     tag.replace('data-tema="Documentação técnica de SST"', 'data-tema=""'),
     tag.replace('data-event-name="cta_click"', '') + '<span data-event-name="cta_click">',
+    tag.replace('data-cta-position="profile_scope"', ''),
     tag.replace('data-cta-id="profile-sst-hub"', ''),
     '</section>' + tag,
     tag + '</a>' + tag,
