@@ -229,6 +229,29 @@ def test_revocation_removes_claim_from_every_owned_html_and_jsonld():
         assert "Confenge Serviços de Desenhos Técnicos Ltda" not in jsonld_blob(after)
 
 
+def test_credential_snapshot_as_of_does_not_change_editorial_jsonld_date_modified():
+    registry = copy.deepcopy(load_registry())
+    registry["as_of"] = "2026-10-01"
+    pages = _surface_html()
+
+    for surface, html in pages.items():
+        page_type = "WebPage" if surface == "/confianca/" else "ProfilePage"
+        original = next(
+            node
+            for node in extract_jsonld_nodes(html)
+            if page_type in (node.get("@type") if isinstance(node.get("@type"), list) else [node.get("@type")])
+        )["dateModified"]
+
+        rendered = apply_to_html(html, project(registry, surface))
+        patched = next(
+            node
+            for node in extract_jsonld_nodes(rendered)
+            if page_type in (node.get("@type") if isinstance(node.get("@type"), list) else [node.get("@type")])
+        )
+        assert patched["dateModified"] == original
+        assert f'data-credential-as-of="{registry["as_of"]}"' in rendered
+
+
 def test_revocation_scrubs_legal_name_duplicated_in_webpage_and_meta():
     legal = "Confenge Serviços de Desenhos Técnicos Ltda"
     registry = load_registry()

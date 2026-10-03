@@ -41,6 +41,46 @@ function anchorAttributes(html) {
   return [...html.matchAll(/<a\b([^>]*)>/gi)].map((match) => match[1]);
 }
 
+function attributeValue(attributes, name) {
+  const match = attributes.match(new RegExp(`(?:^|\\s)${name}\\s*=\\s*(["'])(.*?)\\1`, "i"));
+  return match?.[2];
+}
+
+function editorialUpdatedDate(html, label) {
+  const timeAttributes = html.match(/Atualizado em\s*<time\b([^>]*)>/i)?.[1];
+  assert.ok(timeAttributes, `${label} needs a visible editorial update date`);
+  const date = attributeValue(timeAttributes, "datetime") || "";
+  assert.match(date, /^\d{4}-\d{2}-\d{2}$/, `${label} needs an ISO editorial update date`);
+  return date;
+}
+
+function jsonLdEntity(html, expectedType, label) {
+  const entities = [];
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (attributeValue(match[1], "type")?.toLowerCase() !== "application/ld+json") continue;
+    const document = JSON.parse(match[2]);
+    entities.push(document);
+    if (Array.isArray(document?.["@graph"])) entities.push(...document["@graph"]);
+  }
+  const matches = entities.filter((entity) => {
+    const types = Array.isArray(entity?.["@type"]) ? entity["@type"] : [entity?.["@type"]];
+    return types.includes(expectedType);
+  });
+  assert.equal(matches.length, 1, `${label} needs exactly one ${expectedType} JSON-LD entity`);
+  return matches[0];
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function assertSitemapLastmod(sitemap, url, date) {
+  assert.match(
+    sitemap,
+    new RegExp(`<loc>${escapeRegex(url)}<\\/loc>\\s*<lastmod>${escapeRegex(date)}<\\/lastmod>`),
+  );
+}
+
 test("the SST hub keeps its canonical authority inside the expanded route family", () => {
   const registry = JSON.parse(fs.readFileSync(path.join(root, "data/organic/public-family-registry.json"), "utf8"));
   const pageRows = (registry.families || registry.routes || registry.pages || []).filter((row) =>
@@ -165,14 +205,14 @@ test("official credentials are verified while identifiers stay out of rendered s
   assert.match(specialist, /<title>Tiago Jun Sasaki \| Engenheiro Civil e de Segurança do Trabalho \| CONFENGE<\/title>/);
   assert.match(specialist, /"jobTitle":"Engenheiro Civil e Engenheiro de Segurança do Trabalho"/);
   assert.match(specialist, /"knowsAbout":\[[^\]]*"Engenharia de Segurança do Trabalho"/);
-  assert.match(specialist, /"dateModified":"2026-09-26"/);
+  const specialistModified = editorialUpdatedDate(specialist, "specialist");
+  assert.equal(jsonLdEntity(specialist, "ProfilePage", "specialist").dateModified, specialistModified);
   const confidence = fs.readFileSync(path.join(root, "confianca/index.html"), "utf8");
-  assert.match(confidence, /"dateModified":"2026-09-26"/);
+  const confidenceModified = editorialUpdatedDate(confidence, "confidence page");
+  assert.equal(jsonLdEntity(confidence, "WebPage", "confidence page").dateModified, confidenceModified);
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
-  assert.match(
-    sitemap,
-    /<loc>https:\/\/confenge\.com\.br\/confianca\/<\/loc>\s*<lastmod>2026-09-26<\/lastmod>/,
-  );
+  assertSitemapLastmod(sitemap, "https://confenge.com.br/especialista/tiago-jun-sasaki/", specialistModified);
+  assertSitemapLastmod(sitemap, "https://confenge.com.br/confianca/", confidenceModified);
 });
 
 test("campaign closes complete family coverage without claiming commercial result", () => {

@@ -515,9 +515,9 @@ const failure = (run, pattern) => {
   const short = await import("./runtime_lighthouse_acceptance.mjs?short-timeout");
   delete process.env.RUNTIME_ACCEPTANCE_LH_BUDGET_MS;
   delete process.env.RUNTIME_ACCEPTANCE_LH_TIMEOUT_MS;
-  const started = Date.now();
+  const started = performance.now();
   const run = await rehearse({ stubMode: "hang", acceptance: short.runAcceptance });
-  const elapsed = Date.now() - started;
+  const elapsed = performance.now() - started;
   failure(run, /runtime Lighthouse execution failed/);
   assert.ok(elapsed < 60000, `the wrapper must enforce its deadline, took ${elapsed}ms`);
   pass("a_hanging_measurement_is_terminated_and_blocks_acceptance");

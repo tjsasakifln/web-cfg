@@ -1039,7 +1039,6 @@ def _patch_jsonld(payload: Any, proj: Projection) -> None:
     org = next((n for n in nodes if "Organization" in _types(n)), None)
     person = next((n for n in nodes if "Person" in _types(n)), None)
     service = next((n for n in nodes if "ProfessionalService" in _types(n)), None)
-    webpage = next((n for n in nodes if "WebPage" in _types(n)), None)
 
     if org is not None:
         for key in MANAGED_ORG_KEYS:
@@ -1049,8 +1048,6 @@ def _patch_jsonld(payload: Any, proj: Projection) -> None:
         for key in MANAGED_PERSON_KEYS:
             person.pop(key, None)
         person.update(copy.deepcopy(proj.schema_person))
-    if webpage is not None:
-        webpage["dateModified"] = proj.as_of
     if proj.schema_service:
         body = copy.deepcopy(proj.schema_service)
         body.setdefault("@type", "ProfessionalService")

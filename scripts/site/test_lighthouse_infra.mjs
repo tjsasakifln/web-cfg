@@ -256,9 +256,9 @@ pass("page_http_tls_and_availability_failures_are_never_innocent_infrastructure"
     "hangs",
     `setInterval(() => {}, 1000); // never writes an outcome, never exits`,
   );
-  const started = Date.now();
+  const started = performance.now();
   const { outcome } = await measure(child, { timeoutMs: 2000 });
-  const elapsed = Date.now() - started;
+  const elapsed = performance.now() - started;
   assert.equal(outcome.outcome, OUTCOME.INVALID_OR_INCOMPLETE);
   assert.equal(outcome.timed_out, true);
   assert.equal(isRetryableOutcome(outcome), false);
@@ -277,10 +277,10 @@ pass("page_http_tls_and_availability_failures_are_never_innocent_infrastructure"
     "ignores-sigterm",
     `process.on("SIGTERM", () => {}); setInterval(() => {}, 500);`,
   );
-  const started = Date.now();
+  const started = performance.now();
   const { outcome } = await measure(child, { timeoutMs: 1500 });
   assert.equal(outcome.outcome, OUTCOME.INVALID_OR_INCOMPLETE);
-  assert.ok(Date.now() - started < 1500 + KILL_GRACE_MS + 8000, "SIGKILL must follow the grace period");
+  assert.ok(performance.now() - started < 1500 + KILL_GRACE_MS + 8000, "SIGKILL must follow the grace period");
   pass("a_child_ignoring_sigterm_is_still_terminated");
 }
 

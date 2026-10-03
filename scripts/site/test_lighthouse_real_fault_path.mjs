@@ -206,9 +206,9 @@ pass("real_page_failures_during_measurement_are_never_recovered_as_infrastructur
 //    because we cannot say whether the instrument or the page hung.
 // ---------------------------------------------------------------------------
 {
-  const started = Date.now();
+  const started = performance.now();
   const { outcome } = await attempt("hang", { timeoutMs: 4000 });
-  const elapsed = Date.now() - started;
+  const elapsed = performance.now() - started;
   assert.equal(outcome.outcome, OUTCOME.INVALID_OR_INCOMPLETE);
   assert.equal(outcome.timed_out, true);
   assert.equal(isRetryableOutcome(outcome), false);

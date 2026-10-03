@@ -171,13 +171,13 @@ const goodSummary = (extra = {}) => ({
 {
   const hang = join(WORK, "hang.mjs");
   writeFileSync(hang, "setInterval(() => {}, 1000);");
-  const started = Date.now();
+  const started = performance.now();
   const result = spawnSync(process.execPath, [hang], {
     encoding: "utf8",
     timeout: 2000,
     killSignal: "SIGKILL",
   });
-  const elapsed = Date.now() - started;
+  const elapsed = performance.now() - started;
   assert.ok(elapsed < 15000, `the deadline must actually fire, took ${elapsed}ms`);
   assert.ok(
     result.signal === "SIGKILL" || result.error,
