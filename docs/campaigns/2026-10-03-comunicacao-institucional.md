@@ -170,3 +170,12 @@ permanecem verificados. A distinção entre empresa contratada e órgão públic
 parte. Os 18 testes orgânicos passaram sem alterar os artigos publicados.
 Os quatro testes do caso demonstrativo da home e o gate de adequação da
 oferta também passaram, usando as competências efetivamente exibidas.
+
+A biblioteca de entregas mantém saída concreta e finalidade no bloco próprio,
+competências antes da vertical de obras públicas e abertura responsiva com CSS
+crítico. O CTA do herói chega ao formulário com confirmação dependente de
+persistência e atribuição sem PII; os negativos cobrem perda dessas propriedades.
+Os 51 testes da biblioteca e modelos passaram. As mensagens dos modelos só
+trocam a saudação para CONFENGE, mantendo intenção, assunto, preço e número.
+O inventário exige 46 arquivos, 28 bibliotecas e os mesmos 16 handlers, incluindo
+explicitamente qa-email como biblioteca; seus três testes passaram.
