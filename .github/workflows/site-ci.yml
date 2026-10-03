@@ -210,7 +210,9 @@ jobs:
       - name: Generated Netcup nginx contract E2E
         run: npm run host-contract:nginx-test
       - name: Published HTML and FAQ integrity
-        run: npm run test:html-integrity:site
+        run: |
+          npm run test:html-integrity:site
+          python3 -m pytest scripts/site/test_article_word_counts.py -q
       - name: All first-party CSS fingerprint and cache integrity
         run: |
           python3 scripts/site/test_fingerprint_css.py

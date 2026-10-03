@@ -2,9 +2,9 @@
   "schema_version": "3.0.0",
   "decision_schema_version": "3.0.0",
   "title": "Primeira coorte editorial: revisão humana individual no deploy preview",
-  "commit_sha": "5c07410c4d9119228f946450ab1cf11a25c009d5",
+  "commit_sha": "c7d2d0a42ebb531efc0547b34f2f38b4077ee45e",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-09-19T16:18:33Z",
+  "derived_at": "2026-10-03T18:39:34Z",
   "terminal_status": "READY_FOR_RELEASE",
   "review_target": {
     "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
@@ -149,17 +149,44 @@
       },
       "cta": {
         "offer": "Validar o dossiê de aditivo com a CONFENGE",
-        "whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
+        "whatsapp": "Olá, CONFENGE. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
         "email_subject": "Análise inicial: dossiê de aditivo de obra"
       },
-      "material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+      "material_hash": "b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722",
       "material_diff_since_last_packet": {
-        "previous_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
-        "current_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+        "previous_material_hash": "b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722",
+        "current_material_hash": "b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722",
         "changed": false,
         "reason": "v3 now commits every public page field plus resolved used-source identity."
       },
       "registry_status": "INDEXABLE",
+      "institutional_greeting_amendment": {
+        "schema": "CONFENGE_INSTITUTIONAL_GREETING_AMENDMENT/1",
+        "authorized_at": "2026-10-03",
+        "authorization": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+        "actor": "codex-autonomous-review",
+        "approved_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+        "substitutions": [
+          {
+            "field": "cta_whatsapp",
+            "before": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
+            "after": "Olá, CONFENGE. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/"
+          },
+          {
+            "field": "cta_email_body",
+            "before": "Olá, Tiago.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n",
+            "after": "Olá, CONFENGE.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n"
+          }
+        ],
+        "review_scope": "Independent source/DOM review: all factual, legal, checklist, source, FAQ and body fields unchanged. Only institutional greetings amended; original named reviewer, review time and preview preserved."
+      },
+      "approval_basis": {
+        "kind": "original_human_decision_with_validated_greeting_amendment",
+        "original_approved_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+        "current_material_hash": "b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722",
+        "greeting_amendment_validated": true,
+        "new_human_review_claimed": false
+      },
       "approval_identity": {
         "schema_version": "3.0.0",
         "page_id": "guia-checklist-aditivo",
@@ -180,7 +207,7 @@
           "reviewed_url": "https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/"
         }
       },
-      "decision_reason": "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet."
+      "decision_reason": "A decisão humana original e seu preview permanecem vinculados ao hash factual aprovado. A campanha autorizou exclusivamente as duas saudações institucionais; o adendo reconstrói aquele material e verifica o hash original. O runtime packet descreve o material atual e o vínculo entre ambos. Não há novo revisor, data ou aprovação humana."
     },
     {
       "page_id": "lei-item-novo-desconto",
@@ -286,17 +313,44 @@
       },
       "cta": {
         "offer": "Revisar a formação de preço do item novo",
-        "whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "whatsapp": "Olá, CONFENGE. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
         "email_subject": "Análise inicial: preço de item novo em aditivo"
       },
-      "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+      "material_hash": "9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f",
       "material_diff_since_last_packet": {
-        "previous_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
-        "current_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+        "previous_material_hash": "9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f",
+        "current_material_hash": "9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f",
         "changed": false,
         "reason": "v3 now commits every public page field plus resolved used-source identity."
       },
       "registry_status": "INDEXABLE",
+      "institutional_greeting_amendment": {
+        "schema": "CONFENGE_INSTITUTIONAL_GREETING_AMENDMENT/1",
+        "authorized_at": "2026-10-03",
+        "authorization": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+        "actor": "codex-autonomous-review",
+        "approved_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+        "substitutions": [
+          {
+            "field": "cta_whatsapp",
+            "before": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
+            "after": "Olá, CONFENGE. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/"
+          },
+          {
+            "field": "cta_email_body",
+            "before": "Olá, Tiago.\n\nLi /lei-14133-obras/preco-item-novo-desconto-proposta/ e preciso formar ou contestar preço de item novo em contrato de obra.\n\nPosso enviar planilha, proposta, composições e o pedido de aditivo.\n",
+            "after": "Olá, CONFENGE.\n\nLi /lei-14133-obras/preco-item-novo-desconto-proposta/ e preciso formar ou contestar preço de item novo em contrato de obra.\n\nPosso enviar planilha, proposta, composições e o pedido de aditivo.\n"
+          }
+        ],
+        "review_scope": "Independent source/DOM review: all factual, legal, checklist, source, FAQ and body fields unchanged. Only institutional greetings amended; original named reviewer, review time and preview preserved."
+      },
+      "approval_basis": {
+        "kind": "original_human_decision_with_validated_greeting_amendment",
+        "original_approved_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+        "current_material_hash": "9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f",
+        "greeting_amendment_validated": true,
+        "new_human_review_claimed": false
+      },
       "approval_identity": {
         "schema_version": "3.0.0",
         "page_id": "lei-item-novo-desconto",
@@ -317,7 +371,7 @@
           "reviewed_url": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/"
         }
       },
-      "decision_reason": "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet."
+      "decision_reason": "A decisão humana original e seu preview permanecem vinculados ao hash factual aprovado. A campanha autorizou exclusivamente as duas saudações institucionais; o adendo reconstrói aquele material e verifica o hash original. O runtime packet descreve o material atual e o vínculo entre ambos. Não há novo revisor, data ou aprovação humana."
     }
   ]
 }

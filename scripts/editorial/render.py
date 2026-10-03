@@ -365,9 +365,9 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
     wa = page.get("cta_whatsapp") or ""
     subject = page.get("cta_email_subject") or f"Análise inicial: {page.get('theme') or page.get('title')}"
     body = page.get("cta_email_body") or (
-        f"Olá, Tiago.\n\nLi a página {page.get('url')} e gostaria de avaliar "
+        f"Olá, CONFENGE.\n\nLi a página {page.get('url')} e gostaria de avaliar "
         f"{page.get('theme') or 'contrato de obra pública'}.\n\n"
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.\n"
+        "Quero solicitar uma proposta. Para material confidencial, combinamos o envio reservado.\n"
     )
     email = page.get("contact_email") or "tiago.sasaki@confenge.com.br"
     wa_href = wa_link(wa)
@@ -376,7 +376,7 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
     label_em = page.get("cta_email_label") or "Solicitar análise inicial por e-mail"
     offer = page.get("cta_offer") or "Avaliar os documentos deste caso"
     blurb = page.get("cta_blurb") or (
-        "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
+        "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado."
     )
     landmark_label = "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
     return f"""
@@ -645,7 +645,7 @@ def render_page(page: dict[str, Any]) -> str:
         robots=robots,
         jsonld_graph=graph,
         body_main=main,
-        wa_message=page.get("cta_whatsapp") or "Olá, Tiago. Li um conteúdo técnico da CONFENGE.",
+        wa_message=page.get("cta_whatsapp") or "Olá, CONFENGE. Li um conteúdo técnico da CONFENGE.",
         author_name=author_name if not use_tiago else "Engº Tiago Sasaki",
         data_attrs={
             "content-type": archetype,
@@ -692,11 +692,11 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
             f'</div><div class="hub-list__action"><a href="{e(p["url"])}">Ler <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
         )
     wa_msg = hub.get("cta_whatsapp") or (
-        f"Olá, Tiago. Estou na seção {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
+        f"Olá, CONFENGE. Estou na seção {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
     )
     mail_subject = hub.get("cta_email_subject") or f"Orientação: {title}"
     mail_body = hub.get("cta_email_body") or (
-        f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema desta seção.\n"
+        f"Olá, CONFENGE.\n\nAcessei {url} e gostaria de orientação sobre o tema desta seção.\n"
     )
     # Never publish an empty library section or "0 guias" / empty-index copy.
     if cards:
@@ -736,7 +736,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
 <section class="sec sec--dark" data-hub-case-cta aria-labelledby="hub-proximo-passo"><div class="container">
 <span class="t-kicker">Próximo passo</span>
 <h2 class="t-editorial" id="hub-proximo-passo">Levou uma dúvida da biblioteca para o seu contrato?</h2>
-<p class="measure">Descreva o tema e diga quais documentos você já tem. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo. Conversa técnica, sem contratação nem pagamento; documentos só depois, pelo canal seguro combinado.</p>
+<p class="measure">Descreva o tema e diga quais documentos você já tem. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo. Conversa técnica, sem contratação nem pagamento; referências não sigilosas podem ser compartilhadas por e-mail ou WhatsApp; material confidencial segue em envio reservado.</p>
 <div class="contact-primary">
 <a class="button button-primary button-lg" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <ul class="contact-alt"><li><a data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a></li></ul>

@@ -1,9 +1,9 @@
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-09-20T03:44:18Z`
+- Generated: `2026-10-03T19:06:36Z`
 - Evaluated: **1** (cap 10)
-- Source: `official_live` (`scripts/contract_analysis/fixtures/official-live-01`)
+- Source: `official_live` (`scripts\contract_analysis\fixtures\official-live-01`)
 - catalog_mode: `official_live` claimed_live=`False`
 - Fixture / test-only: **False**
 - official_live absent: **False**
@@ -30,5 +30,5 @@
 
 ## Rendered
 
-- `analises-contratos-publicos/index.html`
-- `analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html`
+- `analises-contratos-publicos\index.html`
+- `analises-contratos-publicos\reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026\index.html`

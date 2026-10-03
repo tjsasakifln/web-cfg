@@ -423,7 +423,7 @@ for (const entry of entries) {
 assert(
   "first_fold_answers",
   JSON.stringify(firstFold.required_answers.map((answer) => answer.key)) ===
-    JSON.stringify(["what", "who", "why_believe", "next_action"]),
+    JSON.stringify(["what", "who", "technical_substance", "next_action"]),
   firstFold.required_answers
 );
 assert("first_fold_sessions_pending", firstFold.human_validation.state === "NOT_STARTED", firstFold.human_validation);

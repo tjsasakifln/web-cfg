@@ -206,8 +206,10 @@ function sha256(buf) {
   assert.match(resources, /is_authorized_public_nested_data_dir/);
   const complementary = read("projetos-complementares-engenharia/index.html");
   const howToHire = read("conteudos/como-contratar-projetos-complementares/index.html");
-  assert.match(complementary, /href="\/servicos\/#servico-projeto"/);
-  assert.match(howToHire, /href="\/servicos\/#servico-projeto"/);
+  assert.match(complementary, /href="#escopo-projeto"/);
+  assert.match(howToHire, /href="\/conteudos\/revisao-compatibilizacao-ou-elaboracao-projetos\/"/);
+  assert.doesNotMatch(complementary, /href="\/servicos\/#servico-projeto"/);
+  assert.doesNotMatch(howToHire, /href="\/servicos\/#servico-projeto"/);
   assert.doesNotMatch(complementary, /\bhubs?\b/i);
   assert.doesNotMatch(howToHire, /\bhubs?\b/i);
   const services = read("servicos/index.html");
@@ -216,15 +218,17 @@ function sha256(buf) {
   // fragmento oferecer um próximo passo de contato dentro do próprio cartão;
   // quando a landing existe, o pedido vai direto ao bloco de contato dela ou
   // a um canal direto, sem reenviar o visitante a um hub de seleção.
-  for (const id of ["servico-projeto", "servico-diagnostico", "servico-pericia", "servico-sst"]) {
+  const directDestinations = {
+    "servico-projeto": "/projetos-complementares-engenharia/",
+    "servico-diagnostico": "/inspecao-diagnostico-edificacoes/",
+    "servico-pericia": "/assistencia-tecnica-pericial-engenharia/",
+    "servico-sst": "/seguranca-trabalho-apoio-tecnico/",
+  };
+  for (const [id, destination] of Object.entries(directDestinations)) {
     const start = services.indexOf(`id="${id}"`);
     assert.notEqual(start, -1, id);
     const slice = services.slice(start, start + 2500);
-    assert.match(
-      slice,
-      /href="(?:\/triagem-tecnica\/|\/[a-z0-9-]+\/#(?:contato|pedido|escopo|triagem)[a-z0-9-]*|https:\/\/wa\.me\/|mailto:)/,
-      `${id}: próximo passo de contato no fragmento`,
-    );
+    assert.match(slice, new RegExp(`href="${destination.replaceAll("/", "\\/")}`), `${id}: destino dedicado`);
   }
 }
 

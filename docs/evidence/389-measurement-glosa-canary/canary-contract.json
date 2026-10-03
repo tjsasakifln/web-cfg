@@ -24,10 +24,10 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "8d05505cfbdae7a3d8d633bb45d3740e47e320d982a54367d7b3133e337fe771",
-    "after_sha256_recaptured_at": "2026-09-19",
-    "after_sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador) sobre f2f4eb7e1d317a24f7c12467f3a3245cfe8ee6c4: a fonte de identidade Archivo passa de assets/archivo-var-latin-bf6e041e.woff2 (60 KB, wdth 66-110) a assets/archivo-var-latin-b19be0f7.woff2 (42 KB, wdth 78-100, a faixa que o CSS publicado usa; contornos identicos nas larguras/pesos usados), entao o <link rel=preload> do <head> muda em toda pagina que o carrega e styles.css declara font-stretch 78% 100%; o CSS publicado passa a inlinar styles-tokens.css no lugar do @import (fingerprint_css.py), o que muda o href impresso das folhas no artefato. Motivo: releases 35420505060 e 35443280330 (commits documentais) reprovaram com LCP simulado de /entregas/ a 2101 ms > 2000 ms; medido na replica local, /entregas/, /casos/ e /servicos/ caem de ~1950 ms para 1650-1800 ms. Nenhum texto visivel, preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou destino canonico mudou nestas paginas. Executor: agente Claude Code; sem revisao humana independente alegada. Nesta pagina (canario) so o preload da fonte mudou.",
-    "after_sha256_previous": "dedb90c5cb437c14f7eb56e347b4461620571d5eb54f16cf214f9998e2a1fa02"
+    "after_sha256": "24271188f0abb5d22e81f3993f20b1caf64b60e054fd05750333923ebbf2ef7e",
+    "after_sha256_recaptured_at": "2026-10-03",
+    "after_sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada.",
+    "after_sha256_previous": "8d05505cfbdae7a3d8d633bb45d3740e47e320d982a54367d7b3133e337fe771"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -123,31 +123,31 @@
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
-      "sha256": "ed1c84526935c73ab6982de949130295ac135241be42b0b232ddd34c95930da3",
-      "sha256_previous": "1f9c69a7a978982b8a728d39bade08b1d7319af0b3ecab56a2ac5fa12bdfb6b5",
-      "sha256_recaptured_at": "2026-09-19",
-      "sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador) sobre f2f4eb7e1d317a24f7c12467f3a3245cfe8ee6c4: a fonte de identidade Archivo passa de assets/archivo-var-latin-bf6e041e.woff2 (60 KB, wdth 66-110) a assets/archivo-var-latin-b19be0f7.woff2 (42 KB, wdth 78-100, a faixa que o CSS publicado usa; contornos identicos nas larguras/pesos usados), entao o <link rel=preload> do <head> muda em toda pagina que o carrega e styles.css declara font-stretch 78% 100%; o CSS publicado passa a inlinar styles-tokens.css no lugar do @import (fingerprint_css.py), o que muda o href impresso das folhas no artefato. Motivo: releases 35420505060 e 35443280330 (commits documentais) reprovaram com LCP simulado de /entregas/ a 2101 ms > 2000 ms; medido na replica local, /entregas/, /casos/ e /servicos/ caem de ~1950 ms para 1650-1800 ms. Nenhum texto visivel, preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou destino canonico mudou nestas paginas. Executor: agente Claude Code; sem revisao humana independente alegada. Nesta pagina so o preload da fonte mudou."
+      "sha256": "9ac0cb5c9aa814c3adeb1fe3be300898d7819aa07f71696b9999b62cc0b6020d",
+      "sha256_previous": "ed1c84526935c73ab6982de949130295ac135241be42b0b232ddd34c95930da3",
+      "sha256_recaptured_at": "2026-10-03",
+      "sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
     },
     {
       "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
-      "sha256": "674f279f40c01528685f9c6b21fcbcf660b1982d46a3d8b56f98413785214caf",
-      "sha256_previous": "c64bcaa0a7455a92ef9ef11160f5f43bf3fad360a46eb5fcd44391fb1714f2d8",
-      "sha256_recaptured_at": "2026-09-19",
-      "sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador) sobre f2f4eb7e1d317a24f7c12467f3a3245cfe8ee6c4: a fonte de identidade Archivo passa de assets/archivo-var-latin-bf6e041e.woff2 (60 KB, wdth 66-110) a assets/archivo-var-latin-b19be0f7.woff2 (42 KB, wdth 78-100, a faixa que o CSS publicado usa; contornos identicos nas larguras/pesos usados), entao o <link rel=preload> do <head> muda em toda pagina que o carrega e styles.css declara font-stretch 78% 100%; o CSS publicado passa a inlinar styles-tokens.css no lugar do @import (fingerprint_css.py), o que muda o href impresso das folhas no artefato. Motivo: releases 35420505060 e 35443280330 (commits documentais) reprovaram com LCP simulado de /entregas/ a 2101 ms > 2000 ms; medido na replica local, /entregas/, /casos/ e /servicos/ caem de ~1950 ms para 1650-1800 ms. Nenhum texto visivel, preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou destino canonico mudou nestas paginas. Executor: agente Claude Code; sem revisao humana independente alegada. Nesta pagina so o preload da fonte mudou."
+      "sha256": "3e48e88b09eb10dd41d7f4e13606a091692318ae98c3a0b0e7fe48ed3759afa5",
+      "sha256_previous": "674f279f40c01528685f9c6b21fcbcf660b1982d46a3d8b56f98413785214caf",
+      "sha256_recaptured_at": "2026-10-03",
+      "sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "78dd82140c04c49b68174b1429c98080e254a23c0f949c9dc3104de05f959486",
-      "sha256_previous": "ef3df614e14e5b127116106b05b0affae01c79676fc8fe02c18f7fcc68a512ed",
-      "sha256_recaptured_at": "2026-09-19",
-      "sha256_recapture_reason": "2026-09-19. INBOUND-RECEITA-20260919: CTA \"Continuar pelo formulario\" passa da home ao pilar com data-tema/data-origem, link do pilar no bloco de oferta e WhatsApp em frase natural; rodape institucional sem o item \"Uso de IA\" nas paginas que tinham a nav.footer-authority (adendo editorial do fundador 2026-09-19; nenhuma das cinco paginas deste contrato a tinha, entao o adendo nao mudou bytes aqui); [pilar: link ao exemplo completo e uma repeticao de condicao material removida; formulario, Limite e limitacao junto do formulario preservados]. Corpo editorial, titulo, canonical, robots, citacoes, precos e destinos canonicos inalterados. Quebra de serie da medicao do canario #389 registrada. Executor: agente Claude Code; sem revisao humana alegada. Nesta pagina: o link 'Continuar pelo formulario' do bloco de oferta passou da home ao formulario do pilar com contexto e o article-aside ganhou o link do pilar (commit f9baa2aa9), mais a data de revisao do cluster de medicao movida para 2026-09-19 (meta, JSON-LD, 'Revisado em'); test_click_origin_articles_match_origin_main mascara essas superficies e a ponte artigo->pilar e continua exigindo bytes identicos ao origin/main no restante."
+      "sha256": "d3d577caeb32db93ab8e2a5ac62622283f461d36f33da1d61ce42b14de2177fe",
+      "sha256_previous": "78dd82140c04c49b68174b1429c98080e254a23c0f949c9dc3104de05f959486",
+      "sha256_recaptured_at": "2026-10-03",
+      "sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
-      "sha256_previous": "a22d05397d0ece10de9429240a50159045598d58f30b32f6aa91cba5108a5fc8",
-      "sha256_recaptured_at": "2026-09-19",
-      "sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador, incremento 2) sobre 505c833ab5938e86d182b88da1021dc8770f0217: nos pilares protegidos, (a) sai a frase redundante 'Este formulario nao conclui contratacao e nao promete ...' da introducao do formulario #captura-pilar (medicoes, aditivos, reequilibrio; o cartao Limite e a linha data-form-boundary continuam), (b) entra a nota <noscript> 'Sem JavaScript, este formulario nao envia; use o WhatsApp ou o e-mail ao lado' nos seis pilares, (c) medicoes reescreve 'recorte operacional' na frase do guia da recusa de ateste, (d) aditivos liga o proprio caso demonstrativo /casos/aditivo-art125-demonstrativo/ como medicoes ja ligava o seu, (e) reequilibrio ganha title/og:title 'Reequilibrio economico-financeiro de obra publica | CONFENGE' e descricao que nomeia o dossie; nenhum preco, prazo, checkout, robots, canonical, JSON-LD de oferta ou campo do formulario mudou. Irmaos do canario #389 (glosa-de-medicao, medicao-rejeitada) nao mudaram nesta recaptura alem do que ja foi recapturado no incremento 1. Executor: agente Claude Code; sem revisao humana independente alegada."
+      "sha256": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
+      "sha256_previous": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+      "sha256_recaptured_at": "2026-10-03",
+      "sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Abertura descreve o trabalho da CONFENGE antes da liderança técnica; responsabilidades materiais foram conservadas em disclosure acessível após a abertura. Referências não sigilosas pelos canais existentes e conteúdo reservado na contratação; prefills institucionais. Preços, cálculos, fontes, campos do formulário e destinos preservados. Sem nova revisão humana alegada."
     }
   ],
   "second_wave": {
@@ -217,5 +217,83 @@
     "visible_body_unchanged": true,
     "author_identity_unchanged": true,
     "dates_facts_calculations_sources_actions_unchanged": true
-  }
+  },
+  "commercial_projection_recaptures": [
+    {
+      "campaign": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003",
+      "baseline_sha": "c7d2d0a42ebb531efc0547b34f2f38b4077ee45e",
+      "authorized_by": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+      "review": "autonomous independent technical-commercial review",
+      "new_human_review_claimed": false,
+      "entries": [
+        {
+          "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+          "previous_binding": {
+            "path": "/conteudos/atraso-na-medicao-obra-publica/",
+            "source": "conteudos/atraso-na-medicao-obra-publica/index.html",
+            "intent_id": "atraso_processamento_medicao",
+            "representative_query": "atraso na medição obra pública",
+            "role": "INDEXABLE_INFORMATIONAL_OWNER",
+            "commercial_destination": "/medicoes-glosas-obras-publicas/",
+            "offer": "Dossiê de Medição, Glosa e Pagamento",
+            "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
+            "after_sha256": "8d05505cfbdae7a3d8d633bb45d3740e47e320d982a54367d7b3133e337fe771",
+            "after_sha256_recaptured_at": "2026-09-19",
+            "after_sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador) sobre f2f4eb7e1d317a24f7c12467f3a3245cfe8ee6c4: a fonte de identidade Archivo passa de assets/archivo-var-latin-bf6e041e.woff2 (60 KB, wdth 66-110) a assets/archivo-var-latin-b19be0f7.woff2 (42 KB, wdth 78-100, a faixa que o CSS publicado usa; contornos identicos nas larguras/pesos usados), entao o <link rel=preload> do <head> muda em toda pagina que o carrega e styles.css declara font-stretch 78% 100%; o CSS publicado passa a inlinar styles-tokens.css no lugar do @import (fingerprint_css.py), o que muda o href impresso das folhas no artefato. Motivo: releases 35420505060 e 35443280330 (commits documentais) reprovaram com LCP simulado de /entregas/ a 2101 ms > 2000 ms; medido na replica local, /entregas/, /casos/ e /servicos/ caem de ~1950 ms para 1650-1800 ms. Nenhum texto visivel, preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou destino canonico mudou nestas paginas. Executor: agente Claude Code; sem revisao humana independente alegada. Nesta pagina (canario) so o preload da fonte mudou.",
+            "after_sha256_previous": "dedb90c5cb437c14f7eb56e347b4461620571d5eb54f16cf214f9998e2a1fa02"
+          },
+          "after_sha256": "24271188f0abb5d22e81f3993f20b1caf64b60e054fd05750333923ebbf2ef7e",
+          "review_scope": "Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
+        },
+        {
+          "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
+          "previous_binding": {
+            "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
+            "sha256": "ed1c84526935c73ab6982de949130295ac135241be42b0b232ddd34c95930da3",
+            "sha256_previous": "1f9c69a7a978982b8a728d39bade08b1d7319af0b3ecab56a2ac5fa12bdfb6b5",
+            "sha256_recaptured_at": "2026-09-19",
+            "sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador) sobre f2f4eb7e1d317a24f7c12467f3a3245cfe8ee6c4: a fonte de identidade Archivo passa de assets/archivo-var-latin-bf6e041e.woff2 (60 KB, wdth 66-110) a assets/archivo-var-latin-b19be0f7.woff2 (42 KB, wdth 78-100, a faixa que o CSS publicado usa; contornos identicos nas larguras/pesos usados), entao o <link rel=preload> do <head> muda em toda pagina que o carrega e styles.css declara font-stretch 78% 100%; o CSS publicado passa a inlinar styles-tokens.css no lugar do @import (fingerprint_css.py), o que muda o href impresso das folhas no artefato. Motivo: releases 35420505060 e 35443280330 (commits documentais) reprovaram com LCP simulado de /entregas/ a 2101 ms > 2000 ms; medido na replica local, /entregas/, /casos/ e /servicos/ caem de ~1950 ms para 1650-1800 ms. Nenhum texto visivel, preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou destino canonico mudou nestas paginas. Executor: agente Claude Code; sem revisao humana independente alegada. Nesta pagina so o preload da fonte mudou."
+          },
+          "after_sha256": "9ac0cb5c9aa814c3adeb1fe3be300898d7819aa07f71696b9999b62cc0b6020d",
+          "review_scope": "Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
+        },
+        {
+          "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+          "previous_binding": {
+            "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+            "sha256": "674f279f40c01528685f9c6b21fcbcf660b1982d46a3d8b56f98413785214caf",
+            "sha256_previous": "c64bcaa0a7455a92ef9ef11160f5f43bf3fad360a46eb5fcd44391fb1714f2d8",
+            "sha256_recaptured_at": "2026-09-19",
+            "sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador) sobre f2f4eb7e1d317a24f7c12467f3a3245cfe8ee6c4: a fonte de identidade Archivo passa de assets/archivo-var-latin-bf6e041e.woff2 (60 KB, wdth 66-110) a assets/archivo-var-latin-b19be0f7.woff2 (42 KB, wdth 78-100, a faixa que o CSS publicado usa; contornos identicos nas larguras/pesos usados), entao o <link rel=preload> do <head> muda em toda pagina que o carrega e styles.css declara font-stretch 78% 100%; o CSS publicado passa a inlinar styles-tokens.css no lugar do @import (fingerprint_css.py), o que muda o href impresso das folhas no artefato. Motivo: releases 35420505060 e 35443280330 (commits documentais) reprovaram com LCP simulado de /entregas/ a 2101 ms > 2000 ms; medido na replica local, /entregas/, /casos/ e /servicos/ caem de ~1950 ms para 1650-1800 ms. Nenhum texto visivel, preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou destino canonico mudou nestas paginas. Executor: agente Claude Code; sem revisao humana independente alegada. Nesta pagina so o preload da fonte mudou."
+          },
+          "after_sha256": "3e48e88b09eb10dd41d7f4e13606a091692318ae98c3a0b0e7fe48ed3759afa5",
+          "review_scope": "Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
+        },
+        {
+          "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+          "previous_binding": {
+            "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+            "sha256": "78dd82140c04c49b68174b1429c98080e254a23c0f949c9dc3104de05f959486",
+            "sha256_previous": "ef3df614e14e5b127116106b05b0affae01c79676fc8fe02c18f7fcc68a512ed",
+            "sha256_recaptured_at": "2026-09-19",
+            "sha256_recapture_reason": "2026-09-19. INBOUND-RECEITA-20260919: CTA \"Continuar pelo formulario\" passa da home ao pilar com data-tema/data-origem, link do pilar no bloco de oferta e WhatsApp em frase natural; rodape institucional sem o item \"Uso de IA\" nas paginas que tinham a nav.footer-authority (adendo editorial do fundador 2026-09-19; nenhuma das cinco paginas deste contrato a tinha, entao o adendo nao mudou bytes aqui); [pilar: link ao exemplo completo e uma repeticao de condicao material removida; formulario, Limite e limitacao junto do formulario preservados]. Corpo editorial, titulo, canonical, robots, citacoes, precos e destinos canonicos inalterados. Quebra de serie da medicao do canario #389 registrada. Executor: agente Claude Code; sem revisao humana alegada. Nesta pagina: o link 'Continuar pelo formulario' do bloco de oferta passou da home ao formulario do pilar com contexto e o article-aside ganhou o link do pilar (commit f9baa2aa9), mais a data de revisao do cluster de medicao movida para 2026-09-19 (meta, JSON-LD, 'Revisado em'); test_click_origin_articles_match_origin_main mascara essas superficies e a ponte artigo->pilar e continua exigindo bytes identicos ao origin/main no restante."
+          },
+          "after_sha256": "d3d577caeb32db93ab8e2a5ac62622283f461d36f33da1d61ce42b14de2177fe",
+          "review_scope": "Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
+        },
+        {
+          "path": "medicoes-glosas-obras-publicas/index.html",
+          "previous_binding": {
+            "path": "medicoes-glosas-obras-publicas/index.html",
+            "sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+            "sha256_previous": "a22d05397d0ece10de9429240a50159045598d58f30b32f6aa91cba5108a5fc8",
+            "sha256_recaptured_at": "2026-09-19",
+            "sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador, incremento 2) sobre 505c833ab5938e86d182b88da1021dc8770f0217: nos pilares protegidos, (a) sai a frase redundante 'Este formulario nao conclui contratacao e nao promete ...' da introducao do formulario #captura-pilar (medicoes, aditivos, reequilibrio; o cartao Limite e a linha data-form-boundary continuam), (b) entra a nota <noscript> 'Sem JavaScript, este formulario nao envia; use o WhatsApp ou o e-mail ao lado' nos seis pilares, (c) medicoes reescreve 'recorte operacional' na frase do guia da recusa de ateste, (d) aditivos liga o proprio caso demonstrativo /casos/aditivo-art125-demonstrativo/ como medicoes ja ligava o seu, (e) reequilibrio ganha title/og:title 'Reequilibrio economico-financeiro de obra publica | CONFENGE' e descricao que nomeia o dossie; nenhum preco, prazo, checkout, robots, canonical, JSON-LD de oferta ou campo do formulario mudou. Irmaos do canario #389 (glosa-de-medicao, medicao-rejeitada) nao mudaram nesta recaptura alem do que ja foi recapturado no incremento 1. Executor: agente Claude Code; sem revisao humana independente alegada."
+          },
+          "after_sha256": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
+          "review_scope": "Abertura descreve o trabalho da CONFENGE antes da liderança técnica; responsabilidades materiais foram conservadas em disclosure acessível após a abertura. Referências não sigilosas pelos canais existentes e conteúdo reservado na contratação; prefills institucionais. Preços, cálculos, fontes, campos do formulário e destinos preservados. Sem nova revisão humana alegada."
+        }
+      ]
+    }
+  ]
 }

@@ -1,8 +1,29 @@
 {
-  "ok": true,
-  "issues": [],
-  "url_count": 113,
-  "unique_paths": 113,
+  "ok": false,
+  "issues": [
+    {
+      "severity": "high",
+      "code": "indexable_missing_from_sitemap",
+      "url": "/guias-contratos-obras/"
+    },
+    {
+      "severity": "high",
+      "code": "indexable_missing_from_sitemap",
+      "url": "/guias-contratos-obras/checklist-pedido-aditivo/"
+    },
+    {
+      "severity": "high",
+      "code": "indexable_missing_from_sitemap",
+      "url": "/lei-14133-obras/"
+    },
+    {
+      "severity": "high",
+      "code": "indexable_missing_from_sitemap",
+      "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    }
+  ],
+  "url_count": 109,
+  "unique_paths": 109,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -111,33 +132,26 @@
     "https://confenge.com.br/terceirizacao-projetos-engenharia/",
     "https://confenge.com.br/termos-de-uso/",
     "https://confenge.com.br/triagem-tecnica/",
-    "https://confenge.com.br/guias-contratos-obras/",
-    "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
-    "https://confenge.com.br/lei-14133-obras/",
-    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
     "https://confenge.com.br/analises-contratos-publicos/",
     "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
     "core": 107,
-    "editorial": 4,
     "contract_analysis": 2
   },
   "member_sitemaps": [
     "https://confenge.com.br/sitemap.xml",
-    "https://confenge.com.br/sitemap-editorial.xml",
     "https://confenge.com.br/sitemap-analises-contratos.xml"
   ],
   "walked_members": [
     "sitemap.xml",
-    "sitemap-editorial.xml",
     "sitemap-analises-contratos.xml"
   ],
   "robots_sitemaps": [
     "https://confenge.com.br/sitemap-index.xml"
   ],
   "broken": 0,
-  "orphan_indexable": 0,
+  "orphan_indexable": 4,
   "noindex_in_sitemap": 0,
   "market_answer_indexable": false,
   "market_answer_in_graph": false

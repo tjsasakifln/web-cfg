@@ -26,9 +26,9 @@
     "agu-alteracoes-contratuais-2024",
     "sinapi-caixa"
   ],
-  "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
+  "cta_whatsapp": "Olá, CONFENGE. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
   "cta_email_subject": "Análise inicial: preço de item novo em aditivo",
-  "cta_email_body": "Olá, Tiago.\n\nLi /lei-14133-obras/preco-item-novo-desconto-proposta/ e preciso formar ou contestar preço de item novo em contrato de obra.\n\nPosso enviar planilha, proposta, composições e o pedido de aditivo.\n",
+  "cta_email_body": "Olá, CONFENGE.\n\nLi /lei-14133-obras/preco-item-novo-desconto-proposta/ e preciso formar ou contestar preço de item novo em contrato de obra.\n\nPosso enviar planilha, proposta, composições e o pedido de aditivo.\n",
   "cta_offer": "Revisar a formação de preço do item novo",
   "related": [
     {
@@ -53,5 +53,25 @@
     }
   ],
   "body_markdown": "## Quando o item novo aparece\n\nDemolição não prevista, drenagem extra, troca de sistema predial, serviço de contenção emergencial. A planilha original não tem o código. Alguém precisa de preço unitário “para ontem”.\n\n## Enquadramento legal do art. 127\n\nAlterações passam pelo **art. 124** e continuam sujeitas aos limites do **art. 125**. O **art. 127** disciplina a hipótese em que o contrato não contempla preços unitários para obras ou serviços cujo aditamento é necessário. Por paráfrase fiel do dispositivo: os preços são fixados pela aplicação da relação geral entre o valor da proposta e o orçamento-base da Administração aos preços referenciais ou de mercado vigentes na data do aditamento.\n\nA relação geral decorre da proposta original: ela pode expressar **desconto** ou **ágio**. Por isso, não há liberdade para escolher, caso a caso, se a relação será aplicada. Contrato e regulamentos podem disciplinar procedimento, referencial e composição, mas não podem transformar em opcional a regra expressa do art. 127.\n\n## Três situações que não devem ser misturadas\n\n1. **Item realmente sem preço unitário contratual:** quando o aditamento exige obra ou serviço que não tem preço unitário no contrato, aplica-se o art. 127, com a relação proposta/orçamento-base sobre os preços vigentes na data do aditamento.\n2. **Item existente ou análogo na planilha:** a análise pode exigir aproveitamento do preço e das condições já contratadas. Não se deve chamar de item novo aquilo que já possui referência contratual utilizável.\n3. **Reequilíbrio de preço de item existente:** é instituto distinto, ligado à recomposição econômico-financeira; não é instrumento para formar o preço de novo escopo.\n\n## O que a construtora precisa provar\n\n- Por que o item é necessário (nexo com projeto, campo ou determinação da Administração)\n- Que não existe preço unitário contratual para a obra ou o serviço que precisa ser aditado\n- Composição de custos (mão de obra, materiais, equipamentos, encargos)\n- Critério de BDI adotado e coerência com a proposta\n- Relação geral entre a proposta vencedora e o orçamento-base, demonstrada com memória de cálculo\n- Preço referencial ou de mercado vigente na data do aditamento, com a composição que o sustenta\n- Impacto no saldo percentual do art. 125\n\n## Erros que destroem a tese\n\n1. Aceitar preço “chutado” pelo fiscal em planilha sem composição  \n2. Afastar a relação proposta/orçamento-base como se o desconto da proposta fosse opcional  \n3. Usar referência de tabela errada (SINAPI onde o edital manda SICRO, ou o inverso)  \n4. Executar o serviço inteiro e só depois discutir preço  \n5. Misturar item novo com reequilíbrio de item existente sem separar causas  \n\n## Roteiro de precificação\n\n1. Descreva o serviço com unidade e critério de medição.  \n2. Monte composição analítica.  \n3. Aplique BDI conforme a disciplina do certame e do contrato.  \n4. Aplique aos preços vigentes a relação proposta/orçamento-base, seja ela desconto ou ágio.  \n5. Documente premissas (produtividade, distância, interferências).  \n6. Submeta no processo do aditivo **antes** da execução plena.  \n\n## Jogo de planilha e item novo\n\nFormar preço de item novo com distorção proposital em relação a itens semelhantes da planilha original é risco clássico de apontamento de controle. Se o item é análogo, examine o preço e as condições já contratadas; se é realmente sem preço unitário, aplique o art. 127. Em ambos os casos, a memória deve explicar produtividade, insumos e BDI.\n\n## Papel dos referenciais SINAPI/SICRO\n\nUse o referencial compatível com a natureza do serviço e com a disciplina aplicável ao contrato. Pavimentação e obras rodoviárias frequentemente usam o SICRO; edificações frequentemente usam o SINAPI. O referencial não elimina a necessidade de composição analítica quando o item foge do código padrão.\n",
-  "interaction_type": "article"
+  "interaction_type": "article",
+  "institutional_greeting_amendment": {
+    "schema": "CONFENGE_INSTITUTIONAL_GREETING_AMENDMENT/1",
+    "authorized_at": "2026-10-03",
+    "authorization": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+    "actor": "codex-autonomous-review",
+    "approved_material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+    "substitutions": [
+      {
+        "field": "cta_whatsapp",
+        "before": "Olá, Tiago. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "after": "Olá, CONFENGE. Li a análise da CONFENGE sobre preço de item novo e desconto da proposta em aditivo de obra. Quero avaliar composições e documentos. Origem: /lei-14133-obras/preco-item-novo-desconto-proposta/"
+      },
+      {
+        "field": "cta_email_body",
+        "before": "Olá, Tiago.\n\nLi /lei-14133-obras/preco-item-novo-desconto-proposta/ e preciso formar ou contestar preço de item novo em contrato de obra.\n\nPosso enviar planilha, proposta, composições e o pedido de aditivo.\n",
+        "after": "Olá, CONFENGE.\n\nLi /lei-14133-obras/preco-item-novo-desconto-proposta/ e preciso formar ou contestar preço de item novo em contrato de obra.\n\nPosso enviar planilha, proposta, composições e o pedido de aditivo.\n"
+      }
+    ],
+    "review_scope": "Independent source/DOM review: all factual, legal, checklist, source, FAQ and body fields unchanged. Only institutional greetings amended; original named reviewer, review time and preview preserved."
+  }
 }

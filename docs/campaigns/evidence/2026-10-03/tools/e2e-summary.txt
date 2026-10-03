@@ -1,0 +1,7 @@
+failed=0
+overflows=0
+axe_critical=0
+axe_serious=0
+axe_moderate=0
+screenshots=docs\campaigns\evidence\2026-10-03\tools\screenshots\after
+generated=2026-10-03T18:17:44.792Z

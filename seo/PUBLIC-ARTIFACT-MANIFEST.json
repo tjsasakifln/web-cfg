@@ -70,6 +70,7 @@
     "_headers",
     "_redirects",
     "content-index.json",
+    "favicon.ico",
     "feed.xml",
     "index.html",
     "llms.txt",
@@ -340,8 +341,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-02T15:38:19Z",
-  "public_artifact_hash": "920ee1cf280938eb37c0b80d001655bf32baf18273436fbbfcccbf2f6a0035e0",
+  "generated_at": "2026-10-03T19:06:54Z",
+  "public_artifact_hash": "71bc2941318070185b62f056ee981394e26caa32645880c23458b547dc3395c0",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -412,6 +413,7 @@
     "_headers",
     "_redirects",
     "content-index.json",
+    "favicon.ico",
     "feed.xml",
     "index.html",
     "llms.txt",

@@ -38,7 +38,7 @@
     "test:attribution": "node tests/attribution/test_source_to_service.mjs",
     "test:event-dictionary": "node seo/scripts/test_event_dictionary.mjs",
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
-    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs && npm run test:adaptive-intake && npm run test:private-readiness",
+    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs && node scripts/site/test_qa_email_probe.mjs && node scripts/site/test_synthetic_lead_probe_qa_email.mjs && npm run test:adaptive-intake && npm run test:private-readiness",
     "test:lead-turnstile-timeout": "node scripts/site/test_lead_turnstile_timeout.mjs",
     "test:synthetic-probe-page-context": "node scripts/site/test_synthetic_lead_probe_page_context.mjs",
     "test:g03-protocol-identity": "node scripts/site/test_g03_qa_protocol_identity.mjs",
@@ -153,7 +153,7 @@
     "test:report-model-ui": "node scripts/site/test_report_model_ui.mjs",
     "test:deliverables-hub-ui": "node scripts/site/test_deliverables_hub_ui.mjs",
     "test:event-semantics": "node scripts/site/test_event_semantics.mjs",
-    "test:project-pages": "python3 scripts/site/render_project_pages.py --check && python3 -m pytest tests/projects -q",
+    "test:project-pages": "python3 scripts/site/render_project_pages.py --check && python3 scripts/site/render_institutional_service_pages.py && python3 -m pytest tests/projects tests/services -q",
     "audit:deliverables-live": "node scripts/site/audit_deliverables_live.mjs",
     "test:deliverables-live-audit": "node --test scripts/site/test_deliverables_live_audit.mjs",
     "test:site-excellence": "python3 -m pytest scripts/site/test_site_excellence.py -q",
@@ -177,7 +177,7 @@
     "host-contract:nginx-test": "node scripts/migration/netcup/validate-nginx.mjs",
     "host-contract:parity": "node scripts/migration/netcup/parity.mjs",
     "host-contract:seo": "node scripts/migration/netcup/seo-adversarial.mjs",
-    "build:site": "npm run test:project-pages && npm run test:cta-form-next-state && npm run test:script-modules && npm run host-contract:render && python3 scripts/pseo/build_site.py && npm run csp:refresh && npm run host-contract:render",
+    "build:site": "npm run test:b2g-openings && npm run test:project-pages && npm run test:cta-form-next-state && npm run test:script-modules && npm run host-contract:render && python3 scripts/pseo/build_site.py && npm run csp:refresh && npm run host-contract:render",
     "repro:compare": "python3 scripts/pseo/reproducible.py compare",
     "repro:hash": "python3 scripts/pseo/reproducible.py hash",
     "pseo:build": "python3 scripts/pseo/build.py",
@@ -332,7 +332,8 @@
     "test:pos-inb-20260911-10": "node tests/campaigns/pos_inb_20260911/10/test_composition.mjs && python3 -m pytest scripts/pseo/tests/test_demonstrative_csv_packaging.py -q && node scripts/site/build_canonical_destination_map.mjs --check",
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
     "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs",
-    "test:contact-journeys": "node scripts/site/test_contact_journeys.mjs"
+    "test:contact-journeys": "node scripts/site/test_contact_journeys.mjs",
+    "test:b2g-openings": "python3 scripts/site/render_institutional_b2g_openings.py"
   },
   "engines": {
     "node": ">=22.19 <23"

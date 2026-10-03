@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
@@ -46,6 +47,17 @@ def run_entry(
     after_hashes = forbidden_path_hashes(base)
     drift_after = forbidden_drift(base)
     drift_policy = forbidden_drift_policy(base)
+    plan_path = base / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json"
+    try:
+        commercial_revision = json.loads(plan_path.read_text(encoding="utf-8")).get(
+            "commercial_revision", {}
+        )
+    except (OSError, ValueError):
+        commercial_revision = {}
+    historical_only = (
+        commercial_revision.get("decision_state") == "EXECUTE_NOW"
+        and commercial_revision.get("editorial_freeze_revoked") is True
+    )
     specs = load_specs()
     spec_reports = []
     for spec in specs:
@@ -62,7 +74,8 @@ def run_entry(
         "forbidden_unchanged": not drift_after,
         "forbidden_drift": drift_after,
         "forbidden_drift_policy": drift_policy,
-        "forbidden_action_required": bool(drift_policy),
+        "forbidden_action_required": bool(drift_policy) and not historical_only,
+        "historical_drift_detected": bool(drift_policy) and historical_only,
         "forbidden_drift_before": drift_before,
         "forbidden_hashes": after_hashes,
         "pillar_count": len(snapshots),

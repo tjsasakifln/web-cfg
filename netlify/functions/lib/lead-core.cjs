@@ -1561,7 +1561,7 @@ function corsHeaders(origin) {
   return {
     "Access-Control-Allow-Origin": allow,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Accept, Idempotency-Key, X-Confenge-Probe",
+    "Access-Control-Allow-Headers": "Content-Type, Accept, Idempotency-Key, X-Confenge-Probe, X-Confenge-QA-Email, X-Confenge-Ops-Token, X-Confenge-Expected-Sha",
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
     "X-Content-Type-Options": "nosniff",

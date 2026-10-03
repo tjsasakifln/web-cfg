@@ -487,7 +487,7 @@ _SCRIPT = r"""
         cta.hidden = false;
         var wa = T.waLink
           ? T.waLink(
-              "Olá, Tiago. Checklist aditivo CONFENGE. Prontidão: " +
+              "Olá, CONFENGE. Checklist aditivo CONFENGE. Prontidão: " +
                 r.readinessLabel +
                 ". Pendências: " +
                 r.essentialPending +

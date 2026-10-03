@@ -22,6 +22,7 @@ import {
   publicHtmlHasUtmOnInternalAnchors,
   publicSurfaces,
   resolveKits,
+  routeFragmentExists,
   routeExists,
   send,
   shareScriptSendsOutreach,
@@ -99,6 +100,20 @@ if (!byId["elaboracao-complementar"].sample.labeled_as_illustration) {
   fail("elaboracao_not_labeled_illustration", byId["elaboracao-complementar"].sample);
 }
 pass("kits_resolve_destination_sample_conversation");
+
+for (const kit of catalog.kits) {
+  if (!routeFragmentExists(root, kit.sample.path, kit.sample.fragment)) {
+    fail("sample_fragment_missing", `${kit.sample.path}${kit.sample.fragment || ""}`);
+  }
+}
+const brokenFragmentCatalog = structuredClone(catalog);
+brokenFragmentCatalog.kits.find((kit) => kit.id === "elaboracao-complementar").sample.fragment = "#fragmento-inexistente";
+const brokenFragmentKit = resolveKits(root, { catalog: brokenFragmentCatalog })
+  .find((kit) => kit.id === "elaboracao-complementar");
+if (brokenFragmentKit.sample.status !== "missing" || brokenFragmentKit.sample.reason !== "sample_fragment_missing") {
+  fail("sample_fragment_mutation_not_rejected", brokenFragmentKit.sample);
+}
+pass("sample_fragments_resolve_to_real_ids");
 
 const htmlPath = path.join(root, "parcerias-engenharia/index.html");
 const html = fs.readFileSync(htmlPath, "utf8");

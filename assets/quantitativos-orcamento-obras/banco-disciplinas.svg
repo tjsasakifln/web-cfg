@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Banco de quantitativos por disciplina e memória de medição comum</title>
+  <desc id="desc">Quatro grupos mostram estrutura, arquitetura, instalações hidrossanitárias e instalações elétricas. Cada elemento identificado segue para uma memória com origem, revisão, critério, unidade e item de planilha.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#2d6f2d"/></marker>
+    <style>
+      .bg{fill:#f3f7f8}.panel{fill:#fff;stroke:#14334d;stroke-width:2}.head{fill:#14334d}.link{fill:none;stroke:#2d6f2d;stroke-width:4;marker-end:url(#arrow)}.rule{stroke:#b9c8ce;stroke-width:1}.tag{fill:#e4f0e4;stroke:#2d6f2d;stroke-width:1.5}.h{font:700 19px Arial,sans-serif;fill:#fff}.t{font:700 17px Arial,sans-serif;fill:#102d46}.s{font:14px Arial,sans-serif;fill:#415965}.v{font:13px Arial,sans-serif;fill:#415965}.code{font:700 14px Consolas,monospace;fill:#245c24}.small{font:12px Arial,sans-serif;fill:#536a75}.smallinv{font:12px Arial,sans-serif;fill:#dce7eb}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="620"/>
+  <text class="t" x="52" y="44">ELEMENTOS MEDIDOS POR DISCIPLINA</text>
+  <text class="t" x="770" y="44">MEMÓRIA ESTRUTURAL CONFERÍVEL</text>
+
+  <g transform="translate(50 70)">
+    <rect class="panel" width="610" height="112" rx="5"/><rect class="head" width="155" height="112" rx="5"/>
+    <text class="h" x="22" y="40">ESTRUTURAS</text><text class="smallinv" x="22" y="65">prancha E-STR-R02</text>
+    <text class="code" x="182" y="35">P07</text><text class="s" x="230" y="35">pilar identificado</text>
+    <rect class="tag" x="182" y="53" width="116" height="34" rx="17"/><text class="s" x="200" y="75">concreto · m³</text>
+    <rect class="tag" x="310" y="53" width="112" height="34" rx="17"/><text class="s" x="329" y="75">fôrma · m²</text>
+    <rect class="tag" x="434" y="53" width="142" height="34" rx="17"/><text class="s" x="452" y="75">armadura · kg</text>
+  </g>
+  <g transform="translate(50 198)">
+    <rect class="panel" width="610" height="92" rx="5"/><rect class="head" width="155" height="92" rx="5"/>
+    <text class="h" x="22" y="38">ARQUITETURA</text><text class="smallinv" x="22" y="63">prancha ARQ-R04</text>
+    <text class="code" x="182" y="38">W12</text><text class="s" x="230" y="38">parede e aberturas</text><text class="s" x="182" y="67">revestimento · m²  |  rodapé · m  |  esquadria · un</text>
+  </g>
+  <g transform="translate(50 306)">
+    <rect class="panel" width="610" height="92" rx="5"/><rect class="head" width="155" height="92" rx="5"/>
+    <text class="h" x="22" y="38" style="font-size:15px">HIDROSSANITÁRIO</text><text class="smallinv" x="22" y="63">prancha HID-R03</text>
+    <text class="code" x="182" y="38">TQ-04</text><text class="s" x="240" y="38">trecho identificado</text><text class="s" x="182" y="67">tubulação · m  |  conexão · un  |  equipamento · un</text>
+  </g>
+  <g transform="translate(50 414)">
+    <rect class="panel" width="610" height="92" rx="5"/><rect class="head" width="155" height="92" rx="5"/>
+    <text class="h" x="22" y="38">ELÉTRICA</text><text class="smallinv" x="22" y="63">prancha ELE-R03</text>
+    <text class="code" x="182" y="38">QD-02 / C07</text><text class="s" x="290" y="38">quadro e circuito</text><text class="s" x="182" y="67">ponto · un  |  eletroduto · m  |  condutor · m</text>
+  </g>
+
+  <path class="link" d="M680 126H748"/><path class="link" d="M680 244H748"/><path class="link" d="M680 352H748"/><path class="link" d="M680 460H748"/>
+
+  <g transform="translate(770 70)">
+    <rect class="panel" width="380" height="436" rx="6"/>
+    <rect class="head" width="380" height="58" rx="6"/>
+    <text class="h" x="24" y="36">P07 · ORIGEM E-STR-R02 · REVISÃO R02</text>
+    <text class="t" x="24" y="94">1 · Concreto</text><text class="v" x="176" y="94">b × h × H → m³</text><line class="rule" x1="24" y1="112" x2="356" y2="112"/>
+    <text class="t" x="24" y="148">2 · Fôrma</text><text class="v" x="176" y="148">Σ faces medidas × H → m²</text><line class="rule" x1="24" y1="166" x2="356" y2="166"/>
+    <text class="t" x="24" y="202">3 · Armadura</text><text class="v" x="176" y="202">Σ(n × comp. × kg/m) → kg</text><line class="rule" x1="24" y1="220" x2="356" y2="220"/>
+    <text class="t" x="24" y="256">4 · Critério</text><text class="v" x="176" y="256">seção, faces e barras do projeto</text><line class="rule" x1="24" y1="274" x2="356" y2="274"/>
+    <text class="t" x="24" y="310">5 · Resultado</text><text class="v" x="176" y="310">por elemento e por revisão</text><line class="rule" x1="24" y1="328" x2="356" y2="328"/>
+    <text class="t" x="24" y="364">6 · Planilha</text><text class="v" x="176" y="364">Q-STR-P07 + itens vinculados</text>
+    <rect class="tag" x="24" y="388" width="332" height="30" rx="15"/><text class="code" x="52" y="408">ORIGEM + REVISÃO + CRITÉRIO + UNIDADE</text>
+  </g>
+  <text class="small" x="52" y="558">Cada linha conserva o elemento e a revisão que geraram a quantidade; alteração de projeto abre nova memória.</text>
+  <text class="small" x="52" y="582">O diagrama mostra a estrutura do levantamento. Quantidades e composições dependem dos documentos do empreendimento.</text>
+</svg>

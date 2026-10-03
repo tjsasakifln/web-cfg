@@ -23,15 +23,13 @@ PATHS = {
     "pin": ROOT / "docs/integration/campaign-20260905/01/consumer-pin.json",
 }
 
-EXPECTED_SEQUENCE = [
-    "situation",
-    "consequence_or_decision",
-    "deliverable",
-    "method",
-    "proof",
-    "material_boundary",
-    "next_useful_state",
-]
+REQUIRED_EDITORIAL_FUNCTIONS = {
+    "service_explanation",
+    "technical_relevance",
+    "competence",
+    "decision_support",
+    "contact",
+}
 
 INTENT_REQUIRED = {
     "intent_family",
@@ -194,8 +192,11 @@ def validate_commercial_contracts(
         if token not in audience_blob:
             raise CommercialContractError(f"audience_coverage:{token}")
 
-    if page.get("required_sequence") != EXPECTED_SEQUENCE:
-        raise CommercialContractError("page_sequence")
+    functions = page.get("required_functions")
+    if not isinstance(functions, list) or set(functions) != REQUIRED_EDITORIAL_FUNCTIONS:
+        raise CommercialContractError("page_editorial_functions")
+    if not isinstance(page.get("presentation_guidance"), dict):
+        raise CommercialContractError("page_presentation_guidance")
     claim_classes = {row.get("class") for row in page.get("claim_classes", [])}
     if not {"credential", "professional_scope", "method", "case_or_outcome", "price", "national_availability"} <= claim_classes:
         raise CommercialContractError("claim_classes")

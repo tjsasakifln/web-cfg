@@ -1,7 +1,12 @@
 {
   "schema": "confenge.first-fold-contract/1.0",
-  "contract_version": "CFG-FIRST-FOLD-2026-08-30-v3",
+  "contract_version": "CFG-FIRST-FOLD-2026-10-03-v4",
   "issue": "#327",
+  "revision_2026_10_03": {
+    "reason_pt_br": "A campanha institucional reposiciona a primeira dobra para projetos e proposta. A linha antes tratada como prova passa a registrar substância técnica visível, sem exigir credencial, registro profissional ou link de auditoria na abertura.",
+    "automation_limit_pt_br": "A medição confirma presença, geometria, texto e ação; não declara compreensão humana, confiança percebida ou qualidade persuasiva.",
+    "historical_measurement_pt_br": "A evidência anterior permanece histórica até nova medição em checkout limpo; hashes não são normalizados ou promovidos manualmente."
+  },
   "rule": "O visitante é cético e concede 3 segundos. Na primeira dobra ele precisa captar, sem ajuda, as quatro respostas obrigatórias.",
   "required_answers": [
     {
@@ -13,8 +18,8 @@
       "question": "para quem ou para qual situação aquilo serve"
     },
     {
-      "key": "why_believe",
-      "question": "por que há motivo verificável para acreditar"
+      "key": "technical_substance",
+      "question": "qual trabalho, entrega ou disciplina técnica dá substância à promessa"
     },
     {
       "key": "next_action",
@@ -940,6 +945,16 @@
       ],
       "measured_at": "2026-10-02",
       "method_pt_br": "Palavras de conteúdo com quatro letras ou mais, sem acento e sem palavras de ligação. O eyebrow precisa trazer ao menos uma palavra que o H1 não traz, e o lead ao menos uma que eyebrow e H1 não trazem."
+    },
+    "technical_substance": {
+      "fields": [
+        "substance"
+      ],
+      "rule_pt_br": "A primeira dobra apresenta trabalho, disciplina, entrega ou valor de decisão em texto visível. Credencial, registro profissional e link de auditoria não são obrigatórios nessa posição.",
+      "minimum_content_words": 2,
+      "state": "PENDING_REMEASUREMENT",
+      "measured_surfaces": [],
+      "method_pt_br": "A automação mede presença, caixa e ao menos duas palavras de conteúdo; não mede compreensão humana nem persuasão."
     }
   },
   "automation_boundary": {

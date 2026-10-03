@@ -1,1 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520"><style>.g{stroke:#c0ccd1}.b{fill:none;stroke:#133249;stroke-width:3}.o{fill:none;stroke:#d96b39;stroke-width:6}.c{fill:none;stroke:#438397;stroke-width:6}.t{font:700 13px Arial;fill:#133249}.s{font:12px Arial;fill:#536a75}</style><rect width="760" height="520" fill="#eaf0f2"/><g class="g"><path d="M30 80H730M30 160H730M30 240H730M30 320H730M30 400H730M100 30V490M220 30V490M340 30V490M460 30V490M580 30V490M700 30V490"/></g><path class="b" d="M90 90H670V430H90zM90 210H670M90 330H670M260 90V430M500 90V430"/><path class="o" d="M130 140H620V278H300V380H620"/><path class="c" d="M130 180H460V370H190"/><path d="M145 118h55v45h-55zm390 235h60v45h-60z" fill="#fff" stroke="#133249" stroke-width="3"/><circle cx="460" cy="278" r="13" fill="#d96b39"/><circle cx="300" cy="278" r="13" fill="#d96b39"/><text class="t" x="151" y="145">QGBT</text><text class="t" x="548" y="380">EQUIP.</text><text class="s" x="315" y="264">zona coordenada</text><text class="s" x="132" y="198">água / ar</text><text class="s" x="532" y="297">energia / dados</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" role="img" aria-labelledby="title desc">
+  <title id="title">Coordenação espacial de instalações em corte</title>
+  <desc id="desc">Corte conceitual de uma edificação com rotas distintas de água, ar, energia e dados, zona técnica, reserva estrutural, cruzamento coordenado e acesso de manutenção.</desc>
+  <rect width="760" height="520" fill="#f4f7f4"/>
+  <g font-family="Arial, sans-serif">
+    <text x="42" y="42" fill="#071a31" font-size="18" font-weight="700">CORTE DE COORDENAÇÃO</text>
+    <text x="42" y="64" fill="#526275" font-size="12">redes, estrutura, espaço técnico e manutenção</text>
+  </g>
+  <g fill="none" stroke="#aebac1" stroke-width="2">
+    <path d="M42 105H718M42 258H718M42 412H718"/>
+    <path d="M92 105V412M318 105V412M548 105V412M668 105V412"/>
+  </g>
+  <g fill="#dfe7e3" stroke="#071a31" stroke-width="3">
+    <path d="M42 96H718V116H42zM42 249H718V269H42zM42 403H718V423H42z"/>
+    <path d="M82 105H102V412H82zM308 105H328V412H308zM538 105H558V412H538zM658 105H678V412H658z"/>
+  </g>
+  <g fill="#eef2ef" stroke="#87969f" stroke-width="2" stroke-dasharray="8 6">
+    <rect x="112" y="126" width="416" height="97" rx="6"/>
+    <rect x="112" y="280" width="416" height="96" rx="6"/>
+  </g>
+  <g font-family="Arial, sans-serif" fill="#526275" font-size="11" font-weight="700">
+    <text x="126" y="146">ZONA TÉCNICA SUPERIOR</text>
+    <text x="126" y="300">ZONA TÉCNICA INFERIOR</text>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M126 178H286V334H515" stroke="#2d6f2d" stroke-width="7"/>
+    <path d="M126 205H455V315H515" stroke="#4b738a" stroke-width="12"/>
+    <path d="M126 162H385V352H515" stroke="#071a31" stroke-width="5"/>
+    <path d="M126 191H360V291H515" stroke="#b2bd19" stroke-width="5" stroke-dasharray="10 7"/>
+  </g>
+  <g fill="#fff" stroke="#071a31" stroke-width="2">
+    <rect x="115" y="151" width="22" height="66" rx="3"/>
+    <rect x="515" y="279" width="34" height="85" rx="4"/>
+    <rect x="279" y="242" width="34" height="34" rx="4"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#071a31">
+    <text x="106" y="232">ORIGENS</text><text x="503" y="378">EQUIPAMENTO</text>
+  </g>
+  <g fill="#fff" stroke="#2d6f2d" stroke-width="2">
+    <circle cx="286" cy="258" r="9"/><circle cx="385" cy="258" r="9"/><circle cx="455" cy="315" r="9"/>
+  </g>
+  <g fill="none" stroke="#2d6f2d" stroke-width="2">
+    <path d="M286 249V129H350"/><path d="M385 249V222H470"/><path d="M455 324V390H520"/>
+  </g>
+  <g font-family="Arial, sans-serif" fill="#071a31" font-size="11" font-weight="700">
+    <text x="358" y="126">RESERVA ESTRUTURAL</text>
+    <text x="478" y="219">CRUZAMENTO COORDENADO</text>
+    <text x="528" y="394">ACESSO DE MANUTENÇÃO</text>
+  </g>
+  <g transform="translate(42 456)" font-family="Arial, sans-serif" font-size="11" fill="#071a31">
+    <path d="M0 0H28" stroke="#2d6f2d" stroke-width="7" stroke-linecap="round"/><text x="36" y="4">água</text>
+    <path d="M116 0H144" stroke="#4b738a" stroke-width="12" stroke-linecap="round"/><text x="152" y="4">ar</text>
+    <path d="M213 0H241" stroke="#071a31" stroke-width="5" stroke-linecap="round"/><text x="249" y="4">energia</text>
+    <path d="M340 0H368" stroke="#b2bd19" stroke-width="5" stroke-dasharray="9 6" stroke-linecap="round"/><text x="376" y="4">dados</text>
+    <text x="505" y="4" fill="#526275">representação conceitual</text>
+  </g>
+</svg>

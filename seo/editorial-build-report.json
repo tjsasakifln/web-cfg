@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generated_at": "2026-09-20T03:44:18Z",
+  "generated_at": "2026-10-03T19:06:33Z",
   "page_defs": 12,
   "indexable_count": 2,
   "indexable_urls": [
@@ -13,8 +13,10 @@
       "page_id": "guia-checklist-aditivo",
       "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
       "status": "INDEXABLE",
-      "gate_ok": true,
-      "issues": []
+      "gate_ok": false,
+      "issues": [
+        "approval_material_hash_mismatch"
+      ]
     },
     {
       "page_id": "guia-docs-reequilibrio",
@@ -62,8 +64,10 @@
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
       "status": "INDEXABLE",
-      "gate_ok": true,
-      "issues": []
+      "gate_ok": false,
+      "issues": [
+        "approval_material_hash_mismatch"
+      ]
     },
     {
       "page_id": "lei-limite-25-50",

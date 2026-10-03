@@ -40,7 +40,7 @@
   "intent_families": [
     {
       "intent_family": "projetar_revisar_compatibilizar",
-      "public_wording": "Preciso elaborar, completar, revisar ou compatibilizar projetos de engenharia antes da obra.",
+      "public_wording": "Preciso elaborar, revisar ou compatibilizar projetos de engenharia antes da obra.",
       "canonical_service_family": "engineering_projects_coordination",
       "offer_ids": ["complementary_engineering_project_review", "bim_coordination_clash_register", "private_project_technical_readiness_assessment"],
       "audience_examples": ["pessoas físicas", "condomínios", "órgãos públicos", "construtoras", "incorporadoras", "escritórios de engenharia", "escritórios e plataformas de arquitetura como clientes de engenharia complementar"],

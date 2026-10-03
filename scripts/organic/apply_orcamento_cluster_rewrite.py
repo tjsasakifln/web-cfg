@@ -437,8 +437,8 @@ def page_admin(html: str) -> str:
 <li>Usar esta classificação para discutir exequibilidade global sem olhar a curva ABC.</li>
 </ul>
 </section>
-{cta(slug, "edital", "Administração local no orçamento: direto, BDI ou planilha?", "Olá, Tiago. Preciso conferir se a administração local do edital está no BDI, no item ou nos dois.", "Enviar planilha e memorial de BDI", "Indicamos se há duplicidade de posto, omissão de equipe ou só ajuste de memória antes do envio.", "Enviar planilha no WhatsApp")}
-{decision("Olá, Tiago. Preciso conferir se a administração local do orçamento está como custo direto, BDI ou item.", "Vale quando o memorial de BDI é ambíguo, a planilha mistura canteiro com serviço, ou a equipe real não cabe na taxa do órgão.")}
+{cta(slug, "edital", "Administração local no orçamento: direto, BDI ou planilha?", "Olá, CONFENGE. Preciso conferir se a administração local do edital está no BDI, no item ou nos dois.", "Enviar planilha e memorial de BDI", "Indicamos se há duplicidade de posto, omissão de equipe ou só ajuste de memória antes do envio.", "Enviar planilha no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso conferir se a administração local do orçamento está como custo direto, BDI ou item.", "Vale quando o memorial de BDI é ambíguo, a planilha mistura canteiro com serviço, ou a equipe real não cabe na taxa do órgão.")}
 {faq(faqs)}
 {sources(
     [
@@ -548,8 +548,8 @@ def page_exequib(html: str) -> str:
 <li>Tratar a garantia adicional de 85% como prova de que o preço executa.</li>
 </ul>
 </section>
-{cta(slug, "edital", "Exequibilidade da proposta: o que comprovar", "Olá, Tiago. Recebi diligência de exequibilidade e quero revisar a planilha e o orçamento de referência.", "Enviar diligência e planilha", "Organizamos o corte de 75%, os critérios do edital e o que a memória da proposta ainda não mostra.", "Enviar diligência no WhatsApp")}
-{decision("Olá, Tiago. Preciso comprovar exequibilidade da proposta sem fragilizar a planilha.", "Útil quando a relação global encosta ou fura 75%, a diligência aponta unitários da curva ABC, ou a equipe quer enviar a planilha interna inteira.")}
+{cta(slug, "edital", "Exequibilidade da proposta: o que comprovar", "Olá, CONFENGE. Recebi diligência de exequibilidade e quero revisar a planilha e o orçamento de referência.", "Enviar diligência e planilha", "Organizamos o corte de 75%, os critérios do edital e o que a memória da proposta ainda não mostra.", "Enviar diligência no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso comprovar exequibilidade da proposta sem fragilizar a planilha.", "Útil quando a relação global encosta ou fura 75%, a diligência aponta unitários da curva ABC, ou a equipe quer enviar a planilha interna inteira.")}
 {faq(faqs)}
 {sources(
     [
@@ -660,8 +660,8 @@ def page_database(html: str) -> str:
 <li>Aplicar o mesmo índice a família de insumo que o contrato setorizou de outro modo.</li>
 </ul>
 </section>
-{cta(slug, "edital", "Data-base e reajuste: meses sem cobertura", "Olá, Tiago. Preciso conferir data-base e cláusula de reajuste do edital e do contrato.", "Enviar cláusula de reajuste", "Marcamos data-base, série e meses descobertos, sem misturar com reequilíbrio.", "Enviar cláusula no WhatsApp")}
-{decision("Olá, Tiago. Preciso revisar data-base e reajuste do contrato de obra pública.", "Vale quando a ordem de serviço atrasou meses após a data-base, o índice do edital é omisso, ou a equipe está usando reequilíbrio para cobrar inflação ordinária.")}
+{cta(slug, "edital", "Data-base e reajuste: meses sem cobertura", "Olá, CONFENGE. Preciso conferir data-base e cláusula de reajuste do edital e do contrato.", "Enviar cláusula de reajuste", "Marcamos data-base, série e meses descobertos, sem misturar com reequilíbrio.", "Enviar cláusula no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso revisar data-base e reajuste do contrato de obra pública.", "Vale quando a ordem de serviço atrasou meses após a data-base, o índice do edital é omisso, ou a equipe está usando reequilíbrio para cobrar inflação ordinária.")}
 {faq(faqs)}
 {sources(
     [
@@ -771,8 +771,8 @@ def page_empreitada(html: str) -> str:
 <li>Não deixar memória do risco de quantidade na proposta global.</li>
 </ul>
 </section>
-{cta(slug, "edital", "Preço global ou unitário: o risco de quantidade", "Olá, Tiago. Quero conferir o regime de execução e o risco de quantitativo do edital.", "Enviar minuta e planilha", "Comparamos medição, quantitativo do projeto original e o que realmente vira aditivo.", "Enviar minuta no WhatsApp")}
-{decision("Olá, Tiago. Preciso analisar o regime de empreitada (preço global ou unitário) deste edital.", "Vale quando o projeto tem quantitativo frouxo, o edital mistura linguagem de global com planilha unitária, ou a equipe está precificando o regime errado.")}
+{cta(slug, "edital", "Preço global ou unitário: o risco de quantidade", "Olá, CONFENGE. Quero conferir o regime de execução e o risco de quantitativo do edital.", "Enviar minuta e planilha", "Comparamos medição, quantitativo do projeto original e o que realmente vira aditivo.", "Enviar minuta no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso analisar o regime de empreitada (preço global ou unitário) deste edital.", "Vale quando o projeto tem quantitativo frouxo, o edital mistura linguagem de global com planilha unitária, ou a equipe está precificando o regime errado.")}
 {faq(faqs)}
 {sources(
     [
@@ -882,8 +882,8 @@ def page_matriz(html: str) -> str:
 <li>Tratar alteração unilateral (art. 124, I) como se a matriz a tivesse apagado.</li>
 </ul>
 </section>
-{cta(slug, "contrato", "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?", "Olá, Tiago. Tenho um evento na execução e quero confrontar a matriz de riscos antes de protocolar reequilíbrio.", "Enviar matriz e cronologia", "Lemos evento, alocação e franquia e dizemos se o instituto é reequilíbrio, reajuste ou risco já precificado.", "Enviar matriz no WhatsApp")}
-{decision("Olá, Tiago. Preciso analisar se a matriz de riscos deste contrato impede o reequilíbrio.", "Vale quando o órgão já respondeu com a alocação, a franquia é opaca, ou a equipe está protocolando reajuste com nome de reequilíbrio.")}
+{cta(slug, "contrato", "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?", "Olá, CONFENGE. Tenho um evento na execução e quero confrontar a matriz de riscos antes de protocolar reequilíbrio.", "Enviar matriz e cronologia", "Lemos evento, alocação e franquia e dizemos se o instituto é reequilíbrio, reajuste ou risco já precificado.", "Enviar matriz no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso analisar se a matriz de riscos deste contrato impede o reequilíbrio.", "Vale quando o órgão já respondeu com a alocação, a franquia é opaca, ou a equipe está protocolando reajuste com nome de reequilíbrio.")}
 {faq(faqs)}
 {sources(
     [
@@ -994,8 +994,8 @@ def page_mobilizacao(html: str) -> str:
 <li>Tratar atraso de liberação de frente como reajuste de índice em vez de custo de equipe parada (reequilíbrio ou aditivo, conforme o fato).</li>
 </ul>
 </section>
-{cta(slug, "edital", "Mobilização e desmobilização na planilha", "Olá, Tiago. Quero conferir se mobilização e desmobilização deste edital estão no item, no BDI ou omitidas.", "Enviar planilha de canteiro", "Comparamos item, BDI e o custo real de ida e volta, sem copiar omissão alheia.", "Enviar planilha no WhatsApp")}
-{decision("Olá, Tiago. Preciso calcular mobilização e desmobilização desta proposta.", "Vale quando a obra é remota, o edital omite canteiro, ou a concorrência zerou a linha e a equipe hesita em precificar.")}
+{cta(slug, "edital", "Mobilização e desmobilização na planilha", "Olá, CONFENGE. Quero conferir se mobilização e desmobilização deste edital estão no item, no BDI ou omitidas.", "Enviar planilha de canteiro", "Comparamos item, BDI e o custo real de ida e volta, sem copiar omissão alheia.", "Enviar planilha no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso calcular mobilização e desmobilização desta proposta.", "Vale quando a obra é remota, o edital omite canteiro, ou a concorrência zerou a linha e a equipe hesita em precificar.")}
 {faq(faqs)}
 {sources(
     [
@@ -1106,8 +1106,8 @@ def page_sicro(html: str) -> str:
 <li>Inventar fator de conversão nacional sem publicação DNIT ou CAIXA.</li>
 </ul>
 </section>
-{cta(slug, "edital", "SINAPI ou SICRO: a referência de cada serviço", "Olá, Tiago. Quero conferir se o orçamento deste edital deveria estar em SINAPI ou SICRO em cada serviço.", "Enviar planilha e objeto", "Classificamos o serviço na ordem do art. 23 e marcamos mistura de bases.", "Enviar planilha no WhatsApp")}
-{decision("Olá, Tiago. Preciso decidir SINAPI ou SICRO nos serviços deste edital.", "Vale quando o objeto mistura rodovia e edificação, o ente usou tabela própria, ou a planilha do órgão troca de sistema sem memória.")}
+{cta(slug, "edital", "SINAPI ou SICRO: a referência de cada serviço", "Olá, CONFENGE. Quero conferir se o orçamento deste edital deveria estar em SINAPI ou SICRO em cada serviço.", "Enviar planilha e objeto", "Classificamos o serviço na ordem do art. 23 e marcamos mistura de bases.", "Enviar planilha no WhatsApp")}
+{decision("Olá, CONFENGE. Preciso decidir SINAPI ou SICRO nos serviços deste edital.", "Vale quando o objeto mistura rodovia e edificação, o ente usou tabela própria, ou a planilha do órgão troca de sistema sem memória.")}
 {faq(faqs)}
 {sources(
     [
@@ -1273,7 +1273,7 @@ def patch_bdi(html: str) -> str:
             "bdi-diferenciado-obra-publica",
             "edital",
             "BDI diferenciado em materiais e equipamentos",
-            "Olá, Tiago. Quero conferir o BDI diferenciado desta proposta.",
+            "Olá, CONFENGE. Quero conferir o BDI diferenciado desta proposta.",
             "Solicitar canal seguro para envio",
             "Confrontamos as famílias de custo, as taxas e o modelo do edital.",
             "Solicitar canal seguro para envio no WhatsApp",
@@ -1392,7 +1392,7 @@ def patch_sinapi(html: str) -> str:
             "sinapi-desonerado-nao-desonerado",
             "edital",
             "SINAPI desonerado ou não desonerado",
-            "Olá, Tiago. Quero conferir a base SINAPI e os encargos desta proposta.",
+            "Olá, CONFENGE. Quero conferir a base SINAPI e os encargos desta proposta.",
             "Solicitar canal seguro para envio",
             "Confrontamos edital, data-base, encargos e BDI sem misturar tabelas.",
             "Solicitar canal seguro para envio no WhatsApp",

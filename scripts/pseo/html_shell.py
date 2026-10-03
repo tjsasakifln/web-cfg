@@ -382,6 +382,14 @@ def page_shell(
 </body>
 </html>
 """
+    # One channel-copy source prevents regenerated library/market pages from
+    # restoring the former admissibility step or personal-only greetings.
+    from scripts.site.document_intake import rewrite_html
+
+    document = rewrite_html(document)
+    from scripts.site.sync_article_word_counts import sync_word_count
+
+    document = sync_word_count(document)
     try:
         from scripts.site.shell_nav import load_brand, sync_text  # noqa: PLC0415
 

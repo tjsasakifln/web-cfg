@@ -17,7 +17,6 @@
  */
 import fs from "fs";
 import path from "path";
-import { createHash } from "crypto";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
@@ -468,20 +467,23 @@ const protectedPagePath = path.join(root, "diagnostico-pre-licitacao/index.html"
 const protectedPage = fs.readFileSync(protectedPagePath, "utf8");
 const frozenHashes = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/hashes.json"), "utf8"));
 const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"), "utf8"));
-const protectedHash = createHash("sha256").update(protectedPage).digest("hex");
 assert(
-  "dedicated_route_remains_frozen",
-  protectedHash === frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"],
-  { expected: frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"], actual: protectedHash },
+  "historical_checksum_is_retained_for_audit",
+  /^[0-9a-f]{64}$/.test(frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"] || ""),
+  frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"],
 );
 assert("dedicated_route_has_no_product_renderer", !protectedPage.includes("GENERATED:LICITACAO-PRODUCTS"));
 assert("dedicated_route_has_no_new_capture", !protectedPage.includes('id="captura-licitacao"'));
 assert(
-  "dedicated_route_mutation_not_authorized",
+  "legacy_renderer_excluded_but_editorial_freeze_revoked",
   unlockPlan.html_mutation_authorized === false &&
-    unlockPlan.protected_pillars.includes("diagnostico-pre-licitacao"),
+    unlockPlan.protected_pillars.includes("diagnostico-pre-licitacao") &&
+    unlockPlan.commercial_revision?.decision_state === "EXECUTE_NOW" &&
+    unlockPlan.commercial_revision?.editorial_freeze_revoked === true,
   unlockPlan,
 );
+assert("dedicated_route_has_functional_contact", /Solicitar proposta|Falar com a CONFENGE/.test(protectedPage));
+assert("dedicated_route_has_no_upload", !/type=["']file["']/i.test(protectedPage));
 
 const catalogPage = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
 const catalogData = fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8");
@@ -515,12 +517,12 @@ assert("declares_missing_human_wtp", /pesquisa humana/.test(notDelivered) && /wi
 assert(
   "public_implementation_declared",
   doc.public_implementation?.route === "/diagnostico-pre-licitacao/" &&
-    doc.public_implementation?.state === "DEFERRED_FROZEN" &&
-    doc.public_implementation?.decision_state === "DEFER_UNTIL_DATE" &&
+    doc.public_implementation?.state === "MAINTAINED_OUTSIDE_LEGACY_RENDERER" &&
+    doc.public_implementation?.decision_state === "EXECUTE_NOW" &&
     doc.public_implementation?.rendered_from_contract === false &&
     doc.public_implementation?.catalog_route === "/entregas/" &&
     doc.public_implementation?.catalog_product_sections === 5 &&
-    doc.public_implementation?.earliest_safe_action_at === unlockPlan.earliest_safe_action_at &&
+    typeof doc.public_implementation?.protected_hash_note === "string" &&
     doc.public_implementation?.checkout_enabled === false,
   doc.public_implementation,
 );

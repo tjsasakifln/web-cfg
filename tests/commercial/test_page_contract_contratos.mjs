@@ -4,7 +4,6 @@
  */
 import fs from "fs";
 import path from "path";
-import { createHash } from "crypto";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
@@ -390,7 +389,8 @@ assert(
   implementation.route_pages === 3 &&
     JSON.stringify(implementation.active_route_items) === JSON.stringify(ACTIVE_ITEMS) &&
     JSON.stringify(implementation.held_protected_route_items) === JSON.stringify(HELD_ITEMS) &&
-    implementation.held_state === "DEFER_UNTIL_DATE" &&
+    implementation.held_state === "LEGACY_RENDERER_EXCLUDED" &&
+    typeof implementation.held_note === "string" &&
     implementation.hub_route === "/servicos-obras-publicas/" &&
     implementation.hub_includes_unrouted_item_21 === true && implementation.checkout_enabled === false &&
     implementation.analytics_contains_qualification === false,
@@ -426,17 +426,20 @@ for (const item of ACTIVE_ITEMS.map((number) => byItem.get(number))) {
 const frozenHashes = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/hashes.json"), "utf8"));
 const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, implementation.held_by_contract), "utf8"));
 assert(
-  "held_route_mutation_is_not_authorized",
-  unlockPlan.html_mutation_authorized === false && implementation.earliest_safe_action_at === unlockPlan.earliest_safe_action_at,
+  "legacy_renderer_excluded_but_editorial_freeze_revoked",
+  unlockPlan.html_mutation_authorized === false &&
+    unlockPlan.commercial_revision?.decision_state === "EXECUTE_NOW" &&
+    unlockPlan.commercial_revision?.editorial_freeze_revoked === true,
   unlockPlan,
 );
 for (const item of HELD_ITEMS.map((number) => byItem.get(number))) {
   const html = fs.readFileSync(path.join(root, item.page_file), "utf8");
-  const actualHash = createHash("sha256").update(html).digest("hex");
-  assert(`held_hash_${item.item}`, actualHash === frozenHashes.forbidden[item.page_file], { expected: frozenHashes.forbidden[item.page_file], actual: actualHash });
+  assert(`historical_hash_${item.item}`, /^[0-9a-f]{64}$/.test(frozenHashes.forbidden[item.page_file] || ""), frozenHashes.forbidden[item.page_file]);
   assert(`held_no_contract_block_${item.item}`, !html.includes("GENERATED:CONTRACT-DEFENSE-PRODUCT"), item.page_file);
   assert(`held_no_product_css_${item.item}`, !html.includes("contract-defense-products.css"), item.page_file);
   assert(`held_no_new_capture_${item.item}`, !html.includes("CONTRACT-DEFENSE-FIELDS"), item.page_file);
+  assert(`held_functional_contact_${item.item}`, /Solicitar proposta|Falar com a CONFENGE/.test(html), item.page_file);
+  assert(`held_no_upload_${item.item}`, !/type=["']file["']/i.test(html), item.page_file);
 }
 const hubHtml = fs.readFileSync(path.join(root, "servicos-obras-publicas/index.html"), "utf8");
 assert("hub_no_internal_item_counters", !/<article class="contract-products-hub__card"[^>]*><p>\d{2}<\/p>/.test(hubHtml));

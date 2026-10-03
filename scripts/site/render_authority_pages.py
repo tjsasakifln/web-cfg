@@ -102,7 +102,7 @@ def _page(
     role_label: str = "Responsável técnico",
     show_version_banner: bool = True,
     author_name: str = "Engº Tiago Sasaki",
-    wa_message: str = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE.",
+    wa_message: str = "Olá, CONFENGE. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE.",
     page_index: list[tuple[str, str]] | None = None,
 ) -> str:
     """One authority page. ``page_index`` (SALTO-INSTITUCIONAL-02, lote B): pairs
@@ -278,7 +278,7 @@ def render_all() -> list[Path]:
         role_label = "Responsável técnico"
         show_version_banner = True
         author_name = "Engº Tiago Sasaki"
-        wa_message = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE."
+        wa_message = "Olá, CONFENGE. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE."
         page_index: list[tuple[str, str]] | None = None
         if key == "conflicts":
             conflict = load_conflict_contract()
@@ -302,7 +302,7 @@ def render_all() -> list[Path]:
             role_label = "Responsável pela política"
             show_version_banner = False
             author_name = "Tiago Jun Sasaki"
-            wa_message = "Olá, Tiago. Quero descrever uma demanda técnica para a CONFENGE e combinar o próximo passo."
+            wa_message = "Olá, CONFENGE. Quero descrever uma demanda técnica para a CONFENGE e combinar o próximo passo."
             written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
             from scripts.site.authority import policy_version_disclosure
 

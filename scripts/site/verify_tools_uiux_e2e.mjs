@@ -335,7 +335,7 @@ await page.setViewport({ width: 1440, height: 1000 });
       hasPanels: !!(out && out.querySelector(".tool-limit-panel")),
       hasNumeric: !!(out && /limite numérico|saldos|percentual|utilizado/i.test(out.innerText)),
       hasSteps: !!document.querySelector("[data-limite-step]"),
-      branch: out ? /NUMERIC_SCOPE_EXCEEDED/.test(out.innerText) : false,
+      branch: out ? /Recorte numérico excedido/.test(out.innerText) : false,
       handoffVisible: !document.getElementById("cfg-d19-handoff")?.hidden,
     };
   });
@@ -400,7 +400,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   });
   const partial = await page.evaluate(() => {
     const text = document.getElementById("resultado")?.innerText || "";
-    return { inputBranch: text.includes("INPUT_NOT_CONFIRMED"), provisional: /provisório|máximo teórico/i.test(text), panels: document.querySelectorAll("#resultado .tool-limit-panel").length };
+    return { inputBranch: text.includes("Premissas ainda não confirmadas"), provisional: /provisório|máximo teórico/i.test(text), panels: document.querySelectorAll("#resultado .tool-limit-panel").length };
   });
   if (!partial.inputBranch || !partial.provisional || partial.panels !== 2) fail("limite_partial_branch " + JSON.stringify(partial));
   else pass("limite_partial_branch");
@@ -414,7 +414,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   });
   const unknown = await page.evaluate(() => {
     const text = document.getElementById("resultado")?.innerText || "";
-    return { inputBranch: text.includes("INPUT_NOT_CONFIRMED"), noCalculation: /Memória de cálculo indisponível|Nenhum saldo foi calculado/i.test(text), panels: document.querySelectorAll("#resultado .tool-limit-panel").length };
+    return { inputBranch: text.includes("Premissas ainda não confirmadas"), noCalculation: /Memória de cálculo indisponível|Nenhum saldo foi calculado/i.test(text), panels: document.querySelectorAll("#resultado .tool-limit-panel").length };
   });
   if (!unknown.inputBranch || !unknown.noCalculation || unknown.panels !== 0) fail("limite_unknown_branch " + JSON.stringify(unknown));
   else pass("limite_unknown_branch");
@@ -990,6 +990,9 @@ await page.setViewport({ width: 1440, height: 1000 });
   const artifactMissing = artifactNeedles.filter((needle) => !reportLen.copied.includes(needle));
   if (artifactMissing.length) fail("limite_artifact_complete " + JSON.stringify({ artifactMissing, copied: reportLen.copied.slice(0, 800) }));
   else pass("limite_artifact_complete");
+  const implementationToken = /Branch:|\b(?:INPUT_NOT_CONFIRMED|WITHIN_NUMERIC_SCOPE|NUMERIC_SCOPE_EXCEEDED|PROVISIONAL_KNOWN_PARTIAL|CONFIRMED_COMPLETE)\b/;
+  if (implementationToken.test(reportLen.resultText) || implementationToken.test(reportLen.copied)) fail("limite_public_output_leaks_internal_enum");
+  else pass("limite_public_output_uses_customer_language");
   // print path exists
   const hasPrint = await page.$("#btn-print");
   if (!hasPrint) fail("limite_print_btn");

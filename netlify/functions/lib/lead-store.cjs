@@ -58,6 +58,21 @@ class MemoryStore {
     this.map.set(id, next);
     return next;
   }
+  async updateQaEmailState(id, updater) {
+    const cur = this.map.get(id);
+    if (!cur) return null;
+    const currentQa = (cur.delivery && cur.delivery.qa_email) || {};
+    const nextQa = updater(currentQa, cur);
+    const next = {
+      ...cur,
+      delivery: { ...(cur.delivery || {}), qa_email: nextQa },
+      lead_id: cur.lead_id,
+      idempotency_key: cur.idempotency_key,
+      updated_at: new Date().toISOString(),
+    };
+    this.map.set(id, next);
+    return next;
+  }
   async delete(id) {
     const cur = this.map.get(id);
     if (cur?.idempotency_key) this.byIdem.delete(cur.idempotency_key);
@@ -179,6 +194,23 @@ class FileStore {
       const next = {
         ...cur,
         ...patch,
+        lead_id: cur.lead_id,
+        idempotency_key: cur.idempotency_key,
+        updated_at: new Date().toISOString(),
+      };
+      this.records._putUnlocked(String(id), next);
+      return next;
+    });
+  }
+  async updateQaEmailState(id, updater) {
+    return this.backend.withExclusiveLock(() => {
+      const cur = this.records.get(String(id));
+      if (!cur) return null;
+      const currentQa = (cur.delivery && cur.delivery.qa_email) || {};
+      const nextQa = updater(currentQa, cur);
+      const next = {
+        ...cur,
+        delivery: { ...(cur.delivery || {}), qa_email: nextQa },
         lead_id: cur.lead_id,
         idempotency_key: cur.idempotency_key,
         updated_at: new Date().toISOString(),
@@ -325,6 +357,11 @@ class NetlifyBlobsStore {
     };
     return this.put(next);
   }
+  async updateQaEmailState() {
+    const err = new Error("qa_email_atomic_update_unsupported");
+    err.code = "ATOMIC_UPDATE_UNSUPPORTED";
+    throw err;
+  }
   async delete(id) {
     const cur = await this.get(id);
     if (!cur) return false;
@@ -450,6 +487,11 @@ class HttpStore {
       return this.put(next);
     }
     return next;
+  }
+  async updateQaEmailState() {
+    const err = new Error("qa_email_atomic_update_unsupported");
+    err.code = "ATOMIC_UPDATE_UNSUPPORTED";
+    throw err;
   }
   async delete(id) {
     try {

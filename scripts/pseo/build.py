@@ -570,13 +570,13 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
         empty_cta = None
         eyebrow = "Inteligência aplicada à decisão"
         wa = (
-            "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE "
+            "Olá, CONFENGE. Quero aplicar a inteligência de mercado da CONFENGE "
             "à decisão da minha empresa."
 )
         if path == "/radar/":
             eyebrow = "Monitoramento estruturado"
             wa = (
-                "Olá, Tiago. Quero configurar o radar de oportunidades com o perfil "
+                "Olá, CONFENGE. Quero configurar o radar de oportunidades com o perfil "
                 "da minha construtora."
 )
             if not items:

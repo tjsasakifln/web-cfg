@@ -1,6 +1,6 @@
 # Ação humana obrigatória — primeira coorte editorial
 
-**Estado:** pronto apenas para revisão humana individual. Nenhum agente, CI ou bot aprova páginas, publica URLs ou faz merge.
+**Estado:** decisões factuais humanas permanecem individuais. Agentes, CI e bots não criam aprovação humana. A publicação de material aprovado segue a autorização da direção e os gates de produção.
 
 A aprovação vale para o conteúdo material canônico, as fontes exatas e o deploy preview, não para uma URL de produção nem para um SHA meramente informativo.
 
@@ -14,7 +14,7 @@ A aprovação vale para o conteúdo material canônico, as fontes exatas e o dep
 ## Checklist de pedido de aditivo em obra pública
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/
-- Material hash v3: `01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885`
+- Material hash v3: `b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722`
 - Fontes a conferir: `lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024`
 - Concorrente interno: `/conteudos/erro-de-projeto-gera-aditivo-obra-publica/`
 - Risco de canibalização: parcial: diferenciar intenção (erro de projeto versus checklist transversal) e manter linkagem contextual.
@@ -26,7 +26,7 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
   --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
   --sources lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885 \
+  --material-hash b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722 \
   --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
@@ -35,7 +35,7 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
 ## Item novo no aditivo: preço e relação proposta/orçamento-base
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/
-- Material hash v3: `06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f`
+- Material hash v3: `9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f`
 - Fontes a conferir: `lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa`
 - Concorrente interno: `/conteudos/desconto-da-proposta-em-item-novo-aditivo/`
 - Risco de canibalização: alto: escolher canônica e impedir dual-index antes da publicação.
@@ -47,7 +47,7 @@ ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
   --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
   --sources lei-14133-art126-132,lei-14133-art124,lei-14133-planalto,agu-alteracoes-contratuais-2024,sinapi-caixa \
   --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f \
+  --material-hash 9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f \
   --preview-base-url https://deploy-preview-54--confenge.netlify.app \
   --confirm \
   --indexable
