@@ -72,6 +72,20 @@ feita pelo assunto único na caixa existente.
 
 ## Recuperação preparada antes da promoção
 
+Na primeira execução protegida da PR #729, os gates recusaram uma exportação
+GSC incidental de teste e a ausência das quatro rotas editoriais aprovadas no
+índice de sitemaps. A exportação foi restaurada byte a byte ao baseline; o
+gerador registra novamente cada segmento aprovado que deixe de estar vazio.
+Não houve nova coleta nem alteração de métricas comerciais nesta correção.
+
+Os seis artigos de medição preservam a revisão técnica de 19 de setembro e
+os fingerprints históricos. O comparador projeta apenas a saudação autorizada
+no link WhatsApp da CONFENGE; destinatário, mensagem restante, texto visível,
+fatos e fontes continuam vinculados ao hash. Os verificadores de texto de
+serviços passaram a usar um parser HTML, e o perfil técnico recebeu os três
+canais diretos no fechamento. Essas correções seguem os mesmos gates
+protegidos antes da publicação.
+
 Baseline servido: `c7d2d0a42ebb531efc0547b34f2f38b4077ee45e`, publicado pelo
 [release 37095012142](https://github.com/tjsasakifln/web-cfg/actions/runs/37095012142).
 O pacote imutável foi recuperado e seu SHA-256 confirmado:

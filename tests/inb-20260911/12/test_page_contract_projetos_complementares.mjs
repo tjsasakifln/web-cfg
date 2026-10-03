@@ -2,16 +2,17 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
+import { htmlText as textOf } from "../../support/html_text.mjs";
 
 const ROOT = path.resolve(".");
 const PAGE = path.join(ROOT, "projetos-complementares-engenharia/index.html");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 const mainOf = (html) => html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
-const textOf = (html) => String(html)
-  .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
-  .replace(/<[^>]+>/g, " ")
-  .replace(/\s+/g, " ")
-  .trim();
+
+test("HTML text assertions follow parsed text and exclude raw-text elements", () => {
+  assert.equal(textOf('<p>Estruturas &amp; instalações</p><!-- <script>comentário</script> --><script>promessa</script\t\n bar><style>oculto</style><p>Coordenação</p>'), "Estruturas & instalações Coordenação");
+  assert.equal(textOf('<p>&lt;script&gt;texto literal&lt;/script&gt;</p>'), "<script>texto literal</script>");
+});
 
 test("institutional route states disciplines, deliverables and proposal factors", () => {
   const html = fs.readFileSync(PAGE, "utf8");

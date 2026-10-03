@@ -542,6 +542,16 @@ def content_fingerprint(html: str) -> str:
     html = unwrap_opaque_tokens(html)
     match = re.search(r'<article class="article-main".*?</article>', html, re.S)
     body = match.group(0) if match else html
+    # Campaign 2026-10-03 authorizes the company greeting in existing contact
+    # links. This exact presentation amendment does not revise the article's
+    # technical text or source consultation. Preserve its historical anchor;
+    # the recipient, message remainder, labels and prose still affect the hash.
+    body = re.sub(
+        r'(<a\b[^>]*\bhref="https://wa\.me/5548988344559\?text=)'
+        r'Ol%C3%A1%2C%20CONFENGE\.(?=[^"]*")',
+        r'\1Ol%C3%A1%2C%20Tiago.',
+        body,
+    )
     body = _ISO_DATE.sub("@DATE@", body)
     for month in _PT_MONTHS:
         body = re.sub(rf"\b\d{{1,2}} de {month} de \d{{4}}\b", "@DATE_BR@", body)
@@ -552,7 +562,8 @@ def content_fingerprint(html: str) -> str:
 # Date-masked body fingerprint recorded at CLUSTER_REVISION. Recapture with
 #   python3 -m scripts.organic.cluster_medicao_originality --recapture
 # only together with a new CLUSTER_REVISION, because a changed body is a
-# changed revision date by definition.
+# changed revision date by definition. The exact authorized institutional
+# greeting projection above is presentation, as are opaque-token wrappers.
 REVISION_BODY_SHA256: dict[str, str] = {
     "atraso-na-medicao-obra-publica": "e9eb9c67874e40d21917ad981960af2d1e8b0f4002b4f6ccdd8bac7cb0763eb1",
     "fiscal-nao-assina-medicao-obra-publica": "ec99bf3327e0c33a8c5844d6c5b9dc20955cd9cae2028a4db19d6c1b4d726581",

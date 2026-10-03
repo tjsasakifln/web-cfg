@@ -146,6 +146,29 @@ def test_revision_gate_fails_when_the_body_moves_without_the_date():
         assert any("body changed since the pinned fingerprint" in f for f in failures)
 
 
+def test_institutional_greeting_preserves_revision_and_other_changes_do_not():
+    for slug in CLUSTER_SLUGS:
+        html = (ROOT / "conteudos" / slug / "index.html").read_text(encoding="utf-8")
+        original = html.replace("Ol%C3%A1%2C%20CONFENGE.", "Ol%C3%A1%2C%20Tiago.")
+        assert content_fingerprint(html) == content_fingerprint(original)
+        assert content_fingerprint(html) == REVISION_BODY_SHA256[slug]
+
+    slug = "fiscal-nao-assina-medicao-obra-publica"
+    html = (ROOT / "conteudos" / slug / "index.html").read_text(encoding="utf-8")
+    baseline = content_fingerprint(html)
+    article = re.search(r'<article class="article-main".*?</article>', html, re.S).group(0)
+    assert article.count("Ol%C3%A1%2C%20CONFENGE.") == 1
+    for before, after in (
+        ("Ol%C3%A1%2C%20CONFENGE.", "Ol%C3%A1%2C%20OutraEmpresa."),
+        ("https://wa.me/5548988344559?text=", "https://wa.me/5599999999999?text="),
+        ("Ol%C3%A1%2C%20CONFENGE.", "Ol%C3%A1%2C%20CONFENGE.%20PROMESSA"),
+        ("<h2", "<h2 data-altered=\"true\""),
+        ("</article>", "<p>Garantimos a aprovação da medição.</p></article>"),
+    ):
+        assert before in article
+        assert content_fingerprint(article.replace(before, after, 1)) != baseline
+
+
 def test_restamping_the_dates_never_moves_the_body_fingerprint():
     """The fingerprint tracks content, not the stamp, so it cannot self-satisfy."""
     for slug in CLUSTER_SLUGS:

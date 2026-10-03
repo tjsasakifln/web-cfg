@@ -2,20 +2,12 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
+import { htmlText as visibleText } from "../support/html_text.mjs";
 
 const PAGE = path.resolve("inspecao-diagnostico-edificacoes/index.html");
 
 function mainOf(html) {
   return html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
-}
-
-function visibleText(html) {
-  return String(html)
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 test("inspection route presents a factual service, technical sample and proposal path", () => {

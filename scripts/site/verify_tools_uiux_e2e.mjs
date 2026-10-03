@@ -166,7 +166,7 @@ async function submitToolAndWaitForOut(page, label) {
 // --- Static source checks first (no browser) ---
 for (const pilot of PILOTS) {
   const rel = pilot.path === "/" ? "index.html" : pilot.path.replace(/^\//, "") + (pilot.path.endsWith("/") ? "index.html" : "");
-  const fp = join(ROOT, rel.replace(/\/index\.html$/, "/index.html"));
+  const fp = join(ROOT, rel);
   const htmlPath = existsSync(fp)
     ? fp
     : join(ROOT, pilot.path.replace(/^\//, ""), "index.html");

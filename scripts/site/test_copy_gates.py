@@ -381,7 +381,17 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert not re.search(r"Jornada\s+[ABC]", ty), f"{name}: visible Jornada letter"
     # Journey-aligned CTA family on offer pages
     assert "Solicitar diagnóstico da operação" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
-    assert "Enviar edital para triagem" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
+    # The campaign authorizes proposal wording. Assert the editorial journey
+    # still has an attributed action leading to its real capture, rather than
+    # freezing the retired triage sentence.
+    bid_room = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
+    assert re.search(
+        r'<a\b(?=[^>]*\bdata-journey="edital")'
+        r'(?=[^>]*\bdata-offer-id="bid-room")'
+        r'(?=[^>]*\bhref="#captura-pilar")[^>]*>\s*[^<\s]',
+        bid_room,
+    )
+    assert 'id="captura-pilar"' in bid_room
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
     assert "Solicitar proposta" in defesa
     assert "enviar documentos para análise" not in defesa.lower()

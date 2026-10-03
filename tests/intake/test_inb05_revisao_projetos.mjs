@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
+import { htmlText as visibleText } from "../support/html_text.mjs";
 
 const ROOT = path.resolve(".");
 const LANDING = "revisao-tecnica-projetos-engenharia/index.html";
@@ -11,12 +12,7 @@ const HIRING = "conteudos/como-contratar-revisao-tecnica-projeto/index.html";
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 const mainOf = (html) => html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
 const titleOf = (html) => html.match(/<title>([^<]+)<\/title>/i)?.[1] || "";
-const h1Of = (html) => html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1]?.replace(/<[^>]+>/g, "").trim() || "";
-const visibleText = (html) => String(html)
-  .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
-  .replace(/<[^>]+>/g, " ")
-  .replace(/\s+/g, " ")
-  .trim();
+const h1Of = (html) => visibleText(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || "");
 
 const pages = { landing: read(LANDING), choice: read(CHOICE), hiring: read(HIRING) };
 

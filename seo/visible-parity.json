@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 109,
+  "page_count": 113,
   "pages": [
     {
       "claimed": {
@@ -4465,6 +4465,124 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Guias e checklists para contratos de obras públicas"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/guias-contratos-obras/",
+      "visible": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Guias e checklists para contratos de obras públicas"
+        ],
+        "canonical": "https://confenge.com.br/guias-contratos-obras/",
+        "dates": [],
+        "description": "Roteiros de uso direto na obra e no escritório: o que reunir, o que conferir e o que protocolar antes de levar um pedido de aditivo à Administração.",
+        "h1": "Guias e checklists para contratos de obras públicas",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "confidential",
+        "reviewers": [],
+        "title": "Guias e checklists para contratos de obras públicas | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumbs": [
+          "Início",
+          "Guias",
+          "Checklist de pedido de aditivo em obra pública"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-08-02",
+          "2026-08-04"
+        ],
+        "descriptions": [
+          "Lista objetiva de documentos e checagens antes de protocolar aditivo de obra pública sob a Lei 14.133."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Checklist de pedido de aditivo em obra pública"
+        ],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE",
+          "Biblioteca técnica CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList",
+          "Article"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "visible": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Guias",
+          "Checklist de pedido de aditivo em obra pública"
+        ],
+        "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+        "dates": [
+          "2026-08-02",
+          "2026-08-04"
+        ],
+        "description": "Lista objetiva de documentos e checagens antes de protocolar aditivo de obra pública sob a Lei 14.133.",
+        "h1": "Checklist de pedido de aditivo em obra pública",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "confidential",
+        "reviewers": [],
+        "title": "Checklist de pedido de aditivo em obra pública | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
           "Imprensa e pesquisa"
         ],
         "dataset_names": [],
@@ -4551,6 +4669,124 @@
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Inspeção e diagnóstico de edificações | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/lei-14133-obras/",
+      "visible": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia"
+        ],
+        "canonical": "https://confenge.com.br/lei-14133-obras/",
+        "dates": [],
+        "description": "A Lei 14.133/2021 traduzida em decisão de obra: como formar e defender o preço de um item novo no aditivo e como a proposta se relaciona com o orçamento-base.",
+        "h1": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "confidential",
+        "reviewers": [],
+        "title": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumbs": [
+          "Início",
+          "Lei 14.133",
+          "Item novo no aditivo: preço e relação proposta/orçamento-base"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-08-02",
+          "2026-08-04"
+        ],
+        "descriptions": [
+          "Art. 127 da Lei 14.133: como formar o preço de item novo no aditivo e aplicar a relação entre a proposta e o orçamento-base da Administração."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Item novo no aditivo: preço e relação proposta/orçamento-base"
+        ],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE",
+          "Biblioteca técnica CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList",
+          "Article"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "visible": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Lei 14.133",
+          "Item novo no aditivo: preço e relação proposta/orçamento-base"
+        ],
+        "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "dates": [
+          "2026-08-02",
+          "2026-08-04"
+        ],
+        "description": "Art. 127 da Lei 14.133: como formar o preço de item novo no aditivo e aplicar a relação entre a proposta e o orçamento-base da Administração.",
+        "h1": "Item novo no aditivo: preço e relação proposta/orçamento-base",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "confidential",
+        "reviewers": [],
+        "title": "Item novo no aditivo: preço e relação proposta/orçamento-base | CONFENGE",
         "versions": []
       }
     },

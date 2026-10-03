@@ -155,8 +155,17 @@ def write_segmented_sitemaps(indexable: list[dict[str, Any]]) -> dict[str, int]:
     except Exception:
         pass
 
-    from scripts.organic.sitemap_graph import close_graph
+    from scripts.organic.sitemap_graph import close_graph, ensure_index_member
 
+    # A previous build may have withdrawn an empty family from the index.
+    # Register each newly populated approved segment before closing the graph.
+    for name, rows in (
+        ("sitemap-editorial.xml", editorial),
+        ("sitemap-jurisprudencia.xml", juris),
+        ("sitemap-inteligencia.xml", intel),
+    ):
+        if rows:
+            ensure_index_member(ROOT, name)
     close_graph(ROOT)
 
     return {

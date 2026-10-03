@@ -1,7 +1,7 @@
 # Visible parity
 
 - ok: `True`
-- pages: `109`
+- pages: `113`
 - defects: `0`
 - site_root: `_site`
 
@@ -83,8 +83,12 @@
 | https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ | True | — | Person,BreadcrumbList | Verificador de limite de acréscimos e supressões |
 | https://confenge.com.br/ferramentas/matriz-atraso-obra/ | True | — | Person,BreadcrumbList | Matriz de atraso de obra |
 | https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/ | True | — |  | Organize as informações da sua obra e veja o próximo passo |
+| https://confenge.com.br/guias-contratos-obras/ | True | — | Organization,BreadcrumbList | Guias e checklists para contratos de obras públicas |
+| https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/ | True | — | Organization,BreadcrumbList,Article; Checklist de pedido de aditivo em obra pública | Checklist de pedido de aditivo em obra pública |
 | https://confenge.com.br/imprensa/ | True | — | BreadcrumbList | Imprensa e pesquisa |
 | https://confenge.com.br/inspecao-diagnostico-edificacoes/ | True | — | BreadcrumbList | Inspeção e diagnóstico de edificações |
+| https://confenge.com.br/lei-14133-obras/ | True | — | Organization,BreadcrumbList | Lei nº 14.133/2021 aplicada a obras e serviços de engenharia |
+| https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/ | True | — | Organization,BreadcrumbList,Article; Item novo no aditivo: preço e relação proposta/orçamento-base | Item novo no aditivo: preço e relação proposta/orçamento-base |
 | https://confenge.com.br/medicoes-glosas-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Medições, glosas e pagamentos em obras públicas |
 | https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido |
 | https://confenge.com.br/nurture/ | True | — |  | Cinco e-mails úteis, não newsletter genérica |
