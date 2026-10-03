@@ -22,6 +22,16 @@ canibalizar a vertical já publicada.
 
 ### Emenda vigente de 2026-09-09
 
+### Emenda vigente de 2026-10-03
+
+A campanha Comunicação Institucional, Competência e Conversão substitui regras
+editoriais anteriores que imponham ressalvas promocionais, rótulos automáticos
+de evidência, estrutura de classificados ou uma definição da CONFENGE limitada
+a complementar projetos de terceiros. A apresentação começa pelo trabalho que
+a empresa elabora e coordena. Fontes, permissões, privacidade, condições
+materiais e responsabilidade profissional continuam controles obrigatórios,
+aplicados de modo proporcional ao serviço e não como advertência recorrente.
+
 Decisão expressa do fundador: EXECUTE_NOW na campanha de comunicação pública
 vinculada à #611. Engenharia e projetos atendem necessidades públicas e privadas;
 o cadastro operacional incompleto pede apuração, não recusa pública automática.

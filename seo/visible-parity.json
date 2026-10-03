@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 100,
+  "page_count": 113,
   "pages": [
     {
       "claimed": {
@@ -19,7 +19,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Tiago Sasaki"
+          "Tiago Jun Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -38,13 +38,13 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/",
         "dates": [],
-        "description": "Engenharia para orçar a obra, completar ou conferir o projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa, em obra pública ou privada.",
-        "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+        "description": "Projetos coordenados de estruturas, instalações e infraestrutura para empreendimentos públicos e privados, com escopo, interfaces e responsabilidade técnica definidos antes da proposta.",
+        "h1": "Engenharia de projeto para decisões que precisam chegar à obra.",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
-        "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+        "title": "CONFENGE | Projetos de estruturas, instalações e infraestrutura",
         "versions": []
       }
     },
@@ -217,7 +217,7 @@
         "h1": "Análises técnicas de contratos públicos",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Análises técnicas de contratos públicos | CONFENGE",
         "versions": []
@@ -289,7 +289,7 @@
         "h1": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | CONFENGE",
         "versions": []
@@ -300,7 +300,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Assistência técnica em disputas"
         ],
         "dataset_names": [],
@@ -328,7 +328,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Assistência técnica em disputas"
         ],
         "canonical": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
@@ -511,7 +511,7 @@
         "h1": "Operação de Proposta para Licitação Crítica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Operação de Proposta para Licitação Crítica | CONFENGE",
         "versions": []
@@ -1340,7 +1340,59 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Como trabalhamos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/como-trabalhamos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Como trabalhamos"
+        ],
+        "canonical": "https://confenge.com.br/como-trabalhamos/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Método de entendimento, concepção, desenvolvimento, coordenação, revisão e entrega de projetos de engenharia.",
+        "h1": "Cada projeto pede um percurso próprio, com decisões e entregas reconhecíveis.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Como trabalhamos em projetos de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços",
           "Compatibilização de projetos"
         ],
         "dataset_names": [],
@@ -1368,7 +1420,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Compatibilização de projetos"
         ],
         "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
@@ -1388,7 +1440,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Confiança e evidência"
+          "Informações institucionais"
         ],
         "dataset_names": [],
         "dates": [],
@@ -1423,20 +1475,20 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Confiança e evidência"
+          "Informações institucionais"
         ],
         "canonical": "https://confenge.com.br/confianca/",
         "dates": [
-          "2026-09-05",
-          "2026-09-26"
+          "2026-09-26",
+          "2026-10-03"
         ],
-        "description": "Confira quem é a CONFENGE, quem conduz os trabalhos, como a responsabilidade profissional é definida e quais evidências sustentam cada afirmação.",
-        "h1": "Quem responde pela CONFENGE",
+        "description": "Empresa, liderança técnica, registros profissionais e contratação de projetos e serviços de engenharia da CONFENGE.",
+        "h1": "Informações institucionais",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
-        "title": "CONFENGE: empresa, responsável e critérios técnicos",
+        "title": "Informações institucionais | CONFENGE",
         "versions": []
       }
     },
@@ -1490,7 +1542,7 @@
         "h1": "Como a CONFENGE protege a independência técnica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Conflitos de interesse e independência técnica | CONFENGE",
         "versions": []
@@ -1542,7 +1594,7 @@
         "h1": "Qual problema de projeto, orçamento ou contrato você precisa resolver?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Biblioteca técnica de projetos, orçamento e contratos | CONFENGE",
         "versions": []
@@ -1610,7 +1662,7 @@
         "h1": "Aditivo em empreitada global: o que o risco de quantitativo não cobre",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Aditivo em empreitada por preço global: quando o regime não cobre | CONFENGE",
         "versions": []
@@ -1678,7 +1730,7 @@
         "h1": "Administração local no orçamento: direto, BDI ou planilha?",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Administração local no orçamento: direto, BDI ou planilha? | CONFENGE",
         "versions": []
@@ -1817,7 +1869,7 @@
         "licenses": [
           "license-token-visible"
         ],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Prova de culpa da Administração no atraso da obra | CONFENGE",
         "versions": []
@@ -1886,7 +1938,7 @@
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Atraso de pagamento: pode suspender a obra pública? | CONFENGE",
         "versions": []
@@ -1955,7 +2007,7 @@
         "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
         "versions": []
@@ -2077,7 +2129,7 @@
         "h1": "Como contratar a compatibilização de projetos",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Como contratar compatibilização de projetos | CONFENGE",
         "versions": []
@@ -2238,7 +2290,7 @@
         "h1": "Como comparar propostas de execução de obra",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Como comparar propostas de execução de obra | CONFENGE",
         "versions": []
@@ -2308,7 +2360,7 @@
         "licenses": [
           "license-token-visible"
         ],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Exequibilidade da proposta: o que comprovar | CONFENGE",
         "versions": []
@@ -2376,7 +2428,7 @@
         "h1": "Data-base e reajuste: meses sem cobertura",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Data-base e reajuste: meses sem cobertura | CONFENGE",
         "versions": []
@@ -2444,7 +2496,7 @@
         "h1": "Demolição fora da planilha: como documentar antes de executar",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Demolição não prevista em obra pública: prova e medição | CONFENGE",
         "versions": []
@@ -2492,7 +2544,7 @@
         "h1": "O que enviar para levantar quantitativos",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Documentos para levantamento de quantitativos | CONFENGE",
         "versions": []
@@ -2560,7 +2612,7 @@
         "h1": "Preço global ou unitário: o risco de quantidade",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Preço global ou unitário: o risco de quantidade | CONFENGE",
         "versions": []
@@ -2698,7 +2750,7 @@
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Glosa por qualidade: pode glosar a medição inteira? | CONFENGE",
         "versions": []
@@ -2767,7 +2819,7 @@
         "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
         "versions": []
@@ -2835,7 +2887,7 @@
         "h1": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro? | CONFENGE",
         "versions": []
@@ -2904,7 +2956,7 @@
         "h1": "Medição por evento ou quantitativo: o que muda",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Medição por evento ou quantitativo: o que muda | CONFENGE",
         "versions": []
@@ -2972,7 +3024,7 @@
         "h1": "Mobilização e desmobilização na planilha",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Mobilização e desmobilização na planilha | CONFENGE",
         "versions": []
@@ -3041,7 +3093,7 @@
         "h1": "Pagamento parcial em empreitada global: quando vale",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Pagamento parcial em empreitada global: quando vale | CONFENGE",
         "versions": []
@@ -3109,7 +3161,7 @@
         "h1": "Dossiê do pedido de prorrogação de prazo",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Dossiê do pedido de prorrogação de prazo | CONFENGE",
         "versions": []
@@ -3166,7 +3218,7 @@
         "h1": "Quando compatibilizar os projetos que você já tem",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Quando compatibilizar projetos de engenharia | CONFENGE",
         "versions": []
@@ -3234,7 +3286,7 @@
         "h1": "Resposta à notificação de atraso em obra pública",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Resposta à notificação de atraso em obra pública | CONFENGE",
         "versions": []
@@ -3337,7 +3389,7 @@
         "h1": "Revisar ou refazer o orçamento da obra",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Revisar ou refazer o orçamento da obra | CONFENGE",
         "versions": []
@@ -3406,7 +3458,7 @@
         "h1": "SINAPI desonerado ou não desonerado: qual usar?",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
         "versions": []
@@ -3474,7 +3526,7 @@
         "h1": "SINAPI ou SICRO: a referência de cada serviço",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "SINAPI ou SICRO: a referência de cada serviço | CONFENGE",
         "versions": []
@@ -3705,7 +3757,7 @@
         "h1": "Diagnóstico de Expansão no Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Diagnóstico de Expansão no Mercado Público - R$ 8.000 | CONFENGE",
         "versions": []
@@ -3820,7 +3872,7 @@
         "h1": "Diretoria Fracionada para o Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Diretoria Fracionada para o Mercado Público | Rotina de licitações e contratos | CONFENGE",
         "versions": []
@@ -3831,7 +3883,59 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Edificações"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/edificacoes/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Edificações"
+        ],
+        "canonical": "https://confenge.com.br/edificacoes/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Projetos e coordenação para edificações residenciais, comerciais, institucionais, industriais e de usos especiais.",
+        "h1": "Edificações projetadas como sistemas que precisam caber, operar e ser construídos.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projetos de engenharia para edificações | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços",
           "Documentação de SST",
           "Elaboração de PGR"
         ],
@@ -3860,7 +3964,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "Elaboração de PGR"
         ],
@@ -3872,9 +3976,61 @@
         "h1": "Seu PGR pronto, sem colocar o RH para coordenar a elaboração",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Elaboração de PGR remoto para empresas | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Empresa"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/empresa/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Empresa"
+        ],
+        "canonical": "https://confenge.com.br/empresa/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Conheça a atuação da CONFENGE, sua forma de mobilizar especialistas e os princípios que orientam projetos e serviços técnicos.",
+        "h1": "Engenharia organizada para transformar necessidades em projetos e decisões técnicas.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "CONFENGE: empresa de engenharia, perícias e inteligência técnica | CONFENGE",
         "versions": []
       }
     },
@@ -3935,7 +4091,8 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Especialista"
+          "Empresa",
+          "Tiago Jun Sasaki"
         ],
         "dataset_names": [],
         "dates": [],
@@ -3968,18 +4125,19 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Especialista"
+          "Empresa",
+          "Tiago Jun Sasaki"
         ],
         "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
         "dates": [
-          "2026-09-05",
-          "2026-09-26"
+          "2026-09-26",
+          "2026-10-03"
         ],
-        "description": "Tiago Jun Sasaki, Engenheiro Civil e Engenheiro de Segurança do Trabalho, com títulos e registro profissional verificados e mais de R$ 700 milhões em obras e projetos analisados.",
-        "h1": "Engº Tiago Sasaki",
+        "description": "Tiago Jun Sasaki, Engenheiro Civil EESC-USP e Engenheiro de Segurança do Trabalho, responsável pela liderança técnica da CONFENGE.",
+        "h1": "Tiago Jun Sasaki",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Tiago Jun Sasaki | Engenheiro Civil e de Segurança do Trabalho | CONFENGE",
         "versions": []
@@ -4029,7 +4187,7 @@
         "h1": "Ferramentas de decisão para contratos, obras públicas e obras privadas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Ferramentas de contrato, obra pública e obra privada | CONFENGE",
         "versions": []
@@ -4084,7 +4242,7 @@
         "h1": "Checklist de documentação para reequilíbrio",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Checklist de documentação para reequilíbrio | CONFENGE",
         "versions": []
@@ -4142,7 +4300,7 @@
         "h1": "Diagnóstico de Defesa de Margem em Contratos Públicos",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Diagnóstico de Defesa de Margem em Contratos Públicos | CONFENGE",
         "versions": []
@@ -4197,7 +4355,7 @@
         "h1": "Verificador de limite de acréscimos e supressões",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Verificador de limite de acréscimos e supressões | CONFENGE",
         "versions": [
@@ -4256,7 +4414,7 @@
         "licenses": [
           "license-token-visible"
         ],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Matriz de atraso de obra | CONFENGE",
         "versions": []
@@ -4296,7 +4454,7 @@
         "h1": "Organize as informações da sua obra e veja o próximo passo",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Organize as informações da sua obra e veja o próximo passo | CONFENGE",
         "versions": []
@@ -4347,7 +4505,7 @@
         "h1": "Guias e checklists para contratos de obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Guias e checklists para contratos de obras públicas | CONFENGE",
         "versions": []
@@ -4414,7 +4572,7 @@
         "h1": "Checklist de pedido de aditivo em obra pública",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Checklist de pedido de aditivo em obra pública | CONFENGE",
         "versions": []
@@ -4460,7 +4618,7 @@
         "h1": "Imprensa e pesquisa",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Imprensa e pesquisa | CONFENGE",
         "versions": []
@@ -4471,7 +4629,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Inspeção e diagnóstico"
         ],
         "dataset_names": [],
@@ -4499,7 +4657,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Inspeção e diagnóstico"
         ],
         "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
@@ -4559,7 +4717,7 @@
         "h1": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia | CONFENGE",
         "versions": []
@@ -4626,7 +4784,7 @@
         "h1": "Item novo no aditivo: preço e relação proposta/orçamento-base",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": "confidential",
         "reviewers": [],
         "title": "Item novo no aditivo: preço e relação proposta/orçamento-base | CONFENGE",
         "versions": []
@@ -4741,7 +4899,7 @@
         "h1": "Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Metodologia de inteligência | CONFENGE",
         "versions": []
@@ -4781,7 +4939,7 @@
         "h1": "Cinco e-mails úteis, não newsletter genérica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Sequências técnicas por e-mail | CONFENGE",
         "versions": []
@@ -4792,7 +4950,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Encaminhar uma necessidade"
         ],
         "dataset_names": [],
@@ -4820,7 +4978,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Encaminhar uma necessidade"
         ],
         "canonical": "https://confenge.com.br/parcerias-engenharia/",
@@ -4840,7 +4998,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "SST para obras"
         ],
@@ -4869,7 +5027,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "SST para obras"
         ],
@@ -4881,7 +5039,7 @@
         "h1": "PGR e documentação de SST que acompanham as etapas da obra",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "PGR e documentação de SST para obras | CONFENGE",
         "versions": []
@@ -4938,7 +5096,7 @@
         "h1": "Política editorial",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Política editorial | CONFENGE",
         "versions": []
@@ -4999,7 +5157,7 @@
         "h1": "Histórico da política editorial",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Histórico da política editorial | CONFENGE",
         "versions": []
@@ -5037,7 +5195,7 @@
         "h1": "Política de Privacidade",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Política de Privacidade | CONFENGE",
         "versions": []
@@ -5096,7 +5254,223 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Projetos",
+          "Projeto elétrico"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projeto-eletrico/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Projeto elétrico"
+        ],
+        "canonical": "https://confenge.com.br/projeto-eletrico/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Concepção, dimensionamento e documentação de instalações elétricas, energia, iluminação, proteção e interfaces do empreendimento.",
+        "h1": "Projeto elétrico da origem da energia aos pontos de utilização.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projeto elétrico | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Estrutura metálica"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projeto-estrutura-metalica/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Estrutura metálica"
+        ],
+        "canonical": "https://confenge.com.br/projeto-estrutura-metalica/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Concepção, análise, dimensionamento e detalhamento de estruturas metálicas e suas ligações, interfaces e documentação.",
+        "h1": "Estrutura metálica pensada como sistema de barras, ligações e montagem.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projeto de estrutura metálica | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Concreto armado"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projeto-estrutural-concreto-armado/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Concreto armado"
+        ],
+        "canonical": "https://confenge.com.br/projeto-estrutural-concreto-armado/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Concepção, análise, dimensionamento e detalhamento de estruturas em concreto armado com interfaces e entregáveis definidos.",
+        "h1": "Concreto armado definido por comportamento, geometria e construção.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projeto estrutural de concreto armado | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Projeto hidrossanitário"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projeto-hidrossanitario/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Projeto hidrossanitário"
+        ],
+        "canonical": "https://confenge.com.br/projeto-hidrossanitario/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Concepção, dimensionamento e documentação de água, esgoto sanitário, águas pluviais, drenagem e interfaces do empreendimento.",
+        "h1": "Água, esgoto e drenagem projetados por demanda, nível e destino.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projeto hidrossanitário | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços",
           "Projetos complementares"
         ],
         "dataset_names": [],
@@ -5124,7 +5498,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Projetos complementares"
         ],
         "canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
@@ -5144,7 +5518,275 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Projetos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projetos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos"
+        ],
+        "canonical": "https://confenge.com.br/projetos/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Estruturas, instalações, infraestrutura e coordenação multidisciplinar organizadas por decisões, interfaces e entregáveis.",
+        "h1": "Projetos que conectam decisões técnicas, disciplinas e documentação.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projetos de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Coordenação multidisciplinar"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projetos/coordenacao-multidisciplinar/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Coordenação multidisciplinar"
+        ],
+        "canonical": "https://confenge.com.br/projetos/coordenacao-multidisciplinar/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Coordenação de premissas, interfaces, interferências, versões e documentação entre disciplinas de projeto.",
+        "h1": "Coordenação não é somar arquivos. É conduzir decisões entre responsáveis.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Coordenação multidisciplinar de projetos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Estruturas"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projetos/estruturas/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Estruturas"
+        ],
+        "canonical": "https://confenge.com.br/projetos/estruturas/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Concepção, análise, dimensionamento e detalhamento de estruturas, fundações e contenções para diferentes sistemas e empreendimentos.",
+        "h1": "O sistema estrutural nasce da leitura do objeto, não de uma solução repetida.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projetos estruturais | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Infraestrutura"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projetos/infraestrutura/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Infraestrutura"
+        ],
+        "canonical": "https://confenge.com.br/projetos/infraestrutura/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Projetos viários, terraplenagem, pavimentação, drenagem, saneamento e infraestrutura de empreendimentos coordenados.",
+        "h1": "Infraestrutura tratada como sistema de território, redes e estruturas.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projetos de infraestrutura | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Instalações"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projetos/instalacoes/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Instalações"
+        ],
+        "canonical": "https://confenge.com.br/projetos/instalacoes/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Projetos elétricos, hidrossanitários, mecânicos, incêndio, telecomunicações, automação e sistemas especiais coordenados.",
+        "h1": "Instalações definidas pelo uso, pela operação e pelo espaço real do empreendimento.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Projetos de instalações | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços",
           "Quantitativos e orçamento"
         ],
         "dataset_names": [],
@@ -5172,17 +5814,15 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Quantitativos e orçamento"
         ],
         "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
         "dates": [],
         "description": "Levantamento de quantitativos, orçamento e revisão de planilha de obra, com origem, critério e data-base conferíveis, responsável técnico no escopo contratado.",
         "h1": "Quantitativos e orçamento de obras",
-        "has_dataset_surface": true,
-        "licenses": [
-          "license-token-visible"
-        ],
+        "has_dataset_surface": false,
+        "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Quantitativos e orçamento de obras | CONFENGE",
@@ -5253,7 +5893,7 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Radar de obras públicas: método aberto e demanda observada | CONFENGE",
         "versions": []
@@ -5322,7 +5962,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "Revisão e atualização de PGR"
         ],
@@ -5351,7 +5991,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "Revisão e atualização de PGR"
         ],
@@ -5363,7 +6003,7 @@
         "h1": "Seu PGR mudou junto com a operação?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Revisão e atualização de PGR existente | CONFENGE",
         "versions": []
@@ -5374,7 +6014,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Revisão técnica de projetos"
         ],
         "dataset_names": [],
@@ -5402,12 +6042,12 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Revisão técnica de projetos"
         ],
         "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
         "dates": [],
-        "description": "Relatório de revisão com evidências, achados e correções propostas: conferimos o projeto recebido e conduzimos os ajustes previstos na proposta.",
+        "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto.",
         "h1": "Revisão técnica de projetos de engenharia",
         "has_dataset_surface": true,
         "licenses": [],
@@ -5422,7 +6062,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST"
         ],
         "dataset_names": [],
@@ -5450,7 +6090,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST"
         ],
         "canonical": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
@@ -5544,7 +6184,9 @@
       "ok": true,
       "url": "https://confenge.com.br/servicos/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
         "breadcrumb_names": [
           "Início",
           "Serviços"
@@ -5552,10 +6194,10 @@
         "canonical": "https://confenge.com.br/servicos/",
         "dates": [],
         "description": "Serviços de engenharia para obras públicas e privadas: projetos, revisão, compatibilização, orçamento, inspeção, perícia, avaliação e segurança do trabalho.",
-        "h1": "Serviços de engenharia para obras públicas e privadas",
+        "h1": "Projetos e serviços de engenharia que dão forma ao empreendimento.",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
         "versions": []
@@ -5566,7 +6208,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "Terceirização documental"
         ],
@@ -5595,7 +6237,7 @@
         "authors": [],
         "breadcrumb_names": [
           "Início",
-          "Serviços e problemas",
+          "Serviços",
           "Documentação de SST",
           "Terceirização documental"
         ],
@@ -5607,9 +6249,63 @@
         "h1": "Sua equipe não precisa administrar sozinha a documentação de SST",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Terceirização da documentação de SST | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Projetos",
+          "Terceirização de projetos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/terceirizacao-projetos-engenharia/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Projetos",
+          "Terceirização de projetos"
+        ],
+        "canonical": "https://confenge.com.br/terceirizacao-projetos-engenharia/",
+        "dates": [
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "description": "Apoio externo para desenvolver disciplinas, pacotes ou capacidade recorrente de projetos com escopo, interfaces e entregáveis definidos.",
+        "h1": "Capacidade externa de projeto sem perder o controle técnico do pacote.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Terceirização de projetos de engenharia | CONFENGE",
         "versions": []
       }
     },
@@ -5648,7 +6344,7 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Termos de Uso | CONFENGE",
         "versions": []
@@ -5682,15 +6378,15 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/triagem-tecnica/",
         "dates": [
-          "2026-09-14"
+          "2026-10-03"
         ],
-        "description": "Conte a situação técnica do seu jeito por WhatsApp, e-mail ou telefone, sem formulário. A resposta nomeia o serviço, o que você recebe e o que falta para a proposta.",
-        "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+        "description": "Solicite uma proposta de projetos ou serviços de engenharia à CONFENGE. Converse por WhatsApp, e-mail ou telefone e compartilhe as referências disponíveis.",
+        "h1": "Solicitar proposta",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
-        "title": "Contato e triagem técnica | CONFENGE",
+        "title": "Solicitar proposta | CONFENGE",
         "versions": []
       }
     }

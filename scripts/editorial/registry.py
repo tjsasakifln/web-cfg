@@ -84,6 +84,10 @@ NON_MATERIAL_PAGE_FIELDS = frozenset(
         "ops_notes",
         "operational_notes",
         "preview_evidence",
+        # A scoped authorization record is bookkeeping, not public material.
+        # Its two CTA substitutions remain in the material hash and are
+        # verified against the unchanged original human decision below.
+        "institutional_greeting_amendment",
     }
 )
 
@@ -384,7 +388,6 @@ def upsert_page(
         new_hash = material_hash(page, source_manifest)
         page["material_hash"] = new_hash
         was_approved = existing.get("status") in INDEXABLE_STATES | {"HUMAN_APPROVED"}
-        invalidated = old_hash != new_hash and was_approved
         # Page definition files are content inputs.  They must never be able
         # to downgrade an approval merely by carrying stale operational state
         # such as EDITORIAL_REVIEWED, history or a copied approval object.
@@ -394,6 +397,10 @@ def upsert_page(
             if key not in {"status", "approval", "history", "material_hash"}
         }
         merged = {**existing, **incoming_material, "material_hash": new_hash}
+        invalidated = (
+            old_hash != new_hash and was_approved
+            and not institutional_greeting_amendment_is_current(merged, source_manifest)
+        )
         if existing.get("history"):
             merged["history"] = list(existing["history"])
         if invalidated:
@@ -418,21 +425,64 @@ def upsert_page(
     return page
 
 
+def institutional_greeting_amendment_is_current(
+    page: dict[str, Any], source_manifest: dict[str, Any] | None = None
+) -> bool:
+    """Validate the two greetings authorized by the 2026-10-03 campaign.
+
+    The original human hash, reviewer, time and preview are never restamped.
+    Reconstructing the prior material also binds every factual field and used
+    source: any other change still requires the ordinary approval workflow.
+    """
+    amendment = page.get("institutional_greeting_amendment")
+    approval = page.get("approval") or {}
+    if not isinstance(amendment, dict) or page.get("page_id") not in {
+        "guia-checklist-aditivo", "lei-item-novo-desconto"
+    }:
+        return False
+    if (
+        amendment.get("schema") != "CONFENGE_INSTITUTIONAL_GREETING_AMENDMENT/1"
+        or amendment.get("authorized_at") != "2026-10-03"
+        or amendment.get("authorization") != "docs/campaigns/2026-10-03-comunicacao-institucional.md"
+        or amendment.get("actor") != "codex-autonomous-review"
+        or amendment.get("approved_material_hash") != approval.get("material_hash")
+    ):
+        return False
+    substitutions = amendment.get("substitutions")
+    if not isinstance(substitutions, list) or len(substitutions) != 2:
+        return False
+    if {item.get("field") for item in substitutions if isinstance(item, dict)} != {"cta_whatsapp", "cta_email_body"}:
+        return False
+    previous = dict(page)
+    for item in substitutions:
+        before, after = item.get("before"), item.get("after")
+        if not isinstance(before, str) or not isinstance(after, str):
+            return False
+        if "Olá, Tiago" not in before or before.replace("Olá, Tiago", "Olá, CONFENGE") != after:
+            return False
+        if page.get(item["field"]) != after:
+            return False
+        previous[item["field"]] = before
+    return material_hash(previous, source_manifest) == approval.get("material_hash")
+
+
 def approval_is_current(
     page: dict[str, Any], source_manifest: dict[str, Any] | None = None
 ) -> bool:
-    """Return true only for a complete human decision on current public material."""
+    """Require the human decision, with only the verified greeting amendment."""
     approval = page.get("approval") or {}
     if not isinstance(approval, dict):
         return False
     reviewer = str(approval.get("reviewer") or "")
     canonical_hash = material_hash(page, source_manifest)
+    greeting_amended = institutional_greeting_amendment_is_current(page, source_manifest)
+    reviewed_hash = str(approval.get("material_hash") or "") if greeting_amended else canonical_hash
     return bool(
         approval.get("schema_version") == APPROVAL_SCHEMA_VERSION
         and approval.get("page_id") == page.get("page_id")
         and approval.get("state") == "HUMAN_APPROVED"
         and page.get("material_hash") == canonical_hash
-        and approval.get("material_hash") == canonical_hash
+        and approval.get("material_hash") == reviewed_hash
         and reviewer
         and not is_blocked_reviewer(reviewer)
         and _valid_timestamp(approval.get("at"))
@@ -440,7 +490,7 @@ def approval_is_current(
         and _checklist_is_complete(approval.get("checklist"))
         and not source_verification_errors(page, approval.get("sources_verified"), source_manifest)
         and list(approval.get("sources_verified") or []) == canonical_source_ids(page)
-        and _preview_is_current(page, approval.get("preview"), canonical_hash)
+        and _preview_is_current(page, approval.get("preview"), reviewed_hash)
     )
 
 

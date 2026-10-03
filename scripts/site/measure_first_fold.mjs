@@ -29,6 +29,7 @@ import {
   ROLE_SELECTORS,
   blockerText,
   categoryRepetition,
+  contentWords,
   foldProblems,
   measurementRecord,
 } from "./first_fold_rules.mjs";
@@ -157,17 +158,6 @@ async function measureRoute(page, route, viewport) {
       .filter(inFold)
       .map((element) => ({ text: textOf(element).slice(0, 120), href: element.getAttribute("href") || "" }));
 
-    // Prova conferivel: um destino publico que o visitante abre sem cadastro,
-    // dentro do bloco de prova da dobra.
-    const proofHit = pickIn(hero, roles.proof);
-    let verifiableProof = null;
-    if (proofHit) {
-      const link = [...proofHit.element.querySelectorAll("a[href]")].filter(visible)[0]
-        || (proofHit.element.matches("a[href]") ? proofHit.element : null);
-      if (link) verifiableProof = { text: textOf(link).slice(0, 120), href: link.getAttribute("href") || "" };
-    }
-    result.verifiable_proof = verifiableProof;
-
     result.horizontal_overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
     return result;
   }, ROLE_SELECTORS);
@@ -274,10 +264,22 @@ invariants.category_repetition = {
     lead_adds: row.category_repetition.lead_new.slice(0, 4),
   })),
 };
+invariants.technical_substance = {
+  ...invariants.technical_substance,
+  state: "MEASURED",
+  measured_at: today,
+  method_pt_br:
+    "O medidor registra uma linha visível de trabalho, disciplina, entrega ou valor de decisão. " +
+    "A automação exige ao menos duas palavras de conteúdo e não exige credencial, registro ou link de auditoria.",
+  measured_surfaces: measurements.map((row) => {
+    const text = row.viewports[DESKTOP_VIEWPORT].roles.substance?.text || "";
+    return { route: row.route, content_words: [...contentWords(text)].sort().slice(0, 8) };
+  }),
+};
 
 const nextContract = {
   ...contract,
-  contract_version: "CFG-FIRST-FOLD-2026-08-30-v3",
+  contract_version: "CFG-FIRST-FOLD-2026-10-03-v4",
   census: nextCensus,
   first_fold_invariants: invariants,
 };

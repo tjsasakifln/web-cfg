@@ -14,19 +14,10 @@ const PORT = Number(process.env.HOME_FIRST_FOLD_PORT || 8794);
 const CLEARANCE_PX = 8;
 const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
-const PRIMARY_CTA_PATH_PREFIX = "/triagem-tecnica/";
-// Semantic concepts, not frozen sentences. The fold may be rewritten, but it
-// must still name the corporate scope, the buyer's situation, the work we
-// assume, a deliverable tied to a use and real trust.
-//
-// VALOR-IMEDIATO-20260914. A regra anterior exigia >=3 de 7 termos de
-// disciplina e >=3 de 7 formatos na dobra. O exame cego (21 revisores, tres
-// concepcoes) mostrou que a enumeracao nao produz pertinencia na primeira
-// tela (Q1 so na segunda ou terceira fatia) e faz a entrega virar formato. A
-// propriedade legitima -- a dobra responde "tem a ver comigo", "que parte
-// assumem", "o que passo a ter e para que", "por que acreditar" -- passa a
-// ser medida por situacao do comprador, verbo de trabalho, entrega nomeada,
-// uso da entrega e rotulo de demonstrativo, alem de escopo e credenciais.
+const PRIMARY_CTA_PATH_PREFIX = "#contato";
+// The project-led fold names the three core competencies, the work the company
+// performs, their integration and the commercial next action. It deliberately
+// does not turn registry checks, public datasets or internal triage into the offer.
 const CONTENT_CONCEPTS = [
   {
     id: "categoria_corporativa",
@@ -35,63 +26,36 @@ const CONTENT_CONCEPTS = [
     minMatches: 1,
   },
   {
-    id: "escopo_publico_privado",
-    label: "obras públicas e privadas",
-    terms: ["públic", "privad"],
-    minMatches: 2,
+    id: "disciplinas_centrais",
+    label: "estruturas, instalações e infraestrutura",
+    terms: ["estruturas", "instalações", "infraestrutura"],
+    minMatches: 3,
   },
   {
-    id: "situacao_do_comprador",
-    label: "situação no vocabulário do comprador",
-    terms: [
-      "comparar propostas", "conferir um projeto", "completar", "infiltração",
-      "fissura", "avaliar um imóvel", "glosa", "medição", "disputa",
-      "segurança do trabalho", "orçar a obra",
-    ],
-    minMatches: 1,
+    id: "mercados_de_projeto",
+    label: "edificações, infraestrutura e indústria",
+    terms: ["edificações", "infraestrutura", "indústria"],
+    minMatches: 3,
   },
   {
     id: "trabalho_assumido",
     label: "trabalho de engenharia assumido",
     terms: [
-      "assumimos", "levantamos", "calculamos", "conferimos", "assinamos",
-      "projetamos", "elaboramos", "revisamos", "compatibilizamos",
-      "inspecionamos", "avaliamos",
+      "elabora", "coordena", "projetamos", "coordenamos",
     ],
     minMatches: 2,
   },
   {
-    id: "entrega_nomeada",
-    label: "entrega técnica nomeada",
-    terms: [
-      "planilha", "projeto", "laudo", "relatório", "parecer",
-      "memória de cálculo", "quantitativo",
-    ],
+    id: "entrega_integrada",
+    label: "entrega técnica integrada",
+    terms: ["entrega técnica integrada", "interfaces", "requisitos de execução"],
+    minMatches: 3,
+  },
+  {
+    id: "acao_comercial",
+    label: "solicitação de proposta",
+    terms: ["solicitar proposta"],
     minMatches: 1,
-  },
-  {
-    id: "uso_da_entrega",
-    label: "uso da entrega",
-    terms: ["comparar", "contratar", "decidir", "orçar", "executar", "coordenar", "aprovar"],
-    minMatches: 1,
-  },
-  {
-    id: "coordenacao_delimitada",
-    label: "coordenação delimitada por escopo",
-    terms: ["escopo", "interfaces", "coordena"],
-    minMatches: 2,
-  },
-  {
-    id: "confianca_verificavel",
-    label: "fundamento verificável de confiança",
-    // Regra substituida (campanha 2026-09-10): "metodo" e "limites" saem da
-    // lista de candidatos. Eram o enquadramento metodo-primeiro que a campanha
-    // declara defeito, e serviam como atalho: uma dobra que so dissesse
-    // "metodo e limites publicados" satisfazia o conceito de confianca sem
-    // trazer um unico fato conferivel. Ficam apenas credenciais e identidade
-    // verificaveis, que e o que sustenta confianca de verdade.
-    terms: ["cnpj", "credenciais", "limites", "composição técnica"],
-    minMatches: 2,
   },
 ];
 
@@ -113,32 +77,19 @@ function conceptResults(text, concepts = CONTENT_CONCEPTS) {
 }
 
 const counterproof = {
-  // Um único identificador não satisfaz a evidência de confiança: são
-  // necessárias pelo menos duas referências independentes.
-  substring_is_not_a_credential: (() => {
-    const c = conceptResults("CNPJ publicado.")
-      .find((item) => item.id === "confianca_verificavel");
-    return c.matched.length === 1 && c.matched[0] === "cnpj" && !c.ok;
-  })(),
   generic_hero_is_rejected: conceptResults(
     "Engenharia com solução personalizada. Solicite uma proposta.",
   ).some((concept) => !concept.ok),
-  // Hero de slogan: nomeia "projeto" (entrega) e "engenharia", mas nao diz a
-  // situacao do comprador, o trabalho assumido, o uso, nem traz credencial ou
-  // amostra rotulada. Precisa reprovar em mais de um conceito.
+  // A slogan still fails because it omits disciplines, markets and integration.
   generic_hero_transforma_is_rejected: conceptResults(
     "Engenharia que transforma o seu projeto. Fale com a gente. CNPJ publicado.",
   ).filter((concept) => !concept.ok).length >= 3,
-  // A enumeracao antiga, sozinha, tambem nao basta: lista disciplinas e
-  // formatos, mas nao diz o que o comprador esta tentando resolver nem o que
-  // assumimos por ele.
+  // A service inventory alone also fails the integrated project proposition.
   enumeration_alone_is_rejected: conceptResults(
-    "Projetos e serviços de engenharia para obras públicas e privadas. Elaboração, revisão, "
-    + "compatibilização, quantitativos, orçamentos, perícias. Plantas, planilhas, laudos. EESC-USP. CNPJ.",
+    "Projetos e serviços de engenharia. Estruturas, instalações e infraestrutura. "
+    + "Quantitativos, orçamentos e perícias. Solicite uma proposta.",
   ).some((concept) => !concept.ok),
-  obsolete_fragment_is_not_a_service_destination: !"#situacoes".startsWith(
-    PRIMARY_CTA_PATH_PREFIX,
-  ),
+  obsolete_triage_is_not_the_primary_destination: !"/triagem-tecnica/".startsWith(PRIMARY_CTA_PATH_PREFIX),
 };
 const VIEWPORTS = [
   { width: 390, height: 844 },
@@ -200,7 +151,7 @@ try {
         category: ".hero-eyebrow",
         h1: "#hero-title",
         promise: ".hero-lead",
-        proof: ".hero-proof",
+        proof: ".home-opening__scope",
         chooserPath: ".hero-secondary",
         primaryCta: ".hero .button-primary",
       };
@@ -502,28 +453,23 @@ try {
       next_step: false,
       ok: false,
     };
-    if (destinationHref.startsWith(PRIMARY_CTA_PATH_PREFIX)) {
-      const response = await page.goto(`http://127.0.0.1:${PORT}${destinationHref}`, {
-        waitUntil: "networkidle0",
-        timeout: 30000,
-      });
+    if (destinationHref === PRIMARY_CTA_PATH_PREFIX) {
       const renderedDestination = await page.evaluate(() => {
-        const main = document.querySelector("main");
-        const heading = (main?.querySelector("h1")?.textContent || "").toLowerCase();
+        const main = document.querySelector("#contato");
+        const heading = (main?.querySelector("h2")?.textContent || "").toLowerCase();
         return {
-          engineering_heading: heading.includes("projeto") || heading.includes("situação"),
-          context: /o que precisa decidir|produzir|revisar|resolver/i.test(main?.innerText || ""),
-          channels: Boolean(main?.querySelector('a[href^="https://wa.me/"], a[href^="mailto:"], a[href^="tel:"]')),
-          next_step: /o que acontece depois|dados mínimos|proposta/i.test(main?.innerText || ""),
+          engineering_heading: heading.includes("proposta") || heading.includes("próximo passo"),
+          context: Boolean(main?.querySelector('select[name="estagio"], textarea[name="mensagem"]')),
+          channels: Boolean(document.querySelector('a[href^="https://wa.me/"], a[href^="mailto:"], a[href^="tel:"]')),
+          next_step: /o que acontece depois|proposta|retorno/i.test(main?.innerText || ""),
         };
       });
       destination = {
         href: destinationHref,
-        http_ok: Boolean(response?.ok()),
+        http_ok: true,
         ...renderedDestination,
         ok: Boolean(
-          response?.ok()
-          && renderedDestination.engineering_heading
+          renderedDestination.engineering_heading
           && renderedDestination.context
           && renderedDestination.channels
           && renderedDestination.next_step

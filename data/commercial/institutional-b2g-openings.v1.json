@@ -1,0 +1,42 @@
+{
+  "version": "2026-10-03",
+  "reason": "Institutional engineering and proportionate factual responsibilities replace the rejected promotional Trabalho/Entrega/Limite first-fold catalog. Prices, formal decisions, technical articles and event identities remain controlled by their existing sources.",
+  "pages": [
+    {
+      "route": "aditivos-obras-publicas",
+      "heading": "Aditivos fundamentados na alteração da obra",
+      "substance": "A CONFENGE organiza o fato gerador, o enquadramento contratual e a memória de quantidades e preços para instruir mudanças de projeto, acréscimos e supressões. O dossiê reúne a cronologia, as evidências e a repercussão financeira da alteração para sustentar a decisão do contratante.",
+      "conditions": "Atendemos a empresa contratada. Cabe ao órgão público formalizar o termo, a apostila ou a recusa. O dossiê é a instrução técnica da solicitação: não autoriza execução sem cobertura contratual nem inclui a redação do termo aditivo. O deferimento depende da decisão do órgão."
+    },
+    {
+      "route": "medicoes-glosas-obras-publicas",
+      "heading": "Execução, critério de medição e valor devido na mesma análise",
+      "substance": "A CONFENGE confronta a execução documentada com os critérios de medição do contrato, verifica quantitativos e organiza a memória financeira da divergência. Registros da obra, projeto e planilha são relacionados em uma análise técnica para responder à glosa ou instruir o reconhecimento do serviço executado.",
+      "conditions": "Atendemos a empresa contratada com análise de engenharia. A peça jurídica permanece com o responsável jurídico; ateste, liquidação e pagamento são decisões do órgão público. A conclusão técnica e a documentação entregue não antecipam o recebimento."
+    },
+    {
+      "route": "reequilibrio-obras-publicas",
+      "heading": "Evento, responsabilidade e impacto econômico demonstrados",
+      "substance": "A CONFENGE analisa o evento que alterou a execução, sua relação com a matriz de riscos e os custos efetivamente afetados. A documentação conecta cronologia, evidências e memória de cálculo para distinguir reequilíbrio de reajuste, repactuação ou alteração de quantidades e instruir a solicitação da contratada.",
+      "conditions": "A análise atende a empresa contratada e fornece a fundamentação técnica e econômica. Parecer jurídico é responsabilidade do jurídico da empresa. Cobertura contratual e índice precisam de fundamento no caso concreto; o órgão público decide o deferimento."
+    },
+    {
+      "route": "auditoria-orcamento-licitacao",
+      "heading": "Orçamento de referência e proposta examinados por item",
+      "substance": "A CONFENGE revisa quantitativos, composições, referências de preço, BDI e encargos em conjunto com as condições de execução. As diferenças são registradas em memória de cálculo e relacionadas ao efeito sobre a proposta, para orientar ajustes, esclarecimentos e a decisão de participar.",
+      "conditions": "Atendemos a empresa contratada ou proponente. A auditoria técnica não inclui parecer jurídico, redação de impugnação ou recurso nem substituição da planilha que a empresa apresenta. A comissão do órgão decide habilitação, aceitabilidade e resultado do certame; a contratação não garante vitória."
+    },
+    {
+      "route": "diagnostico-pre-licitacao",
+      "heading": "Riscos do edital e capacidade da empresa antes da proposta",
+      "substance": "A CONFENGE examina edital e retificações, projetos, orçamento, cronograma, matriz de riscos e requisitos de habilitação. O diagnóstico confronta essas condições com o acervo e a capacidade da empresa, ordena as decisões antes do preço e identifica pontos de esclarecimento, ajuste ou avaliação jurídica.",
+      "conditions": "O diagnóstico atende a empresa proponente; a decisão de participar é da empresa. Redação de impugnação e recurso pertencem à frente jurídica. A comissão do órgão decide habilitação, julgamento e resultado do certame, sem compromisso de habilitação ou vitória pela CONFENGE."
+    },
+    {
+      "route": "diagnostico-b2g-360",
+      "heading": "Operação de obras públicas analisada como um conjunto",
+      "substance": "A CONFENGE conecta carteira, propostas, execução e controles contratuais para identificar prioridades técnicas e comerciais da operação. O diagnóstico trabalha com os dados reais da empresa e produz uma leitura integrada dos pontos de decisão, das responsabilidades e das ações que merecem atenção da direção.",
+      "conditions": "O diagnóstico é uma análise pontual da operação existente, distinta da atuação continuada e da elaboração de todas as propostas. Seu recorte depende de acesso aos dados reais da operação. Peças formais e representação permanecem com o jurídico da empresa; resultados comerciais não são garantidos."
+    }
+  ]
+}

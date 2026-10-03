@@ -12,7 +12,7 @@
     "reject": 18
   },
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-  "generated_at": "2026-09-20",
+  "generated_at": "2026-10-03",
   "human_review_policy": {
     "indexable_states": [
       "APPROVED",
@@ -643,8 +643,8 @@
       "evidences_checked": null,
       "h1": "Valores de contratos: Manutenção predial e serviços de engenharia (Rio Grande do Sul)",
       "human_review": "PENDING",
-      "indexability_score": 75,
-      "indexability_score_alias": 75,
+      "indexability_score": 73,
+      "indexability_score_alias": 73,
       "intent": "estimar_valores_dispersao",
       "last_material_change": "2026-09-01",
       "mandatory_fail": [
@@ -657,14 +657,14 @@
       "page_id": "price-manutencao-predial-engenharia-rs",
       "page_material_hash": "9d0fe28d200d8c03a8647754707aa295745599a1dbe1844e44757b2d419b4e66",
       "page_type": "price",
-      "publication_decision_reason": "buyers<3; temporal_span_days<90; max_buyer_share>0.60; no_comparison_group; score=75",
+      "publication_decision_reason": "buyers<3; temporal_span_days<90; max_buyer_share>0.60; no_comparison_group; score=73",
       "quality_eligible": false,
       "reasons": [
         "buyers<3",
         "temporal_span_days<90",
         "max_buyer_share>0.60",
         "no_comparison_group",
-        "score=75"
+        "score=73"
       ],
       "region": "RS",
       "related_urls": [],
@@ -705,7 +705,7 @@
         "comparability": 2,
         "differentiation": 10,
         "evidence": 8,
-        "freshness": 8,
+        "freshness": 6,
         "icp_adherence": 14,
         "service_cta": 5
       },
@@ -1192,6 +1192,7 @@
         "description": "Concorrência observada em Manutenção predial e serviços de engenharia (Rio Grande do Sul): 2 fornecedores e 50 contratos no recorte público, sem juízo de…",
         "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia (Rio Grande do Sul)",
         "mandatory_fail": [
+          "data_age_days>90",
           "suppliers<3"
         ],
         "observation_count": 50,
@@ -1214,22 +1215,24 @@
       "evidences_checked": null,
       "h1": "Fornecedores observados em Manutenção predial e serviços de engenharia (Rio Grande do Sul)",
       "human_review": "PENDING",
-      "indexability_score": 73,
-      "indexability_score_alias": 73,
+      "indexability_score": 67,
+      "indexability_score_alias": 67,
       "intent": "compreender_concorrencia",
-      "last_material_change": "2026-09-01",
+      "last_material_change": "2026-10-03",
       "mandatory_fail": [
-        "suppliers<3"
+        "suppliers<3",
+        "data_age_days>90"
       ],
       "observation_count": 50,
       "page_id": "comp-manutencao-predial-engenharia-rs",
-      "page_material_hash": "a1b02e142b5d76e87b7bb0ed6ee59081bae30cb1b9334d93701ae0cedafd1596",
+      "page_material_hash": "3596a71f28534f8c535b13fdf0092e3eff991fde1c69ad4acd186c189c3fb671",
       "page_type": "competition",
-      "publication_decision_reason": "suppliers<3; score=73",
+      "publication_decision_reason": "suppliers<3; data_age_days>90; score=67",
       "quality_eligible": false,
       "reasons": [
         "suppliers<3",
-        "score=73"
+        "data_age_days>90",
+        "score=67"
       ],
       "region": "RS",
       "related_urls": [],
@@ -1264,7 +1267,7 @@
         "comparability": 6,
         "differentiation": 5,
         "evidence": 11,
-        "freshness": 6,
+        "freshness": 0,
         "icp_adherence": 15,
         "service_cta": 4
       },

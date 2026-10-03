@@ -1,7 +1,7 @@
 {
   "schema_version": "3.0.0",
-  "derived_at": "2026-09-19T16:18:33Z",
-  "commit_sha": "5c07410c4d9119228f946450ab1cf11a25c009d5",
+  "derived_at": "2026-10-03T18:39:34Z",
+  "commit_sha": "c7d2d0a42ebb531efc0547b34f2f38b4077ee45e",
   "commit_sha_role": "informational_only",
   "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
@@ -81,10 +81,10 @@
     "editorial_locs": 4,
     "jurisprudencia_locs": 0,
     "editorial_urls": [
-      "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
       "/lei-14133-obras/",
-      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+      "/guias-contratos-obras/"
     ],
     "expected_urls": [
       "/guias-contratos-obras/",

@@ -12,7 +12,7 @@
  * quem o possui.
  */
 
-export const FIRST_FOLD_ROLES = ["eyebrow", "h1", "lead", "proof", "primary_action"];
+export const FIRST_FOLD_ROLES = ["eyebrow", "h1", "lead", "substance", "primary_action"];
 export const DESKTOP_VIEWPORT = "1366x768";
 export const MOBILE_VIEWPORT = "390x844";
 
@@ -25,7 +25,16 @@ export const ROLE_SELECTORS = {
   eyebrow: [".hero-eyebrow", "header .eyebrow", ".report-kicker", ".eyebrow"],
   h1: ["h1"],
   lead: [".hero-lead", ".content-lead", ".section-lead", ".deliverables-lead", ".report-lead", ".lead"],
-  proof: [
+  // Technical substance is a visible statement of work, disciplines, output or
+  // decision value. Historical `*-proof-*` class names remain selectors for
+  // compatibility, but the fold no longer requires a credential or registry
+  // link. Human trust and comprehension stay outside this geometry gate.
+  substance: [
+    ".home-opening__scope",
+    ".hero-deliverable",
+    ".hero-substance",
+    ".offer-substance",
+    ".report-substance",
     ".hero-proof-line",
     ".offer-proof-line",
     ".report-proof-line",
@@ -125,6 +134,8 @@ export function foldProblems(routeMeasurement) {
       else if (box.bottom > height || box.top < 0) problems.push(`${viewport}:${role}=${box.top}-${box.bottom}`);
       else if (box.bottom <= box.top) problems.push(`${viewport}:${role}=caixa_sem_altura`);
     }
+    const substanceText = view.roles?.substance?.text || "";
+    if (contentWords(substanceText).size < 2) problems.push(`${viewport}:substance=conteudo_insuficiente`);
     if ((view.primary_actions_in_fold || []).length !== 1) {
       problems.push(`${viewport}:primarias=${(view.primary_actions_in_fold || []).length}`);
     }
@@ -138,12 +149,12 @@ export function foldProblems(routeMeasurement) {
 
 export function passFinding(routeMeasurement) {
   const h1 = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "h1");
-  const proof = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "proof");
+  const substance = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "substance");
   const desktopAction = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "primary_action");
   const mobileAction = boxOfRole(routeMeasurement, MOBILE_VIEWPORT, "primary_action");
   return (
     `H1 de y=${h1.top} a y=${h1.bottom}; ` +
-    `linha de prova de y=${proof.top} a y=${proof.bottom}; ` +
+    `substância técnica de y=${substance.top} a y=${substance.bottom}; ` +
     `ação primária inteira de y=${desktopAction.top} a y=${desktopAction.bottom} em ${DESKTOP_VIEWPORT}, ` +
     `e de y=${mobileAction.top} a y=${mobileAction.bottom} em ${MOBILE_VIEWPORT}, dentro da dobra nos dois`
   );
@@ -152,16 +163,16 @@ export function passFinding(routeMeasurement) {
 export function failFinding(routeMeasurement) {
   const h1 = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "h1");
   const parts = [`H1 de y=${h1.top} a y=${h1.bottom} em ${DESKTOP_VIEWPORT}`];
-  const desktopProof = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "proof");
-  const mobileProof = boxOfRole(routeMeasurement, MOBILE_VIEWPORT, "proof");
-  if (!desktopProof && !mobileProof) {
-    parts.push(`nenhuma linha de prova conferível na dobra em ${DESKTOP_VIEWPORT} nem em ${MOBILE_VIEWPORT}`);
+  const desktopSubstance = boxOfRole(routeMeasurement, DESKTOP_VIEWPORT, "substance");
+  const mobileSubstance = boxOfRole(routeMeasurement, MOBILE_VIEWPORT, "substance");
+  if (!desktopSubstance && !mobileSubstance) {
+    parts.push(`nenhuma substância técnica visível na dobra em ${DESKTOP_VIEWPORT} nem em ${MOBILE_VIEWPORT}`);
   } else {
-    if (mobileProof && mobileProof.bottom > 844) {
-      parts.push(`linha de prova de y=${mobileProof.top} a y=${mobileProof.bottom} em ${MOBILE_VIEWPORT}, fora da dobra de 844`);
+    if (mobileSubstance && mobileSubstance.bottom > 844) {
+      parts.push(`substância técnica de y=${mobileSubstance.top} a y=${mobileSubstance.bottom} em ${MOBILE_VIEWPORT}, fora da dobra de 844`);
     }
-    if (desktopProof && desktopProof.bottom > 768) {
-      parts.push(`linha de prova de y=${desktopProof.top} a y=${desktopProof.bottom} em ${DESKTOP_VIEWPORT}, fora da dobra de 768`);
+    if (desktopSubstance && desktopSubstance.bottom > 768) {
+      parts.push(`substância técnica de y=${desktopSubstance.top} a y=${desktopSubstance.bottom} em ${DESKTOP_VIEWPORT}, fora da dobra de 768`);
     }
   }
   const mobileAction = boxOfRole(routeMeasurement, MOBILE_VIEWPORT, "primary_action");

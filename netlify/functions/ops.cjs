@@ -63,6 +63,7 @@ const {
 } = require("./lib/record-kind.cjs");
 const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop, countPersistedContactsByServiceOrigin } = require("./lib/analytics-agg.cjs");
 const { reconcileEmailDeliveries } = require("./lib/lead-delivery.cjs");
+const { sanitizeProviderId } = require("./lib/qa-email.cjs");
 const { validateHistoryState } = require("./lib/gsc-history.cjs");
 const {
   persistPrivateGscSnapshot,
@@ -1171,6 +1172,9 @@ exports.handler = async (event) => {
                 ? {
                     notify_status: requestedLead.delivery.notify?.status || null,
                     email_status: requestedLead.delivery.email?.status || null,
+                    qa_email_status: requestedLead.delivery.qa_email?.status || null,
+                    qa_email_provider_id:
+                      sanitizeProviderId(requestedLead.delivery.qa_email?.provider_id) || null,
                   }
                 : null,
             }

@@ -159,7 +159,7 @@ def test_sources_show_consulta_date_and_application_limit():
         assert "prorrogacao-escopo-cju-sp-maio-2019.docx" not in html
 
 
-def test_stage_ctas_request_secure_channel_without_fake_upload():
+def test_stage_ctas_offer_real_channels_without_fake_upload():
     # "site não recebe arquivo" was the leading-negation phrasing (value-first
     # rewrite, 2026-08-30): it told the visitor what CONFENGE does NOT do. The
     # honest fact (the web form has no upload) still holds, but the copy now
@@ -169,10 +169,10 @@ def test_stage_ctas_request_secure_channel_without_fake_upload():
     # are exchanged -- is preserved by asserting the new channel-opening
     # sentence is present, both in the rendered HTML and in the decoded
     # WhatsApp href.
-    channel_open_re = re.compile(r"abre[^.<]*canal[^.<]*envio", re.I)
+    channel_open_re = re.compile(r"referências[^.<]*não sigilosas[^.<]*(?:e-mail|whatsapp)", re.I)
     for route in OWNED_ROUTES:
         html = html_path_for(route).read_text(encoding="utf-8")
-        assert "canal seguro" in html.lower(), route
+        assert "envio reservado" in html.lower(), route
         assert channel_open_re.search(html), route
         assert not capture_forms_with_file_input(html), route
         assert dishonest_hits(html) == [], (route, dishonest_hits(html))
@@ -188,7 +188,7 @@ def test_stage_ctas_request_secure_channel_without_fake_upload():
             assert re.search(r"(?:abrir|conversar|falar|solicitar|analisar)", label, re.I), (route, label)
             assert not re.search(r"(?:enviado|recebido|registrado)", label, re.I), (route, label)
             decoded_href = unquote(href).lower()
-            assert "canal seguro" in decoded_href, (route, href)
+            assert "envio reservado" in decoded_href, (route, href)
             assert channel_open_re.search(decoded_href), (route, href)
         for claim in (
             "Enviar a prova de causa",

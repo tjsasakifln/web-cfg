@@ -1,63 +1,63 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-02T20:05:16.083Z",
-  "measured_on": "2026-10-02",
-  "commit_sha": "cdcef99500a5753e6c450ae918b043f544e7c97f",
+  "measured_at": "2026-10-03T19:21:12.696Z",
+  "measured_on": "2026-10-03",
+  "commit_sha": "54020fb106b337b91c85ce00e4f589e79d4b5466",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
-    "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
-    "@control/scripts/site/measure_first_fold.mjs": "9b65d53377cc98fda527283416dadabade5c5b37d2e33c0b68b2a32d6f1110ab",
-    "acompanhamento-contratos-obras/index.html": "03018a0b5f1c6a38a82a3fb5eced54e5ae9a4f109ab619e55ea6f86d1cfa592a",
-    "aditivos-obras-publicas/index.html": "a67d5529545208d966b3621c3e2fea47e6ee9beef61a3a4e91f18b71edfb9c3e",
+    "@control/scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
+    "@control/scripts/site/measure_first_fold.mjs": "e1637d957ea1275998261e00e022825f89548cefb555b6406ae55a15af0a786a",
+    "acompanhamento-contratos-obras/index.html": "2f331ea8ff902f8c7a5c8f28be9d9a607d857ed931eb1447e31774d8c98f808d",
+    "aditivos-obras-publicas/index.html": "3de8a9bb491c1ceb121fd481f9844c9b86012443cc1f80df3e903a9fe26228dc",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "4e806236598e64ec7d45ea54f8423564f113c456bae96b7d3957a563fde12953",
+    "assets/home-10x.css": "a46dd406f689103d858bb82120336dc02f8c0b24bb9b190a5012cef57cc5dd3c",
     "assets/home-base.css": "5daf95b910c1f2bb765320f3b0c8391225a3d26e87bfd25609330998d9110186",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
-    "atrasos-prorrogacao-obras-publicas/index.html": "1a42f209face577d4a3c251b6701b94b12480746cb8338508ac9871e291ec7bb",
-    "auditoria-orcamento-licitacao/index.html": "b0b798dafe581191544d30a199a8758d9b5f5e51b1f20183cceb61b4869878dc",
-    "bid-room-licitacoes-obras/index.html": "153c6f3633dd59a41559c76b9c8415bf938012a8da76e37a415a33ba3a63b668",
-    "casos/modelo-apresentacao-executiva-resultados/index.html": "7d708a3c37a1c3044a7602b78fde684f22f06b8cb25b8d596533fd84de9e78f6",
+    "atrasos-prorrogacao-obras-publicas/index.html": "70a4546c35a49fe73f9c0dab17d7be96ffe21eace4f44c28ab0717113c432145",
+    "auditoria-orcamento-licitacao/index.html": "b79d7dc15f8a653db2b29369a76bac1c19a5537ddc13da541316d04085bc18d7",
+    "bid-room-licitacoes-obras/index.html": "18c882f10f1212f1632d77a9ca488b6996017f930deb36c2ab05aaaa952e87c5",
+    "casos/modelo-apresentacao-executiva-resultados/index.html": "53e66133c3329c274fc38810c09eed3f1a91782ee7d117d6ae2a7e9eb0553835",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
-    "casos/modelo-base-quantitativa-canonica/index.html": "a7501ea5af527a6b61b5c438bcb12774d63f0204481df67ef9b1ea2b5ffcb102",
+    "casos/modelo-base-quantitativa-canonica/index.html": "68f0a2ee8164244f8b53ff2165d8e15bce15732fb9c8c989f9ea21021b93835a",
     "casos/modelo-base-quantitativa-canonica/styles.css": "c8d0c0fcc67bb3ff7368e313a7eb7978728dd012668bbd57c6d4584fd3331d83",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html": "2f680b84c21d49969d730b2cf3c091bedf0c071230e0f812652db9a2fd2d5a5d",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": "6e5bd501036f4dc79ee824767d16f8443bbc2acc746e730c6e6505a0322b31d5",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
-    "casos/modelo-mapa-compradores-publicos/index.html": "c3cd4260fb35c1a578c944ea97a7169c20aea4809469309ea9c8460f334f0ed5",
+    "casos/modelo-mapa-compradores-publicos/index.html": "7872e00b4bb84a4ca789ac8e620fc78b16f83e47826dec0fa6375a5eb16c12d3",
     "casos/modelo-mapa-compradores-publicos/styles.css": "f6eda4b508c8e46e4a5274bd0ac16046c053791ffe13efd82c75cfa9d272e815",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "5d0e73663a59a621028d6317f9365f521af0b72aa5c5726e10517e51747c320b",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "dc7e10f4b47448198a8c4b7eccdba6e163e848cea046f4665dcc0b87ca0c6513",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
-    "casos/modelo-painel-precos-obras-publicas/index.html": "b80185ff6ee21b2d34937466f645c9179b8052f181c38610bb2b3062de97ede2",
+    "casos/modelo-painel-precos-obras-publicas/index.html": "954a4d180a25ad8eaa4de4bf8db17d2c987855f92b612fa2d8245ca5025d676f",
     "casos/modelo-painel-precos-obras-publicas/styles.css": "eddc3b734030a33898728fe41affb4c3bce7ccee5338d13ff05a8cbf7d669e6a",
-    "casos/modelo-relatorio-executivo-consolidado/index.html": "2a3fe72be19297c9708339248d44058ef71d2eb4c9de543e31b765e18afa48aa",
+    "casos/modelo-relatorio-executivo-consolidado/index.html": "86c1565a1c79e6a81b4ce2110b5273098bd720c3b677aa25e261ece27f84bf94",
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "d14a17a3e3b9ad4f47472946f1733894d0c35064b0a713bc2569d5910b6587c3",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "d483a55872ec434ed89e268f9ea9682e9a252a76ff93333fd744befd758bad1f",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
-    "defesa-margem-contratos-publicos/index.html": "7bc289463e8403a5273604aeceb0635f61a38517df191369be26c4f4cfa19892",
-    "defesa-tecnica-contratos-publicos/index.html": "b9a24da73e7bbc8fb86ae26eb1a992d59c49c6e592589af3f60d79fa97426407",
-    "diagnostico-b2g-360/index.html": "5672708ea87e83feb08ceca07433bb075064b220c2c7ec82373021714cbe24cc",
-    "diagnostico-b2g-expansao/index.html": "a30bad14b1341ecf330b88bba70a265a377ae1b9117b21217c3b416f3b4b6bed",
-    "diagnostico-pre-licitacao/index.html": "af255391007247bafae8d6c4bfdfc83d7f17067ab9f691110494602a66e1a56e",
-    "diretoria-b2g/index.html": "9af2103bc48ff5d4a19a70dce0cb1097cda86df1966d8b77e497b86f0b9f2e21",
-    "entregas/index.html": "1aca7010eb64cb52031220e9ad8c8984cec60722d79961d44a4e05de756b3e84",
+    "defesa-margem-contratos-publicos/index.html": "fbaa53dd088194ad74701915dfbfc7569a9f12285ef43c99259d77147baeb7e7",
+    "defesa-tecnica-contratos-publicos/index.html": "b631647a367578aff84c70892b767d8dc17ab3654d945a98b6e585f5c109af44",
+    "diagnostico-b2g-360/index.html": "db04ad9a492c9f261f08e76e9a8904a89104d33e76a6dd615deb1d1ae2d38f5f",
+    "diagnostico-b2g-expansao/index.html": "bd9888951458ebce6342011b6666b5b14a6e7785efdd065c1bb4f41d5fa921c9",
+    "diagnostico-pre-licitacao/index.html": "dde8951f37ddbdf3aef22ba2829c35b184fabb087e04edddd6b57334a331839f",
+    "diretoria-b2g/index.html": "5d3e9299c2a41ada5e6a0780589c518e75c03f245592a4c35ad21e6f844dba5d",
+    "entregas/index.html": "3718911cf0a8eb581e5cfd9982f1f5af0de385dd4fb1e4d0c9aecc471991c813",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "e3206cc31781e021e299f62911d454bc38456f5b42a1b027b10d7f88b9ff61f9",
-    "medicoes-glosas-obras-publicas/index.html": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
-    "problemas-que-resolvemos/index.html": "586f64577b47a72ee571b359a19fe018bbc7bd0d95f3c0616825024333c04086",
-    "reequilibrio-obras-publicas/index.html": "1aeb651fb81e2cc261bbb11aa2dd0c51dfdc5d2b329992fa915a70e5c4bd587e",
-    "script.js": "5ce07c67069def8e926808f6fbb153ae59cf8c2f6f66787dfb1e142e8b3ee407",
-    "servicos-obras-publicas/index.html": "fd358af08a7ab9dd7985d9014a278733b326ab9385914e2f46b093fbe6dfdd04",
+    "index.html": "eaf68520fd8403830ac0b4c0feeae05e707d7cd3a8163e586d8ce55dcfceaf3f",
+    "medicoes-glosas-obras-publicas/index.html": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
+    "problemas-que-resolvemos/index.html": "c6d138be9e1896eeb0128b7384582ae0e6a98b1a77e70e4fcc70bbce0f36e718",
+    "reequilibrio-obras-publicas/index.html": "f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833",
+    "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
+    "servicos-obras-publicas/index.html": "28fd9fd5c2ca2496fbc7318ffdc41e929f0d565862ce78432af842d1ed48934d",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
-    "styles.css": "4a4e4b140fde38853de5b99c73541828a0253430c0a24bcf0238a4836162aa06"
+    "styles.css": "6cd41b554a8884e3a169fbbf4c66f9fbc567dd080b007c3c462ca657cce2d144"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -83,7 +83,12 @@
       ".report-lead",
       ".lead"
     ],
-    "proof": [
+    "substance": [
+      ".home-opening__scope",
+      ".hero-deliverable",
+      ".hero-substance",
+      ".offer-substance",
+      ".report-substance",
       ".hero-proof-line",
       ".offer-proof-line",
       ".report-proof-line",
@@ -104,8 +109,8 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "e3206cc31781e021e299f62911d454bc38456f5b42a1b027b10d7f88b9ff61f9",
-      "measured_on": "2026-10-02",
+      "html_sha256": "eaf68520fd8403830ac0b4c0feeae05e707d7cd3a8163e586d8ce55dcfceaf3f",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -113,88 +118,84 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 105,
-                "bottom": 124,
+                "top": 138,
+                "bottom": 157,
                 "left": 83,
-                "right": 693,
-                "width": 610,
+                "right": 653,
+                "width": 570,
                 "height": 20
               },
-              "text": "Engenharia, Perícias e Inteligência Técnica · Projetos coordenados"
+              "text": "Projetos de engenharia para edificações, infraestrutura e indústria"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 136,
-                "bottom": 342,
+                "top": 173,
+                "bottom": 405,
                 "left": 83,
-                "right": 651,
-                "width": 568,
-                "height": 206
+                "right": 653,
+                "width": 570,
+                "height": 232
               },
-              "text": "Projetamos estruturas, instalações e infraestrutura de forma coordenada."
+              "text": "Engenharia de projeto para decisões que precisam chegar à obra."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 351,
-                "bottom": 466,
+                "top": 425,
+                "bottom": 553,
                 "left": 83,
-                "right": 633,
-                "width": 550,
-                "height": 114
+                "right": 653,
+                "width": 570,
+                "height": 128
               },
-              "text": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos "
+              "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Reunimos as disciplinas necessárias para transformar premissas, interfaces e requisitos de execução em uma entrega técnica integrada."
             },
-            "proof": {
-              "selector": ".hero-proof",
+            "substance": {
+              "selector": ".home-opening__scope",
               "box": {
-                "top": 618,
-                "bottom": 668,
+                "top": 657,
+                "bottom": 699,
                 "left": 83,
-                "right": 693,
-                "width": 610,
-                "height": 50
+                "right": 653,
+                "width": 570,
+                "height": 42
               },
-              "text": "01Confenge Serviços de Desenhos Técnicos Ltda 02CNPJ 52.407.089/0001-09 03Como conferir credenciais e limites"
+              "text": "EstruturasInstalaçõesInfraestruturaCoordenação multidisciplinar"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 476,
-                "bottom": 524,
+                "top": 581,
+                "bottom": 625,
                 "left": 83,
-                "right": 337,
-                "width": 254,
-                "height": 48
+                "right": 287,
+                "width": 204,
+                "height": 44
               },
-              "text": "Solicitar avaliação do escopo"
+              "text": "Solicitar proposta"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Solicitar avaliação do escopo",
-              "href": "/triagem-tecnica/",
+              "text": "Solicitar proposta",
+              "href": "#contato",
               "box": {
-                "top": 476,
-                "bottom": 524,
+                "top": 581,
+                "bottom": 625,
                 "left": 83,
-                "right": 337,
-                "width": 254,
-                "height": 48
+                "right": 287,
+                "width": 204,
+                "height": 44
               }
             }
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Ver áreas de projeto",
+              "text": "Conhecer os projetos",
               "href": "/projetos/"
             }
           ],
-          "verifiable_proof": {
-            "text": "Como conferir credenciais e limites",
-            "href": "/confianca/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -203,88 +204,84 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 80,
-                "bottom": 119,
+                "top": 97,
+                "bottom": 136,
                 "left": 18,
                 "right": 372,
                 "width": 353,
                 "height": 39
               },
-              "text": "Engenharia, Perícias e Inteligência Técnica · Projetos coordenados"
+              "text": "Projetos de engenharia para edificações, infraestrutura e indústria"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 131,
-                "bottom": 339,
+                "top": 152,
+                "bottom": 367,
                 "left": 18,
-                "right": 298,
-                "width": 280,
-                "height": 207
+                "right": 372,
+                "width": 353,
+                "height": 215
               },
-              "text": "Projetamos estruturas, instalações e infraestrutura de forma coordenada."
+              "text": "Engenharia de projeto para decisões que precisam chegar à obra."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 347,
-                "bottom": 510,
+                "top": 387,
+                "bottom": 552,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 162
+                "height": 165
               },
-              "text": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos "
+              "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Reunimos as disciplinas necessárias para transformar premissas, interfaces e requisitos de execução em uma entrega técnica integrada."
             },
-            "proof": {
-              "selector": ".hero-proof",
+            "substance": {
+              "selector": ".home-opening__scope",
               "box": {
-                "top": 610,
-                "bottom": 704,
+                "top": 710,
+                "bottom": 810,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 94
+                "height": 100
               },
-              "text": "01Confenge Serviços de Desenhos Técnicos Ltda 02CNPJ 52.407.089/0001-09 03Como conferir credenciais e limites"
+              "text": "EstruturasInstalaçõesInfraestruturaCoordenação multidisciplinar"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 520,
-                "bottom": 566,
+                "top": 580,
+                "bottom": 624,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 46
+                "height": 44
               },
-              "text": "Solicitar avaliação do escopo"
+              "text": "Solicitar proposta"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Solicitar avaliação do escopo",
-              "href": "/triagem-tecnica/",
+              "text": "Solicitar proposta",
+              "href": "#contato",
               "box": {
-                "top": 520,
-                "bottom": 566,
+                "top": 580,
+                "bottom": 624,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 46
+                "height": 44
               }
             }
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Ver áreas de projeto",
+              "text": "Conhecer os projetos",
               "href": "/projetos/"
             }
           ],
-          "verifiable_proof": {
-            "text": "Como conferir credenciais e limites",
-            "href": "/confianca/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -292,36 +289,35 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
-          "coordenados",
-          "engenharia",
-          "inteligencia",
-          "pericias",
-          "projetos",
-          "tecnica"
+          "edificacoes",
+          "industria",
+          "infraestrutura",
+          "projetos"
         ],
         "lead_new": [
-          "assumimos",
-          "comparar",
-          "conferir",
-          "contratacao",
-          "coordenamos",
-          "decidir",
-          "empreendimentos",
-          "escopo",
-          "exigir",
+          "confenge",
+          "coordena",
+          "disciplinas",
+          "elabora",
+          "entrega",
+          "estruturas",
+          "execucao",
+          "instalacoes",
+          "integrada",
           "interfaces",
-          "preciso",
-          "privados",
-          "projeto",
-          "propostas",
-          "publicos"
+          "necessarias",
+          "premissas",
+          "requisitos",
+          "reunimos",
+          "tecnica",
+          "transformar"
         ]
       }
     },
     {
       "route": "/entregas/",
-      "html_sha256": "1aca7010eb64cb52031220e9ad8c8984cec60722d79961d44a4e05de756b3e84",
-      "measured_on": "2026-10-02",
+      "html_sha256": "3718911cf0a8eb581e5cfd9982f1f5af0de385dd4fb1e4d0c9aecc471991c813",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -362,23 +358,23 @@
               },
               "text": "Projeto, planilha, relatório, laudo, parecer ou análise: cada entrega diz o que chega às suas mãos e para que decisão serve."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 512,
-                "bottom": 554,
+                "top": 434,
+                "bottom": 542,
                 "left": 83,
-                "right": 688,
-                "width": 605,
-                "height": 42
+                "right": 621,
+                "width": 538,
+                "height": 108
               },
-              "text": "Consulte sem cadastro os exemplos demonstrativos e as ferramentas públicas. Dados identificados como sintéticos mostram o formato e o método."
+              "text": "A CONFENGE desenvolve documentos de engenharia para projetar, orçar, contratar e sustentar decisões técnicas. Explore o conteúdo das entregas e exemplos demonstrativos de sua aplicação."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 569,
-                "bottom": 613,
+                "top": 623,
+                "bottom": 667,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -392,8 +388,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 569,
-                "bottom": 613,
+                "top": 623,
+                "bottom": 667,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -407,10 +403,6 @@
               "href": "#captura-entregas"
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplos demonstrativos",
-            "href": "/casos/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -452,23 +444,23 @@
               },
               "text": "Projeto, planilha, relatório, laudo, parecer ou análise: cada entrega diz o que chega às suas mãos e para que decisão serve."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 475,
-                "bottom": 538,
+                "top": 379,
+                "bottom": 499,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 63
+                "height": 120
               },
-              "text": "Consulte sem cadastro os exemplos demonstrativos e as ferramentas públicas. Dados identificados como sintéticos mostram o formato e o método."
+              "text": "A CONFENGE desenvolve documentos de engenharia para projetar, orçar, contratar e sustentar decisões técnicas. Explore o conteúdo das entregas e exemplos demonstrativos de sua aplicação."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 554,
-                "bottom": 598,
+                "top": 602,
+                "bottom": 646,
                 "left": 18,
                 "right": 272,
                 "width": 254,
@@ -482,8 +474,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 554,
-                "bottom": 598,
+                "top": 602,
+                "bottom": 646,
                 "left": 18,
                 "right": 272,
                 "width": 254,
@@ -497,10 +489,6 @@
               "href": "#captura-entregas"
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplos demonstrativos",
-            "href": "/casos/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -526,8 +514,8 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "fd358af08a7ab9dd7985d9014a278733b326ab9385914e2f46b093fbe6dfdd04",
-      "measured_on": "2026-10-02",
+      "html_sha256": "28fd9fd5c2ca2496fbc7318ffdc41e929f0d565862ce78432af842d1ed48934d",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -568,11 +556,11 @@
               },
               "text": "Glosa, aditivo, atraso, reequilíbrio ou edital: apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal."
             },
-            "proof": {
+            "substance": {
               "selector": ".section-proof",
               "box": {
-                "top": 527,
-                "bottom": 614,
+                "top": 469,
+                "bottom": 555,
                 "left": 83,
                 "right": 532,
                 "width": 449,
@@ -586,32 +574,28 @@
                 "top": 411,
                 "bottom": 455,
                 "left": 83,
-                "right": 505,
-                "width": 422,
+                "right": 453,
+                "width": 370,
                 "height": 44
               },
-              "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento"
+              "text": "Conhecer o apoio para medições e glosas"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
+              "text": "Conhecer o apoio para medições e glosas",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
                 "top": 411,
                 "bottom": 455,
                 "left": 83,
-                "right": 505,
-                "width": 422,
+                "right": 453,
+                "width": 370,
                 "height": 44
               }
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "Exemplos completos",
-            "href": "/casos/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -653,7 +637,7 @@
               },
               "text": "Glosa, aditivo, atraso, reequilíbrio ou edital: apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal."
             },
-            "proof": {
+            "substance": {
               "selector": ".section-proof",
               "box": {
                 "top": 536,
@@ -675,12 +659,12 @@
                 "width": 353,
                 "height": 60
               },
-              "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento"
+              "text": "Conhecer o apoio para medições e glosas"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
+              "text": "Conhecer o apoio para medições e glosas",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
                 "top": 404,
@@ -693,10 +677,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "Exemplos completos",
-            "href": "/casos/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -724,8 +704,8 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "586f64577b47a72ee571b359a19fe018bbc7bd0d95f3c0616825024333c04086",
-      "measured_on": "2026-10-02",
+      "html_sha256": "c6d138be9e1896eeb0128b7384582ae0e6a98b1a77e70e4fcc70bbce0f36e718",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -766,7 +746,7 @@
               },
               "text": "Glosa, aditivo, atraso, reequilíbrio, notificação ou edital: cada evento leva à página que diz o que assumimos, o que você recebe e para que serve."
             },
-            "proof": {
+            "substance": {
               "selector": ".section-proof",
               "box": {
                 "top": 519,
@@ -806,10 +786,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "Quatro ferramentas públicas",
-            "href": "/ferramentas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -851,7 +827,7 @@
               },
               "text": "Glosa, aditivo, atraso, reequilíbrio, notificação ou edital: cada evento leva à página que diz o que assumimos, o que você recebe e para que serve."
             },
-            "proof": {
+            "substance": {
               "selector": ".section-proof",
               "box": {
                 "top": 495,
@@ -891,10 +867,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "Quatro ferramentas públicas",
-            "href": "/ferramentas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -922,8 +894,8 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "html_sha256": "a30bad14b1341ecf330b88bba70a265a377ae1b9117b21217c3b416f3b4b6bed",
-      "measured_on": "2026-10-02",
+      "html_sha256": "bd9888951458ebce6342011b6666b5b14a6e7785efdd065c1bb4f41d5fa921c9",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -964,7 +936,7 @@
               },
               "text": "Decida em quais compradores, territórios e segmentos concentrar a expansão antes de espalhar equipe comercial e esforço de proposta."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 539,
@@ -1006,13 +978,9 @@
           "secondary_actions_in_fold": [
             {
               "text": "Tirar uma dúvida pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplo sintético do mapa de compradores",
-            "href": "/casos/modelo-mapa-compradores-publicos/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -1054,7 +1022,7 @@
               },
               "text": "Decida em quais compradores, territórios e segmentos concentrar a expansão antes de espalhar equipe comercial e esforço de proposta."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 467,
@@ -1096,13 +1064,9 @@
           "secondary_actions_in_fold": [
             {
               "text": "Tirar uma dúvida pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplo sintético do mapa de compradores",
-            "href": "/casos/modelo-mapa-compradores-publicos/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -1132,8 +1096,8 @@
     },
     {
       "route": "/diagnostico-pre-licitacao/",
-      "html_sha256": "af255391007247bafae8d6c4bfdfc83d7f17067ab9f691110494602a66e1a56e",
-      "measured_on": "2026-10-02",
+      "html_sha256": "dde8951f37ddbdf3aef22ba2829c35b184fabb087e04edddd6b57334a331839f",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1174,23 +1138,23 @@
               },
               "text": "O edital saiu, a sessão tem data e a equipe já começou a precificar sem saber se o acervo habilita, se o regime cabe e se o orçamento de referência fecha; a decisão de entrar precisa vir antes do preço."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 419,
-                "bottom": 440,
+                "top": 361,
+                "bottom": 496,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
-                "height": 21
+                "right": 621,
+                "width": 538,
+                "height": 135
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE examina edital e retificações, projetos, orçamento, cronograma, matriz de riscos e requisitos de habilitação. O diagnóstico confronta essas condições com o acervo e a capacidade da empresa, ordena as decisões antes do preço e ide"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1204,8 +1168,8 @@
               "text": "Descrever a licitação",
               "href": "#captura-pilar",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1219,10 +1183,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -1264,23 +1224,23 @@
               },
               "text": "O edital saiu, a sessão tem data e a equipe já começou a precificar sem saber se o acervo habilita, se o regime cabe e se o orçamento de referência fecha; a decisão de entrar precisa vir antes do preço."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 633,
-                "bottom": 675,
+                "top": 459,
+                "bottom": 627,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 42
+                "height": 168
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE examina edital e retificações, projetos, orçamento, cronograma, matriz de riscos e requisitos de habilitação. O diagnóstico confronta essas condições com o acervo e a capacidade da empresa, ordena as decisões antes do preço e ide"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 459,
-                "bottom": 503,
+                "top": 651,
+                "bottom": 695,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1294,8 +1254,8 @@
               "text": "Descrever a licitação",
               "href": "#captura-pilar",
               "box": {
-                "top": 459,
-                "bottom": 503,
+                "top": 651,
+                "bottom": 695,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1309,10 +1269,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -1348,8 +1304,8 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "b0b798dafe581191544d30a199a8758d9b5f5e51b1f20183cceb61b4869878dc",
-      "measured_on": "2026-10-02",
+      "html_sha256": "b79d7dc15f8a653db2b29369a76bac1c19a5537ddc13da541316d04085bc18d7",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1390,23 +1346,23 @@
               },
               "text": "O edital parece atraente, o deságio fechou a proposta e ninguém sabe qual item vai pagar a diferença; a planilha precisa dizer onde o risco se concentra antes de imobilizar a equipe."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 419,
-                "bottom": 440,
+                "top": 361,
+                "bottom": 496,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
-                "height": 21
+                "right": 621,
+                "width": 538,
+                "height": 135
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE revisa quantitativos, composições, referências de preço, BDI e encargos em conjunto com as condições de execução. As diferenças são registradas em memória de cálculo e relacionadas ao efeito sobre a proposta, para orientar ajuste"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 328,
                 "width": 245,
@@ -1420,8 +1376,8 @@
               "text": "Descrever o orçamento",
               "href": "#captura-pilar",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 328,
                 "width": 245,
@@ -1435,10 +1391,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -1480,23 +1432,23 @@
               },
               "text": "O edital parece atraente, o deságio fechou a proposta e ninguém sabe qual item vai pagar a diferença; a planilha precisa dizer onde o risco se concentra antes de imobilizar a equipe."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 600,
-                "bottom": 642,
+                "top": 426,
+                "bottom": 594,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 42
+                "height": 168
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE revisa quantitativos, composições, referências de preço, BDI e encargos em conjunto com as condições de execução. As diferenças são registradas em memória de cálculo e relacionadas ao efeito sobre a proposta, para orientar ajuste"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 426,
-                "bottom": 470,
+                "top": 618,
+                "bottom": 662,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1510,8 +1462,8 @@
               "text": "Descrever o orçamento",
               "href": "#captura-pilar",
               "box": {
-                "top": 426,
-                "bottom": 470,
+                "top": 618,
+                "bottom": 662,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1525,10 +1477,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -1565,8 +1513,8 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "153c6f3633dd59a41559c76b9c8415bf938012a8da76e37a415a33ba3a63b668",
-      "measured_on": "2026-10-02",
+      "html_sha256": "18c882f10f1212f1632d77a9ca488b6996017f930deb36c2ab05aaaa952e87c5",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1607,7 +1555,7 @@
               },
               "text": "Para o edital que exige coordenação da proposta, não improviso. Decida se vale disputar antes de comprometer equipe, garantia e capital."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 407,
@@ -1625,23 +1573,23 @@
                 "top": 578,
                 "bottom": 622,
                 "left": 83,
-                "right": 344,
-                "width": 261,
+                "right": 380,
+                "width": 297,
                 "height": 44
               },
-              "text": "Enviar edital para triagem"
+              "text": "Solicitar proposta para o edital"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Enviar edital para triagem",
+              "text": "Solicitar proposta para o edital",
               "href": "#captura-pilar",
               "box": {
                 "top": 578,
                 "bottom": 622,
                 "left": 83,
-                "right": 344,
-                "width": 261,
+                "right": 380,
+                "width": 297,
                 "height": 44
               }
             }
@@ -1649,13 +1597,9 @@
           "secondary_actions_in_fold": [
             {
               "text": "Falar pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20cr%C3%ADtico%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio."
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20edital%20cr%C3%ADtico%20e%20quero%20solicitar%20uma%20proposta."
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplo sintético de decisão sobre editais",
-            "href": "/casos/modelo-relatorio-inteligencia-licitacoes/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -1697,7 +1641,7 @@
               },
               "text": "Para o edital que exige coordenação da proposta, não improviso. Decida se vale disputar antes de comprometer equipe, garantia e capital."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 402,
@@ -1719,12 +1663,12 @@
                 "width": 353,
                 "height": 44
               },
-              "text": "Enviar edital para triagem"
+              "text": "Solicitar proposta para o edital"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Enviar edital para triagem",
+              "text": "Solicitar proposta para o edital",
               "href": "#captura-pilar",
               "box": {
                 "top": 606,
@@ -1739,13 +1683,9 @@
           "secondary_actions_in_fold": [
             {
               "text": "Falar pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20cr%C3%ADtico%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio."
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20edital%20cr%C3%ADtico%20e%20quero%20solicitar%20uma%20proposta."
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplo sintético de decisão sobre editais",
-            "href": "/casos/modelo-relatorio-inteligencia-licitacoes/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -1773,8 +1713,8 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "7bc289463e8403a5273604aeceb0635f61a38517df191369be26c4f4cfa19892",
-      "measured_on": "2026-10-02",
+      "html_sha256": "fbaa53dd088194ad74701915dfbfc7569a9f12285ef43c99259d77147baeb7e7",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1815,7 +1755,7 @@
               },
               "text": "Descubra quais eventos ainda merecem registro, cálculo ou encaminhamento antes que prazo, prova e margem se percam."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 551,
@@ -1833,23 +1773,23 @@
                 "top": 493,
                 "bottom": 537,
                 "left": 83,
-                "right": 395,
-                "width": 312,
+                "right": 287,
+                "width": 204,
                 "height": 44
               },
-              "text": "Solicitar canal seguro para envio"
+              "text": "Solicitar proposta"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Solicitar canal seguro para envio",
+              "text": "Solicitar proposta",
               "href": "#captura-pilar",
               "box": {
                 "top": 493,
                 "bottom": 537,
                 "left": 83,
-                "right": 395,
-                "width": 312,
+                "right": 287,
+                "width": 204,
                 "height": 44
               }
             }
@@ -1857,13 +1797,9 @@
           "secondary_actions_in_fold": [
             {
               "text": "Falar pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio."
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20uma%20proposta."
             }
           ],
-          "verifiable_proof": {
-            "text": "diagnóstico público de risco de margem",
-            "href": "/ferramentas/diagnostico-defesa-margem/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -1905,7 +1841,7 @@
               },
               "text": "Descubra quais eventos ainda merecem registro, cálculo ou encaminhamento antes que prazo, prova e margem se percam."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 593,
@@ -1927,12 +1863,12 @@
                 "width": 353,
                 "height": 44
               },
-              "text": "Solicitar canal seguro para envio"
+              "text": "Solicitar proposta"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Solicitar canal seguro para envio",
+              "text": "Solicitar proposta",
               "href": "#captura-pilar",
               "box": {
                 "top": 477,
@@ -1947,13 +1883,9 @@
           "secondary_actions_in_fold": [
             {
               "text": "Falar pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio."
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20uma%20proposta."
             }
           ],
-          "verifiable_proof": {
-            "text": "diagnóstico público de risco de margem",
-            "href": "/ferramentas/diagnostico-defesa-margem/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -1982,8 +1914,8 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
-      "measured_on": "2026-10-02",
+      "html_sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2024,23 +1956,23 @@
               },
               "text": "O boletim voltou glosado, a medição parou ou o fiscal lê o critério de um jeito e a obra de outro, e o caixa da empresa está financiando o contrato enquanto isso."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 419,
-                "bottom": 440,
+                "top": 361,
+                "bottom": 496,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
-                "height": 21
+                "right": 621,
+                "width": 538,
+                "height": 135
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE confronta a execução documentada com os critérios de medição do contrato, verifica quantitativos e organiza a memória financeira da divergência. Registros da obra, projeto e planilha são relacionados em uma análise técnica para r"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -2054,8 +1986,8 @@
               "text": "Descrever a medição",
               "href": "#captura-pilar",
               "box": {
-                "top": 361,
-                "bottom": 405,
+                "top": 520,
+                "bottom": 564,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -2069,10 +2001,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -2114,23 +2042,23 @@
               },
               "text": "O boletim voltou glosado, a medição parou ou o fiscal lê o critério de um jeito e a obra de outro, e o caixa da empresa está financiando o contrato enquanto isso."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 607,
-                "bottom": 649,
+                "top": 433,
+                "bottom": 601,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 42
+                "height": 168
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE confronta a execução documentada com os critérios de medição do contrato, verifica quantitativos e organiza a memória financeira da divergência. Registros da obra, projeto e planilha são relacionados em uma análise técnica para r"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 433,
-                "bottom": 477,
+                "top": 625,
+                "bottom": 669,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2144,8 +2072,8 @@
               "text": "Descrever a medição",
               "href": "#captura-pilar",
               "box": {
-                "top": 433,
-                "bottom": 477,
+                "top": 625,
+                "bottom": 669,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2159,10 +2087,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -2195,8 +2119,8 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "a67d5529545208d966b3621c3e2fea47e6ee9beef61a3a4e91f18b71edfb9c3e",
-      "measured_on": "2026-10-02",
+      "html_sha256": "3de8a9bb491c1ceb121fd481f9844c9b86012443cc1f80df3e903a9fe26228dc",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2237,23 +2161,23 @@
               },
               "text": "A fiscalização pediu um serviço que não está na planilha, o projeto mudou no canteiro ou o acréscimo se aproxima do limite, e a obra está executando sem cobertura enquanto o termo não sai."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 480,
-                "bottom": 501,
+                "top": 418,
+                "bottom": 553,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
-                "height": 21
+                "right": 621,
+                "width": 538,
+                "height": 135
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE organiza o fato gerador, o enquadramento contratual e a memória de quantidades e preços para instruir mudanças de projeto, acréscimos e supressões. O dossiê reúne a cronologia, as evidências e a repercussão financeira da alteraçã"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 418,
-                "bottom": 462,
+                "top": 577,
+                "bottom": 621,
                 "left": 83,
                 "right": 298,
                 "width": 215,
@@ -2267,8 +2191,8 @@
               "text": "Descrever o aditivo",
               "href": "#captura-pilar",
               "box": {
-                "top": 418,
-                "bottom": 462,
+                "top": 577,
+                "bottom": 621,
                 "left": 83,
                 "right": 298,
                 "width": 215,
@@ -2282,10 +2206,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -2327,23 +2247,23 @@
               },
               "text": "A fiscalização pediu um serviço que não está na planilha, o projeto mudou no canteiro ou o acréscimo se aproxima do limite, e a obra está executando sem cobertura enquanto o termo não sai."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 686,
-                "bottom": 728,
+                "top": 512,
+                "bottom": 680,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 42
+                "height": 168
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE organiza o fato gerador, o enquadramento contratual e a memória de quantidades e preços para instruir mudanças de projeto, acréscimos e supressões. O dossiê reúne a cronologia, as evidências e a repercussão financeira da alteraçã"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 512,
-                "bottom": 556,
+                "top": 704,
+                "bottom": 748,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2357,8 +2277,8 @@
               "text": "Descrever o aditivo",
               "href": "#captura-pilar",
               "box": {
-                "top": 512,
-                "bottom": 556,
+                "top": 704,
+                "bottom": 748,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2366,16 +2286,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Ver os 3 guias",
-              "href": "#guias"
-            }
-          ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
+          "secondary_actions_in_fold": [],
           "horizontal_overflow": false
         }
       },
@@ -2409,8 +2320,8 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "1a42f209face577d4a3c251b6701b94b12480746cb8338508ac9871e291ec7bb",
-      "measured_on": "2026-10-02",
+      "html_sha256": "70a4546c35a49fe73f9c0dab17d7be96ffe21eace4f44c28ab0717113c432145",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2451,7 +2362,7 @@
               },
               "text": "Descubra quantos dias uma causa alheia à contratada realmente atingiu antes que o desvio vire custo absorvido, multa ou pedido frágil."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 579,
@@ -2496,10 +2407,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "matriz pública de atraso de obra",
-            "href": "/ferramentas/matriz-atraso-obra/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -2541,7 +2448,7 @@
               },
               "text": "Descubra quantos dias uma causa alheia à contratada realmente atingiu antes que o desvio vire custo absorvido, multa ou pedido frágil."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 646,
@@ -2586,10 +2493,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "matriz pública de atraso de obra",
-            "href": "/ferramentas/matriz-atraso-obra/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -2622,8 +2525,8 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "1aeb651fb81e2cc261bbb11aa2dd0c51dfdc5d2b329992fa915a70e5c4bd587e",
-      "measured_on": "2026-10-02",
+      "html_sha256": "f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2664,23 +2567,23 @@
               },
               "text": "O insumo disparou depois da proposta, o reajuste do aniversário não cobre a diferença e o contrato está consumindo a margem enquanto o pedido ainda é uma narrativa de aumento de custo, sem evento, nexo e cálculo."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 448,
-                "bottom": 469,
+                "top": 390,
+                "bottom": 552,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
-                "height": 21
+                "right": 621,
+                "width": 538,
+                "height": 162
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE analisa o evento que alterou a execução, sua relação com a matriz de riscos e os custos efetivamente afetados. A documentação conecta cronologia, evidências e memória de cálculo para distinguir reequilíbrio de reajuste, repactuaç"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 576,
+                "bottom": 620,
                 "left": 83,
                 "right": 290,
                 "width": 207,
@@ -2694,8 +2597,8 @@
               "text": "Descrever o pleito",
               "href": "#captura-pilar",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 576,
+                "bottom": 620,
                 "left": 83,
                 "right": 290,
                 "width": 207,
@@ -2709,10 +2612,6 @@
               "href": "#resposta"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -2754,23 +2653,23 @@
               },
               "text": "O insumo disparou depois da proposta, o reajuste do aniversário não cobre a diferença e o contrato está consumindo a margem enquanto o pedido ainda é uma narrativa de aumento de custo, sem evento, nexo e cálculo."
             },
-            "proof": {
-              "selector": ".offer-proof-line",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 660,
-                "bottom": 702,
+                "top": 485,
+                "bottom": 677,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 42
+                "height": 192
               },
-              "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
+              "text": "A CONFENGE analisa o evento que alterou a execução, sua relação com a matriz de riscos e os custos efetivamente afetados. A documentação conecta cronologia, evidências e memória de cálculo para distinguir reequilíbrio de reajuste, repactuaç"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 485,
-                "bottom": 529,
+                "top": 701,
+                "bottom": 745,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2784,8 +2683,8 @@
               "text": "Descrever o pleito",
               "href": "#captura-pilar",
               "box": {
-                "top": 485,
-                "bottom": 529,
+                "top": 701,
+                "bottom": 745,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2793,16 +2692,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Ler a resposta direta",
-              "href": "#resposta"
-            }
-          ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
+          "secondary_actions_in_fold": [],
           "horizontal_overflow": false
         }
       },
@@ -2838,8 +2728,8 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "b9a24da73e7bbc8fb86ae26eb1a992d59c49c6e592589af3f60d79fa97426407",
-      "measured_on": "2026-10-02",
+      "html_sha256": "b631647a367578aff84c70892b767d8dc17ab3654d945a98b6e585f5c109af44",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2880,7 +2770,7 @@
               },
               "text": "Dê ao jurídico uma base verificável antes que o prazo termine e uma acusação sem contraponto evolua para multa, impedimento ou extinção."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 579,
@@ -2925,10 +2815,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplo sintético de relatório executivo",
-            "href": "/casos/modelo-relatorio-executivo-consolidado/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -2970,7 +2856,7 @@
               },
               "text": "Dê ao jurídico uma base verificável antes que o prazo termine e uma acusação sem contraponto evolua para multa, impedimento ou extinção."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 612,
@@ -3015,10 +2901,6 @@
               "href": "#guias"
             }
           ],
-          "verifiable_proof": {
-            "text": "exemplo sintético de relatório executivo",
-            "href": "/casos/modelo-relatorio-executivo-consolidado/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -3047,8 +2929,8 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "html_sha256": "5672708ea87e83feb08ceca07433bb075064b220c2c7ec82373021714cbe24cc",
-      "measured_on": "2026-10-02",
+      "html_sha256": "db04ad9a492c9f261f08e76e9a8904a89104d33e76a6dd615deb1d1ae2d38f5f",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3089,23 +2971,23 @@
               },
               "text": "Mapeie onde a frente pública perde tempo, margem e controle. A empresa participa de editais e executa contratos, mas a direção não enxerga o mapa completo: quem decide avançar ou recusar, onde o registro falha e qual contrato concentra o ri"
             },
-            "proof": {
-              "selector": ".authority-byline",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 450,
-                "bottom": 471,
+                "top": 390,
+                "bottom": 525,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
-                "height": 21
+                "right": 621,
+                "width": 538,
+                "height": 135
               },
-              "text": "Responsável técnico: Engº Tiago Sasaki · Atualizado em 1 de agosto de 2026 · Encontrou um erro?"
+              "text": "A CONFENGE conecta carteira, propostas, execução e controles contratuais para identificar prioridades técnicas e comerciais da operação. O diagnóstico trabalha com os dados reais da empresa e produz uma leitura integrada dos pontos de decis"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 549,
+                "bottom": 593,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3119,8 +3001,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 390,
-                "bottom": 434,
+                "top": 549,
+                "bottom": 593,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3134,10 +3016,6 @@
               "href": "#fit"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -3179,23 +3057,23 @@
               },
               "text": "Mapeie onde a frente pública perde tempo, margem e controle. A empresa participa de editais e executa contratos, mas a direção não enxerga o mapa completo: quem decide avançar ou recusar, onde o registro falha e qual contrato concentra o ri"
             },
-            "proof": {
-              "selector": ".authority-byline",
+            "substance": {
+              "selector": ".hero-deliverable",
               "box": {
-                "top": 644,
-                "bottom": 685,
+                "top": 482,
+                "bottom": 650,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 41
+                "height": 168
               },
-              "text": "Responsável técnico: Engº Tiago Sasaki · Atualizado em 1 de agosto de 2026 · Encontrou um erro?"
+              "text": "A CONFENGE conecta carteira, propostas, execução e controles contratuais para identificar prioridades técnicas e comerciais da operação. O diagnóstico trabalha com os dados reais da empresa e produz uma leitura integrada dos pontos de decis"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 482,
-                "bottom": 526,
+                "top": 674,
+                "bottom": 718,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3209,8 +3087,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 482,
-                "bottom": 526,
+                "top": 674,
+                "bottom": 718,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3224,10 +3102,6 @@
               "href": "#fit"
             }
           ],
-          "verifiable_proof": {
-            "text": "Engº Tiago Sasaki",
-            "href": "/especialista/tiago-jun-sasaki/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -3268,8 +3142,8 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "03018a0b5f1c6a38a82a3fb5eced54e5ae9a4f109ab619e55ea6f86d1cfa592a",
-      "measured_on": "2026-10-02",
+      "html_sha256": "2f331ea8ff902f8c7a5c8f28be9d9a607d857ed931eb1447e31774d8c98f808d",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3310,7 +3184,7 @@
               },
               "text": "Converta diário, medições, mudanças e comunicações em decisões antes que o desvio vire custo absorvido ou defesa tardia."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 551,
@@ -3355,10 +3229,6 @@
               "href": "/ferramentas/"
             }
           ],
-          "verifiable_proof": {
-            "text": "quatro ferramentas públicas",
-            "href": "/ferramentas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -3400,7 +3270,7 @@
               },
               "text": "Converta diário, medições, mudanças e comunicações em decisões antes que o desvio vire custo absorvido ou defesa tardia."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 586,
@@ -3445,10 +3315,6 @@
               "href": "/ferramentas/"
             }
           ],
-          "verifiable_proof": {
-            "text": "quatro ferramentas públicas",
-            "href": "/ferramentas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -3479,8 +3345,8 @@
     },
     {
       "route": "/diretoria-b2g/",
-      "html_sha256": "9af2103bc48ff5d4a19a70dce0cb1097cda86df1966d8b77e497b86f0b9f2e21",
-      "measured_on": "2026-10-02",
+      "html_sha256": "5d3e9299c2a41ada5e6a0780589c518e75c03f245592a4c35ad21e6f844dba5d",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3521,7 +3387,7 @@
               },
               "text": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 378,
@@ -3549,7 +3415,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Falar sobre a operação",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
               "box": {
                 "top": 630,
                 "bottom": 674,
@@ -3566,10 +3432,6 @@
               "href": "#pedido-enquadramento"
             }
           ],
-          "verifiable_proof": {
-            "text": "preço, escopo e prazo das ofertas publicadas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -3611,7 +3473,7 @@
               },
               "text": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna."
             },
-            "proof": {
+            "substance": {
               "selector": ".offer-proof-line",
               "box": {
                 "top": 386,
@@ -3639,7 +3501,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Falar sobre a operação",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
               "box": {
                 "top": 698,
                 "bottom": 742,
@@ -3656,10 +3518,6 @@
               "href": "#pedido-enquadramento"
             }
           ],
-          "verifiable_proof": {
-            "text": "preço, escopo e prazo das ofertas publicadas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -3685,8 +3543,8 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "html_sha256": "d14a17a3e3b9ad4f47472946f1733894d0c35064b0a713bc2569d5910b6587c3",
-      "measured_on": "2026-10-02",
+      "html_sha256": "d483a55872ec434ed89e268f9ea9682e9a252a76ff93333fd744befd758bad1f",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3727,7 +3585,7 @@
               },
               "text": "A CONFENGE cruza editais e anexos com o acervo, a capacidade operacional, o capital de giro e a estratégia da sua construtora. Você recebe uma decisão priorizada, com impedimentos, riscos e próxima ação."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 471,
@@ -3772,10 +3630,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -3817,7 +3671,7 @@
               },
               "text": "A CONFENGE cruza editais e anexos com o acervo, a capacidade operacional, o capital de giro e a estratégia da sua construtora. Você recebe uma decisão priorizada, com impedimentos, riscos e próxima ação."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 439,
@@ -3857,10 +3711,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -3895,8 +3745,8 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "html_sha256": "a7501ea5af527a6b61b5c438bcb12774d63f0204481df67ef9b1ea2b5ffcb102",
-      "measured_on": "2026-10-02",
+      "html_sha256": "68f0a2ee8164244f8b53ff2165d8e15bce15732fb9c8c989f9ea21021b93835a",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3937,7 +3787,7 @@
               },
               "text": "Esta é a fonte única de verdade quantitativa da qual todos os outros entregáveis derivam. Se um número aparece em um relatório, em um painel ou em um slide, ele é re-derivável aqui, por aba e por célula, com a fórmula à vista."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 477,
@@ -3965,7 +3815,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir a base de mercado de obras públicas por R$ 690",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
               "box": {
                 "top": 532,
                 "bottom": 580,
@@ -3982,10 +3832,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -4027,7 +3873,7 @@
               },
               "text": "Esta é a fonte única de verdade quantitativa da qual todos os outros entregáveis derivam. Se um número aparece em um relatório, em um painel ou em um slide, ele é re-derivável aqui, por aba e por célula, com a fórmula à vista."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 439,
@@ -4055,7 +3901,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir a base de mercado de obras públicas por R$ 690",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
               "box": {
                 "top": 512,
                 "bottom": 571,
@@ -4067,10 +3913,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -4105,8 +3947,8 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "html_sha256": "7d708a3c37a1c3044a7602b78fde684f22f06b8cb25b8d596533fd84de9e78f6",
-      "measured_on": "2026-10-02",
+      "html_sha256": "53e66133c3329c274fc38810c09eed3f1a91782ee7d117d6ae2a7e9eb0553835",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4147,7 +3989,7 @@
               },
               "text": "A CONFENGE condensa o diagnóstico inteiro em uma narrativa de 16 slides que a sua diretoria atravessa em uma reunião. Você recebe uma ideia por slide, apenas números já reconciliados no relatório e na base, e três decisões prontas para apro"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 529,
@@ -4175,7 +4017,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir a síntese executiva dos resultados por R$ 890",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
               "box": {
                 "top": 585,
                 "bottom": 633,
@@ -4192,10 +4034,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -4237,7 +4075,7 @@
               },
               "text": "A CONFENGE condensa o diagnóstico inteiro em uma narrativa de 16 slides que a sua diretoria atravessa em uma reunião. Você recebe uma ideia por slide, apenas números já reconciliados no relatório e na base, e três decisões prontas para apro"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 512,
@@ -4265,7 +4103,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir a síntese executiva dos resultados por R$ 890",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
               "box": {
                 "top": 585,
                 "bottom": 645,
@@ -4277,10 +4115,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -4317,8 +4151,8 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "html_sha256": "c3cd4260fb35c1a578c944ea97a7169c20aea4809469309ea9c8460f334f0ed5",
-      "measured_on": "2026-10-02",
+      "html_sha256": "7872e00b4bb84a4ca789ac8e620fc78b16f83e47826dec0fa6375a5eb16c12d3",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4359,7 +4193,7 @@
               },
               "text": "A CONFENGE varre 36 meses de contratos públicos das suas tipologias, separa o que é comparável do que não é, e devolve os órgãos ordenados por frequência histórica, escala de valor e facilidade de aproximação. Você recebe uma lista de abord"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 521,
@@ -4387,7 +4221,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir o mapa de órgãos compradores por R$ 1.200",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
               "box": {
                 "top": 577,
                 "bottom": 625,
@@ -4404,10 +4238,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -4449,7 +4279,7 @@
               },
               "text": "A CONFENGE varre 36 meses de contratos públicos das suas tipologias, separa o que é comparável do que não é, e devolve os órgãos ordenados por frequência histórica, escala de valor e facilidade de aproximação. Você recebe uma lista de abord"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 496,
@@ -4477,7 +4307,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir o mapa de órgãos compradores por R$ 1.200",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
               "box": {
                 "top": 569,
                 "bottom": 629,
@@ -4489,10 +4319,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -4529,8 +4355,8 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "html_sha256": "2f680b84c21d49969d730b2cf3c091bedf0c071230e0f812652db9a2fd2d5a5d",
-      "measured_on": "2026-10-02",
+      "html_sha256": "6e5bd501036f4dc79ee824767d16f8443bbc2acc746e730c6e6505a0322b31d5",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4571,7 +4397,7 @@
               },
               "text": "A CONFENGE varre os contratos em execução que terminam numa janela distante o bastante para você se preparar e próxima o bastante para importar, agrupa por compra-mãe e mede a propensão de cada conjunto virar nova contratação em vez de simp"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 591,
@@ -4599,7 +4425,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
                 "top": 646,
                 "bottom": 694,
@@ -4616,10 +4442,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -4661,7 +4483,7 @@
               },
               "text": "A CONFENGE varre os contratos em execução que terminam numa janela distante o bastante para você se preparar e próxima o bastante para importar, agrupa por compra-mãe e mede a propensão de cada conjunto virar nova contratação em vez de simp"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 557,
@@ -4689,7 +4511,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
                 "top": 630,
                 "bottom": 690,
@@ -4701,10 +4523,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -4742,8 +4560,8 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "html_sha256": "5d0e73663a59a621028d6317f9365f521af0b72aa5c5726e10517e51747c320b",
-      "measured_on": "2026-10-02",
+      "html_sha256": "dc7e10f4b47448198a8c4b7eccdba6e163e848cea046f4665dcc0b87ca0c6513",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4784,7 +4602,7 @@
               },
               "text": "A CONFENGE lê os contratos do seu recorte de mercado e devolve os concorrentes ordenados por frequência e por valor, com a dependência de cada um em relação a um único comprador, a faixa de valor em que ele opera e o ponto em que ele está e"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 526,
@@ -4812,7 +4630,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir o mapa de concorrentes por R$ 1.900",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
               "box": {
                 "top": 582,
                 "bottom": 630,
@@ -4829,10 +4647,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -4874,7 +4688,7 @@
               },
               "text": "A CONFENGE lê os contratos do seu recorte de mercado e devolve os concorrentes ordenados por frequência e por valor, com a dependência de cada um em relação a um único comprador, a faixa de valor em que ele opera e o ponto em que ele está e"
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 477,
@@ -4902,7 +4716,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir o mapa de concorrentes por R$ 1.900",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
               "box": {
                 "top": 550,
                 "bottom": 610,
@@ -4914,10 +4728,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -4950,8 +4760,8 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "html_sha256": "b80185ff6ee21b2d34937466f645c9179b8052f181c38610bb2b3062de97ede2",
-      "measured_on": "2026-10-02",
+      "html_sha256": "954a4d180a25ad8eaa4de4bf8db17d2c987855f92b612fa2d8245ca5025d676f",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4992,7 +4802,7 @@
               },
               "text": "O painel lê os contratos publicados de uma janela de 36 meses e devolve faixas por tipologia, dispersão, outliers preservados e evolução anual. Com o mesmo rigor, ele declara em quais perguntas a base não encosta."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 541,
@@ -5020,7 +4830,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir as referências de preços de obra por R$ 2.400",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
                 "top": 596,
                 "bottom": 644,
@@ -5037,10 +4847,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -5082,7 +4888,7 @@
               },
               "text": "O painel lê os contratos publicados de uma janela de 36 meses e devolve faixas por tipologia, dispersão, outliers preservados e evolução anual. Com o mesmo rigor, ele declara em quais perguntas a base não encosta."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 524,
@@ -5110,7 +4916,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir as referências de preços de obra por R$ 2.400",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
                 "top": 597,
                 "bottom": 656,
@@ -5122,10 +4928,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },
@@ -5164,8 +4966,8 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "html_sha256": "2a3fe72be19297c9708339248d44058ef71d2eb4c9de543e31b765e18afa48aa",
-      "measured_on": "2026-10-02",
+      "html_sha256": "86c1565a1c79e6a81b4ce2110b5273098bd720c3b677aa25e261ece27f84bf94",
+      "measured_on": "2026-10-03",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -5206,7 +5008,7 @@
               },
               "text": "Os cinco módulos do diagnóstico deixam de ser cinco arquivos e viram uma leitura só. A primeira camada permite decidir em dois minutos. As camadas seguintes sustentam cada número, até a célula que o originou."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 512,
@@ -5234,7 +5036,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir o plano de expansão por R$ 3.750",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
               "box": {
                 "top": 568,
                 "bottom": 616,
@@ -5251,10 +5053,6 @@
               "href": "#o-que-recebe"
             }
           ],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         },
         "390x844": {
@@ -5296,7 +5094,7 @@
               },
               "text": "Os cinco módulos do diagnóstico deixam de ser cinco arquivos e viram uma leitura só. A primeira camada permite decidir em dois minutos. As camadas seguintes sustentam cada número, até a célula que o originou."
             },
-            "proof": {
+            "substance": {
               "selector": ".report-proof-line",
               "box": {
                 "top": 473,
@@ -5324,7 +5122,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Pedir o plano de expansão por R$ 3.750",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
               "box": {
                 "top": 546,
                 "bottom": 606,
@@ -5336,10 +5134,6 @@
             }
           ],
           "secondary_actions_in_fold": [],
-          "verifiable_proof": {
-            "text": "vitrine de entregas",
-            "href": "/entregas/"
-          },
           "horizontal_overflow": false
         }
       },

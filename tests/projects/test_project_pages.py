@@ -135,8 +135,18 @@ class TestProjectPages(unittest.TestCase):
                 self.assertIn("WebPage", types)
                 self.assertIn("BreadcrumbList", types)
                 webpage = next(item for item in graph if item["@type"] == "WebPage")
-                self.assertEqual(self.payload["published_at"], webpage["datePublished"])
-                self.assertEqual(self.payload["modified_at"], webpage["dateModified"])
+                self.assertEqual(
+                    page.get("published_at", self.payload["published_at"]),
+                    webpage["datePublished"],
+                )
+                self.assertEqual(
+                    page.get("modified_at", self.payload["modified_at"]),
+                    webpage["dateModified"],
+                )
+                self.assertIn(
+                    f'datetime="{page.get("modified_at", self.payload["modified_at"])}"',
+                    source,
+                )
                 self.assertIn('href="/servicos/"', source)
                 self.assertIn('href="/servicos-obras-publicas/"', source)
                 if page.get("service_type"):
@@ -145,10 +155,51 @@ class TestProjectPages(unittest.TestCase):
     def test_every_demonstration_is_labeled_and_bounded(self) -> None:
         for page in self.pages:
             demo = page["demonstration"]
-            self.assertGreaterEqual(len(demo["limit"]), 45)
+            note = demo.get("note", demo.get("limit", ""))
+            self.assertGreaterEqual(len(note), 45)
             source = self.rendered[page["route"]]
-            self.assertGreaterEqual(source.count("Exemplo demonstrativo"), 2)
-            self.assertIn("não é obra de cliente", source)
+            self.assertIn("Representação demonstrativa", source)
+            self.assertIn("Ilustração técnica", source)
+            self.assertNotIn("Limite da demonstração", source)
+            self.assertNotIn("não é obra de cliente", source)
+
+    def test_page_composition_follows_purpose_instead_of_one_fixed_sequence(self) -> None:
+        orders = {
+            tuple(page.get("section_order", self.payload["shared"]["default_section_order"]))
+            for page in self.pages
+        }
+        self.assertGreaterEqual(len(orders), 4)
+        company = next(page for page in self.pages if page["id"] == "company")
+        process = next(page for page in self.pages if page["id"] == "how-we-work")
+        self.assertIn("leadership", company["section_order"])
+        self.assertEqual("method", process["section_order"][0])
+        self.assertNotIn("responsibility", company["section_order"])
+        self.assertNotIn("inputs", process["section_order"])
+
+    def test_proposal_cta_and_institutional_leadership_are_affirmative(self) -> None:
+        for page in self.pages:
+            with self.subTest(route=page["route"]):
+                self.assertEqual("Solicitar proposta", page["cta"])
+                source = self.rendered[page["route"]]
+                self.assertGreaterEqual(source.count("Solicitar proposta"), 4)
+                self.assertNotIn("Solicitar avaliação do escopo", source)
+                self.assertNotIn("Método como prova", source)
+                self.assertNotIn("Aceite técnico vem depois", source)
+        company = self.rendered["/empresa/"]
+        self.assertIn("Engenheiro Civil formado pela Escola de Engenharia de São Carlos", company)
+        self.assertIn("cada disciplina é desenvolvida e assinada pelo profissional habilitado", company)
+
+    def test_installations_copy_matches_the_diagram(self) -> None:
+        page = next(page for page in self.pages if page["id"] == "installations")
+        narrative = " ".join(
+            [page["demonstration"]["body"], page["demonstration"]["caption"]]
+        ).lower()
+        self.assertNotIn("matriz", narrative)
+        asset = (ROOT / page["demonstration"]["src"].lstrip("/")).read_text(
+            encoding="utf-8"
+        ).lower()
+        for label in ("água", "ar", "energia", "dados", "reserva estrutural"):
+            self.assertIn(label, asset)
 
     def test_assets_exist_and_are_local_svg(self) -> None:
         for page in self.pages:
@@ -168,8 +219,12 @@ class TestProjectPages(unittest.TestCase):
                 plain = re.sub(r"<[^>]+>", " ", self.rendered[page["route"]])
                 self.assertGreater(len(plain.split()), 650)
                 self.assertIsNone(forbidden.search(plain))
-                self.assertIn("Responsabilidade técnica", plain)
-                self.assertIn("Exemplo demonstrativo", plain)
+                self.assertIn("Representação demonstrativa", plain)
+                section_order = page.get(
+                    "section_order", self.payload["shared"]["default_section_order"]
+                )
+                if "responsibility" in section_order:
+                    self.assertIn("Responsabilidade técnica", plain)
 
     def test_css_has_mobile_focus_and_reduced_motion_contracts(self) -> None:
         css = (ROOT / "assets/project-practices.css").read_text(encoding="utf-8")
@@ -184,6 +239,7 @@ class TestProjectPages(unittest.TestCase):
             source = self.rendered[route]
             self.assertNotIn("escopo%20de%20empresa", source)
             self.assertNotIn("escopo%20de%20como%20trabalhamos", source)
+            self.assertIn("solicitar%20uma%20proposta", source)
 
 
 if __name__ == "__main__":

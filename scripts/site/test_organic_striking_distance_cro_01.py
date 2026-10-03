@@ -207,7 +207,10 @@ def test_internal_links_resolve():
             "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
             DIAG,
         ],
-        HOME: [REQ],
+        # Current institutional home reaches B2G through its area hub; a
+        # forced reequilibrio link no longer defines the company's first fold.
+        HOME: ["/servicos-obras-publicas/"],
+        "/servicos-obras-publicas/": [REQ],
     }
     for page, targets in must.items():
         html = _html(page) if page != HOME else (ROOT / "index.html").read_text(
@@ -221,15 +224,14 @@ def test_internal_links_resolve():
 
 
 def test_home_points_to_reequilibrio_with_descriptive_anchor():
+    """Historical name; verify the current two-step area-to-service path."""
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert REQ in home
-    assert re.search(
-        r'href="/reequilibrio-obras-publicas/"[^>]*>[^<]*[Rr]eequil[ií]brio',
-        home,
-    )
+    assert "/servicos-obras-publicas/" in _hrefs(home)
+    public_hub = _html("/servicos-obras-publicas/")
+    assert REQ in _hrefs(public_hub)
     assert not re.search(
         r'href="/reequilibrio-obras-publicas/"[^>]*>\s*saiba mais',
-        home,
+        public_hub,
         flags=re.I,
     )
 

@@ -764,6 +764,9 @@ def main(argv: list[str] | None = None) -> int:
         from scripts.editorial.build import build as editorial_build
 
         editorial_report = editorial_build()
+        from scripts.site.sync_content_directory_schema import sync as sync_directory_schema
+
+        sync_directory_schema(ROOT)
         if editorial_report.get("sitemap_issues"):
             errors.append(
                 "editorial_sitemap_issues:" + ",".join(editorial_report["sitemap_issues"][:5])
@@ -837,6 +840,9 @@ def main(argv: list[str] | None = None) -> int:
         errors.append(f"live_intelligence_publish_failed:{exc}")
 
     # Assemble _site BEFORE validate/editorial so audits see the public artifact
+    from scripts.site.sync_article_word_counts import sync as sync_article_word_counts
+
+    sync_article_word_counts(ROOT)
     artifact = assemble_public_artifact(ROOT)
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
@@ -884,6 +890,10 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL-CLOSED minify_public_js exception: {exc}", file=sys.stderr)
         return 2
+
+    # Responsive token wrappers affect extracted word boundaries. Derive the
+    # final Article metadata after every HTML transform and before tree hashing.
+    final_word_counts = sync_article_word_counts(ROOT / PUBLIC_DIR_NAME)
 
     # Write identity, then hash the final publish tree, then stamp those hashes.
     repro_manifest: dict = {}
@@ -985,6 +995,7 @@ def main(argv: list[str] | None = None) -> int:
         "turnstile": turnstile_config,
         "main_script_fingerprint": main_script_fingerprint,
         "responsive_html": responsive_html,
+        "article_word_counts": {"final_metadata_updated": len(final_word_counts)},
         "public_artifact": {
             "assembled": True,
             "audit_ok": audit.get("ok"),

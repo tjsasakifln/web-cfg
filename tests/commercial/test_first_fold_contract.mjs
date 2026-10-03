@@ -34,6 +34,7 @@ import {
   ROLE_SELECTORS,
   blockerText,
   categoryRepetition,
+  contentWords,
   foldProblems,
   frozenRoutes,
   measurementRecord,
@@ -130,7 +131,14 @@ function hrefsIn(html) {
 /* ------------------------------------------------------------------ */
 
 assert("schema_is_first_fold_v1", data.schema === "confenge.first-fold-contract/1.0", data.schema);
-assert("contract_version_frozen", data.contract_version === "CFG-FIRST-FOLD-2026-08-30-v3", data.contract_version);
+assert("contract_version_is_campaign_revision", data.contract_version === "CFG-FIRST-FOLD-2026-10-03-v4", data.contract_version);
+assert(
+  "campaign_revision_explains_substance_without_credential_gate",
+  /substância técnica visível/i.test(data.revision_2026_10_03?.reason_pt_br || "") &&
+    /(?:sem|não) exigir credencial/i.test(data.revision_2026_10_03?.reason_pt_br || "") &&
+    /checkout limpo/i.test(data.revision_2026_10_03?.historical_measurement_pt_br || ""),
+  data.revision_2026_10_03,
+);
 assert("issue_is_327", data.issue === "#327", data.issue);
 assert("rule_names_three_seconds", /3 segundos/.test(data.rule || ""), data.rule);
 assert("rule_names_skeptical_visitor", /c[eé]tico/i.test(data.rule || ""), data.rule);
@@ -148,7 +156,7 @@ assert(
 const REQUIRED_ANSWERS = [
   ["what", "o que a CONFENGE resolve ou entrega"],
   ["who", "para quem ou para qual situação aquilo serve"],
-  ["why_believe", "por que há motivo verificável para acreditar"],
+  ["technical_substance", "qual trabalho, entrega ou disciplina técnica dá substância à promessa"],
   ["next_action", "qual é a próxima ação dominante"],
 ];
 const answers = Array.isArray(data.required_answers) ? data.required_answers : [];
@@ -434,7 +442,7 @@ assert(
 
 const ACTION_RE =
   /a[cç][aã]o prim[aá]ria inteira de y=(\d+) a y=(\d+) em (\d+)x(\d+), e de y=(\d+) a y=(\d+) em (\d+)x(\d+)/i;
-const HEAD_RE = /H1 de y=(\d+) a y=(\d+); linha de prova de y=(\d+) a y=(\d+)/i;
+const HEAD_RE = /H1 de y=(\d+) a y=(\d+); substância técnica de y=(\d+) a y=(\d+)/i;
 
 for (const surface of census) {
   const route = surface.route;
@@ -497,20 +505,12 @@ for (const surface of census) {
   if (surface.evidence_state === "MEASURED_PASS") {
     assert(`pass_${route}_repetition_is_clean`, row.category_repetition?.ok === true, row.category_repetition);
 
-    // Razao de confianca conferivel: a linha de prova precisa levar a um
-    // destino publico que existe no disco e abre sem cadastro. Uma frase de
-    // posicionamento sem destino nao e prova, e foi exatamente o defeito
-    // medido em /diagnostico-b2g-expansao/ em 2026-08-24.
-    const proofLink = desktop?.verifiable_proof;
-    assert(`pass_${route}_proof_links_a_public_destination`, Boolean(proofLink?.href), proofLink);
-    if (proofLink?.href) {
-      assert(`pass_${route}_proof_destination_is_internal`, proofLink.href.startsWith("/"), proofLink.href);
-      assert(
-        `pass_${route}_proof_destination_is_published`,
-        fs.existsSync(routeToFile(proofLink.href.split("#")[0].split("?")[0])),
-        proofLink.href,
-      );
-    }
+    // A terceira resposta registra substância técnica: trabalho, disciplina,
+    // entrega ou valor de decisão. Um link de credencial ou auditoria pode
+    // existir, mas não é condição para a geometria da primeira dobra.
+    const substanceText = desktop?.roles?.substance?.text || "";
+    const substanceWords = [...contentWords(substanceText)];
+    assert(`pass_${route}_has_visible_technical_substance`, substanceWords.length >= 2, substanceText);
 
     // O texto do registro precisa citar a geometria e bater com ela.
     const finding = surface.measurement?.finding || "";
@@ -520,7 +520,7 @@ for (const surface of census) {
     assert(`pass_${route}_records_head_geometry`, Boolean(head), finding);
     if (!action || !head) continue;
     const [, actionTopDesktop, actionBottomDesktop, w1, h1v, actionTopMobile, actionBottomMobile, w2, h2v] = action.map(Number);
-    const [, h1Top, h1Bottom, proofTop, proofBottom] = head.map(Number);
+    const [, h1Top, h1Bottom, substanceTop, substanceBottom] = head.map(Number);
 
     assert(`pass_${route}_names_declared_viewports`, vpSet.has(`${w1}x${h1v}`) && vpSet.has(`${w2}x${h2v}`), [
       `${w1}x${h1v}`,
@@ -535,13 +535,13 @@ for (const surface of census) {
       actionTopMobile,
       actionBottomMobile,
     ]);
-    assert(`pass_${route}_head_boxes_have_height`, h1Bottom > h1Top && proofBottom > proofTop, [h1Top, h1Bottom, proofTop, proofBottom]);
-    assert(`pass_${route}_head_within_fold_at_${w1}x${h1v}`, proofBottom <= h1v && h1Bottom <= h1v, [h1Bottom, proofBottom, h1v]);
-    assert(`pass_${route}_title_is_read_before_the_proof`, h1Top < proofTop, [h1Top, proofTop]);
+    assert(`pass_${route}_head_boxes_have_height`, h1Bottom > h1Top && substanceBottom > substanceTop, [h1Top, h1Bottom, substanceTop, substanceBottom]);
+    assert(`pass_${route}_head_within_fold_at_${w1}x${h1v}`, substanceBottom <= h1v && h1Bottom <= h1v, [h1Bottom, substanceBottom, h1v]);
+    assert(`pass_${route}_title_is_read_before_the_substance`, h1Top < substanceTop, [h1Top, substanceTop]);
 
     // As coordenadas citadas sao as coordenadas medidas, nao numeros redondos.
     const measuredH1 = row.viewports[DESKTOP_VIEWPORT].roles.h1.box;
-    const measuredProof = row.viewports[DESKTOP_VIEWPORT].roles.proof.box;
+    const measuredSubstance = row.viewports[DESKTOP_VIEWPORT].roles.substance.box;
     const measuredActionDesktop = row.viewports[DESKTOP_VIEWPORT].roles.primary_action.box;
     const measuredActionMobile = row.viewports[MOBILE_VIEWPORT].roles.primary_action.box;
     assert(`pass_${route}_h1_coordinates_match_the_measurement`, h1Top === measuredH1.top && h1Bottom === measuredH1.bottom, [
@@ -549,9 +549,9 @@ for (const surface of census) {
       measuredH1,
     ]);
     assert(
-      `pass_${route}_proof_coordinates_match_the_measurement`,
-      proofTop === measuredProof.top && proofBottom === measuredProof.bottom,
-      [[proofTop, proofBottom], measuredProof],
+      `pass_${route}_substance_coordinates_match_the_measurement`,
+      substanceTop === measuredSubstance.top && substanceBottom === measuredSubstance.bottom,
+      [[substanceTop, substanceBottom], measuredSubstance],
     );
     assert(
       `pass_${route}_action_coordinates_match_the_measurement`,
@@ -584,13 +584,10 @@ assert(
   failures.map((s) => s.route),
 );
 assert(
-  "the_reference_offer_no_longer_lacks_verifiable_proof",
-  byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state === "MEASURED_PASS" &&
-    Boolean(measuredByRoute.get("/diagnostico-b2g-expansao/")?.viewports?.[DESKTOP_VIEWPORT]?.verifiable_proof?.href),
-  [
-    byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state,
-    measuredByRoute.get("/diagnostico-b2g-expansao/")?.viewports?.[DESKTOP_VIEWPORT]?.verifiable_proof,
-  ],
+  "the_home_exposes_project_substance_without_a_credential_requirement",
+  Boolean(measuredByRoute.get("/")?.viewports?.[DESKTOP_VIEWPORT]?.roles?.substance?.text) &&
+    !ROLE_SELECTORS.substance.some((selector) => /credential/i.test(selector)),
+  measuredByRoute.get("/")?.viewports?.[DESKTOP_VIEWPORT]?.roles?.substance,
 );
 
 const entregas = byRoute.get("/entregas/");
@@ -680,7 +677,7 @@ for (const r of canonicalServiceRoutes) derive(r, "money_offer", "rota canonica 
 // PILOT_STAGING stays in the public family registry (ownership + noindex
 // governance) but is not a first-fold obligated money surface until the
 // dated DEFER decision authorizes activation. Measuring those pages today
-// fails the fold (proof/CTA below the fold) and they are not #291-frozen.
+// fails the fold (substance/CTA below the fold) and they are not #291-frozen.
 const pricedFamilies = famList.filter((f) => f.profile === "priced_offer");
 assert("derivation_has_priced_offer_families", pricedFamilies.length >= 2, pricedFamilies.map((f) => f.id));
 const obligatedPricedFamilies = pricedFamilies.filter((f) => f.classification !== "PILOT_STAGING");
@@ -776,7 +773,7 @@ const inv = data.first_fold_invariants || {};
 assert("first_fold_invariants_present", inv && typeof inv === "object", typeof inv);
 assert(
   "first_fold_invariants_keys",
-  eq(sorted(Object.keys(inv)), ["category_repetition", "single_primary_action"]),
+  eq(sorted(Object.keys(inv)), ["category_repetition", "single_primary_action", "technical_substance"]),
   Object.keys(inv),
 );
 
@@ -884,6 +881,32 @@ assert("category_repetition_finding_text", /repete a mesma categoria/i.test(repF
 for (const f of repFindings) {
   assert(`category_repetition_finding_route_in_census_${f.route}`, byRoute.has(f.route), f.route);
   assert(`category_repetition_finding_viewport_declared_${f.route}`, vpSet.has(f.viewport), f.viewport);
+}
+
+const substance = inv.technical_substance || {};
+assert("technical_substance_fields", eq(substance.fields, ["substance"]), substance.fields);
+assert("technical_substance_minimum_content_words", substance.minimum_content_words === 2, substance.minimum_content_words);
+assert("technical_substance_rule_written", filled(substance.rule_pt_br), substance.rule_pt_br);
+assert(
+  "technical_substance_does_not_require_credentials",
+  /não são obrigatórios/i.test(substance.rule_pt_br || "") && /credencial/i.test(substance.rule_pt_br || ""),
+  substance.rule_pt_br,
+);
+assert("technical_substance_state_measured", substance.state === "MEASURED", substance.state);
+assert("technical_substance_measured_on", /^\d{4}-\d{2}-\d{2}$/.test(substance.measured_at || ""), substance.measured_at);
+assert(
+  "technical_substance_covers_the_whole_census",
+  Array.isArray(substance.measured_surfaces) &&
+    eq(sorted(substance.measured_surfaces.map((s) => s.route)), sorted(census.map((s) => s.route))),
+  (substance.measured_surfaces || []).map((s) => s.route),
+);
+for (const entry of substance.measured_surfaces || []) {
+  const text = measuredByRoute.get(entry.route)?.viewports?.[DESKTOP_VIEWPORT]?.roles?.substance?.text || "";
+  const words = [...contentWords(text)].sort().slice(0, 8);
+  assert(`technical_substance_words_match_measurement_${entry.route}`, eq(entry.content_words, words), [entry, words]);
+  if (byRoute.get(entry.route)?.evidence_state === "MEASURED_PASS") {
+    assert(`technical_substance_present_on_pass_${entry.route}`, words.length >= substance.minimum_content_words, words);
+  }
 }
 assert(
   "no_census_row_declares_a_second_primary_action",

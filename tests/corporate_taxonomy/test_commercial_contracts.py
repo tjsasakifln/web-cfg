@@ -84,6 +84,24 @@ def test_core_contract_pin_detects_same_version_content_drift() -> None:
         validate_commercial_contracts(docs)
 
 
+def test_service_page_contract_requires_editorial_functions_without_a_fixed_order() -> None:
+    docs = load_contracts()
+    page = docs["page"]
+    assert "required_sequence" not in page
+    assert "presentation_order" not in page
+    assert set(page["required_functions"]) == {
+        "service_explanation",
+        "technical_relevance",
+        "competence",
+        "decision_support",
+        "contact",
+    }
+    docs["page"] = copy.deepcopy(page)
+    docs["page"]["required_functions"].remove("competence")
+    with pytest.raises(CommercialContractError, match="page_editorial_functions"):
+        validate_commercial_contracts(docs)
+
+
 def test_retained_b2g_typed_authority_is_complete() -> None:
     docs = load_contracts()
     retained = docs["matrix"]["offer_id_semantics"]["retained_b2g"]

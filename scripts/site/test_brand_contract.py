@@ -59,43 +59,44 @@ def test_home_has_canonical_copy():
     hero = brand["hero"]
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     visible = re.sub(r"\s+", " ", _visible_home_text(html)).strip()
-    assert hero["h1"] in visible
-    assert "Diretoria Fracionada para o Mercado Público" in html
-    assert "Engenharia, Perícias e Inteligência Técnica" in html
+    # CAMPANHA-CONFENGE-20261003: a fonte institucional acompanha a home
+    # editorial vigente. O contrato protege a proposta de valor que a pessoa
+    # realmente encontra — competências, empresa, proposta e o acesso
+    # específico a obras públicas — sem exigir na home a taxonomia histórica
+    # de ofertas ou as situações comerciais de campanhas anteriores.
+    for key in ("eyebrow", "h1", "subheadline", "cta_primary", "cta_secondary"):
+        assert hero[key] in visible, key
     assert brand["positioning"]["org_description"] in html
-    # 2026-09-08. Esta linha exigia o rotulo publico "Obras publicas e B2G".
-    # B2G e vocabulario interno: nenhum comprador de obra procura por isso, e
-    # a diretriz manda tirar a sigla de todo texto percebido pelo visitante.
-    # A propriedade que a linha protegia -- a home precisa apresentar a
-    # especialidade em obras publicas como secao propria, e nao dilui-la --
-    # continua verificada, agora pelo texto que o comprador usa.
-    assert "Especialidade em obras públicas" in html
-    assert "Obras públicas: edital, proposta e contrato em execução." in html
+
+    for section_id in (
+        "competencias",
+        "setores",
+        "entregas",
+        "servicos-complementares",
+        "sobre-a-confenge",
+        "solicitar-proposta",
+        "contato",
+    ):
+        assert f'id="{section_id}"' in html, section_id
+
+    for project_url in (
+        "/projetos/estruturas/",
+        "/projetos/instalacoes/",
+        "/projetos/infraestrutura/",
+        "/projetos/coordenacao-multidisciplinar/",
+    ):
+        assert f'href="{project_url}"' in html, project_url
+
+    assert 'href="#contato"' in html
+    assert 'href="/projetos/"' in html
+    assert 'href="/servicos-obras-publicas/"' in html
     assert "B2G" not in _visible_home_text(html)
     assert 'name="diagnostico-b2g"' in html
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
-    # Corporate chooser uses customer situations and keeps the B2G intake intact.
-    # VALOR-IMEDIATO-20260914: os rotulos das situacoes e o rotulo do primario
-    # saem do contrato (brand.json), nao de literais duplicados aqui; o rotulo
-    # do primário declara a avaliação do escopo, sem pré-classificar serviço.
-    assert "Segurança do trabalho" in html
-    assert hero["cta_primary"] in html
-    assert re.search(r"avalia[çc][ãa]o|escopo", hero["cta_primary"], re.I), hero["cta_primary"]
-    assert 'href="/triagem-tecnica/"' in html
-    assert 'href="/projetos/"' in html
-    assert 'href="/servicos/#servico-projeto"' in html
-    assert "Contrato sob pressão" in html
-    assert "Edital e proposta" in html
-    assert "Operação recorrente" in html
     assert "enviar documentos para análise" not in html.lower()
     assert "Sem CTA genérico" not in html
-    for situation in brand.get("service_situations") or []:
-        assert situation["label"] in html, situation["label"]
-    for o in brand["offers"]:
-        assert o["url"] in html, o["url"]
-    assert 'id="triagem-tecnica"' in html
 
 
 def test_offer_pages_exist_with_canonical():

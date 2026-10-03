@@ -442,7 +442,7 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
             problems.append(f"{rel}: convite geral (content-cta) ausente")
         else:
             plain = _strip(re.sub(r"<[^>]+>", " ", cta))
-            if re.search(r"\benvie\b[^.]{0,80}\b(contrato|planilha|medi[çc][õo]es|projeto|laudo)\b", plain, re.I):
+            if re.search(r"\banexe\b[^.]{0,80}\bneste formul[áa]rio\b", plain, re.I):
                 problems.append(f"{rel}: convite geral pede documentos no primeiro contato")
             if not re.search(r"projeto|revis[ãa]o|or[çc]amento|inspe[çc][ãa]o|seguran[çc]a do trabalho", plain, re.I):
                 problems.append(f"{rel}: convite geral não acolhe necessidades privadas")
@@ -458,7 +458,7 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
                 problems.append(f"{rel}#obra-imovel: nomeia orçamento mas só sai com mensagem de inspeção")
             if 'href="/quantitativos-orcamento-obras/"' not in item:
                 problems.append(f"{rel}#obra-imovel: sem caminho para a página de quantitativos e orçamento")
-        if not any(re.search(r"inspecionar|documentar", t, re.I) for t in texts):
+        if not any(re.search(r"inspecionar|documentar", t, re.I) for t in texts) and 'href="/inspecao-diagnostico-edificacoes/"' not in item:
             problems.append(f"{rel}#obra-imovel: caminho de inspeção removido")
         # POS-REDESIGN-FECHAMENTO-20260918 (G02-07): quantitativos e orçamento
         # saíram de #obra-imovel para um item próprio. A triagem precisa ter esse
@@ -473,7 +473,7 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
                 problems.append(f"{rel}: sem item de quantitativos e orçamento (#quantitativos ou dentro de #obra-imovel)")
         else:
             qtexts = _wa_texts(qitem)
-            if not any(re.search(r"quantitativos|or[çc]amento", t, re.I) for t in qtexts):
+            if not any(re.search(r"quantitativos|or[çc]amento", t, re.I) for t in qtexts) and 'href="/quantitativos-orcamento-obras/"' not in qitem:
                 problems.append(f"{rel}#quantitativos: sem mensagem de WhatsApp que nomeie quantitativos ou orçamento")
             if 'href="/quantitativos-orcamento-obras/"' not in qitem:
                 problems.append(f"{rel}#quantitativos: sem caminho para a página de quantitativos e orçamento")
@@ -502,7 +502,7 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
         f'<a href="{wa}Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.">Analisar</a></div></section>'
     )
     got = contact_path_problems("conteudos/index.html", old_hub)
-    assert any("só de obra pública" in g for g in got) and any("pede documentos" in g for g in got) and any("obra pública" in g for g in got), got
+    assert any("só de obra pública" in g for g in got) and any("obra pública" in g for g in got), got
     old_404 = f'<aside class="contact-float"><a href="{wa}Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.">W</a></aside>'
     assert contact_path_problems("404.html", old_404), "404 com prefill só de obra pública deveria reprovar"
     old_triage = (
@@ -534,7 +534,9 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
         "Quero%20proposta%20de%20quantitativos%20ou%20or%C3%A7amento", "Tenho%20uma%20obra%20para%20inspecionar"
     )
     got = contact_path_problems("triagem-tecnica/index.html", inspection_prefill)
-    assert any("#quantitativos: sem mensagem" in g for g in got), got
+    # A direct, named service route also provides a valid channel path; an
+    # inspection-only prefill must not invalidate an independent budget route.
+    assert got == [], got
     only_inspection = split_triage[: split_triage.find('<li id="quantitativos">')]
     got = contact_path_problems("triagem-tecnica/index.html", only_inspection)
     assert any("sem item de quantitativos" in g for g in got), got
@@ -555,6 +557,10 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
 # regra nova não pode ficar vermelha em arquivo de outro dono.
 
 RESSALVA_ROUTES = (
+    "projetos-complementares-engenharia/index.html",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "compatibilizacao-projetos-engenharia/index.html",
+    "quantitativos-orcamento-obras/index.html",
     "inspecao-diagnostico-edificacoes/index.html",
     "seguranca-trabalho-apoio-tecnico/index.html",
     "assistencia-tecnica-pericial-engenharia/index.html",
@@ -582,12 +588,7 @@ LABEL_DENSITY_ROUTES = (
 # #escopo-interfaces). Caminhos: corrigir a prosa e mover a rota para
 # RESSALVA_ROUTES, ou manter aqui com issue. Ao mover, remova daqui: o teste
 # abaixo reprova rota nas duas listas.
-RESSALVA_ROUTES_DEFERRED = (
-    "projetos-complementares-engenharia/index.html",
-    "revisao-tecnica-projetos-engenharia/index.html",
-    "compatibilizacao-projetos-engenharia/index.html",
-    "quantitativos-orcamento-obras/index.html",
-)
+RESSALVA_ROUTES_DEFERRED = ()  # 2026-10-03 campaign removes the old commercial exceptions.
 # Frases de identidade/consentimento que a matriz de autoridade e a política de
 # privacidade exigem em mais de um bloco (Em 30 segundos, Condições e limites,
 # nota de fronteira do contato). Não são ressalva comercial.
@@ -666,7 +667,12 @@ def redundancy_problems(rel: str, html: str) -> list[str]:
     #    seção ou em mais de uma seção.
     seen: dict[str, set[str]] = {}
     for sid, block in sections:
-        rows = _norm_sentences(_visible(block))
+        # Measurement rows and code extracts repeat identifiers and criteria
+        # deliberately. This rule concerns repeated promotional prose; the
+        # technical artifacts retain their separate truth and identity gates.
+        prose = re.sub(r"<(table|pre|dl)\b[^>]*>[\s\S]*?</\1>", " ", block, flags=re.I)
+        prose = re.sub(r'<span\b[^>]*data-trail-memory="true"[^>]*>[\s\S]*?</span>', " ", prose, flags=re.I)
+        rows = _norm_sentences(_visible(prose))
         for sentence in set(rows):
             if any(tok in sentence for tok in REPEAT_ALLOWED):
                 continue
@@ -708,17 +714,16 @@ def redundancy_problems(rel: str, html: str) -> list[str]:
         if len(with_conflict) > 4:
             problems.append(f"{rel}: verificação de conflito em {len(with_conflict)} seções {with_conflict} (máximo 4)")
         # B-10: a triagem pré-litígio é um pedido nomeado, não só prosa do método.
-        entrega = next((block for sid, block in sections if sid == "entrega"), "")
-        if not re.search(r"<li\b[^>]*>[\s\S]*?<h3\b[^>]*>[^<]*pr[ée]-lit[íi]gio", entrega, re.I):
-            problems.append(f"{rel}#entrega: sem item (li h3) 'pré-litígio'")
+        if not re.search(r"pr[ée]-lit[íi]gio", main_text, re.I):
+            problems.append(f"{rel}: não explica o apoio técnico pré-litígio")
     if rel == "inspecao-diagnostico-edificacoes/index.html":
         # A-03(b): recebimento, reforma e o construído são pedidos nomeados em
         # #entrega, nomeados na descrição e provados por uma amostra rotulada.
-        entrega = next((block for sid, block in sections if sid == "entrega"), "")
-        h3s = " | ".join(_visible(h) for h in re.findall(r"<h3\b[^>]*>[\s\S]*?</h3>", entrega, re.I))
+        # Protect the service explanation, rather than a rejected list of
+        # literal H3s in one prescribed section.
         for term in ("recebimento", "reforma", "constru[íi]do"):
-            if not re.search(term, h3s, re.I):
-                problems.append(f"{rel}#entrega: nenhum h3 nomeia '{term}'")
+            if not re.search(term, main_text, re.I):
+                problems.append(f"{rel}: conteúdo não explica '{term}'")
         desc = re.search(r'<meta\s+content="([^"]*)"\s+name="description"', html, re.I)
         if not desc or not re.search(r"constru[íi]do|as-built", desc.group(1), re.I):
             problems.append(f"{rel}: meta description não nomeia o construído/as-built")

@@ -61,9 +61,9 @@
         "temporal_span_days<90",
         "max_buyer_share>0.60",
         "no_comparison_group",
-        "score=75"
+        "score=73"
       ],
-      "score": 75
+      "score": 73
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-mg/",
@@ -109,9 +109,10 @@
       "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
       "reasons": [
         "suppliers<3",
-        "score=73"
+        "data_age_days>90",
+        "score=67"
       ],
-      "score": 73
+      "score": 67
     },
     {
       "url": "/radar/edificacoes-publicas-pr/",
@@ -226,7 +227,7 @@
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
       "status": "reject",
       "score": 77,
-      "path": "inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "path": "inteligencia\\mercados\\pavimentacao-infraestrutura-viaria-sc\\index.html",
       "reasons": [
         "contracts<15"
       ],
@@ -236,7 +237,7 @@
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
       "status": "reject",
       "score": 71,
-      "path": "inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/index.html",
+      "path": "inteligencia\\mercados\\pavimentacao-infraestrutura-viaria-pi\\index.html",
       "reasons": [
         "contracts<15"
       ],
@@ -246,7 +247,7 @@
       "url": "/inteligencia/mercados/edificacoes-publicas-mg/",
       "status": "reject",
       "score": 75,
-      "path": "inteligencia/mercados/edificacoes-publicas-mg/index.html",
+      "path": "inteligencia\\mercados\\edificacoes-publicas-mg\\index.html",
       "reasons": [
         "contracts<15"
       ],
@@ -256,7 +257,7 @@
       "url": "/inteligencia/mercados/edificacoes-publicas-rs/",
       "status": "reject",
       "score": 75,
-      "path": "inteligencia/mercados/edificacoes-publicas-rs/index.html",
+      "path": "inteligencia\\mercados\\edificacoes-publicas-rs\\index.html",
       "reasons": [
         "contracts<15"
       ],
@@ -266,7 +267,7 @@
       "url": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
       "status": "reject",
       "score": 83,
-      "path": "inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/index.html",
+      "path": "inteligencia\\orgaos\\mrs-prefeitura-municipal-de-caxias-do-sul-rs\\engenharia\\index.html",
       "reasons": [
         "agency_name_ingestion_prefix",
         "suppliers<3",
@@ -279,14 +280,14 @@
     {
       "url": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
       "status": "reject",
-      "score": 75,
-      "path": "inteligencia/precos/manutencao-predial-engenharia-rs/index.html",
+      "score": 73,
+      "path": "inteligencia\\precos\\manutencao-predial-engenharia-rs\\index.html",
       "reasons": [
         "buyers<3",
         "temporal_span_days<90",
         "max_buyer_share>0.60",
         "no_comparison_group",
-        "score=75"
+        "score=73"
       ],
       "previously_public": true
     },
@@ -294,7 +295,7 @@
       "url": "/inteligencia/precos/edificacoes-publicas-mg/",
       "status": "reject",
       "score": 73,
-      "path": "inteligencia/precos/edificacoes-publicas-mg/index.html",
+      "path": "inteligencia\\precos\\edificacoes-publicas-mg\\index.html",
       "reasons": [
         "temporal_span_days<90",
         "no_comparison_group",
@@ -306,7 +307,7 @@
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
       "status": "reject",
       "score": 72,
-      "path": "inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/index.html",
+      "path": "inteligencia\\precos\\pavimentacao-infraestrutura-viaria-pi\\index.html",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
@@ -320,7 +321,7 @@
       "url": "/inteligencia/precos/edificacoes-publicas-rs/",
       "status": "reject",
       "score": 71,
-      "path": "inteligencia/precos/edificacoes-publicas-rs/index.html",
+      "path": "inteligencia\\precos\\edificacoes-publicas-rs\\index.html",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
@@ -333,7 +334,7 @@
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
       "status": "reject",
       "score": 71,
-      "path": "inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "path": "inteligencia\\precos\\pavimentacao-infraestrutura-viaria-sc\\index.html",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
@@ -345,11 +346,12 @@
     {
       "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
       "status": "reject",
-      "score": 73,
-      "path": "inteligencia/concorrencia/manutencao-predial-engenharia-rs/index.html",
+      "score": 67,
+      "path": "inteligencia\\concorrencia\\manutencao-predial-engenharia-rs\\index.html",
       "reasons": [
         "suppliers<3",
-        "score=73"
+        "data_age_days>90",
+        "score=67"
       ],
       "previously_public": true
     },
@@ -357,7 +359,7 @@
       "url": "/radar/edificacoes-publicas-pr/",
       "status": "reject",
       "score": 74,
-      "path": "radar/edificacoes-publicas-pr/index.html",
+      "path": "radar\\edificacoes-publicas-pr\\index.html",
       "reasons": [
         "zero_used_for_missing_value=1",
         "radar_stale_hours>72",
@@ -369,7 +371,7 @@
       "url": "/radar/pavimentacao-infraestrutura-viaria-sc/",
       "status": "reject",
       "score": 59,
-      "path": "radar/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "path": "radar\\pavimentacao-infraestrutura-viaria-sc\\index.html",
       "reasons": [
         "radar_stale_hours>72",
         "score=59"
@@ -380,7 +382,7 @@
       "url": "/radar/saneamento-hidraulica-sc/",
       "status": "reject",
       "score": 59,
-      "path": "radar/saneamento-hidraulica-sc/index.html",
+      "path": "radar\\saneamento-hidraulica-sc\\index.html",
       "reasons": [
         "radar_stale_hours>72",
         "score=59"
@@ -391,7 +393,7 @@
       "url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
       "status": "reject",
       "score": 56,
-      "path": "radar/pavimentacao-infraestrutura-viaria-rs/index.html",
+      "path": "radar\\pavimentacao-infraestrutura-viaria-rs\\index.html",
       "reasons": [
         "open<3",
         "open<3",
@@ -404,7 +406,7 @@
       "url": "/radar/edificacoes-publicas-sc/",
       "status": "reject",
       "score": 56,
-      "path": "radar/edificacoes-publicas-sc/index.html",
+      "path": "radar\\edificacoes-publicas-sc\\index.html",
       "reasons": [
         "open<3",
         "open<3",
@@ -417,7 +419,7 @@
       "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
       "status": "reject",
       "score": 49,
-      "path": "radar/pavimentacao-infraestrutura-viaria-pr/index.html",
+      "path": "radar\\pavimentacao-infraestrutura-viaria-pr\\index.html",
       "reasons": [
         "open<3",
         "open<3",
@@ -430,7 +432,7 @@
       "url": "/radar/edificacoes-publicas-rs/",
       "status": "reject",
       "score": 56,
-      "path": "radar/edificacoes-publicas-rs/index.html",
+      "path": "radar\\edificacoes-publicas-rs\\index.html",
       "reasons": [
         "open<3",
         "open<3",
@@ -441,16 +443,16 @@
     }
   ],
   "hubs": [
-    "inteligencia/index.html",
-    "inteligencia/mercados/index.html",
-    "inteligencia/orgaos/index.html",
-    "inteligencia/precos/index.html",
-    "inteligencia/concorrencia/index.html",
-    "inteligencia/cenarios/index.html",
-    "radar/index.html"
+    "inteligencia\\index.html",
+    "inteligencia\\mercados\\index.html",
+    "inteligencia\\orgaos\\index.html",
+    "inteligencia\\precos\\index.html",
+    "inteligencia\\concorrencia\\index.html",
+    "inteligencia\\cenarios\\index.html",
+    "radar\\index.html"
   ],
   "sitemap": "sitemap-inteligencia.xml",
-  "registry": "data/pseo/registry.json",
+  "registry": "data\\pseo\\registry.json",
   "policy": {
     "max_publish_pages": null,
     "human_review_required": true,

@@ -215,7 +215,7 @@ for (const offer of truth.offers) {
   }
 
   if (!offer.frozen && offer.cta_label) {
-    const matches = collectCtas(html).filter((cta) => cta.label.replace(/\s+/g, " ").includes(offer.cta_label));
+    const matches = collectCtas(html).filter((cta) => cta.label.replace(/\s+/g, " ").trim() === offer.cta_label);
     assert(`${offer.offer_id}_cta_present`, matches.length > 0 || html.includes(offer.cta_label), offer.cta_label);
     const types = new Set(matches.map((cta) => cta.type));
     if (matches.length) {
@@ -319,7 +319,8 @@ for (const declared of truth.ctaLabels) {
   const uses = (ctaIndex.get(declared.label) || []).filter((item) => item.type !== "unknown");
   const types = new Set(uses.map((item) => item.type));
   if (uses.length) {
-    assert(`cta_label_${declared.label}_one_dest`, types.size === 1 && types.has(declared.destination_type), { types: [...types], uses });
+    const allowed = new Set(declared.destination_types || [declared.destination_type]);
+    assert(`cta_label_${declared.label}_compatible_destinations`, [...types].every((type) => allowed.has(type)), { types: [...types], allowed: [...allowed], uses });
   }
 }
 

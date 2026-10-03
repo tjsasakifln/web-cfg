@@ -12,6 +12,8 @@ const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
 const opsToken = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
 const expectedSha = String(process.env.EXPECTED_SHA || "").trim();
+const verifyQaEmailRaw = String(process.env.PROBE_VERIFY_EMAIL || "").trim();
+const verifyQaEmail = verifyQaEmailRaw === "1";
 const stamp = Date.now();
 // Random, never a timestamp: an explicit key is a persistence handle and a
 // derivable one could be guessed by a third party (the pre-Turnstile replay in
@@ -41,6 +43,15 @@ if (localBase && !["http:", "https:"].includes(parsedBase.protocol)) finishEarly
 if (!localBase && parsedBase.protocol !== "https:") finishEarly("https_required");
 if (probeSecret.length < 32) finishEarly("lead_probe_secret_missing_or_short");
 if (opsToken.length < 16) finishEarly("ops_token_missing_or_short");
+if (verifyQaEmailRaw && !["0", "1"].includes(verifyQaEmailRaw)) {
+  finishEarly("probe_verify_email_opt_in_invalid");
+}
+if (verifyQaEmail && !/^[0-9a-f]{40}$/.test(expectedSha)) {
+  finishEarly("qa_expected_release_sha_required");
+}
+if (verifyQaEmail && String(process.env.PROBE_QA_RECIPIENT || "").trim()) {
+  finishEarly("qa_recipient_override_forbidden");
+}
 
 const authHeaders = { Authorization: `Bearer ${opsToken}`, Accept: "application/json" };
 
@@ -217,6 +228,13 @@ const headers = {
   "X-Forwarded-For": "198.51.100.27",
   "X-Confenge-Probe": probeSecret,
   "Idempotency-Key": idem,
+  ...(verifyQaEmail
+    ? {
+        "X-Confenge-QA-Email": "1",
+        "X-Confenge-Ops-Token": opsToken,
+        "X-Confenge-Expected-Sha": expectedSha,
+      }
+    : {}),
 };
 
 async function postOnce() {
@@ -252,6 +270,10 @@ const afterExcluded = Number(afterWeekly.data?.leads_excluded_non_real);
 const forbiddenLeak = ["topic", "ntfy", "formsubmit", "upstream", "RESEND_API_KEY"].some(
   (value) => first.text.toLowerCase().includes(value.toLowerCase()),
 );
+const qaProviderId = String(receipt?.delivery?.qa_email_provider_id || "");
+const qaSubject = verifyQaEmail && leadId
+  ? `[TESTE CONTROLADO] CONFENGE ${leadId}`
+  : null;
 
 const checks = {
   first_create_http_201: first.http === 201 && first.data?.ok === true,
@@ -283,6 +305,12 @@ const checks = {
   served_form_context_persisted: !servedForm || ["asset_id", "route_family", "cta_id"].every(
     (key) => !servedForm[key] || receipt?.[key] === servedForm[key],
   ),
+  ...(verifyQaEmail
+    ? {
+        qa_email_delivered: receipt?.delivery?.qa_email_status === "ok",
+        qa_provider_id_sanitized: /^[A-Za-z0-9._:-]{1,64}$/.test(qaProviderId),
+      }
+    : {}),
 };
 const ok = Object.values(checks).every(Boolean);
 
@@ -296,6 +324,15 @@ console.log(JSON.stringify({
   served_form: servedForm,
   persisted_context: receipt ? { asset_id: receipt.asset_id || null, route_family: receipt.route_family || null, cta_id: receipt.cta_id || null } : null,
   receipt_sha256: leadId ? createHash("sha256").update(leadId).digest("hex") : null,
+  ...(verifyQaEmail
+    ? {
+        qa_email: {
+          status: receipt?.delivery?.qa_email_status || null,
+          provider_id: qaProviderId || null,
+          subject: qaSubject,
+        },
+      }
+    : {}),
   warmbly: {
     destination_fingerprint: beforeInbound.data?.configuration?.destination_fingerprint || null,
     contract: safety?.contract || null,

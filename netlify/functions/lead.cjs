@@ -29,7 +29,17 @@ const {
 } = require("./lib/lead-core.cjs");
 const { createStore, buildLeadRecord } = require("./lib/lead-store.cjs");
 const { rateLimit } = require("./lib/lead-rate-limit.cjs");
-const { verifyTurnstile, deliverAll } = require("./lib/lead-delivery.cjs");
+const {
+  verifyTurnstile,
+  deliverAll,
+  deliverQaEmail,
+  deliveryTimeoutMs,
+} = require("./lib/lead-delivery.cjs");
+const {
+  authorizeQaEmailRequest,
+  qaEmailIdempotencyKey,
+  sanitizeProviderId,
+} = require("./lib/qa-email.cjs");
 const {
   STATUS: HANDOFF_STATUS,
   initialHandoff,
@@ -40,6 +50,10 @@ const resultStore = require("./lib/live-intelligence-result-store.cjs");
 
 // Allow tests to inject store
 let _storeOverride = null;
+// Coalesce same-process retries for the controlled QA channel. Durable state
+// and the provider idempotency key remain the cross-process safeguards.
+const qaEmailFlights = new Map();
+const QA_EMAIL_LEASE_MARGIN_MS = 5_000;
 
 // Explicit idempotency keys minted by our own browser code, and nothing else.
 // These are the only keys whose stored receipt may be replayed before the
@@ -140,6 +154,269 @@ async function getStore(event) {
 
 exports.setStoreForTests = setStoreForTests;
 exports.CLIENT_REPLAY_KEY = CLIENT_REPLAY_KEY;
+
+function qaEmailState(result, authorization, previous = {}) {
+  const providerId = sanitizeProviderId(result && result.provider_id);
+  const next = {
+    ...previous,
+    status: (result && result.status) || "blocked",
+    attempts: result && result.status === "blocked" ? Number(previous.attempts || 0) : 1,
+    release_sha: authorization.expected_sha,
+    ...(result && result.reason ? { reason: String(result.reason).slice(0, 40) } : {}),
+    ...(result && Number.isFinite(result.http) ? { http: result.http } : {}),
+    ...(providerId ? { provider_id: providerId } : {}),
+    ...(result && result.idempotency_key
+      ? { idempotency_key: String(result.idempotency_key).slice(0, 256) }
+      : {}),
+  };
+  if (!result || !result.reason) delete next.reason;
+  if (["ok", "blocked", "error", "manual_reconcile"].includes(next.status)) {
+    next.flight_token = null;
+    next.lease_until = null;
+  }
+  return next;
+}
+
+function mergeQaEmailState(current = {}, patch = {}) {
+  const currentStatus = String(current.status || "");
+  const patchStatus = String(patch.status || "");
+  // Provider success is terminal. A late concurrent response must never
+  // downgrade its durable receipt. Manual reconciliation is likewise not
+  // reopened automatically after the provider idempotency window expires.
+  if (currentStatus === "ok" && patchStatus !== "ok") return current;
+  if (
+    currentStatus === "manual_reconcile" &&
+    !["ok", "manual_reconcile"].includes(patchStatus)
+  ) {
+    return current;
+  }
+  const merged = { ...current, ...patch };
+  if (patchStatus === "ok") delete merged.reason;
+  return merged;
+}
+
+async function persistQaEmailState(
+  store,
+  record,
+  patch,
+  maxAttempts = 3,
+  { ownerToken = null } = {},
+) {
+  let lastError = null;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      if (typeof store.updateQaEmailState !== "function") {
+        throw new Error("qa_email_atomic_update_unsupported");
+      }
+      const updated = await store.updateQaEmailState(
+        record.lead_id,
+        (currentQa) => {
+          if (
+            ownerToken &&
+            patch.status !== "ok" &&
+            currentQa.flight_token !== ownerToken
+          ) {
+            return currentQa;
+          }
+          return mergeQaEmailState(currentQa, patch);
+        },
+      );
+      if (updated) return updated;
+      lastError = new Error("qa_email_record_missing");
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  safeLog("error", "qa_email_state_update_failed", {
+    lead_id: record.lead_id,
+    code: lastError && lastError.message ? String(lastError.message).slice(0, 80) : "error",
+  });
+  return null;
+}
+
+async function runQaEmailWithDurableState(store, record, authorization) {
+  const current = (await store.get(record.lead_id).catch(() => null)) || record;
+  const previous = (current.delivery && current.delivery.qa_email) || {};
+  if (!["pending", "in_flight"].includes(String(previous.status || "pending"))) {
+    return { record: current, result: previous, receipt_persisted: true, attempted: false };
+  }
+
+  if (previous.status === "in_flight") {
+    const startedAt = Date.parse(String(previous.started_at || ""));
+    const providerWindowSafe = Number.isFinite(startedAt) && Date.now() - startedAt < 23 * 60 * 60 * 1000;
+    if (!providerWindowSafe) {
+      const result = { status: "manual_reconcile", reason: "provider_window_expired" };
+      const updated = await persistQaEmailState(
+        store,
+        current,
+        qaEmailState(result, authorization, previous),
+      );
+      return {
+        record: updated || current,
+        result,
+        receipt_persisted: Boolean(updated),
+        attempted: false,
+      };
+    }
+    const leaseUntil = Date.parse(String(previous.lease_until || ""));
+    if (Number.isFinite(leaseUntil) && leaseUntil > Date.now()) {
+      return {
+        record: current,
+        result: { status: "in_flight", reason: "active_delivery_lease" },
+        receipt_persisted: true,
+        attempted: false,
+        pending: true,
+      };
+    }
+  }
+
+  const handoffStatus = current.handoff && current.handoff.status;
+  if (handoffStatus === HANDOFF_STATUS.PENDING) {
+    return {
+      record: current,
+      result: { status: "pending", reason: "handoff_pending" },
+      receipt_persisted: true,
+      attempted: false,
+      pending: true,
+    };
+  }
+  if (handoffStatus !== HANDOFF_STATUS.DELIVERED) {
+    const result = { status: "blocked", reason: "handoff_not_delivered" };
+    const updated = await persistQaEmailState(
+      store,
+      current,
+      qaEmailState(result, authorization, previous),
+    );
+    return { record: updated || current, result, receipt_persisted: Boolean(updated), attempted: false };
+  }
+
+  // Write the intent before crossing the provider boundary. If the process
+  // stops after Resend accepts the request, replay sees `in_flight` and uses
+  // the same provider idempotency key to recover the receipt without a second
+  // message.
+  const flightToken = crypto.randomBytes(16).toString("hex");
+  const leaseUntil = new Date(
+    Date.now() + deliveryTimeoutMs() + QA_EMAIL_LEASE_MARGIN_MS,
+  ).toISOString();
+  let inFlight = null;
+  try {
+    if (typeof store.updateQaEmailState !== "function") {
+      throw new Error("qa_email_atomic_update_unsupported");
+    }
+    inFlight = await store.updateQaEmailState(current.lead_id, (fresh = {}) => {
+      if (!["pending", "in_flight"].includes(String(fresh.status || "pending"))) {
+        return fresh;
+      }
+      const freshLeaseUntil = Date.parse(String(fresh.lease_until || ""));
+      if (
+        fresh.status === "in_flight" &&
+        fresh.flight_token &&
+        fresh.flight_token !== flightToken &&
+        Number.isFinite(freshLeaseUntil) &&
+        freshLeaseUntil > Date.now()
+      ) {
+        return fresh;
+      }
+      return mergeQaEmailState(fresh, {
+        ...fresh,
+        status: "in_flight",
+        attempts: 1,
+        started_at: fresh.started_at || previous.started_at || new Date().toISOString(),
+        release_sha: authorization.expected_sha,
+        idempotency_key: fresh.idempotency_key || previous.idempotency_key || qaEmailIdempotencyKey(current),
+        flight_token: flightToken,
+        lease_until: leaseUntil,
+      });
+    });
+  } catch (err) {
+    safeLog("error", "qa_email_lease_failed", {
+      lead_id: current.lead_id,
+      code: err && err.message ? String(err.message).slice(0, 80) : "error",
+    });
+  }
+  if (!inFlight) {
+    return {
+      record: current,
+      result: { status: "blocked", reason: "qa_state_persist_failed" },
+      receipt_persisted: false,
+      attempted: false,
+    };
+  }
+  const claimedState = (inFlight.delivery && inFlight.delivery.qa_email) || {};
+  if (claimedState.flight_token !== flightToken) {
+    return {
+      record: inFlight,
+      result: claimedState,
+      receipt_persisted: true,
+      attempted: false,
+      pending: ["pending", "in_flight"].includes(String(claimedState.status || "")),
+    };
+  }
+
+  const result = await deliverQaEmail(inFlight, {
+    authorized: true,
+    expectedSha: authorization.expected_sha,
+    handoffDelivered: true,
+  });
+  if (result.status === "error" && result.reason === "concurrent_idempotent") {
+    const pendingResult = {
+      ...result,
+      status: "in_flight",
+      reason: "provider_processing",
+      flight_token: flightToken,
+      lease_until: leaseUntil,
+    };
+    const updated = await persistQaEmailState(
+      store,
+      inFlight,
+      qaEmailState(pendingResult, authorization, inFlight.delivery.qa_email || previous),
+      3,
+      { ownerToken: flightToken },
+    );
+    const durable = (updated && updated.delivery && updated.delivery.qa_email) || {};
+    return {
+      record: updated || inFlight,
+      result: durable.status ? durable : pendingResult,
+      receipt_persisted: Boolean(updated),
+      attempted: true,
+      pending: ["pending", "in_flight"].includes(String(durable.status || "in_flight")),
+    };
+  }
+  safeLog("info", "qa_email_attempt", {
+    lead_id: current.lead_id,
+    status: result.status,
+    reason: result.reason || null,
+    http: Number.isFinite(result.http) ? result.http : null,
+  });
+  const updated = await persistQaEmailState(
+    store,
+    inFlight,
+    qaEmailState(result, authorization, inFlight.delivery.qa_email || previous),
+    3,
+    { ownerToken: flightToken },
+  );
+  const durableResult = (updated && updated.delivery && updated.delivery.qa_email) || result;
+  return {
+    record: updated || inFlight,
+    result: durableResult,
+    receipt_persisted: Boolean(updated),
+    attempted: true,
+    pending: ["pending", "in_flight"].includes(String(durableResult.status || "")),
+  };
+}
+
+async function attemptQaEmailWithDurableState(store, record, authorization) {
+  const key = String(record && record.lead_id || "");
+  const active = qaEmailFlights.get(key);
+  if (active) return active;
+  const flight = runQaEmailWithDurableState(store, record, authorization);
+  qaEmailFlights.set(key, flight);
+  try {
+    return await flight;
+  } finally {
+    if (qaEmailFlights.get(key) === flight) qaEmailFlights.delete(key);
+  }
+}
 
 exports.handler = async (event) => {
   const originCheck = originAllowed(event);
@@ -319,6 +596,37 @@ exports.handler = async (event) => {
   // the idempotency map read is eventually consistent on first retry.
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
 
+  // Validate the request envelope before every possible idempotent return.
+  // The stored record is validated again on a hit; this transient shape only
+  // represents the classification that an authenticated probe will receive.
+  const qaEmailPreflight = authorizeQaEmailRequest({
+    event,
+    originCheck,
+    record: {
+      lead_id,
+      record_kind: originCheck.probe ? "synthetic" : "real",
+      synthetic_probe_authenticated: originCheck.probe === true,
+      next_action: originCheck.probe ? "exclude_from_commercial" : undefined,
+    },
+    env: process.env,
+  });
+  const qaDenied = (authorization) => {
+    safeLog("warn", "qa_email_authorization_denied", {
+      reason: authorization.reason,
+    });
+    return {
+      statusCode: authorization.status || 403,
+      headers,
+      body: JSON.stringify(publicErrorBody({
+        error: "qa_email_denied",
+        message: "A verificação controlada de e-mail não foi autorizada.",
+      })),
+    };
+  };
+  if (qaEmailPreflight.requested && !qaEmailPreflight.ok) {
+    return qaDenied(qaEmailPreflight);
+  }
+
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const idempotentOk = (rec) => {
     const storedMaterialHash = rec && rec.adaptive_intake === true
@@ -370,6 +678,44 @@ exports.handler = async (event) => {
     };
   };
 
+  const idempotentQaAware = async (rec) => {
+    if (!qaEmailPreflight.requested) return idempotentOk(rec);
+    const authorization = authorizeQaEmailRequest({
+      event,
+      originCheck,
+      record: rec,
+      env: process.env,
+    });
+    if (!authorization.ok) return qaDenied(authorization);
+
+    const state = rec && rec.delivery && rec.delivery.qa_email;
+    if (state && ["pending", "in_flight"].includes(state.status)) {
+      const recovered = await attemptQaEmailWithDurableState(store, rec, authorization);
+      if (recovered.pending) {
+        return {
+          statusCode: 409,
+          headers,
+          body: JSON.stringify(publicErrorBody({
+            error: "qa_email_pending",
+            message: "A verificação controlada ainda está em processamento. Tente novamente.",
+          })),
+        };
+      }
+      if (!recovered.receipt_persisted) {
+        return {
+          statusCode: 503,
+          headers,
+          body: JSON.stringify(publicErrorBody({
+            error: "qa_email_receipt_unconfirmed",
+            message: "O recibo da verificação controlada ainda não foi confirmado. Tente novamente.",
+          })),
+        };
+      }
+      return idempotentOk(recovered.record);
+    }
+    return idempotentOk(rec);
+  };
+
   // Idempotent replay BEFORE the anti-abuse gate, only for an explicit client
   // key minted by our own front (CLIENT_REPLAY_KEY). A browser that timed out
   // at 15 s and retries reuses the same key (js/modules/form.js,
@@ -409,7 +755,7 @@ exports.handler = async (event) => {
           via: existing && existing.lead_id ? "idem_map_pre_verify" : "deterministic_id_pre_verify",
           attempt: 0,
         });
-        return idempotentOk(rec);
+        return await idempotentQaAware(rec);
       }
     } catch (err) {
       safeLog("error", "idempotency_lookup_failed", {
@@ -515,7 +861,7 @@ exports.handler = async (event) => {
         via: hit.via,
         attempt: hit.attempt,
       });
-      return idempotentOk(hit.rec);
+      return await idempotentQaAware(hit.rec);
     }
   } catch (err) {
     safeLog("error", "idempotency_lookup_failed", {
@@ -590,6 +936,28 @@ exports.handler = async (event) => {
     };
   }
 
+  // A QA inbox verification is request-scoped and fails closed. The normal
+  // synthetic probe remains unchanged unless the explicit header is present.
+  // Authorization happens before the first durable write, so a stale release,
+  // wrong ops token or recipient override cannot leave a half-authorized row.
+  const qaEmailAuthorization = authorizeQaEmailRequest({
+    event,
+    originCheck,
+    record,
+    env: process.env,
+  });
+  if (qaEmailAuthorization.requested && !qaEmailAuthorization.ok) {
+    return qaDenied(qaEmailAuthorization);
+  }
+  if (qaEmailAuthorization.ok) {
+    record.delivery.qa_email = {
+      status: "pending",
+      attempts: 0,
+      idempotency_key: qaEmailIdempotencyKey(record),
+      release_sha: qaEmailAuthorization.expected_sha,
+    };
+  }
+
   // Load establishment_digest from live-intelligence result if available.
   // This is server-side only and used for identity resolution in handoff.
   if (lead.analysis_id && resultStore.isResultToken(lead.analysis_id)) {
@@ -651,7 +1019,7 @@ exports.handler = async (event) => {
       }
       if (existing && existing.lead_id) {
         safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "only_if_new" });
-        return idempotentOk(existing);
+        return await idempotentQaAware(existing);
       }
       if (lead.adaptive_intake) {
         return { statusCode: 503, headers, body: JSON.stringify(publicErrorBody({
@@ -660,6 +1028,16 @@ exports.handler = async (event) => {
       }
       // Key exists (412) but body not yet readable — still must not re-deliver.
       safeLog("info", "lead_idempotent_hit", { lead_id, via: "only_if_new_body_pending" });
+      if (qaEmailPreflight.requested) {
+        return {
+          statusCode: 503,
+          headers,
+          body: JSON.stringify(publicErrorBody({
+            error: "qa_email_receipt_unconfirmed",
+            message: "O registro da verificação controlada ainda não foi confirmado. Tente novamente.",
+          })),
+        };
+      }
       return {
         statusCode: 200,
         headers,
@@ -687,7 +1065,7 @@ exports.handler = async (event) => {
       const raced = await store.get(lead_id);
       if (raced && raced.lead_id === lead_id) {
         safeLog("info", "lead_idempotent_race", { lead_id });
-        return idempotentOk(raced);
+        return await idempotentQaAware(raced);
       }
     } catch {
       /* fall through */
@@ -814,47 +1192,99 @@ exports.handler = async (event) => {
   const notify_status = delivery?.notify?.status || "pending";
   const email_status = delivery?.email?.status || "pending";
 
-  try {
-    await store.update(lead_id, {
-      delivery: {
-        notify: {
-          status: notify_status,
-          attempts: 1,
-          channels: delivery.notify.channels,
+  // The controlled QA message is intentionally serial after the Warmbly
+  // branch: a durable DELIVERED handoff receipt is the server-side second
+  // proof that auto-send-off transport completed before any inbox check.
+  let qaEmail = null;
+  let qaReceiptPersisted = true;
+  let qaEmailPending = false;
+  if (qaEmailAuthorization.ok) {
+    const qaOutcome = await attemptQaEmailWithDurableState(
+      store,
+      record,
+      qaEmailAuthorization,
+    );
+    qaEmail = qaOutcome.result;
+    qaReceiptPersisted = qaOutcome.receipt_persisted;
+    qaEmailPending = qaOutcome.pending === true;
+  }
+
+  let deliveryStatusUpdated = false;
+  let deliveryUpdateError = null;
+  for (let attempt = 0; attempt < 3 && !deliveryStatusUpdated; attempt++) {
+    try {
+      const current = (await store.get(lead_id)) || record;
+      await store.update(lead_id, {
+        delivery: {
+          ...(current.delivery || {}),
+          notify: {
+            status: notify_status,
+            attempts: 1,
+            channels: delivery.notify.channels,
+          },
+          email: {
+            status: email_status,
+            attempts: 1,
+            // Provider correlation handle for the operator (Resend message id and
+            // HTTP status): store-only, read through authenticated ops, never
+            // part of the public body (publicSuccessBody whitelist).
+            ...(delivery?.email?.reason ? { reason: delivery.email.reason } : {}),
+            ...(Number.isFinite(delivery?.email?.http) ? { http: delivery.email.http } : {}),
+            ...(delivery?.email?.provider_id ? { provider_id: delivery.email.provider_id } : {}),
+            // Resend Idempotency-Key used for this record (lead-email/<lead_id>):
+            // a retry with the same key inside the provider's 24 h window returns
+            // the original message id instead of a second e-mail, so the
+            // operator (and the drain retry) know a resend is safe.
+            ...(delivery?.email?.idempotency_key ? { idempotency_key: delivery.email.idempotency_key } : {}),
+          },
         },
-        email: {
-          status: email_status,
-          attempts: 1,
-          // Provider correlation handle for the operator (Resend message id and
-          // HTTP status): store-only, read through authenticated ops, never
-          // part of the public body (publicSuccessBody whitelist).
-          ...(delivery?.email?.reason ? { reason: delivery.email.reason } : {}),
-          ...(Number.isFinite(delivery?.email?.http) ? { http: delivery.email.http } : {}),
-          ...(delivery?.email?.provider_id ? { provider_id: delivery.email.provider_id } : {}),
-          // Resend Idempotency-Key used for this record (lead-email/<lead_id>):
-          // a retry with the same key inside the provider's 24 h window returns
-          // the original message id instead of a second e-mail, so the
-          // operator (and the drain retry) know a resend is safe.
-          ...(delivery?.email?.idempotency_key ? { idempotency_key: delivery.email.idempotency_key } : {}),
-        },
-      },
-      status:
-        notify_status === "ok" || email_status === "ok" ? "persisted_notified" : "persisted",
-      audit: [
-        ...(record.audit || []),
-        {
-          at: new Date().toISOString(),
-          event: "delivery_attempt",
-          notify: notify_status,
-          email: email_status,
-        },
-      ],
-    });
-  } catch (err) {
+        status:
+          notify_status === "ok" || email_status === "ok" ? "persisted_notified" : "persisted",
+        audit: [
+          ...(current.audit || []),
+          {
+            at: new Date().toISOString(),
+            event: "delivery_attempt",
+            notify: notify_status,
+            email: email_status,
+            ...(qaEmailAuthorization.ok ? { qa_email: qaEmail?.status || "blocked" } : {}),
+          },
+        ],
+      });
+      deliveryStatusUpdated = true;
+    } catch (err) {
+      deliveryUpdateError = err;
+    }
+  }
+  if (!deliveryStatusUpdated) {
     safeLog("error", "delivery_status_update_failed", {
       lead_id,
-      code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      code: deliveryUpdateError && deliveryUpdateError.message
+        ? String(deliveryUpdateError.message).slice(0, 80)
+        : "error",
     });
+  }
+
+  if (qaEmailAuthorization.ok && !qaReceiptPersisted) {
+    return {
+      statusCode: 503,
+      headers,
+      body: JSON.stringify(publicErrorBody({
+        error: "qa_email_receipt_unconfirmed",
+        message: "O recibo da verificação controlada ainda não foi confirmado. Tente novamente.",
+      })),
+    };
+  }
+
+  if (qaEmailAuthorization.ok && qaEmailPending) {
+    return {
+      statusCode: 409,
+      headers,
+      body: JSON.stringify(publicErrorBody({
+        error: "qa_email_pending",
+        message: "A verificação controlada ainda está em processamento. Tente novamente.",
+      })),
+    };
   }
 
   // Success: durable persist confirmed (email/notify optional but status always reported)

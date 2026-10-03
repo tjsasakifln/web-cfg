@@ -728,22 +728,16 @@ def test_home_nav_and_hierarchy():
     assert "Obras públicas" in home
     assert "Como trabalhamos" in home
     assert "Empresa" in home
-    assert "Edital e proposta" in home
-    assert "Contrato sob pressão" in home
-    assert "Operação recorrente" in home
     assert "Conteúdos e ferramentas" not in home
     labels, _ = _nav_from(ROOT / "index.html")
     assert labels == EXPECTED_NAV
-    assert 'href="/entregas/"' in home
-    assert "Entregas" in home
     assert home.count("button-primary") <= 5
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
-    assert 'class="situation-row' in home
-    # VALOR-IMEDIATO-20260914: a contagem e a do contrato de situacoes.
-    assert home.count('class="situation-row') == len(_service_situations())
-    assert "54.055" in home and "4,48 mi" in home
-    assert "54.055" not in hero.group(0) and "4,48 mi" not in hero.group(0)
+    for ident in ("competencias", "setores", "entregas", "servicos-complementares", "sobre-a-confenge", "solicitar-proposta"):
+        assert f'id="{ident}"' in home
+    assert home.find('id="competencias"') < home.find('id="servicos-complementares"')
+    assert "54.055" not in home and "4,48 mi" not in home
 
 
 # ---------------------------------------------------------------------------
@@ -1083,17 +1077,11 @@ def test_home_form_anchor_reveals_fields():
         re.I,
     )
     assert hero, "home hero primary CTA missing"
-    assert hero.group(1) == "/triagem-tecnica/", hero.group(1)
-    assert (ROOT / "triagem-tecnica" / "index.html").is_file()
+    assert hero.group(1) == "#contato", hero.group(1)
     hero_text = re.sub(r"<[^>]+>", " ", hero_section.group(0))
-    # VALOR-IMEDIATO-20260914: o hero explica a situacao e o trabalho antes de
-    # preservar os caminhos de contato; a enumeracao nao e mais exigida, a
-    # entrega nomeada e o alcance publico e privado continuam.
     assert re.search(r"estruturas|instalações|infraestrutura|propostas|projeto", hero_text, re.I)
-    assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", hero_text, re.I)
-    assert re.search(r"\b(?:assumimos|projetamos|coordenamos)\b", hero_text, re.I)
-    assert re.search(r"plantas|memórias? de cálculo|planilhas?|laudos?|pareceres?|relatórios?", hero_text, re.I)
-    assert 'id="situacoes"' in html
+    assert re.search(r"\b(?:elabora|coordena|projetamos|coordenamos)\b", hero_text, re.I)
+    assert "entrega técnica integrada" in hero_text
     header_cta = re.search(
         r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
         r'<a\b[^>]*href="([^"]+)"[^>]*\bheader-cta\b',
@@ -1123,37 +1111,13 @@ def test_home_form_anchor_reveals_fields():
         r"(?:^|[{},])[^{}]*\.contact-form\{[^}]*order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
-    situation_hrefs = re.findall(
-        r'<a\b[^>]*class="[^"]*\bsituation-action\b[^"]*"[^>]*href="([^"]+)"',
-        html,
-        re.I,
-    )
-    # 2026-09-08. A lista fixa exigia que o cartao 01 -- "Projetar, revisar,
-    # orcar ou compatibilizar" -- apontasse para /quantitativos-orcamento-obras/,
-    # ou seja, uma chamada que promete quatro servicos levando ao unico que e
-    # orcamento. Quem chegou para projeto executivo ou compatibilizacao era
-    # conduzido a outra coisa. A trava congelava justamente o defeito.
-    #
-    # A propriedade correta, verificada abaixo: as cinco situacoes existem, cada
-    # uma tem destino proprio, nenhum destino se repete, e todos resolvem no
-    # site. O destino de cada cartao pode mudar quando a rota certa mudar; o que
-    # nao pode e sumir, repetir ou apontar para fora.
-    expected = len(_service_situations())
-    assert len(situation_hrefs) == expected, situation_hrefs
-    assert len(set(situation_hrefs)) == expected, situation_hrefs
-    for href in situation_hrefs:
-        assert href.startswith("/"), href
-        target = href.split("#", 1)[0]
-        assert (ROOT / target.strip("/") / "index.html").is_file(), href
-    # Cada promessa chega à explicação correspondente; quando há fragmento,
-    # ele precisa existir no destino e não pode virar um contato genérico.
-    for href in situation_hrefs:
-        target, _, anchor = href.partition("#")
-        target_page = ROOT / target.strip("/") / "index.html"
-        assert target_page.is_file(), href
-        if anchor:
-            target_html = target_page.read_text(encoding="utf-8")
-            assert f'id="{anchor}"' in target_html, href
+    for href in (
+        "/projetos/estruturas/",
+        "/projetos/instalacoes/",
+        "/projetos/infraestrutura/",
+        "/projetos/coordenacao-multidisciplinar/",
+    ):
+        assert f'href="{href}"' in html
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
@@ -1246,7 +1210,7 @@ def test_css_visitor_tokens():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     hub = (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
     for cls, markup, stylesheet in (
-        ("situation-row", home, home_css),
+        ("home-capability-list", home, home_css),
         ("problem-stages", hub, css),
         ("problem-stage-head", hub, css),
         ("featured-lead", hub, css),

@@ -53,7 +53,7 @@ DEFAULT_WA_NUMBER = "5548988344559"
 DEFAULT_EMAIL = "tiago.sasaki@confenge.com.br"
 # Situação genérica, sem dado pessoal: a mesma frase que a home publica.
 DEFAULT_WA_TEXT = (
-    "Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20"
+    "Ol%C3%A1%2C%20CONFENGE.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20"
     "t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo."
 )
 

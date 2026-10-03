@@ -1,0 +1,64 @@
+name: controlled production contact proof
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: Exact published main commit to verify
+        required: true
+        type: string
+      verify_email:
+        description: Send one identified QA notification to the configured company inbox
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: confenge-controlled-contact-proof
+  cancel-in-progress: false
+
+jobs:
+  contact-proof:
+    runs-on: ubuntu-latest
+    environment: netcup-production
+    timeout-minutes: 5
+    steps:
+      - name: Require explicit opt-in and exact main revision
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          RELEASE_SHA: ${{ github.sha }}
+          RELEASE_REF: ${{ github.ref }}
+          VERIFY_EMAIL: ${{ inputs.verify_email }}
+        run: |
+          set -euo pipefail
+          test "$RELEASE_REF" = refs/heads/main
+          test "$VERIFY_EMAIL" = true
+          [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$EXPECTED_SHA" = "$RELEASE_SHA"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+      - name: Prove persistence, safe handoff and isolated QA email
+        env:
+          LEAD_PROBE_SECRET: ${{ secrets.LEAD_PROBE_SECRET }}
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          PROBE_VERIFY_EMAIL: "1"
+          PROBE_PAGE_PATH: /
+        run: |
+          set -euo pipefail
+          mkdir -p build/reports
+          node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br > build/reports/controlled-contact-proof.json
+          cat build/reports/controlled-contact-proof.json
+      - name: Preserve sanitized transport evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: controlled-contact-proof-${{ github.sha }}
+          path: build/reports/controlled-contact-proof.json
+          if-no-files-found: error
+          retention-days: 30

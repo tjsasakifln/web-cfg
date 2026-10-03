@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "review_target_sha": "de974fd048b576e49fe5eae797993c4c926155e7",
+  "review_target_sha": "a8cac5b53fea7bbd4bfb5a871a8b26703d0963ed",
   "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
-  "preview_build_sha": "de974fd048b576e49fe5eae797993c4c926155e7",
-  "preview_generated_at": "2026-09-20T03:44:18Z",
+  "preview_build_sha": "a8cac5b53fea7bbd4bfb5a871a8b26703d0963ed",
+  "preview_generated_at": "2026-10-03T19:45:00Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
       "preview_url": "https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/",
-      "material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+      "material_hash": "b651229e9ce1b1ed036583120ea3803e921fd5ed19e1968705c5255642071722",
       "sources": [
         {
           "accessed_at": "2026-08-02",
@@ -98,7 +98,7 @@
     {
       "page_id": "lei-item-novo-desconto",
       "preview_url": "https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "material_hash": "06e13499819375cfcee2bb59499c3d02d49d2c03b3639ab0fa195ddedf205a0f",
+      "material_hash": "9f758ae7a157a8327d073eceed20c202a7d873c0617ec4f9d72963b9279c816f",
       "sources": [
         {
           "accessed_at": "2026-08-02",

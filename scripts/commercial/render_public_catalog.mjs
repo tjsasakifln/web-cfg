@@ -467,7 +467,7 @@ ${renderOfferLadder(eightContract)}
 <li><b>Informações comuns.</b> ${renderInlineList(commonInputs)}. Cada oferta acrescenta o que precisa para começar.</li>
 <li><b>Preço, condições e exemplos.</b> As oito ofertas publicadas vão de R$ 599 a R$ 3.750. Os preços e condições pertencem somente às ofertas que os exibem.</li>
 <li><b>Limites comuns.</b> ${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</li>
-<li><b>Serviços de engenharia por proposta.</b> Projetos, revisão, compatibilização, quantitativos, inspeção, perícia, avaliação e segurança do trabalho seguem por proposta: escopo, responsável técnico, local, campo e ART, quando o serviço exigir, são confirmados antes do aceite técnico, e o valor sai na proposta.</li>
+<li><b>Serviços de engenharia por proposta.</b> Projetos, revisão, compatibilização, quantitativos, inspeção, perícia, avaliação e segurança do trabalho seguem por proposta: escopo, responsável técnico, local, campo e ART, quando o serviço exigir, são confirmados na proposta, e o valor sai na proposta.</li>
 </ul>
 </div></div>
 </div>

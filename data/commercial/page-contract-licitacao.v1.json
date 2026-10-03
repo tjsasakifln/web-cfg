@@ -377,8 +377,8 @@
     }
   ],
   "public_implementation": {
-    "state": "DEFERRED_FROZEN",
-    "decision_state": "DEFER_UNTIL_DATE",
+    "state": "MAINTAINED_OUTSIDE_LEGACY_RENDERER",
+    "decision_state": "EXECUTE_NOW",
     "route": "/diagnostico-pre-licitacao/",
     "rendered_from_contract": false,
     "catalog_route": "/entregas/",
@@ -398,6 +398,7 @@
     "persisted_handraise_route": "/entregas/#captura-entregas",
     "frozen_gate_contract": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
     "protected_hash_contract": "data/bofu-dominance/frozen-specs/hashes.json",
+    "protected_hash_note": "Hash preservado como evidência histórica; a campanha institucional de 2026-10 revogou a trava editorial de bytes sem autorizar o layout legado deste renderer.",
     "earliest_safe_action_at": "2026-09-16",
     "checkout_enabled": false
   },

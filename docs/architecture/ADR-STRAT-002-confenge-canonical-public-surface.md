@@ -10,6 +10,17 @@
 
 ## Amendment 2026-09-09 (current)
 
+## Amendment 2026-10-03 (current editorial application)
+
+The founder's Comunicação Institucional, Competência e Conversão decision
+supersedes earlier commercial/editorial rules that require automatic evidence
+labels, limitation-led institutional copy, classified-style offer composition
+or a complement-only definition of CONFENGE. Public copy is evaluated by its
+function for the buyer, coherence with the service and factual truthfulness.
+Registry provenance, permissions, privacy, professional responsibility,
+material conditions and URL-level recovery remain mandatory controls; they do
+not require repetitive visitor-facing caveats.
+
 The founder's EXECUTE_NOW decision authorizes the continuing #611 commercial
 revision, including shared contracts, generators, public copy and publication
 checks. The public opening names engineering projects and services for public

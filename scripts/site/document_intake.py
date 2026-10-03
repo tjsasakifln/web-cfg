@@ -14,150 +14,56 @@ from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[2]
 
-HONEST_CTA = "Solicitar canal seguro para envio"
-CHANNEL_SLA = "canal escolhido posteriormente"
-SECURE_CHANNEL_INTENT = "secure_channel_request"
-WA_REQUEST = (
-    "Olá, Tiago. Quero solicitar um canal seguro para envio. "
-    "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
+# Founder decision 2026-10-03: request a proposal through existing channels.
+# A text-only lead form must not claim upload, while e-mail/WhatsApp can carry
+# non-confidential technical references. Confidential material uses a reserved channel.
+HONEST_CTA = "Solicitar proposta"
+CHANNEL_SLA = "envio reservado"
+SECURE_CHANNEL_INTENT = "secure_channel_request"  # retained transport value
+WA_REQUEST = "Olá, CONFENGE. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta."
+
+CTA_REPLACEMENTS = (
+    ("Solicitar canal seguro para a análise", HONEST_CTA),
+    ("Solicitar canal seguro para a prova", HONEST_CTA),
+    ("Solicitar canal seguro para a resposta", HONEST_CTA),
+    ("Solicitar canal seguro para o dossiê", HONEST_CTA),
+    ("Solicitar canal seguro pelo WhatsApp", "Conversar pelo WhatsApp"),
+    ("Solicitar canal seguro por e-mail", "Solicitar proposta por e-mail"),
+    ("solicitar o canal seguro nesta página", "solicitar proposta nesta página"),
+    ("Solicitar canal seguro para envio de documentos", HONEST_CTA),
+    ("Solicitar canal seguro para envio", HONEST_CTA),
+    ("Solicitar canal seguro", HONEST_CTA),
+)
+BODY_REPLACEMENTS = (
+    ("após o primeiro contato, combinamos um canal seguro para o envio", "compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado"),
+    ("Não anexei documentos nesta mensagem; após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.", "Para material confidencial, combinamos o envio reservado."),
+    ("Não anexarei documentos nesta mensagem; após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.", "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado."),
+    ("Olá, Tiago.", "Olá, CONFENGE."),
+    ("Olá Tiago", "Olá, CONFENGE"),
+    ("documentos só depois, pelo canal seguro combinado", "referências não sigilosas podem ser compartilhadas por e-mail ou WhatsApp; material confidencial segue em envio reservado"),
+    ("primeiro contato é em texto, sem anexo", "primeiro contato acolhe o contexto e as referências não sigilosas disponíveis"),
+    ("Se documentos forem necessários, solicite um canal seguro; após o primeiro contato a CONFENGE abre um canal seguro para o envio.", "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado."),
+    ("Se documentos forem necessários, após o primeiro contato a CONFENGE abre um canal seguro para o envio.", "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado."),
+    ("Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.", "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado."),
+    ("quero solicitar um canal seguro para envio de documentos", "quero solicitar uma proposta"),
+    ("Quero solicitar um canal seguro para envio de documentos", "Quero solicitar uma proposta"),
+    ("quero solicitar um canal seguro para envio", "quero solicitar uma proposta"),
+    ("Quero solicitar um canal seguro para envio", "Quero solicitar uma proposta"),
+    ("Não anexe arquivo nesta mensagem", "Para material confidencial, combinamos o envio reservado"),
+    ("não anexe arquivo nesta mensagem", "para material confidencial, combinamos o envio reservado"),
+    ("o canal de envio é escolhido posteriormente; não anexe arquivo no formulário, no WhatsApp automático nem neste e-mail", "compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado"),
 )
 
-# Longest first so nested labels do not leave leftovers.
-CTA_REPLACEMENTS: tuple[tuple[str, str], ...] = (
-    ("Enviar documentos para análise inicial", HONEST_CTA),
-    ("Enviar documentos para análise no WhatsApp", f"{HONEST_CTA} no WhatsApp"),
-    ("Enviar documentos agora pelo WhatsApp", HONEST_CTA),
-    ("Enviar documentos para análise", HONEST_CTA),
-    ("Enviar o edital agora pelo WhatsApp", HONEST_CTA),
-    ("Enviar edital e planilha", HONEST_CTA),
-)
-
-BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
-    (
-        "quero enviar os documentos para análise",
-        "quero solicitar um canal seguro para envio",
-    ),
-    (
-        "quero enviar documentos para análise",
-        "quero solicitar um canal seguro para envio",
-    ),
-    (
-        "quero enviar para triagem da Operação de Proposta para Licitação Crítica",
-        "quero solicitar um canal seguro para envio",
-    ),
-    ("quero enviar para triagem", "quero solicitar um canal seguro para envio"),
-    (
-        "posso encaminhar documentos com o protocolo",
-        "quero solicitar um canal seguro para envio. Protocolo: (cole aqui)",
-    ),
-    ("posso encaminhar documentos", "quero solicitar um canal seguro para envio"),
-    (
-        "posso enviar o PDF ou link",
-        "quero solicitar um canal seguro para envio",
-    ),
-    (
-        "Posso enviar edital e planilha",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem",
-    ),
-    (
-        "Posso enviar: contrato, planilha, medições e notificações relevantes.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar contrato, planilha e histórico de aditivos.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar planilha, proposta, composições e o pedido de aditivo.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar cronograma, diário de obra e notificações.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar os documentos da checklist.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar medições, critérios e notificações.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar contrato, planilha, índices e documentos de custo.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar OS, diário, fotos e planilha.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Posso enviar: contrato, planilha, ordens de serviço, projetos e histórico de aditivos.",
-        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.",
-    ),
-    (
-        "Envie o edital, a planilha, a notificação ou a medição. Retorno com enquadramento técnico e próximos passos.",
-        "Solicite um canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
-    ),
-    (
-        "Envie o edital e a planilha para verificar a referência de preço.",
-        "Solicitar canal seguro para envio",
-    ),
-    (
-        "Envie trechos do edital (SINAPI/data-base/BDI), planilha e, se tiver, memória de encargos. O primeiro retorno organiza o que está coerente, o que está em risco e o próximo passo, sem exigir arquivo perfeito.",
-        "Após a confirmação com protocolo, a CONFENGE abre o canal para o envio de tipos, trechos de edital e planilha.",
-    ),
-    (
-        "WhatsApp: conferir base SINAPI",
-        "Solicitar canal seguro para envio",
-    ),
-    (
-        "Envie o edital, a planilha ou a notificação. Retornamos com enquadramento técnico e próximos passos, sem cadastro em lista.",
-        "Solicite um canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
-    ),
-    (
-        "Envie o edital, a planilha ou a notificação. Retornamos com enquadramento técnico e próximos passos.",
-        "Solicite um canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
-    ),
-    (
-        "Enviar documentos para análise começa por este formulário. Descreva a situação e deixe um canal de retorno. Se houver documentos sensíveis, combinamos o envio seguro depois do primeiro contato.",
-        "Solicitar canal seguro para envio começa por este formulário. Descreva a situação e deixe um canal de retorno; após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
-    ),
-    (
-        "anexe editais e planilhas apenas após combinarmos WhatsApp ou e-mail com o protocolo",
-        "o canal de envio de documentos é escolhido posteriormente; não anexe arquivo nesta mensagem",
-    ),
-    (
-        "Após o protocolo, a orientação é combinar canal seguro (preferencialmente WhatsApp operacional ou e-mail com destinatário confirmado) para anexos.",
-        "Após o protocolo, a CONFENGE abre um canal seguro para o envio da documentação (WhatsApp operacional ou e-mail com destinatário confirmado).",
-    ),
-    (
-        "envie o PDF/link do edital apenas pelo WhatsApp ou e-mail com o protocolo na mensagem, não pelo formulário público",
-        "o canal de envio é escolhido posteriormente; não anexe arquivo no formulário, no WhatsApp automático nem neste e-mail",
-    ),
-)
-
-# Visible visitor claims that the site receives a file. Used by the honesty gate.
-# "Enviar edital para triagem" is the edital journey CTA (job name), not a
-# claim that this form stores a file.
+# Detect only claims of a capability the lead form does not provide. Channel
+# invitations to share a public edital or a non-confidential plan are truthful.
 DISHONEST_VISIBLE = (
-    "Enviar documentos para análise",
-    "Enviar documentos para análise inicial",
-    "Enviar documentos agora pelo WhatsApp",
-    "Enviar o edital agora pelo WhatsApp",
-    "Enviar edital e planilha",
-    "Enviar documentos para análise no WhatsApp",
-    "Envie o edital, a planilha",
-    "Envie o edital e a planilha",
-    "Envie trechos do edital",
-    "quero enviar documentos para análise",
-    "quero enviar para triagem",
-    "posso encaminhar documentos",
-    "Posso enviar edital e planilha",
-    "anexe editais, medições ou planilhas",
+    "Anexe os arquivos neste formulário",
+    "O formulário recebe plantas",
+    "O formulário recebe arquivos",
+    "Upload de documentos concluído",
 )
 
-FROZEN_RELATIVE_PATHS = {
+HISTORICAL_FROZEN_RELATIVE_PATHS = {
     "aditivos-obras-publicas/index.html",
     "medicoes-glosas-obras-publicas/index.html",
     "reequilibrio-obras-publicas/index.html",
@@ -170,7 +76,7 @@ FROZEN_RELATIVE_PATHS = {
 # Hash- or approval-bound visitor HTML that still names a file send.
 # Rewriting would break issue #389 sibling SHAs or HUMAN_APPROVED material_hash.
 # The honesty gate allows the lie only on these exact paths.
-HASH_BOUND_LIE_PATHS = {
+HISTORICAL_HASH_BOUND_LIE_PATHS = {
     "conteudos/glosa-de-medicao-obra-publica/index.html",
     "conteudos/medicao-de-obra-publica-rejeitada/index.html",
     "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
@@ -185,6 +91,10 @@ HASH_BOUND_LIE_PATHS = {
     "lei-14133-obras/reequilibrio-reajuste-repactuacao/index.html",
     "lei-14133-obras/servico-executado-sem-termo-aditivo/index.html",
 }
+
+# Former commercial freezes are superseded for the scoped CTA correction.
+FROZEN_RELATIVE_PATHS = set()
+HASH_BOUND_LIE_PATHS = set()
 
 SKIP_PARTS = {
     "docs",
@@ -207,7 +117,7 @@ WA_HREF_RE = re.compile(
     re.I,
 )
 MAILTO_BODY_RE = re.compile(
-    r"""(mailto:[^"'>\s]*?[?&]body=)([^"'>\s]+)""",
+    r"""(mailto:[^"'>\s]*?(?:[?&]|&amp;)body=)([^"'>\s]+)""",
     re.I,
 )
 

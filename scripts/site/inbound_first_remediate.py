@@ -797,9 +797,9 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
     # Soft-replace generic "Quer validar este cenário" lead with journey-aware next step
     if lead_inline_points_to_pillar(html):
         return html
-    cta = j.get("cta") or "Solicitar canal seguro para envio"
+    cta = j.get("cta") or "Solicitar proposta"
     next_step = j.get("next_step") or ""
-    wa = wa_url(j.get("wa_message") or "Olá, Tiago. Quero solicitar um canal seguro para envio.")
+    wa = wa_url(j.get("wa_message") or "Olá, CONFENGE. Quero solicitar uma proposta.")
     form = article_form_target(origem, html)
 
     new_lead = (
@@ -807,7 +807,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'data-journey="{journey_id}">'
         f'<div class="lead-inline-copy"><span>Próximo passo</span>'
         f"<strong>{html_lib.escape(cta)}</strong>"
-        f"<p>{html_lib.escape(next_step or 'Registramos o pedido de canal seguro. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.')}</p>"
+        f"<p>{html_lib.escape(next_step or 'Registramos o pedido de canal seguro. Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado.')}</p>"
         f"</div>"
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" data-cta-position="inline" data-journey="{journey_id}" '
@@ -1824,7 +1824,7 @@ def fix_radar(brand: dict[str, Any]) -> None:
 )
     if "Configurar meu radar" not in html:
         wa = wa_url(
-            "Olá, Tiago. Quero configurar o radar de oportunidades com o perfil da minha construtora."
+            "Olá, CONFENGE. Quero configurar o radar de oportunidades com o perfil da minha construtora."
 )
         cta = (
             '<section class="lead-inline" id="radar-cta">'

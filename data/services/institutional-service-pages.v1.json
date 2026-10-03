@@ -1,0 +1,786 @@
+{
+  "version": "1.0.0",
+  "pages": [
+    {
+      "route": "projetos-complementares-engenharia",
+      "journey": "projeto",
+      "contact_id": "escopo-projeto",
+      "hero": {
+        "eyebrow": "Engenharia coordenada para empreendimentos públicos e privados",
+        "title": "Projetos complementares de engenharia",
+        "lead": "A CONFENGE organiza as disciplinas que transformam a arquitetura e os requisitos do empreendimento em documentação técnica para aprovar, orçar, contratar e executar.",
+        "value": "A proposta define as especialidades, a fase de desenvolvimento, as interfaces e os responsáveis. A entrega reúne desenhos, memoriais, cálculos, especificações e registros de coordenação compatíveis com o escopo contratado.",
+        "cta": "Solicitar proposta de projetos complementares",
+        "signal_title": "Uma contratação, disciplinas coordenadas",
+        "signals": [
+          [
+            "Estruturas",
+            "Concreto, aço, madeira, fundações e elementos estruturais conforme o objeto e a atribuição profissional definida."
+          ],
+          [
+            "Instalações",
+            "Elétrica, hidrossanitária, drenagem, sistemas mecânicos e especialidades necessárias ao empreendimento."
+          ],
+          [
+            "Infraestrutura",
+            "Terraplenagem, pavimentação, redes, drenagem e interfaces com implantação e edificações."
+          ],
+          [
+            "Coordenação",
+            "Matriz de responsabilidades, referências de origem, revisões e decisões entre disciplinas."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Capacidade técnica",
+        "title": "A disciplina certa entra com escopo, interface e responsabilidade definidos.",
+        "intro": "A configuração parte do empreendimento e da decisão que o projeto precisa sustentar. O pacote pode reunir especialidades ou contratar uma disciplina isolada.",
+        "items": [
+          [
+            "Edificações",
+            "Projetos estruturais e de instalações articulados à arquitetura, ao uso, à execução e às exigências de aprovação aplicáveis."
+          ],
+          [
+            "Implantação e infraestrutura",
+            "Geometria, movimentação de terra, pavimentação, drenagem e redes coordenadas com cotas, acessos e sistemas do lote."
+          ],
+          [
+            "Desenvolvimento técnico",
+            "Estudos, anteprojetos, projetos executivos, detalhamento e documentação de apoio ao orçamento e à obra."
+          ],
+          [
+            "Integração profissional",
+            "Cada especialidade é atribuída ao profissional habilitado indicado na proposta; Tiago Sasaki conduz a definição inicial do escopo e a coordenação pela CONFENGE."
+          ]
+        ]
+      },
+      "deliverables": {
+        "kicker": "Entregas",
+        "title": "Documentação pronta para a próxima decisão do empreendimento.",
+        "intro": "O conjunto é dimensionado para a fase contratada e identifica a origem das informações, as revisões e as interfaces que condicionam cada disciplina.",
+        "items": [
+          [
+            "Desenhos técnicos",
+            "Plantas, cortes, elevações, detalhes e diagramas com identificação de elementos, níveis, dimensões e referências entre pranchas."
+          ],
+          [
+            "Memórias e especificações",
+            "Critérios de projeto, premissas, cálculos, materiais, desempenho esperado e orientações necessárias ao uso dos documentos."
+          ],
+          [
+            "Coordenação e revisões",
+            "Matriz de interfaces, registros de decisão, pendências e histórico de versões para que as equipes trabalhem sobre a mesma base."
+          ],
+          [
+            "Responsabilidade técnica",
+            "Profissionais, disciplinas e registros de responsabilidade são definidos na proposta e formalizados de acordo com o escopo contratado."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta técnica",
+        "title": "O escopo acompanha a fase real do empreendimento.",
+        "intro": "A leitura inicial combina objetivo, documentos disponíveis, especialidades, nível de desenvolvimento e interlocutores. A partir disso, a proposta apresenta entregas, revisões, prazo, investimento e responsáveis.",
+        "items": [
+          [
+            "Insumos",
+            "Arquitetura, levantamentos, estudos e requisitos existentes são referências de partida e podem ser compartilhados pelos canais publicados."
+          ],
+          [
+            "Interfaces",
+            "A proposta identifica dependências entre disciplinas e informa quais decisões precisam do contratante, do arquiteto ou de outros autores."
+          ],
+          [
+            "Continuidade",
+            "Revisão técnica, compatibilização e quantitativos podem integrar a mesma contratação quando forem necessários para fechar o pacote."
+          ],
+          [
+            "Abrangência",
+            "Atendimento em todo o Brasil, com modalidade remota ou presencial definida conforme objeto, localização e necessidade de campo."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "amostra-disponivel"
+      ],
+      "deliverables_id": "entregas-servico",
+      "deliverables_legacy_anchor_ids": [
+        "entregaveis"
+      ],
+      "technical_figures": {
+        "kicker": "Composição e rastreabilidade",
+        "title": "Duas leituras complementares do pacote produzido.",
+        "intro": "Os esquemas mostram como as peças da disciplina contratada formam uma entrega e como cada ciclo conserva a origem, as interfaces e a versão devolvida.",
+        "items": [
+          {
+            "id": "pacote-entrega",
+            "desktop_src": "/assets/projetos-complementares-engenharia/pacote-entrega.svg",
+            "mobile_src": "/assets/pranchas/pacote-entrega-mobile.svg",
+            "desktop_width": 1200,
+            "desktop_height": 400,
+            "mobile_width": 360,
+            "mobile_height": 420,
+            "alt": "Prancha PG com plantas e cortes, detalhes, especificações e memória de cálculo da disciplina contratada",
+            "caption": "Prancha PG, exemplo demonstrativo da composição do pacote: plantas e cortes, detalhes, especificações e memória de cálculo pertencem à disciplina contratada; a arquitetura de origem permanece identificada com seu autor. É um esquema de peças entregáveis, sem dimensionamento de um empreendimento real."
+          },
+          {
+            "id": "interfaces-versoes",
+            "desktop_src": "/assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+            "mobile_src": "/assets/pranchas/interfaces-versoes-mobile.svg",
+            "desktop_width": 1200,
+            "desktop_height": 460,
+            "mobile_width": 360,
+            "mobile_height": 420,
+            "alt": "Prancha PH com o ciclo entre insumos de origem, disciplina delimitada, interfaces e versão devolvida",
+            "caption": "Prancha PH, exemplo demonstrativo do ciclo documental: os insumos de origem alimentam a disciplina delimitada, as interfaces recebem responsáveis e a versão devolvida registra data, responsável e mudança. Prazo, quantidade de ciclos e cobertura são definidos na proposta."
+          }
+        ]
+      },
+      "section_order": [
+        "competencies",
+        "technical",
+        "deliverables",
+        "technical_figures",
+        "engagement"
+      ],
+      "contact": {
+        "title": "Solicite uma proposta de projetos complementares.",
+        "intro": "Conte a finalidade do empreendimento, a fase atual, as disciplinas desejadas e as referências já disponíveis. A CONFENGE devolve a definição do serviço e os dados necessários para a proposta.",
+        "boundary": "Você pode compartilhar referências não sigilosas por WhatsApp ou e-mail. Quando o material exigir controle de acesso ou contiver dados sensíveis, combinamos o canal adequado. O tratamento dos dados segue a Política de Privacidade."
+      }
+    },
+    {
+      "route": "revisao-tecnica-projetos-engenharia",
+      "journey": "projeto",
+      "contact_id": "contato-revisao",
+      "hero": {
+        "eyebrow": "Verificação independente para decisões de projeto",
+        "title": "Revisão técnica de projetos de engenharia",
+        "lead": "A CONFENGE examina documentos já produzidos para localizar inconsistências, lacunas e pontos que exigem decisão antes da aprovação, do orçamento, da contratação ou da execução.",
+        "value": "O relatório relaciona cada achado à evidência, ao documento e à revisão examinada. A proposta define a profundidade da análise e pode incluir a condução das devolutivas com os autores.",
+        "cta": "Solicitar proposta de revisão técnica",
+        "signal_title": "Profundidade alinhada à decisão",
+        "signals": [
+          [
+            "Documental",
+            "Presença, identificação, revisões, selos, referências e correspondência entre as peças recebidas."
+          ],
+          [
+            "Disciplina",
+            "Critérios, coerência interna, executabilidade e atendimento aos requisitos definidos para a especialidade."
+          ],
+          [
+            "Cálculo",
+            "Memórias, hipóteses, geometria, combinações e critérios normativos incluídos no escopo."
+          ],
+          [
+            "Integração",
+            "Encaminhamento dos achados para elaboração, compatibilização ou atualização das peças quando necessário."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Aplicações",
+        "title": "Uma revisão técnica para cada momento de decisão.",
+        "intro": "O mesmo projeto pode exigir leituras diferentes conforme a finalidade. A proposta registra o objeto, os documentos, os critérios e o nível de aprofundamento.",
+        "items": [
+          [
+            "Antes de contratar",
+            "Confere se o pacote recebido permite comparar propostas e delimitar responsabilidades sem omitir disciplinas ou interfaces relevantes."
+          ],
+          [
+            "Antes de executar",
+            "Localiza incompatibilidades, informações faltantes e decisões que afetam detalhamento, sequência construtiva e suprimentos."
+          ],
+          [
+            "Antes de aprovar uma alteração",
+            "Compara revisões, identifica o que mudou e verifica os reflexos nas disciplinas relacionadas."
+          ],
+          [
+            "Em apoio ao autor",
+            "Organiza perguntas e recomendações para devolutiva técnica, preservando a autoria e a responsabilidade do documento de origem."
+          ]
+        ]
+      },
+      "deliverables": {
+        "kicker": "Relatório de revisão",
+        "title": "Achados localizados, classificados e encaminhados.",
+        "intro": "A entrega separa constatação sustentada, recomendação, informação faltante e verificação ainda não realizada.",
+        "items": [
+          [
+            "Mapa de achados",
+            "Código, disciplina, documento, revisão, localização e evidência de cada item examinado."
+          ],
+          [
+            "Implicação técnica",
+            "Descrição objetiva do efeito do achado sobre a decisão, sem converter lacuna de informação em falha comprovada."
+          ],
+          [
+            "Encaminhamento",
+            "Pergunta ao autor, correção proposta, verificação complementar ou aceite registrado conforme a natureza do item."
+          ],
+          [
+            "Síntese para decisão",
+            "Pendências prioritárias, peças que podem avançar e condições para a próxima revisão."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta técnica",
+        "title": "Documentos, critérios e devolutiva ficam definidos antes do início.",
+        "intro": "A proposta informa o conjunto documental, as disciplinas, o nível de análise, o formato do relatório, a quantidade de ciclos e os responsáveis.",
+        "items": [
+          [
+            "Base documental",
+            "Pranchas, memoriais, modelos, especificações e revisões que compõem a base formal da análise."
+          ],
+          [
+            "Critérios",
+            "Requisitos do contratante, referências técnicas e normas incluídas no recorte da revisão."
+          ],
+          [
+            "Interlocução",
+            "Forma de registrar perguntas, receber respostas e consolidar as decisões com autores e coordenação."
+          ],
+          [
+            "Responsabilidade",
+            "Tiago Sasaki, Engenheiro Civil formado pela EESC-USP e com registro profissional ativo no CREA, conduz os escopos compatíveis com suas atribuições; outras disciplinas recebem responsável habilitado definido na proposta."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "extrato-demonstrativo"
+      ],
+      "section_order": [
+        "technical",
+        "deliverables",
+        "competencies",
+        "engagement"
+      ],
+      "related_guides": {
+        "title": "Escolha a etapa que responde à decisão atual.",
+        "intro": "A orientação compara revisão, compatibilização e elaboração e ajuda a definir quando o documento existente deve ser verificado, coordenado ou desenvolvido.",
+        "items": [
+          [
+            "Revisar, compatibilizar ou elaborar",
+            "Compare o objetivo, a entrada e a saída de cada etapa antes de fechar o escopo.",
+            "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/"
+          ],
+          [
+            "Como contratar a revisão técnica",
+            "Veja quais documentos, critérios e ciclos ajudam a dimensionar uma revisão verificável.",
+            "/conteudos/como-contratar-revisao-tecnica-projeto/"
+          ]
+        ]
+      },
+      "contact": {
+        "title": "Solicite uma proposta de revisão técnica.",
+        "intro": "Informe o tipo de projeto, a decisão que a revisão deve apoiar e as disciplinas envolvidas. Se houver uma lista de documentos ou revisões, ela já ajuda a dimensionar o trabalho.",
+        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Para modelos, pranchas ou documentos com acesso restrito, combinamos o canal e as permissões adequadas. O tratamento dos dados segue a Política de Privacidade."
+      },
+      "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto."
+    },
+    {
+      "route": "compatibilizacao-projetos-engenharia",
+      "journey": "projeto",
+      "contact_id": "pedido-compatibilizacao",
+      "hero": {
+        "eyebrow": "Interfaces resolvidas antes de chegarem à obra",
+        "title": "Compatibilização de projetos de engenharia",
+        "lead": "A CONFENGE coordena a leitura conjunta das disciplinas, registra interferências e conduz decisões até que desenhos, modelos e memoriais expressem a solução acordada.",
+        "value": "Cada apontamento recebe localização, documentos de origem, responsável, encaminhamento e estado. A entrega permite contratar e executar sobre revisões coerentes entre si.",
+        "cta": "Solicitar proposta de compatibilização",
+        "signal_title": "Interferência vira decisão rastreável",
+        "signals": [
+          [
+            "Localização",
+            "Ambiente, eixo, nível, elemento e vista que permitem reencontrar o ponto."
+          ],
+          [
+            "Origem",
+            "Disciplina, arquivo e revisão usados na identificação da interface."
+          ],
+          [
+            "Encaminhamento",
+            "Responsável pela resposta, decisão acordada e peças que precisam ser atualizadas."
+          ],
+          [
+            "Fechamento",
+            "Nova revisão conferida e registro do estado final do apontamento."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Coordenação técnica",
+        "title": "Compatibilizar é gerir interfaces entre autores, sistemas e versões.",
+        "intro": "A sobreposição geométrica é uma das fontes de evidência. O trabalho também coordena requisitos funcionais, construtivos, documentais e de responsabilidade.",
+        "items": [
+          [
+            "Edificações",
+            "Arquitetura, estrutura, instalações e sistemas especiais coordenados por ambientes, elementos, níveis e zonas técnicas."
+          ],
+          [
+            "Infraestrutura",
+            "Cotas, acessos, drenagem, redes, pavimento, contenções e interfaces entre lote, via e edificações."
+          ],
+          [
+            "Documentos e modelos",
+            "Pranchas, memoriais, planilhas e modelos vinculados às revisões efetivamente examinadas."
+          ],
+          [
+            "Gestão de decisões",
+            "Reuniões objetivas, registros de issue, responsáveis, prazos de resposta e conferência da solução incorporada."
+          ]
+        ]
+      },
+      "deliverables": {
+        "kicker": "Entregas",
+        "title": "Um registro utilizável pela coordenação e pelos autores.",
+        "intro": "O produto da compatibilização não é apenas uma imagem de conflito. É o conjunto de informações que permite decidir, atualizar e conferir.",
+        "items": [
+          [
+            "Matriz de interfaces",
+            "Disciplinas, documentos, elementos e dependências considerados na rodada."
+          ],
+          [
+            "Registro de apontamentos",
+            "Código, localização, evidência visual, descrição, impacto técnico e responsável pelo encaminhamento."
+          ],
+          [
+            "Controle de versões",
+            "Revisão de origem, resposta do autor, revisão de fechamento e histórico da decisão."
+          ],
+          [
+            "Síntese de coordenação",
+            "Itens abertos, decisões tomadas, pendências do contratante e condições para liberar o pacote."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta técnica",
+        "title": "A coordenação é dimensionada pelo pacote e pelo ciclo de decisões.",
+        "intro": "A proposta considera disciplinas, estágio dos documentos, formato dos arquivos, quantidade de ciclos e interlocutores responsáveis.",
+        "items": [
+          [
+            "Entrada",
+            "Lista de disciplinas e revisões, finalidade do pacote e responsáveis por responder a cada especialidade."
+          ],
+          [
+            "Rodadas",
+            "Critério de abertura, priorização, resposta e fechamento dos apontamentos."
+          ],
+          [
+            "Atualização",
+            "A autoria e a alteração dos projetos permanecem com os responsáveis definidos; a coordenação confere a incorporação da decisão."
+          ],
+          [
+            "Integração",
+            "Elaboração ou revisão técnica pode entrar na mesma proposta quando o pacote precisar dessas etapas."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "registro-interferencias"
+      ],
+      "section_order": [
+        "competencies",
+        "deliverables",
+        "technical",
+        "engagement"
+      ],
+      "contact": {
+        "title": "Solicite uma proposta de compatibilização.",
+        "intro": "Informe as disciplinas existentes, a fase do projeto, os formatos disponíveis e a decisão que o pacote precisa alcançar. Uma relação simples dos arquivos e revisões ajuda a estimar as rodadas.",
+        "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Modelos e documentos controlados são recebidos pelo canal e com as permissões combinadas para o projeto. O tratamento dos dados segue a Política de Privacidade."
+      }
+    },
+    {
+      "route": "quantitativos-orcamento-obras",
+      "journey": "orcamento",
+      "contact_id": "triagem-quantitativos",
+      "hero": {
+        "eyebrow": "Base própria para contratar, comparar e controlar",
+        "title": "Quantitativos e orçamento de obras",
+        "lead": "A CONFENGE transforma projetos e memoriais em uma base auditável de elementos, critérios de medição, quantidades e itens de planilha para obras públicas e privadas.",
+        "value": "Estruturas, arquitetura, instalações e infraestrutura alimentam a mesma memória: cada linha conserva elemento, documento, revisão, unidade, fórmula e vínculo com o orçamento.",
+        "cta": "Solicitar proposta de quantitativos e orçamento",
+        "signal_title": "Da disciplina ao custo",
+        "signals": [
+          [
+            "Quantitativo",
+            "Elementos identificados, critérios declarados e memória de medição por disciplina."
+          ],
+          [
+            "Orçamento",
+            "Composições, insumos, produtividade, encargos, BDI, cotações, referência e data-base conforme o objetivo."
+          ],
+          [
+            "Revisão",
+            "Conferência de planilha existente contra documentos, critérios e quantidades rastreáveis."
+          ],
+          [
+            "Equalização",
+            "Comparação de propostas sobre unidades, escopos, exclusões e base quantitativa comum."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Abrangência disciplinar",
+        "title": "O banco de quantitativos acompanha a estrutura analítica da obra.",
+        "intro": "A organização permite consolidar diferentes disciplinas sem perder o vínculo entre quantidade e documento de origem.",
+        "items": [
+          [
+            "Estruturas",
+            "Concreto em m³, fôrmas em m², armaduras em kg, perfis, chapas e elementos identificados por prancha e revisão."
+          ],
+          [
+            "Arquitetura",
+            "Áreas, volumes, comprimentos, unidades, ambientes, acabamentos e esquadrias associados aos elementos medidos."
+          ],
+          [
+            "Instalações",
+            "Pontos, equipamentos, tubulações, conexões, eletrodutos e condutores organizados por sistema, circuito ou trecho."
+          ],
+          [
+            "Infraestrutura",
+            "Terraplenagem, camadas de pavimento, drenagem, redes e obras lineares referidas a seções, estacas e trechos."
+          ]
+        ]
+      },
+      "deliverables": {
+        "kicker": "Entregas",
+        "title": "Planilha e memória preparadas para conferência e atualização.",
+        "intro": "O formato final é combinado com a finalidade: contratar, estimar, equalizar propostas, revisar um orçamento ou controlar a execução.",
+        "items": [
+          [
+            "Banco de quantitativos",
+            "Código, disciplina, elemento, localização, origem, revisão, critério, unidade, expressão e quantidade."
+          ],
+          [
+            "Memória de medição",
+            "Premissas, inclusões, descontos e fórmulas que permitem refazer cada resultado."
+          ],
+          [
+            "Planilha orçamentária",
+            "Serviços, composições, insumos, preços, encargos, BDI, fontes e data-base no nível contratado."
+          ],
+          [
+            "Relatório de revisão ou equalização",
+            "Divergências, lacunas, escopos comparados e recomendações para decisão."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta técnica",
+        "title": "A finalidade define o nível de detalhe e as fontes de preço.",
+        "intro": "A proposta relaciona disciplinas, documentos, estrutura analítica, base de preços, formato de entrega e ciclos de atualização.",
+        "items": [
+          [
+            "Obra privada",
+            "Quantitativo, orçamento ou revisão para contratar, comprar, comparar propostas ou planejar a execução."
+          ],
+          [
+            "Obra pública",
+            "Orçamento de referência, revisão de planilha ou apoio à proposta considerando edital, critérios de medição e bases oficiais aplicáveis."
+          ],
+          [
+            "Projeto em desenvolvimento",
+            "Premissas e lacunas ficam registradas para que a base possa ser atualizada quando novas revisões forem emitidas."
+          ],
+          [
+            "Responsabilidade",
+            "A proposta identifica o profissional, as disciplinas e o alcance da responsabilidade técnica sobre a entrega."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "banco-disciplinas",
+        "amostra-quantitativos"
+      ],
+      "section_order": [
+        "technical",
+        "competencies",
+        "deliverables",
+        "engagement"
+      ],
+      "related_guides": {
+        "title": "Três decisões antes de fechar a base.",
+        "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas e quando revisar ou refazer um orçamento.",
+        "items": [
+          [
+            "Documentos para o levantamento",
+            "Veja como plantas, memoriais e revisões mudam o recorte e a confiabilidade da memória.",
+            "/conteudos/documentos-para-levantamento-quantitativos/"
+          ],
+          [
+            "Comparação de propostas",
+            "Compare escopos, unidades, exclusões e quantidades sobre uma referência comum.",
+            "/conteudos/comparar-propostas-execucao-obra/"
+          ],
+          [
+            "Revisar ou refazer o orçamento",
+            "Distinga atualização, revisão crítica e nova orçamentação conforme a condição da base existente.",
+            "/conteudos/revisar-ou-refazer-orcamento-obra/"
+          ]
+        ]
+      },
+      "contact": {
+        "title": "Solicite uma proposta de quantitativos ou orçamento.",
+        "intro": "Informe o tipo de obra, a finalidade da base, as disciplinas e os documentos disponíveis. Uma lista de pranchas, a planilha existente ou um resumo do escopo já permite dimensionar a proposta.",
+        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade."
+      }
+    },
+    {
+      "route": "inspecao-diagnostico-edificacoes",
+      "journey": "obra",
+      "contact_id": "contato-inspecao",
+      "hero": {
+        "eyebrow": "Condição registrada, causa investigada, providência orientada",
+        "title": "Inspeção e diagnóstico de edificações",
+        "lead": "A CONFENGE examina manifestações, sistemas e documentos da edificação para registrar a condição observada, investigar causas compatíveis com as evidências e orientar a decisão seguinte.",
+        "value": "O trabalho pode apoiar recebimento, manutenção, reforma, reparo, documentação do construído ou uma discussão técnica. A proposta define objeto, visita, acessos, ensaios e produto final.",
+        "cta": "Solicitar proposta de inspeção e diagnóstico",
+        "signal_title": "Da observação ao encaminhamento",
+        "signals": [
+          [
+            "Campo",
+            "Fotos, croquis, medidas, condições de acesso e localização de cada manifestação."
+          ],
+          [
+            "Documentos",
+            "Projetos, memoriais, registros de execução, manutenção e intervenções relacionados ao objeto."
+          ],
+          [
+            "Diagnóstico",
+            "Fatos, hipóteses, exames complementares e grau de sustentação de cada conclusão."
+          ],
+          [
+            "Providência",
+            "Prioridades, monitoramento, manutenção, projeto de reparo ou aprofundamento indicado."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Aplicações",
+        "title": "Inspeção para compreender a edificação e apoiar uma decisão concreta.",
+        "intro": "O escopo é definido pela pergunta técnica e pelo sistema examinado, com o nível de investigação compatível com a evidência necessária.",
+        "items": [
+          [
+            "Manifestações e desempenho",
+            "Fissuras, umidade, desplacamentos, deformações e falhas aparentes em elementos e sistemas da edificação."
+          ],
+          [
+            "Recebimento e entrega",
+            "Registro da condição, lista de itens, confronto com documentos e evidências para aceite, correção ou ressalva."
+          ],
+          [
+            "Reforma e manutenção",
+            "Leitura das interferências, condição existente, prioridades e requisitos técnicos para planejar a intervenção."
+          ],
+          [
+            "Construído e documentado",
+            "Reconciliação entre projeto, condição observada e documentação disponível para orientar as-built ou regularização."
+          ]
+        ]
+      },
+      "deliverables": {
+        "kicker": "Entregas",
+        "title": "Um relatório que localiza a evidência e explica seu alcance.",
+        "intro": "O produto é estruturado para ser usado por proprietários, condomínios, construtoras, projetistas, gestores e equipes de manutenção.",
+        "items": [
+          [
+            "Registro de condição",
+            "Objeto, data, acesso, fotografias, croquis, medidas e manifestações identificadas."
+          ],
+          [
+            "Análise técnica",
+            "Relação entre observações, documentos, mecanismos possíveis e evidências disponíveis."
+          ],
+          [
+            "Plano de aprofundamento",
+            "Monitoramento, ensaio, abertura, levantamento ou documento necessário para responder ao que permaneceu em aberto."
+          ],
+          [
+            "Encaminhamento",
+            "Prioridades e recomendações para manutenção, reparo, projeto, orçamento ou assistência técnica."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta técnica",
+        "title": "Objeto, acesso e produto final são combinados para a edificação.",
+        "intro": "A proposta delimita áreas e sistemas, finalidade, documentação, visita, recursos de inspeção, necessidade de ensaio e forma de apresentação dos resultados.",
+        "items": [
+          [
+            "Visita",
+            "Local, áreas acessíveis, responsáveis pelo acesso e condições necessárias para o levantamento."
+          ],
+          [
+            "Investigação",
+            "Recursos visuais, medições e exames complementares compatíveis com a pergunta técnica."
+          ],
+          [
+            "Urgência",
+            "Condição com risco aparente exige encaminhamento presencial competente e priorização específica no atendimento."
+          ],
+          [
+            "Responsabilidade",
+            "Tiago Sasaki, Engenheiro Civil formado pela EESC-USP e com registro profissional ativo no CREA, conduz os escopos compatíveis com suas atribuições."
+          ]
+        ]
+      },
+      "distinctions": {
+        "kicker": "Etapas encadeadas",
+        "title": "Inspeção, diagnóstico, reparo e assistência pericial respondem a perguntas diferentes.",
+        "intro": "Fotografia ajuda a localizar a manifestação, mas não permite diagnosticar causa, estabilidade ou solução à distância. Esta orientação não ensina reparo: a intervenção é definida depois da investigação compatível com o caso. Se houver suspeita de risco imediato à segurança das pessoas, procure avaliação presencial competente e os canais locais adequados.",
+        "items": [
+          [
+            "Inspeção",
+            "Registra o que existe no recorte definido: acessos, manifestações, evidências e limitações do que pôde ser observado."
+          ],
+          [
+            "Diagnóstico",
+            "Analisa causas tecnicamente sustentáveis pelas constatações e declara o que ainda exige medição, ensaio ou aprofundamento."
+          ],
+          [
+            "Projeto de reparo",
+            "Define a intervenção com base na condição diagnosticada, em etapa própria, com os detalhes e responsabilidades correspondentes."
+          ],
+          [
+            "Perícia ou assistência em disputa",
+            "Organiza prova técnica para processo, negociação ou contestação. A assistência da parte permanece distinta da perícia do juízo e do relatório de inspeção privada."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "amostra-disponivel"
+      ],
+      "section_order": [
+        "competencies",
+        "technical",
+        "distinctions",
+        "deliverables",
+        "engagement"
+      ],
+      "contact": {
+        "title": "Solicite uma proposta de inspeção e diagnóstico.",
+        "intro": "Informe a edificação, o município, o que foi observado e a decisão que o relatório deve apoiar. Fotos gerais ou referências não sigilosas podem ajudar a definir o escopo inicial.",
+        "boundary": "Você pode compartilhar referências não sigilosas por WhatsApp ou e-mail. Dados pessoais, endereços completos e documentos controlados são tratados pelo canal adequado ao escopo. O tratamento dos dados segue a Política de Privacidade."
+      }
+    },
+    {
+      "route": "assistencia-tecnica-pericial-engenharia",
+      "journey": "pericia",
+      "contact_id": "contato-assistencia",
+      "hero": {
+        "eyebrow": "Engenharia para organizar a posição técnica da parte",
+        "title": "Assistência técnica de engenharia em disputas",
+        "lead": "A CONFENGE apoia partes e advogados em controvérsias sobre edificações, obras e imóveis, estruturando evidências, quesitos e manifestações dentro do campo da engenharia.",
+        "value": "A assistência da parte pode começar na triagem pré-litígio e seguir pela análise documental, inspeção, acompanhamento de diligência, crítica de laudo e esclarecimentos. A atuação técnica se articula com a advocacia sem se confundir com a perícia do juízo.",
+        "cta": "Solicitar proposta de assistência técnica",
+        "signal_title": "Papéis e produtos definidos",
+        "signals": [
+          [
+            "Parte",
+            "Contrata a assistência e apresenta a questão técnica, os documentos e a decisão a apoiar."
+          ],
+          [
+            "Advogado",
+            "Conduz a estratégia, os atos e a representação jurídica quando houver processo."
+          ],
+          [
+            "Assistente técnico",
+            "Organiza a evidência de engenharia, formula quesitos e produz manifestações para a parte."
+          ],
+          [
+            "Perito do juízo",
+            "É nomeado pelo juiz e exerce função própria no processo."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Atuação técnica",
+        "title": "Evidência de engenharia organizada para negociação ou processo.",
+        "intro": "O escopo acompanha o estágio da controvérsia e a pergunta que precisa de resposta técnica.",
+        "items": [
+          [
+            "Triagem pré-litígio",
+            "Leitura inicial da matéria técnica, evidências disponíveis, lacunas e próximos exames para apoiar a decisão de negociar ou litigar."
+          ],
+          [
+            "Assistência em processo",
+            "Quesitos, análise de documentos, acompanhamento de diligência e manifestação técnica nos marcos definidos com o advogado."
+          ],
+          [
+            "Crítica de laudo",
+            "Conferência de método, dados, coerência, limites e respostas aos quesitos, com pontos técnicos localizados."
+          ],
+          [
+            "Controvérsias de edificações",
+            "Condição, execução, reforma, recebimento, danos, interfaces de projeto e outros temas compatíveis com a atribuição contratada."
+          ]
+        ]
+      },
+      "deliverables": {
+        "kicker": "Entregas",
+        "title": "Uma manifestação técnica ligada à evidência do caso.",
+        "intro": "O documento explicita objeto, fontes, método, análise, conclusões e limites, com linguagem utilizável pela parte e pelo advogado.",
+        "items": [
+          [
+            "Matriz de evidências",
+            "Documentos, registros de campo, fatos, lacunas e relação de cada elemento com a pergunta técnica."
+          ],
+          [
+            "Quesitos e pontos controvertidos",
+            "Perguntas tecnicamente verificáveis e organizadas conforme o objeto da atuação."
+          ],
+          [
+            "Manifestação ou parecer",
+            "Análise fundamentada, conclusões delimitadas e resposta aos documentos ou ao laudo examinado."
+          ],
+          [
+            "Acompanhamento",
+            "Preparação para diligência, registro técnico do ato e apoio nos esclarecimentos previstos no escopo."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta técnica",
+        "title": "Objeto, marcos e interlocução jurídica orientam o escopo.",
+        "intro": "A proposta considera a questão técnica, o conjunto documental, a necessidade de campo, os prazos do caso e os produtos esperados em cada etapa.",
+        "items": [
+          [
+            "Definição da atuação",
+            "Objeto da edificação ou obra, ponto controvertido e finalidade da atuação técnica."
+          ],
+          [
+            "Documentos",
+            "Peças técnicas, projetos, registros, laudos e quesitos que compõem a base de análise."
+          ],
+          [
+            "Agenda",
+            "Marcos processuais ou negociais, diligências, reuniões e datas de entrega informadas pelo contratante e pelo advogado."
+          ],
+          [
+            "Responsabilidade",
+            "Tiago Sasaki, Engenheiro Civil formado pela EESC-USP e com registro profissional ativo no CREA, conduz os escopos compatíveis com suas atribuições e atua com ART quando cabível."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "amostra-disponivel"
+      ],
+      "section_order": [
+        "competencies",
+        "deliverables",
+        "technical",
+        "engagement"
+      ],
+      "contact": {
+        "title": "Solicite uma proposta de assistência técnica.",
+        "intro": "Informe o objeto da controvérsia, o estágio da negociação ou do processo, o prazo conhecido e se já há advogado. Uma relação dos documentos disponíveis ajuda a definir a primeira etapa.",
+        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Peças processuais, dados de partes e documentos protegidos seguem pelo canal e com as permissões adequadas ao caso. O tratamento dos dados segue a Política de Privacidade."
+      }
+    }
+  ]
+}

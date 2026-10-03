@@ -478,6 +478,9 @@ def _packet_page(page: dict[str, Any], manifest: dict[str, Any], previous_hash: 
     context = FIRST_COHORT_CONTEXT[page["page_id"]]
     approval = page.get("approval") or {}
     current_hash = material_hash(page, manifest)
+    from scripts.editorial.registry import institutional_greeting_amendment_is_current
+
+    greeting_amended = institutional_greeting_amendment_is_current(page, manifest)
     return {
         "page_id": page["page_id"],
         "url": page["url"],
@@ -507,6 +510,14 @@ def _packet_page(page: dict[str, Any], manifest: dict[str, Any], previous_hash: 
             "reason": "v3 now commits every public page field plus resolved used-source identity.",
         },
         "registry_status": page.get("status"),
+        "institutional_greeting_amendment": page.get("institutional_greeting_amendment"),
+        "approval_basis": {
+            "kind": "original_human_decision_with_validated_greeting_amendment" if greeting_amended else "exact_material_human_decision",
+            "original_approved_material_hash": approval.get("material_hash"),
+            "current_material_hash": current_hash,
+            "greeting_amendment_validated": greeting_amended,
+            "new_human_review_claimed": False,
+        },
         "approval_identity": (
             {
                 "schema_version": approval.get("schema_version"),
@@ -520,7 +531,11 @@ def _packet_page(page: dict[str, Any], manifest: dict[str, Any], previous_hash: 
             if approval
             else None
         ),
-        "decision_reason": "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet.",
+        "decision_reason": (
+            "A decisão humana original e seu preview permanecem vinculados ao hash factual aprovado. A campanha autorizou exclusivamente as duas saudações institucionais; o adendo reconstrói aquele material e verifica o hash original. O runtime packet descreve o material atual e o vínculo entre ambos. Não há novo revisor, data ou aprovação humana."
+            if greeting_amended else
+            "Aprovar somente após conferir fontes, conteúdo material, canibalização e a identidade do deploy preview. O hash deve coincidir com o runtime packet."
+        ),
     }
 
 
@@ -596,7 +611,7 @@ def write_human_action_now(packet: dict[str, Any]) -> Path:
     lines = [
         "# Ação humana obrigatória — primeira coorte editorial",
         "",
-        "**Estado:** pronto apenas para revisão humana individual. Nenhum agente, CI ou bot aprova páginas, publica URLs ou faz merge.",
+        "**Estado:** decisões factuais humanas permanecem individuais. Agentes, CI e bots não criam aprovação humana. A publicação de material aprovado segue a autorização da direção e os gates de produção.",
         "",
         "A aprovação vale para o conteúdo material canônico, as fontes exatas e o deploy preview, não para uma URL de produção nem para um SHA meramente informativo.",
         "",

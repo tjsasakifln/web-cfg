@@ -27,9 +27,9 @@
     "lei-14133-planalto",
     "agu-alteracoes-contratuais-2024"
   ],
-  "cta_whatsapp": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
+  "cta_whatsapp": "Olá, CONFENGE. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
   "cta_email_subject": "Análise inicial: dossiê de aditivo de obra",
-  "cta_email_body": "Olá, Tiago.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n",
+  "cta_email_body": "Olá, CONFENGE.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n",
   "cta_offer": "Validar o dossiê de aditivo com a CONFENGE",
   "related": [
     {
@@ -261,5 +261,25 @@
       "category": "final",
       "label": "Pendências tratadas"
     }
-  ]
+  ],
+  "institutional_greeting_amendment": {
+    "schema": "CONFENGE_INSTITUTIONAL_GREETING_AMENDMENT/1",
+    "authorized_at": "2026-10-03",
+    "authorization": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+    "actor": "codex-autonomous-review",
+    "approved_material_hash": "01fd7f0e60bb058fe3e09851a62f7f43b97167f244445a9d5161bff39b589885",
+    "substitutions": [
+      {
+        "field": "cta_whatsapp",
+        "before": "Olá, Tiago. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/",
+        "after": "Olá, CONFENGE. Usei o checklist da CONFENGE de pedido de aditivo e quero validar o dossiê do meu contrato de obra. Origem: /guias-contratos-obras/checklist-pedido-aditivo/"
+      },
+      {
+        "field": "cta_email_body",
+        "before": "Olá, Tiago.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n",
+        "after": "Olá, CONFENGE.\n\nConsultei /guias-contratos-obras/checklist-pedido-aditivo/ e quero uma leitura do meu pedido de aditivo.\n\nPosso enviar os documentos da checklist.\n"
+      }
+    ],
+    "review_scope": "Independent source/DOM review: all factual, legal, checklist, source, FAQ and body fields unchanged. Only institutional greetings amended; original named reviewer, review time and preview preserved."
+  }
 }

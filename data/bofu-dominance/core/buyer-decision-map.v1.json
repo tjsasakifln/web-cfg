@@ -37,7 +37,7 @@
     },
     {
       "path": "data/organic/bofu-intent-matrix.json",
-      "sha256": "c8a8c7f0e1d73144f9b3f8f938e12e7f70122b7c87e3af01ca3ea1c57de78409"
+      "sha256": "4562b56ef175e3d96fd45ab3bf223762c876edaa6d1ba769ec84fbd3457758f2"
     },
     {
       "path": "data/organic/demand-map.json",
@@ -49,7 +49,7 @@
     },
     {
       "path": "data/organic/public-family-registry.json",
-      "sha256": "fe2bad5aaf604a8a62786d6c4612e4e2112079789c5a31a997acea164757d5e6"
+      "sha256": "c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0"
     },
     {
       "path": "data/bofu-dominance/frozen-specs/query-ownership.json",
@@ -1561,7 +1561,7 @@
       },
       "cta": {
         "state": "DECLARED",
-        "label": "Solicitar canal seguro para envio",
+        "label": "Solicitar proposta",
         "terminal_action": "capture_form"
       },
       "conversion_path": "CONFENGE_WEB_INBOUND_V1",
@@ -2055,6 +2055,24 @@
         "known_factor_product": 256,
         "canonical_owner_impressions": 3
       }
+    }
+  ],
+  "commercial_amendments": [
+    {
+      "date": "2026-10-03",
+      "scope": "Canonical institutional proposal copy and public-family presentation, expressly authorized by the campaign; historical demand, ownership, ranking and human-validation fields remain unchanged. Hashes normalize checkout line endings as the existing validator requires.",
+      "changed_sources": [
+        {
+          "path": "data/organic/bofu-intent-matrix.json",
+          "previous_sha256": "c8a8c7f0e1d73144f9b3f8f938e12e7f70122b7c87e3af01ca3ea1c57de78409",
+          "sha256": "4562b56ef175e3d96fd45ab3bf223762c876edaa6d1ba769ec84fbd3457758f2"
+        },
+        {
+          "path": "data/organic/public-family-registry.json",
+          "previous_sha256": "fe2bad5aaf604a8a62786d6c4612e4e2112079789c5a31a997acea164757d5e6",
+          "sha256": "c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0"
+        }
+      ]
     }
   ]
 }

@@ -523,7 +523,7 @@ def _services_situations() -> list[dict[str, Any]]:
                 "módulos técnicos entram: DOD ou DFD (conforme a nomenclatura do ente), ETP, termo "
                 "de referência ou projeto, quantitativos, orçamento de referência, cronograma, "
                 "critérios de medição, matriz de riscos; sem peça implícita: capacidade, campo e "
-                "responsabilidade profissional são confirmados antes do aceite técnico. Cada módulo "
+                "responsabilidade profissional são confirmados na proposta. Cada módulo "
                 "entra com premissas, levantamentos de campo e limites registrados; a ART cobre cada "
                 "módulo de engenharia efetivamente produzido, e não há ART de ato administrativo. O "
                 "trabalho não é parecer jurídico nem ato administrativo: aprovação, assinatura e "
@@ -674,22 +674,22 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <h1 class="t-service" id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
 <div class="svc-open__actions" data-commercial-route="medicoes-glosas">
-<a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="button button-secondary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-registrar-evento" data-cta-position="hub_services" data-event-name="cta_click" data-journey="contrato" data-route-family="servicos-obras-publicas" href="#captura-contrato">Registrar o evento no formulário</a>
+<a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Conhecer o apoio para medições e glosas <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-secondary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-registrar-evento" data-cta-position="hub_services" data-event-name="cta_click" data-journey="contrato" data-route-family="servicos-obras-publicas" href="#captura-contrato">Solicitar proposta</a>
 </div>
 <p class="section-proof svc-open__note">{_proof_html(meta)}</p>
-<p class="t-caption">Órgão que planeja a contratação: estruturamos a fase preparatória; veja o bloco <a href="#situacao-orgao">Órgão público</a>.</p>
+<p class="t-caption">Para órgãos públicos, apoiamos a preparação técnica da contratação. Veja <a href="#situacao-orgao">planejamento de obra pública</a>.</p>
 </div>
 <aside class="aside-note" aria-labelledby="hub-route-title">
-<h2 id="hub-route-title">Medição glosada ou retida</h2>
+<h2 id="hub-route-title">Apoio técnico para contratos públicos</h2>
 <dl>
-<div><dt>Dossiê de Medição, Glosa e Pagamento</dt><dd>{e(medicao)} após os documentos mínimos, por medição ou glosa de um mesmo período. Apuramos em reais o que está retido, declaramos as lacunas e escrevemos a posição que você apresenta ao fiscal. Não é petição jurídica nem promessa de recebimento.</dd></div>
-<div><dt>Outro evento?</dt><dd>O índice abaixo leva à página de cada situação: o que assumimos, o que chega às suas mãos e o caminho.</dd></div>
+<div><dt>Medição, glosa e pagamento</dt><dd>{e(medicao)} por período analisado. Organizamos medições, evidências e quantitativos para apoiar a posição técnica diante da fiscalização.</dd></div>
+<div><dt>Outras necessidades</dt><dd>Edital, aditivo, atraso, reequilíbrio e planejamento de contratação têm frentes próprias abaixo.</dd></div>
 </dl>
 </aside>
 </div>
 <nav class="page-index" aria-label="Eventos desta página">
-<span class="page-index__label">Em que ponto do contrato você está?</span>
+<span class="page-index__label">Selecione a necessidade do contrato</span>
 <ol>
 {index_html}
 <li><a href="#hub-outras"><span>{len(situations) + 1:02d}</span>Outras necessidades</a></li>
@@ -715,7 +715,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <span class="t-kicker">Serviços por evento contratual</span>
 <div>
 <h2 class="t-editorial" id="hub-situacoes">Em que ponto do contrato você está?</h2>
-<p>Cada situação diz o que assumimos, o que chega às suas mãos e para que serve. Preço e prazo de cada dossiê estão publicados uma vez, em <a href="#contract-products-title">Sete eventos contratuais</a>, e o pedido vai por <a href="#captura-contrato">Registrar o evento</a>; nos demais, a proposta nomeia o valor depois da leitura do caso.</p>
+<p>Escolha a frente que melhor descreve a demanda. Cada página apresenta o trabalho técnico, as entregas e o caminho para solicitar proposta. Valores publicados permanecem nas ofertas correspondentes.</p>
 </div>
 </div>
 <ol class="list-ruled list-ruled--areas">{situations_html}</ol>
@@ -735,18 +735,18 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 </section>
 <section aria-labelledby="hub-next" class="sec sec--tight sec--rule-top">
 <div class="container narrow">
-<span class="t-kicker">Ainda não sabe nomear o evento?</span>
-<h2 class="t-editorial" id="hub-next">Descreva o contrato e o que aconteceu.</h2>
-<p class="t-callout">É uma conversa técnica, sem contratação nem pagamento; sem formulário e sem documento sensível neste primeiro contato. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Casos urgentes de contrato: resposta em até 1 dia útil; demais, em até 2 dias úteis.</p>
+<span class="t-kicker">Fale sobre a demanda</span>
+<h2 class="t-editorial" id="hub-next">Conte o que precisa resolver no contrato.</h2>
+<p class="t-callout">Você pode começar com o contexto disponível. A CONFENGE orienta a frente técnica e os documentos pertinentes para preparar a proposta.</p>
 <div class="contact-primary">
-<a class="button button-primary" data-cta-position="hub_services_next" data-event-name="whatsapp_click" href="{e(_whatsapp("contrato_pressao"))}" rel="noopener" target="_blank">Descrever o contrato pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-primary" data-cta-position="hub_services_next" data-event-name="whatsapp_click" href="{e(_whatsapp("contrato_pressao"))}" rel="noopener" target="_blank">Solicitar proposta pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <ul class="contact-alt">
 <li><a href="{e(problems["url"])}">Reconhecer o problema pelo ciclo do contrato</a></li>
 <li><a href="/ferramentas/">Calcular limite de aditivo, atraso, reequilíbrio ou margem nas ferramentas públicas</a></li>
 <li><a href="/analises-contratos-publicos/">Examinar análises técnicas documentadas</a></li>
 </ul>
 </div>
-<p class="t-caption">As análises examinam fontes públicas, método, cálculos e limites. Não são casos de cliente e não afirmam relação comercial com as partes dos contratos.</p>
+<p class="t-caption">As análises técnicas mostram como a documentação, os cálculos e os critérios contratuais podem ser organizados em cada situação.</p>
 </div>
 </section>""",
         items,
@@ -873,16 +873,53 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
     )
 
 
+def _corporate_services_body() -> tuple[str, list[dict[str, str]]]:
+    """Institutional services hub: disciplines and technical fronts, not a
+    numbered classifieds list of isolated buyer problems."""
+    items = [
+        {"name": "Projetos de engenharia", "url": "/projetos-complementares-engenharia/"},
+        {"name": "Revisão e compatibilização", "url": "/revisao-tecnica-projetos-engenharia/"},
+        {"name": "Quantitativos e orçamento", "url": "/quantitativos-orcamento-obras/"},
+        {"name": "Inspeção e diagnóstico", "url": "/inspecao-diagnostico-edificacoes/"},
+        {"name": "Assistência técnica em disputas", "url": "/assistencia-tecnica-pericial-engenharia/"},
+        {"name": "Segurança do trabalho", "url": "/seguranca-trabalho-apoio-tecnico/"},
+        {"name": "Obras públicas", "url": "/servicos-obras-publicas/"},
+    ]
+    return (
+        """<section aria-labelledby="services-title" class="svc-open">
+<div class="container"><div class="svc-open__grid"><div class="svc-open__copy">
+<p class="eyebrow t-kicker">Engenharia para empreendimentos públicos e privados</p>
+<h1 class="t-service" id="services-title">Projetos e serviços de engenharia que dão forma ao empreendimento.</h1>
+<p class="section-lead svc-open__lead">A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Também conduz revisões, compatibilização, orçamento, inspeção, assistência técnica e segurança do trabalho quando essas frentes ajudam a decidir, contratar ou executar.</p>
+<div class="svc-open__actions"><a class="button button-primary" data-asset-id="corporate_services_hub_v1" data-cta-id="services-proposal" data-hub-link="servicos-contato" data-route-family="servicos-corporativos" href="/triagem-tecnica/">Solicitar proposta <svg class="icon"><use href="#i-arrow"></use></svg></a><a class="button button-secondary" href="#areas">Conhecer as áreas</a></div>
+</div><aside class="aside-note" aria-labelledby="services-brief-title"><h2 id="services-brief-title">Uma proposta para o conjunto necessário</h2><p>Comece pela disciplina principal ou pela decisão que está na mesa. Reunimos as especialidades, interfaces e entregas necessárias para o objeto, inclusive quando o contexto inicial ainda está incompleto.</p></aside></div></div>
+</section>
+<section aria-labelledby="areas-title" class="sec" id="areas"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Áreas de atuação</span><div><h2 class="t-editorial" id="areas-title">Do projeto à decisão técnica, com cada frente no lugar certo.</h2><p>As áreas se combinam no escopo do empreendimento; cada página detalha entregas, aplicações e o canal para solicitar proposta.</p></div></header>
+<div class="grid-3">
+<article class="corporate-service-row" id="servico-projeto"><span class="t-kicker">Projetos</span><h3>Estruturas, instalações e infraestrutura</h3><p>Concepção, análise, dimensionamento, detalhamento e coordenação para edificações, infraestrutura e indústria. Estruturas em concreto, aço, pré-moldados e fundações; instalações elétricas, hidrossanitárias, mecânicas, incêndio, automação e sistemas especiais; implantação, drenagem, vias, saneamento e contenções.</p><p id="servico-revisao">A revisão técnica confere critérios e documentos de projeto já desenvolvidos.</p><p id="servico-compatibilizacao">A compatibilização coordena os encontros entre disciplinas para orientar os ajustes necessários.</p><div class="contact-actions"><a class="list-ruled__action" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-elaboration" data-hub-link="servicos-complementares-landing" data-route-family="servicos-corporativos" href="/projetos-complementares-engenharia/">Conhecer projetos de engenharia <svg class="icon"><use href="#i-arrow"></use></svg></a><a class="text-link" href="/projetos/">Ver disciplinas de projeto</a><a class="text-link" href="/parcerias-engenharia/">Parcerias de engenharia</a></div></article>
+<article class="corporate-service-row" id="servico-orcamento" data-hub-link="servicos-orcamento"><span class="t-kicker">Coordenação e orçamento</span><h3>Revisão, compatibilização, quantitativos e orçamento</h3><p>Conferimos projetos recebidos, coordenamos interfaces entre disciplinas e transformamos definições técnicas em quantitativos, memória de cálculo e orçamento para comparar propostas, contratar e planejar a execução.</p><div class="contact-actions"><a class="list-ruled__action" data-hub-link="servicos-revisao-landing" href="/revisao-tecnica-projetos-engenharia/">Revisar um projeto <svg class="icon"><use href="#i-arrow"></use></svg></a><a class="text-link" data-hub-link="servicos-compat-landing" href="/compatibilizacao-projetos-engenharia/">Compatibilizar disciplinas</a><a class="text-link" href="/quantitativos-orcamento-obras/">Quantitativos e orçamento</a></div></article>
+<article class="corporate-service-row" id="servico-diagnostico"><span class="t-kicker">Condição, prova e operação</span><h3>Inspeção, assistência técnica e segurança do trabalho</h3><p>Inspecionamos e diagnosticamos condições de edificações, organizamos análises técnicas para disputas e desenvolvemos documentação de segurança do trabalho. São frentes distintas, conduzidas conforme a decisão e a responsabilidade técnica necessárias.</p><p id="servico-pericia">A assistência técnica organiza evidências e análise de engenharia para a posição da parte.</p><p id="servico-sst">A documentação de segurança do trabalho é elaborada ou revisada para a atividade contratada.</p><p id="servico-avaliacao">A <a data-hub-link="servicos-avaliacao" href="/servicos/#servico-avaliacao">avaliação de imóveis</a> apoia decisões de compra, venda, partilha e garantia, com método e dados adequados ao objeto.</p><div class="contact-actions"><a class="list-ruled__action" data-hub-link="servicos-inspecao-landing" href="/inspecao-diagnostico-edificacoes/">Inspeção e diagnóstico <svg class="icon"><use href="#i-arrow"></use></svg></a><a class="text-link" data-hub-link="servicos-pericia-landing" href="/assistencia-tecnica-pericial-engenharia/">Assistência técnica</a><a class="text-link" data-hub-link="servicos-sst-landing" href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a></div></article>
+</div></div></section>
+<section aria-labelledby="public-title" class="sec sec--soft" id="servico-obras-publicas" data-hub-link="servicos-obras-publicas"><div class="container"><div class="sec-head sec-head--split"><span class="t-kicker">Obras públicas</span><div><h2 class="t-editorial" id="public-title">Apoio técnico para licitações, contratos e planejamento de obras.</h2><p>A frente especializada atende empresas e órgãos públicos em edital, orçamento, medição, glosa, aditivo, reequilíbrio e preparação técnica da contratação, com ofertas e condições próprias.</p><a class="button button-secondary" href="/servicos-obras-publicas/">Conhecer obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" data-hub-link="servicos-medicao" href="/medicoes-glosas-obras-publicas/">Medição, glosa e pagamento</a> <a class="text-link" data-hub-link="servicos-aditivo" href="/aditivos-obras-publicas/">Aditivos em obras públicas</a></div></div></div></section>
+<section aria-labelledby="services-contact-title" class="sec sec--dark" id="contato-servicos"><div class="container narrow"><span class="t-kicker">Próximo passo</span><h2 class="t-editorial" id="services-contact-title">Conte o que o empreendimento precisa. Nós estruturamos a proposta.</h2><p>Informe a finalidade, a fase do empreendimento e o que já está disponível. Você pode iniciar a conversa mesmo sem todas as disciplinas ou documentos definidos. Se a sua necessidade não está listada, descreva o objetivo e a fase do empreendimento.</p><div class="contact-primary"><a class="button button-primary" data-asset-id="corporate_services_hub_v1" data-cta-id="services-contact-proposal" data-route-family="servicos-corporativos" href="/triagem-tecnica/">Solicitar proposta <svg class="icon"><use href="#i-arrow"></use></svg></a><a class="text-link" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20de%20engenharia." rel="noopener" target="_blank">Conversar pelo WhatsApp</a></div></div></section>""",
+        items,
+    )
+
+
 def render_pages() -> dict[str, str]:
     brand = load_brand()
     out: dict[str, str] = {}
 
     corporate_meta = hub(brand, "corporate_services")
-    corporate_path = ROOT / corporate_meta["url"].strip("/") / "index.html"
-    if not corporate_path.is_file():
-        raise ValueError(f"corporate services page missing: {corporate_path}")
-    out[corporate_meta["url"]] = _sync_corporate_services_jsonld(
-        corporate_path.read_text(encoding="utf-8")
+    body, items = _corporate_services_body()
+    out[corporate_meta["url"]] = _document(
+        url=corporate_meta["url"],
+        title=f"{corporate_meta['title']} | CONFENGE",
+        description=corporate_meta["description"],
+        body=body,
+        crumb=corporate_meta["label"],
+        items=items,
+        cluster="corporate-services",
     )
 
     services_meta = hub(brand, "services")

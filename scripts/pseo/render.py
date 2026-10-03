@@ -610,7 +610,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         (f"{m.get('segment')}, {m.get('region')}", None),
     ]
     wa = (
-        f"Olá, Tiago. Vi a página de inteligência de mercado de {m.get('segment')} "
+        f"Olá, CONFENGE. Vi a página de inteligência de mercado de {m.get('segment')} "
         f"{geo_locale.prepositional_phrase(m.get('region') or m.get('region_label'))} "
         f"e gostaria de um mapa aplicado à minha empresa."
 )
@@ -810,7 +810,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         (agency_display or c.page_id, None),
     ]
     wa = (
-        f"Olá, Tiago. Quero avaliar estratégia para disputar contratos de "
+        f"Olá, CONFENGE. Quero avaliar estratégia para disputar contratos de "
         f"{agency_display} (página de inteligência CONFENGE)."
 )
     body = f"""
@@ -972,7 +972,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
         (f"{p.get('object_label')}, {p.get('region')}", None),
     ]
     wa = (
-        f"Olá, Tiago. Quero validar preço, risco e margem com base no benchmark de "
+        f"Olá, CONFENGE. Quero validar preço, risco e margem com base no benchmark de "
         f"{obj_label} {region_phrase}."
 )
     body = f"""
@@ -1109,7 +1109,7 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
         (f"{d.get('segment')}, {d.get('region')}", None),
     ]
     wa = (
-        f"Olá, Tiago. Vi a página de concorrência observada em {d.get('segment')} "
+        f"Olá, CONFENGE. Vi a página de concorrência observada em {d.get('segment')} "
         f"({geo_locale.display_name(d.get('region') or d.get('region_label'))}) "
         f"e quero um mapa aplicado à minha empresa."
 )
@@ -1246,7 +1246,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         (f"{o.get('segment')}, {o.get('region')}", None),
     ]
     wa = (
-        f"Olá, Tiago. Quero analisar um edital de {o.get('segment')} "
+        f"Olá, CONFENGE. Quero analisar um edital de {o.get('segment')} "
         f"{region_phrase} antes da proposta."
 )
     market_link = o.get("related_market_slug")
@@ -1390,7 +1390,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         (p.get("problem_label") or c.page_id, None),
     ]
     wa = (
-        f"Olá, Tiago. Preciso enquadrar risco e decisão em um cenário de "
+        f"Olá, CONFENGE. Preciso enquadrar risco e decisão em um cenário de "
         f"{p.get('problem_label')} e proteger a margem da operação."
 )
     # Scrub limitations for public display, never ship pipeline template phrases
@@ -1610,7 +1610,7 @@ def render_hub(
     else:
         primary_href = wa_link(
             wa_message
-            or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa."
+            or "Olá, CONFENGE. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa."
 )
         primary_label = "Descrever a operação pelo WhatsApp"
         title_dark = "Evidência pública só vira valor com a capacidade da empresa."
@@ -1649,15 +1649,23 @@ def render_hub(
         from scripts.site.authority import policy_version_disclosure
 
         disclosure = policy_version_disclosure()
+    hero_action = (
+        '<div class="hero-actions"><a class="button button-primary" '
+        'data-cta-id="intelligence-hero-proposal" data-cta-position="hero" '
+        'href="/triagem-tecnica/">Solicitar análise para a minha decisão '
+        '<svg class="icon"><use href="#i-arrow"></use></svg></a></div>'
+        if path.rstrip("/") == "/inteligencia" else ""
+    )
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">{e(eyebrow)}</p>
 <h1 class="t-service">{e(h1)}</h1><p class="content-lead measure">{e(intro)}</p>
-{disclosure}</div></div></header>
+{hero_action}</div></div></header>
 <section class="sec sec--tight"><div class="container">{grid}
 {extra_html}
 {back}</div></section>
 {dark}
+<div class="container">{disclosure}</div>
 """
     graph = [
         ORG_JSONLD,
@@ -1678,7 +1686,7 @@ def render_hub(
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa_message
-        or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
+        or "Olá, CONFENGE. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
         extra_head=EDITORIAL_FULL_SHEET_LINK,
         data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
 )
