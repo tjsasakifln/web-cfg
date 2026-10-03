@@ -203,3 +203,7 @@ O auditor canônico registra 211 chamadas declaradas nas mesmas 31 superfícies
 com formulário: a diferença é o link existente de SST em Entregas, agora
 atribuído. O histórico de 210 permanece na nota e todos os controles materiais
 de next-state/v1 e a verificação de regeneração passaram.
+O template do catálogo público também conserva essa atribuição de SST,
+byte a byte com a âncora publicada; seu check registra 54 entregas e oito
+ofertas sem drift. A suíte completa de contratos comerciais passou depois
+desta conciliação, sem nova alteração de HTML, CSS ou medição de primeira tela.
