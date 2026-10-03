@@ -144,10 +144,10 @@
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
-      "sha256_previous": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+      "sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
+      "sha256_previous": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
       "sha256_recaptured_at": "2026-10-03",
-      "sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Abertura descreve o trabalho da CONFENGE antes da liderança técnica; responsabilidades materiais foram conservadas em disclosure acessível após a abertura. Referências não sigilosas pelos canais existentes e conteúdo reservado na contratação; prefills institucionais. Preços, cálculos, fontes, campos do formulário e destinos preservados. Sem nova revisão humana alegada."
+      "sha256_recapture_reason": "2026-10-03: resultado real de primeira dobra em 8cc14cec9 (22 PASS, 3 FAIL) motivou posicionar a descrição do trabalho antes das ações nas seis aberturas B2G. Nesta página só mudou a posição do mesmo parágrafo de substância; fatos técnicos, números, fontes, condições, formulário e destinos permanecem iguais. Revisão autônoma, sem nova aprovação humana alegada."
     }
   ],
   "second_wave": {
@@ -292,6 +292,26 @@
           },
           "after_sha256": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
           "review_scope": "Abertura descreve o trabalho da CONFENGE antes da liderança técnica; responsabilidades materiais foram conservadas em disclosure acessível após a abertura. Referências não sigilosas pelos canais existentes e conteúdo reservado na contratação; prefills institucionais. Preços, cálculos, fontes, campos do formulário e destinos preservados. Sem nova revisão humana alegada."
+        }
+      ]
+    },
+    {
+      "campaign": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003-FOLD-LAYOUT",
+      "authorized_by": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+      "measurement_source_sha": "8cc14cec9ba5594e638e536bbc405947b9eb1265",
+      "new_human_review_claimed": false,
+      "entries": [
+        {
+          "path": "medicoes-glosas-obras-publicas/index.html",
+          "previous_binding": {
+            "path": "medicoes-glosas-obras-publicas/index.html",
+            "sha256": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",
+            "sha256_previous": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+            "sha256_recaptured_at": "2026-10-03",
+            "sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Abertura descreve o trabalho da CONFENGE antes da liderança técnica; responsabilidades materiais foram conservadas em disclosure acessível após a abertura. Referências não sigilosas pelos canais existentes e conteúdo reservado na contratação; prefills institucionais. Preços, cálculos, fontes, campos do formulário e destinos preservados. Sem nova revisão humana alegada."
+          },
+          "after_sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
+          "review_scope": "2026-10-03: resultado real de primeira dobra em 8cc14cec9 (22 PASS, 3 FAIL) motivou posicionar a descrição do trabalho antes das ações nas seis aberturas B2G. Nesta página só mudou a posição do mesmo parágrafo de substância; fatos técnicos, números, fontes, condições, formulário e destinos permanecem iguais. Revisão autônoma, sem nova aprovação humana alegada."
         }
       ]
     }

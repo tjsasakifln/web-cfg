@@ -10,8 +10,12 @@ def render(page, text):
         pattern=rf'<!-- institutional-b2g-{kind}:start -->.*?<!-- institutional-b2g-{kind}:end -->'
         text,n=re.subn(pattern,lambda _:content,text,flags=re.S)
         if n!=1: raise ValueError(f'{page["route"]}: missing or duplicate {kind} slot')
-    # Describe the company's engineering work before the leadership byline.
-    text=re.sub(r'(<p\b[^>]*class="[^"]*offer-proof-line[^"]*"[^>]*>.*?</p>)\s*(<!-- institutional-b2g-opening:start -->.*?<!-- institutional-b2g-opening:end -->)',r'\2\n\1',text,flags=re.S)
+    # Work comes before the action and leadership, including the two routes
+    # whose byline uses authority-byline instead of offer-proof-line.
+    text,n=re.subn(r'<!-- institutional-b2g-opening:start -->.*?<!-- institutional-b2g-opening:end -->\n?', '',text,flags=re.S)
+    if n!=1: raise ValueError(f'{page["route"]}: invalid opening placement')
+    text,n=re.subn(r'(?=<div\b[^>]*class="[^"]*\bhero-actions\b[^"]*")',lambda _:opening+'\n',text,count=1)
+    if n!=1: raise ValueError(f'{page["route"]}: missing primary action group')
     return text
 
 def main():
