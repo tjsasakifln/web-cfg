@@ -43,9 +43,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 104744,
-      "class_selectors": 346,
-      "used": 346,
+      "bytes": 105014,
+      "class_selectors": 347,
+      "used": 347,
       "unused": []
     },
     "entregas/styles.css": {
@@ -97,8 +97,8 @@
       "gradient": 0
     },
     "assets/project-practices.css": {
-      "border_radius": 0,
-      "box_shadow": 2,
+      "border_radius": 1,
+      "box_shadow": 1,
       "gradient": 0
     },
     "assets/report-capture.css": {
@@ -243,8 +243,8 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 139,
-    "box_shadow": 67,
+    "border_radius": 140,
+    "box_shadow": 66,
     "gradient": 5
   }
 }

@@ -8,6 +8,8 @@ boundary, so ``\\b`` reported a dead class as used.
 """
 from __future__ import annotations
 
+import copy
+import json
 import re
 import shutil
 import sys
@@ -20,9 +22,11 @@ if str(ROOT) not in sys.path:
 
 from scripts.pseo.build_site import PROTOTYPE_SOURCE_DIR  # noqa: E402
 from scripts.site.audit_css_usage import (  # noqa: E402
+    BASELINE,
     SKIP_DIRS,
     audit,
     class_selectors,
+    compare,
     decoration_counts,
     is_test_path,
     public_css_files,
@@ -93,6 +97,33 @@ def test_decoration_counts_are_measured_not_guessed() -> None:
         "/* border-radius:99px; box-shadow:none */"
     )
     assert counts == {"border_radius": 2, "box_shadow": 1, "gradient": 1}, counts
+
+
+def test_shared_project_menu_owns_one_radius_and_the_ratchet_stays_closed() -> None:
+    """The PP menu mirrors the canonical control without opening decoration headroom."""
+
+    project_css = (ROOT / "assets/project-practices.css").read_text(encoding="utf-8")
+    summary = re.search(r"\.pp-mobile summary\s*\{([^}]*)\}", project_css)
+    assert summary, "project menu summary rule missing"
+    declarations = summary.group(1).replace(" ", "")
+    assert "border-radius:var(--radius-md)" in declarations, declarations
+    assert decoration_counts(f".fixture{{{summary.group(1)}}}") == {
+        "border_radius": 1,
+        "box_shadow": 0,
+        "gradient": 0,
+    }
+
+    result = audit(ROOT)
+    baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
+    assert result["decoration"]["assets/project-practices.css"] == {
+        "border_radius": 1,
+        "box_shadow": 1,
+        "gradient": 0,
+    }
+    assert compare(result, baseline) == []
+    planted = copy.deepcopy(result)
+    planted["decoration_totals"]["border_radius"] += 1
+    assert compare(planted, baseline) == ["decoration_regression border_radius 141>140"]
 
 
 def test_shipped_audit_reports_every_bundle_and_no_orphan_stylesheet() -> None:
