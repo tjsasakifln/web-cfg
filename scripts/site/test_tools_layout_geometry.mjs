@@ -86,11 +86,12 @@ function startServer() {
         response.end("not found");
         return;
       }
+      const content = readFileSync(filePath);
       response.writeHead(200, { "Content-Type": MIME[extname(filePath)] || "application/octet-stream" });
-      response.end(readFileSync(filePath));
-    } catch (error) {
-      response.writeHead(500);
-      response.end(String(error));
+      response.end(content);
+    } catch {
+      response.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
+      response.end("Fixture response unavailable");
     }
   });
   return new Promise((done) => server.listen(PORT, "127.0.0.1", () => done(server)));
@@ -407,6 +408,16 @@ const report = {
 };
 
 try {
+  const errorResponse = await fetch(`http://127.0.0.1:${PORT}/%E0%A4%A`, {
+    signal: AbortSignal.timeout(5000),
+  });
+  const errorBody = await errorResponse.text();
+  const errorType = errorResponse.headers.get("content-type");
+  if (errorResponse.status !== 500 || errorType !== "text/plain; charset=utf-8" || errorBody !== "Fixture response unavailable") {
+    throw new Error("fixture error response must be a generic plain-text HTTP 500");
+  }
+  report.fixtureErrorResponse = { status: errorResponse.status, contentType: errorType, genericBody: true };
+
   const probe = await browser.newPage();
   await probe.setViewport({ width: 320, height: 480, deviceScaleFactor: 1 });
   await probe.setContent(`

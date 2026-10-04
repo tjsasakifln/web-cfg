@@ -343,3 +343,11 @@ fatos, filtros, robots e proveniência permanecem iguais. Os 11 testes do
 renderizador, o check global de shell, a renderização determinística e a
 verificação do diretório em quatro larguras passaram. O aceite integral
 continua condicionado aos checks protegidos do head corrigido.
+
+Os checks protegidos desse head aprovaram. A revisão de segurança apontou
+dois alertas no servidor local de testes, que devolvia a exceção em uma
+resposta sem tipo explícito. O servidor passa a responder com HTTP 500,
+texto simples e mensagem fixa; uma contraprova com URI inválida verifica
+essa resposta. A alteração não muda o site servido ou a API de contato.
+Os checks do novo head e o encerramento dos alertas corrigidos precedem
+a integração protegida e o aceite no domínio público.
