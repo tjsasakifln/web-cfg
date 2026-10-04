@@ -673,12 +673,16 @@ function readyGscHistory(asOf, nowIso) {
   await globalMemory.put(realL);
   await globalMemory.put(synL);
 
+  // Keep this fixture on one captured instant. The private snapshot contract
+  // intentionally requires producer.produced_at === history.last_attempt.attempted_at;
+  // independent clock reads make that invariant depend on a millisecond race.
+  const gscFixtureNow = new Date().toISOString();
   const currentInsights = {
     source: "search_analytics_api",
-    as_of: new Date().toISOString().slice(0, 10),
+    as_of: gscFixtureNow.slice(0, 10),
     // Python's datetime.isoformat() emits a valid RFC3339 UTC offset. The
     // authenticated consumer must not confuse that suffix with a phone number.
-    generated_at: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000+00:00"),
+    generated_at: gscFixtureNow.replace(/\.(\d{3})Z$/, ".$1000+00:00"),
     ready_for_product_decisions: true,
     synthetic: false,
     fixture: false,
@@ -916,12 +920,13 @@ function readyGscHistory(asOf, nowIso) {
   }
 
   const publishedAtBeforeFailure = gscBody.meta?.published_at;
+  const failedAttemptedAt = new Date(Date.parse(gscFixtureNow) + 1000).toISOString();
   const failedHistory = {
     ...currentHistory,
     parent_state_sha256: currentHistory.state_sha256,
-    updated_at: new Date().toISOString(),
+    updated_at: failedAttemptedAt,
     last_attempt: {
-      attempted_at: new Date().toISOString(),
+      attempted_at: failedAttemptedAt,
       run_id: "failed-run",
       outcome: "RUN_FAILED",
       as_of: null,
@@ -984,24 +989,44 @@ function readyGscHistory(asOf, nowIso) {
     fail("gsc_identical_state_does_not_refresh", repeatedStateBody);
   } else pass("gsc_identical_state_does_not_refresh");
 
+  const olderAsOf = new Date(Date.parse(`${currentInsights.as_of}T00:00:00Z`) - 864e5)
+    .toISOString()
+    .slice(0, 10);
+  const olderAttemptedAt = new Date(Date.parse(gscFixtureNow) + 2000).toISOString();
+  const olderReadyHistory = readyGscHistory(olderAsOf, olderAttemptedAt);
   const olderHistory = {
-    ...failedHistory,
+    ...olderReadyHistory,
     parent_state_sha256: failedHistory.state_sha256,
+    updated_at: olderAttemptedAt,
+    last_attempt: {
+      attempted_at: olderAttemptedAt,
+      run_id: "older-failed-run",
+      outcome: "RUN_FAILED",
+      as_of: null,
+      snapshot_sha256: null,
+      reason_codes: ["dependency_unavailable", "last_known_good_available"],
+    },
     readiness: {
-      ...failedHistory.readiness,
-      window_end: new Date(Date.parse(`${currentInsights.as_of}T00:00:00Z`) - 864e5)
-        .toISOString()
-        .slice(0, 10),
+      ...olderReadyHistory.readiness,
+      ready_for_product_decisions: false,
+      status: "STALE",
+      access_mode: "READ_ONLY",
+      reason_codes: ["dependency_unavailable", "last_known_good_available"],
     },
   };
   olderHistory.state_sha256 = historyHash(olderHistory);
+  const olderProducer = {
+    ...failedProducer,
+    produced_at: olderAttemptedAt,
+  };
   const staleOverwrite = await ops.handler({
     httpMethod: "POST",
     headers: { authorization: "Bearer " + "z".repeat(24) },
     queryStringParameters: { action: "gsc_insights_ingest" },
     rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
-    body: JSON.stringify({ producer: failedProducer, history: olderHistory }),
+    body: JSON.stringify({ producer: olderProducer, history: olderHistory }),
   });
+  const staleOverwriteBody = JSON.parse(staleOverwrite.body || "{}");
   const afterStaleAttempt = await ops.handler({
     httpMethod: "GET",
     headers: { authorization: "Bearer " + "z".repeat(24) },
@@ -1010,10 +1035,15 @@ function readyGscHistory(asOf, nowIso) {
   });
   const afterStaleBody = JSON.parse(afterStaleAttempt.body || "{}");
   if (
-    staleOverwrite.statusCode < 400 ||
+    staleOverwrite.statusCode !== 409 ||
+    staleOverwriteBody.error !== "gsc_history_stale_overwrite" ||
     afterStaleBody.meta?.state_sha256 !== failedHistory.state_sha256
-  ) fail("gsc_out_of_order_store_protected", staleOverwrite.body);
-  else pass("gsc_out_of_order_store_protected");
+  ) fail("gsc_out_of_order_store_protected", {
+    status: staleOverwrite.statusCode,
+    body: staleOverwriteBody,
+    durable_state_sha256: afterStaleBody.meta?.state_sha256,
+  });
+  else pass("gsc_out_of_order_store_protected", staleOverwriteBody.error);
 
   const pointerRecord = [...globalMemory.system.values()].find(
     (value) => value?.schema_version === "confenge-private-gsc-pointer/v1",
