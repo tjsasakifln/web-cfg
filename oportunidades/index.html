@@ -9,8 +9,10 @@
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="/assets/opportunities-directory.css" rel="stylesheet"/>
 <link href="https://confenge.com.br/oportunidades/" rel="canonical"/>
 <script defer="" src="/script.js?v=fortune02"></script>
+<script defer src="/assets/opportunities-directory.js"></script>
 <meta content="Índice das oportunidades públicas com página própria: objeto, órgão, local, status da sessão e origem dos dados, com a fonte declarada em cada página." name="description"/>
 <meta content="Oportunidades públicas acompanhadas | CONFENGE" property="og:title"/>
 <meta content="Índice das oportunidades públicas com página própria: objeto, órgão, local, status da sessão e origem dos dados, com a fonte declarada em cada página." property="og:description"/>
@@ -18,7 +20,6 @@
 <meta content="website" property="og:type"/>
 <meta content="summary" name="twitter:card"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Oportunidades públicas acompanhadas | CONFENGE","description":"Índice das oportunidades públicas com página própria: objeto, órgão, local, status da sessão e origem dos dados, com a fonte declarada em cada página.","url":"https://confenge.com.br/oportunidades/","inLanguage":"pt-BR"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://confenge.com.br/oportunidades/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Oportunidades públicas","item":"https://confenge.com.br/oportunidades/"}]}</script>
 </head>
 <body class="simple-page" data-asset-family="oportunidade-publica" data-route-family="live-opportunity" data-intel-surface="opportunity-index" data-index-state="NOINDEX">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -60,14 +61,33 @@
 <p>Cada item abaixo abre uma página com o objeto, o órgão, o local, o prazo, a fonte pública citada e a data de referência declarada. Esta lista não é o conjunto das licitações abertas no país: é o conjunto das oportunidades que têm página publicada aqui.</p>
 </section>
 
+<section class="section" id="proximo-passo">
+<h2>Próximo passo</h2>
+<div class="opportunity-directory__next"><p>Duas ações possíveis a partir desta lista:</p>
+<div class="journey-next">
+<a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_index_next_action" href="/analise-cnpj/">Analisar para minha empresa</a>
+<a class="button button-secondary" data-cta-id="intel_talk_to_engineer" data-cta-position="opportunity_index_next_action" href="/#formulario-contato">Falar sobre uma destas oportunidades</a>
+</div></div>
+</section>
+
 <section class="section" id="lista">
 <h2>Oportunidades com página publicada</h2>
+<div class="opportunity-directory" data-opportunity-directory>
+<div class="opportunity-directory__filters" data-opportunity-controls hidden>
+<label for="opportunity-search">Buscar órgão, município ou identificador<input id="opportunity-search" type="search" autocomplete="off" aria-controls="lista-oportunidades"/></label>
+<label for="opportunity-state">Estado<select id="opportunity-state" aria-controls="lista-oportunidades"><option value="all">Todos os estados</option><option value="PR">PR</option><option value="RS">RS</option><option value="SC">SC</option></select></label>
+</div>
+<p data-opportunity-result role="status" aria-live="polite"></p>
 <ul class="card-grid" id="lista-oportunidades">
-<li class="card"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/">Departamento Estadual de Infraestrutura · Rio do Sul/SC</a></h3><p>sessão suspensa · Identificador público: cc-2026-000047-ponte-rio-do-sul-sc</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
-<li class="card"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/">Município de Londrina · Londrina/PR</a></h3><p>sessão aberta · Identificador público: pe-2026-000188-reforma-ubs-londrina-pr</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
-<li class="card"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/">Prefeitura Municipal de Chapecó · Chapecó/SC</a></h3><p>sessão aberta · Identificador público: pe-2026-000412-pav-urbana-chapeco-sc</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
-<li class="card"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/">Município de Caxias do Sul · Caxias do Sul/RS</a></h3><p>sessão aberta · Identificador público: pe-2026-000903-sinalizacao-viaria-caxias-rs</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
+<li class="card" data-opportunity-card data-uf="SC"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/">Departamento Estadual de Infraestrutura · Rio do Sul/SC</a></h3><p>sessão suspensa · Identificador público: cc-2026-000047-ponte-rio-do-sul-sc</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
+<li class="card" data-opportunity-card data-uf="PR"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/">Município de Londrina · Londrina/PR</a></h3><p>sessão aberta · Identificador público: pe-2026-000188-reforma-ubs-londrina-pr</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
+<li class="card" data-opportunity-card data-uf="SC"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/">Prefeitura Municipal de Chapecó · Chapecó/SC</a></h3><p>sessão aberta · Identificador público: pe-2026-000412-pav-urbana-chapeco-sc</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
+<li class="card" data-opportunity-card data-uf="RS"><h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" href="/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/">Município de Caxias do Sul · Caxias do Sul/RS</a></h3><p>sessão aberta · Identificador público: pe-2026-000903-sinalizacao-viaria-caxias-rs</p><p class="form-hint">Origem dos dados: dado de teste, não corresponde a uma licitação real.</p></li>
 </ul>
+<p data-opportunity-empty hidden>Nenhuma oportunidade desta lista corresponde à busca. Altere os termos ou selecione outro estado.</p>
+<nav class="opportunity-directory__pagination" aria-label="Páginas de oportunidades" data-opportunity-controls hidden><button class="button button-secondary" type="button" data-opportunity-prev>Anterior</button><span data-opportunity-page></span><button class="button button-secondary" type="button" data-opportunity-next>Próxima</button></nav>
+<noscript><p>Todos os itens estão disponíveis abaixo. Use a busca do navegador para localizar um órgão, município ou identificador.</p></noscript>
+</div>
 </section>
 
 <section class="section" id="nao-concluir">
@@ -75,13 +95,8 @@
 <p>Esta página apenas lista documentos públicos descritos em outras páginas. Não é parecer jurídico, não julga irregularidade, não afirma quem pode participar e não recomenda participar.</p>
 </section>
 
-<section class="section" id="proximo-passo">
-<h2>Próximo passo</h2>
-<p>Duas ações possíveis a partir desta lista:</p>
-<div class="journey-next">
-<a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_index_next_action" href="/analise-cnpj/">Analisar para minha empresa</a>
-<a class="button button-secondary" data-cta-id="intel_talk_to_engineer" data-cta-position="opportunity_index_next_action" href="/#formulario-contato">Falar sobre uma destas oportunidades</a>
-</div>
+<section class="section" id="outras-ferramentas">
+<h2>Outras ferramentas</h2>
 <p><a href="/ferramentas/">Ver outras ferramentas públicas</a></p>
 </section>
 </article>

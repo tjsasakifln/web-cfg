@@ -530,7 +530,7 @@ function renderServiceDeliveryOverview(registry) {
 <div class="container">
 <header class="capability-roll__intro sec-head sec-head--split"><p class="eyebrow t-kicker">Serviços de engenharia</p><h2 class="t-editorial" id="service-deliveries-title">Projetos para orientar a execução, orçamentos para contratar com critério e análises para decidir com respaldo.</h2><p>Cinco frentes de trabalho, em obra pública ou privada; a proposta nomeia escopo, responsável técnico e valor depois da leitura da necessidade.</p></header>
 <figure class="plate plate--dominant" aria-labelledby="entregas-plate-cap">
-<div class="plate__sheet">${platePicture("pacote-entrega")}</div>
+<div aria-label="Prancha técnica com rolagem horizontal" class="plate__sheet plate__sheet--native-pan" role="group" tabindex="0">${platePicture("pacote-entrega")}</div>
 <figcaption class="plate__caption" id="entregas-plate-cap"><span class="tag">Exemplo demonstrativo</span>Prancha PG, esquema ilustrativo de uma entrega de projeto: <b>PE-01</b> plantas e cortes, <b>PE-02</b> detalhes, <b>PE-03</b> especificações e <b>PE-04</b> memória de cálculo saem da disciplina contratada; a arquitetura de origem permanece com o autor.</figcaption>
 </figure>
 <ol class="list-ruled capability-groups">

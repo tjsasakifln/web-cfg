@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import shutil
 import tempfile
+import json
 from pathlib import Path
 
 from scripts.live_intelligence import render as R
@@ -288,6 +289,26 @@ def test_family_index_survives_the_prune_and_lists_every_renderable_record():
             assert (base / record["opportunity_id"] / "index.html").is_file()
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_compact_heading_preserves_the_complete_official_object():
+    from html import unescape
+    import re
+
+    projection = R.load_projection()
+    record = dict(R.renderable(projection)[0])
+    record["objeto"] = "CONTRATAÇÃO DE EMPRESA PARA edificação & instalações " * 8
+    html = R.render_opportunity_html(record)
+    heading = unescape(re.search(r"<h1>(.*?)</h1>", html, re.S).group(1))
+    assert len(heading) <= 97 and heading.endswith("…")
+    declared = re.search(r'<th scope="row">Objeto oficial</th>\s*<td>(.*?)</td>', html, re.S)
+    assert declared, "complete source object needs an explicit data block"
+    assert unescape(declared.group(1)) == record["objeto"].strip()
+    assert record["objeto"].strip() in unescape(re.search(r"<title>(.*?)</title>", html, re.S).group(1))
+    assert record["objeto"].strip() in unescape(html)
+    structured = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+    assert structured["about"]["name"] == record["objeto"].strip()
+    assert len(R._compact_object_heading("A" * 120)) <= 97
 
 
 def test_family_index_never_claims_indexation_its_children_do_not_have():

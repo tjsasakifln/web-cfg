@@ -438,3 +438,62 @@
 .fig-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:1.5rem 2rem;margin:1.25rem 0 0}
 @media (min-width:800px){.fig-pair{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .fig-pair .plate{margin:0}
+
+/* Technical sheets keep dimension labels readable; the viewport is keyboard-scrollable. */
+.plate__sheet--native-pan{
+  max-width:100%;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-gutter:stable;
+}
+.plate__sheet--native-pan::before{
+  content:"Deslize horizontalmente ou use as setas para ler cotas e chamadas.";
+  display:block;
+  position:sticky;
+  left:0;
+  width:max-content;
+  max-width:100%;
+  padding:.5rem .75rem;
+  font-size:.875rem;
+  line-height:1.35;
+  color:var(--text);
+  background:var(--soft);
+  border-bottom:1px solid var(--rule);
+  white-space:normal;
+  z-index:1;
+}
+.plate__sheet--native-pan:focus-visible{outline:3px solid var(--green-700);outline-offset:3px}
+.plate__sheet--native-pan .plate__picture{display:block;width:85.75rem;max-width:none}
+.plate__sheet--native-pan .plate__picture>img{display:block;width:100%;max-width:none;height:auto}
+.plate__sheet--native-pan .plate__picture--narrow{width:22.5rem}
+@media (max-width:699px){.plate__sheet--native-pan .plate__picture{width:22.5rem}}
+
+/* Responsive SVG variants: keep diagram text at a readable physical size. */
+.plate__sheet>img[src$="/assets/quantitativos-orcamento-obras/banco-disciplinas.svg"]{
+  content:url("/assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg");
+  aspect-ratio:8 / 7;
+  height:auto;
+  max-width:50rem;
+  margin-inline:auto;
+}
+.article-cover img[src$="/assets/conteudos/como-contratar-projetos-complementares.svg"]{
+  content:url("/assets/conteudos/como-contratar-projetos-complementares-wide.svg");
+  aspect-ratio:9 / 7;
+  height:auto;
+  object-fit:contain;
+}
+@media (max-width:699px){
+  .plate__sheet>img[src$="/assets/quantitativos-orcamento-obras/banco-disciplinas.svg"]{
+    content:url("/assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg");
+    aspect-ratio:18 / 71;
+    height:auto;
+    max-width:24rem;
+    margin-inline:auto;
+  }
+  .article-cover img[src$="/assets/conteudos/como-contratar-projetos-complementares.svg"]{
+    content:url("/assets/conteudos/como-contratar-projetos-complementares-mobile.svg");
+    aspect-ratio:18 / 55;
+    height:auto;
+    object-fit:contain;
+  }
+}

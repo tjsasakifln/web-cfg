@@ -23,7 +23,7 @@
 body[data-content-cluster="home"] .home-opening{padding:clamp(2.25rem,4vw,3.5rem) 0;background:#fff;border-bottom:1px solid #dce3e8}
 body[data-content-cluster="home"] .home-opening__grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(25rem,.98fr);gap:clamp(2.5rem,6vw,6.5rem);align-items:center}
 body[data-content-cluster="home"] .home-opening h1{max-width:18ch;margin:0 0 1.25rem;font-size:clamp(2.5rem,1.75rem + 2.2vw,3.85rem);line-height:1}
-body[data-content-cluster="home"] .home-opening__sheet img{display:block;width:100%;height:auto}
+body[data-content-cluster="home"] .home-opening__sheet{position:relative;padding:1.5rem;background:#f7f9f8;border:1px solid #cbd5dc}
 @media (max-width:900px){body[data-content-cluster="home"] .home-opening__grid{grid-template-columns:1fr}}
 </style>
 <link href="/assets/home-base.css" rel="stylesheet"/>
@@ -99,8 +99,19 @@ body[data-content-cluster="home"] .home-opening__sheet img{display:block;width:1
 </ul>
 </div>
 <figure class="home-opening__figure" aria-labelledby="hero-plate-cap">
-<div class="home-opening__sheet"><img alt="Diagrama técnico com estrutura, instalações e infraestrutura coordenadas em um empreendimento" decoding="async" height="760" loading="eager" src="/assets/project-practices/hero-coordinated-engineering.svg" width="1200"/></div>
-<figcaption id="hero-plate-cap"><span>Ilustração técnica original da CONFENGE</span> Estrutura, instalações e infraestrutura lidas como partes do mesmo empreendimento.</figcaption>
+<div class="home-opening__sheet">
+<p class="home-project-diagram__title">Disciplinas conectadas desde a concepção</p>
+<ul class="home-project-diagram__disciplines">
+<li><strong>Estruturas</strong><span>Cargas, sistemas e fundações</span></li>
+<li><strong>Instalações</strong><span>Redes, utilidades e reservas</span></li>
+<li><strong>Infraestrutura</strong><span>Implantação, acessos e drenagem</span></li>
+</ul>
+<div class="home-project-diagram__connector" aria-hidden="true"></div>
+<div class="home-project-diagram__coordination"><strong>Projeto coordenado</strong><p>Premissas, interfaces e decisões alinhadas entre as especialidades.</p></div>
+<div class="home-project-diagram__connector" aria-hidden="true"></div>
+<p class="home-project-diagram__delivery"><strong>Documentação para a obra</strong><span>Desenhos, memórias e especificações para orçar, contratar e executar.</span></p>
+</div>
+<figcaption id="hero-plate-cap"><span>Coordenação multidisciplinar</span> Diagrama demonstrativo da integração entre as disciplinas de um empreendimento.</figcaption>
 </figure>
 </div>
 </section>
@@ -240,6 +251,9 @@ body[data-content-cluster="home"] .home-opening__sheet img{display:block;width:1
 <h2 class="contact-form-title" id="contact-title">Solicitar proposta</h2>
 <input name="form-name" type="hidden" value="diagnostico-b2g"/>
 <input name="origem" type="hidden" value="/"/>
+<input name="asset_id" type="hidden" value="home-institutional"/>
+<input name="cta_id" type="hidden" value="home-proposal-submit"/>
+<input name="route_family" type="hidden" value="home"/>
 <input name="jornada" id="jornada-hidden" type="hidden" value=""/>
 <input name="utm_source" type="hidden" value=""/>
 <input name="utm_medium" type="hidden" value=""/>

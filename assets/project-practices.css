@@ -40,17 +40,18 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-breadcrumb a { color: inherit; }
 
 .pp-hero { padding: clamp(2.8rem,7vw,6.8rem) 0 clamp(3rem,6vw,5rem); overflow: hidden; }
-.pp-hero__grid { display: grid; grid-template-columns: minmax(0,1.12fr) minmax(340px,.88fr); align-items: center; gap: clamp(34px,7vw,96px); }
+.pp-hero__grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 2.5rem; }
 .pp-hero__copy { min-width: 0; }
-.pp-hero h1 { max-width: 830px; margin: 0 0 1.4rem; font-size: clamp(2.65rem,5.6vw,5.7rem); line-height: .98; letter-spacing: -.052em; text-wrap: balance; overflow-wrap: anywhere; }
+.pp-hero h1 { max-width: 900px; margin: 0 0 1.4rem; font-size: clamp(2.35rem,3.8vw,3.85rem); line-height: 1.05; letter-spacing: -.04em; text-wrap: balance; overflow-wrap: anywhere; }
 .pp-lead { max-width: 760px; margin: 0 0 1.1rem; color: var(--pp-ink-2); font-size: clamp(1.22rem,2vw,1.62rem); line-height: 1.42; }
 .pp-summary { max-width: 720px; margin: 0; color: var(--pp-muted); font-size: 1.02rem; line-height: 1.7; }
 .pp-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem 1.2rem; margin-top: 2rem; }
 .pp-actions + .pp-summary { margin-top: 1.5rem; }
 .pp-note { max-width: 720px; margin: 1.2rem 0 0; padding-left: 1rem; border-left: 2px solid var(--pp-line); color: var(--pp-muted); font-size: .88rem; line-height: 1.55; }
-.pp-hero__visual { position: relative; margin: 0; }
-.pp-hero__visual::before { content: ""; position: absolute; inset: -22px 22px 22px -22px; border: 1px solid var(--pp-line); z-index: -1; }
-.pp-hero__visual img { width: 100%; height: auto; display: block; border: 1px solid #9cabb1; background: #edf2f3; }
+.pp-hero__visual { position: relative; min-width: 0; width: min(1040px,100%); margin: 0; }
+.pp-hero__canvas { width: 100%; max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; border: 1px solid #9cabb1; background: #edf2f3; }
+.pp-hero__canvas img { width: 100%; min-width: 960px; max-width: none; height: auto; display: block; }
+.pp-hero__pan-hint { margin: 0 0 .65rem; color: var(--pp-muted); font-size: .875rem; }
 .pp-hero__visual figcaption, .pp-demo figcaption { padding-top: .75rem; color: var(--pp-muted); font-size: .8rem; line-height: 1.45; }
 .pp-hero__visual figcaption span, .pp-demo figcaption span { display: block; color: var(--pp-accent-dark); font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
 
@@ -96,8 +97,8 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-demo > div > p:not(.pp-kicker) { color: var(--pp-muted); line-height: 1.7; }
 .pp-demo figure { min-width: 0; margin: 0; }
 .pp-demo__canvas { width: 100%; max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
-.pp-demo__pan-hint { display: none; margin: 0 0 .65rem; color: var(--pp-muted); font-size: .82rem; }
-.pp-demo img { display: block; width: 100%; max-width: none; height: auto; border: 1px solid var(--pp-line); background: var(--pp-soft); }
+.pp-demo__pan-hint { display: block; margin: 0 0 .65rem; color: var(--pp-muted); font-size: .875rem; }
+.pp-demo img { display: block; width: 100%; min-width: 960px; max-width: none; height: auto; border: 1px solid var(--pp-line); background: var(--pp-soft); }
 .pp-demo .pp-demo__limit { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--pp-line); font-size: .86rem; }
 
 .pp-method { display: grid; grid-template-columns: repeat(5,1fr); margin: 0; padding: 0; list-style: none; border-block: 1px solid var(--pp-line); }
@@ -149,7 +150,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
   .pp-mobile nav { position: absolute; right: 0; top: calc(100% + 12px); width: min(310px,calc(100vw - 40px)); display: grid; padding: .6rem; border: 1px solid var(--pp-line); background: #fff; box-shadow: 0 18px 45px rgba(8,27,46,.18); }
   .pp-mobile nav a { min-height: 48px; display: flex; align-items: center; padding: .6rem .8rem; color: var(--pp-ink); font-weight: 650; }
   .pp-hero__grid { grid-template-columns: 1fr; }
-  .pp-hero__visual { width: min(760px,92%); margin-left: auto; }
+  .pp-hero__visual { width: 100%; }
   .pp-scope-grid:has(.pp-scope:nth-child(4)) .pp-scope, .pp-scope { grid-column: span 6; }
   .pp-method { grid-template-columns: repeat(2,1fr); }
   .pp-method li { border-bottom: 1px solid var(--pp-line); }
@@ -160,7 +161,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 
 @media (max-width: 620px) {
   .pp-demo__pan-hint { display: block; }
-  .pp-demo__canvas img { width: 620px; min-width: 620px; }
+  .pp-demo__canvas img { min-width: 960px; }
 }
 
 @media (max-width: 720px) {
@@ -172,8 +173,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
      fallback still splits an unanticipated long term instead of letting the
      hero's decorative overflow clipping hide it. */
   .pp-hero h1 { font-size: clamp(2.25rem,11vw,4rem); }
-  .pp-hero__visual { width: calc(100% - 14px); }
-  .pp-hero__visual::before { inset: -12px 12px 12px -12px; }
+  .pp-hero__visual { width: 100%; }
   .pp-section__head { grid-template-columns: 1fr; }
   .pp-section__head .pp-kicker { margin-bottom: -1rem; }
   .pp-scope-grid { display: block; background: transparent; border: 0; }

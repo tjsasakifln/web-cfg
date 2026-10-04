@@ -258,3 +258,28 @@ nenhuma página pública ou aprovação editorial foi alterada nesta correção.
 O mesmo leitor preserva os atributos #153, hrefs primários e janelas históricas
 de três contratos BOFU; usos de `origin/main` para diff corrente permanecem.
 As quatro suítes focadas passaram em 68 testes com main já avançado.
+
+A publicação protegida de `0bacc72b7d63a449961442a32d8afab3e9168d23`
+ocorreu em 2026-10-04 às 02:54:07 UTC. A revisão posterior identificou falhas
+visuais que os gates anteriores não mediam: texto interno de SVG reduzido,
+molduras deslocadas e conflito de padding em ferramentas. O censo cobriu as
+550 páginas efetivamente servidas, em 390 e 1440 px; seus alertas foram
+confrontados com capturas e revisão independente, sem aprovar automaticamente
+as bordas intencionais como defeitos nem aceitar a publicação como conclusão.
+
+A correção seguinte substitui o painel da home por texto HTML responsivo,
+retira a moldura deslocada e o filete da foto e mantém os diagramas técnicos
+legíveis em seus containers. As variantes de ilustração conservam fatos,
+condições e unidades. As ferramentas recebem espaçamento e alvos de interação
+adequados. O catálogo de oportunidades passa a oferecer busca local, filtro
+por estado e paginação acessível, preservando todos os links sem JavaScript,
+objetos oficiais integrais, procedência, canonical e decisões de indexação.
+Os novos gates medem geometria e texto renderizado e incluem contraprovas.
+
+O ensaio de contato em produção bloqueou antes de enviar porque seu parser
+procurava uma classe antiga. O leitor agora reconhece o formulário realmente
+servido e exige atribuição coincidente antes do POST. O formulário mantém os
+24 controles anteriores e três campos ocultos de contexto, sem novos dados
+solicitados ao visitante. Este registro descreve a correção fonte; publicação,
+aceite público final e recebimento efetivo continuam dependentes das respectivas
+evidências da nova versão. A recuperação preserva o bundle aceito de 0bacc72.

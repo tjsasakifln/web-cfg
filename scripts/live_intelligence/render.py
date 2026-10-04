@@ -362,6 +362,15 @@ def _limitations_html(limitations: list[str]) -> str:
     return f"<ul>{items}</ul>"
 
 
+def _compact_object_heading(objeto: str) -> str:
+    """An excerpt for navigation; the complete declared object stays in the data block."""
+    normalized = " ".join(objeto.split())
+    if len(normalized) <= 96:
+        return normalized
+    prefix = normalized[:96].rsplit(" ", 1)[0]
+    return (prefix or normalized[:96]) + "…"
+
+
 def render_opportunity_html(record: dict[str, Any]) -> str:
     """Render one opportunity page. INDEX only when the record earned it."""
     opportunity_id = record["opportunity_id"]
@@ -439,14 +448,14 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <article class="simple-card">
 <section class="section" id="masthead"{archetype_attr("masthead")}>
 <p class="eyebrow">Oportunidade pública · dados declarados na fonte</p>
-<h1>{e(objeto)}</h1>
+<h1>{e(_compact_object_heading(objeto))}</h1>
 <p>{e(orgao_nome)} · {e(_local_label(local))} · {e(_mapped(status, PRAZO_MASTHEAD, "sessão sem status informado pela fonte"))}</p>
 </section>
 
 <section class="section" id="ficha"{archetype_attr("ficha")}>
 <h2>Ficha da oportunidade</h2>
 {_kv_rows([
-    ("Objeto", objeto),
+    ("Objeto oficial", objeto),
     ("Valor estimado declarado na fonte", _brl(_declared_amount(valor))),
     ("Faixa de valor declarada", _mapped(valor.get("faixa"), FAIXA_LABEL, NAO_INFORMADO)),
     ("Base do valor", _pt(valor.get("basis"))),
@@ -558,7 +567,7 @@ def _index_item_html(record: dict[str, Any], *, projection_kind: str | None) -> 
     )
     route = opportunity_route(opportunity_id)
     return (
-        '<li class="card">'
+        f'<li class="card" data-opportunity-card data-uf="{e(str((record.get("local") or {}).get("uf") or ""))}">'
         '<h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" '
         f'href="{e(route)}">{e(orgao)} · {e(local)}</a></h3>'
         f"<p>{e(status)} · Identificador público: {e(opportunity_id)}</p>"
@@ -578,7 +587,19 @@ def render_opportunities_index_html(
         items = "\n".join(
             _index_item_html(record, projection_kind=projection_kind) for record in records
         )
-        listing = f'<ul class="card-grid" id="lista-oportunidades">\n{items}\n</ul>'
+        states = sorted({str((record.get("local") or {}).get("uf") or "") for record in records})
+        options = "".join(f'<option value="{e(state)}">{e(state or "UF não informada")}</option>' for state in states)
+        listing = f'''<div class="opportunity-directory" data-opportunity-directory>
+<div class="opportunity-directory__filters" data-opportunity-controls hidden>
+<label for="opportunity-search">Buscar órgão, município ou identificador<input id="opportunity-search" type="search" autocomplete="off" aria-controls="lista-oportunidades"/></label>
+<label for="opportunity-state">Estado<select id="opportunity-state" aria-controls="lista-oportunidades"><option value="all">Todos os estados</option>{options}</select></label>
+</div>
+<p data-opportunity-result role="status" aria-live="polite"></p>
+<ul class="card-grid" id="lista-oportunidades">\n{items}\n</ul>
+<p data-opportunity-empty hidden>Nenhuma oportunidade desta lista corresponde à busca. Altere os termos ou selecione outro estado.</p>
+<nav class="opportunity-directory__pagination" aria-label="Páginas de oportunidades" data-opportunity-controls hidden><button class="button button-secondary" type="button" data-opportunity-prev>Anterior</button><span data-opportunity-page></span><button class="button button-secondary" type="button" data-opportunity-next>Próxima</button></nav>
+<noscript><p>Todos os itens estão disponíveis abaixo. Use a busca do navegador para localizar um órgão, município ou identificador.</p></noscript>
+</div>'''
         next_step = """<p>Duas ações possíveis a partir desta lista:</p>
 <div class="journey-next">
 <a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_index_next_action" href="{company_route}">Analisar para minha empresa</a>
@@ -616,8 +637,10 @@ def render_opportunities_index_html(
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="/assets/opportunities-directory.css" rel="stylesheet"/>
 <link href="{e(canonical)}" rel="canonical"/>
 <script defer="" src="/script.js?v=fortune02"></script>
+<script defer src="/assets/opportunities-directory.js"></script>
 <meta content="{e(INDEX_DESCRIPTION)}" name="description"/>
 <meta content="{e(INDEX_TITLE)}" property="og:title"/>
 <meta content="{e(INDEX_DESCRIPTION)}" property="og:description"/>
@@ -638,6 +661,11 @@ def render_opportunities_index_html(
 <p>Cada item abaixo abre uma página com o objeto, o órgão, o local, o prazo, a fonte pública citada e a data de referência declarada. Esta lista não é o conjunto das licitações abertas no país: é o conjunto das oportunidades que têm página publicada aqui.</p>
 </section>
 
+<section class="section" id="proximo-passo">
+<h2>Próximo passo</h2>
+<div class="opportunity-directory__next">{next_step}</div>
+</section>
+
 <section class="section" id="lista">
 <h2>Oportunidades com página publicada</h2>
 {listing}
@@ -648,9 +676,8 @@ def render_opportunities_index_html(
 <p>Esta página apenas lista documentos públicos descritos em outras páginas. Não é parecer jurídico, não julga irregularidade, não afirma quem pode participar e não recomenda participar.</p>
 </section>
 
-<section class="section" id="proximo-passo">
-<h2>Próximo passo</h2>
-{next_step}
+<section class="section" id="outras-ferramentas">
+<h2>Outras ferramentas</h2>
 <p><a href="/ferramentas/">Ver outras ferramentas públicas</a></p>
 </section>
 </article>

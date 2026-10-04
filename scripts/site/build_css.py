@@ -110,7 +110,7 @@ ROUTE_SUBSETS = {
     # route /ferramentas/diagnostico-defesa-margem/ measured 158.9 KB against the
     # 150 KiB payload cap with it (2026-09-17), and the 154 library pages do not
     # use the service, hub or trust blocks at all.
-    "assets/editorial-article.css": ("Type roles", "Section rhythm", "Page index", "Conditions", "After send", "Contact hierarchy", "Article", "Timeline", "Figure pair", "Motion"),
+    "assets/editorial-article.css": ("Type roles", "Section rhythm", "Page index", "Conditions", "After send", "Contact hierarchy", "Article", "Timeline", "Figure pair", "Responsive SVG variants", "Motion"),
     "assets/editorial-tool.css": ("Type roles", "Section rhythm", "Page index", "Conditions", "After send", "Contact hierarchy", "Tool", "Motion"),
 }
 

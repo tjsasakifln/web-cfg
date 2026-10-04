@@ -126,6 +126,26 @@ const browser = await puppeteer.launch({
 const page = await browser.newPage();
 const failures = [];
 const reports = [];
+const panelReports = [];
+function inspectPanel() {
+  const sheet = document.querySelector(".home-opening__sheet");
+  const figure = sheet?.closest("figure");
+  const portrait = document.querySelector(".home-company__portrait picture");
+  if (!sheet || !figure || !portrait) return { ok: false, problems: ["panel_or_portrait_missing"] };
+  const problems = [];
+  const leaves = [...sheet.querySelectorAll("p,strong,span")].filter((node) => !node.querySelector("p,strong,span"));
+  const fonts = leaves.map((node) => Number.parseFloat(getComputedStyle(node).fontSize));
+  if (leaves.length < 10 || Math.min(...fonts) < 16) problems.push("panel_text_below_16px_or_missing");
+  const box = sheet.getBoundingClientRect();
+  if (box.left < 0 || box.right > innerWidth || sheet.scrollWidth > sheet.clientWidth + 1) problems.push("panel_overflow");
+  const frame = getComputedStyle(figure, "::before");
+  if (frame.content !== "none" && frame.content !== "normal" && frame.display !== "none") problems.push("displaced_decorative_frame");
+  if (Number.parseFloat(getComputedStyle(portrait).borderBottomWidth) !== 0) problems.push("portrait_bottom_border");
+  const copy = document.querySelector(".home-opening__copy").getBoundingClientRect();
+  const figureBox = figure.getBoundingClientRect();
+  if (innerWidth > 900 && copy.right > figureBox.left) problems.push("panel_copy_overlap");
+  return { ok: problems.length === 0, min_font_px: Math.min(...fonts), text_nodes: leaves.length, problems };
+}
 
 try {
   for (const viewport of VIEWPORTS) {
@@ -490,6 +510,23 @@ try {
       );
     }
   }
+  for (const width of [320, 390, 901, 1240, 1440]) {
+    await page.setViewport({ width, height: width > 900 ? 1000 : 844, deviceScaleFactor: 1 });
+    await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: "networkidle0" });
+    const panel = await page.evaluate(inspectPanel);
+    panelReports.push({ width, ...panel });
+    if (!panel.ok) failures.push(`HOME_PANEL ${width}: ${panel.problems.join(",")}`);
+  }
+  // Deliberate visual regressions must make the rendered gate fail.
+  const smallText = await page.addStyleTag({ content: ".home-opening__sheet p,.home-opening__sheet strong,.home-opening__sheet span{font-size:8px!important}" });
+  if (!(await page.evaluate(inspectPanel)).problems.includes("panel_text_below_16px_or_missing")) failures.push("PANEL_COUNTERPROOF small_text_did_not_fail");
+  await smallText.evaluate((node) => node.remove());
+  const shiftedFrame = await page.addStyleTag({ content: ".home-opening__figure::before{content:'';position:absolute;inset:-24px 24px 24px -24px;background:#061a33}" });
+  if (!(await page.evaluate(inspectPanel)).problems.includes("displaced_decorative_frame")) failures.push("PANEL_COUNTERPROOF displaced_frame_did_not_fail");
+  await shiftedFrame.evaluate((node) => node.remove());
+  const photoLine = await page.addStyleTag({ content: ".home-company__portrait picture{border-bottom:6px solid green!important}" });
+  if (!(await page.evaluate(inspectPanel)).problems.includes("portrait_bottom_border")) failures.push("PANEL_COUNTERPROOF portrait_line_did_not_fail");
+  await photoLine.evaluate((node) => node.remove());
 } finally {
   await browser.close();
   server.close();
@@ -517,6 +554,7 @@ console.log(JSON.stringify({
   },
   counterproof,
   reports,
+  panel_reports: panelReports,
 }, null, 2));
 if (failures.length) {
   console.error(failures.join("\n"));

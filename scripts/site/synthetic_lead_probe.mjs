@@ -7,6 +7,10 @@
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
 import { createHash, randomUUID } from "node:crypto";
+import { parse } from "parse5";
+
+const blockedProbe = Symbol("controlled_probe_block");
+async function runProbe() {
 
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
@@ -28,7 +32,7 @@ function finishEarly(reason) {
     base,
     ts: new Date().toISOString(),
   }));
-  process.exit(1);
+  throw blockedProbe;
 }
 
 let parsedBase;
@@ -83,24 +87,26 @@ function sameJson(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-// Reads the first published capture form of a page: the form's data-* context
-// and the hidden inputs it will submit. Pure string parsing; no DOM needed.
+// Browser-compatible HTML parsing keeps quoted attribute values from being
+// mistaken for attributes, and reads the actual hidden controls of the form.
 function servedFormContext(html) {
-  const text = String(html || "");
-  const form = /<form\b[^>]*class="[^"]*\bpillar-capture-form\b[^"]*"[^>]*>/i.exec(text);
+  const attrs = (node) => Object.fromEntries((node.attrs || []).map(({ name, value }) => [name, value]));
+  const descendants = (node) => (node.childNodes || []).flatMap((child) => [child, ...descendants(child)]);
+  const form = descendants(parse(String(html || ""))).find((node) => {
+    if (node.tagName !== "form") return false;
+    const values = attrs(node);
+    return Object.hasOwn(values, "data-capture-form")
+      || (values.class || "").split(/\s+/).includes("pillar-capture-form");
+  });
   if (!form) return null;
-  const tag = form[0];
-  const attr = (name) => {
-    const m = new RegExp(`\\b${name}="([^"]*)"`, "i").exec(tag);
-    return m ? m[1] : "";
-  };
-  const closing = text.indexOf("</form>", form.index);
-  const inner = text.slice(form.index, closing > 0 ? closing : undefined);
+  const values = attrs(form);
+  const attr = (name) => values[name] || "";
   const hidden = (name) => {
-    const m = new RegExp(`<input\\b[^>]*name="${name}"[^>]*>`, "i").exec(inner);
-    if (!m) return "";
-    const v = /\bvalue="([^"]*)"/i.exec(m[0]);
-    return v ? v[1] : "";
+    const input = descendants(form).find((node) => {
+      const fields = attrs(node);
+      return node.tagName === "input" && fields.name === name && fields.type?.toLowerCase() === "hidden";
+    });
+    return input ? attrs(input).value || "" : "";
   };
   const out = {};
   const pairs = [
@@ -181,7 +187,7 @@ if (pagePath) {
   servedForm = servedFormContext(page.text);
   if (!servedForm) finishEarly("probe_page_capture_form_missing");
   const mismatch = Object.keys(pageContext).filter(
-    (key) => key in servedForm && servedForm[key] !== pageContext[key],
+    (key) => pageContext[key] !== (key === "landing_page" ? pagePath : servedForm[key]),
   );
   if (mismatch.length) {
     console.log(JSON.stringify({
@@ -195,8 +201,15 @@ if (pagePath) {
       served_form: servedForm,
       ts: new Date().toISOString(),
     }));
-    process.exit(1);
+    throw blockedProbe;
   }
+  if (["origem", "asset_id", "cta_id", "route_family"].some((key) => !servedForm[key])) {
+    finishEarly("probe_page_attribution_missing");
+  }
+  // The published form is the source of attribution. Explicit environment
+  // values remain cross-checked above; absent values are read from that form.
+  Object.assign(pageContext, servedForm);
+  pageContext.landing_page = pagePath;
 }
 
 const payload = {
@@ -346,4 +359,12 @@ console.log(JSON.stringify({
   checks,
   ts: new Date().toISOString(),
 }));
-if (!ok) process.exit(1);
+if (!ok) process.exitCode = 1;
+}
+
+// Stop before POST on a controlled block, then let stdout and HTTP resources
+// close normally instead of terminating the process in an active fetch.
+try { await runProbe(); } catch (error) {
+  if (error !== blockedProbe) throw error;
+  process.exitCode = 1;
+}

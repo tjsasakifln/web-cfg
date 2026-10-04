@@ -93,8 +93,8 @@ def step_approvals(reason: str, source_root: Path) -> None:
         rec["rendered_hash_recaptured_at"] = now()
         rec["rendered_hash_recapture_reason"] = reason
         doc.setdefault("audit", []).append({
-            "action": "recapture_rendered_presentation", "analysis_id": rec["analysis_id"], "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
-            "authority": "Decisao EXECUTE_NOW do proprietario para a campanha CONFENGE-SALTO-INSTITUCIONAL-02 (encaminhamento de 2026-09-17)",
+            "action": "recapture_rendered_presentation", "analysis_id": rec["analysis_id"], "actor": "CODEX_AGENT_EXECUTOR",
+            "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
             "at": rec["rendered_hash_recaptured_at"],
             "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
             "rendered_content_hash_previous": prev, "rendered_content_hash": new, "reason": reason,
@@ -105,14 +105,29 @@ def step_approvals(reason: str, source_root: Path) -> None:
     print(f"approvals: {changed} registro(s) recapturado(s)")
 
 
+def frozen_recapture_provenance(previous: dict, current: dict, baseline: str, reason: str, at: str) -> dict:
+    """Retain the reviewed checkpoint before replacing its hashes or provenance."""
+    fields = ("baseline_commit", "previous_baseline_commit", "recaptured_at",
+              "recapture_reason", "pillars", "forbidden", "html_mutation")
+    checkpoint = {key: previous[key] for key in fields if key in previous}
+    # JSON round-trip prevents the newly materialized dictionaries from sharing
+    # mutable objects with the historical hashes retained in this record.
+    history = json.loads(json.dumps(previous.get("recapture_history", [])))
+    if checkpoint and checkpoint not in history:
+        history.append(json.loads(json.dumps(checkpoint)))
+    return {**current, "recapture_history": history,
+            "previous_baseline_commit": previous.get("baseline_commit"),
+            "baseline_commit": baseline, "recaptured_at": at,
+            "recapture_reason": reason}
+
+
 def step_frozen(baseline: str, reason: str, source_root: Path) -> None:
     from scripts.bofu_dominance.frozen_specs.materialize import materialize
-    materialize(root=source_root)
     p = ROOT / "data/bofu-dominance/frozen-specs/hashes.json"
+    previous = json.loads(p.read_text(encoding="utf-8"))
+    materialize(root=source_root)
     doc = json.loads(p.read_text(encoding="utf-8"))
-    doc["baseline_commit"] = baseline
-    doc["recaptured_at"] = now()
-    doc["recapture_reason"] = reason
+    doc = frozen_recapture_provenance(previous, doc, baseline, reason, now())
     p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("frozen specs: materializados; baseline", baseline)
 

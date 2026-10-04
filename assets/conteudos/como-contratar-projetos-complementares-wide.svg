@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" role="img" aria-labelledby="prepTitle prepDesc">
+  <title id="prepTitle">O que preparar, combinar e conferir antes de contratar elaboração complementar</title>
+  <desc id="prepDesc">Três colunas de decisão: insumos, interfaces e o que deve constar da proposta. Esquema didático para o comprador, sem preço, prazo ou formato proprietário obrigatório.</desc>
+  <style>
+    .k{font:800 14px Arial,sans-serif;fill:#2d6f2d;letter-spacing:1px}.h{font:760 22px Arial,sans-serif;fill:#061a33}.t{font:16px Arial,sans-serif;fill:#314256}.note{font:14px Arial,sans-serif;fill:#5d6a7a}.card{fill:#fff;stroke:#dce3e8;stroke-width:1.5}.accent{fill:#edf5ec;stroke:#cfe0cc;stroke-width:1.5}
+  </style>
+  <rect width="720" height="560" fill="#f7f9f8"/>
+  <rect x="10" y="10" width="700" height="540" fill="#fff" stroke="#dce3e8" stroke-width="2"/>
+  <text class="k" x="28" y="43">DECISÃO DE CONTRATAÇÃO</text>
+  <text class="h" x="28" y="76">Preparar, delimitar e ler a proposta</text>
+  <text class="note" x="28" y="104">Lista de conferência. Pacote incompleto não impede o primeiro contato.</text>
+
+  <g transform="translate(28 132)">
+    <rect class="card" width="204" height="314" rx="5"/>
+    <text class="k" x="16" y="32">PREPARAR</text><text class="h" x="16" y="66">Insumos</text>
+    <text class="t" x="16" y="104">Finalidade e fase.</text>
+    <text class="t" x="16" y="134">Arquitetura disponível.</text>
+    <text class="t" x="16" y="164">O que falta.</text>
+    <text class="t" x="16" y="194">Autores conhecidos,</text>
+    <text class="t" x="16" y="224">mesmo que parciais.</text>
+  </g>
+  <g transform="translate(258 132)">
+    <rect class="card" width="204" height="314" rx="5"/>
+    <text class="k" x="16" y="32">COMBINAR</text><text class="h" x="16" y="66">Interfaces</text>
+    <text class="t" x="16" y="104">Disciplina do recorte.</text>
+    <text class="t" x="16" y="134">Pontos de encontro.</text>
+    <text class="t" x="16" y="164">Quem devolve correção.</text>
+    <text class="t" x="16" y="194">Como se nomeia</text>
+    <text class="t" x="16" y="224">cada versão.</text>
+  </g>
+  <g transform="translate(488 132)">
+    <rect class="accent" width="204" height="314" rx="5"/>
+    <text class="k" x="16" y="32">CONFERIR</text><text class="h" x="16" y="66">Proposta</text>
+    <text class="t" x="16" y="104">Entregáveis, exclusões</text>
+    <text class="t" x="16" y="134">e formatos.</text>
+    <text class="t" x="16" y="164">Responsável e ART,</text>
+    <text class="t" x="16" y="194">quando couber.</text>
+    <text class="t" x="16" y="224">Campo, se houver.</text>
+    <text class="t" x="16" y="254">O que permanece com</text>
+    <text class="t" x="16" y="284">os autores de origem.</text>
+  </g>
+  <text class="note" x="28" y="486">Este esquema não fixa número de revisões, prazo, desconto nem atendimento de campo nacional.</text>
+  <text class="note" x="28" y="512">Isso só entra com autorização e evidência na proposta.</text>
+</svg>

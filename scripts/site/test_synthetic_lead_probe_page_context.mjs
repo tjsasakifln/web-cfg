@@ -12,6 +12,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import http from "node:http";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const probePath = fileURLToPath(new URL("./synthetic_lead_probe.mjs", import.meta.url));
@@ -28,6 +29,8 @@ const servedPage = `<!doctype html><html><body>
 <input type="hidden" name="route_family" value="medicoes-glosas">
 <label>Nome<input name="nome"></label>
 </form></section></body></html>`;
+const homePage = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
+let homeHtml = homePage;
 
 const zeroCounts = {
   visitor: 0, cta_triggered: 0, form_started: 0, lead_persisted: 0, contacted: 0,
@@ -47,6 +50,11 @@ let persisted = {};
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
+  if (url.pathname === "/") {
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(homeHtml);
+    return;
+  }
   if (url.pathname === "/medicoes-glosas-obras-publicas/") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     res.end(servedPage);
@@ -195,6 +203,83 @@ try {
   });
   assert.equal(ready.stdout.includes(receiptId), false, "raw receipt must not be emitted");
   console.log("PASS probe_served_form_context_persisted_ready");
+
+  // 4) Actual home uses data-capture-form, not the historical pillar class.
+  // No attribution env values: the source form must supply all three fields.
+  created = false;
+  postCount = 0;
+  const home = await runProbe(base, {
+    LEAD_PROBE_SECRET: auth.LEAD_PROBE_SECRET,
+    OPS_TOKEN: auth.OPS_TOKEN,
+    EXPECTED_SHA: auth.EXPECTED_SHA,
+    PROBE_PAGE_PATH: "/",
+    PROBE_ASSET_ID: "", PROBE_CTA_ID: "", PROBE_ROUTE_FAMILY: "",
+    PROBE_JORNADA: "", PROBE_ESTAGIO: "", PROBE_ORIGEM: "",
+  });
+  assert.equal(home.code, 0, home.stdout || home.stderr);
+  const homeProof = JSON.parse(home.stdout);
+  assert.equal(homeProof.state, "TRANSPORT_READY");
+  assert.equal(homeProof.page_context.origem, "/");
+  assert.equal(homeProof.page_context.landing_page, "/");
+  assert.deepEqual(homeProof.persisted_context, {
+    asset_id: "home-institutional", route_family: "home", cta_id: "home-proposal-submit",
+  });
+  assert.equal(postCount, 2);
+  console.log("PASS probe_actual_home_derives_and_persists_served_attribution");
+
+  // 5) An unrelated form must not qualify merely because it is a <form>.
+  homeHtml = '<form class="contact-form"><input name="origem" value="/"></form>';
+  created = false;
+  postCount = 0;
+  const unrelated = await runProbe(base, {
+    LEAD_PROBE_SECRET: auth.LEAD_PROBE_SECRET, OPS_TOKEN: auth.OPS_TOKEN,
+    EXPECTED_SHA: auth.EXPECTED_SHA, PROBE_PAGE_PATH: "/",
+  });
+  assert.equal(unrelated.code, 1, unrelated.stdout || unrelated.stderr);
+  assert.equal(JSON.parse(unrelated.stdout).reason, "probe_page_capture_form_missing");
+  assert.equal(postCount, 0);
+  console.log("PASS probe_unrelated_form_rejected_before_post");
+
+  // 6) A marker inside a quoted class value is not an actual attribute.
+  homeHtml = '<form class="contact-form data-capture-form"><input type="hidden" name="origem" value="/"></form>';
+  const quoted = await runProbe(base, {
+    LEAD_PROBE_SECRET: auth.LEAD_PROBE_SECRET, OPS_TOKEN: auth.OPS_TOKEN,
+    EXPECTED_SHA: auth.EXPECTED_SHA, PROBE_PAGE_PATH: "/",
+  });
+  assert.equal(quoted.code, 1, quoted.stdout || quoted.stderr);
+  assert.equal(JSON.parse(quoted.stdout).reason, "probe_page_capture_form_missing");
+  assert.equal(postCount, 0);
+  console.log("PASS probe_quoted_marker_is_not_an_attribute");
+
+  // 7) Env attribution cannot survive a corresponding missing served field.
+  homeHtml = '<form data-capture-form><input type="hidden" name="origem" value="/"></form>';
+  const missing = await runProbe(base, {
+    LEAD_PROBE_SECRET: auth.LEAD_PROBE_SECRET, OPS_TOKEN: auth.OPS_TOKEN,
+    EXPECTED_SHA: auth.EXPECTED_SHA, PROBE_PAGE_PATH: "/",
+    PROBE_ASSET_ID: "home-institutional",
+  });
+  assert.equal(missing.code, 1, missing.stdout || missing.stderr);
+  assert.equal(JSON.parse(missing.stdout).reason, "page_context_differs_from_served_form");
+  assert.deepEqual(JSON.parse(missing.stdout).mismatch, ["asset_id"]);
+  assert.equal(postCount, 0);
+  console.log("PASS probe_missing_served_attribution_blocks_before_post");
+
+  // 8) Exact workflow env has no attribution overrides. Removing any required
+  // hidden field must still block before a durable row or QA email is created.
+  for (const field of ["origem", "asset_id", "cta_id", "route_family"]) {
+    homeHtml = homePage.replace(new RegExp(`<input\\b[^>]*name="${field}"[^>]*>`, "i"), "");
+    assert.notEqual(homeHtml, homePage, `required home field ${field} absent from fixture`);
+    const missingWorkflow = await runProbe(base, {
+      LEAD_PROBE_SECRET: auth.LEAD_PROBE_SECRET, OPS_TOKEN: auth.OPS_TOKEN,
+      EXPECTED_SHA: auth.EXPECTED_SHA, PROBE_PAGE_PATH: "/",
+      PROBE_ASSET_ID: "", PROBE_CTA_ID: "", PROBE_ROUTE_FAMILY: "",
+      PROBE_JORNADA: "", PROBE_ESTAGIO: "", PROBE_ORIGEM: "",
+    });
+    assert.equal(missingWorkflow.code, 1, missingWorkflow.stdout || missingWorkflow.stderr);
+    assert.equal(JSON.parse(missingWorkflow.stdout).reason, "probe_page_attribution_missing");
+    assert.equal(postCount, 0);
+  }
+  console.log("PASS probe_workflow_missing_each_required_attribution_blocks_before_post");
 } finally {
   await new Promise((resolve) => server.close(resolve));
 }
