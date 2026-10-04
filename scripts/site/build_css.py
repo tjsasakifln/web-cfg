@@ -136,11 +136,11 @@ def sync_route_subsets(root: Path, *, check: bool = False) -> list[str]:
         if current != new:
             stale.append(rel)
             if not check:
-                target.write_text(new, encoding="utf-8")
+                target.write_text(new, encoding="utf-8", newline="\n")
     return stale
 
 
-def sync_home_sheet(root: Path) -> bool:
+def sync_home_sheet(root: Path, *, check: bool = False) -> bool:
     """Copy assets/editorial.css into assets/home-10x.css between its markers.
 
     The home carries the editorial layer inside its own composition sheet so it
@@ -159,7 +159,8 @@ def sync_home_sheet(root: Path) -> bool:
     _old, tail = rest.split(end, 1)
     new = head + begin + home_subset(sheet.read_text(encoding="utf-8")).rstrip("\n") + end + tail
     if new != text:
-        home.write_text(new, encoding="utf-8")
+        if not check:
+            home.write_text(new, encoding="utf-8", newline="\n")
         return True
     return False
 
@@ -176,10 +177,7 @@ def main() -> int:
         if current != assembled:
             print("FAIL styles.css is stale; run python3 scripts/site/build_css.py")
             return 1
-        home = ROOT / "assets" / "home-10x.css"
-        snapshot = home.read_text(encoding="utf-8") if home.is_file() else ""
-        if sync_home_sheet(ROOT):
-            home.write_text(snapshot, encoding="utf-8")
+        if sync_home_sheet(ROOT, check=True):
             print("FAIL assets/home-10x.css is stale against assets/editorial.css; run python3 scripts/site/build_css.py")
             return 1
         stale = sync_route_subsets(ROOT, check=True)
@@ -193,7 +191,7 @@ def main() -> int:
     for rel in sync_route_subsets(ROOT):
         print(f"wrote {rel} (route subset of assets/editorial.css)")
     if current != assembled:
-        STYLES.write_text(assembled, encoding="utf-8")
+        STYLES.write_text(assembled, encoding="utf-8", newline="\n")
         print(f"wrote {STYLES.relative_to(ROOT)} ({len(assembled.encode())} bytes)")
     else:
         print(f"unchanged {STYLES.relative_to(ROOT)} ({len(current.encode())} bytes)")

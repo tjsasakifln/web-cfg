@@ -397,7 +397,7 @@ ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)
 <label class="consent" for="intel-consentimento"><input id="intel-consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre esta solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
 <input id="intel-consent-at" name="consent_at" type="hidden" value=""/>
 <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="${esc(process.env.TURNSTILE_SITE_KEY || "")}">
-  <div class="cf-turnstile" data-theme="light" data-size="normal"></div>
+  <div class="cf-turnstile" data-theme="light" data-size="compact"></div>
 </div>
 <button class="button button-primary button-lg" type="submit">Registrar seguimento desta análise</button>
 </form>

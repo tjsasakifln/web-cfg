@@ -86,3 +86,11 @@ body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1
 }
 /* Tokens opacos marcados pelo build (CNPJ, URLs, codigos) herdam o texto ao redor: regras de rotulo como .answer-box span nao podem transforma-los em bloco em caixa alta (aceite 2026-09-17). */
 .answer-box [data-opaque-token],.lead-inline-copy [data-opaque-token],.author-box [data-opaque-token],.aside-card [data-opaque-token]{display:inline;margin:0;font:inherit;letter-spacing:inherit;text-transform:none;color:inherit}
+
+/* Cloudflare reserves 300px for normal/flexible widgets. Compact is the only
+   documented visual mode that fits the narrow public form. Keep its full
+   140px footprint as soon as a keyed slot becomes visible so asynchronous
+   loading and an error state cannot move the controls below it. */
+.contact-form,.turnstile-slot{min-width:0;max-width:100%}
+.turnstile-slot:not([hidden]){min-block-size:140px}
+.cf-turnstile[data-size=compact]{min-inline-size:0;min-block-size:140px;max-inline-size:100%}

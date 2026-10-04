@@ -91,7 +91,11 @@ def _visible(fragment: str) -> str:
 # Campaign review: 24 original controls plus 3 hidden attribution fields;
 # 3 required fields and receipt/abuse/privacy contracts are preserved.
 # Previous reviewed form: 153a576f12cd5c8897fc6e9191674e3aa2fad5f7d3791e0004495bbceef24350
-CAPTURE_FORM_SHA256 = "ddc1d9b2b548770cf3b5fe44cda485e597ff53b8d8d393daded5bbe239a1a4e7"
+# 2026-10-04 (CONFENGE-QUALIDADE-SITEWIDE): presentation-only recapture
+# after the Turnstile slot changed from normal to compact to fit the first
+# viewport. Capture routing, controls, consent, privacy, receipt and token
+# handling are protected by the assertions below and remain unchanged.
+CAPTURE_FORM_SHA256 = "7d733ae97146d18fb4fe4f8ef46804c9792444ab9d85b45e878d94e093672db6"
 
 
 def _home() -> str:
@@ -166,6 +170,7 @@ def test_corporate_triage_is_safe_and_capture_form_is_reviewed() -> None:
     assert 'type="file"' not in body.lower()
     assert 'data-runtime-profile="shared_lead_form_v1"' in body and 'data-receipt-required="true"' in body
     assert 'name="document_intent" type="hidden" value="secure_channel_request"' in body
+    assert 'class="cf-turnstile" data-theme="light" data-size="compact"' in body
     assert hashlib.sha256(body.encode("utf-8")).hexdigest() == CAPTURE_FORM_SHA256
 
 

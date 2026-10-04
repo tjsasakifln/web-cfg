@@ -221,20 +221,20 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
 <rect x="{X(0):.1f}" y="{Y(W):.1f}" width="{px(L):.1f}" height="{px(W):.1f}" fill="#fff" stroke="#071a31" stroke-width="1.2"/>
 <!-- door opening north -->
 <rect x="{X(door_off):.1f}" y="{Y(W + t):.1f}" width="{px(door_w):.1f}" height="{px(t):.1f}" fill="#fff" stroke="#071a31" stroke-width="1.2"/>
-<text x="{X(door_off + door_w / 2):.1f}" y="{Y(W + t) - 6:.1f}" text-anchor="middle" font-size="11" fill="#071a31">D-01</text>
+<text x="{X(door_off + door_w / 2):.1f}" y="{Y(W + t) - 6:.1f}" text-anchor="middle" font-size="12" fill="#071a31">D-01</text>
 <!-- window east -->
 <rect x="{X(L):.1f}" y="{Y(win_off + win_w):.1f}" width="{px(t):.1f}" height="{px(win_w):.1f}" fill="#edf5ec" stroke="#2d6f2d" stroke-width="1.2"/>
-<text x="{X(L + t) + 4:.1f}" y="{Y(win_off + win_w / 2):.1f}" font-size="11" font-weight="650" fill="#2d6f2d">WN-01</text>
+<text x="{X(L + t) + 4:.1f}" y="{Y(win_off + win_w / 2):.1f}" font-size="12" font-weight="650" fill="#2d6f2d">WN-01</text>
 <!-- beam along east interior -->
 <rect x="{X(L - 0.12):.1f}" y="{Y(W):.1f}" width="{px(0.12):.1f}" height="{px(W):.1f}" fill="none" stroke="#2d6f2d" stroke-width="1.2" stroke-dasharray="4 3"/>
-<text x="{X(L - 0.18):.1f}" y="{Y(W / 2):.1f}" font-size="11" font-weight="650" fill="#2d6f2d" transform="rotate(-90 {X(L - 0.18):.1f} {Y(W / 2):.1f})">B-01</text>
+<text x="{X(L - 0.18):.1f}" y="{Y(W / 2):.1f}" font-size="12" font-weight="650" fill="#2d6f2d" transform="rotate(-90 {X(L - 0.18):.1f} {Y(W / 2):.1f})">B-01</text>
 <!-- shaft west exterior -->
-<rect x="{X(-shaft_d):.1f}" y="{Y(shaft_off + shaft_w):.1f}" width="{px(shaft_d):.1f}" height="{px(shaft_w):.1f}" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
-<text x="{X(-shaft_d / 2):.1f}" y="{Y(shaft_off + shaft_w / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#071a31">HS-01</text>
+<rect x="{X(-shaft_d):.1f}" y="{Y(shaft_off + shaft_w):.1f}" width="{px(shaft_d):.1f}" height="{px(shaft_w):.1f}" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2" data-legibility-contour="shaft-HS-01"/>
+<text x="{X(-shaft_d / 2):.1f}" y="{Y(shaft_off + shaft_w / 2) + 4:.1f}" text-anchor="middle" font-size="12" fill="#071a31">HS-01</text>
 <text x="{X(L / 2):.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" font-weight="650" fill="#071a31">RM-01</text>
-<text x="{X(L / 2):.1f}" y="{Y(-t) + 28:.1f}" text-anchor="middle" font-size="11" fill="#5d6a7a">{br_number(L)} m</text>
-<text x="{X(-t) - 8:.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="11" fill="#5d6a7a" transform="rotate(-90 {X(-t) - 8:.1f} {Y(W / 2):.1f})">{br_number(W)} m</text>
-<text x="{pad}" y="{svg_h - 12}" font-size="11" fill="#5d6a7a">PR-ARQ · {e(revision)} · escala indicativa · exemplo demonstrativo</text>
+<text x="{X(L / 2):.1f}" y="{Y(-t) + 28:.1f}" text-anchor="middle" font-size="12" fill="#5d6a7a">{br_number(L)} m</text>
+<text x="{X(-t) - 36:.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" fill="#5d6a7a" data-legibility-clearance-from="shaft-HS-01" transform="rotate(-90 {X(-t) - 36:.1f} {Y(W / 2):.1f})">{br_number(W)} m</text>
+<text x="{pad}" y="{svg_h - 12}" font-size="12" fill="#5d6a7a">PR-ARQ · {e(revision)} · escala indicativa · exemplo demonstrativo</text>
 </svg>
 """
 
@@ -431,7 +431,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 </dl>
 </div>
 <figure class="plate plate--side" aria-labelledby="case-plate-cap">
-<div class="plate__sheet">
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">
 {_elevation_svg(extracts, "R00", id_suffix="hero")}
 </div>
 <figcaption class="plate__caption" id="case-plate-cap">Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. É a interferência CF-GEO-01, corrigida em R01.</figcaption>
@@ -468,19 +468,19 @@ def render_html(extracts: dict[str, Any]) -> str:
 <h2 class="t-editorial" id="plantas">Planta e elevação</h2>
 <div class="grid-2">
 <figure class="plate">
-<div class="plate__sheet">{_plan_svg(extracts, "R00")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_plan_svg(extracts, "R00")}</div>
 <figcaption class="plate__caption">Planta R00, estado original. Janela WN-01 na parede leste, viga B-01 no mesmo alinhamento, poço HS-01 a oeste.</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_plan_svg(extracts, "R01")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_plan_svg(extracts, "R01")}</div>
 <figcaption class="plate__caption">Planta R01, versão demonstrativa corrigida. A planta baixa é a mesma; a correção aparece na elevação.</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_elevation_svg(extracts, "R00")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_elevation_svg(extracts, "R00")}</div>
 <figcaption class="plate__caption">Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. Sobreposição {br_number(totals["r00_overlap_m"])} m.</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_elevation_svg(extracts, "R01")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_elevation_svg(extracts, "R01")}</div>
 <figcaption class="plate__caption">Elevação leste R01: verga em {br_number(totals["window_head_r01_m"])} m, folga {br_number(totals["r01_clearance_m"])} m até B-01.</figcaption>
 </figure>
 <p>Arquivos da mesma revisão: <a href="assets/planta-r00.svg">planta R00</a>, <a href="assets/planta-r01.svg">planta R01</a>, <a href="assets/elevacao-leste-r00.svg">elevação R00</a>, <a href="assets/elevacao-leste-r01.svg">elevação R01</a>.</p>
@@ -534,7 +534,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Próximo passo</span>
 <h2 class="t-editorial" id="contratar">Levar o mesmo tipo de entrega para o seu projeto</h2>
-<p>Se você tem um projeto de terceiro para conferir, disciplinas para compatibilizar ou uma obra para orçar, este é o formato do que chega às suas mãos: planilha com memória, relatório de revisão com pontos localizados, registro de interferências com a solução acordada. A proposta combina elaboração, revisão, compatibilização, quantitativos e orçamento conforme a necessidade, e autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
+<p>Se você tem um projeto de terceiro para conferir, disciplinas para compatibilizar ou uma obra para orçar, este é o formato do que chega às suas mãos: planilha com memória, relatório de revisão com pontos localizados, registro de interferências com a solução acordada. A proposta combina elaboração, revisão, compatibilização, quantitativos e orçamento conforme a necessidade, e autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas na proposta.</p>
 <p>Abra o serviço que corresponde ao que você precisa: <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica</a> ou <a href="/compatibilizacao-projetos-engenharia/">compatibilização</a>. Traga o que você já tem; o que for sensível segue depois, por canal seguro.</p>
 <div class="contact-primary">
 <a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Descrever o projeto pelo WhatsApp</a>
@@ -591,7 +591,7 @@ def write_outputs(root: Path, extracts: dict[str, Any]) -> dict[str, Path]:
     written: dict[str, Path] = {}
 
     html_path = public / "index.html"
-    html_path.write_text(render_html(extracts), encoding="utf-8")
+    html_path.write_text(render_html(extracts), encoding="utf-8", newline="\n")
     written["html"] = html_path
 
     mapping = {
@@ -605,7 +605,7 @@ def write_outputs(root: Path, extracts: dict[str, Any]) -> dict[str, Path]:
         "elevacao-leste-r01": (public / "assets" / "elevacao-leste-r01.svg", _elevation_svg(extracts, "R01")),
     }
     for key, (path, text) in mapping.items():
-        path.write_text(text, encoding="utf-8")
+        path.write_text(text, encoding="utf-8", newline="\n")
         written[key] = path
 
     from scripts.demonstrative.private_project.derive import CONSUMPTION_REL, consumption_descriptor
@@ -616,6 +616,7 @@ def write_outputs(root: Path, extracts: dict[str, Any]) -> dict[str, Path]:
     cons_path.write_text(
         json.dumps(consumption_descriptor(extracts), ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     written["consumption"] = cons_path
     return written

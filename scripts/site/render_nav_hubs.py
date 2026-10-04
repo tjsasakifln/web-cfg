@@ -722,7 +722,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <ol class="list-ruled list-ruled--areas">{situations_html}</ol>
 </div>
 </section>
-<section aria-labelledby="hub-outras" class="sec sec--tight sec--soft" id="hub-outras">
+<section aria-labelledby="hub-outras-title" class="sec sec--tight sec--soft" id="hub-outras">
 <div class="container">
 <div class="sec-head sec-head--split">
 <span class="t-kicker">Outras necessidades de contrato</span>

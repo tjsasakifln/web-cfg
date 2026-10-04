@@ -11,3 +11,6 @@
 .table-wrap .data-table{min-width:640px}
 .table-wrap .data-table td,.table-wrap .data-table th{overflow-wrap:normal;word-break:normal;hyphens:manual}
 @media (max-width:699px){.table-wrap::after{content:"Role a tabela para o lado para ver todas as colunas.";display:block;padding:.5rem 0 0;font-size:var(--text-small);color:var(--muted)}}
+.breakout-bars-pan{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-gutter:stable}
+.breakout-bars-pan .breakout-bars{width:24rem;max-width:none}
+.breakout-bars-pan:focus-visible{outline:3px solid var(--green-700);outline-offset:3px}

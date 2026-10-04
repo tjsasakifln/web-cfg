@@ -66,11 +66,11 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "762597f03173fb5358783851f88ab2df074b31e14826141a4ec61d184ca18d46",
-      "rendered_content_hash_previous": "5ded413ab185417c7848e37cc3019539048740848967a8c08b314f85ba5ff63b",
+      "rendered_content_hash": "7f224d68d34b01922ee5d6f61c09c067e744f5ae8188f54c7b2029b4834fd2a6",
+      "rendered_content_hash_previous": "0fdf2bf8c7805db9fd62faa80188c95f70631dc17224c0a5a63e9ffc7c2bb87b",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-03T19:05:05.196288+00:00",
-      "rendered_hash_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: projeção comercial estrita sobre snapshot factual imutável. Saudação institucional em um prefill; navegação/rodapé compartilhados atualizados e fingerprint CSS recalculado. Main técnico preservado byte a byte ao mascarar somente a saudação; fatos, cálculos, fontes, limites, título, datas, autoria, canonical, robots, JSON-LD e CTA contextual visível inalterados. Aprovação material humana de 2026-08-20 e snapshot histórico intactos. Revisão autônoma independente; nenhuma nova revisão humana alegada.",
+      "rendered_hash_recaptured_at": "2026-10-04T12:45:57Z",
+      "rendered_hash_recapture_reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correções verificadas de contraste, SVGs e geração determinística; recaptura de apresentação, sem nova aprovação técnica ou revisão humana alegada",
       "rendered_hash_recapture_reason_previous": "CONFENGE-PROJETOS-ENGENHARIA-20261002: IA global, navegacao, posicionamento e apresentacao de projetos foram atualizados; fatos tecnicos e canonicos existentes foram preservados; esta recaptura registra bytes derivados sem alegar revisao humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
@@ -605,6 +605,28 @@
       "rendered_content_hash_previous": "8efa437d0721abf8b164d82828f6992d094ba106d034796979df3e4980498fbb",
       "rendered_content_hash": "5ded413ab185417c7848e37cc3019539048740848967a8c08b314f85ba5ff63b",
       "reason": "CONFENGE-PROJETOS-ENGENHARIA-20261002: IA global, navegacao, posicionamento e apresentacao de projetos foram atualizados; fatos tecnicos e canonicos existentes foram preservados; esta recaptura registra bytes derivados sem alegar revisao humana independente."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
+      "at": "2026-10-04T11:42:00Z",
+      "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "762597f03173fb5358783851f88ab2df074b31e14826141a4ec61d184ca18d46",
+      "rendered_content_hash": "0fdf2bf8c7805db9fd62faa80188c95f70631dc17224c0a5a63e9ffc7c2bb87b",
+      "reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: revisão autônoma das correções de molduras editoriais, Turnstile compacto e tipografia de ferramentas; apresentação validada por fonte/DOM e contraprovas locais. Fatos, textos técnicos, condições, preços, fontes, canonical, robots, autoria e decisões materiais humanas preservados. Somente vínculos derivados de apresentação recapturados; nenhuma nova aprovação técnica ou revisão humana alegada."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
+      "at": "2026-10-04T12:45:57Z",
+      "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "0fdf2bf8c7805db9fd62faa80188c95f70631dc17224c0a5a63e9ffc7c2bb87b",
+      "rendered_content_hash": "7f224d68d34b01922ee5d6f61c09c067e744f5ae8188f54c7b2029b4834fd2a6",
+      "reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correções verificadas de contraste, SVGs e geração determinística; recaptura de apresentação, sem nova aprovação técnica ou revisão humana alegada"
     }
   ]
 }

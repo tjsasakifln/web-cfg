@@ -153,7 +153,7 @@ def render_structured_checklist(page: dict[str, Any]) -> str:
         # Intro (visible before start; with JS becomes gate)
         '<div class="tool-intro" data-tool-intro>',
         '<p class="tool-kicker">Diagnóstico documental</p>',
-        "<h3 class=\"tool-intro-title\">O que este checklist avalia</h3>",
+        "<h2 class=\"tool-intro-title\">O que este checklist avalia</h2>",
         "<ul class=\"tool-intro-list\">",
         f"<li><strong>{total} requisitos</strong> de pedido de aditivo em obra pública "
         "(identificação, planilha, provas e bloqueios).</li>",

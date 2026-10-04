@@ -768,7 +768,7 @@ a.tool-card:focus-visible {
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
-.tool-event-card > header h3 {
+.tool-event-card > header h2 {
   margin: 0;
 }
 @media (max-width: 390px) {

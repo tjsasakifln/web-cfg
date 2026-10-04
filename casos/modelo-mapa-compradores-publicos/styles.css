@@ -32,7 +32,7 @@
 /* Sazonalidade: 12 meses somando 118 contratos. */
 .map-season { list-style: none; margin: 40px 0 0; padding: 0; }
 .map-season li { align-items: center; background: linear-gradient(90deg, rgba(206, 214, 42, .3) var(--bar), transparent var(--bar)); border-bottom: 1px solid rgba(255, 255, 255, .16); display: grid; gap: 14px; grid-template-columns: 62px 1fr 62px; min-height: 44px; padding: 6px 10px; }
-.map-season span { color: #aebcca; font-family: var(--r-mono); font-size: .8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.map-season span { color: #cbd6df; font-family: var(--r-mono); font-size: .8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .map-season strong { color: #fff; font-size: 1.05rem; font-weight: 850; }
 .map-season em { color: #cbd6df; font-family: var(--r-mono); font-size: .8rem; font-style: normal; text-align: right; }
 

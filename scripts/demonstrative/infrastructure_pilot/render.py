@@ -506,7 +506,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 </dl>
 </div>
 <figure class="plate plate--side" aria-labelledby="case-plate-cap">
-<div class="plate__sheet">
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">
 {_profile_svg(extracts, "R00", id_suffix="hero")}
 </div>
 <figcaption class="plate__caption" id="case-plate-cap">Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
@@ -563,23 +563,23 @@ def render_html(extracts: dict[str, Any]) -> str:
 <h2 class="t-editorial" id="desenhos">Planta, perfil e seção</h2>
 <div class="grid-2">
 <figure class="plate">
-<div class="plate__sheet">{_plan_svg(extracts, "R00")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_plan_svg(extracts, "R00")}</div>
 <figcaption class="plate__caption">Planta R00. Faixa PV-01, trecho DR-01, poços MH-01 e MH-02, boca IN-01. A cota de MH-02 ainda diverge da planilha.</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_plan_svg(extracts, "R01")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_plan_svg(extracts, "R01")}</div>
 <figcaption class="plate__caption">Planta R01. A geometria em planta é a mesma; o alinhamento de cota aparece no perfil e na planilha.</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_profile_svg(extracts, "R00")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_profile_svg(extracts, "R00")}</div>
 <figcaption class="plate__caption">Perfil R00: invert desenhada de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m. Diferença {br_number(totals["mh02_mismatch_r00_m"])} m (CF-GEO-01).</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_profile_svg(extracts, "R01")}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_profile_svg(extracts, "R01")}</div>
 <figcaption class="plate__caption">Perfil R01: desenho e planilha na mesma cota {br_number(totals["mh02_invert_drawn_m"])} m.</figcaption>
 </figure>
 <figure class="plate">
-<div class="plate__sheet">{_section_svg(extracts)}</div>
+<div class="plate__sheet plate__sheet--svg-pan" role="group" tabindex="0" aria-label="Desenho técnico: deslize horizontalmente para ler cotas e chamadas">{_section_svg(extracts)}</div>
 <figcaption class="plate__caption">Seção da faixa PV-01: capa, base e sub-base com espessuras declaradas. Volume = área × espessura, sem dimensionar pavimento.</figcaption>
 </figure>
 <p>Arquivos da mesma revisão {e(rev)}: <a href="assets/planta-r00.svg">planta R00</a>, <a href="assets/planta-r01.svg">planta R01</a>, <a href="assets/perfil-drenagem-r00.svg">perfil R00</a>, <a href="assets/perfil-drenagem-r01.svg">perfil R01</a>, <a href="assets/secao-pavimento.svg">seção da faixa</a>.</p>
@@ -633,7 +633,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Próximo passo</span>
 <h2 class="t-editorial" id="contratar">Pedir o mesmo tipo de entrega no seu recorte</h2>
-<p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são trabalhos com nome próprio que a proposta combina conforme a necessidade: o pedido descreve o problema, a proposta organiza as etapas. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
+<p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são trabalhos com nome próprio que a proposta combina conforme a necessidade: o pedido descreve o problema, a proposta organiza as etapas. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas na proposta.</p>
 <p>Veja o escopo em <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, em <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica de projetos</a> e em <a href="/projetos-complementares-engenharia/">projetos complementares</a>. Traga o que você já tem; o que for sensível segue depois, por canal seguro.</p>
 <div class="contact-primary">
 <a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Pedir proposta pelo WhatsApp</a>
@@ -693,7 +693,7 @@ def write_outputs(root: Path, extracts: dict[str, Any]) -> dict[str, Path]:
     written: dict[str, Path] = {}
 
     html_path = public / "index.html"
-    html_path.write_text(render_html(extracts), encoding="utf-8")
+    html_path.write_text(render_html(extracts), encoding="utf-8", newline="\n")
     written["html"] = html_path
 
     mapping = {
@@ -708,7 +708,7 @@ def write_outputs(root: Path, extracts: dict[str, Any]) -> dict[str, Path]:
         "secao-pavimento": (public / "assets" / "secao-pavimento.svg", _section_svg(extracts)),
     }
     for key, (path, text) in mapping.items():
-        path.write_text(text, encoding="utf-8")
+        path.write_text(text, encoding="utf-8", newline="\n")
         written[key] = path
 
     cons_path = root / CONSUMPTION_REL
@@ -716,6 +716,7 @@ def write_outputs(root: Path, extracts: dict[str, Any]) -> dict[str, Path]:
     cons_path.write_text(
         json.dumps(consumption_descriptor(extracts), ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     written["consumption"] = cons_path
     return written

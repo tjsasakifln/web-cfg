@@ -108,7 +108,7 @@
 .article-meta li+li::before,.article-meta span+span::before{content:"·";margin-right:.75rem;color:var(--muted)}
 .authority-byline a{color:var(--ink);text-decoration:underline;text-underline-offset:.2em}
 .hub-list h3,.hub-list h2{max-width:40ch}
-.article-callout,.article-decision{margin:1.5rem 0;padding:1rem 0 1rem 1.25rem;border-left:3px solid var(--green-700);background:transparent;border-radius:0}
+.article-callout,.article-decision{margin:1.5rem 0;padding:1rem 0 1rem 1.25rem;border:0;border-left:3px solid var(--green-700);background:transparent;border-radius:0;box-shadow:none}
 .article-callout .eyebrow,.article-decision .eyebrow{margin:0 0 .35rem}
 .article-callout,.article-callout p,.article-callout li,.article-decision,.article-decision p,.article-decision li{color:var(--text)}
 .article-callout h2,.article-callout h3,.article-callout strong,.article-decision h2,.article-decision h3,.article-decision strong{color:var(--ink)}
@@ -124,7 +124,7 @@
 .sources-section li a{display:inline;padding:0;border:0;background:transparent;color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:.2em;overflow-wrap:anywhere}
 .sources-section li a .icon,.sources-section li .icon{display:inline-block;width:1em;height:1em;vertical-align:-.15em;margin-left:.25rem}
 .sources-section li a:hover{color:var(--green-700)}
-.author-box{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 1.5rem;margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
+.author-box{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 1.5rem;margin:2.5rem 0 0;padding:1.25rem 0 0;border:0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0;box-shadow:none}
 @media (min-width:600px){.author-box{grid-template-columns:6rem minmax(0,1fr);align-items:start}}
 .author-box .author-photo{margin:0;width:6rem;height:6rem;aspect-ratio:1/1;border:1px solid var(--rule);border-radius:var(--radius-sm);overflow:hidden;background:var(--soft)}
 .author-box .author-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
@@ -134,6 +134,7 @@
 .author-box p{margin:0 0 .5rem;max-width:60ch;color:var(--text);font-size:var(--text-caption)}
 .article-aside{position:static;min-width:0}
 .article-aside .aside-card{border:0;border-top:1px solid var(--rule-strong);border-radius:0;background:transparent;box-shadow:none;padding:1rem 0 1.25rem;margin:0}
+.article-aside .aside-card--primary,.article-aside .aside-card--primary h2,.article-aside .aside-card--primary h3,.article-aside .aside-card--primary .aside-title{color:var(--ink)}
 .article-aside .aside-card>span,.article-aside .aside-card>strong{display:block;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--green-700);margin:0 0 .5rem}
 .article-aside .aside-card h2,.article-aside .aside-card h3{font-size:clamp(1.15rem,1.05rem + .4vw,1.35rem);margin:0 0 .6rem;max-width:22ch}
 .article-aside .aside-card p{font-size:var(--text-caption);color:var(--text);margin:0 0 1rem;max-width:40ch}
@@ -141,7 +142,7 @@
 .article-aside .aside-card a:not(.button):not(.button-primary):not(.button-secondary){color:var(--ink);font-weight:720;text-decoration:underline;text-underline-offset:.2em}
 .article-aside .aside-compact{padding-top:.75rem}
 @media (min-width:1000px){.article-aside{position:sticky;top:6rem}}
-.article-main .lead-inline,.article-layout .lead-inline,main>.lead-inline.section,.article-hero~.lead-inline,.article-hero~*>.lead-inline,.article-hero~* .lead-inline{margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
+.article-main .lead-inline,.article-layout .lead-inline,main>.lead-inline.section,.article-hero~.lead-inline,.article-hero~*>.lead-inline,.article-hero~* .lead-inline{margin:2.5rem 0 0;padding:1.25rem 0 0;border:0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0;box-shadow:none}
 .article-main .lead-inline h2,.article-main .lead-inline h3{margin-top:0}
 .article-hero~.lead-inline,.article-hero~* .lead-inline{color:var(--ink);width:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 2rem;align-items:start}
 @media (min-width:800px){.article-hero~.lead-inline,.article-hero~* .lead-inline{grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}

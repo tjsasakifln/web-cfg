@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
@@ -422,3 +423,32 @@ def test_problem_clusters_name_the_published_readjustment_event():
     assert "reajust" in row["label"].casefold()
     hub = (ROOT / "servicos-obras-publicas" / "index.html").read_text(encoding="utf-8")
     assert 'id="entrega-21"' in hub
+
+
+@pytest.mark.parametrize("surface", ["generator", "materialized"])
+def test_other_needs_region_uses_a_heading_as_its_accessible_name(surface):
+    """A region must name its heading rather than recursively name itself."""
+    from scripts.site.render_nav_hubs import render_pages
+
+    class Elements(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.by_id = {}
+
+        def handle_starttag(self, tag, attrs):
+            attributes = dict(attrs)
+            if attributes.get("id"):
+                self.by_id[attributes["id"]] = (tag, attributes)
+
+    route = "/servicos-obras-publicas/"
+    html = (render_pages()[route] if surface == "generator" else
+            (ROOT / route.strip("/") / "index.html").read_text(encoding="utf-8"))
+    elements = Elements()
+    elements.feed(html)
+    tag, region = elements.by_id["hub-outras"]
+    assert tag == "section"
+    names = region.get("aria-labelledby", "").split()
+    assert names
+    for name in names:
+        assert name != region["id"], "section names itself instead of its heading"
+        assert elements.by_id[name][0] in {"h1", "h2", "h3", "h4", "h5", "h6"}
