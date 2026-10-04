@@ -398,11 +398,52 @@ def test_rendered_hash_equals_full_assembled_artifact_with_scrub(tmp_path):
 
     rec = {"slug": "hash-scrub-canary"}
     html = (
-        '<!doctype html><html><head><link rel="stylesheet" href="/styles.css">'
+        '<!doctype html><html><head><title>Hash scrub canary | CONFENGE</title>'
+        '<meta name="description" content="Fixture determinística de montagem pública e normalização tipográfica.">'
+        '<link rel="canonical" href="https://confenge.com.br/analises-contratos-publicos/hash-scrub-canary/">'
+        '<link rel="stylesheet" href="/styles.css">'
         '</head><body><main><p>Antes — depois</p></main></body></html>'
     )
     for name in ("styles.css", "styles-tokens.css", "styles-tools.css", "styles-offers.css"):
         shutil.copy2(ROOT / name, tmp_path / name)
+    for name in (
+        "data/site/share-preview-contract.v1.json",
+        "data/organic/noindex-governance-registry.json",
+    ):
+        target = tmp_path / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, target)
+    # This isolated artifact contains one indexable page and no operational or
+    # receipt routes. Keep the production policy itself, with coverage scoped
+    # to the fixture's actual surface.
+    preview_contract = tmp_path / "data/site/share-preview-contract.v1.json"
+    preview_policy = json.loads(preview_contract.read_text(encoding="utf-8"))
+    preview_policy["noindex_nonshareable"] = []
+    preview_contract.write_text(
+        json.dumps(preview_policy, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    media_manifest_rel = Path("data/site/commercial-media/source.json")
+    media_manifest = json.loads((ROOT / media_manifest_rel).read_text(encoding="utf-8"))
+    fixture_assets = [
+        asset
+        for asset in media_manifest["assets"]
+        if asset["target"] == "assets/og-confenge.jpg"
+    ]
+    assert len(fixture_assets) == 1
+    media_manifest["assets"] = fixture_assets
+    fixture_media_manifest = tmp_path / media_manifest_rel
+    fixture_media_manifest.parent.mkdir(parents=True, exist_ok=True)
+    fixture_media_manifest.write_text(
+        json.dumps(media_manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    for asset in fixture_assets:
+        for key in ("source", "target"):
+            source = Path(asset[key])
+            target = tmp_path / source
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(ROOT / source, target)
     page = tmp_path / "analises-contratos-publicos" / rec["slug"] / "index.html"
     page.parent.mkdir(parents=True, exist_ok=True)
     page.write_text(html, encoding="utf-8")
