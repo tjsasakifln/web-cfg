@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-04T21:45:56.234Z",
+  "measured_at": "2026-10-04T23:09:49.721Z",
   "measured_on": "2026-10-04",
-  "commit_sha": "09094d8c5039018aa9ea47a4d3a5ec9398545f4e",
+  "commit_sha": "01991d4451189c9884dc060a7cddab4b984a94b3",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -53,10 +53,10 @@
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
     "index.html": "118430aa430d861f5d46722be37cde8784d8c16a26f826e88cefc06b9c63d31e",
     "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
-    "problemas-que-resolvemos/index.html": "7a85adf21298a3fc2f5af740d2123a47dbedf84014fa106d536758031fb76200",
+    "problemas-que-resolvemos/index.html": "426604a900dde9981e96f1dda6a83db32cba93fcd89fc24d98577a9aacef6ba6",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
     "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
-    "servicos-obras-publicas/index.html": "d4d59035b24f37dbbd468a475e6ceba320f389dc61019a7d02252a482460c827",
+    "servicos-obras-publicas/index.html": "dd17109e5bdc6f1f2a8e9bfcfd2b3b40fe3689f4cc9e28e8d4080d77a02be1e1",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
@@ -518,7 +518,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "d4d59035b24f37dbbd468a475e6ceba320f389dc61019a7d02252a482460c827",
+      "html_sha256": "dd17109e5bdc6f1f2a8e9bfcfd2b3b40fe3689f4cc9e28e8d4080d77a02be1e1",
       "measured_on": "2026-10-04",
       "viewports": {
         "1366x768": {
@@ -708,7 +708,7 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "7a85adf21298a3fc2f5af740d2123a47dbedf84014fa106d536758031fb76200",
+      "html_sha256": "426604a900dde9981e96f1dda6a83db32cba93fcd89fc24d98577a9aacef6ba6",
       "measured_on": "2026-10-04",
       "viewports": {
         "1366x768": {
