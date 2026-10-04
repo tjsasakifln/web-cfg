@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-04T05:55:11.105Z",
+  "measured_at": "2026-10-04T06:27:43.344Z",
   "measured_on": "2026-10-04",
-  "commit_sha": "b61c1680a6a43856d2acfb31711fdca029ad9c0d",
+  "commit_sha": "25c6eaad08efbdbf1ebbba9204f4c8c07db4498b",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -17,7 +17,7 @@
     "assets/editorial-article.css": "5d06160dfcaf80aa49876b7f5edeaae3c05957826f68e9123051bbdac7a79ad6",
     "assets/editorial.css": "40e2111b70d62725c696c71bfa03c36fdccd9970aa8afcd7ab721dc7de01956d",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "8210c3a42425bc225edaf0b695a3badb999364abe12733debe769d91cbde42c3",
+    "assets/home-10x.css": "635c07a779bc86a56ff4a34576a703eb5b6fb9278375cdfe669f12e808f98545",
     "assets/home-base.css": "5daf95b910c1f2bb765320f3b0c8391225a3d26e87bfd25609330998d9110186",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
@@ -208,8 +208,8 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 97,
-                "bottom": 136,
+                "top": 85,
+                "bottom": 124,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -220,44 +220,44 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 152,
-                "bottom": 367,
+                "top": 140,
+                "bottom": 281,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 215
+                "height": 140
               },
               "text": "Engenharia de projeto para decisões que precisam chegar à obra."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 387,
-                "bottom": 552,
+                "top": 294,
+                "bottom": 414,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 165
+                "height": 120
               },
               "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Reunimos as disciplinas necessárias para transformar premissas, interfaces e requisitos de execução em uma entrega técnica integrada."
             },
             "substance": {
               "selector": ".home-opening__scope",
               "box": {
-                "top": 710,
-                "bottom": 810,
+                "top": 544,
+                "bottom": 638,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 100
+                "height": 94
               },
               "text": "EstruturasInstalaçõesInfraestruturaCoordenação multidisciplinar"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 580,
-                "bottom": 624,
+                "top": 430,
+                "bottom": 474,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -271,8 +271,8 @@
               "text": "Solicitar proposta",
               "href": "#contato",
               "box": {
-                "top": 580,
-                "bottom": 624,
+                "top": 430,
+                "bottom": 474,
                 "left": 18,
                 "right": 372,
                 "width": 353,

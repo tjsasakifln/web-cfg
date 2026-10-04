@@ -307,3 +307,17 @@ a exigir o painel HTML completo: três disciplinas, projeto coordenado,
 documentação para a obra, conectores e ordem de leitura. Os demais critérios
 de hierarquia e contato permanecem. Os 43 testes de design passaram; os
 checks completos precisam aprovar o novo head antes da integração.
+
+A execução seguinte sobre o artefato novo rejeitou a abertura mobile com
+1586 px em 390×844, acima do limite de 1266 px. A composição foi compactada
+sem retirar conteúdo: os textos do painel permanecem completos e com pelo
+menos 16 px. No checkpoint fonte limpo
+`25c6eaad08efbdbf1ebbba9204f4c8c07db4498b`, a abertura mede 1221 px.
+A revisão independente verificou 320, 390, 768 e 1440 px, sem overflow,
+com o botão de proposta na primeira tela e todos os elementos do diagrama.
+Os testes gerais de geometria passaram sobre a fonte explicitamente servida.
+A nova medição de primeira tela aprovou as 25 rotas; as medições anteriores
+permanecem históricas. Parte da matriz local geral anterior usou o artefato
+0b e não compõe o aceite deste candidato. O artefato novo e o domínio real
+precisam passar pelas verificações próprias antes do encerramento público,
+registrado na PR #732 e no relatório final da campanha.
