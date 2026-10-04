@@ -477,7 +477,7 @@
         "items": [
           [
             "Obra privada",
-            "Quantitativo, orçamento ou revisão para contratar, comprar, comparar propostas ou planejar a execução."
+            "Quantitativo, orçamento ou revisão para contratar, comprar, comparar propostas ou planejar a execução. Reformas e escopos pequenos também podem receber levantamento ou revisão delimitados na proposta."
           ],
           [
             "Obra pública",
@@ -495,7 +495,8 @@
       },
       "preserve_sections": [
         "banco-disciplinas",
-        "amostra-quantitativos"
+        "amostra-quantitativos",
+        "exemplos-conferiveis"
       ],
       "section_order": [
         "technical",

@@ -106,7 +106,7 @@ verificado da versão publicada, `run_bundle_control.py --operation rollback
 --rollback-target c7d2d0a42ebb531efc0547b34f2f38b4077ee45e
 --expected-current <SHA_PUBLICADO>`, conforme `docs/ops/ROLLBACK.md`.
 
-Status de publicação desta campanha: **PENDING_PROTECTED_RELEASE**. Este
+Status deste checkpoint de implementação, anterior ao release: **PENDING_PROTECTED_RELEASE**. Este
 registro substitui a comunicação comercial das campanhas anteriores, sem
 apagar suas decisões, evidências históricas ou limitações observadas. Não há
 afirmação de ganho de conversão sem dados posteriores à publicação.
@@ -213,3 +213,22 @@ por ID e rejeita sua remoção. Catálogo e inventário acompanham o metadado;
 os 35 testes da biblioteca, seis de integração SST e o gate next-state/v1
 passaram. A evidência limpa de 33c0364 fica preservada antes da recaptura
 do novo checkpoint de HTML.
+
+O checkpoint de quantitativos restaura duas entradas demonstrativas canônicas,
+de edificação e infraestrutura, com suas memórias, quantidades e oito CSVs.
+O renderer conserva a seção técnica e rejeita sua retirada da fonte ou do HTML.
+Reformas e escopos pequenos continuam acolhidos na proposta. Os cenários de
+compra agora verificam as modalidades e condições na estrutura institucional,
+com negativos para perda de responsabilidade, aceitação parcial e demanda
+pequena: 25 testes passaram. O renderer passou em seis testes e 12 subtestes.
+As três larguras de 320, 390 e 1440 px abriram os oito arquivos e exibiram os
+dois recortes sem overflow. O build composto contém 610 arquivos sem findings.
+
+O gate de interface de Entregas confere o rodapé inteiro contra o mapa de IA
+vigente e a única âncora dominante de cada serviço privado. Exige alvo único,
+posição, family/asset, exatamente um evento com destino form e ausência de PII;
+19 mutações de âncora/evento e cinco de rodapé são rejeitadas. A verificação
+independente em Chrome aprovou 36 findings, com zero erros e zero violações
+axe. Os 26 testes de excelência, 440 de copy e 1942 de primeira tela passaram.
+Os insumos das 25 rotas medidas permanecem iguais aos de d4071b5; estes ajustes
+não constituem nova medição nem conclusão de publicação.

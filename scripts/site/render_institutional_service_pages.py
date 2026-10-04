@@ -225,6 +225,8 @@ def render_contact(page: dict, document: str) -> str:
 
 
 def render_page(page: dict, document: str) -> str:
+    if page["route"] == "quantitativos-orcamento-obras" and "exemplos-conferiveis" not in page["preserve_sections"]:
+        raise ValueError("canonical quantity examples must be preserved")
     old_main = main_of(document)
     breadcrumb = re.search(r'<nav aria-label="Navegação estrutural"[\s\S]*?</nav>', old_main)
     if not breadcrumb:

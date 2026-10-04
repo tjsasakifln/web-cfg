@@ -1,5 +1,8 @@
 from html.parser import HTMLParser
+import copy
+import importlib.util
 import json
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -199,6 +202,30 @@ class InstitutionalServicePagesTest(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_renderer_cannot_drop_the_canonical_quantity_examples(self):
+        spec = importlib.util.spec_from_file_location(
+            "institutional_service_renderer",
+            ROOT / "scripts/site/render_institutional_service_pages.py",
+        )
+        renderer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(renderer)
+        data = json.loads(renderer.SOURCE.read_text(encoding="utf-8"))
+        page = next(item for item in data["pages"] if item["route"] == "quantitativos-orcamento-obras")
+        document = (ROOT / page["route"] / "index.html").read_text(encoding="utf-8")
+        self.assertEqual(renderer.render_page(page, document), document)
+        changed = copy.deepcopy(page)
+        changed["preserve_sections"].remove("exemplos-conferiveis")
+        with self.assertRaisesRegex(ValueError, "canonical quantity examples must be preserved"):
+            renderer.render_page(changed, document)
+        missing_section = re.sub(
+            r'<section\b(?=[^>]*\bid="exemplos-conferiveis")[^>]*>[\s\S]*?</section>',
+            "",
+            document,
+        )
+        self.assertNotEqual(missing_section, document)
+        with self.assertRaisesRegex(ValueError, "section not found: exemplos-conferiveis"):
+            renderer.render_page(page, missing_section)
 
 
 if __name__ == "__main__":

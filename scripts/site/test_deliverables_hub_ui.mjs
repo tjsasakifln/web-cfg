@@ -6,6 +6,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { footerMatches, proposalAnchorErrors } from "./acquisition_ui_contract.mjs";
 
 // One primary card per published offer; the 54-item operational roll stays internal.
 const EXPECTED_EXAMPLES = 8;
@@ -25,6 +26,7 @@ const reportPath = String(process.env.DELIVERABLES_HUB_REPORT || "").trim();
 const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
 const brand = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8"));
 const promotedNav = (brand.navigation?.desktop || []).map((item) => item.label);
+const footerColumns = JSON.parse(fs.readFileSync(path.join(root, "data/site/public-ia-map.json"), "utf8")).footer.columns;
 const legacyNav = ["Serviços", "Problemas que resolvemos", "Conteúdos", "Ferramentas", "Especialista"];
 // 2026-09-16: the founder's capture decision (unlock-plan capture.authorization)
 // released the six B2G pillars from the shell freeze; they are held to the
@@ -139,7 +141,10 @@ for (const width of widths) {
       .map((element) => element.getAttribute('data-section-archetype'));
     const primaries = document.querySelectorAll('main .button-primary').length;
     const desktopProjects = document.querySelector('.desktop-nav a[href="/projetos/"]');
-    const footerDeliverables = document.querySelector('footer a[href="/entregas/"]');
+    const footerNavigation = [...document.querySelectorAll('footer .footer-links')].map((column) => ({
+      heading: column.querySelector('strong')?.textContent?.trim() || "",
+      links: [...column.querySelectorAll('a[href^="/"]')].map((link) => ({ label: link.textContent.trim(), href: link.getAttribute('href') })),
+    }));
     const offerCards = [...document.querySelectorAll('article.vitrine-item[data-primary-offer="true"]')];
     const capabilityRows = [...document.querySelectorAll(".capability-item")];
     const engineeringGroups = [...document.querySelectorAll(".capability-group")];
@@ -222,7 +227,7 @@ for (const width of widths) {
       },
       navProjects: desktopProjects?.textContent?.trim() || "",
       navCurrent: desktopProjects?.getAttribute("aria-current") || "",
-      footerDeliverables: footerDeliverables?.textContent?.trim() || "",
+      footerNavigation,
       emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
       overflowOffenders: [...document.querySelectorAll("body *")]
         .filter((element) => {
@@ -369,7 +374,7 @@ for (const width of widths) {
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
-  if (metrics.navProjects !== "Projetos" || metrics.footerDeliverables !== "Entregas") errors.push("nav_contract");
+  if (metrics.navProjects !== "Projetos" || !footerMatches(metrics.footerNavigation, footerColumns)) errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 
   if (width <= 900) {
@@ -592,28 +597,32 @@ const ANCHOR_CTA_CASES = [
     route: "/quantitativos-orcamento-obras/",
     route_family: "private-engineering-quantities-budget",
     asset_id: "private_quantities_budget_route_v1",
-    ctas: ["frame-quantities-budget-hero", "frame-quantities-budget-inline"],
+    href: "#triagem-quantitativos",
+    ctas: ["quantitativos-orcamento-obras-hero-proposal"],
   },
   {
     route: "/compatibilizacao-projetos-engenharia/",
     route_family: "engineering-projects-coordination-clash",
     asset_id: "engineering_coordination_clash_route_v1",
-    ctas: ["frame-coordination-clash-hero", "frame-coordination-clash-inline"],
+    href: "#pedido-compatibilizacao",
+    ctas: ["compatibilizacao-projetos-engenharia-hero-proposal"],
   },
 ];
 for (const ctaCase of ANCHOR_CTA_CASES) {
   for (const ctaId of ctaCase.ctas) {
     await page.goto(`${base}${ctaCase.route}`, { waitUntil: "networkidle0", timeout: 30000 });
     const before = await page.evaluate(() => (window.dataLayer || []).length);
-    const present = await page.evaluate((id) => {
-      const target = document.querySelector(`[data-cta-id="${id}"]`);
-      if (!target) return false;
-      target.addEventListener("click", (event) => event.preventDefault(), { capture: true });
-      return true;
+    const actual = await page.evaluate((id) => {
+      const targets = document.querySelectorAll(`[data-cta-id="${id}"]`);
+      const target = targets[0];
+      const href = target?.getAttribute("href") || "";
+      target?.addEventListener("click", (event) => event.preventDefault(), { capture: true });
+      return { count: targets.length, href, targetCount: href.startsWith("#") ? document.querySelectorAll(`[id="${href.slice(1)}"]`).length : 0,
+        position: target?.getAttribute("data-cta-position"), family: target?.getAttribute("data-route-family"), asset: target?.getAttribute("data-asset-id") };
     }, ctaId);
     const errors = [];
     let emitted = null;
-    if (!present) {
+    if (actual.count !== 1) {
       errors.push("anchor_cta_missing");
     } else {
       await page.click(`[data-cta-id="${ctaId}"]`);
@@ -625,6 +634,7 @@ for (const ctaCase of ANCHOR_CTA_CASES) {
           count: clicks.length,
           event: clicks[0] || null,
           hasPiiKey: clicks.some((event) => piiKeys.some((key) => Object.prototype.hasOwnProperty.call(event, key))),
+          hasPiiValue: clicks.some((event) => Object.values(event).some((value) => typeof value === "string" && (value.includes("@") || /^\d{10,15}$/.test(value.replace(/[\s()+-]/g, ""))))),
         };
       }, before);
       if (emitted.count !== 1) errors.push(`cta_click_count=${emitted.count}`);
@@ -634,8 +644,9 @@ for (const ctaCase of ANCHOR_CTA_CASES) {
       if (emitted.event?.page_path !== ctaCase.route) errors.push("page_path_mismatch");
       if (emitted.hasPiiKey) errors.push("pii_key");
     }
+    errors.push(...proposalAnchorErrors(actual, { ...ctaCase, id: ctaId }, emitted));
     if (errors.length) failed += 1;
-    findings.push({ route: ctaCase.route, check: "anchor_cta_click", cta_id: ctaId, analytics: emitted, errors });
+    findings.push({ route: ctaCase.route, check: "anchor_cta_click", cta_id: ctaId, actual, analytics: emitted, errors });
   }
 }
 await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });

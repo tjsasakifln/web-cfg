@@ -13,6 +13,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { parse } from "parse5";
 import {
   ENTRANCE_SPECS,
   buildEntrance,
@@ -77,6 +78,30 @@ function entranceBlock(html, key) {
   return match ? match[0] : "";
 }
 
+const nodeAttr = (node, name) => node?.attrs?.find((item) => item.name === name)?.value;
+const nodeText = (node) => node?.nodeName === "#text" ? node.value : (node?.childNodes || []).map(nodeText).join(" ").replace(/\s+/g, " ").trim();
+const descendants = (node) => [node, ...(node?.childNodes || []).flatMap(descendants)];
+function mainNodes(html) {
+  const main = descendants(parse(html)).find((node) => node.tagName === "main");
+  return main ? descendants(main) : [];
+}
+function scopedNode(html, id) {
+  const matches = mainNodes(html).filter((node) => nodeAttr(node, "id") === id);
+  return matches.length === 1 ? matches[0] : null;
+}
+function openingNodes(html) {
+  const openings = mainNodes(html).filter((node) => node.tagName === "section" && (nodeAttr(node, "class") || "").split(/\s+/).includes("svc-open"));
+  return openings.length === 1 ? descendants(openings[0]) : [];
+}
+function modalityProducts(html) {
+  const products = new Map();
+  for (const node of openingNodes(html).filter((node) => node.tagName === "dt")) {
+    const description = node.parentNode?.childNodes?.find((child) => child.tagName === "dd");
+    if (description) products.set(nodeText(node).toLowerCase(), nodeText(description));
+  }
+  return products;
+}
+
 // ---------------------------------------------------------------- predicates
 // Each predicate is used by a scenario and by at least one counterproof.
 
@@ -88,31 +113,35 @@ function entranceBlock(html, key) {
  * gratuita...") is not required and must not be reintroduced to satisfy this.
  */
 export function declaresContractedService(html) {
-  const body = text(html);
-  return (
-    /serviço de engenharia contratado/i.test(body)
-    && /responsável técnico/i.test(body)
-  );
+  const opening = openingNodes(html);
+  const lead = opening.find((node) => (nodeAttr(node, "class") || "").split(/\s+/).includes("svc-open__lead"));
+  const proposition = nodeText(lead);
+  const affirmativeService = /serviço de engenharia contratado/i.test(proposition)
+    || (/CONFENGE (?:transforma|levanta|elabora|revisa)/i.test(proposition) && /quantidades|quantitativos/i.test(proposition) && /itens de planilha|orçamento/i.test(proposition));
+  const proposal = opening.some((node) => node.tagName === "a" && nodeAttr(node, "href") === "#triagem-quantitativos" && /Solicitar proposta/i.test(nodeText(node)));
+  const responsibility = nodeText(scopedNode(html, "proposta-tecnica"));
+  return affirmativeService && proposal && /identifica o profissional/i.test(responsibility) && /alcance da responsabilidade técnica/i.test(responsibility);
 }
 
 export function namesWhoContracts(html) {
-  const body = text(html);
-  return ["construtora", "empresa de engenharia", "escritório de projeto", "terceirizar"].every(
+  const body = text(entranceBlock(html, "edificacao") + entranceBlock(html, "infraestrutura"));
+  return ["construtora", "empresa de engenharia", "escritório de projeto", "contratante público"].every(
     (term) => body.toLowerCase().includes(term),
   );
 }
 
 export function keepsSmallAndPublicDemand(html) {
-  const body = text(html).toLowerCase();
-  return /demanda pequena/.test(body) && /obra pública/.test(body);
+  const contact = nodeText(scopedNode(html, "triagem-quantitativos"));
+  const proposal = nodeText(scopedNode(html, "proposta-tecnica"));
+  return /reformas|escopos pequenos/i.test(proposal) && /Obra pública/.test(proposal)
+    && /planilha existente|resumo do escopo/i.test(contact) && /documentos disponíveis/i.test(contact);
 }
 
 export function offersThreeModalities(html) {
-  return (
-    html.includes('id="levantamento-quantitativos"')
-    && html.includes('id="elaboracao-orcamento"')
-    && html.includes('id="revisao-orcamento"')
-  );
+  const products = modalityProducts(html);
+  return /Elementos identificados.*critérios.*memória/i.test(products.get("quantitativo") || "")
+    && /Composições.*data-base/i.test(products.get("orçamento") || "")
+    && /Conferência de planilha existente.*quantidades rastreáveis/i.test(products.get("revisão") || "");
 }
 
 export function reachesProof(html, href) {
@@ -173,17 +202,20 @@ export function asksOnlyWhatIsNeeded(html) {
 }
 
 export function acceptsPartialProject(html) {
-  const body = text(html).toLowerCase();
-  return (
-    html.includes('id="projeto-parcial"')
-    && /documentação inicial incompleta não/.test(body)
-    && /insumos possíveis/.test(body)
-  );
+  const engagement = scopedNode(html, "proposta-tecnica");
+  const item = descendants(engagement).find((node) => node.tagName === "li" && /Projeto em desenvolvimento/.test(nodeText(node)));
+  const body = nodeText(item);
+  const contact = nodeText(scopedNode(html, "triagem-quantitativos"));
+  return /estudo preliminar|documentação parcial/i.test(body) && /Premissas e lacunas ficam registradas/i.test(body) && /atualizada.*novas revisões/i.test(body) && /documentos disponíveis/i.test(contact);
 }
 
 export function doesNotForcePublicBidding(html) {
-  const body = text(html).toLowerCase();
-  return /não pedimos campos de licitação/.test(body);
+  const contact = scopedNode(html, "triagem-quantitativos");
+  if (!contact) return false;
+  const engagement = descendants(scopedNode(html, "proposta-tecnica")).filter((node) => node.tagName === "li").map(nodeText);
+  return engagement.some((item) => /^Obra privada/.test(item)) && engagement.some((item) => /^Obra pública/.test(item))
+    && !descendants(contact).some((node) => node.tagName === "form" || /edital|licitacao|licitação/i.test(nodeAttr(node, "name") || ""))
+    && !/(?:informe|obrigatório|exigimos).{0,60}(?:edital|licitação)/i.test(nodeText(contact));
 }
 
 export function contactChannelsAreStatic(html) {
@@ -254,7 +286,7 @@ test("B. escritório com projeto parcial encontra insumos e pede proposta sem CN
 
 test("C. contratante que quer revisão de planilha não é mandado para projeto nem para pleito público", () => {
   const html = read(LANDING_REL);
-  assert.ok(html.includes('id="revisao-orcamento"'), "a revisão de orçamento precisa existir como pedido");
+  assert.ok(/Conferência de planilha existente/.test(modalityProducts(html).get("revisão") || ""), "a revisão de orçamento precisa existir como pedido próprio");
   assert.ok(doesNotForcePublicBidding(html), "o comprador privado não pode ser obrigado a campos de licitação");
   const revisar = read(SUPPORT_RELS[2]);
   assert.ok(supportLandsOnTheService(revisar));
@@ -635,7 +667,7 @@ test("contraprova: a qualificação de preço hipotético fica na tabela de pre�
 test("controle positivo: duas redações afirmativas de serviço contratado passam; sem a proposição, reprova", () => {
   const html = read(LANDING_REL);
   assert.ok(declaresContractedService(html), "controle passa na página publicada");
-  const current = "Serviço de engenharia contratado, com responsável técnico nomeado.";
+  const current = "A CONFENGE transforma projetos e memoriais em uma base auditável de elementos, critérios de medição, quantidades e itens de planilha para obras públicas e privadas.";
   assert.ok(html.includes(current), "a redação publicada é a esperada pelo controle");
   const alternatives = [
     "Serviço de engenharia contratado: o responsável técnico assina a planilha, a memória e o orçamento.",
@@ -650,6 +682,40 @@ test("controle positivo: duas redações afirmativas de serviço contratado pass
   assert.equal(declaresContractedService(negativeOnly), false, "só a lista negativa não afirma o serviço");
   const removed = html.replace(current, "");
   assert.equal(declaresContractedService(removed), false, "sem a proposição, reprova");
+});
+
+test("contraprovas: a oferta perde aceite quando proposta, responsabilidade, modalidade ou acolhimento parcial desaparecem", () => {
+  const html = read(LANDING_REL);
+  const mutations = [
+    [declaresContractedService, html.replace(/<a\b[^>]*data-cta-id="quantitativos-orcamento-obras-hero-proposal"[^>]*>[\s\S]*?<\/a>/, "")],
+    [declaresContractedService, html.replace(/<li><b>Responsabilidade\.<\/b>[\s\S]*?<\/li>/, "")],
+    [offersThreeModalities, html.replace(/<div><dt>Revisão<\/dt>[\s\S]*?<\/div>/, "")],
+    [acceptsPartialProject, html.replace(/estudo preliminar ou documentação parcial/, "projeto completo")],
+    [acceptsPartialProject, html.replace("Premissas e lacunas ficam registradas", "Os resultados são apresentados")],
+    [acceptsPartialProject, html.replace("atualizada quando novas revisões forem emitidas", "emitida uma vez")],
+    [doesNotForcePublicBidding, html.replace(/<li><b>Obra privada\.<\/b>[\s\S]*?<\/li>/, "")],
+    [doesNotForcePublicBidding, html.replace('id="triagem-quantitativos">', 'id="triagem-quantitativos"><form><input name="edital" required></form>')],
+  ];
+  for (const [predicate, changed] of mutations) {
+    assert.ok(predicate(html), "clean functional control passes");
+    assert.notEqual(changed, html, "the mutation must touch the published element");
+    assert.equal(predicate(changed), false, "missing buyer function must fail");
+  }
+});
+
+test("contraprovas: demanda pequena, obra pública e abertura única são funções verificáveis", () => {
+  const html = read(LANDING_REL);
+  const sentence = "Reformas e escopos pequenos também podem receber levantamento ou revisão delimitados na proposta.";
+  assert.ok(keepsSmallAndPublicDemand(html));
+  assert.ok(html.includes(sentence));
+  assert.equal(keepsSmallAndPublicDemand(html.replace(sentence, "")), false);
+  const withoutPublic = html.replace(/<li><b>Obra pública\.<\/b>[\s\S]*?<\/li>/, "");
+  assert.notEqual(withoutPublic, html);
+  assert.equal(keepsSmallAndPublicDemand(withoutPublic), false);
+  const duplicateOpening = html.replace('<main id="conteudo">', '<main id="conteudo"><section class="svc-open"></section>');
+  assert.notEqual(duplicateOpening, html);
+  assert.equal(declaresContractedService(duplicateOpening), false);
+  assert.equal(offersThreeModalities(duplicateOpening), false);
 });
 
 test("contraprova: descritor fora do contrato não vira HTML público", () => {
