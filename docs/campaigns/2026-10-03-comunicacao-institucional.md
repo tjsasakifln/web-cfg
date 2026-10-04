@@ -295,3 +295,8 @@ As 26 verificações passaram. Os gates de figuras e projetos também executam
 a navegação real por teclado: 82 e 65 verificações aprovadas, respectivamente.
 São evidências técnicas e revisão executada por agentes; não representam
 validação por compradores humanos. O aceite público final permanece pendente.
+
+A primeira tela foi medida novamente no checkout limpo
+`b61c1680a6a43856d2acfb31711fdca029ad9c0d`: 25 rotas aprovadas nos dois
+viewports do contrato, sem falhas ou pendências; 1942 verificações aprovadas.
+A medição anterior de d4071b5 permanece histórica, sem substituir a nova.
