@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-04T11:44:49.246Z",
+  "measured_at": "2026-10-04T12:50:01.234Z",
   "measured_on": "2026-10-04",
-  "commit_sha": "0534d8d50577c896ac689fcc2af9a349f70d8485",
+  "commit_sha": "e5cdf5b1c9c0342cf4ca4bd954c4d756f1fc95d7",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -14,10 +14,10 @@
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/conteudos/como-contratar-projetos-complementares-mobile.svg": "78faf44bfd07b7505bde169bccdaecfc358a101cf30aba5025fb6312165adec6",
     "assets/conteudos/como-contratar-projetos-complementares-wide.svg": "4e8f5b38dc279607607284007fc496a9d8df8c1bb1970367d03419dd50eef780",
-    "assets/editorial-article.css": "449bbe69d0600661abe63681f892926afa1dc9b930892d6d4f8a89e7cddc292e",
-    "assets/editorial.css": "de2da0b10806f06b5b7f5924e8ba44ba50e24b16d80d9887c2cbf3c339355448",
+    "assets/editorial-article.css": "b0e2fe57e76e860bb885c7091caa74bbf46751d7ec54a717a2053b902faf2a1b",
+    "assets/editorial.css": "7d20c2e78c5ccc3a56a77821d1efb11b10e68dd13fb278a452e0628fd05c86ec",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "635c07a779bc86a56ff4a34576a703eb5b6fb9278375cdfe669f12e808f98545",
+    "assets/home-10x.css": "bd6b961e06bdcf08731d21464c457250d61c6db87441a47e4dc62223b98b2872",
     "assets/home-base.css": "f1907644a214ba272d2b8eae2f8af414d1e839cc92d49fd6a1ae058eff7ebfd4",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
@@ -34,7 +34,7 @@
     "casos/modelo-contratos-vincendos-relicitacao/index.html": "98648888cf847a18f344132e4b65dbebb84407aae76aad6b0d5ae076c8c99ba3",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
     "casos/modelo-mapa-compradores-publicos/index.html": "5b24f01e47e69d07a59d252ec16219f8c333f41cdfad14b91a1d7eacf88728a5",
-    "casos/modelo-mapa-compradores-publicos/styles.css": "f6eda4b508c8e46e4a5274bd0ac16046c053791ffe13efd82c75cfa9d272e815",
+    "casos/modelo-mapa-compradores-publicos/styles.css": "211910fc1bd872792301284632b6139e460777be5f8eb10f0880eccc13ec450d",
     "casos/modelo-mapeamento-concorrentes-publicos/index.html": "915beb579db7cbb9829406bf65fb22fab9900d8493f81a543d4e20c11b2247d1",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
     "casos/modelo-painel-precos-obras-publicas/index.html": "e986f1c9c0e1469bc49b4c442a273d4ec7739950076bdf100187ca9d3dddb7f6",
@@ -61,7 +61,7 @@
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-    "styles.css": "207e867803f65320651eee44ecb15874933d8dbf817955dfcdb1ccb6a573240c"
+    "styles.css": "57f22c2d80e7220b719bae761b7f0c36b3959a45a3ee463665e07a7a4216bb53"
   },
   "surface": "source",
   "artifact_identity": null,

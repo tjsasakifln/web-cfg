@@ -43,9 +43,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 102976,
-      "class_selectors": 345,
-      "used": 345,
+      "bytes": 103657,
+      "class_selectors": 346,
+      "used": 346,
       "unused": []
     },
     "entregas/styles.css": {
