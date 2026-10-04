@@ -321,3 +321,15 @@ permanecem históricas. Parte da matriz local geral anterior usou o artefato
 0b e não compõe o aceite deste candidato. O artefato novo e o domínio real
 precisam passar pelas verificações próprias antes do encerramento público,
 registrado na PR #732 e no relatório final da campanha.
+
+A revisão independente do ensaio de contato encontrou divergência possível
+entre os atributos declarativos e os campos ocultos realmente enviados.
+O leitor agora usa os campos ocultos como autoridade e exige concordância
+quando há declaração nos atributos. Valores inválidos, duplicatas, controles
+desabilitados, vínculo com outro formulário e overrides explícitos inválidos
+bloqueiam antes de qualquer envio. O parser aceita um subconjunto conservador
+da estrutura do formulário, sem afirmar reproduzir todos os casos de FormData.
+Os 13 cenários locais de contexto passaram, incluindo as contraprovas sem
+POST externo; os mocks principal e de QA também passaram. A revisão final
+independente fechou os achados deste escopo. O contato real permanece pendente
+do release final e da prova de persistência, encaminhamento e recebimento.

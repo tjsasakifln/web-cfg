@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url";
 const probePath = fileURLToPath(new URL("./synthetic_lead_probe.mjs", import.meta.url));
 const receiptId = "synthetic:fixture:receipt:0002";
 
-const servedPage = `<!doctype html><html><body>
+const originalServedPage = `<!doctype html><html><body>
 <section id="captura-pilar">
 <form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="medicoes-glosas-obras-publicas-handraise" data-asset-id="medicoes-glosas-obras-publicas" data-route-family="medicoes-glosas" data-cta-position="pillar_capture">
 <input type="hidden" name="jornada" value="contrato">
@@ -29,6 +29,7 @@ const servedPage = `<!doctype html><html><body>
 <input type="hidden" name="route_family" value="medicoes-glosas">
 <label>Nome<input name="nome"></label>
 </form></section></body></html>`;
+let servedPage = originalServedPage;
 const homePage = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
 let homeHtml = homePage;
 
@@ -280,6 +281,112 @@ try {
     assert.equal(postCount, 0);
   }
   console.log("PASS probe_workflow_missing_each_required_attribution_blocks_before_post");
+
+  // 9) FormData is authoritative. A data-* declaration that disagrees with
+  // its successful hidden control must block before a synthetic POST for each
+  // attribution field.
+  for (const [field, declared, hidden] of [
+    ["asset_id", "data-asset-id=\"medicoes-glosas-obras-publicas\"", "data-asset-id=\"different-asset\""],
+    ["cta_id", "data-cta-id=\"medicoes-glosas-obras-publicas-handraise\"", "data-cta-id=\"different-cta\""],
+    ["route_family", "data-route-family=\"medicoes-glosas\"", "data-route-family=\"different-route\""],
+  ]) {
+    servedPage = originalServedPage.replace(declared, hidden);
+    created = false;
+    postCount = 0;
+    const divergent = await runProbe(base, {
+      ...auth, PROBE_ASSET_ID: "", PROBE_CTA_ID: "", PROBE_ROUTE_FAMILY: "",
+    });
+    assert.equal(divergent.code, 1, divergent.stdout || divergent.stderr);
+    const proof = JSON.parse(divergent.stdout);
+    assert.equal(proof.reason, "probe_page_served_form_invalid");
+    assert.equal(proof.served_form_error, "attribute_hidden_mismatch");
+    assert.equal(proof.served_form_field, field);
+    assert.equal(postCount, 0, `${field} declaration divergence must block before POST`);
+  }
+  console.log("PASS probe_attribute_hidden_divergence_each_field_blocks_before_post");
+
+  // 10) Served values must pass the exact environment allowlist and bounds.
+  for (const [name, replacement, expected] of [
+    ["invalid_charset", 'value="medicoes glosas"', "invalid_hidden_value"],
+    ["over_120", `value="${"a".repeat(121)}"`, "invalid_hidden_value"],
+  ]) {
+    servedPage = originalServedPage.replace('name="asset_id" value="medicoes-glosas-obras-publicas"', `name="asset_id" ${replacement}`);
+    created = false;
+    postCount = 0;
+    const invalid = await runProbe(base, {
+      ...auth, PROBE_ASSET_ID: "", PROBE_CTA_ID: "", PROBE_ROUTE_FAMILY: "",
+    });
+    assert.equal(invalid.code, 1, invalid.stdout || invalid.stderr);
+    const proof = JSON.parse(invalid.stdout);
+    assert.equal(proof.reason, "probe_page_served_form_invalid", name);
+    assert.equal(proof.served_form_error, expected, name);
+    assert.equal(proof.served_form_field, "asset_id", name);
+    assert.equal(postCount, 0, `${name} must block before POST`);
+  }
+  console.log("PASS probe_invalid_charset_and_oversized_hidden_block_before_post");
+
+  // 11) A repeated or disabled attribution input is not a trustworthy
+  // successful control and therefore cannot authorize a probe submission.
+  for (const [name, mutate, expected] of [
+    ["duplicate", (html) => html.replace('</form>', '<input type="hidden" name="asset_id" value="second-asset"></form>'), "duplicate_hidden"],
+    ["disabled", (html) => html.replace('name="asset_id" value="medicoes-glosas-obras-publicas"', 'name="asset_id" disabled value="medicoes-glosas-obras-publicas"'), "disabled_hidden"],
+  ]) {
+    servedPage = mutate(originalServedPage);
+    created = false;
+    postCount = 0;
+    const malformed = await runProbe(base, {
+      ...auth, PROBE_ASSET_ID: "", PROBE_CTA_ID: "", PROBE_ROUTE_FAMILY: "",
+    });
+    assert.equal(malformed.code, 1, malformed.stdout || malformed.stderr);
+    const proof = JSON.parse(malformed.stdout);
+    assert.equal(proof.reason, "probe_page_served_form_invalid", name);
+    assert.equal(proof.served_form_error, expected, name);
+    assert.equal(proof.served_form_field, "asset_id", name);
+    assert.equal(postCount, 0, `${name} hidden control must block before POST`);
+  }
+  console.log("PASS probe_duplicate_and_disabled_hidden_block_before_post");
+
+  // 12) A non-empty environment override is never silently dropped. It must
+  // meet the same character set and length contract as the served control.
+  for (const [name, value] of [
+    ["invalid_charset", "asset with spaces"],
+    ["over_120", "a".repeat(121)],
+  ]) {
+    servedPage = originalServedPage;
+    created = false;
+    postCount = 0;
+    const invalidEnv = await runProbe(base, {
+      ...auth, PROBE_ASSET_ID: value,
+    });
+    assert.equal(invalidEnv.code, 1, invalidEnv.stdout || invalidEnv.stderr);
+    const proof = JSON.parse(invalidEnv.stdout);
+    assert.equal(proof.state, "BLOCKED_BEFORE_POST", name);
+    assert.equal(proof.reason, "probe_context_env_invalid", name);
+    assert.equal(postCount, 0, `${name} environment context must block before POST`);
+  }
+  console.log("PASS probe_invalid_environment_context_blocks_before_post");
+
+  // 13) Do not infer browser submission eligibility for controls outside the
+  // conservative subset: a disabled ancestor fieldset or another form owner
+  // must block rather than being treated as a successful hidden control.
+  for (const [name, mutate] of [
+    ["disabled_fieldset", (html) => html.replace('<input type="hidden" name="asset_id" value="medicoes-glosas-obras-publicas">', '<fieldset disabled><input type="hidden" name="asset_id" value="medicoes-glosas-obras-publicas"></fieldset>')],
+    ["other_form_owner", (html) => html.replace('name="asset_id" value="medicoes-glosas-obras-publicas"', 'name="asset_id" form="other-form" value="medicoes-glosas-obras-publicas"')],
+  ]) {
+    servedPage = mutate(originalServedPage);
+    created = false;
+    postCount = 0;
+    const unsupported = await runProbe(base, {
+      ...auth, PROBE_ASSET_ID: "", PROBE_CTA_ID: "", PROBE_ROUTE_FAMILY: "",
+    });
+    assert.equal(unsupported.code, 1, unsupported.stdout || unsupported.stderr);
+    const proof = JSON.parse(unsupported.stdout);
+    assert.equal(proof.reason, "probe_page_served_form_invalid", name);
+    assert.equal(proof.served_form_error, "unsupported_form_control", name);
+    assert.equal(proof.served_form_field, "asset_id", name);
+    assert.equal(postCount, 0, `${name} must block before POST`);
+  }
+  console.log("PASS probe_unsupported_form_controls_block_before_post");
 } finally {
   await new Promise((resolve) => server.close(resolve));
 }
