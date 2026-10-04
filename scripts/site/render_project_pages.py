@@ -22,6 +22,11 @@ from typing import Any
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.site.public_footer import render_public_footer  # noqa: E402
+
 DATA = ROOT / "data/projects/project-pages.v1.json"
 SITE = "https://confenge.com.br"
 
@@ -145,15 +150,11 @@ def _footer(modified_at: str, published_at: str) -> str:
     )
     parsed = date.fromisoformat(modified_at)
     display_date = f"{parsed.day} de {months[parsed.month - 1]} de {parsed.year}"
-    return f"""<footer class="pp-footer">
-<div class="pp-container pp-footer__grid">
-<div><a class="pp-brand pp-brand--footer" href="/"><img src="/assets/logo-confenge-white-500-1677038e.png" width="224" height="58" loading="lazy" decoding="async" alt="CONFENGE Inteligência Técnica"/></a><p>Engenharia, Perícias e Inteligência Técnica.</p></div>
-<nav aria-label="Projetos"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></nav>
-<nav aria-label="Outros serviços"><strong>Outros serviços</strong><a href="/servicos/">Serviços de engenharia</a><a href="/edificacoes/">Edificações</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></nav>
-<nav aria-label="Institucional"><strong>CONFENGE</strong><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/empresa/">Empresa</a><a href="/triagem-tecnica/">Contato técnico</a><a href="/privacidade/">Privacidade</a></nav>
-</div>
-<div class="pp-container pp-footer__bottom"><span>© CONFENGE · publicada em <time datetime="{esc(published_at)}">{esc(published_at)}</time> · atualizada em <time datetime="{esc(modified_at)}">{esc(display_date)}</time></span><a href="/termos-de-uso/">Termos de uso</a></div>
-</footer>"""
+    return render_public_footer(
+        published_at=published_at,
+        modified_at=modified_at,
+        modified_label=display_date,
+    )
 
 
 def _breadcrumbs(crumbs: list[dict[str, str]]) -> str:

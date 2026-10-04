@@ -158,6 +158,7 @@ FOOTER_AUTHORITY_NAV = (
     f'<a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro?</a>'
     '<a href="/conflitos/">Conflitos</a>'
     '<a href="/privacidade/">Privacidade</a>'
+    '<a href="/termos-de-uso/">Termos de uso</a>'
     "</nav>"
 )
 

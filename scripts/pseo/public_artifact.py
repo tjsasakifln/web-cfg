@@ -314,6 +314,7 @@ def finalize_public_artifact(
     *,
     commercial_media_source_root: Path | None = None,
     require_commercial_media_assets: bool = False,
+    require_share_preview_contract_coverage: bool = False,
 ) -> dict[str, Any]:
     """Apply the complete deterministic HTML/CSS transform used at publish time.
 
@@ -341,6 +342,9 @@ def finalize_public_artifact(
 
     promoted_navigation_files = promote_public_navigation_tree(dest)
     navigation_audit = audit_public_navigation_tree(dest)
+    from scripts.site.public_footer import apply_public_footer_tree
+
+    public_footer = apply_public_footer_tree(Path(dest))
     from scripts.site.fingerprint_css import fingerprint_published_css
 
     css_assets = fingerprint_published_css(dest)
@@ -355,6 +359,16 @@ def finalize_public_artifact(
         raise FileNotFoundError(
             f"commercial media source manifest is absent: {COMMERCIAL_MEDIA_SOURCE_MANIFEST}"
         )
+    from scripts.site.share_preview import apply_share_preview_contract
+
+    share_preview = apply_share_preview_contract(
+        Path(dest),
+        source_root=media_source_root,
+        require_contract_coverage=require_share_preview_contract_coverage,
+    )
+    # Share-preview compilation can add the approved default image reference.
+    # Version commercial media afterwards so its manifest covers those final
+    # references and audit never observes an unversioned URL added later.
     commercial_media = (
         version_commercial_media_references(
             Path(dest),
@@ -379,8 +393,10 @@ def finalize_public_artifact(
         "structured_identity": structured_identity,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
+        "public_footer": public_footer,
         "css_assets": css_assets,
         "commercial_media": commercial_media,
+        "share_preview": share_preview,
     }
 
 
@@ -526,11 +542,14 @@ def assemble_public_artifact(
         dest,
         commercial_media_source_root=root,
         require_commercial_media_assets=True,
+        require_share_preview_contract_coverage=True,
     )
     promoted_navigation_files = finalized["promoted_navigation_files"]
     navigation_audit = finalized["navigation_audit"]
     css_assets = finalized["css_assets"]
     commercial_media = finalized["commercial_media"]
+    share_preview = finalized["share_preview"]
+    public_footer = finalized["public_footer"]
 
     artifact_hash = _sha256_tree(dest)
     inv = inventory_public_routes(root)
@@ -546,6 +565,8 @@ def assemble_public_artifact(
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "css_assets": css_assets,
         "commercial_media": commercial_media,
+        "share_preview": share_preview,
+        "public_footer": public_footer,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "scrubbed_html_files": finalized["scrubbed_html_files"],
@@ -766,6 +787,18 @@ def audit_public_artifact(
     )
     from scripts.site.structured_identity import audit_html as audit_structured_identity_html
     from scripts.site.version_commercial_media import validate_commercial_media_versioning
+    from scripts.site.public_footer import PublicFooterError, validate_public_footer_tree
+
+    try:
+        validate_public_footer_tree(dest)
+    except PublicFooterError as exc:
+        findings.append(
+            {
+                "code": "invalid_public_footer_contract",
+                "path": "data/site/public-ia-map.json",
+                "detail": str(exc),
+            }
+        )
 
     if media_contract_present:
         try:
@@ -775,6 +808,24 @@ def audit_public_artifact(
                 {
                     "code": "invalid_commercial_media_versioning",
                     "path": ".well-known/commercial-media-assets.json",
+                    "detail": str(exc),
+                }
+            )
+
+    share_preview_contract_present = (root.resolve() / "data/site/share-preview-contract.v1.json").is_file()
+    if share_preview_contract_present and (dest / ".well-known/pseo-build.json").is_file():
+        from scripts.site.share_preview import (
+            SharePreviewError,
+            validate_share_preview_contract,
+        )
+
+        try:
+            validate_share_preview_contract(dest, source_root=root)
+        except SharePreviewError as exc:
+            findings.append(
+                {
+                    "code": "invalid_share_preview_contract",
+                    "path": "data/site/share-preview-contract.v1.json",
                     "detail": str(exc),
                 }
             )

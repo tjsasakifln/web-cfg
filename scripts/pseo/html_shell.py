@@ -33,11 +33,17 @@ try:
 except Exception:  # noqa: BLE001
     _footer_authority_nav = None  # type: ignore[assignment]
 
+try:
+    from scripts.site.public_footer import render_public_footer as _render_public_footer
+except Exception:  # noqa: BLE001
+    _render_public_footer = None  # type: ignore[assignment]
+
 _FOOTER_AUTHORITY_FALLBACK = (
     '<nav class="footer-authority" aria-label="Autoridade e políticas">'
     '<a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a>'
     '<a href="/conflitos/">Conflitos</a>'
     '<a href="/privacidade/">Privacidade</a>'
+    '<a href="/termos-de-uso/">Termos de uso</a>'
     "</nav>"
 )
 
@@ -157,6 +163,7 @@ def _build_header() -> str:
 <a class="button button-primary header-cta" href="{cta['href']}">{cta['label']}</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+<span class="menu-toggle__label">Menu</span>
 </button>
 </div>
 <nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
@@ -167,6 +174,11 @@ def _build_header() -> str:
 
 
 def _build_footer() -> str:
+    if _render_public_footer is not None:
+        try:
+            return _render_public_footer()
+        except Exception:  # noqa: BLE001
+            pass
     blurb = _footer_text()
     if _footer_columns_html is not None:
         try:
