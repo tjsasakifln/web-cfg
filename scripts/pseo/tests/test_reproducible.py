@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -36,6 +37,7 @@ from scripts.pseo.reproducible import (
     stamp_publish_identity,
     wipe_generated_identity,
 )
+from scripts.site.public_footer import render_public_footer
 
 
 def _write(path: Path, text: str) -> None:
@@ -220,15 +222,41 @@ class TestAssembleWipesStale(unittest.TestCase):
             root = Path(td)
             _write(
                 root / "index.html",
-                '<html><head><link rel="stylesheet" href="/styles.css"></head><body>home</body></html>\n',
+                '<html><head><title>Home</title><meta name="description" content="Fixture home">'
+                '<link rel="canonical" href="https://confenge.com.br/">'
+                '<link rel="stylesheet" href="/styles.css"></head><body>home</body></html>\n',
             )
-            _write(root / "404.html", "<html>404</html>\n")
+            _write(
+                root / "404.html",
+                '<!doctype html><html><head><title>Página não encontrada</title>'
+                '<meta name="robots" content="noindex,nofollow"></head>'
+                '<body>404</body></html>\n',
+            )
             _write(root / "robots.txt", "User-agent: *\nDisallow:\n")
             _write(root / "_redirects", "/old /new 301\n")
             _write(root / "_headers", "/*\n  X-Robots-Tag: all\n")
             _write(root / "styles.css", "body{}\n")
             _write(root / "script.js", "console.log(1)\n")
             _json(root / ".well-known" / "pseo-build.json", {"schema_version": "1.1.0"})
+            contract = json.loads(
+                (ROOT / "data" / "site" / "share-preview-contract.v1.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            contract["noindex_nonshareable"] = [
+                row for row in contract["noindex_nonshareable"] if row["path"] == "404.html"
+            ]
+            _json(root / "data" / "site" / "share-preview-contract.v1.json", contract)
+            (root / "data" / "organic").mkdir(parents=True, exist_ok=True)
+            shutil.copy2(
+                ROOT / "data" / "organic" / "noindex-governance-registry.json",
+                root / "data" / "organic" / "noindex-governance-registry.json",
+            )
+            (root / "assets").mkdir(parents=True, exist_ok=True)
+            shutil.copy2(
+                ROOT / "assets" / "og-confenge.jpg",
+                root / "assets" / "og-confenge.jpg",
+            )
             # leftover from a prior assemble — must not survive wipe+copy
             junk = root / "_site" / "stale-junk.txt"
             _write(junk, "I should not survive\n")
@@ -368,7 +396,7 @@ class TestCliAuditEntrypoint(unittest.TestCase):
             site = Path(td) / "_site"
             _write(
                 site / "index.html",
-                "<html><footer><p>Rodapé institucional</p></footer></html>\n",
+                f"<html><body>{render_public_footer()}</body></html>\n",
             )
             _write(site / "robots.txt", "User-agent: *\nDisallow:\n")
             _write(site / "_redirects", "/old /new 301\n")

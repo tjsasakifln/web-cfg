@@ -943,6 +943,8 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "scripts/site/shell_nav.py",
         "scripts/site/public_ia.py",
         "scripts/site/brand.py",
+        "scripts/site/authority.py",
+        "scripts/site/public_footer.py",
         "scripts/pseo/html_shell.py",
         "data/site/brand.json",
         "data/site/public-ia-map.json",
@@ -1000,7 +1002,11 @@ repo = Path(os.environ['REPO']).resolve()
 assert Path.cwd().resolve() != repo
 assert str(repo) not in sys.path
 sys.path.insert(0, str(payload))
+from scripts.pseo import html_shell
+from scripts.site.public_footer import render_public_footer
 from scripts.live_intelligence.publish import publish
+assert html_shell._render_public_footer is not None
+assert html_shell.FOOTER == render_public_footer()
 result = publish(
     root=payload,
     public_root=payload / '_site',

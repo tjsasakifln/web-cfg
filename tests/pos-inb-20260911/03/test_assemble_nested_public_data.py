@@ -48,7 +48,11 @@ REVISAO = """# exemplo demonstrativo; revisao=R01
 id;documento;constatacao;base;acao;tipo_conferencia;achado_relacionado;elementos;revisao
 RF-01;PR-ARQ-R00;Verga invade viga;Conferência geométrica;Rebaixar verga;arithmetic_documental_coherence;CF-GEO-01;WN-01 B-01;R01
 """
-PAGE = """<html><head><link rel="stylesheet" href="/styles.css"></head>
+PAGE = """<html><head>
+<title>Demonstrativo de projeto privado | CONFENGE</title>
+<meta name="description" content="Fixture pública de arquivos demonstrativos para validação de recursos prometidos.">
+<link rel="canonical" href="https://confenge.com.br/casos/demonstrativo-projeto-privado/">
+<link rel="stylesheet" href="/styles.css"></head>
 <body>
 <p><a href="data/quantitativos.csv">Baixar quantitativos.csv</a></p>
 <p><a href="data/orcamento.csv">Baixar orcamento.csv</a></p>
@@ -120,9 +124,17 @@ def _sha256(path: Path) -> str:
 def _plant_minimum(root: Path) -> None:
     _write(
         root / "index.html",
-        '<html><head><link rel="stylesheet" href="/styles.css"></head><body>home</body></html>\n',
+        '<html><head><title>Fixture de recursos públicos | CONFENGE</title>'
+        '<meta name="description" content="Fixture de montagem e auditoria de recursos públicos prometidos.">'
+        '<link rel="canonical" href="https://confenge.com.br/">'
+        '<link rel="stylesheet" href="/styles.css"></head><body>home</body></html>\n',
     )
-    _write(root / "404.html", "<html>404</html>\n")
+    _write(
+        root / "404.html",
+        '<!doctype html><html><head><title>Página não encontrada</title>'
+        '<meta name="robots" content="noindex,nofollow"></head>'
+        '<body>404</body></html>\n',
+    )
     _write(root / "robots.txt", "User-agent: *\nDisallow:\n")
     _write(root / "_redirects", "/old /new 301\n")
     _write(root / "_headers", "/*\n  X-Robots-Tag: all\n")
@@ -144,6 +156,26 @@ def _plant_minimum(root: Path) -> None:
     _write(root / ".env", "SECRET=1\n")
     _write(root / "docs" / "handoff.json", "{}\n")
     _json(root / "ops" / "data" / "gsc-insights.json", {"queries": []})
+    share_contract = json.loads(
+        (ROOT / "data" / "site" / "share-preview-contract.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    share_contract["noindex_nonshareable"] = [
+        row
+        for row in share_contract["noindex_nonshareable"]
+        if row["path"] == "404.html"
+    ]
+    _json(root / "data" / "site" / "share-preview-contract.v1.json", share_contract)
+    governance = root / "data" / "organic" / "noindex-governance-registry.json"
+    governance.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(
+        ROOT / "data" / "organic" / "noindex-governance-registry.json",
+        governance,
+    )
+    og_image = root / "assets" / "og-confenge.jpg"
+    og_image.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ROOT / "assets" / "og-confenge.jpg", og_image)
     _write(root / "casos" / "demonstrativo-projeto-privado" / "data" / "notes.md", "interno\n")
     _write(root / "casos" / "demonstrativo-projeto-privado" / "data" / "leads.json", "{}\n")
     desk_src = ROOT / "assets" / "data-desk" / "valor-tipico-contratos-pavimentacao-sc" / "v1"
@@ -489,4 +521,3 @@ class TestPackageReleaseTarball(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

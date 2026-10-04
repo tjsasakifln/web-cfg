@@ -152,7 +152,20 @@
 .button-lg{min-height:52px;padding-inline:1.5rem}
 .header-cta{min-height:44px;padding:.5rem 1rem;font-size:var(--text-small)}
 @media (max-width:900px){.header-cta{display:none}}
-.menu-toggle{flex:none}
+.menu-toggle{
+  width:auto;
+  min-width:44px;
+  flex:none;
+  gap:.5rem;
+  padding-inline:.75rem;
+  font-family:var(--sans-wide);
+  font-stretch:var(--wide);
+  font-size:var(--text-small);
+  font-weight:720;
+  line-height:1;
+  letter-spacing:-.005em;
+}
+.menu-toggle__label{display:inline-block}
 
 /* Anchors land below the sticky header ----------------------------------- */
 main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-ask{scroll-margin-top:6rem}

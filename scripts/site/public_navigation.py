@@ -41,12 +41,14 @@ _HEADER_CTA_RE = re.compile(
     r'<a\b(?=[^>]*\bheader-cta\b)[^>]*>.*?</a>',
     flags=re.IGNORECASE | re.DOTALL,
 )
+_BUTTON_RE = re.compile(r"<button\b[^>]*>.*?</button>", flags=re.IGNORECASE | re.DOTALL)
 _ATTRIBUTE_RE = re.compile(
     r"\b(?P<name>[a-z_:][-a-z0-9_:.]*)\s*=\s*(?P<quote>['\"])(?P<value>.*?)"
     r"(?P=quote)",
     flags=re.IGNORECASE | re.DOTALL,
 )
 _TAG_RE = re.compile(r"<[^>]+>")
+_MENU_LABEL = '<span class="menu-toggle__label">Menu</span>'
 
 
 def _brand_contract() -> dict:
@@ -103,6 +105,44 @@ def _anchor_text(anchor: str) -> str:
 
 def _is_button(anchor: str) -> bool:
     return "button" in _attribute(anchor, "class").split()
+
+
+def _canonicalize_menu_toggle(html: str, *, relative_path: str) -> str:
+    """Give every legacy mobile toggle the same visible, semantic label.
+
+    The existing button, its ARIA state and both SVG state icons are preserved.
+    Project-practice pages use native ``details/summary`` and already carry the
+    same visible label, so they deliberately do not match this transform.
+    """
+
+    toggles = [
+        match
+        for match in _BUTTON_RE.finditer(html)
+        if "menu-toggle" in _attribute(match.group(0), "class").split()
+    ]
+    if not toggles:
+        return html
+    if len(toggles) != 1:
+        raise ValueError(
+            f"{relative_path}: expected one legacy menu toggle; found {len(toggles)}"
+        )
+    match = toggles[0]
+    button = match.group(0)
+    labels = re.findall(
+        r'<span\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmenu-toggle__label\b[^"\']*\1[^>]*>'
+        r"(.*?)</span>",
+        button,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if labels:
+        if len(labels) != 1 or _anchor_text(labels[0][1]) != "Menu":
+            raise ValueError(f"{relative_path}: invalid legacy menu label")
+        return html
+    closing = button.lower().rfind("</button>")
+    if closing < 0:
+        raise ValueError(f"{relative_path}: legacy menu toggle is not closed")
+    rendered = button[:closing].rstrip() + _MENU_LABEL + button[closing:]
+    return html[: match.start()] + rendered + html[match.end() :]
 
 
 def _nav_kind(opening: str) -> str:
@@ -304,6 +344,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
     while normalized_path.startswith("./"):
         normalized_path = normalized_path[2:]
     normalized_path = normalized_path.lstrip("/")
+    html = _canonicalize_menu_toggle(html, relative_path=normalized_path)
     if normalized_path in FROZEN_NAV_HTML_PATHS:
         return html
 

@@ -1,0 +1,126 @@
+{
+  "schema": "CONFENGE_SHARE_PREVIEW_CONTRACT/1.0.0",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "Comunicação Institucional, Competência e Conversão",
+  "canonical_origin": "https://confenge.com.br",
+  "default_image": {
+    "url": "https://confenge.com.br/assets/og-confenge.jpg",
+    "source_path": "assets/og-confenge.jpg",
+    "sha256": "b8e2b8da84ecc580f71f9e5ae39ba54ced875a7a57aacfb352f89fc9cbc71d0c",
+    "media_type": "image/jpeg",
+    "width": 1200,
+    "height": 630
+  },
+  "indexable_policy": {
+    "source_identity": [
+      "canonical",
+      "title",
+      "description"
+    ],
+    "open_graph_required": [
+      "og:title",
+      "og:type",
+      "og:image",
+      "og:url",
+      "og:description"
+    ],
+    "twitter_required": [
+      "twitter:card"
+    ]
+  },
+  "noindex_nonshareable": [
+    {
+      "path": "404.html",
+      "reason_code": "http_status_page",
+      "governance_family_id": "pagina-nao-encontrada",
+      "reason": "Página de erro HTTP, fora da descoberta e sem preview social."
+    },
+    {
+      "path": "analise-cnpj/index.html",
+      "reason_code": "archetype_evidence_incomplete",
+      "governance_family_id": "live-intelligence-cnpj-tool",
+      "reason": "Ferramenta operacional ainda retida pelo gate de evidência e sem canonical público estável."
+    },
+    {
+      "path": "analise-cnpj/r/index.html",
+      "reason_code": "cnpj_individual_result",
+      "governance_family_id": "live-intelligence-cnpj-result",
+      "reason": "Resultado individual endereçado por identificador opaco, fora da superfície pública compartilhável."
+    },
+    {
+      "path": "comercial/radar-decisorio/index.html",
+      "reason_code": "commercial_transactional_form",
+      "governance_family_id": "comercial-condicoes",
+      "reason": "Formulário intermediário de parâmetros para a oferta paga; preço e condições visíveis no próprio corpo devem permanecer intactos.",
+      "visible_material_terms_must_remain": true
+    },
+    {
+      "path": "diagnostico-b2g-expansao/cancelado/index.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "diagnostico-b2g-expansao-estados",
+      "reason": "Estado pós-transação cancelada, sem função de descoberta ou compartilhamento."
+    },
+    {
+      "path": "diagnostico-b2g-expansao/expirado/index.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "diagnostico-b2g-expansao-estados",
+      "reason": "Estado pós-transação expirada, sem função de descoberta ou compartilhamento."
+    },
+    {
+      "path": "diagnostico-b2g-expansao/obrigado/index.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "diagnostico-b2g-expansao-estados",
+      "reason": "Confirmação pós-transação, sem função de descoberta ou compartilhamento."
+    },
+    {
+      "path": "nurture/sair/index.html",
+      "reason_code": "transactional_exit",
+      "governance_family_id": "nurture",
+      "reason": "Ação transacional de descadastro, sem preview social."
+    },
+    {
+      "path": "obrigado-contrato.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "obrigado-transacional",
+      "reason": "Recibo pós-formulário da jornada de contrato."
+    },
+    {
+      "path": "obrigado-edital.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "obrigado-transacional",
+      "reason": "Recibo pós-formulário da jornada de edital."
+    },
+    {
+      "path": "obrigado-operacao.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "obrigado-transacional",
+      "reason": "Recibo pós-formulário da jornada de operação."
+    },
+    {
+      "path": "obrigado.html",
+      "reason_code": "post_transaction_state",
+      "governance_family_id": "obrigado-transacional",
+      "reason": "Recibo pós-formulário geral."
+    },
+    {
+      "path": "ops/index.html",
+      "reason_code": "ops_private",
+      "reason": "Shell operacional privado, sem dados públicos de aquisição ou preview social."
+    }
+  ],
+  "authority": {
+    "noindex_governance": "data/organic/noindex-governance-registry.json",
+    "affected_adr": "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+    "visitor_job": "Compartilhar uma página pública com título, contexto, endereço e imagem coerentes antes de avaliar ou encaminhar a CONFENGE.",
+    "acquisition_hypothesis": "Previews completos reduzem ambiguidade em encaminhamentos e preservam a identidade canônica até a visita.",
+    "data_owner": "web-cfg / confenge.com.br",
+    "analytics": "Nenhum evento novo; medir tráfego social existente por source/medium sem PII.",
+    "rollback": "Remover a chamada do compilador e este contrato restaura os bytes de HEAD sem alterar robots, conteúdo ou taxonomia.",
+    "time_to_evidence": "próximo build protegido e prévias das páginas renderizadas",
+    "leverage": [
+      "distribution",
+      "trust",
+      "conversion"
+    ]
+  }
+}

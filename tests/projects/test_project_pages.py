@@ -216,7 +216,15 @@ class TestProjectPages(unittest.TestCase):
         )
         for page in self.pages:
             with self.subTest(route=page["route"]):
-                plain = re.sub(r"<[^>]+>", " ", self.rendered[page["route"]])
+                # Shared brand/navigation copy belongs to the global shell, not
+                # to the page's editorial-depth contract.
+                editorial = re.sub(
+                    r'<footer\b[^>]*\bclass="[^"]*\bsite-footer\b[^"]*"[^>]*>.*?</footer>',
+                    "",
+                    self.rendered[page["route"]],
+                    flags=re.IGNORECASE | re.DOTALL,
+                )
+                plain = re.sub(r"<[^>]+>", " ", editorial)
                 self.assertGreater(len(plain.split()), 650)
                 self.assertIsNone(forbidden.search(plain))
                 self.assertIn("Representação demonstrativa", plain)
@@ -232,7 +240,8 @@ class TestProjectPages(unittest.TestCase):
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
         self.assertIn(":focus-visible", css)
         self.assertNotIn("overflow-x: hidden", css)
-        self.assertIn("grid-template-columns: 1.3fr repeat(3,minmax(0,.85fr))", css)
+        self.assertNotIn(".pp-footer", css)
+        self.assertIn(".pp-mobile summary", css)
 
     def test_whatsapp_context_is_visitor_language(self) -> None:
         for route in ("/como-trabalhamos/", "/empresa/"):

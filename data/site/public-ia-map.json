@@ -231,6 +231,10 @@
             "href": "/servicos/"
           },
           {
+            "label": "Edificações",
+            "href": "/edificacoes/"
+          },
+          {
             "label": "Obras públicas",
             "href": "/servicos-obras-publicas/"
           },
@@ -254,6 +258,10 @@
           {
             "label": "Empresa",
             "href": "/empresa/"
+          },
+          {
+            "label": "Como trabalhamos",
+            "href": "/como-trabalhamos/"
           },
           {
             "label": "Liderança técnica",

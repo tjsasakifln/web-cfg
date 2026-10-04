@@ -424,9 +424,9 @@ async function main() {
       { label: "site_footer_navigation", paths, selector: ".site-footer .footer-links a,.site-footer .footer-links strong,.site-footer .footer-authority a", floor: 13 },
       { label: "site_footer_legal", paths, selector: ".site-footer .footer-bottom,.site-footer .footer-bottom a", floor: 12.8 },
       { label: "site_footer_description", paths, selector: ".site-footer .footer-brand p", floor: 14 },
-      { label: "pp_footer_navigation", paths: ["/projetos/"], selector: ".pp-footer nav a,.pp-footer strong", floor: 13 },
-      { label: "pp_footer_legal", paths: ["/projetos/"], selector: ".pp-footer__bottom,.pp-footer__bottom a", floor: 12.8 },
-      { label: "pp_footer_description", paths: ["/projetos/"], selector: ".pp-footer p", floor: 14 },
+      { label: "project_footer_navigation", paths: ["/projetos/"], selector: ".site-footer .footer-links a,.site-footer .footer-links strong,.site-footer .footer-authority a", floor: 13 },
+      { label: "project_footer_legal", paths: ["/projetos/"], selector: ".site-footer .footer-bottom,.site-footer .footer-bottom a", floor: 12.8 },
+      { label: "project_footer_description", paths: ["/projetos/"], selector: ".site-footer .footer-brand p", floor: 14 },
     ];
     for (const group of footerGroups) {
       for (const path of group.paths) {
@@ -447,7 +447,7 @@ async function main() {
       { path: "/", selector: "a.button, button, .menu-toggle, .whatsapp-float, summary, label.consent" },
       { path: "/", selector: ".site-footer .footer-links a,.site-footer .footer-authority a" },
       { path: "/projetos/", selector: ".pp-button" },
-      { path: "/projetos/", selector: ".pp-footer a" },
+      { path: "/projetos/", selector: ".site-footer .footer-links a,.site-footer .footer-authority a" },
     ];
     let measured = 0;
     for (const width of [390, 1440]) {
@@ -562,6 +562,42 @@ async function main() {
     ok("mobile_menu_toggle_tap_returns_focus");
   } catch (e) {
     fail("mobile_menu_toggle_tap_returns_focus", e.message || e);
+  }
+
+  // 8c) The legacy button and project-practice native summary intentionally
+  // keep their header density, while the actionable Menu control is one visual
+  // identity: same geometry, Archivo role, border and foreground/background.
+  try {
+    await page.setViewport({ width: 390, height: 844 });
+    const measureMenu = async (path, selector) => {
+      await page.goto(`${BASE}${path}`, { waitUntil: "networkidle0" });
+      return page.$eval(selector, (el) => {
+        const box = el.getBoundingClientRect();
+        const cs = getComputedStyle(el);
+        return {
+          width: Math.round(box.width * 100) / 100,
+          height: Math.round(box.height * 100) / 100,
+          paddingLeft: cs.paddingLeft,
+          paddingRight: cs.paddingRight,
+          gap: cs.gap,
+          fontFamily: cs.fontFamily,
+          fontSize: cs.fontSize,
+          fontWeight: cs.fontWeight,
+          color: cs.color,
+          backgroundColor: cs.backgroundColor,
+          borderColor: cs.borderColor,
+          borderRadius: cs.borderRadius,
+        };
+      });
+    };
+    const legacyMenu = await measureMenu("/", ".menu-toggle");
+    const projectMenu = await measureMenu("/projetos/", ".pp-mobile summary");
+    if (JSON.stringify(legacyMenu) !== JSON.stringify(projectMenu)) {
+      throw new Error(`menu identity drift: legacy=${JSON.stringify(legacyMenu)} project=${JSON.stringify(projectMenu)}`);
+    }
+    ok(`mobile_menu_visual_identity (${legacyMenu.width}x${legacyMenu.height}px, ${legacyMenu.fontSize})`);
+  } catch (e) {
+    fail("mobile_menu_visual_identity", e.message || e);
   }
 
   // 8d) Regressao (#650): em /entregas/ a entrega escolhida declara a jornada.
