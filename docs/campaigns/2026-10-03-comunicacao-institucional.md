@@ -244,3 +244,7 @@ parser do navegador e rejeita tags parecidas e entidades duplicadas; a mutação
 de atributo do contrato da home preserva seu teste sem simular escape HTML.
 Os 31 testes combinados passaram. Esses ajustes respondem aos alertas estáticos
 e ao mesmo finding dos dois pipelines; não alteram a superfície pública.
+
+O gerador do hub de serviços agora conserva os seis atributos de intenção SST
+já presentes no HTML aprovado. O check de geração e os seis testes de integração
+SST passaram; esta correção de fonte não altera os bytes das páginas públicas.
