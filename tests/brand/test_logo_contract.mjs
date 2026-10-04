@@ -301,6 +301,14 @@ for (const [src, expected] of Object.entries(observation.legacy_asset_occurrence
 }
 assert("header_lockup_inventory_matches_observation", headerBrandBlocks === observation.header_lockup_occurrences, headerBrandBlocks);
 assert("footer_lockup_inventory_matches_observation", footerBrandBlocks === observation.footer_lockup_occurrences, footerBrandBlocks);
+assert("footer_primary_occurrences_match_footer_blocks", footerPrimary === footerBrandBlocks, [footerPrimary, footerBrandBlocks]);
+for (const relative of [
+  "comercial/privacidade-leads/index.html",
+  "comercial/termos-diagnostico-b2g/index.html",
+]) {
+  const html = fs.readFileSync(path.join(root, relative), "utf8");
+  assert(`canonical_footer_added_${relative}`, elementsWithClass(html, "div", "footer-brand").length === 1, relative);
+}
 assert("every_logo_occurrence_is_accounted_for", [...logoOccurrencesBySrc.values()].reduce((sum, count) => sum + count, 0) === logoImages, logoOccurrencesBySrc);
 
 const cssFile = path.join(root, "styles.css");
