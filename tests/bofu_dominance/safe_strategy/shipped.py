@@ -6,6 +6,7 @@ import json
 import re
 import subprocess
 from pathlib import Path
+from scripts.site.preserved_campaign_source import preserved_source_bytes
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -119,16 +120,8 @@ def attr_pairs(html: str) -> list[tuple[str, str]]:
     return ATTR_RE.findall(html)
 
 
-def origin_main_file(rel: str) -> bytes:
-    proc = subprocess.run(
-        ["git", "show", f"origin/main:{rel}"],
-        cwd=ROOT,
-        capture_output=True,
-        check=False,
-    )
-    if proc.returncode != 0:
-        raise AssertionError(f"git show origin/main:{rel} failed: {proc.stderr!r}")
-    return proc.stdout
+def preserved_baseline_file(rel: str) -> bytes:
+    return preserved_source_bytes(ROOT, rel)
 
 
 def brl_to_cents(match_text: str) -> int:

@@ -22,6 +22,7 @@ from scripts.site.inbound_gates import is_indexable_html
 from scripts.site.public_copy_scope import visible_text
 from scripts.site.sync_article_word_counts import sync_word_count
 from scripts.site.document_intake import BODY_REPLACEMENTS
+from scripts.site.preserved_campaign_source import preserved_source_bytes
 
 SITE = "https://confenge.com.br"
 MEDICOES = ROOT / "medicoes-glosas-obras-publicas" / "index.html"
@@ -198,7 +199,7 @@ _REVISION_SURFACES = re.compile(
 
 # As três superfícies da ponte artigo→pilar. Cada uma colapsa num marcador
 # constante, elemento inteiro (não só atributo): o link do pilar no bloco de
-# oferta não existe em origin/main, e o conjunto de atributos do link do
+# oferta pode evoluir, e o conjunto de atributos do link do
 # formulário muda, não só valores. Na campanha institucional, só o nome
 # após a saudação WhatsApp autorizada é projetado; destinatário e restante
 # da mensagem continuam pinados.
@@ -242,13 +243,11 @@ def _click_origin_equal(live: bytes, base: bytes) -> bool:
 
 
 def _base(path: Path) -> bytes:
-    import subprocess
-
     rel = path.relative_to(ROOT).as_posix()
-    return subprocess.check_output(["git", "-C", str(ROOT), "show", f"origin/main:{rel}"])
+    return preserved_source_bytes(ROOT, rel)
 
 
-def test_click_origin_articles_match_origin_main():
+def test_click_origin_articles_match_preserved_baseline():
     """Non-regression: the three click-origin articles keep the base content.
 
     2026-09-14: /conteudos/fiscal-nao-assina-medicao-obra-publica/ belongs to
@@ -264,12 +263,13 @@ def test_click_origin_articles_match_origin_main():
     pilar e o WhatsApp passa a frase natural
     (``scripts/site/apply_article_pillar_form.py``). Essas três superfícies
     são mascaradas; título, corpo, fontes, canonical e o resto continuam
-    byte a byte iguais a origin/main.
+    byte a byte iguais ao predecessor imutável preservado pela campanha.
     """
     for path in CLICK_ORIGIN:
         rel = path.relative_to(ROOT).as_posix()
         base = _base(path)
         live = path.read_bytes()
+        assert base != live, "approved presentation amendments must not become their own baseline"
         expected_greetings = (4, 4, 3)[CLICK_ORIGIN.index(path)]
         expected_intake = (1, 1, 0)[CLICK_ORIGIN.index(path)]
         assert len(_BRIDGE_WA.findall(base)) == len(_BRIDGE_WA.findall(live)) == expected_greetings, rel
@@ -335,7 +335,7 @@ def test_click_origin_guard_lets_the_bridge_evolve_only():
         assert _mask(bridged) == _mask(base)
         # 2. link do pilar inserido no bloco de oferta: passa. A base pode ja
         # trazer o link do pilar (desde 2026-09-19 os artigos-origem de clique o
-        # tem em origin/main), entao a fixture insere um SEGUNDO link logo apos o
+        # tem no predecessor), entao a fixture insere um SEGUNDO link logo apos o
         # WhatsApp, sem depender do que segue.
         assert b"Conversar pelo WhatsApp</a>" in base, path
         with_pillar = base.replace(
