@@ -327,6 +327,14 @@ def test_family_index_never_claims_indexation_its_children_do_not_have():
     assert "Falar sobre uma destas oportunidades" not in html
 
 
+def test_family_index_emits_the_canonical_shared_shell():
+    """A normal family rebuild must not restore its former literal menu."""
+    from scripts.site.shell_nav import load_brand, sync_text
+
+    html = R.render_opportunities_index_html([], projection_kind="test_only_fixture")
+    assert html == sync_text(html, load_brand(), R.FAMILY_PATH)
+
+
 def test_family_index_reports_fixture_provenance_in_plain_words():
     # This assertion is specifically about the committed test-only projection.
     # load_projection() deliberately prefers a host-accepted official projection

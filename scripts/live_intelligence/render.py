@@ -625,7 +625,7 @@ def render_opportunities_index_html(
         ensure_ascii=False,
         separators=(",", ":"),
     ).replace("</", "<\\/")
-    return ensure_sprite(
+    html = ensure_sprite(
         f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -687,6 +687,13 @@ def render_opportunities_index_html(
 </html>
 """
     )
+    # This family owns its document body, but the visitor shell is shared with
+    # every other public route. Keep this generated index canonical by
+    # construction, so a normal opportunity rebuild cannot restore the old
+    # literal navigation and desynchronize the global shell contract.
+    from scripts.site.shell_nav import load_brand, sync_text
+
+    return sync_text(html, load_brand(), FAMILY_PATH)
 
 
 def load_projection(path: Path | None = None) -> dict[str, Any]:

@@ -333,3 +333,13 @@ Os 13 cenários locais de contexto passaram, incluindo as contraprovas sem
 POST externo; os mocks principal e de QA também passaram. A revisão final
 independente fechou os achados deste escopo. O contato real permanece pendente
 do release final e da prova de persistência, encaminhamento e recebimento.
+
+O pipeline seguinte aprovou a abertura, a matriz responsiva, os diagramas,
+as ferramentas e o diretório, mas rejeitou a regeneração do índice de
+oportunidades por ausência do BreadcrumbList exigido pelo shell canônico.
+O gerador passa a sincronizar seu resultado com o contrato central antes de
+retornar. A materialização mudou somente esse registro de navegação; cards,
+fatos, filtros, robots e proveniência permanecem iguais. Os 11 testes do
+renderizador, o check global de shell, a renderização determinística e a
+verificação do diretório em quatro larguras passaram. O aceite integral
+continua condicionado aos checks protegidos do head corrigido.
