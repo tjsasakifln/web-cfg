@@ -43,7 +43,7 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 103657,
+      "bytes": 104744,
       "class_selectors": 346,
       "used": 346,
       "unused": []
@@ -98,7 +98,7 @@
     },
     "assets/project-practices.css": {
       "border_radius": 0,
-      "box_shadow": 1,
+      "box_shadow": 2,
       "gradient": 0
     },
     "assets/report-capture.css": {
@@ -163,7 +163,7 @@
     },
     "css/components.css": {
       "border_radius": 11,
-      "box_shadow": 4,
+      "box_shadow": 5,
       "gradient": 0
     },
     "css/contracts.css": {
@@ -233,7 +233,7 @@
     },
     "styles.css": {
       "border_radius": 78,
-      "box_shadow": 40,
+      "box_shadow": 41,
       "gradient": 2
     },
     "triagem-tecnica/styles.css": {
@@ -244,7 +244,7 @@
   },
   "decoration_totals": {
     "border_radius": 139,
-    "box_shadow": 64,
+    "box_shadow": 67,
     "gradient": 5
   }
 }

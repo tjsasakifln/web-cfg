@@ -147,7 +147,7 @@ def _footer(modified_at: str, published_at: str) -> str:
     display_date = f"{parsed.day} de {months[parsed.month - 1]} de {parsed.year}"
     return f"""<footer class="pp-footer">
 <div class="pp-container pp-footer__grid">
-<div><a class="pp-brand pp-brand--footer" href="/"><img src="/assets/logo-confenge-500-f8a83f6d.png" width="224" height="58" alt="CONFENGE Inteligência Técnica"/></a><p>Engenharia, Perícias e Inteligência Técnica.</p></div>
+<div><a class="pp-brand pp-brand--footer" href="/"><img src="/assets/logo-confenge-white-500-1677038e.png" width="224" height="58" loading="lazy" decoding="async" alt="CONFENGE Inteligência Técnica"/></a><p>Engenharia, Perícias e Inteligência Técnica.</p></div>
 <nav aria-label="Projetos"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></nav>
 <nav aria-label="Outros serviços"><strong>Outros serviços</strong><a href="/servicos/">Serviços de engenharia</a><a href="/edificacoes/">Edificações</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></nav>
 <nav aria-label="Institucional"><strong>CONFENGE</strong><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/empresa/">Empresa</a><a href="/triagem-tecnica/">Contato técnico</a><a href="/privacidade/">Privacidade</a></nav>

@@ -66,11 +66,11 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "7f224d68d34b01922ee5d6f61c09c067e744f5ae8188f54c7b2029b4834fd2a6",
-      "rendered_content_hash_previous": "0fdf2bf8c7805db9fd62faa80188c95f70631dc17224c0a5a63e9ffc7c2bb87b",
+      "rendered_content_hash": "9d65e3d366f7f48d4c7ded3f4a2ece88fe969bd4118ada7f353a51d2db4fdb7f",
+      "rendered_content_hash_previous": "7f224d68d34b01922ee5d6f61c09c067e744f5ae8188f54c7b2029b4834fd2a6",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-04T12:45:57Z",
-      "rendered_hash_recapture_reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correções verificadas de contraste, SVGs e geração determinística; recaptura de apresentação, sem nova aprovação técnica ou revisão humana alegada",
+      "rendered_hash_recaptured_at": "2026-10-04T15:46:23Z",
+      "rendered_hash_recapture_reason": "CONFENGE 2026-10-04: ajuste autorizado de escala, contraste, logo e glow discreto no rodape; somente apresentacao, sem nova aprovacao tecnica",
       "rendered_hash_recapture_reason_previous": "CONFENGE-PROJETOS-ENGENHARIA-20261002: IA global, navegacao, posicionamento e apresentacao de projetos foram atualizados; fatos tecnicos e canonicos existentes foram preservados; esta recaptura registra bytes derivados sem alegar revisao humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
@@ -627,6 +627,17 @@
       "rendered_content_hash_previous": "0fdf2bf8c7805db9fd62faa80188c95f70631dc17224c0a5a63e9ffc7c2bb87b",
       "rendered_content_hash": "7f224d68d34b01922ee5d6f61c09c067e744f5ae8188f54c7b2029b4834fd2a6",
       "reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correções verificadas de contraste, SVGs e geração determinística; recaptura de apresentação, sem nova aprovação técnica ou revisão humana alegada"
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
+      "at": "2026-10-04T15:46:23Z",
+      "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "7f224d68d34b01922ee5d6f61c09c067e744f5ae8188f54c7b2029b4834fd2a6",
+      "rendered_content_hash": "9d65e3d366f7f48d4c7ded3f4a2ece88fe969bd4118ada7f353a51d2db4fdb7f",
+      "reason": "CONFENGE 2026-10-04: ajuste autorizado de escala, contraste, logo e glow discreto no rodape; somente apresentacao, sem nova aprovacao tecnica"
     }
   ]
 }

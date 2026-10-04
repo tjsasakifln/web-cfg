@@ -668,7 +668,7 @@ def test_layout_contracts_ship_on_cascade():
 
 
 def test_functional_type_floor_in_css():
-    """Shipped CSS must not set commercial functional type below 14px (.875rem)."""
+    """Functional type stays at least 14px, except the intentionally compact footer."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     # Selectors that must stay ≥.875rem on commercial surfaces
     for pattern in (
@@ -676,9 +676,6 @@ def test_functional_type_floor_in_css():
         r"\.consent\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.offer-label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.offer-dominant \.offer-label\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
-        r"\.footer-links\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
-        r"\.footer-links strong\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
-        r"\.footer-bottom\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.breadcrumbs ol\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.profile-list li\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
         r"\.related-card span\{[^}]*font-size:\.(?:[0-7][0-9]?|8[0-6])rem",
@@ -689,7 +686,9 @@ def test_functional_type_floor_in_css():
         assert not re.search(pattern, css), f"sub-14px functional type: {pattern}"
     assert re.search(r"\.field label\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.consent\{[^}]*font-size:\.875rem", css)
-    assert re.search(r"\.footer-links\{[^}]*font-size:\.875rem", css)
+    compact = re.sub(r"\s+", "", css)
+    assert ".site-footer.footer-links,.site-footer.footer-linksstrong,.site-footer.footer-linksa,.site-footer.footer-authoritya{font-size:.8125rem}" in compact
+    assert ".site-footer.footer-bottom{font-size:.8rem" in compact
     assert re.search(r"\.breadcrumbs ol\{[^}]*font-size:\.875rem", css)
     # 2026-09-17 (SALTO-INSTITUCIONAL-02): .profile-list deixou de existir (a
     # pagina do responsavel usa credential-list/conduct regrados); a regra morta

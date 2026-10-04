@@ -354,7 +354,9 @@ async function main() {
     fail("home_hero_fold_390_768_1440", e.message || e);
   }
 
-  // 5) functional text ≥ 14px on home + commercial surfaces (footer, breadcrumbs, profile, related)
+  // 5) functional text ≥ 14px on home + commercial surfaces. The compact
+  // footer has a measured hierarchy of its own: navigation/titles ≥13px,
+  // legal ≥12.8px and description ≥14px.
   try {
     await page.setViewport({ width: 1440, height: 1000 });
     const fontSel = [
@@ -379,10 +381,6 @@ async function main() {
       ".desktop-nav a",
       ".header-cta",
       ".contact-channels small",
-      ".footer-links a",
-      ".footer-links strong",
-      ".footer-bottom",
-      ".footer-bottom a",
       ".breadcrumbs ol",
       ".breadcrumbs a",
       ".profile-list li",
@@ -394,7 +392,7 @@ async function main() {
       ".offer-context dt",
       ".offer-context dd",
     ].join(",");
-    const measureFonts = async (path) => {
+    const measureFonts = async (path, selector = fontSel) => {
       await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
       return page.evaluate((sel) => {
         let min = Infinity;
@@ -409,7 +407,7 @@ async function main() {
           }
         }
         return { min, minSel, path: location.pathname };
-      }, fontSel);
+      }, selector);
     };
     const paths = ["/", "/diretoria-b2g/", "/especialista/tiago-jun-sasaki/"];
     let worst = { min: Infinity, minSel: "", path: "" };
@@ -421,23 +419,60 @@ async function main() {
       }
     }
     ok(`functional_text_min_14px (${worst.min}px across home/offer/specialist)`);
+
+    const footerGroups = [
+      { label: "site_footer_navigation", paths, selector: ".site-footer .footer-links a,.site-footer .footer-links strong,.site-footer .footer-authority a", floor: 13 },
+      { label: "site_footer_legal", paths, selector: ".site-footer .footer-bottom,.site-footer .footer-bottom a", floor: 12.8 },
+      { label: "site_footer_description", paths, selector: ".site-footer .footer-brand p", floor: 14 },
+      { label: "pp_footer_navigation", paths: ["/projetos/"], selector: ".pp-footer nav a,.pp-footer strong", floor: 13 },
+      { label: "pp_footer_legal", paths: ["/projetos/"], selector: ".pp-footer__bottom,.pp-footer__bottom a", floor: 12.8 },
+      { label: "pp_footer_description", paths: ["/projetos/"], selector: ".pp-footer p", floor: 14 },
+    ];
+    for (const group of footerGroups) {
+      for (const path of group.paths) {
+        const rep = await measureFonts(path, group.selector);
+        if (!Number.isFinite(rep.min) || rep.min < group.floor) {
+          throw new Error(`${group.label} ${path}: ${rep.min}px < ${group.floor}px (${rep.minSel})`);
+        }
+      }
+    }
+    ok("footer_type_hierarchy_13_12_8_14px");
   } catch (e) {
     fail("functional_text_min_14px", e.message || e);
   }
 
   // 6) primary controls keep the campaign contract of at least 44×44 CSS px.
   try {
-    const small = await page.evaluate(() => {
-      const bad = [];
-      for (const el of document.querySelectorAll("a.button, button, .menu-toggle, .whatsapp-float, summary, label.consent")) {
-        const r = el.getBoundingClientRect();
-        if (r.width === 0 || r.height === 0) continue;
-        if (r.width < 44 || r.height < 44) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
+    const targetGroups = [
+      { path: "/", selector: "a.button, button, .menu-toggle, .whatsapp-float, summary, label.consent" },
+      { path: "/", selector: ".site-footer .footer-links a,.site-footer .footer-authority a" },
+      { path: "/projetos/", selector: ".pp-button" },
+      { path: "/projetos/", selector: ".pp-footer a" },
+    ];
+    let measured = 0;
+    for (const width of [390, 1440]) {
+      await page.setViewport({ width, height: 1000 });
+      for (const group of targetGroups) {
+        await page.goto(`${BASE}${group.path}`, { waitUntil: "domcontentloaded" });
+        await page.evaluate(() => document.fonts.ready);
+        const result = await page.evaluate((selector) => {
+          const bad = [];
+          let visible = 0;
+          for (const el of document.querySelectorAll(selector)) {
+            const r = el.getBoundingClientRect();
+            const cs = getComputedStyle(el);
+            if (r.width === 0 || r.height === 0 || cs.visibility === "hidden" || cs.display === "none") continue;
+            visible += 1;
+            if (r.width < 44 || r.height < 44) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
+          }
+          return { visible, bad };
+        }, group.selector);
+        if (!result.visible) throw new Error(`no visible targets: ${group.path} ${width}px ${group.selector}`);
+        if (result.bad.length) throw new Error(`${group.path} ${width}px: ${JSON.stringify(result.bad.slice(0, 5))}`);
+        measured += result.visible;
       }
-      return bad;
-    });
-    if (small.length) throw new Error(JSON.stringify(small.slice(0, 5)));
-    ok("targets_min_44x44px");
+    }
+    ok(`targets_min_44x44px (${measured} visible targets across both footer families)`);
   } catch (e) {
     fail("targets_min_44x44px", e.message || e);
   }
