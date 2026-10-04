@@ -232,3 +232,15 @@ independente em Chrome aprovou 36 findings, com zero erros e zero violações
 axe. Os 26 testes de excelência, 440 de copy e 1942 de primeira tela passaram.
 Os insumos das 25 rotas medidas permanecem iguais aos de d4071b5; estes ajustes
 não constituem nova medição nem conclusão de publicação.
+
+O detector de prosa agora distingue os nomes repetidos dos oito arquivos,
+que pertencem a dois contextos técnicos distintos. Só a rota de quantitativos
+admite essa leitura na seção exemplos-conferiveis: quatro CSVs canônicos, alvos exclusivos,
+contexto único e texto exclusivamente de arquivos. Prosa repetida continua
+reprovando; os negativos também recusam alvos compartilhados, arquivo inválido,
+nome ausente, inventário duplicado, metadado perdido e prosa escondida. O scan
+das 248 páginas fonte terminou sem findings. A extração de JSON-LD SST usa o
+parser do navegador e rejeita tags parecidas e entidades duplicadas; a mutação
+de atributo do contrato da home preserva seu teste sem simular escape HTML.
+Os 31 testes combinados passaram. Esses ajustes respondem aos alertas estáticos
+e ao mesmo finding dos dois pipelines; não alteram a superfície pública.

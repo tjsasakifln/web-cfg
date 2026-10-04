@@ -431,7 +431,10 @@ test("production home acceptance requires project scope, attributed paths and pe
     const anchor = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0])
       .find((value) => id ? value.includes(`data-cta-id="${id}"`) : value.includes('data-cta-position="hero"') && value.includes("button-primary"));
     assert.ok(anchor);
-    const moved = anchor.replace('data-event-name="cta_click"', '').replace(">", '><span data-event-name="cta_click"></span>');
+    const eventless = anchor.replace('data-event-name="cta_click"', '');
+    const openingEnd = eventless.indexOf(">");
+    assert.ok(openingEnd > 0);
+    const moved = eventless.slice(0, openingEnd + 1) + '<span data-event-name="cta_click"></span>' + eventless.slice(openingEnd + 1);
     assert.equal(evaluateHomeAcquisition(html.replace(anchor, moved))[field], false, field);
   }
 });

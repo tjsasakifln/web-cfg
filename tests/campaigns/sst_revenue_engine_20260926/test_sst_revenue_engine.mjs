@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { parse } from "parse5";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const pagePath = path.join(root, "seguranca-trabalho-apoio-tecnico/index.html");
@@ -56,9 +57,10 @@ function editorialUpdatedDate(html, type, label) {
 
 function jsonLdEntity(html, expectedType, label) {
   const entities = [];
-  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
-    if (attributeValue(match[1], "type")?.toLowerCase() !== "application/ld+json") continue;
-    const document = JSON.parse(match[2]);
+  const walk = (node) => [node, ...(node.childNodes || []).flatMap(walk)];
+  for (const script of walk(parse(html)).filter((node) => node.tagName === "script")) {
+    if (script.attrs.find((item) => item.name === "type")?.value.toLowerCase() !== "application/ld+json") continue;
+    const document = JSON.parse(script.childNodes.map((node) => node.value || "").join(""));
     entities.push(document);
     if (Array.isArray(document?.["@graph"])) entities.push(...document["@graph"]);
   }
@@ -69,6 +71,16 @@ function jsonLdEntity(html, expectedType, label) {
   assert.equal(matches.length, 1, `${label} needs exactly one ${expectedType} JSON-LD entity`);
   return matches[0];
 }
+
+test("JSON-LD extraction follows browser tag boundaries", () => {
+  const entity = { "@type": "WebPage", dateModified: "2026-10-03" };
+  const html = '<script type="application/ld+json">' + JSON.stringify(entity) + '</script >';
+  assert.deepEqual(jsonLdEntity(html, "WebPage", "tolerated closing tag"), entity);
+  const lookalike = '<scriptfoo type="application/ld+json">' + JSON.stringify(entity) + '</scriptfoo>';
+  assert.deepEqual(jsonLdEntity(html + lookalike, "WebPage", "lookalike"), entity);
+  assert.throws(() => jsonLdEntity(lookalike, "WebPage", "missing"), /exactly one/);
+  assert.throws(() => jsonLdEntity(html + html, "WebPage", "duplicate"), /exactly one/);
+});
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

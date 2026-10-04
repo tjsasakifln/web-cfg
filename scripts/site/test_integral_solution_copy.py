@@ -655,6 +655,47 @@ def _count(pattern: str, text: str) -> int:
     return len(re.findall(pattern, text, re.I))
 
 
+def _prose_without_contextual_csv_inventories(fragment: str) -> tuple[str, list[str]]:
+    """Distinct demonstrative download inventories are technical data, not prose."""
+    expected_names = {"quantitativos.csv", "orcamento.csv", "coordenacao.csv", "revisao.csv"}
+    expected_text = "arquivos abertos deste recorte quantitativos csv orcamento csv coordenacao csv revisao csv"
+    inventories = []
+    contexts = set()
+    all_hrefs = set()
+    problems = []
+
+    def attributes(tag: str) -> dict[str, str]:
+        return {match[0].lower(): html_lib.unescape(match[2]) for match in re.findall(r'''([\w-]+)\s*=\s*(["'])(.*?)\2''', tag, re.S)}
+
+    for article in re.finditer(r"<article\b([^>]*)>[\s\S]*?</article>", fragment, re.I):
+        attrs = attributes(article.group(1))
+        if "qty-proof-entrance" not in attrs.get("class", "").split():
+            continue
+        context = (attrs.get("data-proof-entrance"), attrs.get("data-demonstrative-id"))
+        paragraphs = [match for match in re.finditer(r"<p\b([^>]*)>[\s\S]*?</p>", article.group(0), re.I)
+                      if "qty-proof-files" in attributes(match.group(1)).get("class", "").split()]
+        if not all(context) or context in contexts or len(paragraphs) != 1:
+            problems.append("inventário demonstrativo exige contexto único e um único bloco de arquivos")
+            continue
+        contexts.add(context)
+        paragraph = paragraphs[0].group(0)
+        hrefs = [attributes(match.group(1)).get("href", "") for match in re.finditer(r"<a\b([^>]*)>", paragraph, re.I)]
+        if (len(hrefs) != 4 or len(set(hrefs)) != 4
+                or {href.rsplit("/", 1)[-1] for href in hrefs} != expected_names
+                or any(not href.startswith("/") for href in hrefs)
+                or " ".join(re.findall(r"[a-z0-9]+", _strip(_visible(paragraph)))) != expected_text
+                or all_hrefs.intersection(hrefs)):
+            problems.append("inventário demonstrativo exige quatro CSVs distintos por contexto")
+            continue
+        all_hrefs.update(hrefs)
+        inventories.append((article.group(0), paragraph))
+    if problems:
+        return fragment, problems
+    for article, paragraph in inventories:
+        fragment = fragment.replace(article, article.replace(paragraph, " ", 1), 1)
+    return fragment, []
+
+
 def redundancy_problems(rel: str, html: str) -> list[str]:
     if rel not in RESSALVA_ROUTES:
         return []
@@ -672,6 +713,9 @@ def redundancy_problems(rel: str, html: str) -> list[str]:
         # technical artifacts retain their separate truth and identity gates.
         prose = re.sub(r"<(table|pre|dl)\b[^>]*>[\s\S]*?</\1>", " ", block, flags=re.I)
         prose = re.sub(r'<span\b[^>]*data-trail-memory="true"[^>]*>[\s\S]*?</span>', " ", prose, flags=re.I)
+        if rel == "quantitativos-orcamento-obras/index.html" and sid == "exemplos-conferiveis":
+            prose, inventory_problems = _prose_without_contextual_csv_inventories(prose)
+            problems.extend(f"{rel}#{sid}: {problem}" for problem in inventory_problems)
         rows = _norm_sentences(_visible(prose))
         for sentence in set(rows):
             if any(tok in sentence for tok in REPEAT_ALLOWED):
@@ -846,6 +890,32 @@ def test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statemen
     assert not redundancy_problems("servicos/index.html", repeated), "regra restrita às rotas do workstream"
 
 
+def test_csv_inventories_preserve_context_and_do_not_hide_repeated_prose() -> None:
+    rel = "quantitativos-orcamento-obras/index.html"
+    document = (ROOT / rel).read_text(encoding="utf-8")
+    assert not redundancy_problems(rel, document)
+    moved = document.replace('id="exemplos-conferiveis"', 'id="inventario-deslocado"', 1)
+    assert moved != document
+    assert any("frase repetida" in item for item in redundancy_problems(rel, moved))
+    common = "<p>A proposta considera disciplinas, revisões e critérios de medição.</p>"
+    repeated = document.replace("</article>", common + "</article>")
+    assert any("frase repetida" in item for item in redundancy_problems(rel, repeated))
+    first_href = "/casos/demonstrativo-projeto-privado/data/quantitativos.csv"
+    second_href = "/casos/demonstrativo-infraestrutura/data/quantitativos.csv"
+    inventory = re.search(r'<p class="qty-proof-files">[\s\S]*?</p>', document).group(0)
+    mutations = [
+        document.replace(second_href, first_href),
+        document.replace(second_href, second_href.replace(".csv", ".txt")),
+        document.replace(second_href, second_href.replace("quantitativos.csv", "outro.csv")),
+        document.replace(inventory, inventory + inventory, 1),
+        document.replace('data-proof-entrance="edificacao"', '', 1),
+        document.replace(inventory, inventory.replace("</p>", " A proposta considera disciplinas, revisões e critérios de medição.</p>"), 1),
+    ]
+    for changed in mutations:
+        assert changed != document
+        assert any("inventário demonstrativo" in item for item in redundancy_problems(rel, changed))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -860,6 +930,7 @@ def main() -> int:
         test_coverage_refuses_a_smaller_universe,
         test_contact_paths_reject_public_only_invitation_and_budget_as_inspection,
         test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone,
+        test_csv_inventories_preserve_context_and_do_not_hide_repeated_prose,
         test_ressalva_route_lists_are_explicit_and_disjoint,
     ):
         test()
