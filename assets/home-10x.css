@@ -552,9 +552,24 @@ body[data-content-cluster="home"] .home-proposal p{margin:0 0 1.5rem;color:#c5d0
 }
 @media (max-width:620px){
   body[data-content-cluster="home"] .section{padding:3.75rem 0}
-  body[data-content-cluster="home"] .home-opening{padding:2.25rem 0 3rem}
-  body[data-content-cluster="home"] .home-opening h1{font-size:clamp(2.35rem,11vw,3.35rem)}
+  body[data-content-cluster="home"] .home-opening{padding:1.5rem 0 1.75rem}
+  body[data-content-cluster="home"] .home-opening__grid{gap:1rem}
+  body[data-content-cluster="home"] .home-opening h1{margin-bottom:.85rem;font-size:clamp(2rem,9vw,2.5rem)}
+  body[data-content-cluster="home"] .home-opening .hero-lead{margin-bottom:1rem;font-size:1rem;line-height:1.5}
+  body[data-content-cluster="home"] .home-opening .hero-actions{margin-bottom:1rem}
+  body[data-content-cluster="home"] .home-opening__scope{gap:.5rem .75rem;padding-top:.75rem}
+  body[data-content-cluster="home"] .home-opening__sheet{padding:.875rem}
+  body[data-content-cluster="home"] .home-project-diagram__title{margin-bottom:.75rem;font-size:1rem}
+  body[data-content-cluster="home"] .home-project-diagram__disciplines{gap:.4rem}
   body[data-content-cluster="home"] .home-project-diagram__disciplines li{grid-template-columns:1fr;gap:.2rem}
+  body[data-content-cluster="home"] .home-project-diagram__disciplines li{padding:.55rem .75rem;line-height:1.35}
+  body[data-content-cluster="home"] .home-project-diagram__connector{height:.9rem}
+  body[data-content-cluster="home"] .home-project-diagram__coordination{padding:.75rem 1rem}
+  body[data-content-cluster="home"] .home-project-diagram__coordination>strong{font-size:1.25rem}
+  body[data-content-cluster="home"] .home-project-diagram__coordination p{margin-top:.35rem;line-height:1.4}
+  body[data-content-cluster="home"] .home-project-diagram__delivery{padding:.75rem 1rem;line-height:1.4}
+  body[data-content-cluster="home"] .home-project-diagram__delivery strong{margin-bottom:.25rem;font-size:1rem}
+  body[data-content-cluster="home"] .home-opening__figure figcaption{padding:.55rem .75rem;line-height:1.4}
   body[data-content-cluster="home"] .home-opening__scope{display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1rem}
   body[data-content-cluster="home"] .home-capability-list article,
   body[data-content-cluster="home"] .home-coordination{grid-template-columns:1fr;gap:1.5rem}
