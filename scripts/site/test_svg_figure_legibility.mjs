@@ -204,7 +204,8 @@ try {
         return rows;
       });
       assert.ok(pans.length, `${route}@${width}: prancha externa não renderizada`);
-      for (const pan of pans) {
+      const sheets = await page.$$('.plate__sheet--native-pan');
+      for (const [index, pan] of pans.entries()) {
         const metrics = svgMetrics(pan.asset);
         const renderedFont = metrics.minFont * pan.width / metrics.viewBoxWidth;
         assert.equal(pan.tabIndex, 0, `${route}@${width}: prancha sem foco por teclado`);
@@ -212,10 +213,30 @@ try {
         if (pan.width > pan.clientWidth + 1) assert.ok(pan.scrollable, `${route}@${width}: prancha sem pan nativo`);
         assert.ok(pan.pageOverflow <= 1, `${route}@${width}: pan vazou para a página`);
         assert.ok(renderedFont >= 11.9, `${route}@${width}: ${pan.asset} renderizou ${renderedFont.toFixed(2)}px`);
+        if (pan.scrollable) {
+          await sheets[index].evaluate(sheet => { sheet.scrollLeft = 0; sheet.focus(); });
+          await page.keyboard.press('ArrowRight');
+          await page.waitForFunction(index => document.querySelectorAll('.plate__sheet--native-pan')[index].scrollLeft > 0, { timeout: 2500 }, index);
+          assert.equal(await page.evaluate(() => window.scrollX), 0, `${route}@${width}: teclado deslocou a página`);
+        }
         checked += 1;
       }
     }
   }
+
+  // An area that consumes arrow keys must fail the real keyboard interaction.
+  await page.setViewport({ width: 320, height: 900, deviceScaleFactor: 1 });
+  await page.goto(`http://127.0.0.1:${port}/assistencia-tecnica-pericial-engenharia/`, { waitUntil: 'networkidle0' });
+  const blockedPan = await page.$('.plate__sheet--native-pan');
+  await blockedPan.evaluate(sheet => {
+    sheet.scrollLeft = 0;
+    sheet.addEventListener('keydown', event => event.preventDefault());
+    sheet.focus();
+  });
+  await page.keyboard.press('ArrowRight');
+  await new Promise(done => setTimeout(done, 250));
+  assert.equal(await blockedPan.evaluate(sheet => sheet.scrollLeft), 0, 'contraprova deve bloquear pan pelo teclado');
+  checked += 1;
 
   // The expert-report plate carries the smallest desktop source type (10.5px).
   // This browser negative proves that the former 1310px viewport is insufficient.
@@ -241,4 +262,4 @@ try {
   await new Promise((done) => server.close(done));
 }
 
-console.log(`OK svg figure legibility: ${checked} checks; widths ${widths.join(", ")}; negative controls 2`);
+console.log(`OK svg figure legibility: ${checked} checks; widths ${widths.join(", ")}; negative controls 3; keyboard pan verified`);

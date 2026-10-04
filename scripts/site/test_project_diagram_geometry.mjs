@@ -53,6 +53,16 @@ try{
     for(const item of pages){
       const r=await page.goto(`http://127.0.0.1:${PORT}${item.route}`,{waitUntil:'networkidle0'});assert.equal(r.status(),200);
       const result=await metrics();assert.deepEqual(result.problems,[],`${item.route} ${width}: ${JSON.stringify(result)}`);checks++;
+      if(width===320){
+        for(const canvas of await page.$$('.pp-hero__canvas,.pp-demo__canvas')){
+          const scrollable=await canvas.evaluate(e=>e.scrollWidth>e.clientWidth+1);
+          if(!scrollable)continue;
+          await canvas.evaluate(e=>{e.scrollLeft=0;e.focus();});
+          await page.keyboard.press('ArrowRight');
+          await page.waitForFunction(e=>e.scrollLeft>0,{timeout:2500},canvas);
+          assert.equal(await page.evaluate(()=>window.scrollX),0,`${item.route}: keyboard displaced page`);
+        }
+      }
     }
   }
   const shrink=await page.addStyleTag({content:'.pp-hero__canvas img,.pp-demo__canvas img{min-width:0!important;width:240px!important}'});

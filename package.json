@@ -149,7 +149,7 @@
     "test:ui": "node scripts/site/test_ui_geometry.mjs && python3 -m pytest scripts/site/test_home_conversion_contract.py -q && node scripts/site/test_home_first_fold.mjs && node scripts/site/test_font_fallback_metrics.mjs && npm run test:layout-primitives && npm run test:responsive-matrix && npm run test:project-diagrams && npm run test:svg-figures && npm run test:tools-layout && npm run test:opportunities-directory",
     "test:opportunities-directory": "node scripts/site/test_opportunities_directory.mjs",
     "test:project-diagrams": "node scripts/site/test_project_diagram_geometry.mjs",
-    "test:svg-figures": "node scripts/site/test_svg_figure_legibility.mjs",
+    "test:svg-figures": "node scripts/site/test_svg_figure_legibility.mjs && node scripts/site/test_svg_internal_geometry.mjs",
     "test:tools-layout": "node scripts/site/test_tools_layout_geometry.mjs",
     "test:layout-primitives": "LAYOUT_AUDIT_SCOPE=critical node scripts/site/audit_sitewide_layout.mjs",
     "test:responsive-matrix": "node scripts/site/test_responsive_matrix.mjs",

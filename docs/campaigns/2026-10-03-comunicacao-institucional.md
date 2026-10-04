@@ -283,3 +283,15 @@ servido e exige atribuição coincidente antes do POST. O formulário mantém os
 solicitados ao visitante. Este registro descreve a correção fonte; publicação,
 aceite público final e recebimento efetivo continuam dependentes das respectivas
 evidências da nova versão. A recuperação preserva o bundle aceito de 0bacc72.
+
+A inspeção ampliada das figuras encontrou também rótulos atravessando as
+caixas de coordenação e empresa e colisões com traços em instalações,
+edificações e estruturas metálicas. Os seis SVGs envolvidos, incluindo o
+painel antigo já sem referência na home, foram reposicionados sem reduzir
+fontes nem alterar seus textos. O gate interno usa as caixas reais e mede
+distância entre rótulos e traços; suas contraprovas reproduzem os seis defeitos
+anteriores, o encolhimento de três caixas e a retirada de dois traços exigidos.
+As 26 verificações passaram. Os gates de figuras e projetos também executam
+a navegação real por teclado: 82 e 65 verificações aprovadas, respectivamente.
+São evidências técnicas e revisão executada por agentes; não representam
+validação por compradores humanos. O aceite público final permanece pendente.
