@@ -148,6 +148,16 @@ const expected = policySet.size;
 const stillConsolidar = loadStillPublishedConsolidarUrls();
 const superseded = loadSupersededUrls();
 
+function directorySchemaMatches(html) {
+  const cards = [...html.matchAll(/<article\b[^>]*data-content-item\b[^>]*>[\s\S]*?<h3><a href="([^"]+)"/g)].map((m) => `https://confenge.com.br${m[1]}`);
+  const nodes = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap((m) => {
+    const data = JSON.parse(m[1]); return data["@graph"] || [data];
+  });
+  const list = nodes.find((node) => node["@type"] === "CollectionPage" && node.url === "https://confenge.com.br/conteudos/")?.mainEntity;
+  const items = list?.itemListElement || [];
+  return cards.length > 0 && list.numberOfItems === cards.length && items.length === cards.length && items.every((item, i) => item.position === i + 1 && item.url === cards[i]);
+}
+
 let fail = 0;
 function ok(n, c, d = "") {
   if (c) console.log("PASS", n);
@@ -158,6 +168,8 @@ function ok(n, c, d = "") {
 }
 
 ok("no_corrupted_p_R", !/<p R\s/i.test(hub));
+ok("directory_schema_matches_visible_order_and_count", directorySchemaMatches(hub));
+ok("directory_schema_check_rejects_missing_item", !directorySchemaMatches(hub.replace(/\{"@type":"ListItem","position":30,"url":"[^"]+"\}/, "{}")));
 ok("no_datalake", !/datalake/i.test(hub));
 ok("no_false_evergreen_intel", !/publica páginas evergreen com agregados/i.test(hub));
 ok("no_120_guias", !/120\s*guias/i.test(hub));

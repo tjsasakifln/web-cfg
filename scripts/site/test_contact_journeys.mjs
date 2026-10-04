@@ -27,35 +27,28 @@ if (requestedBase && requestedBaseUrl.href !== `${productionBase}/`) {
 }
 const productionMode = Boolean(requestedBase);
 const viewports = [[360, 800], [390, 844], [768, 900], [1366, 900]];
-// These are visitor situations, rather than internal portfolio labels.  The
-// direct targets can converge on a shared explanatory page, but each must
-// still name an actionable contact path in the rendered result.
-// VALOR-IMEDIATO-20260914: inspecao, assistencia e SST entram direto na
-// landing publicada; quantitativos e avaliacao de imovel ganharam linha
-// propria na home (situacao-orcamento, situacao-avaliacao). Os destinos sao
-// os do contrato de situacoes (brand.json = public-ia-map.json).
+// CONFENGE-CAMPANHA-AQUISICAO-20261003: the home presents project disciplines
+// and engineering services. Test the visible discovery entry separately from
+// the direct technical route: an aggregate service page can explain several
+// needs without restoring the superseded situation catalogue or home CTA.
 const journeys = [
-  ["pequena_reforma", "/inspecao-diagnostico-edificacoes/", "situacao-obra-imovel", ".situation-action[href]"],
-  ["condominio_anomalia", "/inspecao-diagnostico-edificacoes/", "situacao-obra-imovel", ".situation-action[href]"],
-  ["arquiteto_compatibilizacao", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
-  ["projeto_estrutural", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
-  ["instalacoes", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
-  ["orcamento_publico", "/quantitativos-orcamento-obras/", "situacao-orcamento", ".situation-action[href]"],
-  ["orcamento_privado", "/quantitativos-orcamento-obras/", "situacao-orcamento", ".situation-action[href]"],
-  ["disciplina_nao_listada", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
-  // The public-works hub is the explanatory destination for both the public
-  // entity and procurement entries; it must not be mistaken for the generic
-  // services fragment merely because that fragment also names the discipline.
-  ["orgao_preparando_projeto", "/servicos-obras-publicas/", "situacao-obras-publicas", ".situation-action[href]"],
-  ["edital", "/servicos-obras-publicas/", "situacao-obras-publicas", ".situation-action[href]"],
-  // Glosa/aditivo has its own visible shortcut in the public-works section.
-  // Check that direct service destination, rather than treating the section's
-  // general entry point as an erroneous mismatch.
-  ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "jornada-contrato", "a[href]"],
-  ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "situacao-pericia", ".situation-action[href]"],
-  ["avaliacao_imovel", "/servicos/#servico-avaliacao", "situacao-avaliacao", ".situation-action[href]"],
-  ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "situacao-sst", ".situation-action[href]"],
-].map(([id, direct, homeAnchor, homeSelector]) => ({ id, direct, homeAnchor, homeSelector }));
+  ["legacy_project_fragment", "/servicos/#servico-projeto", "competencias", "/projetos/estruturas/"],
+  ["pequena_reforma", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/servicos/#areas"],
+  ["condominio_anomalia", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/servicos/#areas"],
+  ["arquiteto_compatibilizacao", "/revisao-tecnica-projetos-engenharia/", "servicos-complementares", "/revisao-tecnica-projetos-engenharia/"],
+  ["projeto_estrutural", "/projetos/estruturas/", "competencias", "/projetos/estruturas/"],
+  ["instalacoes", "/projetos/instalacoes/", "competencias", "/projetos/instalacoes/"],
+  ["infraestrutura", "/projetos/infraestrutura/", "competencias", "/projetos/infraestrutura/"],
+  ["orcamento_publico", "/quantitativos-orcamento-obras/", "servicos-complementares", "/quantitativos-orcamento-obras/"],
+  ["orcamento_privado", "/quantitativos-orcamento-obras/", "servicos-complementares", "/quantitativos-orcamento-obras/"],
+  ["disciplina_nao_listada", "/servicos/", "servicos-complementares", "/servicos/"],
+  ["orgao_preparando_projeto", "/servicos-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
+  ["edital", "/servicos-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
+  ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
+  ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "servicos-complementares", "/servicos/#areas"],
+  ["avaliacao_imovel", "/servicos/#servico-avaliacao", "servicos-complementares", "/servicos/#areas"],
+  ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "servicos-complementares", "/seguranca-trabalho-apoio-tecnico/"],
+].map(([id, direct, homeContainer, homeHref]) => ({ id, direct, homeContainer, homeHref, homeSelector: `a[href="${homeHref}"]` }));
 const pendingUntilClosure = [];
 const homeHtml = readFileSync(join(root, "index.html"), "utf8");
 // Compact variation matrix for the real home form. This is deliberately not
@@ -66,11 +59,11 @@ const intakeScenarios = [
   // BOFU-FECHAMENTO-20260919 (B-05): a avaliação saiu desta opção e virou
   // situação própria (cenário pf_avaliacao_partilha abaixo); aqui fica a perícia.
   { id: "pf_pericia_com_referencia", audience: "pessoa_fisica", size: "pequeno", budget: "conhecido", docs: "disponiveis", stage: "perícia, assistência técnica ou avaliação", journey: "pericia", route: "/servicos/#servico-pericia", nextTerms: ["provado", "papel técnico"] },
-  { id: "profissional_compatibilizacao", audience: "profissional", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/servicos/#servico-projeto", nextTerms: ["finalidade", "projeto", "compatibilizar"] },
+  { id: "profissional_compatibilizacao", audience: "profissional", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/projetos/", nextTerms: ["finalidade", "projeto", "compatibilização"] },
   { id: "profissional_disciplina_nao_listada", audience: "profissional", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "outro", journey: "outro", route: "/servicos/", nextTerms: ["situação", "trabalho de engenharia", "próximo passo"] },
   { id: "condominio_anomalia", audience: "condominio", size: "grande", budget: "desconhecido", docs: "disponiveis", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "diagnóstico", "local"] },
   { id: "condominio_orcamento_reparo", audience: "condominio", size: "pequeno", budget: "conhecido", docs: "ausentes", stage: "quantitativos ou orçamento", journey: "orcamento", route: "/quantitativos-orcamento-obras/", nextTerms: ["quantificado", "orçado", "projeto"] },
-  { id: "empresa_projeto_estrutural", audience: "empresa", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/servicos/#servico-projeto", nextTerms: ["finalidade", "projetar", "material"] },
+  { id: "empresa_projeto_estrutural", audience: "empresa", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/projetos/", nextTerms: ["finalidade", "projeto", "disciplinas"] },
   { id: "empresa_sst_sem_documentos", audience: "empresa", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "segurança do trabalho", journey: "sst", route: "/servicos/#servico-sst", nextTerms: ["risco", "documentação", "apoio técnico"] },
   { id: "orgao_planejando_projeto", audience: "orgao_publico", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "planejamento de órgão público", journey: "orgao", route: "/servicos/#servico-obras-publicas", nextTerms: ["órgão", "etapa", "apoio técnico"] },
   { id: "orgao_inspecao_inicial", audience: "orgao_publico", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "documentação técnica", "local"] },
@@ -281,7 +274,7 @@ try {
     }
   });
   for (const journey of journeys) {
-    const row = { id: journey.id, direct: journey.direct, homeAnchor: journey.homeAnchor, viewportChecks: [] }; report.journeys.push(row);
+    const row = { id: journey.id, direct: journey.direct, homeContainer: journey.homeContainer, homeHref: journey.homeHref, viewportChecks: [] }; report.journeys.push(row);
     for (const [width, height] of viewports) {
       await page.setViewport({ width, height, deviceScaleFactor: 1 });
       const response = await page.goto(routeUrl(journey.direct, `${journey.id}-${width}`), { waitUntil: "domcontentloaded" });
@@ -290,7 +283,28 @@ try {
       const context = { journey: journey.id, route: journey.direct, viewport: `${width}x${height}` };
       required("journey_direct_status", response?.status() === 200, String(response?.status()), context);
       if (fragment) required("journey_direct_fragment", await page.$(fragment).then(Boolean), fragment, context);
-      required("journey_direct_next_step", data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean), JSON.stringify(data), context);
+      let nextStepReached = data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean);
+      if (journey.id === "legacy_project_fragment") {
+        // The stable legacy fragment explains the discipline, then hands off
+        // through its visible link to the substantive project landing.
+        const explanationRoute = "/projetos-complementares-engenharia/";
+        const explanationVisible = await page.evaluate((route) => {
+          const link = document.querySelector(`#servico-projeto a[href="${route}"]`);
+          const rect = link?.getBoundingClientRect();
+          return Boolean(link && rect.width > 0 && rect.height > 0 && getComputedStyle(link).visibility !== "hidden");
+        }, explanationRoute);
+        required("journey_legacy_explanation_link", explanationVisible, explanationRoute, context);
+        const followPage = await browser.newPage();
+        try {
+          await followPage.setViewport({ width, height, deviceScaleFactor: 1 });
+          await blockExternal(followPage);
+          const followResponse = await followPage.goto(routeUrl(explanationRoute, `legacy-follow-${width}`), { waitUntil: "domcontentloaded" });
+          const followFacts = await facts(followPage);
+          nextStepReached = explanationVisible && followResponse?.status() === 200 && Object.values(followFacts.channels).every(Boolean) && !followFacts.overflow;
+          required("journey_legacy_explanation_terminal_channels", nextStepReached, JSON.stringify(followFacts), { ...context, route: explanationRoute });
+        } finally { await followPage.close(); }
+      }
+      required("journey_direct_next_step", nextStepReached, JSON.stringify(data), context);
       if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/seguranca-trabalho-apoio-tecnico/"].includes(journey.direct)) {
         required("journey_withheld_has_three_direct_channels", Object.values(data.channels).every(Boolean) && !data.activeForm, JSON.stringify(data), context);
       }
@@ -306,14 +320,17 @@ try {
     await page.setViewport({ width: 683, height: 450 }); await page.goto(routeUrl(journey.direct, `${journey.id}-zoom`), { waitUntil: "domcontentloaded" });
     const zoomed = await facts(page, new URL(journey.direct, base).hash); required("journey_zoom_200_reflow_no_overflow", !zoomed.overflow, JSON.stringify(zoomed), { journey: journey.id, route: journey.direct, viewport: "1366@200%-equivalent(683css)" });
     await page.goto(routeUrl("/", `${journey.id}-home`), { waitUntil: "domcontentloaded" });
-    const homeLink = await page.$(`#${journey.homeAnchor} ${journey.homeSelector}`);
-    required("journey_home_entry_link", Boolean(homeLink), journey.homeAnchor, { journey: journey.id, route: "/" });
+    const homeLink = await page.$(`#${journey.homeContainer} ${journey.homeSelector}`);
+    const homeVisible = homeLink && await homeLink.evaluate(anchor => { const box = anchor.getBoundingClientRect(); const style = getComputedStyle(anchor); return box.width > 0 && box.height > 0 && style.display !== "none" && style.visibility !== "hidden"; });
+    required("journey_home_entry_link", Boolean(homeVisible), `${journey.homeContainer} ${journey.homeSelector}`, { journey: journey.id, route: "/" });
     if (!homeLink) continue;
     const href = await homeLink.evaluate(a => a.getAttribute("href"));
     required("journey_home_entry_internal", href.startsWith("/") && !href.startsWith("//"), href, { journey: journey.id, route: "/" });
-    required("journey_home_entry_matches_explanation", new URL(href, base).pathname === new URL(journey.direct, base).pathname && new URL(href, base).hash === new URL(journey.direct, base).hash, `${href} != ${journey.direct}`, { journey: journey.id, route: "/" });
+    required("journey_home_entry_matches_explanation", new URL(href, base).pathname === new URL(journey.homeHref, base).pathname && new URL(href, base).hash === new URL(journey.homeHref, base).hash, `${href} != ${journey.homeHref}`, { journey: journey.id, route: "/" });
     const homeResult = await page.goto(routeUrl(href, `${journey.id}-home-destination`), { waitUntil: "domcontentloaded" });
     required("journey_home_entry_destination", homeResult?.status() === 200, `${href}: ${homeResult?.status()}`, { journey: journey.id, route: "/" });
+    const discovery = await facts(page, new URL(href, base).hash);
+    required("journey_home_destination_next_step", discovery.activeForm || discovery.triageLink || Object.values(discovery.channels).some(Boolean), JSON.stringify(discovery), { journey: journey.id, route: href });
   }
   // Exercise the actual home form without submitting it. Each scenario must
   // pass step-one validation with only name, one contact channel and the

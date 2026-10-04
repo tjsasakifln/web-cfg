@@ -104,12 +104,34 @@ diária de `ops?action=leads` (ver `LEAD-HANDLING.md`).
 | From | `LEAD_FROM_EMAIL` = `CONFENGE Leads <leads@confenge.com.br>` |
 | To | `LEAD_NOTIFY_EMAIL` = `tiago.sasaki@confenge.com.br` |
 
-**Validação:** probe sintético deve retornar `email_status=skipped` e não pode
-ser usado para testar inbox. Entrega transacional real só pode ser observada a
-partir de uma submissão humana genuína, consentida e não fabricada, preservando
-o protocolo fora do git (protocolo de QA: diagnóstico G03-07, ainda não
-executado). Correlação por `lead_id`: `delivery.email.provider_id` no store →
-`GET https://api.resend.com/emails/{id}` do host (ver `LEAD-HANDLING.md`).
+**Validação:** por padrão, o probe sintético continua retornando
+`email_status=skipped` e não envia e-mail. Em 2026-10-03 foi autorizada uma
+única verificação controlada de inbox pelo ramo separado `delivery.qa_email`:
+no host, com o `runtime.env` carregado, executar
+`PROBE_VERIFY_EMAIL=1 EXPECTED_SHA=<SHA completo servido> npm run probe:lead:prod`.
+O script bloqueia antes do POST sem `LEAD_PROBE_SECRET`, `OPS_TOKEN`, SHA
+completo idêntico ao build servido e safety gate Warmbly `READY` com
+`auto_send_off=true`. O servidor repete as provas de probe, token operacional e
+SHA da release e só chama o Resend depois de ler do store o handoff
+`DELIVERED`.
+
+O destinatário é exclusivamente `LEAD_NOTIFY_EMAIL`; override é recusado. O
+assunto é `[TESTE CONTROLADO] CONFENGE <lead_id>` e o corpo contém somente o
+protocolo sintético e o SHA, sem nome, e-mail, telefone ou mensagem do
+formulário. O resultado persiste em `delivery.qa_email`, usa
+`Idempotency-Key: qa-email/<lead_id>`, não entra no drain/retry comercial e um
+replay não dispara outra mensagem. A saída do probe pode registrar esse
+assunto e um `provider_id` sanitizado para a busca exata no Resend/Hostinger;
+nunca registrar tokens ou o destinatário. A autorização vale para essa ação
+opt-in, não cria flag persistente e não muda a regra do e-mail transacional:
+`delivery.email` continua exclusivo de lead real. Ver detalhes em
+`LEAD-HANDLING.md`.
+Se o processo cair após a aceitação pelo provedor, a recuperação usa a mesma
+chave por até 23 h. Após essa margem, o registro fica em `manual_reconcile` e
+exige conferência pelo assunto antes de qualquer ação; não há reenvio automático.
+Execuções simultâneas são serializadas por um lease durável igual ao orçamento
+do canal mais 5 s, até 35 s; o teste é recusado em backend que não ofereça
+atualização atômica desse estado.
 
 ---
 
@@ -223,7 +245,9 @@ Owner: `/opt/confenge-web/bin/rollback <FULL_SHA>` → validar probe → evidên
 ## Ordem recomendada de execução (owner, ~45–90 min)
 
 1. Confirmar EnvironmentFile do VPS e `/ready`
-2. Rodar o probe autenticado com envio local `skipped` e Warmbly sem dispatch
+2. Rodar o probe autenticado padrão (`delivery.email=skipped`) e, somente para
+   a verificação autorizada de inbox, repetir uma vez com
+   `PROBE_VERIFY_EMAIL=1 EXPECTED_SHA=<SHA completo>`
 3. Uptime §6
 4. Revogar ntfy antigo §1
 5. Rollback drill §9 sem usar Netlify

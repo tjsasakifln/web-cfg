@@ -16,6 +16,12 @@
 
 ## Corporate thesis and North Star
 
+The 2026-10-03 Comunicação Institucional, Competência e Conversão campaign
+supersedes commercial rules that make public copy defensive by default. The
+site presents what CONFENGE can elaborate, coordinate and deliver; factual
+source controls remain in their contracts and appear publicly only where they
+help a buyer make a decision.
+
 CONFENGE is the umbrella public brand for Engineering, Expert Evidence and
 Technical Intelligence. It monetizes through high-value technical services with
 ART and invoice when the act and professional attribution allow it. B2G / public

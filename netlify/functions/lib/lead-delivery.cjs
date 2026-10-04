@@ -4,6 +4,10 @@
  * All credentials from environment only.
  */
 const crypto = require("crypto");
+const {
+  qaEmailIdempotencyKey,
+  sanitizeProviderId,
+} = require("./qa-email.cjs");
 const { safeLog } = require("./lead-core.cjs");
 const { isCommercialReal, effectiveRecordKind } = require("./record-kind.cjs");
 
@@ -501,6 +505,96 @@ async function deliverResendEmail(record) {
 }
 
 /**
+ * One-shot QA inbox verification. This channel is deliberately separate from
+ * `delivery.email`: it accepts only an authenticated synthetic record after a
+ * delivered Warmbly handoff receipt, never includes submitted contact fields,
+ * and is not consumed by the commercial e-mail drain.
+ */
+async function deliverQaEmail(record, { authorized = false, expectedSha = "", handoffDelivered = false } = {}) {
+  const channel = "qa_email";
+  const idempotencyKey = qaEmailIdempotencyKey(record);
+  if (
+    authorized !== true ||
+    !record ||
+    record.record_kind !== "synthetic" ||
+    record.synthetic_probe_authenticated !== true ||
+    record.next_action !== "exclude_from_commercial"
+  ) {
+    return { channel, status: "blocked", reason: "qa_guard_failed" };
+  }
+  if (handoffDelivered !== true) {
+    return { channel, status: "blocked", reason: "handoff_not_delivered" };
+  }
+  if (!idempotencyKey || !/^[0-9a-f]{40}$/.test(String(expectedSha || ""))) {
+    return { channel, status: "blocked", reason: "qa_identity_invalid" };
+  }
+
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = String(process.env.LEAD_NOTIFY_EMAIL || "").trim();
+  const from = process.env.LEAD_FROM_EMAIL || "CONFENGE Leads <leads@confenge.com.br>";
+  if (!apiKey || !to) {
+    return { channel, status: "blocked", reason: "not_configured", idempotency_key: idempotencyKey };
+  }
+
+  const subject = `[TESTE CONTROLADO] CONFENGE ${record.lead_id}`.slice(0, 160);
+  const text = [
+    "Teste controlado do pipeline de notificação da CONFENGE.",
+    `Protocolo sintético: ${record.lead_id}`,
+    `Release: ${expectedSha}`,
+    "Sem dados de contato ou mensagem do formulário.",
+  ].join("\n");
+  const deadline = monotonicNow() + deliveryTimeoutMs();
+  return withBackoff(async () => {
+    const res = await fetchWithDeadline("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": idempotencyKey,
+      },
+      body: JSON.stringify({ from, to: [to], subject, text }),
+    }, deadline, { parse: "json" });
+    if (!res.ok) {
+      const err = new Error(`resend_http_${res.status}`);
+      err.status = res.status;
+      const name = res.data && typeof res.data.name === "string" ? res.data.name.slice(0, 60) : "";
+      const classified = res.status === 409 ? RESEND_IDEMPOTENCY_ERRORS[name] : undefined;
+      if (classified) {
+        err.reason = classified.reason;
+        // A concurrent request with the same QA key means another invocation
+        // owns the provider call. Retrying inside this request only creates
+        // more 409s; the durable in-flight receipt is recovered by replay.
+        err.retryable = classified.reason === "concurrent_idempotent"
+          ? false
+          : classified.retryable;
+      }
+      throw err;
+    }
+    const providerId = sanitizeProviderId(res.data && res.data.id);
+    return {
+      channel,
+      status: "ok",
+      http: res.status,
+      ...(providerId ? { provider_id: providerId } : {}),
+      idempotency_key: idempotencyKey,
+    };
+  }).catch((err) => {
+    safeLog("error", "qa_email_failed", {
+      lead_id: record.lead_id,
+      code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      reason: err && err.reason ? String(err.reason).slice(0, 40) : undefined,
+    });
+    return {
+      channel,
+      status: "error",
+      reason: failureReason(err),
+      http: failureHttp(err),
+      idempotency_key: idempotencyKey,
+    };
+  });
+}
+
+/**
  * Run all delivery channels. Persist-before-call is caller's responsibility.
  * Failures do not throw — return status map for audit.
  *
@@ -762,6 +856,7 @@ module.exports = {
   deliverOpsWebhook,
   deliverNtfyAuth,
   deliverResendEmail,
+  deliverQaEmail,
   deliverAll,
   withBackoff,
   validatePiiDestination,

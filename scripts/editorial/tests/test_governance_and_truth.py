@@ -317,7 +317,13 @@ def test_live_registry_first_cohort_indexable_only():
             appr = p.get("approval") or {}
             assert appr.get("state") == "HUMAN_APPROVED", pid
             assert appr.get("reviewer") == "Tiago Jun Sasaki", pid
-            assert appr.get("material_hash") == p.get("material_hash"), pid
+            if p.get("institutional_greeting_amendment"):
+                from scripts.editorial.registry import institutional_greeting_amendment_is_current
+
+                assert institutional_greeting_amendment_is_current(p), pid
+                assert appr.get("material_hash") == p["institutional_greeting_amendment"]["approved_material_hash"], pid
+            else:
+                assert appr.get("material_hash") == p.get("material_hash"), pid
             continue
         assert p.get("status") == "EDITORIAL_REVIEWED", pid
         assert not p.get("approval"), pid

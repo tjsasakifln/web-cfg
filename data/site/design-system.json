@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "campaign": "CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
-  "updated_at": "2026-09-16",
+  "campaign": "CONFENGE-INSTITUTIONAL-ACQUISITION-20261003",
+  "updated_at": "2026-10-03",
   "concept": "engenharia editorial premium",
   "direction": {
     "id": "engenharia-em-contexto-prova-editada",
     "chosen_at": "2026-09-16",
-    "summary": "Sobriedade institucional com evidência técnica editada: uma família (Archivo) e uma escala em todas as rotas; abertura que nomeia a atuação, dois caminhos e um desenho técnico demonstrativo legível; situações em lista regrada com rótulo de categoria e a vertical de obras públicas em bloco escuro; páginas de serviço com caixa \"em 30 segundos\", prova antes do método (figura + conta refazível + tabela com rolagem própria) e um bloco de contato por página.",
+    "summary": "Sobriedade institucional com densidade técnica: uma família tipográfica Archivo, base branca e azul-marinho, verde corporativo e lima pontual. A home coloca projetos de estruturas, instalações e infraestrutura no centro, apresenta competências e setores antes dos serviços complementares e encerra com um caminho direto para proposta. Figuras técnicas são identificadas junto à própria peça.",
     "studies": "docs/campaigns/2026-09-15-design-authority.md"
   },
   "design_principles": [
@@ -110,6 +110,10 @@
   },
   "section_archetypes": {
     "hero_split": "Positioning + H1 + consequence + dual CTA + proprietary visual (not SaaS dashboard)",
+    "discipline_editorial": "Three core engineering disciplines developed as substantial editorial rows, followed by one integrated coordination statement",
+    "sector_editorial": "Markets and project contexts expressed as an asymmetric editorial list, without invented portfolio claims",
+    "delivery_flow": "A concise progression from definition to technical delivery, with each stage tied to a real project decision",
+    "service_index": "Legitimate adjacent engineering services in a secondary ruled index, after the core project proposition",
     "tension_sequence": "Numbered causal sequence with rising stakes; no equal cards",
     "model_radial": "Central nucleus + linked vectors; not four identical cards",
     "offer_dominant": "One large editorial offer + secondary situational paths",
@@ -239,23 +243,24 @@
     "visual regression"
   ],
   "home_architecture": {
-    "normative": false,
-    "note": "Descrição da home publicada (campanha VALOR-IMEDIATO-20260914). Os gates reais são test_design_gates.test_home_archetypes_diverse (5 a 8 blocos, >=5 distintos, journey_paths presente) e test_deliverables_hub (faixa 5 a 8); este bloco não é lido por script.",
+    "normative": true,
+    "note": "Arquitetura institucional vigente desde a campanha de 2026-10-03. Projetos lideram a narrativa; serviços complementares permanecem em plano secundário; contato é uma solicitação de proposta, não um produto de triagem.",
     "min_narrative_sections": 5,
     "max_narrative_sections": 8,
     "min_distinct_archetypes": 5,
     "max_primary_cta": 5,
     "blocks": [
       "hero_split",
-      "journey_paths",
-      "contextual_next_action",
+      "discipline_editorial",
+      "sector_editorial",
+      "delivery_flow",
+      "service_index",
       "authority_editorial",
-      "market_context",
       "cta_formal",
       "cta_formal"
     ],
-    "primary_cta": "Solicitar avaliação do escopo",
-    "secondary_cta": "Ver áreas de projeto"
+    "primary_cta": "Solicitar proposta",
+    "secondary_cta": "Conhecer os projetos"
   },
   "motion": {
     "allowed": [

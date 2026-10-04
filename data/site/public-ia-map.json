@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-10-02",
-  "purpose": "Source of truth for the corporate situation chooser, compact global chrome, protected public-works vertical, hub roles, and route → job → parent → next action → index state.",
+  "updated_at": "2026-10-03",
+  "purpose": "Source of truth for institutional services navigation, projects and public-works discovery, and route/job/parent/contact/index relationships.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
     "decision_state": "EXECUTE_NOW",
@@ -13,12 +13,12 @@
   "service_situations": [
     {
       "id": "project_delivery",
-      "label": "Preciso completar, conferir ou compatibilizar um projeto",
-      "visitor_language": "Preciso completar, conferir ou compatibilizar um projeto",
-      "href": "/servicos/#servico-projeto",
+      "label": "Projetos de engenharia e coordenação",
+      "visitor_language": "Elaboração de projetos de estruturas, instalações e infraestrutura, por disciplina ou de forma multidisciplinar.",
+      "href": "/projetos/",
       "index_state": "service_hub_index",
       "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento têm situação e destino próprios.",
-      "exclusive_elaboration_route": "/projetos-complementares-engenharia/"
+      "exclusive_elaboration_route": "/projetos/"
     },
     {
       "id": "quantities_budget",
@@ -124,12 +124,17 @@
     "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada"
   },
   "quality_baseline": {
-    "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
-    "measured_at": "2026-08-29",
-    "indexable_routes": 75,
-    "orphan_count": 1,
-    "avg_click_depth": 1.8243243243243243,
-    "max_click_depth": 5
+    "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
+    "source_worktree": "uncommitted campaign candidate; file bytes recorded in navigation-depth evidence",
+    "measured_at": "2026-10-03T21:33:57+00:00",
+    "indexable_routes": 113,
+    "orphan_count": 0,
+    "avg_click_depth": 1.9469026548672566,
+    "max_click_depth": 3,
+    "authority": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+    "evidence": "docs/campaigns/evidence/2026-10-03/navigation-depth.json",
+    "actor": "codex_autonomous",
+    "reason": "75 historic indexable routes (74 reachable) expanded to 113 reachable; maximum depth improved from 5 to 3. Preserve prior measurement and zero-orphan/4-task gates; use current census as the regression baseline."
   },
   "hub_roles": [
     "solucao_comercial",
@@ -198,64 +203,64 @@
   "footer": {
     "columns": [
       {
-        "heading": "Situações",
+        "heading": "Projetos",
         "links": [
           {
-            "label": "Projetos e edificações",
-            "href": "/#situacao-projeto"
+            "label": "Estruturas",
+            "href": "/projetos/estruturas/"
           },
           {
-            "label": "Perícias e disputas",
-            "href": "/#situacao-pericia"
+            "label": "Instalações",
+            "href": "/projetos/instalacoes/"
           },
           {
-            "label": "Avaliação de imóvel",
-            "href": "/#situacao-avaliacao"
+            "label": "Infraestrutura",
+            "href": "/projetos/infraestrutura/"
           },
           {
-            "label": "Segurança do trabalho",
-            "href": "/#situacao-sst"
-          },
-          {
-            "label": "Obras públicas",
-            "href": "/servicos-obras-publicas/"
+            "label": "Coordenação multidisciplinar",
+            "href": "/projetos/coordenacao-multidisciplinar/"
           }
         ]
       },
       {
-        "heading": "Biblioteca e provas",
+        "heading": "Serviços e conhecimento",
         "links": [
           {
-            "label": "Conteúdos",
+            "label": "Serviços de engenharia",
+            "href": "/servicos/"
+          },
+          {
+            "label": "Obras públicas",
+            "href": "/servicos-obras-publicas/"
+          },
+          {
+            "label": "Segurança do trabalho",
+            "href": "/seguranca-trabalho-apoio-tecnico/"
+          },
+          {
+            "label": "Conteúdos técnicos",
             "href": "/conteudos/"
           },
           {
             "label": "Ferramentas",
             "href": "/ferramentas/"
-          },
-          {
-            "label": "Entregas",
-            "href": "/entregas/"
-          },
-          {
-            "label": "Casos demonstrativos",
-            "href": "/casos/"
           }
         ]
       },
       {
-        "heading": "Empresa",
+        "heading": "CONFENGE",
         "links": [
           {
-            "label": "Quem responde",
+            "label": "Empresa",
+            "href": "/empresa/"
+          },
+          {
+            "label": "Liderança técnica",
             "href": "/especialista/tiago-jun-sasaki/"
           },
           {
-            "label": "Como verificamos",
-            "href": "/confianca/"
-          },
-          {
-            "label": "Contato e triagem",
+            "label": "Solicitar proposta",
             "href": "/triagem-tecnica/"
           }
         ],
@@ -935,7 +940,7 @@
     {
       "label": "Entregas",
       "href": "/entregas/",
-      "reason": "Catálogo de evidência, não uma situação de compra; descoberta no rodapé Biblioteca."
+      "reason": "Catálogo de evidência acessível por Casos, demonstrações e páginas de ofertas; o rodapé promove projetos, serviços e a empresa."
     },
     {
       "label": "Quem responde",
@@ -978,6 +983,16 @@
       "label": "ofertas B2G individuais no rodapé corporativo",
       "href": "/servicos-obras-publicas/",
       "reason": "A vertical Obras públicas e seu hub preservado cobrem a descoberta sem transformar o rodapé em catálogo."
+    }
+  ],
+  "quality_baseline_history": [
+    {
+      "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
+      "measured_at": "2026-08-29",
+      "indexable_routes": 75,
+      "orphan_count": 1,
+      "avg_click_depth": 1.8243243243243243,
+      "max_click_depth": 5
     }
   ]
 }

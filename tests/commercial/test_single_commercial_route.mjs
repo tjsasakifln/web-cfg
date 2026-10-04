@@ -252,17 +252,38 @@ for (const surface of editoriallyAuthorized.filter((item) => item.cta_id)) {
   assert(`${surface.role}_journey`, attr(tag, "data-journey") === "contrato", attr(tag, "data-journey"));
 }
 
-const homeJourney = (read("index.html").match(
-  /<li\b(?=[^>]*\bid=["']jornada-contrato["'])[^>]*>[\s\S]*?<\/li>/i,
-) || [""])[0];
-assert("home_focused_journey_present", Boolean(homeJourney));
-assert(
-  "home_focused_journey_has_single_route",
-  homeJourney.includes(`href="${route.commercial_transfer_route}"`) &&
-    !/wa\.me|#formulario-contato|\/reequilibrio-obras-publicas\//i.test(homeJourney),
-  homeJourney,
-);
-assert("home_focused_journey_uses_canonical_name", homeJourney.includes(route.public_name_pt_br), homeJourney);
+const homeHtml = read("index.html");
+const projectDiscoveryRoutes = ["/projetos/", "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/"];
+const homeStrategyErrors = (candidate, html = homeHtml) => {
+  const home = candidate.surfaces.find((surface) => surface.role === "home");
+  const strategy = candidate.home_strategy;
+  const errors = [];
+  if (home?.participation !== "corporate_portfolio" || home?.cta_id !== null) errors.push("retired_focal_promotion");
+  if (strategy?.state !== "CORPORATE_PORTFOLIO" || strategy?.authority_record !== "docs/campaigns/2026-10-03-comunicacao-institucional.md") errors.push("campaign_authority_missing");
+  if (strategy?.previous_focal_surface?.cta_id !== "home-medicoes-glosas-dossie" || strategy?.new_human_review_claimed !== false) errors.push("history_or_review_claim_drift");
+  if (!equal(strategy?.required_project_routes, projectDiscoveryRoutes)) errors.push("project_discovery_contract_drift");
+  if (/\b(?:data-cta-id=["']home-medicoes-glosas-dossie["']|id=["']jornada-contrato["'])/.test(html)) errors.push("retired_focal_html");
+  return errors;
+};
+assert("home_corporate_strategy_has_authority_and_history", homeStrategyErrors(contract).length === 0, homeStrategyErrors(contract));
+for (const projectRoute of contract.home_strategy.required_project_routes) {
+  assert(`home_project_discovery_${projectRoute}`, homeHtml.includes(`href="${projectRoute}"`), projectRoute);
+}
+assert("home_keeps_public_works_discovery", homeHtml.includes(`href="${contract.home_strategy.specialist_discovery_route}"`));
+const homeForm = (homeHtml.match(/<form\b[^>]*\bdata-capture-form\b[^>]*>/) || [""])[0];
+assert("home_has_institutional_contact", Boolean(homeForm) && attr(homeForm, "method").toUpperCase() === "POST" && attr(homeForm, "data-runtime-profile") === "shared_lead_form_v1" && attr(homeForm, "data-receipt-required") === "true" && homeHtml.includes('id="contato"'));
+const focalHomeMutation = structuredClone(contract);
+focalHomeMutation.surfaces.find((surface) => surface.role === "home").cta_id = "home-medicoes-glosas-dossie";
+assert("negative_fixture_rejects_restored_focal_home_contract", homeStrategyErrors(focalHomeMutation).includes("retired_focal_promotion"));
+for (const marker of ['data-cta-id="home-medicoes-glosas-dossie"', 'id="jornada-contrato"']) {
+  assert(`negative_fixture_rejects_restored_focal_home_html_${marker}`, homeStrategyErrors(contract, `${homeHtml}<a ${marker} href="/medicoes-glosas-obras-publicas/">Dossiê</a>`).includes("retired_focal_html"));
+}
+const missingProjectMutation = structuredClone(contract);
+missingProjectMutation.home_strategy.required_project_routes.pop();
+assert("negative_fixture_rejects_project_discovery_contract_drift", homeStrategyErrors(missingProjectMutation).includes("project_discovery_contract_drift"));
+// Price exposure is scoped to this specialty's discovery area, never a
+// requirement to restore the old focal journey in the corporate opening.
+const homeJourney = elementById(homeHtml, "section", "setores");
 
 const canarySurface = contract.surfaces.find((surface) => surface.role === "editorial_canary");
 const canaryHtml = read(canarySurface.file);

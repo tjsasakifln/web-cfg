@@ -95,7 +95,7 @@ def test_brand_forbidden_phrases_still_enforced():
 
 def test_microcopy_preferences():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "responsáveis" in home.lower() or "responsável" in home.lower()
+    assert "coordenação" in home.lower()
     # The home must name engineering work and a deliverable, without freezing
     # one internal triage slogan into every future revision.
     public = visible_text(home).lower()
@@ -135,41 +135,27 @@ def test_microcopy_preferences():
         "funil",
     ):
         assert phrase not in lower, f"public leak: {phrase}"
-    # Client-facing situation chooser (not briefing metalinguage).
-    # 2026-09-14 (VALOR-IMEDIATO): a trava exigia os rótulos literais das
-    # cinco situações e o título "qual destas situações se parece com a sua".
-    # Eram inventário técnico ("Projetar, revisar, orçar ou compatibilizar"),
-    # não a situação do comprador. A propriedade protegida passa a ser
-    # afirmativa e com fonte única: o bloco #situacoes existe, tem um título
-    # visível, e cada situação de data/site/brand.json#service_situations
-    # aparece na home com o seu rótulo e um destino próprio. Rótulo de
-    # bastidor ou briefing continua proibido pela lista acima.
-    assert 'id="situacoes"' in home
-    situ_block = home.split('id="situacoes"', 1)[1]
-    assert re.search(r"<h2[^>]*>[^<]{12,}</h2>", situ_block), "situations block needs a visible title"
-    situations = load_brand()["service_situations"]
-    assert len(situations) >= 5
-    hrefs = set()
-    for situation in situations:
-        label = situation["label"].lower()
-        assert label in lower, f"situation label missing on home: {situation['label']}"
-        href = situation.get("href") or situation.get("url")
-        if href:
-            assert href in home, f"situation destination missing on home: {href}"
-            hrefs.add(href)
-    assert len(hrefs) == len([s for s in situations if s.get("href") or s.get("url")]), "situations must have distinct destinations"
+    # 2026-10-03 (campanha institucional): a home abre pelas competências de
+    # projeto e mantém serviços legítimos em segundo plano. A trava verifica
+    # disciplinas, rotas e caminho comercial, sem reconstruir o antigo seletor
+    # de situações nem promover a triagem interna a produto.
+    for anchor in ('id="competencias"', 'id="setores"', 'id="entregas"', 'id="servicos-complementares"'):
+        assert anchor in home, f"institutional section missing: {anchor}"
+    for route in (
+        "/projetos/estruturas/",
+        "/projetos/instalacoes/",
+        "/projetos/infraestrutura/",
+        "/projetos/coordenacao-multidisciplinar/",
+    ):
+        assert route in home, f"project discipline route missing: {route}"
+    assert 'href="#contato"' in home
+    assert "solicitar proposta" in lower
     assert "segurança do trabalho" in lower
-    # B2G retains descriptive, canonical paths lower on the page.
-    assert "contrato sob pressão" in lower
-    assert "edital e proposta" in lower
-    assert "operação recorrente" in lower
-    assert "solicitar canal seguro para envio" in lower
+    assert "obras públicas" in lower
     # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", home), "visible Jornada A/B/C label"
     assert "risco de não agir" not in lower
-    # A oferta de proposta usa o nome canônico em português.
-    assert "operação de proposta para licitação crítica" in lower
-    assert "defesa técnica" in lower or "proteção de margem" in lower
+    assert "coordenação multidisciplinar" in lower
 
 def test_llms_consistent():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
@@ -383,11 +369,11 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "data-lead-success" in t
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
-    # 2026-09-14 (VALOR-IMEDIATO): o rótulo literal "Entrar em obras públicas"
-    # foi apontado pela revisão cega como estranho; a propriedade é a ação da
-    # situação de obra pública levar ao hub da especialidade.
-    assert re.search(r'class="situation-action"[^>]*href="/servicos-obras-publicas/"', home), "situation action to /servicos-obras-publicas/"
-    assert "Solicitar canal seguro para envio" in home
+    # A especialidade pública segue acessível, enquanto a ação comercial da
+    # home usa a proposta e o formulário oferece envio reservado quando útil.
+    assert 'href="/servicos-obras-publicas/"' in home
+    assert 'href="#contato"' in home
+    assert "envio reservado de documentos confidenciais" in home
     assert "enviar documentos para análise" not in home.lower()
     # Thank-you pages must not expose journey letter labels to visitors
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
@@ -395,9 +381,19 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert not re.search(r"Jornada\s+[ABC]", ty), f"{name}: visible Jornada letter"
     # Journey-aligned CTA family on offer pages
     assert "Solicitar diagnóstico da operação" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
-    assert "Solicitar canal seguro para envio" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
+    # The campaign authorizes proposal wording. Assert the editorial journey
+    # still has an attributed action leading to its real capture, rather than
+    # freezing the retired triage sentence.
+    bid_room = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
+    assert re.search(
+        r'<a\b(?=[^>]*\bdata-journey="edital")'
+        r'(?=[^>]*\bdata-offer-id="bid-room")'
+        r'(?=[^>]*\bhref="#captura-pilar")[^>]*>\s*[^<\s]',
+        bid_room,
+    )
+    assert 'id="captura-pilar"' in bid_room
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
-    assert "Solicitar canal seguro para envio" in defesa
+    assert "Solicitar proposta" in defesa
     assert "enviar documentos para análise" not in defesa.lower()
     assert "Diagnosticar encaixe da Diretoria Fracionada para o Mercado Público" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
 
@@ -417,15 +413,19 @@ def test_whatsapp_float_in_landmark():
 def test_conversion_routes_name_price_scope_and_next_step():
     """High-intent pages state the commercial distinction and requested action."""
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Algumas ofertas de inteligência têm preço publicado" in home
-    assert "Os demais serviços de engenharia seguem por proposta" in home
+    home_public = visible_text(home).lower()
+    assert all(term in home_public for term in ("estruturas", "instalações", "infraestrutura"))
+    assert "solicitar proposta" in home_public
+    assert "conte o que precisa projetar" in home_public
+    assert "preço publicado" not in home_public
 
     quantities = (
         ROOT / "quantitativos-orcamento-obras" / "index.html"
     ).read_text(encoding="utf-8")
-    assert "Como definimos honorários e prazo" in quantities
-    assert "Quando a contratação externa é racional" in quantities
-    assert "segunda leitura independente" in quantities
+    assert "Da disciplina ao custo" in quantities
+    assert "A finalidade define o nível de detalhe e as fontes de preço" in quantities
+    assert "formato de entrega" in quantities
+    assert "Solicite uma proposta de quantitativos ou orçamento" in quantities
 
     sinapi = (
         ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
@@ -528,12 +528,14 @@ def test_visitor_offer_context_has_no_internal_labels():
     assert not failures, failures
 
 
-def test_hero_proof_credentials_list_still_present():
-    """ul.hero-proof remains the credentials component; dl.hero-proof is gone."""
+def test_hero_substance_does_not_force_credentials_on_the_home():
+    """The home carries project substance; legacy offer context stays structured."""
     diretoria = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert re.search(r"<ul\b[^>]*\bhero-proof\b", diretoria), "diretoria credentials ul.hero-proof missing"
-    assert re.search(r"<ul\b[^>]*\bhero-proof\b", home), "home credentials ul.hero-proof missing"
+    assert re.search(r"<ul\b[^>]*\bhome-opening__scope\b", home), "home technical substance list missing"
+    assert not re.search(r"<ul\b[^>]*\bhero-proof\b", home), "home must not force credentials into the first fold"
+    assert all(term in visible_text(home).lower() for term in ("estruturas", "instalações", "infraestrutura"))
     assert "Credenciais e posicionamento" in diretoria
     assert not re.search(r"<dl\b[^>]*\bhero-proof\b", diretoria)
     assert 'class="offer-context"' in diretoria
@@ -745,7 +747,7 @@ if __name__ == "__main__":
         test_whatsapp_float_in_landmark,
         test_conversion_routes_name_price_scope_and_next_step,
         test_visitor_offer_context_has_no_internal_labels,
-        test_hero_proof_credentials_list_still_present,
+        test_hero_substance_does_not_force_credentials_on_the_home,
         test_public_backstage_language_absent,
         test_ferramentas_eyebrow_client_facing,
         test_visitor_copy_rejects_internal_strategy_phrases,

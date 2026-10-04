@@ -59,6 +59,16 @@ function ensureCss(html) {
 function isHeldProtected(item, current) {
   const slug = item.route?.replace(/^\/|\/$/g, "");
   if (!slug || !heldProtectedSlugs.has(slug)) return false;
+  // Whole-file hashes belonged to the retired editorial freeze. Keep these
+  // routes outside this legacy product renderer, while allowing reviewed
+  // institutional shell and contact maintenance to evolve under semantic
+  // tests.
+  if (
+    unlockPlan.commercial_revision?.decision_state === "EXECUTE_NOW" &&
+    unlockPlan.commercial_revision?.editorial_freeze_revoked === true
+  ) {
+    return true;
+  }
   const expected = frozenHashes.forbidden?.[item.page_file];
   const actual = createHash("sha256").update(current).digest("hex");
   if (!expected || actual !== expected) {

@@ -2,14 +2,12 @@
   "schema": "confenge.public-service-page/1.0",
   "contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
   "effective_at": "2026-09-09",
-  "required_sequence": [
-    "situation",
-    "consequence_or_decision",
-    "deliverable",
-    "method",
-    "proof",
-    "material_boundary",
-    "next_useful_state"
+  "required_functions": [
+    "service_explanation",
+    "technical_relevance",
+    "competence",
+    "decision_support",
+    "contact"
   ],
   "semantics": {
     "situation": "Situação concreta que o comprador reconhece, sem persona como fonte de verdade; a página parte da necessidade, não de um rótulo interno.",
@@ -157,17 +155,10 @@
       "NEEDS_CONTEXT"
     ]
   },
-  "presentation_order": {
-    "sequence": [
-      "necessidade",
-      "solucao",
-      "trabalhos_e_entregas",
-      "conducao_e_integracao",
-      "conclusao_tecnica",
-      "contato"
-    ],
-    "rule": "A página apresenta situação, solução e próximo passo antes de qualquer inventário de condições. Cada serviço conserva nome e identidade técnica; a proposta compõe as etapas pertinentes (elaboração, revisão, compatibilização, quantitativos, orçamento, inspeção, diagnóstico, perícia, assistência técnica, avaliação imobiliária, segurança do trabalho, especialidades de obras públicas). Distinção entre modalidades explica a articulação e permite proposta sob medida; não encerra a conversa com 'isso é outra compra'.",
-    "completeness": "'Completa' caracteriza a solução técnica para a necessidade atendida. Não promete resultado externo, obra executada, profissão, prazo ou preço; não expande escopo de proposta aceita nem converte preço fixo em tudo incluído.",
+  "presentation_guidance": {
+    "rule": "Cada página organiza explicação do serviço, pertinência técnica ao empreendimento, competência aplicável, apoio à decisão e contato conforme a necessidade de contratação. A ordem, o agrupamento e a profundidade variam com o serviço; não há sequência obrigatória de blocos.",
+    "coordination": "Cada serviço conserva nome e identidade técnica. Quando a solução combina etapas ou disciplinas, a página explica a articulação e o que o cliente recebe, sem encerrar a conversa como se cada interface fosse uma compra isolada.",
+    "truthfulness": "Condições materiais aparecem junto da decisão a que pertencem. A página não promete resultado externo, obra executada, profissão, prazo ou preço; não expande escopo de proposta aceita nem converte preço fixo em tudo incluído.",
     "source": "Campanha SOLUCAO-INTEGRAL-20260913, decisão do fundador de 2026-09-13, aplicada sobre a decisão EXECUTE_NOW de 2026-09-09."
   }
 }

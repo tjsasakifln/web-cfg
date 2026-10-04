@@ -53,14 +53,16 @@ LEGACY_CANARY_SNAPSHOT = (
 
 
 def _legacy_canary_snapshot(record: dict[str, Any]) -> str | None:
-    """Return only the immutable artifact bound to the historic approval."""
+    """Project approved commercial chrome over the immutable factual artifact."""
     approval = find_approval(record)
     if approval is None or any(
         str(approval.get(key) or "") != value
         for key, value in LEGACY_CANARY_APPROVAL.items()
     ):
         return None
-    return LEGACY_CANARY_SNAPSHOT.read_text(encoding="utf-8")
+    from scripts.contract_analysis.presentation import project_approved_snapshot
+
+    return project_approved_snapshot(LEGACY_CANARY_SNAPSHOT.read_text(encoding="utf-8"))
 
 # One archetype per top-level narrative block of an analysis page. The label
 # names the editorial job the block performs, so the archetype and skeleton
@@ -470,7 +472,7 @@ def _cta_html(record: dict[str, Any]) -> str:
     )
     href_attr = f"{href}{sep}{query}" if query else href
     contact_href = wa_link(
-        "Olá, Tiago. Li uma análise técnica de contrato público e quero "
+        "Olá, CONFENGE. Li uma análise técnica de contrato público e quero "
         "conversar sobre um contrato da minha empresa."
     )
     return (
@@ -843,7 +845,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         "Os materiais em revisão permanecem no ambiente editorial interno.</p>"
     )
     contact_href = wa_link(
-        "Olá, Tiago. Consultei as análises técnicas de contratos públicos e quero "
+        "Olá, CONFENGE. Consultei as análises técnicas de contratos públicos e quero "
         "conversar sobre um contrato da minha empresa."
     )
     # Um bloco escuro por página: o próximo passo, com a ação dominante e a
@@ -881,7 +883,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
     published = len(cards)
     hub_aside = (
         '<aside class="aside-note" aria-labelledby="hub-30s-title">'
-        '<h2 id="hub-30s-title">Em 30 segundos</h2><dl>'
+        '<h2 id="hub-30s-title">Contratos e decisões de engenharia</h2><dl>'
         "<div><dt>O que é</dt><dd>Leitura editorial de instrumentos públicos: cada afirmação vem "
         "marcada como fato, cálculo, interpretação técnica ou informação não localizada, "
         "com fonte e data de referência.</dd></div>"

@@ -51,7 +51,7 @@ REPLACEMENTS = (
     ("use a landing de atrasos", "use a página de atrasos"),
     ("use a landing correspondente", "use a página correspondente"),
     ("Sem ranking inventado e sem avaliação de cliente fabricada.", ""),
-    ("Prova visível, sem case inventado.", "Como conferir o método e os limites do trabalho."),
+    ("Prova visível, sem case inventado.", "Exemplos técnicos do trabalho."),
     ("Diagnóstico B2G one-off CFG-DIAG-EXP-v1.", "Diagnóstico B2G pontual."),
     ("Diagnóstico B2G one-off da CONFENGE (CFG-DIAG-EXP-v1).", "Diagnóstico B2G pontual da CONFENGE."),
     ("kickoff", "reunião inicial"),

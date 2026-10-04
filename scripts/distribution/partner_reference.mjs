@@ -151,6 +151,25 @@ export function routeExists(root, routePath) {
   return fs.existsSync(path.join(root, rel));
 }
 
+export function routeFragmentExists(root, routePath, explicitFragment) {
+  const fragment = fragmentOf(routePath, explicitFragment);
+  if (!fragment) return routeExists(root, routePath);
+  const rel = filesystemPathForRoute(routePath);
+  if (!rel) return false;
+  const file = path.join(root, rel);
+  if (!fs.existsSync(file)) return false;
+  let id;
+  try {
+    id = decodeURIComponent(fragment.slice(1));
+  } catch {
+    return false;
+  }
+  if (!id) return false;
+  const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const document = fs.readFileSync(file, "utf8");
+  return new RegExp(`\\bid=(?:"${escaped}"|'${escaped}')`, "i").test(document);
+}
+
 export function pathOnly(routePath) {
   const raw = String(routePath || "");
   const hashIndex = raw.indexOf("#");
@@ -270,9 +289,22 @@ function discoverSample(root, catalog, kit, fileExists) {
   }
 
   if (sample.path && routeExists(root, sample.path)) {
+    const sampleFragment = fragmentOf(sample.path, sample.fragment) || "";
+    if (sampleFragment && !routeFragmentExists(root, sample.path, sampleFragment)) {
+      return {
+        path: pathOnly(sample.path),
+        fragment: sampleFragment,
+        id: sample.id || null,
+        label: sample.label || null,
+        kind: sample.kind || null,
+        status: "missing",
+        reason: "sample_fragment_missing",
+        labeled_as_illustration: Boolean(sample.labeled_as_illustration),
+      };
+    }
     return {
       path: pathOnly(sample.path),
-      fragment: fragmentOf(sample.path, sample.fragment) || "",
+      fragment: sampleFragment,
       href: hrefWithFragment(sample.path, sample.fragment),
       id: sample.id,
       label: sample.label,

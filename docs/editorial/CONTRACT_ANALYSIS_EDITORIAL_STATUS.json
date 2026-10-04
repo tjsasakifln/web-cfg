@@ -1,14 +1,14 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-09-20T03:44:18Z",
+  "generated_at": "2026-10-03T21:27:29Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
   "catalog_mode": "official_live",
   "claimed_live": false,
   "test_only": false,
-  "source_path": "scripts/contract_analysis/fixtures/official-live-01",
+  "source_path": "scripts\\contract_analysis\\fixtures\\official-live-01",
   "schema": "public-read-contract-analysis/1.0",
   "export_kind": "extra_cli_public_read",
   "live_absent": false,
@@ -49,8 +49,8 @@
   ],
   "has_comparable_or_not_comparable": true,
   "rendered": [
-    "analises-contratos-publicos/index.html",
-    "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
+    "analises-contratos-publicos\\index.html",
+    "analises-contratos-publicos\\reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026\\index.html"
   ],
   "recommendation": "ADJUST",
   "recommendation_reason": "Canário INDEX de uma URL official_live. Não expandir. Medir citação, correção e engagement qualificado antes de qualquer segunda análise. Producer publication/index flags nunca autorizam INDEX.",
@@ -59,10 +59,10 @@
   "factual_handoff_pending": false,
   "handoff": {
     "status": "HANDOFF_READY",
-    "path": "scripts/contract_analysis/fixtures/official-live-01",
+    "path": "C:\\Users\\tj_sa\\Documents\\Codex\\2026-10-03\\la\\work\\web-cfg\\scripts\\contract_analysis\\fixtures\\official-live-01",
     "checked": [
       {
-        "path": "scripts/contract_analysis/fixtures/official-live-01",
+        "path": "C:\\Users\\tj_sa\\Documents\\Codex\\2026-10-03\\la\\work\\web-cfg\\scripts\\contract_analysis\\fixtures\\official-live-01",
         "exists": true,
         "layout": "dossiers",
         "schema_ok": true,

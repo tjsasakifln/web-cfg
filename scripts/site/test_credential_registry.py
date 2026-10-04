@@ -21,7 +21,6 @@ if str(ROOT) not in sys.path:
 from scripts.site.authority import check_credentials_against_proof  # noqa: E402
 from scripts.site.credential_registry import (  # noqa: E402
     OWNED_SURFACES,
-    SOURCE_LABELS,
     allowed_schema_values,
     apply_to_html,
     client_proof_approved_count,
@@ -460,12 +459,10 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         proj = project(registry, surface)
         assert "credential-registry:start" in html
         assert proj.visible_html in html
-        # Provenance still ships on every projected row. What changed in #638 is
-        # the FRAMING: both labels are source attribution in the same shape, so
-        # the engineer's own statement is a source, not a caveat against him.
-        assert html.count('class="credential-source"') == len(proj.claim_ids)
-        assert "Fonte: registro público" in html
-        assert "Fonte: Tiago Jun Sasaki" in html
+        # Source, date and permission remain in the registry for validation;
+        # automatic evidence labels do not occupy the institutional surface.
+        assert 'class="credential-source"' not in html
+        assert "Fonte:" not in visible_text_of(html)
         nodes = extract_jsonld_nodes(html)
         org = next(n for n in nodes if "Organization" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")]))
         assert org.get("legalName") == "Confenge Serviços de Desenhos Técnicos Ltda"
@@ -473,7 +470,9 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         person = next(n for n in nodes if "Person" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")]))
         assert person.get("jobTitle") == "Engenheiro Civil e Engenheiro de Segurança do Trabalho"
         if surface == "/especialista/tiago-jun-sasaki/":
-            assert "https://github.com/tjsasakifln" in json.dumps(person.get("sameAs") or [])
+            # Software identity evidence stays in the registry. The engineering
+            # leadership profile projects only identities declared for it.
+            assert sorted(person.get("sameAs") or []) == sorted(proj.schema_person.get("sameAs") or [])
         else:
             assert "sameAs" not in person
         service = next(
@@ -566,12 +565,12 @@ def test_self_deprecating_framing_fails_the_projection():
     ) == []
 
 
-def test_source_labels_are_attribution_not_a_verdict():
-    """Both labels name a source in the same shape. Neither ranks the other."""
-    for status, label in SOURCE_LABELS.items():
-        assert label.startswith("Fonte: "), (status, label)
-        assert self_deprecation_defects(label) == [], (status, label)
-    assert len(set(SOURCE_LABELS.values())) == len(SOURCE_LABELS)
+def test_registry_keeps_sources_without_automatic_visitor_labels():
+    """Evidence remains auditable without turning every credential into a caveat."""
+    registry = load_registry()
+    assert all(claim.get("source_reference") for claim in registry["claims"])
+    projection = project(registry, "/especialista/tiago-jun-sasaki/")
+    assert "Fonte:" not in projection.visible_text
 
 
 def test_unbacked_identity_fields_still_stripped_off_owned_surfaces():

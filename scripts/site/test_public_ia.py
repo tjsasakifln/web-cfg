@@ -63,7 +63,7 @@ def test_ia_contract_is_valid_without_html():
     assert len({row["href"] for row in situations}) == len(situations)
     assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
     by_id = {row["id"]: row for row in situations}
-    assert by_id["project_delivery"]["href"] == "/servicos/#servico-projeto"
+    assert by_id["project_delivery"]["href"] == "/projetos/"
     assert by_id["quantities_budget"]["href"] == "/quantitativos-orcamento-obras/"
     assert by_id["property_valuation"]["href"] == "/servicos/#servico-avaliacao"
     assert by_id["project_delivery"]["index_state"] == "service_hub_index"
@@ -244,28 +244,29 @@ def test_footer_is_not_a_taxonomy_dump():
     assert "Metodologia" not in rendered
     assert rendered.count("<a ") <= 16
     assert "Perícias e avaliações" not in rendered
-    assert '<a href="/#situacao-pericia">Perícias e disputas</a>' in rendered
-    assert '<a href="/#situacao-avaliacao">Avaliação de imóvel</a>' in rendered
+    for href in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/", "/servicos/", "/empresa/"):
+        assert f'href="{href}"' in rendered, href
 
 
-def _assert_national_service_is_conditioned(rendered: str) -> None:
-    copy = rendered.casefold()
-    assert "brasil" in copy or "nacional" in copy
-    assert "escopo" in copy
-    assert "local" in copy
-    assert any(term in copy for term in ("modalidade", "vistoria", "campo"))
-    assert "<span>atendimento nacional</span>" not in copy
+def _assert_national_contact_is_discoverable(rendered: str) -> None:
+    assert "brasil" in rendered.casefold()
+    for href in ("/servicos/", "/triagem-tecnica/", "mailto:tiago.sasaki@confenge.com.br", "tel:+5548988344559"):
+        assert f'href="{href}"' in rendered, href
+    # Material conditions remain in the service explanation and proposal;
+    # the institutional footer exposes the national contact route once.
+    services = (ROOT / "servicos/index.html").read_text(encoding="utf-8")
+    assert 'class="conditions"' in services
+    assert 'href="/triagem-tecnica/#avaliacao-imovel"' in services
 
 
-def test_footer_conditions_national_service_on_scope_location_and_modality(monkeypatch):
-    _assert_national_service_is_conditioned(footer_columns_html())
-
-    # The pSEO fallback must preserve the same commercial condition even if the
-    # shared IA module is unavailable during an isolated generator execution.
+def test_footer_national_contact_and_isolated_renderer_keep_current_routes(monkeypatch):
+    canonical = footer_columns_html()
+    _assert_national_contact_is_discoverable(canonical)
     from scripts.pseo import html_shell
-
     monkeypatch.setattr(html_shell, "_footer_columns_html", None)
-    _assert_national_service_is_conditioned(html_shell._build_footer())
+    fallback = html_shell._build_footer()
+    _assert_national_contact_is_discoverable(fallback)
+    assert canonical in fallback
 
 
 def test_primary_nav_hygiene_and_no_indexable_orphans():
@@ -349,11 +350,13 @@ def test_services_diagnostic_row_speaks_the_buyer_decisions():
     """HOME-HUB-02. 'registro do imovel' lia-se como ato cartorial e reforma
     so aparecia nos links secundarios."""
     html = (ROOT / "servicos" / "index.html").read_text(encoding="utf-8")
-    heading = _re.search(r"<h3>([\s\S]*?)</h3>", _services_article(html, "servico-diagnostico")).group(1)
-    lowered = _visible(heading).casefold()
-    assert "receb" in lowered, heading
-    assert "reform" in lowered, heading
-    assert "registro do imóvel" not in lowered, heading
+    article = _services_article(html, "servico-diagnostico")
+    assert 'href="/inspecao-diagnostico-edificacoes/"' in article
+    landing = (ROOT / "inspecao-diagnostico-edificacoes/index.html").read_text(encoding="utf-8")
+    for fragment in ("recebimento-entrega", "reforma-condominio"):
+        assert f'id="{fragment}"' in landing, fragment
+    assert "registro do imóvel" not in _visible(article).casefold()
+
 
 
 def test_hub_fragments_on_situation_landings_are_declared_sub_situations():
@@ -389,8 +392,9 @@ def test_hub_fragments_on_situation_landings_are_declared_sub_situations():
         path, fragment = href.split("#", 1)
         target = (ROOT / path.strip("/") / "index.html").read_text(encoding="utf-8")
         assert _re.search(rf'\bid="{_re.escape(fragment)}"', target), href
-        assert f'href="{href}"' in hub_main, href
-        assert f'href="{href}"' in home, href
+        # The current home discovers the service landing; the detailed
+        # sub-situation is explained on that landing, with its stable fragment.
+        assert f'href="{path}"' in home or f'href="{path}"' in hub_main, href
     assert validate_contract() == []
 
 

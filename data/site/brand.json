@@ -1,18 +1,18 @@
 {
   "schema_version": "1.1.0",
   "campaign": "CONFENGE-MV-04-CORPORATE-SHELL-20260905",
-  "updated_at": "2026-10-02",
+  "updated_at": "2026-10-03",
   "person": {
     "jobTitle": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
     "short": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
-    "long": "A CONFENGE desenvolve e coordena projetos de estruturas, instalações e infraestrutura, além de revisão, compatibilização, quantitativos, orçamento e análises técnicas. Para cada objeto, estrutura as disciplinas e os profissionais habilitados conforme o escopo, as interfaces e a responsabilidade técnica definidos antes da proposta.",
+    "long": "A CONFENGE desenvolve e coordena projetos de estruturas, instalações e infraestrutura, além de revisão, compatibilização, quantitativos, orçamento e análises técnicas. Organiza as disciplinas e os profissionais habilitados para o empreendimento, construindo a proposta a partir do objetivo e das informações disponíveis.",
     "tagline": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
     "org_description": "Engenharia, perícias e inteligência técnica: projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho para clientes privados e públicos. Obras públicas permanecem uma frente especializada.",
-    "footer_blurb": "Projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos."
+    "footer_blurb": "Projetos e serviços de engenharia para empreendimentos privados e públicos."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -24,18 +24,18 @@
     "site": "https://confenge.com.br"
   },
   "hero": {
-    "eyebrow": "Engenharia, Perícias e Inteligência Técnica · Projetos coordenados",
-    "h1": "Projetamos estruturas, instalações e infraestrutura de forma coordenada.",
-    "h1_html": "Projetamos estruturas, instalações e infraestrutura <span class=\"type-serif\">de forma coordenada.</span>",
-    "subheadline": "Para empreendimentos públicos e privados, projetamos e coordenamos estruturas, instalações e infraestrutura com as interfaces que o escopo exigir. Quando é preciso comparar propostas, conferir um projeto ou decidir a contratação, assumimos a frente técnica que transforma escopo em referência comum.",
-    "cta_primary": "Solicitar avaliação do escopo",
-    "cta_secondary": "Ver áreas de projeto",
-    "cta_secondary_wa": "Olá, Tiago. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
-    "microcopy": "No primeiro contato, enquadramos o escopo, os canais e a próxima etapa antes da proposta.",
+    "eyebrow": "Projetos de engenharia para edificações, infraestrutura e indústria",
+    "h1": "Engenharia de projeto para decisões que precisam chegar à obra.",
+    "h1_html": "Engenharia de projeto para decisões que precisam <span>chegar à obra.</span>",
+    "subheadline": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Reunimos as disciplinas necessárias para transformar premissas, interfaces e requisitos de execução em uma entrega técnica integrada.",
+    "cta_primary": "Solicitar proposta",
+    "cta_secondary": "Conhecer os projetos",
+    "cta_secondary_wa": "Olá, CONFENGE. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
+    "microcopy": "Estruturas · Instalações · Infraestrutura · Coordenação multidisciplinar",
     "meta_title": "CONFENGE | Projetos de estruturas, instalações e infraestrutura",
-    "meta_description": "Projetos coordenados de estruturas, instalações e infraestrutura para empreendimentos públicos e privados, com escopo, interfaces e responsabilidade técnica definidos antes da proposta.",
+    "meta_description": "Projetos de estruturas, instalações e infraestrutura para edificações e indústria, com coordenação multidisciplinar. Converse sobre o empreendimento e solicite proposta.",
     "og_title": "Projetamos estruturas, instalações e infraestrutura de forma coordenada.",
-    "og_description": "A CONFENGE estrutura e coordena as disciplinas e interfaces do empreendimento para transformar escopo em referência comum antes de orçar, contratar, aprovar ou executar."
+    "og_description": "A CONFENGE elabora projetos e coordena as disciplinas do empreendimento, da concepção à documentação para execução. Solicite proposta com o contexto disponível."
   },
   "journeys": [
     {
@@ -46,14 +46,14 @@
       "section_title": "Qual decisão precisa sair agora?",
       "need": "glosa, medição retida, atraso de pagamento, notificação, multa, aditivo, reequilíbrio, paralisação ou divergência de projeto e orçamento",
       "complement": "Organizamos fatos, cronologia, documentos e cálculos para sustentar a decisão técnica.",
-      "cta": "Solicitar canal seguro para envio",
+      "cta": "Solicitar proposta",
       "cta_secondary": "Falar pelo WhatsApp",
       "href": "/#contato",
       "href_params": "jornada=contrato",
       "obrigado": "/obrigado-contrato",
-      "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero solicitar um canal seguro para envio.",
+      "wa_message": "Olá, CONFENGE. Tenho um problema urgente em contrato público e quero solicitar uma proposta.",
       "response_sla": "Retorno inicial em até 1 dia útil nos casos urgentes; demais em até 2 dias úteis. O canal de envio é escolhido posteriormente.",
-      "next_step": "Registramos o pedido de canal seguro. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação. Cada caso recebe análise fundamentada e recomendação técnica; a decisão permanece com a Administração."
+      "next_step": "Registramos o pedido de canal seguro. Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado. Cada caso recebe análise fundamentada e recomendação técnica; a decisão permanece com a Administração."
     },
     {
       "id": "edital",
@@ -66,9 +66,9 @@
       "href": "/#contato",
       "href_params": "jornada=edital",
       "obrigado": "/obrigado-edital",
-      "wa_message": "Olá, Tiago. Tenho um edital em análise e quero solicitar um canal seguro para envio.",
+      "wa_message": "Olá, CONFENGE. Tenho um edital em análise e quero solicitar uma proposta.",
       "response_sla": "Triagem inicial em até 2 dias úteis após dados essenciais. O canal de envio é escolhido posteriormente.",
-      "next_step": "Registramos o pedido de canal seguro. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação. Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
+      "next_step": "Registramos o pedido de canal seguro. Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; para material confidencial, combinamos o envio reservado. Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
     },
     {
       "id": "operacao",
@@ -81,7 +81,7 @@
       "href": "/#contato",
       "href_params": "jornada=operacao",
       "obrigado": "/obrigado-operacao",
-      "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico da Operação em Obras Públicas e entender se a Diretoria Fracionada para o Mercado Público se encaixa.",
+      "wa_message": "Olá, CONFENGE. Quero solicitar o Diagnóstico da Operação em Obras Públicas e entender se a Diretoria Fracionada para o Mercado Público se encaixa.",
       "response_sla": "Agendamento ou retorno de enquadramento em até 2 dias úteis.",
       "next_step": "Conversamos com quem decide a frente pública para combinar o escopo do diagnóstico pontual ou do apoio contínuo à operação."
     }
@@ -92,7 +92,7 @@
       "label": "Preciso completar, conferir ou compatibilizar um projeto",
       "summary": "Quando falta uma disciplina, o projeto recebido precisa ser conferido ou as disciplinas precisam conviver sem interferência antes de aprovar, contratar ou executar.",
       "deliverables": "Plantas, cálculos e memória da disciplina contratada; relatório do que está inconsistente e o que volta ao autor; registro das interferências com o ajuste combinado.",
-      "href": "/servicos/#servico-projeto",
+      "href": "/projetos/",
       "index_state": "service_hub_index",
       "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento têm situação e destino próprios."
     },
@@ -226,7 +226,7 @@
       "description": "Mapeamento da capacidade da empresa, mercado, acervo, carteira de oportunidades, processo decisório, riscos e gargalos. Termina com um plano executivo de 90 dias.",
       "result": "Prioridades claras e backlog de implantação.",
       "cta": "Solicitar diagnóstico da operação",
-      "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico da Operação em Obras Públicas para mapear oportunidades, margem e controle.",
+      "wa_message": "Olá, CONFENGE. Quero solicitar o Diagnóstico da Operação em Obras Públicas para mapear oportunidades, margem e controle.",
       "schema_service_type": "Diagnóstico da Operação em Obras Públicas"
     },
     {
@@ -241,7 +241,7 @@
       "description": "Oportunidades priorizadas com critérios, decisão de participar ou recusar, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
       "result": "A frente pública deixa de depender de improviso e passa a operar com método.",
       "cta": "Avaliar encaixe da Diretoria Fracionada",
-      "wa_message": "Olá, Tiago. Quero conhecer a Diretoria Fracionada para o Mercado Público e entender se ela se encaixa na nossa operação.",
+      "wa_message": "Olá, CONFENGE. Quero conhecer a Diretoria Fracionada para o Mercado Público e entender se ela se encaixa na nossa operação.",
       "schema_service_type": "Diretoria Fracionada para o Mercado Público"
     },
     {
@@ -255,8 +255,8 @@
       "headline": "Para o edital que exige coordenação da proposta, não improviso.",
       "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, revisão crítica independente e controle final da proposta.",
       "result": "Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
-      "cta": "Solicitar canal seguro para envio",
-      "wa_message": "Olá, Tiago. Tenho um edital crítico e quero solicitar um canal seguro para envio.",
+      "cta": "Solicitar proposta",
+      "wa_message": "Olá, CONFENGE. Tenho um edital crítico e quero solicitar uma proposta.",
       "schema_service_type": "Operação de Proposta para Licitação Crítica"
     },
     {
@@ -270,8 +270,8 @@
       "headline": "Quando cada dia sem registro enfraquece sua posição.",
       "description": "Organização de cronologia, causalidade, cálculos, evidências, notificações, aditivos, reequilíbrio, defesa técnica e proteção de margem.",
       "result": "Posição técnica organizada para decisão da direção e atuação coordenada com jurídico e engenharia.",
-      "cta": "Solicitar canal seguro para envio",
-      "wa_message": "Olá, Tiago. Preciso enquadrar um risco contratual e proteger a margem de um contrato público.",
+      "cta": "Solicitar proposta",
+      "wa_message": "Olá, CONFENGE. Preciso enquadrar um risco contratual e proteger a margem de um contrato público.",
       "schema_service_type": "Defesa de margem em contratos públicos"
     }
   ],
@@ -281,9 +281,9 @@
     "header": "Falar com a CONFENGE",
     "final_primary": "Enviar solicitação",
     "final_secondary": "WhatsApp com contexto",
-    "final_secondary_wa": "Olá, Tiago. Preciso de apoio em licitação ou contrato público.",
+    "final_secondary_wa": "Olá, CONFENGE. Preciso de apoio em licitação ou contrato público.",
     "form_submit": "Enviar solicitação",
-    "default_wa": "Olá, Tiago. Quero falar com a CONFENGE sobre licitação ou contrato público."
+    "default_wa": "Olá, CONFENGE. Quero falar com a CONFENGE sobre licitação ou contrato público."
   },
   "faq": [
     {

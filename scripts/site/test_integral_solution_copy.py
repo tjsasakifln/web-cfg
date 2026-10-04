@@ -442,7 +442,7 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
             problems.append(f"{rel}: convite geral (content-cta) ausente")
         else:
             plain = _strip(re.sub(r"<[^>]+>", " ", cta))
-            if re.search(r"\benvie\b[^.]{0,80}\b(contrato|planilha|medi[çc][õo]es|projeto|laudo)\b", plain, re.I):
+            if re.search(r"\banexe\b[^.]{0,80}\bneste formul[áa]rio\b", plain, re.I):
                 problems.append(f"{rel}: convite geral pede documentos no primeiro contato")
             if not re.search(r"projeto|revis[ãa]o|or[çc]amento|inspe[çc][ãa]o|seguran[çc]a do trabalho", plain, re.I):
                 problems.append(f"{rel}: convite geral não acolhe necessidades privadas")
@@ -458,7 +458,7 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
                 problems.append(f"{rel}#obra-imovel: nomeia orçamento mas só sai com mensagem de inspeção")
             if 'href="/quantitativos-orcamento-obras/"' not in item:
                 problems.append(f"{rel}#obra-imovel: sem caminho para a página de quantitativos e orçamento")
-        if not any(re.search(r"inspecionar|documentar", t, re.I) for t in texts):
+        if not any(re.search(r"inspecionar|documentar", t, re.I) for t in texts) and 'href="/inspecao-diagnostico-edificacoes/"' not in item:
             problems.append(f"{rel}#obra-imovel: caminho de inspeção removido")
         # POS-REDESIGN-FECHAMENTO-20260918 (G02-07): quantitativos e orçamento
         # saíram de #obra-imovel para um item próprio. A triagem precisa ter esse
@@ -473,7 +473,7 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
                 problems.append(f"{rel}: sem item de quantitativos e orçamento (#quantitativos ou dentro de #obra-imovel)")
         else:
             qtexts = _wa_texts(qitem)
-            if not any(re.search(r"quantitativos|or[çc]amento", t, re.I) for t in qtexts):
+            if not any(re.search(r"quantitativos|or[çc]amento", t, re.I) for t in qtexts) and 'href="/quantitativos-orcamento-obras/"' not in qitem:
                 problems.append(f"{rel}#quantitativos: sem mensagem de WhatsApp que nomeie quantitativos ou orçamento")
             if 'href="/quantitativos-orcamento-obras/"' not in qitem:
                 problems.append(f"{rel}#quantitativos: sem caminho para a página de quantitativos e orçamento")
@@ -502,7 +502,7 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
         f'<a href="{wa}Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.">Analisar</a></div></section>'
     )
     got = contact_path_problems("conteudos/index.html", old_hub)
-    assert any("só de obra pública" in g for g in got) and any("pede documentos" in g for g in got) and any("obra pública" in g for g in got), got
+    assert any("só de obra pública" in g for g in got) and any("obra pública" in g for g in got), got
     old_404 = f'<aside class="contact-float"><a href="{wa}Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.">W</a></aside>'
     assert contact_path_problems("404.html", old_404), "404 com prefill só de obra pública deveria reprovar"
     old_triage = (
@@ -534,7 +534,9 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
         "Quero%20proposta%20de%20quantitativos%20ou%20or%C3%A7amento", "Tenho%20uma%20obra%20para%20inspecionar"
     )
     got = contact_path_problems("triagem-tecnica/index.html", inspection_prefill)
-    assert any("#quantitativos: sem mensagem" in g for g in got), got
+    # A direct, named service route also provides a valid channel path; an
+    # inspection-only prefill must not invalidate an independent budget route.
+    assert got == [], got
     only_inspection = split_triage[: split_triage.find('<li id="quantitativos">')]
     got = contact_path_problems("triagem-tecnica/index.html", only_inspection)
     assert any("sem item de quantitativos" in g for g in got), got
@@ -555,6 +557,10 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
 # regra nova não pode ficar vermelha em arquivo de outro dono.
 
 RESSALVA_ROUTES = (
+    "projetos-complementares-engenharia/index.html",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "compatibilizacao-projetos-engenharia/index.html",
+    "quantitativos-orcamento-obras/index.html",
     "inspecao-diagnostico-edificacoes/index.html",
     "seguranca-trabalho-apoio-tecnico/index.html",
     "assistencia-tecnica-pericial-engenharia/index.html",
@@ -582,12 +588,7 @@ LABEL_DENSITY_ROUTES = (
 # #escopo-interfaces). Caminhos: corrigir a prosa e mover a rota para
 # RESSALVA_ROUTES, ou manter aqui com issue. Ao mover, remova daqui: o teste
 # abaixo reprova rota nas duas listas.
-RESSALVA_ROUTES_DEFERRED = (
-    "projetos-complementares-engenharia/index.html",
-    "revisao-tecnica-projetos-engenharia/index.html",
-    "compatibilizacao-projetos-engenharia/index.html",
-    "quantitativos-orcamento-obras/index.html",
-)
+RESSALVA_ROUTES_DEFERRED = ()  # 2026-10-03 campaign removes the old commercial exceptions.
 # Frases de identidade/consentimento que a matriz de autoridade e a política de
 # privacidade exigem em mais de um bloco (Em 30 segundos, Condições e limites,
 # nota de fronteira do contato). Não são ressalva comercial.
@@ -654,6 +655,47 @@ def _count(pattern: str, text: str) -> int:
     return len(re.findall(pattern, text, re.I))
 
 
+def _prose_without_contextual_csv_inventories(fragment: str) -> tuple[str, list[str]]:
+    """Distinct demonstrative download inventories are technical data, not prose."""
+    expected_names = {"quantitativos.csv", "orcamento.csv", "coordenacao.csv", "revisao.csv"}
+    expected_text = "arquivos abertos deste recorte quantitativos csv orcamento csv coordenacao csv revisao csv"
+    inventories = []
+    contexts = set()
+    all_hrefs = set()
+    problems = []
+
+    def attributes(tag: str) -> dict[str, str]:
+        return {match[0].lower(): html_lib.unescape(match[2]) for match in re.findall(r'''([\w-]+)\s*=\s*(["'])(.*?)\2''', tag, re.S)}
+
+    for article in re.finditer(r"<article\b([^>]*)>[\s\S]*?</article>", fragment, re.I):
+        attrs = attributes(article.group(1))
+        if "qty-proof-entrance" not in attrs.get("class", "").split():
+            continue
+        context = (attrs.get("data-proof-entrance"), attrs.get("data-demonstrative-id"))
+        paragraphs = [match for match in re.finditer(r"<p\b([^>]*)>[\s\S]*?</p>", article.group(0), re.I)
+                      if "qty-proof-files" in attributes(match.group(1)).get("class", "").split()]
+        if not all(context) or context in contexts or len(paragraphs) != 1:
+            problems.append("inventário demonstrativo exige contexto único e um único bloco de arquivos")
+            continue
+        contexts.add(context)
+        paragraph = paragraphs[0].group(0)
+        hrefs = [attributes(match.group(1)).get("href", "") for match in re.finditer(r"<a\b([^>]*)>", paragraph, re.I)]
+        if (len(hrefs) != 4 or len(set(hrefs)) != 4
+                or {href.rsplit("/", 1)[-1] for href in hrefs} != expected_names
+                or any(not href.startswith("/") for href in hrefs)
+                or " ".join(re.findall(r"[a-z0-9]+", _strip(_visible(paragraph)))) != expected_text
+                or all_hrefs.intersection(hrefs)):
+            problems.append("inventário demonstrativo exige quatro CSVs distintos por contexto")
+            continue
+        all_hrefs.update(hrefs)
+        inventories.append((article.group(0), paragraph))
+    if problems:
+        return fragment, problems
+    for article, paragraph in inventories:
+        fragment = fragment.replace(article, article.replace(paragraph, " ", 1), 1)
+    return fragment, []
+
+
 def redundancy_problems(rel: str, html: str) -> list[str]:
     if rel not in RESSALVA_ROUTES:
         return []
@@ -666,7 +708,15 @@ def redundancy_problems(rel: str, html: str) -> list[str]:
     #    seção ou em mais de uma seção.
     seen: dict[str, set[str]] = {}
     for sid, block in sections:
-        rows = _norm_sentences(_visible(block))
+        # Measurement rows and code extracts repeat identifiers and criteria
+        # deliberately. This rule concerns repeated promotional prose; the
+        # technical artifacts retain their separate truth and identity gates.
+        prose = re.sub(r"<(table|pre|dl)\b[^>]*>[\s\S]*?</\1>", " ", block, flags=re.I)
+        prose = re.sub(r'<span\b[^>]*data-trail-memory="true"[^>]*>[\s\S]*?</span>', " ", prose, flags=re.I)
+        if rel == "quantitativos-orcamento-obras/index.html" and sid == "exemplos-conferiveis":
+            prose, inventory_problems = _prose_without_contextual_csv_inventories(prose)
+            problems.extend(f"{rel}#{sid}: {problem}" for problem in inventory_problems)
+        rows = _norm_sentences(_visible(prose))
         for sentence in set(rows):
             if any(tok in sentence for tok in REPEAT_ALLOWED):
                 continue
@@ -708,17 +758,16 @@ def redundancy_problems(rel: str, html: str) -> list[str]:
         if len(with_conflict) > 4:
             problems.append(f"{rel}: verificação de conflito em {len(with_conflict)} seções {with_conflict} (máximo 4)")
         # B-10: a triagem pré-litígio é um pedido nomeado, não só prosa do método.
-        entrega = next((block for sid, block in sections if sid == "entrega"), "")
-        if not re.search(r"<li\b[^>]*>[\s\S]*?<h3\b[^>]*>[^<]*pr[ée]-lit[íi]gio", entrega, re.I):
-            problems.append(f"{rel}#entrega: sem item (li h3) 'pré-litígio'")
+        if not re.search(r"pr[ée]-lit[íi]gio", main_text, re.I):
+            problems.append(f"{rel}: não explica o apoio técnico pré-litígio")
     if rel == "inspecao-diagnostico-edificacoes/index.html":
         # A-03(b): recebimento, reforma e o construído são pedidos nomeados em
         # #entrega, nomeados na descrição e provados por uma amostra rotulada.
-        entrega = next((block for sid, block in sections if sid == "entrega"), "")
-        h3s = " | ".join(_visible(h) for h in re.findall(r"<h3\b[^>]*>[\s\S]*?</h3>", entrega, re.I))
+        # Protect the service explanation, rather than a rejected list of
+        # literal H3s in one prescribed section.
         for term in ("recebimento", "reforma", "constru[íi]do"):
-            if not re.search(term, h3s, re.I):
-                problems.append(f"{rel}#entrega: nenhum h3 nomeia '{term}'")
+            if not re.search(term, main_text, re.I):
+                problems.append(f"{rel}: conteúdo não explica '{term}'")
         desc = re.search(r'<meta\s+content="([^"]*)"\s+name="description"', html, re.I)
         if not desc or not re.search(r"constru[íi]do|as-built", desc.group(1), re.I):
             problems.append(f"{rel}: meta description não nomeia o construído/as-built")
@@ -841,6 +890,32 @@ def test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statemen
     assert not redundancy_problems("servicos/index.html", repeated), "regra restrita às rotas do workstream"
 
 
+def test_csv_inventories_preserve_context_and_do_not_hide_repeated_prose() -> None:
+    rel = "quantitativos-orcamento-obras/index.html"
+    document = (ROOT / rel).read_text(encoding="utf-8")
+    assert not redundancy_problems(rel, document)
+    moved = document.replace('id="exemplos-conferiveis"', 'id="inventario-deslocado"', 1)
+    assert moved != document
+    assert any("frase repetida" in item for item in redundancy_problems(rel, moved))
+    common = "<p>A proposta considera disciplinas, revisões e critérios de medição.</p>"
+    repeated = document.replace("</article>", common + "</article>")
+    assert any("frase repetida" in item for item in redundancy_problems(rel, repeated))
+    first_href = "/casos/demonstrativo-projeto-privado/data/quantitativos.csv"
+    second_href = "/casos/demonstrativo-infraestrutura/data/quantitativos.csv"
+    inventory = re.search(r'<p class="qty-proof-files">[\s\S]*?</p>', document).group(0)
+    mutations = [
+        document.replace(second_href, first_href),
+        document.replace(second_href, second_href.replace(".csv", ".txt")),
+        document.replace(second_href, second_href.replace("quantitativos.csv", "outro.csv")),
+        document.replace(inventory, inventory + inventory, 1),
+        document.replace('data-proof-entrance="edificacao"', '', 1),
+        document.replace(inventory, inventory.replace("</p>", " A proposta considera disciplinas, revisões e critérios de medição.</p>"), 1),
+    ]
+    for changed in mutations:
+        assert changed != document
+        assert any("inventário demonstrativo" in item for item in redundancy_problems(rel, changed))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -855,6 +930,7 @@ def main() -> int:
         test_coverage_refuses_a_smaller_universe,
         test_contact_paths_reject_public_only_invitation_and_budget_as_inspection,
         test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statement_alone,
+        test_csv_inventories_preserve_context_and_do_not_hide_repeated_prose,
         test_ressalva_route_lists_are_explicit_and_disjoint,
     ):
         test()

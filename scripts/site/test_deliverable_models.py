@@ -117,7 +117,7 @@ def _html(slug: str) -> str:
 
 def _message(subject: str, price: str) -> str:
     return (
-        f"Olá, Tiago. Vi o modelo de {subject} e quero contratar uma versão "
+        f"Olá, CONFENGE. Vi o modelo de {subject} e quero contratar uma versão "
         f"adaptada à minha empresa por {price}."
     )
 

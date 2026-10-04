@@ -19,14 +19,14 @@
     "invented_amounts": true,
     "second_price_table": true,
     "treat_VALIDATE_as_buyable": true,
-    "cta_label_with_two_destination_types": true,
+    "cta_label_requires_compatible_proposal_paths": true,
     "upload_promise_without_upload": true,
     "percent_without_denominator": true
   },
   "cta_labels": [
     {
-      "label": "Solicitar canal seguro",
-      "destination_type": "form"
+      "label": "Solicitar proposta",
+      "destination_types": ["form", "internal"]
     },
     {
       "label": "Enviar edital para triagem",
@@ -184,7 +184,7 @@
       "page_publishes_price": false,
       "page_price_as": "screening_condition",
       "jsonld_offer_price": false,
-      "cta_label": "Enviar edital para triagem",
+      "cta_label": "Solicitar proposta para o edital",
       "cta_href": "#captura-pilar",
       "cta_destination_type": "form",
       "visible_aliases_forbidden": [
@@ -209,7 +209,7 @@
       "page_publishes_price": true,
       "page_price_as": "pilot",
       "jsonld_offer_price": false,
-      "cta_label": "Solicitar canal seguro",
+      "cta_label": "Solicitar proposta para este caso",
       "cta_href": "#captura-pilar",
       "cta_destination_type": "form",
       "visible_aliases_forbidden": [

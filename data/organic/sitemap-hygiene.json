@@ -111,27 +111,27 @@
     "https://confenge.com.br/terceirizacao-projetos-engenharia/",
     "https://confenge.com.br/termos-de-uso/",
     "https://confenge.com.br/triagem-tecnica/",
+    "https://confenge.com.br/analises-contratos-publicos/",
+    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
     "https://confenge.com.br/guias-contratos-obras/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/",
-    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
-    "https://confenge.com.br/analises-contratos-publicos/",
-    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
     "core": 107,
-    "editorial": 4,
-    "contract_analysis": 2
+    "contract_analysis": 2,
+    "editorial": 4
   },
   "member_sitemaps": [
     "https://confenge.com.br/sitemap.xml",
-    "https://confenge.com.br/sitemap-editorial.xml",
-    "https://confenge.com.br/sitemap-analises-contratos.xml"
+    "https://confenge.com.br/sitemap-analises-contratos.xml",
+    "https://confenge.com.br/sitemap-editorial.xml"
   ],
   "walked_members": [
     "sitemap.xml",
-    "sitemap-editorial.xml",
-    "sitemap-analises-contratos.xml"
+    "sitemap-analises-contratos.xml",
+    "sitemap-editorial.xml"
   ],
   "robots_sitemaps": [
     "https://confenge.com.br/sitemap-index.xml"

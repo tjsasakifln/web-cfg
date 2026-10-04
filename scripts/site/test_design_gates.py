@@ -9,6 +9,7 @@ import hashlib
 import json
 import re
 import sys
+import xml.etree.ElementTree as ET
 from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
@@ -116,11 +117,12 @@ def test_css_tokens_mirror_system():
 def test_home_archetypes_diverse():
     html = HOME.read_text(encoding="utf-8")
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', html)
-    # Corporate home adds a situation chooser and preserves the B2G conversion
-    # section, for at most eight large blocks excluding header/footer.
+    # The institutional home moves from projects and sectors to authority and
+    # proposal without exposing the former classified-style situation grid.
     assert 5 <= len(archetypes) <= 8, f"expected 5–8 narrative archetypes, got {archetypes}"
     assert len(set(archetypes)) >= 5, f"need ≥5 distinct archetypes, got {set(archetypes)}"
-    assert "journey_paths" in archetypes, "three buyer journeys must be a first-class home section"
+    for required in ("hero_split", "discipline_editorial", "sector_editorial", "authority_editorial", "cta_formal"):
+        assert required in archetypes, f"institutional home missing {required}: {archetypes}"
     # no three consecutive identical archetypes
     for i in range(len(archetypes) - 2):
         window = archetypes[i : i + 3]
@@ -325,21 +327,12 @@ def test_home_card_grid_limit():
         if re.search(rf'class="[^"]*{cls}', html):
             legacy_grids += 1
     assert legacy_grids <= 2, f"too many legacy card grids on home: {legacy_grids}"
-    # Situation-first hierarchy, followed by tangible outputs and a dedicated
-    # public-works vertical rather than a wall of equal service cards.
-    assert 'data-section-archetype="journey_paths"' in html
-    # VALOR-IMEDIATO-20260914. O ledger generico (offer_dominant) saiu; a
-    # entrega concreta e o seu uso ficam dentro de cada linha de situacao, que
-    # e onde o comprador decide. Propriedade: toda situation-row tem h3 e uma
-    # clausula de uso.
-    assert 'class="situation-list"' in html
-    rows = re.findall(r'<li class="situation-row[\s\S]*?</li>', html)
-    assert len(rows) >= 5, len(rows)
-    for row in rows:
-        assert "<h3>" in row and 'class="situation-use"' in row, row[:120]
-    assert "Licitação ou contrato de obra pública" in html
-    # Corporate narrative: hero, situations, outputs, trust, audiences, B2G,
-    # corporate triage and the preserved B2G conversion form.
+    assert 'data-section-archetype="discipline_editorial"' in html
+    assert 'class="home-capability-list"' in html
+    rows = re.findall(r'<article>[\s\S]*?Ver especialidade[\s\S]*?</article>', html)
+    assert len(rows) == 3, len(rows)
+    assert 'class="home-service-links"' in html
+    assert html.count('class="situation-row') == 0
     sections = re.findall(r"<main[\s\S]*?</main>", html)
     assert sections, "main missing"
     main_sections = len(re.findall(r"<section\b", sections[0]))
@@ -347,10 +340,12 @@ def test_home_card_grid_limit():
 
 
 def test_home_no_uniform_section_padding_only():
-    """Home should declare varied section spacing classes."""
-    html = HOME.read_text(encoding="utf-8")
-    variants = sum(1 for c in ("section--tight", "section--default", "section--loose") if c in html)
-    assert variants >= 2, "home must vary section vertical rhythm"
+    """Home varies rhythm with component spacing and contrasting surfaces."""
+    css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
+    for component in ("home-opening", "home-capabilities", "home-sectors", "home-deliverables", "home-company", "home-proposal"):
+        assert f".{component}" in css
+    for surface in ("background:#fff", "background:#071a31", "background:#f3f4f5", "background:#061a33"):
+        assert surface in css
 
 
 def test_copy_leaks_absent_on_commercial_pages():
@@ -432,49 +427,32 @@ def test_offer_depth_and_distinct_layouts():
     assert "proteção de margem" in defesa.lower() or "Defesa técnica" in defesa
 
 
-def test_journey_accessible_without_js():
+def test_project_capabilities_accessible_without_js():
     html = HOME.read_text(encoding="utf-8")
-    # Situation paths are ordinary links and content, never JS-only UI. The
-    # set of situations is the contract (brand.json = public-ia-map.json).
-    situations = _service_situations()
-    for stage in (
-        "situacao-projeto",
-        "situacao-orcamento",
-        "situacao-obra-imovel",
-        "situacao-avaliacao",
-        "situacao-pericia",
-        "situacao-sst",
-        "situacao-obras-publicas",
+    assert 'id="competencias"' in html
+    for href in (
+        "/projetos/estruturas/",
+        "/projetos/instalacoes/",
+        "/projetos/infraestrutura/",
+        "/projetos/coordenacao-multidisciplinar/",
     ):
-        assert f'id="{stage}"' in html
-    assert '<ol class="situation-list">' in html
-    assert html.count('class="situation-action"') == len(situations)
-    # As cinco situacoes continuam sendo links comuns; o heroi deixou de contar
-    # como sexta ancora porque nao pre-classifica mais a disciplina.
-    # Tres ancoras nomeadas sobrevivem (o heroi deixou de pre-classificar
-    # como #projetos); contar links nus ao hub nao provaria ancora alguma.
-    assert html.count('href="/triagem-tecnica/#') >= 3
-    assert html.count('href="/triagem-tecnica/') >= 4
-    assert 'href="/servicos-obras-publicas/"' in html
+        assert f'href="{href}"' in html
+    assert html.count("Ver especialidade") == 3
+    assert "href=\"#contato\"" in html
 
 
 def test_trace_matrix_and_tension_present():
-    """The corporate chooser keeps B2G depth without making it the umbrella."""
+    """Project depth leads; legitimate adjacent services remain secondary."""
     html = HOME.read_text(encoding="utf-8")
-    assert "Engenharia, Perícias e Inteligência Técnica" in html
-    for situation in _service_situations():
-        assert situation["label"] in html, situation["label"]
-    assert "Segurança do trabalho" in html
-    assert "Licitação ou contrato de obra pública" in html
-    for href in (
-        "/bid-room-licitacoes-obras/",
-        "/problemas-que-resolvemos/",
-        "/diretoria-b2g/",
-        "/guias-contratos-obras/",
-    ):
-        assert f'href="{href}"' in html
-    assert "enviar documentos para análise" not in html.lower()
     lower = html.lower()
+    for term in ("concreto armado", "média e alta tensão", "terraplenagem", "coordenação multidisciplinar"):
+        assert term in lower
+    project_at = html.find('id="competencias"')
+    secondary_at = html.find('id="servicos-complementares"')
+    assert 0 < project_at < secondary_at
+    for term in ("Quantitativos e orçamentos", "Inspeções, avaliações e perícias", "Segurança do trabalho", "Obras públicas"):
+        assert term in html
+    assert "enviar documentos para análise" not in html.lower()
     for leak in (
         "sem inventar case",
         "sem métrica fictícia",
@@ -493,15 +471,15 @@ def test_primary_cta_not_spam():
     # Header twins, hero, corporate triage and preserved B2G form — the viewport
     # gate separately proves that only one is visible in the first fold.
     assert primary <= 5, f"too many primary CTAs on home: {primary}"
-    assert _brand()["hero"]["cta_primary"] in html
-    assert "Solicitar proposta por e-mail" in html
+    assert "Solicitar proposta" in html
+    assert html.count("Solicitar proposta") >= 3
     assert "Descrever minha situação" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
-    assert hero_html.count('href="/triagem-tecnica/"') == 1
+    assert hero_html.count('href="#contato"') == 1
     # A ação principal abre a avaliação do escopo. A secundária é descoberta
     # de áreas, não um segundo caminho de captura concorrente.
     secondary = re.findall(r'href="(/projetos/)"', hero_html)
@@ -510,49 +488,27 @@ def test_primary_cta_not_spam():
 
 
 def test_home_five_second_clarity():
-    """Buyer can answer who / problem / trust / next from visible home copy."""
+    """Buyer can identify the firm, core disciplines, integration and next action."""
     html = HOME.read_text(encoding="utf-8")
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     fold = hero.group(0)
     fold_lower = fold.lower()
-    lower = html.lower()
-    # What the company is, the scope and the buyer situations it names.
-    # VALOR-IMEDIATO-20260914: a enumeracao de disciplinas saiu da dobra; a
-    # propriedade e situacao do comprador + verbo de trabalho + entrega ligada
-    # a uso + alcance publico e privado (ver test_home_conversion_contract).
-    assert "engenharia, perícias e inteligência técnica" in fold_lower
-    assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", fold_lower), fold_lower[:300]
-    assert re.search(r"estruturas|instalações|infraestrutura", fold_lower)
-    assert re.search(r"\b(?:assumimos|projetamos|coordenamos)\b", fold_lower)
-    assert re.search(r"pranchas|projeto|memória|modelos", fold_lower)
-    assert re.search(r"\b(?:comparar|contratar|decidir|or[çc]ar)\b", fold_lower)
-    # True microproofs and an explicit limits path.
-    assert "cnpj 52.407.089/0001-09" in fold_lower
-    assert "credenciais e limites" in fold_lower
-    # Regra substituida: o microproof deixou de liderar pelo METODO. O que
-    # continua exigido -- e verificado de forma mais forte -- e que a primeira
-    # dobra traga fatos conferiveis e um caminho para conferi-los.
-    assert "/confianca/" in fold, "a primeira dobra precisa do caminho de verificacao"
-    assert "limites" in fold_lower
-    # Comprehensible next actions: the primary label is the canonical one and
-    # declares its destination.
-    assert _brand()["hero"]["cta_primary"].lower() in fold_lower
-    assert 'href="/triagem-tecnica/"' in fold
+    assert "projetos de engenharia" in fold_lower
+    for discipline in ("estruturas", "instalações", "infraestrutura"):
+        assert discipline in fold_lower
+    assert "elabora e coordena" in fold_lower
+    assert "entrega técnica integrada" in fold_lower
+    assert "edificações" in fold_lower and "indústria" in fold_lower
+    assert "solicitar proposta" in fold_lower
+    assert 'href="#contato"' in fold
     assert 'href="/projetos/"' in fold
-    assert "solicitar avaliação do escopo" in fold_lower
-    # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
-    # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
-    # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
-    # propriedade protegida -- a especialidade em obras publicas tem secao
-    # propria na home, depois do seletor de situacoes -- continua verificada.
-    assert "especialidade em obras públicas" in lower
-    assert "obras públicas: edital, proposta e contrato em execução." in lower
-    assert "#contato" in html or 'id="contato"' in html
+    assert "credenciais e limites" not in fold_lower
+    assert "54.055" not in html and "4,48 mi" not in html
 
 
 def test_home_decision_fold_hierarchy():
-    """Corporate fold leads with outcome; PNCP remains B2G-only context."""
+    """Corporate fold leads with project capability and a direct proposal path."""
     html = HOME.read_text(encoding="utf-8")
     hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
@@ -560,27 +516,17 @@ def test_home_decision_fold_hierarchy():
     h1 = re.search(r'<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)</h1>', hero_html)
     assert h1, "hero h1 missing"
     h1_text = re.sub(r"<[^>]+>", " ", h1.group(1)).lower()
-    assert re.search(r"estruturas|instalações|infraestrutura", h1_text), h1_text
-    assert "coordenada" in h1_text, h1_text
-    assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", hero_html, re.I)
+    assert "engenharia de projeto" in h1_text, h1_text
+    assert "chegar à obra" in h1_text, h1_text
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1
     assert html.count('name="diagnostico-b2g"') == 1
     assert html.count('id="formulario-contato"') == 1
-    chooser_at = html.find('id="situacoes"')
-    pncp_at = html.find("54.055")
-    assert 0 < chooser_at < pncp_at, "PNCP must come after the corporate chooser"
-    market = html[pncp_at:]
-    # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
-    # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
-    # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
-    # propriedade protegida -- a especialidade em obras publicas tem secao
-    # propria na home, depois do seletor de situacoes -- continua verificada.
-    assert "Especialidade em obras públicas" in html
-    assert "PNCP · 01/08/2026" in market
-    assert "4,48 mi" in market
-    assert "Números de mercado, não resultados de clientes" in market
+    assert 'id="competencias"' in html and 'id="setores"' in html
+    assert html.find('id="competencias"') < html.find('id="servicos-complementares"')
+    assert html.find('id="setores"') < html.find('id="solicitar-proposta"')
+    assert "Ilustração técnica original da CONFENGE" in hero_html
 
 
 def test_form_qualification_minimal():
@@ -615,24 +561,15 @@ def test_operating_flow_has_sitewide_fallback():
     assert '<ol class="operating-flow"' in html
 
 
-def test_mobile_matrix_composition():
-    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+def test_mobile_home_keeps_institutional_narrative_visible():
     home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
-    assert "display:none" in css  # responsive hide rules remain
     html = HOME.read_text(encoding="utf-8")
-    assert 'class="situation-list"' in html
-    assert '<li class="situation-row' in html
-    assert ".situation-list{" in home_css and ".situation-row{" in home_css
-    # Narrow viewports recompose rows without hiding any of the paths.
-    # 2026-09-17 (salto institucional): the index became a grid of areas (three
-    # columns on wide screens, one on phones); the old assertion pinned the
-    # 2rem index column of the ruled list, which was the drawing, not the
-    # intent. What matters: a narrow breakpoint exists, it collapses the list
-    # to one column, and no rule hides a situation row.
-    narrow_blocks = re.findall(r"@media \(max-width:(?:699|700)px\)\{(?:[^{}]*\{[^}]*\})+\}", home_css)
-    assert narrow_blocks, "narrow breakpoint for the situation index is missing"
-    assert any(".situation-list{grid-template-columns:minmax(0,1fr)}" in b for b in narrow_blocks)
-    assert not re.search(r"\.situation-row[^{]*\{[^}]*display:none", home_css)
+    for cls in ("home-capabilities", "home-sectors", "home-deliverables", "home-services", "home-company", "home-proposal"):
+        assert f'class="section {cls}"' in html
+        assert not re.search(rf"\.{cls}[^{{]*\{{[^}}]*display\s*:\s*none", home_css)
+    assert "@media (max-width:620px)" in home_css
+    assert ".home-capability-list article" in home_css
+    assert ".home-delivery-flow" in home_css
 
 
 def test_css_modules_are_concatenated_without_a_framework():
@@ -1343,15 +1280,10 @@ def test_thankyou_specialist_cta_family():
         assert "wa.me" in text
         assert "Prazo" in text or "prazo" in text
     specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
-    # 2026-09-08. Esta linha exigia o rotulo "Solicitar diagnostico tecnico"
-    # no CTA principal, cujo href e /triagem-tecnica/. O rotulo prometia um
-    # diagnostico e o destino entregava uma triagem: rotulo e destino tem de
-    # coincidir. A propriedade preservada -- a pagina de quem assina leva a
-    # um caminho de atendimento nomeado -- passa a ser verificada assim.
-    # 2026-09-17 (salto institucional 02, lote C): o rotulo encurta para
-    # "Descrever a situação" (o botao quebrava em duas linhas a 390 px, 60 px
-    # contra 44 no piloto); mesmo destino /triagem-tecnica/, mesma propriedade.
-    assert "Descrever a situação" in specialist
+    # 2026-10-03. A campanha institucional adota a proposta como ação comercial
+    # reconhecível. O perfil preserva o caminho real de atendimento e deixa de
+    # nomear a etapa interna de triagem como produto para o visitante.
+    assert "Solicitar proposta" in specialist
     assert 'href="/triagem-tecnica/"' in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
@@ -1673,6 +1605,48 @@ def test_page_index_guard_catches_a_hidden_anchor():
     assert parser.index_hrefs == ["a", "d", "s"]
     assert "b" in parser.hidden_ids
     assert not ({"a", "d", "s"} & parser.hidden_ids)
+
+
+def test_project_demonstrations_are_distinct_semantic_and_on_brand():
+    """Each project route needs a technical demonstration that substantiates its
+    local narrative instead of repeating the decorative hero diagram."""
+    source = json.loads(
+        (ROOT / "data" / "projects" / "project-pages.v1.json").read_text(encoding="utf-8")
+    )
+    pages = source["pages"]
+    assert len(pages) == 13
+    demo_sources = [page["demonstration"]["src"] for page in pages]
+    assert len(set(demo_sources)) == len(pages), "project demonstrations must be route-specific"
+
+    semantic_tokens = {
+        "multidisciplinary-coordination": ("passagem", "estrutura", "rota", "arquitetura", "versões"),
+        "infrastructure": ("corte", "aterro", "cobertura", "edificação"),
+        "steel-structure": ("chapa", "parafusos", "solda", "tolerância", "montagem"),
+        "electrical-project": ("origem", "proteção", "qgbt", "qdl", "cargas"),
+        "plumbing-project": ("aparelho", "ventilação", "inspeção", "conexão"),
+    }
+    for page in pages:
+        hero = page["visual"]["src"]
+        demo = page["demonstration"]["src"]
+        assert demo != hero, f"{page['route']}: hero and demonstration repeat the same asset"
+        asset = ROOT / demo.removeprefix("/")
+        assert asset.exists(), f"missing project demonstration: {demo}"
+        root = ET.parse(asset).getroot()
+        assert root.get("role") == "img", f"{demo}: SVG needs an image role"
+        svg_text = " ".join("".join(root.itertext()).split()).casefold()
+        assert "demonstração técnica" in svg_text, f"{demo}: discreet technical label missing"
+        assert root.find("{http://www.w3.org/2000/svg}title") is not None, f"{demo}: title missing"
+        assert root.find("{http://www.w3.org/2000/svg}desc") is not None, f"{demo}: desc missing"
+        for token in semantic_tokens.get(page["id"], ()):
+            assert token.casefold() in svg_text, f"{page['route']}: figure does not show {token!r}"
+
+    family = (ROOT / "assets" / "project-practices.css").read_text(encoding="utf-8")
+    family += "".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted((ROOT / "assets" / "project-practices").glob("*.svg"))
+    )
+    for terracotta in ("#d96b39", "#efa27f", "#f2c7b5"):
+        assert terracotta not in family.casefold(), f"project family reintroduces {terracotta}"
 
 
 def run_all() -> int:

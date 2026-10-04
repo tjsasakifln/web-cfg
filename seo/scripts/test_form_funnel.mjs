@@ -33,9 +33,8 @@ const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
-  "Solicitar canal seguro para envio",
+  "Quero combinar o envio reservado de documentos confidenciais",
   "Descrever minha situação",
-  'data-set-journey="contrato"',
   'data-journey="edital"',
   'data-journey="operacao"',
   'id="estagio"',
@@ -164,7 +163,11 @@ for (const f of ["obrigado-contrato.html", "obrigado-edital.html", "obrigado-ope
 }
 for (const f of ["obrigado-contrato.html", "obrigado-edital.html"]) {
   const t = fs.readFileSync(path.join(root, f), "utf8");
-  if (!t.includes("id=\"receipt-id\"") || !t.includes("canal escolhido posteriormente") || !t.includes("Solicitar canal seguro para envio")) {
+  if (
+    !t.includes("id=\"receipt-id\"") ||
+    !/referências não sigilosas/i.test(t) ||
+    !/envio reservado/i.test(t)
+  ) {
     console.error("FAIL: confirmation missing persisted protocol or B SLA", f);
     process.exit(1);
   }
@@ -175,6 +178,10 @@ for (const f of ["obrigado-contrato.html", "obrigado-edital.html"]) {
 }
 if (!home.includes('id="canal_seguro"') || !home.includes('name="document_intent"')) {
   console.error("FAIL: home form missing secure-channel fields");
+  process.exit(1);
+}
+if (!/documentos confidenciais/i.test(formMatch[0]) || !/forma reservada de envio/i.test(formMatch[0])) {
+  console.error("FAIL: secure-channel boundary is not explicit in the home form");
   process.exit(1);
 }
 if (/type\s*=\s*['"]file['"]/i.test(home)) {
@@ -700,7 +707,8 @@ if (/orçamento|orcamento/i.test(projeto.route)) {
   if (avaliacao.ladder !== false) situationFail("avaliação de imóvel must stay off the public-works ladder");
   if (avaliacao.route !== "/servicos/#servico-avaliacao") situationFail("avaliação de imóvel must open the valuation section", avaliacao.route);
   if (/processo|dados médicos|partes/i.test(String(avaliacao.detail))) situationFail("avaliação de imóvel carries dispute guidance", avaliacao.detail);
-  if (!/finalidade/i.test(String(avaliacao.detail)) || !/data-base/i.test(String(avaliacao.detail))) situationFail("avaliação de imóvel must ask for purpose and base date", avaliacao.detail);
+  const avaliacaoGuidance = `${avaliacao.next_step || ""} ${avaliacao.detail || ""} ${avaliacao.placeholder || ""}`;
+  if (!/finalidade/i.test(avaliacaoGuidance) || !/data-base/i.test(avaliacaoGuidance)) situationFail("avaliação de imóvel must ask for purpose and base date", avaliacaoGuidance);
   if (!/avaliação de imóvel/i.test(String(avaliacao.whatsapp))) situationFail("avaliação de imóvel WhatsApp prefill must name the valuation", avaliacao.whatsapp);
   if (stageToJourney("avaliação de imóvel") !== "avaliacao") situationFail("stageToJourney disagrees with the valuation situation", stageToJourney("avaliação de imóvel"));
   if (journeyActions.avaliacao !== "/obrigado") situationFail("avaliacao journey must confirm on the generic page", journeyActions.avaliacao);

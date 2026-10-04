@@ -1,0 +1,13 @@
+{
+  "schema": "CONFENGE_CONTRACT_ANALYSIS_PRESENTATION_AMENDMENT/1",
+  "authorized_at": "2026-10-03",
+  "authorization": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+  "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "snapshot_sha256": "09e5e32c328f2e8492cfb692fa54856b5f68cf7fdd0cb794a2a48f59b31d66f8",
+  "prefill_before": "Ol%C3%A1%2C%20Tiago.",
+  "prefill_after": "Ol%C3%A1%2C%20CONFENGE.",
+  "prefill_occurrences": 1,
+  "scope": ["institutional_whatsapp_greeting", "shared_navigation", "shared_footer"],
+  "new_human_review_claimed": false,
+  "preserved": ["immutable_factual_snapshot", "material_approval", "technical_main", "sources", "calculations", "author", "dates", "canonical", "robots", "json_ld", "visible_contextual_cta"]
+}

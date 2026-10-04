@@ -115,10 +115,10 @@ await page.evaluateOnNewDocument(() => { window.CONFENGE_DEBUG_ANALYTICS = false
 // (1) home hero assessment CTA -> exactly one cta_click destination_type=route.
 {
   await open(page, "/");
-  const diff = await clickAndDiff(page, '.hero a[data-event-name="cta_click"][href="/triagem-tecnica/"]');
+  const diff = await clickAndDiff(page, '.hero a[data-event-name="cta_click"][href="#contato"]');
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   const others = diff.added.filter((e) => /^(whatsapp_click|lead_form_|content_to_service)/.test(e.event));
-  check("home_hero_route_cta", "/", !diff.missing && clicks.length === 1 && clicks[0].destination_type === "route"
+  check("home_hero_form_cta", "/", !diff.missing && clicks.length === 1 && clicks[0].destination_type === "form"
     && clicks[0].cta_position === "hero" && others.length === 0 && piiViolations(diff.added).length === 0, diff);
 }
 
@@ -139,7 +139,7 @@ await page.evaluateOnNewDocument(() => { window.CONFENGE_DEBUG_ANALYTICS = false
 // (11) home situation link (no data-event-name) -> cta_click route with its own cta_id.
 {
   await open(page, "/");
-  const diff = await clickAndDiff(page, 'a.situation-action[data-cta-id="home-private-quantities-budget"]');
+  const diff = await clickAndDiff(page, 'a[data-cta-id="home-private-quantities-budget"]');
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   check("home_situation_action_route_cta", "/", !diff.missing && clicks.length === 1
     && clicks[0].destination_type === "route" && clicks[0].cta_id === "home-private-quantities-budget"
@@ -149,21 +149,20 @@ await page.evaluateOnNewDocument(() => { window.CONFENGE_DEBUG_ANALYTICS = false
 // (2) home #contato -> one cta_click alias_from=service_cta_click destination_type=form.
 {
   await open(page, "/");
-  const diff = await clickAndDiff(page, 'a[data-cta-position="corporate_triage"][href="#contato"]');
+  const diff = await clickAndDiff(page, 'a[data-cta-position="proposal_band"][href="#contato"]');
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   check("home_contact_anchor_form_cta", "/", !diff.missing && clicks.length === 1
-    && clicks[0].alias_from === "service_cta_click" && clicks[0].destination_type === "form"
-    && clicks[0].cta_kind === "service" && diff.added.length === 1, diff);
+    && clicks[0].cta_position === "proposal_band" && clicks[0].destination_type === "form" && diff.added.length === 1, diff);
 }
 
 // (5) home wa.me link declared critical_decision_cta_click -> whatsapp_click with cta_kind, alias never in dataLayer.
 {
   await open(page, "/");
-  const diff = await clickAndDiff(page, 'a[data-event-name="critical_decision_cta_click"]');
+  const diff = await clickAndDiff(page, '.whatsapp-float[data-event-name="whatsapp_click"]');
   const wa = diff.added.filter((e) => e.event === "whatsapp_click");
   const wrong = diff.added.filter((e) => e.event === "critical_decision_cta_click");
   check("home_whatsapp_cta_kind_from_alias", "/", !diff.missing && wa.length === 1
-    && wa[0].cta_kind === "critical_decision" && wa[0].destination_type === "whatsapp"
+    && wa[0].cta_position === "float" && wa[0].destination_type === "whatsapp"
     && wrong.length === 0 && diff.added.length === 1 && piiViolations(diff.added).length === 0, diff);
 }
 
@@ -229,7 +228,7 @@ for (const [route, hash] of [
 // cta_formal section, #encaminhar is the partner contact block) -> exactly one cta_click destination_type=form
 // with their own cta_id.
 for (const [route, ctaId, hash] of [
-  ["/projetos-complementares-engenharia/", "frame-elaboration-hero", "#escopo-projeto"],
+  ["/projetos-complementares-engenharia/", "projetos-complementares-engenharia-hero-proposal", "#escopo-projeto"],
   ["/parcerias-engenharia/", "partner-hero-describe", "#encaminhar"],
 ]) {
   await open(page, route);
@@ -276,7 +275,7 @@ for (const route of ["/quantitativos-orcamento-obras/", "/", "/conteudos/calculo
 // (4b) home footer mailto whose visible text is the address -> email_click without cta_label or any '@' value.
 {
   await open(page, "/");
-  const diff = await clickAndDiff(page, 'a[data-cta-position="contact"][href^="mailto:"]');
+  const diff = await clickAndDiff(page, 'footer a[href^="mailto:"]');
   const mailEv = diff.added.filter((e) => e.event === "email_click");
   check("home_footer_mailto_no_address_in_payload", "/", !diff.missing && mailEv.length === 1
     && mailEv[0].destination_type === "email" && !("cta_label" in mailEv[0])
@@ -286,10 +285,10 @@ for (const route of ["/quantitativos-orcamento-obras/", "/", "/conteudos/calculo
 // (3) /quantitativos-orcamento-obras/ hero capture anchor -> one cta_click with its own cta_id, destination_type=form.
 {
   await open(page, "/quantitativos-orcamento-obras/");
-  const diff = await clickAndDiff(page, 'a[data-cta-id="frame-quantities-budget-hero"]');
+  const diff = await clickAndDiff(page, 'a[data-cta-id="quantitativos-orcamento-obras-hero-proposal"]');
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   check("quantities_hero_form_cta", "/quantitativos-orcamento-obras/", !diff.missing && clicks.length === 1
-    && clicks[0].cta_id === "frame-quantities-budget-hero" && clicks[0].destination_type === "form"
+    && clicks[0].cta_id === "quantitativos-orcamento-obras-hero-proposal" && clicks[0].destination_type === "form"
     && diff.added.length === 1, diff);
 }
 
@@ -323,7 +322,7 @@ for (const route of ["/quantitativos-orcamento-obras/", "/", "/conteudos/calculo
 // (8) hub /servicos/ -> private service route is content_to_service with a known destination_service_id.
 {
   await open(page, "/servicos/");
-  const diff = await clickAndDiff(page, 'a[data-cta-id="services-private-quantities-budget"]');
+  const diff = await clickAndDiff(page, '#servico-orcamento a[href="/quantitativos-orcamento-obras/"]');
   const trans = diff.added.filter((e) => e.event === "content_to_service");
   check("hub_servicos_content_to_service_known", "/servicos/", !diff.missing && trans.length === 1
     && trans[0].destination_service_id === "quantitativos-orcamento-obras"
@@ -334,7 +333,7 @@ for (const route of ["/quantitativos-orcamento-obras/", "/", "/conteudos/calculo
 // (9) hub /servicos/ -> triage route link is cta_click route, never content_to_service UNKNOWN_SERVICE.
 {
   await open(page, "/servicos/");
-  const diff = await clickAndDiff(page, 'a[href="/triagem-tecnica/#projetos"]');
+  const diff = await clickAndDiff(page, 'a[data-cta-id="services-proposal"][href="/triagem-tecnica/"]');
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   const unknown = diff.added.filter((e) => e.destination_service_id === "UNKNOWN_SERVICE");
   check("hub_servicos_triage_link_route_cta", "/servicos/", !diff.missing && clicks.length === 1
@@ -374,7 +373,7 @@ for (const [route, selector, label] of [
 {
   await open(page, "/");
   const result = await page.evaluate(async () => {
-    const nodes = [...document.querySelectorAll("[data-event-name], a.header-cta, a.situation-action")];
+    const nodes = [...document.querySelectorAll("[data-event-name], a.header-cta")];
     for (const node of nodes) {
       node.addEventListener("click", (event) => event.preventDefault(), { capture: true });
       node.click();

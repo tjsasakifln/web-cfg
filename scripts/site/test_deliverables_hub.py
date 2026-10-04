@@ -593,52 +593,58 @@ def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
     )
 
 
-def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None:
-    home = _html(ROOT / "index.html")
+def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     assert '<link href="/entregas/styles.css" rel="stylesheet"/>' not in home
     assert 'data-home-deliverables-critical=""' in home
-    # 2026-08-30 (overhaul value-first). O bloco critico inline existe para que
-    # a PRIMEIRA DOBRA nao dependa de folha externa. Quando este gate foi
-    # escrito, a previa de entregas ficava logo abaixo do hero e era ela que
-    # precisava do CSS inline. A ordem mudou: agora a pagina e valor, situacao,
-    # entrega, metodo, evidencia, autoridade, adequacao e captura, e a previa
-    # de entregas caiu para a terceira secao, bem abaixo da dobra. Quem precisa
-    # do CSS inline passou a ser o hero e a coluna do artefato. O gate segue a
-    # propriedade, nao o seletor antigo.
+    # The first fold must retain its own critical responsive layout; concrete
+    # deliverables are verified in the current corporate engineering journey.
     crit = re.search(r'<style data-home-deliverables-critical=""[^>]*>([\s\S]*?)</style>', home)
     assert crit, "bloco critico inline ausente"
     critical_css = crit.group(1)
-    assert ".hero{" in critical_css
-    assert ".home-hero-grid{" in critical_css
-    assert ".hero-deliverable{" in critical_css
-    home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
-    assert ".situation-row{" in home_css
-    # VALOR-IMEDIATO-20260914. O ledger "O que sai do trabalho" (quatro h3
-    # genericos) saiu: os 21 revisores do exame cego o leram como formato sem
-    # finalidade nos tres rotulos. A propriedade que ele protegia -- a home
-    # nomeia entregas concretas dentro da jornada corporativa, e nao so a
-    # conversa -- passa a ser verificada onde o comprador decide: cada linha de
-    # situacao nomeia a entrega (h3 + clausula "passa a ter") e o hero traz uma
-    # entrega ligada a um uso (.hero-deliverable).
-    rows = re.findall(r'<li class="situation-row[\s\S]*?</li>', home)
-    assert len(rows) >= 5, len(rows)
-    for row in rows:
-        assert "<h3>" in row, row[:120]
-        assert 'class="situation-use"' in row and "passa a ter" in row, row[:120]
-    deliverable = re.search(r'<p class="hero-deliverable">([\s\S]*?)</p>', home)
-    assert deliverable, "hero must keep a use-linked deliverable line"
-    deliverable_text = re.sub(r"<[^>]+>", " ", deliverable.group(1))
-    assert len(deliverable_text) >= 120
-    assert re.search(r"planilha|projeto|laudo|relat[óo]rio|mem[óo]ria", deliverable_text, re.I)
-    assert re.search(r"compar|contrat|decid|or[çc]ar|executar", deliverable_text, re.I)
-    assert 'href="/servicos/"' in home
+    for selector in (".home-opening{", ".home-opening__grid{", ".home-opening h1{", ".home-opening__sheet img{"):
+        assert selector in critical_css, selector
+    responsive = re.search(r'@media \(max-width:900px\)\{([^\n]+)', critical_css)
+    assert responsive and ".home-opening__grid{grid-template-columns:1fr}" in responsive.group(1)
+    for selector in (".home-capability-list article{", ".home-delivery-flow{", "@media (max-width:900px)", "@media (max-width:620px)"):
+        assert selector in home_css, selector
+    deliverable = re.search(r'<section\b[^>]*id="entregas"[^>]*>.*?</section>', home, re.S)
+    assert deliverable, "home must explain concrete deliverables and their use"
+    block = deliverable.group(0)
+    text = _visible_text(block).lower()
+    assert 'data-section-archetype="delivery_flow"' in block
+    flow = re.search(r'<ol class="home-delivery-flow">.*?</ol>', block, re.S)
+    assert flow and len(re.findall(r"<li>", flow.group(0))) == 4
+    for term in ("desenhos", "modelos", "memórias", "especificações", "quantitativos", "planilhas", "registros de compatibilização", "contratação", "execução", "operação"):
+        assert term in text, term
+    competence = re.search(r'<section\b[^>]*id="competencias"[^>]*>.*?</section>', home, re.S)
+    assert competence
+    articles = re.findall(r"<article>.*?</article>", competence.group(0), re.S)
+    assert len(articles) == 3
+    for article, discipline in zip(articles, ("estruturas", "instalacoes", "infraestrutura")):
+        assert f'href="/projetos/{discipline}/"' in article
+        assert "<h3>" in article and "<p>" in article
+    assert 'href="/projetos/coordenacao-multidisciplinar/"' in competence.group(0)
+    assert 'href="/servicos/"' in home and 'href="/projetos/"' in home
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', home)
-    # Faixa, nao numero magico: 5 a 8 blocos narrativos com >=5 distintos,
-    # jornada por situacao presente e antes da vertical de obras publicas.
     assert 5 <= len(archetypes) <= 8, archetypes
     assert len(set(archetypes)) >= 5, archetypes
-    assert "journey_paths" in archetypes and "market_context" in archetypes, archetypes
-    assert archetypes.index("journey_paths") < archetypes.index("market_context"), archetypes
+    assert {"hero_split", "discipline_editorial", "delivery_flow", "service_index", "authority_editorial", "cta_formal"} <= set(archetypes)
+    assert archetypes.index("discipline_editorial") < archetypes.index("delivery_flow") < archetypes.index("service_index")
+    services = re.search(r'<section\b[^>]*data-section-archetype="service_index"[^>]*>.*?</section>', home, re.S)
+    assert services and 'data-cta-id="home-service-public-works"' in services.group(0)
+    assert 'href="/servicos-obras-publicas/"' in services.group(0)
+
+
+def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None:
+    _assert_home_delivery_contract(_html(ROOT / "index.html"), _html(ROOT / "assets/home-10x.css"))
+
+
+def test_home_delivery_contract_rejects_lost_substance_or_responsive_layout() -> None:
+    home, css = _html(ROOT / "index.html"), _html(ROOT / "assets/home-10x.css")
+    for old, new in (("registros de compatibilização", "objetos"), ('href="/projetos/estruturas/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
+        assert old in home
+        with pytest.raises(AssertionError):
+            _assert_home_delivery_contract(home.replace(old, new), css)
 
 
 def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
@@ -815,12 +821,38 @@ def test_asset_identifiers_are_stable_and_do_not_contain_pii() -> None:
     ids = re.findall(r'data-cta-id="([^"]+)"', html)
     assert len(ids) == len(set(ids)), f"duplicate cta ids: {ids}"
 
-    home = _html(ROOT / "index.html")
+    _assert_home_hero_capture(_html(ROOT / "index.html"))
+
+
+def _assert_home_hero_capture(home: str) -> None:
     primary = re.search(
-        r'<a\b[^>]*data-cta-position="hero"[^>]*href="/triagem-tecnica/"[^>]*>',
+        r'<a\b(?=[^>]*class="[^"]*button-primary)(?=[^>]*data-cta-position="hero")(?=[^>]*href="#contato")[^>]*>.*?</a>',
         home,
+        re.S,
     )
     assert primary and 'data-event-name="cta_click"' in primary.group(0)
+    assert "solicitar proposta" in _visible_text(primary.group(0))
+    tag = primary.group(0).split(">", 1)[0]
+    assert "@" not in tag and not re.search(r"\+?\d{10,}", tag)
+    contact = re.search(r'<section\b[^>]*id="contato"[^>]*>.*?</section>', home, re.S)
+    assert contact
+    assert 'data-runtime-profile="shared_lead_form_v1"' in contact.group(0)
+    assert 'data-receipt-required="true"' in contact.group(0)
+
+
+def test_home_hero_capture_rejects_lost_attribution_intake_or_pii() -> None:
+    home = _html(ROOT / "index.html")
+    _assert_home_hero_capture(home)
+    for old, new in (
+        ('data-cta-position="hero" data-event-name="cta_click" href="#contato"', 'data-cta-position="hero" href="#contato"'),
+        ('href="#contato"', 'href="/triagem-tecnica/"'),
+        ('data-receipt-required="true"', 'data-receipt-required="false"'),
+        ('data-cta-position="hero"', 'data-cta-position="hero" data-email="test@example.invalid"'),
+        ('data-cta-position="hero"', 'data-cta-position="hero" data-phone="5500000000000"'),
+    ):
+        assert old in home
+        with pytest.raises(AssertionError):
+            _assert_home_hero_capture(home.replace(old, new))
 
 
 def test_every_bundle_transition_is_attributable_to_its_origin() -> None:

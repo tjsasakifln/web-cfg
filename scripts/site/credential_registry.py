@@ -104,19 +104,6 @@ STOREFRONT_PATTERNS = (
     r"hor[aá]rio de atendimento presencial",
 )
 
-# Each projected row names WHERE the fact comes from. Both labels are source
-# attribution in the same grammatical shape, so neither reads as a caveat
-# against the engineer who signs the work: a public registry and the named
-# professional are two sources, not a strong claim and a weak one. Issue #638.
-SOURCE_LABELS = {
-    "official_public_registry": "Fonte: registro público oficial",
-    "official_professional_registry": "Fonte: registro profissional oficial",
-    "official_judicial_registry": "Fonte: cadastro judicial oficial",
-    "official_primary_document": "Fonte: documento oficial",
-    "official_public_url": "Fonte: URL pública verificada",
-    "SELF_ATTESTED": "Fonte: Tiago Jun Sasaki",
-}
-
 # Copy that volunteers a deficit about our own credentials, track record or
 # proof inventory. The registry is the machine that stamps every owned surface,
 # so the ban lives here and not only in a page-level linter: a wording edit in
@@ -546,11 +533,6 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             f"{escape(wording)}</span>"
             f"{extra}"
         )
-        status_label = SOURCE_LABELS.get(str(claim.get("source_class") or ""))
-        if not status_label:
-            status_label = SOURCE_LABELS.get(str(claim.get("status") or ""))
-        if status_label:
-            desc += f' <small class="credential-source">{escape(status_label)}</small>'
         rows.append((term, desc, claim))
     return rows
 
@@ -567,9 +549,9 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         else "Identidade e registros"
     )
     lead = (
-        "O que dá para conferir agora, com fonte e data ao lado."
+        "Formação, registro profissional e trajetória de Tiago Jun Sasaki."
         if "especialista" in surface
-        else "Quem responde pelo trabalho, com a fonte de cada informação ao lado."
+        else "Informações institucionais e profissionais que sustentam a atuação da CONFENGE."
     )
     limits: list[str] = []
     if any(c["id"] == "org-cadastral-address" for c in claims):
@@ -587,11 +569,8 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         f"<p>{escape(lead)}</p>"
         f'<dl class="credential-list">{items}</dl>'
         f"{limit_html}"
-        f'<p class="credential-as-of">Consulta pública conferida em '
-        f'<time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>. '
-        "Os dados da pessoa jurídica vêm da consulta pública de CNPJ da Receita Federal. "
-        "Formação, títulos e registro profissional vêm dos documentos ou registros oficiais indicados. "
-        "O histórico de obras e projetos analisados é informado por Tiago Jun Sasaki.</p>"
+        f'<p class="credential-as-of">Informações atualizadas em '
+        f'<time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>.</p>'
         "</section>"
     )
 

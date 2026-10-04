@@ -11,7 +11,7 @@ Handoff Warmbly: [WARMBLY-INBOUND.md](./WARMBLY-INBOUND.md). Não usar `OPS_WEBH
 
 Money-asset ops chain (auth, no PII): `asset_view` → `contract_analyzed` → `cta_view` → `cta_click` → `lead_persisted` (legacy alias `lead_created`) → handoff `delivered`/`blocked` (plus pending/retryable/skipped/dead). Query `ops?action=inbound_handoff` or `analytics_summary`. Unset inbound URL/secret skips handoff and does not fail capture.
 
-Published inspection (read-only, GET-only, no credential, never creates a lead): `npm run probe:money-asset:prod`. Authenticated synthetic capture/transport proof is `npm run probe:lead:prod` (`LEAD_PROBE_SECRET` required). INBOUND NOW stays unproven until a real lead (or real rejection) meets a live destination with auto-send off.
+Published inspection (read-only, GET-only, no credential, never creates a lead): `npm run probe:money-asset:prod`. Authenticated synthetic capture/transport proof is `npm run probe:lead:prod` (`LEAD_PROBE_SECRET` required). Its default remains no e-mail. The separately authorized inbox proof requires the per-run opt-in `PROBE_VERIFY_EMAIL=1`, `OPS_TOKEN` and `EXPECTED_SHA` equal to the full served release SHA; it never changes the synthetic classification or commercial metrics.
 
 ## Estados
 
@@ -32,7 +32,9 @@ peças, nesta ordem:
 
 1. **Alerta** = e-mail Resend (`From: LEAD_FROM_EMAIL`, `To: LEAD_NOTIFY_EMAIL`,
    assunto `Lead CONFENGE [jornada] estágio · <lead_id>`). Só sai para
-   `record_kind=real`; sintético/QA/probe é `email=skipped`. Depende do domínio
+   `record_kind=real`; sintético/QA/probe é `delivery.email=skipped`. A prova
+   de inbox autorizada usa o canal separado `delivery.qa_email`, descrito
+   abaixo, sem modificar essa regra. Depende do domínio
    `confenge.com.br` estar `verified` no Resend (ver
    [EXTERNAL-ACTIONS.md](./EXTERNAL-ACTIONS.md) §2/§3: até 2026-09-18 ele estava
    `failed` e nenhum e-mail de lead real havia saído do host). Um e-mail perdido
@@ -60,7 +62,7 @@ timestamps; nunca imprimir chaves, `to`, e-mail, telefone ou mensagem.
    `record_kind`, `handoff`, `needs_contact`. A mensagem vira `[present]`.
 2. Handoff e entrega: `GET ops?action=inbound_handoff&lead_id=<lead_id>` →
    `handoff.{status,attempts,delivered_at,downstream}` e
-   `delivery.{notify_status,email_status}`.
+   `delivery.{notify_status,email_status,qa_email_status,qa_email_provider_id}`.
 3. Correlação com o Resend: o store guarda `delivery.email.provider_id` (id da
    mensagem) e `delivery.email.http`; com `pii=1` (somente no shell do host)
    `ops?action=lead&id=…&pii=1` devolve `delivery` inteiro. No host,
@@ -75,6 +77,33 @@ timestamps; nunca imprimir chaves, `to`, e-mail, telefone ou mensagem.
    lead_id='<lead_id>'` — nunca selecionar `lead_email`, `lead_phone` ou
    `message`. Depois `GET /confenge/inbound` via túnel para confirmar presença
    na fila.
+
+### Verificação controlada de inbox
+
+O ramo QA só é aceito quando todas as condições valem na mesma requisição:
+
+- header de probe válido por comparação constante com `LEAD_PROBE_SECRET`;
+- opt-in do script `PROBE_VERIFY_EMAIL=1`, convertido no header interno
+  `X-Confenge-QA-Email: 1`;
+- prova adicional do `OPS_TOKEN`, comparada em tempo constante no servidor;
+- `EXPECTED_SHA` completo igual ao build público e ao `RUNTIME_RELEASE_SHA`
+  (ou `COMMIT_REF` legado) do processo;
+- registro forçado como `synthetic`, `synthetic_probe_authenticated=true` e
+  `next_action=exclude_from_commercial`;
+- safety gate Warmbly `READY`, `auto_send_off=true` antes do POST, seguido de
+  recibo durável `handoff.status=DELIVERED` antes do e-mail.
+
+O destinatário não vem da requisição: é sempre `LEAD_NOTIFY_EMAIL`, e qualquer
+header de override é recusado. O assunto único é
+`[TESTE CONTROLADO] CONFENGE <lead_id>`; o corpo tem somente o identificador
+opaco e o SHA da release. `delivery.qa_email` guarda status, uma tentativa,
+`Idempotency-Key: qa-email/<lead_id>`, HTTP e `provider_id` sanitizado. O
+segundo POST com a mesma chave devolve o recibo idempotente e não reenvia. Esse
+campo não é lido por `drain_inbound` nem por `reconcileEmailDeliveries`; erros
+ou timeouts exigem inspeção manual no provedor pelo assunto antes de nova ação.
+Uma execução interrompida recupera o recibo com a mesma chave por até 23 h,
+margem conservadora dentro da janela de 24 h do provedor. Depois disso, o estado
+passa a `manual_reconcile` e nenhuma chamada de envio é feita automaticamente.
 
 ## Comportamento conhecido: reenvio e duplicação
 
@@ -120,6 +149,16 @@ timestamps; nunca imprimir chaves, `to`, e-mail, telefone ou mensagem.
   `LEAD_NOTIFY_EMAIL` alterado dentro de 24 h) → 409 e
   `reason=payload_mismatch`; duas requisições simultâneas → 409 e
   `reason=concurrent_idempotent` (retentado mais tarde).
+- A verificação QA, quando explicitamente autorizada, ocorre somente no probe
+  autenticado: handoff e canais comuns continuam paralelos; depois do recibo
+  `DELIVERED`, o canal `qa_email` usa o mesmo orçamento
+  `LEAD_DELIVERY_TIMEOUT_MS`. Esse custo serial existe apenas nessa execução
+  operacional e não altera o prazo do formulário humano. Replays simultâneos
+  compartilham uma única chamada no processo e disputam no store um lease
+  durável igual ao orçamento configurado do canal mais 5 s entre processos
+  (até 35 s). O estado é atualizado sob a trava do store,
+  e um retorno tardio não pode rebaixar um recibo `ok`. Adaptadores sem
+  atualização atômica recusam o ramo QA antes da chamada ao provedor.
 - Reenvio do e-mail: consumidor `POST ops?action=drain_inbound` (diário via
   `.github/workflows/revops-scheduled.yml` → `scripts/revops/scheduled_daily.mjs`).
   Reenvia, com a MESMA chave, registros `record_kind=real` com

@@ -120,5 +120,8 @@ def test_unlock_gate_requires_date_all_evidence_and_explicit_authorization(tmp_p
     )["gate_open"] is True
 
 
-def test_prepare_only_state_keeps_every_forbidden_surface_at_its_committed_hash():
-    assert forbidden_drift(ROOT) == {}
+def test_reviewed_baseline_preserves_historical_campaign_authorization():
+    drift = forbidden_drift(ROOT)
+    assert drift == {}
+    assert PLAN["commercial_revision"]["editorial_freeze_revoked"] is True
+    assert PLAN["commercial_revision"]["decision_state"] == "EXECUTE_NOW"

@@ -116,6 +116,16 @@ function frozenState(current) {
   if (!(plan.protected_pillars || []).includes(protectedRoute)) {
     throw new Error(`LICITACAO_FREEZE_CONTRACT_INVALID: ${protectedRoute} is not protected`);
   }
+  // The 2026-10 institutional campaign revoked the editorial checksum freeze.
+  // This legacy renderer still stays excluded from the route so it cannot
+  // reintroduce the old product layout; current shell/copy maintenance is
+  // validated by semantic gates instead of a whole-file hash.
+  if (
+    plan.commercial_revision?.decision_state === "EXECUTE_NOW" &&
+    plan.commercial_revision?.editorial_freeze_revoked === true
+  ) {
+    return { held: true, expected: "legacy-checksum-retired" };
+  }
   const expected = hashes.forbidden?.[protectedPath];
   const actual = sha256(current);
   if (!expected || actual !== expected) {

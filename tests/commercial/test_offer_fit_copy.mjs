@@ -36,44 +36,18 @@ for (const route of ROUTES) {
     route.rel,
   );
   if (route.home) {
-    for (const panel of matrix.home_illustrations) {
-      assert(`home_has_${panel.panel}_contract`, html.includes(panel.contract_display), panel.contract_display);
-      assert(`home_has_${panel.panel}_pncp`, html.includes(panel.pncp_path), panel.pncp_path);
-      assert(`home_has_${panel.panel}_copy`, html.includes(panel.copy), panel.panel);
-      assert(`home_${panel.panel}_not_fictional`, !/exemplo fictício|contrato fictício/i.test(html), panel.panel);
-    }
-    // 2026-08-30 (overhaul value-first). Antes daqui a home era obrigada a
-    // escrever "nao sao clientes da CONFENGE", ou seja, a desautorizar a
-    // propria empresa para provar honestidade. A propriedade real a proteger
-    // nao e a frase: e que o registro do PNCP apareca rotulado como contexto
-    // de mercado, com fonte e data de corte, e nunca como prova de cliente.
-    // E isso que passa a ser verificado.
-    assert("home_source_line", html.includes("Fonte: PNCP") && html.includes("21/08/2026"), "source");
-    assert("home_market_context_labelled", /contexto de mercado/i.test(html), "context");
-    // 2026-08-30 (revisao adversarial). A versao anterior desta linha era
-    // `!CLIENT_FRAMING.test(html) || /contexto de mercado/i.test(html)`, e o
-    // lado direito da disjuncao e exatamente o predicado que a linha de cima ja
-    // afirmou verdadeiro: a assercao nao podia falhar em nenhuma home possivel.
-    // Um gate que nunca reprova nao protege propriedade nenhuma. A disjuncao
-    // sai, e a verificacao passa a ser escopada na secao onde a propriedade
-    // vive, para que ela tambem nao passe por ausencia de conteudo.
+    // The institutional home no longer carries a frozen PNCP market panel.
+    // Keep the underlying offer-fit matrix for routing, while making sure the
+    // removed examples cannot be mistaken for CONFENGE client proof.
     const CLIENT_FRAMING = /clientes? da CONFENGE|nossos clientes|clientes? atendidos?|carteira de clientes|resultados? (?:da|de|obtidos? pela) CONFENGE|cases? de cliente/i;
-    const marketSection = html.match(/<div\b[^>]*id="mercado-pncp"[\s\S]*?<\/div>\s*<\/div>/);
-    assert("home_market_section_present", Boolean(marketSection), "market section");
-    assert(
-      "home_not_client_proof",
-      Boolean(marketSection) && !CLIENT_FRAMING.test(marketSection[0]),
-      "client framing inside the PNCP market-context section",
-    );
     assert("home_not_client_proof_page_wide", !CLIENT_FRAMING.test(html), "client framing anywhere on the home");
-    assert(
-      "home_market_provenance_in_section",
-      Boolean(marketSection)
-        && marketSection[0].includes("Fonte: PNCP")
-        && marketSection[0].includes("21/08/2026")
-        && /contexto de mercado/i.test(marketSection[0]),
-      "provenance must sit inside the section, not float anywhere on the page",
-    );
+    assert("home_retired_market_panel_absent", !html.includes('id="mercado-pncp"'), "legacy PNCP panel");
+    for (const panel of matrix.home_illustrations) {
+      assert(`home_omits_retired_${panel.panel}_contract`, !html.includes(panel.contract_display), panel.contract_display);
+      assert(`home_omits_retired_${panel.panel}_pncp`, !html.includes(panel.pncp_path), panel.pncp_path);
+    }
+    assert("home_institutional_service_index_present", html.includes('data-section-archetype="service_index"'), "service index");
+    assert("home_links_current_service_surfaces", /href="\/(?:projetos|servicos)\/"/.test(html), "current services");
     const form = html.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
     assert("home_form_present", Boolean(form), "form");
     const step1 = form ? form[0].match(/data-form-step="1"[\s\S]*?<\/fieldset>/) : null;

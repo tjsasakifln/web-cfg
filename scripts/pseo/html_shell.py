@@ -176,26 +176,7 @@ def _build_footer() -> str:
     else:
         columns = ""
     if not columns:
-        columns = (
-            '<div class="footer-links"><strong>Situações</strong>'
-            '<a href="/#situacao-projeto">Projetos e edificações</a>'
-            '<a href="/#situacao-pericia">Perícias e avaliações</a>'
-            '<a href="/#situacao-sst">Segurança do trabalho</a>'
-            '<a href="/servicos-obras-publicas/">Obras públicas</a></div>'
-            '<div class="footer-links"><strong>Biblioteca e provas</strong>'
-            '<a href="/conteudos/">Conteúdos</a>'
-            '<a href="/ferramentas/">Ferramentas</a>'
-            '<a href="/entregas/">Entregas</a>'
-            '<a href="/casos/">Casos demonstrativos</a></div>'
-            '<div class="footer-links"><strong>Empresa</strong>'
-            '<a href="/especialista/tiago-jun-sasaki/">Quem responde</a>'
-            '<a href="/confianca/">Como verificamos</a>'
-            '<a href="/triagem-tecnica/">Contato e triagem</a>'
-            '<a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>'
-            '<a href="tel:+5548988344559">(48) 98834-4559</a>'
-            "<span>Atendimento em todo o Brasil, conforme escopo, local e "
-            "modalidade definidos na proposta.</span></div>"
-        )
+        columns = '<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/servicos/">Serviços de engenharia</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>'
     return f"""<footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>{html.escape(blurb)}</p></div>
@@ -382,6 +363,14 @@ def page_shell(
 </body>
 </html>
 """
+    # One channel-copy source prevents regenerated library/market pages from
+    # restoring the former admissibility step or personal-only greetings.
+    from scripts.site.document_intake import rewrite_html
+
+    document = rewrite_html(document)
+    from scripts.site.sync_article_word_counts import sync_word_count
+
+    document = sync_word_count(document)
     try:
         from scripts.site.shell_nav import load_brand, sync_text  # noqa: PLC0415
 

@@ -1,15 +1,13 @@
 # Contrato de página pública de serviço
 
-Toda página consumidora segue, nessa ordem:
+Toda página consumidora deve cumprir estas funções editoriais:
 
 ```text
-situation
-→ consequence_or_decision
-→ deliverable
-→ method
-→ proof
-→ material_boundary
-→ next_useful_state
+explicar o serviço
+→ relacionar decisões técnicas ao empreendimento
+→ demonstrar competência pertinente
+→ apoiar uma decisão de contratação
+→ oferecer contato útil
 ```
 
 O contrato executável está em
@@ -24,11 +22,11 @@ CTA de compra. Ela informa o que falta delimitar e conduz a
 `REQUEST_SCOPE_REVIEW`. Outra demanda termina em `NEEDS_CONTEXT` até haver
 enquadramento ou GAP explícito.
 
-## Leitura comercial da sequência (SOLUCAO-INTEGRAL-20260913)
+## Leitura comercial (Comunicação Institucional, Competência e Conversão)
 
-A sequência técnica acima é a ordem dos blocos que o contrato exige. A leitura
-que o visitante faz segue `presentation_order` do JSON: necessidade → solução →
-trabalhos e entregas → condução e integração → conclusão técnica → contato.
+A ordem, o agrupamento e a profundidade dos blocos variam com o serviço. O
+contrato exige as funções acima, sem impor uma narrativa única. As condições
+materiais aparecem junto da decisão a que pertencem.
 
 `material_boundary` reúne as condições reais que mudam a compra (preço ou
 fatores de honorário, extensão contratada, obrigações, papel de terceiros,

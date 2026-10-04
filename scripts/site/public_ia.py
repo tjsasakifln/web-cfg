@@ -611,8 +611,7 @@ def footer_columns_html(ia: dict[str, Any] | None = None) -> str:
                 f'{escape(CONTACT["tel_label"])}</a>'
             )
             links.append(
-                "<span>Atendimento em todo o Brasil, conforme escopo, local e "
-                "modalidade definidos na proposta.</span>"
+                "<span>Atendimento em todo o Brasil.</span>"
             )
         parts.append(
             f'<div class="footer-links"><strong>{heading}</strong>{"".join(links)}</div>'
@@ -717,7 +716,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         elif row.get("id") == "project_delivery":
             if (
                 row.get("index_state") != "service_hub_index"
-                or row.get("href") != "/servicos/#servico-projeto"
+                or row.get("href") != "/projetos/"
                 or not row.get("scope")
             ):
                 errors.append("project situation must resolve to the project service explanation")

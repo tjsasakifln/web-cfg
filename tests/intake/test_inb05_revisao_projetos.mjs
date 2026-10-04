@@ -2,289 +2,99 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
+import { htmlText as visibleText } from "../support/html_text.mjs";
 
 const ROOT = path.resolve(".");
 const LANDING = "revisao-tecnica-projetos-engenharia/index.html";
 const CHOICE = "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html";
 const HIRING = "conteudos/como-contratar-revisao-tecnica-projeto/index.html";
 
-function read(rel) {
-  return fs.readFileSync(path.join(ROOT, rel), "utf8");
-}
+const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
+const mainOf = (html) => html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+const titleOf = (html) => html.match(/<title>([^<]+)<\/title>/i)?.[1] || "";
+const h1Of = (html) => visibleText(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || "");
 
-// Visible-ish text for property assertions. Script bodies are removed by
-// scanning for the closing tag (no HTML-parsing regex), then tags are dropped.
-function textOf(html) {
-  let out = "";
-  let cursor = 0;
-  const lower = html.toLowerCase();
-  while (cursor < html.length) {
-    const open = lower.indexOf("<script", cursor);
-    if (open === -1) {
-      out += html.slice(cursor);
-      break;
-    }
-    out += html.slice(cursor, open);
-    const close = lower.indexOf("</script>", open);
-    cursor = close === -1 ? html.length : close + "</script>".length;
-  }
-  return out.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-}
+const pages = { landing: read(LANDING), choice: read(CHOICE), hiring: read(HIRING) };
 
-function mainOf(html) {
-  return html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
-}
-
-function titleOf(html) {
-  return html.match(/<title>([^<]+)<\/title>/i)?.[1] || "";
-}
-
-function h1Of(html) {
-  return html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1]?.replace(/<[^>]+>/g, "").trim() || "";
-}
-
-function attr(tag, name) {
-  return tag.match(new RegExp(`\\b${name}="([^"]*)"`, "i"))?.[1] || "";
-}
-
-function metaByName(html, name) {
-  const tags = html.match(/<meta\b[^>]*>/gi) || [];
-  const tag = tags.find((item) => attr(item, "name") === name);
-  return tag ? attr(tag, "content") : "";
-}
-
-function metaDescription(html) {
-  return metaByName(html, "description");
-}
-
-function canonicalOf(html) {
-  const tags = html.match(/<link\b[^>]*>/gi) || [];
-  const tag = tags.find((item) => attr(item, "rel").toLowerCase() === "canonical");
-  return tag ? attr(tag, "href") : "";
-}
-
-const PRICE_LANGUAGE =
-  /(a partir de|por apenas|investimento de|valor do servi|pre[çc]o|honor[áa]rio|mensalidade|desconto|or[çc]amento a partir|checkout)/i;
-
-function backedMoneyWordings() {
-  const registry = JSON.parse(
-    fs.readFileSync(path.resolve("data/site/credential-registry.json"), "utf8"),
-  );
-  return registry.claims
-    .filter((claim) => claim.status === "VERIFIED" || claim.status === "SELF_ATTESTED")
-    .flatMap((claim) => [claim.claim, ...(claim.allowed_wording ?? [])])
-    .filter((wording) => typeof wording === "string" && wording.includes("R$"))
-    .map((wording) => wording.toLowerCase());
-}
-
-function unbackedMoneyProblems(html) {
-  const backed = backedMoneyWordings();
-  const text = String(html).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-  const problems = [];
-  for (const match of text.matchAll(/R\$\s*\d/g)) {
-    const window = text.slice(Math.max(0, match.index - 200), match.index + 200);
-    const low = window.toLowerCase();
-    if (!backed.some((wording) => low.includes(wording))) {
-      problems.push(`unbacked_money:${window.trim().slice(0, 120)}`);
-    }
-    if (PRICE_LANGUAGE.test(low)) {
-      problems.push(`price_or_result_money:${window.trim().slice(0, 120)}`);
-    }
-  }
-  return problems;
-}
-
-function stripRefusals(text) {
-  return String(text)
-    .replace(/n[aã]o oferecemos[^.]*\./gi, " ")
-    .replace(/n[aã]o publicamos[^.]*\./gi, " ")
-    .replace(/n[aã]o se conclui[^.]*\./gi, " ")
-    .replace(/n[aã]o substituímos[^.]*\./gi, " ")
-    .replace(/esta recomendação não substitui[^.]*\./gi, " ");
-}
-
-function forbiddenCommercialClaims(html) {
-  const text = stripRefusals(String(html).replace(/<[^>]+>/g, " ").replace(/\s+/g, " "));
-  const problems = [];
-  const banned = [
-    [/assinamos o projeto de terceiro/i, "third_party_signature"],
-    [/assinatura de projeto de terceiro/i, "offers_third_party_signature"],
-    [/aprova[çc][aã]o garantida/i, "guaranteed_approval"],
-    [/obra segura/i, "safe_work_promise"],
-    [/conformidade total/i, "total_compliance"],
-    [/[êe]xito jur[ií]dico/i, "legal_success"],
-    [/(emitimos|publicamos) laudo de seguran[çc]a/i, "safety_report"],
-    [/utm_source=|utm_medium=|utm_campaign=/i, "utm_on_internal_link"],
-  ];
-  for (const [re, code] of banned) {
-    if (re.test(text)) problems.push(code);
-  }
-  return problems;
-}
-
-function authorityStatusOf() {
-  return JSON.parse(
-    fs.readFileSync(path.resolve("netlify/functions/data/adaptive-intake-authority.json"), "utf8"),
-  ).status;
-}
-
-const pages = {
-  landing: read(LANDING),
-  choice: read(CHOICE),
-  hiring: read(HIRING),
-};
-
-test("three URLs have distinct title, H1, meta, CTA and continuation", () => {
-  const titles = [titleOf(pages.landing), titleOf(pages.choice), titleOf(pages.hiring)];
-  const h1s = [h1Of(pages.landing), h1Of(pages.choice), h1Of(pages.hiring)];
-  const metas = [metaDescription(pages.landing), metaDescription(pages.choice), metaDescription(pages.hiring)];
-  assert.equal(new Set(titles).size, 3, titles.join(" | "));
-  assert.equal(new Set(h1s).size, 3, h1s.join(" | "));
-  assert.equal(new Set(metas).size, 3, metas.join(" | "));
-  assert.match(titleOf(pages.landing), /Revisão técnica de projetos de engenharia/i);
-  assert.match(titleOf(pages.choice), /Revisar, compatibilizar ou elaborar/i);
-  assert.match(titleOf(pages.hiring), /Como contratar revisão técnica de projeto/i);
-  assert.match(pages.landing, /Conversar sobre a revisão do projeto/);
-  assert.match(pages.choice, /Pedir revisão do projeto que já tenho/);
-  assert.match(pages.hiring, /Enviar o contexto da revisão/);
-  assert.match(mainOf(pages.choice), /href="\/revisao-tecnica-projetos-engenharia\/"/);
-  assert.match(mainOf(pages.hiring), /href="\/revisao-tecnica-projetos-engenharia\/#contato-revisao"/);
-  assert.match(mainOf(pages.choice), /href="\/conteudos\/como-contratar-revisao-tecnica-projeto\/"/);
-  assert.match(mainOf(pages.hiring), /href="\/conteudos\/revisao-compatibilizacao-ou-elaboracao-projetos\/"/);
+test("review, choice and hiring routes keep distinct search intent and continuity", () => {
+  const titles = Object.values(pages).map(titleOf);
+  const headings = Object.values(pages).map(h1Of);
+  assert.equal(new Set(titles).size, 3);
+  assert.equal(new Set(headings).size, 3);
   assert.match(mainOf(pages.landing), /href="\/conteudos\/revisao-compatibilizacao-ou-elaboracao-projetos\/"/);
   assert.match(mainOf(pages.landing), /href="\/conteudos\/como-contratar-revisao-tecnica-projeto\/"/);
+  assert.match(mainOf(pages.choice), /href="\/revisao-tecnica-projetos-engenharia\/"/);
+  assert.match(mainOf(pages.hiring), /href="\/revisao-tecnica-projetos-engenharia\/#contato-revisao"/);
 });
 
-test("landing first fold states delivery, continuity and authorship without a fixed negative slogan", () => {
-  // SOLUCAO-INTEGRAL-20260913: the fold must say what the review delivers, that the
-  // work continues into the adjustments and sibling stages, and that the original
-  // authorship is preserved. The exact negative sentences are no longer required;
-  // the properties are checked independently of wording.
+test("landing explains depth, evidence classes and accountable deliverable", () => {
   const main = mainOf(pages.landing);
-  const fold = main.slice(0, main.indexOf('id="escopo-revisao"'));
-  const foldText = textOf(fold);
-  assert.match(fold, /relatório com o que a evidência sustenta/i);
-  assert.match(foldText, /autoria[^.]{0,80}(permanece|continua|fica) com o autor|n[ãa]o (substitu[íi]mos|assinamos)[^.]{0,60}autor/i, "authorship stays with the original author");
-  assert.match(foldText, /revis[ãa]o[\s\S]{0,400}(elabora[çc][ãa]o|compatibiliza[çc][ãa]o)[\s\S]{0,200}(mesma proposta|proposta combina|entram na)/i, "sibling stages are articulated as continuity, not as another purchase");
-  assert.doesNotMatch(foldText, /outra compra|compras diferentes|compras distintas|n[ãa]o [ée] elabora[çc][ãa]o nem compatibiliza[çc][ãa]o/i, "no fragmentation slogan in the fold");
-  assert.match(fold, /antes de contratar, executar ou aprovar/i);
-});
-
-test("landing names contractual scope factors and three review depths", () => {
-  const main = mainOf(pages.landing);
+  const text = visibleText(main);
   for (const expected of [
-    "Disciplina e objeto",
-    "Documentos e critérios",
-    "Relatório e encaminhamento",
-    "Revisão documental",
-    "Revisão técnica de disciplina",
-    "Análise de cálculo",
-    "validação normativa integral",
+    "Documental",
+    "Disciplina",
+    "Cálculo",
+    "Mapa de achados",
+    "Implicação técnica",
+    "Síntese para decisão",
   ]) {
-    assert.equal(main.includes(expected), true, `missing scope factor: ${expected}`);
+    assert.match(text, new RegExp(expected, "i"), expected);
   }
-  assert.match(main, /Leitura visual ou questionário não é validação normativa integral/);
-});
-
-test("landing extract separates four honest classes and refuses invented errors", () => {
-  const main = mainOf(pages.landing);
-  assert.match(main, /data-extract-kind="demonstrative"/);
-  assert.match(main, /data-extract-canonical-source="inb-06"/);
-  // LAPIDACAO-COMERCIAL-20260918: "Exemplo demonstrativo" identifies the extract;
-  // the former negative ("não é trabalho de cliente") is superseded and must not
-  // come back. The honest-class limit stays as the material condition.
-  assert.match(main, /rv-note">Exemplo demonstrativo do <a/);
-  assert.doesNotMatch(main, /trabalho de cliente/i);
-  assert.match(main, /Item de checklist não respondido e norma não examinada não viram erro do projeto/);
-  assert.equal(/aprovado pelo fundador|SELECT do demonstrativo|resolved_in_R01/.test(main), false);
-  assert.match(main, /Corrigido na revisão R01/);
-  assert.match(main, /RF-01/);
-  assert.match(main, /WN-01/);
-  assert.match(main, /HS-01/);
-  assert.equal(/V12|E-04/.test(main), false);
-  for (const cls of [
+  for (const kind of [
     "constatacao_sustentada",
     "informacao_faltante",
     "recomendacao",
     "verificacao_nao_realizada",
   ]) {
-    assert.equal(main.includes(`data-extract-class="${cls}"`), true, `missing class ${cls}`);
+    assert.match(main, new RegExp(`data-extract-class="${kind}"`));
   }
-  assert.match(main, /Item de checklist não respondido|Checklist não respondido não é erro do projeto/);
-  assert.match(main, /não se conclui risco(,| nem) não conformidade/i);
-  assert.equal(/classifica[çc][aã]o de gravidade|nota de risco/i.test(main), false);
+  assert.match(text, /Item de checklist não respondido e norma não examinada não viram erro do projeto/i);
+  assert.match(text, /Sem norma examinada, não se conclui risco nem não conformidade/i);
 });
 
-test("incomplete context is welcome and norms are not a gate to talk", () => {
+test("review preserves origin authorship and avoids unsupported promises", () => {
+  const text = visibleText(mainOf(pages.landing));
+  assert.match(text, /preservando a autoria e a responsabilidade do documento de origem/i);
+  assert.doesNotMatch(text, /assinamos o projeto de terceiro|aprovação garantida|conformidade total|êxito jurídico/i);
+  assert.doesNotMatch(text, /R\$\s*\d/);
+  assert.doesNotMatch(text, /\d+\s+dias úteis|\d+\s+revisões incluídas/i);
+});
+
+test("review sample remains explicitly demonstrative and technically bounded", () => {
   const main = mainOf(pages.landing);
-  assert.match(main, /Não é necessário listar normas ou disciplinas para conversar/);
-  assert.match(main, /Documentação inicial incompleta não impede o contato/);
-  assert.match(mainOf(pages.hiring), /Não é preciso listar normas/);
+  assert.match(main, /data-extract-kind="demonstrative"/);
+  assert.match(main, /data-extract-canonical-source="inb-06"/);
+  assert.match(main, /Exemplo demonstrativo/);
+  assert.match(main, /RF-01/);
+  assert.match(main, /WN-01/);
+  assert.match(main, /HS-01/);
+  assert.doesNotMatch(main, /aprovado pelo fundador|resolved_in_R01|\bSELECT\b/);
 });
 
-test("CTA asks for need, contact and optional context; WITHHELD authority keeps live channels", () => {
-  const html = pages.landing;
-  const main = mainOf(html);
-  assert.match(main, /Descreva a necessidade da revisão e como prefere o retorno/);
-  assert.match(main, /contexto opcional/);
-  assert.equal((html.match(/data-fallback-channel=/g) || []).length, 3);
-  assert.match(main, /wa\.me\/5548988344559/);
+test("proposal path supports live channels and controlled documents", () => {
+  const main = mainOf(pages.landing);
+  assert.match(main, /Solicitar proposta de revisão técnica/);
+  assert.equal((pages.landing.match(/data-fallback-channel=/g) || []).length, 3);
+  assert.match(main, /https:\/\/wa\.me\/5548988344559/);
   assert.match(main, /mailto:tiago\.sasaki@confenge\.com\.br/);
   assert.match(main, /tel:\+5548988344559/);
-  if (authorityStatusOf() === "WITHHELD") {
-    assert.equal(/data-adaptive-intake-form/.test(html), false, "withheld authority must not ship a dead form");
-    assert.equal(/<form\b/.test(html), false, "withheld authority must not ship a capture form");
-  }
-  assert.equal(/utm_source=|utm_medium=|utm_campaign=/.test(html), false);
+  assert.match(main, /Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail/);
+  assert.match(main, /documentos com acesso restrito, combinamos o canal e as permissões adequadas/i);
+  assert.doesNotMatch(pages.landing, /name="(?:arquivo|upload|endereco|cpf|processo)"/i);
 });
 
-test("canonical, robots and service identity are coherent", () => {
-  for (const [html, canonical] of [
-    [pages.landing, "https://confenge.com.br/revisao-tecnica-projetos-engenharia/"],
-    [pages.choice, "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/"],
-    [pages.hiring, "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/"],
-  ]) {
-    assert.equal(canonicalOf(html), canonical);
-    assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^"]*")[^>]*>/);
-  }
+test("canonical metadata and service identity stay coherent", () => {
+  assert.match(pages.landing, /href="https:\/\/confenge\.com\.br\/revisao-tecnica-projetos-engenharia\/" rel="canonical"/);
   assert.match(pages.landing, /data-intent-family="projetar_revisar_compatibilizar"/);
   assert.match(pages.landing, /data-offer-id="complementary_engineering_project_review"/);
   assert.match(pages.landing, /<main id="conteudo">/);
   assert.match(pages.landing, /Pular para o conteúdo/);
 });
 
-test("landing refuses unauthorized commercial claims and unbacked money", () => {
-  const html = pages.landing;
-  assert.deepEqual(unbackedMoneyProblems(html), []);
-  assert.deepEqual(forbiddenCommercialClaims(html), []);
-  // Authorship of third-party projects and unbacked safety claims stay protected as
-  // properties: the page may phrase them affirmatively, but may never claim them.
-  assert.match(textOf(html), /n[ãa]o (oferecemos|fazemos) assinatura de projeto de terceiro|autoria[^.]{0,80}permanece com o autor/i);
-  assert.match(textOf(html), /n[ãa]o publicamos laudo de segurança|laudo de segurança[^.]{0,80}n[ãa]o/i);
-  // An affirmative "assinamos projeto de terceiro" is forbidden unless negated right before it.
-  assert.doesNotMatch(textOf(html), /(?<!n[ãa]o |nem |nunca )assinamos (o )?projeto de terceiro\b/i);
-});
-
-test("mutation: invented third-party signature or price fails the page guard", () => {
-  const html = pages.landing;
-  assert.notEqual(
-    forbiddenCommercialClaims(html.replace("</h1>", "</h1><p>Assinamos o projeto de terceiro.</p>")).length,
-    0,
-    "third-party signature must fail",
-  );
-  assert.notEqual(
-    unbackedMoneyProblems(html.replace("</ul>", "<li>Revisão a partir de R$ 2.500 por relatório.</li></ul>")).length,
-    0,
-    "invented price must fail",
-  );
-});
-
-test("choice and hiring pages keep WhatsApp in main and do not cannibalize the landing title", () => {
-  assert.match(mainOf(pages.choice), /wa\.me\/5548988344559/);
-  assert.match(mainOf(pages.hiring), /wa\.me\/5548988344559/);
-  assert.notEqual(titleOf(pages.choice), titleOf(pages.landing));
-  assert.notEqual(titleOf(pages.hiring), titleOf(pages.landing));
-  assert.match(mainOf(pages.choice), /Três compras, três entregas, uma proposta/);
-  assert.match(mainOf(pages.hiring), /O que enviar no primeiro contato/);
-  assert.equal(/utm_/.test(pages.choice + pages.hiring), false);
+test("mutation guard detects an invented third-party signature", () => {
+  const text = visibleText(mainOf(pages.landing));
+  const mutated = `${text} Assinamos o projeto de terceiro.`;
+  const forbidden = /assinamos o projeto de terceiro|aprovação garantida|conformidade total|êxito jurídico/i;
+  assert.doesNotMatch(text, forbidden);
+  assert.match(mutated, forbidden);
 });

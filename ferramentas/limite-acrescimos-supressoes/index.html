@@ -168,7 +168,7 @@
 <p>Para receber o dossiê, registre abaixo o contexto do caso. Os documentos seguem depois, por canal seguro; não repita aqui os valores da calculadora.</p>
 <form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-result-gated-capture="true" data-result-source="#resultado" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" data-journey="contrato" method="POST" name="diagnostico-confenge" id="cfg-d19-form" data-form-contract="next-state/v1" data-next-state-profile="second_reading" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Vincule a leitura pública a um pedido de conferência do responsável técnico sem repetir os dados do contrato nem enviar documentos pelo site.</p>
 <p class="form-hint" data-field-purpose>O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
-<noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. Use o <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.">WhatsApp</a> ou o <a href="mailto:tiago.sasaki@confenge.com.br">e-mail</a> ao lado.</p></noscript>
+<noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. Use o <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.">WhatsApp</a> ou o <a href="mailto:tiago.sasaki@confenge.com.br">e-mail</a> ao lado.</p></noscript>
 <input name="form-name" type="hidden" value="art125-cfg-d19"/>
 <input name="origem" type="hidden" value="/ferramentas/limite-acrescimos-supressoes/"/>
 <input name="landing_page" type="hidden" value="/ferramentas/limite-acrescimos-supressoes/"/>
@@ -497,7 +497,7 @@
     clear(out);
     var summary = make("p", "tool-result-summary");
     summary.appendChild(make("strong", "", branchProfile.label));
-    summary.appendChild(document.createTextNode(" Branch: " + r.branch + ". A saída é uma triagem numérica, não uma conclusão jurídica."));
+    summary.appendChild(document.createTextNode(". A saída é uma triagem numérica, não uma conclusão jurídica."));
     out.appendChild(summary);
     var calc = r.calculation;
     var provisional = r.calculationStatus === "PROVISIONAL_KNOWN_PARTIAL";
@@ -555,10 +555,10 @@
       "Supressão proposta: " + artifactMoney("supressao_proposta", true)
     ];
     var alertLines = calc && calc.alerts && calc.alerts.length
-      ? calc.alerts.map(function(alert){ return alert.code + ": " + alert.text; })
+      ? calc.alerts.map(function(alert){ return alert.text; })
       : ["Nenhum alerta aritmético adicional neste cenário."];
     lastText = T.buildReport([
-      { title: "Triagem numérica do Art. 125", body: "Branch: " + r.branch + ". Status da memória: " + r.calculationStatus + "." },
+      { title: "Triagem numérica do Art. 125", body: branchProfile.label + ". Memória: " + (provisional ? "cenário provisório com os totais anteriores conhecidos" : (calc ? "calculada com as premissas confirmadas" : "indisponível até a confirmação das premissas")) + "." },
       { title: "Premissas", lines: ["Base atualizada: " + stateLabel(r.premiseStates.updatedBase), "Classificação do objeto: " + stateLabel(r.premiseStates.objectClassification), "Totais anteriores: " + stateLabel(r.premiseStates.previousTotals)] },
       { title: "Inputs locais", lines: inputLines },
       { title: "Memória de cálculo", lines: calcLines },
@@ -626,8 +626,8 @@
 
 <footer class="site-footer">
 <div class="container footer-top">
-<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos.</p></div>
-<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e disputas</a><a href="/#situacao-avaliacao">Avaliação de imóvel</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil, conforme escopo, local e modalidade definidos na proposta.</span></div>
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Projetos e serviços de engenharia para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/servicos/">Serviços de engenharia</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
 </footer>

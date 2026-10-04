@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 206
+    "expected_declared_ctas": 211
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 206,
+    "declared_ctas": 211,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -64,9 +64,9 @@
           "commitment": "medium",
           "submit_label": "Descrever meu caso",
           "current_label": "Descrever meu caso",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -83,7 +83,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -122,7 +122,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -137,7 +137,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -152,7 +152,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -160,14 +160,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -175,14 +175,14 @@
         {
           "cta_id": "pillar_bridge",
           "position": "pillar_bridge",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Estruturar a rotina de acompanhamento",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -197,7 +197,7 @@
           "useful_next_state": "Abre o destino declarado por “Enquadrar risco contratual” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -221,9 +221,9 @@
           "commitment": "medium",
           "submit_label": "Descrever o aditivo",
           "current_label": "Descrever o aditivo",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -240,7 +240,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -279,7 +279,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -287,14 +287,14 @@
         {
           "cta_id": "",
           "position": "pillar_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -309,7 +309,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -324,7 +324,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -339,7 +339,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -347,14 +347,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -369,7 +369,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -384,7 +384,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico da Operação em Obras Públicas” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -408,9 +408,9 @@
           "commitment": "medium",
           "submit_label": "Descrever meu caso",
           "current_label": "Descrever meu caso",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -431,7 +431,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -470,7 +470,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -485,7 +485,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -500,7 +500,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -515,7 +515,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -523,14 +523,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -538,14 +538,14 @@
         {
           "cta_id": "pillar_bridge",
           "position": "pillar_bridge",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Enquadrar o atraso agora",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -560,7 +560,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -575,7 +575,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -599,9 +599,9 @@
           "commitment": "medium",
           "submit_label": "Descrever o orçamento",
           "current_label": "Descrever o orçamento",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -618,7 +618,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -657,7 +657,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -665,14 +665,14 @@
         {
           "cta_id": "",
           "position": "pillar_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -687,7 +687,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -702,7 +702,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -710,14 +710,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -732,7 +732,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -747,7 +747,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -769,11 +769,11 @@
           "runtime_profile": "shared_lead_form_v1",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "submit_label": "Solicitar canal seguro para envio",
-          "current_label": "Solicitar canal seguro para envio",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "submit_label": "Solicitar proposta",
+          "current_label": "Solicitar proposta",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -791,7 +791,7 @@
               "canal_seguro"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -826,11 +826,11 @@
           "href": "#captura-pilar",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Enviar edital para triagem",
+          "current_label": "Solicitar proposta para o edital",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -838,14 +838,14 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20cr%C3%ADtico%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20edital%20cr%C3%ADtico%20e%20quero%20solicitar%20uma%20proposta.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -856,11 +856,11 @@
           "href": "#captura-pilar",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "07 Enviar o edital",
+          "current_label": "07 Solicitar proposta",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -868,14 +868,14 @@
         {
           "cta_id": "",
           "position": "offer_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20uma%20oportunidade%20cr%C3%ADtica%20de%20licita%C3%A7%C3%A3o%20e%20quero%20avaliar%20se%20vale%20montar%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20uma%20oportunidade%20cr%C3%ADtica%20de%20licita%C3%A7%C3%A3o%20e%20quero%20avaliar%20se%20vale%20montar%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp sobre o edital",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click",
             "whatsapp_click"
@@ -891,7 +891,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -981,7 +981,7 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20um%20demonstrativo%20e%20quero%20pedir%20proposta.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20um%20demonstrativo%20e%20quero%20pedir%20proposta.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "WhatsApp",
@@ -1097,7 +1097,7 @@
         {
           "cta_id": "apresentacao-890-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a síntese executiva dos resultados por R$ 890",
@@ -1112,7 +1112,7 @@
         {
           "cta_id": "apresentacao-890-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a síntese executiva dos resultados por R$ 890",
@@ -1127,7 +1127,7 @@
         {
           "cta_id": "apresentacao-890-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a síntese executiva dos resultados por R$ 890",
@@ -1157,7 +1157,7 @@
         {
           "cta_id": "apresentacao-890-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 890",
@@ -1243,7 +1243,7 @@
         {
           "cta_id": "base-690-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a base de mercado de obras públicas por R$ 690",
@@ -1258,7 +1258,7 @@
         {
           "cta_id": "base-690-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a base de mercado de obras públicas por R$ 690",
@@ -1273,7 +1273,7 @@
         {
           "cta_id": "base-690-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a base de mercado de obras públicas por R$ 690",
@@ -1303,7 +1303,7 @@
         {
           "cta_id": "base-690-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 690",
@@ -1389,7 +1389,7 @@
         {
           "cta_id": "vincendos-1450-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a análise dos contratos a vencer por R$ 1.450",
@@ -1404,7 +1404,7 @@
         {
           "cta_id": "vincendos-1450-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a análise dos contratos a vencer por R$ 1.450",
@@ -1419,7 +1419,7 @@
         {
           "cta_id": "vincendos-1450-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir a análise dos contratos a vencer por R$ 1.450",
@@ -1449,7 +1449,7 @@
         {
           "cta_id": "vincendos-1450-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 1.450",
@@ -1535,7 +1535,7 @@
         {
           "cta_id": "mapa-1200-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o mapa de órgãos compradores por R$ 1.200",
@@ -1550,7 +1550,7 @@
         {
           "cta_id": "mapa-1200-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o mapa de órgãos compradores por R$ 1.200",
@@ -1565,7 +1565,7 @@
         {
           "cta_id": "mapa-1200-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o mapa de órgãos compradores por R$ 1.200",
@@ -1595,7 +1595,7 @@
         {
           "cta_id": "mapa-1200-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 1.200",
@@ -1681,7 +1681,7 @@
         {
           "cta_id": "concorrentes-1900-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o mapa de concorrentes por R$ 1.900",
@@ -1696,7 +1696,7 @@
         {
           "cta_id": "concorrentes-1900-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o mapa de concorrentes por R$ 1.900",
@@ -1711,7 +1711,7 @@
         {
           "cta_id": "concorrentes-1900-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o mapa de concorrentes por R$ 1.900",
@@ -1741,7 +1741,7 @@
         {
           "cta_id": "concorrentes-1900-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 1.900",
@@ -1827,7 +1827,7 @@
         {
           "cta_id": "precos-2400-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir as referências de preços de obra por R$ 2.400",
@@ -1842,7 +1842,7 @@
         {
           "cta_id": "precos-2400-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir as referências de preços de obra por R$ 2.400",
@@ -1857,7 +1857,7 @@
         {
           "cta_id": "precos-2400-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir as referências de preços de obra por R$ 2.400",
@@ -1887,7 +1887,7 @@
         {
           "cta_id": "precos-2400-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 2.400",
@@ -1973,7 +1973,7 @@
         {
           "cta_id": "consolidado-3750-hero",
           "position": "report_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o plano de expansão por R$ 3.750",
@@ -1988,7 +1988,7 @@
         {
           "cta_id": "consolidado-3750-proof",
           "position": "report_after_proof",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o plano de expansão por R$ 3.750",
@@ -2003,7 +2003,7 @@
         {
           "cta_id": "consolidado-3750-final",
           "position": "report_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir o plano de expansão por R$ 3.750",
@@ -2033,7 +2033,7 @@
         {
           "cta_id": "consolidado-3750-mobile",
           "position": "report_mobile_sticky",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Pedir análise R$ 3.750",
@@ -2223,11 +2223,11 @@
           "runtime_profile": "shared_lead_form_v1",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "submit_label": "Solicitar canal seguro para envio",
-          "current_label": "Solicitar canal seguro para envio",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "submit_label": "Solicitar proposta",
+          "current_label": "Solicitar proposta",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2249,7 +2249,7 @@
               "canal_seguro"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2284,11 +2284,11 @@
           "href": "#captura-pilar",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Solicitar canal seguro para envio",
+          "current_label": "Solicitar proposta",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2296,14 +2296,14 @@
         {
           "cta_id": "contato-direto",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20uma%20proposta.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2318,7 +2318,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2329,11 +2329,11 @@
           "href": "#captura-pilar",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Solicitar canal seguro para envio",
+          "current_label": "Solicitar proposta",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2341,14 +2341,14 @@
         {
           "cta_id": "contato-direto",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20uma%20proposta.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2363,7 +2363,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2378,7 +2378,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2393,7 +2393,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2408,7 +2408,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2419,11 +2419,11 @@
           "href": "#captura-pilar",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "solicitar o canal seguro nesta página",
+          "current_label": "solicitar proposta nesta página",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2438,7 +2438,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2453,7 +2453,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico da Operação em Obras Públicas” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2468,7 +2468,7 @@
           "useful_next_state": "Abre o destino declarado por “Operação de Proposta para Licitação Crítica” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2483,7 +2483,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2498,7 +2498,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2506,14 +2506,14 @@
         {
           "cta_id": "",
           "position": "offer_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20um%20risco%20contratual%20e%20proteger%20a%20margem%20de%20um%20contrato%20p%C3%BAblico.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20enquadrar%20um%20risco%20contratual%20e%20proteger%20a%20margem%20de%20um%20contrato%20p%C3%BAblico.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp sobre o contrato",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click",
             "whatsapp_click"
@@ -2529,7 +2529,7 @@
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
           ]
@@ -2553,9 +2553,9 @@
           "commitment": "medium",
           "submit_label": "Descrever meu caso",
           "current_label": "Descrever meu caso",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2576,7 +2576,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2615,7 +2615,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2630,7 +2630,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2645,7 +2645,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2653,14 +2653,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2668,14 +2668,14 @@
         {
           "cta_id": "pillar_bridge",
           "position": "pillar_bridge",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Organizar a posição técnica",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2690,7 +2690,7 @@
           "useful_next_state": "Abre o destino declarado por “Proteção de margem em contratos públicos” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2705,7 +2705,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnosticar a operação” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2720,7 +2720,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2744,9 +2744,9 @@
           "commitment": "medium",
           "submit_label": "Descrever a operação",
           "current_label": "Descrever a operação",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2763,7 +2763,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2802,7 +2802,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2810,14 +2810,14 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2832,7 +2832,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2847,7 +2847,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2855,14 +2855,14 @@
         {
           "cta_id": "",
           "position": "offer_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2877,7 +2877,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2892,7 +2892,7 @@
           "useful_next_state": "Abre o destino declarado por “Operação de Proposta para Licitação Crítica” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2907,7 +2907,7 @@
           "useful_next_state": "Abre o destino declarado por “Defesa de margem em contrato público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2922,7 +2922,7 @@
           "useful_next_state": "Abre o destino declarado por “conteúdos de apoio” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2946,9 +2946,9 @@
           "commitment": "medium",
           "submit_label": "Pedir retorno da CONFENGE",
           "current_label": "Pedir retorno da CONFENGE",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2966,7 +2966,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -3005,7 +3005,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -3013,14 +3013,14 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Tirar uma dúvida pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -3035,7 +3035,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3050,7 +3050,7 @@
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
           ]
@@ -3065,7 +3065,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -3089,9 +3089,9 @@
           "commitment": "medium",
           "submit_label": "Descrever a licitação",
           "current_label": "Descrever a licitação",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -3108,7 +3108,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -3147,7 +3147,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -3155,14 +3155,14 @@
         {
           "cta_id": "",
           "position": "pillar_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -3177,7 +3177,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3192,7 +3192,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -3200,14 +3200,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -3222,7 +3222,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3246,9 +3246,9 @@
           "commitment": "medium",
           "submit_label": "Conversar sobre minha operação",
           "current_label": "Conversar sobre minha operação",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -3265,7 +3265,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -3297,14 +3297,14 @@
         {
           "cta_id": "",
           "position": "offer_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar sobre a operação",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click",
             "whatsapp_click"
@@ -3320,7 +3320,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3335,7 +3335,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3343,14 +3343,14 @@
         {
           "cta_id": "",
           "position": "offer_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Diagnosticar encaixe da Diretoria Fracionada para o Mercado Público",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click",
             "whatsapp_click"
@@ -3366,7 +3366,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3390,7 +3390,7 @@
           "commitment": "medium",
           "submit_label": "Saber qual entrega resolve a minha pergunta",
           "current_label": "Saber qual entrega resolve a minha pergunta",
-          "useful_next_state": "A decisão fica registrada para a CONFENGE indicar a entrega aplicável, a ordem de execução e os insumos que ainda precisam ser confirmados.",
+          "useful_next_state": "Sua solicitação fica registrada para a CONFENGE preparar a proposta da entrega adequada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "pre_form_value": "Descreva a decisão que está na mesa; a resposta nomeia a entrega, a ordem de contratação e o que você precisa reunir. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
           "pre_form_value_visible": true,
@@ -3497,6 +3497,21 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "deliverables-sst-hub",
+          "position": "capabilities",
+          "href": "/seguranca-trabalho-apoio-tecnico/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Resolver documentação de SST",
+          "useful_next_state": "Abre o destino declarado por “Resolver documentação de SST” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {
@@ -3877,7 +3892,7 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20a%20biblioteca%20de%20entregas%20e%20quero%20saber%20qual%20entrega%20resolve%20a%20minha%20pergunta.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20a%20biblioteca%20de%20entregas%20e%20quero%20saber%20qual%20entrega%20resolve%20a%20minha%20pergunta.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Perguntar qual entrega resolve a sua decisão pelo WhatsApp",
@@ -4166,9 +4181,9 @@
           "commitment": "medium",
           "submit_label": "Descrever minha situação",
           "current_label": "Descrever minha situação",
-          "useful_next_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "pre_form_value": "Vale para qualquer tamanho de demanda, mesmo com o contexto ainda incompleto.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome, um canal de retorno, o tipo de necessidade e o consentimento. Empresa, urgência e contexto são opcionais.",
@@ -4194,7 +4209,7 @@
               "canal_seguro"
             ]
           },
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -4226,14 +4241,14 @@
         {
           "cta_id": "",
           "position": "hero",
-          "href": "/triagem-tecnica/",
-          "stage": "compare",
-          "commitment": "low",
-          "current_label": "Solicitar avaliação do escopo",
-          "useful_next_state": "Abre o destino declarado por “Solicitar avaliação do escopo” para continuar a decisão.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "href": "#contato",
+          "stage": "register_context",
+          "commitment": "medium",
+          "current_label": "Solicitar proposta",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4244,86 +4259,161 @@
           "href": "/projetos/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver áreas de projeto",
-          "useful_next_state": "Abre o destino declarado por “Ver áreas de projeto” para continuar a decisão.",
+          "current_label": "Conhecer os projetos",
+          "useful_next_state": "Abre o destino declarado por “Conhecer os projetos” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-structures",
+          "position": "capabilities",
+          "href": "/projetos/estruturas/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver especialidade",
+          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-installations",
+          "position": "capabilities",
+          "href": "/projetos/instalacoes/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver especialidade",
+          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-infrastructure",
+          "position": "capabilities",
+          "href": "/projetos/infraestrutura/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver especialidade",
+          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-project-coordination",
+          "position": "capabilities",
+          "href": "/projetos/coordenacao-multidisciplinar/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Entender a coordenação",
+          "useful_next_state": "Abre o destino declarado por “Entender a coordenação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
         },
         {
           "cta_id": "home-private-quantities-budget",
-          "position": "",
+          "position": "home_services",
           "href": "/quantitativos-orcamento-obras/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver quantitativos",
-          "useful_next_state": "Abre o destino declarado por “Ver quantitativos” para continuar a decisão.",
+          "current_label": "Quantitativos e orçamentos Levantamento, memória e base para comparar ou contratar.",
+          "useful_next_state": "Abre o destino declarado por “Quantitativos e orçamentos Levantamento, memória e base para comparar ou contratar.” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
-          "event_semantics": [
-            "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "contact_band",
-          "href": "#triagem-tecnica",
-          "stage": "compare",
-          "commitment": "low",
-          "current_label": "Descrever no próximo passo, nesta página",
-          "useful_next_state": "Abre o destino declarado por “Descrever no próximo passo, nesta página” para continuar a decisão.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
         },
         {
-          "cta_id": "home-medicoes-glosas-dossie",
-          "position": "b2g_shortcuts",
-          "href": "/medicoes-glosas-obras-publicas/",
+          "cta_id": "home-service-review",
+          "position": "home_services",
+          "href": "/revisao-tecnica-projetos-engenharia/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Dossiê de Medição, Glosa e Pagamento",
-          "useful_next_state": "Abre o destino declarado por “Dossiê de Medição, Glosa e Pagamento” para continuar a decisão.",
+          "current_label": "Revisão e compatibilização Análise de projetos recebidos e tratamento de interferências.",
+          "useful_next_state": "Abre o destino declarado por “Revisão e compatibilização Análise de projetos recebidos e tratamento de interferências.” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
-            "no_direct_event_declared"
+            "cta_click"
           ]
         },
         {
-          "cta_id": "",
-          "position": "",
-          "href": "/servicos-obras-publicas/#captura-contrato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "registre a necessidade no formulário",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
+          "cta_id": "home-service-inspection",
+          "position": "home_services",
+          "href": "/servicos/#areas",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Inspeções, avaliações e perícias Leitura da condição, avaliação e suporte técnico em disputas.",
+          "useful_next_state": "Abre o destino declarado por “Inspeções, avaliações e perícias Leitura da condição, avaliação e suporte técnico em disputas.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
-            "no_direct_event_declared"
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-service-sst",
+          "position": "home_services",
+          "href": "/seguranca-trabalho-apoio-tecnico/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Segurança do trabalho Elaboração, revisão e organização de documentação técnica de SST.",
+          "useful_next_state": "Abre o destino declarado por “Segurança do trabalho Elaboração, revisão e organização de documentação técnica de SST.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-service-public-works",
+          "position": "home_services",
+          "href": "/servicos-obras-publicas/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Obras públicas Planejamento da contratação, edital, proposta e suporte ao contrato em execução.",
+          "useful_next_state": "Abre o destino declarado por “Obras públicas Planejamento da contratação, edital, proposta e suporte ao contrato em execução.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {
           "cta_id": "",
-          "position": "corporate_triage",
+          "position": "proposal_band",
           "href": "#contato",
           "stage": "register_context",
           "commitment": "medium",
-          "current_label": "Descrever minha situação no formulário",
+          "current_label": "Solicitar proposta",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4331,30 +4421,29 @@
         {
           "cta_id": "",
           "position": "contact",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20de%20engenharia%20e%20solicitar%20uma%20proposta.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Conversar pelo WhatsApp (48) 98834-4559",
+          "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
-            "cta_click",
             "whatsapp_click"
           ]
         },
         {
           "cta_id": "",
           "position": "contact",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20proposta%20de%20engenharia&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0AServi%C3%A7o%20ou%20necessidade%3A%0AFase%20da%20obra%20ou%20do%20projeto%3A%0ADocumentos%20dispon%C3%ADveis%3A%0APrazo%20da%20decis%C3%A3o%3A%0A",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20proposta%20%E2%80%94%20CONFENGE",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Solicitar proposta por e-mail tiago.sasaki@confenge.com.br",
+          "current_label": "Solicitar proposta por e-mail",
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
           ]
@@ -4369,7 +4458,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4384,7 +4473,7 @@
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
           ]
@@ -4408,9 +4497,9 @@
           "commitment": "medium",
           "submit_label": "Descrever a medição",
           "current_label": "Descrever a medição",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -4427,7 +4516,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -4466,7 +4555,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4474,14 +4563,14 @@
         {
           "cta_id": "",
           "position": "pillar_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4496,7 +4585,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4511,7 +4600,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4526,7 +4615,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4534,14 +4623,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4556,7 +4645,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4564,14 +4653,14 @@
         {
           "cta_id": "",
           "position": "pillar_capture_alt",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4586,7 +4675,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público na execução” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4610,9 +4699,9 @@
           "commitment": "medium",
           "submit_label": "Descrever o pleito",
           "current_label": "Descrever o pleito",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -4629,7 +4718,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -4668,7 +4757,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4676,14 +4765,14 @@
         {
           "cta_id": "",
           "position": "pillar_hero",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4698,7 +4787,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4713,7 +4802,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4721,14 +4810,14 @@
         {
           "cta_id": "",
           "position": "pillar_inline",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4743,7 +4832,7 @@
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4758,7 +4847,7 @@
           "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4782,9 +4871,9 @@
           "commitment": "medium",
           "submit_label": "Descrever meu caso",
           "current_label": "Descrever meu caso",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: evento observado, nome de quem responde pelo pedido, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -4809,7 +4898,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -4844,11 +4933,11 @@
           "href": "/medicoes-glosas-obras-publicas/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
-          "useful_next_state": "Abre o destino declarado por “Avaliar o Dossiê de Medição, Glosa e Pagamento” para continuar a decisão.",
+          "current_label": "Conhecer o apoio para medições e glosas",
+          "useful_next_state": "Abre o destino declarado por “Conhecer o apoio para medições e glosas” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4859,11 +4948,11 @@
           "href": "#captura-contrato",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Registrar o evento no formulário",
+          "current_label": "Solicitar proposta",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "cta_click"
           ]
@@ -4874,11 +4963,11 @@
           "href": "#captura-contrato",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "08 Registrar o evento",
+          "current_label": "09 Registrar o evento",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4886,29 +4975,14 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "#captura-contrato",
-          "stage": "request_fit_review",
-          "commitment": "medium",
-          "current_label": "Registrar o evento",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
-          "event_semantics": [
-            "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Sou%20de%20um%20%C3%B3rg%C3%A3o%20p%C3%BAblico%20planejando%20a%20contrata%C3%A7%C3%A3o%20de%20uma%20obra%20e%20quero%20estruturar%20escopo%2C%20or%C3%A7amento%20e%20crit%C3%A9rios%20de%20medi%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Sou%20de%20um%20%C3%B3rg%C3%A3o%20p%C3%BAblico%20planejando%20a%20contrata%C3%A7%C3%A3o%20de%20uma%20obra%20e%20quero%20estruturar%20escopo%2C%20or%C3%A7amento%20e%20crit%C3%A9rios%20de%20medi%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Descrever pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4923,7 +4997,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4931,14 +5005,14 @@
         {
           "cta_id": "",
           "position": "hub_services_next",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20%28glosa%2C%20medi%C3%A7%C3%A3o%2C%20aditivo%2C%20reequil%C3%ADbrio%20ou%20atraso%29%20e%20preciso%20de%20an%C3%A1lise%20inicial.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20%28glosa%2C%20medi%C3%A7%C3%A3o%2C%20aditivo%2C%20reequil%C3%ADbrio%20ou%20atraso%29%20e%20preciso%20de%20an%C3%A1lise%20inicial.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Descrever o contrato pelo WhatsApp",
+          "current_label": "Solicitar proposta pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -4953,7 +5027,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4968,7 +5042,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4983,7 +5057,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -4998,7 +5072,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -5022,9 +5096,9 @@
           "commitment": "medium",
           "submit_label": "Registrar seguimento desta análise",
           "current_label": "Registrar seguimento desta análise",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -5040,7 +5114,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -5072,14 +5146,14 @@
         {
           "cta_id": "",
           "position": "company_capture_alt",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp sobre a decisão",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -5094,7 +5168,7 @@
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
           ]
@@ -5118,9 +5192,9 @@
           "commitment": "medium",
           "submit_label": "Registrar seguimento desta análise",
           "current_label": "Registrar seguimento desta análise",
-          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Obrigatórios: nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -5136,7 +5210,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -5168,14 +5242,14 @@
         {
           "cta_id": "",
           "position": "company_capture_alt",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Analisei%20um%20CNPJ%20no%20site%20e%20quero%20conversar%20sobre%20a%20decis%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp sobre a decisão",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -5190,7 +5264,7 @@
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
           ]
@@ -5269,7 +5343,7 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Registrei%20os%20par%C3%A2metros%20do%20Radar%20Decis%C3%B3rio%20e%20quero%20a%20instru%C3%A7%C3%A3o%20de%20pagamento%20de%20R%24%20599.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Registrei%20os%20par%C3%A2metros%20do%20Radar%20Decis%C3%B3rio%20e%20quero%20a%20instru%C3%A7%C3%A3o%20de%20pagamento%20de%20R%24%20599.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Receber a instrução de pagamento",

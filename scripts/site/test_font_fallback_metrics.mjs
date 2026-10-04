@@ -104,7 +104,7 @@ try {
       fallbackDeclared: Boolean(fallback),
       fallbackAvailable: fallback?.status === "loaded",
       archivoLoaded: document.fonts.check('16px "Archivo Var"'),
-      deliverable: document.querySelector(".hero-deliverable")?.getBoundingClientRect().height,
+      lead: document.querySelector(".hero-lead")?.getBoundingClientRect().height,
       actionsTop: document.querySelector(".hero-actions")?.getBoundingClientRect().top,
       h1: document.querySelector(".hero h1")?.getBoundingClientRect().height,
       };
@@ -125,9 +125,10 @@ try {
     console.log("FONT_FALLBACK_METRICS_OK static+metrics; browser step skipped: no Arial/Liberation Sans/Helvetica on this machine (set FONT_FALLBACK_BROWSER_REQUIRED=1 to fail instead)");
   } else {
     const drift = Math.abs(withFont.actionsTop - withoutFont.actionsTop);
-    const deliverableDrift = Math.abs(withFont.deliverable - withoutFont.deliverable);
-    assert.ok(drift <= 4 && deliverableDrift <= 4, `hero moves ${drift.toFixed(1)}px (deliverable ${deliverableDrift.toFixed(1)}px) when the web font is late`);
-    console.log("FONT_FALLBACK_METRICS_OK", JSON.stringify({ drift, deliverableDrift, withFont, withoutFont }));
+    const leadDrift = Math.abs(withFont.lead - withoutFont.lead);
+    assert.ok(Number.isFinite(drift) && Number.isFinite(leadDrift), "hero actions and lead must both be measured");
+    assert.ok(drift <= 4 && leadDrift <= 4, `hero moves ${drift.toFixed(1)}px (lead ${leadDrift.toFixed(1)}px) when the web font is late`);
+    console.log("FONT_FALLBACK_METRICS_OK", JSON.stringify({ drift, leadDrift, withFont, withoutFont }));
   }
 } finally {
   await browser.close();

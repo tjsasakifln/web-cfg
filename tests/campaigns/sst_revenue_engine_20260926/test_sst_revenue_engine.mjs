@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { parse } from "parse5";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const pagePath = path.join(root, "seguranca-trabalho-apoio-tecnico/index.html");
@@ -46,19 +47,20 @@ function attributeValue(attributes, name) {
   return match?.[2];
 }
 
-function editorialUpdatedDate(html, label) {
-  const timeAttributes = html.match(/Atualizado em\s*<time\b([^>]*)>/i)?.[1];
-  assert.ok(timeAttributes, `${label} needs a visible editorial update date`);
-  const date = attributeValue(timeAttributes, "datetime") || "";
-  assert.match(date, /^\d{4}-\d{2}-\d{2}$/, `${label} needs an ISO editorial update date`);
+function editorialUpdatedDate(html, type, label) {
+  const brand = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8"));
+  const date = brand.updated_at;
+  assert.match(date, /^\d{4}-\d{2}-\d{2}$/, `${label} needs an ISO editorial source date`);
+  assert.equal(jsonLdEntity(html, type, label).dateModified, date, `${label} schema must match its current institutional source`);
   return date;
 }
 
 function jsonLdEntity(html, expectedType, label) {
   const entities = [];
-  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
-    if (attributeValue(match[1], "type")?.toLowerCase() !== "application/ld+json") continue;
-    const document = JSON.parse(match[2]);
+  const walk = (node) => [node, ...(node.childNodes || []).flatMap(walk)];
+  for (const script of walk(parse(html)).filter((node) => node.tagName === "script")) {
+    if (script.attrs.find((item) => item.name === "type")?.value.toLowerCase() !== "application/ld+json") continue;
+    const document = JSON.parse(script.childNodes.map((node) => node.value || "").join(""));
     entities.push(document);
     if (Array.isArray(document?.["@graph"])) entities.push(...document["@graph"]);
   }
@@ -69,6 +71,16 @@ function jsonLdEntity(html, expectedType, label) {
   assert.equal(matches.length, 1, `${label} needs exactly one ${expectedType} JSON-LD entity`);
   return matches[0];
 }
+
+test("JSON-LD extraction follows browser tag boundaries", () => {
+  const entity = { "@type": "WebPage", dateModified: "2026-10-03" };
+  const html = '<script type="application/ld+json">' + JSON.stringify(entity) + '</script >';
+  assert.deepEqual(jsonLdEntity(html, "WebPage", "tolerated closing tag"), entity);
+  const lookalike = '<scriptfoo type="application/ld+json">' + JSON.stringify(entity) + '</scriptfoo>';
+  assert.deepEqual(jsonLdEntity(html + lookalike, "WebPage", "lookalike"), entity);
+  assert.throws(() => jsonLdEntity(lookalike, "WebPage", "missing"), /exactly one/);
+  assert.throws(() => jsonLdEntity(html + html, "WebPage", "duplicate"), /exactly one/);
+});
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -146,12 +158,31 @@ test("the three direct fallback channels carry journey and topic into analytics"
   assert.match(nav, /classified\.kind === 'tel'[\s\S]*?topic: commercialTopic/);
 });
 
-test("page keeps sensitive data and health acts out of first contact", () => {
-  assert.doesNotMatch(page, /<form\b/i);
-  assert.doesNotMatch(page, /type=["']file["']/i);
-  const text = visibleText(page);
-  assert.ok(text.includes("Não envie nomes de trabalhadores, CPF, exames, atestados ou dados médicos no primeiro contato."));
+function assertFirstContactPrivacy(html) {
+  assert.doesNotMatch(html, /<form\b/i);
+  assert.doesNotMatch(html, /type=["']file["']/i);
+  const contact = html.match(/<section\b[^>]*id="contato-sst"[^>]*>[\s\S]*?<\/section>/i)?.[0] || "";
+  const guidance = visibleText(contact).toLocaleLowerCase("pt-BR");
+  assert.ok(guidance.includes("referências técnicas não sigilosas"));
+  assert.match(guidance, /dados de trabalhadores, exames e materiais confidenciais[^.]*canal reservado/);
+  const text = visibleText(html);
   assert.ok(text.includes("PCMSO, ASO, exames, diagnóstico, aptidão e nexo clínico"));
+}
+
+test("page separates ordinary references from reserved worker and health data", () => {
+  assertFirstContactPrivacy(page);
+});
+
+test("first-contact privacy rejects lost guidance or an attachment channel", () => {
+  for (const [old, replacement] of [
+    ["Dados de trabalhadores, exames e materiais confidenciais", "Materiais comuns"],
+    ["canal reservado adequado", "WhatsApp aberto"],
+    ["Referências técnicas não sigilosas", "Todos os documentos"],
+    ["</main>", '<form><input type="file"></form></main>'],
+  ]) {
+    assert.ok(page.includes(old), old);
+    assert.throws(() => assertFirstContactPrivacy(page.replaceAll(old, replacement)), assert.AssertionError);
+  }
 });
 
 test("regulatory overclaims remain rejected", () => {
@@ -205,14 +236,24 @@ test("official credentials are verified while identifiers stay out of rendered s
   assert.match(specialist, /<title>Tiago Jun Sasaki \| Engenheiro Civil e de Segurança do Trabalho \| CONFENGE<\/title>/);
   assert.match(specialist, /"jobTitle":"Engenheiro Civil e Engenheiro de Segurança do Trabalho"/);
   assert.match(specialist, /"knowsAbout":\[[^\]]*"Engenharia de Segurança do Trabalho"/);
-  const specialistModified = editorialUpdatedDate(specialist, "specialist");
+  const specialistModified = editorialUpdatedDate(specialist, "ProfilePage", "specialist");
   assert.equal(jsonLdEntity(specialist, "ProfilePage", "specialist").dateModified, specialistModified);
   const confidence = fs.readFileSync(path.join(root, "confianca/index.html"), "utf8");
-  const confidenceModified = editorialUpdatedDate(confidence, "confidence page");
+  const confidenceModified = editorialUpdatedDate(confidence, "WebPage", "confidence page");
   assert.equal(jsonLdEntity(confidence, "WebPage", "confidence page").dateModified, confidenceModified);
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
   assertSitemapLastmod(sitemap, "https://confenge.com.br/especialista/tiago-jun-sasaki/", specialistModified);
   assertSitemapLastmod(sitemap, "https://confenge.com.br/confianca/", confidenceModified);
+});
+
+test("institutional schema dates cannot drift from their editorial source", () => {
+  const specialist = fs.readFileSync(path.join(root, "especialista/tiago-jun-sasaki/index.html"), "utf8");
+  const date = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8")).updated_at;
+  const surface = `"dateModified":"${date}"`;
+  assert.ok(specialist.includes(surface));
+  for (const replacement of ['"dateModified":"1900-01-01"', '"historicalDate":"1900-01-01"']) {
+    assert.throws(() => editorialUpdatedDate(specialist.replaceAll(surface, replacement), "ProfilePage", "specialist"), assert.AssertionError);
+  }
 });
 
 test("campaign closes complete family coverage without claiming commercial result", () => {

@@ -192,7 +192,7 @@ def pillar_has_anchor(pillar: str) -> bool:
 
 def natural_wa_message(h1: str) -> str:
     title = h1.rstrip(" .:")
-    return f'Olá, Tiago. Li o artigo "{title}" e quero analisar um caso.'
+    return f'Olá, CONFENGE. Li o artigo "{title}" e quero analisar um caso.'
 
 
 def home_form_link(html: str) -> bool:

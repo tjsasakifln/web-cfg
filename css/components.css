@@ -67,6 +67,7 @@
 .list-ruled__action{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;font-size:1.05rem;font-weight:750;color:var(--ink);text-decoration:none;white-space:nowrap;grid-column:2;border-bottom:1px solid var(--rule-strong)}
 @media (min-width:900px){.list-ruled__action{grid-column:3;align-self:center}}
 .list-ruled__action:hover{color:var(--green-700);text-decoration:underline;text-underline-offset:.2em}
+@media (max-width:359px){.list-ruled__action{max-width:100%;min-width:0;font-size:1rem;gap:.3rem;white-space:normal}.list-ruled__action .icon{flex-shrink:0}}
 
 /* Steps: numbered sequence, no cards ---------------------------------------- */
 .steps{list-style:none;margin:0;padding:0;counter-reset:steps;border-top:1px solid var(--rule)}

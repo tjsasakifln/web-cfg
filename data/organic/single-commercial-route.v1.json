@@ -111,8 +111,9 @@
       "role": "home",
       "route": "/",
       "file": "index.html",
-      "cta_id": "home-medicoes-glosas-dossie",
-      "mutation_state": "EDITORIAL_AUTHORIZED"
+      "cta_id": null,
+      "mutation_state": "EDITORIAL_AUTHORIZED",
+      "participation": "corporate_portfolio"
     },
     {
       "role": "services_hub",
@@ -140,11 +141,20 @@
         128,
         291
       ],
-      "expected_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
-      "expected_sha256_note": "Linha de base de bytes efetivamente auditada em 2026-09-14 e reconciliada com data/bofu-dominance/frozen-specs/hashes.json. O hash preserva integridade e procedência; não cria espera nem veto editorial.",
-      "expected_sha256_recaptured_at": "2026-09-19",
-      "expected_sha256_recapture_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador, incremento 2) sobre 505c833ab5938e86d182b88da1021dc8770f0217: nos pilares protegidos, (a) sai a frase redundante 'Este formulario nao conclui contratacao e nao promete ...' da introducao do formulario #captura-pilar (medicoes, aditivos, reequilibrio; o cartao Limite e a linha data-form-boundary continuam), (b) entra a nota <noscript> 'Sem JavaScript, este formulario nao envia; use o WhatsApp ou o e-mail ao lado' nos seis pilares, (c) medicoes reescreve 'recorte operacional' na frase do guia da recusa de ateste, (d) aditivos liga o proprio caso demonstrativo /casos/aditivo-art125-demonstrativo/ como medicoes ja ligava o seu, (e) reequilibrio ganha title/og:title 'Reequilibrio economico-financeiro de obra publica | CONFENGE' e descricao que nomeia o dossie; nenhum preco, prazo, checkout, robots, canonical, JSON-LD de oferta ou campo do formulario mudou. Irmaos do canario #389 (glosa-de-medicao, medicao-rejeitada) nao mudaram nesta recaptura alem do que ja foi recapturado no incremento 1. Executor: agente Claude Code; sem revisao humana independente alegada.",
-      "expected_sha256_previous": "a22d05397d0ece10de9429240a50159045598d58f30b32f6aa91cba5108a5fc8"
+      "expected_sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
+      "expected_sha256_note": "Bytes derivados da campanha institucional, revisados autonomamente e vinculados ao canário #389. A recaptura preserva fatos, fontes, termos e controles; não alega nova aprovação humana.",
+      "expected_sha256_recaptured_at": "2026-10-03",
+      "expected_sha256_recapture_reason": "CONFENGE-CAMPANHA-AQUISICAO-20261003: aberturas específicas de engenharia, responsabilidades acessíveis, saudação institucional e hierarquia medida de primeira tela; preços, prazos, entregáveis, fontes, canonical, robots e formulário protegidos pelos contratos vigentes. A revisão humana factual anterior permanece histórica.",
+      "expected_sha256_previous": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+      "commercial_recapture_history": [
+        {
+          "recorded_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
+          "recorded_previous_sha256": "a22d05397d0ece10de9429240a50159045598d58f30b32f6aa91cba5108a5fc8",
+          "recorded_note": "Linha de base de bytes efetivamente auditada em 2026-09-14 e reconciliada com data/bofu-dominance/frozen-specs/hashes.json. O hash preserva integridade e procedência; não cria espera nem veto editorial.",
+          "recorded_at": "2026-09-19",
+          "recorded_reason": "BOFU-INTEGRAL-20260919 (EXECUTE_NOW do fundador, incremento 2) sobre 505c833ab5938e86d182b88da1021dc8770f0217: nos pilares protegidos, (a) sai a frase redundante 'Este formulario nao conclui contratacao e nao promete ...' da introducao do formulario #captura-pilar (medicoes, aditivos, reequilibrio; o cartao Limite e a linha data-form-boundary continuam), (b) entra a nota <noscript> 'Sem JavaScript, este formulario nao envia; use o WhatsApp ou o e-mail ao lado' nos seis pilares, (c) medicoes reescreve 'recorte operacional' na frase do guia da recusa de ateste, (d) aditivos liga o proprio caso demonstrativo /casos/aditivo-art125-demonstrativo/ como medicoes ja ligava o seu, (e) reequilibrio ganha title/og:title 'Reequilibrio economico-financeiro de obra publica | CONFENGE' e descricao que nomeia o dossie; nenhum preco, prazo, checkout, robots, canonical, JSON-LD de oferta ou campo do formulario mudou. Irmaos do canario #389 (glosa-de-medicao, medicao-rejeitada) nao mudaram nesta recaptura alem do que ja foi recapturado no incremento 1. Executor: agente Claude Code; sem revisao humana independente alegada."
+        }
+      ]
     }
   ],
   "primary_cta_contract": {
@@ -171,5 +181,26 @@
   "rollback": {
     "trigger_pt_br": "Aumento de confusão entre a resposta editorial e a próxima ação, queda observável na transferência ou conflito de ownership.",
     "action_pt_br": "Reverter a alteração defeituosa sem retirar o conteúdo técnico nem a URL canônica; preservar a procedência da issue #389, a integridade medida e as autoridades materiais de preço, checkout e responsabilidade profissional."
+  },
+  "home_strategy": {
+    "state": "CORPORATE_PORTFOLIO",
+    "effective_at": "2026-10-03",
+    "authority_record": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
+    "previous_focal_surface": {
+      "role": "home",
+      "route": "/",
+      "file": "index.html",
+      "cta_id": "home-medicoes-glosas-dossie",
+      "mutation_state": "EDITORIAL_AUTHORIZED"
+    },
+    "specialist_discovery_route": "/servicos-obras-publicas/",
+    "required_project_routes": [
+      "/projetos/",
+      "/projetos/estruturas/",
+      "/projetos/instalacoes/",
+      "/projetos/infraestrutura/"
+    ],
+    "reason_pt_br": "A campanha substitui a promoção focal de medições na home pela apresentação ampla de projetos e serviços. A transferência canônica de medição permanece no hub e no canário editorial; a home oferece descoberta da especialidade e contato institucional.",
+    "new_human_review_claimed": false
   }
 }
