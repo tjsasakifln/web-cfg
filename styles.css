@@ -1116,6 +1116,16 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 @media (min-width:1000px){.footer-top{grid-template-columns:1.3fr .8fr .9fr 1fr;gap:3rem}.footer-top>.footer-links:last-child{grid-column:auto}}
 
 
+.site-footer .footer-brand p{font-size:.875rem;color:#c5d1d7}
+.site-footer .footer-links,.site-footer .footer-links strong,.site-footer .footer-links a,.site-footer .footer-authority a{font-size:.8125rem}
+.site-footer .footer-links strong{color:#fff}
+.site-footer .footer-links a,.site-footer .footer-authority a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;transition:color .16s ease,text-shadow .16s ease,box-shadow .16s ease}
+.site-footer .footer-links a:hover,.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:hover,.site-footer .footer-authority a:focus-visible{color:#fff;text-shadow:0 0 .45rem rgba(206,214,42,.48)}
+.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
+.site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
+@media (prefers-reduced-motion:reduce){.site-footer .footer-links a,.site-footer .footer-authority a{transition:none}}
+
+
 .list-ruled p a,.list-ruled__use a,.aside-note p a,.phases a,.steps a,.calc a,.proof-figure figcaption a,.keys a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:.2em}
 .list-ruled p a:hover,.proof-figure figcaption a:hover{color:var(--green-700)}
 .list-ruled h3{max-width:34ch}

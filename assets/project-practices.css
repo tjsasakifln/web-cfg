@@ -138,9 +138,12 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-footer { padding: 4.5rem 0 1.4rem; background: #051522; color: #c5d1d7; }
 .pp-footer__grid { display: grid; grid-template-columns: 1.3fr repeat(3,minmax(0,.85fr)); gap: 3rem; }
 .pp-footer nav { display: flex; flex-direction: column; gap: .72rem; }
+.pp-footer p { font-size: .875rem; }
+.pp-footer strong, .pp-footer a { font-size: .8125rem; }
 .pp-footer strong { margin-bottom: .4rem; color: #fff; }
-.pp-footer a { color: #c5d1d7; }
-.pp-brand--footer img { filter: grayscale(1) brightness(4); }
+.pp-footer a { min-height: 44px; display: inline-flex; align-items: center; color: #eef4f6; transition: color .16s ease, text-shadow .16s ease, box-shadow .16s ease; }
+.pp-footer a:hover, .pp-footer a:focus-visible { color: #fff; text-shadow: 0 0 .45rem rgba(206,214,42,.48); }
+.pp-footer a:focus-visible { box-shadow: var(--focus-ring); }
 .pp-footer__bottom { display: flex; justify-content: space-between; margin-top: 3.5rem; padding-top: 1.2rem; border-top: 1px solid #40515d; font-size: .8rem; }
 
 @media (max-width: 1040px) {
@@ -195,5 +198,5 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .pp-button { transition: none; }
+  .pp-button, .pp-footer a { transition: none; }
 }

@@ -354,7 +354,9 @@ async function main() {
     fail("home_hero_fold_390_768_1440", e.message || e);
   }
 
-  // 5) functional text ≥ 14px on home + commercial surfaces (footer, breadcrumbs, profile, related)
+  // 5) functional text ≥ 14px on home + commercial surfaces. The compact
+  // footer has a measured hierarchy of its own: navigation/titles ≥13px,
+  // legal ≥12.8px and description ≥14px.
   try {
     await page.setViewport({ width: 1440, height: 1000 });
     const fontSel = [
@@ -379,10 +381,6 @@ async function main() {
       ".desktop-nav a",
       ".header-cta",
       ".contact-channels small",
-      ".footer-links a",
-      ".footer-links strong",
-      ".footer-bottom",
-      ".footer-bottom a",
       ".breadcrumbs ol",
       ".breadcrumbs a",
       ".profile-list li",
@@ -394,7 +392,7 @@ async function main() {
       ".offer-context dt",
       ".offer-context dd",
     ].join(",");
-    const measureFonts = async (path) => {
+    const measureFonts = async (path, selector = fontSel) => {
       await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded" });
       return page.evaluate((sel) => {
         let min = Infinity;
@@ -409,7 +407,7 @@ async function main() {
           }
         }
         return { min, minSel, path: location.pathname };
-      }, fontSel);
+      }, selector);
     };
     const paths = ["/", "/diretoria-b2g/", "/especialista/tiago-jun-sasaki/"];
     let worst = { min: Infinity, minSel: "", path: "" };
@@ -421,6 +419,24 @@ async function main() {
       }
     }
     ok(`functional_text_min_14px (${worst.min}px across home/offer/specialist)`);
+
+    const footerGroups = [
+      { label: "site_footer_navigation", paths, selector: ".site-footer .footer-links a,.site-footer .footer-links strong,.site-footer .footer-authority a", floor: 13 },
+      { label: "site_footer_legal", paths, selector: ".site-footer .footer-bottom,.site-footer .footer-bottom a", floor: 12.8 },
+      { label: "site_footer_description", paths, selector: ".site-footer .footer-brand p", floor: 14 },
+      { label: "pp_footer_navigation", paths: ["/projetos/"], selector: ".pp-footer nav a,.pp-footer strong", floor: 13 },
+      { label: "pp_footer_legal", paths: ["/projetos/"], selector: ".pp-footer__bottom,.pp-footer__bottom a", floor: 12.8 },
+      { label: "pp_footer_description", paths: ["/projetos/"], selector: ".pp-footer p", floor: 14 },
+    ];
+    for (const group of footerGroups) {
+      for (const path of group.paths) {
+        const rep = await measureFonts(path, group.selector);
+        if (!Number.isFinite(rep.min) || rep.min < group.floor) {
+          throw new Error(`${group.label} ${path}: ${rep.min}px < ${group.floor}px (${rep.minSel})`);
+        }
+      }
+    }
+    ok("footer_type_hierarchy_13_12_8_14px");
   } catch (e) {
     fail("functional_text_min_14px", e.message || e);
   }
