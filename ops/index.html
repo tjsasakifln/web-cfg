@@ -8,7 +8,7 @@
  <meta name="googlebot" content="noindex,nofollow" />
  <link rel="canonical" href="https://confenge.com.br/ops/" />
  <style>
- :root { --bg:#0f1419; --card:#1a2332; --text:#e7ecf3; --muted:#8b9bb4; --accent:#3d8bfd; --ok:#3dd68c; --warn:#f5a524; --bad:#f31260; }
+ :root { --bg:#0f1419; --card:#1a2332; --text:#e7ecf3; --muted:#8b9bb4; --accent:#2167c8; --ok:#3dd68c; --warn:#f5a524; --bad:#f31260; }
  * { box-sizing: border-box; }
  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); line-height:1.45; }
  header { padding:1rem 1.25rem; border-bottom:1px solid #2a3548; display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between; }
@@ -67,7 +67,7 @@
  <div class="grid" id="kpi"></div>
  <div class="card">
  <h2 style="margin-top:0;font-size:1rem">Estágios (real-only)</h2>
- <table><thead><tr><th>Estágio</th><th>Qtd</th><th>Taxa</th></tr></thead><tbody id="funnel-body"></tbody></table>
+ <table><thead><tr><th>Estágio</th><th>Qtd</th><th>Taxa</th></tr></thead><tbody id="funnel-body"><tr class="empty"><td colspan="3">Dados ainda não carregados. Informe o token e selecione Carregar.</td></tr></tbody></table>
  </div>
  </section>
 
@@ -173,10 +173,11 @@
  ["Última conversão real", f.last_real_conversion || sh.last_real_conversion || ", "],
  ].map(([l, v]) => `<div class="card"><strong>${v}</strong><span>${l}</span></div>`).join("");
  const rates = f.rates || {};
- $("funnel-body").innerHTML = Object.keys(c).map((k) => {
+ const funnelRows = Object.keys(c).map((k) => {
  const rateKey = Object.keys(rates).find((r) => r.endsWith("_to_" + k));
  return `<tr><td>${k}</td><td>${c[k]}</td><td>${rateKey ? rates[rateKey] : "n/d"}</td></tr>`;
  }).join("");
+ $("funnel-body").innerHTML = funnelRows || '<tr class="empty"><td colspan="3">Sem dados de funil disponíveis para este acesso.</td></tr>';
 
  $("health-kpi").innerHTML = [
  ["Reais", sh.real_leads ?? ", "],

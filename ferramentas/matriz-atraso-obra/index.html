@@ -78,7 +78,7 @@
 <button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
 </div>
 <div class="tool-cta-contextual" id="cta" hidden></div>
-<div class="tool-cta-contextual" id="contato-contextual" aria-labelledby="contato-contextual-titulo">
+<div class="tool-cta-contextual" id="contato-contextual" role="group" aria-labelledby="contato-contextual-titulo">
 <h2 id="contato-contextual-titulo">Levar a matriz para o dossiê de atraso e prorrogação</h2>
 <p>A matriz organiza os eventos e as lacunas de prova; a contagem de dias, o nexo com o caminho crítico e o pedido técnico saem do <a data-cta-id="matriz-atraso-contato-oferta" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">dossiê de atraso e prorrogação</a>, montado a partir do cronograma e dos documentos do contrato. Você pode começar a conversa com a matriz incompleta: escopo, local e responsabilidade técnica são confirmados antes do aceite.</p>
 <ul class="contact-alt">
@@ -168,7 +168,7 @@
     el.className="tool-event-card"; el.setAttribute("data-event-id", id);
     d=d||{};
     // Shell only (no user text in attribute/HTML injection surface)
-    el.innerHTML='<header><h3>Evento</h3><button type="button" class="button button-secondary tool-event-remove" data-rm>Remover</button></header>'+
+    el.innerHTML='<header><h2>Evento</h2><button type="button" class="button button-secondary tool-event-remove" data-rm>Remover</button></header>'+
       '<div class="tool-grid">'+
       '<div class="tool-field tool-field--full"><label for="'+id+'-causa">Causa ou evento</label><input id="'+id+'-causa" data-f="causa" required/></div>'+
       '<div class="tool-field"><label for="'+id+'-di">Data inicial</label><input id="'+id+'-di" type="date" data-f="dataInicio"/></div>'+

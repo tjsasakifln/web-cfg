@@ -89,9 +89,19 @@ function record(name, pass, detail, context = {}) { const row = { name, pass, de
 // Keep running after an individual failure.  The report is evidence for every
 // planned route and viewport, not only the first broken CTA.
 function required(name, pass, detail, context) { record(name, pass, detail, context); }
+function hasEssentialContactResponse(status, data) {
+  return status === 200 && Boolean(data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean));
+}
 function executable() { if (chrome && existsSync(chrome)) return chrome; throw new Error("Chrome unavailable: set CHROME_PATH"); }
 function serve() { return createServer((req, res) => {
   const pathname = new URL(req.url, "http://loopback").pathname;
+  // This detector control is served only by the local test harness. A missing
+  // page can still expose a working contact link in its error-page content.
+  if (pathname === "/__test/no-js-contact-404/") {
+    res.writeHead(404, { "content-type": "text/html; charset=utf-8" });
+    res.end('<!doctype html><title>Contato em página ausente</title><main><h1>Página ausente</h1><a href="mailto:qa-404-control@example.invalid">Contato</a></main>');
+    return;
+  }
   let file = normalize(join(site, pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "")));
   if (file.startsWith(site) && existsSync(file) && statSync(file).isDirectory()) file = join(file, "index.html");
   if (!file.startsWith(site) || !existsSync(file) || statSync(file).isDirectory()) { res.writeHead(404); res.end("not found"); return; }
@@ -494,7 +504,21 @@ try {
   // shared contact route plus the two routes whose adaptive form is withheld.
   const noJs = await browser.newPage(); await noJs.setJavaScriptEnabled(false);
   await blockExternal(noJs);
-  for (const route of ["/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/servicos/"]) { await noJs.goto(routeUrl(route, "js-off"), { waitUntil: "domcontentloaded" }); const data = await facts(noJs); required("journey_js_off_essential_content", data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean), JSON.stringify(data), { route }); }
+  for (const route of ["/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/servicos/"]) {
+    const response = await noJs.goto(routeUrl(route, "js-off"), { waitUntil: "domcontentloaded" });
+    const data = await facts(noJs);
+    const status = response?.status();
+    required("journey_js_off_essential_content", hasEssentialContactResponse(status, data), JSON.stringify({ status, ...data }), { route });
+  }
+  if (server) {
+    const mutationsBefore = report.requestSafety.mutation_attempted;
+    const leadsBefore = report.leadRequests.length;
+    const response = await noJs.goto(new URL("/__test/no-js-contact-404/", base).href, { waitUntil: "domcontentloaded" });
+    const data = await facts(noJs);
+    const status = response?.status();
+    required("journey_js_off_404_contact_control", status === 404 && data.channels.email === true && !hasEssentialContactResponse(status, data), JSON.stringify({ status, ...data }));
+    required("journey_js_off_404_control_no_mutation", report.requestSafety.mutation_attempted === mutationsBefore && report.leadRequests.length === leadsBefore, JSON.stringify({ mutation_attempted: report.requestSafety.mutation_attempted - mutationsBefore, lead_requests: report.leadRequests.length - leadsBefore }));
+  }
   await noJs.close();
   required("journey_all_mutation_requests_blocked", report.requestSafety.mutation_attempted === report.requestSafety.mutation_blocked, JSON.stringify(report.requestSafety));
   if (!await verifyServedIdentity("after")) throw new Error("served identity changed during journeys");

@@ -363,3 +363,32 @@ permanece no predecessor até a aprovação e aceitação do novo release.
 O relatório final e as PRs da campanha registrarão o SHA efetivamente
 publicado, a revisão pública e a prova de contato; este registro conserva
 o histórico da tentativa que não promoveu.
+
+A PR #733 corrigiu a dependência do bundle. O release protegido
+`37193478868`, do SHA `1c60648def70dd1f4484133a5130e419231111a9`, foi
+promovido em 2026-10-04 às 10:42:24 UTC e aceito no domínio público.
+O bundle desse checkpoint e os predecessores permanecem preservados para
+recuperação. Esse aceite de infraestrutura não encerrou a revisão de qualidade.
+
+A varredura pública posterior leu as 550 páginas em 390 e 1440 px, com
+1100 respostas e hashes coincidentes com o inventário aceito. Encontrou
+contraste insuficiente no título de proposta compartilhado e nos botões de
+Ops, duas hierarquias de títulos incorretas, nomes ARIA inadequados, uma
+auto-referência no hub B2G, uma tabela sem estado inicial e bordas herdadas
+nos blocos editoriais. A inspeção adicional em 320 px encontrou recorte
+dos campos causado pelo tamanho normal do Turnstile. As correções mantêm
+o mecanismo antiabuso e usam o tamanho compacto com reserva de área.
+Os scrolls de tabelas e diagramas foram verificados por teclado; os 18
+timeouts de axe desse checkpoint permanecem inconclusivos, sem alegação
+de cobertura completa de acessibilidade.
+
+Esta correção trata a apresentação e os respectivos detectores, preservando
+fatos, fontes, condições comerciais, autoria, decisões materiais, privacidade
+e os contratos de contato. A contraprova local de página 404 com canal de
+contato exige rejeição pelo status HTTP sem envio. A revisão autônoma dos
+vínculos de apresentação não constitui nova aprovação técnica humana.
+O encerramento continua condicionado aos checks do head corrigido, à nova
+publicação protegida, à revisão completa do artefato efetivamente servido e
+ao contato sintético com persistência, encaminhamento e recebimento real.
+As PRs e o relatório final registram o SHA final e essas provas; este trecho
+conserva os achados e o estado do checkpoint público anterior.

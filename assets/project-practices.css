@@ -118,6 +118,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-responsibility p { margin: 0; color: var(--pp-muted); font-size: 1.06rem; line-height: 1.75; }
 
 .pp-section--cta { background: var(--pp-accent); color: #fff; }
+.pp-section--cta .pp-cta h2 { color: #fff; }
 .pp-section--cta .pp-kicker { color: #fff; opacity: .84; }
 .pp-cta { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: clamp(32px,7vw,110px); }
 .pp-cta h2 { max-width: 860px; }

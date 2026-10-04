@@ -275,4 +275,9 @@ code,pre,kbd,samp,[data-opaque-token]{overflow-wrap:anywhere;word-break:break-wo
 }
 @media (max-width:700px){.hero-proof strong{font-size:max(var(--text-small),14px)}}
 @media (max-width:620px){.hero-proof strong,.hero-proof li{font-size:var(--text-small);line-height:var(--lh-micro)}}
+/* Reserve the compact Turnstile footprint only after a real public key makes
+   the slot visible. This avoids both a keyless blank and a late form shift. */
+.contact-form,.turnstile-slot{min-width:0;max-width:100%}
+.turnstile-slot:not([hidden]){min-block-size:140px}
+.cf-turnstile[data-size=compact]{min-inline-size:0;min-block-size:140px;max-inline-size:100%}
 /* END css-modules:cfg10x-12 */
