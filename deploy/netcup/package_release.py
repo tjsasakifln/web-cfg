@@ -355,14 +355,19 @@ def build_release(
         for relative in (
             "scripts/storage/lib.cjs",
             "scripts/storage/retention.mjs",
-            # scripts/live_intelligence/render.py imports scripts.site.svg_sprite so
-            # every packaged opportunity page ships the sprite its menu button uses.
-            # The release inserts the payload on sys.path and imports that chain, so
-            # without these two files the official overlay raises ImportError at
-            # release time. Both are self-contained (svg_sprite imports only `re`),
-            # so this ships the one module needed, not the whole scripts/site tree.
+            # The official opportunity overlay renders its index through
+            # ``shell_nav.sync_text``.  Keep that canonical shell chain portable:
+            # shell_nav needs the shared breadcrumb helper, the brand helpers and
+            # the public IA map, while ``declared_value_first_cta`` reads the
+            # family registry.  This is intentionally a file allowlist rather
+            # than the whole site/pSEO tree.
             "scripts/site/__init__.py",
             "scripts/site/svg_sprite.py",
+            "scripts/site/brand.py",
+            "scripts/site/public_ia.py",
+            "scripts/site/shell_nav.py",
+            "scripts/pseo/__init__.py",
+            "scripts/pseo/html_shell.py",
         ):
             source = repo_root / relative
             destination = payload / relative
@@ -379,6 +384,9 @@ def build_release(
             "data/revops/closed-loop-funnel.v1.json",
             "data/nurture/tracks.json",
             "data/site/editorial-policy.json",
+            "data/site/brand.json",
+            "data/site/public-ia-map.json",
+            "data/organic/public-family-registry.json",
             "data/bofu-dominance/core/gsc-live-overlay.v1.json",
             "data/offers/flags.json",
             "data/offers/catalog.snapshot.json",
@@ -433,10 +441,18 @@ def build_release(
                 "scripts/storage/retention.mjs",
                 "scripts/site/__init__.py",
                 "scripts/site/svg_sprite.py",
+                "scripts/site/brand.py",
+                "scripts/site/public_ia.py",
+                "scripts/site/shell_nav.py",
+                "scripts/pseo/__init__.py",
+                "scripts/pseo/html_shell.py",
                 "data/commercial/",
                 "data/conversion/",
                 "data/nurture/tracks.json",
                 "data/site/editorial-policy.json",
+                "data/site/brand.json",
+                "data/site/public-ia-map.json",
+                "data/organic/public-family-registry.json",
                 "data/bofu-dominance/core/gsc-live-overlay.v1.json",
                 "data/offers/flags.json",
                 "data/offers/catalog.snapshot.json",
