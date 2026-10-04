@@ -27,7 +27,7 @@ Decidir participar, esclarecer, impugnar, ajustar estrutura ou abandonar um edit
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Diagnóstico pré-licitação para obras públicas | CONFENGE |
-| content_sha256 | `dde8951f37ddbdf3aef22ba2829c35b184fabb087e04edddd6b57334a331839f` |
+| content_sha256 | `4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 

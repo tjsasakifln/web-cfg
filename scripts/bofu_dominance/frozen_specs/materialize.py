@@ -134,7 +134,7 @@ Exact replacements: `data/bofu-dominance/frozen-specs/patches/{spec['slug']}.pat
 
 ADR: [ADR-STRAT-002](../../../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md).
 """
-    (DOCS_DIR / f"{spec['slug']}.md").write_text(body, encoding="utf-8")
+    (DOCS_DIR / f"{spec['slug']}.md").write_text(body, encoding="utf-8", newline="\n")
 
 
 def _write_index_markdown(spec_files: list[str]) -> None:
@@ -164,7 +164,7 @@ def _write_index_markdown(spec_files: list[str]) -> None:
         "Shipped entry: `python3 -m scripts.bofu_dominance.frozen_specs` (mutate always false here).",
         "",
     ]
-    (DOCS_DIR / "README.md").write_text("\n".join(lines), encoding="utf-8")
+    (DOCS_DIR / "README.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
 
 def materialize(*, root: Path | None = None) -> dict[str, object]:
@@ -193,7 +193,7 @@ def materialize(*, root: Path | None = None) -> dict[str, object]:
         "forbidden": forbidden_path_hashes(base),
     }
     hashes_path.write_text(
-        json.dumps(hashes_doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        json.dumps(hashes_doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
     )
     repl = _replacements()
     patch_files = []
@@ -212,7 +212,7 @@ def materialize(*, root: Path | None = None) -> dict[str, object]:
         spec["snapshot"] = snapshot_pillar(slug, base)
         target = spec_path(slug)
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(json.dumps(spec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        target.write_text(json.dumps(spec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
         spec_files.append(str(target.relative_to(ROOT)))
         _write_spec_markdown(spec)
     _write_index_markdown(spec_files)
@@ -245,10 +245,10 @@ def materialize(*, root: Path | None = None) -> dict[str, object]:
         },
     }
     (DATA_DIR / "serp-census.json").write_text(
-        json.dumps(census, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        json.dumps(census, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
     )
     (DATA_DIR / "query-ownership.json").write_text(
-        json.dumps(own, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        json.dumps(own, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
     )
     return {
         "html_mutation": False,

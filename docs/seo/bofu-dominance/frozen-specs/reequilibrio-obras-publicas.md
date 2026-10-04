@@ -27,7 +27,7 @@ Decidir se cabe reequilíbrio agora e estruturar evento, matriz de riscos, nexo 
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Reequilíbrio econômico-financeiro de obra pública | CONFENGE |
-| content_sha256 | `f457a6e2432a97d0109b31e0ee232f4e25211f8cb317ab512ff3366634f8c833` |
+| content_sha256 | `df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 
