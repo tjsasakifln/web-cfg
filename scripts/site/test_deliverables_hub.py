@@ -601,7 +601,7 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     crit = re.search(r'<style data-home-deliverables-critical=""[^>]*>([\s\S]*?)</style>', home)
     assert crit, "bloco critico inline ausente"
     critical_css = crit.group(1)
-    for selector in (".home-opening{", ".home-opening__grid{", ".home-opening h1{", ".home-opening__sheet img{"):
+    for selector in (".home-opening{", ".home-opening__grid{", ".home-opening h1{", ".home-opening__sheet{"):
         assert selector in critical_css, selector
     responsive = re.search(r'@media \(max-width:900px\)\{([^\n]+)', critical_css)
     assert responsive and ".home-opening__grid{grid-template-columns:1fr}" in responsive.group(1)

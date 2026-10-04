@@ -185,5 +185,6 @@ def write_patch_file(slug: str, replacements: list[dict[str, str]], root: Path |
     dest.write_text(
         render_patch(slug=slug, content_hash=digest, replacements=replacements),
         encoding="utf-8",
+        newline="\n",
     )
     return dest

@@ -15,6 +15,8 @@
   --tool-read: 68ch;
   --tool-radius: 4px;
   --tool-focus: var(--focus-ring);
+  --tool-panel-pad-inline: clamp(1rem, 2.5vw, 1.4rem);
+  --tool-panel-pad-block: clamp(1.1rem, 2.5vw, 1.35rem);
 }
 
 /* Wide workbench: break out of narrow article column */
@@ -228,8 +230,13 @@ a.tool-card:focus-visible {
   background: var(--tool-soft);
   border: 1px solid var(--tool-line);
   border-radius: var(--tool-radius);
-  padding: 1.25rem 1.35rem;
+  padding: var(--tool-panel-pad-block) var(--tool-panel-pad-inline);
   margin: 1.25rem 0;
+}
+/* editorial-tool.css is intentionally loaded after this sheet and supplies
+   generic tool typography. Keep the operational frame inset authoritative. */
+.tool-shell .tool-form {
+  padding: var(--tool-panel-pad-block) var(--tool-panel-pad-inline);
 }
 .tool-grid {
   display: grid;
@@ -435,7 +442,8 @@ a.tool-card:focus-visible {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.4rem;
 }
-.tool-req-option {
+.tool-req-option,
+.tool-req-states > label {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -451,27 +459,31 @@ a.tool-card:focus-visible {
   text-align: center;
   color: #314256;
 }
-.tool-req-option input {
+.tool-req-option input,
+.tool-req-states > label input {
   position: absolute;
   opacity: 0;
   width: 1px;
   height: 1px;
   pointer-events: none;
 }
-.tool-req-option:has(input:checked) {
+.tool-req-option:has(input:checked),
+.tool-req-states > label:has(input:checked) {
   border-color: var(--tool-accent);
   background: var(--green-100, #edf5ec);
   color: var(--tool-accent);
   box-shadow: inset 0 0 0 1px var(--tool-accent);
 }
-.tool-req-option:focus-within {
+.tool-req-option:focus-within,
+.tool-req-states > label:focus-within {
   box-shadow: var(--tool-focus);
 }
 @media (max-width: 560px) {
   .tool-req-states {
     grid-template-columns: 1fr;
   }
-  .tool-req-option {
+  .tool-req-option,
+  .tool-req-states > label {
     justify-content: flex-start;
     padding-inline: 0.85rem;
   }
@@ -749,6 +761,25 @@ a.tool-card:focus-visible {
   padding: 1rem;
   background: #fff;
 }
+.tool-event-card > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.tool-event-card > header h3 {
+  margin: 0;
+}
+@media (max-width: 390px) {
+  .tool-event-card > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .tool-event-card > header .button {
+    width: 100%;
+  }
+}
 .tool-category {
   margin: 0;
 }
@@ -837,6 +868,7 @@ a.tool-card:focus-visible {
   margin-top: 1.5rem;
   padding: 1.35rem 1.4rem;
   border-width: 2px;
+  max-width: 100%;
 }
 .tool-result-highlights {
   display: grid;

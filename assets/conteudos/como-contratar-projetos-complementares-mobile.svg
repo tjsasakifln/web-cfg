@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 1100" role="img" aria-labelledby="prepTitle prepDesc">
+  <title id="prepTitle">O que preparar, combinar e conferir antes de contratar elaboração complementar</title>
+  <desc id="prepDesc">Três etapas de decisão: preparar insumos, combinar interfaces e conferir o que consta da proposta. Esquema didático para o comprador, sem preço, prazo ou formato proprietário obrigatório.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#2d6f2d"/></marker>
+    <style>
+      .k{font:800 17px Arial,sans-serif;fill:#2d6f2d;letter-spacing:.8px}.h{font:760 25px Arial,sans-serif;fill:#061a33}.t{font:17px Arial,sans-serif;fill:#314256}.note{font:17px Arial,sans-serif;fill:#5d6a7a}.card{fill:#fff;stroke:#dce3e8;stroke-width:1.5}.accent{fill:#edf5ec;stroke:#cfe0cc;stroke-width:1.5}.line{stroke:#2d6f2d;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="360" height="1100" fill="#f7f9f8"/>
+  <rect x="10" y="10" width="340" height="1080" fill="#fff" stroke="#dce3e8" stroke-width="2"/>
+  <text class="k" x="28" y="43">DECISÃO DE CONTRATAÇÃO</text>
+  <text class="h" x="28" y="78">Preparar, delimitar</text>
+  <text class="h" x="28" y="108">e ler a proposta</text>
+  <text class="note" x="28" y="139">Lista de conferência. Pacote</text>
+  <text class="note" x="28" y="161">incompleto não impede o contato.</text>
+
+  <g transform="translate(28 188)">
+    <rect class="card" width="304" height="210" rx="5"/>
+    <text class="k" x="18" y="32">01 · PREPARAR</text>
+    <text class="h" x="18" y="67">Insumos</text>
+    <text class="t" x="18" y="101">Finalidade e fase.</text>
+    <text class="t" x="18" y="126">Arquitetura disponível</text>
+    <text class="t" x="18" y="151">e o que falta.</text>
+    <text class="t" x="18" y="176">Autores conhecidos,</text>
+    <text class="t" x="18" y="201">mesmo que parciais.</text>
+  </g>
+  <path class="line" d="M180 408V432"/>
+  <g transform="translate(28 446)">
+    <rect class="card" width="304" height="210" rx="5"/>
+    <text class="k" x="18" y="32">02 · COMBINAR</text>
+    <text class="h" x="18" y="67">Interfaces</text>
+    <text class="t" x="18" y="101">Disciplina do recorte.</text>
+    <text class="t" x="18" y="126">Pontos de encontro.</text>
+    <text class="t" x="18" y="151">Quem devolve correção.</text>
+    <text class="t" x="18" y="176">Como se nomeia</text>
+    <text class="t" x="18" y="201">cada versão.</text>
+  </g>
+  <path class="line" d="M180 666V690"/>
+  <g transform="translate(28 704)">
+    <rect class="accent" width="304" height="260" rx="5"/>
+    <text class="k" x="18" y="32">03 · CONFERIR</text>
+    <text class="h" x="18" y="67">Proposta</text>
+    <text class="t" x="18" y="101">Entregáveis, exclusões</text>
+    <text class="t" x="18" y="126">e formatos.</text>
+    <text class="t" x="18" y="151">Responsável e ART,</text>
+    <text class="t" x="18" y="176">quando couber.</text>
+    <text class="t" x="18" y="201">Campo, se houver.</text>
+    <text class="t" x="18" y="226">O que permanece com</text>
+    <text class="t" x="18" y="251">os autores de origem.</text>
+  </g>
+  <text class="note" x="28" y="1000">O esquema não fixa revisões, prazo,</text>
+  <text class="note" x="28" y="1026">desconto nem atendimento de campo</text>
+  <text class="note" x="28" y="1052">nacional. Isso só entra com</text>
+  <text class="note" x="28" y="1078">autorização e evidência na proposta.</text>
+</svg>

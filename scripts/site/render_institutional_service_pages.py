@@ -176,7 +176,7 @@ def render_technical_figures(block: dict) -> str:
         figure_id = esc(item["id"])
         figures.append(
             f'''<figure class="plate plate--dominant proof-figure" aria-labelledby="{figure_id}-caption">
-<div class="plate__sheet"><picture class="plate__picture"><source media="(max-width:699px)" srcset="{esc(item['mobile_src'])}" width="{int(item['mobile_width'])}" height="{int(item['mobile_height'])}"/><img alt="{esc(item['alt'])}" decoding="async" loading="lazy" src="{esc(item['desktop_src'])}" width="{int(item['desktop_width'])}" height="{int(item['desktop_height'])}"/></picture></div>
+<div aria-label="Prancha técnica com rolagem horizontal" class="plate__sheet plate__sheet--native-pan" role="group" tabindex="0"><picture class="plate__picture"><source media="(max-width:699px)" srcset="{esc(item['mobile_src'])}" width="{int(item['mobile_width'])}" height="{int(item['mobile_height'])}"/><img alt="{esc(item['alt'])}" decoding="async" loading="lazy" src="{esc(item['desktop_src'])}" width="{int(item['desktop_width'])}" height="{int(item['desktop_height'])}"/></picture></div>
 <figcaption class="plate__caption" id="{figure_id}-caption"><span class="tag">Exemplo demonstrativo</span> {esc(item['caption'])}</figcaption>
 </figure>'''
         )

@@ -42,6 +42,7 @@ def _pages(root: Path = ROOT) -> list[str]:
 
 PAGES = _pages()
 SLOT = re.compile(r"<!-- plate:([a-z0-9-]+)((?: eager| narrow)*) -->.*?<!-- /plate -->", re.S)
+PLATE_SHEET = re.compile(r'<div class="plate__sheet">(?=\s*<!-- plate:)')
 
 
 def _dims(svg_text: str) -> tuple[int, int]:
@@ -100,7 +101,12 @@ def render(html_text: str) -> str:
         narrow = " narrow" in flags
         return f"<!-- plate:{slug}{flags} -->\n{picture(slug, eager=eager, narrow=narrow)}\n<!-- /plate -->"
 
-    return SLOT.sub(repl, html_text)
+    rendered = SLOT.sub(repl, html_text)
+    return PLATE_SHEET.sub(
+        '<div aria-label="Prancha técnica com rolagem horizontal" '
+        'class="plate__sheet plate__sheet--native-pan" role="group" tabindex="0">',
+        rendered,
+    )
 
 
 def main(argv: list[str]) -> int:

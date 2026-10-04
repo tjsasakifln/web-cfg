@@ -189,5 +189,5 @@ def write_snapshots_json(dest: Path, root: Path | None = None) -> dict[str, Any]
         "pillars": snaps,
     }
     dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    dest.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     return doc

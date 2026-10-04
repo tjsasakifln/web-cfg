@@ -14,7 +14,7 @@
     <rect x="80" y="150" width="270" height="122" rx="4"/>
     <rect x="80" y="340" width="270" height="122" rx="4"/>
     <rect x="80" y="530" width="270" height="122" rx="4"/>
-    <rect x="465" y="218" width="300" height="366" rx="4" fill="#e9f1e9" stroke="#2d6f2d" stroke-width="3"/>
+    <rect x="465" y="218" width="300" height="366" rx="4" fill="#e9f1e9" stroke="#2d6f2d" stroke-width="3" id="hero-coordination-card"/>
     <rect x="880" y="260" width="240" height="282" rx="4"/>
   </g>
   <g font-family="Arial, sans-serif" fill="#071a31">
@@ -27,7 +27,7 @@
     <text x="105" y="567" font-size="13" font-weight="700" letter-spacing="1.5">INFRAESTRUTURA</text>
     <text x="105" y="597" font-size="21" font-weight="700">Implantação e redes</text>
     <text x="105" y="623" font-size="15">Drenagem · acessos · conexões</text>
-    <text x="500" y="260" font-size="13" font-weight="700" letter-spacing="1.5" fill="#2d6f2d">COORDENAÇÃO MULTIDISCIPLINAR</text>
+    <text x="615" y="260" font-size="13" font-weight="700" letter-spacing="1.5" fill="#2d6f2d" text-anchor="middle" id="hero-coordination-label">COORDENAÇÃO MULTIDISCIPLINAR</text>
     <text x="500" y="306" font-size="29" font-weight="700">Projeto</text>
     <text x="500" y="340" font-size="29" font-weight="700">coordenado</text>
     <text x="500" y="383" font-size="15">• escopo e interfaces</text>

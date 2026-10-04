@@ -7,6 +7,75 @@
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
 import { createHash, randomUUID } from "node:crypto";
+import { parse } from "parse5";
+
+const blockedProbe = Symbol("controlled_probe_block");
+const CONTEXT_FIELDS = ["asset_id", "cta_id", "route_family", "jornada", "estagio", "origem"];
+const ATTRIBUTION_FIELDS = ["asset_id", "cta_id", "route_family"];
+const CONTEXT_VALUE = /^[\w./:-]{1,120}$/;
+
+// Browser-compatible HTML parsing keeps quoted attribute values from being
+// mistaken for attributes. This deliberately accepts only a conservative
+// subset of controls: a hidden input that is local to this form and not inside
+// a disabled fieldset. Form data attributes only corroborate that value.
+// It does not claim to reproduce every browser FormData edge case.
+export function servedFormContext(html) {
+  const attrs = (node) => Object.fromEntries((node.attrs || []).map(({ name, value }) => [name, value]));
+  const descendants = (node) => (node.childNodes || []).flatMap((child) => [child, ...descendants(child)]);
+  const form = descendants(parse(String(html || ""))).find((node) => {
+    if (node.tagName !== "form") return false;
+    const values = attrs(node);
+    return Object.hasOwn(values, "data-capture-form")
+      || (values.class || "").split(/\s+/).includes("pillar-capture-form");
+  });
+  if (!form) return null;
+
+  const values = attrs(form);
+  const attr = (name) => values[name];
+  const inputs = descendants(form).filter((node) => node.tagName === "input");
+  const isInsideDisabledFieldset = (node) => {
+    for (let parent = node.parentNode; parent; parent = parent.parentNode) {
+      if (parent.tagName === "fieldset" && Object.hasOwn(attrs(parent), "disabled")) return true;
+      if (parent === form) break;
+    }
+    return false;
+  };
+  const context = {};
+  for (const name of CONTEXT_FIELDS) {
+    const controls = inputs.filter((node) => attrs(node).name === name);
+    if (controls.length > 1) return { error: "duplicate_hidden", field: name };
+    if (!controls.length) continue;
+    const fields = attrs(controls[0]);
+    if (Object.hasOwn(fields, "disabled")) return { error: "disabled_hidden", field: name };
+    if (isInsideDisabledFieldset(controls[0])) return { error: "unsupported_form_control", field: name };
+    if (Object.hasOwn(fields, "form") && fields.form !== values.id) {
+      return { error: "unsupported_form_control", field: name };
+    }
+    if (String(fields.type || "").toLowerCase() !== "hidden") return { error: "not_hidden", field: name };
+    const value = fields.value;
+    // Empty optional controls are omitted by this context reader; required
+    // attribution is checked below before any POST.
+    if (value === "" && !ATTRIBUTION_FIELDS.includes(name) && name !== "origem") continue;
+    if (typeof value !== "string" || !CONTEXT_VALUE.test(value)) {
+      return { error: "invalid_hidden_value", field: name };
+    }
+    context[name] = value;
+  }
+
+  for (const name of ATTRIBUTION_FIELDS) {
+    const declared = attr(`data-${name.replace("_", "-")}`);
+    if (declared === undefined) continue;
+    if (typeof declared !== "string" || !CONTEXT_VALUE.test(declared)) {
+      return { error: "invalid_attribute_value", field: name };
+    }
+    if (!context[name] || declared !== context[name]) {
+      return { error: "attribute_hidden_mismatch", field: name };
+    }
+  }
+  return { context };
+}
+
+async function runProbe() {
 
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
@@ -28,7 +97,7 @@ function finishEarly(reason) {
     base,
     ts: new Date().toISOString(),
   }));
-  process.exit(1);
+  throw blockedProbe;
 }
 
 let parsedBase;
@@ -83,38 +152,6 @@ function sameJson(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-// Reads the first published capture form of a page: the form's data-* context
-// and the hidden inputs it will submit. Pure string parsing; no DOM needed.
-function servedFormContext(html) {
-  const text = String(html || "");
-  const form = /<form\b[^>]*class="[^"]*\bpillar-capture-form\b[^"]*"[^>]*>/i.exec(text);
-  if (!form) return null;
-  const tag = form[0];
-  const attr = (name) => {
-    const m = new RegExp(`\\b${name}="([^"]*)"`, "i").exec(tag);
-    return m ? m[1] : "";
-  };
-  const closing = text.indexOf("</form>", form.index);
-  const inner = text.slice(form.index, closing > 0 ? closing : undefined);
-  const hidden = (name) => {
-    const m = new RegExp(`<input\\b[^>]*name="${name}"[^>]*>`, "i").exec(inner);
-    if (!m) return "";
-    const v = /\bvalue="([^"]*)"/i.exec(m[0]);
-    return v ? v[1] : "";
-  };
-  const out = {};
-  const pairs = [
-    ["asset_id", attr("data-asset-id") || hidden("asset_id")],
-    ["cta_id", attr("data-cta-id") || hidden("cta_id")],
-    ["route_family", attr("data-route-family") || hidden("route_family")],
-    ["jornada", hidden("jornada") || attr("data-journey")],
-    ["estagio", hidden("estagio")],
-    ["origem", hidden("origem")],
-  ];
-  for (const [key, value] of pairs) if (value) out[key] = value;
-  return out;
-}
-
 const build = await jsonRequest("/.well-known/build-info.json");
 const liveSha = String(build.data?.commit || "");
 if (build.http !== 200 || !/^[0-9a-f]{40}$/.test(liveSha)) finishEarly("live_build_identity_missing");
@@ -159,7 +196,8 @@ for (const [env, field] of [
   ["PROBE_LANDING_PAGE", "landing_page"],
 ]) {
   const value = String(process.env[env] || "").trim();
-  if (value && /^[\w./:-]{1,120}$/.test(value)) pageContext[field] = value;
+  if (value && !CONTEXT_VALUE.test(value)) finishEarly("probe_context_env_invalid");
+  if (value) pageContext[field] = value;
 }
 
 // Optional served-form cross-check (A06-RECEBIMENTO-08, 2026-09-19): with
@@ -178,10 +216,24 @@ if (pagePath) {
     .then(async (r) => ({ http: r.status, text: await r.text() }))
     .catch(() => ({ http: 0, text: "" }));
   if (page.http !== 200) finishEarly("probe_page_unavailable");
-  servedForm = servedFormContext(page.text);
-  if (!servedForm) finishEarly("probe_page_capture_form_missing");
+  const served = servedFormContext(page.text);
+  if (!served) finishEarly("probe_page_capture_form_missing");
+  if (served.error) {
+    console.log(JSON.stringify({
+      ok: false,
+      state: "BLOCKED_BEFORE_POST",
+      reason: "probe_page_served_form_invalid",
+      served_form_error: served.error,
+      served_form_field: served.field,
+      base,
+      page_path: pagePath,
+      ts: new Date().toISOString(),
+    }));
+    throw blockedProbe;
+  }
+  servedForm = served.context;
   const mismatch = Object.keys(pageContext).filter(
-    (key) => key in servedForm && servedForm[key] !== pageContext[key],
+    (key) => pageContext[key] !== (key === "landing_page" ? pagePath : servedForm[key]),
   );
   if (mismatch.length) {
     console.log(JSON.stringify({
@@ -195,8 +247,15 @@ if (pagePath) {
       served_form: servedForm,
       ts: new Date().toISOString(),
     }));
-    process.exit(1);
+    throw blockedProbe;
   }
+  if (["origem", "asset_id", "cta_id", "route_family"].some((key) => !servedForm[key])) {
+    finishEarly("probe_page_attribution_missing");
+  }
+  // The published form is the source of attribution. Explicit environment
+  // values remain cross-checked above; absent values are read from that form.
+  Object.assign(pageContext, servedForm);
+  pageContext.landing_page = pagePath;
 }
 
 const payload = {
@@ -346,4 +405,12 @@ console.log(JSON.stringify({
   checks,
   ts: new Date().toISOString(),
 }));
-if (!ok) process.exit(1);
+if (!ok) process.exitCode = 1;
+}
+
+// Stop before POST on a controlled block, then let stdout and HTTP resources
+// close normally instead of terminating the process in an active fetch.
+try { await runProbe(); } catch (error) {
+  if (error !== blockedProbe) throw error;
+  process.exitCode = 1;
+}

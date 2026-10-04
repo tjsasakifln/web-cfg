@@ -258,3 +258,96 @@ nenhuma página pública ou aprovação editorial foi alterada nesta correção.
 O mesmo leitor preserva os atributos #153, hrefs primários e janelas históricas
 de três contratos BOFU; usos de `origin/main` para diff corrente permanecem.
 As quatro suítes focadas passaram em 68 testes com main já avançado.
+
+A publicação protegida de `0bacc72b7d63a449961442a32d8afab3e9168d23`
+ocorreu em 2026-10-04 às 02:54:07 UTC. A revisão posterior identificou falhas
+visuais que os gates anteriores não mediam: texto interno de SVG reduzido,
+molduras deslocadas e conflito de padding em ferramentas. O censo cobriu as
+550 páginas efetivamente servidas, em 390 e 1440 px; seus alertas foram
+confrontados com capturas e revisão independente, sem aprovar automaticamente
+as bordas intencionais como defeitos nem aceitar a publicação como conclusão.
+
+A correção seguinte substitui o painel da home por texto HTML responsivo,
+retira a moldura deslocada e o filete da foto e mantém os diagramas técnicos
+legíveis em seus containers. As variantes de ilustração conservam fatos,
+condições e unidades. As ferramentas recebem espaçamento e alvos de interação
+adequados. O catálogo de oportunidades passa a oferecer busca local, filtro
+por estado e paginação acessível, preservando todos os links sem JavaScript,
+objetos oficiais integrais, procedência, canonical e decisões de indexação.
+Os novos gates medem geometria e texto renderizado e incluem contraprovas.
+
+O ensaio de contato em produção bloqueou antes de enviar porque seu parser
+procurava uma classe antiga. O leitor agora reconhece o formulário realmente
+servido e exige atribuição coincidente antes do POST. O formulário mantém os
+24 controles anteriores e três campos ocultos de contexto, sem novos dados
+solicitados ao visitante. Este registro descreve a correção fonte; publicação,
+aceite público final e recebimento efetivo continuam dependentes das respectivas
+evidências da nova versão. A recuperação preserva o bundle aceito de 0bacc72.
+
+A inspeção ampliada das figuras encontrou também rótulos atravessando as
+caixas de coordenação e empresa e colisões com traços em instalações,
+edificações e estruturas metálicas. Os seis SVGs envolvidos, incluindo o
+painel antigo já sem referência na home, foram reposicionados sem reduzir
+fontes nem alterar seus textos. O gate interno usa as caixas reais e mede
+distância entre rótulos e traços; suas contraprovas reproduzem os seis defeitos
+anteriores, o encolhimento de três caixas e a retirada de dois traços exigidos.
+As 26 verificações passaram. Os gates de figuras e projetos também executam
+a navegação real por teclado: 82 e 65 verificações aprovadas, respectivamente.
+São evidências técnicas e revisão executada por agentes; não representam
+validação por compradores humanos. O aceite público final permanece pendente.
+
+A primeira tela foi medida novamente no checkout limpo
+`b61c1680a6a43856d2acfb31711fdca029ad9c0d`: 25 rotas aprovadas nos dois
+viewports do contrato, sem falhas ou pendências; 1942 verificações aprovadas.
+A medição anterior de d4071b5 permanece histórica, sem substituir a nova.
+
+Os primeiros checks protegidos desta correção pararam no contrato de design
+que ainda exigia a legenda da antiga imagem da home. A asserção afetada passa
+a exigir o painel HTML completo: três disciplinas, projeto coordenado,
+documentação para a obra, conectores e ordem de leitura. Os demais critérios
+de hierarquia e contato permanecem. Os 43 testes de design passaram; os
+checks completos precisam aprovar o novo head antes da integração.
+
+A execução seguinte sobre o artefato novo rejeitou a abertura mobile com
+1586 px em 390×844, acima do limite de 1266 px. A composição foi compactada
+sem retirar conteúdo: os textos do painel permanecem completos e com pelo
+menos 16 px. No checkpoint fonte limpo
+`25c6eaad08efbdbf1ebbba9204f4c8c07db4498b`, a abertura mede 1221 px.
+A revisão independente verificou 320, 390, 768 e 1440 px, sem overflow,
+com o botão de proposta na primeira tela e todos os elementos do diagrama.
+Os testes gerais de geometria passaram sobre a fonte explicitamente servida.
+A nova medição de primeira tela aprovou as 25 rotas; as medições anteriores
+permanecem históricas. Parte da matriz local geral anterior usou o artefato
+0b e não compõe o aceite deste candidato. O artefato novo e o domínio real
+precisam passar pelas verificações próprias antes do encerramento público,
+registrado na PR #732 e no relatório final da campanha.
+
+A revisão independente do ensaio de contato encontrou divergência possível
+entre os atributos declarativos e os campos ocultos realmente enviados.
+O leitor agora usa os campos ocultos como autoridade e exige concordância
+quando há declaração nos atributos. Valores inválidos, duplicatas, controles
+desabilitados, vínculo com outro formulário e overrides explícitos inválidos
+bloqueiam antes de qualquer envio. O parser aceita um subconjunto conservador
+da estrutura do formulário, sem afirmar reproduzir todos os casos de FormData.
+Os 13 cenários locais de contexto passaram, incluindo as contraprovas sem
+POST externo; os mocks principal e de QA também passaram. A revisão final
+independente fechou os achados deste escopo. O contato real permanece pendente
+do release final e da prova de persistência, encaminhamento e recebimento.
+
+O pipeline seguinte aprovou a abertura, a matriz responsiva, os diagramas,
+as ferramentas e o diretório, mas rejeitou a regeneração do índice de
+oportunidades por ausência do BreadcrumbList exigido pelo shell canônico.
+O gerador passa a sincronizar seu resultado com o contrato central antes de
+retornar. A materialização mudou somente esse registro de navegação; cards,
+fatos, filtros, robots e proveniência permanecem iguais. Os 11 testes do
+renderizador, o check global de shell, a renderização determinística e a
+verificação do diretório em quatro larguras passaram. O aceite integral
+continua condicionado aos checks protegidos do head corrigido.
+
+Os checks protegidos desse head aprovaram. A revisão de segurança apontou
+dois alertas no servidor local de testes, que devolvia a exceção em uma
+resposta sem tipo explícito. O servidor passa a responder com HTTP 500,
+texto simples e mensagem fixa; uma contraprova com URI inválida verifica
+essa resposta. A alteração não muda o site servido ou a API de contato.
+Os checks do novo head e o encerramento dos alertas corrigidos precedem
+a integração protegida e o aceite no domínio público.

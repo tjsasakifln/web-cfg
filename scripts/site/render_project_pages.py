@@ -329,7 +329,7 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
 <div class="pp-actions"><a class="pp-button" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" data-journey="projetos" data-cta-id="{esc(page['id'])}-hero" data-cta-position="hero">Solicitar proposta {_icon('arrow')}</a><a class="pp-text-link" href="#{first_anchor}">Ver {first_label.lower()}</a></div>
 <p class="pp-summary">{esc(page['summary'])}</p>
 <p class="pp-note">{esc(page['hero_note'])}</p></div>
-<figure class="pp-hero__visual"><img src="{esc(visual['src'])}" width="760" height="520" alt="{esc(visual['alt'])}"/><figcaption><span>Diagrama técnico ilustrativo</span>{esc(visual['caption'])}</figcaption></figure>
+<figure class="pp-hero__visual"><p class="pp-hero__pan-hint">Em telas menores, deslize para ver o diagrama completo.</p><div class="pp-hero__canvas" tabindex="0" role="group" aria-label="Diagrama técnico com rolagem horizontal"><img src="{esc(visual['src'])}" width="760" height="520" alt="{esc(visual['alt'])}"/></div><figcaption><span>Diagrama técnico ilustrativo</span>{esc(visual['caption'])}</figcaption></figure>
 </div></section>
 {_page_index(page)}
 {sections}

@@ -93,31 +93,62 @@ def step_approvals(reason: str, source_root: Path) -> None:
         rec["rendered_hash_recaptured_at"] = now()
         rec["rendered_hash_recapture_reason"] = reason
         doc.setdefault("audit", []).append({
-            "action": "recapture_rendered_presentation", "analysis_id": rec["analysis_id"], "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
-            "authority": "Decisao EXECUTE_NOW do proprietario para a campanha CONFENGE-SALTO-INSTITUCIONAL-02 (encaminhamento de 2026-09-17)",
+            "action": "recapture_rendered_presentation", "analysis_id": rec["analysis_id"], "actor": "CODEX_AGENT_EXECUTOR",
+            "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
             "at": rec["rendered_hash_recaptured_at"],
             "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
             "rendered_content_hash_previous": prev, "rendered_content_hash": new, "reason": reason,
         })
         changed += 1
     if changed:
-        p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"approvals: {changed} registro(s) recapturado(s)")
+
+
+def frozen_recapture_provenance(previous: dict, current: dict, baseline: str, reason: str, at: str) -> dict:
+    """Retain the reviewed checkpoint before replacing its hashes or provenance."""
+    fields = ("baseline_commit", "previous_baseline_commit", "recaptured_at",
+              "recapture_reason", "pillars", "forbidden", "html_mutation")
+    checkpoint = {key: previous[key] for key in fields if key in previous}
+    # JSON round-trip prevents the newly materialized dictionaries from sharing
+    # mutable objects with the historical hashes retained in this record.
+    history = json.loads(json.dumps(previous.get("recapture_history", [])))
+    if checkpoint and checkpoint not in history:
+        history.append(json.loads(json.dumps(checkpoint)))
+    return {**current, "recapture_history": history,
+            "previous_baseline_commit": previous.get("baseline_commit"),
+            "baseline_commit": baseline, "recaptured_at": at,
+            "recapture_reason": reason}
 
 
 def step_frozen(baseline: str, reason: str, source_root: Path) -> None:
     from scripts.bofu_dominance.frozen_specs.materialize import materialize
-    materialize(root=source_root)
     p = ROOT / "data/bofu-dominance/frozen-specs/hashes.json"
+    previous = json.loads(p.read_text(encoding="utf-8"))
+    materialize(root=source_root)
     doc = json.loads(p.read_text(encoding="utf-8"))
-    doc["baseline_commit"] = baseline
-    doc["recaptured_at"] = now()
-    doc["recapture_reason"] = reason
-    p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    doc = frozen_recapture_provenance(previous, doc, baseline, reason, now())
+    p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print("frozen specs: materializados; baseline", baseline)
 
 
-def step_single_route(source_root: Path) -> None:
+def recapture_binding(binding: dict, key: str, live: str, reason: str) -> bool:
+    """Keep each binding's own provenance aligned with the digest it attests."""
+    if binding.get(key) == live:
+        return False
+    fields = (key, key + "_previous", key + "_recaptured_at", key + "_recapture_reason")
+    checkpoint = {field: binding[field] for field in fields if field in binding}
+    history = binding.setdefault(key + "_recapture_history", [])
+    if checkpoint not in history:
+        history.append(json.loads(json.dumps(checkpoint)))
+    binding[key + "_previous"] = binding.get(key)
+    binding[key] = live
+    binding[key + "_recaptured_at"] = now()
+    binding[key + "_recapture_reason"] = reason
+    return True
+
+
+def step_single_route(reason: str, source_root: Path) -> None:
     p = ROOT / "data/organic/single-commercial-route.v1.json"
     source = source_root / "data/organic/single-commercial-route.v1.json"
     doc = json.loads(source.read_text(encoding="utf-8"))
@@ -135,10 +166,9 @@ def step_single_route(source_root: Path) -> None:
     n = 0
     for obj in walk(doc):
         live = sha(obj["file"], root=source_root)
-        if obj["expected_sha256"] != live:
-            obj["expected_sha256"] = live
+        if recapture_binding(obj, "expected_sha256", live, reason):
             n += 1
-    p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"single-commercial-route: {n} hash(es) atualizado(s)")
 
 
@@ -150,21 +180,16 @@ def step_canary(reason: str, source_root: Path) -> None:
     n = 0
     for sib in doc["frozen_siblings"]:
         live = sha(sib["path"], root=source_root)
-        if sib["sha256"] != live:
-            sib["sha256"] = live
+        if recapture_binding(sib, "sha256", live, reason):
             n += 1
     if n:
         doc["frozen_siblings_recaptured_at"] = today
         doc["frozen_siblings_recapture_reason"] = reason + " Anterior: " + doc.get("frozen_siblings_recapture_reason", "")
     page = doc["canary"]["source"]
     live = sha(page, root=source_root)
-    if doc["canary"].get("after_sha256") != live:
-        doc["canary"]["after_sha256_previous"] = doc["canary"].get("after_sha256")
-        doc["canary"]["after_sha256"] = live
-        doc["canary"]["after_sha256_recaptured_at"] = today
-        doc["canary"]["after_sha256_recapture_reason"] = reason + " Anterior: " + doc["canary"].get("after_sha256_recapture_reason", "")
+    if recapture_binding(doc["canary"], "after_sha256", live, reason):
         n += 1
-    p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    p.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"canary 389: {n} hash(es) atualizado(s)")
 
 
@@ -178,7 +203,7 @@ def main() -> int:
     with committed_snapshot(a.baseline) as (source_root, resolved):
         if "approvals" not in skip: step_approvals(a.reason, source_root)
         if "frozen" not in skip: step_frozen(resolved, a.reason, source_root)
-        if "single" not in skip: step_single_route(source_root)
+        if "single" not in skip: step_single_route(a.reason, source_root)
         if "canary" not in skip: step_canary(a.reason, source_root)
     return 0
 

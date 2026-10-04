@@ -10,7 +10,7 @@
     <path d="M42 105H718M42 258H718M42 412H718"/>
     <path d="M92 105V412M318 105V412M548 105V412M668 105V412"/>
   </g>
-  <g fill="#dfe7e3" stroke="#071a31" stroke-width="3">
+  <g fill="#dfe7e3" stroke="#071a31" stroke-width="3" id="installation-structure">
     <path d="M42 96H718V116H42zM42 249H718V269H42zM42 403H718V423H42z"/>
     <path d="M82 105H102V412H82zM308 105H328V412H308zM538 105H558V412H538zM658 105H678V412H658z"/>
   </g>
@@ -22,7 +22,7 @@
     <text x="126" y="146">ZONA TÉCNICA SUPERIOR</text>
     <text x="126" y="300">ZONA TÉCNICA INFERIOR</text>
   </g>
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" id="installation-routes">
     <path d="M126 178H286V334H515" stroke="#2d6f2d" stroke-width="7"/>
     <path d="M126 205H455V315H515" stroke="#4b738a" stroke-width="12"/>
     <path d="M126 162H385V352H515" stroke="#071a31" stroke-width="5"/>
@@ -34,18 +34,19 @@
     <rect x="279" y="242" width="34" height="34" rx="4"/>
   </g>
   <g font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#071a31">
-    <text x="106" y="232">ORIGENS</text><text x="503" y="378">EQUIPAMENTO</text>
+    <text x="106" y="232">ORIGENS</text>
   </g>
   <g fill="#fff" stroke="#2d6f2d" stroke-width="2">
     <circle cx="286" cy="258" r="9"/><circle cx="385" cy="258" r="9"/><circle cx="455" cy="315" r="9"/>
   </g>
-  <g fill="none" stroke="#2d6f2d" stroke-width="2">
-    <path d="M286 249V129H350"/><path d="M385 249V222H470"/><path d="M455 324V390H520"/>
+  <g fill="none" stroke="#2d6f2d" stroke-width="2" id="installation-leaders">
+    <path d="M286 249V82H350"/><path d="M385 249V226H558"/><path d="M549 333H564"/><path d="M455 324V377H558"/>
   </g>
   <g font-family="Arial, sans-serif" fill="#071a31" font-size="11" font-weight="700">
-    <text x="358" y="126">RESERVA ESTRUTURAL</text>
-    <text x="478" y="219">CRUZAMENTO COORDENADO</text>
-    <text x="528" y="394">ACESSO DE MANUTENÇÃO</text>
+    <text x="358" y="85" id="installation-reserve-label">RESERVA ESTRUTURAL</text>
+    <text x="608" y="226" text-anchor="middle" id="installation-crossing-label"><tspan x="608" dy="0">CRUZAMENTO </tspan><tspan x="608" dy="13">COORDENADO</tspan></text>
+    <text x="568" y="337" id="installation-equipment-label">EQUIPAMENTO</text>
+    <text x="608" y="373" text-anchor="middle" id="installation-access-label"><tspan x="608" dy="0">ACESSO DE </tspan><tspan x="608" dy="14">MANUTENÇÃO</tspan></text>
   </g>
   <g transform="translate(42 456)" font-family="Arial, sans-serif" font-size="11" fill="#071a31">
     <path d="M0 0H28" stroke="#2d6f2d" stroke-width="7" stroke-linecap="round"/><text x="36" y="4">água</text>

@@ -88,9 +88,10 @@ def _visible(fragment: str) -> str:
 # As invariantes estruturais seguem identicas: 24 controles, 3 obrigatorios,
 # action /obrigado, sem upload. A entrada HOME_SITUATIONS do bundle e
 # verificada por seo/scripts/test_form_funnel.mjs.
-# Campaign review: preserved 24 controls, 3 required fields, receipt/abuse/privacy contracts.
+# Campaign review: 24 original controls plus 3 hidden attribution fields;
+# 3 required fields and receipt/abuse/privacy contracts are preserved.
 # Previous reviewed form: 153a576f12cd5c8897fc6e9191674e3aa2fad5f7d3791e0004495bbceef24350
-CAPTURE_FORM_SHA256 = "27788ff152421b425abbba10426fff931adabc173d63889ff36be645a8d7b2a2"
+CAPTURE_FORM_SHA256 = "ddc1d9b2b548770cf3b5fe44cda485e597ff53b8d8d393daded5bbe239a1a4e7"
 
 
 def _home() -> str:
@@ -157,7 +158,9 @@ def test_corporate_triage_is_safe_and_capture_form_is_reviewed() -> None:
     assert re.findall(r'<form[^>]*action="([^"]*)"', body) == ["/obrigado"]
     assert 'method="POST"' in body and 'name="diagnostico-b2g"' in body
     controls = re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"', body)
-    assert len(controls) == 24 and "sst_necessidade" in controls
+    assert len(controls) == 27 and "sst_necessidade" in controls
+    for name, value in (("asset_id", "home-institutional"), ("cta_id", "home-proposal-submit"), ("route_family", "home")):
+        assert f'name="{name}" type="hidden" value="{value}"' in body
     required = re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"[^>]*required', body)
     assert len(required) == 3
     assert 'type="file"' not in body.lower()
