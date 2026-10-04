@@ -677,6 +677,7 @@ def _visual_html(record: dict[str, Any]) -> str:
             '<div class="table-wrap" role="group" tabindex="0" aria-label="Mapa de incidência de BDI por família"><table class="compare-table">'
             "<thead><tr><th>Família</th><th>Administração</th><th>Risco</th><th>Garantia</th><th>Lucro</th><th>Nota</th></tr></thead>"
             f"<tbody>{rows}</tbody></table></div>"
+            '<div class="breakout-bars-pan" role="group" tabindex="0" aria-label="Gráfico de incidência: deslize horizontalmente para ler os rótulos">'
             '<svg class="breakout-bars" viewBox="0 0 320 90" role="img" aria-label="Incidência relativa ilustrativa, sem percentuais oficiais">'
             '<rect x="10" y="12" width="220" height="14" fill="#2d6f2d"></rect>'
             '<rect x="10" y="38" width="150" height="14" fill="#3d8238"></rect>'
@@ -684,7 +685,7 @@ def _visual_html(record: dict[str, Any]) -> str:
             '<text x="236" y="23" font-size="10">Mão de obra</text>'
             '<text x="166" y="49" font-size="10">Material</text>'
             '<text x="126" y="75" font-size="10">Equipamento</text>'
-            "</svg>"
+            "</svg></div>"
             "</div>"
         )
     example = art125_saldo(1_000_000.0, 180_000.0, 40_000.0, reforma_edificio_ou_equipamento=False)
@@ -762,7 +763,7 @@ def render_asset(record: dict[str, Any], *, root: Path | None = None) -> Path:
     path = root / _text(record.get("html_path"))
     original = path.read_text(encoding="utf-8")
     updated = inject_chassis(original, record)
-    path.write_text(updated, encoding="utf-8")
+    path.write_text(updated, encoding="utf-8", newline="\n")
     return path
 
 

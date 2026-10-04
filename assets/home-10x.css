@@ -51,6 +51,12 @@ body[data-content-cluster="home"] .hero-proof li>span:last-child{display:block}
 .plate{margin:0;display:grid;gap:1rem;min-width:0}
 .plate__sheet{position:relative;background:var(--white);border:1px solid var(--rule);border-radius:var(--radius-sm);padding:clamp(.6rem,1.5vw,1rem)}
 .plate__sheet svg,.plate__sheet img{display:block;width:100%;height:auto}
+.plate__sheet--svg-pan{max-width:100%;overscroll-behavior-inline:contain}
+.plate__sheet--svg-pan:focus-visible{outline:3px solid var(--green-700);outline-offset:3px}
+@media (max-width:1024px){
+  .plate__sheet--svg-pan{overflow-x:auto;scrollbar-gutter:stable}
+  .plate__sheet--svg-pan>svg{width:27rem;max-width:none}
+}
 .plate__picture{display:block}
 @media (max-width:699px){.plate__sheet .plate__picture img{max-width:24rem;margin-inline:auto}}
 .plate__caption{display:block;font-size:var(--text-caption);line-height:1.5;color:var(--text);max-width:64ch}
