@@ -526,7 +526,42 @@ def test_home_decision_fold_hierarchy():
     assert 'id="competencias"' in html and 'id="setores"' in html
     assert html.find('id="competencias"') < html.find('id="servicos-complementares"')
     assert html.find('id="setores"') < html.find('id="solicitar-proposta"')
-    assert "Ilustração técnica original da CONFENGE" in hero_html
+    # The fold's proof is a readable HTML panel: three disciplines feed one
+    # coordinated project, which produces construction documentation. Keep
+    # this contract semantic so the panel cannot regress to an empty shell or
+    # to the former illegible SVG/image treatment.
+    panel = re.search(
+        r'<figure[^>]*class="home-opening__figure"[\s\S]*?</figure>',
+        hero_html,
+    )
+    assert panel, "hero project panel missing"
+    panel_html = panel.group(0)
+    assert 'class="home-opening__sheet"' in panel_html
+    assert 'class="home-project-diagram__title"' in panel_html
+    disciplines = re.search(
+        r'<ul[^>]*class="home-project-diagram__disciplines"[\s\S]*?</ul>',
+        panel_html,
+    )
+    assert disciplines, "hero discipline panel missing"
+    discipline_items = re.findall(r"<li>[\s\S]*?</li>", disciplines.group(0))
+    assert len(discipline_items) == 3, discipline_items
+    for discipline in ("Estruturas", "Instalações", "Infraestrutura"):
+        assert any(f">{discipline}<" in item for item in discipline_items), discipline
+    coordination = re.search(
+        r'<div[^>]*class="home-project-diagram__coordination"[\s\S]*?</div>',
+        panel_html,
+    )
+    assert coordination and "Projeto coordenado" in coordination.group(0)
+    delivery = re.search(
+        r'<p[^>]*class="home-project-diagram__delivery"[\s\S]*?</p>',
+        panel_html,
+    )
+    assert delivery and "Documentação para a obra" in delivery.group(0)
+    assert panel_html.index('home-project-diagram__disciplines') < panel_html.index(
+        'home-project-diagram__coordination'
+    ) < panel_html.index('home-project-diagram__delivery')
+    assert panel_html.count('class="home-project-diagram__connector"') == 2
+    assert "<img" not in panel_html and "<svg" not in panel_html
 
 
 def test_form_qualification_minimal():

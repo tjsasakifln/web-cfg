@@ -300,3 +300,10 @@ A primeira tela foi medida novamente no checkout limpo
 `b61c1680a6a43856d2acfb31711fdca029ad9c0d`: 25 rotas aprovadas nos dois
 viewports do contrato, sem falhas ou pendências; 1942 verificações aprovadas.
 A medição anterior de d4071b5 permanece histórica, sem substituir a nova.
+
+Os primeiros checks protegidos desta correção pararam no contrato de design
+que ainda exigia a legenda da antiga imagem da home. A asserção afetada passa
+a exigir o painel HTML completo: três disciplinas, projeto coordenado,
+documentação para a obra, conectores e ordem de leitura. Os demais critérios
+de hierarquia e contato permanecem. Os 43 testes de design passaram; os
+checks completos precisam aprovar o novo head antes da integração.
