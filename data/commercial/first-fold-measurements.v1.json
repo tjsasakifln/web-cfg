@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-04T12:50:01.234Z",
+  "measured_at": "2026-10-04T15:48:35.359Z",
   "measured_on": "2026-10-04",
-  "commit_sha": "e5cdf5b1c9c0342cf4ca4bd954c4d756f1fc95d7",
+  "commit_sha": "d1d6391d418aad8d2e1a507ab53d569687193870",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -18,7 +18,7 @@
     "assets/editorial.css": "7d20c2e78c5ccc3a56a77821d1efb11b10e68dd13fb278a452e0628fd05c86ec",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "bd6b961e06bdcf08731d21464c457250d61c6db87441a47e4dc62223b98b2872",
-    "assets/home-base.css": "f1907644a214ba272d2b8eae2f8af414d1e839cc92d49fd6a1ae058eff7ebfd4",
+    "assets/home-base.css": "9066750c2ab1c94502a0f68cb3add0bc923ce85076ea818913b7bd67f345167b",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
@@ -51,7 +51,7 @@
     "diretoria-b2g/index.html": "9ad61abd9057f6c8c3e7cb608b5acd8f6a3596544bd9e956e7fe2d02875283f1",
     "entregas/index.html": "5f94e77b7e77bef73c2d0063297d94784495e23081686d0b0d9964c187c51259",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "e0e1a96e5690dfa06ba5b5c55032b919addef8c7b81179fc8833a36fae77f32e",
+    "index.html": "71cce54e043cb13a537c0d0bfa7b88ba95223fdc21c8323f5f3939d34248217b",
     "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
     "problemas-que-resolvemos/index.html": "d2c025cd91ca0f8510122800edb0e68dafc6e477e8e8ea8fba6c442aa650d0e4",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
@@ -61,7 +61,7 @@
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-    "styles.css": "57f22c2d80e7220b719bae761b7f0c36b3959a45a3ee463665e07a7a4216bb53"
+    "styles.css": "0b96272efa5c3170f4d1e61a956c6e82062d900afc4ff397ceb6b9429b3aec5a"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -113,7 +113,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "e0e1a96e5690dfa06ba5b5c55032b919addef8c7b81179fc8833a36fae77f32e",
+      "html_sha256": "71cce54e043cb13a537c0d0bfa7b88ba95223fdc21c8323f5f3939d34248217b",
       "measured_on": "2026-10-04",
       "viewports": {
         "1366x768": {
