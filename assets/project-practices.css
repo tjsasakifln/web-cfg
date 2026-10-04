@@ -56,7 +56,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-hero__visual figcaption span, .pp-demo figcaption span { display: block; color: var(--pp-accent-dark); font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
 
 .pp-index { min-height: 72px; display: flex; align-items: center; gap: 0; border-block: 1px solid var(--pp-line); overflow-x: auto; scrollbar-width: thin; }
-.pp-index a { min-width: max-content; padding: 1.1rem 1.25rem; border-right: 1px solid var(--pp-line); color: var(--pp-ink); font-size: .84rem; font-weight: 700; text-decoration: none; }
+.pp-index a { min-width: max-content; min-height: 44px; display: inline-flex; align-items: center; padding: 1.1rem 1.25rem; border-right: 1px solid var(--pp-line); color: var(--pp-ink); font-size: .84rem; font-weight: 700; text-decoration: none; }
 .pp-index a:first-child { border-left: 1px solid var(--pp-line); }
 .pp-index a:hover, .pp-index a:focus-visible { background: #fff; color: var(--pp-accent-dark); }
 
@@ -137,6 +137,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 
 
 @media (max-width: 1040px) {
+  .pp-index { flex-wrap: wrap; align-items: stretch; overflow-x: visible; }
   .pp-nav, .pp-header > .pp-container > .pp-button { display: none; }
   .pp-mobile { display: block; position: relative; }
   .pp-mobile summary { width: auto; min-width: 44px; height: 44px; display: flex; align-items: center; gap: .5rem; padding-inline: .75rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: #fff; color: var(--ink); cursor: pointer; font-family: var(--sans-wide); font-stretch: var(--wide); font-size: var(--text-small); font-weight: 720; line-height: 1; letter-spacing: -.005em; list-style: none; }

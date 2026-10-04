@@ -129,6 +129,37 @@ def test_shared_styles_use_the_same_touch_target_and_archivo_tokens() -> None:
     assert ".menu-toggle{display:none;width:44px;height:44px" in compiled
 
 
+def test_project_page_index_wraps_before_labels_can_leave_the_viewport() -> None:
+    project = (ROOT / "assets/project-practices.css").read_text(encoding="utf-8")
+    compact = re.sub(r"\s+", "", project)
+    assert (
+        ".pp-indexa{min-width:max-content;min-height:44px;display:inline-flex;"
+        "align-items:center;" in compact
+    )
+    tablet_rules = compact.split("@media(max-width:1040px){", 1)[1]
+    assert (
+        ".pp-index{flex-wrap:wrap;align-items:stretch;overflow-x:visible;}"
+        in tablet_rules
+    )
+
+    project_pages = sorted(
+        path
+        for path in ROOT.rglob("index.html")
+        if "project-practices.css" in path.read_text(encoding="utf-8")
+    )
+    assert len(project_pages) == 13
+    for path in project_pages:
+        html = path.read_text(encoding="utf-8")
+        match = re.search(
+            r'<nav class="pp-index pp-container" aria-label="Nesta página">(.*?)</nav>',
+            html,
+            flags=re.S,
+        )
+        assert match, path.relative_to(ROOT)
+        links = re.findall(r'<a href="#[^"]+">([^<]+)</a>', match.group(1))
+        assert links and all(label.strip() for label in links), path.relative_to(ROOT)
+
+
 def test_shared_footer_unions_navigation_authority_contact_and_page_dates() -> None:
     footer = render_public_footer(
         published_at="2026-10-02",
