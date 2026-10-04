@@ -20,6 +20,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.authority import ANALYSIS_CASE_TOKENS  # noqa: E402
+from scripts.site.preserved_campaign_source import preserved_source_bytes  # noqa: E402
 from scripts.site.test_organic_striking_distance_cro_01 import CLAIM_RE  # noqa: E402
 
 DOCS = ROOT / "docs" / "seo" / "bofu-dominance" / "safe-execution"
@@ -237,12 +238,8 @@ def flatten_names(node: object, acc: list[str]) -> None:
             flatten_names(item, acc)
 
 
-def origin_html(slug: str) -> str:
-    return subprocess.check_output(
-        ["git", "show", f"origin/main:{slug}/index.html"],
-        cwd=ROOT,
-        text=True,
-    )
+def preserved_html(slug: str) -> str:
+    return preserved_source_bytes(ROOT, f"{slug}/index.html").decode("utf-8")
 
 
 def git_diff_names() -> list[str]:
@@ -422,7 +419,7 @@ def test_existing_153_attributes_preserved_and_primary_cta_complete():
         for cta in primaries:
             assert cta.get("data-cta-id"), f"{slug} primary CTA missing data-cta-id"
             assert cta.get("data-route-family"), f"{slug} primary CTA missing data-route-family"
-        before = origin_html(slug)
+        before = preserved_html(slug)
         before_hrefs = {c["href"] for c in primary_ctas_in(before) if c["href"]}
         after_hrefs = set(re.findall(r'href=["\']([^"\']+)["\']', html, flags=re.I))
         missing = before_hrefs - after_hrefs

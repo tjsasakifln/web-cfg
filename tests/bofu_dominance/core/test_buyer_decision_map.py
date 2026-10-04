@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
-import subprocess
+from scripts.site.preserved_campaign_source import preserved_source_bytes
 
 from scripts.bofu_dominance.core.buyer_decision_map import (
     MapValidationReport,
@@ -478,19 +478,9 @@ def test_tracked_report_is_reproducible_from_projection():
     assert report.ok, report.findings
 
 
-def test_measurement_windows_are_unchanged_from_origin_main():
+def test_measurement_windows_are_unchanged_from_preserved_baseline():
     before = json.loads(
-        subprocess.run(
-            [
-                "git",
-                "show",
-                "origin/main:data/bofu-dominance/core/intent-registry.v2.json",
-            ],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout
+        preserved_source_bytes(ROOT, "data/bofu-dominance/core/intent-registry.v2.json")
     )
     after = _json("data/bofu-dominance/core/intent-registry.v2.json")
 

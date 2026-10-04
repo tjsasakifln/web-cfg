@@ -17,7 +17,7 @@ from .shipped import (
     load_flags,
     load_registry,
     mismatch,
-    origin_main_file,
+    preserved_baseline_file,
     page_price_cents,
     read_html,
     visible_text,
@@ -257,13 +257,13 @@ def test_terms_id_on_pages_if_present_matches_registry():
             mismatch(f"{key} prints a terms id that is not registry {registry_terms}")
 
 
-def test_hash153_attributes_preserved_from_origin_main():
+def test_hash153_attributes_preserved_from_baseline():
     mapping = {
         "bid-room-licitacoes-obras/index.html": "bid-room",
         "diretoria-b2g/index.html": "diretoria",
     }
     for rel, key in mapping.items():
-        origin = origin_main_file(rel).decode("utf-8")
+        origin = preserved_baseline_file(rel).decode("utf-8")
         current = read_html(key)
         origin_pairs = attr_pairs(origin)
         current_pairs = attr_pairs(current)

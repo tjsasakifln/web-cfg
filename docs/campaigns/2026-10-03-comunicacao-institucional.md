@@ -248,3 +248,13 @@ e ao mesmo finding dos dois pipelines; não alteram a superfície pública.
 O gerador do hub de serviços agora conserva os seis atributos de intenção SST
 já presentes no HTML aprovado. O check de geração e os seis testes de integração
 SST passaram; esta correção de fonte não altera os bytes das páginas públicas.
+
+Após o merge protegido, os testes INB-08 revelaram que `origin/main` era uma
+referência móvel usada como origem dos artigos. A comparação agora usa o
+predecessor imutável `c7d2d0a42ebb531efc0547b34f2f38b4077ee45e`, exige sua
+ancestralidade e impede que as emendas de apresentação virem a própria linha
+de base. As máscaras e contraprovas de mudanças materiais permanecem iguais;
+nenhuma página pública ou aprovação editorial foi alterada nesta correção.
+O mesmo leitor preserva os atributos #153, hrefs primários e janelas históricas
+de três contratos BOFU; usos de `origin/main` para diff corrente permanecem.
+As quatro suítes focadas passaram em 68 testes com main já avançado.
