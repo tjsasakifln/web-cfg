@@ -443,17 +443,36 @@ async function main() {
 
   // 6) primary controls keep the campaign contract of at least 44×44 CSS px.
   try {
-    const small = await page.evaluate(() => {
-      const bad = [];
-      for (const el of document.querySelectorAll("a.button, button, .menu-toggle, .whatsapp-float, summary, label.consent")) {
-        const r = el.getBoundingClientRect();
-        if (r.width === 0 || r.height === 0) continue;
-        if (r.width < 44 || r.height < 44) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
+    const targetGroups = [
+      { path: "/", selector: "a.button, button, .menu-toggle, .whatsapp-float, summary, label.consent" },
+      { path: "/", selector: ".site-footer .footer-links a,.site-footer .footer-authority a" },
+      { path: "/projetos/", selector: ".pp-button" },
+      { path: "/projetos/", selector: ".pp-footer a" },
+    ];
+    let measured = 0;
+    for (const width of [390, 1440]) {
+      await page.setViewport({ width, height: 1000 });
+      for (const group of targetGroups) {
+        await page.goto(`${BASE}${group.path}`, { waitUntil: "domcontentloaded" });
+        await page.evaluate(() => document.fonts.ready);
+        const result = await page.evaluate((selector) => {
+          const bad = [];
+          let visible = 0;
+          for (const el of document.querySelectorAll(selector)) {
+            const r = el.getBoundingClientRect();
+            const cs = getComputedStyle(el);
+            if (r.width === 0 || r.height === 0 || cs.visibility === "hidden" || cs.display === "none") continue;
+            visible += 1;
+            if (r.width < 44 || r.height < 44) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
+          }
+          return { visible, bad };
+        }, group.selector);
+        if (!result.visible) throw new Error(`no visible targets: ${group.path} ${width}px ${group.selector}`);
+        if (result.bad.length) throw new Error(`${group.path} ${width}px: ${JSON.stringify(result.bad.slice(0, 5))}`);
+        measured += result.visible;
       }
-      return bad;
-    });
-    if (small.length) throw new Error(JSON.stringify(small.slice(0, 5)));
-    ok("targets_min_44x44px");
+    }
+    ok(`targets_min_44x44px (${measured} visible targets across both footer families)`);
   } catch (e) {
     fail("targets_min_44x44px", e.message || e);
   }
