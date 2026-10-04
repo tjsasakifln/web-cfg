@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tarfile
 import threading
 import urllib.error
@@ -939,12 +940,111 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "scripts/organic/sitemap_graph.py",
         "scripts/storage/lib.cjs",
         "scripts/storage/retention.mjs",
+        "scripts/site/shell_nav.py",
+        "scripts/site/public_ia.py",
+        "scripts/site/brand.py",
+        "scripts/pseo/html_shell.py",
+        "data/site/brand.json",
+        "data/site/public-ia-map.json",
+        "data/organic/public-family-registry.json",
         "schedules/confenge-web-retention.service",
         "schedules/confenge-web-retention.timer",
         "schedules/confenge-web-retention-alert@.service",
         "nginx/confenge-web-logrotate",
     ):
         assert required in names
+
+
+def test_release_payload_runs_official_index_renderer_with_canonical_shell_in_isolation(
+    tmp_path: Path,
+) -> None:
+    """The staged overlay must not borrow shell modules or data from checkout.
+
+    ``render_opportunities_index_html`` imports shell_nav only while rendering,
+    which meant an ordinary in-process test could pass from an already-imported
+    source checkout while the host package failed.  Execute the real publish
+    path from an extracted payload under ``-I -S`` and a foreign cwd instead.
+    """
+    from scripts.live_intelligence.test_consume import _write_539_candidate
+
+    site = make_site(tmp_path, SHA_A)
+    official = _write_539_candidate(
+        tmp_path / "official", catalog_mode="official_live"
+    )
+    release = build_release(
+        repo_root=REPO_ROOT,
+        site=site,
+        host_contract=make_host_contract(tmp_path),
+        output_dir=tmp_path / "bundle",
+        sha=SHA_A,
+        node_version="v22.19.0",
+        python_version="3.12.10",
+        ci_run_id="payload-isolation",
+        ci_run_url="https://example.invalid/payload-isolation",
+        source_date_epoch=1787756400,
+    )
+
+    def extract(name: str) -> Path:
+        target = tmp_path / name
+        with tarfile.open(release["artifact"], "r:gz") as archive:
+            archive.extractall(target)
+        return target
+
+    runner = """
+import os
+import sys
+from pathlib import Path
+
+payload = Path(os.environ['PAYLOAD']).resolve()
+repo = Path(os.environ['REPO']).resolve()
+assert Path.cwd().resolve() != repo
+assert str(repo) not in sys.path
+sys.path.insert(0, str(payload))
+from scripts.live_intelligence.publish import publish
+result = publish(
+    root=payload,
+    public_root=payload / '_site',
+    mutate_discovery=True,
+    withdraw_if_absent=True,
+)
+assert result['ok'] is True and result['skipped'] is False, result
+html = (payload / '_site' / 'oportunidades' / 'index.html').read_text(encoding='utf-8')
+for required in ('BreadcrumbList', 'Oportunidades públicas acompanhadas', 'Identificador público:', 'Origem dos dados:', 'data-cta-position="header_nav"', 'data-cta-position="mobile_nav"', 'Projetos', 'Empresa'):
+    assert required in html, required
+print('PAYLOAD_CANONICAL_SHELL_OK')
+"""
+    environment = {
+        "PATH": os.environ.get("PATH", ""),
+        "PAYLOAD": str(extract("payload")),
+        "REPO": str(REPO_ROOT),
+        "CONFENGE_LI_OFFICIAL_DIR": str(official),
+        "PYTHONDONTWRITEBYTECODE": "1",
+    }
+    command = [sys.executable, "-I", "-S", "-c", runner]
+    passed = subprocess.run(
+        command,
+        cwd=tmp_path,
+        env=environment,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert passed.returncode == 0, passed.stderr
+    assert "PAYLOAD_CANONICAL_SHELL_OK" in passed.stdout
+
+    broken_payload = extract("payload-without-shell-nav")
+    (broken_payload / "scripts" / "site" / "shell_nav.py").unlink()
+    environment["PAYLOAD"] = str(broken_payload)
+    broken = subprocess.run(
+        command,
+        cwd=tmp_path,
+        env=environment,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert broken.returncode != 0
+    assert "shell_nav" in broken.stderr
 
 
 def test_overlay_import_failure_is_fail_closed_when_official_present(

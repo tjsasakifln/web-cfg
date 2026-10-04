@@ -351,3 +351,15 @@ texto simples e mensagem fixa; uma contraprova com URI inválida verifica
 essa resposta. A alteração não muda o site servido ou a API de contato.
 Os checks do novo head e o encerramento dos alertas corrigidos precedem
 a integração protegida e o aceite no domínio público.
+
+A PR #732 foi integrada normalmente em
+`8edd7008156d3bbf519fb89fdc12ab9bb35a44c8`. Os gates completos desse SHA
+aprovaram, mas o stage interrompeu o release antes da promoção: o gerador do
+índice passou a usar o shell canônico, cuja cadeia de módulos e dados não
+estava integralmente no bundle. A correção de empacotamento inclui apenas
+essa dependência de runtime e acrescenta uma prova do publicador real no
+payload extraído, em processo Python isolado e fora do checkout. O domínio
+permanece no predecessor até a aprovação e aceitação do novo release.
+O relatório final e as PRs da campanha registrarão o SHA efetivamente
+publicado, a revisão pública e a prova de contato; este registro conserva
+o histórico da tentativa que não promoveu.
