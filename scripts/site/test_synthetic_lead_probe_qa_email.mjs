@@ -9,9 +9,13 @@ const providerId = "re_qa_fixture_001";
 const sha = "a".repeat(40);
 const probeSecret = "probe-fixture-secret-at-least-32-characters";
 const opsToken = "ops-fixture-token-at-least-16";
-let created = false;
 let postCount = 0;
 let requestCount = 0;
+let liveSha = sha;
+const idempotencyKeys = [];
+const leadsByIdempotencyKey = new Map();
+let createdLeadCount = 0;
+let qaDeliveryCount = 0;
 
 const zeroCounts = {
   visitor: 0, cta_triggered: 0, form_started: 0, lead_persisted: 0, contacted: 0,
@@ -27,7 +31,7 @@ const server = http.createServer((req, res) => {
   requestCount += 1;
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/.well-known/build-info.json") {
-    send(res, 200, { commit: sha });
+    send(res, 200, { commit: liveSha });
     return;
   }
   if (url.pathname === "/.netlify/functions/ops") {
@@ -37,7 +41,7 @@ const server = http.createServer((req, res) => {
       return;
     }
     if (action === "system_health") {
-      send(res, 200, { ok: true, counts_by_kind: { synthetic: created ? 2 : 1 } });
+      send(res, 200, { ok: true, counts_by_kind: { synthetic: 1 + createdLeadCount } });
       return;
     }
     if (action === "weekly_report") {
@@ -46,19 +50,20 @@ const server = http.createServer((req, res) => {
         commercial_only: true,
         leads_total: 0,
         leads_new_7d: 0,
-        leads_excluded_non_real: created ? 2 : 1,
+        leads_excluded_non_real: 1 + createdLeadCount,
         system_health: { pipeline_real: 0, revenue_real: 0 },
       });
       return;
     }
     if (action === "inbound_handoff") {
       const requested = url.searchParams.get("lead_id");
+      const stored = [...leadsByIdempotencyKey.values()].find((lead) => lead.id === requested);
       send(res, 200, {
         ok: true,
         configuration: { contract: "READY", destination_fingerprint: "WARMBLY_PRODUCTION_V1" },
         safety_gate: { ok: true, contract: "READY", auto_send_off: true, dispatch_attempted: false },
-        receipt: created && requested === receiptId ? {
-          lead_id: receiptId,
+        receipt: stored ? {
+          lead_id: stored.id,
           record_kind: "synthetic",
           authenticated_probe: true,
           source: "CONFENGE_WEB",
@@ -66,7 +71,7 @@ const server = http.createServer((req, res) => {
           handoff: {
             status: "DELIVERED",
             attempts: 1,
-            downstream: { http: 201, duplicate: false, downstream_receipt: receiptId },
+            downstream: { http: 201, duplicate: false, downstream_receipt: stored.id },
           },
           delivery: { notify_status: "skipped", email_status: "skipped", qa_email_status: "ok", qa_email_provider_id: providerId },
         } : null,
@@ -76,16 +81,22 @@ const server = http.createServer((req, res) => {
   }
   if (url.pathname === "/.netlify/functions/lead" && req.method === "POST") {
     postCount += 1;
+    const key = String(req.headers["idempotency-key"] || "");
+    idempotencyKeys.push(key);
     assert.equal(req.headers["x-confenge-qa-email"], "1");
     assert.equal(req.headers["x-confenge-ops-token"], opsToken);
-    assert.equal(req.headers["x-confenge-expected-sha"], sha);
+    assert.equal(req.headers["x-confenge-expected-sha"], liveSha);
     req.resume();
     req.on("end", () => {
-      if (!created) {
-        created = true;
-        send(res, 201, { ok: true, lead_id: receiptId, status: "persisted", notify_status: "skipped", email_status: "skipped" });
+      const existing = leadsByIdempotencyKey.get(key);
+      if (!existing) {
+        const lead = { id: `${receiptId}:${String(createdLeadCount + 1).padStart(4, "0")}` };
+        leadsByIdempotencyKey.set(key, lead);
+        createdLeadCount += 1;
+        qaDeliveryCount += 1;
+        send(res, 201, { ok: true, lead_id: lead.id, status: "persisted", notify_status: "skipped", email_status: "skipped" });
       } else {
-        send(res, 200, { ok: true, lead_id: receiptId, idempotent: true, notify_status: "skipped", email_status: "skipped" });
+        send(res, 200, { ok: true, lead_id: existing.id, idempotent: true, notify_status: "skipped", email_status: "skipped" });
       }
     });
     return;
@@ -148,10 +159,38 @@ try {
   assert.deepEqual(proof.qa_email, {
     status: "ok",
     provider_id: providerId,
-    subject: `[TESTE CONTROLADO] CONFENGE ${receiptId}`,
+    subject: `[TESTE CONTROLADO] CONFENGE ${receiptId}:0001`,
   });
   assert.equal(result.stdout.includes(probeSecret), false);
   assert.equal(result.stdout.includes(opsToken), false);
+  assert.equal(idempotencyKeys.length, 2);
+  assert.equal(idempotencyKeys[0], idempotencyKeys[1], "one run must retry its same key");
+  assert.equal(createdLeadCount, 1);
+  assert.equal(qaDeliveryCount, 1);
+
+  // A second process for the same SHA and secret must reuse the HMAC key. The
+  // fixture replays it idempotently, so the probe fails closed because a fresh
+  // 201 was not observed and no second QA delivery is simulated.
+  const rerun = await runProbe(base, { ...auth, EXPECTED_SHA: sha });
+  assert.equal(rerun.code, 1, rerun.stdout || rerun.stderr);
+  assert.equal(postCount, 4);
+  assert.deepEqual(idempotencyKeys.slice(2, 4), [idempotencyKeys[0], idempotencyKeys[0]]);
+  assert.equal(createdLeadCount, 1, "rerun must not create a second synthetic lead");
+  assert.equal(qaDeliveryCount, 1, "rerun must not create a second QA delivery");
+
+  // Changing either HMAC input creates a distinct opaque key. The fixture is
+  // keyed faithfully, so each distinct key creates exactly one lead/delivery.
+  const changedSecret = await runProbe(base, { ...auth, EXPECTED_SHA: sha, LEAD_PROBE_SECRET: "different-probe-secret-at-least-32-characters" });
+  assert.equal(changedSecret.code, 0, changedSecret.stderr || changedSecret.stdout);
+  assert.equal(createdLeadCount, 2);
+  assert.equal(qaDeliveryCount, 2);
+  liveSha = "b".repeat(40);
+  const changedSha = await runProbe(base, { ...auth, EXPECTED_SHA: liveSha });
+  assert.equal(changedSha.code, 0, changedSha.stderr || changedSha.stdout);
+  assert.notEqual(idempotencyKeys[4], idempotencyKeys[0]);
+  assert.notEqual(idempotencyKeys[6], idempotencyKeys[0]);
+  assert.equal(createdLeadCount, 3);
+  assert.equal(qaDeliveryCount, 3);
   console.log("PASS synthetic_probe_qa_email_opt_in_and_readback");
 } finally {
   await new Promise((resolve) => server.close(resolve));

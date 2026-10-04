@@ -8,6 +8,8 @@ const receiptId = "synthetic:fixture:receipt:0001";
 let created = false;
 let postCount = 0;
 let requestCount = 0;
+let metricsMode = "valid";
+let counterMode = "valid";
 
 const zeroCounts = {
   visitor: 0,
@@ -37,24 +39,29 @@ const server = http.createServer((req, res) => {
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
     if (action === "funnel") {
-      send(res, 200, {
-        ok: true,
+      const badMetrics = metricsMode === "before-invalid" || (metricsMode === "after-invalid" && created);
+      const status = metricsMode === "after-funnel-http" && created ? 503 : 200;
+      send(res, status, {
+        ok: !(metricsMode === "before-funnel-ok-false" || (metricsMode === "after-funnel-ok-false" && created)),
         commercial_only: true,
-        funnel: { counts: zeroCounts, pipeline_value: 0, revenue: 0 },
+        funnel: { counts: badMetrics ? { ...zeroCounts, visitor: null } : zeroCounts, pipeline_value: 0, revenue: 0 },
       });
       return;
     }
     if (action === "system_health") {
-      send(res, 200, { ok: true, counts_by_kind: { synthetic: created ? 6 : 5 } });
+      const bad = counterMode === "before-missing" || (counterMode === "after-null" && created) || (counterMode === "before-string" && !created);
+      const counts = bad && counterMode === "before-missing" ? {} : { synthetic: bad ? (counterMode === "before-string" ? "5" : null) : (created ? 6 : 5) };
+      send(res, 200, { ok: true, counts_by_kind: counts });
       return;
     }
     if (action === "weekly_report") {
+      const excluded = counterMode === "before-weekly-null" && !created ? null : (created ? 6 : 5);
       send(res, 200, {
-        ok: true,
+        ok: !(metricsMode === "before-weekly-ok-false" || (metricsMode === "after-weekly-ok-false" && created)),
         commercial_only: true,
-        leads_total: 0,
+        leads_total: metricsMode === "before-weekly-fractional" && !created ? 0.5 : 0,
         leads_new_7d: 0,
-        leads_excluded_non_real: created ? 6 : 5,
+        leads_excluded_non_real: excluded,
         system_health: { pipeline_real: 0, revenue_real: 0 },
       });
       return;
@@ -168,6 +175,64 @@ try {
   assert.equal(proof.receipt_sha256.length, 64);
   assert.equal(result.stdout.includes(receiptId), false, "raw receipt must not be emitted");
   assert.equal(Object.values(proof.checks).every(Boolean), true);
+
+  created = false;
+  const beforeInvalidPosts = postCount;
+  metricsMode = "before-invalid";
+  const beforeInvalid = await runProbe(base, {
+    LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40),
+  });
+  assert.equal(beforeInvalid.code, 1, beforeInvalid.stdout || beforeInvalid.stderr);
+  assert.equal(JSON.parse(beforeInvalid.stdout).reason, "commercial_baseline_metrics_invalid");
+  assert.equal(postCount, beforeInvalidPosts, "invalid baseline metrics must block before POST");
+
+  metricsMode = "after-invalid";
+  const afterInvalid = await runProbe(base, {
+    LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40),
+  });
+  assert.equal(afterInvalid.code, 1, afterInvalid.stdout || afterInvalid.stderr);
+  const afterProof = JSON.parse(afterInvalid.stdout);
+  assert.equal(afterProof.checks.commercial_snapshot_after_valid, false);
+  assert.equal(afterProof.checks.commercial_metrics_unchanged, false);
+  assert.equal(postCount, beforeInvalidPosts + 2, "after mutation remains observable, but fails proof");
+  created = false;
+  metricsMode = "after-funnel-http";
+  const afterFunnelUnavailable = await runProbe(base, {
+    LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40),
+  });
+  assert.equal(afterFunnelUnavailable.code, 1, afterFunnelUnavailable.stdout || afterFunnelUnavailable.stderr);
+  assert.equal(JSON.parse(afterFunnelUnavailable.stdout).checks.commercial_snapshot_after_valid, false);
+  for (const mode of ["before-funnel-ok-false", "before-weekly-ok-false", "before-weekly-fractional"]) {
+    created = false; metricsMode = mode;
+    const beforeContractPosts = postCount;
+    const beforeContract = await runProbe(base, {
+      LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40),
+    });
+    assert.equal(beforeContract.code, 1, beforeContract.stdout || beforeContract.stderr);
+    assert.equal(postCount, beforeContractPosts, `${mode} must block before POST`);
+  }
+  for (const mode of ["after-funnel-ok-false", "after-weekly-ok-false"]) {
+    created = false; metricsMode = mode;
+    const afterContract = await runProbe(base, {
+      LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40),
+    });
+    assert.equal(afterContract.code, 1, afterContract.stdout || afterContract.stderr);
+    assert.equal(JSON.parse(afterContract.stdout).checks.commercial_snapshot_after_valid, false);
+  }
+  metricsMode = "valid";
+  for (const mode of ["before-missing", "before-string", "before-weekly-null"]) {
+    created = false; counterMode = mode;
+    const beforeCounterPosts = postCount;
+    const invalidCounter = await runProbe(base, { LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40) });
+    assert.equal(invalidCounter.code, 1, invalidCounter.stdout || invalidCounter.stderr);
+    assert.equal(JSON.parse(invalidCounter.stdout).reason, "commercial_baseline_metrics_invalid");
+    assert.equal(postCount, beforeCounterPosts, `${mode} must block before POST`);
+  }
+  created = false; counterMode = "after-null";
+  const afterCounter = await runProbe(base, { LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters", OPS_TOKEN: "ops-fixture-token-at-least-16", EXPECTED_SHA: "a".repeat(40) });
+  assert.equal(afterCounter.code, 1, afterCounter.stdout || afterCounter.stderr);
+  assert.equal(JSON.parse(afterCounter.stdout).checks.synthetic_counters_after_valid, false);
+  counterMode = "valid";
   console.log("PASS synthetic_live_probe_fails_closed_and_redacts_receipt");
 } finally {
   await new Promise((resolve) => server.close(resolve));

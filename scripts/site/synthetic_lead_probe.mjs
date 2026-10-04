@@ -6,7 +6,7 @@
  * same idempotency key, then emits only aggregate booleans and a receipt hash.
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
-import { createHash, randomUUID } from "node:crypto";
+import { createHash, createHmac, randomUUID } from "node:crypto";
 import { parse } from "parse5";
 
 const blockedProbe = Symbol("controlled_probe_block");
@@ -84,10 +84,11 @@ const expectedSha = String(process.env.EXPECTED_SHA || "").trim();
 const verifyQaEmailRaw = String(process.env.PROBE_VERIFY_EMAIL || "").trim();
 const verifyQaEmail = verifyQaEmailRaw === "1";
 const stamp = Date.now();
-// Random, never a timestamp: an explicit key is a persistence handle and a
-// derivable one could be guessed by a third party (the pre-Turnstile replay in
-// lead.cjs only honours front-minted shapes anyway, so this is defensive).
-const idem = `synthetic-probe-${randomUUID()}`;
+// Ordinary probes remain random. The authorized QA-email probe instead uses a
+// stable HMAC so a rerun cannot create another delivery.
+const idem = verifyQaEmail
+  ? `synthetic-probe-qa-${createHmac("sha256", probeSecret).update(`confenge:qa-email-probe:v1:${expectedSha}`).digest("hex")}`
+  : `synthetic-probe-${randomUUID()}`;
 
 function finishEarly(reason) {
   console.log(JSON.stringify({
@@ -137,15 +138,36 @@ async function ops(action, leadId = "") {
 }
 
 function commercialSnapshot(funnel, weekly) {
-  return {
-    funnel_counts: funnel.data?.funnel?.counts || null,
-    pipeline_value: funnel.data?.funnel?.pipeline_value ?? null,
-    revenue: funnel.data?.funnel?.revenue ?? null,
-    weekly_leads_total: weekly.data?.leads_total ?? null,
-    weekly_leads_new_7d: weekly.data?.leads_new_7d ?? null,
-    weekly_pipeline_real: weekly.data?.system_health?.pipeline_real ?? null,
-    weekly_revenue_real: weekly.data?.system_health?.revenue_real ?? null,
+  const keys = ["visitor", "cta_triggered", "form_started", "lead_persisted", "contacted", "qualified", "meeting", "proposal", "won", "lost"];
+  const counts = funnel.data?.funnel?.counts;
+  const values = {
+    pipeline_value: funnel.data?.funnel?.pipeline_value,
+    revenue: funnel.data?.funnel?.revenue,
+    weekly_pipeline_real: weekly.data?.system_health?.pipeline_real,
+    weekly_revenue_real: weekly.data?.system_health?.revenue_real,
   };
+  const weeklyCounts = {
+    weekly_leads_total: weekly.data?.leads_total,
+    weekly_leads_new_7d: weekly.data?.leads_new_7d,
+  };
+  const errors = [];
+  if (funnel.http !== 200 || funnel.data?.ok !== true || funnel.data?.commercial_only !== true) errors.push("funnel_unavailable");
+  if (weekly.http !== 200 || weekly.data?.ok !== true || weekly.data?.commercial_only !== true) errors.push("weekly_report_unavailable");
+  if (!counts || typeof counts !== "object" || Array.isArray(counts)) errors.push("funnel_counts_missing_or_invalid");
+  for (const key of keys) if (!Number.isInteger(counts?.[key]) || counts[key] < 0) errors.push(`funnel_count_invalid:${key}`);
+  for (const [key, value] of Object.entries(weeklyCounts)) if (!Number.isInteger(value) || value < 0) errors.push(`weekly_count_invalid:${key}`);
+  for (const [key, value] of Object.entries(values)) if (!Number.isFinite(value) || value < 0) errors.push(`commercial_metric_invalid:${key}`);
+  return { ok: errors.length === 0, errors, snapshot: errors.length ? null : { funnel_counts: Object.fromEntries(keys.map((key) => [key, counts[key]])), ...weeklyCounts, ...values } };
+}
+function syntheticCounters(system, weekly) {
+  const synthetic = system.data?.counts_by_kind?.synthetic;
+  const excluded = weekly.data?.leads_excluded_non_real;
+  const errors = [];
+  if (system.http !== 200 || system.data?.ok !== true) errors.push("system_health_unavailable");
+  if (weekly.http !== 200 || weekly.data?.ok !== true || weekly.data?.commercial_only !== true) errors.push("weekly_report_unavailable");
+  if (!Number.isInteger(synthetic) || synthetic < 0) errors.push("synthetic_counter_invalid");
+  if (!Number.isInteger(excluded) || excluded < 0) errors.push("excluded_counter_invalid");
+  return { ok: errors.length === 0, errors, synthetic: errors.length ? null : synthetic, excluded: errors.length ? null : excluded };
 }
 
 function sameJson(a, b) {
@@ -176,10 +198,13 @@ const safeToProbe = Boolean(
 );
 if (!safeToProbe) finishEarly("warmbly_safety_gate_not_ready");
 if (
-  beforeFunnel.http !== 200 || beforeFunnel.data?.commercial_only !== true ||
+  beforeFunnel.http !== 200 || beforeFunnel.data?.ok !== true || beforeFunnel.data?.commercial_only !== true ||
   beforeSystem.http !== 200 || beforeSystem.data?.ok !== true ||
-  beforeWeekly.http !== 200 || beforeWeekly.data?.commercial_only !== true
+  beforeWeekly.http !== 200 || beforeWeekly.data?.ok !== true || beforeWeekly.data?.commercial_only !== true
 ) finishEarly("commercial_baseline_unavailable");
+const beforeCommercial = commercialSnapshot(beforeFunnel, beforeWeekly);
+const beforeCounters = syntheticCounters(beforeSystem, beforeWeekly);
+if (!beforeCommercial.ok || !beforeCounters.ok) finishEarly("commercial_baseline_metrics_invalid");
 
 // Optional page context (2026-09-16): a published capture form can be proved
 // with the attribution its hidden fields would send, so the durable synthetic
@@ -320,12 +345,12 @@ const [receiptOps, afterFunnel, afterSystem, afterWeekly] = await Promise.all([
   ops("weekly_report"),
 ]);
 const receipt = receiptOps.data?.receipt;
-const beforeCommercial = commercialSnapshot(beforeFunnel, beforeWeekly);
 const afterCommercial = commercialSnapshot(afterFunnel, afterWeekly);
-const beforeSynthetic = Number(beforeSystem.data?.counts_by_kind?.synthetic);
-const afterSynthetic = Number(afterSystem.data?.counts_by_kind?.synthetic);
-const beforeExcluded = Number(beforeWeekly.data?.leads_excluded_non_real);
-const afterExcluded = Number(afterWeekly.data?.leads_excluded_non_real);
+const afterCounters = syntheticCounters(afterSystem, afterWeekly);
+const beforeSynthetic = beforeCounters.synthetic;
+const afterSynthetic = afterCounters.synthetic;
+const beforeExcluded = beforeCounters.excluded;
+const afterExcluded = afterCounters.excluded;
 const forbiddenLeak = ["topic", "ntfy", "formsubmit", "upstream", "RESEND_API_KEY"].some(
   (value) => first.text.toLowerCase().includes(value.toLowerCase()),
 );
@@ -350,9 +375,11 @@ const checks = {
   downstream_receipt_matches: receipt?.handoff?.downstream?.downstream_receipt === leadId,
   downstream_created_not_duplicate: receipt?.handoff?.downstream?.http === 201 && receipt?.handoff?.downstream?.duplicate === false,
   downstream_action_absent: !receipt?.handoff?.downstream?.action_id,
-  persisted_exactly_once: afterSynthetic - beforeSynthetic === 1,
-  excluded_non_real_exactly_once: afterExcluded - beforeExcluded === 1,
-  commercial_metrics_unchanged: sameJson(beforeCommercial, afterCommercial),
+  persisted_exactly_once: afterCounters.ok && afterSynthetic - beforeSynthetic === 1,
+  excluded_non_real_exactly_once: afterCounters.ok && afterExcluded - beforeExcluded === 1,
+  commercial_snapshot_after_valid: afterCommercial.ok,
+  synthetic_counters_after_valid: afterCounters.ok,
+  commercial_metrics_unchanged: beforeCommercial.ok && afterCommercial.ok && sameJson(beforeCommercial.snapshot, afterCommercial.snapshot),
   commercial_contract_real_only: afterFunnel.data?.commercial_only === true && afterWeekly.data?.commercial_only === true,
   // O contexto da pagina (asset_id/route_family/cta_id) tem de chegar ao registro
   // persistido, nao so ao payload enviado (SALTO-INSTITUCIONAL-02, 2026-09-18).
@@ -402,6 +429,7 @@ console.log(JSON.stringify({
     persisted_synthetic: Number.isFinite(afterSynthetic - beforeSynthetic) ? afterSynthetic - beforeSynthetic : null,
     excluded_non_real: Number.isFinite(afterExcluded - beforeExcluded) ? afterExcluded - beforeExcluded : null,
   },
+  commercial_metrics: { before: beforeCommercial.snapshot, after: afterCommercial.snapshot, after_errors: afterCommercial.errors, counters_before: { synthetic: beforeCounters.synthetic, excluded: beforeCounters.excluded }, counters_after: { synthetic: afterCounters.synthetic, excluded: afterCounters.excluded, errors: afterCounters.errors } },
   checks,
   ts: new Date().toISOString(),
 }));
