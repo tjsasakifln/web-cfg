@@ -229,11 +229,11 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
 <rect x="{X(L - 0.12):.1f}" y="{Y(W):.1f}" width="{px(0.12):.1f}" height="{px(W):.1f}" fill="none" stroke="#2d6f2d" stroke-width="1.2" stroke-dasharray="4 3"/>
 <text x="{X(L - 0.18):.1f}" y="{Y(W / 2):.1f}" font-size="12" font-weight="650" fill="#2d6f2d" transform="rotate(-90 {X(L - 0.18):.1f} {Y(W / 2):.1f})">B-01</text>
 <!-- shaft west exterior -->
-<rect x="{X(-shaft_d):.1f}" y="{Y(shaft_off + shaft_w):.1f}" width="{px(shaft_d):.1f}" height="{px(shaft_w):.1f}" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="{X(-shaft_d):.1f}" y="{Y(shaft_off + shaft_w):.1f}" width="{px(shaft_d):.1f}" height="{px(shaft_w):.1f}" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2" data-legibility-contour="shaft-HS-01"/>
 <text x="{X(-shaft_d / 2):.1f}" y="{Y(shaft_off + shaft_w / 2) + 4:.1f}" text-anchor="middle" font-size="12" fill="#071a31">HS-01</text>
 <text x="{X(L / 2):.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" font-weight="650" fill="#071a31">RM-01</text>
 <text x="{X(L / 2):.1f}" y="{Y(-t) + 28:.1f}" text-anchor="middle" font-size="12" fill="#5d6a7a">{br_number(L)} m</text>
-<text x="{X(-t) - 28:.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" fill="#5d6a7a" transform="rotate(-90 {X(-t) - 28:.1f} {Y(W / 2):.1f})">{br_number(W)} m</text>
+<text x="{X(-t) - 36:.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" fill="#5d6a7a" data-legibility-clearance-from="shaft-HS-01" transform="rotate(-90 {X(-t) - 36:.1f} {Y(W / 2):.1f})">{br_number(W)} m</text>
 <text x="{pad}" y="{svg_h - 12}" font-size="12" fill="#5d6a7a">PR-ARQ · {e(revision)} · escala indicativa · exemplo demonstrativo</text>
 </svg>
 """
