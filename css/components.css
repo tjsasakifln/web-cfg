@@ -193,6 +193,7 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
 .site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
 @media (prefers-reduced-motion:reduce){.site-footer .footer-links a,.site-footer .footer-authority a{transition:none}}
+@media (min-width:621px){.site-footer{padding-bottom:max(80px,calc(56px + 14px + 10px + env(safe-area-inset-bottom)))}}
 
 /* Additions from the page migrations (2026-09-16) ---------------------------- */
 .list-ruled p a,.list-ruled__use a,.aside-note p a,.phases a,.steps a,.calc a,.proof-figure figcaption a,.keys a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:.2em}
