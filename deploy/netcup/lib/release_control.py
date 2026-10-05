@@ -64,6 +64,10 @@ LIVE_INTEL_PUBLIC_MANIFEST = "_site/.well-known/live-intelligence-overlay.json"
 LIVE_INTEL_OVERLAY_SCHEMA = "confenge.live-intelligence-stage-overlay/v1"
 LIVE_INTEL_LEGACY_STATE_SCHEMA = "confenge.live-intelligence-legacy-overlay-state/v1"
 LIVE_INTEL_PUBLIC_SCHEMA = "confenge.live-intelligence-overlay/v1"
+CSS_ASSET_MANIFEST = "_site/.well-known/css-assets.json"
+CSS_ASSET_MANIFEST_SCHEMA = "1.0.0"
+CSS_ASSET_MANIFEST_SOURCE = "scripts.site.fingerprint_css"
+RUNTIME_STYLESHEET_ALIAS = b'<link href="/styles.css" rel="stylesheet"/>'
 LIVE_INTEL_OVERLAY_FILES = frozenset(
     {
         "_site/sitemap-oportunidades.xml",
@@ -528,6 +532,82 @@ def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict
         },
         routes,
     )
+
+
+def _runtime_stylesheet_href(release: Path) -> str:
+    """Return the verified content-addressed href for the shared stylesheet."""
+    public_root_path = release / "_site"
+    if not public_root_path.is_dir() or public_root_path.is_symlink():
+        raise ReleaseError("runtime stylesheet public root is missing or unsafe")
+    public_root = public_root_path.resolve()
+    manifest_path = release / CSS_ASSET_MANIFEST
+    if not manifest_path.is_file() or manifest_path.is_symlink():
+        raise ReleaseError("runtime stylesheet asset manifest is missing or unsafe")
+    manifest = load_json(manifest_path)
+    if (
+        manifest.get("schema_version") != CSS_ASSET_MANIFEST_SCHEMA
+        or manifest.get("source") != CSS_ASSET_MANIFEST_SOURCE
+        or not isinstance(manifest.get("files"), dict)
+    ):
+        raise ReleaseError("runtime stylesheet asset manifest contract is invalid")
+    entry = manifest["files"].get("styles.css")
+    if not isinstance(entry, dict):
+        raise ReleaseError("runtime stylesheet asset manifest lacks styles.css")
+    expected_sha = str(entry.get("sha256") or "")
+    short_hash = str(entry.get("hash") or "")
+    href = str(entry.get("href") or "")
+    if (
+        not HEX_256.fullmatch(expected_sha)
+        or short_hash != expected_sha[:12]
+        or href != f"/assets/css/styles.{short_hash}.css"
+    ):
+        raise ReleaseError("runtime stylesheet asset mapping is invalid")
+    asset_candidate = public_root / href.lstrip("/")
+    asset_path = asset_candidate.resolve()
+    if (
+        not asset_path.is_relative_to(public_root)
+        or asset_candidate.is_symlink()
+        or not asset_path.is_file()
+        or sha256_file(asset_path) != expected_sha
+    ):
+        raise ReleaseError("runtime stylesheet asset bytes do not match the manifest")
+    return href
+
+
+def _rewrite_live_intelligence_stylesheet_aliases(release: Path) -> None:
+    """Bind stage-rendered opportunity HTML to this release's immutable CSS."""
+    _, routes = _accepted_overlay_identity(release)
+    relative_paths = [str(item["html_path"]) for item in routes]
+    hub_path = "_site/oportunidades/index.html"
+    if (release / hub_path).is_file():
+        relative_paths.append(hub_path)
+    if not relative_paths:
+        return
+
+    href = _runtime_stylesheet_href(release)
+    rewritten: dict[Path, bytes] = {}
+    for relative in sorted(set(relative_paths)):
+        page = release / relative
+        if not page.is_file() or page.is_symlink():
+            raise ReleaseError(f"runtime stylesheet target is missing or unsafe: {relative}")
+        source = page.read_bytes()
+        if source.count(RUNTIME_STYLESHEET_ALIAS) != 1:
+            raise ReleaseError(
+                "runtime page must contain exactly one canonical stylesheet alias: "
+                f"{relative}"
+            )
+        alias_offset = source.index(RUNTIME_STYLESHEET_ALIAS)
+        head_end = source.lower().find(b"</head>")
+        if head_end < 0 or alias_offset >= head_end:
+            raise ReleaseError(f"runtime stylesheet alias is outside <head>: {relative}")
+        rewritten[page] = source.replace(
+            RUNTIME_STYLESHEET_ALIAS,
+            f'<link href="{href}" rel="stylesheet"/>'.encode("ascii"),
+            1,
+        )
+
+    for page, source in rewritten.items():
+        page.write_bytes(source)
 
 
 def _overlay_allowed_paths(routes: list[dict[str, Any]]) -> set[str]:
@@ -1396,6 +1476,7 @@ def _publish_live_intelligence_overlay(release: Path) -> dict[str, Any]:
         # envelope. Real stage always has both files and must bind the delta.
         if not source_path.is_file() or not files_path.is_file():
             return
+        _rewrite_live_intelligence_stylesheet_aliases(release)
         source = load_json(source_path)
         commit = validate_sha(str(source.get("commit") or ""))
         _write_live_intelligence_overlay_manifest(
