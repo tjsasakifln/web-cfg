@@ -282,11 +282,11 @@ code,pre,kbd,samp,[data-opaque-token]{overflow-wrap:anywhere;word-break:break-wo
 .turnstile-slot:not([hidden]){min-block-size:140px}
 .cf-turnstile[data-size=compact]{min-inline-size:0;min-block-size:140px;max-inline-size:100%}
 .site-footer .footer-brand p{font-size:.875rem;color:#c5d1d7}
-.site-footer .footer-links,.site-footer .footer-links strong,.site-footer .footer-links a,.site-footer .footer-authority a{font-size:.8125rem}
+.site-footer .footer-links,.site-footer .footer-links strong,.site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{font-size:.8125rem}
 .site-footer .footer-links strong{color:#fff}
-.site-footer .footer-links a,.site-footer .footer-authority a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;transition:color .16s ease,text-shadow .16s ease,box-shadow .16s ease}
-.site-footer .footer-links a:hover,.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:hover,.site-footer .footer-authority a:focus-visible{color:#fff;text-shadow:0 0 .45rem rgba(206,214,42,.48)}
-.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
+.site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;transition:color .16s ease,text-shadow .16s ease,box-shadow .16s ease}
+.site-footer .footer-links a:hover,.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:hover,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:hover,.site-footer .footer-bottom>a:focus-visible{color:#fff;text-shadow:0 0 .45rem rgba(206,214,42,.48)}
+.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
 .site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
-@media (prefers-reduced-motion:reduce){.site-footer .footer-links a,.site-footer .footer-authority a{transition:none}}
+@media (prefers-reduced-motion:reduce){.site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{transition:none}}
 /* END css-modules:cfg10x-12 */
