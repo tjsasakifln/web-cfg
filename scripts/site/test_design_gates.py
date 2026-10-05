@@ -687,7 +687,7 @@ def test_functional_type_floor_in_css():
     assert re.search(r"\.field label\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.consent\{[^}]*font-size:\.875rem", css)
     compact = re.sub(r"\s+", "", css)
-    assert ".site-footer.footer-links,.site-footer.footer-linksstrong,.site-footer.footer-linksa,.site-footer.footer-authoritya{font-size:.8125rem}" in compact
+    assert ".site-footer.footer-links,.site-footer.footer-linksstrong,.site-footer.footer-linksa,.site-footer.footer-authoritya,.site-footer.footer-bottom>a{font-size:.8125rem}" in compact
     assert ".site-footer.footer-bottom{font-size:.8rem" in compact
     assert re.search(r"\.breadcrumbs ol\{[^}]*font-size:\.875rem", css)
     # 2026-09-17 (SALTO-INSTITUCIONAL-02): .profile-list deixou de existir (a
