@@ -18,7 +18,7 @@ const SITE_ROOT = resolveSiteRoot(ROOT);
 const PORT = Number(process.env.RESPONSIVE_MATRIX_PORT || 8797);
 const BASE_ARG = process.argv[2];
 const BASE = (BASE_ARG || `http://127.0.0.1:${PORT}`).replace(/\/$/, "");
-const WIDTHS = [320, 360, 390, 430, 768, 900, 901, 960, 1000, 1024, 1120, 1240, 1366, 1440, 1661, 1920];
+const WIDTHS = [320, 360, 390, 430, 621, 700, 760, 768, 900, 901, 960, 1000, 1024, 1120, 1240, 1366, 1440, 1661, 1920];
 const ROUTES = [
   { family: "home", path: "/" },
   { family: "deliverables", path: "/entregas/" },
@@ -345,6 +345,49 @@ async function renderedGeometry(page, route, width) {
     } else {
       await page.click(".menu-toggle,.pp-mobile summary");
     }
+  }
+
+  if ([621, 700, 760, 768, 900, 1024].includes(width)) {
+    const footerContact = await page.evaluate(async () => {
+      const scrollStyle = document.documentElement.style.getPropertyValue("scroll-behavior");
+      const scrollPriority = document.documentElement.style.getPropertyPriority("scroll-behavior");
+      document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
+      await document.fonts.ready;
+      let previous = "", stableSamples = 0;
+      for (let sample = 0; sample < 40; sample += 1) {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+        await new Promise((done) => setTimeout(done, 100));
+        const current = JSON.stringify([document.documentElement.scrollHeight, scrollY]);
+        stableSamples = current === previous ? stableSamples + 1 : 0;
+        previous = current;
+        if (stableSamples >= 3) break;
+      }
+      const visible = (element) => {
+        if (!element || getComputedStyle(element).display === "none" || getComputedStyle(element).visibility === "hidden") return false;
+        const box = element.getBoundingClientRect();
+        return box.width > 0 && box.height > 0;
+      };
+      const floating = [...document.querySelectorAll(".contact-float,.whatsapp-float")].find(visible);
+      const floatBox = floating?.getBoundingClientRect() || null;
+      const legalNodes = [...document.querySelectorAll(".footer-authority a, .footer-bottom > a")];
+      const links = legalNodes.filter((link, index, all) => all.findIndex((candidate) => candidate.href === link.href) === index).filter(visible).map((link) => {
+        const box = link.getBoundingClientRect();
+        const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+        const hitLink = hit?.closest?.("a") === link;
+        const overlaps = Boolean(floatBox && !(box.right <= floatBox.left || box.left >= floatBox.right || box.bottom <= floatBox.top || box.top >= floatBox.bottom));
+        return { text: link.textContent.trim(), hitLink, overlaps, box: { left: box.left, top: box.top, right: box.right, bottom: box.bottom } };
+      });
+      window.scrollTo({ top: 0, behavior: "instant" });
+      if (scrollStyle) document.documentElement.style.setProperty("scroll-behavior", scrollStyle, scrollPriority);
+      else document.documentElement.style.removeProperty("scroll-behavior");
+      return { settled: stableSamples >= 3, floatDom: Boolean(document.querySelector(".contact-float,.whatsapp-float")), floatVisible: Boolean(floating), floatBox: floatBox ? { left: floatBox.left, top: floatBox.top, right: floatBox.right, bottom: floatBox.bottom } : null, links };
+    });
+    if (!footerContact.settled) errors.push({ code: "footer_layout_not_settled", detail: { width, ...footerContact } });
+    if (route.path === "/" && !footerContact.floatVisible) errors.push({ code: "footer_contact_float_missing", detail: { width, ...footerContact } });
+    if (footerContact.floatDom && !footerContact.floatVisible) errors.push({ code: "footer_contact_float_hidden_unexpectedly", detail: { width, ...footerContact } });
+    if (footerContact.links.length === 0) errors.push({ code: "footer_legal_links_missing", detail: { width, ...footerContact } });
+    const blocked = footerContact.links.filter((link) => !link.hitLink || link.overlaps);
+    if (blocked.length) errors.push({ code: "footer_contact_float_obstructs_legal_link", detail: { width, ...footerContact, blocked } });
   }
 
   if ([390, 901, 1024, 1440].includes(width)) {

@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "830a1ee64f561dbc178b11e23775fc4ae99e345f",
-  "recaptured_at": "2026-10-04T22:11:24Z",
-  "recapture_reason": "CONFENGE-COMPARTILHAMENTO-NAVEGACAO-20261004: recaptura revisada do CSS compartilhado do controle móvel Menu; raio único medido, rótulo, alvo 44px e contratos de foco preservados; seis pilares, fatos, textos, preços, condições, canonical, robots, formulários e aprovações técnicas inalterados; nenhuma nova revisão humana alegada.",
+  "baseline_commit": "889e70365b4afd8ae31efb64ab78a71fd7568bc6",
+  "recaptured_at": "2026-10-05T04:25:48Z",
+  "recapture_reason": "CONFENGE-RODAPE-SITEWIDE-20261005: recaptura autonoma dos bytes CSS autorizados para clearance do rodape e link legal direto, com fonte 13px, alvo 44px, glow discreto em hover/foco, anel de foco e reduced-motion; textos, fatos tecnicos e comerciais, seis pilares, formularios e aprovacoes humanas historicas permanecem inalterados; nenhuma nova aprovacao humana ou tecnica alegada.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
     "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
     "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
-    "styles.css": "b0334dc64ea00cbb5fd18f23fe918730fa3ad48d2f14e8e45b86b970d04a4b10",
+    "styles.css": "4e7b2af4d2f1cd4af7ce4298fb7e183e8a6b7fca9e341f7b9694a7b937f7caee",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
@@ -38,7 +38,7 @@
     "sitemap.txt",
     "sitemap.xml"
   ],
-  "previous_baseline_commit": "f90e5f0812e13d40f97e9c163e2cf6364d6543be",
+  "previous_baseline_commit": "830a1ee64f561dbc178b11e23775fc4ae99e345f",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -232,6 +232,40 @@
         "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
         "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
         "styles.css": "0b96272efa5c3170f4d1e61a956c6e82062d900afc4ff397ceb6b9429b3aec5a",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "c4a6d51afb71eb03f24716b1abf5a868405fd636d4079b2b91a8b400e33e7b80",
+        "sitemap.txt": "bacd3c4f3179d287fd1d7e11be2a2e58f4601ed221ef5ccf8d1b2556c8e022de",
+        "sitemap-index.xml": "1c195281e5a634548a1dca6439f7a0882a34ca731e245465e9290eb15d598e6d",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "71fd5962fa48d7abcd87361b1928a00dabe98555bd1a35ca5f3ec405254f8be3"
+      },
+      "html_mutation": true
+    },
+    {
+      "baseline_commit": "830a1ee64f561dbc178b11e23775fc4ae99e345f",
+      "previous_baseline_commit": "f90e5f0812e13d40f97e9c163e2cf6364d6543be",
+      "recaptured_at": "2026-10-04T22:11:24Z",
+      "recapture_reason": "CONFENGE-COMPARTILHAMENTO-NAVEGACAO-20261004: recaptura revisada do CSS compartilhado do controle móvel Menu; raio único medido, rótulo, alvo 44px e contratos de foco preservados; seis pilares, fatos, textos, preços, condições, canonical, robots, formulários e aprovações técnicas inalterados; nenhuma nova revisão humana alegada.",
+      "pillars": {
+        "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
+        "script.js": "0f4ee01a6ba0e86dc4e17748945d7fa61d5e67c2007d9fdfb9422ad05dd4e90a",
+        "styles.css": "b0334dc64ea00cbb5fd18f23fe918730fa3ad48d2f14e8e45b86b970d04a4b10",
         "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
         "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
         "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",

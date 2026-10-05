@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+import hashlib
 import http.server
 import json
 import os
@@ -79,6 +80,31 @@ def make_site(tmp_path: Path, sha: str) -> Path:
     )
     (site / "404.html").write_text(
         "<!doctype html><html lang='pt-BR'><body>Página não encontrada</body></html>\n",
+        encoding="utf-8",
+    )
+    css = b"body { color: #06182d; }\n"
+    css_sha = hashlib.sha256(css).hexdigest()
+    css_href = f"/assets/css/styles.{css_sha[:12]}.css"
+    css_asset = site / css_href.lstrip("/")
+    css_asset.parent.mkdir(parents=True)
+    css_asset.write_bytes(css)
+    (site / "styles.css").write_bytes(css)
+    (well_known / "css-assets.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "source": "scripts.site.fingerprint_css",
+                "files": {
+                    "styles.css": {
+                        "sha256": css_sha,
+                        "hash": css_sha[:12],
+                        "href": css_href,
+                    }
+                },
+            },
+            sort_keys=True,
+        )
+        + "\n",
         encoding="utf-8",
     )
     identity = {
@@ -1068,6 +1094,65 @@ def test_overlay_import_failure_is_fail_closed_when_official_present(
         control._publish_live_intelligence_overlay(release)
 
 
+def test_runtime_stylesheet_alias_uses_verified_fingerprinted_asset(
+    tmp_path: Path,
+) -> None:
+    site = make_site(tmp_path, SHA_A)
+    release = tmp_path / "release-with-css-map"
+    shutil.copytree(site, release / "_site")
+    page = release / "_site/oportunidades/index.html"
+    page.parent.mkdir(parents=True)
+    main = '<main data-proof="unchanged">Fato técnico preservado.</main>'
+    original = (
+        "<!doctype html><html><head>"
+        + control.RUNTIME_STYLESHEET_ALIAS.decode("ascii")
+        + "</head><body>"
+        + main
+        + "</body></html>\n"
+    )
+    page.write_text(original, encoding="utf-8")
+
+    css_manifest = control.load_json(release / control.CSS_ASSET_MANIFEST)
+    expected_href = css_manifest["files"]["styles.css"]["href"]
+    css_asset = release / "_site" / expected_href.lstrip("/")
+    expected_css = css_asset.read_bytes()
+    css_asset.write_bytes(b"tampered\n")
+    with pytest.raises(control.ReleaseError, match="bytes do not match"):
+        control._rewrite_live_intelligence_stylesheet_aliases(release)
+    assert page.read_text(encoding="utf-8") == original
+    css_asset.write_bytes(expected_css)
+
+    control._rewrite_live_intelligence_stylesheet_aliases(release)
+
+    rewritten = page.read_text(encoding="utf-8")
+    assert f'href="{expected_href}"' in rewritten
+    assert 'href="/styles.css"' not in rewritten
+    assert rewritten == original.replace(
+        control.RUNTIME_STYLESHEET_ALIAS.decode("ascii"),
+        f'<link href="{expected_href}" rel="stylesheet"/>',
+        1,
+    )
+
+
+def test_runtime_stylesheet_alias_fails_closed_without_asset_manifest(
+    tmp_path: Path,
+) -> None:
+    release = tmp_path / "release-without-css-map"
+    page = release / "_site/oportunidades/index.html"
+    page.parent.mkdir(parents=True)
+    original = (
+        "<!doctype html><html><head>"
+        + control.RUNTIME_STYLESHEET_ALIAS.decode("ascii")
+        + "</head><body><main>Preservar.</main></body></html>\n"
+    )
+    page.write_text(original, encoding="utf-8")
+
+    with pytest.raises(control.ReleaseError, match="asset manifest is missing"):
+        control._rewrite_live_intelligence_stylesheet_aliases(release)
+
+    assert page.read_text(encoding="utf-8") == original
+
+
 def test_overlay_withdraws_fixtures_without_scripts_when_official_absent(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -1194,6 +1279,12 @@ def test_overlay_prunes_fixture_and_writes_index_when_official_present(
     assert index_page.is_file()
     html = index_page.read_text(encoding="utf-8")
     assert 'content="index,follow" name="robots"' in html
+    css_manifest = control.load_json(release / control.CSS_ASSET_MANIFEST)
+    assert (
+        f'href="{css_manifest["files"]["styles.css"]["href"]}"'
+        in html
+    )
+    assert 'href="/styles.css"' not in html
     assert "UNKNOWN" not in html
     assert "1M_10M" not in html
     public_snapshot = control.load_json(

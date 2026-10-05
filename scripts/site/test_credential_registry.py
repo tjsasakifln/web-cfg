@@ -328,8 +328,9 @@ def test_registry_backed_crea_has_visible_schema_parity_and_unbacked_crea_fails(
         revoked=False,
         withheld_reason=None,
     )
-    proj = project(verified, "/confianca/")
+    proj = project(verified, "/confianca/", now="2026-10-04")
     assert "org-crea-pj" in proj.claim_ids
+    assert "org-crea-pj" not in project(verified, "/confianca/", now="2026-10-05").claim_ids
     assert "CREA-SC PJ 205402-8" in proj.visible_text
     cred = proj.schema_org.get("hasCredential") or {}
     if isinstance(cred, list):

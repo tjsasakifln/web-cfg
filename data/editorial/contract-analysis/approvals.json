@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "bb04e8ba7cdeb98f93ff97c0043175ad3180150f36ff536613f26c8747bec3ec",
-      "rendered_content_hash_previous": "9d65e3d366f7f48d4c7ded3f4a2ece88fe969bd4118ada7f353a51d2db4fdb7f",
+      "rendered_content_hash": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
+      "rendered_content_hash_previous": "bb04e8ba7cdeb98f93ff97c0043175ad3180150f36ff536613f26c8747bec3ec",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-04T21:18:00Z",
-      "rendered_hash_recapture_reason": "CONFENGE-COMPARTILHAMENTO-E-IDENTIDADE-MOBILE-20261004: correção autorizada de preview social, uniformização do controle de menu móvel e adoção do rodapé público compartilhado. O compilador acrescenta metadados OG/Twitter no HEAD; o shell compartilhado acrescenta o rótulo visível Menu ao botão existente; geradores PP e legado passam a usar a mesma autoridade de marca, navegação e contato no rodapé, preservando as datas publicadas/atualizadas quando existentes. Conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, canonical, robots, JSON-LD e CTAs contextuais permanecem; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
-      "rendered_hash_recapture_reason_previous": "CONFENGE 2026-10-04: ajuste autorizado de escala, contraste, logo e glow discreto no rodape; somente apresentacao, sem nova aprovacao tecnica",
+      "rendered_hash_recaptured_at": "2026-10-05T03:02:59Z",
+      "rendered_hash_recapture_reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correção autorizada do espaçamento inferior do rodapé para impedir que o contato flutuante cubra links legais entre 621 e 1024 px, incluindo os links legais diretos do rodapé de runtime no mesmo contrato de fonte compacta, alvo de 44 px, glow discreto no hover/foco, anel de foco e movimento reduzido. A mudança é exclusivamente CSS de apresentação; conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, datas de consulta, canonical, robots, JSON-LD e CTAs permanecem. Esta recaptura determinística não alega nova aprovação técnica nem revisão humana independente.",
+      "rendered_hash_recapture_reason_previous": "CONFENGE-COMPARTILHAMENTO-E-IDENTIDADE-MOBILE-20261004: correção autorizada de preview social, uniformização do controle de menu móvel e adoção do rodapé público compartilhado. O compilador acrescenta metadados OG/Twitter no HEAD; o shell compartilhado acrescenta o rótulo visível Menu ao botão existente; geradores PP e legado passam a usar a mesma autoridade de marca, navegação e contato no rodapé, preservando as datas publicadas/atualizadas quando existentes. Conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, canonical, robots, JSON-LD e CTAs contextuais permanecem; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -655,6 +655,34 @@
         "metadata": "OG básico completo e twitter:card explícito compilados a partir de canonical/title/description; 13 superfícies noindex não compartilháveis permanecem sem preview",
         "mobile_menu": "span Menu inserido dentro do botão legado já existente; aria-controls, aria-expanded, ícones, navegação e CTAs preservados; controle PP nativo details/summary recebe a mesma apresentação",
         "public_footer": "um único componente compartilhado reúne blurb de marca, colunas canônicas, autoridade legal/editorial e contato público; links úteis de ambas as famílias e datas PP foram preservados"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Solicitação expressa do proprietário para corrigir com rigor o rodapé e concluir a campanha CONFENGE-QUALIDADE-SITEWIDE-20261004.",
+      "at": "2026-10-05T03:02:59Z",
+      "reviewer": "comparação determinística pelo próprio agente; nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "bb04e8ba7cdeb98f93ff97c0043175ad3180150f36ff536613f26c8747bec3ec",
+      "rendered_content_hash": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
+      "reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correção autorizada do espaçamento inferior do rodapé para impedir que o contato flutuante cubra links legais entre 621 e 1024 px, incluindo os links legais diretos do rodapé de runtime no mesmo contrato de fonte compacta, alvo de 44 px, glow discreto no hover/foco, anel de foco e movimento reduzido. A mudança é exclusivamente CSS de apresentação; conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, datas de consulta, canonical, robots, JSON-LD e CTAs permanecem. Esta recaptura determinística não alega nova aprovação técnica nem revisão humana independente.",
+      "presentation_delta": {
+        "styles_source_sha256_previous": "b0334dc64ea00cbb5fd18f23fe918730fa3ad48d2f14e8e45b86b970d04a4b10",
+        "styles_source_sha256": "4e7b2af4d2f1cd4af7ce4298fb7e183e8a6b7fca9e341f7b9694a7b937f7caee",
+        "public_footer": "padding inferior reservado acima do contato flutuante entre 621 e 1024 px; links legais diretos do runtime incluídos na fonte compacta, alvo de 44 px, glow discreto, foco visível e movimento reduzido"
       },
       "byte_equivalence": {
         "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
