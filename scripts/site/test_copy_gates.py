@@ -416,7 +416,7 @@ def test_conversion_routes_name_price_scope_and_next_step():
     home_public = visible_text(home).lower()
     assert all(term in home_public for term in ("estruturas", "instalações", "infraestrutura"))
     assert "solicitar proposta" in home_public
-    assert "conte o que precisa projetar" in home_public
+    assert "conte o que precisa decidir, projetar, inspecionar ou documentar." in home_public
     assert "preço publicado" not in home_public
 
     quantities = (
