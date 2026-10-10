@@ -501,7 +501,7 @@ try {
         }
         if (state === "mismatch") sessionStorage.setItem("confenge_last_receipt", "lead-fffffffffffffffffffffffffff");
       }, { state, fixture });
-      const url = new URL(route, base);
+      const url = new URL(routeUrl(route, `confirmation-${state}`));
       if (state !== "direct") url.searchParams.set("receipt", fixture);
       const response = await page.goto(url.href, { waitUntil: "domcontentloaded" });
       const status = await page.evaluate(() => ({

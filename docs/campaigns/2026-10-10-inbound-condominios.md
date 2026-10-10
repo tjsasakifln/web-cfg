@@ -1,6 +1,4 @@
-# Inbound para condomínios e amplitude institucional, 2026-10-10
-
-Decisão: EXECUTE_NOW. Frente: inbound comercial. Alavancas: confiança, distribuição e receita. Evidência da implantação: versão publicada e percursos verificados; contratos e receita continuam resultados da operação.
+# Inbound para condomínios e amplitude institucional | CONFENGE
 
 ## Plano registrado antes da edição
 
@@ -15,46 +13,46 @@ Decisão: EXECUTE_NOW. Frente: inbound comercial. Alavancas: confiança, distrib
 9. Integrar os gates obrigatórios, revisar adversarialmente e publicar pelo fluxo protegido.
 10. Preservar demais rotas, preços, condições, projetos especializados, infraestrutura e política de rastreadores.
 
-## Base e proteção de trabalho existente
+## Resultado
 
-Produção e `origin/main` conferidos antes da edição: `cd7af8aeec8723be4115406a59777367c5737265`, build de 2026-10-05. Checkout isolado a partir desse SHA; alterações de outras sessões preservadas. Autoridade: `docs/architecture/RUNTIME-AUTHORITY.md`, Cloudflare e origem Netcup; Netlify é legado. ADR-STRAT-002 e ADR-STRAT-004 preservados, sem mudança de domínio, núcleos ou owner comercial.
+Publicado em 10/10/2026: `71d115c01c79a9425e21603ef8739bcecfea6841`.
 
-## Intenção e página principal
+A [inicial](https://confenge.com.br/) apresenta projetos, orçamento, inspeção, perícia, avaliação, SST e obras públicas antes dos aprofundamentos de projetos, com acesso em até dois cliques. Apenas uma nova página pública. Empresa, Como trabalhamos, Serviços e triagem receberam ajustes localizados; identidade, fontes, preços, condições, infraestrutura e rastreadores foram preservados.
 
-| Intenção de contratação | Página principal | Ação esperada |
+| Intenção | Página principal | Ação |
 | --- | --- | --- |
-| Engenharia para a necessidade do condomínio | `/engenharia-condominios/` | Identificar a situação e solicitar proposta com contexto |
-| Inspeção predial ou investigação de infiltração/fissura | `/inspecao-diagnostico-edificacoes/` | Delimitar objeto, visitas e investigação |
-| Assistente técnico de engenharia e análise de laudo | `/assistencia-tecnica-pericial-engenharia/` | Informar etapa e combinar verificação de conflito |
+| Contratar engenharia para o condomínio | [Central](https://confenge.com.br/engenharia-condominios/) | Escolher a situação e solicitar proposta |
+| Inspecionar ou investigar fissuras e infiltrações | [Inspeção e diagnóstico](https://confenge.com.br/inspecao-diagnostico-edificacoes/) | Definir objeto, documentos e investigação |
+| Assistência técnica, quesitos ou análise de laudo | [Assistência pericial](https://confenge.com.br/assistencia-tecnica-pericial-engenharia/) | Informar etapa, verificar conflito e definir escopo |
 
-## Fontes e pesquisa delimitada
+As três páginas explicam entregas, responsabilidade técnica, visita, honorários e primeiro contato. Projetos e orçamento podem integrar a proposta conforme a necessidade. Condomínios é entrada editorial das famílias existentes.
 
-Oferta, verdade, atribuições e famílias: constituição comercial, taxonomia, matriz de intenção, registro público de famílias e fontes vigentes no repositório. Pesquisa inicial limitada a quatro consultas de compra e três páginas: [JM](https://www.jmengdiagnostica.com.br/inspecao-predial), [Renovar](https://renovargestaopredial.com.br/inspecao-predial.html) e [LHGEO](https://www.lhgeoengenharia.com.br/servicos/analise-critica-laudo-pericial). Serviram para organizar situação, escopo, entregas e etapa da disputa; não autorizam competências, cobertura ou volumes de busca da CONFENGE.
+## Fontes e limites
 
-## Verificação, publicação e pendências
+Oferta e cobertura seguem `data/corporate/commercial-constitution.v1.json`, taxonomia, matriz de intenções e `data/organic/public-family-registry.json`; ADR-STRAT-002/004 e RUNTIME-AUTHORITY foram observados. As seis fontes técnicas protegidas permaneceram byte-idênticas. Links e rodapé da apresentação aprovada foram recapturados separadamente, preservando os hashes factuais e a aprovação material existente.
 
-Implementação concluída no checkout isolado. Inicial, navegação, Empresa, Como trabalhamos, Serviços e triagem receberam somente os ajustes necessários; central e duas páginas especializadas foram geradas por suas fontes canônicas. Apenas uma nova rota pública foi criada. Preços, infraestrutura, política de rastreadores e conteúdo técnico protegido foram preservados.
+Pesquisa limitada a quatro consultas de compra e três páginas: [JM](https://www.jmengdiagnostica.com.br/inspecao-predial), [Renovar](https://renovargestaopredial.com.br/inspecao-predial.html) e [LHGEO](https://www.lhgeoengenharia.com.br/servicos/analise-critica-laudo-pericial). Nenhuma competência ou volume de busca foi inferido desses exemplos.
 
-Validação local: `build:site` passou com 617 arquivos e zero ocorrências no audit público. Passaram testes de navegação (23), vertical (16 e 12 subtestes), inicial (24), projetos (15 e 39 subtestes), núcleo de leads (119), handoff (34), intake adaptativo (17), atribuição e census de CTA/formulários. A revisão adversarial terminou sem findings remanescentes; a apresentação protegida passou em dois testes e `git diff --check` não encontrou problemas. Os gates obrigatórios de integração, publicação e recebimento em produção ainda serão registrados após sua conclusão.
+Search Console, pelo cliente autorizado em 10/10: período 10/09–07/10, última data observada 06/10, 123 linhas e nenhuma com as quatro intenções consultadas. Não significa volume zero. Estado `insufficient_distinct_runs`, comparação insuficiente. Perfil da Empresa sem acesso conectado autorizado; nenhuma alteração externa.
 
-Inspeção local em navegador: leitura e ações das páginas principais em 390 e 1440 px; menu móvel abre com Enter, fecha com Escape e devolve foco. O contato pericial preserva sua opção e mostra erro quando falta um canal de retorno, sem envio. As simulações são evidência técnica, não pesquisa com compradores ou conversão. Evidências de produção e o SHA servido serão acrescentados ao registro final.
+## Verificações e contato
 
-Jornadas do artifact: 17 percursos, 68 verificações de página/largura e 11 cenários do formulário passaram (599 verificações, zero falhas, zero solicitações enviadas). Correções localizadas na integração: contrato Netcup atualizado para as sete frentes, com mutantes negativos e persistência preservada; pin do cadastro de famílias atualizado com emenda rastreável, sem alterar fatos, owners ou métricas históricas. O inventário pSEO temporal incidental foi restaurado à base, pois a campanha não muda seus dados.
+[PR 740](https://github.com/tjsasakifln/web-cfg/pull/740) integrado com [site-ci](https://github.com/tjsasakifln/web-cfg/actions/runs/38086127055), [pSEO](https://github.com/tjsasakifln/web-cfg/actions/runs/38086127052) e [CodeQL](https://github.com/tjsasakifln/web-cfg/actions/runs/38086127069) aprovados. Conteúdo, navegação, atribuição, contato, geometria, primeira dobra, acessibilidade e Lighthouse integral passaram; limites preservados e revisão adversarial concluída.
 
-Censo de marca: 249 HTMLs e 486 ocorrências dos mesmos logos, 4.518 verificações aprovadas. A nova rota acrescenta somente seus dois lockups. Recaptura do runtime restrita a `script.js`, analytics e dois sitemaps, com checkpoint alcançável, histórico preservado e seis pilares fonte byte-idênticos. O teste diferencia essa fonte protegida da navegação atual projetada no artifact; não altera aprovação factual. Primeira dobra medida pelo coletor vigente em árvore limpa: 25 rotas aprovadas, zero falhas ou pendências e 1.942 verificações do contrato aprovadas, com regras e limites preservados. Nenhuma sessão com comprador real foi alegada.
+Produção: 17 jornadas, 68 combinações rota/viewport, 11 cenários e 599 checks aprovados. Identidade Git/artifact/build/runtime coincidente antes e depois. Zero requests de lead; 195 mutações e 26 leituras externas bloqueadas. O fixture foi ajustado para isolar o cache por estado de confirmação: oito falsos negativos HTTP 304 foram resolvidos, preservando a exigência 200 e os estados DOM. Nenhum código público mudou.
 
-Expectativas antigas de copy e design foram alinhadas ao posicionamento autorizado, mantendo controles de arquitetura, fonte, movimento, CTA e preços. `llms.txt` usa a mesma descrição curta da marca. Geometria mantém os onze caminhos existentes, inclusive coordenação e navegação sem JavaScript; a página pericial é avaliada pelos trabalhos de sua própria oferta. O fluxo demonstrativo da inicial foi encurtado por eliminar repetição, sem reduzir letras ou alterar serviços. Chrome e 92 testes direcionados passaram; a nova medição limpa manteve as 25 rotas aprovadas.
+A captura mantém `home`, `home-institutional`, `home-proposal-submit` e `CONFENGE_WEB`. Origem especializada segue em campos opcionais sanitizados; um canal de retorno basta. Perícia e SST mantêm sua necessidade. Dados pessoais não entram em URLs/eventos; documentos sigilosos seguem verificação de conflito, permissões e canal reservado.
 
-Revisão adversarial identificou e corrigiu perda de jornada no servidor e perda de proveniência entre página especializada, triagem e formulário. A captura mantém `home`/`home-institutional`/`home-proposal-submit`; origem especializada segue nos dois campos opcionais já existentes no contexto comercial. O encaminhamento normal reutiliza o texto contextual do contrato vigente, sem novas chaves externas ou qualificação automática.
+[Contato controlado 38092214199](https://github.com/tjsasakifln/web-cfg/actions/runs/38092214199): `TRANSPORT_READY`, 25 checks aprovados. Criação 201 e repetição idempotente 200; exatamente um registro sintético, excluído do comercial, e uma entrega downstream com recibo correspondente. Contexto preservado, nenhuma ação comercial e métricas inalteradas. E-mail QA encontrado no INBOX da operação às 22:40:05 UTC; assunto único e corpo com o SHA servido confirmados por busca restrita, preservando o estado não lido. Recebimento confirmado, sem alegar leitura humana ou conversão.
 
-A apresentação compartilhada da análise técnica aprovada recebeu somente os dois links de Condomínios e o texto institucional do rodapé. Comparação determinística com `cd7af8ae` confirmou `<main>` técnico byte-idêntico e os mesmos hashes material, conteúdo e fontes. A recaptura restrita registra os bytes de apresentação autorizados nesta missão, conforme o precedente vigente de `commercial_presentation_recaptures`, mantendo a aprovação material de 20/08. Não foi emitida aprovação humana nova, nem alterado o gate. A recuperação reverte apresentação e binding juntos ou retorna ao release anterior pela autoridade Netcup.
+## Publicação, visual e reversão
 
-Search Console: leitura pelo cliente existente em 10/10, período solicitado 10/09 a 07/10, última data observada 06/10. A API retornou 123 linhas de consulta e nenhuma linha com as quatro intenções condominiais pesquisadas. Isso não representa volume zero nem cobertura exaustiva. O contrato marcou `insufficient_distinct_runs` e comparação insuficiente; nenhuma alta de tráfego, posição ou conversão foi atribuída à implantação. A exportação privada incidental foi mantida fora do commit e o snapshot versionado anterior foi preservado.
+[Netcup release 38088768893](https://github.com/tjsasakifln/web-cfg/actions/runs/38088768893) aprovado: gates em main, bundle atestado, stage, qualificação `MEASURED_PASS`, promoção e runtime `PASS`. Os 551/551 HTMLs servidos correspondem ao artifact; zero erros. Build-info e runtime-info confirmam o SHA publicado. As cinco páginas verificadas retornaram HTTP 200, canônicos exatos, sem noindex, JSON-LD válido; a central está no sitemap. Autoridade Cloudflare + Netcup/nginx/Node confirmada.
 
-Geometria completa do pacote público recém-gerado: todos os checks passaram. Censo de desempenho atualizado pela ferramenta vigente para incluir a única nova rota: uma fonte de 41,25 KB e limites preservados; 23 testes passaram. A suíte de redesign confirmou, em 33 testes, os hashes das fontes protegidas e a navegação pública de seis itens, além dos serviços antes das competências na inicial. Lighthouse, acessibilidade e integração completos dependem dos checks protegidos ainda em execução.
+Navegador: 390x844 e 1440x1000, sem overflow nas páginas inspecionadas. Enter abre o menu de seis links; Escape fecha e retorna o foco. Perícia atravessa a triagem e chega selecionada ao formulário; envio vazio mostra erros sem persistir. Alternativas oficiais WhatsApp/e-mail/telefone verificadas. Projetos estruturais conferidos fora da vertical. Simulações técnicas, sem pesquisa com clientes reais.
 
-Correção editorial localizada após o CI: usos vagos de enquadrar/enquadramento nas três páginas foram substituídos por analisar a necessidade, definir o escopo e combinar o recebimento de documentos. O gate de linguagem passou com zero bloqueios; os testes de serviço passaram em 12 testes e 12 subtestes. Fonte e três HTMLs foram regenerados, sem exceção de vocabulário ou mudança de aprovação; novo pacote passou com 617 arquivos e zero ocorrências no audit.
+Capturas entregues junto a este registro: `confenge-{home,condominios,inspecao,pericia,contato-pericial,estruturas}-{390,1440}.jpg` e `confenge-menu-390.jpg`.
 
-A evidência de primeira dobra foi corrigida para finais de linha LF nos quatro SVGs dependentes, com regras restritas no Git: os bytes são idênticos aos objetos já versionados e nenhuma imagem mudou. A tentativa de Lighthouse no Windows não qualificou o candidato e foi preservada como diagnóstico incompleto; a matriz completa e o SHA exato serão comprovados pelo ambiente Linux oficial dos checks protegidos, sem mudar limites ou escolher amostras favoráveis.
+Rollback identificado antes da publicação: `cd7af8aeec8723be4115406a59777367c5737265`. Usar o controlador vigente com `--operation rollback --rollback-target cd7af8aeec8723be4115406a59777367c5737265`, conforme `deploy/netcup/README.md`, pela configuração autorizada. Dados persistentes ficam fora dos releases.
 
-CI oficial do candidato eeeff0cd450ba18ce10efce1a03423a1874e56f4: site-ci 38083368327 aprovado integralmente, incluindo contato, regressões estritas, navegador, primeira dobra do artifact, axe, Lighthouse e comprovação de execução. A matriz completa de 69 medições foi importada do artefato oficial, sem seleção de linhas; estado MEASURED_PASS, zero erros. Home 100/100/100, LCP 1.581/1.652/1.576 ms e TBT 10/28/12 ms; central 100 nas quatro categorias, LCP 1.651 ms e CLS zero. Contrato com dados brutos passou. Limites preservados, nova rota acrescentada ao censo CLS; a nova revisão de integração e a publicação exata em main continuam pendentes.
+Encerramento documental e fixture de QA no ramo `campaign/inbound-condominios-evidencias-20261010`; main permanece no release verificado. Implantação concluída. Resultados comerciais e orgânicos dependem de oportunidades reais e dados suficientes para comparação.
