@@ -28,3 +28,9 @@ styles-hubs.css text eol=lf
 styles-offers.css text eol=lf
 styles-tokens.css text eol=lf
 styles-tools.css text eol=lf
+
+# First-fold evidence binds these text assets byte-for-byte across hosts.
+assets/conteudos/como-contratar-projetos-complementares-mobile.svg text eol=lf
+assets/conteudos/como-contratar-projetos-complementares-wide.svg text eol=lf
+assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg text eol=lf
+assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg text eol=lf
