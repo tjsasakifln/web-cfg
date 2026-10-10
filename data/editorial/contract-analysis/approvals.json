@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
-      "rendered_content_hash_previous": "bb04e8ba7cdeb98f93ff97c0043175ad3180150f36ff536613f26c8747bec3ec",
+      "rendered_content_hash": "1de66302f9f6c6b16f36caf9908cb4d98e40e8b343f161ad3ed777e13a185e7e",
+      "rendered_content_hash_previous": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-05T03:02:59Z",
-      "rendered_hash_recapture_reason": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correção autorizada do espaçamento inferior do rodapé para impedir que o contato flutuante cubra links legais entre 621 e 1024 px, incluindo os links legais diretos do rodapé de runtime no mesmo contrato de fonte compacta, alvo de 44 px, glow discreto no hover/foco, anel de foco e movimento reduzido. A mudança é exclusivamente CSS de apresentação; conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, datas de consulta, canonical, robots, JSON-LD e CTAs permanecem. Esta recaptura determinística não alega nova aprovação técnica nem revisão humana independente.",
-      "rendered_hash_recapture_reason_previous": "CONFENGE-COMPARTILHAMENTO-E-IDENTIDADE-MOBILE-20261004: correção autorizada de preview social, uniformização do controle de menu móvel e adoção do rodapé público compartilhado. O compilador acrescenta metadados OG/Twitter no HEAD; o shell compartilhado acrescenta o rótulo visível Menu ao botão existente; geradores PP e legado passam a usar a mesma autoridade de marca, navegação e contato no rodapé, preservando as datas publicadas/atualizadas quando existentes. Conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, canonical, robots, JSON-LD e CTAs contextuais permanecem; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
+      "rendered_hash_recaptured_at": "2026-10-10T18:38:26.012300+00:00",
+      "rendered_hash_recapture_reason": "CONFENGE-INBOUND-CONDOMINIOS-20261010: recaptura determinística da apresentação compartilhada expressamente autorizada pelo fundador nesta missão. Mudanças limitadas ao link Condomínios nas duas navegações e à apresentação institucional do rodapé. Comparação com cd7af8ae confirmou main técnico byte-idêntico e hashes material, conteúdo e fonte preservados. Aprovação técnica humana de 2026-08-20 mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
+      "rendered_hash_recapture_reason_previous": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correção autorizada do espaçamento inferior do rodapé para impedir que o contato flutuante cubra links legais entre 621 e 1024 px, incluindo os links legais diretos do rodapé de runtime no mesmo contrato de fonte compacta, alvo de 44 px, glow discreto no hover/foco, anel de foco e movimento reduzido. A mudança é exclusivamente CSS de apresentação; conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, datas de consulta, canonical, robots, JSON-LD e CTAs permanecem. Esta recaptura determinística não alega nova aprovação técnica nem revisão humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -160,6 +160,36 @@
           "after_rendered_hash": "762597f03173fb5358783851f88ab2df074b31e14826141a4ec61d184ca18d46",
           "reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: projeção comercial estrita sobre snapshot factual imutável. Saudação institucional em um prefill; navegação/rodapé compartilhados atualizados e fingerprint CSS recalculado. Main técnico preservado byte a byte ao mascarar somente a saudação; fatos, cálculos, fontes, limites, título, datas, autoria, canonical, robots, JSON-LD e CTA contextual visível inalterados. Aprovação material humana de 2026-08-20 e snapshot histórico intactos. Revisão autônoma independente; nenhuma nova revisão humana alegada.",
           "new_human_review_claimed": false
+        },
+        {
+          "authorized_by": "docs/campaigns/2026-10-10-inbound-condominios.md",
+          "at": "2026-10-10T18:38:26.012300+00:00",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "1de66302f9f6c6b16f36caf9908cb4d98e40e8b343f161ad3ed777e13a185e7e",
+          "reason": "CONFENGE-INBOUND-CONDOMINIOS-20261010: recaptura determinística da apresentação compartilhada expressamente autorizada pelo fundador nesta missão. Mudanças limitadas ao link Condomínios nas duas navegações e à apresentação institucional do rodapé. Comparação com cd7af8ae confirmou main técnico byte-idêntico e hashes material, conteúdo e fonte preservados. Aprovação técnica humana de 2026-08-20 mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "desktop_navigation_condominios_link",
+            "mobile_navigation_condominios_link",
+            "institutional_footer_blurb"
+          ],
+          "rollback": "Reverter a apresentação de brand.json/public-ia-map.json e esta recaptura juntos, ou restaurar o release cd7af8ae pela autoridade Netcup vigente."
         }
       ]
     }
@@ -696,6 +726,16 @@
         "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
         "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
       }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "authorized_by": "docs/campaigns/2026-10-10-inbound-condominios.md",
+      "at": "2026-10-10T18:38:26.012300+00:00",
+      "previous_rendered_hash": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
+      "rendered_content_hash": "1de66302f9f6c6b16f36caf9908cb4d98e40e8b343f161ad3ed777e13a185e7e",
+      "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+      "new_human_review_claimed": false
     }
   ]
 }

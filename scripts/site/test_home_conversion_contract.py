@@ -118,7 +118,8 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert all(term in text for term in ("estruturas", "instalações", "infraestrutura"))
     assert re.search(r"elabora|projeta|coordena", text)
     assert re.search(r"obra|execução|empreendimento", text)
-    assert 'href="#contato"' in hero and 'href="/projetos/"' in hero
+    assert 'href="#contato"' in hero and 'href="/servicos/"' in hero
+    assert all(term in text for term in ("orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"))
     assert hero.count("button-primary") == 1
     assert DEMONSTRATIVE_LABEL.search(text) or "ilustração técnica original" in text
     assert "Como conferir credenciais e limites" not in hero and "PNCP" not in hero
@@ -139,9 +140,9 @@ def test_situation_chooser_has_one_path_per_contract_situation_without_catalog_w
         assert f'href="/projetos/{slug}/"' in disciplines
         assert (ROOT / "projetos" / slug / "index.html").is_file()
     services = _section(html, r'id="servicos-complementares"')
-    for slug in ("quantitativos-orcamento-obras", "revisao-tecnica-projetos-engenharia", "seguranca-trabalho-apoio-tecnico", "servicos-obras-publicas"):
-        assert f'href="/{slug}/"' in services
-        assert (ROOT / slug / "index.html").is_file()
+    for route in ("/projetos/", "/quantitativos-orcamento-obras/", "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/"):
+        assert f'href="{route}"' in services
+        assert (ROOT / route.strip("/") / "index.html").is_file()
     assert 'class="situation-row' not in html
     assert "passa a ter" not in _visible(disciplines + services).casefold()
 
@@ -312,7 +313,8 @@ def _services_article(row_id: str) -> str:
 
 def test_home_property_row_names_receiving_reform_and_as_built() -> None:
     home = _section(_home(), r'id="servicos-complementares"')
-    assert 'data-cta-id="home-service-inspection" data-cta-position="home_services" href="/servicos/#areas"' in home
+    assert 'data-cta-id="home-service-inspection" data-cta-position="home_services" href="/inspecao-diagnostico-edificacoes/"' in home
+    assert re.search(r"recebimento|reforma|documentação do construído", _visible(home), re.I)
     services = SERVICES.read_text(encoding="utf-8")
     assert 'href="/inspecao-diagnostico-edificacoes/"' in services
     assert 'href="/assistencia-tecnica-pericial-engenharia/"' in services

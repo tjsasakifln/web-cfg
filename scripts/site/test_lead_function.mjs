@@ -286,6 +286,98 @@ _reset();
   }
 }
 
+// The home exposes a finite need vocabulary. Every declared need must survive
+// the real capture/store path and reach the existing inbound-v1 journey field;
+// accepting the value is classification only, never commercial qualification.
+{
+  const { mapLeadToInboundV1 } = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const needs = [
+    ["projeto", "projeto, revisão ou compatibilização"],
+    ["orcamento", "quantitativos ou orçamento"],
+    ["obra", "obra ou imóvel para inspecionar ou documentar"],
+    ["pericia", "perícia, assistência técnica ou avaliação"],
+    ["avaliacao", "avaliação de imóvel"],
+    ["sst", "segurança do trabalho"],
+    ["orgao", "planejamento de órgão público"],
+    ["contrato", "contrato em execução"],
+    ["edital", "edital ou proposta em análise"],
+    ["operacao", "estruturando a operação no mercado público"],
+    ["outro", "outro"],
+  ];
+  const sourceOriginByJourney = {
+    obra: {
+      asset: "building_inspection_diagnosis_route_v1",
+      family: "inspecao-diagnostico-edificacoes",
+    },
+    pericia: {
+      asset: "civil_building_technical_assistance_route_v1",
+      family: "assistencia-tecnica-pericial-engenharia",
+    },
+  };
+  for (let i = 0; i < needs.length; i += 1) {
+    const [journey, stage] = needs[i];
+    const sourceOrigin = sourceOriginByJourney[journey] || null;
+    const res = await handler(event({
+      nome: `Visitante Jornada ${i + 1}`,
+      email: `jornada-${i + 1}@construtora-matriz.com.br`,
+      estagio: stage,
+      jornada: journey,
+      consentimento: "1",
+      origem: "/",
+      route_family: "home",
+      asset_id: "home-institutional",
+      cta_id: "home-proposal-submit",
+      source_origin_asset_id: sourceOrigin?.asset || "",
+      source_origin_route_family: sourceOrigin?.family || "",
+    }, "POST", { ip: `198.51.100.${100 + i}` }));
+    const body = JSON.parse(res.body);
+    const stored = body.lead_id ? await mem.get(body.lead_id) : null;
+    if (res.statusCode !== 201 || !stored || stored.jornada !== journey) {
+      fail("home_need_journey_persisted", { journey, stage, status: res.statusCode, body, stored });
+    }
+    if (stored.offer_id || stored.deliverable_id || stored.auto_send === true || stored.outbound_eligible === true) {
+      fail("home_need_does_not_autoqualify", { journey, stored });
+    }
+    const handed = mapLeadToInboundV1(stored);
+    if (
+      handed.journey !== journey
+      || handed.route_family !== "home"
+      || handed.asset_id !== "home-institutional"
+      || handed.cta_id !== "home-proposal-submit"
+      || !handed.message?.includes(`situação=${journey}`)
+    ) {
+      fail("home_need_journey_handoff", { journey, handed });
+    }
+    if (sourceOrigin && (
+      stored.source_origin_asset_id !== sourceOrigin.asset
+      || stored.source_origin_route_family !== sourceOrigin.family
+      || !handed.message.includes(`ativo de origem=${sourceOrigin.asset}`)
+      || !handed.message.includes(`família de rota de origem=${sourceOrigin.family}`)
+      || Object.prototype.hasOwnProperty.call(handed, "source_origin_asset_id")
+      || Object.prototype.hasOwnProperty.call(handed, "source_origin_route_family")
+    )) {
+      fail("cross_route_origin_persisted_and_handed_off", { journey, stored, handed });
+    }
+    if (!sourceOrigin && (stored.source_origin_asset_id || stored.source_origin_route_family)) {
+      fail("cross_route_origin_absence_preserved", { journey, stored });
+    }
+  }
+
+  const unknown = await handler(event({
+    nome: "Visitante Jornada Desconhecida",
+    email: "jornada-desconhecida@construtora-matriz.com.br",
+    estagio: "necessidade ainda sem classificação",
+    jornada: "UNKNOWN",
+    consentimento: "1",
+  }, "POST", { ip: "198.51.100.199" }));
+  const unknownBody = JSON.parse(unknown.body);
+  const unknownStored = unknownBody.lead_id ? await mem.get(unknownBody.lead_id) : null;
+  if (unknown.statusCode !== 201 || unknownStored?.jornada !== "outro") {
+    fail("unknown_journey_falls_back_to_outro", { status: unknown.statusCode, body: unknownBody, stored: unknownStored });
+  }
+  pass("home_need_journeys_persist_and_handoff", { journeys: needs.map(([journey]) => journey) });
+}
+
 // 5b) Five unpriced service pillars persist distinct attribution without data-* PII.
 {
   const pillars = [
@@ -1289,6 +1381,8 @@ _reset();
         route_family: "48999999999",
         asset_id: "diagnostico-defesa-margem",
         cta_id: "segunda-leitura-contrato",
+        source_origin_asset_id: marker,
+        source_origin_route_family: "48999999999",
       }),
     );
     const data = JSON.parse(res.body);
@@ -1301,12 +1395,26 @@ _reset();
       fail("attribution_landing_query", stored.landing_page);
     }
     if (stored.referrer !== "https://search.example/result") fail("attribution_referrer_query", stored.referrer);
-    if (stored.utm_source || stored.utm_campaign || stored.route_family) {
+    if (
+      stored.utm_source
+      || stored.utm_campaign
+      || stored.route_family
+      || stored.source_origin_asset_id
+      || stored.source_origin_route_family
+    ) {
       fail("attribution_pii_dimensions", {
         utm_source: stored.utm_source,
         utm_campaign: stored.utm_campaign,
         route_family: stored.route_family,
+        source_origin_asset_id: stored.source_origin_asset_id,
+        source_origin_route_family: stored.source_origin_route_family,
       });
+    }
+    const piiHandoff = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"))
+      .mapLeadToInboundV1(stored);
+    const handoffBlob = JSON.stringify(piiHandoff);
+    if (handoffBlob.includes(marker) || handoffBlob.includes("48999999999") || handoffBlob.includes("Maria Silva")) {
+      fail("attribution_pii_handoff", piiHandoff);
     }
     const publicAndLogs = `${res.body}\n${capturedLogs.join("\n")}`;
     if (publicAndLogs.includes(marker) || publicAndLogs.includes("48999999999") || publicAndLogs.includes("Maria Silva")) {

@@ -205,8 +205,9 @@ function loadShippedScript({
   referrer = "",
   bodyAttrs = {},
   pseoEvents = [],
+  hiddenValues = {},
 }) {
-  const hidden = {};
+  const hidden = Object.fromEntries(Object.entries(hiddenValues).map(([name, value]) => [name, { name, value, type: 'hidden' }]));
   const formAttrs = {};
   const form = withForm
     ? {
@@ -302,6 +303,7 @@ const second = loadShippedScript({
   hash: "#contato",
   dataset: {},
   withForm: true,
+  hiddenValues: { route_family: 'home', asset_id: 'home-institutional', cta_id: 'home-proposal-submit' },
 });
 const afterHome = JSON.parse(hopStore.confenge_pseo_attribution || "{}");
 if (afterHome.route_family !== "reequilibrio") fail("hop2_route_family_wiped", afterHome);
@@ -311,7 +313,7 @@ if (afterHome.landing_url !== "/reequilibrio-obras-publicas/") fail("hop2_landin
 if (afterHome.correlation_id !== GENERATED_UUID) fail("hop2_correlation_id", afterHome);
 if (afterHome.landing_url === "/") fail("hop2_landing_became_home", afterHome);
 const hid = second.hidden;
-if (!hid.route_family || hid.route_family.value !== "reequilibrio") {
+if (!hid.route_family || hid.route_family.value !== "home") {
   fail("hop2_form_route_family", hid.route_family);
 }
 if (!hid.landing_url || hid.landing_url.value !== "/reequilibrio-obras-publicas/") {
@@ -320,11 +322,15 @@ if (!hid.landing_url || hid.landing_url.value !== "/reequilibrio-obras-publicas/
 if (!hid.correlation_id || hid.correlation_id.value !== GENERATED_UUID) {
   fail("hop2_form_correlation_id", hid.correlation_id);
 }
-if (!hid.asset_id || hid.asset_id.value !== "reequilibrio-obras-publicas") {
+if (!hid.asset_id || hid.asset_id.value !== "home-institutional") {
   fail("hop2_form_asset_id", hid.asset_id);
 }
-if (!hid.cta_id || hid.cta_id.value !== "pillar_hero") {
+if (!hid.cta_id || hid.cta_id.value !== "home-proposal-submit") {
   fail("hop2_form_cta_id", hid.cta_id);
+}
+if (hid.source_origin_route_family?.value !== 'reequilibrio'
+    || hid.source_origin_asset_id?.value !== 'reequilibrio-obras-publicas') {
+  fail('hop2_form_separates_capture_from_source', hid);
 }
 const visitSessionId = first.sandbox.window.confengeSessionId();
 if (!/^sess-[0-9a-f]{27}$/.test(visitSessionId)) {
@@ -737,5 +743,49 @@ const hiddenAsFormData = (hidden) => Object.fromEntries(
   }
   pass("pos_inb_01_absent_context_not_invented");
 }
+
+// Exercise the actual home placeholders and the rendered calm-contact links.
+// Capture identity and service provenance have different downstream meanings.
+const actualHomeHidden = {};
+const actualHome = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+for (const name of ['origem', 'route_family', 'asset_id', 'cta_id']) {
+  const tag = [...actualHome.matchAll(/<input\b[^>]*>/g)]
+    .map(m => m[0]).find(tag => tag.includes(`name="${name}"`));
+  actualHomeHidden[name] = tag?.match(/\bvalue="([^"]*)"/)?.[1] || '';
+}
+for (const [route, journey, stage] of [
+  ['inspecao-diagnostico-edificacoes', 'obra', 'obra ou imóvel para inspecionar ou documentar'],
+  ['assistencia-tecnica-pericial-engenharia', 'pericia', 'perícia, assistência técnica ou avaliação'],
+]) {
+  const values = {};
+  const session = { getItem: k => values[k] || null, setItem: (k,v) => { values[k] = String(v); }, removeItem: k => { delete values[k]; } };
+  loadShippedScript({ pathname: '/engenharia-condominios/', withForm: false, session });
+  const specialist = loadShippedScript({ pathname: `/${route}/`, withForm: false, session, referrer: 'https://confenge.com.br/engenharia-condominios/' });
+  const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
+  const calm = [...html.matchAll(/<a\b[^>]*>/g)].map(m => m[0]).find(tag => tag.includes(`data-cta-id="${route}-contact-calm"`));
+  if (!calm) fail('condominium_rendered_calm_link_missing', route);
+  const attrs = Object.fromEntries([...calm.matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
+  const dataset = Object.fromEntries(Object.entries(attrs).filter(([k]) => k.startsWith('data-')).map(([k,v]) => [k.slice(5).replace(/-([a-z])/g, (_,c) => c.toUpperCase()), v]));
+  if (!dataset.assetId || !dataset.routeFamily || dataset.journey !== journey) fail('condominium_calm_context_incomplete', attrs);
+  const anchor = { dataset, getAttribute: k => attrs[k] || null, closest: s => String(s).includes('a[href]') ? anchor : null };
+  specialist.docListeners.filter(l => l.type === 'click' && l.opts === true).forEach(l => l.fn({ target: anchor }));
+  loadShippedScript({ pathname: '/triagem-tecnica/', withForm: false, session, referrer: `https://confenge.com.br/${route}/` });
+  const home = loadShippedScript({ pathname: '/', hash: '#contato', withForm: true, session, hiddenValues: actualHomeHidden, referrer: 'https://confenge.com.br/triagem-tecnica/' });
+  const posted = { ...HOME_LEAD_BASE, ...hiddenAsFormData(home.hidden), estagio: stage };
+  for (const name of ['route_family', 'asset_id', 'cta_id']) {
+    if (posted[name] !== actualHomeHidden[name]) fail('condominium_capture_identity_changed', { name, posted: posted[name] });
+  }
+  if (posted.source_origin_route_family !== route || posted.source_origin_asset_id !== dataset.assetId) fail('condominium_service_origin_lost', posted);
+  if (posted.origem !== '/engenharia-condominios/' || posted.landing_url !== '/engenharia-condominios/') fail('condominium_first_touch_lost', posted);
+  if (posted.jornada !== journey || posted.tema !== route) fail('condominium_need_lost', posted);
+  const normalized = core.validateAndNormalize(posted);
+  if (!normalized.ok || normalized.lead.jornada !== journey || normalized.lead.source_origin_route_family !== route || normalized.lead.source_origin_asset_id !== dataset.assetId) fail('condominium_normalized_context_lost', normalized);
+  pass('condominium_four_hops_keep_capture_source_and_need', { route, journey });
+}
+const freshValues = {};
+const freshSession = { getItem: k => freshValues[k] || null, setItem: (k,v) => { freshValues[k] = String(v); }, removeItem: k => { delete freshValues[k]; } };
+const directHome = loadShippedScript({ pathname: '/', withForm: true, session: freshSession, hiddenValues: actualHomeHidden });
+if (directHome.hidden.source_origin_route_family || directHome.hidden.source_origin_asset_id) fail('direct_home_invented_service_origin', directHome.hidden);
+pass('direct_home_does_not_invent_service_origin');
 
 console.log("OK attribution-allowlist");

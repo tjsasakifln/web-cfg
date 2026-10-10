@@ -223,6 +223,85 @@ const inbound = loadInbound();
   pass("mapper_absent_stays_absent");
 }
 
+// Normal home capture keeps its own identity while two cross-route service
+// journeys retain their categorical origin inside the existing message
+// context. The frozen inbound-v1 body gets no invented provenance keys.
+{
+  const cases = [
+    {
+      journey: "obra",
+      stage: "obra ou imóvel para inspecionar ou documentar",
+      sourceAsset: "building_inspection_diagnosis_route_v1",
+      sourceFamily: "inspecao-diagnostico-edificacoes",
+    },
+    {
+      journey: "pericia",
+      stage: "perícia, assistência técnica ou avaliação",
+      sourceAsset: "civil_building_technical_assistance_route_v1",
+      sourceFamily: "assistencia-tecnica-pericial-engenharia",
+    },
+  ];
+  for (const item of cases) {
+    const mapped = inbound.mapLeadToInboundV1({
+      lead_id: `normal-cross-route-${item.journey}`,
+      jornada: item.journey,
+      estagio: item.stage,
+      route_family: "home",
+      asset_id: "home-institutional",
+      cta_id: "home-proposal-submit",
+      source_origin_asset_id: item.sourceAsset,
+      source_origin_route_family: item.sourceFamily,
+      consentimento: true,
+    });
+    if (
+      mapped.journey !== item.journey
+      || mapped.route_family !== "home"
+      || mapped.asset_id !== "home-institutional"
+      || mapped.cta_id !== "home-proposal-submit"
+      || !mapped.message?.includes(`ativo de origem=${item.sourceAsset}`)
+      || !mapped.message?.includes(`família de rota de origem=${item.sourceFamily}`)
+      || Object.prototype.hasOwnProperty.call(mapped, "source_origin_asset_id")
+      || Object.prototype.hasOwnProperty.call(mapped, "source_origin_route_family")
+      || mapped.offer_id
+      || mapped.deliverable_id
+    ) {
+      fail("normal_cross_route_origin_context", { item, mapped });
+    }
+  }
+  pass("normal_cross_route_origin_context", { cases: cases.map(({ journey }) => journey) });
+}
+
+// Cross-route origin is an existing optional web context in the adaptive
+// handoff. The normal capture now persists the same sanitized source fields;
+// this pins the already-versioned downstream names without expanding
+// confenge.inbound.v1 for ordinary forms.
+{
+  const base = {
+    adaptive_intake: true,
+    lead_id: "crossroute000000000000001",
+    admission_policy_version: "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
+    admission_policy_id: "NET_NEW_INBOUND_HANDRAISER",
+    admission_policy_hash: "a".repeat(64),
+    source_asset_id: "technical_triage_v1",
+  };
+  const mapped = inbound.mapAdaptiveLeadToNetNewInbound({
+    ...base,
+    source_origin_asset_id: "engenharia-condominios-institutional",
+    source_origin_route_family: "engenharia-condominios",
+  });
+  if (
+    mapped.attribution?.source_origin_asset !== "engenharia-condominios-institutional"
+    || mapped.attribution?.source_origin_family !== "engenharia-condominios"
+  ) {
+    fail("adaptive_cross_route_origin_handoff", mapped);
+  }
+  const absent = inbound.mapAdaptiveLeadToNetNewInbound(base);
+  if (absent.attribution?.source_origin_asset || absent.attribution?.source_origin_family) {
+    fail("adaptive_cross_route_origin_absence", absent.attribution);
+  }
+  pass("adaptive_cross_route_origin_handoff");
+}
+
 {
   const signed = inbound.signWarmblyInbound(SECRET, '{"lead_id":"x"}', 1_700_000_000);
   const check = independentVerify(SECRET, signed, '{"lead_id":"x"}', 1_700_000_000 * 1000);

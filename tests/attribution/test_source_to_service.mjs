@@ -247,6 +247,26 @@ async function postCollect(events) {
 // --- Named HTML journeys ---
 const journeys = [
   {
+    name: "condominio_inspecao",
+    html: "engenharia-condominios/index.html",
+    pathname: "/engenharia-condominios/",
+    pick: (a) => a.href === "/inspecao-diagnostico-edificacoes/#fissuras-infiltracoes",
+    expectDest: "/inspecao-diagnostico-edificacoes/",
+    expectService: "inspecao-diagnostico-edificacoes",
+    expectAsset: "engenharia-condominios",
+    expectFamily: "hub",
+  },
+  {
+    name: "condominio_assistencia_pericial",
+    html: "engenharia-condominios/index.html",
+    pathname: "/engenharia-condominios/",
+    pick: (a) => a.href === "/assistencia-tecnica-pericial-engenharia/",
+    expectDest: "/assistencia-tecnica-pericial-engenharia/",
+    expectService: "assistencia-tecnica-pericial-engenharia",
+    expectAsset: "engenharia-condominios",
+    expectFamily: "hub",
+  },
+  {
     name: "sinapi_auditoria",
     html: "conteudos/sinapi-desonerado-nao-desonerado/index.html",
     pathname: "/conteudos/sinapi-desonerado-nao-desonerado/",

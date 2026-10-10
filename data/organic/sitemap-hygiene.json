@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 113,
-  "unique_paths": 113,
+  "url_count": 114,
+  "unique_paths": 114,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -70,6 +70,7 @@
     "https://confenge.com.br/edificacoes/",
     "https://confenge.com.br/elaboracao-pgr/",
     "https://confenge.com.br/empresa/",
+    "https://confenge.com.br/engenharia-condominios/",
     "https://confenge.com.br/entregas/",
     "https://confenge.com.br/especialista/tiago-jun-sasaki/",
     "https://confenge.com.br/ferramentas/",
@@ -119,7 +120,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
-    "core": 107,
+    "core": 108,
     "contract_analysis": 2,
     "editorial": 4
   },

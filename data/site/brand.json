@@ -7,12 +7,12 @@
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
-    "short": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
-    "long": "A CONFENGE desenvolve e coordena projetos de estruturas, instalações e infraestrutura, além de revisão, compatibilização, quantitativos, orçamento e análises técnicas. Organiza as disciplinas e os profissionais habilitados para o empreendimento, construindo a proposta a partir do objetivo e das informações disponíveis.",
-    "tagline": "Projetos multidisciplinares e serviços de engenharia para empreendimentos públicos e privados.",
+    "short": "Engenharia, perícias e inteligência técnica para decisões que chegam à obra.",
+    "long": "A CONFENGE atua em projetos, orçamento, inspeção, perícia, avaliação, segurança do trabalho e obras públicas. Organiza o trabalho técnico e os profissionais habilitados conforme a necessidade, o objetivo e as informações disponíveis.",
+    "tagline": "Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
     "org_description": "Engenharia, perícias e inteligência técnica: projetos de estruturas, instalações e infraestrutura, coordenação multidisciplinar, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho para clientes privados e públicos. Obras públicas permanecem uma frente especializada.",
-    "footer_blurb": "Projetos e serviços de engenharia para empreendimentos privados e públicos."
+    "footer_blurb": "Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -24,18 +24,18 @@
     "site": "https://confenge.com.br"
   },
   "hero": {
-    "eyebrow": "Projetos de engenharia para edificações, infraestrutura e indústria",
-    "h1": "Engenharia de projeto para decisões que precisam chegar à obra.",
-    "h1_html": "Engenharia de projeto para decisões que precisam <span>chegar à obra.</span>",
-    "subheadline": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Reunimos as disciplinas necessárias para transformar premissas, interfaces e requisitos de execução em uma entrega técnica integrada.",
+    "eyebrow": "Engenharia, perícias e inteligência técnica para edificações, infraestrutura e indústria",
+    "h1": "Decisões técnicas que precisam chegar à obra.",
+    "h1_html": "Decisões técnicas que precisam <span>chegar à obra.</span>",
+    "subheadline": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura, e atua com orçamento, inspeção, perícia, avaliação, SST e obras públicas. Reunimos as disciplinas, as interfaces, as evidências e os requisitos de execução para uma entrega técnica integrada.",
     "cta_primary": "Solicitar proposta",
-    "cta_secondary": "Conhecer os projetos",
+    "cta_secondary": "Encontrar a frente técnica",
     "cta_secondary_wa": "Olá, CONFENGE. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
-    "microcopy": "Estruturas · Instalações · Infraestrutura · Coordenação multidisciplinar",
-    "meta_title": "CONFENGE | Projetos de estruturas, instalações e infraestrutura",
-    "meta_description": "Projetos de estruturas, instalações e infraestrutura para edificações e indústria, com coordenação multidisciplinar. Converse sobre o empreendimento e solicite proposta.",
-    "og_title": "Projetamos estruturas, instalações e infraestrutura de forma coordenada.",
-    "og_description": "A CONFENGE elabora projetos e coordena as disciplinas do empreendimento, da concepção à documentação para execução. Solicite proposta com o contexto disponível."
+    "microcopy": "Projetos · Orçamento · Inspeção e perícia · Avaliação e SST · Obras públicas",
+    "meta_title": "CONFENGE | Engenharia, perícias e inteligência técnica",
+    "meta_description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas para decisões técnicas em empreendimentos privados e públicos.",
+    "og_title": "Engenharia, perícias e inteligência técnica para decisões que chegam à obra.",
+    "og_description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas com escopo técnico definido para cada necessidade."
   },
   "journeys": [
     {
@@ -154,6 +154,10 @@
       {
         "label": "Serviços",
         "href": "/servicos/"
+      },
+      {
+        "label": "Condomínios",
+        "href": "/engenharia-condominios/"
       },
       {
         "label": "Obras públicas",

@@ -289,6 +289,11 @@
         "reason": "indexable editorial representative of complementary-discipline hiring"
       },
       {
+        "family_id": "engenharia-condominios",
+        "route": "/engenharia-condominios/",
+        "reason": "single-route editorial entry for condominium engineering situations and contextual contact"
+      },
+      {
         "family_id": "inspecao-diagnostico-edificacoes",
         "route": "/inspecao-diagnostico-edificacoes/",
         "reason": "single-route building inspection and diagnosis landing"
