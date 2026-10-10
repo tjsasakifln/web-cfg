@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
-    "asset_files_max_route": 20,
-    "asset_raw_kb_max_route": 1086.64,
+    "asset_files_max_route": 25,
+    "asset_raw_kb_max_route": 1107.86,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 248
+    "routes_measured": 249
   },
   "budget": {
     "cls_max": 0.05,
@@ -180,6 +180,10 @@
       },
       {
         "cls": 0.0,
+        "route": "/projetos/"
+      },
+      {
+        "cls": 0.0,
         "route": "/quantitativos-orcamento-obras/"
       },
       {
@@ -219,7 +223,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 50
+    "routes_measured": 51
   },
   "fonts": {
     "font_files_total": 1,
@@ -400,6 +404,7 @@
       "/edificacoes/",
       "/elaboracao-pgr/",
       "/empresa/",
+      "/engenharia-condominios/",
       "/entregas/",
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
@@ -649,6 +654,7 @@
       "/edificacoes/",
       "/elaboracao-pgr/",
       "/empresa/",
+      "/engenharia-condominios/",
       "/entregas/",
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
