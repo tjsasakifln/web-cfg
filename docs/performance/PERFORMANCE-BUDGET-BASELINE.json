@@ -1,7 +1,7 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1107.86,
+    "asset_raw_kb_max_route": 1107.68,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
     "routes_measured": 249
   },
@@ -101,6 +101,10 @@
       {
         "cls": 0.0,
         "route": "/elaboracao-pgr/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/engenharia-condominios/"
       },
       {
         "cls": 0.0,
@@ -223,7 +227,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 51
+    "routes_measured": 52
   },
   "fonts": {
     "font_files_total": 1,
