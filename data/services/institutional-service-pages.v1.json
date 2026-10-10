@@ -569,7 +569,7 @@
       "situations_intro": {
         "kicker": "Situações atendidas",
         "title": "O ponto de partida muda conforme a decisão sobre a edificação.",
-        "intro": "A primeira conversa enquadra o problema, o que já foi observado e a finalidade da análise. Fotografias ajudam a localizar a manifestação, mas a causa e a solução dependem da investigação adequada."
+        "intro": "A primeira conversa analisa o problema, o que já foi observado e a finalidade da análise. Fotografias ajudam a localizar a manifestação, mas a causa e a solução dependem da investigação adequada."
       },
       "situations": [
         {
@@ -710,7 +710,7 @@
         "items": [
           [
             "Quais documentos ajudam no primeiro contato?",
-            "Plantas, memoriais, registros de manutenção, histórico da manifestação e fotografias gerais ajudam a enquadrar o trabalho. A ausência de algum documento não impede a conversa inicial."
+            "Plantas, memoriais, registros de manutenção, histórico da manifestação e fotografias gerais ajudam a definir o escopo do trabalho. A ausência de algum documento não impede a conversa inicial."
           ],
           [
             "A visita é sempre necessária?",
@@ -736,7 +736,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de inspeção e diagnóstico.",
-        "intro": "Informe a edificação, o município, o que foi observado, a etapa de manutenção, reforma ou recebimento e a decisão que o trabalho deve apoiar. Fotos gerais ou referências não sigilosas podem ajudar a definir o escopo inicial. A CONFENGE retorna com o enquadramento necessário para preparar a proposta.",
+        "intro": "Informe a edificação, o município, o que foi observado, a etapa de manutenção, reforma ou recebimento e a decisão que o trabalho deve apoiar. Fotos gerais ou referências não sigilosas podem ajudar a definir o escopo inicial. A CONFENGE retorna com perguntas para definir o escopo da proposta.",
         "prep": [
           [
             "Situação",
@@ -865,7 +865,7 @@
         "items": [
           [
             "Objeto e conflito",
-            "Objeto da edificação ou obra, partes envolvidas, ponto controvertido e finalidade da atuação técnica orientam o enquadramento e a verificação de conflito."
+            "Objeto da edificação ou obra, partes envolvidas, ponto controvertido e finalidade da atuação técnica orientam a definição do escopo e a verificação de conflito."
           ],
           [
             "Base e campo",
@@ -894,7 +894,7 @@
       "faq": {
         "kicker": "Dúvidas de contratação",
         "title": "O que esclarecer antes de contratar a assistência técnica.",
-        "intro": "O primeiro contato pode ser breve. Documentos sensíveis entram somente depois do enquadramento do caso, da verificação de conflito e da definição do canal adequado.",
+        "intro": "O primeiro contato pode ser breve. Documentos sensíveis entram somente depois de definir o escopo do caso, verificar conflito e combinar o canal adequado.",
         "items": [
           [
             "Quem pode procurar a assistência técnica?",
@@ -924,7 +924,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta de assistência técnica.",
-        "intro": "Informe o objeto da controvérsia, a etapa da negociação ou do processo, o próximo marco conhecido e se já há advogado. A CONFENGE faz o enquadramento inicial e indica o que precisa ser definido para a proposta.",
+        "intro": "Informe o objeto da controvérsia, a etapa da negociação ou do processo, o próximo marco conhecido e se já há advogado. A CONFENGE analisa a necessidade inicial e indica o que precisa ser definido para a proposta.",
         "prep": [
           [
             "Objeto",
@@ -958,7 +958,7 @@
       "hero": {
         "eyebrow": "Engenharia para a decisão do condomínio",
         "title": "Do problema observado à proposta técnica adequada.",
-        "lead": "A CONFENGE ajuda síndicos, conselhos, administradoras e demais responsáveis a enquadrar a necessidade do condomínio antes de contratar inspeção, assistência pericial, documentação, projeto ou orçamento.",
+        "lead": "A CONFENGE ajuda síndicos, conselhos, administradoras e demais responsáveis a analisar a necessidade do condomínio antes de contratar inspeção, assistência pericial, documentação, projeto ou orçamento.",
         "value": "Você começa pela situação. A proposta define as atividades que precisam caminhar juntas, as entregas, os responsáveis, a necessidade de visita, o prazo e os honorários, preservando o contexto já informado.",
         "cta": "Solicitar proposta para o condomínio",
         "signal_title": "Uma entrada, três decisões",
@@ -1013,7 +1013,7 @@
             "Situação observada, município, etapa do condomínio, decisão esperada e pessoas que participam do processo."
           ],
           [
-            "Enquadramento técnico",
+            "Definição técnica",
             "Definição das perguntas, documentos, áreas, acessos, visita, exames e disciplinas que o caso exige."
           ],
           [
@@ -1075,7 +1075,7 @@
         "items": [
           [
             "Quais documentos enviar no primeiro contato?",
-            "Informe a situação, o município e a decisão que precisa ser tomada. Uma lista de plantas, memoriais, atas, registros de manutenção, fotografias ou laudos disponíveis ajuda; documentos sensíveis ficam para o canal adequado depois do enquadramento."
+            "Informe a situação, o município e a decisão que precisa ser tomada. Uma lista de plantas, memoriais, atas, registros de manutenção, fotografias ou laudos disponíveis ajuda; documentos sensíveis ficam para o canal adequado depois de combinarmos esse recebimento."
           ],
           [
             "A visita técnica é obrigatória?",
@@ -1101,7 +1101,7 @@
       },
       "contact": {
         "title": "Solicite uma proposta para o condomínio.",
-        "intro": "Conte a situação, o município, a etapa de recebimento, reforma, manutenção ou disputa e a decisão que precisa ser tomada. A CONFENGE retorna com o enquadramento necessário para preparar a proposta.",
+        "intro": "Conte a situação, o município, a etapa de recebimento, reforma, manutenção ou disputa e a decisão que precisa ser tomada. A CONFENGE retorna com perguntas para definir o escopo da proposta.",
         "whatsapp_message": "Olá, CONFENGE. Preciso de uma proposta de engenharia para um condomínio.",
         "email_subject": "Engenharia para condomínio",
         "prep": [
