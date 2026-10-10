@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-10-02",
+  "as_of": "2026-10-10",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -1195,6 +1195,33 @@
         ],
         "declared_at": "2026-09-11",
         "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "engenharia-condominios",
+      "visitor_job": "Reconhecer a situação técnica do condomínio, entender como inspeção, assistência em disputa ou documentação de recebimento e reforma se combinam na proposta e solicitar contato contextualizado.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/engenharia-condominios/"]},
+      "editorial_entry": true,
+      "intent_families": ["inspecionar_diagnosticar", "produzir_prova_tecnica", "receber_entregar_reformar"],
+      "canonical_service_families": ["building_condition_documentation", "technical_evidence_disputes"],
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Solicitar proposta para o condomínio",
+        "href": "#contato-condominios"
+      },
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-10-10",
+      "owner_issue": 577,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": ["official_live", "citable_source"],
+        "reason": "Entrada editorial de primeira parte que organiza situações existentes de contratação da CONFENGE. Não cria núcleo, oferta, nova competência ou registro externo.",
+        "authority": ["docs/campaigns/2026-10-10-inbound-condominios.md", "data/corporate/intent-family-matrix.v1.json"],
+        "declared_at": "2026-10-10",
+        "owner_issue": 577
       }
     },
     {

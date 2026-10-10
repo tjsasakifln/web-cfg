@@ -535,11 +535,16 @@
       "route": "inspecao-diagnostico-edificacoes",
       "journey": "obra",
       "contact_id": "contato-inspecao",
+      "description": "Inspeção e diagnóstico de edificações para fissuras, infiltrações, recebimento, reforma, manutenção e documentação do construído (as-built), com proposta definida para a decisão.",
+      "sharing": {
+        "title": "Inspeção e diagnóstico de edificações | CONFENGE",
+        "description": "Entenda quando contratar inspeção, investigação de causas ou projeto de intervenção e quais informações ajudam a compor a proposta."
+      },
       "hero": {
         "eyebrow": "Condição registrada, causa investigada, providência orientada",
         "title": "Inspeção e diagnóstico de edificações",
         "lead": "A CONFENGE examina manifestações, sistemas e documentos da edificação para registrar a condição observada, investigar causas compatíveis com as evidências e orientar a decisão seguinte.",
-        "value": "O trabalho pode apoiar recebimento, manutenção, reforma, reparo, documentação do construído ou uma discussão técnica. A proposta define objeto, visita, acessos, ensaios e produto final.",
+        "value": "O trabalho atende condomínios, proprietários, empresas, construtoras e equipes técnicas em recebimento, manutenção, reforma, reparo, documentação do construído ou discussão técnica. A proposta combina as etapas necessárias e define objeto, visita, acessos, exames e produto final.",
         "cta": "Solicitar proposta de inspeção e diagnóstico",
         "signal_title": "Da observação ao encaminhamento",
         "signals": [
@@ -561,6 +566,41 @@
           ]
         ]
       },
+      "situations_intro": {
+        "kicker": "Situações atendidas",
+        "title": "O ponto de partida muda conforme a decisão sobre a edificação.",
+        "intro": "A primeira conversa analisa o problema, o que já foi observado e a finalidade da análise. Fotografias ajudam a localizar a manifestação, mas a causa e a solução dependem da investigação adequada."
+      },
+      "situations": [
+        {
+          "id": "fissuras-infiltracoes",
+          "title": "Fissuras, infiltrações e outros sinais",
+          "text": "Localização, histórico, sistemas envolvidos e condições de acesso orientam a inspeção. A investigação separa constatações, hipóteses e exames ainda necessários antes de recomendar a intervenção.",
+          "message": "Olá, CONFENGE. Preciso avaliar fissuras, infiltrações ou outro problema em uma edificação.",
+          "cta": "Conversar sobre o problema observado"
+        },
+        {
+          "id": "recebimento-entrega",
+          "title": "Recebimento e entrega",
+          "text": "O escopo registra a condição, confronta documentos pertinentes e organiza itens para aceite, correção ou ressalva. A proposta define áreas, acessos, critérios e formato da entrega.",
+          "message": "Olá, CONFENGE. Preciso de uma inspeção para recebimento ou entrega de uma edificação.",
+          "cta": "Conversar sobre recebimento ou entrega"
+        },
+        {
+          "id": "reforma-condominio",
+          "title": "Reforma em condomínio e manutenção",
+          "text": "A análise pode reunir condição existente, interferências, prioridades e documentação técnica para que síndico, conselho, administradora e responsáveis decidam a intervenção com o mesmo recorte.",
+          "message": "Olá, CONFENGE. Preciso avaliar tecnicamente uma reforma ou manutenção em condomínio.",
+          "cta": "Conversar sobre reforma ou manutenção"
+        },
+        {
+          "id": "documentacao-as-built",
+          "title": "Documentação do construído",
+          "text": "O levantamento compara o que existe com os documentos disponíveis e indica as lacunas que precisam ser medidas, reconciliadas ou desenvolvidas para orientar o as-built.",
+          "message": "Olá, CONFENGE. Preciso reconciliar o construído com os documentos e avaliar um as-built.",
+          "cta": "Conversar sobre a documentação"
+        }
+      ],
       "competencies": {
         "kicker": "Aplicações",
         "title": "Inspeção para compreender a edificação e apoiar uma decisão concreta.",
@@ -609,24 +649,24 @@
       },
       "engagement": {
         "kicker": "Proposta técnica",
-        "title": "Objeto, acesso e produto final são combinados para a edificação.",
-        "intro": "A proposta delimita áreas e sistemas, finalidade, documentação, visita, recursos de inspeção, necessidade de ensaio e forma de apresentação dos resultados.",
+        "title": "A proposta reúne investigação, documentação e continuidade necessárias à decisão.",
+        "intro": "A proposta delimita áreas e sistemas, finalidade, documentação, visita, recursos de inspeção e forma de apresentação. Quando diagnóstico, projeto de intervenção, orçamento ou apoio técnico precisam caminhar juntos, as atividades e entregas entram no mesmo escopo com responsáveis e marcos definidos.",
         "items": [
           [
-            "Visita",
-            "Local, áreas acessíveis, responsáveis pelo acesso e condições necessárias para o levantamento."
+            "Escopo e visita",
+            "Município, áreas e sistemas, responsáveis pelo acesso, condições de segurança e recursos necessários ao levantamento."
           ],
           [
-            "Investigação",
-            "Recursos visuais, medições e exames complementares compatíveis com a pergunta técnica."
+            "Método e entregas",
+            "Recursos visuais, medições, exames complementares e documentos finais compatíveis com a pergunta técnica e a decisão esperada."
           ],
           [
-            "Urgência",
-            "Condição com risco aparente exige encaminhamento presencial competente e priorização específica no atendimento."
+            "Prazo e honorários",
+            "Extensão, acessos, quantidade de visitas, análise documental, exames, reuniões e produtos orientam prazo e honorários apresentados na proposta."
           ],
           [
             "Responsabilidade",
-            "Tiago Sasaki, Engenheiro Civil formado pela EESC-USP e com registro profissional ativo no CREA, conduz os escopos compatíveis com suas atribuições."
+            "Tiago Sasaki, Engenheiro Civil formado pela EESC-USP e com registro profissional ativo no CREA, conduz os escopos compatíveis com suas atribuições. Outras disciplinas recebem profissional habilitado definido na proposta."
           ]
         ]
       },
@@ -663,21 +703,71 @@
         "deliverables",
         "engagement"
       ],
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que definir antes de contratar a inspeção.",
+        "intro": "As respostas abaixo ajudam a preparar o primeiro contato sem exigir um diagnóstico prévio do contratante.",
+        "items": [
+          [
+            "Quais documentos ajudam no primeiro contato?",
+            "Plantas, memoriais, registros de manutenção, histórico da manifestação e fotografias gerais ajudam a definir o escopo do trabalho. A ausência de algum documento não impede a conversa inicial."
+          ],
+          [
+            "A visita é sempre necessária?",
+            "A conversa inicial e a leitura documental podem ocorrer a distância. Quando a conclusão depende da condição existente, a proposta confirma município, acesso, logística e visita antes do aceite técnico. Não publicamos lista de cidades nem unidade de atendimento."
+          ],
+          [
+            "Como os honorários são definidos?",
+            "A proposta considera áreas e sistemas, acesso, quantidade de visitas, documentos, exames, reuniões, prazo e entregas. Não há preço publicado para um escopo ainda não definido."
+          ],
+          [
+            "O relatório já inclui projeto e orçamento do reparo?",
+            "A proposta informa quais entregas estão incluídas. Se a decisão exigir projeto de intervenção, quantitativos ou orçamento, essas atividades podem ser combinadas no mesmo escopo ou planejadas como continuidade, sem abandono depois do diagnóstico."
+          ],
+          [
+            "Como síndico, conselho e administradora participam?",
+            "A proposta registra quem fornece acesso e documentos, quem acompanha o trabalho e quem recebe as conclusões. Aprovações internas dependem das regras e competências aplicáveis ao condomínio."
+          ],
+          [
+            "Uma fotografia permite concluir a causa?",
+            "Não. Fotografia não permite diagnosticar causa, estabilidade ou solução à distância. Hipótese não é causa única. Fotografias localizam e registram sinais, mas a conclusão depende de inspeção, documentos, medições ou exames compatíveis com o caso."
+          ]
+        ]
+      },
       "contact": {
         "title": "Solicite uma proposta de inspeção e diagnóstico.",
-        "intro": "Informe a edificação, o município, o que foi observado e a decisão que o relatório deve apoiar. Fotos gerais ou referências não sigilosas podem ajudar a definir o escopo inicial.",
-        "boundary": "Você pode compartilhar referências não sigilosas por WhatsApp ou e-mail. Dados pessoais, endereços completos e documentos controlados são tratados pelo canal adequado ao escopo. O tratamento dos dados segue a Política de Privacidade."
+        "intro": "Informe a edificação, o município, o que foi observado, a etapa de manutenção, reforma ou recebimento e a decisão que o trabalho deve apoiar. Fotos gerais ou referências não sigilosas podem ajudar a definir o escopo inicial. A CONFENGE retorna com perguntas para definir o escopo da proposta.",
+        "prep": [
+          [
+            "Situação",
+            "O que foi observado e desde quando, sem precisar indicar a causa."
+          ],
+          [
+            "Local e acesso",
+            "Município, áreas envolvidas e condições conhecidas de acesso."
+          ],
+          [
+            "Decisão",
+            "Manutenção, reforma, recebimento, reparo, documentação ou discussão técnica."
+          ]
+        ],
+        "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Dados pessoais, endereços completos e documentos controlados são tratados pelo canal adequado ao escopo e com as permissões necessárias. Não envie documentos sensíveis antes de combinarmos esse recebimento. O tratamento dos dados segue a Política de Privacidade."
       }
     },
     {
       "route": "assistencia-tecnica-pericial-engenharia",
       "journey": "pericia",
       "contact_id": "contato-assistencia",
+      "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido.",
+      "sharing": {
+        "title": "Assistência técnica pericial de engenharia | CONFENGE",
+        "description": "Entenda a atuação do assistente técnico da parte antes dos quesitos, na diligência e na análise do laudo, com proposta adequada à etapa do caso."
+      },
       "hero": {
         "eyebrow": "Engenharia para organizar a posição técnica da parte",
         "title": "Assistência técnica de engenharia em disputas",
-        "lead": "A CONFENGE apoia partes e advogados em controvérsias sobre edificações, obras e imóveis, estruturando evidências, quesitos e manifestações dentro do campo da engenharia.",
-        "value": "A assistência da parte pode começar na triagem pré-litígio e seguir pela análise documental, inspeção, acompanhamento de diligência, crítica de laudo e esclarecimentos. A atuação técnica se articula com a advocacia sem se confundir com a perícia do juízo.",
+        "lead": "A CONFENGE apoia partes, condomínios, empresas e advogados em controvérsias sobre edificações, obras e imóveis, estruturando evidências, quesitos e manifestações dentro do campo da engenharia.",
+        "value": "A assistência da parte pode começar antes do processo e seguir pela preparação de quesitos, análise documental, inspeção, diligência, crítica de laudo e esclarecimentos. A proposta combina as etapas necessárias; a atuação técnica se articula com a advocacia sem se confundir com a perícia do juízo.",
         "cta": "Solicitar proposta de assistência técnica",
         "signal_title": "Papéis e produtos definidos",
         "signals": [
@@ -696,6 +786,29 @@
           [
             "Perito do juízo",
             "É nomeado pelo juiz e exerce função própria no processo."
+          ]
+        ]
+      },
+      "stages": {
+        "kicker": "Etapa do caso",
+        "title": "A assistência técnica se organiza pelo próximo marco da controvérsia.",
+        "intro": "A parte pode procurar a CONFENGE diretamente ou em conjunto com seu advogado. O trabalho jurídico permanece com a advocacia; a engenharia organiza e responde a matéria técnica contratada.",
+        "items": [
+          [
+            "Antes dos quesitos",
+            "Leitura do objeto, documentos e pontos controvertidos para identificar o que a engenharia precisa examinar e quais evidências ainda faltam."
+          ],
+          [
+            "Preparação de quesitos",
+            "Formulação de perguntas tecnicamente verificáveis, ligadas ao objeto e às evidências, em articulação com os prazos e a estratégia informados pelo advogado."
+          ],
+          [
+            "Diligência pericial",
+            "Preparação técnica, acompanhamento do ato quando contratado, registro das ocorrências pertinentes e organização dos pontos que exigem esclarecimento."
+          ],
+          [
+            "Análise do laudo",
+            "Conferência do método, dados, respostas e coerência das conclusões, com manifestação técnica ou subsídios para esclarecimentos conforme o escopo."
           ]
         ]
       },
@@ -747,20 +860,20 @@
       },
       "engagement": {
         "kicker": "Proposta técnica",
-        "title": "Objeto, marcos e interlocução jurídica orientam o escopo.",
-        "intro": "A proposta considera a questão técnica, o conjunto documental, a necessidade de campo, os prazos do caso e os produtos esperados em cada etapa.",
+        "title": "Uma proposta combina as atividades necessárias à etapa do caso.",
+        "intro": "A proposta considera a questão técnica, o conjunto documental, a necessidade de campo, os marcos do caso e os produtos esperados. Quesitos, preparação, diligência, análise de laudo e manifestação podem compor o mesmo escopo quando essa continuidade for necessária.",
         "items": [
           [
-            "Definição da atuação",
-            "Objeto da edificação ou obra, ponto controvertido e finalidade da atuação técnica."
+            "Objeto e conflito",
+            "Objeto da edificação ou obra, partes envolvidas, ponto controvertido e finalidade da atuação técnica orientam a definição do escopo e a verificação de conflito."
           ],
           [
-            "Documentos",
-            "Peças técnicas, projetos, registros, laudos e quesitos que compõem a base de análise."
+            "Base e campo",
+            "Peças técnicas, projetos, registros, laudos, quesitos e eventual necessidade de inspeção ou acompanhamento compõem a base da análise."
           ],
           [
-            "Agenda",
-            "Marcos processuais ou negociais, diligências, reuniões e datas de entrega informadas pelo contratante e pelo advogado."
+            "Prazo e honorários",
+            "Volume e condição dos documentos, visitas, diligências, reuniões, marcos informados e produtos contratados orientam prazo e honorários."
           ],
           [
             "Responsabilidade",
@@ -773,14 +886,239 @@
       ],
       "section_order": [
         "competencies",
+        "stages",
         "deliverables",
         "technical",
         "engagement"
       ],
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que esclarecer antes de contratar a assistência técnica.",
+        "intro": "O primeiro contato pode ser breve. Documentos sensíveis entram somente depois de definir o escopo do caso, verificar conflito e combinar o canal adequado.",
+        "items": [
+          [
+            "Quem pode procurar a assistência técnica?",
+            "A própria parte, o condomínio, a empresa ou o advogado podem iniciar a conversa. Havendo processo ou negociação jurídica, o escopo técnico é articulado com o advogado sem transferir à engenharia a estratégia ou a representação jurídica."
+          ],
+          [
+            "Quais informações bastam no primeiro contato?",
+            "Um resumo do objeto, a etapa do caso, os prazos conhecidos, a identificação das partes para verificação de conflito e uma relação dos documentos disponíveis. Não envie o processo completo ou dados sensíveis antes de combinarmos o canal."
+          ],
+          [
+            "A atuação exige visita ou diligência?",
+            "Depende da pergunta técnica e da evidência disponível. Parte da leitura pode ser documental e remota; inspeção, medição ou acompanhamento entram na proposta quando necessários."
+          ],
+          [
+            "Como os honorários são definidos?",
+            "A proposta considera matéria técnica, volume e condição dos documentos, necessidade de campo, marcos do caso, reuniões e produtos previstos."
+          ],
+          [
+            "Quais entregas podem integrar a proposta?",
+            "Matriz de evidências, quesitos, preparação e acompanhamento de diligência, manifestação técnica, análise de laudo e apoio a esclarecimentos, conforme a etapa e a finalidade contratadas."
+          ],
+          [
+            "O assistente técnico garante o resultado da disputa?",
+            "Não. A atuação organiza e analisa a evidência de engenharia dentro do escopo; não substitui o perito nomeado pelo juízo e não promete decisão judicial, acordo ou conclusão sem sustentação técnica."
+          ]
+        ]
+      },
       "contact": {
         "title": "Solicite uma proposta de assistência técnica.",
-        "intro": "Informe o objeto da controvérsia, o estágio da negociação ou do processo, o prazo conhecido e se já há advogado. Uma relação dos documentos disponíveis ajuda a definir a primeira etapa.",
-        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Peças processuais, dados de partes e documentos protegidos seguem pelo canal e com as permissões adequadas ao caso. O tratamento dos dados segue a Política de Privacidade."
+        "intro": "Informe o objeto da controvérsia, a etapa da negociação ou do processo, o próximo marco conhecido e se já há advogado. A CONFENGE analisa a necessidade inicial e indica o que precisa ser definido para a proposta.",
+        "prep": [
+          [
+            "Objeto",
+            "Edificação, obra ou imóvel e a questão técnica que precisa de resposta."
+          ],
+          [
+            "Etapa",
+            "Negociação, preparação de quesitos, diligência, análise de laudo ou esclarecimentos."
+          ],
+          [
+            "Partes e prazo",
+            "Identificação mínima para verificar conflito e próximo marco conhecido."
+          ]
+        ],
+        "boundary": "No primeiro contato, compartilhe apenas referências não sigilosas. Antes de receber peças processuais, identificação detalhada das partes ou documentos protegidos, a CONFENGE verifica conflito, finalidade, permissões e canal adequado. O tratamento dos dados segue a Política de Privacidade."
+      }
+    }
+  ],
+  "hubs": [
+    {
+      "route": "engenharia-condominios",
+      "template_route": "inspecao-diagnostico-edificacoes",
+      "journey": "outro",
+      "asset_id": "condominium_engineering_editorial_route_v1",
+      "title": "Engenharia para condomínios: inspeção, perícia, reforma e manutenção | CONFENGE",
+      "description": "Engenharia para condomínios na Grande Florianópolis: escolha entre investigação de fissuras e infiltrações, assistência técnica em disputas e apoio a recebimento, reforma ou manutenção.",
+      "sharing": {
+        "title": "Engenharia para condomínios | CONFENGE",
+        "description": "Um caminho para síndicos, conselhos e administradoras escolherem inspeção, assistência técnica, documentação, projeto ou orçamento conforme a situação."
+      },
+      "hero": {
+        "eyebrow": "Engenharia para a decisão do condomínio",
+        "title": "Do problema observado à proposta técnica adequada.",
+        "lead": "A CONFENGE ajuda síndicos, conselhos, administradoras e demais responsáveis a analisar a necessidade do condomínio antes de contratar inspeção, assistência pericial, documentação, projeto ou orçamento.",
+        "value": "Você começa pela situação. A proposta define as atividades que precisam caminhar juntas, as entregas, os responsáveis, a necessidade de visita, o prazo e os honorários, preservando o contexto já informado.",
+        "cta": "Solicitar proposta para o condomínio",
+        "signal_title": "Uma entrada, três decisões",
+        "signals": [
+          [
+            "Investigar",
+            "Compreender fissuras, infiltrações ou outras manifestações antes de decidir a intervenção."
+          ],
+          [
+            "Sustentar",
+            "Organizar evidências, quesitos ou análise técnica para negociação ou processo."
+          ],
+          [
+            "Planejar",
+            "Definir recebimento, reforma ou manutenção com documentação compatível com a decisão."
+          ]
+        ]
+      },
+      "situations": [
+        {
+          "id": "problemas-edificacao",
+          "title": "Fissuras, infiltrações ou outros problemas precisam de investigação.",
+          "text": "A inspeção registra a condição e a investigação relaciona observações, histórico e documentos. Quando faltam evidências, o relatório indica medições, ensaios ou aberturas antes de afirmar causa ou solução.",
+          "decision": "entender o que está acontecendo e quais providências, aprofundamentos ou projetos devem vir depois.",
+          "href": "/inspecao-diagnostico-edificacoes/#fissuras-infiltracoes",
+          "cta": "Ver inspeção e diagnóstico"
+        },
+        {
+          "id": "disputa-laudo",
+          "title": "Perícia, negociação ou laudo exigem assistência técnica da parte.",
+          "text": "A assistência organiza documentos e evidências, prepara quesitos, acompanha a diligência quando contratado e analisa o laudo. O advogado conduz a estratégia jurídica; o perito do juízo exerce função própria.",
+          "decision": "delimitar a questão de engenharia e produzir uma manifestação tecnicamente verificável na etapa do caso.",
+          "href": "/assistencia-tecnica-pericial-engenharia/",
+          "cta": "Ver assistência técnica em disputas"
+        },
+        {
+          "id": "recebimento-reforma-manutencao",
+          "title": "Recebimento, reforma ou manutenção precisam de definição e documentação.",
+          "text": "Condição existente, documentos, interferências e responsabilidades são organizados para o condomínio decidir o escopo. Inspeção, revisão, projeto, quantitativos e orçamento podem entrar conforme a necessidade real.",
+          "decision": "registrar o que existe, definir o que deve ser corrigido ou desenvolvido e preparar a próxima contratação.",
+          "href": "/inspecao-diagnostico-edificacoes/#reforma-condominio",
+          "cta": "Ver caminhos para reforma e manutenção"
+        }
+      ],
+      "process": {
+        "kicker": "Como contratar",
+        "title": "A proposta nasce da decisão, dos acessos e das entregas necessárias.",
+        "intro": "Não é preciso chegar com o serviço nomeado nem com todos os documentos. O primeiro contato preserva o contexto e permite delimitar o trabalho antes do recebimento de material sensível.",
+        "items": [
+          [
+            "Contexto inicial",
+            "Situação observada, município, etapa do condomínio, decisão esperada e pessoas que participam do processo."
+          ],
+          [
+            "Definição técnica",
+            "Definição das perguntas, documentos, áreas, acessos, visita, exames e disciplinas que o caso exige."
+          ],
+          [
+            "Proposta integrada",
+            "Atividades, entregas, responsáveis, marcos, prazo e honorários apresentados em um escopo coerente com a necessidade."
+          ],
+          [
+            "Condução e entrega",
+            "Registros de campo e documentos são analisados; conclusões, pendências e encaminhamentos chegam em formato adequado à decisão do condomínio."
+          ],
+          [
+            "Responsabilidade técnica",
+            "Tiago Sasaki lidera a definição inicial e conduz os escopos compatíveis com suas atribuições. Cada especialidade recebe o profissional habilitado indicado na proposta, com ART quando aplicável."
+          ]
+        ]
+      },
+      "continuity": {
+        "kicker": "Continuidade técnica",
+        "title": "Diagnóstico, projeto, orçamento e assistência podem formar uma solução contínua.",
+        "intro": "Cada atividade responde a uma pergunta diferente, mas a proposta pode combiná-las quando isso evita ruptura entre compreender o problema e preparar a intervenção.",
+        "items": [
+          [
+            "Da investigação à intervenção",
+            "Se a inspeção indicar necessidade de projeto de reparo, a proposta pode prever seu desenvolvimento ou a passagem organizada para essa etapa, com premissas e responsabilidades claras."
+          ],
+          [
+            "Do projeto à contratação",
+            "Revisão, compatibilização, quantitativos e orçamento podem completar a documentação usada pelo condomínio para comparar e contratar a intervenção."
+          ],
+          [
+            "Da evidência à manifestação",
+            "Quando há disputa, a inspeção e a documentação técnica podem alimentar quesitos, diligência e manifestação da parte dentro do escopo acordado."
+          ],
+          [
+            "Governança da decisão",
+            "A proposta registra interlocutores e entregas para síndico, conselho, administradora, advogado e responsáveis técnicos, conforme o caso, sem presumir quem pode aprovar sozinho."
+          ]
+        ]
+      },
+      "coverage": "A prioridade comercial desta frente é a Grande Florianópolis. A conversa inicial e a leitura documental podem ocorrer a distância. Quando o trabalho depende de campo, o município, os acessos, a logística, a disponibilidade de visita e as formalidades profissionais são confirmados na proposta antes do aceite técnico. O atendimento presencial ocorre no local do cliente, mediante agendamento.",
+      "samples": [
+        {
+          "title": "Registro de condição da fachada",
+          "text": "Exemplo demonstrativo com manifestações localizadas, registro visual e limites do que a evidência permite concluir.",
+          "href": "/inspecao-diagnostico-edificacoes/#amostra-disponivel",
+          "cta": "Ver amostra de inspeção"
+        },
+        {
+          "title": "Quesitos e evidências em uma disputa",
+          "text": "Exemplo demonstrativo do mesmo mapa técnico organizado para perguntas, evidências e conclusão delimitada da parte.",
+          "href": "/assistencia-tecnica-pericial-engenharia/#amostra-disponivel",
+          "cta": "Ver amostra de assistência técnica"
+        }
+      ],
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que o condomínio precisa saber antes da proposta.",
+        "intro": "Um resumo da situação basta para começar. A CONFENGE indica quais dados complementares são necessários para dimensionar o trabalho.",
+        "items": [
+          [
+            "Quais documentos enviar no primeiro contato?",
+            "Informe a situação, o município e a decisão que precisa ser tomada. Uma lista de plantas, memoriais, atas, registros de manutenção, fotografias ou laudos disponíveis ajuda; documentos sensíveis ficam para o canal adequado depois de combinarmos esse recebimento."
+          ],
+          [
+            "A visita técnica é obrigatória?",
+            "Depende da pergunta e da evidência. A conversa inicial e parte da análise documental podem ocorrer a distância. Quando a conclusão exige campo, a proposta confirma local, acesso, logística e visita."
+          ],
+          [
+            "Como são definidos prazo e honorários?",
+            "A proposta considera áreas e sistemas, quantidade de visitas, documentos, exames, disciplinas, reuniões, urgência informada e produtos finais. Nenhum prazo ou preço é presumido antes desse recorte."
+          ],
+          [
+            "O que o condomínio recebe?",
+            "A proposta nomeia as entregas: relatório de inspeção, plano de aprofundamento, projeto, desenhos, quantitativos, orçamento, quesitos ou manifestação técnica, conforme a decisão e as atividades contratadas."
+          ],
+          [
+            "O síndico pode contratar sozinho?",
+            "A página não define essa competência. Convenção, regimento, assembleia, conselho, administradora, contrato e situação jurídica podem exigir participantes diferentes. A proposta registra os interlocutores e a finalidade informados pelo condomínio."
+          ],
+          [
+            "Como funciona quando já existe advogado?",
+            "O advogado conduz a estratégia e os atos jurídicos. A CONFENGE articula a matéria de engenharia, os quesitos, a diligência e a manifestação técnica com ele, sem substituir sua função."
+          ]
+        ]
+      },
+      "contact": {
+        "title": "Solicite uma proposta para o condomínio.",
+        "intro": "Conte a situação, o município, a etapa de recebimento, reforma, manutenção ou disputa e a decisão que precisa ser tomada. A CONFENGE retorna com perguntas para definir o escopo da proposta.",
+        "whatsapp_message": "Olá, CONFENGE. Preciso de uma proposta de engenharia para um condomínio.",
+        "email_subject": "Engenharia para condomínio",
+        "prep": [
+          [
+            "Situação",
+            "O que foi observado ou qual etapa precisa de apoio técnico."
+          ],
+          [
+            "Local",
+            "Município e áreas envolvidas, sem expor endereço completo no primeiro contato."
+          ],
+          [
+            "Decisão",
+            "O que síndico, conselho, administradora, advogado ou outros responsáveis precisam decidir."
+          ]
+        ],
+        "boundary": "Compartilhe apenas referências não sigilosas no primeiro contato. Dados pessoais, documentos protegidos, peças processuais e identificação detalhada das partes seguem depois da verificação de conflito, finalidade, permissões e canal adequado. O tratamento dos dados segue a"
       }
     }
   ]

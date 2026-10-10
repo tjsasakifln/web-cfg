@@ -38,14 +38,14 @@ def test_ia_contract_is_valid_without_html():
     errors = validate_contract()
     assert errors == []
     items = header_items()
-    assert len(items) == 5
+    assert len(items) == 6
     assert len(items) <= MAX_HEADER_DESTINATIONS
     assert header_cta()["href"] == "/triagem-tecnica/"
     labels = " ".join(item["label"].lower() for item in items)
     assert "b2g" not in labels
     assert all(
         phrase in labels
-        for phrase in ("projetos", "serviços", "obras públicas", "como trabalhamos", "empresa")
+        for phrase in ("projetos", "serviços", "condomínios", "obras públicas", "como trabalhamos", "empresa")
     )
     assert "projetos" in labels
     assert "ferramentas" not in labels

@@ -49,7 +49,7 @@
     },
     {
       "path": "data/organic/public-family-registry.json",
-      "sha256": "c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0"
+      "sha256": "bcdfaa3e68a7aaa71bed79c3627cd5e12ff55923fb3f74788afc335b602c2934"
     },
     {
       "path": "data/bofu-dominance/frozen-specs/query-ownership.json",
@@ -2071,6 +2071,17 @@
           "path": "data/organic/public-family-registry.json",
           "previous_sha256": "fe2bad5aaf604a8a62786d6c4612e4e2112079789c5a31a997acea164757d5e6",
           "sha256": "c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "scope": "Founder-authorized condominium editorial entry and broad institutional presentation, recorded in docs/campaigns/2026-10-10-inbound-condominios.md. Existing intent ownership, factual evidence, demand, ranking and human-validation fields remain unchanged; no new intent nucleus or commercial outcome is asserted.",
+      "changed_sources": [
+        {
+          "path": "data/organic/public-family-registry.json",
+          "previous_sha256": "c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0",
+          "sha256": "bcdfaa3e68a7aaa71bed79c3627cd5e12ff55923fb3f74788afc335b602c2934"
         }
       ]
     }

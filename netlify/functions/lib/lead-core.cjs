@@ -63,6 +63,8 @@ const MAX_FIELD = {
   route_family: 80,
   cta_id: 80,
   asset_id: 80,
+  source_origin_asset_id: 80,
+  source_origin_route_family: 80,
   correlation_id: 80,
   landing_url: 240,
   idempotency_key: 80,
@@ -120,6 +122,8 @@ const ATTR_ALLOWLIST = [
   "route_family",
   "cta_id",
   "asset_id",
+  "source_origin_asset_id",
+  "source_origin_route_family",
   "correlation_id",
   "session_id",
   "tema",
@@ -687,7 +691,24 @@ function pickAttribution(data) {
   return out;
 }
 
-const ALLOWED_JOURNEYS = new Set(["contrato", "edital", "operacao", "conteudo", "pseo", "sst", "outro"]);
+// Keep this finite vocabulary aligned with HOME_SITUATIONS in nav.js. These
+// values describe the need selected by the visitor; accepting them here does
+// not qualify, price or route a commercial opportunity automatically.
+const ALLOWED_JOURNEYS = new Set([
+  "projeto",
+  "orcamento",
+  "obra",
+  "pericia",
+  "avaliacao",
+  "sst",
+  "orgao",
+  "contrato",
+  "edital",
+  "operacao",
+  "conteudo",
+  "pseo",
+  "outro",
+]);
 const ALLOWED_ORIGINS = new Set([
   "https://confenge.com.br",
   "https://www.confenge.com.br",
@@ -1240,6 +1261,18 @@ function validateAndNormalize(data) {
     route_family: sanitizeAttributionValue(data.route_family, MAX_FIELD.route_family, "route_family") || null,
     cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
     asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
+    source_origin_asset_id:
+      sanitizeAttributionValue(
+        data.source_origin_asset_id,
+        MAX_FIELD.source_origin_asset_id,
+        "source_origin_asset_id",
+      ) || null,
+    source_origin_route_family:
+      sanitizeAttributionValue(
+        data.source_origin_route_family,
+        MAX_FIELD.source_origin_route_family,
+        "source_origin_route_family",
+      ) || null,
     correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
     session_id: normalizeSessionId(data.session_id || data.sid) || null,
     analysis_id: sanitizeAttributionValue(data.analysis_id, MAX_FIELD.analysis_id, "analysis_id") || null,

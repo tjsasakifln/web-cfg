@@ -27,6 +27,7 @@
     "edificacoes/",
     "elaboracao-pgr/",
     "empresa/",
+    "engenharia-condominios/",
     "entregas/",
     "especialista/",
     "ferramentas/",
@@ -94,7 +95,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 244,
+  "html_route_count": 245,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -269,6 +270,7 @@
     "/edificacoes/",
     "/elaboracao-pgr/",
     "/empresa/",
+    "/engenharia-condominios/",
     "/entregas/",
     "/especialista/tiago-jun-sasaki/",
     "/ferramentas/checklist-reequilibrio/",
@@ -341,8 +343,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-04T23:00:23Z",
-  "public_artifact_hash": "d89bd8c2dfc666fa6590f4b43af56d1b3bc1af230dfd0e622f38928ddd3242bb",
+  "generated_at": "2026-10-10T19:58:35Z",
+  "public_artifact_hash": "862c80919f7af243ce139fefb3ed3b56f3b9878d187bf47da3d5a511482b699f",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -370,6 +372,7 @@
     "edificacoes/",
     "elaboracao-pgr/",
     "empresa/",
+    "engenharia-condominios/",
     "entregas/",
     "especialista/",
     "ferramentas/",
@@ -437,14 +440,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 232,
+  "promoted_navigation_files": 233,
   "navigation_audit": {
-    "audited_files": 232,
-    "audited_blocks": 462,
+    "audited_files": 233,
+    "audited_blocks": 464,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 249,
+    "html_scanned": 250,
     "html_rewritten": 184,
     "fields_removed": 780
   }

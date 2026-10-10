@@ -92,6 +92,7 @@
     "/edificacoes/": "Edificações",
     "/como-trabalhamos/": "Como trabalhamos",
     "/empresa/": "Empresa",
+    "/engenharia-condominios/": "Engenharia para condomínios",
     "/terceirizacao-projetos-engenharia/": "Terceirização de projetos",
     "/projeto-estrutural-concreto-armado/": "Projeto estrutural em concreto armado",
     "/projeto-estrutura-metalica/": "Projeto de estrutura metálica",
@@ -178,6 +179,11 @@
         "label": "Serviços",
         "href": "/servicos/",
         "surface": "corporate_services_hub"
+      },
+      {
+        "label": "Condomínios",
+        "href": "/engenharia-condominios/",
+        "surface": "condominium_engineering_hub"
       },
       {
         "label": "Obras públicas",
@@ -314,6 +320,14 @@
       "route": "/servicos/",
       "role": "solucao_comercial",
       "label": "Serviços",
+      "next_action": "/triagem-tecnica/",
+      "index_state": "index"
+    },
+    {
+      "id": "engenharia-condominios",
+      "route": "/engenharia-condominios/",
+      "role": "solucao_comercial",
+      "label": "Condomínios",
       "next_action": "/triagem-tecnica/",
       "index_state": "index"
     },
@@ -472,6 +486,11 @@
     },
     {
       "prefix": "/empresa/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/engenharia-condominios/",
       "parent": "/",
       "exact": true
     },
@@ -776,6 +795,10 @@
     {
       "prefix": "/empresa/",
       "href": "/empresa/"
+    },
+    {
+      "prefix": "/engenharia-condominios/",
+      "href": "/engenharia-condominios/"
     },
     {
       "prefix": "/servicos/",

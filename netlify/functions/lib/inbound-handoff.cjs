@@ -165,10 +165,9 @@ function mapLeadToInboundV1(record) {
 
   const routeFamily = clampText(record.route_family, 80);
   if (routeFamily) body.route_family = routeFamily;
-  // First-class structured journey (one of the three canonical purchase
-  // situations, or the fixed-closed fallbacks) alongside the free-text
-  // "situação=" qualification below. The free-text stays so nothing
-  // downstream that already parses `message` breaks.
+  // First-class structured journey from the finite public need vocabulary,
+  // alongside the free-text "situação=" qualification below. The free-text
+  // stays so nothing downstream that already parses `message` breaks.
   const journey = clampText(record.jornada, 40);
   if (journey) body.journey = journey;
   // `asset_id` identifies the acquisition asset and must not be repurposed as a
@@ -276,6 +275,12 @@ function mapLeadToInboundV1(record) {
     ["nucleo", record.nucleus_id],
     ["oferta_candidata", record.offer_candidate_id],
     ["ativo", record.source_asset_id],
+    // Cross-route service provenance for ordinary forms stays inside the
+    // existing versioned message context. Do not add unconsumed top-level
+    // confenge.inbound.v1 fields; the adaptive envelope already has its own
+    // structured attribution mapping below.
+    ["ativo de origem", record.source_origin_asset_id],
+    ["família de rota de origem", record.source_origin_route_family],
     ["familia", record.landing_family],
     ["cidade_classe", record.city_class],
     ["sitio_classe", record.site_class],

@@ -398,6 +398,9 @@
       return out;
     };
     const ROUTE_FAMILY_BY_PREFIX = [
+      ['/engenharia-condominios/', 'engenharia-condominios'],
+      ['/inspecao-diagnostico-edificacoes/', 'inspecao-diagnostico-edificacoes'],
+      ['/assistencia-tecnica-pericial-engenharia/', 'assistencia-tecnica-pericial-engenharia'],
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],
       ['/reequilibrio-obras-publicas/', 'reequilibrio'],
       ['/aditivos-obras-publicas/', 'aditivos'],
@@ -758,6 +761,18 @@
       try { form.dispatchEvent(new Event('confenge:journeychange')); } catch (_) { /* no Event ctor */ }
     };
     if (form) {
+      // The submitted form keeps its own capture identity. The service that
+      // led to the home form travels separately, through the optional provenance
+      // fields already consumed by the commercial handoff.
+      const captureFamily = form.querySelector('input[name="route_family"]');
+      if (window.location.pathname === '/' && captureFamily?.value === 'home') {
+        const serviceFamily = fromUrl.route_family || storedPseo.route_family || '';
+        const serviceAsset = fromUrl.asset_id || storedPseo.asset_id || '';
+        if (serviceFamily && serviceFamily !== 'home') {
+          ensureHidden('source_origin_route_family', serviceFamily);
+          if (serviceAsset) ensureHidden('source_origin_asset_id', serviceAsset);
+        }
+      }
       const sessionId = typeof window.confengeSessionId === 'function'
         ? window.confengeSessionId()
         : '';

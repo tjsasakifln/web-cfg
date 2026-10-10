@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import sys
@@ -24,7 +25,10 @@ from scripts.site.public_ia import header_cta, header_items  # noqa: E402
 from scripts.site.public_navigation import (  # noqa: E402
     FROZEN_NAV_HTML_PATHS,
     audit_public_navigation_tree,
+    promote_public_navigation,
 )
+from scripts.bofu_dominance.frozen_specs.hashing import canonical_text_bytes  # noqa: E402
+from scripts.site.shell_nav import HASH_BOUND_EDITORIAL_FILES  # noqa: E402
 
 ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [item["label"] for item in header_items()]
@@ -37,6 +41,13 @@ LEGACY_NAV = [
     "Conteúdos",
     "Ferramentas",
     "Especialista",
+]
+APPROVED_PRECAMPAIGN_NAV = [
+    "Projetos",
+    "Serviços",
+    "Obras públicas",
+    "Como trabalhamos",
+    "Empresa",
 ]
 LEGACY_CTA = "Analisar meu caso"
 BANNED_ZERO = (
@@ -510,13 +521,32 @@ def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
         relative_path = path.relative_to(ROOT).as_posix()
         if relative_path in FROZEN_NAV_HTML_PATHS:
             expected = LEGACY_NAV
+        elif relative_path in HASH_BOUND_EDITORIAL_FILES:
+            frozen_hashes = json.loads(
+                (ROOT / "data/bofu-dominance/frozen-specs/hashes.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            assert hashlib.sha256(canonical_text_bytes(path.read_bytes())).hexdigest() == (
+                frozen_hashes["forbidden"][relative_path]
+            ), path
+            assert labels == APPROVED_PRECAMPAIGN_NAV, path
+            projected = _DesktopNav()
+            projected.feed(
+                promote_public_navigation(
+                    path.read_text(encoding="utf-8", errors="replace"),
+                    relative_path=relative_path,
+                )
+            )
+            assert projected.labels == EXPECTED_NAV, path
+            expected = APPROVED_PRECAMPAIGN_NAV
         else:
             expected = EXPECTED_NAV
         if expected is not None and labels != expected:
             failures.append(
                 f"{path.relative_to(ROOT)}: expected source nav {expected}, got {labels}"
             )
-        if relative_path not in FROZEN_NAV_HTML_PATHS and cta and cta != EXPECTED_CTA:
+        if relative_path not in FROZEN_NAV_HTML_PATHS and relative_path not in HASH_BOUND_EDITORIAL_FILES and cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
         html = path.read_text(encoding="utf-8", errors="replace")
         header_cta = re.search(
@@ -527,7 +557,7 @@ def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
         if header_cta:
             href = header_cta.group(1) or header_cta.group(2)
             expected_href = EXPECTED_CTA_HREF
-            if relative_path not in FROZEN_NAV_HTML_PATHS and href != expected_href:
+            if relative_path not in FROZEN_NAV_HTML_PATHS and relative_path not in HASH_BOUND_EDITORIAL_FILES and href != expected_href:
                 failures.append(
                     f"{path.relative_to(ROOT)}: header-cta href {href!r} not {expected_href}"
                 )
@@ -736,7 +766,7 @@ def test_home_nav_and_hierarchy():
     assert hero and hero.group(0).count("button-primary") == 1
     for ident in ("competencias", "setores", "entregas", "servicos-complementares", "sobre-a-confenge", "solicitar-proposta"):
         assert f'id="{ident}"' in home
-    assert home.find('id="competencias"') < home.find('id="servicos-complementares"')
+    assert home.find('id="servicos-complementares"') < home.find('id="competencias"')
     assert "54.055" not in home and "4,48 mi" not in home
 
 

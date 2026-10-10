@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.public_ia import (  # noqa: E402
     HUB_ROLES,
+    MAX_HEADER_DESTINATIONS,
     SERVICE_SITUATION_IDS,
     audit_orphans,
     audit_primary_nav_hygiene,
@@ -42,6 +43,7 @@ from scripts.site.public_ia import (  # noqa: E402
 )
 from scripts.site.shell_nav import (  # noqa: E402
     FROZEN_SHELL_FILES,
+    HASH_BOUND_EDITORIAL_FILES,
     HEADER_CTA_RE,
     MOBILE_NAV_RE,
     ROOT as SHELL_ROOT,
@@ -70,6 +72,15 @@ FROZEN_NAV_LABELS = [
     "Ferramentas",
     "Especialista",
 ]
+HOME_SERVICE_DESTINATIONS = {
+    "/projetos/",
+    "/quantitativos-orcamento-obras/",
+    "/inspecao-diagnostico-edificacoes/",
+    "/assistencia-tecnica-pericial-engenharia/",
+    "/servicos/#servico-avaliacao",
+    "/seguranca-trabalho-apoio-tecnico/",
+    "/servicos-obras-publicas/",
+}
 
 
 class _NavLinks(HTMLParser):
@@ -283,18 +294,17 @@ def main() -> int:
 
     # --- 2b. The freeze exception is declared, bounded and label-consistent --
     # The six BOFU pillars are byte-frozen by CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01
-    # until 2026-09-16, so the sync skips them. They must still show the same labels,
-    # and the skip list must be exactly the campaign's frozen HTML — never wider.
-    # The later deliverables decision added one mutable-shell label, so the frozen
-    # pages retain the earlier five-label contract until their own freeze lifts.
+    # until their evidence is reapproved. A capture release permits its local capture
+    # flow, but does not authorize edits to a separately hash-bound editorial page.
+    # Those pages are excluded from the shell corpus, whose canonical public header
+    # is verified above; this gate must not demand a byte-pinned source be rewritten.
     from scripts.bofu_dominance.frozen_specs.constants import (  # noqa: PLC0415
         FORBIDDEN_RELATIVE_PATHS,
     )
 
     # 2026-09-16: the founder's capture decision (unlock-plan capture.authorization)
-    # lifts the shell freeze on the released pillars; shell_nav derives that release
-    # and the skip list must equal the campaign's frozen HTML minus the released set.
-    # Released pillars are then held to the mutable-shell contract like any route.
+    # lifts the shell-freeze subset. It does not override a material hash pin: those
+    # released-but-hash-bound pages retain their approved shell until reapproval.
     campaign_frozen = {r for r in FORBIDDEN_RELATIVE_PATHS if r.endswith("/index.html")}
     released = campaign_frozen - set(FROZEN_SHELL_FILES)
     if set(FROZEN_SHELL_FILES) != campaign_frozen - released:
@@ -305,6 +315,8 @@ def main() -> int:
     for rel in sorted(campaign_frozen):
         html = (SHELL_ROOT / rel).read_text(encoding="utf-8", errors="replace")
         labels = [label for _, label in nav_links(html, "desktop-nav")]
+        if rel in HASH_BOUND_EDITORIAL_FILES:
+            continue
         wanted = [label for _, label in expected] if rel in released else FROZEN_NAV_LABELS
         if labels != wanted:
             failures.append(
@@ -394,8 +406,10 @@ def main() -> int:
     # --- 5. CFG10X-11 IA contract on shipped HTML --------------------------------
     contract_errors = validate_contract()
     failures.extend(f"ia contract: {err}" for err in contract_errors)
-    if len(expected) > 5:
-        failures.append(f"header has {len(expected)} destinations; max is 5")
+    if len(expected) > MAX_HEADER_DESTINATIONS:
+        failures.append(
+            f"header has {len(expected)} destinations; max is {MAX_HEADER_DESTINATIONS}"
+        )
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     if not first_viewport_names_journey(home):
         failures.append("home header does not name a purchase situation without B2G")
@@ -494,18 +508,19 @@ def main() -> int:
         href = str(situation.get("href") or "")
         if not public_target_exists(href):
             failures.append(f"situation target missing: {situation.get('id')!r} -> {href!r}")
-    expected_discovery = {
-        "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/",
-        "/projetos/coordenacao-multidisciplinar/", "/quantitativos-orcamento-obras/",
-        "/revisao-tecnica-projetos-engenharia/", "/servicos/#areas",
-        "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/",
-    }
-    discovery = re.findall(r'<a\b(?=[^>]*data-cta-id="home-(?:project-[^"]+|private-quantities-budget|service-[^"]+)")[^>]*href="([^"]+)"', home)
-    if len(discovery) != len(expected_discovery) or set(discovery) != expected_discovery:
+    discovery = re.findall(
+        r'<a\b(?=[^>]*data-cta-position="home_services")[^>]*href="([^"]+)"',
+        home,
+    )
+    if len(discovery) != len(HOME_SERVICE_DESTINATIONS) or set(discovery) != HOME_SERVICE_DESTINATIONS:
         failures.append(f"home institutional discovery differs: {discovery}")
     for href in discovery:
         if not public_target_exists(href):
             failures.append(f"home discovery target missing: {href!r}")
+    services_at = home.find('id="servicos-complementares"')
+    capabilities_at = home.find('id="competencias"')
+    if services_at < 0 or capabilities_at < 0 or services_at > capabilities_at:
+        failures.append("home institutional discovery must precede project capabilities")
     if 'href="/servicos-obras-publicas/"' not in home:
         failures.append("public-works vertical lost its canonical entry")
 

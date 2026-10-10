@@ -15,10 +15,15 @@ const CLEARANCE_PX = 8;
 const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
 const PRIMARY_CTA_PATH_PREFIX = "#contato";
-// The project-led fold names the three core competencies, the work the company
-// performs, their integration and the commercial next action. It deliberately
-// does not turn registry checks, public datasets or internal triage into the offer.
+// The institutional fold preserves project competencies while naming the other
+// authorized fronts before the visitor reaches the detailed project sections.
 const CONTENT_CONCEPTS = [
+  {
+    id: "amplitude_institucional",
+    label: "projetos, orçamento, inspeção, perícia, avaliação, SST e obras públicas",
+    terms: ["projetos", "orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"],
+    minMatches: 7,
+  },
   {
     id: "categoria_corporativa",
     label: "categoria corporativa",

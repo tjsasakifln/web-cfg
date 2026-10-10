@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
+from scripts.bofu_dominance.frozen_specs.hashing import canonical_text_bytes
 from scripts.site.public_ia import active_header_href, header_items
 from scripts.site.public_navigation import (
     CANONICAL_CTA,
@@ -20,7 +21,7 @@ from scripts.site.public_navigation import (
     audit_public_navigation_tree,
     promote_public_navigation,
 )
-from scripts.site.shell_nav import value_first_cta_contract
+from scripts.site.shell_nav import HASH_BOUND_EDITORIAL_FILES, value_first_cta_contract
 from scripts.site.test_report_model_599 import (
     _assert_no_scope_contradictions,
     _visible_text,
@@ -52,6 +53,13 @@ LEGACY_NAV = [
     "Conteúdos",
     "Ferramentas",
     "Especialista",
+]
+APPROVED_PRECAMPAIGN_NAV = [
+    "Projetos",
+    "Serviços",
+    "Obras públicas",
+    "Como trabalhamos",
+    "Empresa",
 ]
 
 
@@ -629,10 +637,21 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     assert 5 <= len(archetypes) <= 8, archetypes
     assert len(set(archetypes)) >= 5, archetypes
     assert {"hero_split", "discipline_editorial", "delivery_flow", "service_index", "authority_editorial", "cta_formal"} <= set(archetypes)
-    assert archetypes.index("discipline_editorial") < archetypes.index("delivery_flow") < archetypes.index("service_index")
+    assert archetypes.index("service_index") < archetypes.index("discipline_editorial") < archetypes.index("delivery_flow")
     services = re.search(r'<section\b[^>]*data-section-archetype="service_index"[^>]*>.*?</section>', home, re.S)
     assert services and 'data-cta-id="home-service-public-works"' in services.group(0)
     assert 'href="/servicos-obras-publicas/"' in services.group(0)
+    assert services.start() < competence.start()
+    fronts = set(re.findall(r'data-cta-id="([^"]+)"', services.group(0)))
+    assert fronts == {
+        "home-service-projects",
+        "home-private-quantities-budget",
+        "home-service-inspection",
+        "home-service-expert-evidence",
+        "home-service-valuation",
+        "home-service-sst",
+        "home-service-public-works",
+    }
 
 
 def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None:
@@ -673,6 +692,18 @@ def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
             assert promote_public_navigation(
                 _html(frozen), relative_path=pillar["html_rel"]
             ) == _html(frozen)
+        elif pillar["html_rel"] in HASH_BOUND_EDITORIAL_FILES:
+            assert _desktop_labels(frozen) == APPROVED_PRECAMPAIGN_NAV, frozen
+            assert hashlib.sha256(canonical_text_bytes(frozen.read_bytes())).hexdigest() == (
+                frozen_hashes["forbidden"][pillar["html_rel"]]
+            ), frozen
+            projected = _NavParser()
+            projected.feed(
+                promote_public_navigation(
+                    _html(frozen), relative_path=pillar["html_rel"]
+                )
+            )
+            assert projected.labels == EXPECTED_NAV, frozen
         else:
             assert _desktop_labels(frozen) == EXPECTED_NAV, frozen
     for path in (ROOT / "index.html", PAGE):

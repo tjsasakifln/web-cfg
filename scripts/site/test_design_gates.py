@@ -442,15 +442,23 @@ def test_project_capabilities_accessible_without_js():
 
 
 def test_trace_matrix_and_tension_present():
-    """Project depth leads; legitimate adjacent services remain secondary."""
+    """Institutional fronts lead; project depth remains directly accessible."""
     html = HOME.read_text(encoding="utf-8")
     lower = html.lower()
     for term in ("concreto armado", "média e alta tensão", "terraplenagem", "coordenação multidisciplinar"):
         assert term in lower
+    fronts_at = html.find('id="servicos-complementares"')
     project_at = html.find('id="competencias"')
-    secondary_at = html.find('id="servicos-complementares"')
-    assert 0 < project_at < secondary_at
-    for term in ("Quantitativos e orçamentos", "Inspeções, avaliações e perícias", "Segurança do trabalho", "Obras públicas"):
+    assert 0 < fronts_at < project_at
+    for term in (
+        "Projetos e coordenação",
+        "Quantitativos e orçamentos",
+        "Inspeção e diagnóstico",
+        "Perícia e assistência técnica",
+        "Avaliação de imóvel",
+        "Segurança do trabalho",
+        "Obras públicas",
+    ):
         assert term in html
     assert "enviar documentos para análise" not in html.lower()
     for leak in (
@@ -480,21 +488,22 @@ def test_primary_cta_not_spam():
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
     assert hero_html.count('href="#contato"') == 1
-    # A ação principal abre a avaliação do escopo. A secundária é descoberta
-    # de áreas, não um segundo caminho de captura concorrente.
-    secondary = re.findall(r'href="(/projetos/)"', hero_html)
-    assert secondary == ["/projetos/"], secondary
+    # A ação principal abre a avaliação do escopo. A secundária oferece a
+    # descoberta institucional de serviços, sem criar uma segunda captura.
+    secondary = re.findall(r'href="(/servicos/)"', hero_html)
+    assert secondary == ["/servicos/"], secondary
     assert "EESC-USP" in html
 
 
 def test_home_five_second_clarity():
-    """Buyer can identify the firm, core disciplines, integration and next action."""
+    """Buyer can identify the institutional scope, execution and next action."""
     html = HOME.read_text(encoding="utf-8")
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     fold = hero.group(0)
     fold_lower = fold.lower()
-    assert "projetos de engenharia" in fold_lower
+    assert "engenharia, perícias e inteligência técnica" in fold_lower
+    assert "decisões técnicas" in fold_lower
     for discipline in ("estruturas", "instalações", "infraestrutura"):
         assert discipline in fold_lower
     assert "elabora e coordena" in fold_lower
@@ -502,13 +511,13 @@ def test_home_five_second_clarity():
     assert "edificações" in fold_lower and "indústria" in fold_lower
     assert "solicitar proposta" in fold_lower
     assert 'href="#contato"' in fold
-    assert 'href="/projetos/"' in fold
+    assert 'href="/servicos/"' in fold
     assert "credenciais e limites" not in fold_lower
     assert "54.055" not in html and "4,48 mi" not in html
 
 
 def test_home_decision_fold_hierarchy():
-    """Corporate fold leads with project capability and a direct proposal path."""
+    """Corporate fold leads with technical decisions and a direct proposal path."""
     html = HOME.read_text(encoding="utf-8")
     hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
@@ -516,7 +525,7 @@ def test_home_decision_fold_hierarchy():
     h1 = re.search(r'<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)</h1>', hero_html)
     assert h1, "hero h1 missing"
     h1_text = re.sub(r"<[^>]+>", " ", h1.group(1)).lower()
-    assert "engenharia de projeto" in h1_text, h1_text
+    assert "decisões técnicas" in h1_text, h1_text
     assert "chegar à obra" in h1_text, h1_text
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
@@ -524,17 +533,16 @@ def test_home_decision_fold_hierarchy():
     assert html.count('name="diagnostico-b2g"') == 1
     assert html.count('id="formulario-contato"') == 1
     assert 'id="competencias"' in html and 'id="setores"' in html
-    assert html.find('id="competencias"') < html.find('id="servicos-complementares"')
+    assert html.find('id="servicos-complementares"') < html.find('id="competencias"')
     assert html.find('id="setores"') < html.find('id="solicitar-proposta"')
-    # The fold's proof is a readable HTML panel: three disciplines feed one
-    # coordinated project, which produces construction documentation. Keep
-    # this contract semantic so the panel cannot regress to an empty shell or
-    # to the former illegible SVG/image treatment.
+    # The fold's proof is a readable HTML flow from need through technical work
+    # to a defined delivery. Keep this contract semantic so it cannot regress
+    # to an empty shell or the former illegible SVG/image treatment.
     panel = re.search(
         r'<figure[^>]*class="home-opening__figure"[\s\S]*?</figure>',
         hero_html,
     )
-    assert panel, "hero project panel missing"
+    assert panel, "hero technical flow panel missing"
     panel_html = panel.group(0)
     assert 'class="home-opening__sheet"' in panel_html
     assert 'class="home-project-diagram__title"' in panel_html
@@ -542,21 +550,21 @@ def test_home_decision_fold_hierarchy():
         r'<ul[^>]*class="home-project-diagram__disciplines"[\s\S]*?</ul>',
         panel_html,
     )
-    assert disciplines, "hero discipline panel missing"
+    assert disciplines, "hero need-to-scope panel missing"
     discipline_items = re.findall(r"<li>[\s\S]*?</li>", disciplines.group(0))
     assert len(discipline_items) == 3, discipline_items
-    for discipline in ("Estruturas", "Instalações", "Infraestrutura"):
-        assert any(f">{discipline}<" in item for item in discipline_items), discipline
+    for stage in ("Necessidade", "Leitura técnica", "Escopo"):
+        assert any(f">{stage}<" in item for item in discipline_items), stage
     coordination = re.search(
         r'<div[^>]*class="home-project-diagram__coordination"[\s\S]*?</div>',
         panel_html,
     )
-    assert coordination and "Projeto coordenado" in coordination.group(0)
+    assert coordination and "Trabalho técnico" in coordination.group(0)
     delivery = re.search(
         r'<p[^>]*class="home-project-diagram__delivery"[\s\S]*?</p>',
         panel_html,
     )
-    assert delivery and "Documentação para a obra" in delivery.group(0)
+    assert delivery and "Entrega definida" in delivery.group(0)
     assert panel_html.index('home-project-diagram__disciplines') < panel_html.index(
         'home-project-diagram__coordination'
     ) < panel_html.index('home-project-diagram__delivery')

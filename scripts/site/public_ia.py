@@ -29,7 +29,7 @@ HUB_ROLES = frozenset(
         "institucional",
     }
 )
-MAX_HEADER_DESTINATIONS = 5
+MAX_HEADER_DESTINATIONS = 6
 SKIP_DIR_PARTS = frozenset(
     {
         ".git",
@@ -55,6 +55,7 @@ SKIP_DIR_PARTS = frozenset(
 JOURNEY_PHRASES = (
     "projetos",
     "serviços",
+    "condomínios",
     "obras públicas",
     "como trabalhamos",
     "empresa",

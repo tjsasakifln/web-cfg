@@ -109,6 +109,7 @@ def _header(active: str) -> str:
     links = [
         ("/projetos/", "Projetos"),
         ("/servicos/", "Serviços"),
+        ("/engenharia-condominios/", "Condomínios"),
         ("/servicos-obras-publicas/", "Obras públicas"),
         ("/como-trabalhamos/", "Como trabalhamos"),
         ("/empresa/", "Empresa"),

@@ -23,12 +23,13 @@ const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
 // Current institutional discovery paths; legacy situation aliases remain URL
 // compatibility only. Geometry must protect the visible project/service links.
-const HOME_DISCOVERY_SELECTOR = ".home-capability-list a[href], .home-coordination a[href], .home-service-links a[href]";
+const HOME_DISCOVERY_SELECTOR = ".home-service-links a[href], .home-capability-list a[href], .home-coordination a[href]";
 const HOME_DISCOVERY = [
-  "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/",
-  "/projetos/coordenacao-multidisciplinar/", "/quantitativos-orcamento-obras/",
-  "/revisao-tecnica-projetos-engenharia/", "/servicos/#areas",
+  "/projetos/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/",
+  "/assistencia-tecnica-pericial-engenharia/", "/servicos/#servico-avaliacao",
   "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/",
+  "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/",
+  "/projetos/coordenacao-multidisciplinar/",
 ];
 const EXPECTED_DISCOVERY = HOME_DISCOVERY.length;
 
@@ -664,7 +665,7 @@ async function main() {
       const delivery = document.querySelector(".home-deliverables")?.textContent || "";
       return {
         h1: Boolean(document.querySelector("#hero-title")),
-        projectPath: Boolean(document.querySelector('.hero a[href="/projetos/"]')),
+        projectPath: Boolean(document.querySelector('.hero a[href="/servicos/"]')),
         paths: [...document.querySelectorAll(selector)].map(a => a.getAttribute("href")),
         channels: document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]').length,
         deliveryExplained: /(desenhos|modelos|memórias|planilhas)/i.test(delivery) && /(execução|operação|contratação)/i.test(delivery),
@@ -822,7 +823,7 @@ async function main() {
       const response = await page.goto(`${BASE}${href}`, { waitUntil: "networkidle0" });
       const destination = await page.evaluate(() => {
         const main = document.querySelector("main"), text = main?.innerText || "";
-        return { substantial: text.length >= 1800, work: /elabora|concepção|dimensionamento|coordena|inspeciona|analisa|levantamento|quantitativo|documentação/i.test(text), delivery: /entrega|documentos|desenhos|planilha|projeto|relatório/i.test(text), contact: Boolean(main?.querySelector('a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"], a[href^="mailto:"], form')) };
+        return { substantial: text.length >= 1800, work: /elabora|concepção|dimensionamento|coordena|inspeciona|analisa|levantamento|quantitativo|documentação|quesitos|diligência|análise/i.test(text), delivery: /entrega|documentos|desenhos|planilha|projeto|relatório/i.test(text), contact: Boolean(main?.querySelector('a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"], a[href^="mailto:"], form')) };
       });
       if (response?.status() !== 200 || !Object.values(destination).every(Boolean)) throw new Error(`${href}: incomplete explanation/contact ${JSON.stringify(destination)}`);
     }

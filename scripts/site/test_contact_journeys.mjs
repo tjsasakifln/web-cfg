@@ -26,16 +26,17 @@ if (requestedBase && requestedBaseUrl.href !== `${productionBase}/`) {
   throw new Error("CONTACT_JOURNEY_BASE_URL only permits https://confenge.com.br");
 }
 const productionMode = Boolean(requestedBase);
-const viewports = [[360, 800], [390, 844], [768, 900], [1366, 900]];
+const viewports = [[360, 800], [390, 844], [768, 900], [1440, 1000]];
 // CONFENGE-CAMPANHA-AQUISICAO-20261003: the home presents project disciplines
 // and engineering services. Test the visible discovery entry separately from
 // the direct technical route: an aggregate service page can explain several
 // needs without restoring the superseded situation catalogue or home CTA.
 const journeys = [
   ["legacy_project_fragment", "/servicos/#servico-projeto", "competencias", "/projetos/estruturas/"],
-  ["pequena_reforma", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/servicos/#areas"],
-  ["condominio_anomalia", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/servicos/#areas"],
-  ["arquiteto_compatibilizacao", "/revisao-tecnica-projetos-engenharia/", "servicos-complementares", "/revisao-tecnica-projetos-engenharia/"],
+  ["pequena_reforma", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
+  ["condominio_anomalia", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
+  ["condominio_contratacao", "/engenharia-condominios/", "inicio", "/engenharia-condominios/"],
+  ["arquiteto_compatibilizacao", "/revisao-tecnica-projetos-engenharia/", "servicos-complementares", "/projetos/"],
   ["projeto_estrutural", "/projetos/estruturas/", "competencias", "/projetos/estruturas/"],
   ["instalacoes", "/projetos/instalacoes/", "competencias", "/projetos/instalacoes/"],
   ["infraestrutura", "/projetos/infraestrutura/", "competencias", "/projetos/infraestrutura/"],
@@ -45,8 +46,8 @@ const journeys = [
   ["orgao_preparando_projeto", "/servicos-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
   ["edital", "/servicos-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
   ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
-  ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "servicos-complementares", "/servicos/#areas"],
-  ["avaliacao_imovel", "/servicos/#servico-avaliacao", "servicos-complementares", "/servicos/#areas"],
+  ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "servicos-complementares", "/assistencia-tecnica-pericial-engenharia/"],
+  ["avaliacao_imovel", "/servicos/#servico-avaliacao", "servicos-complementares", "/servicos/#servico-avaliacao"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "servicos-complementares", "/seguranca-trabalho-apoio-tecnico/"],
 ].map(([id, direct, homeContainer, homeHref]) => ({ id, direct, homeContainer, homeHref, homeSelector: `a[href="${homeHref}"]` }));
 const pendingUntilClosure = [];
@@ -330,8 +331,20 @@ try {
     await page.setViewport({ width: 683, height: 450 }); await page.goto(routeUrl(journey.direct, `${journey.id}-zoom`), { waitUntil: "domcontentloaded" });
     const zoomed = await facts(page, new URL(journey.direct, base).hash); required("journey_zoom_200_reflow_no_overflow", !zoomed.overflow, JSON.stringify(zoomed), { journey: journey.id, route: journey.direct, viewport: "1366@200%-equivalent(683css)" });
     await page.goto(routeUrl("/", `${journey.id}-home`), { waitUntil: "domcontentloaded" });
-    const homeLink = await page.$(`#${journey.homeContainer} ${journey.homeSelector}`);
-    const homeVisible = homeLink && await homeLink.evaluate(anchor => { const box = anchor.getBoundingClientRect(); const style = getComputedStyle(anchor); return box.width > 0 && box.height > 0 && style.display !== "none" && style.visibility !== "hidden"; });
+    // A header entry is reached through the mobile menu at the reflow width.
+    // Exercise the real control instead of inspecting its hidden desktop twin.
+    if (journey.homeContainer === "inicio") {
+      const menu = await page.$('#inicio .menu-toggle');
+      if (menu && await menu.evaluate(button => button.getBoundingClientRect().width > 0)) {
+        await menu.focus();
+        await page.keyboard.press("Enter");
+      }
+    }
+    let homeLink = null;
+    for (const candidate of await page.$$(`#${journey.homeContainer} ${journey.homeSelector}`)) {
+      if (await candidate.evaluate(anchor => { const box = anchor.getBoundingClientRect(); const style = getComputedStyle(anchor); return box.width > 0 && box.height > 0 && style.display !== "none" && style.visibility !== "hidden"; })) { homeLink = candidate; break; }
+    }
+    const homeVisible = Boolean(homeLink);
     required("journey_home_entry_link", Boolean(homeVisible), `${journey.homeContainer} ${journey.homeSelector}`, { journey: journey.id, route: "/" });
     if (!homeLink) continue;
     const href = await homeLink.evaluate(a => a.getAttribute("href"));
