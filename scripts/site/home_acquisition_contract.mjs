@@ -1,15 +1,14 @@
 /** Material acquisition contract for the institutional home, independent of layout copy. */
 const DISCOVERY = [
-  ["home-project-structures", "/projetos/estruturas/", "capabilities"],
-  ["home-project-installations", "/projetos/instalacoes/", "capabilities"],
-  ["home-project-infrastructure", "/projetos/infraestrutura/", "capabilities"],
-  ["home-project-coordination", "/projetos/coordenacao-multidisciplinar/", "capabilities"],
+  ["home-service-projects", "/projetos/", "home_services"],
   ["home-private-quantities-budget", "/quantitativos-orcamento-obras/", "home_services"],
-  ["home-service-review", "/revisao-tecnica-projetos-engenharia/", "home_services"],
-  ["home-service-inspection", "/servicos/#areas", "home_services"],
+  ["home-service-inspection", "/inspecao-diagnostico-edificacoes/", "home_services"],
+  ["home-service-expert-evidence", "/assistencia-tecnica-pericial-engenharia/", "home_services"],
+  ["home-service-valuation", "/servicos/#servico-avaliacao", "home_services"],
   ["home-service-sst", "/seguranca-trabalho-apoio-tecnico/", "home_services"],
   ["home-service-public-works", "/servicos-obras-publicas/", "home_services"],
 ];
+const INSTITUTIONAL_FRONTS = ["projetos", "orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"];
 const text = (html) => html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
 const openingTag = (element) => element.slice(0, element.indexOf(">") + 1);
 const attribute = (tag, name) => tag.match(new RegExp(`(?:^|\\s)${name}\\s*=\\s*(["'])(.*?)\\1`, "i"))?.[2] || "";
@@ -32,9 +31,11 @@ export function evaluateHomeAcquisition(html) {
   const form = forms.length === 1 ? forms[0] : "";
   const primaryTag = primary[0] ? openingTag(primary[0]) : "";
   return {
-    headingScope: heading.includes("engenharia") && /\bprojeto/.test(heading),
+    headingScope: heading.includes("decisões técnicas")
+      && /engenharia, perícias e inteligência técnica/.test(text(opening)),
     executionScope: /\b(?:elabora|projetamos|desenvolvemos)\b/.test(lead)
       && /\bcoorden/.test(lead) && ["estruturas", "instalações", "infraestrutura"].every((term) => lead.includes(term)),
+    amplitudeScope: INSTITUTIONAL_FRONTS.every((term) => lead.includes(term)),
     discoveryPaths,
     proposalPath: primary.length === 1 && text(primary[0]).includes("solicitar proposta")
       && attribute(primaryTag, "href") === "#contato" && attribute(primaryTag, "data-event-name") === "cta_click"

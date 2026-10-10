@@ -241,10 +241,10 @@ ok("home_200", home.status === 200, `status=${home.status}`);
 const homeContract = evaluateHomeAcquisition(home.body);
 ok(
   "home_h1_service_scope",
-  homeContract.headingScope && homeContract.executionScope,
-  "opening must name engineering projects and explicitly assume the three coordinated fronts",
+  homeContract.headingScope && homeContract.executionScope && homeContract.amplitudeScope,
+  "opening must represent institutional engineering and all seven contracted fronts",
 );
-ok("corporate_paths_match_contract", homeContract.discoveryPaths, "nine attributed discipline and service destinations required");
+ok("corporate_paths_match_contract", homeContract.discoveryPaths, "seven attributed engineering service destinations required");
 ok("home_proposal_reaches_persisted_intake", homeContract.proposalPath, "hero proposal must reach the shared receipt-dependent form");
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;
 ok("narrative_blocks_within_range", blocks >= 5 && blocks <= 8, `archetypes=${blocks}`);

@@ -12,7 +12,7 @@
     "reject": 18
   },
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-  "generated_at": "2026-10-10",
+  "generated_at": "2026-10-03",
   "human_review_policy": {
     "indexable_states": [
       "APPROVED",
@@ -38,8 +38,7 @@
         "description": "Inteligência de mercado: 13 contratos, 11 órgãos em Santa Catarina. Medianas, compradores e implicações para empresas de engenharia.",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária (Santa Catarina)",
         "mandatory_fail": [
-          "contracts<15",
-          "data_age_days>90"
+          "contracts<15"
         ],
         "observation_count": 13,
         "period_end": "2026-07-08",
@@ -71,23 +70,21 @@
       ],
       "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária (Santa Catarina)",
       "human_review": "PENDING",
-      "indexability_score": 71,
-      "indexability_score_alias": 71,
+      "indexability_score": 77,
+      "indexability_score_alias": 77,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-10-10",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "observation_count": 13,
       "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
-      "page_material_hash": "b296bc3e4c798f13863deaabe0e090fb390941938c7af5b01144ac4161afb53f",
+      "page_material_hash": "d40cd67a939d9063dca65e38c5a1956595caebc9d3c3b8dbf4c4ccc9d72766cd",
       "page_type": "market",
-      "publication_decision_reason": "contracts<15; data_age_days>90",
+      "publication_decision_reason": "contracts<15",
       "quality_eligible": false,
       "reasons": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "region": "SC",
       "related_urls": [],
@@ -122,7 +119,7 @@
         "comparability": 7,
         "differentiation": 10,
         "evidence": 10,
-        "freshness": 0,
+        "freshness": 6,
         "icp_adherence": 15,
         "service_cta": 4
       },
@@ -153,8 +150,7 @@
         "description": "Inteligência de mercado: 13 contratos, 6 órgãos no Piauí. Medianas, compradores e implicações para empresas de engenharia.",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária (Piauí)",
         "mandatory_fail": [
-          "contracts<15",
-          "data_age_days>90"
+          "contracts<15"
         ],
         "observation_count": 13,
         "period_end": "2026-07-08",
@@ -184,23 +180,21 @@
       "evidences_checked": null,
       "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária (Piauí)",
       "human_review": "PENDING",
-      "indexability_score": 65,
-      "indexability_score_alias": 65,
+      "indexability_score": 71,
+      "indexability_score_alias": 71,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-10-10",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "observation_count": 13,
       "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
-      "page_material_hash": "71d8c36d51b82f452a5bbd41dbcde402fe279fe9d6f83c90d99fe3dc81a3f574",
+      "page_material_hash": "a1b83dad4b09d2224634012cebbe0656e647e8c44f79c763efeaee363f5089c0",
       "page_type": "market",
-      "publication_decision_reason": "contracts<15; data_age_days>90",
+      "publication_decision_reason": "contracts<15",
       "quality_eligible": false,
       "reasons": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "region": "PI",
       "related_urls": [],
@@ -235,7 +229,7 @@
         "comparability": 7,
         "differentiation": 10,
         "evidence": 7,
-        "freshness": 0,
+        "freshness": 6,
         "icp_adherence": 12,
         "service_cta": 4
       },
@@ -266,8 +260,7 @@
         "description": "Inteligência de mercado: 12 contratos, 10 órgãos em Minas Gerais. Medianas, compradores e implicações para empresas de engenharia.",
         "h1": "Quanto o poder público contratou em Edificações públicas (Minas Gerais)",
         "mandatory_fail": [
-          "contracts<15",
-          "data_age_days>90"
+          "contracts<15"
         ],
         "observation_count": 12,
         "period_end": "2026-07-08",
@@ -299,23 +292,21 @@
       ],
       "h1": "Quanto o poder público contratou em Edificações públicas (Minas Gerais)",
       "human_review": "PENDING",
-      "indexability_score": 69,
-      "indexability_score_alias": 69,
+      "indexability_score": 75,
+      "indexability_score_alias": 75,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-10-10",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "observation_count": 12,
       "page_id": "market-edificacoes-publicas-mg",
-      "page_material_hash": "9db33d569c58c997314f16d6f0a12fd0ed94dd78b96eb62e946fa7a75c893f95",
+      "page_material_hash": "cb22db149447e316a40c4042cde24f717744b7deb0e383e10934f4cf129c14d1",
       "page_type": "market",
-      "publication_decision_reason": "contracts<15; data_age_days>90",
+      "publication_decision_reason": "contracts<15",
       "quality_eligible": false,
       "reasons": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "region": "MG",
       "related_urls": [],
@@ -350,7 +341,7 @@
         "comparability": 7,
         "differentiation": 10,
         "evidence": 9,
-        "freshness": 0,
+        "freshness": 6,
         "icp_adherence": 14,
         "service_cta": 4
       },
@@ -381,8 +372,7 @@
         "description": "Inteligência de mercado: 10 contratos, 10 órgãos no Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
         "h1": "Quanto o poder público contratou em Edificações públicas (Rio Grande do Sul)",
         "mandatory_fail": [
-          "contracts<15",
-          "data_age_days>90"
+          "contracts<15"
         ],
         "observation_count": 10,
         "period_end": "2026-07-08",
@@ -412,23 +402,21 @@
       "evidences_checked": null,
       "h1": "Quanto o poder público contratou em Edificações públicas (Rio Grande do Sul)",
       "human_review": "PENDING",
-      "indexability_score": 69,
-      "indexability_score_alias": 69,
+      "indexability_score": 75,
+      "indexability_score_alias": 75,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-10-10",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "observation_count": 10,
       "page_id": "market-edificacoes-publicas-rs",
-      "page_material_hash": "31045f87b363e135496c5188595b677ffee452af94d14d16579ded4ece0e1016",
+      "page_material_hash": "e6f57fe80e18fbbde630918d1ff92310e56178ff46ef7aa0e43642b500c14045",
       "page_type": "market",
-      "publication_decision_reason": "contracts<15; data_age_days>90",
+      "publication_decision_reason": "contracts<15",
       "quality_eligible": false,
       "reasons": [
-        "contracts<15",
-        "data_age_days>90"
+        "contracts<15"
       ],
       "region": "RS",
       "related_urls": [],
@@ -463,7 +451,7 @@
         "comparability": 7,
         "differentiation": 10,
         "evidence": 9,
-        "freshness": 0,
+        "freshness": 6,
         "icp_adherence": 14,
         "service_cta": 4
       },
@@ -771,8 +759,8 @@
       "evidences_checked": null,
       "h1": "Valores de contratos: Edificações públicas (Minas Gerais)",
       "human_review": "PENDING",
-      "indexability_score": 71,
-      "indexability_score_alias": 71,
+      "indexability_score": 73,
+      "indexability_score_alias": 73,
       "intent": "estimar_valores_dispersao",
       "last_material_change": "2026-08-29",
       "mandatory_fail": [
@@ -783,12 +771,12 @@
       "page_id": "price-edificacoes-publicas-mg",
       "page_material_hash": "550fe84a17bcb8cdd4dca7f5ddb9c3c2c1d9837a89d9dd48dc2200dd22528cc2",
       "page_type": "price",
-      "publication_decision_reason": "temporal_span_days<90; no_comparison_group; score=71",
+      "publication_decision_reason": "temporal_span_days<90; no_comparison_group; score=73",
       "quality_eligible": false,
       "reasons": [
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=71"
+        "score=73"
       ],
       "region": "MG",
       "related_urls": [],
@@ -827,7 +815,7 @@
         "comparability": 2,
         "differentiation": 10,
         "evidence": 6,
-        "freshness": 6,
+        "freshness": 8,
         "icp_adherence": 14,
         "service_cta": 5
       },
@@ -883,8 +871,8 @@
       "evidences_checked": null,
       "h1": "Valores de contratos: Pavimentação e infraestrutura viária (Piauí)",
       "human_review": "PENDING",
-      "indexability_score": 70,
-      "indexability_score_alias": 70,
+      "indexability_score": 72,
+      "indexability_score_alias": 72,
       "intent": "estimar_valores_dispersao",
       "last_material_change": "2026-09-01",
       "mandatory_fail": [
@@ -897,14 +885,14 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-pi",
       "page_material_hash": "76102908192b838b1502821ded224b82fa1cf692971f4e8a764f8a6c6de055bf",
       "page_type": "price",
-      "publication_decision_reason": "obs<15; primary_contracts<15; temporal_span_days<90; no_comparison_group; score=70",
+      "publication_decision_reason": "obs<15; primary_contracts<15; temporal_span_days<90; no_comparison_group; score=72",
       "quality_eligible": false,
       "reasons": [
         "obs<15",
         "primary_contracts<15",
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=70"
+        "score=72"
       ],
       "region": "PI",
       "related_urls": [],
@@ -945,7 +933,7 @@
         "comparability": 2,
         "differentiation": 10,
         "evidence": 6,
-        "freshness": 6,
+        "freshness": 8,
         "icp_adherence": 13,
         "service_cta": 5
       },
@@ -1000,8 +988,8 @@
       "evidences_checked": null,
       "h1": "Valores de contratos: Edificações públicas (Rio Grande do Sul)",
       "human_review": "PENDING",
-      "indexability_score": 69,
-      "indexability_score_alias": 69,
+      "indexability_score": 71,
+      "indexability_score_alias": 71,
       "intent": "estimar_valores_dispersao",
       "last_material_change": "2026-09-01",
       "mandatory_fail": [
@@ -1013,13 +1001,13 @@
       "page_id": "price-edificacoes-publicas-rs",
       "page_material_hash": "9ff5207524657747d645816f060adfed8ad9ac13a4a18048c0002bddc000a1ee",
       "page_type": "price",
-      "publication_decision_reason": "obs<15; primary_contracts<15; no_comparison_group; score=69",
+      "publication_decision_reason": "obs<15; primary_contracts<15; no_comparison_group; score=71",
       "quality_eligible": false,
       "reasons": [
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=69"
+        "score=71"
       ],
       "region": "RS",
       "related_urls": [],
@@ -1059,7 +1047,7 @@
         "comparability": 2,
         "differentiation": 10,
         "evidence": 5,
-        "freshness": 6,
+        "freshness": 8,
         "icp_adherence": 13,
         "service_cta": 5
       },
@@ -1114,8 +1102,8 @@
       "evidences_checked": null,
       "h1": "Valores de contratos: Pavimentação e infraestrutura viária (Santa Catarina)",
       "human_review": "PENDING",
-      "indexability_score": 69,
-      "indexability_score_alias": 69,
+      "indexability_score": 71,
+      "indexability_score_alias": 71,
       "intent": "estimar_valores_dispersao",
       "last_material_change": "2026-08-29",
       "mandatory_fail": [
@@ -1127,13 +1115,13 @@
       "page_id": "price-pavimentacao-infraestrutura-viaria-sc",
       "page_material_hash": "623a3c2c13fc215c53fa87d84e2c614ecdccc40eb8d77990c0b7d09288ef9f03",
       "page_type": "price",
-      "publication_decision_reason": "obs<15; primary_contracts<15; no_comparison_group; score=69",
+      "publication_decision_reason": "obs<15; primary_contracts<15; no_comparison_group; score=71",
       "quality_eligible": false,
       "reasons": [
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=69"
+        "score=71"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1173,7 +1161,7 @@
         "comparability": 2,
         "differentiation": 10,
         "evidence": 5,
-        "freshness": 6,
+        "freshness": 8,
         "icp_adherence": 13,
         "service_cta": 5
       },

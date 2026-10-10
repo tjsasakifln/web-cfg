@@ -405,17 +405,19 @@ test("production cutover keeps valuable checks and adds host-neutral identities"
   assert.doesNotMatch(originClient, /args\.push\([^\n]*(?:--insecure|["']-k["'])/);
 });
 
-test("production home acceptance requires project scope, attributed paths and persisted proposal", () => {
+test("production home acceptance requires institutional scope, attributed paths and persisted proposal", () => {
   const html = readFileSync(resolve(ROOT, "index.html"), "utf8");
   assert.deepEqual(evaluateHomeAcquisition(html), {
-    headingScope: true, executionScope: true, discoveryPaths: true, proposalPath: true,
+    headingScope: true, executionScope: true, amplitudeScope: true, discoveryPaths: true, proposalPath: true,
   });
   for (const [old, replacement, field] of [
-    ["Engenharia de projeto para decisões", "Serviços para decisões", "headingScope"],
+    ["Decisões técnicas", "Decisões comerciais", "headingScope"],
+    ["Engenharia, perícias e inteligência técnica", "Consultoria genérica", "headingScope"],
     ["A CONFENGE elabora e coordena projetos", "A CONFENGE apresenta serviços", "executionScope"],
     ["estruturas, instalações e infraestrutura", "disciplinas diversas", "executionScope"],
-    ['data-cta-id="home-project-structures"', 'data-cta-id="outro"', "discoveryPaths"],
-    ['href="/servicos/#areas"', 'href="/x/"', "discoveryPaths"],
+    ["orçamento, inspeção, perícia, avaliação, SST e obras públicas", "orçamento e apoio técnico", "amplitudeScope"],
+    ['data-cta-id="home-service-projects"', 'data-cta-id="outro"', "discoveryPaths"],
+    ['href="/inspecao-diagnostico-edificacoes/"', 'href="/x/"', "discoveryPaths"],
     ['data-cta-position="home_services"', 'data-cta-position="outro"', "discoveryPaths"],
     ['href="#contato"', 'href="/triagem-tecnica/"', "proposalPath"],
     ['data-receipt-required="true"', 'data-receipt-required="false"', "proposalPath"],
@@ -427,7 +429,7 @@ test("production home acceptance requires project scope, attributed paths and pe
     assert.ok(html.includes(old), old);
     assert.equal(evaluateHomeAcquisition(html.replaceAll(old, replacement))[field], false, field);
   }
-  for (const [id, field] of [["home-project-structures", "discoveryPaths"], [null, "proposalPath"]]) {
+  for (const [id, field] of [["home-service-projects", "discoveryPaths"], [null, "proposalPath"]]) {
     const anchor = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0])
       .find((value) => id ? value.includes(`data-cta-id="${id}"`) : value.includes('data-cta-position="hero"') && value.includes("button-primary"));
     assert.ok(anchor);

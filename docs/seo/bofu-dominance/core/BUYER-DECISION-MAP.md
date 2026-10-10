@@ -86,7 +86,7 @@ The two URL gaps are deliberately absent from this controllable queue: `bid-read
 | `data/organic/bofu-intent-matrix.json` | `4562b56ef175e3d96fd45ab3bf223762c876edaa6d1ba769ec84fbd3457758f2` |
 | `data/organic/demand-map.json` | `ad85b6fdb44871ac5d47b9acd2941598ea0fba31932d5419534803709860a2b4` |
 | `data/organic/content-service-map.json` | `7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef` |
-| `data/organic/public-family-registry.json` | `c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0` |
+| `data/organic/public-family-registry.json` | `bcdfaa3e68a7aaa71bed79c3627cd5e12ff55923fb3f74788afc335b602c2934` |
 | `data/bofu-dominance/frozen-specs/query-ownership.json` | `fe4948670e8b1e01fc96cb29e21686e6a78389a3df713044375f79941627c6a2` |
 | `data/organic/medicoes-glosas-query-ownership.v1.json` | `bd4f120c7e565eba03fddc843647a75a90bb9cd6413bc61418fa5df5b53567ef` |
 | `data/bofu-dominance/core/gsc-live-overlay.v1.json` | `c9ff7ee00fa58fc4e7756a2c1e733c3ff6269272cf6b58a5c378386476470f14` |
