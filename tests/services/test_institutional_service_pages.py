@@ -8,7 +8,6 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
-from urllib.parse import parse_qs, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -33,6 +32,19 @@ def cta_href(document: str, cta_id: str) -> str:
     if not href:
         raise AssertionError(f"CTA without href: {cta_id}")
     return html.unescape(href.group(1))
+
+
+def cta_attributes(document: str, cta_id: str) -> dict[str, str]:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    if not tag:
+        raise AssertionError(f"CTA not found: {cta_id}")
+    return {
+        name: html.unescape(value)
+        for name, value in re.findall(r'([\w-]+)="([^"]*)"', tag.group(0))
+    }
 
 
 class PageFacts(HTMLParser):
@@ -157,19 +169,16 @@ class InstitutionalServicePagesTest(unittest.TestCase):
             document = (ROOT / route / "index.html").read_text(encoding="utf-8")
             with self.subTest(route=route):
                 for suffix in ("hero-calm", "contact-calm"):
-                    target = urlsplit(cta_href(document, f"{route}-{suffix}"))
-                    params = parse_qs(target.query)
-                    self.assertEqual(target.path, "/")
-                    self.assertEqual(target.fragment, "contato")
-                    self.assertEqual(
-                        set(params),
-                        {"jornada", "tema", "origem", "route_family", "asset_id"},
-                    )
-                    self.assertEqual(params["jornada"], [page["journey"]])
-                    self.assertEqual(params["tema"], [page["hero"]["title"]])
-                    self.assertEqual(params["origem"], [f"/{route}/"])
-                    self.assertEqual(params["route_family"], [route_families[route]])
-                    self.assertTrue(params["asset_id"][0])
+                    cta_id = f"{route}-{suffix}"
+                    attrs = cta_attributes(document, cta_id)
+                    self.assertEqual(cta_href(document, cta_id), "/#contato")
+                    self.assertNotIn("?", attrs["href"])
+                    self.assertEqual(attrs["data-journey"], page["journey"])
+                    self.assertEqual(attrs["data-tema"], page["hero"]["title"])
+                    self.assertEqual(attrs["data-origem"], f"/{route}/")
+                    self.assertEqual(attrs["data-origin-url"], f"/{route}/")
+                    self.assertEqual(attrs["data-route-family"], route_families[route])
+                    self.assertTrue(attrs["data-asset-id"])
                 self.assertIn('href="https://wa.me/', document)
                 self.assertIn('href="mailto:', document)
                 self.assertIn('href="tel:', document)
