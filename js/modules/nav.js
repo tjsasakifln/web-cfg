@@ -440,6 +440,64 @@
       if (isPhoneLike(s)) return '';
       return s;
     };
+    // A browser may deny sessionStorage even during a same-origin navigation.
+    // This one-hop fallback carries only public CTA metadata and is consumed
+    // immediately on the destination; visitor-entered fields never enter it.
+    const PUBLIC_CONTEXT_NAME = 'confenge:public-context:';
+    const PUBLIC_CONTEXT_KEYS = ['jornada', 'tema', 'route_family', 'asset_id', 'origem', 'origin_url', 'landing_url'];
+    const publicContextPath = (p) => String(p || '/').replace(/\/?$/, '/');
+    const takePublicContext = () => {
+      try {
+        const raw = String(window.name || '');
+        if (!raw.startsWith(PUBLIC_CONTEXT_NAME)) return {};
+        window.name = '';
+        const saved = JSON.parse(raw.slice(PUBLIC_CONTEXT_NAME.length));
+        const savedAt = Number(saved && saved.saved_at);
+        const age = Date.now() - savedAt;
+        const sourcePath = String(saved && saved.source_path || '');
+        const sourceHost = String(saved && saved.source_host || '').toLowerCase().replace(/^www\./, '');
+        const sourceOrigin = String(saved && saved.source_origin || '');
+        let referrer = null;
+        try { referrer = new URL(document.referrer || ''); } catch (_) { /* rejected below */ }
+        if (!saved || typeof saved !== 'object'
+          || !Number.isFinite(savedAt) || age < 0 || age > 10 * 60 * 1000
+          || !sourcePath.startsWith('/') || /[?#]/.test(sourcePath)
+          || sourcePath !== publicContextPath(sourcePath)
+          || !isConfengeHostName(sourceHost)
+          || !referrer || !isConfengeHostName(referrer.hostname)
+          || !sourceOrigin || referrer.origin !== sourceOrigin || sourceOrigin !== window.location.origin
+          || String(referrer.hostname).toLowerCase().replace(/^www\./, '') !== sourceHost
+          || publicContextPath(referrer.pathname) !== sourcePath
+          || publicContextPath(saved.path) !== publicContextPath(window.location.pathname)) return {};
+        const context = {};
+        PUBLIC_CONTEXT_KEYS.forEach((key) => {
+          const value = sanitizeAttr(saved.context && saved.context[key], key);
+          if (value) context[key] = value;
+        });
+        return context;
+      } catch (_) { return {}; }
+    };
+    const rememberPublicContextForRoute = (a, incoming) => {
+      try {
+        const target = new URL(a.getAttribute('href') || '', window.location.href);
+        if (!isConfengeHostName(target.hostname)
+          || publicContextPath(target.pathname) === publicContextPath(window.location.pathname)
+          || window.name) return;
+        const context = {};
+        PUBLIC_CONTEXT_KEYS.forEach((key) => {
+          const value = sanitizeAttr(incoming && incoming[key], key);
+          if (value) context[key] = value;
+        });
+        if (!Object.keys(context).length) return;
+        const sourceHost = String(window.location.hostname || '').toLowerCase().replace(/^www\./, '');
+        const sourceOrigin = String(window.location.origin || '');
+        if (!isConfengeHostName(sourceHost) || !sourceOrigin || target.origin !== sourceOrigin) return;
+        window.name = `${PUBLIC_CONTEXT_NAME}${JSON.stringify({
+          path: publicContextPath(target.pathname), source_path: publicContextPath(window.location.pathname),
+          source_host: sourceHost, source_origin: sourceOrigin, context, saved_at: Date.now(),
+        })}`;
+      } catch (_) { /* unavailable */ }
+    };
     const firstNonEmpty = (key, ...vals) => {
       for (const val of vals) {
         const s = sanitizeAttr(val, key);
@@ -454,6 +512,9 @@
         const parsed = JSON.parse(raw);
         return parsed && typeof parsed === 'object' ? parsed : {};
       } catch (_) { return {}; }
+    };
+    const sessionValue = (key) => {
+      try { return sessionStorage.getItem(key) || ''; } catch (_) { return ''; }
     };
     const writeStoredPseo = (obj) => {
       try {
@@ -472,12 +533,14 @@
           clean.saved_at = String(Date.now());
           sessionStorage.setItem(PSEO_STORAGE_KEY, JSON.stringify(clean));
         }
-      } catch (_) { /* private mode */ }
+        return true;
+      } catch (_) { return false; }
     };
     // Capture attribution from URL into sessionStorage (survives home form landing).
     // Only allowlisted keys persist — arbitrary query params are dropped.
     // First-touch: empty values on the current page must not wipe a stored landing/family.
     const storedPrior = readStoredPseo();
+    const publicContext = takePublicContext();
     const internalNav = isInternalReferrer(typeof document !== 'undefined' ? document.referrer : '');
     const fromUrl = {};
     PSEO_ATTR_KEYS.forEach((name) => {
@@ -488,12 +551,15 @@
         if (s) fromUrl[name] = s;
       }
     });
-    const tema = searchParams.get('tema') || hashParams.get('tema');
+    Object.keys(publicContext).forEach((name) => {
+      if (!fromUrl[name]) fromUrl[name] = publicContext[name];
+    });
+    const tema = searchParams.get('tema') || hashParams.get('tema') || publicContext.tema;
     if (tema) {
       const t = sanitizeAttr(tema, 'tema');
       if (t) fromUrl.tema = t;
     }
-    const jornada = searchParams.get('jornada') || hashParams.get('jornada');
+    const jornada = searchParams.get('jornada') || hashParams.get('jornada') || publicContext.jornada;
     if (jornada) {
       const j = sanitizeAttr(jornada, 'jornada');
       if (j) fromUrl.jornada = j;
@@ -626,7 +692,13 @@
         incoming[key] = s;
         wrote = true;
       });
-      if (wrote) writeStoredPseo(mergeFirstTouch(prior, incoming, { internalReferrer: true }));
+      if (wrote && !writeStoredPseo(mergeFirstTouch(prior, incoming, { internalReferrer: true }))) {
+        const publicIncoming = { ...incoming };
+        if (!publicIncoming.landing_url) {
+          publicIncoming.landing_url = fromUrl.landing_url || prior.landing_url || window.location.pathname || '/';
+        }
+        rememberPublicContextForRoute(a, publicIncoming);
+      }
     }, true);
     window.confengeAttribution = {
       ALLOWLIST: PSEO_ATTR_KEYS.slice(),
@@ -760,6 +832,30 @@
       }
       try { form.dispatchEvent(new Event('confenge:journeychange')); } catch (_) { /* no Event ctor */ }
     };
+    const automaticMessageForTheme = (theme) => `Demanda relacionada a: ${theme}.\n\nContexto:\n`;
+    const clearSupersededNeedContext = () => {
+      // `tema` e `jornada` descrevem a necessidade que trouxe a pessoa ate a
+      // home. Uma escolha manual diferente em #estagio passa a ser a
+      // necessidade atual; origem, landing e UTM continuam first-touch.
+      const stored = readStoredPseo();
+      if (stored.tema || stored.jornada || stored.journey) {
+        delete stored.tema;
+        delete stored.jornada;
+        delete stored.journey;
+        try {
+          if (Object.keys(stored).length) sessionStorage.setItem(PSEO_STORAGE_KEY, JSON.stringify(stored));
+          else sessionStorage.removeItem(PSEO_STORAGE_KEY);
+        } catch (_) { /* private mode */ }
+      }
+      const themeInput = form && form.querySelector('input[name="tema"]');
+      const previousTheme = themeInput && themeInput.value;
+      if (themeInput) themeInput.value = '';
+      if (mensagem && previousTheme) {
+        const automatic = automaticMessageForTheme(previousTheme);
+        if (mensagem.value === automatic) mensagem.value = '';
+        else if (mensagem.value.startsWith(automatic)) mensagem.value = mensagem.value.slice(automatic.length);
+      }
+    };
     if (form) {
       // The submitted form keeps its own capture identity. The service that
       // led to the home form travels separately, through the optional provenance
@@ -792,19 +888,19 @@
       ensureHidden(
         'origem',
         origem || storedPseo.origem || storedPseo.origin_url || storedPseo.landing_url
-          || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
+          || sessionValue('confenge_landing') || window.location.pathname || '/',
         Boolean(origem) && origemPlaceholder,
       );
       ensureHidden(
         'landing_page',
-        storedPseo.landing_url || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
+        fromUrl.landing_url || storedPseo.landing_url || sessionValue('confenge_landing') || window.location.pathname || '/',
         true,
       );
       const storedUtm = storedPseo;
       const utmFromUrl = (k) => (internalNav || storedUtm[k] ? '' : searchParams.get(k));
-      ensureHidden('utm_source', storedUtm.utm_source || utmFromUrl('utm_source') || sessionStorage.getItem('utm_source') || '');
-      ensureHidden('utm_medium', storedUtm.utm_medium || utmFromUrl('utm_medium') || sessionStorage.getItem('utm_medium') || '');
-      ensureHidden('utm_campaign', storedUtm.utm_campaign || utmFromUrl('utm_campaign') || sessionStorage.getItem('utm_campaign') || '');
+      ensureHidden('utm_source', storedUtm.utm_source || utmFromUrl('utm_source') || sessionValue('utm_source') || '');
+      ensureHidden('utm_medium', storedUtm.utm_medium || utmFromUrl('utm_medium') || sessionValue('utm_medium') || '');
+      ensureHidden('utm_campaign', storedUtm.utm_campaign || utmFromUrl('utm_campaign') || sessionValue('utm_campaign') || '');
       ['utm_source', 'utm_medium', 'utm_campaign'].forEach((k) => {
         if (internalNav || storedUtm[k]) return;
         const v = searchParams.get(k);
@@ -813,7 +909,7 @@
         }
       });
       try {
-        if (!sessionStorage.getItem('confenge_landing')) {
+        if (!sessionValue('confenge_landing')) {
           sessionStorage.setItem('confenge_landing', window.location.pathname || '/');
         }
       } catch (_) { /* private */ }
@@ -824,10 +920,23 @@
       const journeyParam = searchParams.get('jornada') || hashParams.get('jornada')
         || storedPseo.jornada || storedPseo.journey;
       if (journeyParam) applyJourneyToForm(journeyParam);
+      const stage = form.querySelector('#estagio');
+      if (stage) {
+        let previousStage = stage.value || '';
+        stage.addEventListener('change', () => {
+          const stageChanged = Boolean(stage.value) && stage.value !== previousStage;
+          previousStage = stage.value || '';
+          const currentJourney = form.querySelector('#jornada-hidden, input[name="jornada"]')?.value || '';
+          const hasCurrentNeed = currentJourney || form.querySelector('input[name="tema"]')?.value;
+          if (stageChanged && hasCurrentNeed) {
+            clearSupersededNeedContext();
+          }
+        });
+      }
     }
     if (mensagem && (tema || storedPseo.tema) && !mensagem.value) {
       const t = tema || storedPseo.tema;
-      mensagem.value = `Demanda relacionada a: ${t}.\n\nContexto:\n`;
+      mensagem.value = automaticMessageForTheme(t);
       mensagem.focus();
     }
     // #182 — fragment landings must reveal the target under the sticky header.

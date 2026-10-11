@@ -250,6 +250,16 @@ class TestProjectPages(unittest.TestCase):
             self.assertNotIn("escopo%20de%20como%20trabalhamos", source)
             self.assertIn("solicitar%20uma%20proposta", source)
 
+    def test_projects_hub_has_generated_contextual_partnership_path(self) -> None:
+        page = next(page for page in self.pages if page["id"] == "projects-hub")
+        source = self.rendered[page["route"]]
+        partnership = page["partnership"]
+        self.assertIn("partnership", page["section_order"])
+        self.assertIn('href="#parcerias">Parcerias</a>', source)
+        self.assertIn('id="parcerias"', source)
+        self.assertIn(partnership["title"], source)
+        self.assertIn(f'href="{partnership["href"]}"', source)
+
 
 if __name__ == "__main__":
     unittest.main()

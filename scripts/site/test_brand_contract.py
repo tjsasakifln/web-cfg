@@ -67,11 +67,13 @@ def test_home_has_canonical_copy():
     for key in ("eyebrow", "h1", "subheadline", "cta_primary", "cta_secondary"):
         assert hero[key] in visible, key
     assert brand["positioning"]["org_description"] in html
+    og_title = re.search(r'<meta content="([^"]+)" property="og:title"/>', html)
+    assert og_title and og_title.group(1) == hero["og_title"]
 
     for section_id in (
-        "competencias",
-        "setores",
+        "como-conduzimos",
         "entregas",
+        "contextos",
         "servicos-complementares",
         "sobre-a-confenge",
         "solicitar-proposta",
@@ -79,13 +81,20 @@ def test_home_has_canonical_copy():
     ):
         assert f'id="{section_id}"' in html, section_id
 
-    for project_url in (
-        "/projetos/estruturas/",
-        "/projetos/instalacoes/",
-        "/projetos/infraestrutura/",
-        "/projetos/coordenacao-multidisciplinar/",
+    for public_front in (
+        "/projetos/",
+        "/quantitativos-orcamento-obras/",
+        "/inspecao-diagnostico-edificacoes/",
+        "/assistencia-tecnica-pericial-engenharia/",
+        "/servicos/#servico-avaliacao",
+        "/seguranca-trabalho-apoio-tecnico/",
+        "/servicos-obras-publicas/",
     ):
-        assert f'href="{project_url}"' in html, project_url
+        assert f'href="{public_front}"' in html, public_front
+
+    projects = (ROOT / "projetos" / "index.html").read_text(encoding="utf-8")
+    for project_url in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/", "/projetos/coordenacao-multidisciplinar/"):
+        assert f'href="{project_url}"' in projects, project_url
 
     assert 'href="#contato"' in html
     assert 'href="/projetos/"' in html

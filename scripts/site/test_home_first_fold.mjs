@@ -15,8 +15,8 @@ const CLEARANCE_PX = 8;
 const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
 const PRIMARY_CTA_PATH_PREFIX = "#contato";
-// The institutional fold preserves project competencies while naming the other
-// authorized fronts before the visitor reaches the detailed project sections.
+// The institutional fold names the company, public/private scope, seven
+// authorized fronts and a concrete delivery before specialization.
 const CONTENT_CONCEPTS = [
   {
     id: "amplitude_institucional",
@@ -31,16 +31,10 @@ const CONTENT_CONCEPTS = [
     minMatches: 1,
   },
   {
-    id: "disciplinas_centrais",
-    label: "estruturas, instalações e infraestrutura",
-    terms: ["estruturas", "instalações", "infraestrutura"],
-    minMatches: 3,
-  },
-  {
-    id: "mercados_de_projeto",
-    label: "edificações, infraestrutura e indústria",
-    terms: ["edificações", "infraestrutura", "indústria"],
-    minMatches: 3,
+    id: "amplitude_publica_privada",
+    label: "necessidades públicas e privadas",
+    terms: ["públicas", "privadas"],
+    minMatches: 2,
   },
   {
     id: "trabalho_assumido",
@@ -51,9 +45,9 @@ const CONTENT_CONCEPTS = [
     minMatches: 2,
   },
   {
-    id: "entrega_integrada",
-    label: "entrega técnica integrada",
-    terms: ["entrega técnica integrada", "interfaces", "requisitos de execução"],
+    id: "entrega_definida",
+    label: "necessidade convertida em entrega técnica e documentos",
+    terms: ["necessidade", "entrega técnica", "documentos"],
     minMatches: 3,
   },
   {
@@ -85,11 +79,11 @@ const counterproof = {
   generic_hero_is_rejected: conceptResults(
     "Engenharia com solução personalizada. Solicite uma proposta.",
   ).some((concept) => !concept.ok),
-  // A slogan still fails because it omits disciplines, markets and integration.
+  // A slogan still fails because it omits scope, fronts and a defined delivery.
   generic_hero_transforma_is_rejected: conceptResults(
     "Engenharia que transforma o seu projeto. Fale com a gente. CNPJ publicado.",
   ).filter((concept) => !concept.ok).length >= 3,
-  // A service inventory alone also fails the integrated project proposition.
+  // A service inventory alone also fails the public/private and delivery proposition.
   enumeration_alone_is_rejected: conceptResults(
     "Projetos e serviços de engenharia. Estruturas, instalações e infraestrutura. "
     + "Quantitativos, orçamentos e perícias. Solicite uma proposta.",

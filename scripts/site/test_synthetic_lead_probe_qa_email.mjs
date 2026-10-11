@@ -1,7 +1,18 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import http from "node:http";
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  SPECIALIZED_QA_CONTRACT,
+  SPECIALIZED_QA_CONTEXT,
+  SPECIALIZED_QA_CTA_SELECTOR,
+  SPECIALIZED_QA_ENTRY_PATH,
+  specializedQaContextSha256,
+  specializedQaWireContextSha256,
+} from "./synthetic_contact_journey.mjs";
 
 const probePath = fileURLToPath(new URL("./synthetic_lead_probe.mjs", import.meta.url));
 const receiptId = "synthetic:qa:receipt:0001";
@@ -9,6 +20,11 @@ const providerId = "re_qa_fixture_001";
 const sha = "a".repeat(40);
 const probeSecret = "probe-fixture-secret-at-least-32-characters";
 const opsToken = "ops-fixture-token-at-least-16";
+const contextSha256 = specializedQaContextSha256(SPECIALIZED_QA_CONTEXT);
+const wireContextSha256 = specializedQaWireContextSha256(SPECIALIZED_QA_CONTEXT);
+const temp = mkdtempSync(resolve(tmpdir(), "confenge-qa-probe-"));
+const browserFixturePath = resolve(temp, "browser-journey.json");
+const homeHtml = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
 let postCount = 0;
 let requestCount = 0;
 let liveSha = sha;
@@ -32,6 +48,11 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/.well-known/build-info.json") {
     send(res, 200, { commit: liveSha });
+    return;
+  }
+  if (url.pathname === "/") {
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(homeHtml);
     return;
   }
   if (url.pathname === "/.netlify/functions/ops") {
@@ -68,9 +89,15 @@ const server = http.createServer((req, res) => {
           authenticated_probe: true,
           source: "CONFENGE_WEB",
           next_action: "exclude_from_commercial",
+          asset_id: SPECIALIZED_QA_CONTEXT.asset_id,
+          cta_id: SPECIALIZED_QA_CONTEXT.cta_id,
+          route_family: SPECIALIZED_QA_CONTEXT.route_family,
+          technical_context: { ...SPECIALIZED_QA_CONTEXT },
+          technical_context_sha256: contextSha256,
           handoff: {
             status: "DELIVERED",
             attempts: 1,
+            technical_context_sha256: wireContextSha256,
             downstream: { http: 201, duplicate: false, downstream_receipt: stored.id },
           },
           delivery: { notify_status: "skipped", email_status: "skipped", qa_email_status: "ok", qa_email_provider_id: providerId },
@@ -86,8 +113,13 @@ const server = http.createServer((req, res) => {
     assert.equal(req.headers["x-confenge-qa-email"], "1");
     assert.equal(req.headers["x-confenge-ops-token"], opsToken);
     assert.equal(req.headers["x-confenge-expected-sha"], liveSha);
-    req.resume();
+    let raw = "";
+    req.on("data", (chunk) => { raw += chunk; });
     req.on("end", () => {
+      const body = JSON.parse(raw);
+      for (const [field, value] of Object.entries(SPECIALIZED_QA_CONTEXT)) {
+        assert.equal(body[field] ?? null, value, field);
+      }
       const existing = leadsByIdempotencyKey.get(key);
       if (!existing) {
         const lead = { id: `${receiptId}:${String(createdLeadCount + 1).padStart(4, "0")}` };
@@ -125,9 +157,34 @@ const auth = {
   LEAD_PROBE_SECRET: probeSecret,
   OPS_TOKEN: opsToken,
   PROBE_VERIFY_EMAIL: "1",
+  PROBE_PAGE_PATH: "/",
+  PROBE_BROWSER_CONTEXT_FILE: browserFixturePath,
 };
 
+function writeBrowserFixture(releaseSha) {
+  writeFileSync(browserFixturePath, JSON.stringify({
+    ok: true,
+    contract: SPECIALIZED_QA_CONTRACT,
+    live_sha: releaseSha,
+    entry_path: SPECIALIZED_QA_ENTRY_PATH,
+    cta_selector: SPECIALIZED_QA_CTA_SELECTOR,
+    target_path: "/",
+    target_hash: "#contato",
+    public_query: "",
+    post_requests: 0,
+    mutation_requests: 0,
+    external_requests: 0,
+    analytics_requests_blocked: 0,
+    captcha_sitekey_configured: true,
+    captcha_loader_present: true,
+    captcha_widget_requests_blocked: 1,
+    context: { ...SPECIALIZED_QA_CONTEXT },
+    context_sha256: contextSha256,
+  }));
+}
+
 try {
+  writeBrowserFixture(sha);
   const beforeMissingSha = requestCount;
   const missingSha = await runProbe(base, { ...auth, EXPECTED_SHA: "" });
   assert.equal(missingSha.code, 1);
@@ -185,6 +242,7 @@ try {
   assert.equal(createdLeadCount, 2);
   assert.equal(qaDeliveryCount, 2);
   liveSha = "b".repeat(40);
+  writeBrowserFixture(liveSha);
   const changedSha = await runProbe(base, { ...auth, EXPECTED_SHA: liveSha });
   assert.equal(changedSha.code, 0, changedSha.stderr || changedSha.stdout);
   assert.notEqual(idempotencyKeys[4], idempotencyKeys[0]);
@@ -194,4 +252,5 @@ try {
   console.log("PASS synthetic_probe_qa_email_opt_in_and_readback");
 } finally {
   await new Promise((resolve) => server.close(resolve));
+  rmSync(temp, { recursive: true, force: true });
 }

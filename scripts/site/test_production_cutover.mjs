@@ -352,7 +352,7 @@ ok(
   loc === "/servicos/",
   `loc=${loc}`
 );
-for (const id of ["competencias", "servicos-complementares", "contato"]) {
+for (const id of ["como-conduzimos", "servicos-complementares", "contato"]) {
   ok(`fragment_${id}`, home.body.includes(`id="${id}"`), "missing corporate destination");
 }
 

@@ -10,6 +10,10 @@ const {
 } = require("./qa-email.cjs");
 const { safeLog } = require("./lead-core.cjs");
 const { isCommercialReal, effectiveRecordKind } = require("./record-kind.cjs");
+const {
+  specializedQaTechnicalContextSha256,
+  specializedQaWireTechnicalContextSha256,
+} = require("./inbound-handoff.cjs");
 
 function skipNonReal(record, channel) {
   if (isCommercialReal(record)) return null;
@@ -513,12 +517,18 @@ async function deliverResendEmail(record) {
 async function deliverQaEmail(record, { authorized = false, expectedSha = "", handoffDelivered = false } = {}) {
   const channel = "qa_email";
   const idempotencyKey = qaEmailIdempotencyKey(record);
+  const wireContextSha256 = String(record?.handoff?.technical_context_sha256 || "");
+  const persistedContextSha256 = specializedQaTechnicalContextSha256(record);
+  const expectedWireContextSha256 = specializedQaWireTechnicalContextSha256(record);
   if (
     authorized !== true ||
     !record ||
     record.record_kind !== "synthetic" ||
     record.synthetic_probe_authenticated !== true ||
-    record.next_action !== "exclude_from_commercial"
+    record.next_action !== "exclude_from_commercial" ||
+    !/^[0-9a-f]{64}$/.test(wireContextSha256) ||
+    wireContextSha256 !== expectedWireContextSha256 ||
+    !/^[0-9a-f]{64}$/.test(String(persistedContextSha256 || ""))
   ) {
     return { channel, status: "blocked", reason: "qa_guard_failed" };
   }
@@ -541,6 +551,8 @@ async function deliverQaEmail(record, { authorized = false, expectedSha = "", ha
     "Teste controlado do pipeline de notificação da CONFENGE.",
     `Protocolo sintético: ${record.lead_id}`,
     `Release: ${expectedSha}`,
+    `Contexto técnico persistido SHA-256: ${persistedContextSha256}`,
+    `Contexto técnico entregue SHA-256: ${wireContextSha256}`,
     "Sem dados de contato ou mensagem do formulário.",
   ].join("\n");
   const deadline = monotonicNow() + deliveryTimeoutMs();

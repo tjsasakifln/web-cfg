@@ -22,14 +22,13 @@ const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
 // Current institutional discovery paths; legacy situation aliases remain URL
-// compatibility only. Geometry must protect the visible project/service links.
-const HOME_DISCOVERY_SELECTOR = ".home-service-links a[href], .home-capability-list a[href], .home-coordination a[href]";
+// compatibility only. Geometry protects the seven visible public fronts. The
+// project hub keeps the discipline-level choices one click farther.
+const HOME_DISCOVERY_SELECTOR = ".home-service-links > a[href]";
 const HOME_DISCOVERY = [
   "/projetos/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/",
   "/assistencia-tecnica-pericial-engenharia/", "/servicos/#servico-avaliacao",
   "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/",
-  "/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/",
-  "/projetos/coordenacao-multidisciplinar/",
 ];
 const EXPECTED_DISCOVERY = HOME_DISCOVERY.length;
 
@@ -662,13 +661,13 @@ async function main() {
     await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const nojs = await page.evaluate((selector) => {
-      const delivery = document.querySelector(".home-deliverables")?.textContent || "";
+      const delivery = document.querySelector(".home-evidence")?.textContent || "";
       return {
         h1: Boolean(document.querySelector("#hero-title")),
         projectPath: Boolean(document.querySelector('.hero a[href="/servicos/"]')),
         paths: [...document.querySelectorAll(selector)].map(a => a.getAttribute("href")),
         channels: document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]').length,
-        deliveryExplained: /(desenhos|modelos|memórias|planilhas)/i.test(delivery) && /(execução|operação|contratação)/i.test(delivery),
+        deliveryExplained: /(projetos|planilhas|relatórios|laudos|pareceres|dossiês)/i.test(delivery) && /demonstrativo/i.test(delivery),
       };
     }, HOME_DISCOVERY_SELECTOR);
     await page.setJavaScriptEnabled(true);
@@ -738,8 +737,8 @@ async function main() {
     const hit = leaks.filter((p) => lower.includes(p));
     if (hit.length) throw new Error(hit.join(", "));
     if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
-    const opening = html.match(/<section\b[^>]*id="competencias"[\s\S]*?<\/header>/i)?.[0] || "";
-    if (!/Competências de projeto/i.test(opening) || !/<h2\b[^>]*id="competencias-title"/i.test(opening)) throw new Error("missing institutional discipline hierarchy");
+    const opening = html.match(/<section\b[^>]*id="como-conduzimos"[\s\S]*?<\/header>/i)?.[0] || "";
+    if (!/Da necessidade à entrega/i.test(opening) || !/<h2\b[^>]*id="conducao-title"/i.test(opening)) throw new Error("missing transversal delivery hierarchy");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
@@ -758,16 +757,16 @@ async function main() {
       const rep = await page.evaluate(() => {
         const overflow =
           document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
-        const title = document.querySelector("#competencias-title");
-        const firstCard = document.querySelector(".home-capability-list article");
-        const firstCta = document.querySelector(".home-capability-list__label a");
+        const title = document.querySelector("#servicos-title");
+        const firstCard = document.querySelector(".home-service-links > a");
+        const firstCta = firstCard;
         const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
         const header = document.querySelector(".site-header");
         const titleLines = title
           ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
           : 0;
         const titleFs = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
-        const bodyP = document.querySelector(".home-capability-list article p");
+        const bodyP = document.querySelector(".home-service-links small");
         const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
         const ctaBox = firstCta ? firstCta.getBoundingClientRect() : null;
         const floatBox = floatEl ? floatEl.getBoundingClientRect() : null;
@@ -779,7 +778,7 @@ async function main() {
           const ctaArea = Math.max(1, ctaBox.width * ctaBox.height);
           floatObscuresCta = overlapArea / ctaArea > 0.35;
         }
-        const container = document.querySelector(".home-capabilities .container") || document.querySelector(".container");
+        const container = document.querySelector(".home-services .container") || document.querySelector(".container");
         const padLeft = container ? container.getBoundingClientRect().left : 0;
         return {
           overflow,
@@ -787,7 +786,7 @@ async function main() {
           titleFs,
           bodyFs,
           headerH: header ? header.getBoundingClientRect().height : 0,
-          cardCount: document.querySelectorAll(".home-capability-list article").length,
+          cardCount: document.querySelectorAll(".home-service-links > a").length,
           ctaW: ctaBox?.width || 0,
           ctaH: ctaBox?.height || 0,
           ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,
@@ -798,7 +797,7 @@ async function main() {
       });
       reports.push({ w, h, ...rep });
       if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
-      if (rep.cardCount !== 3) throw new Error(`${w}: expected 3 discipline rows, saw ${rep.cardCount}`);
+      if (rep.cardCount !== 7) throw new Error(`${w}: expected 7 public fronts, saw ${rep.cardCount}`);
       if (rep.titleLines > 4) throw new Error(`${w}: situations title ${rep.titleLines} lines > 4`);
       if (rep.titleFs > 36) throw new Error(`${w}: situations title font ${rep.titleFs}px too large`);
       if (rep.bodyFs < 16 || rep.bodyFs > 20) throw new Error(`${w}: body font ${rep.bodyFs}px outside 16–20`);
@@ -944,12 +943,12 @@ async function main() {
       window.scrollTo(0, 0);
       document.querySelector('.home-proposal a[href="#contato"]').click();
       await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-      window.location.hash = "#competencias";
+      window.location.hash = "#como-conduzimos";
     });
     await new Promise((r) => setTimeout(r, 2600));
     const competing = await page.evaluate(() => {
-      const target = document.querySelector("#competencias");
-      const title = document.querySelector("#competencias-title");
+      const target = document.querySelector("#como-conduzimos");
+      const title = document.querySelector("#conducao-title");
       const header = document.querySelector(".site-header");
       const targetOffset = Math.max(
         parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
@@ -969,7 +968,7 @@ async function main() {
         ),
       };
     });
-    if (competing.hash !== "#competencias") {
+    if (competing.hash !== "#como-conduzimos") {
       throw new Error(`latest fragment lost: ${JSON.stringify(competing)}`);
     }
     if (Math.abs(competing.y - competing.targetY) > 3) {

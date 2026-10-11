@@ -242,7 +242,9 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           SITE_ROOT: _site
-        run: npm run test:contact-journeys
+        run: |
+          npm run test:contact-journeys
+          npm run test:specialized-contact-proof
       - name: Money asset canary browser e2e
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

@@ -613,35 +613,36 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
         assert selector in critical_css, selector
     responsive = re.search(r'@media \(max-width:900px\)\{([^\n]+)', critical_css)
     assert responsive and ".home-opening__grid{grid-template-columns:1fr}" in responsive.group(1)
-    for selector in (".home-capability-list article{", ".home-delivery-flow{", "@media (max-width:900px)", "@media (max-width:620px)"):
+    for selector in (".home-conduction__flow{", ".home-evidence__grid{", "@media (max-width:900px)", "@media (max-width:620px)"):
         assert selector in home_css, selector
     deliverable = re.search(r'<section\b[^>]*id="entregas"[^>]*>.*?</section>', home, re.S)
     assert deliverable, "home must explain concrete deliverables and their use"
     block = deliverable.group(0)
     text = _visible_text(block).lower()
-    assert 'data-section-archetype="delivery_flow"' in block
-    flow = re.search(r'<ol class="home-delivery-flow">.*?</ol>', block, re.S)
-    assert flow and len(re.findall(r"<li>", flow.group(0))) == 4
-    for term in ("desenhos", "modelos", "memórias", "especificações", "quantitativos", "planilhas", "registros de compatibilização", "contratação", "execução", "operação"):
-        assert term in text, term
-    competence = re.search(r'<section\b[^>]*id="competencias"[^>]*>.*?</section>', home, re.S)
-    assert competence
-    articles = re.findall(r"<article>.*?</article>", competence.group(0), re.S)
+    assert 'data-section-archetype="content_editorial"' in block
+    articles = re.findall(r"<article>.*?</article>", block, re.S)
     assert len(articles) == 3
-    for article, discipline in zip(articles, ("estruturas", "instalacoes", "infraestrutura")):
-        assert f'href="/projetos/{discipline}/"' in article
-        assert "<h3>" in article and "<p>" in article
-    assert 'href="/projetos/coordenacao-multidisciplinar/"' in competence.group(0)
+    for term in ("projetos", "planilhas", "relatórios", "laudos", "pareceres", "dossiês", "demonstrativo"):
+        assert term in text, term
+    for destination in ("/casos/demonstrativo-projeto-privado/", "/entregas/", "/casos/medicao-glosa-demonstrativo/"):
+        assert f'href="{destination}"' in block
+    conduction = re.search(r'<section\b[^>]*id="como-conduzimos"[^>]*>.*?</section>', home, re.S)
+    assert conduction
+    flow = re.search(r'<ol class="home-conduction__flow">.*?</ol>', conduction.group(0), re.S)
+    assert flow and len(re.findall(r"<li>", flow.group(0))) == 4
+    conduction_text = _visible_text(conduction.group(0)).lower()
+    for term in ("necessidade", "definir o trabalho", "conduzir e integrar", "entregar para a decisão"):
+        assert term in conduction_text, term
     assert 'href="/servicos/"' in home and 'href="/projetos/"' in home
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', home)
-    assert 5 <= len(archetypes) <= 8, archetypes
+    assert 6 <= len(archetypes) <= 8, archetypes
     assert len(set(archetypes)) >= 5, archetypes
-    assert {"hero_split", "discipline_editorial", "delivery_flow", "service_index", "authority_editorial", "cta_formal"} <= set(archetypes)
-    assert archetypes.index("service_index") < archetypes.index("discipline_editorial") < archetypes.index("delivery_flow")
+    assert {"hero_split", "delivery_flow", "content_editorial", "sector_editorial", "service_index", "authority_editorial", "cta_formal"} <= set(archetypes)
+    assert archetypes.index("service_index") < archetypes.index("delivery_flow") < archetypes.index("content_editorial")
     services = re.search(r'<section\b[^>]*data-section-archetype="service_index"[^>]*>.*?</section>', home, re.S)
     assert services and 'data-cta-id="home-service-public-works"' in services.group(0)
     assert 'href="/servicos-obras-publicas/"' in services.group(0)
-    assert services.start() < competence.start()
+    assert services.start() < conduction.start() < deliverable.start()
     fronts = set(re.findall(r'data-cta-id="([^"]+)"', services.group(0)))
     assert fronts == {
         "home-service-projects",
@@ -660,7 +661,7 @@ def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None
 
 def test_home_delivery_contract_rejects_lost_substance_or_responsive_layout() -> None:
     home, css = _html(ROOT / "index.html"), _html(ROOT / "assets/home-10x.css")
-    for old, new in (("registros de compatibilização", "objetos"), ('href="/projetos/estruturas/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
+    for old, new in (("relatórios", "objetos"), ('href="/casos/demonstrativo-projeto-privado/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
         assert old in home
         with pytest.raises(AssertionError):
             _assert_home_delivery_contract(home.replace(old, new), css)

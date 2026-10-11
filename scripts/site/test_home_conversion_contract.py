@@ -115,9 +115,10 @@ def _section(html: str, marker: str) -> str:
 def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     hero = _section(_home(), r'class="hero')
     text = _visible(hero).casefold()
-    assert all(term in text for term in ("estruturas", "instalações", "infraestrutura"))
+    assert PUBLIC_AND_PRIVATE.search(text)
+    assert "empresa de engenharia" in text
     assert re.search(r"elabora|projeta|coordena", text)
-    assert re.search(r"obra|execução|empreendimento", text)
+    assert "entrega técnica" in text
     assert 'href="#contato"' in hero and 'href="/servicos/"' in hero
     assert all(term in text for term in ("orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"))
     assert hero.count("button-primary") == 1
@@ -130,21 +131,22 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
 
 def test_generic_hero_is_rejected_by_the_fold_properties() -> None:
     for generic in ("Engenharia que transforma o seu projeto.", "Engenharia com solução personalizada. Solicite uma proposta."):
-        assert not all(term in generic.casefold() for term in ("estruturas", "instalações", "infraestrutura"))
+        assert not (PUBLIC_AND_PRIVATE.search(generic) and "entrega técnica" in generic.casefold())
 
 
 def test_situation_chooser_has_one_path_per_contract_situation_without_catalog_wall() -> None:
     html = _home()
-    disciplines = _section(html, r'id="competencias"')
+    projects = (ROOT / "projetos" / "index.html").read_text(encoding="utf-8")
     for slug in ("estruturas", "instalacoes", "infraestrutura", "coordenacao-multidisciplinar"):
-        assert f'href="/projetos/{slug}/"' in disciplines
+        assert f'href="/projetos/{slug}/"' in projects
         assert (ROOT / "projetos" / slug / "index.html").is_file()
     services = _section(html, r'id="servicos-complementares"')
-    for route in ("/projetos/", "/quantitativos-orcamento-obras/", "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/"):
+    for route in ("/projetos/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/servicos/#servico-avaliacao", "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/"):
         assert f'href="{route}"' in services
-        assert (ROOT / route.strip("/") / "index.html").is_file()
+        route_path = route.split("#", 1)[0].strip("/")
+        assert (ROOT / route_path / "index.html").is_file()
     assert 'class="situation-row' not in html
-    assert "passa a ter" not in _visible(disciplines + services).casefold()
+    assert "passa a ter" not in _visible(projects + services).casefold()
 
 
 def test_pncp_proof_is_confined_to_the_b2g_vertical() -> None:
