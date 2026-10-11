@@ -46,7 +46,10 @@ const journeys = [
   ["documentar_as_built", "/inspecao-diagnostico-edificacoes/#documentacao-as-built", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
   ["receber_entregar", "/inspecao-diagnostico-edificacoes/#recebimento-entrega", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
   ["orgao_preparando_projeto", "/servicos-obras-publicas/#situacao-orgao", "servicos-complementares", "/servicos-obras-publicas/"],
-  ["edital", "/servicos-obras-publicas/#situacao-edital", "servicos-complementares", "/servicos-obras-publicas/"],
+  // The edital hub presents a choice of actual offers. Follow that choice
+  // as a buyer would: home -> public services -> pre-bid diagnosis. The
+  // section heading itself is not the specialist intake destination.
+  ["edital", "/diagnostico-pre-licitacao/", "servicos-complementares", "/servicos-obras-publicas/", "/diagnostico-pre-licitacao/"],
   ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
   ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "servicos-complementares", "/assistencia-tecnica-pericial-engenharia/"],
   ["avaliacao_imovel", "/servicos/#servico-avaliacao", "servicos-complementares", "/servicos/#servico-avaliacao"],
@@ -400,7 +403,37 @@ try {
     const discovery = await facts(page, new URL(href, base).hash);
     required("journey_home_destination_next_step", discovery.activeForm || discovery.triageLink || discovery.formLink || Object.values(discovery.channels).some(Boolean), JSON.stringify(discovery), { journey: journey.id, route: href });
     if (journey.secondHref) {
-      const secondLink = await page.$(journey.id === "assistencia_trabalhista" ? 'main a[data-hub-link="servicos-sst-labor-assistance"]' : `main a[href="${journey.secondHref}"]`);
+      const secondSelector = journey.id === "assistencia_trabalhista"
+        ? 'main a[data-hub-link="servicos-sst-labor-assistance"]'
+        : journey.id === "edital"
+          ? `#situacao-edital + li article.corporate-service-row a[href="${journey.secondHref}"]`
+          : `main a[href="${journey.secondHref}"]`;
+      const secondLink = await page.$(secondSelector);
+      if (journey.id === "edital") {
+        const bidderRole = secondLink && await secondLink.evaluate(anchor =>
+          anchor.closest("article")?.querySelector("h3")?.textContent.trim() === "Decidir se disputa o edital");
+        required("journey_edital_second_link_belongs_to_bidder_offer", Boolean(bidderRole), "edital choice must stay in its bidder offer row", { journey: journey.id, route: href });
+        if (secondLink) {
+          // A visible link elsewhere must not conceal loss of the actual
+          // bidder offer. Restore the DOM before the real navigation.
+          const rejectsMovedLink = await page.evaluate((selector, target) => {
+            const actual = document.querySelector(selector);
+            if (!actual) return false;
+            const original = actual.getAttribute("href");
+            const decoy = document.createElement("a");
+            decoy.href = target;
+            decoy.textContent = "Counterproof: unrelated destination";
+            document.querySelector("main").prepend(decoy);
+            actual.removeAttribute("href");
+            const rejected = !document.querySelector(selector)
+              && document.querySelector(`main a[href="${target}"]`) === decoy;
+            actual.setAttribute("href", original);
+            decoy.remove();
+            return rejected;
+          }, secondSelector, journey.secondHref);
+          required("journey_edital_rejects_unrelated_same_href_decoy", rejectsMovedLink, "moving the offer link to another section must fail its scoped selector", { journey: journey.id, route: href });
+        }
+      }
       const visibleSecond = secondLink && await secondLink.evaluate(anchor => { const rect = anchor.getBoundingClientRect(); return rect.width > 0 && rect.height > 0 && getComputedStyle(anchor).visibility !== "hidden"; });
       required("journey_second_navigation_visible", Boolean(visibleSecond), journey.secondHref, { journey: journey.id, route: href });
       if (visibleSecond) {

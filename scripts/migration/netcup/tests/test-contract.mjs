@@ -408,14 +408,17 @@ test("production cutover keeps valuable checks and adds host-neutral identities"
 test("production home acceptance requires institutional scope, attributed paths and persisted proposal", () => {
   const html = readFileSync(resolve(ROOT, "index.html"), "utf8");
   assert.deepEqual(evaluateHomeAcquisition(html), {
-    headingScope: true, executionScope: true, amplitudeScope: true, discoveryPaths: true, proposalPath: true,
+    headingScope: true, executionScope: true, amplitudeScope: true, processScope: true, deliveryProof: true,
+    discoveryPaths: true, proposalPath: true,
   });
   for (const [old, replacement, field] of [
-    ["Decisões técnicas", "Decisões comerciais", "headingScope"],
-    ["Engenharia, perícias e inteligência técnica", "Consultoria genérica", "headingScope"],
+    ["necessidades públicas e privadas", "projetos privados", "headingScope"],
+    ["Engenharia para transformar uma necessidade em", "Projetos para desenvolver", "headingScope"],
     ["A CONFENGE elabora e coordena projetos", "A CONFENGE apresenta serviços", "executionScope"],
-    ["estruturas, instalações e infraestrutura", "disciplinas diversas", "executionScope"],
-    ["orçamento, inspeção, perícia, avaliação, SST e obras públicas", "orçamento e apoio técnico", "amplitudeScope"],
+    ["Cada contratação parte da decisão que precisa ser tomada e termina em documentos definidos", "A contratação segue a demanda do projeto", "executionScope"],
+    ["segurança do trabalho e apoio a obras públicas", "apoio a obras públicas", "amplitudeScope"],
+    ["Conduzir e integrar", "Conduzir", "processScope"],
+    ["formatos, raciocínio e rastreabilidade", "formatos disponíveis", "deliveryProof"],
     ['data-cta-id="home-service-projects"', 'data-cta-id="outro"', "discoveryPaths"],
     ['href="/inspecao-diagnostico-edificacoes/"', 'href="/x/"', "discoveryPaths"],
     ['data-cta-position="home_services"', 'data-cta-position="outro"', "discoveryPaths"],
