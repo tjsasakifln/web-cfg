@@ -48,10 +48,37 @@ function attributeValue(attributes, name) {
 }
 
 function editorialUpdatedDate(html, type, label) {
-  const brand = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8"));
-  const date = brand.updated_at;
+  const walk = (node) => [node, ...(node.childNodes || []).flatMap(walk)];
+  const hasAttribute = (node, name) => node.attrs?.some((attribute) => attribute.name === name);
+  const attribute = (node, name) => node.attrs?.find((item) => item.name === name)?.value;
+  const text = (node) => (node.childNodes || []).map((child) => child.nodeName === "#text" ? child.value : child.nodeName === "#comment" ? "" : text(child)).join("").trim();
+  const isHidden = (node) => {
+    const style = (attribute(node, "style") || "").toLowerCase().replace(/\/\*[\s\S]*?\*\//g, "");
+    const declarations = new Map(style.split(";").map((declaration) => declaration.split(":").map((part) => part.trim())));
+    return hasAttribute(node, "hidden")
+      || attribute(node, "aria-hidden")?.trim().toLowerCase() === "true"
+      || declarations.get("display")?.match(/^none(?:\s*!important)?$/)
+      || declarations.get("visibility")?.match(/^hidden(?:\s*!important)?$/);
+  };
+  const visible = (node) => {
+    for (let current = node; current; current = current.parentNode) {
+      if (isHidden(current)) return false;
+    }
+    return true;
+  };
+  const revisions = walk(parse(html)).filter((node) => hasAttribute(node, "data-editorial-revision"));
+  assert.equal(revisions.length, 1, `${label} needs exactly one visible editorial revision marker`);
+  assert.ok(visible(revisions[0]), `${label} editorial revision marker must not be statically hidden`);
+  const dates = walk(revisions[0]).filter((node) => node.tagName === "time" && hasAttribute(node, "datetime"));
+  assert.equal(dates.length, 1, `${label} needs exactly one editorial revision date`);
+  assert.ok(visible(dates[0]), `${label} editorial revision date must not be statically hidden`);
+  const date = attribute(dates[0], "datetime");
+  assert.ok(text(dates[0]), `${label} editorial revision date needs visible text`);
   assert.match(date, /^\d{4}-\d{2}-\d{2}$/, `${label} needs an ISO editorial source date`);
-  assert.equal(jsonLdEntity(html, type, label).dateModified, date, `${label} schema must match its current institutional source`);
+  const parsed = new Date(`${date}T00:00:00.000Z`);
+  const roundTrip = Number.isNaN(parsed.getTime()) ? "" : parsed.toISOString().slice(0, 10);
+  assert.equal(roundTrip, date, `${label} needs a calendar editorial source date`);
+  assert.equal(jsonLdEntity(html, type, label).dateModified, date, `${label} schema must match its visible editorial revision`);
   return date;
 }
 
@@ -246,14 +273,32 @@ test("official credentials are verified while identifiers stay out of rendered s
   assertSitemapLastmod(sitemap, "https://confenge.com.br/confianca/", confidenceModified);
 });
 
-test("institutional schema dates cannot drift from their editorial source", () => {
+test("institutional dates use the visible page revision, not the brand update", () => {
   const specialist = fs.readFileSync(path.join(root, "especialista/tiago-jun-sasaki/index.html"), "utf8");
-  const date = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8")).updated_at;
+  const date = "2026-10-03";
   const surface = `"dateModified":"${date}"`;
+  const revision = '<p class="t-caption" data-editorial-revision>';
   assert.ok(specialist.includes(surface));
-  for (const replacement of ['"dateModified":"1900-01-01"', '"historicalDate":"1900-01-01"']) {
-    assert.throws(() => editorialUpdatedDate(specialist.replaceAll(surface, replacement), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.ok(specialist.includes(revision));
+  assert.equal(editorialUpdatedDate(specialist, "ProfilePage", "specialist"), date);
+  assert.throws(() => editorialUpdatedDate(specialist.replace(revision, '<p class="t-caption">'), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.throws(() => editorialUpdatedDate(specialist.replace('</main>', `${revision}<time datetime="${date}">3 de outubro de 2026</time>.</p></main>`), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.throws(() => editorialUpdatedDate(specialist.replace(`datetime="${date}"`, 'datetime="03-10-2026"'), "ProfilePage", "specialist"), assert.AssertionError);
+  for (const hidden of ["hidden", 'aria-hidden="true"', 'style="display: none"', 'style="visibility:hidden"']) {
+    assert.throws(() => editorialUpdatedDate(specialist.replace(revision, `<p class="t-caption" data-editorial-revision ${hidden}>`), "ProfilePage", "specialist"), assert.AssertionError);
   }
+  assert.throws(() => editorialUpdatedDate(specialist.replace(`<time datetime="${date}">`, `<time hidden datetime="${date}">`), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.throws(() => editorialUpdatedDate(specialist.replace(revision, `<div aria-hidden="true">${revision}`).replace("</main>", "</div></main>"), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.throws(() => editorialUpdatedDate(specialist.replace(">3 de outubro de 2026<", "><"), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.throws(() => editorialUpdatedDate(specialist.replace(">3 de outubro de 2026<", "><!--3 de outubro de 2026--><"), "ProfilePage", "specialist"), assert.AssertionError);
+  for (const invalidDate of ["2026-02-30", "2026-13-01"]) {
+    assert.throws(() => editorialUpdatedDate(specialist.replaceAll(date, invalidDate), "ProfilePage", "specialist"), assert.AssertionError);
+  }
+  assert.throws(() => editorialUpdatedDate(specialist.replace(surface, '"historicalDate":"1900-01-01"'), "ProfilePage", "specialist"), assert.AssertionError);
+  assert.throws(() => editorialUpdatedDate(specialist.replace(surface, '"dateModified":"1900-01-01"'), "ProfilePage", "specialist"), assert.AssertionError);
+  const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
+  const specialistLastmod = new RegExp(`(<loc>https://confenge\\.com\\.br/especialista/tiago-jun-sasaki/<\\/loc>\\s*<lastmod>)${date}`);
+  assert.throws(() => assertSitemapLastmod(sitemap.replace(specialistLastmod, "$11900-01-01"), "https://confenge.com.br/especialista/tiago-jun-sasaki/", date), assert.AssertionError);
 });
 
 test("campaign closes complete family coverage without claiming commercial result", () => {
