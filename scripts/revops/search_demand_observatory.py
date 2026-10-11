@@ -2084,7 +2084,11 @@ def pull_api(
             run_id=run_id,
             reprocess_days=reprocess_days,
         )
-        history_state, history_result = merge_observation(history_state, observation)
+        history_state, history_result = merge_observation(
+            history_state,
+            observation,
+            now=datetime.fromisoformat(last_sync_at),
+        )
     write_history(HISTORY_PATH, history_state)
     readiness = history_state["readiness"]
     gaps = list(readiness["missing_dates"])

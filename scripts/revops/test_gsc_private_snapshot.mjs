@@ -441,6 +441,30 @@ test("CURRENT survives a consumer restart with equal producer and consumer manif
   assert.equal(repeated.contains_insights, true);
 });
 
+test("a merged observation rejects any producer-to-history timestamp gap", async () => {
+  // Date.parse resolves the observed 2.421 ms production gap to 3 ms.
+  for (const gapMs of [3, 9 * 864e5]) {
+    const history = validHistory();
+    const attemptedAt = new Date(Date.parse(history.last_attempt.attempted_at) + gapMs).toISOString();
+    history.updated_at = attemptedAt;
+    history.last_attempt.attempted_at = attemptedAt;
+    history.state_sha256 = historyHash(history);
+
+    await assert.rejects(
+      persistPrivateGscSnapshot(
+        new MemorySystemStore(new Map()),
+        {
+          producer: { ...producer(), produced_at: attemptedAt },
+          history,
+          insights: validInsights(history),
+        },
+        { now: new Date(Date.parse(attemptedAt) + 1000) },
+      ),
+      /gsc_private_producer_consumer_mismatch/,
+    );
+  }
+});
+
 test("a legacy snapshot accepts the historical sync-to-attempt timing gap", async () => {
   const records = new Map();
   const store = new MemorySystemStore(records);

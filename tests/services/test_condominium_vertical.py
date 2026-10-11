@@ -1,4 +1,5 @@
 import json
+import html
 import re
 import subprocess
 import sys
@@ -52,6 +53,29 @@ def types(document: str) -> set[str]:
             elif value:
                 observed.add(value)
     return observed
+
+
+def cta_href(document: str, cta_id: str) -> str:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    assert tag, cta_id
+    href = re.search(r'\bhref="([^"]+)"', tag.group(0))
+    assert href, cta_id
+    return html.unescape(href.group(1))
+
+
+def cta_attributes(document: str, cta_id: str) -> dict[str, str]:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    assert tag, cta_id
+    return {
+        name: html.unescape(value)
+        for name, value in re.findall(r'([\w-]+)="([^"]*)"', tag.group(0))
+    }
 
 
 def test_central_route_is_one_editorial_entry_for_three_existing_situations():
@@ -124,6 +148,26 @@ def test_central_route_preserves_scope_coverage_and_contact_context():
     assert parser.h1_count == 1
     assert len(parser.ids) == len(set(parser.ids))
     assert parser.forms == 0
+
+
+def test_central_names_the_service_and_links_directly_to_the_contextual_form():
+    document = read(HUB)
+    assert '<h1 class="t-service" id="service-title">Engenharia para condomínios' in document
+    attrs = cta_attributes(document, "condominios-contact-calm")
+    assert cta_href(document, "condominios-contact-calm") == "/#contato"
+    assert "?" not in attrs["href"]
+    assert {
+        "data-journey": "outro",
+        "data-tema": "Engenharia para condomínio",
+        "data-origem": "/engenharia-condominios/",
+        "data-origin-url": "/engenharia-condominios/",
+        "data-route-family": "engenharia-condominios",
+        "data-asset-id": "condominium_engineering_editorial_route_v1",
+    }.items() <= attrs.items()
+    assert 'href="https://wa.me/' in document
+    assert 'href="mailto:' in document
+    assert 'href="tel:' in document
+    assert 'href="/triagem-tecnica/">Solicitar proposta' in document
 
 
 def test_central_links_to_real_specialist_anchors():

@@ -1,5 +1,6 @@
 from html.parser import HTMLParser
 import copy
+import html
 import importlib.util
 import json
 import re
@@ -18,6 +19,32 @@ ROUTES = (
     "inspecao-diagnostico-edificacoes",
     "assistencia-tecnica-pericial-engenharia",
 )
+
+
+def cta_href(document: str, cta_id: str) -> str:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    if not tag:
+        raise AssertionError(f"CTA not found: {cta_id}")
+    href = re.search(r'\bhref="([^"]+)"', tag.group(0))
+    if not href:
+        raise AssertionError(f"CTA without href: {cta_id}")
+    return html.unescape(href.group(1))
+
+
+def cta_attributes(document: str, cta_id: str) -> dict[str, str]:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    if not tag:
+        raise AssertionError(f"CTA not found: {cta_id}")
+    return {
+        name: html.unescape(value)
+        for name, value in re.findall(r'([\w-]+)="([^"]*)"', tag.group(0))
+    }
 
 
 class PageFacts(HTMLParser):
@@ -125,6 +152,37 @@ class InstitutionalServicePagesTest(unittest.TestCase):
                 html = (ROOT / route / "index.html").read_text(encoding="utf-8")
                 for phrase in phrases:
                     self.assertIn(phrase, html)
+
+    def test_service_pages_offer_a_direct_contextual_form_without_removing_channels(self):
+        source = ROOT / "data" / "services" / "institutional-service-pages.v1.json"
+        data = json.loads(source.read_text(encoding="utf-8"))
+        route_families = {
+            "projetos-complementares-engenharia": "complementary-engineering-elaboration",
+            "revisao-tecnica-projetos-engenharia": "private-engineering-project-review",
+            "compatibilizacao-projetos-engenharia": "engineering-projects-coordination-clash",
+            "quantitativos-orcamento-obras": "private-engineering-quantities-budget",
+            "inspecao-diagnostico-edificacoes": "inspecao-diagnostico-edificacoes",
+            "assistencia-tecnica-pericial-engenharia": "assistencia-tecnica-pericial-engenharia",
+        }
+        for page in data["pages"]:
+            route = page["route"]
+            document = (ROOT / route / "index.html").read_text(encoding="utf-8")
+            with self.subTest(route=route):
+                for suffix in ("hero-calm", "contact-calm"):
+                    cta_id = f"{route}-{suffix}"
+                    attrs = cta_attributes(document, cta_id)
+                    self.assertEqual(cta_href(document, cta_id), "/#contato")
+                    self.assertNotIn("?", attrs["href"])
+                    self.assertEqual(attrs["data-journey"], page["journey"])
+                    self.assertEqual(attrs["data-tema"], page["hero"]["title"])
+                    self.assertEqual(attrs["data-origem"], f"/{route}/")
+                    self.assertEqual(attrs["data-origin-url"], f"/{route}/")
+                    self.assertEqual(attrs["data-route-family"], route_families[route])
+                    self.assertTrue(attrs["data-asset-id"])
+                self.assertIn('href="https://wa.me/', document)
+                self.assertIn('href="mailto:', document)
+                self.assertIn('href="tel:', document)
+                self.assertIn('href="/triagem-tecnica/">Solicitar proposta', document)
 
     def test_routes_use_different_information_orders(self):
         observed = set()

@@ -766,22 +766,65 @@ for (const [route, journey, stage] of [
   if (!calm) fail('condominium_rendered_calm_link_missing', route);
   const attrs = Object.fromEntries([...calm.matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
   const dataset = Object.fromEntries(Object.entries(attrs).filter(([k]) => k.startsWith('data-')).map(([k,v]) => [k.slice(5).replace(/-([a-z])/g, (_,c) => c.toUpperCase()), v]));
-  if (!dataset.assetId || !dataset.routeFamily || dataset.journey !== journey) fail('condominium_calm_context_incomplete', attrs);
+  if (attrs.href !== '/#contato' || attrs.href.includes('?')) fail('condominium_calm_href_not_canonical', attrs);
+  if (!dataset.assetId || !dataset.routeFamily || !dataset.tema || dataset.journey !== journey) fail('condominium_calm_context_incomplete', attrs);
   const anchor = { dataset, getAttribute: k => attrs[k] || null, closest: s => String(s).includes('a[href]') ? anchor : null };
   specialist.docListeners.filter(l => l.type === 'click' && l.opts === true).forEach(l => l.fn({ target: anchor }));
-  loadShippedScript({ pathname: '/triagem-tecnica/', withForm: false, session, referrer: `https://confenge.com.br/${route}/` });
-  const home = loadShippedScript({ pathname: '/', hash: '#contato', withForm: true, session, hiddenValues: actualHomeHidden, referrer: 'https://confenge.com.br/triagem-tecnica/' });
+  const home = loadShippedScript({ pathname: '/', hash: '#contato', withForm: true, session, hiddenValues: actualHomeHidden, referrer: `https://confenge.com.br/${route}/` });
   const posted = { ...HOME_LEAD_BASE, ...hiddenAsFormData(home.hidden), estagio: stage };
   for (const name of ['route_family', 'asset_id', 'cta_id']) {
     if (posted[name] !== actualHomeHidden[name]) fail('condominium_capture_identity_changed', { name, posted: posted[name] });
   }
   if (posted.source_origin_route_family !== route || posted.source_origin_asset_id !== dataset.assetId) fail('condominium_service_origin_lost', posted);
   if (posted.origem !== '/engenharia-condominios/' || posted.landing_url !== '/engenharia-condominios/') fail('condominium_first_touch_lost', posted);
-  if (posted.jornada !== journey || posted.tema !== route) fail('condominium_need_lost', posted);
+  if (posted.jornada !== journey || posted.tema !== dataset.tema) fail('condominium_need_lost', posted);
   const normalized = core.validateAndNormalize(posted);
   if (!normalized.ok || normalized.lead.jornada !== journey || normalized.lead.source_origin_route_family !== route || normalized.lead.source_origin_asset_id !== dataset.assetId) fail('condominium_normalized_context_lost', normalized);
   pass('condominium_four_hops_keep_capture_source_and_need', { route, journey });
 }
+
+// A visitor can inspect more than one service before opening the home form.
+// `origem` is the frozen first touch; the service that most recently led to
+// the form travels independently in source_origin_* and the editable need.
+const repeatedValues = {};
+const repeatedSession = {
+  getItem: k => repeatedValues[k] || null,
+  setItem: (k, v) => { repeatedValues[k] = String(v); },
+  removeItem: k => { delete repeatedValues[k]; },
+};
+const clickRenderedCalm = (route, referrer) => {
+  const page = loadShippedScript({ pathname: `/${route}/`, withForm: false, session: repeatedSession, referrer });
+  const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
+  const calm = [...html.matchAll(/<a\b[^>]*>/g)].map(m => m[0]).find(tag => tag.includes(`data-cta-id="${route}-contact-calm"`));
+  if (!calm) fail('repeated_calm_link_missing', route);
+  const attrs = Object.fromEntries([...calm.matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
+  const dataset = Object.fromEntries(Object.entries(attrs).filter(([k]) => k.startsWith('data-')).map(([k, v]) => [k.slice(5).replace(/-([a-z])/g, (_, c) => c.toUpperCase()), v]));
+  const anchor = { dataset, getAttribute: k => attrs[k] || null, closest: s => String(s).includes('a[href]') ? anchor : null };
+  page.docListeners.filter(l => l.type === 'click' && l.opts === true).forEach(l => l.fn({ target: anchor }));
+  return dataset;
+};
+const firstRepeatedRoute = 'projetos-complementares-engenharia';
+const secondRepeatedRoute = 'inspecao-diagnostico-edificacoes';
+clickRenderedCalm(firstRepeatedRoute, 'https://www.google.com/');
+loadShippedScript({ pathname: '/', hash: '#contato', withForm: true, session: repeatedSession, hiddenValues: actualHomeHidden, referrer: `https://confenge.com.br/${firstRepeatedRoute}/` });
+const secondRepeatedDataset = clickRenderedCalm(secondRepeatedRoute, 'https://confenge.com.br/');
+const repeatedHome = loadShippedScript({ pathname: '/', hash: '#contato', withForm: true, session: repeatedSession, hiddenValues: actualHomeHidden, referrer: `https://confenge.com.br/${secondRepeatedRoute}/` });
+const repeatedPosted = { ...HOME_LEAD_BASE, ...hiddenAsFormData(repeatedHome.hidden) };
+if (repeatedPosted.origem !== `/${firstRepeatedRoute}/`) fail('repeated_first_touch_origin_changed', repeatedPosted);
+if (repeatedPosted.source_origin_route_family !== secondRepeatedDataset.routeFamily
+    || repeatedPosted.source_origin_asset_id !== secondRepeatedDataset.assetId) {
+  fail('repeated_current_service_source_stale', repeatedPosted);
+}
+if (repeatedPosted.jornada !== secondRepeatedDataset.journey || repeatedPosted.tema !== secondRepeatedDataset.tema) {
+  fail('repeated_current_need_stale', repeatedPosted);
+}
+pass('repeated_service_navigation_freezes_first_touch_and_updates_current_context', {
+  origem: repeatedPosted.origem,
+  source_origin_route_family: repeatedPosted.source_origin_route_family,
+  jornada: repeatedPosted.jornada,
+  tema: repeatedPosted.tema,
+});
+
 const freshValues = {};
 const freshSession = { getItem: k => freshValues[k] || null, setItem: (k,v) => { freshValues[k] = String(v); }, removeItem: k => { delete freshValues[k]; } };
 const directHome = loadShippedScript({ pathname: '/', withForm: true, session: freshSession, hiddenValues: actualHomeHidden });
