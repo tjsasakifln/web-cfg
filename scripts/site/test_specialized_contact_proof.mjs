@@ -346,6 +346,12 @@ try {
   assert.equal(journey.captcha_sitekey_configured, true);
   assert.equal(journey.captcha_loader_present, true);
   assert.equal(journey.captcha_widget_requests_blocked, 1);
+  const missingCaptchaAttempt = validateSpecializedQaJourney({
+    ...journey,
+    captcha_widget_requests_blocked: 0,
+  }, SHA);
+  assert.equal(missingCaptchaAttempt.reason, "browser_fixture_route_mismatch");
+  assert.deepEqual(missingCaptchaAttempt.invalid_fields, ["captcha_widget_requests_blocked"]);
   console.log(browserRequired
     ? "PASS fixed_browser_journey_captures_only_literal_technical_context"
     : "PASS literal_technical_fixture_contract_validates_without_browser");

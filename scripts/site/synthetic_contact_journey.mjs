@@ -79,22 +79,30 @@ export function validateSpecializedQaJourney(result, expectedSha) {
   if (!/^[0-9a-f]{40}$/.test(String(expectedSha || "")) || result.live_sha !== expectedSha) {
     return { ok: false, reason: "browser_fixture_release_mismatch" };
   }
-  if (
-    result.entry_path !== SPECIALIZED_QA_ENTRY_PATH ||
-    result.cta_selector !== SPECIALIZED_QA_CTA_SELECTOR ||
-    result.target_path !== "/" ||
-    result.target_hash !== "#contato" ||
-    result.public_query !== "" ||
-    result.post_requests !== 0 ||
-    result.mutation_requests !== 0 ||
-    result.external_requests !== 0 ||
-    result.captcha_sitekey_configured !== true ||
-    result.captcha_loader_present !== true ||
-    result.captcha_widget_requests_blocked !== 1 ||
-    !Number.isInteger(result.analytics_requests_blocked) ||
-    result.analytics_requests_blocked < 0
-  ) {
-    return { ok: false, reason: "browser_fixture_route_mismatch" };
+  const routeChecks = {
+    entry_path: result.entry_path === SPECIALIZED_QA_ENTRY_PATH,
+    cta_selector: result.cta_selector === SPECIALIZED_QA_CTA_SELECTOR,
+    target_path: result.target_path === "/",
+    target_hash: result.target_hash === "#contato",
+    public_query: result.public_query === "",
+    post_requests: result.post_requests === 0,
+    mutation_requests: result.mutation_requests === 0,
+    external_requests: result.external_requests === 0,
+    captcha_sitekey_configured: result.captcha_sitekey_configured === true,
+    captcha_loader_present: result.captcha_loader_present === true,
+    captcha_widget_requests_blocked: result.captcha_widget_requests_blocked === 1,
+    analytics_requests_blocked:
+      Number.isInteger(result.analytics_requests_blocked) && result.analytics_requests_blocked >= 0,
+  };
+  const invalidFields = Object.entries(routeChecks)
+    .filter(([, valid]) => !valid)
+    .map(([field]) => field);
+  if (invalidFields.length) {
+    return {
+      ok: false,
+      reason: "browser_fixture_route_mismatch",
+      invalid_fields: invalidFields,
+    };
   }
   const context = exactContext(result.context);
   if (!context) return { ok: false, reason: "browser_fixture_context_mismatch" };
@@ -142,6 +150,10 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
   const externalAttempts = [];
   let analyticsAttempts = 0;
   let captchaWidgetAttempts = 0;
+  let resolveCaptchaWidgetAttempt;
+  const captchaWidgetAttemptObserved = new Promise((resolveObserved) => {
+    resolveCaptchaWidgetAttempt = resolveObserved;
+  });
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 1 });
@@ -216,6 +228,7 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
           requestUrl === "https://challenges.cloudflare.com/turnstile/v0/api.js"
         ) {
           captchaWidgetAttempts += 1;
+          resolveCaptchaWidgetAttempt();
           request.abort("blockedbyclient").catch(() => {});
           return;
         }
@@ -249,6 +262,10 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
       page.click(SPECIALIZED_QA_CTA_SELECTOR),
     ]);
     await page.waitForSelector('form[data-capture-form][name="diagnostico-b2g"]');
+    await page.$eval(
+      'form[data-capture-form][name="diagnostico-b2g"]',
+      (form) => form.scrollIntoView({ block: "center" }),
+    );
     await page.waitForFunction(
       (expectedTheme) => {
         const form = document.querySelector('form[data-capture-form][name="diagnostico-b2g"]');
@@ -259,6 +276,31 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
       {},
       SPECIALIZED_QA_CONTEXT.tema,
     );
+    try {
+      await page.waitForFunction(() => {
+        const slot = document.getElementById("turnstile-slot");
+        const key = String(slot?.getAttribute("data-turnstile-sitekey") || "").trim();
+        const loader = document.querySelector(
+          'script[data-confenge-turnstile="1"][src="https://challenges.cloudflare.com/turnstile/v0/api.js"]',
+        );
+        return key.length >= 10 && key !== "SITEKEY" && Boolean(loader);
+      }, { timeout: 5000 });
+    } catch {
+      throw new Error("captcha_widget_loader_missing");
+    }
+    if (captchaWidgetAttempts === 0) {
+      let timeoutId;
+      try {
+        await Promise.race([
+          captchaWidgetAttemptObserved,
+          new Promise((_, reject) => {
+            timeoutId = setTimeout(() => reject(new Error("captcha_widget_request_missing")), 5000);
+          }),
+        ]);
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }
 
     const browserState = await page.evaluate((keys) => {
       const form = document.querySelector('form[data-capture-form][name="diagnostico-b2g"]');
@@ -310,7 +352,12 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
       context_sha256: contextSha256,
     };
     const validated = validateSpecializedQaJourney(result, expectedSha);
-    if (!validated.ok) throw new Error(validated.reason);
+    if (!validated.ok) {
+      const fields = Array.isArray(validated.invalid_fields) && validated.invalid_fields.length
+        ? `:${validated.invalid_fields.join(",")}`
+        : "";
+      throw new Error(`${validated.reason}${fields}`);
+    }
     return result;
   } finally {
     await browser.close();
