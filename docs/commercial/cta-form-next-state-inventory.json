@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 213
+    "expected_declared_ctas": 215
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 213,
+    "declared_ctas": 215,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4374,13 +4374,13 @@
           ]
         },
         {
-          "cta_id": "home-project-structures",
-          "position": "capabilities",
-          "href": "/projetos/estruturas/",
+          "cta_id": "home-how-we-work",
+          "position": "conduction",
+          "href": "/como-trabalhamos/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver especialidade",
-          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "current_label": "Entender como a CONFENGE conduz o trabalho",
+          "useful_next_state": "Abre o destino declarado por “Entender como a CONFENGE conduz o trabalho” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
@@ -4389,13 +4389,13 @@
           ]
         },
         {
-          "cta_id": "home-project-installations",
-          "position": "capabilities",
-          "href": "/projetos/instalacoes/",
-          "stage": "compare",
+          "cta_id": "home-proof-private-project",
+          "position": "evidence",
+          "href": "/casos/demonstrativo-projeto-privado/",
+          "stage": "inspect",
           "commitment": "low",
-          "current_label": "Ver especialidade",
-          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "current_label": "Examinar o demonstrativo",
+          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
@@ -4404,13 +4404,13 @@
           ]
         },
         {
-          "cta_id": "home-project-infrastructure",
-          "position": "capabilities",
-          "href": "/projetos/infraestrutura/",
+          "cta_id": "home-proof-deliverables",
+          "position": "evidence",
+          "href": "/entregas/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver especialidade",
-          "useful_next_state": "Abre o destino declarado por “Ver especialidade” para continuar a decisão.",
+          "current_label": "Conhecer as entregas",
+          "useful_next_state": "Abre o destino declarado por “Conhecer as entregas” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
@@ -4419,13 +4419,43 @@
           ]
         },
         {
-          "cta_id": "home-project-coordination",
-          "position": "capabilities",
-          "href": "/projetos/coordenacao-multidisciplinar/",
+          "cta_id": "home-proof-public-contract",
+          "position": "evidence",
+          "href": "/casos/medicao-glosa-demonstrativo/",
+          "stage": "inspect",
+          "commitment": "low",
+          "current_label": "Examinar o demonstrativo",
+          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-context-condominiums",
+          "position": "contexts",
+          "href": "/engenharia-condominios/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Entender a coordenação",
-          "useful_next_state": "Abre o destino declarado por “Entender a coordenação” para continuar a decisão.",
+          "current_label": "Condomínios Inspeção, reforma, recebimento, documentação e apoio técnico para decisões do condomínio.",
+          "useful_next_state": "Abre o destino declarado por “Condomínios Inspeção, reforma, recebimento, documentação e apoio técnico para decisões do condomínio.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-context-partners",
+          "position": "contexts",
+          "href": "/parcerias-engenharia/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Parcerias de engenharia Apoio a arquitetos e escritórios quando a entrega pede disciplinas ou capacidade técnica complementar.",
+          "useful_next_state": "Abre o destino declarado por “Parcerias de engenharia Apoio a arquitetos e escritórios quando a entrega pede disciplinas ou capacidade técnica complementar.” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",

@@ -1,13 +1,13 @@
 {
   "schema_version": "1.1.0",
   "campaign": "CONFENGE-MV-04-CORPORATE-SHELL-20260905",
-  "updated_at": "2026-10-03",
+  "updated_at": "2026-10-11",
   "person": {
     "jobTitle": "Engenheiro Civil e Engenheiro de Segurança do Trabalho",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
-    "short": "Engenharia, perícias e inteligência técnica para decisões que chegam à obra.",
+    "short": "Engenharia, perícias e inteligência técnica para necessidades públicas e privadas.",
     "long": "A CONFENGE atua em projetos, orçamento, inspeção, perícia, avaliação, segurança do trabalho e obras públicas. Organiza o trabalho técnico e os profissionais habilitados conforme a necessidade, o objetivo e as informações disponíveis.",
     "tagline": "Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
@@ -24,17 +24,17 @@
     "site": "https://confenge.com.br"
   },
   "hero": {
-    "eyebrow": "Engenharia, perícias e inteligência técnica para edificações, infraestrutura e indústria",
-    "h1": "Decisões técnicas que precisam chegar à obra.",
-    "h1_html": "Decisões técnicas que precisam <span>chegar à obra.</span>",
-    "subheadline": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura, e atua com orçamento, inspeção, perícia, avaliação, SST e obras públicas. Reunimos as disciplinas, as interfaces, as evidências e os requisitos de execução para uma entrega técnica integrada.",
+    "eyebrow": "Empresa de engenharia para necessidades públicas e privadas",
+    "h1": "Engenharia para transformar uma necessidade em entrega técnica.",
+    "h1_html": "Engenharia para transformar uma necessidade em <span>entrega técnica.</span>",
+    "subheadline": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação, segurança do trabalho e apoio a obras públicas. Cada contratação parte da decisão que precisa ser tomada e termina em documentos definidos para essa finalidade.",
     "cta_primary": "Solicitar proposta",
     "cta_secondary": "Encontrar a frente técnica",
     "cta_secondary_wa": "Olá, CONFENGE. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
     "microcopy": "Projetos · Orçamento · Inspeção e perícia · Avaliação e SST · Obras públicas",
     "meta_title": "CONFENGE | Engenharia, perícias e inteligência técnica",
     "meta_description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas para decisões técnicas em empreendimentos privados e públicos.",
-    "og_title": "Engenharia, perícias e inteligência técnica para decisões que chegam à obra.",
+    "og_title": "Engenharia, perícias e inteligência técnica para necessidades públicas e privadas.",
     "og_description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas com escopo técnico definido para cada necessidade."
   },
   "journeys": [

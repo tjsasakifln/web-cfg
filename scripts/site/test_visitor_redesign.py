@@ -764,9 +764,9 @@ def test_home_nav_and_hierarchy():
     assert home.count("button-primary") <= 5
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
-    for ident in ("competencias", "setores", "entregas", "servicos-complementares", "sobre-a-confenge", "solicitar-proposta"):
+    for ident in ("como-conduzimos", "entregas", "contextos", "servicos-complementares", "sobre-a-confenge", "solicitar-proposta"):
         assert f'id="{ident}"' in home
-    assert home.find('id="servicos-complementares"') < home.find('id="competencias"')
+    assert home.find('id="servicos-complementares"') < home.find('id="como-conduzimos"')
     assert "54.055" not in home and "4,48 mi" not in home
 
 
@@ -1109,9 +1109,9 @@ def test_home_form_anchor_reveals_fields():
     assert hero, "home hero primary CTA missing"
     assert hero.group(1) == "#contato", hero.group(1)
     hero_text = re.sub(r"<[^>]+>", " ", hero_section.group(0))
-    assert re.search(r"estruturas|instalações|infraestrutura|propostas|projeto", hero_text, re.I)
+    assert re.search(r"necessidades públicas e privadas", hero_text, re.I)
     assert re.search(r"\b(?:elabora|coordena|projetamos|coordenamos)\b", hero_text, re.I)
-    assert "entrega técnica integrada" in hero_text
+    assert "entrega técnica" in hero_text
     header_cta = re.search(
         r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
         r'<a\b[^>]*href="([^"]+)"[^>]*\bheader-cta\b',
@@ -1141,13 +1141,14 @@ def test_home_form_anchor_reveals_fields():
         r"(?:^|[{},])[^{}]*\.contact-form\{[^}]*order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
+    projects = (ROOT / "projetos" / "index.html").read_text(encoding="utf-8")
     for href in (
         "/projetos/estruturas/",
         "/projetos/instalacoes/",
         "/projetos/infraestrutura/",
         "/projetos/coordenacao-multidisciplinar/",
     ):
-        assert f'href="{href}"' in html
+        assert f'href="{href}"' in projects
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
@@ -1240,7 +1241,7 @@ def test_css_visitor_tokens():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     hub = (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
     for cls, markup, stylesheet in (
-        ("home-capability-list", home, home_css),
+        ("home-conduction__flow", home, home_css),
         ("problem-stages", hub, css),
         ("problem-stage-head", hub, css),
         ("featured-lead", hub, css),

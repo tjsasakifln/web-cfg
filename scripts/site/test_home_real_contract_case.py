@@ -17,7 +17,7 @@ def test_home_is_institutional_and_does_not_use_pncp_as_client_proof():
     assert "R$ 18.293.629,80" not in html
     assert "pncp.gov.br/app/contratos/" not in html
     assert "<dt>1% do valor</dt>" not in html
-    assert 'id="competencias"' in html
+    assert 'id="como-conduzimos"' in html
     assert 'href="/projetos/"' in html
     assert 'href="/servicos/"' in html
     assert not re.search(
@@ -28,12 +28,12 @@ def test_home_is_institutional_and_does_not_use_pncp_as_client_proof():
 def test_home_has_accessible_institutional_paths_instead_of_market_selector():
     html = HOME.read_text(encoding="utf-8")
     journeys = re.search(
-        r'<section[^>]+id="competencias"[\s\S]*?</section>',
+        r'<section[^>]+id="servicos-complementares"[\s\S]*?</section>',
         html,
     )
     assert journeys
-    assert journeys.group(0).count("<article") >= 3
-    for href in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/"):
+    assert journeys.group(0).count('data-cta-id="home-service-') == 6
+    for href in ("/projetos/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/servicos/#servico-avaliacao", "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/"):
         assert f'href="{href}"' in journeys.group(0), href
     assert 'role="tab"' not in journeys.group(0)
     assert 'role="tabpanel"' not in journeys.group(0)

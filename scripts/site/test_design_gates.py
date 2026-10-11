@@ -117,11 +117,11 @@ def test_css_tokens_mirror_system():
 def test_home_archetypes_diverse():
     html = HOME.read_text(encoding="utf-8")
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', html)
-    # The institutional home moves from projects and sectors to authority and
-    # proposal without exposing the former classified-style situation grid.
+    # The institutional home moves from seven public fronts through transversal
+    # delivery, evidence, contexts, authority and proposal.
     assert 5 <= len(archetypes) <= 8, f"expected 5–8 narrative archetypes, got {archetypes}"
     assert len(set(archetypes)) >= 5, f"need ≥5 distinct archetypes, got {set(archetypes)}"
-    for required in ("hero_split", "discipline_editorial", "sector_editorial", "authority_editorial", "cta_formal"):
+    for required in ("hero_split", "service_index", "delivery_flow", "content_editorial", "sector_editorial", "authority_editorial", "cta_formal"):
         assert required in archetypes, f"institutional home missing {required}: {archetypes}"
     # no three consecutive identical archetypes
     for i in range(len(archetypes) - 2):
@@ -327,9 +327,11 @@ def test_home_card_grid_limit():
         if re.search(rf'class="[^"]*{cls}', html):
             legacy_grids += 1
     assert legacy_grids <= 2, f"too many legacy card grids on home: {legacy_grids}"
-    assert 'data-section-archetype="discipline_editorial"' in html
-    assert 'class="home-capability-list"' in html
-    rows = re.findall(r'<article>[\s\S]*?Ver especialidade[\s\S]*?</article>', html)
+    assert 'data-section-archetype="content_editorial"' in html
+    assert 'class="home-evidence__grid"' in html
+    proof = re.search(r'<section\b[^>]*class="[^"]*home-evidence[^"]*"[\s\S]*?</section>', html)
+    assert proof
+    rows = re.findall(r'<article>[\s\S]*?</article>', proof.group(0))
     assert len(rows) == 3, len(rows)
     assert 'class="home-service-links"' in html
     assert html.count('class="situation-row') == 0
@@ -342,7 +344,7 @@ def test_home_card_grid_limit():
 def test_home_no_uniform_section_padding_only():
     """Home varies rhythm with component spacing and contrasting surfaces."""
     css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
-    for component in ("home-opening", "home-capabilities", "home-sectors", "home-deliverables", "home-company", "home-proposal"):
+    for component in ("home-opening", "home-conduction", "home-evidence", "home-contexts", "home-company", "home-proposal"):
         assert f".{component}" in css
     for surface in ("background:#fff", "background:#071a31", "background:#f3f4f5", "background:#061a33"):
         assert surface in css
@@ -429,15 +431,15 @@ def test_offer_depth_and_distinct_layouts():
 
 def test_project_capabilities_accessible_without_js():
     html = HOME.read_text(encoding="utf-8")
-    assert 'id="competencias"' in html
+    assert 'href="/projetos/"' in html
+    projects = (ROOT / "projetos" / "index.html").read_text(encoding="utf-8")
     for href in (
         "/projetos/estruturas/",
         "/projetos/instalacoes/",
         "/projetos/infraestrutura/",
         "/projetos/coordenacao-multidisciplinar/",
     ):
-        assert f'href="{href}"' in html
-    assert html.count("Ver especialidade") == 3
+        assert f'href="{href}"' in projects
     assert "href=\"#contato\"" in html
 
 
@@ -445,11 +447,9 @@ def test_trace_matrix_and_tension_present():
     """Institutional fronts lead; project depth remains directly accessible."""
     html = HOME.read_text(encoding="utf-8")
     lower = html.lower()
-    for term in ("concreto armado", "média e alta tensão", "terraplenagem", "coordenação multidisciplinar"):
-        assert term in lower
     fronts_at = html.find('id="servicos-complementares"')
-    project_at = html.find('id="competencias"')
-    assert 0 < fronts_at < project_at
+    conduction_at = html.find('id="como-conduzimos"')
+    assert 0 < fronts_at < conduction_at
     for term in (
         "Projetos e coordenação",
         "Quantitativos e orçamentos",
@@ -502,13 +502,12 @@ def test_home_five_second_clarity():
     assert hero, "hero missing"
     fold = hero.group(0)
     fold_lower = fold.lower()
-    assert "engenharia, perícias e inteligência técnica" in fold_lower
-    assert "decisões técnicas" in fold_lower
-    for discipline in ("estruturas", "instalações", "infraestrutura"):
-        assert discipline in fold_lower
+    assert "empresa de engenharia" in fold_lower
+    assert "necessidades públicas e privadas" in fold_lower
     assert "elabora e coordena" in fold_lower
-    assert "entrega técnica integrada" in fold_lower
-    assert "edificações" in fold_lower and "indústria" in fold_lower
+    assert "entrega técnica" in fold_lower
+    for front in ("orçamento", "inspeção", "perícia", "avaliação", "segurança do trabalho", "obras públicas"):
+        assert front in fold_lower
     assert "solicitar proposta" in fold_lower
     assert 'href="#contato"' in fold
     assert 'href="/servicos/"' in fold
@@ -525,16 +524,16 @@ def test_home_decision_fold_hierarchy():
     h1 = re.search(r'<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)</h1>', hero_html)
     assert h1, "hero h1 missing"
     h1_text = re.sub(r"<[^>]+>", " ", h1.group(1)).lower()
-    assert "decisões técnicas" in h1_text, h1_text
-    assert "chegar à obra" in h1_text, h1_text
+    assert "engenharia" in h1_text, h1_text
+    assert "entrega técnica" in h1_text, h1_text
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1
     assert html.count('name="diagnostico-b2g"') == 1
     assert html.count('id="formulario-contato"') == 1
-    assert 'id="competencias"' in html and 'id="setores"' in html
-    assert html.find('id="servicos-complementares"') < html.find('id="competencias"')
-    assert html.find('id="setores"') < html.find('id="solicitar-proposta"')
+    assert 'id="como-conduzimos"' in html and 'id="contextos"' in html
+    assert html.find('id="servicos-complementares"') < html.find('id="como-conduzimos"')
+    assert html.find('id="contextos"') < html.find('id="solicitar-proposta"')
     # The fold's proof is a readable HTML flow from need through technical work
     # to a defined delivery. Keep this contract semantic so it cannot regress
     # to an empty shell or the former illegible SVG/image treatment.
@@ -607,12 +606,12 @@ def test_operating_flow_has_sitewide_fallback():
 def test_mobile_home_keeps_institutional_narrative_visible():
     home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
     html = HOME.read_text(encoding="utf-8")
-    for cls in ("home-capabilities", "home-sectors", "home-deliverables", "home-services", "home-company", "home-proposal"):
+    for cls in ("home-conduction", "home-evidence", "home-contexts", "home-services", "home-company", "home-proposal"):
         assert f'class="section {cls}"' in html
         assert not re.search(rf"\.{cls}[^{{]*\{{[^}}]*display\s*:\s*none", home_css)
     assert "@media (max-width:620px)" in home_css
-    assert ".home-capability-list article" in home_css
-    assert ".home-delivery-flow" in home_css
+    assert ".home-evidence__grid article" in home_css
+    assert ".home-conduction__flow" in home_css
 
 
 def test_css_modules_are_concatenated_without_a_framework():

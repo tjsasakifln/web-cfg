@@ -241,8 +241,9 @@ ok("home_200", home.status === 200, `status=${home.status}`);
 const homeContract = evaluateHomeAcquisition(home.body);
 ok(
   "home_h1_service_scope",
-  homeContract.headingScope && homeContract.executionScope && homeContract.amplitudeScope,
-  "opening must represent institutional engineering and all seven contracted fronts",
+  homeContract.headingScope && homeContract.executionScope && homeContract.amplitudeScope
+    && homeContract.processScope && homeContract.deliveryProof,
+  "home must represent public/private institutional engineering, seven needs, and the transversal process and delivery proof",
 );
 ok("corporate_paths_match_contract", homeContract.discoveryPaths, "seven attributed engineering service destinations required");
 ok("home_proposal_reaches_persisted_intake", homeContract.proposalPath, "hero proposal must reach the shared receipt-dependent form");
@@ -352,7 +353,7 @@ ok(
   loc === "/servicos/",
   `loc=${loc}`
 );
-for (const id of ["competencias", "servicos-complementares", "contato"]) {
+for (const id of ["como-conduzimos", "servicos-complementares", "contato"]) {
   ok(`fragment_${id}`, home.body.includes(`id="${id}"`), "missing corporate destination");
 }
 

@@ -26,6 +26,27 @@ const CANONICAL_INBOUND_URL = `https://${CANONICAL_INBOUND_HOST}${INBOUND_PATH}`
 const CANONICAL_INBOUND_DESTINATION = "WARMBLY_PRODUCTION_V1";
 const SOURCE_INTERNAL = "CONFENGE_WEB";
 const SOURCE_WARMBLY = "CONFENGE_WEB";
+const SPECIALIZED_QA_CONTEXT_KEYS = Object.freeze([
+  "asset_id", "cta_id", "route_family", "jornada", "estagio", "origem",
+  "landing_page", "source_origin_asset_id", "source_origin_route_family", "tema",
+]);
+// `origem` is persisted proof only. confenge.inbound.v1 has no origin field,
+// so the delivery projection must not infer it from landing_url.
+const SPECIALIZED_QA_WIRE_CONTEXT_KEYS = Object.freeze(
+  SPECIALIZED_QA_CONTEXT_KEYS.filter((key) => key !== "origem"),
+);
+const SPECIALIZED_QA_CONTEXT = Object.freeze({
+  asset_id: "home-institutional",
+  cta_id: "home-proposal-submit",
+  route_family: "home",
+  jornada: "pericia",
+  estagio: "perícia, assistência técnica ou avaliação",
+  origem: "/servicos/",
+  landing_page: "/servicos/",
+  source_origin_asset_id: null,
+  source_origin_route_family: "servicos-corporativos",
+  tema: "Assistência técnica trabalhista em SST",
+});
 const DEFAULT_TIMEOUT_MS = 8000;
 const DEFAULT_MAX_ATTEMPTS = 8;
 const HMAC_SKEW_MS = 5 * 60 * 1000;
@@ -77,6 +98,37 @@ const PII_QUERY_KEYS = new Set([
 let _fetchOverride = null;
 function setFetchForTests(fn) {
   _fetchOverride = fn;
+}
+
+function specializedQaTechnicalContext(record) {
+  if (
+    !record || record.record_kind !== "synthetic" ||
+    record.synthetic_probe_authenticated !== true ||
+    record.next_action !== "exclude_from_commercial"
+  ) return null;
+  const out = {};
+  for (const key of SPECIALIZED_QA_CONTEXT_KEYS) {
+    const actual = record[key] == null || record[key] === "" ? null : String(record[key]);
+    if (actual !== SPECIALIZED_QA_CONTEXT[key]) return null;
+    out[key] = actual;
+  }
+  return out;
+}
+
+function specializedQaTechnicalContextSha256(record) {
+  const context = specializedQaTechnicalContext(record);
+  return context
+    ? crypto.createHash("sha256").update(JSON.stringify(context)).digest("hex")
+    : null;
+}
+
+function specializedQaWireTechnicalContextSha256(record) {
+  const context = specializedQaTechnicalContext(record);
+  if (!context) return null;
+  const projection = Object.fromEntries(
+    SPECIALIZED_QA_WIRE_CONTEXT_KEYS.map((key) => [key, context[key]]),
+  );
+  return crypto.createHash("sha256").update(JSON.stringify(projection)).digest("hex");
 }
 function getFetch() {
   return _fetchOverride || globalThis.fetch;
@@ -479,6 +531,60 @@ function mapAdaptiveLeadToNetNewInbound(record) {
 
 function stableBody(payload) {
   return JSON.stringify(payload);
+}
+
+function qaTechnicalContextSha256FromSerializedPayload(rawBody) {
+  let parsed;
+  try { parsed = JSON.parse(String(rawBody || "")); } catch { return null; }
+  if (parsed?.synthetic !== true || parsed?.record_kind !== "synthetic") return null;
+  // Extract only fields that already belong to confenge.inbound.v1. The
+  // specialized values which have no first-class key are present in the
+  // existing, versioned "Contexto do próximo passo" prefix. This parser is
+  // deliberately fixture-exact and never returns the raw message.
+  if (
+    parsed.asset_id !== SPECIALIZED_QA_CONTEXT.asset_id ||
+    parsed.cta_id !== SPECIALIZED_QA_CONTEXT.cta_id ||
+    parsed.route_family !== SPECIALIZED_QA_CONTEXT.route_family ||
+    parsed.journey !== SPECIALIZED_QA_CONTEXT.jornada ||
+    parsed.landing_url !== `https://confenge.com.br${SPECIALIZED_QA_CONTEXT.landing_page}`
+  ) return null;
+  const message = String(parsed.message || "");
+  // clampText normalizes the mapper's separating newline to one space before
+  // these exact bytes are serialized.
+  const match = /^Contexto do próximo passo: ([^\n]+?)\.(?:\s|$)/.exec(message);
+  if (!match) return null;
+  const qualifications = new Map();
+  for (const pair of match[1].split("; ")) {
+    const split = pair.indexOf("=");
+    if (split < 1) return null;
+    const label = pair.slice(0, split);
+    const value = pair.slice(split + 1);
+    if (qualifications.has(label)) return null;
+    qualifications.set(label, value);
+  }
+  const expectedQualificationLabels = [
+    "situação", "situação declarada", "família de rota de origem", "tema",
+  ];
+  if (
+    qualifications.size !== expectedQualificationLabels.length ||
+    expectedQualificationLabels.some((label) => !qualifications.has(label)) ||
+    qualifications.get("situação") !== SPECIALIZED_QA_CONTEXT.jornada ||
+    qualifications.get("situação declarada") !== SPECIALIZED_QA_CONTEXT.estagio ||
+    qualifications.get("família de rota de origem") !== SPECIALIZED_QA_CONTEXT.source_origin_route_family ||
+    qualifications.get("tema") !== SPECIALIZED_QA_CONTEXT.tema
+  ) return null;
+  const extracted = {
+    asset_id: parsed.asset_id,
+    cta_id: parsed.cta_id,
+    route_family: parsed.route_family,
+    jornada: parsed.journey,
+    estagio: qualifications.get("situação declarada"),
+    landing_page: SPECIALIZED_QA_CONTEXT.landing_page,
+    source_origin_asset_id: null,
+    source_origin_route_family: qualifications.get("família de rota de origem"),
+    tema: qualifications.get("tema"),
+  };
+  return crypto.createHash("sha256").update(JSON.stringify(extracted)).digest("hex");
 }
 
 function netNewTerminalSnapshot(inner, payload, expectedReceipt) {
@@ -1051,6 +1157,10 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
   if (cfg.blocked) return { status: STATUS.BLOCKED, reason: cfg.reason, last_error: cfg.reason, attemptsDelta: 0 };
 
   const rawBody = stableBody(payload);
+  // Read the proof back from the exact JSON bytes handed to fetch. Computing
+  // it only from the record before serialization would not prove that the
+  // handoff body actually carried the binding.
+  const qaTechnicalContextSha256 = qaTechnicalContextSha256FromSerializedPayload(rawBody);
   const unix = Math.floor(now.getTime() / 1000);
   const signature = signWarmblyInbound(cfg.secret, rawBody, unix);
   const started = Date.now();
@@ -1148,6 +1258,9 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
           : `webhook_http_${res.status}`,
       downstream,
       attemptsDelta: 1,
+      ...(classified === STATUS.DELIVERED && qaTechnicalContextSha256
+        ? { technical_context_sha256: qaTechnicalContextSha256 }
+        : {}),
     };
   } catch (err) {
     const latency_ms = Date.now() - started;
@@ -1281,6 +1394,9 @@ function applyAttempt(current, result, { now = new Date(), env = process.env } =
     downstream: result.downstream || (current && current.downstream) || undefined,
     requeue_mode: current && current.requeue_mode ? current.requeue_mode : undefined,
     requeue_policy: current && current.requeue_policy ? current.requeue_policy : undefined,
+    ...(result && /^[0-9a-f]{64}$/.test(String(result.technical_context_sha256 || ""))
+      ? { technical_context_sha256: result.technical_context_sha256 }
+      : {}),
   };
   if (result.status === STATUS.DELIVERED) {
     next.delivered_at = now.toISOString();
@@ -1539,6 +1655,12 @@ module.exports = {
   STATUS,
   REQUEUE_CLASS,
   PII_QUERY_KEYS,
+  SPECIALIZED_QA_CONTEXT_KEYS,
+  SPECIALIZED_QA_WIRE_CONTEXT_KEYS,
+  specializedQaTechnicalContext,
+  specializedQaTechnicalContextSha256,
+  specializedQaWireTechnicalContextSha256,
+  qaTechnicalContextSha256FromSerializedPayload,
   mapLeadToInboundV1,
   mapAdaptiveLeadToNetNewInbound,
   isAuthenticatedSyntheticProbe,

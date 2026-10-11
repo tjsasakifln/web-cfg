@@ -223,6 +223,7 @@ SECTION_NAV = {
     "responsibility": ("responsabilidade", "Responsabilidade"),
     "leadership": ("lideranca", "Liderança"),
     "contact": ("contato-projetos", "Proposta"),
+    "partnership": ("parcerias", "Parcerias"),
     "related": ("relacionadas", "Relacionadas"),
 }
 
@@ -265,6 +266,9 @@ def _render_section(key: str, page: dict[str, Any]) -> str:
         return f'''<section class="pp-section pp-section--soft" id="lideranca" aria-labelledby="leadership-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">Liderança técnica</p><h2 id="leadership-title">{esc(leadership['title'])}</h2><p>{esc(leadership['intro'])}</p></header><div class="pp-interface-grid">{items}</div></div></section>'''
     if key == "contact":
         return _contact_section(page)
+    if key == "partnership":
+        partnership = page["partnership"]
+        return f'''<section class="pp-section pp-section--soft" id="parcerias" aria-labelledby="partnership-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(partnership['kicker'])}</p><h2 id="partnership-title">{esc(partnership['title'])}</h2><p>{esc(partnership['body'])}</p><p><a class="pp-text-link" href="{esc(partnership['href'])}">{esc(partnership['cta'])} {_icon('arrow')}</a></p></header></div></section>'''
     if key == "related":
         return f'''<section class="pp-section pp-section--related" id="relacionadas" aria-labelledby="related-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">Continue a análise</p><h2 id="related-title">Páginas relacionadas</h2></header><ul>{_related(page)}</ul></div></section>'''
     raise ValueError(f"unknown project section: {key}")

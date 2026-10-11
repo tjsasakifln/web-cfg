@@ -7,7 +7,14 @@
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
 import { createHash, createHmac, randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { parse } from "parse5";
+import {
+  SPECIALIZED_QA_CONTEXT_KEYS,
+  specializedQaContextSha256,
+  specializedQaWireContextSha256,
+  validateSpecializedQaJourney,
+} from "./synthetic_contact_journey.mjs";
 
 const blockedProbe = Symbol("controlled_probe_block");
 const CONTEXT_FIELDS = ["asset_id", "cta_id", "route_family", "jornada", "estagio", "origem"];
@@ -283,6 +290,42 @@ if (pagePath) {
   pageContext.landing_page = pagePath;
 }
 
+// The e-mail-enabled production proof must be tied to the actual browser
+// journey. The file contains only allowlisted technical fields and is accepted
+// only when its fixed CTA, route, DOM state, zero-POST observation and release
+// SHA all match the literal fixture in synthetic_contact_journey.mjs.
+const browserFixturePath = String(process.env.PROBE_BROWSER_CONTEXT_FILE || "").trim();
+let browserJourney = null;
+let technicalContextSha256 = null;
+let wireContextSha256 = null;
+if (verifyQaEmail && !browserFixturePath) finishEarly("qa_browser_fixture_required");
+if (browserFixturePath) {
+  let parsed;
+  let raw = "";
+  try {
+    raw = readFileSync(browserFixturePath, "utf8");
+  } catch {
+    finishEarly("browser_fixture_unreadable");
+  }
+  if (Buffer.byteLength(raw, "utf8") > 32 * 1024) finishEarly("browser_fixture_too_large");
+  try { parsed = JSON.parse(raw); } catch { finishEarly("browser_fixture_unreadable"); }
+  const validated = validateSpecializedQaJourney(parsed, expectedSha);
+  if (!validated.ok) finishEarly(validated.reason);
+  browserJourney = parsed;
+  technicalContextSha256 = validated.context_sha256;
+  wireContextSha256 = specializedQaWireContextSha256(validated.context);
+  if (!servedForm) finishEarly("browser_fixture_requires_served_form");
+  if (["asset_id", "cta_id", "route_family"].some((key) => servedForm[key] !== validated.context[key])) {
+    finishEarly("browser_fixture_capture_identity_mismatch");
+  }
+  for (const [key, value] of Object.entries(pageContext)) {
+    if (value && validated.context[key] !== value && !["origem", "landing_page", "jornada", "estagio"].includes(key)) {
+      finishEarly("browser_fixture_environment_mismatch");
+    }
+  }
+  Object.assign(pageContext, validated.context);
+}
+
 const payload = {
   nome: "SYNTHETIC-PROBE",
   email: "probe@example.com",
@@ -391,6 +434,18 @@ const checks = {
   served_form_context_persisted: !servedForm || ["asset_id", "route_family", "cta_id"].every(
     (key) => !servedForm[key] || receipt?.[key] === servedForm[key],
   ),
+  ...(browserJourney
+    ? {
+        specialized_context_persisted: SPECIALIZED_QA_CONTEXT_KEYS.every(
+          (key) => (receipt?.technical_context?.[key] ?? null) === (pageContext[key] ?? null),
+        ),
+        specialized_persisted_and_handoff_hashes_match_scopes:
+          /^[0-9a-f]{64}$/.test(String(technicalContextSha256 || "")) &&
+          /^[0-9a-f]{64}$/.test(String(wireContextSha256 || "")) &&
+          receipt?.technical_context_sha256 === technicalContextSha256 &&
+          receipt?.handoff?.technical_context_sha256 === wireContextSha256,
+      }
+    : {}),
   ...(verifyQaEmail
     ? {
         qa_email_delivered: receipt?.delivery?.qa_email_status === "ok",
@@ -408,7 +463,9 @@ console.log(JSON.stringify({
   page_context: Object.keys(pageContext).length ? pageContext : null,
   page_path: pagePath || null,
   served_form: servedForm,
-  persisted_context: receipt ? { asset_id: receipt.asset_id || null, route_family: receipt.route_family || null, cta_id: receipt.cta_id || null } : null,
+  persisted_context: receipt?.technical_context || (receipt ? { asset_id: receipt.asset_id || null, route_family: receipt.route_family || null, cta_id: receipt.cta_id || null } : null),
+  technical_context_sha256: technicalContextSha256,
+  handoff_context_sha256: wireContextSha256,
   receipt_sha256: leadId ? createHash("sha256").update(leadId).digest("hex") : null,
   ...(verifyQaEmail
     ? {

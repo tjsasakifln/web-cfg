@@ -44,6 +44,17 @@ jobs:
           node-version: "22"
       - name: Install locked probe parser dependencies
         run: npm ci --ignore-scripts
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: setup-chrome
+      - name: Capture fixed specialized journey without submitting
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p build/reports
+          node scripts/site/synthetic_contact_journey.mjs https://confenge.com.br > build/reports/controlled-contact-journey.json
       - name: Prove persistence, safe handoff and isolated QA email
         env:
           LEAD_PROBE_SECRET: ${{ secrets.LEAD_PROBE_SECRET }}
@@ -51,6 +62,7 @@ jobs:
           EXPECTED_SHA: ${{ inputs.expected_sha }}
           PROBE_VERIFY_EMAIL: "1"
           PROBE_PAGE_PATH: /
+          PROBE_BROWSER_CONTEXT_FILE: build/reports/controlled-contact-journey.json
         run: |
           set -euo pipefail
           mkdir -p build/reports
@@ -61,6 +73,8 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: controlled-contact-proof-${{ github.sha }}
-          path: build/reports/controlled-contact-proof.json
+          path: |
+            build/reports/controlled-contact-journey.json
+            build/reports/controlled-contact-proof.json
           if-no-files-found: error
           retention-days: 30

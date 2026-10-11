@@ -79,6 +79,8 @@ const {
   inboundDestinationFingerprint,
   probeInboundDestinationHealth,
   requeueEligibleHandoffs,
+  specializedQaTechnicalContext,
+  specializedQaTechnicalContextSha256,
 } = require("./lib/inbound-handoff.cjs");
 const {
   loadInboundBacklogDecision,
@@ -1123,6 +1125,12 @@ exports.handler = async (event) => {
     const requestedLead = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/.test(requestedLeadId)
       ? await store.get(requestedLeadId)
       : null;
+    // Exact literal allowlist, synthetic-authenticated only. This endpoint
+    // must never turn into a general raw-lead context reader.
+    const technicalContext = specializedQaTechnicalContext(requestedLead);
+    const technicalContextSha256 = technicalContext
+      ? specializedQaTechnicalContextSha256(requestedLead)
+      : null;
     const configuration = {
       webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
@@ -1158,6 +1166,12 @@ exports.handler = async (event) => {
               asset_id: requestedLead.asset_id || null,
               route_family: requestedLead.route_family || null,
               cta_id: requestedLead.cta_id || null,
+              ...(technicalContext
+                ? {
+                    technical_context: technicalContext,
+                    technical_context_sha256: technicalContextSha256,
+                  }
+                : {}),
               handoff: requestedLead.handoff
                 ? {
                     status: requestedLead.handoff.status,
@@ -1166,6 +1180,10 @@ exports.handler = async (event) => {
                     downstream: requestedLead.handoff.downstream || null,
                     last_error: requestedLead.handoff.last_error || null,
                     next_attempt_at: requestedLead.handoff.next_attempt_at || null,
+                    technical_context_sha256:
+                      technicalContext && /^[0-9a-f]{64}$/.test(String(requestedLead.handoff.technical_context_sha256 || ""))
+                        ? requestedLead.handoff.technical_context_sha256
+                        : null,
                   }
                 : null,
               delivery: requestedLead.delivery

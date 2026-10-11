@@ -8,15 +8,19 @@ const DISCOVERY = [
   ["home-service-sst", "/seguranca-trabalho-apoio-tecnico/", "home_services"],
   ["home-service-public-works", "/servicos-obras-publicas/", "home_services"],
 ];
-const INSTITUTIONAL_FRONTS = ["projetos", "orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"];
+const INSTITUTIONAL_NEEDS = ["projetos", "orçamento", "inspeção", "perícia", "avaliação", "segurança do trabalho", "obras públicas"];
 const text = (html) => html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
 const openingTag = (element) => element.slice(0, element.indexOf(">") + 1);
+const sectionByClass = (html, className) => html.match(new RegExp("<section\\b[^>]*class=\"[^\"]*\\b" + className + "\\b[^\"]*\"[^>]*>[\\s\\S]*?<\\/section>", "i"))?.[0] || "";
 const attribute = (tag, name) => tag.match(new RegExp(`(?:^|\\s)${name}\\s*=\\s*(["'])(.*?)\\1`, "i"))?.[2] || "";
 
 export function evaluateHomeAcquisition(html) {
   const opening = html.match(/<section\b[^>]*class="[^"]*\bhome-opening\b[^"]*"[^>]*>[\s\S]*?<\/section>/i)?.[0] || "";
   const heading = text(opening.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/i)?.[0] || "");
   const lead = text(opening.match(/<p\b[^>]*class="[^"]*\bhero-lead\b[^"]*"[^>]*>[\s\S]*?<\/p>/i)?.[0] || "");
+  const openingText = text(opening);
+  const process = text(sectionByClass(html, "home-conduction"));
+  const proof = text(sectionByClass(html, "home-evidence"));
   const anchors = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/gi)].map((match) => match[0]);
   const discoveryPaths = DISCOVERY.every(([id, href, position]) => {
     const found = anchors.map(openingTag).filter((tag) => attribute(tag, "data-cta-id") === id);
@@ -31,11 +35,15 @@ export function evaluateHomeAcquisition(html) {
   const form = forms.length === 1 ? forms[0] : "";
   const primaryTag = primary[0] ? openingTag(primary[0]) : "";
   return {
-    headingScope: heading.includes("decisões técnicas")
-      && /engenharia, perícias e inteligência técnica/.test(text(opening)),
-    executionScope: /\b(?:elabora|projetamos|desenvolvemos)\b/.test(lead)
-      && /\bcoorden/.test(lead) && ["estruturas", "instalações", "infraestrutura"].every((term) => lead.includes(term)),
-    amplitudeScope: INSTITUTIONAL_FRONTS.every((term) => lead.includes(term)),
+    headingScope: ["engenharia", "necessidade", "entrega técnica"].every((term) => heading.includes(term))
+      && openingText.includes("necessidades públicas e privadas"),
+    executionScope: lead.includes("elabora e coordena projetos e presta serviços")
+      && ["cada contratação", "decisão que precisa ser tomada", "documentos definidos"].every((term) => lead.includes(term)),
+    amplitudeScope: INSTITUTIONAL_NEEDS.every((term) => lead.includes(term)),
+    processScope: ["entender a necessidade", "definir o trabalho", "conduzir e integrar", "entregar para a decisão"]
+      .every((term) => process.includes(term)),
+    deliveryProof: ["entregas que podem ser examinadas", "formatos, raciocínio e rastreabilidade", "exemplo demonstrativo"]
+      .every((term) => proof.includes(term)),
     discoveryPaths,
     proposalPath: primary.length === 1 && text(primary[0]).includes("solicitar proposta")
       && attribute(primaryTag, "href") === "#contato" && attribute(primaryTag, "data-event-name") === "cta_click"

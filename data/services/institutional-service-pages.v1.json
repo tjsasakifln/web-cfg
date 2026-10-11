@@ -88,11 +88,11 @@
           ],
           [
             "Interfaces",
-            "A proposta identifica dependências entre disciplinas e informa quais decisões precisam do contratante, do arquiteto ou de outros autores."
+          "A proposta identifica dependências entre disciplinas e informa quais decisões precisam do contratante, do arquiteto ou de outros autores. Quando a contratação parte de um escritório parceiro, a arquitetura de origem, sua autoria e o canal de devolução permanecem identificados."
           ],
           [
             "Continuidade",
-            "Revisão técnica, compatibilização e quantitativos podem integrar a mesma contratação quando forem necessários para fechar o pacote."
+          "Revisão técnica, compatibilização e quantitativos podem integrar a mesma contratação quando forem necessários para fechar o pacote, com as entregas e responsáveis reunidos no escopo."
           ],
           [
             "Abrangência",
@@ -481,7 +481,7 @@
           ],
           [
             "Obra pública",
-            "Orçamento de referência, revisão de planilha ou apoio à proposta considerando edital, critérios de medição e bases oficiais aplicáveis. Referências como SINAPI orientam composições e devem refletir região, data-base e condições executivas; não equivalem a preço de mercado universal."
+          "Orçamento de referência, revisão de planilha ou apoio à proposta considerando edital, regime de empreitada, critérios de medição e bases oficiais aplicáveis. Referências como SINAPI orientam composições e devem refletir região, data-base, desoneração e condições executivas; não equivalem a preço de mercado universal."
           ],
           [
             "Projeto em desenvolvimento",
@@ -489,7 +489,7 @@
           ],
           [
             "Responsabilidade",
-            "A proposta identifica o profissional, as disciplinas e o alcance da responsabilidade técnica sobre a entrega."
+          "A proposta identifica o profissional, as disciplinas, a decisão que a base apoia e o alcance da responsabilidade técnica sobre a entrega."
           ]
         ]
       },
@@ -505,8 +505,8 @@
         "engagement"
       ],
       "related_guides": {
-        "title": "Três decisões antes de fechar a base.",
-        "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas e quando revisar ou refazer um orçamento.",
+    "title": "Quatro decisões antes de fechar a base.",
+    "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas, quando revisar ou refazer um orçamento e como conferir a base de referência.",
         "items": [
           [
             "Documentos para o levantamento",
@@ -522,6 +522,11 @@
             "Revisar ou refazer o orçamento",
             "Distinga atualização, revisão crítica e nova orçamentação conforme a condição da base existente.",
             "/conteudos/revisar-ou-refazer-orcamento-obra/"
+        ],
+        [
+          "Base oficial e regime de execução",
+          "Entenda por que região, data-base, desoneração e o regime de empreitada mudam a leitura da planilha antes de decidir ou contratar.",
+          "/conteudos/sinapi-desonerado-nao-desonerado/"
           ]
         ]
       },

@@ -27,29 +27,56 @@ if (requestedBase && requestedBaseUrl.href !== `${productionBase}/`) {
 }
 const productionMode = Boolean(requestedBase);
 const viewports = [[360, 800], [390, 844], [768, 900], [1440, 1000]];
-// CONFENGE-CAMPANHA-AQUISICAO-20261003: the home presents project disciplines
-// and engineering services. Test the visible discovery entry separately from
-// the direct technical route: an aggregate service page can explain several
-// needs without restoring the superseded situation catalogue or home CTA.
+// R03: the institutional home gives seven comparable need-based entries.
+// Project disciplines remain one further click into their specialist hub.
+// Preserve the direct route checks independently of this navigation change.
 const journeys = [
-  ["legacy_project_fragment", "/servicos/#servico-projeto", "competencias", "/projetos/estruturas/"],
+  ["legacy_project_fragment", "/servicos/#servico-projeto", "servicos-complementares", "/projetos/"],
   ["pequena_reforma", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
   ["condominio_anomalia", "/inspecao-diagnostico-edificacoes/", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
   ["condominio_contratacao", "/engenharia-condominios/", "inicio", "/engenharia-condominios/"],
   ["arquiteto_compatibilizacao", "/revisao-tecnica-projetos-engenharia/", "servicos-complementares", "/projetos/"],
-  ["projeto_estrutural", "/projetos/estruturas/", "competencias", "/projetos/estruturas/"],
-  ["instalacoes", "/projetos/instalacoes/", "competencias", "/projetos/instalacoes/"],
-  ["infraestrutura", "/projetos/infraestrutura/", "competencias", "/projetos/infraestrutura/"],
+  ["projeto_estrutural", "/projetos/estruturas/", "servicos-complementares", "/projetos/", "/projetos/estruturas/"],
+  ["instalacoes", "/projetos/instalacoes/", "servicos-complementares", "/projetos/", "/projetos/instalacoes/"],
+  ["infraestrutura", "/projetos/infraestrutura/", "servicos-complementares", "/projetos/", "/projetos/infraestrutura/"],
   ["orcamento_publico", "/quantitativos-orcamento-obras/", "servicos-complementares", "/quantitativos-orcamento-obras/"],
   ["orcamento_privado", "/quantitativos-orcamento-obras/", "servicos-complementares", "/quantitativos-orcamento-obras/"],
   ["disciplina_nao_listada", "/servicos/", "servicos-complementares", "/servicos/"],
-  ["orgao_preparando_projeto", "/servicos-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
-  ["edital", "/servicos-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
+  ["outra_demanda_tecnica", "/#contato", "solicitar-proposta", "#contato"],
+  ["documentar_as_built", "/inspecao-diagnostico-edificacoes/#documentacao-as-built", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
+  ["receber_entregar", "/inspecao-diagnostico-edificacoes/#recebimento-entrega", "servicos-complementares", "/inspecao-diagnostico-edificacoes/"],
+  ["orgao_preparando_projeto", "/servicos-obras-publicas/#situacao-orgao", "servicos-complementares", "/servicos-obras-publicas/"],
+  // The edital hub presents a choice of actual offers. Follow that choice
+  // as a buyer would: home -> public services -> pre-bid diagnosis. The
+  // section heading itself is not the specialist intake destination.
+  ["edital", "/diagnostico-pre-licitacao/", "servicos-complementares", "/servicos-obras-publicas/", "/diagnostico-pre-licitacao/"],
   ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
   ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "servicos-complementares", "/assistencia-tecnica-pericial-engenharia/"],
   ["avaliacao_imovel", "/servicos/#servico-avaliacao", "servicos-complementares", "/servicos/#servico-avaliacao"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "servicos-complementares", "/seguranca-trabalho-apoio-tecnico/"],
-].map(([id, direct, homeContainer, homeHref]) => ({ id, direct, homeContainer, homeHref, homeSelector: `a[href="${homeHref}"]` }));
+  ["assistencia_trabalhista", "/servicos/#servico-sst", "servicos-complementares", "/servicos/", "/#contato"],
+].map(([id, direct, homeContainer, homeHref, secondHref]) => ({ id, direct, homeContainer, homeHref, secondHref, homeSelector: `a[href="${homeHref}"]` }));
+// Test coverage binds to the existing authority, including its fallback.
+// This is a scenario map, not another route or offer taxonomy.
+const officialFamilies = JSON.parse(readFileSync(join(root, "data/corporate/intent-family-matrix.v1.json"), "utf8")).intent_families.map(row => row.intent_family);
+const familyScenarios = {
+  projetar_revisar_compatibilizar: "projeto_estrutural",
+  orcar_planejar_decidir: "orcamento_privado",
+  inspecionar_diagnosticar: "condominio_anomalia",
+  receber_entregar_reformar: "receber_entregar",
+  documentar_as_built_regularizar: "documentar_as_built",
+  avaliar_imovel: "avaliacao_imovel",
+  produzir_prova_tecnica: "pericia_assistencia",
+  assistencia_trabalhista_sst: "assistencia_trabalhista",
+  organizar_sst: "seguranca_trabalho",
+  planejar_contratacao_publica: "orgao_preparando_projeto",
+  decidir_disputar_licitacao: "edital",
+  executar_proteger_contrato_publico: "glosa_aditivo",
+  outra_demanda_tecnica: "outra_demanda_tecnica",
+};
+if (officialFamilies.some(family => !journeys.some(row => row.id === familyScenarios[family])) || Object.keys(familyScenarios).some(family => !officialFamilies.includes(family))) {
+  throw new Error("Contact journeys must cover every official family and the context fallback");
+}
 const pendingUntilClosure = [];
 const homeHtml = readFileSync(join(root, "index.html"), "utf8");
 // Compact variation matrix for the real home form. This is deliberately not
@@ -91,7 +118,7 @@ function record(name, pass, detail, context = {}) { const row = { name, pass, de
 // planned route and viewport, not only the first broken CTA.
 function required(name, pass, detail, context) { record(name, pass, detail, context); }
 function hasEssentialContactResponse(status, data) {
-  return status === 200 && Boolean(data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean));
+  return status === 200 && Boolean(data.activeForm || data.triageLink || data.formLink || Object.values(data.channels).some(Boolean));
 }
 function executable() { if (chrome && existsSync(chrome)) return chrome; throw new Error("Chrome unavailable: set CHROME_PATH"); }
 function serve() { return createServer((req, res) => {
@@ -159,13 +186,22 @@ async function verifyAdaptiveIntakeConfig(phase, expectedSnapshot = null) {
 async function facts(page, fragment = "") { return page.evaluate((targetFragment) => {
   const visible = element => { const style = getComputedStyle(element); const box = element.getBoundingClientRect(); return !element.hidden && style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0; };
   const main = document.querySelector("main") || document.body;
-  const context = targetFragment ? document.querySelector(targetFragment) || main : main;
-  const links = [...context.querySelectorAll("a[href]")];
+  const target = targetFragment ? document.querySelector(targetFragment) : null;
+  // A corporate paragraph shares the card's actions. Public-work group titles
+  // introduce the following task rows up to the next title; inspect those
+  // actions too, without borrowing an unrelated footer contact.
+  const context = target?.closest(".corporate-service-row") || target || main;
+  const contexts = [context];
+  if (context.classList.contains("list-ruled__group")) {
+    for (let sibling = context.nextElementSibling; sibling && !sibling.classList.contains("list-ruled__group"); sibling = sibling.nextElementSibling) contexts.push(sibling);
+  }
+  const links = contexts.flatMap(node => [...node.querySelectorAll("a[href]")]);
   const channels = { whatsapp: links.some(a => /^https:\/\/wa\.me\//.test(a.href) && visible(a)), email: links.some(a => a.href.startsWith("mailto:") && visible(a)), phone: links.some(a => a.href.startsWith("tel:") && visible(a)) };
   const activeForm = [...context.querySelectorAll("form")].some(form => visible(form) && [...form.querySelectorAll("[type=submit]")].some(button => visible(button) && !button.disabled));
   const cnpjRequired = [...document.querySelectorAll("[required]")].filter(el => /cnpj/i.test(`${el.name} ${el.id} ${el.labels?.[0]?.textContent || ""}`)).length;
   const triageLink = links.some(a => /^\/triagem-tecnica\//.test(a.getAttribute("href") || "") && visible(a));
-  return { channels, activeForm, triageLink, cnpjRequired, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth };
+  const formLink = links.some(a => { const url = new URL(a.href); return url.origin === location.origin && ["#contato", "#captura-contrato"].includes(url.hash) && visible(a); });
+  return { channels, activeForm, triageLink, formLink, cnpjRequired, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth };
 }, fragment); }
 async function unnamedInteractiveNodes(page) {
   const client = await page.target().createCDPSession();
@@ -216,6 +252,9 @@ async function formStepTransitionDiagnostics(page) {
   });
 }
 async function blockExternal(page) {
+  // This evidence needs fresh response statuses. Cache behaviour is covered
+  // independently; a legitimate 304 must not masquerade as a route failure.
+  await page.setCacheEnabled(false);
   await page.setRequestInterception(true);
   page.on("request", request => {
     const url = new URL(request.url());
@@ -292,9 +331,14 @@ try {
       const fragment = new URL(journey.direct, base).hash;
       const current = facts(page, fragment); const data = await current;
       const context = { journey: journey.id, route: journey.direct, viewport: `${width}x${height}` };
+      if (journey.id === "outra_demanda_tecnica") {
+        await page.waitForFunction(() => document.querySelector("#formulario-contato")?.dataset.formReady === "true");
+        const generic = await page.evaluate(() => ({ stage: document.querySelector("#estagio")?.value, journey: document.querySelector('[name="jornada"]')?.value, theme: document.querySelector('[name="tema"]')?.value || "" }));
+        required("journey_generic_contact_has_no_preselected_need", generic.stage === "" && generic.journey === "" && generic.theme === "", JSON.stringify(generic), context);
+      }
       required("journey_direct_status", response?.status() === 200, String(response?.status()), context);
       if (fragment) required("journey_direct_fragment", await page.$(fragment).then(Boolean), fragment, context);
-      let nextStepReached = data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean);
+      let nextStepReached = data.activeForm || data.triageLink || data.formLink || Object.values(data.channels).some(Boolean);
       if (journey.id === "legacy_project_fragment") {
         // The stable legacy fragment explains the discipline, then hands off
         // through its visible link to the substantive project landing.
@@ -348,12 +392,62 @@ try {
     required("journey_home_entry_link", Boolean(homeVisible), `${journey.homeContainer} ${journey.homeSelector}`, { journey: journey.id, route: "/" });
     if (!homeLink) continue;
     const href = await homeLink.evaluate(a => a.getAttribute("href"));
-    required("journey_home_entry_internal", href.startsWith("/") && !href.startsWith("//"), href, { journey: journey.id, route: "/" });
+    required("journey_home_entry_internal", (href.startsWith("/") && !href.startsWith("//")) || href.startsWith("#"), href, { journey: journey.id, route: "/" });
     required("journey_home_entry_matches_explanation", new URL(href, base).pathname === new URL(journey.homeHref, base).pathname && new URL(href, base).hash === new URL(journey.homeHref, base).hash, `${href} != ${journey.homeHref}`, { journey: journey.id, route: "/" });
+    await homeLink.click();
+    const expectedHome = new URL(href, base);
+    await page.waitForFunction(expected => location.pathname === expected.pathname && location.hash === expected.hash, {}, { pathname: expectedHome.pathname, hash: expectedHome.hash });
+    required("journey_home_actual_click", true, href, { journey: journey.id, route: "/" });
     const homeResult = await page.goto(routeUrl(href, `${journey.id}-home-destination`), { waitUntil: "domcontentloaded" });
     required("journey_home_entry_destination", homeResult?.status() === 200, `${href}: ${homeResult?.status()}`, { journey: journey.id, route: "/" });
     const discovery = await facts(page, new URL(href, base).hash);
-    required("journey_home_destination_next_step", discovery.activeForm || discovery.triageLink || Object.values(discovery.channels).some(Boolean), JSON.stringify(discovery), { journey: journey.id, route: href });
+    required("journey_home_destination_next_step", discovery.activeForm || discovery.triageLink || discovery.formLink || Object.values(discovery.channels).some(Boolean), JSON.stringify(discovery), { journey: journey.id, route: href });
+    if (journey.secondHref) {
+      const secondSelector = journey.id === "assistencia_trabalhista"
+        ? 'main a[data-hub-link="servicos-sst-labor-assistance"]'
+        : journey.id === "edital"
+          ? `#situacao-edital + li article.corporate-service-row a[href="${journey.secondHref}"]`
+          : `main a[href="${journey.secondHref}"]`;
+      const secondLink = await page.$(secondSelector);
+      if (journey.id === "edital") {
+        const bidderRole = secondLink && await secondLink.evaluate(anchor =>
+          anchor.closest("article")?.querySelector("h3")?.textContent.trim() === "Decidir se disputa o edital");
+        required("journey_edital_second_link_belongs_to_bidder_offer", Boolean(bidderRole), "edital choice must stay in its bidder offer row", { journey: journey.id, route: href });
+        if (secondLink) {
+          // A visible link elsewhere must not conceal loss of the actual
+          // bidder offer. Restore the DOM before the real navigation.
+          const rejectsMovedLink = await page.evaluate((selector, target) => {
+            const actual = document.querySelector(selector);
+            if (!actual) return false;
+            const original = actual.getAttribute("href");
+            const decoy = document.createElement("a");
+            decoy.href = target;
+            decoy.textContent = "Counterproof: unrelated destination";
+            document.querySelector("main").prepend(decoy);
+            actual.removeAttribute("href");
+            const rejected = !document.querySelector(selector)
+              && document.querySelector(`main a[href="${target}"]`) === decoy;
+            actual.setAttribute("href", original);
+            decoy.remove();
+            return rejected;
+          }, secondSelector, journey.secondHref);
+          required("journey_edital_rejects_unrelated_same_href_decoy", rejectsMovedLink, "moving the offer link to another section must fail its scoped selector", { journey: journey.id, route: href });
+        }
+      }
+      const visibleSecond = secondLink && await secondLink.evaluate(anchor => { const rect = anchor.getBoundingClientRect(); return rect.width > 0 && rect.height > 0 && getComputedStyle(anchor).visibility !== "hidden"; });
+      required("journey_second_navigation_visible", Boolean(visibleSecond), journey.secondHref, { journey: journey.id, route: href });
+      if (visibleSecond) {
+        await secondLink.click();
+        await page.waitForFunction(expected => location.pathname === expected.pathname && location.hash === expected.hash, {}, { pathname: new URL(journey.secondHref, new URL(href, base)).pathname, hash: new URL(journey.secondHref, new URL(href, base)).hash });
+        const destination = await facts(page, new URL(journey.secondHref, new URL(href, base)).hash);
+        required("journey_two_clicks_destination_next_step", destination.activeForm || destination.triageLink || destination.formLink || Object.values(destination.channels).some(Boolean), JSON.stringify(destination), { journey: journey.id, route: journey.direct });
+        if (journey.id === "assistencia_trabalhista") {
+          await page.waitForFunction(() => document.querySelector("#formulario-contato")?.dataset.formReady === "true");
+          const context = await page.evaluate(() => { const f = document.querySelector("#formulario-contato"); const v = name => f.querySelector(`[name="${name}"]`)?.value || ""; return { journey: v("jornada"), theme: v("tema"), firstOrigin: v("origem"), sourceFamily: v("source_origin_route_family"), routeFamily: v("route_family"), asset: v("asset_id"), consent: f.querySelector('[name="consentimento"]')?.checked || false }; });
+          required("journey_labor_sst_contact_preserves_specific_context", context.journey === "pericia" && context.theme === "Assistência técnica trabalhista em SST" && context.sourceFamily === "servicos-corporativos" && context.routeFamily === "home" && context.asset === "home-institutional" && !context.consent, JSON.stringify(context), { journey: journey.id, route: "/#contato" });
+        }
+      }
+    }
   }
   // Exercise the actual home form without submitting it. Each scenario must
   // pass step-one validation with only name, one contact channel and the

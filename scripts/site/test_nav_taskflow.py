@@ -518,9 +518,9 @@ def main() -> int:
         if not public_target_exists(href):
             failures.append(f"home discovery target missing: {href!r}")
     services_at = home.find('id="servicos-complementares"')
-    capabilities_at = home.find('id="competencias"')
-    if services_at < 0 or capabilities_at < 0 or services_at > capabilities_at:
-        failures.append("home institutional discovery must precede project capabilities")
+    conduction_at = home.find('id="como-conduzimos"')
+    if services_at < 0 or conduction_at < 0 or services_at > conduction_at:
+        failures.append("home institutional discovery must precede transversal conduction")
     if 'href="/servicos-obras-publicas/"' not in home:
         failures.append("public-works vertical lost its canonical entry")
 

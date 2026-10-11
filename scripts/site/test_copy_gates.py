@@ -135,19 +135,20 @@ def test_microcopy_preferences():
         "funil",
     ):
         assert phrase not in lower, f"public leak: {phrase}"
-    # 2026-10-03 (campanha institucional): a home abre pelas competências de
-    # projeto e mantém serviços legítimos em segundo plano. A trava verifica
-    # disciplinas, rotas e caminho comercial, sem reconstruir o antigo seletor
-    # de situações nem promover a triagem interna a produto.
-    for anchor in ('id="competencias"', 'id="setores"', 'id="entregas"', 'id="servicos-complementares"'):
+    # 2026-10-11 (R03): a home abre como empresa ampla, apresenta as sete
+    # frentes antes do aprofundamento e conduz entrega/prova transversalmente.
+    for anchor in ('id="como-conduzimos"', 'id="entregas"', 'id="contextos"', 'id="servicos-complementares"'):
         assert anchor in home, f"institutional section missing: {anchor}"
     for route in (
-        "/projetos/estruturas/",
-        "/projetos/instalacoes/",
-        "/projetos/infraestrutura/",
-        "/projetos/coordenacao-multidisciplinar/",
+        "/projetos/",
+        "/quantitativos-orcamento-obras/",
+        "/inspecao-diagnostico-edificacoes/",
+        "/assistencia-tecnica-pericial-engenharia/",
+        "/servicos/#servico-avaliacao",
+        "/seguranca-trabalho-apoio-tecnico/",
+        "/servicos-obras-publicas/",
     ):
-        assert route in home, f"project discipline route missing: {route}"
+        assert f'href="{route}"' in home, f"public front missing: {route}"
     assert 'href="#contato"' in home
     assert "solicitar proposta" in lower
     assert "segurança do trabalho" in lower

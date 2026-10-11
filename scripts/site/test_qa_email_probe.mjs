@@ -16,6 +16,26 @@ const SHA = "a".repeat(40);
 const OTHER_SHA = "b".repeat(40);
 const PROBE_SECRET = "probe-secret-fixture-at-least-32-characters";
 const OPS_TOKEN = "ops-token-fixture-at-least-16-characters";
+const SPECIALIZED_CONTEXT = Object.freeze({
+  asset_id: "home-institutional",
+  cta_id: "home-proposal-submit",
+  route_family: "home",
+  jornada: "pericia",
+  estagio: "perícia, assistência técnica ou avaliação",
+  origem: "/servicos/",
+  landing_page: "/servicos/",
+  source_origin_asset_id: null,
+  source_origin_route_family: "servicos-corporativos",
+  tema: "Assistência técnica trabalhista em SST",
+});
+const CONTEXT_RECORD = {
+  record_kind: "synthetic",
+  synthetic_probe_authenticated: true,
+  next_action: "exclude_from_commercial",
+  ...SPECIALIZED_CONTEXT,
+};
+const CONTEXT_HASH = require(inboundPath).specializedQaTechnicalContextSha256(CONTEXT_RECORD);
+const WIRE_CONTEXT_HASH = require(inboundPath).specializedQaWireTechnicalContextSha256(CONTEXT_RECORD);
 
 function probeRecord(overrides = {}) {
   return {
@@ -23,6 +43,8 @@ function probeRecord(overrides = {}) {
     record_kind: "synthetic",
     synthetic_probe_authenticated: true,
     next_action: "exclude_from_commercial",
+    ...SPECIALIZED_CONTEXT,
+    handoff: { status: "DELIVERED", technical_context_sha256: WIRE_CONTEXT_HASH },
     ...overrides,
   };
 }
@@ -124,6 +146,20 @@ const env = {
       return { ok: true, status: 200, json: async () => ({ id: "re_qa-123:abc" }) };
     };
     const { deliverQaEmail } = require(deliveryPath);
+    const noContextProof = await deliverQaEmail(probeRecord({ handoff: { status: "DELIVERED" } }), {
+      authorized: true,
+      expectedSha: SHA,
+      handoffDelivered: true,
+    });
+    assert.equal(noContextProof.reason, "qa_guard_failed");
+    assert.equal(captured, null, "missing technical-context hash must block before provider fetch");
+    const forgedContextProof = await deliverQaEmail(probeRecord({ tema: "valor divergente" }), {
+      authorized: true,
+      expectedSha: SHA,
+      handoffDelivered: true,
+    });
+    assert.equal(forgedContextProof.reason, "qa_guard_failed");
+    assert.equal(captured, null, "a copied hash on a near-match record must not authorize provider fetch");
     const record = probeRecord({
       nome: "PERSONAL NAME MUST NOT LEAK",
       email: "person@example.com",
@@ -140,6 +176,8 @@ const env = {
     assert.deepEqual(captured.body.to, ["inbox@confenge.com.br"]);
     assert.equal(captured.body.reply_to, undefined);
     assert.equal(captured.body.subject, `[TESTE CONTROLADO] CONFENGE ${record.lead_id}`);
+    assert.match(captured.body.text, new RegExp(`Contexto técnico persistido SHA-256: ${CONTEXT_HASH}`));
+    assert.match(captured.body.text, new RegExp(`Contexto técnico entregue SHA-256: ${WIRE_CONTEXT_HASH}`));
     const wire = JSON.stringify(captured.body);
     for (const forbidden of [record.nome, record.email, record.telefone, record.mensagem]) {
       assert.equal(wire.includes(forbidden), false);
@@ -223,13 +261,21 @@ const env = {
     const payload = {
       nome: "SYNTHETIC-PROBE",
       email: "probe@example.com",
-      estagio: "synthetic probe discard",
-      jornada: "operacao",
+      estagio: "perícia, assistência técnica ou avaliação",
+      jornada: "pericia",
       consentimento: true,
-      origem: "/synthetic-probe",
+      origem: "/servicos/",
+      landing_page: "/servicos/",
+      asset_id: "home-institutional",
+      cta_id: "home-proposal-submit",
+      route_family: "home",
+      source_origin_route_family: "servicos-corporativos",
+      tema: "Assistência técnica trabalhista em SST",
       utm_source: "synthetic",
       utm_medium: "probe",
       mensagem: "synthetic probe do not contact",
+      test_mode: true,
+      record_kind: "synthetic",
       idempotency_key: "qa-probe-idempotency-0001",
     };
     const event = {
@@ -259,11 +305,18 @@ const env = {
     assert.equal(stored.synthetic_probe_authenticated, true);
     assert.equal(stored.next_action, "exclude_from_commercial");
     assert.equal(stored.handoff.status, "DELIVERED");
+    const storedContextHash = require(inboundPath).specializedQaTechnicalContextSha256(stored);
+    const storedWireContextHash = require(inboundPath).specializedQaWireTechnicalContextSha256(stored);
+    assert.match(storedContextHash, /^[0-9a-f]{64}$/);
+    assert.match(storedWireContextHash, /^[0-9a-f]{64}$/);
+    assert.equal(stored.handoff.technical_context_sha256, storedWireContextHash);
     assert.equal(stored.delivery.email.status, "skipped");
     assert.equal(stored.delivery.qa_email.status, "ok");
     assert.equal(stored.delivery.qa_email.provider_id, "re_pipeline_qa_001");
     assert.equal(stored.delivery.qa_email.attempts, 1);
     assert.equal(resendWire.subject, `[TESTE CONTROLADO] CONFENGE ${firstBody.lead_id}`);
+    assert.match(resendWire.text, new RegExp(`Contexto técnico persistido SHA-256: ${storedContextHash}`));
+    assert.match(resendWire.text, new RegExp(`Contexto técnico entregue SHA-256: ${storedWireContextHash}`));
 
     const invalidReplays = [
       [{ "x-confenge-expected-sha": OTHER_SHA }, 409],
