@@ -693,7 +693,11 @@
         wrote = true;
       });
       if (wrote && !writeStoredPseo(mergeFirstTouch(prior, incoming, { internalReferrer: true }))) {
-        const publicIncoming = { ...incoming };
+        const publicIncoming = mergeFirstTouch(
+          mergeFirstTouch(prior, fromUrl, { internalReferrer: true }),
+          incoming,
+          { internalReferrer: true },
+        );
         if (!publicIncoming.landing_url) {
           publicIncoming.landing_url = fromUrl.landing_url || prior.landing_url || window.location.pathname || '/';
         }

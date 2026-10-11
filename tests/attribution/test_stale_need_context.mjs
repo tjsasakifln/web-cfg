@@ -19,7 +19,17 @@ const laborTheme = "Assistência técnica trabalhista em SST";
 const automaticMessage = (theme) => `Demanda relacionada a: ${theme}.\n\nContexto:\n`;
 const servicesHtml = fs.readFileSync(path.join(root, "servicos/index.html"), "utf8");
 const laborCtaTag = servicesHtml.match(/<a\b(?=[^>]*data-hub-link="servicos-sst-labor-assistance")[^>]*>/i)?.[0] || "";
-const laborCtaAttrs = Object.fromEntries([...laborCtaTag.matchAll(/([\w-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
+const sstLandingTag = servicesHtml.match(/<a\b(?=[^>]*data-hub-link="servicos-sst-landing")[^>]*>/i)?.[0] || "";
+const sstHtml = fs.readFileSync(path.join(root, "seguranca-trabalho-apoio-tecnico/index.html"), "utf8");
+const sstUnsureTag = sstHtml.match(/<a\b(?=[^>]*data-tema="Não sei exatamente qual documento de SST preciso")[^>]*>/i)?.[0] || "";
+const attrsOf = (tag) => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
+const laborCtaAttrs = attrsOf(laborCtaTag);
+const sstLandingAttrs = attrsOf(sstLandingTag);
+const sstUnsureAttrs = attrsOf(sstUnsureTag);
+const clickDataset = (attrs) => ({
+  journey: attrs["data-journey"], routeFamily: attrs["data-route-family"], tema: attrs["data-tema"],
+  origem: attrs["data-origem"], originUrl: attrs["data-origin-url"], assetId: attrs["data-asset-id"],
+});
 
 function boot({ search = "", stored = {}, storageDenied = false, stageValue = "perícia, assistência técnica ou avaliação", pathname = "/", hasForm = true, windowName = "", referrer = "https://confenge.com.br/servicos/", origin = "https://confenge.com.br" } = {}) {
   const fields = {};
@@ -207,7 +217,7 @@ const firstTouch = JSON.stringify({
   assert.match(source.window.name, /^confenge:public-context:/);
   assert.equal(source.window.location.search, "");
   const carried = JSON.parse(source.window.name.slice("confenge:public-context:".length));
-  assert.deepEqual(Object.keys(carried.context).sort(), ["jornada", "landing_url", "origem", "origin_url", "route_family", "tema"]);
+  assert.deepEqual(Object.keys(carried.context).sort(), ["jornada", "landing_url", "origem", "route_family", "tema"]);
   assert.equal(carried.source_origin, "https://confenge.com.br");
   assert.equal(carried.context.referrer, undefined);
   assert.equal(carried.context.utm_source, undefined);
@@ -221,6 +231,41 @@ const firstTouch = JSON.stringify({
   assert.equal(destination.fields.route_family.value, "servicos-corporativos");
   assert.equal(destination.message.value, automaticMessage(laborTheme));
   assert.equal(destination.window.name, "");
+
+  // Two real CTAs: /servicos/ → SST landing → /#contato. The second CTA
+  // supplies the current topic, while origin/landing remain first-touch.
+  assert.equal(sstLandingAttrs.href, "/seguranca-trabalho-apoio-tecnico/");
+  assert.equal(sstUnsureAttrs.href, "/#contato");
+  const deniedA = boot({ pathname: "/servicos/", hasForm: false, storageDenied: true });
+  deniedA.click(clickDataset(sstLandingAttrs), sstLandingAttrs.href);
+  const deniedB = boot({
+    pathname: "/seguranca-trabalho-apoio-tecnico/", hasForm: false, storageDenied: true,
+    referrer: "https://confenge.com.br/servicos/", windowName: deniedA.window.name,
+  });
+  deniedB.click(clickDataset(sstUnsureAttrs), sstUnsureAttrs.href);
+  const deniedHome = boot({
+    pathname: "/", storageDenied: true,
+    referrer: "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/", windowName: deniedB.window.name,
+  });
+  assert.equal(deniedHome.fields.origem.value, "/servicos/");
+  assert.equal(deniedHome.fields.landing_url.value, "/servicos/");
+  assert.equal(deniedHome.fields.tema.value, sstUnsureAttrs["data-tema"]);
+  assert.equal(deniedHome.fields.jornada.value, "sst");
+
+  const availableA = boot({ pathname: "/servicos/", hasForm: false });
+  availableA.click(clickDataset(sstLandingAttrs), sstLandingAttrs.href);
+  const availableB = boot({
+    pathname: "/seguranca-trabalho-apoio-tecnico/", hasForm: false,
+    referrer: "https://confenge.com.br/servicos/", stored: availableA.store,
+  });
+  availableB.click(clickDataset(sstUnsureAttrs), sstUnsureAttrs.href);
+  const availableHome = boot({
+    pathname: "/", referrer: "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/", stored: availableB.store,
+  });
+  assert.equal(availableHome.fields.origem.value, "/servicos/");
+  assert.equal(availableHome.fields.landing_url.value, "/servicos/");
+  assert.equal(availableHome.fields.tema.value, sstUnsureAttrs["data-tema"]);
+  assert.equal(availableHome.fields.jornada.value, "sst");
 
   const prefix = "confenge:public-context:";
   const saved = JSON.parse(source.window.name.slice(prefix.length));
