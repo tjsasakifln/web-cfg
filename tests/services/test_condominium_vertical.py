@@ -1,9 +1,11 @@
 import json
+import html
 import re
 import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -52,6 +54,17 @@ def types(document: str) -> set[str]:
             elif value:
                 observed.add(value)
     return observed
+
+
+def cta_href(document: str, cta_id: str) -> str:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    assert tag, cta_id
+    href = re.search(r'\bhref="([^"]+)"', tag.group(0))
+    assert href, cta_id
+    return html.unescape(href.group(1))
 
 
 def test_central_route_is_one_editorial_entry_for_three_existing_situations():
@@ -124,6 +137,27 @@ def test_central_route_preserves_scope_coverage_and_contact_context():
     assert parser.h1_count == 1
     assert len(parser.ids) == len(set(parser.ids))
     assert parser.forms == 0
+
+
+def test_central_names_the_service_and_links_directly_to_the_contextual_form():
+    document = read(HUB)
+    assert '<h1 class="t-service" id="service-title">Engenharia para condomínios' in document
+    target = urlsplit(cta_href(document, "condominios-contact-calm"))
+    params = parse_qs(target.query)
+    assert target.path == "/"
+    assert target.fragment == "contato"
+    assert set(params) == {"jornada", "tema", "origem", "route_family", "asset_id"}
+    assert params == {
+        "jornada": ["outro"],
+        "tema": ["Engenharia para condomínio"],
+        "origem": ["/engenharia-condominios/"],
+        "route_family": ["engenharia-condominios"],
+        "asset_id": ["condominium_engineering_editorial_route_v1"],
+    }
+    assert 'href="https://wa.me/' in document
+    assert 'href="mailto:' in document
+    assert 'href="tel:' in document
+    assert 'href="/triagem-tecnica/">Solicitar proposta' in document
 
 
 def test_central_links_to_real_specialist_anchors():

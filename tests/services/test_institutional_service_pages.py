@@ -1,5 +1,6 @@
 from html.parser import HTMLParser
 import copy
+import html
 import importlib.util
 import json
 import re
@@ -7,6 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
+from urllib.parse import parse_qs, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -18,6 +20,19 @@ ROUTES = (
     "inspecao-diagnostico-edificacoes",
     "assistencia-tecnica-pericial-engenharia",
 )
+
+
+def cta_href(document: str, cta_id: str) -> str:
+    tag = re.search(
+        rf'<a\b(?=[^>]*\bdata-cta-id="{re.escape(cta_id)}")[^>]*>',
+        document,
+    )
+    if not tag:
+        raise AssertionError(f"CTA not found: {cta_id}")
+    href = re.search(r'\bhref="([^"]+)"', tag.group(0))
+    if not href:
+        raise AssertionError(f"CTA without href: {cta_id}")
+    return html.unescape(href.group(1))
 
 
 class PageFacts(HTMLParser):
@@ -125,6 +140,40 @@ class InstitutionalServicePagesTest(unittest.TestCase):
                 html = (ROOT / route / "index.html").read_text(encoding="utf-8")
                 for phrase in phrases:
                     self.assertIn(phrase, html)
+
+    def test_service_pages_offer_a_direct_contextual_form_without_removing_channels(self):
+        source = ROOT / "data" / "services" / "institutional-service-pages.v1.json"
+        data = json.loads(source.read_text(encoding="utf-8"))
+        route_families = {
+            "projetos-complementares-engenharia": "complementary-engineering-elaboration",
+            "revisao-tecnica-projetos-engenharia": "private-engineering-project-review",
+            "compatibilizacao-projetos-engenharia": "engineering-projects-coordination-clash",
+            "quantitativos-orcamento-obras": "private-engineering-quantities-budget",
+            "inspecao-diagnostico-edificacoes": "inspecao-diagnostico-edificacoes",
+            "assistencia-tecnica-pericial-engenharia": "assistencia-tecnica-pericial-engenharia",
+        }
+        for page in data["pages"]:
+            route = page["route"]
+            document = (ROOT / route / "index.html").read_text(encoding="utf-8")
+            with self.subTest(route=route):
+                for suffix in ("hero-calm", "contact-calm"):
+                    target = urlsplit(cta_href(document, f"{route}-{suffix}"))
+                    params = parse_qs(target.query)
+                    self.assertEqual(target.path, "/")
+                    self.assertEqual(target.fragment, "contato")
+                    self.assertEqual(
+                        set(params),
+                        {"jornada", "tema", "origem", "route_family", "asset_id"},
+                    )
+                    self.assertEqual(params["jornada"], [page["journey"]])
+                    self.assertEqual(params["tema"], [page["hero"]["title"]])
+                    self.assertEqual(params["origem"], [f"/{route}/"])
+                    self.assertEqual(params["route_family"], [route_families[route]])
+                    self.assertTrue(params["asset_id"][0])
+                self.assertIn('href="https://wa.me/', document)
+                self.assertIn('href="mailto:', document)
+                self.assertIn('href="tel:', document)
+                self.assertIn('href="/triagem-tecnica/">Solicitar proposta', document)
 
     def test_routes_use_different_information_orders(self):
         observed = set()

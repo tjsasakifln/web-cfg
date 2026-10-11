@@ -9,7 +9,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -92,6 +92,25 @@ def tracking_attributes(page: dict, family: str | None = None) -> str:
     return " ".join(f'{name}="{esc(value)}"' for name, value in attributes.items())
 
 
+def contextual_form_href(
+    page: dict,
+    family: str | None = None,
+    asset_id: str | None = None,
+    topic: str | None = None,
+) -> str:
+    """Link to the existing form without losing the service request context."""
+    route = page["route"]
+    params = {
+        "jornada": page["journey"],
+        "tema": topic or page["hero"]["title"],
+        "origem": f"/{route}/",
+        "route_family": family or route,
+    }
+    if asset_id:
+        params["asset_id"] = asset_id
+    return f"/?{urlencode(params, quote_via=quote)}#contato"
+
+
 def render_hero(page: dict, document: str) -> str:
     hero = page["hero"]
     contact_id = page["contact_id"]
@@ -101,6 +120,7 @@ def render_hero(page: dict, document: str) -> str:
     family, asset = channel_meta(document, contact_id)
     page_with_asset = {**page, "asset_id": asset or page.get("asset_id")}
     attr = tracking_attributes(page_with_asset, family)
+    calm_href = contextual_form_href(page, family, asset)
     signals = "\n".join(
         f"<div><dt>{esc(title)}</dt><dd>{esc(text)}</dd></div>"
         for title, text in hero["signals"]
@@ -116,7 +136,7 @@ def render_hero(page: dict, document: str) -> str:
 <a class="button button-primary button-lg" data-cta-id="{esc(page['route'])}-hero-proposal" data-cta-position="hero" {attr} href="#{esc(contact_id)}">{esc(hero['cta'])} <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="hero-secondary" data-cta-id="{esc(page['route'])}-hero-whatsapp" data-cta-position="hero" {attr} href="{esc(whatsapp)}" rel="noopener" target="_blank">WhatsApp (48) 98834-4559</a>
 </div>
-<p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Você também pode <a data-cta-id="{esc(page['route'])}-hero-calm" {attr} href="/triagem-tecnica/">solicitar proposta pelos canais disponíveis</a>.</p>
+<p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Você também pode <a data-cta-id="{esc(page['route'])}-hero-calm" {attr} href="{esc(calm_href)}">preencher a solicitação com este contexto</a>.</p>
 </div>
 <aside class="aside-note" aria-labelledby="service-signal-title">
 <h2 id="service-signal-title">{esc(hero['signal_title'])}</h2><dl>{signals}</dl>
@@ -262,20 +282,15 @@ def render_contact(page: dict, document: str) -> str:
         f"<li><strong>{esc(title)}:</strong> {esc(text)}</li>"
         for title, text in page.get("contact", {}).get("prep", page["hero"]["signals"][:3])
     )
-    if page["route"] == "quantitativos-orcamento-obras":
-        calm = '<p class="contact-note">Se a situação não é de quantitativos nem de orçamento, descreva-a pela <a data-journey="orcamento" data-origem="servico-institucional" data-tema="quantitativos-orcamento-obras" href="/triagem-tecnica/">triagem técnica</a>.</p>'
-    elif page["route"] in contextual_routes:
-        family, asset = channel_meta(document, contact_id)
-        calm_attr = tracking_attributes({**page, "asset_id": asset or page.get("asset_id")}, family)
-        calm = (
-            '<p class="contact-note">Se preferir escrever com calma, use a '
-            f'<a data-cta-id="{esc(page["route"])}-contact-calm" {calm_attr} href="/triagem-tecnica/">triagem técnica</a>.</p>'
-        )
-    else:
-        calm = (
-            '<p class="contact-note">Se preferir escrever com calma, use a '
-            f'<a data-journey="{esc(page["journey"])}" data-origem="servico-institucional" data-tema="{esc(page["route"])}" href="/triagem-tecnica/">triagem técnica</a>.</p>'
-        )
+    family, asset = channel_meta(document, contact_id)
+    calm_attr = tracking_attributes(
+        {**page, "asset_id": asset or page.get("asset_id")}, family
+    )
+    calm_href = contextual_form_href(page, family, asset)
+    calm = (
+        '<p class="contact-note">Se preferir escrever com calma, '
+        f'<a data-cta-id="{esc(page["route"])}-contact-calm" {calm_attr} href="{esc(calm_href)}">preencha a solicitação com este contexto</a>.</p>'
+    )
     boundary = esc(contact["boundary"])
     privacy_label = "Política de Privacidade"
     if privacy_label in contact["boundary"]:
@@ -363,6 +378,11 @@ def render_condominium_contact(hub: dict) -> str:
     attr = tracking_attributes(hub)
     message = quote(hub["contact"]["whatsapp_message"])
     subject = quote(hub["contact"]["email_subject"])
+    calm_href = contextual_form_href(
+        hub,
+        asset_id=hub.get("asset_id"),
+        topic="Engenharia para condomínio",
+    )
     prep = "\n".join(
         f"<li><strong>{esc(title)}:</strong> {esc(text)}</li>"
         for title, text in hub["contact"]["prep"]
@@ -371,7 +391,7 @@ def render_condominium_contact(hub: dict) -> str:
 <div class="container"><div class="capture-grid"><div><span class="t-kicker">Próximo passo</span><h2 class="t-editorial" id="contact-title">{esc(hub['contact']['title'])}</h2><p data-form-value>{esc(hub['contact']['intro'])}</p><h3>Fale com a CONFENGE</h3><div class="contact-primary">
 <a class="button button-primary" data-cta-id="condominios-whatsapp" data-fallback-channel="whatsapp" {attr} href="https://wa.me/5548988344559?text={message}" rel="noopener" target="_blank">Conversar sobre o condomínio</a>
 <ul class="contact-alt"><li><a data-cta-id="condominios-email" data-fallback-channel="email" {attr} href="mailto:tiago.sasaki@confenge.com.br?subject={subject}">Enviar o contexto por e-mail</a></li><li><a data-cta-id="condominios-phone" data-fallback-channel="phone" {attr} href="tel:+5548988344559">Ligar: <span class="nowrap">(48) 98834-4559</span></a></li></ul></div>
-<p class="contact-note">Se preferir escrever com calma, use a <a data-cta-id="condominios-contact-calm" {attr} href="/triagem-tecnica/">triagem técnica</a> para solicitar proposta pelos canais da CONFENGE.</p></div>
+<p class="contact-note">Se preferir escrever com calma, <a data-cta-id="condominios-contact-calm" {attr} href="{esc(calm_href)}">preencha a solicitação com este contexto</a>.</p></div>
 <aside aria-label="Informações para a proposta"><h3>Informações que ajudam a preparar a proposta</h3><ul>{prep}</ul><p class="contact-note" data-form-boundary>{esc(hub['contact']['boundary'])} <a href="/privacidade/">Política de Privacidade</a>.</p></aside></div></div>
 </section>'''
 

@@ -33,11 +33,6 @@ const CALM_PATH_EXCEPTIONS = {
   // SST_CORRECTION_20260926: a oferta documental aponta ao formulário geral
   // já pré-classificado em SST, sem repetir a formulação legada desta suíte.
   "seguranca-trabalho-apoio-tecnico": { href: "/#contato", text: /prefiro usar o formul[áa]rio/i },
-  // 2026-09-19 (WS-E): a nota encaminha a situação que não é de quantitativos
-  // nem de orçamento ao contato geral; o herói já tem os três canais diretos.
-  // Se o fechamento decidir dar à rota o mesmo caminho para o formulário da
-  // home, remover a entrada e a asserção passa a exigir o link.
-  "quantitativos-orcamento-obras": { href: "/triagem-tecnica/", text: /n[ãa]o [ée] de quantitativos nem de or[çc]amento/i },
 };
 // A-01: cada situação da inspeção sai com a sua própria mensagem.
 const INSPECTION_SITUATIONS = [
