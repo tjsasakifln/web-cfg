@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1107.68,
+    "asset_raw_kb_max_route": 1110.29,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 249
+    "routes_measured": 251
   },
   "budget": {
     "cls_max": 0.05,
@@ -243,9 +243,11 @@
       "/analise-cnpj/r/",
       "/analises-contratos-publicos/",
       "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "/assistencia-tecnica-pericia-trabalhista/",
       "/assistencia-tecnica-pericial-engenharia/",
       "/atrasos-prorrogacao-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
+      "/avaliacao-imoveis-urbanos/",
       "/bid-room-licitacoes-obras/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
@@ -493,9 +495,11 @@
       "/analise-cnpj/r/",
       "/analises-contratos-publicos/",
       "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "/assistencia-tecnica-pericia-trabalhista/",
       "/assistencia-tecnica-pericial-engenharia/",
       "/atrasos-prorrogacao-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
+      "/avaliacao-imoveis-urbanos/",
       "/bid-room-licitacoes-obras/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
