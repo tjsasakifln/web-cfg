@@ -326,6 +326,8 @@ def main() -> int:
     # --- 3. Active state is visible and inherited by descendant/task routes -
     active_cases = {
         problems["url"]: services["url"],
+        "/avaliacao-imoveis-urbanos/": "/servicos/",
+        "/assistencia-tecnica-pericia-trabalhista/": "/servicos/",
         "/bid-room-licitacoes-obras/": services["url"],
         "/diretoria-b2g/": services["url"],
         "/defesa-tecnica-contratos-publicos/": services["url"],

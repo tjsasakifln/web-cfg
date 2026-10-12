@@ -578,7 +578,11 @@ def render_page(page: dict, document: str) -> str:
         rendered = re.sub(r'<meta\b[^>]*>', update_meta, rendered)
     rendered = update_social_meta(rendered, page)
     rendered = update_structured_faq(rendered, page)
-    return rendered
+    # This renderer owns complete public pages, so its output must include the
+    # same canonical header, footer and breadcrumbs enforced by shell_nav.
+    # Applying the shared producer here keeps a fresh route correct on its
+    # first render and makes the two producers commute idempotently.
+    return sync_text(rendered, load_brand(), f'/{page["route"]}/')
 
 
 def run(write: bool) -> int:
