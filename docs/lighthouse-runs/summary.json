@@ -1,10 +1,10 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-10-10T20:56:55.840Z",
+  "generated_at": "2026-10-12T05:46:35.182Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
-    "public_route_count": 250,
-    "family_count": 51,
+    "public_route_count": 252,
+    "family_count": 53,
     "families": [
       {
         "id": "triagem-tecnica",
@@ -619,6 +619,30 @@
         "runtime_only": null
       },
       {
+        "id": "avaliacao-imoveis-urbanos",
+        "label": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/avaliacao-imoveis-urbanos/",
+        "representative_reason": "single-route urban property valuation landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "assistencia-tecnica-pericia-trabalhista",
+        "label": "Quando uma reclamação depende de evidências sobre o trabalho e o ambiente, a análise técnica precisa responder à questão do caso. A CONFENGE organiza quesitos, examina a documentação de SST e analisa laudos no escopo contratado.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/assistencia-tecnica-pericia-trabalhista/",
+        "representative_reason": "single-route labor dispute technical assistance landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
         "id": "transaction-utilities-noindex",
         "label": "Post-conversion, operations and error utilities",
         "kind": "supplemental_noindex",
@@ -700,6 +724,8 @@
       "/pgr-documentacao-sst-obras/",
       "/terceirizacao-documentacao-sst/",
       "/projetos/",
+      "/avaliacao-imoveis-urbanos/",
+      "/assistencia-tecnica-pericia-trabalhista/",
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
@@ -755,6 +781,8 @@
       "/pgr-documentacao-sst-obras/",
       "/terceirizacao-documentacao-sst/",
       "/projetos/",
+      "/avaliacao-imoveis-urbanos/",
+      "/assistencia-tecnica-pericia-trabalhista/",
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
@@ -1809,25 +1837,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1735.4329000000002,
+      "lcp_ms": 1733.9714,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 1060.4329,
-      "si_ms": 1060.4329,
+      "tbt_ms": 2.5,
+      "longest_own_task_ms": 55,
+      "fcp_ms": 1058.9714,
+      "si_ms": 1058.9714,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 120,
-      "total_byte_weight": 137341,
-      "content_byte_weight": 135070,
+      "total_byte_weight": 138090,
+      "content_byte_weight": 135819,
       "header_byte_weight": 2271,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/triagem-tecnica/",
-          "transfer_size": 4369,
+          "transfer_size": 4370,
           "resource_size": 13407,
-          "content_bytes": 4138,
+          "content_bytes": 4139,
           "encoding": "gzip"
         },
         {
@@ -1859,10 +1887,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -1902,13 +1930,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 5.21645,
-      "lcp_observed_rtt_ms": 0.08355,
+      "lcp_observed_server_latency_ms": 4.4857000000000005,
+      "lcp_observed_rtt_ms": 0.3663,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2030,
+      "benchmark_index": 2219.5,
       "seo_exempt": false
     },
     {
@@ -1918,25 +1946,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1805.8501,
+      "lcp_ms": 1805.9591,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 1055.8501,
-      "si_ms": 1055.8501,
+      "tbt_ms": 6,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 1055.9591,
+      "si_ms": 1055.9591,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 280,
-      "total_byte_weight": 135317,
-      "content_byte_weight": 132937,
+      "total_byte_weight": 136066,
+      "content_byte_weight": 133686,
       "header_byte_weight": 2380,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/ferramentas/prontidao-tecnica-obra-privada/",
-          "transfer_size": 6874,
+          "transfer_size": 6875,
           "resource_size": 24659,
-          "content_bytes": 6643,
+          "content_bytes": 6644,
           "encoding": "gzip"
         },
         {
@@ -1968,10 +1996,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2011,13 +2039,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.92505,
-      "lcp_observed_rtt_ms": 0.12194999999999999,
+      "lcp_observed_server_latency_ms": 2.97955,
+      "lcp_observed_rtt_ms": 0.13845,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1985.5,
+      "benchmark_index": 2187.5,
       "seo_exempt": false
     },
     {
@@ -2027,25 +2055,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1580.8486,
+      "lcp_ms": 1580.5122,
       "cls": 0,
-      "tbt_ms": 10,
-      "longest_own_task_ms": 70,
-      "fcp_ms": 905.8486,
-      "si_ms": 905.8486,
+      "tbt_ms": 14,
+      "longest_own_task_ms": 78,
+      "fcp_ms": 905.5121999999999,
+      "si_ms": 905.5121999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 509,
-      "total_byte_weight": 120077,
-      "content_byte_weight": 118212,
+      "dom_elements": 496,
+      "total_byte_weight": 120591,
+      "content_byte_weight": 118726,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/",
-          "transfer_size": 11727,
-          "resource_size": 42216,
-          "content_bytes": 11496,
+          "transfer_size": 11537,
+          "resource_size": 41694,
+          "content_bytes": 11306,
           "encoding": "gzip"
         },
         {
@@ -2070,17 +2098,17 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.fb9dfa143b75.css",
-          "transfer_size": 10156,
-          "resource_size": 54530,
-          "content_bytes": 9941,
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.e7684e7c0622.css",
+          "transfer_size": 10112,
+          "resource_size": 54616,
+          "content_bytes": 9897,
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2106,13 +2134,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.9243,
-      "lcp_observed_rtt_ms": 0.10769999999999999,
+      "lcp_observed_server_latency_ms": 2.7561,
+      "lcp_observed_rtt_ms": 0.07289999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2004.5,
+      "benchmark_index": 2274,
       "seo_exempt": false
     },
     {
@@ -2122,25 +2150,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.1491,
+      "lcp_ms": 1577.7527,
       "cls": 0,
-      "tbt_ms": 28,
-      "longest_own_task_ms": 78,
-      "fcp_ms": 1280.1491,
-      "si_ms": 1280.1491,
+      "tbt_ms": 7,
+      "longest_own_task_ms": 64,
+      "fcp_ms": 902.7527,
+      "si_ms": 902.7527,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 509,
-      "total_byte_weight": 120077,
-      "content_byte_weight": 118212,
+      "dom_elements": 496,
+      "total_byte_weight": 120591,
+      "content_byte_weight": 118726,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/",
-          "transfer_size": 11727,
-          "resource_size": 42216,
-          "content_bytes": 11496,
+          "transfer_size": 11537,
+          "resource_size": 41694,
+          "content_bytes": 11306,
           "encoding": "gzip"
         },
         {
@@ -2165,17 +2193,17 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.fb9dfa143b75.css",
-          "transfer_size": 10156,
-          "resource_size": 54530,
-          "content_bytes": 9941,
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.e7684e7c0622.css",
+          "transfer_size": 10112,
+          "resource_size": 54616,
+          "content_bytes": 9897,
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2201,13 +2229,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.0745499999999997,
-      "lcp_observed_rtt_ms": 0.12944999999999998,
+      "lcp_observed_server_latency_ms": 1.37635,
+      "lcp_observed_rtt_ms": 0.07064999999999999,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 300,
+      "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1977.5,
+      "benchmark_index": 2284,
       "seo_exempt": false
     },
     {
@@ -2217,25 +2245,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1575.8891,
+      "lcp_ms": 1578.2658,
       "cls": 0,
-      "tbt_ms": 12,
-      "longest_own_task_ms": 74,
-      "fcp_ms": 900.8891000000001,
-      "si_ms": 900.8891000000001,
+      "tbt_ms": 14,
+      "longest_own_task_ms": 78,
+      "fcp_ms": 903.2657999999999,
+      "si_ms": 903.2657999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 509,
-      "total_byte_weight": 120077,
-      "content_byte_weight": 118212,
+      "dom_elements": 496,
+      "total_byte_weight": 120591,
+      "content_byte_weight": 118726,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/",
-          "transfer_size": 11727,
-          "resource_size": 42216,
-          "content_bytes": 11496,
+          "transfer_size": 11537,
+          "resource_size": 41694,
+          "content_bytes": 11306,
           "encoding": "gzip"
         },
         {
@@ -2260,17 +2288,17 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.fb9dfa143b75.css",
-          "transfer_size": 10156,
-          "resource_size": 54530,
-          "content_bytes": 9941,
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.e7684e7c0622.css",
+          "transfer_size": 10112,
+          "resource_size": 54616,
+          "content_bytes": 9897,
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2296,41 +2324,41 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.4445499999999999,
-      "lcp_observed_rtt_ms": 0.07245,
+      "lcp_observed_server_latency_ms": 1.6328999999999996,
+      "lcp_observed_rtt_ms": 0.0771,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1998.5,
+      "benchmark_index": 2266.5,
       "seo_exempt": false
     },
     {
       "path": "/servicos/",
       "run": 1,
-      "performance": 99,
+      "performance": 100,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.3732999999997,
+      "lcp_ms": 1655.1196999999997,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1395.3733,
-      "si_ms": 1395.3733,
+      "fcp_ms": 1288.1197,
+      "si_ms": 1288.1197,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 183,
-      "total_byte_weight": 121359,
-      "content_byte_weight": 119664,
+      "dom_elements": 185,
+      "total_byte_weight": 122320,
+      "content_byte_weight": 120625,
       "header_byte_weight": 1695,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/servicos/",
-          "transfer_size": 5742,
-          "resource_size": 18615,
-          "content_bytes": 5511,
+          "transfer_size": 5955,
+          "resource_size": 19595,
+          "content_bytes": 5724,
           "encoding": "gzip"
         },
         {
@@ -2362,10 +2390,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2384,13 +2412,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.68665,
-      "lcp_observed_rtt_ms": 0.07335,
+      "lcp_observed_server_latency_ms": 2.55985,
+      "lcp_observed_rtt_ms": 0.07815,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 450,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1922,
+      "benchmark_index": 2329.5,
       "seo_exempt": false
     },
     {
@@ -2400,25 +2428,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1801.4532999999997,
+      "lcp_ms": 1802.3419,
       "cls": 0,
-      "tbt_ms": 20,
-      "longest_own_task_ms": 70,
-      "fcp_ms": 901.4532999999999,
-      "si_ms": 901.4532999999999,
+      "tbt_ms": 15,
+      "longest_own_task_ms": 65,
+      "fcp_ms": 902.3418999999999,
+      "si_ms": 902.3418999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 390,
-      "total_byte_weight": 134702,
-      "content_byte_weight": 132180,
+      "dom_elements": 410,
+      "total_byte_weight": 135920,
+      "content_byte_weight": 133398,
       "header_byte_weight": 2522,
       "payload_requests": 12,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/quantitativos-orcamento-obras/",
-          "transfer_size": 9102,
-          "resource_size": 31993,
-          "content_bytes": 8871,
+          "transfer_size": 9572,
+          "resource_size": 34577,
+          "content_bytes": 9341,
           "encoding": "gzip"
         },
         {
@@ -2443,10 +2471,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2500,13 +2528,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.7266499999999998,
-      "lcp_observed_rtt_ms": 0.23384999999999997,
+      "lcp_observed_server_latency_ms": 1.17095,
+      "lcp_observed_rtt_ms": 0.08205,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 200,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2088,
+      "benchmark_index": 2262,
       "seo_exempt": false
     },
     {
@@ -2516,25 +2544,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1732.2130000000002,
+      "lcp_ms": 1727.6367,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 51,
-      "fcp_ms": 1057.213,
-      "si_ms": 1057.213,
+      "longest_own_task_ms": 50,
+      "fcp_ms": 1052.6367,
+      "si_ms": 1052.6367,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 388,
-      "total_byte_weight": 135667,
-      "content_byte_weight": 133368,
+      "total_byte_weight": 136393,
+      "content_byte_weight": 134094,
       "header_byte_weight": 2299,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/acompanhamento-contratos-obras/",
-          "transfer_size": 9881,
-          "resource_size": 32762,
-          "content_bytes": 9650,
+          "transfer_size": 9859,
+          "resource_size": 32738,
+          "content_bytes": 9628,
           "encoding": "gzip"
         },
         {
@@ -2566,10 +2594,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2609,13 +2637,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 3.6065000000000005,
-      "lcp_observed_rtt_ms": 0.1515,
+      "lcp_observed_server_latency_ms": 1.31835,
+      "lcp_observed_rtt_ms": 0.07365,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1886,
+      "benchmark_index": 2269,
       "seo_exempt": false
     },
     {
@@ -2625,17 +2653,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1502.53,
+      "lcp_ms": 1650.7388,
       "cls": 0,
-      "tbt_ms": 2,
-      "longest_own_task_ms": 54,
-      "fcp_ms": 902.53,
-      "si_ms": 902.53,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1087.7388,
+      "si_ms": 1087.7388,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 118,
-      "total_byte_weight": 115416,
-      "content_byte_weight": 113766,
+      "total_byte_weight": 116164,
+      "content_byte_weight": 114514,
       "header_byte_weight": 1650,
       "payload_requests": 8,
       "payload_details": [
@@ -2661,10 +2689,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2697,13 +2725,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.2650000000000003,
-      "lcp_observed_rtt_ms": 0.135,
+      "lcp_observed_server_latency_ms": 0.36939999999999984,
+      "lcp_observed_rtt_ms": 0.1161,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1969.5,
+      "benchmark_index": 2232.5,
       "seo_exempt": false
     },
     {
@@ -2713,12 +2741,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1501.8897,
+      "lcp_ms": 1500.7107,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 901.8897,
-      "si_ms": 901.8897,
+      "fcp_ms": 900.7107000000001,
+      "si_ms": 900.7107000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 117,
@@ -2771,13 +2799,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.94485,
-      "lcp_observed_rtt_ms": 0.10065,
+      "lcp_observed_server_latency_ms": 0.35535000000000017,
+      "lcp_observed_rtt_ms": 0.10515,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2039,
+      "benchmark_index": 2303.5,
       "seo_exempt": false
     },
     {
@@ -2787,25 +2815,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1502.9519,
+      "lcp_ms": 1501.1972,
       "cls": 0,
-      "tbt_ms": 2.5,
-      "longest_own_task_ms": 55,
-      "fcp_ms": 902.9519,
-      "si_ms": 902.9519,
+      "tbt_ms": 2,
+      "longest_own_task_ms": 54,
+      "fcp_ms": 901.1972000000001,
+      "si_ms": 901.1972000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 156,
-      "total_byte_weight": 116341,
-      "content_byte_weight": 114691,
+      "total_byte_weight": 117088,
+      "content_byte_weight": 115438,
       "header_byte_weight": 1650,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/politica-editorial/",
-          "transfer_size": 5503,
+          "transfer_size": 5502,
           "resource_size": 15399,
-          "content_bytes": 5272,
+          "content_bytes": 5271,
           "encoding": "gzip"
         },
         {
@@ -2823,10 +2851,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2859,13 +2887,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.47595,
-      "lcp_observed_rtt_ms": 0.15105,
+      "lcp_observed_server_latency_ms": 0.5985999999999999,
+      "lcp_observed_rtt_ms": 0.08639999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2107.5,
+      "benchmark_index": 2276,
       "seo_exempt": false
     },
     {
@@ -2875,17 +2903,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1653.2345,
+      "lcp_ms": 1718.97,
       "cls": 0,
-      "tbt_ms": 7.5,
-      "longest_own_task_ms": 65,
-      "fcp_ms": 903.2345,
-      "si_ms": 903.2345,
+      "tbt_ms": 16,
+      "longest_own_task_ms": 66,
+      "fcp_ms": 1267.98,
+      "si_ms": 1267.98,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 363,
-      "total_byte_weight": 125442,
-      "content_byte_weight": 123577,
+      "total_byte_weight": 126190,
+      "content_byte_weight": 124325,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
@@ -2918,10 +2946,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -2954,13 +2982,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.6172500000000007,
-      "lcp_observed_rtt_ms": 0.38475,
+      "lcp_observed_server_latency_ms": 0.9899999999999998,
+      "lcp_observed_rtt_ms": 0.093,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2031,
+      "benchmark_index": 2228.5,
       "seo_exempt": false
     },
     {
@@ -2970,17 +2998,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.8402,
+      "lcp_ms": 1650.8173,
       "cls": 0,
-      "tbt_ms": 4,
-      "longest_own_task_ms": 58,
-      "fcp_ms": 902.8402000000001,
-      "si_ms": 902.8402000000001,
+      "tbt_ms": 3,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 900.8172999999999,
+      "si_ms": 900.8172999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 582,
-      "total_byte_weight": 132509,
-      "content_byte_weight": 130644,
+      "total_byte_weight": 133257,
+      "content_byte_weight": 131392,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
@@ -3013,10 +3041,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3049,13 +3077,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.4200999999999997,
-      "lcp_observed_rtt_ms": 0.0939,
+      "lcp_observed_server_latency_ms": 0.40865000000000007,
+      "lcp_observed_rtt_ms": 0.07335,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2026.5,
+      "benchmark_index": 2247.5,
       "seo_exempt": false
     },
     {
@@ -3065,25 +3093,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1728.3732,
+      "lcp_ms": 1726.0726,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 903.3732,
-      "si_ms": 903.3732,
+      "tbt_ms": 4.5,
+      "longest_own_task_ms": 59,
+      "fcp_ms": 901.0726,
+      "si_ms": 901.0726,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 167,
-      "total_byte_weight": 135144,
-      "content_byte_weight": 133087,
+      "total_byte_weight": 135893,
+      "content_byte_weight": 133836,
       "header_byte_weight": 2057,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/guias-contratos-obras/",
-          "transfer_size": 4655,
+          "transfer_size": 4656,
           "resource_size": 14242,
-          "content_bytes": 4424,
+          "content_bytes": 4425,
           "encoding": "gzip"
         },
         {
@@ -3101,10 +3129,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3151,13 +3179,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.6865999999999999,
-      "lcp_observed_rtt_ms": 0.0759,
+      "lcp_observed_server_latency_ms": 0.5362999999999997,
+      "lcp_observed_rtt_ms": 0.08819999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1991.5,
+      "benchmark_index": 2275,
       "seo_exempt": false
     },
     {
@@ -3167,17 +3195,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1726.3777999999998,
+      "lcp_ms": 1726.2588,
       "cls": 0,
-      "tbt_ms": 3.5,
-      "longest_own_task_ms": 57,
-      "fcp_ms": 901.3778,
-      "si_ms": 901.3778,
+      "tbt_ms": 0.5,
+      "longest_own_task_ms": 51,
+      "fcp_ms": 901.2588000000001,
+      "si_ms": 901.2588000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 167,
-      "total_byte_weight": 135199,
-      "content_byte_weight": 133142,
+      "total_byte_weight": 135947,
+      "content_byte_weight": 133890,
       "header_byte_weight": 2057,
       "payload_requests": 10,
       "payload_details": [
@@ -3203,10 +3231,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3253,13 +3281,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.6889000000000001,
-      "lcp_observed_rtt_ms": 0.0846,
+      "lcp_observed_server_latency_ms": 0.6294000000000005,
+      "lcp_observed_rtt_ms": 0.0816,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2018.5,
+      "benchmark_index": 2254,
       "seo_exempt": false
     },
     {
@@ -3269,17 +3297,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.6159000000002,
+      "lcp_ms": 1652.1437,
       "cls": 0,
-      "tbt_ms": 4,
-      "longest_own_task_ms": 58,
-      "fcp_ms": 901.6159,
-      "si_ms": 901.6159,
+      "tbt_ms": 4.5,
+      "longest_own_task_ms": 59,
+      "fcp_ms": 902.1437000000001,
+      "si_ms": 902.1437000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 214,
-      "total_byte_weight": 132156,
-      "content_byte_weight": 130098,
+      "total_byte_weight": 132904,
+      "content_byte_weight": 130846,
       "header_byte_weight": 2058,
       "payload_requests": 10,
       "payload_details": [
@@ -3312,10 +3340,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3355,13 +3383,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.8079500000000001,
-      "lcp_observed_rtt_ms": 0.08055,
+      "lcp_observed_server_latency_ms": 1.0718500000000004,
+      "lcp_observed_rtt_ms": 0.19515,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2048.5,
+      "benchmark_index": 2274.5,
       "seo_exempt": false
     },
     {
@@ -3371,17 +3399,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1655.8415,
+      "lcp_ms": 1650.927,
       "cls": 0,
-      "tbt_ms": 4,
-      "longest_own_task_ms": 58,
-      "fcp_ms": 905.8415,
-      "si_ms": 905.8415,
+      "tbt_ms": 7.5,
+      "longest_own_task_ms": 65,
+      "fcp_ms": 900.9269999999999,
+      "si_ms": 900.9269999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 214,
-      "total_byte_weight": 132156,
-      "content_byte_weight": 130098,
+      "total_byte_weight": 132904,
+      "content_byte_weight": 130846,
       "header_byte_weight": 2058,
       "payload_requests": 10,
       "payload_details": [
@@ -3414,10 +3442,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3457,33 +3485,33 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.92075,
-      "lcp_observed_rtt_ms": 0.10425,
+      "lcp_observed_server_latency_ms": 0.46349999999999975,
+      "lcp_observed_rtt_ms": 0.2805,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1988,
+      "benchmark_index": 2254.5,
       "seo_exempt": false
     },
     {
       "path": "/especialista/tiago-jun-sasaki/",
       "run": 3,
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.6683,
+      "lcp_ms": 1803.7557,
       "cls": 0,
-      "tbt_ms": 5,
-      "longest_own_task_ms": 60,
-      "fcp_ms": 902.6683,
-      "si_ms": 902.6683,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1244.7557,
+      "si_ms": 1244.7557,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 214,
-      "total_byte_weight": 132156,
-      "content_byte_weight": 130098,
+      "total_byte_weight": 132904,
+      "content_byte_weight": 130846,
       "header_byte_weight": 2058,
       "payload_requests": 10,
       "payload_details": [
@@ -3516,10 +3544,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3559,13 +3587,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.3341499999999997,
-      "lcp_observed_rtt_ms": 0.22485000000000002,
+      "lcp_observed_server_latency_ms": 1.8778499999999998,
+      "lcp_observed_rtt_ms": 0.09765,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2010.5,
+      "benchmark_index": 2299.5,
       "seo_exempt": false
     },
     {
@@ -3575,25 +3603,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1503.6274,
+      "lcp_ms": 1502.1056,
       "cls": 0,
-      "tbt_ms": 3,
-      "longest_own_task_ms": 53,
-      "fcp_ms": 903.6274000000001,
-      "si_ms": 903.6274000000001,
+      "tbt_ms": 6,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 902.1056000000001,
+      "si_ms": 902.1056000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 182,
-      "total_byte_weight": 110998,
-      "content_byte_weight": 109747,
+      "total_byte_weight": 111745,
+      "content_byte_weight": 110494,
       "header_byte_weight": 1251,
       "payload_requests": 6,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/nurture/",
-          "transfer_size": 6477,
+          "transfer_size": 6476,
           "resource_size": 17062,
-          "content_bytes": 6246,
+          "content_bytes": 6245,
           "encoding": "gzip"
         },
         {
@@ -3618,10 +3646,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3633,13 +3661,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.8136999999999999,
-      "lcp_observed_rtt_ms": 0.1188,
+      "lcp_observed_server_latency_ms": 1.0528000000000004,
+      "lcp_observed_rtt_ms": 0.10319999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1915.5,
+      "benchmark_index": 2205.5,
       "seo_exempt": false
     },
     {
@@ -3649,17 +3677,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1575.9856,
+      "lcp_ms": 1576.508,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 900.9856,
-      "si_ms": 900.9856,
+      "tbt_ms": 0.5,
+      "longest_own_task_ms": 51,
+      "fcp_ms": 901.508,
+      "si_ms": 901.508,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 144,
-      "total_byte_weight": 125420,
-      "content_byte_weight": 123747,
+      "total_byte_weight": 126168,
+      "content_byte_weight": 124495,
       "header_byte_weight": 1673,
       "payload_requests": 8,
       "payload_details": [
@@ -3692,10 +3720,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3721,13 +3749,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.4928000000000001,
-      "lcp_observed_rtt_ms": 0.1002,
+      "lcp_observed_server_latency_ms": 0.754,
+      "lcp_observed_rtt_ms": 0.11249999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2123.5,
+      "benchmark_index": 2232,
       "seo_exempt": false
     },
     {
@@ -3737,17 +3765,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1501.2704,
+      "lcp_ms": 1500.9266,
       "cls": 0,
-      "tbt_ms": 7,
-      "longest_own_task_ms": 57,
-      "fcp_ms": 901.2704000000001,
-      "si_ms": 901.2704000000001,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 50,
+      "fcp_ms": 900.9266,
+      "si_ms": 900.9266,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 258,
-      "total_byte_weight": 111507,
-      "content_byte_weight": 110256,
+      "total_byte_weight": 112255,
+      "content_byte_weight": 111004,
       "header_byte_weight": 1251,
       "payload_requests": 6,
       "payload_details": [
@@ -3780,10 +3808,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3795,13 +3823,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.6352000000000001,
-      "lcp_observed_rtt_ms": 0.1863,
+      "lcp_observed_server_latency_ms": 0.46329999999999993,
+      "lcp_observed_rtt_ms": 0.08220000000000001,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2000.5,
+      "benchmark_index": 2260,
       "seo_exempt": false
     },
     {
@@ -3811,25 +3839,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.0751,
+      "lcp_ms": 1653.0589999999997,
       "cls": 0,
-      "tbt_ms": 13,
-      "longest_own_task_ms": 63,
-      "fcp_ms": 902.0751,
-      "si_ms": 902.0751,
+      "tbt_ms": 14,
+      "longest_own_task_ms": 64,
+      "fcp_ms": 903.059,
+      "si_ms": 903.059,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 406,
-      "total_byte_weight": 121568,
-      "content_byte_weight": 119918,
+      "total_byte_weight": 122315,
+      "content_byte_weight": 120665,
       "header_byte_weight": 1650,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-          "transfer_size": 10730,
+          "transfer_size": 10729,
           "resource_size": 40584,
-          "content_bytes": 10499,
+          "content_bytes": 10498,
           "encoding": "gzip"
         },
         {
@@ -3847,10 +3875,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3883,41 +3911,41 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.0375500000000002,
-      "lcp_observed_rtt_ms": 0.07995000000000001,
+      "lcp_observed_server_latency_ms": 1.5295,
+      "lcp_observed_rtt_ms": 0.0975,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2009.5,
+      "benchmark_index": 2246.5,
       "seo_exempt": false
     },
     {
       "path": "/casos/",
       "run": 1,
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.0375,
+      "lcp_ms": 1652.0846,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 1051.0375,
-      "si_ms": 1051.0375,
+      "tbt_ms": 12,
+      "longest_own_task_ms": 62,
+      "fcp_ms": 1414.0846,
+      "si_ms": 1414.0846,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 356,
-      "total_byte_weight": 126330,
-      "content_byte_weight": 124649,
+      "total_byte_weight": 127055,
+      "content_byte_weight": 125374,
       "header_byte_weight": 1681,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/casos/",
-          "transfer_size": 8323,
-          "resource_size": 26652,
-          "content_bytes": 8092,
+          "transfer_size": 8300,
+          "resource_size": 26628,
+          "content_bytes": 8069,
           "encoding": "gzip"
         },
         {
@@ -3956,10 +3984,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -3971,13 +3999,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.51875,
-      "lcp_observed_rtt_ms": 0.13575,
+      "lcp_observed_server_latency_ms": 1.0423,
+      "lcp_observed_rtt_ms": 0.0792,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 400,
+      "render_blocking_savings_ms": 450,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2080.5,
+      "benchmark_index": 2246.5,
       "seo_exempt": false
     },
     {
@@ -3987,25 +4015,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1650.9338,
+      "lcp_ms": 1653.9919,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 1050.9338,
-      "si_ms": 1050.9338,
+      "tbt_ms": 10,
+      "longest_own_task_ms": 60,
+      "fcp_ms": 1309.9919,
+      "si_ms": 1309.9919,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 356,
-      "total_byte_weight": 126330,
-      "content_byte_weight": 124649,
+      "total_byte_weight": 127055,
+      "content_byte_weight": 125374,
       "header_byte_weight": 1681,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/casos/",
-          "transfer_size": 8323,
-          "resource_size": 26652,
-          "content_bytes": 8092,
+          "transfer_size": 8300,
+          "resource_size": 26628,
+          "content_bytes": 8069,
           "encoding": "gzip"
         },
         {
@@ -4044,10 +4072,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4059,13 +4087,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.4669,
-      "lcp_observed_rtt_ms": 0.10409999999999998,
+      "lcp_observed_server_latency_ms": 1.9959500000000003,
+      "lcp_observed_rtt_ms": 0.10155,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 400,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1971.5,
+      "benchmark_index": 2237.5,
       "seo_exempt": false
     },
     {
@@ -4075,25 +4103,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.6278,
+      "lcp_ms": 1652.4105,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1052.6278,
-      "si_ms": 1052.6278,
+      "fcp_ms": 1052.4105,
+      "si_ms": 1052.4105,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 356,
-      "total_byte_weight": 126330,
-      "content_byte_weight": 124649,
+      "total_byte_weight": 127055,
+      "content_byte_weight": 125374,
       "header_byte_weight": 1681,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/casos/",
-          "transfer_size": 8323,
-          "resource_size": 26652,
-          "content_bytes": 8092,
+          "transfer_size": 8300,
+          "resource_size": 26628,
+          "content_bytes": 8069,
           "encoding": "gzip"
         },
         {
@@ -4132,10 +4160,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4147,13 +4175,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.3139000000000003,
-      "lcp_observed_rtt_ms": 0.09960000000000001,
+      "lcp_observed_server_latency_ms": 1.2052500000000002,
+      "lcp_observed_rtt_ms": 0.12075,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2044.5,
+      "benchmark_index": 2224.5,
       "seo_exempt": false
     },
     {
@@ -4163,25 +4191,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1845.9220500000001,
+      "lcp_ms": 1950.8341,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 140,
-      "fcp_ms": 1354.6147,
-      "si_ms": 1354.6147,
+      "longest_own_task_ms": 123,
+      "fcp_ms": 1350.8341,
+      "si_ms": 1350.8341,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 933,
-      "total_byte_weight": 139714,
-      "content_byte_weight": 137206,
+      "total_byte_weight": 140441,
+      "content_byte_weight": 137933,
       "header_byte_weight": 2508,
       "payload_requests": 12,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/casos/modelo-relatorio-inteligencia-licitacoes/",
-          "transfer_size": 15776,
-          "resource_size": 55421,
-          "content_bytes": 15545,
+          "transfer_size": 15755,
+          "resource_size": 55397,
+          "content_bytes": 15524,
           "encoding": "gzip"
         },
         {
@@ -4227,10 +4255,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4263,13 +4291,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.30735,
-      "lcp_observed_rtt_ms": 0.06615,
+      "lcp_observed_server_latency_ms": 0.4170499999999998,
+      "lcp_observed_rtt_ms": 0.14145,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 450,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1966,
+      "benchmark_index": 2233,
       "seo_exempt": false
     },
     {
@@ -4279,25 +4307,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1877.161,
+      "lcp_ms": 1802.1249000000003,
       "cls": 0,
-      "tbt_ms": 17.5,
-      "longest_own_task_ms": 85,
-      "fcp_ms": 1479.161,
-      "si_ms": 1479.161,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 67,
+      "fcp_ms": 1202.1249,
+      "si_ms": 1202.1249,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 876,
-      "total_byte_weight": 139512,
-      "content_byte_weight": 137214,
+      "total_byte_weight": 140237,
+      "content_byte_weight": 137939,
       "header_byte_weight": 2298,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/entregas/",
-          "transfer_size": 15921,
-          "resource_size": 66570,
-          "content_bytes": 15690,
+          "transfer_size": 15898,
+          "resource_size": 66546,
+          "content_bytes": 15667,
           "encoding": "gzip"
         },
         {
@@ -4329,10 +4357,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4372,13 +4400,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.0805000000000002,
-      "lcp_observed_rtt_ms": 0.31349999999999995,
+      "lcp_observed_server_latency_ms": 1.0624500000000003,
+      "lcp_observed_rtt_ms": 0.07454999999999999,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 450,
+      "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2111.5,
+      "benchmark_index": 2230.5,
       "seo_exempt": false
     },
     {
@@ -4388,25 +4416,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1805.1991000000003,
+      "lcp_ms": 1801.0663,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 68,
-      "fcp_ms": 1205.1991,
-      "si_ms": 1205.1991,
+      "longest_own_task_ms": 67,
+      "fcp_ms": 1201.0663,
+      "si_ms": 1201.0663,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 876,
-      "total_byte_weight": 139512,
-      "content_byte_weight": 137214,
+      "total_byte_weight": 140237,
+      "content_byte_weight": 137939,
       "header_byte_weight": 2298,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/entregas/",
-          "transfer_size": 15921,
-          "resource_size": 66570,
-          "content_bytes": 15690,
+          "transfer_size": 15898,
+          "resource_size": 66546,
+          "content_bytes": 15667,
           "encoding": "gzip"
         },
         {
@@ -4438,10 +4466,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4481,13 +4509,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.5995500000000002,
-      "lcp_observed_rtt_ms": 0.08444999999999998,
+      "lcp_observed_server_latency_ms": 0.5331499999999992,
+      "lcp_observed_rtt_ms": 0.08685,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1866.5,
+      "benchmark_index": 2197.5,
       "seo_exempt": false
     },
     {
@@ -4497,25 +4525,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1800.784,
+      "lcp_ms": 1801.4884,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 72,
-      "fcp_ms": 1200.784,
-      "si_ms": 1200.784,
+      "longest_own_task_ms": 61,
+      "fcp_ms": 1201.4884,
+      "si_ms": 1201.4884,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 876,
-      "total_byte_weight": 139512,
-      "content_byte_weight": 137214,
+      "total_byte_weight": 140237,
+      "content_byte_weight": 137939,
       "header_byte_weight": 2298,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/entregas/",
-          "transfer_size": 15921,
-          "resource_size": 66570,
-          "content_bytes": 15690,
+          "transfer_size": 15898,
+          "resource_size": 66546,
+          "content_bytes": 15667,
           "encoding": "gzip"
         },
         {
@@ -4547,10 +4575,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4590,13 +4618,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.392,
-      "lcp_observed_rtt_ms": 0.132,
+      "lcp_observed_server_latency_ms": 0.7442,
+      "lcp_observed_rtt_ms": 0.0588,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2112,
+      "benchmark_index": 2241.5,
       "seo_exempt": false
     },
     {
@@ -4606,25 +4634,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1726.3849999999998,
+      "lcp_ms": 1728.2829,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 71,
-      "fcp_ms": 1201.385,
-      "si_ms": 1201.385,
+      "longest_own_task_ms": 62,
+      "fcp_ms": 1053.2829,
+      "si_ms": 1053.2829,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 570,
-      "total_byte_weight": 133320,
-      "content_byte_weight": 131191,
+      "total_byte_weight": 134045,
+      "content_byte_weight": 131916,
       "header_byte_weight": 2129,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/servicos-obras-publicas/",
-          "transfer_size": 11541,
-          "resource_size": 41596,
-          "content_bytes": 11310,
+          "transfer_size": 11518,
+          "resource_size": 41572,
+          "content_bytes": 11287,
           "encoding": "gzip"
         },
         {
@@ -4656,10 +4684,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4692,33 +4720,33 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.6924999999999999,
-      "lcp_observed_rtt_ms": 0.0945,
+      "lcp_observed_server_latency_ms": 1.6414499999999999,
+      "lcp_observed_rtt_ms": 0.07304999999999999,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 500,
+      "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2049.5,
+      "benchmark_index": 2281,
       "seo_exempt": false
     },
     {
       "path": "/problemas-que-resolvemos/",
       "run": 1,
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1655.7754,
+      "lcp_ms": 1652.7401,
       "cls": 0,
-      "tbt_ms": 5,
-      "longest_own_task_ms": 55,
-      "fcp_ms": 1055.7754,
-      "si_ms": 1055.7754,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 50,
+      "fcp_ms": 1402.7401,
+      "si_ms": 1402.7401,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 280,
-      "total_byte_weight": 124306,
-      "content_byte_weight": 122392,
+      "total_byte_weight": 125054,
+      "content_byte_weight": 123140,
       "header_byte_weight": 1914,
       "payload_requests": 9,
       "payload_details": [
@@ -4758,10 +4786,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4787,13 +4815,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.8877,
-      "lcp_observed_rtt_ms": 0.0963,
+      "lcp_observed_server_latency_ms": 1.3700500000000002,
+      "lcp_observed_rtt_ms": 0.07995000000000001,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 400,
+      "render_blocking_savings_ms": 450,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2057.5,
+      "benchmark_index": 2237,
       "seo_exempt": false
     },
     {
@@ -4803,17 +4831,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.1722,
+      "lcp_ms": 1651.2491999999997,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1051.1722,
-      "si_ms": 1051.1722,
+      "fcp_ms": 1051.2492,
+      "si_ms": 1051.2492,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 214,
-      "total_byte_weight": 123347,
-      "content_byte_weight": 121196,
+      "total_byte_weight": 124095,
+      "content_byte_weight": 121944,
       "header_byte_weight": 2151,
       "payload_requests": 10,
       "payload_details": [
@@ -4874,10 +4902,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -4889,41 +4917,41 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5861000000000003,
-      "lcp_observed_rtt_ms": 0.0969,
+      "lcp_observed_server_latency_ms": 0.6245999999999998,
+      "lcp_observed_rtt_ms": 0.12389999999999998,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1991,
+      "benchmark_index": 2260.5,
       "seo_exempt": false
     },
     {
       "path": "/ferramentas/diagnostico-defesa-margem/",
       "run": 1,
-      "performance": 99,
+      "performance": 100,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1802.5411,
+      "lcp_ms": 1848.6564999999998,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1202.5411,
-      "si_ms": 1202.5411,
+      "fcp_ms": 1051.8626,
+      "si_ms": 1051.8626,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 277,
-      "total_byte_weight": 142767,
-      "content_byte_weight": 139975,
+      "total_byte_weight": 143493,
+      "content_byte_weight": 140701,
       "header_byte_weight": 2792,
       "payload_requests": 13,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/",
-          "transfer_size": 11168,
-          "resource_size": 36429,
-          "content_bytes": 10937,
+          "transfer_size": 11146,
+          "resource_size": 36405,
+          "content_bytes": 10915,
           "encoding": "gzip"
         },
         {
@@ -4990,10 +5018,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5012,13 +5040,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.27055,
-      "lcp_observed_rtt_ms": 0.12045,
+      "lcp_observed_server_latency_ms": 0.9313,
+      "lcp_observed_rtt_ms": 0.10469999999999999,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 550,
+      "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2036.5,
+      "benchmark_index": 2307,
       "seo_exempt": false
     },
     {
@@ -5028,25 +5056,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1851.848,
+      "lcp_ms": 1850.1025000000002,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1201.9392,
-      "si_ms": 1201.9392,
+      "fcp_ms": 1201.641,
+      "si_ms": 1201.641,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 277,
-      "total_byte_weight": 142767,
-      "content_byte_weight": 139975,
+      "total_byte_weight": 143493,
+      "content_byte_weight": 140701,
       "header_byte_weight": 2792,
       "payload_requests": 13,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/",
-          "transfer_size": 11168,
-          "resource_size": 36429,
-          "content_bytes": 10937,
+          "transfer_size": 11146,
+          "resource_size": 36405,
+          "content_bytes": 10915,
           "encoding": "gzip"
         },
         {
@@ -5113,10 +5141,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5135,41 +5163,41 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.9696000000000005,
-      "lcp_observed_rtt_ms": 0.1194,
+      "lcp_observed_server_latency_ms": 0.8205,
+      "lcp_observed_rtt_ms": 0.0945,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 550,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1992.5,
+      "benchmark_index": 2270.5,
       "seo_exempt": false
     },
     {
       "path": "/ferramentas/diagnostico-defesa-margem/",
       "run": 3,
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1801.5265999999997,
+      "lcp_ms": 1863.54,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 1051.5266,
-      "si_ms": 1051.5266,
+      "tbt_ms": 11,
+      "longest_own_task_ms": 61,
+      "fcp_ms": 1306.27,
+      "si_ms": 1306.27,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 277,
-      "total_byte_weight": 142767,
-      "content_byte_weight": 139975,
+      "total_byte_weight": 143493,
+      "content_byte_weight": 140701,
       "header_byte_weight": 2792,
       "payload_requests": 13,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/",
-          "transfer_size": 11168,
-          "resource_size": 36429,
-          "content_bytes": 10937,
+          "transfer_size": 11146,
+          "resource_size": 36405,
+          "content_bytes": 10915,
           "encoding": "gzip"
         },
         {
@@ -5236,10 +5264,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5258,13 +5286,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.7633000000000001,
-      "lcp_observed_rtt_ms": 0.11069999999999999,
+      "lcp_observed_server_latency_ms": 0.635,
+      "lcp_observed_rtt_ms": 0.24,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 400,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2035.5,
+      "benchmark_index": 2225.5,
       "seo_exempt": false
     },
     {
@@ -5274,25 +5302,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1575.995,
+      "lcp_ms": 1575.8908,
       "cls": 0,
-      "tbt_ms": 3.5,
-      "longest_own_task_ms": 57,
-      "fcp_ms": 900.9949999999999,
-      "si_ms": 900.9949999999999,
+      "tbt_ms": 1.5,
+      "longest_own_task_ms": 53,
+      "fcp_ms": 900.8907999999999,
+      "si_ms": 900.8907999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 162,
-      "total_byte_weight": 124158,
-      "content_byte_weight": 122487,
+      "total_byte_weight": 124886,
+      "content_byte_weight": 123215,
       "header_byte_weight": 1671,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/analise-cnpj/",
-          "transfer_size": 5453,
-          "resource_size": 15725,
-          "content_bytes": 5222,
+          "transfer_size": 5433,
+          "resource_size": 15701,
+          "content_bytes": 5202,
           "encoding": "gzip"
         },
         {
@@ -5310,10 +5338,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5346,13 +5374,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.49750000000000005,
-      "lcp_observed_rtt_ms": 0.1065,
+      "lcp_observed_server_latency_ms": 0.4454,
+      "lcp_observed_rtt_ms": 0.0711,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1991,
+      "benchmark_index": 2250.5,
       "seo_exempt": true
     },
     {
@@ -5362,25 +5390,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1576.7664,
-      "cls": 0.02028126743991168,
+      "lcp_ms": 1726.4009,
+      "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 901.7664,
-      "si_ms": 901.7664,
+      "fcp_ms": 920.4009000000001,
+      "si_ms": 920.4009000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 135,
-      "total_byte_weight": 123476,
-      "content_byte_weight": 121805,
+      "total_byte_weight": 124203,
+      "content_byte_weight": 122532,
       "header_byte_weight": 1671,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/analise-cnpj/r/",
-          "transfer_size": 4771,
-          "resource_size": 12899,
-          "content_bytes": 4540,
+          "transfer_size": 4750,
+          "resource_size": 12875,
+          "content_bytes": 4519,
           "encoding": "gzip"
         },
         {
@@ -5398,10 +5426,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5434,13 +5462,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.8831999999999994,
-      "lcp_observed_rtt_ms": 0.14129999999999998,
+      "lcp_observed_server_latency_ms": 0.70045,
+      "lcp_observed_rtt_ms": 0.08055,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1936.5,
+      "benchmark_index": 2269,
       "seo_exempt": true
     },
     {
@@ -5450,17 +5478,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 58,
-      "lcp_ms": 1728.3772,
+      "lcp_ms": 1651.1643,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1242.3772,
-      "si_ms": 1242.3772,
+      "fcp_ms": 901.1642999999999,
+      "si_ms": 901.1642999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 120,
-      "total_byte_weight": 127158,
-      "content_byte_weight": 125501,
+      "total_byte_weight": 127906,
+      "content_byte_weight": 126249,
       "header_byte_weight": 1657,
       "payload_requests": 8,
       "payload_details": [
@@ -5493,10 +5521,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5522,13 +5550,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.6886,
-      "lcp_observed_rtt_ms": 0.0969,
+      "lcp_observed_server_latency_ms": 0.5821499999999994,
+      "lcp_observed_rtt_ms": 0.12135,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 300,
+      "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1930.5,
+      "benchmark_index": 2234.5,
       "seo_exempt": true
     },
     {
@@ -5538,17 +5566,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1575.9078,
+      "lcp_ms": 1726.4996,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 900.9078,
-      "si_ms": 900.9078,
+      "fcp_ms": 901.4996000000001,
+      "si_ms": 901.4996000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 142,
-      "total_byte_weight": 128347,
-      "content_byte_weight": 126690,
+      "total_byte_weight": 129095,
+      "content_byte_weight": 127438,
       "header_byte_weight": 1657,
       "payload_requests": 8,
       "payload_details": [
@@ -5581,10 +5609,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5610,13 +5638,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.4539000000000004,
-      "lcp_observed_rtt_ms": 0.0711,
+      "lcp_observed_server_latency_ms": 0.7497999999999999,
+      "lcp_observed_rtt_ms": 0.1137,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2003,
+      "benchmark_index": 2255,
       "seo_exempt": true
     },
     {
@@ -5626,17 +5654,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1729.0723000000003,
+      "lcp_ms": 1725.9121,
       "cls": 0,
-      "tbt_ms": 3.5,
-      "longest_own_task_ms": 57,
-      "fcp_ms": 1054.0723,
-      "si_ms": 1054.0723,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1050.9121,
+      "si_ms": 1050.9121,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 147,
-      "total_byte_weight": 128288,
-      "content_byte_weight": 126441,
+      "total_byte_weight": 129036,
+      "content_byte_weight": 127189,
       "header_byte_weight": 1847,
       "payload_requests": 9,
       "payload_details": [
@@ -5676,10 +5704,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5705,13 +5733,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.03615,
-      "lcp_observed_rtt_ms": 0.09285,
+      "lcp_observed_server_latency_ms": 0.45604999999999996,
+      "lcp_observed_rtt_ms": 0.14295,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 400,
+      "render_blocking_savings_ms": 450,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1919,
+      "benchmark_index": 2266,
       "seo_exempt": true
     },
     {
@@ -5721,17 +5749,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1652.1532,
+      "lcp_ms": 1651.2547,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 50,
-      "fcp_ms": 902.1532,
-      "si_ms": 902.1532,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 901.2547,
+      "si_ms": 901.2547,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 138,
-      "total_byte_weight": 117434,
-      "content_byte_weight": 115740,
+      "total_byte_weight": 118182,
+      "content_byte_weight": 116488,
       "header_byte_weight": 1694,
       "payload_requests": 8,
       "payload_details": [
@@ -5771,10 +5799,10 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5793,13 +5821,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.0765999999999996,
-      "lcp_observed_rtt_ms": 0.08789999999999999,
+      "lcp_observed_server_latency_ms": 0.6273500000000001,
+      "lcp_observed_rtt_ms": 0.07965,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2013.5,
+      "benchmark_index": 2295,
       "seo_exempt": true
     },
     {
@@ -5809,17 +5837,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1751.9347500000001,
+      "lcp_ms": 1726.2707,
       "cls": 0,
-      "tbt_ms": 1,
-      "longest_own_task_ms": 51,
-      "fcp_ms": 1252.1478,
-      "si_ms": 1252.1478,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 901.2707,
+      "si_ms": 901.2707,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 197,
-      "total_byte_weight": 135305,
-      "content_byte_weight": 133248,
+      "total_byte_weight": 136053,
+      "content_byte_weight": 133996,
       "header_byte_weight": 2057,
       "payload_requests": 10,
       "payload_details": [
@@ -5845,10 +5873,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -5873,17 +5901,17 @@
           "encoding": "identity"
         },
         {
-          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
-          "transfer_size": 1164,
-          "resource_size": 973,
-          "content_bytes": 973,
-          "encoding": "identity"
-        },
-        {
           "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
           "transfer_size": 10797,
           "resource_size": 10605,
           "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
           "encoding": "identity"
         },
         {
@@ -5895,13 +5923,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5739000000000001,
-      "lcp_observed_rtt_ms": 0.0906,
+      "lcp_observed_server_latency_ms": 0.6353499999999996,
+      "lcp_observed_rtt_ms": 0.09615,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 300,
+      "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2020.5,
+      "benchmark_index": 2288,
       "seo_exempt": true
     },
     {
@@ -5911,12 +5939,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 751.1774,
+      "lcp_ms": 751.5050000000001,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 630.5887,
-      "si_ms": 630.5887,
+      "fcp_ms": 626.7525,
+      "si_ms": 626.7525,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 57,
@@ -5941,13 +5969,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5887,
-      "lcp_observed_rtt_ms": 0.09179999999999999,
+      "lcp_observed_server_latency_ms": 0.7525000000000002,
+      "lcp_observed_rtt_ms": 0.0765,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 2000,
+      "benchmark_index": 2290,
       "seo_exempt": true
     },
     {
@@ -5957,25 +5985,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1726.9732,
+      "lcp_ms": 1728.4854,
       "cls": 0,
-      "tbt_ms": 2,
-      "longest_own_task_ms": 54,
-      "fcp_ms": 901.9731999999999,
-      "si_ms": 901.9731999999999,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1241.4854,
+      "si_ms": 1241.4854,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 116,
-      "total_byte_weight": 134555,
-      "content_byte_weight": 132499,
+      "total_byte_weight": 135304,
+      "content_byte_weight": 133248,
       "header_byte_weight": 2056,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/jurisprudencia-contratos-obras/",
-          "transfer_size": 4066,
+          "transfer_size": 4067,
           "resource_size": 11970,
-          "content_bytes": 3836,
+          "content_bytes": 3837,
           "encoding": "gzip"
         },
         {
@@ -5993,10 +6021,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6043,13 +6071,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.9866000000000001,
-      "lcp_observed_rtt_ms": 0.08489999999999999,
+      "lcp_observed_server_latency_ms": 1.7427000000000001,
+      "lcp_observed_rtt_ms": 0.3663,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1952.5,
+      "benchmark_index": 2285.5,
       "seo_exempt": true
     },
     {
@@ -6059,25 +6087,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.3017,
+      "lcp_ms": 1651.3305999999998,
       "cls": 0,
-      "tbt_ms": 3,
-      "longest_own_task_ms": 56,
-      "fcp_ms": 902.3017,
-      "si_ms": 902.3017,
+      "tbt_ms": 2,
+      "longest_own_task_ms": 54,
+      "fcp_ms": 1255.3306,
+      "si_ms": 1255.3306,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 307,
-      "total_byte_weight": 129145,
-      "content_byte_weight": 127061,
+      "dom_elements": 320,
+      "total_byte_weight": 130272,
+      "content_byte_weight": 128188,
       "header_byte_weight": 2084,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/compatibilizacao-projetos-engenharia/",
-          "transfer_size": 7840,
-          "resource_size": 25637,
-          "content_bytes": 7609,
+          "transfer_size": 8219,
+          "resource_size": 27765,
+          "content_bytes": 7988,
           "encoding": "gzip"
         },
         {
@@ -6102,10 +6130,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6145,13 +6173,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.1508500000000002,
-      "lcp_observed_rtt_ms": 0.10065,
+      "lcp_observed_server_latency_ms": 0.6652999999999999,
+      "lcp_observed_rtt_ms": 0.0732,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1996,
+      "benchmark_index": 2303.5,
       "seo_exempt": false
     },
     {
@@ -6161,25 +6189,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.0935999999997,
+      "lcp_ms": 1697.1891999999998,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1249.0936,
-      "si_ms": 1249.0936,
+      "fcp_ms": 1246.7928,
+      "si_ms": 1246.7928,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 160,
-      "total_byte_weight": 120764,
-      "content_byte_weight": 118899,
+      "total_byte_weight": 121514,
+      "content_byte_weight": 119649,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/conteudos/quando-compatibilizar-projetos/",
-          "transfer_size": 5322,
+          "transfer_size": 5324,
           "resource_size": 15003,
-          "content_bytes": 5091,
+          "content_bytes": 5093,
           "encoding": "gzip"
         },
         {
@@ -6204,10 +6232,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6240,13 +6268,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5468000000000001,
-      "lcp_observed_rtt_ms": 0.09419999999999999,
+      "lcp_observed_server_latency_ms": 0.39639999999999975,
+      "lcp_observed_rtt_ms": 0.0816,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1960,
+      "benchmark_index": 2296.5,
       "seo_exempt": false
     },
     {
@@ -6256,25 +6284,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.643,
+      "lcp_ms": 1652.5493,
       "cls": 0,
-      "tbt_ms": 2,
-      "longest_own_task_ms": 54,
-      "fcp_ms": 1256.643,
-      "si_ms": 1256.643,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 50,
+      "fcp_ms": 902.5492999999999,
+      "si_ms": 902.5492999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 323,
-      "total_byte_weight": 129034,
-      "content_byte_weight": 126950,
+      "dom_elements": 336,
+      "total_byte_weight": 130115,
+      "content_byte_weight": 128031,
       "header_byte_weight": 2084,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/revisao-tecnica-projetos-engenharia/",
-          "transfer_size": 7738,
-          "resource_size": 26434,
-          "content_bytes": 7507,
+          "transfer_size": 8071,
+          "resource_size": 28513,
+          "content_bytes": 7840,
           "encoding": "gzip"
         },
         {
@@ -6299,10 +6327,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6342,33 +6370,33 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.3214999999999997,
-      "lcp_observed_rtt_ms": 0.12,
+      "lcp_observed_server_latency_ms": 1.2746499999999998,
+      "lcp_observed_rtt_ms": 0.14834999999999998,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 300,
+      "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2119.5,
+      "benchmark_index": 2244.5,
       "seo_exempt": false
     },
     {
       "path": "/parcerias-engenharia/",
       "run": 1,
-      "performance": 99,
+      "performance": 100,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1801.4161999999997,
+      "lcp_ms": 1728.3831999999998,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1201.4162,
-      "si_ms": 1201.4162,
+      "fcp_ms": 1053.3832,
+      "si_ms": 1053.3832,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 322,
-      "total_byte_weight": 132740,
-      "content_byte_weight": 130214,
+      "total_byte_weight": 133488,
+      "content_byte_weight": 130962,
       "header_byte_weight": 2526,
       "payload_requests": 12,
       "payload_details": [
@@ -6408,10 +6436,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6458,13 +6486,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.7081000000000002,
-      "lcp_observed_rtt_ms": 0.3504,
+      "lcp_observed_server_latency_ms": 1.6915999999999998,
+      "lcp_observed_rtt_ms": 0.0804,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2003.5,
+      "benchmark_index": 2225.5,
       "seo_exempt": false
     },
     {
@@ -6474,25 +6502,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1650.6869,
+      "lcp_ms": 1651.017,
       "cls": 0,
-      "tbt_ms": 2.5,
-      "longest_own_task_ms": 55,
-      "fcp_ms": 900.6868999999999,
-      "si_ms": 900.6868999999999,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 901.017,
+      "si_ms": 901.017,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 294,
-      "total_byte_weight": 129208,
-      "content_byte_weight": 127124,
+      "dom_elements": 307,
+      "total_byte_weight": 130401,
+      "content_byte_weight": 128317,
       "header_byte_weight": 2084,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/projetos-complementares-engenharia/",
-          "transfer_size": 7816,
-          "resource_size": 26576,
-          "content_bytes": 7585,
+          "transfer_size": 8261,
+          "resource_size": 28926,
+          "content_bytes": 8030,
           "encoding": "gzip"
         },
         {
@@ -6517,10 +6545,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6560,13 +6588,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.34345000000000014,
-      "lcp_observed_rtt_ms": 0.19754999999999998,
+      "lcp_observed_server_latency_ms": 0.5085000000000003,
+      "lcp_observed_rtt_ms": 0.1215,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2025.5,
+      "benchmark_index": 2211,
       "seo_exempt": false
     },
     {
@@ -6576,25 +6604,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1761.7857499999998,
+      "lcp_ms": 1759.712,
       "cls": 0,
-      "tbt_ms": 20,
-      "longest_own_task_ms": 70,
-      "fcp_ms": 901.4286,
-      "si_ms": 901.4286,
+      "tbt_ms": 17,
+      "longest_own_task_ms": 67,
+      "fcp_ms": 900.9695999999999,
+      "si_ms": 900.9695999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 262,
-      "total_byte_weight": 125116,
-      "content_byte_weight": 122813,
+      "total_byte_weight": 125863,
+      "content_byte_weight": 123560,
       "header_byte_weight": 2303,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/conteudos/como-contratar-projetos-complementares/",
-          "transfer_size": 6839,
+          "transfer_size": 6838,
           "resource_size": 20704,
-          "content_bytes": 6608,
+          "content_bytes": 6607,
           "encoding": "gzip"
         },
         {
@@ -6619,10 +6647,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6669,13 +6697,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.7142999999999999,
-      "lcp_observed_rtt_ms": 0.12869999999999998,
+      "lcp_observed_server_latency_ms": 0.4848000000000001,
+      "lcp_observed_rtt_ms": 0.12719999999999998,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2025.5,
+      "benchmark_index": 2270,
       "seo_exempt": false
     },
     {
@@ -6685,24 +6713,24 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1650.9422,
+      "lcp_ms": 1651.2329,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 900.9422,
-      "si_ms": 900.9422,
+      "fcp_ms": 901.2329,
+      "si_ms": 901.2329,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 278,
-      "total_byte_weight": 127165,
-      "content_byte_weight": 125300,
+      "total_byte_weight": 127913,
+      "content_byte_weight": 126048,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/engenharia-condominios/",
           "transfer_size": 7473,
-          "resource_size": 26974,
+          "resource_size": 26953,
           "content_bytes": 7242,
           "encoding": "gzip"
         },
@@ -6728,10 +6756,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6764,13 +6792,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.47109999999999985,
-      "lcp_observed_rtt_ms": 0.1359,
+      "lcp_observed_server_latency_ms": 0.6164500000000002,
+      "lcp_observed_rtt_ms": 0.32955,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2019,
+      "benchmark_index": 2230.5,
       "seo_exempt": false
     },
     {
@@ -6780,25 +6808,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1652.3961,
+      "lcp_ms": 1653.6674,
       "cls": 0,
-      "tbt_ms": 0.5,
-      "longest_own_task_ms": 51,
-      "fcp_ms": 902.3960999999999,
-      "si_ms": 902.3960999999999,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 903.6674,
+      "si_ms": 903.6674,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 353,
-      "total_byte_weight": 129156,
-      "content_byte_weight": 127291,
+      "dom_elements": 359,
+      "total_byte_weight": 130122,
+      "content_byte_weight": 128257,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/inspecao-diagnostico-edificacoes/",
-          "transfer_size": 9464,
-          "resource_size": 35815,
-          "content_bytes": 9233,
+          "transfer_size": 9682,
+          "resource_size": 37136,
+          "content_bytes": 9451,
           "encoding": "gzip"
         },
         {
@@ -6823,10 +6851,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6859,13 +6887,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.1980500000000003,
-      "lcp_observed_rtt_ms": 0.11295,
+      "lcp_observed_server_latency_ms": 1.8336999999999994,
+      "lcp_observed_rtt_ms": 0.1383,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1766,
+      "benchmark_index": 2291,
       "seo_exempt": false
     },
     {
@@ -6875,25 +6903,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1650.5594,
+      "lcp_ms": 1653.2085,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 50,
-      "fcp_ms": 900.5594000000001,
-      "si_ms": 900.5594000000001,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 903.2085,
+      "si_ms": 903.2085,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 313,
-      "total_byte_weight": 127907,
-      "content_byte_weight": 126042,
+      "dom_elements": 333,
+      "total_byte_weight": 128997,
+      "content_byte_weight": 127132,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/assistencia-tecnica-pericial-engenharia/",
-          "transfer_size": 8215,
-          "resource_size": 30726,
-          "content_bytes": 7984,
+          "transfer_size": 8557,
+          "resource_size": 32631,
+          "content_bytes": 8326,
           "encoding": "gzip"
         },
         {
@@ -6918,10 +6946,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -6954,13 +6982,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.279700000000001,
-      "lcp_observed_rtt_ms": 0.09029999999999999,
+      "lcp_observed_server_latency_ms": 1.6042500000000002,
+      "lcp_observed_rtt_ms": 0.10575,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2019,
+      "benchmark_index": 2308.5,
       "seo_exempt": false
     },
     {
@@ -6970,25 +6998,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.1385,
+      "lcp_ms": 1651.4198,
       "cls": 0,
-      "tbt_ms": 2.5,
-      "longest_own_task_ms": 55,
-      "fcp_ms": 901.1385,
-      "si_ms": 901.1385,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 901.4197999999999,
+      "si_ms": 901.4197999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 346,
-      "total_byte_weight": 127730,
-      "content_byte_weight": 125865,
+      "total_byte_weight": 128607,
+      "content_byte_weight": 126742,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/seguranca-trabalho-apoio-tecnico/",
-          "transfer_size": 8038,
-          "resource_size": 26495,
-          "content_bytes": 7807,
+          "transfer_size": 8167,
+          "resource_size": 26941,
+          "content_bytes": 7936,
           "encoding": "gzip"
         },
         {
@@ -7013,10 +7041,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7049,13 +7077,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5692500000000003,
-      "lcp_observed_rtt_ms": 0.08175,
+      "lcp_observed_server_latency_ms": 0.7099000000000004,
+      "lcp_observed_rtt_ms": 0.0771,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2026,
+      "benchmark_index": 2308,
       "seo_exempt": false
     },
     {
@@ -7065,25 +7093,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.5341,
+      "lcp_ms": 1650.5716,
       "cls": 0,
-      "tbt_ms": 2,
-      "longest_own_task_ms": 54,
-      "fcp_ms": 901.5341000000001,
-      "si_ms": 901.5341000000001,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 900.5716,
+      "si_ms": 900.5716,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 239,
-      "total_byte_weight": 125320,
-      "content_byte_weight": 123455,
+      "total_byte_weight": 126069,
+      "content_byte_weight": 124204,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/elaboracao-pgr/",
-          "transfer_size": 5628,
+          "transfer_size": 5629,
           "resource_size": 17038,
-          "content_bytes": 5397,
+          "content_bytes": 5398,
           "encoding": "gzip"
         },
         {
@@ -7108,10 +7136,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7144,13 +7172,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.7670499999999985,
-      "lcp_observed_rtt_ms": 0.09795,
+      "lcp_observed_server_latency_ms": 0.2858,
+      "lcp_observed_rtt_ms": 0.08519999999999998,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2030.5,
+      "benchmark_index": 2237,
       "seo_exempt": false
     },
     {
@@ -7160,25 +7188,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1650.5236,
+      "lcp_ms": 1652.1834,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 50,
-      "fcp_ms": 900.5236,
-      "si_ms": 900.5236,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 902.1833999999999,
+      "si_ms": 902.1833999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 247,
-      "total_byte_weight": 125450,
-      "content_byte_weight": 123585,
+      "total_byte_weight": 126197,
+      "content_byte_weight": 124332,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/revisao-atualizacao-pgr/",
-          "transfer_size": 5758,
+          "transfer_size": 5757,
           "resource_size": 17515,
-          "content_bytes": 5527,
+          "content_bytes": 5526,
           "encoding": "gzip"
         },
         {
@@ -7203,10 +7231,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7239,13 +7267,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.2618000000000005,
-      "lcp_observed_rtt_ms": 0.10919999999999999,
+      "lcp_observed_server_latency_ms": 1.0917,
+      "lcp_observed_rtt_ms": 0.0633,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1971.5,
+      "benchmark_index": 2320,
       "seo_exempt": false
     },
     {
@@ -7255,17 +7283,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1654.2174,
+      "lcp_ms": 1650.8482,
       "cls": 0,
-      "tbt_ms": 1.5,
-      "longest_own_task_ms": 53,
-      "fcp_ms": 904.2174,
-      "si_ms": 904.2174,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 900.8481999999999,
+      "si_ms": 900.8481999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 252,
-      "total_byte_weight": 125583,
-      "content_byte_weight": 123718,
+      "total_byte_weight": 126331,
+      "content_byte_weight": 124466,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
@@ -7298,10 +7326,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7334,13 +7362,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 2.1086999999999994,
-      "lcp_observed_rtt_ms": 0.0693,
+      "lcp_observed_server_latency_ms": 0.42410000000000003,
+      "lcp_observed_rtt_ms": 0.12389999999999998,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1939.5,
+      "benchmark_index": 2282.5,
       "seo_exempt": false
     },
     {
@@ -7350,17 +7378,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.0652,
+      "lcp_ms": 1696.8796499999999,
       "cls": 0,
-      "tbt_ms": 1,
-      "longest_own_task_ms": 52,
-      "fcp_ms": 901.0652,
-      "si_ms": 901.0652,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1246.2531,
+      "si_ms": 1246.2531,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 245,
-      "total_byte_weight": 125568,
-      "content_byte_weight": 123703,
+      "total_byte_weight": 126316,
+      "content_byte_weight": 124451,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
@@ -7393,10 +7421,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7429,13 +7457,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5326000000000001,
-      "lcp_observed_rtt_ms": 0.0834,
+      "lcp_observed_server_latency_ms": 0.62655,
+      "lcp_observed_rtt_ms": 0.07845,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1925.5,
+      "benchmark_index": 2282.5,
       "seo_exempt": false
     },
     {
@@ -7445,25 +7473,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1650.9330999999997,
+      "lcp_ms": 1651.4606,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 900.9331,
-      "si_ms": 900.9331,
+      "tbt_ms": 1.5,
+      "longest_own_task_ms": 53,
+      "fcp_ms": 901.4606000000001,
+      "si_ms": 901.4606000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 283,
-      "total_byte_weight": 121986,
-      "content_byte_weight": 119903,
+      "dom_elements": 294,
+      "total_byte_weight": 123069,
+      "content_byte_weight": 120986,
       "header_byte_weight": 2083,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/projetos/",
-          "transfer_size": 6417,
-          "resource_size": 20211,
-          "content_bytes": 6186,
+          "transfer_size": 6633,
+          "resource_size": 21055,
+          "content_bytes": 6402,
           "encoding": "gzip"
         },
         {
@@ -7481,17 +7509,17 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/assets/css/assets/project-practices.25de3fc650e2.css",
-          "transfer_size": 3831,
-          "resource_size": 14799,
-          "content_bytes": 3617,
+          "url": "http://127.0.0.1:8766/assets/css/assets/project-practices.2396a8903a38.css",
+          "transfer_size": 3950,
+          "resource_size": 15598,
+          "content_bytes": 3736,
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7531,13 +7559,203 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.46655000000000013,
-      "lcp_observed_rtt_ms": 0.09044999999999999,
+      "lcp_observed_server_latency_ms": 0.7303,
+      "lcp_observed_rtt_ms": 0.08969999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9701,
       "font_display_score": 1,
-      "benchmark_index": 2021,
+      "benchmark_index": 2172.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/avaliacao-imoveis-urbanos/",
+      "run": 1,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1652.3489,
+      "cls": 0,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 902.3489,
+      "si_ms": 902.3489,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 253,
+      "total_byte_weight": 127610,
+      "content_byte_weight": 125745,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/avaliacao-imoveis-urbanos/",
+          "transfer_size": 7170,
+          "resource_size": 24035,
+          "content_bytes": 6939,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
+          "transfer_size": 22285,
+          "resource_size": 108151,
+          "content_bytes": 22070,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+          "transfer_size": 8854,
+          "resource_size": 46718,
+          "content_bytes": 8639,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.17445,
+      "lcp_observed_rtt_ms": 0.05955,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 9519,
+      "font_display_score": 1,
+      "benchmark_index": 2317,
+      "seo_exempt": false
+    },
+    {
+      "path": "/assistencia-tecnica-pericia-trabalhista/",
+      "run": 1,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1651.4638,
+      "cls": 0,
+      "tbt_ms": 0.5,
+      "longest_own_task_ms": 51,
+      "fcp_ms": 901.4638,
+      "si_ms": 901.4638,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 253,
+      "total_byte_weight": 127632,
+      "content_byte_weight": 125767,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/assistencia-tecnica-pericia-trabalhista/",
+          "transfer_size": 7192,
+          "resource_size": 24770,
+          "content_bytes": 6961,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
+          "transfer_size": 22285,
+          "resource_size": 108151,
+          "content_bytes": 22070,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+          "transfer_size": 8854,
+          "resource_size": 46718,
+          "content_bytes": 8639,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 0.7318999999999997,
+      "lcp_observed_rtt_ms": 0.0861,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 9519,
+      "font_display_score": 1,
+      "benchmark_index": 2298,
       "seo_exempt": false
     },
     {
@@ -7547,12 +7765,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 58,
-      "lcp_ms": 752.9547,
+      "lcp_ms": 633.96025,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 637.47735,
-      "si_ms": 637.47735,
+      "fcp_ms": 633.96025,
+      "si_ms": 633.96025,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 94,
@@ -7577,13 +7795,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.47735,
-      "lcp_observed_rtt_ms": 0.11115,
+      "lcp_observed_server_latency_ms": 0.96025,
+      "lcp_observed_rtt_ms": 0.08925,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 2031,
+      "benchmark_index": 2315,
       "seo_exempt": true
     },
     {
@@ -7593,25 +7811,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1651.0556,
+      "lcp_ms": 1651.9279,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 54,
-      "fcp_ms": 1051.0556,
-      "si_ms": 1051.0556,
+      "fcp_ms": 1051.9279,
+      "si_ms": 1051.9279,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 528,
-      "total_byte_weight": 134876,
-      "content_byte_weight": 132796,
+      "total_byte_weight": 135601,
+      "content_byte_weight": 133521,
       "header_byte_weight": 2080,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/diretoria-b2g/",
-          "transfer_size": 10552,
-          "resource_size": 36879,
-          "content_bytes": 10321,
+          "transfer_size": 10529,
+          "resource_size": 36855,
+          "content_bytes": 10298,
           "encoding": "gzip"
         },
         {
@@ -7643,10 +7861,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7679,143 +7897,41 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5278000000000002,
-      "lcp_observed_rtt_ms": 0.10469999999999999,
+      "lcp_observed_server_latency_ms": 0.9639500000000003,
+      "lcp_observed_rtt_ms": 0.09405,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2106,
+      "benchmark_index": 2311,
       "seo_exempt": false
     },
     {
       "path": "/diretoria-b2g/",
       "run": 2,
-      "performance": 100,
-      "accessibility": 100,
-      "best_practices": 100,
-      "seo": 100,
-      "lcp_ms": 1650.7567,
-      "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 53,
-      "fcp_ms": 1050.7567,
-      "si_ms": 1050.7567,
-      "image_aspect_ratio": 1,
-      "image_size_responsive": 1,
-      "dom_elements": 528,
-      "total_byte_weight": 134876,
-      "content_byte_weight": 132796,
-      "header_byte_weight": 2080,
-      "payload_requests": 10,
-      "payload_details": [
-        {
-          "url": "http://127.0.0.1:8766/diretoria-b2g/",
-          "transfer_size": 10552,
-          "resource_size": 36879,
-          "content_bytes": 10321,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
-          "transfer_size": 42401,
-          "resource_size": 42208,
-          "content_bytes": 42208,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
-          "transfer_size": 22285,
-          "resource_size": 108151,
-          "content_bytes": 22070,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
-          "transfer_size": 8854,
-          "resource_size": 46718,
-          "content_bytes": 8639,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/styles-offers.e23f1ae9e064.css",
-          "transfer_size": 4632,
-          "resource_size": 15282,
-          "content_bytes": 4417,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
-          "transfer_size": 10797,
-          "resource_size": 10605,
-          "content_bytes": 10605,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/manifest.webmanifest",
-          "transfer_size": 610,
-          "resource_size": 403,
-          "content_bytes": 403,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
-          "transfer_size": 1164,
-          "resource_size": 973,
-          "content_bytes": 973,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/icon-192.png",
-          "transfer_size": 5707,
-          "resource_size": 5515,
-          "content_bytes": 5515,
-          "encoding": "identity"
-        }
-      ],
-      "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.37835000000000013,
-      "lcp_observed_rtt_ms": 0.22964999999999997,
-      "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 400,
-      "image_delivery_savings_bytes": 9519,
-      "font_display_score": 1,
-      "benchmark_index": 2099,
-      "seo_exempt": false
-    },
-    {
-      "path": "/diretoria-b2g/",
-      "run": 3,
       "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1802.4737,
+      "lcp_ms": 1803.5471000000002,
       "cls": 0,
-      "tbt_ms": 21,
-      "longest_own_task_ms": 71,
-      "fcp_ms": 1423.4737,
-      "si_ms": 1423.4737,
+      "tbt_ms": 19,
+      "longest_own_task_ms": 69,
+      "fcp_ms": 1422.5471,
+      "si_ms": 1422.5471,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 528,
-      "total_byte_weight": 134876,
-      "content_byte_weight": 132796,
+      "total_byte_weight": 135601,
+      "content_byte_weight": 133521,
       "header_byte_weight": 2080,
       "payload_requests": 10,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/diretoria-b2g/",
-          "transfer_size": 10552,
-          "resource_size": 36879,
-          "content_bytes": 10321,
+          "transfer_size": 10529,
+          "resource_size": 36855,
+          "content_bytes": 10298,
           "encoding": "gzip"
         },
         {
@@ -7847,10 +7963,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7883,13 +7999,115 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.23685,
-      "lcp_observed_rtt_ms": 0.28815,
+      "lcp_observed_server_latency_ms": 1.7735500000000004,
+      "lcp_observed_rtt_ms": 0.08594999999999998,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 450,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2050,
+      "benchmark_index": 2296.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "run": 3,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1651.4116,
+      "cls": 0,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 52,
+      "fcp_ms": 1051.4116,
+      "si_ms": 1051.4116,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 528,
+      "total_byte_weight": 135601,
+      "content_byte_weight": 133521,
+      "header_byte_weight": 2080,
+      "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diretoria-b2g/",
+          "transfer_size": 10529,
+          "resource_size": 36855,
+          "content_bytes": 10298,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
+          "transfer_size": 22285,
+          "resource_size": 108151,
+          "content_bytes": 22070,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+          "transfer_size": 8854,
+          "resource_size": 46718,
+          "content_bytes": 8639,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.e23f1ae9e064.css",
+          "transfer_size": 4632,
+          "resource_size": 15282,
+          "content_bytes": 4417,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 0.7058,
+      "lcp_observed_rtt_ms": 0.08370000000000001,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 400,
+      "image_delivery_savings_bytes": 9519,
+      "font_display_score": 1,
+      "benchmark_index": 2315,
       "seo_exempt": false
     },
     {
@@ -7899,25 +8117,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1800.8836,
+      "lcp_ms": 1801.1766000000002,
       "cls": 0,
-      "tbt_ms": 4,
-      "longest_own_task_ms": 58,
-      "fcp_ms": 1200.8836,
-      "si_ms": 1200.8836,
+      "tbt_ms": 6.5,
+      "longest_own_task_ms": 63,
+      "fcp_ms": 1201.1766,
+      "si_ms": 1201.1766,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 355,
-      "total_byte_weight": 140476,
-      "content_byte_weight": 138181,
+      "total_byte_weight": 141202,
+      "content_byte_weight": 138907,
       "header_byte_weight": 2295,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/",
-          "transfer_size": 10337,
-          "resource_size": 34281,
-          "content_bytes": 10106,
+          "transfer_size": 10315,
+          "resource_size": 34257,
+          "content_bytes": 10084,
           "encoding": "gzip"
         },
         {
@@ -7956,10 +8174,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -7992,13 +8210,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.4417999999999999,
-      "lcp_observed_rtt_ms": 0.08220000000000001,
+      "lcp_observed_server_latency_ms": 0.5882999999999998,
+      "lcp_observed_rtt_ms": 0.08669999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 550,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1997,
+      "benchmark_index": 2324,
       "seo_exempt": false
     },
     {
@@ -8008,25 +8226,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1802.2139000000002,
+      "lcp_ms": 1801.5888,
       "cls": 0,
       "tbt_ms": 6,
       "longest_own_task_ms": 62,
-      "fcp_ms": 1202.2139,
-      "si_ms": 1202.2139,
+      "fcp_ms": 1201.5888,
+      "si_ms": 1201.5888,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 355,
-      "total_byte_weight": 140476,
-      "content_byte_weight": 138181,
+      "total_byte_weight": 141202,
+      "content_byte_weight": 138907,
       "header_byte_weight": 2295,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/",
-          "transfer_size": 10337,
-          "resource_size": 34281,
-          "content_bytes": 10106,
+          "transfer_size": 10315,
+          "resource_size": 34257,
+          "content_bytes": 10084,
           "encoding": "gzip"
         },
         {
@@ -8065,10 +8283,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -8101,13 +8319,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.1069499999999999,
-      "lcp_observed_rtt_ms": 0.08804999999999999,
+      "lcp_observed_server_latency_ms": 0.7944000000000002,
+      "lcp_observed_rtt_ms": 0.0906,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 550,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1971,
+      "benchmark_index": 2272,
       "seo_exempt": false
     },
     {
@@ -8117,25 +8335,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1801.4724,
+      "lcp_ms": 1801.7509999999997,
       "cls": 0,
-      "tbt_ms": 3.5,
-      "longest_own_task_ms": 57,
-      "fcp_ms": 1201.4724,
-      "si_ms": 1201.4724,
+      "tbt_ms": 5.5,
+      "longest_own_task_ms": 61,
+      "fcp_ms": 1201.751,
+      "si_ms": 1201.751,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 355,
-      "total_byte_weight": 140476,
-      "content_byte_weight": 138181,
+      "total_byte_weight": 141202,
+      "content_byte_weight": 138907,
       "header_byte_weight": 2295,
       "payload_requests": 11,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/",
-          "transfer_size": 10337,
-          "resource_size": 34281,
-          "content_bytes": 10106,
+          "transfer_size": 10315,
+          "resource_size": 34257,
+          "content_bytes": 10084,
           "encoding": "gzip"
         },
         {
@@ -8174,10 +8392,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -8210,13 +8428,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.7362,
-      "lcp_observed_rtt_ms": 0.1668,
+      "lcp_observed_server_latency_ms": 0.8754999999999996,
+      "lcp_observed_rtt_ms": 0.0675,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 550,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1887,
+      "benchmark_index": 2264.5,
       "seo_exempt": false
     },
     {
@@ -8226,17 +8444,17 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1651.1487,
+      "lcp_ms": 1650.8048,
       "cls": 0,
-      "tbt_ms": 1,
-      "longest_own_task_ms": 59,
-      "fcp_ms": 901.1487,
-      "si_ms": 901.1487,
+      "tbt_ms": 3,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 900.8047999999999,
+      "si_ms": 900.8047999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 355,
-      "total_byte_weight": 124344,
-      "content_byte_weight": 122479,
+      "total_byte_weight": 125092,
+      "content_byte_weight": 123227,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
@@ -8269,10 +8487,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -8305,128 +8523,33 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.5743499999999999,
-      "lcp_observed_rtt_ms": 0.13665,
-      "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
-      "image_delivery_savings_bytes": 9519,
-      "font_display_score": 1,
-      "benchmark_index": 2094,
-      "seo_exempt": true
-    },
-    {
-      "path": "/conteudos/documentos-reequilibrio-obra-publica/",
-      "run": 2,
-      "performance": 100,
-      "accessibility": 100,
-      "best_practices": 100,
-      "seo": 69,
-      "lcp_ms": 1651.3408,
-      "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 54,
-      "fcp_ms": 901.3408,
-      "si_ms": 901.3408,
-      "image_aspect_ratio": 1,
-      "image_size_responsive": 1,
-      "dom_elements": 355,
-      "total_byte_weight": 124344,
-      "content_byte_weight": 122479,
-      "header_byte_weight": 1865,
-      "payload_requests": 9,
-      "payload_details": [
-        {
-          "url": "http://127.0.0.1:8766/conteudos/documentos-reequilibrio-obra-publica/",
-          "transfer_size": 8902,
-          "resource_size": 29051,
-          "content_bytes": 8671,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
-          "transfer_size": 42401,
-          "resource_size": 42208,
-          "content_bytes": 42208,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
-          "transfer_size": 22285,
-          "resource_size": 108151,
-          "content_bytes": 22070,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/assets/editorial-article.b0e2fe57e76e.css",
-          "transfer_size": 4604,
-          "resource_size": 20715,
-          "content_bytes": 4389,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
-          "transfer_size": 10797,
-          "resource_size": 10605,
-          "content_bytes": 10605,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/manifest.webmanifest",
-          "transfer_size": 610,
-          "resource_size": 403,
-          "content_bytes": 403,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
-          "transfer_size": 1164,
-          "resource_size": 973,
-          "content_bytes": 973,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/icon-192.png",
-          "transfer_size": 5707,
-          "resource_size": 5515,
-          "content_bytes": 5515,
-          "encoding": "identity"
-        }
-      ],
-      "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.6703999999999999,
+      "lcp_observed_server_latency_ms": 0.4024000000000001,
       "lcp_observed_rtt_ms": 0.0846,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1988.5,
+      "benchmark_index": 2322.5,
       "seo_exempt": true
     },
     {
       "path": "/conteudos/documentos-reequilibrio-obra-publica/",
-      "run": 3,
+      "run": 2,
       "performance": 100,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1653.1518,
+      "lcp_ms": 1650.7107,
       "cls": 0,
-      "tbt_ms": 2,
-      "longest_own_task_ms": 54,
-      "fcp_ms": 903.1518000000001,
-      "si_ms": 903.1518000000001,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 900.7107000000001,
+      "si_ms": 900.7107000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 355,
-      "total_byte_weight": 124344,
-      "content_byte_weight": 122479,
+      "total_byte_weight": 125092,
+      "content_byte_weight": 123227,
       "header_byte_weight": 1865,
       "payload_requests": 9,
       "payload_details": [
@@ -8459,10 +8582,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js?v=103e6ccd92ad476c",
-          "transfer_size": 27874,
-          "resource_size": 89709,
-          "content_bytes": 27645,
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
           "encoding": "gzip"
         },
         {
@@ -8495,13 +8618,108 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.5758999999999996,
-      "lcp_observed_rtt_ms": 0.10110000000000001,
+      "lcp_observed_server_latency_ms": 0.35535000000000005,
+      "lcp_observed_rtt_ms": 0.16065,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 250,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1916.5,
+      "benchmark_index": 2280.5,
+      "seo_exempt": true
+    },
+    {
+      "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "run": 3,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 69,
+      "lcp_ms": 1651.0509,
+      "cls": 0,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 52,
+      "fcp_ms": 901.0509,
+      "si_ms": 901.0509,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 355,
+      "total_byte_weight": 125092,
+      "content_byte_weight": 123227,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/conteudos/documentos-reequilibrio-obra-publica/",
+          "transfer_size": 8902,
+          "resource_size": 29051,
+          "content_bytes": 8671,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
+          "transfer_size": 22285,
+          "resource_size": 108151,
+          "content_bytes": 22070,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial-article.b0e2fe57e76e.css",
+          "transfer_size": 4604,
+          "resource_size": 20715,
+          "content_bytes": 4389,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+          "transfer_size": 28622,
+          "resource_size": 92381,
+          "content_bytes": 28393,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 0.5254499999999999,
+      "lcp_observed_rtt_ms": 0.09255,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 9519,
+      "font_display_score": 1,
+      "benchmark_index": 2306,
       "seo_exempt": true
     }
   ],
@@ -8512,11 +8730,11 @@
       "expected_runs": 3,
       "observed_runs": 3,
       "minimum_performance": 100,
-      "p75_tbt_ms": 28,
+      "p75_tbt_ms": 14,
       "maximum_own_long_task_ms": 78,
-      "minimum_lcp_ms": 1575.8891,
-      "maximum_lcp_ms": 1652.1491,
-      "maximum_lcp_net_ms": 1652.1491,
+      "minimum_lcp_ms": 1577.7527,
+      "maximum_lcp_ms": 1580.5122,
+      "maximum_lcp_net_ms": 1580.5122,
       "maximum_lcp_network_allowance_ms": 0,
       "maximum_cls": 0
     }
