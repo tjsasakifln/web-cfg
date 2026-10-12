@@ -1,0 +1,81 @@
+name: R04 Lighthouse evidence
+
+on:
+  pull_request:
+    branches:
+      - codex/r04-lighthouse-evidence-20261012
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse-evidence:
+    if: github.event.pull_request.head.ref == 'codex/r04-lighthouse-evidence-20261012'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve contracted producer revision
+        id: producer-contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha="$(python3 -c 'import json; print(json.load(open("data/pseo/manifest.json"))["source_commit_sha"])')"
+          test "${#sha}" = 40
+          printf 'sha=%s\n' "$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout contracted producer fixture
+        env:
+          EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract
+          EXTRA_CLI_SHA: ${{ steps.producer-contract.outputs.sha }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EXTRA_CLI_ROOT"
+          git init --quiet "$EXTRA_CLI_ROOT"
+          git -C "$EXTRA_CLI_ROOT" fetch --no-tags --depth=1 https://github.com/tjsasakifln/extra-cli.git "$EXTRA_CLI_SHA"
+          git -C "$EXTRA_CLI_ROOT" checkout --quiet --detach FETCH_HEAD
+          test "$(git -C "$EXTRA_CLI_ROOT" rev-parse HEAD)" = "$EXTRA_CLI_SHA"
+          echo "EXTRA_CLI_ROOT=$EXTRA_CLI_ROOT" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install locked dependencies
+        run: |
+          npm ci --ignore-scripts
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
+
+      - name: Build public site
+        run: npm run build:site
+
+      - name: Setup Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+
+      - name: Collect Lighthouse matrix
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: node scripts/site/run_lighthouse.mjs
+
+      - name: Validate raw Lighthouse evidence and thresholds
+        env:
+          LH_REQUIRE_RAW_EVIDENCE: "1"
+        run: npm run test:lighthouse-gates
+
+      - name: Upload Lighthouse evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: r04-lighthouse-evidence-${{ github.sha }}
+          path: |
+            docs/lighthouse-runs/**
+            build-info.json
+            build/reports/**
+          if-no-files-found: warn
