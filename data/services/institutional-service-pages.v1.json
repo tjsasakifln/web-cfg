@@ -88,11 +88,11 @@
           ],
           [
             "Interfaces",
-          "A proposta identifica dependências entre disciplinas e informa quais decisões precisam do contratante, do arquiteto ou de outros autores. Quando a contratação parte de um escritório parceiro, a arquitetura de origem, sua autoria e o canal de devolução permanecem identificados."
+            "A proposta identifica dependências entre disciplinas e informa quais decisões precisam do contratante, do arquiteto ou de outros autores. Quando a contratação parte de um escritório parceiro, a arquitetura de origem, sua autoria e o canal de devolução permanecem identificados."
           ],
           [
             "Continuidade",
-          "Revisão técnica, compatibilização e quantitativos podem integrar a mesma contratação quando forem necessários para fechar o pacote, com as entregas e responsáveis reunidos no escopo."
+            "Revisão técnica, compatibilização e quantitativos podem integrar a mesma contratação quando forem necessários para fechar o pacote, com as entregas e responsáveis reunidos no escopo."
           ],
           [
             "Abrangência",
@@ -147,6 +147,21 @@
         "title": "Solicite uma proposta de projetos complementares.",
         "intro": "Conte a finalidade do empreendimento, a fase atual, as disciplinas desejadas e as referências já disponíveis. A CONFENGE devolve a definição do serviço e os dados necessários para a proposta.",
         "boundary": "Você pode compartilhar referências não sigilosas por WhatsApp ou e-mail. Quando o material exigir controle de acesso ou contiver dados sensíveis, combinamos o canal adequado. O tratamento dos dados segue a Política de Privacidade."
+      },
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que ajuda a definir a proposta",
+        "intro": "Informações para comparar as entregas e iniciar a conversa.",
+        "items": [
+          [
+            "Posso contratar apenas uma disciplina?",
+            "Sim. A proposta pode tratar uma disciplina ou reunir as especialidades necessárias. Identificamos as interfaces, os insumos recebidos e os responsáveis para evitar lacunas entre os projetos."
+          ],
+          [
+            "Como comparo duas propostas de projetos?",
+            "Compare disciplinas, fase de desenvolvimento, formatos, memoriais, revisões, coordenação e dependências de levantamentos. Uma lista de nomes semelhante pode esconder entregas e responsabilidades diferentes."
+          ]
+        ]
       }
     },
     {
@@ -278,7 +293,22 @@
         "intro": "Informe o tipo de projeto, a decisão que a revisão deve apoiar e as disciplinas envolvidas. Se houver uma lista de documentos ou revisões, ela já ajuda a dimensionar o trabalho.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Para modelos, pranchas ou documentos com acesso restrito, combinamos o canal e as permissões adequadas. O tratamento dos dados segue a Política de Privacidade."
       },
-      "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto."
+      "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto.",
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que ajuda a definir a proposta",
+        "intro": "Informações para comparar as entregas e iniciar a conversa.",
+        "items": [
+          [
+            "A revisão transfere a autoria do projeto?",
+            "O projeto recebido continua identificado com seu autor. A revisão apresenta verificações e recomendações no escopo contratado; eventual elaboração ou alteração de disciplina exige responsabilidade definida."
+          ],
+          [
+            "O que devo informar para pedir a revisão?",
+            "Indique a disciplina, a fase, os arquivos disponíveis, a decisão a apoiar e o prazo desejado. Não é preciso conhecer previamente todas as verificações necessárias."
+          ]
+        ]
+      }
     },
     {
       "route": "compatibilizacao-projetos-engenharia",
@@ -392,6 +422,21 @@
         "title": "Solicite uma proposta de compatibilização.",
         "intro": "Informe as disciplinas existentes, a fase do projeto, os formatos disponíveis e a decisão que o pacote precisa alcançar. Uma relação simples dos arquivos e revisões ajuda a estimar as rodadas.",
         "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Modelos e documentos controlados são recebidos pelo canal e com as permissões combinadas para o projeto. O tratamento dos dados segue a Política de Privacidade."
+      },
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que ajuda a definir a proposta",
+        "intro": "Informações para comparar as entregas e iniciar a conversa.",
+        "items": [
+          [
+            "A compatibilização resolve automaticamente cada interferência?",
+            "O trabalho identifica e organiza interfaces e decisões. Os ajustes são atribuídos aos responsáveis pelas disciplinas conforme o escopo, com registro das versões e das pendências."
+          ],
+          [
+            "Preciso ter todos os projetos concluídos?",
+            "Informe quais disciplinas e versões já existem. A proposta define o estágio de coordenação possível e as dependências que precisam ser resolvidas para avançar."
+          ]
+        ]
       }
     },
     {
@@ -481,7 +526,7 @@
           ],
           [
             "Obra pública",
-          "Orçamento de referência, revisão de planilha ou apoio à proposta considerando edital, regime de empreitada, critérios de medição e bases oficiais aplicáveis. Referências como SINAPI orientam composições e devem refletir região, data-base, desoneração e condições executivas; não equivalem a preço de mercado universal."
+            "Orçamento de referência, revisão de planilha ou apoio à proposta considerando edital, regime de empreitada, critérios de medição e bases oficiais aplicáveis. Referências como SINAPI orientam composições e devem refletir região, data-base, desoneração e condições executivas; não equivalem a preço de mercado universal."
           ],
           [
             "Projeto em desenvolvimento",
@@ -489,7 +534,7 @@
           ],
           [
             "Responsabilidade",
-          "A proposta identifica o profissional, as disciplinas, a decisão que a base apoia e o alcance da responsabilidade técnica sobre a entrega."
+            "A proposta identifica o profissional, as disciplinas, a decisão que a base apoia e o alcance da responsabilidade técnica sobre a entrega."
           ]
         ]
       },
@@ -505,8 +550,8 @@
         "engagement"
       ],
       "related_guides": {
-    "title": "Quatro decisões antes de fechar a base.",
-    "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas, quando revisar ou refazer um orçamento e como conferir a base de referência.",
+        "title": "Quatro decisões antes de fechar a base.",
+        "intro": "Os guias explicam quais documentos sustentam o levantamento, como comparar propostas, quando revisar ou refazer um orçamento e como conferir a base de referência.",
         "items": [
           [
             "Documentos para o levantamento",
@@ -522,11 +567,11 @@
             "Revisar ou refazer o orçamento",
             "Distinga atualização, revisão crítica e nova orçamentação conforme a condição da base existente.",
             "/conteudos/revisar-ou-refazer-orcamento-obra/"
-        ],
-        [
-          "Base oficial e regime de execução",
-          "Entenda por que região, data-base, desoneração e o regime de empreitada mudam a leitura da planilha antes de decidir ou contratar.",
-          "/conteudos/sinapi-desonerado-nao-desonerado/"
+          ],
+          [
+            "Base oficial e regime de execução",
+            "Entenda por que região, data-base, desoneração e o regime de empreitada mudam a leitura da planilha antes de decidir ou contratar.",
+            "/conteudos/sinapi-desonerado-nao-desonerado/"
           ]
         ]
       },
@@ -534,6 +579,21 @@
         "title": "Solicite uma proposta de quantitativos ou orçamento.",
         "intro": "Informe o tipo de obra, a finalidade da base, as disciplinas e os documentos disponíveis. Uma lista de pranchas, a planilha existente ou um resumo do escopo já permite dimensionar a proposta.",
         "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade."
+      },
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "O que ajuda a definir a proposta",
+        "intro": "Informações para comparar as entregas e iniciar a conversa.",
+        "items": [
+          [
+            "O orçamento também serve para uma obra privada?",
+            "Sim. A finalidade, os projetos, a localização e as referências de preços orientam o trabalho. O resultado pode apoiar comparação de propostas, planejamento ou contratação, conforme o escopo."
+          ],
+          [
+            "Qual é a diferença entre quantitativos e orçamento?",
+            "O levantamento organiza quantidades e sua memória. O orçamento relaciona essas quantidades aos serviços, referências e critérios de preço pertinentes. A proposta identifica quais partes serão entregues."
+          ]
+        ]
       }
     },
     {
@@ -736,6 +796,14 @@
           [
             "Uma fotografia permite concluir a causa?",
             "Não. Fotografia não permite diagnosticar causa, estabilidade ou solução à distância. Hipótese não é causa única. Fotografias localizam e registram sinais, mas a conclusão depende de inspeção, documentos, medições ou exames compatíveis com o caso."
+          ],
+          [
+            "Posso começar enviando uma descrição e fotos?",
+            "Sim, como contexto inicial não sigiloso. Isso ajuda a delimitar a necessidade, mas não substitui automaticamente a vistoria ou a investigação necessária para concluir sobre a edificação."
+          ],
+          [
+            "Receberei só uma lista de problemas?",
+            "O produto é definido para a decisão contratada e relaciona observações, análise e encaminhamentos. Ensaios, acompanhamento ou projeto de reparo podem ser necessários e devem estar identificados no escopo, sem promessa de causa por fotografia."
           ]
         ]
       },
@@ -924,6 +992,14 @@
           [
             "O assistente técnico garante o resultado da disputa?",
             "Não. A atuação organiza e analisa a evidência de engenharia dentro do escopo; não substitui o perito nomeado pelo juízo e não promete decisão judicial, acordo ou conclusão sem sustentação técnica."
+          ],
+          [
+            "Preciso contratar a análise de todo o processo?",
+            "O conjunto documental é delimitado pela questão técnica e pela etapa do caso. A proposta identifica o material e as atividades necessárias, sem exigir um pacote indefinido de serviços."
+          ],
+          [
+            "A CONFENGE pode discordar do laudo?",
+            "A análise pode concordar, divergir ou apontar limitações, conforme as evidências. A contratação não compra uma conclusão favorável nem garante resultado da disputa."
           ]
         ]
       },
@@ -945,6 +1021,327 @@
           ]
         ],
         "boundary": "No primeiro contato, compartilhe apenas referências não sigilosas. Antes de receber peças processuais, identificação detalhada das partes ou documentos protegidos, a CONFENGE verifica conflito, finalidade, permissões e canal adequado. O tratamento dos dados segue a Política de Privacidade."
+      },
+      "related_guides": {
+        "title": "Assistência para questões distintas",
+        "intro": "Escolha a apresentação correspondente à questão técnica.",
+        "items": [
+          [
+            "Assistência técnica trabalhista em SST",
+            "Quesitos e análise de documentos de SST em disputa trabalhista, com conflito e canal reservado.",
+            "/assistencia-tecnica-pericia-trabalhista/"
+          ]
+        ]
+      }
+    },
+    {
+      "route": "avaliacao-imoveis-urbanos",
+      "journey": "avaliacao",
+      "contact_id": "contato-avaliacao-imoveis-urbanos",
+      "last_material_change": "2026-10-12",
+      "last_material_change_label": "12 de outubro de 2026",
+      "hero": {
+        "eyebrow": "Valor fundamentado para a decisão sobre o imóvel",
+        "title": "Avaliação de imóveis urbanos",
+        "lead": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
+        "value": "Conheça os elementos do trabalho e informe como o documento será utilizado. A proposta define o método, os dados necessários, a vistoria, a responsabilidade técnica e o produto adequado à sua decisão.",
+        "cta": "Conversar sobre a avaliação",
+        "signal_title": "O que define o trabalho",
+        "signals": [
+          [
+            "Imóvel",
+            "Tipo, município, identificação e características relevantes."
+          ],
+          [
+            "Finalidade",
+            "A decisão e o destinatário do documento."
+          ],
+          [
+            "Data-base",
+            "A data a que a avaliação precisa se referir."
+          ]
+        ]
+      },
+      "description": "Conheça o trabalho de avaliação de imóvel urbano para negociação, partilha ou análise patrimonial. Entenda a entrega e solicite proposta conforme a finalidade.",
+      "deliverables": {
+        "kicker": "Entrega",
+        "title": "Um valor precisa vir acompanhado de uma explicação.",
+        "intro": "O documento deve permitir entender qual objeto foi analisado, com quais dados e para qual uso. O conteúdo efetivo e sua profundidade são definidos na contratação.",
+        "items": [
+          [
+            "Identificação e finalidade",
+            "Caracterização do imóvel e da decisão, data-base e documentos utilizados, com distinção entre informação recebida e verificada."
+          ],
+          [
+            "Método e dados",
+            "Explicação do método pertinente, das fontes e dos critérios de análise. Preços de anúncios e preços de transações não são tratados como informações equivalentes."
+          ],
+          [
+            "Análise e conclusão",
+            "Demonstração de como as informações sustentam a conclusão, com premissas, condições de uso e limitações identificadas."
+          ],
+          [
+            "Responsabilidade e apresentação",
+            "Identificação do responsável e dos registros aplicáveis ao trabalho contratado. Formato, destinatário e eventuais exigências específicas entram na proposta."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Finalidades",
+        "title": "A pergunta sobre o imóvel orienta a avaliação.",
+        "intro": "O mesmo endereço pode exigir trabalhos diferentes conforme a decisão. Descreva a finalidade em vez de escolher um documento apenas pelo nome.",
+        "items": [
+          [
+            "Compra, venda e negociação",
+            "Uma referência fundamentada para apoiar a decisão de quem compra ou vende. O trabalho não promete o preço pelo qual o negócio será efetivamente fechado."
+          ],
+          [
+            "Partilha e inventário",
+            "A finalidade, a data-base e os destinatários precisam estar definidos. A participação de advogado e as exigências do procedimento são consideradas no escopo."
+          ],
+          [
+            "Análise patrimonial",
+            "A identificação do bem e o uso pretendido orientam os dados, o método e as condições de apresentação. Exigências de terceiros são verificadas antes do aceite."
+          ],
+          [
+            "Opinião preliminar ou avaliação formal",
+            "São produtos de profundidade e uso diferentes. Uma análise preliminar não é apresentada como substituta automática de uma avaliação formal."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Como contratar",
+        "title": "Imóvel, finalidade e acesso antes do orçamento.",
+        "intro": "O pedido pode começar com informações parciais. A proposta identifica o que já está disponível e o que precisa ser levantado.",
+        "items": [
+          [
+            "Documentos",
+            "Identificação registral quando disponível, plantas, áreas, características e finalidade. Não é necessário anexar documentos pessoais no primeiro contato."
+          ],
+          [
+            "Vistoria e localização",
+            "Município, acesso, quantidade e finalidade das visitas são combinados. Não se presume que uma avaliação possa ser concluída só por fotografias."
+          ],
+          [
+            "Método e responsabilidade",
+            "Método, responsável habilitado e registros pertinentes são confirmados para o objeto. Esta página não anuncia avaliação rural, em massa ou fora do Brasil."
+          ],
+          [
+            "Investimento e prazo",
+            "Dependem do tipo de imóvel, finalidade, dados e diligências. Não há valor calculado automaticamente nem promessa de aceitação por qualquer terceiro."
+          ]
+        ]
+      },
+      "faq": {
+        "kicker": "Dúvidas de contratação",
+        "title": "Antes de solicitar a proposta",
+        "intro": "Respostas para delimitar a necessidade, sem antecipar uma conclusão sobre um imóvel não examinado.",
+        "items": [
+          [
+            "Posso pedir uma avaliação para inventário ou partilha?",
+            "Informe essa finalidade, o imóvel, a data-base pretendida e o destinatário. O escopo considera os documentos necessários e as exigências pertinentes, sem prometer aprovação por terceiros."
+          ],
+          [
+            "A avaliação pode ser feita sem visita?",
+            "A necessidade de vistoria é examinada conforme finalidade, método, acesso e dados disponíveis. Quando houver restrição, suas consequências precisam estar explícitas; a modalidade não é presumida no primeiro contato."
+          ],
+          [
+            "Quanto custa e qual é o prazo?",
+            "A proposta depende do objeto, dos dados, do método e do trabalho de campo necessário. Envie o tipo de imóvel, município, finalidade e prazo desejado para definirmos o escopo."
+          ],
+          [
+            "O valor de um anúncio basta?",
+            "Um anúncio é uma informação de oferta, não a comprovação de uma transação. Sua utilidade depende da fonte, das características, da data e do tratamento técnico necessário."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "amostra-avaliacao-imoveis-urbanos"
+      ],
+      "section_order": [
+        "deliverables",
+        "technical",
+        "competencies",
+        "engagement"
+      ],
+      "contact": {
+        "title": "Solicite uma proposta para o seu caso.",
+        "intro": "Informe o objeto, a finalidade, o município e o prazo desejado. A conversa inicial identifica o escopo e as informações necessárias, sem exigir o envio imediato de documentos.",
+        "boundary": "Materiais sigilosos são recebidos por canal reservado, após a verificação de conflito e as permissões pertinentes. O tratamento de dados segue a Política de Privacidade.",
+        "prep": [
+          [
+            "Imóvel",
+            "Tipo, município e características gerais, sem dados pessoais no primeiro contato."
+          ],
+          [
+            "Uso",
+            "Finalidade, data-base e destinatário do documento."
+          ],
+          [
+            "Prazo",
+            "Data desejada e condição de acesso para eventual vistoria."
+          ]
+        ]
+      },
+      "sharing": {
+        "title": "Avaliação de imóveis urbanos | CONFENGE",
+        "description": "Conheça o trabalho de avaliação de imóvel urbano para negociação, partilha ou análise patrimonial. Entenda a entrega e solicite proposta conforme a finalidade.",
+        "image": "https://confenge.com.br/assets/og-confenge.jpg"
+      }
+    },
+    {
+      "route": "assistencia-tecnica-pericia-trabalhista",
+      "journey": "pericia",
+      "contact_id": "contato-assistencia-tecnica-pericia-trabalhista",
+      "last_material_change": "2026-10-12",
+      "last_material_change_label": "12 de outubro de 2026",
+      "hero": {
+        "eyebrow": "Engenharia de segurança do trabalho em disputas",
+        "title": "Assistência técnica trabalhista em SST",
+        "lead": "Quando uma reclamação depende de evidências sobre o trabalho e o ambiente, a análise técnica precisa responder à questão do caso. A CONFENGE organiza quesitos, examina a documentação de SST e analisa laudos no escopo contratado.",
+        "value": "A assistência é prestada à parte e dialoga com o trabalho do advogado, sem assumir a representação jurídica ou a função do perito do juízo. Etapa, prazo, documentos e necessidade de diligência orientam a proposta.",
+        "cta": "Conversar sobre a assistência trabalhista",
+        "signal_title": "Comece pela etapa do caso",
+        "signals": [
+          [
+            "Antes da perícia",
+            "Questões técnicas e documentos que precisam ser examinados."
+          ],
+          [
+            "Durante a diligência",
+            "Acompanhamento quando previsto no escopo e compatível com data e local."
+          ],
+          [
+            "Depois do laudo",
+            "Análise fundamentada dos pontos técnicos contratados."
+          ]
+        ]
+      },
+      "description": "Assistência técnica em perícia trabalhista de SST: quesitos, análise documental e crítica de laudo. Informe a etapa e o prazo para definir a proposta.",
+      "deliverables": {
+        "kicker": "Entregas",
+        "title": "Quesitos e análise ligados às evidências do caso.",
+        "intro": "A proposta define um processo ou controvérsia, o ambiente ou função pertinente e o conjunto documental a examinar.",
+        "items": [
+          [
+            "Quesitos e pontos técnicos",
+            "Perguntas relacionadas ao objeto da perícia, às atividades e às informações que precisam ser esclarecidas."
+          ],
+          [
+            "Análise documental de SST",
+            "Exame dos documentos disponíveis, como PGR, LTCAT, PPRA histórico, AET e laudos, conforme sua pertinência ao caso. Analisar esses documentos não significa elaborar novos programas nesta contratação."
+          ],
+          [
+            "Crítica técnica de laudo",
+            "Confronto entre pergunta, elementos examinados, método e conclusão, quando essa atividade integrar o escopo. Divergências precisam de fundamento, não apenas de discordância."
+          ],
+          [
+            "Registro de acompanhamento",
+            "Quando houver diligência contratada, identificação das condições de acesso e dos elementos observados, sem presumir medições próprias não previstas."
+          ]
+        ]
+      },
+      "competencies": {
+        "kicker": "Etapas",
+        "title": "A assistência muda conforme o momento da disputa.",
+        "intro": "Informe a etapa atual e o prazo indicado pelo advogado para que o trabalho possa ser delimitado.",
+        "items": [
+          [
+            "Preparação",
+            "Organizar as perguntas de engenharia e localizar documentos pertinentes ao período e às atividades discutidas."
+          ],
+          [
+            "Diligência",
+            "Verificar data, local, finalidade e condições do acompanhamento antes de confirmá-lo. Campo e logística não são presumidos."
+          ],
+          [
+            "Laudo já apresentado",
+            "Identificar a questão técnica e os documentos utilizados na conclusão. A crítica considera o conjunto recebido, seu método e suas limitações."
+          ],
+          [
+            "Questões fora da engenharia",
+            "Estratégia processual fica com o advogado. Atos médicos e medições que exijam outros profissionais não são anunciados como capacidade interna automática."
+          ]
+        ]
+      },
+      "engagement": {
+        "kicker": "Proposta",
+        "title": "Prazo do caso, conjunto documental e papel técnico definidos.",
+        "intro": "A conversa inicial serve para compreender a necessidade e combinar a verificação de conflito. Não envie o processo completo pelo formulário público.",
+        "items": [
+          [
+            "Primeiro contato",
+            "Etapa, natureza da questão, local e prazo desejado, sem nomes de trabalhadores, prontuários ou peças sensíveis."
+          ],
+          [
+            "Conflito e sigilo",
+            "Identificações necessárias são combinadas por canal reservado antes do recebimento de documentos sensíveis e da proposta."
+          ],
+          [
+            "Objeto e documentos",
+            "Processo ou controvérsia, estabelecimento ou função e documentos pertinentes definem o recorte. Mudança de objeto precisa ser registrada."
+          ],
+          [
+            "Responsável e condições",
+            "Disponibilidade, atribuição, campo, entregas, prazo e investimento são confirmados antes do aceite. Não há promessa de adicional, improcedência ou resultado judicial."
+          ]
+        ]
+      },
+      "faq": {
+        "kicker": "Dúvidas",
+        "title": "Qual assistência corresponde à etapa do caso?",
+        "intro": "O enquadramento comercial não antecipa a conclusão técnica da análise contratada.",
+        "items": [
+          [
+            "Já recebi um laudo. Ainda posso solicitar a análise?",
+            "Informe o assunto técnico e o prazo relevante. Após a verificação de conflito, o recebimento reservado dos documentos permite definir o escopo e a disponibilidade, sem presumir que o prazo será aceito."
+          ],
+          [
+            "A assistência inclui acompanhamento presencial?",
+            "Somente quando a proposta definir diligência, data, local e entrega correspondente. Acompanhamento não significa que todas as medições serão executadas pela CONFENGE."
+          ],
+          [
+            "Esse serviço inclui elaborar PGR ou LTCAT?",
+            "Nesta oferta, esses documentos podem integrar o conjunto a ser analisado. Sua elaboração é uma necessidade distinta, tratada pela oferta documental pertinente quando autorizada."
+          ],
+          [
+            "Posso enviar o processo pelo formulário?",
+            "No primeiro contato, descreva a questão sem informações sensíveis. A verificação de conflito e o canal reservado para receber as peças são combinados em seguida."
+          ]
+        ]
+      },
+      "preserve_sections": [
+        "amostra-assistencia-tecnica-pericia-trabalhista"
+      ],
+      "section_order": [
+        "deliverables",
+        "technical",
+        "competencies",
+        "engagement"
+      ],
+      "contact": {
+        "title": "Solicite uma proposta para o seu caso.",
+        "intro": "Informe o objeto, a finalidade, o município e o prazo desejado. A conversa inicial identifica o escopo e as informações necessárias, sem exigir o envio imediato de documentos.",
+        "boundary": "Materiais sigilosos são recebidos por canal reservado, após a verificação de conflito e as permissões pertinentes. O tratamento de dados segue a Política de Privacidade.",
+        "prep": [
+          [
+            "Etapa",
+            "Preparação, diligência marcada ou laudo apresentado."
+          ],
+          [
+            "Questão",
+            "Tema técnico geral e local, sem informações sensíveis."
+          ],
+          [
+            "Prazo",
+            "Data relevante para verificar disponibilidade e escopo."
+          ]
+        ]
+      },
+      "sharing": {
+        "title": "Assistência técnica trabalhista em SST | CONFENGE",
+        "description": "Assistência técnica em perícia trabalhista de SST: quesitos, análise documental e crítica de laudo. Informe a etapa e o prazo para definir a proposta.",
+        "image": "https://confenge.com.br/assets/og-confenge.jpg"
       }
     }
   ],

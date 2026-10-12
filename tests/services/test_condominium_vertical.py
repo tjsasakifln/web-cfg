@@ -222,4 +222,4 @@ def test_renderer_is_stable_with_the_new_route():
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert result.stdout.strip() == "OK 7"
+    assert result.stdout.strip() == "OK 9"

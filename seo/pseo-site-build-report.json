@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
+  "web_cfg_sha": "73cfd9f9736566148d67417cbfc2e4c198843cc7",
   "manifest_public": ".well-known\\pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "78e4e80386b3fdffbe3fa335f77bc6e882816628562e14d67c399509be12455d",
-  "manifest_hash": "1323ef133014a554f4898b6267944bd2cd885d6ddbb19214a2582b15d1032c6e",
+  "public_artifact_hash": "89171bfdee2f156c6ec8761029013cda6123b590d57d1fc58b8775a704cbfbd9",
+  "manifest_hash": "9449a0eafbb3022d20499c8310599101ce7af4737adf7fab4d344be045c2e3fd",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -34,7 +34,7 @@
   },
   "visible_parity": {
     "ok": true,
-    "page_count": 113,
+    "page_count": 116,
     "defect_count": 0
   },
   "prototype_isolation": {
@@ -52,15 +52,15 @@
   },
   "main_script_fingerprint": {
     "algorithm": "sha256-16",
-    "fingerprint": "0f4ee01a6ba0e86d",
-    "src": "/script.js?v=0f4ee01a6ba0e86d",
-    "files": 245,
-    "references": 245
+    "fingerprint": "1186c153db8e1ddb",
+    "src": "/script.js?v=1186c153db8e1ddb",
+    "files": 248,
+    "references": 248
   },
   "responsive_html": {
-    "files": 249,
+    "files": 252,
     "currency_files": 32,
-    "opaque_token_files": 236,
+    "opaque_token_files": 252,
     "marker_files": 27
   },
   "article_word_counts": {
@@ -69,7 +69,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 610,
+    "file_count": 619,
     "finding_count": 0
   },
   "errors": []

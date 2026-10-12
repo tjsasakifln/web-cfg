@@ -401,6 +401,8 @@
       ['/engenharia-condominios/', 'engenharia-condominios'],
       ['/inspecao-diagnostico-edificacoes/', 'inspecao-diagnostico-edificacoes'],
       ['/assistencia-tecnica-pericial-engenharia/', 'assistencia-tecnica-pericial-engenharia'],
+      ['/avaliacao-imoveis-urbanos/', 'avaliacao-imoveis-urbanos'],
+      ['/assistencia-tecnica-pericia-trabalhista/', 'assistencia-tecnica-pericia-trabalhista'],
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],
       ['/reequilibrio-obras-publicas/', 'reequilibrio'],
       ['/aditivos-obras-publicas/', 'aditivos'],

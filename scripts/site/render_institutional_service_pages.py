@@ -257,11 +257,25 @@ def render_contact(page: dict, document: str) -> str:
     contact = page["contact"]
     contact_id = page["contact_id"]
     channels = channel_block(document, contact_id)
-    channels = re.sub(
-        r'<a\b(?![^>]*\bdata-journey=)',
-        f'<a data-journey="{esc(page["journey"])}"',
-        channels,
-    )
+    # The channel block is carried forward from the previous rendered page so
+    # its telephone/e-mail/WhatsApp destinations stay byte-stable.  Tracking
+    # metadata, however, belongs to the current canonical source.  Normalize
+    # every channel anchor instead of only filling a missing attribute; this
+    # prevents an old page journey from surviving when a route changes owner.
+    canonical_journey = esc(page["journey"])
+
+    def normalize_channel_journey(match: re.Match[str]) -> str:
+        anchor = match.group(0)
+        if re.search(r'\bdata-journey="[^"]*"', anchor):
+            return re.sub(
+                r'\bdata-journey="[^"]*"',
+                f'data-journey="{canonical_journey}"',
+                anchor,
+                count=1,
+            )
+        return anchor.replace("<a", f'<a data-journey="{canonical_journey}"', 1)
+
+    channels = re.sub(r'<a\b[^>]*>', normalize_channel_journey, channels)
     contextual_routes = {
         "inspecao-diagnostico-edificacoes",
         "assistencia-tecnica-pericial-engenharia",
@@ -289,6 +303,13 @@ def render_contact(page: dict, document: str) -> str:
         '<p class="contact-note">Se preferir escrever com calma, '
         f'<a data-cta-id="{esc(page["route"])}-contact-calm" {calm_attr} href="/#contato">preencha a solicitação com este contexto</a>.</p>'
     )
+    revision = ""
+    if page.get("last_material_change"):
+        revision = (
+            '<p class="contact-note">Escopo desta apresentação revisto em '
+            f'<time datetime="{esc(page["last_material_change"])}">'
+            f'{esc(page["last_material_change_label"])}</time>.</p>'
+        )
     boundary = esc(contact["boundary"])
     privacy_label = "Política de Privacidade"
     if privacy_label in contact["boundary"]:
@@ -300,7 +321,7 @@ def render_contact(page: dict, document: str) -> str:
         boundary += f' <a href="/privacidade/">{privacy_label}</a>.'
     return f'''<section aria-labelledby="contact-title" class="sec sec--dark" data-journey="{esc(page['journey'])}" data-section-archetype="cta_formal" id="{esc(contact_id)}">
 <div class="container"><div class="capture-grid">
-<div><span class="t-kicker">Próximo passo</span><h2 class="t-editorial" id="contact-title">{esc(contact['title'])}</h2><p data-form-value>{esc(contact['intro'])}</p><h3>Fale com a CONFENGE</h3>{channels}{calm}</div>
+<div><span class="t-kicker">Próximo passo</span><h2 class="t-editorial" id="contact-title">{esc(contact['title'])}</h2><p data-form-value>{esc(contact['intro'])}</p><h3>Fale com a CONFENGE</h3>{channels}{calm}{revision}</div>
 <aside aria-label="Informações para a proposta"><h3>Informações que ajudam a preparar a proposta</h3><ul>{prep}</ul><p class="contact-note" data-form-boundary>{boundary}</p></aside>
 </div></div>
 </section>'''
@@ -345,6 +366,8 @@ def update_structured_faq(document: str, page: dict) -> str:
         for item in graph:
             if item.get("@type") == "WebPage":
                 item["description"] = page["description"]
+                if page.get("last_material_change"):
+                    item["dateModified"] = page["last_material_change"]
     graph = [item for item in graph if item.get("@type") != "FAQPage"]
     graph.append(
         {
@@ -489,6 +512,13 @@ def render_page(page: dict, document: str) -> str:
     breadcrumb = re.search(r'<nav aria-label="Navegação estrutural"[\s\S]*?</nav>', old_main)
     if not breadcrumb:
         raise ValueError(f"breadcrumb not found: {page['route']}")
+    breadcrumb_html = breadcrumb.group(0)
+    if not re.match(r'<nav\b[^>]*\bclass="[^"]*\bbreadcrumbs\b', breadcrumb_html):
+        breadcrumb_html = breadcrumb_html.replace(
+            '<nav aria-label="Navegação estrutural"',
+            '<nav aria-label="Navegação estrutural" class="breadcrumbs container"',
+            1,
+        )
     technical_sections = [section_by_id(document, item) for item in page["preserve_sections"]]
     if page["route"] in {
         "inspecao-diagnostico-edificacoes",
@@ -525,7 +555,7 @@ def render_page(page: dict, document: str) -> str:
     )
     main_parts = [
             '<main id="conteudo">',
-            breadcrumb.group(0),
+            breadcrumb_html,
             render_hero(page, document),
             route_specific,
             ordered,

@@ -19,6 +19,10 @@ ROUTES = (
     "inspecao-diagnostico-edificacoes",
     "assistencia-tecnica-pericial-engenharia",
 )
+ALL_ROUTES = ROUTES + (
+    "avaliacao-imoveis-urbanos",
+    "assistencia-tecnica-pericia-trabalhista",
+)
 
 
 def cta_href(document: str, cta_id: str) -> str:
@@ -163,6 +167,8 @@ class InstitutionalServicePagesTest(unittest.TestCase):
             "quantitativos-orcamento-obras": "private-engineering-quantities-budget",
             "inspecao-diagnostico-edificacoes": "inspecao-diagnostico-edificacoes",
             "assistencia-tecnica-pericial-engenharia": "assistencia-tecnica-pericial-engenharia",
+            "avaliacao-imoveis-urbanos": "avaliacao-imoveis-urbanos",
+            "assistencia-tecnica-pericia-trabalhista": "assistencia-tecnica-pericia-trabalhista",
         }
         for page in data["pages"]:
             route = page["route"]
@@ -183,6 +189,99 @@ class InstitutionalServicePagesTest(unittest.TestCase):
                 self.assertIn('href="mailto:', document)
                 self.assertIn('href="tel:', document)
                 self.assertIn('href="/triagem-tecnica/">Solicitar proposta', document)
+                self.assertIn(
+                    'aria-label="Navegação estrutural" class="breadcrumbs container"',
+                    document,
+                )
+
+    def test_new_routes_keep_distinct_buyer_journeys(self):
+        source = ROOT / "data" / "services" / "institutional-service-pages.v1.json"
+        data = json.loads(source.read_text(encoding="utf-8"))
+        journeys = {page["route"]: page["journey"] for page in data["pages"]}
+
+        self.assertEqual(journeys["avaliacao-imoveis-urbanos"], "avaliacao")
+        self.assertEqual(journeys["assistencia-tecnica-pericia-trabalhista"], "pericia")
+
+        for page in data["pages"]:
+            route = page["route"]
+            journey = page["journey"]
+            document = (ROOT / route / "index.html").read_text(encoding="utf-8")
+            contact = re.search(
+                rf'<section\b(?=[^>]*\bid="{re.escape(page["contact_id"])}")[^>]*>[\s\S]*?</section>',
+                document,
+            )
+            self.assertIsNotNone(contact, route)
+            channel = re.search(
+                r'<div class="contact-primary">[\s\S]*?</div>',
+                contact.group(0),
+            )
+            self.assertIsNotNone(channel, route)
+            anchors = re.findall(r'<a\b[^>]*>', channel.group(0))
+            self.assertGreaterEqual(len(anchors), 3, route)
+            for anchor in anchors:
+                self.assertEqual(
+                    re.findall(r'\bdata-journey="([^"]*)"', anchor),
+                    [journey],
+                    f"{route}: {anchor}",
+                )
+
+    def test_new_routes_publish_the_source_material_change_date(self):
+        source = ROOT / "data" / "services" / "institutional-service-pages.v1.json"
+        data = json.loads(source.read_text(encoding="utf-8"))
+        pages = {page["route"]: page for page in data["pages"]}
+
+        for route in (
+            "avaliacao-imoveis-urbanos",
+            "assistencia-tecnica-pericia-trabalhista",
+        ):
+            with self.subTest(route=route):
+                self.assertEqual(pages[route]["last_material_change"], "2026-10-12")
+                document = (ROOT / route / "index.html").read_text(encoding="utf-8")
+                self.assertIn(
+                    '<time datetime="2026-10-12">12 de outubro de 2026</time>',
+                    document,
+                )
+                block = re.search(
+                    r'<script type="application/ld\+json">([\s\S]*?)</script>',
+                    document,
+                )
+                self.assertIsNotNone(block)
+                schema = json.loads(html.unescape(block.group(1)))
+                webpage = next(
+                    item for item in schema["@graph"] if item.get("@type") == "WebPage"
+                )
+                self.assertEqual(webpage["dateModified"], "2026-10-12")
+
+    def test_new_routes_keep_demonstrative_scope_and_contracting_boundaries(self):
+        valuation = (ROOT / "avaliacao-imoveis-urbanos" / "index.html").read_text(
+            encoding="utf-8"
+        )
+        labor = (
+            ROOT / "assistencia-tecnica-pericia-trabalhista" / "index.html"
+        ).read_text(encoding="utf-8")
+
+        for phrase in (
+            "Situação inteiramente fictícia",
+            "Não é laudo, avaliação de mercado nem trabalho de cliente",
+            "finalidade",
+            "data-base",
+            "método",
+            "não anuncia avaliação rural, em massa ou fora do Brasil",
+            "Política de Privacidade",
+        ):
+            self.assertIn(phrase, valuation)
+        for phrase in (
+            "Caso inteiramente fictício",
+            "Não há trabalhador, empresa, processo ou laudo real",
+            "verificação de conflito",
+            "sem assumir a representação jurídica ou a função do perito do juízo",
+            "Analisar esses documentos não significa elaborar novos programas",
+            "Esse serviço inclui elaborar PGR ou LTCAT?",
+            "Política de Privacidade",
+        ):
+            self.assertIn(phrase, labor)
+        self.assertNotIn("trabalho entregue a cliente", valuation)
+        self.assertNotIn("resultado de cliente", labor)
 
     def test_routes_use_different_information_orders(self):
         observed = set()
@@ -250,7 +349,7 @@ class InstitutionalServicePagesTest(unittest.TestCase):
     def test_renderer_and_source_are_stable(self):
         source = ROOT / "data" / "services" / "institutional-service-pages.v1.json"
         data = json.loads(source.read_text(encoding="utf-8"))
-        self.assertEqual({page["route"] for page in data["pages"]}, set(ROUTES))
+        self.assertEqual({page["route"] for page in data["pages"]}, set(ALL_ROUTES))
         result = subprocess.run(
             [sys.executable, "-X", "utf8", "scripts/site/render_institutional_service_pages.py"],
             cwd=ROOT,

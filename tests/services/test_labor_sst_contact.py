@@ -20,17 +20,19 @@ def _labor_anchor(document: str) -> str:
     return match.group(0)
 
 
-def test_labor_sst_handoff_uses_shared_form_with_distinct_context() -> None:
-    """A labor case must not fall into the civil-assistance triage branch."""
+def test_labor_sst_handoff_uses_canonical_service_page_with_distinct_context() -> None:
+    """A labor case must reach its service owner, not the civil-assistance branch."""
     for document in (
         SERVICES.read_text(encoding="utf-8"),
         GENERATOR.read_text(encoding="utf-8"),
     ):
         anchor = _labor_anchor(document)
-        assert 'href="/#contato"' in anchor
+        assert 'href="/assistencia-tecnica-pericia-trabalhista/"' in anchor
         assert '/triagem-tecnica/' not in anchor
         for attribute, value in {
             "data-journey": "pericia",
+            "data-route-family": "assistencia-tecnica-pericia-trabalhista",
+            "data-asset-id": "corporate_services_hub_v1",
             "data-tema": "Assistência técnica trabalhista em SST",
             "data-origem": "/servicos/",
             "data-origin-url": "/servicos/",

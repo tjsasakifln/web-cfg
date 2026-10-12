@@ -10,6 +10,8 @@ import {
   SPECIALIZED_QA_CONTEXT,
   SPECIALIZED_QA_CTA_SELECTOR,
   SPECIALIZED_QA_ENTRY_PATH,
+  SPECIALIZED_QA_FORM_CTA_SELECTOR,
+  SPECIALIZED_QA_SERVICE_PATH,
   specializedQaContextSha256,
   specializedQaWireContextSha256,
 } from "./synthetic_contact_journey.mjs";
@@ -168,6 +170,8 @@ function writeBrowserFixture(releaseSha) {
     live_sha: releaseSha,
     entry_path: SPECIALIZED_QA_ENTRY_PATH,
     cta_selector: SPECIALIZED_QA_CTA_SELECTOR,
+    service_path: SPECIALIZED_QA_SERVICE_PATH,
+    form_cta_selector: SPECIALIZED_QA_FORM_CTA_SELECTOR,
     target_path: "/",
     target_hash: "#contato",
     public_query: "",

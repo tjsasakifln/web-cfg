@@ -43,8 +43,8 @@ const SPECIALIZED_QA_CONTEXT = Object.freeze({
   estagio: "perícia, assistência técnica ou avaliação",
   origem: "/servicos/",
   landing_page: "/servicos/",
-  source_origin_asset_id: null,
-  source_origin_route_family: "servicos-corporativos",
+  source_origin_asset_id: "labor_sst_technical_assistance",
+  source_origin_route_family: "assistencia-tecnica-pericia-trabalhista",
   tema: "Assistência técnica trabalhista em SST",
 });
 const DEFAULT_TIMEOUT_MS = 8000;
@@ -563,13 +563,14 @@ function qaTechnicalContextSha256FromSerializedPayload(rawBody) {
     qualifications.set(label, value);
   }
   const expectedQualificationLabels = [
-    "situação", "situação declarada", "família de rota de origem", "tema",
+    "situação", "situação declarada", "ativo de origem", "família de rota de origem", "tema",
   ];
   if (
     qualifications.size !== expectedQualificationLabels.length ||
     expectedQualificationLabels.some((label) => !qualifications.has(label)) ||
     qualifications.get("situação") !== SPECIALIZED_QA_CONTEXT.jornada ||
     qualifications.get("situação declarada") !== SPECIALIZED_QA_CONTEXT.estagio ||
+    qualifications.get("ativo de origem") !== SPECIALIZED_QA_CONTEXT.source_origin_asset_id ||
     qualifications.get("família de rota de origem") !== SPECIALIZED_QA_CONTEXT.source_origin_route_family ||
     qualifications.get("tema") !== SPECIALIZED_QA_CONTEXT.tema
   ) return null;
@@ -580,7 +581,7 @@ function qaTechnicalContextSha256FromSerializedPayload(rawBody) {
     jornada: parsed.journey,
     estagio: qualifications.get("situação declarada"),
     landing_page: SPECIALIZED_QA_CONTEXT.landing_page,
-    source_origin_asset_id: null,
+    source_origin_asset_id: qualifications.get("ativo de origem"),
     source_origin_route_family: qualifications.get("família de rota de origem"),
     tema: qualifications.get("tema"),
   };

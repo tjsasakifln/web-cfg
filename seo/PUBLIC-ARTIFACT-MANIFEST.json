@@ -7,9 +7,11 @@
     "analise-cnpj/",
     "analises-contratos-publicos/",
     "assets/",
+    "assistencia-tecnica-pericia-trabalhista/",
     "assistencia-tecnica-pericial-engenharia/",
     "atrasos-prorrogacao-obras-publicas/",
     "auditoria-orcamento-licitacao/",
+    "avaliacao-imoveis-urbanos/",
     "bid-room-licitacoes-obras/",
     "casos/",
     "comercial/",
@@ -95,7 +97,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 245,
+  "html_route_count": 247,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -105,9 +107,11 @@
     "/analises-contratos-publicos/",
     "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
     "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+    "/assistencia-tecnica-pericia-trabalhista/",
     "/assistencia-tecnica-pericial-engenharia/",
     "/atrasos-prorrogacao-obras-publicas/",
     "/auditoria-orcamento-licitacao/",
+    "/avaliacao-imoveis-urbanos/",
     "/bid-room-licitacoes-obras/",
     "/casos/aditivo-art125-demonstrativo/",
     "/casos/demonstrativo-infraestrutura/",
@@ -343,8 +347,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-10T19:58:35Z",
-  "public_artifact_hash": "862c80919f7af243ce139fefb3ed3b56f3b9878d187bf47da3d5a511482b699f",
+  "generated_at": "2026-10-12T04:45:44Z",
+  "public_artifact_hash": "3da4486d7724c7d2ae72963dac3daa2b6e06e42aea390f7fc2cecb6a24df9a63",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -352,9 +356,11 @@
     "analise-cnpj/",
     "analises-contratos-publicos/",
     "assets/",
+    "assistencia-tecnica-pericia-trabalhista/",
     "assistencia-tecnica-pericial-engenharia/",
     "atrasos-prorrogacao-obras-publicas/",
     "auditoria-orcamento-licitacao/",
+    "avaliacao-imoveis-urbanos/",
     "bid-room-licitacoes-obras/",
     "casos/",
     "comercial/",
@@ -440,14 +446,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 233,
+  "promoted_navigation_files": 235,
   "navigation_audit": {
-    "audited_files": 233,
-    "audited_blocks": 464,
+    "audited_files": 235,
+    "audited_blocks": 468,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 250,
+    "html_scanned": 252,
     "html_rewritten": 184,
     "fields_removed": 780
   }

@@ -35,6 +35,8 @@
     '/parcerias-engenharia/': 'parcerias-engenharia',
     '/inspecao-diagnostico-edificacoes/': 'inspecao-diagnostico-edificacoes',
     '/assistencia-tecnica-pericial-engenharia/': 'assistencia-tecnica-pericial-engenharia',
+    '/avaliacao-imoveis-urbanos/': 'avaliacao-imoveis-urbanos',
+    '/assistencia-tecnica-pericia-trabalhista/': 'assistencia-tecnica-pericia-trabalhista',
     '/engenharia-condominios/': 'engenharia-condominios',
     '/seguranca-trabalho-apoio-tecnico/': 'seguranca-trabalho-apoio-tecnico',
     '/projetos/': 'engineering-projects',

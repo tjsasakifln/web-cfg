@@ -56,6 +56,8 @@ PUBLIC_TOP_DIRS = frozenset(
         "parcerias-engenharia",
         "inspecao-diagnostico-edificacoes",
         "assistencia-tecnica-pericial-engenharia",
+        "avaliacao-imoveis-urbanos",
+        "assistencia-tecnica-pericia-trabalhista",
         "engenharia-condominios",
         "seguranca-trabalho-apoio-tecnico",
         "elaboracao-pgr",
