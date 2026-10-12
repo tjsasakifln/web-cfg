@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "5fe233305d5d035fba429fa4f636fc76e82c3c2e",
-  "recaptured_at": "2026-10-11T07:27:28Z",
-  "recapture_reason": "CONFENGE-R03-20261011: recaptura real apenas do script derivado da correcao autorizada de contexto/primeiro toque, inclusive sem armazenamento. Navegacao e contato revisados em fonte e navegador. Seis pilares, fatos, precos, condicoes, estilos, rastreadores e aprovacoes materiais inalterados; nenhuma nova revisao humana alegada.",
+  "baseline_commit": "61825d5b9defd8407282efee5edbca9e1bbf0676",
+  "recaptured_at": "2026-10-12T04:46:56Z",
+  "recapture_reason": "CONFENGE-BOFU-R04-20261012: recaptura real dos bytes derivados das duas novas apresentações autorizadas, atribuição, bundle e sitemaps. Seis pilares, home, catálogo, matriz, marca, preços, readiness e autorizações materiais permanecem inalterados; revisão autônoma, sem alegar nova revisão humana.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
@@ -20,22 +20,26 @@
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
     "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
-    "script.js": "ed9dcce9652fb47627c182703833c30c9dfe4c562574bfd9f020119a94e2fe17",
+    "script.js": "1186c153db8e1ddb198a1c1c10550f4e3a029264c28a62f98ac1d688f8dfcea3",
     "styles.css": "4e7b2af4d2f1cd4af7ce4298fb7e183e8a6b7fca9e341f7b9694a7b937f7caee",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-    "sitemap.xml": "88b9950f6b894c11e0746bfc08ec881120a40561af48f69008c0ca96fd89648c",
-    "sitemap.txt": "2ce78c4cd449762f9f9970478858bf9109b050b730959ddd806f65053a49e213",
-    "sitemap-index.xml": "1c195281e5a634548a1dca6439f7a0882a34ca731e245465e9290eb15d598e6d",
+    "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
+    "sitemap.txt": "6ef280f73aea58d36cb7f295c22821713ae3c53f1ba8186bada94fb0882c821a",
+    "sitemap-index.xml": "c887c337958bc075a667da12fee00486a87c9be02aacba31ffa6dcea36488849",
     "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "5f9cdc3d32545b0e6d9f15656fbd6bb6c557e49a61beb10d95427275958bfa64"
+    "js/modules/analytics.js": "a6cafe98e67c270c42f19a79b9ba850456fe212bfc64e5b79e8a5ddfc270b997"
   },
   "recapture_diff_lines_vs_origin_main": [
-    "script.js"
+    "script.js",
+    "sitemap.xml",
+    "sitemap.txt",
+    "sitemap-index.xml",
+    "js/modules/analytics.js"
   ],
-  "previous_baseline_commit": "490086b85aa3cd141b779b9099f0b58ba424830c",
+  "previous_baseline_commit": "5fe233305d5d035fba429fa4f636fc76e82c3c2e",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -340,6 +344,40 @@
         "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
         "js/modules/analytics.js": "5f9cdc3d32545b0e6d9f15656fbd6bb6c557e49a61beb10d95427275958bfa64"
+      },
+      "html_mutation": true
+    },
+    {
+      "baseline_commit": "5fe233305d5d035fba429fa4f636fc76e82c3c2e",
+      "previous_baseline_commit": "490086b85aa3cd141b779b9099f0b58ba424830c",
+      "recaptured_at": "2026-10-11T07:27:28Z",
+      "recapture_reason": "CONFENGE-R03-20261011: recaptura real apenas do script derivado da correcao autorizada de contexto/primeiro toque, inclusive sem armazenamento. Navegacao e contato revisados em fonte e navegador. Seis pilares, fatos, precos, condicoes, estilos, rastreadores e aprovacoes materiais inalterados; nenhuma nova revisao humana alegada.",
+      "pillars": {
+        "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
+        "script.js": "1186c153db8e1ddb198a1c1c10550f4e3a029264c28a62f98ac1d688f8dfcea3",
+        "styles.css": "4e7b2af4d2f1cd4af7ce4298fb7e183e8a6b7fca9e341f7b9694a7b937f7caee",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
+        "sitemap.txt": "6ef280f73aea58d36cb7f295c22821713ae3c53f1ba8186bada94fb0882c821a",
+        "sitemap-index.xml": "c887c337958bc075a667da12fee00486a87c9be02aacba31ffa6dcea36488849",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "a6cafe98e67c270c42f19a79b9ba850456fe212bfc64e5b79e8a5ddfc270b997"
       },
       "html_mutation": true
     }
