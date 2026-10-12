@@ -486,7 +486,6 @@ console.log(JSON.stringify({
     persisted_synthetic: Number.isFinite(afterSynthetic - beforeSynthetic) ? afterSynthetic - beforeSynthetic : null,
     excluded_non_real: Number.isFinite(afterExcluded - beforeExcluded) ? afterExcluded - beforeExcluded : null,
   },
-  commercial_metrics: { before: beforeCommercial.snapshot, after: afterCommercial.snapshot, after_errors: afterCommercial.errors, counters_before: { synthetic: beforeCounters.synthetic, excluded: beforeCounters.excluded }, counters_after: { synthetic: afterCounters.synthetic, excluded: afterCounters.excluded, errors: afterCounters.errors } },
   checks,
   ts: new Date().toISOString(),
 }));

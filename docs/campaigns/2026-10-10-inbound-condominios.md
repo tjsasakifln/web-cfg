@@ -270,6 +270,8 @@ As fontes canônicas são `data/services/institutional-service-pages.v1.json`, `
 
 O percurso controlado de contato representa a nova necessidade: `/servicos/` → `/assistencia-tecnica-pericia-trabalhista/` → formulário da inicial. A captura somente leitura exige rota, CTA, jornada, família, ativo e assunto literais, bloqueia mutações antes da rede e inclui a página específica no artefato testado. A prova sintética posterior permanece opt-in, presa ao SHA servido, persistida antes do handoff e excluída de métricas comerciais. Nenhum dado pessoal é colocado na URL e o contrato Warmbly mantém o mesmo schema; a qualificação técnica agora prova também o ativo e a família da página trabalhista.
 
+O relatório público da QA não exporta snapshots comerciais, valores de pipeline ou receita, nem contagens cumulativas. A comparação antes/depois continua real e restrita à memória do teste; o relatório conserva os checks de validade, igualdade e persistência única, os hashes técnicos e os deltas da própria QA. Contraprovas mantêm a rejeição de baseline inválida e de alteração comercial posterior.
+
 Home `index.html`, catálogo, matriz de intenção e marca são bytes protegidos. R03 e o catálogo B2G 54/54 permanecem. Não houve alteração de readiness, wave, autorização, preço, checkout, infraestrutura, credenciais ou permissões.
 
 ### Busca, perfil e observação

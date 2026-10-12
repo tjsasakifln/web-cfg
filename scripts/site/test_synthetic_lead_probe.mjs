@@ -174,6 +174,12 @@ try {
   assert.equal(typeof proof.receipt_sha256, "string");
   assert.equal(proof.receipt_sha256.length, 64);
   assert.equal(result.stdout.includes(receiptId), false, "raw receipt must not be emitted");
+  for (const privateField of ["commercial_metrics", "pipeline_value", "revenue", "counters_before", "counters_after"]) {
+    assert.equal(Object.hasOwn(proof, privateField), false, `${privateField} must not be exported`);
+    assert.equal(result.stdout.includes(`\"${privateField}\"`), false, `${privateField} must not appear in stdout`);
+  }
+  assert.equal(result.stdout.includes("\"before\"") , false, "raw before snapshot must not be exported");
+  assert.equal(result.stdout.includes("\"after\"") , false, "raw after snapshot must not be exported");
   assert.equal(Object.values(proof.checks).every(Boolean), true);
 
   created = false;
