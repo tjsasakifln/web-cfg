@@ -304,6 +304,16 @@
         "reason": "single-route technical assistance and expert-witness landing"
       },
       {
+        "family_id": "avaliacao-imoveis-urbanos",
+        "route": "/avaliacao-imoveis-urbanos/",
+        "reason": "single-route urban property valuation landing"
+      },
+      {
+        "family_id": "assistencia-tecnica-pericia-trabalhista",
+        "route": "/assistencia-tecnica-pericia-trabalhista/",
+        "reason": "single-route labor dispute technical assistance landing"
+      },
+      {
         "family_id": "seguranca-trabalho-apoio-tecnico",
         "route": "/seguranca-trabalho-apoio-tecnico/",
         "reason": "single-route occupational-safety technical-support landing"
