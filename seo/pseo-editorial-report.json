@@ -52,7 +52,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago-sasaki-editorial-audit",
-      "page_material_hash": "d40cd67a939d9063dca65e38c5a1956595caebc9d3c3b8dbf4c4ccc9d72766cd"
+      "page_material_hash": "b296bc3e4c798f13863deaabe0e090fb390941938c7af5b01144ac4161afb53f"
     },
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
@@ -90,7 +90,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "a1b83dad4b09d2224634012cebbe0656e647e8c44f79c763efeaee363f5089c0"
+      "page_material_hash": "71d8c36d51b82f452a5bbd41dbcde402fe279fe9d6f83c90d99fe3dc81a3f574"
     },
     {
       "page_id": "market-edificacoes-publicas-mg",
@@ -128,7 +128,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago",
-      "page_material_hash": "cb22db149447e316a40c4042cde24f717744b7deb0e383e10934f4cf129c14d1"
+      "page_material_hash": "9db33d569c58c997314f16d6f0a12fd0ed94dd78b96eb62e946fa7a75c893f95"
     },
     {
       "page_id": "market-edificacoes-publicas-rs",
@@ -166,7 +166,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "e6f57fe80e18fbbde630918d1ff92310e56178ff46ef7aa0e43642b500c14045"
+      "page_material_hash": "31045f87b363e135496c5188595b677ffee452af94d14d16579ded4ece0e1016"
     },
     {
       "page_id": "agency-88830609",

@@ -2,7 +2,7 @@
   "schema_version": "confenge-purchase-route-map/v1",
   "contract": "CONFENGE_PURCHASE_ROUTE_MAP/1.0.0",
   "intent_contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
-  "as_of": "2026-09-11",
+  "as_of": "2026-10-12",
   "public_surface": "https://confenge.com.br",
   "authority": {
     "intent_universe": "data/corporate/intent-family-matrix.v1.json#intent_families",
@@ -38,7 +38,8 @@
   "cannibalization_rule": "Duas URLs comerciais da mesma compra sem diferenciação de função geram finding com as duas URLs e o conflito. Semelhança lexical ou família compartilhada, isoladamente, é aviso.",
   "publication_cohorts": {
     "existing-pre-inb-20260911": "Páginas já publicadas; histórico preservado.",
-    "inb-20260911-new": "Páginas novas desta campanha, sem apagar o histórico existente."
+    "inb-20260911-new": "Páginas novas desta campanha, sem apagar o histórico existente.",
+    "confenge-r04-20261012": "Apresentações específicas R04 que preservam os hubs anteriores como caminhos de descoberta."
   },
   "gsc_sample_bound": {
     "property": "sc-domain:confenge.com.br",
@@ -704,7 +705,7 @@
       "contact_mode": "capture_form_or_whatsapp"
     },
     {
-      "canonical": "https://confenge.com.br/servicos/",
+      "canonical": "https://confenge.com.br/avaliacao-imoveis-urbanos/",
       "b2g_protected": false,
       "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": null,
@@ -717,7 +718,7 @@
         "/servicos/#servico-avaliacao",
         "/triagem-tecnica/#avaliacao-imovel"
       ],
-      "current_surface_kind": "hub",
+      "current_surface_kind": "serviço",
       "bofu_family_id": null,
       "reindex_proposal": null,
       "serp_sample": null,
@@ -736,24 +737,24 @@
       "page_kind": "serviço",
       "question_answered": "Qual valor, para qual finalidade e em qual data, com método declarado?",
       "business_context": "private",
-      "primary_url": "/servicos/#servico-avaliacao",
-      "proposed_primary_url": "/servicos/#servico-avaliacao",
-      "source_of_truth": "/servicos/#servico-avaliacao",
+      "primary_url": "/avaliacao-imoveis-urbanos/",
+      "proposed_primary_url": "/avaliacao-imoveis-urbanos/",
+      "source_of_truth": "/avaliacao-imoveis-urbanos/",
       "requested_alias": null,
       "supporting_urls": [
         "/servicos/"
       ],
-      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "required_proof": "A apresentação específica R04 explica finalidade, data-base, método, produto e condições, com amostra inteiramente fictícia. /servicos/#servico-avaliacao permanece como caminho de descoberta.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
-        "destination": "/triagem-tecnica/#avaliacao-imovel"
+        "destination": "/avaliacao-imoveis-urbanos/#contato-avaliacao-imoveis-urbanos"
       },
       "decision": "ENRICH",
       "function_differentiation": "Avaliação formal de imóvel urbano, não assistência de disputa nem parecer preliminar isolado.",
       "requested_indexability": "index,follow",
       "release_unit": "CORE",
       "publication_cohort": {
-        "id": "existing-pre-inb-20260911",
+        "id": "confenge-r04-20261012",
         "history_preserved": true
       },
       "contact_mode": "capture_form_or_whatsapp"
@@ -769,7 +770,7 @@
       ],
       "commercial_surfaces": [],
       "support_destinations": [],
-      "current_surface_kind": "hub",
+      "current_surface_kind": "serviço",
       "bofu_family_id": null,
       "reindex_proposal": null,
       "serp_sample": null,
@@ -811,7 +812,7 @@
       "contact_mode": "capture_form_or_whatsapp"
     },
     {
-      "canonical": "https://confenge.com.br/servicos/",
+      "canonical": "https://confenge.com.br/assistencia-tecnica-pericia-trabalhista/",
       "b2g_protected": false,
       "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": null,
@@ -821,7 +822,7 @@
       ],
       "commercial_surfaces": [],
       "support_destinations": [],
-      "current_surface_kind": "hub",
+      "current_surface_kind": "serviço",
       "bofu_family_id": null,
       "reindex_proposal": null,
       "serp_sample": null,
@@ -840,24 +841,24 @@
       "page_kind": "serviço",
       "question_answered": "Qual suporte técnico de SST cabe nesta reclamação, após checagem de conflito?",
       "business_context": "mixed",
-      "primary_url": "/servicos/#servico-sst",
-      "proposed_primary_url": "/servicos/#servico-sst",
-      "source_of_truth": "/servicos/#servico-sst",
+      "primary_url": "/assistencia-tecnica-pericia-trabalhista/",
+      "proposed_primary_url": "/assistencia-tecnica-pericia-trabalhista/",
+      "source_of_truth": "/assistencia-tecnica-pericia-trabalhista/",
       "requested_alias": null,
       "supporting_urls": [
         "/servicos/"
       ],
-      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "required_proof": "A apresentação específica R04 distingue assistência trabalhista de documentação preventiva, exige checagem de conflito e mantém o exemplo inteiramente fictício. /servicos/#servico-sst permanece como caminho de descoberta.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
-        "destination": "/triagem-tecnica/#sst"
+        "destination": "/assistencia-tecnica-pericia-trabalhista/#contato-assistencia-tecnica-pericia-trabalhista"
       },
       "decision": "ENRICH",
       "function_differentiation": "Assistência técnica de SST em disputa trabalhista, não PGR/LTCAT preventivo.",
       "requested_indexability": "index,follow",
       "release_unit": "CORE",
       "publication_cohort": {
-        "id": "existing-pre-inb-20260911",
+        "id": "confenge-r04-20261012",
         "history_preserved": true
       },
       "contact_mode": "capture_form_or_whatsapp"

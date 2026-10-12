@@ -1,15 +1,17 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 114,
-  "unique_paths": 114,
+  "url_count": 116,
+  "unique_paths": 116,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
     "https://confenge.com.br/aditivos-obras-publicas/",
+    "https://confenge.com.br/assistencia-tecnica-pericia-trabalhista/",
     "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
     "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
     "https://confenge.com.br/auditoria-orcamento-licitacao/",
+    "https://confenge.com.br/avaliacao-imoveis-urbanos/",
     "https://confenge.com.br/bid-room-licitacoes-obras/",
     "https://confenge.com.br/casos/",
     "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
@@ -120,7 +122,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
-    "core": 108,
+    "core": 110,
     "contract_analysis": 2,
     "editorial": 4
   },

@@ -24,8 +24,8 @@ const SPECIALIZED_CONTEXT = Object.freeze({
   estagio: "perícia, assistência técnica ou avaliação",
   origem: "/servicos/",
   landing_page: "/servicos/",
-  source_origin_asset_id: null,
-  source_origin_route_family: "servicos-corporativos",
+  source_origin_asset_id: "labor_sst_technical_assistance",
+  source_origin_route_family: "assistencia-tecnica-pericia-trabalhista",
   tema: "Assistência técnica trabalhista em SST",
 });
 const CONTEXT_RECORD = {
@@ -269,7 +269,8 @@ const env = {
       asset_id: "home-institutional",
       cta_id: "home-proposal-submit",
       route_family: "home",
-      source_origin_route_family: "servicos-corporativos",
+      source_origin_asset_id: "labor_sst_technical_assistance",
+      source_origin_route_family: "assistencia-tecnica-pericia-trabalhista",
       tema: "Assistência técnica trabalhista em SST",
       utm_source: "synthetic",
       utm_medium: "probe",

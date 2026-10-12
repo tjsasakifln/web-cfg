@@ -23,6 +23,16 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "purchase_id": "compatibilizacao-projetos"
     },
+    "urban_property_valuation": {
+      "path": "/avaliacao-imoveis-urbanos/",
+      "intent_family": "avaliar_imovel",
+      "purchase_id": "avaliar-imovel"
+    },
+    "labor_sst_technical_assistance": {
+      "path": "/assistencia-tecnica-pericia-trabalhista/",
+      "intent_family": "assistencia_trabalhista_sst",
+      "purchase_id": "assistencia-trabalhista-sst"
+    },
     "sst_risk_documentation_diagnosis": {
       "path": "/seguranca-trabalho-apoio-tecnico/",
       "intent_family": "organizar_sst",
@@ -79,6 +89,16 @@
       "path": "/casos/",
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": null
+    },
+    "avaliar-imovel": {
+      "path": "/avaliacao-imoveis-urbanos/",
+      "intent_family": "avaliar_imovel",
+      "offer_id": "urban_property_valuation"
+    },
+    "assistencia-trabalhista-sst": {
+      "path": "/assistencia-tecnica-pericia-trabalhista/",
+      "intent_family": "assistencia_trabalhista_sst",
+      "offer_id": "labor_sst_technical_assistance"
     },
     "organizar-sst": {
       "path": "/seguranca-trabalho-apoio-tecnico/",

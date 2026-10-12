@@ -247,6 +247,26 @@ async function postCollect(events) {
 // --- Named HTML journeys ---
 const journeys = [
   {
+    name: "servicos_avaliacao_urbana",
+    html: "servicos/index.html",
+    pathname: "/servicos/",
+    pick: (a) => a.href === "/avaliacao-imoveis-urbanos/" && a["data-hub-link"] === "servicos-avaliacao",
+    expectDest: "/avaliacao-imoveis-urbanos/",
+    expectService: "avaliacao-imoveis-urbanos",
+    expectAsset: "corporate_services_hub_v1",
+    expectFamily: "hub",
+  },
+  {
+    name: "servicos_assistencia_trabalhista_sst",
+    html: "servicos/index.html",
+    pathname: "/servicos/",
+    pick: (a) => a.href === "/assistencia-tecnica-pericia-trabalhista/" && a["data-hub-link"] === "servicos-sst-labor-assistance",
+    expectDest: "/assistencia-tecnica-pericia-trabalhista/",
+    expectService: "assistencia-tecnica-pericia-trabalhista",
+    expectAsset: "corporate_services_hub_v1",
+    expectFamily: "hub",
+  },
+  {
     name: "condominio_inspecao",
     html: "engenharia-condominios/index.html",
     pathname: "/engenharia-condominios/",

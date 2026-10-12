@@ -1,20 +1,22 @@
 # Visible parity
 
 - ok: `True`
-- pages: `113`
+- pages: `116`
 - defects: `0`
 - site_root: `_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
-| https://confenge.com.br/ | True | — | Organization,Person | Engenharia de projeto para decisões que precisam chegar à obra. |
+| https://confenge.com.br/ | True | — | Organization,Person | Engenharia para transformar uma necessidade em entrega técnica. |
 | https://confenge.com.br/acompanhamento-contratos-obras/ | True | — | Organization,Person,BreadcrumbList | Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente |
 | https://confenge.com.br/aditivos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
 | https://confenge.com.br/analises-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Análises técnicas de contratos públicos |
 | https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/ | True | — | Organization,Person,BreadcrumbList,Article; Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo |
+| https://confenge.com.br/assistencia-tecnica-pericia-trabalhista/ | True | — | BreadcrumbList | Assistência técnica trabalhista em SST |
 | https://confenge.com.br/assistencia-tecnica-pericial-engenharia/ | True | — | BreadcrumbList | Assistência técnica de engenharia em disputas |
 | https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo |
 | https://confenge.com.br/auditoria-orcamento-licitacao/ | True | — | Organization,Person,BreadcrumbList | Auditoria de orçamento, BDI, SINAPI e preço |
+| https://confenge.com.br/avaliacao-imoveis-urbanos/ | True | — | BreadcrumbList | Avaliação de imóveis urbanos |
 | https://confenge.com.br/bid-room-licitacoes-obras/ | True | — | Organization,BreadcrumbList,Person | Operação de Proposta para Licitação Crítica |
 | https://confenge.com.br/casos/ | True | — | Organization,Person,BreadcrumbList | Exemplos de entrega (demonstrativos) |
 | https://confenge.com.br/casos/aditivo-art125-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar |
@@ -31,7 +33,7 @@
 | https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/ | True | — | Organization,Person,BreadcrumbList | Modelo sintético: licitações a disputar ou recusar. |
 | https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade: leads e contratação |
 | https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos para pessoa jurídica: Diagnóstico de Expansão no Mercado Público |
-| https://confenge.com.br/como-trabalhamos/ | True | — | BreadcrumbList | Cada projeto pede um percurso próprio, com decisões e entregas reconhecíveis. |
+| https://confenge.com.br/como-trabalhamos/ | True | — | BreadcrumbList | Cada necessidade técnica pede um percurso próprio, com decisões e entregas reconhecíveis. |
 | https://confenge.com.br/compatibilizacao-projetos-engenharia/ | True | — | BreadcrumbList | Compatibilização de projetos de engenharia |
 | https://confenge.com.br/confianca/ | True | — | Organization,Person,BreadcrumbList | Informações institucionais |
 | https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE protege a independência técnica |
@@ -74,7 +76,8 @@
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
 | https://confenge.com.br/edificacoes/ | True | — | BreadcrumbList | Edificações projetadas como sistemas que precisam caber, operar e ser construídos. |
 | https://confenge.com.br/elaboracao-pgr/ | True | — | BreadcrumbList | Seu PGR pronto, sem colocar o RH para coordenar a elaboração |
-| https://confenge.com.br/empresa/ | True | — | BreadcrumbList | Engenharia organizada para transformar necessidades em projetos e decisões técnicas. |
+| https://confenge.com.br/empresa/ | True | — | BreadcrumbList | Engenharia organizada para transformar necessidades em decisões técnicas. |
+| https://confenge.com.br/engenharia-condominios/ | True | — | BreadcrumbList | Engenharia para condomínios: do problema à proposta técnica. |
 | https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Entregas de engenharia. Veja o conteúdo e para que ele serve. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Tiago Jun Sasaki |
 | https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | Ferramentas de decisão para contratos, obras públicas e obras privadas |

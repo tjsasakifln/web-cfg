@@ -122,7 +122,9 @@
     "/revisao-atualizacao-pgr/": "Revisão e atualização de PGR",
     "/pgr-documentacao-sst-obras/": "PGR e documentação de SST para obras",
     "/terceirizacao-documentacao-sst/": "Terceirização documental de SST",
-    "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada"
+    "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada",
+    "/avaliacao-imoveis-urbanos/": "Avaliação de imóveis urbanos",
+    "/assistencia-tecnica-pericia-trabalhista/": "Assistência técnica trabalhista em SST"
   },
   "quality_baseline": {
     "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
@@ -757,6 +759,16 @@
       "prefix": "/terceirizacao-documentacao-sst/",
       "parent": "/seguranca-trabalho-apoio-tecnico/",
       "exact": true
+    },
+    {
+      "prefix": "/avaliacao-imoveis-urbanos/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/assistencia-tecnica-pericia-trabalhista/",
+      "parent": "/servicos/",
+      "exact": true
     }
   ],
   "active_header": [
@@ -802,6 +814,14 @@
     },
     {
       "prefix": "/servicos/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/avaliacao-imoveis-urbanos/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/assistencia-tecnica-pericia-trabalhista/",
       "href": "/servicos/"
     },
     {

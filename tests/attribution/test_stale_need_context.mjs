@@ -19,11 +19,14 @@ const laborTheme = "Assistência técnica trabalhista em SST";
 const automaticMessage = (theme) => `Demanda relacionada a: ${theme}.\n\nContexto:\n`;
 const servicesHtml = fs.readFileSync(path.join(root, "servicos/index.html"), "utf8");
 const laborCtaTag = servicesHtml.match(/<a\b(?=[^>]*data-hub-link="servicos-sst-labor-assistance")[^>]*>/i)?.[0] || "";
+const laborHtml = fs.readFileSync(path.join(root, "assistencia-tecnica-pericia-trabalhista/index.html"), "utf8");
+const laborFormCtaTag = laborHtml.match(/<a\b(?=[^>]*data-cta-id="assistencia-tecnica-pericia-trabalhista-contact-calm")[^>]*>/i)?.[0] || "";
 const sstLandingTag = servicesHtml.match(/<a\b(?=[^>]*data-hub-link="servicos-sst-landing")[^>]*>/i)?.[0] || "";
 const sstHtml = fs.readFileSync(path.join(root, "seguranca-trabalho-apoio-tecnico/index.html"), "utf8");
 const sstUnsureTag = sstHtml.match(/<a\b(?=[^>]*data-tema="Não sei exatamente qual documento de SST preciso")[^>]*>/i)?.[0] || "";
 const attrsOf = (tag) => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const laborCtaAttrs = attrsOf(laborCtaTag);
+const laborFormCtaAttrs = attrsOf(laborFormCtaTag);
 const sstLandingAttrs = attrsOf(sstLandingTag);
 const sstUnsureAttrs = attrsOf(sstUnsureTag);
 const clickDataset = (attrs) => ({
@@ -53,6 +56,9 @@ function boot({ search = "", stored = {}, storageDenied = false, stageValue = "p
     tema: makeField("tema"),
     origem: makeField("origem", "/"),
     landing_page: makeField("landing_page"),
+    asset_id: makeField("asset_id", "home-institutional"),
+    cta_id: makeField("cta_id", "home-proposal-submit"),
+    route_family: makeField("route_family", "home"),
     utm_source: makeField("utm_source"),
     utm_medium: makeField("utm_medium"),
     utm_campaign: makeField("utm_campaign"),
@@ -203,32 +209,57 @@ const firstTouch = JSON.stringify({
 }
 
 {
-  // /servicos/ has no capture form. With storage denied, its canonical CTA
-  // must still carry its approved public context to /#contato without a URL.
+  // Direct entry identifies the dedicated owner even without CTA metadata.
+  const directLabor = boot({
+    pathname: "/assistencia-tecnica-pericia-trabalhista/", hasForm: false,
+    referrer: "https://www.google.com/",
+  });
+  assert.equal(
+    JSON.parse(directLabor.store.confenge_pseo_attribution).route_family,
+    "assistencia-tecnica-pericia-trabalhista",
+  );
+  const directValuation = boot({
+    pathname: "/avaliacao-imoveis-urbanos/", hasForm: false,
+    referrer: "https://www.google.com/",
+  });
+  assert.equal(
+    JSON.parse(directValuation.store.confenge_pseo_attribution).route_family,
+    "avaliacao-imoveis-urbanos",
+  );
+
+  // /servicos/ → dedicated labor page → home form. With storage denied,
+  // both same-origin hops carry only approved public context and keep the
+  // first landing while the dedicated page becomes the service provenance.
   const source = boot({ pathname: "/servicos/", hasForm: false, storageDenied: true });
-  assert.equal(laborCtaAttrs.href, "/#contato");
-  source.click({
-    journey: laborCtaAttrs["data-journey"],
-    routeFamily: laborCtaAttrs["data-route-family"],
-    tema: laborCtaAttrs["data-tema"],
-    origem: laborCtaAttrs["data-origem"],
-    originUrl: laborCtaAttrs["data-origin-url"],
-  }, laborCtaAttrs.href);
+  assert.equal(laborCtaAttrs.href, "/assistencia-tecnica-pericia-trabalhista/");
+  assert.equal(laborFormCtaAttrs.href, "/#contato");
+  source.click(clickDataset(laborCtaAttrs), laborCtaAttrs.href);
   assert.match(source.window.name, /^confenge:public-context:/);
   assert.equal(source.window.location.search, "");
   const carried = JSON.parse(source.window.name.slice("confenge:public-context:".length));
-  assert.deepEqual(Object.keys(carried.context).sort(), ["jornada", "landing_url", "origem", "route_family", "tema"]);
+  assert.deepEqual(Object.keys(carried.context).sort(), ["asset_id", "jornada", "landing_url", "origem", "route_family", "tema"]);
   assert.equal(carried.source_origin, "https://confenge.com.br");
   assert.equal(carried.context.referrer, undefined);
   assert.equal(carried.context.utm_source, undefined);
 
-  const destination = boot({ pathname: "/", storageDenied: true, windowName: source.window.name });
+  const laborPage = boot({
+    pathname: "/assistencia-tecnica-pericia-trabalhista/", hasForm: false,
+    storageDenied: true, referrer: "https://confenge.com.br/servicos/",
+    windowName: source.window.name,
+  });
+  laborPage.click(clickDataset(laborFormCtaAttrs), laborFormCtaAttrs.href);
+  const destination = boot({
+    pathname: "/", storageDenied: true,
+    referrer: "https://confenge.com.br/assistencia-tecnica-pericia-trabalhista/",
+    windowName: laborPage.window.name,
+  });
   assert.equal(destination.fields.jornada.value, "pericia");
   assert.equal(destination.fields.tema.value, laborTheme);
   assert.equal(destination.fields.origem.value, "/servicos/");
   assert.equal(destination.fields.landing_url.value, "/servicos/");
   assert.equal(destination.fields.landing_page.value, "/servicos/");
-  assert.equal(destination.fields.route_family.value, "servicos-corporativos");
+  assert.equal(destination.fields.source_origin_asset_id.value, "labor_sst_technical_assistance");
+  assert.equal(destination.fields.source_origin_route_family.value, "assistencia-tecnica-pericia-trabalhista");
   assert.equal(destination.message.value, automaticMessage(laborTheme));
   assert.equal(destination.window.name, "");
 

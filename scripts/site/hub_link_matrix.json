@@ -205,17 +205,32 @@
       "release_unit": "CORE"
     },
     {
+      "id": "servicos-sst-labor-assistance",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/assistencia-tecnica-pericia-trabalhista/",
+      "marker": "servicos-sst-labor-assistance",
+      "label": "Assistência técnica trabalhista em SST",
+      "intent_family": "assistencia_trabalhista_sst",
+      "offer_id": "labor_sst_technical_assistance",
+      "provider_campaign": "R04",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE",
+      "purchase_id": "assistencia-trabalhista-sst"
+    },
+    {
       "id": "servicos-avaliacao",
       "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
-      "href": "/servicos/#servico-avaliacao",
+      "href": "/avaliacao-imoveis-urbanos/",
       "marker": "servicos-avaliacao",
       "label": "Avaliação de imóvel",
-      "intent_family": "produzir_prova_tecnica",
-      "offer_id": null,
-      "provider_campaign": "07",
+      "intent_family": "avaliar_imovel",
+      "offer_id": "urban_property_valuation",
+      "provider_campaign": "R04",
       "satisfaction": "ALREADY_SATISFIED",
-      "release_unit": "CORE"
+      "release_unit": "CORE",
+      "purchase_id": "avaliar-imovel"
     },
     {
       "id": "conteudos-orcamento",
@@ -577,8 +592,14 @@
     {
       "id": "servico-avaliacao",
       "start": "/servicos/",
-      "goal": "/servicos/#servico-avaliacao",
-      "max_hops": 0
+      "goal": "/avaliacao-imoveis-urbanos/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-assistencia-trabalhista-sst",
+      "start": "/servicos/",
+      "goal": "/assistencia-tecnica-pericia-trabalhista/",
+      "max_hops": 1
     },
     {
       "id": "conteudo-revisao",

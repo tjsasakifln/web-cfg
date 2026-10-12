@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-10-10",
+  "as_of": "2026-10-12",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -1202,24 +1202,45 @@
       "visitor_job": "Reconhecer a situação técnica do condomínio, entender como inspeção, assistência em disputa ou documentação de recebimento e reforma se combinam na proposta e solicitar contato contextualizado.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/engenharia-condominios/"]},
+      "match": {
+        "routes": [
+          "/engenharia-condominios/"
+        ]
+      },
       "editorial_entry": true,
-      "intent_families": ["inspecionar_diagnosticar", "produzir_prova_tecnica", "receber_entregar_reformar"],
-      "canonical_service_families": ["building_condition_documentation", "technical_evidence_disputes"],
+      "intent_families": [
+        "inspecionar_diagnosticar",
+        "produzir_prova_tecnica",
+        "receber_entregar_reformar"
+      ],
+      "canonical_service_families": [
+        "building_condition_documentation",
+        "technical_evidence_disputes"
+      ],
       "value_first_header_cta": {
         "mode": "local_fragment_before_contact",
         "label": "Solicitar proposta para o condomínio",
         "href": "#contato-condominios"
       },
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-10-10",
       "owner_issue": 577,
       "debt": [],
       "index_evidence": {
         "substrate": "first_party_publication",
-        "not_applicable": ["official_live", "citable_source"],
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
         "reason": "Entrada editorial de primeira parte que organiza situações existentes de contratação da CONFENGE. Não cria núcleo, oferta, nova competência ou registro externo.",
-        "authority": ["docs/campaigns/2026-10-10-inbound-condominios.md", "data/corporate/intent-family-matrix.v1.json"],
+        "authority": [
+          "docs/campaigns/2026-10-10-inbound-condominios.md",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
         "declared_at": "2026-10-10",
         "owner_issue": 577
       }
@@ -1601,6 +1622,84 @@
           "data/corporate/intent-family-matrix.v1.json"
         ],
         "declared_at": "2026-10-02",
+        "owner_issue": 611
+      }
+    },
+    {
+      "id": "avaliacao-imoveis-urbanos",
+      "visitor_job": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/avaliacao-imoveis-urbanos/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre a avaliação",
+        "href": "#contato-avaliacao-imoveis-urbanos"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-10-12",
+      "owner_issue": 611,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial da própria CONFENGE, não um registro externo. Permanecem aplicáveis os controles de veracidade, atribuição, privacidade, qualidade e conversão; esta declaração não comprova aprovação.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/corporate/commercial-constitution.v1.json"
+        ],
+        "declared_at": "2026-10-12",
+        "owner_issue": 611
+      }
+    },
+    {
+      "id": "assistencia-tecnica-pericia-trabalhista",
+      "visitor_job": "Quando uma reclamação depende de evidências sobre o trabalho e o ambiente, a análise técnica precisa responder à questão do caso. A CONFENGE organiza quesitos, examina a documentação de SST e analisa laudos no escopo contratado.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/assistencia-tecnica-pericia-trabalhista/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre a assistência trabalhista",
+        "href": "#contato-assistencia-tecnica-pericia-trabalhista"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-10-12",
+      "owner_issue": 611,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial da própria CONFENGE, não um registro externo. Permanecem aplicáveis os controles de veracidade, atribuição, privacidade, qualidade e conversão; esta declaração não comprova aprovação.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/corporate/commercial-constitution.v1.json"
+        ],
+        "declared_at": "2026-10-12",
         "owner_issue": 611
       }
     }

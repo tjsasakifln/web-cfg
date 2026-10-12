@@ -155,9 +155,12 @@ function assertDirectorySstProjection(services) {
     .flatMap((node) => node["@type"] === "ItemList" ? node.itemListElement || [] : node.mainEntity?.itemListElement || []);
   const sst = entries.filter((entry) => entry.url === "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/");
   assert.equal(sst.length, 1);
-  const labels = [...services.matchAll(/<a\b[^>]*href="\/seguranca-trabalho-apoio-tecnico\/"[^>]*>([\s\S]*?)<\/a>/g)].map((match) => visible(match[1]));
-  assert.ok(labels.length > 0);
-  assert.ok(labels.every((label) => label === sst[0].name));
+  const serviceRow = services.match(/<article\b[^>]*id="servico-diagnostico"[\s\S]*?<\/article>/)?.[0] || "";
+  const primaryLinks = [...serviceRow.matchAll(/<a\b(?=[^>]*data-hub-link="servicos-sst-landing")(?=[^>]*href="\/seguranca-trabalho-apoio-tecnico\/")[^>]*>([\s\S]*?)<\/a>/g)];
+  assert.equal(primaryLinks.length, 1, "the SST directory card owns one scoped primary link");
+  const primaryLabel = visible(primaryLinks[0][1]);
+  assert.match(primaryLabel, /documentação/i);
+  assert.match(primaryLabel, /SST|segurança do trabalho/i);
   assert.match(sst[0].name, /SST|segurança do trabalho/i);
 }
 
@@ -174,6 +177,14 @@ test("SST directory projection rejects missing or invented structured entries", 
     assert.ok(services.includes(old));
     assert.throws(() => assertDirectorySstProjection(services.replaceAll(old, replacement)), assert.AssertionError);
   }
+  const primary = services.match(/<a\b(?=[^>]*data-hub-link="servicos-sst-landing")(?=[^>]*href="\/seguranca-trabalho-apoio-tecnico\/")[^>]*>[\s\S]*?<\/a>/)?.[0] || "";
+  assert.ok(primary, "fixture has the scoped SST directory link");
+  const decoy = '<a class="text-link" href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a>';
+  assert.throws(
+    () => assertDirectorySstProjection(services.replace(primary, decoy)),
+    assert.AssertionError,
+    "an unrelated same-href link cannot replace the SST directory card",
+  );
 });
 
 test("portfolio is exhaustive about remote, conditional and excluded work", () => {

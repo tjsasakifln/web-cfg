@@ -18,30 +18,34 @@
     {
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
       "reasons": [
-        "contracts<15"
-      ],
-      "score": 77
-    },
-    {
-      "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
-      "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
       "score": 71
     },
     {
+      "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+      "reasons": [
+        "contracts<15",
+        "data_age_days>90"
+      ],
+      "score": 65
+    },
+    {
       "url": "/inteligencia/mercados/edificacoes-publicas-mg/",
       "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
-      "score": 75
+      "score": 69
     },
     {
       "url": "/inteligencia/mercados/edificacoes-publicas-rs/",
       "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
-      "score": 75
+      "score": 69
     },
     {
       "url": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
@@ -70,9 +74,9 @@
       "reasons": [
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=73"
+        "score=71"
       ],
-      "score": 73
+      "score": 71
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
@@ -81,9 +85,9 @@
         "primary_contracts<15",
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=72"
+        "score=70"
       ],
-      "score": 72
+      "score": 70
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-rs/",
@@ -91,9 +95,9 @@
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=71"
+        "score=69"
       ],
-      "score": 71
+      "score": 69
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
@@ -101,9 +105,9 @@
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=71"
+        "score=69"
       ],
-      "score": 71
+      "score": 69
     },
     {
       "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
@@ -226,40 +230,44 @@
     {
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
       "status": "reject",
-      "score": 77,
+      "score": 71,
       "path": "inteligencia\\mercados\\pavimentacao-infraestrutura-viaria-sc\\index.html",
       "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
       "previously_public": true
     },
     {
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
       "status": "reject",
-      "score": 71,
+      "score": 65,
       "path": "inteligencia\\mercados\\pavimentacao-infraestrutura-viaria-pi\\index.html",
       "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
       "previously_public": true
     },
     {
       "url": "/inteligencia/mercados/edificacoes-publicas-mg/",
       "status": "reject",
-      "score": 75,
+      "score": 69,
       "path": "inteligencia\\mercados\\edificacoes-publicas-mg\\index.html",
       "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
       "previously_public": true
     },
     {
       "url": "/inteligencia/mercados/edificacoes-publicas-rs/",
       "status": "reject",
-      "score": 75,
+      "score": 69,
       "path": "inteligencia\\mercados\\edificacoes-publicas-rs\\index.html",
       "reasons": [
-        "contracts<15"
+        "contracts<15",
+        "data_age_days>90"
       ],
       "previously_public": true
     },
@@ -294,52 +302,52 @@
     {
       "url": "/inteligencia/precos/edificacoes-publicas-mg/",
       "status": "reject",
-      "score": 73,
+      "score": 71,
       "path": "inteligencia\\precos\\edificacoes-publicas-mg\\index.html",
       "reasons": [
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=73"
+        "score=71"
       ],
       "previously_public": true
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
       "status": "reject",
-      "score": 72,
+      "score": 70,
       "path": "inteligencia\\precos\\pavimentacao-infraestrutura-viaria-pi\\index.html",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=72"
+        "score=70"
       ],
       "previously_public": true
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-rs/",
       "status": "reject",
-      "score": 71,
+      "score": 69,
       "path": "inteligencia\\precos\\edificacoes-publicas-rs\\index.html",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=71"
+        "score=69"
       ],
       "previously_public": true
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
       "status": "reject",
-      "score": 71,
+      "score": 69,
       "path": "inteligencia\\precos\\pavimentacao-infraestrutura-viaria-sc\\index.html",
       "reasons": [
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=71"
+        "score=69"
       ],
       "previously_public": true
     },

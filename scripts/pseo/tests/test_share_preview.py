@@ -208,3 +208,10 @@ def test_checked_in_public_html_contract_and_body_invariance(tmp_path: Path) -> 
 
 def test_runtime_overlay_namespace_is_not_part_of_static_artifact_compilation() -> None:
     assert "oportunidades" not in PUBLIC_TOP_DIRS
+
+
+def test_r04_service_routes_are_allowlisted_in_the_public_artifact() -> None:
+    assert {
+        "avaliacao-imoveis-urbanos",
+        "assistencia-tecnica-pericia-trabalhista",
+    }.issubset(PUBLIC_TOP_DIRS)

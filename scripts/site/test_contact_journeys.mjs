@@ -52,9 +52,9 @@ const journeys = [
   ["edital", "/diagnostico-pre-licitacao/", "servicos-complementares", "/servicos-obras-publicas/", "/diagnostico-pre-licitacao/"],
   ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "servicos-complementares", "/servicos-obras-publicas/"],
   ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "servicos-complementares", "/assistencia-tecnica-pericial-engenharia/"],
-  ["avaliacao_imovel", "/servicos/#servico-avaliacao", "servicos-complementares", "/servicos/#servico-avaliacao"],
+  ["avaliacao_imovel", "/avaliacao-imoveis-urbanos/", "servicos-complementares", "/servicos/#servico-avaliacao", "/avaliacao-imoveis-urbanos/"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "servicos-complementares", "/seguranca-trabalho-apoio-tecnico/"],
-  ["assistencia_trabalhista", "/servicos/#servico-sst", "servicos-complementares", "/servicos/", "/#contato"],
+  ["assistencia_trabalhista", "/assistencia-tecnica-pericia-trabalhista/", "servicos-complementares", "/servicos/", "/assistencia-tecnica-pericia-trabalhista/"],
 ].map(([id, direct, homeContainer, homeHref, secondHref]) => ({ id, direct, homeContainer, homeHref, secondHref, homeSelector: `a[href="${homeHref}"]` }));
 // Test coverage binds to the existing authority, including its fallback.
 // This is a scenario map, not another route or offer taxonomy.
@@ -442,9 +442,38 @@ try {
         const destination = await facts(page, new URL(journey.secondHref, new URL(href, base)).hash);
         required("journey_two_clicks_destination_next_step", destination.activeForm || destination.triageLink || destination.formLink || Object.values(destination.channels).some(Boolean), JSON.stringify(destination), { journey: journey.id, route: journey.direct });
         if (journey.id === "assistencia_trabalhista") {
+          // The services hub now hands this need to its canonical specialist
+          // page. Exercise the page's scoped, contextual form CTA before
+          // checking the home form; a same-href link elsewhere must not stand
+          // in for the service owner's handoff.
+          const formCtaSelector = 'main a[data-cta-id="assistencia-tecnica-pericia-trabalhista-contact-calm"]';
+          const formCta = await page.$(formCtaSelector);
+          const formHandoff = formCta && await formCta.evaluate(anchor => {
+            const rect = anchor.getBoundingClientRect();
+            return {
+              visible: rect.width > 0 && rect.height > 0 && getComputedStyle(anchor).visibility !== "hidden",
+              href: anchor.getAttribute("href"),
+              journey: anchor.getAttribute("data-journey"),
+              family: anchor.getAttribute("data-route-family"),
+              theme: anchor.getAttribute("data-tema"),
+            };
+          });
+          required(
+            "journey_labor_sst_scoped_form_handoff",
+            formHandoff?.visible === true
+              && formHandoff.href === "/#contato"
+              && formHandoff.journey === "pericia"
+              && formHandoff.family === "assistencia-tecnica-pericia-trabalhista"
+              && formHandoff.theme === "Assistência técnica trabalhista em SST",
+            JSON.stringify(formHandoff),
+            { journey: journey.id, route: journey.secondHref },
+          );
+          if (!formHandoff?.visible) continue;
+          await formCta.click();
+          await page.waitForFunction(expected => location.pathname === expected.pathname && location.hash === expected.hash, {}, { pathname: "/", hash: "#contato" });
           await page.waitForFunction(() => document.querySelector("#formulario-contato")?.dataset.formReady === "true");
           const context = await page.evaluate(() => { const f = document.querySelector("#formulario-contato"); const v = name => f.querySelector(`[name="${name}"]`)?.value || ""; return { journey: v("jornada"), theme: v("tema"), firstOrigin: v("origem"), sourceFamily: v("source_origin_route_family"), routeFamily: v("route_family"), asset: v("asset_id"), consent: f.querySelector('[name="consentimento"]')?.checked || false }; });
-          required("journey_labor_sst_contact_preserves_specific_context", context.journey === "pericia" && context.theme === "Assistência técnica trabalhista em SST" && context.sourceFamily === "servicos-corporativos" && context.routeFamily === "home" && context.asset === "home-institutional" && !context.consent, JSON.stringify(context), { journey: journey.id, route: "/#contato" });
+          required("journey_labor_sst_contact_preserves_specific_context", context.journey === "pericia" && context.theme === "Assistência técnica trabalhista em SST" && context.sourceFamily === "assistencia-tecnica-pericia-trabalhista" && context.routeFamily === "home" && context.asset === "home-institutional" && !context.consent, JSON.stringify(context), { journey: journey.id, route: "/#contato" });
         }
       }
     }

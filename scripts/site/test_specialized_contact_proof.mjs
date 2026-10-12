@@ -14,6 +14,8 @@ import {
   SPECIALIZED_QA_CONTEXT_KEYS,
   SPECIALIZED_QA_CTA_SELECTOR,
   SPECIALIZED_QA_ENTRY_PATH,
+  SPECIALIZED_QA_FORM_CTA_SELECTOR,
+  SPECIALIZED_QA_SERVICE_PATH,
   captureSpecializedQaJourney,
   specializedQaContextSha256,
   specializedQaWireContextSha256,
@@ -62,7 +64,7 @@ if (browserRequired) {
   mkdirSync(publicRoot, { recursive: true });
   for (const relative of [
     "index.html", "script.js", "styles.css", "styles-hubs.css", "manifest.webmanifest",
-    "assets", "servicos",
+    "assets", "servicos", "assistencia-tecnica-pericia-trabalhista",
   ]) {
     cpSync(resolve(sourcePublicRoot, relative), resolve(publicRoot, relative), { recursive: true });
   }
@@ -106,9 +108,9 @@ const exactRecord = {
     wireTechnicalHash,
   );
   const themeMutated = { ...payload, message: payload.message.replace(SPECIALIZED_QA_CONTEXT.tema, "valor divergente") };
-  const originMutated = { ...payload, message: payload.message.replace("servicos-corporativos", "outra-familia") };
+  const originMutated = { ...payload, message: payload.message.replace("assistencia-tecnica-pericia-trabalhista", "outra-familia") };
   const themeDropped = { ...payload, message: payload.message.replace(`; tema=${SPECIALIZED_QA_CONTEXT.tema}`, "") };
-  const originDropped = { ...payload, message: payload.message.replace("; família de rota de origem=servicos-corporativos", "") };
+  const originDropped = { ...payload, message: payload.message.replace("; família de rota de origem=assistencia-tecnica-pericia-trabalhista", "") };
   const arbitraryQualification = { ...payload, message: payload.message.replace(". synthetic", "; urgencia=agora. synthetic") };
   assert.equal(inbound.qaTechnicalContextSha256FromSerializedPayload(JSON.stringify(themeMutated)), null);
   assert.equal(inbound.qaTechnicalContextSha256FromSerializedPayload(JSON.stringify(originMutated)), null);
@@ -324,6 +326,8 @@ try {
       live_sha: SHA,
       entry_path: SPECIALIZED_QA_ENTRY_PATH,
       cta_selector: SPECIALIZED_QA_CTA_SELECTOR,
+      service_path: SPECIALIZED_QA_SERVICE_PATH,
+      form_cta_selector: SPECIALIZED_QA_FORM_CTA_SELECTOR,
       target_path: "/",
       target_hash: "#contato",
       public_query: "",

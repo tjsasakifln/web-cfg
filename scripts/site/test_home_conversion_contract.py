@@ -387,11 +387,16 @@ def test_purchase_map_terminals_follow_the_persisted_channels() -> None:
     doc = json.loads(PURCHASE_MAP.read_text(encoding="utf-8"))
     rows = {row["purchase_id"]: row for row in doc["purchases"]}
     assert rows["planejar-contratacao-publica"]["terminal_contact"]["destination"] == _public_entity_form_destination()
-    assert rows["avaliar-imovel"]["terminal_contact"]["destination"] == "/triagem-tecnica/#avaliacao-imovel"
+    assert rows["avaliar-imovel"]["terminal_contact"]["destination"] == "/avaliacao-imoveis-urbanos/#contato-avaliacao-imoveis-urbanos"
     # A compra de avaliacao apontava primary_url/source_of_truth para a
     # pericia (#servico-pericia) enquanto o terminal ja era a avaliacao.
     for key in ("primary_url", "proposed_primary_url", "source_of_truth"):
-        assert rows["avaliar-imovel"][key] == "/servicos/#servico-avaliacao", key
+        assert rows["avaliar-imovel"][key] == "/avaliacao-imoveis-urbanos/", key
+        assert rows["assistencia-trabalhista-sst"][key] == "/assistencia-tecnica-pericia-trabalhista/", key
+    assert rows["assistencia-trabalhista-sst"]["terminal_contact"]["destination"] == (
+        "/assistencia-tecnica-pericia-trabalhista/"
+        "#contato-assistencia-tecnica-pericia-trabalhista"
+    )
 
 
 def test_home_select_separates_valuation_and_drops_unpublished_inspection_promise() -> None:

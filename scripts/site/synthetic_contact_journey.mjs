@@ -8,9 +8,12 @@
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 
-export const SPECIALIZED_QA_CONTRACT = "CONFENGE_SPECIALIZED_CONTACT_QA/1.0";
+export const SPECIALIZED_QA_CONTRACT = "CONFENGE_SPECIALIZED_CONTACT_QA/1.1";
 export const SPECIALIZED_QA_ENTRY_PATH = "/servicos/#servico-sst";
 export const SPECIALIZED_QA_CTA_SELECTOR = '[data-hub-link="servicos-sst-labor-assistance"]';
+export const SPECIALIZED_QA_SERVICE_PATH = "/assistencia-tecnica-pericia-trabalhista/";
+export const SPECIALIZED_QA_FORM_CTA_SELECTOR =
+  '[data-cta-id="assistencia-tecnica-pericia-trabalhista-contact-calm"]';
 export const SPECIALIZED_QA_CONTEXT_KEYS = Object.freeze([
   "asset_id",
   "cta_id",
@@ -34,8 +37,8 @@ export const SPECIALIZED_QA_CONTEXT = Object.freeze({
   estagio: "perícia, assistência técnica ou avaliação",
   origem: "/servicos/",
   landing_page: "/servicos/",
-  source_origin_asset_id: null,
-  source_origin_route_family: "servicos-corporativos",
+  source_origin_asset_id: "labor_sst_technical_assistance",
+  source_origin_route_family: "assistencia-tecnica-pericia-trabalhista",
   tema: "Assistência técnica trabalhista em SST",
 });
 
@@ -82,6 +85,8 @@ export function validateSpecializedQaJourney(result, expectedSha) {
   const routeChecks = {
     entry_path: result.entry_path === SPECIALIZED_QA_ENTRY_PATH,
     cta_selector: result.cta_selector === SPECIALIZED_QA_CTA_SELECTOR,
+    service_path: result.service_path === SPECIALIZED_QA_SERVICE_PATH,
+    form_cta_selector: result.form_cta_selector === SPECIALIZED_QA_FORM_CTA_SELECTOR,
     target_path: result.target_path === "/",
     target_hash: result.target_hash === "#contato",
     public_query: result.public_query === "",
@@ -248,9 +253,9 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
       origin_url: element.getAttribute("data-origin-url"),
     }));
     const expectedCta = {
-      href: "/#contato",
+      href: SPECIALIZED_QA_SERVICE_PATH,
       journey: "pericia",
-      route_family: "servicos-corporativos",
+      route_family: "assistencia-tecnica-pericia-trabalhista",
       tema: SPECIALIZED_QA_CONTEXT.tema,
       origem: "/servicos/",
       origin_url: "/servicos/",
@@ -260,6 +265,34 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
     await Promise.all([
       page.waitForNavigation({ waitUntil: "networkidle2" }),
       page.click(SPECIALIZED_QA_CTA_SELECTOR),
+    ]);
+    if (page.url() !== `${base}${SPECIALIZED_QA_SERVICE_PATH}`) {
+      throw new Error("specialized_service_route_mismatch");
+    }
+    const formCta = await page.$eval(SPECIALIZED_QA_FORM_CTA_SELECTOR, (element) => ({
+      href: element.getAttribute("href"),
+      journey: element.getAttribute("data-journey"),
+      route_family: element.getAttribute("data-route-family"),
+      asset_id: element.getAttribute("data-asset-id"),
+      tema: element.getAttribute("data-tema"),
+      origem: element.getAttribute("data-origem"),
+      origin_url: element.getAttribute("data-origin-url"),
+    }));
+    const expectedFormCta = {
+      href: "/#contato",
+      journey: "pericia",
+      route_family: "assistencia-tecnica-pericia-trabalhista",
+      asset_id: "labor_sst_technical_assistance",
+      tema: SPECIALIZED_QA_CONTEXT.tema,
+      origem: SPECIALIZED_QA_SERVICE_PATH,
+      origin_url: SPECIALIZED_QA_SERVICE_PATH,
+    };
+    if (JSON.stringify(formCta) !== JSON.stringify(expectedFormCta)) {
+      throw new Error("specialized_form_cta_fixture_mismatch");
+    }
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: "networkidle2" }),
+      page.click(SPECIALIZED_QA_FORM_CTA_SELECTOR),
     ]);
     await page.waitForSelector('form[data-capture-form][name="diagnostico-b2g"]');
     await page.$eval(
@@ -338,6 +371,8 @@ export async function captureSpecializedQaJourney(baseArg, expectedShaArg) {
       live_sha: liveSha,
       entry_path: SPECIALIZED_QA_ENTRY_PATH,
       cta_selector: SPECIALIZED_QA_CTA_SELECTOR,
+      service_path: SPECIALIZED_QA_SERVICE_PATH,
+      form_cta_selector: SPECIALIZED_QA_FORM_CTA_SELECTOR,
       target_path: browserState.target_path,
       target_hash: browserState.target_hash,
       public_query: browserState.public_query,
