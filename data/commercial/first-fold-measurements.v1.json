@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-14T05:30:26.362Z",
+  "measured_at": "2026-10-14T07:17:47.434Z",
   "measured_on": "2026-10-14",
-  "commit_sha": "67c0c374b7237f568bd61ce2b0d5bf9bf4d9c0a0",
+  "commit_sha": "33bad5353c7e1b30d5260c729cce20c2d977ba93",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -61,7 +61,7 @@
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-    "styles.css": "12d3cc1b4bca11069b86fa854f47a92d6f9bfb34048f86254cccf029a5a7398c"
+    "styles.css": "ac595c5713c77021dc6e6383e6fbc76f1e8c0f98a0f9d4ef1743b124a067bc92"
   },
   "surface": "source",
   "artifact_identity": null,
