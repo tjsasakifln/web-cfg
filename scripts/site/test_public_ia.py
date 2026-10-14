@@ -264,6 +264,7 @@ def test_footer_national_contact_and_isolated_renderer_keep_current_routes(monke
     canonical = footer_columns_html()
     _assert_national_contact_is_discoverable(canonical)
     from scripts.pseo import html_shell
+    monkeypatch.setattr(html_shell, "_render_public_footer", None)
     monkeypatch.setattr(html_shell, "_footer_columns_html", None)
     fallback = html_shell._build_footer()
     _assert_national_contact_is_discoverable(fallback)
