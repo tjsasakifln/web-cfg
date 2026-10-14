@@ -2683,7 +2683,7 @@ INDEX_EVIDENCE_REQUIRED_FIELDS = ("reason", "authority", "declared_at", "owner_i
 # Families whose instances represent a record acquired from outside this site.
 # ``_sub_official_live`` special-cases exactly these; they may never declare
 # first_party_publication. Mirrors the ids that subgate branches on.
-EXTERNAL_RECORD_ONLY_FAMILY_IDS = frozenset({"analises-contratos-publicos", "inteligencia-amostras-reais"})
+EXTERNAL_RECORD_ONLY_FAMILY_IDS = frozenset({"analises-contratos-publicos", "inteligencia-amostras-reais", "inteligencia-climatizacao"})
 EXTERNAL_RECORD_ONLY_FAMILY_PREFIXES = ("live-intelligence",)
 
 CONTRACT_ANALYSIS_STATUS_REL = "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json"
@@ -3214,6 +3214,25 @@ def _sub_official_live(
         return Subgate(
             "official_live", True, SUBGATE_REMEDIABLE, waiver, applicable=False
         )
+    if fid == "inteligencia-climatizacao":
+        try:
+            from scripts.pseo.climatizacao_sample import ROUTE, _canonical_sha256, load_snapshot
+            sample = load_snapshot(ctx.base / "data/pseo/climatizacao-sample.v1.json")
+            if route != ROUTE:
+                raise ValueError("unregistered sector analysis route")
+            expected = {
+                "data-sector-sample-version": sample["version"],
+                "data-sector-sample-as-of": sample["as_of"],
+                "data-sector-sample-sha256": _canonical_sha256(sample),
+            }
+            for attribute, value in expected.items():
+                actual = re.findall(r'\b' + re.escape(attribute) + r'="([^"]+)"', html)
+                if actual != [value]:
+                    raise ValueError(f"rendered sector binding mismatch: {attribute}")
+        except (OSError, ValueError, KeyError, ImportError) as exc:
+            return Subgate("official_live", False, SUBGATE_REMEDIABLE, str(exc))
+        return Subgate("official_live", True, SUBGATE_REMEDIABLE,
+                       "five PNCP contracts and documentary claims match the pinned independent verification manifest and rendered sector identity")
     if fid == "inteligencia-amostras-reais":
         try:
             from scripts.pseo.market_intelligence_sample import (
@@ -3867,7 +3886,14 @@ def archetype_editorial_ready_for_family(
                 f"{route}: {words} words",
             )
         )
-        concrete = len(set(m.group(0) for m in _CONCRETE_SPECIFIC_RE.finditer(text)))
+        concrete_values = set(m.group(0) for m in _CONCRETE_SPECIFIC_RE.finditer(text))
+        # Contract identifiers are concrete evidence in the two manifest-bound
+        # sample families. Counting only figures/years misses their actual grain.
+        # Other families and the minimum remain unchanged; official_live still
+        # independently verifies the sample and its rendered identity.
+        if str(family.get("id")) in {"inteligencia-amostras-reais", "inteligencia-climatizacao"}:
+            concrete_values.update(re.findall(r"\b\d{14}-2-\d{6}/20\d{2}\b", text))
+        concrete = len(concrete_values)
         specific.append(
             Subgate(
                 "specific_value",

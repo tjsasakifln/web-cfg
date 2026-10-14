@@ -97,6 +97,9 @@ def test_renderer_writes_two_source_linked_analyses_without_human_authorship(tmp
         assert 'class="author-box"' not in html
         assert html.count("Abrir contrato no PNCP") >= 10
         assert "carteira de clientes" in html
+        assert "revisão exploratória de 26 CNPJs" in html
+        assert "não registra uma regra reproduzível" in html
+        assert '"spatialCoverage":"Brasil"' not in html
         assert "public_read_v1" not in html
         assert "source_extract" not in html
         assert "human_review" not in html

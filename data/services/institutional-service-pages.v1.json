@@ -536,7 +536,13 @@
             "Responsabilidade",
             "A proposta identifica o profissional, as disciplinas, a decisão que a base apoia e o alcance da responsabilidade técnica sobre a entrega."
           ]
-        ]
+        ],
+        "market_intelligence_bridge": {
+          "before_link": "Quando a decisão ainda é comparar referências de fornecimento, documentos ou preços observados em um recorte de mercado, antes de definir o orçamento técnico da obra, a ",
+          "link_label": "pesquisa de inteligência de mercado",
+          "href": "/inteligencia/precos/",
+          "after_link": " delimita fontes e comparáveis para essa pergunta."
+        }
       },
       "preserve_sections": [
         "banco-disciplinas",

@@ -148,7 +148,9 @@ depois da publicação e da observação correspondente.
 
 Ainda não há preço, margem, checkout, cobrança ou contrato autorizados para
 esta frente. Também não há resultado comercial desta publicação, owner humano
-atribuído a uma demanda real, nem teste de produção desta versão reconciliado.
+atribuído a uma demanda real. Os testes sintéticos da publicação inicial foram
+reconciliados por releitura autenticada; são evidência de transporte e permanecem
+excluídos do resultado comercial.
 
 ## Campo de validação real a preencher após a publicação
 
@@ -168,13 +170,140 @@ produção; não criar registro paralelo.
 
 | Campo | Valor a registrar |
 | --- | --- |
-| Data/hora e artefato/SHA publicado | `PENDENTE` |
-| Rota e contexto do teste controlado | `PENDENTE` |
-| `lead_id`/`receipt_id` persistido e relido | `PENDENTE` |
-| Encaminhamento confirmado no Warmbly | `PENDENTE` |
-| Resultado do teste e exclusão da fila comercial | `PENDENTE` |
-| Estado técnico de sitemap/rastreamento/indexação observado | `PENDENTE` |
-| Capturas e verificações de acessibilidade da produção | `PENDENTE` |
+| Data/hora e artefato/SHA publicado | Publicação inicial `05dde323eac275ec2798c196e75b236c379572b4`, workflow `38544052757` bem sucedido. Revalidação HTTP em 14/10/2026 às 12:22 UTC: build e runtime com esse SHA, Cloudflare/Netcup e nove rotas HTTP 200. |
+| Rota e contexto do teste controlado | Pesquisa institucional e análise de relações, ambas com jornada `outro`; a análise conserva corte e versão da amostra. |
+| `lead_id`/`receipt_id` persistido e relido | Sintéticos `lead-e2b6750a9e9ef9572a07d9b3c19` e `lead-33cf0e5d2b4ae3f7e7b1f44be45`; releitura autenticada em 14/10/2026 às 12:21:35 UTC. |
+| Encaminhamento confirmado no Warmbly | Ambos `DELIVERED`, uma tentativa, downstream HTTP 201, sem ação comercial. |
+| Resultado do teste e exclusão da fila comercial | Ambos `record_kind=synthetic`, `authenticated_probe=true`, `next_action=exclude_from_commercial`. Contadores anteriores e respostas de replay da execução inicial não foram preservados; não alegar delta por recibo ou HTTP do replay. |
+| Estado técnico de sitemap/rastreamento/indexação observado | Sitemap vivo com nove URLs. GSC API read-only em 14/10: três URLs têm crawls anteriores com `noindex`; seis são desconhecidas ao Google. HTML vivo permite indexação. Indexação do lançamento não observada. |
+| Capturas e verificações de acessibilidade da produção | QA da publicação inicial registrado na campanha: 320/390/1440, leitura, contraste e fluxo sintético. A rodada abaixo tem candidato e validação próprios; a evidência inicial não é reutilizada como teste das alterações. |
 
 **Rollback:** este registro é documental e reversível; não altera captura,
 runtime, filas, dados, envio ou cobrança.
+
+## Melhoria pós-publicação — mesma campanha, 14/10/2026
+
+**Decisão:** `EXECUTE_NOW`; frentes receita, distribuição e confiança. O trabalho
+melhora entregas compráveis e descoberta sem criar serviço, preço, runtime,
+CRM, cadência ou agendamento. A revisão cabe à rotina comercial existente,
+após dados GSC com corte posterior ao lançamento e no primeiro pedido humano
+pertinente. Cem aplicações devem reutilizar seleção, revisão e proposta;
+profundidade adicional sem compra não vira cem dossiês gratuitos.
+
+### Decisão por necessidade e esforço econômico
+
+Esta tabela aplica as letras A–H do objetivo pós-publicação. Horas completas
+incluem briefing, aquisição limitada, identidade, documentos, análise, revisão,
+proposta, atendimento, suporte e manutenção. Sem venda comparável observada,
+horas e margem/caixa permanecem **a confirmar**; não há score, volume de busca,
+probabilidade ou previsão de receita. Priorizar D quando houver obrigação e
+lacuna técnica reais aproveita as rotas e entregas de engenharia já existentes.
+A/F vêm em seguida quando catálogo ou item e documentos permitem delimitar uma
+pesquisa finita. A comparação por hora total só será fechada com propostas,
+entregas, custos e recebimentos observados no owner comercial.
+
+| Necessidade / decisão | Rota e trabalho comprado | Dados, fonte e capacidade a confirmar | Esforço completo / margem e caixa / tempo até evidência | Alternativa e estado |
+| --- | --- | --- | --- | --- |
+| A — canais por produto e território: melhorar copy/prova/CTA | `/inteligencia/orgaos/`: seleção justificada de organizações para o catálogo | PNCP/documento por contrato + catálogo e território; canal/revenda somente com documento específico | Reconciliação e revisão documental; horas/margem a confirmar; próximo pedido de seleção pertinente | Consulta PNCP e plataformas; nova prova de climatização delimita papéis, sem carteira prioritária |
+| B — compradores semelhantes: coberto por rota existente | `/inteligencia/orgaos/`: seleção de contas semelhantes; `/mercados/` compara categorias e territórios para expansão | Carteira autorizada, identidade e objetos compatíveis; similaridade precisa de critério explícito | Reconciliação da carteira e exclusões reservadas; horas/margem a confirmar; pedido com critério de similaridade | Ferramentas de busca; não criar página sinônima |
+| C — parcelas complementares: melhorar copy/CTA | `/inteligencia/acompanhamento/`: investigação documental e atualização delimitada | Obrigação, parcelas, regra de subcontratação, situação e lacuna real; contrato assinado não é demanda aberta | Leitura de contrato/TR e reconsulta por ciclo; horas/margem a confirmar; confirmação de trabalho comprável | Alertas informam eventos; não presumir parcela disponível |
+| D — produção técnica concreta: coberto satisfatoriamente | Terceirização, parcerias e quantitativos/orçamento nas rotas de engenharia | Insumos, obrigação, disciplina, lacuna, atribuição/local/ART e capacidade | Produção técnica + revisão e atendimento; horas/margem a confirmar; pedido técnico e escopo suficientes | Escritórios técnicos; preservar honorários técnicos e a proposta da engenharia |
+| E — concorrentes/substituição: melhorar copy | `/inteligencia/concorrencia/`: matriz histórica de empresas e objetos | CNPJ, períodos, compradores e documentos; troca observada não explica motivo | Identidade e reconciliação temporal; horas/margem a confirmar; pedido de comparação | Plataformas/PNCP; não alegar sucesso ou causa não observados |
+| F — preço comparável: melhorar copy/CTA | `/inteligencia/precos/`: caderno por item, especificação, unidade e condição | Item, quantidade, praça/data-base, tributos e entrega; excluir incompatíveis | Leitura de itens e condições + revisão; horas/margem a confirmar; pedido com item/especificação | Compras.gov.br/Precex/cotação; não criar indicador unitário da amostra de valores globais |
+| G — estudo/licença: melhorar copy/CTA | `/inteligencia/pesquisa-sob-encomenda/`: estudo, edição ou licença não exclusiva delimitada | Pergunta, fontes, participantes, finalidade e direitos da análise própria | Pesquisa/edição/revisão e suporte delimitados; horas/margem a confirmar; pedido institucional com uso definido | Consultorias; não conceder revenda/exclusividade por inferência |
+| H — ciclo posterior à aquisição: não ofertar ainda base instalada ou oportunidade presumida | `/inteligencia/acompanhamento/` atende pesquisa documental sob escopo | Entrega, local, quantidade, condições e evento determinante precisam ser comprovados | Verificação por documento e ciclo; horas/margem a confirmar; evidência de entrega e necessidade real | Alertas/manutenção publicada; histórico sozinho não certifica parque instalado |
+
+As seis ofertas receberam introdução/insumos próprios, exemplo distinto,
+entrega conferível e critério de aceitação. A proposta reutilizável existente
+define escopo, fontes, insumos, revisão, direitos e aceite; preço, prazo e
+cobrança dependem da autorização do caso. Os quatro demonstrativos B2G
+continuam exemplos das entregas e condições do catálogo vigente, sem mudança
+de preço, duplicação ou redirecionamento.
+
+### Prova de valor e uma nova URL
+
+`/inteligencia/fornecedores-climatizacao-contratos-publicos/` responde à
+seleção de fornecedores pelo papel observado. É a única URL nova da rodada:
+cinco casos com contratos e documentos oficiais permitem comparar fornecimento
+sem instalação, fornecimento/instalação, locação com serviços, manutenção
+continuada e intervenção corretiva. Não se anunciam revendedores, integradores,
+base instalada, demanda futura, ranking ou valor unitário.
+
+Fonte: `extra-cli`, release `14c8b2473c4e52566a7fed96c45057bd3214a2fe`,
+leitura `REPEATABLE READ READ ONLY`, timeout 25 s e retorno limitado a 30
+candidatos; plano usa índice GIN, sem varredura sequencial. Publicações do
+recorte de candidatos: 01/09 a 11/10/2026. Cinco casos escolhidos para contrastar
+papéis foram rechecados no PNCP e nos documentos determinantes em 14/10.
+Consulta, filtros e hashes ficam na proveniência; os dados públicos curados e
+manifesto independente são `data/pseo/climatizacao-sample.v1.json` e
+`climatizacao-verification.v1.json`. A amplitude examinada para selecionar o
+setor não é denominador censitário nem alegação de procura.
+
+A busca pública mostra intenção de consulta sobre fornecedores, instalação e
+manutenção. Não prova contratação ou volume: a janela GSC ainda antecede o
+lançamento. Climatização foi escolhida pela combinação de pergunta útil e
+documentos capazes de separar papéis; os demais setores ficam em backlog,
+sem novas URLs ou coleta ampla.
+
+As duas análises de dez contratos conservam o resultado original e agora
+explicitam a origem em revisão exploratória de 26 CNPJs, a ausência de regra
+reproduzível para essa seleção inicial e a delimitação à engenharia. A cobertura
+“Brasil” foi retirada do JSON-LD. Datas e vigências são rotuladas como campos
+publicados no PNCP, sem resolver por inferência divergências entre metadado e
+instrumento.
+
+### Uso próprio executado
+
+O contrato PNCP `46223756000109-2-000026/2026` (Tejupá → LOTEARQ), Contrato
+44/2026, cláusulas 1.1 e 2.1, confirma obrigação de projetos executivos BIM,
+compatibilização, planilha, cronograma, modelo e responsabilidades por
+disciplina. CONFENGE aplicou o método a uma hipótese de produção complementar
+ou conferência de compatibilização/quantitativos/orçamento. O contrato inteiro
+continua obrigação da contratada; não é oportunidade ou lead.
+
+O documento declara assinatura 02/10 e vigência 02/10/2026–01/10/2027;
+o PNCP registra 05/10 e 05/10/2026–04/10/2027. A divergência precisa de
+reconciliação antes de usar data como gatilho. O próximo fato decisivo é o TR
+e a regra de subcontratação/anuência, seguidos de lacuna declarada pela
+contratada. Não houve abordagem, envio, inclusão em CRM ou receita.
+Documento oficial: `https://pncp.gov.br/pncp-api/v1/orgaos/46223756000109/contratos/2026/26/arquivos/1`,
+SHA-256 `e6bf73a59b1fc90b9b51b676eceb5b47a06951b246bd3e3f5324c525c87a2b06`.
+
+### Busca, descoberta e indicador editorial
+
+GSC read-only em 14/10: janela 14/09–11/10, 41 pares consulta/página devolvidos.
+Consultas pertinentes retornadas tiveram uma impressão cada, sem clique:
+“mapa de concorrentes” posição 11, “licitação pública” 14, “proposta para
+licitação” 5, “empreitada por preço unitário” 3. A ausência de `/inteligencia/`
+nas linhas retornadas não significa zero; Search Analytics devolve linhas
+selecionadas. Não há evidência de canibalização do lançamento nem de conversão.
+Inspeção das nove URLs: hub/concorrência/preços conservam crawls antigos com
+noindex (14/09, 02/08, 01/08); as outras seis são desconhecidas ao Google.
+O HTML HTTP atual é indexável. Sitemap, rastreamento, indexação e pedido são
+estados separados; nenhuma Indexing API foi usada.
+
+Home, parcerias, terceirização e quantitativos passaram a explicar a ponte
+contextual para inteligência; quantitativos liga à pesquisa de preços e
+parcerias/terceirização à seleção de organizações. `/servicos/` já tinha um
+caminho editorial no conteúdo. A navegação principal, demais serviços,
+formulários técnicos e preços do catálogo foram preservados. Os dois contratos
+de páginas técnicas e seus renderizadores mantêm as pontes após rebuild.
+
+O indicador `inbound:gates` continua ativo. Na primeira execução desta rodada,
+o gate geral passou, mas `specific_value` ainda alerta nas ofertas e na análise
+de relações: seu padrão conta datas/quantias, ignorando IDs PNCP/CNPJs e
+critérios específicos de entrega. O aviso `caveats_preserved` da composição
+não reconhece “não representa tamanho de mercado” e “não é censo”, embora
+ambas as limitações estejam no HTML. São falsos positivos registrados por
+leitura e comparação do algoritmo, não dispensas de qualidade. Não foram
+adicionados números, afrouxados thresholds ou desativados gates para elevar nota.
+O contador foi corrigido apenas nas duas famílias de amostras vinculadas a
+manifesto: passa a reconhecer IDs PNCP exatos e distintos como fatos concretos,
+mantendo o mínimo e a verificação independente da fonte. Os demais avisos
+editoriais permanecem visíveis para conferência por leitura.
+
+O candidato final deve passar pelos checks protegidos `site-ci` e `pSEO quality
+gates`, e só depois pelo `netcup-release` com SHA exato, promoção atômica,
+verificação de HTML/manifesto/CDN e nova prova autenticada de transporte.
+A identidade final, resultados desses controles e pós-publicação pertencem
+ao relatório de entrega desta mesma rodada; merge sozinho não comprova deploy.

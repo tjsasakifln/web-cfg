@@ -54,6 +54,11 @@ MARKET_INTELLIGENCE_COMMERCIAL_ROUTES = (
 # dated, non-census PNCP sample in data/pseo/market-intelligence-sample.v1.json.
 MARKET_INTELLIGENCE_APPROVED_ANALYSES: tuple[tuple[str, str, str], ...] = (
     (
+        "/inteligencia/fornecedores-climatizacao-contratos-publicos/",
+        "Fornecedores de climatização em contratos públicos",
+        "Cinco contratos públicos verificados distinguem fornecimento, instalação e manutenção apenas quando o objeto o declara.",
+    ),
+    (
         "/inteligencia/relacoes-compradores-fornecedores/",
         "Relações documentadas entre compradores e fornecedores",
         "Dez pares públicos conferidos contrato a contrato no PNCP, com identidade legal e limites explícitos de interpretação.",
@@ -159,7 +164,8 @@ def _market_intelligence_capture(
 def _market_intelligence_family_content(
     *, path: str, asset_id: str, decision: str, deliverables: list[tuple[str, str]],
     adaptation: list[tuple[str, str]], limits: list[str], capture_heading: str,
-    capture_prompt: str, capture_button: str,
+    capture_prompt: str, capture_button: str, example: str, acceptance: str,
+    pncp_difference: str, decision_intro: str, adaptation_intro: str,
 ) -> str:
     deliverable_items = "".join(
         f'<li><span class="list-ruled__index">{index:02d}</span><div><h3>{escape(title)}</h3><p>{escape(text)}</p></div></li>'
@@ -170,11 +176,14 @@ def _market_intelligence_family_content(
         for title, text in adaptation
     )
     limit_items = "".join(f"<li>{escape(item)}</li>" for item in limits)
+    related_sample = ('<p><a class="text-link" href="/inteligencia/fornecedores-climatizacao-contratos-publicos/">Ver cinco contratos de climatização verificados</a></p>' if path == "/inteligencia/orgaos/" else "")
     return f'''<section aria-labelledby="entrega-title" class="sec"><div class="container">
-<header class="sec-head sec-head--split"><span class="t-kicker">Decisão e entrega</span><h2 class="t-editorial" id="entrega-title">{escape(decision)}</h2><p>Pesquisa preparada sob encomenda, depois de conferir sua necessidade e as fontes disponíveis. A proposta delimita fontes, recorte, método, entregas, revisão, critério de aceitação e direitos de uso. Preço e prazo dependem desse escopo.</p></header>
+<header class="sec-head sec-head--split"><span class="t-kicker">Decisão e entrega</span><h2 class="t-editorial" id="entrega-title">{escape(decision)}</h2><p>{escape(decision_intro)}</p></header>
 <ol class="list-ruled">{deliverable_items}</ol></div></section>
-<section aria-labelledby="adaptacao-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Aplicação ao seu caso</span><h2 class="t-editorial" id="adaptacao-title">O que a pesquisa adapta à sua decisão</h2><p>Produto, território, período, carteira e documentos disponíveis mudam a pergunta e o esforço. A CONFENGE define o trabalho necessário antes de iniciar a pesquisa específica.</p></header><div class="grid-2">{adaptation_cards}</div></div></section>
+<section aria-labelledby="utilidade-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Exemplo e aceite</span><h2 class="t-editorial" id="utilidade-title">O que será possível conferir antes de aceitar a entrega</h2><p>{escape(example)}</p></header><div class="conditions"><p>{escape(acceptance)}</p><p><strong>Consulta ao PNCP não substitui esta entrega.</strong> {escape(pncp_difference)}</p></div></div></section>
+<section aria-labelledby="adaptacao-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Aplicação ao seu caso</span><h2 class="t-editorial" id="adaptacao-title">Insumos que definem este recorte</h2><p>{escape(adaptation_intro)}</p></header><div class="grid-2">{adaptation_cards}</div></div></section>
 <section aria-labelledby="limites-title" class="sec"><div class="container"><div class="conditions"><h2 class="t-editorial" id="limites-title">O que os dados não autorizam concluir sozinhos</h2><ul>{limit_items}</ul></div></div></section>
+{related_sample}
 {_market_intelligence_capture(path=path, asset_id=asset_id, heading=capture_heading, prompt=capture_prompt, button=capture_button)}'''
 
 
@@ -187,6 +196,7 @@ def _market_intelligence_root_content() -> str:
         )
         analyses = f'''<section aria-labelledby="analises-publicas-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Análises públicas</span><h2 class="t-editorial" id="analises-publicas-title">Veja o método aplicado a perguntas reais</h2><p>Cada análise informa recorte, fontes, corte, método e limites. A publicação demonstra a pesquisa e não revela carteira ou dados reservados de clientes.</p></header><ol class="list-ruled">{rows}</ol></div></section>'''
     return f'''<section aria-labelledby="contratacao-inteligencia-title" class="sec"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Como contratar</span><h2 class="t-editorial" id="contratacao-inteligencia-title">Uma pergunta de negócio, um recorte verificável e uma entrega definida</h2><p>A CONFENGE usa registros públicos, documentos e fontes adequadas à pergunta. A proposta informa o que será pesquisado, como a conclusão será revista e o que chega às mãos do contratante.</p></header><div class="grid-2"><article><h3>Estudo avulso</h3><p>Decisão, período, território, fontes e entrega fechados para uma necessidade específica.</p></article><article><h3>Seleção conforme seu produto e território</h3><p>Conferência de documentos e seleção de organizações conforme produto, restrições, território e carteira fornecida pelo contratante, com conclusões reservadas.</p></article><article><h3>Atualização contratada</h3><p>Novo corte ou acompanhamento com frequência e escopo definidos quando a fonte e a operação permitirem.</p></article><article><h3>Uso institucional</h3><p>Pesquisa para consultorias, associações, redes e fabricantes, com finalidade e direitos de uso descritos na proposta.</p></article></div></div></section>
+<section aria-labelledby="proposta-inteligencia-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Antes de contratar</span><h2 class="t-editorial" id="proposta-inteligencia-title">O que fica definido na proposta</h2><p>O contato enquadra a necessidade. A proposta confirma escopo, prazo, revisões, direitos de uso e condições comerciais para o caso.</p></header><div class="grid-2"><article><h3>Escopo e insumos</h3><p>Pergunta, produto, território, período, fontes, documentos disponíveis e interlocutor para dúvidas de contexto.</p></article><article><h3>Entrega e revisão</h3><p>Formato, campos da tabela ou relatório, leitura técnica, ciclo de revisão e critério objetivo de aceite.</p></article><article><h3>Direitos de uso</h3><p>Uso interno, circulação entre participantes, citação, atualização, licença não exclusiva, revenda ou exclusividade quando previstos na proposta.</p></article><article><h3>Condições comerciais</h3><p>Valor, prazo e forma de cobrança correspondem ao escopo confirmado e às revisões combinadas.</p></article></div></div></section>
 <section aria-labelledby="escopo-inteligencia-title" class="sec sec--soft"><div class="container"><div class="conditions"><h2 class="t-editorial" id="escopo-inteligencia-title">O escopo considera</h2><ul><li>A decisão que o estudo precisa apoiar.</li><li>O recorte de produto, categoria, território e período.</li><li>As fontes e os documentos que podem responder à pergunta.</li><li>A profundidade da conferência e da revisão.</li><li>O formato da entrega e os direitos de uso.</li><li>A necessidade de atualização ou recortes adicionais.</li></ul></div></div></section>
 {analyses}
 {_market_intelligence_capture(path="/inteligencia/", asset_id="im-hub-v1", heading="Conte a decisão que a pesquisa precisa apoiar", prompt="Informe a necessidade, o setor ou produto e o recorte que já conhece.", button="Solicitar proposta de estudo")}'''
@@ -773,6 +783,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             capture_heading="Explique quem você precisa encontrar e para qual decisão",
             capture_prompt="Informe o produto ou serviço, o território, o tipo de canal e o resultado esperado do mapa.",
             capture_button="Solicitar proposta de mapeamento",
+            example="Um fabricante de equipamentos de climatização quer priorizar integradores e distribuidores no Sul que já apareçam em objetos compatíveis.",
+            acceptance="A entrega é conferível quando cada organização selecionada traz papel observado, documento ou registro de apoio, critério de inclusão e pergunta pendente; a lista não é uma agenda de contatos.",
+            pncp_difference="A busca pública localiza registros. O mapeamento contratado fixa produto, território e critério de canal, reconcilia identidades e explica por que cada organização entra ou sai da seleção.",
+            decision_intro="O mapeamento transforma catálogo, território e modelo de canal em uma seleção justificada de organizações e próximos documentos a conferir. A proposta define fonte, profundidade, revisão e uso reservado da carteira informada.",
+            adaptation_intro="Produto, aplicação, território, canal e nível de conferência alteram quem entra na seleção e quais documentos precisam ser lidos.",
         ),
         "/inteligencia/mercados/": _market_intelligence_family_content(
             path="/inteligencia/mercados/",
@@ -798,6 +813,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             capture_heading="Delimite o mercado, a decisão e o período de interesse",
             capture_prompt="Informe o produto ou categoria, o território e se a decisão envolve expansão, catálogo, abastecimento ou assistência técnica.",
             capture_button="Solicitar proposta de estudo de mercado",
+            example="Uma fabricante de materiais elétricos quer decidir se prepara rede de assistência em dois estados, separando compras recorrentes de ocorrências isoladas.",
+            acceptance="O estudo é aceito com recorte, período, fontes, critérios de contagem e tabela que separe contratos, versões e lacunas; a síntese precisa responder à decisão de expansão definida no início.",
+            pncp_difference="O portal permite consultar publicações. O estudo delimita a categoria, remove duplicidade documental e relaciona recorrência, território e condições ao uso comercial escolhido.",
+            decision_intro="O estudo organiza ocorrências documentadas para comparar categoria, território e período antes de comprometer catálogo, presença regional, abastecimento ou assistência. A proposta fixa cobertura, método de contagem e entrega para a decisão escolhida.",
+            adaptation_intro="Categoria, corte histórico, unidade disponível e decisão de expansão determinam quais registros são comparáveis e qual leitura é possível.",
         ),
         "/inteligencia/concorrencia/": _market_intelligence_family_content(
             path="/inteligencia/concorrencia/",
@@ -823,6 +843,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             capture_heading="Explique quais empresas e qual decisão precisam ser comparadas",
             capture_prompt="Informe o mercado, o território, o período e se a decisão envolve concorrência, parceria, carteira ou seleção empresarial.",
             capture_button="Solicitar proposta de análise competitiva",
+            example="Um fornecedor quer comparar empresas que atendem hospitais públicos com a mesma família de produto antes de escolher quais casos devem passar por diligência própria.",
+            acceptance="A entrega é útil se cada comparação mantém empresa identificada, período, objeto, fonte e regra de leitura; substituição só aparece como fato documental, sem atribuir causa ou sucesso à empresa.",
+            pncp_difference="Uma consulta mostra contratos isolados. A análise reconcilia empresas e organiza presença, concentração e continuidade no recorte contratado, indicando exatamente quais documentos merecem leitura posterior.",
+            decision_intro="A análise reúne evidência documental para escolher quais empresas merecem aprofundamento em uma decisão de entrada, parceria, carteira ou composição de rede. A proposta define identidades, período, documentos e regra de comparação.",
+            adaptation_intro="A pergunta competitiva, a identidade empresarial, o território e a profundidade documental definem o que a comparação consegue sustentar.",
         ),
         "/inteligencia/acompanhamento/": _market_intelligence_family_content(
             path="/inteligencia/acompanhamento/",
@@ -848,6 +873,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             capture_heading="Defina o que precisa ser acompanhado e qual decisão se repete",
             capture_prompt="Informe o tema, o território, a frequência desejada e quais mudanças alterariam sua decisão.",
             capture_button="Solicitar proposta de acompanhamento",
+            example="Um prestador de manutenção quer revisar trimestralmente contratos de equipamentos já assinados para decidir onde investigar consumíveis, assistência ou extensão documentada.",
+            acceptance="Cada ciclo traz data de corte, fontes consultadas, alterações classificadas pelo critério acordado e itens que continuam sem evidência; um término previsto, sozinho, não entra como oportunidade.",
+            pncp_difference="A consulta pontual não preserva uma linha de base nem compara cortes. O acompanhamento contratado registra o que mudou e por que isso altera, ou não, a prioridade definida pelo cliente.",
+            decision_intro="O acompanhamento parte de uma linha de base e registra somente mudanças que alteram uma decisão recorrente. A proposta define tema, fontes, corte inicial, critério de mudança e formato de cada atualização.",
+            adaptation_intro="Tema, gatilho, estabilidade das fontes e rotina de decisão determinam se a atualização é útil e qual frequência pode ser combinada.",
         ),
         "/inteligencia/precos/": _market_intelligence_family_content(
             path="/inteligencia/precos/",
@@ -873,6 +903,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             capture_heading="Informe o item, a especificação e a decisão de preço",
             capture_prompt="Descreva o que precisa comparar, a unidade, a quantidade, o local, o período e a finalidade da pesquisa.",
             capture_button="Solicitar proposta de pesquisa de preços",
+            example="Uma empresa precisa avaliar o preço de cabo elétrico por metro, bitola, quantidade e condição de entrega antes de montar uma proposta técnica.",
+            acceptance="O caderno é aceito quando cada referência conserva fonte, item, especificação, unidade, quantidade, data e condições; registros incompatíveis ficam excluídos com motivo explícito.",
+            pncp_difference="O PNCP oferece registros e valores de contratos. A pesquisa contratada lê documentos e itens para testar comparabilidade, sem transformar valor global ou objeto misto em preço unitário.",
+            decision_intro="A pesquisa separa referências comparáveis de valores que não respondem ao item procurado. A proposta fixa especificação, unidade, quantidade, praça, data-base e condições que precisam permanecer ligadas a cada valor.",
+            adaptation_intro="Especificação, unidade, quantidade, local, período e finalidade de uso definem a regra de comparação e os documentos a examinar.",
         ),
         "/inteligencia/pesquisa-sob-encomenda/": _market_intelligence_family_content(
             path="/inteligencia/pesquisa-sob-encomenda/",
@@ -898,6 +933,11 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             capture_heading="Explique a pesquisa, o público e o uso institucional pretendido",
             capture_prompt="Informe a pergunta, quem utilizará a entrega, o formato desejado e se haverá circulação entre participantes ou clientes.",
             capture_button="Solicitar proposta de pesquisa sob encomenda",
+            example="Uma associação setorial quer um retrato datado de compras públicas de uma categoria para orientar debate interno e circular uma apresentação entre associados autorizados.",
+            acceptance="A proposta define pergunta, fontes, corte, formato, revisões, participantes autorizados e critério de aceite; o material é aceito quando esses itens e os direitos de circulação previstos estiverem atendidos.",
+            pncp_difference="A fonte pública pode ter método e condições de dados abertos próprios. A encomenda define o recorte, a interpretação, o formato e a licença da análise produzida pela CONFENGE; circulação além do uso previsto é tratada na proposta.",
+            decision_intro="O estudo transforma uma pergunta institucional em relatório, base curada, atualização ou análise licenciada para o uso combinado. A proposta define participantes, fontes, formato, revisões e direitos sobre a análise própria.",
+            adaptation_intro="Público, finalidade, formato e circulação prevista determinam a entrega e os direitos de uso da análise, sem alterar as condições da fonte pública.",
         ),
     }
     commercial_assets = {
@@ -1123,6 +1163,11 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         market_intelligence_analyses = render_market_intelligence_sample(
             root=ROOT,
             capture_factory=_market_intelligence_capture,
+        )
+        from scripts.pseo.climatizacao_sample import render_all as render_climatizacao_sample
+
+        market_intelligence_analyses.extend(
+            render_climatizacao_sample(root=ROOT, capture_factory=_market_intelligence_capture)
         )
     # lastmod = when the snapshot was verified, never use bid data_period_end
     # (open-bid end dates can be months in the future and GSC rejects future lastmod).
