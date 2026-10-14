@@ -512,12 +512,13 @@
         "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
         "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
         "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
-        "sitemap.txt": "e9ed88130605a1439c78c012a7ef99c424182ccedecc766424db44c31979c670",
+        "sitemap.txt": "f933eff00499ae616a9f42a61623dd2a9fc24d404abce2e3f85504b984af3fb0",
         "sitemap-index.xml": "b8a6d437ea21491ed4d08fce547d7676a2461f602713ffdce895706b426ca883",
         "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
         "js/modules/analytics.js": "eec045b901ddad08bdd71e910c1ff8a41b9479a443c0f9da9a3fe43657a889b0"
-      }
+      },
+      "html_mutation": true
     }
   ]
 }
