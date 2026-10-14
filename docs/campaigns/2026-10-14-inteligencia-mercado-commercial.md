@@ -307,3 +307,15 @@ gates`, e só depois pelo `netcup-release` com SHA exato, promoção atômica,
 verificação de HTML/manifesto/CDN e nova prova autenticada de transporte.
 A identidade final, resultados desses controles e pós-publicação pertencem
 ao relatório de entrega desta mesma rodada; merge sozinho não comprova deploy.
+
+QA do artefato: 45 verificações, 15 rotas em 320/390/1440, sem overflow,
+erro de página ou violação axe WCAG A/AA; oferta e análise setorial passaram
+com texto ampliado a 200%. Dois casos inconclusivos foram conferidos por
+estilo calculado e geometria: home 1440, 8,12:1 e 17,48:1 (marcador separado
+do texto); quantitativos 320, 11,04:1, sem sobreposição após centralizar o
+elemento. A nova página adiciona uma captura e quatro CTAs ao censo canônico:
+41 capturas e 268 CTAs. A atualização mantém os testes de contexto, consentimento,
+retenção, degradação sem JavaScript e confirmação persistida em cada formulário.
+O build oficial completo passou com 624 arquivos públicos e zero achados.
+A família de climatização entrou na cobertura Lighthouse existente, preservando
+os representantes anteriores, as regras e os limites de performance.
