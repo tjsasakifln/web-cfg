@@ -15,3 +15,8 @@ O comando canônico de atualização completa é
 `npm run audit:performance -- --write-baseline`. Nesta reconciliação ele não
 foi executado porque também reancora a evidência de CLS e o snapshot
 informacional de ativos; estes não fazem parte do delta da única URL nova.
+
+A evidência Lighthouse desta rota foi produzida pelo run GitHub Actions
+`38579074050`, no checkout de merge
+`032c7dccee79854ed7f2f9a5161705e315551a1b` (head do PR:
+`6241dcd2589c8c0480891dcb557ed392c1c16310`).
