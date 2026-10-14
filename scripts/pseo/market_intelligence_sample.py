@@ -386,8 +386,8 @@ def render_relations(data: dict[str, Any], capture_factory: Callable[..., str]) 
             (
                 [
                     contract["id"],
-                    f'{buyer["legal_name"]} — CNPJ {_cnpj(buyer["cnpj"])}',
-                    f'{supplier["legal_name"]} — NI {_cnpj(supplier["ni"])}',
+                    f'{buyer["legal_name"]}, CNPJ {_cnpj(buyer["cnpj"])}',
+                    f'{supplier["legal_name"]} (NI) {_cnpj(supplier["ni"])}',
                     contract["category"],
                     _br_date(contract["signature_date"]),
                 ],
@@ -516,7 +516,7 @@ def render_composition(data: dict[str, Any], capture_factory: Callable[..., str]
 </div></section>
 <section id="leitura"><p class="eyebrow t-kicker">Conclusão comercial do recorte</p><h2>Como usar esta composição em uma nova pesquisa</h2><p>Categoria, localização do comprador, calendário e vigência ajudam a formular hipóteses para um estudo maior, mas os objetos mostram quais organizações realmente entram em cada seleção. Para um catálogo de serviços de projeto, por exemplo, contratos que combinam projeto e obra precisam ser separados dos objetos exclusivamente técnicos antes de comparar aderência.</p><p>O valor integral preserva a escala do instrumento, mas não pode ser convertido em preço unitário, receita do fornecedor, carga de trabalho ou participação de mercado. Uma pesquisa sob encomenda pode ampliar o período e o universo, deduplicar registros, conferir documentos e aplicar os critérios do contratante. Este recorte sozinho não sustenta tendência histórica, previsão, TAM, market share, oportunidade ou disponibilidade comercial.</p></section>
 {_method_section(data)}
-</article><aside class="article-aside"><div class="aside-card"><span>Maior instrumento do recorte</span><h2>{_money(33564883.70)}</h2><p>Contrato 18715490000178-2-000069/2026; também tem a maior vigência observada, de 913 dias. É um extremo desta amostra, não uma referência de mercado.</p><a class="button button-secondary" href="{RELATIONS_ROUTE}">Ver os pares documentados</a></div><div class="aside-card aside-compact"><strong>Coleção</strong><a href="/inteligencia/mercados/">Pesquisa de mercados</a><a href="/inteligencia/precos/">Pesquisa de preços</a></div></aside></div>
+</article><aside class="article-aside"><div class="aside-card"><span>Maior instrumento do recorte</span><h2>{_money(33564883.70)}</h2><p>Contrato 18715490000178-2-000069/2026; também tem a maior vigência observada, de 913 dias. É um extremo desta amostra, não uma referência de mercado.</p><a class="button button-secondary" href="{RELATIONS_ROUTE}">Conferir os pares documentados</a></div><div class="aside-card aside-compact"><strong>Coleção</strong><a href="/inteligencia/mercados/">Pesquisa de mercados</a><a href="/inteligencia/precos/">Pesquisa de preços</a></div></aside></div>
 {_capture(capture_factory, route=route, asset_id="im-composicao-v1", heading="Defina o recorte que sua análise precisa comparar", prompt="Informe a categoria, o território, o período e a decisão que os contratos públicos precisam ajudar a responder.")}</div>'''
     return page_shell(
         title="Composição de dez contratos públicos no PNCP | CONFENGE",
