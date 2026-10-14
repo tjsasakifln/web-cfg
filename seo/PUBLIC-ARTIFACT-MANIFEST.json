@@ -97,7 +97,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 251,
+  "html_route_count": 252,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -299,6 +299,7 @@
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
     "/inteligencia/composicao-contratos-amostra/",
     "/inteligencia/concorrencia/",
+    "/inteligencia/fornecedores-climatizacao-contratos-publicos/",
     "/inteligencia/",
     "/inteligencia/mercados/",
     "/inteligencia/orgaos/",
@@ -351,8 +352,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-14T04:28:15Z",
-  "public_artifact_hash": "8d6922fceccf40586ebd0409fa8085b946ca8f92959aebf06b95b4928e2d12d6",
+  "generated_at": "2026-10-14T16:32:30Z",
+  "public_artifact_hash": "4730bccef2f75c2993394af490b4cbf0b0f8e84dd484d2857af12d6cdecf4e56",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -450,15 +451,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 239,
+  "promoted_navigation_files": 240,
   "navigation_audit": {
-    "audited_files": 239,
-    "audited_blocks": 476,
+    "audited_files": 240,
+    "audited_blocks": 478,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 256,
-    "html_rewritten": 188,
-    "fields_removed": 788
+    "html_scanned": 257,
+    "html_rewritten": 189,
+    "fields_removed": 790
   }
 }
