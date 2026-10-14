@@ -19,7 +19,7 @@ import sys
 from datetime import date
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -33,6 +33,15 @@ SITE = "https://confenge.com.br"
 
 def esc(value: Any) -> str:
     return html.escape(str(value), quote=True)
+
+
+def local_bridge_href(value: Any) -> str:
+    if not isinstance(value, str):
+        raise ValueError("market intelligence bridge href must be a string")
+    parsed = urlsplit(value)
+    if parsed.scheme or parsed.netloc or not parsed.path.startswith("/") or "\\" in value or any(ord(c) < 32 for c in value):
+        raise ValueError(f"market intelligence bridge href must be local: {value}")
+    return value
 
 
 def _icon(name: str) -> str:
@@ -270,7 +279,15 @@ def _render_section(key: str, page: dict[str, Any]) -> str:
         partnership = page["partnership"]
         return f'''<section class="pp-section pp-section--soft" id="parcerias" aria-labelledby="partnership-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(partnership['kicker'])}</p><h2 id="partnership-title">{esc(partnership['title'])}</h2><p>{esc(partnership['body'])}</p><p><a class="pp-text-link" href="{esc(partnership['href'])}">{esc(partnership['cta'])} {_icon('arrow')}</a></p></header></div></section>'''
     if key == "related":
-        return f'''<section class="pp-section pp-section--related" id="relacionadas" aria-labelledby="related-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">Continue a análise</p><h2 id="related-title">Páginas relacionadas</h2></header><ul>{_related(page)}</ul></div></section>'''
+        bridge = page.get("market_intelligence_bridge")
+        bridge_html = ""
+        if bridge:
+            href = local_bridge_href(bridge.get("href"))
+            bridge_html = (
+                f'<p>{esc(bridge["before_link"])}<a href="{esc(href)}">'
+                f'{esc(bridge["link_label"])}</a>{esc(bridge["after_link"])}</p>'
+            )
+        return f'''<section class="pp-section pp-section--related" id="relacionadas" aria-labelledby="related-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">Continue a análise</p><h2 id="related-title">Páginas relacionadas</h2></header>{bridge_html}<ul>{_related(page)}</ul></div></section>'''
     raise ValueError(f"unknown project section: {key}")
 
 

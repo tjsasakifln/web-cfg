@@ -1,0 +1,61 @@
+{
+  "schema": "confenge.market-intelligence-sector-verification/1.0",
+  "as_of": "2026-10-14",
+  "sample_sha256": "6a4c6cd9db43ab797696f998e46011ff45914f5f5576f22adee605ead32eeb8f",
+  "method": "GET limitado de seis endpoints públicos; nos cinco casos selecionados, o endpoint individual do contrato foi rechecado no corte e o primeiro documento oficial foi conferido. Nenhuma API de indexação foi chamada.",
+  "records": [
+    {
+      "id": "15131560000152-2-000183/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/15131560000152/contratos/2026/183",
+      "contract_body_sha256": "f4d4ade0dfcb8e9fb86ad0bedc7b568552253bed95b88af4ec7b61118c26ed70",
+      "document_url": "https://pncp.gov.br/pncp-api/v1/orgaos/15131560000152/contratos/2026/183/arquivos/1",
+      "document_sha256": "3d57728c9886f8bc0e9c8c86d531d0211de0965427abf44bc09e92795641a10f",
+      "object_sha256": "aba059dc1893223c01498b964f9f694f294155d4cbc1b58bced46c360b14b804",
+      "projection_sha256": "879e7de376d59e48c498e28cbf44929f2370337c28d491fa61609645714ae032"
+    },
+    {
+      "id": "14674337000199-2-000021/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/14674337000199/contratos/2026/21",
+      "contract_body_sha256": "53e2754e77e153145fb0dbc55bde3f30b486f53f50ac2c8fc20b5e23e1cd47d4",
+      "document_url": "https://pncp.gov.br/pncp-api/v1/orgaos/14674337000199/contratos/2026/21/arquivos/1",
+      "document_sha256": "a09ba3e1e4bbaec19eea3018ba9e2bfac33124eeb88b583a4fed6684295e1992",
+      "object_sha256": "c7baf466d6bd80ceb85f5c7b76f09a36d25f773abf10178c1a99103fc519dcf2",
+      "projection_sha256": "1fa3ab0b9f84a60f0d0ee3e89cc03027d080ff364f85db2ed7992928f9b44ca2"
+    },
+    {
+      "id": "89522437000107-2-000024/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/89522437000107/contratos/2026/24",
+      "contract_body_sha256": "4d20fa215a161c241fda91412e8247d85d8af50e1e1b40ca9ca73ef2d5c6424d",
+      "document_url": "https://pncp.gov.br/pncp-api/v1/orgaos/89522437000107/contratos/2026/24/arquivos/1",
+      "document_sha256": "5ffdfaec218c8e98c8d8e9369696a5165d33821ab2829cf1619b55c798653eb7",
+      "object_sha256": "4e79323ce4d2f9c0c5e8a470356926842be64bc064885b361e1a28f8871185d1",
+      "projection_sha256": "181918f88a0f58d412580287d5ed647ab0c87939498d39049a2fc7fd9b9483a0"
+    },
+    {
+      "id": "89208474000137-2-000004/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/89208474000137/contratos/2026/4",
+      "contract_body_sha256": "b2f5f8ff5dcb4e4dd3ec1f6587de12bcd64eb812cfec04f621913bfa258d54c3",
+      "document_url": "https://pncp.gov.br/pncp-api/v1/orgaos/89208474000137/contratos/2026/4/arquivos/1",
+      "document_sha256": "7e8b2a323afbef2517cf044a01d23213c211db2085665e262a09917650fcbcbb",
+      "object_sha256": "6eaf9eeae28ccb973adecf574eed94c47490bddfc4ecdf16d5060aa4c41eaabc",
+      "projection_sha256": "27a4dee35e053e6ac071945b2fcfe0bd73fed5651c0ac0bc55b4dd362ab9d200"
+    },
+    {
+      "id": "51816247000111-2-000856/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/51816247000111/contratos/2026/856",
+      "contract_body_sha256": "f585ceea97b01538c6431ab4e122b08413aa939fea715b2e90344ca39e2cf620",
+      "document_url": "https://pncp.gov.br/pncp-api/v1/orgaos/51816247000111/contratos/2026/856/arquivos/1",
+      "document_sha256": "a4d2dd5a15473a7cab9b26c637655aba00d3fa785f430fb88522a88878c8010a",
+      "object_sha256": "d80d65522b8ee75d7901529f83d66f362934458c8ed07eff21b61f8feb3c8ff6",
+      "projection_sha256": "b42b6608c9c7e9dff34aff11308590ce2966724277e33b29cfafe82acee0ea93"
+    }
+  ],
+  "limits": [
+    "Papel observado vale somente para o contrato citado.",
+    "Fornecedor, revendedor e integrador não são equivalentes e nenhuma classificação geral da empresa é inferida.",
+    "A ausência de um papel no objeto não prova que a empresa nunca o desempenhe.",
+    "Localidade do comprador não é local de execução quando o objeto não o declara.",
+    "Nenhum contato, previsão de compra, oportunidade aberta ou prioridade comercial é publicado."
+  ],
+  "verification_sha256": "77f9e445ca53318a16055e06b9c0da3116008897873bebf5ec4344c819002ccc"
+}

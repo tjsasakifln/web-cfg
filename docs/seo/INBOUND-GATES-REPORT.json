@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 125,
+        "scanned": 126,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 125
+        "sitemap_locs": 126
       }
     },
     "brand_shell": {
@@ -136,7 +136,7 @@
         }
       ],
       "stats": {
-        "scanned": 125,
+        "scanned": 126,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -146,15 +146,15 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 95,
+          "commercial_content": 96,
           "trust_or_legal": 7
         },
         "main_cta": {
-          "covered": 118,
-          "total": 118,
+          "covered": 119,
+          "total": 119,
           "coverage": 1.0,
           "exempt": 7,
-          "public_scanned": 125
+          "public_scanned": 126
         },
         "on_page_capture": {
           "covered": 13,
@@ -167,8 +167,8 @@
           "coverage": 1.0
         },
         "capture_route_channels": {
-          "covered": 40,
-          "total": 40,
+          "covered": 41,
+          "total": 41,
           "coverage": 1.0,
           "exemptions": [
             {
@@ -226,14 +226,14 @@
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 54,
+          "families": 55,
           "fail_closed": true,
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 117,
-          "total": 118,
-          "coverage": 0.9915,
+          "covered": 118,
+          "total": 119,
+          "coverage": 0.9916,
           "exempt_trust_or_legal": 7,
           "registered_debt": 1
         },
@@ -714,13 +714,6 @@
         {
           "gate": "archetype_editorial_ready",
           "path": "inteligencia\\composicao-contratos-amostra\\index.html",
-          "reason": "archetype_specific_value_failed",
-          "excerpt": "family=inteligencia-amostras-reais 1/2 sampled pages fail: /inteligencia/relacoes-compradores-fornecedores/: 2 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "inteligencia\\composicao-contratos-amostra\\index.html",
           "reason": "archetype_caveats_preserved_failed",
           "excerpt": "family=inteligencia-amostras-reais 1/2 sampled pages fail: /inteligencia/composicao-contratos-amostra/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
@@ -889,8 +882,8 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "families": 54,
-        "archetype_ready": 9,
+        "families": 55,
+        "archetype_ready": 10,
         "archetype_not_ready": 45,
         "materially_rejected": [
           "jurisprudencia-contratos-obras"
@@ -1288,9 +1281,16 @@
               "/inteligencia/relacoes-compradores-fornecedores/"
             ],
             "blocking": [
-              "specific_value",
               "caveats_preserved"
             ],
+            "material": []
+          },
+          "inteligencia-climatizacao": {
+            "ready": true,
+            "sample": [
+              "/inteligencia/fornecedores-climatizacao-contratos-publicos/"
+            ],
+            "blocking": [],
             "material": []
           },
           "inteligencia-pseo": {
@@ -1785,9 +1785,9 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "scanned": 255,
+        "scanned": 256,
         "noindex": 130,
-        "instance_index_ready": 87,
+        "instance_index_ready": 88,
         "index_ready_but_noindex": [],
         "indexable_without_evidence": 38,
         "noindex_without_reason": [],

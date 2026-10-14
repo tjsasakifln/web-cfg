@@ -132,7 +132,8 @@
     "/inteligencia/precos/": "Pesquisar preços e documentos",
     "/inteligencia/pesquisa-sob-encomenda/": "Contratar pesquisa sob encomenda ou institucional",
     "/inteligencia/relacoes-compradores-fornecedores/": "Relações documentadas",
-    "/inteligencia/composicao-contratos-amostra/": "Composição dos contratos"
+    "/inteligencia/composicao-contratos-amostra/": "Composição dos contratos",
+    "/inteligencia/fornecedores-climatizacao-contratos-publicos/": "Fornecedores de climatização"
   },
   "quality_baseline": {
     "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",

@@ -18,7 +18,7 @@ assert.equal(context.research.ladder, false);
 assert.match(context.research.placeholder, /decisão/);
 assert.doesNotMatch(context.research.placeholder, /Edital|glosa|engenharia/);
 
-const proofSlugs = ['relacoes-compradores-fornecedores', 'composicao-contratos-amostra'];
+const proofSlugs = ['relacoes-compradores-fornecedores', 'composicao-contratos-amostra', 'fornecedores-climatizacao-contratos-publicos'];
 for (const slug of ['orgaos', 'mercados', 'concorrencia', 'acompanhamento', 'precos', 'pesquisa-sob-encomenda', ...proofSlugs]) {
   const route = `/inteligencia/${slug}/`;
   const html = readFileSync(new URL(`../../inteligencia/${slug}/index.html`, import.meta.url), 'utf8');
@@ -37,7 +37,7 @@ for (const slug of ['orgaos', 'mercados', 'concorrencia', 'acompanhamento', 'pre
   });
   assert.equal(normalized.ok, true, slug);
   assert.equal(normalized.lead.jornada, 'outro');
-  const version = proofSlugs.includes(slug) ? 'market-intelligence-sample.v1' : null;
+  const version = slug === 'fornecedores-climatizacao-contratos-publicos' ? 'climatizacao-sample.v1' : proofSlugs.includes(slug) ? 'market-intelligence-sample.v1' : null;
   assert.equal(normalized.lead.evidence_pack_version, version);
   const wire = mapLeadToInboundV1({ ...normalized.lead, lead_id: 'unit-research-12345', received_at: '2026-10-14T12:00:00Z' });
   assert.equal(wire.source, 'CONFENGE_WEB');
@@ -50,4 +50,4 @@ for (const slug of ['orgaos', 'mercados', 'concorrencia', 'acompanhamento', 'pre
     assert.match(wire.message, /data de corte=2026-10-14/);
   }
 }
-console.log('PASS eight served research contexts: generic journey, scope, version and canonical source reach the existing handoff; both proof cutoffs survive.');
+console.log('PASS nine research route contexts: generic journey, scope, version and canonical source reach the existing handoff; all three proof cutoffs survive.');

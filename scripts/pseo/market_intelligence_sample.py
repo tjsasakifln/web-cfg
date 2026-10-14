@@ -307,7 +307,6 @@ def _dataset_graph(data: dict[str, Any], route: str, h1: str, description: str) 
         "creator": {"@id": f"{SITE}/#organization"},
         "isBasedOn": "https://pncp.gov.br/",
         "temporalCoverage": "2026-08-21/2026-10-09",
-        "spatialCoverage": "Brasil",
         "variableMeasured": [
             "identidade legal do comprador",
             "identidade legal do fornecedor",
@@ -349,7 +348,8 @@ def _method_section(data: dict[str, Any]) -> str:
     return f'''<section class="sources-section" id="metodo" data-dataset="{VERSION}"><p class="eyebrow t-kicker">Fonte, corte e método</p>
 <h2>Como esta amostra foi conferida</h2>
 <p><strong>Base de dados deste recorte:</strong> conjunto versionado de dez contratos PNCP, com os campos reproduzidos nas tabelas desta página e corte em <time datetime="{AS_OF}">14/10/2026</time>.</p>
-<p>O grão é um contrato PNCP. A CONFENGE selecionou dez identificadores fixos em um recorte delimitado e cada contrato foi rechecado no endpoint oficial do PNCP em <time datetime="{AS_OF}">14/10/2026</time>. A comparação usa somente os campos publicados e conferidos para esses mesmos instrumentos.</p>
+<p>O grão é um contrato PNCP. São dez contratos orientados à engenharia, selecionados de uma revisão exploratória de 26 CNPJs. Cada identificador foi rechecado no endpoint oficial do PNCP em <time datetime="{AS_OF}">14/10/2026</time>. A comparação inclui somente esses dez instrumentos e os campos publicados e reconciliados com a fonte.</p>
+<p>A origem não registra uma regra reproduzível para escolher os 26 CNPJs nem para representar outros setores. Este recorte permite conferir diferenças de objeto, identidade e localização; não permite avaliar cobertura do mercado ou selecionar canais multissetoriais. Papéis comerciais, parcelas de trabalho e preços unitários sem documento determinante ficam fora das conclusões.</p>
 <p>As identidades exibidas são a razão social e o CNPJ ou NI devolvidos pelo PNCP. As contagens usam apenas os dez registros. Vigência é a diferença entre a data final e a inicial; defasagem de publicação é a diferença entre a data de publicação e a assinatura; o valor é o valor integral publicado para o instrumento.</p>
 <p class="technical-note"><strong>Limites:</strong> seleção exploratória, ilustrativa e possivelmente enviesada; sem denominador populacional. Ela não é censo, carteira de clientes, ranking comercial, medição de participação de mercado ou prova de demanda futura. Valor integral não é preço unitário, receita, orçamento disponível, carga de trabalho ou capacidade. A ausência de fornecedor subcontratado nos campos consultados não prova que subcontratação seja proibida ou inexistente.</p>
 <p class="technical-note">Versão do recorte público: <code>{VERSION}</code>. Corte da fonte: <time datetime="{AS_OF}">14/10/2026</time>. Resultados posteriores, alterações cadastrais ou documentos não incluídos podem mudar a seleção, a classificação e a decisão comercial.</p></section>'''
@@ -496,7 +496,7 @@ def render_composition(data: dict[str, Any], capture_factory: Callable[..., str]
             )
         )
     contract_table = _linked_contract_table(
-        ["Contrato", "UF", "Categoria", "Assinatura", "Vigência", "Dias", "Valor integral"],
+        ["Contrato", "UF", "Categoria", "Assinatura no PNCP", "Vigência no PNCP", "Dias", "Valor integral"],
         rows,
         "Calendário, vigência e valor integral dos dez contratos",
     )
@@ -504,7 +504,7 @@ def render_composition(data: dict[str, Any], capture_factory: Callable[..., str]
     body = f'''<div {_sample_marker(data)}>{breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">Amostra pública verificada</p><h1 class="t-editorial">{escape(h1)}</h1><p class="content-lead measure">Uma descrição inteira do recorte por categoria, UF compradora, datas, vigência e valor integral, sem transformar dez contratos em tendência ou tamanho de mercado.</p><div class="article-meta"><span>Fonte: PNCP</span><span>Corte: <time datetime="{AS_OF}">14/10/2026</time></span><span>Grão: um contrato</span></div></div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta direta</span><p>São {summary["contracts"]} contratos assinados entre {_br_date(summary["signature_window"]["from"])} e {_br_date(summary["signature_window"]["to"])}. A soma descritiva dos valores integrais publicados é {_money(summary["aggregate_integral_value_brl"])}; ela não representa tamanho de mercado, receita ou preço unitário.</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>São {summary["contracts"]} contratos com datas de assinatura registradas no PNCP entre {_br_date(summary["signature_window"]["from"])} e {_br_date(summary["signature_window"]["to"])}. A soma descritiva dos valores integrais publicados é {_money(summary["aggregate_integral_value_brl"])}; ela não representa tamanho de mercado, receita ou preço unitário.</p></div>
 <section id="indicadores"><p class="eyebrow t-kicker">Resultado inteiro</p><h2>Números do recorte</h2>{indicators_html([("Contratos", "10", "um registro por instrumento"), ("Categorias", "4", "classificação do PNCP"), ("UFs compradoras", "7", "localização do comprador"), ("Vigência", "89 a 913 dias", "fim menos início"), ("Defasagem da publicação", "0 a 49 dias", "publicação menos assinatura"), ("Valor integral somado", _money(summary["aggregate_integral_value_brl"]), "soma descritiva")])}</section>
 <section id="composicao"><p class="eyebrow t-kicker">Distribuição descritiva</p><h2>Categorias e UFs presentes</h2><p>As contagens descrevem somente estes dez contratos. Não há denominador populacional para calcular participação, concentração setorial ou representatividade.</p>{category_table}{uf_table}</section>
 <section id="contratos"><p class="eyebrow t-kicker">Calendário e valores</p><h2>Os dez registros que formam o resultado</h2>{contract_table}</section>

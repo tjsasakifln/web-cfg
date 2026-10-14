@@ -974,6 +974,26 @@
       }
     },
     {
+      "id": "inteligencia-climatizacao",
+      "visitor_job": "Comparar fornecedores de climatização por papel documentado em cinco contratos públicos antes de solicitar seleção aplicada ao próprio catálogo e território.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/inteligencia/fornecedores-climatizacao-contratos-publicos/"]},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact", "label": "Solicitar seleção", "href": "#captura-estudo",
+        "desktop_cta_id": "im-climatizacao-header", "mobile_cta_id": "im-climatizacao-mobile",
+        "journey": "outro", "tema": "Pesquisa de mercado"
+      },
+      "declared_at": "2026-10-14", "owner_issue": 61, "debt": [],
+      "index_evidence": {
+        "substrate": "external_record", "not_applicable": [],
+        "reason": "Cinco contratos PNCP e documentos oficiais verificados, seleção limitada não censitária; papéis observados são vinculados à fonte e ao manifesto independente, sem inferir demanda aberta ou base instalada.",
+        "authority": ["data/pseo/climatizacao-sample.v1.json", "data/pseo/climatizacao-verification.v1.json"],
+        "declared_at": "2026-10-14", "owner_issue": 61
+      }
+    },
+    {
       "id": "inteligencia-pseo",
       "visitor_job": "Navegar pela inteligencia de mercado derivada de contratos publicos (mercados, orgaos, precos, concorrencia e cenarios tecnicos) antes de decidir onde disputar.",
       "profile": "commercial_content",

@@ -463,7 +463,8 @@
   ],
   "market_intelligence_analyses": [
     "inteligencia/relacoes-compradores-fornecedores/index.html",
-    "inteligencia/composicao-contratos-amostra/index.html"
+    "inteligencia/composicao-contratos-amostra/index.html",
+    "inteligencia/fornecedores-climatizacao-contratos-publicos/index.html"
   ],
   "sitemap": "sitemap-inteligencia.xml",
   "registry": "data\\pseo\\registry.json",

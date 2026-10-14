@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 125,
-  "unique_paths": 125,
+  "url_count": 126,
+  "unique_paths": 126,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -122,6 +122,7 @@
     "https://confenge.com.br/inteligencia/acompanhamento/",
     "https://confenge.com.br/inteligencia/composicao-contratos-amostra/",
     "https://confenge.com.br/inteligencia/concorrencia/",
+    "https://confenge.com.br/inteligencia/fornecedores-climatizacao-contratos-publicos/",
     "https://confenge.com.br/inteligencia/mercados/",
     "https://confenge.com.br/inteligencia/orgaos/",
     "https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/",
@@ -133,7 +134,7 @@
   "families": {
     "core": 110,
     "editorial": 4,
-    "inteligencia": 9,
+    "inteligencia": 10,
     "contract_analysis": 2
   },
   "member_sitemaps": [

@@ -9,7 +9,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -67,6 +67,15 @@ def channel_meta(document: str, contact_id: str) -> tuple[str, str]:
 
 def esc(value: str) -> str:
     return html.escape(str(value), quote=True)
+
+
+def local_bridge_href(value: object) -> str:
+    if not isinstance(value, str):
+        raise ValueError("market intelligence bridge href must be a string")
+    parsed = urlsplit(value)
+    if parsed.scheme or parsed.netloc or not parsed.path.startswith("/") or "\\" in value or any(ord(c) < 32 for c in value):
+        raise ValueError(f"market intelligence bridge href must be local: {value}")
+    return value
 
 
 def tracking_attributes(page: dict, family: str | None = None) -> str:
@@ -191,10 +200,18 @@ def render_engagement(block: dict, section_id: str) -> str:
     items = "\n".join(
         f"<li><b>{esc(title)}.</b> {esc(text)}</li>" for title, text in block["items"]
     )
+    bridge = block.get("market_intelligence_bridge")
+    bridge_html = ""
+    if bridge:
+        href = local_bridge_href(bridge.get("href"))
+        bridge_html = (
+            f'<p>{esc(bridge["before_link"])}<a href="{esc(href)}">'
+            f'{esc(bridge["link_label"])}</a>{esc(bridge["after_link"])}</p>'
+        )
     return f'''<section aria-labelledby="{section_id}-title" class="sec sec--soft" id="{section_id}">
 <div class="container">
 <header class="sec-head sec-head--split"><span class="t-kicker">{esc(block['kicker'])}</span><h2 class="t-editorial" id="{section_id}-title">{esc(block['title'])}</h2><p>{esc(block['intro'])}</p></header>
-<div class="conditions"><ul>{items}</ul></div>
+<div class="conditions"><ul>{items}</ul>{bridge_html}</div>
 </div></section>'''
 
 

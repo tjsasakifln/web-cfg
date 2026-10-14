@@ -1,0 +1,175 @@
+{
+  "schema": "confenge.market-intelligence-sector-sample/1.0",
+  "version": "climatizacao-sample.v1",
+  "as_of": "2026-10-14",
+  "source": {
+    "name": "PNCP official contract API and official contract documents",
+    "query_sha256": "8327a5018d658a5fc9111bfc4c7a018754fc841d33422f75f92a7a7d480eb3eb",
+    "filters": {
+      "publication_start_inclusive": "2026-09-01",
+      "publication_end_exclusive": "2026-10-12",
+      "active": true,
+      "quality_state": "VALID",
+      "supplier_id_type": "CNPJ",
+      "terms": [
+        "climatiza",
+        "ar condicionado",
+        "condicionamento de ar"
+      ],
+      "bounded_candidate_records": 30,
+      "purposeful_verified_records": 5
+    }
+  },
+  "question": "Quais papéis comerciais diferentes aparecem em contratos públicos recentes de climatização?",
+  "selection": "Cinco casos verificados foram escolhidos para contrastar fornecimento, instalação, locação e manutenção; não representam ranking, censo ou carteira comercial.",
+  "records": [
+    {
+      "id": "15131560000152-2-000183/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/15131560000152/contratos/2026/183",
+      "buyer": {
+        "name": "CONSELHO DE ARQUITETURA E URBANISMO DE SAO PAULO (CAU-SP)",
+        "cnpj": "15131560000152",
+        "uf": "SP",
+        "municipality": "São Paulo",
+        "territory_meaning": "localidade da unidade compradora registrada no PNCP; não é local de execução salvo quando o objeto o declara"
+      },
+      "supplier": {
+        "name": "BAGATOLI COMERCIO DE REFRIGERACAO LTDA",
+        "cnpj": "00897750000108"
+      },
+      "observed_role": "Fornecimento e instalação de aparelhos no Grupo 1 do contrato verificado.",
+      "role_basis": "A discriminação do objeto no contrato nomeia 'Aquisição de aparelhos de ar condicionado e instalação destes equipamentos'.",
+      "object": "Aquisição de aparelhos de ar condicionado e contratação de empresas especializadas para execução dos serviços de instalação de aparelhos de ar condicionado, manutenção preventiva e corretiva de  parelhos de ar condicionado e análise da qualidade do ar.",
+      "object_sha256": "aba059dc1893223c01498b964f9f694f294155d4cbc1b58bced46c360b14b804",
+      "publication_date": "2026-09-25",
+      "signature_date": "2026-09-24",
+      "execution_location": null,
+      "evidence_document": {
+        "type": "Contrato",
+        "title": "SEI1161900Contrato.pdf",
+        "official_url": "https://pncp.gov.br/pncp-api/v1/orgaos/15131560000152/contratos/2026/183/arquivos/1",
+        "sha256": "3d57728c9886f8bc0e9c8c86d531d0211de0965427abf44bc09e92795641a10f"
+      }
+    },
+    {
+      "id": "14674337000199-2-000021/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/14674337000199/contratos/2026/21",
+      "buyer": {
+        "name": "BAHIA ASSEMBLEIA LEGISLATIVA",
+        "cnpj": "14674337000199",
+        "uf": "BA",
+        "municipality": "Salvador",
+        "territory_meaning": "localidade da unidade compradora registrada no PNCP; não é local de execução salvo quando o objeto o declara"
+      },
+      "supplier": {
+        "name": "LOC TUDO LOCACAO E ASSISTENCIA TECNICA LTDA",
+        "cnpj": "03019757000115"
+      },
+      "observed_role": "Locação de aparelhos com instalação total, manutenção preventiva e corretiva e higienização.",
+      "role_basis": "O objeto do contrato e o instrumento assinado enumeram locação, instalação total, manutenção e higienização.",
+      "object": "CONTRATAÇÃO DE EMPRESA ESPECIALIZADA PARA PRESTAÇÃO DE SERVIÇOS DE LOCAÇÃO DE APARELHOS DE AR CONDICIONADO, NOVOS DE PRIMEIRO USO, COM REPOSIÇÃO TOTAL DE PEÇAS, CONTEMPLANDO INSTALAÇÃO TOTAL, MANUTENÇÃO PREVENTIVA, CORRETIVA E HIGIENIZAÇÃO PARA IMPLANTAÇÃO NAS DEPENDÊNCIAS DO EDF. WILSON LUIS E EDF. NELSON DAVID RIBEIRO DO PODER LEGISLATIVO DA BAHIA",
+      "object_sha256": "c7baf466d6bd80ceb85f5c7b76f09a36d25f773abf10178c1a99103fc519dcf2",
+      "publication_date": "2026-09-15",
+      "signature_date": "2026-09-10",
+      "execution_location": "Edifícios Wilson Luís e Nelson David Ribeiro, Poder Legislativo da Bahia; município não inferido do objeto.",
+      "evidence_document": {
+        "type": "Contrato",
+        "title": "2026000000033__LOC_TUDO__AR_COND___EDF___WL__NDR",
+        "official_url": "https://pncp.gov.br/pncp-api/v1/orgaos/14674337000199/contratos/2026/21/arquivos/1",
+        "sha256": "a09ba3e1e4bbaec19eea3018ba9e2bfac33124eeb88b583a4fed6684295e1992"
+      }
+    },
+    {
+      "id": "89522437000107-2-000024/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/89522437000107/contratos/2026/24",
+      "buyer": {
+        "name": "CAMARA MUNICIPAL DE PORTO ALEGRE",
+        "cnpj": "89522437000107",
+        "uf": "RS",
+        "municipality": "Porto Alegre",
+        "territory_meaning": "localidade da unidade compradora registrada no PNCP; não é local de execução salvo quando o objeto o declara"
+      },
+      "supplier": {
+        "name": "TERMSUL ENGENHARIA E SERVICOS LTDA",
+        "cnpj": "02598353000160"
+      },
+      "observed_role": "Manutenção continuada preventiva, corretiva e preditiva, com ampliação, desinstalação e materiais sob demanda.",
+      "role_basis": "O objeto e a cláusula de obrigações do contrato enumeram esses serviços e insumos.",
+      "object": "Contratação de serviços continuados com dedicação exclusiva de mão de obra de postos de trabalho para manutenção preventiva, corretiva, preditiva, ampliação e desinstalação dos sistemas de climatização, ventilação e exaustão do prédio, com fornecimento de materiais, insumos e serviços sob demanda, na sede da Câmara Municipal de Porto Alegre (CMPA).",
+      "object_sha256": "4e79323ce4d2f9c0c5e8a470356926842be64bc064885b361e1a28f8871185d1",
+      "publication_date": "2026-09-25",
+      "signature_date": "2026-09-25",
+      "execution_location": "Sede da Câmara Municipal de Porto Alegre, Porto Alegre/RS, expressa no objeto.",
+      "evidence_document": {
+        "type": "Contrato",
+        "title": "SEI_1146279_Contrato_1149.pdf",
+        "official_url": "https://pncp.gov.br/pncp-api/v1/orgaos/89522437000107/contratos/2026/24/arquivos/1",
+        "sha256": "5ffdfaec218c8e98c8d8e9369696a5165d33821ab2829cf1619b55c798653eb7"
+      }
+    },
+    {
+      "id": "89208474000137-2-000004/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/89208474000137/contratos/2026/4",
+      "buyer": {
+        "name": "JAGUARI CAMARA DE VEREADORES",
+        "cnpj": "89208474000137",
+        "uf": "RS",
+        "municipality": "Jaguari",
+        "territory_meaning": "localidade da unidade compradora registrada no PNCP; não é local de execução salvo quando o objeto o declara"
+      },
+      "supplier": {
+        "name": "EMEREL INSTALACAO, MANUTENCAO E REFRIGERACAO LTDA",
+        "cnpj": "02866360000104"
+      },
+      "observed_role": "Manutenção corretiva especializada com recuperação, desinstalação e reinstalação de motores, limpeza, recarga e testes.",
+      "role_basis": "O objeto oficial e o contrato assinado descrevem essas operações específicas.",
+      "object": "Contratação de empresa especializada para manutenção corretiva do sistema de climatização das novas instalações da Câmara Municipal de Jaguari/RS, incluindo recuperação, desinstalação e reinstalação de motores, limpeza do sistema, recarga de gás, configuração e testes operacionais. O serviço compreende o rebobinamento e troca de rolamentos dos quatro motores das condensadoras, fornecimento de gás R22 e demais insumos, desinstalação e reinstalação dos motores, limpeza do sistema, recarga de gás, configuração e testes operacionais, além dos deslocamentos necessários.",
+      "object_sha256": "6eaf9eeae28ccb973adecf574eed94c47490bddfc4ecdf16d5060aa4c41eaabc",
+      "publication_date": "2026-09-14",
+      "signature_date": "2026-09-11",
+      "execution_location": "Novas instalações da Câmara Municipal de Jaguari, Jaguari/RS, expressas no objeto.",
+      "evidence_document": {
+        "type": "Contrato",
+        "title": "12 - Contrato de Prestacao de servico Assinado.pdf",
+        "official_url": "https://pncp.gov.br/pncp-api/v1/orgaos/89208474000137/contratos/2026/4/arquivos/1",
+        "sha256": "7e8b2a323afbef2517cf044a01d23213c211db2085665e262a09917650fcbcbb"
+      }
+    },
+    {
+      "id": "51816247000111-2-000856/2026",
+      "official_url": "https://pncp.gov.br/api/pncp/v1/orgaos/51816247000111/contratos/2026/856",
+      "buyer": {
+        "name": "MUNICIPIO DE MONTE ALTO",
+        "cnpj": "51816247000111",
+        "uf": "SP",
+        "municipality": "Monte Alto",
+        "territory_meaning": "localidade da unidade compradora registrada no PNCP; não é local de execução salvo quando o objeto o declara"
+      },
+      "supplier": {
+        "name": "D L TORQUATO LTDA",
+        "cnpj": "01461135000206"
+      },
+      "observed_role": "Fornecimento de aparelhos Split Inverter, sem instalação nos itens verificados.",
+      "role_basis": "A tabela do contrato identifica os aparelhos e registra 'sem instalação'; a obrigação é entrega dos equipamentos.",
+      "object": "Aquisição de aparelhos de ar-condicionado tipo Split Inverter, destinados à climatização do Conservatório Municipal Maestro Mário Veneri, compreendendo o fornecimento dos equipamentos.",
+      "object_sha256": "d80d65522b8ee75d7901529f83d66f362934458c8ed07eff21b61f8feb3c8ff6",
+      "publication_date": "2026-10-06",
+      "signature_date": "2026-09-28",
+      "execution_location": "Conservatório Municipal Maestro Mário Veneri; comprador registrado em Monte Alto/SP.",
+      "evidence_document": {
+        "type": "Contrato",
+        "title": "Contr_131_-_D_L_Torquato_Ltda.pdf.pdf",
+        "official_url": "https://pncp.gov.br/pncp-api/v1/orgaos/51816247000111/contratos/2026/856/arquivos/1",
+        "sha256": "a4d2dd5a15473a7cab9b26c637655aba00d3fa785f430fb88522a88878c8010a"
+      }
+    }
+  ],
+  "limits": [
+    "Papel observado vale somente para o contrato citado.",
+    "Fornecedor, revendedor e integrador não são equivalentes e nenhuma classificação geral da empresa é inferida.",
+    "A ausência de um papel no objeto não prova que a empresa nunca o desempenhe.",
+    "Localidade do comprador não é local de execução quando o objeto não o declara.",
+    "Nenhum contato, previsão de compra, oportunidade aberta ou prioridade comercial é publicado."
+  ],
+  "claims_sha256": "38ae4ea852a41a2741c709eeb2e4d19a7c067ed6e449a0abb2d57ef6fa5f7fbe"
+}

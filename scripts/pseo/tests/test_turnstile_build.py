@@ -216,6 +216,7 @@ ISSUE_440_CAPTURE_ROUTES = {
     "inteligencia/acompanhamento/index.html",
     "inteligencia/composicao-contratos-amostra/index.html",
     "inteligencia/concorrencia/index.html",
+    "inteligencia/fornecedores-climatizacao-contratos-publicos/index.html",
     "inteligencia/mercados/index.html",
     "inteligencia/orgaos/index.html",
     "inteligencia/pesquisa-sob-encomenda/index.html",

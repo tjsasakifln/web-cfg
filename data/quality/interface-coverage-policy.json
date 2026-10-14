@@ -143,6 +143,11 @@
         "reason": "external-proof market-intelligence family representative with a bounded real-record sample"
       },
       {
+        "family_id": "inteligencia-climatizacao",
+        "route": "/inteligencia/fornecedores-climatizacao-contratos-publicos/",
+        "reason": "single-route climatization supplier sample with verified public-contract evidence"
+      },
+      {
         "family_id": "inteligencia-pseo",
         "route": "/inteligencia/cenarios/",
         "reason": "legacy intelligence scenarios family representative; the route remains a noindex scenario library",
