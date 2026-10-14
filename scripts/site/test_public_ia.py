@@ -241,17 +241,17 @@ def test_footer_is_not_a_taxonomy_dump():
     assert not footer_problem_cluster_dump(home, clusters)
     rendered = footer_columns_html()
     assert rendered.count("<strong>") == 3
-    assert "Inteligência" not in rendered
+    assert '<a href="/inteligencia/">Inteligência de mercado</a>' in rendered
     assert "Metodologia" not in rendered
     assert rendered.count("<a ") <= 16
     assert "Perícias e avaliações" not in rendered
-    for href in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/", "/servicos/", "/empresa/"):
+    for href in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/", "/inteligencia/", "/empresa/"):
         assert f'href="{href}"' in rendered, href
 
 
 def _assert_national_contact_is_discoverable(rendered: str) -> None:
     assert "brasil" in rendered.casefold()
-    for href in ("/servicos/", "/triagem-tecnica/", "mailto:tiago.sasaki@confenge.com.br", "tel:+5548988344559"):
+    for href in ("/triagem-tecnica/", "mailto:tiago.sasaki@confenge.com.br", "tel:+5548988344559"):
         assert f'href="{href}"' in rendered, href
     # Material conditions remain in the service explanation and proposal;
     # the institutional footer exposes the national contact route once.

@@ -243,10 +243,6 @@
         "heading": "Serviços e conhecimento",
         "links": [
           {
-            "label": "Serviços de engenharia",
-            "href": "/servicos/"
-          },
-          {
             "label": "Edificações",
             "href": "/edificacoes/"
           },
@@ -437,8 +433,8 @@
       "role": "evidencia",
       "label": "Inteligência",
       "next_action": "/#formulario-contato",
-      "chrome": "hidden",
-      "chrome_reason": "Hub noindex — reachable from search and deep pages, not from header or footer."
+      "chrome": "footer",
+      "chrome_reason": "Hub público indexável, descoberto pelo diretório de serviços e pelo rodapé compartilhado."
     },
     {
       "id": "metodologia",
@@ -1012,11 +1008,6 @@
     }
   ],
   "removed_from_prominent_chrome": [
-    {
-      "label": "Inteligência",
-      "href": "/inteligencia/",
-      "reason": "Hub noindex — chrome principal não aponta para noindex."
-    },
     {
       "label": "Metodologia",
       "href": "/metodologia-inteligencia/",
