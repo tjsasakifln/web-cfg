@@ -542,6 +542,8 @@
           const payload = {};
           fd.forEach((val, key) => { payload[key] = String(val); });
           const submitBtn = form.querySelector('[type="submit"]');
+          const submitHadFocus = document.activeElement === submitBtn;
+          let restoreSubmitFocus = false;
           if (submitBtn) submitBtn.disabled = true;
           showFormStatus('Enviando. Não feche a página.', 'ok');
           const finishOk = (receipt) => {
@@ -673,6 +675,7 @@
               return;
             }
             if (res.status === 429) {
+              restoreSubmitFocus = true;
               resetTurnstile();
               showFormStatus('Muitas tentativas. Aguarde um minuto e tente de novo.', 'error');
               track('lead_form_error', {
@@ -684,10 +687,19 @@
             }
             throw new Error(data.error || `lead_http_${res.status}`);
           }).catch((err) => {
+            restoreSubmitFocus = true;
             finishFallback(err && err.name === 'AbortError' ? 'timeout' : (err && err.message) || 'network');
           }).finally(() => {
             if (timeoutId) clearTimeout(timeoutId);
-            if (submitBtn) submitBtn.disabled = false;
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              // Disabling a focused button moves focus to body in browsers.
+              // Restore its place only after failure and only if the visitor
+              // did not move focus elsewhere while the request was pending.
+              if (restoreSubmitFocus && submitHadFocus && document.activeElement === document.body) {
+                submitBtn.focus({ preventScroll: true });
+              }
+            }
           });
         }
       });

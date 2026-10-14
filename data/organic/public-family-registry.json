@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-10-12",
+  "as_of": "2026-10-14",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -883,6 +883,95 @@
       "owner_issue": 84,
       "note": "Canario Market Answer de #84. Esteve index,follow entre ed498b1c7 (2026-08-17) e cea6cd6b0 (2026-08-19); voltou a noindex,nofollow quando o gate de frescor de #151 passou a avaliar expires_at em relogio UTC real e classificou o payload extra-cli como STALE. Fail-closed por desenho: reindexa sozinho quando houver payload renovado mais aprovacao correspondente. Rota exata declarada antes do prefixo /inteligencia/ porque a sua governanca e outra. Atencao para quem reindexar: o <main> exibe medianas de contrato (R$) que o heuristico _displays_price pode ler como preco de oferta; a rota precisara resolver priced_offer ou priced_reference_routes no momento do flip.",
       "debt": []
+    },
+    {
+      "id": "inteligencia-mercado",
+      "visitor_job": "Contratar pesquisa multissetorial para selecionar clientes e canais, examinar mercado ou concorrentes, pesquisar preços e documentos, definir acompanhamento ou utilização institucional.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/inteligencia/",
+          "/inteligencia/orgaos/",
+          "/inteligencia/mercados/",
+          "/inteligencia/concorrencia/",
+          "/inteligencia/acompanhamento/",
+          "/inteligencia/precos/",
+          "/inteligencia/pesquisa-sob-encomenda/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Solicitar estudo",
+        "href": "#captura-estudo",
+        "journey": "outro",
+        "tema": "Pesquisa de mercado",
+        "desktop_cta_id": "im-header-study",
+        "mobile_cta_id": "im-mobile-study"
+      },
+      "declared_at": "2026-10-14",
+      "owner_issue": 61,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Explicação comercial da pesquisa sob escopo da própria CONFENGE. Os resultados reais, fontes e corte pertencem às análises vinculadas; estas páginas não representam clientes, descobertas já feitas, preço ou capacidade regulada universal.",
+        "authority": [
+          "data/corporate/intent-family-matrix.v1.json",
+          "docs/campaigns/2026-10-14-inteligencia-mercado-commercial.md"
+        ],
+        "declared_at": "2026-10-14",
+        "owner_issue": 61
+      }
+    },
+    {
+      "id": "inteligencia-amostras-reais",
+      "visitor_job": "Conferir relações institucionais e composição de dez contratos públicos verificáveis antes de solicitar um recorte para a própria decisão.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/inteligencia/relacoes-compradores-fornecedores/",
+          "/inteligencia/composicao-contratos-amostra/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Solicitar um recorte",
+        "href": "#captura-estudo",
+        "desktop_cta_id": "im-sample-header",
+        "mobile_cta_id": "im-sample-mobile",
+        "journey": "outro",
+        "tema": "Pesquisa de mercado"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-10-14",
+      "owner_issue": 61,
+      "debt": [],
+      "note": "Amostras de registros externos adquiridos pelo extra-cli e rechecados no PNCP. Official_live e citable_source permanecem aplicáveis. Grão contrato PNCP, amostra fixa não censitária, corte e hashes no snapshot versionado; autoria/revisão humana não são alegadas.",
+      "index_evidence": {
+        "substrate": "external_record",
+        "not_applicable": [],
+        "reason": "Dez contratos externos, identidades e campos publicados vinculados ao manifesto independente PNCP, sem dispensas de prova.",
+        "authority": [
+          "data/pseo/market-intelligence-sample.v1.json",
+          "data/pseo/market-intelligence-verification.v1.json"
+        ],
+        "declared_at": "2026-10-14",
+        "owner_issue": 61
+      }
     },
     {
       "id": "inteligencia-pseo",

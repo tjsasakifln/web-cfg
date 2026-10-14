@@ -2630,7 +2630,7 @@ INDEX_EVIDENCE_REQUIRED_FIELDS = ("reason", "authority", "declared_at", "owner_i
 # Families whose instances represent a record acquired from outside this site.
 # ``_sub_official_live`` special-cases exactly these; they may never declare
 # first_party_publication. Mirrors the ids that subgate branches on.
-EXTERNAL_RECORD_ONLY_FAMILY_IDS = frozenset({"analises-contratos-publicos"})
+EXTERNAL_RECORD_ONLY_FAMILY_IDS = frozenset({"analises-contratos-publicos", "inteligencia-amostras-reais"})
 EXTERNAL_RECORD_ONLY_FAMILY_PREFIXES = ("live-intelligence",)
 
 CONTRACT_ANALYSIS_STATUS_REL = "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json"
@@ -3160,6 +3160,29 @@ def _sub_official_live(
     if waiver:
         return Subgate(
             "official_live", True, SUBGATE_REMEDIABLE, waiver, applicable=False
+        )
+    if fid == "inteligencia-amostras-reais":
+        try:
+            from scripts.pseo.market_intelligence_sample import (
+                ROUTES, _canonical_sha256, load_snapshot,
+            )
+            sample = load_snapshot(ctx.base / "data/pseo/market-intelligence-sample.v1.json")
+            expected = {
+                "data-market-sample-version": sample["version"],
+                "data-market-sample-as-of": sample["as_of"],
+                "data-market-sample-sha256": _canonical_sha256(sample),
+            }
+            if route not in ROUTES:
+                raise ValueError("unregistered sample analysis route")
+            for attribute, value in expected.items():
+                actual = re.findall(r'\b' + re.escape(attribute) + r'="([^"]+)"', html)
+                if actual != [value]:
+                    raise ValueError(f"rendered sample binding mismatch: {attribute}")
+        except (OSError, ValueError, KeyError, ImportError) as exc:
+            return Subgate("official_live", False, SUBGATE_REMEDIABLE, str(exc))
+        return Subgate(
+            "official_live", True, SUBGATE_REMEDIABLE,
+            "ten public PNCP claims match the independent pinned verification manifest and rendered sample identity",
         )
     if fid.startswith("live-intelligence") and not ctx.live_contract_status.startswith(
         "SHIPPED"

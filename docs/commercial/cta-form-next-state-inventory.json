@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 215
+    "expected_declared_ctas": 264
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
-    "active_capture_routes": 31,
-    "declared_ctas": 215,
+    "active_capture_routes": 40,
+    "declared_ctas": 264,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4374,6 +4374,21 @@
           ]
         },
         {
+          "cta_id": "home-market-intelligence",
+          "position": "home_services",
+          "href": "/inteligencia/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Inteligência de mercado",
+          "useful_next_state": "Abre o destino declarado por “Inteligência de mercado” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
           "cta_id": "home-how-we-work",
           "position": "conduction",
           "href": "/como-trabalhamos/",
@@ -4536,6 +4551,1329 @@
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "email_click"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/acompanhamento/",
+      "file": "inteligencia/acompanhamento/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-acompanhamento-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de acompanhamento",
+          "current_label": "Solicitar proposta de acompanhamento",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-acompanhamento-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Definir acompanhamento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-acompanhamento-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/composicao-contratos-amostra/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar uma análise pública",
+          "useful_next_state": "Abre o destino declarado por “Examinar uma análise pública” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-acompanhamento-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20o%20tema%2C%20o%20territ%C3%B3rio%2C%20a%20frequ%C3%AAncia%20desejada%20e%20quais%20mudan%C3%A7as%20alterariam%20sua%20decis%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-acompanhamento-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Defina%20o%20que%20precisa%20ser%20acompanhado%20e%20qual%20decis%C3%A3o%20se%20repete",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-acompanhamento-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Definir acompanhamento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/composicao-contratos-amostra/",
+      "file": "inteligencia/composicao-contratos-amostra/index.html",
+      "family_id": "inteligencia-amostras-reais",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-composicao-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de pesquisa",
+          "current_label": "Solicitar proposta de pesquisa",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-composicao-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20a%20categoria%2C%20o%20territ%C3%B3rio%2C%20o%20per%C3%ADodo%20e%20a%20decis%C3%A3o%20que%20os%20contratos%20p%C3%BAblicos%20precisam%20ajudar%20a%20responder.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-composicao-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Defina%20o%20recorte%20que%20sua%20an%C3%A1lise%20precisa%20comparar",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-composicao-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/concorrencia/",
+      "file": "inteligencia/concorrencia/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-concorrencia-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de análise competitiva",
+          "current_label": "Solicitar proposta de análise competitiva",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-concorrencia-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Analisar concorrentes e empresas",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-concorrencia-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/relacoes-compradores-fornecedores/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar empresas verificadas",
+          "useful_next_state": "Abre o destino declarado por “Examinar empresas verificadas” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-concorrencia-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20o%20mercado%2C%20o%20territ%C3%B3rio%2C%20o%20per%C3%ADodo%20e%20se%20a%20decis%C3%A3o%20envolve%20concorr%C3%AAncia%2C%20parceria%2C%20carteira%20ou%20sele%C3%A7%C3%A3o%20empresarial.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-concorrencia-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Explique%20quais%20empresas%20e%20qual%20decis%C3%A3o%20precisam%20ser%20comparadas",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-concorrencia-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Analisar concorrentes e empresas",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/",
+      "file": "inteligencia/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-hub-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de estudo",
+          "current_label": "Solicitar proposta de estudo",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-hub-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar estudo de mercado",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-hub-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/relacoes-compradores-fornecedores/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar uma análise de empresas",
+          "useful_next_state": "Abre o destino declarado por “Examinar uma análise de empresas” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-hub-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20a%20necessidade%2C%20o%20setor%20ou%20produto%20e%20o%20recorte%20que%20j%C3%A1%20conhece.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-hub-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Conte%20a%20decis%C3%A3o%20que%20a%20pesquisa%20precisa%20apoiar",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-hub-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar estudo de mercado",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/mercados/",
+      "file": "inteligencia/mercados/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-mercados-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de estudo de mercado",
+          "current_label": "Solicitar proposta de estudo de mercado",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-mercados-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar estudo de mercado",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-mercados-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/composicao-contratos-amostra/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar uma análise de mercado",
+          "useful_next_state": "Abre o destino declarado por “Examinar uma análise de mercado” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-mercados-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20o%20produto%20ou%20categoria%2C%20o%20territ%C3%B3rio%20e%20se%20a%20decis%C3%A3o%20envolve%20expans%C3%A3o%2C%20cat%C3%A1logo%2C%20abastecimento%20ou%20assist%C3%AAncia%20t%C3%A9cnica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-mercados-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Delimite%20o%20mercado%2C%20a%20decis%C3%A3o%20e%20o%20per%C3%ADodo%20de%20interesse",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-mercados-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar estudo de mercado",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/orgaos/",
+      "file": "inteligencia/orgaos/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-clientes-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de mapeamento",
+          "current_label": "Solicitar proposta de mapeamento",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-clientes-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar meu mapeamento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-clientes-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/relacoes-compradores-fornecedores/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar uma análise de empresas",
+          "useful_next_state": "Abre o destino declarado por “Examinar uma análise de empresas” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-clientes-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20o%20produto%20ou%20servi%C3%A7o%2C%20o%20territ%C3%B3rio%2C%20o%20tipo%20de%20canal%20e%20o%20resultado%20esperado%20do%20mapa.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-clientes-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Explique%20quem%20voc%C3%AA%20precisa%20encontrar%20e%20para%20qual%20decis%C3%A3o",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-clientes-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar meu mapeamento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/pesquisa-sob-encomenda/",
+      "file": "inteligencia/pesquisa-sob-encomenda/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-institucional-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de pesquisa sob encomenda",
+          "current_label": "Solicitar proposta de pesquisa sob encomenda",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-institucional-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Contratar pesquisa",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-institucional-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/relacoes-compradores-fornecedores/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar uma análise pública",
+          "useful_next_state": "Abre o destino declarado por “Examinar uma análise pública” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-institucional-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20a%20pergunta%2C%20quem%20utilizar%C3%A1%20a%20entrega%2C%20o%20formato%20desejado%20e%20se%20haver%C3%A1%20circula%C3%A7%C3%A3o%20entre%20participantes%20ou%20clientes.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-institucional-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Explique%20a%20pesquisa%2C%20o%20p%C3%BAblico%20e%20o%20uso%20institucional%20pretendido",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-institucional-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Contratar pesquisa",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/precos/",
+      "file": "inteligencia/precos/index.html",
+      "family_id": "inteligencia-mercado",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-precos-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de pesquisa de preços",
+          "current_label": "Solicitar proposta de pesquisa de preços",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-precos-v1-hero",
+          "position": "hero",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Contratar pesquisa de preços",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-precos-v1-hero-proof",
+          "position": "hero-proof",
+          "href": "/inteligencia/composicao-contratos-amostra/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Examinar valores e condições",
+          "useful_next_state": "Abre o destino declarado por “Examinar valores e condições” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "im-precos-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20descreva%20o%20que%20precisa%20comparar%2C%20a%20unidade%2C%20a%20quantidade%2C%20o%20local%2C%20o%20per%C3%ADodo%20e%20a%20finalidade%20da%20pesquisa.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-precos-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Informe%20o%20item%2C%20a%20especifica%C3%A7%C3%A3o%20e%20a%20decis%C3%A3o%20de%20pre%C3%A7o",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-precos-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-estudo",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Contratar pesquisa de preços",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/inteligencia/relacoes-compradores-fornecedores/",
+      "file": "inteligencia/relacoes-compradores-fornecedores/index.html",
+      "family_id": "inteligencia-amostras-reais",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "im-relacoes-v1-capture",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar proposta de pesquisa",
+          "current_label": "Solicitar proposta de pesquisa",
+          "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "mensagem",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone"
+            ]
+          },
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "im-relacoes-v1-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20contratar%20uma%20pesquisa%20de%20mercado.%20Minha%20necessidade%20%C3%A9%3A%20informe%20o%20produto%20ou%20servi%C3%A7o%2C%20o%20territ%C3%B3rio%20e%20os%20crit%C3%A9rios%20de%20cliente%2C%20canal%20ou%20parceiro%20que%20precisam%20ser%20investigados.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "im-relacoes-v1-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pesquisa%20de%20mercado%3A%20Defina%20quais%20rela%C3%A7%C3%B5es%20sua%20pesquisa%20precisa%20verificar",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar contexto por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "im-relacoes-v1-phone",
+          "position": "",
+          "href": "tel:+5548988344559",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ligar: (48) 98834-4559",
+          "useful_next_state": "Abre o destino declarado por “Ligar: (48) 98834-4559” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "no_direct_event_declared"
           ]
         }
       ]

@@ -317,6 +317,7 @@ def page_shell(
     extra_head: str = "",
     data_attrs: dict[str, str] | None = None,
     author_name: str | None = None,
+    emit_author_meta: bool = True,
     footer_html: str | None = None,
 ) -> str:
     canonical = f"{SITE}{canonical_path}"
@@ -324,6 +325,7 @@ def page_shell(
     attrs = data_attrs or {}
     body_attr = " ".join(f'data-{k}="{e(v)}"' for k, v in attrs.items())
     author = author_name or "Engº Tiago Sasaki"
+    author_meta = f'<meta content="{e(author)}" name="author"/>' if emit_author_meta else ""
     # The JSON goes inside a <script> element, where the HTML tokenizer reacts to
     # literal "<" regardless of JSON quoting: "</script>" closes the block and
     # "<script" flips it into an escaped state that swallows the next close tag.
@@ -359,7 +361,7 @@ def page_shell(
 <meta content="{e(canonical)}" property="og:url"/>
 <meta content="{SITE}/assets/og-confenge.jpg" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="{e(author)}" name="author"/>
+{author_meta}
 <script type="application/ld+json">{ld}</script>
 {extra_head}
 </head>

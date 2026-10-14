@@ -1569,6 +1569,8 @@ def render_hub(
     wa_message: str | None = None,
     empty_cta: dict[str, str] | None = None,
     extra_html: str = "",
+    after_content_html: str = "",
+    hero_cta: dict[str, str] | None = None,
 ) -> str:
     """Render a pSEO hub. Never ship pipeline empty-wave messages to the public.
 
@@ -1649,22 +1651,52 @@ def render_hub(
         from scripts.site.authority import policy_version_disclosure
 
         disclosure = policy_version_disclosure()
-    hero_action = (
-        '<div class="hero-actions"><a class="button button-primary" '
-        'data-cta-id="intelligence-hero-proposal" data-cta-position="hero" '
-        'href="/triagem-tecnica/">Solicitar análise para a minha decisão '
-        '<svg class="icon"><use href="#i-arrow"></use></svg></a></div>'
-        if path.rstrip("/") == "/inteligencia" else ""
-    )
+    if hero_cta:
+        secondary = ""
+        if hero_cta.get("secondary_href") and hero_cta.get("secondary_label"):
+            secondary = (
+                '<a class="button button-secondary" '
+                f'data-cta-id="{e(hero_cta.get("cta_id") or "intelligence-hero-proposal")}-proof" '
+                'data-cta-position="hero-proof" '
+                f'href="{e(hero_cta["secondary_href"])}">'
+                f'{e(hero_cta["secondary_label"])} '
+                '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
+            )
+        hero_action = (
+            '<div class="hero-actions"><a class="button button-primary" '
+            f'data-cta-id="{e(hero_cta.get("cta_id") or "intelligence-hero-proposal")}" '
+            'data-cta-position="hero" '
+            f'data-route-family="{e(hero_cta.get("route_family") or "inteligencia-mercado")}" '
+            f'data-journey="{e(hero_cta.get("journey") or "outro")}" '
+            f'data-intent="{e(hero_cta.get("intent") or "market_research_scope")}" '
+            f'href="{e(hero_cta.get("href") or "#captura-estudo")}">'
+            f'{e(hero_cta.get("label") or "Solicitar estudo de mercado")} '
+            '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
+            f'{secondary}</div>'
+        )
+    else:
+        hero_action = (
+            '<div class="hero-actions"><a class="button button-primary" '
+            'data-cta-id="intelligence-hero-proposal" data-cta-position="hero" '
+            'href="/triagem-tecnica/">Solicitar análise para a minha decisão '
+            '<svg class="icon"><use href="#i-arrow"></use></svg></a></div>'
+            if path.rstrip("/") == "/inteligencia" else ""
+        )
+    if grid or extra_html or not after_content_html:
+        collection_block = (
+            '<section class="sec sec--tight"><div class="container">'
+            f"{grid}\n{extra_html}\n{back}</div></section>"
+        )
+    else:
+        collection_block = f'<div class="container">{back}</div>'
+    after_block = f"{after_content_html}\n" if after_content_html else ""
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">{e(eyebrow)}</p>
 <h1 class="t-service">{e(h1)}</h1><p class="content-lead measure">{e(intro)}</p>
 {hero_action}</div></div></header>
-<section class="sec sec--tight"><div class="container">{grid}
-{extra_html}
-{back}</div></section>
-{dark}
+{collection_block}
+{after_block}{dark}
 <div class="container">{disclosure}</div>
 """
     graph = [

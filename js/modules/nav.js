@@ -7,6 +7,16 @@
     // esta tabela, stageToJourney devolvia 'operacao' e uma pericia, uma
     // demanda de SST ou um projeto viravam, em silencio, jornada B2G.
     const HOME_SITUATIONS = {
+      'pesquisa de mercado': {
+        journey: 'outro',
+        ladder: false,
+        next_step: 'Conte a decisão que precisa tomar. Definimos o recorte, os insumos e a entrega do estudo antes da proposta.',
+        detail: 'Produto, território e utilização institucional entram quando ajudarem a delimitar o trabalho. Carteiras e documentos confidenciais seguem por canal reservado.',
+        route: '/inteligencia/',
+        route_label: 'Ver inteligência de mercado',
+        whatsapp: 'Olá, CONFENGE. Quero solicitar uma pesquisa de mercado para a minha decisão.',
+        placeholder: 'Que decisão você precisa tomar? Se souber, informe produto, território e uso do estudo.',
+      },
       'projeto, revisão ou compatibilização': {
         journey: 'projeto',
         ladder: false,

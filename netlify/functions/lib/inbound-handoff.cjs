@@ -316,6 +316,7 @@ function mapLeadToInboundV1(record) {
     ["origem do recurso", record.funding_source],
     ["decisão", record.decision_intent],
     ["data de corte", record.analysis_cutoff],
+    ["versão da pesquisa", record.evidence_pack_version],
     ["faixa de valor", record.contract_value_band],
     ["faixa de contrato", record.faixa_contrato],
     ["risco em jogo", record.risco_em_jogo],

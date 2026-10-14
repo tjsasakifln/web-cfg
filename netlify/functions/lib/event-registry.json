@@ -78,8 +78,13 @@
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "SST corrective-campaign page impression for a declared SST journey or finite SST route family. Additive to page_view; never a lead."
     },
     "editorial_page_view": {
@@ -262,48 +267,78 @@
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "One declared CTA activation in the SST corrective campaign. Additive to generic CTA/contact events; carries only finite route family, CTA id and declared topic."
     },
     "sst_whatsapp_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "One SST CTA activation whose destination is WhatsApp. Additive to whatsapp_click; never captures message content or contact details."
     },
     "pgr_cta": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "SST CTA on route family elaboracao-pgr. Additive to sst_cta_click and generic CTA events."
     },
     "pgr_review_cta": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "SST CTA on route family revisao-atualizacao-pgr. Additive to sst_cta_click and generic CTA events."
     },
     "sst_obra_cta": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "SST CTA on route family pgr-documentacao-sst-obras. Additive to sst_cta_click and generic CTA events."
     },
     "sst_outsourcing_cta": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "SST CTA on route family terceirizacao-documentacao-sst. Additive to sst_cta_click and generic CTA events."
     },
     "whatsapp_click": {
@@ -628,8 +663,13 @@
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "First focus on an SST campaign form. Additive to lead_form_start; no field name, value or form content is captured."
     },
     "lead_form_step": {
@@ -683,8 +723,13 @@
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Valid SST campaign form submit attempt. Additive to lead_form_submit; not persistence or a lead."
     },
     "lead_form_backend_error": {
@@ -1272,7 +1317,14 @@
       "/projeto-estrutural-concreto-armado/": "structural-project-concrete",
       "/projeto-estrutura-metalica/": "structural-project-steel",
       "/projeto-eletrico/": "installation-project-electrical",
-      "/projeto-hidrossanitario/": "installation-project-hydrosanitary"
+      "/projeto-hidrossanitario/": "installation-project-hydrosanitary",
+      "/inteligencia/orgaos/": "market-research-orgaos",
+      "/inteligencia/mercados/": "market-research-mercados",
+      "/inteligencia/concorrencia/": "market-research-concorrencia",
+      "/inteligencia/acompanhamento/": "market-research-acompanhamento",
+      "/inteligencia/precos/": "market-research-precos",
+      "/inteligencia/pesquisa-sob-encomenda/": "market-research-pesquisa-sob-encomenda",
+      "/inteligencia/": "market-research"
     },
     "origin_prefixes": {
       "/conteudos/": "editorial",

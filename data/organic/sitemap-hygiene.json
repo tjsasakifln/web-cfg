@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 116,
-  "unique_paths": 116,
+  "url_count": 125,
+  "unique_paths": 125,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -114,27 +114,39 @@
     "https://confenge.com.br/terceirizacao-projetos-engenharia/",
     "https://confenge.com.br/termos-de-uso/",
     "https://confenge.com.br/triagem-tecnica/",
-    "https://confenge.com.br/analises-contratos-publicos/",
-    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
     "https://confenge.com.br/guias-contratos-obras/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/",
-    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "https://confenge.com.br/inteligencia/",
+    "https://confenge.com.br/inteligencia/acompanhamento/",
+    "https://confenge.com.br/inteligencia/composicao-contratos-amostra/",
+    "https://confenge.com.br/inteligencia/concorrencia/",
+    "https://confenge.com.br/inteligencia/mercados/",
+    "https://confenge.com.br/inteligencia/orgaos/",
+    "https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/",
+    "https://confenge.com.br/inteligencia/precos/",
+    "https://confenge.com.br/inteligencia/relacoes-compradores-fornecedores/",
+    "https://confenge.com.br/analises-contratos-publicos/",
+    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
     "core": 110,
-    "contract_analysis": 2,
-    "editorial": 4
+    "editorial": 4,
+    "inteligencia": 9,
+    "contract_analysis": 2
   },
   "member_sitemaps": [
     "https://confenge.com.br/sitemap.xml",
-    "https://confenge.com.br/sitemap-analises-contratos.xml",
-    "https://confenge.com.br/sitemap-editorial.xml"
+    "https://confenge.com.br/sitemap-editorial.xml",
+    "https://confenge.com.br/sitemap-inteligencia.xml",
+    "https://confenge.com.br/sitemap-analises-contratos.xml"
   ],
   "walked_members": [
     "sitemap.xml",
-    "sitemap-analises-contratos.xml",
-    "sitemap-editorial.xml"
+    "sitemap-editorial.xml",
+    "sitemap-inteligencia.xml",
+    "sitemap-analises-contratos.xml"
   ],
   "robots_sitemaps": [
     "https://confenge.com.br/sitemap-index.xml"

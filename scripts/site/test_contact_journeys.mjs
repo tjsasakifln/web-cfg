@@ -55,6 +55,12 @@ const journeys = [
   ["avaliacao_imovel", "/avaliacao-imoveis-urbanos/", "servicos-complementares", "/servicos/#servico-avaliacao", "/avaliacao-imoveis-urbanos/"],
   ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "servicos-complementares", "/seguranca-trabalho-apoio-tecnico/"],
   ["assistencia_trabalhista", "/assistencia-tecnica-pericia-trabalhista/", "servicos-complementares", "/servicos/", "/assistencia-tecnica-pericia-trabalhista/"],
+  ["mapear_clientes_canais_parceiros", "/inteligencia/orgaos/", "servicos-complementares", "/inteligencia/"],
+  ["investigar_mercado_expansao_produtos", "/inteligencia/mercados/", "servicos-complementares", "/inteligencia/"],
+  ["analisar_concorrentes_carteiras_empresas", "/inteligencia/concorrencia/", "servicos-complementares", "/inteligencia/"],
+  ["definir_oportunidades_acompanhamento", "/inteligencia/acompanhamento/", "servicos-complementares", "/inteligencia/"],
+  ["pesquisar_precos_documentos", "/inteligencia/precos/", "servicos-complementares", "/inteligencia/"],
+  ["contratar_pesquisa_institucional", "/inteligencia/pesquisa-sob-encomenda/", "servicos-complementares", "/inteligencia/"],
 ].map(([id, direct, homeContainer, homeHref, secondHref]) => ({ id, direct, homeContainer, homeHref, secondHref, homeSelector: `a[href="${homeHref}"]` }));
 // Test coverage binds to the existing authority, including its fallback.
 // This is a scenario map, not another route or offer taxonomy.
@@ -73,6 +79,12 @@ const familyScenarios = {
   decidir_disputar_licitacao: "edital",
   executar_proteger_contrato_publico: "glosa_aditivo",
   outra_demanda_tecnica: "outra_demanda_tecnica",
+  mapear_clientes_canais_parceiros: "mapear_clientes_canais_parceiros",
+  investigar_mercado_expansao_produtos: "investigar_mercado_expansao_produtos",
+  analisar_concorrentes_carteiras_empresas: "analisar_concorrentes_carteiras_empresas",
+  definir_oportunidades_acompanhamento: "definir_oportunidades_acompanhamento",
+  pesquisar_precos_documentos: "pesquisar_precos_documentos",
+  contratar_pesquisa_institucional: "contratar_pesquisa_institucional",
 };
 if (officialFamilies.some(family => !journeys.some(row => row.id === familyScenarios[family])) || Object.keys(familyScenarios).some(family => !officialFamilies.includes(family))) {
   throw new Error("Contact journeys must cover every official family and the context fallback");

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-10-03",
+  "updated_at": "2026-10-14",
   "purpose": "Source of truth for institutional services navigation, projects and public-works discovery, and route/job/parent/contact/index relationships.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -124,7 +124,15 @@
     "/terceirizacao-documentacao-sst/": "Terceirização documental de SST",
     "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada",
     "/avaliacao-imoveis-urbanos/": "Avaliação de imóveis urbanos",
-    "/assistencia-tecnica-pericia-trabalhista/": "Assistência técnica trabalhista em SST"
+    "/assistencia-tecnica-pericia-trabalhista/": "Assistência técnica trabalhista em SST",
+    "/inteligencia/orgaos/": "Mapear clientes, distribuidores e parceiros",
+    "/inteligencia/mercados/": "Investigar mercado, expansão e produtos",
+    "/inteligencia/concorrencia/": "Analisar concorrentes, carteiras e empresas",
+    "/inteligencia/acompanhamento/": "Definir oportunidades e acompanhamento",
+    "/inteligencia/precos/": "Pesquisar preços e documentos",
+    "/inteligencia/pesquisa-sob-encomenda/": "Contratar pesquisa sob encomenda ou institucional",
+    "/inteligencia/relacoes-compradores-fornecedores/": "Relações documentadas",
+    "/inteligencia/composicao-contratos-amostra/": "Composição dos contratos"
   },
   "quality_baseline": {
     "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
@@ -241,6 +249,10 @@
           {
             "label": "Edificações",
             "href": "/edificacoes/"
+          },
+          {
+            "label": "Inteligência de mercado",
+            "href": "/inteligencia/"
           },
           {
             "label": "Obras públicas",

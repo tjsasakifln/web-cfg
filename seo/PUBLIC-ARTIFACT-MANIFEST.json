@@ -97,7 +97,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 247,
+  "html_route_count": 251,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -290,17 +290,21 @@
     "/guias-contratos-obras/responder-notificacao-atraso/",
     "/imprensa/",
     "/inspecao-diagnostico-edificacoes/",
+    "/inteligencia/acompanhamento/",
     "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
     "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
     "/inteligencia/cenarios/",
     "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
     "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+    "/inteligencia/composicao-contratos-amostra/",
     "/inteligencia/concorrencia/",
     "/inteligencia/",
     "/inteligencia/mercados/",
     "/inteligencia/orgaos/",
+    "/inteligencia/pesquisa-sob-encomenda/",
     "/inteligencia/precos/",
+    "/inteligencia/relacoes-compradores-fornecedores/",
     "/inteligencia/valor-tipico-contratos-pavimentacao/",
     "/jurisprudencia-contratos-obras/",
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
@@ -347,8 +351,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-12T04:48:00Z",
-  "public_artifact_hash": "3b89b1b79366871feb11e1e873dd2c0a51907d2afa3365e8cb92aca0ffd69b70",
+  "generated_at": "2026-10-14T04:28:15Z",
+  "public_artifact_hash": "8d6922fceccf40586ebd0409fa8085b946ca8f92959aebf06b95b4928e2d12d6",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -446,15 +450,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 235,
+  "promoted_navigation_files": 239,
   "navigation_audit": {
-    "audited_files": 235,
-    "audited_blocks": 468,
+    "audited_files": 239,
+    "audited_blocks": 476,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 252,
-    "html_rewritten": 184,
-    "fields_removed": 780
+    "html_scanned": 256,
+    "html_rewritten": 188,
+    "fields_removed": 788
   }
 }

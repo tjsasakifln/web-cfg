@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 116,
+  "page_count": 125,
   "pages": [
     {
       "claimed": {
@@ -5045,6 +5045,530 @@
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Inspeção e diagnóstico de edificações | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/",
+        "dates": [],
+        "description": "Estudos sob encomenda para mapear clientes e parceiros, mercados, concorrentes, oportunidades e referências documentais.",
+        "h1": "Pesquisa de mercado para escolher clientes, canais, produtos e movimentos com mais clareza.",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Inteligência de mercado para decisões de crescimento | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Acompanhamento"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/acompanhamento/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Acompanhamento"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/acompanhamento/",
+        "dates": [],
+        "description": "Acompanhamento contratado de mudanças, contratos recentes, términos previstos e necessidades complementares.",
+        "h1": "Pesquisa de oportunidades entre fornecedores do governo",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Oportunidades e acompanhamento de mercado | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Composição da amostra"
+        ],
+        "dataset_names": [
+          "Como se compõem os dez contratos desta amostra?"
+        ],
+        "dates": [
+          "2026-10-14"
+        ],
+        "descriptions": [
+          "Categorias, UFs compradoras, calendário, vigência e valores integrais de dez contratos rechecados no PNCP em 14/10/2026."
+        ],
+        "downloads": [],
+        "has_dataset_type": true,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Dataset",
+          "BreadcrumbList"
+        ],
+        "versions": [
+          "market-intelligence-sample.v1"
+        ]
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/composicao-contratos-amostra/",
+      "visible": {
+        "authors": [
+          "Fonte: PNCP"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Composição da amostra"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/composicao-contratos-amostra/",
+        "dates": [
+          "2026-10-14"
+        ],
+        "description": "Categorias, UFs compradoras, calendário, vigência e valores integrais de dez contratos rechecados no PNCP em 14/10/2026.",
+        "h1": "Como se compõem os dez contratos desta amostra?",
+        "has_dataset_surface": true,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Composição de dez contratos públicos no PNCP | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Concorrência"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/concorrencia/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Concorrência"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/concorrencia/",
+        "dates": [],
+        "description": "Pesquisa sob encomenda de presença observada, concentração, continuidade e complementaridade territorial.",
+        "h1": "Análise de concorrentes e carteira pública de empresas",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Análise de concorrentes, carteiras e empresas | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Mercados"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/mercados/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Mercados"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/mercados/",
+        "dates": [],
+        "description": "Pesquisa sob encomenda de demanda observada, nichos, territórios, categorias e recorrência.",
+        "h1": "Estudo de mercado para expansão comercial",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Pesquisa de mercado, expansão e produtos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Clientes e parceiros"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/orgaos/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Clientes e parceiros"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/orgaos/",
+        "dates": [],
+        "description": "Mapas justificados de compradores públicos, fornecedores, distribuidores, integradores e prestadores complementares.",
+        "h1": "Mapeamento de distribuidores e clientes para sua empresa",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Mapeamento de clientes, distribuidores e parceiros | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Pesquisa sob encomenda"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Pesquisa sob encomenda"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/",
+        "dates": [],
+        "description": "Pesquisa de mercado para consultorias e associações.",
+        "h1": "Pesquisa de mercado para consultorias e associações",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Pesquisa sob encomenda e uso institucional | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Preços"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/precos/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Preços"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/precos/",
+        "dates": [],
+        "description": "Pesquisa sob encomenda de referências, fontes, especificações e condições de fornecimento.",
+        "h1": "Pesquisa de preços e condições de fornecimento",
+        "has_dataset_surface": false,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Pesquisa de preços e referências documentais | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
+          "Relações documentadas"
+        ],
+        "dataset_names": [
+          "Quem são os compradores e fornecedores documentados nesta amostra?"
+        ],
+        "dates": [
+          "2026-10-14"
+        ],
+        "descriptions": [
+          "Dez relações públicas entre compradores e fornecedores, rechecadas contrato a contrato no PNCP em 14/10/2026."
+        ],
+        "downloads": [],
+        "has_dataset_type": true,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Dataset",
+          "BreadcrumbList"
+        ],
+        "versions": [
+          "market-intelligence-sample.v1"
+        ]
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/relacoes-compradores-fornecedores/",
+      "visible": {
+        "authors": [
+          "Fonte: PNCP"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Relações documentadas"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/relacoes-compradores-fornecedores/",
+        "dates": [
+          "2026-10-14"
+        ],
+        "description": "Dez relações públicas entre compradores e fornecedores, rechecadas contrato a contrato no PNCP em 14/10/2026.",
+        "h1": "Quem são os compradores e fornecedores documentados nesta amostra?",
+        "has_dataset_surface": true,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Relações entre compradores e fornecedores no PNCP | CONFENGE",
         "versions": []
       }
     },

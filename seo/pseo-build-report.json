@@ -456,8 +456,14 @@
     "inteligencia\\orgaos\\index.html",
     "inteligencia\\precos\\index.html",
     "inteligencia\\concorrencia\\index.html",
+    "inteligencia\\acompanhamento\\index.html",
+    "inteligencia\\pesquisa-sob-encomenda\\index.html",
     "inteligencia\\cenarios\\index.html",
     "radar\\index.html"
+  ],
+  "market_intelligence_analyses": [
+    "inteligencia/relacoes-compradores-fornecedores/index.html",
+    "inteligencia/composicao-contratos-amostra/index.html"
   ],
   "sitemap": "sitemap-inteligencia.xml",
   "registry": "data\\pseo\\registry.json",

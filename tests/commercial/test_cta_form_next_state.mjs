@@ -20,7 +20,7 @@ assert.equal(report.coverage.manual_route_allowlist, false);
 // componente compartilhado (shared_lead_form_v1), encerrando o debito
 // route-exact que expiraria em 2026-09-30. A contagem e escrituracao; cada
 // formulario continua verificado pelo contrato next-state/v1 abaixo.
-assert.equal(report.coverage.active_capture_routes, 31);
+assert.equal(report.coverage.active_capture_routes, 40);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
 // Os seis pilares protegidos capturam on-page por decisao expressa; nenhum
@@ -44,7 +44,7 @@ const forms = report.surfaces.flatMap((surface) => surface.forms.map((form) => (
   route: surface.route,
   ...form,
 })));
-assert.equal(forms.length, 31); // 25 + os seis pilares B2G (2026-09-16, #61)
+assert.equal(forms.length, 40); // baseline 31 + nove rotas de inteligência (2026-10-14)
 for (const form of forms) {
   assert.equal(form.form_contract, "next-state/v1", `${form.route}: form contract`);
   assert.ok(report.contract.allowed_stages.includes(form.stage), `${form.route}: ${form.stage}`);

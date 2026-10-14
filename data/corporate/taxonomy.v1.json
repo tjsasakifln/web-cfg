@@ -2,7 +2,7 @@
   "contract_id": "CONFENGE_CORPORATE_TAXONOMY",
   "contract_version": "1.0.0",
   "schema_id": "confenge-corporate-taxonomy/v1",
-  "as_of": "2026-09-09",
+  "as_of": "2026-10-14",
   "decision_date": "2026-09-04",
   "owner_issue": 578,
   "parent_issue": 577,
@@ -388,7 +388,8 @@
       },
       "publication_status": "published",
       "deprecated": false,
-      "protection": "protected_vertical"
+      "protection": "protected_vertical",
+      "notes": "A frente autorizada em 14/10/2026 usa a expertise operacional em fatos de contratações públicas para pesquisa multissetorial. O vínculo de ownership preserva os cinco agrupamentos e o vertical B2G; não exige que o comprador dispute licitações nem conduz ao formulário de engenharia. As seis situações são registradas na matriz pública, sem duplicar identidade, CRM, preços ou catálogo."
     }
   ],
   "route_bindings": [
@@ -438,5 +439,5 @@
     "notes": "Sibling contracts are consumed by MV-03 through MV-07 and integrated only by MV-09. They are not runtime fallbacks. Missing or divergent taxonomy version/hash fails closed."
   },
   "notes": "Founder decision 2026-09-04 recorded in #577/#578 and red-teamed by MV-01 on 2026-09-05. This document is the single operational authority for five internal nuclei. Their names are not mandatory public navigation or route labels; customer-facing entry is the public intent matrix. Consumers pin contract_id, contract_version and content_sha256.",
-  "content_sha256": "a75f9d2392630cbb5a0e21ee556c9e1aa1aa56784e8a23da05c46092f100667c"
+  "content_sha256": "d5e97c65ed564936a5a310dd1166f69e97c0648854bdc0782cd241c6ed33361b"
 }
