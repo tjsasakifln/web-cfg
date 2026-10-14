@@ -1231,6 +1231,9 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 }
 .pillar-capture-form input,
 .pillar-capture-form select{min-height:48px}
+.pillar-capture-form[data-route-family="inteligencia-mercado"] input,
+.pillar-capture-form[data-route-family="inteligencia-mercado"] select,
+.pillar-capture-form[data-route-family="inteligencia-mercado"] textarea{border-color:var(--muted)}
 .pillar-capture-form input:focus,
 .pillar-capture-form select:focus,
 .pillar-capture-form textarea:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}

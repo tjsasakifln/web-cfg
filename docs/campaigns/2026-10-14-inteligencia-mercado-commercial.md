@@ -152,6 +152,17 @@ atribuído a uma demanda real, nem teste de produção desta versão reconciliad
 
 ## Campo de validação real a preencher após a publicação
 
+O QA local reutilizou o shell, Archivo Var e o logotipo reais. Em 390/1440/320
+e no reflow equivalente a 200%, as duas superfícies examinadas ficaram sem
+overflow de página, com corpo de 16–18px, tabelas de 14px e axe sem violações
+ou casos inconclusivos. A ampliação real do texto para 32px revelou palavras
+longas e o e-mail do rodapé; as correções de quebra ocorreram na origem dos
+componentes. Campos de pesquisa receberam a borda pelo token institucional
+`--muted` após a medição da borda anterior abaixo de 3:1. O erro 503 foi
+simulado só no endpoint AJAX local, com `data-form-ready=true`: sem protocolo
+ou redirect, mensagem visível e recuperação do foco no botão se o visitante
+não o moveu. A confirmação do artefato e da produção permanece separada.
+
 O responsável raiz preenche esta única seção quando houver a validação em
 produção; não criar registro paralelo.
 

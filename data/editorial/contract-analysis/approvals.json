@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "3a9386cb4f5806153d43a01540ea14862123f95acfa2414837c6d4745d8eb45c",
+      "rendered_content_hash": "930528a70999d823af1170934f8a0ef4af73309c28c8f9690e7509da97ee7ab9",
       "rendered_content_hash_previous": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-14T04:21:00Z",
-      "rendered_hash_recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-20261014: recaptura determinística do artefato após os ajustes compartilhados de reflow a 200% e foco do formulário, já estabilizados no commit e8df14f. O HTML fonte da análise aprovada permaneceu byte-idêntico ao HEAD; a diferença no artefato vem apenas dos fingerprints de styles.css e script.js montados pelo shell público. Hashes material, conteúdo, produtor, fontes, fatos, cálculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA contextual permanecem preservados. A aprovação humana técnica de 2026-08-20 é mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
-      "rendered_hash_recapture_reason_previous": "CONFENGE-INTELIGENCIA-MERCADO-20261014: recaptura determinística autorizada pela instrução complementar desta execução para acrescentar somente o link institucional Inteligência de mercado ao rodapé compartilhado. A comparação do HTML fonte atual contra a página aprovada anterior isolou uma única alteração: esse link na coluna Serviços e conhecimento. Hashes material, conteúdo, produtor, fontes, fatos, cálculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA contextual permanecem preservados. A aprovação humana técnica de 2026-08-20 é mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
+      "rendered_hash_recaptured_at": "2026-10-14T04:25:00Z",
+      "rendered_hash_recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-20261014: recaptura determinística do artefato após a correção compartilhada de contraste das bordas dos campos nas nove rotas de pesquisa. O seletor limitado a data-route-family=inteligencia-mercado usa o token institucional --muted para alcançar contraste de controle suficiente; não alcança a análise contratual. O HTML fonte da análise aprovada permaneceu byte-idêntico ao HEAD e a diferença no artefato vem apenas do fingerprint de styles.css. Hashes material, conteúdo, produtor, fontes, fatos, cálculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA contextual permanecem preservados. A aprovação humana técnica de 2026-08-20 é mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
+      "rendered_hash_recapture_reason_previous": "CONFENGE-INTELIGENCIA-MERCADO-20261014: recaptura determinística do artefato após os ajustes compartilhados de reflow a 200% e foco do formulário, já estabilizados no commit e8df14f. O HTML fonte da análise aprovada permaneceu byte-idêntico ao HEAD; a diferença no artefato vem apenas dos fingerprints de styles.css e script.js montados pelo shell público. Hashes material, conteúdo, produtor, fontes, fatos, cálculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA contextual permanecem preservados. A aprovação humana técnica de 2026-08-20 é mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -101,6 +101,34 @@
         "v2_token_and_hashes_bound": true
       },
       "commercial_presentation_recaptures": [
+        {
+          "authorized_by": "instrução complementar do usuário de 2026-10-14: contraste AA e controles das rotas de pesquisa",
+          "at": "2026-10-14T04:25:00Z",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "3a9386cb4f5806153d43a01540ea14862123f95acfa2414837c6d4745d8eb45c",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "930528a70999d823af1170934f8a0ef4af73309c28c8f9690e7509da97ee7ab9",
+          "reason": "O artigo fonte permanece byte-idêntico ao HEAD. A alteração é limitada a styles.css: a borda dos campos das nove rotas de pesquisa passa a usar o token institucional --muted no seletor de família, corrigindo contraste de controle sem afetar a família editorial aprovada.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "styles_css_scoped_market_research_control_border_contrast_fingerprint"
+          ],
+          "rollback": "Reverter conjuntamente o seletor de contraste e esta recaptura, ou promover o bundle anterior pela autoridade de release vigente."
+        },
         {
           "authorized_by": "instrução complementar do usuário de 2026-10-14 e commit e8df14f: correções compartilhadas de reflow a 200% e foco",
           "at": "2026-10-14T04:21:00Z",
