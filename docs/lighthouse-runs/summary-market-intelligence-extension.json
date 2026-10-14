@@ -1,0 +1,2320 @@
+{
+  "base": "http://127.0.0.1:8766",
+  "generated_at": "2026-10-14T06:27:15.883Z",
+  "coverage": {
+    "policy_path": "data/quality/interface-coverage-policy.json",
+    "public_route_count": 256,
+    "family_count": 55,
+    "families": [
+      {
+        "id": "triagem-tecnica",
+        "label": "Enquadrar a necessidade técnica em um dos cinco núcleos e solicitar retorno com dados mínimos, quando o recebimento estiver disponível.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/triagem-tecnica/",
+        "representative_reason": "single-route adaptive intake with runtime availability gate and persistent receipt",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "prontidao-tecnica-obra-privada",
+        "label": "Identificar evidências presentes, lacunas e desconhecidos antes de contratar, executar ou retomar uma obra privada; ler o resultado completo sem contato; e, se couber, seguir para orçamento, revisão, compatibilização ou conversa de escopo.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "representative_reason": "single-route anonymous private-project readiness tool; complete result before contact",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "home",
+        "label": "Entender em 5 segundos como a CONFENGE transforma problemas de engenharia, perícias, segurança do trabalho e obras públicas em decisões documentadas, reconhecer a própria situação e escolher a próxima ação.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/",
+        "representative_reason": "single-route canonical family",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "servicos-corporativos",
+        "label": "Reconhecer a situação técnica, entender entregas e limites possíveis e seguir para uma triagem funcional sem precisar conhecer a estrutura interna da CONFENGE.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/servicos/",
+        "representative_reason": "single-route corporate services hub and primary multivertical decision path",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "private-engineering-quantities-budget",
+        "label": "Enquadrar uma base documental de quantitativos ou orçamento de obra privada, entender artefatos, método e limites e solicitar retorno com dados mínimos.",
+        "kind": "canonical",
+        "route_count": 4,
+        "lighthouse_representative": "/quantitativos-orcamento-obras/",
+        "representative_reason": "single-route private quantities and budgeting journey with adaptive capture and direct fallback channels",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "service-pillars",
+        "label": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
+        "kind": "canonical",
+        "route_count": 13,
+        "lighthouse_representative": "/acompanhamento-contratos-obras/",
+        "representative_reason": "service-pillar template carrying the #253 responsive-image regression gate",
+        "image_gate": true,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "legal-and-trust",
+        "label": "Conferir termos, privacidade, política de conflitos, correções e contato de imprensa antes de confiar na CONFENGE.",
+        "kind": "canonical",
+        "route_count": 5,
+        "lighthouse_representative": "/termos-de-uso/",
+        "representative_reason": "indexable legal document representative",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "comercial-condicoes",
+        "label": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
+        "kind": "canonical",
+        "route_count": 3,
+        "lighthouse_representative": "/comercial/privacidade-leads/",
+        "representative_reason": "indexable conditions page that exercises the commercial policy template",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "politica-editorial",
+        "label": "Auditar a política editorial vigente e o seu histórico versionado.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/politica-editorial/",
+        "representative_reason": "current indexable editorial-policy document",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "measurement-delay-canary",
+        "label": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/conteudos/atraso-na-medicao-obra-publica/",
+        "representative_reason": "single-route indexable canary owned by #389; exercises the article, epistemic labels and service-transition contract",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "editorial-library",
+        "label": "Encontrar a análise ou o serviço que responde um problema de projeto, orçamento, inspeção ou contrato, público ou privado, antes de pedir ajuda.",
+        "kind": "canonical",
+        "route_count": 122,
+        "lighthouse_representative": "/conteudos/",
+        "representative_reason": "index of the canonical editorial library",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "guias-contratos-obras",
+        "label": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
+        "kind": "canonical",
+        "route_count": 5,
+        "lighthouse_representative": "/guias-contratos-obras/",
+        "representative_reason": "index of the operational guide template family",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "lei-14133-obras",
+        "label": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
+        "kind": "canonical",
+        "route_count": 8,
+        "lighthouse_representative": "/lei-14133-obras/",
+        "representative_reason": "index of the legal-reference template family",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "especialista",
+        "label": "Verificar quem responde tecnicamente pela CONFENGE antes de enviar um caso.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/especialista/tiago-jun-sasaki/",
+        "representative_reason": "single current authority route",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "nurture",
+        "label": "Retomar uma conversa comercial já iniciada a partir de um material enviado.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/nurture/",
+        "representative_reason": "indexable nurture capture surface",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "metodologia-inteligencia",
+        "label": "Auditar como a CONFENGE produz a inteligência pública que publica.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/metodologia-inteligencia/",
+        "representative_reason": "single-route canonical methodology family",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "radar",
+        "label": "Ler o método aberto do Radar de obras públicas e a demanda orgânica observada no domínio da CONFENGE, compreender os limites da amostra e decidir se quer um recorte aplicado ao perfil da própria empresa.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/radar/nacional-obras-publicas/",
+        "representative_reason": "indexable national radar route; noindex regional drafts cannot waive SEO",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "analises-contratos-publicos",
+        "label": "Ler uma análise contratual desidentificada e reconhecer o próprio caso nela.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+        "representative_reason": "the individually approved, indexable analysis is the only packaged article in this family and exercises its rendered SEO contract",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "casos",
+        "label": "Distinguir exemplos de entrega demonstrativos de trabalho real autorizado, publicado só com autorização, fonte e data.",
+        "kind": "canonical",
+        "route_count": 5,
+        "lighthouse_representative": "/casos/",
+        "representative_reason": "index of the demonstrative-case family",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "casos-modelos-precificados",
+        "label": "Comparar modelos de entrega com preço público (R$ 599 a R$ 3.750) e comprar o que resolve o próprio problema.",
+        "kind": "canonical",
+        "route_count": 8,
+        "lighthouse_representative": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "representative_reason": "priced shared report template and first rung in the public value ladder",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "entregas",
+        "label": "Comparar a profundidade das entregas com preço antes de escolher o que contratar.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/entregas/",
+        "representative_reason": "single-route priced deliverables hub",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "servicos-obras-publicas",
+        "label": "Comparar a entrega para o evento contratual e registrar o contexto antes da proposta.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/servicos-obras-publicas/",
+        "representative_reason": "single-route service navigation hub",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "problemas-que-resolvemos",
+        "label": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/problemas-que-resolvemos/",
+        "representative_reason": "single-route problem navigation hub",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "ferramentas-hub",
+        "label": "Escolher o cálculo ou a checagem aplicável a um contrato público ou a uma obra privada, sem tornar nenhuma ferramenta etapa obrigatória.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/ferramentas/",
+        "representative_reason": "single-route interactive-tools hub",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "ferramentas",
+        "label": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+        "kind": "canonical",
+        "route_count": 4,
+        "lighthouse_representative": "/ferramentas/diagnostico-defesa-margem/",
+        "representative_reason": "heaviest canonical tool, with client-side scoring and persistent lead capture",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "live-intelligence-cnpj-tool",
+        "label": "Pesquisar e analisar dados públicos de CNPJ para fundamentar decisões contratais de obra pública.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/analise-cnpj/",
+        "representative_reason": "CNPJ analysis tool landing; noindex until INSTANCE_INDEX_READY",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "tool landing stays noindex until INSTANCE_INDEX_READY on official data",
+        "runtime_only": null
+      },
+      {
+        "id": "live-intelligence-cnpj-result",
+        "label": "Compartilhar e consultar análise estruturada de CNPJ com share token (noindex permanente — não é rota indexável).",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/analise-cnpj/r/",
+        "representative_reason": "share-token result is permanently noindex",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "share-token result is permanently noindex",
+        "runtime_only": null
+      },
+      {
+        "id": "live-intelligence-opportunity",
+        "label": "Visualizar detalhes de uma oportunidade pública de obra com fatos, fonte e data de referência, e escolher o próximo passo real.",
+        "kind": "canonical",
+        "route_count": 0,
+        "lighthouse_representative": null,
+        "representative_reason": "A família não existe no pacote: somente uma oportunidade official_live aceita pode ser acrescentada pelo overlay canônico Netcup. O Lighthouse desta família é obrigatório depois do stage, sobre uma URL real inventariada pelo runtime.",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": {
+          "mode": "official_live_overlay",
+          "owner": "deploy/netcup/lib/release_control.py::_publish_live_intelligence_overlay",
+          "source_contract": "data/live_intelligence/accepted/opportunities.json#official_live-indexable-projection",
+          "required_source_kind": "official_live",
+          "accepted_projection_route": "/.well-known/live-intelligence-overlay.json",
+          "accepted_projection_schema": "confenge.live-intelligence-overlay/v1",
+          "inventory_route": "/sitemap-oportunidades.xml",
+          "route_pattern": "^/oportunidades/[A-Za-z0-9][A-Za-z0-9._-]{0,80}(?:/[A-Za-z0-9][A-Za-z0-9._-]{0,20}){0,3}/$",
+          "absence_behavior": "withdraw_family",
+          "absence_verifier": "deploy/netcup/lib/release_control.py::_withdraw_packaged_opportunity_pages",
+          "post_stage_lighthouse_required": true
+        }
+      },
+      {
+        "id": "diagnostico-b2g-expansao-estados",
+        "label": "Entender o que aconteceu com o proprio pagamento do Diagnostico B2G de Expansao (retorno confirmado, cancelado ou link expirado) e saber qual e o proximo passo.",
+        "kind": "canonical",
+        "route_count": 3,
+        "lighthouse_representative": "/diagnostico-b2g-expansao/cancelado/",
+        "representative_reason": "post-checkout state page, not a priced offer",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "post-checkout receipts intentionally noindex",
+        "runtime_only": null
+      },
+      {
+        "id": "obrigado-transacional",
+        "label": "Confirmar que a solicitacao enviada pelo formulario foi recebida, saber em quanto tempo a CONFENGE responde e ter um canal direto caso o assunto seja urgente.",
+        "kind": "canonical",
+        "route_count": 4,
+        "lighthouse_representative": "/obrigado.html",
+        "representative_reason": "primary post-form receipt",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "post-form receipts intentionally noindex",
+        "runtime_only": null
+      },
+      {
+        "id": "pagina-nao-encontrada",
+        "label": "Descobrir que a URL pedida nao existe mais e voltar para uma superficie util do site sem sair para o buscador.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/404.html",
+        "representative_reason": "host 404 utility",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "HTTP 404 utility is permanently noindex",
+        "runtime_only": null
+      },
+      {
+        "id": "market-answer-canary",
+        "label": "Obter a resposta direta sobre o ticket contratual tipico de pavimentacao em SC, com metodo, recorte e limitacoes explicitos, e citar a fonte.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "representative_reason": "published market-answer canary",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "market-answer publication gate still noindex",
+        "runtime_only": null
+      },
+      {
+        "id": "inteligencia-mercado",
+        "label": "Contratar pesquisa multissetorial para selecionar clientes e canais, examinar mercado ou concorrentes, pesquisar preços e documentos, definir acompanhamento ou utilização institucional.",
+        "kind": "canonical",
+        "route_count": 7,
+        "lighthouse_representative": "/inteligencia/orgaos/",
+        "representative_reason": "commercial market-intelligence family representative with decision-scoped research capture",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "inteligencia-amostras-reais",
+        "label": "Conferir relações institucionais e composição de dez contratos públicos verificáveis antes de solicitar um recorte para a própria decisão.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/inteligencia/relacoes-compradores-fornecedores/",
+        "representative_reason": "external-proof market-intelligence family representative with a bounded real-record sample",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "inteligencia-pseo",
+        "label": "Navegar pela inteligencia de mercado derivada de contratos publicos (mercados, orgaos, precos, concorrencia e cenarios tecnicos) antes de decidir onde disputar.",
+        "kind": "canonical",
+        "route_count": 6,
+        "lighthouse_representative": "/inteligencia/cenarios/",
+        "representative_reason": "legacy intelligence scenarios family representative; the route remains a noindex scenario library",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "legacy scenario pages remain noindex",
+        "runtime_only": null
+      },
+      {
+        "id": "data-desk-citation-kit",
+        "label": "Baixar e citar o kit de dados versionado (tabela, grafico, metodo, cobertura e limitacoes) que sustenta uma resposta publicada, com permalink estavel para imprensa e pesquisa.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+        "representative_reason": "versioned citation-kit index (noindex) for the published market-answer",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "citation kit index is noindex,follow",
+        "runtime_only": null
+      },
+      {
+        "id": "jurisprudencia-contratos-obras",
+        "label": "Encontrar a decisao ou sumula do TCU que sustenta um pleito de obra publica e entender como ela se aplica ao proprio contrato.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/jurisprudencia-contratos-obras/",
+        "representative_reason": "jurisprudence family hub",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "jurisprudence drafts remain noindex pending editorial approval",
+        "runtime_only": null
+      },
+      {
+        "id": "engineering-projects-coordination-clash",
+        "label": "Conferir interfaces entre projetos já existentes, registrar interferências e encaminhar ajustes antes de executar, contratar ou alterar uma obra.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/compatibilizacao-projetos-engenharia/",
+        "representative_reason": "single-route compatibility landing for clash register and interface coordination",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "engineering-projects-coordination-contents",
+        "label": "Decidir o momento e o recorte da compatibilização de projetos, distinto de elaborar, revisar ou orçar.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/conteudos/quando-compatibilizar-projetos/",
+        "representative_reason": "indexable editorial representative of the compatibility decision family",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "private-engineering-project-review",
+        "label": "Conferir um projeto de engenharia recebido antes de contratar, executar ou aprovar uma alteração, entender o recorte da proposta e solicitar retorno com dados mínimos.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/revisao-tecnica-projetos-engenharia/",
+        "representative_reason": "single-route technical review landing distinct from compatibility and elaboration",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "parcerias-engenharia",
+        "label": "Entender como encaminhar uma necessidade de orçamento, revisão, compatibilização ou disciplina complementar mantendo o relacionamento com o cliente.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/parcerias-engenharia/",
+        "representative_reason": "single-route partner-forwarding surface that keeps the client with who refers",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "complementary-engineering-elaboration",
+        "label": "Contratar elaboracao de documentacao de engenharia complementar a partir da arquitetura e dos insumos de origem, com disciplina, interfaces, entregaveis e responsavel delimitados.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/projetos-complementares-engenharia/",
+        "representative_reason": "single-route complementary-discipline elaboration landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "como-contratar-projetos-complementares",
+        "label": "Preparar insumos, definir interfaces e versoes e conferir o que deve constar da proposta de elaboracao complementar.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/conteudos/como-contratar-projetos-complementares/",
+        "representative_reason": "indexable editorial representative of complementary-discipline hiring",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "engenharia-condominios",
+        "label": "Reconhecer a situação técnica do condomínio, entender como inspeção, assistência em disputa ou documentação de recebimento e reforma se combinam na proposta e solicitar contato contextualizado.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/engenharia-condominios/",
+        "representative_reason": "single-route editorial entry for condominium engineering situations and contextual contact",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "inspecao-diagnostico-edificacoes",
+        "label": "Reconhecer fissura, infiltração, recebimento ou entrega, reforma em condomínio ou documentação do construído, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/inspecao-diagnostico-edificacoes/",
+        "representative_reason": "single-route building inspection and diagnosis landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "assistencia-tecnica-pericial-engenharia",
+        "label": "Enquadrar assistência técnica de engenharia em uma disputa de edificação, distinguir assistência da parte, inspeção, advocacia e perícia do juízo, e solicitar retorno com dados mínimos, sem enviar o processo no primeiro contato.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/assistencia-tecnica-pericial-engenharia/",
+        "representative_reason": "single-route technical assistance and expert-witness landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "seguranca-trabalho-apoio-tecnico",
+        "label": "Contratar a elaboração, revisão ou organização remota de documentação de SST, escolher entre PGR novo, revisão de PGR, documentação de obra e terceirização documental, e iniciar o contato sem enviar dados de trabalhador.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/seguranca-trabalho-apoio-tecnico/",
+        "representative_reason": "single-route occupational-safety technical-support landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "elaboracao-pgr",
+        "label": "Contratar a elaboração remota de um PGR e receber Inventário de Riscos, Plano de Ação e os elementos documentais definidos na proposta.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/elaboracao-pgr/",
+        "representative_reason": "single-route BOFU landing for remote PGR preparation",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "revisao-atualizacao-pgr",
+        "label": "Revisar um PGR existente e receber a versão atualizada dentro do escopo contratado.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/revisao-atualizacao-pgr/",
+        "representative_reason": "single-route BOFU landing for remote PGR review and update",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "pgr-documentacao-sst-obras",
+        "label": "Contratar PGR e documentação remota de SST para uma obra conforme etapas e métodos executivos informados.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/pgr-documentacao-sst-obras/",
+        "representative_reason": "single-route BOFU landing for construction-site PGR and SST documentation",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "terceirizacao-documentacao-sst",
+        "label": "Transferir uma demanda documental recorrente ou acumulada de SST para um braço técnico externo.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/terceirizacao-documentacao-sst/",
+        "representative_reason": "single-route BOFU landing for outsourced remote SST documentation",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "engineering-projects-commercial-architecture",
+        "label": "Entender como contratar projetos de estruturas, instalações, infraestrutura ou coordenação multidisciplinar; reconhecer o tipo de empreendimento e iniciar uma triagem técnica contextualizada para receber uma proposta de escopo adequado.",
+        "kind": "canonical",
+        "route_count": 13,
+        "lighthouse_representative": "/projetos/",
+        "representative_reason": "canonical hub for the multidisciplinary engineering-project architecture and its shared responsive project-page system",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "avaliacao-imoveis-urbanos",
+        "label": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/avaliacao-imoveis-urbanos/",
+        "representative_reason": "single-route urban property valuation landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "assistencia-tecnica-pericia-trabalhista",
+        "label": "Quando uma reclamação depende de evidências sobre o trabalho e o ambiente, a análise técnica precisa responder à questão do caso. A CONFENGE organiza quesitos, examina a documentação de SST e analisa laudos no escopo contratado.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/assistencia-tecnica-pericia-trabalhista/",
+        "representative_reason": "single-route labor dispute technical assistance landing",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "transaction-utilities-noindex",
+        "label": "Post-conversion, operations and error utilities",
+        "kind": "supplemental_noindex",
+        "route_count": 1,
+        "lighthouse_representative": "/ops/",
+        "representative_reason": "operations utility surface",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "post-conversion, operations and error routes intentionally declare noindex"
+      }
+    ],
+    "runtime_families": [
+      {
+        "id": "live-intelligence-opportunity",
+        "label": "Visualizar detalhes de uma oportunidade pública de obra com fatos, fonte e data de referência, e escolher o próximo passo real.",
+        "execution_state": "post_stage_required_if_published_otherwise_verified_withdrawal",
+        "representative_reason": "A família não existe no pacote: somente uma oportunidade official_live aceita pode ser acrescentada pelo overlay canônico Netcup. O Lighthouse desta família é obrigatório depois do stage, sobre uma URL real inventariada pelo runtime.",
+        "mode": "official_live_overlay",
+        "owner": "deploy/netcup/lib/release_control.py::_publish_live_intelligence_overlay",
+        "source_contract": "data/live_intelligence/accepted/opportunities.json#official_live-indexable-projection",
+        "required_source_kind": "official_live",
+        "accepted_projection_route": "/.well-known/live-intelligence-overlay.json",
+        "accepted_projection_schema": "confenge.live-intelligence-overlay/v1",
+        "inventory_route": "/sitemap-oportunidades.xml",
+        "route_pattern": "^/oportunidades/[A-Za-z0-9][A-Za-z0-9._-]{0,80}(?:/[A-Za-z0-9][A-Za-z0-9._-]{0,20}){0,3}/$",
+        "absence_behavior": "withdraw_family",
+        "absence_verifier": "deploy/netcup/lib/release_control.py::_withdraw_packaged_opportunity_pages",
+        "post_stage_lighthouse_required": true
+      }
+    ],
+    "runtime_evidence": null,
+    "pages": [
+      "/triagem-tecnica/",
+      "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/",
+      "/servicos/",
+      "/quantitativos-orcamento-obras/",
+      "/acompanhamento-contratos-obras/",
+      "/termos-de-uso/",
+      "/comercial/privacidade-leads/",
+      "/politica-editorial/",
+      "/conteudos/atraso-na-medicao-obra-publica/",
+      "/conteudos/",
+      "/guias-contratos-obras/",
+      "/lei-14133-obras/",
+      "/especialista/tiago-jun-sasaki/",
+      "/nurture/",
+      "/metodologia-inteligencia/",
+      "/radar/nacional-obras-publicas/",
+      "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "/casos/",
+      "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "/entregas/",
+      "/servicos-obras-publicas/",
+      "/problemas-que-resolvemos/",
+      "/ferramentas/",
+      "/ferramentas/diagnostico-defesa-margem/",
+      "/analise-cnpj/",
+      "/analise-cnpj/r/",
+      "/diagnostico-b2g-expansao/cancelado/",
+      "/obrigado.html",
+      "/404.html",
+      "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "/inteligencia/orgaos/",
+      "/inteligencia/relacoes-compradores-fornecedores/",
+      "/inteligencia/cenarios/",
+      "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+      "/jurisprudencia-contratos-obras/",
+      "/compatibilizacao-projetos-engenharia/",
+      "/conteudos/quando-compatibilizar-projetos/",
+      "/revisao-tecnica-projetos-engenharia/",
+      "/parcerias-engenharia/",
+      "/projetos-complementares-engenharia/",
+      "/conteudos/como-contratar-projetos-complementares/",
+      "/engenharia-condominios/",
+      "/inspecao-diagnostico-edificacoes/",
+      "/assistencia-tecnica-pericial-engenharia/",
+      "/seguranca-trabalho-apoio-tecnico/",
+      "/elaboracao-pgr/",
+      "/revisao-atualizacao-pgr/",
+      "/pgr-documentacao-sst-obras/",
+      "/terceirizacao-documentacao-sst/",
+      "/projetos/",
+      "/avaliacao-imoveis-urbanos/",
+      "/assistencia-tecnica-pericia-trabalhista/",
+      "/ops/",
+      "/diretoria-b2g/",
+      "/diagnostico-b2g-expansao/",
+      "/conteudos/documentos-reequilibrio-obra-publica/"
+    ],
+    "measured_pages": [
+      "/",
+      "/inteligencia/orgaos/",
+      "/inteligencia/relacoes-compradores-fornecedores/"
+    ],
+    "critical_money_pages": [
+      "/",
+      "/entregas/",
+      "/conteudos/documentos-reequilibrio-obra-publica/",
+      "/diretoria-b2g/",
+      "/ferramentas/diagnostico-defesa-margem/",
+      "/diagnostico-b2g-expansao/",
+      "/casos/",
+      "/especialista/tiago-jun-sasaki/"
+    ],
+    "repeated_runs": 3,
+    "public_edge": false,
+    "additional_pages": [
+      {
+        "route": "/diretoria-b2g/",
+        "reason": "priced subscription offer retained as a distinct performance and SEO regression surface"
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/",
+        "reason": "the site's only checkout journey, retained as a distinct performance and SEO regression surface"
+      },
+      {
+        "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "reason": "article-template representative that preserves the #253 responsive-image regression gate",
+        "image_gate": true,
+        "seo_exempt": true,
+        "seo_exempt_reason": "intentional noindex,follow editorial review surface"
+      }
+    ],
+    "image_gate_pages": [
+      "/acompanhamento-contratos-obras/",
+      "/conteudos/documentos-reequilibrio-obra-publica/"
+    ],
+    "seo_exempt_pages": [
+      "/analise-cnpj/",
+      "/analise-cnpj/r/",
+      "/diagnostico-b2g-expansao/cancelado/",
+      "/obrigado.html",
+      "/404.html",
+      "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "/inteligencia/cenarios/",
+      "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+      "/jurisprudencia-contratos-obras/",
+      "/ops/",
+      "/conteudos/documentos-reequilibrio-obra-publica/"
+    ],
+    "not_sampled_count": 199,
+    "not_sampled": [
+      {
+        "route": "/aditivos-obras-publicas/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/analises-contratos-publicos/",
+        "family": "analises-contratos-publicos",
+        "reason": "template semantics represented by /analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/ for family analises-contratos-publicos"
+      },
+      {
+        "route": "/atrasos-prorrogacao-obras-publicas/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/auditoria-orcamento-licitacao/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/bid-room-licitacoes-obras/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/casos/aditivo-art125-demonstrativo/",
+        "family": "casos",
+        "reason": "template semantics represented by /casos/ for family casos"
+      },
+      {
+        "route": "/casos/demonstrativo-infraestrutura/",
+        "family": "casos",
+        "reason": "template semantics represented by /casos/ for family casos"
+      },
+      {
+        "route": "/casos/demonstrativo-projeto-privado/",
+        "family": "casos",
+        "reason": "template semantics represented by /casos/ for family casos"
+      },
+      {
+        "route": "/casos/medicao-glosa-demonstrativo/",
+        "family": "casos",
+        "reason": "template semantics represented by /casos/ for family casos"
+      },
+      {
+        "route": "/casos/modelo-apresentacao-executiva-resultados/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/casos/modelo-base-quantitativa-canonica/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/casos/modelo-mapa-compradores-publicos/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/casos/modelo-painel-precos-obras-publicas/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/casos/modelo-relatorio-executivo-consolidado/",
+        "family": "casos-modelos-precificados",
+        "reason": "template semantics represented by /casos/modelo-relatorio-inteligencia-licitacoes/ for family casos-modelos-precificados"
+      },
+      {
+        "route": "/comercial/radar-decisorio/",
+        "family": "comercial-condicoes",
+        "reason": "template semantics represented by /comercial/privacidade-leads/ for family comercial-condicoes"
+      },
+      {
+        "route": "/comercial/termos-diagnostico-b2g/",
+        "family": "comercial-condicoes",
+        "reason": "template semantics represented by /comercial/privacidade-leads/ for family comercial-condicoes"
+      },
+      {
+        "route": "/como-trabalhamos/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/confianca/",
+        "family": "legal-and-trust",
+        "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
+      },
+      {
+        "route": "/conflitos/",
+        "family": "legal-and-trust",
+        "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
+      },
+      {
+        "route": "/conteudos/aceleracao-obra-publica-custo-adicional/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/aditivo-empreitada-por-preco-global/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/administracao-local-orcamento-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/administracao-local-prolongada-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/analise-edital-obra-publica-construtora/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/atraso-obra-culpa-administracao/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/atraso-projeto-executivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/auditoria-contrato-obra-publica-mensal/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/aumento-material-reequilibrio-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/bdi-diferenciado-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/bdi-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/clausula-matriz-risco-abusiva-edital/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/como-contratar-compatibilizacao-projetos/",
+        "family": "engineering-projects-coordination-contents",
+        "reason": "template semantics represented by /conteudos/quando-compatibilizar-projetos/ for family engineering-projects-coordination-contents"
+      },
+      {
+        "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/como-provar-atraso-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/comparar-propostas-execucao-obra/",
+        "family": "private-engineering-quantities-budget",
+        "reason": "template semantics represented by /quantitativos-orcamento-obras/ for family private-engineering-quantities-budget"
+      },
+      {
+        "route": "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/composicao-propria-preco-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/comunicacao-fiscal-contrato-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/consorcio-subcontratacao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/consultoria-b2g-engenharia-construtora/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/consultoria-contrato-obra-publica-construtora/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/contratacao-integrada-semi-integrada-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/controle-mudancas-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/cotacao-mercado-orcamento-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/cronograma-fisico-financeiro-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/cronologia-contrato-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/culpa-sancao-atraso-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/curva-abc-orcamento-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/curva-abc-reequilibrio-contrato/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/custos-indiretos-atraso-administracao-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/defesa-processo-sancionador-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/demolicao-nao-prevista-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/demora-decisao-administracao-contrato-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/desagio-licitacao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/diario-de-obra-pleito-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/divergencia-diario-obra-fiscalizacao/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/documentos-para-levantamento-quantitativos/",
+        "family": "private-engineering-quantities-budget",
+        "reason": "template semantics represented by /quantitativos-orcamento-obras/ for family private-engineering-quantities-budget"
+      },
+      {
+        "route": "/conteudos/dosimetria-multa-contrato-administrativo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/empreitada-preco-global-preco-unitario/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/erros-comunicacao-contrato-publico-construtora/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/extincao-contrato-culpa-administracao/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/fiscal-mandou-executar-sem-aditivo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/frente-de-servico-nao-liberada-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/garantia-proposta-licitacao-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/gestao-contrato-obra-publica-indicadores/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/glosa-de-medicao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/glosa-por-qualidade-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/impedimento-de-licitar-construtora/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/manutencao-habilitacao-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/matriz-de-riscos-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/medicao-por-evento-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/multa-contrato-obra-publica-defesa/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/notas-fiscais-reequilibrio-contrato/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/notificacao-impacto-prazo-custo-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/orcamento-sigiloso-licitacao-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/ordem-paralisacao-obra-publica-custos/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/pedido-de-reequilibrio-negado/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/plano-recuperacao-obra-atrasada/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/pleito-tecnico-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/produtividade-sinapi-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/projeto-basico-incompleto-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/prova-custos-adicionais-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/recuperar-contrato-obra-publica-problematico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/reequilibrio-apos-fim-do-contrato/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/reequilibrio-empreitada-preco-global/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/registro-contemporaneo-pleito-obra/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/reprogramacao-cronograma-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/rescisao-unilateral-contrato-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+        "family": "private-engineering-quantities-budget",
+        "reason": "template semantics represented by /quantitativos-orcamento-obras/ for family private-engineering-quantities-budget"
+      },
+      {
+        "route": "/conteudos/seguro-garantia-execucao-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/servico-executado-sem-projeto-aprovado/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/servico-executado-sem-termo-aditivo/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/subcontratacao-obra-publica-autorizacao/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/tributos-bdi-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "template semantics represented by /conteudos/ for family editorial-library"
+      },
+      {
+        "route": "/defesa-margem-contratos-publicos/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/defesa-tecnica-contratos-publicos/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/diagnostico-b2g-360/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/expirado/",
+        "family": "diagnostico-b2g-expansao-estados",
+        "reason": "template semantics represented by /diagnostico-b2g-expansao/cancelado/ for family diagnostico-b2g-expansao-estados"
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/obrigado/",
+        "family": "diagnostico-b2g-expansao-estados",
+        "reason": "template semantics represented by /diagnostico-b2g-expansao/cancelado/ for family diagnostico-b2g-expansao-estados"
+      },
+      {
+        "route": "/diagnostico-pre-licitacao/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/edificacoes/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/empresa/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/ferramentas/checklist-reequilibrio/",
+        "family": "ferramentas",
+        "reason": "template semantics represented by /ferramentas/diagnostico-defesa-margem/ for family ferramentas"
+      },
+      {
+        "route": "/ferramentas/limite-acrescimos-supressoes/",
+        "family": "ferramentas",
+        "reason": "template semantics represented by /ferramentas/diagnostico-defesa-margem/ for family ferramentas"
+      },
+      {
+        "route": "/ferramentas/matriz-atraso-obra/",
+        "family": "ferramentas",
+        "reason": "template semantics represented by /ferramentas/diagnostico-defesa-margem/ for family ferramentas"
+      },
+      {
+        "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "family": "guias-contratos-obras",
+        "reason": "template semantics represented by /guias-contratos-obras/ for family guias-contratos-obras"
+      },
+      {
+        "route": "/guias-contratos-obras/contestar-glosa-medicao/",
+        "family": "guias-contratos-obras",
+        "reason": "template semantics represented by /guias-contratos-obras/ for family guias-contratos-obras"
+      },
+      {
+        "route": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "family": "guias-contratos-obras",
+        "reason": "template semantics represented by /guias-contratos-obras/ for family guias-contratos-obras"
+      },
+      {
+        "route": "/guias-contratos-obras/responder-notificacao-atraso/",
+        "family": "guias-contratos-obras",
+        "reason": "template semantics represented by /guias-contratos-obras/ for family guias-contratos-obras"
+      },
+      {
+        "route": "/imprensa/",
+        "family": "legal-and-trust",
+        "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
+      },
+      {
+        "route": "/inteligencia/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/inteligencia/acompanhamento/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "family": "inteligencia-pseo",
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
+      },
+      {
+        "route": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "family": "inteligencia-pseo",
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
+      },
+      {
+        "route": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "family": "inteligencia-pseo",
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
+      },
+      {
+        "route": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+        "family": "inteligencia-pseo",
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
+      },
+      {
+        "route": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "family": "inteligencia-pseo",
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
+      },
+      {
+        "route": "/inteligencia/composicao-contratos-amostra/",
+        "family": "inteligencia-amostras-reais",
+        "reason": "template semantics represented by /inteligencia/relacoes-compradores-fornecedores/ for family inteligencia-amostras-reais"
+      },
+      {
+        "route": "/inteligencia/concorrencia/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/inteligencia/mercados/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/inteligencia/pesquisa-sob-encomenda/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/inteligencia/precos/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+        "family": "jurisprudencia-contratos-obras",
+        "reason": "template semantics represented by /jurisprudencia-contratos-obras/ for family jurisprudencia-contratos-obras"
+      },
+      {
+        "route": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/lei-14133-obras/atraso-imputavel-administracao/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "family": "lei-14133-obras",
+        "reason": "template semantics represented by /lei-14133-obras/ for family lei-14133-obras"
+      },
+      {
+        "route": "/medicoes-glosas-obras-publicas/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/nurture/sair/",
+        "family": "nurture",
+        "reason": "template semantics represented by /nurture/ for family nurture"
+      },
+      {
+        "route": "/obrigado-contrato.html",
+        "family": "obrigado-transacional",
+        "reason": "template semantics represented by /obrigado.html for family obrigado-transacional"
+      },
+      {
+        "route": "/obrigado-edital.html",
+        "family": "obrigado-transacional",
+        "reason": "template semantics represented by /obrigado.html for family obrigado-transacional"
+      },
+      {
+        "route": "/obrigado-operacao.html",
+        "family": "obrigado-transacional",
+        "reason": "template semantics represented by /obrigado.html for family obrigado-transacional"
+      },
+      {
+        "route": "/politica-editorial/historico/",
+        "family": "politica-editorial",
+        "reason": "template semantics represented by /politica-editorial/ for family politica-editorial"
+      },
+      {
+        "route": "/privacidade/",
+        "family": "legal-and-trust",
+        "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
+      },
+      {
+        "route": "/projeto-eletrico/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projeto-estrutura-metalica/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projeto-estrutural-concreto-armado/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projeto-hidrossanitario/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projetos/coordenacao-multidisciplinar/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projetos/estruturas/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projetos/infraestrutura/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/projetos/instalacoes/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      },
+      {
+        "route": "/radar/",
+        "family": "radar",
+        "reason": "template semantics represented by /radar/nacional-obras-publicas/ for family radar"
+      },
+      {
+        "route": "/reequilibrio-obras-publicas/",
+        "family": "service-pillars",
+        "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/terceirizacao-projetos-engenharia/",
+        "family": "engineering-projects-commercial-architecture",
+        "reason": "template semantics represented by /projetos/ for family engineering-projects-commercial-architecture"
+      }
+    ],
+    "thresholds": {
+      "performance": 90,
+      "accessibility": 95,
+      "best_practices": 95,
+      "seo": 95
+    }
+  },
+  "results": [
+    {
+      "path": "/",
+      "run": 1,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1586.6175,
+      "cls": 0,
+      "tbt_ms": 3.5,
+      "longest_own_task_ms": 123,
+      "fcp_ms": 911.6175000000001,
+      "si_ms": 911.6175000000001,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 500,
+      "total_byte_weight": 120983,
+      "content_byte_weight": 119118,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/",
+          "transfer_size": 11600,
+          "resource_size": 42392,
+          "content_bytes": 11369,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-base.dff7df09001b.css",
+          "transfer_size": 9641,
+          "resource_size": 40716,
+          "content_bytes": 9426,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.e7684e7c0622.css",
+          "transfer_size": 10112,
+          "resource_size": 54616,
+          "content_bytes": 9897,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 5.808749999999999,
+      "lcp_observed_rtt_ms": 0.10425,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 150,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2435.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/",
+      "run": 2,
+      "performance": 94,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1844.63365,
+      "cls": 0,
+      "tbt_ms": 252.54455000000007,
+      "longest_own_task_ms": 337,
+      "fcp_ms": 1542.0891,
+      "si_ms": 1542.0891,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 500,
+      "total_byte_weight": 120983,
+      "content_byte_weight": 119118,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/",
+          "transfer_size": 11600,
+          "resource_size": 42392,
+          "content_bytes": 11369,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-base.dff7df09001b.css",
+          "transfer_size": 9641,
+          "resource_size": 40716,
+          "content_bytes": 9426,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.e7684e7c0622.css",
+          "transfer_size": 10112,
+          "resource_size": 54616,
+          "content_bytes": 9897,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 2.5445499999999996,
+      "lcp_observed_rtt_ms": 0.08744999999999999,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2895,
+      "seo_exempt": false
+    },
+    {
+      "path": "/",
+      "run": 3,
+      "performance": 94,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1827.8579499999998,
+      "cls": 0,
+      "tbt_ms": 251.95264999999995,
+      "longest_own_task_ms": 322,
+      "fcp_ms": 1525.9053,
+      "si_ms": 1525.9053,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 500,
+      "total_byte_weight": 120983,
+      "content_byte_weight": 119118,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/",
+          "transfer_size": 11600,
+          "resource_size": 42392,
+          "content_bytes": 11369,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-base.dff7df09001b.css",
+          "transfer_size": 9641,
+          "resource_size": 40716,
+          "content_bytes": 9426,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.e7684e7c0622.css",
+          "transfer_size": 10112,
+          "resource_size": 54616,
+          "content_bytes": 9897,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.95265,
+      "lcp_observed_rtt_ms": 0.08835,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 3118,
+      "seo_exempt": false
+    },
+    {
+      "path": "/inteligencia/orgaos/",
+      "run": 1,
+      "performance": 97,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1880.9194000000002,
+      "cls": 0,
+      "tbt_ms": 167,
+      "longest_own_task_ms": 217,
+      "fcp_ms": 1426.2796,
+      "si_ms": 1426.2796,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 234,
+      "total_byte_weight": 127673,
+      "content_byte_weight": 125808,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/inteligencia/orgaos/",
+          "transfer_size": 6796,
+          "resource_size": 20381,
+          "content_bytes": 6565,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.ab07287fbb99.css",
+          "transfer_size": 22393,
+          "resource_size": 108693,
+          "content_bytes": 22178,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+          "transfer_size": 8854,
+          "resource_size": 46718,
+          "content_bytes": 8639,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 4.639800000000001,
+      "lcp_observed_rtt_ms": 0.08819999999999999,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2938.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/inteligencia/relacoes-compradores-fornecedores/",
+      "run": 1,
+      "performance": 95,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1926.9152000000001,
+      "cls": 0,
+      "tbt_ms": 222,
+      "longest_own_task_ms": 272,
+      "fcp_ms": 1475.2768,
+      "si_ms": 1475.2768,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 451,
+      "total_byte_weight": 127521,
+      "content_byte_weight": 125656,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/inteligencia/relacoes-compradores-fornecedores/",
+          "transfer_size": 10894,
+          "resource_size": 35247,
+          "content_bytes": 10663,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.ab07287fbb99.css",
+          "transfer_size": 22393,
+          "resource_size": 108693,
+          "content_bytes": 22178,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial-article.b0e2fe57e76e.css",
+          "transfer_size": 4604,
+          "resource_size": 20715,
+          "content_bytes": 4389,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.6383999999999999,
+      "lcp_observed_rtt_ms": 0.0816,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2838.5,
+      "seo_exempt": false
+    }
+  ],
+  "evaluation": {
+    "ok": false,
+    "errors": [
+      "/: critical performance 94 < 95",
+      "/: critical TBT 252.54455000000007ms > 200ms",
+      "/: critical performance 94 < 95",
+      "/: critical TBT 251.95264999999995ms > 200ms",
+      "home: minimum performance 94 < 95",
+      "home: p75 TBT 252.54455000000007ms must be < 200ms",
+      "home: maximum own long task 337ms must be <= 200ms"
+    ],
+    "home": {
+      "expected_runs": 3,
+      "observed_runs": 3,
+      "minimum_performance": 94,
+      "p75_tbt_ms": 252.54455000000007,
+      "maximum_own_long_task_ms": 337,
+      "minimum_lcp_ms": 1586.6175,
+      "maximum_lcp_ms": 1844.63365,
+      "maximum_lcp_net_ms": 1844.63365,
+      "maximum_lcp_network_allowance_ms": 0,
+      "maximum_cls": 0
+    }
+  },
+  "terminal_state": "MEASURED_FAIL",
+  "fatal": null,
+  "unmeasured": []
+}

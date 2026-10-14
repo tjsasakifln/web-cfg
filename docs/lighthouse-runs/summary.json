@@ -1,10 +1,10 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-10-12T05:46:35.182Z",
+  "generated_at": "2026-10-14T06:27:15.883Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
-    "public_route_count": 252,
-    "family_count": 53,
+    "public_route_count": 256,
+    "family_count": 55,
     "families": [
       {
         "id": "triagem-tecnica",
@@ -403,15 +403,39 @@
         "runtime_only": null
       },
       {
+        "id": "inteligencia-mercado",
+        "label": "Contratar pesquisa multissetorial para selecionar clientes e canais, examinar mercado ou concorrentes, pesquisar preços e documentos, definir acompanhamento ou utilização institucional.",
+        "kind": "canonical",
+        "route_count": 7,
+        "lighthouse_representative": "/inteligencia/orgaos/",
+        "representative_reason": "commercial market-intelligence family representative with decision-scoped research capture",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "inteligencia-amostras-reais",
+        "label": "Conferir relações institucionais e composição de dez contratos públicos verificáveis antes de solicitar um recorte para a própria decisão.",
+        "kind": "canonical",
+        "route_count": 2,
+        "lighthouse_representative": "/inteligencia/relacoes-compradores-fornecedores/",
+        "representative_reason": "external-proof market-intelligence family representative with a bounded real-record sample",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
         "id": "inteligencia-pseo",
         "label": "Navegar pela inteligencia de mercado derivada de contratos publicos (mercados, orgaos, precos, concorrencia e cenarios tecnicos) antes de decidir onde disputar.",
         "kind": "canonical",
-        "route_count": 11,
-        "lighthouse_representative": "/inteligencia/",
-        "representative_reason": "pSEO intelligence hub",
+        "route_count": 6,
+        "lighthouse_representative": "/inteligencia/cenarios/",
+        "representative_reason": "legacy intelligence scenarios family representative; the route remains a noindex scenario library",
         "image_gate": false,
         "seo_exempt": true,
-        "seo_exempt_reason": "pSEO drafts remain noindex pending approval",
+        "seo_exempt_reason": "legacy scenario pages remain noindex",
         "runtime_only": null
       },
       {
@@ -706,7 +730,9 @@
       "/obrigado.html",
       "/404.html",
       "/inteligencia/valor-tipico-contratos-pavimentacao/",
-      "/inteligencia/",
+      "/inteligencia/orgaos/",
+      "/inteligencia/relacoes-compradores-fornecedores/",
+      "/inteligencia/cenarios/",
       "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
       "/jurisprudencia-contratos-obras/",
       "/compatibilizacao-projetos-engenharia/",
@@ -763,7 +789,9 @@
       "/obrigado.html",
       "/404.html",
       "/inteligencia/valor-tipico-contratos-pavimentacao/",
-      "/inteligencia/",
+      "/inteligencia/orgaos/",
+      "/inteligencia/relacoes-compradores-fornecedores/",
+      "/inteligencia/cenarios/",
       "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
       "/jurisprudencia-contratos-obras/",
       "/compatibilizacao-projetos-engenharia/",
@@ -828,13 +856,13 @@
       "/obrigado.html",
       "/404.html",
       "/inteligencia/valor-tipico-contratos-pavimentacao/",
-      "/inteligencia/",
+      "/inteligencia/cenarios/",
       "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
       "/jurisprudencia-contratos-obras/",
       "/ops/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "not_sampled_count": 197,
+    "not_sampled_count": 199,
     "not_sampled": [
       {
         "route": "/aditivos-obras-publicas/",
@@ -1642,54 +1670,64 @@
         "reason": "template semantics represented by /termos-de-uso/ for family legal-and-trust"
       },
       {
-        "route": "/inteligencia/cenarios/",
-        "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "route": "/inteligencia/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
+      },
+      {
+        "route": "/inteligencia/acompanhamento/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
       },
       {
         "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
       },
       {
         "route": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
         "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
       },
       {
         "route": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
         "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
       },
       {
         "route": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
         "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
       },
       {
         "route": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
         "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "reason": "template semantics represented by /inteligencia/cenarios/ for family inteligencia-pseo"
+      },
+      {
+        "route": "/inteligencia/composicao-contratos-amostra/",
+        "family": "inteligencia-amostras-reais",
+        "reason": "template semantics represented by /inteligencia/relacoes-compradores-fornecedores/ for family inteligencia-amostras-reais"
       },
       {
         "route": "/inteligencia/concorrencia/",
-        "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
       },
       {
         "route": "/inteligencia/mercados/",
-        "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
       },
       {
-        "route": "/inteligencia/orgaos/",
-        "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "route": "/inteligencia/pesquisa-sob-encomenda/",
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
       },
       {
         "route": "/inteligencia/precos/",
-        "family": "inteligencia-pseo",
-        "reason": "template semantics represented by /inteligencia/ for family inteligencia-pseo"
+        "family": "inteligencia-mercado",
+        "reason": "template semantics represented by /inteligencia/orgaos/ for family inteligencia-mercado"
       },
       {
         "route": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
@@ -5831,108 +5869,6 @@
       "seo_exempt": true
     },
     {
-      "path": "/inteligencia/",
-      "run": 1,
-      "performance": 100,
-      "accessibility": 100,
-      "best_practices": 100,
-      "seo": 69,
-      "lcp_ms": 1726.2707,
-      "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 901.2707,
-      "si_ms": 901.2707,
-      "image_aspect_ratio": 1,
-      "image_size_responsive": 1,
-      "dom_elements": 197,
-      "total_byte_weight": 136053,
-      "content_byte_weight": 133996,
-      "header_byte_weight": 2057,
-      "payload_requests": 10,
-      "payload_details": [
-        {
-          "url": "http://127.0.0.1:8766/inteligencia/",
-          "transfer_size": 4816,
-          "resource_size": 14457,
-          "content_bytes": 4585,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
-          "transfer_size": 42401,
-          "resource_size": 42208,
-          "content_bytes": 42208,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
-          "transfer_size": 22285,
-          "resource_size": 108151,
-          "content_bytes": 22070,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
-          "transfer_size": 28622,
-          "resource_size": 92381,
-          "content_bytes": 28393,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
-          "transfer_size": 8854,
-          "resource_size": 46718,
-          "content_bytes": 8639,
-          "encoding": "gzip"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
-          "transfer_size": 10797,
-          "resource_size": 10605,
-          "content_bytes": 10605,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/manifest.webmanifest",
-          "transfer_size": 610,
-          "resource_size": 403,
-          "content_bytes": 403,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
-          "transfer_size": 10797,
-          "resource_size": 10605,
-          "content_bytes": 10605,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
-          "transfer_size": 1164,
-          "resource_size": 973,
-          "content_bytes": 973,
-          "encoding": "identity"
-        },
-        {
-          "url": "http://127.0.0.1:8766/assets/icon-192.png",
-          "transfer_size": 5707,
-          "resource_size": 5515,
-          "content_bytes": 5515,
-          "encoding": "identity"
-        }
-      ],
-      "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.6353499999999996,
-      "lcp_observed_rtt_ms": 0.09615,
-      "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
-      "image_delivery_savings_bytes": 18071,
-      "font_display_score": 1,
-      "benchmark_index": 2288,
-      "seo_exempt": true
-    },
-    {
       "path": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
       "run": 1,
       "performance": 100,
@@ -8721,6 +8657,196 @@
       "font_display_score": 1,
       "benchmark_index": 2306,
       "seo_exempt": true
+    },
+    {
+      "path": "/inteligencia/orgaos/",
+      "run": 1,
+      "performance": 97,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1880.9194000000002,
+      "cls": 0,
+      "tbt_ms": 167,
+      "longest_own_task_ms": 217,
+      "fcp_ms": 1426.2796,
+      "si_ms": 1426.2796,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 234,
+      "total_byte_weight": 127673,
+      "content_byte_weight": 125808,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/inteligencia/orgaos/",
+          "transfer_size": 6796,
+          "resource_size": 20381,
+          "content_bytes": 6565,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.ab07287fbb99.css",
+          "transfer_size": 22393,
+          "resource_size": 108693,
+          "content_bytes": 22178,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+          "transfer_size": 8854,
+          "resource_size": 46718,
+          "content_bytes": 8639,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 4.639800000000001,
+      "lcp_observed_rtt_ms": 0.08819999999999999,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2938.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/inteligencia/relacoes-compradores-fornecedores/",
+      "run": 1,
+      "performance": 95,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1926.9152000000001,
+      "cls": 0,
+      "tbt_ms": 222,
+      "longest_own_task_ms": 272,
+      "fcp_ms": 1475.2768,
+      "si_ms": 1475.2768,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 451,
+      "total_byte_weight": 127521,
+      "content_byte_weight": 125656,
+      "header_byte_weight": 1865,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/inteligencia/relacoes-compradores-fornecedores/",
+          "transfer_size": 10894,
+          "resource_size": 35247,
+          "content_bytes": 10663,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.ab07287fbb99.css",
+          "transfer_size": 22393,
+          "resource_size": 108693,
+          "content_bytes": 22178,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=216d79618c7ec7a4",
+          "transfer_size": 28951,
+          "resource_size": 93499,
+          "content_bytes": 28722,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial-article.b0e2fe57e76e.css",
+          "transfer_size": 4604,
+          "resource_size": 20715,
+          "content_bytes": 4389,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 5707,
+          "resource_size": 5515,
+          "content_bytes": 5515,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.6383999999999999,
+      "lcp_observed_rtt_ms": 0.0816,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2838.5,
+      "seo_exempt": false
     }
   ],
   "evaluation": {
@@ -8741,5 +8867,184 @@
   },
   "terminal_state": "MEASURED_PASS",
   "fatal": null,
-  "unmeasured": []
+  "unmeasured": [],
+  "evidence_replay": {
+    "schema": "CONFENGE_LIGHTHOUSE_HISTORICAL_REPLAY_EXTENSION/1.0.0",
+    "mode": "HISTORICAL_REPLAY_EXTENSION",
+    "final_artifact_approval": false,
+    "current_candidate_home_approval": false,
+    "statement": "Este replay apenas estende a matriz histórica com duas medições reais. Ele não aprova o artefato final; CI e qualificação pré-promoção devem medir as 57 rotas no candidato exato.",
+    "historical_home_rows_role": "As três linhas históricas da home mantêm a continuidade da matriz, mas não aprovam a home do candidato 44f71b266. Os controles atuais permanecem no resumo rotulado MEASURED_FAIL e a qualificação completa deve medi-la novamente sem reamostragem seletiva.",
+    "historical_summary": {
+      "file": "summary-pre-market-intelligence-replay.json",
+      "archived_from_commit": "44f71b26616f6d8a0891c14212484758348530d5",
+      "generated_at": "2026-10-12T05:46:35.182Z",
+      "rows_preserved": 71,
+      "pages_preserved": 55,
+      "sha256": "58ea69d7bd542006089a162a6d1684fc691f791d782b9d3a6dda909097fc5a21"
+    },
+    "superseded_active_rows": [
+      {
+        "path": "/inteligencia/",
+        "run": 1,
+        "performance": 100,
+        "accessibility": 100,
+        "best_practices": 100,
+        "seo": 69,
+        "lcp_ms": 1726.2707,
+        "cls": 0,
+        "tbt_ms": 0,
+        "longest_own_task_ms": 0,
+        "fcp_ms": 901.2707,
+        "si_ms": 901.2707,
+        "image_aspect_ratio": 1,
+        "image_size_responsive": 1,
+        "dom_elements": 197,
+        "total_byte_weight": 136053,
+        "content_byte_weight": 133996,
+        "header_byte_weight": 2057,
+        "payload_requests": 10,
+        "payload_details": [
+          {
+            "url": "http://127.0.0.1:8766/inteligencia/",
+            "transfer_size": 4816,
+            "resource_size": 14457,
+            "content_bytes": 4585,
+            "encoding": "gzip"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+            "transfer_size": 42401,
+            "resource_size": 42208,
+            "content_bytes": 42208,
+            "encoding": "identity"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/css/styles.7a711fbca303.css",
+            "transfer_size": 22285,
+            "resource_size": 108151,
+            "content_bytes": 22070,
+            "encoding": "gzip"
+          },
+          {
+            "url": "http://127.0.0.1:8766/script.js?v=1186c153db8e1ddb",
+            "transfer_size": 28622,
+            "resource_size": 92381,
+            "content_bytes": 28393,
+            "encoding": "gzip"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+            "transfer_size": 8854,
+            "resource_size": 46718,
+            "content_bytes": 8639,
+            "encoding": "gzip"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+            "transfer_size": 10797,
+            "resource_size": 10605,
+            "content_bytes": 10605,
+            "encoding": "identity"
+          },
+          {
+            "url": "http://127.0.0.1:8766/manifest.webmanifest",
+            "transfer_size": 610,
+            "resource_size": 403,
+            "content_bytes": 403,
+            "encoding": "identity"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+            "transfer_size": 10797,
+            "resource_size": 10605,
+            "content_bytes": 10605,
+            "encoding": "identity"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+            "transfer_size": 1164,
+            "resource_size": 973,
+            "content_bytes": 973,
+            "encoding": "identity"
+          },
+          {
+            "url": "http://127.0.0.1:8766/assets/icon-192.png",
+            "transfer_size": 5707,
+            "resource_size": 5515,
+            "content_bytes": 5515,
+            "encoding": "identity"
+          }
+        ],
+        "lcp_network_allowance_ms": 0,
+        "lcp_observed_server_latency_ms": 0.6353499999999996,
+        "lcp_observed_rtt_ms": 0.09615,
+        "lcp_network_allowance_capped": false,
+        "render_blocking_savings_ms": 250,
+        "image_delivery_savings_bytes": 18071,
+        "font_display_score": 1,
+        "benchmark_index": 2288,
+        "seo_exempt": true
+      }
+    ],
+    "supersession_reason": "A policy corrente substituiu o antigo representante noindex /inteligencia/ pelo supplemental /inteligencia/cenarios/. O row antigo permanece byte a byte no arquivo histórico, mas não integra a matriz ativa.",
+    "extension": {
+      "label": "market-intelligence-extension",
+      "summary_file": "summary-market-intelligence-extension.json",
+      "summary_sha256": "5ea849d0c267cd7c754c2ed41a5bb6cdd5cec8d75428d1b99ebac9cb4cd2695e",
+      "generated_at": "2026-10-14T06:27:15.883Z",
+      "terminal_state": "MEASURED_FAIL",
+      "evaluation_errors": [
+        "/: critical performance 94 < 95",
+        "/: critical TBT 252.54455000000007ms > 200ms",
+        "/: critical performance 94 < 95",
+        "/: critical TBT 251.95264999999995ms > 200ms",
+        "home: minimum performance 94 < 95",
+        "home: p75 TBT 252.54455000000007ms must be < 200ms",
+        "home: maximum own long task 337ms must be <= 200ms"
+      ],
+      "measured_pages": [
+        "/",
+        "/inteligencia/orgaos/",
+        "/inteligencia/relacoes-compradores-fornecedores/"
+      ],
+      "admitted_rows": [
+        "/inteligencia/orgaos/#1",
+        "/inteligencia/relacoes-compradores-fornecedores/#1"
+      ],
+      "control_rows": [
+        "/#1",
+        "/#2",
+        "/#3"
+      ],
+      "raw_evidence_sha256": {
+        "home-market-intelligence-extension-run-1.json": "8cd933e58580b724925fedafdd3323767009a0ea5d4d0da5e0d86e0c903a3a5b",
+        "home-market-intelligence-extension-run-2.json": "0d64ab06d771de8dacde6aa5a1558eeef8a7ad74246962358831160d667e1ff4",
+        "home-market-intelligence-extension-run-3.json": "9f1e842f17585c16629f842b5204c050f84ae3c1b5d325d79d0750e42bb5b811",
+        "inteligencia_orgaos-market-intelligence-extension.json": "2b823dd2ebed0322b0dbf70c86bd4839f21370529ad73207a083247047893d1f",
+        "inteligencia_relacoes-compradores-fornecedores-market-intelligence-extension.json": "e52d99859a3329c7979e35d4b602f86f8e41e568857266b976a65254aa5cf1c0"
+      }
+    },
+    "candidate_identity": {
+      "artifact_hash": "3d65bfe2b2c728794f350a37c6414cbfaaca0a0cd5eb3df0c8dd0eba76adbce0",
+      "build_time": "2026-10-14T06:21:54Z",
+      "commit": "44f71b26616f6d8a0891c14212484758348530d5",
+      "deploy_id": null,
+      "environment": "local",
+      "manifest_hash": "8bb2807918f0129e1b6d3d479be1e4bec520eb7056237e14f5268b70d52817c7",
+      "schema_version": "1.2.0",
+      "site_schema_version": "1.1.0",
+      "source": "build_site.write_build_info",
+      "versioned_timestamp_fields": [
+        "build_time",
+        "generated_at",
+        "preview_generated_at"
+      ]
+    },
+    "required_final_measurement": {
+      "route_count": 57,
+      "workflow": ".github/workflows/netcup-release.yml",
+      "step": "Pre-promotion candidate qualification"
+    }
+  }
 }
