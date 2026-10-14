@@ -148,6 +148,21 @@ for (const width of widths) {
     const offerCards = [...document.querySelectorAll('article.vitrine-item[data-primary-offer="true"]')];
     const capabilityRows = [...document.querySelectorAll(".capability-item")];
     const engineeringGroups = [...document.querySelectorAll(".capability-group")];
+    const intelligenceFooterLink = document.querySelector('footer a[href="/inteligencia/"]');
+    const intelligenceFooterBox = intelligenceFooterLink?.getBoundingClientRect();
+    const intelligenceFooterStyle = intelligenceFooterLink?.getAttribute("style");
+    let documentHeightWithoutAuthorizedFooterAddition = document.documentElement.scrollHeight;
+    try {
+      if (intelligenceFooterLink) {
+        intelligenceFooterLink.style.display = "none";
+        documentHeightWithoutAuthorizedFooterAddition = document.documentElement.scrollHeight;
+      }
+    } finally {
+      if (intelligenceFooterLink) {
+        if (intelligenceFooterStyle === null) intelligenceFooterLink.removeAttribute("style");
+        else intelligenceFooterLink.setAttribute("style", intelligenceFooterStyle);
+      }
+    }
     return {
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       longestArchetypeRun: archetypes.reduce(
@@ -166,6 +181,13 @@ for (const width of widths) {
       heroCtaBottom: heroCta?.bottom || null,
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
       documentHeight: Math.round(document.documentElement.scrollHeight),
+      documentHeightWithoutAuthorizedFooterAddition: Math.round(documentHeightWithoutAuthorizedFooterAddition),
+      authorizedFooterHeightDelta: Math.round(document.documentElement.scrollHeight - documentHeightWithoutAuthorizedFooterAddition),
+      intelligenceFooterLinkCount: document.querySelectorAll('footer a[href="/inteligencia/"]').length,
+      intelligenceFooterLinkVisible: Boolean(intelligenceFooterBox && intelligenceFooterBox.width > 0 && intelligenceFooterBox.height > 0),
+      intelligenceFooterLinkFontSize: intelligenceFooterLink
+        ? Number.parseFloat(getComputedStyle(intelligenceFooterLink).fontSize)
+        : 0,
       decisionNavTop: Math.round((decisionNav?.getBoundingClientRect().top || 0) + window.scrollY),
       // Correcao apos revisao (onda 2): a geometria de conversao do indice pela
       // decisao e medida em relacao a secao das ofertas (#enquadrar) e a
@@ -330,7 +352,13 @@ for (const width of widths) {
   // 24300 deixa ~260 px (1,1%) de folga e continua pegando deriva nao
   // relacionada. A 1440 px a mesma pagina caiu de 14909 para 13591 (pares de
   // criterios em duas colunas).
-  if (width === 390 && metrics.documentHeight > 24300) errors.push(`document_height=${metrics.documentHeight}`);
+  if (width === 390 && metrics.documentHeightWithoutAuthorizedFooterAddition > 24300) {
+    errors.push(`document_height_normalized=${metrics.documentHeightWithoutAuthorizedFooterAddition}`);
+  }
+  if (!metrics.intelligenceFooterLinkVisible || metrics.intelligenceFooterLinkFontSize < 14) {
+    errors.push("authorized_footer_link_geometry");
+  }
+  if (metrics.intelligenceFooterLinkCount !== 1) errors.push("authorized_footer_link_count");
   // Geometria de conversao do indice pela decisao (correcao apos revisao,
   // onda 2): o indice e o primeiro bloco da secao das ofertas (#enquadrar),
   // logo depois da cabeca da secao, e a entrada "Analises com preco publicado"

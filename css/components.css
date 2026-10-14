@@ -194,6 +194,7 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;transition:color .16s ease,text-shadow .16s ease,box-shadow .16s ease}
 .site-footer .footer-links{min-width:0}
 .site-footer .footer-links a{min-width:0;overflow-wrap:anywhere}
+.site-footer .footer-links a[href="/inteligencia/"]{font-size:.875rem}
 .site-footer .footer-links a:hover,.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:hover,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:hover,.site-footer .footer-bottom>a:focus-visible{color:#fff;text-shadow:0 0 .45rem rgba(206,214,42,.48)}
 .site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
 .site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
