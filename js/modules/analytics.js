@@ -13,6 +13,13 @@
   const PII_PARAM_PATTERN = /address|arquivo|attach|cnpj|company|cpf|document|edital|email|empresa|endereco|comment|description|field|file|text|name|nome|message|mensagem|note|phone|query|search|tel|whatsapp/;
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
+    '/inteligencia/': 'market-research',
+    '/inteligencia/orgaos/': 'market-research-orgaos',
+    '/inteligencia/mercados/': 'market-research-mercados',
+    '/inteligencia/concorrencia/': 'market-research-concorrencia',
+    '/inteligencia/acompanhamento/': 'market-research-acompanhamento',
+    '/inteligencia/precos/': 'market-research-precos',
+    '/inteligencia/pesquisa-sob-encomenda/': 'market-research-pesquisa-sob-encomenda',
     '/auditoria-orcamento-licitacao/': 'auditoria-orcamento-licitacao',
     '/medicoes-glosas-obras-publicas/': 'medicoes-glosas-obras-publicas',
     '/aditivos-obras-publicas/': 'aditivos-obras-publicas',

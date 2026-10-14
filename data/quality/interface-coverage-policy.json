@@ -133,6 +133,22 @@
         "reason": "single-route canonical methodology family"
       },
       {
+        "family_id": "inteligencia-mercado",
+        "route": "/inteligencia/orgaos/",
+        "reason": "commercial market-intelligence family representative with decision-scoped research capture"
+      },
+      {
+        "family_id": "inteligencia-amostras-reais",
+        "route": "/inteligencia/relacoes-compradores-fornecedores/",
+        "reason": "external-proof market-intelligence family representative with a bounded real-record sample"
+      },
+      {
+        "family_id": "inteligencia-pseo",
+        "route": "/inteligencia/cenarios/",
+        "reason": "legacy intelligence scenarios family representative; the route remains a noindex scenario library",
+        "seo_exempt_reason": "legacy scenario pages remain noindex"
+      },
+      {
         "family_id": "radar",
         "route": "/radar/nacional-obras-publicas/",
         "reason": "indexable national radar route; noindex regional drafts cannot waive SEO"
@@ -229,12 +245,6 @@
         "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
         "reason": "published market-answer canary",
         "seo_exempt_reason": "market-answer publication gate still noindex"
-      },
-      {
-        "family_id": "inteligencia-pseo",
-        "route": "/inteligencia/",
-        "reason": "pSEO intelligence hub",
-        "seo_exempt_reason": "pSEO drafts remain noindex pending approval"
       },
       {
         "family_id": "data-desk-citation-kit",

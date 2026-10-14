@@ -80,6 +80,7 @@ HOME_SERVICE_DESTINATIONS = {
     "/servicos/#servico-avaliacao",
     "/seguranca-trabalho-apoio-tecnico/",
     "/servicos-obras-publicas/",
+    "/inteligencia/",
 }
 
 

@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "1de66302f9f6c6b16f36caf9908cb4d98e40e8b343f161ad3ed777e13a185e7e",
-      "rendered_content_hash_previous": "b564cddc037f43446895aef927acfc74b0d9b8dd1d74f585105eb3cfad4dfae0",
+      "rendered_content_hash": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
+      "rendered_content_hash_previous": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-10T18:38:26.012300+00:00",
-      "rendered_hash_recapture_reason": "CONFENGE-INBOUND-CONDOMINIOS-20261010: recaptura determinística da apresentação compartilhada expressamente autorizada pelo fundador nesta missão. Mudanças limitadas ao link Condomínios nas duas navegações e à apresentação institucional do rodapé. Comparação com cd7af8ae confirmou main técnico byte-idêntico e hashes material, conteúdo e fonte preservados. Aprovação técnica humana de 2026-08-20 mantida; nenhuma nova aprovação técnica ou revisão humana independente é alegada.",
-      "rendered_hash_recapture_reason_previous": "CONFENGE-QUALIDADE-SITEWIDE-20261004: correção autorizada do espaçamento inferior do rodapé para impedir que o contato flutuante cubra links legais entre 621 e 1024 px, incluindo os links legais diretos do rodapé de runtime no mesmo contrato de fonte compacta, alvo de 44 px, glow discreto no hover/foco, anel de foco e movimento reduzido. A mudança é exclusivamente CSS de apresentação; conteúdo técnico, fatos, cálculos, fontes, preços, tese, limites, autoria, datas de consulta, canonical, robots, JSON-LD e CTAs permanecem. Esta recaptura determinística não alega nova aprovação técnica nem revisão humana independente.",
+      "rendered_hash_recaptured_at": "2026-10-14T08:14:09Z",
+      "rendered_hash_recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-SERVICOS-20261014: recaptura deterministica da apresentacao compartilhada apos remover do rodape o link duplicado /servicos/ rotulado Servicos de engenharia em 233 HTMLs, preservando a navegacao principal, os sete cards de servicos, o link /inteligencia/ a 14px e os assets styles.css e script.js. O material tecnico, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA da analise aprovada permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
+      "rendered_hash_recapture_reason_previous": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-20261014: recaptura deterministica da apresentacao compartilhada apos o ajuste localizado do link /inteligencia/ no rodape para fonte de 14px, preservando legibilidade, alvo de 44px e identidade institucional. styles.css final tem 105961 bytes. O HTML tecnico da analise aprovada e os hashes material, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -101,6 +101,147 @@
         "v2_token_and_hashes_bound": true
       },
       "commercial_presentation_recaptures": [
+        {
+          "authorized_by": "instrução complementar do usuário de 2026-10-14 sobre clareza e legibilidade; aplicação editorial para remover a duplicidade do link de serviços no rodapé",
+          "at": "2026-10-14T08:14:09Z",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
+          "reason": "O conteúdo técnico principal da análise aprovada permaneceu inalterado no commit 844b1e3a. A alteração de apresentação remove apenas o link duplicado /servicos/ rotulado Serviços de engenharia do rodapé compartilhado, preservando navegação principal, cards, material editorial e metadados de publicação.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "shared_footer_duplicate_services_link_removed"
+          ],
+          "rollback": "Reverter conjuntamente a remoção do link duplicado no rodapé e esta recaptura, ou promover o bundle anterior pela autoridade de release vigente."
+        },
+        {
+          "authorized_by": "instrução complementar do usuário de 2026-10-14 sobre legibilidade; aplicação do critério editorial ao novo link de inteligência de mercado",
+          "at": "2026-10-14T07:12:47Z",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "930528a70999d823af1170934f8a0ef4af73309c28c8f9690e7509da97ee7ab9",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
+          "reason": "O HTML técnico da análise aprovada permaneceu byte-idêntico no commit dec4d907. A alteração é limitada a styles.css: o link /inteligencia/ no rodapé compartilhado passa a 14px por seletor específico, mantendo o alvo de 44px e sem alterar material editorial ou metadados de publicação.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "styles_css_scoped_footer_market_intelligence_link_font_14px_fingerprint"
+          ],
+          "rollback": "Reverter conjuntamente o seletor tipográfico do rodapé e esta recaptura, ou promover o bundle anterior pela autoridade de release vigente."
+        },
+        {
+          "authorized_by": "instrução complementar do usuário de 2026-10-14: contraste AA e controles das rotas de pesquisa",
+          "at": "2026-10-14T04:25:00Z",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "3a9386cb4f5806153d43a01540ea14862123f95acfa2414837c6d4745d8eb45c",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "930528a70999d823af1170934f8a0ef4af73309c28c8f9690e7509da97ee7ab9",
+          "reason": "O artigo fonte permanece byte-idêntico ao HEAD. A alteração é limitada a styles.css: a borda dos campos das nove rotas de pesquisa passa a usar o token institucional --muted no seletor de família, corrigindo contraste de controle sem afetar a família editorial aprovada.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "styles_css_scoped_market_research_control_border_contrast_fingerprint"
+          ],
+          "rollback": "Reverter conjuntamente o seletor de contraste e esta recaptura, ou promover o bundle anterior pela autoridade de release vigente."
+        },
+        {
+          "authorized_by": "instrução complementar do usuário de 2026-10-14 e commit e8df14f: correções compartilhadas de reflow a 200% e foco",
+          "at": "2026-10-14T04:21:00Z",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "5fc74903db3187900115b583764ae379b14e6bd63507db009471622cac99cdda",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "3a9386cb4f5806153d43a01540ea14862123f95acfa2414837c6d4745d8eb45c",
+          "reason": "O HTML fonte atual da análise é byte-idêntico ao HEAD. A montagem pública alterou apenas os fingerprints de styles.css e script.js: correções compartilhadas de reflow/foco e o mapeamento de telemetria das novas rotas. Não houve alteração de material editorial ou de metadados de publicação.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "styles_css_asset_fingerprint",
+            "script_js_asset_fingerprint"
+          ],
+          "rollback": "Reverter conjuntamente os ativos compartilhados e esta recaptura, ou promover o bundle anterior pela autoridade de release vigente."
+        },
+        {
+          "authorized_by": "instrução complementar do usuário de 2026-10-14: identidade visual e links institucionais da entrega Inteligência de mercado",
+          "at": "2026-10-14T04:17:09Z",
+          "previous_binding": {
+            "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+            "evidence_pack_version": "official-live-document-chain/1.1",
+            "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+            "state": "PUBLISHABLE_INDEX",
+            "actor": "OWNER_CONFENGE_CONDITIONAL",
+            "approved_at": "2026-08-20T12:13:43Z",
+            "withdrawn": false,
+            "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
+            "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+            "rendered_content_hash": "1de66302f9f6c6b16f36caf9908cb4d98e40e8b343f161ad3ed777e13a185e7e",
+            "rendered_hash_scope": "public_artifact_v2",
+            "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+          },
+          "after_rendered_hash": "5fc74903db3187900115b583764ae379b14e6bd63507db009471622cac99cdda",
+          "reason": "O diff normalizado do HTML fonte mostrou exclusivamente a inserção de <a href=\"/inteligencia/\">Inteligência de mercado</a> na coluna Serviços e conhecimento do rodapé compartilhado. Não houve alteração no material editorial aprovado nem nos metadados de publicação.",
+          "new_human_review_claimed": false,
+          "technical_main_byte_identical": true,
+          "presentation_delta": [
+            "shared_footer_market_intelligence_link"
+          ],
+          "rollback": "Reverter simultaneamente o link institucional do rodapé e esta recaptura, ou promover o bundle anterior pela autoridade de release vigente."
+        },
         {
           "authorized_by": "docs/campaigns/2026-10-03-comunicacao-institucional.md",
           "at": "2026-10-03T19:05:05.196288+00:00",
@@ -736,6 +877,28 @@
       "rendered_content_hash": "1de66302f9f6c6b16f36caf9908cb4d98e40e8b343f161ad3ed777e13a185e7e",
       "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
       "new_human_review_claimed": false
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
+      "at": "2026-10-14T07:12:47Z",
+      "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "930528a70999d823af1170934f8a0ef4af73309c28c8f9690e7509da97ee7ab9",
+      "rendered_content_hash": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
+      "reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-20261014: recaptura deterministica da apresentacao compartilhada apos o ajuste localizado do link /inteligencia/ no rodape para fonte de 14px, preservando legibilidade, alvo de 44px e identidade institucional. styles.css final tem 105961 bytes. O HTML tecnico da analise aprovada e os hashes material, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
+      "at": "2026-10-14T08:14:09Z",
+      "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
+      "rendered_content_hash": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
+      "reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-SERVICOS-20261014: recaptura deterministica da apresentacao compartilhada apos remover do rodape o link duplicado /servicos/ rotulado Servicos de engenharia em 233 HTMLs, preservando a navegacao principal, os sete cards de servicos, o link /inteligencia/ a 14px e os assets styles.css e script.js. O material tecnico, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA da analise aprovada permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada."
     }
   ]
 }

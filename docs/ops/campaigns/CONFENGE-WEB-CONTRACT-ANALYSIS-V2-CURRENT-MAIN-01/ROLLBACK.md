@@ -28,3 +28,17 @@ Re-approval with token `OWNER_CONDITIONAL_PREAPPROVAL_CONTRACT_ANALYSIS_CANARY_V
 ## Emergency
 
 If production is INDEX and hashes drift: withdraw, rebuild, deploy that SHA. Do not edit robots/headers by hand; the pipeline rewrites the family block.
+
+## Shared-shell recapture
+
+A changed `rendered_content_hash` does not by itself authorize a new editorial
+approval. When an expressly authorized shared-shell change causes the drift,
+first compare the generated source HTML with the previously approved page and
+prove that the material hash, factual content, sources, calculations, limits,
+authorship, canonical, robots, JSON-LD and contextual CTA are unchanged. Record
+the prior and resulting rendered hashes, the exact presentation delta and the
+authorization in `approvals.json`, then rebuild and validate the family.
+
+Any difference outside that bounded presentation comparison remains a real
+approval drift: leave the gate fail-closed and obtain an individual human
+approval. Never use a shell recapture to alter the editorial decision.

@@ -24,8 +24,8 @@ def test_committed_commercial_contracts_are_consistent() -> None:
     counts = validate_commercial_contracts()
     assert counts == {
         "nuclei": 5,
-        "service_families": 9,
-        "intent_families": 13,
+        "service_families": 10,
+        "intent_families": 19,
         "modeled_offers": 18,
     }
 

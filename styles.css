@@ -1000,6 +1000,9 @@ h4{font-size:1rem;font-weight:720;line-height:1.3;margin:0 0 var(--space-2)}
 
 .list-ruled{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule-strong)}
 .list-ruled>li{display:grid;grid-template-columns:2.25rem minmax(0,1fr);gap:.25rem 1rem;padding:1.35rem 0;border-bottom:1px solid var(--rule)}
+.list-ruled h3,.list-ruled p{overflow-wrap:anywhere}
+.content-hero .t-service{overflow-wrap:anywhere}
+.contact-primary .button{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
 @media (min-width:900px){.list-ruled>li{grid-template-columns:2.5rem minmax(0,1fr) auto;gap:.25rem 1.5rem;align-items:start}}
 .list-ruled__index{font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--green-700);padding-top:.35rem}
 .list-ruled__kicker{display:block;font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--green-700);margin:0 0 .35rem}
@@ -1133,6 +1136,9 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .site-footer .footer-links,.site-footer .footer-links strong,.site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{font-size:.8125rem}
 .site-footer .footer-links strong{color:#fff}
 .site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;transition:color .16s ease,text-shadow .16s ease,box-shadow .16s ease}
+.site-footer .footer-links{min-width:0}
+.site-footer .footer-links a{min-width:0;overflow-wrap:anywhere}
+.site-footer .footer-links a[href="/inteligencia/"]{font-size:.875rem}
 .site-footer .footer-links a:hover,.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:hover,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:hover,.site-footer .footer-bottom>a:focus-visible{color:#fff;text-shadow:0 0 .45rem rgba(206,214,42,.48)}
 .site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
 .site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
@@ -1226,6 +1232,9 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 }
 .pillar-capture-form input,
 .pillar-capture-form select{min-height:48px}
+.pillar-capture-form[data-route-family="inteligencia-mercado"] input,
+.pillar-capture-form[data-route-family="inteligencia-mercado"] select,
+.pillar-capture-form[data-route-family="inteligencia-mercado"] textarea{border-color:var(--muted)}
 .pillar-capture-form input:focus,
 .pillar-capture-form select:focus,
 .pillar-capture-form textarea:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}

@@ -1286,7 +1286,8 @@ function validateAndNormalize(data) {
     deliverable_id: deliverableCheck.deliverable_id,
     analysis_cutoff:
       productQualification?.analysis_cutoff
-      || (gapFallback ? rawIsoDate(data.analysis_cutoff, MAX_FIELD.analysis_cutoff) : "")
+      || ((gapFallback || (data.intent === "market_research_scope" && data.route_family === "inteligencia-mercado"))
+        ? rawIsoDate(data.analysis_cutoff, MAX_FIELD.analysis_cutoff) : "")
       || null,
     opportunity_deadline:
       productQualification?.opportunity_deadline

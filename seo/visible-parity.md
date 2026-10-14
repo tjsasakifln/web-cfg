@@ -1,7 +1,7 @@
 # Visible parity
 
 - ok: `True`
-- pages: `116`
+- pages: `125`
 - defects: `0`
 - site_root: `_site`
 
@@ -90,6 +90,15 @@
 | https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/ | True | — | Organization,BreadcrumbList,Article; Checklist de pedido de aditivo em obra pública | Checklist de pedido de aditivo em obra pública |
 | https://confenge.com.br/imprensa/ | True | — | BreadcrumbList | Imprensa e pesquisa |
 | https://confenge.com.br/inspecao-diagnostico-edificacoes/ | True | — | BreadcrumbList | Inspeção e diagnóstico de edificações |
+| https://confenge.com.br/inteligencia/ | True | — | Organization,BreadcrumbList | Pesquisa de mercado para escolher clientes, canais, produtos e movimentos com mais clareza. |
+| https://confenge.com.br/inteligencia/acompanhamento/ | True | — | Organization,BreadcrumbList | Pesquisa de oportunidades entre fornecedores do governo |
+| https://confenge.com.br/inteligencia/composicao-contratos-amostra/ | True | — | Organization,Dataset,BreadcrumbList; Como se compõem os dez contratos desta amostra? | Como se compõem os dez contratos desta amostra? |
+| https://confenge.com.br/inteligencia/concorrencia/ | True | — | Organization,BreadcrumbList | Análise de concorrentes e carteira pública de empresas |
+| https://confenge.com.br/inteligencia/mercados/ | True | — | Organization,BreadcrumbList | Estudo de mercado para expansão comercial |
+| https://confenge.com.br/inteligencia/orgaos/ | True | — | Organization,BreadcrumbList | Mapeamento de distribuidores e clientes para sua empresa |
+| https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/ | True | — | Organization,BreadcrumbList | Pesquisa de mercado para consultorias e associações |
+| https://confenge.com.br/inteligencia/precos/ | True | — | Organization,BreadcrumbList | Pesquisa de preços e condições de fornecimento |
+| https://confenge.com.br/inteligencia/relacoes-compradores-fornecedores/ | True | — | Organization,Dataset,BreadcrumbList; Quem são os compradores e fornecedores documentados nesta amostra? | Quem são os compradores e fornecedores documentados nesta amostra? |
 | https://confenge.com.br/lei-14133-obras/ | True | — | Organization,BreadcrumbList | Lei nº 14.133/2021 aplicada a obras e serviços de engenharia |
 | https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/ | True | — | Organization,BreadcrumbList,Article; Item novo no aditivo: preço e relação proposta/orçamento-base | Item novo no aditivo: preço e relação proposta/orçamento-base |
 | https://confenge.com.br/medicoes-glosas-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Medições, glosas e pagamentos em obras públicas |

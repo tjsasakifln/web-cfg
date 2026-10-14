@@ -1,3 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+ <url>
+ <loc>https://confenge.com.br/inteligencia/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/acompanhamento/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/composicao-contratos-amostra/</loc>
+ <lastmod>2026-10-14</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/concorrencia/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/mercados/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/orgaos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/precos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inteligencia/relacoes-compradores-fornecedores/</loc>
+ <lastmod>2026-10-14</lastmod>
+ </url>
 </urlset>

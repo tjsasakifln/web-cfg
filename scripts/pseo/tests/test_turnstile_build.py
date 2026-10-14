@@ -212,6 +212,15 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
 # interna, mas o namespace /piloto/ foi retirado do artefato e responde 410. As
 # 25 rotas públicas de captura abaixo preservam a prova real do antiabuso.
 ISSUE_440_CAPTURE_ROUTES = {
+    "inteligencia/index.html",
+    "inteligencia/acompanhamento/index.html",
+    "inteligencia/composicao-contratos-amostra/index.html",
+    "inteligencia/concorrencia/index.html",
+    "inteligencia/mercados/index.html",
+    "inteligencia/orgaos/index.html",
+    "inteligencia/pesquisa-sob-encomenda/index.html",
+    "inteligencia/precos/index.html",
+    "inteligencia/relacoes-compradores-fornecedores/index.html",
     "acompanhamento-contratos-obras/index.html",
     # 2026-09-16: os seis pilares B2G ganharam captura on-page (decisao do
     # fundador, #61); passam a receber widget + sitekey como qualquer captura.

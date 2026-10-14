@@ -15,8 +15,10 @@ import json
 import sys
 from collections import Counter
 from datetime import date
+from html import escape
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -36,11 +38,158 @@ from scripts.site.scrub_em_dashes import scrub_html # noqa: E402
 
 SITE = "https://confenge.com.br"
 SIM_THRESHOLD = 0.88
+MARKET_INTELLIGENCE_MATERIAL_DATE = "2026-10-14"
+MARKET_INTELLIGENCE_COMMERCIAL_ROUTES = (
+    "/inteligencia/",
+    "/inteligencia/orgaos/",
+    "/inteligencia/mercados/",
+    "/inteligencia/concorrencia/",
+    "/inteligencia/acompanhamento/",
+    "/inteligencia/precos/",
+    "/inteligencia/pesquisa-sob-encomenda/",
+)
+
+# Public analyses only enter this list after their checked-in evidence, method and
+# technical verification are approved. The entries below are generated from the
+# dated, non-census PNCP sample in data/pseo/market-intelligence-sample.v1.json.
+MARKET_INTELLIGENCE_APPROVED_ANALYSES: tuple[tuple[str, str, str], ...] = (
+    (
+        "/inteligencia/relacoes-compradores-fornecedores/",
+        "Relações documentadas entre compradores e fornecedores",
+        "Dez pares públicos conferidos contrato a contrato no PNCP, com identidade legal e limites explícitos de interpretação.",
+    ),
+    (
+        "/inteligencia/composicao-contratos-amostra/",
+        "Composição de uma amostra de contratos públicos",
+        "Categorias, UFs compradoras, calendário, vigência e valores integrais dos dez contratos verificados.",
+    ),
+)
+MARKET_INTELLIGENCE_PUBLIC_ROUTES = MARKET_INTELLIGENCE_COMMERCIAL_ROUTES + tuple(
+    route for route, _title, _summary in MARKET_INTELLIGENCE_APPROVED_ANALYSES
+)
 
 
 def write_public_html(path: Path, html: str) -> None:
     """Write visitor HTML after the shipped em-dash scrubber."""
     path.write_text(scrub_html(html), encoding="utf-8")
+
+
+def _market_intelligence_hero_cta(
+    asset_id: str, label: str, proof_href: str, proof_label: str
+) -> dict[str, str]:
+    return {
+        "cta_id": f"{asset_id}-hero",
+        "route_family": "inteligencia-mercado",
+        "journey": "outro",
+        "intent": "market_research_scope",
+        "href": "#captura-estudo",
+        "label": label,
+        "secondary_href": proof_href,
+        "secondary_label": proof_label,
+    }
+
+
+def _market_intelligence_next_step(label: str) -> dict[str, str]:
+    return {
+        "title": "A proposta começa pela decisão e pelo recorte.",
+        "body": (
+            "Explique o que precisa decidir e o que já sabe sobre produto, setor, "
+            "território ou carteira. A CONFENGE verifica a aderência, delimita fontes, "
+            "entregas, revisões e direitos de uso e então prepara a proposta."
+        ),
+        "primary_label": label,
+        "primary_href": "#captura-estudo",
+        "secondary_label": "Conhecer o método de pesquisa",
+        "secondary_href": "/metodologia-inteligencia/",
+    }
+
+
+def _market_intelligence_capture(
+    *, path: str, asset_id: str, heading: str, prompt: str, button: str,
+    analysis_cutoff: str = "",
+    evidence_pack_version: str = "",
+) -> str:
+    from scripts.pseo.html_shell import wa_link
+
+    route = path if path.endswith("/") else f"{path}/"
+    landing = f"{SITE}{route}"
+    cta_id = f"{asset_id}-capture"
+    whatsapp = wa_link(
+        "Olá, CONFENGE. Quero contratar uma pesquisa de mercado. "
+        f"Minha necessidade é: {prompt.lower()}"
+    )
+    email_subject = quote(f"Pesquisa de mercado: {heading}")
+    analysis_attr = (
+        f' data-analysis-cutoff="{escape(analysis_cutoff)}"' if analysis_cutoff else ""
+    )
+    analysis_field = (
+        f'<input type="hidden" name="analysis_cutoff" value="{escape(analysis_cutoff)}">'
+        if analysis_cutoff else ""
+    )
+    evidence_attr = (
+        f' data-evidence-pack-version="{escape(evidence_pack_version)}"'
+        if evidence_pack_version else ""
+    )
+    evidence_field = (
+        f'<input type="hidden" name="evidence_pack_version" value="{escape(evidence_pack_version)}">'
+        if evidence_pack_version else ""
+    )
+    return rf'''<section aria-labelledby="captura-estudo-title" class="sec pillar-capture" id="captura-estudo">
+<div class="container pillar-capture-grid"><div class="pillar-capture-copy">
+<span class="t-kicker">Solicitar proposta</span><h2 class="t-editorial" id="captura-estudo-title">{escape(heading)}</h2>
+<p>{escape(prompt)} Comece com o contexto disponível. Não envie carteira, documentos sigilosos nem dados pessoais de terceiros neste primeiro contato.</p>
+<div class="contact-primary"><a class="button button-secondary" data-cta-id="{escape(asset_id)}-whatsapp" data-fallback-channel="whatsapp" data-route-family="inteligencia-mercado" data-journey="outro" data-intent="market_research_scope" href="{escape(whatsapp)}" rel="noopener" target="_blank">Falar pelo WhatsApp</a>
+<ul class="contact-alt"><li><a data-cta-id="{escape(asset_id)}-email" href="mailto:tiago.sasaki@confenge.com.br?subject={email_subject}">Enviar contexto por e-mail</a></li><li><a data-cta-id="{escape(asset_id)}-phone" href="tel:+5548988344559">Ligar: (48) 98834-4559</a></li></ul></div>
+</div><form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-capture-form data-offer-id="" data-cta-id="{escape(cta_id)}" data-asset-id="{escape(asset_id)}" data-route-family="inteligencia-mercado" data-cta-position="market_intelligence_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true" data-intent="market_research_scope"{evidence_attr}{analysis_attr}><p class="form-hint" data-form-value>Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.</p>
+<p class="form-hint" data-field-purpose>Obrigatórios: decisão e recorte, nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<noscript><p class="form-hint form-nojs-note">Sem JavaScript, este formulário não envia. Use o <a href="{escape(whatsapp, quote=True)}">WhatsApp</a> ou o <a href="mailto:tiago.sasaki@confenge.com.br">e-mail</a> ao lado.</p></noscript>
+<input type="hidden" name="offer_id" value=""><input type="hidden" name="terms_id" value=""><input type="hidden" name="intent" value="market_research_scope">{evidence_field}{analysis_field}<input id="jornada-hidden" type="hidden" name="jornada" value="outro"><input id="estagio" type="hidden" name="estagio" value="pesquisa de mercado"><input type="hidden" name="origem" value="{escape(route)}"><input type="hidden" name="asset_id" value="{escape(asset_id)}"><input type="hidden" name="cta_id" value="{escape(cta_id)}"><input type="hidden" name="route_family" value="inteligencia-mercado"><input type="hidden" name="landing_page" value="{escape(landing)}">
+<label>Decisão e recorte <textarea id="mensagem" name="mensagem" rows="5" maxlength="2000" required placeholder="Ex.: quero selecionar distribuidores para um produto no Sul e entender quais critérios a pesquisa pode verificar."></textarea></label>
+<label>Nome <input id="nome" name="nome" required autocomplete="name"></label>
+<label>Empresa <span class="optional-mark">opcional</span> <input id="empresa" name="empresa" autocomplete="organization"></label>
+<label>E-mail <span class="optional-mark">informe e-mail ou WhatsApp</span> <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{{2,}}" title="Informe um e-mail completo, como nome@empresa.com.br."></label>
+<label>WhatsApp <span class="optional-mark">informe WhatsApp ou e-mail</span> <input id="telefone" name="telefone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{{2}}\)?[\s.\-]?9?\d{{4}}[\s.\-]?\d{{4}}" title="Informe DDD e número, com 10 ou 11 dígitos."></label>
+<label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required> Autorizo o uso destes dados para retorno sobre esta pesquisa.</label>
+<div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey=""><div class="cf-turnstile" data-theme="light" data-size="compact"></div></div>
+<button class="button button-primary" type="submit">{escape(button)}</button><p class="form-status" role="status" aria-live="polite"></p>
+<p class="form-hint" data-form-boundary>Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+</form></div></section>'''
+
+
+def _market_intelligence_family_content(
+    *, path: str, asset_id: str, decision: str, deliverables: list[tuple[str, str]],
+    adaptation: list[tuple[str, str]], limits: list[str], capture_heading: str,
+    capture_prompt: str, capture_button: str,
+) -> str:
+    deliverable_items = "".join(
+        f'<li><span class="list-ruled__index">{index:02d}</span><div><h3>{escape(title)}</h3><p>{escape(text)}</p></div></li>'
+        for index, (title, text) in enumerate(deliverables, 1)
+    )
+    adaptation_cards = "".join(
+        f'<article><h3>{escape(title)}</h3><p>{escape(text)}</p></article>'
+        for title, text in adaptation
+    )
+    limit_items = "".join(f"<li>{escape(item)}</li>" for item in limits)
+    return f'''<section aria-labelledby="entrega-title" class="sec"><div class="container">
+<header class="sec-head sec-head--split"><span class="t-kicker">Decisão e entrega</span><h2 class="t-editorial" id="entrega-title">{escape(decision)}</h2><p>Pesquisa preparada sob encomenda, depois de conferir sua necessidade e as fontes disponíveis. A proposta delimita fontes, recorte, método, entregas, revisão, critério de aceitação e direitos de uso. Preço e prazo dependem desse escopo.</p></header>
+<ol class="list-ruled">{deliverable_items}</ol></div></section>
+<section aria-labelledby="adaptacao-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Aplicação ao seu caso</span><h2 class="t-editorial" id="adaptacao-title">O que a pesquisa adapta à sua decisão</h2><p>Produto, território, período, carteira e documentos disponíveis mudam a pergunta e o esforço. A CONFENGE define o trabalho necessário antes de iniciar a pesquisa específica.</p></header><div class="grid-2">{adaptation_cards}</div></div></section>
+<section aria-labelledby="limites-title" class="sec"><div class="container"><div class="conditions"><h2 class="t-editorial" id="limites-title">O que os dados não autorizam concluir sozinhos</h2><ul>{limit_items}</ul></div></div></section>
+{_market_intelligence_capture(path=path, asset_id=asset_id, heading=capture_heading, prompt=capture_prompt, button=capture_button)}'''
+
+
+def _market_intelligence_root_content() -> str:
+    analyses = ""
+    if MARKET_INTELLIGENCE_APPROVED_ANALYSES:
+        rows = "".join(
+            f'<li><span class="list-ruled__index">{index:02d}</span><div><h3><a href="{escape(url)}">{escape(title)}</a></h3><p>{escape(summary)}</p></div></li>'
+            for index, (url, title, summary) in enumerate(MARKET_INTELLIGENCE_APPROVED_ANALYSES, 1)
+        )
+        analyses = f'''<section aria-labelledby="analises-publicas-title" class="sec sec--soft"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Análises públicas</span><h2 class="t-editorial" id="analises-publicas-title">Veja o método aplicado a perguntas reais</h2><p>Cada análise informa recorte, fontes, corte, método e limites. A publicação demonstra a pesquisa e não revela carteira ou dados reservados de clientes.</p></header><ol class="list-ruled">{rows}</ol></div></section>'''
+    return f'''<section aria-labelledby="contratacao-inteligencia-title" class="sec"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Como contratar</span><h2 class="t-editorial" id="contratacao-inteligencia-title">Uma pergunta de negócio, um recorte verificável e uma entrega definida</h2><p>A CONFENGE usa registros públicos, documentos e fontes adequadas à pergunta. A proposta informa o que será pesquisado, como a conclusão será revista e o que chega às mãos do contratante.</p></header><div class="grid-2"><article><h3>Estudo avulso</h3><p>Decisão, período, território, fontes e entrega fechados para uma necessidade específica.</p></article><article><h3>Seleção conforme seu produto e território</h3><p>Conferência de documentos e seleção de organizações conforme produto, restrições, território e carteira fornecida pelo contratante, com conclusões reservadas.</p></article><article><h3>Atualização contratada</h3><p>Novo corte ou acompanhamento com frequência e escopo definidos quando a fonte e a operação permitirem.</p></article><article><h3>Uso institucional</h3><p>Pesquisa para consultorias, associações, redes e fabricantes, com finalidade e direitos de uso descritos na proposta.</p></article></div></div></section>
+<section aria-labelledby="escopo-inteligencia-title" class="sec sec--soft"><div class="container"><div class="conditions"><h2 class="t-editorial" id="escopo-inteligencia-title">O escopo considera</h2><ul><li>A decisão que o estudo precisa apoiar.</li><li>O recorte de produto, categoria, território e período.</li><li>As fontes e os documentos que podem responder à pergunta.</li><li>A profundidade da conferência e da revisão.</li><li>O formato da entrega e os direitos de uso.</li><li>A necessidade de atualização ou recortes adicionais.</li></ul></div></div></section>
+{analyses}
+{_market_intelligence_capture(path="/inteligencia/", asset_id="im-hub-v1", heading="Conte a decisão que a pesquisa precisa apoiar", prompt="Informe a necessidade, o setor ou produto e o recorte que já conhece.", button="Solicitar proposta de estudo")}'''
 
 # Hand-authored surfaces under inteligencia/radar. pSEO generation wipes other
 # index.html files in those trees and rewrites them from the snapshot.
@@ -51,6 +200,10 @@ PRESERVED_STATIC_INDEXES = frozenset(
         "inteligencia/orgaos/index.html",
         "inteligencia/precos/index.html",
         "inteligencia/concorrencia/index.html",
+        "inteligencia/acompanhamento/index.html",
+        "inteligencia/pesquisa-sob-encomenda/index.html",
+        "inteligencia/relacoes-compradores-fornecedores/index.html",
+        "inteligencia/composicao-contratos-amostra/index.html",
         "inteligencia/cenarios/index.html",
         "radar/index.html",
         "radar/nacional-obras-publicas/index.html",
@@ -332,10 +485,7 @@ def _hub_lastmod_for_page(c: Candidate, default: str) -> str:
 
 
 def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
-    """Sitemap only for publish URLs + hubs that have ≥1 publish child.
-
-    Empty hubs stay out of the sitemap (they are rendered noindex,follow).
-    """
+    """Sitemap for approved publications and the finite commercial hub set."""
     pubs = [c for c in cands if c.status == "publish"]
     urls: list[str] = []
     for c in sorted(pubs, key=lambda x: x.url):
@@ -344,23 +494,23 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
             f" <url>\n <loc>{SITE}{c.url}</loc>\n <lastmod>{lm}</lastmod>\n </url>"
 )
 
+    commercial_hubs = set(MARKET_INTELLIGENCE_COMMERCIAL_ROUTES)
+    for hpath in reversed(MARKET_INTELLIGENCE_PUBLIC_ROUTES):
+        urls.insert(
+            0,
+            f" <url>\n <loc>{SITE}{hpath}</loc>\n <lastmod>{MARKET_INTELLIGENCE_MATERIAL_DATE}</lastmod>\n </url>",
+        )
+
     hub_defs = [
-        ("/inteligencia/", None), # root hub always if any publish or own editorial
-        ("/inteligencia/mercados/", "market"),
-        ("/inteligencia/orgaos/", "agency"),
-        ("/inteligencia/precos/", "price"),
-        ("/inteligencia/concorrencia/", "competition"),
         ("/inteligencia/cenarios/", "problem_service"),
         ("/radar/", "radar"),
     ]
     for hpath, ptype in hub_defs:
-        if ptype is None:
-            if not pubs:
-                continue
-        else:
-            children = [c for c in pubs if c.page_type == ptype]
-            if not children:
-                continue
+        if hpath in commercial_hubs:
+            continue
+        children = [c for c in pubs if c.page_type == ptype]
+        if not children:
+            continue
         urls.insert(
             0,
             f" <url>\n <loc>{SITE}{hpath}</loc>\n <lastmod>{lastmod}</lastmod>\n </url>",
@@ -394,8 +544,10 @@ def write_sitemap(cands: list[Candidate], lastmod: str) -> Path:
 def write_sitemap_index(lastmod: str) -> Path:
     """Rewrite sitemap-index from existing children. `lastmod` is ignored (no build clock)."""
     del lastmod
-    from scripts.organic.sitemap_graph import close_graph
+    from scripts.organic.sitemap_graph import close_graph, ensure_index_member
 
+    if (ROOT / "sitemap-inteligencia.xml").is_file():
+        ensure_index_member(ROOT, "sitemap-inteligencia.xml")
     close_graph(ROOT)
     return ROOT / "sitemap-index.xml"
 
@@ -469,8 +621,10 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             out.append((c.url, kind, c.h1[:90], meta, _hub_summary(c.description)))
         return out
 
-    def hub_robots(ptype: str | None) -> str:
-        """Empty hubs: noindex,follow. Hubs with publish children: index,follow."""
+    def hub_robots(path: str, ptype: str | None) -> str:
+        """Commercial hubs are first-party pages; data-only hubs follow child state."""
+        if path in MARKET_INTELLIGENCE_COMMERCIAL_ROUTES:
+            return "index,follow"
         if ptype is None:
             return "index,follow" if publish_types else "noindex,follow"
         return "index,follow" if ptype in publish_types else "noindex,follow"
@@ -479,65 +633,92 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
     hubs = [
         (
             "/inteligencia/",
-            "Inteligência aplicada à decisão no mercado público | CONFENGE",
-            "O mercado público deixa rastros. Nós transformamos esses rastros em decisão.",
-            "Mercados, órgãos, preços e concorrência como evidência para decisões de participação, preço e proteção de margem.",
-            "Contratos, órgãos, preços, concorrência e oportunidades só criam valor quando são confrontados "
-            "com a capacidade, o risco e a estratégia da empresa. Esta área organiza evidências públicas "
-            "para apoiar decisões comerciais e técnicas, sem confundir frequência histórica com certeza futura.",
+            "Inteligência de mercado para decisões de crescimento | CONFENGE",
+            "Pesquisa de mercado para escolher clientes, canais, produtos e movimentos com mais clareza.",
+            "Estudos sob encomenda para mapear clientes e parceiros, mercados, concorrentes, oportunidades e referências documentais.",
+            "A CONFENGE transforma registros públicos e pesquisa documental em recortes úteis para empresas, "
+            "consultorias, associações e redes. Cada trabalho parte da decisão do contratante e termina em uma "
+            "entrega definida, com fontes, método, limites e próximos passos.",
             [
-                ("/inteligencia/mercados/", "Mercados", "Onde a demanda se concentra", "Segmentos e regiões com massa de contratos e compradores, para decidir onde alocar esforço comercial."),
-                ("/inteligencia/orgaos/", "Órgãos", "Quem contrata o que importa", "Dossiês de órgãos com histórico de contratação em engenharia, fornecedores e limitações explícitas."),
-                ("/inteligencia/precos/", "Preços", "Referências antes de precificar", "Medianas e faixas de valor contratual por segmento, com data-base e fonte declaradas."),
-                ("/inteligencia/concorrencia/", "Concorrência", "Quem aparece com frequência", "Fornecedores recorrentes nos registros públicos: frequência observada, não ranking de qualidade."),
-                ("/inteligencia/cenarios/", "Cenários", "Problema + decisão técnica", "Problemas recorrentes de proposta, preço e contrato, ligados à decisão técnica e ao serviço que responde."),
-                ("/metodologia-inteligencia/", "Método", "Como lemos as evidências", "Fontes oficiais, janela de leitura e limites da amostra, para conferir cada número."),
+                ("/inteligencia/orgaos/", "Clientes e canais", "Mapear clientes, distribuidores e parceiros", "Seleção justificada de organizações e canais compatíveis com produto, território e decisão comercial."),
+                ("/inteligencia/mercados/", "Mercados", "Avaliar mercado, expansão e produtos", "Demanda observada, nichos, territórios, categorias e recorrência para orientar expansão e portfólio."),
+                ("/inteligencia/concorrencia/", "Concorrência", "Analisar concorrentes, carteiras e empresas", "Presença observada, concentração, continuidade de fornecedores e seleção documental de parceiros."),
+                ("/inteligencia/acompanhamento/", "Acompanhamento", "Acompanhar oportunidades e mudanças relevantes", "Recortes periódicos delimitados para decisões recorrentes, sem promessa de alerta instantâneo."),
+                ("/inteligencia/precos/", "Preços e documentos", "Pesquisar referências comparáveis", "Fontes, especificações e condições de fornecimento para comparar referências e preparar decisões."),
+                ("/inteligencia/pesquisa-sob-encomenda/", "Uso institucional", "Contratar pesquisa sob encomenda", "Estudos, bases curadas e análises para consultorias, associações, redes, fabricantes e outros setores."),
             ],
             [("Início", "/"), ("Inteligência", None)],
             None,
 ),
         (
             "/inteligencia/mercados/",
-            "Mercados públicos de engenharia | CONFENGE",
-            "Mercados por segmento e região",
-            "Contratos, órgãos e evolução: para priorizar onde atuar.",
-            "Lista de mercados com massa mínima de contratos e compradores. "
-            "Use para decidir em quais UFs e segmentos alocar esforço comercial.",
+            "Pesquisa de mercado, expansão e produtos | CONFENGE",
+            "Estudo de mercado para expansão comercial",
+            "Pesquisa sob encomenda de demanda observada, nichos, territórios, categorias e recorrência.",
+            "O estudo organiza evidências para comparar mercados e apoiar decisões sobre catálogo, presença regional, "
+            "abastecimento e assistência técnica. Logística, estoque e programação física entram somente quando as fontes "
+            "trazem local, quantidade e condições de entrega suficientes.",
             items_for("market"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Mercados", None)],
             "market",
 ),
         (
             "/inteligencia/orgaos/",
-            "Órgãos compradores de engenharia | CONFENGE",
-            "Dossiês de órgãos compradores",
-            "Histórico de contratação em engenharia com massa crítica.",
-            "Dossiês de órgãos com contratos primários, fornecedores e limitações explícitas. "
-            "Útil para comparar o histórico de contratação do órgão com o objeto, "
-            "o acervo técnico e a capacidade da empresa.",
+            "Mapeamento de clientes, distribuidores e parceiros | CONFENGE",
+            "Mapeamento de distribuidores e clientes para sua empresa",
+            "Mapas justificados de compradores públicos, fornecedores, distribuidores, integradores e prestadores complementares.",
+            "A pesquisa parte do produto, do território e do modelo de canal para selecionar organizações compatíveis. "
+            "Quando houver carteira do contratante, o cruzamento é reservado e serve para orientar a priorização, sem vender "
+            "contatos pessoais nem presumir interesse de compra.",
             items_for("agency"),
-            [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Órgãos", None)],
+            [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Clientes e parceiros", None)],
             "agency",
 ),
         (
             "/inteligencia/precos/",
-            "Benchmarks de valores contratados | CONFENGE",
-            "Preços e dispersão contratual",
-            "Medianas e quartis com critérios de inclusão, sem média cega.",
-            "Benchmarks de contratos integrais comparáveis. Não são preços unitários SINAPI/SICRO.",
+            "Pesquisa de preços e referências documentais | CONFENGE",
+            "Pesquisa de preços e condições de fornecimento",
+            "Pesquisa sob encomenda de referências, fontes, especificações e condições de fornecimento.",
+            "A comparação verifica objeto, unidade, quantidade, período e demais condições materiais. Valores integrais de "
+            "contratos ajudam a dimensionar porte, mas não viram preço unitário sem composição comparável.",
             items_for("price"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Preços", None)],
             "price",
 ),
         (
             "/inteligencia/concorrencia/",
-            "Concorrência observada em obras públicas | CONFENGE",
-            "Concorrência observada",
-            "Fornecedores e concentração no recorte público.",
-            "Frequência neutra de fornecedores no recorte, observação pública, não ranking comercial.",
+            "Análise de concorrentes, carteiras e empresas | CONFENGE",
+            "Análise de concorrentes e carteira pública de empresas",
+            "Pesquisa sob encomenda de presença observada, concentração, continuidade e complementaridade territorial.",
+            "A leitura documental ajuda a comparar atuação comercial e selecionar empresas para aprofundamento. Ela não "
+            "substitui avaliação financeira, crédito, certificação, diligência jurídica nem garantia de desempenho.",
             items_for("competition"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Concorrência", None)],
             "competition",
+),
+        (
+            "/inteligencia/acompanhamento/",
+            "Oportunidades e acompanhamento de mercado | CONFENGE",
+            "Pesquisa de oportunidades entre fornecedores do governo",
+            "Acompanhamento contratado de mudanças, contratos recentes, términos previstos e necessidades complementares.",
+            "A CONFENGE define com o contratante o tema, as fontes, a frequência possível e o formato de cada atualização. "
+            "O trabalho pode investigar compras planejadas quando disponíveis e desdobramentos de contratos recentes, sem "
+            "tratar vencimento como compra aberta nem prometer alerta automático.",
+            [],
+            [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Acompanhamento", None)],
+            None,
+),
+        (
+            "/inteligencia/pesquisa-sob-encomenda/",
+            "Pesquisa sob encomenda e uso institucional | CONFENGE",
+            "Pesquisa de mercado para consultorias e associações",
+            "Pesquisa de mercado para consultorias e associações.",
+            "O trabalho pode resultar em relatório reservado, base curada, exportação, atualização ou licença não exclusiva "
+            "de uma análise própria. A proposta define a finalidade, os participantes autorizados e os direitos de uso, sem "
+            "anunciar competência regulada que o estudo não exige nem comprova.",
+            [],
+            [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Pesquisa sob encomenda", None)],
+            None,
 ),
         (
             "/inteligencia/cenarios/",
@@ -566,6 +747,169 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
     ]
     from scripts.pseo.html_shell import wa_link as _wa_link
 
+    commercial_content = {
+        "/inteligencia/": _market_intelligence_root_content(),
+        "/inteligencia/orgaos/": _market_intelligence_family_content(
+            path="/inteligencia/orgaos/",
+            asset_id="im-clientes-v1",
+            decision="Escolher onde aprofundar a prospecção e quais canais podem ampliar a presença comercial.",
+            deliverables=[
+                ("Mapa de organizações", "Lista estruturada de compradores públicos, fornecedores, distribuidores, integradores ou prestadores complementares dentro do recorte contratado."),
+                ("Critérios de seleção", "Justificativa documentada para incluir, comparar ou retirar cada grupo da priorização."),
+                ("Plano de aprofundamento", "Perguntas, fontes e verificações seguintes para transformar a seleção em uma decisão comercial."),
+            ],
+            adaptation=[
+                ("Produto e aplicação", "O que a empresa oferece, para quem serve e quais usos precisam aparecer nos registros."),
+                ("Território e canal", "Regiões, modelo de distribuição, integração, representação ou prestação complementar."),
+                ("Carteira reservada", "Clientes atuais ou perfis de referência podem orientar similaridade sem serem publicados nem reutilizados."),
+                ("Nível de conferência", "O escopo define se basta mapear organizações ou se documentos e casos determinantes precisam ser lidos."),
+            ],
+            limits=[
+                "Contratação passada ou presença documental não prova interesse de compra atual.",
+                "A entrega não vende contatos pessoais nem presume autorização para abordagem.",
+                "Nome semelhante não resolve identidade de empresa, filial ou consórcio.",
+                "Compatibilidade observada orienta pesquisa e priorização; não garante venda, parceria ou desempenho.",
+            ],
+            capture_heading="Explique quem você precisa encontrar e para qual decisão",
+            capture_prompt="Informe o produto ou serviço, o território, o tipo de canal e o resultado esperado do mapa.",
+            capture_button="Solicitar proposta de mapeamento",
+        ),
+        "/inteligencia/mercados/": _market_intelligence_family_content(
+            path="/inteligencia/mercados/",
+            asset_id="im-mercados-v1",
+            decision="Comparar mercados, territórios ou categorias antes de alocar produto, estoque e esforço comercial.",
+            deliverables=[
+                ("Recorte de demanda observada", "Tabela de categorias, compradores, territórios, períodos e modalidades que as fontes sustentam."),
+                ("Leitura de recorrência e concentração", "Separação entre ocorrências, contratos únicos e versões para evitar volume duplicado."),
+                ("Implicações para a decisão", "Síntese do que o recorte apoia sobre expansão, catálogo, abastecimento ou assistência técnica."),
+            ],
+            adaptation=[
+                ("Mercado e categoria", "A pergunta pode partir de produto, aplicação, comprador, cadeia de fornecimento ou território."),
+                ("Período e atualidade", "O corte histórico é datado; atualização e acompanhamento são dimensionados separadamente."),
+                ("Quantidade e entrega", "Logística e estoque só entram quando unidade, quantidade, local e condições de entrega são suficientes."),
+                ("Decisão interna", "A apresentação pode ser preparada para diretoria, comercial, produto, suprimentos ou rede institucional."),
+            ],
+            limits=[
+                "Evolução da captura de dados não é crescimento do mercado.",
+                "Sem denominador confiável, o estudo não publica participação nem mercado total.",
+                "Município do comprador, local de entrega e presença comercial são conceitos diferentes.",
+                "Histórico ajuda a formular cenários; não prevê compra futura nem resultado comercial.",
+            ],
+            capture_heading="Delimite o mercado, a decisão e o período de interesse",
+            capture_prompt="Informe o produto ou categoria, o território e se a decisão envolve expansão, catálogo, abastecimento ou assistência técnica.",
+            capture_button="Solicitar proposta de estudo de mercado",
+        ),
+        "/inteligencia/concorrencia/": _market_intelligence_family_content(
+            path="/inteligencia/concorrencia/",
+            asset_id="im-concorrencia-v1",
+            decision="Entender presença observada, concentração e complementaridade antes de escolher uma empresa para aprofundamento.",
+            deliverables=[
+                ("Mapa de presença observada", "Comparação de empresas, categorias, compradores, territórios e períodos dentro das fontes contratadas."),
+                ("Carteiras e continuidade", "Leitura de continuidade, substituição e concentração com identidade e critérios explícitos."),
+                ("Seleção documental", "Lista justificada de empresas e documentos que merecem diligência complementar para a decisão."),
+            ],
+            adaptation=[
+                ("Pergunta competitiva", "Entrada, expansão, parceria, aquisição empresarial ou composição de rede exigem recortes diferentes."),
+                ("Identidade empresarial", "Filiais, consórcios e mudanças de nome precisam de tratamento compatível com a fonte disponível."),
+                ("Carteira e território", "A comparação pode observar compradores, categorias e regiões sem revelar dados reservados do contratante."),
+                ("Profundidade documental", "O escopo separa contagem agregada, leitura de documentos e validação de casos determinantes."),
+            ],
+            limits=[
+                "Frequência observada não é ranking de qualidade ou reputação.",
+                "Contratos públicos não comprovam faturamento, solvência, crédito ou capacidade financeira.",
+                "A pesquisa não certifica regularidade, desempenho, disponibilidade nem interesse em parceria.",
+                "Uma seleção para aprofundamento não substitui diligência financeira, jurídica ou operacional.",
+            ],
+            capture_heading="Explique quais empresas e qual decisão precisam ser comparadas",
+            capture_prompt="Informe o mercado, o território, o período e se a decisão envolve concorrência, parceria, carteira ou seleção empresarial.",
+            capture_button="Solicitar proposta de análise competitiva",
+        ),
+        "/inteligencia/acompanhamento/": _market_intelligence_family_content(
+            path="/inteligencia/acompanhamento/",
+            asset_id="im-acompanhamento-v1",
+            decision="Definir quais mudanças precisam ser revistas de forma recorrente e com que evidência.",
+            deliverables=[
+                ("Linha de base", "Primeiro retrato do tema, das fontes, do período e dos critérios que orientam cada atualização."),
+                ("Atualização delimitada", "Novo corte com mudanças relevantes, contratos recentes, términos previstos ou sinais documentais contratados."),
+                ("Síntese para ação", "Registro do que mudou, do que permanece incerto e das verificações necessárias para a próxima decisão."),
+            ],
+            adaptation=[
+                ("Tema e gatilho", "Produto, categoria, carteira, território, fornecedor ou necessidade complementar que motiva a revisão."),
+                ("Fontes disponíveis", "A frequência possível depende da atualização, estabilidade e direito de uso de cada fonte."),
+                ("Rotina de decisão", "O formato pode apoiar reunião, planejamento comercial, suprimentos ou revisão de carteira."),
+                ("Critério de mudança", "A proposta define o que conta como alteração material e o que permanece apenas como contexto."),
+            ],
+            limits=[
+                "Acompanhamento contratado não é alerta instantâneo nem assinatura já ativa.",
+                "Término previsto não significa compra aberta ou oportunidade ainda contratável.",
+                "Compra planejada, contrato recente, assinatura e demanda de terceiros são estados diferentes.",
+                "A frequência só é definida depois de confirmar fonte, esforço e capacidade operacional.",
+            ],
+            capture_heading="Defina o que precisa ser acompanhado e qual decisão se repete",
+            capture_prompt="Informe o tema, o território, a frequência desejada e quais mudanças alterariam sua decisão.",
+            capture_button="Solicitar proposta de acompanhamento",
+        ),
+        "/inteligencia/precos/": _market_intelligence_family_content(
+            path="/inteligencia/precos/",
+            asset_id="im-precos-v1",
+            decision="Comparar referências compatíveis antes de preparar proposta, negociar ou pesquisar fornecedores.",
+            deliverables=[
+                ("Caderno de referências", "Tabela com fonte, data, especificação, unidade, quantidade e condições relevantes para cada comparação."),
+                ("Pesquisa documental", "Documentos e trechos que sustentam a referência, com critérios de inclusão e exclusão."),
+                ("Leitura de comparabilidade", "Síntese do que pode ser comparado, das diferenças materiais e das lacunas que exigem nova pesquisa."),
+            ],
+            adaptation=[
+                ("Especificação", "Características técnicas e comerciais que tornam duas referências comparáveis ou incompatíveis."),
+                ("Quantidade e unidade", "Escala, embalagem, composição e unidade precisam permanecer ligadas ao valor observado."),
+                ("Local e período", "Praça, data-base, entrega, tributos e demais condições podem mudar a utilidade da referência."),
+                ("Uso da pesquisa", "Preparação de proposta, orçamento, negociação, compra ou pesquisa de fornecedores pedem entregas diferentes."),
+            ],
+            limits=[
+                "Valor integral de contrato não é preço unitário de item.",
+                "Preço sem especificação, quantidade, unidade e condições não é referência comparável.",
+                "Contrato misto não pode ter seu valor inteiro atribuído a cada categoria.",
+                "A pesquisa organiza evidência; não garante fornecimento, estoque ou manutenção da condição observada.",
+            ],
+            capture_heading="Informe o item, a especificação e a decisão de preço",
+            capture_prompt="Descreva o que precisa comparar, a unidade, a quantidade, o local, o período e a finalidade da pesquisa.",
+            capture_button="Solicitar proposta de pesquisa de preços",
+        ),
+        "/inteligencia/pesquisa-sob-encomenda/": _market_intelligence_family_content(
+            path="/inteligencia/pesquisa-sob-encomenda/",
+            asset_id="im-institucional-v1",
+            decision="Encomendar um estudo que sua organização possa usar, apresentar ou atualizar dentro de uma finalidade definida.",
+            deliverables=[
+                ("Relatório sob encomenda", "Pergunta, recorte, método, resultados e recomendações preparados para o uso contratado."),
+                ("Base curada ou exportação", "Dados selecionados e documentados no formato acordado, quando fontes e direitos permitirem."),
+                ("Licença ou atualização", "Uso não exclusivo de análise própria, recortes adicionais ou nova edição com condições específicas."),
+            ],
+            adaptation=[
+                ("Organização e público", "Consultoria, associação, rede, fabricante ou outra organização informa quem usará a entrega."),
+                ("Finalidade", "Decisão interna, estudo setorial, apoio a clientes, conteúdo institucional ou planejamento exigem direitos distintos."),
+                ("Formato", "Relatório, apresentação, tabela, base curada, sumário executivo ou combinação definida em proposta."),
+                ("Direitos de uso", "Participantes, citação, circulação, atualização, revenda e exclusividade são tratados expressamente."),
+            ],
+            limits=[
+                "Entrega reservada não concede exclusividade setorial por padrão.",
+                "Dados e conclusões confidenciais de um contratante não são reutilizados para outro.",
+                "Revenda, exclusividade e uso por participantes adicionais exigem condições próprias.",
+                "A pesquisa não anuncia competência regulada de outro setor nem substitui o profissional legalmente responsável.",
+            ],
+            capture_heading="Explique a pesquisa, o público e o uso institucional pretendido",
+            capture_prompt="Informe a pergunta, quem utilizará a entrega, o formato desejado e se haverá circulação entre participantes ou clientes.",
+            capture_button="Solicitar proposta de pesquisa sob encomenda",
+        ),
+    }
+    commercial_assets = {
+        "/inteligencia/": ("im-hub-v1", "Solicitar estudo de mercado", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar uma análise de empresas"),
+        "/inteligencia/orgaos/": ("im-clientes-v1", "Solicitar meu mapeamento", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar uma análise de empresas"),
+        "/inteligencia/mercados/": ("im-mercados-v1", "Solicitar estudo de mercado", "/inteligencia/composicao-contratos-amostra/", "Examinar uma análise de mercado"),
+        "/inteligencia/concorrencia/": ("im-concorrencia-v1", "Analisar concorrentes e empresas", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar empresas verificadas"),
+        "/inteligencia/acompanhamento/": ("im-acompanhamento-v1", "Definir acompanhamento", "/inteligencia/composicao-contratos-amostra/", "Examinar uma análise pública"),
+        "/inteligencia/precos/": ("im-precos-v1", "Contratar pesquisa de preços", "/inteligencia/composicao-contratos-amostra/", "Examinar valores e condições"),
+        "/inteligencia/pesquisa-sob-encomenda/": ("im-institucional-v1", "Contratar pesquisa", "/inteligencia/relacoes-compradores-fornecedores/", "Examinar uma análise pública"),
+    }
+
     for path, title, h1, desc, intro, items, crumbs, ptype in hubs:
         empty_cta = None
         eyebrow = "Inteligência aplicada à decisão"
@@ -591,6 +935,16 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                     "secondary_label": "Começar pelo diagnóstico da operação em obras públicas",
                     "secondary_href": "/diagnostico-b2g-360/",
                 }
+        hero_cta = None
+        after_content_html = ""
+        if path in commercial_content:
+            asset_id, label, proof_href, proof_label = commercial_assets[path]
+            hero_cta = _market_intelligence_hero_cta(
+                asset_id, label, proof_href, proof_label
+            )
+            empty_cta = _market_intelligence_next_step(label)
+            eyebrow = "Inteligência de mercado sob encomenda"
+            after_content_html = commercial_content[path]
         extra_html = ""
         if path == "/radar/":
             # /radar/ is the declared breadcrumb parent of the hand-authored
@@ -619,12 +973,14 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             path=path,
             intro=intro,
             items=items,
-            robots=hub_robots(ptype),
+            robots=hub_robots(path, ptype),
             crumbs=crumbs,
             eyebrow=eyebrow,
             wa_message=wa,
             empty_cta=empty_cta,
             extra_html=extra_html,
+            after_content_html=after_content_html,
+            hero_cta=hero_cta,
 )
         out = url_to_path(path)
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -746,7 +1102,28 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
             encoding="utf-8",
 )
 
+    render_market_intelligence_sample = None
+    if not dry_run:
+        from scripts.pseo.market_intelligence_sample import (
+            load_snapshot as load_market_intelligence_sample,
+        )
+        from scripts.pseo.market_intelligence_sample import (
+            render_all as render_market_intelligence_sample,
+        )
+
+        # The public proof block and the two analysis routes are emitted only
+        # after the independent PNCP claims manifest matches the snapshot.
+        load_market_intelligence_sample(
+            ROOT / "data" / "pseo" / "market-intelligence-sample.v1.json"
+        )
     hubs = [] if dry_run else render_hubs(cands)
+    market_intelligence_analyses: list[str] = []
+    if not dry_run:
+        assert render_market_intelligence_sample is not None
+        market_intelligence_analyses = render_market_intelligence_sample(
+            root=ROOT,
+            capture_factory=_market_intelligence_capture,
+        )
     # lastmod = when the snapshot was verified, never use bid data_period_end
     # (open-bid end dates can be months in the future and GSC rejects future lastmod).
     lastmod = _sitemap_lastmod(manifest)
@@ -777,6 +1154,7 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
         ],
         "withdrawn": withdrawn_pages,
         "hubs": hubs,
+        "market_intelligence_analyses": market_intelligence_analyses,
         "sitemap": str(sm.relative_to(ROOT)) if sm else None,
         "registry": str(registry_path.relative_to(ROOT)),
         "policy": {

@@ -213,12 +213,24 @@ def test_radar_not_empty_wave_message():
 
 def test_inteligencia_hub_decision_copy():
     html = (ROOT / "inteligencia" / "index.html").read_text(encoding="utf-8")
-    assert "O mercado público deixa rastros" in html
+    assert "Pesquisa de mercado para escolher clientes, canais, produtos e movimentos com mais clareza." in html
+    assert "A CONFENGE transforma registros públicos e pesquisa documental em recortes úteis" in html
+    expected_offers = {
+        "/inteligencia/orgaos/": "Mapear clientes, distribuidores e parceiros",
+        "/inteligencia/mercados/": "Avaliar mercado, expansão e produtos",
+        "/inteligencia/concorrencia/": "Analisar concorrentes, carteiras e empresas",
+        "/inteligencia/acompanhamento/": "Acompanhar oportunidades e mudanças relevantes",
+        "/inteligencia/precos/": "Pesquisar referências comparáveis",
+        "/inteligencia/pesquisa-sob-encomenda/": "Contratar pesquisa sob encomenda",
+    }
+    for href, label in expected_offers.items():
+        assert f'href="{href}">{label}</a>' in html
     assert "critérios de evidência" not in html.lower()
     assert "revisão editorial" not in html.lower()
     assert "sem ranking proprietário" not in html.lower()
     build_src = (ROOT / "scripts" / "pseo" / "build.py").read_text(encoding="utf-8")
-    assert "O mercado público deixa rastros" in build_src
+    assert "Pesquisa de mercado para escolher clientes, canais, produtos e movimentos com mais clareza." in build_src
+    assert "A CONFENGE transforma registros públicos e pesquisa documental em recortes úteis" in build_src
     assert "critérios de evidência" not in build_src
     assert "sem ranking proprietário" not in build_src
 

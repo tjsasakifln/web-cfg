@@ -1,7 +1,7 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-10-12T04:47:31Z",
+  "generated_at": "2026-10-14T04:51:07Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
@@ -59,10 +59,10 @@
   "factual_handoff_pending": false,
   "handoff": {
     "status": "HANDOFF_READY",
-    "path": "C:\\Users\\tj_sa\\Documents\\Codex\\2026-10-12\\goal-execute-o-pacote-confenge-bofu\\work\\web-cfg\\scripts\\contract_analysis\\fixtures\\official-live-01",
+    "path": "C:\\Users\\tj_sa\\Documents\\Codex\\2026-10-14\\la\\work\\web-cfg\\scripts\\contract_analysis\\fixtures\\official-live-01",
     "checked": [
       {
-        "path": "C:\\Users\\tj_sa\\Documents\\Codex\\2026-10-12\\goal-execute-o-pacote-confenge-bofu\\work\\web-cfg\\scripts\\contract_analysis\\fixtures\\official-live-01",
+        "path": "C:\\Users\\tj_sa\\Documents\\Codex\\2026-10-14\\la\\work\\web-cfg\\scripts\\contract_analysis\\fixtures\\official-live-01",
         "exists": true,
         "layout": "dossiers",
         "schema_ok": true,

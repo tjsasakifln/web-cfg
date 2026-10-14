@@ -320,8 +320,24 @@ test("campaign closes complete family coverage without claiming commercial resul
   assert.equal(matrix.family_count, 13);
   assert.equal(matrix.rows.length, 13);
   assert.equal(new Set(matrix.rows.map((row) => row.intent_family)).size, 13);
+  // This evidence is a dated SST campaign snapshot (2026-09-26), not a
+  // promise that every family added to the living corporate contract is SST
+  // coverage. Market-intelligence research was added later for the separate
+  // October campaign and is explicitly identified by its service family.
+  const marketResearchFamilies = intentContract.intent_families.filter(
+    (row) => row.canonical_service_family === "market_intelligence_research",
+  );
+  const sstCampaignFamilies = intentContract.intent_families.filter(
+    (row) => row.canonical_service_family !== "market_intelligence_research",
+  );
+  assert.equal(intentContract.intent_families.length, 19);
+  assert.equal(marketResearchFamilies.length, 6);
+  assert.equal(sstCampaignFamilies.length, 13);
+  assert.ok(marketResearchFamilies.every((row) => !matrix.rows.some(
+    (covered) => covered.intent_family === row.intent_family,
+  )));
   const expected = new Map(
-    intentContract.intent_families.map((row) => [row.intent_family, row]),
+    sstCampaignFamilies.map((row) => [row.intent_family, row]),
   );
   assert.deepEqual(
     [...matrix.rows.map((row) => row.intent_family)].sort(),

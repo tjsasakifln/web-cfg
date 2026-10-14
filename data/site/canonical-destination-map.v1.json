@@ -173,6 +173,36 @@
       "path": "/ferramentas/prontidao-tecnica-obra-privada/",
       "intent_family": "orcar_planejar_decidir",
       "offer_id": "private_project_technical_readiness_assessment"
+    },
+    "market-intelligence-buyers-channels": {
+      "path": "/inteligencia/orgaos/",
+      "intent_family": "mapear_clientes_canais_parceiros",
+      "offer_id": null
+    },
+    "market-intelligence-expansion": {
+      "path": "/inteligencia/mercados/",
+      "intent_family": "investigar_mercado_expansao_produtos",
+      "offer_id": null
+    },
+    "market-intelligence-competitors": {
+      "path": "/inteligencia/concorrencia/",
+      "intent_family": "analisar_concorrentes_carteiras_empresas",
+      "offer_id": null
+    },
+    "market-intelligence-monitoring": {
+      "path": "/inteligencia/acompanhamento/",
+      "intent_family": "definir_oportunidades_acompanhamento",
+      "offer_id": null
+    },
+    "market-intelligence-prices": {
+      "path": "/inteligencia/precos/",
+      "intent_family": "pesquisar_precos_documentos",
+      "offer_id": null
+    },
+    "market-intelligence-institutional": {
+      "path": "/inteligencia/pesquisa-sob-encomenda/",
+      "intent_family": "contratar_pesquisa_institucional",
+      "offer_id": null
     }
   },
   "shared_offer_ids": {

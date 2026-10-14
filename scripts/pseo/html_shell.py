@@ -188,7 +188,7 @@ def _build_footer() -> str:
     else:
         columns = ""
     if not columns:
-        columns = '<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/servicos/">Serviços de engenharia</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>'
+        columns = '<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>'
     return f"""<footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>{html.escape(blurb)}</p></div>
@@ -317,6 +317,7 @@ def page_shell(
     extra_head: str = "",
     data_attrs: dict[str, str] | None = None,
     author_name: str | None = None,
+    emit_author_meta: bool = True,
     footer_html: str | None = None,
 ) -> str:
     canonical = f"{SITE}{canonical_path}"
@@ -324,6 +325,7 @@ def page_shell(
     attrs = data_attrs or {}
     body_attr = " ".join(f'data-{k}="{e(v)}"' for k, v in attrs.items())
     author = author_name or "Engº Tiago Sasaki"
+    author_meta = f'<meta content="{e(author)}" name="author"/>' if emit_author_meta else ""
     # The JSON goes inside a <script> element, where the HTML tokenizer reacts to
     # literal "<" regardless of JSON quoting: "</script>" closes the block and
     # "<script" flips it into an escaped state that swallows the next close tag.
@@ -359,7 +361,7 @@ def page_shell(
 <meta content="{e(canonical)}" property="og:url"/>
 <meta content="{SITE}/assets/og-confenge.jpg" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="{e(author)}" name="author"/>
+{author_meta}
 <script type="application/ld+json">{ld}</script>
 {extra_head}
 </head>

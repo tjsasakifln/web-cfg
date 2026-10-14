@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "61825d5b9defd8407282efee5edbca9e1bbf0676",
-  "recaptured_at": "2026-10-12T04:46:56Z",
-  "recapture_reason": "CONFENGE-BOFU-R04-20261012: recaptura real dos bytes derivados das duas novas apresentações autorizadas, atribuição, bundle e sitemaps. Seis pilares, home, catálogo, matriz, marca, preços, readiness e autorizações materiais permanecem inalterados; revisão autônoma, sem alegar nova revisão humana.",
+  "baseline_commit": "844b1e3a59476c82ab4070d1f0ebf6a2625cf9d0",
+  "recaptured_at": "2026-10-14T08:14:10Z",
+  "recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-SERVICOS-20261014: recaptura deterministica da apresentacao compartilhada apos remover do rodape o link duplicado /servicos/ rotulado Servicos de engenharia em 233 HTMLs, preservando a navegacao principal, os sete cards de servicos, o link /inteligencia/ a 14px e os assets styles.css e script.js. O material tecnico, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA da analise aprovada permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
@@ -20,17 +20,17 @@
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
     "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
-    "script.js": "1186c153db8e1ddb198a1c1c10550f4e3a029264c28a62f98ac1d688f8dfcea3",
-    "styles.css": "4e7b2af4d2f1cd4af7ce4298fb7e183e8a6b7fca9e341f7b9694a7b937f7caee",
+    "script.js": "216d79618c7ec7a471b8265951d106c963c9a45fdbd38b6cad1a1aa7a6f3b5ef",
+    "styles.css": "ac595c5713c77021dc6e6383e6fbc76f1e8c0f98a0f9d4ef1743b124a067bc92",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
     "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
-    "sitemap.txt": "6ef280f73aea58d36cb7f295c22821713ae3c53f1ba8186bada94fb0882c821a",
-    "sitemap-index.xml": "c887c337958bc075a667da12fee00486a87c9be02aacba31ffa6dcea36488849",
+    "sitemap.txt": "f933eff00499ae616a9f42a61623dd2a9fc24d404abce2e3f85504b984af3fb0",
+    "sitemap-index.xml": "b8a6d437ea21491ed4d08fce547d7676a2461f602713ffdce895706b426ca883",
     "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "a6cafe98e67c270c42f19a79b9ba850456fe212bfc64e5b79e8a5ddfc270b997"
+    "js/modules/analytics.js": "eec045b901ddad08bdd71e910c1ff8a41b9479a443c0f9da9a3fe43657a889b0"
   },
   "recapture_diff_lines_vs_origin_main": [
     "script.js",
@@ -39,7 +39,7 @@
     "sitemap-index.xml",
     "js/modules/analytics.js"
   ],
-  "previous_baseline_commit": "5fe233305d5d035fba429fa4f636fc76e82c3c2e",
+  "previous_baseline_commit": "dec4d90792fb8ac9a6132177b08943ff33a141e4",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -378,6 +378,115 @@
         "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
         "js/modules/analytics.js": "a6cafe98e67c270c42f19a79b9ba850456fe212bfc64e5b79e8a5ddfc270b997"
+      },
+      "html_mutation": true
+    },
+    {
+      "baseline_commit": "61825d5b9defd8407282efee5edbca9e1bbf0676",
+      "previous_baseline_commit": "5fe233305d5d035fba429fa4f636fc76e82c3c2e",
+      "recaptured_at": "2026-10-12T04:46:56Z",
+      "recapture_reason": "CONFENGE-BOFU-R04-20261012: recaptura real dos bytes derivados das duas novas apresentações autorizadas, atribuição, bundle e sitemaps. Seis pilares, home, catálogo, matriz, marca, preços, readiness e autorizações materiais permanecem inalterados; revisão autônoma, sem alegar nova revisão humana.",
+      "pillars": {
+        "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
+        "script.js": "1186c153db8e1ddb198a1c1c10550f4e3a029264c28a62f98ac1d688f8dfcea3",
+        "styles.css": "4e7b2af4d2f1cd4af7ce4298fb7e183e8a6b7fca9e341f7b9694a7b937f7caee",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
+        "sitemap.txt": "6ef280f73aea58d36cb7f295c22821713ae3c53f1ba8186bada94fb0882c821a",
+        "sitemap-index.xml": "c887c337958bc075a667da12fee00486a87c9be02aacba31ffa6dcea36488849",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "a6cafe98e67c270c42f19a79b9ba850456fe212bfc64e5b79e8a5ddfc270b997"
+      },
+      "html_mutation": true,
+      "checkpoint_verification": {
+        "verified_against_git_commit": "61825d5b9defd8407282efee5edbca9e1bbf0676",
+        "verified_path": "script.js",
+        "verified_sha256": "1186c153db8e1ddb198a1c1c10550f4e3a029264c28a62f98ac1d688f8dfcea3",
+        "superseded_partial_pin_commit": "67c0c374b7237f568bd61ce2b0d5bf9bf4d9c0a0",
+        "note": "O pin isolado 216d7961 introduzido depois deste baseline não correspondia aos bytes do commit 61825d5b; este checkpoint retém o SHA real verificado no Git. A edição parcial fica registrada como inválida para a proveniência histórica e superada pela recaptura corrente, sem alegar nova revisão humana ou aprovação técnica."
+      }
+    },
+    {
+      "baseline_commit": "663f0c2eecf40b34c5375b21b09abad1185c9674",
+      "previous_baseline_commit": "61825d5b9defd8407282efee5edbca9e1bbf0676",
+      "recaptured_at": "2026-10-14T05:57:52Z",
+      "recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-20261014: recaptura autonoma dos bytes compartilhados autorizados de legibilidade, captura, atribuicao e descoberta das nove rotas de inteligencia de mercado. Seis pilares, fatos, precos, condicoes, fontes, patches experimentais e aprovacoes humanas historicas permanecem; nenhuma nova revisao humana ou aprovacao tecnica alegada.",
+      "pillars": {
+        "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
+        "script.js": "216d79618c7ec7a471b8265951d106c963c9a45fdbd38b6cad1a1aa7a6f3b5ef",
+        "styles.css": "12d3cc1b4bca11069b86fa854f47a92d6f9bfb34048f86254cccf029a5a7398c",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
+        "sitemap.txt": "f933eff00499ae616a9f42a61623dd2a9fc24d404abce2e3f85504b984af3fb0",
+        "sitemap-index.xml": "b8a6d437ea21491ed4d08fce547d7676a2461f602713ffdce895706b426ca883",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "eec045b901ddad08bdd71e910c1ff8a41b9479a443c0f9da9a3fe43657a889b0"
+      },
+      "html_mutation": true
+    },
+    {
+      "baseline_commit": "dec4d90792fb8ac9a6132177b08943ff33a141e4",
+      "previous_baseline_commit": "663f0c2eecf40b34c5375b21b09abad1185c9674",
+      "recaptured_at": "2026-10-14T07:12:48Z",
+      "recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-20261014: recaptura deterministica da apresentacao compartilhada apos o ajuste localizado do link /inteligencia/ no rodape para fonte de 14px, preservando legibilidade, alvo de 44px e identidade institucional. styles.css final tem 105961 bytes. O HTML tecnico da analise aprovada e os hashes material, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
+      "pillars": {
+        "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas/index.html": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "4d87aa5575e65d54d90bfc82325a4a96854efb5790af0716c39ca59a64e826e3",
+        "script.js": "216d79618c7ec7a471b8265951d106c963c9a45fdbd38b6cad1a1aa7a6f3b5ef",
+        "styles.css": "ac595c5713c77021dc6e6383e6fbc76f1e8c0f98a0f9d4ef1743b124a067bc92",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
+        "sitemap.txt": "f933eff00499ae616a9f42a61623dd2a9fc24d404abce2e3f85504b984af3fb0",
+        "sitemap-index.xml": "b8a6d437ea21491ed4d08fce547d7676a2461f602713ffdce895706b426ca883",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "eec045b901ddad08bdd71e910c1ff8a41b9479a443c0f9da9a3fe43657a889b0"
       },
       "html_mutation": true
     }

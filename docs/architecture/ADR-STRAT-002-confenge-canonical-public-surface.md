@@ -10,6 +10,25 @@
 
 ## Amendment 2026-09-09 (current)
 
+## Aplicação autorizada de 2026-10-14: inteligência de mercado
+
+O objetivo do fundador autoriza ampliar a oferta com pesquisa multissetorial
+baseada em contratações públicas, preservar a home agnóstica e publicar pela
+Netcup com reversão. As seis situações de pesquisa entram na matriz pública e
+nas rotas canônicas de inteligência, sem preços novos, checkout ou outro sistema.
+
+O ownership operacional da expertise em dados públicos permanece no agrupamento
+`public_works_b2g`; isso não restringe o setor do comprador nem o conduz a uma
+jornada de licitação ou engenharia. A família `market_intelligence_research`
+identifica o trabalho de pesquisa; os cinco núcleos e o catálogo B2G permanecem.
+Pedidos usam a captura canônica com jornada genérica e contexto próprio.
+
+Amostras públicas fixas conservam fonte, corte, identidade, método e hashes.
+São retratos não censitários, com rechecagem dos registros determinantes, sem
+alegar atualização contínua, interesse comercial, autoria ou revisão humana.
+extra-cli continua dono dos fatos e da proveniência; Warmbly recebe o pedido e
+mantém ação, proposta e resultado. Não há campanha outbound autorizada.
+
 ## Amendment 2026-10-03 (current editorial application)
 
 The founder's Comunicação Institucional, Competência e Conversão decision

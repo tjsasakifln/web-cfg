@@ -1,0 +1,303 @@
+{
+  "schema": "confenge.market-intelligence-sample/1.0",
+  "version": "market-intelligence-sample.v1",
+  "as_of": "2026-10-14",
+  "status": "PUBLIC_FACTS_RECHECKED_NON_CENSUS_SAMPLE",
+  "grain": "one PNCP contract",
+  "lineage": {
+    "selection_artifact": "extra-cli-public-contract-sample-2026-10-14.v2.json",
+    "selection_artifact_sha256": "cb987bedd8e6e35446bf4848c0f765144aec483cdd08a48d80aef56b5854aa07",
+    "selection_interface": "direct bounded read-only query of pncp_datalake.public.pncp_supplier_contracts",
+    "selection_release_sha": "14c8b2473c4e52566a7fed96c45057bd3214a2fe",
+    "selection_query_mode": "REPEATABLE READ, READ ONLY, bounded canonical contrato_id list, timeout 25 seconds, rollback",
+    "verification_manifest": "market-intelligence-verification.v1.json",
+    "verification_manifest_sha256": "e8a649a7f890b24fd85deb517a8b1436de6148934fbba5e023c9fc4c54774507",
+    "verification_claims_sha256": "8d50b6dd2371d648d04b2b7b918a5c1e62ac0eb329701c10fb6d8ce7dfe6361b",
+    "verification_interface": "PNCP official contract API, one immutable contract endpoint per record"
+  },
+  "selection_statement": "The source extract selected ten engineering-oriented public contracts from a 26-CNPJ exploratory review. It is not a client list, a channel priority list, a market census, or an authorized commercial cohort.",
+  "verification": {
+    "checked_at": "2026-10-14T03:37:42.433Z",
+    "requested": 10,
+    "retrieved": 10,
+    "failed": 0,
+    "subcontractors_reported": 0,
+    "identity_fields": {
+      "buyer": "orgaoEntidade.cnpj + orgaoEntidade.razaoSocial",
+      "supplier": "niFornecedor + nomeRazaoSocialFornecedor"
+    },
+    "projection_hash": "canonical field projection SHA-256, stored per record"
+  },
+  "summary": {
+    "contracts": 10,
+    "distinct_buyer_cnpjs": 10,
+    "distinct_supplier_nis": 10,
+    "signature_window": {
+      "from": "2026-08-21",
+      "to": "2026-10-09"
+    },
+    "publication_lag_days": {
+      "min": 0,
+      "max": 49
+    },
+    "term_days": {
+      "min": 89,
+      "max": 913
+    },
+    "category_counts": {
+      "Obras": 4,
+      "Serviços": 3,
+      "Serviços de Engenharia": 2,
+      "Compras": 1
+    },
+    "buyer_uf_counts": {
+      "SP": 3,
+      "MG": 2,
+      "BA": 1,
+      "PA": 1,
+      "RO": 1,
+      "RS": 1,
+      "SC": 1
+    },
+    "aggregate_integral_value_brl": 41446506.23
+  },
+  "limits": [
+    "Sample selection is exploratory and may be biased; no population denominator or comparative rate is available.",
+    "Contract global value is the published integral instrument value, not supplier revenue, available budget, price unit, workload, capacity or market share.",
+    "Null subcontractor identity fields do not prove no subcontracting is permitted or occurs.",
+    "Two extreme-case source-document attachments were hash-verified, but no document text was used; claims about contractual permissions require an exact document-chain review.",
+    "No private contacts, Extra client prioritization, exclusions, correspondence, scores or conclusions are carried forward."
+  ],
+  "contracts": [
+    {
+      "id": "03137985000190-2-000016/2026",
+      "buyer": {
+        "cnpj": "03137985000190",
+        "legal_name": "SECRETARIA DE ESTADO DE DESENVOLVIMENTO URBANO E OBRAS PUBLICAS",
+        "municipality": "Belém",
+        "uf": "PA"
+      },
+      "supplier": {
+        "ni": "05257336000158",
+        "legal_name": "SERVE OBRAS ENGENHARIA LTDA"
+      },
+      "category": "Serviços",
+      "signature_date": "2026-09-17",
+      "published_at": "2026-09-18T16:00:47",
+      "valid_from": "2026-09-18",
+      "valid_to": "2028-03-18",
+      "value_global_brl": 6646500,
+      "object_original": "Elaboração de projeto executivo e a execução de obra de implantação do sistema de esgotamento sanitário do município de Soure/PA",
+      "object_sha256": "a04ee3d9a6b91a5712cb6d5ed0664021516ff993b9da183386a43fdc2f26b757",
+      "projection_sha256": "f16590501d1aff10532e279170c67b0397bc42852593e21537ddced96eb87e80",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/03137985000190/contratos/2026/16"
+    },
+    {
+      "id": "04092706000181-2-000121/2026",
+      "buyer": {
+        "cnpj": "04092706000181",
+        "legal_name": "MUNICIPIO DE VILHENA",
+        "municipality": "Vilhena",
+        "uf": "RO"
+      },
+      "supplier": {
+        "ni": "59742516000154",
+        "legal_name": "RUNAS ARQUITETURA E ENGENHARIA LTDA"
+      },
+      "category": "Compras",
+      "signature_date": "2026-10-09",
+      "published_at": "2026-10-09T13:05:17",
+      "valid_from": "2026-10-09",
+      "valid_to": "2027-10-09",
+      "value_global_brl": 126480,
+      "object_original": "Contratação de empresa especializada em engenharia para a elaboração integral dos estudos, levantamentos, projetos e demais peças técnicas necessárias à substituição de 06 (seis) pontes de madeira por pontes mistas, localizadas nas estradas vicinais do Município de Vilhena/RO, bem como para a prestação de assessoramento e acompanhamento técnico especializado à Administração durante a futura execução das respectivas obras, exclusivamente em relação às soluções técnicas e aos projetos elaborados pela contratada. O assessoramento integra o objeto da contratação e constitui\netapa necessária para assegurar a adequada interpretação dos projetos, o esclarecimento de dúvidas técnicas, a análise de eventuais situações surgidas em campo e a manutenção da compatibilidade entre as soluções projetadas e a execução das obras.\n",
+      "object_sha256": "9ccc1d808542d0cf09b9032375e5b28ba5d6dc796d67a751c076c41968452030",
+      "projection_sha256": "b9040779e86851ec398e5e2fcc5fcb2939800073b5f8d74b97a01c39c1d8cc47",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/04092706000181/contratos/2026/121"
+    },
+    {
+      "id": "10559279000100-2-000044/2026",
+      "buyer": {
+        "cnpj": "10559279000100",
+        "legal_name": "SUPERINTENDENCIA DE AGUA E ESGOTO DE CATANDUVA",
+        "municipality": "Catanduva",
+        "uf": "SP"
+      },
+      "supplier": {
+        "ni": "23672668000180",
+        "legal_name": "GAD CONSTRUCAO E ADMINISTRACAO LTDA"
+      },
+      "category": "Obras",
+      "signature_date": "2026-10-05",
+      "published_at": "2026-10-08T15:30:42",
+      "valid_from": "2026-10-05",
+      "valid_to": "2027-01-02",
+      "value_global_brl": 128567.12,
+      "object_original": "CONTRATAÇÃO DE EMPRESA DE ENGENHARIA ESPECIALIZADA PARA ELABORAÇÃO DOS PROJETOS ESTRUTURAIS EXECUTIVO E EXECUÇÃO DE DUAS FUNDAÇÕES/BASES EM CONCRETO ARMADO DESTINADAS AO APOIO DE DOIS RESERVATÓRIOS METÁLICOS NO MUNICÍPIO DE CATANDUVA/SP, COMPREENDENDO O FORNECIMENTO INTEGRAL DE MATERIAIS, MÃO DE OBRA, EQUIPAMENTOS, MÁQUINAS, FERRAMENTAS, TRANSPORTE, MOBILIZAÇÃO, DOCUMENTAÇÃO TÉCNICA E DEMAIS RECURSOS NECESSÁRIOS À COMPLETA EXECUÇÃO DO OBJETO",
+      "object_sha256": "1500e483392b9a013a2ad0f43d1181f8087cf8eeaddb1def0e78e54b5dd9fd1a",
+      "projection_sha256": "e4d8f1b3906af005b78a8eac12ad00dc6c49d0dddeedb82cba30527164c3dcb6",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/10559279000100/contratos/2026/44"
+    },
+    {
+      "id": "13988308000139-2-000393/2026",
+      "buyer": {
+        "cnpj": "13988308000139",
+        "legal_name": "MUNICIPIO DE SENHOR DO BONFIM",
+        "municipality": "Senhor do Bonfim",
+        "uf": "BA"
+      },
+      "supplier": {
+        "ni": "59008914000141",
+        "legal_name": "HAER PROJETOS LTDA"
+      },
+      "category": "Serviços",
+      "signature_date": "2026-09-01",
+      "published_at": "2026-09-02T15:32:11",
+      "valid_from": "2026-09-01",
+      "valid_to": "2027-09-01",
+      "value_global_brl": 30000,
+      "object_original": "Elaboração de Projeto Estrutural para Cobertura Metálica e Fundações de Quadras Poliesportivas das Escolas: Creche Professor Paulo Batista Machado (Missão do Sahy), Escola Municipal Austricliano de Carvalho (Zona Urbana), Escola Municipal de 1º Grau de Estiva (Estiva), Escola Municipal Maria Euda Xavier (Carrapichel) e Escola Municipal Professora Anísia Rodrigues (Tijuaçu). Conforme Projeto Básico Arquitetônico.",
+      "object_sha256": "59058c38e096b8af32176e91f4f872e1c01526b63857f640b3183a960954689d",
+      "projection_sha256": "04ef9b25095d87d1df4527370072fe63d4933eaf641f0d4dd2839845a778c157",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/13988308000139/contratos/2026/393"
+    },
+    {
+      "id": "18715490000178-2-000069/2026",
+      "buyer": {
+        "cnpj": "18715490000178",
+        "legal_name": "MUNICIPIO DE IBIRITE",
+        "municipality": "Ibirité",
+        "uf": "MG"
+      },
+      "supplier": {
+        "ni": "03103468000108",
+        "legal_name": "UNICAPA - UNIAO DOS APLICADORES DE PAVIMENTO ASFALTICO LTDA"
+      },
+      "category": "Obras",
+      "signature_date": "2026-10-02",
+      "published_at": "2026-10-09T08:35:15",
+      "valid_from": "2026-10-02",
+      "valid_to": "2029-04-02",
+      "value_global_brl": 33564883.7,
+      "object_original": "Contratação semi-integrada, para a elaboração dos projetos executivos e a execução das obras de duplicação do trecho da Rodovia MG-040, conhecido como \"Estrada Velha\", no Município de Ibirité/MG, compreendendo os serviços de terraplenagem, pavimentação, drenagem pluvial, sinalização viária, obras de arte correntes, obras complementares, dispositivos de segurança viária e demais intervenções necessárias à implantação do empreendimento, bem como a elaboração dos projetos executivos e a execução das obras de revitalização dos acessos à Praça da Estação, abrangendo adequações urbanísticas, pavimentação, calçamento, acessibilidade, paisagismo e demais serviços correlatos, observadas as diretrizes estabelecidas nos projetos básicos elaborados pela Administração Municipal.",
+      "object_sha256": "7c73a67372d36070ccd3f2789cbc9b88c26685ce65088a91299fa49913520994",
+      "projection_sha256": "7476d1a6d72325368157fa7a764b4001c9ea05d4848696b2ca7a0dfa97e524f7",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/18715490000178/contratos/2026/69"
+    },
+    {
+      "id": "18836965000184-2-000120/2026",
+      "buyer": {
+        "cnpj": "18836965000184",
+        "legal_name": "MUNICIPIO DE RAUL SOARES",
+        "municipality": "Raul Soares",
+        "uf": "MG"
+      },
+      "supplier": {
+        "ni": "08625222000101",
+        "legal_name": "EQUILIBRIO ENGENHARIA LTDA"
+      },
+      "category": "Serviços",
+      "signature_date": "2026-09-21",
+      "published_at": "2026-09-30T16:31:16",
+      "valid_from": "2026-09-21",
+      "valid_to": "2027-09-21",
+      "value_global_brl": 384619.47,
+      "object_original": "Contratação de empresa especializada para elaboração de estudo de concepção, estudo ambiental, projeto básico, projeto executivo, além de serviços de apoio técnico (incluindo o Cadastro Técnico) para Sistemas de Esgotamento Sanitário do Distrito de Santana do Tabuleiro, Contrato de Transferência nº: 4.202.0253.2.02.037.00.2024 e Esgotamento Sanitário do Distrito de São Vicente da Estrela, Contrato de Transferência nº: 4.202.051125.2.02.04125.00.2025 do município de Raul Soares/MG",
+      "object_sha256": "1fe265b1547136166660a3dad634be2ba1e91ddd10588881bbb589478fb726f1",
+      "projection_sha256": "bfce063d8b935d096b3b335a2c84628dd72b667137ce150ee8bc0ee559ae8a15",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/18836965000184/contratos/2026/120"
+    },
+    {
+      "id": "46223756000109-2-000026/2026",
+      "buyer": {
+        "cnpj": "46223756000109",
+        "legal_name": "MUNICIPIO DE TEJUPA",
+        "municipality": "Tejupá",
+        "uf": "SP"
+      },
+      "supplier": {
+        "ni": "22009553000148",
+        "legal_name": "LOTEARQ ARQUITETURA E URBANISMO LTDA EPP"
+      },
+      "category": "Serviços de Engenharia",
+      "signature_date": "2026-10-05",
+      "published_at": "2026-10-09T12:01:56",
+      "valid_from": "2026-10-05",
+      "valid_to": "2027-10-04",
+      "value_global_brl": 45900,
+      "object_original": "ESCOLHA DA MELHOR PROPOSTA, PARA CONTRATACAO DE EMPRESA ESPECIALIZADA PARA ELABORACAO E COMPATIBILIZACAO DE PROJETOS EXECUTIVOS DE ENGENHARIA E ARQUITETURA, EM METODOLOGIA BIM, INCLUINDO PROJETO ARQUITETONICO, ESTRUTURAL, ESTRUTURA METALICA, ELETRICO E LUMINOTECNICO, HIDROSSANITARIO, DRENAGEM, ACESSIBILIDADE, DETALHAMENTOS COMPLEMENTARES, MEMORIAIS, PLANILHA ORCAMENTARIA, CRONOGRAMA FISICO-FINANCEIRO, COMPATIBILIZACAO, MODELO BIM E EMISSAO DAS RESPECTIVAS ARTS/RRTS, DESTINADOS A REVITALIZACAO DO ESTADIO VICENTE ANTONIO BRISOLA, NO DISTRITO DE RIBEIRAO BONITO, TEJUPA/SP, PARA INSTRUCAO DO PLEITO DO EDITAL DE CHAMAMENTO PUBLICO NO01 SJC/FID/2026   PROCESSO SEI NO019.00002164/2026-38.",
+      "object_sha256": "00c831bbaa8b4c7be8914178682165478d73e4ad927bbd0d7ddb9a4204d37741",
+      "projection_sha256": "6c268b92aef6f2b83e05ae45c8ee7a4e9aed418170909e93192f26da23aa00a2",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/46223756000109/contratos/2026/26"
+    },
+    {
+      "id": "46377800000127-2-007449/2026",
+      "buyer": {
+        "cnpj": "46377800000127",
+        "legal_name": "SAO PAULO SECRETARIA DA SEGURANCA PUBLICA",
+        "municipality": "São Paulo",
+        "uf": "SP"
+      },
+      "supplier": {
+        "ni": "52667737000166",
+        "legal_name": "CHANGE M&G ENGENHARIA LTDA"
+      },
+      "category": "Obras",
+      "signature_date": "2026-10-05",
+      "published_at": "2026-10-09T15:41:10",
+      "valid_from": "2026-10-05",
+      "valid_to": "2027-02-04",
+      "value_global_brl": 331199,
+      "object_original": "Constitui objeto da presente contratação a elaboração dos Projetos Executivos e a execução das obras de reforma e adequação estrutural e funcional da unidade prisional, descritas em planilha orçamentária que compõem o estudo técnico elaborado pela 2ª EQUIPE TÉCNICA, da Divisão de Planejamento e Controle de Recursos Materiais, do Departamento de Administração e Planejamento - DAP, compreendendo: • Elaboração dos Projetos Executivos de Arquitetura, Estrutura e\nInstalações Elétricas referentes às celas, pátio e laje das novas salas; • Elaboração dos Projetos Executivos de Estrutura Metálica e Instalações Hidráulicas de águas pluviais referentes à cobertura de toda a unidade; • Execução de laje montada in loco, incluindo seus reforços, fundações, vigas, pilares, armaduras e acabamentos; • Reforma das celas e pátio, com demolições, recomposições, revestimentos e pintura; • Remoção integral da cobertura existente dos anexos; • Execução de\nnova estrutura metálica e novo sistema completo de cobertura; • Execução das instalações elétricas e hidráulicas; • Execução de impermeabilizações e sistemas de drenagem pluvial; • Limpeza final e entrega técnica da obra",
+      "object_sha256": "b3ce4dddec5f7c26edfe079750e54bdc8855d50b0e5244c4c182899fbc08c9eb",
+      "projection_sha256": "a28efcc88e59de3f612dbc322819d0663f3ec7e0be21de32fb202429449e12ef",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/46377800000127/contratos/2026/7449"
+    },
+    {
+      "id": "82939380000199-2-000819/2026",
+      "buyer": {
+        "cnpj": "82939380000199",
+        "legal_name": "MUNICIPIO DE JOACABA",
+        "municipality": "Joaçaba",
+        "uf": "SC"
+      },
+      "supplier": {
+        "ni": "13697820000126",
+        "legal_name": "CONCORDIA ENGENHARIA E TECNOLOGIA LTDA"
+      },
+      "category": "Serviços de Engenharia",
+      "signature_date": "2026-09-17",
+      "published_at": "2026-09-17T13:28:35",
+      "valid_from": "2026-09-17",
+      "valid_to": "2027-01-15",
+      "value_global_brl": 32751.52,
+      "object_original": "Contratação de empresa especializada para prestação de serviços de engenharia visando à elaboração de projetos complementares (estrutural de concreto armado, estrutural metálico, elétrico/telefônico/lógica/CFTV, luminotécnico, hidráulico/pluvial/drenagem), bem como memorial descritivo, planilhas orçamentárias e cronograma físico-financeiro para a Reforma e Construção de Cobertura do CEI Clara Zomkowski.",
+      "object_sha256": "c676d124dd8eccff58fcb7b6cff77ab82c715eea6dcdb6152883d85f28268e49",
+      "projection_sha256": "12d4d328a36e796da8c83aab9fe7637407f471ac0626be38fa1d0cd36d586b91",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/82939380000199/contratos/2026/819"
+    },
+    {
+      "id": "91551119000108-2-000028/2026",
+      "buyer": {
+        "cnpj": "91551119000108",
+        "legal_name": "CAMARA MUNICIPAL DE ALEGRETE",
+        "municipality": "Alegrete",
+        "uf": "RS"
+      },
+      "supplier": {
+        "ni": "49884870000160",
+        "legal_name": "O D MORAES ARQUITETURA"
+      },
+      "category": "Obras",
+      "signature_date": "2026-08-21",
+      "published_at": "2026-10-09T11:50:15",
+      "valid_from": "2026-08-24",
+      "valid_to": "2027-08-24",
+      "value_global_brl": 155605.42,
+      "object_original": "Contratacao de empresa especializada na area de engenharia arquitetura  para prestacao de servicos tecnicos de elaboracao de anteprojeto  projetos basico e executivo de arquitetura  estrutural  memorias de calculo  memorial descritivo  composicao de servicos  memoriais de execucao de obras e planilhas detalhadas de orcamento  especificacoes e detalhamentos de equipamentos e materiais  bem como projetos complementares de troca de telhado  troca de metalico madeiramento do telhado  troca de forros",
+      "object_sha256": "823927e7ea2a0fed1a3d46459103c4a0a6fed96b4164fc8b1cdb31e66bc536e0",
+      "projection_sha256": "beccfeda52e5939014c3e4adbd3429b13846045ae5617df9b6e1c2c0353cc7c0",
+      "url": "https://pncp.gov.br/api/pncp/v1/orgaos/91551119000108/contratos/2026/28"
+    }
+  ]
+}
