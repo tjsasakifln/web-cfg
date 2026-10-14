@@ -1005,7 +1005,7 @@ def test_price_allows_contextual_direct_contact_without_claiming_receipt():
     from scripts.site.inbound_gates import _has_contextual_direct_contact, _priced_offer_findings
 
     route = "/casos/modelo-relatorio-inteligencia-licitacoes/"
-    brand = json.loads((ROOT / "data/site/brand.json").read_text())["contact"]
+    brand = json.loads((ROOT / "data/site/brand.json").read_text(encoding="utf-8"))["contact"]
     message = "Quero conversar sobre esta entrega: https://confenge.com.br" + route
     href = brand["whatsapp_base"] + "?" + urlencode({"text": message})
     anchor = f'<a href="{href}" data-cta-id="modelo-contato">Conversar sobre esta entrega</a>'
@@ -1026,13 +1026,39 @@ def test_price_allows_contextual_direct_contact_without_claiming_receipt():
 
 def test_bare_currency_amounts_are_data_not_a_priced_offer():
     """Contract values in an editorial page must not escalate the profile."""
-    from scripts.site.inbound_gates import _displays_price
+    from scripts.site.inbound_gates import _displays_price, priced_offer_routes
 
     assert not _displays_price("<p>O contrato somava R$ 248,0 mil em serviços medidos.</p>")
     assert _displays_price("<p>Investimento: R$ 3.750 por relatório.</p>")
     assert _displays_price("<p>Investimento: R$ 3750 por relatório.</p>")
+    assert _displays_price("<h2>Investimento</h2><p>R$ 3.750</p>")
+    assert _displays_price(
+        "<table><tr><th>Preço</th><td>R$ 3.750</td></tr></table>"
+    )
+    assert _displays_price(
+        "<section><h2>Plano mensal</h2><div><strong>R$ 599,00</strong></div></section>"
+    )
     assert not _displays_price("<p>Investimento público de R$ 1,2 milhão.</p>")
+    assert not _displays_price(
+        "<p>O valor integral é R$ 41.446.506,23; ele não representa preço unitário.</p>"
+    )
+    assert _displays_price(
+        "<p>R$ 3.750 não representa preço unitário, mas é o investimento total.</p>"
+    )
+    assert _displays_price(
+        "<p>R$ 3.750 não é preço por unidade; é o preço total do serviço.</p>"
+    )
+    assert _displays_price(
+        "<p>No contrato, R$ 3.750 não representa preço unitário, mas é o investimento total.</p>"
+    )
+    assert _displays_price(
+        "<p>Na amostra, R$ 3.750 não é preço por unidade; é o preço total do serviço.</p>"
+    )
     assert _displays_price('<script type="application/ld+json">{"price": "599.00"}</script>')
+
+    # This public evidence page displays contract values and expressly limits
+    # their interpretation.  It is not a new priced offer.
+    assert "/inteligencia/composicao-contratos-amostra/" not in priced_offer_routes(ROOT)
 
 
 def test_registered_debt_expires_and_stops_being_an_exemption():

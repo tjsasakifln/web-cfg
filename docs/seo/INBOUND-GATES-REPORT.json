@@ -1,11 +1,11 @@
 {
-  "ok": false,
+  "ok": true,
   "gates": {
     "naturalness": {
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 123,
+        "scanned": 125,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 116
+        "sitemap_locs": 125
       }
     },
     "brand_shell": {
@@ -27,7 +27,7 @@
       }
     },
     "conversion": {
-      "ok": false,
+      "ok": true,
       "findings": [
         {
           "gate": "conversion",
@@ -122,55 +122,6 @@
         },
         {
           "gate": "conversion",
-          "path": "inteligencia\\acompanhamento\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
-          "path": "inteligencia\\concorrencia\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
-          "path": "inteligencia\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
-          "path": "inteligencia\\mercados\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
-          "path": "inteligencia\\orgaos\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
-          "path": "inteligencia\\pesquisa-sob-encomenda\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
-          "path": "inteligencia\\precos\\index.html",
-          "reason": "capture_route_missing_nojs_note",
-          "excerpt": "",
-          "severity": "error"
-        },
-        {
-          "gate": "conversion",
           "path": "metodologia-inteligencia\\index.html",
           "reason": "terminal_action_debt",
           "excerpt": "/metodologia-inteligencia/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-10-31",
@@ -185,7 +136,7 @@
         }
       ],
       "stats": {
-        "scanned": 123,
+        "scanned": 125,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -195,15 +146,15 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 93,
+          "commercial_content": 95,
           "trust_or_legal": 7
         },
         "main_cta": {
-          "covered": 116,
-          "total": 116,
+          "covered": 118,
+          "total": 118,
           "coverage": 1.0,
           "exempt": 7,
-          "public_scanned": 123
+          "public_scanned": 125
         },
         "on_page_capture": {
           "covered": 13,
@@ -216,9 +167,9 @@
           "coverage": 1.0
         },
         "capture_route_channels": {
-          "covered": 31,
-          "total": 38,
-          "coverage": 0.8158,
+          "covered": 40,
+          "total": 40,
+          "coverage": 1.0,
           "exemptions": [
             {
               "route": "/diagnostico-pre-licitacao/",
@@ -275,14 +226,14 @@
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 53,
+          "families": 54,
           "fail_closed": true,
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 115,
-          "total": 116,
-          "coverage": 0.9914,
+          "covered": 117,
+          "total": 118,
+          "coverage": 0.9915,
           "exempt_trust_or_legal": 7,
           "registered_debt": 1
         },
@@ -358,7 +309,7 @@
           "earliest_safe_action_at": "2026-09-16",
           "warn_before_date": false
         },
-        "errors": 7,
+        "errors": 0,
         "warnings": 15
       }
     },
@@ -441,16 +392,8 @@
       }
     },
     "bofu_buyer_decision_map": {
-      "ok": false,
-      "findings": [
-        {
-          "gate": "bofu_buyer_decision_map",
-          "path": "derived_from[4]",
-          "reason": "source_contract_hash_drift",
-          "excerpt": "data/organic/public-family-registry.json: expected=813b3e3902db5ff755b7781ef700753e41a781462f748a09690cd0394445eb31 actual=4174b8a7f74931cbe9ae2ae5d695da37f915368017aef4b15f0c6e98fb176c5c",
-          "severity": "error"
-        }
-      ],
+      "ok": true,
+      "findings": [],
       "stats": {
         "buyer_jobs": 15,
         "registry_buyer_jobs": 15,
@@ -765,7 +708,21 @@
           "gate": "archetype_editorial_ready",
           "path": "inteligencia\\index.html",
           "reason": "archetype_specific_value_failed",
-          "excerpt": "family=inteligencia-mercado 6/6 sampled pages fail: /inteligencia/: 0 concrete specifics (min 3); /inteligencia/acompanhamento/: 0 concrete specifics (min 3)",
+          "excerpt": "family=inteligencia-mercado 6/6 sampled pages fail: /inteligencia/: 1 concrete specifics (min 3); /inteligencia/acompanhamento/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "inteligencia\\composicao-contratos-amostra\\index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=inteligencia-amostras-reais 1/2 sampled pages fail: /inteligencia/relacoes-compradores-fornecedores/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "inteligencia\\composicao-contratos-amostra\\index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=inteligencia-amostras-reais 1/2 sampled pages fail: /inteligencia/composicao-contratos-amostra/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
         },
         {
@@ -932,9 +889,9 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "families": 53,
+        "families": 54,
         "archetype_ready": 9,
-        "archetype_not_ready": 44,
+        "archetype_not_ready": 45,
         "materially_rejected": [
           "jurisprudencia-contratos-obras"
         ],
@@ -1321,6 +1278,18 @@
             ],
             "blocking": [
               "specific_value"
+            ],
+            "material": []
+          },
+          "inteligencia-amostras-reais": {
+            "ready": false,
+            "sample": [
+              "/inteligencia/composicao-contratos-amostra/",
+              "/inteligencia/relacoes-compradores-fornecedores/"
+            ],
+            "blocking": [
+              "specific_value",
+              "caveats_preserved"
             ],
             "material": []
           },
@@ -1816,9 +1785,9 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "scanned": 253,
+        "scanned": 255,
         "noindex": 130,
-        "instance_index_ready": 85,
+        "instance_index_ready": 87,
         "index_ready_but_noindex": [],
         "indexable_without_evidence": 38,
         "noindex_without_reason": [],

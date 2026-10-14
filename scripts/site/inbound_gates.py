@@ -1041,6 +1041,21 @@ PRICE_NEAR_RE = re.compile(
     rf"(?is)(?:{_PRICE_COMMITMENT})[^.]{{0,80}}?{_PRICE_AMOUNT}"
     rf"|{_PRICE_AMOUNT}[^.]{{0,60}}?(?:{_PRICE_COMMITMENT})"
 )
+# An editorial amount can explicitly rule out a price interpretation (for
+# example, a published contract's integral value).  It must not be promoted to
+# a CONFENGE offer merely because the explanation says it is *not* a unit
+# price.  Keep this narrow: a real offer is still caught by markup or a
+# non-negated commitment-and-amount pair.
+PRICE_REFERENCE_NEGATION_RE = re.compile(
+    rf"(?is){_PRICE_AMOUNT}[^.]{{0,100}}?n[ãa]o\s+(?:representa|[ée])[^.]{{0,80}}?pre[çc]o"
+)
+PRICE_CONTRACT_REFERENCE_CONTEXT_RE = re.compile(
+    r"(?i)\b(?:valor(?:es)?\s+integral(?:is)?|contrato(?:s)?|amostra|instrumento(?:s)?)\b"
+)
+PRICE_AFFIRMATIVE_SUFFIX_RE = re.compile(
+    r"(?i)\b(?:investimento(?:\s+total)?|pre[çc]o\s+total|pre[çc]o\s+do\s+servi[çc]o|"
+    r"pagamento\s+[úu]nico|plano|mensal|assinatura)\b"
+)
 PRICED_CAPTURE_DATA_ATTRS = (
     "data-offer-id",
     "data-cta-id",
@@ -1089,7 +1104,45 @@ def _displays_price(main: str) -> bool:
     """True when ``<main>`` shows a price for something CONFENGE sells."""
     if PRICE_MARKUP_RE.search(main):
         return True
-    return bool(PRICE_NEAR_RE.search(strip_html(main)))
+    # Keep semantic context inside a section and inside a table row: offer
+    # headings, prices and labels are commonly split across those elements.
+    # `strip_html` deliberately flattens the document for general checks, so
+    # insert a boundary only where an unrelated section or table row begins.
+    # That prevents a table heading such as "Assinatura" from being related
+    # to an amount in the following row.
+    price_text = re.sub(
+        r"(?is)</(?:article|aside|section|tr)\s*>",
+        ". ",
+        main,
+    )
+    # Metric-card siblings are separate observations.  Do not let a label in
+    # one card (for example, "assinatura") price an amount in the next card.
+    # Other divs intentionally remain connected, so a heading followed by an
+    # offer amount keeps its commercial context.
+    price_text = re.sub(
+        r"(?is)</div>\s*</div>\s*<div\b(?=[^>]*\bcriterion-card\b)",
+        ". <div",
+        price_text,
+    )
+    visible = strip_html(price_text)
+    for match in PRICE_NEAR_RE.finditer(visible):
+        context_start = max(0, match.start() - 160)
+        context = visible[context_start : match.end()]
+        is_contract_reference = bool(PRICE_CONTRACT_REFERENCE_CONTEXT_RE.search(context))
+        # PRICE_NEAR_RE ends at the first occurrence of "preço".  Inspect
+        # the remaining sentence as well: a clause may first reject a unit
+        # price and then explicitly state the total investment or sale price.
+        tail = visible[match.end() :]
+        sentence_end = re.search(r"(?<!\d)[.!?](?=\s|$)", tail)
+        clause_suffix = tail[: sentence_end.end() if sentence_end else len(tail)]
+        has_affirmative_suffix = bool(PRICE_AFFIRMATIVE_SUFFIX_RE.search(clause_suffix))
+        if not (
+            is_contract_reference
+            and PRICE_REFERENCE_NEGATION_RE.fullmatch(match.group(0))
+            and not has_affirmative_suffix
+        ):
+            return True
+    return False
 
 
 def priced_action_registry() -> tuple[set[str], set[str]]:
