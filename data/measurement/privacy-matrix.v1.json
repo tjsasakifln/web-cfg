@@ -1,0 +1,96 @@
+{
+  "schema": "confenge.multivertical-privacy-matrix/1.0",
+  "contract_id": "CONFENGE_MULTIVERTICAL_PRIVACY_MATRIX/1.0.0-draft.20260904",
+  "campaign_id": 13,
+  "owner_issue": "#336",
+  "related_issues": ["#580"],
+  "aggregate_pii_allowlist": [],
+  "analytics_record": "AGGREGATE_ONLY_NO_PII",
+  "repository_record": "AGGREGATE_ONLY_NO_PII",
+  "fail_closed": true,
+  "forbidden_fields": [
+    {
+      "id": "nome",
+      "aliases": ["name", "participant_name", "full_name", "razao_social"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "email",
+      "aliases": ["e-mail", "e_mail", "mail"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "telefone",
+      "aliases": ["phone", "telephone", "whatsapp", "celular"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "cpf_cnpj_visitante",
+      "aliases": ["cpf", "cnpj", "tax_id", "documento_fiscal"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "endereco",
+      "aliases": ["address", "street", "cep", "site_location_text"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "texto_livre",
+      "aliases": ["free_text", "notes", "comment", "description", "quote", "transcript", "raw_note"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "processo",
+      "aliases": ["lawsuit", "case_number", "process_number", "autos"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "empregado",
+      "aliases": ["employee", "employee_list", "worker_name", "folha"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "documento",
+      "aliases": ["document_upload", "laudo", "prontuario", "medical_record", "plan_file"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "valor_informado",
+      "aliases": ["informed_value", "budget_told", "contract_value_typed", "fee_guess"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    },
+    {
+      "id": "motivo_detalhado_de_conflito",
+      "aliases": ["conflict_reason_detail", "conflict_narrative", "parties_narrative"],
+      "destinations": ["analytics", "repository", "event_envelope", "url_query"]
+    }
+  ],
+  "allowed_public_classes": [
+    "source_landing_family",
+    "source_asset",
+    "nucleus_id",
+    "offer_candidate",
+    "city_service_area_class",
+    "urgency",
+    "decision_role",
+    "why_now_class",
+    "triage_start",
+    "triage_complete",
+    "handoff",
+    "conflict_state_class",
+    "qualification_state"
+  ],
+  "private_store_only": [
+    "contact",
+    "consent_record",
+    "eligibility_screen",
+    "moderator_notes",
+    "slot_to_person_map"
+  ],
+  "human_protocol": {
+    "audio_video_recording": "FORBIDDEN",
+    "free_text_in_repository": "FORBIDDEN",
+    "anonymizable_speech_in_private_store_only": true,
+    "consent_separate_from_marketing": true
+  }
+}
