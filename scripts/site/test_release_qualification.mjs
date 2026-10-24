@@ -134,15 +134,22 @@ for (const state of ["MEASURED_FAIL", "INVALID_OR_INCOMPLETE", "INFRA_ERROR", nu
 pass("only_a_passing_measurement_authorises_the_promotion");
 
 // ---------------------------------------------------------------------------
-// A record whose acceptance failed does not authorise, even if some other
-// field claims a pass. The two must agree.
+// A record must carry an explicit passing acceptance. A failure, an unknown
+// value, and an omitted field never authorise, even if other fields pass.
 // ---------------------------------------------------------------------------
-{
-  const record = { ...goodRecord(), acceptance_result: "FAILED" };
+for (const [label, mutate] of [
+  ["FAILED", (record) => { record.acceptance_result = "FAILED"; }],
+  ["undefined", (record) => { record.acceptance_result = undefined; }],
+  ["absent", (record) => { delete record.acceptance_result; }],
+  ["null", (record) => { record.acceptance_result = null; }],
+  ["empty", (record) => { record.acceptance_result = ""; }],
+]) {
+  const record = goodRecord();
+  mutate(record);
   const { ok: allowed } = verifyQualification({ record, expected: EXPECTED });
-  assert.equal(allowed, false);
-  pass("a_failed_acceptance_blocks_the_promotion");
+  assert.equal(allowed, false, `acceptance_result ${label} must not authorise`);
 }
+pass("only_an_explicit_passing_acceptance_authorises_the_promotion");
 
 // ---------------------------------------------------------------------------
 // A qualification produced by a different verifier proves nothing about this
