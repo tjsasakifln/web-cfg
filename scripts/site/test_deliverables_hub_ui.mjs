@@ -684,4 +684,5 @@ if (reportPath) {
   fs.writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 }
 console.log("DELIVERABLES_HUB_UI", JSON.stringify(report));
-if (failed) process.exit(1);
+// Let the structured report drain when stdout is a CI pipe before exiting.
+if (failed) process.exitCode = 1;
