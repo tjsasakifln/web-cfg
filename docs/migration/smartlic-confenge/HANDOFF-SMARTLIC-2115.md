@@ -4,7 +4,7 @@ Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smar
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `9e0679be0989768c2d374432427dcd6c37db9d46a5f05a640e9562e5a055785c`
+**SHA-256:** `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8`
 **Version:** `v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
@@ -57,7 +57,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 ### Post-#68 revalidation (2026-08-15)
 
-`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. The current v2 pin is `9e0679be0989768c2d374432427dcd6c37db9d46a5f05a640e9562e5a055785c` (11 ready 301s; 54 HOLD rows reviewed and kept fail-closed through 2026-10-19; WEB-017 remapped payment-delay blog off the work-delay pillar).
+`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. The 2026-08-16 v2 pin was `9e0679be0989768c2d374432427dcd6c37db9d46a5f05a640e9562e5a055785c`; the current pin is `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8` because the [2026-10-24 technical HOLD reassessment](../../migrations/smartlic/HOLD-REVIEW-2026-10-24.md) kept 54 unchanged rows fail-closed through 2026-11-21. The 11 ready mappings are unchanged, including WEB-017's payment-delay mapping. This records no human acceptance, bridge execution, DNS/TLS change, cutover, or observation.
 
 Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
 

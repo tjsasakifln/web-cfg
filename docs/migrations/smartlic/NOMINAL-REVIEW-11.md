@@ -28,3 +28,13 @@ None of the 11 targets is `https://confenge.com.br/` or `/consultoria-b2g/`. Uni
 ## Not claimed
 
 Live SmartLic 301/410/Location is SmartLic#2115 / UNOBSERVED (Railway fallback 404; www TLS SAN mismatch). This review does not accept the set for the human; it records the implementer check.
+
+## Current pin metadata (not a new nominal review)
+
+The original 2026-08-16 review and its pin above remain historical evidence for
+the 11 redirect mappings. The current inventory pin is
+`acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8` only
+because the [2026-10-24 technical HOLD reassessment](HOLD-REVIEW-2026-10-24.md)
+renewed 54 unchanged 410/no-target entries through 2026-11-21. It neither
+re-reviewed nor approved the 11 mappings and did not perform human acceptance,
+bridge execution, DNS/TLS changes, cutover, or observation.
