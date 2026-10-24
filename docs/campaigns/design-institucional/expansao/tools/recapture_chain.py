@@ -106,16 +106,29 @@ def step_approvals(reason: str, source_root: Path) -> None:
 
 
 def frozen_recapture_provenance(previous: dict, current: dict, baseline: str, reason: str, at: str) -> dict:
-    """Retain the reviewed checkpoint before replacing its hashes or provenance."""
+    """Retain the reviewed checkpoint without carrying its transient diff metadata."""
     fields = ("baseline_commit", "previous_baseline_commit", "recaptured_at",
               "recapture_reason", "pillars", "forbidden", "html_mutation")
-    checkpoint = {key: previous[key] for key in fields if key in previous}
+    checkpoint = {
+        key: previous[key]
+        for key in previous
+        if key in fields or (key.startswith("recapture_") and key != "recapture_history")
+    }
     # JSON round-trip prevents the newly materialized dictionaries from sharing
     # mutable objects with the historical hashes retained in this record.
     history = json.loads(json.dumps(previous.get("recapture_history", [])))
     if checkpoint and checkpoint not in history:
         history.append(json.loads(json.dumps(checkpoint)))
-    return {**current, "recapture_history": history,
+    # materialize() intentionally starts from the prior document so it can
+    # preserve authority fields. Recapture-only observations (for example a
+    # prior comparison with origin/main) belong to that historical checkpoint,
+    # never to the new named baseline.
+    next_current = {
+        key: value
+        for key, value in current.items()
+        if not (key.startswith("recapture_") and key not in {"recaptured_at", "recapture_reason", "recapture_history"})
+    }
+    return {**next_current, "recapture_history": history,
             "previous_baseline_commit": previous.get("baseline_commit"),
             "baseline_commit": baseline, "recaptured_at": at,
             "recapture_reason": reason}

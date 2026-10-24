@@ -33,6 +33,24 @@ def test_history_does_not_duplicate_an_already_retained_checkpoint():
     assert result["recapture_history"] == [checkpoint]
 
 
+def test_recapture_only_metadata_is_historical_not_inherited_by_next_baseline():
+    previous = {
+        "baseline_commit": "b" * 40,
+        "pillars": {"one": "2" * 64},
+        "recapture_diff_lines_vs_origin_main": ["sitemap.txt"],
+        "recapture_legacy_probe": {"base": "a" * 40},
+    }
+    current = {**previous, "pillars": {"one": "3" * 64}}
+    result = CHAIN.frozen_recapture_provenance(
+        previous, current, "c" * 40, "reviewed correction", "2026-10-24T14:00:00Z"
+    )
+    assert "recapture_diff_lines_vs_origin_main" not in result
+    assert "recapture_legacy_probe" not in result
+    checkpoint = result["recapture_history"][-1]
+    assert checkpoint["recapture_diff_lines_vs_origin_main"] == ["sitemap.txt"]
+    assert checkpoint["recapture_legacy_probe"] == {"base": "a" * 40}
+
+
 def test_changed_binding_preserves_its_immediate_digest_and_updates_provenance(monkeypatch):
     monkeypatch.setattr(CHAIN, "now", lambda: "2026-10-04T04:00:00Z")
     for key in ("expected_sha256", "sha256", "after_sha256"):
