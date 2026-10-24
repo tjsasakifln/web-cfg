@@ -4,9 +4,9 @@ publishes wa.me in <main>, mailto on the page and the no-JS note.
 
 Counter-proofs for CONTEXTO-CAPTURA-01/-05/-06 in ``gate_conversion``:
 ``_capture_route_findings`` grades synthetic documents (no channel, channel
-only inside <noscript>, note missing, dated exception, exception already
-satisfied, exception expired) and the shipped tree must be fully covered with
-the five route-exact exceptions reported. Before this rule the production tree
+only inside <noscript>, note missing and an exception already satisfied) and
+the shipped tree must be fully covered; the sole permanent route-exact
+exception remains reported. Before this rule the production tree
 (fedb4768b) passed the gate with /analise-cnpj/ publishing no channel at all,
 /entregas/ without WhatsApp and 13 generated forms without the note.
 
@@ -15,6 +15,7 @@ Uso: python3 scripts/site/test_capture_route_channels_gate.py
 
 from __future__ import annotations
 
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -98,18 +99,6 @@ def test_home_style_page_level_note_is_accepted() -> None:
     assert reasons == {}, reasons
 
 
-def test_dated_exception_is_a_reported_warning_until_it_expires() -> None:
-    route = "/ferramentas/checklist-reequilibrio/"
-    assert CAPTURE_WHATSAPP_EXCEPTIONS[route]["expires_at"] == "2026-10-19"
-    reasons, exemptions, _ = grade(route, FORM.format(note=NOTE) + MAIL)
-    assert reasons == {"capture_whatsapp_debt": "warn"}, reasons
-    assert [e["route"] for e in exemptions] == [route]
-    assert exemptions[0]["owner_issue"] == 705 and exemptions[0]["expired"] is False
-    reasons, exemptions, _ = grade(route, FORM.format(note=NOTE) + MAIL, today=date(2026, 10, 20))
-    assert reasons == {"capture_whatsapp_debt_expired": "error"}, reasons
-    assert exemptions[0]["expired"] is True
-
-
 def test_exception_already_satisfied_is_reported_for_removal() -> None:
     route = "/casos/modelo-relatorio-inteligencia-licitacoes/"
     reasons, exemptions, _ = grade(route, FORM.format(note=NOTE) + WA + MAIL)
@@ -117,15 +106,44 @@ def test_exception_already_satisfied_is_reported_for_removal() -> None:
     assert exemptions == []
 
 
-def test_frozen_pillar_note_debt_is_dated_and_route_exact() -> None:
-    route = "/diagnostico-pre-licitacao/"
-    entry = CAPTURE_NOJS_NOTE_EXCEPTIONS[route]
-    assert entry["owner_issue"] == 705 and entry["dated"] == "2026-09-19" and entry["expires_at"]
-    reasons, _, _ = grade(route, FORM.format(note="") + WA + MAIL)
-    assert reasons == {"capture_nojs_note_debt": "warn"}, reasons
-    # Any other route without the note is an error, never a debt.
+def test_missing_note_fails_closed_without_a_pillar_exception() -> None:
+    assert CAPTURE_NOJS_NOTE_EXCEPTIONS == {}
     reasons, _, _ = grade("/outro-pilar/", FORM.format(note="") + WA + MAIL)
     assert reasons == {"capture_route_missing_nojs_note": "error"}, reasons
+
+
+def test_closed_capture_debts_publish_real_channels_and_fallbacks() -> None:
+    routes = (
+        "/diagnostico-pre-licitacao/",
+        "/ferramentas/checklist-reequilibrio/",
+        "/ferramentas/diagnostico-defesa-margem/",
+        "/ferramentas/limite-acrescimos-supressoes/",
+    )
+    for route in routes:
+        path = ROOT / route.strip("/") / "index.html"
+        html = path.read_text(encoding="utf-8")
+        main = re.search(r"(?is)<main\b.*?</main>", html)
+        assert main, route
+        findings, exemptions, is_capture = _capture_route_findings(
+            str(path.relative_to(ROOT)), route, html, main.group(0), date.today()
+        )
+        assert is_capture, route
+        assert not findings and not exemptions, (route, findings, exemptions)
+    assert not (set(routes) & set(CAPTURE_WHATSAPP_EXCEPTIONS))
+
+
+def test_pre_bid_note_removal_fails_closed() -> None:
+    route = "/diagnostico-pre-licitacao/"
+    path = ROOT / route.strip("/") / "index.html"
+    html = path.read_text(encoding="utf-8")
+    removed = html.replace("Sem JavaScript, este formulário não envia", "", 1)
+    main = re.search(r"(?is)<main\b.*?</main>", removed)
+    assert main
+    findings, _, is_capture = _capture_route_findings(
+        str(path.relative_to(ROOT)), route, removed, main.group(0), date.today()
+    )
+    assert is_capture
+    assert any(item.reason == "capture_route_missing_nojs_note" for item in findings), findings
 
 
 def test_every_exception_is_route_exact_dated_and_owned() -> None:

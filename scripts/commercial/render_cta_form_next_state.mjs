@@ -12,11 +12,9 @@ import { ensureNojsNote, pageHasOwnNojsNote } from "./form_nojs_note.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contract = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/cta-form-next-state.v1.json"), "utf8"));
 // Mesma autoridade de render_contract_defense_products.mjs: enquanto o plano de
-// desbloqueio nao autoriza mutacao de HTML, os seis pilares congelados nao
-// recebem a nota <noscript> por este passe (a insercao e a unica transformacao
-// nova deste normalizador que os alcancaria; as demais ja eram no-op neles).
-// Cinco ja publicam a nota; /diagnostico-pre-licitacao/ fica registrado como
-// pendencia datada (2026-09-19, BOFU-FECHAMENTO, #705) ate a cadeia de recaptura.
+// desbloqueio não autoriza mutação de HTML, os seis pilares congelados não
+// recebem uma nota <noscript> nova por este passe. As seis notas já foram
+// publicadas e a paridade delas é verificada pelo contrato de captura.
 const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"), "utf8"));
 const mutationAuthorized = unlockPlan.html_mutation_authorized === true
   && (unlockPlan.preconditions_all_required || []).every((entry) => entry.state === "READY");

@@ -73,9 +73,9 @@ GENERATOR_OWNED_PREFIXES: tuple[str, ...] = ()
 
 def _frozen_pillar_pages() -> frozenset[str]:
     """Os seis pilares presos por hash (``unlock-plan.v1.json``) enquanto a mutação
-    de HTML não está autorizada: a nota não entra neles por este aplicador nem
-    pelo normalizador. Pendência datada 2026-09-19 (BOFU-FECHAMENTO, #705) para
-    ``diagnostico-pre-licitacao/index.html``, o único ainda sem a nota."""
+    de HTML não está autorizada: uma nota nova não entra neles por este
+    aplicador nem pelo normalizador. As seis já publicam a nota; a exclusão
+    apenas preserva os bytes protegidos."""
     try:
         plan = json.loads(
             (ROOT / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json").read_text(encoding="utf-8")

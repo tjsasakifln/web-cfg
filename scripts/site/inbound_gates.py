@@ -1256,40 +1256,8 @@ CAPTURE_WHATSAPP_EXCEPTIONS: dict[str, dict[str, Any]] = {
             "única é /comercial/radar-decisorio/ e o e-mail fica ao lado do formulário"
         ),
     },
-    "/ferramentas/checklist-reequilibrio/": {
-        "kind": "capture_whatsapp_debt",
-        "dated": "2026-09-19",
-        "owner_issue": 705,
-        "expires_at": "2026-10-19",
-        "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
-    },
-    "/ferramentas/diagnostico-defesa-margem/": {
-        "kind": "capture_whatsapp_debt",
-        "dated": "2026-09-19",
-        "owner_issue": 705,
-        "expires_at": "2026-10-19",
-        "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
-    },
-    "/ferramentas/limite-acrescimos-supressoes/": {
-        "kind": "capture_whatsapp_debt",
-        "dated": "2026-09-19",
-        "owner_issue": 705,
-        "expires_at": "2026-10-19",
-        "reason": "canal WhatsApp só no rodapé e na nota <noscript>; publicar ao lado do formulário de segunda leitura",
-    },
 }
-# Pilar preso por hash (unlock-plan.v1.json, html_mutation_authorized=false):
-# a nota entra na cadeia de recaptura, não por este gate. Expira com a data;
-# deixa de valer assim que a mutação de HTML for autorizada.
-CAPTURE_NOJS_NOTE_EXCEPTIONS: dict[str, dict[str, Any]] = {
-    "/diagnostico-pre-licitacao/": {
-        "kind": "capture_nojs_note_debt",
-        "dated": "2026-09-19",
-        "owner_issue": 705,
-        "expires_at": "2026-10-19",
-        "reason": "pilar protegido por hash sem a nota <noscript>; entra na recaptura dos pilares",
-    },
-}
+CAPTURE_NOJS_NOTE_EXCEPTIONS: dict[str, dict[str, Any]] = {}
 
 
 def _strip_noscript(html: str) -> str:
@@ -2951,6 +2919,7 @@ class IndexationContext:
     shingles_by_route: dict[str, frozenset[str]] = field(default_factory=dict)
     title_owners: dict[str, list[str]] = field(default_factory=dict)
     editorial_registry: dict[str, str] = field(default_factory=dict)
+    editorial_publication_holds: dict[str, dict[str, Any]] = field(default_factory=dict)
     content_disposition: dict[str, dict[str, Any]] = field(default_factory=dict)
     contract_analysis: dict[str, dict[str, Any]] = field(default_factory=dict)
     live_contract_status: str = ""
@@ -3042,6 +3011,10 @@ def build_indexation_context(
         url = str(page_row.get("url") or "")
         if url:
             ctx.editorial_registry[url] = str(page_row.get("status") or "")
+            if page_row.get("publication_hold") is True:
+                ctx.editorial_publication_holds[url] = {
+                    "hold_reason": str(page_row.get("hold_reason") or ""),
+                }
 
     disposition = _read_json(root / CONTENT_DISPOSITION_REL)
     for item in disposition.get("items") or []:
@@ -3640,6 +3613,17 @@ def _sub_named_gate_verdict(
     status = ctx.editorial_registry.get(route)
     if status:
         if status == "REJECTED":
+            hold = ctx.editorial_publication_holds.get(route)
+            hold_reason = str((hold or {}).get("hold_reason") or "")
+            if hold is not None and hold_reason:
+                return Subgate(
+                    "named_gate_verdict",
+                    False,
+                    SUBGATE_REMEDIABLE,
+                    f"{EDITORIAL_REGISTRY_REL} = REJECTED with "
+                    f"publication_hold=true ({hold_reason}); remains ineligible "
+                    "for indexation until named human approval",
+                )
             return Subgate(
                 "named_gate_verdict",
                 False,
@@ -4251,6 +4235,8 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
       earned an index slot and is still suppressed.
     * ``noindex_without_reason`` — the instance did not earn one and nobody
       recorded why it is out.
+    * ``publication_hold_is_indexable`` — a named editorial hold is exposed to
+      search despite explicitly remaining ineligible for publication.
 
     An indexable route that did not earn its slot is reported as a warning
     (``indexable_without_evidence``): the remedy is evidence, and flipping it to
@@ -4295,6 +4281,7 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
     index_ready_but_noindex: list[str] = []
     indexable_without_evidence: list[str] = []
     noindex_without_reason: list[str] = []
+    indexable_publication_holds: list[str] = []
     blocking_histogram: Counter[str] = Counter()
 
     for route in sorted(ctx.html_by_route):
@@ -4308,6 +4295,23 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
         noindex = is_noindex(html)
         if noindex:
             noindex_count += 1
+        hold = ctx.editorial_publication_holds.get(route)
+        if hold is not None and not noindex:
+            indexable_publication_holds.append(route)
+            findings.append(
+                Finding(
+                    gate="instance_index_ready",
+                    path=rel,
+                    reason="publication_hold_is_indexable",
+                    excerpt=(
+                        f"{route} is indexable while {EDITORIAL_REGISTRY_REL} "
+                        "declares publication_hold=true "
+                        f"({hold.get('hold_reason') or 'missing_hold_reason'})"
+                    ),
+                    severity="error",
+                )
+            )
+            continue
         if ready:
             ready_count += 1
             if noindex:
@@ -4378,6 +4382,7 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
             "instance_index_ready": ready_count,
             "index_ready_but_noindex": index_ready_but_noindex,
             "indexable_without_evidence": len(indexable_without_evidence),
+            "indexable_publication_holds": indexable_publication_holds,
             "noindex_without_reason": noindex_without_reason,
             "candidate_noindex_pending_family_activation": sorted(candidate_noindex_routes),
             "blocking_subgates": dict(blocking_histogram.most_common()),
