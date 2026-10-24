@@ -3,8 +3,10 @@
 **Owner (map):** web-cfg#62 / `@dev`  
 **Owner (bridge/DNS):** SmartLic#2115 operator (Gage / @devops)  
 **Cost:** UNKNOWN  
-**Exact SHA:** `9e0679be0989768c2d374432427dcd6c37db9d46a5f05a640e9562e5a055785c`
+**Exact SHA:** `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8`
 **Observation window:** 28 days after the first production 301 of this hash — **not started** as of 2026-08-16.
+
+**HOLD metadata:** [technical reassessment 2026-10-24](HOLD-REVIEW-2026-10-24.md) retains 54 fail-closed HOLDs through 2026-11-21; it did not accept or execute a bridge/cutover.
 
 This file is the CONFENGE-side pin and validation runbook. Live DNS/TLS/ACME commands are in the SmartLic counterpart `bridge/docs/CUTOVER.md` and `bridge/docs/RUNBOOK.md`. They are **not** executed from this checkout.
 

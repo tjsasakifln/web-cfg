@@ -350,6 +350,71 @@ def test_archetype_inherits_materiality_and_never_invents_it():
     assert verdicts["editorial-library"]["material"] == [], verdicts["editorial-library"]
 
 
+def test_editorial_publication_hold_is_remediable_not_withdrawal(monkeypatch):
+    """A source-verification hold blocks indexation without ordering URL withdrawal."""
+    route = "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
+    family = next(
+        f for f in ctx().families if f["id"] == "jurisprudencia-contratos-obras"
+    )
+    verdict = G._sub_named_gate_verdict(route, family, ctx())
+    assert verdict.applicable and not verdict.passed
+    assert verdict.severity == G.SUBGATE_REMEDIABLE
+    assert "publication_hold=true" in verdict.detail
+    assert "official_sumula_text_date_and_specific_url_not_verified" in verdict.detail
+
+    report = sweep()
+    assert route not in report["buckets"]["REJECT_WITHDRAW"]
+    assert route in report["buckets"]["NOINDEX_JUSTIFIED"]
+
+    # The classification is remediable only while the route is actually held
+    # out of search. Removing noindex must fail the public-state gate closed.
+    indexable_html = ctx().html_by_route[route].replace(
+        'content="noindex,follow" name="robots"',
+        'content="index,follow" name="robots"',
+        1,
+    )
+    assert indexable_html != ctx().html_by_route[route]
+    synthetic = G.IndexationContext(
+        base=ROOT,
+        today=ctx().today,
+        families=[family],
+        route_family={route: family},
+        family_routes={family["id"]: [route]},
+        html_by_route={route: indexable_html},
+        path_by_route={route: ctx().path_by_route[route]},
+        editorial_registry={route: "REJECTED"},
+        editorial_publication_holds={
+            route: {
+                "hold_reason": "official_sumula_text_date_and_specific_url_not_verified"
+            }
+        },
+    )
+    monkeypatch.setattr(G, "build_indexation_context", lambda root=None: synthetic)
+    public_state = G.gate_instance_index_ready()
+    assert public_state.ok is False
+    failures = [
+        finding
+        for finding in public_state.findings
+        if finding.reason == "publication_hold_is_indexable"
+    ]
+    assert len(failures) == 1 and failures[0].severity == "error"
+
+
+def test_unqualified_editorial_rejection_remains_material():
+    """The hold distinction must not soften a plain or unexplained REJECTED verdict."""
+    route = "/conteudos/rejeitado/"
+    synthetic = G.IndexationContext(base=ROOT, today=date.today())
+    synthetic.editorial_registry[route] = "REJECTED"
+    plain = G._sub_named_gate_verdict(route, {"id": "editorial-library"}, synthetic)
+    assert not plain.passed and plain.severity == G.SUBGATE_MATERIAL
+
+    synthetic.editorial_publication_holds[route] = {"hold_reason": ""}
+    unexplained = G._sub_named_gate_verdict(
+        route, {"id": "editorial-library"}, synthetic
+    )
+    assert not unexplained.passed and unexplained.severity == G.SUBGATE_MATERIAL
+
+
 def test_only_a_doorway_archetype_is_inherited_by_its_instances():
     """A named REJECT is per-instance; it must not withdraw the family around it."""
     from scripts.site.universe_sweep import ARCHETYPE_LEVEL_MATERIAL

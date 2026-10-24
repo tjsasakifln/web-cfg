@@ -10,7 +10,7 @@ Issue remains **OPEN**. 28-day observation is planned, not complete.
 | CONFENGE-only brand/canonical | YES | crawl: no SmartLic; canonical `https://confenge.com.br/...` |
 | Zero indiscriminate home/parent 301 | YES | validator rejects ready home/`/consultoria-b2g`/parent without justification; RETIRE = 410 |
 | CTA + allowlisted attribution, no PII | YES | `lead-core.pickAttribution` + `window.confengeAttribution`; tests inject unlisted + PII |
-| Manifesto + #2115 handoff pinned by hash | YES | `9e0679be0989768c2d374432427dcd6c37db9d46a5f05a640e9562e5a055785c` |
+| Manifesto + #2115 handoff pinned by hash | YES | `acd21cdf7bd71f5bde06a7887e50f4054cd19aeaacce908cb84d679a796246e8` (2026-10-24 technical HOLD reassessment; 54 remain 410, 11 mappings unchanged) |
 | Zero chain/loop/soft-404 on priority crawl of **targets** | YES | built artifact crawl |
 | Live SmartLic 301s | NOT THIS PR | SmartLic#2115 after this hash |
 | DNS/TLS/cutover | **BLOCKED** | Railway fallback 404; www TLS SAN mismatch |

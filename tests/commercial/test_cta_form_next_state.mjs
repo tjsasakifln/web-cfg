@@ -95,13 +95,9 @@ for (const form of forms) {
 // campos opcionais da fase preparatoria, autorizados pela excecao datada da
 // politica de campos. Antes: 14 formularios sem nota; hub sem id e sem opcao.
 const NOJS_NOTE_TEXT = "Sem JavaScript, este formulário não envia";
-// Pilares congelados (unlock-plan, html_mutation_authorized=false) que ainda nao
-// publicam a nota: pendencia datada 2026-09-19 (BOFU-FECHAMENTO, #705); o
-// normalizador nao os toca ate a cadeia de recaptura. Um pilar que ganhar a
-// nota sai daqui pela propria assercao (a lista e exata, nao um allowlist aberto).
-const frozenWithoutNote = new Set(
-  unlockPlan.html_mutation_authorized === true ? [] : ["/diagnostico-pre-licitacao/"],
-);
+// O plano continua protegendo a mutação automática dos pilares; isso não
+// isenta nenhuma rota de publicar a nota no-JS já aprovada no HTML entregue.
+const frozenWithoutNote = new Set();
 for (const surface of report.surfaces) {
   const html = fs.readFileSync(surface.file, "utf8");
   const withoutNoscript = html.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, " ");

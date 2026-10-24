@@ -9,3 +9,5 @@ Hash-pinned decision table for web-cfg#62 / SmartLic#2115.
 | `execute-set.v2.json` | compiled 11 ready 301s + HOLD fail-closed list + default 410 |
 
 `data/migration/smartlic-confenge/manifesto.v1.json` is written with **identical bytes** so the SmartLic bridge vendors one pin. Rebuild only through `python3 scripts/legacy_equity/build_inventory.py`.
+
+The current technical HOLD reassessment is [HOLD-REVIEW-2026-10-24](../../../docs/migrations/smartlic/HOLD-REVIEW-2026-10-24.md). It keeps HOLD rows at 410 and is not a bridge approval or cutover.

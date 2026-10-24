@@ -165,7 +165,7 @@ export function verifyQualification({ record, expected }) {
       `the qualification records ${JSON.stringify(record.terminal_state)}; only MEASURED_PASS authorises a promotion`,
     );
   }
-  if (record.acceptance_result && record.acceptance_result !== "PASSED") {
+  if (record.acceptance_result !== "PASSED") {
     refusals.push(`the acceptance recorded ${JSON.stringify(record.acceptance_result)}`);
   }
   if (!Array.isArray(record.evidence) || record.evidence.length === 0) {
