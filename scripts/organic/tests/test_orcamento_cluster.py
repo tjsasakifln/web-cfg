@@ -34,6 +34,10 @@ from scripts.organic.service_map import (  # noqa: E402
     html_has_commercial_bridge,
     map_content_to_service,
 )
+from scripts.organic.apply_orcamento_cluster_rewrite import (  # noqa: E402
+    page_empreitada,
+    patch_sinapi,
+)
 from scripts.organic.sinapi_snippet import evaluate_sinapi_snippet  # noqa: E402
 from scripts.site.public_copy_scope import visible_text  # noqa: E402
 
@@ -294,6 +298,46 @@ def test_proposal_cta_rejects_lost_action_privacy_form_or_false_upload():
             changed = decoded_html.replace(old, new)
         assert changed != decoded_html
         assert expected in _proposal_cta_failures(changed, row["service_path"]), expected
+
+
+def test_priority_conversion_ctas_match_their_canonical_generator():
+    """Keep the two Search Console-prioritized CTAs stable on regeneration."""
+    routes = (
+        (
+            "empreitada-preco-global-preco-unitario",
+            page_empreitada,
+            "/diagnostico-pre-licitacao/#captura-pilar",
+        ),
+        (
+            "sinapi-desonerado-nao-desonerado",
+            patch_sinapi,
+            "/auditoria-orcamento-licitacao/#captura-pilar",
+        ),
+    )
+    for slug, handler, service_form in routes:
+        html = read_shipped_html(slug)
+        assert handler(html) == html, slug
+        block = re.search(
+            r'<section class="lead-inline" id="diagnostico-confenge".*?</section>', html, re.S
+        )
+        assert block, slug
+        decoded = unquote(block.group(0))
+        assert service_form in block.group(0), slug
+        assert 'data-journey="edital"' in block.group(0), slug
+        assert "Contexto opcional:" in decoded, slug
+        assert "Prazo ou data da sessão" in decoded, slug
+        assert "Etapa ou decisão que preciso tomar" in decoded, slug
+        assert "Documentos disponíveis" in decoded, slug
+        assert "material confidencial, combinamos o envio reservado" in decoded, slug
+        assert "Solicitar proposta fica para a etapa seguinte" not in decoded, slug
+
+    sinapi = read_shipped_html("sinapi-desonerado-nao-desonerado")
+    for cta_id in ("cta-pos-resposta", "cta-pos-documentos"):
+        cta = re.search(rf'<aside class="[^"]+" id="{cta_id}".*?</aside>', sinapi, re.S)
+        assert cta, cta_id
+        decoded = unquote(cta.group(0))
+        assert "Contexto opcional:" in decoded, cta_id
+        assert "protocolo" not in decoded.lower(), cta_id
 
 
 def test_revalidated_source_manifest_has_freshness_and_limitations():

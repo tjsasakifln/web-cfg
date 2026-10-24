@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
@@ -179,6 +180,37 @@ def cta(
     return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>{visible_heading}</strong><p>{body} {document_step}</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">{visible_wa_label}</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{form}">Continuar pelo formulário</a></div></section>"""
 
 
+def qualified_whatsapp_url(request: str, documents: str) -> str:
+    """Build a contextual WhatsApp starter without asking for file uploads."""
+    from urllib.parse import quote
+
+    message = (
+        f"Olá, CONFENGE. {request}\n\n"
+        "Contexto opcional:\n"
+        "- Prazo ou data da sessão: ___\n"
+        "- Etapa ou decisão que preciso tomar: ___\n"
+        f"- Documentos disponíveis ({documents}): ___\n\n"
+        "Para material confidencial, combinamos o envio reservado."
+    )
+    return "https://wa.me/5548988344559?text=" + quote(message)
+
+
+def proposal_cta(
+    *,
+    journey: str,
+    theme: str,
+    origin: str,
+    service_path: str,
+    heading: str,
+    body: str,
+    request: str,
+    documents: str,
+    label: str,
+) -> str:
+    wa_url = qualified_whatsapp_url(request, documents)
+    return f'''<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>{heading}</strong><p>{body}</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">{label}</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{service_path}#captura-pilar" data-tema="{theme}" data-origem="{origin}">Continuar pelo formulário</a></div></section>'''
+
+
 def decision(wa: str, body: str) -> str:
     from urllib.parse import quote
 
@@ -192,8 +224,8 @@ def decision(wa: str, body: str) -> str:
 
 
 def toc(links: list[tuple[str, str]]) -> str:
-    anchors = "".join(f'<a href="{href}">{label}</a>' for href, label in links)
-    return f'<nav aria-label="Nesta página" class="article-toc"><strong>Nesta página</strong>{anchors}</nav>'
+    items = "".join(f'<li><a href="{href}">{label}</a></li>' for href, label in links)
+    return f'<nav aria-label="Nesta página" class="article-toc"><strong>Nesta página</strong><ol>{items}</ol></nav>'
 
 
 def callout(title: str, body: str) -> str:
@@ -771,7 +803,7 @@ def page_empreitada(html: str) -> str:
 <li>Não deixar memória do risco de quantidade na proposta global.</li>
 </ul>
 </section>
-{cta(slug, "edital", "Preço global ou unitário: o risco de quantidade", "Olá, CONFENGE. Quero conferir o regime de execução e o risco de quantitativo do edital.", "Enviar minuta e planilha", "Comparamos medição, quantitativo do projeto original e o que realmente vira aditivo.", "Enviar minuta no WhatsApp")}
+{proposal_cta(journey="edital", theme="Preço global ou unitário: o risco de quantidade", origin="/conteudos/empreitada-preco-global-preco-unitario/", service_path="/diagnostico-pre-licitacao/", heading="Solicitar proposta de diagnóstico pré-licitação", body="Verificamos o regime de execução, o quantitativo do projeto e o risco que pode afetar a proposta, para organizar a decisão antes do envio. Você pode começar com o contexto disponível; para material confidencial, combinamos o canal reservado.", request="Quero solicitar uma proposta de diagnóstico pré-licitação para conferir o regime de execução e o risco de quantitativo.", documents="edital, planilha, projeto ou matriz", label="Solicitar proposta no WhatsApp")}
 {decision("Olá, CONFENGE. Preciso analisar o regime de empreitada (preço global ou unitário) deste edital.", "Vale quando o projeto tem quantitativo frouxo, o edital mistura linguagem de global com planilha unitária, ou a equipe está precificando o regime errado.")}
 {faq(faqs)}
 {sources(
@@ -1386,17 +1418,34 @@ def patch_sinapi(html: str) -> str:
             citation_pair,
             1,
         )
+    after_answer = f'''<aside class="lead-inline lead-inline-soft" id="cta-pos-resposta" aria-label="Próximo passo após a resposta"><div class="lead-inline-copy"><span>Depois da resposta</span><strong>Pedir proposta de revisão do orçamento</strong><p>Peça a proposta com o contexto que já tiver. A revisão confronta edital, planilha, data-base, encargos e BDI para indicar a base aplicável, os desvios relevantes e a decisão que precisa ser tomada antes do envio da proposta. Para material confidencial, combinamos o canal reservado.</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="after_answer" data-content-cluster="orcamento-bdi" data-journey="edital" href="{qualified_whatsapp_url('Quero pedir uma proposta de revisão do orçamento para conferir SINAPI desonerado ou não desonerado, encargos e BDI.', 'edital, planilha, projeto')}" rel="noopener" target="_blank">Pedir proposta de revisão do orçamento</a><a class="button button-secondary" data-cta-position="after_answer" data-destination-type="form" data-journey="edital" href="/auditoria-orcamento-licitacao/#captura-pilar" data-tema="SINAPI desonerado ou não desonerado" data-origem="/conteudos/sinapi-desonerado-nao-desonerado/">Continuar pelo formulário</a></div></aside>'''
+    after_documents = f'''<aside class="lead-inline" id="cta-pos-documentos" aria-label="CTA após documentos"><div class="lead-inline-copy"><span>Com os documentos em mãos</span><strong>Solicitar proposta</strong><p>Peça a proposta de revisão com o contexto disponível. Para material confidencial, combinamos o canal reservado antes do envio de edital, planilha ou projeto.</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="after_documents" data-content-cluster="orcamento-bdi" data-journey="edital" href="{qualified_whatsapp_url('Quero pedir uma proposta de revisão do orçamento para conferir SINAPI desonerado ou não desonerado, encargos e BDI.', 'edital, planilha, projeto')}" rel="noopener" target="_blank">Solicitar proposta</a><a class="button button-secondary" data-cta-position="after_documents" data-journey="edital" href="/auditoria-orcamento-licitacao/">Ver serviço de auditoria</a></div></aside>'''
+    html = re.sub(
+        r'<aside class="lead-inline lead-inline-soft" id="cta-pos-resposta".*?</aside>',
+        after_answer,
+        html,
+        count=1,
+        flags=re.S,
+    )
+    html = re.sub(
+        r'<aside class="lead-inline" id="cta-pos-documentos".*?</aside>',
+        after_documents,
+        html,
+        count=1,
+        flags=re.S,
+    )
     html = re.sub(
         r'<section class="lead-inline" id="diagnostico-confenge".*?</section>',
-        cta(
-            "sinapi-desonerado-nao-desonerado",
-            "edital",
-            "SINAPI desonerado ou não desonerado",
-            "Olá, CONFENGE. Quero conferir a base SINAPI e os encargos desta proposta.",
-            "Solicitar canal seguro para envio",
-            "Confrontamos edital, data-base, encargos e BDI sem misturar tabelas.",
-            "Solicitar canal seguro para envio no WhatsApp",
-            "Pedir proposta de revisão do orçamento",
+        proposal_cta(
+            journey="edital",
+            theme="SINAPI desonerado ou não desonerado",
+            origin="/conteudos/sinapi-desonerado-nao-desonerado/",
+            service_path="/auditoria-orcamento-licitacao/",
+            heading="Pedir proposta de revisão do orçamento",
+            body="Confrontamos edital, data-base, encargos e BDI sem misturar tabelas. Você pode pedir a proposta com as informações já disponíveis; para material confidencial, combinamos o canal reservado.",
+            request="Quero pedir uma proposta de revisão do orçamento para conferir SINAPI desonerado ou não desonerado, encargos e BDI.",
+            documents="edital, planilha, projeto",
+            label="Pedir proposta de revisão do orçamento",
         ),
         html,
         count=1,
@@ -1418,8 +1467,16 @@ HANDLERS = {
 }
 
 
-def main() -> int:
-    for slug, handler in HANDLERS.items():
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Rewrite orçamento cluster content pages.")
+    parser.add_argument("--slug", action="append", choices=sorted(HANDLERS))
+    args = parser.parse_args(argv)
+    handlers = (
+        ((slug, HANDLERS[slug]) for slug in args.slug)
+        if args.slug
+        else HANDLERS.items()
+    )
+    for slug, handler in handlers:
         path = ROOT / "conteudos" / slug / "index.html"
         original = path.read_text(encoding="utf-8")
         updated = handler(original)
