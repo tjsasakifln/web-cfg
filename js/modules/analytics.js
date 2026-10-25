@@ -304,6 +304,7 @@
   const looksLikePiiValue = (raw, key) => {
     if (typeof raw !== 'string' || !raw) return false;
     const inspected = decodeForInspection(raw);
+    if (inspected.malformed || inspected.exhausted) return true;
     const val = inspected.decoded;
     if (typeof val !== 'string' || !val) return false;
     if (/@/.test(val)) return true;

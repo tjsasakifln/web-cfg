@@ -180,11 +180,13 @@ for (const unsafePath of ["/contato/ana%40example.test/", "/contato/ana%2540exam
     process.exit(1);
   }
 }
-track("whatsapp_click", { page_path: "/", topic: "ana%2540example.test" });
-const encodedParam = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
-if (encodedParam.topic) {
-  console.error("FAIL: double-encoded PII parameter leaked", encodedParam);
-  process.exit(1);
+for (const unsafeTopic of ["ana%2540example.test", "ana%40example.test%ZZ", "ana%2525252540example.test"]) {
+  track("whatsapp_click", { page_path: "/", topic: unsafeTopic });
+  const encodedParam = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+  if (encodedParam.topic) {
+    console.error("FAIL: encoded or malformed PII parameter leaked", { unsafeTopic, encodedParam });
+    process.exit(1);
+  }
 }
 if (/gtag|plausible/.test(analyticsSource)) {
   console.error("FAIL: DEFER analytics source must not forward to third parties");

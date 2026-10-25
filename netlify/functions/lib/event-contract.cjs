@@ -182,6 +182,7 @@ function looksLikePiiValue(value, key) {
   if (typeof value !== "string") return false;
   if (looksLikeDecodedPiiValue(value, key)) return true;
   const inspected = decodeForInspection(value);
+  if (inspected.malformed || inspected.exhausted) return true;
   return inspected.decoded !== value && looksLikeDecodedPiiValue(inspected.decoded, key);
 }
 

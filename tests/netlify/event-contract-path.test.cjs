@@ -80,6 +80,8 @@ test("encoded PII in any other analytics string property fails closed", () => {
   for (const topic of [
     "ana%40example.test",
     "ana%2540example.test",
+    "ana%40example.test%ZZ",
+    "ana%2525252540example.test",
     "%35%35%34%38%39%39%39%39%39%39%39%39%39",
   ]) {
     const admitted = contract.admitEvent(event({ props: { topic } }));
