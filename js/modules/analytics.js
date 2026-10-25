@@ -448,9 +448,9 @@
     preference.className = 'container footer-analytics-preference';
     preference.textContent = 'Medição opcional com Google Analytics para entender o uso agregado do site. ';
     const accept = document.createElement('button');
-    accept.type = 'button'; accept.className = 'button button-primary'; accept.textContent = 'Permitir Google Analytics';
+    accept.type = 'button'; accept.className = 'button button-secondary'; accept.textContent = 'Permitir Google Analytics';
     const deny = document.createElement('button');
-    deny.type = 'button'; deny.className = 'button button-primary'; deny.textContent = 'Não permitir';
+    deny.type = 'button'; deny.className = 'button button-secondary'; deny.textContent = 'Não permitir';
     const privacy = document.createElement('a');
     privacy.href = '/privacidade/'; privacy.textContent = 'Saiba mais na privacidade';
     const render = () => { const granted = gaConsent() === 'granted'; accept.hidden = granted; deny.textContent = granted ? 'Desativar Google Analytics' : 'Não permitir'; };
