@@ -37,6 +37,7 @@ PACKAGE_JSON = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 NVMRC = ROOT / ".nvmrc"
 REVOPS_SCHEDULED = WORKFLOWS_DIR / "revops-scheduled.yml"
+CONTACT_QA = WORKFLOWS_DIR / "contact-qa.yml"
 PYTHON_REQUIREMENTS = ROOT / "requirements-ci.txt"
 UI_GEOMETRY = ROOT / "scripts" / "site" / "test_ui_geometry.mjs"
 TOOLS_UIUX = ROOT / "scripts" / "site" / "verify_tools_uiux_e2e.mjs"
@@ -478,6 +479,61 @@ def test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed():
         raise AssertionError("revops scheduler must enforce the Node engine floor")
     if re.search(r"npm ci[^\n]*\|\|\s*npm install", text):
         raise AssertionError("revops scheduler must not hide a broken lock with npm install")
+
+
+def test_contact_qa_supports_explicit_no_email_proof():
+    """The production proof defaults to no notification and cannot force e-mail."""
+    text = _read(CONTACT_QA)
+    errors: list[str] = []
+    dispatch = _event_block(text, "workflow_dispatch")
+    if not re.search(
+        r"(?ms)^\s{6}verify_email:\s*$.*?^\s{8}required:\s*true\s*$.*?^\s{8}default:\s*false\s*$.*?^\s{8}type:\s*boolean\s*$",
+        dispatch,
+    ):
+        errors.append("verify_email must remain a required boolean whose safe default is false")
+    for needle in (
+        "scenario:",
+        "default: priority-aditivo",
+        "- priority-aditivo",
+        "- legacy-sst",
+    ):
+        if needle not in dispatch:
+            errors.append(f"contact proof fixed scenario input missing {needle}")
+
+    gate = _step_block(_job_block(text, "contact-proof"), "Require exact main revision and explicit proof mode")
+    if gate is None:
+        errors.append("contact proof must validate the selected notification mode")
+    else:
+        for needle in (
+            "VERIFY_EMAIL: ${{ inputs.verify_email }}",
+            "SCENARIO: ${{ inputs.scenario }}",
+            'true|false) ;;',
+            "priority-aditivo:false|legacy-sst:true) ;;",
+            'test "$EXPECTED_SHA" = "$RELEASE_SHA"',
+            'test "$RELEASE_REF" = refs/heads/main',
+        ):
+            if needle not in gate:
+                errors.append(f"contact proof mode/revision gate missing {needle}")
+
+    probe = _step_block(_job_block(text, "contact-proof"), "Prove persistence, safe handoff and optional isolated QA email")
+    if probe is None:
+        errors.append("contact proof probe step is missing")
+    else:
+        for needle in (
+            "VERIFY_EMAIL: ${{ inputs.verify_email }}",
+            "SCENARIO: ${{ inputs.scenario }}",
+            "true) export PROBE_VERIFY_EMAIL=1 ;;",
+            "false) export PROBE_VERIFY_EMAIL=0 ;;",
+            "priority-aditivo) export PROBE_SCENARIO=priority-aditivo PROBE_PAGE_PATH=/aditivos-obras-publicas/ ;;",
+            "legacy-sst) export PROBE_SCENARIO=legacy-sst PROBE_PAGE_PATH=/ ;;",
+            "node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br",
+        ):
+            if needle not in probe:
+                errors.append(f"contact proof safe-mode mapping missing {needle}")
+        if re.search(r'(?m)^\s+PROBE_VERIFY_EMAIL:\s*["\']?1["\']?\s*$', probe):
+            errors.append("contact proof must not force the email-enabled probe mode")
+
+    assert not errors, "contact QA no-email shape failures:\n- " + "\n- ".join(errors)
 
 
 def test_ci_supply_chain_is_pinned():
@@ -957,6 +1013,7 @@ def main() -> int:
         test_pseo_shape,
         test_node_pins_match_runtime_baseline,
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
+        test_contact_qa_supports_explicit_no_email_proof,
         test_ci_supply_chain_is_pinned,
         test_merge_workflows_have_no_path_skip,
         test_legacy_netlify_preview_cannot_skip_main_commits,

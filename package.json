@@ -40,7 +40,7 @@
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
     "test:priority-pages": "python3 -m pytest scripts/site/test_priority_pages_commercial.py -q",
     "test:priority-contact": "node scripts/site/test_priority_contact_journey.mjs",
-    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs && node scripts/site/test_qa_email_probe.mjs && node scripts/site/test_synthetic_lead_probe_qa_email.mjs && node scripts/site/test_specialized_contact_proof.mjs --unit-only && npm run test:adaptive-intake && npm run test:private-readiness && node scripts/site/test_market_research_capture.mjs",
+    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs && node scripts/site/test_qa_email_probe.mjs && node scripts/site/test_synthetic_lead_probe_qa_email.mjs && node scripts/site/test_specialized_contact_proof.mjs --unit-only && node scripts/site/test_priority_aditivo_contact_proof.mjs --unit-only && npm run test:adaptive-intake && npm run test:private-readiness && node scripts/site/test_market_research_capture.mjs",
     "test:specialized-contact-proof": "node scripts/site/test_specialized_contact_proof.mjs",
     "test:lead-turnstile-timeout": "node scripts/site/test_lead_turnstile_timeout.mjs",
     "test:synthetic-probe-page-context": "node scripts/site/test_synthetic_lead_probe_page_context.mjs",

@@ -72,7 +72,7 @@ const server = http.createServer((req, res) => {
       return;
     }
     if (action === "system_health") {
-      send(res, 200, { ok: true, counts_by_kind: { synthetic: created ? 6 : 5 } });
+      send(res, 200, { ok: true, counts_by_kind: { real: 2, synthetic: created ? 6 : 5, qa: 1 } });
       return;
     }
     if (action === "weekly_report") {
@@ -83,6 +83,10 @@ const server = http.createServer((req, res) => {
       const requested = url.searchParams.get("lead_id");
       send(res, 200, {
         ok: true,
+        counters: {
+          persisted_leads: created ? 9 : 8, pending: 0, delivered: created ? 8 : 7,
+          retryable: 0, retries: 1, permanent_failures: 0, skipped: 1, blocked: 0, dead: 0,
+        },
         configuration: { contract: "READY", destination_fingerprint: "WARMBLY_PRODUCTION_V1" },
         safety_gate: { ok: true, contract: "READY", auto_send_off: true, dispatch_attempted: false },
         receipt: created && requested === receiptId ? {

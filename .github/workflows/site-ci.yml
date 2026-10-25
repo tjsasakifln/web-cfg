@@ -247,6 +247,7 @@ jobs:
           npm run test:contact-journeys
           npm run test:priority-contact
           npm run test:specialized-contact-proof
+          node scripts/site/test_priority_aditivo_contact_proof.mjs
       - name: Money asset canary browser e2e
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

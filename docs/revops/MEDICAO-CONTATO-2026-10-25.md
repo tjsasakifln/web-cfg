@@ -78,7 +78,7 @@ Testes do backend executados em Linux/WSL com Node 22.23.4, armazenamento tempor
 - `npm run test:lead-function`: passou, com 119 verificações principais e suítes de probes, intake e prontidão.
 - `npm run test:inbound-handoff`: 34 verificações passaram, incluindo persistência anterior ao encaminhamento, repetição sem segundo POST, falha temporária, timeout e rejeição de autorização.
 - `npm run test:lead-store-production`: passou, incluindo 64 operações concorrentes, migração e snapshots no backend filesystem.
-- `npm run test:workflow-gates`: 18 verificações passaram em Linux. O fixture de shell não é portável ao Windows.
+- `npm run test:workflow-gates`: 19 verificações passaram em Linux após incluir o modo produtivo sem e-mail. O fixture de shell não é portável ao Windows.
 
 Validação final com Node 22.23.4:
 
@@ -88,6 +88,7 @@ Validação final com Node 22.23.4:
 - `npm run test:priority-pages`: 4 testes passaram.
 - `npm run test:priority-contact`: passou em Chrome, nas cinco páginas a 390 e 1440 px. A jornada artigo → formulário → handlers reais confirmou validação, contexto, persistência, resposta perdida, reenvio com o mesmo recibo, ausência de duplicação e recebimento no coletor isolado. Foram duas requisições de contato para um registro e 14 lotes analíticos observados, sem PII do formulário nem erros JavaScript.
 - `npm run test:secrets-scan`: passou, 439 arquivos examinados; `git diff --check` sem erros.
+- Evidências de medição anteriores foram recapturadas para os arquivos autorizados, mantendo comparações exatas e histórico. A captura real de primeira tela foi refeita em checkout limpo do commit `c2fc250f15a142ba6b35fe600aec81ed4fb1dd1e`, com Chrome e Node 22: 25/25 rotas passaram e `test:first-fold-contract` passou 1.942 verificações. Nenhum hash de medição visual foi simplesmente substituído sem nova captura.
 
 As telas iniciais e os trechos de contato foram inspecionados em celular e computador. URLs, títulos, descrições, canônicas e links internos foram conferidos; não houve mudança de endereço ou redirecionamento. A revisão crítica final encerrou o achado de PII com dupla codificação após correção e teste.
 
@@ -96,6 +97,10 @@ Testes com armazenamento isolado e serviços substitutos comprovam a implementa�
 A publicação foi expressamente autorizada pelo usuário em 25/10/2026, que exigiu encerramento somente após validação adversarial e comprovação em produção. A `main` dispara o processo de release Netcup. O resultado da publicação, o SHA efetivamente servido e as evidências posteriores à implantação são registrados no [PR #753](https://github.com/tjsasakifln/web-cfg/pull/753). Só os testes locais acima não satisfazem essa etapa.
 
 A comprovação de persistência em produção deve usar o mecanismo existente de registros sintéticos, excluídos da carteira e dos indicadores comerciais, com notificações e e-mail desabilitados. A evidência precisa confirmar a exclusão, a ausência de efeitos comerciais e a idempotência, além do recibo. A identificação autorizada do fluxo web Google permanece dependente de acesso à configuração; não se deve converter essa ausência em confirmação de ingestão.
+
+O workflow existente `contact-qa.yml` recebeu o cenário fechado `priority-aditivo`, obrigatoriamente com `verify_email=false`. Ele observa o artigo e o formulário publicados sem fazer POST pelo navegador e depois executa o probe autenticado. O endpoint privado Ops calcula um SHA-256 sobre sete campos técnicos do registro durável, somente para o probe sintético autenticado desta rota. A prova compara esse hash com o contexto do navegador, confirma o mesmo recibo no reenvio e confronta os totais agregados antes/depois. Os testes locais usam os handlers reais de lead e Ops e comprovam falha quando a jornada é adulterada no armazenamento. A revisão adversarial encerrou esse achado após a correção.
+
+O recibo do Warmbly comprova aceitação do transporte, sem `action_id`, sob o bloqueio de envio automático. O contrato atual não oferece releitura da classificação armazenada dentro do Warmbly; a prova não deve alegar essa observação. As evidências disponíveis são o payload sintético, o recibo, a ausência de acionamento e os totais comerciais antes/depois.
 
 Para reverter antes da publicação, descartar a ramificação de trabalho sem tocar a `main` ou o checkout anterior. Depois de publicação autorizada, usar o procedimento de rollback por SHA em `docs/ops/ROLLBACK.md` e `deploy/netcup/README.md`, apontando para a release anterior verificada. A reversão de arquivos não deve apagar ou reescrever `/var/lib/confenge-web`.
 

@@ -1,10 +1,10 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "08ce53927ea222d9ba6bcfb7dc9f788c1264bb89",
-  "recaptured_at": "2026-10-25T01:03:06-03:00",
-  "recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: recaptura autorizada dos bytes da versão 08ce53927ea222d9ba6bcfb7dc9f788c1264bb89. Em #captura-pilar de medições, o pedido passou a declarar que preserva o contexto de medição ou glosa e que documentos complementares podem seguir depois se necessários. script.js e js/modules/analytics.js foram recapturados porque seus bytes também mudaram na mesma versão autorizada; os gates seguem conferindo os hashes exatos. Não há nova aprovação técnica ou revisão humana alegada.",
-  "html_mutation": true,
+  "baseline_commit": "c2fc250f15a142ba6b35fe600aec81ed4fb1dd1e",
+  "recaptured_at": "2026-10-25T04:15:45.311458Z",
+  "recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: fechamento adversarial do filtro de privacidade. O modulo analytics e seu bundle passam a rejeitar codificacao malformada ou alem de quatro decodificacoes, antes do dataLayer e da coleta. Testes de Analytics e montagem deterministica passaram. Recaptura somente dos dois hashes de JavaScript alterados; HTML, historia e demais comparacoes exatas preservados. Sem alegar nova revisao humana.",
+  "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
     "medicoes-glosas-obras-publicas": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-    "script.js": "6aa3df18274d9dfc26239efabcb30298c186566d691df7385f95ca8da6549865",
+    "script.js": "4c8fdf21892593e122b5d73b99ce17c5290968e01532592290dda42bffd28aee",
     "styles.css": "ac595c5713c77021dc6e6383e6fbc76f1e8c0f98a0f9d4ef1743b124a067bc92",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
@@ -30,9 +30,9 @@
     "sitemap-index.xml": "b8a6d437ea21491ed4d08fce547d7676a2461f602713ffdce895706b426ca883",
     "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "dfb864474f618ea9b390523a68b39cf992c85c47e63224d32ff7ad4a6a7d2ce6"
+    "js/modules/analytics.js": "e7519eeaeaa16c5f7270ae02890de81d5c881d6cb3e6c620323dbe34d63406ab"
   },
-  "previous_baseline_commit": "5ce39ac747bf457f49223504838f33cc6830dd22",
+  "previous_baseline_commit": "08ce53927ea222d9ba6bcfb7dc9f788c1264bb89",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -623,6 +623,42 @@
         "js/modules/analytics.js": "eec045b901ddad08bdd71e910c1ff8a41b9479a443c0f9da9a3fe43657a889b0"
       },
       "previous_baseline_commit": "c0cb2c3ac58b5dd737aa00462e03c2ff3ed2c2c7"
+    },
+    {
+      "schema": "bofu_frozen_hashes/v1",
+      "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
+      "baseline_commit": "08ce53927ea222d9ba6bcfb7dc9f788c1264bb89",
+      "recaptured_at": "2026-10-25T01:03:06-03:00",
+      "recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: recaptura autorizada dos bytes da versão 08ce53927ea222d9ba6bcfb7dc9f788c1264bb89. Em #captura-pilar de medições, o pedido passou a declarar que preserva o contexto de medição ou glosa e que documentos complementares podem seguir depois se necessários. script.js e js/modules/analytics.js foram recapturados porque seus bytes também mudaram na mesma versão autorizada; os gates seguem conferindo os hashes exatos. Não há nova aprovação técnica ou revisão humana alegada.",
+      "html_mutation": true,
+      "pillars": {
+        "aditivos-obras-publicas": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+        "medicoes-glosas-obras-publicas/index.html": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "6aa3df18274d9dfc26239efabcb30298c186566d691df7385f95ca8da6549865",
+        "styles.css": "ac595c5713c77021dc6e6383e6fbc76f1e8c0f98a0f9d4ef1743b124a067bc92",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "d77ed9e6cb903601ed269eb4a9005f8e460b65fe615987c797e02cadda4e9cab",
+        "sitemap.txt": "e9ed88130605a1439c78c012a7ef99c424182ccedecc766424db44c31979c670",
+        "sitemap-index.xml": "b8a6d437ea21491ed4d08fce547d7676a2461f602713ffdce895706b426ca883",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "dfb864474f618ea9b390523a68b39cf992c85c47e63224d32ff7ad4a6a7d2ce6"
+      },
+      "previous_baseline_commit": "5ce39ac747bf457f49223504838f33cc6830dd22"
     }
   ]
 }

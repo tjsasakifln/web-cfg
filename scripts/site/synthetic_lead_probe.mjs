@@ -15,6 +15,11 @@ import {
   specializedQaWireContextSha256,
   validateSpecializedQaJourney,
 } from "./synthetic_contact_journey.mjs";
+import {
+  PRIORITY_ADITIVO_FORM_PATH,
+  priorityAditivoContextSha256,
+  validatePriorityAditivoJourney,
+} from "./synthetic_priority_aditivo_journey.mjs";
 
 const blockedProbe = Symbol("controlled_probe_block");
 const CONTEXT_FIELDS = ["asset_id", "cta_id", "route_family", "jornada", "estagio", "origem"];
@@ -90,6 +95,8 @@ const opsToken = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
 const expectedSha = String(process.env.EXPECTED_SHA || "").trim();
 const verifyQaEmailRaw = String(process.env.PROBE_VERIFY_EMAIL || "").trim();
 const verifyQaEmail = verifyQaEmailRaw === "1";
+const probeScenario = String(process.env.PROBE_SCENARIO || "").trim();
+const priorityAditivoScenario = probeScenario === "priority-aditivo";
 const stamp = Date.now();
 // Ordinary probes remain random. The authorized QA-email probe instead uses a
 // stable HMAC so a rerun cannot create another delivery.
@@ -123,6 +130,10 @@ if (opsToken.length < 16) finishEarly("ops_token_missing_or_short");
 if (verifyQaEmailRaw && !["0", "1"].includes(verifyQaEmailRaw)) {
   finishEarly("probe_verify_email_opt_in_invalid");
 }
+if (probeScenario && !["priority-aditivo", "legacy-sst"].includes(probeScenario)) {
+  finishEarly("probe_scenario_invalid");
+}
+if (priorityAditivoScenario && verifyQaEmail) finishEarly("priority_aditivo_email_forbidden");
 if (verifyQaEmail && !/^[0-9a-f]{40}$/.test(expectedSha)) {
   finishEarly("qa_expected_release_sha_required");
 }
@@ -177,6 +188,35 @@ function syntheticCounters(system, weekly) {
   return { ok: errors.length === 0, errors, synthetic: errors.length ? null : synthetic, excluded: errors.length ? null : excluded };
 }
 
+function operationalSnapshot(system, inbound) {
+  const kindKeys = ["real", "synthetic", "qa"];
+  const handoffKeys = [
+    "persisted_leads", "pending", "delivered", "retryable", "retries",
+    "permanent_failures", "skipped", "blocked", "dead",
+  ];
+  const errors = [];
+  if (system.http !== 200 || system.data?.ok !== true) errors.push("system_health_unavailable");
+  if (inbound.http !== 200 || inbound.data?.ok !== true) errors.push("inbound_handoff_unavailable");
+  const kinds = system.data?.counts_by_kind;
+  const handoff = inbound.data?.counters;
+  for (const key of kindKeys) {
+    if (!Number.isInteger(kinds?.[key]) || kinds[key] < 0) errors.push(`record_kind_count_invalid:${key}`);
+  }
+  for (const key of handoffKeys) {
+    if (!Number.isInteger(handoff?.[key]) || handoff[key] < 0) errors.push(`handoff_count_invalid:${key}`);
+  }
+  return {
+    ok: errors.length === 0,
+    errors,
+    snapshot: errors.length
+      ? null
+      : {
+          leads_by_kind: Object.fromEntries(kindKeys.map((key) => [key, kinds[key]])),
+          handoff: Object.fromEntries(handoffKeys.map((key) => [key, handoff[key]])),
+        },
+  };
+}
+
 function sameJson(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
@@ -212,6 +252,8 @@ if (
 const beforeCommercial = commercialSnapshot(beforeFunnel, beforeWeekly);
 const beforeCounters = syntheticCounters(beforeSystem, beforeWeekly);
 if (!beforeCommercial.ok || !beforeCounters.ok) finishEarly("commercial_baseline_metrics_invalid");
+const beforeOperational = operationalSnapshot(beforeSystem, beforeInbound);
+if (!beforeOperational.ok) finishEarly("operational_baseline_metrics_invalid");
 
 // Optional page context (2026-09-16): a published capture form can be proved
 // with the attribution its hidden fields would send, so the durable synthetic
@@ -296,9 +338,14 @@ if (pagePath) {
 // SHA all match the literal fixture in synthetic_contact_journey.mjs.
 const browserFixturePath = String(process.env.PROBE_BROWSER_CONTEXT_FILE || "").trim();
 let browserJourney = null;
+let browserContextSha256 = null;
 let technicalContextSha256 = null;
 let wireContextSha256 = null;
 if (verifyQaEmail && !browserFixturePath) finishEarly("qa_browser_fixture_required");
+if (priorityAditivoScenario && !browserFixturePath) finishEarly("priority_browser_fixture_required");
+if (priorityAditivoScenario && pagePath !== PRIORITY_ADITIVO_FORM_PATH) {
+  finishEarly("priority_probe_page_path_mismatch");
+}
 if (browserFixturePath) {
   let parsed;
   let raw = "";
@@ -309,11 +356,16 @@ if (browserFixturePath) {
   }
   if (Buffer.byteLength(raw, "utf8") > 32 * 1024) finishEarly("browser_fixture_too_large");
   try { parsed = JSON.parse(raw); } catch { finishEarly("browser_fixture_unreadable"); }
-  const validated = validateSpecializedQaJourney(parsed, expectedSha);
+  const validated = priorityAditivoScenario
+    ? validatePriorityAditivoJourney(parsed, expectedSha)
+    : validateSpecializedQaJourney(parsed, expectedSha);
   if (!validated.ok) finishEarly(validated.reason);
   browserJourney = parsed;
-  technicalContextSha256 = validated.context_sha256;
-  wireContextSha256 = specializedQaWireContextSha256(validated.context);
+  browserContextSha256 = validated.context_sha256;
+  technicalContextSha256 = priorityAditivoScenario ? null : validated.context_sha256;
+  wireContextSha256 = priorityAditivoScenario
+    ? null
+    : specializedQaWireContextSha256(validated.context);
   if (!servedForm) finishEarly("browser_fixture_requires_served_form");
   if (["asset_id", "cta_id", "route_family"].some((key) => servedForm[key] !== validated.context[key])) {
     finishEarly("browser_fixture_capture_identity_mismatch");
@@ -390,6 +442,7 @@ const [receiptOps, afterFunnel, afterSystem, afterWeekly] = await Promise.all([
 const receipt = receiptOps.data?.receipt;
 const afterCommercial = commercialSnapshot(afterFunnel, afterWeekly);
 const afterCounters = syntheticCounters(afterSystem, afterWeekly);
+const afterOperational = operationalSnapshot(afterSystem, receiptOps);
 const beforeSynthetic = beforeCounters.synthetic;
 const afterSynthetic = afterCounters.synthetic;
 const beforeExcluded = beforeCounters.excluded;
@@ -422,6 +475,7 @@ const checks = {
   excluded_non_real_exactly_once: afterCounters.ok && afterExcluded - beforeExcluded === 1,
   commercial_snapshot_after_valid: afterCommercial.ok,
   synthetic_counters_after_valid: afterCounters.ok,
+  operational_snapshot_after_valid: afterOperational.ok,
   commercial_metrics_unchanged: beforeCommercial.ok && afterCommercial.ok && sameJson(beforeCommercial.snapshot, afterCommercial.snapshot),
   commercial_contract_real_only: afterFunnel.data?.commercial_only === true && afterWeekly.data?.commercial_only === true,
   // O contexto da pagina (asset_id/route_family/cta_id) tem de chegar ao registro
@@ -434,8 +488,20 @@ const checks = {
   served_form_context_persisted: !servedForm || ["asset_id", "route_family", "cta_id"].every(
     (key) => !servedForm[key] || receipt?.[key] === servedForm[key],
   ),
-  ...(browserJourney
+  ...(browserJourney && priorityAditivoScenario
     ? {
+        // The private ops API computes this digest from the durable row. A
+        // local re-hash of the outbound payload would not prove persistence.
+        priority_aditivo_context_persisted:
+          /^[0-9a-f]{64}$/.test(String(receipt?.priority_aditivo_context_sha256 || "")) &&
+          receipt?.priority_aditivo_context_sha256 === browserContextSha256,
+        priority_aditivo_context_hash_valid:
+          browserContextSha256 === priorityAditivoContextSha256(pageContext),
+        priority_aditivo_email_disabled:
+          !verifyQaEmail && receipt?.delivery?.qa_email_status !== "ok",
+      }
+    : browserJourney
+      ? {
         specialized_context_persisted: SPECIALIZED_QA_CONTEXT_KEYS.every(
           (key) => (receipt?.technical_context?.[key] ?? null) === (pageContext[key] ?? null),
         ),
@@ -444,8 +510,8 @@ const checks = {
           /^[0-9a-f]{64}$/.test(String(wireContextSha256 || "")) &&
           receipt?.technical_context_sha256 === technicalContextSha256 &&
           receipt?.handoff?.technical_context_sha256 === wireContextSha256,
-      }
-    : {}),
+        }
+      : {}),
   ...(verifyQaEmail
     ? {
         qa_email_delivered: receipt?.delivery?.qa_email_status === "ok",
@@ -460,11 +526,13 @@ console.log(JSON.stringify({
   state: ok ? "TRANSPORT_READY" : "TRANSPORT_PROOF_FAILED",
   base,
   live_sha: liveSha,
+  scenario: probeScenario || (verifyQaEmail ? "legacy-sst" : "standard"),
   page_context: Object.keys(pageContext).length ? pageContext : null,
   page_path: pagePath || null,
   served_form: servedForm,
   persisted_context: receipt?.technical_context || (receipt ? { asset_id: receipt.asset_id || null, route_family: receipt.route_family || null, cta_id: receipt.cta_id || null } : null),
   technical_context_sha256: technicalContextSha256,
+  browser_context_sha256: browserContextSha256,
   handoff_context_sha256: wireContextSha256,
   receipt_sha256: leadId ? createHash("sha256").update(leadId).digest("hex") : null,
   ...(verifyQaEmail
@@ -485,6 +553,10 @@ console.log(JSON.stringify({
   deltas: {
     persisted_synthetic: Number.isFinite(afterSynthetic - beforeSynthetic) ? afterSynthetic - beforeSynthetic : null,
     excluded_non_real: Number.isFinite(afterExcluded - beforeExcluded) ? afterExcluded - beforeExcluded : null,
+  },
+  aggregates: {
+    before: beforeOperational.snapshot,
+    after: afterOperational.snapshot,
   },
   checks,
   ts: new Date().toISOString(),

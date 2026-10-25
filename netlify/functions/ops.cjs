@@ -81,6 +81,7 @@ const {
   requeueEligibleHandoffs,
   specializedQaTechnicalContext,
   specializedQaTechnicalContextSha256,
+  priorityAditivoPersistedContextSha256,
 } = require("./lib/inbound-handoff.cjs");
 const {
   loadInboundBacklogDecision,
@@ -1131,6 +1132,7 @@ exports.handler = async (event) => {
     const technicalContextSha256 = technicalContext
       ? specializedQaTechnicalContextSha256(requestedLead)
       : null;
+    const priorityAditivoContextSha256 = priorityAditivoPersistedContextSha256(requestedLead);
     const configuration = {
       webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
@@ -1166,6 +1168,9 @@ exports.handler = async (event) => {
               asset_id: requestedLead.asset_id || null,
               route_family: requestedLead.route_family || null,
               cta_id: requestedLead.cta_id || null,
+              ...(priorityAditivoContextSha256
+                ? { priority_aditivo_context_sha256: priorityAditivoContextSha256 }
+                : {}),
               ...(technicalContext
                 ? {
                     technical_context: technicalContext,

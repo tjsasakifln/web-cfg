@@ -47,6 +47,14 @@ const SPECIALIZED_QA_CONTEXT = Object.freeze({
   source_origin_route_family: "assistencia-tecnica-pericia-trabalhista",
   tema: "Assistência técnica trabalhista em SST",
 });
+const PRIORITY_ADITIVO_CONTEXT_KEYS = Object.freeze([
+  "asset_id", "cta_id", "route_family", "jornada", "estagio", "origem", "landing_page",
+]);
+const PRIORITY_ADITIVO_CONTEXT_ANCHOR = Object.freeze({
+  asset_id: "aditivos-obras-publicas",
+  cta_id: "aditivos-obras-publicas-handraise",
+  route_family: "aditivos",
+});
 const DEFAULT_TIMEOUT_MS = 8000;
 const DEFAULT_MAX_ATTEMPTS = 8;
 const HMAC_SKEW_MS = 5 * 60 * 1000;
@@ -129,6 +137,29 @@ function specializedQaWireTechnicalContextSha256(record) {
     SPECIALIZED_QA_WIRE_CONTEXT_KEYS.map((key) => [key, context[key]]),
   );
   return crypto.createHash("sha256").update(JSON.stringify(projection)).digest("hex");
+}
+
+/**
+ * Digest of the seven technical fields as they exist in the durable record.
+ *
+ * The authenticated ops response deliberately exposes only the digest, never
+ * the values. The three literal anchors keep this from becoming a general
+ * hash oracle over arbitrary lead fields; the remaining four fields are left
+ * as persisted so any storage drift produces a different digest rather than
+ * being hidden by validation against the expected browser fixture.
+ */
+function priorityAditivoPersistedContextSha256(record) {
+  if (
+    !record || record.record_kind !== "synthetic" ||
+    record.synthetic_probe_authenticated !== true ||
+    record.next_action !== "exclude_from_commercial" ||
+    Object.entries(PRIORITY_ADITIVO_CONTEXT_ANCHOR).some(([key, expected]) => record[key] !== expected)
+  ) return null;
+  const context = {};
+  for (const key of PRIORITY_ADITIVO_CONTEXT_KEYS) {
+    context[key] = record[key] == null || record[key] === "" ? null : String(record[key]);
+  }
+  return crypto.createHash("sha256").update(JSON.stringify(context)).digest("hex");
 }
 function getFetch() {
   return _fetchOverride || globalThis.fetch;
@@ -1662,6 +1693,7 @@ module.exports = {
   specializedQaTechnicalContext,
   specializedQaTechnicalContextSha256,
   specializedQaWireTechnicalContextSha256,
+  priorityAditivoPersistedContextSha256,
   qaTechnicalContextSha256FromSerializedPayload,
   mapLeadToInboundV1,
   mapAdaptiveLeadToNetNewInbound,

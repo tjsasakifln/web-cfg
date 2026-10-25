@@ -213,12 +213,16 @@ const server = http.createServer((req, res) => {
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
     if (action === "funnel") return json(res, 200, { ok: true, commercial_only: true, funnel: { counts: zeroCounts, pipeline_value: 0, revenue: 0 } });
-    if (action === "system_health") return json(res, 200, { ok: true, counts_by_kind: { synthetic: created ? 6 : 5 } });
+    if (action === "system_health") return json(res, 200, { ok: true, counts_by_kind: { real: 2, synthetic: created ? 6 : 5, qa: 1 } });
     if (action === "weekly_report") return json(res, 200, { ok: true, commercial_only: true, leads_total: 0, leads_new_7d: 0, leads_excluded_non_real: created ? 6 : 5, system_health: { pipeline_real: 0, revenue_real: 0 } });
     if (action === "inbound_handoff") {
       const requested = url.searchParams.get("lead_id");
       return json(res, 200, {
         ok: true,
+        counters: {
+          persisted_leads: created ? 9 : 8, pending: 0, delivered: created ? 8 : 7,
+          retryable: 0, retries: 1, permanent_failures: 0, skipped: 1, blocked: 0, dead: 0,
+        },
         configuration: { contract: "READY", destination_fingerprint: "WARMBLY_PRODUCTION_V1" },
         safety_gate: { ok: true, contract: "READY", auto_send_off: true, dispatch_attempted: false },
         receipt: created && requested === RECEIPT ? {
