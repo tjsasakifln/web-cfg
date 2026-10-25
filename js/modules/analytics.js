@@ -445,7 +445,7 @@
     if (!footer || document.getElementById('confenge-analytics-preference')) return;
     const preference = document.createElement('p');
     preference.id = 'confenge-analytics-preference';
-    preference.className = 'footer-analytics-preference';
+    preference.className = 'container footer-analytics-preference';
     preference.textContent = 'Medição opcional com Google Analytics para entender o uso agregado do site. ';
     const accept = document.createElement('button');
     accept.type = 'button'; accept.className = 'button button-primary'; accept.textContent = 'Permitir Google Analytics';
