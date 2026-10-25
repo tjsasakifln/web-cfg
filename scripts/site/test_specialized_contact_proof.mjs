@@ -212,6 +212,10 @@ const server = http.createServer((req, res) => {
   if (url.pathname === "/.well-known/build-info.json") return json(res, 200, { commit: SHA });
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
+    if (action === "analytics_summary") return json(res, 200, {
+      ok: true, events_loaded: 0,
+      aggregate: { generated_at: "2026-10-25T12:00:00.000Z", daily: [] },
+    });
     if (action === "funnel") return json(res, 200, { ok: true, commercial_only: true, funnel: { counts: zeroCounts, pipeline_value: 0, revenue: 0 } });
     if (action === "system_health") return json(res, 200, { ok: true, counts_by_kind: { real: 2, synthetic: created ? 6 : 5, qa: 1 } });
     if (action === "weekly_report") return json(res, 200, { ok: true, commercial_only: true, leads_total: 0, leads_new_7d: 0, leads_excluded_non_real: created ? 6 : 5, system_health: { pipeline_real: 0, revenue_real: 0 } });

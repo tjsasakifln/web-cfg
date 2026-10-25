@@ -165,6 +165,38 @@ def sync_home_sheet(root: Path, *, check: bool = False) -> bool:
     return False
 
 
+def sync_home_runtime_buttons(root: Path, assembled: str, *, check: bool = False) -> bool:
+    """Keep existing light-button rules for controls inserted after HTML load.
+
+    The home subset omits selectors absent from static index.html. Analytics
+    preferences are inserted by script.js, so their existing button variant
+    must be copied from the canonical stylesheet rather than redefined here.
+    """
+    home_base = root / "assets" / "home-base.css"
+    if not home_base.is_file():
+        return False
+    begin = "/* BEGIN home runtime button variants */"
+    end = "/* END home runtime button variants */"
+    rules = re.findall(r"\.button-light(?::hover)?\{[^{}]+\}", assembled)
+    if len(rules) != 2:
+        raise ValueError("expected canonical light button and hover rules")
+    current = home_base.read_text(encoding="utf-8")
+    block = begin + "\n" + "\n".join(rules) + "\n" + end
+    if begin in current:
+        prefix, rest = current.split(begin, 1)
+        if end not in rest:
+            raise ValueError("incomplete home runtime button marker")
+        _, tail = rest.split(end, 1)
+        updated = prefix + block + tail
+    else:
+        updated = current.rstrip() + "\n" + block + "\n"
+    if updated == current:
+        return False
+    if not check:
+        home_base.write_text(updated, encoding="utf-8", newline="\n")
+    return True
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="fail if styles.css is stale")
@@ -180,6 +212,9 @@ def main() -> int:
         if sync_home_sheet(ROOT, check=True):
             print("FAIL assets/home-10x.css is stale against assets/editorial.css; run python3 scripts/site/build_css.py")
             return 1
+        if sync_home_runtime_buttons(ROOT, assembled, check=True):
+            print("FAIL assets/home-base.css runtime button variants are stale; run python3 scripts/site/build_css.py")
+            return 1
         stale = sync_route_subsets(ROOT, check=True)
         if stale:
             print(f"FAIL route subsets stale against assets/editorial.css: {', '.join(stale)}; run python3 scripts/site/build_css.py")
@@ -188,6 +223,8 @@ def main() -> int:
         return 0
     if sync_home_sheet(ROOT):
         print("wrote assets/home-10x.css (editorial route sheet synced)")
+    if sync_home_runtime_buttons(ROOT, assembled):
+        print("wrote assets/home-base.css (runtime button variants synced)")
     for rel in sync_route_subsets(ROOT):
         print(f"wrote {rel} (route subset of assets/editorial.css)")
     if current != assembled:

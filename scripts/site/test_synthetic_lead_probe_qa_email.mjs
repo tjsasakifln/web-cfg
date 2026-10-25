@@ -59,6 +59,13 @@ const server = http.createServer((req, res) => {
   }
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
+    if (action === "analytics_summary") {
+      send(res, 200, {
+        ok: true, events_loaded: 0,
+        aggregate: { generated_at: "2026-10-25T12:00:00.000Z", daily: [] },
+      });
+      return;
+    }
     if (action === "funnel") {
       send(res, 200, { ok: true, commercial_only: true, funnel: { counts: zeroCounts, pipeline_value: 0, revenue: 0 } });
       return;

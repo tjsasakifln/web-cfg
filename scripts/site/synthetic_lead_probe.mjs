@@ -8,6 +8,7 @@
  */
 import { createHash, createHmac, randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { parse } from "parse5";
 import {
   SPECIALIZED_QA_CONTEXT_KEYS,
@@ -22,6 +23,10 @@ import {
 } from "./synthetic_priority_aditivo_journey.mjs";
 
 const blockedProbe = Symbol("controlled_probe_block");
+const require = createRequire(import.meta.url);
+const { admittedNames } = require("../../netlify/functions/lib/event-contract.cjs");
+const ANALYTICS_EVENT_NAMES = new Set(admittedNames());
+const ANALYTICS_LOOKBACK_DAYS = 14;
 const CONTEXT_FIELDS = ["asset_id", "cta_id", "route_family", "jornada", "estagio", "origem"];
 const ATTRIBUTION_FIELDS = ["asset_id", "cta_id", "route_family"];
 const CONTEXT_VALUE = /^[\w./:-]{1,120}$/;
@@ -217,6 +222,95 @@ function operationalSnapshot(system, inbound) {
   };
 }
 
+function analyticsSnapshot(summary) {
+  const errors = [];
+  if (summary.http !== 200 || summary.data?.ok !== true) errors.push("analytics_summary_unavailable");
+  const eventsLoaded = summary.data?.events_loaded;
+  const aggregate = summary.data?.aggregate;
+  const generatedAt = aggregate?.generated_at;
+  const daily = aggregate?.daily;
+  if (!Number.isInteger(eventsLoaded) || eventsLoaded < 0) errors.push("analytics_events_loaded_invalid");
+  if (!aggregate || typeof aggregate !== "object" || Array.isArray(aggregate)) errors.push("analytics_aggregate_invalid");
+  if (!Array.isArray(daily)) errors.push("analytics_daily_invalid");
+  const generatedAtMs = Date.parse(generatedAt || "");
+  if (!Number.isFinite(generatedAtMs)) errors.push("analytics_generated_at_invalid");
+  const earliestDay = Number.isFinite(generatedAtMs)
+    ? new Date(generatedAtMs - ANALYTICS_LOOKBACK_DAYS * 864e5).toISOString().slice(0, 10)
+    : null;
+  const generatedDay = Number.isFinite(generatedAtMs)
+    ? new Date(generatedAtMs).toISOString().slice(0, 10)
+    : null;
+
+  const counts = {};
+  const days = [];
+  let admittedTotal = 0;
+  if (Array.isArray(daily)) {
+    for (const row of daily) {
+      const day = row?.day;
+      const parsedDay = /^\d{4}-\d{2}-\d{2}$/.test(day || "")
+        ? new Date(`${day}T00:00:00Z`)
+        : null;
+      const validDay = parsedDay && !Number.isNaN(parsedDay.valueOf()) &&
+        parsedDay.toISOString().slice(0, 10) === day;
+      if (!validDay) errors.push("analytics_day_invalid");
+      if (validDay && (day < earliestDay || day > generatedDay)) {
+        errors.push("analytics_day_outside_window");
+      }
+      const byEvent = row?.by_event;
+      if (!byEvent || typeof byEvent !== "object" || Array.isArray(byEvent)) {
+        errors.push("analytics_by_event_invalid");
+        continue;
+      }
+      let rowTotal = 0;
+      for (const [name, count] of Object.entries(byEvent)) {
+        if (!ANALYTICS_EVENT_NAMES.has(name)) errors.push(`analytics_event_name_invalid:${name}`);
+        if (!Number.isInteger(count) || count < 0) {
+          errors.push(`analytics_event_count_invalid:${name}`);
+          continue;
+        }
+        if (ANALYTICS_EVENT_NAMES.has(name)) counts[name] = (counts[name] || 0) + count;
+        rowTotal += count;
+      }
+      if (!Number.isInteger(row?.events) || row.events < 0 || row.events !== rowTotal) {
+        errors.push("analytics_daily_total_invalid");
+      }
+      admittedTotal += rowTotal;
+      if (validDay) days.push(day);
+    }
+  }
+  if (Number.isInteger(eventsLoaded) && admittedTotal > eventsLoaded) {
+    errors.push("analytics_admitted_total_exceeds_loaded");
+  }
+  if (errors.length) return { ok: false, errors, snapshot: null };
+  days.sort();
+  const status = eventsLoaded === 0
+    ? "NO_EVENTS_IN_WINDOW"
+    : days.length === 0
+      ? "NO_ADMITTED_EVENTS_IN_WINDOW"
+      : "AGGREGATED_EVENTS_PRESENT";
+  return {
+    ok: true,
+    errors: [],
+    snapshot: {
+      events_loaded: eventsLoaded,
+      counts_by_event: Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b))),
+      coverage: {
+        lookback_days: ANALYTICS_LOOKBACK_DAYS,
+        all_time: false,
+        events_loaded_unit: "event_records_not_visitors",
+        backend_loader_limits: {
+          filesystem: "all_rows_within_window",
+          legacy: "up_to_200_blobs_per_day",
+        },
+        generated_at: new Date(generatedAt).toISOString(),
+        event_day_start: days[0] || null,
+        event_day_end: days.at(-1) || null,
+        status,
+      },
+    },
+  };
+}
+
 function sameJson(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
@@ -226,11 +320,12 @@ const liveSha = String(build.data?.commit || "");
 if (build.http !== 200 || !/^[0-9a-f]{40}$/.test(liveSha)) finishEarly("live_build_identity_missing");
 if (expectedSha && liveSha !== expectedSha) finishEarly("live_build_identity_mismatch");
 
-const [beforeFunnel, beforeSystem, beforeWeekly, beforeInbound] = await Promise.all([
+const [beforeFunnel, beforeSystem, beforeWeekly, beforeInbound, beforeAnalytics] = await Promise.all([
   ops("funnel"),
   ops("system_health"),
   ops("weekly_report"),
   ops("inbound_handoff"),
+  ops("analytics_summary"),
 ]);
 const safety = beforeInbound.data?.safety_gate;
 const safeToProbe = Boolean(
@@ -254,6 +349,8 @@ const beforeCounters = syntheticCounters(beforeSystem, beforeWeekly);
 if (!beforeCommercial.ok || !beforeCounters.ok) finishEarly("commercial_baseline_metrics_invalid");
 const beforeOperational = operationalSnapshot(beforeSystem, beforeInbound);
 if (!beforeOperational.ok) finishEarly("operational_baseline_metrics_invalid");
+const analytics = analyticsSnapshot(beforeAnalytics);
+if (!analytics.ok) finishEarly("analytics_summary_invalid");
 
 // Optional page context (2026-09-16): a published capture form can be proved
 // with the attribution its hidden fields would send, so the durable synthetic
@@ -558,6 +655,7 @@ console.log(JSON.stringify({
     before: beforeOperational.snapshot,
     after: afterOperational.snapshot,
   },
+  analytics_summary: analytics.snapshot,
   checks,
   ts: new Date().toISOString(),
 }));

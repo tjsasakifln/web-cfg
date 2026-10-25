@@ -290,3 +290,7 @@ code,pre,kbd,samp,[data-opaque-token]{overflow-wrap:anywhere;word-break:break-wo
 .site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
 @media (prefers-reduced-motion:reduce){.site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{transition:none}}
 /* END css-modules:cfg10x-12 */
+/* BEGIN home runtime button variants */
+.button-light{color:var(--navy-950);background:#fff;box-shadow:0 14px 32px rgba(0,0,0,.15)}
+.button-light:hover{box-shadow:var(--shadow)}
+/* END home runtime button variants */

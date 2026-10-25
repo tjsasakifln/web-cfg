@@ -11,6 +11,7 @@ let requestCount = 0;
 let metricsMode = "valid";
 let counterMode = "valid";
 let inboundCounterMode = "valid";
+let analyticsMode = "valid";
 
 const zeroCounts = {
   visitor: 0,
@@ -39,6 +40,33 @@ const server = http.createServer((req, res) => {
   }
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
+    if (action === "analytics_summary") {
+      const invalid = analyticsMode !== "valid";
+      send(res, 200, {
+        ok: true,
+        events_loaded: 4,
+        aggregate: {
+          generated_at: "2026-10-25T12:00:00.000Z",
+          daily: invalid
+            ? [{
+                day: analyticsMode === "old-day"
+                  ? "2026-10-10"
+                  : analyticsMode === "future-day"
+                    ? "2026-10-26"
+                    : "2026-10-24",
+                events: 1,
+                by_event: analyticsMode === "invalid-schema" ? { not_in_registry: 1 } : { page_view: 1 },
+              }]
+            : [
+                { day: "2026-10-23", events: 3, by_event: { page_view: 2, cta_click: 1 } },
+                { day: "2026-10-24", events: 1, by_event: { lead_form_start: 1 } },
+              ],
+          funnel_by_path: [{ path: "/ana%40example.test/raw-path-must-not-escape" }],
+        },
+        attribution_cohorts: [{ sid: "sess-private-cohort-must-not-escape" }],
+      });
+      return;
+    }
     if (action === "funnel") {
       const badMetrics = metricsMode === "before-invalid" || (metricsMode === "after-invalid" && created);
       const status = metricsMode === "after-funnel-http" && created ? 503 : 200;
@@ -203,6 +231,27 @@ try {
   assert.equal(proof.aggregates.before.handoff.delivered, 7);
   assert.equal(proof.aggregates.after.handoff.delivered, 8);
   assert.equal(proof.aggregates.after.handoff.permanent_failures, 0);
+  assert.deepEqual(proof.analytics_summary, {
+    events_loaded: 4,
+    counts_by_event: { cta_click: 1, lead_form_start: 1, page_view: 2 },
+    coverage: {
+      lookback_days: 14,
+      all_time: false,
+      events_loaded_unit: "event_records_not_visitors",
+      backend_loader_limits: {
+        filesystem: "all_rows_within_window",
+        legacy: "up_to_200_blobs_per_day",
+      },
+      generated_at: "2026-10-25T12:00:00.000Z",
+      event_day_start: "2026-10-23",
+      event_day_end: "2026-10-24",
+      status: "AGGREGATED_EVENTS_PRESENT",
+    },
+  });
+  assert.equal(result.stdout.includes("raw-path-must-not-escape"), false);
+  assert.equal(result.stdout.includes("private-cohort-must-not-escape"), false);
+  assert.equal(result.stdout.includes("ana%40example.test"), false, "encoded PII path must not enter proof output");
+  assert.equal(result.stdout.includes("sess-private"), false, "cohort/session IDs must not enter proof output");
   for (const privateField of ["commercial_metrics", "pipeline_value", "revenue", "counters_before", "counters_after"]) {
     assert.equal(Object.hasOwn(proof, privateField), false, `${privateField} must not be exported`);
     assert.equal(result.stdout.includes(`\"${privateField}\"`), false, `${privateField} must not appear in stdout`);
@@ -210,6 +259,36 @@ try {
   assert.equal(Object.hasOwn(proof, "before"), false, "raw before response must not be exported");
   assert.equal(Object.hasOwn(proof, "after"), false, "raw after response must not be exported");
   assert.equal(Object.values(proof.checks).every(Boolean), true);
+
+  created = false;
+  analyticsMode = "invalid-schema";
+  const beforeInvalidAnalyticsPosts = postCount;
+  const invalidAnalytics = await runProbe(base, {
+    LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters",
+    OPS_TOKEN: "ops-fixture-token-at-least-16",
+    EXPECTED_SHA: "a".repeat(40),
+    PROBE_VERIFY_EMAIL: "0",
+  });
+  assert.equal(invalidAnalytics.code, 1, invalidAnalytics.stdout || invalidAnalytics.stderr);
+  assert.equal(JSON.parse(invalidAnalytics.stdout).reason, "analytics_summary_invalid");
+  assert.equal(postCount, beforeInvalidAnalyticsPosts, "invalid analytics schema must block before POST");
+  analyticsMode = "valid";
+
+  for (const invalidWindowMode of ["old-day", "future-day"]) {
+    created = false;
+    analyticsMode = invalidWindowMode;
+    const beforeInvalidWindowPosts = postCount;
+    const invalidWindow = await runProbe(base, {
+      LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters",
+      OPS_TOKEN: "ops-fixture-token-at-least-16",
+      EXPECTED_SHA: "a".repeat(40),
+      PROBE_VERIFY_EMAIL: "0",
+    });
+    assert.equal(invalidWindow.code, 1, invalidWindow.stdout || invalidWindow.stderr);
+    assert.equal(JSON.parse(invalidWindow.stdout).reason, "analytics_summary_invalid");
+    assert.equal(postCount, beforeInvalidWindowPosts, `${invalidWindowMode} analytics day must block before POST`);
+  }
+  analyticsMode = "valid";
 
   created = false;
   inboundCounterMode = "before-invalid";
