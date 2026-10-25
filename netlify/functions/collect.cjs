@@ -164,8 +164,13 @@ async function persistAnalyticsBlobs(accepted, event) {
         duplicates.push(analyticsEvent);
       } else {
         safeLog("warn", "analytics_store_skip", { reason: "write_failed" });
-        if (eventId) failures.push(analyticsEvent);
-        else persisted.push(analyticsEvent);
+        // A write exception is never proof of persistence. This used to count
+        // events without an event_id as accepted, so the collector could reply
+        // 202 after setJSON had failed and silently lose the measurement. Keep
+        // the row retryable and return the same fail-closed 503 used for an
+        // identified event. (The production filesystem adapter already follows
+        // this rule; this closes the legacy/preview adapter gap.)
+        failures.push(analyticsEvent);
       }
     }
   }

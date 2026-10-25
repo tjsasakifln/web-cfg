@@ -4,7 +4,7 @@
 (() => {
   const normalize = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-  /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
+  /** Analytics bus — no PII, first-party collector only. */
   // EVENT_CONTRACT_CLIENT_START — keep in lockstep with netlify/functions/lib/event-registry.json
   const EVENT_CONTRACT_SCHEMA_VERSION = '1.3.0';
   const EVENT_SOURCE = 'CONFENGE_WEB';
@@ -169,8 +169,12 @@
   };
   const analyticsQueue = [];
   const ANALYTICS_FLUSH_DELAY_MS = 30000;
+  const MAX_ANALYTICS_QUEUE = 100;
+  const MAX_ANALYTICS_RETRIES = 3;
   let analyticsFlushTimer = null;
+  let analyticsFlushInFlight = false;
   let volatileSessionId = '';
+  let analyticsEventSequence = 0;
   const trackedEventIds = new Set();
   const sessionHexFromSeed = (seed) => {
     const text = String(seed || 'confenge-session');
@@ -214,9 +218,28 @@
     }
   };
   window.confengeSessionId = getSessionId;
-  const flushAnalytics = () => {
+  const newAnalyticsEventId = () => `evt-${newSessionSeed()}-${++analyticsEventSequence}`.slice(0, 80);
+  const scheduleAnalyticsFlush = () => {
+    if (!analyticsQueue.length || analyticsFlushTimer || analyticsFlushInFlight) return;
+    const delay = analyticsQueue.length >= 10 ? 0 : ANALYTICS_FLUSH_DELAY_MS;
+    analyticsFlushTimer = setTimeout(flushAnalytics, delay);
+  };
+  const requeueAnalytics = (batch) => {
+    const retryable = batch.filter((item) => item.retries < MAX_ANALYTICS_RETRIES);
+    if (!retryable.length) return;
+    retryable.forEach((item) => { item.retries += 1; });
+    analyticsQueue.unshift(...retryable);
+    if (analyticsQueue.length > MAX_ANALYTICS_QUEUE) analyticsQueue.length = MAX_ANALYTICS_QUEUE;
+    scheduleAnalyticsFlush();
+  };
+  const flushAnalytics = ({ pagehide = false } = {}) => {
+    if (analyticsFlushTimer) clearTimeout(analyticsFlushTimer);
     analyticsFlushTimer = null;
-    if (!analyticsQueue.length || typeof window.fetch !== 'function') return;
+    if (analyticsDenied()) {
+      analyticsQueue.length = 0;
+      return;
+    }
+    if (!analyticsQueue.length || analyticsFlushInFlight || typeof window.fetch !== 'function') return;
     const batch = analyticsQueue.splice(0, 25);
     const body = JSON.stringify({
       events: batch.map((e) => ({
@@ -227,18 +250,32 @@
       })),
     });
     const url = '/api/web/collect';
-    try {
-      if (navigator.sendBeacon) {
-        const blob = new Blob([body], { type: 'application/json' });
-        if (navigator.sendBeacon(url, blob)) return;
-      }
-    } catch (_) { /* fall through */ }
+    if (pagehide) {
+      try {
+        if (navigator.sendBeacon) {
+          const blob = new Blob([body], { type: 'application/json' });
+          if (navigator.sendBeacon(url, blob)) return;
+        }
+      } catch (_) { /* fall through to fetch */ }
+    }
+    analyticsFlushInFlight = true;
     fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body,
       keepalive: true,
-    }).catch(() => { /* never break UX */ });
+    }).then((response) => {
+      // Client errors are final for this batch; retry only a missing response
+      // or a server-side/transient failure with the same event_id values.
+      if (!response || !Number.isFinite(response.status) || response.status >= 500) {
+        requeueAnalytics(batch);
+      }
+    }).catch(() => {
+      requeueAnalytics(batch);
+    }).finally(() => {
+      analyticsFlushInFlight = false;
+      scheduleAnalyticsFlush();
+    });
   };
   const resolveTrackedName = (raw) => {
     const name = String(raw || '').slice(0, 64);
@@ -253,7 +290,21 @@
     if (!ADMITTED_EVENTS[canonical]) return { ok: false, reason: 'unknown_event', name };
     return { ok: true, original: name, canonical };
   };
-  const looksLikePiiValue = (val, key) => {
+  const decodeForInspection = (value, maxRounds = 4) => {
+    let decoded = String(value || '');
+    for (let round = 0; round < maxRounds; round += 1) {
+      if (!decoded.includes('%')) return { decoded, malformed: false, exhausted: false };
+      let next = '';
+      try { next = decodeURIComponent(decoded); } catch (_) { return { decoded, malformed: true, exhausted: false }; }
+      if (next === decoded) return { decoded, malformed: false, exhausted: false };
+      decoded = next;
+    }
+    return { decoded, malformed: false, exhausted: /%[0-9a-f]{2}/i.test(decoded) };
+  };
+  const looksLikePiiValue = (raw, key) => {
+    if (typeof raw !== 'string' || !raw) return false;
+    const inspected = decodeForInspection(raw);
+    const val = inspected.decoded;
     if (typeof val !== 'string' || !val) return false;
     if (/@/.test(val)) return true;
     const k = String(key || '').toLowerCase();
@@ -281,6 +332,18 @@
     if (/^\+?\d{10,15}$/.test(compact)) return true;
     if (/^\d{14}$/.test(val.trim())) return true;
     return false;
+  };
+  const safePagePath = (value) => {
+    if (typeof value !== 'string') return '';
+    // A page path is an aggregate route, never a URL/query/hash carrier. In
+    // particular, a supplied page_path must not turn a contact query into an
+    // analytics property.
+    const pathname = value.split(/[?#]/, 1)[0].trim();
+    if (!pathname || !pathname.startsWith('/') || pathname.startsWith('//') || pathname.length > 180) return '';
+    const inspected = decodeForInspection(pathname);
+    const decoded = inspected.decoded;
+    if (inspected.malformed || inspected.exhausted || !decoded || decoded.startsWith('//') || /[\\\u0000-\u001f\u007f]/.test(decoded)) return '';
+    return looksLikePiiValue(pathname, 'page_path') ? '' : pathname;
   };
   const analyticsDenied = () => {
     try {
@@ -313,17 +376,24 @@
         if (val == null || val === '') return;
         const piiKey = String(key).toLowerCase();
         if (PII_PARAM_PATTERN.test(piiKey)) return;
+        if (piiKey === 'page_path') {
+          const pagePath = safePagePath(val);
+          if (pagePath) safe.page_path = pagePath;
+          return;
+        }
         const entityPattern = ENTITY_ID_PATTERNS[piiKey];
         if (entityPattern && (typeof val !== 'string' || !entityPattern.test(val))) {
           invalidEntityId = true;
           return;
         }
+        if (!['string', 'number', 'boolean'].includes(typeof val)) return;
+        if (typeof val === 'number' && !Number.isFinite(val)) return;
         if (typeof val === 'string' && val.length > 180) return;
         if (looksLikePiiValue(val, key)) return;
         safe[key] = val;
       });
       if (invalidEntityId) return;
-      safe.page_path = safe.page_path || (window.location.pathname || '/');
+      safe.page_path = safe.page_path || safePagePath(window.location.pathname) || '/';
       safe.session_id = getSessionId();
       safe.source = EVENT_SOURCE;
       safe.schema_version = EVENT_CONTRACT_SCHEMA_VERSION;
@@ -342,20 +412,16 @@
           trackedEventIds.delete(first);
         }
         safe.event_id = eid;
+      } else {
+        safe.event_id = newAnalyticsEventId();
+        trackedEventIds.add(safe.event_id);
       }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: resolved.canonical, ...safe });
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', resolved.canonical, safe);
-      }
-      if (typeof window.plausible === 'function') {
-        window.plausible(resolved.canonical, { props: safe });
-      }
-      analyticsQueue.push({ eventName: resolved.canonical, safe });
+      analyticsQueue.push({ eventName: resolved.canonical, safe, retries: 0 });
+      if (analyticsQueue.length > MAX_ANALYTICS_QUEUE) analyticsQueue.shift();
       if (analyticsQueue.length >= 10) flushAnalytics();
-      else if (!analyticsFlushTimer) {
-        analyticsFlushTimer = setTimeout(flushAnalytics, ANALYTICS_FLUSH_DELAY_MS);
-      }
+      else scheduleAnalyticsFlush();
       if (window.CONFENGE_DEBUG_ANALYTICS) {
         // eslint-disable-next-line no-console
         console.info('[confenge:analytics]', resolved.canonical, safe);
@@ -369,7 +435,7 @@
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') flushAnalytics();
     });
-    window.addEventListener('pagehide', flushAnalytics);
+    window.addEventListener('pagehide', () => flushAnalytics({ pagehide: true }));
   } catch (_) { /* ignore */ }
 
   /** Field Core Web Vitals (LCP, INP, CLS, TTFB) — anonymous aggregates only */

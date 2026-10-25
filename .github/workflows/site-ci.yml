@@ -175,6 +175,7 @@ jobs:
       - name: Contact and lead pathway gates
         run: |
           npm run test:form-funnel
+          npm run test:priority-pages
           npm run test:cta-form-next-state
           npm run test:lead-function
       - name: INB-15 strict regression on the candidate tree
@@ -244,6 +245,7 @@ jobs:
           SITE_ROOT: _site
         run: |
           npm run test:contact-journeys
+          npm run test:priority-contact
           npm run test:specialized-contact-proof
       - name: Money asset canary browser e2e
         env:

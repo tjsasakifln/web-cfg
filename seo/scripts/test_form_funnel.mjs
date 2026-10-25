@@ -21,6 +21,16 @@ if (!formSource.includes("lead_id: protocol")) {
   console.error("FAIL: persisted analytics does not carry the server receipt id");
   process.exit(1);
 }
+for (const needle of ["let submissionInFlight = false", "if (submissionInFlight)", "submissionInFlight = true", "submissionInFlight = false"]) {
+  if (!formSource.includes(needle)) {
+    console.error("FAIL: receipt submission guard source missing", needle);
+    process.exit(1);
+  }
+}
+if (/data-lead-success[\s\S]{0,300}track\('lead_form_success'/.test(formSource)) {
+  console.error("FAIL: thank-you page must not emit a success without a server receipt");
+  process.exit(1);
+}
 for (const needle of ["validationCategory", "validation_category: 'rate_limited'"]) {
   if (!formSource.includes(needle)) {
     console.error("FAIL: form validation category source missing", needle);
@@ -375,9 +385,14 @@ for (const key of ["field", "field_value", "native_message"]) {
     addEventListener() {},
   };
   const store = {};
+  let storageBlocked = false;
   const runtimeWindow = {
     dataLayer: runtimeDataLayer,
-    sessionStorage: { getItem: (k) => store[k] ?? null, setItem(k, v) { store[k] = String(v); }, removeItem(k) { delete store[k]; } },
+    sessionStorage: {
+      getItem(k) { if (storageBlocked) throw new Error("storage blocked"); return store[k] ?? null; },
+      setItem(k, v) { if (storageBlocked) throw new Error("storage blocked"); store[k] = String(v); },
+      removeItem(k) { if (storageBlocked) throw new Error("storage blocked"); delete store[k]; },
+    },
     matchMedia: () => ({ matches: false }),
     location: { pathname: "/", search: "", hash: "", assign() {} },
     document: docMock,
@@ -385,7 +400,10 @@ for (const key of ["field", "field_value", "native_message"]) {
     innerHeight: 800,
     innerWidth: 1280,
     scrollY: 0,
-    fetch(url, init) { fetchCalls.push({ url, init }); return new Promise(() => {}); },
+    fetch(url, init) {
+      fetchCalls.push({ url, init });
+      return new Promise((resolve) => { runtimeWindow.resolveInitialPost = resolve; });
+    },
     turnstile: { resets: 0, reset() { this.resets += 1; } },
     CONFENGE_DEBUG_ANALYTICS: false,
   };
@@ -428,6 +446,10 @@ for (const key of ["field", "field_value", "native_message"]) {
   }
   if (prevented !== 1) runtimeFail("progressive enhancement must intercept the native submit exactly once", prevented);
   if (!submitBtn.disabled) runtimeFail("double-submit protection missing while the POST is in flight");
+  for (const fn of formMock._listeners.submit || []) fn({ type: "submit", preventDefault() { prevented += 1; } });
+  if (fetchCalls.length !== 1 || prevented !== 2) {
+    runtimeFail("in-flight submit must not create a duplicate POST", { calls: fetchCalls.length, prevented });
+  }
   console.log("STEP_ONE_SUBMIT_OK", JSON.stringify({ events: [...new Set(runtimeEvents)], posted: fetchCalls[0].url }));
 
   // -------------------------------------------------------------------------
@@ -451,6 +473,13 @@ for (const key of ["field", "field_value", "native_message"]) {
   const keyOf = (call) => (call && call.init && call.init.headers && call.init.headers["Idempotency-Key"]) || "";
   const bodyKeyOf = (call) => { try { return JSON.parse(call.init.body).idempotency_key || ""; } catch (_) { return ""; } };
   const receiptKeys = () => Object.keys(store).filter((k) => k.startsWith("confenge_idem:") && !k.endsWith(":material"));
+  // Release the first intentionally pending POST before starting independent
+  // retry scenarios; its 5xx is indeterminate and must not retain the guard.
+  runtimeWindow.resolveInitialPost({ status: 500, json: async () => ({}) });
+  await settle();
+  if (submitBtn.disabled) runtimeFail("in-flight guard was not released after a failed request");
+  runtimeWindow.turnstile.resets = 0;
+  runtimeDataLayer.length = 0;
   // O primeiro POST (acima) ficou pendente para sempre; aqui comeca a sequencia
   // com resultados controlados. Um controlador por tentativa.
   fetchCalls.length = 0;
@@ -505,6 +534,27 @@ for (const key of ["field", "field_value", "native_message"]) {
   const persisted = runtimeDataLayer.filter((e) => e.event === "lead_persisted");
   if (persisted.length !== 1 || persisted[0].lead_id !== "lead-0123456789abcdef0123456789a") runtimeFail("lead_persisted must carry the receipt", runtimeDataLayer.map((e) => e.event));
   if (JSON.stringify(runtimeDataLayer).includes("Contexto editado")) runtimeFail("message text leaked into analytics");
+
+  // sessionStorage is not guaranteed (private/restricted browsing). The
+  // in-memory material fingerprint must still preserve a same-payload retry
+  // and mint a new key after a material edit.
+  storageBlocked = true;
+  hiddens.idempotency_key.value = "";
+  formValues.set("mensagem", "Primeiro contexto sem storage.");
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  const blockedFirst = keyOf(leadCalls().at(-1));
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  const blockedRetry = keyOf(leadCalls().at(-1));
+  if (blockedRetry !== blockedFirst) runtimeFail("blocked-storage unchanged retry must reuse its key", { blockedFirst, blockedRetry });
+  formValues.set("mensagem", "Contexto editado sem storage.");
+  fetchOutcomes.push({ reject: Object.assign(new Error("aborted"), { name: "AbortError" }) });
+  await submitOnce();
+  const blockedEdited = keyOf(leadCalls().at(-1));
+  if (!blockedEdited || blockedEdited === blockedFirst) {
+    runtimeFail("blocked-storage material edit must mint a new key", { blockedFirst, blockedEdited });
+  }
   console.log("TIMEOUT_RETRY_OK", JSON.stringify({ first: firstKey, edited: editedKey, resets: runtimeWindow.turnstile.resets, assigned: assigned[0] }));
 }
 

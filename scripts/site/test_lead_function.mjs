@@ -2329,6 +2329,7 @@ for (const bodyHonoursAbort of [true, false]) {
       return { modified: true };
     },
     async setJSON(key, value) {
+      if (failWrites) throw new Error("injected_blob_write_failure");
       blobRecords.set(key, JSON.stringify(value));
       return { modified: true };
     },
@@ -2378,6 +2379,31 @@ for (const bodyHonoursAbort of [true, false]) {
     const retriedBody = JSON.parse(retried.body);
     if (retried.statusCode !== 202 || retriedBody.accepted !== 1) {
       fail("collect_blob_write_retryable", retriedBody);
+    }
+
+    // Events without a client event_id use setJSON. A thrown write is still a
+    // failed durable persist; it must never be acknowledged as accepted.
+    const anonymousEvent = blobEvent(null);
+    anonymousEvent.body = JSON.stringify({
+      event: "cta_click",
+      props: { cta_id: "durable-blob-anonymous" },
+      path: "/",
+    });
+    failWrites = true;
+    const anonymousFailed = await collector.handler(anonymousEvent);
+    const anonymousFailedBody = JSON.parse(anonymousFailed.body);
+    if (
+      anonymousFailed.statusCode !== 503 ||
+      anonymousFailedBody.accepted !== 0 ||
+      anonymousFailedBody.error !== "durable_store_unavailable"
+    ) {
+      fail("collect_blob_anonymous_write_fail_closed", anonymousFailedBody);
+    }
+    failWrites = false;
+    const anonymousRetried = await collector.handler(anonymousEvent);
+    const anonymousRetriedBody = JSON.parse(anonymousRetried.body);
+    if (anonymousRetried.statusCode !== 202 || anonymousRetriedBody.accepted !== 1) {
+      fail("collect_blob_anonymous_write_retryable", anonymousRetriedBody);
     }
     collector._setBlobStoreForTests(null);
     process.env.NODE_ENV = "production";

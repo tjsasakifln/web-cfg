@@ -1374,7 +1374,7 @@ async function postWebIntentToWarmbly(formData, { now = new Date(), env = proces
 
   safeLog("info", "web_intent_envelope_built", {
     intent_kind: formData.intent_kind,
-    contact_email: String(formData.email || "").slice(0, 20),
+    has_contact_email: Boolean(formData.email),
   });
 
   // Post to Warmbly using generic handler

@@ -4,7 +4,7 @@
 
 1. **Coletor 1ª parte** `POST/GET /api/web/collect` — runtime portátil Netcup/nginx, eventos sem PII. `/.netlify/functions/collect` permanece apenas como alias compatível.
 2. **Campos no lead persistido** — UTMs, landing, journey, referrer (não vão ao analytics como PII).
-3. **Opcional** Plausible/GA4 quando `PLAUSIBLE_*` ou gtag configurados.
+3. **Analytics externo**: a decisão versionada em `data/ops/third-party-conversion-decision.v1.json` está em `DEFER`. A presença de `gtag` no navegador não autoriza exportação. A coleta própria continua sendo o destino vigente. Confirmar propriedade, fluxo web, consentimento e configuração antes de habilitar qualquer envio externo.
 
 ## Conversões distintas (não contar clique decorativo como lead)
 
@@ -30,13 +30,17 @@ Closed-loop fixture report (visit → qualified opportunity → revenue): [docs/
 - tempo até atendimento (observação Warmbly read-only; ausência é `UNKNOWN`)
 - proporção formulário × WhatsApp × e-mail
 
-## Prova em produção
+## Consulta de saúde da coleta
 
 ```bash
 # health
 curl -sS https://confenge.com.br/api/web/collect
-# synthetic event (no PII)
-curl -sS -X POST https://confenge.com.br/api/web/collect \
-  -H 'Content-Type: application/json' -H 'Origin: https://confenge.com.br' \
-  -d '{"events":[{"event":"page_view","path":"/","sid":"sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa","props":{"event_id":"evt-ops-health-0001","content_cluster":"home","session_id":"sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa"}}]}'
 ```
+
+O GET confirma disponibilidade do endpoint, não o recebimento de eventos. Testes de gravação devem usar armazenamento isolado e serviços externos substitutos. Não publique um `page_view` fictício no coletor real para testar saúde: ele pode entrar nos indicadores comerciais.
+
+## Acompanhamento focal de 25/10/2026
+
+Na rotina comercial existente, acompanhar uma única rota: `/conteudos/aditivo-empreitada-por-preco-global/` → contato persistido → oportunidade qualificada → proposta e avanço comercial. A origem fica no registro do pedido; `lead_id`/`receipt_id` relaciona a captura com o recebimento no Warmbly. A qualificação e as etapas posteriores exigem evidências do proprietário comercial. Cliques e eventos de navegador não preenchem essas etapas.
+
+A referência histórica, os testes e os limites desta entrega ficam em [MEDICAO-CONTATO-2026-10-25.md](../revops/MEDICAO-CONTATO-2026-10-25.md). Reutilizar esta leitura e a carteira existente, sem novo painel ou rotina paralela.

@@ -169,6 +169,13 @@ function transitionsOf(dataLayer) {
   return dataLayer.filter((e) => e.event === "content_to_service");
 }
 
+async function settleAnalyticsFlush() {
+  // The browser client serializes a pending collector request before flushing
+  // queued clicks. Let the mocked successful fetch settle without assuming a
+  // synchronous transport.
+  for (let i = 0; i < 6; i += 1) await Promise.resolve();
+}
+
 function flushedEvents(fetches) {
   const out = [];
   for (const f of fetches || []) {
@@ -363,6 +370,7 @@ for (const j of journeys) {
     namedEls: attrs["data-event-name"] ? [el] : [],
   });
   el.click();
+  await settleAnalyticsFlush();
   const hits = transitionsOf(driven.dataLayer);
   if (hits.length !== 1) fail("journey_event_count", { name: j.name, count: hits.length, events: driven.dataLayer.map((e) => e.event) });
   const ev = hits[0];
@@ -418,6 +426,7 @@ for (const j of journeys) {
     hrefEls: [el],
   });
   el.click();
+  await settleAnalyticsFlush();
   const payload = flushedEvents(driven.fetches).find((e) => e.event === "content_to_service");
   if (!payload || !payload.props || !payload.props.correlation_id) {
     fail("flush_missing_correlation_id", payload);
@@ -462,6 +471,7 @@ for (const j of journeys) {
     namedEls: [el],
   });
   el.click();
+  await settleAnalyticsFlush();
   const hits = transitionsOf(driven.dataLayer);
   const ctaClicks = driven.dataLayer.filter((e) => e.event === "cta_click");
   if (hits.length !== 1) fail("duplicate_listener_count", { hits: hits.length, events: driven.dataLayer.map((e) => e.event) });
@@ -488,6 +498,7 @@ for (const j of journeys) {
     namedEls: [el],
   });
   el.click();
+  await settleAnalyticsFlush();
   const hits = driven.dataLayer.filter((event) => event.event === "cta_click");
   if (hits.length !== 1) {
     fail("deliverables_cta_click_count", {
@@ -558,6 +569,7 @@ for (const target of [
     namedEls: [el],
   });
   el.click();
+  await settleAnalyticsFlush();
   const clicks = driven.dataLayer.filter((event) => event.event === "cta_click");
   if (clicks.length !== 1) fail("hash_primary_cta_duplicate", { target, events: driven.dataLayer });
   const click = clicks[0];

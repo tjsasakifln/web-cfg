@@ -156,6 +156,41 @@ if (last.session_id !== firstSessionId) {
   process.exit(1);
 }
 
+track("whatsapp_click", {
+  page_path: "/contato?email=should-not-pass%40example.com#mensagem",
+  nested: { email: "should-not-pass@example.com" },
+  list: ["should-not-pass@example.com"],
+  count: 2,
+  accepted: true,
+});
+const pathOnly = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+if (pathOnly.page_path !== "/contato" || pathOnly.nested || pathOnly.list) {
+  console.error("FAIL: page path/query or non-primitive params leaked", pathOnly);
+  process.exit(1);
+}
+if (pathOnly.count !== 2 || pathOnly.accepted !== true) {
+  console.error("FAIL: safe primitive analytics params were lost", pathOnly);
+  process.exit(1);
+}
+for (const unsafePath of ["/contato/ana%40example.test/", "/contato/ana%2540example.test/", "//tracker.example/collect", "/\\tracker", "/contato%0Aemail@example.test"]) {
+  track("whatsapp_click", { page_path: unsafePath });
+  const rejectedPath = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+  if (rejectedPath.page_path !== windowObj.location.pathname || JSON.stringify(rejectedPath).includes("ana%40example") || JSON.stringify(rejectedPath).includes("email@example")) {
+    console.error("FAIL: unsafe or decoded-PII page path leaked", { unsafePath, rejectedPath });
+    process.exit(1);
+  }
+}
+track("whatsapp_click", { page_path: "/", topic: "ana%2540example.test" });
+const encodedParam = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+if (encodedParam.topic) {
+  console.error("FAIL: double-encoded PII parameter leaked", encodedParam);
+  process.exit(1);
+}
+if (/gtag|plausible/.test(analyticsSource)) {
+  console.error("FAIL: DEFER analytics source must not forward to third parties");
+  process.exit(1);
+}
+
 track("lead_form_submit", {
   page_path: "/",
   journey: "contrato",
@@ -197,4 +232,92 @@ if (sandbox.window.dataLayer.length !== beforeMalformed) {
   process.exit(1);
 }
 
-console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub, whatsapp_protocol: protocol }));
+// A transport failure must retry the exact same client event IDs. The collector
+// deduplicates those IDs if it persisted before a lost response, so retrying a
+// 503 does not create a second measurement.
+const runRetryProbe = async ({ status, optOut = false, extraEvents = 0 } = {}) => {
+  const timers = [];
+  const calls = [];
+  const retryDocument = {
+    readyState: "complete",
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    getElementById: () => null,
+    addEventListener: () => {},
+    documentElement: { scrollHeight: 2000 },
+    body: { classList: { remove() {}, add() {} }, getAttribute: () => null },
+  };
+  const retryWindow = {
+    dataLayer: [],
+    location: { pathname: "/", search: "", hash: "" },
+    document: retryDocument,
+    matchMedia: () => ({ matches: false }),
+    addEventListener: () => {},
+    innerHeight: 800,
+    scrollY: 0,
+    sessionStorage: { getItem: () => null, setItem: () => {} },
+    crypto: { randomUUID: () => "9e0bdd75-a332-45d8-8ec9-5d98843f0000" },
+  };
+  retryWindow.window = retryWindow;
+  const retryFetch = (url, init) => {
+    calls.push({ url, init });
+    const responseStatus = Array.isArray(status)
+      ? status[Math.min(calls.length - 1, status.length - 1)]
+      : status;
+    return Promise.resolve({ status: responseStatus });
+  };
+  const retrySandbox = {
+    window: retryWindow,
+    document: retryDocument,
+    console,
+    URLSearchParams,
+    sessionStorage: retryWindow.sessionStorage,
+    fetch: retryFetch,
+    navigator: {},
+    setTimeout(fn) { timers.push(fn); return timers.length; },
+    clearTimeout() {},
+  };
+  retryWindow.fetch = retryFetch;
+  vm.createContext(retrySandbox);
+  vm.runInContext(code, retrySandbox);
+  for (let i = 0; i < extraEvents; i += 1) {
+    retryWindow.confengeTrack("whatsapp_click", { page_path: "/", cta_position: `probe_${i}` });
+  }
+  if (optOut) retryWindow.CONFENGE_ANALYTICS_OPT_OUT = true;
+  const runTimer = async () => {
+    const timer = timers.shift();
+    if (timer) timer();
+    for (let i = 0; i < 4; i += 1) await Promise.resolve();
+  };
+  for (let i = 0; i < 12 && timers.length; i += 1) await runTimer();
+  return { calls, timers };
+};
+const retried = await runRetryProbe({ status: [503, 202] });
+if (retried.calls.length !== 2) {
+  console.error("FAIL: 503 analytics batch was not retried once", retried.calls);
+  process.exit(1);
+}
+const retryIds = retried.calls.map((call) => JSON.parse(call.init.body).events.map((event) => event.props.event_id));
+if (!retryIds[0].length || JSON.stringify(retryIds[0]) !== JSON.stringify(retryIds[1]) || !retryIds[0].every((id) => /^evt-/.test(id))) {
+  console.error("FAIL: analytics retry did not preserve generated event IDs", retryIds);
+  process.exit(1);
+}
+const clientFailure = await runRetryProbe({ status: 400 });
+if (clientFailure.calls.length !== 1) {
+  console.error("FAIL: permanent 4xx analytics response must not retry", clientFailure.calls);
+  process.exit(1);
+}
+const optedOut = await runRetryProbe({ status: 503, optOut: true });
+if (optedOut.calls.length !== 0) {
+  console.error("FAIL: analytics opt-out must discard queued events", optedOut.calls);
+  process.exit(1);
+}
+const drained = await runRetryProbe({ status: [503, 202], extraEvents: 30 });
+const drainedEvents = drained.calls.flatMap((call) => JSON.parse(call.init.body).events);
+const drainedIds = new Set(drainedEvents.map((event) => event.props.event_id));
+if (drained.calls.length < 3 || drainedIds.size !== 32) {
+  console.error("FAIL: retried analytics queue above one batch did not drain", { calls: drained.calls.length, ids: drainedIds.size });
+  process.exit(1);
+}
+
+console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, pathOnly, submit: sub, whatsapp_protocol: protocol, retried: retryIds[0].length, drained: drained.calls.length }));

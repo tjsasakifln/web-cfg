@@ -35,6 +35,9 @@ const ENTITY_ID_PATTERNS = Object.freeze({
   proposal_id: /^prop-[0-9a-f]{27}$/i,
   sale_id: /^sale-[0-9a-f]{27}$/i,
 });
+const ANALYTICS_PATH_KEYS = new Set(["page_path", "path"]);
+const REDACTED_ANALYTICS_PATH = "/[redacted]";
+const MAX_INSPECTION_DECODES = 4;
 
 const LAYER_RANK = Object.freeze({
   session: 0,
@@ -124,9 +127,28 @@ function eventDef(name) {
   return REGISTRY.events[canonical] || null;
 }
 
-function looksLikePiiValue(value, key) {
-  if (typeof value !== "string") return false;
-  const s = value;
+function decodeForInspection(value, maxRounds = MAX_INSPECTION_DECODES) {
+  let decoded = String(value || "");
+  for (let round = 0; round < maxRounds; round += 1) {
+    if (!decoded.includes("%")) return { decoded, malformed: false, exhausted: false };
+    let next;
+    try {
+      next = decodeURIComponent(decoded);
+    } catch {
+      return { decoded, malformed: true, exhausted: false };
+    }
+    if (next === decoded) return { decoded, malformed: false, exhausted: false };
+    decoded = next;
+  }
+  return {
+    decoded,
+    malformed: false,
+    exhausted: /%[0-9a-f]{2}/i.test(decoded),
+  };
+}
+
+function looksLikeDecodedPiiValue(value, key) {
+  const s = String(value || "");
   if (!s) return false;
   if (/@/.test(s)) return true;
   const k = String(key || "").toLowerCase();
@@ -156,6 +178,51 @@ function looksLikePiiValue(value, key) {
   return false;
 }
 
+function looksLikePiiValue(value, key) {
+  if (typeof value !== "string") return false;
+  if (looksLikeDecodedPiiValue(value, key)) return true;
+  const inspected = decodeForInspection(value);
+  return inspected.decoded !== value && looksLikeDecodedPiiValue(inspected.decoded, key);
+}
+
+function sanitizeAnalyticsPath(value) {
+  let raw = String(value || "").trim();
+  if (!raw) return { ok: true, path: "", redacted: false };
+
+  // Query and fragment are not part of the logical route and may contain
+  // arbitrary visitor input. Remove them before inspecting or persisting the
+  // pathname so a legitimate route remains measurable without retaining PII.
+  const cut = raw.search(/[?#]/);
+  if (cut !== -1) raw = raw.slice(0, cut);
+  raw = raw.slice(0, 180);
+  if (!raw) return { ok: true, path: "/", redacted: false };
+
+  const inspected = decodeForInspection(raw);
+  const decoded = inspected.decoded.trimStart();
+  const invalidSyntax = (candidate) => (
+    /[\u0000-\u001f\u007f-\u009f]/.test(candidate)
+    || candidate.includes("\\")
+    || candidate.startsWith("//")
+    || /^[a-z][a-z0-9+.-]*:/i.test(candidate)
+  );
+  if (
+    inspected.malformed
+    || inspected.exhausted
+    || invalidSyntax(raw)
+    || invalidSyntax(decoded)
+  ) {
+    return { ok: false, path: REDACTED_ANALYTICS_PATH, reason: "invalid_path" };
+  }
+  if (looksLikePiiValue(raw, "path")) {
+    return { ok: true, path: REDACTED_ANALYTICS_PATH, redacted: true };
+  }
+  return {
+    ok: true,
+    path: sts.canonicalizePath(raw),
+    redacted: false,
+  };
+}
+
 function keyLooksPii(key) {
   const k = String(key || "").toLowerCase();
   if (PII_KEYS.has(k)) return true;
@@ -174,8 +241,9 @@ function minimizeProps(props) {
   const out = {};
   const dropped = [];
   const invalidEntityFields = [];
+  const invalidPathFields = [];
   if (!props || typeof props !== "object" || Array.isArray(props)) {
-    return { props: out, dropped, invalidEntityFields, tainted: false };
+    return { props: out, dropped, invalidEntityFields, invalidPathFields, tainted: false };
   }
   let tainted = false;
   for (const [k, v] of Object.entries(props)) {
@@ -186,6 +254,19 @@ function minimizeProps(props) {
     }
     if (!isValidEntityId(k, v)) {
       invalidEntityFields.push(k);
+      continue;
+    }
+    if (ANALYTICS_PATH_KEYS.has(String(k).toLowerCase())) {
+      if (typeof v !== "string") {
+        invalidPathFields.push(k);
+        continue;
+      }
+      const normalizedPath = sanitizeAnalyticsPath(v);
+      if (!normalizedPath.ok) {
+        invalidPathFields.push(k);
+        continue;
+      }
+      out[k] = normalizedPath.path;
       continue;
     }
     if (typeof v === "string") {
@@ -199,7 +280,7 @@ function minimizeProps(props) {
       out[k] = v;
     }
   }
-  return { props: out, dropped, invalidEntityFields, tainted };
+  return { props: out, dropped, invalidEntityFields, invalidPathFields, tainted };
 }
 
 function applyEnvelope(canonical, props, meta = {}) {
@@ -230,7 +311,10 @@ function invalidPropertyAllowlist(def, props) {
 function strictPiiProps(def, props) {
   if (!def || def.strict_no_pii_props !== true || !props || typeof props !== "object") return [];
   return Object.entries(props)
-    .filter(([key, value]) => keyLooksPii(key) || looksLikePiiValue(value, key))
+    .filter(([key, value]) => (
+      keyLooksPii(key)
+      || (!ANALYTICS_PATH_KEYS.has(String(key).toLowerCase()) && looksLikePiiValue(value, key))
+    ))
     .map(([key]) => key);
 }
 
@@ -297,6 +381,16 @@ function admitEvent(raw) {
       fields: minimized.invalidEntityFields,
     };
   }
+  if (minimized.invalidPathFields.length) {
+    return {
+      ok: false,
+      reason: "invalid_path",
+      original,
+      canonical,
+      classification: classified.classification,
+      fields: minimized.invalidPathFields,
+    };
+  }
   if (minimized.tainted) {
     return {
       ok: false,
@@ -355,9 +449,25 @@ function admitEvent(raw) {
   const aliasMeta = classified.classification === "alias"
     ? { cta_kind: CTA_KIND_FROM_ALIAS[original] }
     : {};
-  const path = String(input.path || minimized.props.page_path || minimized.props.path || "").slice(0, 180);
-  const safePath = /@|whatsapp|telefone/i.test(path) ? "/[redacted]" : (sts.canonicalizePath(path) || path);
+  const topLevelPath = sanitizeAnalyticsPath(input.path || "");
+  if (!topLevelPath.ok) {
+    return {
+      ok: false,
+      reason: "invalid_path",
+      original,
+      canonical,
+      classification: classified.classification,
+      fields: ["path"],
+    };
+  }
+  const safePath = topLevelPath.path || minimized.props.page_path || minimized.props.path || "";
   const transitionProps = sts.normalizeTransitionProps(canonical, minimized.props, { path: safePath });
+  if (Object.prototype.hasOwnProperty.call(transitionProps, "page_path")) {
+    transitionProps.page_path = safePath;
+  }
+  if (Object.prototype.hasOwnProperty.call(transitionProps, "path")) {
+    transitionProps.path = safePath;
+  }
   const props = applyEnvelope(canonical, transitionProps, aliasMeta);
 
   return {
