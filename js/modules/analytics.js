@@ -357,9 +357,114 @@
     }
     return false;
   };
+  // GA4 is explicitly opted in and never consumes the first-party dataLayer,
+  // which carries internal correlation identifiers.
+  const GA_MEASUREMENT_ID = 'G-MT2G5L4KBR';
+  const GA_QUEUE_NAME = 'confengeGaQueue';
+  const GA_CONSENT_KEY = 'confenge_google_analytics_consent';
+  const GA_ALLOWED_EVENTS = new Set(['page_view', 'service_page_view', 'editorial_page_view', 'cta_click', 'content_to_service', 'whatsapp_click', 'email_click', 'lead_form_start', 'lead_form_submit', 'lead_form_success', 'lead_form_error', 'scroll_depth', 'offer_view']);
+  let gaLoaded = false;
+  let gaGranted = false;
+  let gaManualPagePath = '';
+  const gaConsent = () => {
+    if (analyticsDenied()) return 'denied';
+    try { return localStorage.getItem(GA_CONSENT_KEY) === 'granted' ? 'granted' : 'denied'; } catch (_) { return 'denied'; }
+  };
+  const gaCanonicalPath = () => {
+    try {
+      const canonical = document.querySelector('link[rel="canonical"][href]');
+      if (!canonical) return '/404.html';
+      const url = new URL(canonical.href, 'https://confenge.com.br');
+      if (url.origin !== 'https://confenge.com.br' || url.search || url.hash) return '/404.html';
+      return safePagePath(url.pathname) || '/404.html';
+    } catch (_) { return '/404.html'; }
+  };
+  const gaLocation = (path) => `https://confenge.com.br${safePagePath(path) || '/404.html'}`;
+  function gaPush() {
+    window[GA_QUEUE_NAME] = window[GA_QUEUE_NAME] || [];
+    // gtag.js consumes the same Arguments-shaped queue entries as its
+    // documented `function gtag(){ dataLayer.push(arguments); }` bootstrap.
+    window[GA_QUEUE_NAME].push(arguments);
+  }
+  const sendGaPageView = () => {
+    gaManualPagePath = gaCanonicalPath();
+    gaPush('event', 'page_view', { page_location: gaLocation(gaManualPagePath), page_referrer: '', page_title: 'CONFENGE' });
+  };
+  const revokeGoogleAnalytics = () => {
+    gaGranted = false;
+    window[`ga-disable-${GA_MEASUREMENT_ID}`] = true;
+    if (gaLoaded) gaPush('consent', 'update', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+  };
+  const loadGoogleAnalytics = () => {
+    if (gaConsent() !== 'granted') return;
+    if (gaLoaded) {
+      gaGranted = true;
+      window[`ga-disable-${GA_MEASUREMENT_ID}`] = false;
+      gaPush('consent', 'update', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+      sendGaPageView();
+      return;
+    }
+    gaLoaded = true; gaGranted = true;
+    window[`ga-disable-${GA_MEASUREMENT_ID}`] = false;
+    gaPush('js', new Date());
+    gaPush('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+    gaPush('consent', 'update', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+    gaPush('set', { allow_google_signals: false });
+    gaPush('config', GA_MEASUREMENT_ID, { send_page_view: false, allow_google_signals: false, page_location: gaLocation(gaCanonicalPath()), page_referrer: '', page_title: 'CONFENGE' });
+    sendGaPageView();
+    try {
+      const script = document.createElement('script');
+      script.async = true;
+      script.referrerPolicy = 'no-referrer';
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}&l=${GA_QUEUE_NAME}`;
+      script.setAttribute('data-confenge-ga4', '1');
+      document.head.appendChild(script);
+    } catch (_) { /* no DOM: consent remains denied outside this page */ }
+  };
+  const projectGoogleAnalytics = (eventName, safe) => {
+    if (analyticsDenied() && gaGranted) revokeGoogleAnalytics();
+    if (!gaGranted || gaConsent() !== 'granted' || !GA_ALLOWED_EVENTS.has(eventName)) return;
+    const path = gaCanonicalPath();
+    if (eventName === 'page_view' && path === gaManualPagePath) return;
+    gaPush('event', eventName, { page_location: gaLocation(path), page_referrer: '', page_title: 'CONFENGE' });
+  };
+  const setGoogleAnalyticsConsent = (choice) => {
+    const granted = choice === 'granted' && !analyticsDenied();
+    try { localStorage.setItem(GA_CONSENT_KEY, granted ? 'granted' : 'denied'); } catch (_) { /* default denied after reload */ }
+    if (!granted) {
+      revokeGoogleAnalytics();
+      return;
+    }
+    loadGoogleAnalytics();
+  };
+  window.confengeSetGoogleAnalyticsConsent = setGoogleAnalyticsConsent;
+  const installGoogleAnalyticsPreference = () => {
+    if (typeof document === 'undefined') return;
+    if (gaConsent() === 'granted') loadGoogleAnalytics();
+    const footer = document.querySelector('footer');
+    if (!footer || document.getElementById('confenge-analytics-preference')) return;
+    const preference = document.createElement('p');
+    preference.id = 'confenge-analytics-preference';
+    preference.className = 'footer-analytics-preference';
+    preference.textContent = 'Medição opcional com Google Analytics para entender o uso agregado do site. ';
+    const accept = document.createElement('button');
+    accept.type = 'button'; accept.className = 'button button-primary'; accept.textContent = 'Permitir Google Analytics';
+    const deny = document.createElement('button');
+    deny.type = 'button'; deny.className = 'button button-primary'; deny.textContent = 'Não permitir';
+    const privacy = document.createElement('a');
+    privacy.href = '/privacidade/'; privacy.textContent = 'Saiba mais na privacidade';
+    const render = () => { const granted = gaConsent() === 'granted'; accept.hidden = granted; deny.textContent = granted ? 'Desativar Google Analytics' : 'Não permitir'; };
+    accept.addEventListener('click', () => { setGoogleAnalyticsConsent('granted'); render(); });
+    deny.addEventListener('click', () => { setGoogleAnalyticsConsent('denied'); render(); });
+    preference.appendChild(accept); preference.appendChild(document.createTextNode(' ')); preference.appendChild(deny); preference.appendChild(document.createTextNode(' ')); preference.appendChild(privacy);
+    footer.appendChild(preference); render();
+  };
   const track = (eventName, params = {}) => {
     try {
-      if (analyticsDenied()) return;
+      if (analyticsDenied()) {
+        if (gaGranted) revokeGoogleAnalytics();
+        return;
+      }
       const resolved = resolveTrackedName(eventName);
       if (!resolved.ok) {
         if (window.CONFENGE_DEBUG_ANALYTICS) {
@@ -419,6 +524,7 @@
       }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: resolved.canonical, ...safe });
+      projectGoogleAnalytics(resolved.canonical, safe);
       analyticsQueue.push({ eventName: resolved.canonical, safe, retries: 0 });
       if (analyticsQueue.length > MAX_ANALYTICS_QUEUE) analyticsQueue.shift();
       if (analyticsQueue.length >= 10) flushAnalytics();
@@ -438,6 +544,8 @@
     });
     window.addEventListener('pagehide', () => flushAnalytics({ pagehide: true }));
   } catch (_) { /* ignore */ }
+
+  installGoogleAnalyticsPreference();
 
   /** Field Core Web Vitals (LCP, INP, CLS, TTFB) — anonymous aggregates only */
   const reportVital = (metric, value, rating) => {

@@ -4,7 +4,7 @@
 
 1. **Coletor 1ª parte** `POST/GET /api/web/collect` — runtime portátil Netcup/nginx, eventos sem PII. `/.netlify/functions/collect` permanece apenas como alias compatível.
 2. **Campos no lead persistido** — UTMs, landing, journey, referrer (não vão ao analytics como PII).
-3. **Analytics externo**: a decisão versionada em `data/ops/third-party-conversion-decision.v1.json` está em `DEFER`. A presença de `gtag` no navegador não autoriza exportação. A coleta própria continua sendo o destino vigente. Confirmar propriedade, fluxo web, consentimento e configuração antes de habilitar qualquer envio externo.
+3. **Google Analytics 4 opcional**: a decisão versionada em `data/ops/third-party-conversion-decision.v1.json` autoriza somente o fluxo web confirmado de `confenge.com.br`, após consentimento explícito. A coleta própria continua independente e obrigatória. Google Ads, marketing personalizado, gasto pago e encaminhamento server-side permanecem desautorizados.
 
 ## Conversões distintas (não contar clique decorativo como lead)
 

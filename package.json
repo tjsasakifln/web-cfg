@@ -38,6 +38,7 @@
     "test:attribution": "node tests/attribution/test_source_to_service.mjs && node tests/attribution/test_stale_need_context.mjs",
     "test:event-dictionary": "node seo/scripts/test_event_dictionary.mjs",
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
+    "test:ga4-consent-browser": "node seo/scripts/test_ga4_consent_headless.mjs",
     "test:priority-pages": "python3 -m pytest scripts/site/test_priority_pages_commercial.py -q",
     "test:priority-contact": "node scripts/site/test_priority_contact_journey.mjs",
     "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs && node scripts/site/test_qa_email_probe.mjs && node scripts/site/test_synthetic_lead_probe_qa_email.mjs && node scripts/site/test_specialized_contact_proof.mjs --unit-only && node scripts/site/test_priority_aditivo_contact_proof.mjs --unit-only && npm run test:adaptive-intake && npm run test:private-readiness && node scripts/site/test_market_research_capture.mjs",

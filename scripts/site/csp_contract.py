@@ -11,13 +11,30 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 DATA_TYPES = frozenset({"application/ld+json", "application/json"})
-ALLOWED_SCRIPT_HOSTS = frozenset({"'self'", "https://challenges.cloudflare.com"})
+ALLOWED_SCRIPT_HOSTS = frozenset(
+    {"'self'", "https://challenges.cloudflare.com", "https://www.googletagmanager.com"}
+)
 ALLOWED_STYLE_HOSTS = frozenset({"'self'"})
-ALLOWED_CONNECT_HOSTS = frozenset({"'self'", "https://challenges.cloudflare.com"})
+ALLOWED_CONNECT_HOSTS = frozenset(
+    {
+        "'self'",
+        "https://challenges.cloudflare.com",
+        "https://www.google-analytics.com",
+        "https://region1.google-analytics.com",
+    }
+)
 ALLOWED_FRAME_HOSTS = frozenset(
     {"'self'", "https://www.youtube-nocookie.com", "https://challenges.cloudflare.com"}
 )
-ALLOWED_IMG_SOURCES = frozenset({"'self'", "data:", "https://i.ytimg.com"})
+ALLOWED_IMG_SOURCES = frozenset(
+    {
+        "'self'",
+        "data:",
+        "https://i.ytimg.com",
+        "https://www.google-analytics.com",
+        "https://region1.google-analytics.com",
+    }
+)
 DENIED_PERMISSIONS = frozenset(
     {"camera", "microphone", "geolocation", "payment", "usb", "interest-cohort"}
 )

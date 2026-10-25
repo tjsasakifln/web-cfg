@@ -1,68 +1,56 @@
 # Third-party conversion measurement decision
 
 - **Issue:** [#247](https://github.com/tjsasakifln/web-cfg/issues/247)
-- **Decision state:** `DEFER`
-- **Decision date:** 2026-08-23
-- **Review date:** 2026-09-20
+- **Decision state:** `EXECUTE`
+- **Decision date:** 2026-10-25
+- **Review date:** 2027-01-25
 - **Owner:** CONFENGE
-- **Executive front:** INBOUND ENGINE
-- **Leverage:** distribution + trust
-- **Time to evidence:** 28 days after an explicitly authorized canary starts
+- **Scope:** optional site measurement only
 - **Machine-readable authority:**
   [`data/ops/third-party-conversion-decision.v1.json`](../../data/ops/third-party-conversion-decision.v1.json)
 
 ## Decision
 
-Do not install a browser analytics tag or forward first-party events to an
-analytics vendor. The existing `/.netlify/functions/collect` path remains the
-measurement authority for the public site. Its `CONFENGE_WEB` events retain the
-`aggregate_allowlist_empty` policy; analytics receive no lead identity or other
-PII.
+Use the existing confirmed Google Analytics 4 web stream for
+`confenge.com.br`, and only that stream. Browser export is off by default and
+begins only after the visitor explicitly accepts optional measurement. The
+choice is revocable, no queued first-party event is replayed retroactively, and
+the first-party `/api/web/collect` pipeline remains required and independent.
 
-The previous optional Plausible environment switch is removed. External export
-cannot be enabled by changing production environment variables alone.
+The machine record is the only authority for the provider, measurement ID,
+property, stream, consent storage key, setter and dedicated queue. Property and
+stream identifiers are operational configuration, not visitor-facing copy.
 
-## Visitor job and hypothesis
+## Data boundary
 
-The visitor needs to understand and use CONFENGE without being observed by an
-unannounced vendor. A third-party destination is justified only when there is a
-specific, approved paid-search experiment that needs conversion feedback. An
-available vendor dashboard is not evidence of that need.
+The CONFENGE exporter explicitly supplies only allowlisted event names, the
+canonical page location without query or fragment, an empty referrer and the
+constant page title `CONFENGE`; it supplies no other app event property. The
+Google protocol can still add measurement/client identifiers and automatic
+technical fields such as language, screen/device and session metadata. The app does
+not supply contact fields, free text, raw URLs or referrers, query strings,
+fragments, or internal lead, receipt, correlation, event, session, CTA, asset
+or service identifiers. Google signals and advertising features stay disabled.
 
-## Promotion gate
+The first-party collector remains source `CONFENGE_WEB`, with
+`aggregate_allowlist_empty`. Refusing GA4 does not disable that separate
+collector. The existing first-party master opt-out also denies GA4.
 
-Promotion requires one new reviewed PR that changes the machine decision to
-`EXECUTE` and proves every condition below in the same revision:
+## Paid advertising remains blocked
 
-1. issue #87 is `EXECUTE`, with an in-repository versioned acquisition
-   hypothesis;
-2. a positive BRL spend cap and its in-repository human approval are
-   referenced;
-3. consent defaults to denied and the visitor explicitly opts in before any
-   browser or server-side export;
-4. the versioned consent contract supports withdrawal and has an enforcement
-   test proving that denied consent exports zero events;
-5. exactly one provider is named and matches the reviewed runtime; its
-   authorization owner and valid, unexpired ISO-date window are recorded;
-6. `npm run test:analytics` continues to prove an empty PII allowlist.
+This authorization does not approve Google Ads, remarketing, marketing
+personalization, issue #87 execution, a media hypothesis, a spend cap or paid
+spend. Issue #87 remains `VALIDATE`; Ads and server-side forwarding remain
+forbidden. A later advertising proposal needs its own explicit authority.
 
-The measurable revisit trigger is the first of:
+## Consent and rollback
 
-- 2026-09-20; or
-- all four readiness facts becoming true: #87 = `EXECUTE`, hypothesis reference
-  present, approved spend cap greater than zero, and versioned consent contract
-  plus enforcement test present.
+The privacy notice explains optional Google measurement, approximate device and
+location processing, refusal and withdrawal. Withdrawal stops future export; it
+does not fabricate deletion or retroactive anonymity for processing already
+performed under consent.
 
-Reaching the review date causes a decision review, not automatic installation.
-
-## Analytics, data owner and rollback
-
-- Public event owner: `web-cfg`, source `CONFENGE_WEB`.
-- Commercial outcome owner: Warmbly; `qualified_lead` and `pipeline` remain
-  observed-only and are not invented by the public collector.
-- No external analytics destination receives events in `DEFER`.
-- Rollback after any future canary: remove the external loader/exporter and its
-  runtime configuration, retain `/.netlify/functions/collect`, then run
-  `npm run test:analytics`.
+Rollback removes the GA4 loader/exporter, updates `analytics_storage` to
+`denied`, keeps `/api/web/collect`, and runs `npm run test:analytics`.
 
 This decision does not change ADR-STRAT-002 boundaries.

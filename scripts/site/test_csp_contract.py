@@ -60,11 +60,13 @@ def _headers_with_script_src(
 ) -> str:
     return (
         "/*\n"
-        f"  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://i.ytimg.com; "
+        f"  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://i.ytimg.com "
+        "https://www.google-analytics.com https://region1.google-analytics.com; "
         f"style-src {style_src}; "
         f"script-src {script_src}; "
         "script-src-attr 'none'; frame-src 'self' https://www.youtube-nocookie.com "
-        "https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; "
+        "https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com "
+        "https://www.google-analytics.com https://region1.google-analytics.com; "
         "object-src 'none'; form-action 'self'; base-uri 'self'; frame-ancestors 'self'; "
         "upgrade-insecure-requests\n"
         "  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload\n"
@@ -112,6 +114,34 @@ def test_new_third_party_host_fails() -> None:
     directives = csp_directives_from_text(text)
     errors = evaluate_security_headers(directives, parse_header_rules(text))
     assert any("unexpected third-party" in item for item in errors), errors
+
+
+def test_exact_ga4_measurement_hosts_pass_without_ads() -> None:
+    text = _headers_with_script_src(
+        "'self' https://challenges.cloudflare.com https://www.googletagmanager.com"
+    )
+    directives = csp_directives_from_text(text)
+    errors = evaluate_security_headers(directives, parse_header_rules(text))
+    assert errors == []
+
+
+def test_ads_doubleclick_and_ga_wildcards_remain_forbidden() -> None:
+    base = _headers_with_script_src(
+        "'self' https://challenges.cloudflare.com https://www.googletagmanager.com"
+    )
+    for forbidden in (
+        "https://googleads.g.doubleclick.net",
+        "https://www.googleadservices.com",
+        "https://*.google-analytics.com",
+    ):
+        text = base.replace(
+            "connect-src 'self'",
+            f"connect-src 'self' {forbidden}",
+        )
+        errors = evaluate_security_headers(
+            csp_directives_from_text(text), parse_header_rules(text)
+        )
+        assert any("connect-src" in item for item in errors), (forbidden, errors)
 
 
 def test_wildcard_or_unsafe_eval_fails() -> None:
