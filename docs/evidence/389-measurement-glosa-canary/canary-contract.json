@@ -144,11 +144,17 @@
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
-      "sha256_previous": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
-      "sha256_recaptured_at": "2026-10-04T04:46:39Z",
-      "sha256_recapture_reason": "CONFENGE-CORRECAO-VISUAL-20261004: wrappers de pan e ARIA nos seis pilares e CSS de ferramentas corrigem legibilidade e geometria; textos, precos, condicoes, fontes, canonical, robots, formularios e aprovacoes factuais preservados; revisao autonoma, sem nova revisao humana alegada.",
+      "sha256": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+      "sha256_previous": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+      "sha256_recaptured_at": "2026-10-25T01:03:06-03:00",
+      "sha256_recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: autorização expressa para melhorar a continuidade do contato na página prioritária. No texto de #captura-pilar, a orientação passou a dizer que o pedido preserva o contexto da medição ou glosa e que contrato completo, diário, fotos e notas podem ser enviados depois se necessários. Formulário, campos, atributos de origem, CTA, destino, conteúdo técnico, preços, fontes, canonical, robots e rotas do canário permanecem inalterados.",
       "sha256_recapture_history": [
+        {
+          "sha256": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+          "sha256_previous": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
+          "sha256_recaptured_at": "2026-10-04T04:46:39Z",
+          "sha256_recapture_reason": "CONFENGE-CORRECAO-VISUAL-20261004: wrappers de pan e ARIA nos seis pilares e CSS de ferramentas corrigem legibilidade e geometria; textos, precos, condicoes, fontes, canonical, robots, formularios e aprovacoes factuais preservados; revisao autonoma, sem nova revisao humana alegada."
+        },
         {
           "sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
           "sha256_previous": "50d0cff563293020011497b051598afec7251496a3d4851bc53669a5bcbf5eaf",

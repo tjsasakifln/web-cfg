@@ -43,11 +43,13 @@ Não havia token Ops nem acesso SSH utilizável nos acessos locais relacionados 
 
 ## Google Analytics
 
-Windsor.ai consultado em 25/10: única conta GA4 disponível `vision-etp-express`, propriedade `494051528`. Consulta de hostname, stream_id, stream_name, event_name e event_count entre 28/08 e 24/10 retornou zero linhas. Nenhum fluxo web ou identificador `G-...` foi confirmado. Isso não comprova ausência de visitantes, nem vínculo incorreto da propriedade.
+Windsor.ai consultado em 25/10: única conta GA4 disponível `vision-etp-express`, propriedade `494051528`. Consulta de hostname, stream_id, stream_name, event_name e event_count entre 28/08 e 24/10 retornou zero linhas. Isso não comprova ausência de visitantes, nem vínculo incorreto da propriedade.
+
+A administração autenticada do Google Analytics foi consultada depois: conta `359236854`, propriedade `494051528`, fluxo web `frontend`, código `11376849383`, identificador de coleta `G-MT2G5L4KBR`. A tela mostra o campo URL do fluxo vazio, zero tags de site conectadas e aviso de ausência de dados nas últimas 48 horas. Portanto, a existência do fluxo foi confirmada, mas sua destinação a `confenge.com.br` e a ingestão permanecem não comprovadas. A definição do destino foi solicitada ao usuário antes de alterar a configuração.
 
 A decisão existente `data/ops/third-party-conversion-decision.v1.json` está em `DEFER`, com exportação de navegador e servidor desabilitada e sem contrato de consentimento externo implementado. A entrega mantém a coleta própria e impede que a simples existência de `window.gtag` ou `window.plausible` dispare exportação. Não instala outra tag, propriedade ou fluxo.
 
-Para concluir a ligação Google, é necessário acesso à configuração da propriedade e dos fluxos para confirmar domínio e identificador de coleta, além de compatibilizar a implantação com o consentimento vigente. Sem esses elementos, não há como comprovar recebimento no Google.
+Para concluir a ligação Google, é necessário confirmar qual fluxo deve receber este domínio e compatibilizar a implantação com o consentimento vigente. Sem esses elementos e uma observação posterior no destino, não há como comprovar recebimento no Google.
 
 ## Leitura comercial na rotina existente
 
@@ -91,7 +93,9 @@ As telas iniciais e os trechos de contato foram inspecionados em celular e compu
 
 Testes com armazenamento isolado e serviços substitutos comprovam a implementação local; não comprovam ingestão GA4 ou transporte de produção. A jornada de navegador bloqueia rede externa e usa substituto de memória no Windows; a persistência filesystem é verificada separadamente em Linux. A CI remota é informada no PR e não é presumida aprovada por estes testes locais.
 
-Não houve publicação nesta entrega. A `main` dispara o processo de release Netcup; a integração depende da aprovação final prevista no pedido do usuário. Também permanecem pendentes o acesso operacional para consultar registros históricos e a identificação autorizada do fluxo web Google. Não houve contatos fictícios, notificações ou mensagens reais enviados à produção.
+A publicação foi expressamente autorizada pelo usuário em 25/10/2026, que exigiu encerramento somente após validação adversarial e comprovação em produção. A `main` dispara o processo de release Netcup. O resultado da publicação, o SHA efetivamente servido e as evidências posteriores à implantação são registrados no [PR #753](https://github.com/tjsasakifln/web-cfg/pull/753). Só os testes locais acima não satisfazem essa etapa.
+
+A comprovação de persistência em produção deve usar o mecanismo existente de registros sintéticos, excluídos da carteira e dos indicadores comerciais, com notificações e e-mail desabilitados. A evidência precisa confirmar a exclusão, a ausência de efeitos comerciais e a idempotência, além do recibo. A identificação autorizada do fluxo web Google permanece dependente de acesso à configuração; não se deve converter essa ausência em confirmação de ingestão.
 
 Para reverter antes da publicação, descartar a ramificação de trabalho sem tocar a `main` ou o checkout anterior. Depois de publicação autorizada, usar o procedimento de rollback por SHA em `docs/ops/ROLLBACK.md` e `deploy/netcup/README.md`, apontando para a release anterior verificada. A reversão de arquivos não deve apagar ou reescrever `/var/lib/confenge-web`.
 
