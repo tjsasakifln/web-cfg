@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-26T12:55:17.042Z",
+  "measured_at": "2026-10-26T13:25:23.485Z",
   "measured_on": "2026-10-26",
-  "commit_sha": "9d62fc843978375a4ff7bbed39057851fe6e08eb",
+  "commit_sha": "a67e9e1b6ffe9b78bf642c161e1c76a9504bfb74",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -18,7 +18,7 @@
     "assets/editorial.css": "7d20c2e78c5ccc3a56a77821d1efb11b10e68dd13fb278a452e0628fd05c86ec",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "e7684e7c0622aec5c851844c8759e0add0766e451f20e58137ef81d89292cc9a",
-    "assets/home-base.css": "e469df4b42f1eeb91f4cc8bfa251b566e973e7e1ae59a209d4d3d8492e022830",
+    "assets/home-base.css": "62ba1fb9962c1e559895c1b333e41608476c0aa3088a90cddf114fd142cd3aef",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
@@ -61,7 +61,7 @@
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-    "styles.css": "72a7b41aa27b69897350f0cf6a4bcb09904583f3194503eec15a8e127c7e3b7e"
+    "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6"
   },
   "surface": "source",
   "artifact_identity": null,
