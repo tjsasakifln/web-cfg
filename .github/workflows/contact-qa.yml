@@ -12,6 +12,14 @@ on:
         required: true
         default: false
         type: boolean
+      scenario:
+        description: Fixed proof journey; priority aditivo is the no-email production proof
+        required: true
+        default: priority-aditivo
+        type: choice
+        options:
+          - priority-aditivo
+          - legacy-sst
 
 permissions:
   contents: read
@@ -26,16 +34,24 @@ jobs:
     environment: netcup-production
     timeout-minutes: 5
     steps:
-      - name: Require explicit opt-in and exact main revision
+      - name: Require exact main revision and explicit proof mode
         env:
           EXPECTED_SHA: ${{ inputs.expected_sha }}
           RELEASE_SHA: ${{ github.sha }}
           RELEASE_REF: ${{ github.ref }}
           VERIFY_EMAIL: ${{ inputs.verify_email }}
+          SCENARIO: ${{ inputs.scenario }}
         run: |
           set -euo pipefail
           test "$RELEASE_REF" = refs/heads/main
-          test "$VERIFY_EMAIL" = true
+          case "$VERIFY_EMAIL" in
+            true|false) ;;
+            *) echo "verify_email must be true or false" >&2; exit 1 ;;
+          esac
+          case "$SCENARIO:$VERIFY_EMAIL" in
+            priority-aditivo:false|legacy-sst:true) ;;
+            *) echo "priority-aditivo forbids email; legacy-sst requires explicit email opt-in" >&2; exit 1 ;;
+          esac
           [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$EXPECTED_SHA" = "$RELEASE_SHA"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -47,24 +63,43 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
-      - name: Capture fixed specialized journey without submitting
+      - name: Capture fixed proof journey without submitting
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           EXPECTED_SHA: ${{ inputs.expected_sha }}
+          SCENARIO: ${{ inputs.scenario }}
         run: |
           set -euo pipefail
           mkdir -p build/reports
-          node scripts/site/synthetic_contact_journey.mjs https://confenge.com.br > build/reports/controlled-contact-journey.json
-      - name: Prove persistence, safe handoff and isolated QA email
+          case "$SCENARIO" in
+            priority-aditivo)
+              node scripts/site/synthetic_priority_aditivo_journey.mjs https://confenge.com.br > build/reports/controlled-contact-journey.json
+              ;;
+            legacy-sst)
+              node scripts/site/synthetic_contact_journey.mjs https://confenge.com.br > build/reports/controlled-contact-journey.json
+              ;;
+            *) echo "unsupported proof scenario" >&2; exit 1 ;;
+          esac
+      - name: Prove persistence, safe handoff and optional isolated QA email
         env:
           LEAD_PROBE_SECRET: ${{ secrets.LEAD_PROBE_SECRET }}
           OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
           EXPECTED_SHA: ${{ inputs.expected_sha }}
-          PROBE_VERIFY_EMAIL: "1"
-          PROBE_PAGE_PATH: /
+          VERIFY_EMAIL: ${{ inputs.verify_email }}
+          SCENARIO: ${{ inputs.scenario }}
           PROBE_BROWSER_CONTEXT_FILE: build/reports/controlled-contact-journey.json
         run: |
           set -euo pipefail
+          case "$VERIFY_EMAIL" in
+            true) export PROBE_VERIFY_EMAIL=1 ;;
+            false) export PROBE_VERIFY_EMAIL=0 ;;
+            *) echo "verify_email must be true or false" >&2; exit 1 ;;
+          esac
+          case "$SCENARIO" in
+            priority-aditivo) export PROBE_SCENARIO=priority-aditivo PROBE_PAGE_PATH=/aditivos-obras-publicas/ ;;
+            legacy-sst) export PROBE_SCENARIO=legacy-sst PROBE_PAGE_PATH=/ ;;
+            *) echo "unsupported proof scenario" >&2; exit 1 ;;
+          esac
           mkdir -p build/reports
           node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br > build/reports/controlled-contact-proof.json
           cat build/reports/controlled-contact-proof.json

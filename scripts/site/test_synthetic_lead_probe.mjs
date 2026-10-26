@@ -10,6 +10,8 @@ let postCount = 0;
 let requestCount = 0;
 let metricsMode = "valid";
 let counterMode = "valid";
+let inboundCounterMode = "valid";
+let analyticsMode = "valid";
 
 const zeroCounts = {
   visitor: 0,
@@ -38,6 +40,33 @@ const server = http.createServer((req, res) => {
   }
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
+    if (action === "analytics_summary") {
+      const invalid = analyticsMode !== "valid";
+      send(res, 200, {
+        ok: true,
+        events_loaded: 4,
+        aggregate: {
+          generated_at: "2026-10-25T12:00:00.000Z",
+          daily: invalid
+            ? [{
+                day: analyticsMode === "old-day"
+                  ? "2026-10-10"
+                  : analyticsMode === "future-day"
+                    ? "2026-10-26"
+                    : "2026-10-24",
+                events: 1,
+                by_event: analyticsMode === "invalid-schema" ? { not_in_registry: 1 } : { page_view: 1 },
+              }]
+            : [
+                { day: "2026-10-23", events: 3, by_event: { page_view: 2, cta_click: 1 } },
+                { day: "2026-10-24", events: 1, by_event: { lead_form_start: 1 } },
+              ],
+          funnel_by_path: [{ path: "/ana%40example.test/raw-path-must-not-escape" }],
+        },
+        attribution_cohorts: [{ sid: "sess-private-cohort-must-not-escape" }],
+      });
+      return;
+    }
     if (action === "funnel") {
       const badMetrics = metricsMode === "before-invalid" || (metricsMode === "after-invalid" && created);
       const status = metricsMode === "after-funnel-http" && created ? 503 : 200;
@@ -50,7 +79,11 @@ const server = http.createServer((req, res) => {
     }
     if (action === "system_health") {
       const bad = counterMode === "before-missing" || (counterMode === "after-null" && created) || (counterMode === "before-string" && !created);
-      const counts = bad && counterMode === "before-missing" ? {} : { synthetic: bad ? (counterMode === "before-string" ? "5" : null) : (created ? 6 : 5) };
+      const counts = bad && counterMode === "before-missing" ? {} : {
+        real: 2,
+        synthetic: bad ? (counterMode === "before-string" ? "5" : null) : (created ? 6 : 5),
+        qa: 1,
+      };
       send(res, 200, { ok: true, counts_by_kind: counts });
       return;
     }
@@ -68,8 +101,21 @@ const server = http.createServer((req, res) => {
     }
     if (action === "inbound_handoff") {
       const requested = url.searchParams.get("lead_id");
+      const invalidCounters = inboundCounterMode === "before-invalid"
+        || (inboundCounterMode === "after-invalid" && created);
       send(res, 200, {
         ok: true,
+        counters: {
+          persisted_leads: created ? 9 : 8,
+          pending: 0,
+          delivered: invalidCounters ? null : (created ? 8 : 7),
+          retryable: 0,
+          retries: 1,
+          permanent_failures: 0,
+          skipped: 1,
+          blocked: 0,
+          dead: 0,
+        },
         configuration: {
           contract: "READY",
           destination_fingerprint: "WARMBLY_PRODUCTION_V1",
@@ -102,6 +148,9 @@ const server = http.createServer((req, res) => {
   }
   if (url.pathname === "/.netlify/functions/lead" && req.method === "POST") {
     postCount += 1;
+    assert.equal(req.headers["x-confenge-qa-email"], undefined, "safe mode must not request a QA email");
+    assert.equal(req.headers["x-confenge-ops-token"], undefined, "safe mode must not forward the ops token to lead");
+    assert.equal(req.headers["x-confenge-expected-sha"], undefined, "safe mode must not opt into release-bound email");
     req.resume();
     req.on("end", () => {
       if (!created) {
@@ -161,6 +210,7 @@ try {
     LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters",
     OPS_TOKEN: "ops-fixture-token-at-least-16",
     EXPECTED_SHA: "a".repeat(40),
+    PROBE_VERIFY_EMAIL: "0",
   });
   assert.equal(result.code, 0, result.stderr || result.stdout);
   assert.equal(postCount, 2, "proof must create once and retry once");
@@ -174,13 +224,85 @@ try {
   assert.equal(typeof proof.receipt_sha256, "string");
   assert.equal(proof.receipt_sha256.length, 64);
   assert.equal(result.stdout.includes(receiptId), false, "raw receipt must not be emitted");
+  assert.equal(Object.hasOwn(proof, "qa_email"), false, "safe proof must not emit QA email evidence");
+  assert.equal(Object.hasOwn(proof.checks, "qa_email_delivered"), false, "safe proof must not require QA email delivery");
+  assert.deepEqual(proof.aggregates.before.leads_by_kind, { real: 2, synthetic: 5, qa: 1 });
+  assert.deepEqual(proof.aggregates.after.leads_by_kind, { real: 2, synthetic: 6, qa: 1 });
+  assert.equal(proof.aggregates.before.handoff.delivered, 7);
+  assert.equal(proof.aggregates.after.handoff.delivered, 8);
+  assert.equal(proof.aggregates.after.handoff.permanent_failures, 0);
+  assert.deepEqual(proof.analytics_summary, {
+    events_loaded: 4,
+    counts_by_event: { cta_click: 1, lead_form_start: 1, page_view: 2 },
+    coverage: {
+      lookback_days: 14,
+      all_time: false,
+      events_loaded_unit: "event_records_not_visitors",
+      backend_loader_limits: {
+        filesystem: "all_rows_within_window",
+        legacy: "up_to_200_blobs_per_day",
+      },
+      generated_at: "2026-10-25T12:00:00.000Z",
+      event_day_start: "2026-10-23",
+      event_day_end: "2026-10-24",
+      status: "AGGREGATED_EVENTS_PRESENT",
+    },
+  });
+  assert.equal(result.stdout.includes("raw-path-must-not-escape"), false);
+  assert.equal(result.stdout.includes("private-cohort-must-not-escape"), false);
+  assert.equal(result.stdout.includes("ana%40example.test"), false, "encoded PII path must not enter proof output");
+  assert.equal(result.stdout.includes("sess-private"), false, "cohort/session IDs must not enter proof output");
   for (const privateField of ["commercial_metrics", "pipeline_value", "revenue", "counters_before", "counters_after"]) {
     assert.equal(Object.hasOwn(proof, privateField), false, `${privateField} must not be exported`);
     assert.equal(result.stdout.includes(`\"${privateField}\"`), false, `${privateField} must not appear in stdout`);
   }
-  assert.equal(result.stdout.includes("\"before\"") , false, "raw before snapshot must not be exported");
-  assert.equal(result.stdout.includes("\"after\"") , false, "raw after snapshot must not be exported");
+  assert.equal(Object.hasOwn(proof, "before"), false, "raw before response must not be exported");
+  assert.equal(Object.hasOwn(proof, "after"), false, "raw after response must not be exported");
   assert.equal(Object.values(proof.checks).every(Boolean), true);
+
+  created = false;
+  analyticsMode = "invalid-schema";
+  const beforeInvalidAnalyticsPosts = postCount;
+  const invalidAnalytics = await runProbe(base, {
+    LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters",
+    OPS_TOKEN: "ops-fixture-token-at-least-16",
+    EXPECTED_SHA: "a".repeat(40),
+    PROBE_VERIFY_EMAIL: "0",
+  });
+  assert.equal(invalidAnalytics.code, 1, invalidAnalytics.stdout || invalidAnalytics.stderr);
+  assert.equal(JSON.parse(invalidAnalytics.stdout).reason, "analytics_summary_invalid");
+  assert.equal(postCount, beforeInvalidAnalyticsPosts, "invalid analytics schema must block before POST");
+  analyticsMode = "valid";
+
+  for (const invalidWindowMode of ["old-day", "future-day"]) {
+    created = false;
+    analyticsMode = invalidWindowMode;
+    const beforeInvalidWindowPosts = postCount;
+    const invalidWindow = await runProbe(base, {
+      LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters",
+      OPS_TOKEN: "ops-fixture-token-at-least-16",
+      EXPECTED_SHA: "a".repeat(40),
+      PROBE_VERIFY_EMAIL: "0",
+    });
+    assert.equal(invalidWindow.code, 1, invalidWindow.stdout || invalidWindow.stderr);
+    assert.equal(JSON.parse(invalidWindow.stdout).reason, "analytics_summary_invalid");
+    assert.equal(postCount, beforeInvalidWindowPosts, `${invalidWindowMode} analytics day must block before POST`);
+  }
+  analyticsMode = "valid";
+
+  created = false;
+  inboundCounterMode = "before-invalid";
+  const beforeInvalidHandoffPosts = postCount;
+  const beforeInvalidHandoff = await runProbe(base, {
+    LEAD_PROBE_SECRET: "probe-fixture-secret-at-least-32-characters",
+    OPS_TOKEN: "ops-fixture-token-at-least-16",
+    EXPECTED_SHA: "a".repeat(40),
+    PROBE_VERIFY_EMAIL: "0",
+  });
+  assert.equal(beforeInvalidHandoff.code, 1, beforeInvalidHandoff.stdout || beforeInvalidHandoff.stderr);
+  assert.equal(JSON.parse(beforeInvalidHandoff.stdout).reason, "operational_baseline_metrics_invalid");
+  assert.equal(postCount, beforeInvalidHandoffPosts, "invalid aggregate handoff baseline must block before POST");
+  inboundCounterMode = "valid";
 
   created = false;
   const beforeInvalidPosts = postCount;

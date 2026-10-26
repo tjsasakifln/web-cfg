@@ -156,6 +156,43 @@ if (last.session_id !== firstSessionId) {
   process.exit(1);
 }
 
+track("whatsapp_click", {
+  page_path: "/contato?email=should-not-pass%40example.com#mensagem",
+  nested: { email: "should-not-pass@example.com" },
+  list: ["should-not-pass@example.com"],
+  count: 2,
+  accepted: true,
+});
+const pathOnly = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+if (pathOnly.page_path !== "/contato" || pathOnly.nested || pathOnly.list) {
+  console.error("FAIL: page path/query or non-primitive params leaked", pathOnly);
+  process.exit(1);
+}
+if (pathOnly.count !== 2 || pathOnly.accepted !== true) {
+  console.error("FAIL: safe primitive analytics params were lost", pathOnly);
+  process.exit(1);
+}
+for (const unsafePath of ["/contato/ana%40example.test/", "/contato/ana%2540example.test/", "//tracker.example/collect", "/\\tracker", "/contato%0Aemail@example.test"]) {
+  track("whatsapp_click", { page_path: unsafePath });
+  const rejectedPath = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+  if (rejectedPath.page_path !== windowObj.location.pathname || JSON.stringify(rejectedPath).includes("ana%40example") || JSON.stringify(rejectedPath).includes("email@example")) {
+    console.error("FAIL: unsafe or decoded-PII page path leaked", { unsafePath, rejectedPath });
+    process.exit(1);
+  }
+}
+for (const unsafeTopic of ["ana%2540example.test", "ana%40example.test%ZZ", "ana%2525252540example.test"]) {
+  track("whatsapp_click", { page_path: "/", topic: unsafeTopic });
+  const encodedParam = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+  if (encodedParam.topic) {
+    console.error("FAIL: encoded or malformed PII parameter leaked", { unsafeTopic, encodedParam });
+    process.exit(1);
+  }
+}
+if (/plausible/.test(analyticsSource) || analyticsSource.includes("window.gtag(")) {
+  console.error("FAIL: analytics must not forward the first-party queue to an ambient third-party tag");
+  process.exit(1);
+}
+
 track("lead_form_submit", {
   page_path: "/",
   journey: "contrato",
@@ -197,4 +234,169 @@ if (sandbox.window.dataLayer.length !== beforeMalformed) {
   process.exit(1);
 }
 
-console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub, whatsapp_protocol: protocol }));
+// A transport failure must retry the exact same client event IDs. The collector
+// deduplicates those IDs if it persisted before a lost response, so retrying a
+// 503 does not create a second measurement.
+const runRetryProbe = async ({ status, optOut = false, extraEvents = 0 } = {}) => {
+  const timers = [];
+  const calls = [];
+  const retryDocument = {
+    readyState: "complete",
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    getElementById: () => null,
+    addEventListener: () => {},
+    documentElement: { scrollHeight: 2000 },
+    body: { classList: { remove() {}, add() {} }, getAttribute: () => null },
+  };
+  const retryWindow = {
+    dataLayer: [],
+    location: { pathname: "/", search: "", hash: "" },
+    document: retryDocument,
+    matchMedia: () => ({ matches: false }),
+    addEventListener: () => {},
+    innerHeight: 800,
+    scrollY: 0,
+    sessionStorage: { getItem: () => null, setItem: () => {} },
+    crypto: { randomUUID: () => "9e0bdd75-a332-45d8-8ec9-5d98843f0000" },
+  };
+  retryWindow.window = retryWindow;
+  const retryFetch = (url, init) => {
+    calls.push({ url, init });
+    const responseStatus = Array.isArray(status)
+      ? status[Math.min(calls.length - 1, status.length - 1)]
+      : status;
+    return Promise.resolve({ status: responseStatus });
+  };
+  const retrySandbox = {
+    window: retryWindow,
+    document: retryDocument,
+    console,
+    URLSearchParams,
+    sessionStorage: retryWindow.sessionStorage,
+    fetch: retryFetch,
+    navigator: {},
+    setTimeout(fn) { timers.push(fn); return timers.length; },
+    clearTimeout() {},
+  };
+  retryWindow.fetch = retryFetch;
+  vm.createContext(retrySandbox);
+  vm.runInContext(code, retrySandbox);
+  for (let i = 0; i < extraEvents; i += 1) {
+    retryWindow.confengeTrack("whatsapp_click", { page_path: "/", cta_position: `probe_${i}` });
+  }
+  if (optOut) retryWindow.CONFENGE_ANALYTICS_OPT_OUT = true;
+  const runTimer = async () => {
+    const timer = timers.shift();
+    if (timer) timer();
+    for (let i = 0; i < 4; i += 1) await Promise.resolve();
+  };
+  for (let i = 0; i < 12 && timers.length; i += 1) await runTimer();
+  return { calls, timers };
+};
+const retried = await runRetryProbe({ status: [503, 202] });
+if (retried.calls.length !== 2) {
+  console.error("FAIL: 503 analytics batch was not retried once", retried.calls);
+  process.exit(1);
+}
+const retryIds = retried.calls.map((call) => JSON.parse(call.init.body).events.map((event) => event.props.event_id));
+if (!retryIds[0].length || JSON.stringify(retryIds[0]) !== JSON.stringify(retryIds[1]) || !retryIds[0].every((id) => /^evt-/.test(id))) {
+  console.error("FAIL: analytics retry did not preserve generated event IDs", retryIds);
+  process.exit(1);
+}
+const clientFailure = await runRetryProbe({ status: 400 });
+if (clientFailure.calls.length !== 1) {
+  console.error("FAIL: permanent 4xx analytics response must not retry", clientFailure.calls);
+  process.exit(1);
+}
+const optedOut = await runRetryProbe({ status: 503, optOut: true });
+if (optedOut.calls.length !== 0) {
+  console.error("FAIL: analytics opt-out must discard queued events", optedOut.calls);
+  process.exit(1);
+}
+// GA4 is absent until explicit grant, uses its own queue, and only receives a
+// projected public event shape. This is a DOM/network mock; no Google request
+// is made by the test.
+{
+  const gaStorage = new Map();
+  const gaScripts = [];
+  const footer = { appendChild() {} };
+  const gaCanonical = { href: "https://confenge.com.br/" };
+  const gaDocument = {
+    readyState: "complete", documentElement: { scrollHeight: 2000 }, referrer: "https://referrer.example/?email=blocked@example.test",
+    body: { classList: { remove() {}, add() {} }, getAttribute: () => null },
+    head: { appendChild(node) { gaScripts.push(node); } },
+    querySelector: (selector) => selector === "footer" ? footer : (selector === 'link[rel="canonical"][href]' ? gaCanonical : null),
+    querySelectorAll: () => [], getElementById: () => null, addEventListener() {},
+    createTextNode: () => ({}),
+    createElement: () => ({ setAttribute() {}, addEventListener() {}, appendChild() {}, classList: {}, hidden: false }),
+  };
+  const gaWindow = {
+    dataLayer: [], location: { pathname: "/contato?email=blocked@example.test", search: "?email=blocked@example.test", hash: "#x" },
+    document: gaDocument, matchMedia: () => ({ matches: false }), addEventListener() {}, innerHeight: 800, scrollY: 0,
+    sessionStorage: { getItem: () => null, setItem: () => {} },
+    localStorage: { getItem: (k) => gaStorage.get(k) || null, setItem: (k, v) => gaStorage.set(k, String(v)) },
+  };
+  gaWindow.window = gaWindow;
+  const gaSandbox = { window: gaWindow, document: gaDocument, console, URL, URLSearchParams, sessionStorage: gaWindow.sessionStorage, localStorage: gaWindow.localStorage, navigator: {}, setTimeout: () => 0, clearTimeout() {} };
+  vm.createContext(gaSandbox); vm.runInContext(code, gaSandbox);
+  if (gaScripts.length || gaWindow.confengeGaQueue) {
+    console.error("FAIL: Google Analytics loaded before explicit consent", { gaScripts, queue: gaWindow.confengeGaQueue }); process.exit(1);
+  }
+  gaWindow.confengeSetGoogleAnalyticsConsent("granted");
+  gaWindow.confengeTrack("lead_form_submit", { page_path: "/contato?email=blocked@example.test", route_family: "contact", lead_id: "lead-0123456789abcdef0123456789a", mensagem: "private" });
+  const gaQueue = gaWindow.confengeGaQueue || [];
+  const gaText = JSON.stringify(gaQueue);
+  if (gaScripts.length !== 1 || !/gtag\/js\?id=G-MT2G5L4KBR&l=confengeGaQueue/.test(gaScripts[0].src || "") || gaText.includes("blocked@example") || gaText.includes("lead-") || gaText.includes("private") || gaText.includes("session_id") || !gaQueue.some((item) => item[0] === "event" && item[1] === "lead_form_submit")) {
+    console.error("FAIL: GA4 consent projection leaked or did not load safely", { gaScripts, gaQueue }); process.exit(1);
+  }
+  const pageViewsAfterGrant = gaQueue.filter((item) => item[0] === "event" && item[1] === "page_view").length;
+  if (pageViewsAfterGrant !== 1) {
+    console.error("FAIL: initial GA4 grant must emit exactly one manual page view", { pageViewsAfterGrant, gaQueue }); process.exit(1);
+  }
+  const expectedConsent = JSON.stringify({ analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" });
+  const expectedProjection = JSON.stringify({ page_location: "https://confenge.com.br/", page_referrer: "", page_title: "CONFENGE" });
+  const initialConsent = gaQueue.find((item) => item[0] === "consent" && item[1] === "default");
+  const grantedConsent = gaQueue.find((item) => item[0] === "consent" && item[1] === "update");
+  const config = gaQueue.find((item) => item[0] === "config");
+  const projectedEvents = gaQueue.filter((item) => item[0] === "event");
+  if (!initialConsent || !grantedConsent || JSON.stringify(initialConsent[2]) !== expectedConsent || JSON.stringify(grantedConsent[2]) !== expectedConsent.replace('"analytics_storage":"denied"', '"analytics_storage":"granted"') || !config || config[1] !== "G-MT2G5L4KBR" || config[2].allow_google_signals !== false || config[2].send_page_view !== false || JSON.stringify({ page_location: config[2].page_location, page_referrer: config[2].page_referrer, page_title: config[2].page_title }) !== expectedProjection || projectedEvents.some((item) => JSON.stringify(item[2]) !== expectedProjection)) {
+    console.error("FAIL: GA4 consent or event projection changed", { gaQueue }); process.exit(1);
+  }
+  const beforeRevoke = gaQueue.length;
+  gaWindow.confengeSetGoogleAnalyticsConsent("denied");
+  const afterRevoke = gaQueue.length;
+  gaWindow.confengeTrack("cta_click", { page_path: "/", cta_id: "hero" });
+  if (gaQueue.length !== afterRevoke || afterRevoke !== beforeRevoke + 1 || gaWindow[`ga-disable-G-MT2G5L4KBR`] !== true) {
+    console.error("FAIL: revoked GA4 consent still exported an event", { beforeRevoke, afterRevoke, gaQueue }); process.exit(1);
+  }
+  gaWindow.confengeSetGoogleAnalyticsConsent("granted");
+  gaWindow.confengeTrack("lead_form_success", { page_path: "/", lead_id: "lead-0123456789abcdef0123456789a", receipt_id: "private-receipt" });
+  const regrantedPageViews = gaQueue.filter((item) => item[0] === "event" && item[1] === "page_view").length;
+  if (gaScripts.length !== 1 || regrantedPageViews !== 2 || !gaQueue.some((item) => item[0] === "event" && item[1] === "lead_form_success") || JSON.stringify(gaQueue).includes("private-receipt")) {
+    console.error("FAIL: GA4 regrant did not restore only the safe projection", { gaScripts, gaQueue }); process.exit(1);
+  }
+  gaCanonical.href = "https://confenge.com.br/cliente/ana%2540example.test/?email=secret@example.test";
+  gaWindow.confengeTrack("cta_click", { page_path: "/cliente/ana-silva/" });
+  const fallbackEvent = gaQueue[gaQueue.length - 1];
+  if (fallbackEvent[0] !== "event" || fallbackEvent[1] !== "cta_click" || JSON.stringify(fallbackEvent[2]) !== JSON.stringify({ page_location: "https://confenge.com.br/404.html", page_referrer: "", page_title: "CONFENGE" })) {
+    console.error("FAIL: GA4 must use only a canonical published path or the 404 fallback", { fallbackEvent }); process.exit(1);
+  }
+  const beforeMasterOptOut = gaQueue.length;
+  gaWindow.CONFENGE_ANALYTICS_OPT_OUT = true;
+  gaWindow.confengeTrack("cta_click", { page_path: "/", cta_id: "hero" });
+  const afterMasterOptOut = gaQueue.length;
+  gaWindow.confengeTrack("cta_click", { page_path: "/", cta_id: "hero" });
+  if (afterMasterOptOut !== beforeMasterOptOut + 1 || gaQueue.length !== afterMasterOptOut || gaWindow[`ga-disable-G-MT2G5L4KBR`] !== true) {
+    console.error("FAIL: master opt-out did not revoke GA4 before early return", { beforeMasterOptOut, afterMasterOptOut, gaQueue }); process.exit(1);
+  }
+}
+const drained = await runRetryProbe({ status: [503, 202], extraEvents: 30 });
+const drainedEvents = drained.calls.flatMap((call) => JSON.parse(call.init.body).events);
+const drainedIds = new Set(drainedEvents.map((event) => event.props.event_id));
+if (drained.calls.length < 3 || drainedIds.size !== 32) {
+  console.error("FAIL: retried analytics queue above one batch did not drain", { calls: drained.calls.length, ids: drainedIds.size });
+  process.exit(1);
+}
+
+console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, pathOnly, submit: sub, whatsapp_protocol: protocol, retried: retryIds[0].length, drained: drained.calls.length }));

@@ -175,6 +175,7 @@ jobs:
       - name: Contact and lead pathway gates
         run: |
           npm run test:form-funnel
+          npm run test:priority-pages
           npm run test:cta-form-next-state
           npm run test:lead-function
       - name: INB-15 strict regression on the candidate tree
@@ -190,6 +191,8 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Consent and third-party policy on the generated public artifact
+        run: PUBLIC_ARTIFACT_REQUIRED=1 node scripts/site/third_party_analytics_gate.mjs
       - name: Promised public downloads are in the gated artifact
         run: npm run test:promised-public-resources
       - name: Final public-surface coverage and copy gate
@@ -244,7 +247,10 @@ jobs:
           SITE_ROOT: _site
         run: |
           npm run test:contact-journeys
+          npm run test:priority-contact
           npm run test:specialized-contact-proof
+          node scripts/site/test_priority_aditivo_contact_proof.mjs
+          npm run test:ga4-consent-browser
       - name: Money asset canary browser e2e
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

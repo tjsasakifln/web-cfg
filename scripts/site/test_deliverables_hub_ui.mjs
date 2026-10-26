@@ -328,18 +328,6 @@ for (const width of widths) {
   // em vez do cartao com grade de tres colunas; os servicos ganharam indice e
   // linha propria; "Condicoes e limites" virou secao; o bloco escuro traz a
   // sequencia do envio. Nenhum campo foi acrescentado nem escondido.
-  // Correcao apos revisao (2026-09-17, onda 2): 21700 -> 24300. A revisao
-  // reprovou a vitrine a 390 px com rotulo em coluna de 96 px e valor a 14 px;
-  // cada criterio voltou a empilhar rotulo sobre valor na largura toda, com o
-  // valor no corpo (16 px), e "Pacote e credito" entrou como ultima linha da
-  // mesma lista. Sao 8 ofertas x 12 criterios legiveis, mais a prancha PG na
-  // secao de servicos: medido 24037 px a 390 px (Chromium headless local);
-  // 24300 deixa ~260 px (1,1%) de folga e continua pegando deriva nao
-  // relacionada. A 1440 px a mesma pagina caiu de 14909 para 13591 (pares de
-  // criterios em duas colunas).
-  if (width === 390 && metrics.documentHeight > 24300) {
-    errors.push(`document_height=${metrics.documentHeight}`);
-  }
   if (!metrics.intelligenceFooterLinkVisible || metrics.intelligenceFooterLinkFontSize < 14) {
     errors.push("authorized_footer_link_geometry");
   }
@@ -417,6 +405,138 @@ for (const width of widths) {
   findings.push({ route: "/entregas/", width, height, ...metrics, errors });
   if (errors.length) failed += 1;
 }
+
+// The GA preference belongs to the footer, but it is not unrelated hub
+// content. Keep the historical 390px ceiling on the page with this component
+// removed, and give the component a small, explicit budget of its own.
+await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+const preferenceHeightGate = await page.evaluate(() => {
+  const selector = "footer.site-footer > p#confenge-analytics-preference.footer-analytics-preference";
+  const preference = document.querySelector(selector);
+  const documentHeight = () => Math.round(document.documentElement.scrollHeight);
+  const measure = () => {
+    const style = preference ? getComputedStyle(preference) : null;
+    const rect = preference?.getBoundingClientRect();
+    const marginTop = style ? Number.parseFloat(style.marginTop) : Number.NaN;
+    const marginBottom = style ? Number.parseFloat(style.marginBottom) : Number.NaN;
+    const outer = rect && Number.isFinite(marginTop) && Number.isFinite(marginBottom)
+      ? rect.height + marginTop + marginBottom : Number.NaN;
+    const interactive = preference
+      ? [...preference.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+      : [];
+    return {
+      fullHeight: documentHeight(),
+      preferenceOuterHeight: Math.round(outer * 100) / 100,
+      normalizedHeight: Number.isFinite(outer) ? Math.round(documentHeight() - outer) : null,
+      selectorCount: document.querySelectorAll(selector).length,
+      idCount: document.querySelectorAll('#confenge-analytics-preference').length,
+      directLastChild: Boolean(preference && preference.parentElement?.lastElementChild === preference),
+      visible: Boolean(rect && rect.width > 0 && rect.height > 0 && style.visibility !== "hidden"
+        && Number.parseFloat(style.opacity) > 0),
+      display: style?.display || "",
+      position: style?.position || "",
+      float: style?.float || "",
+      transform: style?.transform || "",
+      marginTop,
+      marginBottom,
+      contentClipped: Boolean(preference && (preference.scrollHeight > preference.clientHeight + 1
+        || preference.scrollWidth > preference.clientWidth + 1)),
+      interactiveCount: interactive.length,
+      buttonCount: preference?.querySelectorAll('button[type="button"]').length || 0,
+      privacyLinkCount: preference?.querySelectorAll('a[href="/privacidade/"]').length || 0,
+      defaultDenied: (() => {
+        try { return localStorage.getItem("confenge_google_analytics_consent") !== "granted"; } catch { return true; }
+      })(),
+      interactiveTargets: interactive.map((element) => {
+        const target = element.getBoundingClientRect();
+        const host = preference?.getBoundingClientRect();
+        const targetStyle = getComputedStyle(element);
+        return {
+          tag: element.tagName.toLowerCase(), type: element.getAttribute("type"), href: element.getAttribute("href"),
+          width: Math.round(target.width * 100) / 100, height: Math.round(target.height * 100) / 100,
+          visible: targetStyle.display !== 'none' && !['hidden', 'collapse'].includes(targetStyle.visibility)
+            && Number.parseFloat(targetStyle.opacity) > 0,
+          inside: Boolean(host && target.left >= host.left - 1 && target.right <= host.right + 1
+            && target.top >= host.top - 1 && target.bottom <= host.bottom + 1),
+        };
+      }),
+    };
+  };
+  const initialStyle = preference?.getAttribute("style");
+  const baseline = measure();
+  // Measured 113.86px on 2026-10-26, plus 16px of fixed rendering headroom.
+  // Never derive the budget from the current run: that would accept growth.
+  const componentBudget = 130;
+  // Triangulate the contribution instead of trusting a subtraction alone.
+  if (preference) preference.style.display = "none";
+  const hiddenHeight = documentHeight();
+  if (preference) {
+    if (initialStyle === null) preference.removeAttribute("style");
+    else preference.setAttribute("style", initialStyle);
+  }
+  const restoredHeight = documentHeight();
+  const delta = baseline.fullHeight - hiddenHeight;
+  const baselineChecks = {
+    historical: baseline.normalizedHeight !== null && baseline.normalizedHeight <= 24300,
+    component: componentBudget !== null && baseline.preferenceOuterHeight <= componentBudget,
+    componentMaximum: componentBudget !== null && componentBudget <= 190,
+    triangular: Number.isFinite(baseline.preferenceOuterHeight)
+      && Math.abs(delta - baseline.preferenceOuterHeight) <= 1,
+    restored: restoredHeight === baseline.fullHeight,
+  };
+  // Real DOM regressions: each mutation must trip its corresponding guard.
+  let componentRegression = null;
+  let historicalRegression = null;
+  if (preference && componentBudget !== null) {
+    preference.style.minHeight = `${Math.ceil(componentBudget) + 1}px`;
+    const expanded = measure();
+    componentRegression = expanded.preferenceOuterHeight > componentBudget;
+    if (initialStyle === null) preference.removeAttribute("style");
+    else preference.setAttribute("style", initialStyle);
+  }
+  if (preference) {
+    const before = document.createElement("div");
+    before.setAttribute("data-height-gate-probe", "true");
+    const probeHeight = Math.max(1, Math.ceil(24301 - baseline.normalizedHeight));
+    before.style.cssText = `display:block; height:${probeHeight}px; min-height:${probeHeight}px; margin:0; padding:0; border:0; clear:both;`;
+    preference.before(before);
+    const expanded = measure();
+    historicalRegression = expanded.normalizedHeight > 24300;
+    before.remove();
+  }
+  const afterNegativeTests = measure();
+  return {
+    ...baseline,
+    componentBudget,
+    hiddenHeight,
+    delta,
+    restoredHeight,
+    baselineChecks,
+    negativeControls: { componentRegression, historicalRegression, restored: afterNegativeTests.fullHeight === baseline.fullHeight },
+  };
+});
+const preferenceHeightErrors = [];
+if (preferenceHeightGate.selectorCount !== 1 || preferenceHeightGate.idCount !== 1 || !preferenceHeightGate.directLastChild) preferenceHeightErrors.push("preference_selector_or_position");
+if (!preferenceHeightGate.visible || preferenceHeightGate.display !== "block" || preferenceHeightGate.position !== "static"
+  || preferenceHeightGate.float !== "none" || preferenceHeightGate.transform !== "none"
+  || !Number.isFinite(preferenceHeightGate.marginTop) || preferenceHeightGate.marginTop < 0
+  || !Number.isFinite(preferenceHeightGate.marginBottom) || preferenceHeightGate.marginBottom < 0
+  || preferenceHeightGate.contentClipped) preferenceHeightErrors.push("preference_geometry");
+if (preferenceHeightGate.interactiveCount !== 3 || preferenceHeightGate.buttonCount !== 2 || preferenceHeightGate.privacyLinkCount !== 1
+  || !preferenceHeightGate.defaultDenied
+  || preferenceHeightGate.interactiveTargets.some((target) => target.width < 44 || target.height < 44 || !target.inside || !target.visible)) preferenceHeightErrors.push("preference_interactions");
+const validPreferenceContribution = preferenceHeightErrors.length === 0
+  && preferenceHeightGate.baselineChecks.component && preferenceHeightGate.baselineChecks.triangular
+  && preferenceHeightGate.baselineChecks.restored;
+preferenceHeightGate.creditedPreferenceHeight = validPreferenceContribution ? preferenceHeightGate.preferenceOuterHeight : 0;
+preferenceHeightGate.normalizedHeight = Math.round(preferenceHeightGate.fullHeight - preferenceHeightGate.creditedPreferenceHeight);
+preferenceHeightGate.baselineChecks.historical = preferenceHeightGate.normalizedHeight <= 24300;
+for (const [name, passed] of Object.entries(preferenceHeightGate.baselineChecks)) if (!passed) preferenceHeightErrors.push(`preference_${name}`);
+if (!preferenceHeightGate.negativeControls.componentRegression || !preferenceHeightGate.negativeControls.historicalRegression
+  || !preferenceHeightGate.negativeControls.restored) preferenceHeightErrors.push("preference_negative_controls");
+findings.push({ route: "/entregas/", check: "footer_analytics_preference_height", ...preferenceHeightGate, errors: preferenceHeightErrors });
+if (preferenceHeightErrors.length) failed += 1;
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });

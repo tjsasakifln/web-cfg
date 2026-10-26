@@ -196,34 +196,29 @@ antes do POST quando qualquer precondição está ausente.
 
 ---
 
-## 7. Exportação de conversão para analytics de terceiros — **DEFER**
+## 7. Medição opcional no Google Analytics 4 — **EXECUTE**
 
-**Decisão:** não instalar tag no browser e não encaminhar eventos server-side.
-O coletor `/.netlify/functions/collect` continua sendo a autoridade de mensuração
-da superfície pública, com origem `CONFENGE_WEB` e política de PII
-`aggregate_allowlist_empty`.
+**Decisão:** usar somente o fluxo web GA4 já confirmado para
+`confenge.com.br`, com carregamento no navegador apenas depois de consentimento
+explícito, default negado, revogação e sem replay retroativo. O coletor
+`/.netlify/functions/collect` continua independente e obrigatório, com origem
+`CONFENGE_WEB` e política de PII `aggregate_allowlist_empty`.
 
 Autoridade versionada:
 [`data/ops/third-party-conversion-decision.v1.json`](../../data/ops/third-party-conversion-decision.v1.json)
 e [decisão operacional](THIRD-PARTY-CONVERSION-DECISION.md).
 
-Não há variável de ambiente que autorize exportação. Configuração externa não
-pode substituir revisão de código e decisão humana.
+O runtime exporta somente eventos e propriedades allowlisted, sem campos de
+contato, texto livre, URL/referrer brutos ou identificadores internos. Sinais do
+Google e recursos de publicidade ficam desligados.
 
-**Revisão:** 2026-09-20, ou antes somente quando todas as condições forem
-verdadeiras:
+Esta decisão não autoriza Google Ads, remarketing, personalização de marketing,
+spend pago ou servidor intermediário. A issue #87 permanece `VALIDATE`, sem
+hipótese ou teto de gasto aprovados. Configuração externa e variáveis de ambiente
+não podem ampliar o escopo versionado.
 
-1. #87 muda para `EXECUTE` com hipótese versionada neste repositório;
-2. existe teto de gasto em BRL maior que zero e aprovação humana referenciada
-   neste repositório;
-3. consentimento explícito, default-denied, é versionado e ocorre antes do
-   primeiro evento exportado;
-4. um teste prova exportação zero quando o consentimento é negado.
-
-Chegar à data apenas abre nova decisão; não instala nada automaticamente. Um
-futuro canário deve nomear provedor, validade da autorização e rollback, manter
-PII zero e passar `npm run test:analytics`. O provedor deve ser único, coincidir
-com o runtime revisado e ter autorização não expirada.
+**Revisão:** 2027-01-25, ou imediatamente se houver deriva de consentimento,
+provedor, propriedade, allowlist, privacidade, publicidade ou forwarding.
 
 ---
 

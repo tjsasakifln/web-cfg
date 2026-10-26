@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import time
 from pathlib import Path
 
@@ -57,3 +58,30 @@ def test_main_check_does_not_write_stale_home(tmp_path: Path, monkeypatch) -> No
     monkeypatch.setattr("sys.argv", ["build_css.py", "--check"])
     assert build_css.main() == 1
     assert (home.read_bytes(), home.stat().st_mtime_ns) == before
+
+
+def test_runtime_button_sync_preserves_unrelated_rules_and_check_is_read_only(tmp_path: Path) -> None:
+    root, _ = _fixture_root(tmp_path)
+    home_base = root / "assets" / "home-base.css"
+    original = (
+        ".before{color:red}\n/* BEGIN home runtime button variants */\n"
+        ".button-light{color:red}\n/* END home runtime button variants */\n"
+        ".after{color:blue}\n"
+    )
+    home_base.write_text(original, encoding="utf-8")
+    canonical = (
+        ".button-light{color:navy;background:white}.button-light:hover{box-shadow:none}"
+        ".site-footer .footer-analytics-preference{margin:.5rem auto 0;color:#e7eef3;font-size:.8125rem;line-height:1.35}"
+        ".site-footer .footer-analytics-preference .button{min-height:44px;padding:.45rem .65rem;font-size:.8125rem}"
+        ".site-footer .footer-analytics-preference a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;text-decoration:underline;text-underline-offset:.18em}"
+        ".site-footer .footer-analytics-preference a:hover,.site-footer .footer-analytics-preference a:focus-visible{color:#fff}"
+    )
+    assert build_css.sync_home_runtime_buttons(root, canonical, check=True) is True
+    assert home_base.read_text(encoding="utf-8") == original
+    assert build_css.sync_home_runtime_buttons(root, canonical) is True
+    rendered = home_base.read_text(encoding="utf-8")
+    assert rendered.startswith(".before{color:red}\n")
+    assert rendered.endswith(".after{color:blue}\n")
+    assert ".button-light{color:navy;background:white}" in rendered
+    assert len(re.findall(r"\.site-footer \.footer-analytics-preference[^{}]*\{", rendered)) == 4
+    assert build_css.sync_home_runtime_buttons(root, canonical) is False

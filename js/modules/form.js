@@ -102,6 +102,7 @@
         // escolhido nada.
       };
       const receiptRequired = form.getAttribute('data-receipt-required') === 'true';
+      let submissionInFlight = false;
 
       const receiptStorageKey = () => {
         const asset = (form.querySelector('[name="asset_id"]')?.value || 'form').slice(0, 80);
@@ -146,6 +147,10 @@
         'nome', 'telefone', 'email', 'empresa', 'mensagem', 'estagio',
         'deliverable_id', 'consentimento',
       ];
+      // Storage can be unavailable in private/restricted contexts. Keep the
+      // material fingerprint only for this live form/session in that case so
+      // an edited retry cannot silently reuse the prior request's receipt.
+      const volatileMaterialHashes = new Map();
       const materialStorageKey = () => `${receiptStorageKey()}:material`;
       const materialHash = (payload) => {
         const text = MATERIAL_FIELDS
@@ -163,13 +168,18 @@
         if (!receiptRequired) return key;
         const current = materialHash(payload);
         let previous = '';
-        try { previous = sessionStorage.getItem(materialStorageKey()) || ''; } catch (_) { /* private mode */ }
+        const storageKey = materialStorageKey();
+        try { previous = sessionStorage.getItem(storageKey) || ''; } catch (_) {
+          previous = volatileMaterialHashes.get(storageKey) || '';
+        }
         if (previous && previous !== current) {
           key = newIdempotencyKey();
           ensureHidden('idempotency_key', key, true);
           try { sessionStorage.setItem(receiptStorageKey(), key); } catch (_) { /* private mode */ }
         }
-        try { sessionStorage.setItem(materialStorageKey(), current); } catch (_) { /* private mode */ }
+        try { sessionStorage.setItem(storageKey, current); } catch (_) {
+          volatileMaterialHashes.set(storageKey, current);
+        }
         return key;
       };
 
@@ -458,6 +468,12 @@
       });
 
       form.addEventListener('submit', (event) => {
+        // A disabled button does not cover Enter or duplicate programmatic
+        // submit events. Keep exactly one receipt-bearing request active.
+        if (submissionInFlight) {
+          event.preventDefault();
+          return;
+        }
         if (multi) {
           // LAPIDACAO-COMERCIAL-20260918 (§8.1). O painel de detalhes e
           // opcional de verdade: consentimento e envio ficam fora dos dois
@@ -533,6 +549,7 @@
         // then FormSubmit/Netlify Forms, then WhatsApp operational fallback.
         if (typeof window.fetch === 'function' && form.getAttribute('data-ajax') !== 'false') {
           event.preventDefault();
+          submissionInFlight = true;
           const dest = safeSuccessDestination(
             form.getAttribute('data-success-destination') || JOURNEY_ACTIONS[journey],
           );
@@ -582,6 +599,7 @@
                 sessionStorage.removeItem(materialStorageKey());
               }
             } catch (_) { /* private mode */ }
+            if (receiptRequired) volatileMaterialHashes.delete(materialStorageKey());
             const q = protocol
               ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(protocol)}`
               : dest;
@@ -601,7 +619,7 @@
               }
             } catch (_) { /* optional anti-abuse */ }
           };
-          const finishFallback = (reason) => {
+          const finishFallback = (reason, indeterminate = false) => {
             resetTurnstile();
             const stage = (estagioEl?.value || '').slice(0, 80);
             const msg = encodeURIComponent(
@@ -610,7 +628,7 @@
             // The POST already left this browser. A deadline, an unreadable body or a
             // proxy error do NOT prove nothing was written, so the wording must not
             // assert it. Only a refusal that never reached the server may say that.
-            const leftTheBrowser = reason === 'timeout' || reason === 'receipt_unconfirmed';
+            const leftTheBrowser = indeterminate || reason === 'timeout' || reason === 'receipt_unconfirmed';
             showFormStatus(
               leftTheBrowser
                 ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado; não reescreva os dados. Tente enviar de novo (o mesmo pedido, sem duplicar) ou use o WhatsApp abaixo. O protocolo só aparece depois que o registro é confirmado.'
@@ -685,12 +703,26 @@
               });
               return;
             }
-            throw new Error(data.error || `lead_http_${res.status}`);
+            if ((res.status === 200 || res.status === 201) && data && data.ok) {
+              // A nominal success without the durable receipt is not a
+              // confirmed lead. Treat it like an unknown delivery outcome.
+              finishFallback('receipt_unconfirmed', true);
+              return;
+            }
+            const error = new Error(data.error || `lead_http_${res.status}`);
+            // A 5xx means the request reached an intermediary/server but not
+            // whether durable persistence completed.  Do not tell the visitor
+            // it was not registered until the server proves that refusal.
+            error.deliveryIndeterminate = res.status >= 500;
+            throw error;
           }).catch((err) => {
             restoreSubmitFocus = true;
-            finishFallback(err && err.name === 'AbortError' ? 'timeout' : (err && err.message) || 'network');
+            const timeout = err && err.name === 'AbortError';
+            const indeterminate = timeout || !err || err.deliveryIndeterminate !== false;
+            finishFallback(timeout ? 'timeout' : (err && err.message) || 'network', indeterminate);
           }).finally(() => {
             if (timeoutId) clearTimeout(timeoutId);
+            submissionInFlight = false;
             if (submitBtn) {
               submitBtn.disabled = false;
               // Disabling a focused button moves focus to body in browsers.
@@ -715,18 +747,6 @@
       }, true);
       // Exposes readiness for deterministic UI verification after all handlers bind.
       form.dataset.formReady = 'true';
-    }
-
-    // Thank-you page: real form success (Netlify redirect target)
-    if (typeof document.body?.getAttribute === 'function'
-      && document.body.getAttribute('data-lead-success') === '1') {
-      track('lead_form_success', {
-        page_path: pagePath,
-        content_cluster: defaultCluster,
-        device_context: deviceContext,
-        destination_type: 'form',
-        journey: document.body.getAttribute('data-journey') || '',
-      });
     }
 
     // Qualified scroll (once at 50% and 75%)

@@ -59,12 +59,19 @@ const server = http.createServer((req, res) => {
   }
   if (url.pathname === "/.netlify/functions/ops") {
     const action = url.searchParams.get("action");
+    if (action === "analytics_summary") {
+      send(res, 200, {
+        ok: true, events_loaded: 0,
+        aggregate: { generated_at: "2026-10-25T12:00:00.000Z", daily: [] },
+      });
+      return;
+    }
     if (action === "funnel") {
       send(res, 200, { ok: true, commercial_only: true, funnel: { counts: zeroCounts, pipeline_value: 0, revenue: 0 } });
       return;
     }
     if (action === "system_health") {
-      send(res, 200, { ok: true, counts_by_kind: { synthetic: 1 + createdLeadCount } });
+      send(res, 200, { ok: true, counts_by_kind: { real: 2, synthetic: 1 + createdLeadCount, qa: 1 } });
       return;
     }
     if (action === "weekly_report") {
@@ -83,6 +90,10 @@ const server = http.createServer((req, res) => {
       const stored = [...leadsByIdempotencyKey.values()].find((lead) => lead.id === requested);
       send(res, 200, {
         ok: true,
+        counters: {
+          persisted_leads: 4 + createdLeadCount, pending: 0, delivered: 3 + createdLeadCount,
+          retryable: 0, retries: 0, permanent_failures: 0, skipped: 1, blocked: 0, dead: 0,
+        },
         configuration: { contract: "READY", destination_fingerprint: "WARMBLY_PRODUCTION_V1" },
         safety_gate: { ok: true, contract: "READY", auto_send_off: true, dispatch_attempted: false },
         receipt: stored ? {

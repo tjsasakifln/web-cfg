@@ -11,7 +11,8 @@ Two things this file used to get wrong, both of which hid dead CSS (#511):
 
 Usage is now read from the places a class can really come from: ``class``
 attributes in shipped HTML, ``class`` attributes emitted by generators, and
-``classList``/``querySelector`` literals in shipped JavaScript. Test files are
+``classList``/``querySelector`` literals and static ``className`` assignments
+in shipped JavaScript. Test files are
 deliberately excluded -- a fixture that names a class must not keep that
 class's CSS alive.
 
@@ -58,6 +59,9 @@ AUDITED_BUNDLES = ("styles.css", "entregas/styles.css")
 
 CLASS_ATTR_RE = re.compile(r"""class\s*=\s*(?:"([^"]*)"|'([^']*)')""")
 CLASSLIST_RE = re.compile(r"""classList\.(?:add|remove|toggle|contains|replace)\(([^)]*)\)""")
+CLASSNAME_ASSIGN_RE = re.compile(
+    r"""\.className\s*=\s*(?:\"([^\"]*)\"|'([^']*)')(?=\s*;)"""
+)
 SELECTOR_CALL_RE = re.compile(
     r"""(?:querySelector|querySelectorAll|closest|matches)\(\s*(?:"([^"]*)"|'([^']*)'|`([^`]*)`)"""
 )
@@ -153,6 +157,9 @@ def used_classes(root: Path) -> dict[str, set[str]]:
     def record_script_tokens(text: str, rel: str) -> None:
         for match in CLASSLIST_RE.finditer(text):
             for token in STRING_CLASS_RE.findall(match.group(1)):
+                record(token, rel)
+        for match in CLASSNAME_ASSIGN_RE.finditer(text):
+            for token in (match.group(1) or match.group(2) or "").split():
                 record(token, rel)
         for match in SELECTOR_CALL_RE.finditer(text):
             selector = match.group(1) or match.group(2) or match.group(3) or ""

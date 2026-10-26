@@ -1,76 +1,151 @@
 {
-  "contract": "CONFENGE_THIRD_PARTY_CONVERSION_DECISION/1.0",
-  "schema_version": "1.0.0",
+  "contract": "CONFENGE_THIRD_PARTY_CONVERSION_DECISION/1.1",
+  "schema_version": "1.1.0",
   "issue": "https://github.com/tjsasakifln/web-cfg/issues/247",
-  "decision_state": "DEFER",
+  "decision_state": "EXECUTE",
   "decision_owner": "CONFENGE",
-  "decided_at": "2026-08-23",
-  "review_at": "2026-09-20",
+  "decided_at": "2026-10-25",
+  "review_at": "2027-01-25",
   "executive_front": "INBOUND ENGINE",
-  "leverage": [
-    "distribution",
-    "trust"
-  ],
-  "time_to_evidence": "28 days after an explicitly authorized canary starts",
+  "leverage": ["distribution", "trust"],
+  "time_to_evidence": "28 days after the consented measurement release is published",
   "decision": {
-    "browser_tag_authorized": false,
+    "browser_tag_authorized": true,
     "server_side_forward_authorized": false,
-    "provider": null,
-    "reason": "Do not export conversion events while issue #87 is not EXECUTE with an approved hypothesis and spend cap, and while no explicit-consent contract is versioned and enforced."
+    "provider": "google_analytics_4",
+    "purpose": "optional_site_measurement",
+    "advertising_authorized": false,
+    "reason": "The CONFENGE owner explicitly authorized optional GA4 measurement for confenge.com.br using the existing confirmed property and web stream. Export remains default-denied, consented, revocable, non-retroactive and separate from the required first-party collector."
+  },
+  "browser_contract": {
+    "provider": "google_analytics_4",
+    "measurement_id": "G-MT2G5L4KBR",
+    "property_id": "494051528",
+    "web_stream_id": "11376849383",
+    "hostname": "confenge.com.br",
+    "loader_origin": "https://www.googletagmanager.com",
+    "consent": {
+      "storage_key": "confenge_google_analytics_consent",
+      "allowed_values": ["denied", "granted"],
+      "default_state": "denied",
+      "google_consent_type": "analytics_storage",
+      "setter": "confengeSetGoogleAnalyticsConsent",
+      "queue": "confengeGaQueue",
+      "first_party_master_opt_out_precedence": true,
+      "withdrawal_supported": true,
+      "retroactive_event_replay": false
+    }
+  },
+  "event_export_policy": {
+    "allowlisted_events": [
+      "content_to_service",
+      "cta_click",
+      "editorial_page_view",
+      "email_click",
+      "lead_form_error",
+      "lead_form_start",
+      "lead_form_submit",
+      "lead_form_success",
+      "offer_view",
+      "page_view",
+      "scroll_depth",
+      "service_page_view",
+      "whatsapp_click"
+    ],
+    "allowlisted_properties": [
+      "page_location",
+      "page_referrer",
+      "page_title"
+    ],
+    "allowlisted_properties_scope": "explicit_app_parameters_only",
+    "provider_added_protocol_fields_acknowledged": true,
+    "page_location_policy": "canonical_origin_plus_safe_path_without_query_or_fragment",
+    "page_referrer_policy": "empty_string",
+    "page_title_policy": "constant_CONFENGE",
+    "custom_event_properties": false,
+    "forbidden": [
+      "pii",
+      "raw_url",
+      "query",
+      "fragment",
+      "raw_referrer",
+      "lead_id",
+      "receipt_id",
+      "correlation_id",
+      "event_id",
+      "session_id",
+      "cta_id",
+      "asset_id",
+      "destination_service_id"
+    ],
+    "google_signals": false,
+    "advertising_features": false
   },
   "first_party_baseline": {
     "required": true,
     "collector": "/api/web/collect",
     "source": "CONFENGE_WEB",
     "pii_policy": "aggregate_allowlist_empty",
-    "third_party_cookie_required": false
+    "third_party_cookie_required": false,
+    "independent_of_google_analytics": true
   },
   "promotion_gate": {
     "all_required": true,
-    "issue_87": {
-      "required_state": "EXECUTE",
-      "current_state": "VALIDATE",
-      "hypothesis_approved": false,
-      "hypothesis_ref": null,
-      "spend_approved": false,
-      "spend_cap_brl": null,
-      "spend_approval_ref": null
+    "measurement_authorization": {
+      "confirmed": true,
+      "scope": "confenge.com.br_optional_measurement_only",
+      "property_id": "494051528",
+      "web_stream_id": "11376849383",
+      "measurement_id": "G-MT2G5L4KBR"
     },
     "explicit_consent": {
       "required": true,
-      "current_state": "MISSING",
+      "current_state": "ENFORCED",
       "default_state": "denied",
-      "opt_in_before_export": false,
-      "withdrawal_supported": false,
-      "contract_ref": null,
-      "enforcement_test_ref": null
+      "opt_in_before_export": true,
+      "withdrawal_supported": true,
+      "retroactive_export": false,
+      "contract_ref": "data/ops/third-party-conversion-decision.v1.json",
+      "enforcement_test_ref": "seo/scripts/test_third_party_analytics_gate.mjs"
+    },
+    "paid_advertising_gate": {
+      "issue": "https://github.com/tjsasakifln/web-cfg/issues/87",
+      "current_state": "VALIDATE",
+      "google_ads_authorized": false,
+      "marketing_personalization_authorized": false,
+      "spend_approved": false,
+      "spend_cap_brl": null,
+      "spend_approval_ref": null,
+      "independent_of_measurement_authorization": true
     },
     "privacy": {
       "pii_policy": "aggregate_allowlist_empty",
+      "raw_url_export": false,
+      "internal_identifier_export": false,
+      "privacy_notice_ref": "privacidade/index.html",
       "zero_pii_gate": "npm run test:analytics"
     },
-    "authorization": null
+    "authorization": {
+      "provider": "google_analytics_4",
+      "scope": "optional_site_measurement",
+      "approved_by": "CONFENGE owner",
+      "approved_at": "2026-10-25"
+    }
   },
   "measurable_revisit_trigger": {
-    "mode": "first_of",
-    "triggers": [
-      {
-        "type": "date",
-        "value": "2026-09-20"
-      },
-      {
-        "type": "all_conditions",
-        "conditions": [
-          "issue_87_decision_state_equals_EXECUTE",
-          "approved_hypothesis_ref_is_versioned",
-          "approved_spend_cap_brl_is_greater_than_zero",
-          "explicit_consent_contract_and_enforcement_test_are_versioned"
-        ]
-      }
+    "mode": "review_on_date_or_contract_violation",
+    "review_on": "2027-01-25",
+    "contract_violations": [
+      "consent_default_changes_from_denied",
+      "withdrawal_stops_working",
+      "retroactive_export_is_enabled",
+      "provider_or_measurement_id_changes",
+      "pii_raw_url_or_internal_identifier_is_exported",
+      "advertising_or_server_side_export_is_enabled"
     ]
   },
   "rollback": {
-    "action": "Remove the external loader/exporter and its runtime configuration, keep the first-party collector active, and verify npm run test:analytics.",
+    "action": "Remove the GA4 loader and exporter, set analytics_storage to denied, keep the first-party collector active, and verify npm run test:analytics.",
     "owner": "CONFENGE"
   },
   "affected_adr": "ADR-STRAT-002 (no boundary change)"
