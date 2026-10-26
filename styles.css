@@ -1142,6 +1142,10 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .site-footer .footer-links a:hover,.site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:hover,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:hover,.site-footer .footer-bottom>a:focus-visible{color:#fff;text-shadow:0 0 .45rem rgba(206,214,42,.48)}
 .site-footer .footer-links a:focus-visible,.site-footer .footer-authority a:focus-visible,.site-footer .footer-bottom>a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring,0 0 0 2px #fff,0 0 0 5px #071a31),0 0 .55rem rgba(206,214,42,.36)}
 .site-footer .footer-bottom{font-size:.8rem;color:#c4d0d9}
+.site-footer .footer-analytics-preference{margin:.5rem auto 0;color:#e7eef3;font-size:.8125rem;line-height:1.35}
+.site-footer .footer-analytics-preference .button{min-height:44px;padding:.45rem .65rem;font-size:.8125rem}
+.site-footer .footer-analytics-preference a{display:inline-flex;align-items:center;min-height:44px;color:#e7eef3;text-decoration:underline;text-underline-offset:.18em}
+.site-footer .footer-analytics-preference a:hover,.site-footer .footer-analytics-preference a:focus-visible{color:#fff}
 @media (prefers-reduced-motion:reduce){.site-footer .footer-links a,.site-footer .footer-authority a,.site-footer .footer-bottom>a{transition:none}}
 @media (min-width:621px){.site-footer{padding-bottom:max(80px,calc(56px + 14px + 10px + env(safe-area-inset-bottom)))}}
 
