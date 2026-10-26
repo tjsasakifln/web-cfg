@@ -77,6 +77,40 @@ def test_behaviour_and_inline_scripts_keep_a_class_alive() -> None:
         shutil.rmtree(root)
 
 
+def test_static_classname_assignments_keep_literal_classes_alive() -> None:
+    root = _fixture_root()
+    try:
+        (root / "class-name.js").write_text(
+            "node.className = 'container footer-analytics-preference';\n",
+            encoding="utf-8",
+        )
+        (root / "inline.html").write_text(
+            "<script>item.className = \"inline-visible inline-card\";</script>",
+            encoding="utf-8",
+        )
+        (root / "dynamic.js").write_text(
+            "item.classNamePrefix = 'prefix-false';\n"
+            "item.className = 'concat-false' + suffix;\n"
+            "item.className = `template-false${suffix}`;\n",
+            encoding="utf-8",
+        )
+        (root / "test_ignored.js").write_text(
+            "item.className = 'fixture-must-not-keep-alive';\n",
+            encoding="utf-8",
+        )
+        css = (root / "bundle.css").read_text(encoding="utf-8")
+        css += (
+            ".container{} .footer-analytics-preference{} .inline-visible{} "
+            ".inline-card{} .prefix-false{} .concat-false{} .template-false{} .fixture-must-not-keep-alive{}"
+        )
+        used = used_classes(root)
+        dead = unused_classes(css, used)
+        assert {"container", "footer-analytics-preference", "inline-visible", "inline-card"}.isdisjoint(dead)
+        assert {"prefix-false", "concat-false", "template-false", "fixture-must-not-keep-alive"}.issubset(dead)
+    finally:
+        shutil.rmtree(root)
+
+
 def test_quoted_strings_are_not_class_selectors() -> None:
     selectors = class_selectors('@import url("/styles-tokens.css");\na[href$=".css"]{color:red}')
     assert "css" not in selectors, selectors
