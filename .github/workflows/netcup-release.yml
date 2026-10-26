@@ -97,15 +97,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "22"
           cache: npm
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: "3.12"
       - name: Download the exact public artifact exported by site-ci
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: site-ci-public-${{ github.sha }}
           path: _site
@@ -151,7 +151,7 @@ jobs:
         with:
           subject-path: dist/netcup/${{ github.sha }}/confenge-web-${{ github.sha }}.tar.gz
       - name: Store release candidate independently of Netlify
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: netcup-release-${{ github.sha }}
           path: dist/netcup/${{ github.sha }}/
@@ -173,7 +173,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Download attested release bundle
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: netcup-release-${{ github.sha }}
           path: dist/netcup/${{ github.sha }}
@@ -291,19 +291,19 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "22"
           cache: npm
       - name: Install the gated Lighthouse toolchain
         run: npm ci --ignore-scripts
       - name: Download the exact gated public artifact
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: site-ci-public-${{ github.sha }}
           path: _site
       - name: Download the attested release bundle
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: netcup-release-${{ github.sha }}
           path: dist/netcup/${{ github.sha }}
@@ -369,7 +369,7 @@ jobs:
             --residual="real edge network latency and RTT;Cloudflare edge caching and transforms;the production nginx contract and its headers;the Node runtime endpoints (/.well-known/runtime-info.json);the live-intelligence overlay published at stage"
       - name: Store the qualification
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: netcup-qualification-${{ github.sha }}
           path: |
@@ -390,7 +390,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Download the same attested controller bundle
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: netcup-release-${{ github.sha }}
           path: dist/netcup/${{ github.sha }}
@@ -437,14 +437,14 @@ jobs:
             echo "NETCUP_PROMOTE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST:NETCUP_DEPLOY_PORT" >&2
             exit 1
           }
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "22"
           cache: npm
       - name: Install the gated Lighthouse toolchain
         run: npm ci --ignore-scripts
       - name: Download the same gated public artifact
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: site-ci-public-${{ github.sha }}
           path: _site
@@ -452,7 +452,7 @@ jobs:
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: runtime_chrome
       - name: Download this candidate's qualification
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: netcup-qualification-${{ github.sha }}
           path: qualification
@@ -657,7 +657,7 @@ jobs:
           echo "NETCUP_EVIDENCE_COMPLETE"
       - name: Store mandatory post-promote evidence
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: netcup-runtime-acceptance-${{ github.sha }}
           path: |
