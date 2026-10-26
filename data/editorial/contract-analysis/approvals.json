@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
-      "rendered_content_hash_previous": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
+      "rendered_content_hash": "1c1819d05a7dc99233222bfe185c504606b2614b3a854141cf80897cf950c3af",
+      "rendered_content_hash_previous": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-10-14T08:14:09Z",
-      "rendered_hash_recapture_reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-SERVICOS-20261014: recaptura deterministica da apresentacao compartilhada apos remover do rodape o link duplicado /servicos/ rotulado Servicos de engenharia em 233 HTMLs, preservando a navegacao principal, os sete cards de servicos, o link /inteligencia/ a 14px e os assets styles.css e script.js. O material tecnico, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA da analise aprovada permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
-      "rendered_hash_recapture_reason_previous": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-20261014: recaptura deterministica da apresentacao compartilhada apos o ajuste localizado do link /inteligencia/ no rodape para fonte de 14px, preservando legibilidade, alvo de 44px e identidade institucional. styles.css final tem 105961 bytes. O HTML tecnico da analise aprovada e os hashes material, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
+      "rendered_hash_recaptured_at": "2026-10-26T12:35:46Z",
+      "rendered_hash_recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: correcao autorizada da regressao de altura introduzida pelo consentimento GA4. Regras restritas ao rodape, com alvos de 44px e contraste preservados. Comparacao deterministica confirma HTML tecnico byte-identico e artefato final diferente somente no fingerprint de styles.css. Material, fontes, autoria, datas, canonical, robots e CTA preservados. Recaptura de apresentacao pelo procedimento existente; nenhuma nova aprovacao tecnica ou revisao humana alegada.",
+      "rendered_hash_recapture_reason_previous": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-SERVICOS-20261014: recaptura deterministica da apresentacao compartilhada apos remover do rodape o link duplicado /servicos/ rotulado Servicos de engenharia em 233 HTMLs, preservando a navegacao principal, os sete cards de servicos, o link /inteligencia/ a 14px e os assets styles.css e script.js. O material tecnico, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA da analise aprovada permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -899,6 +899,17 @@
       "rendered_content_hash_previous": "21e3100922cf69cf2a8d8bf98f9371ff34c675523037cabd674ebeed32cc494e",
       "rendered_content_hash": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
       "reason": "CONFENGE-INTELIGENCIA-MERCADO-RODAPE-SERVICOS-20261014: recaptura deterministica da apresentacao compartilhada apos remover do rodape o link duplicado /servicos/ rotulado Servicos de engenharia em 233 HTMLs, preservando a navegacao principal, os sete cards de servicos, o link /inteligencia/ a 14px e os assets styles.css e script.js. O material tecnico, conteudo, produtor, fontes, fatos, calculos, limites, autoria, datas, canonical, robots, JSON-LD e CTA da analise aprovada permanecem preservados. A aprovacao humana tecnica de 2026-08-20 e mantida; nenhuma nova aprovacao tecnica ou revisao humana independente e alegada."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisao da direcao para a campanha indicada em reason; recaptura apenas da apresentacao renderizada, sem nova aprovacao tecnica.",
+      "at": "2026-10-26T12:35:46Z",
+      "reviewer": "comparacao deterministica pelo proprio agente; nenhuma nova aprovacao tecnica ou revisao humana independente alegada",
+      "rendered_content_hash_previous": "bf9ee3b5b56eaa42f52393d8ec60e51a2473c415b5680068604957c5a4b6601b",
+      "rendered_content_hash": "1c1819d05a7dc99233222bfe185c504606b2614b3a854141cf80897cf950c3af",
+      "reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: correcao autorizada da regressao de altura introduzida pelo consentimento GA4. Regras restritas ao rodape, com alvos de 44px e contraste preservados. Comparacao deterministica confirma HTML tecnico byte-identico e artefato final diferente somente no fingerprint de styles.css. Material, fontes, autoria, datas, canonical, robots e CTA preservados. Recaptura de apresentacao pelo procedimento existente; nenhuma nova aprovacao tecnica ou revisao humana alegada."
     }
   ]
 }

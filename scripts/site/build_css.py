@@ -166,22 +166,29 @@ def sync_home_sheet(root: Path, *, check: bool = False) -> bool:
 
 
 def sync_home_runtime_buttons(root: Path, assembled: str, *, check: bool = False) -> bool:
-    """Keep existing light-button rules for controls inserted after HTML load.
+    """Keep canonical runtime-only preference controls in the home stylesheet.
 
     The home subset omits selectors absent from static index.html. Analytics
-    preferences are inserted by script.js, so their existing button variant
-    must be copied from the canonical stylesheet rather than redefined here.
+    preferences are inserted by script.js, so their button and preference
+    rules must be copied from the canonical stylesheet rather than redefined
+    here.
     """
     home_base = root / "assets" / "home-base.css"
     if not home_base.is_file():
         return False
     begin = "/* BEGIN home runtime button variants */"
     end = "/* END home runtime button variants */"
-    rules = re.findall(r"\.button-light(?::hover)?\{[^{}]+\}", assembled)
-    if len(rules) != 2:
+    button_rules = re.findall(r"\.button-light(?::hover)?\{[^{}]+\}", assembled)
+    if len(button_rules) != 2:
         raise ValueError("expected canonical light button and hover rules")
+    preference_rules = re.findall(
+        r"\.site-footer \.footer-analytics-preference[^{}]*\{[^{}]+\}",
+        assembled,
+    )
+    if len(preference_rules) != 4:
+        raise ValueError("expected four canonical footer analytics preference rules")
     current = home_base.read_text(encoding="utf-8")
-    block = begin + "\n" + "\n".join(rules) + "\n" + end
+    block = begin + "\n" + "\n".join(button_rules + preference_rules) + "\n" + end
     if begin in current:
         prefix, rest = current.split(begin, 1)
         if end not in rest:
