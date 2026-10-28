@@ -65,6 +65,7 @@ def host(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     monkeypatch.setenv("CONFENGE_RELEASE_TEST_MODE", "1")
     monkeypatch.setenv("CONFENGE_RELEASE_ROOT", str(root))
     monkeypatch.setenv("CONFENGE_ORIGIN_HOST", "confenge.com.br")
+    monkeypatch.setattr(control, "CACHE_TRANSITION_MIN_AGE_SECONDS", 0)
     return root
 
 
@@ -74,21 +75,23 @@ def make_site(tmp_path: Path, sha: str) -> Path:
     well_known.mkdir(parents=True)
     artifact_hash = sha256_file(Path(__file__))
     manifest_hash = sha256_file(REPO_ROOT / "deploy" / "netcup" / "package_release.py")
-    (site / "index.html").write_text(
-        "<!doctype html><html lang='pt-BR'><body>CONFENGE</body></html>\n",
-        encoding="utf-8",
-    )
     (site / "404.html").write_text(
         "<!doctype html><html lang='pt-BR'><body>Página não encontrada</body></html>\n",
         encoding="utf-8",
     )
-    css = b"body { color: #06182d; }\n"
+    css = f"body {{ color: #06182d; }} /* {sha} */\n".encode()
     css_sha = hashlib.sha256(css).hexdigest()
     css_href = f"/assets/css/styles.{css_sha[:12]}.css"
     css_asset = site / css_href.lstrip("/")
     css_asset.parent.mkdir(parents=True)
     css_asset.write_bytes(css)
     (site / "styles.css").write_bytes(css)
+    (site / "index.html").write_text(
+        "<!doctype html><html lang='pt-BR'><head>"
+        f"<link rel='stylesheet' href='{css_href}'>"
+        "</head><body>CONFENGE</body></html>\n",
+        encoding="utf-8",
+    )
     (well_known / "css-assets.json").write_text(
         json.dumps(
             {
@@ -473,6 +476,196 @@ def test_promote_is_atomic_and_live_identity_matches(
             assert json.load(response)["commit"] == SHA_A
 
 
+def _fingerprinted_css(release: Path) -> tuple[str, Path]:
+    payload = json.loads(
+        (release / "_site/.well-known/css-assets.json").read_text(encoding="utf-8")
+    )
+    rel = "_site/" + payload["files"]["styles.css"]["href"].lstrip("/")
+    return rel, release / rel
+
+
+def test_promote_retains_exact_predecessor_assets_for_stale_html(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    release_a = host / "releases" / SHA_A
+    release_b = host / "releases" / SHA_B
+    old_rel, old_asset = _fingerprinted_css(release_a)
+    new_rel, new_asset = _fingerprinted_css(release_b)
+    assert old_rel != new_rel
+    old_digest = control.sha256_file(old_asset)
+    new_digest = control.sha256_file(new_asset)
+
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+        with urllib.request.urlopen(
+            os.environ["CONFENGE_LOCAL_ORIGIN"] + "/" + old_rel.removeprefix("_site/")
+        ) as response:
+            assert hashlib.sha256(response.read()).hexdigest() == old_digest
+
+    transition = json.loads(
+        (release_b / control.CACHE_TRANSITION_MANIFEST).read_text(encoding="utf-8")
+    )
+    assert transition["predecessor_sha"] == SHA_A
+    assert transition["files"] == {old_rel: old_digest}
+    assert control.sha256_file(release_b / old_rel) == old_digest
+    assert control.sha256_file(new_asset) == new_digest
+    assert control.verify_release_envelope_and_tree(host, SHA_B)["commit"] == SHA_B
+
+
+def test_second_rapid_promotion_is_blocked_before_swap(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    for index, sha in enumerate((SHA_A, SHA_B, SHA_C)):
+        make_incoming(tmp_path / str(index), host, sha)
+        control.stage_release(sha)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+        monkeypatch.setattr(control, "CACHE_TRANSITION_MIN_AGE_SECONDS", 300)
+        control.rollback_release(SHA_A, expected_current=SHA_B)
+        with pytest.raises(control.ReleaseError, match="guard is active"):
+            control.rollback_release(SHA_C, expected_current=SHA_A)
+    assert control.read_release_link(host, "current") == SHA_A
+    assert not (host / "releases" / SHA_C / control.CACHE_TRANSITION_MANIFEST).exists()
+
+
+def test_rollback_retains_assets_from_release_being_replaced(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    release_a = host / "releases" / SHA_A
+    release_b = host / "releases" / SHA_B
+    b_rel, b_asset = _fingerprinted_css(release_b)
+    b_digest = control.sha256_file(b_asset)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+        control.rollback_release(SHA_A, expected_current=SHA_B)
+        with urllib.request.urlopen(
+            os.environ["CONFENGE_LOCAL_ORIGIN"] + "/" + b_rel.removeprefix("_site/")
+        ) as response:
+            assert hashlib.sha256(response.read()).hexdigest() == b_digest
+    transition = json.loads(
+        (release_a / control.CACHE_TRANSITION_MANIFEST).read_text(encoding="utf-8")
+    )
+    assert transition["predecessor_sha"] == SHA_B
+    assert transition["files"] == {b_rel: b_digest}
+
+
+def test_cache_transition_rejects_mutable_paths_and_tampering(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    assert control.is_cache_transition_asset(
+        "_site/assets/css/home-base.dff7df09001b.css"
+    )
+    assert control.is_cache_transition_asset(
+        "_site/assets/archivo-var-latin-b19be0f7.woff2"
+    )
+    assert not control.is_cache_transition_asset("_site/styles.css")
+    assert not control.is_cache_transition_asset("_site/assets/css/home-base.css")
+    assert not control.is_cache_transition_asset("_site/assets/data.abcdef123456.json")
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    release_a = host / "releases" / SHA_A
+    release_b = host / "releases" / SHA_B
+    old_rel, _old_asset = _fingerprinted_css(release_a)
+    collision = release_b / old_rel
+    collision.parent.mkdir(parents=True, exist_ok=True)
+    collision.write_bytes(b"untrusted pre-existing bytes")
+    with pytest.raises(control.ReleaseError, match="target already exists"):
+        control._prepare_cache_transition(host, SHA_B, SHA_A)
+    assert collision.read_bytes() == b"untrusted pre-existing bytes"
+    collision.unlink()
+    monkeypatch.setattr(control, "CACHE_TRANSITION_MAX_FILES", 0)
+    with pytest.raises(control.ReleaseError, match="count exceeds fixed limit"):
+        control._prepare_cache_transition(host, SHA_B, SHA_A)
+    monkeypatch.setattr(control, "CACHE_TRANSITION_MAX_FILES", 512)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+    transition = json.loads(
+        (release_b / control.CACHE_TRANSITION_MANIFEST).read_text(encoding="utf-8")
+    )
+    retained = release_b / next(iter(transition["files"]))
+    retained.write_bytes(b"tampered")
+    with pytest.raises(control.ReleaseError, match="checksum mismatch"):
+        control.verify_release_envelope_and_tree(host, SHA_B)
+
+
+def test_interrupted_cache_transition_is_journaled_and_retryable(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    original_write = Path.write_bytes
+    crashed = {"done": False}
+
+    def crash_after_asset_write(path: Path, body: bytes) -> int:
+        written = original_write(path, body)
+        if control.is_cache_transition_asset(
+            path.relative_to(host / "releases" / SHA_B).as_posix()
+        ) and not crashed["done"]:
+            crashed["done"] = True
+            raise KeyboardInterrupt("simulated host crash")
+        return written
+
+    monkeypatch.setattr(Path, "write_bytes", crash_after_asset_write)
+    with pytest.raises(KeyboardInterrupt, match="simulated host crash"):
+        control._prepare_cache_transition(host, SHA_B, SHA_A)
+    journal = json.loads(
+        (host / "releases" / SHA_B / control.CACHE_TRANSITION_MANIFEST).read_text(
+            encoding="utf-8"
+        )
+    )
+    assert journal["state"] == "PREPARING"
+    monkeypatch.setattr(Path, "write_bytes", original_write)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+    ready = json.loads(
+        (host / "releases" / SHA_B / control.CACHE_TRANSITION_MANIFEST).read_text(
+            encoding="utf-8"
+        )
+    )
+    assert ready["state"] == "READY"
+    assert control.verify_release_envelope_and_tree(host, SHA_B)["commit"] == SHA_B
+
+
+def test_cache_transition_extracts_source_tar_in_constant_passes(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    source_package = host / "incoming" / SHA_A / f"confenge-web-{SHA_A}.tar.gz"
+    original_open = control.tarfile.open
+    opens = {"source": 0}
+
+    def counted_open(name, *args, **kwargs):
+        if Path(name) == source_package:
+            opens["source"] += 1
+        return original_open(name, *args, **kwargs)
+
+    monkeypatch.setattr(control.tarfile, "open", counted_open)
+    control._prepare_cache_transition(host, SHA_B, SHA_A)
+    # The ledger is checked before and after the write, while all selected
+    # assets share one extraction pass. The count is independent of asset count.
+    assert opens["source"] == 3
+
+
 def test_concurrent_promote_is_refused_by_host_lock(host: Path) -> None:
     control.ensure_layout(host)
     with (
@@ -850,6 +1043,13 @@ def test_failed_post_swap_check_restores_previous(
             control.promote_release(SHA_B, SHA_A)
         assert control.read_release_link(host, "current") == SHA_A
         control.smoke_live(SHA_A)
+        b_rel, b_asset = _fingerprinted_css(host / "releases" / SHA_B)
+        b_digest = control.sha256_file(b_asset)
+        assert control.sha256_file(host / "releases" / SHA_A / b_rel) == b_digest
+        with urllib.request.urlopen(
+            os.environ["CONFENGE_LOCAL_ORIGIN"] + "/" + b_rel.removeprefix("_site/")
+        ) as response:
+            assert hashlib.sha256(response.read()).hexdigest() == b_digest
 
 
 def test_failed_switch_seals_and_restores_a_route_exact_legacy_overlay(
@@ -889,7 +1089,16 @@ def test_failed_switch_seals_and_restores_a_route_exact_legacy_overlay(
             path.relative_to(release_a).as_posix()
         )
     }
-    assert after == before, "legacy current release/docroot must remain byte-identical"
+    assert all(
+        after.get(rel) == digest for rel, digest in before.items()
+    ), "legacy current release/docroot bytes must remain unchanged"
+    transition = json.loads(
+        (release_a / control.CACHE_TRANSITION_MANIFEST).read_text(encoding="utf-8")
+    )
+    assert set(after) - set(before) == {
+        control.CACHE_TRANSITION_MANIFEST,
+        *transition["files"],
+    }
     assert not (release_a / control.LIVE_INTEL_OVERLAY_MANIFEST).exists()
     assert not (release_a / control.LIVE_INTEL_PUBLIC_MANIFEST).exists()
     assert control._legacy_overlay_state_path(release_a, SHA_A).is_file()

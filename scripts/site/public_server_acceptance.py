@@ -40,10 +40,16 @@ from scripts.site.cache_contract import (  # noqa: E402
 CANONICAL_BASE = "https://confenge.com.br"
 INVENTORY_SCHEMA = "confenge.served-html-inventory/v1"
 REPORT_SCHEMA = "confenge.public-server-acceptance/v1"
+CACHE_TRANSITION_SCHEMA = "confenge.cache-transition-assets/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_HTML = re.compile(r"^[A-Za-z0-9._/-]+\.html$")
 SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/-]+$")
+CACHE_TRANSITION_ASSET = re.compile(
+    r"^_site/assets(?:/[A-Za-z0-9._-]+)*/[A-Za-z0-9._-]+[.-][0-9a-f]{8,64}\.(?:avif|css|gif|ico|jpeg|jpg|js|mjs|png|svg|webp|woff|woff2)$"
+)
+CACHE_TRANSITION_MAX_FILES = 512
+CACHE_TRANSITION_MAX_BYTES = 64 * 1024 * 1024
 NONPUBLIC_CONFIG_FILES = frozenset({"_headers", "_redirects"})
 EXACT_ASSET_CONTENT_TYPES = {
     "favicon.ico": frozenset({"image/x-icon", "image/vnd.microsoft.icon"}),
@@ -128,6 +134,43 @@ def _request_path_for_html(rel: str) -> str:
     return "/" + rel
 
 
+def _cache_transition(raw: Any, release_sha: str, assets: dict[str, str]) -> tuple[dict[str, Any] | None, list[str]]:
+    """Parse the controller's narrow cache-compatibility exception fail-closed."""
+    if raw is None:
+        return None, []
+    errors: list[str] = []
+    required = {"schema", "state", "release_sha", "predecessor_sha", "predecessor_artifact_sha256", "files", "total_bytes"}
+    if not isinstance(raw, dict) or set(raw) != required:
+        return None, ["served_inventory_cache_transition_shape_invalid"]
+    if raw.get("schema") != CACHE_TRANSITION_SCHEMA or raw.get("state") != "READY":
+        errors.append("served_inventory_cache_transition_state_invalid")
+    predecessor = raw.get("predecessor_sha")
+    if raw.get("release_sha") != release_sha or not FULL_SHA.fullmatch(str(predecessor or "")) or predecessor == release_sha:
+        errors.append("served_inventory_cache_transition_identity_invalid")
+    if not HEX256.fullmatch(str(raw.get("predecessor_artifact_sha256") or "")):
+        errors.append("served_inventory_cache_transition_predecessor_digest_invalid")
+    files = raw.get("files")
+    if not isinstance(files, dict) or not 1 <= len(files) <= CACHE_TRANSITION_MAX_FILES:
+        errors.append("served_inventory_cache_transition_files_invalid")
+        files = {}
+    normalized: dict[str, str] = {}
+    for raw_rel, digest in files.items():
+        rel = str(raw_rel)
+        public_rel = rel.removeprefix("_site/")
+        if (not isinstance(raw_rel, str) or not CACHE_TRANSITION_ASSET.fullmatch(rel)
+                or not HEX256.fullmatch(str(digest)) or assets.get(public_rel) != digest):
+            errors.append(f"served_inventory_cache_transition_entry_invalid:{rel[:100]}")
+            continue
+        normalized[public_rel] = str(digest)
+    total = raw.get("total_bytes")
+    if isinstance(total, bool) or not isinstance(total, int) or not 0 <= total <= CACHE_TRANSITION_MAX_BYTES:
+        errors.append("served_inventory_cache_transition_total_bytes_invalid")
+    if len(normalized) != len(files):
+        errors.append("served_inventory_cache_transition_accounting_mismatch")
+    return ({"files": normalized, "total_bytes": total, "predecessor_sha": predecessor,
+             "predecessor_artifact_sha256": raw.get("predecessor_artifact_sha256")}, errors)
+
+
 def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     try:
@@ -170,6 +213,10 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
                 errors.append(f"served_inventory_non_html_entry_invalid:{str(rel)[:100]}")
             else:
                 assets[rel] = str(digest)
+    cache_transition, cache_transition_errors = _cache_transition(
+        payload.get("cache_transition"), release_sha, assets,
+    )
+    errors.extend(cache_transition_errors)
     if not isinstance(payload.get("overlay"), dict):
         errors.append("served_inventory_overlay_invalid")
     if not isinstance(payload.get("build_info"), dict):
@@ -278,6 +325,7 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         "release_sha": release_sha,
         "html_sha256": normalized,
         "non_html_sha256": assets,
+        "cache_transition": cache_transition,
         "http_dispositions": dispositions,
         "contract_probes": contract_probes,
         "overlay": payload.get("overlay"),
@@ -986,6 +1034,23 @@ def verify_non_html_assets(
         if path.is_file() and not path.is_symlink() and path.suffix != ".html"
     }
     errors: list[str] = []
+    transition = inventory.get("cache_transition")
+    compatibility: dict[str, Any] = {
+        "applicable": transition is not None, "expected_files": 0,
+        "verified_files": 0, "total_bytes": 0, "errors": [], "ok": True,
+    }
+    transition_files = (transition or {}).get("files") or {}
+    if transition is not None:
+        # These are intentionally absent from the candidate artifact: the host
+        # temporarily carries verified predecessor bytes while edge HTML drains.
+        # Their proof is therefore exact inventory + public HTTP, never a local
+        # candidate-file requirement.
+        compatibility["expected_files"] = len(transition_files)
+        overlap = sorted(set(transition_files) & set(artifact))
+        if overlap:
+            compatibility["errors"].extend(
+                f"cache_transition_candidate_overlap:{rel}" for rel in overlap
+            )
     overlay_allowed = OVERLAY_NON_HTML_FILES if overlay.get("source_kind") == "official_live" else frozenset()
     # The public overlay receipt exists for both official and withheld states.
     receipt = ".well-known/live-intelligence-overlay.json"
@@ -993,7 +1058,7 @@ def verify_non_html_assets(
         overlay_allowed = overlay_allowed | {receipt}
     for rel in sorted(set(artifact) - set(host)):
         errors.append(f"server_non_html_missing:{rel}")
-    for rel in sorted(set(host) - set(artifact) - overlay_allowed):
+    for rel in sorted(set(host) - set(artifact) - overlay_allowed - set(transition_files)):
         errors.append(f"server_non_html_unlisted:{rel}")
     for rel in sorted(set(host) & set(artifact)):
         if host[rel] != artifact[rel] and rel not in overlay_allowed:
@@ -1065,11 +1130,30 @@ def verify_non_html_assets(
         published=EDGE_MANAGED_ROBOTS in host,
     )
     errors.extend(policy["errors"])
+    if transition is not None:
+        transition_rows = {row["path"]: row for row in rows if row["path"] in transition_files}
+        compatibility["verified_files"] = sum(
+            row.get("ok") and row.get("http_sha256") == transition_files.get(rel)
+            for rel, row in transition_rows.items()
+        )
+        compatibility["total_bytes"] = sum(
+            int(row.get("bytes") or 0) for row in transition_rows.values()
+            if row.get("ok") and row.get("http_sha256") == transition_files.get(row["path"])
+        )
+        if set(transition_rows) != set(transition_files):
+            compatibility["errors"].append("cache_transition_public_selection_incomplete")
+        if compatibility["verified_files"] != compatibility["expected_files"]:
+            compatibility["errors"].append("cache_transition_public_digest_mismatch")
+        if compatibility["total_bytes"] != transition.get("total_bytes"):
+            compatibility["errors"].append("cache_transition_public_total_bytes_mismatch")
+        compatibility["ok"] = not compatibility["errors"]
+        errors.extend(compatibility["errors"])
     return {
         "artifact_files": len(artifact), "server_files": len(host),
         "planned": len(requests), "executed": len(rows),
         "passed": len(rows) - len(failures), "failures": failures,
         "results": rows, "robots_policy": policy, "errors": errors, "ok": not errors,
+        "cache_transition": compatibility,
     }
 
 

@@ -76,6 +76,20 @@ LIVE_INTEL_OVERLAY_FILES = frozenset(
         *LIVE_INTEL_ACCEPTED_FILES,
     }
 )
+CACHE_TRANSITION_MANIFEST = "metadata/cache-transition-assets.json"
+CACHE_TRANSITION_SCHEMA = "confenge.cache-transition-assets/v1"
+# Cloudflare may retain public HTML for five minutes. A distinct promotion is
+# therefore not allowed to outrun the one-predecessor compatibility overlay.
+# Tests replace this constant; production has no environment bypass.
+CACHE_TRANSITION_MIN_AGE_SECONDS = 300
+CACHE_TRANSITION_MAX_FILES = 512
+CACHE_TRANSITION_MAX_BYTES = 64 * 1024 * 1024
+CACHE_TRANSITION_EXTENSIONS = frozenset(
+    {
+        "avif", "css", "gif", "ico", "jpeg", "jpg", "js", "mjs",
+        "png", "svg", "webp", "woff", "woff2",
+    }
+)
 # sitemap-index is hashed in the package. Stage overlay may add the
 # oportunidades child after official consume; checksum may then differ.
 LIVE_INTEL_OVERLAY_REWRITES = frozenset(
@@ -357,6 +371,311 @@ def _files_manifest_bytes_from_package(package: Path) -> bytes:
         raise ReleaseError(f"cannot inspect packaged metadata/files.sha256: {exc}") from exc
 
 
+def is_cache_transition_asset(rel: str) -> bool:
+    """Allow only fingerprinted assets under the public immutable asset tree."""
+    try:
+        safe = _safe_member_name(rel)
+    except ReleaseError:
+        return False
+    path = Path(safe)
+    if len(path.parts) < 3 or path.parts[:2] != ("_site", "assets"):
+        return False
+    extension = path.suffix.removeprefix(".").lower()
+    if extension not in CACHE_TRANSITION_EXTENSIONS:
+        return False
+    return re.search(
+        rf"(?:\.|-)[0-9a-f]{{8,64}}\.{re.escape(extension)}$", path.name
+    ) is not None
+
+
+def _packaged_files(
+    root: Path, sha: str
+) -> tuple[Path, dict[str, str], dict[str, Any]]:
+    package, manifest = validate_incoming(root, sha)
+    try:
+        lines = _files_manifest_bytes_from_package(package).decode("utf-8").splitlines()
+    except UnicodeDecodeError as exc:
+        raise ReleaseError("packaged metadata/files.sha256 is not UTF-8") from exc
+    return package, _parse_files_manifest_lines(lines), manifest
+
+
+def _package_asset_bytes(package: Path, selected: dict[str, str]) -> dict[str, bytes]:
+    bodies: dict[str, bytes] = {}
+    try:
+        with tarfile.open(package, mode="r:gz") as archive:
+            members: dict[str, tarfile.TarInfo] = {}
+            for member in archive.getmembers():
+                rel = member.name.rstrip("/")
+                if rel not in selected:
+                    continue
+                if rel in members or not member.isfile():
+                    raise ReleaseError(
+                        f"transition source asset is not one regular member: {rel}"
+                    )
+                members[rel] = member
+            if set(members) != set(selected):
+                raise ReleaseError("transition source package asset set is incomplete")
+            if sum(member.size for member in members.values()) > CACHE_TRANSITION_MAX_BYTES:
+                raise ReleaseError("cache-transition bytes exceed fixed limit")
+            for rel, digest in selected.items():
+                extracted = archive.extractfile(members[rel])
+                if extracted is None:
+                    raise ReleaseError(f"cannot read transition source asset: {rel}")
+                body = extracted.read(members[rel].size + 1)
+                if (
+                    len(body) != members[rel].size
+                    or hashlib.sha256(body).hexdigest() != digest
+                ):
+                    raise ReleaseError(f"transition source asset checksum mismatch: {rel}")
+                bodies[rel] = body
+    except ReleaseError:
+        raise
+    except (OSError, tarfile.TarError) as exc:
+        raise ReleaseError(f"cannot inspect transition source assets: {exc}") from exc
+    return bodies
+
+
+def _cache_transition_contract(
+    release: Path, sha: str, expected: dict[str, str]
+) -> dict[str, Any] | None:
+    path = release / CACHE_TRANSITION_MANIFEST
+    if not path.is_file():
+        return None
+    payload = load_json(path)
+    required = {
+        "schema", "state", "release_sha", "predecessor_sha",
+        "predecessor_artifact_sha256", "files", "total_bytes",
+    }
+    if set(payload) != required:
+        raise ReleaseError("cache-transition manifest shape is invalid")
+    predecessor = str(payload.get("predecessor_sha") or "")
+    if (
+        payload.get("schema") != CACHE_TRANSITION_SCHEMA
+        or payload.get("state") != "READY"
+        or payload.get("release_sha") != sha
+        or predecessor == sha
+        or not FULL_SHA.fullmatch(predecessor)
+    ):
+        raise ReleaseError("cache-transition manifest identity mismatch")
+    if release.parent.name != "releases":
+        raise ReleaseError("cache-transition overlay is only valid in the release store")
+    root = release.parent.parent
+    _package, source_files, source_manifest = _packaged_files(root, predecessor)
+    if payload.get("predecessor_artifact_sha256") != source_manifest["artifact"]["sha256"]:
+        raise ReleaseError("cache-transition predecessor artifact mismatch")
+    files = payload.get("files")
+    if (
+        not isinstance(files, dict)
+        or not files
+        or len(files) > CACHE_TRANSITION_MAX_FILES
+        or any(
+            not isinstance(rel, str)
+            or not is_cache_transition_asset(rel)
+            or not isinstance(digest, str)
+            or not HEX_256.fullmatch(digest)
+            for rel, digest in files.items()
+        )
+    ):
+        raise ReleaseError("cache-transition asset allowlist is invalid")
+    total_bytes = 0
+    for rel, digest in files.items():
+        if rel in expected:
+            raise ReleaseError(f"cache-transition asset overlaps candidate package: {rel}")
+        if source_files.get(rel) != digest:
+            raise ReleaseError(f"cache-transition source ledger mismatch: {rel}")
+        target = release / rel
+        if not target.is_file() or target.is_symlink() or sha256_file(target) != digest:
+            raise ReleaseError(f"cache-transition asset checksum mismatch: {rel}")
+        total_bytes += target.stat().st_size
+    if total_bytes > CACHE_TRANSITION_MAX_BYTES or payload.get("total_bytes") != total_bytes:
+        raise ReleaseError("cache-transition byte accounting mismatch")
+    return payload
+
+
+def _cache_transition_state_path(root: Path, sha: str) -> Path:
+    return root / "state" / f"cache-transition-{sha}.json"
+
+
+def _write_cache_transition_manifest(
+    root: Path, release: Path, sha: str, payload: dict[str, Any]
+) -> None:
+    state_path = _cache_transition_state_path(root, sha)
+    state_path.parent.mkdir(mode=0o750, parents=True, exist_ok=True)
+    state_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(state_path, release / CACHE_TRANSITION_MANIFEST)
+
+
+def _recover_cache_transition_preparation(
+    release: Path, sha: str, expected: dict[str, str]
+) -> None:
+    path = release / CACHE_TRANSITION_MANIFEST
+    if not path.is_file():
+        return
+    payload = load_json(path)
+    if payload.get("state") != "PREPARING":
+        return
+    required = {
+        "schema", "state", "release_sha", "predecessor_sha",
+        "predecessor_artifact_sha256", "files", "total_bytes",
+    }
+    predecessor = str(payload.get("predecessor_sha") or "")
+    files = payload.get("files")
+    if (
+        set(payload) != required
+        or payload.get("schema") != CACHE_TRANSITION_SCHEMA
+        or payload.get("release_sha") != sha
+        or predecessor == sha
+        or not FULL_SHA.fullmatch(predecessor)
+        or not isinstance(files, dict)
+        or not files
+        or len(files) > CACHE_TRANSITION_MAX_FILES
+        or not isinstance(payload.get("total_bytes"), int)
+        or not 0 <= payload["total_bytes"] <= CACHE_TRANSITION_MAX_BYTES
+    ):
+        raise ReleaseError("cache-transition preparation journal is invalid")
+    root = release.parent.parent
+    _package, source_files, source_manifest = _packaged_files(root, predecessor)
+    if payload.get("predecessor_artifact_sha256") != source_manifest["artifact"]["sha256"]:
+        raise ReleaseError("cache-transition preparation predecessor mismatch")
+    for rel, digest in files.items():
+        if (
+            not isinstance(rel, str)
+            or not is_cache_transition_asset(rel)
+            or rel in expected
+            or not isinstance(digest, str)
+            or not HEX_256.fullmatch(digest)
+            or source_files.get(rel) != digest
+        ):
+            raise ReleaseError("cache-transition preparation allowlist is invalid")
+        target = release / rel
+        if os.path.lexists(target):
+            if target.is_dir() and not target.is_symlink():
+                raise ReleaseError(f"cache-transition recovery target is a directory: {rel}")
+            target.unlink()
+    path.unlink()
+
+
+def _recover_cache_transition(root: Path, sha: str) -> None:
+    """Recover only a source-proven PREPARING journal under the deploy lock."""
+    release = root / "releases" / sha
+    if not release.is_dir() or release.is_symlink():
+        return
+    _verify_files_manifest_matches_incoming(root, sha)
+    expected = _parse_files_manifest(release / "metadata/files.sha256")
+    _recover_cache_transition_preparation(release, sha, expected)
+    _cache_transition_state_path(root, sha).unlink(missing_ok=True)
+
+
+def _clear_cache_transition(release: Path, sha: str, expected: dict[str, str]) -> None:
+    _recover_cache_transition_preparation(release, sha, expected)
+    payload = _cache_transition_contract(release, sha, expected)
+    if payload is None:
+        return
+    parents = {(release / rel).parent for rel in payload["files"]}
+    for rel in payload["files"]:
+        (release / rel).unlink()
+    (release / CACHE_TRANSITION_MANIFEST).unlink()
+    for directory in sorted(parents, key=lambda value: len(value.parts), reverse=True):
+        while directory not in {release / "_site", release}:
+            try:
+                directory.rmdir()
+            except OSError:
+                break
+            directory = directory.parent
+
+
+def _prepare_cache_transition(
+    root: Path, sha: str, predecessor: str
+) -> dict[str, Any] | None:
+    """Install a bounded, hash-proven predecessor asset overlay before swap."""
+    validate_sha(sha)
+    validate_sha(predecessor)
+    release = root / "releases" / sha
+    expected = _parse_files_manifest(release / "metadata/files.sha256")
+    _cache_transition_state_path(root, sha).unlink(missing_ok=True)
+    _clear_cache_transition(release, sha, expected)
+    package, source_files, source_manifest = _packaged_files(root, predecessor)
+    selected: dict[str, str] = {}
+    for rel, digest in sorted(source_files.items()):
+        if not is_cache_transition_asset(rel):
+            continue
+        candidate_digest = expected.get(rel)
+        if candidate_digest is not None:
+            if candidate_digest != digest:
+                raise ReleaseError(
+                    f"fingerprinted asset path collides across releases: {rel}"
+                )
+            continue
+        selected[rel] = digest
+    if len(selected) > CACHE_TRANSITION_MAX_FILES:
+        raise ReleaseError("cache-transition asset count exceeds fixed limit")
+    bodies = _package_asset_bytes(package, selected)
+    total_bytes = sum(len(body) for body in bodies.values())
+    if not selected:
+        return None
+    for rel in selected:
+        target = release / rel
+        if os.path.lexists(target):
+            raise ReleaseError(f"cache-transition target already exists: {rel}")
+    payload = {
+        "schema": CACHE_TRANSITION_SCHEMA,
+        "state": "PREPARING",
+        "release_sha": sha,
+        "predecessor_sha": predecessor,
+        "predecessor_artifact_sha256": source_manifest["artifact"]["sha256"],
+        "files": selected,
+        "total_bytes": total_bytes,
+    }
+    _write_cache_transition_manifest(root, release, sha, payload)
+    written: list[Path] = []
+    try:
+        for rel, digest in selected.items():
+            target = release / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            written.append(target)
+            target.write_bytes(bodies[rel])
+        payload["state"] = "READY"
+        _write_cache_transition_manifest(root, release, sha, payload)
+        _cache_transition_contract(release, sha, expected)
+        return payload
+    except Exception:
+        for target in written:
+            if os.path.lexists(target) and not (target.is_dir() and not target.is_symlink()):
+                target.unlink()
+        (release / CACHE_TRANSITION_MANIFEST).unlink(missing_ok=True)
+        raise
+
+
+def _assert_cache_transition_guard(
+    root: Path,
+    previous: str | None,
+    sha: str,
+    event: str,
+    rollback_sha: str | None,
+) -> None:
+    if previous is None or previous == sha or CACHE_TRANSITION_MIN_AGE_SECONDS <= 0:
+        return
+    try:
+        switched_at = os.lstat(root / "current").st_mtime
+    except OSError as exc:
+        raise ReleaseError("cannot read current release transition age") from exc
+    age = time.time() - switched_at
+    if age < CACHE_TRANSITION_MIN_AGE_SECONDS:
+        # The canonical compensating rollback is a safe immediate reversal:
+        # its target receives the current release's assets before the swap.
+        # Any third identity remains blocked until the edge HTML window closes.
+        if event == "ROLLED_BACK" and rollback_sha == sha:
+            return
+        remaining = max(1, int(CACHE_TRANSITION_MIN_AGE_SECONDS - age + 0.999))
+        raise ReleaseError(
+            "cache-transition guard is active; distinct promotion must wait "
+            f"{remaining}s before swap"
+        )
+
+
 def _verify_files_manifest_matches_incoming(root: Path, sha: str) -> None:
     package, _ = validate_incoming(root, sha)
     release_manifest = root / "releases" / sha / "metadata/files.sha256"
@@ -401,11 +720,7 @@ def extract_safely(package: Path, destination: Path) -> None:
         raise ReleaseError(f"cannot extract release tarball: {exc}") from exc
 
 
-def _parse_files_manifest(path: Path) -> dict[str, str]:
-    try:
-        lines = path.read_text(encoding="utf-8").splitlines()
-    except OSError as exc:
-        raise ReleaseError(f"missing internal file manifest: {path}") from exc
+def _parse_files_manifest_lines(lines: list[str]) -> dict[str, str]:
     expected: dict[str, str] = {}
     for line in lines:
         match = re.fullmatch(r"([0-9a-f]{64})  ([^\x00]+)", line)
@@ -419,6 +734,14 @@ def _parse_files_manifest(path: Path) -> dict[str, str]:
     if not expected:
         raise ReleaseError("internal files.sha256 is empty")
     return expected
+
+
+def _parse_files_manifest(path: Path) -> dict[str, str]:
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError as exc:
+        raise ReleaseError(f"missing internal file manifest: {path}") from exc
+    return _parse_files_manifest_lines(lines)
 
 
 def _actual_release_files(release: Path) -> dict[str, Path]:
@@ -772,11 +1095,16 @@ def _seal_legacy_live_intelligence_overlay(release: Path, sha: str) -> bool:
     if state_path.is_file():
         return False
     expected = _parse_files_manifest(release / "metadata/files.sha256")
+    cache_transition = _cache_transition_contract(release, sha, expected)
+    cache_paths = set((cache_transition or {}).get("files") or {})
+    if cache_transition is not None:
+        cache_paths.add(CACHE_TRANSITION_MANIFEST)
     actual = _actual_release_files(release)
     actual_digests = {
         rel: sha256_file(path)
         for rel, path in actual.items()
         if rel not in {"metadata/files.sha256", "metadata/release-manifest.json"}
+        and rel not in cache_paths
         and not is_release_ephemeral(rel)
     }
     has_stage_delta = (
@@ -1008,7 +1336,18 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         if (release / LIVE_INTEL_OVERLAY_MANIFEST).is_file()
         else set()
     )
-    permitted_actual = (set(expected) - set(overlay_removed)) | set(overlay_files) | overlay_manifest_files
+    cache_transition = _cache_transition_contract(release, sha, expected)
+    cache_files = set((cache_transition or {}).get("files") or {})
+    cache_manifest_files = (
+        {CACHE_TRANSITION_MANIFEST} if cache_transition is not None else set()
+    )
+    permitted_actual = (
+        (set(expected) - set(overlay_removed))
+        | set(overlay_files)
+        | overlay_manifest_files
+        | cache_files
+        | cache_manifest_files
+    )
     extra = sorted(actual_hashed - permitted_actual)
     missing = sorted(permitted_actual - actual_hashed)
     if missing or extra:
@@ -1028,6 +1367,10 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         path = actual.get(rel)
         if path is None or sha256_file(path) != digest:
             raise ReleaseError(f"live-intelligence overlay checksum mismatch: {rel}")
+    for rel, digest in (cache_transition or {}).get("files", {}).items():
+        path = actual.get(rel)
+        if path is None or sha256_file(path) != digest:
+            raise ReleaseError(f"cache-transition asset checksum mismatch: {rel}")
 
     source = load_json(release / "metadata" / "release-source.json")
     manifest = load_json(release / "metadata" / "release-manifest.json")
@@ -1579,6 +1922,7 @@ def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
         package, incoming_manifest = validate_incoming(root, sha)
         target = root / "releases" / sha
         if os.path.lexists(target):
+            _recover_cache_transition(root, sha)
             stored = verify_release_envelope_and_tree(root, sha)
             if stored["artifact"]["sha256"] != incoming_manifest["artifact"]["sha256"]:
                 raise ReleaseError(
@@ -1627,6 +1971,7 @@ def verify_release(sha: str) -> dict[str, Any]:
     sha = validate_sha(sha)
     root = release_root()
     with deploy_lock(root):
+        _recover_cache_transition(root, sha)
         _seal_legacy_live_intelligence_overlay(root / "releases" / sha, sha)
         manifest = verify_release_envelope_and_tree(root, sha)
         smoke_candidate(root / "releases" / sha, sha)
@@ -1637,8 +1982,12 @@ def verify_release(sha: str) -> dict[str, Any]:
         return manifest
 
 
-def _restore_after_failed_switch(root: Path, previous: str | None) -> None:
+def _restore_after_failed_switch(
+    root: Path, previous: str | None, failed_sha: str
+) -> None:
     if previous:
+        _prepare_cache_transition(root, previous, failed_sha)
+        verify_release_envelope_and_tree(root, previous)
         atomic_release_link(root, "current", previous)
     else:
         _remove_release_link(root, "current")
@@ -1680,6 +2029,9 @@ def _switch_release(
                 f"expected={expected_current or 'NONE'}, "
                 f"found={previous_before_checks or 'NONE'}"
             )
+    _assert_cache_transition_guard(
+        root, previous_before_checks, sha, event, rollback_before_checks
+    )
     recovery_predecessor = None
     if event == "PROMOTED":
         recovery_predecessor = (
@@ -1688,6 +2040,7 @@ def _switch_release(
             else previous_before_checks
         )
     for candidate in {value for value in (sha, recovery_predecessor) if value}:
+        _recover_cache_transition(root, candidate)
         _seal_legacy_live_intelligence_overlay(root / "releases" / candidate, candidate)
     manifest = verify_release_envelope_and_tree(root, sha)
     if recovery_predecessor and recovery_predecessor != sha:
@@ -1695,6 +2048,12 @@ def _switch_release(
         # release is already corrupt. On an idempotent retry, the real recovery
         # release is the rollback link, not the candidate already at current.
         verify_release_envelope_and_tree(root, recovery_predecessor)
+    cache_transition = None
+    if previous_before_checks and previous_before_checks != sha:
+        cache_transition = _prepare_cache_transition(
+            root, sha, previous_before_checks
+        )
+        manifest = verify_release_envelope_and_tree(root, sha)
     smoke_candidate(root / "releases" / sha, sha)
     previous = read_release_link(root, "current")
     if previous == sha:
@@ -1730,6 +2089,15 @@ def _switch_release(
             nginx_reloaded=True,
             live_identity=sha,
             runtime_identity=sha,
+            cache_transition=(
+                {
+                    "predecessor_sha": cache_transition["predecessor_sha"],
+                    "files": len(cache_transition["files"]),
+                    "total_bytes": cache_transition["total_bytes"],
+                }
+                if cache_transition is not None
+                else None
+            ),
         )
     except Exception as exc:
         evidence_error = _append_evidence_best_effort(
@@ -1740,7 +2108,7 @@ def _switch_release(
             error=str(exc),
         )
         try:
-            _restore_after_failed_switch(root, previous)
+            _restore_after_failed_switch(root, previous, sha)
         except Exception as rollback_error:
             _append_evidence_best_effort(
                 root,
@@ -2008,6 +2376,11 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
             }
         contract_probes = _gone_contract_probes(site, routes)
         public_overlay = release / LIVE_INTEL_PUBLIC_MANIFEST
+        cache_transition = _cache_transition_contract(
+            release,
+            sha,
+            _parse_files_manifest(release / "metadata" / "files.sha256"),
+        )
         build_info = load_json(site / ".well-known/build-info.json")
         runtime_info: dict[str, Any] | None = None
         if os.environ.get("CONFENGE_RELEASE_TEST_MODE") != "1":
@@ -2029,6 +2402,7 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
             "http_dispositions": http_dispositions,
             "contract_probes": contract_probes,
             "overlay": load_json(public_overlay) if public_overlay.is_file() else None,
+            "cache_transition": cache_transition,
             "build_info": build_info,
             "runtime_info": runtime_info,
             "release_control_sha256": release_controller_evidence_hash(),
