@@ -682,6 +682,36 @@ def test_favicon_requires_an_exact_ico_content_type(tmp_path, content_type, acce
     assert favicon_result["content_type_ok"] is accepted
 
 
+@pytest.mark.parametrize("content_type,accepted", [
+    ("application/manifest+json", True),
+    ("application/manifest+json; charset=utf-8", True),
+    ("application/octet-stream", False),
+    ("application/json", False),
+])
+def test_manifest_requires_the_exact_public_media_type(tmp_path, content_type, accepted):
+    fixture = _fixture(tmp_path)
+    manifest = b'{"name":"CONFENGE"}'
+    (fixture["site"] / "manifest.webmanifest").write_bytes(manifest)
+    inventory = json.loads(fixture["inventory"].read_text(encoding="utf-8"))
+    inventory["non_html_sha256"]["manifest.webmanifest"] = hashlib.sha256(manifest).hexdigest()
+    fixture["inventory"].write_text(json.dumps(inventory), encoding="utf-8")
+    delegate = _asset_fetcher(fixture)
+
+    def fetch(url, timeout):
+        entry, body = delegate(url, timeout)
+        if url.endswith("/manifest.webmanifest"):
+            entry["headers"]["content-type"] = content_type
+        return entry, body
+
+    report = _run(tmp_path, fixture, asset_fetcher=fetch)
+    assert report["ok"] is accepted, report["errors"]
+    asset_report = json.loads(
+        Path(report["evidence_files"]["non_html_assets"]).read_text(encoding="utf-8")
+    )
+    manifest_result = next(row for row in asset_report["results"] if row["path"] == "manifest.webmanifest")
+    assert manifest_result["content_type_ok"] is accepted
+
+
 def test_only_declared_non_html_overlay_changes_are_accepted(tmp_path):
     fixture = _fixture(tmp_path)
     site = fixture["site"]

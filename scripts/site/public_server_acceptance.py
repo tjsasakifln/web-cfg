@@ -53,6 +53,7 @@ CACHE_TRANSITION_MAX_BYTES = 64 * 1024 * 1024
 NONPUBLIC_CONFIG_FILES = frozenset({"_headers", "_redirects"})
 EXACT_ASSET_CONTENT_TYPES = {
     "favicon.ico": frozenset({"image/x-icon", "image/vnd.microsoft.icon"}),
+    "manifest.webmanifest": frozenset({"application/manifest+json"}),
 }
 OVERLAY_NON_HTML_FILES = frozenset({
     "sitemap-index.xml", "sitemap-oportunidades.xml",
