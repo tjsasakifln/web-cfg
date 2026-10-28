@@ -191,6 +191,7 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.doesNotMatch(redirects, /proxy_pass|return 301 "https:\/\/ops[^\n]*intranet/);
   assert.match(locations, /error_page 404 \/404\.html;/);
   assert.match(locations, /try_files \$uri \$uri\/ \$uri\.html \$uri\/index\.html =404;/);
+  assert.match(locations, /location = "\/manifest\.webmanifest" \{\n\s+types \{\}\n\s+default_type "application\/manifest\+json";/);
   // Adjusted: CSP is now a document-only header, so its map is keyed on the
   // document marker prefixed onto $request_uri instead of $request_uri alone.
   assert.match(rendered["headers.generated.conf"], /map "\$confenge_document_marker\$request_uri" \$confenge_header_content_security_policy/);
