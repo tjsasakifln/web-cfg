@@ -14,6 +14,18 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
  * the upload and cannot be told apart from a run that never happened.
  */
 const IDENTITY_FETCH_TIMEOUT_MS = Number(process.env.RUNTIME_ACCEPTANCE_FETCH_TIMEOUT_MS || 30000);
+export function homeConvergenceConfig(env = process.env) {
+  const timeout = Number(env.RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_TIMEOUT_MS || 300000);
+  const poll = Number(env.RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_POLL_MS || 5000);
+  if (!Number.isSafeInteger(timeout) || timeout <= 0 || timeout > 300000) {
+    throw new Error("home convergence timeout must be a finite positive integer no greater than 300000ms");
+  }
+  if (!Number.isSafeInteger(poll) || poll <= 0 || poll > timeout) {
+    throw new Error("home convergence poll must be a finite positive integer no greater than its timeout");
+  }
+  return { timeout, poll };
+}
+const { timeout: HOME_CONVERGENCE_TIMEOUT_MS, poll: HOME_CONVERGENCE_POLL_MS } = homeConvergenceConfig();
 
 /**
  * The measurement's own budget must expire BEFORE the supervision that kills
@@ -131,6 +143,32 @@ async function fetchJson200(origin, path) {
   return JSON.parse(response.body.toString("utf8"));
 }
 
+function expectedHomeDigest() {
+  const stagedHome = join(ROOT, "_site", "index.html");
+  if (!existsSync(stagedHome)) throw new Error("runtime acceptance requires the qualified _site/index.html artifact");
+  return createHash("sha256").update(readFileSync(stagedHome)).digest("hex");
+}
+
+/** Await the exact qualified home bytes; these probes are never Lighthouse samples. */
+export async function awaitHomeConvergence({ origin, expectedDigest, now = () => Date.now(), sleep = (ms) => new Promise((done) => setTimeout(done, ms)), fetchHome = (base) => fetchExact(base, "/", "text/html") }) {
+  const started = now();
+  let attempts = 0;
+  let last = null;
+  while (true) {
+    attempts += 1;
+    const response = await fetchHome(origin);
+    const digest = response.status === 200 ? createHash("sha256").update(response.body).digest("hex") : null;
+    last = { status: response.status, sha256: digest };
+    if (digest === expectedDigest) {
+      return { ok: true, attempts, elapsed_ms: now() - started, expected_sha256: expectedDigest, ...last };
+    }
+    if (now() - started >= HOME_CONVERGENCE_TIMEOUT_MS) {
+      throw new Error(`public home did not converge to qualified artifact within ${HOME_CONVERGENCE_TIMEOUT_MS}ms; status=${response.status} sha256=${digest || "missing"}`);
+    }
+    await sleep(HOME_CONVERGENCE_POLL_MS);
+  }
+}
+
 
 /**
  * Measures the public home, and optionally one runtime route, with the
@@ -239,6 +277,9 @@ export async function runAcceptance(args = process.argv.slice(2), measurement = 
   };
   try {
     if (!baseArg) throw new Error("runtime acceptance requires an explicit production base URL");
+    if (option(args, "home-html-sha256")) {
+      throw new Error("runtime acceptance does not accept a caller-supplied home HTML digest");
+    }
     const origin = new URL(baseArg).origin;
     if (origin !== baseArg.replace(/\/$/, "")) {
       throw new Error("runtime acceptance base URL must be a bare origin");
@@ -257,6 +298,17 @@ export async function runAcceptance(args = process.argv.slice(2), measurement = 
       runtime_release_sha: runtimeInfo.release_sha,
       overlay_release_sha: overlay.release_sha,
     };
+    const homeDigest = measurement.expectedHomeDigest || expectedHomeDigest();
+    if (!/^[0-9a-f]{64}$/.test(homeDigest)) {
+      throw new Error("runtime acceptance test digest must be a lowercase SHA-256");
+    }
+    const convergence = await (measurement.homeConvergence || awaitHomeConvergence)({
+      origin, expectedDigest: homeDigest,
+    });
+    if (!convergence?.ok || convergence.sha256 !== homeDigest) {
+      throw new Error("public home convergence did not prove the qualified artifact bytes");
+    }
+    report.evidence.home_convergence = convergence;
 
     if (overlay.routes.length > 0) {
       const route = [...overlay.routes]

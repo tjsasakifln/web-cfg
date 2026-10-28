@@ -330,6 +330,29 @@ loopback live identity. Any failure restores the previous symlink, restarts the
 previous runtime, reloads its generated contract and revalidates it. No promote
 or rollback requires a manual nginx edit.
 
+Cloudflare may retain public HTML for five minutes after `current` changes.
+Before a distinct switch, the controller therefore adds to the candidate only
+the predecessor's missing content-addressed files below `_site/assets/`. Every
+retained path and digest must occur in the predecessor's immutable package
+ledger, must not overlap the candidate package, and is recorded in
+`metadata/cache-transition-assets.json`. The overlay is bounded to 512 files
+and 64 MiB; mutable aliases and unhashed paths are never retained. A
+source-proven `PREPARING` journal makes an interrupted copy retryable, while
+only `READY` is valid release content.
+
+Distinct switches are held for the five-minute HTML cache window. The only
+early exception is the exact compensating rollback named by the `rollback`
+link; it first installs the inverse asset overlay. Automatic restoration does
+the same before moving `current` back, so HTML briefly cached from a failed
+candidate still resolves its immutable assets. A third release remains blocked
+until the transition window closes. This mechanism does not purge Cloudflare,
+change cache rules, or weaken artifact and rollback verification.
+
+Before the three public Lighthouse samples, post-promote acceptance polls the
+plain canonical home until its bytes equal the qualified `_site/index.html`
+SHA-256, with per-request timeout and a fail-closed five-minute deadline. The
+barrier does not replace, rewrite or discard any measured Lighthouse result.
+
 Verify the GitHub attestation after downloading a release candidate:
 
 ```sh

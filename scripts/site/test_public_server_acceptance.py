@@ -249,6 +249,95 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
     }
 
 
+def _cache_transition_inventory(fixture: dict, *, rel: str = "assets/css/home.abcdef12.css") -> dict:
+    """Add one controller-shaped, immutable compatibility asset to a fixture."""
+    body = b".compat{display:block}"
+    target = fixture["site"] / rel
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(body)
+    payload = json.loads(fixture["inventory"].read_text(encoding="utf-8"))
+    digest = hashlib.sha256(body).hexdigest()
+    payload["non_html_sha256"][rel] = digest
+    payload["cache_transition"] = {
+        "schema": "confenge.cache-transition-assets/v1", "state": "READY",
+        "release_sha": SHA, "predecessor_sha": "e" * 40,
+        "predecessor_artifact_sha256": "f" * 64,
+        "files": {"_site/" + rel: digest}, "total_bytes": len(body),
+    }
+    fixture["inventory"].write_text(json.dumps(payload), encoding="utf-8")
+    return payload
+
+
+def test_cache_transition_is_strictly_bound_to_inventory_and_local_bytes(tmp_path):
+    fixture = _fixture(tmp_path)
+    _cache_transition_inventory(fixture)
+    (fixture["site"] / "assets/css/home.abcdef12.css").unlink()
+    inventory, errors = acceptance.load_served_inventory(fixture["inventory"])
+    assert not errors
+    assert inventory["cache_transition"]["files"] == {
+        "assets/css/home.abcdef12.css": hashlib.sha256(b".compat{display:block}").hexdigest()
+    }
+    served = b".compat{display:block}"
+    def fetch(url, _timeout):
+        body = served if url.endswith("/assets/css/home.abcdef12.css") else b""
+        return ({"status": 200, "location": None, "headers": {"content-encoding": "identity"}, "sha256": hashlib.sha256(body).hexdigest(), "error": None}, body)
+    report = acceptance.verify_non_html_assets(
+        site=fixture["site"], inventory=inventory, overlay=inventory["overlay"],
+        base=CANONICAL_BASE, fetcher=fetch, concurrency=1, timeout=1,
+    )
+    # The asset is absent from the candidate artifact but present and exact on
+    # the public host: it is a narrowly audited compatibility exception.
+    assert report["cache_transition"]["ok"] is True
+    assert report["cache_transition"]["verified_files"] == 1
+
+
+@pytest.mark.parametrize("mutation", ["preparing", "traversal", "unlisted", "tamper"])
+def test_cache_transition_rejects_any_non_exact_exception(tmp_path, mutation):
+    fixture = _fixture(tmp_path)
+    payload = _cache_transition_inventory(fixture)
+    transition = payload["cache_transition"]
+    if mutation == "preparing":
+        transition["state"] = "PREPARING"
+    elif mutation == "traversal":
+        digest = next(iter(transition["files"].values()))
+        transition["files"] = {"_site/assets/css/../escape.abcdef12.css": digest}
+    elif mutation == "unlisted":
+        transition["files"]["_site/assets/css/other.abcdef12.css"] = "0" * 64
+    else:
+        payload["cache_transition"]["files"]["_site/assets/css/home.abcdef12.css"] = "0" * 64
+        payload["non_html_sha256"]["assets/css/home.abcdef12.css"] = "0" * 64
+    fixture["inventory"].write_text(json.dumps(payload), encoding="utf-8")
+    inventory, errors = acceptance.load_served_inventory(fixture["inventory"])
+    if mutation != "tamper":
+        assert any("cache_transition" in error for error in errors)
+    else:
+        assert not errors
+        def stale_fetch(url, _timeout):
+            body = b".compat{display:block}" if url.endswith("/assets/css/home.abcdef12.css") else b""
+            return ({"status": 200, "location": None, "headers": {"content-encoding": "identity"}, "sha256": hashlib.sha256(body).hexdigest(), "error": None}, body)
+        report = acceptance.verify_non_html_assets(
+            site=fixture["site"], inventory=inventory, overlay=inventory["overlay"],
+            base=CANONICAL_BASE, fetcher=stale_fetch, concurrency=1, timeout=1,
+        )
+        assert "cache_transition_public_digest_mismatch" in report["errors"]
+
+
+def test_cache_transition_cannot_overlap_candidate_asset(tmp_path):
+    fixture = _fixture(tmp_path)
+    _cache_transition_inventory(fixture)  # deliberately remains in candidate _site
+    inventory, errors = acceptance.load_served_inventory(fixture["inventory"])
+    assert not errors
+    body = b".compat{display:block}"
+    def fetch(url, _timeout):
+        response = body if url.endswith("/assets/css/home.abcdef12.css") else b""
+        return ({"status": 200, "location": None, "headers": {"content-encoding": "identity"}, "sha256": hashlib.sha256(response).hexdigest(), "error": None}, response)
+    report = acceptance.verify_non_html_assets(
+        site=fixture["site"], inventory=inventory, overlay=inventory["overlay"],
+        base=CANONICAL_BASE, fetcher=fetch, concurrency=1, timeout=1,
+    )
+    assert "cache_transition_candidate_overlap:assets/css/home.abcdef12.css" in report["errors"]
+
+
 def _identity_fetcher(
     commit: str = SHA,
     *,

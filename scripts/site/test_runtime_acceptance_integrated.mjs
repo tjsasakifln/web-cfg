@@ -25,7 +25,7 @@ import { createServer } from "node:http";
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { runAcceptance, validateWithdrawnOverlay } from "./runtime_lighthouse_acceptance.mjs";
+import { awaitHomeConvergence, homeConvergenceConfig, runAcceptance, validateWithdrawnOverlay } from "./runtime_lighthouse_acceptance.mjs";
 
 const WORK = mkdtempSync(join(tmpdir(), "confenge-acceptance-integrated-"));
 const SHA = "a".repeat(40);
@@ -57,6 +57,8 @@ const HUB_HTML = [
 ].join("");
 const HUB_BODY = Buffer.from(HUB_HTML, "utf8");
 const HUB_SHA256 = createHash("sha256").update(HUB_BODY).digest("hex");
+const HOME_BODY = Buffer.from("<!doctype html><html><body>candidate home</body></html>", "utf8");
+const HOME_SHA256 = createHash("sha256").update(HOME_BODY).digest("hex");
 
 const withdrawnOverlay = () => ({
   schema: SCHEMA,
@@ -99,6 +101,7 @@ const candidate = (over = {}) => ({
   sitemapBody: "",
   hubStatus: 200,
   hubBody: HUB_BODY,
+  homeBody: HOME_BODY,
   ...over,
 });
 
@@ -131,6 +134,13 @@ function startCandidate(config) {
       const body = Buffer.isBuffer(config.hubBody) ? config.hubBody : Buffer.from(String(config.hubBody), "utf8");
       res.writeHead(config.hubStatus, { "content-type": "text/html", "content-length": body.length });
       return res.end(config.hubStatus === 200 ? body : "");
+    }
+    if (req.url === "/") {
+      const next = Array.isArray(config.homeBodies) && config.homeBodies.length
+        ? config.homeBodies.shift() : config.homeBody;
+      const body = Buffer.isBuffer(next) ? next : Buffer.from(String(next), "utf8");
+      res.writeHead(200, { "content-type": "text/html", "content-length": body.length });
+      return res.end(body);
     }
     // Explicit, so an unexpected path fails fast instead of hanging the fetch.
     res.writeHead(404, { "content-type": "text/plain", "content-length": 0 });
@@ -222,6 +232,8 @@ async function rehearse({
   stubMode = "ok",
   stubShaOverride = null,
   acceptance = runAcceptance,
+  measurement = {},
+  extraArgs = [],
 } = {}) {
   caseId += 1;
   const dir = join(WORK, `case-${caseId}`);
@@ -233,8 +245,8 @@ async function rehearse({
   let returned = null;
   try {
     returned = await acceptance(
-      [server.origin, `--expected-sha=${expectedSha}`, `--report=${reportPath}`],
-      { runnerPath: stub.runnerPath, summaryDir: stub.summaryDir },
+      [server.origin, `--expected-sha=${expectedSha}`, `--report=${reportPath}`, ...extraArgs],
+      { runnerPath: stub.runnerPath, summaryDir: stub.summaryDir, expectedHomeDigest: HOME_SHA256, ...measurement },
     );
   } catch (thrown) {
     error = thrown;
@@ -275,6 +287,93 @@ const failure = (run, pattern) => {
   assert.ok(run.report.errors.length > 0, "a failing report must carry the reason");
 };
 
+for (const [env, pattern] of [
+  [{ RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_TIMEOUT_MS: "NaN" }, /timeout must/],
+  [{ RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_TIMEOUT_MS: "Infinity" }, /timeout must/],
+  [{ RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_TIMEOUT_MS: "0" }, /timeout must/],
+  [{ RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_TIMEOUT_MS: "-1" }, /timeout must/],
+  [{ RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_TIMEOUT_MS: "100", RUNTIME_ACCEPTANCE_HOME_CONVERGENCE_POLL_MS: "101" }, /poll must/],
+]) {
+  assert.throws(() => homeConvergenceConfig(env), pattern);
+}
+pass("home_preflight_configuration_rejects_unbounded_or_invalid_deadlines");
+
+// Unit-level preflight cases use a deterministic clock: no test spends the
+// production five-minute propagation budget. Transport exceptions fail closed
+// immediately; only an observed, complete but old home is eligible to wait.
+{
+  let now = 0;
+  let count = 0;
+  const result = await awaitHomeConvergence({
+    origin: "http://127.0.0.1:1", expectedDigest: HOME_SHA256,
+    now: () => now,
+    sleep: async (ms) => { now += ms; },
+    fetchHome: async () => ({ status: 200, body: ++count === 1 ? Buffer.from("old") : HOME_BODY }),
+  });
+  assert.equal(result.attempts, 2);
+  assert.equal(result.sha256, HOME_SHA256);
+  pass("home_preflight_retries_stale_bytes_with_a_fake_clock");
+}
+{
+  let now = 0;
+  await assert.rejects(
+    awaitHomeConvergence({
+      origin: "http://127.0.0.1:1", expectedDigest: HOME_SHA256,
+      now: () => now,
+      sleep: async (ms) => { now += 300000 + ms; },
+      fetchHome: async () => ({ status: 200, body: Buffer.from("old") }),
+    }), /did not converge/,
+  );
+  await assert.rejects(
+    awaitHomeConvergence({ origin: "http://127.0.0.1:1", expectedDigest: HOME_SHA256,
+      fetchHome: async () => { throw new Error("controlled transport failure"); } }),
+    /controlled transport failure/,
+  );
+  pass("home_preflight_times_out_on_old_bytes_and_fails_closed_on_transport_error");
+}
+
+// The preflight has its own bounded evidence path: stale home bytes are never
+// passed to Lighthouse, and controlled clocks keep this test independent of a
+// five-minute real wait.
+{
+  let calls = 0;
+  const run = await rehearse({ measurement: { homeConvergence: async ({ expectedDigest }) => {
+    calls += 1; // stale old response followed by the qualified candidate bytes.
+    return { ok: true, attempts: 2, elapsed_ms: 1, expected_sha256: expectedDigest, status: 200, sha256: HOME_SHA256 };
+  } } });
+  assert.equal(run.error, null);
+  assert.equal(run.report.evidence.home_convergence.attempts, 2);
+  assert.equal(run.report.evidence.home_convergence.sha256, HOME_SHA256);
+  pass("stale_home_converges_before_lighthouse_measurement");
+}
+{
+  let tick = 0;
+  const run = await rehearse({
+    config: candidate({ homeBody: Buffer.from("persistently old") }),
+    measurement: { homeConvergence: async ({ expectedDigest }) => {
+      while (tick++ < 2) { /* controlled bounded retry */ }
+      throw new Error(`public home did not converge to qualified artifact within 300000ms; status=200 sha256=wrong expected=${expectedDigest}`);
+    } },
+  });
+  failure(run, /public home did not converge/);
+  assert.equal(run.runnerArgv, null, "timeout preflight must not start a Lighthouse run");
+  pass("home_convergence_timeout_blocks_without_measuring");
+}
+{
+  const run = await rehearse({
+    measurement: { homeConvergence: async () => ({ ok: true, sha256: "0".repeat(64) }) },
+  });
+  failure(run, /home convergence did not prove/);
+  assert.equal(run.runnerArgv, null, "wrong hash preflight must not start Lighthouse");
+  pass("wrong_home_hash_blocks_without_measuring");
+}
+{
+  const run = await rehearse({ extraArgs: [`--home-html-sha256=${"0".repeat(64)}`] });
+  failure(run, /does not accept a caller-supplied home HTML digest/);
+  assert.equal(run.runnerArgv, null, "CLI digest injection must not start Lighthouse");
+  pass("caller_supplied_home_digest_is_rejected");
+}
+
 // ===========================================================================
 // 1. HAPPY PATH — withdrawn overlay, end to end.
 // ===========================================================================
@@ -293,6 +392,7 @@ const failure = (run, pattern) => {
   assert.deepEqual(
     [...run.requests.map((r) => r.path)].sort(),
     [
+      "/",
       "/.well-known/build-info.json",
       "/.well-known/live-intelligence-overlay.json",
       "/.well-known/runtime-info.json",
@@ -323,6 +423,7 @@ const failure = (run, pattern) => {
   assert.deepEqual(
     [...run.requests.map((r) => r.path)].sort(),
     [
+      "/",
       "/.well-known/build-info.json",
       "/.well-known/live-intelligence-overlay.json",
       "/.well-known/runtime-info.json",
