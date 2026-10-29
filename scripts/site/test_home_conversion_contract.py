@@ -148,6 +148,20 @@ def test_situation_chooser_has_one_path_per_contract_situation_without_catalog_w
     assert 'class="situation-row' not in html
     assert "passa a ter" not in _visible(projects + services).casefold()
 
+    # Specific services are reachable directly from the main acquisition page.
+    # A generic hub link alone would hide the four disciplinary offers again.
+    direct_nav = re.search(r'<nav\b[^>]*aria-label="Projetos por disciplina"[^>]*>[\s\S]*?</nav>', services)
+    assert direct_nav, "missing direct service discovery"
+    for route in (
+        "/projeto-estrutural-concreto-armado/", "/projeto-estrutura-metalica/",
+        "/projeto-eletrico/", "/projeto-hidrossanitario/",
+        "/terceirizacao-projetos-engenharia/",
+    ):
+        assert direct_nav.group(0).count(f'href="{route}"') == 1
+        assert (ROOT / route.strip("/") / "index.html").is_file()
+    assert direct_nav.group(0).count('data-event-name="cta_click"') == 5
+    assert direct_nav.group(0).count('data-cta-position="home_services"') == 5
+
 
 def test_pncp_proof_is_confined_to_the_b2g_vertical() -> None:
     html = _home()

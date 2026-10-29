@@ -6,6 +6,7 @@ import re
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data/projects/project-pages.v1.json"
@@ -94,11 +95,6 @@ class TestProjectPages(unittest.TestCase):
                 self.assertIn("contato-projetos", parser.ids)
                 self.assertIn("conteudo", parser.ids)
                 self.assertTrue(all(image.get("alt") for image in parser.images))
-                contact_links = [
-                    link for link in parser.links
-                    if link.get("href") == "/triagem-tecnica/"
-                ]
-                self.assertTrue(contact_links, "missing triage CTA")
                 project_ctas = [
                     link for link in parser.links
                     if link.get("data-event-name") == "project_cta_click"
@@ -125,10 +121,13 @@ class TestProjectPages(unittest.TestCase):
                     link for link in parser.links
                     if str(link.get("href", "")).startswith("https://wa.me/")
                 ]
-                self.assertEqual(1, len(whatsapp))
-                self.assertEqual("whatsapp_click", whatsapp[0].get("data-event-name"))
-                self.assertEqual("projetos", whatsapp[0].get("data-journey"))
-                self.assertEqual(page["id"], whatsapp[0].get("data-route-family"))
+                self.assertEqual(2, len(whatsapp))
+                self.assertEqual({"hero", "final"}, {link.get("data-cta-position") for link in whatsapp})
+                self.assertEqual(whatsapp[0]["href"], whatsapp[1]["href"])
+                for link in whatsapp:
+                    self.assertEqual("whatsapp_click", link.get("data-event-name"))
+                    self.assertEqual("projeto" if page.get("service_type") else "outro", link.get("data-journey"))
+                    self.assertEqual(page["id"], link.get("data-route-family"))
                 self.assertEqual(1, len(parser.jsonld))
                 graph = json.loads(parser.jsonld[0])["@graph"]
                 types = {item["@type"] for item in graph}
@@ -151,6 +150,50 @@ class TestProjectPages(unittest.TestCase):
                 self.assertIn('href="/servicos-obras-publicas/"', source)
                 if page.get("service_type"):
                     self.assertIn("Service", types)
+
+    def test_proposal_reaches_canonical_form_with_contextual_attributes(self) -> None:
+        # SEO uses one clean destination; public context belongs in data-*
+        # and is exercised with the runtime listener in the attribution suite.
+        for page in self.pages:
+            with self.subTest(route=page["route"]):
+                parser = ProjectHTMLParser()
+                parser.feed(self.rendered[page["route"]])
+                for position in ("hero", "final"):
+                    link = next(link for link in parser.links if link.get("data-cta-id") == f"{page['id']}-{position}")
+                    destination = urlsplit(str(link["href"]))
+                    self.assertEqual("", destination.netloc)
+                    self.assertEqual("/", destination.path)
+                    self.assertEqual("contato", destination.fragment)
+                    self.assertEqual("", destination.query)
+                    self.assertEqual("projeto" if page.get("service_type") else "outro", link.get("data-journey"))
+                    self.assertEqual(page.get("whatsapp_context") or page["breadcrumb"].lower(), link.get("data-tema"))
+                    self.assertEqual(page["id"], link.get("data-route-family"))
+                    self.assertEqual(page["id"], link.get("data-asset-id"))
+                    self.assertEqual(page["route"], link.get("data-origem"))
+                header = next(link for link in parser.links if link.get("data-cta-id") == "project-header")
+                self.assertEqual("#contato-projetos", header["href"])
+                self.assertEqual("projeto" if page.get("service_type") else "outro", header.get("data-journey"))
+
+    def test_editorial_contact_context_cannot_inject_link_attributes(self) -> None:
+        page = dict(self.pages[0], whatsapp_context='elétrica & água "especial" <teste>')
+        source = self.renderer._contact_section(page)
+        parser = ProjectHTMLParser()
+        parser.feed(source)
+        contact = next(link for link in parser.links if link.get("data-cta-id") == f"{page['id']}-final")
+        self.assertEqual("/#contato", contact["href"])
+        self.assertEqual(page["whatsapp_context"], contact["data-tema"])
+        self.assertNotIn("<teste>", source)
+
+    def test_project_hub_keeps_general_specialties_and_specific_disciplines_in_main(self) -> None:
+        source = self.rendered["/projetos/"]
+        main = re.search(r"<main[^>]*>(.*?)</main>", source, re.S)
+        self.assertIsNotNone(main)
+        for route in (
+            "/projetos/estruturas/", "/projetos/instalacoes/",
+            "/projeto-estrutural-concreto-armado/", "/projeto-estrutura-metalica/",
+            "/projeto-eletrico/", "/projeto-hidrossanitario/",
+        ):
+            self.assertIn(f'href="{route}"', main.group(1), route)
 
     def test_every_demonstration_is_labeled_and_bounded(self) -> None:
         for page in self.pages:

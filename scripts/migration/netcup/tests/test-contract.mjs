@@ -414,10 +414,10 @@ test("production home acceptance requires institutional scope, attributed paths 
   });
   for (const [old, replacement, field] of [
     ["necessidades públicas e privadas", "projetos privados", "headingScope"],
-    ["Engenharia para transformar uma necessidade em", "Projetos para desenvolver", "headingScope"],
+    ["Projetos e serviços de", "Atuação para", "headingScope"],
     ["A CONFENGE elabora e coordena projetos", "A CONFENGE apresenta serviços", "executionScope"],
-    ["Cada contratação parte da decisão que precisa ser tomada e termina em documentos definidos", "A contratação segue a demanda do projeto", "executionScope"],
-    ["segurança do trabalho e apoio a obras públicas", "apoio a obras públicas", "amplitudeScope"],
+    ["Entregamos projetos, planilhas e laudos", "Entregamos documentos técnicos", "executionScope"],
+    ["segurança do trabalho.", "apoio técnico.", "amplitudeScope"],
     ["Conduzir e integrar", "Conduzir", "processScope"],
     ["formatos, raciocínio e rastreabilidade", "formatos disponíveis", "deliveryProof"],
     ['data-cta-id="home-service-projects"', 'data-cta-id="outro"', "discoveryPaths"],

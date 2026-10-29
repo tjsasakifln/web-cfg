@@ -46,8 +46,8 @@ const CONTENT_CONCEPTS = [
   },
   {
     id: "entrega_definida",
-    label: "necessidade convertida em entrega técnica e documentos",
-    terms: ["necessidade", "entrega técnica", "documentos"],
+    label: "entregas concretas para construir, contratar ou decidir",
+    terms: ["projetos", "planilhas", "laudos"],
     minMatches: 3,
   },
   {

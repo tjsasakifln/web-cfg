@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SINAPI_PATH = ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
 QUERY_LEAD = "desonerado e não desonerado"
 # Query language first; SINAPI named in the title without front-loading (#126 / #207).
-CANONICAL_TITLE = "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE"
+CANONICAL_TITLE = "Desonerado e não desonerado: qual SINAPI usar? | CONFENGE"
 SERVICE = "/auditoria-orcamento-licitacao/"
 TITLE_SOFT_MAX = 60
 

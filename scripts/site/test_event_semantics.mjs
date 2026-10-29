@@ -132,7 +132,7 @@ await page.evaluateOnNewDocument(() => { window.CONFENGE_DEBUG_ANALYTICS = false
   check("project_page_view_cluster", "/projeto-eletrico/", pageView?.content_cluster === "engineering-projects", pageView);
   check("project_cta_alias", "/projeto-eletrico/", !diff.missing && clicks.length === 1
     && clicks[0].alias_from === "project_cta_click" && clicks[0].cta_kind === "project"
-    && clicks[0].cta_position === "hero" && clicks[0].destination_type === "anchor"
+    && clicks[0].cta_position === "hero" && clicks[0].destination_type === "form"
     && piiViolations(diff.added).length === 0, diff);
 }
 

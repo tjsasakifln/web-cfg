@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-29",
+  "scope": "candidate branch; not production acceptance",
+  "checks": {
+    "build:site": "PASS",
+    "inbound:gates": {
+      "pass": true,
+      "gates": {
+        "naturalness": true,
+        "index_surface": true,
+        "brand_shell": true,
+        "conversion": true,
+        "legacy_entity": true,
+        "similarity": true,
+        "semantic_query_ownership": true,
+        "bofu_buyer_decision_map": true,
+        "archetype_editorial_ready": true,
+        "instance_index_ready": true
+      }
+    },
+    "validate:seo": {
+      "pass": true,
+      "indexable": 126,
+      "sitemap_urls": 126,
+      "errors": 0,
+      "warnings": 0
+    },
+    "focused_pytest": {
+      "passed": 124,
+      "subtests": 74
+    },
+    "test:nav": "PASS; 23 pytest, shell and taskflow checks",
+    "test:analytics": "PASS",
+    "test:form-funnel": "PASS",
+    "test:lead-function": "PASS; mocked integrations and isolated QA",
+    "audit:accessibility": "PASS; static checks, not a WCAG certification",
+    "test:secrets-scan": "PASS",
+    "git diff --check": "PASS",
+    "test:host-contract": "PASS; 30 tests, including negative home acceptance mutations",
+    "test:first-fold-contract": "PASS; 1942/1942 checks, 25 routes and 50 recaptured source viewports",
+    "frozen-and-deliverables": "PASS; 51 pytest checks, original six pillar bytes preserved",
+    "test:commercial-contracts": "PASS; full commercial contract suite",
+    "project_hub_journeys": "PASS; general structures/installations links restored inside main and checked by browser navigation"
+  },
+  "browser": {
+    "artifact": "generated public artifact copied to isolated local preview",
+    "desktop": {
+      "viewport_width": 1363,
+      "project_to_form": "PASS; clean /#contato, visible project need selected"
+    },
+    "responsive": {
+      "iframe_widths": [
+        390,
+        320
+      ],
+      "horizontal_overflow": false,
+      "electrical_primary_cta_bottom_px": 586,
+      "electrical_secondary_targets_min_height_px": 44,
+      "mobile_menu_expands": true,
+      "physical_device_test": false
+    },
+    "production_form_submissions": 0,
+    "screenshot": "mobile-review.jpg",
+    "first_fold_recapture": {
+      "routes": 25,
+      "viewports": 50,
+      "sizes": [
+        "1366x768",
+        "390x844"
+      ],
+      "all_pass": true,
+      "source_commit": "fda436f4eb770b804588546342b3bc094f1c6ed9",
+      "source_tree_clean": true,
+      "method": "Cloud Browser via CUA; same read-only DOM geometry algorithm and shared verdict rules; iframe viewports; no human comprehension claim"
+    }
+  },
+  "adversarial_corrections": [
+    "recognized singular project journey",
+    "generic institutional journey",
+    "first-touch origin preservation",
+    "visible selection when session storage is unavailable",
+    "canonical internal contact URLs",
+    "geographical coherence in inspection schema",
+    "mobile heading and tap targets"
+  ],
+  "limits": [
+    "Node 24.22.1 locally; repository CI uses Node 22",
+    "full remote CI and production acceptance are separate stages",
+    "traffic, qualified opportunity and revenue lift are not measured by this validation"
+  ]
+}

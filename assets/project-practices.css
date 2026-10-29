@@ -33,6 +33,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-button--light { border-color: var(--pp-white); background: var(--pp-white); color: var(--pp-ink); }
 .pp-button--light:hover, .pp-button--light:focus-visible { border-color: #dce9dc; background: #dce9dc; color: var(--pp-ink); }
 .pp-text-link, .pp-whatsapp { color: inherit; font-weight: 700; text-underline-offset: .22em; }
+.pp-actions .pp-text-link { display: inline-flex; align-items: center; min-height: 44px; }
 
 .pp-breadcrumb { padding-block: 20px; }
 .pp-breadcrumb ol { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; color: var(--pp-muted); font-size: .82rem; }
@@ -169,11 +170,11 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
   .pp-container { width: min(calc(100% - 28px), var(--pp-max)); }
   .pp-header__inner { min-height: 72px; }
   .pp-brand img { width: 146px; }
-  .pp-hero { padding-top: 2.4rem; }
+  .pp-hero { padding-top: 1.75rem; }
   /* Keep the current service titles on a full word at narrow widths. The
      fallback still splits an unanticipated long term instead of letting the
      hero's decorative overflow clipping hide it. */
-  .pp-hero h1 { font-size: clamp(2.25rem,11vw,4rem); }
+  .pp-hero h1 { font-size: clamp(2rem,8.5vw,2.75rem); }
   .pp-hero__visual { width: 100%; }
   .pp-section__head { grid-template-columns: 1fr; }
   .pp-section__head .pp-kicker { margin-bottom: -1rem; }

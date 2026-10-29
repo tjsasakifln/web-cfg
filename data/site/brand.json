@@ -25,17 +25,17 @@
   },
   "hero": {
     "eyebrow": "Empresa de engenharia para necessidades públicas e privadas",
-    "h1": "Engenharia para transformar uma necessidade em entrega técnica.",
-    "h1_html": "Engenharia para transformar uma necessidade em <span>entrega técnica.</span>",
-    "subheadline": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação, segurança do trabalho e apoio a obras públicas. Cada contratação parte da decisão que precisa ser tomada e termina em documentos definidos para essa finalidade.",
+    "h1": "Projetos e serviços de engenharia.",
+    "h1_html": "Projetos e serviços de <span>engenharia.</span>",
+    "subheadline": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação e segurança do trabalho. Entregamos projetos, planilhas e laudos para construir, contratar ou decidir, com apoio especializado a obras públicas.",
     "cta_primary": "Solicitar proposta",
-    "cta_secondary": "Encontrar a frente técnica",
+    "cta_secondary": "Ver serviços",
     "cta_secondary_wa": "Olá, CONFENGE. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
     "microcopy": "Projetos · Orçamento · Inspeção e perícia · Avaliação e SST · Obras públicas",
-    "meta_title": "CONFENGE | Engenharia, perícias e inteligência técnica",
-    "meta_description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas para decisões técnicas em empreendimentos privados e públicos.",
-    "og_title": "Engenharia, perícias e inteligência técnica para necessidades públicas e privadas.",
-    "og_description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas com escopo técnico definido para cada necessidade."
+    "meta_title": "CONFENGE | Projetos e serviços de engenharia",
+    "meta_description": "Projetos, orçamento, inspeção, perícia, avaliação e SST para obras e empresas. Serviços documentais nacionais e vistorias na Grande Florianópolis.",
+    "og_title": "Projetos e serviços de engenharia para necessidades públicas e privadas.",
+    "og_description": "Projetos, planilhas e laudos para construir, contratar ou decidir. Projetos e serviços documentais em todo o Brasil; vistorias na Grande Florianópolis."
   },
   "journeys": [
     {

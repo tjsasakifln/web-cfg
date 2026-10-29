@@ -81,6 +81,11 @@ HOME_SERVICE_DESTINATIONS = {
     "/seguranca-trabalho-apoio-tecnico/",
     "/servicos-obras-publicas/",
     "/inteligencia/",
+    "/projeto-estrutural-concreto-armado/",
+    "/projeto-estrutura-metalica/",
+    "/projeto-eletrico/",
+    "/projeto-hidrossanitario/",
+    "/terceirizacao-projetos-engenharia/",
 }
 
 
