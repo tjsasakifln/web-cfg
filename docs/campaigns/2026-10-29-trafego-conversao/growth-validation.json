@@ -85,10 +85,30 @@
     "observation": "An independent first run rejected a random fixture identifier as potential personal data; an unchanged repeat and the integrated run passed. No production fixture or validation rule was weakened."
   },
   "publication": {
+    "snapshot_kind": "preintegration_validation_snapshot_preserved_for_history",
     "state": "candidate_not_yet_merged",
     "required_remote_checks": "must_pass_on_final_PR_head",
     "production_identity": "must_match_merge_commit",
     "terminal_release_acceptance": "not_yet_observed",
-    "final_evidence_location": "pull_request_body_linked_from_README_after_remote_validation"
+    "final_evidence_location": "pull_request_body_linked_from_README_after_remote_validation",
+    "subsequent_integration": {
+      "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/759",
+      "merge_commit": "4bc45c483e30b04c3b5ad4c5d2b23fc915c67862",
+      "release_run": "https://github.com/tjsasakifln/web-cfg/actions/runs/40913310683",
+      "note": "Integration is confirmed. Live acceptance and the controlled Lighthouse recovery are recorded in the pull request; this historical local snapshot is not production proof."
+    }
+  },
+  "link_discovery_correction": {
+    "date": "2026-10-29",
+    "finding": "Two new inline service links in the regime-comparison paragraph inherited the body text color and no underline.",
+    "cause": "The paragraph had none of the existing classes targeted by link-discovery styles.",
+    "change": "Added breakout-links to that paragraph in the source HTML and canonical generator, reusing the existing green underlined link rule.",
+    "validation": {
+      "generator_idempotence": "passed",
+      "existing_orcamento_cluster_tests": 10,
+      "html_integrity": "passed",
+      "git_diff_check": "passed"
+    },
+    "production_verified": false
   }
 }
