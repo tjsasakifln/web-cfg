@@ -55,7 +55,7 @@ def test_medicoes_form_keeps_scope_and_does_not_require_complete_documents():
 def test_sinapi_search_presentation_and_budget_offer_are_precise():
     html = read("conteudos/sinapi-desonerado-nao-desonerado/index.html")
 
-    assert "Desonerado e não desonerado no SINAPI: o que o edital fixa" in html
+    assert "Desonerado e não desonerado: qual SINAPI usar?" in html
     assert "Use a tabela que o edital e a planilha modelo fixam na data-base" in html
     assert "Pedir proposta de revisão do orçamento" in html
     assert 'href="/auditoria-orcamento-licitacao/#captura-pilar"' in html

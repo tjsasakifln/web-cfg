@@ -114,7 +114,45 @@ def _jsonld(page: dict[str, Any], crumbs: list[dict[str, str]]) -> str:
     )
 
 
-def _header(active: str) -> str:
+def _contact_context(page: dict[str, Any]) -> str:
+    # Versioned editorial context only. No visitor input or contact data enters
+    # the URL, analytics attributes or prefilled direct-channel message.
+    return str(page.get("whatsapp_context") or page["breadcrumb"].lower())
+
+
+def _contact_journey(page: dict[str, Any]) -> str:
+    # Institutional pages welcome any engineering need. Only service pages
+    # select a project journey before the visitor has described the request.
+    return "projeto" if page.get("service_type") else "outro"
+
+
+def _contact_attrs(page: dict[str, Any]) -> str:
+    values = {
+        "journey": _contact_journey(page),
+        "tema": _contact_context(page),
+        "route-family": page["id"],
+        "asset-id": page["id"],
+        "origem": page["route"],
+        "origin-url": page["route"],
+    }
+    return " ".join(f'data-{key}="{esc(value)}"' for key, value in values.items())
+
+
+def _proposal_href() -> str:
+    # Public internal URLs remain canonical. Attribution uses the existing
+    # data-* listener, sessionStorage and public window.name fallback.
+    return "/#contato"
+
+
+def _whatsapp_href(page: dict[str, Any]) -> str:
+    message = (
+        "Olá. Quero solicitar uma proposta para " + _contact_context(page)
+        + ". Posso informar finalidade, fase, local e documentos disponíveis."
+    )
+    return f"https://wa.me/5548988344559?text={quote(message, safe='')}"
+
+
+def _header(active: str, page: dict[str, Any]) -> str:
     links = [
         ("/projetos/", "Projetos"),
         ("/servicos/", "Serviços"),
@@ -132,8 +170,8 @@ def _header(active: str) -> str:
 <div class="pp-container pp-header__inner">
 <a class="pp-brand" href="/" aria-label="CONFENGE, página inicial"><img src="/assets/logo-confenge-500-f8a83f6d.png" width="224" height="58" alt="CONFENGE Inteligência Técnica"/></a>
 <nav class="pp-nav" aria-label="Navegação principal">{nav}</nav>
-<a class="pp-button pp-button--compact" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" data-journey="projetos" data-cta-id="project-header" data-cta-position="header">Solicitar proposta</a>
-<details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav aria-label="Navegação móvel">{nav}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" data-journey="projetos" data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
+<a class="pp-button pp-button--compact" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header" data-cta-position="header">Solicitar proposta</a>
+<details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav aria-label="Navegação móvel">{nav}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
 </div>
 </header>"""
 
@@ -292,12 +330,8 @@ def _render_section(key: str, page: dict[str, Any]) -> str:
 
 
 def _contact_section(page: dict[str, Any]) -> str:
-    whatsapp_context = page.get("whatsapp_context") or page["breadcrumb"].lower()
-    whatsapp_message = quote(
-        "Olá. Quero solicitar uma proposta para " + whatsapp_context
-        + ". Posso informar finalidade, fase, local e documentos disponíveis."
-    )
-    whatsapp = f"https://wa.me/5548988344559?text={whatsapp_message}"
+    whatsapp_context = _contact_context(page)
+    whatsapp = _whatsapp_href(page)
     email_subject = quote("Solicitação de proposta de engenharia", safe="")
     email_body = quote(
         "Olá, equipe CONFENGE.\n\nQuero solicitar uma proposta para " + whatsapp_context
@@ -308,7 +342,7 @@ def _contact_section(page: dict[str, Any]) -> str:
         "mailto:tiago.sasaki@confenge.com.br?subject=" + email_subject
         + "&amp;body=" + email_body
     )
-    return f'''<section class="pp-section pp-section--cta" id="contato-projetos" aria-labelledby="proposal-title"><div class="pp-container pp-cta"><div><p class="pp-kicker">Solicite uma proposta</p><h2 id="proposal-title">{esc(page.get('proposal_title', 'Conte o que precisa projetar ou decidir.'))}</h2><p>{esc(page.get('proposal_body', 'Envie a finalidade, a fase, o local e as referências que já possui. A CONFENGE retorna com as perguntas necessárias para definir disciplinas, entregas e condições da proposta.'))}</p></div><div class="pp-cta__actions"><a class="pp-button pp-button--light" href="/triagem-tecnica/" data-event-name="project_cta_click" data-journey="projetos" data-cta-id="{esc(page['id'])}-final" data-cta-position="final">Solicitar proposta {_icon('arrow')}</a><a class="pp-whatsapp" href="{esc(whatsapp)}" target="_blank" rel="noopener" data-event-name="whatsapp_click" data-journey="projetos" data-route-family="{esc(page['id'])}" data-cta-id="{esc(page['id'])}-whatsapp" data-cta-position="final">Conversar pelo WhatsApp</a><div class="pp-direct"><a href="{email}" data-event-name="email_click" data-journey="projetos" data-route-family="{esc(page['id'])}" data-cta-id="{esc(page['id'])}-email" data-cta-position="final">Enviar por e-mail</a><a href="tel:+5548988344559" data-journey="projetos" data-route-family="{esc(page['id'])}" data-cta-id="{esc(page['id'])}-phone" data-cta-position="final">Ligar: (48) 98834-4559</a></div></div></div></section>'''
+    return f'''<section class="pp-section pp-section--cta" id="contato-projetos" aria-labelledby="proposal-title"><div class="pp-container pp-cta"><div><p class="pp-kicker">Solicite uma proposta</p><h2 id="proposal-title">{esc(page.get('proposal_title', 'Conte o que precisa projetar ou decidir.'))}</h2><p>{esc(page.get('proposal_body', 'Envie a finalidade, a fase, o local e as referências que já possui. A CONFENGE retorna com as perguntas necessárias para definir disciplinas, entregas e condições da proposta.'))}</p></div><div class="pp-cta__actions"><a class="pp-button pp-button--light" href="{_proposal_href()}" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-final" data-cta-position="final">Solicitar proposta {_icon('arrow')}</a><a class="pp-whatsapp" href="{esc(whatsapp)}" target="_blank" rel="noopener" data-event-name="whatsapp_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-whatsapp" data-cta-position="final">Conversar pelo WhatsApp</a><div class="pp-direct"><a href="{email}" data-event-name="email_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-email" data-cta-position="final">Enviar por e-mail</a><a href="tel:+5548988344559" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-phone" data-cta-position="final">Ligar: (48) 98834-4559</a></div></div></div></section>'''
 
 
 def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
@@ -342,14 +376,14 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
 <body data-content-cluster="engineering-projects" data-project-page="{esc(page['id'])}">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 {SPRITE}
-{_header(_active_header_route(page))}
+{_header(_active_header_route(page), page)}
 <main id="conteudo">
 {_breadcrumbs(crumbs)}
 <section class="pp-hero" aria-labelledby="page-title">
 <div class="pp-container pp-hero__grid"><div class="pp-hero__copy">
 <p class="pp-eyebrow">{esc(page['eyebrow'])}</p><h1 id="page-title">{esc(page['h1'])}</h1>
 <p class="pp-lead">{esc(page['lead'])}</p>
-<div class="pp-actions"><a class="pp-button" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" data-journey="projetos" data-cta-id="{esc(page['id'])}-hero" data-cta-position="hero">Solicitar proposta {_icon('arrow')}</a><a class="pp-text-link" href="#{first_anchor}">Ver {first_label.lower()}</a></div>
+<div class="pp-actions"><a class="pp-button" href="{_proposal_href()}" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero" data-cta-position="hero">Solicitar proposta {_icon('arrow')}</a><a class="pp-text-link" href="{esc(_whatsapp_href(page))}" target="_blank" rel="noopener" data-event-name="whatsapp_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero-whatsapp" data-cta-position="hero">Conversar pelo WhatsApp</a><a class="pp-text-link" href="#{first_anchor}">Ver {first_label.lower()}</a></div>
 <p class="pp-summary">{esc(page['summary'])}</p>
 <p class="pp-note">{esc(page['hero_note'])}</p></div>
 <figure class="pp-hero__visual"><p class="pp-hero__pan-hint">Em telas menores, deslize para ver o diagrama completo.</p><div class="pp-hero__canvas" tabindex="0" role="group" aria-label="Diagrama técnico com rolagem horizontal"><img src="{esc(visual['src'])}" width="760" height="520" alt="{esc(visual['alt'])}"/></div><figcaption><span>Diagrama técnico ilustrativo</span>{esc(visual['caption'])}</figcaption></figure>

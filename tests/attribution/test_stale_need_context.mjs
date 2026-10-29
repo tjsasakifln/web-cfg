@@ -40,6 +40,8 @@ function boot({ search = "", stored = {}, storageDenied = false, stageValue = "p
   const stage = {
     value: stageValue,
     options: [
+      { value: "ainda não sei qual serviço", dataset: { journey: "outro" } },
+      { value: "projeto, revisão ou compatibilização", dataset: { journey: "projeto" } },
       { value: "perícia, assistência técnica ou avaliação", dataset: { journey: "pericia" } },
       { value: "avaliação de imóvel", dataset: { journey: "avaliacao" } },
       { value: "quantitativos ou orçamento", dataset: { journey: "orcamento" } },
@@ -145,6 +147,62 @@ const firstTouch = JSON.stringify({
   utm_medium: "organic",
   utm_campaign: "sst",
 });
+
+{
+  // Exercise the generated clean service CTA and its data-* listener across
+  // Google -> article -> service -> home. Current service attribution must
+  // coexist with the article's first-touch origin, never overwrite it.
+  const projectHtml = fs.readFileSync(path.join(root, "projeto-eletrico/index.html"), "utf8");
+  const projectTag = projectHtml.match(/<a\b(?=[^>]*data-cta-id="electrical-project-hero")[^>]*>/i)?.[0] || "";
+  const projectAttrs = attrsOf(projectTag);
+  assert.ok(projectAttrs.href, "generated project hero CTA missing");
+  const href = projectAttrs.href.replace(/&amp;/g, "&");
+  const destination = new URL(href, "https://confenge.com.br");
+  assert.equal(destination.pathname, "/");
+  assert.equal(destination.hash, "#contato");
+  assert.equal(destination.search, "");
+  const articlePath = "/conteudos/como-contratar-projetos-complementares/";
+  const article = boot({ pathname: articlePath, hasForm: false, referrer: "https://www.google.com/" });
+  const project = boot({
+    pathname: "/projeto-eletrico/", hasForm: false,
+    referrer: `https://confenge.com.br${articlePath}`, stored: article.store,
+  });
+  project.click(clickDataset(projectAttrs), href);
+  const home = boot({
+    search: destination.search, stageValue: "", stored: project.store,
+    referrer: "https://confenge.com.br/projeto-eletrico/",
+  });
+  assert.equal(home.fields.origem.value, articlePath);
+  assert.equal(home.fields.landing_page.value, articlePath);
+  assert.equal(home.fields.landing_url.value, articlePath);
+  assert.equal(home.fields.referrer.value, "https://www.google.com/");
+  assert.equal(home.fields.source_origin_route_family.value, "electrical-project");
+  assert.equal(home.fields.source_origin_asset_id.value, "electrical-project");
+  assert.equal(home.fields.jornada.value, "projeto");
+  assert.equal(home.stage.value, "projeto, revisão ou compatibilização");
+  assert.equal(home.fields.tema.value, "projeto elétrico");
+
+  // With storage blocked, the same-window click carries public metadata via
+  // the existing one-hop window.name fallback, not through a query URL.
+  const deniedProject = boot({
+    pathname: "/projeto-eletrico/", hasForm: false, storageDenied: true,
+    referrer: "https://www.google.com/",
+  });
+  deniedProject.click(clickDataset(projectAttrs), href);
+  assert.match(deniedProject.window.name, /^confenge:public-context:/);
+  const deniedHome = boot({
+    search: destination.search, stageValue: "", storageDenied: true,
+    referrer: "https://confenge.com.br/projeto-eletrico/",
+    windowName: deniedProject.window.name,
+  });
+  assert.equal(deniedHome.fields.origem.value, "/projeto-eletrico/");
+  assert.equal(deniedHome.fields.source_origin_route_family.value, "electrical-project");
+  assert.equal(deniedHome.fields.source_origin_asset_id.value, "electrical-project");
+  assert.equal(deniedHome.fields.jornada.value, "projeto");
+  assert.equal(deniedHome.stage.value, "projeto, revisão ou compatibilização");
+  assert.equal(deniedHome.fields.tema.value, "projeto elétrico");
+  assert.equal(deniedHome.window.name, "");
+}
 
 {
   const runtime = boot({ stored: { confenge_pseo_attribution: firstTouch } });

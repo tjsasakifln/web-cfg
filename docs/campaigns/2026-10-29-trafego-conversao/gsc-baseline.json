@@ -1,0 +1,261 @@
+{
+  "measured_at": "2026-10-29",
+  "source": "Windsor.ai Search Console, propriedade conectada sc-domain:confenge.com.br",
+  "period": {
+    "from": "2026-09-29",
+    "to": "2026-10-26",
+    "days": 28
+  },
+  "property": {
+    "clicks": 88,
+    "impressions": 1766,
+    "ctr": 0.04983012457531144,
+    "average_position": 5.983
+  },
+  "query_dimension": {
+    "visible_clicks": 23,
+    "visible_impressions": 399,
+    "rows": 61,
+    "limitation": "Consultas anonimizadas por privacidade não aparecem; não inferir ausência de cliques sem marca. Impressions agregadas por página não equivalem ao total da propriedade."
+  },
+  "pages": [
+    {
+      "page": "https://confenge.com.br/",
+      "clicks": 26,
+      "impressions": 139,
+      "position": 3.9424,
+      "ctr": 0.18705035971223022
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/",
+      "clicks": 17,
+      "impressions": 153,
+      "position": 4.4902,
+      "ctr": 0.1111111111111111
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "clicks": 8,
+      "impressions": 138,
+      "position": 3.8261,
+      "ctr": 0.057971014492753624
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+      "clicks": 8,
+      "impressions": 138,
+      "position": 7.1812,
+      "ctr": 0.057971014492753624
+    },
+    {
+      "page": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "clicks": 6,
+      "impressions": 236,
+      "position": 4.2669,
+      "ctr": 0.025423728813559324
+    },
+    {
+      "page": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+      "clicks": 4,
+      "impressions": 36,
+      "position": 4.1111,
+      "ctr": 0.1111111111111111
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
+      "clicks": 2,
+      "impressions": 32,
+      "position": 5.9375,
+      "ctr": 0.0625
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/",
+      "clicks": 2,
+      "impressions": 34,
+      "position": 9.5882,
+      "ctr": 0.058823529411764705
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "clicks": 2,
+      "impressions": 280,
+      "position": 6.3857,
+      "ctr": 0.007142857142857143
+    },
+    {
+      "page": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "clicks": 2,
+      "impressions": 25,
+      "position": 4.12,
+      "ctr": 0.08
+    },
+    {
+      "page": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "clicks": 2,
+      "impressions": 25,
+      "position": 6.36,
+      "ctr": 0.08
+    },
+    {
+      "page": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+      "clicks": 1,
+      "impressions": 4,
+      "position": 5.5,
+      "ctr": 0.25
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/",
+      "clicks": 1,
+      "impressions": 69,
+      "position": 1.9855,
+      "ctr": 0.014492753623188406
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "clicks": 1,
+      "impressions": 76,
+      "position": 4.3553,
+      "ctr": 0.013157894736842105
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/pedido-de-reequilibrio-negado/",
+      "clicks": 1,
+      "impressions": 2,
+      "position": 3.5,
+      "ctr": 0.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "clicks": 1,
+      "impressions": 32,
+      "position": 5.6562,
+      "ctr": 0.03125
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/",
+      "clicks": 1,
+      "impressions": 91,
+      "position": 7.5385,
+      "ctr": 0.01098901098901099
+    },
+    {
+      "page": "https://confenge.com.br/elaboracao-pgr/",
+      "clicks": 1,
+      "impressions": 4,
+      "position": 4.25,
+      "ctr": 0.25
+    },
+    {
+      "page": "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/",
+      "clicks": 1,
+      "impressions": 1,
+      "position": 2,
+      "ctr": 1
+    },
+    {
+      "page": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "clicks": 1,
+      "impressions": 10,
+      "position": 2.6,
+      "ctr": 0.1
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "clicks": 0,
+      "impressions": 5,
+      "position": 7.2,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "clicks": 0,
+      "impressions": 4,
+      "position": 7,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "clicks": 0,
+      "impressions": 27,
+      "position": 4.8148,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projeto-eletrico/",
+      "clicks": 0,
+      "impressions": 2,
+      "position": 5,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projeto-estrutura-metalica/",
+      "clicks": 0,
+      "impressions": 12,
+      "position": 12.3333,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projeto-estrutural-concreto-armado/",
+      "clicks": 0,
+      "impressions": 7,
+      "position": 6.4286,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projetos-complementares-engenharia/",
+      "clicks": 0,
+      "impressions": 10,
+      "position": 15.1,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projetos/estruturas/",
+      "clicks": 0,
+      "impressions": 25,
+      "position": 3.76,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projetos/infraestrutura/",
+      "clicks": 0,
+      "impressions": 22,
+      "position": 1.8636,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/projetos/instalacoes/",
+      "clicks": 0,
+      "impressions": 22,
+      "position": 3.1818,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "clicks": 0,
+      "impressions": 7,
+      "position": 8.1429,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/terceirizacao-documentacao-sst/",
+      "clicks": 0,
+      "impressions": 9,
+      "position": 40.6667,
+      "ctr": 0
+    },
+    {
+      "page": "https://confenge.com.br/terceirizacao-projetos-engenharia/",
+      "clicks": 0,
+      "impressions": 19,
+      "position": 6.1579,
+      "ctr": 0
+    }
+  ],
+  "conversion_baseline": null,
+  "conversion_limitation": "Sem leitura de recibos comerciais e propostas nesta sessão. Cliques em canais não comprovam pedido recebido, proposta, contrato ou receita.",
+  "claims": {
+    "traffic_lift_measured": false,
+    "conversion_lift_measured": false,
+    "causal_inference": false
+  }
+}

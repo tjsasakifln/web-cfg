@@ -525,7 +525,7 @@ def test_home_decision_fold_hierarchy():
     assert h1, "hero h1 missing"
     h1_text = re.sub(r"<[^>]+>", " ", h1.group(1)).lower()
     assert "engenharia" in h1_text, h1_text
-    assert "entrega técnica" in h1_text, h1_text
+    assert all(term in h1_text for term in ("projetos", "serviços", "engenharia")), h1_text
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1

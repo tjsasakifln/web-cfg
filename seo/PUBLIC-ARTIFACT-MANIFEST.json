@@ -352,8 +352,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-14T16:32:30Z",
-  "public_artifact_hash": "4730bccef2f75c2993394af490b4cbf0b0f8e84dd484d2857af12d6cdecf4e56",
+  "generated_at": "2026-10-29T12:59:01Z",
+  "public_artifact_hash": "3c0569af65bea6c7a852fe9a8dd3d171987ec650a13e03b490e4228ea6d39cbd",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -451,7 +451,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 240,
+  "promoted_navigation_files": 204,
   "navigation_audit": {
     "audited_files": 240,
     "audited_blocks": 478,

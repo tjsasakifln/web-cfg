@@ -1,13 +1,13 @@
 # Visible parity
 
 - ok: `True`
-- pages: `125`
+- pages: `126`
 - defects: `0`
 - site_root: `_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
-| https://confenge.com.br/ | True | — | Organization,Person | Engenharia para transformar uma necessidade em entrega técnica. |
+| https://confenge.com.br/ | True | — | Organization,Person | Projetos e serviços de engenharia. |
 | https://confenge.com.br/acompanhamento-contratos-obras/ | True | — | Organization,Person,BreadcrumbList | Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente |
 | https://confenge.com.br/aditivos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
 | https://confenge.com.br/analises-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Análises técnicas de contratos públicos |
@@ -74,7 +74,7 @@
 | https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/diagnostico-pre-licitacao/ | True | — | Organization,Person,BreadcrumbList | Diagnóstico pré-licitação para obras públicas |
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
-| https://confenge.com.br/edificacoes/ | True | — | BreadcrumbList | Edificações projetadas como sistemas que precisam caber, operar e ser construídos. |
+| https://confenge.com.br/edificacoes/ | True | — | BreadcrumbList | Projetos de engenharia para a sua edificação. |
 | https://confenge.com.br/elaboracao-pgr/ | True | — | BreadcrumbList | Seu PGR pronto, sem colocar o RH para coordenar a elaboração |
 | https://confenge.com.br/empresa/ | True | — | BreadcrumbList | Engenharia organizada para transformar necessidades em decisões técnicas. |
 | https://confenge.com.br/engenharia-condominios/ | True | — | BreadcrumbList | Engenharia para condomínios: do problema à proposta técnica. |
@@ -94,6 +94,7 @@
 | https://confenge.com.br/inteligencia/acompanhamento/ | True | — | Organization,BreadcrumbList | Pesquisa de oportunidades entre fornecedores do governo |
 | https://confenge.com.br/inteligencia/composicao-contratos-amostra/ | True | — | Organization,Dataset,BreadcrumbList; Como se compõem os dez contratos desta amostra? | Como se compõem os dez contratos desta amostra? |
 | https://confenge.com.br/inteligencia/concorrencia/ | True | — | Organization,BreadcrumbList | Análise de concorrentes e carteira pública de empresas |
+| https://confenge.com.br/inteligencia/fornecedores-climatizacao-contratos-publicos/ | True | — | Organization,Dataset,BreadcrumbList; Amostra de cinco contratos públicos de climatização | Fornecedores de climatização em contratos públicos: quem fornece, instala ou mantém? |
 | https://confenge.com.br/inteligencia/mercados/ | True | — | Organization,BreadcrumbList | Estudo de mercado para expansão comercial |
 | https://confenge.com.br/inteligencia/orgaos/ | True | — | Organization,BreadcrumbList | Mapeamento de distribuidores e clientes para sua empresa |
 | https://confenge.com.br/inteligencia/pesquisa-sob-encomenda/ | True | — | Organization,BreadcrumbList | Pesquisa de mercado para consultorias e associações |
@@ -110,16 +111,16 @@
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
-| https://confenge.com.br/projeto-eletrico/ | True | — | BreadcrumbList | Projeto elétrico da origem da energia aos pontos de utilização. |
-| https://confenge.com.br/projeto-estrutura-metalica/ | True | — | BreadcrumbList | Estrutura metálica pensada como sistema de barras, ligações e montagem. |
-| https://confenge.com.br/projeto-estrutural-concreto-armado/ | True | — | BreadcrumbList | Concreto armado definido por comportamento, geometria e construção. |
-| https://confenge.com.br/projeto-hidrossanitario/ | True | — | BreadcrumbList | Água, esgoto e drenagem projetados por demanda, nível e destino. |
+| https://confenge.com.br/projeto-eletrico/ | True | — | BreadcrumbList | Projeto elétrico com plantas e diagramas. |
+| https://confenge.com.br/projeto-estrutura-metalica/ | True | — | BreadcrumbList | Projeto de estrutura metálica com cálculo e detalhamento. |
+| https://confenge.com.br/projeto-estrutural-concreto-armado/ | True | — | BreadcrumbList | Projeto estrutural de concreto armado, do cálculo ao detalhamento. |
+| https://confenge.com.br/projeto-hidrossanitario/ | True | — | BreadcrumbList | Projeto hidrossanitário de água, esgoto e águas pluviais. |
 | https://confenge.com.br/projetos-complementares-engenharia/ | True | — | BreadcrumbList | Projetos complementares de engenharia |
-| https://confenge.com.br/projetos/ | True | — | BreadcrumbList | Projetos que conectam decisões técnicas, disciplinas e documentação. |
-| https://confenge.com.br/projetos/coordenacao-multidisciplinar/ | True | — | BreadcrumbList | Coordenação não é somar arquivos. É conduzir decisões entre responsáveis. |
-| https://confenge.com.br/projetos/estruturas/ | True | — | BreadcrumbList | O sistema estrutural nasce da leitura do objeto, não de uma solução repetida. |
-| https://confenge.com.br/projetos/infraestrutura/ | True | — | BreadcrumbList | Infraestrutura tratada como sistema de território, redes e estruturas. |
-| https://confenge.com.br/projetos/instalacoes/ | True | — | BreadcrumbList | Instalações definidas pelo uso, pela operação e pelo espaço real do empreendimento. |
+| https://confenge.com.br/projetos/ | True | — | BreadcrumbList | Projetos de engenharia para planejar, orçar e construir. |
+| https://confenge.com.br/projetos/coordenacao-multidisciplinar/ | True | — | BreadcrumbList | Coordenação multidisciplinar para integrar projetos e revisões. |
+| https://confenge.com.br/projetos/estruturas/ | True | — | BreadcrumbList | Projetos estruturais com cálculo, desenhos e detalhamento. |
+| https://confenge.com.br/projetos/infraestrutura/ | True | — | BreadcrumbList | Projetos de infraestrutura para implantação, vias e redes. |
+| https://confenge.com.br/projetos/instalacoes/ | True | — | BreadcrumbList | Projetos de instalações para coordenar redes antes da obra. |
 | https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Quantitativos e orçamento de obras |
 | https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar de obras públicas: método aberto e demanda observada | Radar de obras públicas: método aberto e demanda observada |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
@@ -129,6 +130,6 @@
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Projetos e serviços de engenharia que dão forma ao empreendimento. |
 | https://confenge.com.br/terceirizacao-documentacao-sst/ | True | — | BreadcrumbList | Sua equipe não precisa administrar sozinha a documentação de SST |
-| https://confenge.com.br/terceirizacao-projetos-engenharia/ | True | — | BreadcrumbList | Capacidade externa de projeto sem perder o controle técnico do pacote. |
+| https://confenge.com.br/terceirizacao-projetos-engenharia/ | True | — | BreadcrumbList | Terceirização de projetos com entregas e revisões definidas. |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
 | https://confenge.com.br/triagem-tecnica/ | True | — |  | Solicitar proposta |

@@ -738,9 +738,11 @@
       routeFamilyFromPath,
     };
     const storedPseo = readStoredPseo();
-    // A queda para a query crua passa pelo mesmo sanitizador (e-mail, telefone
-    // e valores longos nunca entram no hidden nem no payload).
-    const origem = fromUrl.origem || storedPseo.origem
+    // A origem guardada e first-touch. A query do CTA pode identificar o
+    // servico atual, mas nao substitui o artigo que iniciou a sessao. Sem
+    // storage, a query continua sendo o contexto disponivel do novo contato.
+    // A queda para a query crua passa pelo mesmo sanitizador.
+    const origem = storedPseo.origem || fromUrl.origem
       || sanitizeAttr(searchParams.get('origem') || hashParams.get('origem'), 'origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
@@ -933,8 +935,10 @@
         const val = fromUrl[name] || storedPseo[name];
         if (val) ensureHidden(name, val);
       });
-      const journeyParam = searchParams.get('jornada') || hashParams.get('jornada')
-        || storedPseo.jornada || storedPseo.journey;
+      // fromUrl includes the validated one-hop public-context fallback. Using
+      // only query/storage here left the visible select blank when storage
+      // was denied even though the hidden journey already held the service.
+      const journeyParam = fromUrl.jornada || storedPseo.jornada || storedPseo.journey;
       if (journeyParam) applyJourneyToForm(journeyParam);
       const stage = form.querySelector('#estagio');
       if (stage) {

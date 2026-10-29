@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 125,
+  "page_count": 126,
   "pages": [
     {
       "claimed": {
@@ -38,8 +38,8 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/",
         "dates": [],
-        "description": "Projetos, orçamento, inspeção, perícia, avaliação, SST e apoio a obras públicas para decisões técnicas em empreendimentos privados e públicos.",
-        "h1": "Engenharia para transformar uma necessidade em entrega técnica.",
+        "description": "Projetos, orçamento, inspeção, perícia, avaliação e SST para obras e empresas. Serviços documentais nacionais e vistorias na Grande Florianópolis.",
+        "h1": "Projetos e serviços de engenharia.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -47,7 +47,7 @@
         ],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "CONFENGE | Engenharia, perícias e inteligência técnica",
+        "title": "CONFENGE | Projetos e serviços de engenharia",
         "versions": []
       }
     },
@@ -2211,7 +2211,7 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": "confidential",
+        "permission_class": null,
         "reviewers": [],
         "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
         "versions": []
@@ -3274,7 +3274,7 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": "confidential",
+        "permission_class": null,
         "reviewers": [],
         "title": "Mobilização e desmobilização na planilha | CONFENGE",
         "versions": []
@@ -3729,9 +3729,9 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": null,
+        "permission_class": "confidential",
         "reviewers": [],
-        "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+        "title": "Desonerado e não desonerado: qual SINAPI usar? | CONFENGE",
         "versions": []
       }
     },
@@ -4207,10 +4207,10 @@
         "canonical": "https://confenge.com.br/edificacoes/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Projetos e coordenação para edificações residenciais, comerciais, institucionais, industriais e de usos especiais.",
-        "h1": "Edificações projetadas como sistemas que precisam caber, operar e ser construídos.",
+        "description": "Projetos de estruturas, instalações e coordenação para edificações residenciais, comerciais e industriais. Defina as disciplinas e solicite sua proposta.",
+        "h1": "Projetos de engenharia para a sua edificação.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -5287,6 +5287,73 @@
         "breadcrumbs": [
           "Início",
           "Inteligência",
+          "Climatização"
+        ],
+        "dataset_names": [
+          "Amostra de cinco contratos públicos de climatização"
+        ],
+        "dates": [
+          "2026-10-14"
+        ],
+        "descriptions": [
+          "Cinco casos verificados; não é censo, ranking ou mercado total."
+        ],
+        "downloads": [],
+        "has_dataset_type": true,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Dataset",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inteligencia/fornecedores-climatizacao-contratos-publicos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Inteligência",
+          "Climatização"
+        ],
+        "canonical": "https://confenge.com.br/inteligencia/fornecedores-climatizacao-contratos-publicos/",
+        "dates": [
+          "2026-09-14",
+          "2026-09-15",
+          "2026-09-25",
+          "2026-10-06",
+          "2026-10-14"
+        ],
+        "description": "Cinco contratos públicos de climatização com papéis observados e fontes verificáveis.",
+        "h1": "Fornecedores de climatização em contratos públicos: quem fornece, instala ou mantém?",
+        "has_dataset_surface": true,
+        "licenses": [
+          "https://confenge.com.br/termos-de-uso/",
+          "license-token-visible"
+        ],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Fornecedores de climatização em contratos públicos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Inteligência",
           "Mercados"
         ],
         "dataset_names": [],
@@ -6221,10 +6288,10 @@
         "canonical": "https://confenge.com.br/projeto-eletrico/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Concepção, dimensionamento e documentação de instalações elétricas, energia, iluminação, proteção e interfaces do empreendimento.",
-        "h1": "Projeto elétrico da origem da energia aos pontos de utilização.",
+        "description": "Projeto elétrico com levantamento de cargas, dimensionamento, plantas, diagramas e especificações para edificações e indústria. Solicite uma proposta.",
+        "h1": "Projeto elétrico com plantas e diagramas.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6232,7 +6299,7 @@
         ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Projeto elétrico | CONFENGE",
+        "title": "Projeto elétrico: dimensionamento, plantas e diagramas | CONFENGE",
         "versions": []
       }
     },
@@ -6275,10 +6342,10 @@
         "canonical": "https://confenge.com.br/projeto-estrutura-metalica/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Concepção, análise, dimensionamento e detalhamento de estruturas metálicas e suas ligações, interfaces e documentação.",
-        "h1": "Estrutura metálica pensada como sistema de barras, ligações e montagem.",
+        "description": "Projeto de estrutura metálica para coberturas, mezaninos e estruturas industriais. Cálculo, ligações, desenhos e interfaces de fabricação e montagem.",
+        "h1": "Projeto de estrutura metálica com cálculo e detalhamento.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6329,10 +6396,10 @@
         "canonical": "https://confenge.com.br/projeto-estrutural-concreto-armado/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Concepção, análise, dimensionamento e detalhamento de estruturas em concreto armado com interfaces e entregáveis definidos.",
-        "h1": "Concreto armado definido por comportamento, geometria e construção.",
+        "description": "Projeto estrutural de concreto armado com cálculo, formas, armações e fundações. Coordenação com arquitetura e instalações, conforme a fase contratada.",
+        "h1": "Projeto estrutural de concreto armado, do cálculo ao detalhamento.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6383,10 +6450,10 @@
         "canonical": "https://confenge.com.br/projeto-hidrossanitario/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Concepção, dimensionamento e documentação de água, esgoto sanitário, águas pluviais, drenagem e interfaces do empreendimento.",
-        "h1": "Água, esgoto e drenagem projetados por demanda, nível e destino.",
+        "description": "Projeto hidrossanitário com dimensionamento de água, esgoto e águas pluviais. Plantas, isométricos, memórias e especificações para a fase contratada.",
+        "h1": "Projeto hidrossanitário de água, esgoto e águas pluviais.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6394,7 +6461,7 @@
         ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Projeto hidrossanitário | CONFENGE",
+        "title": "Projeto hidrossanitário: água, esgoto e águas pluviais | CONFENGE",
         "versions": []
       }
     },
@@ -6486,10 +6553,10 @@
         "canonical": "https://confenge.com.br/projetos/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Estruturas, instalações, infraestrutura e coordenação multidisciplinar organizadas por decisões, interfaces e entregáveis.",
-        "h1": "Projetos que conectam decisões técnicas, disciplinas e documentação.",
+        "description": "Projetos de estruturas, instalações e infraestrutura, com desenhos, memórias e coordenação entre disciplinas. Solicite uma proposta para o seu empreendimento.",
+        "h1": "Projetos de engenharia para planejar, orçar e construir.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6497,7 +6564,7 @@
         ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Projetos de engenharia | CONFENGE",
+        "title": "Projetos de engenharia e coordenação técnica | CONFENGE",
         "versions": []
       }
     },
@@ -6540,10 +6607,10 @@
         "canonical": "https://confenge.com.br/projetos/coordenacao-multidisciplinar/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Coordenação de premissas, interfaces, interferências, versões e documentação entre disciplinas de projeto.",
-        "h1": "Coordenação não é somar arquivos. É conduzir decisões entre responsáveis.",
+        "description": "Coordenação multidisciplinar de projetos: premissas, interfaces, interferências e revisões organizadas entre arquitetura, estruturas e instalações.",
+        "h1": "Coordenação multidisciplinar para integrar projetos e revisões.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6594,10 +6661,10 @@
         "canonical": "https://confenge.com.br/projetos/estruturas/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Concepção, análise, dimensionamento e detalhamento de estruturas, fundações e contenções para diferentes sistemas e empreendimentos.",
-        "h1": "O sistema estrutural nasce da leitura do objeto, não de uma solução repetida.",
+        "description": "Projetos estruturais em concreto, aço e outros sistemas: concepção, cálculo, fundações, desenhos e detalhamento para edificações e indústria.",
+        "h1": "Projetos estruturais com cálculo, desenhos e detalhamento.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6605,7 +6672,7 @@
         ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Projetos estruturais | CONFENGE",
+        "title": "Projetos estruturais e fundações | CONFENGE",
         "versions": []
       }
     },
@@ -6648,10 +6715,10 @@
         "canonical": "https://confenge.com.br/projetos/infraestrutura/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Projetos viários, terraplenagem, pavimentação, drenagem, saneamento e infraestrutura de empreendimentos coordenados.",
-        "h1": "Infraestrutura tratada como sistema de território, redes e estruturas.",
+        "description": "Projetos de drenagem, terraplenagem, pavimentação, água e esgoto. Plantas, perfis, seções e memórias para implantação e infraestrutura do empreendimento.",
+        "h1": "Projetos de infraestrutura para implantação, vias e redes.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6659,7 +6726,7 @@
         ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Projetos de infraestrutura | CONFENGE",
+        "title": "Projetos de infraestrutura: drenagem, vias e saneamento | CONFENGE",
         "versions": []
       }
     },
@@ -6702,10 +6769,10 @@
         "canonical": "https://confenge.com.br/projetos/instalacoes/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Projetos elétricos, hidrossanitários, mecânicos, incêndio, telecomunicações, automação e sistemas especiais coordenados.",
-        "h1": "Instalações definidas pelo uso, pela operação e pelo espaço real do empreendimento.",
+        "description": "Projetos de instalações elétricas, hidrossanitárias, incêndio e sistemas especiais. Dimensionamento, plantas e memórias coordenados com arquitetura e estrutura.",
+        "h1": "Projetos de instalações para coordenar redes antes da obra.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -6713,7 +6780,7 @@
         ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Projetos de instalações | CONFENGE",
+        "title": "Projetos de instalações elétricas, hidráulicas e incêndio | CONFENGE",
         "versions": []
       }
     },
@@ -7254,10 +7321,10 @@
         "canonical": "https://confenge.com.br/terceirizacao-projetos-engenharia/",
         "dates": [
           "2026-10-02",
-          "2026-10-03"
+          "2026-10-29"
         ],
-        "description": "Apoio externo para desenvolver disciplinas, pacotes ou capacidade recorrente de projetos com escopo, interfaces e entregáveis definidos.",
-        "h1": "Capacidade externa de projeto sem perder o controle técnico do pacote.",
+        "description": "Terceirização de projetos para escritórios, construtoras e indústrias. Desenvolvimento de disciplinas e pacotes com formatos, revisões e responsabilidades definidos.",
+        "h1": "Terceirização de projetos com entregas e revisões definidas.",
         "has_dataset_surface": false,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",

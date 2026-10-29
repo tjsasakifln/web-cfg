@@ -35,10 +35,11 @@ export function evaluateHomeAcquisition(html) {
   const form = forms.length === 1 ? forms[0] : "";
   const primaryTag = primary[0] ? openingTag(primary[0]) : "";
   return {
-    headingScope: ["engenharia", "necessidade", "entrega técnica"].every((term) => heading.includes(term))
+    headingScope: ["projetos", "serviços", "engenharia"].every((term) => heading.includes(term))
       && openingText.includes("necessidades públicas e privadas"),
     executionScope: lead.includes("elabora e coordena projetos e presta serviços")
-      && ["cada contratação", "decisão que precisa ser tomada", "documentos definidos"].every((term) => lead.includes(term)),
+      && ["projetos", "planilhas", "laudos"].every((term) => lead.includes(term))
+      && ["construir", "contratar", "decidir"].some((term) => lead.includes(term)),
     amplitudeScope: INSTITUTIONAL_NEEDS.every((term) => lead.includes(term)),
     processScope: ["entender a necessidade", "definir o trabalho", "conduzir e integrar", "entregar para a decisão"]
       .every((term) => process.includes(term)),
