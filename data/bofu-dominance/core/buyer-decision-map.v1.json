@@ -37,7 +37,7 @@
     },
     {
       "path": "data/organic/bofu-intent-matrix.json",
-      "sha256": "4562b56ef175e3d96fd45ab3bf223762c876edaa6d1ba769ec84fbd3457758f2"
+      "sha256": "ac9967b053deef92e83a4ca738655d13b1428ce91d1a51814004fa53d9a7eec3"
     },
     {
       "path": "data/organic/demand-map.json",
@@ -2082,6 +2082,18 @@
           "path": "data/organic/public-family-registry.json",
           "previous_sha256": "c1e611cb3236b6895bf6841f018adb0e8038e4d1c4fe1de4cf9a94ae8947a7a0",
           "sha256": "bcdfaa3e68a7aaa71bed79c3627cd5e12ff55923fb3f74788afc335b602c2934"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "scope": "Second founder-authorized organic-growth stage: the existing aditivos service snippet now names technical analysis and calculation. The source retains the original #128 before/after hypothesis and the immediate predecessor with explicit revision provenance. Only this source binding is refreshed; intent ownership, routes, demand history, ranking, currentness and human-validation fields remain unchanged. No publication or commercial growth is asserted by this recapture.",
+      "evidence_reference": "docs/campaigns/2026-10-29-trafego-conversao/",
+      "changed_sources": [
+        {
+          "path": "data/organic/bofu-intent-matrix.json",
+          "previous_sha256": "4562b56ef175e3d96fd45ab3bf223762c876edaa6d1ba769ec84fbd3457758f2",
+          "sha256": "ac9967b053deef92e83a4ca738655d13b1428ce91d1a51814004fa53d9a7eec3"
         }
       ]
     }

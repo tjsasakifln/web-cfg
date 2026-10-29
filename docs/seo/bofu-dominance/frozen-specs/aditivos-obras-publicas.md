@@ -20,14 +20,14 @@ Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extr
 
 | Field | Value |
 |---|---|
-| title | Aditivos em obras públicas: documentos e margem | CONFENGE |
-| meta | Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura. |
+| title | Aditivos em obras públicas: análise técnica e cálculo | CONFENGE |
+| meta | Mudança de projeto ou serviço extra? Comparamos escopos, apuramos quantidades e preços e organizamos a documentação técnica para instruir o pedido de aditivo. |
 | H1 | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
 | canonical | https://confenge.com.br/aditivos-obras-publicas/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
-| og:title | Aditivos em obras públicas: documentos e margem | CONFENGE |
-| content_sha256 | `41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22` |
+| og:title | Aditivos em obras públicas: análise técnica e cálculo | CONFENGE |
+| content_sha256 | `9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 

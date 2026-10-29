@@ -11,7 +11,9 @@ from scripts.organic.service_map import audit_link_coverage, html_has_commercial
 ROOT = Path(__file__).resolve().parents[2]
 ADITIVOS = ROOT / "aditivos-obras-publicas" / "index.html"
 QUERY_LEAD = "aditivos em obras públicas"
-CANONICAL_TITLE = "Aditivos em obras públicas: documentos e margem | CONFENGE"
+# Second commercial revision, 2026-10-29; the matrix retains the original
+# before/after experiment and the immediate predecessor as reviewable history.
+CANONICAL_TITLE = "Aditivos em obras públicas: análise técnica e cálculo | CONFENGE"
 PILLARS = (
     "aditivos-obras-publicas",
     "medicoes-glosas-obras-publicas",

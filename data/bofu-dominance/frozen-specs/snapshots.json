@@ -6,11 +6,11 @@
       "slug": "aditivos-obras-publicas",
       "path": "/aditivos-obras-publicas/",
       "html_rel": "aditivos-obras-publicas/index.html",
-      "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
-      "meta_description": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+      "title": "Aditivos em obras públicas: análise técnica e cálculo | CONFENGE",
+      "meta_description": "Mudança de projeto ou serviço extra? Comparamos escopos, apuramos quantidades e preços e organizamos a documentação técnica para instruir o pedido de aditivo.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
-      "og_title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+      "og_title": "Aditivos em obras públicas: análise técnica e cálculo | CONFENGE",
       "og_url": "https://confenge.com.br/aditivos-obras-publicas/",
       "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
       "schema_types": [
@@ -113,19 +113,19 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
-      "bytes": 37180,
+      "content_sha256": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+      "bytes": 39726,
       "noindex": false
     },
     {
       "slug": "medicoes-glosas-obras-publicas",
       "path": "/medicoes-glosas-obras-publicas/",
       "html_rel": "medicoes-glosas-obras-publicas/index.html",
-      "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
-      "meta_description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.",
+      "title": "Medição e glosa em obras públicas: apoio técnico | CONFENGE",
+      "meta_description": "Medição glosada ou pagamento retido? Conferimos boletins, critérios do contrato e provas da execução para preparar a resposta técnica à fiscalização.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
-      "og_title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "og_title": "Medição e glosa em obras públicas: apoio técnico | CONFENGE",
       "og_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
       "h1": "Medições, glosas e pagamentos em obras públicas",
       "schema_types": [
@@ -233,8 +233,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
-      "bytes": 37510,
+      "content_sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+      "bytes": 41151,
       "noindex": false
     },
     {

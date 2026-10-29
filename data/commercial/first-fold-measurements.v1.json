@@ -1,16 +1,16 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-10-29T13:23:41.120Z",
+  "measured_at": "2026-10-29T15:54:58.038Z",
   "measured_on": "2026-10-29",
-  "commit_sha": "fda436f4eb770b804588546342b3bc094f1c6ed9",
+  "commit_sha": "e57b8ddf47e6eeb7725400d7939e943dfb93e389",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
     "@control/scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
     "@control/scripts/site/measure_first_fold.mjs": "e1637d957ea1275998261e00e022825f89548cefb555b6406ae55a15af0a786a",
     "acompanhamento-contratos-obras/index.html": "8f1b3675e04325327834615ccaa34c0568d0f1c09b9117f59338abcf04f5af42",
-    "aditivos-obras-publicas/index.html": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+    "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/conteudos/como-contratar-projetos-complementares-mobile.svg": "78faf44bfd07b7505bde169bccdaecfc358a101cf30aba5025fb6312165adec6",
     "assets/conteudos/como-contratar-projetos-complementares-wide.svg": "4e8f5b38dc279607607284007fc496a9d8df8c1bb1970367d03419dd50eef780",
@@ -52,7 +52,7 @@
     "entregas/index.html": "5ceeb2fa984d72ae462c6040845a34685a1499e4014e8bbb1e35ab65b116f7c2",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
     "index.html": "8d00412fae4b45462005fb20981fd8c30ddd89c911761a4ea850d8acd59a9f48",
-    "medicoes-glosas-obras-publicas/index.html": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+    "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
     "problemas-que-resolvemos/index.html": "7a249fa5ede6e9c336808dbd45f315f8c0363c07a05a81fb4ea0044dc0f0b72a",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
     "script.js": "5ab6fe0bb915e865bd26c704b911e291db4f6dfaf67bb392c4594723d6648e09",
@@ -111,11 +111,12 @@
   },
   "rules": "scripts/site/first_fold_rules.mjs",
   "measurement_transport": {
-    "provider": "Cloud Browser via CUA",
-    "source": "clean sparse Git worktree at commit_sha; exact measured source HTML and dependencies",
-    "geometry": "same read-only DOM algorithm from measure_first_fold.mjs in 1366x768 and 390x844 iframe viewports",
-    "route_identity": "each frame pathname checked and captured heading compared with source HTML",
-    "human_comprehension_claimed": false
+    "source": "Isolated public source copy of committed bytes; all 56 input hashes matched the named Git commit and matched before/after measurement.",
+    "human_comprehension_claimed": false,
+    "browser": "Cloud Browser via CUA",
+    "method": "Same measureRoute read-only DOM algorithm in 1366x768 and 390x844 iframe viewports, font readiness awaited; canonical pure rules derive contract verdicts.",
+    "routes": 25,
+    "viewports": 50
   },
   "routes": [
     {
@@ -2103,7 +2104,7 @@
           "viewport": "390x844"
         }
       },
-      "html_sha256": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+      "html_sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
       "measured_on": "2026-10-29",
       "category_repetition": {
         "ok": true,
@@ -2303,7 +2304,7 @@
           "viewport": "390x844"
         }
       },
-      "html_sha256": "41b542aaf2749996a1045abff5acac49ede7f60ef37ddf63f448ad7bb4751c22",
+      "html_sha256": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
       "measured_on": "2026-10-29",
       "category_repetition": {
         "ok": true,

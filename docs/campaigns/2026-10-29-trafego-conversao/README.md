@@ -145,3 +145,11 @@ Revisores independentes questionaram interpretação do GSC, valor comercial, pr
 A avaliação usa o painel diário e os relatórios existentes. Se esta etapa for publicada em 29/10, as janelas completas são 30/10 a 26/11 (28 dias) e 30/10 a 24/12 (56 dias); a linha de base comparável termina no último dia completo disponível antes da publicação. Confrontar a tendência prévia, composição e intervenções simultâneas, incluindo o PR #758. Nenhuma atribuição causal isolada é inferida de antes/depois.
 
 As validações, a revisão final e a identidade efetivamente publicada serão registradas em `growth-validation.json` e no PR desta etapa. Enquanto esses registros não confirmarem o release terminal, esta seção documenta a implementação candidata.
+
+A investigação de aditivos não encontrou impedimento técnico atual: HTTP 200, canonical próprio, indexação permitida, sitemap e redirecionamentos corretos. As 43 revisões HTML examinadas desde agosto preservaram canonical e robots. Isso não comprova inclusão no índice Google nem explica a redução de impressões. A causa permanece desconhecida.
+
+Validação integrada da segunda etapa: build completo; 289 testes orgânicos, 123 de proteção B2G, 34 de propriedade de intenção e 41 de taxonomia; SEO sem erros ou avisos, com 126 rotas indexáveis; atribuição, privacidade, formulário, navegação, HTML e acessibilidade estática aprovados. A conferência de fonte mediu 25 rotas em 50 quadros e passou 1.942/1.942 verificações, com todos os 56 insumos confrontados com os bytes do commit de conteúdo. O censo mantém 41 formulários; os dois links novos para captura elevam as ações declaradas a 278, com zero problemas.
+
+O navegador conferiu desktop e quadros de 390/320 pixels (área útil de 375/305 por causa da barra de rolagem), sem transbordamento do documento nas três páginas. A tabela possui sua própria rolagem horizontal e foco por teclado. O percurso do artigo ao formulário de medições exibiu o assunto correto no campo de contexto. A primeira origem e o comportamento sem armazenamento foram cobertos pelas regressões do listener real. Nenhum pedido de produção ou mensagem a cliente foi enviado.
+
+![Conferência das novas seções em quadros de 390 pixels](growth-mobile-review.jpg)
