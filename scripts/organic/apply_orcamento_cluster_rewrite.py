@@ -113,7 +113,7 @@ def faq(pairs: list[tuple[str, str]]) -> str:
     )
 
 
-def sources(links: list[tuple[str, str]], note: str) -> str:
+def sources(links: list[tuple[str, str]], note: str, *, reviewed: str | None = None) -> str:
     lis = "".join(
         f'<li><a href="{href}" rel="noopener noreferrer" target="_blank">{label}{ARROW}</a></li>'
         for href, label in links
@@ -122,8 +122,8 @@ def sources(links: list[tuple[str, str]], note: str) -> str:
         '<section class="sources-section" id="fontes"><p class="eyebrow">Referências oficiais</p>'
         "<h2>Fontes primárias deste guia</h2>"
         f"<p>{note}</p><ul>{lis}</ul>"
-        f'<p class="sources-reviewed">Fontes oficiais verificadas em <time datetime="{DATE}">{DATE_LABEL}</time>. Confirme o texto vigente do edital e do contrato.</p>'
-        '<p class="technical-note">Conteúdo educacional. Não substitui análise dos documentos do certame nem manifestação jurídica quando necessária.</p></section>'
+        + (reviewed or f'<p class="sources-reviewed">Fontes oficiais verificadas em <time datetime="{DATE}">{DATE_LABEL}</time>. Confirme o texto vigente do edital e do contrato.</p>')
+        + '<p class="technical-note">Conteúdo educacional. Não substitui análise dos documentos do certame nem manifestação jurídica quando necessária.</p></section>'
     )
 
 
@@ -274,16 +274,16 @@ def _replace_attr_tag(html: str, attr: str, name: str, value: str) -> str:
     return pattern.sub(repl, html, count=1)
 
 
-def set_modified_date(html: str) -> str:
-    html = _replace_attr_tag(html, "property", "article:modified_time", DATE)
+def set_modified_date(html: str, *, modified_date: str = DATE, modified_label: str = DATE_LABEL) -> str:
+    html = _replace_attr_tag(html, "property", "article:modified_time", modified_date)
     html = re.sub(
         r'("dateModified"\s*:\s*")[^"]+',
-        rf"\g<1>{DATE}",
+        rf"\g<1>{modified_date}",
         html,
     )
     return re.sub(
         r'<time datetime="[^"]+">[^<]+</time>',
-        f'<time datetime="{DATE}">{DATE_LABEL}</time>',
+        f'<time datetime="{modified_date}">{modified_label}</time>',
         html,
         count=1,
     )
@@ -343,11 +343,20 @@ def set_head(
     faqs: list[tuple[str, str]],
     citations: list[str],
     headline: str,
+    modified_date: str = DATE,
+    modified_label: str = DATE_LABEL,
+    about: str | None = None,
+    breadcrumb_label: str | None = None,
+    image_alt: str | None = None,
 ) -> str:
     html = re.sub(r"<title>.*?</title>", f"<title>{title}</title>", html, count=1, flags=re.S)
     html = _replace_attr_tag(html, "name", "description", description)
     html = _replace_attr_tag(html, "property", "og:title", title)
     html = _replace_attr_tag(html, "property", "og:description", description)
+    if image_alt is not None:
+        html = _replace_attr_tag(html, "property", "og:image:alt", image_alt)
+    if breadcrumb_label is not None:
+        html = re.sub(r'<li aria-current="page">[^<]*</li>', f'<li aria-current="page">{breadcrumb_label}</li>', html, count=1)
     html = re.sub(r"(<h1>)(.*?)(</h1>)", rf"\1{h1}\3", html, count=1, flags=re.S)
     html = re.sub(
         r'(<p class="content-lead">)(.*?)(</p>)',
@@ -356,7 +365,7 @@ def set_head(
         count=1,
         flags=re.S,
     )
-    html = set_modified_date(html)
+    html = set_modified_date(html, modified_date=modified_date, modified_label=modified_label)
 
     def _ld(match: re.Match[str]) -> str:
         data = json.loads(match.group(1))
@@ -366,9 +375,13 @@ def set_head(
             if kind == "Article":
                 node["headline"] = headline
                 node["description"] = description
-                node["dateModified"] = DATE
+                node["dateModified"] = modified_date
                 node["citation"] = citations
                 node["keywords"] = [headline, "obras públicas", "contratos públicos"]
+                if about is not None:
+                    node["about"] = [{"@type": "Thing", "name": about}]
+            if kind == "BreadcrumbList" and breadcrumb_label is not None:
+                node["itemListElement"][-1]["name"] = breadcrumb_label
             if kind == "FAQPage":
                 node["mainEntity"] = [
                     {
@@ -760,16 +773,24 @@ def page_empreitada(html: str) -> str:
         limit="40.000 é quantidade apurada vezes preço unitário ilustrativo, não crédito automático. No preço unitário, a medição segue unidades e autorização contratuais. No global, a alocação do desvio depende de projeto, edital, contrato e matriz. O exemplo não calcula aditivo nem reequilíbrio.",
     )
     inner = f"""
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>No <strong>preço unitário</strong>, a contratação usa preço certo de unidades determinadas. No <strong>preço global</strong>, usa preço certo e total, com medição por etapas ou metas quando se aplica o art. 46, § 9º. O nome do regime não transfere sozinho todo desvio quantitativo: leia projeto, edital, contrato e matriz antes de pôr o risco na margem.</p></div>
-<p class="article-intro">A pergunta útil não é 'qual regime é pior'. É: neste projeto, o quantitativo do item original está confiável? Se não estiver, o global transfere o vão para a margem. Esta página não escolhe SINAPI ou SICRO e não aplica índice de reajuste.</p>
+<div class="answer-box" id="resposta"><span>Qual é a diferença?</span><p>Na <strong>empreitada por preço unitário</strong>, a medição considera as quantidades executadas e aceitas, conforme os itens e critérios contratuais. Na <strong>empreitada por preço global</strong> regida pela Lei 14.133/2021, o pagamento acompanha etapas do cronograma ligadas a metas de resultado; o art. 46, § 9º, veda remunerar por quantidades de itens unitários. A planilha continua útil para orçamento e alterações, mas não muda o regime. Projeto, edital, contrato e matriz de riscos orientam o tratamento de diferenças quantitativas.</p></div>
+<p class="article-intro">Antes de precificar uma obra pública, confira se o projeto permite estimar as quantidades e se o critério de pagamento combina com o regime da minuta. Na execução, separe a variação do serviço originalmente previsto de uma mudança de projeto. Uma quantidade maior, por si só, não demonstra crédito nem obrigação de absorver o custo.</p>
 {toc([("#resposta", "Resposta"), ("#regimes", "Regimes"), ("#exemplo-calculo", "Cálculo"), ("#documentos", "Peças"), ("#plano", "Leitura"), ("#erros", "Erros"), ("#fontes", "Fontes")])}
-<section id="regimes"><p class="eyebrow">Execução, não só nome do edital</p>
-<h2>O que muda na medição e no risco de quantidade</h2>
-{cards([
-    ("01", "Preço unitário", "A remuneração usa unidades determinadas e o critério de medição autorizado. A diferença de 40.000 do exemplo só vira crédito se a execução e a medição estiverem cobertas pelo contrato."),
-    ("02", "Preço global", "Preço certo e total do objeto descrito, medido por etapas ou metas nos casos do art. 46, § 9º. A matriz, o projeto e o contrato dizem quem absorve o desvio quantitativo; o nome do regime não basta."),
-    ("03", "O que o regime não decide", "Reajuste segue o índice. Reequilíbrio segue a matriz e o art. 124, II, d. Exequibilidade testa a proposta. Administração local continua sendo classificação de custo."),
-])}
+<section id="regimes"><p class="eyebrow">Execução, medição e orçamento</p>
+<h2>Comparação entre empreitada por preço global e preço unitário</h2>
+<div class="table-wrap" role="group" tabindex="0" aria-label="Comparação dos regimes de empreitada; tabela com rolagem horizontal">
+<table class="compare-table">
+<caption>Diferenças para obras públicas regidas pela Lei 14.133/2021</caption>
+<thead><tr><th scope="col">O que conferir</th><th scope="col">Preço unitário</th><th scope="col">Preço global</th></tr></thead>
+<tbody>
+<tr><th scope="row">Preço contratado</th><td>Preço de unidades determinadas de serviço.</td><td>Preço certo e total para o objeto definido.</td></tr>
+<tr><th scope="row">Medição e pagamento</th><td>Quantidades executadas e aceitas, pelos critérios do contrato.</td><td>Etapas do cronograma físico-financeiro vinculadas a metas de resultado. Não remunera quantidades de itens unitários.</td></tr>
+<tr><th scope="row">Projeto e quantitativos</th><td>Exige projeto adequado e controle das quantidades medidas.</td><td>Requer elevada precisão dos quantitativos. Variações podem afetar a margem; a responsabilidade depende dos documentos e da causa.</td></tr>
+<tr><th scope="row">Mudança de projeto</th><td>Registre a alteração, seu preço e a formalização necessária.</td><td>Separe mudança do objeto de variação do serviço original antes de instruir eventual aditivo.</td></tr>
+</tbody></table></div>
+<p class="table-note">Base: art. 6º, XXVIII e XXIX, e art. 46, § 9º, da Lei 14.133/2021; orientação do TCU sobre empreitada global. A presença de preços unitários na planilha não converte um contrato global em unitário.</p>
+<p>Reajuste, reequilíbrio e exequibilidade respondem a outras perguntas. O primeiro segue a cláusula de atualização; o segundo exige enquadrar o evento e a alocação de riscos; a terceira verifica a viabilidade da proposta.</p>
+<p>Com a obra já contratada, uma divergência de boletim pode exigir <a href="/medicoes-glosas-obras-publicas/" data-journey="contrato" data-tema="critério de medição em empreitada global ou unitária" data-origem="/conteudos/empreitada-preco-global-preco-unitario/">análise técnica da medição ou glosa</a>. Se houve revisão de projeto ou serviço não previsto, o caminho é <a href="/aditivos-obras-publicas/" data-journey="contrato" data-tema="alteração de projeto em empreitada global ou unitária" data-origem="/conteudos/empreitada-preco-global-preco-unitario/">organizar o aditivo e a memória de quantidades e preços</a>. Antes da licitação, o diagnóstico abaixo ajuda a decidir como formar a proposta.</p>
 </section>
 {callout("Global mal lido vira desconto involuntário.", "Gerir boletim de preço global como se cada metro extra do projeto original fosse aditivo é o caminho inverso: a fiscalização recusa, e a empresa já executou.")}
 {example}
@@ -778,7 +799,7 @@ def page_empreitada(html: str) -> str:
 {docs([
     "Edital e minuta: regime de execução (art. 46) e critério de medição (art. 92, VI)",
     "Projeto básico, quantitativos e memória de cálculo do orçamento de referência",
-    "Planilha: se há preços unitários mesmo no global, para aditivo futuro (art. 127)",
+    "Planilha: quantitativos e custos unitários no preço global para adequações do cronograma e eventual aditivo (art. 56, § 5º)",
     "Matriz de riscos: quem arca com erro de quantitativo e com interferência de campo",
     "Critério de medição por evento, percentual ou unidade",
     "Proposta com margem explícita para o risco de quantidade, se o regime for global",
@@ -788,8 +809,8 @@ def page_empreitada(html: str) -> str:
 <h2>Leitura de regime que cabe na margem</h2>
 {actions([
     ("01", "Nomear o regime com o artigo", "Unitário (art. 6º, XXVIII) ou global (XXIX). Não use o nome comercial do órgão se a minuta disser outra coisa."),
-    ("02", "Amostrar os itens de maior valor", "No exemplo, 128 m² a 312,50 = 40.000. No unitário isso é medição. No global isso é margem, salvo mudança de escopo."),
-    ("03", "Separar quantidade de escopo", "Quantidade do projeto original versus serviço novo ou interferência. Só o segundo caminha bem por aditivo nos dois regimes."),
+    ("02", "Amostrar os itens de maior valor", "No exemplo, 128 m² a 312,50 = 40.000. No unitário, confira execução, aceite e cobertura contratual; no global, confronte o desvio com o projeto e a alocação de riscos antes de atribuir a diferença à margem."),
+    ("03", "Separar quantidade de escopo", "Separe variação de quantidade, falha de projeto, serviço novo e interferência. A causa, o regime legal e os documentos definem o enquadramento e a formalização necessários em cada regime."),
     ("04", "Não usar exequibilidade para tapar quantitativo", "O corte de 75% testa a proposta na forma do art. 59, § 4º. Não corrige projeto frouxo nem decide alocação contratual."),
 ])}
 </section>
@@ -808,11 +829,12 @@ def page_empreitada(html: str) -> str:
 {faq(faqs)}
 {sources(
     [
-        (LEI, "Lei 14.133/2021, arts. 6º XXVIII-XXIX, 46, 59 § 3º e 127"),
+        (LEI, "Lei 14.133/2021, arts. 6º XXVIII-XXIX, 46 § 9º, 56 § 5º, 59 § 3º e 127"),
         (TCU_EPG, "TCU: empreitada por preço global"),
         (CAIXA_PDF, "CAIXA: metodologia de composição (quantitativo e custo direto)"),
     ],
     "As definições de regime estão no art. 6º da Lei 14.133/2021 (Planalto, 1º de abril de 2021). O exemplo de 40.000 BRL é aritmética de premissas, não preço de referência do mês.",
+    reviewed='<p class="sources-reviewed">Definições legais e orientação do TCU sobre empreitada global conferidas em <time datetime="2026-10-29">29 de outubro de 2026</time>. Confirme o regime legal, o edital e o contrato aplicáveis à obra.</p>',
 )}
 {AUTHOR}
 {related(
@@ -827,13 +849,18 @@ def page_empreitada(html: str) -> str:
     html = replace_article(html, inner)
     return set_head(
         html,
-        title="Preço global ou unitário: o risco de quantidade | CONFENGE",
-        description="O que muda na medição quando o quantitativo do projeto original estoura: crédito no unitário, margem no global, com conta reproduzível.",
-        h1="Preço global ou unitário: o risco de quantidade",
-        lead="No unitário, a medição usa unidades determinadas. No global, o preço é certo e total e a medição segue etapas ou metas. Projeto, contrato e matriz decidem quem absorve o desvio de quantidade.",
+        title="Empreitada por preço global ou unitário: diferenças | CONFENGE",
+        description="Compare empreitada por preço global e preço unitário: critérios de medição, risco de quantitativos e alterações de projeto em obras públicas. Veja o que conferir.",
+        h1="Empreitada por preço global ou unitário: diferenças e riscos",
+        lead="A empreitada por preço unitário remunera unidades determinadas; a empreitada por preço global contrata o objeto por preço certo e total. A diferença muda a medição, a leitura do projeto e o risco de quantitativos da construtora.",
         faqs=faqs,
         citations=[LEI, TCU_EPG, CAIXA_PDF],
-        headline="Preço global ou unitário: o risco de quantidade",
+        headline="Empreitada por preço global ou unitário: diferenças e riscos",
+        modified_date="2026-10-29",
+        modified_label="29 de outubro de 2026",
+        about="Diferenças entre empreitada por preço global e preço unitário",
+        breadcrumb_label="Empreitada por preço global ou unitário",
+        image_alt="Comparação entre empreitada por preço global e preço unitário | CONFENGE",
     )
 
 

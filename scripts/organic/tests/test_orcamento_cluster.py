@@ -253,11 +253,20 @@ def test_metadata_canonical_schema_and_cta():
             html,
             flags=re.I,
         )
-        assert modified_meta and modified_meta.group(1) == "2026-08-29", slug
-        assert '"dateModified":"2026-08-29"' in html or '"dateModified": "2026-08-29"' in html
-        assert 'datetime="2026-08-29">29 de agosto de 2026</time>' in html
+        # The regime comparison was substantively revised after this cohort.
+        # Keep each page's known revision exact, including the other eight.
+        expected_modified = (
+            "2026-10-29" if slug == "empreitada-preco-global-preco-unitario"
+            else "2026-08-29"
+        )
+        expected_label = (
+            "29 de outubro de 2026" if expected_modified == "2026-10-29"
+            else "29 de agosto de 2026"
+        )
+        assert modified_meta and modified_meta.group(1) == expected_modified, slug
+        assert f'datetime="{expected_modified}">{expected_label}</time>' in html
         assert re.search(
-            r'<p class="sources-reviewed">.*?datetime="2026-08-29".*?</p>',
+            rf'<p class="sources-reviewed">.*?datetime="{expected_modified}".*?</p>',
             html,
             flags=re.S,
         ), slug
@@ -268,6 +277,7 @@ def test_metadata_canonical_schema_and_cta():
         assert article_html and primary_jsonld
         graph = json.loads(primary_jsonld.group(1))["@graph"]
         article_schema = next(node for node in graph if node.get("@type") == "Article")
+        assert article_schema["dateModified"] == expected_modified, slug
         assert article_schema["wordCount"] == len(visible_text(article_html.group(0)).split()), slug
 
         assert not _proposal_cta_failures(html, row["service_path"]), slug

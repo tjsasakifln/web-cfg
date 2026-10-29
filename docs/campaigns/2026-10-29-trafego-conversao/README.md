@@ -23,7 +23,7 @@ Fonte: Search Console da propriedade conectada `sc-domain:confenge.com.br`, cons
 - Medições e glosas: 6 cliques em 236 impressões.
 - SINAPI desonerado/não desonerado: 2 cliques em 280 impressões, CTR de 0,71%.
 
-O detalhamento por consulta expôs somente 23 cliques. Consultas omitidas por privacidade impedem concluir que os demais cliques seriam de marca ou sem marca. Impressões por página e totais da propriedade têm agregações diferentes e não devem ser somados como se fossem equivalentes.
+O detalhamento por consulta expôs somente 23 cliques. Na conferência desta rodada, a consulta isolada retornou 119 impressões em 29 linhas; as 399 impressões e 61 linhas do registro anterior foram preservadas no histórico do JSON, pois o universo de impressões corresponde à agregação por página. A causa exata da lacuna de cliques permanece desconhecida. Não se pode classificar o restante como marca ou sem marca. Impressões por página e totais da propriedade têm agregações diferentes.
 
 O volume ainda é pequeno. Os dados orientam prioridade; não demonstram aumento de tráfego ou conversão após esta alteração. Não foi obtida uma linha de base de pedidos comerciais, propostas ou receita nesta sessão.
 
@@ -83,6 +83,65 @@ Pedidos persistidos e oportunidades qualificadas têm precedência sobre contage
 
 ## Publicação e reversão
 
-A produção continua sendo `confenge.com.br`, no fluxo protegido GitHub/Netcup. Esta implementação é entregue em branch e pull request; não constitui confirmação de publicação.
+A produção continua sendo `confenge.com.br`, no fluxo protegido GitHub/Netcup. A primeira etapa foi publicada pelo PR [#758](https://github.com/tjsasakifln/web-cfg/pull/758), merge `38271d674f186682539a699d5636ddb9bf76597c`, com [release aceito](https://github.com/tjsasakifln/web-cfg/actions/runs/40890976677). A identidade foi novamente conferida no domínio oficial no início desta rodada.
 
 A reversão é o revert do commit da alteração. Rotas, índices e acervo público são preservados. A eventual promoção segue a verificação e reversão já existentes no repositório, sem mudança de DNS ou infraestrutura.
+
+## Segunda etapa: procura contratual e comparação dos regimes
+
+Decisão em 29/10/2026: EXECUTE_NOW. Frente INBOUND ENGINE, alavancas distribuição, receita e confiança. Tempo para evidência técnica: nesta entrega; para procura: 28 e 56 dias completos. O trabalho do visitante é distinguir um risco de proposta, uma medição contestada ou uma alteração de projeto e encontrar o apoio técnico correspondente. O experimento estrutural continua único: atrair procura comercial pertinente para serviços claros e preservar o contexto até o pedido real. Cem visitas usam a mesma biblioteca, os mesmos serviços e a captura existente, sem cem páginas ou operações manuais.
+
+A consulta conectada atualizada reproduziu os três períodos completos e a tendência anterior. Dados e cálculos saneados estão em [gsc-growth-analysis.json](gsc-growth-analysis.json). São evidências históricas de pesquisa; não substituem a autoridade durável do GSC no runtime.
+
+| Período de 28 dias em 2026 | Cliques | Impressões | CTR |
+| --- | ---: | ---: | ---: |
+| 04/08 a 31/08 | 28 | 1.176 | 2,38% |
+| 01/09 a 28/09 | 72 | 1.140 | 6,32% |
+| 29/09 a 26/10 | 88 | 1.766 | 4,98% |
+
+Todos os dias retornados foram calculados por código. O pedido de extensão a 12/05 retornou dados somente desde 14/07. Os 21 dias anteriores a 04/08 não formam outro período equivalente. O dia 27/10 foi separado para comparabilidade; 28/10 não retornou linha e não foi tratado como zero. A fonte foi consultada com `include_fresh_data=false`.
+
+### Uma carteira e um plano
+
+| Ordem e decisão | Evidência | Público, serviço e obstáculo | Alteração ou motivo de espera | Esforço, confiança e risco |
+| --- | --- | --- | --- | --- |
+| 1 EXECUTE_NOW: medições e glosas | 9 cliques/528 impressões em 84 dias; 6/236 no último período, posição 4,27 | Construtora com corte ou divergência; análise e contestação técnica; poucos cliques na exposição conquistada | Snippet específico, roteiro por item, parcela incontroversa e distinção entre glosa, ateste, pagamento e alteração | Moderado; procura observada, efeito incerto; preservar URL, formulário e exemplo |
+| 2 EXECUTE_NOW: global versus unitário | 1/254 em 84 dias; 0/85 e posição 9,42 no último período | Quem prepara proposta ou executa contrato; diagnóstico, medições ou aditivos; abertura não respondia primeiro à comparação literal | Título e resposta direta, quadro de diferenças, fontes e caminhos segundo a fase do contrato | Moderado; confiança média; pode atrair público informativo, sem pressupor compra |
+| 3 EXECUTE_NOW: serviço de aditivos | 1/132 em 84 dias; 67 para 1 impressão nos últimos períodos; artigo global já tem 22/189 | Construtora com projeto alterado; memória de escopo, quantidade e preço; serviço com pouca exposição recente | Apresentação concreta do trabalho e seção de preço global ligada ao artigo existente; investigar indexabilidade antes de atribuir causa | Pequeno a moderado; confiança média; não inferir canibalização nem reescrever o artigo forte |
+| 4 DEFER: limites de aditivo | 1/76 no último período | Empresa enquadrando alteração | Preservar resposta; próxima investigação se a procura justificar | Moderado; tema legal requer fonte atual |
+| 5 DEFER: BDI e mobilização | Ambos 8/138 no último período | Equipe de orçamento; auditoria de planilha | Proteger respostas que já atraem visitas; sem achado que justifique reescrita | Baixo ganho marginal identificado, risco de perder resposta útil |
+| 6 DEFER: SINAPI | 7/819 em 84 dias | Orçamentistas e possíveis compradores de revisão | Título já melhorado no PR #758; intenção comercial não demonstrada para justificar liderar esta rodada | Baixa confiança sobre compra; não priorizar apenas impressões |
+| 7 VALIDATE: expansão para outras verticais | Serviços de projetos melhorados no PR #758; pesquisa externa mostra linguagem de contratação, sem volume validado | Projetos, SST, perícias e revisão de orçamento | Investigar lacuna distinta antes de criar rota; ausência de cliques não prova ausência de mercado | Esforço maior; procura própria e retorno ainda incertos |
+
+Não há ticket, margem ou taxa comercial validados para pontuação financeira. A ordem compara proximidade de um problema contratual, procura conquistada, esforço total e risco. A pesquisa comercial e o manual interno autorizado confirmaram aderência de medições, aditivos e orçamentação; nenhum dado individual ou documento interno foi incorporado ao repositório. Não foi necessária investigação extensa de CRM para desempatar estas alterações de conteúdo.
+
+O conjunto ficou fixado nas três rotas acima. As únicas dependências adicionais são fonte canônica, datas, inventário de links, recaptura de integridade e controles já existentes. Não há nova página, preço, infraestrutura, crawler, CRM, painel ou agendamento. O corpo do artigo global/unitário também é mantido no gerador histórico reaplicável `scripts/organic/apply_orcamento_cluster_rewrite.py`; sua regressão continua exigindo paridade com o HTML.
+
+### Limitações que mudam a interpretação
+
+Em 84 dias, a propriedade retorna 188 cliques/4.082 impressões; página retorna 188/5.230. Consulta isolada retorna 45/236 em 53 linhas; data+consulta retorna os mesmos 45/236 em 135 linhas. Página+consulta e página+dispositivo retornam somente 45/708, embora a dimensão de dispositivo isolada reconcilie com a propriedade. Esses cruzamentos incompletos não foram usados para diagnosticar defeito móvel. A interface descoberta não expõe paginação, limite de linhas ou deslocamento; os resultados indicaram conclusão, mas a extração upstream não pôde ser certificada. A causa dos 143 cliques sem consulta disponível permanece desconhecida.
+
+Desktop e celular têm composições e posições diferentes. Brasil concentra 187 dos 188 cliques, sem base para orientar expansão internacional. A pesquisa externa fornece sinais qualitativos de vocabulário e necessidade, sem alegar volume mensal, dificuldade numérica ou chance de posição.
+
+### Ganho condicionado, sem previsão de contratos
+
+Para medições, a base é o último período de 28 dias: 236 impressões e 6 cliques. A página já vinha crescendo (1/110, 2/182 e 6/236), portanto não se atribui essa tendência à entrega atual.
+
+| Hipótese explícita para outros 28 dias | Cliques calculados | Adicionais sobre 6 |
+| --- | ---: | ---: |
+| Exposição e CTR mantidos | 6 | 0 |
+| 236 impressões e CTR de 4% | 9,44 | 3,44 |
+| 236 impressões e CTR de 6% | 14,16 | 8,16 |
+| Exposição 25% maior e CTR de 4% | 11,80 | 5,80 |
+
+São cenários aritméticos condicionados, sem probabilidade ou intervalo estatístico. BDI e mobilização têm CTR próximo de 6%, mas intenção e posição diferem, com amostra pequena; não são controles equivalentes. Não somar cenário de página e de consultas da mesma página. Não há estimativa pontual defensável para recuperação de aditivos ou crescimento da comparação de regimes. Sem taxas verificadas, não há previsão de oportunidades ou receita. O resultado comercial só avança com evidência de conversa, pedido, oportunidade, proposta, contrato, faturamento e recebimento, cada qual em sua fonte responsável.
+
+### Fontes e revisão
+
+Fontes primárias conferidas nesta rodada: [Lei 14.133/2021](https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm), [TCU: empreitada global](https://licitacoesecontratos.tcu.gov.br/4-4-1-2-empreitada-por-preco-global-epg/), [TCU: empreitada unitária](https://licitacoesecontratos.tcu.gov.br/4-4-1-1-empreitada-por-preco-unitario-epu/) e [TCU: pagamento](https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/). A definição legal de preço unitário usa o inciso XXVIII do art. 6º; a planilha em preço global é tratada no art. 56, § 5º. Não se transplantou um numeral divergente do rodapé do manual.
+
+Revisores independentes questionaram interpretação do GSC, valor comercial, propriedade de intenção, precisão técnica e implementação. A revisão preservou o artigo forte de aditivo e BDI, rejeitou nova landing de glosa, identificou o gerador reaplicável e corrigiu simplificações que tratavam qualquer variação no global como margem automaticamente absorvida. A manutenção técnica inclui a cadeia de hashes, o pin da rota comercial, o canário e a primeira dobra, sempre com bytes e commit reais, sem dispensa de controles.
+
+A avaliação usa o painel diário e os relatórios existentes. Se esta etapa for publicada em 29/10, as janelas completas são 30/10 a 26/11 (28 dias) e 30/10 a 24/12 (56 dias); a linha de base comparável termina no último dia completo disponível antes da publicação. Confrontar a tendência prévia, composição e intervenções simultâneas, incluindo o PR #758. Nenhuma atribuição causal isolada é inferida de antes/depois.
+
+As validações, a revisão final e a identidade efetivamente publicada serão registradas em `growth-validation.json` e no PR desta etapa. Enquanto esses registros não confirmarem o release terminal, esta seção documenta a implementação candidata.
