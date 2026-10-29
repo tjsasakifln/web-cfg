@@ -20,14 +20,14 @@ Recuperar medição, contestar glosa e transformar serviço executado em valor r
 
 | Field | Value |
 |---|---|
-| title | Medições, glosas e pagamentos em obras públicas | CONFENGE |
-| meta | Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido. |
+| title | Medição e glosa em obras públicas: apoio técnico | CONFENGE |
+| meta | Medição glosada ou pagamento retido? Conferimos boletins, critérios do contrato e provas da execução para preparar a resposta técnica à fiscalização. |
 | H1 | Medições, glosas e pagamentos em obras públicas |
 | canonical | https://confenge.com.br/medicoes-glosas-obras-publicas/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
-| og:title | Medições, glosas e pagamentos em obras públicas | CONFENGE |
-| content_sha256 | `1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155` |
+| og:title | Medição e glosa em obras públicas: apoio técnico | CONFENGE |
+| content_sha256 | `47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 

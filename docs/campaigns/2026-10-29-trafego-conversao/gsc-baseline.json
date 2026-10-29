@@ -14,9 +14,27 @@
   },
   "query_dimension": {
     "visible_clicks": 23,
-    "visible_impressions": 399,
-    "rows": 61,
-    "limitation": "Consultas anonimizadas por privacidade não aparecem; não inferir ausência de cliques sem marca. Impressions agregadas por página não equivalem ao total da propriedade."
+    "visible_impressions": 119,
+    "rows": 29,
+    "aggregation": "Consulta isolada, sem dimensão de página, de 29/09 a 26/10/2026.",
+    "limitation": "A consulta isolada cobre 23 dos 88 cliques da propriedade. A causa exata da lacuna permanece desconhecida; não classificar o restante como marca ou sem marca. O conector não expõe limites de linha nem paginação. Impressões agregadas por página não equivalem às da propriedade.",
+    "revision_2026_10_29": {
+      "previously_recorded": {
+        "visible_clicks": 23,
+        "visible_impressions": 399,
+        "rows": 61,
+        "aggregation": "Identificação original não confirmada. As 399 impressões coincidem com o universo agregado por página retornado na revisão, não com a consulta isolada."
+      },
+      "rechecked_query_only": {
+        "visible_clicks": 23,
+        "visible_impressions": 119,
+        "rows": 29
+      },
+      "missing_clicks": 65,
+      "cause": "unknown",
+      "correction": "Preservados os números originais como histórico. Removida a atribuição categórica à anonimização, pois filtros, agregação e capacidade de paginação não comprovam essa causa.",
+      "evidence_file": "gsc-growth-analysis.json"
+    }
   },
   "pages": [
     {

@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: medicoes-glosas-obras-publicas
 path: medicoes-glosas-obras-publicas/index.html
-content_sha256: 1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155
+content_sha256: 47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false

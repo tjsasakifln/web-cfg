@@ -141,11 +141,11 @@
         128,
         291
       ],
-      "expected_sha256": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+      "expected_sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
       "expected_sha256_note": "Hash recapturado para a melhoria comercial autorizada da página prioritária, mantendo fatos, fontes, termos, campos, destinos e controles do canário #389.",
-      "expected_sha256_recaptured_at": "2026-10-25T01:03:06-03:00",
-      "expected_sha256_recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: #captura-pilar passou a esclarecer que o pedido preserva o contexto da medição ou glosa e que documentos complementares podem ser enviados depois, se necessários. Formulário, campos, atributos de origem, CTA, destino, conteúdo técnico, preços, fontes, canonical e robots permanecem inalterados.",
-      "expected_sha256_previous": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+      "expected_sha256_recaptured_at": "2026-10-29T15:51:25Z",
+      "expected_sha256_recapture_reason": "CONFENGE trafego qualificado 2026-10-29: conteudo e metadados de medicoes e aditivos revisados, rotas e captura preservadas",
+      "expected_sha256_previous": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
       "commercial_recapture_history": [
         {
           "recorded_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
@@ -167,6 +167,12 @@
           "expected_sha256_previous": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
           "expected_sha256_recaptured_at": "2026-10-03",
           "expected_sha256_recapture_reason": "CONFENGE-CAMPANHA-AQUISICAO-20261003: aberturas específicas de engenharia, responsabilidades acessíveis, saudação institucional e hierarquia medida de primeira tela; preços, prazos, entregáveis, fontes, canonical, robots e formulário protegidos pelos contratos vigentes. A revisão humana factual anterior permanece histórica."
+        },
+        {
+          "expected_sha256": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+          "expected_sha256_previous": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
+          "expected_sha256_recaptured_at": "2026-10-25T01:03:06-03:00",
+          "expected_sha256_recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: #captura-pilar passou a esclarecer que o pedido preserva o contexto da medição ou glosa e que documentos complementares podem ser enviados depois, se necessários. Formulário, campos, atributos de origem, CTA, destino, conteúdo técnico, preços, fontes, canonical e robots permanecem inalterados."
         }
       ]
     }

@@ -1,0 +1,94 @@
+{
+  "schema": "confenge-growth-validation/v1",
+  "date": "2026-10-29",
+  "decision": "EXECUTE_NOW",
+  "source_content_commit": "e57b8ddf47e6eeb7725400d7939e943dfb93e389",
+  "routes": [
+    "/medicoes-glosas-obras-publicas/",
+    "/aditivos-obras-publicas/",
+    "/conteudos/empreitada-preco-global-preco-unitario/"
+  ],
+  "review": {
+    "independent_data_review": "passed_with_query_and_cross_dimension_limitations_recorded",
+    "independent_technical_commercial_review": "no_material_defect_remaining",
+    "independent_implementation_review": "no_material_defect_remaining",
+    "defects_resolved": [
+      "historical_generator_would_restore_old_article",
+      "quantity_risk_simplifications_and_planilha_legal_reference",
+      "unverified_anonymization_cause_in_previous_baseline",
+      "CTA_inventory_required_two_new_real_capture_links",
+      "canonical_aditivos_snippet_and_consumer_pin_needed_explicit_revision"
+    ]
+  },
+  "local_checks": {
+    "build_site": "passed",
+    "organic_tests": 289,
+    "bofu_dominance_tests": 123,
+    "bofu_ownership_tests": 34,
+    "corporate_taxonomy_tests": 41,
+    "article_and_priority_page_tests": 14,
+    "first_fold": {
+      "routes": 25,
+      "viewports": 50,
+      "checks_passed": 1942,
+      "checks_total": 1942,
+      "input_hashes_verified_against_commit": 56,
+      "human_comprehension_claimed": false
+    },
+    "seo": {
+      "errors": 0,
+      "warnings": 0,
+      "indexable_routes": 126
+    },
+    "cta_contract": {
+      "active_forms": 41,
+      "declared_actions": 278,
+      "problems": 0
+    },
+    "analytics_privacy_and_attribution": "passed_including_first_touch_and_storage_denied_regressions",
+    "html_integrity_source_and_built_artifact": "passed",
+    "navigation": "passed",
+    "static_accessibility": "passed",
+    "secrets_scan": "passed"
+  },
+  "browser": {
+    "preview": "source_copy_with_all_first_fold_inputs_equal_to_named_commit",
+    "desktop": "checked",
+    "mobile_iframe_widths": [
+      390,
+      320
+    ],
+    "effective_mobile_client_widths": [
+      375,
+      305
+    ],
+    "three_changed_pages_have_no_document_horizontal_overflow": true,
+    "comparison_table": "dedicated_keyboard_focusable_horizontal_scroll",
+    "article_to_measurement_form": "visible_topic_preserved",
+    "whatsapp": "contextual_links_checked_without_sending_message",
+    "real_production_request_submitted": false,
+    "image": "growth-mobile-review.jpg",
+    "limitation": "Browser preview used Cloud Browser because the local Chrome extension could not resolve the internal preview hostname. No physical device study or human comprehension study is claimed."
+  },
+  "aditivos_exposure_investigation": {
+    "current_http": 200,
+    "self_canonical": true,
+    "index_follow": true,
+    "sitemap_present": true,
+    "googlebot_allowed": true,
+    "canonical_and_robots_in_43_historical_html_revisions": "unchanged",
+    "cause_of_67_to_1_impression_change": "unknown",
+    "google_index_membership_confirmed": false
+  },
+  "known_test_flake": {
+    "test": "test_analytics_capture_anchor",
+    "observation": "An independent first run rejected a random fixture identifier as potential personal data; an unchanged repeat and the integrated run passed. No production fixture or validation rule was weakened."
+  },
+  "publication": {
+    "state": "candidate_not_yet_merged",
+    "required_remote_checks": "must_pass_on_final_PR_head",
+    "production_identity": "must_match_merge_commit",
+    "terminal_release_acceptance": "not_yet_observed",
+    "final_evidence_location": "pull_request_body_linked_from_README_after_remote_validation"
+  }
+}

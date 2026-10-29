@@ -10,14 +10,43 @@
     "status": "LANDED_IN_REPO",
     "before_title": "Aditivos em obras públicas: limites, serviços extras e pleitos | CONFENGE",
     "before_meta": "generic library description ending in Biblioteca CONFENGE.",
-    "after_title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
-    "after_meta": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+    "after_title": "Aditivos em obras públicas: análise técnica e cálculo | CONFENGE",
+    "after_meta": "Mudança de projeto ou serviço extra? Comparamos escopos, apuramos quantidades e preços e organizamos a documentação técnica para instruir o pedido de aditivo.",
     "baseline_gsc": {
       "impressions": 12,
       "clicks": 0,
       "position": 49.25
     },
-    "note": "Title/H1/meta commercial-intent hypothesis from #128 is in the shipped HTML. Live rank is not claimed."
+    "note": "Segunda etapa da hipótese comercial em 29/10/2026: título e descrição passam a nomear análise técnica, quantidades e preços do serviço já oferecido. O antes original e a primeira versão entregue de #128 permanecem registrados. A revisão não demonstra aumento de posição, cliques ou contratos e não atribui a queda de exposição ao título anterior.",
+    "revised_at": "2026-10-29",
+    "revision_history": [
+      {
+        "as_of": "2026-08-24",
+        "source_issue": 128,
+        "status": "LANDED_IN_REPO",
+        "before_title": "Aditivos em obras públicas: limites, serviços extras e pleitos | CONFENGE",
+        "before_meta": "generic library description ending in Biblioteca CONFENGE.",
+        "after_title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+        "after_meta": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+        "baseline_gsc": {
+          "impressions": 12,
+          "clicks": 0,
+          "position": 49.25
+        },
+        "note": "Title/H1/meta commercial-intent hypothesis from #128 is in the shipped HTML. Live rank is not claimed."
+      }
+    ],
+    "second_stage": {
+      "decision_state": "EXECUTE_NOW",
+      "revised_at": "2026-10-29",
+      "before_title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+      "before_meta": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+      "after_title": "Aditivos em obras públicas: análise técnica e cálculo | CONFENGE",
+      "after_meta": "Mudança de projeto ou serviço extra? Comparamos escopos, apuramos quantidades e preços e organizamos a documentação técnica para instruir o pedido de aditivo.",
+      "reason": "Distinguir a compra da análise técnica do conteúdo informativo: explicitar comparação de escopo, cálculo de quantidades e preços e instrução documental no destino comercial existente, preservando a intenção de aditivos e as respostas úteis dos artigos.",
+      "evidence_reference": "docs/campaigns/2026-10-29-trafego-conversao/",
+      "measurement_rule": "Comparar períodos completos de 28 e 56 dias após a publicação; controlar composição das pesquisas e intervenções simultâneas. A queda observada de exposição permanece sem causa atribuída."
+    }
   },
   "notes": [
     "Existing routes only. No new URL family.",

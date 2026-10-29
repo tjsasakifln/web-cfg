@@ -1,0 +1,2203 @@
+{
+  "measured_at": "2026-10-29",
+  "source": "Windsor.ai Search Console conectado",
+  "account": "sc-domain:confenge.com.br",
+  "request": {
+    "date_from": "2026-08-04",
+    "date_to": "2026-10-26",
+    "include_fresh_data": false,
+    "explicit_filters": [],
+    "pagination": "Não exposta pelo conector; respostas status=done e total_rows conferidos."
+  },
+  "periods": [
+    {
+      "from": "2026-08-04",
+      "to": "2026-08-31",
+      "rows": 28,
+      "clicks": 28,
+      "impressions": 1176,
+      "ctr": 0.023809523809523808,
+      "position": 8.087581887755102
+    },
+    {
+      "from": "2026-09-01",
+      "to": "2026-09-28",
+      "rows": 28,
+      "clicks": 72,
+      "impressions": 1140,
+      "ctr": 0.06315789473684211,
+      "position": 6.713151052631579
+    },
+    {
+      "from": "2026-09-29",
+      "to": "2026-10-26",
+      "rows": 28,
+      "clicks": 88,
+      "impressions": 1766,
+      "ctr": 0.04983012457531144,
+      "position": 5.983020724801812
+    }
+  ],
+  "total84": {
+    "rows": 84,
+    "clicks": 188,
+    "impressions": 4082,
+    "ctr": 0.046055854973052424,
+    "position": 6.7932393679568825
+  },
+  "pages84": [
+    {
+      "page": "https://confenge.com.br/",
+      "clicks": 74,
+      "impressions": 302,
+      "ctr": 0.245,
+      "position": 5.7583
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/",
+      "clicks": 22,
+      "impressions": 189,
+      "ctr": 0.1164,
+      "position": 4.3228
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+      "clicks": 14,
+      "impressions": 246,
+      "ctr": 0.0569,
+      "position": 4.9878
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+      "clicks": 10,
+      "impressions": 195,
+      "ctr": 0.0513,
+      "position": 7.3179
+    },
+    {
+      "page": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+      "clicks": 9,
+      "impressions": 80,
+      "ctr": 0.1125,
+      "position": 4.1
+    },
+    {
+      "page": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "clicks": 9,
+      "impressions": 528,
+      "ctr": 0.017,
+      "position": 4.9564
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "clicks": 7,
+      "impressions": 819,
+      "ctr": 0.0085,
+      "position": 6.5409
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/",
+      "clicks": 4,
+      "impressions": 79,
+      "ctr": 0.0506,
+      "position": 8.6835
+    },
+    {
+      "page": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
+      "clicks": 4,
+      "impressions": 38,
+      "ctr": 0.1053,
+      "position": 3.7368
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
+      "clicks": 3,
+      "impressions": 133,
+      "ctr": 0.0226,
+      "position": 7.2481
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/custos-indiretos-atraso-administracao-obra/",
+      "clicks": 3,
+      "impressions": 11,
+      "ctr": 0.2727,
+      "position": 4.9091
+    },
+    {
+      "page": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "clicks": 3,
+      "impressions": 75,
+      "ctr": 0.04,
+      "position": 3.88
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+      "clicks": 2,
+      "impressions": 8,
+      "ctr": 0.25,
+      "position": 4.875
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "clicks": 2,
+      "impressions": 109,
+      "ctr": 0.0183,
+      "position": 10.633
+    },
+    {
+      "page": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "clicks": 2,
+      "impressions": 19,
+      "ctr": 0.1053,
+      "position": 2.9474
+    },
+    {
+      "page": "https://confenge.com.br/aditivos-obras-publicas/",
+      "clicks": 1,
+      "impressions": 132,
+      "ctr": 0.0076,
+      "position": 20.8333
+    },
+    {
+      "page": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+      "clicks": 1,
+      "impressions": 38,
+      "ctr": 0.0263,
+      "position": 5.6842
+    },
+    {
+      "page": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+      "clicks": 1,
+      "impressions": 35,
+      "ctr": 0.0286,
+      "position": 8.3143
+    },
+    {
+      "page": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 0.2,
+      "position": 6.6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/",
+      "clicks": 1,
+      "impressions": 172,
+      "ctr": 0.0058,
+      "position": 2.3314
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/desagio-licitacao-obra-publica/",
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 0.2,
+      "position": 1.8
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/",
+      "clicks": 1,
+      "impressions": 254,
+      "ctr": 0.0039,
+      "position": 8.5472
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+      "clicks": 1,
+      "impressions": 6,
+      "ctr": 0.1667,
+      "position": 6.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "clicks": 1,
+      "impressions": 12,
+      "ctr": 0.0833,
+      "position": 6.0833
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/glosa-de-medicao-obra-publica/",
+      "clicks": 1,
+      "impressions": 11,
+      "ctr": 0.0909,
+      "position": 4.5455
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/medicao-de-obra-publica-rejeitada/",
+      "clicks": 1,
+      "impressions": 16,
+      "ctr": 0.0625,
+      "position": 6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/pedido-de-reequilibrio-negado/",
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 0.2,
+      "position": 5.6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/reequilibrio-empreitada-preco-global/",
+      "clicks": 1,
+      "impressions": 20,
+      "ctr": 0.05,
+      "position": 6.7
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "clicks": 1,
+      "impressions": 32,
+      "ctr": 0.0312,
+      "position": 5.6562
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/",
+      "clicks": 1,
+      "impressions": 100,
+      "ctr": 0.01,
+      "position": 7.51
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/troca-responsavel-tecnico-contrato-publico/",
+      "clicks": 1,
+      "impressions": 10,
+      "ctr": 0.1,
+      "position": 6.6
+    },
+    {
+      "page": "https://confenge.com.br/elaboracao-pgr/",
+      "clicks": 1,
+      "impressions": 4,
+      "ctr": 0.25,
+      "position": 4.25
+    },
+    {
+      "page": "https://confenge.com.br/entregas/",
+      "clicks": 1,
+      "impressions": 91,
+      "ctr": 0.011,
+      "position": 2.3626
+    },
+    {
+      "page": "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/",
+      "clicks": 1,
+      "impressions": 1,
+      "ctr": 1,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "clicks": 1,
+      "impressions": 28,
+      "ctr": 0.0357,
+      "position": 5.3214
+    },
+    {
+      "page": "http://confenge.com.br/",
+      "clicks": 0,
+      "impressions": 64,
+      "ctr": 0,
+      "position": 10.1094
+    },
+    {
+      "page": "https://confenge.com.br/acompanhamento-contratos-obras/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/analises-contratos-publicos/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "clicks": 0,
+      "impressions": 13,
+      "ctr": 0,
+      "position": 5.9231
+    },
+    {
+      "page": "https://confenge.com.br/assistencia-tecnica-pericia-trabalhista/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 7.25
+    },
+    {
+      "page": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 5.4375
+    },
+    {
+      "page": "https://confenge.com.br/avaliacao-imoveis-urbanos/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 3.3333
+    },
+    {
+      "page": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 5.5714
+    },
+    {
+      "page": "https://confenge.com.br/blog",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 4.3333
+    },
+    {
+      "page": "https://confenge.com.br/casos/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/casos/demonstrativo-infraestrutura/",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 1.7647
+    },
+    {
+      "page": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 3.5
+    },
+    {
+      "page": "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "page": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/casos/modelo-contratos-vincendos-relicitacao/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 5.3333
+    },
+    {
+      "page": "https://confenge.com.br/casos/modelo-mapeamento-concorrentes-publicos/",
+      "clicks": 0,
+      "impressions": 20,
+      "ctr": 0,
+      "position": 11.6
+    },
+    {
+      "page": "https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "page": "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 2.6667
+    },
+    {
+      "page": "https://confenge.com.br/comercial/privacidade-leads/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9.5
+    },
+    {
+      "page": "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 4.8
+    },
+    {
+      "page": "https://confenge.com.br/como-trabalhamos/",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 2.4286
+    },
+    {
+      "page": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "clicks": 0,
+      "impressions": 18,
+      "ctr": 0,
+      "position": 6.1111
+    },
+    {
+      "page": "https://confenge.com.br/confianca/",
+      "clicks": 0,
+      "impressions": 64,
+      "ctr": 0,
+      "position": 2.0625
+    },
+    {
+      "page": "https://confenge.com.br/conflitos/",
+      "clicks": 0,
+      "impressions": 41,
+      "ctr": 0,
+      "position": 5.5122
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/aditivo-qualitativo-quantitativo/",
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 5.4375
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/administracao-local-prolongada-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 4.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+      "clicks": 0,
+      "impressions": 24,
+      "ctr": 0,
+      "position": 5.4583
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 10.25
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "clicks": 0,
+      "impressions": 37,
+      "ctr": 0,
+      "position": 6.3243
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/auditoria-contrato-obra-publica-mensal/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/bdi-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/calculo-reequilibrio-economico-financeiro/",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 5.625
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 12
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 4.4118
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 7.2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/",
+      "clicks": 0,
+      "impressions": 13,
+      "ctr": 0,
+      "position": 6.7692
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/compensacao-acrescimo-supressao-aditivo/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 2.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/composicao-propria-preco-obra-publica/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/consultoria-b2g-engenharia-construtora/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/contratacao-integrada-semi-integrada-obra/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/cotacao-mercado-orcamento-obra-publica/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/cronograma-fisico-financeiro-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/cronologia-contrato-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/curva-abc-orcamento-obra/",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 7.8333
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/curva-abc-reequilibrio-contrato/",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "position": 4.6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 4.75
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 9.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/divergencia-quantitativo-medicao-as-built/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 17
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/extincao-contrato-culpa-administracao/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 5.2857
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/impedimento-de-licitar-construtora/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 5.3333
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/manutencao-habilitacao-contrato-publico/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/matriz-de-riscos-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 6.3333
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 5.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 4.375
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/multa-contrato-obra-publica-defesa/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 24
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/notas-fiscais-reequilibrio-contrato/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/notificacao-impacto-prazo-custo-obra/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/pagamento-contrato-publico-certidao-vencida/",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 14
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/",
+      "clicks": 0,
+      "impressions": 22,
+      "ctr": 0,
+      "position": 7.1364
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/plano-recuperacao-obra-atrasada/",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 10.2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/pleito-tecnico-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "clicks": 0,
+      "impressions": 22,
+      "ctr": 0,
+      "position": 6.2273
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 7.3333
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/produtividade-sinapi-obra-publica/",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 9.375
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/projeto-basico-incompleto-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 6.75
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 8.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/reequilibrio-apos-fim-do-contrato/",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 5.625
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 4.75
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/registro-contemporaneo-pleito-obra/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/reprogramacao-cronograma-obra-publica/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 6.25
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/rescisao-unilateral-contrato-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "position": 4.2
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "clicks": 0,
+      "impressions": 27,
+      "ctr": 0,
+      "position": 4.8148
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/servico-executado-sem-termo-aditivo/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7.5
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/suspensao-execucao-contrato-publico-contratado/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/tributos-bdi-obra-publica/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 4.6667
+    },
+    {
+      "page": "https://confenge.com.br/conteudos/visita-tecnica-licitacao-obra-publica/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "page": "https://confenge.com.br/correcoes/",
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 1.8125
+    },
+    {
+      "page": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 6.6429
+    },
+    {
+      "page": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+      "clicks": 0,
+      "impressions": 13,
+      "ctr": 0,
+      "position": 8.6154
+    },
+    {
+      "page": "https://confenge.com.br/diagnostico-b2g-360/",
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 4.9474
+    },
+    {
+      "page": "https://confenge.com.br/diagnostico-b2g-expansao/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/diagnostico-pre-licitacao/",
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/diretoria-b2g/",
+      "clicks": 0,
+      "impressions": 12,
+      "ctr": 0,
+      "position": 5.4167
+    },
+    {
+      "page": "https://confenge.com.br/edificacoes/",
+      "clicks": 0,
+      "impressions": 58,
+      "ctr": 0,
+      "position": 1.7414
+    },
+    {
+      "page": "https://confenge.com.br/engenharia-condominios/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 38.3333
+    },
+    {
+      "page": "https://confenge.com.br/ferramentas/",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 6.2857
+    },
+    {
+      "page": "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 1.3333
+    },
+    {
+      "page": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "page": "https://confenge.com.br/guias-contratos-obras/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/imprensa/",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 7.6
+    },
+    {
+      "page": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+      "clicks": 0,
+      "impressions": 27,
+      "ctr": 0,
+      "position": 5.5926
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/acompanhamento/",
+      "clicks": 0,
+      "impressions": 13,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/cenarios/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/fornecedores-climatizacao-contratos-publicos/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/mercados/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi-paralelepipedo/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 13
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/relacoes-compradores-fornecedores/",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 12.25
+    },
+    {
+      "page": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 2.5
+    },
+    {
+      "page": "https://confenge.com.br/lei-14133-obras/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "page": "https://confenge.com.br/medicoes-obras-publicas/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "page": "https://confenge.com.br/metodologia-inteligencia/",
+      "clicks": 0,
+      "impressions": 18,
+      "ctr": 0,
+      "position": 3.1667
+    },
+    {
+      "page": "https://confenge.com.br/parcerias-engenharia/",
+      "clicks": 0,
+      "impressions": 52,
+      "ctr": 0,
+      "position": 2.3269
+    },
+    {
+      "page": "https://confenge.com.br/pgr-documentacao-sst-obras/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 8.5
+    },
+    {
+      "page": "https://confenge.com.br/politica-editorial/",
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 6.6842
+    },
+    {
+      "page": "https://confenge.com.br/politica-editorial/historico/",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "page": "https://confenge.com.br/politica-editorial/v/1.0.0/",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "page": "https://confenge.com.br/privacidade",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/privacidade/",
+      "clicks": 0,
+      "impressions": 23,
+      "ctr": 0,
+      "position": 5.087
+    },
+    {
+      "page": "https://confenge.com.br/projeto-eletrico/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "page": "https://confenge.com.br/projeto-estrutura-metalica/",
+      "clicks": 0,
+      "impressions": 12,
+      "ctr": 0,
+      "position": 12.3333
+    },
+    {
+      "page": "https://confenge.com.br/projeto-estrutural-concreto-armado/",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 6.4286
+    },
+    {
+      "page": "https://confenge.com.br/projetos-complementares-engenharia/",
+      "clicks": 0,
+      "impressions": 39,
+      "ctr": 0,
+      "position": 8.3077
+    },
+    {
+      "page": "https://confenge.com.br/projetos/estruturas/",
+      "clicks": 0,
+      "impressions": 25,
+      "ctr": 0,
+      "position": 3.76
+    },
+    {
+      "page": "https://confenge.com.br/projetos/infraestrutura/",
+      "clicks": 0,
+      "impressions": 22,
+      "ctr": 0,
+      "position": 1.8636
+    },
+    {
+      "page": "https://confenge.com.br/projetos/instalacoes/",
+      "clicks": 0,
+      "impressions": 22,
+      "ctr": 0,
+      "position": 3.1818
+    },
+    {
+      "page": "https://confenge.com.br/radar/nacional-obras-publicas/",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 7.2
+    },
+    {
+      "page": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4.5
+    },
+    {
+      "page": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 7.7333
+    },
+    {
+      "page": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 4.625
+    },
+    {
+      "page": "https://confenge.com.br/servicos-obras-publicas/",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 6.125
+    },
+    {
+      "page": "https://confenge.com.br/servicos/",
+      "clicks": 0,
+      "impressions": 94,
+      "ctr": 0,
+      "position": 2.3617
+    },
+    {
+      "page": "https://confenge.com.br/terceirizacao-documentacao-sst/",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 40.6667
+    },
+    {
+      "page": "https://confenge.com.br/terceirizacao-projetos-engenharia/",
+      "clicks": 0,
+      "impressions": 19,
+      "ctr": 0,
+      "position": 6.1579
+    },
+    {
+      "page": "https://confenge.com.br/termos-de-uso/",
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 2.875
+    },
+    {
+      "page": "https://confenge.com.br/terms-and-conditions",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 4.5
+    },
+    {
+      "page": "https://confenge.com.br/triagem-tecnica/",
+      "clicks": 0,
+      "impressions": 30,
+      "ctr": 0,
+      "position": 2.5
+    },
+    {
+      "page": "https://confenge.com.br/uso-de-ia/",
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 3.5333
+    },
+    {
+      "page": "https://confenge.com.br/vision",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 3
+    }
+  ],
+  "page_periods": [
+    {
+      "term": "medicoes-glosas-obras-publicas",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 25,
+          "clicks": 1,
+          "impressions": 110,
+          "ctr": 0.00909090909090909,
+          "position": 6.281820909090908
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 26,
+          "clicks": 2,
+          "impressions": 182,
+          "ctr": 0.01098901098901099,
+          "position": 5.049445054945056
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 25,
+          "clicks": 6,
+          "impressions": 236,
+          "ctr": 0.025423728813559324,
+          "position": 4.266959745762712
+        }
+      ]
+    },
+    {
+      "term": "aditivos-obras-publicas",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 24,
+          "clicks": 0,
+          "impressions": 64,
+          "ctr": 0,
+          "position": 26.859375
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 20,
+          "clicks": 1,
+          "impressions": 67,
+          "ctr": 0.014925373134328358,
+          "position": 15.29850447761194
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 1,
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        }
+      ]
+    },
+    {
+      "term": "aditivo-empreitada-por-preco-global",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 3,
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 4.333333333333333
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 11,
+          "clicks": 5,
+          "impressions": 33,
+          "ctr": 0.15151515151515152,
+          "position": 3.545448484848485
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 19,
+          "clicks": 17,
+          "impressions": 153,
+          "ctr": 0.1111111111111111,
+          "position": 4.490191503267973
+        }
+      ]
+    },
+    {
+      "term": "sinapi-desonerado-nao-desonerado",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 27,
+          "clicks": 2,
+          "impressions": 291,
+          "ctr": 0.006872852233676976,
+          "position": 6.821307560137457
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 26,
+          "clicks": 3,
+          "impressions": 248,
+          "ctr": 0.012096774193548387,
+          "position": 6.387089919354839
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 28,
+          "clicks": 2,
+          "impressions": 280,
+          "ctr": 0.007142857142857143,
+          "position": 6.385723214285713
+        }
+      ]
+    },
+    {
+      "term": "empreitada-preco-global-preco-unitario",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 26,
+          "clicks": 1,
+          "impressions": 102,
+          "ctr": 0.00980392156862745,
+          "position": 8.20588137254902
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 20,
+          "clicks": 0,
+          "impressions": 67,
+          "ctr": 0,
+          "position": 7.955222388059702
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 22,
+          "clicks": 0,
+          "impressions": 85,
+          "ctr": 0,
+          "position": 9.423524705882354
+        }
+      ]
+    },
+    {
+      "term": "bdi-diferenciado",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 24,
+          "clicks": 3,
+          "impressions": 57,
+          "ctr": 0.05263157894736842,
+          "position": 7.614031578947368
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 15,
+          "clicks": 3,
+          "impressions": 51,
+          "ctr": 0.058823529411764705,
+          "position": 5.196078431372549
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 20,
+          "clicks": 8,
+          "impressions": 138,
+          "ctr": 0.057971014492753624,
+          "position": 3.8260833333333335
+        }
+      ]
+    },
+    {
+      "term": "mobilizacao-desmobilizacao",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 9,
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 5.866666666666666
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 14,
+          "clicks": 2,
+          "impressions": 42,
+          "ctr": 0.047619047619047616,
+          "position": 8.285719047619047
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 22,
+          "clicks": 8,
+          "impressions": 138,
+          "ctr": 0.057971014492753624,
+          "position": 7.181154347826086
+        }
+      ]
+    },
+    {
+      "term": "administracao-local-orcamento",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 19,
+          "clicks": 1,
+          "impressions": 37,
+          "ctr": 0.02702702702702703,
+          "position": 7.756756756756757
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 22,
+          "clicks": 0,
+          "impressions": 64,
+          "ctr": 0,
+          "position": 7.609379687499999
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 13,
+          "clicks": 2,
+          "impressions": 32,
+          "ctr": 0.0625,
+          "position": 5.9375125
+        }
+      ]
+    },
+    {
+      "term": "limite-aditivo-25-50",
+      "periods": [
+        {
+          "from": "2026-08-04",
+          "to": "2026-08-31",
+          "rows": 8,
+          "clicks": 1,
+          "impressions": 33,
+          "ctr": 0.030303030303030304,
+          "position": 25.09091515151515
+        },
+        {
+          "from": "2026-09-01",
+          "to": "2026-09-28",
+          "rows": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": null,
+          "position": null
+        },
+        {
+          "from": "2026-09-29",
+          "to": "2026-10-26",
+          "rows": 18,
+          "clicks": 1,
+          "impressions": 76,
+          "ctr": 0.013157894736842105,
+          "position": 4.3552513157894746
+        }
+      ]
+    }
+  ],
+  "devices84": [
+    {
+      "device": "DESKTOP",
+      "clicks": 161,
+      "impressions": 3249,
+      "ctr": 0.0496,
+      "position": 6.4922
+    },
+    {
+      "device": "MOBILE",
+      "clicks": 26,
+      "impressions": 827,
+      "ctr": 0.0314,
+      "position": 7.9891
+    },
+    {
+      "device": "TABLET",
+      "clicks": 1,
+      "impressions": 6,
+      "ctr": 0.1667,
+      "position": 5
+    }
+  ],
+  "countries84": [
+    {
+      "country": "Brazil",
+      "clicks": 187,
+      "impressions": 3762,
+      "ctr": 0.0497,
+      "position": 6.3224
+    },
+    {
+      "country": "Australia",
+      "clicks": 1,
+      "impressions": 1,
+      "ctr": 1,
+      "position": 1
+    },
+    {
+      "country": "Angola",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 8.5
+    },
+    {
+      "country": "United Arab Emirates",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1.5
+    },
+    {
+      "country": "Argentina",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "country": "Bangladesh",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 11.8
+    },
+    {
+      "country": "Bulgaria",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "country": "Canada",
+      "clicks": 0,
+      "impressions": 11,
+      "ctr": 0,
+      "position": 4.6364
+    },
+    {
+      "country": "Chile",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "country": "Colombia",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "country": "Czech Republic",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "country": "Germany",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 8.6667
+    },
+    {
+      "country": "Spain",
+      "clicks": 0,
+      "impressions": 36,
+      "ctr": 0,
+      "position": 56.25
+    },
+    {
+      "country": "Estonia",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "country": "France",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "country": "United Kingdom",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 7.3333
+    },
+    {
+      "country": "Hong Kong",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "country": "Croatia",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "country": "Indonesia",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 35
+    },
+    {
+      "country": "India",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 3.1667
+    },
+    {
+      "country": "Italy",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7.5
+    },
+    {
+      "country": "Japan",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 1.5
+    },
+    {
+      "country": "South Korea",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 12
+    },
+    {
+      "country": "Sri Lanka",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "country": "Moldova",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "country": "Mexico",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 7.6667
+    },
+    {
+      "country": "Mozambique",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 9.25
+    },
+    {
+      "country": "Nepal",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "country": "Pakistan",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 2
+    },
+    {
+      "country": "Philippines",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 29.6667
+    },
+    {
+      "country": "Poland",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 6.5
+    },
+    {
+      "country": "Portugal",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "position": 7.2
+    },
+    {
+      "country": "Paraguay",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 4
+    },
+    {
+      "country": "Romania",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 1
+    },
+    {
+      "country": "Russia",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "country": "Saudi Arabia",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 12
+    },
+    {
+      "country": "Serbia",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "country": "Slovenia",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3
+    },
+    {
+      "country": "Thailand",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "country": "Türkiye",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 13
+    },
+    {
+      "country": "United States",
+      "clicks": 0,
+      "impressions": 183,
+      "ctr": 0,
+      "position": 6.0055
+    },
+    {
+      "country": "Vietnam",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 10.75
+    }
+  ],
+  "device_periods": [
+    {
+      "from": "2026-08-04",
+      "to": "2026-08-31",
+      "devices": [
+        {
+          "device": "DESKTOP",
+          "rows": 28,
+          "clicks": 21,
+          "impressions": 924,
+          "ctr": 0.022727272727272728,
+          "position": 7.649348484848485
+        },
+        {
+          "device": "MOBILE",
+          "rows": 28,
+          "clicks": 7,
+          "impressions": 250,
+          "ctr": 0.028,
+          "position": 9.699991599999999
+        },
+        {
+          "device": "TABLET",
+          "rows": 2,
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 9
+        }
+      ]
+    },
+    {
+      "from": "2026-09-01",
+      "to": "2026-09-28",
+      "devices": [
+        {
+          "device": "DESKTOP",
+          "rows": 28,
+          "clicks": 64,
+          "impressions": 912,
+          "ctr": 0.07017543859649122,
+          "position": 6.218197258771931
+        },
+        {
+          "device": "MOBILE",
+          "rows": 28,
+          "clicks": 8,
+          "impressions": 227,
+          "ctr": 0.03524229074889868,
+          "position": 8.726862114537445
+        },
+        {
+          "device": "TABLET",
+          "rows": 1,
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 1
+        }
+      ]
+    },
+    {
+      "from": "2026-09-29",
+      "to": "2026-10-26",
+      "devices": [
+        {
+          "device": "DESKTOP",
+          "rows": 28,
+          "clicks": 76,
+          "impressions": 1413,
+          "ctr": 0.0537862703467799,
+          "position": 5.91225109695683
+        },
+        {
+          "device": "MOBILE",
+          "rows": 27,
+          "clicks": 11,
+          "impressions": 350,
+          "ctr": 0.03142857142857143,
+          "position": 6.288570857142856
+        },
+        {
+          "device": "TABLET",
+          "rows": 2,
+          "clicks": 1,
+          "impressions": 3,
+          "ctr": 0.3333333333333333,
+          "position": 3.6666666666666665
+        }
+      ]
+    }
+  ],
+  "query_gap": {
+    "property_84": {
+      "rows": 84,
+      "clicks": 188,
+      "impressions": 4082,
+      "ctr": 0.046055854973052424,
+      "position": 6.7932393679568825
+    },
+    "query_only_84": {
+      "rows": 53,
+      "clicks": 45,
+      "impressions": 236,
+      "ctr": 0.1906779661016949,
+      "position": 17.991531779661013
+    },
+    "date_query_84": {
+      "rows": 135,
+      "clicks": 45,
+      "impressions": 236,
+      "ctr": 0.1906779661016949,
+      "position": 17.991524576271186
+    },
+    "unique_queries_date_query": 53,
+    "query_page_84": {
+      "rows": 90,
+      "clicks": 45,
+      "impressions": 708,
+      "ctr": 0.0635593220338983,
+      "position": 7.909605225988701
+    },
+    "page_device_84": {
+      "rows": 81,
+      "clicks": 45,
+      "impressions": 708,
+      "ctr": 0.0635593220338983,
+      "position": 7.909611581920902
+    },
+    "page_only_84": {
+      "rows": 183,
+      "clicks": 188,
+      "impressions": 5230,
+      "ctr": 0.03594646271510516,
+      "position": 6.191195697896745
+    },
+    "date_page_84": {
+      "rows": 1705,
+      "clicks": 188,
+      "impressions": 5230,
+      "ctr": 0.03594646271510516,
+      "position": 6.19120434034417
+    },
+    "device_only_84": {
+      "rows": 3,
+      "clicks": 188,
+      "impressions": 4082,
+      "ctr": 0.046055854973052424,
+      "position": 6.793273762861342
+    },
+    "date_device_84": {
+      "rows": 172,
+      "clicks": 188,
+      "impressions": 4082,
+      "ctr": 0.046055854973052424,
+      "position": 6.793238633023031
+    },
+    "query_only_latest28": {
+      "rows": 29,
+      "clicks": 23,
+      "impressions": 119,
+      "ctr": 0.19327731092436976,
+      "position": 9.310926050420168
+    },
+    "date_page_device_latest28": {
+      "rows": 190,
+      "clicks": 23,
+      "impressions": 399,
+      "ctr": 0.05764411027568922,
+      "position": 3.5388498746867167
+    },
+    "missing_clicks_84": 143,
+    "cause": "Desconhecida. Não atribuir automaticamente à anonimização. Cruzamentos com page+device também retornam o subconjunto de45cliques, sinal de limitação de extração/agregação; mecanismo não confirmado."
+  },
+  "extended_range": {
+    "requested": {
+      "from": "2026-05-12",
+      "to": "2026-10-28"
+    },
+    "returned": {
+      "from": "2026-07-14",
+      "to": "2026-10-27",
+      "rows": 106,
+      "clicks": 203,
+      "impressions": 4693,
+      "ctr": 0.04325591306200725,
+      "position": 7.103132218197317
+    },
+    "prior_partial": {
+      "from": "2026-07-14",
+      "to": "2026-08-03",
+      "rows": 21,
+      "clicks": 15,
+      "impressions": 506,
+      "ctr": 0.029644268774703556,
+      "position": 9.853755731225299
+    },
+    "excluded_recent": [
+      {
+        "date": "2026-10-27",
+        "reason": "Retornado com include_fresh_data=false, excluído para manter a mesma janela fechada de84dias."
+      },
+      {
+        "date": "2026-10-28",
+        "reason": "Sem linha na resposta; não tratar como zero."
+      }
+    ],
+    "limitation": "Antes de14/07 não foram retornadas linhas; isso não comprova ausência de procura. Extensão não fornece outro período completo de28dias nem sazonalidade anual."
+  },
+  "scenarios": {
+    "unit": "cliques orgânicos adicionais em28dias",
+    "page": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+    "observed": {
+      "impressions": 236,
+      "clicks": 6,
+      "ctr": 0.025423728813559324
+    },
+    "cases": [
+      {
+        "name": "Sem ganho",
+        "assumed_impressions": 236,
+        "assumed_ctr": 0.025423728813559324,
+        "expected_clicks": 6,
+        "additional_clicks": 0
+      },
+      {
+        "name": "Melhor resposta e resultado de busca",
+        "assumed_impressions": 236,
+        "assumed_ctr": 0.04,
+        "expected_clicks": 9.44,
+        "additional_clicks": 3.4399999999999995
+      },
+      {
+        "name": "CTR próximo aos informativos BDI e mobilização",
+        "assumed_impressions": 236,
+        "assumed_ctr": 0.06,
+        "expected_clicks": 14.16,
+        "additional_clicks": 8.16
+      },
+      {
+        "name": "Exposição25%maior e CTR4%",
+        "assumed_impressions": 295,
+        "assumed_ctr": 0.04,
+        "expected_clicks": 11.8,
+        "additional_clicks": 5.800000000000001
+      }
+    ],
+    "limitations": [
+      "Cenários condicionais, sem probabilidades nem intervalo estatístico.",
+      "Referências BDI/mobilização têm intenção distinta; não são controles equivalentes.",
+      "Tendência anterior de medições já positiva; ganho observado posterior não prova causalidade.",
+      "Sem projeção de oportunidades ou receita porque não há taxas comerciais verificadas.",
+      "Estimativas de consultas não adicionadas às de página.",
+      "Novas páginas e recuperação do serviço aditivos sem estimativa pontual sustentada."
+    ]
+  },
+  "evidence_role": {
+    "kind": "historical_research_evidence",
+    "authority": "Pesquisa para esta rodada; não é autoridade de fatos atuais de produção ou contrato de operação comercial.",
+    "privacy": "Consultas individuais removidas. Somente agregados e URLs públicas sem parâmetros.",
+    "revenue_projection": false,
+    "interpretation": "Cenários de cliques condicionados às premissas declaradas. Não comprovam crescimento após publicação nem efeito causal."
+  }
+}
