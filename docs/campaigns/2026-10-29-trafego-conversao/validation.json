@@ -26,7 +26,7 @@
       "warnings": 0
     },
     "focused_pytest": {
-      "passed": 123,
+      "passed": 124,
       "subtests": 74
     },
     "test:nav": "PASS; 23 pytest, shell and taskflow checks",
@@ -39,7 +39,8 @@
     "test:host-contract": "PASS; 30 tests, including negative home acceptance mutations",
     "test:first-fold-contract": "PASS; 1942/1942 checks, 25 routes and 50 recaptured source viewports",
     "frozen-and-deliverables": "PASS; 51 pytest checks, original six pillar bytes preserved",
-    "test:commercial-contracts": "PASS; full commercial contract suite"
+    "test:commercial-contracts": "PASS; full commercial contract suite",
+    "project_hub_journeys": "PASS; general structures/installations links restored inside main and checked by browser navigation"
   },
   "browser": {
     "artifact": "generated public artifact copied to isolated local preview",

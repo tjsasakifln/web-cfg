@@ -184,6 +184,17 @@ class TestProjectPages(unittest.TestCase):
         self.assertEqual(page["whatsapp_context"], contact["data-tema"])
         self.assertNotIn("<teste>", source)
 
+    def test_project_hub_keeps_general_specialties_and_specific_disciplines_in_main(self) -> None:
+        source = self.rendered["/projetos/"]
+        main = re.search(r"<main[^>]*>(.*?)</main>", source, re.S)
+        self.assertIsNotNone(main)
+        for route in (
+            "/projetos/estruturas/", "/projetos/instalacoes/",
+            "/projeto-estrutural-concreto-armado/", "/projeto-estrutura-metalica/",
+            "/projeto-eletrico/", "/projeto-hidrossanitario/",
+        ):
+            self.assertIn(f'href="{route}"', main.group(1), route)
+
     def test_every_demonstration_is_labeled_and_bounded(self) -> None:
         for page in self.pages:
             demo = page["demonstration"]

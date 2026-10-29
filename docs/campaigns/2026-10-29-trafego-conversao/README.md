@@ -54,12 +54,13 @@ Revisores independentes encontraram e a implementação corrigiu:
 6. Novos links exigindo atualização explícita do inventário de ações e do hash do contrato consumidor.
 7. Continuidade sem armazenamento preenchendo a jornada oculta, mas deixando o seletor visível vazio.
 8. Endereços parametrizados de contato incompatíveis com o contrato de SEO, substituídos por destino canônico e atributos de contexto.
+9. Caminhos gerais de estruturas e instalações retirados do conteúdo do hub ao priorizar disciplinas específicas. Ambos foram restituídos no conteúdo, preservando os atalhos novos, com regressão e navegação conferidas.
 
 Os quatro destinos disciplinares já eram reconhecidos no navegador e no servidor. A verificação do classificador confirmou `content_to_service` nos artigos. Cliques no WhatsApp continuam sendo intenção de contato, sem recibo comercial fictício.
 
 ## Validação
 
-A geração completa `npm run build:site` passou, junto dos controles de entrada, SEO, navegação, privacidade, jornada, formulário e persistência. Os 123 testes focados e 74 subtestes passaram. O resultado por verificação está em [validation.json](validation.json). Os testes de regressão usam o endereço efetivamente gerado e cobrem chegada desde artigo/Google, contexto do serviço e uso com armazenamento indisponível.
+A geração completa `npm run build:site` passou, junto dos controles de entrada, SEO, navegação, privacidade, jornada, formulário e persistência. Os 124 testes focados e 74 subtestes passaram. O resultado por verificação está em [validation.json](validation.json). Os testes de regressão usam o endereço efetivamente gerado e cobrem chegada desde artigo/Google, contexto do serviço e uso com armazenamento indisponível.
 
 A conferência no navegador usa o artefato público gerado, sem submeter pedidos em produção. A versão estreita é examinada em iframes com larguras de 390 e 320 pixels; a barra de rolagem ocupa parte da área útil. Isso confere o comportamento responsivo real do navegador, sem afirmar teste em aparelho físico. Evidências visuais e resultado final são registrados nesta pasta.
 
