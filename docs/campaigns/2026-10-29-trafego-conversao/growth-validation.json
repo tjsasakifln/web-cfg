@@ -110,5 +110,51 @@
       "git_diff_check": "passed"
     },
     "production_verified": false
+  },
+  "capture_arrival_correction": {
+    "date": "2026-10-29",
+    "finding": "Two independent desktop tabs reproduced an incoming article-topic navigation without a fragment that scrolled beyond the message textarea.",
+    "hashless_desktop_observation": {
+      "viewport": [
+        1278,
+        1207
+      ],
+      "message_rect_top": -229.8,
+      "message_rect_bottom": -85.0,
+      "topic_preserved": true,
+      "real_request_submitted": false
+    },
+    "change": "Only the two new comparison-paragraph hrefs now target the existing service capture section with #captura-pilar, in the HTML and canonical generator. Runtime, copy, CSS and attribution attributes are unchanged.",
+    "existing_hash_path_observation": {
+      "method": "Reload of the existing capture-fragment URL with incoming topic retained; this probes the existing alignment path, not publication of the candidate.",
+      "desktop_capture_top": 96,
+      "mobile_viewport": [
+        390,
+        844
+      ],
+      "mobile_capture_top": 95.67,
+      "mobile_message_visible_on_arrival": false,
+      "topic_preserved": true
+    },
+    "expected_event": {
+      "event": "cta_click",
+      "destination_type": "form",
+      "content_to_service_transition": false
+    },
+    "scope": "Align arrival with the beginning of the established capture section. No claim that every field fits the first mobile viewport.",
+    "limitations": [
+      "The exact mechanical cause of the original offset has not been isolated.",
+      "The pre-existing inherited focus on the message textarea below the first mobile viewport remains; complete keyboard behavior is not claimed corrected.",
+      "Browser verification of the changed links and production publication remains with the release owner."
+    ],
+    "validation": {
+      "generator_idempotence": "passed",
+      "existing_article_and_priority_tests": 14,
+      "capture_anchor_event_semantics": "passed_on_unchanged_repeat_after_existing_random_fixture_flake",
+      "pseo_attribution": "passed",
+      "form_funnel": "passed",
+      "cta_form_next_state": "passed_no_inventory_change_required"
+    },
+    "production_verified": false
   }
 }
