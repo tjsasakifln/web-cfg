@@ -652,6 +652,11 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
         "home-service-valuation",
         "home-service-sst",
         "home-service-public-works",
+        "home-project-concreto",
+        "home-project-metalica",
+        "home-project-eletrico",
+        "home-project-hidrossanitario",
+        "home-project-terceirizacao",
     }
     extra = re.search(r'<p class="home-services__all">.*?</p>', home, re.S)
     assert extra, "home deve manter o atalho discreto de inteligência de mercado"
@@ -687,6 +692,12 @@ def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
             encoding="utf-8"
         )
     )
+    # Founder decision 2026-10-29 authorizes the conversion revision in PR #758:
+    # nav.js preserves the article's first-touch origin and preselects the
+    # validated journey even when session storage is denied. The regression
+    # cases live in tests/attribution/test_stale_need_context.mjs. The reviewed
+    # assembly is recaptured in the single hashes.json authority; historical
+    # BOFU page hashes and form/CDN/price protections remain unchanged.
     assert script_hash == frozen_hashes["forbidden"]["script.js"]
     # 2026-09-16: pillars released by the founder's capture decision carry the
     # promoted nav like every mutable route and are no longer frozen for the

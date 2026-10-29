@@ -63,6 +63,8 @@ A geração completa `npm run build:site` passou, junto dos controles de entrada
 
 A conferência no navegador usa o artefato público gerado, sem submeter pedidos em produção. A versão estreita é examinada em iframes com larguras de 390 e 320 pixels; a barra de rolagem ocupa parte da área útil. Isso confere o comportamento responsivo real do navegador, sem afirmar teste em aparelho físico. Evidências visuais e resultado final são registrados nesta pasta.
 
+Após o CI identificar a evidência anterior vinculada à antiga home e ao antigo script, as 25 rotas do censo foram recapturadas em 50 viewports de 1366×768 e 390×844. A medição usou o Cloud Browser via CUA, o mesmo algoritmo de leitura de caixas do medidor e as mesmas funções puras de veredito. A fonte veio de um checkout Git esparso e limpo no commit fda436f4, com identidade de cada página, H1 e dependências conferida antes e depois. O método consta em measurement_transport no arquivo de evidências. O gate original aprovou 1.942 de 1.942 verificações. Não se atribui compreensão humana a essa medição.
+
 Ambiente local: Node 24.22.1; o CI do repositório usa Node 22. A execução local não substitui os controles do CI nem a aceitação do runtime publicado.
 
 ## Medição após publicação

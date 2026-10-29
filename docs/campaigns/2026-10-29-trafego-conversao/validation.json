@@ -36,7 +36,10 @@
     "audit:accessibility": "PASS; static checks, not a WCAG certification",
     "test:secrets-scan": "PASS",
     "git diff --check": "PASS",
-    "test:host-contract": "PASS; 30 tests, including negative home acceptance mutations"
+    "test:host-contract": "PASS; 30 tests, including negative home acceptance mutations",
+    "test:first-fold-contract": "PASS; 1942/1942 checks, 25 routes and 50 recaptured source viewports",
+    "frozen-and-deliverables": "PASS; 51 pytest checks, original six pillar bytes preserved",
+    "test:commercial-contracts": "PASS; full commercial contract suite"
   },
   "browser": {
     "artifact": "generated public artifact copied to isolated local preview",
@@ -56,7 +59,19 @@
       "physical_device_test": false
     },
     "production_form_submissions": 0,
-    "screenshot": "mobile-review.jpg"
+    "screenshot": "mobile-review.jpg",
+    "first_fold_recapture": {
+      "routes": 25,
+      "viewports": 50,
+      "sizes": [
+        "1366x768",
+        "390x844"
+      ],
+      "all_pass": true,
+      "source_commit": "fda436f4eb770b804588546342b3bc094f1c6ed9",
+      "source_tree_clean": true,
+      "method": "Cloud Browser via CUA; same read-only DOM geometry algorithm and shared verdict rules; iframe viewports; no human comprehension claim"
+    }
   },
   "adversarial_corrections": [
     "recognized singular project journey",
