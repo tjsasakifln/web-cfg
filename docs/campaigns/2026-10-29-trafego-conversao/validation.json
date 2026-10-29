@@ -35,7 +35,8 @@
     "test:lead-function": "PASS; mocked integrations and isolated QA",
     "audit:accessibility": "PASS; static checks, not a WCAG certification",
     "test:secrets-scan": "PASS",
-    "git diff --check": "PASS"
+    "git diff --check": "PASS",
+    "test:host-contract": "PASS; 30 tests, including negative home acceptance mutations"
   },
   "browser": {
     "artifact": "generated public artifact copied to isolated local preview",
