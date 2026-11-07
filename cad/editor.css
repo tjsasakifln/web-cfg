@@ -20,7 +20,7 @@
 }
 #cad-editor .cad-brand { display:none; width:7rem; height:auto; flex:none; }
 #cad-editor .cad-caption, #cad-editor .cad-help { color:var(--muted); font-size:var(--text-caption); }
-#cad-editor .cad-actions button, #cad-editor select {
+#cad-editor .cad-actions button, #cad-editor [data-page], #cad-editor select {
   display:inline-flex; align-items:center; justify-content:center; gap:.42rem;
   border:1px solid var(--line); min-height:var(--touch-min);
   padding:.5rem .8rem; background:var(--white); color:var(--ink); font:700 var(--text-small)/1.35 var(--sans);
@@ -44,7 +44,8 @@
 #cad-editor .cad-foot { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1.5rem; padding:.7rem clamp(.85rem,2vw,1.4rem); background:var(--soft); border-top:1px solid var(--line); }
 #cad-editor .cad-status { font-size:var(--text-small); line-height:1.45; overflow-wrap:anywhere; flex:1 1 20rem; }
 #cad-editor .cad-status[data-error="true"] { font-weight:750; color:var(--ink); }
-#cad-editor .cad-format { font-weight:650; font-size:var(--text-small); }
+#cad-editor .cad-export { display:inline-flex; align-items:center; gap:.25rem; }
+#cad-editor .cad-export:has([data-save][hidden]) { display:none; }
 #cad-editor .cad-recover { color:var(--green-700); font-weight:750; text-decoration:underline; }
 #cad-editor .cad-help { margin:.7rem clamp(.85rem,2vw,1.4rem); }
 #cad-editor .cad-help summary { cursor:pointer; min-height:var(--touch-min); display:list-item; line-height:var(--touch-min); font-weight:750; color:var(--ink); }
@@ -53,16 +54,18 @@
   margin:0; padding:.7rem clamp(.85rem,2vw,1.4rem); color:var(--ink); font-size:var(--text-small);
   background:var(--green-100); border-left:4px solid var(--green-700); overflow-wrap:anywhere;
 }
-#cad-editor:fullscreen, #cad-editor.cad-expanded {
-  height:100dvh; width:100%; display:flex; flex-direction:column; border:0; border-radius:0; overflow:auto;
+html.cad-page-locked { overflow:hidden; overscroll-behavior:none; }
+#cad-editor.cad-working {
+  height:calc(100dvh - var(--cad-header-height, 0px)); display:flex; flex-direction:column;
+  overflow:auto; overscroll-behavior:contain;
 }
-#cad-editor.cad-expanded { position:fixed; inset:0; z-index:10000; }
-#cad-editor:is(:fullscreen,.cad-expanded) .cad-brand { display:block; }
-#cad-editor:is(:fullscreen,.cad-expanded) .cad-file-tag { display:none; }
-#cad-editor:is(:fullscreen,.cad-expanded) .cad-stage { flex:1 0 12rem; display:grid; }
-#cad-editor:is(:fullscreen,.cad-expanded) iframe { height:100%; min-height:12rem; }
-#cad-editor:is(:fullscreen,.cad-expanded) .cad-help { display:none; }
-body:has(#cad-editor.cad-expanded) { overflow:hidden; }
+#cad-editor.cad-working [data-example] { display:none; }
+#cad-editor [data-page] { order:1; }
+#cad-editor.cad-working .cad-stage { flex:1 0 8rem; display:grid; }
+#cad-editor.cad-working .cad-stage iframe { height:100%; min-height:8rem; }
+#cad-editor.cad-expanded { position:fixed; inset:0; height:100dvh; width:100%; z-index:10000; border:0; border-radius:0; }
+#cad-editor.cad-expanded .cad-brand { display:block; }
+#cad-editor.cad-expanded .cad-file-tag, #cad-editor.cad-expanded .cad-help { display:none; }
 @media (max-width:660px) {
   #cad-editor .cad-welcome { grid-template-columns:1fr; min-height:14rem; }
   #cad-editor .cad-illustration { display:none; }
@@ -71,11 +74,30 @@ body:has(#cad-editor.cad-expanded) { overflow:hidden; }
   #cad-editor .cad-bar { gap:.6rem; }
   #cad-editor .cad-doc { flex:1 0 100%; }
 }
-@media (max-height:500px) {
-  #cad-editor:is(:fullscreen,.cad-expanded) .cad-bar { padding:.22rem .5rem; gap:.3rem; }
-  #cad-editor:is(:fullscreen,.cad-expanded) .cad-doc { flex:0 1 auto; }
-  #cad-editor:is(:fullscreen,.cad-expanded) .cad-caption { display:none; }
-  #cad-editor:is(:fullscreen,.cad-expanded) .cad-foot { padding:.2rem .7rem; }
+@media (max-width:660px), (max-height:500px) {
+  #cad-editor.cad-working .cad-bar {
+    display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.35rem .5rem; padding:.35rem .55rem;
+  }
+  #cad-editor.cad-working .cad-doc, #cad-editor.cad-working .cad-actions { gap:.35rem; }
+  #cad-editor.cad-working .cad-name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  #cad-editor.cad-working .cad-file-tag { display:none; }
+  #cad-editor.cad-working .cad-brand { width:3.75rem; }
+  #cad-editor.cad-working [data-page] { order:0; font-size:.78rem; padding:.35rem .5rem; }
+  #cad-editor.cad-working .cad-actions { grid-column:1/-1; }
+  #cad-editor.cad-working .cad-actions button {
+    flex:1; gap:0; padding:.25rem; min-width:var(--touch-min); font-size:0;
+  }
+  #cad-editor.cad-working .cad-export { order:1; flex:1 0 auto; }
+  #cad-editor.cad-working .cad-actions [data-save] { font-size:.8rem; gap:.3rem; }
+  #cad-editor.cad-working [data-expand] span { position:absolute; clip-path:inset(50%); }
+  #cad-editor.cad-working .cad-foot { padding:.35rem .55rem; gap:.25rem; }
+  #cad-editor.cad-working .cad-help { margin:0 .55rem; }
+}
+@media (max-height:500px) and (min-width:661px) {
+  #cad-editor.cad-working .cad-bar { grid-template-columns:minmax(0,1fr) auto auto; }
+  #cad-editor.cad-working .cad-actions { grid-column:auto; flex-wrap:nowrap; }
+  #cad-editor.cad-working [data-page] { order:1; }
+  #cad-editor.cad-working .cad-caption { display:none; }
 }
 #cad-editor .cad-stage[data-busy="true"]:has(iframe)::after {
   content:""; position:absolute; inset:0; background:transparent; cursor:progress;
@@ -88,3 +110,8 @@ body:has(#cad-editor.cad-expanded) { overflow:hidden; }
 #cad-editor .cad-preview figure { margin:0 0 .65rem; }
 #cad-editor .cad-preview img { display:block; height:auto; max-width:100%; max-height:22rem; border:1px solid var(--line); }
 #cad-editor .cad-preview figcaption { color:var(--muted); margin-top:.4rem; font-size:var(--text-caption); }
+
+.cad-related { margin:.65rem 0 1rem; }
+.cad-related a { display:inline-block; padding:.55rem .75rem; color:var(--green-700); background:var(--green-100); }
+.cad-credits { margin:1.5rem 0; font-size:var(--text-caption); color:var(--muted); }
+.cad-credits summary { cursor:pointer; }

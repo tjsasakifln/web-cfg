@@ -37,10 +37,86 @@ try {
   await input.uploadFile(sample);
   await waitForDrawing(path.basename(sample));
   assert.equal(await page.$eval('[data-format]', el => el.value), 'dwg');
+  const saveLabel = () => page.$eval('[data-save]', el => el.textContent.trim());
+  assert.equal(await saveLabel(), 'Baixar DWG');
+  await page.select('[data-format]', 'dxf');
+  assert.equal(await saveLabel(), 'Baixar DXF');
+  await page.select('[data-format]', 'dwg');
+  assert.equal(await saveLabel(), 'Baixar DWG');
   const iframe = await page.$('#cad-editor iframe');
   const frame = await iframe.contentFrame();
   assert.equal(await frame.evaluate(() => document.fullscreenEnabled), false);
   const canvas = await frame.waitForSelector('canvas');
+  // The page stays put during a real middle-button drag. Pixels from model space
+  // must change as well, so swallowing the pan cannot make this test pass.
+  const position = () => page.evaluate(() => Math.round(window.scrollY));
+  const rect = await canvas.boundingBox();
+  const x = Math.round(rect.x + rect.width*.48), y = Math.round(rect.y + rect.height*.50);
+  const clip = {x:Math.round(rect.x + rect.width*.49), y:Math.round(rect.y + rect.height*.32) + await position(),
+    width:Math.round(rect.width*.18), height:Math.round(rect.height*.26)};
+  const paint = () => frame.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+  await page.mouse.move(x, y);
+  await paint();
+  const scrollBefore = await position();
+  const beforePan = await page.screenshot({clip});
+  // Linux CI has no Windows autoscroll. Verify its cancelable trigger as well as the real drag.
+  assert(await canvas.evaluate(el => !el.dispatchEvent(new MouseEvent('mousedown', {
+    button:1, bubbles:true, cancelable:true
+  }))), 'O botão do meio deve cancelar a rolagem automática do navegador.');
+  await page.mouse.down({button:'middle'});
+  await paint();
+  await page.mouse.move(x + 85, y + 65, {steps:8});
+  await paint();
+  await page.mouse.up({button:'middle'});
+  await page.mouse.move(x, y);
+  await paint();
+  const afterPan = await page.screenshot({clip});
+  assert(!beforePan.equals(afterPan), 'A vista do desenho precisa se deslocar.');
+  assert.equal(await position(), scrollBefore, 'A página não pode acompanhar o arraste.');
+  await page.mouse.move(4,100);
+  await page.mouse.wheel({deltaY:460});
+  await paint();
+  assert.equal(await position(), scrollBefore, 'A rolagem deve permanecer travada durante a edição.');
+
+  await page.click('[data-expand]');
+  await page.waitForSelector('#cad-editor.cad-expanded');
+  await page.keyboard.type('l');
+  await page.keyboard.press('Escape');
+  // Cancel a line after its first point. The next pick must not create geometry.
+  // The decoded download below checks exactly how many lines were added.
+  const enlarged = await canvas.boundingBox();
+  const pick = (x, y) => page.mouse.click(enlarged.x + enlarged.width*x, enlarged.y + enlarged.height*y);
+  await page.keyboard.type('l');
+  await page.keyboard.press('Enter');
+  await paint();
+  await pick(.39, .46);
+  await paint();
+  await page.keyboard.press('Escape');
+  await paint();
+  await pick(.55, .58);
+  await paint();
+  assert(await page.$eval('[data-expand]', el => el.getAttribute('aria-pressed') === 'true'));
+  assert.equal(await page.evaluate(() => document.fullscreenElement), null);
+  assert(await frame.evaluate(() => document.activeElement?.id === 'cadcraft_canvas'));
+  await page.click('[data-expand]');
+  await page.click('[data-page]');
+  assert.equal(await page.$eval('[data-page]', el => el.textContent), 'Retomar edição');
+  const releasedAt = await position();
+  await page.mouse.move(4,100);
+  await page.mouse.wheel({deltaY:460});
+  await page.waitForFunction(previous => window.scrollY > previous + 10, {}, releasedAt);
+  await page.click('[data-page]');
+  assert(await page.$eval('#cad-editor', el => el.classList.contains('cad-working')));
+  // A reader can also return by clicking the drawing. Reflow only after the pick
+  // so an active command receives the coordinates that were actually clicked.
+  await page.click('[data-page]');
+  const readBounds = await canvas.boundingBox();
+  await page.mouse.click(readBounds.x + readBounds.width*.46, readBounds.y + readBounds.height*.4);
+  await page.waitForSelector('#cad-editor.cad-working');
+  assert(await page.evaluate(() => document.documentElement.classList.contains('cad-page-locked')));
+  assert.equal(await page.$eval('.cad-name', el => el.textContent), path.basename(sample));
+  await page.click('[data-fit]');
+  await paint();
   await canvas.scrollIntoView();
   const bounds = await canvas.boundingBox();
   const clickDrawing = (x, y) => page.mouse.click(bounds.x + bounds.width*x, bounds.y + bounds.height*y);

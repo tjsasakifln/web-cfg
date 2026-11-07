@@ -11,6 +11,7 @@ if (editor) {
   const saveButton = find('[data-save]');
   const fitButton = find('[data-fit]');
   const expandButton = find('[data-expand]');
+  const pageButton = find('[data-page]');
   const stage = find('.cad-stage');
   const status = find('.cad-status');
   const issue = find('.cad-issue');
@@ -131,6 +132,11 @@ if (editor) {
     canvasCommand('s', { ctrlKey:!mac, metaKey:mac });
   }
 
+  function reflectFormat() {
+    saveButton.querySelector('span').textContent = 'Baixar ' + format.value.toUpperCase();
+  }
+  format.addEventListener('change', reflectFormat);
+
   function startFrame() {
     if (ready) return ready;
     // The drawing retains its CAD colours. Apply the site's light interface and language to a
@@ -151,7 +157,6 @@ if (editor) {
     });
     find('.cad-welcome').hidden = true;
     stage.append(frame);
-    expandButton.hidden = false;
     find('.cad-help').hidden = false;
     return ready;
   }
@@ -163,7 +168,7 @@ if (editor) {
     warn();
     activeName = expectedName = '';
     find('.cad-welcome').hidden = false;
-    saveButton.hidden = fitButton.hidden = expandButton.hidden = find('.cad-format').hidden = true;
+    saveButton.hidden = fitButton.hidden = expandButton.hidden = pageButton.hidden = find('.cad-format').hidden = true;
     find('.cad-help').hidden = true;
     find('.cad-name').textContent = 'Área de desenho';
   }
@@ -173,7 +178,7 @@ if (editor) {
   function setBusy(value) {
     loading = value;
     openButton.disabled = exampleButton.disabled = value || saving;
-    saveButton.disabled = value || saving;
+    saveButton.disabled = format.disabled = value || saving;
     editor.setAttribute('aria-busy', String(value || saving));
     stage.dataset.busy = String(value);
   }
@@ -229,6 +234,7 @@ if (editor) {
         titleObserver?.disconnect();
         titleObserver = new MutationObserver(reflectTitle);
         titleObserver.observe(frame.contentDocument.head, {subtree:true, childList:true, characterData:true});
+        bindCanvasResume();
         readyResolve();
         break;
       case 'confenge:open-file':
@@ -315,16 +321,20 @@ if (editor) {
         warnings.add('A gravação em DWG foi desativada para este desenho. Confira a cópia em DXF antes de usá-la.');
       }
       format.querySelector('[value="dwg"]').disabled = dwgBlocked;
+      reflectFormat();
       warn([...warnings]);
       if (dwgBlocked) await showPreview(input, file.name);
       reflectTitle();
       await fitDrawing();
-      saveButton.hidden = fitButton.hidden = find('.cad-format').hidden = false;
+      saveButton.hidden = fitButton.hidden = expandButton.hidden = pageButton.hidden = find('.cad-format').hidden = false;
       say('Desenho aberto. Selecione um objeto ou escolha uma ferramenta.');
-      frame.focus();
+      setWorkspace(editor.classList.contains('cad-expanded') ? 'expanded' : 'inline');
     } catch (error) {
       opened = baseline = null;
-      if (started) removeFailedFrame();
+      if (started) {
+        setWorkspace('page');
+        removeFailedFrame();
+      }
       if (!frame && file) await showPreview(input, file.name);
       if (error.name === 'GraphicsUnavailable' && doc) {
         if (doc.lossy) {
@@ -368,28 +378,81 @@ if (editor) {
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => say('Clique na área de desenho e use Arquivo > Salvar para baixar a cópia no formato escolhido.'), 4000);
   });
-  function expanded() {
-    return document.fullscreenElement === editor || editor.classList.contains('cad-expanded');
-  }
-  function reflectExpanded() {
-    const active = expanded();
-    expandButton.setAttribute('aria-pressed', String(active));
-    expandButton.querySelector('span').textContent = active ? 'Reduzir editor' : 'Ampliar editor';
-  }
-  expandButton.addEventListener('click', async () => {
-    if (document.fullscreenElement === editor) await document.exitFullscreen();
-    else if (editor.classList.contains('cad-expanded')) editor.classList.remove('cad-expanded');
-    else {
-      try { await editor.requestFullscreen(); }
-      catch { editor.classList.add('cad-expanded'); }
+  const inertSiblings = new Set();
+  function setBackgroundInert(inert) {
+    if (!inert) {
+      for (const node of inertSiblings) node.inert = false;
+      inertSiblings.clear();
+      return;
     }
-    reflectExpanded();
+    for (let node = editor; node !== document.body; node = node.parentElement) {
+      for (const sibling of node.parentElement.children) {
+        if (sibling === node || sibling.inert || !(sibling instanceof HTMLElement)) continue;
+        sibling.inert = true;
+        inertSiblings.add(sibling);
+      }
+    }
+  }
+  function alignInline() {
+    const header = document.querySelector('.site-header').getBoundingClientRect().height;
+    editor.style.setProperty('--cad-header-height', header + 'px');
+    window.scrollBy({ top:editor.getBoundingClientRect().top - header, behavior:'instant' });
+  }
+  function setWorkspace(mode) {
+    const working = mode !== 'page';
+    const expanded = mode === 'expanded';
+    editor.classList.toggle('cad-working', working);
+    editor.classList.toggle('cad-expanded', expanded);
+    document.documentElement.classList.toggle('cad-page-locked', working);
+    setBackgroundInert(expanded);
+    editor.setAttribute('role', expanded ? 'dialog' : 'region');
+    if (expanded) editor.setAttribute('aria-modal', 'true');
+    else editor.removeAttribute('aria-modal');
+    expandButton.setAttribute('aria-pressed', String(expanded));
+    expandButton.querySelector('span').textContent = expanded ? 'Reduzir editor' : 'Ampliar editor';
+    pageButton.textContent = working ? 'Voltar à página' : 'Retomar edição';
+    if (mode === 'inline') alignInline();
+    if (working) frame?.contentDocument?.getElementById('cadcraft_canvas')?.focus({preventScroll:true});
+  }
+  function bindCanvasResume() {
+    const canvas = frame.contentDocument.getElementById('cadcraft_canvas');
+    const reading = () => !pageButton.hidden && !editor.classList.contains('cad-working');
+    canvas.addEventListener('pointerdown', event => {
+      if (!event.isTrusted || !reading()) return;
+      // Keep the pan/pick coordinates stable until this gesture ends.
+      document.documentElement.classList.add('cad-page-locked');
+      canvas.setPointerCapture(event.pointerId);
+    }, true);
+    canvas.addEventListener('lostpointercapture', () => {
+      requestAnimationFrame(() => {
+        if (frame?.contentDocument === canvas.ownerDocument && reading() && document.documentElement.classList.contains('cad-page-locked')) {
+          setWorkspace('inline');
+        }
+      });
+    });
+    canvas.addEventListener('keydown', event => {
+      if (event.isTrusted && reading() && !['Tab','Shift','Control','Alt','Meta'].includes(event.key)) {
+        setWorkspace('inline');
+      }
+    }, true);
+  }
+  // Escape belongs to the drawing, including partially typed commands. Only the
+  // workspace controls change size or release the page for reading.
+  expandButton.addEventListener('click', () => {
+    setWorkspace(editor.classList.contains('cad-expanded') ? 'inline' : 'expanded');
   });
-  document.addEventListener('fullscreenchange', reflectExpanded);
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && editor.classList.contains('cad-expanded')) {
-      editor.classList.remove('cad-expanded'); reflectExpanded(); expandButton.focus();
+  pageButton.addEventListener('click', () => {
+    const leaving = editor.classList.contains('cad-working');
+    setWorkspace(leaving ? 'page' : 'inline');
+    if (leaving) pageButton.focus();
+  });
+  document.addEventListener('focusin', event => {
+    if (editor.classList.contains('cad-working') && !editor.classList.contains('cad-expanded') && !editor.contains(event.target)) {
+      setWorkspace('page');
     }
+  });
+  window.addEventListener('resize', () => {
+    if (editor.classList.contains('cad-working') && !editor.classList.contains('cad-expanded')) alignInline();
   });
   const hasFiles = event => Array.from(event.dataTransfer?.types || []).includes('Files');
   for (const eventName of ['dragenter', 'dragover']) {

@@ -1,6 +1,7 @@
 """Install the pinned, unmodified CADCraft web runtime into the public site."""
 import hashlib
 import os
+import re
 from pathlib import Path
 import shutil
 import sys
@@ -47,5 +48,33 @@ def install(output):
                 shutil.copyfileobj(inp, out)
 
 
+def version_editor_assets(output):
+    # The origin caches unversioned JS for hours. Bind each parent to the
+    # bytes of its children so returning visitors get one consistent editor.
+    links = {
+        "drawing.mjs": ["../bim/web/vendor-cad/acad.mjs"],
+        "codec-worker.mjs": ["./drawing.mjs"],
+        "codec.js": ["./codec-worker.mjs"],
+        "editor/frame.htm": ["./start.js", "./frame.css"],
+        "editor.js": ["./codec.js", "./preview.mjs", "/cad/editor/frame.htm?host=parent"],
+        "index.html": ["/cad/editor.js"],
+    }
+    for parent, children in links.items():
+        path = output / "cad" / parent
+        html_or_js = path.read_text(encoding="utf-8")
+        for url in children:
+            filename = url.split("?", 1)[0]
+            asset = output / filename.lstrip("/") if filename.startswith("/") else path.parent / filename
+            digest = hashlib.sha256(asset.read_bytes()).hexdigest()[:16]
+            prefix = url + ("&" if "?" in url else "?") + "v="
+            pattern = re.escape(url) + r"(?:[?&]v=[a-f0-9]+)?(?=['\"])"
+            html_or_js, count = re.subn(pattern, prefix + digest, html_or_js)
+            if not count:
+                raise ValueError(f"Missing CAD asset reference: {parent} -> {url}")
+        path.write_text(html_or_js, encoding="utf-8")
+
+
 if __name__ == "__main__":
-    install(Path(sys.argv[1]))
+    output = Path(sys.argv[1])
+    install(output)
+    version_editor_assets(output)
