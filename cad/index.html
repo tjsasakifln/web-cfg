@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Abrir e editar DWG online grátis, sem cadastro | CONFENGE</title>
-<meta content="Abra uma planta em DWG no navegador, confira as camadas, edite o desenho e baixe uma cópia. Use seu arquivo ou um exemplo da CONFENGE, sem cadastro." name="description"/>
-<meta content="index,follow" name="robots"/>
+<title>Editor de DWG online grátis | Abrir e editar plantas | CONFENGE</title>
+<meta content="Abra DWG ou DXF no navegador, confira camadas e medidas, edite a planta e baixe uma cópia em DWG 2000 ou DXF. Grátis, sem cadastro e com arquivo de exemplo." name="description"/>
+<meta content="index,follow,max-image-preview:large" name="robots"/>
 <meta content="#061a33" name="theme-color"/>
 <link href="https://confenge.com.br/cad/" rel="canonical"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
@@ -18,13 +18,17 @@
 <meta content="website" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>
 <meta content="CONFENGE" property="og:site_name"/>
-<meta content="Abrir e editar DWG online grátis, sem cadastro | CONFENGE" property="og:title"/>
-<meta content="Abra uma planta em DWG no navegador, confira as camadas, edite o desenho e baixe uma cópia. Use seu arquivo ou um exemplo da CONFENGE, sem cadastro." property="og:description"/>
+<meta content="Editor de DWG online grátis | Abrir e editar plantas | CONFENGE" property="og:title"/>
+<meta content="Abra DWG ou DXF no navegador, confira camadas e medidas, edite a planta e baixe uma cópia em DWG 2000 ou DXF. Grátis, sem cadastro e com arquivo de exemplo." property="og:description"/>
 <meta content="https://confenge.com.br/cad/" property="og:url"/>
-<meta content="https://confenge.com.br/assets/og-confenge.jpg" property="og:image"/>
+<meta content="https://confenge.com.br/assets/cad-editor-social.webp" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Planta de exemplo aberta no editor de DWG da CONFENGE" property="og:image:alt"/>
+<meta content="https://confenge.com.br/assets/cad-editor-social.webp" name="twitter:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="CONFENGE" name="author"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","applicationCategory":"DesignApplication","operatingSystem":"Web","isAccessibleForFree":true,"name":"Abrir e editar DWG online grátis, sem cadastro","url":"https://confenge.com.br/cad/","inLanguage":"pt-BR","dateModified":"2026-11-07"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Editor de DWG","item":"https://confenge.com.br/cad/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","applicationCategory":"DesignApplication","operatingSystem":"Web","isAccessibleForFree":true,"name":"Editor de DWG online da CONFENGE","url":"https://confenge.com.br/cad/","inLanguage":"pt-BR","dateModified":"2026-11-07","@id":"https://confenge.com.br/cad/#aplicativo","description":"Abra DWG ou DXF no navegador, confira camadas e medidas, edite a planta e baixe uma cópia em DWG 2000 ou DXF. Grátis, sem cadastro e com arquivo de exemplo.","featureList":["Abrir arquivos DWG e DXF","Editar desenhos 2D e conferir camadas","Baixar cópias em DWG 2000 ou DXF"],"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Editor de DWG","item":"https://confenge.com.br/cad/"}]}]}</script>
 <link rel="stylesheet" href="/cad/editor.css"/>
 <script type="module" src="/cad/editor.js"></script>
 </head>
@@ -72,19 +76,24 @@
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Editor de DWG</li></ol></nav>
 <header class="container"><p class="eyebrow">Ferramentas de engenharia</p>
 <h1>Abrir e editar DWG online</h1>
-<p class="content-lead">Visualize a planta, ajuste o desenho e baixe uma cópia. O editor é gratuito e abre o arquivo no seu navegador, sem cadastro.</p></header>
+<p class="content-lead">Abra seu DWG ou DXF, confira as camadas e edite a planta no navegador. Baixe uma cópia em DWG 2000 ou DXF, sem cadastro.</p>
+<nav class="cad-related" aria-label="Ferramentas de projeto"><a href="/bim/" data-event-name="cta_click" data-cta-id="cad-ferramentas-bim" data-cta-position="cad_entrada"><strong>Ferramentas BIM</strong> · Ver IFC em 3D e converter pranchas <span aria-hidden="true">→</span></a></nav></header>
 <section class="container" aria-label="Área de desenho">
-<div id="cad-editor" aria-label="Editor CAD">
+<div id="cad-editor" role="region" aria-label="Editor CAD">
     <div class="cad-bar">
       <div class="cad-doc">
         <span class="cad-file-tag" aria-hidden="true">DWG</span>
         <div class="cad-doc-text"><strong class="cad-name">Área de desenho</strong>
         <span class="cad-caption">Edição local no navegador</span></div>
       </div>
+      <button type="button" class="button" data-page hidden>Voltar à página</button>
       <div class="cad-actions" role="group" aria-label="Arquivo e área de trabalho">
         <button type="button" class="button cad-primary" data-open><svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18.5V5.5h6l2 2h9v3"/><path d="M3 18.5 6 11h15l-3 7.5Z"/></svg>Abrir DWG</button>
         <button type="button" class="button" data-example><svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M8 4v9h5m0-9v5m0 4v7M3 15h5"/></svg>Experimentar um exemplo</button>
-        <button type="button" class="button" data-save hidden><svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Baixar cópia</button>
+        <div class="cad-export">
+          <label class="cad-format" hidden><select data-format aria-label="Formato da cópia"><option value="dwg">DWG 2000</option><option value="dxf">DXF</option></select></label>
+          <button type="button" class="button" data-save hidden><svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span>Baixar DWG</span></button>
+        </div>
         <button type="button" class="button" data-fit hidden><svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8V3h5m8 0h5v5M3 16v5h5m13-5v5h-5M7 8h10v8H7Z"/></svg>Mostrar desenho inteiro</button>
         <button type="button" class="button" data-expand hidden aria-pressed="false"><svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>Ampliar editor</span></button>
         <input type="file" data-leitura-local data-file accept=".dwg,.dxf" hidden>
@@ -92,7 +101,7 @@
     </div>
     <div class="cad-stage">
       <div class="cad-welcome">
-        <div><strong>Seu desenho começa aqui.</strong><p>Arraste o DWG para esta área ou abra o exemplo para conhecer as ferramentas de edição.</p></div>
+        <div><strong>Abra sua planta</strong><p>Solte um DWG ou DXF aqui. Para testar os comandos, abra a planta de exemplo.</p></div>
         <svg class="cad-illustration" aria-hidden="true" viewBox="0 0 380 182">
           <g fill="none" stroke="var(--white)" stroke-width="1.6">
             <path d="M40 21h289v124H197m-33 0H40Z M46 27h277v112H198m-34 0H46Z"/>
@@ -115,11 +124,10 @@
       <p class="cad-status" role="status" aria-live="polite">Escolha um DWG ou DXF do seu dispositivo.</p>
       <button type="button" class="button" data-open-2d hidden>Abrir este desenho no CadCraft 2D</button>
       <a href="/cad/aplicativos/#cadcraft" data-manual-2d hidden>Abrir o CadCraft 2D e escolher o arquivo</a>
-      <label class="cad-format" hidden>Cópia em <select data-format><option value="dwg">DWG R2000</option><option value="dxf">DXF</option></select></label>
     </div>
     <details class="cad-help" hidden><summary>Controles do editor</summary>
       <p>Use a roda do mouse para aproximar ou afastar. Segure o botão do meio e arraste para percorrer a planta. Clique em um objeto para selecioná-lo. Pressione Esc para encerrar o comando atual.</p>
-      <p>Para desenhar uma linha, digite L, pressione Enter e clique nos dois pontos. Para voltar uma alteração, use Ctrl+Z. Em “Cópia em”, escolha o formato e use “Baixar cópia”.</p>
+      <p>Para desenhar uma linha, digite L, pressione Enter e clique nos dois pontos. Para voltar uma alteração, use Ctrl+Z. Escolha o formato da cópia ao lado do botão de download.</p>
     </details>
 </div>
 <noscript><p>Ative o JavaScript no navegador para abrir o editor de DWG.</p></noscript>
@@ -129,19 +137,24 @@
 <ol><li><strong>Abra o arquivo.</strong> Clique em <strong>Abrir DWG</strong> e escolha um DWG de até 25 MiB ou um DXF de até 64 MiB. Para conhecer os comandos, escolha <strong>Experimentar um exemplo</strong>.</li>
 <li><strong>Localize o trecho.</strong> Aproxime a vista, selecione uma linha e confira a camada à qual ela pertence. Em uma planta com arquitetura e instalações, isso ajuda a distinguir uma parede da tubulação que passa junto dela.</li>
 <li><strong>Faça a alteração.</strong> Para deslocar uma linha, confira antes a unidade do desenho. Para mover 15 cm em uma planta desenhada em milímetros, o deslocamento é de 150 unidades.</li>
-<li><strong>Salve e confira.</strong> Em <strong>Cópia em</strong>, escolha o formato disponível e use <strong>Baixar cópia</strong>. Reabra a revisão. Confira o trecho alterado e uma dimensão que deveria ter permanecido igual.</li></ol>
-<h2>O que conferir ao salvar o DWG</h2>
+<li><strong>Salve e confira.</strong> Escolha <strong>DWG 2000</strong> no seletor e clique em <strong>Baixar DWG</strong>. Se preferir DXF, selecione <strong>DXF</strong> e clique em <strong>Baixar DXF</strong>. Reabra a revisão. Confira o trecho alterado e uma dimensão que deveria ter permanecido igual.</li></ol>
+<h2>Teste o editor com a planta de exemplo</h2>
+<p>Abra <strong>Experimentar um exemplo</strong> e localize as salas 01 e 02. Use a roda do mouse para aproximar a divisória e segure o botão do meio para percorrer a planta. Digite <kbd>L</kbd>, pressione <kbd>Enter</kbd> e marque dois pontos para traçar uma linha. Pressione <kbd>Esc</kbd> para encerrar o comando. Se o editor estiver ampliado, a planta continua na tela.</p>
+<p>Baixe a cópia e reabra o arquivo com <strong>Abrir DWG</strong> para conferir a linha acrescentada. Para consultar os guias durante a edição, escolha <strong>Voltar à página</strong>. <strong>Retomar edição</strong> leva você de volta ao mesmo desenho.</p>
+<h2 id="salvar-dwg">Como salvar o arquivo editado em DWG?</h2>
 <p>O editor grava cópias em DWG 2000. Se detectar perda de geometria ou não conseguir conferir a importação, ele desativa a saída em DWG. Nesse caso, a cópia em DXF contém apenas o que o editor conseguiu abrir e salvar. Preserve o original e compare as camadas, os blocos, as cotas e as folhas antes de distribuir a revisão.</p>
-<h2>Por que a planta abriu vazia ou com partes faltando?</h2>
+<h2 id="planta-incompleta">Por que meu DWG abriu vazio ou com partes faltando?</h2>
 <p>Primeiro use <strong>Mostrar desenho inteiro</strong> e confira se as camadas da planta estão ligadas. Quando houver uma miniatura no arquivo incompleto, <strong>Ver prévia gravada no DWG</strong> mostra a última vista salva pelo autor. Essa imagem serve como referência visual. Se faltam paredes, portas ou janelas criadas com objetos AEC, peça ao autor uma cópia com esses elementos convertidos em linhas, arcos ou blocos CAD. Uma base de arquitetura vinculada por referência externa também pode faltar no DWG recebido. Nesse caso, peça uma cópia com a referência incorporada.</p>
 <h2>Aplicativos para outros trabalhos de projeto</h2>
 <p>Precisa entregar uma planta 2D em DWG 2018? No <a href="/cad/aplicativos/#cadcraft">CadCraft do catálogo</a>, abra o desenho, use <strong>Salvar como</strong> e escolha DWG 2018. Use outro nome e reabra a cópia para comparar blocos e folhas com o original.</p>
 <p>Se você precisa coordenar um modelo IFC, revisar uma prancha em PDF, levantar quantitativos ou estudar um terreno, <a href="/cad/aplicativos/">escolha um dos oito aplicativos de engenharia</a>.</p>
-<h2>Guias para trabalhar com desenhos de engenharia</h2>
+<h2>Do CAD ao BIM</h2>
+<p>No <a href="/bim/">catálogo de ferramentas BIM</a>, você pode abrir um IFC em 3D, extrair quantitativos para Excel ou converter uma prancha. Estes guias mostram o processo com arquivos de exemplo.</p>
 <ul><li><a href="/cad/guias/escala-e-unidade-do-dwg/">Como conferir a unidade e a escala do DWG</a>. Experimente com um eixo de 4 m e confira que medida deve aparecer em uma folha a 1:50.</li>
 <li><a href="/bim/guias/pdf-escaneado-para-dwg/">Como recuperar um DWG editável a partir de uma prancha escaneada</a>. Calibre uma medida conhecida antes de transformar os contornos em linhas.</li>
 <li><a href="/bim/guias/dwg-para-ifc-paredes/">Como gerar paredes IFC com eixos desenhados em DWG</a>. Escolha a camada e confira o encontro das paredes no modelo.</li></ul>
-<p class="article-meta">Editor baseado no <a href="https://github.com/storytold/cadcraft">projeto aberto CADCraft</a>. Atualizado em <time datetime="2026-11-07">7 de novembro de 2026</time>.</p>
+<p class="article-meta">Atualizado em <time datetime="2026-11-07">7 de novembro de 2026</time>.</p>
+<details class="cad-credits"><summary>Créditos e licenças</summary><p><a href="/cad/editor/licencas/fontes-e-codigo.txt">Componentes, autores e licenças de uso</a></p></details>
 </article><aside class="article-aside"><section class="aside-card"><p class="eyebrow">Revisão de projetos</p><h2>Duas plantas mostram medidas diferentes?</h2>
 <p>A CONFENGE pode comparar as revisões e indicar quais desenhos, quantitativos e serviços de obra precisam de ajuste.</p>
 <p><a href="/revisao-tecnica-projetos-engenharia/">Conhecer a revisão técnica de projetos</a></p><p><a class="button button-primary" href="https://wa.me/5548988344559?text=Gostaria%20de%20conversar%20sobre%20a%20revis%C3%A3o%20dos%20desenhos%20e%20das%20medidas%20do%20meu%20projeto." data-cta-position="cad_contato">Conversar sobre a revisão do meu projeto</a></p></section></aside></div>

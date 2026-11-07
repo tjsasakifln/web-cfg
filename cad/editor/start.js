@@ -13,6 +13,19 @@ if (window.parent === window) {
   }
   window.addEventListener('drop', routeFiles, true);
   window.addEventListener('change', routeFiles, true);
+  // Windows starts browser autoscroll on middle mouse down. Leave event propagation
+  // intact for the CAD engine and keep dragging when the cursor crosses the frame.
+  const canvas = document.getElementById('cadcraft_canvas');
+  for (const type of ['pointerdown', 'mousedown', 'auxclick']) {
+    canvas.addEventListener(type, event => {
+      if (event.button !== 1) return;
+      if (type === 'pointerdown') {
+        if (event.isTrusted) canvas.setPointerCapture(event.pointerId);
+      } else {
+        event.preventDefault();
+      }
+    }, true);
+  }
   try {
     const { default: init } = await import('./cadcraft-web-d875c3c223026021.js');
     await init({ module_or_path: './cadcraft-web-d875c3c223026021_bg.wasm' });

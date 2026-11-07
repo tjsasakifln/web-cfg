@@ -125,8 +125,27 @@ function snapshot(doc) {
   let total = 0;
   for (const block of doc.blockRecords) for (const e of block.entities) {
     const signature = [block.name.toUpperCase(), e.layer?.name.toUpperCase(), e.objectName];
+    // For justified TEXT, DXF 11 anchors the glyphs and AutoCAD recalculates DXF 10.
+    // Aligned and fit text use two endpoints, so keep both for those modes.
+    const anchoredText = e.objectName === 'TEXT' && e.alignmentPoint &&
+      ([1, 2, 4].includes(e.horizontalAlignment) || (e.horizontalAlignment === 0 && e.verticalAlignment > 0));
+    if (e.objectName === 'TEXT') {
+      signature.push(['text', e.horizontalAlignment, e.verticalAlignment, e.widthFactor,
+        e.obliqueAngle, e.mirror, e.style?.name.toUpperCase()]);
+    }
     for (const key of signatureKeys) {
+      if (anchoredText && key === 'insertPoint') continue;
       if (e[key] !== undefined) signature.push([key, coordinate(e[key])]);
+    }
+    if (e.objectName === 'VIEWPORT') {
+      signature.push(['view', e.width, e.viewHeight, e.twistAngle, e.viewCenter, e.viewDirection, e.viewTarget].map(coordinate));
+      signature.push(['frozen', Array.from(e.frozenLayers, layer => layer.name.toUpperCase()).sort()]);
+      // CADCraft stores sheet settings (including inch units) on a paper viewport.
+      for (const [app, data] of e.extendedData) {
+        if (app.name === 'CADCRAFT' && data.records[0]?.value === 'LAYOUT') {
+          signature.push(['sheetData', data.records.map(record => [record.code, coordinate(record.value)])]);
+        }
+      }
     }
     if (e.block?.name) signature.push(['block', e.block.name.toUpperCase()]);
     if (e.vertices?.[Symbol.iterator]) {
@@ -139,7 +158,12 @@ function snapshot(doc) {
     total++;
   }
   const names = table => new Set(Array.from(table, item => item.name.toUpperCase()));
-  return { entities, total, layers: names(doc.layers), layouts: names(doc.layouts), blocks: names(doc.blockRecords) };
+  const sheets = new Map(Array.from(doc.layouts, layout => [layout.name.toUpperCase(), JSON.stringify([
+    layout.associatedBlock?.name.toUpperCase(), layout.paperSize, layout.paperUnits, layout.paperRotation,
+    layout.paperWidth, layout.paperHeight, layout.numeratorScale, layout.denominatorScale,
+    layout.minLimits.x, layout.minLimits.y, layout.maxLimits.x, layout.maxLimits.y
+  ].map(value => typeof value === 'number' ? rounded(value) : value))]));
+  return { entities, total, layers: names(doc.layers), layouts: names(doc.layouts), blocks: names(doc.blockRecords), sheets };
 }
 
 function missingNames(original, opened) {
@@ -147,6 +171,11 @@ function missingNames(original, opened) {
   for (const [key, label] of [['layers', 'camadas'], ['layouts', 'folhas'], ['blocks', 'blocos']]) {
     const missing = [...original[key]].filter(name => !opened[key].has(name));
     if (missing.length) messages.push('A cópia omitiu ' + label + ': ' + missing.slice(0, 5).join(', ') + '.');
+  }
+  for (const [name, settings] of original.sheets) {
+    if (name !== 'MODEL' && opened.sheets.has(name) && opened.sheets.get(name) !== settings) {
+      messages.push('A cópia alterou o papel, a escala ou os limites da folha ' + name + '.');
+    }
   }
   return messages;
 }

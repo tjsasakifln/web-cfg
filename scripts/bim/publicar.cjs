@@ -29,6 +29,19 @@ function build(stage) {
   }
   run('tar', ['-xzf', source]);
   run('npm', ['ci', '--ignore-scripts', '--include=dev', '--no-audit', '--no-fund']);
+  // acad-ts 3.8.0 writes the lower plot limit twice. Correct the unminified writer
+  // in this disposable build and regenerate its browser bundle using the upstream flags.
+  const acad = path.join(stage, 'node_modules/@node-projects/acad-ts');
+  const writer = path.join(acad, 'dist/IO/DWG/DwgStreamWriters/DwgObjectWriter.js');
+  const code = fs.readFileSync(writer, 'utf8');
+  const lower = 'this._writer.write2RawDouble(layout.minLimits);';
+  const duplicate = lower + '\n        ' + lower;
+  if (require(path.join(acad, 'package.json')).version !== '3.8.0' ||
+      createHash('sha256').update(code).digest('hex') !== '418905ac13efe509fc0ceb15a026376e868a8e2f1f77ebf69013df6fa6640283' ||
+      !code.includes(duplicate)) throw Error('Revisar gravador de limites de folhas ao atualizar acad-ts.');
+  fs.writeFileSync(writer, code.replace(duplicate, lower + '\n        this._writer.write2RawDouble(layout.maxLimits);'));
+  run(path.join(stage, 'node_modules/.bin/esbuild'), [path.join(acad, 'dist/index.js'), '--bundle',
+    '--format=esm', '--minify', '--keep-names', '--platform=neutral', '--outfile=' + path.join(acad, 'dist/index-min.js')]);
   // WebSfM uses its own pinned Vite checkout. Supply its CSS policy only for
   // this build and refuse to overwrite an existing PostCSS configuration.
   const checkout = process.env.WEBSFM_SOURCE
