@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Prumada em corte</title>
+  <desc id="desc">Dois ramais entram na prumada. A ventilação sobe acima da cobertura e o coletor segue para inspeção e conexão externa.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M54 31h218v7H54z M54 80h218v7H54z M54 130h218v7H54z" fill="url(#hatch)" stroke="#839da9"/>
+    <path d="M154 14v50 M152 59v52q0 12 13 14l86 12" stroke="#ced62a" stroke-width="5"/>
+    <path d="M105 52v7l47 7m-47 32v8l47 7" stroke="#ced62a" stroke-width="3"/>
+    <path d="M87 46h36q-1 9-17 9t-19-9z M87 93h36q-1 9-17 9t-19-9z" fill="#536d7d"/>
+    <path d="M235 123h30v21h-30z" fill="#19364b"/>
+    <path d="m265 138 42 6" stroke="#ced62a" stroke-width="4"/>
+    <path d="m150 19 4-6 4 6m-6 73v7m-3-4 3 4 3-4" stroke="#f0f1b1"/>
+  </g>
+</svg>

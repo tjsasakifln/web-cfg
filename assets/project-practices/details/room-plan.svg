@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Área do piso em planta</title>
+  <desc id="desc">Planta simplificada do banheiro de 2,40 m por 1,80 m. A marcação interna acompanha o perímetro utilizado no levantamento.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M105 23h30m40 0h80v120H105V23" stroke-width="8" stroke="#79919e"/>
+    <path d="M111 29h138v108H111z" fill="url(#hatch)" stroke="#ced62a"/>
+    <path d="M134 22h42v42a42 42 0 0 1-42-42" fill="#102d40" stroke-width="1"/>
+    <path d="M254 53v48" stroke="#ced62a" stroke-width="4"/>
+    <path d="M104 151v9m150-9v9m-150-4h150m-151 3 4-6m144 6 4-6 M89 24h8m-8 119h8m-4-120v120" stroke="#a2b5be" stroke-width="1.2"/>
+    <path d="M75 65h27v26H75z" fill="#19364b"/>
+  </g>
+</svg>

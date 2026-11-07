@@ -5,6 +5,7 @@ These tests drive the real shipped HTML/CSS/JSON — not re-implementations.
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import re
@@ -534,41 +535,26 @@ def test_home_decision_fold_hierarchy():
     assert 'id="como-conduzimos"' in html and 'id="contextos"' in html
     assert html.find('id="servicos-complementares"') < html.find('id="como-conduzimos"')
     assert html.find('id="contextos"') < html.find('id="solicitar-proposta"')
-    # The fold's proof is a readable HTML flow from need through technical work
-    # to a defined delivery. Keep this contract semantic so it cannot regress
-    # to an empty shell or the former illegible SVG/image treatment.
-    panel = re.search(
-        r'<figure[^>]*class="home-opening__figure"[\s\S]*?</figure>',
-        hero_html,
-    )
-    assert panel, "hero technical flow panel missing"
+    # The sample on the first screen must be traceable to the published
+    # takeoff. Check the material quantities independently of the illustration.
+    panel = re.search(r'<figure class="home-opening__figure"[\s\S]*?</figure>', hero_html)
+    assert panel, "hero takeoff sample missing"
     panel_html = panel.group(0)
-    assert 'class="home-opening__sheet"' in panel_html
-    assert 'class="home-project-diagram__title"' in panel_html
-    disciplines = re.search(
-        r'<ul[^>]*class="home-project-diagram__disciplines"[\s\S]*?</ul>',
-        panel_html,
-    )
-    assert disciplines, "hero need-to-scope panel missing"
-    discipline_items = re.findall(r"<li>[\s\S]*?</li>", disciplines.group(0))
-    assert len(discipline_items) == 3, discipline_items
-    for stage in ("Necessidade", "Leitura técnica", "Escopo"):
-        assert any(f">{stage}<" in item for item in discipline_items), stage
-    coordination = re.search(
-        r'<div[^>]*class="home-project-diagram__coordination"[\s\S]*?</div>',
-        panel_html,
-    )
-    assert coordination and "Trabalho técnico" in coordination.group(0)
-    delivery = re.search(
-        r'<p[^>]*class="home-project-diagram__delivery"[\s\S]*?</p>',
-        panel_html,
-    )
-    assert delivery and "Entrega definida" in delivery.group(0)
-    assert panel_html.index('home-project-diagram__disciplines') < panel_html.index(
-        'home-project-diagram__coordination'
-    ) < panel_html.index('home-project-diagram__delivery')
-    assert panel_html.count('class="home-project-diagram__connector"') == 2
-    assert "<img" not in panel_html and "<svg" not in panel_html
+    case = ROOT / "casos/demonstrativo-projeto-privado"
+    with (case / "data/quantitativos.csv").open(encoding="utf-8") as stream:
+        rows = {row["id"]: row for row in csv.DictReader((line for line in stream if not line.startswith("#")), delimiter=";")}
+    floor = float(rows["Q-PISO-01"]["quantidade"])
+    membrane = float(rows["Q-IMP-01"]["quantidade"])
+    for value in (floor, membrane - floor, membrane):
+        assert f"{value:.2f}".replace(".", ",") + " m²" in panel_html
+    assert "Exemplo demonstrativo" in panel_html
+    assert rows["Q-IMP-01"]["revisao"] in panel_html
+    assert 'src="/assets/home-quantitativo-r01.svg"' in panel_html
+    assert (ROOT / "assets/home-quantitativo-r01.svg").is_file()
+    for href in ("/casos/demonstrativo-projeto-privado/#quantitativos", "/quantitativos-orcamento-obras/#triagem-quantitativos"):
+        assert f'href="{href}"' in panel_html
+        path, anchor = href.split("#")
+        assert f'id="{anchor}"' in (ROOT / path.strip("/") / "index.html").read_text(encoding="utf-8")
 
 
 def test_form_qualification_minimal():
@@ -1656,35 +1642,35 @@ def test_project_demonstrations_are_distinct_semantic_and_on_brand():
     )
     pages = source["pages"]
     assert len(pages) == 13
-    demo_sources = [page["demonstration"]["src"] for page in pages]
-    assert len(set(demo_sources)) == len(pages), "project demonstrations must be route-specific"
-
-    semantic_tokens = {
-        "multidisciplinary-coordination": ("passagem", "estrutura", "rota", "arquitetura", "versões"),
-        "infrastructure": ("corte", "aterro", "cobertura", "edificação"),
-        "steel-structure": ("chapa", "parafusos", "solda", "tolerância", "montagem"),
-        "electrical-project": ("origem", "proteção", "qgbt", "qdl", "cargas"),
-        "plumbing-project": ("aparelho", "ventilação", "inspeção", "conexão"),
-    }
+    examples = [
+        tuple((row["label"], row["value"]) for row in page["demonstration"]["rows"])
+        for page in pages
+    ]
+    assert len(set(examples)) == len(pages), "each page must interpret the example for its service"
     for page in pages:
-        hero = page["visual"]["src"]
-        demo = page["demonstration"]["src"]
-        assert demo != hero, f"{page['route']}: hero and demonstration repeat the same asset"
-        asset = ROOT / demo.removeprefix("/")
-        assert asset.exists(), f"missing project demonstration: {demo}"
+        visual = page["visual"]
+        demo = page["demonstration"]
+        assert len(demo["rows"]) >= 3, f"{page['route']}: evidence record missing"
+        assert demo["href"] != visual["src"], f"{page['route']}: evidence link repeats the opening"
+        asset = ROOT / visual["src"].removeprefix("/")
+        assert asset.is_file(), f"missing technical detail: {asset}"
         root = ET.parse(asset).getroot()
-        assert root.get("role") == "img", f"{demo}: SVG needs an image role"
-        svg_text = " ".join("".join(root.itertext()).split()).casefold()
-        assert "demonstração técnica" in svg_text, f"{demo}: discreet technical label missing"
-        assert root.find("{http://www.w3.org/2000/svg}title") is not None, f"{demo}: title missing"
-        assert root.find("{http://www.w3.org/2000/svg}desc") is not None, f"{demo}: desc missing"
-        for token in semantic_tokens.get(page["id"], ()):
-            assert token.casefold() in svg_text, f"{page['route']}: figure does not show {token!r}"
+        assert root.get("viewBox"), f"{asset}: detail needs a scalable drawing"
+        assert root.get("role") == "img", f"{asset}: drawing needs an image role"
+        for tag in ("title", "desc"):
+            assert root.findtext(f"{{http://www.w3.org/2000/svg}}{tag}"), f"{asset}: missing {tag}"
+        assert visual["alt"].strip(), f"{asset}: illustration needs an accessible description"
+        assert not root.findall(".//{http://www.w3.org/2000/svg}text"), (
+            f"{asset}: put measurements and instructions in the responsive HTML"
+        )
+        assert re.search(r"(exemplo|demonstrativ|ilustrativ)", " ".join([
+            visual["label"], demo["label"], demo["body"]
+        ]), re.I), f"{page['route']}: identify the illustrative nature of the example"
 
     family = (ROOT / "assets" / "project-practices.css").read_text(encoding="utf-8")
     family += "".join(
         path.read_text(encoding="utf-8")
-        for path in sorted((ROOT / "assets" / "project-practices").glob("*.svg"))
+        for path in sorted((ROOT / "assets" / "project-practices").rglob("*.svg"))
     )
     for terracotta in ("#d96b39", "#efa27f", "#f2c7b5"):
         assert terracotta not in family.casefold(), f"project family reintroduces {terracotta}"

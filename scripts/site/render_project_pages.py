@@ -286,6 +286,24 @@ def _page_index(page: dict[str, Any]) -> str:
     return f'<nav class="pp-index pp-container" aria-label="Nesta página">{links}</nav>'
 
 
+def _readings(items: list[dict[str, str]]) -> str:
+    return "".join(
+        f'<div><dt>{esc(item["label"])}</dt><dd>{esc(item["value"])}</dd></div>'
+        for item in items
+    )
+
+
+def _project_sheet(visual: dict[str, Any]) -> str:
+    return f'''<figure class="pp-hero__visual">
+<figcaption><span class="pp-sheet__label">{esc(visual['label'])}</span>
+<strong class="pp-sheet__title">{esc(visual['title'])}</strong>
+<span class="pp-sheet__caption">{esc(visual['caption'])}</span></figcaption>
+<img class="pp-sheet__art" src="{esc(visual['src'])}" width="360" height="168" alt="{esc(visual['alt'])}"/>
+<dl class="pp-sheet__readings">{_readings(visual['readings'])}</dl>
+<a class="pp-sheet__link" href="#demonstracao">Ver a conferência {_icon('arrow')}</a>
+</figure>'''
+
+
 def _render_section(key: str, page: dict[str, Any]) -> str:
     if key == "scope":
         return f'''<section class="pp-section" id="escopo" aria-labelledby="scope-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('scope_kicker', 'Atuação técnica'))}</p><h2 id="scope-title">{esc(page['scope_title'])}</h2><p>{esc(page['scope_intro'])}</p></header><div class="pp-scope-grid">{_scope_groups(page)}</div></div></section>'''
@@ -294,9 +312,14 @@ def _render_section(key: str, page: dict[str, Any]) -> str:
     if key == "interfaces":
         return f'''<section class="pp-section pp-section--soft" id="coordenacao" aria-labelledby="interfaces-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('interfaces_kicker', 'Integração'))}</p><h2 id="interfaces-title">{esc(page['interfaces_title'])}</h2><p>{esc(page['interfaces_intro'])}</p></header><div class="pp-interface-grid">{_interfaces(page)}</div></div></section>'''
     if key == "demonstration":
-        demonstration = page["demonstration"]
-        note = demonstration.get("note", demonstration.get("limit", ""))
-        return f'''<section class="pp-section" id="demonstracao" aria-labelledby="demo-title"><div class="pp-container pp-demo"><div><p class="pp-kicker">Representação demonstrativa</p><h2 id="demo-title">{esc(demonstration['title'])}</h2><p>{esc(demonstration['body'])}</p><p class="pp-demo__limit">{esc(note)}</p></div><figure><p class="pp-demo__pan-hint">Deslize para ver o diagrama completo.</p><div class="pp-demo__canvas" tabindex="0" role="group" aria-label="Diagrama técnico com rolagem horizontal"><img loading="lazy" decoding="async" src="{esc(demonstration['src'])}" width="960" height="600" alt="{esc(demonstration['alt'])}"/></div><figcaption><span>Ilustração técnica</span>{esc(demonstration['caption'])}</figcaption></figure></div></section>'''
+        demo = page["demonstration"]
+        return f'''<section class="pp-section pp-section--soft" id="demonstracao" aria-labelledby="demo-title">
+<div class="pp-container pp-demo"><div><p class="pp-kicker">Exemplo demonstrativo</p>
+<h2 id="demo-title">{esc(demo['title'])}</h2><p>{esc(demo['body'])}</p></div>
+<figure class="pp-record"><figcaption>{esc(demo['label'])}</figcaption>
+<dl>{_readings(demo['rows'])}</dl>
+<a class="pp-text-link" data-event-name="cta_click" data-cta-id="{esc(page['id'])}-sample-source" data-cta-position="demonstration" href="{esc(demo['href'])}">{esc(demo['link_label'])} {_icon('arrow')}</a>
+</figure></div></section>'''
     if key == "method":
         return f'''<section class="pp-section pp-section--rule" id="metodo" aria-labelledby="method-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('method_kicker', 'Desenvolvimento'))}</p><h2 id="method-title">{esc(page['method_title'])}</h2><p>{esc(page['method_intro'])}</p></header><ol class="pp-method">{_method(page)}</ol></div></section>'''
     if key == "inputs":
@@ -348,9 +371,7 @@ def _contact_section(page: dict[str, Any]) -> str:
 def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
     route = page["route"]
     crumbs = _crumbs(page, by_route)
-    visual = page["visual"]
     sections = "\n".join(_render_section(key, page) for key in page["section_order"])
-    first_anchor, first_label = SECTION_NAV[page["section_order"][0]]
     return f"""<!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
 <head>
@@ -383,10 +404,11 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
 <div class="pp-container pp-hero__grid"><div class="pp-hero__copy">
 <p class="pp-eyebrow">{esc(page['eyebrow'])}</p><h1 id="page-title">{esc(page['h1'])}</h1>
 <p class="pp-lead">{esc(page['lead'])}</p>
-<div class="pp-actions"><a class="pp-button" href="{_proposal_href()}" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero" data-cta-position="hero">Solicitar proposta {_icon('arrow')}</a><a class="pp-text-link" href="{esc(_whatsapp_href(page))}" target="_blank" rel="noopener" data-event-name="whatsapp_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero-whatsapp" data-cta-position="hero">Conversar pelo WhatsApp</a><a class="pp-text-link" href="#{first_anchor}">Ver {first_label.lower()}</a></div>
+<div class="pp-actions"><a class="pp-button" href="{_proposal_href()}" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero" data-cta-position="hero">Solicitar proposta {_icon('arrow')}</a><a class="pp-text-link" href="{esc(_whatsapp_href(page))}" target="_blank" rel="noopener" data-event-name="whatsapp_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero-whatsapp" data-cta-position="hero">Conversar pelo WhatsApp</a></div></div>
+{_project_sheet(page['visual'])}
+<div class="pp-hero__support">
 <p class="pp-summary">{esc(page['summary'])}</p>
 <p class="pp-note">{esc(page['hero_note'])}</p></div>
-<figure class="pp-hero__visual"><p class="pp-hero__pan-hint">Em telas menores, deslize para ver o diagrama completo.</p><div class="pp-hero__canvas" tabindex="0" role="group" aria-label="Diagrama técnico com rolagem horizontal"><img src="{esc(visual['src'])}" width="760" height="520" alt="{esc(visual['alt'])}"/></div><figcaption><span>Diagrama técnico ilustrativo</span>{esc(visual['caption'])}</figcaption></figure>
 </div></section>
 {_page_index(page)}
 {sections}

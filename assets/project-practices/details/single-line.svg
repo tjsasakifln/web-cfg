@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Distribuição elétrica</title>
+  <desc id="desc">Um alimentador chega ao quadro. O barramento se divide em três circuitos, cada um com a sua proteção antes das cargas.</desc>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M69 40h219v84H69z" fill="#163247" stroke="#617e8d" stroke-dasharray="5 4"/>
+    <path d="M180 14v40 M105 58h149" stroke="#e7eded" stroke-width="3"/>
+    <circle cx="180" cy="58" r="4" fill="#ced62a" stroke="none"/>
+    <g fill="#102a3e" stroke="#a4b9c2" stroke-width="1"><rect x="94" y="72" width="22" height="28"/><rect x="169" y="72" width="22" height="28"/><rect x="243" y="72" width="22" height="28"/></g>
+    <g stroke="#ced62a" stroke-width="2"><path d="M105 58v21l-6 12m6 0v38 M180 58v21l-6 12m6 0v38 M254 58v21l-6 12m6 0v38"/></g>
+    <g fill="#183347"><circle cx="105" cy="139" r="8"/><circle cx="180" cy="139" r="8"/><circle cx="254" cy="139" r="8"/></g>
+    <path d="m100 134 10 10m0-10-10 10m75-10 10 10m0-10-10 10m74-10 10 10m0-10-10 10" stroke-width="1"/>
+  </g>
+</svg>
