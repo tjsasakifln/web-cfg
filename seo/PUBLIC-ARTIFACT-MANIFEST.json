@@ -13,6 +13,7 @@
     "auditoria-orcamento-licitacao/",
     "avaliacao-imoveis-urbanos/",
     "bid-room-licitacoes-obras/",
+    "bim/",
     "casos/",
     "comercial/",
     "como-trabalhamos/",
@@ -97,7 +98,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 252,
+  "html_route_count": 259,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -113,6 +114,13 @@
     "/auditoria-orcamento-licitacao/",
     "/avaliacao-imoveis-urbanos/",
     "/bid-room-licitacoes-obras/",
+    "/bim/fotogrametria/",
+    "/bim/guias/dwg-para-ifc-paredes/",
+    "/bim/guias/medir-distancia-area-foto/",
+    "/bim/guias/pdf-escaneado-para-dwg/",
+    "/bim/guias/quantitativos-ifc-para-excel/",
+    "/bim/",
+    "/bim/web/",
     "/casos/aditivo-art125-demonstrativo/",
     "/casos/demonstrativo-infraestrutura/",
     "/casos/demonstrativo-projeto-privado/",
@@ -352,8 +360,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-10-29T12:59:01Z",
-  "public_artifact_hash": "3c0569af65bea6c7a852fe9a8dd3d171987ec650a13e03b490e4228ea6d39cbd",
+  "generated_at": "2026-11-07T03:05:16Z",
+  "public_artifact_hash": "9e3e31689151354ed3e7e31d915c33b3656a0cbdea663af48166e3b776fb8cb3",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -367,6 +375,7 @@
     "auditoria-orcamento-licitacao/",
     "avaliacao-imoveis-urbanos/",
     "bid-room-licitacoes-obras/",
+    "bim/",
     "casos/",
     "comercial/",
     "como-trabalhamos/",
@@ -451,14 +460,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 204,
+  "promoted_navigation_files": 245,
   "navigation_audit": {
-    "audited_files": 240,
-    "audited_blocks": 478,
+    "audited_files": 245,
+    "audited_blocks": 488,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 257,
+    "html_scanned": 274,
     "html_rewritten": 189,
     "fields_removed": 790
   }
