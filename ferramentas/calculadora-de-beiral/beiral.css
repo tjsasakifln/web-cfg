@@ -10,7 +10,6 @@
 .solar-fields input,.solar-fields select {width:100%;min-width:0;min-height:46px;font:inherit;color:#122d49;background:white;border:1px solid #899eae;border-radius:.35rem;padding:.44rem .6rem}
 .solar-fields input[aria-invalid="true"] {border-color:#a12616}
 .solar-wide {grid-column:1/-1}
-.solar-fields input:focus-visible,.solar-fields select:focus-visible {outline:3px solid #1565a4;outline-offset:2px}
 .solar-detail {margin:1.1rem 0 .6rem;font-weight:700;color:#153f61}
 .solar-card .solar-number {display:block;font-size:clamp(1.65rem,3.5vw,2.8rem);font-weight:750;line-height:1.15;color:#074a6a}
 .solar-metrics {margin:0;display:grid;gap:1rem}
