@@ -2,6 +2,9 @@ const editor = document.getElementById('cad-editor');
 
 if (editor) {
   const find = selector => editor.querySelector(selector);
+  const brand = document.querySelector('.site-header .brand img').cloneNode();
+  brand.className = 'cad-brand';
+  find('.cad-doc').prepend(brand);
   const fileInput = find('[data-file]');
   const openButton = find('[data-open]');
   const exampleButton = find('[data-example]');
