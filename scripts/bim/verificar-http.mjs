@@ -1,6 +1,7 @@
 // Smoke do mesmo host usado pelo navegador, com as políticas efetivamente servidas.
 import assert from 'node:assert/strict';
 import { pathToFileURL } from 'node:url';
+import { verificarSuite } from '../cad/suite/verificar-http.mjs';
 
 export async function verificarBim(base, versao = '') {
   async function requisitar(caminho, opcoes = {}) {
@@ -63,4 +64,5 @@ export async function verificarBim(base, versao = '') {
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
   await verificarBim(process.argv[2], process.argv[3]);
+  await verificarSuite(process.argv[2], process.argv[3]);
 }

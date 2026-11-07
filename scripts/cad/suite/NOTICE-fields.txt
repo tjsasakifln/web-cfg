@@ -1,0 +1,6 @@
+CadCraft field packs. Author: CadCraft, The Data Design Group, Inc.
+Apache License, Version 2.0. See LICENSE.txt.
+Source catalogue: https://getcadcraft.com/assets/fields/index.json (2026-11-07).
+For each source file, append the file path in index.json to https://getcadcraft.com/assets/fields/.
+Each pack.json is the original file, including its author, licence, notice and coverage limitations.
+The local index.json was compiled by Confenge from the licensed pack data. Basic, partial and well-covered statuses are the author's assessments. No independent engineering certification is implied.

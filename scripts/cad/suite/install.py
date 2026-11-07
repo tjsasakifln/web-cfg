@@ -8,6 +8,7 @@ import re
 import shutil
 from struct import unpack
 import sys
+import tarfile
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
@@ -85,6 +86,67 @@ def install_app(item, target, cache):
     return slug, {"archive": filename, "size": spec["size"], "scripts": sorted(set(sources)), "files": files}
 
 
+def install_fields(site):
+    bundle = Path(__file__).with_name("field-packs-2026-11-07.tar.gz")
+    expected = "89887b40ded4d19a70c0a94d02d24c2a670c7162c886edae09b2c88f15ec50c8"
+    with bundle.open("rb") as src:
+        if file_digest(src, "sha256").hexdigest() != expected:
+            raise ValueError("O catálogo de especialidades diverge da cópia verificada.")
+    target = site / "assets" / "fields"
+    with tarfile.open(bundle, "r:gz") as tar:
+        index = json.load(tar.extractfile("index.json"))
+        expected_packs = {p["file"]: p for p in index["packs"]}
+        host_contract = json.loads((Path(__file__).resolve().parents[3] / "runtime/contract.json").read_text())
+        if sorted(p["id"] for p in index["packs"]) != host_contract["cad_field_ids"]:
+            raise ValueError("As fichas públicas não correspondem aos 74 pacotes licenciados.")
+        if len(expected_packs) != 74 or set(tar.getnames()) != {"index.json", *expected_packs}:
+            raise ValueError("Inventário de especialidades inválido.")
+        for member in tar.getmembers():
+            if not member.isfile() or not re.fullmatch(r"(?:index\.json|[a-z0-9-]+/pack\.json)", member.name):
+                raise ValueError(member.name)
+            data = tar.extractfile(member).read()
+            if member.name != "index.json":
+                source = json.loads(data)
+                entry = expected_packs[member.name]
+                if (not source.get("author") or source.get("license") != "Apache-2.0" or
+                        source["id"] != entry["id"] or sha256(data).hexdigest() != entry["sha256"]):
+                    raise ValueError(member.name)
+            dst = target / member.name
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_bytes(data)
+    shutil.copyfile(Path(__file__).with_name("NOTICE-fields.txt"), target / "NOTICE.txt")
+    with ZipFile(next((site / "cad/suite/pacotes").glob("cadcraft-*.zip"))) as edition:
+        (target / "LICENSE.txt").write_bytes(edition.read("cadcraft-browser-edition-v0.8.1/LICENSE"))
+
+
+def install_engines(site):
+    archive = Path(__file__).with_name("calc-engines-2026-11-07.tar.gz")
+    expected = "45e5b89cb52bbd30798755a418b866a52704a8ac985a398c4d3372e63a0bf1ed"
+    with archive.open("rb") as source:
+        if file_digest(source, "sha256").hexdigest() != expected:
+            raise ValueError("Os módulos de cálculo divergem da distribuição verificada.")
+    target = site / "assets/cad-engines"
+    with tarfile.open(archive, "r:gz") as tar:
+        records = json.load(tar.extractfile("origens.json"))
+        if set(tar.getnames()) != {"origens.json", *records} or len(records) != 99:
+            raise ValueError("Inventário de módulos de cálculo inválido.")
+        for member in tar.getmembers():
+            path = member.name
+            if not member.isfile() or not re.fullmatch(r"(?:[a-z0-9-]+/)*[a-z0-9-]+\.(?:js|json)", path):
+                raise ValueError(path)
+            data = tar.extractfile(member).read()
+            if path in records and (sha256(data).hexdigest() != records[path]["sha256"] or
+                                    b"SPDX-License-Identifier: Apache-2.0" not in data[:2500]):
+                raise ValueError(path)
+            dst = target / path
+            if path == "skill-packs.js":
+                dst = site / "assets/js/skill-packs.js"  # path used by the official edition
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_bytes(data)
+    shutil.copyfile(site / "assets/fields/LICENSE.txt", target / "LICENSE.txt")
+    shutil.copyfile(Path(__file__).with_name("NOTICE-engines.txt"), target / "NOTICE.txt")
+
+
 def install(site):
     target = site / "cad" / "suite" / "pacotes"
     target.mkdir(exist_ok=True, parents=True)
@@ -92,6 +154,8 @@ def install(site):
     with ThreadPoolExecutor(max_workers=3) as workers:
         apps = dict(workers.map(lambda item: install_app(item, target, cache), RELEASES.items()))
     (target / "edicoes.json").write_text(json.dumps(apps, ensure_ascii=True, separators=(",", ":"), sort_keys=True))
+    install_fields(site)
+    install_engines(site)
 
 
 if __name__ == "__main__":

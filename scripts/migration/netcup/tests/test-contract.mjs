@@ -223,6 +223,17 @@ test("host-only control artifacts are denied without removing them from the pack
   }
 });
 
+test("field kit cards redirect only the 74 named packs to the catalogue", () => {
+  const { contract } = buildHostContract(ROOT);
+  const output = renderRuntimeLocations(contract);
+  assert.equal(contract.runtime.cadFieldIds.length, 74);
+  for (const id of contract.runtime.cadFieldIds) {
+    assert.ok(output.includes("location = /library/kits/" + id + " {"));
+    assert.ok(output.includes('return 302 "/cad/aplicativos/?area=' + id + '#pacotes";'));
+  }
+  assert.ok(!output.includes("location /library/"));
+});
+
 test("nginx escaping keeps input values inside quoted arguments", () => {
   const { contract } = buildHostContract(ROOT);
   const clone = structuredClone(contract);

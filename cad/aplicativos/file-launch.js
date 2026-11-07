@@ -23,6 +23,7 @@ export function installFileLauncher(choose, names) {
   function configure() {
     const compatible = routes[extension(file.files[0]?.name || '')] || [];
     app.replaceChildren(...compatible.map(slug => new Option(names.get(slug), slug)));
+    if (!compatible.length) app.add(new Option('Escolha o arquivo primeiro', ''));
     app.disabled = submit.disabled = !compatible.length;
     status.textContent = file.files.length && !compatible.length ? 'Escolha um arquivo DWG, DXF, IFC ou PDF.' : '';
   }

@@ -1,0 +1,3 @@
+CadCraft engineering engines and assistant skill descriptions, The Data Design Group, Inc.
+All 99 original JavaScript files in origens.json carry an explicit SPDX-License-Identifier: Apache-2.0.
+See LICENSE.txt. Modules are distributed without changes to source bytes. origens.json gives the individual official source URLs and their SHA-256 checksums as retrieved on 2026-11-07. The public application of the skill descriptions requires a compatible assistant; no language-model service is provided by the Confenge site.

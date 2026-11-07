@@ -41,11 +41,11 @@ function slice(first, last, size) {
   });
 }
 const has = (obj, key) => Object.hasOwn(obj, key);
-function policy(app) {
+function policy(app, name) {
   return [
     "default-src 'none'", "base-uri 'self'", "form-action 'none'", "frame-ancestors 'self'",
     "object-src 'none'", "connect-src 'self' blob: data:", "img-src 'self' data: blob:",
-    "font-src 'self' data: blob:", "style-src 'self' 'unsafe-inline'", "media-src 'self' blob:",
+    "font-src 'self' data: blob:", "style-src 'self' 'unsafe-inline'", name === 'markupcraft' ? "media-src 'self' blob: data:" : "media-src 'self' blob:",
     "frame-src 'self' blob:", "worker-src 'self' blob:", "manifest-src 'self'", "script-src-attr 'none'",
     "script-src 'self' 'wasm-unsafe-eval' blob: " + app.scripts.map(h => "'" + h + "'").join(' ')
   ].join('; ');
@@ -73,7 +73,13 @@ export function createCadEditions(directory) {
     try {
       index ??= readFile(join(directory, 'edicoes.json'), 'utf8').then(JSON.parse);
       const all = await index;
-      if (!has(all, name) || !has(all[name].files, path)) return fail(404);
+      if (!has(all, name)) return fail(404);
+      // Some editions import the shared first-party prompt list via a relative URL.
+      if (path === 'assets/js/skill-packs.js' && !has(all[name].files, path)) {
+        res.writeHead(307, { Location: '/assets/js/skill-packs.js', 'Cache-Control': 'no-cache' }).end();
+        return true;
+      }
+      if (!has(all[name].files, path)) return fail(404);
       const app = all[name], [offset, compressed, size, method, digest] = app.files[path];
       if (!new RegExp('^' + name + '-[0-9a-f]{16}\\.zip$').test(app.archive) ||
           ![offset, compressed, size].every(v => Number.isSafeInteger(v) && v >= 0) ||
@@ -87,7 +93,7 @@ export function createCadEditions(directory) {
           return true;
         }
       }
-      res.setHeader('Content-Security-Policy', policy(app));
+      res.setHeader('Content-Security-Policy', policy(app, name));
       res.setHeader('Content-Type', MIME[extname(path).toLowerCase()] || (/^(LICENSE|NOTICE|TRADEMARKS)$/.test(path.split('/').at(-1)) ? MIME['.txt'] : 'application/octet-stream'));
       const tag = '"' + digest + '"';
       res.setHeader('ETag', tag);

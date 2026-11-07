@@ -506,6 +506,10 @@ export function renderRuntimeLocations(contract) {
     "}",
     "",
   ];
+  for (const id of contract.runtime.cadFieldIds || []) {
+    if (!/^field\.[a-z0-9-]+$/.test(id)) throw Error("Invalid field pack identifier");
+    lines.push(`location = /library/kits/${id} {`, "  absolute_redirect off;", `  return 302 "/cad/aplicativos/?area=${id}#pacotes";`, "}", "");
+  }
   if (contract.runtime.cadEditions) {
     lines.push(`location ^~ ${contract.runtime.cadEditions} {`);
     // The edition supplies its exact inline-script hashes and cache validators.

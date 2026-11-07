@@ -1,5 +1,5 @@
 #cad-editor {
-  min-width:0; border:1px solid var(--line); border-radius:var(--radius-lg);
+  min-width:0; border:1px solid var(--line);
   background:var(--white); color:var(--text); font-family:var(--sans);
   overflow:hidden; scroll-margin-top:6rem;
 }
@@ -16,13 +16,13 @@
 #cad-editor .cad-file-tag {
   display:inline-flex; align-items:center; justify-content:center; flex:none;
   background:var(--green-100); color:var(--green-700); font-size:.73rem;
-  letter-spacing:.07em; font-weight:800; border-radius:var(--radius-sm); width:3rem; height:2.55rem;
+  letter-spacing:.07em; font-weight:800; width:3rem; height:2.55rem;
 }
 #cad-editor .cad-brand { display:none; width:7rem; height:auto; flex:none; }
 #cad-editor .cad-caption, #cad-editor .cad-help { color:var(--muted); font-size:var(--text-caption); }
 #cad-editor .cad-actions button, #cad-editor select {
   display:inline-flex; align-items:center; justify-content:center; gap:.42rem;
-  border:1px solid var(--line); border-radius:var(--radius-sm); min-height:var(--touch-min);
+  border:1px solid var(--line); min-height:var(--touch-min);
   padding:.5rem .8rem; background:var(--white); color:var(--ink); font:700 var(--text-small)/1.35 var(--sans);
 }
 #cad-editor .cad-actions button:hover:enabled { border-color:var(--green-700); color:var(--green-700); }
