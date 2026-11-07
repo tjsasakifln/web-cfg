@@ -113,6 +113,8 @@
     </details>
     <div class="cad-foot">
       <p class="cad-status" role="status" aria-live="polite">Escolha um DWG ou DXF do seu dispositivo.</p>
+      <button type="button" class="button" data-open-2d hidden>Abrir este desenho no CadCraft 2D</button>
+      <a href="/cad/aplicativos/#cadcraft" data-manual-2d hidden>Abrir o CadCraft 2D e escolher o arquivo</a>
       <label class="cad-format" hidden>Cópia em <select data-format><option value="dwg">DWG R2000</option><option value="dxf">DXF</option></select></label>
     </div>
     <details class="cad-help" hidden><summary>Controles do editor</summary>
@@ -132,6 +134,9 @@
 <p>O editor grava cópias em DWG 2000. Se detectar perda de geometria ou não conseguir conferir a importação, ele desativa a saída em DWG. Nesse caso, a cópia em DXF contém apenas o que o editor conseguiu abrir e salvar. Preserve o original e compare as camadas, os blocos, as cotas e as folhas antes de distribuir a revisão.</p>
 <h2>Por que a planta abriu vazia ou com partes faltando?</h2>
 <p>Primeiro use <strong>Mostrar desenho inteiro</strong> e confira se as camadas da planta estão ligadas. Quando houver uma miniatura no arquivo incompleto, <strong>Ver prévia gravada no DWG</strong> mostra a última vista salva pelo autor. Essa imagem serve como referência visual. Se faltam paredes, portas ou janelas criadas com objetos AEC, peça ao autor uma cópia com esses elementos convertidos em linhas, arcos ou blocos CAD. Uma base de arquitetura vinculada por referência externa também pode faltar no DWG recebido. Nesse caso, peça uma cópia com a referência incorporada.</p>
+<h2>Aplicativos para outros trabalhos de projeto</h2>
+<p>Precisa entregar uma planta 2D em DWG 2018? No <a href="/cad/aplicativos/#cadcraft">CadCraft do catálogo</a>, abra o desenho, use <strong>Salvar como</strong> e escolha DWG 2018. Use outro nome e reabra a cópia para comparar blocos e folhas com o original.</p>
+<p>Se você precisa coordenar um modelo IFC, revisar uma prancha em PDF, levantar quantitativos ou estudar um terreno, <a href="/cad/aplicativos/">escolha um dos oito aplicativos de engenharia</a>.</p>
 <h2>Guias para trabalhar com desenhos de engenharia</h2>
 <ul><li><a href="/cad/guias/escala-e-unidade-do-dwg/">Como conferir a unidade e a escala do DWG</a>. Experimente com um eixo de 4 m e confira que medida deve aparecer em uma folha a 1:50.</li>
 <li><a href="/bim/guias/pdf-escaneado-para-dwg/">Como recuperar um DWG editável a partir de uma prancha escaneada</a>. Calibre uma medida conhecida antes de transformar os contornos em linhas.</li>

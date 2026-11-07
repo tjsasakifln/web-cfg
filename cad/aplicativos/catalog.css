@@ -1,0 +1,49 @@
+.suite-page {padding-bottom:var(--space-6)}
+.suite-lead {max-width:80ch;padding-block:var(--space-5)}
+.suite-lead h1 {max-width:26ch}
+.suite-lead .content-lead {max-width:65ch}
+.suite-catalog {margin-block:var(--space-5)}
+.suite-catalog h2,.suite-toolbar h2 {font-size:var(--text-h3)}
+.suite-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr));gap:1rem;list-style:none;padding:0;margin:1rem 0}
+.suite-grid li {min-width:0;margin:0;scroll-margin-top:6rem}
+.suite-grid a {height:100%;display:flex;flex-direction:column;gap:.75rem;padding:1.15rem;background:var(--white);border:1px solid var(--rule);border-top:3px solid var(--green-700);color:var(--ink);text-decoration:none}
+.suite-grid a:focus-visible,.suite-grid a:hover {outline:2px solid var(--green-700);outline-offset:1px}
+.suite-grid h3 {font-size:1.23rem;line-height:1.16;margin:0}
+.suite-grid p {font-size:.96rem;line-height:1.5;margin:0;color:var(--text)}
+.suite-label,.suite-card-bottom {font-size:.84rem;line-height:1.45}
+.suite-label,.suite-card-bottom strong {font-weight:720;color:var(--green-700)}
+.suite-card-bottom {display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding-top:.75rem;margin-top:auto;border-top:1px solid var(--rule)}
+.suite-notes {display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr);gap:clamp(1.5rem,5vw,4rem);padding:var(--space-6) 0;border-top:1px solid var(--rule)}
+.suite-credit {font-size:var(--text-small);color:var(--muted)}
+.suite-workspace {background:var(--white);border:1px solid var(--rule);border-top:3px solid var(--green-700);margin-bottom:1.25rem;scroll-margin-top:5.5rem}
+.suite-workspace[hidden],.suite-catalog[hidden] {display:none}
+.suite-signature {display:none;width:130px;height:auto}
+.suite-workspace:fullscreen .suite-signature {display:block}
+.suite-heading {display:flex;align-items:center;gap:1rem}
+.suite-toolbar,.suite-actions {display:flex;align-items:center;flex-wrap:wrap;gap:.65rem}
+.suite-toolbar {justify-content:space-between;padding:.85rem 1rem}
+.suite-toolbar p,.suite-toolbar h2 {margin:0}
+.suite-actions button {background:var(--white);color:var(--ink);border:1px solid var(--rule);cursor:pointer;min-height:44px}
+.suite-status {margin:0;padding:.45rem 1rem;color:var(--text);font-size:var(--text-small)}
+.suite-status:empty {display:none}
+#suite-frame iframe {width:100%;height:clamp(520px,75svh,960px);display:block;border:0;background:var(--white)}
+.suite-workspace:fullscreen {margin:0;border:0;display:flex;flex-direction:column}
+.suite-workspace:fullscreen #suite-frame {flex:1;min-height:0}
+.suite-workspace:fullscreen iframe {height:100%}
+@media(max-width:700px){.suite-notes{grid-template-columns:1fr}.suite-grid{gap:.75rem}.suite-lead{padding-block:1rem}.suite-toolbar{align-items:flex-start}.suite-actions button{padding:.5rem .7rem}}
+.suite-file-form {margin-bottom:var(--space-5);padding:1rem 1.15rem;border:1px solid var(--rule);border-top:3px solid var(--green-700);background:var(--soft)}
+.suite-file-form[hidden]{display:none}
+.suite-file-form h2,.suite-file-form p{margin:0 0 .6rem}
+.suite-file-form p {max-width:72ch;font-size:var(--text-small)}
+.suite-file-form [role=status]:empty{display:none}
+.suite-file-form [role=status]{margin:.6rem 0 0}
+.suite-file-actions{display:flex;flex-wrap:wrap;align-items:end;gap:.75rem}
+.suite-file-actions label{display:grid;min-width:0;max-width:100%;gap:.25rem;font-weight:700;font-size:var(--text-small)}
+.suite-file-actions input,.suite-file-actions select{min-height:var(--touch-min);min-inline-size:var(--touch-min);max-width:100%;border:1px solid var(--line);padding:.5rem;background:var(--white);color:var(--ink);font:inherit}
+.suite-file-actions :disabled{opacity:.65}
+.suite-instructions {border-block:1px solid var(--line);padding:.5rem 0;margin-block:1rem}
+.suite-instructions summary {cursor:pointer;min-height:var(--touch-min);padding:.55rem 0;color:var(--ink);font-weight:750}
+.suite-instructions p {font-size:var(--text-small);max-width:75ch}
+.suite-instructions [role=status]{margin-inline-start:.5rem;font-size:var(--text-small)}
+.suite-script-text {display:grid;gap:.3rem;max-width:55rem;font-size:var(--text-small);font-weight:700;margin:.85rem 0}
+.suite-script-text textarea {width:100%;font:inherit;font-weight:450;padding:.7rem;color:var(--text);border:1px solid var(--line)}

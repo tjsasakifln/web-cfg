@@ -13,6 +13,8 @@
     "profile": "netcup-production",
     "storage_backend": "filesystem"
   },
+  "cad_browser_editions": "/cad/suite/runtime/",
+  "cad_field_ids": ["field.acoustics","field.additive","field.aerospace","field.agricultural","field.architecture","field.automotive","field.battery","field.biomechanical","field.building-performance","field.chemical","field.civil-site","field.coastal","field.construction","field.controls","field.dam","field.data-center","field.drones","field.electrical-building","field.entertainment","field.environmental","field.exhibit","field.facade","field.facilities","field.fire-safety","field.food","field.forensic","field.fusion","field.geology","field.geotechnical","field.hospital","field.hvac","field.hydrogen","field.hydrology","field.industrial","field.instrumentation","field.interior","field.lab-cleanroom","field.landscape","field.lighting","field.manufacturing","field.materials","field.mechanical","field.medical-devices","field.mining","field.naval","field.nuclear","field.oil-gas","field.optics","field.packaging","field.pcb","field.pharma","field.piping-plant","field.plumbing-fire","field.power","field.process-safety","field.protective","field.quality","field.quantum","field.rail","field.refining","field.reliability","field.renewables","field.rf","field.robotics","field.semiconductor","field.space","field.structural","field.surveying","field.systems","field.telecom","field.tooling","field.transportation","field.tunnel","field.water-treatment"],
   "identity_path": "/.well-known/runtime-info.json",
   "readiness_path": "/ready"
 }

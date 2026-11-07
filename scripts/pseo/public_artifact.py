@@ -553,6 +553,9 @@ def assemble_public_artifact(
     if (root / "cad/index.html").is_file():
         subprocess.run([sys.executable, str(root / "scripts/cad/publicar.py"), str(dest.resolve())], check=True)
 
+    if (root / "scripts/cad/suite/releases.json").is_file():
+        subprocess.run([sys.executable, str(root / "scripts/cad/suite/install.py"), str(dest.resolve())], check=True)
+
     omitted_review_metadata = omit_production_review_packet(
         dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"
     )

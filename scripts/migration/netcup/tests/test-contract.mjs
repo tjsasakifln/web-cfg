@@ -223,6 +223,17 @@ test("host-only control artifacts are denied without removing them from the pack
   }
 });
 
+test("field kit cards redirect only the 74 named packs to the catalogue", () => {
+  const { contract } = buildHostContract(ROOT);
+  const output = renderRuntimeLocations(contract);
+  assert.equal(contract.runtime.cadFieldIds.length, 74);
+  for (const id of contract.runtime.cadFieldIds) {
+    assert.ok(output.includes("location = /library/kits/" + id + " {"));
+    assert.ok(output.includes('return 302 "/cad/aplicativos/?area=' + id + '#pacotes";'));
+  }
+  assert.ok(!output.includes("location /library/"));
+});
+
 test("nginx escaping keeps input values inside quoted arguments", () => {
   const { contract } = buildHostContract(ROOT);
   const clone = structuredClone(contract);
@@ -461,6 +472,7 @@ test("production home acceptance requires institutional scope, attributed paths 
   assert.match(rendered, /default_type "application\/xml";\n\s+charset utf-8;\n\s+charset_types application\/xml;/);
   assert.match(rendered, /default_type "application\/json";\n\s+charset utf-8;\n\s+charset_types application\/json;/);
   assert.doesNotMatch(rendered, /default_type "[^"]*charset/, "charset must never stay inside default_type");
+  assert.ok(rendered.includes("types { application/javascript mjs; application/wasm wasm; }\n  gzip_types application/javascript application/wasm;"));
   // A type with no charset parameter emits no charset directives at all.
   assert.match(rendered, /default_type "text\/plain";\n\s+try_files/);
   console.log("PASS default_type_charset_split_keeps_gzip_matchable");

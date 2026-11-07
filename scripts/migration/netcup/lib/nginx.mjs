@@ -461,6 +461,7 @@ export function renderLocations(contract) {
   // JavaScript MIME with nosniff; streaming WebAssembly requires application/wasm.
   lines.push("location ~ ^/(?:bim/(?:web|fotogrametria)|cad)/.+\\.(?:mjs|wasm)$ {");
   lines.push("  types { application/javascript mjs; application/wasm wasm; }");
+  lines.push("  gzip_types application/javascript application/wasm;");
   lines.push("  try_files $uri =404;");
   lines.push("}", "");
   lines.push("location / {");
@@ -506,6 +507,21 @@ export function renderRuntimeLocations(contract) {
     "}",
     "",
   ];
+  for (const id of contract.runtime.cadFieldIds || []) {
+    if (!/^field\.[a-z0-9-]+$/.test(id)) throw Error("Invalid field pack identifier");
+    lines.push(`location = /library/kits/${id} {`, "  absolute_redirect off;", `  return 302 "/cad/aplicativos/?area=${id}#pacotes";`, "}", "");
+  }
+  if (contract.runtime.cadEditions) {
+    lines.push(`location ^~ ${contract.runtime.cadEditions} {`);
+    // The edition supplies its exact inline-script hashes and cache validators.
+    // A location-level add_header prevents the site's global CSP from doubling it.
+    for (const { lower, name } of allHeaderNames(contract)) {
+      if (!["content-security-policy", "cache-control", "content-type", "x-robots-tag", "x-content-type-options"].includes(lower)) {
+        lines.push(`  add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
+      }
+    }
+    lines.push(...runtimeProxyDirectives(), "}", "");
+  }
   for (const path of ["/healthz", "/ready", "/runtime-identity", contract.runtime.identityPath]) {
     lines.push(`location = ${path} {`);
     lines.push(...runtimeProxyDirectives());

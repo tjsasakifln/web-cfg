@@ -1,0 +1,262 @@
+[
+  {
+    "name": "BIM residencial",
+    "app": "bimcraft",
+    "tasks": [
+      {
+        "name": "Pavimentos e componentes",
+        "text": "Quais pavimentos, paredes, portas e janelas constam em house.ifc?"
+      },
+      {
+        "name": "Relação de portas",
+        "text": "Liste todas as portas de house.ifc."
+      },
+      {
+        "name": "Criar um ambiente",
+        "text": "Crie um modelo com um ambiente de 6000 × 4000 mm e salve como room.ifc."
+      },
+      {
+        "name": "Ambiente com janela",
+        "text": "Crie um ambiente de 6000 × 4000 mm, insira uma janela na primeira parede e salve como room.ifc."
+      },
+      {
+        "name": "Ambiente com piso",
+        "text": "Crie um ambiente de 6000 × 4000 mm com piso e salve como room.ifc."
+      }
+    ]
+  },
+  {
+    "name": "Desenho CAD",
+    "app": "cadcraft",
+    "tasks": [
+      {
+        "name": "Contar objetos por camada",
+        "text": "Abra Kitchen/k.dwg e informe a quantidade de objetos por camada."
+      },
+      {
+        "name": "Objetos de uma camada",
+        "text": "Liste os objetos da camada A-WALL em Kitchen/k.dwg."
+      },
+      {
+        "name": "Desenhar um retângulo",
+        "text": "Crie um desenho com um retângulo de 4000 × 3000 unidades e salve como room.dwg."
+      },
+      {
+        "name": "Limpar blocos sem uso",
+        "text": "Remova de Kitchen/k.dwg os blocos sem uso e salve a cópia como Kitchen/tidy.dwg."
+      },
+      {
+        "name": "Inserir um bloco",
+        "text": "Insira o primeiro bloco de Kitchen/k.dwg nas coordenadas (1000, 1000) e salve a cópia como Kitchen/ins.dwg."
+      }
+    ]
+  },
+  {
+    "name": "Padronização de DWG",
+    "app": "cadcraft",
+    "tasks": [
+      {
+        "name": "Conferir uma camada vazia",
+        "text": "Confira se a camada 0 de Kitchen/k.dwg está vazia e liste os objetos encontrados."
+      },
+      {
+        "name": "Plotar a primeira folha",
+        "text": "Plote a primeira folha de Kitchen/k.dwg e salve o resultado em Plots/sheet.pdf."
+      },
+      {
+        "name": "Gravar outra versão de DWG",
+        "text": "Salve uma cópia de Kitchen/k.dwg em DWG versão 2013, com o nome Out/k2013.dwg."
+      }
+    ]
+  },
+  {
+    "name": "Levantamento e terreno",
+    "app": "civilcraft",
+    "tasks": [
+      {
+        "name": "Resumir um levantamento",
+        "text": "Abra site.civilcraft.json e informe a quantidade de pontos levantados, os alinhamentos e as parcelas."
+      },
+      {
+        "name": "Consultar uma cota",
+        "text": "Qual é a cota do terreno nas coordenadas (6150200, 2080100) em site.civilcraft.json?"
+      },
+      {
+        "name": "Quantificar corte e aterro",
+        "text": "Quais volumes de corte e aterro são necessários para o platô de site.civilcraft.json?"
+      },
+      {
+        "name": "Traçar um perfil",
+        "text": "Informe as cotas do terreno a intervalos de 100 unidades de desenho ao longo do alinhamento de site.civilcraft.json."
+      },
+      {
+        "name": "Descrever uma parcela",
+        "text": "Prepare a descrição da parcela representada em site.civilcraft.json."
+      },
+      {
+        "name": "Exportar a superfície",
+        "text": "Exporte a superfície de site.civilcraft.json em LandXML e salve em site.xml."
+      }
+    ]
+  },
+  {
+    "name": "Estruturas metálicas",
+    "app": "detailcraft",
+    "tasks": [
+      {
+        "name": "Lançar pilar e viga",
+        "text": "Desenhe um pilar com 4000 mm de altura e apoie uma viga no topo."
+      },
+      {
+        "name": "Calcular o peso do pilar",
+        "text": "Quanto pesa um pilar de 4 m com perfil W10x33?"
+      },
+      {
+        "name": "Detalhar a ligação",
+        "text": "Conecte a viga ao pilar com uma ligação por chapa de extremidade."
+      },
+      {
+        "name": "Inserir bases nos pilares",
+        "text": "Instale uma placa de base sob cada pilar."
+      },
+      {
+        "name": "Verificar a estrutura",
+        "text": "Confira as interferências entre os elementos, desconsiderando sobreposições inferiores a 2 mm. Identifique também os detalhes que impedem a montagem."
+      }
+    ]
+  },
+  {
+    "name": "Comentários na prancha",
+    "app": "markupcraft",
+    "tasks": [
+      {
+        "name": "Marcar uma parede",
+        "text": "Desenhe uma nuvem de revisão ao redor da parede no canto superior esquerdo e acrescente o comentário “Conferir o alinhamento desta parede”."
+      },
+      {
+        "name": "Aceitar uma anotação",
+        "text": "Aceite a anotação e inclua no histórico a observação “Conforme o detalhe da prancha”."
+      },
+      {
+        "name": "Atribuir uma tarefa",
+        "text": "Transforme a anotação em uma tarefa para Ana."
+      },
+      {
+        "name": "Registrar uma decisão",
+        "text": "Registre na prancha a decisão de adotar montantes de madeira de 2 × 6 polegadas na parede."
+      }
+    ]
+  },
+  {
+    "name": "Revisão de pranchas",
+    "app": "markupcraft",
+    "tasks": [
+      {
+        "name": "Listar as anotações",
+        "text": "Liste todas as anotações de Set/marked.pdf."
+      },
+      {
+        "name": "Localizar pendências",
+        "text": "Mostre as anotações de Set/marked.pdf que estão com status aberto."
+      },
+      {
+        "name": "Filtrar por autor",
+        "text": "Quais anotações Ana fez em Set/marked.pdf?"
+      },
+      {
+        "name": "Filtrar por tipo",
+        "text": "Liste as nuvens de revisão retangulares em Set/marked.pdf."
+      },
+      {
+        "name": "Revisar por lotes",
+        "text": "Apresente as anotações de Set/marked.pdf em grupos de 2."
+      }
+    ]
+  },
+  {
+    "name": "Modelagem de volumes",
+    "app": "modelcraft",
+    "tasks": [
+      {
+        "name": "Criar um volume",
+        "text": "Modele uma caixa com as dimensões 2 m × 1 m × 1 m."
+      },
+      {
+        "name": "Elevar a face superior",
+        "text": "Eleve a face superior da caixa em 0,5 m."
+      },
+      {
+        "name": "Aplicar um material",
+        "text": "Aplique um material de cor vermelho-tijolo à face superior da caixa."
+      },
+      {
+        "name": "Preparar a iluminação",
+        "text": "Ilumine a cena com a luz do fim da tarde e aplique neblina."
+      },
+      {
+        "name": "Inserir pessoas",
+        "text": "Insira 2 pessoas na área externa."
+      }
+    ]
+  },
+  {
+    "name": "Peças mecânicas",
+    "app": "partcraft",
+    "tasks": [
+      {
+        "name": "Descrever uma peça",
+        "text": "Abra Parts/screw.partcraft.json e informe o material da peça e a quantidade de operações de modelagem."
+      },
+      {
+        "name": "Calcular o peso",
+        "text": "Quanto pesa a peça de Parts/screw.partcraft.json?"
+      },
+      {
+        "name": "Alterar um parâmetro",
+        "text": "Altere o parâmetro l de Parts/screw.partcraft.json para 30 e salve a cópia como Parts/screw-30.partcraft.json."
+      },
+      {
+        "name": "Preparar para impressão 3D",
+        "text": "Exporte Parts/screw.partcraft.json em STL para impressão 3D e salve em Out/screw.stl."
+      },
+      {
+        "name": "Preparar para o fornecedor",
+        "text": "Exporte Parts/screw.partcraft.json em STEP e salve a cópia para o fornecedor em Out/screw.step."
+      },
+      {
+        "name": "Dimensionar um suporte",
+        "text": "Preciso de um suporte de alumínio usinável para uma carga de 20 lbf aplicada a 6 polegadas do apoio. Escolha um modelo paramétrico, dimensione a peça, confira o resultado e entregue o arquivo."
+      }
+    ]
+  },
+  {
+    "name": "Quantitativos e orçamento",
+    "app": "takeoffcraft",
+    "tasks": [
+      {
+        "name": "Quantidades por item",
+        "text": "Quais são as quantidades de job.takeoff.json discriminadas por item?"
+      },
+      {
+        "name": "Quantidades por prancha",
+        "text": "Apresente as quantidades de job.takeoff.json por prancha."
+      },
+      {
+        "name": "Orçar os serviços",
+        "text": "Calcule o orçamento de job.takeoff.json com discriminação de materiais e mão de obra."
+      },
+      {
+        "name": "Contar um bloco",
+        "text": "Conte as ocorrências de TABLE-30X48, crie o item Mesas de preparo e salve o levantamento em counted.takeoff.json."
+      },
+      {
+        "name": "Medir uma camada",
+        "text": "Meça os objetos da camada A-WALL, atribua o resultado ao novo item Paredes e salve o levantamento em measured.takeoff.json."
+      },
+      {
+        "name": "Exportar para planilha",
+        "text": "Exporte o orçamento de job.takeoff.json como planilha e salve em job.xlsx."
+      }
+    ]
+  }
+]

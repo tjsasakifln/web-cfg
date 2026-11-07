@@ -99,7 +99,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 261,
+  "html_route_count": 262,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -122,6 +122,7 @@
     "/bim/guias/quantitativos-ifc-para-excel/",
     "/bim/",
     "/bim/web/",
+    "/cad/aplicativos/",
     "/cad/guias/escala-e-unidade-do-dwg/",
     "/cad/",
     "/casos/aditivo-art125-demonstrativo/",
@@ -363,8 +364,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-11-07T17:13:45Z",
-  "public_artifact_hash": "ce8fdf9852d0c2d4549059bc2cd73efaa8502c4c002cc4d36999e3a461f2e50e",
+  "generated_at": "2026-11-07T17:17:31Z",
+  "public_artifact_hash": "e1a23301c52a05cf0366d2c7ba9d2f1f9e3c0c6428239f463bece0b9e00743e3",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -464,14 +465,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 260,
+  "promoted_navigation_files": 261,
   "navigation_audit": {
-    "audited_files": 260,
-    "audited_blocks": 518,
+    "audited_files": 261,
+    "audited_blocks": 520,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 276,
+    "html_scanned": 277,
     "html_rewritten": 189,
     "fields_removed": 790
   }

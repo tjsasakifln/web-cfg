@@ -19,6 +19,9 @@ if (editor) {
   recovery.className = 'cad-recover';
   recovery.textContent = 'Baixar a edição em DXF';
   const preview = find('.cad-preview');
+  const open2d = find('[data-open-2d]');
+  const manual2d = find('[data-manual-2d]');
+  let fileFor2d;
   let frame, ready, readyResolve, readyReject, titleObserver;
   let loading = false, saving = false, dirty = false, retained = false;
   let opened, baseline, dwgBlocked = false;
@@ -139,7 +142,7 @@ if (editor) {
     } catch { /* Browser storage may be disabled. */ }
     frame = document.createElement('iframe');
     frame.title = 'Área de edição CAD da CONFENGE';
-    frame.allow = 'fullscreen';
+    frame.allow = "fullscreen 'none'";
     frame.src = '/cad/editor/frame.htm?host=parent';
     ready = new Promise((resolve, reject) => {
       const timer = window.setTimeout(() => reject(new Error('O editor demorou a responder. Confira a conexão e abra o desenho novamente.')), 90000);
@@ -233,7 +236,11 @@ if (editor) {
         break;
       case 'cadcraft:error':
       case 'cadcraft:failed': {
-        const error = new Error(data.error || 'Não foi possível abrir o desenho na área gráfica.');
+        const graphicsFailed = data.type === 'cadcraft:failed' && /webgl2 not available|failed to create wgpu surface/i.test(data.error);
+        const error = new Error(graphicsFailed
+          ? 'Este navegador não conseguiu iniciar a área gráfica do editor.'
+          : data.error || 'Não foi possível abrir o desenho na área gráfica.');
+        if (graphicsFailed) error.name = 'GraphicsUnavailable';
         readyReject(error);
         opened?.reject(error);
         baseline?.reject(error);
@@ -256,7 +263,10 @@ if (editor) {
     if (loading || saving) return;
     if ((dirty || retained) && !window.confirm('Há alterações sem uma cópia baixada. Abrir outro desenho mesmo assim?')) return;
     setBusy(true);
-    let started = false, input;
+    fileFor2d = null;
+    open2d.hidden = manual2d.hidden = true;
+    if (!frame) warn();
+    let started = false, input, doc;
     try {
       if (example) {
         say('Abrindo o desenho de exemplo…');
@@ -270,7 +280,7 @@ if (editor) {
       say('Lendo ' + file.name + '…');
       const { prepareDrawing, compareImportBaseline } = await import('./codec.js');
       input = await file.arrayBuffer();
-      const doc = await prepareDrawing(file.name, input);
+      doc = await prepareDrawing(file.name, input);
       clearPreview();
       // A single drawing per workbench also makes a second upload with the same name unambiguous.
       if (frame) removeFailedFrame();
@@ -316,9 +326,33 @@ if (editor) {
       opened = baseline = null;
       if (started) removeFailedFrame();
       if (!frame && file) await showPreview(input, file.name);
+      if (error.name === 'GraphicsUnavailable' && doc) {
+        if (doc.lossy) {
+          warn(doc.warnings);
+          issue.querySelector('p').textContent = 'O desenho contém objetos que a leitura não conseguiu preservar. Confira o arquivo original.';
+        } else {
+          fileFor2d = file;
+          open2d.hidden = false;
+        }
+      }
       say(error.message || 'Não foi possível abrir o arquivo.', true);
     } finally { setBusy(false); }
   }
+  open2d.addEventListener('click', async () => {
+    if (loading || !fileFor2d) return;
+    setBusy(true);
+    open2d.disabled = true;
+    try {
+      const { newHandoffId, putHandoff } = await import('./aplicativos/studio/handoff.mjs');
+      const id = newHandoffId();
+      await putHandoff(id, fileFor2d, 'confenge');
+      location.assign('/cad/aplicativos/#cadcraft/' + id);
+    } catch {
+      open2d.hidden = true;
+      manual2d.hidden = false;
+      say('O navegador não permitiu transferir o desenho localmente. Abra o CadCraft 2D e selecione o arquivo novamente.', true);
+    } finally { open2d.disabled = false; setBusy(false); }
+  });
   openButton.addEventListener('click', () => fileInput.click());
   fileInput.addEventListener('change', () => {
     const file = fileInput.files[0];

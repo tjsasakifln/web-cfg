@@ -155,6 +155,12 @@
 /assets/tiago-sasaki-avatar-v11-sem-fundo.avif
   Content-Type: image/avif
 
+/cad/aplicativos/
+  Permissions-Policy: camera=(), microphone=(self), geolocation=(), payment=(), usb=(), interest-cohort=()
+
+/cad/suite/runtime/markupcraft/
+  Permissions-Policy: camera=(), microphone=(self), geolocation=(), payment=(), usb=(), interest-cohort=()
+
 /cad/editor/*
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; frame-ancestors 'self'; base-uri 'none'; form-action 'none'
   X-Robots-Tag: noindex, follow
