@@ -1,9 +1,11 @@
-"""Install the pinned, unmodified CADCraft web runtime into the public site."""
+"""Install the verified CONFENGE distribution of the CADCraft web runtime."""
 import hashlib
+import json
 import os
 import re
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import urllib.request
@@ -12,17 +14,40 @@ import zipfile
 VERSION = "0.18.0"
 DIGEST = "2440d15ebe28ce0a97f107a860f96d3bc21d98381b9f685676843b876a4d9086"
 RELEASE = f"https://github.com/storytold/cadcraft/releases/download/v{VERSION}/cadcraft-web-{VERSION}.zip"
-BASENAME = "cadcraft-web-d875c3c223026021"
+BRANDING = Path(__file__).resolve().parent / "branding"
 SNIPPET = "snippets/eframe-d31a8450ea12dfc1/inline0.js"
-FILES = {
-    name: name for name in [BASENAME + ".js", BASENAME + "_bg.wasm", SNIPPET]
-}
+FILES = {SNIPPET: SNIPPET}
 for name in ["NOTICE", "LICENSE-MIT", "LICENSE-APACHE", "ATTRIBUTION.md"]:
     FILES[name] = "licencas/" + name.removesuffix(".md") + ".txt"
 
 
 def valid(path):
     return path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == DIGEST
+
+
+def verify(path, expected):
+    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+        raise ValueError(f"SHA-256 incorreto para {path.name}.")
+
+
+def install_runtime(archive, editor):
+    receipt = json.loads((BRANDING / "runtime.json").read_text(encoding="utf-8"))
+    with tempfile.TemporaryDirectory(dir=editor) as tmp:
+        stage = Path(tmp)
+        for item in receipt["modules"]:
+            base = stage / item["source"]
+            base.write_bytes(archive.read(f"cadcraft-web-{VERSION}/{base.name}"))
+            verify(base, item["source_sha256"])
+            delta = BRANDING / item["patch"]
+            verify(delta, item["patch_sha256"])
+            result = stage / item["target"]
+            subprocess.run(["zstd", "-q", "-d", f"--patch-from={base}", str(delta),
+                            "-o", str(result)], check=True)
+            verify(result, item["target_sha256"])
+        for item in receipt["modules"]:
+            os.replace(stage / item["target"], editor / item["target"])
+        for item in receipt["modules"]:
+            (editor / item["source"]).unlink(missing_ok=True)
 
 
 def install(output):
@@ -46,12 +71,14 @@ def install(output):
             path.parent.mkdir(parents=True, exist_ok=True)
             with z.open(f"cadcraft-web-{VERSION}/{src}") as inp, path.open("wb") as out:
                 shutil.copyfileobj(inp, out)
+        install_runtime(z, output / "cad" / "editor")
 
 
 def version_editor_assets(output):
     # The origin caches unversioned JS for hours. Bind each parent to the
     # bytes of its children so returning visitors get one consistent editor.
     links = {
+        "editor/start.js": ["./confenge-cad.js", "./confenge-cad_bg.wasm"],
         "drawing.mjs": ["../bim/web/vendor-cad/acad.mjs"],
         "codec-worker.mjs": ["./drawing.mjs"],
         "codec.js": ["./codec-worker.mjs"],

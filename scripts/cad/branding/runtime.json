@@ -1,0 +1,20 @@
+{
+  "modules": [
+    {
+      "source": "cadcraft-web-d875c3c223026021.js",
+      "source_sha256": "9bb2812cb8516708c53b3efad77a5235c423d1d21c92530e49f3bac88bb84a48",
+      "target": "confenge-cad.js",
+      "target_sha256": "a61e54ff58b46f0bd7f77fe07e02f5a3d719db03f053c70b23df90ccf47bca23",
+      "patch": "runtime-js.zst",
+      "patch_sha256": "7fa896b75360173f6fff38d6326bc42118dc31f9b0056fd0e2c66c314fd394cf"
+    },
+    {
+      "source": "cadcraft-web-d875c3c223026021_bg.wasm",
+      "source_sha256": "7b8563f9ae654e4c203e9df445d20bf16c8e10679b572727422b64c6a0d17631",
+      "target": "confenge-cad_bg.wasm",
+      "target_sha256": "cf3f9bf4b53e5ef76a46d76e41fec2a37045882e7f033833cab3c159b67afa12",
+      "patch": "runtime-wasm.zst",
+      "patch_sha256": "f097d6bf67f4bb549e61361bb1a09cbe111c47b0d215b7fc3682a207c62c5383"
+    }
+  ]
+}

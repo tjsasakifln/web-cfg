@@ -15,7 +15,14 @@ export async function verificarSuite(base, release = '') {
     assert.match(result.headers.get('x-robots-tag') || '', /noindex/, app);
     assert.match(result.headers.get('cache-control') || '', /no-transform/, app);
     assert.match(result.headers.get('content-security-policy') || '', /frame-ancestors 'self'/, app);
-    const hash = createHash('sha256').update(Buffer.from(await result.arrayBuffer())).digest('hex');
+    const bytes = Buffer.from(await result.arrayBuffer());
+    const html = bytes.toString('utf8');
+    assert.match(html, /<title>CONFENGE /, app + ' precisa exibir a marca no título');
+    const toolbar = html.match(/<header class="app-bar">([\s\S]*?)<\/header>/)?.[1] || '';
+    assert.match(toolbar, /<img\b[^>]*favicon-32\.png/, app + ' precisa exibir a marca na barra interna');
+    assert.match(toolbar, />CONFENGE [^<>]*</, app + ' precisa identificar a ferramenta');
+    assert.match(toolbar, /href="\.\/creditos\.html"/, app + ' precisa permitir a consulta às licenças');
+    const hash = createHash('sha256').update(bytes).digest('hex');
     assert.equal(hash, spec.files['index.html'][4], app);
   }
   console.log('CAD: oito edições entregues com os bytes e as políticas previstos.');
