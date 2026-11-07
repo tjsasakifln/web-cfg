@@ -1,0 +1,85 @@
+#cad-editor {
+  min-width:0; border:1px solid var(--line); border-radius:var(--radius-lg);
+  background:var(--white); color:var(--text); font-family:var(--sans);
+  overflow:hidden; scroll-margin-top:6rem;
+}
+#cad-editor [hidden] { display:none!important; }
+#cad-editor p { margin:0; }
+#cad-editor .cad-bar, #cad-editor .cad-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
+#cad-editor .cad-bar {
+  justify-content:space-between; gap:.8rem 1.25rem; padding:.8rem clamp(.85rem,2vw,1.4rem);
+  border-top:3px solid var(--green-700); border-bottom:1px solid var(--line);
+}
+#cad-editor .cad-doc { display:flex; align-items:center; gap:.8rem; min-width:0; }
+#cad-editor .cad-doc-text { display:grid; min-width:0; }
+#cad-editor .cad-name { color:var(--ink); font-weight:750; overflow-wrap:anywhere; }
+#cad-editor .cad-file-tag {
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+  background:var(--green-100); color:var(--green-700); font-size:.73rem;
+  letter-spacing:.07em; font-weight:800; border-radius:var(--radius-sm); width:3rem; height:2.55rem;
+}
+#cad-editor .cad-brand { display:none; width:7rem; height:auto; flex:none; }
+#cad-editor .cad-caption, #cad-editor .cad-help { color:var(--muted); font-size:var(--text-caption); }
+#cad-editor .cad-actions button, #cad-editor select {
+  display:inline-flex; align-items:center; justify-content:center; gap:.42rem;
+  border:1px solid var(--line); border-radius:var(--radius-sm); min-height:var(--touch-min);
+  padding:.5rem .8rem; background:var(--white); color:var(--ink); font:700 var(--text-small)/1.35 var(--sans);
+}
+#cad-editor .cad-actions button:hover:enabled { border-color:var(--green-700); color:var(--green-700); }
+#cad-editor .cad-actions .cad-primary { color:var(--white); background:var(--green-700); border-color:var(--green-700); }
+#cad-editor .cad-actions .cad-primary:hover:enabled { background:var(--green-600); color:var(--white); }
+#cad-editor .cad-actions button:disabled { opacity:.62; cursor:wait; }
+#cad-editor :focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+#cad-editor .cad-ico { width:1.05rem; height:1.05rem; stroke:currentColor; stroke-width:1.7; fill:none; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+#cad-editor .cad-stage { position:relative; min-width:0; width:100%; background:var(--navy-950); color:var(--white); }
+#cad-editor .cad-welcome {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(8rem,26rem); align-items:center;
+  gap:1.1rem; width:min(100%,64rem); margin:auto; min-height:17rem; padding:clamp(1.3rem,4vw,3.5rem);
+}
+#cad-editor .cad-welcome strong { display:block; max-width:17ch; font:720 var(--text-editorial)/1.1 var(--sans); letter-spacing:-.035em; margin-bottom:.65rem; }
+#cad-editor .cad-welcome p { max-width:43ch; line-height:1.45; font-size:var(--text-small); }
+#cad-editor .cad-illustration { display:block; width:100%; max-height:13.5rem; opacity:.95; }
+#cad-editor .cad-stage[data-over="true"] { outline:4px solid var(--lime); outline-offset:-4px; }
+#cad-editor .cad-stage iframe { display:block; width:100%; height:clamp(29rem,69vh,55rem); border:0; }
+#cad-editor .cad-foot { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1.5rem; padding:.7rem clamp(.85rem,2vw,1.4rem); background:var(--soft); border-top:1px solid var(--line); }
+#cad-editor .cad-status { font-size:var(--text-small); line-height:1.45; overflow-wrap:anywhere; flex:1 1 20rem; }
+#cad-editor .cad-status[data-error="true"] { font-weight:750; color:var(--ink); }
+#cad-editor .cad-format { font-weight:650; font-size:var(--text-small); }
+#cad-editor .cad-recover { color:var(--green-700); font-weight:750; text-decoration:underline; }
+#cad-editor .cad-help { margin:.7rem clamp(.85rem,2vw,1.4rem); }
+#cad-editor .cad-help summary { cursor:pointer; min-height:var(--touch-min); display:list-item; line-height:var(--touch-min); font-weight:750; color:var(--ink); }
+#cad-editor .cad-help p { margin:.2rem 0 .7rem; max-width:80ch; }
+#cad-editor .cad-issue {
+  margin:0; padding:.7rem clamp(.85rem,2vw,1.4rem); color:var(--ink); font-size:var(--text-small);
+  background:var(--green-100); border-left:4px solid var(--green-700); overflow-wrap:anywhere;
+}
+#cad-editor:fullscreen, #cad-editor.cad-expanded {
+  height:100dvh; width:100%; display:flex; flex-direction:column; border:0; border-radius:0; overflow:auto;
+}
+#cad-editor.cad-expanded { position:fixed; inset:0; z-index:10000; }
+#cad-editor:is(:fullscreen,.cad-expanded) .cad-brand { display:block; }
+#cad-editor:is(:fullscreen,.cad-expanded) .cad-file-tag { display:none; }
+#cad-editor:is(:fullscreen,.cad-expanded) .cad-stage { flex:1 0 12rem; display:grid; }
+#cad-editor:is(:fullscreen,.cad-expanded) iframe { height:100%; min-height:12rem; }
+#cad-editor:is(:fullscreen,.cad-expanded) .cad-help { display:none; }
+body:has(#cad-editor.cad-expanded) { overflow:hidden; }
+@media (max-width:660px) {
+  #cad-editor .cad-welcome { grid-template-columns:1fr; min-height:14rem; }
+  #cad-editor .cad-illustration { display:none; }
+  #cad-editor .cad-actions button { padding:.48rem .64rem; }
+  #cad-editor .cad-stage iframe { height:clamp(23rem,66svh,44rem); }
+  #cad-editor .cad-bar { gap:.6rem; }
+  #cad-editor .cad-doc { flex:1 0 100%; }
+}
+@media (max-height:500px) {
+  #cad-editor:is(:fullscreen,.cad-expanded) .cad-bar { padding:.22rem .5rem; gap:.3rem; }
+  #cad-editor:is(:fullscreen,.cad-expanded) .cad-doc { flex:0 1 auto; }
+  #cad-editor:is(:fullscreen,.cad-expanded) .cad-caption { display:none; }
+  #cad-editor:is(:fullscreen,.cad-expanded) .cad-foot { padding:.2rem .7rem; }
+}
+#cad-editor .cad-stage[data-busy="true"]:has(iframe)::after {
+  content:""; position:absolute; inset:0; background:transparent; cursor:progress;
+}
+#cad-editor .cad-issue p { font-weight:700; }
+#cad-editor .cad-issue summary { cursor:pointer; text-decoration:underline; text-underline-offset:.2em; min-height:var(--touch-min); display:list-item; line-height:var(--touch-min); }
+#cad-editor .cad-issue ul { margin:.2rem 0; padding-inline-start:1.3rem; }

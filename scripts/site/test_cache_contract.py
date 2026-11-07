@@ -237,6 +237,7 @@ def _headers(body: str) -> str:
         "  Cache-Control: no-store, no-transform\n"
         "/assets/data-desk/*\n"
         "  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n"
+        + "".join(f"{path}\n  Cache-Control: no-cache, no-transform\n" for path in ("/bim/web/*", "/bim/fotogrametria/*", "/cad/editor/*"))
     )
 
 

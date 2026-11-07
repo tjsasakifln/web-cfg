@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 import { buildHostContract } from "./contract.mjs";
 import { extractSeoSignals } from "./html-seo.mjs";
 import { MATERIAL_HEADERS, classifyResponseHeaders } from "./origin-client.mjs";
-import { BIM_EXECUTION_PATH, DOCUMENT_ONLY_HEADERS } from "./nginx.mjs";
+import { LOCAL_CAD_EXECUTION_PATH, DOCUMENT_ONLY_HEADERS } from "./nginx.mjs";
 
 function bodyHash(body) {
   return createHash("sha256").update(body).digest("hex");
@@ -133,8 +133,8 @@ export function compareResponses(testCase, baseline, candidate, { strictHeaderIn
   // baseline may, and that is not a parity defect.
   const candidateIsDocument = /^text\/html\b/i.test(String(candidateHeaders.material["content-type"] || ""));
   for (const name of MATERIAL_HEADERS) {
-    const bimResourcePolicy = name === "content-security-policy" && BIM_EXECUTION_PATH.test(testCase.path);
-    if (DOCUMENT_ONLY_HEADERS.has(name) && !candidateIsDocument && !bimResourcePolicy) {
+    const localResourcePolicy = name === "content-security-policy" && LOCAL_CAD_EXECUTION_PATH.test(testCase.path);
+    if (DOCUMENT_ONLY_HEADERS.has(name) && !candidateIsDocument && !localResourcePolicy) {
       compareValue(differences, `header:${name}`, null, candidateHeaders.material[name]);
       continue;
     }

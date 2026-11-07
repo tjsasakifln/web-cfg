@@ -14,6 +14,8 @@ https://confenge.com.br/bim/guias/dwg-para-ifc-paredes/
 https://confenge.com.br/bim/guias/medir-distancia-area-foto/
 https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/
 https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/
+https://confenge.com.br/cad/
+https://confenge.com.br/cad/guias/escala-e-unidade-do-dwg/
 https://confenge.com.br/casos/
 https://confenge.com.br/casos/aditivo-art125-demonstrativo/
 https://confenge.com.br/casos/demonstrativo-infraestrutura/

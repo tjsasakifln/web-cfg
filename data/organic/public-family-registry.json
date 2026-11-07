@@ -1816,7 +1816,9 @@
           "/bim/guias/dwg-para-ifc-paredes/",
           "/bim/guias/medir-distancia-area-foto/",
           "/bim/guias/pdf-escaneado-para-dwg/",
-          "/bim/guias/quantitativos-ifc-para-excel/"
+          "/bim/guias/quantitativos-ifc-para-excel/",
+          "/cad/",
+          "/cad/guias/escala-e-unidade-do-dwg/"
         ]
       },
       "gate_coverage": {
