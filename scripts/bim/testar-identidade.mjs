@@ -32,6 +32,9 @@ const headerLogo = logo('site-header');
 const footerLogo = logo('site-footer');
 for (const file of html) {
   const nodes = elements(parse(read(file)));
+  const styles = nodes.filter(n => n.tagName === 'link' && attr(n, 'rel') === 'stylesheet').map(n => attr(n, 'href'));
+  const requiredStyles = file === 'index.html' ? [files['assets/home-base.css'].href, files['assets/home-10x.css'].href] : [siteCss];
+  if (!requiredStyles.every(href => styles.includes(href))) problems.push(file + ': folha de estilo institucional ausente');
   const privateConsole = file === join('ops', 'index.html');
   const header = nodes.find(n => n.tagName === 'header'
     && (privateConsole || hasClass(n, 'site-header') || hasClass(n, 'pp-header')));
