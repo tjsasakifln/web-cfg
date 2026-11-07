@@ -1116,10 +1116,9 @@ def test_report_lists_every_exempt_route_with_its_reason():
         "/ferramentas/matriz-atraso-obra/",
         "/casos/aditivo-art125-demonstrativo/",
         "/casos/medicao-glosa-demonstrativo/",
+        "/metodologia-inteligencia/",
     ):
         assert route not in debt_routes, route
-    for route in ("/metodologia-inteligencia/",):
-        assert route in debt_routes, route
     for route in (
         "/casos/modelo-apresentacao-executiva-resultados/",
         "/casos/modelo-base-quantitativa-canonica/",

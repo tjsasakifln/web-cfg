@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Como extrair quantitativos de um IFC para Excel | CONFENGE</title>
+<meta name="description" content="Extraia quantitativos de um IFC para Excel e confira comprimento, área e volume pela origem no modelo. Inclui um IFC gratuito e um exemplo de viga.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#061a33"><link rel="canonical" href="https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<script>document.documentElement.classList.replace('no-js','js');</script>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/assets/editorial-article.css">
+<script defer src="/script.js?v=mv09"></script>
+<meta property="og:type" content="article"><meta property="og:site_name" content="CONFENGE"><meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Como extrair quantitativos de um IFC para Excel"><meta property="og:description" content="Extraia quantitativos de um IFC para Excel e confira comprimento, área e volume pela origem no modelo. Inclui um IFC gratuito e um exemplo de viga."><meta property="og:url" content="https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/"><meta property="og:image" content="https://confenge.com.br/bim/imagens/modelo-pavilhao.webp">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/#artigo","mainEntityOfPage":"https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/","headline":"Como extrair quantitativos de um IFC para Excel","description":"Extraia quantitativos de um IFC para Excel e confira comprimento, área e volume pela origem no modelo. Inclui um IFC gratuito e um exemplo de viga.","image":["https://confenge.com.br/bim/imagens/modelo-pavilhao.webp"],"inLanguage":"pt-BR","datePublished":"2026-11-06","dateModified":"2026-11-06","author":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/empresa/"},"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas BIM","item":"https://confenge.com.br/bim/"},{"@type":"ListItem","position":3,"name":"Quantitativos de obra","item":"https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/"}]}]}</script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" data-value-first-cta="true" href="/bim/">Ferramentas BIM</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" data-value-first-cta="true" href="/bim/">Ferramentas BIM</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/bim/">Ferramentas BIM</a><span aria-hidden="true">/</span></li><li aria-current="page">Quantitativos de obra</li></ol></nav>
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Quantitativos de obra</p><h1>Como extrair quantitativos de um IFC para Excel</h1><p class="content-lead">O IFC do Pavilhão Ipê tem uma viga de 10,90 m na frente da varanda. Veja como localizar a peça na planilha, conferir seu volume e distinguir um zero declarado de uma quantidade que ficou em branco.</p>
+<p><a class="button button-primary" data-cta-position="bim_guide_hero" href="/bim/web/ifc-excel.html">Extrair quantitativos do meu IFC</a></p>
+<p class="article-meta"><a href="/empresa/" rel="author">CONFENGE</a><span>Atualizado em <time datetime="2026-11-06">6 de novembro de 2026</time></span></p>
+</div></div></header>
+<div class="container article-layout">
+<article class="article-main" aria-label="Como extrair quantitativos de um IFC para Excel">
+<nav aria-label="Nesta página" class="article-toc"><strong>Neste guia</strong><ol><li><a href="#extrair">Do modelo IFC à planilha XLSX</a></li><li><a href="#unidades">Três números da mesma viga</a></li><li><a href="#lacunas">Como tratar um campo em branco</a></li></ol></nav>
+<h2 id="extrair">Do modelo IFC à planilha XLSX</h2>
+<p>Uma viga pode ter comprimento, área de seção e volume vinculados ao mesmo elemento. A extração separa essas grandezas em linhas e mantém um identificador que permite encontrar a peça no modelo. Assim você consegue responder de onde vieram os metros ou metros cúbicos lançados na planilha.</p>
+<ol><li>Baixe o <a href="/bim/examples/pavilhao-ipe.ifc" download>IFC de demonstração do Pavilhão Ipê</a>. Em <strong>IFC para Excel</strong>, selecione esse arquivo e clique em <strong>Extrair quantitativos</strong>. A leitura acontece no navegador. Cada arquivo pode ter até 25 MiB.</li>
+<li>Abra a prévia e escolha <strong>Baixar Excel (.xlsx)</strong>. Na aba <strong>Quantitativos</strong>, filtre a coluna <strong>Objeto</strong> por <strong>Viga frontal da varanda</strong>.</li>
+<li>Compare o nome, a quantidade e a unidade. O <code>GlobalId</code> da viga é <code>23JRQaIODHTOt5IeU6HYxg</code>. No <a href="/bim/web/visualizador.html">visor IFC</a>, abra o mesmo modelo e selecione a peça para conferir sua posição.</li></ol>
+<figure><img src="/bim/imagens/modelo-pavilhao.webp" alt="Viga frontal da varanda selecionada no visor IFC do Pavilhão Ipê." width="1485" height="825" loading="lazy"><figcaption>A viga acompanha a frente da varanda. Seu nome e seu identificador ligam o elemento às três linhas da planilha.</figcaption></figure>
+<h2 id="unidades">Três números da mesma viga</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Quantidades da viga"><table><caption>Valores declarados no IFC de exemplo</caption><thead><tr><th scope="col">Quantidade</th><th scope="col">Significado</th><th scope="col">Valor</th></tr></thead><tbody><tr><td>Length</td><td>Comprimento</td><td>10,90 m</td></tr><tr><td>CrossSectionArea</td><td>Área da seção transversal</td><td>0,0364 m²</td></tr><tr><td>NetVolume</td><td>Volume líquido</td><td>0,39676 m³</td></tr></tbody></table></div>
+<p>Nesta peça prismática, a multiplicação de 10,90 por 0,0364 permite conferir o volume de 0,39676 m³. Para orçar pintura, a área da seção transversal responde a outra pergunta. O levantamento precisa considerar as faces que recebem o acabamento e o critério de medição.</p>
+<h2 id="lacunas">Como tratar um campo em branco</h2>
+<p>Com a situação <code>sem_quantidade</code>, o arquivo não forneceu um conjunto de quantidades diretamente ligado àquela ocorrência. A linha permanece em branco. Um zero declarado permanece zero. Somar os dois casos como se fossem idênticos pode esconder uma peça inteira do levantamento.</p>
+<p>Filtre primeiro as pendências, inclusive unidades não identificadas. Registre quais itens exigem medição geométrica ou nova exportação do arquivo de origem. Depois agrupe as linhas comparáveis por serviço, unidade e critério. Para identificar alterações entre duas entregas, o <a href="/bim/web/comparar.html">comparador de revisões IFC</a> acompanha as quantidades declaradas de um mesmo elemento.</p>
+
+<p><a href="https://standards.buildingsmart.org/IFC/RELEASE/IFC4/FINAL/HTML/schema/templates/quantity-sets.htm">Conjuntos de quantidades do IFC na documentação da buildingSMART</a></p>
+</article>
+<aside class="article-aside"><section class="aside-card"><p class="eyebrow">Aplicar ao seu projeto</p><h2>Levantamento de quantitativos e orçamento</h2><p>Para levar o levantamento ao orçamento, a CONFENGE pode conciliar as quantidades do modelo com as plantas, os serviços e os critérios de medição da obra.</p>
+<p><a data-cta-position="bim_guide_service" href="/quantitativos-orcamento-obras/">Conhecer o serviço da CONFENGE</a></p>
+<p><a class="button button-primary" data-cta-position="bim_guide_contact" href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20o%20levantamento%20de%20quantitativos%20do%20meu%20projeto.">Falar no WhatsApp sobre o meu levantamento</a></p></section><p><a href="/bim/">Ver todas as ferramentas BIM</a></p></aside>
+</div>
+</main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body>
+</html>

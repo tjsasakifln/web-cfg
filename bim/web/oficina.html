@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Oficina BIM | CONFENGE</title>
+    <link rel="stylesheet" href="oficina.css" />
+  <meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/oficina.html">
+<meta name="description" content="Converta peças de fornecedores e malhas em IFC, extraia perfis de nuvens de pontos ou confira os requisitos de entrega de um modelo com IDS.">
+</head>
+  <body>
+    <main class="oficina">
+      <a href="index.html">← Ferramentas da CONFENGE BIM</a>
+      <nav aria-label="Escolher ferramenta">
+        <a id="fornecedor" href="#fornecedor">Peça STEP ou IGES</a>
+        <a id="malha" href="#malha">Malha PLY</a>
+        <a id="perfil" href="#perfil">Perfil de nuvem</a>
+        <a id="ids" href="#ids">Requisitos IDS</a>
+      </nav>
+      <h1 id="titulo">Oficina BIM</h1>
+      <p id="orientacao"></p>
+      <form id="form"></form>
+      <p id="status" role="status"></p>
+      <div id="saida" class="painel" hidden>
+        <strong id="resumo"></strong>
+        <p><a id="baixar" download>Baixar resultado</a></p>
+        <pre id="detalhes"></pre>
+      </div>
+    </main>
+    <script type="module" src="oficina.mjs"></script>
+  </body>
+</html>

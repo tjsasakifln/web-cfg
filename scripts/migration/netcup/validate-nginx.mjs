@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, extname, join, resolve } from "node:path";
 
 import { writeRenderedContract } from "./lib/nginx.mjs";
+import { verificarBim } from "../../bim/verificar-http.mjs";
 import { createOriginClient } from "./lib/origin-client.mjs";
 
 const ROOT = resolve(new URL("../../..", import.meta.url).pathname);
@@ -349,6 +350,7 @@ ${normalizeWrapper("confenge-web-public.conf")}
     }
   }
   if (!ready) throw new Error("nginx test container did not become ready");
+  await verificarBim(`http://127.0.0.1:${port}`);
 
   // --- Document-only security headers -------------------------------------
   // Browsers honour Content-Security-Policy, X-Frame-Options, Permissions-Policy

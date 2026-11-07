@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Régua fotográfica | CONFENGE BIM</title>
+    <link rel="stylesheet" href="oficina.css" />
+    <link rel="stylesheet" href="regua.css" />
+  <meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/regua.html">
+<meta name="description" content="Meça distâncias, áreas e ângulos em fotografias de superfícies planas. Use uma referência de medidas conhecidas para corrigir a perspectiva.">
+</head>
+  <body>
+    <main class="oficina">
+      <a href="index.html">← CONFENGE BIM</a>
+      <section id="regua" lang="pt-BR" aria-labelledby="rg-title">
+        <p class="rg-kicker">Ferramenta de campo</p>
+        <h2 id="rg-title">Régua fotográfica</h2>
+        <p class="rg-intro">
+          Meça uma superfície plana a partir de uma foto com uma referência retangular conhecida. A imagem
+          fica neste navegador.
+        </p>
+        <div class="rg-row">
+          <label class="rg-upload"
+            >Abrir minha foto<input
+              id="rg-file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              aria-label="Abrir foto local JPEG, PNG ou WebP" /></label
+          ><button id="rg-demo" type="button">Voltar ao exemplo</button>
+        </div>
+        <div class="rg-box">
+          <div class="rg-row">
+            <label
+              >Largura (mm)<input
+                type="number"
+                id="rg-w"
+                min="0"
+                step="any"
+                inputmode="decimal"
+                value="200" /></label
+            ><label
+              >Altura (mm)<input
+                type="number"
+                id="rg-h"
+                min="0"
+                step="any"
+                inputmode="decimal"
+                value="120" /></label
+            ><button id="rg-cal" type="button">Marcar referência</button>
+          </div>
+          <p class="rg-note">
+            Use uma referência plana, com quatro cantos visíveis. Marque em volta do retângulo, começando no
+            alto à esquerda, depois alto à direita, baixo à direita e baixo à esquerda.
+          </p>
+        </div>
+        <div class="rg-row">
+          <label
+            >Operação<select class="rg-select" id="rg-mode">
+              <option value="dist">Comprimento</option>
+              <option value="angle">Ângulo</option>
+              <option value="area">Área de um polígono</option>
+              <option value="check">Conferir medida conhecida</option>
+            </select></label
+          ><label id="rg-known-label" hidden
+            >Controle (mm)<input
+              id="rg-known"
+              type="number"
+              min="0"
+              step="any"
+              value="100"
+              inputmode="decimal" /></label
+          ><button id="rg-undo" type="button">Desfazer ponto</button
+          ><button id="rg-clear" type="button">Limpar medição</button
+          ><button id="rg-close" type="button" hidden>Fechar polígono</button>
+        </div>
+        <p id="rg-hint" class="rg-status" aria-live="polite"></p>
+        <div class="rg-board">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            id="rg-svg"
+            viewBox="0 0 900 510"
+            width="900"
+            height="510"
+            tabindex="0"
+            role="img"
+            aria-label="Área para marcar pontos na imagem"
+            aria-describedby="rg-keys"
+          >
+            <g id="rg-bg"></g>
+            <g id="rg-overlay" pointer-events="none"></g>
+          </svg>
+        </div>
+        <p id="rg-keys" class="rg-note rg-pad">
+          Clique ou toque na imagem. Com o teclado, use as setas para mover a mira, Shift para passos maiores
+          e Enter para marcar.
+        </p>
+        <output id="rg-out" class="rg-result" aria-live="polite"></output>
+        <button id="rg-peca" type="button" hidden>Modelar este contorno em IFC ou STEP</button>
+        <p class="rg-note rg-well">
+          Escolha pontos no mesmo plano da referência. Profundidade, espessura, relevo e deslocamentos entre
+          planos geram paralaxe. Distorção de lente, baixa resolução e pontos mal marcados também afetam a
+          medida. Confira uma segunda dimensão conhecida antes de usar o resultado em projeto.
+        </p>
+      </section>
+      <script type="module" src="regua.mjs"></script>
+    </main>
+  </body>
+</html>

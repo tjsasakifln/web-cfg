@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153e35">
+  <title>CONFENGE BIM | Ferramentas para a obra</title>
+
+  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="plataforma.css">
+<meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/">
+<meta name="description" content="Abra ferramentas gratuitas para ler IFC, exportar quantitativos, medir fotografias e converter pranchas. Os arquivos são processados no seu navegador.">
+</head>
+<body class="plataforma">
+<a class="pular" href="#ferramentas">Pular para as ferramentas</a>
+<header class="barra">
+  <div class="miolo barra-interna">
+    <a class="assinatura" href="/bim/" aria-label="CONFENGE BIM, início"><span class="sinal-marca" aria-hidden="true"></span>CONFENGE <b>BIM</b></a>
+    <nav aria-label="Navegação principal"><a href="/bim/">Guias BIM</a><a href="#ferramentas">Ferramentas</a></nav>
+  </div>
+</header>
+<main>
+  <section class="capa" aria-labelledby="chamada">
+    <div class="miolo capa-conteudo">
+      <div>
+        <p class="rubrica clara">Engenharia civil · Plataforma BIM</p>
+        <h1 id="chamada">Converta pranchas em DWG, meça fotos e confira modelos IFC.</h1>
+        <a class="acao-capa" href="digitalizar.html">Digitalizar prancha para DWG <span aria-hidden="true">↗</span></a>
+        <a class="atalho-confere" href="#ferramentas">Ver todas as ferramentas</a>
+        <a class="atalho-confere" href="/quantitativos-orcamento-obras/">Consultar minha obra</a>
+      </div>
+      <figure class="desenho">
+        <svg viewBox="0 0 360 256" role="img" aria-labelledby="titulo-desenho">
+          <title id="titulo-desenho">Estudo ilustrativo de uma estrutura de dois pavimentos em perspectiva</title>
+          <defs>
+            <pattern id="reticula" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="#477366" stroke-width=".6"/></pattern>
+            <symbol id="laje">
+              <path d="m52 116 118-58 139 55-118 61z" fill="#305d50" stroke="#e8efdc"/>
+              <path d="m52 116 139 58 118-61v5l-118 61-139-58z" fill="#164539" stroke="#e8efdc"/>
+              <path d="m91 97 139 57m-99-77 139 57M98 135l118-59m-71 79 118-60" fill="none" stroke="#a5b9a6" stroke-width=".8"/>
+            </symbol>
+            <symbol id="pilares" fill="none" stroke="#dfead5" stroke-width="2"><path d="M54 117v37m137 19v38m115-98v38m-208-16v37m165-38v38"/></symbol>
+          </defs>
+          <rect width="360" height="256" fill="url(#reticula)"/>
+          <g fill="none" stroke="#788e75" stroke-dasharray="3 4"><path d="m21 172 169 70 151-76M34 158l155 65 145-72M54 84v100m137-44v102m115-145v77"/></g>
+          <use href="#laje" transform="translate(0 39)"/>
+          <use href="#pilares"/><use href="#laje"/>
+          <use href="#pilares" transform="translate(0 -39)"/><use href="#laje" transform="translate(0 -39)"/>
+          <g fill="none" stroke="#e5bf7e"><path d="m190 136 24-14h84"/><circle cx="190" cy="136" r="3" fill="#e5bf7e"/></g>
+          <text x="300" y="125" fill="#efd09a" font-family="monospace" font-size="9">L02</text>
+        </svg>
+        <figcaption>Estudo ilustrativo <span>Estrutura / 01</span></figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="miolo ferramentas" id="ferramentas" aria-labelledby="titulo-ferramentas">
+    <p class="rubrica">Catálogo</p>
+    <h2 id="titulo-ferramentas">Ferramentas da plataforma</h2>
+    <div class="grade">
+      <article class="ficha" id="abrir-ifc">
+        <span class="numero" aria-hidden="true">01 / IFC · Gratuito</span>
+        <h3>Abrir IFC</h3>
+        <p>Consulta de um modelo IFC no navegador.</p>
+        <a class="acessar" href="visualizador.html">Abrir o visualizador <span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="ficha" id="ifc-para-excel">
+        <span class="numero" aria-hidden="true">02 / XLSX · Gratuito</span>
+        <h3>IFC para Excel</h3>
+        <p>Extração dos quantitativos declarados no IFC para uma planilha.</p>
+        <a class="acessar" href="ifc-excel.html">Extrair para Excel <span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="ficha" id="comparar-revisoes">
+        <span class="numero" aria-hidden="true">03 / IFC · Gratuito</span>
+        <h3>Comparar revisões</h3>
+        <p>Selecione duas revisões para ver o que mudou nos quantitativos declarados.</p>
+        <a class="acessar" href="comparar.html">Comparar quantitativos <span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="ficha ativa" id="confere-obra">
+        <span class="numero" aria-hidden="true">04 / OBRA · Disponível</span>
+        <h3>Conferência de quantitativos</h3>
+        <p>Um engenheiro confere o orçamento contratado e, quando há pranchas no pacote, compara os itens com o projeto.</p>
+        <a class="acessar" href="/quantitativos-orcamento-obras/">Consultar escopo do orçamento <span aria-hidden="true">↗</span></a>
+      </article>
+    </div>
+    <h2>Pranchas e desenho</h2>
+    <div class="grade">
+      <article class="ficha"><h3>Digitalizar prancha para DWG</h3><p>Recupere os traços e revise os textos reconhecidos em uma imagem ou PDF digitalizado.</p><a class="acessar" href="digitalizar.html">Abrir OCR e vetorização <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Converter PDF vetorial, DXF e DWG</h3><p>Selecione a página, confira a escala e baixe a geometria em formato CAD.</p><a class="acessar" href="cad.html">Converter desenho <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Encontrar texto em folhas escaneadas</h3><p>Busque códigos e cotas por OCR e confira a região de origem em cada página.</p><a class="acessar" href="digitalizar.html#consulta">Buscar na prancha <span aria-hidden="true">↗</span></a></article>
+    </div>
+    <h2>Fotos e modelagem</h2>
+    <div class="grade">
+      <article class="ficha"><h3>Medir uma fotografia</h3><p>Calibre um plano para medir comprimento, ângulo ou área e conferir uma medida de controle.</p><a class="acessar" href="regua.html">Abrir régua <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Eixos do CAD em paredes IFC</h3><p>Confirme camada, unidade, altura, espessura e pavimento dos eixos selecionados.</p><a class="acessar" href="modelagem.html#paredes">Gerar paredes <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Croqui em paredes 3D</h3><p>Trace os eixos sobre uma foto calibrada e exporte paredes para IFC.</p><a class="acessar" href="modelagem.html#croqui">Abrir croqui <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Modelar uma chapa ou flange</h3><p>Confirme as dimensões, a espessura e os furos para gerar um sólido em STEP ou IFC.</p><a class="acessar" href="modelagem.html#peca">Gerar peça <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Converter peça de fornecedor</h3><p>Abra STEP ou IGES, confira o envelope e exporte a superfície para coordenação IFC.</p><a class="acessar" href="oficina.html#fornecedor">Converter peça <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Reconstrução por fotografias</h3><p>Processe várias tomadas do objeto no laboratório local de fotogrametria.</p><a class="acessar" href="fotogrametria.html">Abrir laboratório <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Malha PLY para IFC</h3><p>Converta a malha reconstruída em um elemento IFC na unidade escolhida.</p><a class="acessar" href="oficina.html#malha">Converter malha <span aria-hidden="true">↗</span></a></article>
+    </div>
+    <h2>Campo, fabricação e controle de entrega</h2>
+    <div class="grade">
+      <article class="ficha"><h3>Terreno LandXML para IFC4.3</h3><p>Leve uma superfície topográfica com triângulos e coordenadas conferidas ao modelo.</p><a class="acessar" href="modelagem.html#terreno">Converter terreno <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Cortar um perfil de nuvem</h3><p>Extraia a cota dos pontos de uma faixa de levantamento XYZ ou COPC.</p><a class="acessar" href="oficina.html#perfil">Extrair perfil <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Aproveitamento de chapas</h3><p>Distribua contornos de peças, com folga e rotações permitidas.</p><a class="acessar" href="chapas.html">Montar arranjo <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Sombra do modelo IFC</h3><p>Defina local, norte verdadeiro, fuso e hora para estudar a sombra da volumetria.</p><a class="acessar" href="visualizador.html#estudo-solar">Estudar insolação <span aria-hidden="true">↗</span></a></article>
+      <article class="ficha"><h3>Verificar o checklist IDS</h3><p>Carregue o IFC e os requisitos de entrega. Baixe o relatório de verificações por elemento.</p><a class="acessar" href="oficina.html#ids">Conferir entrega <span aria-hidden="true">↗</span></a></article>
+    </div>
+  </section>
+</main>
+<footer><div class="miolo rodape"><span>CONFENGE BIM</span><a href="avisos/INDEX.txt">Bibliotecas e licenças</a><a href="#ferramentas">Ferramentas</a></div></footer>
+</body>
+</html>

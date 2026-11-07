@@ -154,3 +154,21 @@
 
 /assets/tiago-sasaki-avatar-v11-sem-fundo.avif
   Content-Type: image/avif
+
+/bim/web/*
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: data:; font-src 'self' data:; media-src 'self' blob:; child-src 'self' blob:; frame-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=0, must-revalidate
+
+/bim/fotogrametria/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: data:; font-src 'self' data:; media-src 'self' blob:; child-src 'self' blob:; frame-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=0, must-revalidate
+
+/bim/web/vendor/oficina/fornecedor.js
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; object-src 'none'
+
+/bim/web/modelagem-step.mjs
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; object-src 'none'

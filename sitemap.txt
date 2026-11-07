@@ -9,6 +9,11 @@ https://confenge.com.br/atrasos-prorrogacao-obras-publicas/
 https://confenge.com.br/auditoria-orcamento-licitacao/
 https://confenge.com.br/avaliacao-imoveis-urbanos/
 https://confenge.com.br/bid-room-licitacoes-obras/
+https://confenge.com.br/bim/
+https://confenge.com.br/bim/guias/dwg-para-ifc-paredes/
+https://confenge.com.br/bim/guias/medir-distancia-area-foto/
+https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/
+https://confenge.com.br/bim/guias/quantitativos-ifc-para-excel/
 https://confenge.com.br/casos/
 https://confenge.com.br/casos/aditivo-art125-demonstrativo/
 https://confenge.com.br/casos/demonstrativo-infraestrutura/

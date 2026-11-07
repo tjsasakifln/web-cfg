@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prancha escaneada para DWG | CONFENGE BIM</title>
+<link href="estilo.css" rel="stylesheet"><link href="plataforma.css" rel="stylesheet"><link href="digitalizar.css" rel="stylesheet"><meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/digitalizar.html">
+<meta name="description" content="Converta uma planta escaneada em DWG ou DXF. Calibre a escala, revise os textos lidos em português e confira os contornos antes de baixar.">
+</head>
+<body class="plataforma"><header class="barra"><div class="miolo barra-interna"><a class="assinatura" href="./">CONFENGE <b>BIM</b></a><a href="./">Ferramentas</a></div></header>
+<main class="miolo digitalizar"><h1>Prancha escaneada para DWG</h1>
+<p>Transforme uma vista digitalizada em contornos e textos editáveis. O arquivo e o reconhecimento em português ficam neste dispositivo.</p>
+<p><a href="../examples/planta-digitalizada.pdf" download>Planta baixa escaneada de exemplo</a> · <a href="../examples/planta-digitalizada.dwg" download>DWG revisado dessa planta</a></p><p>Na planta de exemplo, marque as extremidades da cota superior e informe 8000 mm. Confira também a cota vertical de 4500 mm. O DWG revisado tem 30 palavras editáveis e 22 contornos. Quatro nomes de ambientes foram relidos por região.</p><p><a href="../examples/prancha-ocr.pdf" download>Prancha escaneada de exemplo (duas folhas)</a> · <a href="../examples/prancha-ocr-p1.dwg" download>DWG da primeira folha com edição de texto</a></p>
+<section><h2>1. Abrir uma folha</h2><div class="campos"><label>PDF, PNG, JPEG ou WebP<input type="file" id="origem" accept="application/pdf,image/png,image/jpeg,image/webp"></label><label>Página do PDF<input type="number" id="pagina" min="1" value="1" step="1" disabled></label><label>Girar a folha<select id="giro"><option value="0">0°</option><option value="90">90° à direita</option><option value="180">180°</option><option value="270">90° à esquerda</option></select></label></div>
+<p>Escolha uma vista com uma única escala e textos próximos da horizontal. Recorte vistas de escalas diferentes em arquivos separados. Até 20 MiB por arquivo e 40 megapixels por imagem. Imagens grandes são reduzidas para até 6 milhões de pixels.</p>
+<p id="estado" role="status" aria-live="polite">Selecione um arquivo para começar.</p></section>
+<section><h2>2. Conferir a escala</h2>
+<p>Clique nas duas extremidades de uma cota legível. Informe a distância que ela representa no projeto. A origem do desenho será o canto inferior esquerdo da imagem.</p>
+<div class="campos"><label>Distância real (mm)<input type="number" id="medida" min="0.001" step="any" placeholder="Por exemplo, 3000"></label><button type="button" id="remarcar" disabled>Remarcar cota</button></div>
+<p id="escala">Abra uma folha para marcar a referência.</p>
+<figure id="painel-vista" hidden>
+<div class="barra-vista" role="group" aria-label="Visualização da prancha">
+<button type="button" id="original" aria-pressed="true" aria-controls="vista">Original</button>
+<button type="button" id="vista-cad" aria-pressed="false" aria-controls="vista" disabled>Resultado CAD</button>
+<button type="button" id="zoom-vista" aria-pressed="false" aria-controls="quadro-vista" title="Ver a imagem em sua resolução de leitura">Zoom 100%</button></div>
+<figcaption id="legenda-vista" aria-live="polite"></figcaption>
+<div id="quadro-vista" role="region" aria-label="Área de leitura da prancha"><canvas id="vista" hidden role="img" aria-describedby="legenda-vista" aria-label="Imagem original da folha"></canvas></div>
+</figure>
+<details><summary>Informar os pontos pelo teclado</summary><p>Coordenadas em pixels da prévia, medidas a partir do canto superior esquerdo.</p><div class="campos" id="coordenadas">
+<label>X inicial<input id="ax" type="number" step="any"></label><label>Y inicial<input id="ay" type="number" step="any"></label><label>X final<input id="bx" type="number" step="any"></label><label>Y final<input id="by" type="number" step="any"></label>
+<button id="usar-pontos" type="button" disabled>Usar pontos</button></div></details></section>
+<section><h2>3. Ler e revisar textos</h2><button type="button" id="ler" disabled>Reconhecer textos</button> <button type="button" id="ler-regiao" disabled>Ler rótulo por região</button>
+<p>Confira códigos, acentos, símbolos e vírgulas antes de exportar. Cada palavra incluída vira um texto CAD. Desmarque leituras indevidas para preservar seus traços. A prévia mostra a inclinação estimada da linha pelo OCR. Para bases ausentes, inconsistentes ou acima de 15° em módulo, o texto sai horizontal. A posição e a altura são aproximadas. Confira inscrições inclinadas no original.</p>
+<div id="palavras"></div></section>
+<section><h2>Localizar código ou cota</h2><p>Procure o texto em até 12 folhas consecutivas a partir da página escolhida. Abra uma ocorrência para destacar sua posição. O reconhecimento pode confundir caracteres semelhantes.</p>
+<div class="campos"><label>Texto a procurar<input id="consulta" type="search" maxlength="90" placeholder="Por exemplo, HID-07"></label>
+<button id="buscar" type="button" disabled>Buscar nas folhas</button><button id="parar" type="button" hidden>Interromper busca</button></div><div id="achados"></div></section>
+<section><h2>4. Exportar o desenho</h2>
+<div class="campos"><label>Limiar dos traços (1–254)<input type="number" id="limiar" min="1" max="254" step="1" value="160"></label><label class="opcao-inline"><input type="checkbox" id="mascarar" checked> Retirar os pixels dos textos incluídos</label></div>
+<p>A camada CONTORNOS contém o perímetro dos traços escuros. Linhas grossas produzem duas bordas. A camada OCR contém os textos revisados. Retirar os pixels evita que as letras apareçam duas vezes. Confira linhas que cruzam uma inscrição, pois também podem perder um trecho.</p>
+<button type="button" id="preview" disabled>Conferir resultado CAD</button>
+<p><label><span><input type="checkbox" id="conferi"> Conferi a escala, os textos selecionados e suas posições.</span></label></p><button id="baixar-dwg" disabled>Baixar DWG</button> <button id="baixar-dxf" disabled>Baixar DXF</button></section>
+</main><script type="module" src="digitalizar.mjs"></script></body></html>

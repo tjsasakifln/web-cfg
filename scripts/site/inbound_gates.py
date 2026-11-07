@@ -3877,6 +3877,11 @@ def archetype_editorial_ready_for_family(
         # independently verifies the sample and its rendered identity.
         if str(family.get("id")) in {"inteligencia-amostras-reais", "inteligencia-climatizacao"}:
             concrete_values.update(re.findall(r"\b\d{14}-2-\d{6}/20\d{2}\b", text))
+        if family.get("id") == "ferramentas-e-guias-bim":
+            # Measured dimensions and entity counts are the evidence in CAD/IFC examples.
+            concrete_values.update(re.findall(
+                r"\b\d+(?:[.,]\d+)*\s*(?:mm|cm|m[²³]?|MiB|eixos|contornos|textos|elementos)\b", text
+            ))
         concrete = len(concrete_values)
         specific.append(
             Subgate(

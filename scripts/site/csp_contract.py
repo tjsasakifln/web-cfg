@@ -152,11 +152,19 @@ def csp_directives_from_text(text: str) -> dict[str, list[str]]:
     raise AssertionError("headers have no Content-Security-Policy")
 
 
+def _uses_global_policy(root: Path, page: Path) -> bool:
+    # The CAD and photogrammetry documents run under their own local-only CSP.
+    # Their code must never grant inline-script or style authority to the site.
+    return page.relative_to(root).parts[:2] not in {("bim", "web"), ("bim", "fotogrametria")}
+
+
 def executable_inline_hashes(root: Path) -> Counter[str]:
     if not (root / "index.html").is_file():
         raise AssertionError("_site is missing; run npm run build:site before the CSP gate")
     hashes: Counter[str] = Counter()
     for path in sorted(root.rglob("*.html")):
+        if not _uses_global_policy(root, path):
+            continue
         html = path.read_text(encoding="utf-8")
         for attrs, body in parse_scripts(html):
             if any(name == "src" for name, _ in attrs):
@@ -176,6 +184,8 @@ def inline_style_hashes(root: Path) -> tuple[Counter[str], Counter[str]]:
     blocks: Counter[str] = Counter()
     attributes: Counter[str] = Counter()
     for path in sorted(root.rglob("*.html")):
+        if not _uses_global_policy(root, path):
+            continue
         parsed_blocks, parsed_attributes = parse_styles(path.read_text(encoding="utf-8"))
         blocks.update(sha256_source(body) for body in parsed_blocks)
         attributes.update(sha256_source(value) for value in parsed_attributes)
@@ -187,9 +197,12 @@ def apply_source_hashes(headers_text: str, directive: str, hashes: list[str]) ->
     ordered = sorted(set(hashes))
     lines: list[str] = []
     replaced = False
+    global_rule = False
     for raw in headers_text.splitlines(keepends=True):
         stripped = raw.strip()
-        if not stripped.lower().startswith("content-security-policy:"):
+        if stripped.startswith("/"):
+            global_rule = stripped == "/*"
+        if not global_rule or not stripped.lower().startswith("content-security-policy:"):
             lines.append(raw)
             continue
         prefix, value = raw.split(":", 1)

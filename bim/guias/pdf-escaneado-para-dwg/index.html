@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PDF escaneado para DWG com OCR e escala correta | CONFENGE</title>
+<meta name="description" content="Converta uma planta escaneada em DWG editável. Aprenda a calibrar pelas cotas, revisar o OCR e conferir os contornos com uma planta de exemplo.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#061a33"><link rel="canonical" href="https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<script>document.documentElement.classList.replace('no-js','js');</script>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/assets/editorial-article.css">
+<script defer src="/script.js?v=mv09"></script>
+<meta property="og:type" content="article"><meta property="og:site_name" content="CONFENGE"><meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="PDF escaneado para DWG com OCR e escala correta"><meta property="og:description" content="Converta uma planta escaneada em DWG editável. Aprenda a calibrar pelas cotas, revisar o OCR e conferir os contornos com uma planta de exemplo."><meta property="og:url" content="https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/"><meta property="og:image" content="https://confenge.com.br/bim/imagens/prancha-ocr.webp">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/#artigo","mainEntityOfPage":"https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/","headline":"Como converter uma planta em PDF escaneado para DWG","description":"Converta uma planta escaneada em DWG editável. Aprenda a calibrar pelas cotas, revisar o OCR e conferir os contornos com uma planta de exemplo.","image":["https://confenge.com.br/bim/imagens/prancha-ocr.webp"],"inLanguage":"pt-BR","datePublished":"2026-11-06","dateModified":"2026-11-06","author":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/empresa/"},"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas BIM","item":"https://confenge.com.br/bim/"},{"@type":"ListItem","position":3,"name":"Digitalização de plantas","item":"https://confenge.com.br/bim/guias/pdf-escaneado-para-dwg/"}]}]}</script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" data-value-first-cta="true" href="/bim/">Ferramentas BIM</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" data-value-first-cta="true" href="/bim/">Ferramentas BIM</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/bim/">Ferramentas BIM</a><span aria-hidden="true">/</span></li><li aria-current="page">Digitalização de plantas</li></ol></nav>
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow">Digitalização de plantas</p><h1>Como converter uma planta em PDF escaneado para DWG</h1><p class="content-lead">Para recuperar uma planta que só existe no papel, comece por uma cota legível. Neste exemplo, você vai calibrar uma folha, recuperar os nomes dos ambientes e abrir o desenho editável para conferir uma porta.</p>
+<p><a class="button button-primary" data-cta-position="bim_guide_hero" href="/bim/web/digitalizar.html">Converter minha prancha em DWG</a></p>
+<p class="article-meta"><a href="/empresa/" rel="author">CONFENGE</a><span>Atualizado em <time datetime="2026-11-06">6 de novembro de 2026</time></span></p>
+</div></div></header>
+<div class="container article-layout">
+<article class="article-main" aria-label="Como converter uma planta em PDF escaneado para DWG">
+<nav aria-label="Nesta página" class="article-toc"><strong>Neste guia</strong><ol><li><a href="#origem">Sua planta tem linhas ou pixels?</a></li><li><a href="#calibracao">Calibre em uma direção e confira na outra</a></li><li><a href="#reconhecimento">Revise o que vai virar texto editável</a></li><li><a href="#dwg">O que inspecionar no DWG</a></li></ol></nav>
+<h2 id="origem">Sua planta tem linhas ou pixels?</h2>
+<p>Amplie uma palavra e uma parede no PDF. Bordas que se desfazem em quadradinhos são indício de uma imagem escaneada. Se as linhas continuam nítidas e o texto pode ser selecionado, experimente primeiro o <a href="/bim/web/cad.html">conversor de PDF vetorial</a>. Uma folha pode misturar desenho escaneado e carimbo digital. Faça a verificação na planta que você precisa editar.</p>
+<p>Em um escaneamento há duas tarefas. O reconhecimento óptico de caracteres (OCR) lê as inscrições, enquanto a vetorização percorre os contornos dos traços. Uma parede escura e larga pode produzir dois contornos. Para obter um eixo de parede, será preciso interpretar a planta.</p>
+<h2 id="calibracao">Calibre em uma direção e confira na outra</h2>
+<ol><li>Abra a <a href="/bim/examples/planta-digitalizada.pdf" download>planta de exemplo em PDF</a> na ferramenta. Na folha da unidade de atendimento, localize a cota superior de 8.000 mm.</li>
+<li>Marque as duas extremidades da linha de cota e preencha a distância real com <strong>8000</strong>. Clicar nas bordas dos algarismos encurta a referência e altera toda a escala.</li>
+<li>Depois de exportar, meça a cota vertical no CAD. Nesta folha ela corresponde a <strong>4.500 mm</strong>. Uma divergência grande em apenas uma direção pode indicar deformação da cópia. Reavalie a fonte antes de usar a base em projeto.</li></ol>
+<h2 id="reconhecimento">Revise o que vai virar texto editável</h2>
+<p>Acione <strong>Reconhecer textos</strong>. Confira cotas, siglas e nomes de ambientes. Se uma inscrição ficou de fora, use <strong>Ler rótulo por região</strong> e delimite a palavra. Na planta de exemplo, a releitura recuperou os nomes de quatro ambientes. Aproxime com <strong>Zoom 100%</strong> e alterne entre <strong>Original</strong> e <strong>Resultado CAD</strong> para conferir a mesma região.</p>
+<figure><img src="/bim/imagens/prancha-ocr.webp" alt="Prévia da planta com cotas, nomes dos ambientes e contornos em verde; a cota horizontal é 8000." width="1414" height="1134" loading="lazy"><figcaption>Na planta de demonstração, há 30 textos editáveis na camada OCR e 22 polilinhas fechadas na camada CONTORNOS.</figcaption></figure>
+<h2 id="dwg">O que inspecionar no DWG</h2>
+<p>Confirme a revisão na tela e baixe o arquivo. Abra o DWG, selecione um nome de ambiente e confirme que é possível editar as letras. Em seguida, amplie a porta do lavabo. No escaneamento, o arco atravessa a letra L. Ao retirar os pixels das letras, sobra uma pequena interrupção na curva. O original permite decidir onde recompor o arco.</p>
+<p>Use o arquivo revisado para comparar seu resultado. <a href="/bim/examples/planta-digitalizada.dwg" download>Baixar o DWG de referência</a>.</p>
+
+<p><a href="https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html">Documentação do Tesseract sobre a qualidade das imagens para OCR</a></p>
+</article>
+<aside class="article-aside"><section class="aside-card"><p class="eyebrow">Aplicar ao seu projeto</p><h2>Revisão técnica de projetos</h2><p>Vai usar a prancha como base de projeto? A CONFENGE pode revisar a compatibilidade do desenho recuperado com as cotas, os cortes e os detalhes disponíveis.</p>
+<p><a data-cta-position="bim_guide_service" href="/revisao-tecnica-projetos-engenharia/">Conhecer o serviço da CONFENGE</a></p>
+<p><a class="button button-primary" data-cta-position="bim_guide_contact" href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20a%20revis%C3%A3o%20da%20planta%20que%20digitalizei.">Falar no WhatsApp sobre a minha planta</a></p></section><p><a href="/bim/">Ver todas as ferramentas BIM</a></p></aside>
+</div>
+</main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body>
+</html>

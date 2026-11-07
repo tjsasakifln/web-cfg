@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IFC para Excel | CONFENGE BIM</title>
+  <meta name="description" content="Extraia os quantitativos declarados nos elementos de um modelo IFC para Excel. O arquivo é processado no seu navegador.">
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    .marca {align-items:center;gap:1rem}.marca a {text-decoration:none}
+    .bloco {background:white;border:1px solid var(--linha);padding:clamp(16px,3vw,28px);border-radius:8px}
+    .bloco h2 {margin-top:0}.bloco .links{margin:12px 0}
+    .tabela {overflow-x:auto;border:1px solid var(--linha);border-radius:6px}
+    table {width:100%;border-collapse:collapse;font-size:.92rem;text-align:left}
+    caption {text-align:left;padding:10px;font-weight:650}th,td {padding:9px 12px;border-top:1px solid var(--linha);vertical-align:top}
+    th {background:#e9efe7} td:nth-child(3){font-variant-numeric:tabular-nums}
+    .dados {background:#eaf0e6;border-left:4px solid var(--marca);padding:10px 14px}
+    .botao:disabled{background:#617368;cursor:wait}
+    #arquivo {max-width:100%;min-width:0}
+  </style>
+  <script src="ifc-excel.mjs" type="module"></script>
+<meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/ifc-excel.html">
+</head>
+<body>
+<header><div class="largura marca"><a href="index.html">CONFENGE BIM</a><span>Ferramentas</span></div></header>
+<main class="largura">
+  <section>
+    <p class="rotulo">Quantitativos · IFC para XLSX</p>
+    <h1>IFC para Excel</h1>
+    <p class="resumo">Leve para a planilha as quantidades que o autor do modelo registrou em cada elemento. O GlobalId e as referências do IFC acompanham cada linha para você localizar a origem do valor.</p>
+    <div class="bloco">
+      <label for="arquivo">Selecione um arquivo IFC</label>
+      <input type="file" id="arquivo" accept=".ifc" aria-describedby="limites">
+      <p id="limites" class="nota">Modelo STEP com extensão .ifc, até 25 MiB. A leitura e a geração do Excel acontecem neste navegador.</p>
+      <div class="links">
+        <button id="extrair" type="button" class="botao" disabled>Extrair quantitativos</button>
+        <button id="exemplo" type="button" class="botao suave" disabled>Testar com IFC de exemplo</button>
+      </div>
+      <p id="mensagem" role="status" aria-live="polite"></p>
+      <noscript><p>Ative JavaScript para ler o IFC e gerar a planilha.</p></noscript>
+    </div>
+  </section>
+  <section id="resultado" hidden>
+    <p class="rotulo">Resultado</p>
+    <h2>Quantitativos do modelo</h2>
+    <p id="resumo" class="dados"></p>
+    <div class="links"><a class="botao" id="baixar" download>Baixar Excel (.xlsx)</a></div>
+    <p id="aviso"></p>
+    <div class="tabela" tabindex="0" aria-label="Prévia dos quantitativos com rolagem horizontal">
+      <table><caption id="legenda">Prévia</caption>
+        <thead><tr><th scope="col">Objeto</th><th scope="col">Quantidade</th><th scope="col">Valor</th><th scope="col">Unidade</th><th scope="col">Situação</th></tr></thead>
+        <tbody id="previa"></tbody>
+      </table>
+    </div>
+  </section>
+  <section>
+    <h2>Como ler a planilha</h2>
+    <p>A extração percorre as ocorrências de <code>IfcElement</code> e os conjuntos <code>IfcElementQuantity</code> ligados diretamente a elas. A coluna de valor preserva a unidade da fonte. A ferramenta lê a unidade indicada na quantidade ou, quando aplicável, a definida no projeto.</p>
+    <details><summary>O que entra no Excel?</summary><p>Comprimento, área, volume, massa, tempo, contagem e número. Um zero declarado fica como zero. Um elemento sem conjunto direto fica com o valor em branco e a situação <code>sem_quantidade</code>. Referências STEP valem para esta versão do arquivo.</p></details>
+    <details><summary>Quais casos pedem conferência?</summary><p>Sem uma unidade identificada, confira o conjunto no modelo antes de comparar valores. Conjuntos vazios, medidas complexas e valores ilegíveis ficam marcados para revisão. As quantidades herdadas de tipos e os dados de espaços ficam fora desta extração. O cálculo geométrico de comprimentos, áreas e volumes também fica fora. O limite da planilha é de 50.000 linhas de dados.</p></details>
+    <p><a href="index.html">Voltar à plataforma CONFENGE BIM</a></p>
+  </section>
+</main>
+<footer><div class="largura">CONFENGE BIM · IFC para Excel</div></footer>
+</body>
+</html>
