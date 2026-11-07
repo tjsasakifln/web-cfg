@@ -374,15 +374,15 @@ def test_html_serving_override_must_preserve_no_transform() -> None:
 
 def test_bim_html_no_transform_cannot_be_removed() -> None:
     valid = _headers(
-        "/assets/*\\n"
-        "  Cache-Control: public, max-age=3600, must-revalidate\\n"
-        "/.well-known/build-info.json\\n"
-        "  Cache-Control: no-cache, max-age=0, must-revalidate\\n"
+        "/assets/*\n"
+        "  Cache-Control: public, max-age=3600, must-revalidate\n"
+        "/.well-known/build-info.json\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate\n"
     )
     for route in ("/bim/web/*", "/bim/fotogrametria/*"):
         original = (
-            route + "\\n"
-            "  Cache-Control: public, max-age=0, must-revalidate, no-transform\\n"
+            route + "\n"
+            "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
         )
         assert original in valid
         mutated = valid.replace(
