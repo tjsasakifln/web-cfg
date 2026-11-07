@@ -237,6 +237,10 @@ def _headers(body: str) -> str:
         "  Cache-Control: no-store, no-transform\n"
         "/assets/data-desk/*\n"
         "  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n"
+        "/bim/web/*\n"
+        "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
+        "/bim/fotogrametria/*\n"
+        "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
     )
 
 
@@ -366,6 +370,32 @@ def test_html_serving_override_must_preserve_no_transform() -> None:
         "published /assets/data-desk/*" in item and "no-transform" in item
         for item in errors
     ), errors
+
+
+def test_bim_html_no_transform_cannot_be_removed() -> None:
+    valid = _headers(
+        "/assets/*\\n"
+        "  Cache-Control: public, max-age=3600, must-revalidate\\n"
+        "/.well-known/build-info.json\\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate\\n"
+    )
+    for route in ("/bim/web/*", "/bim/fotogrametria/*"):
+        original = (
+            route + "\\n"
+            "  Cache-Control: public, max-age=0, must-revalidate, no-transform\\n"
+        )
+        assert original in valid
+        mutated = valid.replace(
+            original, original.replace(", no-transform", ""), 1
+        )
+        for source, published in ((mutated, valid), (valid, mutated)):
+            errors = evaluate_cache_contract(
+                headers_text=source,
+                hashed_source_assets=set(),
+                hashed_published_assets=set(),
+                published_headers_text=published,
+            )
+            assert any(route in item and "no-transform" in item for item in errors), errors
 
 
 def test_downloadable_without_content_disposition_fails() -> None:
