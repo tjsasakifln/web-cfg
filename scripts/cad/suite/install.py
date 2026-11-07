@@ -161,7 +161,10 @@ def install(site):
         (staged / "edicoes.json").write_text(json.dumps(apps, ensure_ascii=True, separators=(",", ":"), sort_keys=True))
         if target.exists():
             shutil.rmtree(target)
-        staged.rename(target)
+        target.mkdir()
+        for app in apps.values():
+            (staged / app["archive"]).replace(target / app["archive"])
+        (staged / "edicoes.json").replace(target / "edicoes.json")
     install_fields(site, target / apps["cadcraft"]["archive"])
     install_engines(site)
 
