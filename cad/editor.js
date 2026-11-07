@@ -1,63 +1,10 @@
 const editor = document.getElementById('cad-editor');
-const icons = {
-  open: '<path d="M3 18.5V5.5h6l2 2h9v3"/><path d="M3 18.5 6 11h15l-3 7.5Z"/>',
-  example: '<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M8 4v9h5m0-9v5m0 4v7M3 15h5"/>',
-  expand: '<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',
-  fit: '<path d="M3 8V3h5m8 0h5v5M3 16v5h5m13-5v5h-5M7 8h10v8H7Z"/>',
-  save: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>'
-};
-const icon = name => '<svg class="cad-ico" viewBox="0 0 24 24" aria-hidden="true">' + icons[name] + '</svg>';
 
 if (editor) {
-  // Only static, authored markup goes into the template. File and CAD data use textContent.
-  editor.innerHTML = `
-    <div class="cad-bar">
-      <div class="cad-doc">
-        <img class="cad-brand" src="/assets/logo-confenge-500-f8a83f6d.png" alt="CONFENGE" width="224" height="58">
-        <span class="cad-file-tag" aria-hidden="true">DWG</span>
-        <div class="cad-doc-text"><strong class="cad-name">Área de desenho</strong>
-        <span class="cad-caption">Edição local no navegador</span></div>
-      </div>
-      <div class="cad-actions" role="group" aria-label="Arquivo e área de trabalho">
-        <button type="button" class="button cad-primary" data-open>${icon('open')}Abrir DWG</button>
-        <button type="button" class="button" data-example>${icon('example')}Experimentar um exemplo</button>
-        <button type="button" class="button" data-save hidden>${icon('save')}Baixar cópia</button>
-        <button type="button" class="button" data-fit hidden>${icon('fit')}Mostrar desenho inteiro</button>
-        <button type="button" class="button" data-expand hidden aria-pressed="false">${icon('expand')}<span>Ampliar editor</span></button>
-        <input type="file" data-file accept=".dwg,.dxf" hidden>
-      </div>
-    </div>
-    <div class="cad-stage">
-      <div class="cad-welcome">
-        <div><strong>Seu desenho começa aqui.</strong><p>Arraste o DWG para esta área ou abra o exemplo para conhecer as ferramentas de edição.</p></div>
-        <svg class="cad-illustration" aria-hidden="true" viewBox="0 0 380 182">
-          <g fill="none" stroke="var(--white)" stroke-width="1.6">
-            <path d="M40 21h289v124H197m-33 0H40Z M46 27h277v112H198m-34 0H46Z"/>
-            <path d="M147 27v33m0 30v49m6 0V89m0-29V27m0 56h62m33 0h75m-75 6h75m-170 0h62"/>
-            <path d="M179 27v20h64V27m26 0v50h54M46 104h39v35m-39-29h33v29" opacity=".65"/>
-          </g><g fill="none" stroke="var(--lime)" stroke-width="1.2">
-            <path d="M164 145v-33a33 33 0 0 1 33 33m18-62V52a31 31 0 0 1 31 31m-99 7h-31a31 31 0 0 1 31-31"/>
-            <path d="M39 154v20m290-20v20M35 165h299m-298 4 8-8m280 8 8-8M16 18v129m-6-121 12-9m-12 133 12-9"/>
-          </g><g stroke="var(--white)" stroke-dasharray="5 5" opacity=".32">
-            <path d="M27 12v145m113-145v145m199-145v145M23 8h324M23 155h324"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-    <div class="cad-issue" hidden><p></p><details><summary>Ver ocorrências do desenho</summary><ul></ul></details></div>
-    <details class="cad-preview" hidden><summary>Ver prévia gravada no DWG</summary>
-      <figure><img alt="Prévia gravada no arquivo DWG"><figcaption>Última vista salva pelo autor. Esta imagem serve de referência visual e não permite editar ou medir objetos.</figcaption></figure>
-    </details>
-    <div class="cad-foot">
-      <p class="cad-status" role="status" aria-live="polite">Escolha um DWG ou DXF do seu dispositivo.</p>
-      <label class="cad-format" hidden>Cópia em <select data-format><option value="dwg">DWG R2000</option><option value="dxf">DXF</option></select></label>
-      <a class="cad-recover" hidden>Baixar a edição em DXF</a>
-    </div>
-    <details class="cad-help" hidden><summary>Controles do editor</summary>
-      <p>Use a roda do mouse para aproximar ou afastar. Segure o botão do meio e arraste para percorrer a planta. Clique em um objeto para selecioná-lo. Pressione Esc para encerrar o comando atual.</p>
-      <p>Para desenhar uma linha, digite L, pressione Enter e clique nos dois pontos. Para voltar uma alteração, use Ctrl+Z. Em “Cópia em”, escolha o formato e use “Baixar cópia”.</p>
-    </details>`;
   const find = selector => editor.querySelector(selector);
+  const brand = document.querySelector('.site-header .brand img').cloneNode();
+  brand.className = 'cad-brand';
+  find('.cad-doc').prepend(brand);
   const fileInput = find('[data-file]');
   const openButton = find('[data-open]');
   const exampleButton = find('[data-example]');
@@ -68,7 +15,9 @@ if (editor) {
   const status = find('.cad-status');
   const issue = find('.cad-issue');
   const format = find('[data-format]');
-  const recovery = find('.cad-recover');
+  const recovery = document.createElement('a');
+  recovery.className = 'cad-recover';
+  recovery.textContent = 'Baixar a edição em DXF';
   const preview = find('.cad-preview');
   let frame, ready, readyResolve, readyReject, titleObserver;
   let loading = false, saving = false, dirty = false, retained = false;
@@ -124,7 +73,7 @@ if (editor) {
   function clearRecovery() {
     if (recovery.href) URL.revokeObjectURL(recovery.href);
     recovery.removeAttribute('href');
-    recovery.hidden = true;
+    recovery.remove();
     retained = false;
   }
   function leaveGuard(event) {
@@ -261,7 +210,7 @@ if (editor) {
         clearRecovery();
         recovery.href = URL.createObjectURL(new Blob([data.bytes]));
         recovery.download = name.replace(/\.dxf$/i, '-editado.dxf');
-        recovery.hidden = false;
+        find('.cad-foot').append(recovery);
         retained = true;
         find('.cad-caption').textContent = 'Cópia DWG pendente';
       }
