@@ -44,7 +44,7 @@ CACHE_TRANSITION_SCHEMA = "confenge.cache-transition-assets/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_HTML = re.compile(r"^[A-Za-z0-9._/-]+\.html$")
-SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/-]+$")
+SAFE_ASSET = re.compile(r"^[A-Za-z0-9._@/-]+$")
 CACHE_TRANSITION_ASSET = re.compile(
     r"^_site/assets(?:/[A-Za-z0-9._-]+)*/[A-Za-z0-9._-]+[.-][0-9a-f]{8,64}\.(?:avif|css|gif|ico|jpeg|jpg|js|mjs|png|svg|webp|woff|woff2)$"
 )
@@ -59,6 +59,7 @@ OVERLAY_NON_HTML_FILES = frozenset({
     "sitemap-index.xml", "sitemap-oportunidades.xml",
     ".well-known/live-intelligence-overlay.json",
 })
+FIRST_HOP_LIMIT = 5 * 1024 * 1024
 IDENTITY_LIMIT = 1024 * 1024
 CACHE_PROPAGATION_SECONDS = 310.0
 CACHE_RETRY_MAX_SLEEP = 15.0
@@ -396,14 +397,13 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def _read_first_hop_body(response: Any, status: int) -> dict[str, Any]:
+def _read_first_hop_body(response: Any, status: int, limit: int = FIRST_HOP_LIMIT) -> dict[str, Any]:
     """Read one first-hop body and keep the read outcome explicit and distinct.
 
     Never collapse "empty body, read finished" into "body never read": the first
     keeps its digest (the sha256 of zero bytes) and the second has no digest at
     all. Content-Length absent alone never proves truncation.
     """
-    limit = 5 * 1024 * 1024
     declared_raw = response.headers.get("Content-Length") if response.headers else None
     record: dict[str, Any] = {
         "body": b"",
@@ -475,7 +475,7 @@ def _first_hop_entry(url: str, status: int, headers: Any, record: dict[str, Any]
     }
 
 
-def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | None]:
+def _probe_first_hop(url: str, timeout: float, *, limit: int = FIRST_HOP_LIMIT) -> tuple[dict[str, Any], bytes | None]:
     """GET one normal URL without following its first HTTP disposition."""
     request = urllib.request.Request(
         url,
@@ -489,7 +489,7 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
     try:
         opener = urllib.request.build_opener(_NoRedirect())
         with opener.open(request, timeout=timeout) as response:
-            record = _read_first_hop_body(response, int(response.status))
+            record = _read_first_hop_body(response, int(response.status), limit)
             entry = _first_hop_entry(url, int(response.status), response.headers, record)
     except urllib.error.HTTPError as exc:
         try:
@@ -1025,7 +1025,7 @@ def verify_robots_policy(
 
 def verify_non_html_assets(
     *, site: Path, inventory: dict[str, Any], overlay: dict[str, Any],
-    base: str, fetcher: Callable, concurrency: int, timeout: float,
+    base: str, fetcher: Callable | None, concurrency: int, timeout: float,
 ) -> dict[str, Any]:
     """Reconcile physical assets independently, then verify exact public bytes."""
     host = inventory.get("non_html_sha256") or {}
@@ -1080,7 +1080,15 @@ def verify_non_html_assets(
         protected = rel in NONPUBLIC_CONFIG_FILES
         status = 404 if protected else 200
         expected = (inventory.get("html_sha256") or {}).get("404.html") if protected else host[rel]
-        entry, body = fetcher(base + request_path, timeout)
+        if fetcher is None:
+            # Only a known release file may raise the response budget. A server
+            # cannot ask for a larger read through its own Content-Length.
+            limit = FIRST_HOP_LIMIT
+            if rel in artifact and not protected:
+                limit = max(limit, (site / rel).stat().st_size)
+            entry, body = _probe_first_hop(base + request_path, timeout, limit=limit)
+        else:
+            entry, body = fetcher(base + request_path, timeout)
         headers = entry.get("headers") or {}
         digest = hashlib.sha256(body).hexdigest() if body is not None else None
         expected_content_types = EXACT_ASSET_CONTENT_TYPES.get(rel)
@@ -1173,7 +1181,7 @@ def run_acceptance(
     disposition_fetcher: Callable[
         [str, float], tuple[dict[str, Any], bytes | None]
     ] = _probe_first_hop,
-    asset_fetcher: Callable = _probe_first_hop,
+    asset_fetcher: Callable | None = None,
     run_mutations: bool = True,
     cache_deadline_seconds: float = CACHE_PROPAGATION_SECONDS,
     clock: Callable[[], float] = time.monotonic,
