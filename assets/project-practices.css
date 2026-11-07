@@ -52,7 +52,7 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-hero__visual {
   grid-column: 2; grid-row: 1 / span 2; min-width: 0; margin: 0;
   padding: clamp(1rem,2vw,1.8rem); background: var(--pp-ink); color: var(--pp-white);
-  border-radius: var(--radius-md); border-top: 4px solid var(--lime);
+  border-top: 4px solid var(--lime);
 }
 .pp-hero__visual figcaption { display: grid; gap: .55rem; }
 .pp-sheet__label { color: var(--lime); font-size: .77rem; font-weight: 700; letter-spacing: .055em; text-transform: uppercase; }
