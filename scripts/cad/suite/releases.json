@@ -1,0 +1,42 @@
+{
+  "bimcraft": {
+    "url": "https://github.com/getcadcraft/bimcraft/releases/download/bimcraft-v0.8.1/bimcraft-browser-edition-v0.8.1.zip",
+    "size": 48833318,
+    "sha256": "93ccdf2500eab65a001b98594eeda63c6ddee40e98e3283b66863abbe2a3673a"
+  },
+  "cadcraft": {
+    "url": "https://github.com/getcadcraft/cadcraft/releases/download/cadcraft-v0.8.1/cadcraft-browser-edition-v0.8.1.zip",
+    "size": 48673718,
+    "sha256": "8cd14ef206d73199633f5be0ef15b1bce1c914cca3c7b8611d202007e69ea8ea"
+  },
+  "civilcraft": {
+    "url": "https://github.com/getcadcraft/civilcraft/releases/download/civilcraft-v0.8.1/civilcraft-browser-edition-v0.8.1.zip",
+    "size": 31459438,
+    "sha256": "faaad12c0f3fb94dfa374c12f8afd5bbe780213a248124339cebb42d4ec41ade"
+  },
+  "detailcraft": {
+    "url": "https://github.com/getcadcraft/detailcraft/releases/download/detailcraft-v0.8.1/detailcraft-browser-edition-v0.8.1.zip",
+    "size": 16452779,
+    "sha256": "e4080e3bae6a2805e9a34a82ae7261e52b8aaf84921295dd183c2fffe947b968"
+  },
+  "markupcraft": {
+    "url": "https://github.com/getcadcraft/markupcraft/releases/download/markupcraft-v0.8.1/markupcraft-browser-edition-v0.8.1.zip",
+    "size": 49757398,
+    "sha256": "e2cbb65839f64239f2e17340fb8f66a4bb40c459301dd3f77229acf3693a5813"
+  },
+  "modelcraft": {
+    "url": "https://github.com/getcadcraft/modelcraft/releases/download/modelcraft-v0.8.1/modelcraft-browser-edition-v0.8.1.zip",
+    "size": 27310014,
+    "sha256": "700bad93418b82391f45615cefcea893c7f15ae6bb070273aaa44600cc1e42a2"
+  },
+  "partcraft": {
+    "url": "https://github.com/getcadcraft/partcraft/releases/download/partcraft-v0.8.1/partcraft-browser-edition-v0.8.1.zip",
+    "size": 42229922,
+    "sha256": "50329f578317741ecce81a3efdc78c00fe56b478d07ce1cdca4ef0e32be94e8f"
+  },
+  "takeoffcraft": {
+    "url": "https://github.com/getcadcraft/takeoffcraft/releases/download/takeoffcraft-v0.8.1/takeoffcraft-browser-edition-v0.8.1.zip",
+    "size": 19603975,
+    "sha256": "b55556327934f449047cde8f03fc6bfcd5f56bb8cd0fd36fbb4dba9a83cff0d6"
+  }
+}

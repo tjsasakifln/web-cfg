@@ -3,7 +3,7 @@
     "asset_files_max_route": 25,
     "asset_raw_kb_max_route": 1116.55,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 275
+    "routes_measured": 276
   },
   "budget": {
     "cls_max": 0.05,
@@ -300,6 +300,7 @@
       "/bim/web/regua.html",
       "/bim/web/visualizador.html",
       "/cad/",
+      "/cad/aplicativos/",
       "/cad/guias/escala-e-unidade-do-dwg/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
@@ -577,6 +578,7 @@
       "/bim/web/regua.html",
       "/bim/web/visualizador.html",
       "/cad/",
+      "/cad/aplicativos/",
       "/cad/guias/escala-e-unidade-do-dwg/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",

@@ -506,6 +506,17 @@ export function renderRuntimeLocations(contract) {
     "}",
     "",
   ];
+  if (contract.runtime.cadEditions) {
+    lines.push(`location ^~ ${contract.runtime.cadEditions} {`);
+    // The edition supplies its exact inline-script hashes and cache validators.
+    // A location-level add_header prevents the site's global CSP from doubling it.
+    for (const { lower, name } of allHeaderNames(contract)) {
+      if (!["content-security-policy", "cache-control", "content-type", "x-robots-tag", "x-content-type-options"].includes(lower)) {
+        lines.push(`  add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
+      }
+    }
+    lines.push(...runtimeProxyDirectives(), "}", "");
+  }
   for (const path of ["/healthz", "/ready", "/runtime-identity", contract.runtime.identityPath]) {
     lines.push(`location = ${path} {`);
     lines.push(...runtimeProxyDirectives());

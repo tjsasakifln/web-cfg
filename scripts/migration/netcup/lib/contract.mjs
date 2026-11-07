@@ -635,6 +635,7 @@ export function buildHostContract(root = MODULE_ROOT) {
       routePrefixes: [DYNAMIC_ROUTE_PREFIX, "/api/web/"],
       identityPath: INTEGRATED_RUNTIME_CONTRACT.identity_path,
       readinessPath: INTEGRATED_RUNTIME_CONTRACT.readiness_path,
+      cadEditions: INTEGRATED_RUNTIME_CONTRACT.cad_browser_editions,
       httpFunctions,
       upstream: {
         host: INTEGRATED_RUNTIME_CONTRACT.netcup_production.host,

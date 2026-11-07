@@ -13,6 +13,7 @@
     "profile": "netcup-production",
     "storage_backend": "filesystem"
   },
+  "cad_browser_editions": "/cad/suite/runtime/",
   "identity_path": "/.well-known/runtime-info.json",
   "readiness_path": "/ready"
 }

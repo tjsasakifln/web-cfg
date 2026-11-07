@@ -1,4 +1,6 @@
 import http from "node:http";
+import { fileURLToPath } from "node:url";
+import { createCadEditions } from "./cad-editions.mjs";
 import { createHttpAdapter, writeJson } from "./adapter.mjs";
 import {
   evaluateReadiness,
@@ -44,8 +46,10 @@ export function createPortableRuntime({
     trackInvocation,
   });
 
+  const serveEdition = createCadEditions(fileURLToPath(new URL("../../_site/cad/suite/pacotes/", import.meta.url)));
   const server = http.createServer((req, res) => {
-    const request = adapter(req, res);
+    const request = req.url?.startsWith("/cad/suite/runtime/")
+      ? serveEdition(req, res) : adapter(req, res);
     activeRequests.add(request);
     request.then(
       () => activeRequests.delete(request),

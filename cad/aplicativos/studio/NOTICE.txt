@@ -1,0 +1,12 @@
+This distribution includes the unmodified hub/handoff.js module from CadCraft Studio,
+release studio-v0.8.1, distributed under the Apache License, Version 2.0.
+Source: https://github.com/getcadcraft/studio/blob/studio-v0.8.1/hub/handoff.js
+Copyright 2026 The Data Design Group, Inc.
+The CadCraft family product names and logos are trademarks of their respective owner.
+
+The Portuguese examples in roteiros.json are translated and adapted from the 50
+prompt starters in the ten skill packs shipped under Apache-2.0 in CadCraft
+Studio 0.8.1. Wording and examples were adapted by CONFENGE. Original module:
+assets/js/skill-packs.js (SHA-256 7607ba2372adf9761b560cd928c9dab18e5249f8abd3ab14b3a84dbb0d4fbbc2).
+Source distribution:
+https://github.com/getcadcraft/studio/releases/tag/studio-v0.8.1

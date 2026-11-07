@@ -254,7 +254,7 @@ def apply_rewrites(root: Path | None = None) -> dict[str, int]:
 LOCAL_FILE_TOOLS = frozenset(
     f"bim/web/{name}.html" for name in
     ("cad", "chapas", "comparar", "digitalizar", "ifc-excel", "modelagem", "regua", "visualizador")
-)
+) | {"cad/aplicativos/index.html"}
 
 
 class _FileControls(HTMLParser):

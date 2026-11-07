@@ -461,6 +461,11 @@
   ],
   "parents": [
     {
+      "prefix": "/cad/aplicativos/",
+      "parent": "/cad/",
+      "exact": true
+    },
+    {
       "prefix": "/cad/guias/",
       "parent": "/cad/"
     },
