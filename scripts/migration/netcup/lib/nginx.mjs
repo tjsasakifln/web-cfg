@@ -461,6 +461,7 @@ export function renderLocations(contract) {
   // JavaScript MIME with nosniff; streaming WebAssembly requires application/wasm.
   lines.push("location ~ ^/(?:bim/(?:web|fotogrametria)|cad)/.+\\.(?:mjs|wasm)$ {");
   lines.push("  types { application/javascript mjs; application/wasm wasm; }");
+  lines.push("  gzip_types application/javascript application/wasm;");
   lines.push("  try_files $uri =404;");
   lines.push("}", "");
   lines.push("location / {");
