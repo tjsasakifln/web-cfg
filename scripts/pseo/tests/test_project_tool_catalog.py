@@ -41,7 +41,7 @@ def test_release_local_tools_no_dead_or_duplicate_links(tmp_path):
     slugs = list(TOOLS)
     for slug in slugs:
         (tmp_path / slug).mkdir(parents=True, exist_ok=True)
-    for flags in product([False, True], repeat=5):
+    for flags in product([False, True], repeat=len(slugs) - 2):
         active = ["cad", "bim"] + [slug for slug, yes in zip(slugs[2:], flags) if yes]
         for slug in slugs:
             file = tmp_path / slug / "index.html"

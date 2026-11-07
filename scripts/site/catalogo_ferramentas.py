@@ -12,6 +12,10 @@ TOOLS = {
     "ferramentas/conversor-utm-sirgas-2000": ("Converter coordenadas SIRGAS 2000", "Passe de latitude e longitude para UTM e confira o fuso do levantamento."),
     "ferramentas/calculadora-de-beiral": ("Calcular a sombra de um beiral", "Compare a proteção da janela em diferentes horários e orientações de fachada."),
     "ferramentas/calculadora-psicrometrica": ("Calcular o ponto de orvalho", "Compare a temperatura da superfície com a condição de condensação do ar."),
+    "ferramentas/orcamento-de-obras": ("Montar o orçamento de obras", "Organize serviços e composições por etapa com preços próprios ou do SINAPI."),
+    "ferramentas/analise-de-viga-continua": ("Analisar uma viga contínua", "Obtenha reações, momentos, cortantes e flechas sob as cargas do modelo."),
+    "ferramentas/rede-de-agua": ("Projetar a rede de água", "Compare a pressão nos pontos e a vazão nos trechos em dois cenários de consumo."),
+    "ferramentas/diagrama-unifilar": ("Desenhar um diagrama unifilar", "Conecte os terminais dos componentes e exporte o esquema elétrico."),
     "ferramentas/calculadora-bdi": ("Calcular o BDI da obra", "Componha as parcelas do BDI e obtenha o preço de venda a partir do custo direto."),
     "ferramentas/caminho-critico-obra": ("Encontrar o caminho crítico da obra", "Confira o prazo de entrega e a folga de cada atividade do cronograma."),
 }
