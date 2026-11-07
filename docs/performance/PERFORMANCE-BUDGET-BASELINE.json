@@ -3,7 +3,7 @@
     "asset_files_max_route": 25,
     "asset_raw_kb_max_route": 1116.55,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 276
+    "routes_measured": 277
   },
   "budget": {
     "cls_max": 0.05,
@@ -468,6 +468,7 @@
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
       "/ferramentas/checklist-reequilibrio/",
+      "/ferramentas/conversor-utm-sirgas-2000/",
       "/ferramentas/diagnostico-defesa-margem/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
@@ -746,6 +747,7 @@
       "/especialista/tiago-jun-sasaki/",
       "/ferramentas/",
       "/ferramentas/checklist-reequilibrio/",
+      "/ferramentas/conversor-utm-sirgas-2000/",
       "/ferramentas/diagnostico-defesa-margem/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
