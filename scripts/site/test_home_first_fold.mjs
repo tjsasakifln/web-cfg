@@ -99,6 +99,7 @@ const MIME = {
   ".html": "text/html; charset=utf-8",
   ".js": "application/javascript",
   ".png": "image/png",
+  ".svg": "image/svg+xml",
   ".webp": "image/webp",
   ".avif": "image/avif",
 };
@@ -132,9 +133,11 @@ function inspectPanel() {
   const portrait = document.querySelector(".home-company__portrait picture");
   if (!sheet || !figure || !portrait) return { ok: false, problems: ["panel_or_portrait_missing"] };
   const problems = [];
-  const leaves = [...sheet.querySelectorAll("p,strong,span")].filter((node) => !node.querySelector("p,strong,span"));
+  const leaves = [...sheet.querySelectorAll("p,h2,dt,dd,small")];
   const fonts = leaves.map((node) => Number.parseFloat(getComputedStyle(node).fontSize));
-  if (leaves.length < 10 || Math.min(...fonts) < 16) problems.push("panel_text_below_16px_or_missing");
+  if (!sheet.querySelector("h2") || sheet.querySelectorAll("dd").length !== 3 || Math.min(...fonts) < 16) problems.push("panel_text_below_16px_or_missing");
+  const drawing = sheet.querySelector("img");
+  if (!drawing?.complete || !drawing.naturalWidth || drawing.getBoundingClientRect().width < 180) problems.push("quantity_drawing_missing");
   const box = sheet.getBoundingClientRect();
   if (box.left < 0 || box.right > innerWidth || sheet.scrollWidth > sheet.clientWidth + 1) problems.push("panel_overflow");
   const frame = getComputedStyle(figure, "::before");
@@ -517,7 +520,7 @@ try {
     if (!panel.ok) failures.push(`HOME_PANEL ${width}: ${panel.problems.join(",")}`);
   }
   // Deliberate visual regressions must make the rendered gate fail.
-  const smallText = await page.addStyleTag({ content: ".home-opening__sheet p,.home-opening__sheet strong,.home-opening__sheet span{font-size:8px!important}" });
+  const smallText = await page.addStyleTag({ content: ".home-opening__sheet dd{font-size:8px!important}" });
   if (!(await page.evaluate(inspectPanel)).problems.includes("panel_text_below_16px_or_missing")) failures.push("PANEL_COUNTERPROOF small_text_did_not_fail");
   await smallText.evaluate((node) => node.remove());
   const shiftedFrame = await page.addStyleTag({ content: ".home-opening__figure::before{content:'';position:absolute;inset:-24px 24px 24px -24px;background:#061a33}" });

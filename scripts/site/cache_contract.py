@@ -10,7 +10,7 @@ HASHED_DASH = re.compile(r"-[0-9a-f]{8,}\.[A-Za-z0-9]+$")
 HASHED_DOT = re.compile(r"\.[0-9a-f]{8,}\.(?:css|js)$")
 IMMUTABLE_CACHE = "public, max-age=31536000, immutable"
 REVALIDATABLE_IDENTITY = "no-cache, max-age=0, must-revalidate"
-HTML_SERVING_CACHE_OVERRIDES = ("/assets/data-desk/*",)
+HTML_SERVING_CACHE_OVERRIDES = ("/assets/data-desk/*", "/bim/web/*", "/bim/fotogrametria/*")
 
 
 def parse_header_rules(text: str) -> dict[str, dict[str, str]]:

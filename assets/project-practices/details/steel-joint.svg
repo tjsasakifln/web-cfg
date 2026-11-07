@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Ligação aparafusada</title>
+  <desc id="desc">Detalhe conceitual do encontro de viga e pilar. A chapa de ligação está destacada e as cabeças dos parafusos aparecem sobre a alma da viga.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M66 18h44v132H66z" fill="url(#hatch)"/>
+    <path d="M62 18h8v132h-8z M106 18h8v132h-8z" fill="#556e7d"/>
+    <path d="M116 54h160v7H116z M116 105h160v7H116z" fill="#6b8492"/>
+    <path d="M116 61h160v44H116z" fill="#19364b"/>
+    <path d="M115 67h41v32h-41z" fill="#ced62a" stroke="#ced62a"/>
+    <g fill="#203745" stroke="#0b2437"><path d="m125 74 4-2 4 2v5l-4 2-4-2z m13 10 4-2 4 2v5l-4 2-4-2z"/></g>
+    <path d="M156 67l32-35h48m-104 68 34 30h49" stroke-width="1.1"/>
+    <path d="M281 54h13m-13 58h13m-5-59v60" stroke="#77919e" stroke-width="1"/>
+  </g>
+</svg>

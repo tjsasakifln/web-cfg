@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 278
+    "expected_declared_ctas": 280
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 41,
-    "declared_ctas": 278,
+    "declared_ctas": 280,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4331,6 +4331,36 @@
           ]
         },
         {
+          "cta_id": "home-hero-quantity-example",
+          "position": "hero_sample",
+          "href": "/casos/demonstrativo-projeto-privado/#quantitativos",
+          "stage": "inspect",
+          "commitment": "low",
+          "current_label": "Conferir a memória de cálculo",
+          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-hero-quantity-request",
+          "position": "hero_sample",
+          "href": "/quantitativos-orcamento-obras/#triagem-quantitativos",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Pedir um levantamento",
+          "useful_next_state": "Abre o destino declarado por “Pedir um levantamento” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
           "cta_id": "home-service-projects",
           "position": "home_services",
           "href": "/projetos/",
@@ -4546,7 +4576,7 @@
           "href": "/casos/demonstrativo-projeto-privado/",
           "stage": "inspect",
           "commitment": "low",
-          "current_label": "Examinar o demonstrativo",
+          "current_label": "Comparar as pranchas",
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
@@ -4576,7 +4606,7 @@
           "href": "/casos/medicao-glosa-demonstrativo/",
           "stage": "inspect",
           "commitment": "low",
-          "current_label": "Examinar o demonstrativo",
+          "current_label": "Abrir o dossiê demonstrativo",
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",

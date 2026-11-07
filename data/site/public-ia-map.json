@@ -25,7 +25,13 @@
       "label": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
       "visitor_language": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
       "href": "/quantitativos-orcamento-obras/",
-      "index_state": "service_hub_index"
+      "index_state": "service_hub_index",
+      "sub_situations": [
+        {
+          "label": "Conferir o desenho e a conta do revestimento",
+          "href": "/quantitativos-orcamento-obras/#amostra-quantitativos"
+        }
+      ]
     },
     {
       "id": "building_diagnosis",
@@ -45,6 +51,10 @@
         {
           "label": "Documentar o construído",
           "href": "/inspecao-diagnostico-edificacoes/#documentacao-as-built"
+        },
+        {
+          "label": "Examinar o mapa da fachada",
+          "href": "/inspecao-diagnostico-edificacoes/#amostra-disponivel"
         }
       ]
     },

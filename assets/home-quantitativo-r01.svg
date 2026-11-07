@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="222" viewBox="0 0 420 222" role="img" aria-labelledby="title desc">
+  <title id="title">Área impermeabilizada no banheiro demonstrativo R01</title>
+  <desc id="desc">O piso de 2,40 m por 1,80 m aparece em azul. A faixa contínua verde sobe 30 cm nas quatro paredes. O contorno tracejado mostra a faixa junto às duas bordas da frente.</desc>
+  <defs>
+    <pattern id="floor" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="matrix(1 .4 -1 .4 180 55)">
+      <rect width="14" height="14" fill="#e2ebef"/>
+      <path d="M0 0H14M0 0V14" fill="none" stroke="#b2c6ce" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <g stroke-linejoin="round" stroke="#15384b" stroke-width="2">
+    <!-- The 2.40 x 1.80 m floor and its 0.30 m upstand, axonometric projection. -->
+    <path d="m30 115 192 76.8 144-57.6v6l-144 57.6L30 121Z" fill="#c1cfd4"/>
+    <path d="m174 57.4 192 76.8-144 57.6L30 115Z" fill="url(#floor)"/>
+    <path d="M30 115V91l144-57.6v24Z" fill="#75a989"/>
+    <path d="M174 33.4 366 110.2v24L174 57.4Z" fill="#b6d3b5"/>
+    <path d="m30 91 192 76.8 144-57.6M222 167.8v24" fill="none" stroke="#327045" stroke-width="1.8" stroke-dasharray="6 5"/>
+  </g>
+  <g fill="none" stroke="#327045" stroke-width="1.4" stroke-linecap="round">
+    <path d="M375 110.2h10m-10 24h10m-5-24v24"/>
+    <path d="m377 113.2 6-6m-6 30 6-6"/>
+  </g>
+  <text x="380" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#245835">30 cm</text>
+</svg>

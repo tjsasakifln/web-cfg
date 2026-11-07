@@ -1111,7 +1111,7 @@ def test_home_form_anchor_reveals_fields():
     hero_text = re.sub(r"<[^>]+>", " ", hero_section.group(0))
     assert re.search(r"necessidades públicas e privadas", hero_text, re.I)
     assert re.search(r"\b(?:elabora|coordena|projetamos|coordenamos)\b", hero_text, re.I)
-    assert "entrega técnica" in hero_text
+    assert "entrega técnica" in hero_text.casefold()
     header_cta = re.search(
         r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
         r'<a\b[^>]*href="([^"]+)"[^>]*\bheader-cta\b',
