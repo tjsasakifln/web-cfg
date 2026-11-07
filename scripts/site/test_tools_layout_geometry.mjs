@@ -32,6 +32,7 @@ const ALLOW_FAILURES = process.env.TOOLS_LAYOUT_ALLOW_FAILURES === "1";
 const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
+  { id: "beiral", path: "/ferramentas/calculadora-de-beiral/", primary: "#simulador" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
@@ -308,6 +309,13 @@ async function exercise(page, id) {
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#resultado");
     return [stage2, stage3, result];
+  }
+
+  if (id === "beiral") {
+    await page.waitForSelector("#resultado:not([hidden])");
+    await page.click("#resultado summary");
+    await page.waitForSelector("#horarios tr:nth-child(24)");
+    return [await geometry(page, id, "tabela-horaria", page.viewport().width)];
   }
 
   if (id === "reequilibrio") {

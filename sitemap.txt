@@ -80,6 +80,7 @@ https://confenge.com.br/engenharia-condominios/
 https://confenge.com.br/entregas/
 https://confenge.com.br/especialista/tiago-jun-sasaki/
 https://confenge.com.br/ferramentas/
+https://confenge.com.br/ferramentas/calculadora-de-beiral/
 https://confenge.com.br/ferramentas/checklist-reequilibrio/
 https://confenge.com.br/ferramentas/diagnostico-defesa-margem/
 https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/
