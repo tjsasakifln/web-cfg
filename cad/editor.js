@@ -22,7 +22,7 @@ if (editor) {
         <button type="button" class="cad-primary" data-open>${icon('open')}Abrir DWG</button>
         <button type="button" data-example>${icon('example')}Experimentar um exemplo</button>
         <button type="button" data-save hidden>${icon('save')}Baixar cópia</button>
-        <button type="button" data-fit hidden>${icon('fit')}Enquadrar</button>
+        <button type="button" data-fit hidden>${icon('fit')}Mostrar desenho inteiro</button>
         <button type="button" data-expand hidden aria-pressed="false">${icon('expand')}<span>Ampliar editor</span></button>
         <input type="file" data-file accept=".dwg,.dxf" hidden>
       </div>
