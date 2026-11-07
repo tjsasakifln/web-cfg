@@ -1813,6 +1813,7 @@
       "match": {
         "routes": [
           "/bim/",
+          "/ferramentas/conversor-utm-sirgas-2000/",
           "/bim/guias/dwg-para-ifc-paredes/",
           "/bim/guias/medir-distancia-area-foto/",
           "/bim/guias/pdf-escaneado-para-dwg/",

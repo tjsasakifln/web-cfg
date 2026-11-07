@@ -33,6 +33,7 @@ const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
+  { id: "sirgas2000", path: "/ferramentas/conversor-utm-sirgas-2000/", primary: "#conversor" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
@@ -372,6 +373,14 @@ async function exercise(page, id) {
     await waitForPaint(page);
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#diagnostic-result");
+    return [result];
+  }
+
+  if (id === "sirgas2000") {
+    await page.click("#exemplo");
+    await page.waitForSelector("#resultado:not([hidden])");
+    const result = await geometry(page, id, "resultado", page.viewport().width);
+    await screenshot(page, id, page.viewport().width, "resultado", "#conversor");
     return [result];
   }
 
