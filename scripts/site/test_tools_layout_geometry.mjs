@@ -34,6 +34,7 @@ const ROUTES = [
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
+  { id: "unifilar", path: "/ferramentas/diagrama-unifilar/", primary: "#editor" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
@@ -373,6 +374,12 @@ async function exercise(page, id) {
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#diagnostic-result");
     return [result];
+  }
+
+  if (id === "unifilar") {
+    await page.click("#exemplo");
+    await page.waitForFunction(() => document.querySelector("#contagem").textContent.includes("6 ligações"));
+    return [await geometry(page, id, "exemplo", page.viewport().width)];
   }
 
   if (id === "prontidao") {

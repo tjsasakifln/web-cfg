@@ -3,7 +3,7 @@
     "asset_files_max_route": 25,
     "asset_raw_kb_max_route": 1116.55,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 276
+    "routes_measured": 277
   },
   "budget": {
     "cls_max": 0.05,
@@ -469,6 +469,7 @@
       "/ferramentas/",
       "/ferramentas/checklist-reequilibrio/",
       "/ferramentas/diagnostico-defesa-margem/",
+      "/ferramentas/diagrama-unifilar/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
@@ -747,6 +748,7 @@
       "/ferramentas/",
       "/ferramentas/checklist-reequilibrio/",
       "/ferramentas/diagnostico-defesa-margem/",
+      "/ferramentas/diagrama-unifilar/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
       "/ferramentas/prontidao-tecnica-obra-privada/",

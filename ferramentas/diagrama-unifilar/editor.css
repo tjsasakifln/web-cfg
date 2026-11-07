@@ -1,0 +1,17 @@
+.unifilar {padding-block: 1.25rem 3rem}
+.unifilar .content-lead {max-width: 70ch}
+.uni-work {display:grid;grid-template-columns:minmax(17rem,.75fr) minmax(0,1.4fr);gap:1rem;align-items:start;margin:1.3rem 0}
+.uni-work > div {min-width:0}
+.uni-card {padding:clamp(.9rem,2vw,1.5rem);border:1px solid var(--line);background:var(--white);margin-bottom:1rem}
+.uni-card summary {cursor:pointer;font-weight:700;padding:.4rem 0;min-height:44px}
+.uni-card label {display:grid;gap:.3rem;margin:.6rem 0;font-weight:600;min-width:0}
+.uni-card :is(input,select) {display:block;width:100%;max-width:100%;min-height:44px;background:white;color:var(--ink);border:1px solid var(--muted);padding:.45rem .6rem;font:inherit}
+.uni-card input[type=file] {font-size:.875rem}
+.uni-card .xy {display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.uni-actions {display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}
+.uni-actions .button {min-height:44px}
+.unifilar fieldset {border:0;padding:0;min-width:0;margin:0}
+#visor {overflow:auto;border:1px solid var(--line);background:#fff;padding:.4rem}
+#visor svg {display:block;width:100%;height:auto;min-width:295px;max-height:65vh}
+.uni-guide {max-width:76ch}
+@media(max-width:800px){.uni-work{display:flex;flex-direction:column}.uni-work>div{width:100%}.uni-preview{order:-1}}
