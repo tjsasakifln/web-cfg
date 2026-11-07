@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de viga contínua | CONFENGE</title>
+<meta name="description" content="Calcule reações de apoio, cortantes, momentos e flechas de vigas contínuas com até seis vãos. Compare cargas, apoios e inércias e baixe os resultados em CSV.">
+<meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#061a33">
+<link rel="canonical" href="https://confenge.com.br/ferramentas/analise-de-viga-continua/">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<script>document.documentElement.classList.replace('no-js','js');</script>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="viga.css">
+<script defer src="/script.js?v=mv09"></script><script type="module" src="painel.js"></script>
+<meta property="og:type" content="website"><meta property="og:site_name" content="CONFENGE"><meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Calculadora de viga contínua"><meta property="og:url" content="https://confenge.com.br/ferramentas/analise-de-viga-continua/"><meta property="og:description" content="Calcule reações de apoio, cortantes, momentos e flechas de vigas contínuas com até seis vãos. Compare cargas, apoios e inércias e baixe os resultados em CSV.">
+<meta property="og:image" content="https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"><meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora de viga contínua","url":"https://confenge.com.br/ferramentas/analise-de-viga-continua/","applicationCategory":"EngineeringApplication","operatingSystem":"Navegador web","inLanguage":"pt-BR","isAccessibleForFree":true,"description":"Calcule reações de apoio, cortantes, momentos e flechas de vigas contínuas com até seis vãos. Compare cargas, apoios e inércias e baixe os resultados em CSV.","publisher":{"@type":"Organization","name":"CONFENGE"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Calculadora de viga contínua","item":"https://confenge.com.br/ferramentas/analise-de-viga-continua/"}]}]}</script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/ferramentas/">Ferramentas</a><span aria-hidden="true">/</span></li><li aria-current="page">Calculadora de viga contínua</li></ol></nav>
+<div class="container viga-shell"><header><p class="eyebrow">Análise estrutural</p>
+<h1>Calculadora de viga contínua</h1>
+<p class="content-lead">Compare as reações, os momentos e as flechas de uma viga com um a seis vãos. Altere a carga ou a inércia de um trecho para ver quanto chega a cada apoio.</p>
+<p>Uso gratuito, direto no navegador. O exemplo inicial tem dois vãos de 5 m, ambos com carga de 10 kN/m.</p>
+<p><a href="#saida" id="ir-resultado" hidden>Ver diagramas e resultados</a></p></header>
+
+<section class="viga-bloco" id="entrada" aria-labelledby="dados"><h2 id="dados">Geometria, rigidez e cargas</h2>
+<p id="sem-js" role="status">Ative o JavaScript para fazer o cálculo. O exemplo resolvido e o método estão disponíveis abaixo.</p>
+<fieldset id="controles" disabled aria-label="Dados do modelo"><div class="viga-campos">
+<label>Módulo E (GPa)<input id="modulo" inputmode="decimal" value="30" data-min="0.1" data-max="350"></label>
+<label>Extremidade inicial<select id="esquerda"><option value="livre">Apoio simples</option><option value="fixo">Engaste</option></select></label>
+<label>Extremidade final<select id="direita"><option value="livre">Apoio simples</option><option value="fixo">Engaste</option></select></label></div>
+<p>Conte os vãos da esquerda para a direita. Os apoios intermediários mantêm a continuidade da viga. Digite a carga distribuída total de cada vão, incluindo o peso próprio se ele fizer parte do caso analisado. Carga positiva atua para baixo.</p>
+<div id="lista-vaos"></div><div class="viga-acoes"><button id="adicionar" type="button" class="button button-secondary">Adicionar vão</button><button id="remover" type="button" class="button button-secondary">Remover último vão</button></div></fieldset>
+<p id="status" role="status"></p>
+<details><summary>Unidades e limites de entrada</summary><p>Use vírgula ou ponto decimal, sem separador de milhar. Módulo de elasticidade entre 0,1 e 350 GPa, comprimento de 0,1 a 100 m, carga distribuída de −10.000 a 10.000 kN/m e momento de inércia entre 1 e 1 bilhão de cm⁴. Para uma seção retangular, calcule I = b × h³ / 12 com b e h em centímetros, sendo h a altura na direção da flexão.</p></details></section>
+
+<section class="viga-bloco" id="saida" aria-labelledby="resultados" hidden><h2 id="resultados">Esforços e deslocamentos</h2>
+<label>Diagrama<select id="grandeza"><option value="M">Momento fletor (kN·m)</option><option value="V">Força cortante (kN)</option><option value="flecha">Flecha (mm)</option></select></label>
+<figure><svg id="diagrama" viewBox="0 0 620 178" role="img" aria-label="Diagrama ao longo dos vãos. Os extremos são informados na legenda e os valores podem ser baixados em CSV."></svg><figcaption id="escala"></figcaption></figure>
+<h3>Reações dos apoios</h3><div class="viga-tabela" role="region" aria-label="Reações de todos os apoios" tabindex="0"><table><thead><tr><th>Apoio</th><th>Posição (m)</th><th>Reação (kN)</th><th>Momento de reação (kN·m)</th></tr></thead><tbody id="apoios"></tbody></table></div>
+<h3>Extremos em cada vão</h3><div class="viga-tabela" role="region" aria-label="Extremos por vão" tabindex="0"><table><thead><tr><th>Vão</th><th>M mín. (kN·m)</th><th>M máx. (kN·m)</th><th>Maior flecha em módulo, com sinal (mm)</th><th>Distância ao início do vão (m)</th></tr></thead><tbody id="extremos"></tbody></table></div>
+<p>Reação positiva atua para cima. Momento de reação positivo gira no sentido anti-horário. Momento fletor positivo traciona a face inferior. O cortante corresponde à variação do momento por metro. Flecha negativa indica deslocamento para baixo.</p>
+<p id="leitura" role="status"></p><button id="csv" type="button" class="button button-secondary">Baixar memória em CSV</button></section>
+
+<section aria-labelledby="exemplo"><h2 id="exemplo">Confira pelo exemplo de dois vãos</h2>
+<p>Para dois vãos iguais de 5 m, apoiados nas extremidades e carregados com 10 kN/m em toda a extensão, a carga aplicada soma 100 kN. Com rigidez constante, cada apoio externo recebe 18,75 kN e o apoio central recebe 62,50 kN. O momento fletor sobre o apoio central é −31,25 kN·m. O momento positivo máximo de cada vão é 17,578 kN·m.</p>
+<p>Para ensaiar um caso conhecido de viga biapoiada, remova o segundo vão. As reações passam a 25 kN em cada apoio. O maior momento vale qL²/8, ou 31,25 kN·m. Com E = 30 GPa e I = 160000 cm⁴, a flecha no meio do vão vale 5qL⁴/(384EI), aproximadamente 1,695 mm para baixo.</p>
+<h2>Como interpretar o modelo estrutural</h2>
+<p>A análise utiliza flexão plana de Euler-Bernoulli, material elástico linear, pequenos deslocamentos e rigidez constante em cada vão. Os apoios impedem o deslocamento transversal. Apoio simples permite rotação e engaste impede rotação. O cálculo combina a rigidez dos trechos e recupera a linha elástica e os esforços sob carga uniforme.</p>
+<p>O modelo representa uma viga reta, sem balanços, recalques, rótulas internas ou cargas pontuais. A solução muda com a rigidez adotada. Em concreto, a fissuração e a fluência podem alterar as flechas. A seleção de combinações de ações, armaduras, perfis, ligações e limites de serviço pertence ao dimensionamento do projeto.</p>
+<p>O CSV registra as entradas, as condições de apoio, as reações e os resultados ao longo da viga, inclusive as seções críticas.
+As rotinas de elemento e recuperação de esforços foram adaptadas do <a href="https://github.com/CALFEM/calfem-python/blob/dc7d250bb7502a45f1b407b9cbc9c7bcc1a00b90/src/calfem/core.py">CALFEM da Universidade de Lund</a>. <a href="LICENSE-CALFEM.txt">Licença MIT</a>.</p>
+<p><a href="/projeto-estrutural-concreto-armado/">Projeto estrutural de concreto armado</a> · <a href="/projeto-estrutura-metalica/">Projeto de estrutura metálica</a> · <a href="https://wa.me/5548988344559?text=Gostaria%20de%20conversar%20sobre%20a%20revis%C3%A3o%20de%20uma%20viga%20no%20projeto%20estrutural." data-cta-position="viga_revisao">Conversar pelo WhatsApp sobre o projeto</a></p>
+<p>Atualizado em <time datetime="2026-11-07">7 de novembro de 2026</time>.</p></section>
+</div></main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body>
+</html>

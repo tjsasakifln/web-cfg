@@ -31,6 +31,7 @@ const OUT = resolve(process.env.TOOLS_LAYOUT_EVIDENCE_DIR || join(ROOT, ".playwr
 const ALLOW_FAILURES = process.env.TOOLS_LAYOUT_ALLOW_FAILURES === "1";
 const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
+  { id: "viga", path: "/ferramentas/analise-de-viga-continua/", primary: "#entrada" },
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
@@ -261,6 +262,13 @@ async function requireVisiblePrimary(page, route) {
 }
 
 async function exercise(page, id) {
+  if (id === "viga") {
+    await page.waitForSelector("#saida:not([hidden])");
+    await page.click("#adicionar");
+    await page.waitForSelector("#apoios tr:nth-child(4)");
+    return [await geometry(page, id, "tres-vaos", page.viewport().width)];
+  }
+
   if (id === "limite") {
     await page.evaluate(() => {
       const set = (name, value) => {

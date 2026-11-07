@@ -99,7 +99,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 262,
+  "html_route_count": 263,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -289,6 +289,7 @@
     "/engenharia-condominios/",
     "/entregas/",
     "/especialista/tiago-jun-sasaki/",
+    "/ferramentas/analise-de-viga-continua/",
     "/ferramentas/checklist-reequilibrio/",
     "/ferramentas/diagnostico-defesa-margem/",
     "/ferramentas/",
