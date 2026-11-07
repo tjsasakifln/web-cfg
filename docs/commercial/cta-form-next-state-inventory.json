@@ -7130,6 +7130,15 @@
       "nojs_degradation": "runtime_status"
     },
     {
+      "route": "/ferramentas/orcamento-de-obras/",
+      "form_id": "editor-servico",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/orcamento-de-obras/",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
       "route": "/ferramentas/prontidao-tecnica-obra-privada/",
       "form_id": "diagnostico",
       "form_class": "pptr-form",

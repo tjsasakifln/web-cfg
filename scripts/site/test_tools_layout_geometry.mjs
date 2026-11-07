@@ -36,6 +36,7 @@ const ROUTES = [
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
+  { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
 ];
 const expectedRoutePaths = ROUTES.map(({ path }) => path).sort();
@@ -308,6 +309,12 @@ async function exercise(page, id) {
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#resultado");
     return [stage2, stage3, result];
+  }
+
+  if (id === "orcamento") {
+    await page.click("#demonstrar");
+    await page.waitForFunction(() => document.querySelector("#total-obra").textContent.includes("2.391,84"));
+    return [await geometry(page, id, "resultado", page.viewport().width)];
   }
 
   if (id === "reequilibrio") {

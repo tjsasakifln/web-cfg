@@ -45,6 +45,7 @@ assert.ok(!report.surfaces.some((surface) => surface.forms.some((form) => form.k
 // the CNPJ lookup form of /analise-cnpj/ (its lead form is a capture surface).
 const expectedRoutes = new Set([
   "/analise-cnpj/",
+  "/ferramentas/orcamento-de-obras/",
   "/conflitos/",
   "/conteudos/sinapi-desonerado-nao-desonerado/",
   "/ferramentas/checklist-reequilibrio/",

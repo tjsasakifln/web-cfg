@@ -120,6 +120,7 @@ https://confenge.com.br/projetos/coordenacao-multidisciplinar/
 https://confenge.com.br/projetos/estruturas/
 https://confenge.com.br/projetos/infraestrutura/
 https://confenge.com.br/projetos/instalacoes/
+https://confenge.com.br/ferramentas/orcamento-de-obras/
 https://confenge.com.br/quantitativos-orcamento-obras/
 https://confenge.com.br/radar/nacional-obras-publicas/
 https://confenge.com.br/reequilibrio-obras-publicas/

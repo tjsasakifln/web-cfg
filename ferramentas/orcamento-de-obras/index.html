@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orçamento de obras online com planilha e SINAPI | CONFENGE</title><meta name="description" content="Monte uma planilha de orçamento de obra com etapas, quantitativos, preços próprios e referências SINAPI. Calcule custos e BDI e exporte a planilha sem cadastro.">
+<link rel="canonical" href="https://confenge.com.br/ferramentas/orcamento-de-obras/"><meta property="og:title" content="Planilha de orçamento de obras | CONFENGE"><meta property="og:description" content="Monte uma planilha de orçamento de obra com etapas, quantitativos, preços próprios e referências SINAPI. Calcule custos e BDI e exporte a planilha sem cadastro."><meta property="og:url" content="https://confenge.com.br/ferramentas/orcamento-de-obras/"><meta property="og:type" content="website">
+<meta name="theme-color" content="#061a33"><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="/assets/editorial-tool.css"><link rel="stylesheet" href="./orcamento.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Planilha de orçamento de obras","url":"https://confenge.com.br/ferramentas/orcamento-de-obras/","inLanguage":"pt-BR","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-11-07","description":"Monte uma planilha de orçamento de obra com etapas, quantitativos, preços próprios e referências SINAPI. Calcule custos e BDI e exporte a planilha sem cadastro.","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Orçamento de obras","item":"https://confenge.com.br/ferramentas/orcamento-de-obras/"}]}]}</script>
+<script src="/assets/js/tools-common.js" defer></script><script src="/script.js" defer></script><script src="./app.js" type="module"></script></head><body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav class="breadcrumbs container" aria-label="Caminho de navegação"><ol><li><a href="/">Início</a> /</li><li><a href="/ferramentas/">Ferramentas</a> /</li><li aria-current="page">Orçamento de obras</li></ol></nav>
+<header class="tool-page-hero"><div class="container orc"><p class="eyebrow">Custos e planejamento</p><h1>Planilha de orçamento de obras</h1>
+<p class="content-lead" data-tool-job>Orce os serviços por etapa. Use preços próprios ou importe referências do SINAPI para calcular o custo direto, aplicar seu BDI e baixar a planilha.</p></div></header>
+<div class="container orc">
+<noscript><p>Ative o JavaScript para editar e calcular a planilha no navegador. O exemplo e o método de cálculo estão abaixo.</p></noscript>
+<section aria-labelledby="obra-titulo" class="orc-bloco"><div class="orc-topo"><h2 id="obra-titulo">Seu orçamento</h2><button type="button" id="demonstrar" class="button button-secondary" disabled>Carregar exemplo</button></div>
+<div class="orc-dados"><label for="nome-obra">Nome da obra<input id="nome-obra" maxlength="160" placeholder="Ex.: Reforma do térreo" disabled></label>
+<label for="bdi-obra">BDI (%)<input id="bdi-obra" inputmode="decimal" value="0" disabled></label></div>
+<p id="erro-bdi" role="alert"></p>
+<div class="orc-resumo"><div>Custo direto<strong id="custo-direto">R$ 0,00</strong></div><div>BDI em reais<strong id="valor-bdi">R$ 0,00</strong></div><div>Total com BDI<strong id="total-obra">R$ 0,00</strong></div></div>
+<p id="gravacao" class="orc-nota">Grátis e sem cadastro. Os serviços são guardados neste navegador ao clicar em “Adicionar à planilha” ou “Salvar alterações”. Salve o projeto JSON para levar uma cópia a outro aparelho.</p></section>
+<section class="orc-bloco" aria-labelledby="titulo-editor"><h2 id="titulo-editor">Adicionar serviço</h2>
+<details id="opcoes-importar"><summary>Buscar preço em uma base SINAPI</summary><div id="importar-base"></div></details>
+<form id="editor-servico" method="post" action="/ferramentas/orcamento-de-obras/" class="tool-form">
+<fieldset id="campos-servico" data-tool-runtime-fields disabled><legend class="visually-hidden">Dados do serviço</legend>
+<div class="orc-campos">
+<label for="etapa">Etapa<input id="etapa" list="lista-etapas" maxlength="80" placeholder="Ex.: Fundações" required></label><datalist id="lista-etapas"></datalist>
+<label for="codigo">Código (opcional)<input id="codigo" maxlength="40" placeholder="Ex.: F01"></label>
+<label for="descricao" class="orc-largo">Serviço<input id="descricao" maxlength="1000" placeholder="Ex.: Concretagem das sapatas" required></label>
+<label for="unidade">Unidade<input id="unidade" maxlength="24" placeholder="Ex.: m³" required></label>
+<label for="quantidade">Quantidade<input id="quantidade" inputmode="decimal" placeholder="Ex.: 12,5" required></label>
+<label for="tipo-preco">Origem do custo<select id="tipo-preco"><option value="preco">Preço unitário</option><option value="composicao">Composição de custos</option></select></label>
+<label for="preco" id="campo-preco">Preço unitário (R$)<input id="preco" inputmode="decimal" placeholder="Ex.: 385,50" required></label>
+<div id="campo-composicao" class="orc-largo" hidden><label for="insumos">Insumos por unidade do serviço</label><p id="dica-insumos">Uma linha por insumo. Separe com ponto e vírgula ou tabulação, na ordem tipo, descrição, unidade, coeficiente e preço. Tipos aceitos: material, mão de obra, equipamento ou outro. Inclua os encargos no preço da mão de obra.</p><textarea id="insumos" rows="3" maxlength="65000" aria-describedby="dica-insumos" placeholder="material;Tinta;L;0,25;22,00"></textarea></div>
+<label for="fonte" class="orc-largo">Referência do preço (opcional)<input id="fonte" maxlength="300" placeholder="Ex.: Cotação do fornecedor, novembro de 2026"></label>
+</div><p id="erro-servico" role="alert"></p>
+<div class="tool-actions"><button class="button button-primary tool-run" id="gravar-item" type="submit" disabled>Adicionar à planilha</button><button id="cancelar" type="button" class="button button-secondary" hidden>Cancelar edição</button></div>
+</fieldset></form></section>
+<section class="orc-bloco" aria-labelledby="titulo-planilha"><div class="orc-topo"><h2 id="titulo-planilha" tabindex="-1">Planilha por etapa</h2><span id="contagem">0 serviços</span></div>
+<p id="sem-itens">Sua planilha está vazia. Adicione o primeiro serviço ou carregue o exemplo de reforma.</p>
+<div id="rolagem" tabindex="0" role="region" aria-label="Planilha com rolagem horizontal" hidden><table><caption>Preços e subtotais antes do BDI</caption><thead><tr><th scope="col">Serviço</th><th scope="col">Un.</th><th scope="col">Quantidade</th><th scope="col">Unitário (R$)</th><th scope="col">Total (R$)</th><th scope="col">Ações</th></tr></thead><tbody id="linhas"></tbody></table></div>
+<div class="tool-actions"><button id="excel" type="button" class="button button-primary" data-tool-download disabled>Baixar Excel com fórmulas</button><button id="csv" type="button" class="button button-secondary" data-tool-download disabled>Baixar planilha CSV</button><button id="json" type="button" class="button button-secondary" disabled>Salvar projeto JSON</button></div><p>O Excel contém as abas Orçamento, Composições e Resumo. Alterar uma quantidade, o custo de um insumo ou o BDI atualiza os totais na planilha.</p>
+<details><summary>Abrir outro projeto ou começar de novo</summary>
+<label for="abrir">Abrir projeto salvo nesta ferramenta<input id="abrir" type="file" accept=".json,application/json" disabled></label><button id="novo" class="button button-secondary" type="button" disabled>Começar orçamento vazio</button></details>
+<p id="avisos" role="status" aria-live="polite"></p></section>
+<section class="tool-guide"><h2>Como o orçamento fecha</h2><p data-tool-decision>Cada serviço precisa de unidade, quantidade e custo unitário. Para uma composição própria, o custo unitário reúne os consumos de materiais, mão de obra e equipamentos por unidade executada. Separe serviços por etapa para comparar fundações, estrutura ou acabamentos.</p>
+<p>Quantidade e preço unitário aceitam quatro casas decimais. Cada insumo da composição é calculado com quatro casas. O total de cada serviço é arredondado ao centavo antes da soma por etapa. O BDI informado incide uma vez sobre o custo direto total. O arredondamento de meio centavo é para cima.</p>
+<h3>Exemplo de reforma</h3><p>A proteção de 40 m² de piso a R$ 8,50 custa R$ 340,00. No exemplo completo, a pintura e os rodapés somam R$ 1.653,20. A obra tem R$ 1.993,20 de custo direto e, com BDI ilustrativo de 20%, chega a R$ 2.391,84.</p>
+<p>Os preços do exemplo são didáticos. Para orçar uma obra real, verifique unidade, localidade, regime de encargos e competência da referência. O CSV leva as linhas e totais para uma planilha eletrônica. O projeto JSON preserva as composições, quantidades e fontes para nova edição.</p>
+<p><a href="/bim/guias/quantitativos-ifc-para-excel/">Levantar quantitativos a partir de um modelo IFC</a> · <a href="/quantitativos-orcamento-obras/">Quantitativos e orçamento de obras</a></p>
+<p>Cálculo e exemplo conferidos em <time datetime="2026-11-07">7 de novembro de 2026</time>. <a href="https://github.com/jonathancnn/precifica-obra-core">Precifica Obra Core</a> · <a href="./vendor/precifica-LICENSE.txt">Licença do motor</a> · <a href="./vendor/decimal-LICENSE.txt">Licença da aritmética decimal</a>.</p></section>
+<div class="tool-cta-contextual" id="contato-contextual"><h2>Quer revisar o orçamento da sua obra?</h2><p>A CONFENGE pode conferir quantitativos, composições e aderência da planilha aos projetos.</p><a data-tool-to-whatsapp data-journey="contrato" data-cta-position="tool_contact" data-cta-channel="whatsapp" href="https://wa.me/5548988344559?text=Quero%20revisar%20um%20or%C3%A7amento%20de%20obra." rel="noopener" target="_blank">Conversar sobre o orçamento pelo WhatsApp</a></div>
+</div></main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body></html>
