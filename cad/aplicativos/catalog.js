@@ -101,7 +101,11 @@ document.addEventListener('fullscreenchange', () => {
 });
 const syncLocation = () => {
   const slug = location.hash.slice(1);
-  if (!slug || names.has(slug)) choose(slug, false);
+  const transfer = /^cadcraft\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/.exec(slug);
+  if (transfer) {
+    history.replaceState(null, '', '#cadcraft');
+    choose('cadcraft', false, transfer[1]);
+  } else if (!slug || names.has(slug)) choose(slug, false);
 };
 window.addEventListener('hashchange', syncLocation);
 syncLocation();
