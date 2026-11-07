@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de rede de água com EPANET | CONFENGE</title><meta name="description" content="Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro."><link rel="canonical" href="https://confenge.com.br/ferramentas/rede-de-agua/">
+<meta property="og:type" content="website"><meta property="og:title" content="Simulador de rede de água com EPANET | CONFENGE"><meta property="og:description" content="Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro."><meta property="og:url" content="https://confenge.com.br/ferramentas/rede-de-agua/">
+<meta name="theme-color" content="#061a33"><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="agua.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Início", "item": "https://confenge.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Ferramentas", "item": "https://confenge.com.br/ferramentas/"}, {"@type": "ListItem", "position": 3, "name": "Rede de água", "item": "https://confenge.com.br/ferramentas/rede-de-agua/"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Simulador de rede de água com EPANET", "description": "Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro.", "url": "https://confenge.com.br/ferramentas/rede-de-agua/", "operatingSystem": "Navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "applicationCategory": "UtilitiesApplication"}</script><script type="module" src="app.js"></script><script defer src="/script.js"></script></head>
+<body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav class="breadcrumbs container" aria-label="Caminho de navegação"><ol><li><a href="/">Início</a> /</li><li><a href="/ferramentas/">Ferramentas</a> /</li><li aria-current="page">Rede de água</li></ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell"><p class="eyebrow">Instalações hidráulicas</p><h1>Simulador de rede de água com EPANET</h1>
+<p class="content-lead" data-tool-job>Compare a pressão e a vazão disponível em cada ponto da instalação quando o consumo aumenta. Altere o diâmetro de uma tubulação e veja o efeito nos demais trechos.</p></div></header>
+<div class="container tool-shell rede">
+<section id="modelo" class="tool-form"><h2>Montar a rede</h2>
+<p>O exemplo já vem preenchido. Edite os dados ou abra um projeto salvo neste simulador. Tudo roda no navegador.</p>
+<noscript><p>Ative o JavaScript para simular a rede. Abaixo há um exemplo calculado e a descrição do método.</p></noscript>
+<fieldset id="controles" disabled><legend>Reservatório e cenários</legend>
+<div class="entrada"><label>Nível da água no reservatório R (m)<input id="head" inputmode="decimal"></label><label>Pressão de início de atendimento (mca)<input id="min" inputmode="decimal"></label>
+<label>Pressão para atendimento integral (mca)<input id="required" inputmode="decimal"></label><label>Multiplicador de demanda no cenário 2<input id="factor" inputmode="decimal"></label></div>
+<p>Use o nível da superfície da água e as cotas dos pontos em relação à mesma referência. No cenário 1, valem as demandas informadas. No cenário 2, um fator de 1,5 representa aumento de 50%.</p>
+<label for="nodes"><strong>Pontos de consumo e derivações</strong></label><p id="hn">Uma linha por ponto. Colunas em ordem: identificador; cota (m); demanda (L/s); X (m); Y (m). O reservatório é R, na origem do esquema. Para uma derivação sem consumo, use demanda zero.</p>
+<textarea id="nodes" aria-describedby="hn" rows="4" spellcheck="false"></textarea>
+<label for="pipes"><strong>Trechos da rede</strong></label><p id="ht">Identificador; ponto inicial; ponto final; comprimento (m); diâmetro interno (mm); coeficiente C de Hazen-Williams; soma dos coeficientes de perda localizada K. Separe as colunas por ponto e vírgula ou cole células de uma planilha.</p>
+<textarea id="pipes" aria-describedby="ht" rows="4" spellcheck="false"></textarea>
+<div class="acoes"><button id="simular" type="button" class="button button-primary">Simular os dois cenários</button><button id="salvar" type="button" class="button button-secondary">Salvar projeto</button><label class="abrir">Abrir projeto JSON<input type="file" id="abrir" accept=".json,application/json"></label></div></fieldset></section>
+<p role="status" aria-live="polite" id="estado"></p>
+<section id="resultado" hidden class="tool-method"><p class="eyebrow">Simulação hidráulica</p><h2 id="resultado-titulo" tabindex="-1">Pressões e vazões da rede</h2><p id="resumo"></p>
+<figure><svg id="desenho" viewBox="0 0 560 240" role="img" aria-label="Representação dos pontos e trechos da rede pelas coordenadas fornecidas"></svg><figcaption>O traçado usa as coordenadas X e Y. A perda de carga usa o comprimento informado para cada trecho.</figcaption></figure>
+<div class="scroll" role="region" aria-label="Pressões nos pontos de consumo" tabindex="0"><table><caption>Pontos da rede</caption><thead><tr><th>Ponto</th><th>Pressão 1 (mca)</th><th>Pressão 2 (mca)</th><th>Solicitada 2 (L/s)</th><th>Atendida 2 (L/s)</th></tr></thead><tbody id="nos"></tbody></table></div>
+<div class="scroll" role="region" aria-label="Resultados dos trechos" tabindex="0"><table><caption>Trechos no cenário 2</caption><thead><tr><th>Trecho</th><th>Vazão (L/s)</th><th>Velocidade (m/s)</th><th>Perda de carga (m)</th></tr></thead><tbody id="tubos"></tbody></table></div>
+<p>Vazão negativa indica escoamento no sentido contrário à ordem dos pontos. O CSV reúne os dois cenários para todos os pontos e trechos.</p>
+<div class="acoes"><button type="button" class="button button-secondary" id="csv">Baixar resultados CSV</button><button type="button" class="button button-secondary" id="inp">Exportar cenário 2 para EPANET (.inp)</button></div>
+</section>
+<section class="tool-method" id="metodo"><h2>Como interpretar o resultado</h2><p data-tool-decision>No exemplo, o ponto P2 está na cota de 24 m e recebe água pelo trecho T3, de 25 mm internos. A pressão cai de 8,92 para 6,75 mca quando a demanda é multiplicada por 1,5. Frente a uma solicitação de 0,750 L/s, a vazão atendida no segundo cenário é de 0,616 L/s, cerca de 82% da solicitação.</p>
+<p>O motor EPANET 2.2 resolve o equilíbrio hidráulico em regime permanente com um reservatório de carga fixa, tubulações pressurizadas e demanda dependente da pressão. Entre as duas pressões informadas, o expoente da relação de atendimento é 0,5. As perdas distribuídas seguem Hazen-Williams e K representa as perdas localizadas.</p>
+<p>A aplicação atende redes ramificadas ou em anel com até 160 pontos e 320 trechos. O exemplo usa pressões didáticas. Verifique, para um projeto real, os requisitos de cada aparelho e as condições de abastecimento da instalação. Bombas, variação de nível no tempo, transientes e verificação normativa exigem modelagem específica.</p>
+<p>Referência conferida em <time datetime="2026-11-07">7 de novembro de 2026</time>. <a href="https://www.epa.gov/water-research/epanet">EPANET na EPA</a> · <a href="https://github.com/epanet-js/epanet-js-toolkit">Interface JavaScript</a> · <a href="vendor/OWA-LICENSE.txt">Licença do motor</a>.</p></section>
+<section class="tool-method"><h2>Projeto hidrossanitário</h2><p>Para compatibilizar tubulações, aparelhos e cotas com a arquitetura, reúna as plantas e os pontos de abastecimento.</p><a data-cta-id="rede-agua-projeto" href="/projeto-hidrossanitario/">Conhecer o projeto hidrossanitário</a> · <a data-cta-id="rede-agua-contato" data-tool-to-whatsapp data-journey="operacao" data-cta-position="tool_contact" data-cta-channel="whatsapp" href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20a%20rede%20de%20%C3%A1gua%20do%20projeto." target="_blank" rel="noopener">Conversar sobre a rede de água</a></section>
+</div></main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body></html>

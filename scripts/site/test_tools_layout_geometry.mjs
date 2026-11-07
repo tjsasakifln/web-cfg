@@ -31,6 +31,7 @@ const OUT = resolve(process.env.TOOLS_LAYOUT_EVIDENCE_DIR || join(ROOT, ".playwr
 const ALLOW_FAILURES = process.env.TOOLS_LAYOUT_ALLOW_FAILURES === "1";
 const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
+  { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
@@ -261,6 +262,15 @@ async function requireVisiblePrimary(page, route) {
 }
 
 async function exercise(page, id) {
+  if (id === "hidraulica") {
+    await page.click("#simular");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (!await page.$eval("#resumo", e => e.textContent.includes("6,75 mca"))) {
+      throw new Error("Pressão de referência ausente no cenário de pico");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
+
   if (id === "limite") {
     await page.evaluate(() => {
       const set = (name, value) => {

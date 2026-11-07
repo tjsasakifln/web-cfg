@@ -36,7 +36,7 @@ export const DOCUMENT_ONLY_HEADERS = new Set([
 // an add_header whose evaluated value is empty, which is what a non-document
 // response resolves to.
 const DOCUMENT_MARKER_VARIABLE = "$confenge_document_marker";
-export const LOCAL_CAD_EXECUTION_PATH = /^\/(?:bim\/(?:web|fotogrametria)|cad\/editor)\//;
+export const LOCAL_EXECUTION_POLICY_PATH = /^\/(?:bim\/(?:web|fotogrametria)\/|cad\/editor\/|ferramentas\/rede-de-agua\/motor\.js$)/;
 const DOCUMENT_MARKER_PREFIX = "html:";
 
 function escapeLiteral(value) {
@@ -275,7 +275,7 @@ export function renderHeaders(contract) {
         const chunks = splitHeaderValue(value);
         // A worker has its own execution context. A path-declared CSP also
         // belongs on the script response; the corporate CSP stays HTML-only.
-        if (lower === "content-security-policy" && LOCAL_CAD_EXECUTION_PATH.test(selector.path)) {
+        if (lower === "content-security-policy" && LOCAL_EXECUTION_POLICY_PATH.test(selector.path)) {
           lines.push(`  ${requestUriRegex(selector)} ${quoted(chunks[index] || "")};`);
           if (selector.match === "exact" && /\.m?js$/.test(selector.path)) continue;
         }

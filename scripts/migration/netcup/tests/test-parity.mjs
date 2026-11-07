@@ -129,3 +129,15 @@ test("sitemap parser compares URL sets independent of XML order", () => {
   const two = sitemapUrlSet("https://confenge.com.br/a\nhttps://confenge.com.br/b\n", "text/plain");
   assert.deepEqual(one, two);
 });
+
+test("only the hydraulic worker carries the local EPANET WebAssembly exception", () => {
+  const workerPath = "/ferramentas/rede-de-agua/motor.js";
+  const policy = "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'none'; object-src 'none'; base-uri 'none'";
+  const withPolicy = response({headers: {"content-type": "text/javascript", "content-security-policy": policy}});
+  const withoutPolicy = response({headers: {"content-type": "text/javascript"}});
+  const worker = {...baseCase, path: workerPath};
+  assert.equal(compareResponses(worker, withPolicy, withPolicy).ok, true);
+  assert.ok(compareResponses(worker, withPolicy, withoutPolicy).differences.some(d => d.field === "header:content-security-policy"));
+  const ui = {...baseCase, path: "/ferramentas/rede-de-agua/app.js"};
+  assert.ok(compareResponses(ui, withPolicy, withPolicy).differences.some(d => d.field === "header:content-security-policy"));
+});

@@ -99,7 +99,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 262,
+  "html_route_count": 263,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -295,6 +295,7 @@
     "/ferramentas/limite-acrescimos-supressoes/",
     "/ferramentas/matriz-atraso-obra/",
     "/ferramentas/prontidao-tecnica-obra-privada/",
+    "/ferramentas/rede-de-agua/",
     "/guias-contratos-obras/checklist-pedido-aditivo/",
     "/guias-contratos-obras/contestar-glosa-medicao/",
     "/guias-contratos-obras/documentos-pedido-reequilibrio/",
@@ -364,8 +365,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-11-07T17:17:31Z",
-  "public_artifact_hash": "e1a23301c52a05cf0366d2c7ba9d2f1f9e3c0c6428239f463bece0b9e00743e3",
+  "generated_at": "2026-11-07T23:49:20Z",
+  "public_artifact_hash": "3f7c2784c042bef85b746c67d108e016e134277751d701dc3bcd9a2ff870be06",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -465,14 +466,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 261,
+  "promoted_navigation_files": 262,
   "navigation_audit": {
-    "audited_files": 261,
-    "audited_blocks": 520,
+    "audited_files": 262,
+    "audited_blocks": 522,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 277,
+    "html_scanned": 278,
     "html_rewritten": 189,
     "fields_removed": 790
   }
