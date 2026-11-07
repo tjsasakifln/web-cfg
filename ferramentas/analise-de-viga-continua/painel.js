@@ -20,7 +20,7 @@ function adicionar() {
   for (const [chave, titulo, exemplo, min, max] of [
     ['L', 'Comprimento (m)', '5', 0.1, 100],
     ['q', 'Carga (kN/m)', '10', -10000, 10000],
-    ['I', 'Inércia (cm⁴)', '160000', 1, 1e9]
+    ['I', 'Inércia (cm^4)', '160000', 1, 1e9]
   ]) {
     const rotulo = document.createElement('label');
     rotulo.textContent = titulo;

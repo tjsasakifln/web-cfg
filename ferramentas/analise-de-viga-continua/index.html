@@ -66,7 +66,7 @@
 <p>Conte os vãos da esquerda para a direita. Os apoios intermediários mantêm a continuidade da viga. Digite a carga distribuída total de cada vão, incluindo o peso próprio se ele fizer parte do caso analisado. Carga positiva atua para baixo.</p>
 <div id="lista-vaos"></div><div class="viga-acoes"><button id="adicionar" type="button" class="button button-secondary">Adicionar vão</button><button id="remover" type="button" class="button button-secondary">Remover último vão</button></div></fieldset>
 <p id="status" role="status"></p>
-<details><summary>Unidades e limites de entrada</summary><p>Use vírgula ou ponto decimal, sem separador de milhar. Módulo de elasticidade entre 0,1 e 350 GPa, comprimento de 0,1 a 100 m, carga distribuída de −10.000 a 10.000 kN/m e momento de inércia entre 1 e 1 bilhão de cm⁴. Para uma seção retangular, calcule I = b × h³ / 12 com b e h em centímetros, sendo h a altura na direção da flexão.</p></details></section>
+<details><summary>Unidades e limites de entrada</summary><p>Use vírgula ou ponto decimal, sem separador de milhar. Módulo de elasticidade entre 0,1 e 350 GPa, comprimento de 0,1 a 100 m, carga distribuída de −10.000 a 10.000 kN/m e momento de inércia entre 1 e 1 bilhão de cm<sup>4</sup>. Para uma seção retangular, calcule I = b × h³ / 12 com b e h em centímetros, sendo h a altura na direção da flexão.</p></details></section>
 
 <section class="viga-bloco" id="saida" aria-labelledby="resultados" hidden><h2 id="resultados">Esforços e deslocamentos</h2>
 <label>Diagrama<select id="grandeza"><option value="M">Momento fletor (kN·m)</option><option value="V">Força cortante (kN)</option><option value="flecha">Flecha (mm)</option></select></label>
@@ -78,7 +78,7 @@
 
 <section aria-labelledby="exemplo"><h2 id="exemplo">Confira pelo exemplo de dois vãos</h2>
 <p>Para dois vãos iguais de 5 m, apoiados nas extremidades e carregados com 10 kN/m em toda a extensão, a carga aplicada soma 100 kN. Com rigidez constante, cada apoio externo recebe 18,75 kN e o apoio central recebe 62,50 kN. O momento fletor sobre o apoio central é −31,25 kN·m. O momento positivo máximo de cada vão é 17,578 kN·m.</p>
-<p>Para ensaiar um caso conhecido de viga biapoiada, remova o segundo vão. As reações passam a 25 kN em cada apoio. O maior momento vale qL²/8, ou 31,25 kN·m. Com E = 30 GPa e I = 160000 cm⁴, a flecha no meio do vão vale 5qL⁴/(384EI), aproximadamente 1,695 mm para baixo.</p>
+<p>Para ensaiar um caso conhecido de viga biapoiada, remova o segundo vão. As reações passam a 25 kN em cada apoio. O maior momento vale qL²/8, ou 31,25 kN·m. Com E = 30 GPa e I = 160000 cm<sup>4</sup>, a flecha no meio do vão vale 5qL<sup>4</sup>/(384EI), aproximadamente 1,695 mm para baixo.</p>
 <h2>Como interpretar o modelo estrutural</h2>
 <p>A análise utiliza flexão plana de Euler-Bernoulli, material elástico linear, pequenos deslocamentos e rigidez constante em cada vão. Os apoios impedem o deslocamento transversal. Apoio simples permite rotação e engaste impede rotação. O cálculo combina a rigidez dos trechos e recupera a linha elástica e os esforços sob carga uniforme.</p>
 <p>O modelo representa uma viga reta, sem balanços, recalques, rótulas internas ou cargas pontuais. A solução muda com a rigidez adotada. Em concreto, a fissuração e a fluência podem alterar as flechas. A seleção de combinações de ações, armaduras, perfis, ligações e limites de serviço pertence ao dimensionamento do projeto.</p>
