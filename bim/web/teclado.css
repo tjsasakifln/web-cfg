@@ -1,3 +1,5 @@
+@import url("/styles-tokens.css");
+
 .skip-link {
   position: fixed;
   top: .6rem;
@@ -7,11 +9,10 @@
   padding: .6rem .85rem;
   color: #fff;
   background: #173f35;
-  border: 2px solid #fff;
+  border: 2px solid var(--focus-ring-halo);
 }
 .skip-link:focus {
   transform: none;
-  outline: 2px solid currentColor;
-  box-shadow: var(--focus-ring, 0 0 0 2px white, 0 0 0 5px #071a31);
+  outline: 3px solid var(--focus-ring-core);
 }
 .laboratorio-bim { height: 100%; }

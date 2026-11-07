@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-10-02",
+  "updated_at": "2026-11-06",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry. Package families use real artifact representatives; the official-live opportunity overlay has an exact runtime owner contract and mandatory SHA-bound post-stage Lighthouse evidence, never a virtual fixture representative.",
   "axe": {
     "viewports": [
@@ -352,6 +352,23 @@
         "family_id": "terceirizacao-documentacao-sst",
         "route": "/terceirizacao-documentacao-sst/",
         "reason": "single-route BOFU landing for outsourced remote SST documentation"
+      },
+      {
+        "family_id": "ferramentas-e-guias-bim",
+        "route": "/bim/",
+        "reason": "Indexable hub connects the IFC viewer and drawing tools to task guides and downloadable examples."
+      },
+      {
+        "family_id": "bim-aplicativos",
+        "route": "/bim/web/digitalizar.html",
+        "reason": "Exercises the scanned-sheet converter with local PDF/image input and CAD preview controls.",
+        "seo_exempt_reason": "These interactive workspaces are noindex. Their crawlable entry points and instructions are the BIM hub and guides."
+      },
+      {
+        "family_id": "bim-laboratorio-fotos",
+        "route": "/bim/fotogrametria/",
+        "reason": "Exercises the application shell for the locally processed photogrammetry workspace.",
+        "seo_exempt_reason": "The reconstruction workspace is noindex. The indexable BIM hub describes its purpose and links to it."
       }
     ],
     "additional_pages": [
