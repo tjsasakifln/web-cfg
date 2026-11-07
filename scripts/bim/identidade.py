@@ -53,7 +53,9 @@ def apply_bim_shell(site: Path) -> None:
         document = document.replace("</body>", FOOTER + "\n</body>", 1)
         # Keep metadata and the charset declaration first; the institutional
         # stylesheet precedes the application styles, the BIM theme follows.
-        document = document.replace('<link href="/styles.css" rel="stylesheet"/>', BRAND_HEAD, 1)
+        if BRAND_ASSETS not in document:
+            raise ValueError(f"Recursos de identidade ausentes em {page.name}")
+        document = document.replace(BRAND_ASSETS, BRAND_HEAD, 1)
         document = re.sub(r"<style>(.*?)</style>", lambda m: f"<style>{SCOPE} {{\n{m[1]}\n}}</style>", document, flags=re.S)
         page.write_text(document, encoding="utf-8")
 
