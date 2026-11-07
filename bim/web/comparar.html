@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparar revisões de IFC | CONFENGE BIM</title>
+  <meta name="description" content="Compare gratuitamente os quantitativos declarados em duas revisões de um modelo IFC. Os arquivos ficam no navegador.">
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    .marca{align-items:center;gap:1rem}.marca a{text-decoration:none}
+    .escolha{display:grid;gap:1rem}.escolha label{min-width:0;margin:0}.escolha input{max-width:100%}
+    .caixa{background:white;border:1px solid var(--linha);border-radius:8px;padding:clamp(16px,3vw,28px)}
+    .tabela{max-width:100%;overflow-x:auto;border:1px solid var(--linha);background:white}
+    table{border-collapse:collapse;width:100%;text-align:left;font-size:.9rem}
+    th,td{padding:10px;border-bottom:1px solid var(--linha);vertical-align:top}th{background:#eaf0e6}
+    td small{word-break:break-word;font-size:.72rem}.numero{white-space:nowrap;font-variant-numeric:tabular-nums}
+    .paginas{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+    button:disabled{opacity:.57;cursor:default}.filtro{max-width:400px}
+    caption{text-align:left;padding:10px;font-weight:650}
+    @media(min-width:640px){.escolha{grid-template-columns:1fr 1fr}}
+  </style>
+  <script type="module" src="comparar.mjs"></script>
+<meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/comparar.html">
+<link rel="stylesheet" href="/bim/web/teclado.css">
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header><div class="largura marca"><a href="index.html">CONFENGE BIM</a><span>Ferramentas</span></div></header>
+<main id="conteudo" tabindex="-1" class="largura">
+  <section>
+    <p class="rotulo">Revisões · Quantitativos declarados</p>
+    <h1>Comparar revisões</h1>
+    <p class="resumo">Escolha duas versões de um modelo IFC para ver quais quantidades mudaram. Use a revisão mais antiga como A e a mais recente como B.</p>
+    <div class="caixa">
+      <div class="escolha">
+        <label>Revisão A · anterior<input type="file" data-leitura-local id="arquivo-a" accept=".ifc"></label>
+        <label>Revisão B · atual<input type="file" data-leitura-local id="arquivo-b" accept=".ifc"></label>
+      </div>
+      <p class="nota">Uso gratuito. Os arquivos ficam no navegador. Limites de 25 MiB e 50.000 linhas de quantitativos ou de ocorrências sem dados por revisão.</p>
+      <div class="links"><button class="botao" type="button" id="comparar" disabled>Comparar arquivos</button><button class="botao suave" type="button" id="exemplo" disabled>Testar com duas revisões de exemplo</button></div>
+      <p id="mensagem" role="status" aria-live="polite"></p><noscript>Ative JavaScript para comparar os arquivos.</noscript>
+    </div>
+  </section>
+  <section id="resultado" hidden>
+    <p class="rotulo">Resultado da comparação</p>
+    <h2>O que mudou</h2>
+    <p id="arquivos"></p><p id="resumo"></p>
+    <label class="filtro">Mostrar<select id="filtro"><option value="destaques">Mudanças e pendências</option><option value="todas">Todas as linhas</option></select></label>
+    <div class="tabela" tabindex="0" aria-label="Comparação com rolagem horizontal">
+      <table><caption id="legenda"></caption><thead><tr><th scope="col">Elemento</th><th scope="col">Quantidade</th><th scope="col">Revisão A</th><th scope="col">Revisão B</th><th scope="col">Variação B menos A</th><th scope="col">Situação</th></tr></thead><tbody id="lista"></tbody></table>
+    </div>
+    <div class="paginas"><button class="botao suave" type="button" id="anterior">Anterior</button><span id="pagina"></span><button class="botao suave" type="button" id="proxima">Próxima</button></div>
+  </section>
+  <section>
+    <h2>O que a comparação cobre</h2>
+    <p>O vínculo usa o mesmo GlobalId nas duas revisões. Dentro de cada ocorrência, a ferramenta procura o mesmo conjunto, nome e tipo de quantidade. Mostra a diferença quando a unidade SI coincide nas duas revisões ou quando ambas declaram contagem simples.</p>
+    <details><summary>Como interpretar os pontos para conferir?</summary><p>Um elemento que aparece só de um lado pode ter recebido outro GlobalId. Nome ou posição semelhantes não estabelecem correspondência. Identificadores repetidos, quantidades com a mesma chave e unidades ambíguas ou diferentes pedem revisão. Unidades de conversão com nomes iguais também exigem conferência.</p></details>
+    <details><summary>Por que um elemento pode aparecer sem dados?</summary><p>A comparação lê quantidades simples declaradas diretamente nas ocorrências de IfcElement. Quantidades herdadas de tipos, espaços e medidas complexas ficam fora da comparação numérica. Mudanças na geometria, nos materiais ou na posição podem ocorrer sem mudança no quantitativo declarado.</p></details>
+    <p><a href="index.html">Voltar à plataforma CONFENGE BIM</a></p>
+  </section>
+</main>
+<footer><div class="largura">CONFENGE BIM · Comparar revisões</div></footer>
+</body></html>

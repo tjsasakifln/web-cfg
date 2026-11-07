@@ -99,6 +99,8 @@ const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css",
   ".js": "application/javascript",
+  ".mjs": "application/javascript",
+  ".wasm": "application/wasm",
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".webp": "image/webp",

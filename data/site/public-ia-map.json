@@ -84,6 +84,7 @@
     }
   ],
   "breadcrumb_labels": {
+    "/bim/": "Ferramentas BIM",
     "/projetos/": "Projetos",
     "/projetos/estruturas/": "Estruturas",
     "/projetos/instalacoes/": "Instalações",
@@ -448,6 +449,10 @@
     }
   ],
   "parents": [
+    {
+      "prefix": "/bim/guias/",
+      "parent": "/bim/"
+    },
     {
       "prefix": "/",
       "parent": null,

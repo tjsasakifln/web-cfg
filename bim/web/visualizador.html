@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#153e35">
+  <title>Abrir IFC em 3D | CONFENGE BIM</title>
+  <link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="plataforma.css"><link rel="stylesheet" href="visualizador.css">
+<meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/visualizador.html">
+<meta name="description" content="Abra seu modelo IFC no navegador, localize elementos por nome, veja propriedades, consulte quantitativos e confira sombras do modelo em 3D.">
+<link rel="stylesheet" href="/bim/web/teclado.css">
+</head>
+<body class="plataforma visor">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="barra"><div class="miolo barra-interna"><a class="assinatura" href="index.html"><span class="sinal-marca" aria-hidden="true"></span>CONFENGE <b>BIM</b></a><a class="catalogo" href="index.html#ferramentas">Voltar ao catálogo</a></div></header>
+<main id="conteudo" tabindex="-1" class="miolo">
+  <p class="rubrica">01 / Visualização de modelo</p>
+  <h1>Abrir IFC em 3D</h1>
+  <p class="introducao">Gire o modelo e selecione uma peça para consultar sua classe e seu identificador. A leitura do seu arquivo acontece no próprio navegador.</p>
+  <div class="arquivo-acoes">
+    <label class="escolher"><span>Abrir meu IFC</span><input id="arquivo" type="file" data-leitura-local disabled accept=".ifc" aria-label="Abrir meu IFC"></label>
+    <button id="exemplo" type="button" disabled>Abrir modelo de exemplo</button>
+    <button id="fechar" class="texto" type="button" hidden>Fechar modelo</button>
+  </div>
+  <p id="status" class="status" role="status">Selecione um arquivo .ifc de até 50 MiB ou abra o exemplo.</p>
+  <noscript>Ative o JavaScript para abrir modelos IFC.</noscript>
+  <div class="mesa">
+    <div class="area-modelo">
+      <div id="palco"><div id="vazio"><span class="eixo" aria-hidden="true">3D</span><strong>Área de visualização</strong><span>O modelo aparecerá aqui.</span></div></div>
+      <div class="legenda"><span>Arraste para girar. Use a roda ou dois dedos para aproximar.</span><button id="enquadrar" type="button" disabled>Mostrar modelo inteiro</button></div>
+    </div>
+    <aside aria-labelledby="tit-painel"><p class="rubrica">Inspeção</p><h2 id="tit-painel">Elemento</h2>
+      <label for="elementos">Selecione na vista ou na lista</label><select id="elementos" disabled><option value="">Escolha um elemento</option></select>
+      <dl aria-live="polite"><dt>Nome</dt><dd id="nome">Nenhum selecionado</dd><dt>Classe IFC</dt><dd id="classe">·</dd><dt>GlobalId</dt><dd id="guid">·</dd><dt>Linha no IFC</dt><dd id="linha">·</dd></dl>
+    </aside>
+  </div>
+  <div class="arquivo-acoes saida-modelo">
+    <button id="gerar-excel" type="button" hidden>Extrair quantitativos deste modelo</button>
+    <a id="excel-modelo" download hidden>Baixar Excel deste modelo</a>
+    <span id="status-excel" role="status"></span>
+  </div>
+  <details id="estudo-solar"><summary>Sombra por local, data e hora</summary>
+    <p>Estudo visual sobre terreno horizontal. Informe a posição da obra e o ângulo do norte verdadeiro, medido no sentido horário a partir do eixo +Y do IFC. Os valores iniciais representam Florianópolis.</p>
+    <div class="solar-campos">
+      <label>Latitude (graus)<input type="number" id="sol-lat" value="-27.5954" min="-90" max="90" step="any"></label>
+      <label>Longitude (graus)<input type="number" id="sol-lon" value="-48.5480" min="-180" max="180" step="any"></label>
+      <label>Data e hora na obra<input type="datetime-local" id="sol-data"></label>
+      <label>Fuso em horas UTC<input type="number" id="sol-fuso" min="-12" max="14" value="-3"></label>
+      <label>Norte verdadeiro (graus)<input type="number" id="sol-norte" value="0" step="any"></label></div>
+    <button id="sol-aplicar" type="button" disabled>Projetar sombra</button> <button id="sol-limpar" type="button" hidden>Remover estudo</button>
+    <p id="sol-status" role="status"></p>
+  </details>
+  <p class="nota-visor">O visor exibe os elementos 3D que o leitor consegue interpretar. Arquivos IFCZIP precisam ser descompactados. Se o modelo for complexo, exporte um pavimento ou uma disciplina. A janela 3D requer WebGL 2.</p>
+</main>
+<script type="module" src="./visualizador.mjs"></script>
+</body></html>

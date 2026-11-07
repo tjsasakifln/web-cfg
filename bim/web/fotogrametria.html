@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fotogrametria local | CONFENGE BIM</title>
+    <link rel="stylesheet" href="oficina.css" />
+  <meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/fotogrametria.html">
+<meta name="description" content="Veja como fotografar um objeto de vários ângulos, reconstruir sua malha e exportá-la em PLY para usar na coordenação BIM.">
+<link rel="stylesheet" href="/bim/web/teclado.css">
+</head>
+  <body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <main id="conteudo" tabindex="-1" class="oficina">
+      <a href="index.html">← CONFENGE BIM</a>
+      <h1>Reconstruir um objeto com várias fotos</h1>
+      <p>
+        Use um computador e fotos sobrepostas feitas de vários ângulos. Mantenha o objeto parado e inclua
+        referências de tamanho conhecido. A reconstrução acontece neste aparelho e pode levar minutos.
+      </p>
+      <ol>
+        <li>Abra o laboratório WebSfM e crie um projeto com suas fotos.</li>
+        <li>
+          Use o detector <strong>SIFT</strong>, o emparelhamento clássico e a reconstrução esparsa para
+          conferir quais câmeras foram registradas.
+        </li>
+        <li>
+          Gere os mapas de profundidade e a malha. Atribua escala por controles medidos e confira outra
+          dimensão independente. Exporte a malha com faces em PLY.
+        </li>
+        <li>
+          Selecione a malha no conversor para gerar o IFC de referência. Confirme as unidades físicas do PLY
+          antes de exportar.
+        </li>
+      </ol>
+      <nav>
+        <a href="../fotogrametria/#abrir">Abrir laboratório de fotogrametria</a
+        ><a href="oficina.html#malha">Converter a malha PLY em IFC</a>
+      </nav>
+      <p>
+        Em fase experimental. Vidro, metal brilhante, peças lisas e faces ocultas exigem outras tomadas ou
+        medição direta. O laboratório utiliza armazenamento local do navegador e oferece exclusão dos
+        projetos.
+      </p>
+    </main>
+  </body>
+</html>

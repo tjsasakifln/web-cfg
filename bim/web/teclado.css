@@ -1,0 +1,29 @@
+@import url("/styles-tokens.css");
+
+.skip-link {
+  position: fixed;
+  top: .6rem;
+  left: .6rem;
+  z-index: 99999;
+  transform: translateY(calc(-100% - 1rem));
+  padding: .6rem .85rem;
+  color: #fff;
+  background: #173f35;
+  border: 2px solid var(--focus-ring-halo);
+}
+.skip-link:focus {
+  transform: none;
+  outline: 3px solid var(--focus-ring-core);
+}
+.laboratorio-bim { height: 100%; }
+
+.plataforma .desenho figcaption {
+  font-size: .875rem;
+}
+
+@media (max-width: 480px) {
+  #conteudo:not(.laboratorio-bim) :is(button, select, textarea, summary, input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

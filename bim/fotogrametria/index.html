@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39; data: blob:; script-src &#39;self&#39; blob: &#39;wasm-unsafe-eval&#39;; style-src &#39;self&#39; &#39;unsafe-inline&#39;; connect-src &#39;self&#39; blob: data:; object-src &#39;none&#39;; form-action &#39;none&#39;; base-uri &#39;self&#39;">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171a21" />
+    <meta
+      name="description"
+      content="Reconstrua uma malha 3D a partir de fotografias sobrepostas. O laboratório processa as imagens no navegador e permite exportar o resultado em PLY."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Laboratório de fotogrametria | CONFENGE BIM" />
+    <meta
+      property="og:description"
+      content="Gere uma malha a partir de fotografias sobrepostas no navegador."
+    />
+    <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <title>Laboratório de fotogrametria | CONFENGE BIM</title>
+    <script type="module" crossorigin src="./entrada.mjs"></script>
+    <link rel="stylesheet" crossorigin href="./entrada.css">
+  <link rel="canonical" href="https://confenge.com.br/bim/fotogrametria/"><meta name="robots" content="noindex, follow">
+  <link rel="stylesheet" href="/bim/web/teclado.css">
+</head>
+  <body class="preparar-fotos">
+    <a class="skip-link" href="#conteudo">Ir para o laboratório</a>
+    <main class="laboratorio-bim" id="conteudo" tabindex="-1">
+      <section id="entrada" aria-labelledby="titulo">
+        <a href="/bim/">Voltar às ferramentas BIM</a>
+        <p class="rotulo">CONFENGE · Fotogrametria</p>
+        <h1 id="titulo">Reconstrua um objeto a partir de fotos</h1>
+        <p>Use fotos de diferentes ângulos para gerar uma malha 3D. As imagens e o processamento ficam neste aparelho. Para definir a escala, fotografe uma medida conhecida junto ao objeto.</p>
+        <button id="abrir" type="button">Abrir laboratório</button>
+        <span id="estado" role="status"></span>
+        <h2>Experimente com um galpão</h2>
+        <p><a href="../examples/vistas-galpao.zip" download>Baixar as oito fotos de exemplo (ZIP)</a>. Extraia as imagens, abra o laboratório e selecione <strong lang="en">Create project</strong> para começar. A interface de reconstrução está em inglês.</p>
+        <p><a href="../web/fotogrametria.html">Como conferir a malha e exportar para IFC</a></p>
+        <noscript><p>Ative o JavaScript no navegador para abrir o laboratório.</p></noscript>
+      </section>
+      <div id="app" lang="en" inert></div>
+    </main>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-10-14",
+  "as_of": "2026-11-06",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -460,14 +460,7 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
-      "debt": [
-        {
-          "route": "/metodologia-inteligencia/",
-          "owner_issue": 61,
-          "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. #74 foi superseded; o épico operacional #61 mantém este débito nominal até a data de expiração, sem reativar a iniciativa histórica.",
-          "expires_at": "2026-10-31"
-        }
-      ],
+      "debt": [],
       "index_evidence": {
         "substrate": "first_party_publication",
         "not_applicable": [
@@ -1811,6 +1804,78 @@
         "declared_at": "2026-10-12",
         "owner_issue": 611
       }
+    },
+    {
+      "id": "ferramentas-e-guias-bim",
+      "visitor_job": "Conferir um modelo, desenho ou levantamento, executar a tarefa com o próprio arquivo e conversar sobre revisão, compatibilização ou orçamento do projeto.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/bim/",
+          "/bim/guias/dwg-para-ifc-paredes/",
+          "/bim/guias/medir-distancia-area-foto/",
+          "/bim/guias/pdf-escaneado-para-dwg/",
+          "/bim/guias/quantitativos-ifc-para-excel/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-06",
+      "owner_issue": 577,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Ferramentas e guias da CONFENGE com exemplos demonstrativos reproduzíveis e arquivos próprios. As instruções descrevem o funcionamento da ferramenta distribuída neste site.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "bim/index.html"
+        ],
+        "declared_at": "2026-11-06",
+        "owner_issue": 577
+      }
+    },
+    {
+      "id": "bim-aplicativos",
+      "visitor_job": "Executar localmente a ferramenta de desenho, modelo ou fotografia escolhida pelo visitante no portal BIM.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "prefix": "/bim/web/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-06",
+      "owner_issue": 577,
+      "debt": []
+    },
+    {
+      "id": "bim-laboratorio-fotos",
+      "visitor_job": "Executar localmente a ferramenta de desenho, modelo ou fotografia escolhida pelo visitante no portal BIM.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "prefix": "/bim/fotogrametria/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-06",
+      "owner_issue": 577,
+      "debt": []
     }
   ]
 }

@@ -1061,11 +1061,31 @@ def test_bare_currency_amounts_are_data_not_a_priced_offer():
     assert "/inteligencia/composicao-contratos-amostra/" not in priced_offer_routes(ROOT)
 
 
+def _add_fixture_method_debt(registry, expires_at):
+    family = next(f for f in registry["families"] if f["id"] == "metodologia-inteligencia")
+    family["debt"] = [{
+        "route": "/metodologia-inteligencia/",
+        "owner_issue": family["owner_issue"],
+        "reason": "Somente na cópia de teste, esta página ainda não tem canal de contato.",
+        "expires_at": expires_at,
+    }]
+
+
 def test_registered_debt_expires_and_stops_being_an_exemption():
-    report = gate_conversion(now="2027-01-01")
-    expired = [f for f in report.findings if f.reason == "terminal_action_debt_expired"]
-    assert report.ok is False
-    assert expired, "debt must expire instead of becoming a permanent allowlist"
+    from unittest.mock import patch
+    from scripts.site.inbound_gates import load_family_registry
+
+    registry = load_family_registry()
+    _add_fixture_method_debt(registry, "2026-10-31")
+    with tempfile.TemporaryDirectory(prefix="confenge-family-gate-") as tmp:
+        root = Path(tmp)
+        _green_fixture_root(root)
+        _publish(root, "/metodologia-inteligencia/", ATTRIBUTED_CTA_ONLY)
+        with patch("scripts.site.inbound_gates.load_family_registry", return_value=registry):
+            before = gate_conversion(root, now="2026-10-31")
+            after = gate_conversion(root, now="2026-11-01")
+    assert before.ok and any(f.reason == "terminal_action_debt" for f in before.findings)
+    assert not after.ok and any(f.reason == "terminal_action_debt_expired" for f in after.findings)
 
 
 def test_every_exemption_carries_a_written_reason_and_an_owner():
@@ -1116,10 +1136,9 @@ def test_report_lists_every_exempt_route_with_its_reason():
         "/ferramentas/matriz-atraso-obra/",
         "/casos/aditivo-art125-demonstrativo/",
         "/casos/medicao-glosa-demonstrativo/",
+        "/metodologia-inteligencia/",
     ):
         assert route not in debt_routes, route
-    for route in ("/metodologia-inteligencia/",):
-        assert route in debt_routes, route
     for route in (
         "/casos/modelo-apresentacao-executiva-resultados/",
         "/casos/modelo-base-quantitativa-canonica/",
@@ -1231,8 +1250,7 @@ def test_registry_matching_is_unambiguous_and_cannot_absorb_the_site():
     editorial["terminal_action"] = "service_transition"
 
     unbounded_debt = json.loads(json.dumps(registry))
-    debt_family = next(f for f in unbounded_debt["families"] if f.get("debt"))
-    debt_family["debt"][0]["expires_at"] = "2099-12-31"
+    _add_fixture_method_debt(unbounded_debt, "2099-12-31")
 
     cases = (
         (invalid_source, "family_match_source_invalid"),

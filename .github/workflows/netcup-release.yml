@@ -564,6 +564,7 @@ jobs:
             --site _site --expected-sha "$RELEASE_SHA" --base https://confenge.com.br \
             --server-inventory "build/reports/server-inventory-$RELEASE_SHA.json" \
             --report-dir build/reports/served-public-acceptance
+          node scripts/bim/verificar-http.mjs https://confenge.com.br "$RELEASE_SHA"
       - name: Verify the served runtime family and its applicable behavior
         id: runtime_acceptance
         env:

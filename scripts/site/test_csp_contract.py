@@ -191,6 +191,14 @@ def test_apply_style_src_hashes_round_trip() -> None:
     assert "'sha256-oldhash=='" not in style_src
 
 
+def test_corporate_hash_refresh_preserves_independent_worker_policy() -> None:
+    portal = _headers_with_script_src("'self'")
+    worker = "/bim/web/modelagem-step.mjs\n  Content-Security-Policy: script-src 'self' 'unsafe-eval'\n"
+    updated = apply_script_src_hashes(portal + worker, ["'sha256-example='"])
+    assert updated.endswith(worker)
+    assert "'sha256-example='" in csp_directives_from_text(updated)["script-src"]
+
+
 def test_hash_refresh_is_idempotent_and_preserves_header_indentation() -> None:
     original = _headers_with_script_src("'self' 'sha256-oldhash=='").replace(
         "  Content-Security-Policy:", "        Content-Security-Policy:"

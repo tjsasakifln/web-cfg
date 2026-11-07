@@ -36,6 +36,7 @@ export const DOCUMENT_ONLY_HEADERS = new Set([
 // an add_header whose evaluated value is empty, which is what a non-document
 // response resolves to.
 const DOCUMENT_MARKER_VARIABLE = "$confenge_document_marker";
+export const BIM_EXECUTION_PATH = /^\/bim\/(?:web|fotogrametria)\//;
 const DOCUMENT_MARKER_PREFIX = "html:";
 
 function escapeLiteral(value) {
@@ -272,6 +273,12 @@ export function renderHeaders(contract) {
         const value = headerValueForSelector(contract, selector, lower);
         if (value === undefined || value === defaultValue) continue;
         const chunks = splitHeaderValue(value);
+        // A worker has its own execution context. A path-declared CSP also
+        // belongs on the script response; the corporate CSP stays HTML-only.
+        if (lower === "content-security-policy" && BIM_EXECUTION_PATH.test(selector.path)) {
+          lines.push(`  ${requestUriRegex(selector)} ${quoted(chunks[index] || "")};`);
+          if (selector.match === "exact" && /\.m?js$/.test(selector.path)) continue;
+        }
         const regex = documentOnly ? documentRequestUriRegex(selector) : requestUriRegex(selector);
         lines.push(`  ${regex} ${quoted(chunks[index] || "")};`);
       }
@@ -450,6 +457,12 @@ export function renderLocations(contract) {
     lines.push("}", "");
   }
 
+  // Deployed nginx MIME tables differ across releases. JS modules require a
+  // JavaScript MIME with nosniff; streaming WebAssembly requires application/wasm.
+  lines.push("location ~ ^/bim/(?:web|fotogrametria)/.+\\.(?:mjs|wasm)$ {");
+  lines.push("  types { application/javascript mjs; application/wasm wasm; }");
+  lines.push("  try_files $uri =404;");
+  lines.push("}", "");
   lines.push("location / {");
   lines.push("  try_files $uri $uri/ $uri.html $uri/index.html =404;");
   lines.push("}");

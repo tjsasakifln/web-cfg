@@ -1,8 +1,13 @@
 {
   "schema_version": "noindex-governance-v1",
-  "as_of": "2026-09-05",
+  "as_of": "2026-11-06",
   "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
   "reason_codes": {
+    "interactive_workbench": {
+      "description": "Interface de processamento de arquivos. A descoberta orgânica ocorre nas páginas editoriais que explicam a tarefa e conduzem à ferramenta.",
+      "class": "PERMANENT",
+      "context": "interactive"
+    },
     "cnpj_individual_result": {
       "description": "Resultado individual de CNPJ com share token, fixture-backed ou privado. Não é página de conversão pública.",
       "class": "PERMANENT",
@@ -244,6 +249,20 @@
       "owner_issue": 225,
       "review_at": "2026-10-31",
       "note": "REMEDIABLE por desenho proprio, nao por divida: ADR-STRAT-003 decide que o produtor nunca concede INDEX e que a autorizacao vive em data/editorial/market-panorama/approvals.json vinculada ao hash do payload, expirando sozinha quando fatos novos mudam o hash. approvals.json hoje e {} e o <main> do hub diz 'rascunho noindex'. robots.txt aplica Disallow: /panorama-mercado-obras-publicas/. Nao afrouxar: a aprovacao por pagina e o mecanismo."
+    },
+    {
+      "family_id": "bim-aplicativos",
+      "reason_code": "interactive_workbench",
+      "owner_issue": 577,
+      "review_at": null,
+      "note": "A área de trabalho é acessada pelo portal e pelos guias indexáveis em /bim/. A política abrange apenas a execução das ferramentas."
+    },
+    {
+      "family_id": "bim-laboratorio-fotos",
+      "reason_code": "interactive_workbench",
+      "owner_issue": 577,
+      "review_at": null,
+      "note": "A área de trabalho é acessada pelo portal e pelos guias indexáveis em /bim/. A política abrange apenas a execução das ferramentas."
     }
   ]
 }

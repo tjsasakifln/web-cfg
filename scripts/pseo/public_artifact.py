@@ -14,6 +14,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -30,6 +31,7 @@ PUBLIC_DIR_NAME = "_site"
 PUBLIC_TOP_DIRS = frozenset(
     {
         "assets",
+        "bim",
         "conteudos",
         "especialista",
         "inteligencia",
@@ -537,6 +539,12 @@ def assemble_public_artifact(
         shutil.copytree(wk, dest / ".well-known")
         if ".well-known/" not in copied_dirs:
             copied_dirs.append(".well-known/")
+
+    # Keep the checked-in HTML in the route census. Install the pinned runtime
+    # before CSS fingerprinting, security checks, and the release tree hash.
+    bim_installer = root / "scripts/bim/publicar.cjs"
+    if bim_installer.is_file() or (root / "bim/web").is_dir():
+        subprocess.run(["node", str(bim_installer.resolve()), str(dest.resolve())], check=True)
 
     omitted_review_metadata = omit_production_review_packet(
         dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"

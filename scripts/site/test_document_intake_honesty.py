@@ -65,13 +65,25 @@ def test_home_form_keeps_labels_consent_and_return_channel():
     assert not capture_forms_with_file_input(html)
 
 
+def test_local_bim_file_picker_cannot_become_document_intake():
+    route = "bim/web/digitalizar.html"
+    local = '<input type="file" data-leitura-local>'
+    assert not capture_forms_with_file_input(local, route)
+    assert capture_forms_with_file_input(local, "triagem-tecnica/index.html")
+    assert capture_forms_with_file_input(local, "bim/web/novo.html")
+    assert capture_forms_with_file_input('<input type=file>', route)
+    assert capture_forms_with_file_input(f'<form action="/envio">{local}</form>', route)
+    assert capture_forms_with_file_input('<form id="lead"></form><input type="file" data-leitura-local form="lead">', route)
+    assert capture_forms_with_file_input('<input name="desenho" type=file data-leitura-local>', route)
+
+
 def test_all_visitor_forms_remain_truthful_about_upload():
     failures = []
     files = visitor_html_files(ROOT)
     assert len(files) > 50
     for path in files:
         html = path.read_text(encoding="utf-8")
-        if capture_forms_with_file_input(html) or dishonest_hits(html):
+        if capture_forms_with_file_input(html, path.relative_to(ROOT).as_posix()) or dishonest_hits(html):
             failures.append(str(path.relative_to(ROOT)))
     assert not failures, failures
 
