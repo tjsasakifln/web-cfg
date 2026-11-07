@@ -20,6 +20,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote, urlsplit
+from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -313,13 +314,27 @@ def _render_section(key: str, page: dict[str, Any]) -> str:
         return f'''<section class="pp-section pp-section--soft" id="coordenacao" aria-labelledby="interfaces-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('interfaces_kicker', 'Integração'))}</p><h2 id="interfaces-title">{esc(page['interfaces_title'])}</h2><p>{esc(page['interfaces_intro'])}</p></header><div class="pp-interface-grid">{_interfaces(page)}</div></div></section>'''
     if key == "demonstration":
         demo = page["demonstration"]
+        href = esc(demo["href"])
+        source = href
+        enlargement = ""
+        if demo["href"].endswith(".svg"):
+            drawing = ElementTree.parse(ROOT / demo["href"].lstrip("/")).getroot()
+            description = drawing.findtext("{http://www.w3.org/2000/svg}desc") or demo["title"]
+            source = "#desenho-ampliado"
+            enlargement = f'''<details class="pp-container pp-enlargement">
+<summary>Desenho ampliado</summary>
+<h3 id="desenho-ampliado" tabindex="-1">{esc(demo['label'])}</h3>
+<p id="drawing-help">Percorra o desenho com o dedo ou com as teclas de seta.</p>
+<div class="pp-drawing" role="region" aria-labelledby="desenho-ampliado" aria-describedby="drawing-help" tabindex="0">
+<img src="{href}" width="960" height="600" loading="lazy" alt="{esc(description)}"/></div>
+<div class="pp-actions"><a class="pp-text-link" href="#contato-projetos">Ver opções para solicitar proposta</a></div></details>'''
         return f'''<section class="pp-section pp-section--soft" id="demonstracao" aria-labelledby="demo-title">
 <div class="pp-container pp-demo"><div><p class="pp-kicker">Exemplo demonstrativo</p>
 <h2 id="demo-title">{esc(demo['title'])}</h2><p>{esc(demo['body'])}</p></div>
 <figure class="pp-record"><figcaption>{esc(demo['label'])}</figcaption>
 <dl>{_readings(demo['rows'])}</dl>
-<a class="pp-text-link" data-event-name="cta_click" data-cta-id="{esc(page['id'])}-sample-source" data-cta-position="demonstration" href="{esc(demo['href'])}">{esc(demo['link_label'])} {_icon('arrow')}</a>
-</figure></div></section>'''
+<a class="pp-text-link" data-event-name="cta_click" data-cta-id="{esc(page['id'])}-sample-source" data-cta-position="demonstration" href="{source}">{esc(demo['link_label'])} {_icon('arrow')}</a>
+</figure></div>{enlargement}</section>'''
     if key == "method":
         return f'''<section class="pp-section pp-section--rule" id="metodo" aria-labelledby="method-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('method_kicker', 'Desenvolvimento'))}</p><h2 id="method-title">{esc(page['method_title'])}</h2><p>{esc(page['method_intro'])}</p></header><ol class="pp-method">{_method(page)}</ol></div></section>'''
     if key == "inputs":

@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve, join, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { setInterval } from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
 import { resolveChromePath } from './resolve_chrome.mjs';
 
@@ -84,6 +85,32 @@ try {
         assert.ok(top >= -1 && top < 900, `keyboard link did not reach the example on ${item.route}`);
         assert.equal(await page.evaluate(() => scrollX), 0);
       }
+    }
+  }
+  await page.setViewport({ width: 320, height: 900, deviceScaleFactor: 1 });
+  for (const scripts of [false, true]) {
+    await page.setJavaScriptEnabled(scripts);
+    for (const item of pages.filter(p => p.demonstration.href.endsWith('.svg'))) {
+      await page.goto(origin + item.route, { waitUntil: 'load' });
+      await page.focus('.pp-record a');
+      await page.keyboard.press('Enter');
+      assert.ok(await page.$eval('.pp-enlargement', details => details.open), item.route);
+      await page.keyboard.press('Tab');
+      assert.ok(await page.$eval('.pp-drawing', el => el === document.activeElement));
+      assert.equal(await page.$eval('.pp-drawing img', img => img.getBoundingClientRect().width), 960);
+      await page.keyboard.press('ArrowRight');
+      // Poll from Node as page timers are disabled during the no-script iteration.
+      for await (const tick of setInterval(40, null, { signal: AbortSignal.timeout(3000) })) {
+        if (await page.$eval('.pp-drawing', el => el.scrollLeft > 0 && el.firstElementChild.naturalWidth > 0)) break;
+      }
+      assert.deepEqual(await page.evaluate(problems), [], item.route + ' expanded drawing');
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Enter');
+      assert.equal(page.url(), origin + item.route + '#contato-projetos');
+      assert.equal(await page.$eval('#contato-projetos .pp-button', el => el.getAttribute('href')), '/#contato');
+      await page.focus('.pp-enlargement summary');
+      await page.keyboard.press('Enter');
+      assert.ok(await page.$eval('.pp-enlargement', details => !details.open));
     }
   }
   await page.setJavaScriptEnabled(true);

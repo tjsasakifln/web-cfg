@@ -219,7 +219,14 @@ class TestProjectPages(unittest.TestCase):
                 detail = page["demonstration"]
                 parser = ProjectHTMLParser()
                 parser.feed(record.group(1))
-                self.assertIn(detail["href"], [link["href"] for link in parser.links])
+                if detail["href"].endswith(".svg"):
+                    self.assertIn("#desenho-ampliado", [link["href"] for link in parser.links])
+                    parser = ProjectHTMLParser()
+                    parser.feed(source)
+                    self.assertIn("desenho-ampliado", parser.ids)
+                    self.assertTrue(any(img.get("src") == detail["href"] and img.get("alt") for img in parser.images))
+                else:
+                    self.assertIn(detail["href"], [link["href"] for link in parser.links])
                 self.assertIn(detail["link_label"], unescape(record.group(1)))
                 self.assertNotIn("deslize para ver o diagrama", source.casefold())
 

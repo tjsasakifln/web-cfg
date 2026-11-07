@@ -525,8 +525,12 @@ def _run(tmp_path: Path, fixture: dict, **kwargs):
     ("public, x-no-transform", False),
     ("", False),
 ])
-def test_public_datadesk_requires_actual_no_transform_header(tmp_path, cache_control, accepted):
-    rel = "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html"
+@pytest.mark.parametrize("rel", [
+    "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html",
+    "bim/web/visualizador.html",
+    "bim/fotogrametria/index.html",
+])
+def test_public_html_override_requires_actual_no_transform_header(tmp_path, cache_control, accepted, rel):
     fixture = _fixture(tmp_path, {"index.html": HOME, rel: HOME})
     delegate = _html_fetcher(fixture["html"])
     def fetch(path, timeout):

@@ -116,6 +116,10 @@ body { background: var(--pp-paper); color: var(--pp-ink); }
 .pp-record dd { margin: 0; color: var(--pp-ink-2); line-height: 1.5; }
 .pp-record a { color: var(--pp-accent-dark); }
 .pp-record a .pp-icon { flex: none; }
+.pp-enlargement:not([open]) > summary:not(:focus-visible) { display: none; }
+.pp-enlargement summary { margin-top: 2rem; color: var(--pp-accent-dark); cursor: pointer; font-weight: 700; }
+.pp-drawing { overflow-x: auto; }
+.pp-drawing img { display: block; width: 960px; max-width: none; height: auto; margin-inline: auto; }
 
 .pp-method { display: grid; grid-template-columns: repeat(5,1fr); margin: 0; padding: 0; list-style: none; border-block: 1px solid var(--pp-line); }
 .pp-method li { min-width: 0; padding: 1.7rem 1.4rem 2rem; border-right: 1px solid var(--pp-line); }
