@@ -45,6 +45,9 @@ if (editor) {
       </div>
     </div>
     <div class="cad-issue" hidden><p></p><details><summary>Ver ocorrências do desenho</summary><ul></ul></details></div>
+    <details class="cad-preview" hidden><summary>Ver prévia gravada no DWG</summary>
+      <figure><img alt="Prévia gravada no arquivo DWG"><figcaption>Última vista salva pelo autor. Esta imagem serve de referência visual e não permite editar ou medir objetos.</figcaption></figure>
+    </details>
     <div class="cad-foot">
       <p class="cad-status" role="status" aria-live="polite">Escolha um DWG ou DXF do seu dispositivo.</p>
       <label class="cad-format" hidden>Cópia em <select data-format><option value="dwg">DWG R2000</option><option value="dxf">DXF</option></select></label>
@@ -66,6 +69,7 @@ if (editor) {
   const issue = find('.cad-issue');
   const format = find('[data-format]');
   const recovery = find('.cad-recover');
+  const preview = find('.cad-preview');
   let frame, ready, readyResolve, readyReject, titleObserver;
   let loading = false, saving = false, dirty = false, retained = false;
   let opened, baseline, dwgBlocked = false;
@@ -90,6 +94,32 @@ if (editor) {
       : 'Há observações sobre a leitura deste desenho.';
     issue.hidden = !messages.length && !dwgBlocked;
     issue.querySelector('details').hidden = !messages.length;
+  }
+  function clearPreview() {
+    const img = preview.querySelector('img');
+    img.removeAttribute('src');
+    preview.hidden = true;
+    preview.open = false;
+  }
+  async function showPreview(bytes, name) {
+    clearPreview();
+    if (!bytes || !/\.dwg$/i.test(name)) return;
+    try {
+      const { extractDwgPreview } = await import('./preview.mjs');
+      const blob = extractDwgPreview(bytes);
+      if (!blob) return;
+      const img = preview.querySelector('img');
+      // The site's image policy accepts bounded data images, including saved CAD thumbnails.
+      img.src = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+      await img.decode();
+      img.alt = 'Prévia gravada no arquivo ' + name;
+      preview.hidden = false;
+    } catch { clearPreview(); }
   }
   function clearRecovery() {
     if (recovery.href) URL.revokeObjectURL(recovery.href);
@@ -277,7 +307,7 @@ if (editor) {
     if (loading || saving) return;
     if ((dirty || retained) && !window.confirm('Há alterações sem uma cópia baixada. Abrir outro desenho mesmo assim?')) return;
     setBusy(true);
-    let started = false;
+    let started = false, input;
     try {
       if (example) {
         say('Abrindo o desenho de exemplo…');
@@ -290,7 +320,9 @@ if (editor) {
       if (!file.size || file.size > limit * 1024 * 1024) throw new Error('Escolha um desenho de até ' + limit + ' MiB que contenha dados.');
       say('Lendo ' + file.name + '…');
       const { prepareDrawing, compareImportBaseline } = await import('./codec.js');
-      const doc = await prepareDrawing(file.name, await file.arrayBuffer());
+      input = await file.arrayBuffer();
+      const doc = await prepareDrawing(file.name, input);
+      clearPreview();
       // A single drawing per workbench also makes a second upload with the same name unambiguous.
       if (frame) removeFailedFrame();
       started = true;
@@ -325,6 +357,7 @@ if (editor) {
       }
       format.querySelector('[value="dwg"]').disabled = dwgBlocked;
       warn([...warnings]);
+      if (dwgBlocked) await showPreview(input, file.name);
       reflectTitle();
       await fitDrawing();
       saveButton.hidden = fitButton.hidden = find('.cad-format').hidden = false;
@@ -333,6 +366,7 @@ if (editor) {
     } catch (error) {
       opened = baseline = null;
       if (started) removeFailedFrame();
+      if (!frame && file) await showPreview(input, file.name);
       say(error.message || 'Não foi possível abrir o arquivo.', true);
     } finally { setBusy(false); }
   }

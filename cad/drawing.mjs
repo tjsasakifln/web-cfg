@@ -44,14 +44,25 @@ export async function convertDrawing(operation, name, input) {
   let loss = false;
   function notify(_, event) {
     const message = String(event.message || '').slice(0, 220);
-    if (event.notificationType === 3 && saving) throw new Error('Falha na gravação CAD. ' + message);
-    if (event.notificationType === 3) loss = true;
+    if (event.notificationType === 0) return;
+    // ACadSharp emits these even for an untouched AutoCAD file containing one LINE.
+    // They concern presentation resources. Flag their absence explicitly, but only
+    // block the DWG copy when the drawing geometry or other records are at risk.
+    if (/^Object not implemented\s*:\s*VisualStyle$/.test(message) ||
+        /^(Unlisted object with DXF name (ACDBDETAILVIEWSTYLE|ACDBSECTIONVIEWSTYLE|CELLSTYLEMAP) |Entry not found .*(ACAD_DETAILVIEWSTYLE|ACAD_SECTIONVIEWSTYLE|TABLESTYLE_CELLSTYLEMAP))/.test(message)) {
+      warnings.add('Alguns estilos de apresentação do arquivo original não acompanham a cópia 2D.');
+      return;
+    }
     if (message.includes('joggedRadiusDimensionTransverseSegmentAngle')) {
       warnings.add('O leitor usou o ângulo padrão para a quebra em cotas de raio.');
       return;
     }
-    if (event.notificationType === -1 || event.notificationType === 1 || /skipp(ed|ing)|not supported|unsupported/i.test(message)) loss = true;
-    if ((event.notificationType !== 0 || loss) && warnings.size < 5) warnings.add(message);
+    if (event.notificationType === 3 && saving) throw new Error('Erro no desenho durante a gravação. Baixe o DXF para conferência.');
+    loss = true;
+    const unknown = /Unlisted object with DXF name ([A-Z0-9_]+)/.exec(message);
+    if (warnings.size < 5) warnings.add(unknown ? 'Registro sem suporte: ' + unknown[1] + '.' :
+      'O leitor encontrou registros inconsistentes ou sem suporte no arquivo.');
+
   }
 
   if (dwg && !/^AC10\d{2}$/.test(new TextDecoder().decode(bytes.subarray(0, 6)))) {
@@ -72,12 +83,16 @@ export async function convertDrawing(operation, name, input) {
   if (xref) warnings.add('O desenho contém referência externa. O conteúdo do arquivo vinculado pode não aparecer.');
   let result = bytes;
   if (saving) {
+    const expected = snapshot(doc);
     if (loss) throw new Error('O DXF contém registros que o gravador DWG não reconhece. Baixe a cópia em DXF.');
     doc.header.version = cad.ACadVersion.AC1015;
     result = cad.DwgWriter.writeToBuffer(doc, null, notify);
     const output = result.buffer.slice(result.byteOffset, result.byteOffset + result.byteLength);
     const reopened = cad.DwgReader.readFromStream(output, notify);
-    if (!unchanged(before, inventory(reopened)) || loss) throw new Error('O DWG gerado não preservou o inventário de entidades por bloco e camada. Baixe a cópia em DXF.');
+    const verified = snapshot(reopened);
+    if (!unchanged(expected.entities, verified.entities) || missingNames(expected, verified).length || loss) {
+      throw new Error('O DWG gerado não preservou a geometria ou a organização do desenho. Baixe a cópia em DXF.');
+    }
   } else if (dwg) {
     result = dxfBytes(doc, notify);
     try {
@@ -127,6 +142,15 @@ function snapshot(doc) {
   return { entities, total, layers: names(doc.layers), layouts: names(doc.layouts), blocks: names(doc.blockRecords) };
 }
 
+function missingNames(original, opened) {
+  const messages = [];
+  for (const [key, label] of [['layers', 'camadas'], ['layouts', 'folhas'], ['blocks', 'blocos']]) {
+    const missing = [...original[key]].filter(name => !opened[key].has(name));
+    if (missing.length) messages.push('A cópia omitiu ' + label + ': ' + missing.slice(0, 5).join(', ') + '.');
+  }
+  return messages;
+}
+
 export function compareBaseline(before, after) {
   const warnings = [];
   try {
@@ -140,10 +164,7 @@ export function compareBaseline(before, after) {
       warnings.push('O editor alterou a geometria, a camada ou o conteúdo de entidades durante a abertura. ' +
         'Entidades no original: ' + original.total + '. Na cópia: ' + opened.total + '.');
     }
-    for (const [key, label] of [['layers', 'camadas'], ['layouts', 'folhas'], ['blocks', 'blocos']]) {
-      const missing = [...original[key]].filter(name => !opened[key].has(name));
-      if (missing.length) warnings.push('O editor omitiu ' + label + ': ' + missing.slice(0, 5).join(', ') + '.');
-    }
+    warnings.push(...missingNames(original, opened));
   } catch {
     warnings.push('Não foi possível conferir a geometria importada pelo editor.');
   }

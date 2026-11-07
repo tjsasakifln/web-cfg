@@ -83,3 +83,8 @@ body:has(#cad-editor.cad-expanded) { overflow:hidden; }
 #cad-editor .cad-issue p { font-weight:700; }
 #cad-editor .cad-issue summary { cursor:pointer; text-decoration:underline; text-underline-offset:.2em; min-height:var(--touch-min); display:list-item; line-height:var(--touch-min); }
 #cad-editor .cad-issue ul { margin:.2rem 0; padding-inline-start:1.3rem; }
+#cad-editor .cad-preview { padding:.4rem clamp(.85rem,2vw,1.4rem); border-top:1px solid var(--line); background:var(--white); }
+#cad-editor .cad-preview summary { min-height:var(--touch-min); font-weight:700; cursor:pointer; padding-block:.55rem; }
+#cad-editor .cad-preview figure { margin:0 0 .65rem; }
+#cad-editor .cad-preview img { display:block; height:auto; max-width:100%; max-height:22rem; border:1px solid var(--line); }
+#cad-editor .cad-preview figcaption { color:var(--muted); margin-top:.4rem; font-size:var(--text-caption); }
