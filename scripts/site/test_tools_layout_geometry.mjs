@@ -35,6 +35,7 @@ const ROUTES = [
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
+  { id: "bdi", path: "/ferramentas/calculadora-bdi/", primary: "#composicao" },
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
 ];
@@ -358,6 +359,16 @@ async function exercise(page, id) {
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#out");
     return [result];
+  }
+
+  if (id === "bdi") {
+    await page.click("#exemplo");
+    await page.click("#composicao button[type=submit]");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (!await page.$eval("#preco", (el) => el.textContent.includes("119.445,79"))) {
+      throw new Error("BDI example price differs from the reference");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
   }
 
   if (id === "margem") {

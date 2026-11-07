@@ -50,6 +50,7 @@ const expectedRoutes = new Set([
   "/ferramentas/checklist-reequilibrio/",
   "/ferramentas/diagnostico-defesa-margem/",
   "/ferramentas/limite-acrescimos-supressoes/",
+  "/ferramentas/calculadora-bdi/",
   "/ferramentas/matriz-atraso-obra/",
   "/ferramentas/prontidao-tecnica-obra-privada/",
 ]);
