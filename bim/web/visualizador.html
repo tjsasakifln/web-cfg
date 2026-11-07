@@ -6,11 +6,12 @@
   <link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="plataforma.css"><link rel="stylesheet" href="visualizador.css">
 <meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/visualizador.html">
 <meta name="description" content="Abra seu modelo IFC no navegador, localize elementos por nome, veja propriedades, consulte quantitativos e confira sombras do modelo em 3D.">
+<link rel="stylesheet" href="/bim/web/teclado.css">
 </head>
 <body class="plataforma visor">
-<a class="pular" href="#principal">Pular para o visualizador</a>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="barra"><div class="miolo barra-interna"><a class="assinatura" href="index.html"><span class="sinal-marca" aria-hidden="true"></span>CONFENGE <b>BIM</b></a><a class="catalogo" href="index.html#ferramentas">Voltar ao catálogo</a></div></header>
-<main id="principal" class="miolo">
+<main id="conteudo" tabindex="-1" class="miolo">
   <p class="rubrica">01 / Visualização de modelo</p>
   <h1>Abrir IFC em 3D</h1>
   <p class="introducao">Gire o modelo e selecione uma peça para consultar sua classe e seu identificador. A leitura do seu arquivo acontece no próprio navegador.</p>
@@ -24,7 +25,7 @@
   <div class="mesa">
     <div class="area-modelo">
       <div id="palco"><div id="vazio"><span class="eixo" aria-hidden="true">3D</span><strong>Área de visualização</strong><span>O modelo aparecerá aqui.</span></div></div>
-      <div class="legenda"><span>Arraste para girar. Use a roda ou dois dedos para aproximar.</span><button id="enquadrar" type="button" disabled>Enquadrar</button></div>
+      <div class="legenda"><span>Arraste para girar. Use a roda ou dois dedos para aproximar.</span><button id="enquadrar" type="button" disabled>Mostrar modelo inteiro</button></div>
     </div>
     <aside aria-labelledby="tit-painel"><p class="rubrica">Inspeção</p><h2 id="tit-painel">Elemento</h2>
       <label for="elementos">Selecione na vista ou na lista</label><select id="elementos" disabled><option value="">Escolha um elemento</option></select>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39; data: blob:; script-src &#39;self&#39; blob: &#39;wasm-unsafe-eval&#39;; style-src &#39;self&#39; &#39;unsafe-inline&#39;; connect-src &#39;self&#39; blob: data:; object-src &#39;none&#39;; form-action &#39;none&#39;; base-uri &#39;self&#39;">
 
@@ -8,23 +8,25 @@
     <meta name="theme-color" content="#171a21" />
     <meta
       name="description"
-      content="Browser-based Structure-from-Motion and photogrammetry. Reconstruct 3D models locally without uploading your photographs."
+      content="Reconstrua uma malha 3D a partir de fotografias sobrepostas. O laboratório processa as imagens no navegador e permite exportar o resultado em PLY."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="WebSfM, photogrammetry in your browser" />
+    <meta property="og:title" content="Laboratório de fotogrametria | CONFENGE BIM" />
     <meta
       property="og:description"
-      content="Turn overlapping photographs into 3D reconstructions locally in your browser."
+      content="Gere uma malha a partir de fotografias sobrepostas no navegador."
     />
     <link rel="icon" href="./favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
-    <title>WebSfM, photogrammetry in your browser</title>
+    <title>Laboratório de fotogrametria | CONFENGE BIM</title>
     <script type="module" crossorigin src="./app.mjs"></script>
     <link rel="stylesheet" crossorigin href="./app.css">
   <link rel="canonical" href="https://confenge.com.br/bim/fotogrametria/"><meta name="robots" content="noindex, follow">
-  </head>
-  <body>
-    <div id="app"></div>
+  <link rel="stylesheet" href="/bim/web/teclado.css">
+</head>
+  <body lang="en">
+<a lang="pt-BR" class="skip-link" href="#conteudo">Ir para o laboratório</a>
+    <main class="laboratorio-bim" id="conteudo" tabindex="-1"><div id="app"></div></main>
   </body>
 </html>

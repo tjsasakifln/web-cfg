@@ -1,0 +1,16 @@
+.skip-link {
+  position: fixed;
+  top: .6rem;
+  left: .6rem;
+  z-index: 99999;
+  transform: translateY(calc(-100% - 1rem));
+  padding: .6rem .85rem;
+  color: #fff;
+  background: #173f35;
+  border: 2px solid #fff;
+}
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid #173f35;
+}
+.laboratorio-bim { height: 100%; }
