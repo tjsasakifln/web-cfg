@@ -28,14 +28,14 @@ function extent(values){
 const ticks=new Intl.NumberFormat('pt-BR',{maximumSignificantDigits:3});
 const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
 
-export function plots(all,unit) {
+export function plots(all,unit,log=false) {
   const usable=all.filter(r=>[r.observed,r.predicted,r.residual].every(Number.isFinite));
   const container=html('section');container.className='mp-charts';container.setAttribute('aria-label','Gráficos de diagnóstico');
   if(!usable.length)return container;
   const rows=sample(usable);
   const max=Math.max(...usable.slice(0,10000).map(r=>Math.max(Math.abs(r.observed),Math.abs(r.predicted),Math.abs(r.residual))));
   const scale=max>=1e6?1e6:max>=1e3?1e3:1;
-  const label='R$'+(scale===1e6?' mi':scale===1e3?' mil':'')+(unit==='BRL'?'':'/m²');
+  const label=log?'ln(preço)':'R$'+(scale===1e6?' mi':scale===1e3?' mil':'')+(unit==='BRL'?'':'/m²');
   const grid=html('div');grid.className='mp-plot-grid';container.append(grid);
   const points=[];
   for(const isResidual of [false,true]){
@@ -62,7 +62,7 @@ export function plots(all,unit) {
       svgElement('text',{x:0,y:0,transform:'translate(15 '+((top+bottom)/2)+') rotate(-90)','text-anchor':'middle'},(isResidual?'Resíduo':'Observado')+' ('+label+')'));
     const markers=rows.map((row,i)=>{
       const dot=svgElement('circle',{cx:px(row.predicted),cy:py(row[yKey]),r:3.6,class:'mp-dot'});
-      dot.append(svgElement('title',{},'Observação '+row.id+' · '+money.format(row[yKey])));
+      dot.append(svgElement('title',{},'Observação '+row.id+' · '+(log?ticks.format(row[yKey]):money.format(row[yKey]))));
       dot.addEventListener('click',()=>{select.value=String(i);highlight(i);});s.append(dot);return dot;
     });
     const highlightDot=svgElement('circle',{r:6,class:'mp-dot-selected'});s.append(highlightDot);
@@ -76,7 +76,7 @@ export function plots(all,unit) {
     for(const [marks,mark] of points){
       mark.setAttribute('cx',marks[i].getAttribute('cx'));mark.setAttribute('cy',marks[i].getAttribute('cy'));
     }
-    const amt=v=>money.format(v)+(unit==='BRL'?'':'/m²');
+    const amt=v=>log?ticks.format(v)+' (ln)':money.format(v)+(unit==='BRL'?'':'/m²');
     out.textContent='Observação '+r.id+' · observado '+amt(r.observed)+' · estimado '+amt(r.predicted)+' · resíduo '+amt(r.residual)+'.';
   }
   select.onchange=()=>highlight(Number(select.value));highlight(0);

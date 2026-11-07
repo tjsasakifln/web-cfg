@@ -155,6 +155,10 @@
 /assets/tiago-sasaki-avatar-v11-sem-fundo.avif
   Content-Type: image/avif
 
+/assets/modela/amostra-exemplo.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="amostra-exemplo.csv"
+
 /avaliacao-imoveis-urbanos/inferencia/engine/*
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self'; object-src 'none'
   Cache-Control: public, max-age=0, must-revalidate, no-transform

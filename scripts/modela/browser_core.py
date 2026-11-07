@@ -166,6 +166,19 @@ def call_calculate(raw):
     }
     if any(v is None for v in subject.values()):
         raise ValueError("Preencha todos os atributos do imóvel avaliando.")
+    target_scale = req.get("targetScale", "identity")
+    log_features = req.get("logFeatures", [])
+    if target_scale not in ("identity", "log") or not isinstance(log_features, list):
+        raise ValueError("Escala de transformação inválida.")
+    if any(c not in features for c in log_features) or len(set(log_features)) != len(log_features):
+        raise ValueError("As variáveis em log devem fazer parte da seleção.")
+    log_cols = list(log_features) + ([target] if target_scale == "log" else [])
+    for col in log_cols:
+        invalid = df.index[df[col].notna() & (df[col] <= 0)]
+        if len(invalid):
+            raise ValueError(f"O logaritmo exige valores positivos em {col}. Confira a observação {invalid[0] + 1}.")
+    if any(subject[col] <= 0 for col in log_features):
+        raise ValueError("Os atributos do avaliando com escala logarítmica devem ser positivos.")
     spec = {
         "schema_version": "MP/1",
         "target_col": target,
@@ -192,8 +205,8 @@ def call_calculate(raw):
             features=features,
             base_variables=features,
             feature_groups={},
-            x_transformations={},
-            y_transformation="identity",
+            x_transformations={col: "ln" for col in log_features},
+            y_transformation=target_scale,
             intercept=True,
         ),
         spec,
@@ -281,6 +294,10 @@ def call_calculate(raw):
     return pack(
         {
             "point": assessment.value["point"],
+            "targetScale": target_scale,
+            "logFeatures": log_features,
+            "estimand": assessment.statistical.get("estimand"),
+            "originalIntervalsValidated": assessment.statistical.get("interval_method_validated"),
             "meanCI": bounds("mean_ci80"),
             "predictionInterval": bounds("prediction_interval"),
             "coefficients": coefficients,

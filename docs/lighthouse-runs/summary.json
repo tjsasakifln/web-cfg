@@ -3,8 +3,8 @@
   "generated_at": "2026-10-14T14:55:53.860Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
-    "public_route_count": 264,
-    "family_count": 59,
+    "public_route_count": 268,
+    "family_count": 60,
     "families": [
       {
         "id": "triagem-tecnica",
@@ -655,6 +655,18 @@
         "runtime_only": null
       },
       {
+        "id": "modela-pro",
+        "label": "Avaliar uma amostra de imóveis, conferir a memória de cálculo e conversar sobre uma avaliação profissional.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/avaliacao-imoveis-urbanos/inferencia/",
+        "representative_reason": "Calculadora pública de avaliações com carregamento sob demanda e processamento de planilhas no navegador.",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
         "id": "avaliacao-imoveis-urbanos",
         "label": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
         "kind": "canonical",
@@ -682,7 +694,7 @@
         "id": "ferramentas-e-guias-bim",
         "label": "Conferir um modelo, desenho ou levantamento, executar a tarefa com o próprio arquivo e conversar sobre revisão, compatibilização ou orçamento do projeto.",
         "kind": "canonical",
-        "route_count": 5,
+        "route_count": 8,
         "lighthouse_representative": "/bim/",
         "representative_reason": "Indexable hub connects the IFC viewer and drawing tools to task guides and downloadable examples.",
         "image_gate": false,
@@ -799,6 +811,7 @@
       "/pgr-documentacao-sst-obras/",
       "/terceirizacao-documentacao-sst/",
       "/projetos/",
+      "/avaliacao-imoveis-urbanos/inferencia/",
       "/avaliacao-imoveis-urbanos/",
       "/assistencia-tecnica-pericia-trabalhista/",
       "/bim/",
@@ -862,15 +875,16 @@
       "/pgr-documentacao-sst-obras/",
       "/terceirizacao-documentacao-sst/",
       "/projetos/",
+      "/avaliacao-imoveis-urbanos/inferencia/",
       "/avaliacao-imoveis-urbanos/",
       "/assistencia-tecnica-pericia-trabalhista/",
+      "/bim/",
+      "/bim/web/",
+      "/bim/fotogrametria/",
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
-      "/conteudos/documentos-reequilibrio-obra-publica/",
-      "/bim/",
-      "/bim/web/",
-      "/bim/fotogrametria/"
+      "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
     "critical_money_pages": [
       "/",
@@ -920,7 +934,7 @@
       "/ops/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "not_sampled_count": 203,
+    "not_sampled_count": 206,
     "not_sampled": [
       {
         "route": "/aditivos-obras-publicas/",
@@ -964,6 +978,21 @@
       },
       {
         "route": "/bim/guias/quantitativos-ifc-para-excel/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
+      },
+      {
+        "route": "/cad/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
+      },
+      {
+        "route": "/cad/aplicativos/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
+      },
+      {
+        "route": "/cad/guias/escala-e-unidade-do-dwg/",
         "family": "ferramentas-e-guias-bim",
         "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
       },
@@ -9330,6 +9359,115 @@
       "font_display_score": 1,
       "benchmark_index": 2976,
       "seo_exempt": true
+    },
+    {
+      "path": "/avaliacao-imoveis-urbanos/inferencia/",
+      "run": 1,
+      "performance": 97,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1949.864,
+      "cls": 0,
+      "tbt_ms": 157,
+      "longest_own_task_ms": 390.0000000000001,
+      "fcp_ms": 1246.4319999999998,
+      "si_ms": 1246.4319999999998,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 200,
+      "total_byte_weight": 141403,
+      "content_byte_weight": 139075,
+      "header_byte_weight": 2328,
+      "payload_requests": 11,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/avaliacao-imoveis-urbanos/inferencia/",
+          "transfer_size": 4498,
+          "resource_size": 12869,
+          "content_bytes": 4267,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.55fa114a1478.css",
+          "transfer_size": 22475,
+          "resource_size": 109271,
+          "content_bytes": 22260,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/editorial.7d20c2e78c5c.css",
+          "transfer_size": 8854,
+          "resource_size": 46718,
+          "content_bytes": 8639,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=5ab6fe0bb915e865",
+          "transfer_size": 30625,
+          "resource_size": 98250,
+          "content_bytes": 30396,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/avaliacao-imoveis-urbanos/inferencia/interface.dc1cd7d21fd6.css",
+          "transfer_size": 2318,
+          "resource_size": 6119,
+          "content_bytes": 2104,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/avaliacao-imoveis-urbanos/inferencia/custo.eed44e6122a1.css",
+          "transfer_size": 940,
+          "resource_size": 750,
+          "content_bytes": 750,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/avaliacao-imoveis-urbanos/inferencia/app.mjs",
+          "transfer_size": 4805,
+          "resource_size": 11774,
+          "content_bytes": 4576,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/avaliacao-imoveis-urbanos/inferencia/custo.mjs",
+          "transfer_size": 2893,
+          "resource_size": 6931,
+          "content_bytes": 2665,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 23.215999999999998,
+      "lcp_observed_rtt_ms": 0.6810000000000009,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 100,
+      "image_delivery_savings_bytes": 6262,
+      "font_display_score": 1,
+      "benchmark_index": 2551,
+      "seo_exempt": false
     }
   ],
   "evaluation": {
@@ -9360,6 +9498,15 @@
         "/bim/",
         "/bim/web/",
         "/bim/fotogrametria/"
+      ],
+      "prior_summary_generated_at": "2026-10-14T14:55:53.860Z"
+    },
+    {
+      "generated_at": "2026-11-07T22:23:06.369Z",
+      "source": "summary-modela-candidate.json",
+      "base": "http://127.0.0.1:8766",
+      "added_paths": [
+        "/avaliacao-imoveis-urbanos/inferencia/"
       ],
       "prior_summary_generated_at": "2026-10-14T14:55:53.860Z"
     }

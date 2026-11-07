@@ -60,6 +60,10 @@
       },
       {
         "cls": 0.0,
+        "route": "/avaliacao-imoveis-urbanos/inferencia/"
+      },
+      {
+        "cls": 0.0,
         "route": "/bim/"
       },
       {
@@ -259,7 +263,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 60
+    "routes_measured": 61
   },
   "fonts": {
     "font_files_total": 1,
