@@ -7,7 +7,7 @@
 .bim-capa {padding:clamp(2rem,5vw,4rem) 0;background:#edf4f5}
 .bim-duas-colunas {display:grid;grid-template-columns:1fr 1.12fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center}
 .bim-capa figure {margin:0}
-.bim-capa img {width:100%;height:auto;display:block;border-radius:.5rem;border:1px solid #9db1b7;background:white}
+.bim-capa img {width:100%;height:auto;display:block;border:1px solid #9db1b7;background:white}
 .bim-capa figcaption,.bim-portal .bim-nota {font-size:.88rem;color:#415e67;margin:.65rem 0 0}
 .bim-selo {font-weight:750;color:#166659;font-size:.88rem;margin:0}
 .bim-acoes {display:flex;align-items:center;flex-wrap:wrap;gap:.8rem 1.5rem;margin:1rem 0}
@@ -18,7 +18,7 @@
 .bim-grade {list-style:none;padding:0;margin:1.25rem 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .bim-guias {grid-template-columns:repeat(2,minmax(0,1fr))}
 .bim-grade li {margin:0}
-.bim-portal .bim-grade a {display:block;height:100%;padding:1.15rem;border:1px solid #b8c8ce;border-radius:.4rem;text-decoration:none;background:#fff}
+.bim-portal .bim-grade a {display:block;height:100%;padding:1.15rem;border:1px solid #b8c8ce;text-decoration:none;background:#fff}
 .bim-grade strong {font-size:1.1rem;display:block}
 .bim-grade span {display:block;margin-top:.45rem;font-size:.96rem;line-height:1.45;color:#344c59}
 .bim-grade a:hover strong,.bim-grade a:focus-visible strong {text-decoration:underline}
