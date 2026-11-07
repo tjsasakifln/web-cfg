@@ -64,6 +64,13 @@ try {
     return frame;
   };
   const cad = await receive(sample,'cadcraft','30 objects on 5 layers');
+  assert.equal(await cad.evaluate(() => document.fullscreenEnabled), false);
+  assert.ok(await page.$eval('[data-dwg-note]', el => !el.hidden));
+  await page.click('#suite-workspace [data-expand]');
+  await page.waitForFunction(() => document.fullscreenElement?.id === 'suite-workspace' &&
+    document.querySelector('.suite-signature')?.getBoundingClientRect().width > 0);
+  await page.click('#suite-workspace [data-expand]');
+  await page.waitForFunction(() => !document.fullscreenElement);
   const canvas = await cad.$('canvas[data-over]');
   await cad.click('[data-cmd=LINE]');
   await canvas.scrollIntoView();

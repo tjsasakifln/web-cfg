@@ -39,6 +39,7 @@ try {
   assert.equal(await page.$eval('[data-format]', el => el.value), 'dwg');
   const iframe = await page.$('#cad-editor iframe');
   const frame = await iframe.contentFrame();
+  assert.equal(await frame.evaluate(() => document.fullscreenEnabled), false);
   const canvas = await frame.waitForSelector('canvas');
   await canvas.scrollIntoView();
   const bounds = await canvas.boundingBox();

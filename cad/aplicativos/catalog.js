@@ -39,12 +39,13 @@ function choose(slug, changeHistory = true, fileId = '') {
 
   const name = names.get(slug);
   title.textContent = name;
+  workspace.querySelector('[data-dwg-note]').hidden = slug !== 'cadcraft';
   status.textContent = 'Abrindo ' + name + '…';
   const next = document.createElement('iframe');
   next.title = name + ' · área de trabalho';
   next.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-downloads allow-modals allow-popups allow-forms allow-pointer-lock');
-  next.allow = slug === 'markupcraft' ? "microphone 'self'" : "microphone 'none'";
-  next.allowFullscreen = true;
+  // The workspace owns fullscreen so its logo and return control stay accessible.
+  next.allow = "fullscreen 'none'; microphone " + (slug === 'markupcraft' ? "'self'" : "'none'");
   next.referrerPolicy = 'no-referrer';
   const failed = () => {
     if (frame !== next) return;

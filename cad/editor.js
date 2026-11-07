@@ -139,7 +139,7 @@ if (editor) {
     } catch { /* Browser storage may be disabled. */ }
     frame = document.createElement('iframe');
     frame.title = 'Área de edição CAD da CONFENGE';
-    frame.allow = 'fullscreen';
+    frame.allow = "fullscreen 'none'";
     frame.src = '/cad/editor/frame.htm?host=parent';
     ready = new Promise((resolve, reject) => {
       const timer = window.setTimeout(() => reject(new Error('O editor demorou a responder. Confira a conexão e abra o desenho novamente.')), 90000);
