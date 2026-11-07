@@ -38,6 +38,9 @@ try {
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
+  ".mjs": "application/javascript",
+  ".wasm": "application/wasm",
+  ".webp": "image/webp",
   ".css": "text/css",
   ".js": "application/javascript",
   ".png": "image/png",

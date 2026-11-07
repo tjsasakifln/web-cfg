@@ -16,3 +16,14 @@
   outline: 3px solid var(--focus-ring-core);
 }
 .laboratorio-bim { height: 100%; }
+
+.plataforma .desenho figcaption {
+  font-size: .875rem;
+}
+
+@media (max-width: 480px) {
+  #conteudo:not(.laboratorio-bim) :is(button, select, textarea, summary, input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

@@ -360,8 +360,8 @@
       },
       {
         "family_id": "bim-aplicativos",
-        "route": "/bim/web/digitalizar.html",
-        "reason": "Exercises the scanned-sheet converter with local PDF/image input and CAD preview controls.",
+        "route": "/bim/web/",
+        "reason": "Exercises the application catalog, which groups links to drawing, model and field tools by task.",
         "seo_exempt_reason": "These interactive workspaces are noindex. Their crawlable entry points and instructions are the BIM hub and guides."
       },
       {

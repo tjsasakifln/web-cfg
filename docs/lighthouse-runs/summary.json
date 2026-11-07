@@ -3,8 +3,8 @@
   "generated_at": "2026-10-14T14:55:53.860Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
-    "public_route_count": 257,
-    "family_count": 56,
+    "public_route_count": 264,
+    "family_count": 59,
     "families": [
       {
         "id": "triagem-tecnica",
@@ -679,6 +679,42 @@
         "runtime_only": null
       },
       {
+        "id": "ferramentas-e-guias-bim",
+        "label": "Conferir um modelo, desenho ou levantamento, executar a tarefa com o próprio arquivo e conversar sobre revisão, compatibilização ou orçamento do projeto.",
+        "kind": "canonical",
+        "route_count": 5,
+        "lighthouse_representative": "/bim/",
+        "representative_reason": "Indexable hub connects the IFC viewer and drawing tools to task guides and downloadable examples.",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null,
+        "runtime_only": null
+      },
+      {
+        "id": "bim-aplicativos",
+        "label": "Executar localmente a ferramenta de desenho, modelo ou fotografia escolhida pelo visitante no portal BIM.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/bim/web/",
+        "representative_reason": "Exercises the application catalog, which groups links to drawing, model and field tools by task.",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "These interactive workspaces are noindex. Their crawlable entry points and instructions are the BIM hub and guides.",
+        "runtime_only": null
+      },
+      {
+        "id": "bim-laboratorio-fotos",
+        "label": "Executar localmente a ferramenta de desenho, modelo ou fotografia escolhida pelo visitante no portal BIM.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/bim/fotogrametria/",
+        "representative_reason": "Exercises the application shell for the locally processed photogrammetry workspace.",
+        "image_gate": false,
+        "seo_exempt": true,
+        "seo_exempt_reason": "The reconstruction workspace is noindex. The indexable BIM hub describes its purpose and links to it.",
+        "runtime_only": null
+      },
+      {
         "id": "transaction-utilities-noindex",
         "label": "Post-conversion, operations and error utilities",
         "kind": "supplemental_noindex",
@@ -765,6 +801,9 @@
       "/projetos/",
       "/avaliacao-imoveis-urbanos/",
       "/assistencia-tecnica-pericia-trabalhista/",
+      "/bim/",
+      "/bim/web/",
+      "/bim/fotogrametria/",
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
@@ -828,7 +867,10 @@
       "/ops/",
       "/diretoria-b2g/",
       "/diagnostico-b2g-expansao/",
-      "/conteudos/documentos-reequilibrio-obra-publica/"
+      "/conteudos/documentos-reequilibrio-obra-publica/",
+      "/bim/",
+      "/bim/web/",
+      "/bim/fotogrametria/"
     ],
     "critical_money_pages": [
       "/",
@@ -873,10 +915,12 @@
       "/inteligencia/cenarios/",
       "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
       "/jurisprudencia-contratos-obras/",
+      "/bim/web/",
+      "/bim/fotogrametria/",
       "/ops/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "not_sampled_count": 199,
+    "not_sampled_count": 203,
     "not_sampled": [
       {
         "route": "/aditivos-obras-publicas/",
@@ -902,6 +946,26 @@
         "route": "/bid-room-licitacoes-obras/",
         "family": "service-pillars",
         "reason": "template semantics represented by /acompanhamento-contratos-obras/ for family service-pillars"
+      },
+      {
+        "route": "/bim/guias/dwg-para-ifc-paredes/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
+      },
+      {
+        "route": "/bim/guias/medir-distancia-area-foto/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
+      },
+      {
+        "route": "/bim/guias/pdf-escaneado-para-dwg/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
+      },
+      {
+        "route": "/bim/guias/quantitativos-ifc-para-excel/",
+        "family": "ferramentas-e-guias-bim",
+        "reason": "template semantics represented by /bim/ for family ferramentas-e-guias-bim"
       },
       {
         "route": "/casos/aditivo-art125-demonstrativo/",
@@ -9058,6 +9122,214 @@
       "font_display_score": 1,
       "benchmark_index": 2071.5,
       "seo_exempt": true
+    },
+    {
+      "path": "/bim/",
+      "run": 1,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1882.877,
+      "cls": 0,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 907.877,
+      "si_ms": 907.877,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 184,
+      "total_byte_weight": 168225,
+      "content_byte_weight": 166566,
+      "header_byte_weight": 1659,
+      "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/bim/",
+          "transfer_size": 5138,
+          "resource_size": 14947,
+          "content_bytes": 4907,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-b19be0f7.woff2",
+          "transfer_size": 42401,
+          "resource_size": 42208,
+          "content_bytes": 42208,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.55fa114a1478.css",
+          "transfer_size": 22475,
+          "resource_size": 109271,
+          "content_bytes": 22260,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 30625,
+          "resource_size": 98250,
+          "content_bytes": 30396,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/bim/portal.7550ed9711e2.css",
+          "transfer_size": 979,
+          "resource_size": 1883,
+          "content_bytes": 765,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/bim/imagens/modelo-pavilhao.webp",
+          "transfer_size": 45013,
+          "resource_size": 44820,
+          "content_bytes": 44820,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 3.9385,
+      "lcp_observed_rtt_ms": 0.059000000000000004,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 0,
+      "image_delivery_savings_bytes": 35728,
+      "font_display_score": 1,
+      "benchmark_index": 2942.5,
+      "seo_exempt": false
+    },
+    {
+      "path": "/bim/web/",
+      "run": 1,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 66,
+      "lcp_ms": 901.241,
+      "cls": 0,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 901.241,
+      "si_ms": 901.241,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 161,
+      "total_byte_weight": 8289,
+      "content_byte_weight": 7417,
+      "header_byte_weight": 872,
+      "payload_requests": 4,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/bim/web/",
+          "transfer_size": 3573,
+          "resource_size": 10293,
+          "content_bytes": 3343,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/bim/web/estilo.985cc4768f08.css",
+          "transfer_size": 1436,
+          "resource_size": 2834,
+          "content_bytes": 1222,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/bim/web/plataforma.6b78e0061c06.css",
+          "transfer_size": 1514,
+          "resource_size": 3234,
+          "content_bytes": 1300,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/bim/web/teclado.946bb738fcdf.css",
+          "transfer_size": 1766,
+          "resource_size": 3475,
+          "content_bytes": 1552,
+          "encoding": "gzip"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 0.6205,
+      "lcp_observed_rtt_ms": 0.10200000000000031,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 250,
+      "image_delivery_savings_bytes": 0,
+      "font_display_score": 1,
+      "benchmark_index": 3070,
+      "seo_exempt": true
+    },
+    {
+      "path": "/bim/fotogrametria/",
+      "run": 1,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 66,
+      "lcp_ms": 907.4369999999999,
+      "cls": 0,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 907.4369999999999,
+      "si_ms": 907.4369999999999,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 19,
+      "total_byte_weight": 5438,
+      "content_byte_weight": 4576,
+      "header_byte_weight": 862,
+      "payload_requests": 4,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/bim/fotogrametria/",
+          "transfer_size": 1633,
+          "resource_size": 3186,
+          "content_bytes": 1403,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/bim/fotogrametria/entrada.mjs",
+          "transfer_size": 844,
+          "resource_size": 1292,
+          "content_bytes": 616,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/bim/fotogrametria/entrada.e6f4b592a983.css",
+          "transfer_size": 1195,
+          "resource_size": 1005,
+          "content_bytes": 1005,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/bim/web/teclado.946bb738fcdf.css",
+          "transfer_size": 1766,
+          "resource_size": 3475,
+          "content_bytes": 1552,
+          "encoding": "gzip"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.2185000000000006,
+      "lcp_observed_rtt_ms": 0.119,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 150,
+      "image_delivery_savings_bytes": 0,
+      "font_display_score": 1,
+      "benchmark_index": 2770,
+      "seo_exempt": true
     }
   ],
   "evaluation": {
@@ -9078,5 +9350,18 @@
   },
   "terminal_state": "MEASURED_PASS",
   "fatal": null,
-  "unmeasured": []
+  "unmeasured": [],
+  "evidence_extensions": [
+    {
+      "generated_at": "2026-11-07T01:53:12.162Z",
+      "source": "summary-portal-bim.json",
+      "base": "http://127.0.0.1:8766",
+      "added_paths": [
+        "/bim/",
+        "/bim/web/",
+        "/bim/fotogrametria/"
+      ],
+      "prior_summary_generated_at": "2026-10-14T14:55:53.860Z"
+    }
+  ]
 }

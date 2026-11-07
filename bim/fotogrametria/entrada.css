@@ -1,0 +1,24 @@
+body.preparar-fotos {
+  margin: 0;
+  color: #16332c;
+  background: #f6f8f2;
+  font: 1rem/1.55 system-ui, sans-serif;
+}
+#entrada { max-width: 40rem; margin: 0 auto; padding: clamp(1rem, 6vw, 4rem); }
+#entrada .rotulo { margin: 2.4rem 0 .4rem; font-weight: 700; color: #315346; }
+#entrada h1 { margin: .3rem 0 1rem; font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; }
+#entrada h2 { margin: 2rem 0 .3rem; font-size: 1.25rem; }
+#entrada a { color: #16513c; text-underline-offset: .15em; }
+#entrada button { padding: .75rem 1.2rem; border: 0; border-radius: .4rem; background: #19513f; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+#entrada [role="status"] { display: block; margin-top: .5rem; }
+#entrada[hidden] { display: none; }
+.bancada-fotos .scene-desc code { color: var(--text); }
+@media (max-width: 768px) {
+  .bancada-fotos button.bw-close,
+  .bancada-fotos button.project-btn,
+  .bancada-fotos button.tab {
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+}
