@@ -331,6 +331,9 @@ def finalize_public_artifact(
     from scripts.site.scrub_em_dashes import scrub_html
     from scripts.site.structured_identity import sanitize_tree
 
+    from scripts.site.catalogo_ferramentas import publish_catalog
+
+    publish_catalog(Path(dest))
     scrubbed = 0
     for html_path in sorted(Path(dest).rglob("*.html")):
         raw = html_path.read_text(encoding="utf-8")
