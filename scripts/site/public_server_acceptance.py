@@ -44,7 +44,7 @@ CACHE_TRANSITION_SCHEMA = "confenge.cache-transition-assets/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_HTML = re.compile(r"^[A-Za-z0-9._/-]+\.html$")
-SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/-]+$")
+SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/@-]+$")
 CACHE_TRANSITION_ASSET = re.compile(
     r"^_site/assets(?:/[A-Za-z0-9._-]+)*/[A-Za-z0-9._-]+[.-][0-9a-f]{8,64}\.(?:avif|css|gif|ico|jpeg|jpg|js|mjs|png|svg|webp|woff|woff2)$"
 )
