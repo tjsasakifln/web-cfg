@@ -249,6 +249,23 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
     }
 
 
+@pytest.mark.parametrize("path, accepted", [
+    ("bim/web/avisos/bim/@ifc-lite_codegen-1.19.1/LICENSE", True),
+    ("bim/web/avisos/websfm/@sqlite.org_sqlite-wasm-3.53.0-build1/README-licenca.txt", True),
+    ("bim/web/avisos/bim/@ifc-lite/../../segredo.txt", False),
+    ("bim/web/avisos/bim/%2e%2e/segredo.txt", False),
+    ("bim/web/avisos/bim/@ifc-lite/arquivo?download=1", False),
+])
+def test_inventory_supports_scoped_package_notices_safely(tmp_path, path, accepted):
+    fixture = _fixture(tmp_path)
+    payload = json.loads(fixture["inventory"].read_text(encoding="utf-8"))
+    payload["non_html_sha256"][path] = hashlib.sha256(b"license").hexdigest()
+    fixture["inventory"].write_text(json.dumps(payload), encoding="utf-8")
+    inventory, errors = acceptance.load_served_inventory(fixture["inventory"])
+    assert (path in inventory["non_html_sha256"]) is accepted
+    assert not any(error.startswith("served_inventory_non_html_entry_invalid:") for error in errors) == accepted
+
+
 def _cache_transition_inventory(fixture: dict, *, rel: str = "assets/css/home.abcdef12.css") -> dict:
     """Add one controller-shaped, immutable compatibility asset to a fixture."""
     body = b".compat{display:block}"
