@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.data_desk.bind import CANONICAL_SOURCE
+from scripts.pseo.html_shell import FOOTER, HEADER, SVG_SPRITE
 from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 PUBLIC_REL = Path("assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1")
@@ -116,7 +117,7 @@ def kit_landing_html(package: dict[str, Any], *, files: list[str]) -> str:
     terms = package.get("license_url") or "https://confenge.com.br/termos-de-uso/"
     return (
         "<!DOCTYPE html>\n"
-        '<html lang="pt-BR">\n'
+        '<html class="no-js" lang="pt-BR">\n'
         "<head>\n"
         '<meta charset="utf-8"/>\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1"/>\n'
@@ -124,13 +125,15 @@ def kit_landing_html(package: dict[str, Any], *, files: list[str]) -> str:
         '<meta name="robots" content="noindex,follow"/>\n'
         '<meta name="description" content="Dados agregados, método, gráfico e citações sobre valores nominais de contratos públicos de pavimentação em Santa Catarina."/>\n'
         f'<link rel="canonical" href="{escape(str(source))}"/>\n'
-        "<style>body{margin:0;background:#f5f7fa;color:#10233d;font:17px/1.6 system-ui,sans-serif}"
-        "main{max-width:58rem;margin:auto;padding:clamp(1.25rem,4vw,3rem)}h1{line-height:1.15}"
-        "h2{margin-top:2rem}a{color:#075a9c;text-underline-offset:.18em}a:focus-visible{outline:3px solid #f4b400;outline-offset:3px}"
-        "li{margin:.45rem 0}small{color:#52647a}</style>\n"
+        '<link rel="icon" href="/assets/favicon-32.png" sizes="32x32"/>\n'
+        '<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>\n'
+        '<link rel="stylesheet" href="/styles.css"/>\n'
+        '<link rel="stylesheet" href="/assets/editorial-article.css"/>\n'
         "</head>\n"
         "<body>\n"
-        "<main>\n"
+        '<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>\n'
+        f'{SVG_SPRITE}\n{HEADER}\n'
+        '<main id="conteudo" tabindex="-1" class="container section article-main">\n'
         "<h1>Kit de citação: valor contratual de pavimentação em Santa Catarina</h1>\n"
         "<p>Arquivos para quem precisa citar ou conferir a faixa de valor integral nominal "
         "dos contratos públicos de pavimentação no recorte de Santa Catarina.</p>\n"
@@ -148,12 +151,12 @@ def kit_landing_html(package: dict[str, Any], *, files: list[str]) -> str:
         f"<a href=\"{escape(str(source))}\">Leia a análise técnica e a fonte canônica</a>.</p>\n"
         "<h2>O que está disponível</h2>\n"
         f"<ul>\n{links}\n</ul>\n"
-        f"<p>Link permanente deste kit: {escape(str(permalink))}</p>\n"
+        f'<p><a href="{escape(str(permalink), quote=True)}">Link permanente deste kit</a></p>\n'
         "<h2>Condições de uso e correções</h2>\n"
         f"<p>{escape(str(package.get('license_notice') or 'Consulte os Termos de Uso da CONFENGE.'))} "
         f'<a href="{escape(str(terms))}">Consulte os Termos de Uso</a>.</p>\n'
         f'<p><a href="{escape(str(correction))}">Solicitar correção ou falar com a CONFENGE</a>.</p>\n'
-        "</main>\n"
+        f'</main>\n{FOOTER}\n'
         "</body>\n"
         "</html>\n"
     )

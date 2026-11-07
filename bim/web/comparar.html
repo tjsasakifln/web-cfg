@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="no-js">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Comparar revisões de IFC | CONFENGE BIM</title>
   <meta name="description" content="Compare gratuitamente os quantitativos declarados em duas revisões de um modelo IFC. Os arquivos ficam no navegador.">
-  <link rel="stylesheet" href="estilo.css">
+  <link href="/styles.css" rel="stylesheet"/>
+<link rel="stylesheet" href="estilo.css">
   <style>
     .marca{align-items:center;gap:1rem}.marca a{text-decoration:none}
     .escolha{display:grid;gap:1rem}.escolha label{min-width:0;margin:0}.escolha input{max-width:100%}
@@ -21,11 +22,11 @@
   <script type="module" src="comparar.mjs"></script>
 <meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/comparar.html">
 <link rel="stylesheet" href="/bim/web/teclado.css">
+<link rel="stylesheet" href="/bim/ferramentas.css">
 </head>
-<body>
+<body class="bim-tool">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-<header><div class="largura marca"><a href="index.html">CONFENGE BIM</a><span>Ferramentas</span></div></header>
-<main id="conteudo" tabindex="-1" class="largura">
+<main id="conteudo" tabindex="-1" class="bim-workspace largura">
   <section>
     <p class="rotulo">Revisões · Quantitativos declarados</p>
     <h1>Comparar revisões</h1>
@@ -58,5 +59,4 @@
     <p><a href="index.html">Voltar à plataforma CONFENGE BIM</a></p>
   </section>
 </main>
-<footer><div class="largura">CONFENGE BIM · Comparar revisões</div></footer>
 </body></html>

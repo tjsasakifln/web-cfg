@@ -1,0 +1,63 @@
+"""Give the browser tools the same static navigation as the public portal."""
+
+from __future__ import annotations
+
+import re
+from pathlib import Path
+from textwrap import dedent
+
+from scripts.pseo.html_shell import (
+    BRAND_ASSETS,
+    BRAND_ICONS,
+    FOOTER,
+    HEADER,
+    SVG_SPRITE,
+    THEME_COLOR_META,
+    breadcrumbs_html,
+)
+
+BRAND_HEAD = "\n".join((
+    THEME_COLOR_META, BRAND_ICONS, BRAND_ASSETS,
+    '<script type="module" src="/bim/web/pular-navegacao.mjs"></script>',
+))
+
+
+# Vendor styles also style dialogs mounted on the document body. Keep them in
+# that document while preventing their global resets from touching site chrome.
+SCOPE = "@scope (:root) to (.site-header, .site-footer, .breadcrumbs, .skip-link, .svg-sprite)"
+
+
+def apply_bim_shell(site: Path) -> None:
+    web = site / "bim/web"
+    lab = site / "bim/fotogrametria"
+    # The local file tools need the public menu, without commercial tracking or
+    # the site-wide anchor handler. Their engines use native hashchange events.
+    nav = (Path(__file__).resolve().parents[2] / "js/modules/nav.js").read_text(encoding="utf-8")
+    menu = re.search(r"^ *// BEGIN SHARED SITE MENU[^\n]*\n(.*?)^ *// END SHARED SITE MENU$", nav, re.M | re.S)
+    if menu is None:
+        raise ValueError("Componente de navegação institucional ausente")
+    with (web / "pular-navegacao.mjs").open("a", encoding="utf-8") as module:
+        module.write("\n" + dedent(menu[1]).strip() + "\n")
+
+    pages = [*web.glob("*.html"), lab / "index.html"]
+    for page in pages:
+        document = page.read_text(encoding="utf-8")
+        title = re.search(r"<title>([^<]+)</title>", document).group(1).split(" | ")[0]
+        is_catalog = page == web / "index.html"
+        crumbs = [("Início", "/"), ("BIM", "/bim/"), ("Ferramentas", "/bim/web/")]
+        if not is_catalog:
+            crumbs.append((title, None))
+
+        chrome = SVG_SPRITE + "\n" + HEADER + "\n" + breadcrumbs_html(crumbs)
+        document = document.replace("<main ", chrome + "\n<main ", 1)
+        document = document.replace("</body>", FOOTER + "\n</body>", 1)
+        # Keep metadata and the charset declaration first; the institutional
+        # stylesheet precedes the application styles, the BIM theme follows.
+        document = document.replace('<link href="/styles.css" rel="stylesheet"/>', BRAND_HEAD, 1)
+        document = re.sub(r"<style>(.*?)</style>", lambda m: f"<style>{SCOPE} {{\n{m[1]}\n}}</style>", document, flags=re.S)
+        page.write_text(document, encoding="utf-8")
+
+    # WebSfM already scopes its compiled chunks before Vite computes their names.
+    for sheet in [*web.glob("*.css"), lab / "entrada.css"]:
+        css = sheet.read_text(encoding="utf-8")
+        sheet.write_text(f"{SCOPE} {{\n{css}\n}}\n", encoding="utf-8")
