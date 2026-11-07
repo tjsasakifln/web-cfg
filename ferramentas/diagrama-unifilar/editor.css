@@ -11,7 +11,10 @@
 .uni-actions {display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}
 .uni-actions .button {min-height:44px}
 .unifilar fieldset {border:0;padding:0;min-width:0;margin:0}
-#visor {overflow:auto;border:1px solid var(--line);background:#fff;padding:.4rem}
-#visor svg {display:block;width:100%;height:auto;min-width:295px;max-height:65vh}
+#visor {overflow:auto;max-height:70vh;border:1px solid var(--line);background:#fff;padding:.4rem}
+#visor svg {display:block;width:100%;height:auto;min-width:295px;max-width:none}
 .uni-guide {max-width:76ch}
 @media(max-width:800px){.uni-work{display:flex;flex-direction:column}.uni-work>div{width:100%}.uni-preview{order:-1}}
+#visor[data-zoom="150"] svg {width:150%}
+#visor[data-zoom="200"] svg {width:200%}
+#visor[data-zoom="300"] svg {width:300%}

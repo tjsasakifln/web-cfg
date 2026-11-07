@@ -6,6 +6,8 @@ function avisar(msg){$('estado').textContent=msg;}
 try{const s=localStorage.getItem(storage);if(s)doc=normalizar(JSON.parse(s));}
 catch{avisar('Não foi possível recuperar o projeto local. O exemplo está aberto.');}
 for(const [key,label] of tipos)$('tipo').add(new Option(label,key));
+function zoom(){$('visor').dataset.zoom=$('zoom').value;}
+$('zoom').addEventListener('change',zoom);
 function fields(){
   const item=doc.equipamentos.find(e=>e.id===$('equip').value);
   $('nome').value=item?.nome||'';$('tipo').value=item?.tipo||'breaker';$('tipo').disabled=!!item;
@@ -14,7 +16,7 @@ function fields(){
   $('gravar').textContent=item?'Aplicar alterações':'Adicionar equipamento';$('apagar').disabled=!item;
 }
 function render(id){
-  const m=compilar(doc);$('visor').innerHTML=svgDiagrama(doc);$('titulo').value=doc.titulo;
+  const m=compilar(doc);$('visor').innerHTML=svgDiagrama(doc);zoom();$('titulo').value=doc.titulo;
   const equip=$('equip');equip.replaceChildren(new Option('Novo equipamento',''));
   const choices=[];for(const e of doc.equipamentos){equip.add(new Option(e.id+' · '+e.nome,e.id));for(const [ref,p] of portas(e))choices.push([ref,e.id+' · '+e.nome+' · '+p]);}
   equip.value=id||'';fields();
