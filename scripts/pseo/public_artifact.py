@@ -544,7 +544,10 @@ def assemble_public_artifact(
     # before CSS fingerprinting, security checks, and the release tree hash.
     bim_installer = root / "scripts/bim/publicar.cjs"
     if bim_installer.is_file() or (root / "bim/web").is_dir():
+        from scripts.bim.identidade import apply_bim_shell
+
         subprocess.run(["node", str(bim_installer.resolve()), str(dest.resolve())], check=True)
+        apply_bim_shell(dest)
 
     omitted_review_metadata = omit_production_review_packet(
         dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"

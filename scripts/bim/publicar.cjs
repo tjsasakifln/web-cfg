@@ -11,7 +11,9 @@ if (!target) throw Error('Informe o diretório do artefato público.');
 const site = path.resolve(target);
 if (site === root || site === path.parse(site).root) throw Error('Destino de publicação inválido.');
 const source = path.join(here, 'aplicativo.tar.gz');
+const postcss = path.join(here, 'postcss.config.cjs');
 const digest = createHash('sha256').update(fs.readFileSync(source)).update(fs.readFileSync(__filename))
+  .update(fs.readFileSync(postcss))
   .update([process.version, process.platform, process.arch].join('/')).digest('hex');
 // Compilers and npm packages must remain entirely outside the site's source census.
 const cache = path.join(os.homedir(), '.cache', 'confenge-web-bim');
@@ -27,7 +29,19 @@ function build(stage) {
   }
   run('tar', ['-xzf', source]);
   run('npm', ['ci', '--ignore-scripts', '--include=dev', '--no-audit', '--no-fund']);
-  run('npm', ['run', 'build']);
+  // WebSfM uses its own pinned Vite checkout. Supply its CSS policy only for
+  // this build and refuse to overwrite an existing PostCSS configuration.
+  const checkout = process.env.WEBSFM_SOURCE
+    ? path.resolve(process.env.WEBSFM_SOURCE)
+    : path.join(stage, '.cache-bim', 'websfm');
+  fs.mkdirSync(checkout, { recursive: true });
+  const cssConfig = path.join(checkout, 'postcss.config.cjs');
+  fs.copyFileSync(postcss, cssConfig, fs.constants.COPYFILE_EXCL);
+  try {
+    run('npm', ['run', 'build']);
+  } finally {
+    fs.unlinkSync(cssConfig);
+  }
 
   // Keep the desktop lab shell versioned in bim/. Load its actual Vite entry chunks.
   const lab = path.join(dist, 'fotogrametria');

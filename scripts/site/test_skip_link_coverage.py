@@ -60,11 +60,6 @@ EXCLUSIONS: dict[str, str] = {
         "internal RevOps console, noindex + robots Disallow: staff-only "
         "surface published for operators, not part of the visitor journey"
     ),
-    "assets/data-desk/": (
-        "generated citation-kit permalinks, noindex,follow: a machine-facing "
-        "file listing emitted by scripts/data_desk/publish.py with no header, "
-        "no navigation and therefore nothing for a skip link to skip"
-    ),
 }
 
 SKIP_LINK_RE = re.compile(

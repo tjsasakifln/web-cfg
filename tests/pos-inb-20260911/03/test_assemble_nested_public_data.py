@@ -185,6 +185,7 @@ def _plant_minimum(root: Path) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(desk_csv, dest)
         shutil.copy2(desk_src / "index.html", dest.parent / "index.html")
+        shutil.copy2(ROOT / "assets" / "editorial-article.css", root / "assets" / "editorial-article.css")
         shutil.copy2(desk_src / "chart.svg", dest.parent / "chart.svg")
 
 

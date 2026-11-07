@@ -1,10 +1,13 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aproveitamento de chapas | CONFENGE BIM</title><link rel="stylesheet" href="estilo.css"><style>
+<!doctype html><html lang="pt-BR" class="no-js"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aproveitamento de chapas | CONFENGE BIM</title><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
+<link href="/styles.css" rel="stylesheet"/>
+<link rel="stylesheet" href="estilo.css"><style>
 [hidden]{display:none!important}label{display:block;margin:8px 0}input,textarea,button{font:inherit;max-width:100%}.medidas{display:flex;gap:12px;flex-wrap:wrap}.medidas label{display:grid;gap:3px}.medidas input{width:95px}textarea{display:block;width:100%;padding:.6em;min-height:8em}#vista{max-height:50vh;width:100%;object-fit:contain;background:white;border:1px solid #ccd8ce}#status{white-space:pre-line}#salvar{display:inline-block;margin:.5em 0}
 </style><script type="module" src="chapas-pagina.mjs"></script><meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/chapas.html">
 <meta name="description" content="Distribua peças em chapas a partir das medidas ou de contornos de um DXF. Defina folgas e confira o aproveitamento antes de exportar o arranjo.">
 <link rel="stylesheet" href="/bim/web/teclado.css">
-</head><body>
-<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><header><div class="largura marca"><a href="index.html">CONFENGE BIM</a><span>Ferramentas</span></div></header><main id="conteudo" tabindex="-1" class="largura"><section><p class="rotulo">Planejamento de corte</p><h1>Aproveitamento de chapas</h1><p>Distribua peças de mesmo material e espessura em uma chapa e baixe o arranjo em escala. A busca roda no próprio aparelho.</p>
+<link rel="stylesheet" href="/bim/ferramentas.css">
+</head><body class="bim-tool">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><main id="conteudo" tabindex="-1" class="bim-workspace largura"><section><p class="rotulo">Planejamento de corte</p><h1>Aproveitamento de chapas</h1><p>Distribua peças de mesmo material e espessura em uma chapa e baixe o arranjo em escala. A busca roda no próprio aparelho.</p>
 <div class="medidas"><label>Largura (mm)<input id="largura" type="number" min=".01" step="any" value="1000"></label><label>Altura (mm)<input id="altura" type="number" min=".01" step="any" value="500"></label><label>Folga entre peças (mm)<input id="folga" type="number" min="0" step="any" value="4"></label><label>Margem de borda (mm)<input id="margem" type="number" min="0" step="any" value="5"></label></div>
 <label><input id="giro" type="checkbox"> Permitir giro de 90°</label>
 <label>Contornos da chapa em milímetros<textarea id="contornos" spellcheck="false">Placa A | 2 | 0,0 300,0 300,180 0,180
