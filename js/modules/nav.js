@@ -132,6 +132,7 @@
       window.CONFENGE_HOME_SITUATIONS = HOME_SITUATIONS;
     }
 
+    // BEGIN SHARED SITE MENU (also used in the offline BIM workspace)
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
     // O menu movel SE COMPORTA como modal: cobre a tela, trava a rolagem do
@@ -236,6 +237,8 @@
     document.querySelectorAll('#year').forEach((element) => {
       if (element.textContent !== currentYear) element.textContent = currentYear;
     });
+
+    // END SHARED SITE MENU
 
     // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
     document.querySelectorAll('[data-journey-enhance]').forEach((rail) => {

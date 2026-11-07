@@ -198,6 +198,13 @@ def _build_footer() -> str:
 </footer>"""
 
 
+THEME_COLOR_META = """<meta content="#061a33" name="theme-color"/>"""
+BRAND_ICONS = """<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.webmanifest" rel="manifest"/>"""
+BRAND_ASSETS = """<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
+<link href="/styles.css" rel="stylesheet"/>"""
+
 HEADER = _build_header()
 FOOTER = _build_footer()
 
@@ -344,14 +351,11 @@ def page_shell(
 <title>{e(title)}</title>
 <meta content="{e(description)}" name="description"/>
 <meta content="{e(robots)}" name="robots"/>
-<meta content="#061a33" name="theme-color"/>
+{THEME_COLOR_META}
 <link href="{e(canonical)}" rel="canonical"/>
-<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
-<link href="/manifest.webmanifest" rel="manifest"/>
+{BRAND_ICONS}
 <script>document.documentElement.classList.replace('no-js','js');</script>
-<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
-<link href="/styles.css" rel="stylesheet"/>
+{BRAND_ASSETS}
 <script defer="" src="/script.js"></script>
 <meta content="article" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>

@@ -1,10 +1,12 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Modelagem por medidas | CONFENGE BIM</title><link rel="stylesheet" href="modelagem.css"><meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/modelagem.html">
+<!doctype html><html lang="pt-BR" class="no-js"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Modelagem por medidas | CONFENGE BIM</title><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
+<link href="/styles.css" rel="stylesheet"/>
+<link rel="stylesheet" href="modelagem.css"><meta name="robots" content="noindex, follow"><link rel="canonical" href="https://confenge.com.br/bim/web/modelagem.html">
 <meta name="description" content="Modele paredes pelos eixos de um DWG ou croqui, gere peças em IFC ou STEP e converta terrenos LandXML a partir de medidas conferidas.">
 <link rel="stylesheet" href="/bim/web/teclado.css">
-<script type="module" src="./pular-navegacao.mjs"></script>
+<link rel="stylesheet" href="/bim/ferramentas.css">
 </head>
-<body>
-<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><main id="conteudo" tabindex="-1"><nav><a href="./">CONFENGE BIM</a></nav><h1>Modelagem por medidas</h1><p>Crie elementos a partir dos eixos do desenho ou das dimensões confirmadas. O processamento acontece neste aparelho.</p>
+<body class="bim-tool">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><main id="conteudo" tabindex="-1" class="bim-workspace"><h1>Modelagem por medidas</h1><p>Crie elementos a partir dos eixos do desenho ou das dimensões confirmadas. O processamento acontece neste aparelho.</p>
 <nav class="tabs" aria-label="Ferramentas"><a href="#paredes">Paredes CAD</a><a href="#croqui">Croqui</a><a href="#peca">Peça mecânica</a><a href="#terreno">Terreno</a></nav>
 <section id="paredes"><h2>Dos eixos CAD às paredes IFC</h2><p>Selecione uma camada com linhas de eixo horizontais no espaço de modelo e Z igual a zero. Cada linha vira uma parede independente, centrada no eixo. Encontros entre paredes mantêm os sólidos individuais.</p>
 <label>DXF ASCII ou DWG até 16 MiB<input type="file" data-leitura-local id="cad-file" accept=".dxf,.dwg"></label>

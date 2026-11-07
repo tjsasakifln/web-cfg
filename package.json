@@ -185,7 +185,7 @@
     "host-contract:nginx-test": "node scripts/migration/netcup/validate-nginx.mjs",
     "host-contract:parity": "node scripts/migration/netcup/parity.mjs",
     "host-contract:seo": "node scripts/migration/netcup/seo-adversarial.mjs",
-    "build:site": "npm run test:b2g-openings && npm run test:project-pages && npm run test:cta-form-next-state && npm run test:script-modules && npm run host-contract:render && python3 scripts/pseo/build_site.py && npm run csp:refresh && npm run host-contract:render",
+    "build:site": "npm run test:b2g-openings && npm run test:project-pages && npm run test:cta-form-next-state && npm run test:script-modules && npm run host-contract:render && python3 scripts/pseo/build_site.py && npm run csp:refresh && npm run host-contract:render && node scripts/bim/testar-identidade.mjs",
     "repro:compare": "python3 scripts/pseo/reproducible.py compare",
     "repro:hash": "python3 scripts/pseo/reproducible.py hash",
     "pseo:build": "python3 scripts/pseo/build.py",
