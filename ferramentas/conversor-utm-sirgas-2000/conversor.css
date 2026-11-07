@@ -1,12 +1,12 @@
 .geo-shell {padding-block: 1.4rem 3rem}
 .geo-shell h1 {margin: .25rem 0 .65rem}
 .geo-shell .content-lead {max-width: 66ch}
-.geo-card {margin-block: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(1rem,3vw,2rem); background: var(--white); box-shadow: var(--shadow)}
+.geo-card {margin-block: 1.25rem; border: 1px solid var(--line); padding: clamp(1rem,3vw,2rem); background: var(--white)}
 .geo-card h2,.geo-guide h2 {font-size: var(--text-h2); margin: 0 0 .65rem}
 .geo-card fieldset {padding: 0; border: 0; min-width: 0; margin: 0}
 .geo-grid {display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,18rem),1fr)); gap: 1rem}
 .geo-card label {display: block; font-weight: 650; margin-bottom: .4rem}
-.geo-card :is(select,textarea) {width: 100%; min-height: 46px; padding: .6rem .75rem; color: var(--ink); background: white; border: 1px solid var(--muted); border-radius: var(--radius-sm); font: inherit}
+.geo-card :is(select,textarea) {width: 100%; min-height: 46px; padding: .6rem .75rem; color: var(--ink); background: white; border: 1px solid var(--muted); font: inherit}
 .geo-card textarea {display: block; min-height: 6rem; font: 1rem/1.5 ui-monospace,monospace}
 .geo-card [hidden] {display: none !important}
 .geo-actions {display: flex; gap: .6rem; flex-wrap: wrap; margin-block: .8rem}
