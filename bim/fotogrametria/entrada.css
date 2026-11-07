@@ -9,7 +9,7 @@ body.preparar-fotos {
 #entrada h1 { margin: .3rem 0 1rem; font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; }
 #entrada h2 { margin: 2rem 0 .3rem; font-size: 1.25rem; }
 #entrada a { color: #16513c; text-underline-offset: .15em; }
-#entrada button { padding: .75rem 1.2rem; border: 0; border-radius: .4rem; background: #19513f; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+#entrada button { padding: .75rem 1.2rem; border: 0; background: #19513f; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
 #entrada [role="status"] { display: block; margin-top: .5rem; }
 #entrada[hidden] { display: none; }
 .bancada-fotos .scene-desc code { color: var(--text); }

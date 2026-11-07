@@ -9130,25 +9130,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1882.877,
+      "lcp_ms": 1879.957,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 907.877,
-      "si_ms": 907.877,
+      "tbt_ms": 6,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 904.9570000000001,
+      "si_ms": 904.9570000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
-      "dom_elements": 184,
-      "total_byte_weight": 168225,
-      "content_byte_weight": 166566,
+      "dom_elements": 185,
+      "total_byte_weight": 168256,
+      "content_byte_weight": 166597,
       "header_byte_weight": 1659,
       "payload_requests": 8,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/bim/",
-          "transfer_size": 5138,
-          "resource_size": 14947,
-          "content_bytes": 4907,
+          "transfer_size": 5169,
+          "resource_size": 14997,
+          "content_bytes": 4938,
           "encoding": "gzip"
         },
         {
@@ -9166,7 +9166,7 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/script.js",
+          "url": "http://127.0.0.1:8766/script.js?v=5ab6fe0bb915e865",
           "transfer_size": 30625,
           "resource_size": 98250,
           "content_bytes": 30396,
@@ -9202,13 +9202,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 3.9385,
-      "lcp_observed_rtt_ms": 0.059000000000000004,
+      "lcp_observed_server_latency_ms": 2.4785,
+      "lcp_observed_rtt_ms": 0.1299999999999999,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 35728,
       "font_display_score": 1,
-      "benchmark_index": 2942.5,
+      "benchmark_index": 2677.5,
       "seo_exempt": false
     },
     {
@@ -9218,25 +9218,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 901.241,
+      "lcp_ms": 901.0930000000001,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 0,
-      "fcp_ms": 901.241,
-      "si_ms": 901.241,
+      "longest_own_task_ms": 69,
+      "fcp_ms": 901.0930000000001,
+      "si_ms": 901.0930000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 161,
-      "total_byte_weight": 8289,
-      "content_byte_weight": 7417,
+      "total_byte_weight": 8295,
+      "content_byte_weight": 7423,
       "header_byte_weight": 872,
       "payload_requests": 4,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/bim/web/",
-          "transfer_size": 3573,
-          "resource_size": 10293,
-          "content_bytes": 3343,
+          "transfer_size": 3579,
+          "resource_size": 10307,
+          "content_bytes": 3349,
           "encoding": "gzip"
         },
         {
@@ -9262,13 +9262,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 0.6205,
-      "lcp_observed_rtt_ms": 0.10200000000000031,
+      "lcp_observed_server_latency_ms": 0.5465000000000004,
+      "lcp_observed_rtt_ms": 0.10799999999999965,
       "lcp_network_allowance_capped": false,
-      "render_blocking_savings_ms": 250,
+      "render_blocking_savings_ms": 200,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 3070,
+      "benchmark_index": 2878,
       "seo_exempt": true
     },
     {
@@ -9278,25 +9278,25 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 907.4369999999999,
+      "lcp_ms": 907.8969999999999,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 907.4369999999999,
-      "si_ms": 907.4369999999999,
+      "fcp_ms": 907.8969999999999,
+      "si_ms": 907.8969999999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 19,
-      "total_byte_weight": 5438,
-      "content_byte_weight": 4576,
+      "total_byte_weight": 5420,
+      "content_byte_weight": 4558,
       "header_byte_weight": 862,
       "payload_requests": 4,
       "payload_details": [
         {
           "url": "http://127.0.0.1:8766/bim/fotogrametria/",
-          "transfer_size": 1633,
-          "resource_size": 3186,
-          "content_bytes": 1403,
+          "transfer_size": 1637,
+          "resource_size": 3200,
+          "content_bytes": 1407,
           "encoding": "gzip"
         },
         {
@@ -9307,10 +9307,10 @@
           "encoding": "gzip"
         },
         {
-          "url": "http://127.0.0.1:8766/assets/css/bim/fotogrametria/entrada.e6f4b592a983.css",
-          "transfer_size": 1195,
-          "resource_size": 1005,
-          "content_bytes": 1005,
+          "url": "http://127.0.0.1:8766/assets/css/bim/fotogrametria/entrada.c87f1f7cffc5.css",
+          "transfer_size": 1173,
+          "resource_size": 983,
+          "content_bytes": 983,
           "encoding": "identity"
         },
         {
@@ -9322,13 +9322,13 @@
         }
       ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_server_latency_ms": 1.2185000000000006,
-      "lcp_observed_rtt_ms": 0.119,
+      "lcp_observed_server_latency_ms": 0.9485,
+      "lcp_observed_rtt_ms": 0.10400000000000009,
       "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 2770,
+      "benchmark_index": 2976,
       "seo_exempt": true
     }
   ],
@@ -9353,7 +9353,7 @@
   "unmeasured": [],
   "evidence_extensions": [
     {
-      "generated_at": "2026-11-07T01:53:12.162Z",
+      "generated_at": "2026-11-07T02:03:29.230Z",
       "source": "summary-portal-bim.json",
       "base": "http://127.0.0.1:8766",
       "added_paths": [
