@@ -32,6 +32,7 @@ PUBLIC_TOP_DIRS = frozenset(
     {
         "assets",
         "bim",
+        "cad",
         "conteudos",
         "especialista",
         "inteligencia",
@@ -548,6 +549,9 @@ def assemble_public_artifact(
 
         subprocess.run(["node", str(bim_installer.resolve()), str(dest.resolve())], check=True)
         apply_bim_shell(dest)
+
+    if (root / "cad/index.html").is_file():
+        subprocess.run([sys.executable, str(root / "scripts/cad/publicar.py"), str(dest.resolve())], check=True)
 
     omitted_review_metadata = omit_production_review_packet(
         dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"

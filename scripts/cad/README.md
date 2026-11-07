@@ -1,0 +1,7 @@
+# Confenge CAD
+
+A página usa o editor CADCraft 0.18.0 distribuído em [storytold/cadcraft](https://github.com/storytold/cadcraft/releases/tag/v0.18.0). O download acontece na construção do site. O instalador valida o SHA-256 do ZIP e publica os módulos originais com suas licenças MIT/Apache-2.0, NOTICE e atribuições em `/cad/editor/licencas/`. A integração externa usa o protocolo de hospedagem documentado na mesma release. O navegador busca os recursos no domínio da Confenge.
+
+O navegador desta versão upstream edita DXF. Um worker local usa a distribuição MIT de [acad-ts](https://github.com/node-projects/acad-ts), já instalada pela construção de `/bim/web/`, para abrir DWG e gravar DWG 2000. As licenças da distribuição BIM permanecem em `/bim/web/vendor-cad/acad-LICENSE` e `/bim/web/avisos/`. Para atualizar o editor, confira o SHA, nomes de arquivos e mensagens do host e repita os testes de abertura, edição e gravação em navegador.
+
+Para executar a prova de conversão depois de construir o site, use `node tests/cad/roundtrip.mjs _site`. A página inclui uma planta de exemplo criada para o teste. O teste compara geometria, camadas e nomes de blocos e verifica a posição exata de uma linha após reabrir o DWG de saída. O editor salva uma primeira cópia temporária em memória para que a interface identifique omissões na importação antes de permitir uma cópia DWG. Objetos proprietários e dependências externas podem impedir a exportação. Essa verificação não certifica fidelidade de fontes, estilos, cotas associativas, sólidos ou impressão.

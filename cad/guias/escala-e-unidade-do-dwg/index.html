@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="no-js" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Como conferir a unidade e a escala de um DWG | CONFENGE</title>
+<meta content="Confira se a planta usa metros, centímetros ou milímetros. Baixe o DWG de exemplo e compare um eixo de 4 m no modelo e na folha impressa a 1:50." name="description"/>
+<meta content="index,follow" name="robots"/>
+<meta content="#061a33" name="theme-color"/>
+<link href="https://confenge.com.br/cad/guias/escala-e-unidade-do-dwg/" rel="canonical"/>
+<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.webmanifest" rel="manifest"/>
+<script>document.documentElement.classList.replace('no-js','js');</script>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
+<link href="/styles.css" rel="stylesheet"/>
+<script defer="" src="/script.js"></script>
+<meta content="article" property="og:type"/>
+<meta content="pt_BR" property="og:locale"/>
+<meta content="CONFENGE" property="og:site_name"/>
+<meta content="Como conferir a unidade e a escala de um DWG | CONFENGE" property="og:title"/>
+<meta content="Confira se a planta usa metros, centímetros ou milímetros. Baixe o DWG de exemplo e compare um eixo de 4 m no modelo e na folha impressa a 1:50." property="og:description"/>
+<meta content="https://confenge.com.br/cad/guias/escala-e-unidade-do-dwg/" property="og:url"/>
+<meta content="https://confenge.com.br/assets/og-confenge.jpg" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="CONFENGE" name="author"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Como conferir a unidade e a escala de um DWG","author":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/empresa/"},"datePublished":"2026-11-07","name":"Como conferir a unidade e a escala de um DWG","url":"https://confenge.com.br/cad/guias/escala-e-unidade-do-dwg/","inLanguage":"pt-BR","dateModified":"2026-11-07"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Editor de DWG","item":"https://confenge.com.br/cad/"},{"@type":"ListItem","position":3,"name":"Unidade e escala do DWG","item":"https://confenge.com.br/cad/guias/escala-e-unidade-do-dwg/"}]}]}</script>
+
+</head>
+<body >
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewbox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-check" viewbox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
+<symbol id="i-chart" viewbox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"></path></symbol>
+<symbol id="i-shield" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path></symbol>
+<symbol id="i-building" viewbox="0 0 24 24"><path d="M3 21h18M5 21V9m14 12V9M3 9h18L12 3 3 9Z"></path></symbol>
+<symbol id="i-file" viewbox="0 0 24 24"><path d="M6 2h8l4 4v16H6z"></path></symbol>
+<symbol id="i-menu" viewbox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewbox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-whatsapp" viewbox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="1.8" d="M20.5 11.6 A8.5 8.5 0 0 1 7.9 19.1 L3 20.5 L4.4 15.8 A8.5 8.5 0 1 1 20.5 11.6 Z"></path><path fill="none" stroke="#fff" stroke-width="1.8" d="M8.4 7.7 C8.8 7.1 9.4 7 9.8 7.6 L11 9.4 C11.2 9.8 11.1 10.2 10.8 10.5 L10 11.1 C10.8 12.6 12 13.8 13.5 14.6 L14.2 13.8 C14.5 13.5 14.9 13.4 15.3 13.6 L17.1 14.6 C17.8 15 17.7 15.7 17.3 16.2 C16.8 16.9 15.9 17.2 15 17.1 C10.6 16.6 7.2 13.2 6.8 8.8 C6.7 8.3 7.3 7.8 8.4 7.7 Z"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+<span class="menu-toggle__label">Menu</span>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/cad/">Editor de DWG</a><span aria-hidden="true">/</span></li><li aria-current="page">Unidade e escala do DWG</li></ol></nav>
+<header class="content-hero article-hero"><div class="container"><p class="eyebrow">Guia de desenho técnico</p>
+<h1>Como conferir a unidade e a escala de um DWG</h1>
+<p class="content-lead">Um eixo de 4 metros pode aparecer como 4, 400 ou 4.000 unidades no CAD. Use uma distância conhecida para descobrir a convenção do projeto antes de mover uma parede ou levar medidas para a obra.</p>
+<p><a class="button button-primary" href="/cad/#cad-editor">Abrir o editor de DWG</a></p>
+<p class="article-meta"><a href="/empresa/" rel="author">CONFENGE</a><span>Atualizado em <time datetime="2026-11-07">7 de novembro de 2026</time></span></p></div></header>
+<div class="container article-layout"><article class="article-main" aria-label="Conferência de unidade e escala">
+<h2>Comece com dois pontos de posição conhecida</h2>
+<p>Use o <a href="/bim/guias/dwg-para-ifc-paredes/eixos-em-mm.dwg" download>DWG demonstrativo com dois eixos em milímetros</a>. Abra-o no editor e localize as duas linhas em L da camada EIXOS. A maior mede 4.000 unidades e a perpendicular mede 3.000. Selecione os extremos da linha para medir. O centro do traço impresso e a posição do cursor ampliado são referências imprecisas.</p>
+<p>No seu projeto, escolha um vão entre eixos ou uma distância levantada em campo. Compare os mesmos dois pontos na geometria e na referência. Confira também um segundo trecho em outra direção. Isso ajuda a identificar uma referência errada ou a deformação de uma base digitalizada.</p>
+<h2>Qual é a unidade da planta?</h2>
+<p>Suponha que o levantamento tenha confirmado 4 m entre dois eixos. A leitura da distância no espaço de modelo indica qual convenção de desenho é compatível com essa medida.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Medidas e unidades para o vão de quatro metros"><table><caption>Exemplo para um vão real de 4 m</caption><thead><tr><th scope="col">Distância no modelo</th><th scope="col">Unidade compatível</th><th scope="col">Deslocamento de 15 cm</th></tr></thead><tbody>
+<tr><th scope="row">4.000</th><td>Milímetro</td><td>150 unidades</td></tr>
+<tr><th scope="row">400</th><td>Centímetro</td><td>15 unidades</td></tr>
+<tr><th scope="row">4</th><td>Metro</td><td>0,15 unidade</td></tr></tbody></table></div>
+<p>Se a leitura cair fora dessas relações, confirme se a medida veio do modelo ou de uma vista na folha. Confira também a escala de inserção de blocos e referências externas. O texto impresso de uma cota pode ter sido alterado manualmente. Meça a geometria antes de decidir por um fator de correção.</p>
+<h2>Quanto o eixo deve medir na folha a 1:50?</h2>
+<p>Uma planta costuma ser desenhada em tamanho real no modelo. A escala da vista determina quanto ela ocupa na folha. Para um eixo de 4 m impresso a 1:50, divida 4.000 mm por 50. O eixo deve ocupar <strong>80 mm no papel</strong>. A 1:100, o mesmo eixo ocupa 40 mm.</p>
+<p>Ao conferir uma impressão, use o tamanho de papel previsto e imprima o PDF em tamanho real. A opção de ajustar o desenho à área imprimível pode modificar a medida mesmo quando a indicação de escala do carimbo está correta.</p>
+<h2>Antes de repassar o arquivo</h2>
+<p>Anote a unidade usada, a revisão e os dois pontos de referência. Baixe uma cópia, reabra-a e repita a conferência. Se a ferramenta avisar que faltaram objetos na abertura, a saída em DXF guarda o que foi reconhecido. Para conferir uma medida que dependa desses objetos, use o original ou solicite ao autor uma cópia convertida. No exemplo, os eixos devem continuar a medir 4.000 e 3.000 unidades se a edição tiver afetado apenas outro elemento do desenho.</p>
+<p><a href="/bim/guias/dwg-para-ifc-paredes/">Usar os dois eixos deste exemplo para gerar paredes IFC</a>.</p>
+<p>Referências técnicas da Autodesk. <a href="https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-MAC-Core/files/GUID-990538B6-DDA1-4190-BCC0-BB5BA94C9879.htm">Espaço de modelo e espaço do papel</a> e <a href="https://help.autodesk.com/cloudhelp/2026/PTB/AutoCAD-Core/files/GUID-A58A87BB-482B-4042-A00A-EEF55A2B4FD8.htm">unidades de inserção de blocos e referências externas</a>.</p>
+</article><aside class="article-aside"><section class="aside-card"><p class="eyebrow">Pratique com o DWG</p><h2>Confira a escala dos eixos</h2>
+<p>Baixe o <a download href="/bim/guias/dwg-para-ifc-paredes/eixos-em-mm.dwg">desenho de exemplo</a> e abra-o no <a href="/cad/#cad-editor">editor de DWG</a>. Compare as duas distâncias com os valores do guia.</p></section>
+<section class="aside-card"><h2>Há divergências entre desenhos?</h2><p>Se a diferença afeta as dimensões que serão usadas na obra, a CONFENGE pode comparar as plantas e indicar os ajustes de projeto.</p><p><a class="button button-primary" href="https://wa.me/5548988344559?text=Gostaria%20de%20conversar%20sobre%20a%20revis%C3%A3o%20dos%20desenhos%20e%20das%20medidas%20do%20meu%20projeto." data-cta-position="cad_contato">Conversar sobre a revisão do meu projeto</a></p></section></aside></div>
+</main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body>
+</html>

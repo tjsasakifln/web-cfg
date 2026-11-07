@@ -95,6 +95,7 @@
   ],
   "breadcrumb_labels": {
     "/bim/": "Ferramentas BIM",
+    "/cad/": "Editor de DWG",
     "/projetos/": "Projetos",
     "/projetos/estruturas/": "Estruturas",
     "/projetos/instalacoes/": "Instalações",
@@ -459,6 +460,10 @@
     }
   ],
   "parents": [
+    {
+      "prefix": "/cad/guias/",
+      "parent": "/cad/"
+    },
     {
       "prefix": "/bim/guias/",
       "parent": "/bim/"

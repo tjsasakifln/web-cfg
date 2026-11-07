@@ -10,7 +10,14 @@ HASHED_DASH = re.compile(r"-[0-9a-f]{8,}\.[A-Za-z0-9]+$")
 HASHED_DOT = re.compile(r"\.[0-9a-f]{8,}\.(?:css|js)$")
 IMMUTABLE_CACHE = "public, max-age=31536000, immutable"
 REVALIDATABLE_IDENTITY = "no-cache, max-age=0, must-revalidate"
-HTML_SERVING_CACHE_OVERRIDES = ("/assets/data-desk/*", "/bim/web/*", "/bim/fotogrametria/*")
+# Explicit HTML-serving route blocks override the default HTML cache header.
+# Cloudflare must not rewrite the BIM tools' response bodies (exact SHA contract).
+HTML_SERVING_CACHE_OVERRIDES = (
+    "/assets/data-desk/*",
+    "/bim/web/*",
+    "/bim/fotogrametria/*",
+    "/cad/editor/*",
+)
 
 
 def parse_header_rules(text: str) -> dict[str, dict[str, str]]:
