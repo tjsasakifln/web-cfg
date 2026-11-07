@@ -7094,6 +7094,15 @@
       "nojs_degradation": "none"
     },
     {
+      "route": "/ferramentas/caminho-critico-obra/",
+      "form_id": "planejar",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/caminho-critico-obra/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
       "route": "/ferramentas/checklist-reequilibrio/",
       "form_id": "f",
       "form_class": "tool-form",
