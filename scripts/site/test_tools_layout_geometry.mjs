@@ -34,6 +34,7 @@ const ROUTES = [
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
+  { id: "cpm", path: "/ferramentas/caminho-critico-obra/", primary: "#planejar" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
@@ -336,6 +337,15 @@ async function exercise(page, id) {
     await waitForPaint(page);
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#out");
+    return [result];
+  }
+
+  if (id === "cpm") {
+    await page.click("#executar");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (await page.$eval("#prazo", el => el.textContent) !== "11 dias") throw new Error("CPM fixture duration");
+    const result = await geometry(page, id, "resultado", page.viewport().width);
+    await screenshot(page, id, page.viewport().width, "resultado", "#resultado");
     return [result];
   }
 
