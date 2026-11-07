@@ -30,6 +30,7 @@ from scripts.site.audit_css_usage import (  # noqa: E402
     decoration_counts,
     is_test_path,
     public_css_files,
+    stylesheet_references,
     unused_classes,
     used_classes,
 )
@@ -109,6 +110,15 @@ def test_static_classname_assignments_keep_literal_classes_alive() -> None:
         assert {"prefix-false", "concat-false", "template-false", "fixture-must-not-keep-alive"}.issubset(dead)
     finally:
         shutil.rmtree(root)
+
+
+def test_html_frame_stylesheet_and_classes_are_in_scope() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "frame.htm").write_text('<link href="frame.css" rel="stylesheet"><div class="frame"></div>')
+        (root / "frame.css").write_text(".frame{display:block}")
+        assert "frame" in used_classes(root)
+        assert stylesheet_references(root, "frame.css") == 1
 
 
 def test_quoted_strings_are_not_class_selectors() -> None:

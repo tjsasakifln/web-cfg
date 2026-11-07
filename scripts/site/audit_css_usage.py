@@ -166,7 +166,7 @@ def used_classes(root: Path) -> dict[str, set[str]]:
             for token in SELECTOR_CLASS_RE.findall(selector):
                 record(token, rel)
 
-    for path in walk(root, (".html",)):
+    for path in walk(root, (".html", ".htm")):
         rel = path.relative_to(root).as_posix()
         text = path.read_text(encoding="utf-8", errors="ignore")
         for token in _tokens_from_class_attrs(text):
@@ -214,7 +214,7 @@ def stylesheet_references(root: Path, rel: str) -> int:
         data = json.loads(manifest.read_text(encoding="utf-8"))
         if rel in data.get("modules", []) or rel == data.get("tokens"):
             hits += 1
-    for path in walk(root, (".html",)):
+    for path in walk(root, (".html", ".htm")):
         text = path.read_text(encoding="utf-8", errors="ignore")
         hits += len(re.findall(rf'href="[^"]*{re.escape(name)}"', text))
     for path in walk(root, (".css",)):
