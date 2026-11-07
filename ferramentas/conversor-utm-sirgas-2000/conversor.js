@@ -18,9 +18,9 @@ function projection(zone, hemisphere) {
   return parameters;
 }
 
-function checkDomain(lat, lon) {
+function checkDomain(lat, lon, tolerance = 0) {
   // Scope is an envelope covering mainland Brazil, not a political boundary.
-  if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -35 || lat > 6 || lon < -75 || lon > -31) {
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -35 - tolerance || lat > 6 + tolerance || lon < -75 - tolerance || lon > -31 + tolerance) {
     throw new Error('Coordenada fora da faixa atendida (latitude −35 a +6 e longitude −75 a −31 graus). Confira a ordem e os sinais.');
   }
 }
@@ -43,7 +43,8 @@ export function fromUtm(easting, northing, zone, hemisphere) {
   const { x, y } = projection(zone, hemisphere).inverse({ x: easting, y: northing });
   const lat = y / degrees;
   const lon = x / degrees;
-  checkDomain(lat, lon);
+  // CSV precision is one millimetre, including at the inclusive domain edges.
+  checkDomain(lat, lon, 1e-8);
   // Accept centimetre rounding on zone edges, including the Equator.
   if (Math.abs(lon - (6 * zone - 183)) > 3.000001 ||
       (hemisphere === 'N' ? lat < -0.000001 : lat > 0.000001)) {

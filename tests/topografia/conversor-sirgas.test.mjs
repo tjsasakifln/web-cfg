@@ -40,3 +40,13 @@ test('identifies invalid line and bounds, including a UTM pair outside the natur
   assert.throws(() => fromGeographic(4, -32));
   assert.throws(() => fromGeographic(NaN, -45));
 });
+
+test('inverse accepts millimetre-rounded CSV values on the inclusive envelope', () => {
+  for (const [lat, lon] of [[-35, -31], [-35, -75], [6, -75], [6, -51]]) {
+    const point = fromGeographic(lat, lon);
+    const inverse = fromUtm(Number(point.easting.toFixed(3)), Number(point.northing.toFixed(3)), point.zone, point.hemisphere);
+    assert.ok(Math.abs(inverse.lat - lat) <= 1e-8);
+    assert.ok(Math.abs(inverse.lon - lon) <= 1e-8);
+  }
+  assert.throws(() => fromGeographic(-35.000000001, -31));
+});
