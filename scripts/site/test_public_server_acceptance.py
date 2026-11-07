@@ -263,7 +263,7 @@ def test_inventory_supports_scoped_package_notices_safely(tmp_path, path, accept
     fixture["inventory"].write_text(json.dumps(payload), encoding="utf-8")
     inventory, errors = acceptance.load_served_inventory(fixture["inventory"])
     assert (path in inventory["non_html_sha256"]) is accepted
-    assert not any(error.startswith("served_inventory_non_html_entry_invalid:") for error in errors) == accepted
+    assert (not any(error.startswith("served_inventory_non_html_entry_invalid:") for error in errors)) is accepted
 
 
 def _cache_transition_inventory(fixture: dict, *, rel: str = "assets/css/home.abcdef12.css") -> dict:
