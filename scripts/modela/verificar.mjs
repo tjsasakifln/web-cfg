@@ -11,6 +11,16 @@ const browser = await puppeteer.launch({
 try {
   const page = await browser.newPage();
   await page.goto(route.href, {waitUntil: 'domcontentloaded'});
+  for (const width of [360, 390]) {
+    await page.setViewport({width, height: 844, isMobile: true, hasTouch: true});
+    for (const id of ['sample-file', 'project-file']) {
+      const size = await page.$eval('#' + id, el => {
+        const {width, height} = el.getBoundingClientRect();
+        return [width, height];
+      });
+      assert(size.every(side => side >= 44), id + ' sem área de toque de 44 px em ' + width);
+    }
+  }
   const results = await page.evaluate(async () => {
     const engine = await import('./engine/client.mjs');
     const csv = Array.from({length: 24}, (_, i) => {
