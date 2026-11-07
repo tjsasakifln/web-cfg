@@ -1,0 +1,15 @@
+.psi { padding-inline: clamp(.75rem, 3vw, 1.5rem); padding-block: 1rem 3rem; }
+.psi fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.psi-fields, .psi-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 1rem; }
+.psi-fields label { display: grid; gap: .35rem; align-content: start; font-weight: 650; }
+.psi-fields :is(input,select) { width: 100%; min-width: 0; min-height: 46px; padding: .55rem .7rem; font: inherit; font-weight: 400; color: #102e48; background: white; border: 1px solid #81939c; border-radius: .35rem; }
+.psi .tool-method { margin-block: 1.5rem; }
+.psi-metrics { padding: 0; margin: 1rem 0; }
+.psi-metrics div { padding: .7rem 1rem; border-inline-start: 3px solid #447951; background: #f1f6f2; }
+.psi-metrics dt { font-size: .95rem; color: #345347; }
+.psi-metrics dd { font-variant-numeric: tabular-nums; margin: .2rem 0 0; font-weight: 700; font-size: 1.25rem; color: #102c45; }
+.psi-note { font-weight: 650; }
+.psi figure { margin: 1.2rem 0; max-width: 45rem; }
+.psi svg { width: 100%; height: auto; display: block; }
+.psi figcaption { font-size: .92rem; }
+.psi [hidden] { display: none; }

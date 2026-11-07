@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora psicrométrica online e ponto de orvalho | CONFENGE</title><meta name="description" content="Calcule o ponto de orvalho, bulbo úmido, entalpia e umidade do ar. Compare a temperatura da superfície e exporte o resultado. Grátis e sem cadastro.">
+<link rel="canonical" href="https://confenge.com.br/ferramentas/calculadora-psicrometrica/"><meta property="og:url" content="https://confenge.com.br/ferramentas/calculadora-psicrometrica/">
+<meta property="og:type" content="website"><meta property="og:title" content="Calculadora psicrométrica online e ponto de orvalho | CONFENGE">
+<meta property="og:description" content="Calcule o ponto de orvalho, bulbo úmido, entalpia e umidade do ar. Compare a temperatura da superfície e exporte o resultado. Grátis e sem cadastro."><meta name="theme-color" content="#061a33">
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="psicrometria.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "name": "Início", "position": 1, "item": "https://confenge.com.br/"}, {"@type": "ListItem", "name": "Ferramentas", "position": 2, "item": "https://confenge.com.br/ferramentas/"}, {"@type": "ListItem", "name": "Calculadora psicrométrica", "position": 3, "item": "https://confenge.com.br/ferramentas/calculadora-psicrometrica/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Calculadora psicrométrica CONFENGE", "description": "Calcule o ponto de orvalho, bulbo úmido, entalpia e umidade do ar. Compare a temperatura da superfície e exporte o resultado. Grátis e sem cadastro.", "url": "https://confenge.com.br/ferramentas/calculadora-psicrometrica/", "inLanguage": "pt-BR", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Navegador", "isAccessibleForFree": true}</script>
+<script defer src="vendor/psychrolib-2.5.0.js"></script><script defer src="psicrometria.js"></script><script defer src="/script.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+<main id="conteudo">
+<nav class="breadcrumbs container" aria-label="Caminho de navegação"><ol><li><a href="/">Início</a> /</li><li><a href="/ferramentas/">Ferramentas</a> /</li><li aria-current="page">Calculadora psicrométrica</li></ol></nav>
+<header class="tool-page-hero"><div class="container tool-shell">
+<p class="eyebrow">Climatização e desempenho de edificações</p>
+<h1>Calculadora psicrométrica</h1>
+<p class="content-lead" data-tool-job>Calcule o ponto de orvalho do ar e veja se uma parede, vidro ou duto está frio o suficiente para condensar umidade.</p>
+</div></header>
+<div class="container tool-shell psi">
+<form class="tool-form" id="ambiente" method="post">
+<h2>Condições do ambiente</h2>
+<p>Os valores iniciais são um exemplo. Substitua pelas leituras feitas no mesmo local e horário. O cálculo é gratuito e roda no seu navegador.</p>
+<noscript><p>Ative o JavaScript para calcular. O exemplo e o método podem ser consultados abaixo.</p></noscript>
+<fieldset id="controles" disabled><legend class="sr-only">Leituras do ambiente</legend>
+<div class="psi-fields">
+<label>Temperatura do ar (°C)<input id="temperatura" inputmode="decimal" value="25" required></label>
+<label>Umidade relativa (%)<input id="umidade" inputmode="decimal" value="80" required></label>
+<label>Como informar a pressão<select id="modo"><option value="pressao">Pressão medida no local</option><option value="altitude">Estimar pela altitude</option></select></label>
+<label><span id="rotulo-pressao">Pressão absoluta (kPa)</span><input id="pressao" inputmode="decimal" value="101,325" required></label>
+<label>Temperatura da superfície (°C)<input id="superficie" inputmode="decimal" placeholder="Opcional"></label>
+</div><p id="dica-pressao">Use a pressão absoluta local. Boletins meteorológicos também podem informar a pressão corrigida ao nível do mar.</p>
+<button type="submit" class="button button-primary">Calcular propriedades do ar</button></fieldset></form>
+<p role="status" id="aviso" aria-live="polite"></p>
+<section id="resultado" class="tool-method" aria-labelledby="titulo-resultado" hidden>
+<p class="eyebrow">Resultado</p><h2 id="titulo-resultado" tabindex="-1">Estado do ar</h2><p id="condicoes"></p>
+<dl class="psi-metrics" id="propriedades"></dl>
+<p id="leitura" class="psi-note"></p>
+<figure><svg id="carta" viewBox="0 0 520 260" role="img" aria-labelledby="grafico-titulo grafico-desc"><title id="grafico-titulo">Carta psicrométrica simplificada</title><desc id="grafico-desc">Curvas de umidade relativa e posição da leitura no gráfico de temperatura e razão de umidade. Os valores numéricos estão acima.</desc><g id="curvas"></g></svg>
+<figcaption>As curvas correspondem a 20%, 40%, 60%, 80% e 100% de umidade relativa, da mais baixa à mais alta. O ponto indica o estado calculado à pressão informada.</figcaption></figure>
+<button id="csv" class="button button-secondary" type="button">Baixar memória em CSV</button></section>
+<section class="tool-method" id="metodo"><p class="eyebrow">Método e exemplo</p><h2>Como interpretar o ponto de orvalho</h2>
+<p data-tool-decision>A 25 °C e 80% de umidade relativa, o ponto de orvalho é 21,31 °C. Um vidro a 19 °C está abaixo desse limite e há condição para condensação superficial. Uma superfície a 23 °C está acima dele.</p>
+<p>O bulbo úmido indica o efeito do resfriamento evaporativo. A razão de umidade expressa a massa de água por quilograma de ar seco. A entalpia soma as parcelas sensível e latente por quilograma de ar seco. Abaixo de 0 °C, o limite de saturação calculado considera o gelo.</p>
+<p>O cálculo usa o sistema internacional e as relações do capítulo 1 do ASHRAE Handbook, Fundamentals (2017), implementadas no PsychroLib. Se você informar a altitude, a pressão será estimada pela atmosfera padrão. Uma medição barométrica absoluta representa melhor as condições do dia.</p>
+<p>A leitura vale para as condições informadas. Uma investigação de umidade também considera a duração da exposição, pontes térmicas, ventilação e infiltrações.</p>
+<p><a href="https://github.com/psychrometrics/psychrolib/tree/2.5.0">Equações e fonte do PsychroLib 2.5.0</a> · <a href="vendor/PsychroLib-LICENSE.txt">Licença da biblioteca</a></p>
+</section>
+<p>Exemplo numérico conferido em <time datetime="2026-11-07">7 de novembro de 2026</time>.</p>
+<section class="tool-method"><h2>Umidade recorrente em uma edificação</h2><p>Se as marcas persistem, reúna leituras em diferentes horários e fotos dos pontos afetados para orientar a inspeção.</p>
+<a data-cta-id="psicrometria-inspecao" href="/inspecao-diagnostico-edificacoes/">Conhecer a inspeção de edificações</a> · <a data-cta-id="psicrometria-contato" data-tool-to-whatsapp data-journey="operacao" data-cta-position="tool_contact" data-cta-channel="whatsapp" href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20umidade%20e%20condensa%C3%A7%C3%A3o%20em%20uma%20edifica%C3%A7%C3%A3o." rel="noopener" target="_blank">Conversar sobre umidade pelo WhatsApp</a></section></div></main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body></html>

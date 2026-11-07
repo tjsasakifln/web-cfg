@@ -99,7 +99,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 262,
+  "html_route_count": 263,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -289,6 +289,7 @@
     "/engenharia-condominios/",
     "/entregas/",
     "/especialista/tiago-jun-sasaki/",
+    "/ferramentas/calculadora-psicrometrica/",
     "/ferramentas/checklist-reequilibrio/",
     "/ferramentas/diagnostico-defesa-margem/",
     "/ferramentas/",
@@ -364,8 +365,8 @@
     "/termos-de-uso/",
     "/triagem-tecnica/"
   ],
-  "generated_at": "2026-11-07T17:17:31Z",
-  "public_artifact_hash": "e1a23301c52a05cf0366d2c7ba9d2f1f9e3c0c6428239f463bece0b9e00743e3",
+  "generated_at": "2026-11-07T23:16:19Z",
+  "public_artifact_hash": "dde2c0e34ce66a4a2a0b9d0c89b5270376507b55fcfb2a95d478ac1867cb2f87",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -465,14 +466,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 261,
+  "promoted_navigation_files": 262,
   "navigation_audit": {
-    "audited_files": 261,
-    "audited_blocks": 520,
+    "audited_files": 262,
+    "audited_blocks": 522,
     "frozen_files": 0
   },
   "structured_identity": {
-    "html_scanned": 277,
+    "html_scanned": 278,
     "html_rewritten": 189,
     "fields_removed": 790
   }

@@ -31,6 +31,7 @@ const OUT = resolve(process.env.TOOLS_LAYOUT_EVIDENCE_DIR || join(ROOT, ".playwr
 const ALLOW_FAILURES = process.env.TOOLS_LAYOUT_ALLOW_FAILURES === "1";
 const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
+  { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
@@ -373,6 +374,15 @@ async function exercise(page, id) {
     const result = await geometry(page, id, "resultado", page.viewport().width);
     await screenshot(page, id, page.viewport().width, "resultado", "#diagnostic-result");
     return [result];
+  }
+
+  if (id === "psicrometria") {
+    await page.click("#ambiente button");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (!await page.$eval("#propriedades", (list) => list.innerText.includes("21,31"))) {
+      throw new Error("PsychroLib reference dew point missing");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
   }
 
   if (id === "prontidao") {
