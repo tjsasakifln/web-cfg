@@ -132,12 +132,12 @@
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
     "source_html_files_scanned": 273,
-    "logo_image_occurrences": 510,
-    "header_lockup_occurrences": 247,
-    "footer_lockup_occurrences": 250,
+    "logo_image_occurrences": 512,
+    "header_lockup_occurrences": 248,
+    "footer_lockup_occurrences": 251,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 260,
-      "/assets/logo-confenge-white-500-1677038e.png": 250
+      "/assets/logo-confenge-500-f8a83f6d.png": 261,
+      "/assets/logo-confenge-white-500-1677038e.png": 251
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -146,7 +146,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "2026-11-06. O portal BIM, os quatro guias e as doze telas do aplicativo acrescentaram 17 HTML ao censo. O portal e os guias usam os cabeçalhos e rodapés institucionais. O inventário mediu 273 HTML, 510 imagens da marca, 247 assinaturas de cabeçalho e 250 de rodapé."
+    "observation_note": "2026-11-07. O censo do HTML fonte encontrou 512 imagens institucionais em 273 arquivos após a inclusão da marca no kit de citação. O teste de identidade do pacote publicado confere também o cabeçalho e o rodapé gerados para as 12 ferramentas BIM."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
