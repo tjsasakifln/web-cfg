@@ -58,8 +58,8 @@
 <div class="solar-layout">
 <form id="simulador" class="solar-card" method="post" aria-labelledby="titulo-cenario">
 <h2 id="titulo-cenario">Monte o seu cenário</h2>
-<p id="carregando" role="status">Ative o JavaScript para calcular a posição do sol e a sombra.</p>
-<fieldset id="campos" disabled aria-label="Dados do local e da janela">
+<p id="carregando" data-tool-runtime-status role="status">Ative o JavaScript para calcular a posição do sol e a sombra.</p>
+<fieldset id="campos" data-tool-runtime-fields disabled aria-label="Dados do local e da janela">
 <div class="solar-fields"><label class="solar-wide">Preencher coordenadas
 <select id="local"><option value="">Coordenadas próprias</option><option value="-27,5949|-48,5482|-3" selected>Florianópolis (SC)</option><option value="-23,5505|-46,6333|-3">São Paulo (SP)</option><option value="-15,7939|-47,8828|-3">Brasília (DF)</option><option value="-3,1190|-60,0217|-4">Manaus (AM)</option><option value="-9,9747|-67,8243|-5">Rio Branco (AC)</option><option value="-3,8547|-32,4233|-2">Fernando de Noronha (PE)</option></select></label>
 <label>Latitude (°)<input id="latitude" type="text" inputmode="decimal" value="-27,5949" data-min="-90" data-max="90" required></label>

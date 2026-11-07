@@ -7100,7 +7100,7 @@
       "kind": "tool_form",
       "action": "",
       "method": "post",
-      "nojs_degradation": "none"
+      "nojs_degradation": "runtime_status"
     },
     {
       "route": "/ferramentas/checklist-reequilibrio/",

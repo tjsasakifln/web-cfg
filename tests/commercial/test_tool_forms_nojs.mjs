@@ -47,6 +47,7 @@ const expectedRoutes = new Set([
   "/analise-cnpj/",
   "/conflitos/",
   "/conteudos/sinapi-desonerado-nao-desonerado/",
+  "/ferramentas/calculadora-de-beiral/",
   "/ferramentas/checklist-reequilibrio/",
   "/ferramentas/diagnostico-defesa-margem/",
   "/ferramentas/limite-acrescimos-supressoes/",
