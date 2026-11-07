@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import quote
 
@@ -111,7 +112,6 @@ SKIP_PARTS = {
     "ops",
 }
 
-FILE_INPUT_RE = re.compile(r"""type\s*=\s*['"]file['"]""", re.I)
 WA_HREF_RE = re.compile(
     r"""(https://wa\.me/\d+\?text=)([^"'>\s]+)""",
     re.I,
@@ -251,19 +251,43 @@ def apply_rewrites(root: Path | None = None) -> dict[str, int]:
     return stats
 
 
-def capture_forms_with_file_input(html: str) -> bool:
-    if not FILE_INPUT_RE.search(html):
+LOCAL_FILE_TOOLS = frozenset(
+    f"bim/web/{name}.html" for name in
+    ("cad", "chapas", "comparar", "digitalizar", "ifc-excel", "modelagem", "regua", "visualizador")
+)
+
+
+class _FileControls(HTMLParser):
+    def __init__(self, local_tool):
+        super().__init__()
+        self.local_tool = local_tool
+        self.form_depth = 0
+        self.unsafe = False
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(reversed(attrs))  # HTML uses the first duplicate attribute.
+        if tag == "form":
+            self.form_depth += 1
+        if tag != "input" or (values.get("type") or "").casefold() != "file":
+            return
+        # A local picker must not be a successful control, including remote
+        # form ownership by id. The marker alone never authorizes submission.
+        if (not self.local_tool or self.form_depth or "data-leitura-local" not in values
+                or {"name", "form", "action", "formaction", "formmethod", "formenctype"} & values.keys()):
+            self.unsafe = True
+
+    def handle_endtag(self, tag):
+        if tag == "form" and self.form_depth:
+            self.form_depth -= 1
+
+
+def capture_forms_with_file_input(html: str, route: str = "") -> bool:
+    if "<input" not in html.casefold():
         return False
-    # Fail if any capture form (lead / contact) includes a file control.
-    for form in re.finditer(r"<form\b[^>]*>.*?</form>", html, flags=re.I | re.S):
-        chunk = form.group(0)
-        if FILE_INPUT_RE.search(chunk) and re.search(
-            r"diagnostico-b2g|diagnostico-confenge|data-capture-form|functions/lead",
-            chunk,
-            re.I,
-        ):
-            return True
-    return bool(FILE_INPUT_RE.search(html))
+    controls = _FileControls(route in LOCAL_FILE_TOOLS)
+    controls.feed(html)
+    controls.close()
+    return controls.unsafe
 
 
 if __name__ == "__main__":

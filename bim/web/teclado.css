@@ -11,6 +11,7 @@
 }
 .skip-link:focus {
   transform: none;
-  outline: 2px solid #173f35;
+  outline: 2px solid currentColor;
+  box-shadow: var(--focus-ring, 0 0 0 2px white, 0 0 0 5px #071a31);
 }
 .laboratorio-bim { height: 100%; }
