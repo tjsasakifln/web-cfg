@@ -95,6 +95,18 @@ try {
   await page.click('#suite-workspace [data-catalog]');
   const reopened = await receive(output,'cadcraft','31 objects on 5 layers');
   assert.match(reopened.url(),/\/cadcraft\//);
+  await page.setViewport({width:390,height:844});
+  await reopened.click('canvas[data-over]');
+  await page.keyboard.down('Control');
+  await page.keyboard.down('Shift');
+  await page.keyboard.press('s');
+  await page.keyboard.up('Shift');
+  await page.keyboard.up('Control');
+  await reopened.waitForSelector('dialog[open] [data-dwg-version]', {visible:true});
+  await page.waitForFunction(() => document.querySelector('#suite-frame iframe')
+    .getBoundingClientRect().bottom <= innerHeight + 1);
+  await page.keyboard.press('Escape');
+  await page.setViewport({width:1440,height:960});
   await page.click('#suite-workspace [data-catalog]');
   await receive(output,'modelcraft','edges on the ground');
   console.log('DWG received, edited, downloaded and reopened in two distinct apps; handoff records consumed.');

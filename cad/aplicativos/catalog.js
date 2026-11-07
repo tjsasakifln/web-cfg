@@ -61,6 +61,13 @@ function choose(slug, changeHistory = true, fileId = '') {
     } catch { return failed(); }
     clearTimeout(timer);
     status.textContent = '';
+    if (slug === 'cadcraft') {
+      next.contentDocument.addEventListener('toggle', event => {
+        if (event.target.matches('dialog[open]') && event.target.querySelector('[data-dwg-version]')) {
+          next.scrollIntoView({block:'nearest', behavior:'instant'});
+        }
+      }, true);
+    }
   });
   frame = next;
   timer = setTimeout(failed, 45000);
