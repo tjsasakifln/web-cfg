@@ -82,11 +82,11 @@
 <p class="suite-status" role="status" aria-live="polite" tabindex="-1"></p><div id="suite-frame"></div>
 </section>
 <section id="suite-catalog" class="suite-catalog" aria-labelledby="suite-catalog-heading">
-<section id="suite-file-form" class="suite-file-form" aria-labelledby="suite-file-heading" hidden>
+<section id="suite-file-form" class="suite-file-form" aria-labelledby="suite-file-heading">
 <h2 id="suite-file-heading">Abrir um arquivo do meu dispositivo</h2>
 <p>Escolha uma planta ou modelo de até 64 MiB. As opções de aplicativo dependem do formato. Para levar uma alteração de uma ferramenta a outra, baixe a revisão e selecione a cópia editada.</p>
 <div class="suite-file-actions"><label>Arquivo DWG, DXF, IFC ou PDF<input data-leitura-local data-drawing type="file" accept=".dwg,.dxf,.ifc,.pdf"></label>
-<label>Aplicativo<select data-application disabled></select></label>
+<label>Aplicativo<select data-application disabled><option value="" disabled selected>Escolha o arquivo primeiro</option></select></label>
 <button type="button" data-open-file class="button button-primary" disabled>Abrir arquivo</button></div>
 <p role="status" aria-live="polite"></p></section>
 <h2 id="suite-catalog-heading" tabindex="-1">Qual trabalho você quer fazer?</h2>
@@ -110,8 +110,8 @@
 <p><a data-cta-position="suite_contato" href="https://wa.me/5548988344559?text=Gostaria%20de%20conversar%20sobre%20a%20compatibiliza%C3%A7%C3%A3o%20de%20desenhos%20e%20modelos%20do%20meu%20projeto.">Conversar sobre a compatibilização do meu projeto</a></p></aside></section>
 <details id="suite-instructions" class="suite-instructions"><summary>Roteiros para descrever tarefas de engenharia</summary>
 <p>Adapte um dos 50 exemplos em português e copie o texto para sua equipe ou para um assistente com acesso ao projeto. Os nomes de arquivos e as medidas servem de exemplo.</p>
-<div class="suite-file-actions"><label>Especialidade<select data-area></select></label>
-<label>Tarefa<select data-task></select></label></div>
+<div class="suite-file-actions"><label>Especialidade<select data-area><option value="" disabled selected>Escolha a especialidade</option></select></label>
+<label>Tarefa<select data-task><option value="" disabled selected>Escolha a tarefa</option></select></label></div>
 <label class="suite-script-text">Texto para adaptar<textarea rows="3" data-script></textarea></label>
 <button class="button" type="button" data-copy>Copiar texto</button>
 <span role="status" aria-live="polite"></span>

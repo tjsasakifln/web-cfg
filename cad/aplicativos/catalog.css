@@ -39,7 +39,7 @@
 .suite-file-form [role=status]{margin:.6rem 0 0}
 .suite-file-actions{display:flex;flex-wrap:wrap;align-items:end;gap:.75rem}
 .suite-file-actions label{display:grid;min-width:0;max-width:100%;gap:.25rem;font-weight:700;font-size:var(--text-small)}
-.suite-file-actions input,.suite-file-actions select{min-height:var(--touch-min);max-width:100%;border:1px solid var(--line);padding:.5rem;background:var(--white);color:var(--ink);font:inherit}
+.suite-file-actions input,.suite-file-actions select{min-height:var(--touch-min);min-inline-size:var(--touch-min);max-width:100%;border:1px solid var(--line);padding:.5rem;background:var(--white);color:var(--ink);font:inherit}
 .suite-file-actions :disabled{opacity:.65}
 .suite-instructions {border-block:1px solid var(--line);padding:.5rem 0;margin-block:1rem}
 .suite-instructions summary {cursor:pointer;min-height:var(--touch-min);padding:.55rem 0;color:var(--ink);font-weight:750}
