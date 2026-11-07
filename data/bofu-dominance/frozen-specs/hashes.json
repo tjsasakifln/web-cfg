@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "758d36cd096c12a355a9a7564418a6b3f4edb7cf",
+  "baseline_commit": "62c311090bf21fdf892ded736bcff74387145a7e",
   "recaptured_at": "2026-11-07T22:12:00Z",
-  "recapture_reason": "Inclusão da rota do Modela Pro nos dois sitemaps. A comparação confirma uma única URL nova e preserva as URLs anteriores.",
+  "recapture_reason": "PR #774. Inclusão exclusiva da ferramenta de avaliação nos dois sitemaps. Os 17 arquivos protegidos foram conferidos pelos bytes da revisão registrada.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
