@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "eb8b3e5fe549c5739d7cc42d06e1ac7f3be612fe",
-  "recaptured_at": "2026-11-07T17:37:59Z",
-  "recapture_reason": "PR #772. A comparação com o editor do PR #771 confirmou que a página do catálogo de aplicativos é a única URL acrescentada aos dois sitemaps. Canonical da página e data de 7 de novembro de 2026 conferidos. Os outros 15 caminhos protegidos coincidem com o checkpoint anterior.",
+  "baseline_commit": "758d36cd096c12a355a9a7564418a6b3f4edb7cf",
+  "recaptured_at": "2026-11-07T22:12:00Z",
+  "recapture_reason": "Inclusão da rota do Modela Pro nos dois sitemaps. A comparação confirma uma única URL nova e preserva as URLs anteriores.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
@@ -25,14 +25,14 @@
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-    "sitemap.xml": "cc96cac74cdeac14ef238528e58bd7ac293d1346e2a96949e5601f91d9f07f50",
-    "sitemap.txt": "0283461d19ec814a7d1c255ec2ab05b3653826beb3032862f0b6cbd85c6f98de",
+    "sitemap.xml": "dcd73ce6527a972f190db24798aaeea25643f235e58bb9afe7e07514d250e99c",
+    "sitemap.txt": "d3c91de42d1a97778b0d06e10ee51567f0ed6078c8421cb5486b18498f31972e",
     "sitemap-index.xml": "0fc78a8087fe395586a05dc29538837e0e935292c598dbba7f5aa47f2e73929a",
     "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "7fd5295451fc2d5a63e42da28a670b8f2e18171a0bcdc1d806e3f22085de4084"
   },
-  "previous_baseline_commit": "74c58f6c07086197e090e8d618d16e790052e909",
+  "previous_baseline_commit": "eb8b3e5fe549c5739d7cc42d06e1ac7f3be612fe",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -1079,6 +1079,39 @@
         "js/modules/analytics.js": "7fd5295451fc2d5a63e42da28a670b8f2e18171a0bcdc1d806e3f22085de4084"
       },
       "previous_baseline_commit": "71ff50e60f3d92d1ca493c4228f6756fe80daf78"
+    },
+    {
+      "baseline_commit": "eb8b3e5fe549c5739d7cc42d06e1ac7f3be612fe",
+      "previous_baseline_commit": "74c58f6c07086197e090e8d618d16e790052e909",
+      "recaptured_at": "2026-11-07T17:37:59Z",
+      "recapture_reason": "PR #772. A comparação com o editor do PR #771 confirmou que a página do catálogo de aplicativos é a única URL acrescentada aos dois sitemaps. Canonical da página e data de 7 de novembro de 2026 conferidos. Os outros 15 caminhos protegidos coincidem com o checkpoint anterior.",
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "5ab6fe0bb915e865bd26c704b911e291db4f6dfaf67bb392c4594723d6648e09",
+        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "cc96cac74cdeac14ef238528e58bd7ac293d1346e2a96949e5601f91d9f07f50",
+        "sitemap.txt": "0283461d19ec814a7d1c255ec2ab05b3653826beb3032862f0b6cbd85c6f98de",
+        "sitemap-index.xml": "0fc78a8087fe395586a05dc29538837e0e935292c598dbba7f5aa47f2e73929a",
+        "_redirects": "adb960a2faf0013e639a237a48dfde743d381a20ce8d7a7b28757509f4edd37f",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "7fd5295451fc2d5a63e42da28a670b8f2e18171a0bcdc1d806e3f22085de4084"
+      }
     }
   ]
 }

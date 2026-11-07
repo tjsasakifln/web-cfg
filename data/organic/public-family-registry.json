@@ -1728,6 +1728,40 @@
       }
     },
     {
+      "id": "modela-pro",
+      "visitor_job": "Avaliar uma amostra de imóveis, conferir a memória de cálculo e conversar sobre uma avaliação profissional.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/avaliacao-imoveis-urbanos/inferencia/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-07",
+      "owner_issue": 611,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Ferramenta da CONFENGE para análise local de amostras fornecidas pelo visitante.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/corporate/commercial-constitution.v1.json"
+        ],
+        "declared_at": "2026-11-07",
+        "owner_issue": 611
+      }
+    },
+    {
       "id": "avaliacao-imoveis-urbanos",
       "visitor_job": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
       "profile": "commercial_content",

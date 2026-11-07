@@ -3,7 +3,7 @@
     "asset_files_max_route": 25,
     "asset_raw_kb_max_route": 1116.55,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 276
+    "routes_measured": 277
   },
   "budget": {
     "cls_max": 0.05,
@@ -281,6 +281,7 @@
       "/atrasos-prorrogacao-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
       "/avaliacao-imoveis-urbanos/",
+      "/avaliacao-imoveis-urbanos/inferencia/",
       "/bid-room-licitacoes-obras/",
       "/bim/",
       "/bim/fotogrametria/",
@@ -559,6 +560,7 @@
       "/atrasos-prorrogacao-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
       "/avaliacao-imoveis-urbanos/",
+      "/avaliacao-imoveis-urbanos/inferencia/",
       "/bid-room-licitacoes-obras/",
       "/bim/",
       "/bim/fotogrametria/",
