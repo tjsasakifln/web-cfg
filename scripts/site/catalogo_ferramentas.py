@@ -23,7 +23,7 @@ MARKER = re.compile(r"(<!-- catalogo:inicio -->).*?(<!-- catalogo:fim -->)", re.
 # Independent tool PRs add standalone links before this catalog ships. Move their
 # single-purpose cards/paragraph to the shared grid without consuming contract cards.
 ENTRY = re.compile(r'<section class="tool-situation" aria-labelledby="sit-(?:beiral|cpm)">.*?</section>'
-                   r'|<aside class="tool-method">.*?</aside>|<p>[^<>]*<a [^<>]+>[^<>]+</a>[^<>]*</p>', re.S)
+                   r'|<aside(?: class="tool-method")?>.*?</aside>|<p>[^<>]*<a [^<>]+>[^<>]+</a>[^<>]*</p>', re.S)
 HREF = re.compile(r'href="(/[^"#?]+/)"')
 COLLECTION = re.compile(r'(<script type="application/ld\+json">)(\s*\{.*?\})(\s*</script>)', re.S)
 

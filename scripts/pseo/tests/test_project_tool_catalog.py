@@ -36,6 +36,10 @@ def test_release_local_tools_no_dead_or_duplicate_links(tmp_path):
         '<aside class="tool-method"><h2>Ar</h2><a href="/ferramentas/calculadora-psicrometrica/">Ponto de orvalho</a></aside>',
         '<aside class="tool-method"><h2>Orçamento</h2><a href="/ferramentas/calculadora-bdi/">BDI</a></aside>',
         '<section class="tool-situation" aria-labelledby="sit-cpm"><p>Prazo</p><a href="/ferramentas/caminho-critico-obra/">CPM</a></section>',
+        '<aside><h2>Chamada estrutural de origem</h2><p>Abra a <a href="/ferramentas/analise-de-viga-continua/">viga</a>.</p></aside>',
+        '<aside class="tool-method"><h2>Planilha</h2><a href="/ferramentas/orcamento-de-obras/">Orçar serviços</a></aside>',
+        '<aside class="tool-method"><h2>Rede de água</h2><a href="/ferramentas/rede-de-agua/">Simular</a></aside>',
+        '<aside class="tool-method"><h2>Unifilar</h2><a href="/ferramentas/diagrama-unifilar/">Desenhar</a></aside>',
     ]
     source = source.replace("</main>", "\n".join(extra) + "</main>")
     slugs = list(TOOLS)
@@ -52,6 +56,7 @@ def test_release_local_tools_no_dead_or_duplicate_links(tmp_path):
         hub.write_text(source)
         publish_catalog(tmp_path)
         rendered = hub.read_text()
+        assert "Chamada estrutural de origem" not in rendered
         parser = MainLinks()
         parser.feed(rendered)
         listed = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', rendered, re.S)[1])["mainEntity"]["itemListElement"]
