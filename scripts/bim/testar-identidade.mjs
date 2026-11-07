@@ -69,6 +69,11 @@ for (const page of pages) {
     }
     const scripts = nodes.filter(n => n.tagName === 'script').map(n => (attr(n, 'src') || '').split('?')[0]);
     assert.equal(scripts.filter(src => src === toolScript).length, 1, 'Menu institucional da ferramenta');
+    const bootstrap = nodes.find(n => n.tagName === 'script' && (attr(n, 'src') || '').split('?')[0] === toolScript);
+    assert.equal(bootstrap.parentNode.tagName, 'head', 'Preparar o menu antes da primeira pintura');
+    for (const flag of ['type', 'async', 'defer']) {
+      assert.equal(attr(bootstrap, flag), undefined, 'O preparo do menu precisa bloquear o parser: ' + flag);
+    }
     assert.ok(!scripts.includes('/script.js'), 'O módulo comercial interfere nas abas e nos arquivos locais');
     const styles = nodes.filter(n => n.tagName === 'link' && attr(n,'rel') === 'stylesheet').map(n => attr(n,'href'));
     assert.equal(styles.filter(s => s === siteCss).length, 1, 'Folha institucional');

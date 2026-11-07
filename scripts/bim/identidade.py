@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from textwrap import dedent
+from textwrap import dedent, indent
 
 from scripts.pseo.html_shell import (
     BRAND_ASSETS,
@@ -17,8 +17,9 @@ from scripts.pseo.html_shell import (
 )
 
 BRAND_HEAD = "\n".join((
-    THEME_COLOR_META, BRAND_ICONS, BRAND_ASSETS,
-    '<script type="module" src="/bim/web/pular-navegacao.mjs"></script>',
+    THEME_COLOR_META, BRAND_ICONS,
+    '<script src="/bim/web/pular-navegacao.mjs"></script>',
+    BRAND_ASSETS,
 ))
 
 
@@ -37,7 +38,11 @@ def apply_bim_shell(site: Path) -> None:
     if menu is None:
         raise ValueError("Componente de navegação institucional ausente")
     with (web / "pular-navegacao.mjs").open("a", encoding="utf-8") as module:
-        module.write("\n" + dedent(menu[1]).strip() + "\n")
+        # Set the progressive-enhancement class before the body can paint, but
+        # wait for the actual controls before binding their event handlers.
+        module.write("\ndocument.addEventListener('DOMContentLoaded', () => {\n")
+        module.write("  document.querySelector('.skip-link').addEventListener('click', pularParaConteudo);\n")
+        module.write(indent(dedent(menu[1]).strip(), "  ") + "\n}, { once: true });\n")
 
     pages = [*web.glob("*.html"), lab / "index.html"]
     for page in pages:

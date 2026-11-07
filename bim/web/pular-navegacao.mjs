@@ -4,9 +4,9 @@ if (window.parent !== window && location.pathname === '/bim/web/visualizador.htm
 document.documentElement.classList.replace('no-js', 'js');
 
 // Preserve o fragmento da operação ao pular a navegação com o teclado.
-document.querySelector('.skip-link').addEventListener('click', event => {
+function pularParaConteudo(event) {
   event.preventDefault();
   const conteudo = document.getElementById('conteudo');
   conteudo.focus({ preventScroll: true });
   conteudo.scrollIntoView({ block: 'start' });
-});
+}
