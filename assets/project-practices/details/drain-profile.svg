@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Perfil de drenagem e origem da diferença de cota</title>
+  <desc id="desc">As duas linhas partem da mesma cota a montante. A linha tracejada termina acima da contínua, revelando a divergência na conexão a jusante.</desc>
+  <defs>
+    <pattern id="accent" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M-1 4l5-5M0 8l8-8" stroke="#ced62a" stroke-width="1.6"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M38 20v126h283" stroke="#688696" stroke-width="1"/>
+    <path d="M60 36L292 93v27z" fill="url(#accent)" stroke="none"/>
+    <path d="M60 36L292 93" stroke-dasharray="7 5" stroke-width="2"/>
+    <path d="M60 36L292 120" stroke="#ced62a" stroke-width="3"/>
+    <path d="M60 40v103m232-18v18" stroke="#688696" stroke-width="1" stroke-dasharray="4 4"/>
+    <path d="M302 93h10m-10 27h10m-5-27v27" stroke="#e7eded" stroke-width="1.6"/>
+    <circle cx="60" cy="36" r="4" fill="#e7eded"/><circle cx="292" cy="93" r="4" fill="#0b2437"/><circle cx="292" cy="120" r="4" fill="#ced62a" stroke="#ced62a"/>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Passagem de instalações junto à viga</title>
+  <desc id="desc">O traço descontínuo encontra o concreto no centro da viga. A alternativa em destaque passa por baixo, no espaço que o corte precisa verificar.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M51 30h259v13H212v48h-59V43H51z" fill="url(#hatch)" stroke-width="2.5"/>
+    <path d="M58 68h243" stroke="#bcc7cd" stroke-dasharray="6 6"/>
+    <path d="M60 67h65l24 38h71l25-38h57" stroke="#ced62a" stroke-width="7"/>
+    <path d="M60 67h65l24 38h71l25-38h57" stroke="#273d42" stroke-width="3.2"/>
+    <path d="M53 128h258" stroke-dasharray="6 3" stroke-width="1"/>
+    <path d="M181 91h12m-12 11h12m-6-11v11" stroke="#e7eded" stroke-width="1"/>
+  </g>
+</svg>

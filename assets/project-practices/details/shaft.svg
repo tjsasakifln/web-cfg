@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Poço de instalações em planta</title>
+  <desc id="desc">O detalhe destaca o contorno externo do poço na parede. O interior está vazio porque as dimensões livres e os diâmetros não foram informados.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M114 17h136v12H126v110h124v12H114z" fill="url(#hatch)"/>
+    <path d="M52 58h76v76H52z" fill="#19364b" stroke="#ced62a" stroke-width="2.8"/>
+    <path d="M52 45v-7m76 7v-7M52 41h76m-77 3 4-6m70 6 4-6" stroke="#ced62a" stroke-width="1"/>
+    <path d="M45 58h-9m9 76h-9m4-76v76" stroke="#ced62a" stroke-width="1"/>
+    <path d="M131 93h63l22-25h64" stroke-dasharray="4 4"/>
+    <circle cx="129" cy="93" r="3" fill="#ced62a" stroke="none"/>
+  </g>
+</svg>

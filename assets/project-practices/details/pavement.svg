@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Camadas de pavimento</title>
+  <desc id="desc">Vista esquemática de três camadas do pavimento. A sub-base, na parte inferior, está destacada para o cálculo de volume.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+    <pattern id="accent" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M-1 4l5-5M0 8l8-8" stroke="#ced62a" stroke-width="1.6"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="m44 72 104-42 164 33-105 44z" fill="#304b5e"/>
+    <path d="m44 72 163 35 105-44v5l-105 44L44 77z" fill="#8198a3"/>
+    <path d="m44 77 163 35 105-44v12l-105 44L44 89z" fill="url(#hatch)"/>
+    <path d="m44 89 163 35 105-44v16l-105 44L44 105z" fill="url(#accent)" stroke="#ced62a"/>
+    <path d="M207 107v33m114-60h9m-9 16h9m-5-16v16" stroke="#e7eded" stroke-width="1"/>
+  </g>
+</svg>

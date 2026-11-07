@@ -1,0 +1,10 @@
+Editor CADCraft Web 0.18.0, release oficial inalterada
+https://github.com/storytold/cadcraft/releases/tag/v0.18.0
+Código-fonte exato e dependências: https://github.com/storytold/cadcraft/tree/32238e83c2c8bf643994132883e94bc96961f649
+As atribuições de recursos da distribuição estão em NOTICE.txt, ATTRIBUTION.txt, LICENSE-MIT.txt e LICENSE-APACHE.txt.
+O repositório de fontes usado pelo processo de lançamento está fixado em https://github.com/storytold/craft-fonts/tree/b076417b5880bd4154bd22f00695b1d28c6bea83
+As licenças de fontes da distribuição estão em fontes.txt, egui-fontes.txt e hack.txt. Os perfis ICC de Krilla estão sob CC0-1.0 (icc.txt).
+O código-fonte da biblioteca acadrust 0.6.6 indicada no NOTICE está disponível em https://crates.io/crates/acadrust/0.6.6
+A versão Web usa o leitor e gravador DWG @node-projects/acad-ts 3.8.0 hospedado pela Confenge sob MIT. Licença: /bim/web/vendor-cad/acad-LICENSE
+Código: https://github.com/node-projects/acad-ts
+Os nomes das aplicações identificam os componentes oficiais de seus autores.

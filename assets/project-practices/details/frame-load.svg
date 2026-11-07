@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 168" role="img" aria-labelledby="title desc">
+  <title id="title">Percurso das ações verticais</title>
+  <desc id="desc">As setas mostram as cargas sobre a viga chegando aos pilares, aos blocos de fundação e ao terreno.</desc>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M-1 1l2-2M0 6l6-6M5 7l2-2" stroke="#728f9e" stroke-width=".8"/></pattern>
+  </defs>
+  <g fill="none" stroke="#c1d0d6" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+<path d="M51 143h258v10H51z" stroke="none" fill="url(#hatch)"/>
+    <path d="M75 127V54h210v73h-11V65H86v62z" fill="#375367"/>
+    <path d="M60 127h41l6 16H54z M260 127h40l7 16h-53z" fill="url(#hatch)"/>
+    <g stroke="#ced62a" stroke-width="2.4"><path d="M114 18v26m-5-6 5 6 5-6 M157 18v26m-5-6 5 6 5-6 M202 18v26m-5-6 5 6 5-6 M245 18v26m-5-6 5 6 5-6"/><path d="M150 79H98v29m-5-6 5 6 5-6 M210 79h52v29m-5-6 5 6 5-6"/></g>
+  </g>
+</svg>

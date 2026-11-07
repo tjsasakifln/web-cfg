@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1110.29,
+    "asset_raw_kb_max_route": 1116.55,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 251
+    "routes_measured": 275
   },
   "budget": {
     "cls_max": 0.05,
@@ -48,7 +48,27 @@
       },
       {
         "cls": 0.0,
+        "route": "/assistencia-tecnica-pericia-trabalhista/"
+      },
+      {
+        "cls": 0.0,
         "route": "/assistencia-tecnica-pericial-engenharia/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/avaliacao-imoveis-urbanos/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/bim/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/bim/fotogrametria/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/bim/web/"
       },
       {
         "cls": 0.0,
@@ -136,7 +156,19 @@
       },
       {
         "cls": 0.0,
-        "route": "/inteligencia/"
+        "route": "/inteligencia/cenarios/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/inteligencia/fornecedores-climatizacao-contratos-publicos/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/inteligencia/orgaos/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/inteligencia/relacoes-compradores-fornecedores/"
       },
       {
         "cls": 0.0,
@@ -227,7 +259,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 52
+    "routes_measured": 60
   },
   "fonts": {
     "font_files_total": 1,
@@ -267,6 +299,8 @@
       "/bim/web/oficina.html",
       "/bim/web/regua.html",
       "/bim/web/visualizador.html",
+      "/cad/",
+      "/cad/guias/escala-e-unidade-do-dwg/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
       "/casos/demonstrativo-infraestrutura/",
@@ -542,6 +576,8 @@
       "/bim/web/oficina.html",
       "/bim/web/regua.html",
       "/bim/web/visualizador.html",
+      "/cad/",
+      "/cad/guias/escala-e-unidade-do-dwg/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
       "/casos/demonstrativo-infraestrutura/",
