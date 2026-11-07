@@ -7094,6 +7094,15 @@
       "nojs_degradation": "none"
     },
     {
+      "route": "/ferramentas/calculadora-de-beiral/",
+      "form_id": "simulador",
+      "form_class": "solar-card",
+      "kind": "tool_form",
+      "action": "",
+      "method": "post",
+      "nojs_degradation": "none"
+    },
+    {
       "route": "/ferramentas/checklist-reequilibrio/",
       "form_id": "f",
       "form_class": "tool-form",
