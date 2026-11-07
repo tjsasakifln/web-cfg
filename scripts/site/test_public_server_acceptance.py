@@ -140,6 +140,33 @@ def test_connection_failure_records_phase_and_no_digest(monkeypatch):
     assert entry["error"].startswith("first_hop_transport_failed:URLError")
 
 
+@pytest.mark.parametrize("mutation", ["exact", "corrupt", "oversized"])
+def test_large_packaged_asset_requires_exact_served_bytes(tmp_path, monkeypatch, mutation):
+    rel = "model.wasm"
+    content = b"x" * (acceptance.FIRST_HOP_LIMIT + 1)
+    expected = hashlib.sha256(content).hexdigest()
+    (tmp_path / rel).write_bytes(content)
+    served = {"exact": content, "corrupt": content[:-1] + b"y", "oversized": content + b"y"}[mutation]
+
+    class Response(io.BytesIO):
+        status = 200
+        headers = {"Content-Length": str(len(served)), "Content-Type": "application/wasm"}
+
+    opener = SimpleNamespace(open=lambda *_, **_kw: Response(served))
+    monkeypatch.setattr(acceptance.urllib.request, "build_opener", lambda *_: opener)
+    report = acceptance.verify_non_html_assets(
+        site=tmp_path, inventory={"non_html_sha256": {rel: expected}}, overlay={},
+        base=CANONICAL_BASE, fetcher=None, concurrency=1, timeout=1,
+    )
+    row, = report["results"]
+    assert row["ok"] is (mutation == "exact")
+    if mutation == "oversized":
+        assert row["error"] == "first_hop_body_too_large"
+    else:
+        assert row["http_sha256"] == hashlib.sha256(served).hexdigest()
+    assert acceptance._probe_first_hop(CANONICAL_BASE + "/unlisted", 1)[0]["error"] == "first_hop_body_too_large"
+
+
 def test_empty_redirect_body_remains_legitimate():
     response = SimpleNamespace(read=lambda _limit: b"", headers={"Content-Length": "0"})
     record = acceptance._read_first_hop_body(response, 301)
@@ -511,6 +538,24 @@ def test_public_datadesk_requires_actual_no_transform_header(tmp_path, cache_con
     assert report["ok"] is accepted, report["errors"]
     if not accepted:
         assert f"http_html_cache_no_transform_missing:{rel}" in report["errors"]
+
+
+def test_scoped_package_licenses_are_valid_inventory_paths(tmp_path):
+    inventory = _fixture(tmp_path)["inventory"]
+    payload = json.loads(inventory.read_text())
+    digest = hashlib.sha256(b"license").hexdigest()
+    valid = "bim/web/avisos/bim/@ifc-lite_wasm-12.2.0/LICENSE"
+    traversal = "bim/@scope/../outside.txt"
+    authority = "//other.example/@scope/file"
+    payload["non_html_sha256"].update(dict.fromkeys([valid, traversal, authority], digest))
+    inventory.write_text(json.dumps(payload))
+
+    verified, errors = acceptance.load_served_inventory(inventory)
+    assert verified["non_html_sha256"][valid] == digest
+    assert set(errors) == {
+        f"served_inventory_non_html_entry_invalid:{traversal}",
+        f"served_inventory_non_html_entry_invalid:{authority}",
+    }
 
 
 def test_accepts_complete_exact_server_inventory(tmp_path):
