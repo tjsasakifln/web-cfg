@@ -2,8 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Verificador de limite de acréscimos e supressões | CONFENGE</title>
-<meta name="description" content="Calcule o saldo orientativo de acréscimos e supressões (art. 125 da Lei 14.133/2021)."/>
+<title>Calculadora de aditivo de obra e limite de 25% | CONFENGE</title>
+<meta name="description" content="Calcule o saldo orientativo de acréscimos e supressões em contrato de obra pública, incluindo o limite de 25% do art. 125 da Lei 14.133/2021."/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/"/>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/>
@@ -11,7 +12,7 @@
 <link href="/assets/editorial-tool.css" rel="stylesheet"/>
 <meta content="#061a33" name="theme-color"/>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"Verificador de limite de acréscimos e supressões","url":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/","dateModified":"2026-08-15","author":{"@type":"Person","name":"Engº Tiago Sasaki","url":"https://confenge.com.br/especialista/tiago-jun-sasaki/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
+{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de aditivo de obra e limite de acréscimos e supressões","url":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/","description":"Calculadora orientativa do saldo de acréscimos e supressões de contrato de obra pública, com base no art. 125 da Lei 14.133/2021.","applicationCategory":"BusinessApplication","operatingSystem":"Web","isAccessibleForFree":true,"inLanguage":"pt-BR","dateModified":"2026-11-08","author":{"@type":"Person","name":"Engº Tiago Sasaki","url":"https://confenge.com.br/especialista/tiago-jun-sasaki/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
 </script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Limite de acréscimos e supressões","item":"https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/"}]}</script>
 </head>
@@ -205,7 +206,7 @@
 </div>
 
 <section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método, fonte e limitações">
-<p>Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência da página: <time datetime="2026-08-15">15 de agosto de 2026</time> · Fonte legal reconfirmada em 31 de agosto de 2026.</p>
+<p>Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Página atualizada em <time datetime="2026-11-08">8 de novembro de 2026</time> · Fonte legal reconfirmada em 31 de agosto de 2026.</p>
 <p>Método: triagem numérica <code>art125-numeric-triage/1.0.0</code>, com saldos independentes de acréscimo e supressão em centavos e estados explícitos de premissa.</p>
 <p>Fonte: Lei nº 14.133/2021, arts. 124, I, 125 e 126, aplicada aos valores que você informa nesta página.</p>
 <p>Limitação: triagem numérica orientativa do art. 125; não é parecer jurídico.</p>
@@ -312,10 +313,33 @@
       __step: current
     };
   }
-  function persist() { if (T && T.saveState) T.saveState(TOOL, SCHEMA, collectFields()); }
+  var draftAtRisk = false;
+  function hasDraft(d) {
+    return Boolean(d.base_status || d.valor_inicial || d.object_status || d.previous_totals_status ||
+      d.acrescimos_previos || d.supressoes_previas || (d.acrescimo_proposto && d.acrescimo_proposto !== "0") ||
+      (d.supressao_proposta && d.supressao_proposta !== "0"));
+  }
+  function persist() {
+    var d = collectFields();
+    if (!hasDraft(d)) {
+      draftAtRisk = false;
+      if (T && T.clearDraft) T.clearDraft(TOOL);
+      return;
+    }
+    draftAtRisk = !(T && T.saveDraft && T.saveDraft(TOOL, SCHEMA, d));
+  }
+  var persistTimer;
+  function schedulePersist() {
+    clearTimeout(persistTimer);
+    persistTimer = setTimeout(persist, 250);
+  }
+  function flushPersist() {
+    clearTimeout(persistTimer);
+    persist();
+  }
   function restore() {
-    if (!T || !T.loadState) return;
-    var d = T.loadState(TOOL, SCHEMA);
+    if (!T || !T.loadDraft) return;
+    var d = T.loadDraft(TOOL, SCHEMA);
     if (!d) return;
     ["base_status", "valor_inicial", "object_status", "tipo", "previous_totals_status", "acrescimos_previos", "supressoes_previas", "acrescimo_proposto", "supressao_proposta"].forEach(function(k) {
       var el = document.getElementById(k);
@@ -600,7 +624,10 @@
   form.addEventListener("input", function() {
     if (current === 2) updateAxisVisual();
     if (current === 3) updatePrecalc();
+    schedulePersist();
   });
+  window.addEventListener("pagehide", flushPersist);
+  window.addEventListener("beforeunload", function(e) { flushPersist(); if (!draftAtRisk) return; e.preventDefault(); e.returnValue = ""; });
   document.getElementById("btn-dl").onclick = function() { T.downloadText("confenge-limite-aditivo.txt", lastText); };
   document.getElementById("btn-copy").onclick = function() { T.copyText(lastText); };
   document.getElementById("btn-print").onclick = function() { window.print(); };
@@ -617,7 +644,8 @@
     var leadForm = document.getElementById("cfg-d19-form"); if (leadForm) leadForm.reset();
     prepareHandoffIdempotency("", true);
     lastText = "";
-    if (T.clearState) T.clearState(TOOL);
+    draftAtRisk = false;
+    if (T.clearDraft) T.clearDraft(TOOL); else if (T.clearState) T.clearState(TOOL);
     syncPremiseControls();
     showStep(1);
   };

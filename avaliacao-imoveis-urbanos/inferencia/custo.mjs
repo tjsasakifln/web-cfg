@@ -1,4 +1,6 @@
 // All cost inputs and the calculation memory stay in this browser.
+import {tabDraft} from '/assets/js/tab-draft.mjs';
+
 const host = document.getElementById('modela-custo');
 if (host) mountCost(host);
 
@@ -24,13 +26,33 @@ function mountCost(root) {
         <button type="button" class="button" data-example>Usar exemplo fictício de custo</button></div>
     </form>
     <section aria-live="polite" aria-label="Resultado do custo" data-output></section>
+    <p class="mp-note">Os dados de custo ficam no rascunho desta aba. Ao recarregar, você pode retomar os dados e calcular novamente.</p>
+    <button type="button" class="mp-btn" data-clear-draft hidden>Limpar rascunho de custo</button>
+    <p class="mp-note" role="status" data-draft-status></p>
   `;
   const form = root.querySelector('form');
   const output = root.querySelector('[data-output]');
   const items = form.querySelector('[data-items]');
+  const submit = form.querySelector('[type="submit"]');
+  const clear = root.querySelector('[data-clear-draft]');
+  const draftStatus = root.querySelector('[data-draft-status]');
+  const costFields = ['local','data','fonte','modalidade','bdi','bdifonte','dep','depfonte'];
+  const itemFields = ['descricao','categoria','qtd','unidade','unitario'];
+  const field = (element, name) => element.querySelector('[name="'+name+'"]');
+  const values = (element, names) => Object.fromEntries(names.map(name => [name, field(element, name).value]));
+  const snapshot = () => ({
+    fields: values(form, costFields),
+    items: Array.from(items.children, row => values(row, itemFields)),
+  });
+  function report(text, error) {
+    if (draftStatus.textContent !== text) draftStatus.textContent = text;
+    draftStatus.classList.toggle('mp-error', Boolean(error));
+  }
+  const draft = tabDraft('confenge.modela.custo.v1', snapshot, () => submit.disabled, report);
   let serial = 0;
   let revision = 0;
   function invalidate() { revision++; output.replaceChildren(); }
+  function edited() { invalidate(); clear.hidden = false; draft.schedule(); }
   function addItem(sample = {}) {
     const fs = document.createElement('fieldset');
     fs.className = 'cost-item'; fs.innerHTML = `
@@ -42,22 +64,43 @@ function mountCost(root) {
       <label>Custo unitário (R$)<input name="unitario" type="number" min="0" step="any" required></label>
       </div><button class="button" type="button">Remover item</button>`;
     fs.querySelector('legend').textContent = 'Item ' + (++serial);
-    for (const [name, value] of Object.entries(sample)) fs.querySelector('[name="' + name + '"]').value = value;
-    fs.querySelector('button').onclick = () => { fs.remove(); if (!items.children.length) addItem(); invalidate(); };
+    for (const name of itemFields) if (sample[name] !== undefined) field(fs, name).value = sample[name];
+    fs.querySelector('button').onclick = () => { fs.remove(); if (!items.children.length) addItem(); edited(); };
     items.append(fs);
     return fs;
   }
   addItem();
-  form.querySelector('[data-add]').onclick = () => { invalidate(); addItem().querySelector('input').focus(); };
-  form.addEventListener('input', invalidate);
+  form.querySelector('[data-add]').onclick = () => { addItem().querySelector('input').focus(); edited(); };
+  form.addEventListener('input', edited);
   form.querySelector('[data-example]').onclick = () => {
-    invalidate(); items.replaceChildren(); serial = 0;
+    if (!clear.hidden && !window.confirm('Substituir os dados de custo pelo exemplo fictício?')) return;
+    items.replaceChildren(); serial = 0;
     form.elements.local.value = 'Florianópolis, SC'; form.elements.data.value = '2026-11-01';
     form.elements.fonte.value = 'Orçamento sintético fictício para demonstração'; form.elements.modalidade.value = 'synthetic_budget';
     form.elements.bdi.value = '20'; form.elements.bdifonte.value = 'Composição demonstrativa de despesas e bonificação.';
     form.elements.dep.value = '10'; form.elements.depfonte.value = 'Hipótese demonstrativa de desgaste físico.';
     addItem({descricao:'Edificação térrea',qtd:100,unidade:'m²',unitario:2800});
+    edited();
   };
+  clear.onclick = () => {
+    if (!window.confirm('Limpar os dados de custo desta aba?') || !draft.clear()) return;
+    invalidate(); form.reset(); items.replaceChildren(); serial = 0; addItem(); clear.hidden = true;
+  };
+  try {
+    const saved = draft.read();
+    if (saved) {
+      clear.hidden = false;
+      const hasFields = (data, names) => data && names.every(name => typeof data[name] === 'string');
+      if (!hasFields(saved.fields, costFields) || !Array.isArray(saved.items) || !saved.items.length ||
+        !saved.items.every(row => hasFields(row, itemFields))) throw new Error('Rascunho inválido');
+      for (const name of costFields) field(form, name).value = saved.fields[name];
+      items.replaceChildren(); serial = 0; saved.items.forEach(addItem);
+      root.closest('details').open = true;
+      report('Rascunho de custo recuperado nesta aba. Confira os dados e calcule novamente.');
+    }
+  } catch {
+    report('O rascunho de custo não pôde ser lido.', true);
+  }
   form.onsubmit = async event => {
     event.preventDefault(); invalidate(); const request = revision;
     const get = name => form.elements[name].value.trim();
@@ -71,7 +114,7 @@ function mountCost(root) {
       })};
     if (get('bdi')) bom.bdi={mode:'justified',rate:Number(get('bdi'))/100,source:get('bdifonte'),justification:get('bdifonte')};
     if (get('dep')) bom.depreciation={mode:'arbitrated',rate:Number(get('dep'))/100,source:get('depfonte'),justification:get('depfonte')};
-    const submit = form.querySelector('[type="submit"]'); submit.disabled = true; output.textContent='Preparando o cálculo no seu dispositivo…';
+    submit.disabled = true; draft.refreshGuard(); output.textContent='Preparando o cálculo no seu dispositivo…';
     try {
       const {cost} = await import('./engine/client.mjs');
       const result = await cost({bom, value_basis:get('dep')?'depreciated_cost':'reconstruction_cost',include_depreciation:Boolean(get('dep'))});
@@ -85,6 +128,6 @@ function mountCost(root) {
       download.onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({entrada:bom,resultado:result},null,2)],{type:'application/json'}));a.download='modela-pro-memoria-de-custo.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
       output.replaceChildren(heading,details,download);
     } catch(error) { if (request===revision) output.textContent='Cálculo não concluído. '+error.message; }
-    finally { submit.disabled=false; }
+    finally { submit.disabled=false; draft.refreshGuard(); }
   };
 }

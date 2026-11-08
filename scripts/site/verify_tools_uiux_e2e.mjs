@@ -209,6 +209,19 @@ try {
 
 const page = await browser.newPage();
 
+async function legacyLocalFixturePage(path, key, data) {
+  const context = await browser.createBrowserContext();
+  const fixturePage = await context.newPage();
+  await fixturePage.setViewport({ width: 1440, height: 1000 });
+  await fixturePage.evaluateOnNewDocument((fixture) => {
+    window.__persistedXss = 0;
+    window.__xss = 0;
+    localStorage.setItem(fixture.key, JSON.stringify(fixture.data));
+  }, { key, data });
+  await fixturePage.goto(`${BASE}${path}`, { waitUntil: "networkidle0", timeout: 60000 });
+  return { context, page: fixturePage };
+}
+
 async function tabToSelector(browserPage, selector, maxTabs = 80) {
   for (let i = 0; i < maxTabs; i++) {
     await browserPage.keyboard.press("Tab");
@@ -720,30 +733,31 @@ await page.setViewport({ width: 1440, height: 1000 });
 }
 
 // --- Keyboard-only: complete every public tool flow and reach its result ---
+const keyboardContext = await browser.createBrowserContext();
+const keyboardPage = await keyboardContext.newPage();
+await keyboardPage.setViewport({ width: 1440, height: 1000 });
 {
-  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
-  await page.evaluate(() => localStorage.removeItem("confenge.tool.limite-acrescimos"));
-  await page.reload({ waitUntil: "networkidle0", timeout: 60000 });
-  await page.focus("#base_status");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("Tab");
-  await page.keyboard.type("1000000");
-  await page.keyboard.press("Tab");
-  await page.keyboard.press("ArrowDown");
-  const step1 = await tabToSelector(page, '[data-limite-step="1"] [data-limite-next]');
-  if (step1) await page.keyboard.press("Enter");
-  await page.focus("#previous_totals_status");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("Tab");
-  await page.keyboard.type("0");
-  await page.keyboard.press("Tab");
-  await page.keyboard.type("0");
-  const step2 = await tabToSelector(page, '[data-limite-step="2"] [data-limite-next]');
-  if (step2) await page.keyboard.press("Enter");
-  const submit = await tabToSelector(page, '[data-limite-step="3"] button.tool-run');
-  if (submit) await page.keyboard.press("Enter");
-  await page.waitForSelector("#resultado:not([hidden])", { timeout: 5000 }).catch(() => null);
-  const completed = await page.evaluate(() => {
+  await keyboardPage.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await keyboardPage.focus("#base_status");
+  await keyboardPage.keyboard.press("ArrowDown");
+  await keyboardPage.keyboard.press("Tab");
+  await keyboardPage.keyboard.type("1000000");
+  await keyboardPage.keyboard.press("Tab");
+  await keyboardPage.keyboard.press("ArrowDown");
+  const step1 = await tabToSelector(keyboardPage, '[data-limite-step="1"] [data-limite-next]');
+  if (step1) await keyboardPage.keyboard.press("Enter");
+  await keyboardPage.focus("#previous_totals_status");
+  await keyboardPage.keyboard.press("ArrowDown");
+  await keyboardPage.keyboard.press("Tab");
+  await keyboardPage.keyboard.type("0");
+  await keyboardPage.keyboard.press("Tab");
+  await keyboardPage.keyboard.type("0");
+  const step2 = await tabToSelector(keyboardPage, '[data-limite-step="2"] [data-limite-next]');
+  if (step2) await keyboardPage.keyboard.press("Enter");
+  const submit = await tabToSelector(keyboardPage, '[data-limite-step="3"] button.tool-run');
+  if (submit) await keyboardPage.keyboard.press("Enter");
+  await keyboardPage.waitForSelector("#resultado:not([hidden])", { timeout: 5000 }).catch(() => null);
+  const completed = await keyboardPage.evaluate(() => {
     const out = document.getElementById("resultado");
     return !!(out && !out.hidden && out.innerText.trim().length > 40 && document.activeElement === out);
   });
@@ -753,13 +767,13 @@ await page.setViewport({ width: 1440, height: 1000 });
 }
 
 {
-  await page.goto(`${BASE}/ferramentas/checklist-reequilibrio/`, { waitUntil: "networkidle0", timeout: 60000 });
-  await page.focus('#root input[type="radio"]');
-  await page.keyboard.press("Space");
-  const submit = await tabToSelector(page, '#f button.tool-run');
-  if (submit) await page.keyboard.press("Enter");
-  await page.waitForSelector("#out:not([hidden])", { timeout: 5000 }).catch(() => null);
-  const completed = await page.evaluate(() => {
+  await keyboardPage.goto(`${BASE}/ferramentas/checklist-reequilibrio/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await keyboardPage.focus('#root input[type="radio"]');
+  await keyboardPage.keyboard.press("Space");
+  const submit = await tabToSelector(keyboardPage, '#f button.tool-run');
+  if (submit) await keyboardPage.keyboard.press("Enter");
+  await keyboardPage.waitForSelector("#out:not([hidden])", { timeout: 5000 }).catch(() => null);
+  const completed = await keyboardPage.evaluate(() => {
     const out = document.getElementById("out");
     return !!(out && !out.hidden && out.innerText.trim().length > 40 && document.activeElement === out);
   });
@@ -769,13 +783,13 @@ await page.setViewport({ width: 1440, height: 1000 });
 }
 
 {
-  await page.goto(`${BASE}/ferramentas/matriz-atraso-obra/`, { waitUntil: "networkidle0", timeout: 60000 });
-  await page.focus('[data-f="causa"]');
-  await page.keyboard.type("Projeto liberado com atraso");
-  const submit = await tabToSelector(page, '#f button.tool-run');
-  if (submit) await page.keyboard.press("Enter");
-  await page.waitForSelector("#out:not([hidden])", { timeout: 5000 }).catch(() => null);
-  const completed = await page.evaluate(() => {
+  await keyboardPage.goto(`${BASE}/ferramentas/matriz-atraso-obra/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await keyboardPage.focus('[data-f="causa"]');
+  await keyboardPage.keyboard.type("Projeto liberado com atraso");
+  const submit = await tabToSelector(keyboardPage, '#f button.tool-run');
+  if (submit) await keyboardPage.keyboard.press("Enter");
+  await keyboardPage.waitForSelector("#out:not([hidden])", { timeout: 5000 }).catch(() => null);
+  const completed = await keyboardPage.evaluate(() => {
     const out = document.getElementById("out");
     return !!(out && !out.hidden && /hipótese/i.test(out.innerText) && document.activeElement === out);
   });
@@ -785,13 +799,13 @@ await page.setViewport({ width: 1440, height: 1000 });
 }
 
 {
-  await page.goto(`${BASE}/ferramentas/diagnostico-defesa-margem/`, { waitUntil: "networkidle0", timeout: 60000 });
-  await page.focus("#qid");
-  await page.keyboard.type("itajai");
-  const submit = await tabToSelector(page, '#lookup button.tool-run');
-  if (submit) await page.keyboard.press("Enter");
+  await keyboardPage.goto(`${BASE}/ferramentas/diagnostico-defesa-margem/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await keyboardPage.focus("#qid");
+  await keyboardPage.keyboard.type("itajai");
+  const submit = await tabToSelector(keyboardPage, '#lookup button.tool-run');
+  if (submit) await keyboardPage.keyboard.press("Enter");
   await new Promise((resolveWait) => setTimeout(resolveWait, 300));
-  const completed = await page.evaluate(() => {
+  const completed = await keyboardPage.evaluate(() => {
     const out = document.getElementById("diagnostic-result");
     return !!(out && !out.hidden && /itaj/i.test(out.innerText) && document.activeElement === out);
   });
@@ -799,10 +813,11 @@ await page.setViewport({ width: 1440, height: 1000 });
   else pass("keyboard_complete_diagnostico");
   report.keyboard.push({ page: "diagnostico", completed });
 
-  const hasFocusStyle = await page.evaluate(() => !!document.querySelector('link[href*="styles"]'));
+  const hasFocusStyle = await keyboardPage.evaluate(() => !!document.querySelector('link[href*="styles"]'));
   if (!hasFocusStyle) fail("focus_css_link");
   else pass("focus_css_link");
 }
+await keyboardContext.close();
 
 // JS-off: controls stay disabled, the explanatory state is visible and no URL input can be submitted.
 {
@@ -832,29 +847,28 @@ await page.setViewport({ width: 1440, height: 1000 });
 // --- Persist / erase / copy / download / invalid money (skeptic gaps) ---
 {
   // Limite: hostile persisted values stay literal text and never become markup.
-  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
   const hostile = '</li><img id="persisted-xss" src=x onerror="window.__persistedXss=1">';
-  await page.evaluate((payloadText) => {
-    window.__persistedXss = 0;
-    localStorage.setItem("confenge.tool.limite-acrescimos", JSON.stringify({
+  const hostileFixture = await legacyLocalFixturePage(
+    "/ferramentas/limite-acrescimos-supressoes/",
+    "confenge.tool.limite-acrescimos",
+    {
       v: 5,
       savedAt: Date.now(),
       data: {
         base_status: "CONFIRMED",
-        valor_inicial: payloadText,
+        valor_inicial: hostile,
         object_status: "CONFIRMED",
         tipo: "geral",
         previous_totals_status: "CONFIRMED_COMPLETE",
-        acrescimos_previos: payloadText,
+        acrescimos_previos: hostile,
         supressoes_previas: "0",
         acrescimo_proposto: "0",
         supressao_proposta: "0",
         __step: 3,
       },
-    }));
-  }, hostile);
-  await page.reload({ waitUntil: "networkidle0", timeout: 60000 });
-  const hostileState = await page.evaluate(() => ({
+    },
+  );
+  const hostileState = await hostileFixture.page.evaluate(() => ({
     executed: window.__persistedXss === 1,
     injectedNode: !!document.getElementById("persisted-xss"),
     summaryText: document.querySelector("[data-precalc-summary]")?.innerText || "",
@@ -863,7 +877,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   if (hostileState.executed || hostileState.injectedNode || !hostileState.summaryText.includes("<img") || !hostileState.rawValue.includes("<img")) {
     fail("limite_hostile_persisted_text_safe " + JSON.stringify(hostileState));
   } else pass("limite_hostile_persisted_text_safe");
-  await page.evaluate(() => localStorage.removeItem("confenge.tool.limite-acrescimos"));
+  await hostileFixture.context.close();
 
   // Limite: invalid money must not coerce to 0 (staged UI — advance then set invalid)
   await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
@@ -1007,6 +1021,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   await new Promise((r) => setTimeout(r, 400));
   // Fallback: if confirm was blocked, invoke clearState path directly for structural check
   await page.evaluate(() => {
+    try { sessionStorage.removeItem("confenge.tool.limite-acrescimos"); } catch (_) {}
     if (localStorage.getItem("confenge.tool.limite-acrescimos")) {
       try { localStorage.removeItem("confenge.tool.limite-acrescimos"); } catch (_) {}
     }
@@ -1166,9 +1181,11 @@ await page.setViewport({ width: 1440, height: 1000 });
     fail("matriz_invalid_period_ui " + JSON.stringify(invalidPeriod));
   } else pass("matriz_invalid_period_ui");
 
-  // XSS: inject payload via localStorage restore + result HTML
-  await page.evaluate(() => {
-    const payload = {
+  // XSS: inject payload through the legacy localStorage fallback + result HTML.
+  const matrizXssFixture = await legacyLocalFixturePage(
+    "/ferramentas/matriz-atraso-obra/",
+    "confenge.tool.matriz-atraso",
+    {
       v: 4,
       savedAt: Date.now(),
       data: {
@@ -1187,12 +1204,11 @@ await page.setViewport({ width: 1440, height: 1000 });
           concorrencia: true,
         }],
       },
-    };
-    localStorage.setItem("confenge.tool.matriz-atraso", JSON.stringify(payload));
-  });
-  await page.reload({ waitUntil: "networkidle0" });
-  await page.waitForSelector('[data-f="causa"]', { timeout: 10000 });
-  const xssCard = await page.evaluate(() => {
+    },
+  );
+  const matrizXssPage = matrizXssFixture.page;
+  await matrizXssPage.waitForSelector('[data-f="causa"]', { timeout: 10000 });
+  const xssCard = await matrizXssPage.evaluate(() => {
     const causa = document.querySelector('[data-f="causa"]');
     const obs = document.querySelector('[data-f="observacao"]');
     const card = document.querySelector(".tool-event-card");
@@ -1211,8 +1227,8 @@ await page.setViewport({ width: 1440, height: 1000 });
   if (!/onerror|img|script/i.test(xssCard.causaVal + xssCard.obsVal)) fail("matriz_xss_input_value_ok", xssCard);
   else pass("matriz_xss_input_value_ok");
 
-  await submitToolAndWaitForOut(page, "matriz_xss");
-  const xssOut = await page.evaluate(() => {
+  await submitToolAndWaitForOut(matrizXssPage, "matriz_xss");
+  const xssOut = await matrizXssPage.evaluate(() => {
     const out = document.getElementById("out");
     const html = out ? out.innerHTML : "";
     const badEls = out ? out.querySelectorAll("img, script, iframe, object, embed").length : -1;
@@ -1230,6 +1246,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   else pass("matriz_xss_result_escaped");
   if (!xssOut.hasEntities && !xssOut.textShowsPayload) fail("matriz_xss_result_visible");
   else pass("matriz_xss_result_safe_text");
+  await matrizXssFixture.context.close();
 }
 
 

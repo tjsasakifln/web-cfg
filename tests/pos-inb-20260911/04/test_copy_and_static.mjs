@@ -54,6 +54,21 @@ expect("no_percentage", !/% de prontid|progressPct|score percentual/i.test(html 
 expect("no_urgency", !/urgente|últimas vagas|somente hoje/i.test(publicHtml));
 expect("edit_control", html.includes('id="btn-edit"') && /btn-edit/.test(app));
 expect("reset_control", html.includes('id="btn-reset"'));
+expect("draft_status", html.includes('id="draft-status"'));
+expect("draft_persistence", /saveDraft\(TOOL, SCHEMA/.test(app) && /loadDraft\(TOOL, SCHEMA/.test(app));
+expect("storage_failure_guard", /pendingWithoutStorage/.test(app) && /beforeunload/.test(app));
+var common = readFileSync(resolve(root, "assets/js/tools-common.js"), "utf8");
+expect("draft_tab_isolation", /sessionStorage/.test(common) && /loadDraft/.test(common) && /saveDraft/.test(common));
+var checklistDraft = readFileSync(resolve(root, "ferramentas/checklist-reequilibrio/index.html"), "utf8");
+expect("checklist_preserves_explicit_pending", /answered:\s*answered\(\)/.test(checklistDraft) && /d\.answered\.indexOf\(k\)/.test(checklistDraft));
+[
+  "ferramentas/limite-acrescimos-supressoes/index.html",
+  "ferramentas/checklist-reequilibrio/index.html",
+  "ferramentas/matriz-atraso-obra/index.html"
+].forEach(function(rel) {
+  var tool = readFileSync(resolve(root, rel), "utf8");
+  expect("protected_draft_" + rel, /saveDraft\(TOOL, SCHEMA/.test(tool) && /beforeunload/.test(tool) && /clearDraft/.test(tool));
+});
 expect("result_focus", /resultEl\.focus/.test(app));
 expect("no_processed_without_js", /form\.querySelectorAll\("\.pptr-runtime-fields"\)/.test(app) && /disabled/.test(html));
 expect("tool_complete_not_lead", /tool_complete/.test(app) && !/qualified_lead/.test(app));

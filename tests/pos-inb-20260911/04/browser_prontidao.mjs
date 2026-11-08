@@ -120,10 +120,62 @@ async function main() {
     });
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 900 });
+
+    const protectedRoutes = [
+      ["limite", "/ferramentas/limite-acrescimos-supressoes/", "#valor_inicial", "input"],
+      ["checklist", "/ferramentas/checklist-reequilibrio/", "input[data-req]", "change"],
+      ["matriz", "/ferramentas/matriz-atraso-obra/", "[data-f=causa]", "input"],
+      ["prontidao", PATH, "#work_stage", "change"],
+    ];
+    for (const [name, route, selector, eventName] of protectedRoutes) {
+      const blocked = await browser.newPage();
+      await blocked.evaluateOnNewDocument(() => {
+        Storage.prototype.setItem = function () { throw new DOMException("Storage blocked", "SecurityError"); };
+      });
+      await blocked.goto(origin + route, { waitUntil: "networkidle0", timeout: 30000 });
+      const untouched = await blocked.evaluate(() => {
+        const event = new Event("beforeunload", {cancelable:true});
+        window.dispatchEvent(event);
+        return event.defaultPrevented;
+      });
+      if (!untouched) pass(name + "_untouched_no_prompt");
+      else fail(name + "_untouched_no_prompt");
+      await blocked.$eval(selector, (el, type) => {
+        if (el.type === "radio") el.checked = true;
+        else if (el.tagName === "SELECT") el.selectedIndex = Math.min(1, el.options.length - 1);
+        else el.value = "1";
+        el.dispatchEvent(new Event(type, {bubbles:true}));
+      }, eventName);
+      const edited = await blocked.evaluate(() => {
+        const event = new Event("beforeunload", {cancelable:true});
+        window.dispatchEvent(event);
+        return event.defaultPrevented;
+      });
+      if (edited) pass(name + "_blocked_storage_prompts_after_edit");
+      else fail(name + "_blocked_storage_prompts_after_edit");
+      await blocked.close({runBeforeUnload:false});
+    }
+
     await page.goto(origin + PATH, { waitUntil: "networkidle0", timeout: 30000 });
     const runEnabled = await page.$eval("button.tool-run", (el) => !el.disabled);
     if (runEnabled) pass("js_unlocks_form");
     else fail("js_unlocks_form");
+
+    await page.select("#work_stage", "execucao");
+    await page.select("#decision_on_table", "iniciar_execucao");
+    await page.reload({ waitUntil: "networkidle0", timeout: 30000 });
+    const restoredAnswers = await page.evaluate(() => ({
+      workStage: document.getElementById("work_stage").value,
+      decision: document.getElementById("decision_on_table").value,
+    }));
+    if (restoredAnswers.workStage === "execucao" && restoredAnswers.decision === "iniciar_execucao") {
+      pass("reload_restores_answers", JSON.stringify(restoredAnswers));
+    } else fail("reload_restores_answers", JSON.stringify(restoredAnswers));
+    await page.click("#btn-reset");
+    await page.reload({ waitUntil: "networkidle0", timeout: 30000 });
+    const clearedAnswer = await page.$eval("#work_stage", (el) => el.value);
+    if (clearedAnswer === "UNKNOWN") pass("reset_clears_draft");
+    else fail("reset_clears_draft", clearedAnswer);
 
     async function runScenario(name, overrides, expectedHref) {
       await page.goto(origin + PATH, { waitUntil: "networkidle0", timeout: 30000 });

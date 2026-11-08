@@ -7,6 +7,7 @@
   var resultBody = document.getElementById("resultado-corpo");
   var resultActions = document.getElementById("resultado-acoes");
   var cta = document.getElementById("cta-comercial");
+  var draftStatus = document.getElementById("draft-status");
   var lastText = "";
   var lastResult = null;
   if (!api || !form || !resultBody) return;
@@ -19,7 +20,63 @@
   if (statusEl) statusEl.hidden = true;
 
   var T = window.ConfengeTools;
+  var TOOL = api.ENGINE_ID;
+  var SCHEMA = 1;
+  var pendingWithoutStorage = false;
   if (T && T.bindToolLifecycle) T.bindToolLifecycle({ tool: api.ENGINE_ID });
+
+  function hasProgress(answers) {
+    var ids = api.QUESTION_IDS;
+    for (var n = 0; n < ids.length; n += 1) {
+      if (answers[ids[n]] && answers[ids[n]] !== api.UNKNOWN) return true;
+    }
+    return false;
+  }
+
+  function sameAnswers(left, right) {
+    var ids = api.QUESTION_IDS;
+    for (var n = 0; n < ids.length; n += 1) {
+      if (!right || left[ids[n]] !== right[ids[n]]) return false;
+    }
+    return true;
+  }
+
+  function setDraftStatus(saved, cleared) {
+    if (!draftStatus) return;
+    draftStatus.textContent = cleared
+      ? "Nenhuma resposta pendente neste navegador."
+      : saved
+      ? "Rascunho guardado neste navegador."
+      : "O navegador não conseguiu guardar o rascunho. Ao tentar sair ou atualizar, ele pedirá confirmação.";
+  }
+
+  function persistDraft() {
+    var answers = readAnswers();
+    if (!hasProgress(answers)) {
+      pendingWithoutStorage = false;
+      if (T && T.clearDraft) T.clearDraft(TOOL);
+      else if (T && T.clearState) T.clearState(TOOL);
+      setDraftStatus(true, true);
+      return true;
+    }
+    if (!T || !T.saveDraft || !T.loadDraft) {
+      pendingWithoutStorage = true;
+      setDraftStatus(false);
+      return false;
+    }
+    var wrote = T.saveDraft(TOOL, SCHEMA, { answers: answers, hasResult: Boolean(lastResult) });
+    var stored = T.loadDraft(TOOL, SCHEMA);
+    var saved = Boolean(wrote && stored && sameAnswers(answers, stored.answers));
+    pendingWithoutStorage = !saved;
+    setDraftStatus(saved);
+    return saved;
+  }
+
+  window.addEventListener("beforeunload", function (event) {
+    if (!pendingWithoutStorage) return;
+    event.preventDefault();
+    event.returnValue = "";
+  });
 
   function emitComplete(result) {
     var event = api.buildAnalyticsEvent(result);
@@ -108,7 +165,7 @@
     }
   }
 
-  function render(result) {
+  function render(result, focusResult) {
     lastResult = result;
     while (resultBody.firstChild) resultBody.removeChild(resultBody.firstChild);
     var summary = result.summary || { present: [], gaps: [], unknowns: [] };
@@ -224,7 +281,7 @@
       cta.hidden = false;
     }
     if (resultActions) resultActions.hidden = false;
-    if (resultEl && resultEl.focus) {
+    if (focusResult !== false && resultEl && resultEl.focus) {
       try { resultEl.focus(); } catch (err) {}
     }
   }
@@ -236,7 +293,10 @@
     });
     render(result);
     emitComplete(result);
+    persistDraft();
   });
+
+  form.addEventListener("change", persistDraft);
 
   var reset = document.getElementById("btn-reset");
   if (reset) {
@@ -247,6 +307,10 @@
       add(resultBody, "p", "", "O resultado aparece aqui depois de classificar as respostas. Contato não é exigido.");
       if (resultActions) resultActions.hidden = true;
       if (cta) cta.hidden = true;
+      pendingWithoutStorage = false;
+      if (T && T.clearDraft) T.clearDraft(TOOL);
+      else if (T && T.clearState) T.clearState(TOOL);
+      setDraftStatus(true, true);
     });
   }
 
@@ -270,4 +334,32 @@
   if (printBtn) {
     printBtn.addEventListener("click", function () { window.print(); });
   }
+
+  function restoreDraft() {
+    if (!T || !T.loadDraft) return;
+    var stored = T.loadDraft(TOOL, SCHEMA);
+    if (!stored || !stored.answers) return;
+    var restored = false;
+    for (var n = 0; n < api.QUESTION_IDS.length; n += 1) {
+      var id = api.QUESTION_IDS[n];
+      var el = document.getElementById(id);
+      var value = stored.answers[id];
+      if (!el || !value) continue;
+      for (var option = 0; option < el.options.length; option += 1) {
+        if (el.options[option].value !== value) continue;
+        el.value = value;
+        restored = restored || value !== api.UNKNOWN;
+        break;
+      }
+    }
+    if (!restored) return;
+    if (stored.hasResult) {
+      render(api.diagnosePrivateProjectTechnicalReadiness(readAnswers(), {
+        expected_engine_id: api.ENGINE_ID,
+      }), false);
+    }
+    setDraftStatus(true);
+  }
+
+  restoreDraft();
 })();

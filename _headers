@@ -159,14 +159,12 @@
   Content-Type: text/csv; charset=utf-8
   Content-Disposition: attachment; filename="amostra-exemplo.csv"
 
+/avaliacao-imoveis-urbanos/inferencia/creditos.txt
+  X-Robots-Tag: noindex
+
 /avaliacao-imoveis-urbanos/inferencia/engine/*
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self'; object-src 'none'
   Cache-Control: public, max-age=0, must-revalidate, no-transform
-  X-Robots-Tag: noindex
-
-/avaliacao-imoveis-urbanos/inferencia/modela-pro-completo.zip
-  Content-Type: application/zip
-  Content-Disposition: attachment; filename="modela-pro-completo.zip"
   X-Robots-Tag: noindex
 
 /cad/aplicativos/

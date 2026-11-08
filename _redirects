@@ -9,6 +9,9 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # --- File extension / legacy HTML ---
 /privacidade.html  /privacidade/  301!
 
+# The installable Modela Pro package was retired. The browser tool keeps its URL.
+/avaliacao-imoveis-urbanos/inferencia/modela-pro-completo.zip /404.html 410
+
 # Founder 2026-09-09: withdraw unapproved fixture/preview exposure. Source
 # fixtures and the research preview are preserved under internal scripts/docs.
 # Exact routes include direct file aliases; no home redirect or approval claim.

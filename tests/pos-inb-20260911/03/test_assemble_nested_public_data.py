@@ -520,5 +520,26 @@ class TestPackageReleaseTarball(unittest.TestCase):
             self.assertTrue(payload.get("ok"), payload)
 
 
+class TestRetiredModelaDistribution(unittest.TestCase):
+    def test_audit_rejects_the_retired_modela_zip_at_its_exact_public_path(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            retired = root / "_site" / "avaliacao-imoveis-urbanos" / "inferencia" / "modela-pro-completo.zip"
+            retired.parent.mkdir(parents=True)
+            retired.write_bytes(b"PK\x03\x04")
+
+            report = audit_public_artifact(root)
+
+            self.assertFalse(report["ok"], report)
+            findings = {
+                (item["code"], item["path"])
+                for item in report["findings"]
+            }
+            self.assertIn(
+                ("retired_public_artifact", "avaliacao-imoveis-urbanos/inferencia/modela-pro-completo.zip"),
+                findings,
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

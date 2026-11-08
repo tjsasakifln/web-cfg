@@ -43,7 +43,7 @@ export async function verificarBim(base, versao = '') {
       assert.match(conteudo, /\{[^}]+\}/, 'regras de estilo do laboratório');
     }
   }
-  for (const caminho of ['/web/digitalizar.mjs', '/web/vendor/oficina/fornecedor.js', '/web/modelagem-step.mjs', '/fotogrametria/app.mjs']) {
+  for (const caminho of ['/web/digitalizar.mjs', '/web/proteger-trabalho.mjs', '/web/vendor/oficina/fornecedor.js', '/web/modelagem-step.mjs', '/fotogrametria/app.mjs']) {
     const r = await requisitar(caminho, { method: 'HEAD' });
     assert.match(r.headers.get('content-type') || '', /javascript/i, caminho);
     const permiteLigacoesNativas = caminho.endsWith('fornecedor.js') || caminho.endsWith('modelagem-step.mjs');
