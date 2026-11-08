@@ -396,9 +396,10 @@ assert.throws(
     siteRoot: ROOT,
     // Give the fixture an explicit package inventory. A copied canonical
     // source fixture is not runtime evidence unless packaged in that inventory.
-    // Without this override, the physical fixture is deliberately discovered
-    // by loadManifestRoutes() as a candidate canonical representative.
-    routes: routes.filter((route) => route !== virtualEntry.route),
+    // Exclude the entire runtime-only detail family, not merely the chosen
+    // example: other packaged source fixtures may exist but are not runtime
+    // acceptance evidence for this family.
+    routes: routes.filter((route) => !route.startsWith("/oportunidades/")),
   }),
   /Lighthouse families absent from the artifact/,
   "a source fixture absent from the package cannot stand in for runtime evidence",
