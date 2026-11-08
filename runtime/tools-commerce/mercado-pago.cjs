@@ -119,11 +119,10 @@ function normalize(order) {
   };
 }
 
-function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sandboxSellerId, sandboxPayerEmail, fetchImpl = globalThis.fetch } = {}) {
+function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId, sandboxPayerEmail, fetchImpl = globalThis.fetch } = {}) {
   accessToken = required(accessToken, 'accessToken');
   if (mode !== 'sandbox' && mode !== 'live') throw new Error('Invalid Mercado Pago environment');
   const sandbox = mode === 'sandbox';
-  if (sandbox) sandboxSellerId = required(sandboxSellerId, 'sandboxSellerId');
   webhookSecret = sandbox ? optional(webhookSecret) : required(webhookSecret, 'webhookSecret');
   const authorization = { Authorization: 'Bearer ' + accessToken };
   if (typeof fetchImpl !== 'function') throw new Error('fetchImpl must be a function');
@@ -137,12 +136,13 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sandboxS
   let sellerCheck;
   function verifySellerEnvironment() {
     // Orders tokens can have the same prefix in both environments.
+    const expectedSellerId = required(sellerId, 'sellerId');
     sellerCheck ??= request(SELLER_PROFILE_URL, { method: 'GET', headers: authorization }).then(seller => {
       if (!Array.isArray(seller?.tags) || seller.tags.includes('test_user') !== sandbox) {
         throw new Error('Mercado Pago seller does not match the configured environment');
       }
-      if (sandbox && String(seller.id) !== sandboxSellerId) {
-        throw new Error('Mercado Pago test seller does not match the configured ID');
+      if (String(seller.id) !== expectedSellerId) {
+        throw new Error('Mercado Pago seller does not match the configured ID');
       }
     }).catch(error => {
       sellerCheck = undefined;
@@ -162,10 +162,10 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sandboxS
         { email: required(email, 'email') };
       const body = {
         type: 'online', external_reference: id, total_amount: amount,
-        capture_mode: 'automatic', processing_mode: 'automatic',
         transactions: { payments: [{ amount, payment_method: { id: 'pix', type: 'bank_transfer' } }] },
-        payer, description: label,
-        items: [{ title: label, quantity: 1, unit_price: amount, description: label, external_code: id }]
+        payer,
+        // Use the provider's documented minimal Pix request in the sandbox.
+        ...(!sandbox ? { processing_mode: 'automatic', description: label } : {})
       };
       await verifySellerEnvironment();
       const normalized = normalize(await request(API_ROOT + '/v1/orders', {

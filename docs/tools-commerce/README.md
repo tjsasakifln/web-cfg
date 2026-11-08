@@ -9,7 +9,7 @@ Preparado em 08/11/2026, em ramo separado do [aprimoramento das ferramentas](htt
 | 5 | R$ 59,90 | R$ 11,98 |
 | 10 | R$ 99,99 | R$ 10,00 |
 | 25 | R$ 224,90 | R$ 9,00 |
-| 50 | R$ 399,90 | R$ 8,00 |
+| 50 | R$ 400,00 | R$ 8,00 |
 
 O [Mercado Pago anuncia Pix a 0,99% no checkout PJ](https://www.mercadopago.com.br/blog/conta-pj-do-mercado-pago) e [sem mensalidade](https://www.mercadopago.com.br/ferramentas-para-vender/check-out). Após a taxa publicada, os pacotes de R$ 14,90 e R$ 99,99 deixam cerca de R$ 14,75 e R$ 99,00, antes de tributos, infraestrutura e devoluções. A [Efí](https://sejaefi.com.br/tarifas) anuncia 1,19% para Pix API; a integração pede certificados. A [tabela Asaas](https://www.asaas.com/precos-e-taxas) usa taxa por cobrança, menos vantajosa no crédito avulso fora de promoção, mas pode ser competitiva nos pacotes maiores. A [Stripe](https://stripe.com/br/pricing) lista 1,19% e disponibilidade sob convite. Confirmar a tarifa efetiva no painel da conta antes de habilitar compras. R$ 8 por crédito é o piso de preço do piloto; validar margem por ferramenta antes de manter os lotes maiores.
 
@@ -30,6 +30,8 @@ Para desenvolvimento, aponte o runtime Node para `TOOLS_COMMERCE_MODE=emulator`,
 ## Homologação na estação de trabalho
 
 Execute `npm run build:site` para montar `_site`. Use um arquivo de ambiente privado, fora do repositório, para configurar o Firebase institucional de homologação, ADC, HMAC e a lista `TOOLS_COMMERCE_SANDBOX_UIDS`. Cadastre e confirme no Firebase Auth os dois usuários usados para testar a indicação. Use seus UIDs na lista. Configure `TOOLS_COMMERCE_MODE=sandbox` e `TOOLS_COMMERCE_SANDBOX_ORIGIN=http://127.0.0.1:8790`. Comece com `TOOLS_COMMERCE_PURCHASES=0` para validar o cadastro e a emissão gratuita.
+
+Use um projeto Firebase com ID terminado em `-hml` para homologação e outro com ID terminado em `-prod` para produção. Configure `TOOLS_COMMERCE_MP_LIVE_SELLER_ID` no ambiente de produção com o ID da conta vendedora contratada. O registro de cada pedido guarda a versão e o hash da seção de créditos dos termos. Atualize ambos se o conteúdo dessa seção mudar.
 
 ```bash
 node --env-file=/caminho/privado/creditos-hml.env scripts/tools-commerce/serve-hml.mjs --port 8790

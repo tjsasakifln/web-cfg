@@ -1,5 +1,5 @@
 const { randomBytes } = require('node:crypto');
-const { PACKAGES, TERMS, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMIT, check, mac, sha, accountId, orderId, normalizeEmail } = require('./policy.cjs');
+const { PACKAGES, TERMS, TERMS_HASH, CATALOG_VERSION, REFERRAL_LIMIT, ORDER_LIMIT, check, mac, sha, accountId, orderId, normalizeEmail } = require('./policy.cjs');
 
 const ORIGIN = 'CONFENGE_WEB';
 const emptyInviteStats = () => ({ earned: 0, pending: 0, reversed: 0, month: '', grantedThisMonth: 0 });
@@ -78,7 +78,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       const count = w.orderDay === day(now) ? w.orderCount : 0;
       check(count < ORDER_LIMIT, 'ORDER_LIMIT', 429);
       const order = { id, accountId: buyer, origin: ORIGIN, currency: 'BRL', packageId,
-        catalogVersion: CATALOG_VERSION, termsVersion, termsAcceptedAt: now, createdAt: now,
+        catalogVersion: CATALOG_VERSION, termsVersion, termsHash: TERMS_HASH, termsAcceptedAt: now, createdAt: now,
         credits: pack.credits, amountCents: pack.amountCents, provider: 'mercado_pago',
         providerId: null, status: 'creating', remaining: 0, nextPollAt: 0, credited: false };
       tx.create(orders(id), order);

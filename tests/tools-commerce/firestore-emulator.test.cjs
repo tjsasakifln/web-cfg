@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { randomBytes, randomUUID, createHmac } = require('node:crypto');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { createMercadoPago } = require('../../runtime/tools-commerce/mercado-pago.cjs');
-const { TERMS, TOOL, accountId } = require('../../runtime/tools-commerce/policy.cjs');
+const { TERMS, TERMS_HASH, TOOL, accountId } = require('../../runtime/tools-commerce/policy.cjs');
 const { sdk } = require('../../runtime/tools-commerce/firebase.cjs');
 const { payload } = require('./fixtures.cjs');
 
@@ -18,8 +18,8 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     const incidents = [];
     const handler = createCommerceHttp({ config: { mode: 'emulator', projectId, identityKey: randomBytes(32), purchasesEnabled: true,
       accessToken: 'fake-access-token-integration', webhookSecret }, onIncident: x => incidents.push(x), providerFactory: options => createMercadoPago({
-        ...options, mode: 'live', fetchImpl: async (url, options) => {
-          if (url === 'https://api.mercadolibre.com/users/me') return Response.json({ tags: ['normal'] });
+        ...options, mode: 'live', sellerId: '1170000100', fetchImpl: async (url, options) => {
+          if (url === 'https://api.mercadolibre.com/users/me') return Response.json({ tags: ['normal'], id: '1170000100' });
           if (options.method === 'POST') {
             createCalls++;
             const input = JSON.parse(options.body);
@@ -37,7 +37,7 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
       }) });
     const { getApp } = sdk('firebase-admin/app');
     const { getAuth } = sdk('firebase-admin/auth');
-    handler.getDependencies(handler.config());
+    const { db } = handler.getDependencies(handler.config());
     const app = getApp('confenge-tools-emulator-demo-confenge-tools');
     const auth = getAuth(app);
     async function identity(email, verified = true) {
@@ -80,6 +80,8 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     const orderResponses = await Promise.all([api(b, 'orders', orderRequest), api(b, 'orders', orderRequest)]);
     const order = json(orderResponses.find(r => r.statusCode === 201) || orderResponses[0]);
     assert.equal(order.status, 'pending', JSON.stringify(orderResponses));
+    const stored = (await db.doc(`toolsCommerce/v1-emulator/orders/${order.id}`).get()).data();
+    assert.equal(stored.termsHash, TERMS_HASH);
     assert.equal(createCalls, 1);
     assert.equal((await api(a, 'order', undefined, { id: order.id })).statusCode, 404);
     const mp = [...providerOrders.values()][0];

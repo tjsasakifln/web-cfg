@@ -1,7 +1,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { randomBytes, randomUUID } = require('node:crypto');
-const { PACKAGES, TERMS, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
+const fs = require('node:fs');
+const path = require('node:path');
+const { createHash } = require('node:crypto');
+const { PACKAGES, TERMS, TERMS_HASH, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
 const { modelaReport } = require('../../runtime/tools-commerce/report.cjs');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { payload } = require('./fixtures.cjs');
@@ -15,7 +18,7 @@ test('production, sandbox and emulator cannot be mixed; prices are server owned'
   assert.throws(() => loadConfig({ ...local, RUNTIME_PROFILE: 'netcup-production' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_PURCHASES: '1' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_MODE: 'live', RUNTIME_PROFILE: 'netcup-production' }), /COMMERCE_UNAVAILABLE/);
-  assert.deepEqual(PACKAGES.map(p => [p.credits, p.amountCents]), [[1, 1490], [3, 3990], [5, 5990], [10, 9999], [25, 22490], [50, 39990]]);
+  assert.deepEqual(PACKAGES.map(p => [p.credits, p.amountCents]), [[1, 1490], [3, 3990], [5, 5990], [10, 9999], [25, 22490], [50, 40000]]);
   const id = randomUUID();
   assert.equal(orderId('alpha', id), orderId('alpha', id.toUpperCase()));
   assert.notEqual(orderId('alpha', id), orderId('beta', id));
@@ -23,18 +26,44 @@ test('production, sandbox and emulator cannot be mixed; prices are server owned'
 });
 
 test('sandbox can poll a test order before a public webhook is configured', async () => {
-  const sandbox = { TOOLS_COMMERCE_MODE: 'sandbox', TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-test',
+  const sandbox = { TOOLS_COMMERCE_MODE: 'sandbox', TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-ferramentas-pj-hml',
     TOOLS_COMMERCE_FIREBASE_WEB_KEY: 'AIza' + 'x'.repeat(30), TOOLS_COMMERCE_FIREBASE_WEB_APP: '1:123:web:abc',
     TOOLS_COMMERCE_HMAC_KEY: randomBytes(32).toString('base64url'), TOOLS_COMMERCE_SANDBOX_UIDS: 'tester',
     TOOLS_COMMERCE_SANDBOX_ORIGIN: 'http://127.0.0.1:8790', TOOLS_COMMERCE_PURCHASES: '1',
     TOOLS_COMMERCE_TERMS_APPROVED: TERMS, TOOLS_COMMERCE_MP_ACCESS_TOKEN: 'APP_USR-' + 'x'.repeat(30),
     TOOLS_COMMERCE_MP_TEST_SELLER_ID: '1170000100' };
   assert.equal(loadConfig(sandbox).sandboxPayerEmail, 'test_payer@example.com');
+  assert.equal(loadConfig(sandbox).sellerId, '1170000100');
   assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MP_TEST_SELLER_ID: '' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '3823648243' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-ferramentas-pj-prod' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MP_TEST_BUYER: 'visitor@example.com' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MODE: 'live', RUNTIME_PROFILE: 'netcup-production' }), /COMMERCE_UNAVAILABLE/);
   const handler = createCommerceHttp({ env: sandbox });
   assert.equal((await handler.webhook({ httpMethod: 'POST' })).statusCode, 404);
+});
+
+test('live seller and Firebase environment must match live commerce configuration', () => {
+  const live = { TOOLS_COMMERCE_MODE: 'live', RUNTIME_PROFILE: 'netcup-production', TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-ferramentas-pj-prod',
+    TOOLS_COMMERCE_FIREBASE_WEB_KEY: 'AIza' + 'x'.repeat(30), TOOLS_COMMERCE_FIREBASE_WEB_APP: '1:123:web:abc',
+    TOOLS_COMMERCE_HMAC_KEY: randomBytes(32).toString('base64url'), TOOLS_COMMERCE_PURCHASES: '1', TOOLS_COMMERCE_TERMS_APPROVED: TERMS,
+    TOOLS_COMMERCE_MP_ACCESS_TOKEN: 'APP_USR-' + 'x'.repeat(30), TOOLS_COMMERCE_MP_WEBHOOK_SECRET: 'x'.repeat(24),
+    TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '3823648243' };
+  assert.equal(loadConfig(live).sellerId, '3823648243');
+  assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '0' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_MP_TEST_SELLER_ID: '1170000100' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-ferramentas-pj-hml' }), /COMMERCE_UNAVAILABLE/);
+});
+
+test('terms hash locks the published credits section', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../../termos-de-uso/index.html'), 'utf8').replace(/\r\n?/g, '\n');
+  const start = source.indexOf('<h2 id="creditos-ferramentas">');
+  const end = source.indexOf('<h2', start + 4);
+  assert.ok(start >= 0 && end > start);
+  const actual = createHash('sha256').update(source.slice(start, end).trim()).digest('hex');
+  assert.equal(TERMS_HASH, 'b4ec61dc0849d971562044415691105f030e7371cee94be9e5d85020b261cb96');
+  assert.equal(actual, TERMS_HASH);
 });
 
 test('official report is deterministic and retains diagnostics; rejects raw sample or changed shape', () => {

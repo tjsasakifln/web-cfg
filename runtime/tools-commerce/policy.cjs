@@ -1,14 +1,15 @@
 const { createHash, createHmac } = require('node:crypto');
 
 const TERMS = 'ferramentas-creditos-v1';
-const CATALOG_VERSION = 'brl-2026-11-08';
+const TERMS_HASH = 'b4ec61dc0849d971562044415691105f030e7371cee94be9e5d85020b261cb96';
+const CATALOG_VERSION = 'brl-2026-11-08-v2';
 const PACKAGES = Object.freeze([
   { id: 'creditos-1', credits: 1, amountCents: 1490 },
   { id: 'creditos-3', credits: 3, amountCents: 3990 },
   { id: 'creditos-5', credits: 5, amountCents: 5990 },
   { id: 'creditos-10', credits: 10, amountCents: 9999 },
   { id: 'creditos-25', credits: 25, amountCents: 22490 },
-  { id: 'creditos-50', credits: 50, amountCents: 39990 },
+  { id: 'creditos-50', credits: 50, amountCents: 40000 },
 ].map(Object.freeze));
 const TOOL = 'modela-memoria';
 const REFERRAL_LIMIT = 10;
@@ -55,6 +56,7 @@ function loadConfig(env) {
     firebase = { apiKey: 'demo-confenge-tools', projectId, authDomain: `${projectId}.firebaseapp.com`, appId: 'demo-confenge-tools' };
   } else {
     valid(!projectId.startsWith('demo-') && !env.FIREBASE_AUTH_EMULATOR_HOST && !env.FIRESTORE_EMULATOR_HOST);
+    valid(mode === 'sandbox' ? projectId.endsWith('-hml') : projectId.endsWith('-prod'));
     valid(/^AIza[A-Za-z0-9_-]{20,70}$/.test(env.TOOLS_COMMERCE_FIREBASE_WEB_KEY || ''));
     valid(/^1:\d+:web:[a-f0-9]+$/.test(env.TOOLS_COMMERCE_FIREBASE_WEB_APP || ''));
     firebase = { apiKey: env.TOOLS_COMMERCE_FIREBASE_WEB_KEY, authDomain: `${projectId}.firebaseapp.com`, projectId, appId: env.TOOLS_COMMERCE_FIREBASE_WEB_APP };
@@ -66,23 +68,31 @@ function loadConfig(env) {
   const accessToken = env.TOOLS_COMMERCE_MP_ACCESS_TOKEN || '';
   const webhookSecret = env.TOOLS_COMMERCE_MP_WEBHOOK_SECRET || '';
   const sandboxSellerId = env.TOOLS_COMMERCE_MP_TEST_SELLER_ID || '';
+  const liveSellerId = env.TOOLS_COMMERCE_MP_LIVE_SELLER_ID || '';
   const samplePayer = 'test_payer@example.com';
   const sandboxPayerEmail = env.TOOLS_COMMERCE_MP_TEST_BUYER || (mode === 'sandbox' ? samplePayer : '');
   const sandboxUids = (env.TOOLS_COMMERCE_SANDBOX_UIDS || '').split(',').map(s => s.trim()).filter(Boolean);
   if (mode === 'sandbox') valid(sandboxUids.length > 0 && /^https:\/\/[a-z0-9.-]+$|^http:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/i.test(env.TOOLS_COMMERCE_SANDBOX_ORIGIN || ''));
-  if (accessToken || webhookSecret || purchasesEnabled) {
+  const providerConfigured = Boolean(accessToken || webhookSecret || purchasesEnabled);
+  valid(!sandboxSellerId || /^[1-9]\d{0,14}$/.test(sandboxSellerId));
+  valid(!liveSellerId || /^[1-9]\d{0,14}$/.test(liveSellerId));
+  if (mode === 'sandbox') valid(!liveSellerId);
+  if (mode === 'live') valid(!sandboxSellerId);
+  if (mode === 'emulator') valid(!sandboxSellerId && !liveSellerId);
+  if (providerConfigured) {
     valid(mode !== 'emulator' && accessToken.length >= 25);
     if (mode === 'sandbox') {
       valid(!webhookSecret || webhookSecret.length >= 24);
-      valid(/^[1-9]\d{0,14}$/.test(sandboxSellerId));
+      valid(Boolean(sandboxSellerId));
       valid(sandboxPayerEmail === samplePayer || /^[^\s@]+@testuser\.com$/i.test(sandboxPayerEmail));
     }
-    if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail && !sandboxSellerId);
+    if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail && Boolean(liveSellerId));
   }
   if (purchasesEnabled) valid(env.TOOLS_COMMERCE_TERMS_APPROVED === TERMS);
   return { mode, firebase, authEmulator, projectId, identityKey: Buffer.from(identityKey, 'base64url'),
-    purchasesEnabled, exportsPaused, accessToken, webhookSecret, sandboxSellerId, sandboxPayerEmail, sandboxUids };
+    purchasesEnabled, exportsPaused, accessToken, webhookSecret, sellerId: mode === 'sandbox' ? sandboxSellerId : mode === 'live' ? liveSellerId : '',
+    sandboxSellerId, liveSellerId, sandboxPayerEmail, sandboxUids };
 }
 
-module.exports = { TERMS, CATALOG_VERSION, PACKAGES, TOOL, REFERRAL_LIMIT, ORDER_LIMIT, MAX_BODY,
+module.exports = { TERMS, TERMS_HASH, CATALOG_VERSION, PACKAGES, TOOL, REFERRAL_LIMIT, ORDER_LIMIT, MAX_BODY,
   UUID, REFERRAL, CommerceError, check, sha, mac, accountId, orderId, normalizeEmail, loadConfig };
