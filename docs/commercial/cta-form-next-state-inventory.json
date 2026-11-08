@@ -7076,6 +7076,15 @@
       "nojs_degradation": "noscript_note"
     },
     {
+      "route": "/avaliacao-imoveis-urbanos/inferencia/",
+      "form_id": "model-form",
+      "form_class": "",
+      "kind": "tool_form",
+      "action": "",
+      "method": "get",
+      "nojs_degradation": "noscript_note"
+    },
+    {
       "route": "/conflitos/",
       "form_id": "conflict-gate-form",
       "form_class": "contact-form",

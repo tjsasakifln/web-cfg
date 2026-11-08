@@ -131,6 +131,8 @@ def render_hero(page: dict, document: str) -> str:
     page_with_asset = {**page, "asset_id": asset or page.get("asset_id")}
     attr = tracking_attributes(page_with_asset, family)
     calm_attr = contextual_form_attributes(page, family, asset)
+    tool = hero.get("tool")
+    tool_link = (f'<p><a class="text-link" href="{esc(tool["href"])}">{esc(tool["label"])}</a></p>' if tool else "")
     signals = "\n".join(
         f"<div><dt>{esc(title)}</dt><dd>{esc(text)}</dd></div>"
         for title, text in hero["signals"]
@@ -149,7 +151,7 @@ def render_hero(page: dict, document: str) -> str:
 <p class="svc-open__note">Converse diretamente com a CONFENGE por <a data-cta-id="{esc(page['route'])}-hero-email" {attr} href="{esc(email)}">e-mail</a> ou <a data-cta-id="{esc(page['route'])}-hero-phone" {attr} href="{esc(phone)}">telefone</a>. Referências não sigilosas ajudam a definir a proposta; materiais controlados seguem pelo canal adequado ao projeto. Você também pode <a data-cta-id="{esc(page['route'])}-hero-calm" {calm_attr} href="/#contato">preencher a solicitação com este contexto</a>.</p>
 </div>
 <aside class="aside-note" aria-labelledby="service-signal-title">
-<h2 id="service-signal-title">{esc(hero['signal_title'])}</h2><dl>{signals}</dl>
+<h2 id="service-signal-title">{esc(hero['signal_title'])}</h2><dl>{signals}</dl>{tool_link}
 </aside>
 </div></div>
 </section>'''

@@ -131,13 +131,13 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 276,
-    "logo_image_occurrences": 519,
-    "header_lockup_occurrences": 251,
-    "footer_lockup_occurrences": 254,
+    "source_html_files_scanned": 277,
+    "logo_image_occurrences": 521,
+    "header_lockup_occurrences": 252,
+    "footer_lockup_occurrences": 255,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 265,
-      "/assets/logo-confenge-white-500-1677038e.png": 254
+      "/assets/logo-confenge-500-f8a83f6d.png": 266,
+      "/assets/logo-confenge-white-500-1677038e.png": 255
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -146,7 +146,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "2026-11-07. O censo do HTML fonte encontrou 519 imagens institucionais em 276 arquivos, incluindo a área de CAD, seu guia de escala e o catálogo de aplicativos. O teste de identidade do pacote publicado confere também o cabeçalho e o rodapé gerados para as 12 ferramentas BIM."
+    "observation_note": "2026-11-07. Censo do HTML fonte após a inclusão do Modela Pro na área de avaliação de imóveis."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",

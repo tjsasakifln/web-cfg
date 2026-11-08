@@ -41,10 +41,10 @@ assert.equal(tools.filter((form) => form.route.startsWith("/piloto/") || form.ro
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas);
 assert.ok(!report.surfaces.some((surface) => surface.forms.some((form) => form.kind === "tool_form")));
 
-// The seven tool forms the census used to leave out (critic, 2026-09-19) plus
-// the CNPJ lookup form of /analise-cnpj/ (its lead form is a capture surface).
+// Explicitly cover every visitor tool form, including the browser-only valuation.
 const expectedRoutes = new Set([
   "/analise-cnpj/",
+  "/avaliacao-imoveis-urbanos/inferencia/",
   "/conflitos/",
   "/conteudos/sinapi-desonerado-nao-desonerado/",
   "/ferramentas/checklist-reequilibrio/",

@@ -1049,6 +1049,7 @@
       "hero": {
         "eyebrow": "Valor fundamentado para a decisão sobre o imóvel",
         "title": "Avaliação de imóveis urbanos",
+        "tool": {"href": "/avaliacao-imoveis-urbanos/inferencia/", "label": "Abrir o Modela Pro gratuito"},
         "lead": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
         "value": "Conheça os elementos do trabalho e informe como o documento será utilizado. A proposta define o método, os dados necessários, a vistoria, a responsabilidade técnica e o produto adequado à sua decisão.",
         "cta": "Conversar sobre a avaliação",

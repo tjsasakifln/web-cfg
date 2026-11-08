@@ -136,6 +136,7 @@
     "/terceirizacao-documentacao-sst/": "Terceirização documental de SST",
     "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada",
     "/avaliacao-imoveis-urbanos/": "Avaliação de imóveis urbanos",
+    "/avaliacao-imoveis-urbanos/inferencia/": "Modela Pro",
     "/assistencia-tecnica-pericia-trabalhista/": "Assistência técnica trabalhista em SST",
     "/inteligencia/orgaos/": "Mapear clientes, distribuidores e parceiros",
     "/inteligencia/mercados/": "Investigar mercado, expansão e produtos",
@@ -792,6 +793,11 @@
     {
       "prefix": "/terceirizacao-documentacao-sst/",
       "parent": "/seguranca-trabalho-apoio-tecnico/",
+      "exact": true
+    },
+    {
+      "prefix": "/avaliacao-imoveis-urbanos/inferencia/",
+      "parent": "/avaliacao-imoveis-urbanos/",
       "exact": true
     },
     {

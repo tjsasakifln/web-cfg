@@ -354,6 +354,11 @@
         "reason": "single-route BOFU landing for outsourced remote SST documentation"
       },
       {
+        "family_id": "modela-pro",
+        "route": "/avaliacao-imoveis-urbanos/inferencia/",
+        "reason": "Calculadora pública de avaliações com carregamento sob demanda e processamento de planilhas no navegador."
+      },
+      {
         "family_id": "ferramentas-e-guias-bim",
         "route": "/bim/",
         "reason": "Indexable hub connects the IFC viewer and drawing tools to task guides and downloadable examples."

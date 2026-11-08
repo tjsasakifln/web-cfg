@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-07",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -1724,6 +1724,40 @@
           "data/corporate/intent-family-matrix.v1.json"
         ],
         "declared_at": "2026-10-02",
+        "owner_issue": 611
+      }
+    },
+    {
+      "id": "modela-pro",
+      "visitor_job": "Avaliar uma amostra de imóveis, conferir a memória de cálculo e conversar sobre uma avaliação profissional.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/avaliacao-imoveis-urbanos/inferencia/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-07",
+      "owner_issue": 611,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Ferramenta da CONFENGE para análise local de amostras fornecidas pelo visitante.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/corporate/commercial-constitution.v1.json"
+        ],
+        "declared_at": "2026-11-07",
         "owner_issue": 611
       }
     },
