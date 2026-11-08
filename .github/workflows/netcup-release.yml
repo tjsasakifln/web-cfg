@@ -302,6 +302,11 @@ jobs:
         with:
           name: site-ci-public-${{ github.sha }}
           path: _site
+      - name: Restore the route inventory from the same build
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: site-ci-routes-${{ github.sha }}
+          path: seo
       - name: Download the attested release bundle
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -448,6 +453,11 @@ jobs:
         with:
           name: site-ci-public-${{ github.sha }}
           path: _site
+      - name: Restore the route inventory from the same build
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: site-ci-routes-${{ github.sha }}
+          path: seo
       - name: Setup Chrome for public runtime verification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: runtime_chrome
