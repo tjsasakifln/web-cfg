@@ -55,6 +55,10 @@ EXACT_ASSET_CONTENT_TYPES = {
     "favicon.ico": frozenset({"image/x-icon", "image/vnd.microsoft.icon"}),
     "manifest.webmanifest": frozenset({"application/manifest+json"}),
 }
+EXECUTABLE_ASSET_CONTENT_TYPES = {
+    ".mjs": frozenset({"application/javascript", "text/javascript"}),
+    ".wasm": frozenset({"application/wasm"}),
+}
 OVERLAY_NON_HTML_FILES = frozenset({
     "sitemap-index.xml", "sitemap-oportunidades.xml",
     ".well-known/live-intelligence-overlay.json",
@@ -1091,7 +1095,9 @@ def verify_non_html_assets(
             entry, body = fetcher(base + request_path, timeout)
         headers = entry.get("headers") or {}
         digest = hashlib.sha256(body).hexdigest() if body is not None else None
-        expected_content_types = EXACT_ASSET_CONTENT_TYPES.get(rel)
+        expected_content_types = EXACT_ASSET_CONTENT_TYPES.get(rel) or EXECUTABLE_ASSET_CONTENT_TYPES.get(
+            Path(rel).suffix
+        )
         observed_content_type = str(headers.get("content-type") or "").split(";", 1)[0].strip().lower()
         content_type_ok = (
             expected_content_types is None

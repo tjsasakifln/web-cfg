@@ -351,6 +351,13 @@ ${normalizeWrapper("confenge-web-public.conf")}
   }
   if (!ready) throw new Error("nginx test container did not become ready");
   await verificarBim(`http://127.0.0.1:${port}`);
+  const draftModule = await client.request("/assets/js/tab-draft.mjs");
+  assertProbe(
+    "nginx_shared_draft_module_content_type",
+    draftModule.status === 200 &&
+      /^application\/javascript(?:\s*;|$)/i.test(draftModule.headers["content-type"] || ""),
+    `/assets/js/tab-draft.mjs: HTTP ${draftModule.status} ${draftModule.headers["content-type"]}`,
+  );
 
   // --- Document-only security headers -------------------------------------
   // Browsers honour Content-Security-Policy, X-Frame-Options, Permissions-Policy
