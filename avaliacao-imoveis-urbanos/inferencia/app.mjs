@@ -1,5 +1,6 @@
 import {plots} from './graficos.mjs';
 import {tabDraft} from '/assets/js/tab-draft.mjs';
+import {createToolCredits} from '/assets/js/tool-credits.mjs';
 const byId = id => document.getElementById(id);
 const el = (tag, text) => { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; return element; };
 const formatter = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 5});
@@ -279,10 +280,60 @@ function renderResult(r) {
   if(r.issues?.length){const list=el('ul');r.issues.forEach(x=>list.append(el('li',x)));box.append(detail('Observações do cálculo',list));}
 }
 function pValue(v){return Number.isFinite(v)?(v>0&&v<0.00001?v.toExponential(3).replace('.',','):number(v)):'Pendente';}
-byId('export-json').onclick=()=>{
-  if(!state.analysis)return;
-  const doc={programa:'Modela Pro',gerado_em:new Date().toISOString(),amostra:state.fileName,exemplo_ficticio:state.example,parametros:state.tested,resultado:state.analysis};
-  const url=URL.createObjectURL(new Blob([JSON.stringify(doc,null,2)],{type:'application/json'}));const a=el('a');a.href=url;a.download='modela-pro-memoria.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+const commerce = createToolCredits({toolId:'modela-memoria'});
+const showCredits = enabled => {
+  byId('tool-credits').hidden=!enabled;
+  byId('tool-credits-info').hidden=!enabled;
+  byId('print').hidden=enabled;
+};
+commerce.ready().then(showCredits).catch(()=>{});
+byId('tool-credits').onclick=()=>commerce.open().catch(()=>status('export-status','Não foi possível abrir sua conta. Tente novamente.',true));
+const exportAttempts = new WeakMap();
+function saveMemory(blob) {
+  const url=URL.createObjectURL(blob);const a=el('a');a.href=url;a.download='modela-pro-memoria.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function exportIdFor(analysis, payload) {
+  if(exportAttempts.has(analysis))return exportAttempts.get(analysis);
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(payload)));
+  const fingerprint=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+  let requestId=crypto.randomUUID();
+  // Recover only an interrupted attempt at the exact same report after a reload.
+  // The calculation, sample and account are not written to this storage key.
+  try {
+    const old=JSON.parse(sessionStorage.getItem('cfg-modela-export-attempt')||'null');
+    if(old?.fingerprint===fingerprint && /^[0-9a-f-]{36}$/.test(old.requestId))requestId=old.requestId;
+    sessionStorage.setItem('cfg-modela-export-attempt',JSON.stringify({fingerprint,requestId}));
+  } catch { /* storage is optional */ }
+  exportAttempts.set(analysis,requestId);
+  return requestId;
+}
+byId('export-json').onclick=async()=>{
+  const analysis=state.analysis,tested=state.tested;
+  if(!analysis||!tested)return;
+  const button=byId('export-json');button.disabled=true;
+  status('export-status','Preparando a memória de cálculo…');
+  try {
+    if(!await commerce.ready()) {
+      const doc={programa:'Modela Pro',gerado_em:new Date().toISOString(),amostra:state.fileName,exemplo_ficticio:state.example,parametros:tested,resultado:analysis};
+      saveMemory(new Blob([JSON.stringify(doc,null,2)],{type:'application/json'}));
+    } else {
+      showCredits(true);
+      const {target,features,subject,unit,targetScale,logFeatures}=tested;
+      const payload={exemplo_ficticio:state.example,parametros:{target,features,subject,unit,targetScale,logFeatures},resultado:analysis};
+      const requestId=await exportIdFor(analysis,payload);
+      const blob=await commerce.exportReport({payload,requestId});
+      if(!blob)throw new Error('EXPORT_UNAVAILABLE');
+      saveMemory(blob);
+      try { sessionStorage.removeItem('cfg-modela-export-attempt'); } catch { /* storage is optional */ }
+    }
+    status('export-status','Memória de cálculo pronta.');
+  } catch (error) {
+    const code=error?.error||error?.code;
+    status('export-status',['AUTH_REQUIRED','EMAIL_UNVERIFIED','NO_CREDITS','ACCOUNT_BLOCKED'].includes(code)
+      ? 'Conclua a etapa na sua conta e selecione Baixar memória de cálculo novamente.'
+      : 'Não foi possível baixar a memória agora. Seu trabalho continua aberto; tente novamente.',true);
+  } finally {button.disabled=false;}
 };
 let closed=[];
 window.addEventListener('beforeprint',()=>{closed=[...byId('results').querySelectorAll('details:not([open])')];closed.forEach(d=>d.open=true);});

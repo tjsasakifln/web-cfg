@@ -26,6 +26,9 @@ seo/REPRODUCIBLE-BUILD-MANIFEST.json
 # Isolated public artifact (Netlify publish directory)
 _site/
 
+# Generated from the pinned Firebase Web SDK immediately before public assembly.
+assets/tools-commerce/firebase-auth.mjs
+
 # Lighthouse full runs (keep summary only)
 docs/lighthouse-runs/*.json
 !docs/lighthouse-runs/summary.json

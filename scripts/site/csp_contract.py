@@ -238,7 +238,26 @@ def apply_artifact_csp_hashes(headers_text: str, root: Path) -> str:
     scripts = executable_inline_hashes(root)
     style_blocks, style_attributes = inline_style_hashes(root)
     updated = apply_script_src_hashes(headers_text, list(scripts))
-    return apply_style_src_hashes(updated, list(style_blocks + style_attributes))
+    updated = apply_style_src_hashes(updated, list(style_blocks + style_attributes))
+    # Inherit the artifact's exact inline hashes and existing optional-site
+    # resources. Only Modela Pro needs to connect to the Firebase Auth API.
+    lines = updated.splitlines(keepends=True)
+    route = None
+    common = None
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("/"):
+            route = stripped
+        if not stripped.lower().startswith("content-security-policy:"):
+            continue
+        if route == "/*":
+            common = line
+        if route == "/avaliacao-imoveis-urbanos/inferencia/" and common:
+            lines[index] = common.replace(
+                "connect-src 'self'", "connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com",
+                1,
+            ).replace("img-src 'self' data:", "img-src 'self' data: blob:", 1)
+    return "".join(lines)
 
 
 def extra_hosts(tokens: list[str], allowed: set[str]) -> set[str]:

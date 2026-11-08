@@ -203,6 +203,11 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.match(runtimeLocations, /proxy_set_header X-Forwarded-For \$remote_addr;/);
   assert.match(runtimeLocations, /proxy_set_header X-Real-IP \$remote_addr;/);
   assert.match(runtimeLocations, /proxy_set_header X-Request-Id \$request_id;/);
+  assert.match(runtimeLocations, /location = \/\.netlify\/functions\/tool-credits \{\n  client_max_body_size 4m;/);
+  assert.match(runtimeLocations, /location = \/api\/web\/tool-credits \{\n  client_max_body_size 4m;/);
+  const pixWebhook = runtimeLocations.match(/location = \/api\/web\/tool-credits-webhook \{([^}]+)}/)?.[1];
+  assert.match(pixWebhook, /client_max_body_size 64k;/);
+  assert.match(pixWebhook, /proxy_set_header X-Request-Id \$http_x_request_id;/);
   assert.doesNotMatch(runtimeLocations, /proxy_add_x_forwarded_for/);
   assert.doesNotMatch(runtimeLocations, /search-observation-tick/);
   assert.doesNotMatch(runtimeLocations, /location ~ \^\/\.netlify\/functions\/\.\*/);

@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { TextDecoder } from "node:util";
+import commercePolicy from "../tools-commerce/policy.cjs";
 
 const ROUTE = /^\/(?:\.netlify\/functions|api\/web)\/([a-z0-9][a-z0-9-]*)$/;
 const REQUEST_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,79}$/;
@@ -354,7 +355,12 @@ export function createHttpAdapter({
 
       let body;
       try {
-        body = await readBody(req, config.maxBodyBytes);
+        const op = url.searchParams.getAll('op');
+        const maxBytes = functionName === 'tool-credits'
+          ? (req.method === 'POST' && op.length === 1 && op[0] === 'export' && /^Bearer [A-Za-z0-9._-]{1,8192}$/.test(req.headers.authorization || '')
+            ? commercePolicy.MAX_BODY : Math.min(config.maxBodyBytes, 8192))
+          : functionName === 'tool-credits-webhook' ? Math.min(config.maxBodyBytes, 64 * 1024) : config.maxBodyBytes;
+        body = await readBody(req, maxBytes);
       } catch (error) {
         const code = error && error.code;
         status = code === "payload_too_large" ? 413 : 400;

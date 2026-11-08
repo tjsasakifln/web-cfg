@@ -8,6 +8,14 @@
 - **Amendment authority:** [#577](https://github.com/tjsasakifln/web-cfg/issues/577), [#578](https://github.com/tjsasakifln/web-cfg/issues/578), [#583](https://github.com/tjsasakifln/web-cfg/issues/583) and ADR-STRAT-004
 - **Taxonomy contract:** `CONFENGE_CORPORATE_TAXONOMY/1.0.0` in `data/corporate/taxonomy.v1.json`
 
+## Application prepared on 2026-11-08: self-service tool exports
+
+The founder requested preparation of prepaid exports for the CONFENGE browser
+tools. [ADR-TOOLS-001](ADR-TOOLS-001-export-entitlements.md) defines the narrow
+tool entitlement boundary. This preparation does not authorize checkout or
+public price activation, and does not move proposal, invoicing or commercial
+orchestration out of Warmbly.
+
 ## Amendment 2026-09-09 (current)
 
 ## Aplicação autorizada de 2026-10-14: inteligência de mercado

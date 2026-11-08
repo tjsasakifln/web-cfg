@@ -162,6 +162,17 @@
 /avaliacao-imoveis-urbanos/inferencia/creditos.txt
   X-Robots-Tag: noindex
 
+/assets/js/tool-credits.mjs
+  Cache-Control: no-cache, max-age=0, must-revalidate
+
+/assets/tools-commerce/firebase-auth.mjs
+  Cache-Control: no-cache, max-age=0, must-revalidate
+
+/avaliacao-imoveis-urbanos/inferencia/
+  # Firebase Auth is bundled and served same-origin. Email/password requests
+  # require these two Google endpoints; no third-party scripts or frames run.
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self' 'sha256-dNdlBplWR5bDZDI+YCKolkPPL27/gS/a7SNuPT2Lg0A='; script-src-attr 'none'; worker-src 'self' blob:; frame-src 'self'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; object-src 'none'; form-action 'self'; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
 /avaliacao-imoveis-urbanos/inferencia/engine/*
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self'; object-src 'none'
   Cache-Control: public, max-age=0, must-revalidate, no-transform

@@ -95,6 +95,42 @@ test("missing, schedule-only, oversized and malformed requests fail closed", asy
   assert.equal((await malformed.json()).error, "invalid_json");
 });
 
+test("only a syntactically authenticated tool export receives the 4 MiB body allowance", async (t) => {
+  const fixture = await startFixtureRuntime();
+  t.after(() => fixture.runtime.shutdown("test"));
+  const limit = 4 * 1024 * 1024;
+  const exportBody = JSON.stringify({ report: "x".repeat(limit - 32) });
+  assert.ok(Buffer.byteLength(exportBody, "utf8") <= limit);
+
+  const accepted = await fetch(fixture.baseUrl + "/api/web/tool-credits?op=export", {
+    method: "POST",
+    headers: {
+      authorization: "Bearer local.test-token_123",
+      "content-type": "application/json",
+    },
+    body: exportBody,
+  });
+  assert.equal(accepted.status, 200);
+  assert.equal((await accepted.json()).bytes, Buffer.byteLength(exportBody, "utf8"));
+
+  const tooLargeForAccount = await fetch(fixture.baseUrl + "/api/web/tool-credits?op=account", {
+    method: "POST",
+    headers: {
+      authorization: "Bearer local.test-token_123",
+      "content-type": "application/json",
+    },
+    body: "x".repeat(8193),
+  });
+  assert.equal(tooLargeForAccount.status, 413);
+
+  const tooLargeWithoutBearer = await fetch(fixture.baseUrl + "/api/web/tool-credits?op=export", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: "x".repeat(8193),
+  });
+  assert.equal(tooLargeWithoutBearer.status, 413);
+});
+
 test("handler timeout returns a bounded response while shutdown still tracks the invocation", async (t) => {
   const fixture = await startFixtureRuntime({ RUNTIME_HANDLER_TIMEOUT_MS: "100" });
   t.after(() => fixture.runtime.shutdown("test"));
