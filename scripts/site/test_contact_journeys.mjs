@@ -449,9 +449,15 @@ try {
       const visibleSecond = secondLink && await secondLink.evaluate(anchor => { const rect = anchor.getBoundingClientRect(); return rect.width > 0 && rect.height > 0 && getComputedStyle(anchor).visibility !== "hidden"; });
       required("journey_second_navigation_visible", Boolean(visibleSecond), journey.secondHref, { journey: journey.id, route: href });
       if (visibleSecond) {
-        await secondLink.click();
-        await page.waitForFunction(expected => location.pathname === expected.pathname && location.hash === expected.hash, {}, { pathname: new URL(journey.secondHref, new URL(href, base)).pathname, hash: new URL(journey.secondHref, new URL(href, base)).hash });
-        const destination = await facts(page, new URL(journey.secondHref, new URL(href, base)).hash);
+        const expected = new URL(journey.secondHref, new URL(href, base));
+        // The URL can change before the destination has a body to inspect.
+        await Promise.all([
+          page.waitForNavigation({ waitUntil: "domcontentloaded" }),
+          secondLink.click(),
+        ]);
+        await page.waitForFunction(({ pathname, hash }) => location.pathname === pathname && location.hash === hash,
+          {}, { pathname: expected.pathname, hash: expected.hash });
+        const destination = await facts(page, expected.hash);
         required("journey_two_clicks_destination_next_step", destination.activeForm || destination.triageLink || destination.formLink || Object.values(destination.channels).some(Boolean), JSON.stringify(destination), { journey: journey.id, route: journey.direct });
         if (journey.id === "assistencia_trabalhista") {
           // The services hub now hands this need to its canonical specialist
