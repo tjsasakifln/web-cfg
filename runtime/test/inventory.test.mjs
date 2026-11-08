@@ -68,9 +68,10 @@ test("inventory classifies frontend, schedules, probes and ops without assuming 
   );
   assert.equal(byName.get("offer-terms-accept").usage_state, "test_or_legacy_only");
   assert.equal(byName.get("asaas-webhook-sandbox").usage_state, "test_or_legacy_only");
-  // The commerce client is still landing separately, so inventory correctly
-  // marks these discoverable handlers as not yet referenced by a frontend.
-  assert.equal(byName.get("tool-credits").usage_state, "unreferenced_legacy_candidate");
+  const credits = byName.get("tool-credits");
+  assert.equal(credits.usage_state, "public_runtime");
+  assert.ok(credits.consumers.frontend.some(({ path }) => path === "assets/js/tool-credits.mjs"));
+  // The provider callback is routed by the host, with no frontend caller.
   assert.equal(byName.get("tool-credits-webhook").usage_state, "unreferenced_legacy_candidate");
   assert.equal(byName.get("search-observation-tick").usage_state, "scheduled");
   assert.deepEqual(byName.get("search-observation-tick").schedule, {
