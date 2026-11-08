@@ -390,7 +390,16 @@ const virtualEntry = virtualRepresentative.lighthouse.canonical_representatives
 delete virtualEntry.runtime_only;
 virtualEntry.route = "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/";
 assert.throws(
-  () => deriveCoverage({ policy: virtualRepresentative, registry, siteRoot: ROOT }),
+  () => deriveCoverage({
+    policy: virtualRepresentative,
+    registry,
+    siteRoot: ROOT,
+    // Give the fixture an explicit package inventory. A copied canonical
+    // source fixture is not runtime evidence unless packaged in that inventory.
+    // Without this override, the physical fixture is deliberately discovered
+    // by loadManifestRoutes() as a candidate canonical representative.
+    routes: routes.filter((route) => route !== virtualEntry.route),
+  }),
   /Lighthouse families absent from the artifact/,
   "a source fixture absent from the package cannot stand in for runtime evidence",
 );
