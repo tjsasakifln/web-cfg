@@ -46,6 +46,10 @@ const routes = loadManifestRoutes();
 const selected = new Set(coverage.axe.routes.map((entry) => entry.route));
 
 assert.equal(coverage.route_count, routes.length, "coverage must sweep the full public manifest");
+assert(routes.includes("/avaliacao-imoveis-urbanos/inferencia/"),
+  "a canonical representative physically present in the artifact must be included despite a stale checked-in manifest");
+assert(coverage.lighthouse.pages.includes("/avaliacao-imoveis-urbanos/inferencia/"),
+  "Modela Pro must pass the full Lighthouse representative gate");
 assert.deepEqual(
   coverage.viewports.map((viewport) => [viewport.width, viewport.height]),
   [[390, 844], [1440, 1000]],
@@ -183,6 +187,17 @@ missingCanonical.lighthouse.canonical_representatives =
 assert.throws(
   () => deriveCoverage({ policy: missingCanonical, registry, siteRoot: ROOT }),
   /must match public-family-registry exactly/,
+);
+
+assert.throws(
+  () => deriveCoverage({
+    policy,
+    registry,
+    siteRoot: ROOT,
+    routes: routes.filter((route) => route !== "/avaliacao-imoveis-urbanos/inferencia/"),
+  }),
+  /Lighthouse families absent from the artifact: modela-pro/,
+  "a missing published family must block release qualification, never be silently omitted",
 );
 
 const wrongOwner = structuredClone(policy);

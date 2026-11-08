@@ -39,14 +39,23 @@ export function loadPublicFamilyRegistry() {
   return JSON.parse(readFileSync(FAMILY_REGISTRY_PATH, "utf8"));
 }
 
-export function loadManifestRoutes() {
+export function loadManifestRoutes({ siteRoot = resolveSiteRoot(), policy = loadPolicy() } = {}) {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
   const routes = manifest.html_routes || [];
   if (!routes.length) throw new Error("PUBLIC-ARTIFACT-MANIFEST.json has no html_routes");
   const rootFiles = (manifest.root_files || [])
     .filter((name) => name.endsWith(".html") && name !== "index.html")
     .map((name) => `/${name}`);
-  return [...new Set([...routes, ...rootFiles])].sort((a, b) => a.localeCompare(b));
+  // The build refreshes the source manifest, but the release qualification
+  // checks out this manifest fresh and downloads only the already-gated _site.
+  // Include any canonical representative actually present in THAT artifact:
+  // a newly published family cannot escape Lighthouse merely because the
+  // checked-in build snapshot predates it. Never invent absent pages.
+  const actualRepresentatives = (policy.lighthouse?.canonical_representatives || [])
+    .filter(({ route }) => typeof route === "string" && existsSync(routeToFile(siteRoot, route)))
+    .map(({ route }) => route);
+  return [...new Set([...routes, ...rootFiles, ...actualRepresentatives])]
+    .sort((a, b) => a.localeCompare(b));
 }
 
 export function routeToFile(siteRoot, route) {
@@ -399,7 +408,7 @@ export function deriveCoverage(options = {}) {
   const policy = options.policy || loadPolicy();
   const registry = options.registry || loadPublicFamilyRegistry();
   const siteRoot = options.siteRoot || resolveSiteRoot();
-  const routes = options.routes || loadManifestRoutes();
+  const routes = options.routes || loadManifestRoutes({ siteRoot, policy });
   validatePolicyShape(policy, registry);
 
   const routeSet = new Set(routes);
