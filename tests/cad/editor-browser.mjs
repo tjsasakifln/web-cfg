@@ -45,6 +45,10 @@ try {
   assert.equal(await saveLabel(), 'Baixar DWG');
   const iframe = await page.$('#cad-editor iframe');
   const frame = await iframe.contentFrame();
+  assert.match(await frame.title(), / — CONFENGE$/);
+  const toolbarBrand = await page.$eval('.cad-doc .cad-brand', img => [img.alt, img.naturalWidth, img.offsetWidth]);
+  assert.match(toolbarBrand[0], /CONFENGE/);
+  assert(toolbarBrand[1] > 0 && toolbarBrand[2] > 0, 'A marca da CONFENGE precisa estar visível na ferramenta.');
   assert.equal(await frame.evaluate(() => document.fullscreenEnabled), false);
   const canvas = await frame.waitForSelector('canvas');
   // The page stays put during a real middle-button drag. Pixels from model space

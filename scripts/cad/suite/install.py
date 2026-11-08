@@ -1,4 +1,5 @@
 """Pin and index the eight original browser editions. No end-user request contacts GitHub."""
+from brand import build_archive
 from base64 import b64encode
 from concurrent.futures import ThreadPoolExecutor
 from hashlib import file_digest, sha256
@@ -9,7 +10,7 @@ import shutil
 from struct import unpack
 import sys
 import tarfile
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 from urllib.request import urlopen
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 
@@ -44,9 +45,9 @@ def obtain(spec, cache):
 
 def install_app(item, target, cache):
     slug, spec = item
-    archive = obtain(spec, cache)
-    filename = f"{slug}-{spec['sha256'][:16]}.zip"
-    shutil.copyfile(archive, target / filename)
+    archive = build_archive(slug, obtain(spec, cache), target)
+    filename = archive.name
+    archive_size = archive.stat().st_size
     prefix = f"{slug}-browser-edition-v0.8.1/"
     files = {}
     sources = []
@@ -70,7 +71,7 @@ def install_app(item, target, cache):
                 raise ValueError("ZIP local header")
             local_name, extra = unpack("<HH", header[-4:])
             offset = e.header_offset + 30 + local_name + extra
-            if offset + e.compress_size > spec["size"]:
+            if offset + e.compress_size > archive_size:
                 raise ValueError(name)
             body = z.read(e)  # Verify CRC and hash the uncompressed member.
             files[name] = [offset, e.compress_size, e.file_size, e.compress_type, sha256(body).hexdigest()]
@@ -83,10 +84,10 @@ def install_app(item, target, cache):
     for required in ("index.html", "LICENSE", "NOTICE", "TRADEMARKS.md", "THIRD_PARTY.md"):
         if required not in files:
             raise ValueError(f"{slug}/{required}")
-    return slug, {"archive": filename, "size": spec["size"], "scripts": sorted(set(sources)), "files": files}
+    return slug, {"archive": filename, "size": archive_size, "scripts": sorted(set(sources)), "files": files}
 
 
-def install_fields(site):
+def install_fields(site, cad_archive):
     bundle = Path(__file__).with_name("field-packs-2026-11-07.tar.gz")
     expected = "89887b40ded4d19a70c0a94d02d24c2a670c7162c886edae09b2c88f15ec50c8"
     with bundle.open("rb") as src:
@@ -115,7 +116,7 @@ def install_fields(site):
             dst.parent.mkdir(parents=True, exist_ok=True)
             dst.write_bytes(data)
     shutil.copyfile(Path(__file__).with_name("NOTICE-fields.txt"), target / "NOTICE.txt")
-    with ZipFile(next((site / "cad/suite/pacotes").glob("cadcraft-*.zip"))) as edition:
+    with ZipFile(cad_archive) as edition:
         (target / "LICENSE.txt").write_bytes(edition.read("cadcraft-browser-edition-v0.8.1/LICENSE"))
 
 
@@ -149,12 +150,22 @@ def install_engines(site):
 
 def install(site):
     target = site / "cad" / "suite" / "pacotes"
-    target.mkdir(exist_ok=True, parents=True)
+    target.parent.mkdir(exist_ok=True, parents=True)
     cache = Path.home() / ".cache" / "confenge-suite-cad"
-    with ThreadPoolExecutor(max_workers=3) as workers:
-        apps = dict(workers.map(lambda item: install_app(item, target, cache), RELEASES.items()))
-    (target / "edicoes.json").write_text(json.dumps(apps, ensure_ascii=True, separators=(",", ":"), sort_keys=True))
-    install_fields(site)
+    # A build may reuse its output directory. Publish only this complete generation.
+    with TemporaryDirectory(dir=target.parent) as tmp:
+        staged = Path(tmp) / "pacotes"
+        staged.mkdir()
+        with ThreadPoolExecutor(max_workers=3) as workers:
+            apps = dict(workers.map(lambda item: install_app(item, staged, cache), RELEASES.items()))
+        (staged / "edicoes.json").write_text(json.dumps(apps, ensure_ascii=True, separators=(",", ":"), sort_keys=True))
+        if target.exists():
+            shutil.rmtree(target)
+        target.mkdir()
+        for app in apps.values():
+            (staged / app["archive"]).replace(target / app["archive"])
+        (staged / "edicoes.json").replace(target / "edicoes.json")
+    install_fields(site, target / apps["cadcraft"]["archive"])
     install_engines(site)
 
 

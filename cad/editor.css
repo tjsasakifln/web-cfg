@@ -13,12 +13,7 @@
 #cad-editor .cad-doc { display:flex; align-items:center; gap:.8rem; min-width:0; }
 #cad-editor .cad-doc-text { display:grid; min-width:0; }
 #cad-editor .cad-name { color:var(--ink); font-weight:750; overflow-wrap:anywhere; }
-#cad-editor .cad-file-tag {
-  display:inline-flex; align-items:center; justify-content:center; flex:none;
-  background:var(--green-100); color:var(--green-700); font-size:.73rem;
-  letter-spacing:.07em; font-weight:800; width:3rem; height:2.55rem;
-}
-#cad-editor .cad-brand { display:none; width:7rem; height:auto; flex:none; }
+#cad-editor .cad-brand { display:block; width:7rem; height:auto; flex:none; }
 #cad-editor .cad-caption, #cad-editor .cad-help { color:var(--muted); font-size:var(--text-caption); }
 #cad-editor .cad-actions button, #cad-editor [data-page], #cad-editor select {
   display:inline-flex; align-items:center; justify-content:center; gap:.42rem;
@@ -64,8 +59,7 @@ html.cad-page-locked { overflow:hidden; overscroll-behavior:none; }
 #cad-editor.cad-working .cad-stage { flex:1 0 8rem; display:grid; }
 #cad-editor.cad-working .cad-stage iframe { height:100%; min-height:8rem; }
 #cad-editor.cad-expanded { position:fixed; inset:0; height:100dvh; width:100%; z-index:10000; border:0; border-radius:0; }
-#cad-editor.cad-expanded .cad-brand { display:block; }
-#cad-editor.cad-expanded .cad-file-tag, #cad-editor.cad-expanded .cad-help { display:none; }
+#cad-editor.cad-expanded .cad-help { display:none; }
 @media (max-width:660px) {
   #cad-editor .cad-welcome { grid-template-columns:1fr; min-height:14rem; }
   #cad-editor .cad-illustration { display:none; }
@@ -80,7 +74,6 @@ html.cad-page-locked { overflow:hidden; overscroll-behavior:none; }
   }
   #cad-editor.cad-working .cad-doc, #cad-editor.cad-working .cad-actions { gap:.35rem; }
   #cad-editor.cad-working .cad-name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-  #cad-editor.cad-working .cad-file-tag { display:none; }
   #cad-editor.cad-working .cad-brand { width:3.75rem; }
   #cad-editor.cad-working [data-page] { order:0; font-size:.78rem; padding:.35rem .5rem; }
   #cad-editor.cad-working .cad-actions { grid-column:1/-1; }

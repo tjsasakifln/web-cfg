@@ -88,7 +88,7 @@ if (editor) {
   window.addEventListener('beforeunload', leaveGuard);
   function reflectTitle() {
     const title = frame?.contentDocument?.title || '';
-    const match = title.match(/^(.+?)(?: •)? — CADCraft$/);
+    const match = title.match(/^(.+?)(?: •)? — CONFENGE$/);
     if (!match) return;
     activeName = match[1];
     find('.cad-name').textContent = activeName === expectedName ? sourceName : activeName;
@@ -360,7 +360,7 @@ if (editor) {
     } catch {
       open2d.hidden = true;
       manual2d.hidden = false;
-      say('O navegador não permitiu transferir o desenho localmente. Abra o CadCraft 2D e selecione o arquivo novamente.', true);
+      say('O navegador não permitiu transferir o desenho localmente. Abra o CONFENGE CAD 2D e selecione o arquivo novamente.', true);
     } finally { open2d.disabled = false; setBusy(false); }
   });
   openButton.addEventListener('click', () => fileInput.click());

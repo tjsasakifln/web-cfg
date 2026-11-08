@@ -27,8 +27,8 @@ if (window.parent === window) {
     }, true);
   }
   try {
-    const { default: init } = await import('./cadcraft-web-d875c3c223026021.js');
-    await init({ module_or_path: './cadcraft-web-d875c3c223026021_bg.wasm' });
+    const { default: init } = await import('./confenge-cad.js');
+    await init({ module_or_path: './confenge-cad_bg.wasm' });
   } catch {
     const error = 'O navegador não conseguiu iniciar a área de desenho. Atualize a página e tente novamente.';
     document.getElementById('cadcraft_loading').textContent = error;
