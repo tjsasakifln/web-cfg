@@ -22,6 +22,19 @@ test('production, sandbox and emulator cannot be mixed; prices are server owned'
   assert.equal(normalizeEmail('Nome.Sobrenome+alias@googlemail.com'), 'nomesobrenome@gmail.com');
 });
 
+test('sandbox can poll a test order before a public webhook is configured', async () => {
+  const sandbox = { TOOLS_COMMERCE_MODE: 'sandbox', TOOLS_COMMERCE_FIREBASE_PROJECT: 'confenge-test',
+    TOOLS_COMMERCE_FIREBASE_WEB_KEY: 'AIza' + 'x'.repeat(30), TOOLS_COMMERCE_FIREBASE_WEB_APP: '1:123:web:abc',
+    TOOLS_COMMERCE_HMAC_KEY: randomBytes(32).toString('base64url'), TOOLS_COMMERCE_SANDBOX_UIDS: 'tester',
+    TOOLS_COMMERCE_SANDBOX_ORIGIN: 'http://127.0.0.1:8790', TOOLS_COMMERCE_PURCHASES: '1',
+    TOOLS_COMMERCE_TERMS_APPROVED: TERMS, TOOLS_COMMERCE_MP_ACCESS_TOKEN: 'APP_USR-' + 'x'.repeat(30) };
+  assert.equal(loadConfig(sandbox).sandboxPayerEmail, 'test_payer@example.com');
+  assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MP_TEST_BUYER: 'visitor@example.com' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...sandbox, TOOLS_COMMERCE_MODE: 'live', RUNTIME_PROFILE: 'netcup-production' }), /COMMERCE_UNAVAILABLE/);
+  const handler = createCommerceHttp({ env: sandbox });
+  assert.equal((await handler.webhook({ httpMethod: 'POST' })).statusCode, 404);
+});
+
 test('official report is deterministic and retains diagnostics; rejects raw sample or changed shape', () => {
   const key = randomBytes(32);
   const event = { exportId: 'emissao-1', at: 1794144000000 };

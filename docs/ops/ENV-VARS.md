@@ -144,6 +144,6 @@ Ver [provisionamento e operação](../tools-commerce/README.md). O modo padrão 
 | `TOOLS_COMMERCE_FIREBASE_WEB_KEY`, `TOOLS_COMMERCE_FIREBASE_WEB_APP` | Configuração pública de autenticação do app web. |
 | `GOOGLE_APPLICATION_CREDENTIALS` | Caminho da credencial ADC privada, fora do release. |
 | `TOOLS_COMMERCE_HMAC_KEY` | Chave privada estável para identidade e integridade das emissões. |
-| `TOOLS_COMMERCE_MP_ACCESS_TOKEN`, `TOOLS_COMMERCE_MP_WEBHOOK_SECRET` | Token privado da aplicação Mercado Pago e segredo de webhook. |
-| `TOOLS_COMMERCE_MP_TEST_BUYER`, `TOOLS_COMMERCE_SANDBOX_UIDS`, `TOOLS_COMMERCE_SANDBOX_ORIGIN` | Identidades de teste e origem explícita, somente no sandbox. |
+| `TOOLS_COMMERCE_MP_ACCESS_TOKEN`, `TOOLS_COMMERCE_MP_WEBHOOK_SECRET` | Token privado da aplicação Mercado Pago e segredo de webhook. No sandbox local, o segredo pode ficar vazio durante o teste de confirmação por consulta. |
+| `TOOLS_COMMERCE_MP_TEST_BUYER`, `TOOLS_COMMERCE_SANDBOX_UIDS`, `TOOLS_COMMERCE_SANDBOX_ORIGIN` | E-mail opcional de comprador de teste, UIDs permitidos e origem explícita, somente no sandbox. |
 | `FIREBASE_AUTH_EMULATOR_HOST`, `FIRESTORE_EMULATOR_HOST` | Hosts loopback, somente no projeto demo. |

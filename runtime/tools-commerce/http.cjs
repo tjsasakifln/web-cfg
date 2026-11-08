@@ -40,7 +40,8 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
     if (!dependencies) {
       const firebase = firebaseFactory(cfg);
       dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock }),
-        provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret }) : null };
+        provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret,
+          mode: cfg.mode, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
     }
     return dependencies;
   }
@@ -111,12 +112,12 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
         const input = bodyOf(event, 8192);
         only(input, ['packageId', 'requestId', 'termsVersion']);
         check(validId(input.requestId), 'INVALID_REQUEST_ID', 422);
+        await provider.verifySellerEnvironment();
         const { created, order } = await ledger.startOrder({ uid: user.uid, ...input });
         if (!created) return reply(200, publicOrder(order));
         try {
           const fact = await provider.createOrder({ id: order.id, amountCents: order.amountCents, email: user.email,
-            label: `${order.credits} ${order.credits === 1 ? 'crédito' : 'créditos'} para exportar — CONFENGE`,
-            sandboxPayerEmail: cfg.sandboxPayerEmail });
+            label: `${order.credits} ${order.credits === 1 ? 'crédito' : 'créditos'} para exportar — CONFENGE` });
           check(validProviderId(fact.providerId) && fact.reference === order.id, 'PAYMENT_MISMATCH', 422);
           return reply(201, publicOrder(await ledger.observe(fact, { creation: true })));
         } catch {
@@ -138,7 +139,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
   async function webhook(event) {
     try {
       const cfg = config();
-      if (cfg.mode === 'off' || !cfg.accessToken) return reply(404, { error: 'FEATURE_DISABLED' });
+      if (cfg.mode === 'off' || !cfg.accessToken || !cfg.webhookSecret) return reply(404, { error: 'FEATURE_DISABLED' });
       check(event.httpMethod === 'POST', 'METHOD_NOT_ALLOWED', 405);
       check(!event.isBase64Encoded && Buffer.byteLength(event.body || '') <= 64 * 1024, 'PAYLOAD_TOO_LARGE', 413);
       const dep = getDependencies(cfg);

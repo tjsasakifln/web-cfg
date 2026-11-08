@@ -3,8 +3,10 @@
 const { createHmac, timingSafeEqual } = require('node:crypto');
 
 const API_ROOT = 'https://api.mercadopago.com';
+const SELLER_PROFILE_URL = 'https://api.mercadolibre.com/users/me';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[47][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ORDER_ID = /^ORD[A-Z0-9]+$/;
+const TRANSITIONAL = new Set(['created', 'pending', 'in_process', 'processing', 'action_required', 'authorized']);
 
 function required(value, name) {
   if (typeof value !== 'string' || !value.trim()) throw new Error(name + ' is required');
@@ -71,20 +73,22 @@ function stateFor(order, payment, amountCents, paymentCount) {
   const orderPaid = toCents(order.total_paid_amount);
   const paymentPaid = toCents(payment && payment.paid_amount);
   const refundValues = [order.total_refunded_amount, payment && payment.refunded_amount].filter((value) => value !== undefined).map(toCents);
-  if (!amountCents || paymentCount !== 1 || !payment || payment.payment_method.type !== 'bank_transfer' || toCents(payment.amount) !== amountCents) return 'review';
-  const details = [order.status_detail, payment.status_detail];
-  if (details.includes('partially_refunded') || refundValues.some(value => value === undefined || value < 0)) return 'review';
+  const details = [order.status_detail, payment?.status_detail];
+  if (!(amountCents > 0) || details.includes('partially_refunded') || refundValues.some(value => value === undefined || value < 0)) return 'review';
+  const hasRefund = refundValues.some(value => value > 0);
+  // Order creation may return before the Pix transaction is available.
+  if (paymentCount === 0 && TRANSITIONAL.has(orderStatus) && !hasRefund) return 'pending';
+  if (paymentCount !== 1 || !payment || payment.payment_method.type !== 'bank_transfer' || toCents(payment.amount) !== amountCents) return 'review';
   // Mercado Pago distinguishes full (`refunded`) from partial
   // (`processed/partially_refunded`). If refund totals are present they must agree.
   if (orderStatus === 'refunded') return orderPaid === amountCents && paymentStatus === 'refunded' &&
     refundValues.every(value => value === amountCents) ? 'reversed' : 'review';
-  if (refundValues.some(value => value > 0)) return 'review';
-  const transitional = new Set(['created', 'pending', 'in_process', 'processing', 'action_required', 'authorized']);
-  if (paymentStatus && paymentStatus !== orderStatus && !(transitional.has(paymentStatus) && transitional.has(orderStatus))) return 'review';
+  if (hasRefund) return 'review';
+  if (paymentStatus && paymentStatus !== orderStatus && !(TRANSITIONAL.has(paymentStatus) && TRANSITIONAL.has(orderStatus))) return 'review';
   if (['cancelled', 'canceled', 'failed', 'rejected', 'expired'].includes(orderStatus)) return 'failed';
   if (orderStatus === 'processed') return paymentStatus === 'processed' && details.every(detail => detail === 'accredited') &&
     orderPaid === amountCents && paymentPaid === amountCents ? 'paid' : 'review';
-  if (['created', 'pending', 'in_process', 'processing', 'action_required', 'authorized'].includes(orderStatus) || !orderStatus) return 'pending';
+  if (TRANSITIONAL.has(orderStatus) || !orderStatus) return 'pending';
   return 'review';
 }
 
@@ -115,35 +119,54 @@ function normalize(order) {
   };
 }
 
-function createMercadoPago({ accessToken, webhookSecret, fetchImpl = globalThis.fetch } = {}) {
+function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sandboxPayerEmail, fetchImpl = globalThis.fetch } = {}) {
   accessToken = required(accessToken, 'accessToken');
-  webhookSecret = required(webhookSecret, 'webhookSecret');
+  if (mode !== 'sandbox' && mode !== 'live') throw new Error('Invalid Mercado Pago environment');
+  const sandbox = mode === 'sandbox';
+  webhookSecret = sandbox ? optional(webhookSecret) : required(webhookSecret, 'webhookSecret');
+  const authorization = { Authorization: 'Bearer ' + accessToken };
   if (typeof fetchImpl !== 'function') throw new Error('fetchImpl must be a function');
-  async function request(path, options) {
+  async function request(url, options) {
     let response;
-    try { response = await fetchImpl(API_ROOT + path, { ...options, signal: AbortSignal.timeout(8000), redirect: 'error' }); }
+    try { response = await fetchImpl(url, { ...options, signal: AbortSignal.timeout(8000), redirect: 'error' }); }
     catch { throw new Error('Mercado Pago request could not be completed; reconcile the existing order before retrying'); }
     if (!response || !response.ok) throw new Error('Mercado Pago request failed (HTTP ' + (response && response.status || 'unknown') + ')');
     try { return await response.json(); } catch { throw new Error('Mercado Pago returned an invalid response'); }
   }
+  let sellerCheck;
+  function verifySellerEnvironment() {
+    // Orders tokens can have the same prefix in both environments.
+    sellerCheck ??= request(SELLER_PROFILE_URL, { method: 'GET', headers: authorization }).then(seller => {
+      if (!Array.isArray(seller?.tags) || seller.tags.includes('test_user') !== sandbox) {
+        throw new Error('Mercado Pago seller does not match the configured environment');
+      }
+    }).catch(error => {
+      sellerCheck = undefined;
+      throw error;
+    });
+    return sellerCheck;
+  }
   return {
-    async createOrder({ id, amountCents, email, label, sandboxPayerEmail } = {}) {
+    verifySellerEnvironment,
+    async createOrder({ id, amountCents, email, label } = {}) {
       id = required(id, 'id');
       if (!UUID.test(id) || id.length > 64) throw new Error('id must be a stable UUID');
       label = required(label, 'label');
       if (label.length > 256) throw new Error('label is too long');
       const amount = toMoney(amountCents);
-      const payerEmail = optional(sandboxPayerEmail) || required(email, 'email');
+      const payer = sandbox ? { email: required(sandboxPayerEmail, 'sandboxPayerEmail'), first_name: 'APRO' } :
+        { email: required(email, 'email') };
       const body = {
         type: 'online', external_reference: id, total_amount: amount,
         capture_mode: 'automatic', processing_mode: 'automatic',
         transactions: { payments: [{ amount, payment_method: { id: 'pix', type: 'bank_transfer' } }] },
-        payer: { email: payerEmail }, description: label,
+        payer, description: label,
         items: [{ title: label, quantity: 1, unit_price: amount, description: label, external_code: id }]
       };
-      const normalized = normalize(await request('/v1/orders', {
+      await verifySellerEnvironment();
+      const normalized = normalize(await request(API_ROOT + '/v1/orders', {
         method: 'POST',
-        headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': 'application/json', 'X-Idempotency-Key': id },
+        headers: { ...authorization, 'Content-Type': 'application/json', 'X-Idempotency-Key': id },
         body: JSON.stringify(body)
       }));
       if (!normalized.providerId || normalized.reference !== id || normalized.amountCents !== amountCents) throw new Error('Mercado Pago order did not match the requested reference and amount');
@@ -152,12 +175,13 @@ function createMercadoPago({ accessToken, webhookSecret, fetchImpl = globalThis.
     async getOrder(providerId) {
       providerId = required(providerId, 'providerId');
       if (!ORDER_ID.test(providerId)) throw new Error('providerId must be a Mercado Pago order ID');
-      const normalized = normalize(await request('/v1/orders/' + encodeURIComponent(providerId), { method: 'GET', headers: { Authorization: 'Bearer ' + accessToken } }));
+      const normalized = normalize(await request(API_ROOT + '/v1/orders/' + encodeURIComponent(providerId), { method: 'GET', headers: authorization }));
       if (normalized.providerId !== providerId || !ORDER_ID.test(normalized.providerId)) throw new Error('Mercado Pago returned an unexpected order ID');
       return normalized;
     },
     parseWebhook({ headers, query: queryObject, body } = {}) {
       void body;
+      if (!webhookSecret) throw new Error('Mercado Pago webhook is not configured');
       const providerId = optional(query(queryObject, 'data.id'));
       const requestId = optional(header(headers, 'x-request-id'));
       const parts = signature(header(headers, 'x-signature'));

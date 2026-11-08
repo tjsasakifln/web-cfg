@@ -18,7 +18,8 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     const incidents = [];
     const handler = createCommerceHttp({ config: { mode: 'emulator', projectId, identityKey: randomBytes(32), purchasesEnabled: true,
       accessToken: 'fake-access-token-integration', webhookSecret }, onIncident: x => incidents.push(x), providerFactory: options => createMercadoPago({
-        ...options, fetchImpl: async (url, options) => {
+        ...options, mode: 'live', fetchImpl: async (url, options) => {
+          if (url === 'https://api.mercadolibre.com/users/me') return Response.json({ tags: ['normal'] });
           if (options.method === 'POST') {
             createCalls++;
             const input = JSON.parse(options.body);

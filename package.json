@@ -355,8 +355,9 @@
   "devDependencies": {
     "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
+    "@firebase/app": "0.16.2",
+    "@firebase/auth": "1.13.6",
     "esbuild": "0.28.2",
-    "firebase": "13.2.0",
     "lighthouse": "^13.4.1",
     "parse5": "^8.0.1",
     "puppeteer-core": "^25.8.0",

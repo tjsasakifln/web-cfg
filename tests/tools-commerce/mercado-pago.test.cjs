@@ -5,6 +5,7 @@ const test = require('node:test');
 const { createMercadoPago } = require('../../runtime/tools-commerce/mercado-pago.cjs');
 const ID = '018f0f34-7a01-7c75-b7b8-c5c5f169c6ac';
 const ORDER = 'ORD01J49MMW3SSBK5PSV3DFR32959';
+const SELLER_PROFILE = 'https://api.mercadolibre.com/users/me';
 function response(body, status = 200) { return { ok: status >= 200 && status < 300, status, json: async () => body }; }
 function pixOrder(overrides = {}) {
   return { id: ORDER, external_reference: ID, total_amount: '14.90', total_paid_amount: '0.00', status: 'created',
@@ -12,18 +13,43 @@ function pixOrder(overrides = {}) {
 }
 test('creates a single automatic Pix order with stable idempotency reference', async () => {
   let call;
-  const client = createMercadoPago({ accessToken: 'token', webhookSecret: 'secret', fetchImpl: async (url, options) => { call = { url, options }; return response(pixOrder()); } });
+  const client = createMercadoPago({ accessToken: 'token', webhookSecret: 'secret', fetchImpl: async (url, options) => {
+    if (url === SELLER_PROFILE) return response({ tags: ['normal'] });
+    call = { url, options };
+    return response(pixOrder());
+  } });
   const order = await client.createOrder({ id: ID, amountCents: 1490, email: 'buyer@example.com', label: '1 crédito' });
   assert.equal(call.url, 'https://api.mercadopago.com/v1/orders');
   assert.equal(call.options.headers['X-Idempotency-Key'], ID);
   const body = JSON.parse(call.options.body);
   assert.equal(body.external_reference, ID);
   assert.equal(body.total_amount, '14.90');
+  assert.deepEqual(body.payer, { email: 'buyer@example.com' });
   assert.equal(body.transactions.payments[0].amount, '14.90');
   assert.deepEqual(body.transactions.payments[0].payment_method, { id: 'pix', type: 'bank_transfer' });
   assert.equal(order.state, 'pending');
   assert.equal(order.currency, 'BRL');
   assert.equal(order.qrCode, '000201PIX');
+});
+test('uses only the verified sandbox seller and keeps an asynchronous Pix order pending', async () => {
+  let sellerTags = ['normal'];
+  let sent;
+  const client = createMercadoPago({ mode: 'sandbox', sandboxPayerEmail: 'test_payer@example.com',
+    accessToken: 'token', webhookSecret: 'secret', fetchImpl: async (url, options) => {
+      if (url === SELLER_PROFILE) return response({ tags: sellerTags });
+      if (options.method === 'GET') return response(pixOrder());
+      sent = JSON.parse(options.body);
+      return response(pixOrder({ status: 'processing', transactions: {} }));
+    } });
+  const input = { id: ID, amountCents: 1490, email: 'buyer@example.com', label: '1 crédito' };
+  await assert.rejects(() => client.createOrder(input), /configured environment/);
+  assert.equal(sent, undefined);
+  sellerTags = ['normal', 'test_user'];
+  const pending = await client.createOrder(input);
+  assert.deepEqual(sent.payer, { email: 'test_payer@example.com', first_name: 'APRO' });
+  assert.equal(pending.state, 'pending');
+  assert.equal(pending.qrCode, undefined);
+  assert.equal((await client.getOrder(ORDER)).qrCode, '000201PIX');
 });
 test('marks only fully paid fetched Pix orders as paid', async () => {
   const client = createMercadoPago({ accessToken: 'token', webhookSecret: 'secret', fetchImpl: async () => response(pixOrder({ status: 'processed', status_detail: 'accredited', total_paid_amount: '14.90', transactions: { payments: [{ amount: '14.90', paid_amount: '14.90', status: 'processed', status_detail: 'accredited', payment_method: { id: 'pix', type: 'bank_transfer' } }] } })) });
@@ -54,6 +80,12 @@ test('validates lowercase Mercado Pago webhook manifest and ignores body identit
   assert.throws(() => client.parseWebhook({ headers: { 'x-signature': 'ts=' + ts + ',v1=nope', 'x-request-id': requestId }, query: { 'data.id': providerId } }), /signature/);
 });
 test('does not retry an uncertain provider POST', async () => {
-  const client = createMercadoPago({ accessToken: 'token', webhookSecret: 'secret', fetchImpl: async () => { throw new Error('network'); } });
+  let posts = 0;
+  const client = createMercadoPago({ accessToken: 'token', webhookSecret: 'secret', fetchImpl: async url => {
+    if (url === SELLER_PROFILE) return response({ tags: ['normal'] });
+    posts++;
+    throw new Error('network');
+  } });
   await assert.rejects(() => client.createOrder({ id: ID, amountCents: 1490, email: 'buyer@example.com', label: '1 crédito' }), /reconcile the existing order/);
+  assert.equal(posts, 1);
 });

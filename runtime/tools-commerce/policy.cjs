@@ -65,13 +65,17 @@ function loadConfig(env) {
   const exportsPaused = env.TOOLS_COMMERCE_EXPORTS_PAUSED === '1';
   const accessToken = env.TOOLS_COMMERCE_MP_ACCESS_TOKEN || '';
   const webhookSecret = env.TOOLS_COMMERCE_MP_WEBHOOK_SECRET || '';
-  const sandboxPayerEmail = env.TOOLS_COMMERCE_MP_TEST_BUYER || '';
+  const samplePayer = 'test_payer@example.com';
+  const sandboxPayerEmail = env.TOOLS_COMMERCE_MP_TEST_BUYER || (mode === 'sandbox' ? samplePayer : '');
   const sandboxUids = (env.TOOLS_COMMERCE_SANDBOX_UIDS || '').split(',').map(s => s.trim()).filter(Boolean);
   if (mode === 'sandbox') valid(sandboxUids.length > 0 && /^https:\/\/[a-z0-9.-]+$|^http:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/i.test(env.TOOLS_COMMERCE_SANDBOX_ORIGIN || ''));
   if (accessToken || webhookSecret || purchasesEnabled) {
-    valid(mode !== 'emulator' && accessToken.length >= 25 && webhookSecret.length >= 24);
-    if (mode === 'sandbox') valid(/^[^\s@]+@testuser\.com$/i.test(sandboxPayerEmail));
-    if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && !sandboxPayerEmail);
+    valid(mode !== 'emulator' && accessToken.length >= 25);
+    if (mode === 'sandbox') {
+      valid(!webhookSecret || webhookSecret.length >= 24);
+      valid(sandboxPayerEmail === samplePayer || /^[^\s@]+@testuser\.com$/i.test(sandboxPayerEmail));
+    }
+    if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail);
   }
   if (purchasesEnabled) valid(env.TOOLS_COMMERCE_TERMS_APPROVED === TERMS);
   return { mode, firebase, authEmulator, projectId, identityKey: Buffer.from(identityKey, 'base64url'),
