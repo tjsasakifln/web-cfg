@@ -1,0 +1,169 @@
+const ENDPOINT = '/api/web/tool-credits';
+const REF_KEY = 'confenge-tool-referral-v1';
+const ORDER_KEY = 'confenge-tool-orders-v1';
+const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const makeId = () => crypto.randomUUID();
+const el = (tag, text) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; return n; };
+const btn = (text, fn) => { const n = el('button', text); n.type = 'button'; n.onclick = fn; return n; };
+const message = e => ({ AUTH_REQUIRED: 'Entre na sua conta para continuar.', EMAIL_UNVERIFIED: 'Confirme seu e-mail para continuar.', NO_CREDITS: 'Você não tem créditos disponíveis.', ACCOUNT_BLOCKED: 'Esta conta está temporariamente bloqueada.', EXPORT_PAUSED: 'As exportações estão temporariamente pausadas.' })[e?.error || e?.code] || e?.message || 'Não foi possível concluir agora.';
+const asJson = async r => { const body = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(body.error || 'Falha na conexão.'), body); return body; };
+const getStore = (key, fallback = {}) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+const setStore = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
+
+function referralFirstTouch() {
+  const url = new URL(location.href), ref = url.searchParams.get('ref');
+  const valid = value => typeof value === 'string' && /^[A-Za-z0-9_-]{16}$/.test(value);
+  if (url.searchParams.has('ref')) { url.searchParams.delete('ref'); history.replaceState(history.state, '', url); }
+  const saved = getStore(REF_KEY);
+  if (saved.expires > Date.now() && valid(saved.ref)) return saved.ref;
+  if (valid(ref)) { setStore(REF_KEY, { ref, expires: Date.now() + 30 * 864e5 }); return ref; }
+  try { localStorage.removeItem(REF_KEY); } catch {} return '';
+}
+
+/** Fail-closed, isolated export entitlement UI. It sends no analytics events. */
+export function createToolCredits({ toolId, root = document.body, fetchImpl = fetch } = {}) {
+  if (!toolId) throw new Error('toolId is required');
+  let config, firebase, auth, account, dialog, init, provisionedUid, opening, renderVersion = 0, pollTimer;
+  const referralCode = referralFirstTouch();
+  const url = (op, more = '') => `${ENDPOINT}?op=${encodeURIComponent(op)}${more}`;
+  const ready = async () => {
+    if (init) return init;
+    init = (async () => {
+      const response = await fetchImpl(url('config'), { headers: { Accept: 'application/json' } });
+      if (response.status === 404) return false;
+      const parsed = await asJson(response);
+      if (parsed.enabled === false) return false;
+      if (parsed.enabled !== true || !Array.isArray(parsed.tools) || !parsed.tools.includes(toolId) || !parsed.firebase?.apiKey) throw new Error('Configuração de créditos indisponível.');
+      config = parsed; firebase = await import('/assets/tools-commerce/firebase-auth.mjs');
+      const name = 'confenge-tools';
+      const existing = firebase.getApps().find(app => app.name === name);
+      if (existing) auth = firebase.getAuth(existing);
+      else {
+        const app = firebase.initializeApp(config.firebase, name);
+        auth = firebase.initializeAuth(app, { persistence: firebase.browserLocalPersistence });
+        if (config.authEmulator) firebase.connectAuthEmulator(auth, config.authEmulator, { disableWarnings: true });
+      }
+      await auth.authStateReady?.();
+      firebase.onAuthStateChanged(auth, () => { clearTimeout(pollTimer); account = undefined; provisionedUid = undefined; if (dialog?.open) render(); });
+      return true;
+    })();
+    try { return await init; } catch (error) { init = undefined; throw error; }
+  };
+  const token = async () => { if (!auth?.currentUser) throw { error: 'AUTH_REQUIRED' }; return auth.currentUser.getIdToken(); };
+  const api = async (op, options = {}, extra = '') => {
+    const response = await fetchImpl(url(op, extra), { ...options, headers: { Accept: 'application/json', Authorization: `Bearer ${await token()}`, ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...options.headers } });
+    return asJson(response);
+  };
+  const provision = async () => {
+    const user = auth.currentUser; if (!user) throw { error: 'AUTH_REQUIRED' }; await user.reload();
+    if (!user.emailVerified) throw { error: 'EMAIL_UNVERIFIED' }; await user.getIdToken(true);
+    if (provisionedUid !== user.uid) { account = await api('account', { method: 'POST', body: JSON.stringify(referralCode ? { referralCode } : {}) }); provisionedUid = user.uid; }
+    return account;
+  };
+  const refresh = async () => { await provision(); account = await api('account'); return account; };
+  const orderKey = () => `${ORDER_KEY}:${auth?.currentUser?.uid || 'anonymous'}`;
+  const cleanOrders = all => Object.fromEntries(Object.entries(all).filter(([, value]) => value?.at > Date.now() - 2 * 864e5 || value?.creating));
+  const saveOrder = order => { const all = cleanOrders(getStore(orderKey())); all[order.id] = { id: order.id, status: order.status, at: Date.now() }; setStore(orderKey(), all); };
+  const dropOrder = id => { const all = getStore(orderKey()); delete all[id]; setStore(orderKey(), all); };
+  const setBusy = (host, busy) => host.querySelectorAll('button,input').forEach(node => { node.disabled = busy; });
+  const note = (host, text) => { if (text) { const n = el('p', text); n.className = 'tool-credits__notice'; n.setAttribute('role', 'status'); host.append(n); } };
+  const authView = (host, notice) => {
+    host.append(el('h2', 'Seu primeiro uso completo é gratuito'), el('p', 'Entre para guardar seus créditos e exportações.')); note(host, notice);
+    const form = el('form'), email = el('input'), password = el('input'); email.type = 'email'; email.required = true; email.autocomplete = 'email'; password.type = 'password'; password.required = true; password.minLength = 6; password.autocomplete = 'current-password';
+    for (const [text, field] of [['E-mail', email], ['Senha', password]]) { const label = el('label', text); label.append(field); form.append(label); }
+    const login = btn('Entrar'); login.type = 'submit';
+    form.append(login, btn('Criar conta', async () => { setBusy(form, true); try { const created = await firebase.createUserWithEmailAndPassword(auth, email.value, password.value); await firebase.sendEmailVerification(created.user); render('Conta criada. Confirme seu e-mail para ativá-la.'); } catch (e) { render(message(e)); } }), btn('Esqueci a senha', async () => { setBusy(form, true); try { if (!email.value) throw new Error('Informe seu e-mail para redefinir a senha.'); await firebase.sendPasswordResetEmail(auth, email.value); render('Enviamos o link para redefinir a senha.'); } catch (e) { render(message(e)); } }));
+    form.onsubmit = async event => { event.preventDefault(); setBusy(form, true); try { await firebase.signInWithEmailAndPassword(auth, email.value, password.value); render('Conta acessada.'); } catch (e) { render(message(e)); } }; host.append(form);
+  };
+  const verifyView = (host, notice) => { host.append(el('h2', 'Confirme seu e-mail'), el('p', `Abra a mensagem enviada para ${auth.currentUser.email || 'seu e-mail'} e volte aqui.`)); note(host, notice); host.append(btn('Já confirmei', () => render()), btn('Reenviar confirmação', async () => { try { await firebase.sendEmailVerification(auth.currentUser); render('Confirmação reenviada.'); } catch (e) { render(message(e)); } }), btn('Sair', () => firebase.signOut(auth))); };
+  const shareView = host => {
+    const section = el('section'); section.append(el('h3', 'Indique a CONFENGE'), el('p', 'Quando uma pessoa indicada fizer o primeiro uso pago, você recebe 1 crédito cortesia. Até 10 cortesias por mês.'));
+    if (!account?.referralCode) return;
+    const link = `${location.origin}${location.pathname}?ref=${encodeURIComponent(account.referralCode)}`;
+    const text = `Conheci esta ferramenta da CONFENGE: ${link}. Posso receber um crédito cortesia se você fizer a primeira exportação paga.`;
+    const external = destination => window.open(destination, '_blank', 'noopener,noreferrer');
+    section.append(btn('Copiar link', async () => { try { await navigator.clipboard.writeText(link); render('Link copiado.'); } catch { render('Copie o link de indicação abaixo.'); } }),
+      btn('LinkedIn', () => external(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`)), btn('WhatsApp', () => external(`https://wa.me/?text=${encodeURIComponent(text)}`)));
+    if (navigator.share) section.append(btn('Mais opções', async () => { try { await navigator.share({ title: 'Ferramentas CONFENGE', text }); } catch { /* share is optional */ } }));
+    section.append(el('p', 'Ao publicar seu link, informe que você pode receber uma cortesia se houver uso pago.'));
+    const input = el('input'); input.readOnly = true; input.value = link; input.setAttribute('aria-label', 'Seu link de indicação'); section.append(input); host.append(section);
+  };
+  const accountView = (host, notice) => {
+    host.append(el('h2', 'Créditos de exportação'));
+    const amount = (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
+    const balance = amount === 1 ? '1 crédito disponível' : `${amount} créditos disponíveis`;
+    const courtesy = (account?.promo || 0) + Number(Boolean(account?.freeAvailable));
+    host.append(el('p', balance + (courtesy ? ` · ${courtesy} de cortesia` : '')));
+    note(host, notice);
+    const section = el('section'); section.append(el('h3', 'Comprar por Pix'));
+    if (account?.blocked) section.append(el('p', 'Sua conta está em análise. Fale com a CONFENGE pelo contato nos termos.'));
+    else if (!config.purchasesEnabled) section.append(el('p', 'As compras ainda não estão disponíveis.'));
+    else for (const pack of config.packages || []) { const check = el('input'), label = el('label'), unit = BRL.format(pack.amountCents / pack.credits / 100); check.type = 'checkbox'; check.id = `terms-${pack.id}`; label.htmlFor = check.id; label.append(check, ' Li e aceito os termos aplicáveis.'); section.append(btn(`${pack.credits} crédito${pack.credits === 1 ? '' : 's'} · ${BRL.format(pack.amountCents / 100)} (${unit}/crédito)`, () => createOrder(pack.id, check.checked)), label); }
+    host.append(section); const legal = el('p'); const terms = el('a', 'Termos de uso'); terms.href = '/termos-de-uso/#creditos-ferramentas'; const privacy = el('a', 'Política de privacidade'); privacy.href = '/privacidade/'; legal.append('Consulte os ', terms, ' e a ', privacy, '. Créditos comprados não expiram.'); host.append(legal); shareView(host);
+    const previous = [...(account?.recentOrders || []), ...Object.values(getStore(orderKey())).filter(item => item?.id)].filter((item, index, all) => all.findIndex(x => x.id === item.id) === index);
+    if (previous.length) { const recent = el('section'); recent.append(el('h3', 'Pagamentos recentes')); for (const item of previous) recent.append(btn(`Consultar pedido ${item.id}`, () => checkOrder(item.id))); host.append(recent); } host.append(btn('Sair', () => firebase.signOut(auth)));
+  };
+  const render = async notice => {
+    if (!dialog) return; const host = dialog.querySelector('.tool-credits__content'); host.replaceChildren(); const user = auth?.currentUser;
+    const version = ++renderVersion;
+    if (!user) return authView(host, notice); try { await user.reload(); } catch (error) { notice = message(error); } if (version !== renderVersion) return;
+    if (!user.emailVerified) return verifyView(host, notice);
+    try { await refresh(); } catch (error) { notice = message(error); } if (version !== renderVersion) return; accountView(host, notice);
+  };
+  const createOrder = async (packageId, accepted) => {
+    if (!accepted) return render('Confirme que leu os termos para continuar.');
+    const key = orderKey(), store = getStore(key), requestId = store.creating?.[packageId] || makeId();
+    store.creating = { ...(store.creating || {}), [packageId]: requestId }; setStore(key, store);
+    if (dialog) setBusy(dialog, true);
+    try {
+      const order = await api('orders', { method: 'POST', body: JSON.stringify({ packageId, requestId, termsVersion: config.termsVersion }) });
+      delete store.creating[packageId]; setStore(key, store);
+      if (key === orderKey()) { saveOrder(order); showOrder(order); }
+    } catch (e) { if (key === orderKey()) render(`${message(e)} Você pode tentar novamente; a identificação do pedido será preservada.`); }
+  };
+  const checkOrder = async (id, remaining = 15) => {
+    const key = orderKey();
+    try {
+      const order = await api('order', {}, `&id=${encodeURIComponent(id)}`);
+      if (key === orderKey() && dialog?.open) { saveOrder(order); showOrder(order, remaining); }
+    } catch (e) { if (key === orderKey() && dialog?.open) render(message(e)); }
+  };
+  const showOrder = async (order, remaining = 15) => {
+    clearTimeout(pollTimer);
+    const key = orderKey();
+    if (['paid', 'failed', 'review', 'reversed'].includes(order.status)) {
+      dropOrder(order.id);
+      return render(order.status === 'paid' ? 'Pagamento confirmado. Seus créditos foram atualizados.' : order.status === 'review' ? 'Pedido em análise. Consulte os termos para falar com a CONFENGE.' : order.status === 'reversed' ? 'Pagamento estornado.' : 'Não foi possível concluir este pagamento.');
+    }
+    await render(order.status === 'creating' ? 'Preparando o Pix.' : 'Aguardando o pagamento.');
+    if (!dialog?.open || key !== orderKey()) return;
+    const host = dialog.querySelector('.tool-credits__content'), section = el('section');
+    section.className = 'tool-credits__payment';
+    section.append(el('h3', 'Pague por Pix'));
+    if (order.qrImage) {
+      const img = el('img'); img.src = `data:image/png;base64,${order.qrImage}`; img.alt = 'QR Code Pix'; section.append(img);
+    }
+    if (order.qrCode) {
+      const code = el('textarea'); code.readOnly = true; code.value = order.qrCode; code.setAttribute('aria-label', 'Pix copia e cola');
+      section.append(code, btn('Copiar Pix', async () => { try { await navigator.clipboard.writeText(order.qrCode); note(section, 'Código Pix copiado.'); } catch { code.focus(); code.select(); } }));
+    }
+    if (order.checkoutUrl?.startsWith('https://www.mercadopago.com.br/')) {
+      section.append(btn('Abrir Pix no Mercado Pago', () => window.open(order.checkoutUrl, '_blank', 'noopener,noreferrer')));
+    }
+    section.append(btn('Atualizar pagamento', () => checkOrder(order.id)));
+    host.prepend(section);
+    if (remaining > 0) pollTimer = setTimeout(() => checkOrder(order.id, remaining - 1), 8000);
+  };
+  const ensure = () => { if (dialog) return; dialog = el('dialog'); dialog.className = 'tool-credits'; dialog.setAttribute('aria-label', 'Créditos CONFENGE'); const close = btn('×', () => dialog.close()); close.className = 'tool-credits__close'; close.setAttribute('aria-label', 'Fechar'); const content = el('div'); content.className = 'tool-credits__content'; dialog.append(close, content); dialog.addEventListener('close', () => clearTimeout(pollTimer)); dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); }); root.append(dialog); };
+  const open = async notice => { if (opening) return opening; opening = (async () => { if (!await ready()) return false; ensure(); if (!dialog.open) dialog.showModal(); await render(notice); return true; })(); try { return await opening; } finally { opening = undefined; } };
+  return { ready, open, async exportReport({ payload, requestId = makeId() } = {}) {
+    if (!await ready()) return null;
+    try {
+      await provision();
+      const response = await fetchImpl(url('export'), { method: 'POST', headers: { Authorization: `Bearer ${await token()}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ toolId, requestId, payload }) });
+      if (!response.ok) throw Object.assign(new Error(), await response.json().catch(() => ({})));
+      if (!/^attachment;/i.test(response.headers.get('Content-Disposition') || '')) throw new Error('Arquivo indisponível. Tente novamente.');
+      return response.blob();
+    } catch (error) { try { await open(message(error)); } catch {} throw error; }
+  } };
+}

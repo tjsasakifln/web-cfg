@@ -26,6 +26,22 @@ from deploy.netcup.package_release import build_release, sha256_file
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
+@pytest.fixture(scope="module", autouse=True)
+def private_dependency_fixture(tmp_path_factory: pytest.TempPathFactory):
+    # These release-controller tests repeatedly build small fixture archives.
+    # The actual installed closure is smoke-tested after packaging in CI.
+    directory = tmp_path_factory.mktemp("private-runtime-deps")
+    for name in ("package.json", "package-lock.json"):
+        (directory / name).write_text("{}\n", encoding="utf-8")
+    for package in ("firebase-admin", "firebase-admin/node_modules/nested-fixture"):
+        package_dir = directory / "node_modules" / package
+        package_dir.mkdir(parents=True)
+        (package_dir / "package.json").write_text("{}\n", encoding="utf-8")
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        monkeypatch.setattr("deploy.netcup.package_release.TOOLS_COMMERCE_DEPS", directory)
+        yield
+
+
 def test_live_intel_overlay_paths_are_explicit() -> None:
     assert not control.is_live_intel_overlay("_site/oportunidades/abc/index.html")
     assert control.is_live_intel_overlay("_site/sitemap-oportunidades.xml")
@@ -1148,11 +1164,22 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
     with tarfile.open(first["artifact"], "r:gz") as archive:
         names = archive.getnames()
     assert not any("__pycache__" in name or name.endswith(".pyc") for name in names)
-    assert all(not name.startswith((".git", "node_modules")) for name in names)
+    assert all(
+        not name.startswith((".git", "node_modules"))
+        and (
+            "/node_modules/" not in name
+            or name.startswith("runtime/tools-commerce/node_modules/")
+        )
+        for name in names
+    )
     for required in (
         "_site/index.html",
         "runtime/server.mjs",
         "runtime/contract.json",
+        "runtime/tools-commerce/deps/package.json",
+        "runtime/tools-commerce/deps/package-lock.json",
+        "runtime/tools-commerce/node_modules/firebase-admin/package.json",
+        "runtime/tools-commerce/node_modules/firebase-admin/node_modules/nested-fixture/package.json",
         "netlify/functions/lead.cjs",
         "data/revops/closed-loop-funnel.v1.json",
         "data/nurture/tracks.json",

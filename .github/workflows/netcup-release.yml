@@ -122,6 +122,10 @@ jobs:
             echo "NETCUP_PACKAGE_ERROR: checkout is not the exact clean gated SHA" >&2
             exit 1
           fi
+          # The Firebase Admin closure is separate from the site toolchain. It
+          # is locked, included in the immutable tarball and never installed on
+          # the VPS during stage or promotion.
+          npm ci --omit=dev --ignore-scripts --no-bin-links --prefix runtime/tools-commerce/deps
           source_date_epoch=$(git show -s --format=%ct "$RELEASE_SHA")
           node_version=$(node --version)
           python_version=$(python3 --version | awk '{print $2}')
@@ -146,6 +150,11 @@ jobs:
             cd "dist/netcup/$RELEASE_SHA"
             sha256sum --check "confenge-web-$RELEASE_SHA.tar.gz.sha256"
           )
+          # Prove the packaged SDK loads from the release in isolation. This
+          # step does not initialize a cloud project or read credentials.
+          smoke=$(mktemp -d)
+          tar -xzf "dist/netcup/$RELEASE_SHA/confenge-web-$RELEASE_SHA.tar.gz" -C "$smoke" --wildcards 'runtime/tools-commerce/*'
+          node -e 'const {sdk}=require(process.argv[1]); for (const module of ["app","auth","firestore"]) sdk("firebase-admin/"+module)' "$smoke/runtime/tools-commerce/firebase.cjs"
       - name: Attest immutable deploy artifact
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:

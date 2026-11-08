@@ -256,6 +256,13 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/diagnostico-b2g-expansao/"],
   },
+  "test:tools-commerce": {
+    producers: ["runtime/tools-commerce/", "tests/tools-commerce/", "scripts/tools-commerce/",
+      "assets/js/tool-credits.mjs", "assets/css/tool-credits.css", "netlify/functions/tool-credits.cjs",
+      "netlify/functions/tool-credits-webhook.cjs", "firebase.tools-commerce.json", "avaliacao-imoveis-urbanos/inferencia/"],
+    artifacts: [],
+    surfaces: ["/avaliacao-imoveis-urbanos/inferencia/", "/api/web/tool-credits", "/api/web/tool-credits-webhook"],
+  },
   "test:deliverables-registry": {
     producers: [
       "tests/commercial/",

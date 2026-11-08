@@ -464,13 +464,17 @@ export function renderLocations(contract) {
   lines.push("  gzip_types application/javascript application/wasm;");
   lines.push("  try_files $uri =404;");
   lines.push("}", "");
+  lines.push("location ~ ^/assets/(?:js/tool-credits|tools-commerce/firebase-auth)\\.mjs$ {");
+  lines.push("  types { application/javascript mjs; }");
+  lines.push("  try_files $uri =404;");
+  lines.push("}", "");
   lines.push("location / {");
   lines.push("  try_files $uri $uri/ $uri.html $uri/index.html =404;");
   lines.push("}");
   return `${lines.join("\n").trimEnd()}\n`;
 }
 
-function runtimeProxyDirectives(indent = "  ") {
+function runtimeProxyDirectives(indent = "  ", requestId = "$request_id") {
   return [
     `${indent}proxy_pass http://confenge_web_runtime;`,
     `${indent}proxy_http_version 1.1;`,
@@ -478,7 +482,7 @@ function runtimeProxyDirectives(indent = "  ") {
     `${indent}proxy_set_header X-Forwarded-For $remote_addr;`,
     `${indent}proxy_set_header X-Real-IP $remote_addr;`,
     `${indent}proxy_set_header X-Forwarded-Proto $scheme;`,
-    `${indent}proxy_set_header X-Request-Id $request_id;`,
+    `${indent}proxy_set_header X-Request-Id ${requestId};`,
     `${indent}proxy_set_header Connection "";`,
     `${indent}proxy_intercept_errors off;`,
   ];
@@ -502,11 +506,33 @@ export function renderRuntimeLocations(contract) {
   const lines = [
     BANNER,
     "# Include inside the canonical server block before static locations.",
+  ];
+  // Full browser-side Modela reports are larger than the general 512 KiB
+  // runtime request cap. Scope nginx's body allowance to this one endpoint;
+  // the handler imposes its own 4 MiB export-only limit and all other routes
+  // retain nginx's default rejection behavior.
+  if (contract.runtime.httpFunctions.includes("tool-credits")) {
+    for (const prefix of ["/.netlify/functions", "/api/web"]) {
+      lines.push(`location = ${prefix}/tool-credits {`);
+      lines.push("  client_max_body_size 4m;");
+      lines.push(...runtimeProxyDirectives(), "}", "");
+    }
+  }
+  if (contract.runtime.httpFunctions.includes("tool-credits-webhook")) {
+    for (const prefix of ["/.netlify/functions", "/api/web"]) {
+      // Mercado Pago signs the original X-Request-Id; the generic proxy
+      // deliberately replaces this header for all other functions.
+      lines.push(`location = ${prefix}/tool-credits-webhook {`);
+      lines.push("  client_max_body_size 64k;");
+      lines.push(...runtimeProxyDirectives("  ", "$http_x_request_id"), "}", "");
+    }
+  }
+  lines.push(
     `location ~ ^/(?:\\.netlify/functions|api/web)/(?:${names})$ {`,
     ...runtimeProxyDirectives(),
     "}",
     "",
-  ];
+  );
   for (const id of contract.runtime.cadFieldIds || []) {
     if (!/^field\.[a-z0-9-]+$/.test(id)) throw Error("Invalid field pack identifier");
     lines.push(`location = /library/kits/${id} {`, "  absolute_redirect off;", `  return 302 "/cad/aplicativos/?area=${id}#pacotes";`, "}", "");

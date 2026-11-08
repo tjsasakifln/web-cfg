@@ -28,6 +28,8 @@ SCHEMA_VERSION = "1.0.0"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX_256 = re.compile(r"^[0-9a-f]{64}$")
 FORBIDDEN_PATH_PARTS = {".git", "node_modules", "__pycache__", ".pytest_cache"}
+TOOLS_COMMERCE_DEPS = Path("runtime/tools-commerce/deps")
+TOOLS_COMMERCE_NODE_MODULES = Path("runtime/tools-commerce/node_modules")
 FORBIDDEN_FILE_SUFFIXES = {".pem", ".key", ".sql", ".dump", ".sqlite", ".sqlite3"}
 
 
@@ -77,7 +79,12 @@ def assert_regular_tree(root: Path, label: str) -> None:
 def assert_payload_hygiene(root: Path) -> None:
     for path in sorted(root.rglob("*")):
         rel = path.relative_to(root)
-        if any(part in FORBIDDEN_PATH_PARTS for part in rel.parts):
+        allowed_commerce_modules = (
+            rel == TOOLS_COMMERCE_NODE_MODULES
+            or TOOLS_COMMERCE_NODE_MODULES in rel.parents
+        )
+        forbidden = FORBIDDEN_PATH_PARTS - {"node_modules"} if allowed_commerce_modules else FORBIDDEN_PATH_PARTS
+        if any(part in forbidden for part in rel.parts):
             raise PackageError(f"release payload contains a forbidden path: {rel}")
         if not path.is_file():
             continue
@@ -94,13 +101,18 @@ def assert_payload_hygiene(root: Path) -> None:
             raise PackageError(f"release payload contains private-key material: {rel}")
 
 
-def copy_tree(source: Path, destination: Path) -> None:
+def copy_tree(source: Path, destination: Path, *, exclude: Path | None = None) -> None:
     assert_regular_tree(source, source.name)
+    exclude_cache = shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache")
+
+    def ignored(directory: str, names: list[str]) -> set[str]:
+        return set(exclude_cache(directory, names)) | {name for name in names if Path(directory) / name == exclude}
+
     shutil.copytree(
         source,
         destination,
         copy_function=shutil.copy2,
-        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache"),
+        ignore=ignored,
     )
 
 
@@ -334,8 +346,25 @@ def build_release(
         ):
             if not required.is_dir() or required.is_symlink():
                 raise PackageError(f"required portable {label} tree is missing")
-        copy_tree(runtime_source, payload / "runtime")
+        copy_tree(runtime_source, payload / "runtime", exclude=runtime_source / "tools-commerce" / "deps" / "node_modules")
         copy_tree(functions_source, payload / "netlify" / "functions")
+        # This is the only production dependency closure in the portable
+        # runtime. It is prepared in the package job from its committed lock,
+        # carried inside the immutable tarball, and covered by files.sha256.
+        # Never install dependencies during stage or promote: that would make a
+        # rollback depend on a mutable registry response.
+        deps_source = repo_root / TOOLS_COMMERCE_DEPS
+        deps_modules = deps_source / "node_modules"
+        if not deps_source.is_dir() or deps_source.is_symlink():
+            raise PackageError("tools-commerce dependency manifest is missing")
+        for name in ("package.json", "package-lock.json"):
+            if not (deps_source / name).is_file() or (deps_source / name).is_symlink():
+                raise PackageError(f"tools-commerce dependency file is missing: {name}")
+        if not deps_modules.is_dir() or deps_modules.is_symlink():
+            raise PackageError("tools-commerce dependency closure is missing; run npm ci --omit=dev")
+        # The upstream README illustrates key syntax; it is not a runtime
+        # input. Keep the private-key scan strict and ship the code and license.
+        copy_tree(deps_modules, payload / TOOLS_COMMERCE_NODE_MODULES, exclude=deps_modules / "gtoken" / "README.md")
         for source, destination in (
             (repo_root / "scripts" / "conversion", payload / "scripts" / "conversion"),
             (repo_root / "scripts" / "offers", payload / "scripts" / "offers"),
@@ -433,6 +462,9 @@ def build_release(
                 "nginx/",
                 "schedules/",
                 "runtime/",
+                "runtime/tools-commerce/deps/package.json",
+                "runtime/tools-commerce/deps/package-lock.json",
+                "runtime/tools-commerce/node_modules/",
                 "netlify/functions/",
                 "scripts/conversion/",
                 "scripts/offers/",

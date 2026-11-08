@@ -218,6 +218,8 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
     { name: "offer-eligibility", method: "GET", path: "/.netlify/functions/offer-eligibility" },
     { name: "offer-terms-accept", method: "GET", path: "/.netlify/functions/offer-terms-accept" },
     { name: "ops", method: "GET", path: "/.netlify/functions/ops?action=health" },
+    { name: "tool-credits", method: "GET", path: "/.netlify/functions/tool-credits?op=config" },
+    { name: "tool-credits-webhook", method: "POST", path: "/.netlify/functions/tool-credits-webhook", body: "{}" },
   ];
 
   const config = loadRuntimeConfig();

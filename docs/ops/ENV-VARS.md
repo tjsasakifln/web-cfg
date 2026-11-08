@@ -129,3 +129,21 @@ Checkout/callback cannot emit `payment_received`. Production real-money stays of
 | `GSC_CLIENT_SECRETS_JSON` | alternativa OAuth | Caminho do client secret; exige `GSC_TOKEN_JSON` |
 | `GSC_TOKEN_JSON` | com client secret | Token OAuth armazenado. Não commitar. |
 | `GSC_USE_FIXTURE` | teste | `1` força o sync de fixture (`ready_for_product_decisions=false`) |
+
+## Créditos de exportação das ferramentas
+
+Ver [provisionamento e operação](../tools-commerce/README.md). O modo padrão é desligado.
+
+| Variável | Finalidade |
+|---|---|
+| `TOOLS_COMMERCE_MODE` | `off`, `emulator`, `sandbox` ou `live`; modo real apenas no perfil Netcup de produção. |
+| `TOOLS_COMMERCE_PURCHASES` | `1` libera novos pedidos, após aprovação de termos e configuração do provedor. |
+| `TOOLS_COMMERCE_EXPORTS_PAUSED` | `1` pausa emissão sem perder saldo nem liberar o fluxo anterior. |
+| `TOOLS_COMMERCE_TERMS_APPROVED` | Versão aprovada para checkout; registrar antes de publicar. |
+| `TOOLS_COMMERCE_FIREBASE_PROJECT` | ID do projeto dedicado do ambiente. |
+| `TOOLS_COMMERCE_FIREBASE_WEB_KEY`, `TOOLS_COMMERCE_FIREBASE_WEB_APP` | Configuração pública de autenticação do app web. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Caminho da credencial ADC privada, fora do release. |
+| `TOOLS_COMMERCE_HMAC_KEY` | Chave privada estável para identidade e integridade das emissões. |
+| `TOOLS_COMMERCE_MP_ACCESS_TOKEN`, `TOOLS_COMMERCE_MP_WEBHOOK_SECRET` | Token privado da aplicação Mercado Pago e segredo de webhook. |
+| `TOOLS_COMMERCE_MP_TEST_BUYER`, `TOOLS_COMMERCE_SANDBOX_UIDS`, `TOOLS_COMMERCE_SANDBOX_ORIGIN` | Identidades de teste e origem explícita, somente no sandbox. |
+| `FIREBASE_AUTH_EMULATOR_HOST`, `FIRESTORE_EMULATOR_HOST` | Hosts loopback, somente no projeto demo. |
