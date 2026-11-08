@@ -33,10 +33,11 @@ test('creates a single automatic Pix order with stable idempotency reference', a
 });
 test('uses only the verified sandbox seller and keeps an asynchronous Pix order pending', async () => {
   let sellerTags = ['normal'];
+  let sellerId = 1170000101;
   let sent;
-  const client = createMercadoPago({ mode: 'sandbox', sandboxPayerEmail: 'test_payer@example.com',
+  const client = createMercadoPago({ mode: 'sandbox', sandboxSellerId: '1170000100', sandboxPayerEmail: 'test_payer@example.com',
     accessToken: 'token', webhookSecret: 'secret', fetchImpl: async (url, options) => {
-      if (url === SELLER_PROFILE) return response({ tags: sellerTags });
+      if (url === SELLER_PROFILE) return response({ tags: sellerTags, id: sellerId });
       if (options.method === 'GET') return response(pixOrder());
       sent = JSON.parse(options.body);
       return response(pixOrder({ status: 'processing', transactions: {} }));
@@ -45,6 +46,9 @@ test('uses only the verified sandbox seller and keeps an asynchronous Pix order 
   await assert.rejects(() => client.createOrder(input), /configured environment/);
   assert.equal(sent, undefined);
   sellerTags = ['normal', 'test_user'];
+  await assert.rejects(() => client.createOrder(input), /configured ID/);
+  assert.equal(sent, undefined);
+  sellerId = 1170000100;
   const pending = await client.createOrder(input);
   assert.deepEqual(sent.payer, { email: 'test_payer@example.com', first_name: 'APRO' });
   assert.equal(pending.state, 'pending');

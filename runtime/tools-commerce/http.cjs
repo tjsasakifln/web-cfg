@@ -41,7 +41,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       const firebase = firebaseFactory(cfg);
       dependencies = { ...firebase, ledger: createLedger({ db: firebase.db, mode: cfg.mode, identityKey: cfg.identityKey, clock }),
         provider: cfg.accessToken ? providerFactory({ accessToken: cfg.accessToken, webhookSecret: cfg.webhookSecret,
-          mode: cfg.mode, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
+          mode: cfg.mode, sandboxSellerId: cfg.sandboxSellerId, sandboxPayerEmail: cfg.sandboxPayerEmail }) : null };
     }
     return dependencies;
   }

@@ -35,7 +35,7 @@ Execute `npm run build:site` para montar `_site`. Use um arquivo de ambiente pri
 node --env-file=/caminho/privado/creditos-hml.env scripts/tools-commerce/serve-hml.mjs --port 8790
 ```
 
-Abra `http://127.0.0.1:8790/avaliacao-imoveis-urbanos/inferencia/`. O servidor local lê os arquivos públicos de `_site` e encaminha apenas as duas APIs de créditos ao runtime. Depois de instalar o Access Token da aba **Teste**, configure `TOOLS_COMMERCE_TERMS_APPROVED=ferramentas-creditos-v1`, mude `TOOLS_COMMERCE_PURCHASES` para `1` nesse arquivo e reinicie o processo. A consulta autenticada da ordem permite testar a confirmação do Pix localmente antes de configurar o webhook. A entrega da notificação do Mercado Pago exige uma instância de homologação com URL HTTPS própria. Valide essa etapa separadamente com o segredo do webhook de teste.
+Abra `http://127.0.0.1:8790/avaliacao-imoveis-urbanos/inferencia/`. O servidor local lê os arquivos públicos de `_site` e encaminha apenas as duas APIs de créditos ao runtime. Configure o Access Token da aba **Teste** e o User ID da conta vendedora de teste em `TOOLS_COMMERCE_MP_TEST_SELLER_ID`. O runtime confere a identidade da conta antes de criar a ordem. Para iniciar o teste de compra, configure `TOOLS_COMMERCE_TERMS_APPROVED=ferramentas-creditos-v1`, mude `TOOLS_COMMERCE_PURCHASES` para `1` nesse arquivo e reinicie o processo. A consulta autenticada da ordem permite testar a confirmação do Pix localmente antes de configurar o webhook. A entrega da notificação do Mercado Pago exige uma instância de homologação com URL HTTPS própria. Valide essa etapa separadamente com o segredo do webhook de teste.
 
 ## Projetos e contas reais
 

@@ -65,6 +65,7 @@ function loadConfig(env) {
   const exportsPaused = env.TOOLS_COMMERCE_EXPORTS_PAUSED === '1';
   const accessToken = env.TOOLS_COMMERCE_MP_ACCESS_TOKEN || '';
   const webhookSecret = env.TOOLS_COMMERCE_MP_WEBHOOK_SECRET || '';
+  const sandboxSellerId = env.TOOLS_COMMERCE_MP_TEST_SELLER_ID || '';
   const samplePayer = 'test_payer@example.com';
   const sandboxPayerEmail = env.TOOLS_COMMERCE_MP_TEST_BUYER || (mode === 'sandbox' ? samplePayer : '');
   const sandboxUids = (env.TOOLS_COMMERCE_SANDBOX_UIDS || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -73,13 +74,14 @@ function loadConfig(env) {
     valid(mode !== 'emulator' && accessToken.length >= 25);
     if (mode === 'sandbox') {
       valid(!webhookSecret || webhookSecret.length >= 24);
+      valid(/^[1-9]\d{0,14}$/.test(sandboxSellerId));
       valid(sandboxPayerEmail === samplePayer || /^[^\s@]+@testuser\.com$/i.test(sandboxPayerEmail));
     }
-    if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail);
+    if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail && !sandboxSellerId);
   }
   if (purchasesEnabled) valid(env.TOOLS_COMMERCE_TERMS_APPROVED === TERMS);
   return { mode, firebase, authEmulator, projectId, identityKey: Buffer.from(identityKey, 'base64url'),
-    purchasesEnabled, exportsPaused, accessToken, webhookSecret, sandboxPayerEmail, sandboxUids };
+    purchasesEnabled, exportsPaused, accessToken, webhookSecret, sandboxSellerId, sandboxPayerEmail, sandboxUids };
 }
 
 module.exports = { TERMS, CATALOG_VERSION, PACKAGES, TOOL, REFERRAL_LIMIT, ORDER_LIMIT, MAX_BODY,
