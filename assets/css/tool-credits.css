@@ -3,11 +3,9 @@
   max-height: calc(100% - 2rem);
   overflow: auto;
   border: 0;
-  border-radius: 1rem;
   padding: 0;
   color: #17242f;
   background: #fff;
-  box-shadow: 0 1rem 4rem #0005;
 }
 .tool-credits::backdrop { background: #0c1c29aa; }
 .tool-credits__content { padding: 1.5rem; }
@@ -19,7 +17,6 @@
 .tool-credits input, .tool-credits textarea, .tool-credits button {
   box-sizing: border-box;
   min-height: 44px;
-  border-radius: .4rem;
   font: inherit;
   padding: .6rem;
 }
@@ -47,7 +44,7 @@
   font-size: 1.5rem;
   padding: .2rem;
 }
-.tool-credits__notice { padding: .65rem; background: #eaf7f3; border-radius: .4rem; }
-.tool-credits__payment { border: 1px solid #d3e4df; padding: 1rem; border-radius: .7rem; }
+.tool-credits__notice { padding: .65rem; background: #eaf7f3; }
+.tool-credits__payment { border: 1px solid #d3e4df; padding: 1rem; }
 .tool-credits__payment img { width: min(100%, 14rem); height: auto; justify-self: center; }
 #tool-credits[hidden], #tool-credits-info[hidden], #print[hidden] { display: none; }
