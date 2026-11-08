@@ -24,6 +24,7 @@ RELEASE_ONLY_STEPS = {
     "Pin release build clock to the commit",
     "Release artifact carries a usable anti-abuse widget",
     "Export exact gated public artifact",
+    "Export the private route inventory generated for this release",
     "Read durable GSC consumer (#413)",
 }
 
