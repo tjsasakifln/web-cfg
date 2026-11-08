@@ -1,7 +1,7 @@
 /** Canonical events: tool_view, tool_start, tool_complete, tool_copy, tool_download, tool_reset, tool_to_content, tool_to_offer, tool_to_whatsapp, tool_to_form */
 (function () {
   "use strict";
-  var P = "confenge.tool.", TTL = 864e5 * 30;
+  var P = "confenge.tool.", TTL = 864e5 * 30, DRAFT_CLEARED = "__confenge_tool_draft_cleared__";
   var PII_KEYS = ["email","phone","valor","valorinicial","valorInicial","raw","nome","cnpj","cpf","q","query","qid","mensagem","message","causa","observacao","telefone","tel","whatsapp","name","empresa","documento","identificador","contrato","freetext","free_text","search_query","edital"];
   var SAFE_STRING_KEYS = ["tool","level","offer","tipo","cta_branch","readiness","urgencia","materialidade"];
   var SAFE_NUMBER_KEYS = ["events","sem_prova","blockers","unknown_count","official_count"];
@@ -74,6 +74,35 @@
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
   }
+  function packState(v, d) {
+    return (typeof ConfengeToolPersist !== "undefined" && ConfengeToolPersist.packState)
+      ? ConfengeToolPersist.packState(v, d)
+      : (window.ConfengeToolPersist && window.ConfengeToolPersist.packState
+        ? window.ConfengeToolPersist.packState(v, d)
+        : { v: v || 1, savedAt: Date.now(), data: d });
+  }
+  function writeState(storage, id, v, d) {
+    try {
+      var raw = JSON.stringify(packState(v, d));
+      return writeRaw(storage, id, raw);
+    } catch (_) { return false; }
+  }
+  function writeRaw(storage, id, raw) {
+    try {
+      storage.setItem(P + id, raw);
+      return storage.getItem(P + id) === raw;
+    } catch (_) { return false; }
+  }
+  function readState(storage, id, v) {
+    try {
+      var r = storage.getItem(P + id); if (!r) return null;
+      var p = JSON.parse(r); if (v != null && p.v !== v) { storage.removeItem(P + id); return null; }
+      if (p.savedAt && Date.now() - p.savedAt > TTL) { storage.removeItem(P + id); return null; }
+      return p.data;
+    } catch (_) { return null; }
+  }
+  function removeState(storage, id) { try { storage.removeItem(P + id); } catch (_) {} }
+  function browserStorage(name) { try { return window[name]; } catch (_) { return null; } }
   window.ConfengeTools = {
     track: emit, emit: emit, scrubProps: scrubProps, bindToolLifecycle: bindToolLifecycle, parseMoney: parseMoney, setFieldError: setFieldError,
     escapeHtml: escapeHtml,
@@ -83,16 +112,29 @@
     pct: function (n) { return Number.isFinite(n) ? (n * 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) + "%" : "n/d"; },
     waLink: function (t) { return "https://wa.me/5548988344559?text=" + encodeURIComponent(t); },
     localNow: function () { try { return new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }); } catch (_) { return new Date().toISOString(); } },
-    saveState: function (id, v, d) { try { var packed = (typeof ConfengeToolPersist !== "undefined" && ConfengeToolPersist.packState) ? ConfengeToolPersist.packState(v, d) : (window.ConfengeToolPersist && window.ConfengeToolPersist.packState ? window.ConfengeToolPersist.packState(v, d) : { v: v || 1, savedAt: Date.now(), data: d }); localStorage.setItem(P + id, JSON.stringify(packed)); } catch (_) {} },
-    loadState: function (id, v) {
-      try {
-        var r = localStorage.getItem(P + id); if (!r) return null;
-        var p = JSON.parse(r); if (v != null && p.v !== v) { localStorage.removeItem(P + id); return null; }
-        if (p.savedAt && Date.now() - p.savedAt > TTL) { localStorage.removeItem(P + id); return null; }
-        return p.data;
-      } catch (_) { return null; }
+    saveState: function (id, v, d) { return writeState(browserStorage("localStorage"), id, v, d); },
+    loadState: function (id, v) { return readState(browserStorage("localStorage"), id, v); },
+    clearState: function (id) { removeState(browserStorage("localStorage"), id); },
+    saveDraft: function (id, v, d) {
+      var raw;
+      try { raw = JSON.stringify(packState(v, d)); } catch (_) { return false; }
+      var isolated = writeRaw(browserStorage("sessionStorage"), id, raw);
+      writeRaw(browserStorage("localStorage"), id, raw);
+      return isolated;
     },
-    clearState: function (id) { try { localStorage.removeItem(P + id); } catch (_) {} },
+    loadDraft: function (id, v) {
+      var session = browserStorage("sessionStorage"), raw = null;
+      try { raw = session && session.getItem(P + id); } catch (_) {}
+      if (raw === DRAFT_CLEARED) return null;
+      return readState(session, id, v) || readState(browserStorage("localStorage"), id, v);
+    },
+    clearDraft: function (id) {
+      var session = browserStorage("sessionStorage"), local = browserStorage("localStorage"), sessionRaw = null, localRaw = null;
+      try { sessionRaw = session && session.getItem(P + id); } catch (_) {}
+      try { localRaw = local && local.getItem(P + id); } catch (_) {}
+      try { if (session) session.setItem(P + id, DRAFT_CLEARED); } catch (_) {}
+      if (!sessionRaw || localRaw === sessionRaw) removeState(local, id);
+    },
     copyText: function (t) { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return true; }); return Promise.resolve(false); },
     buildReport: function (secs) {
       var lines = [];

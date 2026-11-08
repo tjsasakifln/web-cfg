@@ -1,22 +1,26 @@
 import {plots} from './graficos.mjs';
+import {tabDraft} from '/assets/js/tab-draft.mjs';
 const byId = id => document.getElementById(id);
 const el = (tag, text) => { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; return element; };
 const formatter = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 5});
 const reais = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
-const state = { dataset:null, example:false, fileName:'', revision:0, request:0, running:false, analysis:null, tested:null, engine:null };
+const state = { dataset:null, example:false, fileName:'', revision:0, request:0, draftVersion:0, loading:false, running:false, analysis:null, tested:null, engine:null };
 const number = value => Number.isFinite(value) ? formatter.format(value) : 'Pendente';
 const amount = value => Number.isFinite(value) ? reais.format(value)+(byId('unit').value==='BRL'?'':'/m²') : 'Pendente';
 const grade = value => ({1:'I',2:'II',3:'III'}[value] ?? (value===0 ? 'Sem enquadramento' : 'Pendente'));
 const normalize = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const engine = async () => state.engine ??= await import('./engine/client.mjs');
+const draft = tabDraft('confenge.modela.regressao.v1', () => ({version:state.draftVersion, settings:projectSettings()}), () => state.loading || state.running,
+  (text, error) => status('draft-status', text, error));
 
 function status(id,text,error=false) {
-  const node=byId(id);node.textContent=text;node.classList.toggle('mp-error',error);
+  const node=byId(id);if(node.textContent!==text)node.textContent=text;node.classList.toggle('mp-error',error);
 }
 function invalidate() {
   state.revision++;state.analysis=null;state.tested=null;
   byId('resultado').hidden=true;byId('results').replaceChildren();
   if(state.running){state.engine?.cancel?.();state.running=false;byId('run').disabled=false;byId('cancel').hidden=true;}
+  draft.refreshGuard();
   status('run-status','');
 }
 function detail(label,content) {
@@ -56,11 +60,16 @@ function features(preselected=[]) {
   }
   renderSubjects();
 }
-function setSample(dataset,name,isExample) {
+function sampleColumns(dataset) {
   if(!dataset?.rows?.length||dataset.columns.length<2)throw new Error('Use ao menos duas colunas com cabeçalhos e uma linha de dados.');
-  state.dataset=dataset;state.example=isExample;state.fileName=name;state.numeric=dataset.columns.filter(column=>numeric(column,dataset.rows));
-  const keys=state.numeric;
+  const keys=dataset.columns.filter(column=>numeric(column,dataset.rows));
   if(keys.length<2)throw new Error('O cálculo precisa de ao menos duas colunas numéricas. Confira os cabeçalhos e os valores da planilha.');
+  return keys;
+}
+function setSample(dataset,name,isExample,keys) {
+  invalidate();
+  status('project-status','');
+  state.dataset=dataset;state.example=isExample;state.fileName=name;state.numeric=keys;
   const target=byId('target');target.replaceChildren();
   keys.forEach(key=>target.append(new Option(key,key)));
   target.value=keys.find(k=>/valor|preco|price/.test(normalize(k))) ?? keys.at(-1);
@@ -68,47 +77,73 @@ function setSample(dataset,name,isExample) {
   const preview=table('Primeiras linhas da amostra',dataset.columns,dataset.rows.slice(0,6).map(r=>dataset.columns.map(c=>r[c])));
   byId('preview').replaceChildren(detail('Conferir as primeiras linhas',preview));
   byId('model-form').hidden=false;byId('empty-model').hidden=true;
-  byId('project-save').disabled=false;
+  byId('project-save').disabled=false;byId('draft-clear').hidden=false;
   status('sample-status',name+' · '+dataset.rows.length+' imóveis · '+dataset.columns.length+' colunas.');
 }
 function resetSample() {
-  byId('project-save').disabled=true;status('project-status','');
+  ++state.request;state.loading=false;
+  byId('project-save').disabled=true;byId('draft-clear').hidden=true;status('project-status','');
   invalidate();state.dataset=null;state.example=false;byId('model-form').hidden=true;byId('empty-model').hidden=false;byId('preview').replaceChildren();
+  byId('unit').value='BRL';status('sample-status','CSV ou XLSX de até 8 MB.');
 }
-async function upload(file) {
-  if(!file)return;
-  const request=++state.request;resetSample();status('sample-status','Lendo a planilha no seu dispositivo…');
+async function loadSample(statusId, message, read, apply) {
+  const request=++state.request;
+  state.loading=true;draft.refreshGuard();
+  status(statusId,message);
   try {
+    const data=await read();
+    if(request!==state.request)return;
+    if(state.dataset && !window.confirm('Substituir o projeto de regressão aberto? Salve um arquivo de projeto para guardar uma cópia.')) {
+      status(statusId,'Projeto atual mantido.');
+      return;
+    }
+    apply(data);
+    draft.replaceBase({version:++state.draftVersion, project:projectSnapshot()});
+  } catch(error) {
+    if(request===state.request)status(statusId,error.message,true);
+  } finally {
+    if(request===state.request){state.loading=false;draft.refreshGuard();}
+  }
+}
+byId('sample-file').onchange=e=>{
+  const file=e.target.files[0];e.target.value='';
+  if(!file)return;
+  loadSample('sample-status','Lendo a planilha no seu dispositivo…',async()=>{
     if(!/\.(csv|xlsx)$/i.test(file.name))throw new Error('Escolha um arquivo .csv ou .xlsx.');
     const data=await (await engine()).readFile(file);
-    if(request===state.request)setSample(data,file.name,false);
-  }catch(error){if(request===state.request){resetSample();status('sample-status',error.message,true);}}
-}
-byId('sample-file').onchange=e=>{const file=e.target.files[0];e.target.value='';upload(file);};
-byId('example').onclick=async()=>{
-  const request=++state.request;resetSample();status('sample-status','Abrindo amostra fictícia…');
-  try{
+    return {data,keys:sampleColumns(data)};
+  },({data,keys})=>setSample(data,file.name,false,keys));
+};
+byId('example').onclick=()=>loadSample('sample-status','Abrindo amostra fictícia…',
+  async()=>{
     const response=await fetch('/assets/modela/amostra-exemplo.csv');if(!response.ok)throw new Error('O exemplo não pôde ser carregado. Tente novamente.');
     const [head,...lines]=(await response.text()).trim().split(/\r?\n/);
     const columns=head.split(';'),rows=lines.map(line=>Object.fromEntries(line.split(';').map((x,i)=>[columns[i],i?Number(x):x])));
-    if(request===state.request){setSample({columns,rows},'Exemplo fictício',true);byId('unit').value='BRL';}
-  }catch(error){if(request===state.request)status('sample-status',error.message,true);}
-};
+    const dataset={columns,rows};
+    return {dataset,keys:sampleColumns(dataset)};
+  },({dataset,keys})=>{
+    setSample(dataset,'Exemplo fictício',true,keys);
+    byId('unit').value='BRL';
+  });
 const projectFormat='br.com.confenge.modelapro.regressao.v1';
 const maxProjectBytes=32*1024*1024;
 
 const logFeatures=()=>[...byId('subject').querySelectorAll('select')].filter(i=>i.value==='log').map(i=>i.name);
-byId('project-save').onclick=()=>{
-  if(!state.dataset)return;
-  const {columns,rows}=state.dataset;
-  const settings={
+function projectSettings() {
+  return {
     target:byId('target').value,unit:byId('unit').value,targetScale:byId('target-scale').value,logFeatures:logFeatures(),
     features:[...byId('features').querySelectorAll('input:checked')].map(i=>i.value),
     subject:[...byId('subject').querySelectorAll('input')].map(i=>i.value===''?null:i.valueAsNumber),
   };
-  const doc={format:projectFormat,name:state.fileName,example:state.example,columns,
-    rows:rows.map(row=>columns.map(column=>row[column])),settings};
-  const file=new Blob([JSON.stringify(doc)],{type:'application/json'});
+}
+function projectSnapshot() {
+  const {columns,rows}=state.dataset;
+  return {format:projectFormat,name:state.fileName,example:state.example,columns,
+    rows:rows.map(row=>columns.map(column=>row[column])),settings:projectSettings()};
+}
+byId('project-save').onclick=()=>{
+  if(!state.dataset)return;
+  const file=new Blob([JSON.stringify(projectSnapshot())],{type:'application/json'});
   if(file.size>maxProjectBytes){status('project-status','O projeto excede 32 MB. Reduza a amostra para salvá-lo.',true);return;}
   const link=el('a');link.href=URL.createObjectURL(file);link.download='modela-pro-projeto.json';link.click();
   setTimeout(()=>URL.revokeObjectURL(link.href),1000);
@@ -129,38 +164,69 @@ function validateProject(doc) {
     return Object.fromEntries(columns.map((column,i)=>[column,row[i]]));
   })};
   const {target,features,unit,subject,targetScale='identity',logFeatures:logs=[]}=settings;
-  if(!['BRL','BRL/m²'].includes(unit)||!Array.isArray(features)||features.length>columns.length||
+  const keys=columns.filter(column=>numeric(column,dataset.rows));
+  if(keys.length<2||!['BRL','BRL/m²'].includes(unit)||!Array.isArray(features)||features.length>columns.length||
      !Array.isArray(subject)||subject.length!==features.length||features.includes(target)||
-     new Set(features).size!==features.length||features.some(f=>!columns.includes(f))||
-     !columns.includes(target)||[target,...features].some(c=>!numeric(c,dataset.rows))||
-     subject.some(v=>v!==null&&!Number.isFinite(v))||columns.filter(c=>numeric(c,dataset.rows)).length<2)invalid();
+     new Set(features).size!==features.length||[target,...features].some(c=>!keys.includes(c))||
+     subject.some(v=>v!==null&&!Number.isFinite(v)))invalid();
   if(!['identity','log'].includes(targetScale)||!Array.isArray(logs)||logs.some(f=>!features.includes(f))||
      new Set(logs).size!==logs.length)invalid();
-  return {dataset,target,features,unit,subject,targetScale,logs,name:doc.name,example:doc.example};
+  return {dataset,keys,target,features,unit,subject,targetScale,logs,name:doc.name,example:doc.example};
 }
 
-byId('project-file').onchange=async event=>{
+function applyProject(project) {
+  setSample(project.dataset,project.name,project.example,project.keys);
+  byId('target').value=project.target;byId('unit').value=project.unit;
+  byId('target-scale').value=project.targetScale;features(project.features);
+  byId('subject').querySelectorAll('select').forEach(i=>{i.value=project.logs.includes(i.name)?'log':'identity';});
+  const values=new Map(project.features.map((key,i)=>[key,project.subject[i]]));
+  byId('subject').querySelectorAll('input').forEach(i=>{i.value=values.get(i.name)??'';});
+}
+
+byId('project-file').onchange=event=>{
   const input=event.target,file=input.files[0];input.value='';
   if(!file)return;
-  const request=++state.request;
-  try {
+  loadSample('project-status','Lendo projeto de regressão…',async()=>{
     if(file.size>maxProjectBytes)throw new Error('Escolha um projeto de até 32 MB.');
-    const project=validateProject(JSON.parse(await file.text()));
-    if(request!==state.request)return;
-    resetSample();setSample(project.dataset,project.name,project.example);
-    byId('target').value=project.target;byId('unit').value=project.unit;
-    byId('target-scale').value=project.targetScale;features(project.features);
-    byId('subject').querySelectorAll('select').forEach(i=>{i.value=project.logs.includes(i.name)?'log':'identity';});
-    const values=new Map(project.features.map((key,i)=>[key,project.subject[i]]));
-    byId('subject').querySelectorAll('input').forEach(i=>{i.value=values.get(i.name)??'';});
+    try { return validateProject(JSON.parse(await file.text())); }
+    catch(error){throw new Error(error instanceof SyntaxError?'O arquivo não contém um projeto JSON válido.':error.message);}
+  },project=>{
+    applyProject(project);
     status('project-status','Projeto reaberto. Confira os dados e calcule a avaliação.');
-  }catch(error){
-    if(request===state.request)status('project-status',error instanceof SyntaxError?'O arquivo não contém um projeto JSON válido.':error.message,true);
-  }
+  });
 };
-byId('target').onchange=()=>{invalidate();features();};
-byId('features').onchange=()=>{invalidate();renderSubjects();};
-byId('subject').oninput=invalidate;byId('subject').onchange=invalidate;byId('unit').onchange=invalidate;byId('target-scale').onchange=invalidate;
+function updateDraft(){invalidate();draft.schedule();}
+byId('target').onchange=()=>{features();updateDraft();};
+byId('features').onchange=()=>{renderSubjects();updateDraft();};
+byId('subject').oninput=event=>{if(event.target.matches('input'))updateDraft();};
+byId('subject').onchange=event=>{if(event.target.matches('select'))updateDraft();};
+byId('unit').onchange=updateDraft;byId('target-scale').onchange=updateDraft;
+byId('draft-clear').onclick=()=>{
+  if(window.confirm('Limpar a amostra e os dados de regressão desta aba?') && draft.clear())resetSample();
+};
+try {
+  const saved=draft.readBase();
+  if(saved){
+    byId('draft-clear').hidden=false;
+    if(!Number.isSafeInteger(saved.version)||saved.version<1)throw new Error('Versão inválida');
+    state.draftVersion=saved.version;
+    let project;
+    let defaults=false;
+    try {
+      const current=draft.read();
+      if(current?.version!==saved.version)throw new Error('Ajustes de outra amostra');
+      project=validateProject({...saved.project,settings:current.settings});
+    } catch {
+      project=validateProject(saved.project);
+      defaults=true;
+    }
+    applyProject(project);
+    status('draft-status',defaults?'Amostra recuperada. Revise os ajustes antes de calcular.':
+      'Rascunho recuperado nesta aba. Confira os dados e calcule novamente.');
+  }
+} catch {
+  status('draft-status','O rascunho de regressão não pôde ser lido. Você pode reabrir um arquivo de projeto.',true);
+}
 byId('cancel').onclick=()=>{invalidate();status('run-status','Cálculo cancelado. A amostra continua disponível.');};
 byId('model-form').onsubmit=async event=>{
   event.preventDefault();if(!state.dataset||state.running)return;
@@ -170,6 +236,7 @@ byId('model-form').onsubmit=async event=>{
   const subject=Object.fromEntries([...byId('subject').querySelectorAll('input')].map(x=>[x.name,x.valueAsNumber]));
   const params={rows:state.dataset.rows,target:byId('target').value,features:selected,subject,unit:byId('unit').value,targetScale:byId('target-scale').value,logFeatures:logFeatures()};
   state.running=true;byId('run').disabled=true;byId('cancel').hidden=false;
+  draft.refreshGuard();
   status('run-status','Calculando no dispositivo. No primeiro uso, aguarde o carregamento das bibliotecas estatísticas.');
   try {
     const worker=await engine();if(rev!==state.revision)return;
@@ -178,7 +245,7 @@ byId('model-form').onsubmit=async event=>{
     state.analysis=result;state.tested=params;renderResult(result);status('run-status','Cálculo concluído.');
     byId('resultado').hidden=false;byId('resultado').querySelector('h2').focus({preventScroll:true});byId('resultado').scrollIntoView({block:'start'});
   } catch(error) {if(rev===state.revision)status('run-status',error.message||'Falha no cálculo. Revise a amostra e tente novamente.',true);}
-  finally{if(rev===state.revision){state.running=false;byId('run').disabled=false;byId('cancel').hidden=true;}}
+  finally{if(rev===state.revision){state.running=false;byId('run').disabled=false;byId('cancel').hidden=true;draft.refreshGuard();}}
 };
 
 function renderResult(r) {

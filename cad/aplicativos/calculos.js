@@ -1,5 +1,8 @@
 // The vendor registry and individual numerical modules are loaded on demand.
+import {tabDraft} from '/assets/js/tab-draft.mjs';
+
 const library = '/assets/cad-engines/engines.js';
+const draftStorageKey = 'br.com.confenge.cad-calculos.drafts.v1';
 
 if (typeof document === 'undefined') {
   self.onmessage = async ({ data }) => {
@@ -53,11 +56,13 @@ function mount(root) {
     <div class="calc-options"><label>Tipo de cálculo<select data-engine></select></label>
       <label>Exemplo<select data-example></select></label></div>
     <label for="suite-modelo"><strong>Dados do modelo</strong></label>
-    <p data-input-help></p><textarea id="suite-modelo" rows="10" spellcheck="false" aria-describedby="suite-ajuda-modelo"></textarea>
+    <p data-input-help></p><textarea id="suite-modelo" rows="10" spellcheck="false" aria-describedby="suite-ajuda-modelo" disabled></textarea>
     <div class="calc-actions"><button type="button" class="button button-primary" data-run>Calcular</button>
       <button type="button" class="button" data-reset>Restaurar exemplo</button>
+      <button type="button" class="button" data-draft-clear hidden>Limpar rascunhos desta aba</button>
       <button type="button" class="button" data-cancel hidden>Interromper</button></div>
     <p role="status" aria-live="polite" data-status></p>
+    <p role="status" aria-live="polite" data-draft-status></p>
     <div data-results></div>`;
   const status = panel.querySelector('[data-status]');
   const result = panel.querySelector('[data-results]');
@@ -68,14 +73,32 @@ function mount(root) {
   hint.id = 'suite-ajuda-modelo';
   const run = panel.querySelector('[data-run]');
   const cancel = panel.querySelector('[data-cancel]');
+  const clearDrafts = panel.querySelector('[data-draft-clear]');
+  const draftStatus = panel.querySelector('[data-draft-status]');
   root.append(open, panel);
 
   let api, limit, sequence = 0, worker, timer, selected = '';
   const drafts = new Map();
+  function reportDraft(text) {
+    if (draftStatus.textContent !== text) draftStatus.textContent = text;
+  }
+  const draft = tabDraft(draftStorageKey, () => ({selected, models:Object.fromEntries(drafts)}), () => Boolean(worker), reportDraft);
+  try {
+    const saved = draft.read();
+    if (saved?.models && typeof saved.selected === 'string') {
+      for (const [key, text] of Object.entries(saved.models)) {
+        if (typeof text === 'string') drafts.set(key, text);
+      }
+      selected = saved.selected;
+    }
+  } catch {
+    reportDraft('O rascunho de cálculo não pôde ser lido.');
+  }
   const resetResult = () => { result.replaceChildren(); status.textContent = ''; };
   function stop(message) {
     if (worker) worker.terminate();
     worker = null;
+    draft.refreshGuard();
     clearTimeout(timer);
     run.disabled = !input.value.trim();
     cancel.hidden = true;
@@ -85,19 +108,20 @@ function mount(root) {
     const ticket = ++sequence;
     resetResult();
     stop();
-    run.disabled = true;
+    run.disabled = input.disabled = true;
     try {
       const data = await api.example(engines.value, sample.value);
       if (ticket !== sequence) return;
       input.value = drafts.get(engines.value + '/' + data.id) ?? data.text;
+      input.disabled = false;
       run.disabled = !input.value.trim();
     } catch { if (ticket === sequence) status.textContent = 'O exemplo não carregou. Selecione-o novamente.'; }
   }
-  async function selectEngine() {
+  async function selectEngine(preferredExample) {
     const ticket = ++sequence;
     resetResult();
     stop();
-    run.disabled = true;
+    run.disabled = input.disabled = true;
     input.value = '';
     sample.replaceChildren();
     try {
@@ -106,6 +130,7 @@ function mount(root) {
       if (ticket !== sequence) return;
       const engine = api.list().find(item => item.id === id);
       for (const ex of descriptor.examples) sample.add(new Option(examples[ex.id] || ex.name, ex.id));
+      if (descriptor.examples.some(ex => ex.id === preferredExample)) sample.value = preferredExample;
       selected = id + '/' + sample.value;
       hint.textContent = 'Formato: ' + (engine.kind === 'JSON' ? 'JSON' : 'texto') +
         '. Altere os valores preservando os nomes dos campos e as unidades do exemplo. ' + descriptor.inputLabel;
@@ -132,20 +157,37 @@ function mount(root) {
       api = createEngines();
       limit = LIMITS.text;
       for (const item of api.list()) engines.add(new Option(names[item.id] || item.name, item.id));
-      engines.value = 'schedule';
-      await selectEngine();
+      const [savedEngine, savedExample] = selected.split('/');
+      engines.value = api.list().some(item => item.id === savedEngine) ? savedEngine : 'schedule';
+      await selectEngine(savedExample);
     } catch { status.textContent = 'Não foi possível abrir as calculadoras. Feche o painel e tente novamente.'; }
     finally { open.disabled = false; }
   });
-  engines.addEventListener('change', selectEngine);
+  engines.addEventListener('change', () => selectEngine());
   sample.addEventListener('change', () => { selected = engines.value + '/' + sample.value; loadSample(); });
   input.addEventListener('input', () => {
     resetResult(); stop();
-    if (input.value.length <= limit) drafts.set(selected, input.value);
-    else status.textContent = 'O modelo ultrapassa o limite de ' + limit.toLocaleString('pt-BR') + ' caracteres.';
+    drafts.set(selected, input.value);
+    clearDrafts.hidden = false;
+    draft.schedule();
+    if (input.value.length > limit) status.textContent = 'O modelo ultrapassa o limite de ' + limit.toLocaleString('pt-BR') + ' caracteres.';
   });
   panel.querySelector('[data-reset]').addEventListener('click', () => {
-    drafts.delete(selected);
+    if (drafts.has(selected)) {
+      if (!window.confirm('Substituir os dados deste modelo pelo exemplo original?')) return;
+      if (drafts.size === 1 && !draft.clear()) return;
+      drafts.delete(selected);
+      if (drafts.size) draft.schedule();
+      clearDrafts.hidden = drafts.size === 0;
+    }
+    if (api) loadSample();
+  });
+  clearDrafts.addEventListener('click', () => {
+    if (!window.confirm('Limpar os rascunhos de cálculo desta aba?') || !draft.clear()) return;
+    stop();
+    drafts.clear();
+    clearDrafts.hidden = true;
+    resetResult();
     if (api) loadSample();
   });
   cancel.addEventListener('click', () => stop('Cálculo interrompido.'));
@@ -158,6 +200,7 @@ function mount(root) {
     cancel.hidden = false;
     try {
       worker = new Worker(import.meta.url, {type:'module'});
+      draft.refreshGuard();
       worker.onerror = () => stop('O cálculo não pôde ser executado. Confira os dados e tente novamente.');
       worker.onmessage = ({data}) => {
         stop();
@@ -169,6 +212,11 @@ function mount(root) {
       worker.postMessage({id:engines.value, text:input.value});
     } catch { stop('O navegador não conseguiu iniciar o cálculo.'); }
   });
+  if (drafts.size) {
+    clearDrafts.hidden = false;
+    reportDraft('Rascunho recuperado nesta aba. Confira os dados e calcule novamente.');
+    open.click();
+  }
 }
 
 function render(target, report) {

@@ -1,6 +1,5 @@
-Modela Pro da CONFENGE
-Código e documentação do sistema: https://github.com/tjsasakifln/modelapro
-Revisão do sistema usada nesta distribuição: bd610037a48e6a9a778abc5db5a56e35bedc3b82.
+Modela Pro da CONFENGE | Avisos técnicos e licenças de terceiros
+Revisão dos módulos usados no navegador: bd610037a48e6a9a778abc5db5a56e35bedc3b82.
 
 O ambiente Python executa no dispositivo do visitante. As bibliotecas mantêm suas licenças e avisos, incluídos nas distribuições instaladas. Os arquivos .whl e .zip do ambiente podem ser abertos como arquivos ZIP para ler os avisos originais (pastas *.dist-info/licenses, LICENSE ou COPYING).
 
@@ -12,7 +11,7 @@ SciPy: https://github.com/scipy/scipy
 pandas: https://github.com/pandas-dev/pandas
 statsmodels: https://github.com/statsmodels/statsmodels
 openpyxl: https://openpyxl.readthedocs.io/
-Licenças das distribuições completas: https://github.com/tjsasakifln/modelapro/blob/main/THIRD_PARTY_NOTICES.md
+Avisos de licenças das dependências: https://github.com/tjsasakifln/modelapro/blob/bd610037a48e6a9a778abc5db5a56e35bedc3b82/THIRD_PARTY_NOTICES.md
 
 Mozilla Public License Version 2.0
 ==================================

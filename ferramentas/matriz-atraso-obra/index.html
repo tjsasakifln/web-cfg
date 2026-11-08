@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Matriz de atraso de obra | CONFENGE</title><meta name="description" content="Registre eventos de atraso e obtenha hipóteses preliminares e lacunas de prova."/>
+<title>Matriz de atraso de obra e prorrogação de prazo | CONFENGE</title><meta name="description" content="Registre eventos de atraso de obra, organize provas e identifique hipóteses preliminares para prorrogação de prazo em contratos públicos."/><meta name="robots" content="index,follow,max-image-preview:large"/>
 <link rel="canonical" href="https://confenge.com.br/ferramentas/matriz-atraso-obra/"/>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/styles-tools.css"/>
 <link href="/assets/editorial-tool.css" rel="stylesheet"/><link rel="stylesheet" href="/ferramentas/matriz-atraso-obra/styles.css"/>
 <meta content="#061a33" name="theme-color"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Matriz de atraso de obra","url":"https://confenge.com.br/ferramentas/matriz-atraso-obra/","dateModified":"2026-08-15","author":{"@type":"Person","name":"Engº Tiago Sasaki","url":"https://confenge.com.br/especialista/tiago-jun-sasaki/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Matriz de atraso de obra e prorrogação de prazo","url":"https://confenge.com.br/ferramentas/matriz-atraso-obra/","description":"Registre eventos de atraso de obra, organize provas e identifique hipóteses preliminares para prorrogação de prazo em contratos públicos.","applicationCategory":"BusinessApplication","operatingSystem":"Web","isAccessibleForFree":true,"inLanguage":"pt-BR","dateModified":"2026-11-08","author":{"@type":"Person","name":"Engº Tiago Sasaki","url":"https://confenge.com.br/especialista/tiago-jun-sasaki/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://confenge.com.br/ferramentas/matriz-atraso-obra/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Matriz de atraso","item":"https://confenge.com.br/ferramentas/matriz-atraso-obra/"}]}</script>
 </head><body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
@@ -227,10 +227,28 @@
     return ev;
   }
   function persist(){
-    T.saveState(TOOL, SCHEMA, { events: collect(), tem_matriz: document.getElementById("tem_matriz").value });
+    var d={ events: collect(), tem_matriz: document.getElementById("tem_matriz").value };
+    if(!hasDraft(d)){draftAtRisk=false;if(T.clearDraft)T.clearDraft(TOOL);return;}
+    draftAtRisk=!(T.saveDraft && T.saveDraft(TOOL, SCHEMA, d));
+  }
+  var draftAtRisk=false;
+  function hasDraft(d){return Boolean((d.tem_matriz && d.tem_matriz!=="sim") || d.events.some(function(ev){
+    return Boolean((ev.causa||"").trim() || ev.dataInicio || ev.dataFim || ev.duracaoDias!=null ||
+      (ev.parte && ev.parte!=="indefinida") || ev.comunicacaoContemporanea || ev.documentoDisponivel ||
+      ev.atividadeAfetada || (ev.impactoCaminhoCritico && ev.impactoCaminhoCritico!=="incerto") ||
+      ev.concorrencia || (ev.observacao||"").trim());
+  }));}
+  var persistTimer;
+  function schedulePersist(){
+    clearTimeout(persistTimer);
+    persistTimer=setTimeout(persist,250);
+  }
+  function flushPersist(){
+    clearTimeout(persistTimer);
+    persist();
   }
   function restore(){
-    var d=T.loadState(TOOL, SCHEMA);
+    var d=T.loadDraft ? T.loadDraft(TOOL, SCHEMA) : T.loadState(TOOL, SCHEMA);
     if(d && d.tem_matriz) document.getElementById("tem_matriz").value=d.tem_matriz;
     if(d && d.events && d.events.length){
       d.events.forEach(function(ev){ root.appendChild(card(ev)); });
@@ -343,7 +361,10 @@
     persist();
   });
   root.addEventListener("change", persist);
+  root.addEventListener("input", schedulePersist);
   document.getElementById("tem_matriz").addEventListener("change", persist);
+  window.addEventListener("pagehide", flushPersist);
+  window.addEventListener("beforeunload", function(e){flushPersist();if(!draftAtRisk)return;e.preventDefault();e.returnValue="";});
   document.getElementById("btn-dl").onclick=function(){ T.downloadText("confenge-matriz-atraso.txt", lastText); };
   document.getElementById("btn-copy").onclick=function(){ T.copyText(lastText); };
   document.getElementById("btn-print").onclick=function(){ window.print(); };
@@ -354,7 +375,8 @@
     document.getElementById("ra").hidden=true;
     document.getElementById("cta").hidden=true;
     lastText="";
-    T.clearState(TOOL);
+    draftAtRisk=false;
+    if(T.clearDraft)T.clearDraft(TOOL);else T.clearState(TOOL);
   };
   restore();
 })();

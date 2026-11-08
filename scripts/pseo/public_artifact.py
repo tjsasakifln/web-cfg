@@ -253,6 +253,13 @@ FORBIDDEN_PUBLIC_PATH_PREFIXES = (
     "tests/",
 )
 
+# Retired browser-tool distributions are checked by exact path. A generic ZIP
+# ban would reject legitimate public archives, while this artifact must never
+# reintroduce an installable Modela Pro application.
+RETIRED_PUBLIC_ARTIFACT_PATHS = frozenset(
+    {"avaliacao-imoveis-urbanos/inferencia/modela-pro-completo.zip"}
+)
+
 # Explicit public demonstrative downloads. Not a license to copy repo-root
 # data/, ops/data, fixtures, GSC, logs, handoffs, or anything under tests/.
 _PUBLIC_NESTED_DATA_DIR = re.compile(r"^casos/[a-z0-9][a-z0-9-]{0,80}/data$")
@@ -557,8 +564,7 @@ def assemble_public_artifact(
         subprocess.run([sys.executable, str(root / "scripts/cad/suite/install.py"), str(dest.resolve())], check=True)
 
     if (root / "avaliacao-imoveis-urbanos/inferencia/index.html").is_file():
-        for installer in ("publicar.py", "pacote_completo.py"):
-            subprocess.run([sys.executable, str(root / "scripts/modela" / installer), str(dest.resolve())], check=True)
+        subprocess.run([sys.executable, str(root / "scripts/modela/publicar.py"), str(dest.resolve())], check=True)
 
     omitted_review_metadata = omit_production_review_packet(
         dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"
@@ -635,6 +641,16 @@ def audit_public_artifact(
             "findings": [{"code": "missing_artifact", "path": dest_name, "detail": "not found"}],
             "file_count": 0,
         }
+
+    for rel in RETIRED_PUBLIC_ARTIFACT_PATHS:
+        if (dest / rel).exists():
+            findings.append(
+                {
+                    "code": "retired_public_artifact",
+                    "path": rel,
+                    "detail": "the Modela Pro browser tool must not ship an installable package",
+                }
+            )
 
     from scripts.site.public_navigation import audit_public_navigation_tree
 

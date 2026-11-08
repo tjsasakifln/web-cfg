@@ -340,6 +340,7 @@ jobs:
       - name: Playwright checklist on _site
         env:
           CONFENGE_BASE: http://127.0.0.1:8765
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           python3 -m http.server 8765 --directory _site &
           echo $! > /tmp/site-http.pid
@@ -348,6 +349,8 @@ jobs:
             sleep 1
           done
           node scripts/site/playwright_local_checklist.mjs
+          node scripts/modela/verificar-projeto.mjs "$CONFENGE_BASE"
+          node scripts/cad/suite/verificar-rascunho.mjs "$CONFENGE_BASE"
           kill "$(cat /tmp/site-http.pid)" || true
       - name: Read durable GSC consumer (#413)
         # Release path only: the pull_request context has no OPS_TOKEN, so the

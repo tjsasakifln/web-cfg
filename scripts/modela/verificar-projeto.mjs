@@ -8,6 +8,8 @@ import puppeteer from 'puppeteer-core';
 
 const base=process.argv[2] || 'https://confenge.com.br';
 const url=new URL('/avaliacao-imoveis-urbanos/inferencia/',base);
+const removed=await fetch(new URL('modela-pro-completo.zip',url),{method:'HEAD',redirect:'manual',signal:AbortSignal.timeout(30000)});
+assert([404,410].includes(removed.status),`O pacote aposentado respondeu HTTP ${removed.status}.`);
 const directory=await mkdtemp(join(tmpdir(),'modela-projeto-'));
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH,
   args:['--no-sandbox','--disable-dev-shm-usage']});
@@ -17,9 +19,14 @@ try {
   const posts=[];
   pg.on('request',r=>{if(r.method()==='POST' && r.postData()?.includes('br.com.confenge.modelapro'))posts.push(r.url());});
   await pg.goto(url.href);
+  const isGuarded = page=>page.evaluate(()=>!window.dispatchEvent(new Event('beforeunload',{cancelable:true})));
+  assert.equal(await isGuarded(pg),false,'A página vazia deve permitir sair.');
+  pg.on('dialog',dialog=>dialog.accept());
   const client=await pg.createCDPSession();
   await client.send('Page.setDownloadBehavior',{behavior:'allow',downloadPath:directory});
-  await pg.click('#example');await pg.waitForSelector('#model-form:not([hidden])');
+  await pg.waitForFunction(()=>typeof document.querySelector('#example').onclick==='function');
+  await pg.$eval('#example',button=>button.click());
+  await pg.waitForSelector('#model-form:not([hidden])');
   await pg.evaluate(()=>{
     document.querySelector('#project-save').closest('details').open=true;
     const area=document.querySelector('#subject input[name="area_m2"]');area.value='83.5';area.dispatchEvent(new Event('input',{bubbles:true}));
@@ -49,6 +56,10 @@ try {
     },doc);
   };
   await pg.reload();
+  await pg.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('Rascunho recuperado'));
+  assert.equal(await pg.$eval('#subject input[name="area_m2"]',i=>i.value),'83.5');
+  assert.equal(await pg.$eval('#subject select[name="area_m2"]',i=>i.value),'log');
+  assert.equal(await isGuarded(pg),false,'O rascunho recuperável deve permitir sair.');
   await reopen({...saved,resultado:{point:9e15}});
   await pg.waitForFunction(()=>document.querySelector('#project-status').textContent.includes('Projeto reaberto'));
   assert.equal(await pg.$eval('#resultado',x=>x.hidden),true);
@@ -56,7 +67,11 @@ try {
   assert.equal(await pg.$eval('#unit',i=>i.value),'BRL/m²');
   assert.equal(await pg.$eval('#target-scale',i=>i.value),'log');
   assert.equal(await pg.$eval('#subject select[name="area_m2"]',i=>i.value),'log');
-  await pg.click('#run');
+  const guardedDuringRun=await pg.$eval('#run',button=>{
+    button.click();
+    return !window.dispatchEvent(new Event('beforeunload',{cancelable:true}));
+  });
+  assert.equal(guardedDuringRun,true,'O recarregamento deve ser protegido enquanto o motor calcula.');
   await pg.waitForSelector('#resultado:not([hidden])');
   assert.match(await pg.$eval('.mp-equation',n=>n.textContent),/ln\(area_m2\)/);
   assert.match(await pg.$eval('.mp-equation',n=>n.textContent),/^ln\(/);
@@ -65,6 +80,13 @@ try {
   await reopen({...saved,columns:['constructor',...saved.columns.slice(1)]});
   await pg.waitForFunction(()=>document.querySelector('#project-status').textContent.includes('inválido'));
   assert.equal(await pg.$eval('#resultado',x=>x.hidden),false,'Um arquivo inválido deve preservar o projeto aberto.');
+  await pg.evaluate(()=>{
+    const input=document.querySelector('#sample-file'), transfer=new DataTransfer();
+    transfer.items.add(new File(['dados inválidos'],'invalido.txt'));
+    input.files=transfer.files;input.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await pg.waitForFunction(()=>document.querySelector('#sample-status').textContent.includes('Escolha um arquivo'));
+  assert.equal(await pg.$eval('#resultado',x=>x.hidden),false,'Uma planilha inválida deve preservar o projeto aberto.');
   await reopen(saved);
   await pg.waitForFunction(()=>document.querySelector('#project-status').textContent.includes('Projeto reaberto'));
   assert.equal(await pg.$eval('#resultado',x=>x.hidden),true,'Reabrir exige novo cálculo.');
@@ -92,9 +114,53 @@ try {
   assert.equal(logarithm.pi,null);assert.equal(logarithm.precision,null);assert.equal(logarithm.errors.length,3);
   for(const error of logarithm.errors)assert.match(error,/positiv/);
   assert(logarithm.xOnlyCi.every(Number.isFinite));
+  await pg.evaluate(()=>{
+    document.querySelector('#metodo-custo').open=true;
+    document.querySelector('#cost-form [data-example]').click();
+    document.querySelector('#cost-form [data-add]').click();
+    const item=document.querySelector('.cost-item:last-child [name="descricao"]');
+    item.value='Instalações';
+    item.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await pg.waitForFunction(()=>document.querySelector('[data-draft-status]').textContent.includes('atualizado'));
+  await pg.reload();
+  await pg.waitForFunction(()=>document.querySelector('[data-draft-status]').textContent.includes('recuperado'));
+  assert.deepEqual(await pg.$$eval('.cost-item [name="descricao"]',fields=>fields.map(field=>field.value)),
+    ['Edificação térrea','Instalações']);
+  await pg.click('.cost-item:last-child button');
+  await pg.click('#cost-form button[type="submit"]');
+  await pg.waitForSelector('[data-output] h3');
+  assert.match(await pg.$eval('[data-output] h3',heading=>heading.textContent),/302\.400,00/);
+  await pg.click('#draft-clear');
+  await pg.reload();
+  await pg.waitForFunction(()=>document.querySelector('[data-draft-status]').textContent.includes('recuperado'));
+  assert.equal(await pg.$eval('#model-form',form=>form.hidden),true,'A limpeza deve apagar a regressão sem afetar custo.');
+
+  const blocked=await browser.newPage();
+  await blocked.evaluateOnNewDocument(()=>{
+    const setItem=Storage.prototype.setItem;
+    Storage.prototype.setItem=function(key,value){
+      if(key.startsWith('confenge.modela.'))throw new DOMException('Limite de teste','QuotaExceededError');
+      return setItem.call(this,key,value);
+    };
+  });
+  await blocked.goto(url.href);
+  await blocked.waitForFunction(()=>typeof document.querySelector('#example').onclick==='function');
+  await blocked.$eval('#example',button=>button.click());
+  await blocked.waitForFunction(()=>document.querySelector('#draft-status').textContent.includes('só na página'));
+  assert.equal(await isGuarded(blocked),true);
+  const warning=new Promise(resolve=>blocked.once('dialog',async dialog=>{
+    await dialog.dismiss();
+    resolve(dialog.type());
+  }));
+  await blocked.mouse.click(10,10);
+  void blocked.evaluate(()=>{location.reload();}).catch(()=>{});
+  assert.equal(await Promise.race([warning,delay(5000,'sem aviso')]),'beforeunload',
+    'O navegador deve proteger uma amostra sem rascunho.');
+  assert.equal(await blocked.$eval('#model-form',form=>form.hidden),false);
   assert.equal(posts.length,0);
   console.log('Escalas logarítmicas conferidas:',JSON.stringify(logarithm));
-  console.log('Projeto local conferido: download, 24 imóveis, atributos, unidade, JSON inválido, invalidação e recálculo no Chrome.');
+  console.log('Projeto local conferido: download, reabertura, rascunhos, limpeza isolada e aviso nativo quando o armazenamento falha.');
 } finally {
   await browser.close();
   await rm(directory,{recursive:true,force:true});
