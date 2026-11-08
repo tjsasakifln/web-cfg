@@ -33,10 +33,6 @@
 }
 .tool-credits button + button { background: #fff; color: #00645c; }
 .tool-credits button:disabled { opacity: .6; cursor: wait; }
-.tool-credits button:focus-visible, .tool-credits input:focus-visible, .tool-credits textarea:focus-visible {
-  outline: 2px solid #00423d;
-  outline-offset: 3px;
-}
 .tool-credits a { color: #004b44; text-decoration: underline; }
 .tool-credits .tool-credits__close {
   float: right;
