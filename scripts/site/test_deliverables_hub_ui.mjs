@@ -668,7 +668,7 @@ for (const { route, expectedNav } of [
   }
   if (expectedNav === promotedNav) {
     if (metrics.nav.filter(({ href }) => href === "/projetos/").length !== 1) errors.push("projects_nav_missing");
-    if (metrics.nav.some(({ href }) => href === "/ferramentas/")) errors.push("tools_nav_not_consolidated");
+    if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("tools_nav_count");
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("entregas_still_in_header");
   } else {
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");

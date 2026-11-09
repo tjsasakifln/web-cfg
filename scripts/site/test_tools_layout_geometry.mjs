@@ -40,7 +40,7 @@ const ROUTES = [
   { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
   { id: "unifilar", path: "/ferramentas/diagrama-unifilar/", primary: "#editor" },
   { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
-  { id: "catalogo", path: "/ferramentas/", primary: ".ts-grid" },
+  { id: "catalogo", path: "/ferramentas/", primary: "#destaques" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
@@ -177,7 +177,9 @@ async function geometry(page, route, state, width) {
       }
     }
 
-    const controls = [...document.querySelectorAll("main input:not([type=hidden]), main select, main textarea, main button, main .button")].filter(visible);
+    const controls = [...document.querySelectorAll(
+      "main input:not([type=hidden]), main select, main textarea, main button, main .button, main .ts-card-action, main .ts-jumps a, main .tool-share-social a",
+    )].filter(visible);
     for (const control of controls) {
       const box = control.getBoundingClientRect();
       const style = getComputedStyle(control);
