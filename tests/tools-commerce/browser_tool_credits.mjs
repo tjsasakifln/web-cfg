@@ -270,9 +270,9 @@ try {
   assert.equal(termsBeforeClick.checked, false);
   assert.equal(termsBeforeClick.connected, true);
   assert.ok(termsBeforeClick.width > 0 && termsBeforeClick.height > 0, 'terms control must have a clickable geometry');
-  // The locator performs one physical click after the live checkbox settles;
-  // rendering the refusal notice can otherwise replace a cached handle.
-  await page.locator('dialog input[type=checkbox]').click();
+  // The same trusted pointer path as the primary purchase restores foreground
+  // focus after the competing tab and rejects a moving or covered checkbox.
+  await trustedPhysicalClick(page, await prepareTrustedPhysicalClick(page, 'dialog input[type=checkbox]', 'terms consent'));
   try {
     await page.waitForFunction(() => document.querySelector('dialog input[type=checkbox]')?.checked === true, { timeout: 5000 });
   } catch (error) {
