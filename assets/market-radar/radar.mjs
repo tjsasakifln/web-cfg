@@ -114,6 +114,7 @@ async function search(page = 1) {
     });
     const data = await response.json();
     if (thisGeneration !== generation) return;
+    if (data.error === "data_stale") { status.textContent = "A atualização do radar está atrasada. Consulte o PNCP para uma busca atual."; return; }
     if (!response.ok || !data.ok) throw new Error(data.message || "O radar não está disponível neste momento.");
     if (data.meta?.stale) { status.textContent = "A atualização do radar está atrasada. Consulte o PNCP para uma busca atual."; return; }
     render(data);

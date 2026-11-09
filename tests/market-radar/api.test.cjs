@@ -107,6 +107,12 @@ test("expiry filter only includes eligible current signals and entity filter is 
   assert.equal(ending.records[0].id, "contrato-1");
 });
 
+test("rankings keep the latest entity name inside the filtered universe", async () => {
+  const cleaning = JSON.parse((await api.handler(event("POST", { q: "limpeza", months: "all" }))).body);
+  assert.equal(cleaning.buyers[0].name, "Prefeitura Antiga");
+  assert.equal(cleaning.suppliers[0].name, "Limpeza Dois");
+});
+
 test("stale generation, stale ingestion and hash-divergent snapshots fail closed", async () => {
   installSnapshot({ generatedHours: 40 });
   let result = await api.handler(event("GET"));

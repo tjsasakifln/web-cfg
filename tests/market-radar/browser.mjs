@@ -13,7 +13,7 @@ const validPnpc = "https://pncp.gov.br/app/contratos/46068425000133/2026/9335";
 const requests = [];
 
 function result(filters, stale = false) {
-  return { ok: true, meta: { generated_at: "2026-11-09T12:00:00Z", source_as_of: "2026-11-09T11:00:00Z", ingestion_latest_at: "2026-11-09T11:50:00Z", window_start: "2025-11-09", window_end: "2026-11-09", stale, excluded_count: 2, coverage_note: "Cobertura local de teste.", value_note: "Não totalize valores." }, filters, summary: { contracts: 501, buyers: 1, suppliers: 1, valued_contracts: 1 }, buyers: [{ id: buyer, name: "Órgão teste", contracts: 2, uf: "SC" }], suppliers: [{ id: supplier, name: "Fornecedor teste", contracts: 2, uf: "SC" }], records: [{ object: filters.q === "new" ? "Objeto novo" : "  =formula <img src=x onerror=alert(1)>", buyer_name: "Órgão teste", supplier_name: "Fornecedor teste", uf: "SC", city: "Florianópolis", value: null, published_at: null, ends_at: null, source_url: validPnpc }, { object: "sem link", buyer_name: "Órgão teste", supplier_name: "Fornecedor teste", uf: "SC", value: "123.45", published_at: "2026-11-01", ends_at: "2027-01-01", source_url: "https://example.invalid/contract" }], pagination: { page: Number(filters.page || 1), pages: 21, total: 501, limited: true } };
+  return { ok: true, meta: { generated_at: "2026-11-09T12:00:00Z", source_as_of: "2026-11-09T11:00:00Z", ingestion_latest_at: "2026-11-09T11:50:00Z", window_start: "2025-11-09", window_end: "2026-11-09", stale, excluded_count: 2, coverage_note: "Cobertura local de teste.", value_note: "Não totalize valores." }, filters, summary: { contracts: 501, buyers: 1, suppliers: 1, valued_contracts: 1 }, buyers: [{ id: buyer, name: "Órgão teste", contracts: 2, uf: "SC" }], suppliers: [{ id: supplier, name: "Fornecedor teste", contracts: 2, uf: "SC" }], records: [{ object: filters.q === "new" ? "Objeto novo" : "  =formula <img src=x onerror=alert(1)>", buyer_name: "Órgão teste", supplier_name: "Fornecedor teste", uf: "SC", city: "Florianópolis", value: null, published_at: null, ends_at: null, source_url: validPnpc }, { object: "sem link", buyer_name: "Órgão teste", supplier_name: "Fornecedor teste", uf: "SC", value: "9000000000000000.01", published_at: "2026-11-01", ends_at: "2027-01-01", source_url: "https://example.invalid/contract" }], pagination: { page: Number(filters.page || 1), pages: 21, total: 501, limited: true } };
 }
 
 const types = { ".html": "text/html", ".mjs": "text/javascript", ".css": "text/css", ".js": "text/javascript", ".woff2": "font/woff2", ".png": "image/png" };
@@ -24,6 +24,7 @@ const server = createServer((req, res) => {
     req.on("end", () => {
       const filters = JSON.parse(raw || "{}"); requests.push(filters);
       if (filters.q === "failure") { res.writeHead(503, { "content-type": "application/json" }); res.end(JSON.stringify({ ok: false })); return; }
+      if (filters.q === "stale") { res.writeHead(503, { "content-type": "application/json" }); res.end(JSON.stringify({ ok: false, error: "data_stale" })); return; }
       setTimeout(() => { res.writeHead(200, { "content-type": "application/json" }); res.end(JSON.stringify(result(filters, filters.q === "stale"))); }, filters.q === "old" ? 120 : filters.q === "timeout" ? 600 : 0);
     }); return;
   }
@@ -52,6 +53,7 @@ try {
   assert.deepEqual(requests.at(-1), { q: "limpeza", uf: "SC", months: "24", ending: "90", sort: "ending", page: 1 });
   assert.match(await page.$eval("#radar-meta", (e) => e.textContent), /Projeção preparada.*Base consultada.*Última observação/s);
   assert.equal(await page.$eval("#radar-records-body", (e) => e.textContent.includes("1970") || e.textContent.includes("R$ 0")), false);
+  assert.match(await page.$eval("#radar-records-body", (e) => e.textContent), /9\.000\.000\.000\.000\.000,01/, "decimal cents remain exact above Number precision");
   assert.equal(await page.$eval("#radar-records-body", (e) => e.querySelectorAll("img").length), 0, "record text is escaped");
   assert.equal(await page.$eval("#radar-records-body", (e, href) => e.querySelectorAll(`a[href="${href}"]`).length, validPnpc), 1, "official PNCP link remains usable");
   assert.equal(await page.$eval("#radar-records-body", (e) => e.textContent.includes("example.invalid")), false, "untrusted link omitted");

@@ -167,19 +167,19 @@ function number(value) {
   return numeric;
 }
 
-function where(filters, today) {
+function where(filters, today, prefix = "") {
   const clauses = [];
   const values = {};
-  if (filters.q) { clauses.push("contracts.rowid IN (SELECT rowid FROM contract_search WHERE contract_search MATCH $match)"); values.$match = filters.match; }
-  if (filters.uf) { clauses.push("uf = $uf"); values.$uf = filters.uf; }
-  if (filters.months !== "all") { clauses.push("published_at >= $published"); values.$published = monthsAgo(today, Number(filters.months)); }
+  if (filters.q) { clauses.push(`${prefix}rowid IN (SELECT rowid FROM contract_search WHERE contract_search MATCH $match)`); values.$match = filters.match; }
+  if (filters.uf) { clauses.push(`${prefix}uf = $uf`); values.$uf = filters.uf; }
+  if (filters.months !== "all") { clauses.push(`${prefix}published_at >= $published`); values.$published = monthsAgo(today, Number(filters.months)); }
   if (filters.ending !== "all") {
-    clauses.push("expiry_eligible = 1 AND ends_at >= $today AND ends_at <= date($today, $ending)");
+    clauses.push(`${prefix}expiry_eligible = 1 AND ${prefix}ends_at >= $today AND ${prefix}ends_at <= date($today, $ending)`);
     values.$today = today;
     values.$ending = `+${filters.ending} days`;
   }
-  if (filters.buyer) { clauses.push("buyer_id = $buyer"); values.$buyer = filters.buyer; }
-  if (filters.supplier) { clauses.push("supplier_id = $supplier"); values.$supplier = filters.supplier; }
+  if (filters.buyer) { clauses.push(`${prefix}buyer_id = $buyer`); values.$buyer = filters.buyer; }
+  if (filters.supplier) { clauses.push(`${prefix}supplier_id = $supplier`); values.$supplier = filters.supplier; }
   return { sql: clauses.length ? ` WHERE ${clauses.join(" AND ")}` : "", values };
 }
 
@@ -202,9 +202,11 @@ function mapRanking(rows, type) {
 function execute(db, filters) {
   const today = todayInBrazil();
   const filter = where(filters, today);
+  const candidateFilter = where(filters, today, "candidate.");
+  const candidateTail = candidateFilter.sql ? ` AND ${candidateFilter.sql.slice(" WHERE ".length)}` : "";
   const summary = prepared(db, `SELECT COUNT(*) contracts, COUNT(DISTINCT buyer_id) buyers, COUNT(DISTINCT supplier_id) suppliers, COUNT(value_cents) valued_contracts, SUM(CASE WHEN expiry_eligible=1 AND ends_at>=$today AND ends_at<=date($today,'+90 days') THEN 1 ELSE 0 END) ending_90 FROM contracts${filter.sql}`, { ...filter.values, $today: today });
-  const buyerRows = prepared(db, `SELECT id,name,uf,contracts FROM (SELECT buyer_id id,buyer_name name,uf,COUNT(*) OVER(PARTITION BY buyer_id) contracts,ROW_NUMBER() OVER(PARTITION BY buyer_id ORDER BY published_at DESC,id ASC) rn FROM contracts${filter.sql}) WHERE rn=1 ORDER BY contracts DESC,name ASC LIMIT 10`, filter.values, true);
-  const supplierRows = prepared(db, `SELECT id,name,contracts FROM (SELECT supplier_id id,supplier_name name,COUNT(*) OVER(PARTITION BY supplier_id) contracts,ROW_NUMBER() OVER(PARTITION BY supplier_id ORDER BY published_at DESC,id ASC) rn FROM contracts${filter.sql}) WHERE rn=1 ORDER BY contracts DESC,name ASC LIMIT 10`, filter.values, true);
+  const buyerRows = prepared(db, `SELECT counts.id,latest.buyer_name name,latest.uf,counts.contracts FROM (SELECT buyer_id id,COUNT(*) contracts FROM contracts${filter.sql} GROUP BY buyer_id) counts JOIN contracts latest ON latest.rowid=(SELECT candidate.rowid FROM contracts candidate WHERE candidate.buyer_id=counts.id${candidateTail} ORDER BY candidate.published_at DESC,candidate.id ASC LIMIT 1) ORDER BY counts.contracts DESC,name ASC LIMIT 10`, filter.values, true);
+  const supplierRows = prepared(db, `SELECT counts.id,latest.supplier_name name,counts.contracts FROM (SELECT supplier_id id,COUNT(*) contracts FROM contracts${filter.sql} GROUP BY supplier_id) counts JOIN contracts latest ON latest.rowid=(SELECT candidate.rowid FROM contracts candidate WHERE candidate.supplier_id=counts.id${candidateTail} ORDER BY candidate.published_at DESC,candidate.id ASC LIMIT 1) ORDER BY counts.contracts DESC,name ASC LIMIT 10`, filter.values, true);
   const total = number(summary.contracts);
   const page = filters.page;
   const order = {
