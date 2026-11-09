@@ -257,29 +257,102 @@ export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, acce
   const inventoried = [...String(sitemapXml || "").matchAll(/<loc>([^<]+)<\/loc>/gi)]
     .map((match) => match[1].replace(/&amp;/g, "&"))
     .map((value) => {
-      try { return new URL(value, "https://runtime.invalid").pathname; }
-      catch { return ""; }
+      let parsed;
+      try { parsed = new URL(value); }
+      catch { throw new Error(`runtime Lighthouse sitemap has an invalid absolute loc: ${value}`); }
+      if (parsed.origin !== "https://confenge.com.br" || parsed.search || parsed.hash) {
+        throw new Error(`runtime Lighthouse sitemap has a non-canonical loc: ${value}`);
+      }
+      return parsed.pathname;
     });
-  if (!inventoried.includes(route)) {
-    throw new Error(`runtime Lighthouse route is absent from ${contract.inventory_route}: ${route}`);
+  if (new Set(inventoried).size !== inventoried.length) {
+    throw new Error("runtime Lighthouse sitemap contains duplicate routes");
   }
-  if (acceptedRoutes) {
-    const accepted = [...new Set(acceptedRoutes)];
-    if (accepted.length !== acceptedRoutes.length) {
-      throw new Error("runtime Lighthouse accepted route inventory contains duplicates");
+  if (!acceptedRoutes) {
+    if (!inventoried.includes(route)) {
+      throw new Error(`runtime Lighthouse route is absent from ${contract.inventory_route}: ${route}`);
     }
-    const observed = [...new Set(inventoried)];
-    if (
-      observed.length !== accepted.length
-      || observed.some((value) => !accepted.includes(value))
-      || accepted.some((value) => !observed.includes(value))
-    ) {
-      throw new Error(
-        `runtime Lighthouse sitemap differs from the exact accepted projection: accepted=${accepted.length} inventoried=${observed.length}`,
-      );
+    return true;
+  }
+  const acceptedItems = acceptedRoutes.map((item) => (
+    typeof item === "string" ? { route: item, index_state: "INDEX" } : item
+  ));
+  const accepted = acceptedItems.map((item) => String(item?.route || ""));
+  if (new Set(accepted).size !== accepted.length) {
+    throw new Error("runtime Lighthouse accepted route inventory contains duplicates");
+  }
+  for (const item of acceptedItems) {
+    if (!accepted.includes(item.route) || !["INDEX", "NOINDEX"].includes(item.index_state)) {
+      throw new Error(`runtime Lighthouse accepted route has invalid index_state: ${item?.route || "missing"}`);
     }
   }
-  return true;
+  const selected = acceptedItems.find((item) => item.route === route);
+  if (!selected) throw new Error(`runtime Lighthouse route is absent from the accepted projection: ${route}`);
+  const expected = acceptedItems.filter((item) => item.index_state === "INDEX").map((item) => item.route);
+  if (
+    inventoried.length !== expected.length
+    || inventoried.some((value) => !expected.includes(value))
+    || expected.some((value) => !inventoried.includes(value))
+  ) {
+    throw new Error(
+      `runtime Lighthouse sitemap differs from the exact indexable accepted projection: accepted_index=${expected.length} inventoried=${inventoried.length}`,
+    );
+  }
+  if (selected.index_state === "INDEX" && !inventoried.includes(route)) {
+    throw new Error(`runtime Lighthouse INDEX route is absent from ${contract.inventory_route}: ${route}`);
+  }
+  if (selected.index_state === "NOINDEX" && inventoried.includes(route)) {
+    throw new Error(`runtime Lighthouse NOINDEX route is present in ${contract.inventory_route}: ${route}`);
+  }
+  return { selected, inventoried, expected };
+}
+
+function htmlAttributes(tag) {
+  const attributes = new Map();
+  for (const match of String(tag).matchAll(/\s([:\w-]+)\s*=\s*(["'])(.*?)\2/gs)) {
+    const name = match[1].toLowerCase();
+    if (attributes.has(name)) throw new Error(`runtime Lighthouse HTML tag has duplicate attribute: ${name}`);
+    attributes.set(name, match[3]);
+  }
+  return attributes;
+}
+
+/** Prove the semantic state of the exact rendered bytes sealed by the projection. */
+export function verifyRuntimeRenderedPageDocument(route, html, acceptedItem) {
+  if (!acceptedItem || acceptedItem.route !== route) {
+    throw new Error(`runtime Lighthouse rendered page has no matching accepted route: ${route}`);
+  }
+  const bodyTags = String(html || "").match(/<body\b[^>]*>/gi) || [];
+  const canonicalTags = String(html || "").match(/<link\b[^>]*>/gi) || [];
+  const robotsTags = String(html || "").match(/<meta\b[^>]*>/gi) || [];
+  if (bodyTags.length !== 1) throw new Error(`runtime Lighthouse page must contain exactly one body: ${route}`);
+  const body = htmlAttributes(bodyTags[0]);
+  const state = body.get("data-index-state");
+  if (body.get("data-opportunity-id") !== acceptedItem.opportunity_id) {
+    throw new Error(`runtime Lighthouse accepted opportunity id differs from rendered HTML: ${route}`);
+  }
+  if (
+    !["INDEX", "NOINDEX"].includes(state)
+    || (acceptedItem.index_state !== undefined && state !== acceptedItem.index_state)
+  ) {
+    throw new Error(`runtime Lighthouse accepted index_state differs from rendered HTML: ${route}`);
+  }
+  const canonicals = canonicalTags
+    .map(htmlAttributes)
+    .filter((attrs) => String(attrs.get("rel") || "").toLowerCase().split(/\s+/).includes("canonical"));
+  if (canonicals.length !== 1 || canonicals[0].get("href") !== `https://confenge.com.br${route}`) {
+    throw new Error(`runtime Lighthouse page has no exact self canonical: ${route}`);
+  }
+  const robots = robotsTags
+    .map(htmlAttributes)
+    .filter((attrs) => String(attrs.get("name") || "").toLowerCase() === "robots");
+  if (robots.length !== 1) throw new Error(`runtime Lighthouse page must contain exactly one robots directive: ${route}`);
+  const tokens = String(robots[0].get("content") || "").toLowerCase().split(/\s*,\s*/).filter(Boolean);
+  const expectedTokens = state === "INDEX" ? ["index", "follow"] : ["noindex", "nofollow"];
+  if (tokens.length !== 2 || expectedTokens.some((token) => !tokens.includes(token))) {
+    throw new Error(`runtime Lighthouse robots directive contradicts ${state}: ${route}`);
+  }
+  return { ...acceptedItem, index_state: state, robots: tokens.join(","), canonical: `https://confenge.com.br${route}` };
 }
 
 /**

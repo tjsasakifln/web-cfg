@@ -16,6 +16,7 @@ import {
   runtimeLighthouseContractForRoute,
   verifyRuntimeAcceptedProjectionDocument,
   verifyRuntimeInventoryDocument,
+  verifyRuntimeRenderedPageDocument,
 } from "./interface_coverage.mjs";
 
 const rootFixture = mkdtempSync(join(tmpdir(), "confenge-site-root-"));
@@ -267,19 +268,67 @@ assert.equal(
     runtimeContract.route,
     `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`,
     runtimeContract,
-    acceptedRuntimeDocument.routes.map((item) => item.route),
-  ),
-  true,
+    acceptedRuntimeDocument.routes.map((item) => ({ ...item, index_state: "INDEX" })),
+  ).selected.route,
+  runtimeContract.route,
 );
 assert.throws(
   () => verifyRuntimeInventoryDocument(
     runtimeContract.route,
     `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br/oportunidades/unaccepted/</loc></url></urlset>`,
     runtimeContract,
-    acceptedRuntimeDocument.routes.map((item) => item.route),
+    acceptedRuntimeDocument.routes.map((item) => ({ ...item, index_state: "INDEX" })),
   ),
-  /sitemap differs from the exact accepted projection/,
+  /sitemap differs from the exact indexable accepted projection/,
   "a sitemap-only opportunity absent from the accepted projection must fail closed",
+);
+
+const runtimeHtml = (item, state = item.index_state || "INDEX", robots = state === "INDEX" ? "index,follow" : "noindex,nofollow") =>
+  `<!doctype html><html><head><link rel="canonical" href="https://confenge.com.br${item.route}"><meta name="robots" content="${robots}"></head><body data-opportunity-id="${item.opportunity_id}" data-index-state="${state}"></body></html>`;
+assert.equal(
+  verifyRuntimeRenderedPageDocument(runtimeContract.route, runtimeHtml(acceptedRuntimeDocument.routes[0]), acceptedRuntimeDocument.routes[0]).index_state,
+  "INDEX",
+);
+assert.throws(
+  () => verifyRuntimeRenderedPageDocument(runtimeContract.route, runtimeHtml(acceptedRuntimeDocument.routes[0], "INDEX", "noindex,nofollow"), acceptedRuntimeDocument.routes[0]),
+  /robots directive contradicts INDEX/,
+);
+const noindexItem = {
+  opportunity_id: "00394429000100-1-002201/2026",
+  route: "/oportunidades/00394429000100-1-002201/2026/",
+  html_path: "_site/oportunidades/00394429000100-1-002201/2026/index.html",
+  content_hash: "1".repeat(64),
+  index_state: "NOINDEX",
+  sha256: "2".repeat(64),
+};
+assert.equal(verifyRuntimeRenderedPageDocument(noindexItem.route, runtimeHtml(noindexItem), noindexItem).index_state, "NOINDEX");
+assert.throws(
+  () => verifyRuntimeRenderedPageDocument(noindexItem.route, runtimeHtml(noindexItem).replace("https://confenge.com.br", "https://evil.example"), noindexItem),
+  /no exact self canonical/,
+);
+assert.throws(
+  () => verifyRuntimeRenderedPageDocument(
+    noindexItem.route,
+    runtimeHtml(noindexItem).replace('content="noindex,nofollow"', 'content="index,follow" content="noindex,nofollow"'),
+    noindexItem,
+  ),
+  /duplicate attribute/,
+  "duplicate attributes cannot make preflight and browser interpret robots differently",
+);
+const mixedRoutes = [{ ...acceptedRuntimeDocument.routes[0], index_state: "INDEX" }, noindexItem];
+assert.equal(
+  verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`, runtimeContract, mixedRoutes).expected.length,
+  1,
+  "mixed accepted projection inventories only INDEX routes",
+);
+assert.throws(
+  () => verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br${noindexItem.route}</loc></url></urlset>`, runtimeContract, mixedRoutes),
+  /exact indexable accepted projection/,
+  "NOINDEX routes must be absent from sitemap",
+);
+assert.throws(
+  () => verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`, runtimeContract, mixedRoutes),
+  /duplicate routes/,
 );
 assert.throws(
   () => verifyRuntimeAcceptedProjectionDocument(
@@ -398,8 +447,9 @@ assert.match(runner, /\.well-known\/runtime-info\.json/);
 assert.match(runner, /contract\.accepted_projection_route/);
 assert.match(runner, /verifyRuntimeAcceptedProjectionDocument/);
 assert.match(runner, /verifyRuntimeInventoryDocument/);
+assert.match(runner, /verifyRuntimeRenderedPageDocument/);
 assert.match(runner, /accepted HTML digest mismatch/);
-assert.match(runner, /data-opportunity-id/);
+assert.match(readFileSync(new URL("./interface_coverage.mjs", import.meta.url), "utf8"), /data-opportunity-id/);
 
 console.log(
   `INTERFACE_COVERAGE_OK routes=${coverage.route_count} axe=${coverage.axe.route_count}x2 `

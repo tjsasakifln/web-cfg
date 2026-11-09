@@ -199,7 +199,8 @@ const results = [
 const coverage = { public_edge: true };
 if (route) {
   results.push({ path: route, run: 1 });
-  coverage.runtime_evidence = { routes: [{ route, html_sha256: "c".repeat(64) }] };
+  coverage.runtime_evidence = { routes: [{ route, html_sha256: "c".repeat(64), index_state: "INDEX" }] };
+  coverage.seo_only_exempt_pages = [];
 }
 const summary = {
   terminal_state: "MEASURED_PASS",
@@ -436,6 +437,22 @@ pass("home_preflight_configuration_rejects_unbounded_or_invalid_deadlines");
   assert.ok(run.runnerArgv.includes("--public-edge"));
   assertNeverProduction(run);
   pass("active_overlay_passes_end_to_end_and_measures_the_home_plus_the_exact_route");
+}
+
+{
+  const run = await rehearse({
+    config: candidate({ overlay: activeOverlay() }),
+    summaryPatch: {
+      coverage: {
+        public_edge: true,
+        runtime_evidence: { routes: [{ route: ACTIVE_ROUTE, html_sha256: "c".repeat(64), index_state: "NOINDEX" }] },
+        seo_only_exempt_pages: [ACTIVE_ROUTE],
+      },
+    },
+  });
+  assert.equal(run.error, null, `NOINDEX rehearsal failed: ${run.error?.message}`);
+  assert.equal(run.report.evidence.runtime_index_state, "NOINDEX");
+  pass("verified_noindex_route_carries_the_narrow_seo_exemption");
 }
 
 // The lowest-sorted route is the one measured, never an arbitrary one.
