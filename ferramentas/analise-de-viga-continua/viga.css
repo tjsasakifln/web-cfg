@@ -1,0 +1,20 @@
+.viga-shell{padding-block:1.5rem 3rem;max-width:65rem}
+.viga-shell h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.08;max-width:24ch;margin:.35em 0}
+.viga-shell h2{font-size:clamp(1.4rem,3vw,2rem);margin:.6em 0}
+.viga-bloco{margin-block:1.1rem;padding:clamp(1rem,3vw,1.8rem);border:1px solid #cbd6df;background:white}
+.viga-shell fieldset{padding:0;border:0;margin:0;min-width:0}
+.viga-campos,#lista-vaos fieldset{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+#lista-vaos fieldset{padding:.7rem 0 1rem;border-top:1px solid #cfdae1}
+#lista-vaos legend {font-weight:700;padding:0 .5rem 0 0}
+.viga-shell label{display:grid;align-content:end;gap:.3rem;font-weight:650}
+.viga-shell input,.viga-shell select{width:100%;min-width:0;min-height:44px;padding:.45rem;font:inherit;color:#172f46;border:1px solid #8498a7;background:white}
+.viga-shell input[aria-invalid=true]{border-color:#a32424}
+.viga-acoes{display:flex;gap:.55rem;flex-wrap:wrap;margin:.85rem 0}
+.viga-shell :disabled{opacity:.65;cursor:default}
+.viga-tabela{overflow-x:auto;margin:.65rem 0 1.4rem}
+.viga-tabela table{width:100%;border-collapse:collapse}
+.viga-tabela th,.viga-tabela td{text-align:right;padding:.5rem .6rem;border-bottom:1px solid #cbd7dc}
+.viga-tabela th:first-child{text-align:left}
+.viga-shell figure{margin:1rem 0}.viga-shell svg{display:block;width:100%;max-height:200px}
+.viga-shell p{max-width:82ch}.viga-shell summary{padding:.65rem 0;font-weight:650;cursor:pointer}
+@media(max-width:560px){.viga-campos{grid-template-columns:1fr}#lista-vaos fieldset{grid-template-columns:repeat(2,minmax(0,1fr))}}

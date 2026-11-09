@@ -1,0 +1,13 @@
+#planejar fieldset { min-inline-size: 0; margin: 0; border: 0; padding: 0; }
+#atividades { display: block; width: 100%; min-height: 13rem; padding: .8rem; font: 1rem/1.6 monospace; }
+#erro { color: #8e2722; overflow-wrap: anywhere; }
+#erro:empty { display: none; }
+#resultado { margin: 1.5rem 0; }
+#resultado[hidden] { display: none; }
+#caminho { overflow-wrap: anywhere; font-weight: 700; }
+.cpm-tabela { overflow-x: auto; margin: 1rem 0; }
+.cpm-tabela table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.cpm-tabela th, .cpm-tabela td { padding: .5rem; text-align: start; border-bottom: 1px solid #cdd4dc; }
+.cpm-tabela th { color: #fff; background: var(--navy-900, #061a33); }
+.cpm-tabela td:nth-child(2) { min-width: 11rem; overflow-wrap: anywhere; }
+.cpm-tabela tr:nth-child(even) { background: #f2f5f7; }
