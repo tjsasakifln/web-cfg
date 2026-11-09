@@ -1208,6 +1208,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "scripts/site/authority.py",
         "scripts/site/public_footer.py",
         "scripts/pseo/html_shell.py",
+        "scripts/pseo/reproducible.py",
         "data/site/brand.json",
         "data/site/public-ia-map.json",
         "data/organic/public-family-registry.json",
@@ -1491,7 +1492,7 @@ def test_overlay_withdraws_fixtures_when_official_absent(
     assert verified["commit"] == SHA_A
 
 
-def test_overlay_prunes_fixture_and_writes_index_when_official_present(
+def test_overlay_prunes_fixture_and_keeps_sealed_noindex_page_when_official_present(
     host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     from scripts.live_intelligence.test_consume import _write_539_candidate
@@ -1514,7 +1515,8 @@ def test_overlay_prunes_fixture_and_writes_index_when_official_present(
     )
     assert index_page.is_file()
     html = index_page.read_text(encoding="utf-8")
-    assert 'content="index,follow" name="robots"' in html
+    assert 'content="noindex,nofollow" name="robots"' in html
+    assert "situação atual não foi revalidada" in html
     css_manifest = control.load_json(release / control.CSS_ASSET_MANIFEST)
     assert (
         f'href="{css_manifest["files"]["styles.css"]["href"]}"'

@@ -306,7 +306,7 @@ def refresh_sources_reviewed(html: str) -> str:
     return html.replace('<p class="technical-note">', reviewed + '<p class="technical-note">', 1)
 
 
-def sync_article_word_count(html: str) -> str:
+def sync_article_word_count(html: str, *, modified_date: str | None = None) -> str:
     from scripts.site.public_copy_scope import visible_text
 
     article = re.search(r"<article\b.*?</article>", html, flags=re.I | re.S)
@@ -321,9 +321,15 @@ def sync_article_word_count(html: str) -> str:
         if len(article_nodes) != 1:
             raise SystemExit("expected exactly one Article in primary JSON-LD")
         article_nodes[0]["wordCount"] = actual_words
+        if modified_date is not None:
+            # Presentation/link changes update the Article, without claiming
+            # a new technical source review or changing the HowTo's date.
+            article_nodes[0]["dateModified"] = modified_date
         dumped = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
         return f'<script type="application/ld+json">{dumped}</script>'
 
+    if modified_date is not None:
+        html = _replace_attr_tag(html, "property", "article:modified_time", modified_date)
     return re.sub(
         r'<script type="application/ld\+json">(\{"@context":"https://schema.org","@graph":.*?)</script>',
         _sync,
@@ -1366,6 +1372,14 @@ def patch_bdi(html: str) -> str:
 
 
 def patch_sinapi(html: str) -> str:
+    # The November presentation/link update is distinct from the August
+    # technical review. Keep both visible and preserve source access dates.
+    html = html.replace(
+        f'<span>Revisado em <time datetime="{DATE}">{DATE_LABEL}</time></span>',
+        f'<span>Revisão técnica em <time datetime="{DATE}">{DATE_LABEL}</time></span>'
+        '<span>Atualizado em <time datetime="2026-11-09">9 de novembro de 2026</time></span>',
+        1,
+    )
     answer = (
         '<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>'
         "Use a base SINAPI que o edital e a planilha modelo fixam para a competência e localidade do orçamento. "
@@ -1478,7 +1492,9 @@ def patch_sinapi(html: str) -> str:
         count=1,
         flags=re.S,
     )
-    return sync_article_word_count(refresh_sources_reviewed(set_modified_date(html)))
+    return sync_article_word_count(
+        refresh_sources_reviewed(set_modified_date(html)), modified_date="2026-11-09"
+    )
 
 
 HANDLERS = {

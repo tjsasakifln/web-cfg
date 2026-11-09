@@ -193,8 +193,8 @@ def test_fixture_records_carry_index_bars(projection):
         assert "catalog_mode_fixture" in record["index_bars"]
 
 
-def test_official_live_opportunity_earns_publishable_index(bundle):
-    """#563: official opportunity that is ready is canonical INDEX candidate."""
+def test_official_live_opportunity_stays_noindex_without_consumer_authorization(bundle):
+    """Factual readiness cannot mint the missing intent-specific SEO decision."""
     record = _opportunity(bundle)
     record.update(
         schema=OPPORTUNITY_FAMILY,
@@ -205,12 +205,60 @@ def test_official_live_opportunity_earns_publishable_index(bundle):
         test_only=False,
     )
     record.pop("never_index", None)
-    decision = C.decide(_rehash(record))
+    decision = C.decide(
+        _rehash(record), publication_at="2026-09-01T10:00:00+00:00"
+    )
     assert decision["ready"] is True
     assert decision["source_kind"] == SOURCE_OFFICIAL_LIVE
-    assert decision["index_bars"] == []
-    assert decision["state"] == "PUBLISHABLE_INDEX"
-    assert decision["index_eligible"] is True
+    assert decision["index_bars"] == ["public_index_authorization_absent"]
+    assert decision["state"] == "PUBLISHABLE_NOINDEX"
+    assert decision["index_eligible"] is False
+
+
+def test_publication_clock_rechecks_an_accepted_snapshot(bundle):
+    record = _opportunity(bundle)
+    record.update(
+        schema=OPPORTUNITY_FAMILY,
+        catalog_mode=SOURCE_OFFICIAL_LIVE,
+        producer_status=SOURCE_OFFICIAL_LIVE,
+        official_live=True,
+        claimed_live=True,
+        test_only=False,
+    )
+    record.pop("never_index", None)
+    sealed = _rehash(record)
+    fresh = C.decide(sealed, publication_at="2026-09-02T03:00:00+00:00")
+    stale = C.decide(sealed, publication_at="2026-11-09T03:00:00+00:00")
+    assert "publication_freshness_stale" not in fresh["index_bars"]
+    assert "publication_freshness_stale" in stale["index_bars"]
+    assert stale["ready"] is True  # useful page is retained
+    assert stale["state"] == "PUBLISHABLE_NOINDEX"
+
+
+def test_producer_cannot_expand_or_disable_consumer_freshness_slo(bundle):
+    record = _opportunity(bundle)
+    record.update(
+        schema=OPPORTUNITY_FAMILY,
+        catalog_mode=SOURCE_OFFICIAL_LIVE,
+        producer_status=SOURCE_OFFICIAL_LIVE,
+        official_live=True,
+        claimed_live=True,
+        test_only=False,
+    )
+    record.pop("never_index", None)
+    record["freshness"]["max_age_hours"] = 8760
+    year = C.decide(
+        _rehash(record), publication_at="2026-09-04T03:00:01+00:00"
+    )
+    assert "publication_freshness_stale" in year["index_bars"]
+    for invalid in (0, -1, "NaN", "Infinity", "not-a-number"):
+        candidate = _opportunity(bundle)
+        candidate["freshness"]["max_age_hours"] = invalid
+        candidate = _rehash(candidate)
+        assert "freshness_absent" in C.inspect_producer_integrity(candidate)
+        assert C.publication_freshness_bar(
+            candidate, "2026-09-01T04:00:00+00:00"
+        ) == "publication_freshness_invalid"
 
 
 def test_official_live_company_stays_noindex(bundle):

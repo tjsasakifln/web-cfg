@@ -90,4 +90,8 @@ for (const page of pages) {
   }
 }
 assert.equal(problems.length, 0, problems.join('\n'));
+const viewer = read('bim/web/visualizador.mjs');
+assert.ok(!viewer.includes("import * as THREE from"), 'O visor não pode carregar Three antes da ação do visitante');
+assert.ok(viewer.includes("async function ensureViewerRuntime()"), 'O visor precisa carregar Three sob demanda');
+assert.ok(viewer.includes("await ensureViewerRuntime();"), 'A abertura de IFC precisa aguardar o runtime sob demanda');
 console.log('Identidade institucional conferida em ' + html.length + ' páginas, incluindo ' + pages.length + ' telas BIM em ' + relative(process.cwd(), site));

@@ -9,6 +9,7 @@ const { modelaReport } = require('../../runtime/tools-commerce/report.cjs');
 const { LOCAL_FORMATS, localArtifact } = require('../../runtime/tools-commerce/exports.cjs');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { payload } = require('./fixtures.cjs');
+require('./ops.test.cjs');
 
 test('production, sandbox and emulator cannot be mixed; prices are server owned', () => {
   const key = randomBytes(32).toString('base64url');

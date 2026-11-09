@@ -105,3 +105,27 @@ test("collector never buffers encoded path PII", async () => {
   assert.equal(JSON.stringify(persisted).includes("example.test"), false);
   assert.equal(JSON.stringify(persisted).includes("%252540"), false);
 });
+
+test("referral events keep a finite, no-PII measurement shape", () => {
+  const accepted = [
+    { event: "tool_referral_visit", props: { touch_outcome: "accepted", storage_mode: "persistent" } },
+    { event: "tool_referral_panel_view", props: { tool_id: "modela-memoria", destination_kind: "modela" } },
+    { event: "tool_referral_action", props: { tool_id: "shared-wallet", destination_kind: "catalog", share_channel: "native", action_outcome: "cancelled" } },
+  ];
+  for (const input of accepted) assert.equal(contract.admitEvent(input).ok, true, input.event);
+
+  for (const input of [
+    { event: "tool_referral_visit", props: { touch_outcome: "ignored" } },
+    { event: "tool_referral_panel_view", props: { tool_id: "another-tool" } },
+    { event: "tool_referral_action", props: { share_channel: "email" } },
+    { event: "tool_referral_action", props: { action_outcome: "retry" } },
+  ]) {
+    const result = contract.admitEvent(input);
+    assert.equal(result.ok, false, JSON.stringify(input));
+    assert.equal(result.reason, "invalid_property_value", JSON.stringify(result));
+  }
+
+  const pii = contract.admitEvent({ event: "tool_referral_action", props: { tool_id: "modela-memoria", share_channel: "copy", referral_code: "ana@example.test" } });
+  assert.equal(pii.ok, false);
+  assert.match(pii.reason, /^pii_/);
+});

@@ -135,7 +135,11 @@ def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
     text = "Envie a alguém que precisa resolver uma tarefa de engenharia." if path == HUB else (
         "Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho."
     )
-    heading = "Indique as ferramentas CONFENGE" if path == HUB else "Indique esta ferramenta"
+    heading = "Compartilhe as ferramentas CONFENGE" if path == HUB else "Compartilhe esta ferramenta"
+    referral_path = (
+        "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao"
+        if key == "modela" else f"{HUB}#programa-indicacao"
+    )
     return f'''<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="{escape(title)}">
 <h2 id="tool-share-title">{heading}</h2>
 <p>{text}</p>
@@ -147,6 +151,12 @@ def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
 </div>
 <label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="{escape(copy_url)}" readonly data-share-url></label>
 <p class="tool-share-status" role="status"></p>
+<aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
+<h3>Indique e ganhe créditos de uso</h3>
+<p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
+<a href="{referral_path}" {cta_attrs('tool-referral-entry-' + key, 'tool_share')}>Gerar meu link de indicação</a>
+<a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
+</aside>
 {f'<div class="tool-share-related">{more}</div>' if more else ''}
 </section>'''
 
@@ -201,7 +211,7 @@ def set_head(html: str, path: str, title: str, desc: str, key: str, *, updated: 
             f'<meta property="og:updated_time" content="{escape(updated)}"/>',
         ))
     css = f"{CSS}\n{HUB_CSS}" if path == HUB else CSS
-    js = JS.replace("showcase.mjs", "showcase.mjs?v=vitrine1") if path == HUB else JS
+    js = JS.replace("showcase.mjs", "showcase.mjs?v=vitrine2") if path == HUB else JS
     tags += [meta_tags(path, title, desc, key), css, js]
     return marker(head + "</head>", "head", "\n".join(tags), "</head>") + rest
 
@@ -268,7 +278,7 @@ def catalogue(html: str, data: dict) -> str:
 <p class="eyebrow">CONFENGE · Ferramentas online</p>
 <h1>Ferramentas de engenharia <span>online.</span></h1>
 <p data-tool-job>Abra uma planta, confira um modelo, faça um cálculo ou organize a próxima decisão da obra. Tudo direto no navegador.</p>
-<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Indicar a um colega">Indicar</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
+<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Compartilhar com um colega">Compartilhar</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
 <p id="meus-creditos-status" role="status"></p>
 <dl class="ts-hero-facts"><div><dt>{total}</dt><dd>opções de uso</dd></div><div><dt>{len(data["groups"])}</dt><dd>frentes de trabalho</dd></div><div><dt>web</dt><dd>uso direto no navegador</dd></div></dl>
 </div>
@@ -340,8 +350,10 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
         button = re.search(r'<button\b[^>]*\bid="' + action + r'"[^>]*>.*?</button>', html, re.S)
         if not button:
             raise ValueError(f"Result actions moved: {path}")
-        link = '<a class="text-link tool-result-share" href="#tool-share-title">Indicar esta ferramenta</a>'
+        link = '<a class="text-link tool-result-share" href="#tool-share-title">Compartilhar esta ferramenta</a>'
         html = html[:button.end()] + link + html[button.end():]
+    html = re.sub(r'(<a\b[^>]*class="text-link tool-result-share"[^>]*>).*?(</a>)',
+                  r'\1Compartilhar esta ferramenta\2', html)
     share = share_panel(path, item["title"], key, [by_id[ref] for ref in page["related"]])
     return marker(html, "share", share, "</main>")
 
