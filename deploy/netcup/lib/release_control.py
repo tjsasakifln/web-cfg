@@ -774,7 +774,12 @@ def _canonical_opportunity_route(opportunity_id: str) -> tuple[str, str]:
 
 
 def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Read the release-local accepted projection and derive exact INDEX routes."""
+    """Read the accepted projection and bind every rendered official route.
+
+    A useful factual page may be retained as NOINDEX when its publication
+    clock or intent authorization is missing.  It remains part of the sealed
+    overlay even though it is absent from the sitemap.
+    """
     path = release / "data/live_intelligence/accepted/opportunities.json"
     if not path.is_file():
         return (
@@ -808,12 +813,9 @@ def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict
     for record in records:
         if not isinstance(record, dict):
             raise ReleaseError("stage accepted opportunity record must be an object")
-        indexable = (
-            (record.get("source_kind") or payload.get("source_kind")) == "official_live"
-            and record.get("publication_state") == "PUBLISHABLE_INDEX"
-            and record.get("index_eligible") is True
-        )
-        if not indexable:
+        official = (record.get("source_kind") or payload.get("source_kind")) == "official_live"
+        state = record.get("publication_state")
+        if not official or state not in {"PUBLISHABLE_INDEX", "PUBLISHABLE_NOINDEX"}:
             continue
         opportunity_id = str(record.get("opportunity_id") or "")
         route, html_path = _canonical_opportunity_route(opportunity_id)

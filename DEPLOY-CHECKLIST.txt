@@ -7,6 +7,7 @@ Rollback: docs/ops/ROLLBACK.md
 2. O push em main dispara automaticamente package -> stage/verify -> promote.
    Dispatch manual é só diagnóstico/recuperação e exige -f expected_sha=<FULL_SHA>.
 3. Confirme no navegador:
+   https://confenge.com.br/sitemap-index.xml (raiz de descoberta, inclui os sitemaps de cada família)
    https://confenge.com.br/sitemap.xml
    https://confenge.com.br/robots.txt
    https://confenge.com.br/llms.txt
@@ -18,13 +19,15 @@ Rollback: docs/ops/ROLLBACK.md
    leftover: https://confenge.netlify.app/* → https://confenge.com.br/:splat
    npm run audit:migration -- --base=https://confenge.com.br
 5. No Search Console:
-   - Envie/atualize apenas sitemap.xml
-   - Solicite indexação das URLs reescritas
+   - Envie/atualize sitemap-index.xml, a raiz anunciada em robots.txt.
+   - Confira os sitemaps filhos, URLs canônicas e exclusões no relatório de indexação.
+   - Inspecione as URLs materialmente alteradas; solicite indexação depois da validação em produção.
    - Monitore queda de impressões em URLs fantasma
 6. Captura: POST /.netlify/functions/lead no runtime portátil (filesystem host-owned).
 7. (Opcional) Configure analytics — ver seo/ANALYTICS.md
 8. Alternativa de diagnóstico de sitemap:
    https://confenge.com.br/sitemap.txt
 
-O sitemap.xml permanece mínimo: loc + lastmod (sem extensões de imagem).
+O sitemap.xml é um dos filhos; seu conteúdo permanece mínimo: loc + lastmod.
+O aceite de sitemap ou pedido de indexação não comprova indexação nem posição.
 Não publicar este diretório na Netlify como produção.

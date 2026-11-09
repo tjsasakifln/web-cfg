@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "source": "CONFENGE_WEB",
   "pii_policy": "aggregate_allowlist_empty",
   "aggregate_pii_allowlist": [],
@@ -541,6 +541,44 @@
         "netlify/functions/lib/analytics-agg.cjs"
       ],
       "semantic": "Tool page bound/viewed."
+    },
+    "tool_referral_visit": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/tool-referral.mjs"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "property_allowlist": {
+        "touch_outcome": ["accepted"],
+        "storage_mode": ["persistent", "memory"]
+      },
+      "semantic": "A valid personal-referral attribution reached a tool. Stores only the accepted outcome and storage capability; never the referral code or recipient identity. Engagement, not a reward or paid-use event."
+    },
+    "tool_referral_panel_view": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/tool-credits.mjs"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "property_allowlist": {
+        "tool_id": ["modela-memoria"],
+        "destination_kind": ["modela", "catalog"]
+      },
+      "semantic": "The authenticated referral panel became visible. Carries only the finite tool and destination category; never account, referral code, balance, invitee, or payment data. Engagement, not a reward."
+    },
+    "tool_referral_action": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/tool-credits.mjs"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "property_allowlist": {
+        "tool_id": ["modela-memoria"],
+        "destination_kind": ["modela", "catalog"],
+        "share_channel": ["copy", "linkedin", "whatsapp", "native"],
+        "action_outcome": ["success", "failure", "cancelled", "blocked"]
+      },
+      "semantic": "A personal-referral sharing attempt. Finite channel and outcome only; never referral code, URL query, account, recipient, message, or payment data. Engagement, not a reward or conversion."
     },
     "tool_start": {
       "layer": "engagement",

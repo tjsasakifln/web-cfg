@@ -21,7 +21,10 @@ with (here / "aplicativo.tar.gz").open("wb") as raw, gzip.GzipFile(fileobj=raw, 
     with tarfile.open(fileobj=compressed, mode="w", format=tarfile.USTAR_FORMAT) as archive:
         for name in sorted(set(files)):
             src = root / name
-            entry = tarfile.TarInfo(name)
+            # The distribution is consumed by Linux CI/release hosts. `Path`
+            # stringification on Windows yields backslashes, which tar treats
+            # as literal filename characters rather than archive separators.
+            entry = tarfile.TarInfo(name.replace("\\", "/"))
             entry.size = src.stat().st_size
             entry.mode = 0o644
             with src.open("rb") as data:

@@ -45,9 +45,9 @@ function fail(name, detail) {
 }
 
 // --- 1. Registry + client lockstep ------------------------------------------
-if (registry.schema_version !== "1.3.0") fail("registry_schema_version", registry.schema_version);
+if (registry.schema_version !== "1.4.0") fail("registry_schema_version", registry.schema_version);
 const analyticsMod = fs.readFileSync(path.join(root, "js/modules/analytics.js"), "utf8");
-if (!analyticsMod.includes("EVENT_CONTRACT_SCHEMA_VERSION = '1.3.0'")) {
+if (!analyticsMod.includes("EVENT_CONTRACT_SCHEMA_VERSION = '1.4.0'")) {
   fail("client_schema_version_drift");
 }
 pass("schema_version_bumped_in_lockstep");

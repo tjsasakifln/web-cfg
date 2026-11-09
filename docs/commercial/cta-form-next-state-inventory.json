@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 280
+    "expected_declared_ctas": 283
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 41,
-    "declared_ctas": 280,
+    "declared_ctas": 283,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4044,6 +4044,21 @@
           "event_semantics": [
             "whatsapp_click"
           ]
+        },
+        {
+          "cta_id": "tool-referral-entry-reequilibrio",
+          "position": "tool_share",
+          "href": "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Gerar meu link de indicação",
+          "useful_next_state": "Abre o destino declarado por “Gerar meu link de indicação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
+          "event_semantics": [
+            "cta_click"
+          ]
         }
       ]
     },
@@ -4124,6 +4139,21 @@
           "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
           "event_semantics": [
             "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "tool-referral-entry-margem",
+          "position": "tool_share",
+          "href": "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Gerar meu link de indicação",
+          "useful_next_state": "Abre o destino declarado por “Gerar meu link de indicação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
+          "event_semantics": [
+            "cta_click"
           ]
         }
       ]
@@ -4222,6 +4252,21 @@
           "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "tool-referral-entry-aditivos",
+          "position": "tool_share",
+          "href": "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Gerar meu link de indicação",
+          "useful_next_state": "Abre o destino declarado por “Gerar meu link de indicação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
+          "event_semantics": [
+            "cta_click"
           ]
         }
       ]

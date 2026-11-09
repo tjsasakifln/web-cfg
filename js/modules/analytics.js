@@ -6,7 +6,7 @@
 
   /** Analytics bus — no PII, first-party collector only. */
   // EVENT_CONTRACT_CLIENT_START — keep in lockstep with netlify/functions/lib/event-registry.json
-  const EVENT_CONTRACT_SCHEMA_VERSION = '1.3.0';
+  const EVENT_CONTRACT_SCHEMA_VERSION = '1.4.0';
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
@@ -134,7 +134,8 @@
     sst_page_view: 1, sst_cta_click: 1, sst_whatsapp_click: 1,
     sst_form_start: 1, sst_form_submit: 1,
     pgr_cta: 1, pgr_review_cta: 1, sst_obra_cta: 1, sst_outsourcing_cta: 1,
-    tool_complete: 1, tool_copy: 1, tool_download: 1, tool_reset: 1, tool_start: 1,
+    tool_complete: 1, tool_copy: 1, tool_download: 1, tool_referral_action: 1,
+    tool_referral_panel_view: 1, tool_referral_visit: 1, tool_reset: 1, tool_start: 1,
     tool_to_content: 1, tool_to_form: 1, tool_to_offer: 1, tool_to_whatsapp: 1,
     tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
     xray_start: 1, xray_timeout: 1,

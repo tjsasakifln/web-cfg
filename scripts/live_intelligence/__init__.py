@@ -38,6 +38,13 @@ SOURCE_FIXTURE = "test_only_fixture"
 # this window is stale; a missing or unparseable `source_as_of` is not fresh.
 MAX_AGE_HOURS = 48
 
+# The current producer contract contains factual acquisition fields, but no
+# consumer-owned, intent-specific authorization for organic indexing.  Keep
+# the allowlist explicit and empty: enabling a family requires a reviewed
+# contract amendment, rather than treating DATA_READY or official_live as SEO
+# permission.
+PUBLIC_INDEX_AUTHORIZED_CONTRACTS: frozenset[tuple[str, str]] = frozenset()
+
 # Lead `intent_kind` values this engine may emit. The server-side allowlist in
 # netlify/functions/lib/lead-core.cjs is the authority; this mirror exists so a
 # renderer cannot invent a fifth intent.
