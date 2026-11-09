@@ -244,6 +244,10 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node scripts/site/test_tool_showcase_browser.mjs _site
+      - name: Deferred IFC viewer file and example journeys
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: node scripts/bim/test_lazy_visualizador_browser.mjs _site
       - name: Quantity takeoff and budgeting purchase path
         run: npm run test:orc-b2b-20260913
       - name: Money asset production inspection is read-only

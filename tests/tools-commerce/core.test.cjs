@@ -8,6 +8,7 @@ const { PACKAGES, TERMS, TERMS_HASH, loadConfig, orderId, normalizeEmail } = req
 const { modelaReport } = require('../../runtime/tools-commerce/report.cjs');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { payload } = require('./fixtures.cjs');
+require('./ops.test.cjs');
 
 test('production, sandbox and emulator cannot be mixed; prices are server owned', () => {
   const key = randomBytes(32).toString('base64url');

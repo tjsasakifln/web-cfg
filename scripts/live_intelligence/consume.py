@@ -24,8 +24,10 @@ no second classifier that could drift from it.
 from __future__ import annotations
 
 import argparse
+import errno
 import hashlib
 import json
+import math
 import os
 import re
 import shutil
@@ -49,10 +51,12 @@ from scripts.live_intelligence import (
     MAX_AGE_HOURS,
     OPPORTUNITIES_OUT,
     OPPORTUNITY_FAMILY,
+    PUBLIC_INDEX_AUTHORIZED_CONTRACTS,
     PRAZO_STATUS,
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
 )
+from scripts.pseo.reproducible import build_timestamp
 
 OFFICIAL_DIR_ENV = "CONFENGE_LI_OFFICIAL_DIR"
 
@@ -316,11 +320,29 @@ def _parse_instant(value: Any) -> datetime | None:
 
 def freshness_of(payload: dict[str, Any]) -> dict[str, Any]:
     raw = payload.get("freshness") if isinstance(payload.get("freshness"), dict) else {}
+    declared_max_age = raw.get("max_age_hours")
     return {
         "source_as_of": str(raw.get("source_as_of") or payload.get("as_of") or "").strip(),
         "generated_at": str(raw.get("generated_at") or payload.get("generated_at") or "").strip(),
-        "max_age_hours": raw.get("max_age_hours") or MAX_AGE_HOURS,
+        "max_age_hours": MAX_AGE_HOURS if declared_max_age is None else declared_max_age,
     }
+
+
+def effective_max_age_hours(payload: dict[str, Any]) -> float | None:
+    """Bound producer freshness to the consumer SLO.
+
+    A payload may demand a shorter refresh, but it cannot stretch a 48-hour
+    publication contract to a year. Invalid, zero, negative and non-finite
+    values fail closed.
+    """
+    raw = freshness_of(payload)["max_age_hours"]
+    try:
+        declared = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(declared) or declared <= 0:
+        return None
+    return min(declared, float(MAX_AGE_HOURS))
 
 
 def _has_coverage(payload: dict[str, Any]) -> bool:
@@ -389,14 +411,56 @@ def freshness_reasons(payload: dict[str, Any]) -> list[str]:
     if generated_at is None:
         reasons.append("freshness_absent")
         return reasons
-    try:
-        max_age = float(fresh["max_age_hours"])
-    except (TypeError, ValueError):
-        max_age = float(MAX_AGE_HOURS)
+    max_age = effective_max_age_hours(payload)
+    if max_age is None:
+        return ["freshness_absent"]
     age_hours = (generated_at - parsed_as_of).total_seconds() / 3600.0
     if age_hours > max_age or age_hours < 0:
         reasons.append("freshness_stale")
     return reasons
+
+
+def publication_freshness_bar(
+    payload: dict[str, Any], publication_at: datetime | str | None = None
+) -> str | None:
+    """Return an INDEX bar when facts are old at publication time.
+
+    Producer freshness proves the snapshot was assembled coherently.  It does
+    not make a September snapshot fresh again when a November release reuses
+    it.  This second clock is consumer-owned and uses SOURCE_DATE_EPOCH when a
+    reproducible build supplies one; the host overlay naturally uses its real
+    promotion time.
+    """
+    fresh = freshness_of(payload)
+    source_as_of = _parse_instant(fresh["source_as_of"])
+    if source_as_of is None:
+        return "publication_freshness_absent"
+    if isinstance(publication_at, datetime):
+        observed = publication_at
+    else:
+        observed = _parse_instant(publication_at or build_timestamp())
+    if observed is None:
+        return "publication_clock_invalid"
+    if observed.tzinfo is None:
+        observed = observed.replace(tzinfo=timezone.utc)
+    max_age = effective_max_age_hours(payload)
+    if max_age is None:
+        return "publication_freshness_invalid"
+    age_hours = (observed - source_as_of).total_seconds() / 3600.0
+    if age_hours < 0:
+        return "publication_clock_before_source"
+    if age_hours > max_age:
+        return "publication_freshness_stale"
+    return None
+
+
+def public_index_authorized(payload: dict[str, Any]) -> bool:
+    """Consumer-owned gate; producer DATA_READY never grants SEO permission."""
+    key = (
+        str(payload.get("schema") or "").strip(),
+        str(payload.get("contract_version") or "").strip(),
+    )
+    return key in PUBLIC_INDEX_AUTHORIZED_CONTRACTS
 
 
 def _payload_hash_reasons(payload: dict[str, Any]) -> list[str]:
@@ -460,7 +524,9 @@ def inspect_producer_integrity(
     return sorted({code for code in reasons if code in INTEGRITY_REASON_CODES})
 
 
-def index_bars(payload: dict[str, Any]) -> list[str]:
+def index_bars(
+    payload: dict[str, Any], *, publication_at: datetime | str | None = None
+) -> list[str]:
     """Reasons this payload may be projected but never promoted to INDEX.
 
     Separate from integrity: a labeled fixture is *honest* data with a known
@@ -475,6 +541,12 @@ def index_bars(payload: dict[str, Any]) -> list[str]:
         bars.append("catalog_mode_fixture")
     if negotiate_schema(payload.get("schema"), payload.get("contract_version")).kind == "fixture":
         bars.append("fixture_schema")
+    if is_opportunity_payload(payload) and source_kind_of(payload) == SOURCE_OFFICIAL_LIVE:
+        if not public_index_authorized(payload):
+            bars.append("public_index_authorization_absent")
+        freshness_bar = publication_freshness_bar(payload, publication_at)
+        if freshness_bar:
+            bars.append(freshness_bar)
     return sorted(set(bars))
 
 
@@ -488,7 +560,12 @@ def is_opportunity_payload(payload: dict[str, Any]) -> bool:
     return has_opp and not has_company
 
 
-def decide(payload: dict[str, Any], *, manifest: dict[str, Any] | None = None) -> dict[str, Any]:
+def decide(
+    payload: dict[str, Any],
+    *,
+    manifest: dict[str, Any] | None = None,
+    publication_at: datetime | str | None = None,
+) -> dict[str, Any]:
     """Fail-closed editorial decision for one payload.
 
     READY means the payload may be projected. INDEX is earned only by an
@@ -497,7 +574,7 @@ def decide(payload: dict[str, Any], *, manifest: dict[str, Any] | None = None) -
     the rendered HTML is the inbound_gates check, not this function.
     """
     reasons = inspect_producer_integrity(payload, manifest=manifest)
-    bars = index_bars(payload)
+    bars = index_bars(payload, publication_at=publication_at)
     state = data_state_of(payload)
     source_kind = source_kind_of(payload)
     index_eligible = False
@@ -886,7 +963,9 @@ def project_company(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
+def build_projection(
+    bundle: dict[str, Any], *, publication_at: datetime | str | None = None
+) -> dict[str, Any]:
     """Split a loaded export into READY projections and rejected records."""
     manifest = bundle.get("manifest") or {}
     source_kind = source_kind_of(manifest)
@@ -894,8 +973,9 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
     companies: dict[str, dict[str, Any]] = {}
     rejected: list[dict[str, Any]] = []
 
+    publication_clock = publication_at or build_timestamp()
     for record in bundle.get("opportunities") or []:
-        decision = decide(record, manifest=manifest)
+        decision = decide(record, manifest=manifest, publication_at=publication_clock)
         if not decision["ready"]:
             rejected.append(
                 {
@@ -914,7 +994,7 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
         opportunities.append(projected)
 
     for record in bundle.get("companies") or []:
-        decision = decide(record, manifest=manifest)
+        decision = decide(record, manifest=manifest, publication_at=publication_clock)
         if not decision["ready"]:
             rejected.append(
                 {
@@ -954,6 +1034,10 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
         "source_as_of": bundle.get("source_as_of") or manifest.get("as_of"),
         "as_of": manifest.get("as_of") or bundle.get("source_as_of"),
         "source_run_id": manifest.get("source_run_id") or manifest.get("snapshot_id"),
+        "publication_at": (
+            publication_clock.isoformat() if isinstance(publication_clock, datetime)
+            else str(publication_clock)
+        ),
         "manifest_hash": manifest.get("manifest_hash"),
         "consumer_observed_manifest_hash": observed_hash or manifest.get("manifest_hash"),
         "official_live": official_live_declared(manifest),
@@ -986,6 +1070,7 @@ def _projection_common(projection: dict[str, Any]) -> dict[str, Any]:
         "source_as_of": projection["source_as_of"],
         "as_of": projection.get("as_of"),
         "source_run_id": projection.get("source_run_id"),
+        "publication_at": projection.get("publication_at"),
         "manifest_hash": projection.get("manifest_hash"),
         "consumer_observed_manifest_hash": projection.get("consumer_observed_manifest_hash"),
         "official_live": projection.get("official_live"),
@@ -994,8 +1079,23 @@ def _projection_common(projection: dict[str, Any]) -> dict[str, Any]:
 
 
 def _fsync_file(path: Path) -> None:
-    with path.open("rb") as handle:
+    # Windows rejects fsync on a read-only descriptor; the bytes are already
+    # complete, so opening update mode preserves the same durability contract.
+    with path.open("rb+") as handle:
         os.fsync(handle.fileno())
+
+
+def _fsync_dir(path: Path) -> None:
+    try:
+        fd = os.open(str(path), os.O_RDONLY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+    except OSError as exc:
+        if os.name == "nt" and exc.errno in {errno.EBADF, errno.EINVAL, errno.EACCES}:
+            return
+        raise
 
 
 def _is_official_projection_dir(path: Path) -> bool:
@@ -1083,11 +1183,7 @@ def write_projection(
         )
         _fsync_file(opportunities_path)
         _fsync_file(companies_path)
-        fd = os.open(str(tmp), os.O_RDONLY)
-        try:
-            os.fsync(fd)
-        finally:
-            os.close(fd)
+        _fsync_dir(tmp)
         preserve = last_accepted
         if preserve is None and projection.get("source_kind") == SOURCE_OFFICIAL_LIVE:
             preserve = _root() / DEFAULT_LAST_ACCEPTED_DIR

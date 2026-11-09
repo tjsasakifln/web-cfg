@@ -868,6 +868,29 @@
 
   window.confengeTrack = track;
 
+  // Tool modules can be evaluated before this public tracker is published.
+  // Replay only the one bounded, enum-only deferred event after publication;
+  // `track` still applies the normal opt-out and PII gates to every item.
+  const drainDeferredReferralEvents = () => {
+    const pending = Array.isArray(window.confengeDeferredEvents)
+      ? window.confengeDeferredEvents.slice(-8)
+      : [];
+    window.confengeDeferredEvents = [];
+    for (const item of pending) {
+      const props = item && typeof item === 'object' && !Array.isArray(item) ? item.props : null;
+      if (
+        item?.event !== 'tool_referral_visit'
+        || !props || typeof props !== 'object' || Array.isArray(props)
+        || Object.keys(item).some(key => key !== 'event' && key !== 'props')
+        || Object.keys(props).length !== 2
+        || props.touch_outcome !== 'accepted'
+        || !['persistent', 'memory'].includes(props.storage_mode)
+      ) continue;
+      track('tool_referral_visit', { touch_outcome: 'accepted', storage_mode: props.storage_mode });
+    }
+  };
+  drainDeferredReferralEvents();
+
   /** Optional Cloudflare Turnstile — only loads when a public sitekey is present. */
   const initTurnstile = () => {
     try {

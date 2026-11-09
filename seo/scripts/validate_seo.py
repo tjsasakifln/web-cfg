@@ -9,9 +9,11 @@ from __future__ import annotations
 import json
 import re
 import sys
+import tarfile
 from collections import Counter, defaultdict
+from functools import lru_cache
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -176,6 +178,61 @@ def intranet_indexable_hits(root: Path | None = None) -> list[str]:
     return hits
 
 
+@lru_cache(maxsize=4)
+def _internal_redirect_rules(redirects: str) -> tuple:
+    rules = []
+    for raw in redirects.splitlines():
+        parts = raw.split()
+        if len(parts) < 3 or not parts[0].startswith("/") or parts[0].startswith("//"):
+            continue
+        source, target, status = parts[:3]
+        pattern = re.escape(source.rstrip("/")).replace(r"\*", "(?P<splat>.*)")
+        pattern = re.sub(r":([A-Za-z_][A-Za-z0-9_]*)", r"(?P<\1>[^/]+)", pattern)
+        rules.append((re.compile(pattern + "/?"), target, status.rstrip("!")))
+    return tuple(rules)
+
+
+def internal_target_exists(root: Path, href: str, redirects: str, seen: frozenset[str] = frozenset()) -> bool:
+    """Resolve a static link or an explicit redirect; never assume a fallback.
+
+    Fragment identity is checked separately by the HTML-integrity gate.
+    Removed routes and redirect loops are not valid internal destinations.
+    """
+    parsed = urlparse(href)
+    if parsed.netloc and parsed.hostname != "confenge.com.br":
+        return parsed.scheme in {"http", "https"}
+    path = unquote(parsed.path or "/")
+    if path in seen or len(seen) >= 10:
+        return False
+    candidate = (root / path.lstrip("/")).resolve()
+    if not candidate.is_relative_to(root.resolve()):
+        return False
+    for pattern, target, code in _internal_redirect_rules(redirects):
+        match = pattern.fullmatch(path)
+        if not match:
+            continue
+        if code not in {"200", "301", "302", "303", "307", "308"}:
+            return False
+        for key, value in match.groupdict().items():
+            target = target.replace(":" + key, value)
+        if code == "200" and target.startswith("/.netlify/functions/"):
+            function = target.split("/", 4)[3]
+            return any((root / "netlify/functions" / (function + ext)).is_file() for ext in (".js", ".cjs", ".mjs"))
+        return internal_target_exists(root, target, redirects, seen | {path})
+    if candidate.is_file() or (candidate / "index.html").is_file():
+        return True
+    # The source checkout packages BIM examples; publicar.cjs extracts these
+    # exact members before assembly. Validate the member, not a prefix exemption.
+    if path.startswith("/bim/examples/"):
+        archive = root / "scripts/bim/aplicativo.tar.gz"
+        try:
+            with tarfile.open(archive, "r:gz") as packaged:
+                return packaged.getmember(path.removeprefix("/bim/")).isfile()
+        except (OSError, KeyError, tarfile.TarError):
+            return False
+    return False
+
+
 def main() -> int:
     html_pages = iter_seo_html_pages(ROOT)
     from scripts.organic.canonical_hrefs import scan_public_parameterized_hrefs
@@ -324,6 +381,9 @@ def main() -> int:
             if a and b and a == b and parts[0] != parts[1]:
                 errors.append(f"trailing-slash-only redirect forbidden: {s}")
     link_re = re.compile(r'href=["\']([^"\'#]+)')
+    # The filesystem is immutable during this scan. Shared navigation repeats
+    # the same destinations thousands of times; resolve each only once.
+    target_cache: dict[str, bool] = {}
     for path, p in paths_info.items():
         t = p.read_text(encoding="utf-8", errors="replace")
         for href in link_re.findall(t):
@@ -345,14 +405,10 @@ def main() -> int:
                 continue
             if h == "/":
                 continue
-            hp = h if h.endswith("/") else h + "/"
-            cand = ROOT / hp.lstrip("/") / "index.html"
-            if not cand.exists() and h not in ("/obrigado", "/privacidade"):
-                # allow only known redirect sources without index
-                if h.rstrip("/") in legacy:
-                    continue
-                # skip if netlify redirects handle it
-                continue
+            if h not in target_cache:
+                target_cache[h] = internal_target_exists(ROOT, h, redirects_blob)
+            if not target_cache[h]:
+                errors.append(f"broken internal link {path} -> {h}")
 
     sin = (ROOT / "conteudos/sinapi-desonerado-nao-desonerado/index.html").read_text(encoding="utf-8")
     for needle in [

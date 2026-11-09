@@ -72,6 +72,9 @@
 .tool-share-social{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tool-share-social a{display:inline-flex;align-items:center;background:#fff;border:1px solid #829c9c;color:var(--ts-ink);padding:8px 12px;font-weight:710;min-height:44px;text-decoration:none}
 .tool-share-social a:hover{background:#e9f7f1;text-decoration:underline}
+.tool-referral-entry{margin-top:20px;padding:16px;border:1px solid var(--ts-line);background:#e9f7f1}
+.tool-referral-entry h3{margin:0;color:var(--ts-ink)}
+.tool-referral-entry a{display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
 .tool-share-related{display:flex;flex-wrap:wrap;gap:0 16px;margin-top:13px;border-top:1px solid var(--ts-line)}
 .tool-share-related a{display:inline-flex;align-items:center;min-height:44px}
 .tool-share-manual{display:block;margin:10px 0}

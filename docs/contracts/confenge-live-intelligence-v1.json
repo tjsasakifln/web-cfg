@@ -103,6 +103,14 @@
     "producer_status_not_official_live"
   ],
   "hold_reason_codes": ["freshness_stale"],
+  "consumer_index_bars": [
+    "public_index_authorization_absent",
+    "publication_freshness_absent",
+    "publication_freshness_invalid",
+    "publication_clock_invalid",
+    "publication_clock_before_source",
+    "publication_freshness_stale"
+  ],
   "reject_reason_codes": [
     "schema_absent",
     "schema_unsupported",
@@ -170,7 +178,9 @@
   },
   "publication": {
     "w1_surface_a_state": "PUBLISHABLE_NOINDEX",
-    "index_requires": "a declared family in data/organic/public-family-registry.json plus the full editorial gate; W1 declares none and ships noindex"
+    "index_requires": "a declared family in data/organic/public-family-registry.json, an intent-specific consumer authorization and the full editorial gate; v1.0.0 has no such authorization and ships noindex",
+    "consumer_index_authorization": "absent in v1.0.0; official_live and DATA_READY are factual readiness only",
+    "publication_clock": "source_as_of plus max_age_hours is re-evaluated against SOURCE_DATE_EPOCH in reproducible builds and the actual host overlay time; old accepted snapshots remain useful pages but are noindex and absent from the opportunity sitemap"
   },
   "forbidden_public_language": [
     "extra-cli",

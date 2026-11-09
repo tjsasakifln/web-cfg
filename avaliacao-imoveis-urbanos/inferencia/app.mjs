@@ -286,7 +286,20 @@ const showCredits = enabled => {
   byId('tool-credits-info').hidden=!enabled;
   byId('print').hidden=enabled;
 };
-commerce.ready().then(showCredits).catch(()=>{});
+async function openReferralProgram() {
+  try {
+    const opened=await commerce.openReferral();
+    if(!opened) status('export-status','O programa de indicação não está disponível neste momento. Você pode continuar usando a ferramenta.');
+  } catch { status('export-status','Não foi possível abrir sua conta. Tente novamente.',true); }
+}
+commerce.ready().then(async enabled=>{
+  showCredits(enabled);
+  if(enabled && location.hash==='#programa-indicacao') await openReferralProgram();
+}).catch(()=>{});
+document.querySelector('[data-referral-entry] a')?.addEventListener('click',event=>{
+  event.preventDefault();
+  openReferralProgram();
+});
 byId('tool-credits').onclick=()=>commerce.open().catch(()=>status('export-status','Não foi possível abrir sua conta. Tente novamente.',true));
 const exportAttempts = new WeakMap();
 function saveMemory(blob) {

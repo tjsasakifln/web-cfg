@@ -1,6 +1,6 @@
 # Funnel event dictionary
 
-**Schema:** `1.1.0`  
+**Schema:** `1.4.0`
 **Public source:** `CONFENGE_WEB`  
 **Machine registry:** `netlify/functions/lib/event-registry.json`  
 **Admit/minimize/reconcile:** `netlify/functions/lib/event-contract.cjs`  
@@ -29,6 +29,12 @@ Every admitted event carries:
 | `pii_policy` | `aggregate_allowlist_empty` |
 
 The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text, description/note/comment/free-text fields and PII-like values are never admitted. Join identifiers are validated against their complete declared patterns: `sess-`, `lead-` (plus the rollback-compatible legacy 24-hex lead id), `opp-`, `prop-` and `sale-`. `correlation_id`, `idempotency_key` and `event_id` remain non-PII technical tokens; `@` still fails on every field.
+
+## Indicação de ferramentas
+
+O funil de indicação mede apenas interações agregadas e não infere uma recompensa ou pagamento. `tool_referral_visit` registra uma atribuição válida com `touch_outcome=accepted` e `storage_mode=persistent|memory`. `tool_referral_panel_view` registra a abertura do painel autenticado com `tool_id=modela-memoria` e `destination_kind=modela|catalog`. `tool_referral_action` registra uma tentativa de compartilhar com `share_channel=copy|linkedin|whatsapp|native` e `action_outcome=success|failure|cancelled|blocked`.
+
+Esses campos são enums fechados. Código de indicação, URL com query, conta, pessoa indicada, destinatário, mensagem, saldo e pagamento não entram na telemetria. As métricas de créditos concedidos ou revertidos vêm do livro transacional do comércio, em relatório operacional separado; uma interação de compartilhamento não é conversão.
 
 ## Form validation category
 
