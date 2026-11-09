@@ -11,8 +11,9 @@ from struct import unpack
 import sys
 import tarfile
 from tempfile import NamedTemporaryFile, TemporaryDirectory
-from urllib.request import urlopen
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
+
+from release_download import download_release
 
 RELEASES = json.loads(Path(__file__).with_name("releases.json").read_text())
 MAX_MEMBER = 10 * 1024 * 1024
@@ -33,8 +34,7 @@ def obtain(spec, cache):
     with NamedTemporaryFile(dir=cache, delete=False) as tmp:
         temp = Path(tmp.name)
     try:
-        with urlopen(spec["url"], timeout=90) as response, temp.open("wb") as output:
-            shutil.copyfileobj(response, output)
+        download_release(spec["url"], temp, spec["sha256"])
         if not verified(temp, spec):
             raise ValueError("O ZIP diverge da release fixada.")
         temp.replace(target)

@@ -27,6 +27,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.public_footer import render_public_footer  # noqa: E402
+from scripts.site.shell_nav import load_brand  # noqa: E402
 
 DATA = ROOT / "data/projects/project-pages.v1.json"
 SITE = "https://confenge.com.br"
@@ -154,18 +155,11 @@ def _whatsapp_href(page: dict[str, Any]) -> str:
 
 
 def _header(active: str, page: dict[str, Any]) -> str:
-    links = [
-        ("/projetos/", "Projetos"),
-        ("/servicos/", "Serviços"),
-        ("/engenharia-condominios/", "Condomínios"),
-        ("/servicos-obras-publicas/", "Obras públicas"),
-        ("/como-trabalhamos/", "Como trabalhamos"),
-        ("/empresa/", "Empresa"),
-    ]
+    links = load_brand()["navigation"]["desktop"]
     nav = "".join(
-        f'<a href="{route}"{current}>{label}</a>'
-        for route, label in links
-        for current in (' aria-current="page"' if route == active else "",)
+        f'<a href="{esc(item["href"])}"{current}>{esc(item["label"])}</a>'
+        for item in links
+        for current in (' aria-current="page"' if item["href"] == active else "",)
     )
     return f"""<header class="pp-header">
 <div class="pp-container pp-header__inner">
@@ -179,6 +173,8 @@ def _header(active: str, page: dict[str, Any]) -> str:
 
 def _active_header_route(page: dict[str, Any]) -> str:
     route = page["route"]
+    if route == "/como-trabalhamos/":
+        return "/empresa/"
     project_branch = {
         "/edificacoes/",
         "/terceirizacao-projetos-engenharia/",

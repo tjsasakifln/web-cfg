@@ -8,8 +8,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import urllib.request
 import zipfile
+
+from suite.release_download import download_release
 
 VERSION = "0.18.0"
 DIGEST = "2440d15ebe28ce0a97f107a860f96d3bc21d98381b9f685676843b876a4d9086"
@@ -58,8 +59,7 @@ def install(output):
         with tempfile.NamedTemporaryFile(dir=cache, delete=False) as temp:
             name = Path(temp.name)
         try:
-            with urllib.request.urlopen(RELEASE, timeout=90) as response, name.open("wb") as tmp:
-                shutil.copyfileobj(response, tmp)
+            download_release(RELEASE, name, DIGEST)
             if not valid(name):
                 raise ValueError("O pacote CADCraft recebido diverge da versão fixada.")
             os.replace(name, archive)
