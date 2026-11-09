@@ -1453,6 +1453,74 @@ def _stage_release_with_fixture_opportunity(
     return host / "releases" / SHA_A
 
 
+def _write_test_accepted_overlay(
+    release: Path, records: list[dict[str, object]]
+) -> dict[str, object]:
+    files_manifest = release / "metadata/files.sha256"
+    expected = (
+        control._parse_files_manifest(files_manifest)
+        if files_manifest.is_file()
+        else {}
+    )
+    managed_packaged_html = (
+        control._managed_packaged_opportunity_pages(release, expected)
+        if expected
+        else set()
+    )
+    opportunities = release / "_site/oportunidades"
+    if opportunities.is_dir():
+        shutil.rmtree(opportunities)
+    for record in records:
+        route = str(record["route"])
+        page = release / f"_site{route}index.html"
+        page.parent.mkdir(parents=True, exist_ok=True)
+        page.write_text(
+            f"<html><body>{record['opportunity_id']}</body></html>\n",
+            encoding="utf-8",
+        )
+    accepted = release / "data/live_intelligence/accepted/opportunities.json"
+    accepted.parent.mkdir(parents=True, exist_ok=True)
+    accepted.write_text(
+        json.dumps(
+            {
+                "source_kind": "official_live",
+                "official_live": True,
+                "source_run_id": "test-mixed-indexability",
+                "as_of": "2026-11-09",
+                "manifest_hash": "f" * 64,
+                "consumer_observed_manifest_hash": "f" * 64,
+                "opportunities": records,
+            },
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    control._write_live_intelligence_overlay_manifest(
+        release,
+        SHA_A,
+        expected,
+        managed_packaged_html=managed_packaged_html,
+    )
+    return control.load_json(release / control.LIVE_INTEL_PUBLIC_MANIFEST)
+
+
+def _test_opportunity(
+    opportunity_id: str, publication_state: str, index_eligible: bool
+) -> dict[str, object]:
+    route = f"/oportunidades/{opportunity_id}/"
+    return {
+        "opportunity_id": opportunity_id,
+        "route": route,
+        "source_kind": "official_live",
+        "publication_state": publication_state,
+        "index_eligible": index_eligible,
+        "content_hash": hashlib.sha256(opportunity_id.encode()).hexdigest(),
+    }
+
+
 def test_overlay_cannot_seal_a_rogue_packaged_child_removal(
     host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -1542,7 +1610,91 @@ def test_overlay_prunes_fixture_and_keeps_sealed_noindex_page_when_official_pres
             "sha256": control.sha256_file(index_page),
         }
     ]
+    assert public_snapshot["indexable_routes"] == []
     assert control.verify_release_tree_at(release, SHA_A)["commit"] == SHA_A
+
+
+def test_public_overlay_separates_indexable_routes_and_rejects_tampering(
+    tmp_path: Path,
+) -> None:
+    release = tmp_path / f".stage-{SHA_A}-mixed"
+    release.mkdir()
+    noindex = _test_opportunity(
+        "z-historical/2026", "PUBLISHABLE_NOINDEX", False
+    )
+    index = _test_opportunity("a-current/2026", "PUBLISHABLE_INDEX", True)
+    public = _write_test_accepted_overlay(release, [noindex, index])
+
+    assert [item["route"] for item in public["routes"]] == [
+        "/oportunidades/a-current/2026/",
+        "/oportunidades/z-historical/2026/",
+    ]
+    assert public["indexable_routes"] == ["/oportunidades/a-current/2026/"]
+    control._overlay_contract(release, SHA_A, {})
+
+    public_path = release / control.LIVE_INTEL_PUBLIC_MANIFEST
+    original = public_path.read_bytes()
+    public["indexable_routes"] = [
+        "/oportunidades/a-current/2026/",
+        "/oportunidades/z-historical/2026/",
+    ]
+    public_path.write_text(
+        json.dumps(public, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(control.ReleaseError, match="public live-intelligence overlay"):
+        control._overlay_contract(release, SHA_A, {})
+    public_path.write_bytes(original)
+    control._overlay_contract(release, SHA_A, {})
+
+    accepted_path = release / "data/live_intelligence/accepted/opportunities.json"
+    accepted_original = accepted_path.read_bytes()
+    accepted = control.load_json(accepted_path)
+    accepted["opportunities"][1]["index_eligible"] = False
+    accepted_path.write_text(
+        json.dumps(accepted, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(control.ReleaseError, match="accepted_projection_sha256 mismatch"):
+        control._overlay_contract(release, SHA_A, {})
+    accepted_path.write_bytes(accepted_original)
+    control._overlay_contract(release, SHA_A, {})
+
+
+def test_installed_legacy_v1_may_lack_indexable_routes_but_candidate_may_not(
+    tmp_path: Path,
+) -> None:
+    release = tmp_path / "host/releases" / SHA_A
+    release.mkdir(parents=True)
+    public = _write_test_accepted_overlay(
+        release,
+        [_test_opportunity("historical/2026", "PUBLISHABLE_NOINDEX", False)],
+    )
+    assert public["indexable_routes"] == []
+    public.pop("indexable_routes")
+    public_path = release / control.LIVE_INTEL_PUBLIC_MANIFEST
+    public_path.write_text(
+        json.dumps(public, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    internal_path = release / control.LIVE_INTEL_OVERLAY_MANIFEST
+    internal = control.load_json(internal_path)
+    internal["files"][control.LIVE_INTEL_PUBLIC_MANIFEST] = control.sha256_file(
+        public_path
+    )
+    internal_path.write_text(
+        json.dumps(internal, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    control._overlay_contract(
+        release, SHA_A, {}, allow_legacy_public_manifest=True
+    )
+
+    candidate = release.parent / f".stage-{SHA_A}-legacy-shape"
+    shutil.copytree(release, candidate)
+    with pytest.raises(control.ReleaseError, match="public live-intelligence overlay"):
+        control._overlay_contract(candidate, SHA_A, {})
 
 
 def test_stale_official_overlay_withdraws_records_and_keeps_truthful_hub(

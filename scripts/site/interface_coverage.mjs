@@ -174,7 +174,7 @@ function validateRuntimeOnlyRepresentative(entry, family) {
     && decisions.counterproof?.official_opportunity_owner === OFFICIAL_OVERLAY_OWNER
     && /source_kind=official_live/.test(decisions.counterproof?.official_opportunity_contract || "")
     && /def _publish_live_intelligence_overlay\(release: Path\)/.test(controller)
-    && /def _accepted_overlay_identity\(release: Path\)/.test(controller)
+    && /def _accepted_overlay_identity\(\s*release: Path,?\s*\)/.test(controller)
     && /def _write_live_intelligence_overlay_manifest\(/.test(controller)
     && /LIVE_INTEL_PUBLIC_MANIFEST/.test(controller)
     && /def _withdraw_packaged_opportunity_pages\(release: Path\)/.test(controller)
@@ -249,12 +249,29 @@ export function runtimeLighthouseContractForRoute(
   };
 }
 
-/** Prove that a selected post-stage route came from the runtime inventory. */
-export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, acceptedRoutes = null) {
+/**
+ * Prove that the runtime sitemap is exactly the INDEX subset of the accepted
+ * projection. `routes` seals every served official page, including historical
+ * NOINDEX pages; only `indexable_routes` is allowed into the sitemap.
+ *
+ * The nullable fourth argument preserves the older verification contract for
+ * historical evidence. New candidate manifests always pass an explicit array,
+ * including `[]` when every accepted page is NOINDEX.
+ */
+export function verifyRuntimeInventoryDocument(
+  route,
+  sitemapXml,
+  contract,
+  acceptedRoutes = null,
+  sealedIndexableRoutes = null,
+) {
   if (!contract?.post_stage_lighthouse_required || contract.route !== route) {
     throw new Error(`runtime Lighthouse inventory check has no matching contract: ${route}`);
   }
-  const inventoried = [...String(sitemapXml || "").matchAll(/<loc>([^<]+)<\/loc>/gi)]
+  const sitemapSource = String(sitemapXml || "");
+  const urlset = sitemapSource.match(/^\s*(?:<\?xml\s+[^?]*\?>\s*)?<urlset\b[^>]*>([\s\S]*)<\/urlset>\s*$/i);
+  if (!urlset) throw new Error("runtime Lighthouse sitemap is not a complete urlset XML document");
+  const inventoried = [...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>/gi)]
     .map((match) => match[1].replace(/&amp;/g, "&"))
     .map((value) => {
       let parsed;
@@ -268,12 +285,13 @@ export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, acce
   if (new Set(inventoried).size !== inventoried.length) {
     throw new Error("runtime Lighthouse sitemap contains duplicate routes");
   }
-  if (!acceptedRoutes) {
+  if (acceptedRoutes === null) {
     if (!inventoried.includes(route)) {
       throw new Error(`runtime Lighthouse route is absent from ${contract.inventory_route}: ${route}`);
     }
     return true;
   }
+  if (!Array.isArray(acceptedRoutes)) throw new Error("runtime Lighthouse accepted route inventory is not an array");
   const acceptedItems = acceptedRoutes.map((item) => (
     typeof item === "string" ? { route: item, index_state: "INDEX" } : item
   ));
@@ -282,13 +300,23 @@ export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, acce
     throw new Error("runtime Lighthouse accepted route inventory contains duplicates");
   }
   for (const item of acceptedItems) {
-    if (!accepted.includes(item.route) || !["INDEX", "NOINDEX"].includes(item.index_state)) {
+    if (!(new RegExp(contract.route_pattern)).test(item.route) || !["INDEX", "NOINDEX"].includes(item.index_state)) {
       throw new Error(`runtime Lighthouse accepted route has invalid index_state: ${item?.route || "missing"}`);
     }
   }
   const selected = acceptedItems.find((item) => item.route === route);
   if (!selected) throw new Error(`runtime Lighthouse route is absent from the accepted projection: ${route}`);
-  const expected = acceptedItems.filter((item) => item.index_state === "INDEX").map((item) => item.route);
+  const expected = acceptedItems.filter((item) => item.index_state === "INDEX").map((item) => item.route).sort();
+  if (sealedIndexableRoutes !== null) {
+    const sealed = [...validatedRuntimeIndexableRoutes(
+      { indexable_routes: sealedIndexableRoutes },
+      new Set(accepted),
+      new RegExp(contract.route_pattern),
+    )];
+    if (sealed.length !== expected.length || sealed.some((value, index) => value !== expected[index])) {
+      throw new Error("runtime Lighthouse rendered INDEX states differ from sealed indexable_routes");
+    }
+  }
   if (
     inventoried.length !== expected.length
     || inventoried.some((value) => !expected.includes(value))
@@ -298,11 +326,8 @@ export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, acce
       `runtime Lighthouse sitemap differs from the exact indexable accepted projection: accepted_index=${expected.length} inventoried=${inventoried.length}`,
     );
   }
-  if (selected.index_state === "INDEX" && !inventoried.includes(route)) {
-    throw new Error(`runtime Lighthouse INDEX route is absent from ${contract.inventory_route}: ${route}`);
-  }
-  if (selected.index_state === "NOINDEX" && inventoried.includes(route)) {
-    throw new Error(`runtime Lighthouse NOINDEX route is present in ${contract.inventory_route}: ${route}`);
+  if (expected.length === 0 && urlset[1].trim()) {
+    throw new Error("runtime Lighthouse empty indexable projection requires an empty urlset XML body");
   }
   return { selected, inventoried, expected };
 }
@@ -353,6 +378,28 @@ export function verifyRuntimeRenderedPageDocument(route, html, acceptedItem) {
     throw new Error(`runtime Lighthouse robots directive contradicts ${state}: ${route}`);
   }
   return { ...acceptedItem, index_state: state, robots: tokens.join(","), canonical: `https://confenge.com.br${route}` };
+}
+
+/** Validate the canonical sorted INDEX subset against the digest-sealed route set. */
+export function validatedRuntimeIndexableRoutes(document, sealedRoutes, routePattern = null) {
+  if (!Array.isArray(document?.indexable_routes)) {
+    throw new Error("runtime official overlay has no exact indexable_routes");
+  }
+  const sorted = [...document.indexable_routes].sort();
+  if (
+    document.indexable_routes.some((route) => typeof route !== "string")
+    || new Set(document.indexable_routes).size !== document.indexable_routes.length
+    || document.indexable_routes.some((route, index) => route !== sorted[index])
+  ) {
+    throw new Error("runtime official overlay indexable_routes must be sorted unique path strings");
+  }
+  const sealed = sealedRoutes instanceof Set ? sealedRoutes : new Set(sealedRoutes || []);
+  for (const route of document.indexable_routes) {
+    if ((routePattern && !routePattern.test(route)) || !sealed.has(route)) {
+      throw new Error(`runtime official overlay has an unsealed indexable route: ${route}`);
+    }
+  }
+  return document.indexable_routes;
 }
 
 /**
@@ -456,6 +503,7 @@ export function verifyRuntimeAcceptedProjectionDocument(
     ids.add(opportunityId);
     htmlPaths.add(htmlPath);
   }
+  const indexableRoutes = validatedRuntimeIndexableRoutes(document, routes, routePattern);
   for (const htmlPath of htmlPaths) {
     if (removedPaths.has(`_site/${htmlPath}`)) {
       throw new Error(`runtime Lighthouse accepted projection both publishes and removes: ${htmlPath}`);
@@ -464,7 +512,10 @@ export function verifyRuntimeAcceptedProjectionDocument(
   if (!routes.has(route)) {
     throw new Error(`runtime Lighthouse route is absent from the accepted official projection: ${route}`);
   }
-  return document.routes.find((item) => item.route === route);
+  return {
+    ...document.routes.find((item) => item.route === route),
+    route_indexable: indexableRoutes.includes(route),
+  };
 }
 
 /** Derive the complete axe and Lighthouse coverage plan. */

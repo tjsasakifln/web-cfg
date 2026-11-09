@@ -250,6 +250,7 @@ const acceptedRuntimeDocument = {
     content_hash: "d".repeat(64),
     sha256: "e".repeat(64),
   }],
+  indexable_routes: [runtimeContract.route],
   static_html_paths: ["_site/oportunidades/index.html"],
   static_html_sha256: { "_site/oportunidades/index.html": "f".repeat(64) },
   removed_html_paths: [],
@@ -269,6 +270,7 @@ assert.equal(
     `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`,
     runtimeContract,
     acceptedRuntimeDocument.routes.map((item) => ({ ...item, index_state: "INDEX" })),
+    acceptedRuntimeDocument.indexable_routes,
   ).selected.route,
   runtimeContract.route,
 );
@@ -278,6 +280,7 @@ assert.throws(
     `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br/oportunidades/unaccepted/</loc></url></urlset>`,
     runtimeContract,
     acceptedRuntimeDocument.routes.map((item) => ({ ...item, index_state: "INDEX" })),
+    acceptedRuntimeDocument.indexable_routes,
   ),
   /sitemap differs from the exact indexable accepted projection/,
   "a sitemap-only opportunity absent from the accepted projection must fail closed",
@@ -317,12 +320,12 @@ assert.throws(
 );
 const mixedRoutes = [{ ...acceptedRuntimeDocument.routes[0], index_state: "INDEX" }, noindexItem];
 assert.equal(
-  verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`, runtimeContract, mixedRoutes).expected.length,
+  verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`, runtimeContract, mixedRoutes, [runtimeContract.route]).expected.length,
   1,
   "mixed accepted projection inventories only INDEX routes",
 );
 assert.throws(
-  () => verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br${noindexItem.route}</loc></url></urlset>`, runtimeContract, mixedRoutes),
+  () => verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br${noindexItem.route}</loc></url></urlset>`, runtimeContract, mixedRoutes, [runtimeContract.route]),
   /exact indexable accepted projection/,
   "NOINDEX routes must be absent from sitemap",
 );

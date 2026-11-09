@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { validatedRuntimeIndexableRoutes } from "./interface_coverage.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -85,6 +86,9 @@ export function validateWithdrawnOverlay(document, expectedSha) {
   if (!Array.isArray(document.routes) || document.routes.length !== 0) {
     throw new Error("withdrawn overlay retains accepted opportunity routes");
   }
+  if (!Array.isArray(document.indexable_routes) || document.indexable_routes.length !== 0) {
+    throw new Error("withdrawn overlay retains indexable opportunity routes");
+  }
   if (
     !Array.isArray(document.static_html_paths)
     || document.static_html_paths.length !== 1
@@ -103,6 +107,27 @@ export function validateWithdrawnOverlay(document, expectedSha) {
     throw new Error("withdrawn overlay removed_html_paths is invalid");
   }
   return true;
+}
+
+/** Select an INDEX route first, falling back to a sealed official NOINDEX route. */
+export function selectOfficialRuntimeRoute(document) {
+  if (document?.official_live !== true || document?.source_kind !== "official_live") {
+    throw new Error("runtime overlay routes do not claim accepted official_live input");
+  }
+  if (!Array.isArray(document.routes) || document.routes.length === 0) {
+    throw new Error("runtime official overlay has no sealed opportunity routes");
+  }
+  const sealedRoutes = document.routes.map((item) => String(item?.route || ""));
+  if (
+    new Set(sealedRoutes).size !== sealedRoutes.length
+    || sealedRoutes.some((route) => !route.startsWith("/oportunidades/") || !route.endsWith("/"))
+  ) {
+    throw new Error("runtime official overlay has invalid or duplicate sealed opportunity routes");
+  }
+  const sealed = new Set(sealedRoutes);
+  const indexableRoutes = validatedRuntimeIndexableRoutes(document, sealed);
+  const route = indexableRoutes[0] || [...sealedRoutes].sort()[0];
+  return { route, route_indexable: indexableRoutes.includes(route) };
 }
 
 /**
@@ -311,12 +336,7 @@ export async function runAcceptance(args = process.argv.slice(2), measurement = 
     report.evidence.home_convergence = convergence;
 
     if (overlay.routes.length > 0) {
-      const route = [...overlay.routes]
-        .map((item) => String(item?.route || ""))
-        .sort()[0];
-      if (!route.startsWith("/oportunidades/") || !route.endsWith("/")) {
-        throw new Error(`runtime overlay selected an invalid opportunity route: ${route || "missing"}`);
-      }
+      const { route, route_indexable: routeIndexable } = selectOfficialRuntimeRoute(overlay);
       const { summary, summaryPath, home } = measurePublicFamily({ origin, expectedSha, route, ...measurement });
       const measured = (summary.results || []).filter((row) => row.path === route && !row.error);
       const accepted = summary.coverage?.runtime_evidence?.routes || [];
@@ -326,6 +346,8 @@ export async function runAcceptance(args = process.argv.slice(2), measurement = 
         measured.length !== 1
         || !acceptedItem
         || !["INDEX", "NOINDEX"].includes(acceptedItem.index_state)
+        || acceptedItem.route_indexable !== routeIndexable
+        || acceptedItem.index_state !== (routeIndexable ? "INDEX" : "NOINDEX")
         || seoOnlyExempt.includes(route) !== (acceptedItem.index_state === "NOINDEX")
       ) {
         throw new Error("runtime Lighthouse summary does not prove the exact accepted route and index state");
@@ -333,6 +355,7 @@ export async function runAcceptance(args = process.argv.slice(2), measurement = 
       report.mode = "official_live_lighthouse";
       report.evidence.runtime_route = route;
       report.evidence.runtime_index_state = acceptedItem.index_state;
+      report.evidence.route_indexable = routeIndexable;
       report.evidence.lighthouse_summary = summaryPath.slice(ROOT.length + 1);
       report.evidence.lighthouse_evaluation = summary.evaluation;
       report.evidence.public_home_runs = home.length;

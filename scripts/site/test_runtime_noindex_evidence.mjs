@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, rmdirSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -45,6 +45,7 @@ const projection = {
       sha256: createHash("sha256").update(body).digest("hex"),
     };
   }),
+  indexable_routes: [indexRoute],
   static_html_paths: ["_site/oportunidades/index.html"],
   static_html_sha256: { "_site/oportunidades/index.html": createHash("sha256").update(hub).digest("hex") },
   removed_html_paths: [],
@@ -72,8 +73,6 @@ const server = createServer((request, response) => {
 });
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 let fixtureDir = null;
-const temporaryModela = join(ROOT, "avaliacao-imoveis-urbanos", "inferencia", "index.html");
-let createdModela = false;
 const summaryPath = join(ROOT, "docs", "lighthouse-runs", `summary-${sha}.json`);
 try {
   const origin = `http://127.0.0.1:${server.address().port}`;
@@ -87,17 +86,17 @@ try {
     verified.push(verifyRuntimeRenderedPageDocument(item.route, body.toString("utf8"), item));
   }
   const inventory = await fetch(`${origin}/sitemap-oportunidades.xml`).then((response) => response.text());
-  const proof = verifyRuntimeInventoryDocument(selectedRoute, inventory, contract, verified);
+  const proof = verifyRuntimeInventoryDocument(selectedRoute, inventory, contract, verified, projection.indexable_routes);
   assert.equal(proof.selected.index_state, "NOINDEX");
   assert.deepEqual(proof.inventoried, [indexRoute]);
   assert.deepEqual(proof.expected, [indexRoute]);
+  assert.throws(
+    () => verifyRuntimeInventoryDocument(selectedRoute, inventory, contract, verified, [selectedRoute]),
+    /rendered INDEX states differ from sealed indexable_routes/,
+    "the sealed INDEX subset cannot contradict the digest-bound rendered state",
+  );
 
   fixtureDir = mkdtempSync(join(tmpdir(), "confenge-runtime-noindex-runner-"));
-  createdModela = !existsSync(temporaryModela);
-  if (createdModela) {
-    mkdirSync(dirname(temporaryModela), { recursive: true });
-    writeFileSync(temporaryModela, "<html><body>fixture</body></html>");
-  }
   const child = join(fixtureDir, "measure.mjs");
   writeFileSync(child, `import{readFileSync,writeFileSync}from"node:fs";const[s,o]=process.argv.slice(2),x=JSON.parse(readFileSync(s,"utf8"));if(x.preflight){writeFileSync(o,JSON.stringify({outcome:"MEASURED",phase:"complete",lhr_written:false}));process.exit(0)}const row={path:x.path,run:x.run,performance:100,accessibility:100,best_practices:100,seo:x.path==="/"?100:70,seo_without_crawlability:100,lcp_ms:1000,cls:0,tbt_ms:0,longest_own_task_ms:0,dom_elements:10,total_byte_weight:1000,content_byte_weight:1000,lcp_network_allowance_ms:0,font_display_score:1,image_aspect_ratio:1,image_size_responsive:1};writeFileSync(x.out_json,"{}");writeFileSync(o,JSON.stringify({outcome:"MEASURED",phase:"complete",row,lhr_written:true}));`);
   const completed = await new Promise((done) => {
@@ -119,12 +118,6 @@ try {
   assert.equal(summary.results.find((row) => row.path === selectedRoute).seo_without_crawlability, 100);
   for (const file of [summaryPath, ...summary.results.map((row) => join(ROOT, "docs", "lighthouse-runs", `${row.path === "/" ? "home" : "oportunidades_00394429000100-1-002200_2026"}-${sha}${row.path === "/" ? `-run-${row.run}` : ""}.json`))]) rmSync(file, { force: true });
   rmSync(fixtureDir, { recursive: true, force: true });
-  if (createdModela) {
-    rmSync(temporaryModela, { force: true });
-    for (const directory of [dirname(temporaryModela), join(ROOT, "avaliacao-imoveis-urbanos")]) {
-      try { rmdirSync(directory); } catch { /* preserve any pre-existing contents */ }
-    }
-  }
 } finally {
   for (const file of [
     summaryPath,
@@ -132,12 +125,6 @@ try {
     join(ROOT, "docs", "lighthouse-runs", `oportunidades_00394429000100-1-002200_2026-${sha}.json`),
   ]) rmSync(file, { force: true });
   if (fixtureDir) rmSync(fixtureDir, { recursive: true, force: true });
-  if (createdModela) {
-    rmSync(temporaryModela, { force: true });
-    for (const directory of [dirname(temporaryModela), join(ROOT, "avaliacao-imoveis-urbanos")]) {
-      try { rmdirSync(directory); } catch { /* preserve any pre-existing contents */ }
-    }
-  }
   await new Promise((resolve) => server.close(resolve));
 }
 

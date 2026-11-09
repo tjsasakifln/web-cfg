@@ -248,6 +248,7 @@ async function mapConcurrent(values, limit, worker) {
 }
 
 async function verifyProjectionPages(origin, projection) {
+  const indexable = new Set(projection.indexable_routes);
   return mapConcurrent(projection.routes, 12, async (acceptedItem) => {
     const page = await fetchExactRuntimeHtml(origin, acceptedItem.route);
     const observedSha256 = createHash("sha256").update(page.body).digest("hex");
@@ -257,7 +258,10 @@ async function verifyProjectionPages(origin, projection) {
       );
     }
     return {
-      ...verifyRuntimeRenderedPageDocument(acceptedItem.route, page.text, acceptedItem),
+      ...verifyRuntimeRenderedPageDocument(acceptedItem.route, page.text, {
+        ...acceptedItem,
+        index_state: indexable.has(acceptedItem.route) ? "INDEX" : "NOINDEX",
+      }),
       observed_sha256: observedSha256,
     };
   });
@@ -315,6 +319,7 @@ async function verifyRuntimeEvidenceInputs() {
       inventories.get(contract.inventory_route),
       contract,
       verifiedRoutes,
+      projection.indexable_routes,
     );
     selectedRoutes.push({
       family_id: contract.family_id,
@@ -331,6 +336,7 @@ async function verifyRuntimeEvidenceInputs() {
       consumer_observed_manifest_hash: projection.consumer_observed_manifest_hash,
       source_run_id: projection.source_run_id,
       as_of: projection.as_of,
+      route_indexable: acceptedItem.route_indexable,
     });
   }
   const staticHtml = [];

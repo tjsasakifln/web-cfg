@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import {
   assertWithdrawnDetailStatus,
   hasFunctionalOpportunityAlternative,
+  selectOfficialRuntimeRoute,
   validateRuntimeIdentity,
   validateWithdrawnOverlay,
 } from "./runtime_lighthouse_acceptance.mjs";
@@ -29,6 +30,7 @@ const withdrawn = {
   consumer_observed_manifest_hash: null,
   accepted_projection_sha256: null,
   routes: [],
+  indexable_routes: [],
   static_html_paths: ["_site/oportunidades/index.html"],
   static_html_sha256: { "_site/oportunidades/index.html": "b".repeat(64) },
   removed_html_paths: [],
@@ -43,8 +45,31 @@ assert.throws(
   /retains accepted opportunity routes/,
 );
 assert.throws(
+  () => validateWithdrawnOverlay({ ...withdrawn, indexable_routes: ["/oportunidades/ghost/"] }, sha),
+  /retains indexable opportunity routes/,
+);
+assert.throws(
   () => validateWithdrawnOverlay({ ...withdrawn, static_html_paths: ["_site/oportunidades/ghost/index.html"] }, sha),
   /no exact static commercial hub/,
+);
+
+const noindexRoute = "/oportunidades/a-historica/2026/";
+const indexRoute = "/oportunidades/z-publicavel/2026/";
+const mixed = {
+  ...withdrawn,
+  official_live: true,
+  source_kind: "official_live",
+  routes: [{ route: noindexRoute }, { route: indexRoute }],
+  indexable_routes: [indexRoute],
+};
+assert.deepEqual(selectOfficialRuntimeRoute(mixed), { route: indexRoute, route_indexable: true });
+assert.deepEqual(
+  selectOfficialRuntimeRoute({ ...mixed, indexable_routes: [] }),
+  { route: noindexRoute, route_indexable: false },
+);
+assert.throws(
+  () => selectOfficialRuntimeRoute({ ...mixed, indexable_routes: ["/oportunidades/unsealed/2026/"] }),
+  /unsealed indexable route/,
 );
 
 assert.equal(

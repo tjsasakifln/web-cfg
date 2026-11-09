@@ -32,7 +32,9 @@ const options = {
 };
 assert.equal(evaluateLighthouseResults([...homes, row()], options).ok, true);
 assert.equal(evaluateLighthouseResults([...homes, row({ accessibility: 94 })], options).ok, false);
+assert.equal(evaluateLighthouseResults([...homes, row({ accessibility: undefined })], options).ok, false);
 assert.equal(evaluateLighthouseResults([...homes, row({ best_practices: 94 })], options).ok, false);
+assert.equal(evaluateLighthouseResults([...homes, row({ best_practices: Number.NaN })], options).ok, false);
 assert.equal(evaluateLighthouseResults([...homes, row({ seo_without_crawlability: 90 })], options).ok, false);
 assert.equal(evaluateLighthouseResults([...homes, row()], { ...options, seoOnlyExemptPages: new Set() }).ok, false);
 assert.equal(evaluateLighthouseResults([...homes, row({ seo_without_crawlability: undefined })], options).ok, false);
