@@ -174,9 +174,9 @@
 .ts-search{display:grid;gap:7px}
 .ts-search label{color:#36505b;font-size:.72rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase}
 .ts-search-field{position:relative;display:flex;align-items:center;min-height:52px;color:#658087;background:#f6f9f7;border:1px solid #b9cac8;transition:border-color .18s,background .18s}
-.ts-search-field:focus-within{background:#fff;border-color:#32806c;outline:3px solid rgba(50,128,108,.22);outline-offset:2px}
+.ts-search-field:focus-within{background:#fff;border-color:#32806c}
 .ts-search-field>svg{flex:none;margin-left:14px}
-.ts-search input{min-width:0;width:100%;min-height:50px;padding:10px 12px;color:#0c293b;background:transparent;border:0;outline:0;font-size:.91rem}
+.ts-search input{min-width:0;width:100%;min-height:50px;padding:10px 12px;color:#0c293b;background:transparent;border:0;font-size:.91rem}
 .ts-search input::placeholder{color:#768d92}
 .ts-search kbd{margin-right:12px;padding:2px 7px;color:#6f8186;background:#fff;border:1px solid #d3dfdd;font:650 .72rem/1.5 var(--mono,monospace)}
 .ts-search button{min-height:36px;margin-right:7px;padding:5px 9px;color:#155b4c;background:#fff;border:1px solid #b8cbc7;font-size:.75rem}
