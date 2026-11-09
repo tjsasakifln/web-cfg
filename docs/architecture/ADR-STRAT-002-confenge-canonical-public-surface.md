@@ -10,6 +10,21 @@
 
 ## Application prepared on 2026-11-08: self-service tool exports
 
+## Aplicação autorizada em 2026-11-09: Radar de Mercado Público
+
+O fundador autorizou implementar e publicar no catálogo uma ferramenta de
+pesquisa estratégica de contratos para empresas que vendem ao governo.
+`/ferramentas/radar-mercado-publico/` consome o contrato versionado de leitura
+produzido pelo `extra-cli`, por projeção sanitizada e descartável fora do
+release público. Aquisição, identidade e proveniência continuam no produtor;
+não há acesso do visitante ao banco operacional, nova marca, CRM ou outbound.
+O snapshot declara cobertura, exclusões e validade; falha fecha apenas o radar.
+Valores legados sem natureza discriminada não são somados nem ordenados.
+O desenho, a hipótese de aquisição e a recuperação estão em
+[`docs/products/market-radar.md`](../products/market-radar.md).
+
+### Self-service tool exports (2026-11-08)
+
 The founder requested preparation of prepaid exports for the CONFENGE browser
 tools. [ADR-TOOLS-001](ADR-TOOLS-001-export-entitlements.md) defines the narrow
 tool entitlement boundary. This preparation does not authorize checkout or

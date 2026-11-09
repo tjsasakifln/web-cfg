@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-11-07",
+  "as_of": "2026-11-09",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -39,6 +39,39 @@
     "reported_in": "docs/seo/INBOUND-GATES-REPORT.json → gates.conversion.stats.exemptions"
   },
   "families": [
+    {
+      "id": "radar-mercado-publico",
+      "visitor_job": "Investigar demanda pública contratada por objeto, órgão, fornecedor e fim de vigência registrado, com acesso às fontes e continuidade em pesquisa sob encomenda.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/ferramentas/radar-mercado-publico/"
+        ]
+      },
+      "intent_family": "investigar_mercado_expansao_produtos",
+      "canonical_service_family": "market_intelligence_research",
+      "nucleus_id": "public_works_b2g",
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-09",
+      "owner_issue": 61,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "external_record",
+        "not_applicable": [],
+        "reason": "Interface consulta projeção de contratos reais do PNCP; fontes, cobertura, deduplicação e validade temporal são verificadas pelo produtor e pela API.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "docs/products/market-radar.md"
+        ],
+        "declared_at": "2026-11-09",
+        "owner_issue": 61
+      }
+    },
     {
       "id": "triagem-tecnica",
       "visitor_job": "Enquadrar a necessidade técnica em um dos cinco núcleos e solicitar retorno com dados mínimos, quando o recebimento estiver disponível.",

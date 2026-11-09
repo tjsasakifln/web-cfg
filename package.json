@@ -10,6 +10,8 @@
     "runtime:inventory": "node runtime/inventory.mjs",
     "runtime:schedule": "node runtime/schedule.mjs",
     "test:runtime": "node --test --test-concurrency=1 runtime/test/*.test.mjs",
+    "test:market-radar": "node --test --test-concurrency=1 tests/market-radar/*.test.cjs",
+    "test:market-radar:browser": "node tests/market-radar/browser.mjs",
     "test:tools-commerce": "node --test tests/tools-commerce/core.test.cjs tests/tools-commerce/mercado-pago.test.cjs",
     "test:tools-commerce:browser": "node tests/tools-commerce/browser_tool_credits.mjs",
     "test:tools-commerce:emulator": "npx --yes firebase-tools@15.35.0 --config firebase.tools-commerce.json --project demo-confenge-tools emulators:exec --only auth,firestore \"node --test tests/tools-commerce/firestore-emulator.test.cjs\"",
