@@ -45,10 +45,10 @@ def test_ia_contract_is_valid_without_html():
     assert "b2g" not in labels
     assert all(
         phrase in labels
-        for phrase in ("projetos", "serviços", "condomínios", "obras públicas", "como trabalhamos", "empresa")
+        for phrase in ("projetos", "serviços", "condomínios", "obras públicas", "ferramentas", "empresa")
     )
     assert "projetos" in labels
-    assert "ferramentas" not in labels
+    assert any(item == {"label": "Ferramentas", "href": "/ferramentas/"} for item in items)
     ia = load_ia_map()
     situations = ia["service_situations"]
     # VALOR-IMEDIATO-20260914: a taxonomia e uma so (brand.json = mapa de IA) e
