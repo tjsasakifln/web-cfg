@@ -9,6 +9,13 @@ const site = pathToFileURL(resolve(process.argv[2] || '_site') + '/');
 const read = name => readFile(new URL(name, site));
 const releases = JSON.parse(await read('cad/suite/pacotes/edicoes.json'));
 const release = releases.cadcraft;
+const member = (archive, entry) => {
+  const [start, length, size, method] = entry;
+  const bytes = archive.subarray(start, start + length);
+  const body = method === 8 ? inflateRawSync(bytes) : bytes;
+  assert.equal(body.length, size);
+  return body;
+};
 const [offset, packed] = release.files['assets/js/fields.js'];
 const zip = await read('cad/suite/pacotes/' + release.archive);
 const moduleSource = inflateRawSync(zip.subarray(offset, offset + packed));
@@ -52,4 +59,80 @@ for (const { id } of engines.list()) {
     assert.ok(Math.abs(Number(pipe[3]) - v) < 0.00001);
   }
 }
-console.log('74 field packs and 12 engines validated, including hydraulic loss and traceability.');
+
+let firstBridge;
+const auditedModules = {
+  bimcraft: ['addons/plant/main.js', 'addons/trusscraft/panel.js', 'addons/regs/lib/ui.js', 'register-ui.js', 'views-ui-bim.js', 'live/connect-ui.js', 'process/calc-ui.js', 'process/safety/timer-ui.js'],
+  cadcraft: ['cadcraft.js', 'addons/trusscraft/panel.js', 'addons/regs/lib/ui.js', 'libpanel.js', 'params-panel.js', 'register-ui.js', 'addons/apparel/main.js', 'addons/electrical/main.js', 'live/connect-ui.js', 'process/calc-ui.js', 'process/safety/timer-ui.js'],
+  civilcraft: ['addons/regs/lib/ui.js', 'site-view3d.js', 'storm-route-ui.js'],
+  detailcraft: ['addons/regs/lib/ui.js'],
+  modelcraft: ['addons/flow/main.js', 'addons/trusscraft/panel.js', 'compute-mc.js', 'print-split-ui.js'],
+  partcraft: ['partcraft.js', 'addons/advanced-sim/main.js', 'addons/magnetics/main.js', 'addons/trusscraft/panel.js'],
+};
+for (const [slug, edition] of Object.entries(releases)) {
+  const archive = await read('cad/suite/pacotes/' + edition.archive);
+  const root = `assets/apps/${slug}/`;
+  const bridgeName = Object.keys(edition.files).find(name => name.startsWith(root) && name.endsWith('/confenge-export.js'));
+  const hostName = Object.keys(edition.files).find(name => name.startsWith(root) && new RegExp(`^assets/apps/${slug}/[^/]+/host\\.js$`).test(name));
+  assert.ok(bridgeName, slug + ': entitlement bridge');
+  assert.ok(hostName, slug + ': host');
+  const bridge = member(archive, edition.files[bridgeName]).toString();
+  const host = member(archive, edition.files[hostName]).toString();
+  assert.match(bridge, /event\.origin !== location\.origin \|\| event\.source !== window\.parent/);
+  assert.match(bridge, /requestConfengeBackup/);
+  assert.match(bridge, /unavailable = true/);
+  assert.doesNotMatch(bridge, /authorization|access.?token|id.?token|firebase/i);
+  assert.match(host, /requestConfengeExport, requestConfengeBackup/);
+  assert.match(host, /this\.downloadLocal\(data, name, type\)/);
+  assert.match(host, /requestConfengeBackup\(data, name, type\)/);
+  assert.match(member(archive, edition.files['index.html']).toString(), new RegExp(bridgeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  if (slug === 'markupcraft' || slug === 'takeoffcraft') {
+    const uiName = Object.keys(edition.files).find(name => name.startsWith(root) && new RegExp(`^assets/apps/${slug}/[^/]+/ui-util\\.js$`).test(name));
+    assert.match(member(archive, edition.files[uiName]).toString(), /requestConfengeExport\(data, name, type\)/);
+  }
+  const cabinetMain = Object.keys(edition.files).find(name => name.startsWith(root) && name.endsWith('/addons/cabinetcraft/main.js'));
+  if (cabinetMain) {
+    assert.match(member(archive, edition.files[cabinetMain]).toString(), /requestConfengeExport, requestConfengeBackup/);
+    const cabinetUi = cabinetMain.replace('/main.js', '/lib/ui.js');
+    assert.match(member(archive, edition.files[cabinetUi]).toString(), /app\.backup\(\(p\.name \|\| 'job'\)/);
+  }
+  for (const suffix of auditedModules[slug] || []) {
+    const name = Object.keys(edition.files).find(file => file.startsWith(root) && file.endsWith('/' + suffix));
+    assert.ok(name, slug + ': ' + suffix);
+    assert.match(member(archive, edition.files[name]).toString(), /requestConfengeExport/);
+  }
+  for (const [name, marker] of [
+    ['assets/js/app-ai-activity.js', /requestConfengeBackup/],
+    ['assets/js/app-devices-ui.js', /requestConfengeBackup/],
+    ['assets/js/app-input-ui.js', /requestConfengeExport/],
+    ['assets/js/app-settings.js', /confengeSuiteBackup/],
+  ]) assert.match(member(archive, edition.files[name]).toString(), marker, slug + ': ' + name);
+  if (slug === 'cadcraft') firstBridge = bridge;
+}
+
+let posted, receive;
+const parent = {postMessage(message, target) { posted = {message, target}; }};
+globalThis.window = {parent, addEventListener(type, listener) { if (type === 'message') receive = listener; }, dispatchEvent() {}};
+globalThis.location = {origin: 'https://confenge.invalid'};
+const bridgeModule = await import('data:text/javascript;base64,' + Buffer.from(firstBridge).toString('base64'));
+const exportBytes = new Blob(['resultado exato'], {type:'text/csv'});
+assert.equal(bridgeModule.requestConfengeExport(exportBytes, 'resultado.csv', 'text/csv'), true);
+assert.equal(posted.target, location.origin);
+assert.equal(posted.message.kind, 'export');
+assert.equal(posted.message.content, exportBytes);
+receive({origin: location.origin, source: parent, data: {type:'confenge-suite-export-result', requestId:posted.message.requestId, status:'approved'}});
+delete globalThis.window;
+delete globalThis.location;
+
+const launcher = (await read('cad/aplicativos/catalog.js')).toString();
+assert.match(launcher, /event\.origin !== location\.origin \|\| event\.source !== frame\?\.contentWindow/);
+assert.match(launcher, /input\.kind === 'backup'/);
+assert.match(launcher, /toolId: 'cad-suite-' \+ app/);
+assert.doesNotMatch(launcher, /allow-downloads/);
+for (const slug of Object.keys(releases)) assert.match(launcher, new RegExp(`\\b${slug}: \\[`));
+const calculations = (await read('cad/aplicativos/calculos.js')).toString();
+assert.match(calculations, /toolId: 'cad-suite-calculos'/);
+assert.match(calculations, /format: 'txt'/);
+assert.match(calculations, /if \(data\.result\.ok\)/);
+
+console.log('74 field packs, 12 engines and the fail-closed export bridge for 8 apps validated.');

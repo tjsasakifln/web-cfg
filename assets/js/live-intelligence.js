@@ -150,6 +150,7 @@
   const limitacoesSection = el("limitacoes");
   const limitacoesList = el("resultado-limitacoes");
   const disclaimerNode = el("resultado-disclaimer");
+  const exportarAnalise = el("exportar-analise");
   const proximoPasso = el("proximo-passo");
   const pedido = el("pedido");
   const pedidoTitulo = el("pedido-titulo");
@@ -168,6 +169,31 @@
   // lets the next-action CTAs work on a page opened cold from a shared link,
   // with no closure state and no CNPJ anywhere.
   let currentAnalysisId = body.getAttribute("data-analysis-id") || "";
+
+  exportarAnalise?.addEventListener("click", async () => {
+    if (resultado.hidden || !resultadoCorpo?.textContent.trim()) return;
+    exportarAnalise.disabled = true;
+    try {
+      const content = [resultadoTitulo, resultadoExplicacao, resultadoCorpo, limitacoesList, disclaimerNode]
+        .map(node => node?.innerText.trim()).filter(Boolean).join("\n\n") + "\n";
+      const { exportToolResult } = await import("/assets/js/tool-credits.mjs");
+      await exportToolResult({
+        toolId: "analise-cnpj", format: "txt", content,
+        deliver() {
+          const url = URL.createObjectURL(new Blob([content], { type: "text/plain;charset=utf-8" }));
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "confenge-perfil-contratual.txt";
+          link.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        },
+      });
+    } catch {
+      setStatus(analiseStatus, "Não foi possível preparar a exportação da análise. Tente novamente.");
+    } finally {
+      exportarAnalise.disabled = false;
+    }
+  });
 
   const list = (values) => {
     const ul = document.createElement("ul");

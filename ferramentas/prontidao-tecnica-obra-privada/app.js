@@ -332,7 +332,22 @@
   }
   var printBtn = document.getElementById("btn-print");
   if (printBtn) {
-    printBtn.addEventListener("click", function () { window.print(); });
+    var printStatus = document.getElementById("print-status");
+    printBtn.addEventListener("click", async function () {
+      var content = lastText;
+      if (printStatus) printStatus.textContent = "";
+      try {
+        var commerce = await import("/assets/js/tool-credits.mjs");
+        await commerce.exportToolResult({
+          toolId: "prontidao-tecnica-obra-privada",
+          format: "print",
+          content: content,
+          deliver: function () { window.print(); },
+        });
+      } catch {
+        if (printStatus) printStatus.textContent = "Não foi possível preparar a impressão. Tente novamente.";
+      }
+    });
   }
 
   function restoreDraft() {

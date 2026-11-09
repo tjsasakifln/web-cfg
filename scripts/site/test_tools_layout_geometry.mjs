@@ -259,7 +259,14 @@ async function screenshot(page, id, width, state, selector) {
   const target = await page.$(selector);
   if (!target) throw new Error(`missing screenshot target: ${id} ${state} ${selector}`);
   const path = join(OUT, "screenshots", `${id}-${width}-${state}.png`);
-  await target.screenshot({ path });
+  // Element capture scrolls the page. Restore the visitor's starting position
+  // so the sticky header cannot intercept the next interaction.
+  const position = await page.evaluate(() => ({ left: scrollX, top: scrollY }));
+  try {
+    await target.screenshot({ path });
+  } finally {
+    await page.evaluate(scroll => window.scrollTo({ ...scroll, behavior: "instant" }), position);
+  }
   return path;
 }
 

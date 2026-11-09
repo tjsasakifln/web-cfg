@@ -17,11 +17,14 @@ const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/assets/js/tool-credits.mjs' && mockCommerce !== null) {
     return res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(`
-      export const createToolCredits = () => ({
+      export const createToolCredits = options => {
+        window.sharedWalletOptions = options;
+        return ({
         ready: async () => ${mockCommerce},
         open: async () => {},
         openReferral: async () => { window.referralOpened = (window.referralOpened || 0) + 1; return ${mockCommerce}; }
-      });`);
+      }); };
+      export const exportToolResult = async () => ({ ok: true });`);
   }
   if (url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'config') {
     return res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(commerceConfig));
@@ -102,22 +105,48 @@ try {
 
   // Personal rewards require an active commerce program. Public sharing remains
   // usable while checkout is unavailable, without implying credit attribution.
+  const paint = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const loadWithCommerce = async route => {
+    const [response] = await Promise.all([
+      page.waitForResponse(result => result.url() === base + '/api/web/tool-credits?op=config'),
+      load(route),
+    ]);
+    await response.json();
+    await paint();
+  };
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
   for (const config of [
     { enabled: true, purchasesEnabled: false, tools: ['modela-memoria'] },
     { enabled: true, purchasesEnabled: true, tools: [] },
+    { enabled: true, purchasesEnabled: true, sharedExportsEnabled: false, tools: ['modela-memoria'] },
   ]) {
     commerceConfig = config;
-    await load('/ferramentas/');
+    await loadWithCommerce('/ferramentas/');
     assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   }
-  commerceConfig = { enabled: true, purchasesEnabled: true, tools: ['modela-memoria'] };
-  await load('/ferramentas/');
+  await loadWithCommerce('/ferramentas/calculadora-de-beiral/');
+  assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
+  commerceConfig = { enabled: true, purchasesEnabled: true, sharedExportsEnabled: true, tools: ['modela-memoria'] };
+  mockCommerce = true;
+  await load('/ferramentas/#programa-indicacao');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
-    '/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
+    '/ferramentas/#programa-indicacao');
   assert.match(await page.$eval('[data-referral-entry]', el => el.textContent), /primeira exportação paga/);
+  await page.waitForFunction(() => window.referralOpened === 1);
+  assert.equal(await page.evaluate(() => window.sharedWalletOptions?.shared), true);
+  await page.click('[data-referral-entry] a');
+  await page.waitForFunction(() => window.referralOpened === 2);
+  await load('/ferramentas/calculadora-de-beiral/');
+  await page.waitForSelector('[data-referral-entry]:not([hidden])');
+  assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
+    '/ferramentas/#programa-indicacao');
+  await page.click('[data-referral-entry] a');
+  await page.waitForFunction(() => window.referralOpened === 1);
+  assert.equal(await page.evaluate(() => window.sharedWalletOptions?.shared), true);
+  assert.equal(await page.evaluate(() => window.sharedWalletOptions?.toolId), 'modela-memoria');
+  mockCommerce = null;
   commerceConfig = { enabled: false };
 
   // Declining/accepting analytics is not required to copy or share. A denied
@@ -182,8 +211,12 @@ try {
   await load('/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
   await page.waitForFunction(() => window.referralOpened === 1);
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
+  assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
+    '/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
   await page.click('[data-referral-entry] a');
   await page.waitForFunction(() => window.referralOpened === 2);
+  await paint();
+  assert.equal(await page.evaluate(() => window.referralOpened), 2);
   await load('/avaliacao-imoveis-urbanos/inferencia/');
   assert.equal(await page.evaluate(() => window.referralOpened || 0), 0);
   mockCommerce = false;

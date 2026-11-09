@@ -33,3 +33,29 @@ cada gerador tenha entrega controlada, tratamento de dados adequado e teste de
 paridade. Durante falha da API, a interface habilitada deve pausar a emissão.
 Uma reversão preserva pedidos e ledger; a conciliação dos Pix emitidos permanece
 ativa mesmo com compras suspensas. Ver o [runbook](../tools-commerce/README.md).
+
+## Carteira comum e meios de pagamento
+
+Em 09/11/2026 o fundador autorizou o checkout para a carteira única de todas
+as ferramentas do site, com Pix preferencial e demais meios disponíveis na conta
+Mercado Pago. Uma conta usa a mesma cortesia inicial e o mesmo saldo em todas as
+ferramentas. Cada nova exportação de resultado custa um crédito. Simulações,
+projetos editáveis e exemplos podem ser usados sem emissão.
+
+O Modela Pro continua emitindo a memória no servidor. Para arquivos produzidos
+localmente, o navegador calcula o SHA-256 do resultado pronto e pede autorização
+de entrega com ferramenta, formato, tamanho e hash. A impressão usa um resumo
+do conteúdo preparado para o comando da ferramenta. O backend valida ferramenta
+e formato, registra o débito idempotente e devolve um comprovante de emissão
+selado. A interface só entrega após receber esse comprovante. O arquivo de
+trabalho, o resultado e os dados de entrada ficam no dispositivo nesses fluxos.
+O comprovante identifica uma emissão da ferramenta, sem atestar a validade do
+cálculo nem controlar cópias locais ou a impressão nativa do navegador.
+
+O Pix direto usa Checkout Transparente. O checkout hospedado usa Orders para
+oferecer os meios elegíveis ao comprador. Os dois fluxos conciliam no mesmo
+ledger por consulta autenticada ao provedor. O retorno do comprador ao site
+apenas indica onde consultar o pedido. Em disputas e devoluções parciais, a
+operação verifica o pedido antes de liberar saldo. A compra pública depende de
+integração e ensaio de todas as ferramentas do catálogo, com paridade de
+formatos e confirmação de ambos os fluxos de pagamento no Netcup.

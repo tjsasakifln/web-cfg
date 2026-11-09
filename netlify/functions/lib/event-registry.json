@@ -561,7 +561,7 @@
       "producers": ["assets/js/tool-credits.mjs"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "property_allowlist": {
-        "tool_id": ["modela-memoria"],
+        "tool_id": ["modela-memoria", "shared-wallet"],
         "destination_kind": ["modela", "catalog"]
       },
       "semantic": "The authenticated referral panel became visible. Carries only the finite tool and destination category; never account, referral code, balance, invitee, or payment data. Engagement, not a reward."
@@ -573,7 +573,7 @@
       "producers": ["assets/js/tool-credits.mjs"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "property_allowlist": {
-        "tool_id": ["modela-memoria"],
+        "tool_id": ["modela-memoria", "shared-wallet"],
         "destination_kind": ["modela", "catalog"],
         "share_channel": ["copy", "linkedin", "whatsapp", "native"],
         "action_outcome": ["success", "failure", "cancelled", "blocked"]

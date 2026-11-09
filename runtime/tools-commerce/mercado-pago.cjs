@@ -28,7 +28,7 @@ function toMoney(cents) {
 }
 function toCents(value) {
   const text = String(value === undefined ? '' : value);
-  if (!/^-?\d+(?:\.\d{1,2})?$/.test(text)) return undefined;
+  if (!/^\d+(?:\.\d{1,2})?$/.test(text)) return undefined;
   const pieces = text.split('.');
   const result = Number(pieces[0]) * 100 + Number(((pieces[1] || '') + '00').slice(0, 2));
   return Number.isSafeInteger(result) ? result : undefined;
@@ -51,6 +51,22 @@ function officialCheckoutUrl(value) {
   if (url.protocol !== 'https:' || url.host !== 'www.mercadopago.com.br' || url.username || url.password) throw new Error('Mercado Pago returned an invalid checkout URL');
   return url.toString();
 }
+function checkoutProUrl(value) {
+  const normalized = officialCheckoutUrl(value);
+  if (!normalized || !new URL(normalized).pathname.startsWith('/checkout/')) {
+    throw new Error('Mercado Pago returned an invalid Checkout Pro URL');
+  }
+  return normalized;
+}
+function returnUrl(value) {
+  value = required(value, 'returnUrl');
+  let url;
+  try { url = new URL(value); } catch { throw new Error('returnUrl must be an HTTPS URL'); }
+  if (url.protocol !== 'https:' || url.username || url.password || value.length > 2048) {
+    throw new Error('returnUrl must be an HTTPS URL');
+  }
+  return url.toString();
+}
 function pixCode(value) {
   if (!value) return undefined;
   if (typeof value !== 'string' || value.length > 4096) throw new Error('Mercado Pago returned an invalid Pix code');
@@ -67,6 +83,15 @@ function pngBase64(value) {
   return value;
 }
 
+function methodFor(payment) {
+  const method = payment?.payment_method;
+  if (!method || typeof method !== 'object') return undefined;
+  const id = optional(method.id);
+  const type = optional(method.type);
+  if (![id, type].some(Boolean) || [id, type].some(value => value && !/^[a-z0-9_-]{1,64}$/i.test(value))) return undefined;
+  return { id, type };
+}
+
 function stateFor(order, payment, amountCents, paymentCount) {
   const orderStatus = String(order.status || '').toLowerCase();
   const paymentStatus = String(payment && payment.status || '').toLowerCase();
@@ -76,32 +101,70 @@ function stateFor(order, payment, amountCents, paymentCount) {
   const details = [order.status_detail, payment?.status_detail];
   if (!(amountCents > 0) || details.includes('partially_refunded') || refundValues.some(value => value === undefined || value < 0)) return 'review';
   const hasRefund = refundValues.some(value => value > 0);
-  // Order creation may return before the Pix transaction is available.
-  if (paymentCount === 0 && TRANSITIONAL.has(orderStatus) && !hasRefund) return 'pending';
-  if (paymentCount !== 1 || !payment || payment.payment_method.type !== 'bank_transfer' || toCents(payment.amount) !== amountCents) return 'review';
+  const ended = ['cancelled', 'canceled', 'failed', 'rejected', 'expired'].includes(orderStatus);
+  if (paymentCount === 0 && !hasRefund && !(orderPaid > 0)) {
+    if (ended) return 'failed';
+    if (TRANSITIONAL.has(orderStatus)) return 'pending';
+  }
+  if (paymentCount !== 1 || !payment || !methodFor(payment) || toCents(payment.amount) !== amountCents) return 'review';
+  if (paymentStatus === 'charged_back') {
+    const paymentDetail = String(payment.status_detail || '').toLowerCase();
+    const orderDetail = String(order.status_detail || '').toLowerCase();
+    if (orderStatus !== 'charged_back' || orderDetail !== paymentDetail || paymentDetail !== 'settled') return 'review';
+    return orderPaid === amountCents && paymentPaid === amountCents ? 'reversed' : 'review';
+  }
   // Mercado Pago distinguishes full (`refunded`) from partial
   // (`processed/partially_refunded`). If refund totals are present they must agree.
   if (orderStatus === 'refunded') return orderPaid === amountCents && paymentStatus === 'refunded' &&
     refundValues.every(value => value === amountCents) ? 'reversed' : 'review';
   if (hasRefund) return 'review';
   if (paymentStatus && paymentStatus !== orderStatus && !(TRANSITIONAL.has(paymentStatus) && TRANSITIONAL.has(orderStatus))) return 'review';
-  if (['cancelled', 'canceled', 'failed', 'rejected', 'expired'].includes(orderStatus)) return 'failed';
+  if (ended) return 'failed';
   if (orderStatus === 'processed') return paymentStatus === 'processed' && details.every(detail => detail === 'accredited') &&
     orderPaid === amountCents && paymentPaid === amountCents ? 'paid' : 'review';
   if (TRANSITIONAL.has(orderStatus) || !orderStatus) return 'pending';
   return 'review';
 }
 
-function normalize(order) {
+function disputeFor(order, payment, amountCents, paymentCount) {
+  if (paymentCount !== 1 || !payment || !methodFor(payment) || toCents(payment.amount) !== amountCents ||
+      toCents(payment.paid_amount) !== amountCents || toCents(order.total_paid_amount) !== amountCents ||
+      String(order.status || '').toLowerCase() !== 'charged_back' ||
+      String(payment.status || '').toLowerCase() !== 'charged_back') return undefined;
+  const detail = String(payment.status_detail || '').toLowerCase();
+  if (String(order.status_detail || '').toLowerCase() !== detail) return undefined;
+  if (detail === 'in_process') return 'open';
+  if (detail === 'reimbursed') return 'won';
+  return undefined;
+}
+
+function providerTimestamp(value) {
+  if (typeof value !== 'string' ||
+      !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)) return undefined;
+  const parsed = Date.parse(value.replace(/(\.\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, '$1'));
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function normalize(order, expectedSellerId) {
   if (!order || typeof order !== 'object') throw new Error('Mercado Pago returned an invalid order');
   const payments = Array.isArray(order.transactions && order.transactions.payments) ? order.transactions.payments : [];
-  const pix = payments.filter((payment) => payment && payment.payment_method && payment.payment_method.id === 'pix');
-  const payment = pix.length === 1 ? pix[0] : undefined;
-  const method = payment && payment.payment_method || {};
+  const payment = payments.length === 1 ? payments[0] : undefined;
+  const method = methodFor(payment) || {};
+  const rawMethod = payment?.payment_method || {};
   const amountCents = toCents(order.total_amount);
   if ((order.type && order.type !== 'online') || (order.site_id && order.site_id !== 'MLB') ||
-      (order.currency_id && order.currency_id !== 'BRL')) throw new Error('Mercado Pago returned an incompatible order');
+      (order.country_code && order.country_code !== 'BRA') ||
+      (order.currency_id && order.currency_id !== 'BRL') || (order.currency && order.currency !== 'BRL') ||
+      (order.processing_mode && !['automatic', 'manual'].includes(order.processing_mode)) ||
+      (expectedSellerId && order.user_id != null && String(order.user_id) !== String(expectedSellerId))) {
+    throw new Error('Mercado Pago returned an incompatible order');
+  }
+  const checkoutHint = order.processing_mode === 'manual' ||
+    typeof order.checkout_url === 'string' && order.checkout_url.includes('/checkout/');
+  const paymentFlow = checkoutHint || payment && (method.id !== 'pix' || method.type !== 'bank_transfer') ? 'checkout' : 'pix';
   const state = stateFor(order, payment, amountCents, payments.length);
+  const dispute = disputeFor(order, payment, amountCents, payments.length);
+  const providerUpdatedAt = providerTimestamp(order.last_updated_date);
   // Orders Pix does not expose a currency field. This adapter is restricted to
   // the Brazilian Mercado Pago account/site, where Pix is denominated in BRL.
   return {
@@ -110,10 +173,15 @@ function normalize(order) {
     amountCents,
     currency: 'BRL',
     state,
+    paymentFlow,
+    ...(dispute ? { dispute } : {}),
+    ...(providerUpdatedAt !== undefined ? { providerUpdatedAt } : {}),
+    ...(method.id || method.type ? { paymentMethod: method.id || method.type } : {}),
     ...(state === 'pending' ? {
-      checkoutUrl: officialCheckoutUrl(optional(order.checkout_url) || optional(order.init_point) || optional(method.ticket_url)),
-      qrCode: pixCode(optional(method.qr_code)),
-      qrImage: pngBase64(optional(method.qr_code_base64)),
+      checkoutUrl: paymentFlow === 'checkout' && order.checkout_url ? checkoutProUrl(order.checkout_url) :
+        officialCheckoutUrl(optional(order.checkout_url) || optional(order.init_point) || optional(rawMethod.ticket_url)),
+      qrCode: pixCode(optional(rawMethod.qr_code)),
+      qrImage: pngBase64(optional(rawMethod.qr_code_base64)),
       expiresAt: optional(payment && (payment.date_of_expiration || payment.expiration_date)) || optional(order.date_of_expiration)
     } : {})
   };
@@ -172,16 +240,71 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
         method: 'POST',
         headers: { ...authorization, 'Content-Type': 'application/json', 'X-Idempotency-Key': id },
         body: JSON.stringify(body)
-      }));
+      }), sellerId);
       if (!normalized.providerId || normalized.reference !== id || normalized.amountCents !== amountCents) throw new Error('Mercado Pago order did not match the requested reference and amount');
+      return { ...normalized, paymentFlow: 'pix' };
+    },
+    async createCheckoutOrder({ id, amountCents, email, label, returnUrl: requestedReturnUrl } = {}) {
+      id = required(id, 'id');
+      if (!UUID.test(id) || id.length > 64) throw new Error('id must be a stable UUID');
+      label = required(label, 'label');
+      if (label.length > 256) throw new Error('label is too long');
+      const amount = toMoney(amountCents);
+      const destination = returnUrl(requestedReturnUrl);
+      const payer = sandbox ? { email: required(sandboxPayerEmail, 'sandboxPayerEmail'), first_name: 'APRO' } :
+        { email: required(email, 'email') };
+      const body = {
+        type: 'online', processing_mode: 'manual', capture_mode: 'automatic_async',
+        external_reference: id, total_amount: amount, description: label,
+        payer,
+        items: [{ title: label, quantity: 1, unit_price: amount }],
+        config: { online: { success_url: destination, failure_url: destination, pending_url: destination, auto_return: 'approved' } }
+      };
+      await verifySellerEnvironment();
+      const normalized = normalize(await request(API_ROOT + '/v1/orders', {
+        method: 'POST',
+        headers: { ...authorization, 'Content-Type': 'application/json', 'X-Idempotency-Key': id },
+        body: JSON.stringify(body)
+      }), sellerId);
+      if (!normalized.providerId || normalized.reference !== id || normalized.amountCents !== amountCents ||
+          normalized.paymentFlow !== 'checkout' || !normalized.checkoutUrl) {
+        throw new Error('Mercado Pago checkout did not match the requested reference and amount');
+      }
       return normalized;
     },
     async getOrder(providerId) {
       providerId = required(providerId, 'providerId');
       if (!ORDER_ID.test(providerId)) throw new Error('providerId must be a Mercado Pago order ID');
-      const normalized = normalize(await request(API_ROOT + '/v1/orders/' + encodeURIComponent(providerId), { method: 'GET', headers: authorization }));
+      const normalized = normalize(await request(API_ROOT + '/v1/orders/' + encodeURIComponent(providerId), { method: 'GET', headers: authorization }), sellerId);
       if (normalized.providerId !== providerId || !ORDER_ID.test(normalized.providerId)) throw new Error('Mercado Pago returned an unexpected order ID');
       return normalized;
+    },
+    async findOrderId({ reference, createdAt } = {}) {
+      reference = required(reference, 'reference');
+      if (!UUID.test(reference) || reference.length > 64) throw new Error('reference must be a stable UUID');
+      if (!Number.isSafeInteger(createdAt)) throw new Error('createdAt must be a timestamp in milliseconds');
+      const windowMs = 15 * 60 * 1000;
+      const begin = new Date(createdAt - windowMs);
+      const end = new Date(createdAt + windowMs);
+      if (!Number.isFinite(begin.getTime()) || !Number.isFinite(end.getTime())) {
+        throw new Error('createdAt must be a timestamp in milliseconds');
+      }
+      const params = new URLSearchParams({ begin_date: begin.toISOString(), end_date: end.toISOString(),
+        external_reference: reference, limit: '2' });
+      await verifySellerEnvironment();
+      const result = await request(API_ROOT + '/v1/orders?' + params, { method: 'GET', headers: authorization });
+      if (!result || !Array.isArray(result.data)) throw new Error('Mercado Pago returned an invalid order search');
+      if (Number(result.paging?.total) > result.data.length) throw new Error('Mercado Pago returned an incomplete order search');
+      const matching = result.data.filter(order => order?.external_reference === reference);
+      for (const order of matching) {
+        if (!ORDER_ID.test(optional(order.id) || '') ||
+            sellerId && order.user_id != null && String(order.user_id) !== String(sellerId)) {
+          throw new Error('Mercado Pago returned an incompatible order search');
+        }
+      }
+      const ids = [...new Set(matching.map(order => order.id))];
+      if (ids.length > 1) throw new Error('Mercado Pago returned an ambiguous order search');
+      return ids[0] || null;
     },
     parseWebhook({ headers, query: queryObject, body } = {}) {
       void body;

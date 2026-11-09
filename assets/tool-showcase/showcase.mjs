@@ -4,16 +4,60 @@ import { referralFirstTouch } from '/assets/js/tool-referral.mjs';
 // always uses the authored tool URL (never location.href or form values).
 referralFirstTouch();
 
+const walletButton = document.getElementById('meus-creditos');
 // The ordinary share URL is public. A personal reward link is generated only
 // by a verified account, and is advertised only while paid use is available.
 const referralEntries = [...document.querySelectorAll('[data-referral-entry]')];
-if (referralEntries.length) {
+const isModela = document.getElementById('tool-credits') !== null;
+const walletStatus = document.getElementById('meus-creditos-status');
+let wallet;
+const sharedWallet = async () => {
+  const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+  wallet ??= createToolCredits({ toolId: 'modela-memoria', shared: true });
+  return wallet;
+};
+const openWallet = async () => {
+  try {
+    if (!await (await sharedWallet()).open()) throw new Error('wallet unavailable');
+    if (walletStatus) walletStatus.textContent = '';
+  } catch {
+    if (walletStatus) walletStatus.textContent = 'A conta de créditos está indisponível. Tente novamente.';
+  }
+};
+const openSharedReferral = async (entry = referralEntries[0]) => {
+  try { if (await (await sharedWallet()).openReferral()) return; } catch {}
+  const status = entry?.closest('.tool-share')?.querySelector('.tool-share-status');
+  if (status) status.textContent = 'A conta de créditos está indisponível. Tente novamente.';
+};
+const returning = location.hash === '#meus-creditos';
+const returningToReferral = walletButton && location.hash === '#programa-indicacao';
+if (returning) {
+  // Confirm the order through the account. Redirect query values are not payment facts.
+  try { history.replaceState(history.state, '', location.pathname + location.hash); } catch {}
+}
+
+if (walletButton || referralEntries.length) {
   fetch('/api/web/tool-credits?op=config', { headers: { Accept: 'application/json' } })
     .then(response => response.ok ? response.json() : null)
     .then(config => {
+      if (walletButton && config?.enabled === true && config.sharedExportsEnabled === true) {
+        walletButton.hidden = false;
+        walletButton.addEventListener('click', openWallet);
+        if (returning) openWallet();
+      }
       if (config?.enabled === true && config?.purchasesEnabled === true &&
           Array.isArray(config.tools) && config.tools.includes('modela-memoria')) {
-        referralEntries.forEach(entry => { entry.hidden = false; });
+        const sharedReferralEnabled = config.sharedExportsEnabled === true && !isModela;
+        referralEntries.forEach(entry => {
+          if (!isModela && !sharedReferralEnabled) return;
+          entry.hidden = false;
+          if (!sharedReferralEnabled) return;
+          entry.querySelector('a[href$="#programa-indicacao"]')?.addEventListener('click', (event) => {
+            event.preventDefault();
+            openSharedReferral(entry);
+          });
+        });
+        if (sharedReferralEnabled && returningToReferral) openSharedReferral();
       }
     }).catch(() => {});
 }
@@ -59,6 +103,31 @@ if (search) {
   });
   search.hidden = false;
   filter();
+
+  document.addEventListener('keydown', (event) => {
+    const editing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
+    if (event.key !== '/' || editing || event.metaKey || event.ctrlKey || event.altKey) return;
+    event.preventDefault();
+    input.focus();
+  });
+}
+
+const groupLinks = [...document.querySelectorAll('[data-group-link]')];
+if (groupLinks.length && 'IntersectionObserver' in window) {
+  const linksByGroup = new Map(groupLinks.map((link) => [link.dataset.groupLink, link]));
+  const markCurrent = (id) => {
+    for (const [group, link] of linksByGroup) {
+      if (group === id) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    }
+  };
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting && !entry.target.hidden)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible) markCurrent(visible.target.id);
+  }, { rootMargin: '-18% 0px -64% 0px', threshold: [0, .08, .2] });
+  document.querySelectorAll('[data-group]').forEach((group) => observer.observe(group));
 }
 
 for (const panel of document.querySelectorAll('[data-tool-share]')) {

@@ -73,6 +73,10 @@ async function main([action, first, second]) {
   if (config.mode === 'off') throw new Error('FEATURE_DISABLED');
   const dep = commerceHttp.getDependencies(config);
   if (action === 'usage') return usage(dep.db, config.mode, first, second);
+  if (action === 'resolve-dispute' && /^ORD[A-Z0-9]{8,70}$/i.test(first || '') && second === '--seller-credit-confirmed' && dep.provider) {
+    const order = await commerceHttp.reconcile(dep, first.toUpperCase(), { sellerCreditConfirmed: true });
+    return { applied: order?.status === 'paid', orderId: order?.id, status: order?.status };
+  }
   if (action === 'reconcile' && /^ORD[A-Z0-9]{8,70}$/i.test(first || '') && (!second || second === '--apply') && dep.provider) {
     const id = first.toUpperCase();
     if (second) {

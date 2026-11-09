@@ -16,9 +16,10 @@ const measure = props => {
   } catch {}
 };
 
-// One first-touch policy for the catalogue and the Modela Pro account.
+// One first-touch policy for the catalogue and the tools' shared account.
 // The credit service is the only consumer of the stored code.
 export function referralFirstTouch() {
+  const now = Date.now();
   const url = new URL(location.href);
   const refs = url.searchParams.getAll('ref');
   if (refs.length) {
@@ -27,19 +28,23 @@ export function referralFirstTouch() {
   }
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (saved?.expires > Date.now() && validReferral(saved.ref)) return saved.ref;
+    if (Number.isFinite(saved?.expires) && saved.expires > now && validReferral(saved.ref)) {
+      inMemory = saved;
+      return saved.ref;
+    }
   } catch {}
-  if (inMemory) return inMemory;
+  if (inMemory?.expires > now) return inMemory.ref;
+  inMemory = undefined;
   if (refs.length === 1 && validReferral(refs[0])) {
     let storageMode = 'memory';
+    const saved = { ref: refs[0], expires: now + DURATION_MS };
     try {
-      const saved = { ref: refs[0], expires: Date.now() + DURATION_MS };
       localStorage.setItem(KEY, JSON.stringify(saved));
       if (JSON.parse(localStorage.getItem(KEY) || 'null')?.ref === refs[0]) storageMode = 'persistent';
     } catch {}
-    inMemory = refs[0];
+    inMemory = saved;
     measure({ touch_outcome: 'accepted', storage_mode: storageMode });
-    return inMemory;
+    return saved.ref;
   }
   try { localStorage.removeItem(KEY); } catch {}
   return '';

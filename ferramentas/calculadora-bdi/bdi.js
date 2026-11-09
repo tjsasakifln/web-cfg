@@ -1,4 +1,5 @@
 import {calculateBdiRate, Decimal} from "./vendor/precifica-bdi.js";
+import {exportToolResult} from "/assets/js/tool-credits.mjs";
 
 const field = id => document.getElementById(id);
 const form = field("composicao");
@@ -63,13 +64,16 @@ form.addEventListener("submit", event => {
     status.textContent = error.message;
   }
 });
-field("exportar").addEventListener("click", () => {
+field("exportar").addEventListener("click", async () => {
   if (!lines) return;
-  const url = URL.createObjectURL(new Blob(["\uFEFF" + lines.map(row => row.join(";")).join("\r\n") + "\r\n"], {type:"text/csv;charset=utf-8"}));
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = "CONFENGE-composicao-BDI.csv";
-  anchor.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const content = "\uFEFF" + lines.map(row => row.join(";")).join("\r\n") + "\r\n";
+  await exportToolResult({toolId:"calculadora-bdi",format:"csv",content,deliver(){
+    const url = URL.createObjectURL(new Blob([content], {type:"text/csv;charset=utf-8"}));
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "CONFENGE-composicao-BDI.csv";
+    anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }});
 });
 field("campos").disabled = false;

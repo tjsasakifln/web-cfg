@@ -240,7 +240,7 @@
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
 <h3>Indique e ganhe créditos de uso</h3>
 <p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
-<a href="/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-margem" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-margem" data-cta-position="tool_share">Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
 </aside>
 <div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/limite-acrescimos-supressoes/">Calculadora de limite de aditivo</a><a href="/ferramentas/matriz-atraso-obra/">Matriz de atraso de obra</a></div>
@@ -418,8 +418,21 @@
   var btnPrint = document.getElementById("btn-print");
   var btnReset = document.getElementById("btn-reset");
   if (btnCopy) btnCopy.onclick = function(){ if (T && T.copyText) T.copyText(lastText); };
-  if (btnDl) btnDl.onclick = function(){ if (T && T.downloadText) T.downloadText("confenge-diagnostico-defesa-margem.txt", lastText); };
-  if (btnPrint) btnPrint.onclick = function(){ window.print(); };
+  async function exportDiagnosis(format, deliver){
+    var content = lastText;
+    if (!content) return;
+    try {
+      var commerce = await import("/assets/js/tool-credits.mjs");
+      await commerce.exportToolResult({ toolId: TOOL, format: format, content: content,
+        deliver: function(){ return deliver(content); } });
+    } catch {
+      showStatus("Não foi possível preparar a exportação. Tente novamente.", "error");
+    }
+  }
+  if (btnDl && T.downloadText) btnDl.onclick = function(){
+    return exportDiagnosis("txt", function(content){ T.downloadText("confenge-diagnostico-defesa-margem.txt", content); });
+  };
+  if (btnPrint) btnPrint.onclick = function(){ return exportDiagnosis("print", function(){ window.print(); }); };
   function clearDiagnosisUi(){
     resultEl.hidden = true;
     document.getElementById("public-contract-id").value = "";
