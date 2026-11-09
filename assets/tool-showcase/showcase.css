@@ -15,6 +15,8 @@
 .ts-hero-actions .button{background:var(--ts-mint);border:1px solid var(--ts-mint);color:var(--ts-deep);min-height:48px}
 .ts-hero-actions .button:hover{background:#dbffeb}
 .ts-hero-actions .ts-hero-link{color:#f3fffa;text-decoration:underline;text-underline-offset:4px;padding:10px}
+.ts-hero-actions button.ts-hero-link{border:1px solid currentColor;background:transparent;font:inherit;cursor:pointer}
+#meus-creditos-status:empty{display:none}
 .ts-hero-visual{display:grid;position:relative;grid-template-columns:1fr 1fr;gap:10px;align-self:stretch;align-content:center;min-width:0;margin:0}
 .ts-hero-visual .ts-plate:first-child{grid-column:span 2;min-height:132px;background:#102d3b}
 .ts-hero-visual .ts-plate:first-child svg{height:132px}

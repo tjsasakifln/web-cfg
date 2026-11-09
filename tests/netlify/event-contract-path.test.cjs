@@ -110,7 +110,7 @@ test("referral events keep a finite, no-PII measurement shape", () => {
   const accepted = [
     { event: "tool_referral_visit", props: { touch_outcome: "accepted", storage_mode: "persistent" } },
     { event: "tool_referral_panel_view", props: { tool_id: "modela-memoria", destination_kind: "modela" } },
-    { event: "tool_referral_action", props: { tool_id: "modela-memoria", destination_kind: "catalog", share_channel: "native", action_outcome: "cancelled" } },
+    { event: "tool_referral_action", props: { tool_id: "shared-wallet", destination_kind: "catalog", share_channel: "native", action_outcome: "cancelled" } },
   ];
   for (const input of accepted) assert.equal(contract.admitEvent(input).ok, true, input.event);
 

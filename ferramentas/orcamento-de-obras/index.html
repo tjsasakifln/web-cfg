@@ -2,8 +2,8 @@
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="canonical" href="https://confenge.com.br/ferramentas/orcamento-de-obras/"><meta name="theme-color" content="#061a33"><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="/assets/editorial-tool.css"><link rel="stylesheet" href="./orcamento.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Planilha de orçamento de obras","url":"https://confenge.com.br/ferramentas/orcamento-de-obras/","inLanguage":"pt-BR","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-11-09","description":"Monte uma planilha de orçamento de obra com etapas, quantitativos, preços próprios e referências SINAPI. Calcule custos e BDI e exporte a planilha sem cadastro.","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Orçamento de obras","item":"https://confenge.com.br/ferramentas/orcamento-de-obras/"}]}]}</script>
-<script src="/assets/js/tools-common.js" defer></script><script src="/script.js" defer></script><script src="./app.js" type="module"></script><!-- tool-showcase:head -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Planilha de orçamento de obras","url":"https://confenge.com.br/ferramentas/orcamento-de-obras/","inLanguage":"pt-BR","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-11-09","description":"Monte uma planilha de orçamento de obra com etapas, quantitativos, preços próprios e referências SINAPI. Calcule custos e BDI no navegador.","isAccessibleForFree":true,"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Orçamento de obras","item":"https://confenge.com.br/ferramentas/orcamento-de-obras/"}]}]}</script>
+<script src="/assets/js/tools-common.js" defer></script><script src="/script.js" defer></script><script src="./app.js?v=creditos2" type="module"></script><!-- tool-showcase:head -->
 <title>Orçamento de obras por etapa com SINAPI e Excel | CONFENGE</title>
 <meta name="description" content="Monte o orçamento de obras por etapa com preços próprios, composições ou tabelas SINAPI. Exporte Excel editável, CSV ou JSON."/>
 <meta name="robots" content="index,follow,max-image-preview:large"/>
@@ -70,7 +70,7 @@
 <label for="bdi-obra">BDI (%)<input id="bdi-obra" inputmode="decimal" value="0" disabled></label></div>
 <p id="erro-bdi" role="alert"></p>
 <div class="orc-resumo"><div>Custo direto<strong id="custo-direto">R$ 0,00</strong></div><div>BDI em reais<strong id="valor-bdi">R$ 0,00</strong></div><div>Total com BDI<strong id="total-obra">R$ 0,00</strong></div></div>
-<p id="gravacao" class="orc-nota">Grátis e sem cadastro. O rascunho fica nesta aba do navegador ao clicar em “Adicionar à planilha” ou “Salvar alterações”; ele não substitui o trabalho aberto em outra aba. Salve o projeto JSON para levar uma cópia a outro aparelho ou manter uma versão permanente.</p></section>
+<p id="gravacao" class="orc-nota">O cálculo e o rascunho ficam nesta aba do navegador ao clicar em “Adicionar à planilha” ou “Salvar alterações”. O projeto JSON continua disponível para levar uma cópia a outro aparelho ou manter uma versão permanente. A primeira exportação de resultado da conta é cortesia. As próximas usam um crédito quando a emissão por créditos estiver disponível.</p></section>
 <section class="orc-bloco" aria-labelledby="titulo-editor"><h2 id="titulo-editor">Adicionar serviço</h2>
 <details id="opcoes-importar"><summary>Buscar preço em uma base SINAPI</summary><div id="importar-base"></div></details>
 <form id="editor-servico" method="post" action="/ferramentas/orcamento-de-obras/" class="tool-form">
@@ -117,7 +117,7 @@
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
 <h3>Indique e ganhe créditos de uso</h3>
 <p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
-<a href="/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-orcamento-de-obras" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-orcamento-de-obras" data-cta-position="tool_share">Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
 </aside>
 <div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/calculadora-bdi/">Calculadora de BDI</a></div>

@@ -46,10 +46,10 @@
       <label>Data e hora na obra<input type="datetime-local" id="sol-data"></label>
       <label>Fuso em horas UTC<input type="number" id="sol-fuso" min="-12" max="14" value="-3"></label>
       <label>Norte verdadeiro (graus)<input type="number" id="sol-norte" value="0" step="any"></label></div>
-    <button id="sol-aplicar" type="button" disabled>Projetar sombra</button> <button id="sol-limpar" type="button" hidden>Remover estudo</button>
+    <button id="sol-aplicar" type="button" disabled>Projetar sombra</button> <button id="sol-limpar" type="button" hidden>Remover estudo</button> <button id="sol-exportar" type="button" hidden>Baixar resultado CSV</button>
     <p id="sol-status" role="status"></p>
   </details>
   <p class="nota-visor">O visor exibe os elementos 3D que o leitor consegue interpretar. Arquivos IFCZIP precisam ser descompactados. Se o modelo for complexo, exporte um pavimento ou uma disciplina. A janela 3D requer WebGL 2.</p>
 </main>
-<script type="module" src="./visualizador.mjs"></script>
+<script type="module" src="./visualizador.mjs?v=creditos2"></script>
 </body></html>

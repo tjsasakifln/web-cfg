@@ -1,4 +1,5 @@
 import { calcular, exportarCsv, valores } from './cronograma.js';
+import { exportToolResult } from '/assets/js/tool-credits.mjs';
 
 const q = id => document.getElementById(id);
 const entrada = q('atividades');
@@ -49,14 +50,17 @@ q('exemplo').addEventListener('click', () => {
   entrada.value = exemplo;
   entrada.focus();
 });
-q('csv').addEventListener('click', () => {
+q('csv').addEventListener('click', async () => {
   if (!rede) return;
-  const url = URL.createObjectURL(new Blob([exportarCsv(rede)], {type: 'text/csv;charset=utf-8'}));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'confenge-caminho-critico.csv';
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const content = exportarCsv(rede);
+  await exportToolResult({ toolId: 'caminho-critico-obra', format: 'csv', content, deliver() {
+    const url = URL.createObjectURL(new Blob([content], {type: 'text/csv;charset=utf-8'}));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'confenge-caminho-critico.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }});
 });
 window.ConfengeTools?.bindToolLifecycle({tool: 'caminho-critico-obra'});
 q('campos').disabled = false;

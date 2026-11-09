@@ -1,5 +1,6 @@
 import {compilar,exemplo,normalizar,portas,proximoId,svgDiagrama,tipos,vazio} from './modelo.js';
 import {tabDraft} from '/assets/js/tab-draft.mjs';
+import {exportToolResult} from '/assets/js/tool-credits.mjs';
 const $=id=>document.getElementById(id);
 const history=[];
 let doc=exemplo();
@@ -58,5 +59,8 @@ function baixar(data,type,ext){
  const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download='diagrama-unifilar.'+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 $('salvar').onclick=()=>baixar(JSON.stringify(doc,null,2),'application/json','json');
-$('exportar').onclick=()=>baixar(svgDiagrama(doc),'image/svg+xml;charset=utf-8','svg');
+$('exportar').onclick=async()=>{
+ const content=svgDiagrama(doc);
+ await exportToolResult({toolId:'diagrama-unifilar',format:'svg',content,deliver(){baixar(content,'image/svg+xml;charset=utf-8','svg');}});
+};
 render();$('controle').disabled=false;

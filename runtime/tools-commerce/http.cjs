@@ -3,6 +3,7 @@ const { createLedger, publicOrder } = require('./ledger.cjs');
 const { createFirebase } = require('./firebase.cjs');
 const { createMercadoPago } = require('./mercado-pago.cjs');
 const { modelaReport } = require('./report.cjs');
+const { LOCAL_FORMATS, localArtifact } = require('./exports.cjs');
 
 const HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'private, no-store',
   'X-Content-Type-Options': 'nosniff', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer' };
@@ -34,7 +35,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       if (usage.size >= 5000) usage.delete(usage.keys().next().value);
       entry = { since: at, count: 0 }; usage.set(key, entry);
     }
-    check(++entry.count <= (op === 'export' ? 20 : 30), 'TOO_MANY_REQUESTS', 429);
+    check(++entry.count <= (op === 'export' || op === 'export-local' ? 20 : 30), 'TOO_MANY_REQUESTS', 429);
   }
   function getDependencies(cfg) {
     if (!dependencies) {
@@ -55,13 +56,13 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
     else if (cfg.mode === 'emulator') check(/^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d{2,5})?$/.test(header(event, 'origin') || ''), 'ORIGIN_FORBIDDEN', 403);
     else if (env.TOOLS_COMMERCE_SANDBOX_ORIGIN) check(header(event, 'origin') === env.TOOLS_COMMERCE_SANDBOX_ORIGIN, 'ORIGIN_FORBIDDEN', 403);
   }
-  async function reconcile({ provider, ledger }, id) {
+  async function reconcile({ provider, ledger }, id, options) {
     check(validProviderId(id), 'INVALID_PROVIDER_ORDER', 422);
     const fact = await provider.getOrder(id);
     check(fact?.providerId?.toLowerCase() === id.toLowerCase() && validId(fact.reference) &&
       Number.isSafeInteger(fact.amountCents) && fact.amountCents > 0 && fact.currency === 'BRL' &&
       ['pending', 'paid', 'reversed', 'failed', 'review'].includes(fact.state), 'PAYMENT_MISMATCH', 422);
-    return ledger.observe(fact);
+    return ledger.observe(fact, options);
   }
 
   async function api(event) {
@@ -72,12 +73,14 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       if (q.op === 'config' && method === 'GET') {
         if (cfg.mode === 'off') return reply(200, { enabled: false });
         return reply(200, { enabled: true, firebase: cfg.firebase, ...(cfg.authEmulator ? { authEmulator: cfg.authEmulator } : {}),
-          tools: [TOOL], packages: PACKAGES, termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
-          purchasesEnabled: cfg.purchasesEnabled, exportsPaused: cfg.exportsPaused });
+          tools: cfg.sharedExportsEnabled ? [TOOL, ...Object.keys(LOCAL_FORMATS)] : [TOOL],
+          packages: PACKAGES, termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
+          purchasesEnabled: cfg.purchasesEnabled, exportsPaused: cfg.exportsPaused,
+          sharedExportsEnabled: Boolean(cfg.sharedExportsEnabled), checkoutEnabled: Boolean(cfg.checkoutEnabled) });
       }
       if (cfg.mode === 'off') return reply(404, { error: 'FEATURE_DISABLED' });
-      if (!['account', 'orders', 'order', 'export'].includes(q.op)) return reply(404, { error: 'NOT_FOUND' });
-      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'] };
+      const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'] };
+      if (!Object.hasOwn(expected, q.op)) return reply(404, { error: 'NOT_FOUND' });
       check(expected[q.op].includes(method), 'METHOD_NOT_ALLOWED', 405);
       const authHeader = header(event, 'authorization');
       const bearer = typeof authHeader === 'string' && /^Bearer ([A-Za-z0-9._-]{1,8192})$/.exec(authHeader);
@@ -97,11 +100,10 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       if (q.op === 'order') {
         check(validId(q.id), 'ORDER_NOT_FOUND', 404);
         const { order, poll } = await ledger.getOrder(user.uid, q.id, Boolean(provider));
-        if (order.status === 'creating' && clock() - order.createdAt > 60_000) {
-          return reply(200, publicOrder(await ledger.markCreationUnknown(order.id)));
-        }
         if (poll) {
-          const fresh = await reconcile(dep, order.providerId);
+          const id = order.providerId || await provider.findOrderId({ reference: order.id, createdAt: order.createdAt });
+          if (!id) return reply(200, publicOrder(await ledger.markCreationUnknown(order.id)));
+          const fresh = await reconcile(dep, id);
           check(fresh?.id === order.id, 'PAYMENT_MISMATCH', 422);
           return reply(200, publicOrder(fresh));
         }
@@ -110,22 +112,38 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       if (q.op === 'orders') {
         check(cfg.purchasesEnabled && provider, 'PURCHASES_PAUSED', 503);
         const input = bodyOf(event, 8192);
-        only(input, ['packageId', 'requestId', 'termsVersion']);
+        only(input, ['packageId', 'requestId', 'termsVersion', 'paymentFlow']);
         check(validId(input.requestId), 'INVALID_REQUEST_ID', 422);
+        check(input.paymentFlow === undefined || input.paymentFlow === 'pix' ||
+          (input.paymentFlow === 'checkout' && cfg.checkoutEnabled), 'INVALID_PAYMENT_METHOD', 422);
         await provider.verifySellerEnvironment();
         const { created, order } = await ledger.startOrder({ uid: user.uid, ...input });
         if (!created) return reply(200, publicOrder(order));
+        const checkout = order.paymentFlow === 'checkout';
         try {
-          const fact = await provider.createOrder({ id: order.id, amountCents: order.amountCents, email: user.email,
-            label: `${order.credits} ${order.credits === 1 ? 'crédito' : 'créditos'} para exportar — CONFENGE` });
+          const details = { id: order.id, amountCents: order.amountCents, email: user.email,
+            label: `${order.credits} ${order.credits === 1 ? 'crédito' : 'créditos'} para exportar — CONFENGE` };
+          const fact = checkout ? await provider.createCheckoutOrder({ ...details,
+            returnUrl: 'https://confenge.com.br/ferramentas/#meus-creditos' }) : await provider.createOrder(details);
           check(validProviderId(fact.providerId) && fact.reference === order.id, 'PAYMENT_MISMATCH', 422);
           return reply(201, publicOrder(await ledger.observe(fact, { creation: true })));
         } catch {
-          onIncident('PIX_CREATION_REVIEW');
+          onIncident(checkout ? 'CHECKOUT_CREATION_REVIEW' : 'PIX_CREATION_REVIEW');
           return reply(202, publicOrder(await ledger.markCreationUnknown(order.id)));
         }
       }
       check(!cfg.exportsPaused, 'EXPORT_PAUSED', 503);
+      if (q.op === 'export-local') {
+        check(cfg.sharedExportsEnabled, 'FEATURE_DISABLED', 404);
+        const input = bodyOf(event, 2048);
+        only(input, ['toolId', 'requestId', 'payload']);
+        check(validId(input.requestId), 'INVALID_EXPORT', 422);
+        const artifact = localArtifact(input.toolId, input.payload, cfg.identityKey);
+        const emission = await ledger.completeExport({
+          uid: user.uid, toolId: input.toolId, requestId: input.requestId, digest: artifact.digest,
+        });
+        return reply(200, artifact.receipt(emission));
+      }
       const input = bodyOf(event, MAX_BODY);
       only(input, ['toolId', 'requestId', 'payload']);
       check(input.toolId === TOOL && validId(input.requestId), 'INVALID_EXPORT', 422);
@@ -152,7 +170,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       catch (error) {
         if (!(error instanceof CommerceError) || error.status >= 500) throw error;
         // Permanent inconsistencies require reconciliation by the operator. Never credit from them.
-        onIncident('PIX_RECONCILIATION_MISMATCH');
+        onIncident('PAYMENT_RECONCILIATION_MISMATCH');
       }
       return reply(200, { received: true });
     } catch (error) { return failure(error); }
