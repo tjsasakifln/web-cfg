@@ -13,14 +13,26 @@
 .tool-credits h3 { font-size: 1.1rem; margin: 1.4rem 0 .4rem; }
 .tool-credits form, .tool-credits section { display: grid; gap: .65rem; }
 .tool-credits label { display: grid; gap: .25rem; font-weight: 600; }
-.tool-credits label:has(input[type=checkbox]) { display: flex; align-items: center; min-height: 44px; }
-.tool-credits input, .tool-credits textarea, .tool-credits select, .tool-credits button {
+.tool-credits label:has(input[type=checkbox]) {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+.tool-credits input[type=checkbox] {
+  flex: none;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin: 0;
+}
+.tool-credits input:not([type=checkbox]), .tool-credits textarea, .tool-credits select, .tool-credits button {
   box-sizing: border-box;
   min-height: 44px;
   font: inherit;
   padding: .6rem;
 }
-.tool-credits input, .tool-credits textarea, .tool-credits select { border: 1px solid #88969c; }
+.tool-credits input:not([type=checkbox]), .tool-credits textarea, .tool-credits select { border: 1px solid #88969c; }
 .tool-credits button {
   border: 1px solid #00645c;
   background: #00645c;
