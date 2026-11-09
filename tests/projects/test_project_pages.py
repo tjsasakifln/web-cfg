@@ -109,15 +109,17 @@ class TestProjectPages(unittest.TestCase):
                     source.index('<p class="pp-summary">'),
                     "primary project CTA must precede supporting summary copy",
                 )
+                menu_routes = {
+                    item["href"] for item in self.renderer.load_brand()["navigation"]["desktop"]
+                }
                 active_header = [
-                    link for link in parser.links
-                    if link.get("aria-current") == "page"
-                    and link.get("href") in {
-                        "/projetos/", "/servicos/", "/servicos-obras-publicas/",
-                        "/ferramentas/", "/empresa/",
-                    }
+                    link["href"] for link in parser.links
+                    if link.get("aria-current") == "page" and link.get("href") in menu_routes
                 ]
-                self.assertGreaterEqual(len(active_header), 2)
+                active_route = self.renderer._active_header_route(page)
+                if page["route"] == "/como-trabalhamos/":
+                    self.assertEqual(active_route, "/empresa/")
+                self.assertEqual(active_header, [active_route, active_route])
                 whatsapp = [
                     link for link in parser.links
                     if str(link.get("href", "")).startswith("https://wa.me/")
