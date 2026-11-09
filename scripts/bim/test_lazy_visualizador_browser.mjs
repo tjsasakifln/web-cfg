@@ -26,9 +26,10 @@ const server = createServer((request, response) => {
 });
 await new Promise((done) => server.listen(0, "127.0.0.1", done));
 const port = server.address().port;
-const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true,
-  args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
+let browser;
 try {
+  browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true,
+    args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
   const page = await browser.newPage();
   const threeRequests = [];
   page.on("request", (request) => { if (request.url().includes("/vendor/three/")) threeRequests.push(request.url()); });
@@ -48,6 +49,6 @@ try {
   assert.equal(exampleAttempts, 2, "the retry must make a second example request");
   console.log("OK lazy viewer: deferred runtime, example retry, and local IFC file");
 } finally {
-  await browser.close();
+  await browser?.close();
   await new Promise((done) => server.close(done));
 }

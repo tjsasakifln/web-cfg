@@ -54,7 +54,7 @@ try {
     window.confengeTrack = (name, properties) => window.events.push([name, properties]);
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } });
     Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('cancelled', 'AbortError'); } });
-    window.open = destination => destination.includes('linkedin.com') ? null : {};
+    window.open = destination => new URL(destination).hostname === 'www.linkedin.com' ? null : {};
     const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
     window.credits=createToolCredits({toolId:'modela-memoria'});
     window.referralOpened = await window.credits.openReferral();
