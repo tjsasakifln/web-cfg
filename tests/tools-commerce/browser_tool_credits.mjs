@@ -55,6 +55,20 @@ const server = createServer(async (req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({executablePath, headless:true,args:['--no-sandbox']});
+async function activateVisibleControl(page, selector) {
+  const control = await page.waitForSelector(selector, { visible: true });
+  await control.evaluate(async (node, selector) => {
+    node.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    const rect = node.getBoundingClientRect();
+    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    if (node.disabled || !node.contains(hit)) throw new Error('Control cannot be reached: ' + selector);
+    // Verify the hit target and use the browser's native activation. CDP
+    // pointer events can be consumed when headless Chrome refocuses a dialog.
+    node.click();
+  }, selector);
+}
+
 async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   const opened = await page.evaluate(async ({ referral, shared }) => {
     const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
@@ -66,7 +80,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeiro uso completo/i);
   await page.type('input[type=email]', 'a@b.com');
   await page.type('input[type=password]', '123456');
-  await page.click('button[type=submit]');
+  await activateVisibleControl(page, 'dialog button[type=submit]');
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
 }
 
@@ -108,21 +122,13 @@ try {
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
-  const priceButton = await page.$$('button').then(async buttons => { for (const item of buttons) if ((await item.evaluate(n => n.textContent)).includes('R$')) return item; });
-  await priceButton.click();
+  await activateVisibleControl(page, 'dialog .tool-credits__packs button');
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
-  const checkbox = await page.$('input[type=checkbox]'); await checkbox.click();
-  assert.equal(await checkbox.evaluate(node => node.checked), true, 'the real terms control must be accepted');
-  // Stop walking handles before the real click. Continuing through stale
-  // buttons afterwards could delay observation of the Pix state on a loaded
-  // runner, while the automatic status poll kept advancing.
-  const acceptedPriceButton = await page.$$('button').then(async buttons => {
-    for (const item of buttons) if ((await item.evaluate(node => node.textContent)).includes('R$')) return item;
-  });
-  assert.ok(acceptedPriceButton, 'purchase button must remain available after accepting terms');
-  await acceptedPriceButton.click();
+  await activateVisibleControl(page, 'dialog input[type=checkbox]');
+  assert.equal(await page.$eval('dialog input[type=checkbox]', node => node.checked), true, 'the terms control must be accepted');
+  await activateVisibleControl(page, 'dialog .tool-credits__packs button');
   await page.waitForFunction(() => document.querySelector('textarea')?.value === 'pix-code'); assert.ok(await page.$('img[alt="QR Code Pix"]'));
   assert.equal(orderRequests.length, 1);
   assert.equal(orderRequests[0].packageId, 'one');
@@ -172,15 +178,15 @@ try {
   assert.deepEqual(await checkoutPage.evaluate(() => window.events), [['tool_referral_panel_view', { tool_id: 'shared-wallet', destination_kind: 'catalog' }]]);
   assert.equal(await checkoutPage.$eval('dialog select', select => select.value), 'pix');
   await checkoutPage.select('dialog select', 'checkout');
-  await checkoutPage.click('dialog input[type=checkbox]');
+  await activateVisibleControl(checkoutPage, 'dialog input[type=checkbox]');
   assert.equal(await checkoutPage.$eval('dialog input[type=checkbox]', checkbox => checkbox.checked), true);
-  await checkoutPage.click('dialog .tool-credits__packs button');
+  await activateVisibleControl(checkoutPage, 'dialog .tool-credits__packs button');
   await checkoutPage.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir pagamento no Mercado Pago'));
   assert.equal(orderRequests.length, 2);
   assert.equal(orderRequests[1].paymentFlow, 'checkout');
   assert.equal(await checkoutPage.$('img[alt="QR Code Pix"]'), null);
   assert.equal(await checkoutPage.$eval('dialog .tool-credits__close', button => button.disabled), false);
-  await checkoutPage.click('dialog .tool-credits__close');
+  await activateVisibleControl(checkoutPage, 'dialog .tool-credits__close');
   await checkoutPage.waitForSelector('dialog[open]', { hidden: true });
   await checkoutPage.close();
   await page.evaluate(() => document.querySelector('dialog').close());
