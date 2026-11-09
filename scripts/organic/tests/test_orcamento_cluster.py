@@ -253,20 +253,24 @@ def test_metadata_canonical_schema_and_cta():
             html,
             flags=re.I,
         )
-        # The regime comparison was substantively revised after this cohort.
-        # Keep each page's known revision exact, including the other eight.
-        expected_modified = (
+        # Keep technical source reviews separate from later presentation/link
+        # changes. The November SINAPI edit did not revalidate its sources.
+        expected_reviewed = (
             "2026-10-29" if slug == "empreitada-preco-global-preco-unitario"
             else "2026-08-29"
         )
+        expected_modified = (
+            "2026-11-09" if slug == "sinapi-desonerado-nao-desonerado"
+            else expected_reviewed
+        )
         expected_label = (
-            "29 de outubro de 2026" if expected_modified == "2026-10-29"
+            "29 de outubro de 2026" if expected_reviewed == "2026-10-29"
             else "29 de agosto de 2026"
         )
         assert modified_meta and modified_meta.group(1) == expected_modified, slug
-        assert f'datetime="{expected_modified}">{expected_label}</time>' in html
+        assert f'datetime="{expected_reviewed}">{expected_label}</time>' in html
         assert re.search(
-            rf'<p class="sources-reviewed">.*?datetime="{expected_modified}".*?</p>',
+            rf'<p class="sources-reviewed">.*?datetime="{expected_reviewed}".*?</p>',
             html,
             flags=re.S,
         ), slug
@@ -279,6 +283,14 @@ def test_metadata_canonical_schema_and_cta():
         article_schema = next(node for node in graph if node.get("@type") == "Article")
         assert article_schema["dateModified"] == expected_modified, slug
         assert article_schema["wordCount"] == len(visible_text(article_html.group(0)).split()), slug
+        if slug == "sinapi-desonerado-nao-desonerado":
+            assert 'Atualizado em <time datetime="2026-11-09">9 de novembro de 2026</time>' in html
+            assert 'Revisão técnica em <time datetime="2026-08-29">' in html
+            schemas = [json.loads(raw) for raw in re.findall(
+                r'<script type="application/ld\+json">(.*?)</script>', html, re.S
+            )]
+            howto = next(node for node in schemas if node.get("@type") == "HowTo")
+            assert howto["dateModified"] == "2026-08-29"
 
         assert not _proposal_cta_failures(html, row["service_path"]), slug
 
