@@ -245,7 +245,7 @@ def catalogue(html: str, data: dict) -> str:
 <nav class="breadcrumbs container ts-crumb" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Ferramentas</li></ol></nav>
 <header class="ts-hero"><div class="container ts-hero-inner">
 <div class="ts-hero-copy">
-<p class="ts-kicker">CONFENGE · Engenharia no navegador</p>
+<p class="eyebrow">Ferramentas CONFENGE</p>
 <h1>Ferramentas de engenharia online</h1>
 <p data-tool-job>Abra uma planta em DWG, confira um modelo IFC, estime o valor de um imóvel ou organize a próxima decisão da obra.</p>
 <div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Indicar a um colega">Indicar</a></div>

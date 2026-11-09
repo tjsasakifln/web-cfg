@@ -921,6 +921,17 @@
       "rendered_content_hash_previous": "1c1819d05a7dc99233222bfe185c504606b2614b3a854141cf80897cf950c3af",
       "rendered_content_hash": "aac54b38d71b96d5936a81d7ca22f1dbfd377c9c3d93e0fa4eede88b720260a5",
       "reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: correcao autorizada da regressao de altura introduzida pelo consentimento GA4. Regras restritas ao rodape, com alvos de 44px e contraste preservados. Comparacao deterministica confirma HTML tecnico byte-identico e artefato final diferente somente no fingerprint de styles.css. Material, fontes, autoria, datas, canonical, robots e CTA preservados. Recaptura de apresentacao pelo procedimento existente; nenhuma nova aprovacao tecnica ou revisao humana alegada."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Pedido da direção para acesso pelo menu principal; escopo shared_navigation da emenda de apresentação.",
+      "at": "2026-11-09T03:11:57Z",
+      "reviewer": "Verificação determinística e comparação adversarial independente por agente; nenhuma revisão humana nova.",
+      "rendered_content_hash_previous": "aac54b38d71b96d5936a81d7ca22f1dbfd377c9c3d93e0fa4eede88b720260a5",
+      "rendered_content_hash": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
+      "reason": "Vitrine CONFENGE autorizada para publicação em 2026-11-09; escopo shared_navigation da emenda de apresentação já registrada. Comparação do artefato final com a base 3c65897: diferença byte a byte limitada às duas âncoras do menu (desktop e móvel). Miolo técnico, fontes, cálculos, autoria, CTA contextual, robots e canonical preservados. Recaptura de apresentação; nenhuma nova aprovação técnica ou revisão humana."
     }
   ]
 }

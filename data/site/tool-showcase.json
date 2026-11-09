@@ -545,16 +545,7 @@
       "href": "/analise-cnpj/",
       "art": "table",
       "mark": "CNPJ",
-      "keywords": "pesquisa empresa fornecedor oportunidades contratos públicos cnpj",
-      "page": {
-        "title": "Consulta por CNPJ: histórico de contratações públicas",
-        "desc": "Pesquise um CNPJ para consultar o perfil de contratações e as oportunidades cobertas pelas fontes públicas, com data e referências da análise.",
-        "index": false,
-        "related": [
-          "margem",
-          "aditivos"
-        ]
-      }
+      "keywords": "pesquisa empresa fornecedor oportunidades contratos públicos cnpj"
     }
   ]
 }
