@@ -71,22 +71,27 @@ const withdrawnOverlay = () => ({
   consumer_observed_manifest_hash: null,
   accepted_projection_sha256: null,
   routes: [],
+  indexable_routes: [],
   static_html_paths: ["_site/oportunidades/index.html"],
   static_html_sha256: { "_site/oportunidades/index.html": HUB_SHA256 },
   removed_html_paths: [`_site${WITHDRAWAL_PROBE}index.html`],
 });
 
-const activeOverlay = (routes = [{ route: ACTIVE_ROUTE }]) => ({
+const activeOverlay = (
+  routes = [{ route: ACTIVE_ROUTE }],
+  indexableRoutes = routes.map((item) => item.route).sort(),
+) => ({
   schema: SCHEMA,
   release_sha: SHA,
   official_live: true,
-  source_kind: "official_projection",
+  source_kind: "official_live",
   source_run_id: "run-1",
   as_of: "2026-09-10T00:00:00.000Z",
   manifest_hash: "d".repeat(64),
   consumer_observed_manifest_hash: "d".repeat(64),
   accepted_projection_sha256: "e".repeat(64),
   routes,
+  indexable_routes: indexableRoutes,
   static_html_paths: [],
   static_html_sha256: {},
   removed_html_paths: [],
@@ -199,7 +204,7 @@ const results = [
 const coverage = { public_edge: true };
 if (route) {
   results.push({ path: route, run: 1 });
-  coverage.runtime_evidence = { routes: [{ route, html_sha256: "c".repeat(64) }] };
+  coverage.runtime_evidence = { routes: [{ route, html_sha256: "c".repeat(64), route_indexable: true }] };
 }
 const summary = {
   terminal_state: "MEASURED_PASS",
@@ -419,6 +424,7 @@ pass("home_preflight_configuration_rejects_unbounded_or_invalid_deadlines");
   assert.equal(run.report.result, "PASS");
   assert.equal(run.report.mode, "official_live_lighthouse");
   assert.equal(run.report.evidence.runtime_route, ACTIVE_ROUTE);
+  assert.equal(run.report.evidence.route_indexable, true);
   assert.equal(run.report.evidence.public_home_runs, 3);
   assert.deepEqual(
     [...run.requests.map((r) => r.path)].sort(),
@@ -438,16 +444,38 @@ pass("home_preflight_configuration_rejects_unbounded_or_invalid_deadlines");
   pass("active_overlay_passes_end_to_end_and_measures_the_home_plus_the_exact_route");
 }
 
-// The lowest-sorted route is the one measured, never an arbitrary one.
+// INDEX routes are preferred even when a sealed NOINDEX route sorts first.
 {
+  const laterIndexable = "/oportunidades/zz-ultima/2026/";
   const run = await rehearse({
     config: candidate({
-      overlay: activeOverlay([{ route: "/oportunidades/zz-ultima/2026/" }, { route: ACTIVE_ROUTE }]),
+      overlay: activeOverlay([{ route: laterIndexable }, { route: ACTIVE_ROUTE }], [laterIndexable]),
     }),
   });
   assert.equal(run.error, null, `deterministic route rehearsal failed: ${run.error?.message}`);
+  assert.equal(run.report.evidence.runtime_route, laterIndexable);
+  assert.equal(run.report.evidence.route_indexable, true);
+  pass("the_measured_runtime_route_prefers_the_first_verified_indexable_route");
+}
+
+// When every official route is historical, the first sealed route is measured
+// with an explicit NOINDEX identity instead of being mistaken for withdrawal.
+{
+  const run = await rehearse({
+    config: candidate({ overlay: activeOverlay([{ route: ACTIVE_ROUTE }], []) }),
+    summaryPatch: {
+      coverage: {
+        public_edge: true,
+        runtime_evidence: { routes: [{ route: ACTIVE_ROUTE, html_sha256: "c".repeat(64), route_indexable: false }] },
+      },
+    },
+  });
+  assert.equal(run.error, null, `all-NOINDEX rehearsal failed: ${run.error?.message}`);
+  assert.equal(run.report.mode, "official_live_lighthouse");
   assert.equal(run.report.evidence.runtime_route, ACTIVE_ROUTE);
-  pass("the_measured_runtime_route_is_deterministic_lowest_sorted");
+  assert.equal(run.report.evidence.route_indexable, false);
+  assert.equal(run.report.evidence.public_home_runs, 3);
+  pass("an_all_noindex_official_overlay_measures_a_verified_sealed_fallback");
 }
 
 // ===========================================================================
@@ -510,7 +538,7 @@ pass("home_preflight_configuration_rejects_unbounded_or_invalid_deadlines");
   const run = await rehearse({
     config: candidate({ overlay: activeOverlay([{ route: "/servicos/ghost/" }]) }),
   });
-  failure(run, /selected an invalid opportunity route/);
+  failure(run, /invalid or duplicate sealed opportunity routes/);
   pass("a_withdrawn_overlay_that_still_lists_routes_cannot_be_accepted");
 }
 
@@ -652,7 +680,7 @@ pass("home_preflight_configuration_rejects_unbounded_or_invalid_deadlines");
   const run = await rehearse({
     config: candidate({ overlay: activeOverlay() }),
     summaryPatch: {
-      coverage: { public_edge: true, runtime_evidence: { routes: [{ route: "/oportunidades/outra/2026/", html_sha256: "c".repeat(64) }] } },
+      coverage: { public_edge: true, runtime_evidence: { routes: [{ route: "/oportunidades/outra/2026/", html_sha256: "c".repeat(64), route_indexable: true }] } },
       results: [
         { path: "/", run: 1 },
         { path: "/", run: 2 },
