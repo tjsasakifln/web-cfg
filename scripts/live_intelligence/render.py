@@ -399,6 +399,26 @@ def _opportunity_title(objeto: str, opportunity_id: str) -> str:
     return normalized + suffix
 
 
+def _status_summary(record: dict[str, Any]) -> str:
+    """Status for prominent surfaces, qualified by its observation clock."""
+    bars = {str(item) for item in (record.get("index_bars") or [])}
+    if any(
+        item.startswith("publication_freshness_")
+        or item in {"publication_clock_invalid", "publication_clock_before_source"}
+        for item in bars
+    ):
+        return "situação atual não confirmada"
+    prazo = record.get("prazo") or {}
+    status = _mapped(
+        prazo.get("status"),
+        PRAZO_MASTHEAD,
+        "sessão sem status informado pela fonte",
+    )
+    freshness = record.get("freshness") or {}
+    reference = _human_date(freshness.get("source_as_of") or record.get("as_of"))
+    return f"{status} na referência de {reference}" if reference else status
+
+
 def render_opportunity_html(record: dict[str, Any]) -> str:
     """Render one opportunity page. INDEX only when the record earned it."""
     opportunity_id = record["opportunity_id"]
@@ -425,9 +445,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
     index_state = "INDEX" if indexable else "NOINDEX"
     as_of_human = _human_date(freshness.get("source_as_of") or record.get("as_of"))
     iso_as_of = str(freshness.get("source_as_of") or record.get("as_of") or "").strip()
-    current_status_unconfirmed = "publication_freshness_stale" in (
-        record.get("index_bars") or []
-    )
+    current_status_unconfirmed = _status_summary(record) == "situação atual não confirmada"
     json_ld_doc: dict[str, Any] = {
         "@context": "https://schema.org",
         "@type": "WebPage",
@@ -481,7 +499,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <section class="section" id="masthead"{archetype_attr("masthead")}>
 <p class="eyebrow">Oportunidade pública · dados declarados na fonte</p>
 <h1>{e(_compact_object_heading(objeto))}</h1>
-<p>{e(orgao_nome)} · {e(_local_label(local))} · {e(_mapped(status, PRAZO_MASTHEAD, "sessão sem status informado pela fonte"))}</p>
+<p>{e(orgao_nome)} · {e(_local_label(local))} · {e(_status_summary(record))}</p>
 </section>
 
 <section class="section" id="ficha"{archetype_attr("ficha")}>
@@ -587,11 +605,7 @@ def _index_item_html(record: dict[str, Any], *, projection_kind: str | None) -> 
     opportunity_id = str(record.get("opportunity_id") or "")
     orgao = _pt((record.get("orgao") or {}).get("nome"))
     local = _local_label(record.get("local") or {})
-    status = _mapped(
-        (record.get("prazo") or {}).get("status"),
-        PRAZO_MASTHEAD,
-        "sessão sem status informado pela fonte",
-    )
+    status = _status_summary(record)
     origem = _mapped(
         record.get("source_kind") or projection_kind,
         SOURCE_KIND_LABEL,

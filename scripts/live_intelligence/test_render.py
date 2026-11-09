@@ -213,6 +213,26 @@ def test_repeated_objects_get_compact_unique_pncp_titles():
     assert len(adversarial) <= 68
 
 
+def test_stale_status_is_qualified_in_masthead_and_directory_but_retained_in_facts():
+    projection = R.load_projection()
+    record = dict(R.renderable(projection)[0])
+    record["source_kind"] = "official_live"
+    record["prazo"] = {"status": "ABERTA", "data_sessao": "2026-09-24"}
+    record["freshness"] = {"source_as_of": "2026-09-01T03:00:00+00:00"}
+    record["index_bars"] = ["publication_freshness_stale"]
+
+    page = R.render_opportunity_html(record)
+    card = R._index_item_html(record, projection_kind="official_live")
+    masthead = page.split('id="masthead"', 1)[1].split("</section>", 1)[0]
+    assert "situação atual não confirmada" in masthead
+    assert "sessão aberta" not in masthead
+    assert "situação atual não confirmada" in card
+    assert "sessão aberta" not in card
+    assert "Status informado na data de referência" in page
+    assert ">Aberta<" in page
+    assert "1 de setembro de 2026" in page
+
+
 def test_one_hundred_rebuilds_do_not_mint_duplicate_urls_or_canonicals():
     tmp = _tmp_root()
     try:
