@@ -15,14 +15,14 @@ const expand = workspace.querySelector('[data-expand]');
 let active = '', frame, timer;
 
 const exportFormats = Object.freeze({
-  cadcraft: ['bcfzip', 'craft', 'csv', 'dxf', 'gcode', 'geojson', 'html', 'json', 'jsonl', 'mp4', 'pdf', 'png', 'svg', 'swb', 'usda', 'webm', 'zip'],
-  bimcraft: ['bcfzip', 'craft', 'csv', 'dxf', 'gcode', 'gltf', 'glb', 'html', 'ifc', 'json', 'jsonl', 'mp4', 'nc', 'pcf', 'pdf', 'png', 'svg', 'txt', 'usda', 'usdc', 'usdz', 'wav', 'webm', 'xlsx', 'xml', 'zip'],
+  cadcraft: ['bcfzip', 'craft', 'csv', 'dxf', 'e57', 'gcode', 'geojson', 'html', 'json', 'jsonl', 'las', 'mp4', 'obj', 'pdf', 'png', 'rul', 'stl', 'svg', 'swb', 'usda', 'webm', 'zip'],
+  bimcraft: ['bcfzip', 'craft', 'csv', 'dxf', 'e57', 'gcode', 'gltf', 'glb', 'html', 'ifc', 'json', 'jsonl', 'las', 'mp4', 'nc', 'obj', 'pcf', 'pdf', 'png', 'srt', 'stl', 'svg', 'txt', 'usda', 'usdc', 'usdz', 'vtt', 'wav', 'webm', 'xlsx', 'xml', 'zip'],
   modelcraft: ['3mf', 'csv', 'dae', 'dwg', 'dxf', 'glb', 'html', 'ifc', 'json', 'jsonl', 'mp4', 'mtlx', 'obj', 'pdf', 'ply', 'png', 'stl', 'svg', 'usda', 'usdc', 'usdz', 'webm', 'zip'],
   markupcraft: ['bcfzip', 'csv', 'json', 'jsonl', 'pdf', 'png', 'xlsx'],
   takeoffcraft: ['csv', 'glb', 'json', 'jsonl', 'pdf', 'png', 'usdz', 'xlsx'],
-  civilcraft: ['csv', 'dwg', 'dxf', 'geojson', 'html', 'ifc', 'json', 'jsonl', 'kml', 'landxml', 'pdf', 'png', 'tif', 'tiff', 'xml', 'zip'],
+  civilcraft: ['csv', 'dwg', 'dxf', 'geojson', 'glb', 'html', 'ifc', 'json', 'jsonl', 'kml', 'landxml', 'obj', 'pdf', 'png', 'tif', 'tiff', 'usda', 'usdc', 'usdz', 'xml', 'zip'],
   detailcraft: ['craft', 'csv', 'dwg', 'dxf', 'html', 'ifc', 'json', 'jsonl', 'kss', 'nc1', 'pdf', 'stl', 'txt', 'usda', 'usdc', 'usdz', 'zip'],
-  partcraft: ['3mf', 'csv', 'dxf', 'gcode', 'html', 'json', 'jsonl', 'md', 'nc', 'pcscript', 'pdf', 'stl', 'svg', 'vdb', 'vti', 'vtu', 'zip'],
+  partcraft: ['3mf', 'csv', 'dxf', 'gcode', 'html', 'ifc', 'inp', 'json', 'jsonl', 'md', 'nc', 'obj', 'pcscript', 'pdf', 'step', 'stl', 'svg', 'swb', 'usdz', 'vdb', 'vti', 'vtk', 'vtu', 'zip'],
 });
 const extension = name => /\.([a-z0-9]{1,12})$/i.exec(name)?.[1].toLowerCase() || '';
 const downloadBlob = (content, name) => {

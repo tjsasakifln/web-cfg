@@ -61,6 +61,14 @@ for (const { id } of engines.list()) {
 }
 
 let firstBridge;
+const auditedModules = {
+  bimcraft: ['addons/plant/main.js', 'addons/trusscraft/panel.js', 'addons/regs/lib/ui.js', 'register-ui.js', 'views-ui-bim.js', 'live/connect-ui.js', 'process/calc-ui.js', 'process/safety/timer-ui.js'],
+  cadcraft: ['cadcraft.js', 'addons/trusscraft/panel.js', 'addons/regs/lib/ui.js', 'libpanel.js', 'params-panel.js', 'register-ui.js', 'addons/apparel/main.js', 'addons/electrical/main.js', 'live/connect-ui.js', 'process/calc-ui.js', 'process/safety/timer-ui.js'],
+  civilcraft: ['addons/regs/lib/ui.js', 'site-view3d.js', 'storm-route-ui.js'],
+  detailcraft: ['addons/regs/lib/ui.js'],
+  modelcraft: ['addons/flow/main.js', 'addons/trusscraft/panel.js', 'compute-mc.js', 'print-split-ui.js'],
+  partcraft: ['partcraft.js', 'addons/advanced-sim/main.js', 'addons/magnetics/main.js', 'addons/trusscraft/panel.js'],
+};
 for (const [slug, edition] of Object.entries(releases)) {
   const archive = await read('cad/suite/pacotes/' + edition.archive);
   const root = `assets/apps/${slug}/`;
@@ -88,6 +96,17 @@ for (const [slug, edition] of Object.entries(releases)) {
     const cabinetUi = cabinetMain.replace('/main.js', '/lib/ui.js');
     assert.match(member(archive, edition.files[cabinetUi]).toString(), /app\.backup\(\(p\.name \|\| 'job'\)/);
   }
+  for (const suffix of auditedModules[slug] || []) {
+    const name = Object.keys(edition.files).find(file => file.startsWith(root) && file.endsWith('/' + suffix));
+    assert.ok(name, slug + ': ' + suffix);
+    assert.match(member(archive, edition.files[name]).toString(), /requestConfengeExport/);
+  }
+  for (const [name, marker] of [
+    ['assets/js/app-ai-activity.js', /requestConfengeBackup/],
+    ['assets/js/app-devices-ui.js', /requestConfengeBackup/],
+    ['assets/js/app-input-ui.js', /requestConfengeExport/],
+    ['assets/js/app-settings.js', /confengeSuiteBackup/],
+  ]) assert.match(member(archive, edition.files[name]).toString(), marker, slug + ': ' + name);
   if (slug === 'cadcraft') firstBridge = bridge;
 }
 
