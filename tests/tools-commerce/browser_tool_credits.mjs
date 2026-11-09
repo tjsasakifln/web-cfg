@@ -65,6 +65,7 @@ let physicalClickSequence = 0;
 
 async function prepareTrustedPhysicalClick(page, selector, label) {
   await page.bringToFront();
+  await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
   const traceKey = `${label}-${++physicalClickSequence}`;
   return page.evaluate(async ({ selector, label, traceKey }) => {
     if (document.visibilityState !== 'visible' || !document.hasFocus()) {
@@ -116,7 +117,6 @@ async function prepareTrustedPhysicalClick(page, selector, label) {
 }
 
 async function trustedPhysicalClick(page, prepared) {
-  await page.bringToFront();
   const clearTrace = () => page.evaluate(traceKey => {
     const state = window.__toolCreditsPhysicalClicks?.[traceKey];
     if (!state) return [];
@@ -238,9 +238,20 @@ try {
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
-  await trustedPhysicalClick(page, await prepareTrustedPhysicalClick(
+  // Reproduce the CI focus transition with a real competing tab. Preparation
+  // must restore and observe focus before it records the live target; action
+  // must not activate the page a second time and reintroduce that race.
+  const focusProbe = await browser.newPage();
+  await focusProbe.bringToFront();
+  await focusProbe.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
+  await page.waitForFunction(() => !document.hasFocus(), { polling: 50 });
+  assert.equal(await page.evaluate(() => document.hasFocus()), false, 'the competing tab must own focus');
+  const preparedUnacceptedPurchase = await prepareTrustedPhysicalClick(
     page, 'dialog .tool-credits__packs button', 'unaccepted purchase',
-  ));
+  );
+  assert.equal(await page.evaluate(() => document.hasFocus()), true, 'purchase page focus must settle before input');
+  await trustedPhysicalClick(page, preparedUnacceptedPurchase);
+  await focusProbe.close();
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
