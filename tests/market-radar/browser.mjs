@@ -11,6 +11,21 @@ const buyer = "0123456789abcdef01234567";
 const supplier = "89abcdef0123456789012345";
 const validPnpc = "https://pncp.gov.br/app/contratos/46068425000133/2026/9335";
 const requests = [];
+const radarSource = readFileSync(join(root, "assets/market-radar/radar.mjs"), "utf8")
+  .replace('"/assets/js/tool-credits.mjs"', '"/assets/market-radar/credits-fixture.mjs"');
+const creditsFixture = `export async function exportToolResult({toolId, format, content, deliver}) {
+  const text = await content.text();
+  window.__radarExports ??= [];
+  window.__radarExportBlob = content;
+  window.__radarExports.push({toolId, format, bytes: content.size, text});
+  if (window.__radarWalletEnabled) {
+    await new Promise((resolve) => { window.__releaseRadarAuthorization = resolve; });
+    window.__radarAuthorized = true;
+    return deliver();
+  }
+  const {exportToolResult: canonicalExport} = await import('/assets/js/tool-credits.mjs');
+  return canonicalExport({toolId, format, content, deliver});
+}`;
 
 function result(filters, stale = false) {
   return { ok: true, meta: { generated_at: "2026-11-09T12:00:00Z", source_as_of: "2026-11-09T11:00:00Z", ingestion_latest_at: "2026-11-09T11:50:00Z", window_start: "2025-11-09", window_end: "2026-11-09", stale, excluded_count: 2, coverage_note: "Cobertura local de teste.", value_note: "Não totalize valores." }, filters, summary: { contracts: 501, buyers: 1, suppliers: 1, valued_contracts: 1 }, buyers: [{ id: buyer, name: "Órgão teste", contracts: 2, uf: "SC" }], suppliers: [{ id: supplier, name: "Fornecedor teste", contracts: 2, uf: "SC" }], records: [{ object: filters.q === "new" ? "Objeto novo" : "  =formula <img src=x onerror=alert(1)>", buyer_name: "Órgão teste", supplier_name: "Fornecedor teste", uf: "SC", city: "Florianópolis", value: null, published_at: null, ends_at: null, source_url: validPnpc }, { object: "sem link", buyer_name: "Órgão teste", supplier_name: "Fornecedor teste", uf: "SC", value: "9000000000000000.01", published_at: "2026-11-01", ends_at: "2027-01-01", source_url: "https://example.invalid/contract" }], pagination: { page: Number(filters.page || 1), pages: 21, total: 501, limited: true } };
@@ -18,6 +33,9 @@ function result(filters, stale = false) {
 
 const types = { ".html": "text/html", ".mjs": "text/javascript", ".css": "text/css", ".js": "text/javascript", ".woff2": "font/woff2", ".png": "image/png" };
 const server = createServer((req, res) => {
+  if (req.url === "/api/web/tool-credits?op=config") { res.writeHead(200, { "content-type": "application/json" }); res.end('{"enabled":false}'); return; }
+  if (req.url === "/assets/market-radar/radar.mjs") { res.writeHead(200, { "content-type": "text/javascript" }); res.end(radarSource); return; }
+  if (req.url === "/assets/market-radar/credits-fixture.mjs") { res.writeHead(200, { "content-type": "text/javascript" }); res.end(creditsFixture); return; }
   if (req.url === "/api/web/market-radar") {
     let raw = "";
     req.on("data", (chunk) => { raw += chunk; });
@@ -41,7 +59,7 @@ try {
     const original = window.setTimeout.bind(window);
     window.setTimeout = (fn, ms, ...args) => original(fn, ms >= 12_000 ? 300 : ms, ...args);
     window.__radarBlobs = []; const create = URL.createObjectURL.bind(URL);
-    URL.createObjectURL = (blob) => { window.__radarBlobs.push(blob); return create(blob); };
+    URL.createObjectURL = (blob) => { window.__radarBlobs.push({ blob, authorized: Boolean(window.__radarAuthorized) }); return create(blob); };
     Object.defineProperty(navigator, "clipboard", { value: { writeText: async (value) => { window.__copiedRadar = value; } } });
   });
   await page.setViewport({ width: 1280, height: 900 });
@@ -76,8 +94,34 @@ try {
   await page.$eval("#radar-clear-entity", (e) => e.click()); await page.waitForFunction(() => document.querySelector("#radar-clear-entity").hidden); assert.equal("buyer" in requests.at(-1), false);
   await page.$eval("#radar-suppliers button", (e) => e.click()); await page.waitForFunction(() => !document.querySelector("#radar-clear-entity").hidden); assert.equal(requests.at(-1).supplier, supplier);
   await page.$eval("#radar-clear-entity", (e) => e.click()); await page.waitForFunction(() => document.querySelector("#radar-clear-entity").hidden);
-  await page.$eval("#radar-csv", (e) => e.click()); const csv = await page.evaluate(async () => (await window.__radarBlobs.at(-1).text()));
+  await page.$eval("#radar-csv", (e) => e.click()); await page.waitForFunction(() => window.__radarBlobs.length === 1);
+  const offExport = await page.evaluate(async () => ({ export: window.__radarExports.at(-1), csv: await window.__radarBlobs.at(-1).blob.text(), bytes: (await window.__radarBlobs.at(-1).blob.arrayBuffer()).byteLength, sameBlob: window.__radarBlobs.at(-1).blob === window.__radarExportBlob, authorized: window.__radarBlobs.at(-1).authorized }));
+  assert.equal(offExport.authorized, false, "disabled shared wallet keeps the compatible local download");
+  assert.deepEqual(Object.keys(offExport.export).sort(), ["bytes", "format", "text", "toolId"]);
+  assert.equal(offExport.export.toolId, "radar-mercado-publico"); assert.equal(offExport.export.format, "csv"); assert.equal(offExport.export.bytes, offExport.bytes); assert.equal(offExport.sameBlob, true);
+  const csv = offExport.csv;
   assert.match(csv, /"'  =formula <img src=x onerror=alert\(1\)>"/, "CSV escapes leading-space formula"); assert.match(csv, /"https:\/\/pncp\.gov\.br\/app\/contratos\/46068425000133\/2026\/9335"/);
+  assert.match(await page.$eval("#radar-export-note", (e) => e.textContent), /Consulta e rankings são livres.*1 crédito.*primeira.*cortesia/i);
+  const walletPage = await browser.newPage();
+  await walletPage.evaluateOnNewDocument(() => {
+    window.__radarWalletEnabled = true;
+    window.__radarBlobs = []; const create = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = (blob) => { window.__radarBlobs.push({ blob, authorized: Boolean(window.__radarAuthorized) }); return create(blob); };
+  });
+  await walletPage.goto(url, { waitUntil: "networkidle0" });
+  await walletPage.click("[data-example='limpeza']"); await walletPage.waitForSelector("#radar-results:not([hidden])");
+  await walletPage.$eval("#radar-csv", (e) => e.click()); await walletPage.waitForFunction(() => window.__radarExports?.length === 1);
+  const frozenWalletCsv = await walletPage.evaluate(() => window.__radarExports.at(-1).text);
+  await walletPage.$eval("#radar-q", (e) => { e.value = "new"; }); await walletPage.$eval("#market-radar-form", (e) => e.requestSubmit());
+  await walletPage.waitForFunction(() => document.querySelector("#radar-result-title")?.textContent.includes("new"));
+  assert.equal(await walletPage.evaluate(() => window.__radarBlobs.length), 0, "no delivery URL before authorization is released");
+  await walletPage.evaluate(() => window.__releaseRadarAuthorization()); await walletPage.waitForFunction(() => window.__radarBlobs.length === 1);
+  const walletExport = await walletPage.evaluate(async () => ({ export: window.__radarExports.at(-1), csv: await window.__radarBlobs.at(-1).blob.text(), bytes: (await window.__radarBlobs.at(-1).blob.arrayBuffer()).byteLength, sameBlob: window.__radarBlobs.at(-1).blob === window.__radarExportBlob, authorized: window.__radarBlobs.at(-1).authorized }));
+  assert.equal(walletExport.authorized, true, "shared-wallet fixture authorizes before delivery creates the URL");
+  assert.equal(walletExport.export.toolId, "radar-mercado-publico"); assert.equal(walletExport.export.format, "csv");
+  assert.equal(walletExport.export.bytes, walletExport.bytes); assert.equal(walletExport.sameBlob, true, "the authorized delivery closes over the exact pre-authorized Blob");
+  assert.equal(walletExport.csv, frozenWalletCsv, "a later search cannot alter the authorized CSV"); assert.equal(walletExport.csv, walletExport.export.text);
+  await walletPage.close();
   await page.$eval("#radar-copy", (e) => e.click()); assert.equal(await page.evaluate(() => window.__copiedRadar), url, "copy excludes query");
   mkdirSync(join(root, "build/reports/market-radar"), { recursive: true }); await page.screenshot({ path: join(root, "build/reports/market-radar/desktop-1280.png"), fullPage: true });
   await page.setViewport({ width: 375, height: 820 }); geometry = await targetGeometry(); assert.equal(geometry.overflow, true); assert.ok(geometry.heights.length > 0 && geometry.heights.every((height) => height >= 43), `mobile dynamic targets: ${geometry.heights.join(",")}`); await page.screenshot({ path: join(root, "build/reports/market-radar/mobile-375.png"), fullPage: true }); await page.setViewport({ width: 1280, height: 900 });

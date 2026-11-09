@@ -135,12 +135,19 @@ function csvCell(value) {
   const safe = /^\s*[=+\-@]/.test(raw) ? `'${raw}` : raw;
   return `"${safe.replace(/"/g, '""')}"`;
 }
-$("#radar-csv")?.addEventListener("click", () => {
+$("#radar-csv")?.addEventListener("click", async () => {
   if (!latest) return;
   const f = latest.filters || {}, m = latest.meta || {};
   const rows = [["radar_mercado_publico", "recorte", f.q || "", f.uf || "Brasil", f.months || "", entity?.name || "", m.generated_at || "", m.source_as_of || "", m.ingestion_latest_at || ""],
     ["objeto", "orgao", "fornecedor", "uf", "municipio", "valor_informado", "publicacao", "fim_vigencia", "fonte_pncp"],
     ...(latest.records || []).map((r) => [r.object, r.buyer_name, r.supplier_name, r.uf, r.city, r.value, r.published_at, r.ends_at, r.source_url])];
-  const url = URL.createObjectURL(new Blob([`\ufeff${rows.map((row) => row.map(csvCell).join(";")).join("\n")}`], { type: "text/csv;charset=utf-8" }));
-  const link = document.createElement("a"); link.href = url; link.download = "radar-mercado-publico.csv"; link.click(); URL.revokeObjectURL(url);
+  const file = new Blob([`\ufeff${rows.map((row) => row.map(csvCell).join(";")).join("\n")}`], { type: "text/csv;charset=utf-8" });
+  try {
+    const { exportToolResult } = await import("/assets/js/tool-credits.mjs");
+    await exportToolResult({ toolId: "radar-mercado-publico", format: "csv", content: file, deliver() {
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a"); link.href = url; link.download = "radar-mercado-publico.csv"; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }});
+  } catch { status.textContent = "Não foi possível autorizar a exportação agora. Tente novamente."; }
 });

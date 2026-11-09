@@ -4,7 +4,7 @@ Decisão do fundador em 2026-11-09: estruturar, implementar e publicar uma ferra
 
 ## Trabalho do visitante
 
-Pesquisar objetos contratados e identificar compradores, fornecedores e datas de fim de vigência que merecem investigação. Rankings por quantidade de contratos permitem abrir o conjunto de um comprador ou fornecedor. Filtros por publicação, UF e vigência usam o mesmo universo dos indicadores e da lista. A exportação CSV compreende a página visível, não a base integral. Copiar link indica a ferramenta sem revelar a consulta.
+Pesquisar objetos contratados e identificar compradores, fornecedores e datas de fim de vigência que merecem investigação. Rankings por quantidade de contratos permitem abrir o conjunto de um comprador ou fornecedor. Filtros por publicação, UF e vigência usam o mesmo universo dos indicadores e da lista. A exportação CSV compreende a página visível, não a base integral; quando a carteira compartilhada está habilitada, sua emissão usa um crédito (a primeira da conta verificada é cortesia). Consulta, rankings e filtros continuam sem login. Copiar link indica a ferramenta sem revelar a consulta.
 
 Rota única: `/ferramentas/radar-mercado-publico/`. Continuidade comercial: `/inteligencia/pesquisa-sob-encomenda/`, família `market_intelligence_research`, intenção `investigar_mercado_expansao_produtos`, ownership `public_works_b2g`. Não cria marca, domínio, CRM, preço, checkout, oportunidade comercial ou autorização outbound.
 

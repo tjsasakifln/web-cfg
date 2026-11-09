@@ -14,6 +14,7 @@ const LOCAL_FORMATS = Object.freeze({
   'prontidao-tecnica-obra-privada': ['print'],
   'caminho-critico-obra': ['csv'],
   'calculadora-bdi': ['csv'],
+  'radar-mercado-publico': ['csv'],
   'orcamento-de-obras': ['xlsx', 'csv'],
   'cad-editor': ['dwg', 'dxf'],
   'analise-cnpj': ['txt'],
