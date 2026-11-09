@@ -76,7 +76,7 @@ try {
   await page.select('dialog select', 'checkout');
   await page.click('dialog input[type=checkbox]');
   await page.evaluate(() => [...document.querySelectorAll('dialog button')].find(button => button.textContent.includes('R$')).click());
-  await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir checkout no Mercado Pago'));
+  await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir pagamento no Mercado Pago'));
   assert.equal(await page.$('img[alt="QR Code Pix"]'), null);
   await page.evaluate(() => document.querySelector('dialog').close());
   await page.evaluate(async () => {

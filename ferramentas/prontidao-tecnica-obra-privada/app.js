@@ -1,6 +1,5 @@
 (function () {
   "use strict";
-  var credits = import("/assets/js/tool-credits.mjs");
   var api = window.ConfengePrivateProjectTechnicalReadiness;
   var form = document.getElementById("diagnostico");
   var statusEl = document.getElementById("runtime-status");
@@ -333,9 +332,21 @@
   }
   var printBtn = document.getElementById("btn-print");
   if (printBtn) {
+    var printStatus = document.getElementById("print-status");
     printBtn.addEventListener("click", async function () {
-      var commerce = await credits;
-      await commerce.exportToolResult({toolId:"prontidao-tecnica-obra-privada",format:"print",content:lastText,deliver:function(){ window.print(); }});
+      var content = lastText;
+      if (printStatus) printStatus.textContent = "";
+      try {
+        var commerce = await import("/assets/js/tool-credits.mjs");
+        await commerce.exportToolResult({
+          toolId: "prontidao-tecnica-obra-privada",
+          format: "print",
+          content: content,
+          deliver: function () { window.print(); },
+        });
+      } catch {
+        if (printStatus) printStatus.textContent = "Não foi possível preparar a impressão. Tente novamente.";
+      }
     });
   }
 

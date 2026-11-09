@@ -152,7 +152,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         paymentMethod.onchange = () => { preferredFlow = paymentMethod.value; };
         const label = el('label', 'Forma de pagamento');
         label.append(paymentMethod);
-        section.append(label, el('p', 'O checkout do Mercado Pago mostra as opções disponíveis para sua compra.'));
+        section.append(label, el('p', 'Na página de pagamento do Mercado Pago, você verá as opções disponíveis para sua compra.'));
       }
       const accepted = el('input'), termsLabel = el('label'), cards = el('div');
       accepted.type = 'checkbox';
@@ -221,7 +221,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       section.append(code, btn('Copiar Pix', async () => { try { await navigator.clipboard.writeText(order.qrCode); note(section, 'Código Pix copiado.'); } catch { code.focus(); code.select(); } }));
     }
     if (order.checkoutUrl?.startsWith('https://www.mercadopago.com.br/')) {
-      section.append(btn(checkout ? 'Abrir checkout no Mercado Pago' : 'Abrir Pix no Mercado Pago',
+      section.append(btn(checkout ? 'Abrir pagamento no Mercado Pago' : 'Abrir Pix no Mercado Pago',
         () => window.open(order.checkoutUrl, '_blank', 'noopener,noreferrer')));
     }
     section.append(btn('Atualizar pagamento', () => checkOrder(order.id)));

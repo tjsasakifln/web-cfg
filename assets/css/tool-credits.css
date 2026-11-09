@@ -33,7 +33,11 @@
 }
 .tool-credits button + button { background: #fff; color: #00645c; }
 .tool-credits button:disabled { opacity: .6; cursor: wait; }
-.tool-credits :focus-visible { outline: 3px solid #008475; outline-offset: 2px; }
+.tool-credits :focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring, 0 0 0 2px #fff, 0 0 0 5px #071a31);
+}
 .tool-credits a { color: #004b44; text-decoration: underline; }
 .tool-credits .tool-credits__close {
   float: right;
