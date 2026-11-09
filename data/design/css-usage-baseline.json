@@ -2,6 +2,7 @@
   "schema_version": "1.0.0",
   "generated_by": "scripts/site/audit_css_usage.py",
   "public_css_files": [
+    "assets/css/tool-credits.css",
     "assets/editorial-a11y-v293.css",
     "assets/editorial-article.css",
     "assets/editorial-tool.css",
@@ -15,6 +16,17 @@
     "assets/report-model-a11y-v293.css",
     "assets/report-model.css",
     "assets/simple-page-a11y-v293.css",
+    "assets/tool-showcase/showcase.css",
+    "avaliacao-imoveis-urbanos/inferencia/custo.css",
+    "avaliacao-imoveis-urbanos/inferencia/interface.css",
+    "bim/ferramentas.css",
+    "bim/fotogrametria/entrada.css",
+    "bim/portal.css",
+    "bim/web/teclado.css",
+    "cad/aplicativos/calculos.css",
+    "cad/aplicativos/catalog.css",
+    "cad/editor/frame.css",
+    "cad/editor.css",
     "casos/modelo-apresentacao-executiva-resultados/styles.css",
     "casos/modelo-base-quantitativa-canonica/styles.css",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css",
@@ -43,9 +55,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 105961,
-      "class_selectors": 349,
-      "used": 349,
+      "bytes": 106468,
+      "class_selectors": 350,
+      "used": 350,
       "unused": []
     },
     "entregas/styles.css": {
@@ -56,6 +68,11 @@
     }
   },
   "decoration": {
+    "assets/css/tool-credits.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
     "assets/editorial-a11y-v293.css": {
       "border_radius": 0,
       "box_shadow": 0,
@@ -117,6 +134,61 @@
       "gradient": 1
     },
     "assets/simple-page-a11y-v293.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/tool-showcase/showcase.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "avaliacao-imoveis-urbanos/inferencia/custo.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "avaliacao-imoveis-urbanos/inferencia/interface.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "bim/ferramentas.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "bim/fotogrametria/entrada.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "bim/portal.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "bim/web/teclado.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "cad/aplicativos/calculos.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "cad/aplicativos/catalog.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "cad/editor/frame.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "cad/editor.css": {
       "border_radius": 0,
       "box_shadow": 0,
       "gradient": 0

@@ -1,0 +1,10 @@
+.bdi { padding-inline: clamp(.75rem, 3vw, 1.5rem); padding-block: 1.2rem 3rem; }
+.bdi fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+.bdi-fields, .bdi-metrics { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap: 1rem; margin-block: 1.2rem; }
+.bdi-fields label { display: grid; align-content: end; gap: .3rem; font-weight: 650; }
+.bdi-fields input { min-width: 0; width: 100%; min-height: 46px; padding: .55rem .7rem; font: inherit; font-weight: 400; border: 1px solid #81939c; background: white; color: #102e48; }
+.bdi .tool-method { margin-block: 1.5rem; }
+.bdi-metrics div { background: #f1f6f2; border-inline-start: 3px solid #427651; padding: .7rem 1rem; overflow-wrap: anywhere; }
+.bdi-metrics dt { color: #365247; }.bdi-metrics dd { font-weight: 700; margin: .25rem 0 0; font-size: 1.25rem; color: #102e48; font-variant-numeric: tabular-nums; }
+.bdi-formula { background: #f0f4f7; padding: .85rem; font-variant-numeric: tabular-nums; }
+.bdi [hidden] { display: none; }

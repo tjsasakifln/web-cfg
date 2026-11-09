@@ -202,6 +202,10 @@ jobs:
         run: npm run build:site
       - name: Consent and third-party policy on the generated public artifact
         run: PUBLIC_ARTIFACT_REQUIRED=1 node scripts/site/third_party_analytics_gate.mjs
+      - name: Tool catalogue, SEO and share images in the gated artifact
+        run: |
+          python3 scripts/site/render_tool_showcase.py --check
+          python3 scripts/site/verify_tool_showcase.py --root _site
       - name: Promised public downloads are in the gated artifact
         run: npm run test:promised-public-resources
       - name: Final public-surface coverage and copy gate
@@ -236,6 +240,10 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run test:tools-commerce:browser
+      - name: Tool catalogue navigation and sharing in Chrome
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: node scripts/site/test_tool_showcase_browser.mjs _site
       - name: Quantity takeoff and budgeting purchase path
         run: npm run test:orc-b2b-20260913
       - name: Money asset production inspection is read-only

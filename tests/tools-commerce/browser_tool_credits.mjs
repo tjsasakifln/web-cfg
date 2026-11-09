@@ -5,6 +5,7 @@ import puppeteer from 'puppeteer-core';
 
 const root = new URL('../../', import.meta.url);
 const source = await readFile(new URL('assets/js/tool-credits.mjs', root));
+const referral = await readFile(new URL('assets/js/tool-referral.mjs', root));
 const css = await readFile(new URL('assets/css/tool-credits.css', root));
 const firstRef = 'first_______0001';
 const secondRef = 'other_______0002';
@@ -18,6 +19,7 @@ const server = createServer(async (req, res) => {
   if (url.pathname === '/') { res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
   if (url.pathname === '/assets/css/tool-credits.css') { res.setHeader('content-type', 'text/css'); return res.end(css); }
   if (url.pathname === '/assets/js/tool-credits.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(source); }
+  if (url.pathname === '/assets/js/tool-referral.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(referral); }
   if (url.pathname === '/assets/tools-commerce/firebase-auth.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(firebase); }
   if (url.pathname !== '/api/web/tool-credits') { res.statusCode = 404; return res.end(); }
   calls.push(url.searchParams.get('op')); let body = ''; for await (const chunk of req) body += chunk;

@@ -1,0 +1,43 @@
+.orc { max-width: 68rem; }
+.orc [hidden] { display: none !important; }
+.orc-bloco { margin: 1.5rem 0; padding: clamp(1rem,2vw,1.6rem); border: 1px solid #cad5df; }
+.orc h2 { margin: 0 0 .8rem; }
+.orc .orc-topo { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: .9rem; }
+.orc-topo h2 { margin: 0; }
+.orc label { display: grid; gap: .25rem; font-weight: 600; min-width: 0; }
+.orc input, .orc select, .orc textarea { width: 100%; min-height: 44px; padding: .5rem .625rem; border: 1px solid #71859a; color: #071e36; background: white; font: inherit; box-sizing: border-box; }
+.orc-dados, .orc-campos, .orc-resumo { display: grid; gap: .8rem; }
+.orc-dados { grid-template-columns: minmax(0,3fr) minmax(5rem,1fr); }
+.orc-campos { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.orc-largo { grid-column: span 2; }
+.orc-resumo { grid-template-columns: repeat(3,minmax(0,1fr)); background: var(--navy-900,#061a33); color: white; padding: 1rem; margin-top: 1rem; }
+.orc-resumo strong { display: block; font-size: clamp(1rem,2vw,1.5rem); overflow-wrap: anywhere; }
+.orc-nota,.orc .referencia { font-size: .9rem; }
+.orc details { margin: .8rem 0; padding: .6rem 0; }
+.orc summary { cursor: pointer; font-weight: 700; }
+.orc fieldset { padding: 0; margin: 0; border: 0; min-inline-size: 0; }
+.orc .tool-form { margin: .5rem 0 0; padding: clamp(1rem, 2vw, 1.5rem); }
+.orc .tool-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1rem 0 .3rem; }
+.orc p[role=alert] { color: #852322; }
+.orc p:empty { display: none; }
+.orc #rolagem { overflow: auto; }
+.orc table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.orc caption { text-align: left; padding: .5rem 0; }
+.orc th,.orc td { border-bottom: 1px solid #d4dce3; text-align: start; padding: .5rem; }
+.orc td:first-child { min-width: 11rem; overflow-wrap: anywhere; }
+.orc td:not(:first-child) { white-space: nowrap; }
+.orc tr.etapa { background: #eaf0f5; }
+.orc small { display: block; font-weight: normal; }
+.orc .linha-acao { min-height: 44px; padding: 0 .5rem; text-decoration: underline; background: transparent; border: 0; font: inherit; cursor: pointer; color: var(--navy-900,#061a33); }
+@media(max-width:650px) { .orc-campos { grid-template-columns: repeat(2,minmax(0,1fr)); } .orc-resumo { grid-template-columns: 1fr; gap: .4rem; } .orc-resumo div { display:flex;justify-content: space-between; gap: .5rem; } }
+@media(max-width:650px) {
+  .orc #rolagem table, .orc #rolagem tbody { display: block; }
+  .orc #rolagem caption { display: block; }
+  .orc #rolagem thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .orc #rolagem tr { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); border-bottom: 1px solid #c8d4df; padding: .35rem 0; }
+  .orc #rolagem td, .orc #rolagem th { min-width: 0; border: 0; padding: .35rem; white-space: normal; overflow-wrap: anywhere; }
+  .orc #rolagem td:first-child,.orc #rolagem td:last-child { grid-column: 1 / -1; }
+  .orc #rolagem td:first-child { font-weight: 700; }
+  .orc #rolagem td[data-rotulo]::before { content: attr(data-rotulo); display: block; font-size: .8rem; color: #44566b; }
+  .orc #rolagem tr.etapa th:last-child { text-align: right; }
+}

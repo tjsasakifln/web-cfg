@@ -7103,6 +7103,42 @@
       "nojs_degradation": "none"
     },
     {
+      "route": "/ferramentas/calculadora-bdi/",
+      "form_id": "composicao",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/ferramentas/calculadora-de-beiral/",
+      "form_id": "simulador",
+      "form_class": "solar-card",
+      "kind": "tool_form",
+      "action": "",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/calculadora-psicrometrica/",
+      "form_id": "ambiente",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/ferramentas/caminho-critico-obra/",
+      "form_id": "planejar",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/caminho-critico-obra/",
+      "method": "post",
+      "nojs_degradation": "runtime_status"
+    },
+    {
       "route": "/ferramentas/checklist-reequilibrio/",
       "form_id": "f",
       "form_class": "tool-form",
@@ -7137,6 +7173,15 @@
       "action": "/ferramentas/matriz-atraso-obra/",
       "method": "post",
       "nojs_degradation": "runtime_status"
+    },
+    {
+      "route": "/ferramentas/orcamento-de-obras/",
+      "form_id": "editor-servico",
+      "form_class": "tool-form",
+      "kind": "tool_form",
+      "action": "/ferramentas/orcamento-de-obras/",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
     },
     {
       "route": "/ferramentas/prontidao-tecnica-obra-privada/",

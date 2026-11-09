@@ -44,7 +44,7 @@ const PILOTS = [
   {
     id: "hub",
     path: "/ferramentas/",
-    expect: ["CollectionPage", "tool-situation", "styles-tools", "Usar ferramenta"],
+    expect: ["CollectionPage", "data-tool-card", "data-tool-search", "Explorar ferramentas"],
     flow: "hub",
   },
   {

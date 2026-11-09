@@ -166,8 +166,9 @@ def test_shared_project_menu_owns_one_radius_and_the_ratchet_stays_closed() -> N
     }
     assert compare(result, baseline) == []
     planted = copy.deepcopy(result)
-    planted["decoration_totals"]["border_radius"] += 1
-    assert compare(planted, baseline) == ["decoration_regression border_radius 141>140"]
+    ceiling = baseline["decoration_totals"]["border_radius"]
+    planted["decoration_totals"]["border_radius"] = ceiling + 1
+    assert compare(planted, baseline) == [f"decoration_regression border_radius {ceiling + 1}>{ceiling}"]
 
 
 def test_shipped_audit_reports_every_bundle_and_no_orphan_stylesheet() -> None:

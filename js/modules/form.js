@@ -929,9 +929,24 @@
             landing_page: path,
           });
         }
+        // Attribute arrivals from the three authored public share links.
+        // Keep the projection finite; never copy a query value, code or URL.
+        const shareSource = (() => {
+          if (!document.querySelector('[data-tool-share]')) return '';
+          const params = new URLSearchParams(window.location.search);
+          if (params.getAll('utm_campaign').join(',') !== 'ferramentas'
+            || params.getAll('utm_medium').join(',') !== 'referral') return '';
+          switch (params.getAll('utm_source').join(',')) {
+            case 'confenge_share': return 'tool-share-copy';
+            case 'linkedin': return 'tool-share-linkedin';
+            case 'whatsapp': return 'tool-share-wa';
+            default: return '';
+          }
+        })();
         track('page_view', {
           page_path: path,
           content_cluster: clusterFromPath(path),
+          ...(shareSource ? { source_asset_id: shareSource } : {}),
           referrer_host: (() => {
             try { return document.referrer ? new URL(document.referrer).hostname.slice(0, 80) : ''; } catch (_) { return ''; }
           })(),

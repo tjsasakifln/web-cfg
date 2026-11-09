@@ -1,5 +1,6 @@
+import { referralFirstTouch, validReferral } from './tool-referral.mjs';
+
 const ENDPOINT = '/api/web/tool-credits';
-const REF_KEY = 'confenge-tool-referral-v1';
 const ORDER_KEY = 'confenge-tool-orders-v1';
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 const makeId = () => crypto.randomUUID();
@@ -9,16 +10,6 @@ const message = e => ({ AUTH_REQUIRED: 'Entre na sua conta para continuar.', EMA
 const asJson = async r => { const body = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(body.error || 'Falha na conexão.'), body); return body; };
 const getStore = (key, fallback = {}) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
 const setStore = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
-
-function referralFirstTouch() {
-  const url = new URL(location.href), ref = url.searchParams.get('ref');
-  const valid = value => typeof value === 'string' && /^[A-Za-z0-9_-]{16}$/.test(value);
-  if (url.searchParams.has('ref')) { url.searchParams.delete('ref'); history.replaceState(history.state, '', url); }
-  const saved = getStore(REF_KEY);
-  if (saved.expires > Date.now() && valid(saved.ref)) return saved.ref;
-  if (valid(ref)) { setStore(REF_KEY, { ref, expires: Date.now() + 30 * 864e5 }); return ref; }
-  try { localStorage.removeItem(REF_KEY); } catch {} return '';
-}
 
 /** Fail-closed, isolated export entitlement UI. It sends no analytics events. */
 export function createToolCredits({ toolId, root = document.body, fetchImpl = fetch } = {}) {
@@ -77,10 +68,10 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   };
   const verifyView = (host, notice) => { host.append(el('h2', 'Confirme seu e-mail'), el('p', `Abra a mensagem enviada para ${auth.currentUser.email || 'seu e-mail'} e volte aqui.`)); note(host, notice); host.append(btn('Já confirmei', () => render()), btn('Reenviar confirmação', async () => { try { await firebase.sendEmailVerification(auth.currentUser); render('Confirmação reenviada.'); } catch (e) { render(message(e)); } }), btn('Sair', () => firebase.signOut(auth))); };
   const shareView = host => {
-    const section = el('section'); section.append(el('h3', 'Indique a CONFENGE'), el('p', 'Quando uma pessoa indicada fizer o primeiro uso pago, você recebe 1 crédito cortesia. Até 10 cortesias por mês.'));
-    if (!account?.referralCode) return;
-    const link = `${location.origin}${location.pathname}?ref=${encodeURIComponent(account.referralCode)}`;
-    const text = `Conheci esta ferramenta da CONFENGE: ${link}. Posso receber um crédito cortesia se você fizer a primeira exportação paga.`;
+    if (!config.purchasesEnabled || account?.blocked || !validReferral(account?.referralCode)) return;
+    const section = el('section'); section.append(el('h3', 'Indique as ferramentas CONFENGE'), el('p', 'Quando uma pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.'));
+    const link = `https://confenge.com.br/ferramentas/?ref=${encodeURIComponent(account.referralCode)}`;
+    const text = `Veja as ferramentas de engenharia da CONFENGE: ${link}. Posso receber um crédito cortesia se você fizer a primeira exportação paga.`;
     const external = destination => window.open(destination, '_blank', 'noopener,noreferrer');
     section.append(btn('Copiar link', async () => { try { await navigator.clipboard.writeText(link); render('Link copiado.'); } catch { render('Copie o link de indicação abaixo.'); } }),
       btn('LinkedIn', () => external(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`)), btn('WhatsApp', () => external(`https://wa.me/?text=${encodeURIComponent(text)}`)));

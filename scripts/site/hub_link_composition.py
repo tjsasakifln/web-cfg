@@ -103,6 +103,8 @@ def href_to_relpath(href: str) -> str:
     path, _ = split_href(href)
     if path in ("/", ""):
         return "index.html"
+    if path.endswith(".html"):
+        return path.lstrip("/")
     return f"{path.strip('/')}/index.html"
 
 

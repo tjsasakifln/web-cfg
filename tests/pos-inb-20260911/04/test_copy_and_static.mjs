@@ -35,7 +35,7 @@ const publicHtml = html
   .replace(/<script type="application\/json" id="pptr-destination-map">[\s\S]*?<\/script>/gi, " ");
 
 expect("twins", js === cjs);
-expect("buyer_h1", /Organize as informações da sua obra e veja o próximo passo/.test(html));
+expect("buyer_h1", /<h1>Prontidão técnica de obra privada<\/h1>/.test(html));
 expect("buyer_lead", /sem cadastro/.test(html) && /sem envio das respostas à CONFENGE/.test(html));
 expect("no_vocabulario_fechado", !/vocabulário fechado/i.test(publicHtml));
 expect("no_calculo_deterministico", !/cálculo determinístico/i.test(publicHtml));

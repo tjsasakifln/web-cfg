@@ -215,9 +215,9 @@
         "vertical": "public_works_b2g"
       },
       {
-        "label": "Como trabalhamos",
-        "href": "/como-trabalhamos/",
-        "surface": "engineering_method"
+        "label": "Ferramentas",
+        "href": "/ferramentas/",
+        "surface": "engineering_tools"
       },
       {
         "label": "Empresa",
@@ -857,6 +857,10 @@
       "href": "/servicos/"
     },
     {
+      "prefix": "/avaliacao-imoveis-urbanos/inferencia/",
+      "href": "/ferramentas/"
+    },
+    {
       "prefix": "/avaliacao-imoveis-urbanos/",
       "href": "/servicos/"
     },
@@ -965,12 +969,20 @@
       "href": "/servicos-obras-publicas/"
     },
     {
-      "prefix": "/ferramentas/prontidao-tecnica-obra-privada/",
-      "href": "/servicos/"
+      "prefix": "/cad/",
+      "href": "/ferramentas/"
+    },
+    {
+      "prefix": "/bim/",
+      "href": "/ferramentas/"
+    },
+    {
+      "prefix": "/analise-cnpj/",
+      "href": "/ferramentas/"
     },
     {
       "prefix": "/ferramentas/",
-      "href": "/servicos-obras-publicas/"
+      "href": "/ferramentas/"
     },
     {
       "prefix": "/compatibilizacao-projetos-engenharia/",
