@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import puppeteer from 'puppeteer-core';
 
 const root = new URL('../../', import.meta.url);
@@ -16,6 +18,7 @@ export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));r
 const pendingPix = {id:'o1',status:'pending',paymentFlow:'pix',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='};
 const pendingCheckout = {id:'o2',status:'pending',paymentFlow:'checkout',checkoutUrl:'https://www.mercadopago.com.br/checkout/v1/redirect?order_id=TEST_ONLY'};
 let fixtureMayConfirm = false;
+const fixtureRejectsOrder = process.env.TOOL_CREDITS_FIXTURE_REJECT_ORDER === '1';
 const calls = [], registrations = [], orderRequests = [], attempts = [];
 const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
   purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
@@ -39,6 +42,7 @@ const server = createServer(async (req, res) => {
   if (url.searchParams.get('op') === 'orders') {
     const request = JSON.parse(body);
     orderRequests.push(request);
+    if (fixtureRejectsOrder) { res.statusCode = 503; return send({error:'FIXTURE_ORDER_REJECTED'}); }
     return send(request.paymentFlow === 'checkout' ? pendingCheckout : pendingPix);
   }
   if (url.searchParams.get('op') === 'order') {
@@ -74,6 +78,10 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
 
 try {
   const page = await browser.newPage();
+  const cpuThrottleRate = Number(process.env.TOOL_CREDITS_CPU_THROTTLE_RATE || 1);
+  assert.ok(Number.isFinite(cpuThrottleRate) && cpuThrottleRate >= 1 && cpuThrottleRate <= 20,
+    'TOOL_CREDITS_CPU_THROTTLE_RATE must be from 1 to 20');
+  if (cpuThrottleRate > 1) await page.emulateCPUThrottling(cpuThrottleRate);
   await page.setViewport({width:390,height:844});
   await page.goto(`http://127.0.0.1:${port}/?ref=${firstRef}`);
   await page.evaluate(async () => {
@@ -110,8 +118,7 @@ try {
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
-  const priceButton = await page.$$('button').then(async buttons => { for (const item of buttons) if ((await item.evaluate(n => n.textContent)).includes('R$')) return item; });
-  await priceButton.click();
+  await page.locator('dialog .tool-credits__packs button').click();
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
@@ -146,15 +153,76 @@ try {
   const termsClickTrace = await page.evaluate(() => window.termsClickTrace);
   assert.ok(termsClickTrace.some(event => event.type === 'click' && event.target === 'INPUT' && event.checked && event.connected),
     `real terms click was not observed on the live control: ${JSON.stringify(termsClickTrace)}`);
-  // Stop walking handles before the real click. Continuing through stale
-  // buttons afterwards could delay observation of the Pix state on a loaded
-  // runner, while the automatic status poll kept advancing.
-  const acceptedPriceButton = await page.$$('button').then(async buttons => {
-    for (const item of buttons) if ((await item.evaluate(node => node.textContent)).includes('R$')) return item;
+  // Re-resolve the actionable button after the terms render settles. Arm the
+  // network observation before one physical click so a failure distinguishes
+  // click delivery from the asynchronous Pix render without retrying either.
+  await page.evaluate(() => {
+    window.priceClickTrace = [];
+    const dialog = document.querySelector('dialog');
+    for (const type of ['pointerdown', 'pointerup', 'click']) dialog.addEventListener(type, event => {
+      const button = event.target?.closest?.('.tool-credits__packs button');
+      if (!button) return;
+      const rect = button.getBoundingClientRect();
+      window.priceClickTrace.push({
+        type,
+        target: event.target.tagName,
+        connected: button.isConnected,
+        disabled: button.disabled,
+        width: rect.width,
+        height: rect.height,
+      });
+    });
   });
-  assert.ok(acceptedPriceButton, 'purchase button must remain available after accepting terms');
-  await acceptedPriceButton.click();
-  await page.waitForFunction(() => document.querySelector('textarea')?.value === 'pix-code'); assert.ok(await page.$('img[alt="QR Code Pix"]'));
+  const priceLocator = page.locator('dialog .tool-credits__packs button');
+  let orderResponse;
+  try {
+    [orderResponse] = await Promise.all([
+      page.waitForResponse(response => {
+        const request = response.request();
+        const url = new URL(request.url());
+        return request.method() === 'POST' && url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'orders';
+      }),
+      priceLocator.click(),
+    ]);
+    assert.equal(orderResponse.status(), 200, 'the real purchase click must receive a successful orders response');
+    const clickTrace = await page.evaluate(() => window.priceClickTrace || []);
+    assert.equal(clickTrace.filter(event => event.type === 'click').length, 1,
+      `purchase must receive exactly one real click: ${JSON.stringify(clickTrace)}`);
+    // The application disables the button synchronously inside its click
+    // handler. Actionability therefore belongs to pointerdown; the bubbled
+    // click is expected to observe the already-disabled pending state.
+    assert.ok(clickTrace.some(event => event.type === 'pointerdown' && event.connected && !event.disabled && event.width > 0 && event.height > 0),
+      `real purchase pointer did not start on the live actionable button: ${JSON.stringify(clickTrace)}`);
+    await page.waitForFunction(() => document.querySelector('textarea')?.value === 'pix-code');
+  } catch (error) {
+    const diagnostic = await page.evaluate(() => {
+      const dialog = document.querySelector('dialog');
+      const checkbox = dialog?.querySelector('input[type=checkbox]');
+      const button = dialog?.querySelector('.tool-credits__packs button');
+      const rect = button?.getBoundingClientRect();
+      const center = rect && { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      const point = center && document.elementFromPoint(center.x, center.y);
+      return {
+        clickTrace: window.priceClickTrace || [],
+        dialogText: dialog?.textContent || null,
+        checkbox: checkbox && { checked: checkbox.checked, connected: checkbox.isConnected },
+        button: button && { connected: button.isConnected, disabled: button.disabled, text: button.textContent, rect: rect?.toJSON?.() || null },
+        centerTarget: point && { tag: point.tagName, text: point.textContent, className: point.className },
+        pix: document.querySelector('textarea')?.value || null,
+        storedOrders: localStorage.getItem('confenge-tool-orders-v1:u1'),
+      };
+    });
+    const screenshotPath = join(process.env.RUNNER_TEMP || tmpdir(), 'tool-credits-pix-click-failure.png');
+    await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+    throw new Error(`real purchase click/Pix transition failed: ${JSON.stringify({
+      responseStatus: orderResponse?.status?.() || null,
+      calls,
+      orderRequests,
+      screenshotPath,
+      ...diagnostic,
+    })}`, { cause: error });
+  }
+  assert.ok(await page.$('img[alt="QR Code Pix"]'));
   assert.equal(orderRequests.length, 1);
   assert.equal(orderRequests[0].packageId, 'one');
   assert.equal(orderRequests[0].termsVersion, 'v2');
