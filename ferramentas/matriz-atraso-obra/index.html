@@ -172,7 +172,8 @@
 <script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
 
-<script>
+<script type="module">
+  import { exportToolResult } from "/assets/js/tool-credits.mjs";
 (function(){
   var T=window.ConfengeTools, C=window.ConfengeToolCompute;
   var TOOL="matriz-atraso", SCHEMA=4, n=0, lastText="", root=document.getElementById("events");
@@ -407,9 +408,9 @@
   document.getElementById("tem_matriz").addEventListener("change", persist);
   window.addEventListener("pagehide", flushPersist);
   window.addEventListener("beforeunload", function(e){flushPersist();if(!draftAtRisk)return;e.preventDefault();e.returnValue="";});
-  document.getElementById("btn-dl").onclick=function(){ T.downloadText("confenge-matriz-atraso.txt", lastText); };
+  document.getElementById("btn-dl").onclick=async function(){ await exportToolResult({toolId:"matriz-atraso-obra",format:"txt",content:lastText,deliver:function(){T.downloadText("confenge-matriz-atraso.txt", lastText);}}); };
   document.getElementById("btn-copy").onclick=function(){ T.copyText(lastText); };
-  document.getElementById("btn-print").onclick=function(){ window.print(); };
+  document.getElementById("btn-print").onclick=async function(){ await exportToolResult({toolId:"matriz-atraso-obra",format:"print",content:lastText,deliver:function(){window.print();}}); };
   document.getElementById("btn-reset").onclick=function(){
     if(!confirm("Apagar todos os eventos neste navegador?")) return;
     root.innerHTML=""; root.appendChild(card({}));

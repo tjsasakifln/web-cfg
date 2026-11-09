@@ -260,7 +260,8 @@
 <script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
 
-<script>
+<script type="module">
+  import { exportToolResult } from "/assets/js/tool-credits.mjs";
 (function(){
   var T = window.ConfengeTools, C = window.ConfengeToolCompute;
   var TOOL = "limite-acrescimos", SCHEMA = 5, lastText = "";
@@ -668,9 +669,9 @@
   });
   window.addEventListener("pagehide", flushPersist);
   window.addEventListener("beforeunload", function(e) { flushPersist(); if (!draftAtRisk) return; e.preventDefault(); e.returnValue = ""; });
-  document.getElementById("btn-dl").onclick = function() { T.downloadText("confenge-limite-aditivo.txt", lastText); };
+  document.getElementById("btn-dl").onclick = async function() { await exportToolResult({toolId:"limite-acrescimos-supressoes",format:"txt",content:lastText,deliver:function(){T.downloadText("confenge-limite-aditivo.txt", lastText);}}); };
   document.getElementById("btn-copy").onclick = function() { T.copyText(lastText); };
-  document.getElementById("btn-print").onclick = function() { window.print(); };
+  document.getElementById("btn-print").onclick = async function() { await exportToolResult({toolId:"limite-acrescimos-supressoes",format:"print",content:lastText,deliver:function(){window.print();}}); };
   document.getElementById("btn-reset").onclick = function() {
     if (!confirm("Apagar respostas deste formulário neste navegador?")) return;
     form.reset();

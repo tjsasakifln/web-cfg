@@ -199,7 +199,9 @@ def set_head(html: str, path: str, title: str, desc: str, key: str, *, updated: 
             '<meta name="robots" content="index,follow,max-image-preview:large"/>',
             f'<meta property="og:updated_time" content="{escape(updated)}"/>',
         ))
-    tags += [meta_tags(path, title, desc, key), CSS, JS]
+    css = CSS.replace("showcase.css", "showcase.css?v=creditos2") if path == HUB else CSS
+    js = JS.replace("showcase.mjs", "showcase.mjs?v=creditos2") if path == HUB else JS
+    tags += [meta_tags(path, title, desc, key), css, js]
     return marker(head + "</head>", "head", "\n".join(tags), "</head>") + rest
 
 
@@ -248,7 +250,8 @@ def catalogue(html: str, data: dict) -> str:
 <p class="eyebrow">Ferramentas CONFENGE</p>
 <h1>Ferramentas de engenharia online</h1>
 <p data-tool-job>Abra uma planta em DWG, confira um modelo IFC, estime o valor de um imóvel ou organize a próxima decisão da obra.</p>
-<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Indicar a um colega">Indicar</a></div>
+<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Indicar a um colega">Indicar</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
+<p id="meus-creditos-status" role="status"></p>
 </div>
 <figure class="ts-hero-visual" aria-hidden="true">{plate('plan', 'DWG · DXF')}{plate('iso', 'IFC · BIM')}{plate('chart', 'MODELA PRO')}</figure>
 </div></header>

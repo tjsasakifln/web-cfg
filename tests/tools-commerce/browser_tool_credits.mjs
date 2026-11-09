@@ -13,7 +13,7 @@ const firebase = `let listener, user; const auth={authStateReady:async()=>{},cur
 export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
 const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false)=>({uid:'u1',email,emailVerified:verified,reload:async()=>{},getIdToken:async()=> 'token'});
 export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
-let status = 'pending', calls = [], registrations = [];
+let calls = [], registrations = [], attempts = [];
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (url.pathname === '/') { res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
@@ -24,13 +24,26 @@ const server = createServer(async (req, res) => {
   if (url.pathname !== '/api/web/tool-credits') { res.statusCode = 404; return res.end(); }
   calls.push(url.searchParams.get('op')); let body = ''; for await (const chunk of req) body += chunk;
   const send = value => { res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(value)); };
-  if (url.searchParams.get('op') === 'config') return send({enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria'],purchasesEnabled:true,termsVersion:'v1',termsUrl:'/termos-de-uso/#creditos-ferramentas',packages:[{id:'one',credits:1,amountCents:1490}]});
+  if (url.searchParams.get('op') === 'config') return send({enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
+    purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
+    packages:[{id:'one',credits:1,amountCents:1490}]});
   if (url.searchParams.get('op') === 'account') {
     if (req.method === 'POST') registrations.push(JSON.parse(body));
     return send({paid:2,promo:1,freeAvailable:false,referralCode:firstRef,invites:{earned:1,pending:0},recentOrders:[]});
   }
-  if (url.searchParams.get('op') === 'orders') return send({id:'o1',status:'pending',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='});
-  if (url.searchParams.get('op') === 'order') { status = 'paid'; return send({id:'o1',status}); }
+  if (url.searchParams.get('op') === 'orders') {
+    if (JSON.parse(body).paymentFlow === 'checkout') return send({ id:'o2', status:'pending', paymentFlow:'checkout',
+      checkoutUrl:'https://www.mercadopago.com.br/checkout/v1/redirect?order_id=TEST_ONLY' });
+    return send({id:'o1',status:'pending',paymentFlow:'pix',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='});
+  }
+  if (url.searchParams.get('op') === 'order') return send({ id: url.searchParams.get('id'), status: 'paid' });
+  if (url.searchParams.get('op') === 'export-local') {
+    const request = JSON.parse(body);
+    attempts.push(request);
+    if (attempts.length === 1) { res.statusCode = 503; return send({ error: 'COMMERCE_UNAVAILABLE' }); }
+    return send({ schema: 'confenge.tools.emission/v1', id: 'a'.repeat(64), proof: 'b'.repeat(64),
+      toolId: request.toolId, ...request.payload });
+  }
   res.statusCode = 400; send({error:'bad'});
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
@@ -59,5 +72,27 @@ try {
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Pagamento confirmado'), { timeout: 15000 });
   assert.ok(calls.includes('orders') && calls.includes('order'));
   assert.equal(await page.evaluate(() => location.search), '', 'ref must be removed from visible URL');
+  assert.equal(await page.$eval('dialog select', select => select.value), 'pix');
+  await page.select('dialog select', 'checkout');
+  await page.click('dialog input[type=checkbox]');
+  await page.evaluate(() => [...document.querySelectorAll('dialog button')].find(button => button.textContent.includes('R$')).click());
+  await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir checkout no Mercado Pago'));
+  assert.equal(await page.$('img[alt="QR Code Pix"]'), null);
+  await page.evaluate(() => document.querySelector('dialog').close());
+  await page.evaluate(async () => {
+    window.confirm = () => true;
+    const { exportToolResult } = await import('/assets/js/tool-credits.mjs');
+    window.delivered = 0;
+    await exportToolResult({ toolId: 'calculadora-bdi', format: 'csv', content: 'dado privado',
+      deliver: () => { window.delivered++; } });
+  });
+  assert.equal(await page.evaluate(() => window.delivered), 0);
+  await page.evaluate(() => [...document.querySelectorAll('.tool-credits__export-notice button')]
+    .find(button => button.textContent === 'Retomar exportação').click());
+  await page.waitForFunction(() => window.delivered === 1);
+  assert.deepEqual(attempts[1], attempts[0]);
+  assert.deepEqual(Object.keys(attempts[0].payload).sort(), ['bytes', 'format', 'sha256']);
+  assert.ok(!JSON.stringify(attempts[0]).includes('dado privado'));
+  await page.waitForFunction(() => document.querySelector('.tool-credits__export-notice')?.textContent.includes('Baixar comprovante'));
   console.log('browser tool credits: ok');
 } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }

@@ -245,7 +245,8 @@
 <script src="/assets/js/tools-common.js"></script>
 <script src="/assets/js/diagnose-margin.js"></script>
 <script src="/script.js" defer></script>
-<script>
+<script type="module">
+  import { exportToolResult } from "/assets/js/tool-credits.mjs";
 (function(){
   var D = window.ConfengeDiagnoseMargin;
   var T = window.ConfengeTools;
@@ -412,8 +413,8 @@
   var btnPrint = document.getElementById("btn-print");
   var btnReset = document.getElementById("btn-reset");
   if (btnCopy) btnCopy.onclick = function(){ if (T && T.copyText) T.copyText(lastText); };
-  if (btnDl) btnDl.onclick = function(){ if (T && T.downloadText) T.downloadText("confenge-diagnostico-defesa-margem.txt", lastText); };
-  if (btnPrint) btnPrint.onclick = function(){ window.print(); };
+  if (btnDl) btnDl.onclick = async function(){ await exportToolResult({toolId:"diagnostico-defesa-margem",format:"txt",content:lastText,deliver:function(){ if (T && T.downloadText) T.downloadText("confenge-diagnostico-defesa-margem.txt", lastText); }}); };
+  if (btnPrint) btnPrint.onclick = async function(){ await exportToolResult({toolId:"diagnostico-defesa-margem",format:"print",content:lastText,deliver:function(){ window.print(); }}); };
   function clearDiagnosisUi(){
     resultEl.hidden = true;
     document.getElementById("public-contract-id").value = "";

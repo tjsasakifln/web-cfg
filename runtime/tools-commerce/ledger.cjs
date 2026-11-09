@@ -12,10 +12,12 @@ const month = t => day(t).slice(0, 7);
 const activeOrder = status => status === 'creating' || status === 'pending';
 const recentSummary = order => ({ id: order.id, status: order.status, packageId: order.packageId });
 const updateRecent = (wallet, order) => [recentSummary(order), ...wallet.recentOrders.filter(o => o.id !== order.id)].slice(0, 12);
+const blocked = w => w.blocked || (w.disputeHolds || 0) > 0;
 const publicAccount = w => ({ paid: w.paid, promo: w.promo, freeAvailable: w.freeAvailable,
-  blocked: w.blocked, referralCode: w.referralCode, invites: { earned: w.invites.earned, pending: w.invites.pending }, recentOrders: w.recentOrders });
+  blocked: blocked(w), referralCode: w.referralCode, invites: { earned: w.invites.earned, pending: w.invites.pending }, recentOrders: w.recentOrders });
 const publicOrder = order => ({ ...recentSummary(order), amountCents: order.amountCents, credits: order.credits, currency: order.currency,
-  ...(activeOrder(order.status) && order.pix ? order.pix : {}) });
+  paymentFlow: order.paymentFlow || 'pix',
+  ...(activeOrder(order.status) ? order.checkout || order.pix || {} : {}) });
 
 function createLedger({ db, mode, identityKey, clock = Date.now }) {
   const root = db.collection('toolsCommerce').doc(`v1-${mode}`);
@@ -45,7 +47,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       }
       const inviterId = referralCode && (await get(tx, doc('referralCodes', referralCode)))?.accountId;
       const inviter = inviterId && inviterId !== id && await get(tx, wallet(inviterId));
-      const referredBy = inviter && !inviter.blocked && inviter.emailKey !== emailKey ? inviterId : null;
+      const referredBy = inviter && !blocked(inviter) && inviter.emailKey !== emailKey ? inviterId : null;
       const account = { emailKey, freeAvailable: true, paid: 0, promo: 0, blocked: false, debt: 0,
         referralCode: code, referredBy, referralState: referredBy ? 'pending' : 'none', referralOrder: null,
         invites: emptyInviteStats(), lotIds: [], recentOrders: [], createdAt: now, orderDay: '', orderCount: 0 };
@@ -60,10 +62,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
 
   async function account(uid) { return publicAccount(requireWallet((await wallet(accountId(uid)).get()).data())); }
 
-  async function startOrder({ uid, packageId, requestId, termsVersion }) {
+  async function startOrder({ uid, packageId, requestId, termsVersion, paymentFlow = 'pix' }) {
     const pack = PACKAGES.find(p => p.id === packageId);
     check(pack, 'INVALID_PACKAGE', 422);
-    check(termsVersion === TERMS, 'TERMS_REQUIRED', 422);
+    check(paymentFlow === 'pix' || paymentFlow === 'checkout', 'INVALID_PAYMENT_METHOD', 422);
     const buyer = accountId(uid);
     const id = orderId(uid, requestId);
     const now = clock();
@@ -71,15 +73,17 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       const w = requireWallet(await get(tx, wallet(buyer)));
       const existing = await get(tx, orders(id));
       if (existing) {
-        check(existing.accountId === buyer && existing.packageId === packageId && existing.termsVersion === termsVersion, 'REQUEST_CONFLICT', 409);
+        check(existing.accountId === buyer && existing.packageId === packageId &&
+          existing.termsVersion === termsVersion && (existing.paymentFlow || 'pix') === paymentFlow, 'REQUEST_CONFLICT', 409);
         return { created: false, order: existing };
       }
-      check(!w.blocked, 'ACCOUNT_BLOCKED', 409);
+      check(termsVersion === TERMS, 'TERMS_REQUIRED', 422);
+      check(!blocked(w), 'ACCOUNT_BLOCKED', 409);
       const count = w.orderDay === day(now) ? w.orderCount : 0;
       check(count < ORDER_LIMIT, 'ORDER_LIMIT', 429);
       const order = { id, accountId: buyer, origin: ORIGIN, currency: 'BRL', packageId,
         catalogVersion: CATALOG_VERSION, termsVersion, termsHash: TERMS_HASH, termsAcceptedAt: now, createdAt: now,
-        credits: pack.credits, amountCents: pack.amountCents, provider: 'mercado_pago',
+        credits: pack.credits, amountCents: pack.amountCents, provider: 'mercado_pago', paymentFlow,
         providerId: null, status: 'creating', remaining: 0, nextPollAt: 0, credited: false };
       tx.create(orders(id), order);
       tx.update(wallet(buyer), { orderDay: day(now), orderCount: count + 1, recentOrders: updateRecent(w, order) });
@@ -98,8 +102,10 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
     if (!poll) return { order: owned((await ref.get()).data()), poll: false };
     return db.runTransaction(async tx => {
       const order = owned(await get(tx, ref));
-      if (!order.providerId || order.status !== 'pending' || order.nextPollAt > now) return { order, poll: false };
-      tx.update(ref, { nextPollAt: now + 7000 });
+      const recover = !order.providerId && (order.reason === 'creation_uncertain' ||
+        (order.status === 'creating' && now - order.createdAt > 60_000));
+      if ((!recover && !(order.providerId && order.status === 'pending')) || order.nextPollAt > now) return { order, poll: false };
+      tx.update(ref, { nextPollAt: now + (recover ? 30_000 : 7000) });
       return { order, poll: true };
     });
   }
@@ -118,25 +124,37 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
     });
   }
 
-  async function observe(fact, { creation = false } = {}) {
+  async function observe(fact, { creation = false, sellerCreditConfirmed = false } = {}) {
     const now = clock();
     return db.runTransaction(async tx => {
       const orderRef = orders(fact.reference);
       const o = await get(tx, orderRef);
       if (!o) return null;
+      const paymentFlow = o.paymentFlow || 'pix';
       check(o.amountCents === fact.amountCents && o.currency === fact.currency &&
+        paymentFlow === (fact.paymentFlow || 'pix') &&
         (!o.providerId || o.providerId === fact.providerId), 'PAYMENT_MISMATCH', 422);
       const providerRef = doc('providerOrders', sha(fact.providerId));
       const binding = await get(tx, providerRef);
       check(!binding || binding.orderId === o.id, 'PAYMENT_MISMATCH', 422);
+      const dispute = fact.state === 'review' && (fact.dispute === 'open' || fact.dispute === 'won');
+      if (sellerCreditConfirmed) {
+        check(!creation && dispute && fact.dispute === 'won' && o.credited && o.status === 'review' &&
+          o.disputeHold === true, 'DISPUTE_NOT_RESOLVABLE', 409);
+      }
       if (o.status === 'reversed') return o;
-      // A POST response can bind a QR/order, never fund a wallet. GET is required.
+      if (o.providerUpdatedAt && fact.providerUpdatedAt && fact.providerUpdatedAt < o.providerUpdatedAt) return o;
+      if (dispute && o.disputeResolvedAt &&
+          (!fact.providerUpdatedAt || fact.providerUpdatedAt <= o.disputeResolvedAt)) return o;
+      // A POST response can bind an order. Funding requires a verified GET.
       const state = creation && ['paid', 'reversed'].includes(fact.state) ? 'pending' : fact.state;
       if (o.credited && ['pending', 'failed', 'paid'].includes(state)) return o;
       const w = requireWallet(await get(tx, wallet(o.accountId)));
       const shouldRevokeReferral = state === 'reversed' && w.referralState === 'earned' && w.referralOrder === o.id;
       const inviter = shouldRevokeReferral && await get(tx, wallet(w.referredBy));
       const next = { ...o, providerId: fact.providerId, updatedAt: now };
+      delete next.reason;
+      if (fact.providerUpdatedAt) next.providerUpdatedAt = fact.providerUpdatedAt;
       const changes = {};
       if (!binding) tx.create(providerRef, { orderId: o.id, providerId: fact.providerId });
 
@@ -144,7 +162,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
         next.status = 'paid'; next.credited = true; next.remaining = o.credits; next.paidAt = now;
         changes.paid = w.paid + o.credits;
         changes.lotIds = [...w.lotIds, o.id];
-        append(tx, o.accountId, `purchase-${o.id}`, { type: 'pix_paid', orderId: o.id, bucket: 'paid', delta: o.credits,
+        append(tx, o.accountId, `purchase-${o.id}`, { type: `${paymentFlow}_paid`, orderId: o.id, bucket: 'paid', delta: o.credits,
           providerId: fact.providerId, amountCents: o.amountCents, currency: o.currency }, now);
       } else if (state === 'reversed') {
         next.status = 'reversed'; next.remaining = 0;
@@ -154,7 +172,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
           changes.lotIds = w.lotIds.filter(id => id !== o.id);
           changes.blocked = w.blocked || used > 0;
           changes.debt = w.debt + used;
-          append(tx, o.accountId, `reverse-${o.id}`, { type: 'pix_reversed', orderId: o.id, bucket: 'paid',
+          append(tx, o.accountId, `reverse-${o.id}`, { type: `${paymentFlow}_reversed`, orderId: o.id, bucket: 'paid',
             delta: -o.remaining, debt: used, providerId: fact.providerId }, now);
         }
         if (inviter) {
@@ -169,16 +187,36 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
         }
       } else {
         next.status = state;
-        if (state === 'review' && o.credited) changes.blocked = true;
+        if (state === 'review' && o.credited) {
+          if (dispute) next.disputeHold = true;
+          else changes.blocked = true;
+        }
+      }
+      if (sellerCreditConfirmed || state === 'reversed') {
+        next.disputeHold = false;
+        if (sellerCreditConfirmed) {
+          next.status = 'paid';
+          next.disputeResolvedAt = fact.providerUpdatedAt || now;
+          append(tx, o.accountId, `dispute-release-${o.id}-${next.disputeResolvedAt}`,
+            { type: 'dispute_released', orderId: o.id, providerId: fact.providerId }, now);
+        }
+      }
+      if (Boolean(next.disputeHold) !== Boolean(o.disputeHold)) {
+        changes.disputeHolds = (w.disputeHolds || 0) + (next.disputeHold ? 1 : -1);
+        check(changes.disputeHolds >= 0, 'COMMERCE_UNAVAILABLE', 503);
       }
       if (next.status === 'pending') {
         // No payer or raw provider payload is stored. QR expires with the order.
-        next.pix = {};
-        for (const key of ['qrCode', 'qrImage', 'checkoutUrl', 'expiresAt']) {
-          if (fact[key] != null) next.pix[key] = fact[key];
-          else if (o.pix?.[key] != null) next.pix[key] = o.pix[key];
+        const fields = paymentFlow === 'checkout' ? ['checkoutUrl', 'expiresAt'] : ['qrCode', 'qrImage', 'checkoutUrl', 'expiresAt'];
+        next[paymentFlow] = {};
+        for (const key of fields) {
+          if (fact[key] != null) next[paymentFlow][key] = fact[key];
+          else if (o[paymentFlow]?.[key] != null) next[paymentFlow][key] = o[paymentFlow][key];
         }
-      } else delete next.pix;
+      } else {
+        delete next.pix;
+        delete next.checkout;
+      }
       tx.set(orderRef, next);
       tx.update(wallet(o.accountId), { ...changes, recentOrders: updateRecent(w, next) });
       return next;
@@ -197,7 +235,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
         return previous;
       }
       const w = requireWallet(await get(tx, wallet(id)));
-      check(!w.blocked, 'ACCOUNT_BLOCKED', 409);
+      check(!blocked(w), 'ACCOUNT_BLOCKED', 409);
       const bucket = w.freeAvailable ? 'free' : w.promo > 0 ? 'promo' : w.paid > 0 ? 'paid' : null;
       check(bucket, 'NO_CREDITS', 402);
       const lotId = bucket === 'paid' ? w.lotIds[0] : null;
@@ -216,7 +254,7 @@ function createLedger({ db, mode, identityKey, clock = Date.now }) {
       }
       if (inviter) {
         const count = inviter.invites.month === month(now) ? inviter.invites.grantedThisMonth : 0;
-        const grant = !inviter.blocked && count < REFERRAL_LIMIT;
+        const grant = !blocked(inviter) && count < REFERRAL_LIMIT;
         updates.referralState = grant ? 'earned' : 'ineligible';
         updates.referralOrder = lotId;
         tx.update(wallet(w.referredBy), { promo: inviter.promo + Number(grant), invites: { ...inviter.invites,

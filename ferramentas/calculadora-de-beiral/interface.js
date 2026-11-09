@@ -1,4 +1,5 @@
 import { simular, paraCentimetro } from './calculo.js';
+import { exportToolResult } from '/assets/js/tool-credits.mjs';
 
 const el = id => document.getElementById(id);
 const numeros = ['latitude', 'longitude', 'fuso', 'fachada', 'vao', 'distancia', 'avanco'];
@@ -72,3 +73,19 @@ formulario.addEventListener('submit', evento => { evento.preventDefault(); atual
 el('campos').disabled = false;
 el('carregando').hidden = true;
 atualizar();
+
+el('exportar-resultado').addEventListener('click', async () => {
+  if (el('resultado').hidden) return;
+  const content = [
+    'CONFENGE — Beiral e sombra na janela',
+    el('posicao').textContent,
+    'Altura protegida pelo beiral: ' + el('percentual').textContent,
+    'Avanço para cobrir o vão inteiro: ' + el('medida').textContent,
+    '', el('legenda').textContent
+  ].join('\r\n') + '\r\n';
+  await exportToolResult({toolId:'calculadora-de-beiral',format:'txt',content,deliver(){
+    const url=URL.createObjectURL(new Blob([content],{type:'text/plain;charset=utf-8'}));
+    const link=document.createElement('a');link.href=url;link.download='CONFENGE-beiral-e-sombra.txt';link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }});
+});

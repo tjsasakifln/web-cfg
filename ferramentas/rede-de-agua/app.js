@@ -1,4 +1,5 @@
 import {example,readNetwork,toInp} from "./rede.js";
+import {exportToolResult} from "/assets/js/tool-credits.mjs";
 const $=id=>document.getElementById(id);
 const keys=Object.keys(example);
 const fmt=(n,d=2)=>n.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d,useGrouping:false});
@@ -67,13 +68,18 @@ $("abrir").addEventListener("change",async e=>{
     readNetwork(d.model);invalidate();fill(d.model);$("estado").textContent="Projeto aberto. Simule para atualizar os resultados.";
   }catch(e){$("estado").textContent=e instanceof SyntaxError?"Arquivo JSON inválido.":e.message;}finally{$("abrir").value="";}
 });
-$("inp").addEventListener("click",()=>{if(last)download("CONFENGE-rede-cenario-2.inp",toInp(last.model,last.model.factor));});
-$("csv").addEventListener("click",()=>{
+$("inp").addEventListener("click",async()=>{
+  if(!last)return;
+  const content=toInp(last.model,last.model.factor);
+  await exportToolResult({toolId:"rede-de-agua",format:"inp",content,deliver(){download("CONFENGE-rede-cenario-2.inp",content);}});
+});
+$("csv").addEventListener("click",async()=>{
   if(!last)return;
   const out=["Cenário;Ponto;Demanda solicitada (L/s);Demanda atendida (L/s);Pressão (mca)"];
   for(const [i,s] of [last.result.base,last.result.variant].entries())for(const n of s.nodes)out.push([i+1,n.id,fmt(n.demand,5),fmt(n.delivered,5),fmt(n.pressure,5)].join(";"));
   out.push("","Cenário;Trecho;Vazão (L/s);Velocidade (m/s);Perda de carga (m)");
   for(const [i,s] of [last.result.base,last.result.variant].entries())for(const t of s.pipes)out.push([i+1,t.id,fmt(t.flow,5),fmt(t.velocity,5),fmt(t.loss,5)].join(";"));
-  download("CONFENGE-rede-resultados.csv","\uFEFF"+out.join("\r\n")+"\r\n","text/csv;charset=utf-8");
+  const content="\uFEFF"+out.join("\r\n")+"\r\n";
+  await exportToolResult({toolId:"rede-de-agua",format:"csv",content,deliver(){download("CONFENGE-rede-resultados.csv",content,"text/csv;charset=utf-8");}});
 });
 fill(example);$("controles").disabled=false;

@@ -14,13 +14,13 @@
 .tool-credits form, .tool-credits section { display: grid; gap: .65rem; }
 .tool-credits label { display: grid; gap: .25rem; font-weight: 600; }
 .tool-credits label:has(input[type=checkbox]) { display: flex; align-items: center; min-height: 44px; }
-.tool-credits input, .tool-credits textarea, .tool-credits button {
+.tool-credits input, .tool-credits textarea, .tool-credits select, .tool-credits button {
   box-sizing: border-box;
   min-height: 44px;
   font: inherit;
   padding: .6rem;
 }
-.tool-credits input, .tool-credits textarea { border: 1px solid #88969c; }
+.tool-credits input, .tool-credits textarea, .tool-credits select { border: 1px solid #88969c; }
 .tool-credits button {
   border: 1px solid #00645c;
   background: #00645c;
@@ -47,4 +47,21 @@
 .tool-credits__notice { padding: .65rem; background: #eaf7f3; }
 .tool-credits__payment { border: 1px solid #d3e4df; padding: 1rem; }
 .tool-credits__payment img { width: min(100%, 14rem); height: auto; justify-self: center; }
+.tool-credits__export-notice {
+  position: fixed;
+  inset: auto 1rem 1rem auto;
+  z-index: 1000;
+  width: min(28rem, calc(100% - 2rem));
+  box-sizing: border-box;
+  padding: .85rem;
+  border: 1px solid #00645c;
+  border-radius: .4rem;
+  color: #17242f;
+  background: #fff;
+}
+.tool-credits__export-notice p { margin: 0 0 .55rem; }
+.tool-credits__export-notice button { margin-right: .55rem; min-height: 44px; font: inherit; }
+@media print {
+  .tool-credits__export-notice { display: none; }
+}
 #tool-credits[hidden], #tool-credits-info[hidden], #print[hidden] { display: none; }

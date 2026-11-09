@@ -4,6 +4,35 @@ import { referralFirstTouch } from '/assets/js/tool-referral.mjs';
 // always uses the authored tool URL (never location.href or form values).
 referralFirstTouch();
 
+const walletButton = document.getElementById('meus-creditos');
+if (walletButton) {
+  const walletStatus = document.getElementById('meus-creditos-status');
+  let wallet;
+  const openWallet = async () => {
+    try {
+      const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+      wallet ??= createToolCredits({ toolId: 'modela-memoria', shared: true });
+      if (!await wallet.open()) throw new Error('wallet unavailable');
+      walletStatus.textContent = '';
+    } catch {
+      walletStatus.textContent = 'A conta de créditos está indisponível. Tente novamente.';
+    }
+  };
+  const returning = location.hash === '#meus-creditos';
+  if (returning) {
+    // Confirm the order through the account. Redirect query values are not payment facts.
+    try { history.replaceState(history.state, '', location.pathname + location.hash); } catch {}
+  }
+  fetch('/api/web/tool-credits?op=config', { headers: { Accept: 'application/json' } })
+    .then(response => response.ok ? response.json() : null)
+    .then(config => {
+      if (config?.enabled !== true || config.sharedExportsEnabled !== true) return;
+      walletButton.hidden = false;
+      walletButton.addEventListener('click', openWallet);
+      if (returning) openWallet();
+    }).catch(() => {});
+}
+
 const simplify = (value) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const search = document.querySelector('[data-tool-search]');
 if (search) {

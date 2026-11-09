@@ -1,5 +1,6 @@
 (function () {
   "use strict";
+  var credits = import("/assets/js/tool-credits.mjs");
   var api = window.ConfengePrivateProjectTechnicalReadiness;
   var form = document.getElementById("diagnostico");
   var statusEl = document.getElementById("runtime-status");
@@ -332,7 +333,10 @@
   }
   var printBtn = document.getElementById("btn-print");
   if (printBtn) {
-    printBtn.addEventListener("click", function () { window.print(); });
+    printBtn.addEventListener("click", async function () {
+      var commerce = await credits;
+      await commerce.exportToolResult({toolId:"prontidao-tecnica-obra-privada",format:"print",content:lastText,deliver:function(){ window.print(); }});
+    });
   }
 
   function restoreDraft() {

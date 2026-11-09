@@ -41,7 +41,7 @@
 #cad-editor .cad-status[data-error="true"] { font-weight:750; color:var(--ink); }
 #cad-editor .cad-export { display:inline-flex; align-items:center; gap:.25rem; }
 #cad-editor .cad-export:has([data-save][hidden]) { display:none; }
-#cad-editor .cad-recover { color:var(--green-700); font-weight:750; text-decoration:underline; }
+#cad-editor .cad-recover { appearance:none; background:transparent; border:0; color:var(--green-700); cursor:pointer; font:inherit; font-weight:750; padding:0; text-decoration:underline; }
 #cad-editor .cad-help { margin:.7rem clamp(.85rem,2vw,1.4rem); }
 #cad-editor .cad-help summary { cursor:pointer; min-height:var(--touch-min); display:list-item; line-height:var(--touch-min); font-weight:750; color:var(--ink); }
 #cad-editor .cad-help p { margin:.2rem 0 .7rem; max-width:80ch; }

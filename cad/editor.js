@@ -16,7 +16,8 @@ if (editor) {
   const status = find('.cad-status');
   const issue = find('.cad-issue');
   const format = find('[data-format]');
-  const recovery = document.createElement('a');
+  const recovery = document.createElement('button');
+  recovery.type = 'button';
   recovery.className = 'cad-recover';
   recovery.textContent = 'Baixar a edição em DXF';
   const preview = find('.cad-preview');
@@ -26,7 +27,7 @@ if (editor) {
   let frame, ready, readyResolve, readyReject, titleObserver;
   let loading = false, saving = false, dirty = false, retained = false;
   let opened, baseline, dwgBlocked = false;
-  let saveTimer, activeName = '', expectedName = '', sourceName = '';
+  let saveTimer, activeName = '', expectedName = '', sourceName = '', recoveryFile;
 
   function say(message, error = false) {
     status.textContent = message;
@@ -75,8 +76,7 @@ if (editor) {
     } catch { clearPreview(); }
   }
   function clearRecovery() {
-    if (recovery.href) URL.revokeObjectURL(recovery.href);
-    recovery.removeAttribute('href');
+    recoveryFile = undefined;
     recovery.remove();
     retained = false;
   }
@@ -182,7 +182,7 @@ if (editor) {
     editor.setAttribute('aria-busy', String(value || saving));
     stage.dataset.busy = String(value);
   }
-  function download(name, bytes) {
+  function downloadLocal(name, bytes) {
     const link = document.createElement('a');
     link.href = URL.createObjectURL(new Blob([bytes], { type:'application/octet-stream' }));
     link.download = name;
@@ -190,6 +190,16 @@ if (editor) {
     link.click();
     link.remove();
     setTimeout(() => URL.revokeObjectURL(link.href), 60000);
+  }
+  async function download(name, bytes) {
+    const extension = name.split('.').pop().toLowerCase();
+    const { exportToolResult } = await import('/assets/js/tool-credits.mjs');
+    return exportToolResult({
+      toolId: 'cad-editor',
+      format: extension,
+      content: new Blob([bytes], { type: 'application/octet-stream' }),
+      deliver: () => downloadLocal(name, bytes),
+    });
   }
   async function save(data) {
     clearTimeout(saveTimer);
@@ -200,32 +210,55 @@ if (editor) {
     const isDrawing = /\.dxf$/i.test(name);
     const output = dwgBlocked ? 'dxf' : format.value;
     say('Preparando a cópia para baixar…');
+    let file = { name, bytes:data.bytes };
     try {
-      let file = { name, bytes:data.bytes };
       if (isDrawing && output === 'dwg') {
         const { encodeDrawing } = await import('./codec.js');
         file = await encodeDrawing(name, data.bytes);
       }
-      const copy = file.name.replace(/\.(dwg|dxf)$/i, '-editado.$1');
-      download(copy, file.bytes);
+    } catch (error) {
+      if (isDrawing) {
+        clearRecovery();
+        recoveryFile = { name: name.replace(/\.dxf$/i, '-editado.dxf'), bytes: data.bytes };
+        find('.cad-foot').append(recovery);
+        retained = true;
+        find('.cad-caption').textContent = 'Cópia DWG pendente';
+      }
+      say((error.message || 'Falha ao preparar a cópia.') + (isDrawing ? ' A edição em DXF está disponível para baixar.' : ''), true);
+      saving = false;
+      setBusy(loading);
+      return;
+    }
+    const copy = file.name.replace(/\.(dwg|dxf)$/i, '-editado.$1');
+    try {
+      const delivered = await download(copy, file.bytes);
+      if (!delivered) return;
       clearRecovery();
       if (data.id != null) send({ type:'cadcraft:saved', id:data.id });
       if (!dwgBlocked && file.warnings?.length) warn(file.warnings);
       say('Download iniciado: ' + copy);
       reflectTitle();
     } catch (error) {
-      if (isDrawing) {
-        clearRecovery();
-        recovery.href = URL.createObjectURL(new Blob([data.bytes]));
-        recovery.download = name.replace(/\.dxf$/i, '-editado.dxf');
-        find('.cad-foot').append(recovery);
-        retained = true;
-        find('.cad-caption').textContent = 'Cópia DWG pendente';
-      }
-      say((error.message || 'Falha ao preparar a cópia.') + (isDrawing ? ' A edição em DXF está disponível para baixar.' : ''), true);
+      say(error.message || 'Não foi possível autorizar a emissão da cópia.', true);
     } finally { saving = false; setBusy(loading); }
   }
-  recovery.addEventListener('click', () => { retained = false; });
+  recovery.addEventListener('click', async event => {
+    if (!recoveryFile || saving) return;
+    saving = true;
+    setBusy(loading);
+    try {
+      const file = recoveryFile;
+      const delivered = await download(file.name, file.bytes);
+      if (!delivered) return;
+      clearRecovery();
+      say('Download iniciado: ' + file.name);
+    } catch (error) {
+      say(error.message || 'Não foi possível autorizar a emissão da cópia.', true);
+    } finally {
+      saving = false;
+      setBusy(loading);
+    }
+  });
   window.addEventListener('message', event => {
     if (!frame || event.source !== frame.contentWindow || event.origin !== location.origin) return;
     const data = event.data;

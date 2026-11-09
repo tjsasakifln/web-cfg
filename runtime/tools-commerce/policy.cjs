@@ -1,7 +1,7 @@
 const { createHash, createHmac } = require('node:crypto');
 
-const TERMS = 'ferramentas-creditos-v1';
-const TERMS_HASH = 'b4ec61dc0849d971562044415691105f030e7371cee94be9e5d85020b261cb96';
+const TERMS = 'ferramentas-creditos-v2';
+const TERMS_HASH = '39e7ed6f4db8a21666ebce3a30bda3b2a498adfb1737070cd6d617408661c6e4';
 const CATALOG_VERSION = 'brl-2026-11-08-v2';
 const PACKAGES = Object.freeze([
   { id: 'creditos-1', credits: 1, amountCents: 1490 },
@@ -63,8 +63,12 @@ function loadConfig(env) {
   }
   const identityKey = env.TOOLS_COMMERCE_HMAC_KEY || '';
   valid(/^[A-Za-z0-9_-]{43,86}$/.test(identityKey) && Buffer.from(identityKey, 'base64url').length >= 32);
-  const purchasesEnabled = env.TOOLS_COMMERCE_PURCHASES === '1';
+  const purchasesRequested = env.TOOLS_COMMERCE_PURCHASES === '1';
   const exportsPaused = env.TOOLS_COMMERCE_EXPORTS_PAUSED === '1';
+  const sharedExportsEnabled = env.TOOLS_COMMERCE_SHARED_EXPORTS === '1';
+  const checkoutEnabled = env.TOOLS_COMMERCE_MP_CHECKOUT === '1';
+  const purchasesEnabled = purchasesRequested && env.TOOLS_COMMERCE_TERMS_APPROVED === TERMS &&
+    !exportsPaused && (!prod || (sharedExportsEnabled && checkoutEnabled));
   const accessToken = env.TOOLS_COMMERCE_MP_ACCESS_TOKEN || '';
   const webhookSecret = env.TOOLS_COMMERCE_MP_WEBHOOK_SECRET || '';
   const sandboxSellerId = env.TOOLS_COMMERCE_MP_TEST_SELLER_ID || '';
@@ -73,7 +77,7 @@ function loadConfig(env) {
   const sandboxPayerEmail = env.TOOLS_COMMERCE_MP_TEST_BUYER || (mode === 'sandbox' ? samplePayer : '');
   const sandboxUids = (env.TOOLS_COMMERCE_SANDBOX_UIDS || '').split(',').map(s => s.trim()).filter(Boolean);
   if (mode === 'sandbox') valid(sandboxUids.length > 0 && /^https:\/\/[a-z0-9.-]+$|^http:\/\/(?:localhost|127\.0\.0\.1):\d{2,5}$/i.test(env.TOOLS_COMMERCE_SANDBOX_ORIGIN || ''));
-  const providerConfigured = Boolean(accessToken || webhookSecret || purchasesEnabled);
+  const providerConfigured = Boolean(accessToken || webhookSecret || purchasesRequested || checkoutEnabled);
   valid(!sandboxSellerId || /^[1-9]\d{0,14}$/.test(sandboxSellerId));
   valid(!liveSellerId || /^[1-9]\d{0,14}$/.test(liveSellerId));
   if (mode === 'sandbox') valid(!liveSellerId);
@@ -88,9 +92,9 @@ function loadConfig(env) {
     }
     if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail && Boolean(liveSellerId));
   }
-  if (purchasesEnabled) valid(env.TOOLS_COMMERCE_TERMS_APPROVED === TERMS);
   return { mode, firebase, authEmulator, projectId, identityKey: Buffer.from(identityKey, 'base64url'),
-    purchasesEnabled, exportsPaused, accessToken, webhookSecret, sellerId: mode === 'sandbox' ? sandboxSellerId : mode === 'live' ? liveSellerId : '',
+    purchasesEnabled, exportsPaused, sharedExportsEnabled, checkoutEnabled,
+    accessToken, webhookSecret, sellerId: mode === 'sandbox' ? sandboxSellerId : mode === 'live' ? liveSellerId : '',
     sandboxSellerId, liveSellerId, sandboxPayerEmail, sandboxUids };
 }
 

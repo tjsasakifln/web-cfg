@@ -20,6 +20,41 @@ ICO = (ROOT / 'favicon.ico').read_bytes()
 REV = '0.8.1-confenge-' + sha256(Path(__file__).read_bytes() + ICON + ICO).hexdigest()[:12]
 CREDIT = "CONFENGE adaptou a interface, os nomes, a ajuda e os recursos offline desta edição. "
 
+EXPORT_BRIDGE = r"""// Entitlement bridge for the CONFENGE browser edition. No login token enters this frame.
+const pending = new Map();
+let unavailable = false;
+
+function request(kind, data, name, type) {
+  const safeName = String(name || '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 200);
+  const blob = data instanceof Blob ? data : new Blob([data], { type });
+  if (unavailable || window.parent === window || !safeName || !blob.size) return false;
+  const requestId = crypto.randomUUID();
+  const timeout = setTimeout(() => {
+    pending.delete(requestId);
+    unavailable = true;
+    window.dispatchEvent(new CustomEvent('confenge-export-error', { detail: { code: 'BRIDGE_UNAVAILABLE' } }));
+  }, 30000);
+  pending.set(requestId, { blob, name: safeName, timeout });
+  window.parent.postMessage({
+    type: 'confenge-suite-export', version: 1, kind, requestId,
+    name: safeName, mime: blob.type || String(type || ''), size: blob.size, content: blob,
+  }, location.origin);
+  return true;
+}
+
+export const requestConfengeExport = (data, name, type) => request('export', data, name, type);
+export const requestConfengeBackup = (data, name, type) => request('backup', data, name, type);
+
+window.addEventListener('message', event => {
+  if (event.origin !== location.origin || event.source !== window.parent || event.data?.type !== 'confenge-suite-export-result') return;
+  const job = pending.get(event.data.requestId);
+  if (!job) return;
+  clearTimeout(job.timeout);
+  pending.delete(event.data.requestId);
+  if (event.data.status === 'unavailable') unavailable = true;
+});
+"""
+
 
 def display(text):
     return BRANDS.sub(lambda m: NAMES[m[1]], text)
@@ -29,6 +64,11 @@ def replace_one(text, before, after):
     if text.count(before) != 1:
         raise ValueError(f'Unexpected edition source: {before[:100]}')
     return text.replace(before, after)
+
+
+def bridge_import(slug, names='requestConfengeExport'):
+    url = f'/cad/suite/runtime/{slug}/assets/apps/{slug}/{REV}/confenge-export.js'
+    return f"import {{ {names} }} from '{url}';\n"
 
 
 def offline_worker(text):
@@ -86,7 +126,7 @@ def adapted(slug, name, data):
         text = data.decode().replace(old, new)
         text = replace_one(text, '"version":"0.8.1","site":"https://getcadcraft.com"', f'"version":"{REV}","site":"https://confenge.com.br"')
         text = replace_one(text, '"sw":"sw.js","scope":"./","urls":[',
-                           f'"sw":"sw.js?v={REV}","scope":"./","urls":["creditos.html","LICENSE","NOTICE","TRADEMARKS.md","THIRD_PARTY.md",')
+                           f'"sw":"sw.js?v={REV}","scope":"./","urls":["creditos.html","LICENSE","NOTICE","TRADEMARKS.md","THIRD_PARTY.md","{new}confenge-export.js",')
         text = replace_one(text, './favicon.svg', f'./favicon-32.png?v={REV}').replace('type="image/svg+xml"', 'type="image/png"', 1)
         text = replace_one(text, '<i class="bi bi-bounding-box"></i></span>', f'<img width="28" height="28" src="./favicon-32.png?v={REV}" alt=""></span>')
         text = replace_one(text, f'<span>{source}</span>', f'<span><a href="./creditos.html" target="_blank" rel="noopener" title="Sobre e licenças" style="color:inherit;text-decoration:none">{source}</a></span>')
@@ -105,6 +145,165 @@ def adapted(slug, name, data):
         return path, ('// Link de créditos da edição CONFENGE.\n' + text).encode()
     if name == 'assets/js/app-offline.js':
         return path, ('// Atualização offline adaptada pela CONFENGE.\n' + offline_ui(data.decode())).encode()
+    if name == f'assets/apps/{slug}/0.8.1/host.js':
+        text = data.decode()
+        text = "import { requestConfengeExport, requestConfengeBackup } from './confenge-export.js';\n" + text
+        text = replace_one(text, '    this.download(data, name, type);\n    await this.recent.add(',
+                           '    this.downloadLocal(data, name, type);\n    await this.recent.add(')
+        before = """    if (this.desktop) { this.saveAs({ data, name, type }); return; }
+    const d = this.doc;
+    if (!d || typeof URL === 'undefined' || !URL.createObjectURL) return;
+    const url = URL.createObjectURL(toBlob(data, type));
+    const a = d.createElement('a');
+    a.href = url;
+    a.download = name;
+    a.rel = 'noopener';
+    a.style.display = 'none';
+    d.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);"""
+        after = """    if (this.desktop) { this.saveAs({ data, name, type }); return; }
+    requestConfengeExport(data, name, type);"""
+        text = replace_one(text, before, after)
+        text = replace_one(text, '  // ---------------------------------------------------------------- folders (W2.12: sheet sets)',
+                           """  downloadLocal(data, name, type) {
+    requestConfengeBackup(data, name, type);
+  }
+
+  // ---------------------------------------------------------------- folders (W2.12: sheet sets)""")
+        return path, text.encode()
+    if name == f'assets/apps/{slug}/0.8.1/ui-util.js' and slug in ('markupcraft', 'takeoffcraft'):
+        text = "import { requestConfengeExport } from './confenge-export.js';\n" + data.decode()
+        if slug == 'markupcraft':
+            before = r"""  const blob = data instanceof Blob ? data : new Blob([data], { type });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: name.replace(/[\\/:*?"<>|]+/g, '_') });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);"""
+        else:
+            before = """  const blob = data instanceof Blob ? data : new Blob([data], { type });
+  const a = el('a', { href: URL.createObjectURL(blob), download: name });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 30000);"""
+        text = replace_one(text, before, '  requestConfengeExport(data, name, type);')
+        return path, text.encode()
+    if name == f'assets/apps/{slug}/0.8.1/addons/cabinetcraft/main.js':
+        text = "import { requestConfengeExport, requestConfengeBackup } from '../../confenge-export.js';\n" + data.decode()
+        before = """  const download = (name, data, mime) => {
+    const d = pane?.ownerDocument || (typeof document !== 'undefined' ? document : null);
+    if (!d) return;
+    const a = d.createElement('a');
+    a.download = name; a.href = URL.createObjectURL(new Blob([data], { type: mime || 'text/plain' }));
+    d.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  };"""
+        after = """  const download = (name, data, mime) => requestConfengeExport(data, name, mime);
+  const backup = (name, data, mime) => requestConfengeBackup(data, name, mime);"""
+        text = replace_one(text, before, after)
+        text = replace_one(text, '    download,\n', '    download, backup,\n')
+        return path, text.encode()
+    if name == f'assets/apps/{slug}/0.8.1/addons/cabinetcraft/lib/ui.js':
+        text = data.decode()
+        text = replace_one(text, "app.download((p.name || 'job') + '.cabinetcraft.json', X.jobJson(p), 'application/json')",
+                           "app.backup((p.name || 'job') + '.cabinetcraft.json', X.jobJson(p), 'application/json')")
+        return path, text.encode()
+    if slug in ('bimcraft', 'cadcraft', 'civilcraft') and name in (
+            f'assets/apps/{slug}/0.8.1/addons/plant/main.js',
+            f'assets/apps/{slug}/0.8.1/addons/trusscraft/panel.js'):
+        text = bridge_import(slug) + data.decode()
+        before = "const download = (name, data, mime) => { const a = el('a', { download: name, href: URL.createObjectURL(new Blob([data], { type: mime })) }); d.body.append(a); a.click(); a.remove(); };"
+        text = replace_one(text, before, "const download = (name, data, mime) => requestConfengeExport(data, name, mime);")
+        return path, text.encode()
+    if slug in ('bimcraft', 'cadcraft', 'civilcraft', 'detailcraft') and name == f'assets/apps/{slug}/0.8.1/addons/regs/lib/ui.js':
+        text = bridge_import(slug) + data.decode()
+        text = replace_one(text, r"""    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([out.bytes], { type: 'application/pdf' }));
+    a.download = ((host.modelName() || 'drawing').replace(/\.[a-z0-9]+$/i, '')) + ' - ' + t('regs.sheet.pdf.file') + '.pdf';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);""",
+                           r"""    const name = ((host.modelName() || 'drawing').replace(/\.[a-z0-9]+$/i, '')) + ' - ' + t('regs.sheet.pdf.file') + '.pdf';
+    requestConfengeExport(out.bytes, name, 'application/pdf');""")
+        text = replace_one(text, r"""    const html = sheetHtml(), a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    a.download = ((host.modelName() || 'drawing').replace(/\.[a-z0-9]+$/i, '')) + ' - ' + t('regs.sheet.file') + '.html';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);""",
+                           r"""    const html = sheetHtml();
+    const name = ((host.modelName() || 'drawing').replace(/\.[a-z0-9]+$/i, '')) + ' - ' + t('regs.sheet.file') + '.html';
+    requestConfengeExport(html, name, 'text/html');""")
+        return path, text.encode()
+    if name == f'assets/apps/{slug}/0.8.1/register-ui.js' and slug in ('bimcraft', 'cadcraft'):
+        text = bridge_import(slug) + data.decode()
+        before = "const download = (blob, name) => { const a = el('a', { href: URL.createObjectURL(blob), download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 10000); };"
+        text = replace_one(text, before, "const download = (blob, name) => requestConfengeExport(blob, name, blob.type);")
+        return path, text.encode()
+    if name == 'assets/apps/bimcraft/0.8.1/views-ui-bim.js':
+        text = bridge_import(slug) + data.decode()
+        before = "const file = (name, text, type) => { const a = el('a', { href: URL.createObjectURL(new Blob([text], { type })), download: name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };"
+        text = replace_one(text, before, "const file = (name, text, type) => requestConfengeExport(text, name, type);")
+        return path, text.encode()
+    if name == 'assets/apps/cadcraft/0.8.1/params-panel.js':
+        text = bridge_import(slug) + data.decode()
+        before = """  host.download = (name, data, mime) => {
+    const a = el('a', { href: URL.createObjectURL(new Blob([data], { type: mime || 'application/octet-stream' })), download: name });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  };"""
+        text = replace_one(text, before, "  host.download = (name, data, mime) => requestConfengeExport(data, name, mime || 'application/octet-stream');")
+        return path, text.encode()
+    if name == 'assets/apps/cadcraft/0.8.1/libpanel.js':
+        text = bridge_import(slug) + data.decode()
+        text = replace_one(text, """      const a = el('a', { href: URL.createObjectURL(new Blob([creditsCsv(uses)], { type: 'text/csv' })), download: t('lib.panel.credits_file', { name: doc.meta.name || 'Drawing1' }) });
+      document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 10000);""",
+                           "      requestConfengeExport(creditsCsv(uses), t('lib.panel.credits_file', { name: doc.meta.name || 'Drawing1' }), 'text/csv');")
+        text = replace_one(text, """      const a = el('a', { href: URL.createObjectURL(new Blob([partsCsv(rows)], { type: 'text/csv' })), download: t('lib.panel.parts_file', { name: doc.meta.name || 'Drawing1' }) });
+      document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 10000);""",
+                           "      requestConfengeExport(partsCsv(rows), t('lib.panel.parts_file', { name: doc.meta.name || 'Drawing1' }), 'text/csv');")
+        return path, text.encode()
+    if name == 'assets/apps/civilcraft/0.8.1/site-view3d.js':
+        text = bridge_import(slug) + data.decode()
+        before = """    const a = el('a', { href: URL.createObjectURL(new Blob([bytes], { type })), download: name });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);"""
+        text = replace_one(text, before, "    requestConfengeExport(bytes, name, type);")
+        return path, text.encode()
+    if name == 'assets/apps/civilcraft/0.8.1/storm-route-ui.js':
+        text = bridge_import(slug) + data.decode()
+        before = r"""    const a = el('a', { href: URL.createObjectURL(new Blob(['﻿' + hydrographCsv(r, id, U())], { type: 'text/csv' })), download: (name || 'outlet').replace(/[^\w.-]+/g, '-') + '-hydrograph.csv' });
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); ctx.say(t('rt.saved'));"""
+        after = r"""    const file = (name || 'outlet').replace(/[^\w.-]+/g, '-') + '-hydrograph.csv';
+    requestConfengeExport('﻿' + hydrographCsv(r, id, U()), file, 'text/csv'); ctx.say(t('rt.saved'));"""
+        text = replace_one(text, before, after)
+        return path, text.encode()
+    if name == 'assets/js/app-ai-activity.js':
+        text = bridge_import(slug, 'requestConfengeBackup') + data.decode()
+        before = """    const url = URL.createObjectURL(new Blob([x.text], { type: x.type }));
+    const a = h('a', { href: url, download: x.name }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);"""
+        text = replace_one(text, before, "    requestConfengeBackup(x.text, x.name, x.type);")
+        return path, text.encode()
+    if name == 'assets/js/app-devices-ui.js':
+        text = bridge_import(slug, 'requestConfengeBackup') + data.decode()
+        before = """      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+      a.download = 'my-devices.ccdevices.json'; document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);"""
+        text = replace_one(text, before, "      requestConfengeBackup(text, 'my-devices.ccdevices.json', 'application/json');")
+        return path, text.encode()
+    if name == 'assets/js/app-settings.js':
+        text = bridge_import(slug, 'requestConfengeBackup') + data.decode()
+        before = """      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([x.text], { type: 'application/json' })); a.download = x.name;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);"""
+        text = replace_one(text, before, "      requestConfengeBackup(x.text, x.name, 'application/json');")
+        before = """        var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+        a.download = (x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'environment') + '.ccenv.json';
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);"""
+        after = """        var fileName = (x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'environment') + '.ccenv.json';
+        requestConfengeBackup(text, fileName, 'application/json');"""
+        text = replace_one(text, before, after)
+        return path, text.encode()
     if name == 'assets/apps/detailcraft/0.8.1/detailcraft.js':
         text = replace_one(data.decode(), "+ model.state.name + ' — DetailCraft'", "+ model.state.name + ' — CONFENGE Detalhamento'")
         return path, ('// Título de janela adaptado pela CONFENGE.\n' + text).encode()
@@ -164,6 +363,8 @@ def build_archive(slug, archive, target):
                 dst.writestr(info, data, compress_type=ZIP_DEFLATED, compresslevel=4)
             info = ZipInfo(prefix + 'creditos.html', (2026, 11, 7, 0, 0, 0))
             dst.writestr(info, credits(slug), compress_type=ZIP_DEFLATED)
+            info = ZipInfo(prefix + f'assets/apps/{slug}/{REV}/confenge-export.js', (2026, 11, 9, 0, 0, 0))
+            dst.writestr(info, EXPORT_BRIDGE.encode(), compress_type=ZIP_DEFLATED)
         with path.open('rb') as src:
             digest = file_digest(src, 'sha256').hexdigest()
         result = target / f'{slug}-{digest[:16]}.zip'

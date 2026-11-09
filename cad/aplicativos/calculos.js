@@ -1,5 +1,6 @@
 // The vendor registry and individual numerical modules are loaded on demand.
 import {tabDraft} from '/assets/js/tab-draft.mjs';
+import {exportToolResult} from '/assets/js/tool-credits.mjs';
 
 const library = '/assets/cad-engines/engines.js';
 const draftStorageKey = 'br.com.confenge.cad-calculos.drafts.v1';
@@ -59,6 +60,7 @@ function mount(root) {
     <p data-input-help></p><textarea id="suite-modelo" rows="10" spellcheck="false" aria-describedby="suite-ajuda-modelo" disabled></textarea>
     <div class="calc-actions"><button type="button" class="button button-primary" data-run>Calcular</button>
       <button type="button" class="button" data-reset>Restaurar exemplo</button>
+      <button type="button" class="button" data-export hidden>Exportar resultado (1 crédito)</button>
       <button type="button" class="button" data-draft-clear hidden>Limpar rascunhos desta aba</button>
       <button type="button" class="button" data-cancel hidden>Interromper</button></div>
     <p role="status" aria-live="polite" data-status></p>
@@ -72,6 +74,7 @@ function mount(root) {
   const hint = panel.querySelector('[data-input-help]');
   hint.id = 'suite-ajuda-modelo';
   const run = panel.querySelector('[data-run]');
+  const exportResult = panel.querySelector('[data-export]');
   const cancel = panel.querySelector('[data-cancel]');
   const clearDrafts = panel.querySelector('[data-draft-clear]');
   const draftStatus = panel.querySelector('[data-draft-status]');
@@ -94,7 +97,13 @@ function mount(root) {
   } catch {
     reportDraft('O rascunho de cálculo não pôde ser lido.');
   }
-  const resetResult = () => { result.replaceChildren(); status.textContent = ''; };
+  let completedReport = null;
+  const resetResult = () => {
+    completedReport = null;
+    exportResult.hidden = true;
+    result.replaceChildren();
+    status.textContent = '';
+  };
   function stop(message) {
     if (worker) worker.terminate();
     worker = null;
@@ -207,16 +216,63 @@ function mount(root) {
         if (data.error) { status.textContent = data.error; return; }
         render(result, data.result);
         status.textContent = data.result.ok ? 'Cálculo concluído.' : 'Confira os problemas indicados pelo motor.';
+        if (data.result.ok) {
+          completedReport = {
+            engineId: engines.value,
+            engineName: engines.options[engines.selectedIndex]?.text || engines.value,
+            exampleId: sample.value,
+            report: data.result,
+          };
+          exportResult.hidden = false;
+        }
       };
       timer = setTimeout(() => stop('O cálculo excedeu 20 segundos. Reduza o modelo e tente novamente.'), 20000);
       worker.postMessage({id:engines.value, text:input.value});
     } catch { stop('O navegador não conseguiu iniciar o cálculo.'); }
+  });
+  exportResult.addEventListener('click', async () => {
+    const completed = completedReport;
+    if (!completed) return;
+    const content = serializeResult(completed);
+    const filename = `confenge-calculo-${completed.engineId}.txt`;
+    await exportToolResult({
+      toolId: 'cad-suite-calculos',
+      format: 'txt',
+      content,
+      deliver: () => downloadText(content, filename),
+    });
   });
   if (drafts.size) {
     clearDrafts.hidden = false;
     reportDraft('Rascunho recuperado nesta aba. Confira os dados e calcule novamente.');
     open.click();
   }
+}
+
+function serializeResult({engineId, engineName, exampleId, report}) {
+  const lines = [
+    'CONFENGE — Resultado de cálculo',
+    `Motor: ${engineName} (${engineId})`,
+    `Exemplo: ${exampleId || 'personalizado'}`,
+    `Situação: ${report.ok ? 'OK' : 'COM PENDÊNCIAS'}`,
+  ];
+  if (report.notes.length) lines.push('', 'Observações do cálculo', ...report.notes.map(item => '- ' + item));
+  if (report.problems.length) lines.push('', 'Verificações do modelo', ...report.problems.map(item => '- ' + (item.code ? item.code + ' · ' : '') + item.text));
+  for (const table of report.tables) {
+    lines.push('', table.title, table.head.join('\t'), ...table.rows.map(row => row.join('\t')));
+    if (table.more) lines.push(`[${table.more} linhas adicionais não exibidas]`);
+  }
+  return lines.join('\r\n') + '\r\n';
+}
+
+function downloadText(content, name) {
+  const url = URL.createObjectURL(new Blob([content], {type:'text/plain;charset=utf-8'}));
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = name;
+  anchor.rel = 'noopener';
+  anchor.click();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
 
 function render(target, report) {
