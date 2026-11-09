@@ -301,11 +301,11 @@ function domainById(result, id) {
   expect("html_public_canonical", /rel=["']canonical["'][^>]*https:\/\/confenge\.com\.br\/ferramentas\/prontidao-tecnica-obra-privada\//i.test(html));
   expect(
     "html_h1_job",
-    /<h1[^>]*>[\s\S]*Organize as informações da sua obra e veja o próximo passo/i.test(html),
+    /<h1[^>]*>Prontidão técnica de obra privada<\/h1>/i.test(html),
   );
   expect(
     "html_title_job",
-    /<title>[\s\S]*Organize as informações da sua obra e veja o próximo passo/i.test(html),
+    /<title>Prontidão técnica de obra privada: checklist para contratar/i.test(html),
   );
   for (const label of [
     "Decisão, escopo e estágio",
@@ -327,7 +327,8 @@ function domainById(result, id) {
   expect("html_result_before_cta", html.indexOf("id=\"resultado\"") < html.indexOf("id=\"cta-comercial\"") && html.indexOf("id=\"resultado\"") > html.indexOf("id=\"diagnostico\""));
   expect("html_no_generic_specialist", !/fale com especialista/i.test(html));
   expect("html_no_ia_claim", !/inteligência artificial/i.test(html) && !/inteligencia artificial/i.test(html));
-  expect("html_plain_script", /<script src="[^"]+private-project-technical-readiness\.js">/.test(html) && !/type=["']module["']/.test(html));
+  // The calculator itself stays a classic script; independent sharing can be a module.
+  expect("html_plain_script", /<script src="[^"]+private-project-technical-readiness\.js">/.test(html));
   expect("html_no_emdash", !html.includes("\u2014"));
   // A propriedade e que A FERRAMENTA nao faz a afirmacao proibida. O rodape
   // compartilhado nao e afirmacao da ferramenta: ele carrega o link para a
@@ -666,7 +667,7 @@ const FIXTURE_MAP = {
   expect("html_no_withheld_compat", !html.includes("/compatibilizacao-revisao/"));
   expect("html_no_fixture_paths", !html.includes("/fixture/"));
   expect("html_no_unpublished_notice", !/ainda não está nesta versão|até a página específica estar publicada/i.test(html));
-  expect("html_noindex_landing", /content="index,follow"/.test(html) && !/content="noindex,follow"/.test(html));
+  expect("html_indexable_landing", /name="robots" content="index,follow(?:,[^"]+)?"/.test(html) && !/content="[^"]*\bnoindex\b/.test(html));
   expect("html_not_webapplication", !/WebApplication/.test(html));
   expect("html_noscript_honest", /nenhum resultado personalizado é produzido/i.test(html));
   expect("html_noscript_no_fake_success", /não há sucesso de processamento/i.test(html));
