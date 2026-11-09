@@ -102,7 +102,15 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const cleanOrders = all => Object.fromEntries(Object.entries(all).filter(([, value]) => value?.at > Date.now() - 2 * 864e5 || value?.creating));
   const saveOrder = order => { const all = cleanOrders(getStore(orderKey())); all[order.id] = { id: order.id, status: order.status, at: Date.now() }; setStore(orderKey(), all); };
   const dropOrder = id => { const all = getStore(orderKey()); delete all[id]; setStore(orderKey(), all); };
-  const setBusy = (host, busy) => host.querySelectorAll('button,input,select').forEach(node => { node.disabled = busy; });
+  const preserveDialogFocus = host => {
+    if (dialog?.open && host.contains(document.activeElement)) {
+      dialog.querySelector('.tool-credits__close').focus({ preventScroll: true });
+    }
+  };
+  const setBusy = (host, busy) => {
+    if (busy) preserveDialogFocus(host);
+    host.querySelectorAll('button,input,select').forEach(node => { node.disabled = busy; });
+  };
   const note = (host, text) => { if (text) { const n = el('p', text); n.className = 'tool-credits__notice'; n.setAttribute('role', 'status'); host.append(n); } };
   const authView = (host, notice) => {
     host.append(el('h2', 'Seu primeiro uso completo é gratuito'), el('p', 'Entre para guardar seus créditos e exportações.')); note(host, notice);
@@ -174,7 +182,11 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     if (previous.length) { const recent = el('section'); recent.append(el('h3', 'Pagamentos recentes')); for (const item of previous) recent.append(btn(`Consultar pedido ${item.id}`, () => checkOrder(item.id))); host.append(recent); } host.append(btn('Sair', () => firebase.signOut(auth)));
   };
   const render = async notice => {
-    if (!dialog) return; const host = dialog.querySelector('.tool-credits__content'); host.replaceChildren(); const user = auth?.currentUser;
+    if (!dialog) return;
+    const host = dialog.querySelector('.tool-credits__content');
+    preserveDialogFocus(host);
+    host.replaceChildren();
+    const user = auth?.currentUser;
     const version = ++renderVersion;
     if (!user) return authView(host, notice); try { await user.reload(); } catch (error) { notice = message(error); } if (version !== renderVersion) return;
     if (!user.emailVerified) return verifyView(host, notice);
@@ -186,7 +198,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const attempt = `${config.termsVersion}:${paymentFlow}:${packageId}`;
     const requestId = store.creating?.[attempt] || makeId();
     store.creating = { ...(store.creating || {}), [attempt]: requestId }; setStore(key, store);
-    if (dialog) setBusy(dialog, true);
+    if (dialog) setBusy(dialog.querySelector('.tool-credits__content'), true);
     try {
       const order = await api('orders', { method: 'POST', body: JSON.stringify({ packageId, requestId, termsVersion: config.termsVersion, paymentFlow }) });
       delete store.creating[attempt]; setStore(key, store);

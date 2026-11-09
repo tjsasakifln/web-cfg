@@ -49,16 +49,26 @@ const server = createServer(async (req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({executablePath, headless:true,args:['--no-sandbox']});
+async function openAndSignIn(page) {
+  await page.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    await createToolCredits({ toolId: 'modela-memoria' }).open();
+  });
+  assert.equal(await page.$eval('dialog', dialog => dialog.open), true);
+  assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeiro uso completo/i);
+  await page.type('input[type=email]', 'a@b.com');
+  await page.type('input[type=password]', '123456');
+  await page.click('button[type=submit]');
+  await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
+}
+
 try {
   const page = await browser.newPage();
   await page.setViewport({width:390,height:844});
   await page.goto(`http://127.0.0.1:${port}/?ref=${firstRef}`);
   await page.evaluate(async () => { const {createToolCredits}=await import('/assets/js/tool-credits.mjs'); createToolCredits({toolId:'modela-memoria'}); });
   await page.goto(`http://127.0.0.1:${port}/?ref=${secondRef}`);
-  await page.evaluate(async () => { const {createToolCredits}=await import('/assets/js/tool-credits.mjs'); window.credits=createToolCredits({toolId:'modela-memoria'}); await window.credits.open(); });
-  assert.equal(await page.$eval('dialog', d => d.open), true); assert.match(await page.$eval('dialog', d => d.textContent), /primeiro uso completo/i);
-  await page.type('input[type=email]', 'a@b.com'); await page.type('input[type=password]', '123456'); await page.click('button[type=submit]');
-  await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
+  await openAndSignIn(page);
   assert.match(await page.$eval('dialog', d => d.textContent), /3 créditos disponíveis/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
@@ -72,13 +82,21 @@ try {
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Pagamento confirmado'), { timeout: 15000 });
   assert.ok(calls.includes('orders') && calls.includes('order'));
   assert.equal(await page.evaluate(() => location.search), '', 'ref must be removed from visible URL');
-  assert.equal(await page.$eval('dialog select', select => select.value), 'pix');
-  await page.select('dialog select', 'checkout');
-  await page.click('dialog input[type=checkbox]');
-  assert.equal(await page.$eval('dialog input[type=checkbox]', checkbox => checkbox.checked), true);
-  await page.click('dialog .tool-credits__packs button');
-  await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir pagamento no Mercado Pago'));
-  assert.equal(await page.$('img[alt="QR Code Pix"]'), null);
+  const checkoutPage = await browser.newPage();
+  await checkoutPage.setViewport({ width: 390, height: 844 });
+  await checkoutPage.goto(`http://127.0.0.1:${port}/`);
+  await openAndSignIn(checkoutPage);
+  assert.equal(await checkoutPage.$eval('dialog select', select => select.value), 'pix');
+  await checkoutPage.select('dialog select', 'checkout');
+  await checkoutPage.click('dialog input[type=checkbox]');
+  assert.equal(await checkoutPage.$eval('dialog input[type=checkbox]', checkbox => checkbox.checked), true);
+  await checkoutPage.click('dialog .tool-credits__packs button');
+  await checkoutPage.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir pagamento no Mercado Pago'));
+  assert.equal(await checkoutPage.$('img[alt="QR Code Pix"]'), null);
+  assert.equal(await checkoutPage.$eval('dialog .tool-credits__close', button => button.disabled), false);
+  await checkoutPage.click('dialog .tool-credits__close');
+  await checkoutPage.waitForSelector('dialog[open]', { hidden: true });
+  await checkoutPage.close();
   await page.evaluate(() => document.querySelector('dialog').close());
   await page.evaluate(async () => {
     window.confirm = () => true;
