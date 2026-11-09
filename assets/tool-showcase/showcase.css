@@ -1,12 +1,9 @@
 /* Shared by the catalogue and its tool pages. No external fonts or widgets. */
-.ts-card,.ts-plate,.ts-plate-label,.ts-card-action,.ts-card-share,.ts-card-share-url,
-.ts-jumps a,.ts-search input,.ts-search button,.tool-brief,.tool-share,
-.tool-share button,.tool-share-social a,.tool-share-manual input{border-radius:9px}
 :root{--ts-deep:#092337;--ts-mid:#103c4a;--ts-ink:#102c3e;--ts-muted:#415965;--ts-line:#d9e5e6;--ts-mint:#baf8d7;--ts-paper:#f4f8f8;--ts-link:#115d4d;--ts-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.5 16V.5H16' fill='none' stroke='white' stroke-opacity='.13'/%3E%3C/svg%3E")}
 .tool-showcase{background:var(--ts-paper);color:var(--ts-ink)}
 .tool-showcase [hidden],.tool-share [hidden]{display:none!important}
 .ts-crumb{padding-block:14px;margin-block:0}
-.ts-hero{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 86% 28%,#176155 0%,#0c3744 45%,var(--ts-deep) 84%);color:#fff}
+.ts-hero{position:relative;isolation:isolate;overflow:hidden;background:var(--ts-deep);color:#fff}
 .ts-hero::before{content:"";position:absolute;z-index:-1;inset:0;background-image:var(--ts-grid);background-size:32px 32px;opacity:.65}
 .ts-hero-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);align-items:center;gap:clamp(26px,6vw,88px);padding-block:clamp(38px,5.6vw,82px)}
 .ts-hero .eyebrow{display:flex;gap:9px;align-items:center;font-size:.78rem;line-height:1.4;font-weight:780;letter-spacing:.12em;text-transform:uppercase;color:var(--ts-link);margin:0 0 10px}
