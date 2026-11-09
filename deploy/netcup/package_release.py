@@ -399,6 +399,11 @@ def build_release(
             "scripts/site/shell_nav.py",
             "scripts/pseo/__init__.py",
             "scripts/pseo/html_shell.py",
+            # ``live_intelligence.consume`` revalidates publication freshness
+            # against the release clock through this helper.  Ship the helper
+            # explicitly so the staged overlay has the same deterministic
+            # SOURCE_DATE_EPOCH semantics as the build that produced it.
+            "scripts/pseo/reproducible.py",
         ):
             source = repo_root / relative
             destination = payload / relative
@@ -482,6 +487,7 @@ def build_release(
                 "scripts/site/shell_nav.py",
                 "scripts/pseo/__init__.py",
                 "scripts/pseo/html_shell.py",
+                "scripts/pseo/reproducible.py",
                 "data/commercial/",
                 "data/conversion/",
                 "data/nurture/tracks.json",

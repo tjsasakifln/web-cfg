@@ -1208,6 +1208,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "scripts/site/authority.py",
         "scripts/site/public_footer.py",
         "scripts/pseo/html_shell.py",
+        "scripts/pseo/reproducible.py",
         "data/site/brand.json",
         "data/site/public-ia-map.json",
         "data/organic/public-family-registry.json",
