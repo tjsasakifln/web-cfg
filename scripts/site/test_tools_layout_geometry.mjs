@@ -31,7 +31,7 @@ const OUT = resolve(process.env.TOOLS_LAYOUT_EVIDENCE_DIR || join(ROOT, ".playwr
 const ALLOW_FAILURES = process.env.TOOLS_LAYOUT_ALLOW_FAILURES === "1";
 const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
-  { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
+  { id: "catalogo", path: "/ferramentas/", primary: "#destaques" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
@@ -167,7 +167,9 @@ async function geometry(page, route, state, width) {
       }
     }
 
-    const controls = [...document.querySelectorAll("main input:not([type=hidden]), main select, main textarea, main button, main .button")].filter(visible);
+    const controls = [...document.querySelectorAll(
+      "main input:not([type=hidden]), main select, main textarea, main button, main .button, main .ts-card-action, main .ts-jumps a, main .tool-share-social a",
+    )].filter(visible);
     for (const control of controls) {
       const box = control.getBoundingClientRect();
       const style = getComputedStyle(control);
