@@ -1,0 +1,17 @@
+.rede { padding: 1rem clamp(.8rem,3vw,1.5rem) 3rem; }
+.rede fieldset { border:0; padding:0; margin:0; min-width:0; }
+.rede legend,.rede label { font-weight:650; }.rede legend { margin-block:1rem .6rem; }
+.rede .entrada { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:1rem; }
+.rede .entrada label {display:grid;align-content:end;gap:.45rem;}
+.rede :is(input,textarea) {padding:.65rem; width:100%; min-width:0; border:1px solid var(--muted); color:var(--ink); background:white; font:inherit; }
+.rede textarea {margin-block:.4rem 1rem;font-family:monospace; resize:vertical;}
+.rede .acoes {display:flex;gap:.7rem;align-items:end;flex-wrap:wrap;margin-block:1rem;}
+.rede .abrir {display:grid;max-width:100%;font-size:.9rem;}
+.rede .tool-method {margin-block:1.5rem;}
+.rede figure {margin:1rem 0;max-width:46rem;}
+.rede figure svg {display:block;width:100%;height:auto;background:#f3f6f6;}
+.rede .scroll {max-width:100%;overflow:auto;margin-block:1rem;}
+.rede table {border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;}
+.rede caption {text-align:start;font-weight:700;margin-block:.5rem;}
+.rede :is(td,th) {padding:.5rem .7rem;text-align:start;border-bottom:1px solid var(--line);}
+.rede [hidden] {display:none;}

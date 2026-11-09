@@ -31,6 +31,15 @@ const OUT = resolve(process.env.TOOLS_LAYOUT_EVIDENCE_DIR || join(ROOT, ".playwr
 const ALLOW_FAILURES = process.env.TOOLS_LAYOUT_ALLOW_FAILURES === "1";
 const VIEWPORTS = [320, 390, 901, 1240, 1440];
 const ROUTES = [
+  { id: "cpm", path: "/ferramentas/caminho-critico-obra/", primary: "#planejar" },
+  { id: "beiral", path: "/ferramentas/calculadora-de-beiral/", primary: "#simulador" },
+  { id: "sirgas2000", path: "/ferramentas/conversor-utm-sirgas-2000/", primary: "#conversor" },
+  { id: "psicrometria", path: "/ferramentas/calculadora-psicrometrica/", primary: "#ambiente" },
+  { id: "bdi", path: "/ferramentas/calculadora-bdi/", primary: "#composicao" },
+  { id: "viga", path: "/ferramentas/analise-de-viga-continua/", primary: "#entrada" },
+  { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
+  { id: "unifilar", path: "/ferramentas/diagrama-unifilar/", primary: "#editor" },
+  { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
   { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
@@ -261,6 +270,77 @@ async function requireVisiblePrimary(page, route) {
 }
 
 async function exercise(page, id) {
+  if (id === "cpm") {
+    await page.click("#executar");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (await page.$eval("#prazo", el => el.textContent) !== "11 dias") throw new Error("CPM fixture duration");
+    const result = await geometry(page, id, "resultado", page.viewport().width);
+    await screenshot(page, id, page.viewport().width, "resultado", "#resultado");
+    return [result];
+  }
+
+  if (id === "beiral") {
+    await page.waitForSelector("#resultado:not([hidden])");
+    await page.click("#resultado summary");
+    await page.waitForSelector("#horarios tr:nth-child(24)");
+    return [await geometry(page, id, "tabela-horaria", page.viewport().width)];
+  }
+
+  if (id === "sirgas2000") {
+    await page.click("#exemplo");
+    await page.waitForSelector("#resultado:not([hidden])");
+    const result = await geometry(page, id, "resultado", page.viewport().width);
+    await screenshot(page, id, page.viewport().width, "resultado", "#conversor");
+    return [result];
+  }
+
+  if (id === "psicrometria") {
+    await page.click("#ambiente button");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (!await page.$eval("#propriedades", (list) => list.innerText.includes("21,31"))) {
+      throw new Error("PsychroLib reference dew point missing");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
+
+  if (id === "bdi") {
+    await page.click("#exemplo");
+    await page.click("#composicao button[type=submit]");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (!await page.$eval("#preco", (el) => el.textContent.includes("119.445,79"))) {
+      throw new Error("BDI example price differs from the reference");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
+
+  if (id === "viga") {
+    await page.waitForSelector("#saida:not([hidden])");
+    await page.click("#adicionar");
+    await page.waitForSelector("#apoios tr:nth-child(4)");
+    return [await geometry(page, id, "tres-vaos", page.viewport().width)];
+  }
+
+  if (id === "orcamento") {
+    await page.click("#demonstrar");
+    await page.waitForFunction(() => document.querySelector("#total-obra").textContent.includes("2.391,84"));
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
+
+  if (id === "unifilar") {
+    await page.click("#exemplo");
+    await page.waitForFunction(() => document.querySelector("#contagem").textContent.includes("6 ligações"));
+    return [await geometry(page, id, "exemplo", page.viewport().width)];
+  }
+
+  if (id === "hidraulica") {
+    await page.click("#simular");
+    await page.waitForSelector("#resultado:not([hidden])");
+    if (!await page.$eval("#resumo", e => e.textContent.includes("6,75 mca"))) {
+      throw new Error("Pressão de referência ausente no cenário de pico");
+    }
+    return [await geometry(page, id, "resultado", page.viewport().width)];
+  }
+
   if (id === "limite") {
     await page.evaluate(() => {
       const set = (name, value) => {

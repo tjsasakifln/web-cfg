@@ -184,6 +184,9 @@
 /cad/suite/runtime/markupcraft/
   Permissions-Policy: camera=(), microphone=(self), geolocation=(), payment=(), usb=(), interest-cohort=()
 
+/ferramentas/rede-de-agua/motor.js
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'none'; object-src 'none'; base-uri 'none'
+
 /cad/editor/*
   Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; frame-ancestors 'self'; base-uri 'none'; form-action 'none'
   X-Robots-Tag: noindex, follow
