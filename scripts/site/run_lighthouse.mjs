@@ -34,9 +34,11 @@ import {
   formatCoverageDeclaration,
   loadPolicy,
   resolveSiteRoot,
+  runtimeSeoOnlyBudgetErrors,
   runtimeLighthouseContractForRoute,
   verifyRuntimeAcceptedProjectionDocument,
   verifyRuntimeInventoryDocument,
+  verifyRuntimePageIndexState,
 } from "./interface_coverage.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -80,6 +82,7 @@ if (omittedRuntimeRoutes.length) {
 }
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
+const RUNTIME_SEO_ONLY_EXEMPT_PAGES = new Set();
 console.log(formatCoverageDeclaration(coverage));
 console.log(`lighthouse pages (${RUN_PAGES.length}/${PAGES.length}): ${RUN_PAGES.join(" ")}`);
 for (const [name, configuredPages] of [
@@ -262,7 +265,7 @@ async function verifyRuntimeEvidenceInputs() {
       contract.route,
       inventories.get(contract.inventory_route),
       contract,
-      projection.routes.map((item) => item.route),
+      projection.indexable_routes,
     );
     const page = await fetchExactRuntimeHtml(origin, contract.route);
     const observedSha256 = createHash("sha256").update(page.body).digest("hex");
@@ -271,12 +274,11 @@ async function verifyRuntimeEvidenceInputs() {
         `runtime Lighthouse accepted HTML digest mismatch: route=${contract.route} accepted=${acceptedItem.sha256} observed=${observedSha256}`,
       );
     }
-    if (
-      !page.text.includes(`data-opportunity-id="${acceptedItem.opportunity_id}"`)
-      || !page.text.includes('data-index-state="INDEX"')
-    ) {
+    if (!page.text.includes(`data-opportunity-id="${acceptedItem.opportunity_id}"`)) {
       throw new Error(`runtime Lighthouse accepted page identity is absent from rendered HTML: ${contract.route}`);
     }
+    verifyRuntimePageIndexState(page.text, acceptedItem.route_indexable);
+    if (!acceptedItem.route_indexable) RUNTIME_SEO_ONLY_EXEMPT_PAGES.add(contract.route);
     selectedRoutes.push({
       family_id: contract.family_id,
       route: contract.route,
@@ -288,6 +290,7 @@ async function verifyRuntimeEvidenceInputs() {
       consumer_observed_manifest_hash: projection.consumer_observed_manifest_hash,
       source_run_id: projection.source_run_id,
       as_of: projection.as_of,
+      route_indexable: acceptedItem.route_indexable,
     });
   }
   const staticHtml = [];
@@ -331,6 +334,11 @@ try {
 } catch (error) {
   fatal = `runtime evidence prerequisites did not verify: ${String(error?.message || error)}`;
 }
+
+const EFFECTIVE_SEO_EXEMPT_PAGES = new Set([
+  ...SEO_EXEMPT_PAGES,
+  ...RUNTIME_SEO_ONLY_EXEMPT_PAGES,
+]);
 
 const CHILD = join(ROOT, "scripts", "site", "lighthouse_measure_child.mjs");
 const WORK = mkdtempSync(join(tmpdir(), "confenge-lighthouse-supervisor-"));
@@ -426,7 +434,7 @@ try {
             form_factor: coverage.lighthouse.form_factor,
             viewport: coverage.lighthouse.viewport,
             runtime_mode: runtimeContracts.length > 0 || publicEdge,
-            seo_exempt: SEO_EXEMPT_PAGES.has(path),
+            seo_exempt: EFFECTIVE_SEO_EXEMPT_PAGES.has(path),
             chrome_path: process.env.CHROME_PATH,
           },
           outJson,
@@ -478,9 +486,19 @@ const evaluation = evaluateLighthouseResults(results, {
   criticalRuns: REPEATED_RUNS,
   measuredPages: RUN_PAGES,
   imageGatePages: IMAGE_GATE_PAGES,
-  seoExemptPages: SEO_EXEMPT_PAGES,
+  seoExemptPages: EFFECTIVE_SEO_EXEMPT_PAGES,
   thresholds: coverage.lighthouse.thresholds,
 });
+// Historical package exemptions predate this runtime contract and retain their
+// existing behavior. A runtime NOINDEX page receives an SEO-only exemption:
+// accessibility and best-practices remain mandatory, while performance and CLS
+// are already enforced unconditionally by evaluateLighthouseResults.
+evaluation.errors.push(...runtimeSeoOnlyBudgetErrors(
+  results,
+  RUNTIME_SEO_ONLY_EXEMPT_PAGES,
+  coverage.lighthouse.thresholds,
+));
+evaluation.ok = evaluation.errors.length === 0;
 const summary = {
   base: BASE,
   generated_at: new Date().toISOString(),
@@ -498,7 +516,8 @@ const summary = {
     public_edge: publicEdge,
     additional_pages: coverage.lighthouse.additional_pages,
     image_gate_pages: [...IMAGE_GATE_PAGES],
-    seo_exempt_pages: [...SEO_EXEMPT_PAGES],
+    seo_exempt_pages: [...EFFECTIVE_SEO_EXEMPT_PAGES],
+    runtime_seo_only_exempt_pages: [...RUNTIME_SEO_ONLY_EXEMPT_PAGES],
     not_sampled_count: coverage.lighthouse.not_sampled_count,
     not_sampled: coverage.lighthouse.not_sampled,
     thresholds: coverage.lighthouse.thresholds,
