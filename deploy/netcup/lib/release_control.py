@@ -773,7 +773,9 @@ def _canonical_opportunity_route(opportunity_id: str) -> tuple[str, str]:
     return route, f"_site{route}index.html"
 
 
-def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def _accepted_overlay_identity(
+    release: Path,
+) -> tuple[dict[str, Any], list[dict[str, Any]], list[str]]:
     """Read the accepted projection and bind every rendered official route.
 
     A useful factual page may be retained as NOINDEX when its publication
@@ -793,6 +795,7 @@ def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict
                 "accepted_projection_sha256": None,
             },
             [],
+            [],
         )
     payload = load_json(path)
     declared = str(payload.get("manifest_hash") or "")
@@ -808,6 +811,7 @@ def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict
     if not isinstance(records, list):
         raise ReleaseError("stage accepted opportunities must be a list")
     routes: list[dict[str, Any]] = []
+    indexable_routes: list[str] = []
     seen_ids: set[str] = set()
     seen_routes: set[str] = set()
     for record in records:
@@ -844,6 +848,8 @@ def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict
                 "sha256": sha256_file(page),
             }
         )
+        if state == "PUBLISHABLE_INDEX" and record.get("index_eligible") is True:
+            indexable_routes.append(route)
     routes.sort(key=lambda item: item["route"])
     return (
         {
@@ -856,6 +862,7 @@ def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict
             "accepted_projection_sha256": sha256_file(path),
         },
         routes,
+        sorted(set(indexable_routes)),
     )
 
 
@@ -901,7 +908,7 @@ def _runtime_stylesheet_href(release: Path) -> str:
 
 def _rewrite_live_intelligence_stylesheet_aliases(release: Path) -> None:
     """Bind stage-rendered opportunity HTML to this release's immutable CSS."""
-    _, routes = _accepted_overlay_identity(release)
+    _, routes, _ = _accepted_overlay_identity(release)
     relative_paths = [str(item["html_path"]) for item in routes]
     hub_path = "_site/oportunidades/index.html"
     if (release / hub_path).is_file():
@@ -973,7 +980,7 @@ def _write_live_intelligence_overlay_manifest(
     managed_packaged_html: set[str],
 ) -> None:
     """Bind stage output to the release-local accepted projection and file digests."""
-    identity, routes = _accepted_overlay_identity(release)
+    identity, routes, indexable_routes = _accepted_overlay_identity(release)
     actual = _actual_release_files(release)
     actual_hashed = {
         rel: sha256_file(path)
@@ -1036,6 +1043,7 @@ def _write_live_intelligence_overlay_manifest(
         "release_sha": sha,
         **identity,
         "routes": routes,
+        "indexable_routes": indexable_routes,
         "static_html_paths": (
             ["_site/oportunidades/index.html"]
             if (release / "_site/oportunidades/index.html").is_file()
@@ -1115,7 +1123,7 @@ def _seal_legacy_live_intelligence_overlay(release: Path, sha: str) -> bool:
     )
     if not has_stage_delta:
         return False
-    identity, routes = _accepted_overlay_identity(release)
+    identity, routes, _ = _accepted_overlay_identity(release)
     removed = {
         rel: digest for rel, digest in expected.items() if rel not in actual_digests
     }
@@ -1188,7 +1196,11 @@ def _legacy_overlay_state_path(release: Path, sha: str) -> Path:
 
 
 def _overlay_contract(
-    release: Path, sha: str, expected: dict[str, str]
+    release: Path,
+    sha: str,
+    expected: dict[str, str],
+    *,
+    allow_legacy_public_manifest: bool = False,
 ) -> tuple[dict[str, str], dict[str, str]]:
     """Validate and return exact changed/removed files for this staged release."""
     internal_path = release / LIVE_INTEL_OVERLAY_MANIFEST
@@ -1223,7 +1235,7 @@ def _overlay_contract(
         raise ReleaseError("live-intelligence overlay file digest is invalid")
     if any(not isinstance(key, str) or not isinstance(value, str) or not HEX_256.fullmatch(value) for key, value in removed.items()):
         raise ReleaseError("live-intelligence overlay removed-file digest is invalid")
-    identity, accepted_routes = _accepted_overlay_identity(release)
+    identity, accepted_routes, indexable_routes = _accepted_overlay_identity(release)
     if routes != accepted_routes:
         raise ReleaseError("live-intelligence overlay routes differ from accepted projection")
     for key, value in identity.items():
@@ -1255,6 +1267,7 @@ def _overlay_contract(
             "release_sha": sha,
             **identity,
             "routes": accepted_routes,
+            "indexable_routes": indexable_routes,
             "static_html_paths": (
                 ["_site/oportunidades/index.html"]
                 if (release / "_site/oportunidades/index.html").is_file()
@@ -1273,12 +1286,24 @@ def _overlay_contract(
                 rel for rel in removed if rel.startswith("_site/") and rel.endswith(".html")
             ),
         }
-        if public != expected_public:
+        legacy_public = dict(expected_public)
+        legacy_public.pop("indexable_routes")
+        installed_legacy_v1 = (
+            allow_legacy_public_manifest
+            and "indexable_routes" not in public
+            and public == legacy_public
+        )
+        if public != expected_public and not installed_legacy_v1:
             raise ReleaseError("public live-intelligence overlay snapshot mismatch")
     return ({str(key): str(value) for key, value in files.items()}, {str(key): str(value) for key, value in removed.items()})
 
 
-def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
+def verify_release_tree_at(
+    release: Path,
+    sha: str,
+    *,
+    allow_legacy_public_manifest: bool = False,
+) -> dict[str, Any]:
     if not release.is_dir() or release.is_symlink():
         raise ReleaseError(f"release does not exist as a real directory: {sha}")
     required = (
@@ -1332,7 +1357,12 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         rel for rel in actual if rel not in ignored and not is_release_ephemeral(rel)
     }
 
-    overlay_files, overlay_removed = _overlay_contract(release, sha, expected)
+    overlay_files, overlay_removed = _overlay_contract(
+        release,
+        sha,
+        expected,
+        allow_legacy_public_manifest=allow_legacy_public_manifest,
+    )
     overlay_manifest_files = (
         {LIVE_INTEL_OVERLAY_MANIFEST}
         if (release / LIVE_INTEL_OVERLAY_MANIFEST).is_file()
@@ -1450,11 +1480,19 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
     return manifest
 
 
-def verify_release_tree(root: Path, sha: str) -> dict[str, Any]:
-    return verify_release_tree_at(root / "releases" / sha, sha)
+def verify_release_tree(
+    root: Path, sha: str, *, allow_legacy_public_manifest: bool = False
+) -> dict[str, Any]:
+    return verify_release_tree_at(
+        root / "releases" / sha,
+        sha,
+        allow_legacy_public_manifest=allow_legacy_public_manifest,
+    )
 
 
-def verify_release_envelope_and_tree(root: Path, sha: str) -> dict[str, Any]:
+def verify_release_envelope_and_tree(
+    root: Path, sha: str, *, allow_legacy_public_manifest: bool = False
+) -> dict[str, Any]:
     package, incoming_manifest = validate_incoming(root, sha)
     stored_files_manifest = root / "releases" / sha / "metadata/files.sha256"
     try:
@@ -1467,7 +1505,11 @@ def verify_release_envelope_and_tree(root: Path, sha: str) -> dict[str, Any]:
         raise ReleaseError(
             "stored metadata/files.sha256 differs from the immutable incoming package"
         )
-    stored_manifest = verify_release_tree(root, sha)
+    stored_manifest = verify_release_tree(
+        root,
+        sha,
+        allow_legacy_public_manifest=allow_legacy_public_manifest,
+    )
     if stored_manifest["artifact"]["sha256"] != incoming_manifest["artifact"]["sha256"]:
         raise ReleaseError("stored release and incoming artifact checksums diverge")
     return stored_manifest
@@ -1911,7 +1953,11 @@ def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
             if legacy_sha and _seal_legacy_live_intelligence_overlay(
                 root / "releases" / legacy_sha, legacy_sha
             ):
-                verify_release_tree_at(root / "releases" / legacy_sha, legacy_sha)
+                verify_release_tree_at(
+                    root / "releases" / legacy_sha,
+                    legacy_sha,
+                    allow_legacy_public_manifest=True,
+                )
                 append_evidence(
                     root,
                     "LEGACY_OVERLAY_SEALED",
@@ -1975,7 +2021,19 @@ def verify_release(sha: str) -> dict[str, Any]:
     with deploy_lock(root):
         _recover_cache_transition(root, sha)
         _seal_legacy_live_intelligence_overlay(root / "releases" / sha, sha)
-        manifest = verify_release_envelope_and_tree(root, sha)
+        installed_links = {
+            value
+            for value in (
+                read_release_link(root, "current"),
+                read_release_link(root, "rollback"),
+            )
+            if value
+        }
+        manifest = verify_release_envelope_and_tree(
+            root,
+            sha,
+            allow_legacy_public_manifest=sha in installed_links,
+        )
         smoke_candidate(root / "releases" / sha, sha)
         verify_portable_runtime(root / "releases" / sha)
         append_evidence(
@@ -1989,13 +2047,17 @@ def _restore_after_failed_switch(
 ) -> None:
     if previous:
         _prepare_cache_transition(root, previous, failed_sha)
-        verify_release_envelope_and_tree(root, previous)
+        verify_release_envelope_and_tree(
+            root, previous, allow_legacy_public_manifest=True
+        )
         atomic_release_link(root, "current", previous)
     else:
         _remove_release_link(root, "current")
     nginx_test()
     if previous:
-        previous_manifest = verify_release_tree(root, previous)
+        previous_manifest = verify_release_tree(
+            root, previous, allow_legacy_public_manifest=True
+        )
         runtime_restart()
         smoke_runtime(previous_manifest)
     nginx_reload()
@@ -2044,18 +2106,31 @@ def _switch_release(
     for candidate in {value for value in (sha, recovery_predecessor) if value}:
         _recover_cache_transition(root, candidate)
         _seal_legacy_live_intelligence_overlay(root / "releases" / candidate, candidate)
-    manifest = verify_release_envelope_and_tree(root, sha)
+    allow_target_legacy_manifest = event == "ROLLED_BACK"
+    manifest = verify_release_envelope_and_tree(
+        root,
+        sha,
+        allow_legacy_public_manifest=allow_target_legacy_manifest,
+    )
     if recovery_predecessor and recovery_predecessor != sha:
         # Never move the canonical symlink toward a candidate whose recovery
         # release is already corrupt. On an idempotent retry, the real recovery
         # release is the rollback link, not the candidate already at current.
-        verify_release_envelope_and_tree(root, recovery_predecessor)
+        verify_release_envelope_and_tree(
+            root,
+            recovery_predecessor,
+            allow_legacy_public_manifest=True,
+        )
     cache_transition = None
     if previous_before_checks and previous_before_checks != sha:
         cache_transition = _prepare_cache_transition(
             root, sha, previous_before_checks
         )
-        manifest = verify_release_envelope_and_tree(root, sha)
+        manifest = verify_release_envelope_and_tree(
+            root,
+            sha,
+            allow_legacy_public_manifest=allow_target_legacy_manifest,
+        )
     smoke_candidate(root / "releases" / sha, sha)
     previous = read_release_link(root, "current")
     if previous == sha:
@@ -2348,7 +2423,9 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
                 "served inventory current release mismatch; "
                 f"expected={sha}, found={current or 'NONE'}"
             )
-        manifest = verify_release_envelope_and_tree(root, sha)
+        manifest = verify_release_envelope_and_tree(
+            root, sha, allow_legacy_public_manifest=True
+        )
         release = root / "releases" / sha
         site = release / "_site"
         html_sha256 = {
