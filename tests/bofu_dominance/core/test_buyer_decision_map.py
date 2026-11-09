@@ -18,6 +18,7 @@ from scripts.bofu_dominance.core.buyer_decision_map import (
 from scripts.bofu_dominance.core.constants import BUYER_DECISION_MAP_PATH, PURCHASE_ROUTE_MAP_PATH, ROOT
 from scripts.bofu_dominance.core.purchase_route_map import (
     RouteFacts,
+    collect_route_inventory,
     project_intent_route_table,
     validate_purchase_route_map,
 )
@@ -831,13 +832,11 @@ def test_prontidao_index_is_not_robots_disallow_or_url_removal():
     assert proposal["reason_code_observed"] is None
     assert proposal["robots_txt_disallow"] is False
     assert proposal["url_removal"] is False
-    html = (ROOT / "ferramentas/prontidao-tecnica-obra-privada/index.html").read_text(
-        encoding="utf-8"
-    )
-    assert 'content="index,follow"' in html
-    assert 'content="noindex,follow"' not in html
-    robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
-    assert "prontidao" not in robots.lower()
-    assert "Disallow: /ferramentas/" not in robots
+    route = "/ferramentas/prontidao-tecnica-obra-privada/"
+    facts = collect_route_inventory(ROOT, [route])[route]
+    directives = {token.strip().lower() for token in (facts.robots or "").split(",")}
+    assert {"index", "follow"} <= directives
+    assert directives.isdisjoint({"noindex", "nofollow", "none"})
+    assert facts.robots_txt_disallow is False
     report = validate_purchase_route_map()
     assert "obsolete_maturity_noindex" not in {item.reason for item in report.findings}
