@@ -165,10 +165,12 @@ def _current_hrefs(anchors: list[str], relative_path: str) -> set[str]:
         public_path = public_path[: -len("index.html")]
     canonical_hrefs = {href for _, href in CANONICAL_NAV_ITEMS}
     mapped = active_header_href(public_path)
+    # The route map owns the active destination. A formerly secondary
+    # link can become primary without turning stale markup into two states.
     if mapped in canonical_hrefs:
-        current.add(mapped)
-    elif public_path in canonical_hrefs:
-        current.add(public_path)
+        return {mapped}
+    if public_path in canonical_hrefs:
+        return {public_path}
     return current & canonical_hrefs
 
 

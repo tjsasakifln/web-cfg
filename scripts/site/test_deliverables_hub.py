@@ -761,13 +761,11 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
             for anchor in navigation
         )
         assert '/#ofertas' not in block and '/#jornadas' not in block
-        # A IA vigente classifica ferramentas na vertical protegida de obras
-        # públicas. A nova entrada de cabeçalho precisa, portanto, ficar ativa
-        # em vez de o promotor inventar uma sexta entrada ou deixar a rota sem
-        # contexto. A contraprova é a igualdade exata com a regra de IA.
+        # Ferramentas is a main navigation destination with its own active
+        # state. Promotion still preserves the exact order and context.
         current = [anchor for anchor in navigation if 'aria-current="page"' in anchor]
         active_href = active_header_href("/ferramentas/")
-        assert active_href == "/servicos-obras-publicas/"
+        assert active_href == "/ferramentas/"
         assert len(current) == 1
         assert f'href="{active_href}"' in current[0]
         if index == 1:
@@ -803,6 +801,8 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
     value_first = promote_public_navigation(
         legacy, relative_path="quantitativos-orcamento-obras/index.html"
     )
+    assert re.search(r'aria-current="page" href="/servicos/"', value_first)
+    assert not re.search(r'aria-current="page" href="/ferramentas/"', value_first)
     quantitativos_cta = value_first_cta_contract("/quantitativos-orcamento-obras/")
     assert quantitativos_cta is not None
     assert quantitativos_cta["href"] == "#triagem-quantitativos"
