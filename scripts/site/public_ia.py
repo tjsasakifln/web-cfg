@@ -57,7 +57,7 @@ JOURNEY_PHRASES = (
     "serviços",
     "condomínios",
     "obras públicas",
-    "como trabalhamos",
+    "ferramentas",
     "empresa",
 )
 # VALOR-IMEDIATO-20260914: quantitativos/orçamento e avaliação de imóvel
@@ -670,7 +670,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
             f"header has {len(destinations)} destinations; max is {MAX_HEADER_DESTINATIONS}"
         )
     if len(destinations) < 3:
-        errors.append("header must expose projects, services, public works, method, and company")
+        errors.append("header must expose projects, services, public works, tools, and company")
     hrefs = [item["href"] for item in destinations]
     if len(set(hrefs)) != len(hrefs):
         errors.append("header has duplicate hrefs")

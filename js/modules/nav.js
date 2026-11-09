@@ -1474,6 +1474,16 @@
       const position = el.getAttribute('data-cta-position')
         || (el.classList && el.classList.contains('whatsapp-float') ? 'float' : 'inline');
       const label = (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+      // Sharing and launching a tool are usage signals. A WhatsApp share
+      // must not enter the commercial funnel or acquire a contact protocol.
+      if (['tool_share', 'tool_catalog', 'tool_intro'].includes(position)) {
+        track('cta_click', {
+          page_path: pagePath, cta_position: position, cta_label: label,
+          destination_type: position === 'tool_share' ? 'external' : position === 'tool_intro' ? 'anchor' : 'route',
+          cta_id: el.getAttribute(A_CTA_ID) || '', event_id: eventId,
+        });
+        return;
+      }
       const classified = classifyTransition({
         href,
         origin_path: pagePath,

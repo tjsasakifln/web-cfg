@@ -1,0 +1,551 @@
+{
+  "schema": 1,
+  "updated": "2026-11-09",
+  "groups": [
+    {
+      "id": "destaques",
+      "title": "Comece por aqui",
+      "summary": "Abra uma planta, confira um modelo ou analise uma amostra de mercado.",
+      "jump": "Destaques"
+    },
+    {
+      "id": "desenho",
+      "title": "Desenho e pranchas",
+      "summary": "Edite projetos, revise folhas e leve o desenho de um formato a outro.",
+      "jump": "Desenho e pranchas"
+    },
+    {
+      "id": "modelos",
+      "title": "Modelos, medições e campo",
+      "summary": "Trabalhe com IFC, quantitativos, levantamentos e estudos de geometria.",
+      "jump": "Modelos e campo"
+    },
+    {
+      "id": "obras",
+      "title": "Obras e contratos",
+      "summary": "Confira aditivos, organize evidências e prepare sua próxima decisão.",
+      "jump": "Obras e contratos"
+    }
+  ],
+  "entries": [
+    {
+      "id": "dwg",
+      "group": "destaques",
+      "title": "Editor de DWG e DXF",
+      "summary": "Abra a planta, confira camadas e medidas, faça ajustes e baixe uma cópia editada. Você pode começar com uma planta de exemplo.",
+      "format": "DWG · DXF",
+      "action": "Abrir editor DWG",
+      "href": "/cad/",
+      "art": "plan",
+      "mark": "A–A",
+      "keywords": "autocad planta baixa arquivo dxf",
+      "page": {
+        "title": "Editor de DWG online: abrir e editar plantas",
+        "desc": "Abra e edite DWG ou DXF online. Confira camadas e medidas, teste com uma planta de exemplo e salve uma cópia em DWG 2000 ou DXF.",
+        "related": [
+          "cad-suite",
+          "pdf-cad"
+        ]
+      }
+    },
+    {
+      "id": "bim",
+      "group": "destaques",
+      "title": "Ferramentas BIM e IFC",
+      "summary": "Abra um modelo em 3D, confira propriedades de elementos e leve os quantitativos para uma planilha. Experimente com o IFC do Pavilhão Ipê.",
+      "format": "IFC · BIM · XLSX",
+      "action": "Explorar ferramentas BIM",
+      "href": "/bim/",
+      "art": "iso",
+      "mark": "IFC4",
+      "keywords": "building information modeling revit openbim visualizador excel",
+      "page": {
+        "title": "Ferramentas BIM online: IFC 3D, DWG e quantitativos",
+        "desc": "Abra IFC em 3D, compare revisões, extraia quantitativos para Excel e converta pranchas para DWG. Experimente com modelos BIM de exemplo.",
+        "related": [
+          "ifc-excel",
+          "ifc-revisoes"
+        ]
+      }
+    },
+    {
+      "id": "modela",
+      "group": "destaques",
+      "title": "Modela Pro: avaliação de imóveis",
+      "summary": "Importe comparáveis de mercado para estimar o valor de um imóvel. Examine a regressão, os intervalos e os diagnósticos ou trabalhe pelo custo de reedição.",
+      "format": "CSV · XLSX",
+      "action": "Abrir Modela Pro",
+      "href": "/avaliacao-imoveis-urbanos/inferencia/",
+      "art": "chart",
+      "mark": "R²",
+      "keywords": "inferência estatística regressao linear imobiliaria valor de imovel avaliador custo",
+      "page": {
+        "title": "Modela Pro: avaliação de imóveis por inferência estatística",
+        "desc": "Importe comparáveis em CSV ou XLSX e estime o valor de um imóvel. Confira regressão, intervalos e diagnósticos ou calcule o custo de reedição.",
+        "start": "amostra",
+        "brief": "Comece pelo exemplo fictício. Compare a estimativa, o intervalo e a influência de cada imóvel sem precisar montar uma amostra.",
+        "related": [
+          "prontidao",
+          "dwg"
+        ],
+        "start_label": "Começar pela amostra"
+      }
+    },
+    {
+      "id": "cad-suite",
+      "group": "desenho",
+      "title": "Aplicativos CAD e engenharia",
+      "summary": "Encontre oito ambientes de trabalho: do desenho 2D à coordenação de modelos, passando por revisão, quantitativos, civil e detalhamento.",
+      "format": "DWG · DXF · IFC · PDF",
+      "action": "Explorar aplicativos CAD",
+      "href": "/cad/aplicativos/",
+      "art": "grid",
+      "mark": "2D / 3D",
+      "keywords": "suite aplicativos cad engenharia arquitetura",
+      "page": {
+        "title": "Aplicativos CAD online: desenho, revisão PDF e modelagem",
+        "desc": "Abra oito aplicativos de engenharia no navegador. Desenhe em CAD, revise pranchas PDF, coordene IFC e trabalhe com terrenos, peças e quantitativos.",
+        "related": [
+          "dwg",
+          "bim"
+        ]
+      }
+    },
+    {
+      "id": "cad-2d",
+      "group": "desenho",
+      "title": "Desenhar em CAD 2D",
+      "summary": "Trabalhe com linhas, camadas, blocos e cotas e organize a folha para plotagem.",
+      "format": "DESENHO 2D",
+      "action": "Abrir CAD 2D",
+      "href": "/cad/aplicativos/#cadcraft",
+      "art": "plan",
+      "mark": "1:50",
+      "keywords": "planta layout desenho cotas camada bloco"
+    },
+    {
+      "id": "revisao-pdf",
+      "group": "desenho",
+      "title": "Revisar pranchas em PDF",
+      "summary": "Destaque uma interferência, registre a correção e compare revisões de desenho para localizar mudanças.",
+      "format": "PDF · REVISÕES",
+      "action": "Abrir revisão de pranchas",
+      "href": "/cad/aplicativos/#markupcraft",
+      "art": "sheet",
+      "mark": "REV B",
+      "keywords": "marcação anotação interferência"
+    },
+    {
+      "id": "pdf-cad",
+      "group": "desenho",
+      "title": "Converter PDF vetorial em CAD",
+      "summary": "Selecione a folha e confira a unidade antes de exportar a geometria. Use quando o PDF já contém linhas vetoriais.",
+      "format": "PDF · DXF · DWG",
+      "action": "Converter PDF vetorial",
+      "href": "/bim/web/cad.html",
+      "art": "plan",
+      "mark": "PDF → CAD",
+      "keywords": "conversor transformar pdf para dwg vetores"
+    },
+    {
+      "id": "pdf-escaneado",
+      "group": "desenho",
+      "title": "Digitalizar planta escaneada para DWG",
+      "summary": "Recupere traços e textos de um PDF escaneado ou de uma imagem. Calibre a escala e confira o que o reconhecimento encontrou.",
+      "format": "OCR · DWG",
+      "action": "Abrir OCR e vetorização",
+      "href": "/bim/web/digitalizar.html",
+      "art": "sheet",
+      "mark": "OCR",
+      "keywords": "scanner escaneamento converter imagem prancha texto pdf",
+      "links": [
+        [
+          "Seguir o guia de PDF escaneado",
+          "/bim/guias/pdf-escaneado-para-dwg/"
+        ],
+        [
+          "Buscar texto na prancha",
+          "/bim/web/digitalizar.html#consulta"
+        ]
+      ]
+    },
+    {
+      "id": "ifc-3d",
+      "group": "modelos",
+      "title": "Visualizar IFC em 3D",
+      "summary": "Selecione vigas, paredes e lajes para consultar classes e identificadores. Abra um exemplo antes de escolher seu arquivo.",
+      "format": "IFC · VISUALIZAÇÃO",
+      "action": "Abrir visualizador IFC",
+      "href": "/bim/web/visualizador.html",
+      "art": "iso",
+      "mark": "3D",
+      "keywords": "abrir ifc viewer ifc 4 ifc4 propriedades"
+    },
+    {
+      "id": "ifc-excel",
+      "group": "modelos",
+      "title": "Extrair quantitativos de IFC para Excel",
+      "summary": "Exporte comprimentos, áreas e volumes declarados no IFC. Use o identificador do elemento para reencontrá-lo no modelo.",
+      "format": "IFC → XLSX",
+      "action": "Extrair quantitativos IFC",
+      "href": "/bim/web/ifc-excel.html",
+      "art": "table",
+      "mark": "XLSX",
+      "keywords": "planilha volume área comprimento orçamento ifc",
+      "links": [
+        [
+          "Seguir o guia de IFC para Excel",
+          "/bim/guias/quantitativos-ifc-para-excel/"
+        ]
+      ]
+    },
+    {
+      "id": "ifc-revisoes",
+      "group": "modelos",
+      "title": "Comparar revisões de IFC",
+      "summary": "Coloque duas versões lado a lado para identificar mudanças nos quantitativos declarados entre as entregas.",
+      "format": "IFC · REVISÕES",
+      "action": "Comparar dois arquivos IFC",
+      "href": "/bim/web/comparar.html",
+      "art": "bars",
+      "mark": "A / B",
+      "keywords": "comparador comparação revisão ifc quantitativos versões"
+    },
+    {
+      "id": "bim-coordenacao",
+      "group": "modelos",
+      "title": "Coordenar um modelo BIM",
+      "summary": "Navegue por pavimentos, confira as propriedades dos objetos e separe elementos por disciplina no ambiente de trabalho.",
+      "format": "COORDENAÇÃO",
+      "action": "Abrir coordenação BIM",
+      "href": "/cad/aplicativos/#bimcraft",
+      "art": "iso",
+      "mark": "NÍVEL 02",
+      "keywords": "coordenar modelo disciplinas elementos pavimentos"
+    },
+    {
+      "id": "modelagem-3d",
+      "group": "modelos",
+      "title": "Modelar volumes em 3D",
+      "summary": "Desenhe uma face, use a extrusão para dar altura e agrupe componentes para estudar a volumetria.",
+      "format": "MODELAGEM 3D",
+      "action": "Abrir modelador de volumes",
+      "href": "/cad/aplicativos/#modelcraft",
+      "art": "iso",
+      "mark": "EXTRUSÃO",
+      "keywords": "volumetria estudar edifício forma"
+    },
+    {
+      "id": "medir-planta",
+      "group": "modelos",
+      "title": "Medir e levantar quantitativos na planta",
+      "summary": "Calibre uma distância conhecida, meça áreas e comprimentos, conte itens e associe os custos às quantidades.",
+      "format": "MEDIÇÕES · CUSTOS",
+      "action": "Abrir levantamento na planta",
+      "href": "/cad/aplicativos/#takeoffcraft",
+      "art": "plan",
+      "mark": "m²",
+      "keywords": "takeoff orçamento medir quantidade comprimento planta"
+    },
+    {
+      "id": "medir-foto",
+      "group": "modelos",
+      "title": "Medir distâncias e áreas em uma foto",
+      "summary": "Calibre uma superfície plana com uma medida conhecida e meça comprimentos, ângulos e áreas na imagem.",
+      "format": "FOTO · ESCALA",
+      "action": "Abrir régua fotográfica",
+      "href": "/bim/web/regua.html",
+      "art": "photo",
+      "mark": "m²",
+      "keywords": "régua foto imagem perspectiva retificar medição",
+      "links": [
+        [
+          "Seguir o guia de medição por foto",
+          "/bim/guias/medir-distancia-area-foto/"
+        ]
+      ]
+    },
+    {
+      "id": "paredes-ifc",
+      "group": "modelos",
+      "title": "Gerar paredes IFC a partir de eixos CAD",
+      "summary": "Escolha os eixos do DWG, confira unidade e camada e informe a altura, a espessura e o pavimento das paredes.",
+      "format": "DWG → IFC",
+      "action": "Converter eixos em paredes",
+      "href": "/bim/web/modelagem.html#paredes",
+      "art": "plan",
+      "mark": "EIXOS → IFC",
+      "keywords": "converter autocad parede dwg ifc modelo",
+      "links": [
+        [
+          "Seguir o guia de DWG para IFC",
+          "/bim/guias/dwg-para-ifc-paredes/"
+        ],
+        [
+          "Modelar pelo croqui",
+          "/bim/web/modelagem.html#croqui"
+        ]
+      ]
+    },
+    {
+      "id": "fotogrametria",
+      "group": "modelos",
+      "title": "Reconstruir um objeto a partir de fotos",
+      "summary": "Use tomadas de vários ângulos para reconstruir um objeto no laboratório de fotogrametria. A malha PLY pode ser convertida em IFC em outra etapa.",
+      "format": "FOTOS · MALHA 3D",
+      "action": "Abrir laboratório de fotogrametria",
+      "href": "/bim/web/fotogrametria.html",
+      "art": "mesh",
+      "mark": "FOTOS → 3D",
+      "keywords": "fotogrametria scanner objeto ply reconstrução",
+      "links": [
+        [
+          "Converter uma malha PLY para IFC",
+          "/bim/web/oficina.html#malha"
+        ]
+      ]
+    },
+    {
+      "id": "civil",
+      "group": "modelos",
+      "title": "Estudar terrenos, traçados e perfis",
+      "summary": "Crie uma superfície a partir de pontos e linhas de quebra e explore alinhamentos, perfis e terraplenagem.",
+      "format": "INFRAESTRUTURA",
+      "action": "Abrir ambiente civil",
+      "href": "/cad/aplicativos/#civilcraft",
+      "art": "profile",
+      "mark": "TERRENO",
+      "keywords": "topografia curva nível superfície terreno civil 3d"
+    },
+    {
+      "id": "landxml",
+      "group": "modelos",
+      "title": "Converter terreno LandXML em IFC",
+      "summary": "Use os triângulos de uma superfície topográfica para gerar IFC4.3 e confira as coordenadas antes da entrega.",
+      "format": "LANDXML → IFC4.3",
+      "action": "Converter superfície do terreno",
+      "href": "/bim/web/modelagem.html#terreno",
+      "art": "mesh",
+      "mark": "IFC4.3",
+      "keywords": "topografia tin terreno coordenadas landxml converter"
+    },
+    {
+      "id": "perfil-nuvem",
+      "group": "modelos",
+      "title": "Extrair um perfil de nuvem de pontos",
+      "summary": "Selecione uma faixa do levantamento XYZ ou COPC para extrair o perfil das cotas.",
+      "format": "XYZ · COPC",
+      "action": "Extrair perfil da nuvem",
+      "href": "/bim/web/oficina.html#perfil",
+      "art": "profile",
+      "mark": "XYZ",
+      "keywords": "nuvem de pontos levantamento topográfico perfil lidar"
+    },
+    {
+      "id": "solar",
+      "group": "modelos",
+      "title": "Estudar a sombra de um modelo IFC",
+      "summary": "Ajuste local, norte verdadeiro, fuso e hora para observar a sombra da volumetria.",
+      "format": "IFC · INSOLAÇÃO",
+      "action": "Abrir estudo solar",
+      "href": "/bim/web/visualizador.html#estudo-solar",
+      "art": "photo",
+      "mark": "SOL",
+      "keywords": "solar insolação sombras trajetória brise"
+    },
+    {
+      "id": "ids",
+      "group": "modelos",
+      "title": "Conferir requisitos IDS em um IFC",
+      "summary": "Carregue o IFC e as especificações de entrega para conferir os requisitos e baixar o relatório por elemento.",
+      "format": "IFC · IDS",
+      "action": "Verificar requisitos IDS",
+      "href": "/bim/web/oficina.html#ids",
+      "art": "check",
+      "mark": "IDS",
+      "keywords": "validação openbim requisitos de informação auditoria"
+    },
+    {
+      "id": "detalhamento",
+      "group": "modelos",
+      "title": "Detalhar aço e armaduras",
+      "summary": "Organize perfis metálicos e ligações ou posicione barras de armadura para preparar desenhos de fabricação.",
+      "format": "ESTRUTURAS",
+      "action": "Abrir detalhamento estrutural",
+      "href": "/cad/aplicativos/#detailcraft",
+      "art": "plan",
+      "mark": "AÇO",
+      "keywords": "ferragem aço armadura estrutural concreto"
+    },
+    {
+      "id": "pecas",
+      "group": "modelos",
+      "title": "Projetar peças e conjuntos",
+      "summary": "Parta de um esboço com restrições, modele a peça e organize as juntas para estudar o encaixe do conjunto.",
+      "format": "MECÂNICA · 3D",
+      "action": "Abrir modelador de peças",
+      "href": "/cad/aplicativos/#partcraft",
+      "art": "part",
+      "mark": "3D",
+      "keywords": "mecânica peça componentes juntas esboço"
+    },
+    {
+      "id": "flanges",
+      "group": "modelos",
+      "title": "Gerar uma chapa ou flange em 3D",
+      "summary": "Informe as dimensões, a espessura e os furos para gerar um sólido em STEP ou IFC.",
+      "format": "STEP · IFC",
+      "action": "Gerar chapa ou flange",
+      "href": "/bim/web/modelagem.html#peca",
+      "art": "part",
+      "mark": "STEP",
+      "keywords": "chapa flange paramétrica sólido furos"
+    },
+    {
+      "id": "fornecedor",
+      "group": "modelos",
+      "title": "Converter peça de fornecedor para IFC",
+      "summary": "Abra a geometria STEP ou IGES, confira o envelope e exporte a superfície para usar na coordenação.",
+      "format": "STEP · IGES → IFC",
+      "action": "Converter peça de fornecedor",
+      "href": "/bim/web/oficina.html#fornecedor",
+      "art": "iso",
+      "mark": "IGES",
+      "keywords": "arquivo mecânico stp sat envelope fornecedor conversor"
+    },
+    {
+      "id": "chapas",
+      "group": "modelos",
+      "title": "Planejar o aproveitamento de chapas",
+      "summary": "Distribua os contornos das peças na superfície da chapa com a folga e as rotações permitidas.",
+      "format": "FABRICAÇÃO",
+      "action": "Montar arranjo de chapas",
+      "href": "/bim/web/chapas.html",
+      "art": "grid",
+      "mark": "NESTING",
+      "keywords": "corte chapa arranjo encaixe aproveitamento nesting"
+    },
+    {
+      "id": "aditivos",
+      "group": "obras",
+      "title": "Calculadora de limite de aditivo",
+      "summary": "Calcule separadamente o saldo para acréscimos e supressões em obra pública e veja o que muda com o próximo termo.",
+      "format": "ART. 125 · LEI 14.133",
+      "action": "Calcular limite de aditivo",
+      "href": "/ferramentas/limite-acrescimos-supressoes/",
+      "art": "bars",
+      "mark": "25 / 50%",
+      "keywords": "calculadora aditivo contratual limite 25 50 acréscimos supressões lei 14133",
+      "page": {
+        "title": "Calculadora de limite de aditivo: acréscimos e supressões",
+        "desc": "Confira o limite de aditivo de obra pública pelo art. 125 da Lei 14.133. Calcule separadamente acréscimos, supressões e o saldo para o próximo termo.",
+        "start": "limite-form",
+        "brief": "Para simular o próximo aditivo, tenha o valor inicial atualizado e o histórico de acréscimos e supressões. A ferramenta mostra o saldo de cada lado separadamente e indica quando a base não basta para calcular.",
+        "related": [
+          "reequilibrio",
+          "atrasos"
+        ]
+      }
+    },
+    {
+      "id": "reequilibrio",
+      "group": "obras",
+      "title": "Checklist de reequilíbrio econômico-financeiro",
+      "summary": "Veja quais evidências sustentam o pedido, o que falta documentar e o que deve ser resolvido primeiro.",
+      "format": "DOCUMENTAÇÃO · CONTRATO",
+      "action": "Revisar pedido de reequilíbrio",
+      "href": "/ferramentas/checklist-reequilibrio/",
+      "art": "check",
+      "mark": "DOSSIÊ",
+      "keywords": "reequilíbrio econômico financeiro reajuste checklist requerimento",
+      "page": {
+        "title": "Checklist de reequilíbrio econômico-financeiro de obra",
+        "desc": "Confira os documentos para pedir reequilíbrio econômico-financeiro em obra pública. Identifique bloqueadores e organize a sequência de correção.",
+        "start": "f",
+        "brief": "Separe a proposta, o registro do evento e as comunicações com a Administração. O checklist organiza as lacunas documentais antes de você montar o dossiê. O resultado não calcula o valor a pedir.",
+        "related": [
+          "aditivos",
+          "margem"
+        ]
+      }
+    },
+    {
+      "id": "atrasos",
+      "group": "obras",
+      "title": "Matriz de atraso de obra",
+      "summary": "Registre datas, evidências e a relação com o caminho crítico. Veja hipóteses por evento e os pontos que ainda precisam de prova.",
+      "format": "PRAZO · EVIDÊNCIAS",
+      "action": "Abrir matriz de atraso",
+      "href": "/ferramentas/matriz-atraso-obra/",
+      "art": "timeline",
+      "mark": "PRAZO",
+      "keywords": "prorrogação cronograma atraso contrato atraso obra matriz caminho crítico",
+      "page": {
+        "title": "Matriz de atraso de obra: eventos, provas e caminho crítico",
+        "desc": "Registre eventos de atraso em obra, confira datas, evidências e relação com o caminho crítico. Veja hipóteses por evento e lacunas de prova.",
+        "start": "f",
+        "brief": "Comece por um evento, como uma liberação de frente que saiu depois do previsto. Registre o período, a prova disponível e a atividade afetada. A matriz distingue hipóteses de atribuição e lacunas de evidência.",
+        "related": [
+          "reequilibrio",
+          "margem"
+        ]
+      }
+    },
+    {
+      "id": "margem",
+      "group": "obras",
+      "title": "Diagnóstico de defesa de margem",
+      "summary": "Consulte o recorte público de um contrato para ver a linha do tempo, os eventos documentados, as fontes e o que ainda precisa de conferência.",
+      "format": "CONTRATOS · FONTES",
+      "action": "Consultar contrato público",
+      "href": "/ferramentas/diagnostico-defesa-margem/",
+      "art": "timeline",
+      "mark": "FONTES",
+      "keywords": "contrato público defesa margem diagnóstico licitação glosa medição pncp",
+      "page": {
+        "title": "Diagnóstico de contrato público: linha do tempo e fontes",
+        "desc": "Consulte o recorte público de um contrato de obra. Veja eventos documentados, linha do tempo, fontes e lacunas antes de decidir como agir.",
+        "start": "lookup",
+        "brief": "Use o identificador do contrato ou escolha um registro disponível. A leitura organiza fatos e fontes, preservando as lacunas que ainda dependem dos documentos do caso.",
+        "related": [
+          "aditivos",
+          "atrasos"
+        ]
+      }
+    },
+    {
+      "id": "prontidao",
+      "group": "obras",
+      "title": "Prontidão técnica de obra privada",
+      "summary": "Identifique o que está documentado e o que falta esclarecer antes de contratar ou retomar uma obra. O diagnóstico é opcional.",
+      "format": "PROJETOS · DOCUMENTAÇÃO",
+      "action": "Ver o que falta na obra",
+      "href": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "art": "check",
+      "mark": "7 DOMÍNIOS",
+      "keywords": "obra privada contratar documentação compatibilização diagnóstico retomar",
+      "page": {
+        "title": "Prontidão técnica de obra privada: checklist para contratar",
+        "desc": "Veja o que falta antes de contratar ou retomar uma obra privada. Confira sete domínios e identifique o próximo passo em projetos, orçamento ou revisão.",
+        "start": "diagnostico",
+        "brief": "Escolha o estágio da obra e a decisão que você precisa tomar. Para cada domínio, indique o que existe, o que falta e o que você ainda não sabe. O resultado orienta a próxima conferência.",
+        "related": [
+          "medir-planta",
+          "modela"
+        ]
+      }
+    },
+    {
+      "id": "cnpj",
+      "group": "obras",
+      "title": "Consultar perfil público por CNPJ",
+      "summary": "Pesquise o histórico público de contratações e as oportunidades relacionadas quando houver cobertura das fontes.",
+      "format": "CNPJ · DADOS PÚBLICOS",
+      "action": "Pesquisar um CNPJ",
+      "href": "/analise-cnpj/",
+      "art": "table",
+      "mark": "CNPJ",
+      "keywords": "pesquisa empresa fornecedor oportunidades contratos públicos cnpj"
+    }
+  ]
+}
