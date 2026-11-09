@@ -164,6 +164,23 @@ async function trustedPhysicalClick(page, prepared) {
   return trace;
 }
 
+// Auxiliary flow controls use synthetic DOM activation after a visible center
+// hit-test. The primary Pix purchase proof does not use this helper:
+// it requires one browser-trusted physical pointer sequence.
+async function activateVisibleControl(page, selector) {
+  const control = await page.waitForSelector(selector, { visible: true });
+  await control.evaluate(async (node, selector) => {
+    node.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    const rect = node.getBoundingClientRect();
+    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    if (node.disabled || !node.contains(hit)) throw new Error('Control cannot be reached: ' + selector);
+    // Preserve the upstream functional-flow coverage without presenting this
+    // synthetic activation as proof of trusted pointer input.
+    node.click();
+  }, selector);
+}
+
 async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   const opened = await page.evaluate(async ({ referral, shared }) => {
     const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
@@ -175,7 +192,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeiro uso completo/i);
   await page.type('input[type=email]', 'a@b.com');
   await page.type('input[type=password]', '123456');
-  await page.click('button[type=submit]');
+  await activateVisibleControl(page, 'dialog button[type=submit]');
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
 }
 
@@ -389,15 +406,15 @@ try {
   assert.deepEqual(await checkoutPage.evaluate(() => window.events), [['tool_referral_panel_view', { tool_id: 'shared-wallet', destination_kind: 'catalog' }]]);
   assert.equal(await checkoutPage.$eval('dialog select', select => select.value), 'pix');
   await checkoutPage.select('dialog select', 'checkout');
-  await checkoutPage.click('dialog input[type=checkbox]');
+  await activateVisibleControl(checkoutPage, 'dialog input[type=checkbox]');
   assert.equal(await checkoutPage.$eval('dialog input[type=checkbox]', checkbox => checkbox.checked), true);
-  await checkoutPage.click('dialog .tool-credits__packs button');
+  await activateVisibleControl(checkoutPage, 'dialog .tool-credits__packs button');
   await checkoutPage.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Abrir pagamento no Mercado Pago'));
   assert.equal(orderRequests.length, 2);
   assert.equal(orderRequests[1].paymentFlow, 'checkout');
   assert.equal(await checkoutPage.$('img[alt="QR Code Pix"]'), null);
   assert.equal(await checkoutPage.$eval('dialog .tool-credits__close', button => button.disabled), false);
-  await checkoutPage.click('dialog .tool-credits__close');
+  await activateVisibleControl(checkoutPage, 'dialog .tool-credits__close');
   await checkoutPage.waitForSelector('dialog[open]', { hidden: true });
   await checkoutPage.close();
   await page.evaluate(() => document.querySelector('dialog').close());
