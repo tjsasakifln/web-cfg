@@ -17,6 +17,10 @@ const pendingPix = {id:'o1',status:'pending',paymentFlow:'pix',qrCode:'pix-code'
 const pendingCheckout = {id:'o2',status:'pending',paymentFlow:'checkout',checkoutUrl:'https://www.mercadopago.com.br/checkout/v1/redirect?order_id=TEST_ONLY'};
 let fixtureMayConfirm = false;
 const calls = [], registrations = [], orderRequests = [], attempts = [];
+const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
+  purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
+  packages:[{id:'one',credits:1,amountCents:1490}]};
+let toolCreditsConfig = sharedEnabledConfig;
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (url.pathname === '/') { res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
@@ -27,9 +31,7 @@ const server = createServer(async (req, res) => {
   if (url.pathname !== '/api/web/tool-credits') { res.statusCode = 404; return res.end(); }
   calls.push(url.searchParams.get('op')); let body = ''; for await (const chunk of req) body += chunk;
   const send = value => { res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(value)); };
-  if (url.searchParams.get('op') === 'config') return send({enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
-    purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
-    packages:[{id:'one',credits:1,amountCents:1490}]});
+  if (url.searchParams.get('op') === 'config') return send(toolCreditsConfig);
   if (url.searchParams.get('op') === 'account') {
     if (req.method === 'POST') registrations.push(JSON.parse(body));
     return send({paid:2,promo:1,freeAvailable:false,referralCode:firstRef,invites:{earned:1,pending:0},recentOrders:[]});
@@ -200,6 +202,7 @@ try {
   assert.ok(!JSON.stringify(attempts[0]).includes('dado privado'));
   await page.waitForFunction(() => document.querySelector('.tool-credits__export-notice')?.textContent.includes('Baixar comprovante'));
 
+  toolCreditsConfig = {...sharedEnabledConfig}; delete toolCreditsConfig.sharedExportsEnabled;
   const gated = await browser.newPage();
   await gated.goto(`http://127.0.0.1:${port}/`);
   const gates = await gated.evaluate(async () => {
@@ -207,10 +210,22 @@ try {
     const response = value => ({ status: 200, ok: true, json: async () => value });
     const disabled = createToolCredits({toolId:'modela-memoria', fetchImpl: async () => response({enabled:false})});
     const paused = createToolCredits({toolId:'modela-memoria', fetchImpl: async () => response({enabled:true, firebase:{apiKey:'fake'}, tools:['modela-memoria'], purchasesEnabled:false})});
-    return { disabled: await disabled.openReferral(), paused: await paused.openReferral(), dialogs: document.querySelectorAll('dialog').length };
+    const sharedConfig = sharedExportsEnabled => ({enabled:true, firebase:{apiKey:'fake'}, tools:['modela-memoria'], sharedExportsEnabled});
+    const sharedMissing = createToolCredits({toolId:'modela-memoria', shared:true, fetchImpl: async () => response(sharedConfig())});
+    const sharedNull = createToolCredits({toolId:'modela-memoria', shared:true, fetchImpl: async () => response(sharedConfig(null))});
+    const sharedFalse = createToolCredits({toolId:'modela-memoria', shared:true, fetchImpl: async () => response(sharedConfig(false))});
+    const {exportToolResult} = await import('/assets/js/tool-credits.mjs');
+    let directDelivered = 0;
+    const directResult = await exportToolResult({toolId:'calculadora-bdi', format:'csv', content:'local only', deliver: () => { directDelivered += 1; }});
+    return {
+      disabled: await disabled.openReferral(), paused: await paused.openReferral(),
+      sharedMissing: await sharedMissing.open(), sharedNull: await sharedNull.open(), sharedFalse: await sharedFalse.open(),
+      directResult, directDelivered, dialogs: document.querySelectorAll('dialog').length,
+    };
   });
-  assert.deepEqual(gates, {disabled:false, paused:false, dialogs:0});
+  assert.deepEqual(gates, {disabled:false, paused:false, sharedMissing:false, sharedNull:false, sharedFalse:false, directResult:true, directDelivered:1, dialogs:0});
   await gated.close();
+  toolCreditsConfig = sharedEnabledConfig;
 
   const malformed = await browser.newPage();
   await malformed.goto(`http://127.0.0.1:${port}/?ref=${firstRef}&ref=${secondRef}`);
