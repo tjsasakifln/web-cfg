@@ -15,7 +15,6 @@
 .ts-hero-actions .button{background:var(--ts-mint);border:1px solid var(--ts-mint);color:var(--ts-deep);min-height:48px;box-shadow:none}
 .ts-hero-actions .button:hover{background:#dbffeb}
 .ts-hero-actions .ts-hero-link{color:#f3fffa;text-decoration:underline;text-underline-offset:4px;padding:10px}
-.ts-hero-actions a:focus-visible{outline:3px solid #fff;outline-offset:4px}
 .ts-hero-visual{display:grid;position:relative;grid-template-columns:1fr 1fr;gap:10px;align-self:stretch;align-content:center;min-width:0;margin:0}
 .ts-hero-visual .ts-plate:first-child{grid-column:span 2;min-height:132px;background:#102d3b}
 .ts-hero-visual .ts-plate:first-child svg{height:132px}
@@ -39,7 +38,8 @@
 .ts-section-heading p{max-width:44ch;margin:0;color:var(--ts-muted);line-height:1.5}
 .ts-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2.1vw,24px);list-style:none;padding:0;margin:0}
 .ts-card{min-width:0;display:flex;flex-direction:column;background:#fff;border:1px solid var(--ts-line);border-radius:14px;padding:9px;box-shadow:0 8px 18px #122c3809;transition:border-color .18s ease,box-shadow .18s ease}
-.ts-card:hover,.ts-card:focus-within{border-color:#75ab9d;box-shadow:0 10px 24px #102e3b12}
+.ts-card:hover{border-color:#75ab9d;box-shadow:0 10px 24px #102e3b12}
+.ts-card:focus-within{border-color:#75ab9d}
 .ts-plate{--ts-accent:#a8f2cd;display:block;position:relative;overflow:hidden;background:#103b3d;border-radius:9px;min-height:94px;color:var(--ts-accent);margin:0;isolation:isolate}
 .ts-plate::before{position:absolute;inset:0;content:"";z-index:-1;background-image:linear-gradient(#effffc16 1px,transparent 1px),linear-gradient(90deg,#effffc16 1px,transparent 1px);background-size:14px 14px;mask-image:linear-gradient(110deg,transparent,#000)}
 .ts-plate svg{display:block;width:100%;height:100px;color:inherit}
