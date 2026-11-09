@@ -19,7 +19,8 @@ SOURCE_NAMES = {name.lower(): name for name in NAMES}
 BRANDS = re.compile(r'(?<![A-Za-z0-9_.])(' + '|'.join(NAMES) + r')(?![A-Za-z0-9_]|\.[A-Za-z0-9_])')
 ICON = (ROOT / 'assets/favicon-32.png').read_bytes()
 ICO = (ROOT / 'favicon.ico').read_bytes()
-REV = '0.8.1-confenge-' + sha256(Path(__file__).read_bytes() + ICON + ICO).hexdigest()[:12]
+EXTRA_EXPORTS = Path(__file__).with_name('extra_exports.py').read_bytes()
+REV = '0.8.1-confenge-' + sha256(Path(__file__).read_bytes() + EXTRA_EXPORTS + ICON + ICO).hexdigest()[:12]
 CREDIT = "CONFENGE adaptou a interface, os nomes, a ajuda e os recursos offline desta edição. "
 
 EXPORT_BRIDGE = r"""// Entitlement bridge for the CONFENGE browser edition. No login token enters this frame.
@@ -357,9 +358,9 @@ def adapted(slug, name, data):
         return path, text.encode()
     if name == 'assets/js/app-input-ui.js':
         text = bridge_import(slug) + data.decode()
-        before = """  const a = el('a', { href: URL.createObjectURL(new Blob([text], { type })), download: name });
-  document.body.append(a); a.click(); a.remove();"""
-        text = replace_one(text, before, "  requestConfengeExport(text, name, type);")
+        before = """    const a = el('a', { href: URL.createObjectURL(new Blob([text], { type })), download: name });
+    document.body.append(a); a.click(); a.remove();"""
+        text = replace_one(text, before, "    requestConfengeExport(text, name, type);")
         return path, text.encode()
     if name == 'assets/js/app-devices-ui.js':
         text = bridge_import(slug, 'requestConfengeBackup') + data.decode()

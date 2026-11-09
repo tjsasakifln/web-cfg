@@ -87,7 +87,7 @@ def patch_extra_exports(slug: str, name: str, text: str, bridge_url: str) -> str
     (kind === 'study' ? requestConfengeBackup : requestConfengeExport)(text, name, mime);"""
         return _import(bridge_url, "requestConfengeExport, requestConfengeBackup") + _once(text, before, after, name)
 
-    if name.endswith("partcraft.js") and slug == "partcraft":
+    if name == "assets/apps/partcraft/0.8.1/partcraft.js" and slug == "partcraft":
         before = """  function download(bytes, name, type) {
     const url = URL.createObjectURL(new Blob([bytes], { type }));
     const a = el('a', { href: url, download: name });
