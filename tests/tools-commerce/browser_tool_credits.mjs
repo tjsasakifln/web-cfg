@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 
 const root = new URL('../../', import.meta.url);
@@ -61,6 +61,109 @@ const server = createServer(async (req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({executablePath, headless:true,args:['--no-sandbox']});
+let physicalClickSequence = 0;
+
+async function prepareTrustedPhysicalClick(page, selector, label) {
+  await page.bringToFront();
+  const traceKey = `${label}-${++physicalClickSequence}`;
+  return page.evaluate(async ({ selector, label, traceKey }) => {
+    if (document.visibilityState !== 'visible' || !document.hasFocus()) {
+      throw new Error(`${label}: page is not visible and focused`);
+    }
+    const target = document.querySelector(selector);
+    if (!(target instanceof HTMLElement)) throw new Error(`${label}: live target is absent`);
+    if (!target.isConnected) throw new Error(`${label}: live target is disconnected`);
+    if ('disabled' in target && target.disabled) throw new Error(`${label}: live target is disabled`);
+    target.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+    const snapshot = () => {
+      const rect = target.getBoundingClientRect();
+      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    };
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    const first = snapshot();
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    const second = snapshot();
+    if (first.x !== second.x || first.y !== second.y || first.width !== second.width || first.height !== second.height) {
+      throw new Error(`${label}: target geometry is not stable: ${JSON.stringify({ first, second })}`);
+    }
+    if (!(second.width > 0 && second.height > 0)) {
+      throw new Error(`${label}: target has no positive geometry: ${JSON.stringify(second)}`);
+    }
+    const center = { x: second.x + second.width / 2, y: second.y + second.height / 2 };
+    if (!(center.x >= 0 && center.x < innerWidth && center.y >= 0 && center.y < innerHeight)) {
+      throw new Error(`${label}: target center is outside the viewport: ${JSON.stringify({ center, width: innerWidth, height: innerHeight })}`);
+    }
+    const hit = document.elementFromPoint(center.x, center.y);
+    if (!hit || !target.contains(hit)) {
+      throw new Error(`${label}: target center is obstructed: ${JSON.stringify({ center, hit: hit && { tag: hit.tagName, id: hit.id, className: hit.className } })}`);
+    }
+    const state = { target, trace: [], listener: null };
+    state.listener = event => {
+      if (!state.target.contains(event.target)) return;
+      state.trace.push({
+        type: event.type,
+        isTrusted: event.isTrusted,
+        target: event.target.tagName,
+        connected: state.target.isConnected,
+        disabled: Boolean(state.target.disabled),
+      });
+    };
+    for (const type of ['pointerdown', 'pointerup', 'click']) document.addEventListener(type, state.listener, true);
+    window.__toolCreditsPhysicalClicks ||= Object.create(null);
+    window.__toolCreditsPhysicalClicks[traceKey] = state;
+    return { selector, label, traceKey, rect: second };
+  }, { selector, label, traceKey });
+}
+
+async function trustedPhysicalClick(page, prepared) {
+  await page.bringToFront();
+  const clearTrace = () => page.evaluate(traceKey => {
+    const state = window.__toolCreditsPhysicalClicks?.[traceKey];
+    if (!state) return [];
+    for (const type of ['pointerdown', 'pointerup', 'click']) document.removeEventListener(type, state.listener, true);
+    delete window.__toolCreditsPhysicalClicks[traceKey];
+    return state.trace;
+  }, prepared.traceKey);
+  let center;
+  try {
+    center = await page.evaluate(prepared => {
+      if (document.visibilityState !== 'visible' || !document.hasFocus()) {
+        throw new Error(`${prepared.label}: page lost visibility or focus before action`);
+      }
+      const state = window.__toolCreditsPhysicalClicks?.[prepared.traceKey];
+      const target = document.querySelector(prepared.selector);
+      if (!state || target !== state.target) throw new Error(`${prepared.label}: live target identity changed before action`);
+      if (!target.isConnected) throw new Error(`${prepared.label}: live target disconnected before action`);
+      if ('disabled' in target && target.disabled) throw new Error(`${prepared.label}: live target disabled before action`);
+      const rect = target.getBoundingClientRect();
+      const current = { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+      const prior = prepared.rect;
+      if (current.x !== prior.x || current.y !== prior.y || current.width !== prior.width || current.height !== prior.height) {
+        throw new Error(`${prepared.label}: target geometry changed before action: ${JSON.stringify({ prior, current })}`);
+      }
+      const point = { x: current.x + current.width / 2, y: current.y + current.height / 2 };
+      const hit = document.elementFromPoint(point.x, point.y);
+      if (!hit || !target.contains(hit)) throw new Error(`${prepared.label}: target center became obstructed before action`);
+      return point;
+    }, prepared);
+  } catch (error) {
+    await clearTrace().catch(() => {});
+    throw error;
+  }
+  let clickError;
+  try { await page.mouse.click(center.x, center.y); }
+  catch (error) { clickError = error; }
+  const trace = await clearTrace();
+  if (clickError) throw clickError;
+  for (const type of ['pointerdown', 'pointerup', 'click']) {
+    assert.equal(trace.filter(event => event.type === type).length, 1,
+      `${prepared.label}: expected one trusted ${type}: ${JSON.stringify(trace)}`);
+  }
+  assert.ok(trace.every(event => event.isTrusted),
+    `${prepared.label}: physical input must be browser-trusted: ${JSON.stringify(trace)}`);
+  return trace;
+}
+
 async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   const opened = await page.evaluate(async ({ referral, shared }) => {
     const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
@@ -118,7 +221,9 @@ try {
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
-  await page.locator('dialog .tool-credits__packs button').click();
+  await trustedPhysicalClick(page, await prepareTrustedPhysicalClick(
+    page, 'dialog .tool-credits__packs button', 'unaccepted purchase',
+  ));
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
@@ -153,48 +258,57 @@ try {
   const termsClickTrace = await page.evaluate(() => window.termsClickTrace);
   assert.ok(termsClickTrace.some(event => event.type === 'click' && event.target === 'INPUT' && event.checked && event.connected),
     `real terms click was not observed on the live control: ${JSON.stringify(termsClickTrace)}`);
-  // Re-resolve the actionable button after the terms render settles. Arm the
-  // network observation before one physical click so a failure distinguishes
-  // click delivery from the asynchronous Pix render without retrying either.
+  // A covering element must be rejected before any input is dispatched. This
+  // counterproof prevents the physical helper from degrading into a forced
+  // click when another element owns the visible center.
   await page.evaluate(() => {
-    window.priceClickTrace = [];
-    const dialog = document.querySelector('dialog');
-    for (const type of ['pointerdown', 'pointerup', 'click']) dialog.addEventListener(type, event => {
-      const button = event.target?.closest?.('.tool-credits__packs button');
-      if (!button) return;
-      const rect = button.getBoundingClientRect();
-      window.priceClickTrace.push({
-        type,
-        target: event.target.tagName,
-        connected: button.isConnected,
-        disabled: button.disabled,
-        width: rect.width,
-        height: rect.height,
-      });
-    });
+    const obstruction = document.createElement('div');
+    obstruction.id = 'tool-credits-click-obstruction';
+    obstruction.style.cssText = 'position:fixed;inset:0;z-index:2147483647;pointer-events:auto';
+    document.querySelector('dialog').append(obstruction);
   });
-  const priceLocator = page.locator('dialog .tool-credits__packs button');
+  await assert.rejects(
+    () => prepareTrustedPhysicalClick(page, 'dialog .tool-credits__packs button', 'obstructed purchase'),
+    /target center is obstructed/,
+  );
+  assert.equal(orderRequests.length, 0, 'an obstructed target must not create an order');
+  await page.evaluate(() => document.querySelector('#tool-credits-click-obstruction')?.remove());
+
+  const preparedPurchase = await prepareTrustedPhysicalClick(
+    page, 'dialog .tool-credits__packs button', 'accepted purchase',
+  );
   let orderResponse;
+  let responseState = 'pending';
+  let clickState = 'prepared';
+  let purchaseClickTrace = [];
+  const responseAbort = new AbortController();
+  const responsePromise = page.waitForResponse(response => {
+    const request = response.request();
+    const url = new URL(request.url());
+    return request.method() === 'POST' && url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'orders';
+  }, { signal: responseAbort.signal }).then(response => {
+    responseState = `fulfilled:${response.status()}`;
+    return { response };
+  }, error => {
+    responseState = `rejected:${error?.name || 'Error'}:${error?.message || error}`;
+    return { error };
+  });
   try {
-    [orderResponse] = await Promise.all([
-      page.waitForResponse(response => {
-        const request = response.request();
-        const url = new URL(request.url());
-        return request.method() === 'POST' && url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'orders';
-      }),
-      priceLocator.click(),
-    ]);
+    purchaseClickTrace = await trustedPhysicalClick(page, preparedPurchase);
+    clickState = 'fulfilled';
+    const responseOutcome = await responsePromise;
+    if (responseOutcome.error) throw responseOutcome.error;
+    orderResponse = responseOutcome.response;
     assert.equal(orderResponse.status(), 200, 'the real purchase click must receive a successful orders response');
-    const clickTrace = await page.evaluate(() => window.priceClickTrace || []);
-    assert.equal(clickTrace.filter(event => event.type === 'click').length, 1,
-      `purchase must receive exactly one real click: ${JSON.stringify(clickTrace)}`);
-    // The application disables the button synchronously inside its click
-    // handler. Actionability therefore belongs to pointerdown; the bubbled
-    // click is expected to observe the already-disabled pending state.
-    assert.ok(clickTrace.some(event => event.type === 'pointerdown' && event.connected && !event.disabled && event.width > 0 && event.height > 0),
-      `real purchase pointer did not start on the live actionable button: ${JSON.stringify(clickTrace)}`);
+    assert.ok(purchaseClickTrace.some(event => event.type === 'pointerdown' && event.connected && !event.disabled),
+      `real purchase pointer did not start on the live actionable button: ${JSON.stringify(purchaseClickTrace)}`);
     await page.waitForFunction(() => document.querySelector('textarea')?.value === 'pix-code');
   } catch (error) {
+    if (clickState !== 'fulfilled') {
+      clickState = `rejected:${error?.name || 'Error'}:${error?.message || error}`;
+      responseAbort.abort();
+      await responsePromise;
+    }
     const diagnostic = await page.evaluate(() => {
       const dialog = document.querySelector('dialog');
       const checkbox = dialog?.querySelector('input[type=checkbox]');
@@ -203,7 +317,6 @@ try {
       const center = rect && { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       const point = center && document.elementFromPoint(center.x, center.y);
       return {
-        clickTrace: window.priceClickTrace || [],
         dialogText: dialog?.textContent || null,
         checkbox: checkbox && { checked: checkbox.checked, connected: checkbox.isConnected },
         button: button && { connected: button.isConnected, disabled: button.disabled, text: button.textContent, rect: rect?.toJSON?.() || null },
@@ -212,10 +325,15 @@ try {
         storedOrders: localStorage.getItem('confenge-tool-orders-v1:u1'),
       };
     });
-    const screenshotPath = join(process.env.RUNNER_TEMP || tmpdir(), 'tool-credits-pix-click-failure.png');
+    const reportDir = fileURLToPath(new URL('build/reports/', root));
+    await mkdir(reportDir, { recursive: true });
+    const screenshotPath = join(reportDir, 'tool-credits-pix-click-failure.png');
     await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
     throw new Error(`real purchase click/Pix transition failed: ${JSON.stringify({
       responseStatus: orderResponse?.status?.() || null,
+      responseState,
+      clickState,
+      clickTrace: purchaseClickTrace,
       calls,
       orderRequests,
       screenshotPath,
