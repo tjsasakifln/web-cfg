@@ -14,8 +14,9 @@ from scripts.organic.service_map import extract_bridge_service, html_has_commerc
 ROOT = Path(__file__).resolve().parents[2]
 SINAPI_PATH = ROOT / "conteudos" / "sinapi-desonerado-nao-desonerado" / "index.html"
 QUERY_LEAD = "desonerado e não desonerado"
-# Query language first; SINAPI named in the title without front-loading (#126 / #207).
-CANONICAL_TITLE = "Desonerado e não desonerado: qual SINAPI usar? | CONFENGE"
+# Query language first. The November GSC observation supports testing a clearer
+# comparison promise; the on-page decision and technical claims stay unchanged.
+CANONICAL_TITLE = "Desonerado e não desonerado no SINAPI: diferenças | CONFENGE"
 SERVICE = "/auditoria-orcamento-licitacao/"
 TITLE_SOFT_MAX = 60
 

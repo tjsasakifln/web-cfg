@@ -176,6 +176,43 @@ def test_producer_limitation_tokens_are_rewritten_to_reader_copy():
     assert "sessão suspensa que esta fonte nunca emitiu" in html
 
 
+def test_repeated_objects_get_compact_unique_pncp_titles():
+    base = {
+        "objeto": "Aquisição de material e execução de serviço com descrição oficial longa " * 4,
+        "orgao": {"nome": "Município"},
+        "local": {"municipio": "Chapecó", "uf": "SC"},
+        "prazo": {"status": "ABERTA", "data_encerramento": "2026-11-24"},
+        "valor": {},
+        "fonte": [],
+        "freshness": {"source_as_of": "2026-11-09T00:00:00+00:00"},
+        "publication_state": "PUBLISHABLE_NOINDEX",
+        "index_eligible": False,
+        "source_kind": "official_live",
+    }
+    first = R.render_opportunity_html({**base, "opportunity_id": "01594009000130-1-000060/2026"})
+    second = R.render_opportunity_html({**base, "opportunity_id": "01594009000130-1-000061/2026"})
+    first_title = first.split("<title>", 1)[1].split("</title>", 1)[0]
+    second_title = second.split("<title>", 1)[1].split("</title>", 1)[0]
+    assert first_title != second_title
+    assert "01594009000130-1-000060/2026" in first_title
+    assert "01594009000130-1-000061/2026" in second_title
+    assert len(first_title) <= 68 and len(second_title) <= 68
+    assert " ".join(base["objeto"].split()) in first  # complete object remains visible
+    other_buyer = R.render_opportunity_html(
+        {**base, "opportunity_id": "99999999000199-1-000060/2026"}
+    )
+    other_title = other_buyer.split("<title>", 1)[1].split("</title>", 1)[0]
+    assert other_title != first_title
+    legacy_a = R._opportunity_title(base["objeto"], "prefix-a-same-long-legacy-tail")
+    legacy_b = R._opportunity_title(base["objeto"], "prefix-b-same-long-legacy-tail")
+    assert legacy_a != legacy_b
+    assert len(legacy_a) <= 68 and len(legacy_b) <= 68
+    adversarial = R._opportunity_title(
+        base["objeto"], "01594009000130-123456789-000000000000000000000060/2026"
+    )
+    assert len(adversarial) <= 68
+
+
 def test_one_hundred_rebuilds_do_not_mint_duplicate_urls_or_canonicals():
     tmp = _tmp_root()
     try:
@@ -304,7 +341,10 @@ def test_compact_heading_preserves_the_complete_official_object():
     declared = re.search(r'<th scope="row">Objeto oficial</th>\s*<td>(.*?)</td>', html, re.S)
     assert declared, "complete source object needs an explicit data block"
     assert unescape(declared.group(1)) == record["objeto"].strip()
-    assert record["objeto"].strip() in unescape(re.search(r"<title>(.*?)</title>", html, re.S).group(1))
+    title = unescape(re.search(r"<title>(.*?)</title>", html, re.S).group(1))
+    assert len(title) <= 68
+    assert record["objeto"].strip() not in title
+    assert f'"name":"{record["objeto"].strip()}' in unescape(html)
     assert record["objeto"].strip() in unescape(html)
     structured = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
     assert structured["about"]["name"] == record["objeto"].strip()

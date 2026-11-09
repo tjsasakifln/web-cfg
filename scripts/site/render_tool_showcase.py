@@ -134,7 +134,7 @@ def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
     text = "Envie a alguém que precisa resolver uma tarefa de engenharia." if path == HUB else (
         "Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho."
     )
-    heading = "Indique as ferramentas CONFENGE" if path == HUB else "Indique esta ferramenta"
+    heading = "Compartilhe as ferramentas CONFENGE" if path == HUB else "Compartilhe esta ferramenta"
     return f'''<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="{escape(title)}">
 <h2 id="tool-share-title">{heading}</h2>
 <p>{text}</p>
@@ -146,6 +146,12 @@ def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
 </div>
 <label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="{escape(copy_url)}" readonly data-share-url></label>
 <p class="tool-share-status" role="status"></p>
+<aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
+<h3>Indique e ganhe créditos de uso</h3>
+<p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
+<a href="/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao" {cta_attrs('tool-referral-entry-' + key, 'tool_share')}>Gerar meu link de indicação</a>
+<a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
+</aside>
 {f'<div class="tool-share-related">{more}</div>' if more else ''}
 </section>'''
 
@@ -248,7 +254,7 @@ def catalogue(html: str, data: dict) -> str:
 <p class="eyebrow">Ferramentas CONFENGE</p>
 <h1>Ferramentas de engenharia online</h1>
 <p data-tool-job>Abra uma planta em DWG, confira um modelo IFC, estime o valor de um imóvel ou organize a próxima decisão da obra.</p>
-<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Indicar a um colega">Indicar</a></div>
+<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Compartilhar com um colega">Compartilhar</a></div>
 </div>
 <figure class="ts-hero-visual" aria-hidden="true">{plate('plan', 'DWG · DXF')}{plate('iso', 'IFC · BIM')}{plate('chart', 'MODELA PRO')}</figure>
 </div></header>
@@ -310,8 +316,10 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
         button = re.search(r'<button\b[^>]*\bid="' + action + r'"[^>]*>.*?</button>', html, re.S)
         if not button:
             raise ValueError(f"Result actions moved: {path}")
-        link = '<a class="text-link tool-result-share" href="#tool-share-title">Indicar esta ferramenta</a>'
+        link = '<a class="text-link tool-result-share" href="#tool-share-title">Compartilhar esta ferramenta</a>'
         html = html[:button.end()] + link + html[button.end():]
+    html = re.sub(r'(<a\b[^>]*class="text-link tool-result-share"[^>]*>).*?(</a>)',
+                  r'\1Compartilhar esta ferramenta\2', html)
     share = share_panel(path, item["title"], key, [by_id[ref] for ref in page["related"]])
     return marker(html, "share", share, "</main>")
 

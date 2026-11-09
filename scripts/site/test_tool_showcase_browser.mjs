@@ -9,10 +9,23 @@ import { resolveChromePath } from './resolve_chrome.mjs';
 const root = resolve(process.argv[2] || '_site');
 const shots = process.env.TOOL_SHOWCASE_SCREENSHOTS;
 const events = [];
+let commerceConfig = { enabled: false };
+let mockCommerce = null;
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript',
   '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
+  if (url.pathname === '/assets/js/tool-credits.mjs' && mockCommerce !== null) {
+    return res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(`
+      export const createToolCredits = () => ({
+        ready: async () => ${mockCommerce},
+        open: async () => {},
+        openReferral: async () => { window.referralOpened = (window.referralOpened || 0) + 1; return ${mockCommerce}; }
+      });`);
+  }
+  if (url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'config') {
+    return res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(commerceConfig));
+  }
   if (url.pathname.startsWith('/.netlify/functions/') || url.pathname.startsWith('/api/web/')) {
     if (req.method === 'POST') {
       let body = '';
@@ -44,7 +57,8 @@ try {
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   const load = async (route) => {
-    const res = await page.goto(base + route, { waitUntil: 'load', timeout: 25000 });
+    let res = await page.goto(base + route, { waitUntil: 'load', timeout: 25000 });
+    if (!res) res = await page.reload({ waitUntil: 'load', timeout: 25000 });
     assert.equal(res.status(), 200, route);
   };
   const overflow = () => page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
@@ -85,6 +99,26 @@ try {
     runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
   })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })));
   assert.deepEqual(violations, [], JSON.stringify(violations));
+
+  // Personal rewards require an active commerce program. Public sharing remains
+  // usable while checkout is unavailable, without implying credit attribution.
+  assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
+  assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
+  for (const config of [
+    { enabled: true, purchasesEnabled: false, tools: ['modela-memoria'] },
+    { enabled: true, purchasesEnabled: true, tools: [] },
+  ]) {
+    commerceConfig = config;
+    await load('/ferramentas/');
+    assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
+  }
+  commerceConfig = { enabled: true, purchasesEnabled: true, tools: ['modela-memoria'] };
+  await load('/ferramentas/');
+  await page.waitForSelector('[data-referral-entry]:not([hidden])');
+  assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
+    '/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
+  assert.match(await page.$eval('[data-referral-entry]', el => el.textContent), /primeira exportação paga/);
+  commerceConfig = { enabled: false };
 
   // Declining/accepting analytics is not required to copy or share. A denied
   // clipboard must expose a selectable static URL with neither input nor ref.
@@ -136,6 +170,27 @@ try {
   if (shots) await page.screenshot({ path: resolve(shots, 'modela-1440.png') });
   assert.equal(await overflow(), false);
   assert.equal(await page.$eval('link[rel="canonical"]', el => el.href), 'https://confenge.com.br/avaliacao-imoveis-urbanos/inferencia/');
+  await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
+  const modelaViolations = await page.evaluate(async () => (await window.axe.run('main', {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+  })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({target:n.target, summary:n.failureSummary})) })));
+  assert.deepEqual(modelaViolations, [], JSON.stringify(modelaViolations));
+  // Exercise the actual Modela app wiring. Wallet authentication and reward
+  // behavior are covered separately by browser_tool_credits.mjs.
+  mockCommerce = true;
+  commerceConfig = { enabled: true, purchasesEnabled: true, tools: ['modela-memoria'] };
+  await load('/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
+  await page.waitForFunction(() => window.referralOpened === 1);
+  await page.waitForSelector('[data-referral-entry]:not([hidden])');
+  await page.click('[data-referral-entry] a');
+  await page.waitForFunction(() => window.referralOpened === 2);
+  await load('/avaliacao-imoveis-urbanos/inferencia/');
+  assert.equal(await page.evaluate(() => window.referralOpened || 0), 0);
+  mockCommerce = false;
+  await load('/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
+  assert.equal(await page.evaluate(() => window.referralOpened || 0), 0);
+  mockCommerce = null;
+  commerceConfig = { enabled: false };
   assert.deepEqual(errors, []);
 
   await page.setJavaScriptEnabled(false);

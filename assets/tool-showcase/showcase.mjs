@@ -4,6 +4,20 @@ import { referralFirstTouch } from '/assets/js/tool-referral.mjs';
 // always uses the authored tool URL (never location.href or form values).
 referralFirstTouch();
 
+// The ordinary share URL is public. A personal reward link is generated only
+// by a verified account, and is advertised only while paid use is available.
+const referralEntries = [...document.querySelectorAll('[data-referral-entry]')];
+if (referralEntries.length) {
+  fetch('/api/web/tool-credits?op=config', { headers: { Accept: 'application/json' } })
+    .then(response => response.ok ? response.json() : null)
+    .then(config => {
+      if (config?.enabled === true && config?.purchasesEnabled === true &&
+          Array.isArray(config.tools) && config.tools.includes('modela-memoria')) {
+        referralEntries.forEach(entry => { entry.hidden = false; });
+      }
+    }).catch(() => {});
+}
+
 const simplify = (value) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const search = document.querySelector('[data-tool-search]');
 if (search) {

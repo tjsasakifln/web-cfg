@@ -106,17 +106,20 @@ def publish(
         last_accepted=site / DEFAULT_LAST_ACCEPTED_DIR,
     )
     written = R.write_pages(projection, root=pages_root)
-    try:
-        from scripts.organic.sitemap_graph import ensure_index_member
-
-        ensure_index_member(pages_root, R.SITEMAP_NAME)
-    except (ImportError, OSError, ValueError):
-        pass
     indexable = [
         record
         for record in R.renderable(projection)
         if R.record_is_indexable(record, projection_kind=projection.get("source_kind"))
     ]
+    try:
+        from scripts.organic.sitemap_graph import drop_index_member, ensure_index_member
+
+        if indexable:
+            ensure_index_member(pages_root, R.SITEMAP_NAME)
+        else:
+            drop_index_member(pages_root, R.SITEMAP_NAME)
+    except (ImportError, OSError, ValueError):
+        pass
     if mutate_discovery:
         _write_discovery(site if public_root is None else pages_root, indexable)
     return {

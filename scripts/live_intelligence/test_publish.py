@@ -39,6 +39,13 @@ def test_publish_prunes_fixture_and_writes_index_when_official_present(
     fixture = tmp_path / "oportunidades" / "pe-2026-000188-reforma-ubs-londrina-pr"
     fixture.mkdir(parents=True)
     (fixture / "index.html").write_text("<html>fixture</html>\n", encoding="utf-8")
+    (tmp_path / "sitemap-index.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '<sitemap><loc>https://confenge.com.br/sitemap-oportunidades.xml</loc></sitemap>'
+        '</sitemapindex>\n',
+        encoding="utf-8",
+    )
     export = _write_539_candidate(tmp_path / "official-src", catalog_mode="official_live")
     monkeypatch.setenv("CONFENGE_LI_OFFICIAL_DIR", str(export))
     result = P.publish(root=tmp_path, public_root=tmp_path, mutate_discovery=False)
@@ -49,6 +56,11 @@ def test_publish_prunes_fixture_and_writes_index_when_official_present(
     index_page = tmp_path / "oportunidades" / "12345678000190-1" / "2026" / "index.html"
     assert index_page.is_file()
     html = index_page.read_text(encoding="utf-8")
-    assert "index,follow" in html
+    assert "noindex,nofollow" in html
+    assert "situação atual não foi revalidada" in html
+    sitemap = (tmp_path / "sitemap-oportunidades.xml").read_text(encoding="utf-8")
+    assert "<url>" not in sitemap
+    sitemap_index = (tmp_path / "sitemap-index.xml").read_text(encoding="utf-8")
+    assert "sitemap-oportunidades.xml" not in sitemap_index
     assert "UNKNOWN" not in html
     shutil.rmtree(tmp_path / "data", ignore_errors=True)

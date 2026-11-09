@@ -2,6 +2,7 @@
  * Assert tools emit canonical event names on the shipped path (static + tools-common).
  */
 import { readFileSync, existsSync } from "fs";
+import { execFileSync } from "child_process";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import vm from "vm";
@@ -160,27 +161,33 @@ else {
   else pass("wave1_pages", r.pages.length);
 }
 
-// release-approved: pre-approval is a noop; post first-cohort release is a clean green report
-import { execSync } from "child_process";
+// Read-only release truth: pre-approval stays gated; the released first cohort
+// must have current human approvals and clean public surfaces. The mutating
+// release command itself is covered by scripts/editorial/tests.
 function parseLastJsonObject(text) {
   const start = text.lastIndexOf("\n{") >= 0 ? text.lastIndexOf("\n{") + 1 : text.indexOf("{");
   if (start < 0) throw new Error("no_json_object");
   return JSON.parse(text.slice(start));
 }
-const out = execSync("python3 scripts/editorial/release_approved.py", {
+const out = execFileSync("python3", ["scripts/editorial/truth.py"], {
   cwd: ROOT,
   encoding: "utf8",
   maxBuffer: 20 * 1024 * 1024,
 });
 const j = parseLastJsonObject(out);
-if (j.valid_human_approved === 0) {
+const validHumanApproved = j.first_cohort?.human_approved;
+if (validHumanApproved === 0) {
   pass("release_noop_without_human");
-  if (!(Array.isArray(j.blocked) ? j.blocked.join(" ") : String(j.blocked || "")).includes("no_valid_human")) {
+  if (j.release?.cohort_complete !== false || j.release?.released_count !== 0) {
     fail("release_blocked_msg");
   } else pass("release_blocked_msg");
-} else if (j.valid_human_approved === 2 && j.cohort_complete === true && Array.isArray(j.blocked) && j.blocked.length === 0) {
-  pass("release_first_cohort_complete", j.released_count);
-  const urls = j.gsc_submit_candidates || [];
+} else if (validHumanApproved === 2 && j.release?.cohort_complete === true && j.ok === true && Array.isArray(j.contradictions) && j.contradictions.length === 0) {
+  pass("release_first_cohort_complete", j.release.released_count);
+  const rows = Array.isArray(j.surface_audit) ? j.surface_audit : [];
+  const urls = [...new Set(rows
+    .filter((row) => row.valid_indexable === true || row.registry_status === "MIGRATED")
+    .map((row) => row.canonical)
+    .filter((url) => typeof url === "string" && url.startsWith("https://confenge.com.br/")))];
   const need = [
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
@@ -192,9 +199,9 @@ if (j.valid_human_approved === 0) {
   else fail("release_gsc_candidates", urls);
 } else {
   fail("release_unexpected_state", JSON.stringify({
-    valid_human_approved: j.valid_human_approved,
-    cohort_complete: j.cohort_complete,
-    blocked: j.blocked,
+    valid_human_approved: validHumanApproved,
+    cohort_complete: j.release?.cohort_complete,
+    contradictions: j.contradictions,
   }));
 }
 

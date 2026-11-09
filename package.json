@@ -37,7 +37,7 @@
     "test:pos-inb-04:browser": "node tests/pos-inb-20260911/04/browser_prontidao.mjs",
     "test:infrastructure-demonstrative": "python3 -m pytest tests/demonstrative_infrastructure/test_infrastructure_pilot.py tests/pos-inb-20260911/08/test_gates.py -q",
     "pos-inb:06:audit": "python3 scripts/campaigns/pos-inb-20260911/06/audit_discovery.py",
-    "validate:seo": "python3 seo/scripts/validate_seo.py",
+    "validate:seo": "python3 -m pytest seo/scripts/test_internal_link_targets.py -q && python3 seo/scripts/validate_seo.py",
     "test:analytics": "node seo/scripts/test_third_party_analytics_gate.mjs && node seo/scripts/test_analytics_pii.mjs && node seo/scripts/test_editorial_analytics.mjs && node seo/scripts/test_event_dictionary.mjs && node --test tests/netlify/event-contract-path.test.cjs && npm run test:attribution",
     "test:attribution": "node tests/attribution/test_source_to_service.mjs && node tests/attribution/test_stale_need_context.mjs",
     "test:event-dictionary": "node seo/scripts/test_event_dictionary.mjs",

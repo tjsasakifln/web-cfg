@@ -16,7 +16,9 @@ Fail-closed by construction:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import re
 import shutil
 from datetime import datetime, timezone
 from html import escape
@@ -371,6 +373,32 @@ def _compact_object_heading(objeto: str) -> str:
     return (prefix or normalized[:96]) + "…"
 
 
+def _short_public_id(opportunity_id: str) -> str:
+    """Stable public identity for human-visible title disambiguation.
+
+    Sequence/year alone collides across buyers. PNCP identifiers fit the title
+    budget and retain the CNPJ component, so distinct records stay distinct.
+    """
+    normalized = opportunity_id.strip("/")
+    if re.fullmatch(r"\d{14}-\d-\d{6}/\d{4}", normalized):
+        return normalized
+    if not normalized:
+        return "sem-identificador"
+    digest = hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:10]
+    return f"{normalized[-16:]}-{digest}"
+
+
+def _opportunity_title(objeto: str, opportunity_id: str) -> str:
+    """Compact, unique title; the full official object remains in the body."""
+    label = _short_public_id(opportunity_id)
+    normalized = " ".join(objeto.split())
+    suffix = f" · {label} | CONFENGE"
+    room = max(24, 68 - len(suffix))
+    if len(normalized) > room:
+        normalized = normalized[:room].rsplit(" ", 1)[0].rstrip(" ,.;:-") + "…"
+    return normalized + suffix
+
+
 def render_opportunity_html(record: dict[str, Any]) -> str:
     """Render one opportunity page. INDEX only when the record earned it."""
     opportunity_id = record["opportunity_id"]
@@ -381,9 +409,10 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
     valor = record.get("valor") or {}
     freshness = record.get("freshness") or {}
     orgao_nome = _pt(orgao.get("nome"))
-    # <title> survives the gate's visible-text extraction (only <script>/<style>
-    # content is dropped), so it is reader copy and is normalised like the body.
-    title = f"{objeto}, {orgao_nome} | CONFENGE"
+    # Distinct PNCP records may repeat the exact object and buyer.  Their public
+    # identifier disambiguates the SERP title while the full object stays in
+    # the body and structured data.
+    title = _opportunity_title(objeto, opportunity_id)
     description = (
         f"Dados públicos declarados da oportunidade {opportunity_id}: objeto, valor estimado "
         f"declarado na fonte, órgão, local, prazo e status, com fonte e data de referência."
@@ -396,6 +425,9 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
     index_state = "INDEX" if indexable else "NOINDEX"
     as_of_human = _human_date(freshness.get("source_as_of") or record.get("as_of"))
     iso_as_of = str(freshness.get("source_as_of") or record.get("as_of") or "").strip()
+    current_status_unconfirmed = "publication_freshness_stale" in (
+        record.get("index_bars") or []
+    )
     json_ld_doc: dict[str, Any] = {
         "@context": "https://schema.org",
         "@type": "WebPage",
@@ -463,7 +495,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
     ("Órgão", orgao_nome),
     ("Esfera", _pt(orgao.get("esfera"))),
     ("Local", _local_label(local)),
-    ("Status da sessão", _mapped(status, PRAZO_LABEL, NAO_INFORMADO)),
+    ("Status informado na data de referência", _mapped(status, PRAZO_LABEL, NAO_INFORMADO)),
     ("Data da sessão", _pt(prazo.get("data_sessao") or prazo.get("data_encerramento"))),
 ])}
 <p class="form-hint">O valor acima é a estimativa declarada no documento público citado. Não é valor contratado e não é valor de serviço CONFENGE. {NAO_INFORMADO_NOTA}</p>
@@ -479,7 +511,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 {_kv_rows([
     ("Data de referência da fonte", as_of_human),
 ])}
-<p class="form-hint">A data acima é a referência declarada pela fonte pública. Não é o relógio de quem lê esta página.</p>
+<p class="form-hint">A data acima é a referência declarada pela fonte pública. Não é o relógio de quem lê esta página.{" A situação atual não foi revalidada dentro da janela de atualização e deve ser confirmada na fonte oficial." if current_status_unconfirmed else ""}</p>
 </section>
 
 <section class="section" id="limitacoes"{archetype_attr("limitacoes")}>

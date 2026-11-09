@@ -40,13 +40,33 @@ try {
   const page = await browser.newPage();
   await page.setViewport({width:390,height:844});
   await page.goto(`http://127.0.0.1:${port}/?ref=${firstRef}`);
-  await page.evaluate(async () => { const {createToolCredits}=await import('/assets/js/tool-credits.mjs'); createToolCredits({toolId:'modela-memoria'}); });
+  await page.evaluate(async () => {
+    window.events = [];
+    window.confengeTrack = (name, properties) => window.events.push([name, properties]);
+    const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
+    createToolCredits({toolId:'modela-memoria'});
+  });
+  const firstTouchEvents = await page.evaluate(() => window.events);
+  assert.deepEqual(firstTouchEvents, [['tool_referral_visit', {touch_outcome:'accepted', storage_mode:'persistent'}]]);
   await page.goto(`http://127.0.0.1:${port}/?ref=${secondRef}`);
-  await page.evaluate(async () => { const {createToolCredits}=await import('/assets/js/tool-credits.mjs'); window.credits=createToolCredits({toolId:'modela-memoria'}); await window.credits.open(); });
+  await page.evaluate(async () => {
+    window.events = [];
+    window.confengeTrack = (name, properties) => window.events.push([name, properties]);
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } });
+    Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('cancelled', 'AbortError'); } });
+    window.open = destination => destination.includes('linkedin.com') ? null : {};
+    const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
+    window.credits=createToolCredits({toolId:'modela-memoria'});
+    window.referralOpened = await window.credits.openReferral();
+  });
+  assert.equal(await page.evaluate(() => window.referralOpened), true);
   assert.equal(await page.$eval('dialog', d => d.open), true); assert.match(await page.$eval('dialog', d => d.textContent), /primeiro uso completo/i);
   await page.type('input[type=email]', 'a@b.com'); await page.type('input[type=password]', '123456'); await page.click('button[type=submit]');
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
   assert.match(await page.$eval('dialog', d => d.textContent), /3 créditos disponíveis/);
+  await page.waitForFunction(() => document.activeElement?.id === 'tool-credits-referral');
+  assert.match(await page.$eval('#tool-credits-referral', node => node.textContent), /primeira exportação paga/i);
+  assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
   const priceButton = await page.$$('button').then(async buttons => { for (const item of buttons) if ((await item.evaluate(n => n.textContent)).includes('R$')) return item; });
@@ -59,5 +79,61 @@ try {
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Pagamento confirmado'), { timeout: 15000 });
   assert.ok(calls.includes('orders') && calls.includes('order'));
   assert.equal(await page.evaluate(() => location.search), '', 'ref must be removed from visible URL');
+
+  const clickByText = async text => page.evaluate(async value => {
+    const button = [...document.querySelectorAll('button')].find(node => node.textContent === value);
+    if (!button) throw new Error(`button not found: ${value}`);
+    await button.onclick();
+  }, text);
+  await clickByText('Copiar link pessoal');
+  await clickByText('Compartilhar no LinkedIn');
+  await clickByText('Compartilhar no WhatsApp');
+  await clickByText('Mais opções de compartilhamento');
+  await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new Error('denied'); } } }));
+  await clickByText('Copiar link pessoal');
+  const referralEvents = await page.evaluate(() => window.events);
+  assert.equal(referralEvents.filter(([name]) => name === 'tool_referral_panel_view').length, 1);
+  assert.deepEqual(referralEvents.filter(([name]) => name === 'tool_referral_action').map(([, props]) => [props.share_channel, props.action_outcome]), [
+    ['copy', 'success'], ['linkedin', 'blocked'], ['whatsapp', 'success'], ['native', 'cancelled'], ['copy', 'failure']
+  ]);
+  const serializedEvents = JSON.stringify(referralEvents);
+  assert.ok(!serializedEvents.includes(firstRef) && !serializedEvents.includes('a@b.com') && !serializedEvents.includes('confenge.com.br/'));
+
+  const gated = await browser.newPage();
+  await gated.goto(`http://127.0.0.1:${port}/`);
+  const gates = await gated.evaluate(async () => {
+    const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
+    const response = value => ({ status: 200, ok: true, json: async () => value });
+    const disabled = createToolCredits({toolId:'modela-memoria', fetchImpl: async () => response({enabled:false})});
+    const paused = createToolCredits({toolId:'modela-memoria', fetchImpl: async () => response({enabled:true, firebase:{apiKey:'fake'}, tools:['modela-memoria'], purchasesEnabled:false})});
+    return { disabled: await disabled.openReferral(), paused: await paused.openReferral(), dialogs: document.querySelectorAll('dialog').length };
+  });
+  assert.deepEqual(gates, {disabled:false, paused:false, dialogs:0});
+  await gated.close();
+
+  const malformed = await browser.newPage();
+  await malformed.goto(`http://127.0.0.1:${port}/?ref=${firstRef}&ref=${secondRef}`);
+  const malformedResult = await malformed.evaluate(async () => {
+    window.events = [];
+    window.confengeTrack = (name, properties) => window.events.push([name, properties]);
+    const {referralFirstTouch}=await import('/assets/js/tool-referral.mjs');
+    return {value: referralFirstTouch(), search: location.search, events: window.events};
+  });
+  assert.deepEqual(malformedResult, {value:firstRef, search:'', events:[]}, 'ambiguous URLs cannot replace the first accepted attribution');
+  await malformed.close();
+
+  const early = await browser.newPage();
+  await early.goto(`http://127.0.0.1:${port}/`);
+  await early.evaluate(() => localStorage.clear());
+  await early.goto(`http://127.0.0.1:${port}/?ref=early_______0003`);
+  const deferred = await early.evaluate(async () => {
+    window.confengeDeferredEvents = [{event:'untrusted', props:{email:'private@example.com'}}];
+    const {referralFirstTouch}=await import('/assets/js/tool-referral.mjs');
+    referralFirstTouch();
+    return window.confengeDeferredEvents;
+  });
+  assert.deepEqual(deferred, [{event:'tool_referral_visit', props:{touch_outcome:'accepted', storage_mode:'persistent'}}]);
+  assert.ok(!JSON.stringify(deferred).includes('early_______0003'));
+  await early.close();
   console.log('browser tool credits: ok');
 } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }

@@ -35,6 +35,13 @@ const document = {
 };
 const windowObj = {
   dataLayer,
+  // This is the only deferred event shape allowed before form.js publishes
+  // confengeTrack. Extra keys, PII and malformed records must not survive.
+  confengeDeferredEvents: [
+    { event: "tool_referral_visit", props: { touch_outcome: "accepted", storage_mode: "memory" } },
+    { event: "tool_referral_visit", props: { touch_outcome: "accepted", storage_mode: "persistent", ref: "never-admit" } },
+    { event: "tool_referral_visit", props: { touch_outcome: "ignored", storage_mode: "memory" } },
+  ],
   matchMedia: () => ({ matches: false }),
   location: {
     pathname: "/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -54,6 +61,33 @@ windowObj.window = windowObj;
 const sandbox = { window: windowObj, document, console, URLSearchParams, sessionStorage };
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
+
+const deferredVisits = sandbox.window.dataLayer.filter((event) => event.event === "tool_referral_visit");
+if (deferredVisits.length !== 1 || deferredVisits[0].storage_mode !== "memory" || JSON.stringify(deferredVisits[0]).includes("never-admit")) {
+  console.error("FAIL: deferred referral event must replay once with its finite no-PII shape", deferredVisits);
+  process.exit(1);
+}
+if (!Array.isArray(sandbox.window.confengeDeferredEvents) || sandbox.window.confengeDeferredEvents.length !== 0) {
+  console.error("FAIL: deferred referral queue must be consumed", sandbox.window.confengeDeferredEvents);
+  process.exit(1);
+}
+
+const optOutWindow = {
+  ...windowObj,
+  dataLayer: [],
+  confengeDeferredEvents: [
+    { event: "tool_referral_visit", props: { touch_outcome: "accepted", storage_mode: "persistent" } },
+  ],
+  localStorage: { getItem: (key) => key === "confenge_analytics" ? "denied" : null },
+};
+optOutWindow.window = optOutWindow;
+const optOutSandbox = { window: optOutWindow, document, console, URLSearchParams, sessionStorage };
+vm.createContext(optOutSandbox);
+vm.runInContext(code, optOutSandbox);
+if (optOutWindow.dataLayer.some((event) => event.event === "tool_referral_visit") || optOutWindow.confengeDeferredEvents.length !== 0) {
+  console.error("FAIL: deferred referral event must respect analytics opt-out and still be cleared", optOutWindow);
+  process.exit(1);
+}
 
 const track = sandbox.window.confengeTrack;
 if (typeof track !== "function") {
