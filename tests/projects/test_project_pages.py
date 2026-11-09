@@ -114,7 +114,7 @@ class TestProjectPages(unittest.TestCase):
                     if link.get("aria-current") == "page"
                     and link.get("href") in {
                         "/projetos/", "/servicos/", "/servicos-obras-publicas/",
-                        "/como-trabalhamos/", "/empresa/",
+                        "/ferramentas/", "/empresa/",
                     }
                 ]
                 self.assertGreaterEqual(len(active_header), 2)

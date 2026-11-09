@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve, join, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { setInterval } from 'node:timers/promises';
+import { setInterval, setTimeout as sleep } from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
 import { resolveChromePath } from './resolve_chrome.mjs';
 
@@ -28,6 +28,17 @@ const page = await browser.newPage();
 await page.setJavaScriptEnabled(false);
 await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
 const widths = [320, 390, 901, 1240, 1440];
+
+async function expectLocation(expected) {
+  const deadline = Date.now() + 3000;
+  let actual;
+  do {
+    actual = await page.evaluate(() => location.href);
+    if (actual === expected) return;
+    await sleep(40);
+  } while (Date.now() < deadline);
+  assert.equal(actual, expected);
+}
 
 function problems() {
   const errors = new Set();
@@ -77,10 +88,13 @@ try {
       const artLoaded = await page.$eval('.pp-hero__visual img', img => img.complete && img.naturalWidth > 0);
       assert.ok(artLoaded, `missing graphic on ${item.route}`);
       if (width === 320) {
+        for (const nav of ['.pp-nav', '.pp-mobile nav']) {
+          assert.equal(await page.$$eval(`${nav} a[href="/ferramentas/"]`, links => links.length), 1, item.route);
+        }
         const link = '.pp-hero__visual a[href="#demonstracao"]';
         await page.focus(link);
         await page.keyboard.press('Enter');
-        assert.equal(await page.evaluate(() => location.hash), '#demonstracao');
+        await expectLocation(origin + item.route + '#demonstracao');
         const top = await page.$eval('#demonstracao', el => el.getBoundingClientRect().top);
         assert.ok(top >= -1 && top < 900, `keyboard link did not reach the example on ${item.route}`);
         assert.equal(await page.evaluate(() => scrollX), 0);
@@ -105,8 +119,9 @@ try {
       }
       assert.deepEqual(await page.evaluate(problems), [], item.route + ' expanded drawing');
       await page.keyboard.press('Tab');
+      assert.ok(await page.evaluate(() => document.activeElement.matches('.pp-enlargement a[href="#contato-projetos"]')), item.route);
       await page.keyboard.press('Enter');
-      assert.equal(page.url(), origin + item.route + '#contato-projetos');
+      await expectLocation(origin + item.route + '#contato-projetos');
       assert.equal(await page.$eval('#contato-projetos .pp-button', el => el.getAttribute('href')), '/#contato');
       await page.focus('.pp-enlargement summary');
       await page.keyboard.press('Enter');
