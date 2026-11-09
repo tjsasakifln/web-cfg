@@ -1,5 +1,6 @@
 import {calcular, csv, exemplo, formatar, lerComposicao, limiteJson, novaPlanilha, numeroBR, validarPlanilha} from './orcamento.js';
 import {tabDraft} from '/assets/js/tab-draft.mjs';
+import {exportToolResult} from '/assets/js/tool-credits.mjs';
 
 const q = id => document.getElementById(id);
 const tool = 'orcamento-de-obras';
@@ -148,10 +149,11 @@ q('excel').onclick=async()=>{
   if(!bdiValido||!resultado.linhas.length)return;
   try {
     const {planilhaExcel}=await import('./excel.js');
-    baixar(await planilhaExcel(projeto),'CONFENGE-orcamento.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    const content=await planilhaExcel(projeto);
+    await exportToolResult({toolId:'orcamento-de-obras',format:'xlsx',content,deliver(){baixar(content,'CONFENGE-orcamento.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');}});
   } catch(e) { avisar('Exportação Excel: '+e.message); }
 };
-q('csv').onclick=()=>{if(bdiValido)baixar(csv(projeto,resultado),'CONFENGE-orcamento.csv','text/csv;charset=utf-8');};
+q('csv').onclick=async()=>{if(!bdiValido)return;const content=csv(projeto,resultado);await exportToolResult({toolId:'orcamento-de-obras',format:'csv',content,deliver(){baixar(content,'CONFENGE-orcamento.csv','text/csv;charset=utf-8');}});};
 q('json').onclick=()=>{if(bdiValido)baixar(JSON.stringify(projeto),'CONFENGE-orcamento.json','application/json');};
 q('abrir').onchange=async e=>{
   const arquivo=e.target.files[0];e.target.value='';if(!arquivo)return;

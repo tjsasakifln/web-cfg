@@ -8,8 +8,8 @@
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
 <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="beiral.css">
-<script defer src="/script.js?v=mv09"></script><script type="module" src="interface.js"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora de beiral e sombra na janela","url":"https://confenge.com.br/ferramentas/calculadora-de-beiral/","applicationCategory":"DesignApplication","operatingSystem":"Navegador web","inLanguage":"pt-BR","isAccessibleForFree":true,"description":"Calcule a profundidade de um beiral para proteger uma janela do sol. Compare a sombra por hora, data, orientação da fachada e cidade. Grátis, sem cadastro.","publisher":{"@type":"Organization","name":"CONFENGE"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Calculadora de beiral","item":"https://confenge.com.br/ferramentas/calculadora-de-beiral/"}]}]}</script>
+<script defer src="/script.js?v=mv09"></script><script type="module" src="interface.js?v=creditos2"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora de beiral e sombra na janela","url":"https://confenge.com.br/ferramentas/calculadora-de-beiral/","applicationCategory":"DesignApplication","operatingSystem":"Navegador web","inLanguage":"pt-BR","isAccessibleForFree":true,"description":"Calcule a profundidade de um beiral para proteger uma janela do sol. Compare a sombra por hora, data, orientação da fachada e cidade.","publisher":{"@type":"Organization","name":"CONFENGE"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Calculadora de beiral","item":"https://confenge.com.br/ferramentas/calculadora-de-beiral/"}]}]}</script>
 <!-- tool-showcase:head -->
 <title>Calculadora de beiral e sombra na janela | CONFENGE</title>
 <meta name="description" content="Calcule o avanço de um beiral horizontal e a sombra na janela pela posição do sol, orientação da fachada, data e hora."/>
@@ -73,7 +73,7 @@
 <div class="container solar-shell">
 <header><p class="eyebrow">Arquitetura bioclimática</p><h1>Calculadora de beiral e sombra na janela</h1>
 <p class="content-lead">Descubra quanto o beiral precisa avançar para sombrear a janela inteira. Compare horários e orientações de fachada antes de lançar a proteção no desenho.</p>
-<p>Gratuita e sem cadastro. O exemplo inicial usa uma janela voltada para o norte em Florianópolis.</p><p><a href="#resultado" id="ver-sombra" hidden>Ver o resultado deste cenário</a></p></header>
+<p>O cálculo é gratuito e roda neste navegador. A primeira exportação da conta é cortesia. As próximas usam um crédito quando a emissão por créditos estiver disponível. O exemplo inicial usa uma janela voltada para o norte em Florianópolis.</p><p><a href="#resultado" id="ver-sombra" hidden>Ver o resultado deste cenário</a></p></header>
 <div class="solar-layout">
 <form id="simulador" class="solar-card" method="post" aria-labelledby="titulo-cenario">
 <h2 id="titulo-cenario">Monte o seu cenário</h2>
@@ -95,6 +95,7 @@
 <dl class="solar-metrics" aria-live="polite" aria-atomic="true"><div><dt>Altura protegida pelo beiral</dt><dd class="solar-number" id="percentual"></dd></div><div><dt>Avanço para cobrir o vão inteiro</dt><dd class="solar-number" id="medida"></dd></div></dl>
 <figure><svg aria-hidden="true" viewBox="0 0 280 125"><rect x="60" y="8" width="160" height="100" rx="2" fill="#ffe8ae"></rect><rect id="faixa" x="60" y="8" width="160" height="0" fill="#5390ac"></rect><rect x="60" y="8" width="160" height="100" rx="2" fill="none" stroke="#203951" stroke-width="4"></rect><path d="M140 9v98" stroke="#203951" stroke-width="3"></path></svg><figcaption id="legenda"></figcaption></figure>
 <p id="posicao"></p>
+<p><button type="button" class="button button-secondary" id="exportar-resultado">Baixar resultado (.txt)</button></p>
 <details><summary>Comparar os horários do dia</summary>
 <div class="solar-table" role="region" aria-label="Tabela de sombra por hora" tabindex="0"><table><caption>Valores nas horas cheias, em hora local.</caption><thead><tr><th scope="col">Hora</th><th scope="col">Incidência</th><th scope="col">Sombra</th><th scope="col">Avanço para 100%</th></tr></thead><tbody id="horarios"></tbody></table></div></details>
 </section></div>
@@ -122,7 +123,7 @@
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
 <h3>Indique e ganhe créditos de uso</h3>
 <p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
-<a href="/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-calculadora-de-beiral" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-calculadora-de-beiral" data-cta-position="tool_share">Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
 </aside>
 <div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/calculadora-psicrometrica/">Ponto de orvalho e condensação</a></div>

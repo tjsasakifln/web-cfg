@@ -1,4 +1,5 @@
 import { fromGeographic, fromUtm, readPoints, values, columns } from './conversor.js';
+import { exportToolResult } from '/assets/js/tool-credits.mjs';
 
 const get = id => document.getElementById(id);
 const direction = get('sentido');
@@ -68,15 +69,18 @@ get('exemplo').addEventListener('click', () => {
   input.value = direct() ? '-27,6;-48,55\n2,82;-60,67' : '741816,185;6944710,158\n741915,300;6944860,350';
   calculate();
 });
-get('baixar').addEventListener('click', () => {
+get('baixar').addEventListener('click', async () => {
   if (!points.length) return;
   const lines = [columns, ...points.map(values)].map(row => row.join(';'));
-  const url = URL.createObjectURL(new Blob(['\uFEFF', lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'coordenadas-sirgas-2000.csv';
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const content = '\uFEFF' + lines.join('\r\n');
+  await exportToolResult({ toolId: 'conversor-utm-sirgas-2000', format: 'csv', content, deliver() {
+    const url = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'coordenadas-sirgas-2000.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }});
 });
 setMode();
 get('controles').disabled = false;

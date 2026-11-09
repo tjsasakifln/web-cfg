@@ -72,7 +72,7 @@
 <div class="tool-brief container"><div><p>Escolha o estágio da obra e a decisão que você precisa tomar. Para cada domínio, indique o que existe, o que falta e o que você ainda não sabe. O resultado orienta a próxima conferência.</p><a href="#diagnostico" data-event-name="cta_click" data-cta-id="tool-start-prontidao" data-cta-position="tool_intro">Ver o que falta na obra <span aria-hidden="true">↗</span></a></div><div class="ts-plate" data-art="check" aria-hidden="true"><svg viewBox="0 0 360 114" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M109 18h153v79H109zM124 39l5 5 10-12m-15 27 5 5 10-12m-15 27 5 5 10-12M156 37h86m-86 20h70m-70 20h86"/><path d="M151 15h66v9h-66z" fill="currentColor" fill-opacity=".3"/></svg><span class="ts-plate-label">7 DOMÍNIOS</span></div></div>
 <!-- /tool-showcase:brief -->
 
-<p class="lead">Organize as informações da sua obra e veja o próximo passo. O resultado mostra o que está documentado, o que falta esclarecer e o caminho correspondente: levantamento de quantitativos e orçamento, revisão do projeto recebido, compatibilização de interfaces ou uma conversa de escopo. Completo neste navegador, sem cadastro, sem pagamento, sem envio das respostas à CONFENGE e sem nota de urgência.</p>
+<p class="lead">Organize as informações da sua obra e veja o próximo passo. O resultado mostra o que está documentado, o que falta esclarecer e o caminho correspondente: levantamento de quantitativos e orçamento, revisão do projeto recebido, compatibilização de interfaces ou uma conversa de escopo. O cálculo fica no navegador, sem envio das respostas à CONFENGE. A primeira exportação da conta é cortesia. As próximas usam um crédito quando a emissão por créditos estiver disponível.</p>
 <p class="authority-byline">Responsável pela página: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência: <time datetime="2026-09-11">11 de setembro de 2026</time> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
 
 <details class="pptr-method" id="metodo-detalhe">
@@ -322,6 +322,7 @@
 <button type="button" class="secondary" id="btn-copy" data-tool-copy>Copiar leitura</button>
 <button type="button" class="secondary" id="btn-print">Imprimir</button><a class="text-link tool-result-share" href="#tool-share-title">Compartilhar esta ferramenta</a>
 </div>
+<span id="print-status" role="status"></span>
 </section>
 
 <section class="pptr-cta" id="cta-comercial" hidden>
@@ -345,7 +346,7 @@
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
 <h3>Indique e ganhe créditos de uso</h3>
 <p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
-<a href="/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-prontidao" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-prontidao" data-cta-position="tool_share">Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
 </aside>
 <div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/cad/aplicativos/#takeoffcraft">Medir e levantar quantitativos na planta</a><a href="/avaliacao-imoveis-urbanos/inferencia/">Modela Pro: avaliação de imóveis</a></div>
@@ -361,6 +362,6 @@
 </footer>
 <script src="/assets/js/private-project-technical-readiness.js"></script>
 <script src="/assets/js/tools-common.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=creditos3"></script>
 </body>
 </html>

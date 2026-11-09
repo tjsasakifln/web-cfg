@@ -346,7 +346,8 @@ function domainById(result, id) {
 
 {
   const app = readFileSync(appPath, "utf8");
-  expect("app_no_module", !/type=["']module["']/.test(app) && !/\bimport\b/.test(app) && !/\bexport\b/.test(app));
+  // Parse as a classic script. Optional delivery can load an ES module on demand.
+  assert.doesNotThrow(() => new vm.Script(app, { filename: appPath }));
   expect("app_calls_shipped", /diagnosePrivateProjectTechnicalReadiness/.test(app));
   expect("app_no_contact_gate", !/email.*required/i.test(app));
 }

@@ -1,4 +1,5 @@
 import { analisar } from './viga.js';
+import { exportToolResult } from '/assets/js/tool-credits.mjs';
 
 const el = id => document.getElementById(id);
 const esquema = el('lista-vaos');
@@ -120,7 +121,7 @@ el('adicionar').addEventListener('click',()=>{adicionar();calcular();});
 el('remover').addEventListener('click',()=>{if(esquema.children.length>1) esquema.lastElementChild.remove();calcular();});
 el('entrada').addEventListener('input',calcular);
 el('grandeza').addEventListener('change',diagrama);
-el('csv').addEventListener('click',()=>{
+el('csv').addEventListener('click',async ()=>{
   if (!caso) return;
   const { vaos, E, fixoE, fixoD, resultado } = caso;
   const linhas = [['Estudo de viga contínua CONFENGE'],['E (GPa)',E],
@@ -133,8 +134,11 @@ el('csv').addEventListener('click',()=>{
     for(const x of xs){const p=t.avaliar(x);linhas.push([i+1,x,resultado.apoios[i].x+x,p.V,p.M,p.flecha]);}
   }
   const dados=linhas.map(l=>l.map(v=>typeof v==='number'?Number(v.toFixed(8)).toString().replace('.',','):v).join(';')).join('\r\n');
-  const url=URL.createObjectURL(new Blob(['\uFEFF',dados],{type:'text/csv;charset=utf-8'}));
-  const a=document.createElement('a');a.href=url;a.download='viga-continua-confenge.csv';a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const content='\uFEFF'+dados;
+  await exportToolResult({toolId:'analise-de-viga-continua',format:'csv',content,deliver(){
+    const url=URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8'}));
+    const a=document.createElement('a');a.href=url;a.download='viga-continua-confenge.csv';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }});
 });
 adicionar();adicionar();el('controles').disabled=false;el('sem-js').hidden=true;calcular();

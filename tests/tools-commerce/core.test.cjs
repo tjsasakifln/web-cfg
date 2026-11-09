@@ -4,8 +4,9 @@ const { randomBytes, randomUUID } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
-const { PACKAGES, TERMS, TERMS_HASH, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
+const { PACKAGES, TERMS, TERMS_HASH, TOOL, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
 const { modelaReport } = require('../../runtime/tools-commerce/report.cjs');
+const { LOCAL_FORMATS, localArtifact } = require('../../runtime/tools-commerce/exports.cjs');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
 const { payload } = require('./fixtures.cjs');
 require('./ops.test.cjs');
@@ -49,8 +50,15 @@ test('live seller and Firebase environment must match live commerce configuratio
     TOOLS_COMMERCE_FIREBASE_WEB_KEY: 'AIza' + 'x'.repeat(30), TOOLS_COMMERCE_FIREBASE_WEB_APP: '1:123:web:abc',
     TOOLS_COMMERCE_HMAC_KEY: randomBytes(32).toString('base64url'), TOOLS_COMMERCE_PURCHASES: '1', TOOLS_COMMERCE_TERMS_APPROVED: TERMS,
     TOOLS_COMMERCE_MP_ACCESS_TOKEN: 'APP_USR-' + 'x'.repeat(30), TOOLS_COMMERCE_MP_WEBHOOK_SECRET: 'x'.repeat(24),
-    TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '3823648243' };
+    TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '3823648243', TOOLS_COMMERCE_SHARED_EXPORTS: '1', TOOLS_COMMERCE_MP_CHECKOUT: '1' };
   assert.equal(loadConfig(live).sellerId, '3823648243');
+  assert.equal(loadConfig(live).purchasesEnabled, true);
+  assert.equal(loadConfig({ ...live, TOOLS_COMMERCE_SHARED_EXPORTS: '0' }).purchasesEnabled, false);
+  assert.equal(loadConfig({ ...live, TOOLS_COMMERCE_MP_CHECKOUT: '0' }).purchasesEnabled, false);
+  const paused = loadConfig({ ...live, TOOLS_COMMERCE_EXPORTS_PAUSED: '1' });
+  assert.equal(paused.purchasesEnabled, false);
+  assert.equal(paused.accessToken, live.TOOLS_COMMERCE_MP_ACCESS_TOKEN, 'the provider can still reconcile orders');
+  assert.equal(loadConfig({ ...live, TOOLS_COMMERCE_TERMS_APPROVED: 'ferramentas-creditos-v1' }).purchasesEnabled, false);
   assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_MP_LIVE_SELLER_ID: '0' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...live, TOOLS_COMMERCE_MP_TEST_SELLER_ID: '1170000100' }), /COMMERCE_UNAVAILABLE/);
@@ -63,8 +71,60 @@ test('terms hash locks the published credits section', () => {
   const end = source.indexOf('<h2', start + 4);
   assert.ok(start >= 0 && end > start);
   const actual = createHash('sha256').update(source.slice(start, end).trim()).digest('hex');
-  assert.equal(TERMS_HASH, 'b4ec61dc0849d971562044415691105f030e7371cee94be9e5d85020b261cb96');
+  assert.equal(TERMS, 'ferramentas-creditos-v2');
   assert.equal(actual, TERMS_HASH);
+});
+
+test('local emissions bind the format and exact fingerprint without receiving the result', () => {
+  const key = randomBytes(32);
+  const event = { exportId: 'proof-id', at: 1794144000000 };
+  const base = { format: 'csv', bytes: 12, sha256: 'a'.repeat(64) };
+  for (const [id, formats] of Object.entries(LOCAL_FORMATS)) {
+    for (const format of formats) {
+      const artifact = localArtifact(id, { ...base, format }, key);
+      assert.equal(artifact.receipt(event).toolId, id);
+      assert.equal(artifact.receipt(event).format, format);
+    }
+  }
+  const artifact = localArtifact('calculadora-bdi', base, key);
+  assert.deepEqual(artifact.receipt(event), localArtifact('calculadora-bdi', base, key).receipt(event));
+  assert.notEqual(artifact.digest, localArtifact('rede-de-agua', base, key).digest);
+  assert.notEqual(artifact.digest, localArtifact('calculadora-bdi', { ...base, bytes: 13 }, key).digest);
+  assert.throws(() => localArtifact('calculadora-bdi', { ...base, bytes: 0 }, key), /INVALID_EXPORT/);
+  assert.throws(() => localArtifact('calculadora-bdi', { ...base, format: 'xlsx' }, key), /INVALID_EXPORT/);
+  assert.throws(() => localArtifact('calculadora-bdi', { ...base, file: 'sensitive' }, key), /INVALID_EXPORT/);
+  assert.throws(() => localArtifact('constructor', base, key), /INVALID_EXPORT/);
+});
+
+test('each executable linked by the published showcase has a wallet export', () => {
+  const catalogue = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/site/tool-showcase.json'), 'utf8'));
+  const suite = JSON.parse(fs.readFileSync(path.join(__dirname, '../../scripts/cad/suite/releases.json'), 'utf8'));
+  const hubs = new Set(['/bim/', '/cad/aplicativos/']);
+  const special = {
+    '/cad/': 'cad-editor',
+    '/analise-cnpj/': 'analise-cnpj',
+    '/avaliacao-imoveis-urbanos/inferencia/': TOOL,
+  };
+  for (const { href } of catalogue.entries) {
+    if (hubs.has(href)) continue;
+    const url = new URL(href, 'https://confenge.com.br');
+    const slug = url.pathname.split('/').filter(Boolean).at(-1);
+    let id = special[url.pathname];
+    if (url.pathname.startsWith('/ferramentas/')) id = slug;
+    if (url.pathname.startsWith('/bim/web/')) id = 'bim-' + slug.replace(/\.html$/, '');
+    if (url.pathname === '/cad/aplicativos/') {
+      id = url.hash.startsWith('#calculo-') ? 'cad-suite-calculos' : 'cad-suite-' + url.hash.slice(1);
+    }
+    assert.ok(id === TOOL || LOCAL_FORMATS[id]?.length > 0, `Exportação sem carteira: ${href}`);
+  }
+  const launcher = fs.readFileSync(path.join(__dirname, '../../cad/aplicativos/catalog.js'), 'utf8');
+  for (const app of Object.keys(suite)) {
+    const formats = new RegExp(`^ +${app}: \\[([^\\]]+)\\]`, 'm').exec(launcher)?.[1].match(/'[a-z0-9]+'/g)
+      .map(value => value.slice(1, -1)).sort();
+    assert.ok(formats?.length > 0, `Aplicativo sem formatos de exportação: ${app}`);
+    assert.deepEqual([...LOCAL_FORMATS['cad-suite-' + app]].sort(), formats, `Formatos divergentes: ${app}`);
+  }
+  assert.deepEqual(LOCAL_FORMATS['cad-suite-calculos'], ['txt']);
 });
 
 test('official report is deterministic and retains diagnostics; rejects raw sample or changed shape', () => {

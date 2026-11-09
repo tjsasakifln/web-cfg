@@ -166,7 +166,7 @@
 <aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
 <h3>Indique e ganhe créditos de uso</h3>
 <p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
-<a href="/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-atrasos" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-atrasos" data-cta-position="tool_share">Gerar meu link de indicação</a>
 <a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
 </aside>
 <div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/checklist-reequilibrio/">Checklist de reequilíbrio econômico-financeiro</a><a href="/ferramentas/diagnostico-defesa-margem/">Diagnóstico de defesa de margem</a></div>
@@ -178,7 +178,8 @@
 <script src="/assets/js/tool-compute.js"></script>
 <script src="/script.js" defer></script>
 
-<script>
+<script type="module">
+  import { exportToolResult } from "/assets/js/tool-credits.mjs";
 (function(){
   var T=window.ConfengeTools, C=window.ConfengeToolCompute;
   var TOOL="matriz-atraso", SCHEMA=4, n=0, lastText="", root=document.getElementById("events");
@@ -413,9 +414,9 @@
   document.getElementById("tem_matriz").addEventListener("change", persist);
   window.addEventListener("pagehide", flushPersist);
   window.addEventListener("beforeunload", function(e){flushPersist();if(!draftAtRisk)return;e.preventDefault();e.returnValue="";});
-  document.getElementById("btn-dl").onclick=function(){ T.downloadText("confenge-matriz-atraso.txt", lastText); };
+  document.getElementById("btn-dl").onclick=async function(){ await exportToolResult({toolId:"matriz-atraso-obra",format:"txt",content:lastText,deliver:function(){T.downloadText("confenge-matriz-atraso.txt", lastText);}}); };
   document.getElementById("btn-copy").onclick=function(){ T.copyText(lastText); };
-  document.getElementById("btn-print").onclick=function(){ window.print(); };
+  document.getElementById("btn-print").onclick=async function(){ await exportToolResult({toolId:"matriz-atraso-obra",format:"print",content:lastText,deliver:function(){window.print();}}); };
   document.getElementById("btn-reset").onclick=function(){
     if(!confirm("Apagar todos os eventos neste navegador?")) return;
     root.innerHTML=""; root.appendChild(card({}));

@@ -1,5 +1,6 @@
 (() => {
   "use strict";
+  const credits = import('/assets/js/tool-credits.mjs');
   const lib = window.psychrolib;
   const byId = id => document.getElementById(id);
   const form = byId("ambiente");
@@ -131,15 +132,18 @@
       status.textContent = error.message;
     }
   });
-  byId("csv").addEventListener("click", () => {
+  byId("csv").addEventListener("click", async () => {
     if (!csvRows) return;
     const csv = "\uFEFF" + csvRows.map(row => row.join(";")).join("\r\n") + "\r\n";
-    const url = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "CONFENGE-psicrometria.csv";
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const { exportToolResult } = await credits;
+    await exportToolResult({ toolId: 'calculadora-psicrometrica', format: 'csv', content: csv, deliver() {
+      const url = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "CONFENGE-psicrometria.csv";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }});
   });
   byId("controles").disabled = false;
 })();

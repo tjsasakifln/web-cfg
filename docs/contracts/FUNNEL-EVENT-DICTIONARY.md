@@ -32,7 +32,7 @@ The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query t
 
 ## Indicação de ferramentas
 
-O funil de indicação mede apenas interações agregadas e não infere uma recompensa ou pagamento. `tool_referral_visit` registra uma atribuição válida com `touch_outcome=accepted` e `storage_mode=persistent|memory`. `tool_referral_panel_view` registra a abertura do painel autenticado com `tool_id=modela-memoria` e `destination_kind=modela|catalog`. `tool_referral_action` registra uma tentativa de compartilhar com `share_channel=copy|linkedin|whatsapp|native` e `action_outcome=success|failure|cancelled|blocked`.
+O funil de indicação mede apenas interações agregadas. `tool_referral_visit` registra uma atribuição válida com `touch_outcome=accepted` e `storage_mode=persistent|memory`. `tool_referral_panel_view` registra a abertura do painel autenticado com `tool_id=modela-memoria|shared-wallet` e `destination_kind=modela|catalog`. `shared-wallet` reúne o catálogo e as ferramentas com saldo compartilhado. `tool_referral_action` registra uma tentativa de compartilhar com `share_channel=copy|linkedin|whatsapp|native` e `action_outcome=success|failure|cancelled|blocked`.
 
 Esses campos são enums fechados. Código de indicação, URL com query, conta, pessoa indicada, destinatário, mensagem, saldo e pagamento não entram na telemetria. As métricas de créditos concedidos ou revertidos vêm do livro transacional do comércio, em relatório operacional separado; uma interação de compartilhamento não é conversão.
 
