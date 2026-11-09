@@ -105,6 +105,15 @@ try {
 
   // Personal rewards require an active commerce program. Public sharing remains
   // usable while checkout is unavailable, without implying credit attribution.
+  const paint = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const loadWithCommerce = async route => {
+    const [response] = await Promise.all([
+      page.waitForResponse(result => result.url() === base + '/api/web/tool-credits?op=config'),
+      load(route),
+    ]);
+    await response.json();
+    await paint();
+  };
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
   for (const config of [
@@ -113,12 +122,10 @@ try {
     { enabled: true, purchasesEnabled: true, sharedExportsEnabled: false, tools: ['modela-memoria'] },
   ]) {
     commerceConfig = config;
-    await load('/ferramentas/');
-    await page.waitForNetworkIdle({ idleTime: 100 });
+    await loadWithCommerce('/ferramentas/');
     assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   }
-  await load('/ferramentas/calculadora-de-beiral/');
-  await page.waitForNetworkIdle({ idleTime: 100 });
+  await loadWithCommerce('/ferramentas/calculadora-de-beiral/');
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   commerceConfig = { enabled: true, purchasesEnabled: true, sharedExportsEnabled: true, tools: ['modela-memoria'] };
   mockCommerce = true;
@@ -208,7 +215,7 @@ try {
     '/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao');
   await page.click('[data-referral-entry] a');
   await page.waitForFunction(() => window.referralOpened === 2);
-  await page.waitForNetworkIdle({ idleTime: 100 });
+  await paint();
   assert.equal(await page.evaluate(() => window.referralOpened), 2);
   await load('/avaliacao-imoveis-urbanos/inferencia/');
   assert.equal(await page.evaluate(() => window.referralOpened || 0), 0);
