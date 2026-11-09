@@ -13,7 +13,8 @@ const firebase = `let listener, user; const auth={authStateReady:async()=>{},cur
 export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
 const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false)=>({uid:'u1',email,emailVerified:verified,reload:async()=>{},getIdToken:async()=> 'token'});
 export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
-let status = 'pending', calls = [], registrations = [];
+const pendingPix = {id:'o1',status:'pending',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='};
+let fixtureMayConfirm = false, calls = [], registrations = [], orderRequests = [];
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (url.pathname === '/') { res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
@@ -29,8 +30,8 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST') registrations.push(JSON.parse(body));
     return send({paid:2,promo:1,freeAvailable:false,referralCode:firstRef,invites:{earned:1,pending:0},recentOrders:[]});
   }
-  if (url.searchParams.get('op') === 'orders') return send({id:'o1',status:'pending',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='});
-  if (url.searchParams.get('op') === 'order') { status = 'paid'; return send({id:'o1',status}); }
+  if (url.searchParams.get('op') === 'orders') { orderRequests.push(JSON.parse(body)); return send(pendingPix); }
+  if (url.searchParams.get('op') === 'order') return send(fixtureMayConfirm ? {id:'o1',status:'paid'} : pendingPix);
   res.statusCode = 400; send({error:'bad'});
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
@@ -74,8 +75,26 @@ try {
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
-  const checkbox = await page.$('input[type=checkbox]'); await checkbox.click(); const buttons = await page.$$('button'); for (const b of buttons) if ((await b.evaluate(n=>n.textContent)).includes('R$')) await b.click();
+  const checkbox = await page.$('input[type=checkbox]'); await checkbox.click();
+  assert.equal(await checkbox.evaluate(node => node.checked), true, 'the real terms control must be accepted');
+  // Stop walking handles before the real click. Continuing through stale
+  // buttons afterwards could delay observation of the Pix state on a loaded
+  // runner, while the automatic status poll kept advancing.
+  const acceptedPriceButton = await page.$$('button').then(async buttons => {
+    for (const item of buttons) if ((await item.evaluate(node => node.textContent)).includes('R$')) return item;
+  });
+  assert.ok(acceptedPriceButton, 'purchase button must remain available after accepting terms');
+  await acceptedPriceButton.click();
   await page.waitForFunction(() => document.querySelector('textarea')?.value === 'pix-code'); assert.ok(await page.$('img[alt="QR Code Pix"]'));
+  assert.equal(orderRequests.length, 1);
+  assert.equal(orderRequests[0].packageId, 'one');
+  assert.equal(orderRequests[0].termsVersion, 'v1');
+  assert.match(orderRequests[0].requestId, /^[0-9a-f-]{36}$/i);
+  const persistedOrder = await page.evaluate(() => JSON.parse(localStorage.getItem('confenge-tool-orders-v1:u1'))?.o1);
+  assert.equal(persistedOrder.id, 'o1'); assert.equal(persistedOrder.status, 'pending'); assert.ok(Number.isFinite(persistedOrder.at));
+  // Release the fixture only after the pending Pix and durable request have
+  // been observed. The production polling interval remains unchanged.
+  fixtureMayConfirm = true;
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Pagamento confirmado'), { timeout: 15000 });
   assert.ok(calls.includes('orders') && calls.includes('order'));
   assert.equal(await page.evaluate(() => location.search), '', 'ref must be removed from visible URL');
