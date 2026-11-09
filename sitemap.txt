@@ -94,6 +94,7 @@ https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/
 https://confenge.com.br/ferramentas/matriz-atraso-obra/
 https://confenge.com.br/ferramentas/orcamento-de-obras/
 https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/
+https://confenge.com.br/ferramentas/radar-mercado-publico/
 https://confenge.com.br/ferramentas/rede-de-agua/
 https://confenge.com.br/guias-contratos-obras/
 https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/
