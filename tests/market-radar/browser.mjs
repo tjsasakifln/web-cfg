@@ -57,6 +57,8 @@ try {
   assert.equal(await page.$eval("#radar-records-body", (e) => e.querySelectorAll("img").length), 0, "record text is escaped");
   assert.equal(await page.$eval("#radar-records-body", (e, href) => e.querySelectorAll(`a[href="${href}"]`).length, validPnpc), 1, "official PNCP link remains usable");
   assert.equal(await page.$eval("#radar-records-body", (e) => e.textContent.includes("example.invalid")), false, "untrusted link omitted");
+  const targetGeometry = async () => page.evaluate(() => ({ overflow: document.documentElement.scrollWidth <= innerWidth, heights: [...document.querySelectorAll(".radar-ranking button,.radar-pagination button")].map((button) => button.getBoundingClientRect().height) }));
+  let geometry = await targetGeometry(); assert.equal(geometry.overflow, true); assert.ok(geometry.heights.length > 0 && geometry.heights.every((height) => height >= 43), `desktop dynamic targets: ${geometry.heights.join(",")}`);
   for (let expected = 2; expected <= 21; expected += 1) {
     const before = requests.length;
     await page.$eval("#radar-pagination button:last-child", (e) => e.click());
@@ -78,7 +80,7 @@ try {
   assert.match(csv, /"'  =formula <img src=x onerror=alert\(1\)>"/, "CSV escapes leading-space formula"); assert.match(csv, /"https:\/\/pncp\.gov\.br\/app\/contratos\/46068425000133\/2026\/9335"/);
   await page.$eval("#radar-copy", (e) => e.click()); assert.equal(await page.evaluate(() => window.__copiedRadar), url, "copy excludes query");
   mkdirSync(join(root, "build/reports/market-radar"), { recursive: true }); await page.screenshot({ path: join(root, "build/reports/market-radar/desktop-1280.png"), fullPage: true });
-  await page.setViewport({ width: 375, height: 820 }); assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true); await page.screenshot({ path: join(root, "build/reports/market-radar/mobile-375.png"), fullPage: true }); await page.setViewport({ width: 1280, height: 900 });
+  await page.setViewport({ width: 375, height: 820 }); geometry = await targetGeometry(); assert.equal(geometry.overflow, true); assert.ok(geometry.heights.length > 0 && geometry.heights.every((height) => height >= 43), `mobile dynamic targets: ${geometry.heights.join(",")}`); await page.screenshot({ path: join(root, "build/reports/market-radar/mobile-375.png"), fullPage: true }); await page.setViewport({ width: 1280, height: 900 });
   const submit = async (q) => { await page.$eval("#radar-q", (e, value) => { e.value = value; }, q); await page.$eval("#market-radar-form", (e) => e.requestSubmit()); };
   await submit("old"); await submit("new"); await page.waitForFunction(() => document.querySelector("#radar-result-title").textContent.includes("new")); await new Promise((resolve) => setTimeout(resolve, 150)); assert.match(await page.$eval("#radar-result-title", (e) => e.textContent), /new/, "late response cannot replace newer result");
   await submit("failure"); await page.waitForFunction(() => document.querySelector("#radar-status").textContent.includes("Não foi possível")); assert.equal(await page.$eval("#radar-results", (e) => e.hidden), true, "503 not empty result");
