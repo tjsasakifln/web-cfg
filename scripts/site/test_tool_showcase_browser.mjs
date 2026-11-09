@@ -128,6 +128,10 @@ try {
   assert.ok(events.every(e => !/private-example|first_______0001|other_______0002/.test(e.body)),
     'share and referral traffic must not leak query data to analytics');
 
+  await load('/ferramentas/?utm_medium=referral&utm_campaign=ferramentas&utm_source=whatsapp&cnpj=private-example');
+  const landing = await page.evaluate(() => window.dataLayer?.find(e => e.event === 'page_view'));
+  assert.equal(landing?.source_asset_id, 'tool-share-wa');
+  assert.doesNotMatch(JSON.stringify(landing), /private-example|utm_source/);
   await load('/avaliacao-imoveis-urbanos/inferencia/');
   if (shots) await page.screenshot({ path: resolve(shots, 'modela-1440.png') });
   assert.equal(await overflow(), false);

@@ -613,21 +613,19 @@ def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
 
 def test_tools_hub_situation_first():
     hub = (ROOT / "ferramentas" / "index.html").read_text(encoding="utf-8")
-    assert "Preciso conferir um aditivo" in hub
-    assert "Preciso organizar um pedido de reequilíbrio" in hub
-    assert "Preciso registrar e analisar atrasos" in hub
-    assert "Usar ferramenta" in hub
-    assert hub.count("Usar ferramenta") >= 3
-    assert "tool-situation--recommended" in hub or "Recomendada" in hub
-    # no seven-metadata inventory list
-    assert "tool-card-meta" not in hub
-    assert hub.count("Estado só no navegador") <= 1  # at most in single disclaimer
-    # first-read fields present
-    assert "Problema resolvido" in hub
-    assert "Resultado entregue" in hub
-    assert "Tempo aproximado" in hub
-    # single end disclaimer
-    assert hub.count("tool-disclaimer") == 1
+    for route, label in (
+        ("/ferramentas/limite-acrescimos-supressoes/", "Calcular limite de aditivo"),
+        ("/ferramentas/checklist-reequilibrio/", "Revisar pedido de reequilíbrio"),
+        ("/ferramentas/matriz-atraso-obra/", "Abrir matriz de atraso"),
+        ("/cad/", "Abrir editor DWG"),
+        ("/bim/", "Explorar ferramentas BIM"),
+        ("/avaliacao-imoveis-urbanos/inferencia/", "Abrir Modela Pro"),
+    ):
+        assert re.search(r'<a class="ts-card-action" href="' + re.escape(route)
+                         + r'"[^>]*>' + re.escape(label), hub), route
+    assert 'data-tool-job' in hub and 'data-tool-decision' in hub
+    assert 'tool-card-meta' not in hub
+    assert "não é etapa obrigatória" in hub
 
 
 def test_limit_tool_staged_structure():

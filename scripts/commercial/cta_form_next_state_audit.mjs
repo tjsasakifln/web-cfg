@@ -125,6 +125,13 @@ function commercialActions(html, profile) {
       const href = attrValue(attrs, "href");
       const label = visibleText(match[2]);
       const position = attrValue(attrs, "data-cta-position");
+      const id = attrValue(attrs, "data-cta-id");
+      // A share composer has no CONFENGE recipient. A tool jump opens a
+      // utility, not its lead form. Keep both outside the commercial census.
+      if (position === "tool_share" && /^tool-share-(?:wa|linkedin)-[a-z0-9-]+$/.test(id)
+        && /^(?:https:\/\/wa\.me\/\?text=|https:\/\/www\.linkedin\.com\/sharing\/share-offsite\/\?url=)/.test(href)) return null;
+      if (position === "tool_intro" && /^tool-start-[a-z0-9-]+$/.test(id)
+        && /^#(?:limite-form|f|lookup|diagnostico|amostra)$/.test(href)) return null;
       const className = attrValue(attrs, "class");
       const whatsapp = /^https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(href);
       const email = /^mailto:/i.test(href);
