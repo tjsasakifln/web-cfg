@@ -22,6 +22,7 @@ DESCRIPTION = (
     "com o Modela Pro. Escolha uma ferramenta de engenharia e use no navegador."
 )
 CSS = '<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>'
+HUB_CSS = '<link rel="stylesheet" href="/assets/tool-showcase/vitrine.css"/>'
 JS = '<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>'
 ID = re.compile(r"[a-z][a-z0-9-]*\Z")
 PATH = re.compile(r"/(?:[a-z0-9-]+/)+(?:[a-z0-9-]+\.html)?(?:#[a-z0-9-]+)?\Z")
@@ -199,8 +200,8 @@ def set_head(html: str, path: str, title: str, desc: str, key: str, *, updated: 
             '<meta name="robots" content="index,follow,max-image-preview:large"/>',
             f'<meta property="og:updated_time" content="{escape(updated)}"/>',
         ))
-    css = CSS.replace("showcase.css", "showcase.css?v=creditos2") if path == HUB else CSS
-    js = JS.replace("showcase.mjs", "showcase.mjs?v=creditos2") if path == HUB else JS
+    css = f"{CSS}\n{HUB_CSS}" if path == HUB else CSS
+    js = JS.replace("showcase.mjs", "showcase.mjs?v=vitrine1") if path == HUB else JS
     tags += [meta_tags(path, title, desc, key), css, js]
     return marker(head + "</head>", "head", "\n".join(tags), "</head>") + rest
 
@@ -232,33 +233,59 @@ def catalogue(html: str, data: dict) -> str:
     html = marker(html, "collection",
                   f'<script type="application/ld+json">\n{json.dumps(collection, ensure_ascii=False, indent=2)}\n</script>',
                   "</head>")
-    jumps = "".join(f'<a href="#{group["id"]}">{escape(group["jump"])}</a>' for group in data["groups"])
+    total = len(entries)
+    group_entries = {
+        group["id"]: [entry for entry in entries if entry["group"] == group["id"]]
+        for group in data["groups"]
+    }
+    jumps = "".join(
+        f'''<a href="#{group["id"]}" data-group-link="{group["id"]}">
+<span class="ts-jump-index" aria-hidden="true">{number:02d}</span>
+<span class="ts-jump-copy"><strong>{escape(group["jump"])}</strong><small>{len(group_entries[group["id"]])} {'opção' if len(group_entries[group["id"]]) == 1 else 'opções'}</small></span>
+<span class="ts-jump-arrow" aria-hidden="true">↘</span></a>'''
+        for number, group in enumerate(data["groups"], 1)
+    )
     sections = []
-    for group in data["groups"]:
+    for number, group in enumerate(data["groups"], 1):
         key = group["id"]
-        cards = "\n".join(card(item) for item in entries if item["group"] == key)
+        group_items = group_entries[key]
+        cards = "\n".join(card(item) for item in group_items)
         sections.append(f'''<section class="ts-section container" data-group="{key}" id="{key}" aria-labelledby="{key}-title">
-<div class="ts-section-heading"><h2 id="{key}-title">{escape(group["title"])}</h2><p>{escape(group["summary"])}</p></div>
+<div class="ts-section-heading"><div class="ts-section-title"><span class="ts-section-index" aria-hidden="true">{number:02d}</span><div><p class="ts-section-kicker">{len(group_items)} {'opção de uso' if len(group_items) == 1 else 'opções de uso'}</p><h2 id="{key}-title">{escape(group["title"])}</h2></div></div><p>{escape(group["summary"])}</p></div>
 <ul class="ts-grid">
 {cards}
 </ul></section>''')
     section_html = "\n".join(sections)
+    hero_items = entries[:3]
+    hero_cards = "".join(
+        f'''<div class="ts-workbench-item"><span>{escape(item["format"])}</span><strong>{escape(item["title"])}</strong></div>'''
+        for item in hero_items
+    )
     main = f'''<main id="conteudo" class="tool-showcase">
 <nav class="breadcrumbs container ts-crumb" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Ferramentas</li></ol></nav>
 <header class="ts-hero"><div class="container ts-hero-inner">
 <div class="ts-hero-copy">
-<p class="eyebrow">Ferramentas CONFENGE</p>
-<h1>Ferramentas de engenharia online</h1>
-<p data-tool-job>Abra uma planta em DWG, confira um modelo IFC, estime o valor de um imóvel ou organize a próxima decisão da obra.</p>
+<p class="eyebrow">CONFENGE · Ferramentas online</p>
+<h1>Ferramentas de engenharia <span>online.</span></h1>
+<p data-tool-job>Abra uma planta, confira um modelo, faça um cálculo ou organize a próxima decisão da obra. Tudo direto no navegador.</p>
 <div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Indicar a um colega">Indicar</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
 <p id="meus-creditos-status" role="status"></p>
+<dl class="ts-hero-facts"><div><dt>{total}</dt><dd>opções de uso</dd></div><div><dt>{len(data["groups"])}</dt><dd>frentes de trabalho</dd></div><div><dt>web</dt><dd>uso direto no navegador</dd></div></dl>
 </div>
-<figure class="ts-hero-visual" aria-hidden="true">{plate('plan', 'DWG · DXF')}{plate('iso', 'IFC · BIM')}{plate('chart', 'MODELA PRO')}</figure>
+<figure class="ts-hero-visual" aria-hidden="true">
+<div class="ts-workbench">
+<div class="ts-workbench-bar"><span></span><span></span><span></span><b>PAINEL DE PROJETO</b></div>
+<div class="ts-workbench-canvas">{plate(hero_items[0]['art'], hero_items[0]['mark'])}<div class="ts-workbench-axis ts-workbench-axis-x"></div><div class="ts-workbench-axis ts-workbench-axis-y"></div><span class="ts-workbench-coordinate">X 024.70 · Y 118.42</span></div>
+<div class="ts-workbench-list">{hero_cards}</div>
+</div>
+</figure>
 </div></header>
-<div class="ts-browser"><div class="container">
+<section class="ts-browser" aria-labelledby="ts-browser-title"><div class="container">
+<div class="ts-browser-heading"><div><p class="ts-browser-kicker">Seu ponto de partida</p><h2 id="ts-browser-title">O que você precisa fazer?</h2></div>
+<div class="ts-search" data-tool-search hidden><label for="ts-query">Buscar no catálogo</label><div class="ts-search-field"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" id="ts-query" placeholder="Busque por tarefa, formato ou resultado" autocomplete="off" maxlength="120"><kbd aria-hidden="true">/</kbd><button type="button" data-search-clear hidden>Limpar</button></div></div></div>
 <nav class="ts-jumps" aria-label="Grupos de ferramentas">{jumps}</nav>
-<div class="ts-search" data-tool-search hidden><label for="ts-query">Buscar ferramenta</label><input type="search" id="ts-query" placeholder="Ex.: DWG ou aditivo" autocomplete="off" maxlength="120"><button type="button" data-search-clear hidden>Limpar</button></div>
-</div></div>
+<div class="ts-mobile-preview" aria-hidden="true"><div><span>Painel de projeto</span><strong>Desenhe, calcule e decida no navegador.</strong></div>{plate(hero_items[0]['art'], hero_items[0]['mark'])}</div>
+</div></section>
 <div class="container"><p class="ts-search-status" role="status" data-search-status></p></div>
 {section_html}
 <div class="container ts-end" id="metodo">

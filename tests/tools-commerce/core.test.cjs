@@ -111,7 +111,9 @@ test('each executable linked by the published showcase has a wallet export', () 
     let id = special[url.pathname];
     if (url.pathname.startsWith('/ferramentas/')) id = slug;
     if (url.pathname.startsWith('/bim/web/')) id = 'bim-' + slug.replace(/\.html$/, '');
-    if (url.pathname === '/cad/aplicativos/') id = 'cad-suite-' + url.hash.slice(1);
+    if (url.pathname === '/cad/aplicativos/') {
+      id = url.hash.startsWith('#calculo-') ? 'cad-suite-calculos' : 'cad-suite-' + url.hash.slice(1);
+    }
     assert.ok(id === TOOL || LOCAL_FORMATS[id]?.length > 0, `Exportação sem carteira: ${href}`);
   }
   const launcher = fs.readFileSync(path.join(__dirname, '../../cad/aplicativos/catalog.js'), 'utf8');

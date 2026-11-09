@@ -74,6 +74,31 @@ if (search) {
   });
   search.hidden = false;
   filter();
+
+  document.addEventListener('keydown', (event) => {
+    const editing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
+    if (event.key !== '/' || editing || event.metaKey || event.ctrlKey || event.altKey) return;
+    event.preventDefault();
+    input.focus();
+  });
+}
+
+const groupLinks = [...document.querySelectorAll('[data-group-link]')];
+if (groupLinks.length && 'IntersectionObserver' in window) {
+  const linksByGroup = new Map(groupLinks.map((link) => [link.dataset.groupLink, link]));
+  const markCurrent = (id) => {
+    for (const [group, link] of linksByGroup) {
+      if (group === id) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    }
+  };
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting && !entry.target.hidden)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible) markCurrent(visible.target.id);
+  }, { rootMargin: '-18% 0px -64% 0px', threshold: [0, .08, .2] });
+  document.querySelectorAll('[data-group]').forEach((group) => observer.observe(group));
 }
 
 for (const panel of document.querySelectorAll('[data-tool-share]')) {

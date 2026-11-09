@@ -2,7 +2,7 @@ import { referralFirstTouch, validReferral } from './tool-referral.mjs';
 
 const ENDPOINT = '/api/web/tool-credits';
 const ORDER_KEY = 'confenge-tool-orders-v1';
-const CREDIT_STYLES = '/assets/css/tool-credits.css';
+const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos2';
 const localWallets = new Map();
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 const makeId = () => crypto.randomUUID();
@@ -15,6 +15,8 @@ const setStore = (key, value) => { try { localStorage.setItem(key, JSON.stringif
 
 function loadStyles() {
   if (document.querySelector(`link[href="${CREDIT_STYLES}"]`)) return;
+  const previous = document.querySelector('link[href="/assets/css/tool-credits.css"]');
+  if (previous) { previous.href = CREDIT_STYLES; return; }
   const link = el('link');
   link.rel = 'stylesheet';
   link.href = CREDIT_STYLES;
@@ -47,6 +49,7 @@ function exportNotice(text, { receipt, retry } = {}) {
 export function createToolCredits({ toolId, root = document.body, fetchImpl = fetch, shared = false } = {}) {
   if (!toolId) throw new Error('toolId is required');
   let config, firebase, auth, account, dialog, init, provisionedUid, opening, renderVersion = 0, pollTimer;
+  let preferredFlow = 'pix';
   const referralCode = referralFirstTouch();
   const url = (op, more = '') => `${ENDPOINT}?op=${encodeURIComponent(op)}${more}`;
   const ready = async () => {
@@ -68,7 +71,13 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         if (config.authEmulator) firebase.connectAuthEmulator(auth, config.authEmulator, { disableWarnings: true });
       }
       await auth.authStateReady?.();
-      firebase.onAuthStateChanged(auth, () => { clearTimeout(pollTimer); account = undefined; provisionedUid = undefined; if (dialog?.open) render(); });
+      firebase.onAuthStateChanged(auth, () => {
+        clearTimeout(pollTimer);
+        account = undefined;
+        provisionedUid = undefined;
+        preferredFlow = 'pix';
+        if (dialog?.open) render();
+      });
       return true;
     })();
     try {
@@ -121,8 +130,12 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const amount = (account?.paid || 0) + (account?.promo || 0) + (account?.freeAvailable ? 1 : 0);
     const balance = amount === 1 ? '1 crédito disponível' : `${amount} créditos disponíveis`;
     const courtesy = (account?.promo || 0) + Number(Boolean(account?.freeAvailable));
-    host.append(el('p', balance + (courtesy ? ` · ${courtesy} de cortesia` : '')));
-    if (config.sharedExportsEnabled) host.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
+    const summary = el('div');
+    summary.className = 'tool-credits__balance';
+    summary.append(el('strong', balance));
+    if (courtesy) summary.append(el('span', `${courtesy} de cortesia`));
+    if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
+    host.append(summary);
     note(host, notice);
     const section = el('section'); section.append(el('h3', config.checkoutEnabled ? 'Comprar créditos' : 'Comprar por Pix'));
     if (account?.blocked) section.append(el('p', 'Sua conta está em análise. Fale com a CONFENGE pelo contato nos termos.'));
@@ -135,17 +148,26 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
           option.value = value;
           paymentMethod.append(option);
         }
+        paymentMethod.value = preferredFlow;
+        paymentMethod.onchange = () => { preferredFlow = paymentMethod.value; };
         const label = el('label', 'Forma de pagamento');
         label.append(paymentMethod);
         section.append(label, el('p', 'O checkout do Mercado Pago mostra as opções disponíveis para sua compra.'));
       }
+      const accepted = el('input'), termsLabel = el('label'), cards = el('div');
+      accepted.type = 'checkbox';
+      termsLabel.append(accepted, ' Li e aceito os termos aplicáveis.');
+      cards.className = 'tool-credits__packs';
       for (const pack of config.packages || []) {
-        const check = el('input'), label = el('label'), unit = BRL.format(pack.amountCents / pack.credits / 100);
-        check.type = 'checkbox'; check.id = `terms-${pack.id}`; label.htmlFor = check.id;
-        label.append(check, ' Li e aceito os termos aplicáveis.');
-        section.append(btn(`${pack.credits} crédito${pack.credits === 1 ? '' : 's'} · ${BRL.format(pack.amountCents / 100)} (${unit}/crédito)`,
-          () => createOrder(pack.id, check.checked, paymentMethod.value || 'pix')), label);
+        const unit = BRL.format(pack.amountCents / pack.credits / 100);
+        const quantity = `${pack.credits} crédito${pack.credits === 1 ? '' : 's'}`;
+        const price = BRL.format(pack.amountCents / 100);
+        const choice = btn('', () => createOrder(pack.id, accepted.checked, paymentMethod.value || 'pix'));
+        choice.setAttribute('aria-label', `Comprar ${quantity} por ${price}. ${unit} por crédito.`);
+        choice.append(el('span', quantity), el('strong', price), el('small', `${unit} por crédito`));
+        cards.append(choice);
       }
+      section.append(termsLabel, cards);
     }
     host.append(section); const legal = el('p'); const terms = el('a', 'Termos de uso'); terms.href = '/termos-de-uso/#creditos-ferramentas'; const privacy = el('a', 'Política de privacidade'); privacy.href = '/privacidade/'; legal.append('Consulte os ', terms, ' e a ', privacy, '. Créditos comprados não expiram.'); host.append(legal); shareView(host);
     const previous = [...(account?.recentOrders || []), ...Object.values(getStore(orderKey())).filter(item => item?.id)].filter((item, index, all) => all.findIndex(x => x.id === item.id) === index);

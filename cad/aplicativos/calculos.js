@@ -26,6 +26,9 @@ function element(tag, text) {
 }
 
 function mount(root) {
+  // Tool cards may name a specific engine. Keep the suite URL canonical while
+  // opening that real model directly, without creating separate calculators.
+  const requestedEngine = () => /^calculo-([a-z0-9]+)$/.exec(location.hash.slice(1))?.[1] || '';
   const names = {
     schedule: 'Cronograma e custos', network: 'Redes hidráulicas e sistemas elétricos',
     schematic: 'Esquemas e conexões', motion: 'Mecanismos e robôs', des: 'Filas e processos',
@@ -167,11 +170,24 @@ function mount(root) {
       limit = LIMITS.text;
       for (const item of api.list()) engines.add(new Option(names[item.id] || item.name, item.id));
       const [savedEngine, savedExample] = selected.split('/');
-      engines.value = api.list().some(item => item.id === savedEngine) ? savedEngine : 'schedule';
+      const desiredEngine = requestedEngine() || savedEngine;
+      engines.value = api.list().some(item => item.id === desiredEngine) ? desiredEngine : 'schedule';
       await selectEngine(savedExample);
     } catch { status.textContent = 'Não foi possível abrir as calculadoras. Feche o painel e tente novamente.'; }
     finally { open.disabled = false; }
   });
+  async function chooseRequestedEngine() {
+    const wanted = requestedEngine();
+    if (!wanted) return;
+    if (!api) {
+      if (panel.hidden) open.click();
+      return;
+    }
+    if (!api.list().some(item => item.id === wanted) || engines.value === wanted) return;
+    engines.value = wanted;
+    await selectEngine();
+  }
+  window.addEventListener('hashchange', () => { void chooseRequestedEngine(); });
   engines.addEventListener('change', () => selectEngine());
   sample.addEventListener('change', () => { selected = engines.value + '/' + sample.value; loadSample(); });
   input.addEventListener('input', () => {
@@ -242,7 +258,8 @@ function mount(root) {
       deliver: () => downloadText(content, filename),
     });
   });
-  if (drafts.size) {
+  if (requestedEngine()) open.click();
+  else if (drafts.size) {
     clearDrafts.hidden = false;
     reportDraft('Rascunho recuperado nesta aba. Confira os dados e calcule novamente.');
     open.click();
