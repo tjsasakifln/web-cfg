@@ -46,6 +46,7 @@ const ROUTES = [
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
   { id: "margem", path: "/ferramentas/diagnostico-defesa-margem/", primary: "#lookup" },
   { id: "prontidao", path: "/ferramentas/prontidao-tecnica-obra-privada/", primary: "#diagnostico" },
+  { id: "radar", path: "/ferramentas/radar-mercado-publico/", primary: "#market-radar-form" },
 ];
 const expectedRoutePaths = ROUTES.map(({ path }) => path).sort();
 const sitemapToolPaths = [...readFileSync(join(ROOT, "sitemap.xml"), "utf8").matchAll(
