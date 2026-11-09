@@ -299,7 +299,7 @@
   .ts-search{max-width:none}
   .ts-section-heading{gap:17px}
   .ts-section-heading>p{padding-left:59px}
-  .ts-end{grid-template-columns:1fr}
+  .ts-end{grid-template-columns:minmax(0,1fr)}
   .ts-end h2{grid-row:auto;max-width:12ch}
 }
 @media(max-width:680px){
