@@ -115,8 +115,37 @@ try {
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
-  const checkbox = await page.$('input[type=checkbox]'); await checkbox.click();
-  assert.equal(await checkbox.evaluate(node => node.checked), true, 'the real terms control must be accepted');
+  const termsBeforeClick = await page.evaluate(() => {
+    const dialog = document.querySelector('dialog');
+    const checkbox = dialog?.querySelector('input[type=checkbox]');
+    if (!checkbox) throw new Error('terms control is absent before the real click');
+    window.termsClickTrace = [];
+    for (const type of ['pointerdown', 'pointerup', 'click']) dialog.addEventListener(type, event => {
+      if (!event.target?.matches('input[type=checkbox]')) return;
+      window.termsClickTrace.push({ type, target: event.target.tagName, checked: event.target.checked, connected: event.target.isConnected });
+    });
+    const rect = checkbox.getBoundingClientRect();
+    return { checked: checkbox.checked, connected: checkbox.isConnected, width: rect.width, height: rect.height };
+  });
+  assert.equal(termsBeforeClick.checked, false);
+  assert.equal(termsBeforeClick.connected, true);
+  assert.ok(termsBeforeClick.width > 0 && termsBeforeClick.height > 0, 'terms control must have a clickable geometry');
+  // The locator performs one physical click after the live checkbox settles;
+  // rendering the refusal notice can otherwise replace a cached handle.
+  await page.locator('dialog input[type=checkbox]').click();
+  try {
+    await page.waitForFunction(() => document.querySelector('dialog input[type=checkbox]')?.checked === true, { timeout: 5000 });
+  } catch (error) {
+    const trace = await page.evaluate(() => ({
+      trace: window.termsClickTrace || [],
+      current: (() => { const checkbox = document.querySelector('dialog input[type=checkbox]'); return checkbox && { checked: checkbox.checked, connected: checkbox.isConnected }; })(),
+    }));
+    throw new Error(`real terms click did not persist on the live control: ${JSON.stringify(trace)}`, { cause: error });
+  }
+  assert.equal(await page.$eval('dialog input[type=checkbox]', node => node.checked), true, 'the live terms control must be accepted');
+  const termsClickTrace = await page.evaluate(() => window.termsClickTrace);
+  assert.ok(termsClickTrace.some(event => event.type === 'click' && event.target === 'INPUT' && event.checked && event.connected),
+    `real terms click was not observed on the live control: ${JSON.stringify(termsClickTrace)}`);
   // Stop walking handles before the real click. Continuing through stale
   // buttons afterwards could delay observation of the Pix state on a loaded
   // runner, while the automatic status poll kept advancing.
