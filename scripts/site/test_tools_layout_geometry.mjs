@@ -65,6 +65,7 @@ const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".js": "application/javascript; charset=utf-8",
+  ".mjs": "application/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
   ".png": "image/png",
@@ -345,9 +346,11 @@ async function exercise(page, id) {
       for (const input of document.querySelectorAll("#composicao input")) {
         input.value = input.id === "custo" ? "0,05" : input.id === "profit" ? "10" : "0";
       }
+      document.getElementById("composicao").requestSubmit();
     });
-    await page.click("#composicao button[type=submit]");
-    if (await page.$eval("#preco", el => el.textContent) !== "R$ 0,06") throw new Error("BDI cent rounding");
+    if (!await page.$eval("#resultado", el => !el.hidden && el.querySelector("#preco").textContent === "R$ 0,06")) {
+      throw new Error("BDI cent rounding");
+    }
     return [original];
   }
 
