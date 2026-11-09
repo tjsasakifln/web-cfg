@@ -21,6 +21,12 @@
       "jump": "Modelos e campo"
     },
     {
+      "id": "calculo",
+      "title": "Cálculo e projeto",
+      "summary": "Compare cenários de sombra, condensação, estruturas, instalações elétricas e redes de água.",
+      "jump": "Cálculo e projeto"
+    },
+    {
       "id": "obras",
       "title": "Obras e contratos",
       "summary": "Confira aditivos, organize evidências e prepare sua próxima decisão.",
@@ -546,6 +552,177 @@
       "art": "table",
       "mark": "CNPJ",
       "keywords": "pesquisa empresa fornecedor oportunidades contratos públicos cnpj"
+    },
+    {
+      "id": "caminho-critico-obra",
+      "group": "obras",
+      "title": "Caminho crítico da obra",
+      "summary": "Monte a rede de atividades e veja o prazo, as folgas e as tarefas que podem atrasar a entrega.",
+      "format": "Planejamento · CSV",
+      "action": "Calcular caminho crítico",
+      "href": "/ferramentas/caminho-critico-obra/",
+      "art": "timeline",
+      "mark": "CPM",
+      "keywords": "cronograma planejamento cpm predecessoras folga gantt prazo",
+      "page": {
+        "title": "Calculadora de caminho crítico e folgas de obra",
+        "desc": "Informe as atividades, durações e predecessoras. Veja o prazo total da obra, o início e o fim de cada tarefa e as folgas.",
+        "related": [
+          "orcamento-de-obras"
+        ]
+      }
+    },
+    {
+      "id": "calculadora-de-beiral",
+      "group": "calculo",
+      "title": "Beiral e sombra na janela",
+      "summary": "Compare horários e orientações de fachada para estimar o avanço de um beiral horizontal.",
+      "format": "Estudo solar",
+      "action": "Calcular sombra",
+      "href": "/ferramentas/calculadora-de-beiral/",
+      "art": "plan",
+      "mark": "SOL",
+      "keywords": "beiral sombra sol fachada brise insolação janela norte",
+      "page": {
+        "title": "Calculadora de beiral e sombra na janela",
+        "desc": "Calcule o avanço de um beiral horizontal e a sombra na janela pela posição do sol, orientação da fachada, data e hora.",
+        "related": [
+          "calculadora-psicrometrica"
+        ]
+      }
+    },
+    {
+      "id": "conversor-utm-sirgas-2000",
+      "group": "modelos",
+      "title": "Conversor UTM e SIRGAS 2000",
+      "summary": "Passe de latitude e longitude para UTM e confira o fuso e o hemisfério usados no levantamento.",
+      "format": "Topografia · UTM",
+      "action": "Converter coordenadas",
+      "href": "/ferramentas/conversor-utm-sirgas-2000/",
+      "art": "grid",
+      "mark": "UTM",
+      "keywords": "sirgas utm coordenadas geodesia levantamento topografia latitude longitude",
+      "page": {
+        "title": "Conversor UTM e latitude/longitude SIRGAS 2000",
+        "desc": "Converta coordenadas geográficas e UTM no mesmo referencial SIRGAS 2000. Confira fuso, hemisfério e unidades no resultado.",
+        "related": [
+          "bim"
+        ]
+      }
+    },
+    {
+      "id": "calculadora-psicrometrica",
+      "group": "calculo",
+      "title": "Ponto de orvalho e condensação",
+      "summary": "Informe temperatura e umidade e compare o limite de saturação com a temperatura da superfície.",
+      "format": "Conforto · CSV",
+      "action": "Calcular ponto de orvalho",
+      "href": "/ferramentas/calculadora-psicrometrica/",
+      "art": "chart",
+      "mark": "AR",
+      "keywords": "umidade ponto orvalho geada psicrometria condensacao superfície pressão",
+      "page": {
+        "title": "Calculadora psicrométrica e de condensação",
+        "desc": "Calcule ponto de orvalho ou geada, bulbo úmido e outras propriedades do ar com temperatura, umidade e pressão ou altitude.",
+        "related": [
+          "calculadora-de-beiral"
+        ]
+      }
+    },
+    {
+      "id": "calculadora-bdi",
+      "group": "obras",
+      "title": "Calculadora de BDI",
+      "summary": "Componha as parcelas do BDI e calcule o preço de venda a partir do custo direto.",
+      "format": "Orçamento · BDI",
+      "action": "Calcular BDI",
+      "href": "/ferramentas/calculadora-bdi/",
+      "art": "bars",
+      "mark": "BDI",
+      "keywords": "bdi benefícios despesas indiretas custo preço lucro tributos",
+      "page": {
+        "title": "Calculadora de BDI e preço de venda da obra",
+        "desc": "Calcule BDI e preço de venda com as despesas, o lucro e os tributos que você informar. Compare cenários de orçamento.",
+        "related": [
+          "orcamento-de-obras"
+        ]
+      }
+    },
+    {
+      "id": "analise-de-viga-continua",
+      "group": "calculo",
+      "title": "Análise de viga contínua",
+      "summary": "Modele vãos e apoios e confira reações, cortante, momento fletor e flecha.",
+      "format": "Estruturas · CSV",
+      "action": "Analisar uma viga",
+      "href": "/ferramentas/analise-de-viga-continua/",
+      "art": "profile",
+      "mark": "VIGA",
+      "keywords": "viga flecha momento cortante reações estrutura engaste",
+      "page": {
+        "title": "Calculadora de viga contínua: esforços e flecha",
+        "desc": "Calcule reações, força cortante, momento fletor e flecha de uma viga contínua com cargas distribuídas no navegador.",
+        "related": [
+          "dwg"
+        ]
+      }
+    },
+    {
+      "id": "orcamento-de-obras",
+      "group": "obras",
+      "title": "Orçamento de obras",
+      "summary": "Organize serviços por etapa, use preços próprios ou importe o XLSX do SINAPI e exporte uma planilha editável.",
+      "format": "SINAPI · XLSX · CSV",
+      "action": "Montar orçamento",
+      "href": "/ferramentas/orcamento-de-obras/",
+      "art": "sheet",
+      "mark": "XLSX",
+      "keywords": "planilha sinapi orçamento obra orçamento custo etapa composições",
+      "page": {
+        "title": "Orçamento de obras por etapa com SINAPI e Excel",
+        "desc": "Monte o orçamento de obras por etapa com preços próprios, composições ou tabelas SINAPI. Exporte Excel editável, CSV ou JSON.",
+        "related": [
+          "calculadora-bdi"
+        ]
+      }
+    },
+    {
+      "id": "diagrama-unifilar",
+      "group": "calculo",
+      "title": "Editor de diagrama unifilar",
+      "summary": "Escolha os símbolos, conecte terminais e exporte o diagrama elétrico em SVG ou o projeto em JSON.",
+      "format": "Elétrica · SVG · JSON",
+      "action": "Desenhar unifilar",
+      "href": "/ferramentas/diagrama-unifilar/",
+      "art": "grid",
+      "mark": "SVG",
+      "keywords": "diagrama unifilar esquema elétrico quadro disjuntor circuito terminal",
+      "page": {
+        "title": "Editor de diagrama unifilar elétrico online",
+        "desc": "Desenhe um diagrama unifilar no navegador com símbolos e conexões. Baixe em SVG ou salve o projeto em JSON para editar depois.",
+        "related": [
+          "dwg"
+        ]
+      }
+    },
+    {
+      "id": "rede-de-agua",
+      "group": "calculo",
+      "title": "Simulador de rede de água",
+      "summary": "Monte uma rede pressurizada e compare pressões e vazões em dois cenários de consumo.",
+      "format": "Hidráulica · EPANET",
+      "action": "Simular rede de água",
+      "href": "/ferramentas/rede-de-agua/",
+      "art": "iso",
+      "mark": "EPANET",
+      "keywords": "epanet hidráulica rede agua vazao pressão tubos perda de carga",
+      "page": {
+        "title": "Simulador de rede de água no navegador com EPANET",
+        "desc": "Compare pressões e vazões de uma rede de água em dois cenários de consumo, com o motor EPANET 2.2 rodando no navegador.",
+        "related": [
+          "calculadora-bdi"
+        ]
+      }
     }
   ]
 }

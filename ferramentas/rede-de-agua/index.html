@@ -1,10 +1,33 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Simulador de rede de água com EPANET | CONFENGE</title><meta name="description" content="Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro."><link rel="canonical" href="https://confenge.com.br/ferramentas/rede-de-agua/">
-<meta property="og:type" content="website"><meta property="og:title" content="Simulador de rede de água com EPANET | CONFENGE"><meta property="og:description" content="Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro."><meta property="og:url" content="https://confenge.com.br/ferramentas/rede-de-agua/">
+<link rel="canonical" href="https://confenge.com.br/ferramentas/rede-de-agua/">
 <meta name="theme-color" content="#061a33"><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
 <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="agua.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Início", "item": "https://confenge.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Ferramentas", "item": "https://confenge.com.br/ferramentas/"}, {"@type": "ListItem", "position": 3, "name": "Rede de água", "item": "https://confenge.com.br/ferramentas/rede-de-agua/"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Simulador de rede de água com EPANET", "description": "Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro.", "url": "https://confenge.com.br/ferramentas/rede-de-agua/", "operatingSystem": "Navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "applicationCategory": "UtilitiesApplication"}</script><script type="module" src="app.js"></script><script defer src="/script.js"></script></head>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Início", "item": "https://confenge.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Ferramentas", "item": "https://confenge.com.br/ferramentas/"}, {"@type": "ListItem", "position": 3, "name": "Rede de água", "item": "https://confenge.com.br/ferramentas/rede-de-agua/"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Simulador de rede de água com EPANET", "description": "Modele uma rede de água pressurizada, compare pressões e vazões em dois cenários de consumo e exporte o projeto para EPANET. Grátis e sem cadastro.", "url": "https://confenge.com.br/ferramentas/rede-de-agua/", "operatingSystem": "Navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "applicationCategory": "UtilitiesApplication"}</script><script type="module" src="app.js"></script><script defer src="/script.js"></script><!-- tool-showcase:head -->
+<title>Simulador de rede de água no navegador com EPANET | CONFENGE</title>
+<meta name="description" content="Compare pressões e vazões de uma rede de água em dois cenários de consumo, com o motor EPANET 2.2 rodando no navegador."/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
+<meta property="og:updated_time" content="2026-11-09"/>
+<meta property="og:type" content="website"/>
+<meta property="og:locale" content="pt_BR"/>
+<meta property="og:site_name" content="CONFENGE"/>
+<meta property="og:title" content="Simulador de rede de água no navegador com EPANET | CONFENGE"/>
+<meta property="og:description" content="Compare pressões e vazões de uma rede de água em dois cenários de consumo, com o motor EPANET 2.2 rodando no navegador."/>
+<meta property="og:url" content="https://confenge.com.br/ferramentas/rede-de-agua/"/>
+<meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/rede-de-agua.jpg"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Simulador de rede de água no navegador com EPANET, ilustração da ferramenta CONFENGE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Simulador de rede de água no navegador com EPANET | CONFENGE"/>
+<meta name="twitter:description" content="Compare pressões e vazões de uma rede de água em dois cenários de consumo, com o motor EPANET 2.2 rodando no navegador."/>
+<meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/rede-de-agua.jpg"/>
+<meta name="twitter:image:alt" content="Simulador de rede de água no navegador com EPANET, ilustração da ferramenta CONFENGE"/>
+<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
+<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>
+<!-- /tool-showcase:head -->
+</head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <svg aria-hidden="true" class="svg-sprite" height="0" width="0">
@@ -18,8 +41,8 @@
 <a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
 <a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
 <a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
-<a data-cta-position="header_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
-<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
 <a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
 </nav>
 <a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
@@ -31,8 +54,8 @@
 <a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
 <a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
 <a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
-<a data-cta-position="mobile_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
-<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
 <a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
 <a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
@@ -67,7 +90,22 @@
 <p>A aplicação atende redes ramificadas ou em anel com até 160 pontos e 320 trechos. O exemplo usa pressões didáticas. Verifique, para um projeto real, os requisitos de cada aparelho e as condições de abastecimento da instalação. Bombas, variação de nível no tempo, transientes e verificação normativa exigem modelagem específica.</p>
 <p>Referência conferida em <time datetime="2026-11-07">7 de novembro de 2026</time>. <a href="https://www.epa.gov/water-research/epanet">EPANET na EPA</a> · <a href="https://github.com/epanet-js/epanet-js-toolkit">Interface JavaScript</a> · <a href="vendor/OWA-LICENSE.txt">Licença do motor</a>.</p></section>
 <section class="tool-method"><h2>Projeto hidrossanitário</h2><p>Para compatibilizar tubulações, aparelhos e cotas com a arquitetura, reúna as plantas e os pontos de abastecimento.</p><a data-cta-id="rede-agua-projeto" href="/projeto-hidrossanitario/">Conhecer o projeto hidrossanitário</a> · <a data-cta-id="rede-agua-contato" data-tool-to-whatsapp data-journey="operacao" data-cta-position="tool_contact" data-cta-channel="whatsapp" href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20a%20rede%20de%20%C3%A1gua%20do%20projeto." target="_blank" rel="noopener">Conversar sobre a rede de água</a></section>
-</div></main>
+</div><!-- tool-showcase:share -->
+<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Simulador de rede de água">
+<h2 id="tool-share-title">Indique esta ferramenta</h2>
+<p>Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho.</p>
+<div class="tool-share-social">
+<button type="button" data-share-copy hidden data-event-name="cta_click" data-cta-id="tool-share-copy-rede-de-agua" data-cta-position="tool_share">Copiar link</button>
+<button type="button" data-share-native hidden data-event-name="cta_click" data-cta-id="tool-share-native-rede-de-agua" data-cta-position="tool_share">Compartilhar…</button>
+<a href="https://wa.me/?text=Simulador+de+rede+de+%C3%A1gua+%7C+CONFENGE%0Ahttps%3A%2F%2Fconfenge.com.br%2Fferramentas%2Frede-de-agua%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-wa-rede-de-agua" data-cta-position="tool_share">WhatsApp</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fconfenge.com.br%2Fferramentas%2Frede-de-agua%2F%3Futm_source%3Dlinkedin%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-linkedin-rede-de-agua" data-cta-position="tool_share">LinkedIn</a>
+</div>
+<label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="https://confenge.com.br/ferramentas/rede-de-agua/?utm_source=confenge_share&amp;utm_medium=referral&amp;utm_campaign=ferramentas" readonly data-share-url></label>
+<p class="tool-share-status" role="status"></p>
+<div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/calculadora-bdi/">Calculadora de BDI</a></div>
+</section>
+<!-- /tool-showcase:share -->
+</main>
 <footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>

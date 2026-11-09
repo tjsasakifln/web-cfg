@@ -1,16 +1,36 @@
 <!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calculadora de caminho crítico da obra (CPM) | CONFENGE</title>
-<meta name="description" content="Calcule o prazo da obra e a folga de cada atividade. Cole seu cronograma, identifique o caminho crítico e baixe o resultado em CSV. Grátis e sem cadastro.">
 <link rel="canonical" href="https://confenge.com.br/ferramentas/caminho-critico-obra/">
-<meta property="og:type" content="website"><meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="Calculadora de caminho crítico da obra (CPM) | CONFENGE"><meta property="og:description" content="Calcule o prazo da obra e a folga de cada atividade. Cole seu cronograma, identifique o caminho crítico e baixe o resultado em CSV. Grátis e sem cadastro.">
-<meta property="og:url" content="https://confenge.com.br/ferramentas/caminho-critico-obra/"><meta name="theme-color" content="#061a33">
+<meta name="theme-color" content="#061a33">
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="/assets/editorial-tool.css"><link rel="stylesheet" href="./styles.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora de caminho crítico da obra (CPM)","url":"https://confenge.com.br/ferramentas/caminho-critico-obra/","description":"Calcule o prazo da obra e a folga de cada atividade. Cole seu cronograma, identifique o caminho crítico e baixe o resultado em CSV. Grátis e sem cadastro.","applicationCategory":"BusinessApplication","dateModified":"2026-11-07","operatingSystem":"Web","inLanguage":"pt-BR","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Caminho crítico da obra","item":"https://confenge.com.br/ferramentas/caminho-critico-obra/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora de caminho crítico da obra (CPM)","url":"https://confenge.com.br/ferramentas/caminho-critico-obra/","description":"Calcule o prazo da obra e a folga de cada atividade. Cole seu cronograma, identifique o caminho crítico e baixe o resultado em CSV. Grátis e sem cadastro.","applicationCategory":"BusinessApplication","dateModified":"2026-11-09","operatingSystem":"Web","inLanguage":"pt-BR","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Caminho crítico da obra","item":"https://confenge.com.br/ferramentas/caminho-critico-obra/"}]}]}</script>
 <script src="/assets/js/tools-common.js" defer></script><script src="/script.js" defer></script><script type="module" src="./app.js"></script>
+<!-- tool-showcase:head -->
+<title>Calculadora de caminho crítico e folgas de obra | CONFENGE</title>
+<meta name="description" content="Informe as atividades, durações e predecessoras. Veja o prazo total da obra, o início e o fim de cada tarefa e as folgas."/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
+<meta property="og:updated_time" content="2026-11-09"/>
+<meta property="og:type" content="website"/>
+<meta property="og:locale" content="pt_BR"/>
+<meta property="og:site_name" content="CONFENGE"/>
+<meta property="og:title" content="Calculadora de caminho crítico e folgas de obra | CONFENGE"/>
+<meta property="og:description" content="Informe as atividades, durações e predecessoras. Veja o prazo total da obra, o início e o fim de cada tarefa e as folgas."/>
+<meta property="og:url" content="https://confenge.com.br/ferramentas/caminho-critico-obra/"/>
+<meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/caminho-critico-obra.jpg"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Calculadora de caminho crítico e folgas de obra, ilustração da ferramenta CONFENGE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Calculadora de caminho crítico e folgas de obra | CONFENGE"/>
+<meta name="twitter:description" content="Informe as atividades, durações e predecessoras. Veja o prazo total da obra, o início e o fim de cada tarefa e as folgas."/>
+<meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/caminho-critico-obra.jpg"/>
+<meta name="twitter:image:alt" content="Calculadora de caminho crítico e folgas de obra, ilustração da ferramenta CONFENGE"/>
+<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
+<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>
+<!-- /tool-showcase:head -->
 </head><body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
 <svg aria-hidden="true" class="svg-sprite" height="0" width="0">
@@ -24,8 +44,8 @@
 <a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
 <a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
 <a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
-<a data-cta-position="header_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
-<a data-cta-position="header_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
 <a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
 </nav>
 <a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
@@ -37,8 +57,8 @@
 <a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
 <a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
 <a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
-<a data-cta-position="mobile_nav" aria-current="page" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
-<a data-cta-position="mobile_nav" href="/como-trabalhamos/" style="min-height:44px">Como trabalhamos</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
 <a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
 <a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
@@ -89,7 +109,22 @@ E;Entrega;0;D</textarea></div>
 <div class="tool-cta-contextual" id="contato-contextual"><h2>Precisa rever o prazo do contrato?</h2>
 <p>Converse com a CONFENGE sobre as atividades afetadas, os registros da obra e a análise do cronograma.</p>
 <a href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20o%20cronograma%20da%20obra." data-tool-to-whatsapp data-journey="contrato" data-cta-position="tool_contact" data-cta-channel="whatsapp" target="_blank" rel="noopener">Conversar sobre o cronograma pelo WhatsApp</a></div>
-</div></main>
+</div><!-- tool-showcase:share -->
+<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Caminho crítico da obra">
+<h2 id="tool-share-title">Indique esta ferramenta</h2>
+<p>Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho.</p>
+<div class="tool-share-social">
+<button type="button" data-share-copy hidden data-event-name="cta_click" data-cta-id="tool-share-copy-caminho-critico-obra" data-cta-position="tool_share">Copiar link</button>
+<button type="button" data-share-native hidden data-event-name="cta_click" data-cta-id="tool-share-native-caminho-critico-obra" data-cta-position="tool_share">Compartilhar…</button>
+<a href="https://wa.me/?text=Caminho+cr%C3%ADtico+da+obra+%7C+CONFENGE%0Ahttps%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fcaminho-critico-obra%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-wa-caminho-critico-obra" data-cta-position="tool_share">WhatsApp</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fcaminho-critico-obra%2F%3Futm_source%3Dlinkedin%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-linkedin-caminho-critico-obra" data-cta-position="tool_share">LinkedIn</a>
+</div>
+<label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="https://confenge.com.br/ferramentas/caminho-critico-obra/?utm_source=confenge_share&amp;utm_medium=referral&amp;utm_campaign=ferramentas" readonly data-share-url></label>
+<p class="tool-share-status" role="status"></p>
+<div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/orcamento-de-obras/">Orçamento de obras</a></div>
+</section>
+<!-- /tool-showcase:share -->
+</main>
 <footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>

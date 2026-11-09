@@ -1,7 +1,7 @@
 import {calcular, csv, exemplo, formatar, lerComposicao, limiteJson, novaPlanilha, numeroBR, validarPlanilha} from './orcamento.js';
+import {tabDraft} from '/assets/js/tab-draft.mjs';
 
 const q = id => document.getElementById(id);
-const storageKey = 'confenge.orcamento-de-obras.v1';
 const tool = 'orcamento-de-obras';
 let projeto = novaPlanilha();
 let resultado;
@@ -10,10 +10,10 @@ let bdiValido = true;
 let rascunho = false;
 const moeda = valor => 'R$ ' + formatar(valor,2);
 const avisar = texto => { q('avisos').textContent=texto; };
+const draft = tabDraft('confenge.orcamento-de-obras.v2', () => projeto, () => false, avisar);
 
 function guardar() {
-  try { localStorage.setItem(storageKey,JSON.stringify(projeto)); }
-  catch { q('gravacao').textContent='Este navegador não conseguiu guardar o orçamento. Salve o projeto JSON antes de fechar a página.'; }
+  draft.schedule();
 }
 function elemento(tag, valor) {
   const el=document.createElement(tag);
@@ -164,9 +164,9 @@ q('abrir').onchange=async e=>{
 };
 let carregado=novaPlanilha();
 try {
-  const raw=localStorage.getItem(storageKey);
-  if(raw)carregado=validarPlanilha(JSON.parse(raw));
-} catch {avisar('O orçamento guardado neste dispositivo não pôde ser lido. Você pode abrir sua cópia JSON.');}
+  const raw=draft.read();
+  if(raw)carregado=validarPlanilha(raw);
+} catch {avisar('O rascunho desta aba não pôde ser lido. Você pode abrir sua cópia JSON.');}
 trocarPlanilha(carregado);
 for (const id of ['demonstrar','nome-obra','bdi-obra','campos-servico','gravar-item','abrir','novo']) q(id).disabled=false;
 window.ConfengeTools?.bindToolLifecycle({tool});

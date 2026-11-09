@@ -1,7 +1,7 @@
 import { simular, paraCentimetro } from './calculo.js';
 
 const el = id => document.getElementById(id);
-const numeros = ['latitude', 'longitude', 'fachada', 'vao', 'distancia', 'avanco'];
+const numeros = ['latitude', 'longitude', 'fuso', 'fachada', 'vao', 'distancia', 'avanco'];
 const formatos = [0, 1, 2].map(digitos => new Intl.NumberFormat('pt-BR', {
   minimumFractionDigits: digitos, maximumFractionDigits: digitos
 }));
@@ -12,10 +12,10 @@ const cobertura = fracao => fmt(Math.floor(fracao * 1000 + 1e-10) / 10) + '%';
 const formulario = el('simulador');
 
 function atualizar() {
-  const dados = { data: el('data').value, fuso: Number(el('fuso').value) };
+  const dados = { data: el('data').value };
   for (const id of numeros) {
     const campo = el(id);
-    const texto = campo.value.trim().replace(',', '.');
+    const texto = campo.value.trim().replace('−', '-').replace(',', '.');
     const valor = Number(texto);
     const valido = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(texto) &&
       valor >= Number(campo.dataset.min) && valor <= Number(campo.dataset.max);

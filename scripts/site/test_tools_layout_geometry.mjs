@@ -40,7 +40,7 @@ const ROUTES = [
   { id: "orcamento", path: "/ferramentas/orcamento-de-obras/", primary: "#editor-servico" },
   { id: "unifilar", path: "/ferramentas/diagrama-unifilar/", primary: "#editor" },
   { id: "hidraulica", path: "/ferramentas/rede-de-agua/", primary: "#modelo" },
-  { id: "catalogo", path: "/ferramentas/", primary: ".tool-hub-situations" },
+  { id: "catalogo", path: "/ferramentas/", primary: ".ts-grid" },
   { id: "reequilibrio", path: "/ferramentas/checklist-reequilibrio/", primary: "#f" },
   { id: "limite", path: "/ferramentas/limite-acrescimos-supressoes/", primary: "#limite-form" },
   { id: "matriz", path: "/ferramentas/matriz-atraso-obra/", primary: "#f" },
@@ -283,7 +283,16 @@ async function exercise(page, id) {
     await page.waitForSelector("#resultado:not([hidden])");
     await page.click("#resultado summary");
     await page.waitForSelector("#horarios tr:nth-child(24)");
-    return [await geometry(page, id, "tabela-horaria", page.viewport().width)];
+    const original = await geometry(page, id, "tabela-horaria", page.viewport().width);
+    await page.evaluate(() => {
+      const custom = {latitude: "5,6037", longitude: "-0,1870", fachada: "90", fuso: "0"};
+      for (const [key, value] of Object.entries(custom)) document.getElementById(key).value = value;
+      document.getElementById("fuso").dispatchEvent(new Event("input", {bubbles: true}));
+    });
+    if (await page.$eval("#medida", el => el.textContent) !== "0,02 m") {
+      throw new Error("UTC+0 scenario must show the correct shadow");
+    }
+    return [original];
   }
 
   if (id === "sirgas2000") {
@@ -300,7 +309,19 @@ async function exercise(page, id) {
     if (!await page.$eval("#propriedades", (list) => list.innerText.includes("21,31"))) {
       throw new Error("PsychroLib reference dew point missing");
     }
-    return [await geometry(page, id, "resultado", page.viewport().width)];
+    const original = await geometry(page, id, "resultado", page.viewport().width);
+    await page.evaluate(() => {
+      document.getElementById("temperatura").value = "0,1";
+      const humidity = document.getElementById("umidade");
+      humidity.value = "99,23";
+      humidity.dispatchEvent(new Event("input", {bubbles: true}));
+    });
+    if (!await page.$eval("#resultado", el => el.hidden)) throw new Error("Old psychrometric result stayed visible");
+    await page.click("#ambiente button");
+    if (!await page.$eval("#propriedades div", el => el.textContent.includes("Limite de saturação0,00 °C"))) {
+      throw new Error("Negative rounded zero in saturation result");
+    }
+    return [original];
   }
 
   if (id === "bdi") {
@@ -310,7 +331,24 @@ async function exercise(page, id) {
     if (!await page.$eval("#preco", (el) => el.textContent.includes("119.445,79"))) {
       throw new Error("BDI example price differs from the reference");
     }
-    return [await geometry(page, id, "resultado", page.viewport().width)];
+    const original = await geometry(page, id, "resultado", page.viewport().width);
+    await page.$eval("#taxes", el => {
+      el.value = "100";
+      el.dispatchEvent(new Event("input", {bubbles: true}));
+    });
+    if (!await page.$eval("#resultado", el => el.hidden)) throw new Error("Old BDI result stayed visible");
+    await page.click("#composicao button[type=submit]");
+    if (!await page.$eval("#aviso", el => el.textContent.includes("menos de 100%"))) {
+      throw new Error("BDI must reject a zero denominator");
+    }
+    await page.evaluate(() => {
+      for (const input of document.querySelectorAll("#composicao input")) {
+        input.value = input.id === "custo" ? "0,05" : input.id === "profit" ? "10" : "0";
+      }
+    });
+    await page.click("#composicao button[type=submit]");
+    if (await page.$eval("#preco", el => el.textContent) !== "R$ 0,06") throw new Error("BDI cent rounding");
+    return [original];
   }
 
   if (id === "viga") {

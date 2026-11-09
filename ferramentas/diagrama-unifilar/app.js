@@ -1,10 +1,12 @@
 import {compilar,exemplo,normalizar,portas,proximoId,svgDiagrama,tipos,vazio} from './modelo.js';
+import {tabDraft} from '/assets/js/tab-draft.mjs';
 const $=id=>document.getElementById(id);
-const storage='confenge-unifilar-v1', history=[];
+const history=[];
 let doc=exemplo();
 function avisar(msg){$('estado').textContent=msg;}
-try{const s=localStorage.getItem(storage);if(s)doc=normalizar(JSON.parse(s));}
-catch{avisar('Não foi possível recuperar o projeto local. O exemplo está aberto.');}
+const draft=tabDraft('confenge.unifilar.v2',()=>doc,()=>false,avisar);
+try{const saved=draft.read();if(saved)doc=normalizar(saved);}
+catch{avisar('Não foi possível recuperar o rascunho desta aba. O exemplo está aberto.');}
 for(const [key,label] of tipos)$('tipo').add(new Option(label,key));
 function zoom(){$('visor').dataset.zoom=$('zoom').value;}
 $('zoom').addEventListener('change',zoom);
@@ -33,7 +35,7 @@ function commit(next,id,msg){
     render(id);persistir(msg);
   }catch(e){avisar(e.message);}
 }
-function persistir(msg){try{localStorage.setItem(storage,JSON.stringify(doc));avisar(msg);}catch{avisar(msg+' Salve o JSON para conservar seu projeto.');}}
+function persistir(msg){draft.schedule();avisar(msg);}
 $('equip').addEventListener('change',fields);
 $('gravar').onclick=()=>{
   let id=$('equip').value;const novo=!id;
