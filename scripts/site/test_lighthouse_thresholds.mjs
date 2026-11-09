@@ -190,6 +190,44 @@ assert.equal(
   true,
   "seo-exempt noindex utilities are not scored on accessibility/SEO",
 );
+const runtimeNoindex = "/oportunidades/00394429000100-1-002200/2026/";
+assert.equal(
+  evaluateLighthouseResults(
+    [...passing, criticalPage(runtimeNoindex, 100, 0, { seo: 70, seo_without_crawlability: 100 })],
+    { homeRuns: 3, seoOnlyExemptPages: new Set([runtimeNoindex]) },
+  ).ok,
+  true,
+  "a fully proven runtime NOINDEX route may waive only the aggregate SEO floor",
+);
+assert.equal(
+  evaluateLighthouseResults(
+    [...passing, criticalPage(runtimeNoindex, 100, 0, { seo: 70, seo_without_crawlability: 100, accessibility: 94 })],
+    { homeRuns: 3, seoOnlyExemptPages: new Set([runtimeNoindex]) },
+  ).ok,
+  false,
+  "runtime NOINDEX never waives accessibility",
+);
+assert.equal(
+  evaluateLighthouseResults(
+    [...passing, criticalPage(runtimeNoindex, 100, 0, { seo: 70, seo_without_crawlability: 100, best_practices: 94 })],
+    { homeRuns: 3, seoOnlyExemptPages: new Set([runtimeNoindex]) },
+  ).ok,
+  false,
+  "runtime NOINDEX never waives best practices",
+);
+assert.equal(
+  evaluateLighthouseResults([...passing, criticalPage(runtimeNoindex, 100, 0, { seo: 70 })], { homeRuns: 3 }).ok,
+  false,
+  "an INDEX or otherwise unproven route still fails a low SEO score",
+);
+assert.equal(
+  evaluateLighthouseResults(
+    [...passing, criticalPage(runtimeNoindex, 100, 0, { seo: 70, seo_without_crawlability: 90 })],
+    { homeRuns: 3, seoOnlyExemptPages: new Set([runtimeNoindex]) },
+  ).ok,
+  false,
+  "runtime NOINDEX waives only is-crawlable, not another weighted SEO regression",
+);
 assert.equal(
   evaluateLighthouseResults(
     [...passing, criticalPage("/ops/", 100, 0, { accessibility: 89 })],

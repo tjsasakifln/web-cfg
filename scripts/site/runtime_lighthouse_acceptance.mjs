@@ -340,18 +340,21 @@ export async function runAcceptance(args = process.argv.slice(2), measurement = 
       const { summary, summaryPath, home } = measurePublicFamily({ origin, expectedSha, route, ...measurement });
       const measured = (summary.results || []).filter((row) => row.path === route && !row.error);
       const accepted = summary.coverage?.runtime_evidence?.routes || [];
+      const acceptedItem = accepted.find((item) => item.route === route && item.html_sha256);
+      const seoOnlyExempt = summary.coverage?.seo_only_exempt_pages || [];
       if (
         measured.length !== 1
-        || !accepted.some((item) => (
-          item.route === route
-          && item.html_sha256
-          && item.route_indexable === routeIndexable
-        ))
+        || !acceptedItem
+        || !["INDEX", "NOINDEX"].includes(acceptedItem.index_state)
+        || acceptedItem.route_indexable !== routeIndexable
+        || acceptedItem.index_state !== (routeIndexable ? "INDEX" : "NOINDEX")
+        || seoOnlyExempt.includes(route) !== (acceptedItem.index_state === "NOINDEX")
       ) {
-        throw new Error("runtime Lighthouse summary does not prove the exact accepted route");
+        throw new Error("runtime Lighthouse summary does not prove the exact accepted route and index state");
       }
       report.mode = "official_live_lighthouse";
       report.evidence.runtime_route = route;
+      report.evidence.runtime_index_state = acceptedItem.index_state;
       report.evidence.route_indexable = routeIndexable;
       report.evidence.lighthouse_summary = summaryPath.slice(ROOT.length + 1);
       report.evidence.lighthouse_evaluation = summary.evaluation;

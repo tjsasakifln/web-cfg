@@ -34,11 +34,10 @@ import {
   formatCoverageDeclaration,
   loadPolicy,
   resolveSiteRoot,
-  runtimeSeoOnlyBudgetErrors,
   runtimeLighthouseContractForRoute,
   verifyRuntimeAcceptedProjectionDocument,
   verifyRuntimeInventoryDocument,
-  verifyRuntimePageIndexState,
+  verifyRuntimeRenderedPageDocument,
 } from "./interface_coverage.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -61,7 +60,17 @@ if (diagnosticRunCount && !evidenceLabel) {
     `--runs/LH_HOME_RUNS=${REPEATED_RUNS} is diagnostic-only and requires --label; final evidence requires ${FINAL_REPEATED_RUNS} runs`,
   );
 }
-const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
+const localRuntimeFixture = process.env.LH_TEST_FIXTURE_MODE === "runtime-noindex-evidence"
+  && Boolean(process.env.LH_TEST_MEASURE_CHILD);
+const coverage = localRuntimeFixture ? {
+  policy_path: "local-runtime-noindex-evidence", route_count: 1,
+  lighthouse: {
+    pages: ["/"], families: [], runtime_families: [], additional_pages: [],
+    image_gate_pages: [], seo_exempt_pages: [], not_sampled_count: 0, not_sampled: [],
+    form_factor: "mobile", viewport: { width: 390, height: 844, device_scale_factor: 1 },
+    thresholds: { performance: 90, accessibility: 95, best_practices: 95, seo: 95 },
+  },
+} : deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
 const runtimeRoutes = option("runtime-route").split(",").map((value) => value.trim()).filter(Boolean);
 if (new Set(runtimeRoutes).size !== runtimeRoutes.length) {
   throw new Error("--runtime-route contains duplicate routes");
@@ -82,8 +91,7 @@ if (omittedRuntimeRoutes.length) {
 }
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
-const RUNTIME_SEO_ONLY_EXEMPT_PAGES = new Set();
-console.log(formatCoverageDeclaration(coverage));
+if (!localRuntimeFixture) console.log(formatCoverageDeclaration(coverage));
 console.log(`lighthouse pages (${RUN_PAGES.length}/${PAGES.length}): ${RUN_PAGES.join(" ")}`);
 for (const [name, configuredPages] of [
   ["image_gate_pages", IMAGE_GATE_PAGES],
@@ -226,6 +234,39 @@ async function fetchExactRuntimeHtml(origin, route) {
   return { body, text: body.toString("utf8") };
 }
 
+async function mapConcurrent(values, limit, worker) {
+  const results = new Array(values.length);
+  let cursor = 0;
+  await Promise.all(Array.from({ length: Math.min(limit, values.length) }, async () => {
+    while (cursor < values.length) {
+      const index = cursor;
+      cursor += 1;
+      results[index] = await worker(values[index]);
+    }
+  }));
+  return results;
+}
+
+async function verifyProjectionPages(origin, projection) {
+  const indexable = new Set(projection.indexable_routes);
+  return mapConcurrent(projection.routes, 12, async (acceptedItem) => {
+    const page = await fetchExactRuntimeHtml(origin, acceptedItem.route);
+    const observedSha256 = createHash("sha256").update(page.body).digest("hex");
+    if (observedSha256 !== acceptedItem.sha256) {
+      throw new Error(
+        `runtime Lighthouse accepted HTML digest mismatch: route=${acceptedItem.route} accepted=${acceptedItem.sha256} observed=${observedSha256}`,
+      );
+    }
+    return {
+      ...verifyRuntimeRenderedPageDocument(acceptedItem.route, page.text, {
+        ...acceptedItem,
+        index_state: indexable.has(acceptedItem.route) ? "INDEX" : "NOINDEX",
+      }),
+      observed_sha256: observedSha256,
+    };
+  });
+}
+
 async function verifyRuntimeEvidenceInputs() {
   if (!runtimeContracts.length) return null;
   const origin = BASE.replace(/\/$/, "");
@@ -240,6 +281,7 @@ async function verifyRuntimeEvidenceInputs() {
   }
   const inventories = new Map();
   const projections = new Map();
+  const verifiedProjectionRoutes = new Map();
   const selectedRoutes = [];
   for (const contract of runtimeContracts) {
     if (!projections.has(contract.accepted_projection_route)) {
@@ -255,6 +297,17 @@ async function verifyRuntimeEvidenceInputs() {
       contract,
       expectedSha,
     );
+    if (!verifiedProjectionRoutes.has(contract.accepted_projection_route)) {
+      verifiedProjectionRoutes.set(
+        contract.accepted_projection_route,
+        await verifyProjectionPages(origin, projection),
+      );
+    }
+    const verifiedRoutes = verifiedProjectionRoutes.get(contract.accepted_projection_route);
+    const renderedItem = verifiedRoutes.find((item) => item.route === contract.route);
+    if (!renderedItem || renderedItem.sha256 !== acceptedItem.sha256) {
+      throw new Error(`runtime Lighthouse selected route was not verified from the accepted projection: ${contract.route}`);
+    }
     if (!inventories.has(contract.inventory_route)) {
       inventories.set(
         contract.inventory_route,
@@ -265,26 +318,19 @@ async function verifyRuntimeEvidenceInputs() {
       contract.route,
       inventories.get(contract.inventory_route),
       contract,
+      verifiedRoutes,
       projection.indexable_routes,
     );
-    const page = await fetchExactRuntimeHtml(origin, contract.route);
-    const observedSha256 = createHash("sha256").update(page.body).digest("hex");
-    if (observedSha256 !== acceptedItem.sha256) {
-      throw new Error(
-        `runtime Lighthouse accepted HTML digest mismatch: route=${contract.route} accepted=${acceptedItem.sha256} observed=${observedSha256}`,
-      );
-    }
-    if (!page.text.includes(`data-opportunity-id="${acceptedItem.opportunity_id}"`)) {
-      throw new Error(`runtime Lighthouse accepted page identity is absent from rendered HTML: ${contract.route}`);
-    }
-    verifyRuntimePageIndexState(page.text, acceptedItem.route_indexable);
-    if (!acceptedItem.route_indexable) RUNTIME_SEO_ONLY_EXEMPT_PAGES.add(contract.route);
     selectedRoutes.push({
       family_id: contract.family_id,
       route: contract.route,
       opportunity_id: acceptedItem.opportunity_id,
       content_hash: acceptedItem.content_hash,
-      html_sha256: observedSha256,
+      index_state: renderedItem.index_state,
+      robots: renderedItem.robots,
+      canonical: renderedItem.canonical,
+      seo_only_exempt: renderedItem.index_state === "NOINDEX",
+      html_sha256: renderedItem.observed_sha256,
       accepted_projection_sha256: projection.accepted_projection_sha256,
       producer_manifest_hash: projection.manifest_hash,
       consumer_observed_manifest_hash: projection.consumer_observed_manifest_hash,
@@ -329,18 +375,28 @@ const results = [];
 let fatal = null;
 
 let runtimeEvidence = null;
+const SEO_ONLY_EXEMPT_PAGES = new Set();
 try {
   runtimeEvidence = await verifyRuntimeEvidenceInputs();
+  for (const item of runtimeEvidence?.routes || []) {
+    if (item.index_state === "NOINDEX" && item.seo_only_exempt === true) {
+      SEO_ONLY_EXEMPT_PAGES.add(item.route);
+    }
+  }
 } catch (error) {
   fatal = `runtime evidence prerequisites did not verify: ${String(error?.message || error)}`;
 }
 
-const EFFECTIVE_SEO_EXEMPT_PAGES = new Set([
-  ...SEO_EXEMPT_PAGES,
-  ...RUNTIME_SEO_ONLY_EXEMPT_PAGES,
-]);
-
-const CHILD = join(ROOT, "scripts", "site", "lighthouse_measure_child.mjs");
+const testMeasureChild = process.env.LH_TEST_MEASURE_CHILD || "";
+if (testMeasureChild && (
+  process.env.LH_TEST_FIXTURE_MODE !== "runtime-noindex-evidence"
+  || !["127.0.0.1", "localhost"].includes(new URL(BASE).hostname)
+)) {
+  throw new Error("LH_TEST_MEASURE_CHILD is restricted to the local runtime-noindex evidence fixture");
+}
+const CHILD = testMeasureChild
+  ? resolve(testMeasureChild)
+  : join(ROOT, "scripts", "site", "lighthouse_measure_child.mjs");
 const WORK = mkdtempSync(join(tmpdir(), "confenge-lighthouse-supervisor-"));
 
 /** Whole-run budget. The release job allows 30 minutes and the site-ci gates
@@ -434,7 +490,7 @@ try {
             form_factor: coverage.lighthouse.form_factor,
             viewport: coverage.lighthouse.viewport,
             runtime_mode: runtimeContracts.length > 0 || publicEdge,
-            seo_exempt: EFFECTIVE_SEO_EXEMPT_PAGES.has(path),
+            seo_exempt: SEO_EXEMPT_PAGES.has(path) || SEO_ONLY_EXEMPT_PAGES.has(path),
             chrome_path: process.env.CHROME_PATH,
           },
           outJson,
@@ -486,19 +542,10 @@ const evaluation = evaluateLighthouseResults(results, {
   criticalRuns: REPEATED_RUNS,
   measuredPages: RUN_PAGES,
   imageGatePages: IMAGE_GATE_PAGES,
-  seoExemptPages: EFFECTIVE_SEO_EXEMPT_PAGES,
+  seoExemptPages: SEO_EXEMPT_PAGES,
+  seoOnlyExemptPages: SEO_ONLY_EXEMPT_PAGES,
   thresholds: coverage.lighthouse.thresholds,
 });
-// Historical package exemptions predate this runtime contract and retain their
-// existing behavior. A runtime NOINDEX page receives an SEO-only exemption:
-// accessibility and best-practices remain mandatory, while performance and CLS
-// are already enforced unconditionally by evaluateLighthouseResults.
-evaluation.errors.push(...runtimeSeoOnlyBudgetErrors(
-  results,
-  RUNTIME_SEO_ONLY_EXEMPT_PAGES,
-  coverage.lighthouse.thresholds,
-));
-evaluation.ok = evaluation.errors.length === 0;
 const summary = {
   base: BASE,
   generated_at: new Date().toISOString(),
@@ -516,8 +563,8 @@ const summary = {
     public_edge: publicEdge,
     additional_pages: coverage.lighthouse.additional_pages,
     image_gate_pages: [...IMAGE_GATE_PAGES],
-    seo_exempt_pages: [...EFFECTIVE_SEO_EXEMPT_PAGES],
-    runtime_seo_only_exempt_pages: [...RUNTIME_SEO_ONLY_EXEMPT_PAGES],
+    seo_exempt_pages: [...SEO_EXEMPT_PAGES],
+    seo_only_exempt_pages: [...SEO_ONLY_EXEMPT_PAGES],
     not_sampled_count: coverage.lighthouse.not_sampled_count,
     not_sampled: coverage.lighthouse.not_sampled,
     thresholds: coverage.lighthouse.thresholds,

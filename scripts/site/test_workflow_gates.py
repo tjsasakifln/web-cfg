@@ -702,7 +702,9 @@ def test_lighthouse_covers_article_cover_regression_routes():
             raise AssertionError(f"Lighthouse image regression gate missing {needle}")
     for needle in (
         "imageGatePages.has(row.path)",
-        "!seoExemptPages.has(row.path) && row.seo < thresholds.seo",
+        "seoOnlyExemptPages.has(row.path) ? row.seo_without_crawlability : row.seo",
+        "!Number.isFinite(seoScore)",
+        "seoScore < thresholds.seo",
     ):
         if needle not in thresholds:
             raise AssertionError(f"Lighthouse threshold module missing {needle}")
