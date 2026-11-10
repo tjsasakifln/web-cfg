@@ -124,8 +124,6 @@ async function recordPrimaryInputFailure(page, selector, label, error) {
 async function prepareTrustedPhysicalClick(page, selector, label) {
   const traceKey = `${label}-${++physicalClickSequence}`;
   try {
-    await page.bringToFront();
-    await page.waitForFunction(() => document.visibilityState === 'visible');
     return await page.evaluate(async ({ selector, label, traceKey }) => {
       if (document.visibilityState !== 'visible') throw new Error(`${label}: page is not visible`);
       const target = document.querySelector(selector);
@@ -259,13 +257,50 @@ async function trustedPhysicalClick(page, prepared) {
       if (!hit || !target.contains(hit)) throw new Error(`${prepared.label}: target center became obstructed before action`);
       return point;
     }, prepared);
+    // Puppeteer's click helper batches move/down/up. Chrome may accept that
+    // batch before target activation reaches the renderer, discarding every
+    // event. Move first, await native readiness, then press exactly once.
+    await page.mouse.move(center.x, center.y);
+    await page.evaluate(traceKey => {
+      const state = window.__toolCreditsPhysicalClicks?.[traceKey];
+      state?.timeline.push({ phase: 'pointer-moved', at: performance.now(), focus: document.hasFocus(),
+        visibility: document.visibilityState });
+    }, prepared.traceKey);
+    await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
+    center = await page.evaluate(prepared => {
+      const state = window.__toolCreditsPhysicalClicks?.[prepared.traceKey];
+      if (document.visibilityState !== 'visible' || !document.hasFocus()) {
+        throw new Error(`${prepared.label}: page lost native readiness before press`);
+      }
+      const target = document.querySelector(prepared.selector);
+      if (!state || target !== state.target) throw new Error(`${prepared.label}: live target identity changed before press`);
+      if (!target.isConnected) throw new Error(`${prepared.label}: live target disconnected before press`);
+      if ('disabled' in target && target.disabled) throw new Error(`${prepared.label}: live target disabled before press`);
+      const rect = target.getBoundingClientRect();
+      const current = { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+      const prior = prepared.rect;
+      if (current.x !== prior.x || current.y !== prior.y || current.width !== prior.width || current.height !== prior.height) {
+        throw new Error(`${prepared.label}: target geometry changed before press: ${JSON.stringify({ prior, current })}`);
+      }
+      const point = { x: current.x + current.width / 2, y: current.y + current.height / 2 };
+      const hit = document.elementFromPoint(point.x, point.y);
+      if (!hit || !target.contains(hit)) {
+        throw new Error(`${prepared.label}: target center became obstructed before press`);
+      }
+      state.timeline.push({ phase: 'ready-to-press', at: performance.now(), focus: document.hasFocus(),
+        visibility: document.visibilityState, storedConnected: state.target.isConnected, currentIsStored: target === state.target });
+      return point;
+    }, prepared);
   } catch (error) {
     error.browserDiagnostic = await clearTrace().catch(clearError => ({ clearError: String(clearError?.message || clearError) }));
     await recordPrimaryInputFailure(page, prepared.selector, prepared.label, error);
     throw error;
   }
   let clickError;
-  try { await page.mouse.click(center.x, center.y); }
+  try {
+    await page.mouse.down();
+    await page.mouse.up();
+  }
   catch (error) { clickError = error; }
   const immediate = await snapshotTrace();
   let delayed = null;
@@ -366,6 +401,8 @@ try {
       return popup;
     };
   });
+  await page.bringToFront();
+  await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
   await openAndSignIn(page, { referral: true });
   assert.match(await page.$eval('dialog', d => d.textContent), /3 créditos disponíveis/);
   await page.waitForFunction(() => document.activeElement?.id === 'tool-credits-referral');
@@ -373,9 +410,8 @@ try {
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
-  // CDP mouse input is page-scoped; document.hasFocus() is a transient global
-  // diagnostic, not an actionability invariant. Delivery is proved below by
-  // one trusted pointer sequence on this exact live target, never by focus.
+  // Focus is only a pre-press readiness condition. Delivery is still proved
+  // by one trusted pointer sequence on this exact live target, never by focus.
   await trustedPhysicalClick(page, await prepareTrustedPhysicalClick(
     page, 'dialog .tool-credits__packs button', 'unaccepted purchase',
   ));
