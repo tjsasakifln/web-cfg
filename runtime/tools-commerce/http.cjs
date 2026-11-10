@@ -76,7 +76,8 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
           tools: cfg.sharedExportsEnabled ? [TOOL, ...Object.keys(LOCAL_FORMATS)] : [TOOL],
           packages: PACKAGES, termsVersion: TERMS, termsUrl: '/termos-de-uso/#creditos-ferramentas',
           purchasesEnabled: cfg.purchasesEnabled, exportsPaused: cfg.exportsPaused,
-          sharedExportsEnabled: Boolean(cfg.sharedExportsEnabled), checkoutEnabled: Boolean(cfg.checkoutEnabled) });
+          sharedExportsEnabled: Boolean(cfg.sharedExportsEnabled), checkoutEnabled: Boolean(cfg.checkoutEnabled),
+          authProviders: cfg.authProviders || [] });
       }
       if (cfg.mode === 'off') return reply(404, { error: 'FEATURE_DISABLED' });
       const expected = { account: ['GET', 'POST'], orders: ['POST'], order: ['GET'], export: ['POST'], 'export-local': ['POST'] };

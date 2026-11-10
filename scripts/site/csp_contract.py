@@ -39,6 +39,50 @@ DENIED_PERMISSIONS = frozenset(
     {"camera", "microphone", "geolocation", "payment", "usb", "interest-cohort"}
 )
 
+FIREBASE_AUTH_CONNECTIONS = (
+    "https://identitytoolkit.googleapis.com",
+    "https://securetoken.googleapis.com",
+)
+FIREBASE_POPUP_SCRIPT = "https://apis.google.com"
+FIREBASE_POPUP_FRAMES = (
+    "https://confenge-ferramentas-pj-prod.firebaseapp.com",
+    "https://confenge-ferramentas-pj-hml.firebaseapp.com",
+)
+WALLET_ISOLATED_DOCUMENT = "/bim/fotogrametria/"
+WALLET_DOCUMENTS = (
+    "/analise-cnpj/",
+    "/analise-cnpj/r/",
+    "/avaliacao-imoveis-urbanos/inferencia/",
+    "/bim/web/cad.html",
+    "/bim/web/chapas.html",
+    "/bim/web/comparar.html",
+    "/bim/web/digitalizar.html",
+    "/bim/web/ifc-excel.html",
+    "/bim/web/modelagem.html",
+    "/bim/web/oficina.html",
+    "/bim/web/regua.html",
+    "/bim/web/visualizador.html",
+    WALLET_ISOLATED_DOCUMENT,
+    "/cad/",
+    "/cad/aplicativos/",
+    "/ferramentas/",
+    "/ferramentas/analise-de-viga-continua/",
+    "/ferramentas/calculadora-bdi/",
+    "/ferramentas/calculadora-de-beiral/",
+    "/ferramentas/calculadora-psicrometrica/",
+    "/ferramentas/caminho-critico-obra/",
+    "/ferramentas/checklist-reequilibrio/",
+    "/ferramentas/conversor-utm-sirgas-2000/",
+    "/ferramentas/diagnostico-defesa-margem/",
+    "/ferramentas/diagrama-unifilar/",
+    "/ferramentas/limite-acrescimos-supressoes/",
+    "/ferramentas/matriz-atraso-obra/",
+    "/ferramentas/orcamento-de-obras/",
+    "/ferramentas/prontidao-tecnica-obra-privada/",
+    "/ferramentas/radar-mercado-publico/",
+    "/ferramentas/rede-de-agua/",
+)
+
 
 class ScriptParser(HTMLParser):
     """Collect script bodies with exact attribute names and body bytes."""
@@ -239,25 +283,59 @@ def apply_artifact_csp_hashes(headers_text: str, root: Path) -> str:
     style_blocks, style_attributes = inline_style_hashes(root)
     updated = apply_script_src_hashes(headers_text, list(scripts))
     updated = apply_style_src_hashes(updated, list(style_blocks + style_attributes))
-    # Inherit the artifact's exact inline hashes and existing optional-site
-    # resources. Only Modela Pro needs to connect to the Firebase Auth API.
-    lines = updated.splitlines(keepends=True)
-    route = None
-    common = None
+    return apply_wallet_document_policies(updated, root)
+
+
+def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
+    """Authorize Firebase only on documents that can open the export wallet."""
+    lines = headers_text.splitlines(keepends=True)
+    route = ""
+    blocks: dict[str, int] = {}
+    policies: dict[str, int] = {}
     for index, line in enumerate(lines):
         stripped = line.strip()
         if stripped.startswith("/"):
             route = stripped
-        if not stripped.lower().startswith("content-security-policy:"):
+            blocks[route] = index
+        if stripped.lower().startswith("content-security-policy:"):
+            policies[route] = index
+    if "/*" not in policies:
+        return headers_text
+
+    insertions: dict[int, str] = {}
+    appended: list[str] = []
+    for route in WALLET_DOCUMENTS:
+        path = route.lstrip("/") + ("index.html" if route.endswith("/") else "")
+        if not (root / path).is_file():
             continue
-        if route == "/*":
-            common = line
-        if route == "/avaliacao-imoveis-urbanos/inferencia/" and common:
-            lines[index] = common.replace(
-                "connect-src 'self'", "connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com",
-                1,
-            ).replace("img-src 'self' data:", "img-src 'self' data: blob:", 1)
-    return "".join(lines)
+        # BIM keeps its application policy. The ordinary pages inherit the
+        # artifact's inline hashes. WebSfM keeps its isolated worker policy.
+        parent = "/*"
+        if route.startswith("/bim/web/"):
+            parent = "/bim/web/*"
+        elif route == WALLET_ISOLATED_DOCUMENT:
+            parent = "/bim/fotogrametria/*"
+        directives = csp_directives_from_text(lines[policies[parent]])
+        directives["connect-src"].extend(FIREBASE_AUTH_CONNECTIONS)
+        if route != WALLET_ISOLATED_DOCUMENT:
+            directives["script-src"].append(FIREBASE_POPUP_SCRIPT)
+            directives["frame-src"].extend(FIREBASE_POPUP_FRAMES)
+        if route == "/avaliacao-imoveis-urbanos/inferencia/":
+            directives["img-src"].append("blob:")
+        value = "; ".join(
+            " ".join([name, *dict.fromkeys(sources)]) for name, sources in directives.items()
+        )
+        header = f"  Content-Security-Policy: {value}\n"
+        if route in policies:
+            lines[policies[route]] = header
+        elif route in blocks:
+            insertions[blocks[route] + 1] = header
+        else:
+            appended.append(f"\n{route}\n{header}")
+
+    for index, header in sorted(insertions.items(), reverse=True):
+        lines.insert(index, header)
+    return "".join(lines + appended)
 
 
 def extra_hosts(tokens: list[str], allowed: set[str]) -> set[str]:

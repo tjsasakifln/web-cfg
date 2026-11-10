@@ -6,6 +6,7 @@ import path from "path";
 import { createServer } from "http";
 import { fileURLToPath } from "url";
 import puppeteer from "puppeteer-core";
+import { parseHeaders } from "../migration/netcup/lib/contract.mjs";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -24,11 +25,23 @@ const csp = liveResponse
 // The canary server is loopback HTTP. Exercise every enforcement directive
 // except the production-only HTTP→HTTPS upgrade, which would make local asset
 // URLs unreachable before script-src itself can be tested.
-const browserCsp = csp
-  .split(";")
+const browserPolicy = (policy) => policy.split(";")
   .map((part) => part.trim())
   .filter((part) => part.toLowerCase() !== "upgrade-insecure-requests")
   .join("; ");
+const scopedPolicies = new Map(parseHeaders(headers).filter((rule) => rule.match === "exact")
+  .map((rule) => [rule.path, rule.headers.find((header) => header.name.toLowerCase() === "content-security-policy")?.value])
+  .filter(([, value]) => value));
+const walletRoutes = new Set([
+  "/ferramentas/",
+  "/ferramentas/limite-acrescimos-supressoes/",
+  "/ferramentas/matriz-atraso-obra/",
+  "/ferramentas/radar-mercado-publico/",
+]);
+const authProbes = [
+  "https://identitytoolkit.googleapis.com/confenge-csp-probe",
+  "https://securetoken.googleapis.com/confenge-csp-probe",
+];
 const directiveSources = (name) => {
   const directive = csp
     .split(";")
@@ -44,6 +57,7 @@ const routes = [
   "/ferramentas/",
   "/ferramentas/limite-acrescimos-supressoes/",
   "/ferramentas/matriz-atraso-obra/",
+  "/ferramentas/radar-mercado-publico/",
   "/ops/",
 ];
 
@@ -80,6 +94,7 @@ function startServer() {
       const relative = pathname.endsWith("/") ? `${pathname}index.html` : pathname;
       const target = path.resolve(site, `.${relative}`);
       const insideSite = target === site || target.startsWith(`${site}${path.sep}`);
+      const browserCsp = browserPolicy(scopedPolicies.get(pathname) || csp);
       if (!insideSite || !fs.existsSync(target) || !fs.statSync(target).isFile()) {
         response.writeHead(404, { "Content-Security-Policy": browserCsp }).end("not found");
         return;
@@ -126,6 +141,15 @@ const failures = [];
 try {
   for (const route of routes) {
     const page = await browser.newPage();
+    if (walletRoutes.has(route)) {
+      await page.setRequestInterception(true);
+      page.on("request", (request) => {
+        if (authProbes.includes(request.url())) {
+          return request.respond({ status: 204, headers: { "Access-Control-Allow-Origin": "*" } });
+        }
+        return request.continue();
+      });
+    }
     await page.evaluateOnNewDocument(() => {
       window.__cspViolations = [];
       document.addEventListener("securitypolicyviolation", (event) => {
@@ -140,6 +164,14 @@ try {
     });
     const response = await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
     if (response?.status() !== 200) failures.push(`${route} returned ${response?.status() || "no response"}`);
+
+    if (walletRoutes.has(route)) {
+      const passed = await page.evaluate((probes) => Promise.all(probes.map(async (url) => {
+        try { return (await fetch(url)).status === 204; }
+        catch { return false; }
+      })), authProbes);
+      if (passed.some((allowed) => !allowed)) failures.push(`${route} cannot reach Firebase Auth`);
+    }
 
     if (route === "/") {
       await page.evaluate(() => {

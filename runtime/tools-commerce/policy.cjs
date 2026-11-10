@@ -17,6 +17,10 @@ const ORDER_LIMIT = 8;
 const MAX_BODY = 4 * 1024 * 1024;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const REFERRAL = /^[A-Za-z0-9_-]{16}$/;
+const AUTH_PROVIDERS = Object.freeze([
+  'google.com', 'linkedin.com', 'apple.com', 'facebook.com', 'github.com',
+  'microsoft.com', 'twitter.com', 'yahoo.com',
+]);
 
 class CommerceError extends Error {
   constructor(code, status = 400) { super(code); this.status = status; }
@@ -67,6 +71,8 @@ function loadConfig(env) {
   const exportsPaused = env.TOOLS_COMMERCE_EXPORTS_PAUSED === '1';
   const sharedExportsEnabled = env.TOOLS_COMMERCE_SHARED_EXPORTS === '1';
   const checkoutEnabled = env.TOOLS_COMMERCE_MP_CHECKOUT === '1';
+  const authProviders = (env.TOOLS_COMMERCE_AUTH_PROVIDERS || '').split(',').map(value => value.trim()).filter(Boolean);
+  valid(authProviders.length === new Set(authProviders).size && authProviders.every(provider => AUTH_PROVIDERS.includes(provider)));
   const purchasesEnabled = purchasesRequested && env.TOOLS_COMMERCE_TERMS_APPROVED === TERMS &&
     !exportsPaused && (!prod || (sharedExportsEnabled && checkoutEnabled));
   const accessToken = env.TOOLS_COMMERCE_MP_ACCESS_TOKEN || '';
@@ -93,10 +99,10 @@ function loadConfig(env) {
     if (mode === 'live') valid(accessToken.startsWith('APP_USR-') && webhookSecret.length >= 24 && !sandboxPayerEmail && Boolean(liveSellerId));
   }
   return { mode, firebase, authEmulator, projectId, identityKey: Buffer.from(identityKey, 'base64url'),
-    purchasesEnabled, exportsPaused, sharedExportsEnabled, checkoutEnabled,
+    purchasesEnabled, exportsPaused, sharedExportsEnabled, checkoutEnabled, authProviders,
     accessToken, webhookSecret, sellerId: mode === 'sandbox' ? sandboxSellerId : mode === 'live' ? liveSellerId : '',
     sandboxSellerId, liveSellerId, sandboxPayerEmail, sandboxUids };
 }
 
 module.exports = { TERMS, TERMS_HASH, CATALOG_VERSION, PACKAGES, TOOL, REFERRAL_LIMIT, ORDER_LIMIT, MAX_BODY,
-  UUID, REFERRAL, CommerceError, check, sha, mac, accountId, orderId, normalizeEmail, loadConfig };
+  UUID, REFERRAL, AUTH_PROVIDERS, CommerceError, check, sha, mac, accountId, orderId, normalizeEmail, loadConfig };

@@ -17,9 +17,10 @@ const fixtureEmail = 'wallet-browser-fixture@example.test';
 // UI from intercepting the browser-trusted purchase click under test.
 const fixturePassword = `${randomBytes(24).toString('base64url')}Aa1!`;
 const firebase = `let listener, user; const auth={authStateReady:async()=>{},currentUser:null};
-export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
-const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false)=>({uid:'u1',email,emailVerified:verified,reload:async()=>{},getIdToken:async()=> 'token'});
-export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
+export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const browserPopupRedirectResolver={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
+const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false,providerId='password')=>({uid:'u1',email,emailVerified:verified,providerData:[{providerId}],reload:async()=>{},getIdToken:async()=> 'token'});
+class Provider { constructor(providerId){this.providerId=providerId} } export class GoogleAuthProvider extends Provider { constructor(){super('google.com')} } export class FacebookAuthProvider extends Provider { constructor(){super('facebook.com')} } export class GithubAuthProvider extends Provider { constructor(){super('github.com')} } export class TwitterAuthProvider extends Provider { constructor(){super('twitter.com')} } export class OAuthProvider extends Provider {};
+export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const signInWithPopup=async(a,provider,resolver)=>{if(resolver!==browserPopupRedirectResolver)throw new Error('popup resolver missing');globalThis.popupResolverSeen=true;set(make('social@example.test',true,provider.providerId));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
 const pendingPix = {id:'o1',status:'pending',paymentFlow:'pix',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='};
 const pendingCheckout = {id:'o2',status:'pending',paymentFlow:'checkout',checkoutUrl:'https://www.mercadopago.com.br/checkout/v1/redirect?order_id=TEST_ONLY'};
 let fixtureMayConfirm = false;
@@ -27,11 +28,11 @@ const fixtureRejectsOrder = process.env.TOOL_CREDITS_FIXTURE_REJECT_ORDER === '1
 const calls = [], registrations = [], orderRequests = [], attempts = [];
 const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
   purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
-  packages:[{id:'one',credits:1,amountCents:1490}]};
+  authProviders:['google.com','linkedin.com','invalid.example'], packages:[{id:'one',credits:1,amountCents:1490}]};
 let toolCreditsConfig = sharedEnabledConfig;
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
-  if (url.pathname === '/') { res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
+  if (url.pathname === '/') { if (url.searchParams.has('isolated')) { res.setHeader('cross-origin-opener-policy', 'same-origin'); res.setHeader('cross-origin-embedder-policy', 'require-corp'); } res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
   if (url.pathname === '/assets/css/tool-credits.css') { res.setHeader('content-type', 'text/css'); return res.end(css); }
   if (url.pathname === '/assets/js/tool-credits.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(source); }
   if (url.pathname === '/assets/js/tool-referral.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(referral); }
@@ -434,12 +435,41 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   });
   await page.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
+  const socialPage = await browser.newPage();
+  await socialPage.setViewport({width:390,height:844});
+  await socialPage.goto(`http://127.0.0.1:${port}/?social=1`);
+  const socialOpened = await socialPage.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    return createToolCredits({ toolId: 'modela-memoria' }).open();
+  });
+  assert.equal(socialOpened, true);
+  assert.deepEqual(await socialPage.$$eval('dialog[open] .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
+    ['Continuar com Google', 'Continuar com LinkedIn']);
+  assert.equal(await socialPage.$('dialog[open] .tool-credits__provider--invalid'), null);
+  await activateVisibleControl(socialPage, 'dialog[open] .tool-credits__provider--google');
+  await socialPage.waitForFunction(() => document.querySelector('dialog[open]')?.textContent.includes('Créditos de exportação'));
+  assert.equal(await socialPage.evaluate(() => globalThis.popupResolverSeen), true);
+  await socialPage.close();
+  const isolatedPage = await browser.newPage();
+  await isolatedPage.setViewport({width:390,height:844});
+  await isolatedPage.goto(`http://127.0.0.1:${port}/?isolated=1`);
+  assert.equal(await isolatedPage.evaluate(() => globalThis.crossOriginIsolated), true);
+  const isolatedOpened = await isolatedPage.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    return createToolCredits({ toolId: 'modela-memoria' }).open();
+  });
+  assert.equal(isolatedOpened, true);
+  assert.deepEqual(await isolatedPage.$eval('dialog[open] .tool-credits__central-wallet', link => ({
+    href: link.getAttribute('href'), target: link.target, rel: link.rel,
+  })), { href: '/ferramentas/#meus-creditos', target: '_blank', rel: 'noopener' });
+  assert.equal(await isolatedPage.$('dialog[open] .tool-credits__provider'), null);
+  await isolatedPage.close();
   await openAndSignIn(page, { referral: true });
   assert.match(await page.$eval('dialog', d => d.textContent), /3 créditos disponíveis/);
   await page.waitForFunction(() => document.activeElement?.id === 'tool-credits-referral');
   assert.match(await page.$eval('#tool-credits-referral', node => node.textContent), /primeira exportação paga/i);
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
-  assert.equal(registrations[0].referralCode, firstRef);
+  assert.equal(registrations.find(record => record.referralCode === firstRef)?.referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
   // Focus is only a pre-press readiness condition. Delivery is still proved
   // by one trusted pointer sequence on this exact live target, never by focus.

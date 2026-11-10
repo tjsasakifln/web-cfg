@@ -47,6 +47,12 @@ Abra `http://127.0.0.1:8790/ferramentas/`. O servidor local lê os arquivos de `
 4. **Sandbox externo.** Execute o runtime fora do perfil `netcup-production`, com `TOOLS_COMMERCE_MODE=sandbox`, `TOOLS_COMMERCE_SANDBOX_ORIGIN` e `TOOLS_COMMERCE_SANDBOX_UIDS`. Use o app, o banco e o token de teste. Registre evidência de QR, confirmação integral, recebimento da notificação assinada, débito, duplicata, estorno, atendimento e recuperação. O ensaio com emuladores cobre o fluxo com respostas simuladas.
 5. **Ativação.** Validar no Netcup todas as rotas de resultado, Pix e Checkout Pro em homologação, o webhook assinado de Orders, conciliação, termos v2, tarifas e atendimento. Excluir API, comprovantes e QR de cache e de analytics. Configurar `TOOLS_COMMERCE_MODE=live`, `TOOLS_COMMERCE_TERMS_APPROVED=ferramentas-creditos-v2`, `TOOLS_COMMERCE_SHARED_EXPORTS=1` e `TOOLS_COMMERCE_MP_CHECKOUT=1`. Ligar `TOOLS_COMMERCE_PURCHASES=1` após conferir a versão exata do release e os segredos. A saída do checkout indica onde consultar o pedido. O saldo só é atualizado após consulta autenticada ao Mercado Pago. Validar o [contrato de Checkout Pro via Orders](https://www.mercadopago.com.br/developers/pt/docs/checkout-pro-orders/create-order?scope=prod).
 
+### Login federado
+
+Configure os [provedores OAuth do Firebase](https://firebase.google.com/docs/auth/configure-oauth-rest-api) no projeto do ambiente. Use `https://<projeto>.firebaseapp.com/__/auth/handler` como URL de retorno no painel de cada provedor e autorize o domínio do site no Firebase. Confira se o provedor inicia o fluxo OAuth antes de publicar seu botão.
+
+No ambiente privado do runtime, `TOOLS_COMMERCE_AUTH_PROVIDERS` recebe os IDs confirmados, separados por vírgula. O valor inicial para Google é `google.com`. Os demais IDs são `linkedin.com`, `apple.com`, `facebook.com`, `github.com`, `microsoft.com`, `twitter.com` e `yahoo.com`. Guarde as credenciais OAuth na configuração do Firebase. O saldo continua associado ao UID autenticado e exige e-mail verificado. Em páginas com isolamento para processamento BIM, o acesso social abre a carteira central em outra aba.
+
 ## Incidentes e métricas
 
 - `TOOLS_COMMERCE_PURCHASES=0` impede novas compras. `TOOLS_COMMERCE_EXPORTS_PAUSED=1` suspende as emissões autorizadas e novas compras. Pedidos existentes continuam a ser conciliados. Preserve o Firestore e mantenha uma versão do webhook capaz de consultar os dois tipos de pedido até encerrar os pendentes.

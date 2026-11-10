@@ -169,8 +169,7 @@
   Cache-Control: no-cache, max-age=0, must-revalidate
 
 /avaliacao-imoveis-urbanos/inferencia/
-  # Firebase Auth is bundled and served same-origin. Email/password requests
-  # require these two Google endpoints; no third-party scripts or frames run.
+  # The artifact compiler scopes the wallet's Firebase policy to its documents.
   Content-Security-Policy: default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self' 'sha256-dNdlBplWR5bDZDI+YCKolkPPL27/gS/a7SNuPT2Lg0A='; script-src-attr 'none'; worker-src 'self' blob:; frame-src 'self'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; object-src 'none'; form-action 'self'; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests
 
 /avaliacao-imoveis-urbanos/inferencia/engine/*
