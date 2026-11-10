@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 144,
-  "unique_paths": 144,
+  "url_count": 145,
+  "unique_paths": 145,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -98,6 +98,7 @@
     "https://confenge.com.br/ferramentas/matriz-atraso-obra/",
     "https://confenge.com.br/ferramentas/orcamento-de-obras/",
     "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+    "https://confenge.com.br/ferramentas/radar-mercado-publico/",
     "https://confenge.com.br/ferramentas/rede-de-agua/",
     "https://confenge.com.br/imprensa/",
     "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
@@ -150,7 +151,7 @@
     "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
-    "core": 128,
+    "core": 129,
     "editorial": 4,
     "inteligencia": 10,
     "contract_analysis": 2

@@ -7236,6 +7236,15 @@
       "action": "#",
       "method": "post",
       "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/ferramentas/radar-mercado-publico/",
+      "form_id": "market-radar-form",
+      "form_class": "radar-form",
+      "kind": "tool_form",
+      "action": "/api/web/market-radar",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
     }
   ]
 }

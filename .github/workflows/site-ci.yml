@@ -186,6 +186,7 @@ jobs:
           npm run test:cta-whatsapp
           npm run test:release-filters
           npm run test:runtime
+          npm run test:market-radar
           python3 -m pytest deploy/netcup/tests -q
           npm run test:pos-inb-20260911-10
           npm run test:pseo-attribution
@@ -253,6 +254,10 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node scripts/site/test_tool_showcase_browser.mjs _site
+      - name: Market radar filters, failures and export in Chrome
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:market-radar:browser
       - name: Deferred IFC viewer file and example journeys
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

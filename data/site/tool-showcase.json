@@ -31,6 +31,12 @@
       "title": "Obras e contratos",
       "summary": "Confira aditivos, organize evidências e prepare sua próxima decisão.",
       "jump": "Obras e contratos"
+    },
+    {
+      "id": "mercado-publico",
+      "title": "Vendas ao governo",
+      "summary": "Investigue compradores, fornecedores e contratos para orientar sua atuação no mercado público.",
+      "jump": "Vendas ao governo"
     }
   ],
   "entries": [
@@ -865,6 +871,26 @@
         "desc": "Compare pressões e vazões de uma rede de água em dois cenários de consumo, com o motor EPANET 2.2 rodando no navegador.",
         "related": [
           "calculadora-bdi"
+        ]
+      }
+    },
+    {
+      "id": "radar-mercado-publico",
+      "group": "mercado-publico",
+      "title": "Radar de Mercado Público",
+      "summary": "Pesquise o que o governo contratou, descubra compradores e fornecedores e acompanhe fins de vigência registrados.",
+      "format": "PNCP · Contratos",
+      "action": "Pesquisar mercado público",
+      "href": "/ferramentas/radar-mercado-publico/",
+      "art": "bars",
+      "mark": "GOVERNO",
+      "keywords": "governo compras publicas licitacoes contratos concorrentes fornecedores compradores inteligencia prospeccao",
+      "page": {
+        "title": "Radar de Mercado Público: compradores e contratos",
+        "desc": "Pesquise contratos públicos por objeto, UF e publicação. Compare compradores e fornecedores e investigue fins de vigência registrados com fontes do PNCP.",
+        "related": [
+          "cnpj",
+          "aditivos"
         ]
       }
     }
