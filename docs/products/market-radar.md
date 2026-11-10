@@ -28,6 +28,8 @@ O leitor valida contrato, tamanho, hash e integridade antes de usar; ausência o
 
 O endpoint `/api/web/market-radar` recebe consultas por POST JSON. Não grava termos em URL, analytics ou logs próprios. GET/HEAD retornam metadados sem busca. Campos, tamanho de entrada, tokens FTS, ordenação, paginação, fila, cache e frequência são limitados. Consultas SQLite rodam em worker separado e são parametrizadas. Nenhuma tabela bruta ou arquivo do snapshot é servido por URL. Erros não retornam resultados vazios com aparência de sucesso.
 
+A primeira requisição após a troca do ponteiro pode usar até 50 segundos no worker para verificar e abrir o snapshot. A consulta recebe até 15 segundos dentro desse prazo, e a espera na fila tem limite de cinco segundos. A rota tem prazo HTTP de 57 segundos, abaixo do prazo de leitura do proxy, e mantém os mesmos controles de frescor, hash, integridade e capacidade da fila. [Prazo de leitura do nginx](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout).
+
 A fonte oficial define campos de contratos e empenhos: https://pncp.gov.br/manual/pt-br/latest/contrato_empenho/consultar_contratos_ou_empenhos_de_uma_contratacao.html . O catálogo de dados abertos está em https://www.gov.br/pncp/pt-br/acesso-a-informacao/dados-abertos . A interpretação dos campos foi confrontada com o código de ingestão e o schema efetivo da base.
 
 ## Validação, operação e recuperação

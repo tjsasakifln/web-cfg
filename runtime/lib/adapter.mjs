@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { TextDecoder } from "node:util";
 import commercePolicy from "../tools-commerce/policy.cjs";
+import radarClient from "../../netlify/functions/lib/market-radar-client.cjs";
 
 const ROUTE = /^\/(?:\.netlify\/functions|api\/web)\/([a-z0-9][a-z0-9-]*)$/;
 const REQUEST_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,79}$/;
@@ -389,7 +390,8 @@ export function createHttpAdapter({
       };
       const invocation = Promise.resolve().then(() => handler(event, context));
       trackInvocation(invocation);
-      const deadline = handlerDeadline(config.handlerTimeoutMs);
+      const timeoutMs = functionName === "market-radar" ? radarClient.HANDLER_TIMEOUT_MS : config.handlerTimeoutMs;
+      const deadline = handlerDeadline(timeoutMs);
       let response;
       try {
         response = await Promise.race([

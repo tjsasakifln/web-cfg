@@ -18,8 +18,21 @@ function pump() {
     busy = false;
     setImmediate(pump);
   };
-  if (message.action === "delay") setTimeout(finish, 25);
-  else finish();
+  if (message.action === "rollover") {
+    const { loadMs, queryMs = 0, duplicateLoadingMs } = message.filters;
+    const loading = () => parentPort.postMessage({ id: message.id, phase: "snapshot_loading" });
+    loading();
+    if (duplicateLoadingMs != null) setTimeout(loading, duplicateLoadingMs);
+    setTimeout(() => {
+      parentPort.postMessage({ id: message.id, phase: "snapshot_ready" });
+      setTimeout(finish, queryMs);
+    }, loadMs);
+    return;
+  }
+  if (message.action === "delay") {
+    parentPort.postMessage({ id: message.id, phase: "snapshot_ready" });
+    setTimeout(finish, message.filters?.delayMs ?? 25);
+  } else finish();
 }
 
 parentPort.on("message", (message) => {

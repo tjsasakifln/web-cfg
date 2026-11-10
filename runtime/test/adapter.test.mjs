@@ -140,6 +140,14 @@ test("handler timeout returns a bounded response while shutdown still tracks the
   assert.equal(fixture.runtime.activeHandlers.size, 1);
 });
 
+test("the Radar's snapshot budget fits inside its own HTTP deadline", async (t) => {
+  const fixture = await startFixtureRuntime({ RUNTIME_HANDLER_TIMEOUT_MS: "100" });
+  t.after(() => fixture.runtime.shutdown("test"));
+  const response = await fetch(fixture.baseUrl + "/api/web/market-radar?delay=300");
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).completed, true);
+});
+
 test("health, readiness and identity are honest and identity never exposes secrets", async (t) => {
   const secret = "runtime-secret-marker-778899";
   const fixture = await startFixtureRuntime({
