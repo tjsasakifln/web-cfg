@@ -210,9 +210,16 @@ def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> N
     assert "--run-id=\"$GITHUB_RUN_ID\"" in qualify
     assert "--run-attempt=\"$GITHUB_RUN_ATTEMPT\"" in qualify
     assert "if-no-files-found: error" in qualify
-    # An older committed summary must not be able to fill the gap left by a run
-    # that died before writing its own.
-    assert "rm -f docs/lighthouse-runs/summary.json" in qualify
+    # Neither a committed summary nor historical page reports may fill gaps in
+    # this measurement. The wildcard includes summary.json and every raw LHR.
+    cleanup = re.search(r"(?m)^\s+rm -f docs/lighthouse-runs/\*\.json\s*$", qualify)
+    assert cleanup, "qualification must remove all historical Lighthouse JSON"
+    assert cleanup.start() < qualify.index("node scripts/site/run_lighthouse.mjs")
+    upload = qualify.split("- name: Store the qualification", 1)[1]
+    assert "if: always()" in upload, "failed measurements must retain diagnostics"
+    assert re.search(r"(?m)^\s+docs/lighthouse-runs/\*\.json\s*$", upload), (
+        "qualification must upload its fresh raw page reports with the summary"
+    )
     # It must never change production.
     assert "--operation promote" not in qualify
     assert "--operation rollback" not in qualify
