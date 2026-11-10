@@ -445,6 +445,19 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(await page.$('dialog .tool-credits__provider--invalid'), null);
   await activateVisibleControl(page, 'dialog .tool-credits__close');
   await page.waitForSelector('dialog[open]', { hidden: true });
+  await page.evaluate(() => Object.defineProperty(window, 'crossOriginIsolated', { configurable: true, value: true }));
+  const isolatedOpened = await page.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    return createToolCredits({ toolId: 'modela-memoria' }).open();
+  });
+  assert.equal(isolatedOpened, true);
+  assert.deepEqual(await page.$eval('dialog .tool-credits__central-wallet', link => ({
+    href: link.getAttribute('href'), target: link.target, rel: link.rel,
+  })), { href: '/ferramentas/#meus-creditos', target: '_blank', rel: 'noopener' });
+  assert.equal(await page.$('dialog .tool-credits__provider'), null);
+  await activateVisibleControl(page, 'dialog .tool-credits__close');
+  await page.waitForSelector('dialog[open]', { hidden: true });
+  await page.evaluate(() => Object.defineProperty(window, 'crossOriginIsolated', { configurable: true, value: false }));
   await openAndSignIn(page, { referral: true });
   assert.match(await page.$eval('dialog', d => d.textContent), /3 créditos disponíveis/);
   await page.waitForFunction(() => document.activeElement?.id === 'tool-credits-referral');

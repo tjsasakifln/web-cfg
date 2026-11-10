@@ -158,10 +158,20 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     form.append(login, btn('Criar conta', async () => { setBusy(form, true); try { const created = await firebase.createUserWithEmailAndPassword(auth, email.value, password.value); await firebase.sendEmailVerification(created.user); render('Conta criada. Confirme seu e-mail para ativá-la.'); } catch (e) { render(message(e)); } }), btn('Esqueci a senha', async () => { setBusy(form, true); try { if (!email.value) throw new Error('Informe seu e-mail para redefinir a senha.'); await firebase.sendPasswordResetEmail(auth, email.value); render('Enviamos o link para redefinir a senha.'); } catch (e) { render(message(e)); } }));
     form.onsubmit = async event => { event.preventDefault(); setBusy(form, true); try { await firebase.signInWithEmailAndPassword(auth, email.value, password.value); render('Conta acessada.'); } catch (e) { render(message(e)); } }; host.append(form);
     const providers = configuredProviders();
-    if (providers.length) {
+    const isolated = globalThis.crossOriginIsolated === true;
+    if (providers.length || isolated) {
       const social = el('section'); social.className = 'tool-credits__social'; social.setAttribute('aria-label', 'Outras formas de acesso');
       social.append(el('p', 'Ou entre com'));
-      for (const [, detail] of providers) {
+      if (isolated) {
+        social.append(el('p', 'O acesso por rede social abre na carteira central desta ferramenta.'));
+        const central = el('a', 'Abrir carteira central para acesso social');
+        central.className = 'tool-credits__central-wallet';
+        central.href = '/ferramentas/#meus-creditos';
+        central.target = '_blank';
+        central.rel = 'noopener';
+        social.append(central);
+      }
+      for (const [, detail] of isolated ? [] : providers) {
         const access = btn(`Continuar com ${detail.label}`, async () => {
           setBusy(social, true);
           try { await firebase.signInWithPopup(auth, detail.create(firebase)); render('Conta acessada.'); }

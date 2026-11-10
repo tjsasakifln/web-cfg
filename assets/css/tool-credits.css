@@ -62,6 +62,8 @@
 .tool-credits__social > p { margin: 0; color: #52616b; font-weight: 600; }
 .tool-credits__social { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .tool-credits__social > p { grid-column: 1 / -1; }
+.tool-credits__central-wallet { display: flex; grid-column: 1 / -1; align-items: center; justify-content: center; min-height: 44px; box-sizing: border-box; padding: .6rem; border: 1px solid #00645c; background: #f4faf8; color: #06473f; font-weight: 700; text-align: center; }
+.tool-credits__central-wallet:hover { border-color: #004b44; background: #e4f4ef; }
 .tool-credits__provider,
 .tool-credits__provider + .tool-credits__provider { display: flex; align-items: center; justify-content: center; border-color: #c5d4d0; background: #fff; color: #17242f; font-weight: 700; }
 .tool-credits__provider:hover { border-color: #00645c; background: #edf7f4; }
