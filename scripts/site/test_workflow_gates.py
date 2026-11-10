@@ -701,8 +701,9 @@ def test_browser_actions_use_the_puppeteer_chrome_contract():
     assert wallet_step is not None
     for needle in (
         'TOOL_CREDITS_HEADED: "1"',
+        'TOOL_CREDITS_NATIVE_POINTER: "1"',
         "TOOL_CREDITS_EXPECTED_CHROME_VERSION: ${{ steps.browser_contract.outputs.version }}",
-        "sudo apt-get install --yes --no-install-recommends xvfb xauth openbox x11-utils",
+        "sudo apt-get install --yes --no-install-recommends xvfb xauth openbox x11-utils xdotool",
         'xvfb-run -a -s "-screen 0 1280x1024x24"',
         "bash scripts/site/run_wallet_browser_headed.sh npm run test:tools-commerce:browser",
     ):

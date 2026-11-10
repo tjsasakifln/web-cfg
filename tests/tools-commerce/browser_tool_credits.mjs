@@ -4,6 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core';
+import { assertX11NativePointerAvailable, prepareX11NativePointer } from './x11_native_pointer.mjs';
 
 const root = new URL('../../', import.meta.url);
 const source = await readFile(new URL('assets/js/tool-credits.mjs', root));
@@ -64,6 +65,15 @@ if (headedMode === '1' && process.platform === 'linux') {
   assert.ok(process.env.DISPLAY, 'TOOL_CREDITS_HEADED=1 requires DISPLAY on Linux');
 }
 const expectedChromeVersion = process.env.TOOL_CREDITS_EXPECTED_CHROME_VERSION || '';
+const nativePointerMode = process.env.TOOL_CREDITS_NATIVE_POINTER || '0';
+assert.ok(nativePointerMode === '0' || nativePointerMode === '1', 'TOOL_CREDITS_NATIVE_POINTER must be 0 or 1');
+if (nativePointerMode === '1') {
+  assert.equal(process.platform, 'linux', 'native pointer mode requires Linux');
+  assert.equal(headedMode, '1', 'native pointer mode requires TOOL_CREDITS_HEADED=1');
+  assert.ok(process.env.DISPLAY, 'native pointer mode requires DISPLAY');
+  assert.ok(expectedChromeVersion, 'native pointer mode requires TOOL_CREDITS_EXPECTED_CHROME_VERSION');
+  await assertX11NativePointerAvailable();
+}
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
 let browser;
 try {
@@ -254,6 +264,7 @@ async function trustedPhysicalClick(page, prepared) {
       storedConnected: state.target.isConnected, currentIsStored: current === state.target };
   }, prepared.traceKey);
   let center;
+  let nativePointer;
   try {
     center = await page.evaluate(prepared => {
       if (document.visibilityState !== 'visible') throw new Error(`${prepared.label}: page lost visibility before action`);
@@ -274,10 +285,15 @@ async function trustedPhysicalClick(page, prepared) {
       if (!hit || !target.contains(hit)) throw new Error(`${prepared.label}: target center became obstructed before action`);
       return point;
     }, prepared);
-    // Puppeteer's click helper batches move/down/up. Chrome may accept that
-    // batch before target activation reaches the renderer, discarding every
-    // event. Move first, await native readiness, then press exactly once.
-    await page.mouse.move(center.x, center.y);
+    if (nativePointerMode === '1') {
+      // XTEST generates browser-trusted native automation input inside the
+      // isolated X11 display. It is not a physical human mouse.
+      nativePointer = await prepareX11NativePointer({ browser, page, prepared, center });
+    } else {
+      // Puppeteer's click helper batches move/down/up. Move separately so the
+      // press remains sequential in local non-native runs.
+      await page.mouse.move(center.x, center.y);
+    }
     await page.evaluate(traceKey => {
       const state = window.__toolCreditsPhysicalClicks?.[traceKey];
       state?.timeline.push({ phase: 'pointer-moved', at: performance.now(), focus: document.hasFocus(),
@@ -309,14 +325,20 @@ async function trustedPhysicalClick(page, prepared) {
       return point;
     }, prepared);
   } catch (error) {
-    error.browserDiagnostic = await clearTrace().catch(clearError => ({ clearError: String(clearError?.message || clearError) }));
+    await nativePointer?.cleanup().catch(() => {});
+    const cleared = await clearTrace().catch(clearError => ({ clearError: String(clearError?.message || clearError) }));
+    error.browserDiagnostic = { ...cleared, nativePointer: nativePointer?.proof || null };
     await recordPrimaryInputFailure(page, prepared.selector, prepared.label, error);
     throw error;
   }
   let clickError;
   try {
-    await page.mouse.down();
-    await page.mouse.up();
+    if (nativePointer) {
+      await nativePointer.press();
+    } else {
+      await page.mouse.down();
+      await page.mouse.up();
+    }
   }
   catch (error) { clickError = error; }
   const immediate = await snapshotTrace();
@@ -328,7 +350,7 @@ async function trustedPhysicalClick(page, prepared) {
     delayed = await snapshotTrace();
   }
   const final = await clearTrace();
-  const diagnostic = { ...final, immediate, delayed };
+  const diagnostic = { ...final, immediate, delayed, nativePointer: nativePointer?.proof || null };
   if (clickError) {
     clickError.browserDiagnostic = diagnostic;
     await recordPrimaryInputFailure(page, prepared.selector, prepared.label, clickError);
