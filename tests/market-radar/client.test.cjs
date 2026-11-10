@@ -28,6 +28,35 @@ test("successful serialized work leaves no pending requests", async () => {
   client.stop();
 });
 
+test("a warm worker can validate a replacement snapshot beyond the query deadline", async (t) => {
+  const client = createClient({ workerFile, timeoutMs: 250, bootTimeoutMs: 1200, enqueueTimeoutMs: 1000 });
+  t.after(() => client.stop());
+  await client.request("ok", "x");
+  assert.deepEqual(await client.request("rollover", "x", { loadMs: 400 }), { action: "rollover" });
+  await assert.rejects(client.request("rollover", "x", { loadMs: 80, queryMs: 450 }), { code: "query_timeout" });
+});
+
+test("loading notices cannot renew the snapshot deadline", async (t) => {
+  const client = createClient({ workerFile, timeoutMs: 250, bootTimeoutMs: 500, enqueueTimeoutMs: 1000 });
+  t.after(() => client.stop());
+  await client.request("ok", "x");
+  await assert.rejects(client.request("rollover", "x", { loadMs: 750, duplicateLoadingMs: 400 }), { code: "snapshot_load_timeout" });
+});
+
+test("SQL after a reload only receives the remaining total budget", async (t) => {
+  const client = createClient({ workerFile, timeoutMs: 500, bootTimeoutMs: 900, enqueueTimeoutMs: 1000 });
+  t.after(() => client.stop());
+  await client.request("ok", "x");
+  await assert.rejects(client.request("rollover", "x", { loadMs: 600, queryMs: 450 }), { code: "query_timeout" });
+});
+
+test("snapshot ready without a reload keeps the warm query deadline", async (t) => {
+  const client = createClient({ workerFile, timeoutMs: 100, bootTimeoutMs: 1000, enqueueTimeoutMs: 1000 });
+  t.after(() => client.stop());
+  await client.request("ok", "x");
+  await assert.rejects(client.request("delay", "x", { delayMs: 300 }), { code: "query_timeout" });
+});
+
 test("worker crash rejects pending request and enters bounded backoff", async () => {
   const client = createClient({ workerFile, timeoutMs: 500, maxQueue: 2, backoffBaseMs: 20 });
   const error = await client.request("crash", "x").catch((caught) => caught);

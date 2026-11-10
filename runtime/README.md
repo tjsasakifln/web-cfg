@@ -248,7 +248,7 @@ Portable process:
 | RUNTIME_RELEASE_BUNDLE_HASH | empty outside production | exact release tar SHA-256; derived from the immutable detached manifest on Netcup |
 | RUNTIME_MAX_BODY_BYTES | 524288 | global transport ceiling |
 | RUNTIME_REQUEST_TIMEOUT_MS | 30000 | request receive timeout |
-| RUNTIME_HANDLER_TIMEOUT_MS | 25000 | handler response timeout |
+| RUNTIME_HANDLER_TIMEOUT_MS | 25000 | handler response timeout. Market Radar uses a dedicated 57000 ms deadline for its bounded snapshot verification and query. |
 | RUNTIME_HEADERS_TIMEOUT_MS | 10000 | header timeout |
 | RUNTIME_KEEP_ALIVE_TIMEOUT_MS | 5000 | idle keep-alive timeout |
 | RUNTIME_SHUTDOWN_GRACE_MS | 30000 | graceful drain ceiling |

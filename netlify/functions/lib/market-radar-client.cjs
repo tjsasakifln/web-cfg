@@ -5,6 +5,9 @@ const path = require("node:path");
 
 const MAX_QUEUE = 4;
 const TIMEOUT_MS = 15_000;
+const SNAPSHOT_TIMEOUT_MS = 50_000;
+const QUEUE_TIMEOUT_MS = 5_000;
+const HANDLER_TIMEOUT_MS = SNAPSHOT_TIMEOUT_MS + QUEUE_TIMEOUT_MS + 2_000;
 
 function unavailable(code = "data_unavailable", status = 503, message = "Dados do radar indisponíveis.") {
   return Object.assign(new Error(message), { code, status });
@@ -13,8 +16,8 @@ function unavailable(code = "data_unavailable", status = 503, message = "Dados d
 function createClient({
   workerFile = path.join(__dirname, "market-radar-worker.cjs"),
   timeoutMs = TIMEOUT_MS,
-  bootTimeoutMs = 60_000,
-  enqueueTimeoutMs = 5_000,
+  bootTimeoutMs = SNAPSHOT_TIMEOUT_MS,
+  enqueueTimeoutMs = QUEUE_TIMEOUT_MS,
   maxQueue = MAX_QUEUE,
   backoffBaseMs = 250,
 } = {}) {
@@ -45,17 +48,44 @@ function createClient({
     return termination;
   }
 
+  function armDeadline(request, deadline, code) {
+    clearTimeout(request.timer);
+    request.deadline = deadline;
+    request.timeoutCode = code;
+    request.timer = setTimeout(() => stop(unavailable(code)), Math.max(1, Math.ceil(deadline - performance.now())));
+    request.timer.unref();
+  }
+
   function start() {
     if (worker) return worker;
     if (Date.now() < retryAt) throw unavailable("worker_backoff");
     const instance = new Worker(workerFile);
     instance.on("message", (message) => {
+      if (worker !== instance) return;
       const request = pending.get(message.id);
       if (!request) return;
+      const now = performance.now();
+      if (request.deadline != null && now >= request.deadline) {
+        stop(unavailable(request.timeoutCode));
+        return;
+      }
       if (message.started) {
+        if (request.phase !== "queued") return;
         clearTimeout(request.enqueueTimer);
-        request.timer = setTimeout(() => stop(unavailable("query_timeout", 503, "A consulta excedeu o tempo disponível.")), warmed ? timeoutMs : bootTimeoutMs);
-        request.timer.unref();
+        request.phase = "running";
+        request.snapshotDeadline = now + bootTimeoutMs;
+        armDeadline(request, warmed ? now + timeoutMs : request.snapshotDeadline, "query_timeout");
+        return;
+      }
+      if (message.phase) {
+        if (message.phase === "snapshot_loading" && request.phase === "running") {
+          request.phase = "loading";
+          armDeadline(request, request.snapshotDeadline, "snapshot_load_timeout");
+        } else if (message.phase === "snapshot_ready" && request.phase === "loading") {
+          request.phase = "query";
+          // SQL gets its own budget within the original snapshot deadline.
+          armDeadline(request, Math.min(now + timeoutMs, request.snapshotDeadline), "query_timeout");
+        }
         return;
       }
       pending.delete(message.id);
@@ -69,7 +99,9 @@ function createClient({
       }
       else request.reject(unavailable(message.error, message.status, message.message));
     });
-    instance.on("error", () => stop(unavailable("worker_failed")));
+    instance.on("error", () => {
+      if (worker === instance) stop(unavailable("worker_failed"));
+    });
     instance.on("exit", () => {
       if (worker !== instance) return;
       stop(unavailable("worker_failed"), { terminate: false });
@@ -94,7 +126,7 @@ function createClient({
         reject(unavailable("queue_timeout", 503, "A fila do radar excedeu o tempo disponível."));
       }, enqueueTimeoutMs);
       enqueueTimer.unref();
-      pending.set(id, { resolve, reject, timer: null, enqueueTimer });
+      pending.set(id, { resolve, reject, timer: null, enqueueTimer, phase: "queued" });
       target.ref();
       target.postMessage({ id, action, root, filters });
     });
@@ -104,4 +136,4 @@ function createClient({
 }
 
 const singleton = createClient();
-module.exports = { request: singleton.request, _stopForTests: singleton.stop, createClient, MAX_QUEUE, TIMEOUT_MS };
+module.exports = { request: singleton.request, _stopForTests: singleton.stop, createClient, MAX_QUEUE, TIMEOUT_MS, HANDLER_TIMEOUT_MS };

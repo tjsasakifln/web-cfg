@@ -110,7 +110,7 @@ function canonical(value) {
   return value;
 }
 
-async function load(root) {
+async function load(root, onSnapshotLoading) {
   if (loading) return loading;
   loading = (async () => {
     const canonicalRoot = await realpath(root).catch(() => { throw fail("data_unavailable", "Dados do radar indisponíveis."); });
@@ -120,6 +120,7 @@ async function load(root) {
       validateMeta(active.meta);
       return active;
     }
+    onSnapshotLoading();
     const resolved = await resolveSnapshot(canonicalRoot, pointerInfo);
     const db = new DatabaseSync(resolved.file, { readOnly: true });
     try {
@@ -139,6 +140,7 @@ async function load(root) {
       if (JSON.stringify(canonical(storedMeta)) !== JSON.stringify(canonical(resolved.pointer.meta))) throw fail("snapshot_invalid", "Metadados internos do snapshot divergentes.");
       const actualCount = scalar(db, "SELECT COUNT(*) AS count FROM contracts");
       if (number(actualCount.count) !== resolved.pointer.meta.record_count) throw fail("snapshot_invalid", "Contagem interna do snapshot divergente.");
+      validateMeta(resolved.pointer.meta);
       const previous = active;
       active = { db, hash: resolved.pointer.sha256, pointerSignature: resolved.pointerSignature, meta: Object.freeze({ ...resolved.pointer.meta }) };
       cache.clear();
@@ -237,7 +239,10 @@ function execute(db, filters) {
 }
 
 async function handle(message) {
-  const loaded = await load(message.root);
+  const loaded = await load(message.root, () => {
+    parentPort.postMessage({ id: message.id, phase: "snapshot_loading" });
+  });
+  parentPort.postMessage({ id: message.id, phase: "snapshot_ready" });
   if (message.action === "meta") return { meta: loaded.meta, hash: loaded.hash };
   const key = loaded.hash + ":" + JSON.stringify(message.filters);
   const hit = cache.get(key);
