@@ -18,8 +18,9 @@ const fixtureEmail = 'wallet-browser-fixture@example.test';
 const fixturePassword = `${randomBytes(24).toString('base64url')}Aa1!`;
 const firebase = `let listener, user; const auth={authStateReady:async()=>{},currentUser:null};
 export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
-const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false)=>({uid:'u1',email,emailVerified:verified,reload:async()=>{},getIdToken:async()=> 'token'});
-export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
+const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false,providerId='password')=>({uid:'u1',email,emailVerified:verified,providerData:[{providerId}],reload:async()=>{},getIdToken:async()=> 'token'});
+class Provider { constructor(providerId){this.providerId=providerId} } export class GoogleAuthProvider extends Provider { constructor(){super('google.com')} } export class FacebookAuthProvider extends Provider { constructor(){super('facebook.com')} } export class GithubAuthProvider extends Provider { constructor(){super('github.com')} } export class TwitterAuthProvider extends Provider { constructor(){super('twitter.com')} } export class OAuthProvider extends Provider {};
+export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const signInWithPopup=async(a,provider)=>{set(make('social@example.test',true,provider.providerId));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
 const pendingPix = {id:'o1',status:'pending',paymentFlow:'pix',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='};
 const pendingCheckout = {id:'o2',status:'pending',paymentFlow:'checkout',checkoutUrl:'https://www.mercadopago.com.br/checkout/v1/redirect?order_id=TEST_ONLY'};
 let fixtureMayConfirm = false;
@@ -27,7 +28,7 @@ const fixtureRejectsOrder = process.env.TOOL_CREDITS_FIXTURE_REJECT_ORDER === '1
 const calls = [], registrations = [], orderRequests = [], attempts = [];
 const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
   purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
-  packages:[{id:'one',credits:1,amountCents:1490}]};
+  authProviders:['google.com','linkedin.com','invalid.example'], packages:[{id:'one',credits:1,amountCents:1490}]};
 let toolCreditsConfig = sharedEnabledConfig;
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
@@ -434,6 +435,16 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   });
   await page.bringToFront();
   await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
+  const socialOpened = await page.evaluate(async () => {
+    const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
+    return createToolCredits({ toolId: 'modela-memoria' }).open();
+  });
+  assert.equal(socialOpened, true);
+  assert.deepEqual(await page.$$eval('dialog .tool-credits__provider', nodes => nodes.map(node => node.textContent)),
+    ['Continuar com Google', 'Continuar com LinkedIn']);
+  assert.equal(await page.$('dialog .tool-credits__provider--invalid'), null);
+  await activateVisibleControl(page, 'dialog .tool-credits__close');
+  await page.waitForSelector('dialog[open]', { hidden: true });
   await openAndSignIn(page, { referral: true });
   assert.match(await page.$eval('dialog', d => d.textContent), /3 créditos disponíveis/);
   await page.waitForFunction(() => document.activeElement?.id === 'tool-credits-referral');

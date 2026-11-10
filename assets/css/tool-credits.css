@@ -58,6 +58,21 @@
   padding: .2rem;
 }
 .tool-credits__notice { padding: .65rem; border-inline-start: 3px solid #287767; background: #eaf7f3; }
+.tool-credits__social { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #d6e4e1; }
+.tool-credits__social > p { margin: 0; color: #52616b; font-weight: 600; }
+.tool-credits__social { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tool-credits__social > p { grid-column: 1 / -1; }
+.tool-credits__provider,
+.tool-credits__provider + .tool-credits__provider { display: flex; align-items: center; justify-content: center; border-color: #c5d4d0; background: #fff; color: #17242f; font-weight: 700; }
+.tool-credits__provider:hover { border-color: #00645c; background: #edf7f4; }
+.tool-credits__provider--google { border-color: #4285f4; box-shadow: inset 4px 0 #4285f4; }
+.tool-credits__provider--linkedin { border-color: #0a66c2; box-shadow: inset 4px 0 #0a66c2; }
+.tool-credits__provider--apple { border-color: #1d1d1f; box-shadow: inset 4px 0 #1d1d1f; }
+.tool-credits__provider--facebook { border-color: #1877f2; box-shadow: inset 4px 0 #1877f2; }
+.tool-credits__provider--github { border-color: #24292f; box-shadow: inset 4px 0 #24292f; }
+.tool-credits__provider--microsoft { border-color: #00a4ef; box-shadow: inset 4px 0 #00a4ef; }
+.tool-credits__provider--x { border-color: #17242f; box-shadow: inset 4px 0 #17242f; }
+.tool-credits__provider--yahoo { border-color: #6001d2; box-shadow: inset 4px 0 #6001d2; }
 .tool-credits__balance {
   display: flex;
   flex-wrap: wrap;
@@ -107,5 +122,6 @@
 @media (max-width: 480px) {
   .tool-credits__content { padding: 1rem; }
   .tool-credits__packs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tool-credits__social { grid-template-columns: 1fr; }
 }
 #tool-credits[hidden], #tool-credits-info[hidden], #print[hidden] { display: none; }

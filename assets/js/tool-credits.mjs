@@ -8,7 +8,28 @@ const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' 
 const makeId = () => crypto.randomUUID();
 const el = (tag, text) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; return n; };
 const btn = (text, fn) => { const n = el('button', text); n.type = 'button'; n.onclick = fn; return n; };
-const message = e => ({ AUTH_REQUIRED: 'Entre na sua conta para continuar.', EMAIL_UNVERIFIED: 'Confirme seu e-mail para continuar.', NO_CREDITS: 'Você não tem créditos disponíveis.', ACCOUNT_BLOCKED: 'Esta conta está temporariamente bloqueada.', EXPORT_PAUSED: 'As exportações estão temporariamente pausadas.' })[e?.error || e?.code] || e?.message || 'Não foi possível concluir agora.';
+const AUTH_PROVIDER_DETAILS = Object.freeze({
+  'google.com': { label: 'Google', className: 'google', create: firebase => new firebase.GoogleAuthProvider() },
+  'linkedin.com': { label: 'LinkedIn', className: 'linkedin', create: firebase => new firebase.OAuthProvider('linkedin.com') },
+  'apple.com': { label: 'Apple', className: 'apple', create: firebase => new firebase.OAuthProvider('apple.com') },
+  'facebook.com': { label: 'Facebook', className: 'facebook', create: firebase => new firebase.FacebookAuthProvider() },
+  'github.com': { label: 'GitHub', className: 'github', create: firebase => new firebase.GithubAuthProvider() },
+  'microsoft.com': { label: 'Microsoft', className: 'microsoft', create: firebase => new firebase.OAuthProvider('microsoft.com') },
+  'twitter.com': { label: 'X', className: 'x', create: firebase => new firebase.TwitterAuthProvider() },
+  'yahoo.com': { label: 'Yahoo', className: 'yahoo', create: firebase => new firebase.OAuthProvider('yahoo.com') },
+});
+const message = e => ({
+  AUTH_REQUIRED: 'Entre na sua conta para continuar.',
+  EMAIL_UNVERIFIED: 'Este acesso não forneceu um e-mail confirmado. Entre com e-mail e senha ou escolha outro provedor.',
+  NO_CREDITS: 'Você não tem créditos disponíveis.',
+  ACCOUNT_BLOCKED: 'Esta conta está temporariamente bloqueada.',
+  EXPORT_PAUSED: 'As exportações estão temporariamente pausadas.',
+  'auth/popup-closed-by-user': 'A janela de acesso foi fechada antes da conclusão.',
+  'auth/popup-blocked': 'O navegador bloqueou a janela de acesso. Permita pop-ups para confenge.com.br e tente novamente.',
+  'auth/operation-not-allowed': 'Este provedor ainda não está disponível. Escolha outro método de acesso.',
+  'auth/account-exists-with-different-credential': 'Já existe uma conta com este e-mail em outro método. Entre pelo método já usado para manter seus créditos na mesma conta.',
+  'auth/credential-already-in-use': 'Esta identidade já está vinculada a outra conta.',
+})[e?.error || e?.code] || e?.message || 'Não foi possível concluir agora.';
 const asJson = async r => { const body = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(body.error || 'Falha na conexão.'), body, { status: r.status }); return body; };
 const getStore = (key, fallback = {}) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
 const setStore = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
@@ -127,6 +148,8 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     host.querySelectorAll('button,input,select').forEach(node => { node.disabled = busy; });
   };
   const note = (host, text) => { if (text) { const n = el('p', text); n.className = 'tool-credits__notice'; n.setAttribute('role', 'status'); n.setAttribute('aria-live', 'polite'); host.append(n); } };
+  const configuredProviders = () => (Array.isArray(config?.authProviders) ? config.authProviders : [])
+    .map(id => [id, AUTH_PROVIDER_DETAILS[id]]).filter(([, detail]) => detail);
   const authView = (host, notice) => {
     host.append(el('h2', 'Seu primeiro uso completo é gratuito'), el('p', 'Entre para guardar seus créditos e exportações.')); note(host, notice);
     const form = el('form'), email = el('input'), password = el('input'); email.type = 'email'; email.required = true; email.autocomplete = 'email'; password.type = 'password'; password.required = true; password.minLength = 6; password.autocomplete = 'current-password';
@@ -134,8 +157,34 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     const login = btn('Entrar'); login.type = 'submit';
     form.append(login, btn('Criar conta', async () => { setBusy(form, true); try { const created = await firebase.createUserWithEmailAndPassword(auth, email.value, password.value); await firebase.sendEmailVerification(created.user); render('Conta criada. Confirme seu e-mail para ativá-la.'); } catch (e) { render(message(e)); } }), btn('Esqueci a senha', async () => { setBusy(form, true); try { if (!email.value) throw new Error('Informe seu e-mail para redefinir a senha.'); await firebase.sendPasswordResetEmail(auth, email.value); render('Enviamos o link para redefinir a senha.'); } catch (e) { render(message(e)); } }));
     form.onsubmit = async event => { event.preventDefault(); setBusy(form, true); try { await firebase.signInWithEmailAndPassword(auth, email.value, password.value); render('Conta acessada.'); } catch (e) { render(message(e)); } }; host.append(form);
+    const providers = configuredProviders();
+    if (providers.length) {
+      const social = el('section'); social.className = 'tool-credits__social'; social.setAttribute('aria-label', 'Outras formas de acesso');
+      social.append(el('p', 'Ou entre com'));
+      for (const [, detail] of providers) {
+        const access = btn(`Continuar com ${detail.label}`, async () => {
+          setBusy(social, true);
+          try { await firebase.signInWithPopup(auth, detail.create(firebase)); render('Conta acessada.'); }
+          catch (e) { render(message(e)); }
+        });
+        access.className = `tool-credits__provider tool-credits__provider--${detail.className}`;
+        access.setAttribute('aria-label', `Continuar com ${detail.label}`);
+        social.append(access);
+      }
+      host.append(social);
+    }
   };
-  const verifyView = (host, notice) => { host.append(el('h2', 'Confirme seu e-mail'), el('p', `Abra a mensagem enviada para ${auth.currentUser.email || 'seu e-mail'} e volte aqui.`)); note(host, notice); host.append(btn('Já confirmei', () => render()), btn('Reenviar confirmação', async () => { try { await firebase.sendEmailVerification(auth.currentUser); render('Confirmação reenviada.'); } catch (e) { render(message(e)); } }), btn('Sair', () => firebase.signOut(auth))); };
+  const verifyView = (host, notice) => {
+    const providers = auth.currentUser?.providerData || [];
+    const passwordOnly = providers.every(provider => provider.providerId === 'password');
+    host.append(el('h2', passwordOnly ? 'Confirme seu e-mail' : 'E-mail não confirmado'));
+    host.append(el('p', passwordOnly
+      ? `Abra a mensagem enviada para ${auth.currentUser.email || 'seu e-mail'} e volte aqui.`
+      : 'Este provedor não confirmou um e-mail que possa ser usado para guardar créditos. Entre com e-mail e senha ou escolha outro provedor.'));
+    note(host, notice);
+    if (passwordOnly) host.append(btn('Já confirmei', () => render()), btn('Reenviar confirmação', async () => { try { await firebase.sendEmailVerification(auth.currentUser); render('Confirmação reenviada.'); } catch (e) { render(message(e)); } }));
+    host.append(btn(passwordOnly ? 'Sair' : 'Escolher outro método', () => firebase.signOut(auth)));
+  };
   const shareView = host => {
     if (!config.purchasesEnabled || account?.blocked || !validReferral(account?.referralCode)) return;
     const section = el('section'); section.id = 'tool-credits-referral'; section.tabIndex = -1; section.setAttribute('aria-labelledby', 'tool-credits-referral-title');

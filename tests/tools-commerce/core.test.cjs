@@ -4,7 +4,7 @@ const { randomBytes, randomUUID } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
-const { PACKAGES, TERMS, TERMS_HASH, TOOL, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
+const { AUTH_PROVIDERS, PACKAGES, TERMS, TERMS_HASH, TOOL, loadConfig, orderId, normalizeEmail } = require('../../runtime/tools-commerce/policy.cjs');
 const { modelaReport } = require('../../runtime/tools-commerce/report.cjs');
 const { LOCAL_FORMATS, localArtifact } = require('../../runtime/tools-commerce/exports.cjs');
 const { createCommerceHttp } = require('../../runtime/tools-commerce/http.cjs');
@@ -17,6 +17,10 @@ test('production, sandbox and emulator cannot be mixed; prices are server owned'
     FIREBASE_AUTH_EMULATOR_HOST: '127.0.0.1:9099', FIRESTORE_EMULATOR_HOST: '127.0.0.1:8085', TOOLS_COMMERCE_HMAC_KEY: key };
   assert.equal(loadConfig({}).mode, 'off');
   assert.equal(loadConfig(local).mode, 'emulator');
+  assert.deepEqual(loadConfig({ ...local, TOOLS_COMMERCE_AUTH_PROVIDERS: 'google.com,linkedin.com' }).authProviders, ['google.com', 'linkedin.com']);
+  assert.deepEqual(AUTH_PROVIDERS.slice(0, 2), ['google.com', 'linkedin.com']);
+  assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_AUTH_PROVIDERS: 'google.com,google.com' }), /COMMERCE_UNAVAILABLE/);
+  assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_AUTH_PROVIDERS: 'phone' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...local, RUNTIME_PROFILE: 'netcup-production' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_PURCHASES: '1' }), /COMMERCE_UNAVAILABLE/);
   assert.throws(() => loadConfig({ ...local, TOOLS_COMMERCE_MODE: 'live', RUNTIME_PROFILE: 'netcup-production' }), /COMMERCE_UNAVAILABLE/);
@@ -151,11 +155,12 @@ test('disabled endpoints never load Firebase; browser config excludes all secret
   assert.deepEqual(JSON.parse((await disabled.api(e)).body), { enabled: false });
   assert.equal((await disabled.webhook({ httpMethod: 'POST' })).statusCode, 404);
   const cfg = { mode: 'live', identityKey: randomBytes(32), accessToken: 'do-not-expose', webhookSecret: 'private',
-    firebase: { apiKey: 'public-config' }, purchasesEnabled: true };
+    firebase: { apiKey: 'public-config' }, purchasesEnabled: true, authProviders: ['google.com', 'linkedin.com'] };
   const enabled = createCommerceHttp({ config: cfg, firebaseFactory: factory });
   const out = await enabled.api(e);
   assert.equal(out.headers['Cache-Control'], 'private, no-store');
   assert.equal(JSON.parse(out.body).termsVersion, TERMS);
+  assert.deepEqual(JSON.parse(out.body).authProviders, ['google.com', 'linkedin.com']);
   assert.ok(!out.body.includes(cfg.accessToken) && !out.body.includes(cfg.webhookSecret));
   assert.equal((await enabled.api({ httpMethod: 'POST', queryStringParameters: { op: 'export' } })).statusCode, 401);
   const wrongOrigin = await enabled.api({ httpMethod: 'POST', queryStringParameters: { op: 'export' }, headers: { authorization: 'Bearer fake', origin: 'https://wrong.test' } });
