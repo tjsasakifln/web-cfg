@@ -79,6 +79,7 @@ WALLET_DOCUMENTS = (
     "/ferramentas/matriz-atraso-obra/",
     "/ferramentas/orcamento-de-obras/",
     "/ferramentas/prontidao-tecnica-obra-privada/",
+    "/ferramentas/radar-mercado-publico/",
     "/ferramentas/rede-de-agua/",
 )
 

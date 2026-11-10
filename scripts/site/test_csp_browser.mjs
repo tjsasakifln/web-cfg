@@ -36,6 +36,7 @@ const walletRoutes = new Set([
   "/ferramentas/",
   "/ferramentas/limite-acrescimos-supressoes/",
   "/ferramentas/matriz-atraso-obra/",
+  "/ferramentas/radar-mercado-publico/",
 ]);
 const authProbes = [
   "https://identitytoolkit.googleapis.com/confenge-csp-probe",
@@ -56,6 +57,7 @@ const routes = [
   "/ferramentas/",
   "/ferramentas/limite-acrescimos-supressoes/",
   "/ferramentas/matriz-atraso-obra/",
+  "/ferramentas/radar-mercado-publico/",
   "/ops/",
 ];
 
