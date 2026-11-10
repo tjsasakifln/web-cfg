@@ -23,17 +23,20 @@ if str(ROOT) not in sys.path:
 from scripts.pseo.build_site import PROTOTYPE_SOURCE_DIR  # noqa: E402
 from scripts.site.audit_css_usage import (  # noqa: E402
     BASELINE,
+    AUDITED_BUNDLES,
     SKIP_DIRS,
     audit,
     class_selectors,
     compare,
     decoration_counts,
+    derived_route_bundles,
     is_test_path,
     public_css_files,
     stylesheet_references,
     unused_classes,
     used_classes,
 )
+from scripts.site.build_css import ROUTE_BUNDLES, route_bundle  # noqa: E402
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "css-usage"
 
@@ -44,6 +47,32 @@ def _fixture_root() -> Path:
     for name in ("bundle.css", "page.html", "behaviour.js"):
         shutil.copy(FIXTURE / name, tmp / name)
     return tmp
+
+
+def _derived_bundle_fixture() -> tuple[Path, str, tuple[str, ...]]:
+    """A minimal public tree with every CSS file referenced by HTML."""
+    root = Path(tempfile.mkdtemp(prefix="css-derived-bundle-"))
+    rel, sources = next(iter(ROUTE_BUNDLES.items()))
+    for audited in AUDITED_BUNDLES:
+        path = root / audited
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("", encoding="utf-8")
+    for index, source in enumerate(sources):
+        path = root / source
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            f".source-{index}{{border-radius:{index + 1}px;box-shadow:0 1px #000}}\n",
+            encoding="utf-8",
+        )
+    target = root / rel
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(route_bundle(root, sources), encoding="utf-8", newline="\n")
+    hrefs = sorted(set((*AUDITED_BUNDLES, *sources, rel)))
+    (root / "index.html").write_text(
+        "".join(f'<link rel="stylesheet" href="/{href}"/>\n' for href in hrefs),
+        encoding="utf-8",
+    )
+    return root, rel, sources
 
 
 def test_word_boundary_does_not_swallow_a_prefixed_class() -> None:
@@ -74,6 +103,72 @@ def test_behaviour_and_inline_scripts_keep_a_class_alive() -> None:
         assert "reveal" not in dead, dead
         # `.is-open` only appears in an inline <script> classList call
         assert "is-open" not in dead, dead
+    finally:
+        shutil.rmtree(root)
+
+
+def test_route_bundle_is_discounted_only_when_its_generated_bytes_match() -> None:
+    root, rel, _ = _derived_bundle_fixture()
+    try:
+        result = audit(root)
+        assert compare(result, result) == []
+        valid, invalid = derived_route_bundles(root)
+        assert valid == {rel}, (valid, invalid)
+        assert invalid == {}, invalid
+        assert result["derived_css_bundles"] == [rel]
+        assert result["decoration"][rel] == {
+            "border_radius": 0,
+            "box_shadow": 0,
+            "gradient": 0,
+        }
+    finally:
+        shutil.rmtree(root)
+
+
+def test_regenerated_route_bundle_still_counts_new_source_decoration() -> None:
+    root, rel, sources = _derived_bundle_fixture()
+    try:
+        baseline = audit(root)
+        source = root / sources[0]
+        source.write_text(
+            source.read_text(encoding="utf-8") + ".new-radius{border-radius:99px}\n",
+            encoding="utf-8",
+        )
+        (root / rel).write_text(route_bundle(root, sources), encoding="utf-8", newline="\n")
+        result = audit(root)
+        assert result["derived_css_bundles"] == [rel]
+        assert result["invalid_derived_css_bundles"] == {}
+        assert any(failure.startswith("decoration_regression border_radius ") for failure in compare(result, baseline))
+    finally:
+        shutil.rmtree(root)
+
+
+def test_route_bundle_extra_css_fails_closed() -> None:
+    root, rel, _ = _derived_bundle_fixture()
+    try:
+        baseline = audit(root)
+        target = root / rel
+        target.write_text(
+            target.read_text(encoding="utf-8") + ".extra-shadow{box-shadow:0 2px #000}\n",
+            encoding="utf-8",
+        )
+        result = audit(root)
+        assert result["derived_css_bundles"] == []
+        assert rel in result["invalid_derived_css_bundles"]
+        assert f"invalid_derived_stylesheet {rel}: does not match its declared source sheets" in compare(result, baseline)
+    finally:
+        shutil.rmtree(root)
+
+
+def test_missing_route_bundle_fails_closed() -> None:
+    root, rel, _ = _derived_bundle_fixture()
+    try:
+        baseline = audit(root)
+        (root / rel).unlink()
+        result = audit(root)
+        assert result["derived_css_bundles"] == []
+        assert result["invalid_derived_css_bundles"] == {rel: "missing generated bundle"}
+        assert f"invalid_derived_stylesheet {rel}: missing generated bundle" in compare(result, baseline)
     finally:
         shutil.rmtree(root)
 

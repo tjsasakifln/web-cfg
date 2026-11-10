@@ -114,6 +114,19 @@ ROUTE_SUBSETS = {
     "assets/editorial-tool.css": ("Type roles", "Section rhythm", "Page index", "Conditions", "After send", "Contact hierarchy", "Tool", "Motion"),
 }
 
+# Keep the main site sheet independently cacheable, but collapse the four
+# route-only sheets that otherwise serialize the first paint of this tool.
+# The order is the same as the former <link> order, so cascade behavior is
+# byte-for-byte equivalent after fingerprint_css.py flattens the token import.
+ROUTE_BUNDLES = {
+    "assets/tool-bundles/diagnostico-defesa-margem.css": (
+        "styles-tools.css",
+        "ferramentas/diagnostico-defesa-margem/styles.css",
+        "assets/editorial-tool.css",
+        "assets/tool-showcase/showcase.css",
+    ),
+}
+
 
 def subset(sheet_text: str, prefixes: tuple[str, ...]) -> str:
     import re as _re
@@ -136,6 +149,38 @@ def sync_route_subsets(root: Path, *, check: bool = False) -> list[str]:
         if current != new:
             stale.append(rel)
             if not check:
+                target.write_text(new, encoding="utf-8", newline="\n")
+    return stale
+
+
+def route_bundle(root: Path, sources: tuple[str, ...]) -> str:
+    parts = [
+        "/* Route bundle written by scripts/site/build_css.py; edit the source sheets. */"
+    ]
+    for rel in sources:
+        raw = (root / rel).read_text(encoding="utf-8").strip()
+        parts.extend((f"/* source:{rel} */", raw))
+    return "\n".join(parts) + "\n"
+
+
+def sync_route_bundles(root: Path, *, check: bool = False) -> list[str]:
+    stale: list[str] = []
+    for rel, sources in ROUTE_BUNDLES.items():
+        present = [(root / source).is_file() for source in sources]
+        target = root / rel
+        # Small unit fixtures that do not model tool CSS can omit the whole
+        # bundle. A partial source set is always a real build error.
+        if not any(present) and not target.is_file():
+            continue
+        if not all(present):
+            missing = [source for source, exists in zip(sources, present) if not exists]
+            raise FileNotFoundError(f"{rel}: missing bundle sources: {', '.join(missing)}")
+        new = route_bundle(root, sources)
+        current = target.read_text(encoding="utf-8") if target.is_file() else ""
+        if current != new:
+            stale.append(rel)
+            if not check:
+                target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text(new, encoding="utf-8", newline="\n")
     return stale
 
@@ -226,6 +271,10 @@ def main() -> int:
         if stale:
             print(f"FAIL route subsets stale against assets/editorial.css: {', '.join(stale)}; run python3 scripts/site/build_css.py")
             return 1
+        stale = sync_route_bundles(ROOT, check=True)
+        if stale:
+            print(f"FAIL route CSS bundles stale: {', '.join(stale)}; run python3 scripts/site/build_css.py")
+            return 1
         print("OK css modules concatenated")
         return 0
     if sync_home_sheet(ROOT):
@@ -234,6 +283,8 @@ def main() -> int:
         print("wrote assets/home-base.css (runtime button variants synced)")
     for rel in sync_route_subsets(ROOT):
         print(f"wrote {rel} (route subset of assets/editorial.css)")
+    for rel in sync_route_bundles(ROOT):
+        print(f"wrote {rel} (route CSS bundle)")
     if current != assembled:
         STYLES.write_text(assembled, encoding="utf-8", newline="\n")
         print(f"wrote {STYLES.relative_to(ROOT)} ({len(assembled.encode())} bytes)")

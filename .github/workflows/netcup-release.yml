@@ -346,10 +346,9 @@ jobs:
           LH_HOME_RUNS: "3"
         run: |
           set -euo pipefail
-          # The checkout ships a committed summary from a previous release. It
-          # is removed first so a run that dies before writing its own cannot
-          # have the gap filled by an older report.
-          rm -f docs/lighthouse-runs/summary.json
+          # Remove the checkout's historical reports before measuring. Neither
+          # acceptance nor the diagnostic artifact may inherit older evidence.
+          rm -f docs/lighthouse-runs/*.json
           # The runner's own server over the exact gated tree, the same
           # thresholds, the same counts. A candidate that cannot be measured to
           # a passing terminal state does not reach the visitors.
@@ -391,9 +390,11 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: netcup-qualification-${{ github.sha }}
+          # Keep the measured page reports as well as the summary so a
+          # rejected candidate retains its LCP element and task diagnostics.
           path: |
             build/reports/release-qualification-${{ github.sha }}.json
-            docs/lighthouse-runs/summary.json
+            docs/lighthouse-runs/*.json
           if-no-files-found: error
           retention-days: 30
 
