@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
+import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core';
-import { assertX11NativePointerAvailable, prepareX11NativePointer } from './x11_native_pointer.mjs';
 
 const root = new URL('../../', import.meta.url);
 const source = await readFile(new URL('assets/js/tool-credits.mjs', root));
@@ -12,6 +12,10 @@ const referral = await readFile(new URL('assets/js/tool-referral.mjs', root));
 const css = await readFile(new URL('assets/css/tool-credits.css', root));
 const firstRef = 'first_______0001';
 const secondRef = 'other_______0002';
+const fixtureEmail = 'wallet-browser-fixture@example.test';
+// A fresh high-entropy fixture secret prevents Chrome's compromised-password
+// UI from intercepting the browser-trusted purchase click under test.
+const fixturePassword = `${randomBytes(24).toString('base64url')}Aa1!`;
 const firebase = `let listener, user; const auth={authStateReady:async()=>{},currentUser:null};
 export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
 const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false)=>({uid:'u1',email,emailVerified:verified,reload:async()=>{},getIdToken:async()=> 'token'});
@@ -59,29 +63,12 @@ const server = createServer(async (req, res) => {
   }
   res.statusCode = 400; send({error:'bad'});
 });
-const headedMode = process.env.TOOL_CREDITS_HEADED || '0';
-assert.ok(headedMode === '0' || headedMode === '1', 'TOOL_CREDITS_HEADED must be 0 or 1');
-if (headedMode === '1' && process.platform === 'linux') {
-  assert.ok(process.env.DISPLAY, 'TOOL_CREDITS_HEADED=1 requires DISPLAY on Linux');
-}
 const expectedChromeVersion = process.env.TOOL_CREDITS_EXPECTED_CHROME_VERSION || '';
-const nativePointerMode = process.env.TOOL_CREDITS_NATIVE_POINTER || '0';
-assert.ok(nativePointerMode === '0' || nativePointerMode === '1', 'TOOL_CREDITS_NATIVE_POINTER must be 0 or 1');
-if (nativePointerMode === '1') {
-  assert.equal(process.platform, 'linux', 'native pointer mode requires Linux');
-  assert.equal(headedMode, '1', 'native pointer mode requires TOOL_CREDITS_HEADED=1');
-  assert.ok(process.env.DISPLAY, 'native pointer mode requires DISPLAY');
-  assert.ok(expectedChromeVersion, 'native pointer mode requires TOOL_CREDITS_EXPECTED_CHROME_VERSION');
-  await assertX11NativePointerAvailable();
-}
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
 let browser;
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
-  const headed = headedMode === '1';
-  const browserArgs = ['--no-sandbox'];
-  if (headed) browserArgs.push('--ozone-platform=x11', '--window-size=1280,1024');
-  browser = await puppeteer.launch({ executablePath, headless: !headed, args: browserArgs });
+  browser = await puppeteer.launch({ executablePath, headless: true, args: ['--no-sandbox'] });
   if (expectedChromeVersion) {
     assert.equal(expectedChromeVersion, PUPPETEER_REVISIONS.chrome,
       'TOOL_CREDITS_EXPECTED_CHROME_VERSION must equal Puppeteer locked Chrome');
@@ -282,7 +269,6 @@ async function trustedPhysicalClick(page, prepared) {
       storedConnected: state.target.isConnected, currentIsStored: current === state.target };
   }, prepared.traceKey);
   let center;
-  let nativePointer;
   try {
     center = await page.evaluate(prepared => {
       if (document.visibilityState !== 'visible') throw new Error(`${prepared.label}: page lost visibility before action`);
@@ -303,17 +289,9 @@ async function trustedPhysicalClick(page, prepared) {
       if (!hit || !target.contains(hit)) throw new Error(`${prepared.label}: target center became obstructed before action`);
       return point;
     }, prepared);
-    if (nativePointerMode === '1') {
-      // XTEST generates browser-trusted native automation input inside the
-      // isolated X11 display. It is not a physical human mouse.
-      nativePointer = await prepareX11NativePointer({
-        browser, page, prepared, center, diagnosticDir: inputReportDir,
-      });
-    } else {
-      // Puppeteer's click helper batches move/down/up. Move separately so the
-      // press remains sequential in local non-native runs.
-      await page.mouse.move(center.x, center.y);
-    }
+    // Puppeteer's click helper batches move/down/up. Move separately so the
+    // press remains sequential and the live target is revalidated first.
+    await page.mouse.move(center.x, center.y);
     await page.evaluate(traceKey => {
       const state = window.__toolCreditsPhysicalClicks?.[traceKey];
       state?.timeline.push({ phase: 'pointer-moved', at: performance.now(), focus: document.hasFocus(),
@@ -345,20 +323,15 @@ async function trustedPhysicalClick(page, prepared) {
       return point;
     }, prepared);
   } catch (error) {
-    await nativePointer?.cleanup().catch(() => {});
     const cleared = await clearTrace().catch(clearError => ({ clearError: String(clearError?.message || clearError) }));
-    error.browserDiagnostic = { ...cleared, nativePointer: nativePointer?.proof || null };
+    error.browserDiagnostic = cleared;
     await recordPrimaryInputFailure(page, prepared.selector, prepared.label, error);
     throw error;
   }
   let clickError;
   try {
-    if (nativePointer) {
-      await nativePointer.press();
-    } else {
-      await page.mouse.down();
-      await page.mouse.up();
-    }
+    await page.mouse.down();
+    await page.mouse.up();
   }
   catch (error) { clickError = error; }
   const immediate = await snapshotTrace();
@@ -370,7 +343,7 @@ async function trustedPhysicalClick(page, prepared) {
     delayed = await snapshotTrace();
   }
   const final = await clearTrace();
-  const diagnostic = { ...final, immediate, delayed, nativePointer: nativePointer?.proof || null };
+  const diagnostic = { ...final, immediate, delayed };
   if (clickError) {
     clickError.browserDiagnostic = diagnostic;
     await recordPrimaryInputFailure(page, prepared.selector, prepared.label, clickError);
@@ -417,8 +390,8 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.equal(opened, true);
   assert.equal(await page.$eval('dialog', dialog => dialog.open), true);
   assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeiro uso completo/i);
-  await page.type('input[type=email]', 'a@b.com');
-  await page.type('input[type=password]', '123456');
+  await page.type('input[type=email]', fixtureEmail);
+  await page.type('input[type=password]', fixturePassword);
   await activateVisibleControl(page, 'dialog button[type=submit]');
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
 }
@@ -626,7 +599,8 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
     ['copy', 'success'], ['linkedin', 'blocked'], ['whatsapp', 'success'], ['native', 'cancelled'], ['copy', 'failure']
   ]);
   const serializedEvents = JSON.stringify(referralEvents);
-  assert.ok(!serializedEvents.includes(firstRef) && !serializedEvents.includes('a@b.com') && !serializedEvents.includes('confenge.com.br/'));
+  assert.ok(!serializedEvents.includes(firstRef) && !serializedEvents.includes(fixtureEmail)
+    && !serializedEvents.includes(fixturePassword) && !serializedEvents.includes('confenge.com.br/'));
 
   const checkoutPage = await browser.newPage();
   await checkoutPage.setViewport({ width: 390, height: 844 });
@@ -717,16 +691,16 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.deepEqual(deferred, [{event:'tool_referral_visit', props:{touch_outcome:'accepted', storage_mode:'persistent'}}]);
   assert.ok(!JSON.stringify(deferred).includes('early_______0003'));
   const provisionStart = registrations.length;
-  await early.evaluate(async () => {
+  await early.evaluate(async ({ email, password }) => {
     const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
     await createToolCredits({ toolId: 'modela-memoria' }).open();
     const afterExpiry = Date.now() + 31 * 864e5;
     Date.now = () => afterExpiry;
     const form = document.querySelector('dialog form');
-    form.querySelector('input[type=email]').value = 'expired@example.test';
-    form.querySelector('input[type=password]').value = '123456';
+    form.querySelector('input[type=email]').value = email;
+    form.querySelector('input[type=password]').value = password;
     form.requestSubmit();
-  });
+  }, { email: 'expired@example.test', password: fixturePassword });
   await early.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
   const afterExpiry = registrations.slice(provisionStart);
   assert.ok(afterExpiry.length && afterExpiry.every(request => !('referralCode' in request)));
