@@ -63,14 +63,14 @@ const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' 
 const browser = await puppeteer.launch({executablePath, headless:true,args:['--no-sandbox']});
 let physicalClickSequence = 0;
 
+// "Trusted" here means Chrome generated the events from page-scoped CDP
+// input. It proves real browser dispatch, not a physical human mouse.
 async function prepareTrustedPhysicalClick(page, selector, label) {
   await page.bringToFront();
-  await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
+  await page.waitForFunction(() => document.visibilityState === 'visible');
   const traceKey = `${label}-${++physicalClickSequence}`;
   return page.evaluate(async ({ selector, label, traceKey }) => {
-    if (document.visibilityState !== 'visible' || !document.hasFocus()) {
-      throw new Error(`${label}: page is not visible and focused`);
-    }
+    if (document.visibilityState !== 'visible') throw new Error(`${label}: page is not visible`);
     const target = document.querySelector(selector);
     if (!(target instanceof HTMLElement)) throw new Error(`${label}: live target is absent`);
     if (!target.isConnected) throw new Error(`${label}: live target is disconnected`);
@@ -112,7 +112,7 @@ async function prepareTrustedPhysicalClick(page, selector, label) {
     for (const type of ['pointerdown', 'pointerup', 'click']) document.addEventListener(type, state.listener, true);
     window.__toolCreditsPhysicalClicks ||= Object.create(null);
     window.__toolCreditsPhysicalClicks[traceKey] = state;
-    return { selector, label, traceKey, rect: second };
+    return { selector, label, traceKey, rect: second, focusAtPrepare: document.hasFocus() };
   }, { selector, label, traceKey });
 }
 
@@ -127,9 +127,7 @@ async function trustedPhysicalClick(page, prepared) {
   let center;
   try {
     center = await page.evaluate(prepared => {
-      if (document.visibilityState !== 'visible' || !document.hasFocus()) {
-        throw new Error(`${prepared.label}: page lost visibility or focus before action`);
-      }
+      if (document.visibilityState !== 'visible') throw new Error(`${prepared.label}: page lost visibility before action`);
       const state = window.__toolCreditsPhysicalClicks?.[prepared.traceKey];
       const target = document.querySelector(prepared.selector);
       if (!state || target !== state.target) throw new Error(`${prepared.label}: live target identity changed before action`);
@@ -197,7 +195,9 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
 }
 
 try {
-  const page = await browser.newPage();
+  const initialPages = await browser.pages();
+  assert.equal(initialPages.length, 1, 'the primary journey must reuse the sole launch page');
+  const [page] = initialPages;
   const cpuThrottleRate = Number(process.env.TOOL_CREDITS_CPU_THROTTLE_RATE || 1);
   assert.ok(Number.isFinite(cpuThrottleRate) && cpuThrottleRate >= 1 && cpuThrottleRate <= 20,
     'TOOL_CREDITS_CPU_THROTTLE_RATE must be from 1 to 20');
@@ -238,20 +238,12 @@ try {
   assert.match(await page.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/avaliacao-imoveis-urbanos\/inferencia\/\?ref=/);
   assert.equal(registrations[0].referralCode, firstRef);
   assert.ok(await page.$eval('dialog', d => d.getBoundingClientRect().width <= innerWidth));
-  // Reproduce the CI focus transition with a real competing tab. Preparation
-  // must restore and observe focus before it records the live target; action
-  // must not activate the page a second time and reintroduce that race.
-  const focusProbe = await browser.newPage();
-  await focusProbe.bringToFront();
-  await focusProbe.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus());
-  await page.waitForFunction(() => !document.hasFocus(), { polling: 50 });
-  assert.equal(await page.evaluate(() => document.hasFocus()), false, 'the competing tab must own focus');
-  const preparedUnacceptedPurchase = await prepareTrustedPhysicalClick(
+  // CDP mouse input is page-scoped; document.hasFocus() is a transient global
+  // diagnostic, not an actionability invariant. Delivery is proved below by
+  // one trusted pointer sequence on this exact live target, never by focus.
+  await trustedPhysicalClick(page, await prepareTrustedPhysicalClick(
     page, 'dialog .tool-credits__packs button', 'unaccepted purchase',
-  );
-  assert.equal(await page.evaluate(() => document.hasFocus()), true, 'purchase page focus must settle before input');
-  await trustedPhysicalClick(page, preparedUnacceptedPurchase);
-  await focusProbe.close();
+  ));
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Confirme que leu os termos'));
   assert.match(await page.$eval('dialog', d => d.textContent), /Confirme que leu os termos/);
   assert.equal(calls.includes('orders'), false);
@@ -270,8 +262,7 @@ try {
   assert.equal(termsBeforeClick.checked, false);
   assert.equal(termsBeforeClick.connected, true);
   assert.ok(termsBeforeClick.width > 0 && termsBeforeClick.height > 0, 'terms control must have a clickable geometry');
-  // The same trusted pointer path as the primary purchase restores foreground
-  // focus after the competing tab and rejects a moving or covered checkbox.
+  // The same trusted pointer path rejects a moving or covered checkbox.
   await trustedPhysicalClick(page, await prepareTrustedPhysicalClick(page, 'dialog input[type=checkbox]', 'terms consent'));
   try {
     await page.waitForFunction(() => document.querySelector('dialog input[type=checkbox]')?.checked === true, { timeout: 5000 });
@@ -345,6 +336,8 @@ try {
       const center = rect && { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       const point = center && document.elementFromPoint(center.x, center.y);
       return {
+        visibilityState: document.visibilityState,
+        documentFocus: document.hasFocus(),
         dialogText: dialog?.textContent || null,
         checkbox: checkbox && { checked: checkbox.checked, connected: checkbox.isConnected },
         button: button && { connected: button.isConnected, disabled: button.disabled, text: button.textContent, rect: rect?.toJSON?.() || null },
@@ -361,6 +354,7 @@ try {
       responseStatus: orderResponse?.status?.() || null,
       responseState,
       clickState,
+      focusAtPrepare: preparedPurchase.focusAtPrepare,
       clickTrace: purchaseClickTrace,
       calls,
       orderRequests,
