@@ -89,6 +89,21 @@ jobs:
           rm -rf node_modules
           npm ci --engine-strict
           python -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: setup-chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
+      # This wallet fixture serves source assets and needs no public build.
+      # Run it early for isolated browser input and prompt failure evidence;
+      # artifact-specific browser gates remain after Build public site.
+      - name: Verify the credits panel in the browser
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:tools-commerce:browser
       - name: Validate the credits wallet and Firebase rules
         env:
           METADATA_SERVER_DETECTION: none
@@ -233,13 +248,6 @@ jobs:
         run: |
           python3 scripts/site/test_fingerprint_css.py
           python3 scripts/site/test_cache_contract.py
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
-        id: setup-chrome
-      - name: Verify the credits panel in the browser
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: npm run test:tools-commerce:browser
       - name: Tool catalogue navigation and sharing in Chrome
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -453,6 +461,9 @@ jobs:
             build/reports/site-excellence.json
             build/reports/site-excellence.md
             build/reports/gsc-insights-durable.json
+            build/reports/wallet-input-*.json
+            build/reports/wallet-input-*.png
+            build/reports/tool-credits-pix-click-failure.png
           if-no-files-found: ignore
 
   execution_evidence:

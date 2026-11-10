@@ -41,6 +41,7 @@ CONTACT_QA = WORKFLOWS_DIR / "contact-qa.yml"
 PYTHON_REQUIREMENTS = ROOT / "requirements-ci.txt"
 UI_GEOMETRY = ROOT / "scripts" / "site" / "test_ui_geometry.mjs"
 TOOLS_UIUX = ROOT / "scripts" / "site" / "verify_tools_uiux_e2e.mjs"
+CHROME_VERSION_RESOLVER = ROOT / "scripts" / "site" / "resolve_chrome_version.mjs"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -643,6 +644,59 @@ def test_pseo_still_requires_full_npm_test():
         raise AssertionError("pseo.yml must not soften or replace npm test with test:affected")
 
 
+def test_browser_actions_use_the_puppeteer_chrome_contract():
+    """Browser gates must install Puppeteer's exact Chrome revision first."""
+    resolver = _read(CHROME_VERSION_RESOLVER)
+    for needle in (
+        'import { PUPPETEER_REVISIONS } from "puppeteer-core"',
+        "PUPPETEER_REVISIONS.chrome",
+        r"/^\d+\.\d+\.\d+\.\d+$/",
+        "console.log(`version=${version}`)",
+    ):
+        assert needle in resolver, f"Chrome resolver must fail closed with {needle!r}"
+
+    contracts = (
+        (SITE_CI, "gates", "Setup Chrome"),
+        (PSEO, "pseo", "Setup Chrome"),
+        (CONTACT_QA, "contact-proof", "Setup Chrome"),
+        (WORKFLOWS_DIR / "netcup-release.yml", "qualify", "Setup Chrome for candidate qualification"),
+        (WORKFLOWS_DIR / "netcup-release.yml", "promote", "Setup Chrome for public runtime verification"),
+    )
+    for path, job_name, setup_name in contracts:
+        job = _job_block(_read(path), job_name)
+        resolver_at = job.find("- name: Resolve contracted Chrome version\n")
+        setup_at = job.find(f"- name: {setup_name}\n")
+        assert resolver_at >= 0, f"{path.name}:{job_name} must resolve Chrome from Puppeteer"
+        assert setup_at >= 0, f"{path.name}:{job_name} is missing its Chrome setup step"
+        assert job[:resolver_at].rfind("npm ci") >= 0, (
+            f"{path.name}:{job_name} must resolve Chrome only after npm ci installs Puppeteer"
+        )
+        assert resolver_at < setup_at, (
+            f"{path.name}:{job_name} must resolve Chrome before browser setup/use"
+        )
+        resolve_step = _step_block(job, "Resolve contracted Chrome version")
+        assert resolve_step is not None
+        assert "id: browser_contract" in resolve_step
+        assert 'node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"' in resolve_step
+        setup = _step_block(job, setup_name)
+        assert setup is not None
+        assert "browser-actions/setup-chrome@" in setup
+        assert "chrome-version: ${{ steps.browser_contract.outputs.version }}" in setup, (
+            f"{path.name}:{job_name} must not float to stable Chrome"
+        )
+        assert job.count("browser-actions/setup-chrome@") == 1, (
+            f"{path.name}:{job_name} must not retain another uncontracted Chrome setup"
+        )
+
+    site_ci = _read(SITE_CI)
+    for path in (
+        "build/reports/wallet-input-*.json",
+        "build/reports/wallet-input-*.png",
+        "build/reports/tool-credits-pix-click-failure.png",
+    ):
+        assert path in site_ci, f"site-ci must upload browser failure evidence: {path}"
+
+
 def test_post_build_browser_gates_use_public_artifact():
     """Browser checks after build must serve _site, never the source tree."""
     for label, path in (("UI geometry", UI_GEOMETRY), ("tools UI/UX", TOOLS_UIUX)):
@@ -1021,6 +1075,7 @@ def main() -> int:
         test_legacy_netlify_preview_cannot_skip_main_commits,
         test_merge_workflows_cover_every_pr_base,
         test_pseo_still_requires_full_npm_test,
+        test_browser_actions_use_the_puppeteer_chrome_contract,
         test_post_build_browser_gates_use_public_artifact,
         test_lighthouse_covers_article_cover_regression_routes,
         test_codeql_is_fail_closed,

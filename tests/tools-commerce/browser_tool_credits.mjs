@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
@@ -62,67 +62,181 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
 const browser = await puppeteer.launch({executablePath, headless:true,args:['--no-sandbox']});
 let physicalClickSequence = 0;
+const inputReportDir = fileURLToPath(new URL('build/reports/', root));
+
+async function recordPrimaryInputFailure(page, selector, label, error) {
+  if (label.startsWith('obstructed ') || error?.walletInputDiagnosticWritten) return;
+  error.walletInputDiagnosticWritten = true;
+  try {
+    const browserState = await page.evaluate(selector => {
+      const target = document.querySelector(selector);
+      const rect = target?.getBoundingClientRect();
+      const center = rect && { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      const hit = center && document.elementFromPoint(center.x, center.y);
+      const identify = node => node && {
+        tag: node.tagName,
+        id: node.id || '',
+        className: String(node.className || ''),
+      };
+      return {
+        visibilityState: document.visibilityState,
+        documentFocus: document.hasFocus(),
+        activeElement: identify(document.activeElement),
+        target: target && {
+          ...identify(target),
+          connected: target.isConnected,
+          disabled: Boolean(target.disabled),
+          rect: rect?.toJSON?.() || null,
+        },
+        centerTarget: identify(hit),
+        centerInsideTarget: Boolean(target && hit && target.contains(hit)),
+      };
+    }, selector).catch(browserError => ({ collectionError: String(browserError?.message || browserError) }));
+    const slug = label.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+    const diagnostic = {
+      schema: 'confenge.wallet-input-diagnostic/v1',
+      label,
+      selector,
+      error: { name: error?.name || 'Error', message: String(error?.message || error) },
+      browserState,
+      action: error?.browserDiagnostic || null,
+      fixture: { calls: [...calls], orderRequestCount: orderRequests.length },
+    };
+    const jsonPath = join(inputReportDir, `wallet-input-${slug}.json`);
+    const screenshotPath = join(inputReportDir, `wallet-input-${slug}.png`);
+    await mkdir(inputReportDir, { recursive: true });
+    await writeFile(jsonPath, JSON.stringify(diagnostic, null, 2));
+    await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+    // The workflow can fail before artifacts are uploaded, so the bounded,
+    // metadata-only diagnostic must also remain available in the job log.
+    console.error('wallet input diagnostic', JSON.stringify({ ...diagnostic, jsonPath, screenshotPath }));
+  } catch (diagnosticError) {
+    console.error('wallet input diagnostic collection failed', JSON.stringify({
+      label,
+      primaryError: String(error?.message || error),
+      diagnosticError: String(diagnosticError?.message || diagnosticError),
+    }));
+  }
+}
 
 // "Trusted" here means Chrome generated the events from page-scoped CDP
 // input. It proves real browser dispatch, not a physical human mouse.
 async function prepareTrustedPhysicalClick(page, selector, label) {
-  await page.bringToFront();
-  await page.waitForFunction(() => document.visibilityState === 'visible');
   const traceKey = `${label}-${++physicalClickSequence}`;
-  return page.evaluate(async ({ selector, label, traceKey }) => {
-    if (document.visibilityState !== 'visible') throw new Error(`${label}: page is not visible`);
-    const target = document.querySelector(selector);
-    if (!(target instanceof HTMLElement)) throw new Error(`${label}: live target is absent`);
-    if (!target.isConnected) throw new Error(`${label}: live target is disconnected`);
-    if ('disabled' in target && target.disabled) throw new Error(`${label}: live target is disabled`);
-    target.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
-    const snapshot = () => {
-      const rect = target.getBoundingClientRect();
-      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
-    };
-    await new Promise(resolve => requestAnimationFrame(resolve));
-    const first = snapshot();
-    await new Promise(resolve => requestAnimationFrame(resolve));
-    const second = snapshot();
-    if (first.x !== second.x || first.y !== second.y || first.width !== second.width || first.height !== second.height) {
-      throw new Error(`${label}: target geometry is not stable: ${JSON.stringify({ first, second })}`);
-    }
-    if (!(second.width > 0 && second.height > 0)) {
-      throw new Error(`${label}: target has no positive geometry: ${JSON.stringify(second)}`);
-    }
-    const center = { x: second.x + second.width / 2, y: second.y + second.height / 2 };
-    if (!(center.x >= 0 && center.x < innerWidth && center.y >= 0 && center.y < innerHeight)) {
-      throw new Error(`${label}: target center is outside the viewport: ${JSON.stringify({ center, width: innerWidth, height: innerHeight })}`);
-    }
-    const hit = document.elementFromPoint(center.x, center.y);
-    if (!hit || !target.contains(hit)) {
-      throw new Error(`${label}: target center is obstructed: ${JSON.stringify({ center, hit: hit && { tag: hit.tagName, id: hit.id, className: hit.className } })}`);
-    }
-    const state = { target, trace: [], listener: null };
-    state.listener = event => {
-      if (!state.target.contains(event.target)) return;
-      state.trace.push({
-        type: event.type,
-        isTrusted: event.isTrusted,
-        target: event.target.tagName,
-        connected: state.target.isConnected,
-        disabled: Boolean(state.target.disabled),
+  try {
+    await page.bringToFront();
+    await page.waitForFunction(() => document.visibilityState === 'visible');
+    return await page.evaluate(async ({ selector, label, traceKey }) => {
+      if (document.visibilityState !== 'visible') throw new Error(`${label}: page is not visible`);
+      const target = document.querySelector(selector);
+      if (!(target instanceof HTMLElement)) throw new Error(`${label}: live target is absent`);
+      if (!target.isConnected) throw new Error(`${label}: live target is disconnected`);
+      if ('disabled' in target && target.disabled) throw new Error(`${label}: live target is disabled`);
+      target.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+      const snapshot = () => {
+        const rect = target.getBoundingClientRect();
+        return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+      };
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const first = snapshot();
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const second = snapshot();
+      if (first.x !== second.x || first.y !== second.y || first.width !== second.width || first.height !== second.height) {
+        throw new Error(`${label}: target geometry is not stable: ${JSON.stringify({ first, second })}`);
+      }
+      if (!(second.width > 0 && second.height > 0)) {
+        throw new Error(`${label}: target has no positive geometry: ${JSON.stringify(second)}`);
+      }
+      const center = { x: second.x + second.width / 2, y: second.y + second.height / 2 };
+      if (!(center.x >= 0 && center.x < innerWidth && center.y >= 0 && center.y < innerHeight)) {
+        throw new Error(`${label}: target center is outside the viewport: ${JSON.stringify({ center, width: innerWidth, height: innerHeight })}`);
+      }
+      const hit = document.elementFromPoint(center.x, center.y);
+      if (!hit || !target.contains(hit)) {
+        throw new Error(`${label}: target center is obstructed: ${JSON.stringify({ center, hit: hit && { tag: hit.tagName, id: hit.id, className: hit.className } })}`);
+      }
+      const state = {
+        target, selector, trace: [], rawTrace: [], mutations: [], timeline: [], listener: null, observer: null,
+      };
+      const identify = node => node && { tag: node.tagName, id: node.id || '', className: String(node.className || '') };
+      const mark = (phase, extra = {}) => {
+        if (state.timeline.length < 24) state.timeline.push({ phase, at: performance.now(), ...extra });
+      };
+      mark('prepared', { focus: document.hasFocus(), visibility: document.visibilityState });
+      state.listener = event => {
+        const current = document.querySelector(state.selector);
+        if (state.rawTrace.length < 24) state.rawTrace.push({
+          type: event.type,
+          at: performance.now(),
+          isTrusted: event.isTrusted,
+          target: identify(event.target),
+          clientX: event.clientX,
+          clientY: event.clientY,
+          visibility: document.visibilityState,
+          focus: document.hasFocus(),
+          storedConnected: state.target.isConnected,
+          currentIsStored: current === state.target,
+          eventInsideStored: state.target.contains(event.target),
+        });
+        if (!state.target.contains(event.target)) return;
+        state.trace.push({
+          type: event.type,
+          isTrusted: event.isTrusted,
+          target: event.target.tagName,
+          connected: state.target.isConnected,
+          disabled: Boolean(state.target.disabled),
+        });
+      };
+      for (const type of ['pointerdown', 'pointerup', 'click']) document.addEventListener(type, state.listener, true);
+      state.observer = new MutationObserver(records => {
+        const current = document.querySelector(state.selector);
+        for (const record of records) {
+          if (state.mutations.length >= 48) break;
+          state.mutations.push({
+            at: performance.now(),
+            type: record.type,
+            attributeName: record.attributeName || null,
+            added: record.addedNodes?.length || 0,
+            removed: record.removedNodes?.length || 0,
+            storedConnected: state.target.isConnected,
+            currentIsStored: current === state.target,
+          });
+        }
       });
-    };
-    for (const type of ['pointerdown', 'pointerup', 'click']) document.addEventListener(type, state.listener, true);
-    window.__toolCreditsPhysicalClicks ||= Object.create(null);
-    window.__toolCreditsPhysicalClicks[traceKey] = state;
-    return { selector, label, traceKey, rect: second, focusAtPrepare: document.hasFocus() };
-  }, { selector, label, traceKey });
+      state.observer.observe(document.querySelector('dialog') || document.body, {
+        subtree: true, childList: true, attributes: true,
+      });
+      window.__toolCreditsPhysicalClicks ||= Object.create(null);
+      window.__toolCreditsPhysicalClicks[traceKey] = state;
+      return { selector, label, traceKey, rect: second, focusAtPrepare: document.hasFocus() };
+    }, { selector, label, traceKey });
+  } catch (error) {
+    await recordPrimaryInputFailure(page, selector, label, error);
+    throw error;
+  }
 }
 
 async function trustedPhysicalClick(page, prepared) {
+  const snapshotTrace = () => page.evaluate(traceKey => {
+    const state = window.__toolCreditsPhysicalClicks?.[traceKey];
+    if (!state) return { trace: [], rawTrace: [], mutations: [], timeline: [], stateMissing: true };
+    const current = document.querySelector(state.selector);
+    return {
+      trace: [...state.trace], rawTrace: [...state.rawTrace], mutations: [...state.mutations], timeline: [...state.timeline],
+      storedConnected: state.target.isConnected, currentIsStored: current === state.target,
+    };
+  }, prepared.traceKey);
   const clearTrace = () => page.evaluate(traceKey => {
     const state = window.__toolCreditsPhysicalClicks?.[traceKey];
-    if (!state) return [];
+    if (!state) return { trace: [], rawTrace: [], mutations: [], timeline: [], stateMissing: true };
     for (const type of ['pointerdown', 'pointerup', 'click']) document.removeEventListener(type, state.listener, true);
+    state.observer?.disconnect();
+    const current = document.querySelector(state.selector);
+    state.timeline.push({ phase: 'cleared', at: performance.now(), focus: document.hasFocus(),
+      visibility: document.visibilityState, storedConnected: state.target.isConnected, currentIsStored: current === state.target });
     delete window.__toolCreditsPhysicalClicks[traceKey];
-    return state.trace;
+    return { trace: state.trace, rawTrace: state.rawTrace, mutations: state.mutations, timeline: state.timeline,
+      storedConnected: state.target.isConnected, currentIsStored: current === state.target };
   }, prepared.traceKey);
   let center;
   try {
@@ -133,6 +247,7 @@ async function trustedPhysicalClick(page, prepared) {
       if (!state || target !== state.target) throw new Error(`${prepared.label}: live target identity changed before action`);
       if (!target.isConnected) throw new Error(`${prepared.label}: live target disconnected before action`);
       if ('disabled' in target && target.disabled) throw new Error(`${prepared.label}: live target disabled before action`);
+      state.timeline.push({ phase: 'action-check', at: performance.now(), focus: document.hasFocus(), visibility: document.visibilityState });
       const rect = target.getBoundingClientRect();
       const current = { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
       const prior = prepared.rect;
@@ -145,21 +260,41 @@ async function trustedPhysicalClick(page, prepared) {
       return point;
     }, prepared);
   } catch (error) {
-    await clearTrace().catch(() => {});
+    error.browserDiagnostic = await clearTrace().catch(clearError => ({ clearError: String(clearError?.message || clearError) }));
+    await recordPrimaryInputFailure(page, prepared.selector, prepared.label, error);
     throw error;
   }
   let clickError;
   try { await page.mouse.click(center.x, center.y); }
   catch (error) { clickError = error; }
-  const trace = await clearTrace();
-  if (clickError) throw clickError;
-  for (const type of ['pointerdown', 'pointerup', 'click']) {
-    assert.equal(trace.filter(event => event.type === type).length, 1,
-      `${prepared.label}: expected one trusted ${type}: ${JSON.stringify(trace)}`);
+  const immediate = await snapshotTrace();
+  let delayed = null;
+  if (immediate.trace.length === 0) {
+    // Diagnostic only: the assertion remains on the immediate snapshot. Keep
+    // listeners briefly to distinguish late renderer delivery from no input.
+    await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 150)));
+    delayed = await snapshotTrace();
   }
-  assert.ok(trace.every(event => event.isTrusted),
-    `${prepared.label}: physical input must be browser-trusted: ${JSON.stringify(trace)}`);
-  return trace;
+  const final = await clearTrace();
+  const diagnostic = { ...final, immediate, delayed };
+  if (clickError) {
+    clickError.browserDiagnostic = diagnostic;
+    await recordPrimaryInputFailure(page, prepared.selector, prepared.label, clickError);
+    throw clickError;
+  }
+  try {
+    for (const type of ['pointerdown', 'pointerup', 'click']) {
+      assert.equal(immediate.trace.filter(event => event.type === type).length, 1,
+        `${prepared.label}: expected one immediate trusted ${type}: ${JSON.stringify(immediate.trace)}`);
+    }
+    assert.ok(immediate.trace.every(event => event.isTrusted),
+      `${prepared.label}: physical input must be browser-trusted: ${JSON.stringify(immediate.trace)}`);
+  } catch (error) {
+    error.browserDiagnostic = diagnostic;
+    await recordPrimaryInputFailure(page, prepared.selector, prepared.label, error);
+    throw error;
+  }
+  return immediate.trace;
 }
 
 // Auxiliary flow controls use synthetic DOM activation after a visible center
