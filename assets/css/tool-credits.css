@@ -65,16 +65,11 @@
 .tool-credits__central-wallet { display: flex; grid-column: 1 / -1; align-items: center; justify-content: center; min-height: 44px; box-sizing: border-box; padding: .6rem; border: 1px solid #00645c; background: #f4faf8; color: #06473f; font-weight: 700; text-align: center; }
 .tool-credits__central-wallet:hover { border-color: #004b44; background: #e4f4ef; }
 .tool-credits__provider,
-.tool-credits__provider + .tool-credits__provider { display: flex; align-items: center; justify-content: center; border-color: #c5d4d0; background: #fff; color: #17242f; font-weight: 700; }
+.tool-credits__provider + .tool-credits__provider { display: flex; align-items: center; justify-content: center; gap: .55rem; border-color: #c5d4d0; background: #fff; color: #17242f; font-weight: 700; }
 .tool-credits__provider:hover { border-color: #00645c; background: #edf7f4; }
-.tool-credits__provider--google { border-color: #4285f4; box-shadow: inset 4px 0 #4285f4; }
-.tool-credits__provider--linkedin { border-color: #0a66c2; box-shadow: inset 4px 0 #0a66c2; }
-.tool-credits__provider--apple { border-color: #1d1d1f; box-shadow: inset 4px 0 #1d1d1f; }
-.tool-credits__provider--facebook { border-color: #1877f2; box-shadow: inset 4px 0 #1877f2; }
-.tool-credits__provider--github { border-color: #24292f; box-shadow: inset 4px 0 #24292f; }
-.tool-credits__provider--microsoft { border-color: #00a4ef; box-shadow: inset 4px 0 #00a4ef; }
-.tool-credits__provider--x { border-color: #17242f; box-shadow: inset 4px 0 #17242f; }
-.tool-credits__provider--yahoo { border-color: #6001d2; box-shadow: inset 4px 0 #6001d2; }
+.tool-credits__provider--google { border-color: #747775; color: #3c4043; }
+.tool-credits__google-mark { display: inline-flex; inline-size: 18px; block-size: 18px; }
+.tool-credits__google-mark svg { inline-size: 100%; block-size: 100%; }
 .tool-credits__balance {
   display: flex;
   flex-wrap: wrap;

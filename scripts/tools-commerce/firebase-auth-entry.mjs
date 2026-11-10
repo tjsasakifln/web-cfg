@@ -3,6 +3,7 @@
 export { getApps, initializeApp } from '@firebase/app';
 export {
   browserLocalPersistence,
+  browserPopupRedirectResolver,
   connectAuthEmulator,
   createUserWithEmailAndPassword,
   FacebookAuthProvider,
