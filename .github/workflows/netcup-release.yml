@@ -306,6 +306,9 @@ jobs:
           cache: npm
       - name: Install the gated Lighthouse toolchain
         run: npm ci --ignore-scripts
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
       - name: Download the exact gated public artifact
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -324,6 +327,8 @@ jobs:
       - name: Setup Chrome for candidate qualification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: qualify_chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Confirm the candidate carries the release identity
         env:
           RELEASE_SHA: ${{ github.sha }}
@@ -457,6 +462,9 @@ jobs:
           cache: npm
       - name: Install the gated Lighthouse toolchain
         run: npm ci --ignore-scripts
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
       - name: Download the same gated public artifact
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -470,6 +478,8 @@ jobs:
       - name: Setup Chrome for public runtime verification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: runtime_chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Download this candidate's qualification
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
