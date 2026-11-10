@@ -77,6 +77,14 @@ test('Firebase emulator: atomic free and paid exports, Pix replay, referral and 
     const b = await identity(`b${suffix}@example.test`);
     const c = await identity(`c${suffix}@example.test`, false);
     assert.equal((await api(c, 'account', {})).statusCode, 403);
+    const aliases = await Promise.all([
+      identity(`wallet${suffix}@gmail.com`),
+      identity(`wallet${suffix}+social@googlemail.com`),
+    ]);
+    const registrations = await Promise.all(aliases.map(user => api(user, 'account', {})));
+    assert.deepEqual(registrations.map(result => result.statusCode).sort(), [200, 409]);
+    assert.equal(json(registrations.find(result => result.statusCode === 200)).freeAvailable, true);
+    assert.equal(json(registrations.find(result => result.statusCode === 409)).error, 'ACCOUNT_LINK_REQUIRED');
     const wa = json(await api(a, 'account', {}));
     assert.equal(wa.freeAvailable, true);
     await api(b, 'account', { referralCode: wa.referralCode });

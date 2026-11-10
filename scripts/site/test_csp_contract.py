@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import Counter
+from html import unescape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -81,6 +83,20 @@ def test_wallet_policy_is_scoped_and_idempotent() -> None:
             if route.startswith("/bim/"):
                 assert directives["default-src"] == ["'none'"]
                 assert "'wasm-unsafe-eval'" in directives["script-src"]
+
+
+def test_websfm_meta_allows_firebase_without_popup_sources() -> None:
+    document = ROOT / "bim/fotogrametria/index.html"
+    meta = re.search(
+        r'<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]+)"',
+        document.read_text(encoding="utf-8"),
+        re.IGNORECASE,
+    )
+    assert meta, "WebSfM must retain its document CSP"
+    directives = _policy(unescape(meta.group(1)))
+    assert set(FIREBASE_AUTH_CONNECTIONS) <= set(directives["connect-src"])
+    assert FIREBASE_POPUP_SCRIPT not in directives["script-src"]
+    assert "'wasm-unsafe-eval'" in directives["script-src"]
 
 
 def test_build_refreshes_canonical_csp_before_final_host_render() -> None:
