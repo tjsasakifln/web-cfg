@@ -85,3 +85,36 @@ def test_runtime_button_sync_preserves_unrelated_rules_and_check_is_read_only(tm
     assert ".button-light{color:navy;background:white}" in rendered
     assert len(re.findall(r"\.site-footer \.footer-analytics-preference[^{}]*\{", rendered)) == 4
     assert build_css.sync_home_runtime_buttons(root, canonical) is False
+
+
+def test_route_bundle_preserves_source_order_and_check_is_read_only(tmp_path: Path) -> None:
+    root = tmp_path
+    sources = build_css.ROUTE_BUNDLES[
+        "assets/tool-bundles/diagnostico-defesa-margem.css"
+    ]
+    for index, rel in enumerate(sources):
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f".source-{index}{{order:{index}}}\n", encoding="utf-8")
+
+    assert build_css.sync_route_bundles(root, check=True) == [
+        "assets/tool-bundles/diagnostico-defesa-margem.css"
+    ]
+    target = root / "assets/tool-bundles/diagnostico-defesa-margem.css"
+    assert not target.exists()
+    assert build_css.sync_route_bundles(root) == [
+        "assets/tool-bundles/diagnostico-defesa-margem.css"
+    ]
+    generated = target.read_text(encoding="utf-8")
+    assert [generated.index(f"source:{rel}") for rel in sources] == sorted(
+        generated.index(f"source:{rel}") for rel in sources
+    )
+    assert build_css.sync_route_bundles(root, check=True) == []
+
+    first = root / sources[0]
+    first.write_text(first.read_text(encoding="utf-8") + ".changed{}\n", encoding="utf-8")
+    before = target.read_bytes()
+    assert build_css.sync_route_bundles(root, check=True) == [
+        "assets/tool-bundles/diagnostico-defesa-margem.css"
+    ]
+    assert target.read_bytes() == before

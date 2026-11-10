@@ -3,13 +3,35 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let fail=0;
+function stylesheetHrefsOf(html) {
+  return [...html.matchAll(/<link\b[^>]*>/gi)]
+    .map((match) => match[0])
+    .filter((tag) => /\brel\s*=\s*["'][^"']*\bstylesheet\b[^"']*["']/i.test(tag))
+    .map((tag) => tag.match(/\bhref\s*=\s*["']([^"']+)["']/i)?.[1]);
+}
 const pages=["ferramentas/index.html","ferramentas/limite-acrescimos-supressoes/index.html","ferramentas/checklist-reequilibrio/index.html","ferramentas/matriz-atraso-obra/index.html","ferramentas/diagnostico-defesa-margem/index.html"];
 if(!existsSync(resolve(ROOT,"styles-tools.css"))){console.error("FAIL styles-tools");fail++;}else console.log("PASS styles-tools");
 for(const rel of pages){
   const html=readFileSync(resolve(ROOT,rel),"utf8");
   if(html.includes("#0b5fff")){console.error("FAIL blue",rel);fail++;}else console.log("PASS no_blue",rel);
-  if(rel!=="ferramentas/index.html" && !html.includes("styles-tools.css")){console.error("FAIL csslink",rel);fail++;}
+  const routeCss = rel === "ferramentas/diagnostico-defesa-margem/index.html"
+    ? "/assets/tool-bundles/diagnostico-defesa-margem.css"
+    : "styles-tools.css";
+  if(rel!=="ferramentas/index.html" && !html.includes(routeCss)){console.error("FAIL csslink",rel);fail++;}
   else if(rel!=="ferramentas/index.html") console.log("PASS csslink",rel);
+  if (rel === "ferramentas/diagnostico-defesa-margem/index.html") {
+    const stylesheetHrefs = stylesheetHrefsOf(html);
+    const expected = ["/styles.css", "/assets/tool-bundles/diagnostico-defesa-margem.css"];
+    if (JSON.stringify(stylesheetHrefs) !== JSON.stringify(expected)) {
+      console.error("FAIL margin_css_request_budget", stylesheetHrefs); fail++;
+    } else console.log("PASS margin_css_request_budget", stylesheetHrefs.length);
+    const counterCase = stylesheetHrefsOf(html.replace(
+      "</head>", '<link href="/assets/editorial-tool.css" rel="stylesheet"/></head>',
+    ));
+    if (counterCase.length !== expected.length + 1 || !counterCase.includes("/assets/editorial-tool.css")) {
+      console.error("FAIL margin_css_request_budget_counter_case", counterCase); fail++;
+    } else console.log("PASS margin_css_request_budget_counter_case");
+  }
   if(!/<form/i.test(html) && rel!=="ferramentas/index.html"){console.error("FAIL form",rel);fail++;}
   if(!html.includes('data-tool-job') || !html.includes('data-tool-decision')){
     console.error("FAIL job_decision",rel); fail++;
