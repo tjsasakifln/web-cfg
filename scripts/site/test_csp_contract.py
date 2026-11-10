@@ -14,9 +14,15 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.cache_contract import parse_header_rules  # noqa: E402
 from scripts.site.csp_contract import (  # noqa: E402
+    FIREBASE_AUTH_CONNECTIONS,
+    FIREBASE_POPUP_FRAMES,
+    FIREBASE_POPUP_SCRIPT,
+    WALLET_DOCUMENTS,
+    WALLET_ISOLATED_DOCUMENT,
     apply_artifact_csp_hashes,
     apply_script_src_hashes,
     apply_style_src_hashes,
+    apply_wallet_document_policies,
     csp_directives_from_text,
     evaluate_security_headers,
     executable_inline_hashes,
@@ -30,6 +36,51 @@ SITE = ROOT / "_site"
 PACKAGE = ROOT / "package.json"
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 DOWNLOADABLE = "/radar/nacional-obras-publicas/gsc-demand-sample.json"
+
+
+def _policy(value: str) -> dict[str, list[str]]:
+    return csp_directives_from_text(f"Content-Security-Policy: {value}")
+
+
+def test_wallet_policy_is_scoped_and_idempotent() -> None:
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        (root / "ferramentas").mkdir()
+        (root / "ferramentas/index.html").touch()
+        (root / "bim/web").mkdir(parents=True)
+        (root / "bim/web/visualizador.html").touch()
+        (root / "bim/fotogrametria").mkdir()
+        (root / "bim/fotogrametria/index.html").touch()
+        original = _headers_with_script_src("'self'") + (
+            "\n/ferramentas/\n  X-Content-Type-Options: nosniff\n"
+            "\n/bim/web/*\n  Content-Security-Policy: default-src 'none'; "
+            "script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' blob:; frame-src 'self'\n"
+            "\n/bim/fotogrametria/*\n  Cross-Origin-Opener-Policy: same-origin\n"
+            "  Cross-Origin-Embedder-Policy: require-corp\n"
+            "  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; "
+            "connect-src 'self' blob:; frame-src 'self'\n"
+        )
+        result = apply_wallet_document_policies(original, root)
+        assert apply_wallet_document_policies(result, root) == result
+        before, after = map(parse_header_rules, (original, result))
+        for pattern in ("/*", "/bim/web/*", "/bim/fotogrametria/*"):
+            assert after[pattern] == before[pattern]
+        assert after["/ferramentas/"]["x-content-type-options"] == "nosniff"
+        assert "/ferramentas/calculadora-bdi/" not in after
+        for route in ("/ferramentas/", "/bim/web/visualizador.html", WALLET_ISOLATED_DOCUMENT):
+            directives = _policy(after[route]["content-security-policy"])
+            assert set(FIREBASE_AUTH_CONNECTIONS) <= set(directives["connect-src"])
+            if route == WALLET_ISOLATED_DOCUMENT:
+                assert directives["frame-src"] == ["'self'"]
+                assert FIREBASE_POPUP_SCRIPT not in directives["script-src"]
+            else:
+                assert set(FIREBASE_POPUP_FRAMES) <= set(directives["frame-src"])
+                assert FIREBASE_POPUP_SCRIPT in directives["script-src"]
+            if route.startswith("/bim/"):
+                assert directives["default-src"] == ["'none'"]
+                assert "'wasm-unsafe-eval'" in directives["script-src"]
 
 
 def test_build_refreshes_canonical_csp_before_final_host_render() -> None:
@@ -223,7 +274,35 @@ def evaluate_live() -> tuple[list[str], Counter[str], Counter[str], Counter[str]
     verify_parser_is_fail_closed()
     text = HEADERS.read_text(encoding="utf-8")
     directives = csp_directives_from_text(text)
-    errors = evaluate_security_headers(directives, parse_header_rules(text))
+    rules = parse_header_rules(text)
+    errors = evaluate_security_headers(directives, rules)
+    for route in WALLET_DOCUMENTS:
+        path = route.lstrip("/") + ("index.html" if route.endswith("/") else "")
+        if not (SITE / path).is_file():
+            errors.append(f"Wallet document missing from the artifact: {route}")
+            continue
+        value = rules.get(route, {}).get("content-security-policy", "")
+        if not value:
+            errors.append(f"Wallet document has no scoped CSP: {route}")
+            continue
+        wallet = _policy(value)
+        if not set(FIREBASE_AUTH_CONNECTIONS) <= set(wallet.get("connect-src", [])):
+            errors.append(f"Wallet CSP blocks Firebase Auth: {route}")
+        frames = set(wallet.get("frame-src", []))
+        popup_script = FIREBASE_POPUP_SCRIPT in wallet.get("script-src", [])
+        if route == WALLET_ISOLATED_DOCUMENT:
+            if popup_script or frames.intersection(FIREBASE_POPUP_FRAMES):
+                errors.append(f"Isolated wallet should open social login in the catalogue: {route}")
+        elif not popup_script or not set(FIREBASE_POPUP_FRAMES) <= frames:
+            errors.append(f"Wallet CSP blocks Firebase OAuth: {route}")
+        if len(value.encode("utf-8")) > 7168:
+            errors.append(f"Wallet CSP exceeds 7168 bytes: {route}")
+    for route, values in rules.items():
+        if route in WALLET_DOCUMENTS or "content-security-policy" not in values:
+            continue
+        if any(origin in values["content-security-policy"]
+               for origin in (*FIREBASE_AUTH_CONNECTIONS, FIREBASE_POPUP_SCRIPT, *FIREBASE_POPUP_FRAMES)):
+            errors.append(f"Unrelated policy authorizes wallet origins: {route}")
     script_src = set(directives.get("script-src", []))
     style_src = set(directives.get("style-src", []))
 
