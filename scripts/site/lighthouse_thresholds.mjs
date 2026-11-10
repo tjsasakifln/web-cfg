@@ -89,10 +89,28 @@ export const CRITICAL_MONEY_PATHS = new Set([
   "/especialista/tiago-jun-sasaki/",
 ]);
 
+export function seoScoreWithoutCrawlability(category, audits) {
+  const refs = (category?.auditRefs || []).filter(
+    (ref) => ref.id !== "is-crawlable" && Number(ref.weight) > 0,
+  );
+  if (refs.some((ref) => {
+    const audit = audits?.[ref.id];
+    return !audit || (!Number.isFinite(audit.score) && audit.scoreDisplayMode !== "notApplicable");
+  })) return null;
+  const scored = refs.filter((ref) => Number.isFinite(audits[ref.id]?.score));
+  const weight = scored.reduce((total, ref) => total + Number(ref.weight), 0);
+  if (weight <= 0) return null;
+  return Math.round(100 * scored.reduce(
+    (total, ref) => total + Number(ref.weight) * Number(audits[ref.id].score),
+    0,
+  ) / weight);
+}
+
 export function evaluateLighthouseResults(results, options = {}) {
   const homeRuns = Number(options.homeRuns || 1);
   const imageGatePages = options.imageGatePages || new Set();
   const seoExemptPages = options.seoExemptPages || new Set();
+  const seoOnlyExemptPages = options.seoOnlyExemptPages || new Set();
   const criticalRoutes = options.criticalRoutes || new Set(["/entregas/"]);
   const criticalPerformance = Number(options.criticalPerformance || 95);
   const homeLcpMaxMs = Number(options.homeLcpMaxMs || DECLARED_LCP_MAX_MS);
@@ -112,14 +130,21 @@ export function evaluateLighthouseResults(results, options = {}) {
       errors.push(`${row.path} run ${row.run || 1}: ${row.error}`);
       continue;
     }
-    if (!seoExemptPages.has(row.path) && row.accessibility < thresholds.accessibility) {
+    if (!seoExemptPages.has(row.path) && !Number.isFinite(row.accessibility)) {
+      errors.push(`${row.path}: accessibility was not measured`);
+    } else if (!seoExemptPages.has(row.path) && row.accessibility < thresholds.accessibility) {
       errors.push(`${row.path}: accessibility ${row.accessibility} < ${thresholds.accessibility}`);
     }
-    if (!seoExemptPages.has(row.path) && row.best_practices < thresholds.best_practices) {
+    if (!seoExemptPages.has(row.path) && !Number.isFinite(row.best_practices)) {
+      errors.push(`${row.path}: best-practices was not measured`);
+    } else if (!seoExemptPages.has(row.path) && row.best_practices < thresholds.best_practices) {
       errors.push(`${row.path}: best-practices ${row.best_practices} < ${thresholds.best_practices}`);
     }
-    if (!seoExemptPages.has(row.path) && row.seo < thresholds.seo) {
-      errors.push(`${row.path}: seo ${row.seo} < ${thresholds.seo}`);
+    const seoScore = seoOnlyExemptPages.has(row.path) ? row.seo_without_crawlability : row.seo;
+    if (!seoExemptPages.has(row.path) && !Number.isFinite(seoScore)) {
+      errors.push(`${row.path}: SEO score was not measured`);
+    } else if (!seoExemptPages.has(row.path) && seoScore < thresholds.seo) {
+      errors.push(`${row.path}: seo ${seoScore} < ${thresholds.seo}`);
     }
     if (row.path !== "/") {
       const floor = criticalRoutes.has(row.path)

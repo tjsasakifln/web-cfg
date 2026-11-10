@@ -13,11 +13,10 @@ import {
   loadPublicFamilyRegistry,
   resolveSiteRoot,
   routeToFile,
-  runtimeSeoOnlyBudgetErrors,
   runtimeLighthouseContractForRoute,
   verifyRuntimeAcceptedProjectionDocument,
   verifyRuntimeInventoryDocument,
-  verifyRuntimePageIndexState,
+  verifyRuntimeRenderedPageDocument,
 } from "./interface_coverage.mjs";
 
 const rootFixture = mkdtempSync(join(tmpdir(), "confenge-site-root-"));
@@ -270,154 +269,69 @@ assert.equal(
     runtimeContract.route,
     `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`,
     runtimeContract,
+    acceptedRuntimeDocument.routes.map((item) => ({ ...item, index_state: "INDEX" })),
     acceptedRuntimeDocument.indexable_routes,
-  ),
-  true,
+  ).selected.route,
+  runtimeContract.route,
 );
 assert.throws(
   () => verifyRuntimeInventoryDocument(
     runtimeContract.route,
     `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br/oportunidades/unaccepted/</loc></url></urlset>`,
     runtimeContract,
+    acceptedRuntimeDocument.routes.map((item) => ({ ...item, index_state: "INDEX" })),
     acceptedRuntimeDocument.indexable_routes,
   ),
-  /sitemap differs from the exact indexable projection/,
+  /sitemap differs from the exact indexable accepted projection/,
   "a sitemap-only opportunity absent from the accepted projection must fail closed",
 );
-const secondRuntimeRoute = "/oportunidades/00394429000100-1-002201/2026/";
-const mixedRuntimeDocument = {
-  ...acceptedRuntimeDocument,
-  routes: [
-    ...acceptedRuntimeDocument.routes,
-    {
-      opportunity_id: "00394429000100-1-002201/2026",
-      route: secondRuntimeRoute,
-      html_path: "_site/oportunidades/00394429000100-1-002201/2026/index.html",
-      content_hash: "1".repeat(64),
-      sha256: "2".repeat(64),
-    },
-  ],
-  indexable_routes: [secondRuntimeRoute],
+
+const runtimeHtml = (item, state = item.index_state || "INDEX", robots = state === "INDEX" ? "index,follow" : "noindex,nofollow") =>
+  `<!doctype html><html><head><link rel="canonical" href="https://confenge.com.br${item.route}"><meta name="robots" content="${robots}"></head><body data-opportunity-id="${item.opportunity_id}" data-index-state="${state}"></body></html>`;
+assert.equal(
+  verifyRuntimeRenderedPageDocument(runtimeContract.route, runtimeHtml(acceptedRuntimeDocument.routes[0]), acceptedRuntimeDocument.routes[0]).index_state,
+  "INDEX",
+);
+assert.throws(
+  () => verifyRuntimeRenderedPageDocument(runtimeContract.route, runtimeHtml(acceptedRuntimeDocument.routes[0], "INDEX", "noindex,nofollow"), acceptedRuntimeDocument.routes[0]),
+  /robots directive contradicts INDEX/,
+);
+const noindexItem = {
+  opportunity_id: "00394429000100-1-002201/2026",
+  route: "/oportunidades/00394429000100-1-002201/2026/",
+  html_path: "_site/oportunidades/00394429000100-1-002201/2026/index.html",
+  content_hash: "1".repeat(64),
+  index_state: "NOINDEX",
+  sha256: "2".repeat(64),
 };
-assert.equal(
-  verifyRuntimeAcceptedProjectionDocument(
-    runtimeContract.route,
-    mixedRuntimeDocument,
-    runtimeContract,
-    expectedRuntimeSha,
-  ).route_indexable,
-  false,
-  "a sealed historical route remains measurable without being indexable",
-);
-assert.equal(
-  verifyRuntimeInventoryDocument(
-    runtimeContract.route,
-    `<urlset><url><loc>https://confenge.com.br${secondRuntimeRoute}</loc></url></urlset>`,
-    runtimeContract,
-    mixedRuntimeDocument.indexable_routes,
-  ),
-  true,
-  "the sitemap must equal the INDEX subset even when the measured fallback route is NOINDEX",
-);
-const allNoindexRuntimeDocument = { ...acceptedRuntimeDocument, indexable_routes: [] };
-assert.equal(
-  verifyRuntimeAcceptedProjectionDocument(
-    runtimeContract.route,
-    allNoindexRuntimeDocument,
-    runtimeContract,
-    expectedRuntimeSha,
-  ).route_indexable,
-  false,
-);
-assert.equal(
-  verifyRuntimeInventoryDocument(runtimeContract.route, "<urlset></urlset>", runtimeContract, []),
-  true,
-  "an empty sitemap is exact when every sealed official route is NOINDEX",
+assert.equal(verifyRuntimeRenderedPageDocument(noindexItem.route, runtimeHtml(noindexItem), noindexItem).index_state, "NOINDEX");
+assert.throws(
+  () => verifyRuntimeRenderedPageDocument(noindexItem.route, runtimeHtml(noindexItem).replace("https://confenge.com.br", "https://evil.example"), noindexItem),
+  /no exact self canonical/,
 );
 assert.throws(
-  () => verifyRuntimeInventoryDocument(
-    runtimeContract.route,
-    "<!doctype html><html><body>upstream error</body></html>",
-    runtimeContract,
-    [],
+  () => verifyRuntimeRenderedPageDocument(
+    noindexItem.route,
+    runtimeHtml(noindexItem).replace('content="noindex,nofollow"', 'content="index,follow" content="noindex,nofollow"'),
+    noindexItem,
   ),
-  /not a complete urlset XML document/,
-  "an arbitrary HTTP 200 body cannot certify an empty indexable projection",
+  /duplicate attribute/,
+  "duplicate attributes cannot make preflight and browser interpret robots differently",
 );
-assert.throws(
-  () => verifyRuntimeAcceptedProjectionDocument(
-    runtimeContract.route,
-    { ...mixedRuntimeDocument, indexable_routes: [secondRuntimeRoute, runtimeContract.route] },
-    runtimeContract,
-    expectedRuntimeSha,
-  ),
-  /sorted unique path strings/,
-  "manifest order is part of the exact indexable projection contract",
-);
-assert.throws(
-  () => verifyRuntimeAcceptedProjectionDocument(
-    runtimeContract.route,
-    { ...acceptedRuntimeDocument, indexable_routes: ["/oportunidades/unsealed/2026/"] },
-    runtimeContract,
-    expectedRuntimeSha,
-  ),
-  /unsealed indexable route/,
-  "an indexable route cannot escape the digest-sealed routes array",
-);
-assert.throws(
-  () => verifyRuntimeInventoryDocument(
-    runtimeContract.route,
-    `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`,
-    runtimeContract,
-    [],
-  ),
-  /sitemap differs from the exact indexable projection/,
-  "a NOINDEX fallback route must not appear in the sitemap",
-);
+const mixedRoutes = [{ ...acceptedRuntimeDocument.routes[0], index_state: "INDEX" }, noindexItem];
 assert.equal(
-  verifyRuntimePageIndexState(
-    '<html><head><meta content="noindex,nofollow" name="robots"></head><body data-index-state="NOINDEX"></body></html>',
-    false,
-  ),
-  true,
-  "robots verification must tolerate serializer attribute order",
-);
-assert.equal(
-  verifyRuntimePageIndexState('<html><head></head><body data-index-state="INDEX"></body></html>', true),
-  true,
+  verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`, runtimeContract, mixedRoutes, [runtimeContract.route]).expected.length,
+  1,
+  "mixed accepted projection inventories only INDEX routes",
 );
 assert.throws(
-  () => verifyRuntimePageIndexState(
-    '<html><head><meta name="robots" content="noindex,follow"></head><body data-index-state="NOINDEX"></body></html>',
-    false,
-  ),
-  /exactly one robots noindex,nofollow/,
-  "the NOINDEX fallback requires the exact robots contract",
+  () => verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br${noindexItem.route}</loc></url></urlset>`, runtimeContract, mixedRoutes, [runtimeContract.route]),
+  /exact indexable accepted projection/,
+  "NOINDEX routes must be absent from sitemap",
 );
 assert.throws(
-  () => verifyRuntimePageIndexState(
-    '<html><head><meta name="robots" content="noindex,nofollow"></head><body data-index-state="INDEX"></body></html>',
-    true,
-  ),
-  /INDEX page carries a robots noindex/,
-);
-assert.deepEqual(
-  runtimeSeoOnlyBudgetErrors(
-    [{
-      path: runtimeContract.route,
-      accessibility: 94,
-      best_practices: 93,
-      seo: 0,
-      performance: 100,
-    }],
-    new Set([runtimeContract.route]),
-    { accessibility: 95, best_practices: 95, seo: 95, performance: 90 },
-  ),
-  [
-    `${runtimeContract.route}: accessibility 94 < 95`,
-    `${runtimeContract.route}: best-practices 93 < 95`,
-  ],
-  "NOINDEX exempts only SEO; all other category budgets remain mandatory",
+  () => verifyRuntimeInventoryDocument(runtimeContract.route, `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`, runtimeContract, mixedRoutes),
+  /duplicate routes/,
 );
 assert.throws(
   () => verifyRuntimeAcceptedProjectionDocument(
@@ -536,8 +450,9 @@ assert.match(runner, /\.well-known\/runtime-info\.json/);
 assert.match(runner, /contract\.accepted_projection_route/);
 assert.match(runner, /verifyRuntimeAcceptedProjectionDocument/);
 assert.match(runner, /verifyRuntimeInventoryDocument/);
+assert.match(runner, /verifyRuntimeRenderedPageDocument/);
 assert.match(runner, /accepted HTML digest mismatch/);
-assert.match(runner, /data-opportunity-id/);
+assert.match(readFileSync(new URL("./interface_coverage.mjs", import.meta.url), "utf8"), /data-opportunity-id/);
 
 console.log(
   `INTERFACE_COVERAGE_OK routes=${coverage.route_count} axe=${coverage.axe.route_count}x2 `

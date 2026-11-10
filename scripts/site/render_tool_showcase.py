@@ -24,6 +24,11 @@ DESCRIPTION = (
 CSS = '<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>'
 HUB_CSS = '<link rel="stylesheet" href="/assets/tool-showcase/vitrine.css"/>'
 JS = '<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>'
+ROUTE_CSS = {
+    "/ferramentas/diagnostico-defesa-margem/": (
+        '<link rel="stylesheet" href="/assets/tool-bundles/diagnostico-defesa-margem.css"/>'
+    ),
+}
 ID = re.compile(r"[a-z][a-z0-9-]*\Z")
 PATH = re.compile(r"/(?:[a-z0-9-]+/)+(?:[a-z0-9-]+\.html)?(?:#[a-z0-9-]+)?\Z")
 ART = {
@@ -210,7 +215,7 @@ def set_head(html: str, path: str, title: str, desc: str, key: str, *, updated: 
             '<meta name="robots" content="index,follow,max-image-preview:large"/>',
             f'<meta property="og:updated_time" content="{escape(updated)}"/>',
         ))
-    css = f"{CSS}\n{HUB_CSS}" if path == HUB else CSS
+    css = f"{CSS}\n{HUB_CSS}" if path == HUB else ROUTE_CSS.get(path, CSS)
     js = JS.replace("showcase.mjs", "showcase.mjs?v=vitrine2") if path == HUB else JS
     tags += [meta_tags(path, title, desc, key), css, js]
     return marker(head + "</head>", "head", "\n".join(tags), "</head>") + rest

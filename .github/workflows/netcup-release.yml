@@ -306,6 +306,9 @@ jobs:
           cache: npm
       - name: Install the gated Lighthouse toolchain
         run: npm ci --ignore-scripts
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
       - name: Download the exact gated public artifact
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -324,6 +327,8 @@ jobs:
       - name: Setup Chrome for candidate qualification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: qualify_chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Confirm the candidate carries the release identity
         env:
           RELEASE_SHA: ${{ github.sha }}
@@ -341,10 +346,9 @@ jobs:
           LH_HOME_RUNS: "3"
         run: |
           set -euo pipefail
-          # The checkout ships a committed summary from a previous release. It
-          # is removed first so a run that dies before writing its own cannot
-          # have the gap filled by an older report.
-          rm -f docs/lighthouse-runs/summary.json
+          # Remove the checkout's historical reports before measuring. Neither
+          # acceptance nor the diagnostic artifact may inherit older evidence.
+          rm -f docs/lighthouse-runs/*.json
           # The runner's own server over the exact gated tree, the same
           # thresholds, the same counts. A candidate that cannot be measured to
           # a passing terminal state does not reach the visitors.
@@ -386,9 +390,11 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: netcup-qualification-${{ github.sha }}
+          # Keep the measured page reports as well as the summary so a
+          # rejected candidate retains its LCP element and task diagnostics.
           path: |
             build/reports/release-qualification-${{ github.sha }}.json
-            docs/lighthouse-runs/summary.json
+            docs/lighthouse-runs/*.json
           if-no-files-found: error
           retention-days: 30
 
@@ -457,6 +463,9 @@ jobs:
           cache: npm
       - name: Install the gated Lighthouse toolchain
         run: npm ci --ignore-scripts
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
       - name: Download the same gated public artifact
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -470,6 +479,8 @@ jobs:
       - name: Setup Chrome for public runtime verification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: runtime_chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Download this candidate's qualification
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:

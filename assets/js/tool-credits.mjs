@@ -67,7 +67,10 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       if (response.status === 404 && !shared) return false;
       const parsed = await asJson(response);
       if (parsed.enabled === false) return false;
-      if (shared && parsed.sharedExportsEnabled === false) return false;
+      // Shared exports cross tool boundaries and must be explicitly enabled.
+      // A partial/legacy config that omits the flag is never permission to use
+      // a shared wallet or prompt for its account flow.
+      if (shared && parsed.sharedExportsEnabled !== true) return false;
       if (parsed.enabled !== true || !Array.isArray(parsed.tools) || !parsed.tools.includes(toolId) || !parsed.firebase?.apiKey) throw new Error('Configuração de créditos indisponível.');
       config = parsed; firebase = await import('/assets/tools-commerce/firebase-auth.mjs');
       const name = 'confenge-tools';

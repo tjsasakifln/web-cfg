@@ -34,6 +34,7 @@ import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
 import { headerByteWeight, lcpNetworkAllowanceMs, measureContentByteWeight } from "./lighthouse_payload.mjs";
 import { classifyFailure } from "./lighthouse_infra.mjs";
+import { seoScoreWithoutCrawlability } from "./lighthouse_thresholds.mjs";
 
 const specPath = process.argv[2];
 const outcomePath = process.argv[3];
@@ -336,6 +337,7 @@ try {
   markProgress("postprocess");
   const totalByteWeight = audits["total-byte-weight"]?.numericValue;
   const network = lcpNetworkAllowanceMs({ audits, runtimeMode: spec.runtime_mode });
+  const seoWithoutCrawlability = seoScoreWithoutCrawlability(cats.seo, audits);
   const row = {
     path: spec.path,
     run: spec.run,
@@ -343,6 +345,7 @@ try {
     accessibility: Math.round((cats.accessibility?.score || 0) * 100),
     best_practices: Math.round((cats["best-practices"]?.score || 0) * 100),
     seo: Math.round((cats.seo?.score || 0) * 100),
+    seo_without_crawlability: seoWithoutCrawlability,
     lcp_ms: audits["largest-contentful-paint"]?.numericValue,
     cls: audits["cumulative-layout-shift"]?.numericValue,
     tbt_ms: audits["total-blocking-time"]?.numericValue,

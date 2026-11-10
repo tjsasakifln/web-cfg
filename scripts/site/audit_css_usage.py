@@ -28,6 +28,14 @@ import json
 import re
 from pathlib import Path
 
+try:
+    # Package import when the audit is exercised by its test module.
+    from scripts.site.build_css import ROUTE_BUNDLES, route_bundle
+except ModuleNotFoundError:
+    # Direct execution (`python3 scripts/site/audit_css_usage.py`) puts only
+    # scripts/site on sys.path.
+    from build_css import ROUTE_BUNDLES, route_bundle
+
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = ROOT / "data" / "design" / "css-usage-baseline.json"
 
@@ -195,6 +203,40 @@ def unused_classes(css: str, used: dict[str, set[str]]) -> list[str]:
 DERIVED_SUBSETS = frozenset({"assets/home-base.css"})
 
 
+def derived_route_bundles(root: Path) -> tuple[set[str], dict[str, str]]:
+    """Return only route bundles proven to be exact generated copies.
+
+    Their source sheets remain public CSS and are already counted individually.
+    A route bundle may therefore contribute zero decoration only when its bytes
+    are exactly what ``build_css.py`` would produce from the declared inputs.
+    Missing inputs, a stale bundle, and a tampered bundle all stay visible to
+    the ratchet and also produce an explicit fail-closed audit result.
+    """
+    valid: set[str] = set()
+    invalid: dict[str, str] = {}
+    for rel, sources in ROUTE_BUNDLES.items():
+        target = root / rel
+        present = [(root / source).is_file() for source in sources]
+        # Small isolated fixtures can omit this complete production feature.
+        # Once either the bundle or an input exists, the full contract applies.
+        if not target.is_file() and not any(present):
+            continue
+        if not target.is_file():
+            invalid[rel] = "missing generated bundle"
+            continue
+        missing = [source for source, exists in zip(sources, present) if not exists]
+        if missing:
+            invalid[rel] = "missing sources: " + ", ".join(missing)
+            continue
+        expected = route_bundle(root, sources)
+        actual = target.read_text(encoding="utf-8")
+        if actual != expected:
+            invalid[rel] = "does not match its declared source sheets"
+            continue
+        valid.add(rel)
+    return valid, invalid
+
+
 def public_css_files(root: Path) -> list[str]:
     out = []
     for path in walk(root, (".css",)):
@@ -253,13 +295,14 @@ def audit(root: Path = ROOT) -> dict:
             "unused": dead,
         }
     files = public_css_files(root)
+    derived_bundles, invalid_derived_bundles = derived_route_bundles(root)
     decoration = {}
     for rel in files:
         counts = decoration_counts((root / rel).read_text(encoding="utf-8"))
         # assets/home-base.css e styles.css podada para a home por scripts/site/build_css.py:
         # cada declaracao dela ja foi contada em styles.css. Contar de novo nao mede
         # decoracao nova, mede a existencia do subconjunto (2026-09-18).
-        if rel in DERIVED_SUBSETS:
+        if rel in DERIVED_SUBSETS or rel in derived_bundles:
             counts = {key: 0 for key in counts}
         decoration[rel] = counts
     unreferenced = [rel for rel in files if stylesheet_references(root, rel) == 0]
@@ -269,6 +312,8 @@ def audit(root: Path = ROOT) -> dict:
         "public_css_files": files,
         "unreferenced_css_files": unreferenced,
         "bundles": bundles,
+        "derived_css_bundles": sorted(derived_bundles),
+        "invalid_derived_css_bundles": invalid_derived_bundles,
         "decoration": decoration,
         "decoration_totals": {
             key: sum(counts[key] for counts in decoration.values())
@@ -279,6 +324,8 @@ def audit(root: Path = ROOT) -> dict:
 
 def compare(result: dict, baseline: dict) -> list[str]:
     failures: list[str] = []
+    for rel, reason in result.get("invalid_derived_css_bundles", {}).items():
+        failures.append(f"invalid_derived_stylesheet {rel}: {reason}")
     for rel in result["unreferenced_css_files"]:
         failures.append(f"unreferenced_stylesheet {rel}")
     for rel, data in result["bundles"].items():

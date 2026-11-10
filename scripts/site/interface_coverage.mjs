@@ -258,54 +258,126 @@ export function runtimeLighthouseContractForRoute(
  * historical evidence. New candidate manifests always pass an explicit array,
  * including `[]` when every accepted page is NOINDEX.
  */
-export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, indexableRoutes = null) {
+export function verifyRuntimeInventoryDocument(
+  route,
+  sitemapXml,
+  contract,
+  acceptedRoutes = null,
+  sealedIndexableRoutes = null,
+) {
   if (!contract?.post_stage_lighthouse_required || contract.route !== route) {
     throw new Error(`runtime Lighthouse inventory check has no matching contract: ${route}`);
   }
   const sitemapSource = String(sitemapXml || "");
+  const urlset = sitemapSource.match(/^\s*(?:<\?xml\s+[^?]*\?>\s*)?<urlset\b[^>]*>([\s\S]*)<\/urlset>\s*$/i);
+  if (!urlset) throw new Error("runtime Lighthouse sitemap is not a complete urlset XML document");
   const inventoried = [...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>/gi)]
     .map((match) => match[1].replace(/&amp;/g, "&"))
     .map((value) => {
-      try { return new URL(value, "https://runtime.invalid").pathname; }
-      catch { return ""; }
+      let parsed;
+      try { parsed = new URL(value); }
+      catch { throw new Error(`runtime Lighthouse sitemap has an invalid absolute loc: ${value}`); }
+      if (parsed.origin !== "https://confenge.com.br" || parsed.search || parsed.hash) {
+        throw new Error(`runtime Lighthouse sitemap has a non-canonical loc: ${value}`);
+      }
+      return parsed.pathname;
     });
-  if (indexableRoutes === null) {
+  if (new Set(inventoried).size !== inventoried.length) {
+    throw new Error("runtime Lighthouse sitemap contains duplicate routes");
+  }
+  if (acceptedRoutes === null) {
     if (!inventoried.includes(route)) {
       throw new Error(`runtime Lighthouse route is absent from ${contract.inventory_route}: ${route}`);
     }
-  } else {
-    if (!Array.isArray(indexableRoutes)) {
-      throw new Error("runtime Lighthouse indexable route inventory is not an array");
-    }
-    const urlset = sitemapSource.match(/^\s*(?:<\?xml\s+[^?]*\?>\s*)?<urlset\b[^>]*>([\s\S]*)<\/urlset>\s*$/i);
-    if (!urlset) {
-      throw new Error("runtime Lighthouse sitemap is not a complete urlset XML document");
-    }
-    const accepted = [...new Set(indexableRoutes)];
-    if (accepted.length !== indexableRoutes.length) {
-      throw new Error("runtime Lighthouse indexable route inventory contains duplicates");
-    }
-    if (accepted.some((value) => typeof value !== "string" || !(new RegExp(contract.route_pattern)).test(value))) {
-      throw new Error("runtime Lighthouse indexable route inventory contains an invalid route");
-    }
-    const observed = [...new Set(inventoried)];
-    if (observed.length !== inventoried.length) {
-      throw new Error("runtime Lighthouse sitemap contains duplicate routes");
-    }
-    if (
-      observed.length !== accepted.length
-      || observed.some((value) => !accepted.includes(value))
-      || accepted.some((value) => !observed.includes(value))
-    ) {
-      throw new Error(
-        `runtime Lighthouse sitemap differs from the exact indexable projection: accepted=${accepted.length} inventoried=${observed.length}`,
-      );
-    }
-    if (accepted.length === 0 && urlset[1].trim()) {
-      throw new Error("runtime Lighthouse empty indexable projection requires an empty urlset XML body");
+    return true;
+  }
+  if (!Array.isArray(acceptedRoutes)) throw new Error("runtime Lighthouse accepted route inventory is not an array");
+  const acceptedItems = acceptedRoutes.map((item) => (
+    typeof item === "string" ? { route: item, index_state: "INDEX" } : item
+  ));
+  const accepted = acceptedItems.map((item) => String(item?.route || ""));
+  if (new Set(accepted).size !== accepted.length) {
+    throw new Error("runtime Lighthouse accepted route inventory contains duplicates");
+  }
+  for (const item of acceptedItems) {
+    if (!(new RegExp(contract.route_pattern)).test(item.route) || !["INDEX", "NOINDEX"].includes(item.index_state)) {
+      throw new Error(`runtime Lighthouse accepted route has invalid index_state: ${item?.route || "missing"}`);
     }
   }
-  return true;
+  const selected = acceptedItems.find((item) => item.route === route);
+  if (!selected) throw new Error(`runtime Lighthouse route is absent from the accepted projection: ${route}`);
+  const expected = acceptedItems.filter((item) => item.index_state === "INDEX").map((item) => item.route).sort();
+  if (sealedIndexableRoutes !== null) {
+    const sealed = [...validatedRuntimeIndexableRoutes(
+      { indexable_routes: sealedIndexableRoutes },
+      new Set(accepted),
+      new RegExp(contract.route_pattern),
+    )];
+    if (sealed.length !== expected.length || sealed.some((value, index) => value !== expected[index])) {
+      throw new Error("runtime Lighthouse rendered INDEX states differ from sealed indexable_routes");
+    }
+  }
+  if (
+    inventoried.length !== expected.length
+    || inventoried.some((value) => !expected.includes(value))
+    || expected.some((value) => !inventoried.includes(value))
+  ) {
+    throw new Error(
+      `runtime Lighthouse sitemap differs from the exact indexable accepted projection: accepted_index=${expected.length} inventoried=${inventoried.length}`,
+    );
+  }
+  if (expected.length === 0 && urlset[1].trim()) {
+    throw new Error("runtime Lighthouse empty indexable projection requires an empty urlset XML body");
+  }
+  return { selected, inventoried, expected };
+}
+
+function htmlAttributes(tag) {
+  const attributes = new Map();
+  for (const match of String(tag).matchAll(/\s([:\w-]+)\s*=\s*(["'])(.*?)\2/gs)) {
+    const name = match[1].toLowerCase();
+    if (attributes.has(name)) throw new Error(`runtime Lighthouse HTML tag has duplicate attribute: ${name}`);
+    attributes.set(name, match[3]);
+  }
+  return attributes;
+}
+
+/** Prove the semantic state of the exact rendered bytes sealed by the projection. */
+export function verifyRuntimeRenderedPageDocument(route, html, acceptedItem) {
+  if (!acceptedItem || acceptedItem.route !== route) {
+    throw new Error(`runtime Lighthouse rendered page has no matching accepted route: ${route}`);
+  }
+  const bodyTags = String(html || "").match(/<body\b[^>]*>/gi) || [];
+  const canonicalTags = String(html || "").match(/<link\b[^>]*>/gi) || [];
+  const robotsTags = String(html || "").match(/<meta\b[^>]*>/gi) || [];
+  if (bodyTags.length !== 1) throw new Error(`runtime Lighthouse page must contain exactly one body: ${route}`);
+  const body = htmlAttributes(bodyTags[0]);
+  const state = body.get("data-index-state");
+  if (body.get("data-opportunity-id") !== acceptedItem.opportunity_id) {
+    throw new Error(`runtime Lighthouse accepted opportunity id differs from rendered HTML: ${route}`);
+  }
+  if (
+    !["INDEX", "NOINDEX"].includes(state)
+    || (acceptedItem.index_state !== undefined && state !== acceptedItem.index_state)
+  ) {
+    throw new Error(`runtime Lighthouse accepted index_state differs from rendered HTML: ${route}`);
+  }
+  const canonicals = canonicalTags
+    .map(htmlAttributes)
+    .filter((attrs) => String(attrs.get("rel") || "").toLowerCase().split(/\s+/).includes("canonical"));
+  if (canonicals.length !== 1 || canonicals[0].get("href") !== `https://confenge.com.br${route}`) {
+    throw new Error(`runtime Lighthouse page has no exact self canonical: ${route}`);
+  }
+  const robots = robotsTags
+    .map(htmlAttributes)
+    .filter((attrs) => String(attrs.get("name") || "").toLowerCase() === "robots");
+  if (robots.length !== 1) throw new Error(`runtime Lighthouse page must contain exactly one robots directive: ${route}`);
+  const tokens = String(robots[0].get("content") || "").toLowerCase().split(/\s*,\s*/).filter(Boolean);
+  const expectedTokens = state === "INDEX" ? ["index", "follow"] : ["noindex", "nofollow"];
+  if (tokens.length !== 2 || expectedTokens.some((token) => !tokens.includes(token))) {
+    throw new Error(`runtime Lighthouse robots directive contradicts ${state}: ${route}`);
+  }
+  return { ...acceptedItem, index_state: state, robots: tokens.join(","), canonical: `https://confenge.com.br${route}` };
 }
 
 /** Validate the canonical sorted INDEX subset against the digest-sealed route set. */
@@ -328,63 +400,6 @@ export function validatedRuntimeIndexableRoutes(document, sealedRoutes, routePat
     }
   }
   return document.indexable_routes;
-}
-
-function tagAttributes(tag) {
-  const attributes = new Map();
-  const source = String(tag || "").replace(/^<[^\s>]+|\/?\s*>$/g, "");
-  const pattern = /([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
-  for (const match of source.matchAll(pattern)) {
-    attributes.set(match[1].toLowerCase(), match[2] ?? match[3] ?? match[4] ?? "");
-  }
-  return attributes;
-}
-
-/** Verify the rendered INDEX/NOINDEX identity without depending on attribute order. */
-export function verifyRuntimePageIndexState(html, expectedIndexable) {
-  const source = String(html || "");
-  const bodyTag = source.match(/<body\b[^>]*>/i)?.[0];
-  const observedState = bodyTag ? tagAttributes(bodyTag).get("data-index-state") : null;
-  const expectedState = expectedIndexable ? "INDEX" : "NOINDEX";
-  if (observedState !== expectedState) {
-    throw new Error(
-      `runtime Lighthouse rendered index state mismatch: expected=${expectedState} observed=${observedState || "missing"}`,
-    );
-  }
-  const robots = [...source.matchAll(/<meta\b[^>]*>/gi)]
-    .map((match) => tagAttributes(match[0]))
-    .filter((attributes) => String(attributes.get("name") || "").toLowerCase() === "robots")
-    .map((attributes) => String(attributes.get("content") || "").trim().toLowerCase());
-  if (!expectedIndexable) {
-    if (robots.length !== 1 || robots[0] !== "noindex,nofollow") {
-      throw new Error(
-        `runtime Lighthouse NOINDEX page must carry exactly one robots noindex,nofollow declaration: observed=${JSON.stringify(robots)}`,
-      );
-    }
-  } else if (robots.some((content) => content.split(",").map((value) => value.trim()).includes("noindex"))) {
-    throw new Error("runtime Lighthouse INDEX page carries a robots noindex declaration");
-  }
-  return true;
-}
-
-/** Restore non-SEO category gates for runtime pages exempted only because they are NOINDEX. */
-export function runtimeSeoOnlyBudgetErrors(results, routes, thresholds) {
-  const selected = routes instanceof Set ? routes : new Set(routes || []);
-  const errors = [];
-  for (const row of results || []) {
-    if (row?.error || !selected.has(row?.path)) continue;
-    if (!Number.isFinite(row.accessibility)) {
-      errors.push(`${row.path}: accessibility was not measured`);
-    } else if (row.accessibility < thresholds.accessibility) {
-      errors.push(`${row.path}: accessibility ${row.accessibility} < ${thresholds.accessibility}`);
-    }
-    if (!Number.isFinite(row.best_practices)) {
-      errors.push(`${row.path}: best-practices was not measured`);
-    } else if (row.best_practices < thresholds.best_practices) {
-      errors.push(`${row.path}: best-practices ${row.best_practices} < ${thresholds.best_practices}`);
-    }
-  }
-  return errors;
 }
 
 /**

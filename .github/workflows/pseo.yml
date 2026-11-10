@@ -60,6 +60,9 @@ jobs:
         # --engine-strict also hard-fails EBADENGINE, so a dependency declaring a
         # Node floor above this runner cannot install green (see site-ci.yml).
         run: npm ci --engine-strict
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
       - name: Workflow gate shape
         run: npm run test:workflow-gates
       - name: Legacy Netlify preview must publish the gated _site artifact
@@ -94,6 +97,8 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Full test suite
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
