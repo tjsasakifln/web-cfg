@@ -7,6 +7,7 @@ import { createStructuredLogger } from "../lib/logger.mjs";
 import { createPortableRuntime } from "../lib/server.mjs";
 import { executeScheduledFunction } from "../schedule.mjs";
 import { temporaryDirectory } from "./helpers.mjs";
+import marketRadarClient from "../../netlify/functions/lib/market-radar-client.cjs";
 
 const RELEVANT_HEADERS = new Set([
   "access-control-allow-headers",
@@ -106,6 +107,7 @@ async function httpFor(baseUrl, fixture) {
 }
 
 test("every HTTP function preserves direct-handler status, relevant headers and normalized body", async (t) => {
+  t.after(() => marketRadarClient._stopForTests());
   const keys = [
     "ASAAS_MODE",
     "CONFENGE_OFFER_CATALOG_PUBLIC",
@@ -202,6 +204,7 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
       body: JSON.stringify({ cnpj: "00000000000000" }),
     },
     { name: "market-answer-intake", method: "POST", path: "/.netlify/functions/market-answer-intake", body: invalidXray },
+    { name: "market-radar", method: "GET", path: "/.netlify/functions/market-radar" },
     { name: "nurture", method: "GET", path: "/.netlify/functions/nurture?action=health" },
     {
       name: "offer-checkout",

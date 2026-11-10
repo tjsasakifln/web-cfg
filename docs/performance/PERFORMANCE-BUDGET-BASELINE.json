@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1117.24,
+    "asset_raw_kb_max_route": 1117.8,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 286
+    "routes_measured": 287
   },
   "budget": {
     "cls_max": 0.05,
@@ -485,6 +485,7 @@
       "/ferramentas/matriz-atraso-obra/",
       "/ferramentas/orcamento-de-obras/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/ferramentas/radar-mercado-publico/",
       "/ferramentas/rede-de-agua/",
       "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
@@ -773,6 +774,7 @@
       "/ferramentas/matriz-atraso-obra/",
       "/ferramentas/orcamento-de-obras/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/ferramentas/radar-mercado-publico/",
       "/ferramentas/rede-de-agua/",
       "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",

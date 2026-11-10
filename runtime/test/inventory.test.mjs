@@ -12,6 +12,7 @@ const EXPECTED_FUNCTIONS = [
   "lead",
   "live-intelligence-analyze",
   "market-answer-intake",
+  "market-radar",
   "nurture",
   "offer-checkout",
   "offer-checkout-sandbox",
@@ -26,18 +27,23 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 48);
-  assert.equal(inventory.function_count, 18);
+  assert.equal(inventory.file_count, 52);
+  assert.equal(inventory.function_count, 19);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 18);
+  assert.equal(inventory.validation.loaded_handlers, 19);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "support_library").length,
-    28,
+    31,
   );
+  for (const name of ["market-radar-client", "market-radar-dates", "market-radar-worker"]) {
+    assert.ok(inventory.files.some((entry) =>
+      entry.path === `netlify/functions/lib/${name}.cjs`
+      && entry.role === "support_library"));
+  }
   assert.ok(
     inventory.files.some((entry) =>
       entry.path === "netlify/functions/lib/gsc-private-snapshot.cjs"
@@ -68,6 +74,9 @@ test("inventory classifies frontend, schedules, probes and ops without assuming 
   );
   assert.equal(byName.get("offer-terms-accept").usage_state, "test_or_legacy_only");
   assert.equal(byName.get("asaas-webhook-sandbox").usage_state, "test_or_legacy_only");
+  const radar = byName.get("market-radar");
+  assert.equal(radar.usage_state, "public_runtime");
+  assert.ok(radar.consumers.frontend.some(({ path }) => path === "ferramentas/radar-mercado-publico/index.html"));
   const credits = byName.get("tool-credits");
   assert.equal(credits.usage_state, "public_runtime");
   assert.ok(credits.consumers.frontend.some(({ path }) => path === "assets/js/tool-credits.mjs"));

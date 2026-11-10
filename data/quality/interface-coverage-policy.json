@@ -199,6 +199,11 @@
         "reason": "heaviest canonical tool, with client-side scoring and persistent lead capture"
       },
       {
+        "family_id": "radar-mercado-publico",
+        "route": "/ferramentas/radar-mercado-publico/",
+        "reason": "Indexable public-contract search interface with filters, buyer and supplier rankings, and first-party result rendering."
+      },
+      {
         "family_id": "live-intelligence-cnpj-tool",
         "route": "/analise-cnpj/",
         "reason": "CNPJ analysis tool landing; noindex until INSTANCE_INDEX_READY",
