@@ -42,6 +42,7 @@ PYTHON_REQUIREMENTS = ROOT / "requirements-ci.txt"
 UI_GEOMETRY = ROOT / "scripts" / "site" / "test_ui_geometry.mjs"
 TOOLS_UIUX = ROOT / "scripts" / "site" / "verify_tools_uiux_e2e.mjs"
 CHROME_VERSION_RESOLVER = ROOT / "scripts" / "site" / "resolve_chrome_version.mjs"
+HEADED_WALLET_WRAPPER = ROOT / "scripts" / "site" / "run_wallet_browser_headed.sh"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -695,6 +696,29 @@ def test_browser_actions_use_the_puppeteer_chrome_contract():
         "build/reports/tool-credits-pix-click-failure.png",
     ):
         assert path in site_ci, f"site-ci must upload browser failure evidence: {path}"
+
+    wallet_step = _step_block(_job_block(site_ci, "gates"), "Verify the credits panel in the browser")
+    assert wallet_step is not None
+    for needle in (
+        'TOOL_CREDITS_HEADED: "1"',
+        "TOOL_CREDITS_EXPECTED_CHROME_VERSION: ${{ steps.browser_contract.outputs.version }}",
+        "sudo apt-get install --yes --no-install-recommends xvfb xauth openbox x11-utils",
+        'xvfb-run -a -s "-screen 0 1280x1024x24"',
+        "bash scripts/site/run_wallet_browser_headed.sh npm run test:tools-commerce:browser",
+    ):
+        assert needle in wallet_step, f"wallet headed browser gate missing {needle!r}"
+    wrapper = _read(HEADED_WALLET_WRAPPER)
+    for needle in (
+        "set -euo pipefail",
+        "openbox --sm-disable",
+        'if [ "$#" -eq 0 ]',
+        'kill -0 "$wm_pid"',
+        "xprop -root _NET_SUPPORTING_WM_CHECK",
+        "tail -n 20 /tmp/wallet-browser-openbox.log",
+        "trap cleanup EXIT",
+        '"$@"',
+    ):
+        assert needle in wrapper, f"headed wallet wrapper missing readiness/cleanup guard {needle!r}"
 
 
 def test_post_build_browser_gates_use_public_artifact():

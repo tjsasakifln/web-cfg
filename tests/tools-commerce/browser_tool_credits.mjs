@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import puppeteer from 'puppeteer-core';
+import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core';
 
 const root = new URL('../../', import.meta.url);
 const source = await readFile(new URL('assets/js/tool-credits.mjs', root));
@@ -58,11 +58,28 @@ const server = createServer(async (req, res) => {
   }
   res.statusCode = 400; send({error:'bad'});
 });
-await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
+const headedMode = process.env.TOOL_CREDITS_HEADED || '0';
+assert.ok(headedMode === '0' || headedMode === '1', 'TOOL_CREDITS_HEADED must be 0 or 1');
+if (headedMode === '1' && process.platform === 'linux') {
+  assert.ok(process.env.DISPLAY, 'TOOL_CREDITS_HEADED=1 requires DISPLAY on Linux');
+}
+const expectedChromeVersion = process.env.TOOL_CREDITS_EXPECTED_CHROME_VERSION || '';
 const executablePath = process.env.CHROME_PATH || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/usr/bin/google-chrome');
-const browser = await puppeteer.launch({executablePath, headless:true,args:['--no-sandbox']});
-let physicalClickSequence = 0;
-const inputReportDir = fileURLToPath(new URL('build/reports/', root));
+let browser;
+try {
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); const port = server.address().port;
+  const headed = headedMode === '1';
+  const browserArgs = ['--no-sandbox'];
+  if (headed) browserArgs.push('--ozone-platform=x11', '--window-size=1280,1024');
+  browser = await puppeteer.launch({ executablePath, headless: !headed, args: browserArgs });
+  if (expectedChromeVersion) {
+    assert.equal(expectedChromeVersion, PUPPETEER_REVISIONS.chrome,
+      'TOOL_CREDITS_EXPECTED_CHROME_VERSION must equal Puppeteer locked Chrome');
+    const actualChromeVersion = (await browser.version()).replace(/^[^/]+\//, '');
+    assert.equal(actualChromeVersion, expectedChromeVersion, 'browser must match Puppeteer locked Chrome exactly');
+  }
+  let physicalClickSequence = 0;
+  const inputReportDir = fileURLToPath(new URL('build/reports/', root));
 
 async function recordPrimaryInputFailure(page, selector, label, error) {
   if (label.startsWith('obstructed ') || error?.walletInputDiagnosticWritten) return;
@@ -364,7 +381,6 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   await page.waitForFunction(() => document.querySelector('dialog')?.textContent.includes('Créditos de exportação'));
 }
 
-try {
   const initialPages = await browser.pages();
   assert.equal(initialPages.length, 1, 'the primary journey must reuse the sole launch page');
   const [page] = initialPages;
@@ -674,4 +690,10 @@ try {
   assert.ok(afterExpiry.length && afterExpiry.every(request => !('referralCode' in request)));
   await early.close();
   console.log('browser tool credits: ok');
-} finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
+} finally {
+  try {
+    await browser?.close();
+  } finally {
+    if (server.listening) await new Promise(resolve => server.close(resolve));
+  }
+}

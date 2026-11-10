@@ -103,7 +103,12 @@ jobs:
       - name: Verify the credits panel in the browser
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: npm run test:tools-commerce:browser
+          TOOL_CREDITS_HEADED: "1"
+          TOOL_CREDITS_EXPECTED_CHROME_VERSION: ${{ steps.browser_contract.outputs.version }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends xvfb xauth openbox x11-utils
+          xvfb-run -a -s "-screen 0 1280x1024x24" bash scripts/site/run_wallet_browser_headed.sh npm run test:tools-commerce:browser
       - name: Validate the credits wallet and Firebase rules
         env:
           METADATA_SERVER_DETECTION: none
