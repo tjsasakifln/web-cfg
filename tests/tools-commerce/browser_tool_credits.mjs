@@ -181,8 +181,12 @@ async function prepareTrustedPhysicalClick(page, selector, label) {
         throw new Error(`${label}: target center is obstructed: ${JSON.stringify({ center, hit: hit && { tag: hit.tagName, id: hit.id, className: hit.className } })}`);
       }
       const state = {
-        target, selector, trace: [], rawTrace: [], mutations: [], timeline: [], listener: null, observer: null,
+        target, selector, trace: [], rawTrace: [], mutations: [], timeline: [], listener: null,
+        focusListener: null, visibilityListener: null, observer: null,
       };
+      const primaryTypes = new Set(['pointerdown', 'pointerup', 'click']);
+      const observedTypes = ['pointerdown', 'pointerup', 'pointercancel', 'mousedown', 'mouseup', 'click',
+        'gotpointercapture', 'lostpointercapture'];
       const identify = node => node && { tag: node.tagName, id: node.id || '', className: String(node.className || '') };
       const mark = (phase, extra = {}) => {
         if (state.timeline.length < 24) state.timeline.push({ phase, at: performance.now(), ...extra });
@@ -203,6 +207,7 @@ async function prepareTrustedPhysicalClick(page, selector, label) {
           currentIsStored: current === state.target,
           eventInsideStored: state.target.contains(event.target),
         });
+        if (!primaryTypes.has(event.type)) return;
         if (!state.target.contains(event.target)) return;
         state.trace.push({
           type: event.type,
@@ -212,7 +217,16 @@ async function prepareTrustedPhysicalClick(page, selector, label) {
           disabled: Boolean(state.target.disabled),
         });
       };
-      for (const type of ['pointerdown', 'pointerup', 'click']) document.addEventListener(type, state.listener, true);
+      for (const type of observedTypes) document.addEventListener(type, state.listener, true);
+      state.observedTypes = observedTypes;
+      state.focusListener = event => mark(`window-${event.type}`, {
+        focus: document.hasFocus(), visibility: document.visibilityState,
+      });
+      state.visibilityListener = () => mark('document-visibilitychange', {
+        focus: document.hasFocus(), visibility: document.visibilityState,
+      });
+      for (const type of ['focus', 'blur']) window.addEventListener(type, state.focusListener, true);
+      document.addEventListener('visibilitychange', state.visibilityListener, true);
       state.observer = new MutationObserver(records => {
         const current = document.querySelector(state.selector);
         for (const record of records) {
@@ -254,7 +268,11 @@ async function trustedPhysicalClick(page, prepared) {
   const clearTrace = () => page.evaluate(traceKey => {
     const state = window.__toolCreditsPhysicalClicks?.[traceKey];
     if (!state) return { trace: [], rawTrace: [], mutations: [], timeline: [], stateMissing: true };
-    for (const type of ['pointerdown', 'pointerup', 'click']) document.removeEventListener(type, state.listener, true);
+    for (const type of state.observedTypes || ['pointerdown', 'pointerup', 'click']) {
+      document.removeEventListener(type, state.listener, true);
+    }
+    for (const type of ['focus', 'blur']) window.removeEventListener(type, state.focusListener, true);
+    document.removeEventListener('visibilitychange', state.visibilityListener, true);
     state.observer?.disconnect();
     const current = document.querySelector(state.selector);
     state.timeline.push({ phase: 'cleared', at: performance.now(), focus: document.hasFocus(),
@@ -288,7 +306,9 @@ async function trustedPhysicalClick(page, prepared) {
     if (nativePointerMode === '1') {
       // XTEST generates browser-trusted native automation input inside the
       // isolated X11 display. It is not a physical human mouse.
-      nativePointer = await prepareX11NativePointer({ browser, page, prepared, center });
+      nativePointer = await prepareX11NativePointer({
+        browser, page, prepared, center, diagnosticDir: inputReportDir,
+      });
     } else {
       // Puppeteer's click helper batches move/down/up. Move separately so the
       // press remains sequential in local non-native runs.
