@@ -297,10 +297,14 @@ def test_home_has_its_own_authority_without_waiving_content_freshness():
     # 9ee98507ce5a3a2209adeff22608c70ba1890029), not the test/run clock.
     assert datetime.fromisoformat(modified) >= datetime.fromisoformat("2026-11-10T23:49:48-03:00")
     assert datetime.fromisoformat(modified).date() <= ctx().today
+    visible_date = datetime.fromisoformat(modified).date().isoformat()
+    assert f'<time datetime="{visible_date}">' in html
 
     undated = re.sub(r',?"dateModified"\s*:\s*"[^"]+"', "", html)
+    undated = re.sub(r'<p\b[^>]*data-page-updated[^>]*>.*?</p>\s*', "", undated, flags=re.S)
     assert not G._sub_freshness(undated, ctx()).passed
     future = html.replace(modified, "2099-01-01T00:00:00-03:00")
+    future = future.replace(f'datetime="{visible_date}"', 'datetime="2099-01-01"')
     assert not G._sub_freshness(future, ctx()).passed
 
 
