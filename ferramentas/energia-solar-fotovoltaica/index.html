@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#061a33">
+<link rel="canonical" href="https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<script>document.documentElement.classList.replace('no-js','js');</script>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/assets/css/science-tools.css">
+<script defer src="/script.js?v=mv09"></script><script type="module" src="modelo.mjs"></script><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Simulador de energia solar fotovoltaica","url":"https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/","applicationCategory":"EngineeringApplication","operatingSystem":"Navegador web","inLanguage":"pt-BR","isAccessibleForFree":true,"description":"Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib.","publisher":{"@type":"Organization","name":"CONFENGE"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Simulador de energia solar fotovoltaica","item":"https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"O simulador busca dados meteorológicos automaticamente?","acceptedAnswer":{"@type":"Answer","text":"A série é fornecida por você, por arquivo CSV ou pelo campo de texto. Nenhum endereço externo ou credencial de serviço meteorológico é solicitado."}},{"@type":"Question","name":"Quatro horas de dados produzem uma previsão anual?","acceptedAnswer":{"@type":"Answer","text":"Não. O relatório informa energia e duração do período enviado. Cada leitura representa a média do intervalo e o último registro utiliza a mesma duração dos anteriores."}}]}]}</script>
+<!-- tool-showcase:head -->
+<title>Simulador de energia solar fotovoltaica | CONFENGE</title>
+<meta name="description" content="Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib."/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
+<meta property="og:updated_time" content="2026-11-11"/>
+<meta property="og:type" content="website"/>
+<meta property="og:locale" content="pt_BR"/>
+<meta property="og:site_name" content="CONFENGE"/>
+<meta property="og:title" content="Simulador de energia solar fotovoltaica | CONFENGE"/>
+<meta property="og:description" content="Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib."/>
+<meta property="og:url" content="https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/"/>
+<meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/energia-solar-fotovoltaica.jpg"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Simulador de energia solar fotovoltaica, ilustração da ferramenta CONFENGE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Simulador de energia solar fotovoltaica | CONFENGE"/>
+<meta name="twitter:description" content="Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib."/>
+<meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/energia-solar-fotovoltaica.jpg"/>
+<meta name="twitter:image:alt" content="Simulador de energia solar fotovoltaica, ilustração da ferramenta CONFENGE"/>
+<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
+<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>
+<!-- /tool-showcase:head -->
+</head><body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+
+<main id="conteudo"><div class="container content-page">
+<nav class="breadcrumbs" aria-label="Trilha de navegação"><ol><li><a href="/">Início</a></li><li><a href="/ferramentas/">Ferramentas</a></li><li aria-current="page">Simulador de energia solar fotovoltaica</li></ol></nav>
+<header class="content-header"><p class="eyebrow">Ferramentas de engenharia</p><h1>Simulador de energia solar fotovoltaica</h1><p class="content-lead">Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib.</p>
+<!-- tool-showcase:export-terms -->
+<p class="tool-export-terms" data-tool-export-terms hidden><span data-tool-export-copy></span> <a href="/ferramentas/#meus-creditos" data-tool-export-wallet>Minha conta e créditos</a></p>
+<!-- /tool-showcase:export-terms -->
+<p>Calcule gratuitamente e confira os resultados. Para guardar o trabalho, exporte as tabelas, o modelo ou o relatório para impressão pela sua conta de ferramentas.</p></header>
+<section class="science-panel" aria-label="Dados e resultados" data-science-tool><p>Ative o JavaScript para preencher o modelo e calcular. O método e o exemplo resolvido estão disponíveis abaixo.</p></section>
+<section aria-labelledby="metodo"><h2 id="metodo">Como calcular e interpretar</h2><p>O pvlib calcula posição solar e irradiância sobre módulos fixos, estima a temperatura da célula com o modelo SAPM e converte potência DC em AC pelo PVWatts. A energia resulta da integração dos intervalos informados. A tabela mensal agrega somente os meses presentes na série enviada.</p><p>Informe as unidades indicadas em cada campo e confira os sinais das ações. O relatório reúne dados utilizados, resultados e hipóteses para facilitar a revisão. O cálculo é processado no servidor; os dados são descartados ao terminar e não são incluídos no link de compartilhamento.</p></section>
+<section aria-labelledby="exemplo"><h2 id="exemplo">Exemplo para conferir o cálculo</h2><p>O exemplo inicial contém quatro intervalos horários demonstrativos para uma instalação de 5 kWp em Florianópolis. Ele permite experimentar inclinação, orientação e potência do inversor. Para estimar um período real, substitua a série por dados meteorológicos com origem e qualidade conhecidas.</p></section>
+<section aria-labelledby="perguntas"><h2 id="perguntas">Perguntas frequentes</h2><h3>O simulador busca dados meteorológicos automaticamente?</h3><p>A série é fornecida por você, por arquivo CSV ou pelo campo de texto. Nenhum endereço externo ou credencial de serviço meteorológico é solicitado.</p><h3>Quatro horas de dados produzem uma previsão anual?</h3><p>Não. O relatório informa energia e duração do período enviado. Cada leitura representa a média do intervalo e o último registro utiliza a mesma duração dos anteriores.</p></section>
+<section aria-labelledby="projeto"><h2 id="projeto">Transforme o cálculo em uma decisão de projeto</h2><p>A CONFENGE integra análise, revisão e projeto à necessidade do empreendimento. Envie o contexto, os desenhos e os dados disponíveis para definir a solução e os entregáveis adequados.</p><p><a class="button button-primary" href="/triagem-tecnica/" data-cta-position="science_project">Conversar sobre o projeto</a></p></section>
+<section aria-labelledby="fontes"><h2 id="fontes">Método e referências</h2><p>Biblioteca de cálculo: <a href="https://pvlib-python.readthedocs.io/" rel="noopener noreferrer">pvlib, documentação oficial</a>. Licença BSD-3-Clause. A versão executada aparece nos resultados. Consulte as <a href="/assets/science-tools/THIRD_PARTY_NOTICES.txt">licenças e notas das dependências</a>.</p><p>Atualizado em <time datetime="2026-11-11">11 de novembro de 2026</time>.</p></section>
+<section aria-labelledby="relacionadas"><h2 id="relacionadas">Continue seu estudo</h2><p><a href="/ferramentas/memorial-de-calculo/">Memorial de cálculo com fórmulas e substituições</a> · <a href="/ferramentas/propriedades-de-secoes/">Propriedades de seções e tensões elásticas</a> · <a href="/ferramentas/secao-de-concreto-armado/">Análise de seção de concreto armado</a> · <a href="/ferramentas/trelicas-e-porticos/">Análise de treliças e pórticos planos</a> · <a href="/ferramentas/geotecnia-cpt-estacas/">CPT e resistência axial de estacas</a> · <a href="/ferramentas/conforto-termico/">Conforto térmico: PMV, PPD, SET e UTCI</a></p><p><a href="/ferramentas/">Ver todas as ferramentas</a> · <a href="/ferramentas/#programa-indicacao">Programa de indicação e créditos</a></p></section>
+</div><!-- tool-showcase:share -->
+<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Energia solar fotovoltaica">
+<h2 id="tool-share-title">Compartilhe esta ferramenta</h2>
+<p>Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho.</p>
+<div class="tool-share-social">
+<button type="button" data-share-copy hidden data-event-name="cta_click" data-cta-id="tool-share-copy-energia-solar-fotovoltaica" data-cta-position="tool_share">Copiar link</button>
+<button type="button" data-share-native hidden data-event-name="cta_click" data-cta-id="tool-share-native-energia-solar-fotovoltaica" data-cta-position="tool_share">Compartilhar…</button>
+<a href="https://wa.me/?text=Energia+solar+fotovoltaica+%7C+CONFENGE%0Ahttps%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fenergia-solar-fotovoltaica%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-wa-energia-solar-fotovoltaica" data-cta-position="tool_share">WhatsApp</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fenergia-solar-fotovoltaica%2F%3Futm_source%3Dlinkedin%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-linkedin-energia-solar-fotovoltaica" data-cta-position="tool_share">LinkedIn</a>
+</div>
+<label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/?utm_source=confenge_share&amp;utm_medium=referral&amp;utm_campaign=ferramentas" readonly data-share-url></label>
+<p class="tool-share-status" role="status"></p>
+<aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
+<h3>Indique e ganhe créditos de uso</h3>
+<p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-energia-solar-fotovoltaica" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
+</aside>
+<div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/ferramentas/conforto-termico/">Conforto e estresse térmico</a><a href="/ferramentas/calculadora-de-beiral/">Beiral e sombra na janela</a></div>
+</section>
+<!-- /tool-showcase:share -->
+</main><footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body>
+</html>
