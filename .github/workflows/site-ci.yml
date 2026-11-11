@@ -399,7 +399,7 @@ jobs:
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Playwright checklist on _site
         env:
           CONFENGE_BASE: http://127.0.0.1:8765
