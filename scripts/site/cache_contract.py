@@ -17,6 +17,7 @@ HTML_SERVING_CACHE_OVERRIDES = (
     "/bim/web/*",
     "/bim/fotogrametria/*",
     "/cad/editor/*",
+    "/cad/freecad/*",
 )
 
 

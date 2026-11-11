@@ -1,0 +1,17 @@
+.modelador-page { padding:2.5rem 0 4rem; }
+.modelador-page h1 { max-width:20ch; font-size:clamp(2rem,4.6vw,3.5rem); line-height:1.1; }
+.modelador-page .lead { max-width:60ch; }
+.modelador-page section+section { margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--line); }
+.modelador-page p,.modelador-page li { max-width:72ch; }
+.modelador-page .modelador-facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.25rem; margin:1.5rem 0; }
+.modelador-facts p { margin:0; }
+.modelador-facts strong { display:block; color:var(--ink); }
+.modelador-page .modelador-example { display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,.7fr); align-items:center; gap:2rem; }
+.modelador-example svg { max-width:100%; height:auto; }
+.modelador-page details { padding:.8rem 0; border-bottom:1px solid var(--line); }
+.modelador-page summary { cursor:pointer; font-weight:700; min-height:44px; }
+.modelador-page table { width:100%; border-collapse:collapse; }
+.modelador-page th,.modelador-page td { text-align:left; padding:.75rem; vertical-align:top; border-bottom:1px solid var(--line); }
+.modelador-page .table-scroll { overflow:auto; }
+.modelador-page a:not(.button) { text-decoration:underline; text-underline-offset:.15em; }
+@media(max-width:640px) { .modelador-page { padding-top:1.5rem; } .modelador-page .modelador-facts,.modelador-page .modelador-example { grid-template-columns:1fr; } .modelador-example svg { max-width:280px; } .modelador-page .button { width:100%; } }

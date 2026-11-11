@@ -32,6 +32,7 @@ const LOCAL_FORMATS = Object.freeze({
   'radar-mercado-publico': ['csv'],
   'orcamento-de-obras': ['xlsx', 'csv'],
   'cad-editor': ['dwg', 'dxf'],
+  'modelador-parametrico-3d': ['step', 'stp', 'iges', 'igs', 'stl', '3mf', 'svg', 'dxf'],
   'analise-cnpj': ['txt'],
   'bim-cad': ['dxf', 'dwg'],
   'bim-digitalizar': ['dxf', 'dwg'],

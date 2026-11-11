@@ -7,12 +7,21 @@ import {resolveChromePath} from '../scripts/site/resolve_chrome.mjs';
 
 const publicRoot=resolve(process.argv[2]||'_site');
 const screenshots=process.env.REPORT_TOOLS_SCREENSHOTS;
-const routes=['quantitativos-dxf','epanet-inp','comparador-cronogramas','radier-solo-elastico'];
+const catalogue=await readFile(resolve(publicRoot,'ferramentas/index.html'),'utf8');
+const candidates=['quantitativos-dxf','epanet-inp','comparador-cronogramas','radier-solo-elastico'];
+const routes=candidates.filter(slug=>catalogue.includes(`/ferramentas/${slug}/`));
+assert.ok(routes.length>0,'the published catalogue must advertise a calculation journey');
 for(const slug of routes)await stat(resolve(publicRoot,'ferramentas',slug,'index.html'));
 const mime={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.wasm':'application/wasm','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.inp':'text/plain','.dxf':'text/plain'};
+const boundaryProbePath='/__report-tools-worker-boundary';
+let foreignProbeHits=0;
 let failDxfExample=true;
 const server=createServer(async(request,response)=>{
   const path=new URL(request.url,'http://localhost').pathname;
+  if(path===boundaryProbePath){
+    if(request.headers.host?.startsWith('localhost:'))foreignProbeHits++;
+    return response.writeHead(200,{'Content-Type':'text/plain','Access-Control-Allow-Origin':'*'}).end('worker-boundary-ok');
+  }
   if(path==='/api/web/tool-credits')return response.writeHead(200,{'Content-Type':'application/json'}).end('{"enabled":false}');
   if(path==='/ferramentas/quantitativos-dxf/exemplo.dxf'&&failDxfExample){failDxfExample=false;return response.writeHead(503).end('controlled example failure');}
   if(path.startsWith('/api/')||path.startsWith('/.netlify/'))return response.writeHead(404).end();
@@ -25,6 +34,7 @@ const server=createServer(async(request,response)=>{
 });
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const origin='http://127.0.0.1:'+server.address().port;
+const foreignProbeURL='http://localhost:'+server.address().port+boundaryProbePath;
 const numeric=value=>Number(String(value).replaceAll('.','').replace(',','.'));
 const near=(actual,expected,tolerance=0.0002)=>assert.ok(Math.abs(actual-expected)<=tolerance,`${actual} differs from ${expected}`);
 let browser;
@@ -32,8 +42,20 @@ try{
   browser=await puppeteer.launch({executablePath:resolveChromePath(),headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
   const page=await browser.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(String(error)));
-  await page.setRequestInterception(true);
-  page.on('request',request=>request.url().startsWith(origin)||request.url().startsWith('data:')?request.continue():request.abort());
+  // Settle each pause through the session that emitted it. Puppeteer 25.8 can
+  // pair dedicated-worker metadata with another client (puppeteer/puppeteer#15509).
+  const traffic=await page.createCDPSession();
+  let blockedWorkerProbes=0,probeAbort;
+  traffic.on('Fetch.requestPaused',async({requestId,request})=>{
+    const allowed=request.url.startsWith(origin)||request.url.startsWith('data:');
+    try{
+      const settlement=traffic.send(allowed?'Fetch.continueRequest':'Fetch.failRequest',allowed?{requestId}:{requestId,errorReason:'BlockedByClient'});
+      if(!allowed&&request.url===foreignProbeURL)probeAbort=settlement;
+      await settlement;
+      if(!allowed&&request.url===foreignProbeURL)blockedWorkerProbes++;
+    }catch(error){errors.push('Network boundary: '+String(error));console.error('Network boundary failed:',error);}
+  });
+  await traffic.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
   if(screenshots)await mkdir(screenshots,{recursive:true});
   const paint=()=>page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
   const load=async path=>{const response=await page.goto(origin+path,{waitUntil:'load',timeout:30000});assert.equal(response.status(),200,path);};
@@ -60,6 +82,31 @@ try{
     assert.equal(new URL(page.url()).pathname,`/ferramentas/${slug}/`);
   };
 
+  // Exercise the real worker boundary against two origins of this local server.
+  // CORS permits the second origin so only an observed Fetch abort qualifies.
+  await load('/');
+  const boundaryProof=await page.evaluate(async({local,remote})=>{
+    const code="self.onmessage=async({data})=>{const local=await(await fetch(data.local)).text();const remote=await fetch(data.remote).then(()=>'unexpected',()=>'blocked');postMessage({local,remote});};";
+    const url=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));
+    let worker,timer;
+    try{
+      worker=new Worker(url);
+      return await new Promise((resolve,reject)=>{
+        timer=setTimeout(()=>reject(new Error('Worker network-boundary probe timed out.')),10000);
+        worker.onmessage=event=>resolve(event.data);
+        worker.onerror=event=>reject(new Error(event.message));
+        worker.postMessage({local,remote});
+      });
+    }finally{clearTimeout(timer);worker?.terminate();URL.revokeObjectURL(url);}
+  },{local:origin+boundaryProbePath,remote:foreignProbeURL});
+  assert.deepEqual(boundaryProof,{local:'worker-boundary-ok',remote:'blocked'});
+  assert.ok(probeAbort,'the page session must observe the worker request to the second origin');
+  await probeAbort;
+  assert.equal(blockedWorkerProbes,1,'the page session must confirm the worker request was aborted');
+  assert.equal(foreignProbeHits,0,'the second origin must never reach the controlled server');
+  assert.deepEqual(errors,[],'worker network-boundary protocol failures');
+  console.log('PASS worker network boundary: local fetch delivered and second origin blocked before the server');
+
   // Use both navigation modes before the actual calculation journeys.
   for(const width of [390,1280]){
     await page.setViewport({width,height:900});await load('/');
@@ -70,6 +117,7 @@ try{
     assert.equal(new URL(page.url()).pathname,'/ferramentas/');
   }
 
+  if(routes.includes('quantitativos-dxf')){
   await fromCatalog('quantitativos-dxf');
   await page.click('#exemplo');
   await page.waitForFunction(()=>document.querySelector('#estado').classList.contains('is-error'));
@@ -87,6 +135,8 @@ try{
   near(numeric(walls[2]),260);near(numeric(walls[3]),4000);
   console.log('PASS DXF: example retry, real worker, geometry, unit override and invalidation');
 
+  }
+  if(routes.includes('epanet-inp')){
   await fromCatalog('epanet-inp');await page.click('#exemplo');await finished();
   assert.equal(await page.$$eval('#instante option',options=>options.length),7);
   const nodeA=(await rows('nos')).find(row=>row[0]==='A');assert.ok(nodeA);near(numeric(nodeA[3]),5);
@@ -99,6 +149,8 @@ try{
   await page.click('#executar');await finished();near(numeric((await rows('nos')).find(row=>row[0]==='A')[3]),3.5);
   console.log('PASS EPANET: actual WASM worker, seven time steps, physical demand and invalidation');
 
+  }
+  if(routes.includes('comparador-cronogramas')){
   await fromCatalog('comparador-cronogramas');
   await page.click('#comparar');assert.equal(await visible(),false,'comparison requires a confirmed baseline');
   await page.click('#fixar');assert.equal(await page.$eval('#base',node=>node.readOnly),true);
@@ -123,6 +175,8 @@ try{
   await page.click('#fixar');await page.click('#comparar');await finished();
   assert.match(await page.$eval('#resumo',node=>node.textContent),/Baseline: 4 dias.*atual: 5 dias/);
   console.log('PASS CPM: float, baseline immutability, invalidation and latest-file import');
+  }
+  if(routes.includes('radier-solo-elastico')){
   await fromCatalog('radier-solo-elastico');await page.click('#exemplo');await finished();
   const soil=await rows('nos');assert.ok(soil.length>100);
   for(const n of soil){near(numeric(n[4]),1);near(numeric(n[6]),20);}
@@ -132,8 +186,9 @@ try{
   assert.equal(await visible(),false,'load edits invalidate the previous raft result');
   await page.click('#calcular');await finished();near(numeric((await rows('nos'))[0][4]),1.5);
   console.log('PASS raft: real MITC4 worker, q/ks settlement, reactions and stale result guard');
+  }
   assert.deepEqual(errors,[],'unexpected JavaScript errors');
-  console.log('PASS published artifact: four real tools, desktop/mobile navigation and no page overflow');
+  console.log(`PASS published artifact: ${routes.length} catalogue calculation journeys, desktop/mobile navigation and no page overflow`);
 }finally{
   await browser?.close();await new Promise(done=>server.close(done));
 }

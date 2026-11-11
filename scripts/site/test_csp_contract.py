@@ -21,6 +21,7 @@ from scripts.site.csp_contract import (  # noqa: E402
     FIREBASE_POPUP_SCRIPT,
     WALLET_DOCUMENTS,
     WALLET_ISOLATED_DOCUMENT,
+    WALLET_ISOLATED_DOCUMENTS,
     apply_artifact_csp_hashes,
     apply_script_src_hashes,
     apply_style_src_hashes,
@@ -286,6 +287,33 @@ def test_style_parser_covers_blocks_and_attributes() -> None:
     assert attributes == ["--bar: 25%"]
 
 
+def wallet_policy_errors(route: str, value: str) -> list[str]:
+    errors = []
+    wallet = _policy(value)
+    if not set(FIREBASE_AUTH_CONNECTIONS) <= set(wallet.get("connect-src", [])):
+        errors.append(f"Wallet CSP blocks Firebase Auth: {route}")
+    frames = set(wallet.get("frame-src", []))
+    popup_script = FIREBASE_POPUP_SCRIPT in wallet.get("script-src", [])
+    if route in WALLET_ISOLATED_DOCUMENTS:
+        if popup_script or frames.intersection(FIREBASE_POPUP_FRAMES):
+            errors.append(f"Isolated wallet should open social login in the catalogue: {route}")
+    elif not popup_script or not set(FIREBASE_POPUP_FRAMES) <= frames:
+        errors.append(f"Wallet CSP blocks Firebase OAuth: {route}")
+    if len(value.encode("utf-8")) > 7168:
+        errors.append(f"Wallet CSP exceeds 7168 bytes: {route}")
+    return errors
+
+
+def test_isolated_wallet_policy_accepts_token_auth_and_rejects_popup_sources() -> None:
+    base = "default-src 'none'; script-src 'self'; connect-src 'self' " + " ".join(FIREBASE_AUTH_CONNECTIONS) + "; frame-src 'none'"
+    for route in WALLET_ISOLATED_DOCUMENTS:
+        assert wallet_policy_errors(route, base) == []
+        assert wallet_policy_errors(route, base.replace("script-src 'self'", "script-src 'self' " + FIREBASE_POPUP_SCRIPT))
+        assert wallet_policy_errors(route, base.replace("frame-src 'none'", "frame-src " + FIREBASE_POPUP_FRAMES[0]))
+        assert wallet_policy_errors(route, base.replace(FIREBASE_AUTH_CONNECTIONS[0], ""))
+    assert wallet_policy_errors("/ferramentas/", base), "the catalogue still requires its social login policy"
+
+
 def evaluate_live() -> tuple[list[str], Counter[str], Counter[str], Counter[str]]:
     verify_parser_is_fail_closed()
     text = HEADERS.read_text(encoding="utf-8")
@@ -301,18 +329,7 @@ def evaluate_live() -> tuple[list[str], Counter[str], Counter[str], Counter[str]
         if not value:
             errors.append(f"Wallet document has no scoped CSP: {route}")
             continue
-        wallet = _policy(value)
-        if not set(FIREBASE_AUTH_CONNECTIONS) <= set(wallet.get("connect-src", [])):
-            errors.append(f"Wallet CSP blocks Firebase Auth: {route}")
-        frames = set(wallet.get("frame-src", []))
-        popup_script = FIREBASE_POPUP_SCRIPT in wallet.get("script-src", [])
-        if route == WALLET_ISOLATED_DOCUMENT:
-            if popup_script or frames.intersection(FIREBASE_POPUP_FRAMES):
-                errors.append(f"Isolated wallet should open social login in the catalogue: {route}")
-        elif not popup_script or not set(FIREBASE_POPUP_FRAMES) <= frames:
-            errors.append(f"Wallet CSP blocks Firebase OAuth: {route}")
-        if len(value.encode("utf-8")) > 7168:
-            errors.append(f"Wallet CSP exceeds 7168 bytes: {route}")
+        errors.extend(wallet_policy_errors(route, value))
     for route, values in rules.items():
         if route in WALLET_DOCUMENTS or "content-security-policy" not in values:
             continue

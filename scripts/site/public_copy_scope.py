@@ -287,6 +287,23 @@ def artifact_index_routes(artifact_root: Path) -> list[str]:
     ]
 
 
+def manifest_routes_for_html(files: list[Path], root: Path) -> list[str]:
+    """Project a physical HTML census onto the explicit manifest route class.
+
+    Source and artifact callers keep their independent filesystem walks. Only
+    directory indexes and declared supporting documents belong in html_routes;
+    other HTML, including vendor files, stays in the full copy census.
+    """
+    from scripts.pseo.public_artifact import PUBLIC_NESTED_HTML_DOCUMENTS
+
+    routes: list[str] = []
+    for path in files:
+        rel = relpath(path, root)
+        if path.name == "index.html" or rel in PUBLIC_NESTED_HTML_DOCUMENTS:
+            routes.append(route_for(rel))
+    return routes
+
+
 def visitor_facing_relpaths(root: Path | None = None) -> list[str]:
     base = root or ROOT
     return [p.relative_to(base).as_posix() for p in visitor_facing_html_files(base)]

@@ -137,9 +137,13 @@ def share_url(path: str, source: str) -> str:
     return f"{HOST}{parsed.path}?{query}" + (f"#{parsed.fragment}" if parsed.fragment else "")
 
 
-def export_terms() -> str:
+def export_terms(tool_id: str | None = None) -> str:
     """Expose current export terms before use without loading authentication."""
+    scope = ('<strong>A cópia editável FCStd é sempre gratuita. '
+             'Para STEP, STL e outras exportações técnicas:</strong> '
+             if tool_id == "modelador-parametrico-3d" else "")
     return ('<p class="tool-export-terms" data-tool-export-terms hidden>'
+            + scope +
             '<span data-tool-export-copy></span> '
             '<a href="/ferramentas/#meus-creditos" data-tool-export-wallet>'
             'Minha conta e créditos</a></p>')
@@ -346,14 +350,14 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
         return re.sub(r'("dateModified"\s*:\s*")[^"]+(")', lambda m: m[1] + updated + m[2], block[0])
     html = re.sub(r'<script type="application/ld\+json">.*?</script>', sync_date, html, flags=re.S)
     if "<!-- tool-showcase:export-terms -->" in html:
-        html = marker(html, "export-terms", export_terms(), "")
+        html = marker(html, "export-terms", export_terms(key), "")
     else:
         # Keep the introduction ahead of account conditions. This is a short
         # runtime-controlled note, not an authentication gate on tool use.
         end_h1 = html.index("</h1>", html.index("<main")) + len("</h1>")
         intro = re.match(r'\s*<p\b[^>]*>.*?</p>', html[end_h1:], flags=re.S)
         where = end_h1 + intro.end() if intro else end_h1
-        html = html[:where] + "\n" + marker("", "export-terms", export_terms(), "") + html[where:]
+        html = html[:where] + "\n" + marker("", "export-terms", export_terms(key), "") + html[where:]
     if "brief" in page:
         # Keep existing form and scripting intact. The intro points to the real start control.
         if not re.search(r'\bid=["\x27]' + re.escape(page["start"]) + r'["\x27]', html):

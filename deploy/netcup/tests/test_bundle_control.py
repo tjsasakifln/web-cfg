@@ -8,7 +8,11 @@ import subprocess
 import pytest
 
 from deploy.netcup import run_bundle_control as runner
-from deploy.netcup.tests.test_release_control import SHA_A, SHA_B, LiveServer, make_incoming
+# Register the same runtime fixture used when make_incoming builds an archive
+# in its own test module; importing the helper alone does not register fixtures.
+from deploy.netcup.tests.test_release_control import (
+    SHA_A, SHA_B, LiveServer, make_incoming, private_dependency_fixture,
+)
 
 
 def test_bundle_controller_is_bound_to_payload_and_checkout(tmp_path, monkeypatch):

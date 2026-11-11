@@ -1,0 +1,41 @@
+CONFENGE | Modelador paramétrico 3D
+
+Esta distribuição usa os binários FreeCAD-Web v1.0.9, publicados por Virtastic,
+com FreeCAD 1.1.3. FreeCAD é marca do projeto FreeCAD. CONFENGE não afirma
+afiliação, certificação ou endosso do projeto FreeCAD ou da Virtastic.
+
+Fontes correspondentes e instruções de reconstrução da versão binária:
+https://github.com/Virtastic/freecad-web/tree/v1.0.9
+https://github.com/Virtastic/freecad-web/blob/v1.0.9/BUILD-WEH.md
+https://github.com/Virtastic/freecad-web/tree/v1.0.9/patches
+https://github.com/Virtastic/freecad-web/releases/tag/v1.0.9
+
+LICENSE-FreeCAD-Web.txt contém LGPL-2.1-or-later. NOTICE-upstream.txt preserva
+a atribuição completa do fornecedor. Os textos adicionais estão em licenses/.
+
+Adaptações desta edição, 2026-11-11:
+- shell, inicialização, fronteira de rede e ponte de arquivos próprios;
+- preservação das rotinas gráficas, do compositor e da recuperação local de
+  freecad-gui.html, scripts 7 e 8, com crédito ao autor original;
+- remoção da API de instalação de addons e do tick de compartilhamento remoto;
+- desativação dos controles de depuração por URL, inclusive interpolação de
+  valores de query em Python;
+- qtloader.js da Qt Company preservado, GPL-3.0-only; apenas espaços finais normalizados;
+- diálogos JSPI preservados a partir do código Python embutido nessa versão;
+- fechamento de diálogos por Escape ou falha rejeita a ação pelo papel Qt;
+- cópias locais não expiram por idade nem são excluídas por não serem reabertas;
+- Gmsh, CalculiX, serviços de compartilhamento, MCP, proxies, telemetria,
+  instalador de addons e cliente 3Dconnexion não são distribuídos nesta edição.
+  O ambiente FEM é removido da seleção enquanto esses solvers não são validados.
+
+Os arquivos novos do shell e as adaptações derivadas são distribuídos sob
+GPL-3.0-or-later. Os arquivos servidos em /cad/freecad/ incluem o código-fonte
+legível correspondente da adaptação, sem etapa de compilação adicional.
+bootstrap.txt e vendor/dialogs.txt são código Python carregado pela aplicação.
+Os três binários do motor são publicados sem alterações e identificados pelo
+SHA-256 no arquivo /assets/freecad/runtime.json.
+
+A modelagem e a cópia editável FCStd não exigem créditos. A carteira da CONFENGE
+autoriza a entrega dos formatos técnicos conforme a política publicada do site.
+Essas condições não restringem os direitos de copiar, estudar, modificar e
+redistribuir o software concedidos pelas suas licenças.
