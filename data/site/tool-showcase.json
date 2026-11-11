@@ -1553,6 +1553,32 @@
           "quantitativos-dxf"
         ]
       }
+    },
+    {
+      "id": "comparador-geometrico-ifc",
+      "group": "modelos",
+      "title": "Comparador geométrico de IFC",
+      "summary": "Compare elementos por GlobalId e identifique inclusão, remoção, deslocamento e alteração da malha. Ajuste a tolerância e exporte a conferência CSV ou JSON.",
+      "format": "IFC · CSV · JSON",
+      "file_formats": [
+        "IFC",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Comparar geometria IFC",
+      "href": "/ferramentas/comparador-geometrico-ifc/",
+      "art": "iso",
+      "mark": "REVISÕES BIM",
+      "keywords": "comparação geométrica ifc revisão modelo revit forma posição malha globalid alteração",
+      "page": {
+        "title": "Comparador geométrico de IFC: mudanças de forma e posição",
+        "desc": "Compare a geometria de duas revisões IFC por GlobalId, com tolerância definida. Identifique inclusão, remoção e alterações de forma e posição.",
+        "related": [
+          "ifc-revisoes",
+          "inventario-ifc",
+          "federacao-bcf"
+        ]
+      }
     }
   ]
 }

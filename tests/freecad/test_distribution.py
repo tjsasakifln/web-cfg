@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sys
 import runpy
+import subprocess
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -46,17 +47,30 @@ def test_isolation_and_wasm_authority_do_not_leak_to_the_launcher(tmp_path):
     assert runtime["cross-origin-opener-policy"] == "same-origin"
     assert runtime["cross-origin-embedder-policy"] == "require-corp"
     assert "noindex" in runtime["x-robots-tag"]
+    for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
+        assert "'unsafe-eval'" not in parsed[pattern]["content-security-policy"]
+        assert "identitytoolkit.googleapis.com" not in parsed[pattern]["content-security-policy"]
+        assert "securetoken.googleapis.com" not in parsed[pattern]["content-security-policy"]
     assert "wasm-unsafe-eval" not in parsed["/*"]["content-security-policy"]
     for route in ["cad/freecad", "ferramentas/modelador-parametrico-3d"]:
         (tmp_path / route).mkdir(parents=True)
         (tmp_path / route / "index.html").write_text("<html></html>")
     result = parse_header_rules(apply_wallet_document_policies(headers, tmp_path))
-    app = result["/cad/freecad/"]["content-security-policy"]
     launcher = result["/ferramentas/modelador-parametrico-3d/"]["content-security-policy"]
-    assert "wasm-unsafe-eval" in app and "wasm-unsafe-eval" not in launcher
-    assert "identitytoolkit.googleapis.com" in app
-    assert "apis.google.com" not in app and "firebaseapp.com" not in app
-    assert "frame-src 'none'" in app
+    assert "wasm-unsafe-eval" not in launcher and "'unsafe-eval'" not in launcher
+    for route in ["/cad/freecad/", "/cad/freecad/index.html"]:
+        for policies in [parsed, result]:
+            app = policies[route]["content-security-policy"]
+            assert "'unsafe-eval'" in app and "wasm-unsafe-eval" in app
+            assert "identitytoolkit.googleapis.com" in app
+            assert "apis.google.com" not in app and "firebaseapp.com" not in app
+            assert "script-src-attr 'none'" in app
+            assert "frame-src 'none'" in app and "object-src 'none'" in app
+            assert "'unsafe-inline'" not in csp_directives_from_text("Content-Security-Policy: " + app)["script-src"]
+    built = apply_wallet_document_policies(headers, tmp_path)
+    assert apply_wallet_document_policies(built, tmp_path) == built
+    for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
+        assert result[pattern] == parsed[pattern]
 
 
 def test_engine_cannot_be_downloaded_by_reading_the_public_page():
@@ -101,3 +115,48 @@ def test_dialog_escape_and_bridge_errors_never_accept_an_action(monkeypatch):
     instance = messagebox()
     instance.standardButtons = lambda: (_ for _ in ()).throw(RuntimeError('bridge failed'))
     assert instance.exec() == messagebox.NoButton
+
+
+def test_autosave_preserves_edits_to_an_opened_example(tmp_path, monkeypatch):
+    # Execute the Python saver shipped inside the compatibility script. Merely
+    # checking that save(True) was called would miss the old /freecad/ skip.
+    extract = r"""
+import fs from 'node:fs';
+import vm from 'node:vm';
+const graphics = fs.readFileSync('cad/freecad/vendor/graphics.js', 'utf8');
+const code = graphics.slice(graphics.indexOf('    var AUTOSAVE_INSTALL = ['), graphics.indexOf('    var RESTORE_PY = ['));
+if (!code) throw new Error('production saver not found');
+const scope = vm.createContext({URLSearchParams, AUTOSAVE_DIR: process.argv[1], AUTOSAVE_MARKER: process.argv[2]});
+vm.runInContext(code, scope);
+process.stdout.write(scope.AUTOSAVE_INSTALL);
+"""
+    recovery = tmp_path / "recovery"
+    marker = tmp_path / "installed"
+    source = subprocess.check_output(
+        ["node", "--input-type=module", "-e", extract, str(recovery), str(marker)],
+        cwd=ROOT,
+        text=True,
+    )
+    saved = []
+
+    def document(name, filename, content):
+        def save_copy(target):
+            path = Path(target)
+            saved.append(path)
+            path.write_bytes(content)
+        return SimpleNamespace(Name=name, FileName=filename, saveCopy=save_copy)
+
+    docs = {
+        "Example": document("Example", "/freecad/data/examples/PartDesign.FCStd", b"edited example"),
+        "Project": document("Project", "/home/web_user/project.FCStd", b"edited project"),
+    }
+    params = SimpleNamespace(SetBool=lambda *_: None, SetInt=lambda *_: None, GetInt=lambda *_: 3)
+    app = SimpleNamespace(ParamGet=lambda *_: params, listDocuments=lambda: docs, addDocumentObserver=lambda *_: None)
+    monkeypatch.setitem(sys.modules, "FreeCAD", app)
+    exec(compile(source, "production-autosaver", "exec"), {})
+    app._fcweb_saver.save(True)
+    assert set(saved) == {recovery / "Example.FCStd", recovery / "Project.FCStd"}
+    assert (recovery / "Example.FCStd").read_bytes() == b"edited example"
+    assert (recovery / "Project.FCStd").read_bytes() == b"edited project"
+    assert app._fcweb_saver.dirty is False
+    assert not (recovery / ".failed").exists()

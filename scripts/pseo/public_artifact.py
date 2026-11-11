@@ -297,6 +297,19 @@ SECRET_PATTERNS = [
     re.compile(r"(?i)site-confenge-guides"),
 ]
 
+
+def is_freecad_virtual_home_reference(relative: str, match: re.Match[str]) -> bool:
+    """Emscripten's public virtual home is not a server or developer path.
+
+    Only the two FreeCAD sources use this fixed in-memory filesystem root.
+    Other home paths and every credential pattern in the same file still fail.
+    The installer verifies the generated engine's full SHA-256 independently.
+    """
+    return match.group() == "/home/web_user/" and (
+        relative == "cad/freecad/vendor/graphics.js"
+        or relative == "assets/freecad/FreeCAD-3f8c1ff4a0ee.js"
+    )
+
 TEXT_SCAN_SUFFIXES = frozenset(
     {".html", ".js", ".css", ".json", ".xml", ".txt", ".webmanifest", ".map"}
 )
@@ -764,7 +777,8 @@ def audit_public_artifact(
                 )
                 continue
             for pat in SECRET_PATTERNS:
-                m = pat.search(text)
+                m = next((match for match in pat.finditer(text)
+                          if not is_freecad_virtual_home_reference(rel, match)), None)
                 if m:
                     findings.append(
                         {

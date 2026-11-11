@@ -1,0 +1,98 @@
+<!doctype html><html lang="pt-BR" class="no-js"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="canonical" href="https://confenge.com.br/ferramentas/comparador-geometrico-ifc/"><meta name="theme-color" content="#061a33"><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="ifc.css"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Comparador geométrico de IFC", "description": "Compare a geometria e o posicionamento de duas versões IFC por GlobalId. Ajuste a tolerância, confira alterações e exporte CSV ou JSON.", "url": "https://confenge.com.br/ferramentas/comparador-geometrico-ifc/", "operatingSystem": "Navegador", "inLanguage": "pt-BR", "applicationCategory": "UtilitiesApplication", "isAccessibleForFree": true}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Início", "item": "https://confenge.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Ferramentas", "item": "https://confenge.com.br/ferramentas/"}, {"@type": "ListItem", "position": 3, "name": "Comparador geométrico IFC", "item": "https://confenge.com.br/ferramentas/comparador-geometrico-ifc/"}]}</script><script defer src="/script.js"></script><script type="module" src="/bim/web/geometry-diff.mjs"></script><!-- tool-showcase:head -->
+<title>Comparador geométrico de IFC: mudanças de forma e posição | CONFENGE</title>
+<meta name="description" content="Compare a geometria de duas revisões IFC por GlobalId, com tolerância definida. Identifique inclusão, remoção e alterações de forma e posição."/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
+<meta property="og:updated_time" content="2026-11-11"/>
+<meta property="og:type" content="website"/>
+<meta property="og:locale" content="pt_BR"/>
+<meta property="og:site_name" content="CONFENGE"/>
+<meta property="og:title" content="Comparador geométrico de IFC: mudanças de forma e posição | CONFENGE"/>
+<meta property="og:description" content="Compare a geometria de duas revisões IFC por GlobalId, com tolerância definida. Identifique inclusão, remoção e alterações de forma e posição."/>
+<meta property="og:url" content="https://confenge.com.br/ferramentas/comparador-geometrico-ifc/"/>
+<meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/comparador-geometrico-ifc.jpg"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Comparador geométrico de IFC: mudanças de forma e posição, ilustração da ferramenta CONFENGE"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Comparador geométrico de IFC: mudanças de forma e posição | CONFENGE"/>
+<meta name="twitter:description" content="Compare a geometria de duas revisões IFC por GlobalId, com tolerância definida. Identifique inclusão, remoção e alterações de forma e posição."/>
+<meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/comparador-geometrico-ifc.jpg"/>
+<meta name="twitter:image:alt" content="Comparador geométrico de IFC: mudanças de forma e posição, ilustração da ferramenta CONFENGE"/>
+<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
+<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>
+<!-- /tool-showcase:head -->
+</head><body>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" aria-current="page" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav>
+</header>
+<main id="conteudo"><nav class="breadcrumbs container" aria-label="Caminho de navegação"><ol><li><a href="/">Início</a> /</li><li><a href="/ferramentas/">Ferramentas</a> /</li><li aria-current="page">Comparador geométrico IFC</li></ol></nav><header class="tool-page-hero"><div class="container tool-shell"><p class="eyebrow">BIM e coordenação de projetos</p><h1>Comparador geométrico de IFC</h1><p class="content-lead" data-tool-job>Compare a malha e o posicionamento de duas versões do projeto. Identifique elementos adicionados, removidos e modificados por GlobalId, com a tolerância em milímetros que você definir.</p>
+<!-- tool-showcase:export-terms -->
+<p class="tool-export-terms" data-tool-export-terms hidden><span data-tool-export-copy></span> <a href="/ferramentas/#meus-creditos" data-tool-export-wallet>Minha conta e créditos</a></p>
+<!-- /tool-showcase:export-terms -->
+</div></header><div class="container tool-shell ifc-tool">
+<section aria-labelledby="entrada"><h2 id="entrada">Comparar versões do modelo</h2><p>A leitura e a simulação são gratuitas e acontecem neste navegador. Para baixar o resultado, use os créditos da sua conta. <a href="/termos-de-uso/#creditos-ferramentas">Consultar os créditos</a>.</p>
+<div class="ifc-grid"><label for="antes">Versão anterior (.ifc)<input id="antes" type="file" accept=".ifc"></label><label for="depois">Versão revisada (.ifc)<input id="depois" type="file" accept=".ifc"></label><label for="tolerancia">Tolerância geométrica (mm)<input id="tolerancia" type="number" min="0.01" max="100" step="0.01" value="1" required></label></div>
+<div class="ifc-actions"><button id="comparar" type="button">Comparar geometria</button><button id="exemplo" type="button">Comparar exemplo</button><button id="cancelar" type="button" hidden>Cancelar</button></div><p id="status" class="status" role="status" aria-live="polite">Escolha duas versões de até 25 MiB cada ou abra o exemplo demonstrativo.</p></section>
+<section id="resultado" aria-labelledby="titulo-resultado" hidden><h2 id="titulo-resultado">Resultado geométrico</h2><p id="resumo"></p><p id="originais"></p><p id="referencia"></p><label for="filtro">Elementos na tabela<select id="filtro"><option value="changes">Somente alterações</option><option value="all">Todos</option><option value="added">Adicionados</option><option value="removed">Removidos</option><option value="modified">Modificados</option><option value="same">Dentro da tolerância</option></select></label><p id="amostra"></p><div class="scroll" tabindex="0" role="region" aria-label="Diferenças entre os elementos"><table><thead><tr><th>Estado</th><th>Classe</th><th>Nome</th><th>GlobalId</th><th>Diferença</th><th>Triângulos antes</th><th>Triângulos depois</th><th>Delta do centro X / Y / Z (m)</th></tr></thead><tbody id="linhas"></tbody></table></div><div class="ifc-actions"><button id="csv" type="button">Baixar CSV com créditos</button><button id="json" type="button">Baixar JSON com créditos</button></div></section>
+<section><h2>Como a comparação funciona</h2><p>O leitor web-ifc extrai os triângulos de cada elemento nas coordenadas de engenharia do IFC, em metros. O GlobalId identifica o mesmo elemento nas duas versões; IDs internos de malha e números de registros não definem a correspondência.</p><p>A assinatura SHA-256 ordena triângulos e vértices, desconsiderando a ordem de leitura. Quando as assinaturas diferem, o algoritmo procura uma correspondência de um para um entre os triângulos: cada vértice deve ficar a uma distância de até a tolerância escolhida. A assinatura é uma aceleração do teste, e não substitui a conferência de proximidade.</p><p>Se a malha local é equivalente mas as coordenadas finais mudaram, a tabela indica posicionamento ou transformação das partes. Se a malha local também muda, indica malha ou triangulação. O delta X/Y/Z é a diferença entre os centros das caixas envolventes; não representa necessariamente a translação do objeto.</p></section>
+<section><h2>Exemplo e interpretação</h2><p>O exemplo contém duas versões sintéticas de paredes e laje. Uma parede muda de comprimento. A simulação identifica a diferença geométrica mesmo que as quantidades declaradas nas propriedades permaneçam desatualizadas.</p><p>Use o relatório de geometria junto do <a href="/bim/web/comparar.html">comparador de quantitativos IFC</a> e do <a href="/ferramentas/inventario-ifc/">inventário de propriedades</a> para conferir a entrega. O CSV lista todos os elementos, estados, assinaturas e deslocamento do centro. O JSON acrescenta os arquivos de origem, SHA-256 dos arquivos, método e limites.</p></section>
+<section><h2>Escopo e limites</h2><p>Até 6.000 elementos e 200.000 triângulos por arquivo, com limite de 90 segundos por comparação. GlobalIds inválidos ou repetidos e mais de uma operação cartográfica por arquivo impedem o resultado para evitar correspondências ambíguas. Elementos sem geometria triangulada ficam fora desta comparação.</p><p>Os modelos não são alinhados nem recentrados. Operações cartográficas como MapConversion são informadas separadamente e não são aplicadas. Confira a origem comum e o sistema de referência antes de interpretar deslocamentos.</p><p>A comparação trabalha sobre malhas. Uma triangulação diferente pode marcar um elemento como modificado mesmo quando representa a mesma superfície. Cor, materiais, nomes, propriedades e quantitativos não alteram o estado geométrico. Não calcula subtração booleana de sólidos, interferências ou volume da alteração.</p></section>
+<section class="tool-method"><h2>Conferência e compatibilização do projeto</h2><p>Reúna os modelos e os requisitos de entrega para conferir as interfaces entre disciplinas e organizar as correções.</p><a data-cta-id="comparador-geometrico-ifc-projeto" href="/projetos/coordenacao-multidisciplinar/">Conhecer a coordenação multidisciplinar</a> · <a data-cta-id="comparador-geometrico-ifc-contato" data-cta-position="tool_contact" href="/triagem-tecnica/">Conversar sobre o meu projeto</a></section></div>
+<!-- tool-showcase:share -->
+<section class="tool-share container" aria-labelledby="tool-share-title" data-tool-share data-share-title="Comparador geométrico de IFC">
+<h2 id="tool-share-title">Compartilhe esta ferramenta</h2>
+<p>Envie o link da ferramenta para um colega. O link não leva os dados do seu trabalho.</p>
+<div class="tool-share-social">
+<button type="button" data-share-copy hidden data-event-name="cta_click" data-cta-id="tool-share-copy-comparador-geometrico-ifc" data-cta-position="tool_share">Copiar link</button>
+<button type="button" data-share-native hidden data-event-name="cta_click" data-cta-id="tool-share-native-comparador-geometrico-ifc" data-cta-position="tool_share">Compartilhar…</button>
+<a href="https://wa.me/?text=Comparador+geom%C3%A9trico+de+IFC+%7C+CONFENGE%0Ahttps%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fcomparador-geometrico-ifc%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-wa-comparador-geometrico-ifc" data-cta-position="tool_share">WhatsApp</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fconfenge.com.br%2Fferramentas%2Fcomparador-geometrico-ifc%2F%3Futm_source%3Dlinkedin%26utm_medium%3Dreferral%26utm_campaign%3Dferramentas" target="_blank" rel="noopener noreferrer" data-event-name="cta_click" data-cta-id="tool-share-linkedin-comparador-geometrico-ifc" data-cta-position="tool_share">LinkedIn</a>
+</div>
+<label class="tool-share-manual" hidden>Link da ferramenta<input type="text" value="https://confenge.com.br/ferramentas/comparador-geometrico-ifc/?utm_source=confenge_share&amp;utm_medium=referral&amp;utm_campaign=ferramentas" readonly data-share-url></label>
+<p class="tool-share-status" role="status"></p>
+<aside id="programa-indicacao" class="tool-referral-entry" data-referral-entry hidden aria-label="Programa de indicação">
+<h3>Indique e ganhe créditos de uso</h3>
+<p>Gere seu link pessoal na sua conta. Quando uma nova pessoa indicada fizer a primeira exportação paga, você recebe 1 crédito cortesia. Até 10 cortesias por mês.</p>
+<a href="/ferramentas/#programa-indicacao" data-event-name="cta_click" data-cta-id="tool-referral-entry-comparador-geometrico-ifc" data-cta-position="tool_share">Gerar meu link de indicação</a>
+<a href="/termos-de-uso/#creditos-ferramentas">Ver as regras</a>
+</aside>
+<div class="tool-share-related"><a href="/ferramentas/">Ver todas as ferramentas</a><a href="/bim/web/comparar.html">Comparar revisões de IFC</a><a href="/ferramentas/inventario-ifc/">Inventário de propriedades IFC</a><a href="/ferramentas/federacao-bcf/">Federação IFC e apontamentos BCF</a></div>
+</section>
+<!-- /tool-showcase:share -->
+</main><footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body></html>

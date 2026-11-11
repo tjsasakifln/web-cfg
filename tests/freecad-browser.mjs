@@ -142,8 +142,15 @@ try {
   const client = await page.createCDPSession();
   await client.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: join(reports, 'downloads') });
   const waitReady = async () => {
-    await page.waitForFunction(() => window.fcInstance?.FS && window.__fcWorkReady && document.getElementById('sample')?.disabled === false,
+    await page.waitForFunction(() =>
+      (window.fcInstance?.FS && window.__fcWorkReady && document.getElementById('sample')?.disabled === false)
+      || (document.getElementById('entry')?.hidden === false && document.getElementById('start')?.hidden === true),
       { timeout: 300000, polling: 500 });
+    const boot = await page.evaluate(() => ({
+      ready: Boolean(window.fcInstance?.FS && window.__fcWorkReady && document.getElementById('sample')?.disabled === false),
+      message: document.getElementById('status')?.textContent,
+    }));
+    assert.equal(boot.ready, true, `the runtime reported a terminal startup failure: ${boot.message}`);
     // Let the observer complete its restore pass before testing user operations.
     assert.equal(await page.evaluate(() => window.fcInstance.FS.analyzePath('/tmp/.confenge_restore_complete').exists), true,
       'user actions must wait for the confirmed local recovery pass');

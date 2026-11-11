@@ -1,4 +1,4 @@
-:root { color-scheme:light; font-family:Arial,sans-serif; color:#153d3e; background:#f1f5f2; }
+:root { color-scheme:light; font-family:var(--sans,Arial,sans-serif); color:#153d3e; background:#f1f5f2; }
 * { box-sizing:border-box; }
 body { margin:0; min-height:100dvh; }
 a { color:#075b60; text-underline-offset:.2em; }
@@ -8,6 +8,7 @@ button.primary { background:#115b60; color:#fff; }
 button:disabled { opacity:.55; cursor:wait; }
 [hidden] { display:none!important; }
 .bar { min-height:70px; padding:.75rem 1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; background:#fff; border-bottom:1px solid #cedbd4; }
+.bar .brand img { width:162px; height:42px; }
 .bar strong { color:#104d50; font-size:1.1rem; letter-spacing:.05em; }
 .bar .back { margin-right:auto; }
 .bar button { font-size:.9rem; }

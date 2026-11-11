@@ -24,6 +24,12 @@ afirma compatibilidade por uma lista de versões de navegadores.
   acrescenta cache imutável apenas a essas rotas no artefato. Não altera binários.
 - COOP/COEP e permissão de WebAssembly ficam no ambiente técnico. A página
   pública preserva a política global e continua leve.
+- O JavaScript Emscripten fixado utiliza `new Function` nos invocadores Embind.
+  Por isso, somente os documentos `/cad/freecad/` e `/cad/freecad/index.html`
+  recebem `script-src 'unsafe-eval'`. A política global, o launcher, a página
+  de licenças e os assets não recebem essa permissão. Scripts inline,
+  complementos remotos e frames continuam bloqueados. O gerador da política
+  de produção mantém esse mesmo escopo, conferido pelo teste de distribuição.
 - O sistema de arquivos, geometria, modelo importado e cópia FCStd ficam no
   navegador. O backup FCStd não chama a carteira, inclusive em falhas de saldo.
 - Saídas técnicas usam `exportToolResult` e o contrato existente
