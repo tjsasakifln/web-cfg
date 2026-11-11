@@ -1442,6 +1442,26 @@ def test_declared_family_parent_route_answers_with_a_page_not_a_server_error():
         assert f'href="/oportunidades/{child.name}/"' in html, child.name
 
 
+def test_freecad_noindex_families_cover_only_the_two_technical_routes():
+    from scripts.site.inbound_gates import build_indexation_context
+
+    context = build_indexation_context()
+    expected = {
+        "cad-freecad-aplicativo": {"/cad/freecad/"},
+        "cad-freecad-fontes-licencas": {"/cad/freecad/creditos.html"},
+    }
+    for family_id, routes in expected.items():
+        matched = {route for route, family in context.route_family.items()
+                   if family.get("id") == family_id}
+        # The literal .html prefix used by the registry must remain unitary;
+        # it must not silently give a future sibling the same noindex reason.
+        assert matched == routes, (family_id, matched)
+        assert all(is_noindex(context.html_by_route[route]) for route in routes)
+    landing = "/ferramentas/modelador-parametrico-3d/"
+    assert context.route_family[landing]["id"] not in expected
+    assert not is_noindex(context.html_by_route[landing])
+
+
 if __name__ == "__main__":
     # simple runner
     failed = 0
