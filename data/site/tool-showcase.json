@@ -46,14 +46,18 @@
       "title": "Editor de DWG e DXF",
       "summary": "Abra a planta, confira camadas e medidas, faça ajustes e baixe uma cópia editada. Você pode começar com uma planta de exemplo.",
       "format": "DWG · DXF",
+      "file_formats": [
+        "DWG",
+        "DXF"
+      ],
       "action": "Abrir editor DWG",
       "href": "/cad/",
       "art": "plan",
       "mark": "A–A",
       "keywords": "autocad planta baixa arquivo dxf",
       "page": {
-        "title": "Editor de DWG online: abrir e editar plantas",
-        "desc": "Abra e edite DWG ou DXF online. Confira camadas e medidas, teste com uma planta de exemplo e salve uma cópia em DWG 2000 ou DXF.",
+        "title": "Editor DWG online grátis: alternativa ao AutoCAD",
+        "desc": "Abra e edite DWG ou DXF grátis no navegador. Uma alternativa para ajustes 2D no lugar do AutoCAD. Confira as condições de exportação por créditos.",
         "related": [
           "cad-suite",
           "pdf-cad"
@@ -66,14 +70,25 @@
       "title": "Ferramentas BIM e IFC",
       "summary": "Abra um modelo em 3D, confira propriedades de elementos e leve os quantitativos para uma planilha. Experimente com o IFC do Pavilhão Ipê.",
       "format": "IFC · BIM · XLSX",
+      "file_formats": [
+        "IFC",
+        "DWG",
+        "DXF",
+        "PDF",
+        "XLSX",
+        "CSV",
+        "SVG",
+        "JSON",
+        "TXT"
+      ],
       "action": "Explorar ferramentas BIM",
       "href": "/bim/",
       "art": "iso",
       "mark": "IFC4",
       "keywords": "building information modeling revit openbim visualizador excel",
       "page": {
-        "title": "Ferramentas BIM online: IFC 3D, DWG e quantitativos",
-        "desc": "Abra IFC em 3D, compare revisões, extraia quantitativos para Excel e converta pranchas para DWG. Experimente com modelos BIM de exemplo.",
+        "title": "IFC online grátis: visualize modelos exportados do Revit",
+        "desc": "Abra IFC exportado do Revit ou de outro programa BIM. Confira o modelo em 3D, compare revisões e prepare quantitativos para Excel no navegador.",
         "related": [
           "ifc-excel",
           "ifc-revisoes"
@@ -86,6 +101,11 @@
       "title": "Modela Pro: avaliação de imóveis",
       "summary": "Importe comparáveis de mercado para estimar o valor de um imóvel. Examine a regressão, os intervalos e os diagnósticos ou trabalhe pelo custo de reedição.",
       "format": "CSV · XLSX",
+      "file_formats": [
+        "CSV",
+        "XLSX",
+        "JSON"
+      ],
       "action": "Abrir Modela Pro",
       "href": "/avaliacao-imoveis-urbanos/inferencia/",
       "art": "chart",
@@ -109,6 +129,18 @@
       "title": "Aplicativos CAD e engenharia",
       "summary": "Encontre oito ambientes de trabalho: do desenho 2D à coordenação de modelos, passando por revisão, quantitativos, civil e detalhamento.",
       "format": "DWG · DXF · IFC · PDF",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC",
+        "PDF",
+        "XLSX",
+        "CSV",
+        "JSON",
+        "TXT",
+        "STEP",
+        "LANDXML"
+      ],
       "action": "Explorar aplicativos CAD",
       "href": "/cad/aplicativos/",
       "art": "grid",
@@ -129,6 +161,12 @@
       "title": "Desenhar em CAD 2D",
       "summary": "Trabalhe com linhas, camadas, blocos e cotas e organize a folha para plotagem.",
       "format": "DESENHO 2D",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "PDF",
+        "JSON"
+      ],
       "action": "Abrir CAD 2D",
       "href": "/cad/aplicativos/#cadcraft",
       "art": "plan",
@@ -141,6 +179,11 @@
       "title": "Revisar pranchas em PDF",
       "summary": "Destaque uma interferência, registre a correção e compare revisões de desenho para localizar mudanças.",
       "format": "PDF · REVISÕES",
+      "file_formats": [
+        "PDF",
+        "CSV",
+        "JSON"
+      ],
       "action": "Abrir revisão de pranchas",
       "href": "/cad/aplicativos/#markupcraft",
       "art": "sheet",
@@ -153,6 +196,11 @@
       "title": "Converter PDF vetorial em CAD",
       "summary": "Selecione a folha e confira a unidade antes de exportar a geometria. Use quando o PDF já contém linhas vetoriais.",
       "format": "PDF · DXF · DWG",
+      "file_formats": [
+        "PDF",
+        "DWG",
+        "DXF"
+      ],
       "action": "Converter PDF vetorial",
       "href": "/bim/web/cad.html",
       "art": "plan",
@@ -165,6 +213,14 @@
       "title": "Digitalizar planta escaneada para DWG",
       "summary": "Recupere traços e textos de um PDF escaneado ou de uma imagem. Calibre a escala e confira o que o reconhecimento encontrou.",
       "format": "OCR · DWG",
+      "file_formats": [
+        "PDF",
+        "PNG",
+        "JPEG",
+        "WEBP",
+        "DWG",
+        "DXF"
+      ],
       "action": "Abrir OCR e vetorização",
       "href": "/bim/web/digitalizar.html",
       "art": "sheet",
@@ -187,6 +243,10 @@
       "title": "Visualizar IFC em 3D",
       "summary": "Selecione vigas, paredes e lajes para consultar classes e identificadores. Abra um exemplo antes de escolher seu arquivo.",
       "format": "IFC · VISUALIZAÇÃO",
+      "file_formats": [
+        "IFC",
+        "XLSX"
+      ],
       "action": "Abrir visualizador IFC",
       "href": "/bim/web/visualizador.html",
       "art": "iso",
@@ -199,6 +259,10 @@
       "title": "Extrair quantitativos de IFC para Excel",
       "summary": "Exporte comprimentos, áreas e volumes declarados no IFC. Use o identificador do elemento para reencontrá-lo no modelo.",
       "format": "IFC → XLSX",
+      "file_formats": [
+        "IFC",
+        "XLSX"
+      ],
       "action": "Extrair quantitativos IFC",
       "href": "/bim/web/ifc-excel.html",
       "art": "table",
@@ -217,6 +281,10 @@
       "title": "Comparar revisões de IFC",
       "summary": "Coloque duas versões lado a lado para identificar mudanças nos quantitativos declarados entre as entregas.",
       "format": "IFC · REVISÕES",
+      "file_formats": [
+        "IFC",
+        "CSV"
+      ],
       "action": "Comparar dois arquivos IFC",
       "href": "/bim/web/comparar.html",
       "art": "bars",
@@ -229,6 +297,14 @@
       "title": "Coordenar um modelo BIM",
       "summary": "Navegue por pavimentos, confira as propriedades dos objetos e separe elementos por disciplina no ambiente de trabalho.",
       "format": "COORDENAÇÃO",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC",
+        "PDF",
+        "CSV",
+        "STEP"
+      ],
       "action": "Abrir coordenação BIM",
       "href": "/cad/aplicativos/#bimcraft",
       "art": "iso",
@@ -241,6 +317,14 @@
       "title": "Modelar volumes em 3D",
       "summary": "Desenhe uma face, use a extrusão para dar altura e agrupe componentes para estudar a volumetria.",
       "format": "MODELAGEM 3D",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC",
+        "PDF",
+        "JSON",
+        "STEP"
+      ],
       "action": "Abrir modelador de volumes",
       "href": "/cad/aplicativos/#modelcraft",
       "art": "iso",
@@ -253,6 +337,13 @@
       "title": "Medir e levantar quantitativos na planta",
       "summary": "Calibre uma distância conhecida, meça áreas e comprimentos, conte itens e associe os custos às quantidades.",
       "format": "MEDIÇÕES · CUSTOS",
+      "file_formats": [
+        "IFC",
+        "PDF",
+        "XLSX",
+        "CSV",
+        "JSON"
+      ],
       "action": "Abrir levantamento na planta",
       "href": "/cad/aplicativos/#takeoffcraft",
       "art": "plan",
@@ -265,6 +356,12 @@
       "title": "Medir distâncias e áreas em uma foto",
       "summary": "Calibre uma superfície plana com uma medida conhecida e meça comprimentos, ângulos e áreas na imagem.",
       "format": "FOTO · ESCALA",
+      "file_formats": [
+        "JPEG",
+        "PNG",
+        "WEBP",
+        "TXT"
+      ],
       "action": "Abrir régua fotográfica",
       "href": "/bim/web/regua.html",
       "art": "photo",
@@ -283,6 +380,11 @@
       "title": "Gerar paredes IFC a partir de eixos CAD",
       "summary": "Escolha os eixos do DWG, confira unidade e camada e informe a altura, a espessura e o pavimento das paredes.",
       "format": "DWG → IFC",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC"
+      ],
       "action": "Converter eixos em paredes",
       "href": "/bim/web/modelagem.html#paredes",
       "art": "plan",
@@ -305,6 +407,11 @@
       "title": "Reconstruir um objeto a partir de fotos",
       "summary": "Use tomadas de vários ângulos para reconstruir um objeto no laboratório de fotogrametria. A malha PLY pode ser convertida em IFC em outra etapa.",
       "format": "FOTOS · MALHA 3D",
+      "file_formats": [
+        "JPEG",
+        "PNG",
+        "PLY"
+      ],
       "action": "Abrir laboratório de fotogrametria",
       "href": "/bim/web/fotogrametria.html",
       "art": "mesh",
@@ -323,6 +430,16 @@
       "title": "Estudar terrenos, traçados e perfis",
       "summary": "Crie uma superfície a partir de pontos e linhas de quebra e explore alinhamentos, perfis e terraplenagem.",
       "format": "INFRAESTRUTURA",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC",
+        "PDF",
+        "CSV",
+        "JSON",
+        "TXT",
+        "LANDXML"
+      ],
       "action": "Abrir ambiente civil",
       "href": "/cad/aplicativos/#civilcraft",
       "art": "profile",
@@ -335,6 +452,11 @@
       "title": "Converter terreno LandXML em IFC",
       "summary": "Use os triângulos de uma superfície topográfica para gerar IFC4.3 e confira as coordenadas antes da entrega.",
       "format": "LANDXML → IFC4.3",
+      "file_formats": [
+        "LANDXML",
+        "XML",
+        "IFC"
+      ],
       "action": "Converter superfície do terreno",
       "href": "/bim/web/modelagem.html#terreno",
       "art": "mesh",
@@ -347,6 +469,12 @@
       "title": "Extrair um perfil de nuvem de pontos",
       "summary": "Selecione uma faixa do levantamento XYZ ou COPC para extrair o perfil das cotas.",
       "format": "XYZ · COPC",
+      "file_formats": [
+        "XYZ",
+        "TXT",
+        "LAZ",
+        "CSV"
+      ],
       "action": "Extrair perfil da nuvem",
       "href": "/bim/web/oficina.html#perfil",
       "art": "profile",
@@ -359,6 +487,10 @@
       "title": "Estudar a sombra de um modelo IFC",
       "summary": "Ajuste local, norte verdadeiro, fuso e hora para observar a sombra da volumetria.",
       "format": "IFC · INSOLAÇÃO",
+      "file_formats": [
+        "IFC",
+        "CSV"
+      ],
       "action": "Abrir estudo solar",
       "href": "/bim/web/visualizador.html#estudo-solar",
       "art": "photo",
@@ -371,6 +503,11 @@
       "title": "Conferir requisitos IDS em um IFC",
       "summary": "Carregue o IFC e as especificações de entrega para conferir os requisitos e baixar o relatório por elemento.",
       "format": "IFC · IDS",
+      "file_formats": [
+        "IFC",
+        "IDS",
+        "JSON"
+      ],
       "action": "Verificar requisitos IDS",
       "href": "/bim/web/oficina.html#ids",
       "art": "check",
@@ -383,6 +520,14 @@
       "title": "Detalhar aço e armaduras",
       "summary": "Organize perfis metálicos e ligações ou posicione barras de armadura para preparar desenhos de fabricação.",
       "format": "ESTRUTURAS",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC",
+        "PDF",
+        "CSV",
+        "JSON"
+      ],
       "action": "Abrir detalhamento estrutural",
       "href": "/cad/aplicativos/#detailcraft",
       "art": "plan",
@@ -395,6 +540,14 @@
       "title": "Projetar peças e conjuntos",
       "summary": "Parta de um esboço com restrições, modele a peça e organize as juntas para estudar o encaixe do conjunto.",
       "format": "MECÂNICA · 3D",
+      "file_formats": [
+        "DWG",
+        "DXF",
+        "IFC",
+        "PDF",
+        "JSON",
+        "STEP"
+      ],
       "action": "Abrir modelador de peças",
       "href": "/cad/aplicativos/#partcraft",
       "art": "part",
@@ -407,6 +560,10 @@
       "title": "Gerar uma chapa ou flange em 3D",
       "summary": "Informe as dimensões, a espessura e os furos para gerar um sólido em STEP ou IFC.",
       "format": "STEP · IFC",
+      "file_formats": [
+        "STEP",
+        "IFC"
+      ],
       "action": "Gerar chapa ou flange",
       "href": "/bim/web/modelagem.html#peca",
       "art": "part",
@@ -419,6 +576,11 @@
       "title": "Converter peça de fornecedor para IFC",
       "summary": "Abra a geometria STEP ou IGES, confira o envelope e exporte a superfície para usar na coordenação.",
       "format": "STEP · IGES → IFC",
+      "file_formats": [
+        "STEP",
+        "IGES",
+        "IFC"
+      ],
       "action": "Converter peça de fornecedor",
       "href": "/bim/web/oficina.html#fornecedor",
       "art": "iso",
@@ -431,6 +593,10 @@
       "title": "Planejar o aproveitamento de chapas",
       "summary": "Distribua os contornos das peças na superfície da chapa com a folga e as rotações permitidas.",
       "format": "FABRICAÇÃO",
+      "file_formats": [
+        "DXF",
+        "SVG"
+      ],
       "action": "Montar arranjo de chapas",
       "href": "/bim/web/chapas.html",
       "art": "grid",
@@ -443,6 +609,9 @@
       "title": "Calculadora de limite de aditivo",
       "summary": "Calcule separadamente o saldo para acréscimos e supressões em obra pública e veja o que muda com o próximo termo.",
       "format": "ART. 125 · LEI 14.133",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Calcular limite de aditivo",
       "href": "/ferramentas/limite-acrescimos-supressoes/",
       "art": "bars",
@@ -465,6 +634,9 @@
       "title": "Checklist de reequilíbrio econômico-financeiro",
       "summary": "Veja quais evidências sustentam o pedido, o que falta documentar e o que deve ser resolvido primeiro.",
       "format": "DOCUMENTAÇÃO · CONTRATO",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Revisar pedido de reequilíbrio",
       "href": "/ferramentas/checklist-reequilibrio/",
       "art": "check",
@@ -487,6 +659,9 @@
       "title": "Matriz de atraso de obra",
       "summary": "Registre datas, evidências e a relação com o caminho crítico. Veja hipóteses por evento e os pontos que ainda precisam de prova.",
       "format": "PRAZO · EVIDÊNCIAS",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir matriz de atraso",
       "href": "/ferramentas/matriz-atraso-obra/",
       "art": "timeline",
@@ -509,6 +684,9 @@
       "title": "Diagnóstico de defesa de margem",
       "summary": "Consulte o recorte público de um contrato para ver a linha do tempo, os eventos documentados, as fontes e o que ainda precisa de conferência.",
       "format": "CONTRATOS · FONTES",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Consultar contrato público",
       "href": "/ferramentas/diagnostico-defesa-margem/",
       "art": "timeline",
@@ -531,6 +709,7 @@
       "title": "Prontidão técnica de obra privada",
       "summary": "Identifique o que está documentado e o que falta esclarecer antes de contratar ou retomar uma obra. O diagnóstico é opcional.",
       "format": "PROJETOS · DOCUMENTAÇÃO",
+      "file_formats": [],
       "action": "Ver o que falta na obra",
       "href": "/ferramentas/prontidao-tecnica-obra-privada/",
       "art": "check",
@@ -553,6 +732,7 @@
       "title": "Consultar perfil público por CNPJ",
       "summary": "Pesquise o histórico público de contratações e as oportunidades relacionadas quando houver cobertura das fontes.",
       "format": "CNPJ · DADOS PÚBLICOS",
+      "file_formats": [],
       "action": "Pesquisar um CNPJ",
       "href": "/analise-cnpj/",
       "art": "table",
@@ -565,6 +745,9 @@
       "title": "Caminho crítico da obra",
       "summary": "Monte a rede de atividades e veja o prazo, as folgas e as tarefas que podem atrasar a entrega.",
       "format": "Planejamento · CSV",
+      "file_formats": [
+        "CSV"
+      ],
       "action": "Calcular caminho crítico",
       "href": "/ferramentas/caminho-critico-obra/",
       "art": "timeline",
@@ -584,6 +767,9 @@
       "title": "Cronograma e custos",
       "summary": "Organize atividades, predecessoras, duração, equipe e custo para conferir a sequência de execução.",
       "format": "PLANEJAMENTO · CUSTOS",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir modelo de cronograma",
       "href": "/cad/aplicativos/#calculo-schedule",
       "art": "bars",
@@ -596,6 +782,9 @@
       "title": "Redes hidráulicas e sistemas elétricos",
       "summary": "Compare vazão, perda de carga e velocidade em tubulações ou fluxo, carga e proteção em uma rede elétrica.",
       "format": "HIDRÁULICA · ELÉTRICA",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir modelo de rede",
       "href": "/cad/aplicativos/#calculo-network",
       "art": "iso",
@@ -608,6 +797,9 @@
       "title": "Esquemas e conexões",
       "summary": "Teste uma partida e parada com lâmpada e identifique falhas de ligação no esquema.",
       "format": "COMANDOS · CONEXÕES",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir esquema elétrico",
       "href": "/cad/aplicativos/#calculo-schematic",
       "art": "grid",
@@ -620,6 +812,9 @@
       "title": "Mecanismos e robôs",
       "summary": "Simule braços articulados, quatro barras, biela e manivela ou um braço SCARA.",
       "format": "CINEMÁTICA · ROBÓTICA",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir modelo de mecanismo",
       "href": "/cad/aplicativos/#calculo-motion",
       "art": "iso",
@@ -632,6 +827,9 @@
       "title": "Filas e processos",
       "summary": "Modele atendimento, percurso e saída para comparar capacidade e tempo de espera de um processo.",
       "format": "PROCESSOS · FILAS",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir modelo de processo",
       "href": "/cad/aplicativos/#calculo-des",
       "art": "bars",
@@ -644,6 +842,9 @@
       "title": "Requisitos e testes",
       "summary": "Relacione requisitos e resultados de teste para conferir um conjunto de bombeamento.",
       "format": "REQUISITOS · TESTES",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir matriz de testes",
       "href": "/cad/aplicativos/#calculo-trace",
       "art": "table",
@@ -656,6 +857,9 @@
       "title": "Risco e confiabilidade",
       "summary": "Explore árvore de falhas, reparos e vida útil para comparar cenários de confiabilidade.",
       "format": "RISCO · CONFIABILIDADE",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir análise de risco",
       "href": "/cad/aplicativos/#calculo-risk",
       "art": "chart",
@@ -668,6 +872,9 @@
       "title": "Dados e protocolos industriais",
       "summary": "Inspecione exemplos de mensagens Modbus e MQTT para acompanhar dados de equipamentos.",
       "format": "MODBUS · MQTT",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir protocolos industriais",
       "href": "/cad/aplicativos/#calculo-live",
       "art": "grid",
@@ -680,6 +887,9 @@
       "title": "Circuitos elétricos",
       "summary": "Analise a resposta de um filtro RC em frequência ou a um degrau de tensão.",
       "format": "CIRCUITOS · RC",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir análise de circuito",
       "href": "/cad/aplicativos/#calculo-em",
       "art": "chart",
@@ -692,6 +902,9 @@
       "title": "Placas de circuito",
       "summary": "Confira uma placa com LED e localize conexões que precisam de revisão no projeto.",
       "format": "PCB · ELETRÔNICA",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir modelo de placa",
       "href": "/cad/aplicativos/#calculo-pcb",
       "art": "plan",
@@ -704,6 +917,9 @@
       "title": "Sistemas térmicos e elétricos",
       "summary": "Compare resfriamento de um corpo e divisão resistiva para estudar respostas de sistema.",
       "format": "TÉRMICA · ELÉTRICA",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir modelo de sistema",
       "href": "/cad/aplicativos/#calculo-sys",
       "art": "chart",
@@ -716,6 +932,9 @@
       "title": "Controladores programáveis",
       "summary": "Teste temporizador, liberação por grupos, elevação de carga e contador com lâmpada.",
       "format": "CLP · AUTOMAÇÃO",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Abrir controlador programável",
       "href": "/cad/aplicativos/#calculo-plc",
       "art": "grid",
@@ -728,6 +947,9 @@
       "title": "Beiral e sombra na janela",
       "summary": "Compare horários e orientações de fachada para estimar o avanço de um beiral horizontal.",
       "format": "Estudo solar",
+      "file_formats": [
+        "TXT"
+      ],
       "action": "Calcular sombra",
       "href": "/ferramentas/calculadora-de-beiral/",
       "art": "plan",
@@ -747,6 +969,9 @@
       "title": "Conversor UTM e SIRGAS 2000",
       "summary": "Passe de latitude e longitude para UTM e confira o fuso e o hemisfério usados no levantamento.",
       "format": "Topografia · UTM",
+      "file_formats": [
+        "CSV"
+      ],
       "action": "Converter coordenadas",
       "href": "/ferramentas/conversor-utm-sirgas-2000/",
       "art": "grid",
@@ -766,6 +991,9 @@
       "title": "Ponto de orvalho e condensação",
       "summary": "Informe temperatura e umidade e compare o limite de saturação com a temperatura da superfície.",
       "format": "Conforto · CSV",
+      "file_formats": [
+        "CSV"
+      ],
       "action": "Calcular ponto de orvalho",
       "href": "/ferramentas/calculadora-psicrometrica/",
       "art": "chart",
@@ -785,6 +1013,9 @@
       "title": "Calculadora de BDI",
       "summary": "Componha as parcelas do BDI e calcule o preço de venda a partir do custo direto.",
       "format": "Orçamento · BDI",
+      "file_formats": [
+        "CSV"
+      ],
       "action": "Calcular BDI",
       "href": "/ferramentas/calculadora-bdi/",
       "art": "bars",
@@ -804,14 +1035,17 @@
       "title": "Análise de viga contínua",
       "summary": "Modele vãos e apoios e confira reações, cortante, momento fletor e flecha.",
       "format": "Estruturas · CSV",
+      "file_formats": [
+        "CSV"
+      ],
       "action": "Analisar uma viga",
       "href": "/ferramentas/analise-de-viga-continua/",
       "art": "profile",
       "mark": "VIGA",
       "keywords": "viga flecha momento cortante reações estrutura engaste",
       "page": {
-        "title": "Calculadora de viga contínua: esforços e flecha",
-        "desc": "Calcule reações, força cortante, momento fletor e flecha de uma viga contínua com cargas distribuídas no navegador.",
+        "title": "Cálculo estrutural grátis: análise de vigas contínuas",
+        "desc": "Calcule reações, cortantes, momentos e flechas de vigas com até seis vãos grátis no navegador. Exporte a memória CSV conforme as condições da conta.",
         "related": [
           "dwg"
         ]
@@ -823,14 +1057,21 @@
       "title": "Orçamento de obras",
       "summary": "Organize serviços por etapa, use preços próprios ou importe o XLSX do SINAPI e exporte uma planilha editável.",
       "format": "SINAPI · XLSX · CSV",
+      "file_formats": [
+        "XLSX",
+        "CSV",
+        "JSON",
+        "TXT",
+        "TSV"
+      ],
       "action": "Montar orçamento",
       "href": "/ferramentas/orcamento-de-obras/",
       "art": "sheet",
       "mark": "XLSX",
       "keywords": "planilha sinapi orçamento obra orçamento custo etapa composições",
       "page": {
-        "title": "Orçamento de obras por etapa com SINAPI e Excel",
-        "desc": "Monte o orçamento de obras por etapa com preços próprios, composições ou tabelas SINAPI. Exporte Excel editável, CSV ou JSON.",
+        "title": "Orçamento de obra grátis: planilha SINAPI online",
+        "desc": "Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta.",
         "related": [
           "calculadora-bdi"
         ]
@@ -842,6 +1083,10 @@
       "title": "Editor de diagrama unifilar",
       "summary": "Escolha os símbolos, conecte terminais e exporte o diagrama elétrico em SVG ou o projeto em JSON.",
       "format": "Elétrica · SVG · JSON",
+      "file_formats": [
+        "SVG",
+        "JSON"
+      ],
       "action": "Desenhar unifilar",
       "href": "/ferramentas/diagrama-unifilar/",
       "art": "grid",
@@ -861,6 +1106,11 @@
       "title": "Simulador de rede de água",
       "summary": "Monte uma rede pressurizada e compare pressões e vazões em dois cenários de consumo.",
       "format": "Hidráulica · EPANET",
+      "file_formats": [
+        "INP",
+        "CSV",
+        "JSON"
+      ],
       "action": "Simular rede de água",
       "href": "/ferramentas/rede-de-agua/",
       "art": "iso",
@@ -880,6 +1130,9 @@
       "title": "Radar de Mercado Público",
       "summary": "Pesquise o que o governo contratou, descubra compradores e fornecedores e acompanhe fins de vigência registrados.",
       "format": "PNCP · Contratos",
+      "file_formats": [
+        "CSV"
+      ],
       "action": "Pesquisar mercado público",
       "href": "/ferramentas/radar-mercado-publico/",
       "art": "bars",

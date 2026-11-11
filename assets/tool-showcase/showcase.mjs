@@ -10,6 +10,7 @@ const walletButton = document.getElementById('meus-creditos');
 const referralEntries = [...document.querySelectorAll('[data-referral-entry]')];
 const isModela = document.getElementById('tool-credits') !== null;
 const walletStatus = document.getElementById('meus-creditos-status');
+const exportTerms = [...document.querySelectorAll('[data-tool-export-terms]')];
 let wallet;
 const sharedWallet = async () => {
   const { createToolCredits } = await import('/assets/js/tool-credits.mjs');
@@ -20,8 +21,10 @@ const openWallet = async () => {
   try {
     if (!await (await sharedWallet()).open()) throw new Error('wallet unavailable');
     if (walletStatus) walletStatus.textContent = '';
+    return true;
   } catch {
     if (walletStatus) walletStatus.textContent = 'A conta de créditos está indisponível. Tente novamente.';
+    return false;
   }
 };
 const openSharedReferral = async (entry = referralEntries[0]) => {
@@ -36,10 +39,45 @@ if (returning) {
   try { history.replaceState(history.state, '', location.pathname + location.hash); } catch {}
 }
 
-if (walletButton || referralEntries.length) {
+if (walletButton || referralEntries.length || exportTerms.length) {
   fetch('/api/web/tool-credits?op=config', { headers: { Accept: 'application/json' } })
     .then(response => response.ok ? response.json() : null)
     .then(config => {
+      const sharedEnabled = config?.enabled === true && config.sharedExportsEnabled === true
+        && Array.isArray(config.tools) && config.tools.includes('modela-memoria');
+      const modelaEnabled = isModela && config?.enabled === true
+        && Array.isArray(config.tools) && config.tools.includes('modela-memoria');
+      if (sharedEnabled || modelaEnabled) {
+        const single = config.packages?.find(pack => pack.credits === 1
+          && Number.isSafeInteger(pack.amountCents) && pack.amountCents > 0);
+        const price = single && new Intl.NumberFormat('pt-BR', {
+          style: 'currency', currency: 'BRL',
+        }).format(single.amountCents / 100);
+        const copy = config.exportsPaused === true
+          ? 'Use a ferramenta gratuitamente. As exportações por créditos estão temporariamente pausadas.'
+          : 'Use a ferramenta gratuitamente. A primeira exportação da conta verificada é cortesia; as seguintes usam 1 crédito.'
+            + (config.purchasesEnabled === true
+              ? (price ? ` Crédito avulso: ${price}. Há pacotes na carteira.` : '')
+              : ' Novas compras estão temporariamente indisponíveis.');
+        for (const notice of exportTerms) {
+          notice.querySelector('[data-tool-export-copy]').textContent = copy;
+          notice.hidden = false;
+          const access = notice.querySelector('[data-tool-export-wallet]');
+          access.target = '_blank';
+          access.rel = 'noopener';
+          access.addEventListener('click', async event => {
+            // Isolated BIM pages use the existing central account handoff.
+            if (globalThis.crossOriginIsolated === true) return;
+            event.preventDefault();
+            if (isModela) { document.getElementById('tool-credits').click(); return; }
+            if (!await openWallet()) {
+              let status = notice.querySelector('[role="status"]');
+              if (!status) { status = document.createElement('span'); status.setAttribute('role', 'status'); notice.append(status); }
+              status.textContent = ' A conta de créditos está indisponível. Tente novamente.';
+            }
+          });
+        }
+      }
       if (walletButton && config?.enabled === true && config.sharedExportsEnabled === true) {
         walletButton.hidden = false;
         walletButton.addEventListener('click', openWallet);
@@ -66,43 +104,76 @@ const simplify = (value) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowe
 const search = document.querySelector('[data-tool-search]');
 if (search) {
   const input = search.querySelector('input');
+  const format = search.querySelector('#ts-format');
   const clear = search.querySelector('[data-search-clear]');
   const status = document.querySelector('[data-search-status]');
   const groups = [...document.querySelectorAll('[data-group]')].map((group) => ({
     group,
+    expanded: false,
+    more: group.querySelector('[data-show-more]'),
     jump: document.querySelector('.ts-jumps a[href="#' + group.id + '"]'),
     cards: [...group.querySelectorAll('[data-tool-card]')].map((card) => ({
-      card, text: simplify(card.textContent + ' ' + card.dataset.toolKeywords),
+      card, text: simplify(card.textContent + ' ' + card.dataset.toolKeywords + ' ' + (card.dataset.toolFormat || '') +
+        (/\bXLSX\b/.test(card.dataset.toolFormat || '') ? ' excel' : '')),
+      formats: ((card.dataset.toolFormat || '').toUpperCase().match(/[A-Z]+[0-9]*/g) || [])
+        .map(value => value.replace(/\d+$/, '')),
     })),
   }));
   const filter = () => {
     const tokens = simplify(input.value).trim().split(/\s+/).filter(Boolean);
+    const chosenFormat = format?.value || '';
+    const filtered = tokens.length > 0 || Boolean(chosenFormat);
     let total = 0;
-    for (const { group, jump, cards } of groups) {
+    for (const item of groups) {
+      const { group, jump, cards, more, expanded } = item;
       let count = 0;
-      for (const { card, text } of cards) {
-        const match = tokens.every(token => text.includes(token));
-        card.hidden = !match;
+      for (const { card, text, formats } of cards) {
+        const match = tokens.every(token => text.includes(token)) && (!chosenFormat || formats.includes(chosenFormat));
+        card.hidden = !match || Boolean(more && !filtered && !expanded && count >= 6);
         count += Number(match);
+      }
+      if (more) {
+        more.hidden = filtered || expanded || count <= 6;
+        more.textContent = `Ver mais ${Math.max(0, count - 6)} opções deste grupo`;
       }
       group.hidden = count === 0;
       if (jump) jump.hidden = count === 0;
       total += count;
     }
-    clear.hidden = !input.value;
-    status.textContent = !tokens.length ? '' : total === 0
+    clear.hidden = !input.value && !chosenFormat;
+    status.textContent = !filtered ? '' : total === 0
       ? 'Nenhuma ferramenta encontrada. Tente outro termo, como IFC, foto ou aditivo.'
       : total === 1 ? '1 ferramenta encontrada.' : total + ' ferramentas encontradas.';
   };
   input.addEventListener('input', filter);
   input.addEventListener('search', filter);
+  format?.addEventListener('change', filter);
   clear.addEventListener('click', () => {
     input.value = '';
+    if (format) format.value = '';
     filter();
     input.focus();
   });
   search.hidden = false;
+  for (const item of groups) item.more?.addEventListener('click', () => {
+    const next = item.cards.find(({ card }) => card.hidden);
+    item.expanded = true;
+    filter();
+    next?.card.querySelector('.ts-card-action')?.focus();
+  });
+  const exposeTarget = () => {
+    const target = document.getElementById(location.hash.slice(1));
+    const group = groups.find(item => item.cards.some(({ card }) => card === target));
+    if (!group) return;
+    group.expanded = true;
+    input.value = '';
+    if (format) format.value = '';
+    filter();
+    requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  };
   filter();
+  exposeTarget();
+  window.addEventListener('hashchange', exposeTarget);
 
   document.addEventListener('keydown', (event) => {
     const editing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;

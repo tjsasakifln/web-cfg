@@ -74,6 +74,11 @@ def load_registry(root: Path = ROOT) -> dict:
     for entry in entries:
         if entry["group"] not in groups or not ID.fullmatch(entry["id"]) or entry["art"] not in ART:
             raise ValueError(f"Invalid tool: {entry['id']}")
+        file_formats = entry.get("file_formats", [])
+        if (not isinstance(file_formats, list) or
+                any(not isinstance(value, str) or not re.fullmatch(r"[A-Z0-9]{1,16}", value) for value in file_formats) or
+                len(set(file_formats)) != len(file_formats)):
+            raise ValueError(f"Invalid file formats: {entry['id']}")
         for href in [entry["href"], *(link for _, link in entry.get("links", []))]:
             if not PATH.fullmatch(href):
                 raise ValueError(f"Nonlocal tool destination: {href}")
@@ -114,7 +119,8 @@ def card(item: dict) -> str:
     )
     share_target = item["href"] if "page" in item else f"{HUB}#ferramenta-{tool}"
     share = escape(share_url(share_target, "confenge_share"))
-    return f'''<li class="ts-card" id="ferramenta-{tool}" data-tool-card="{tool}" data-tool-keywords="{escape(item['keywords'])}"{link_tag}>
+    file_formats = " ".join(item.get("file_formats", [])) if "file_formats" in item else item["format"]
+    return f'''<li class="ts-card" id="ferramenta-{tool}" data-tool-card="{tool}" data-tool-format="{escape(file_formats)}" data-tool-keywords="{escape(item['keywords'])}"{link_tag}>
 {plate(item['art'], item['mark'])}
 <div class="ts-card-body"><span class="ts-card-format">{escape(item['format'])}</span>
 <h3>{escape(item['title'])}</h3><p>{escape(item['summary'])}</p>
@@ -129,6 +135,14 @@ def share_url(path: str, source: str) -> str:
     parsed = urlsplit(path)
     query = urlencode({"utm_source": source, "utm_medium": "referral", "utm_campaign": "ferramentas"})
     return f"{HOST}{parsed.path}?{query}" + (f"#{parsed.fragment}" if parsed.fragment else "")
+
+
+def export_terms() -> str:
+    """Expose current export terms before use without loading authentication."""
+    return ('<p class="tool-export-terms" data-tool-export-terms hidden>'
+            '<span data-tool-export-copy></span> '
+            '<a href="/ferramentas/#meus-creditos" data-tool-export-wallet>'
+            'Minha conta e créditos</a></p>')
 
 
 def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
@@ -269,37 +283,40 @@ def catalogue(html: str, data: dict) -> str:
 <div class="ts-section-heading"><div class="ts-section-title"><span class="ts-section-index" aria-hidden="true">{number:02d}</span><div><p class="ts-section-kicker">{len(group_items)} {'opção de uso' if len(group_items) == 1 else 'opções de uso'}</p><h2 id="{key}-title">{escape(group["title"])}</h2></div></div><p>{escape(group["summary"])}</p></div>
 <ul class="ts-grid">
 {cards}
-</ul></section>''')
+</ul><button type="button" class="ts-more" data-show-more hidden>Ver todas as opções deste grupo</button></section>''')
     section_html = "\n".join(sections)
-    hero_items = entries[:3]
-    hero_cards = "".join(
-        f'''<div class="ts-workbench-item"><span>{escape(item["format"])}</span><strong>{escape(item["title"])}</strong></div>'''
-        for item in hero_items
+    by_id = {item["id"]: item for item in entries}
+    starts = [
+        ("dwg", "Ajustar uma planta", "Abra DWG ou DXF e continue o desenho."),
+        ("ifc-excel", "Levar IFC para uma planilha", "Comprimentos, áreas e volumes declarados."),
+        ("orcamento-de-obras", "Montar um orçamento", "Etapas, custos e BDI em uma planilha."),
+        ("analise-de-viga-continua", "Conferir uma viga", "Reações, esforços e flechas por vão."),
+    ]
+    quickstarts = "".join(
+        f'<li><a href="{escape(by_id[key]["href"])}" {cta_attrs("tool-quick-" + key, "tool_intro")}>'
+        f'<span class="ts-quick-copy"><strong>{escape(title)}</strong><small>{escape(result)}</small></span>'
+        '<span aria-hidden="true">↗</span></a></li>'
+        for key, title, result in starts
     )
+    formats = "".join(f'<option value="{fmt}">{fmt}</option>' for fmt in ["DWG", "DXF", "IFC", "PDF", "XLSX", "CSV", "SVG", "JSON", "TXT"])
     main = f'''<main id="conteudo" class="tool-showcase">
 <nav class="breadcrumbs container ts-crumb" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Ferramentas</li></ol></nav>
 <header class="ts-hero"><div class="container ts-hero-inner">
 <div class="ts-hero-copy">
 <p class="eyebrow">CONFENGE · Ferramentas online</p>
-<h1>Ferramentas de engenharia <span>online.</span></h1>
-<p data-tool-job>Abra uma planta, confira um modelo, faça um cálculo ou organize a próxima decisão da obra. Tudo direto no navegador.</p>
-<div class="ts-hero-actions"><a class="button button-primary" href="#destaques">Explorar ferramentas</a><a class="ts-hero-link" href="#tool-share-title" aria-label="Compartilhar com um colega">Compartilhar</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
+<h1>Ferramentas de engenharia <span>para usar agora.</span></h1>
+<p data-tool-job>Da planta ao orçamento: abra arquivos, confira cálculos e prepare sua próxima entrega. Escolha a tarefa e comece no navegador.</p>
+<div class="ts-hero-actions"><a class="button button-primary" href="#ts-browser-title">Encontrar minha ferramenta</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
 <p id="meus-creditos-status" role="status"></p>
+{export_terms()}
 <dl class="ts-hero-facts"><div><dt>{total}</dt><dd>opções de uso</dd></div><div><dt>{len(data["groups"])}</dt><dd>frentes de trabalho</dd></div><div><dt>web</dt><dd>uso direto no navegador</dd></div></dl>
 </div>
-<figure class="ts-hero-visual" aria-hidden="true">
-<div class="ts-workbench">
-<div class="ts-workbench-bar"><span></span><span></span><span></span><b>PAINEL DE PROJETO</b></div>
-<div class="ts-workbench-canvas">{plate(hero_items[0]['art'], hero_items[0]['mark'])}<div class="ts-workbench-axis ts-workbench-axis-x"></div><div class="ts-workbench-axis ts-workbench-axis-y"></div><span class="ts-workbench-coordinate">X 024.70 · Y 118.42</span></div>
-<div class="ts-workbench-list">{hero_cards}</div>
-</div>
-</figure>
+<nav class="ts-quickstart" aria-label="Comece por uma tarefa"><p>Um próximo passo concreto</p><ul>{quickstarts}</ul></nav>
 </div></header>
 <section class="ts-browser" aria-labelledby="ts-browser-title"><div class="container">
 <div class="ts-browser-heading"><div><p class="ts-browser-kicker">Seu ponto de partida</p><h2 id="ts-browser-title">O que você precisa fazer?</h2></div>
-<div class="ts-search" data-tool-search hidden><label for="ts-query">Buscar no catálogo</label><div class="ts-search-field"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" id="ts-query" placeholder="Busque por tarefa, formato ou resultado" autocomplete="off" maxlength="120"><kbd aria-hidden="true">/</kbd><button type="button" data-search-clear hidden>Limpar</button></div></div></div>
+<div class="ts-search" data-tool-search hidden><label for="ts-query">Buscar no catálogo</label><div class="ts-search-field"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" id="ts-query" placeholder="Ex.: orçamento, viga, IFC, hidráulica" autocomplete="off" maxlength="120"><kbd aria-hidden="true">/</kbd><button type="button" data-search-clear hidden>Limpar</button></div><label class="ts-format-label" for="ts-format">Formato de arquivo<select id="ts-format"><option value="">Todos os formatos</option>{formats}</select></label></div></div>
 <nav class="ts-jumps" aria-label="Grupos de ferramentas">{jumps}</nav>
-<div class="ts-mobile-preview" aria-hidden="true"><div><span>Painel de projeto</span><strong>Desenhe, calcule e decida no navegador.</strong></div>{plate(hero_items[0]['art'], hero_items[0]['mark'])}</div>
 </div></section>
 <div class="container"><p class="ts-search-status" role="status" data-search-status></p></div>
 {section_html}
@@ -328,6 +345,15 @@ def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
     def sync_date(block: re.Match) -> str:
         return re.sub(r'("dateModified"\s*:\s*")[^"]+(")', lambda m: m[1] + updated + m[2], block[0])
     html = re.sub(r'<script type="application/ld\+json">.*?</script>', sync_date, html, flags=re.S)
+    if "<!-- tool-showcase:export-terms -->" in html:
+        html = marker(html, "export-terms", export_terms(), "")
+    else:
+        # Keep the introduction ahead of account conditions. This is a short
+        # runtime-controlled note, not an authentication gate on tool use.
+        end_h1 = html.index("</h1>", html.index("<main")) + len("</h1>")
+        intro = re.match(r'\s*<p\b[^>]*>.*?</p>', html[end_h1:], flags=re.S)
+        where = end_h1 + intro.end() if intro else end_h1
+        html = html[:where] + "\n" + marker("", "export-terms", export_terms(), "") + html[where:]
     if "brief" in page:
         # Keep existing form and scripting intact. The intro points to the real start control.
         if not re.search(r'\bid=["\x27]' + re.escape(page["start"]) + r'["\x27]', html):

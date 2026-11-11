@@ -170,6 +170,22 @@ const actions = report.surfaces.flatMap((surface) => surface.actions.map((action
   route: surface.route,
   ...action,
 })));
+// Four explicit home entries let the visitor use the current tools directly.
+// Keep their destinations and event semantics reviewable, beyond the census.
+const homeTools = actions.filter(action => action.route === "/" && action.position === "home_tools");
+assert.deepEqual(homeTools.map(action => [action.cta_id, action.href]), [
+  ["home-tools-cad", "/cad/"],
+  ["home-tools-ifc", "/bim/"],
+  ["home-tools-budget", "/ferramentas/orcamento-de-obras/"],
+  ["home-tools-beam", "/ferramentas/analise-de-viga-continua/"],
+]);
+for (const action of homeTools) {
+  assert.equal(action.stage, "calculate");
+  assert.equal(action.commitment, "low");
+  assert.deepEqual(action.event_semantics, ["cta_click"]);
+  assert.match(action.actual_receipt, /não emite receipt/);
+  assert.ok(fs.existsSync(action.href.slice(1) + "index.html"), action.href);
+}
 assert.equal(actions.length, report.coverage.declared_ctas);
 for (const action of actions) {
   assert.ok(report.contract.allowed_stages.includes(action.stage), `${action.route}: CTA stage`);

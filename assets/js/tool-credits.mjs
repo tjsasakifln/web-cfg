@@ -52,7 +52,7 @@ function loadStyles() {
   document.head.append(link);
 }
 
-function exportNotice(text, { receipt, retry } = {}) {
+function exportNotice(text, { receipt, retry, referral } = {}) {
   loadStyles();
   document.querySelector('.tool-credits__export-notice')?.remove();
   const notice = el('aside');
@@ -70,6 +70,7 @@ function exportNotice(text, { receipt, retry } = {}) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }));
   if (retry) notice.append(btn('Retomar exportação', retry));
+  if (referral) notice.append(btn('Indique e ganhe créditos', referral));
   notice.append(btn('Fechar', () => notice.remove()));
   document.body.append(notice);
 }
@@ -413,7 +414,10 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       interrupted = undefined;
       attempts.delete(key);
       try { sessionStorage.removeItem(key); } catch { /* storage is optional */ }
-      exportNotice('Exportação autorizada. O comprovante identifica este resultado.', { receipt });
+      exportNotice('Exportação autorizada. O comprovante identifica este resultado.', {
+        receipt,
+        ...(config.purchasesEnabled ? { referral: () => openReferral() } : {}),
+      });
       return true;
     } catch (error) {
       if (started && (!error.status || error.status >= 500)) {
