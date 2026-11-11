@@ -327,6 +327,10 @@
  <lastmod>2026-11-11</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/ferramentas/comparador-cronogramas/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
  <loc>https://confenge.com.br/ferramentas/conversor-utm-sirgas-2000/</loc>
  <lastmod>2026-11-11</lastmod>
  </url>
@@ -336,6 +340,10 @@
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/diagrama-unifilar/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/epanet-inp/</loc>
  <lastmod>2026-11-11</lastmod>
  </url>
  <url>
@@ -483,13 +491,5 @@
  <url>
  <loc>https://confenge.com.br/triagem-tecnica/</loc>
  <lastmod>2026-10-03</lastmod>
- </url>
- <url>
- <loc>https://confenge.com.br/ferramentas/epanet-inp/</loc>
- <lastmod>2026-11-11</lastmod>
- </url>
- <url>
- <loc>https://confenge.com.br/ferramentas/comparador-cronogramas/</loc>
- <lastmod>2026-11-11</lastmod>
  </url>
 </urlset>
