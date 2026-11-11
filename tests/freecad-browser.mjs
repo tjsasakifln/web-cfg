@@ -6,6 +6,8 @@ import { createServer } from 'node:http';
 import { dirname, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core';
+import { qualifyImports } from './freecad/imports.mjs';
+import { testNativeMenus } from './freecad/native-menus.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const site = resolve(root, process.env.FREECAD_SITE || '_site');
@@ -319,6 +321,12 @@ proof={'before':before,'after':pad.Shape.Volume,'valid':pad.Shape.isValid(),'con
   assert.equal(calls.includes('order'), false, 'the fixture never polls a purchase');
   assert.equal(approved.length, 2);
   record('native STL mesh is receipt-bound without creating or simulating a purchase');
+
+  report.imports = await qualifyImports({ page, python, reports, record });
+  assert.equal(exports.length, 3, 'opening interchange models never requests another export');
+
+  report.nativeMenus = await testNativeMenus({ page, python, record, exportRequests: exports, reportDirectory: reports });
+  assert.equal(approved.length, 3, 'the native menu adds exactly one authorized STL result');
 
   const denied = await page.evaluate(async () => {
     const results = [];

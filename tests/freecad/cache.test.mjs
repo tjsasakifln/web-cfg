@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, webcrypto } from 'node:crypto';
+import fs from 'node:fs';
+import vm from 'node:vm';
 import { fetchRuntimeBytes, RUNTIME_CACHE } from '../../cad/freecad/network.mjs';
 
 const origin = 'https://confenge.com.br';
@@ -183,4 +185,40 @@ test('network data cannot run when cryptographic verification is unavailable', a
   env.scope.crypto = undefined;
   await assert.rejects(fetchRuntimeBytes(spec, undefined, env.scope), /verificação necessária/);
   assert.deepEqual(env.events, []);
+});
+
+test('the production Qt configuration compiles verified bytes instead of refetching the engine', async () => {
+  const source = fs.readFileSync(new URL('../../cad/freecad/runtime.mjs', import.meta.url), 'utf8');
+  const start = source.indexOf('    const config = {');
+  const end = source.indexOf('    module = window.fcInstance = await window.qtLoad(config);', start);
+  assert.ok(start > 0 && end > start, 'exercise the actual production initialization config');
+  const configSource = source.slice(start, end);
+  const loaderSource = fs.readFileSync(new URL('../../cad/freecad/vendor/qtloader.js', import.meta.url), 'utf8');
+  const bytes = Uint8Array.of(0, 97, 115, 109, 1, 0, 0, 0); // Empty valid WASM module.
+  let instantiations = 0;
+  const scope = vm.createContext({
+    WebAssembly, wasm: bytes.buffer, data: new ArrayBuffer(1), files: {},
+    $: () => ({}),
+    fetch() { throw new Error('Qt attempted to fetch an already verified engine'); },
+    window: { FreeCAD_entry: async config => {
+      assert.strictEqual(config.wasmBinary, bytes.buffer, 'FreeCAD PyEM still receives the same verified bytes');
+      assert.equal(typeof config.instantiateWasm, 'function', 'Qt must replace the Emscripten download path');
+      await new Promise(resolve => config.instantiateWasm({}, (instance, compiled) => {
+        assert.ok(instance instanceof WebAssembly.Instance);
+        assert.ok(compiled instanceof WebAssembly.Module);
+        instantiations++;
+        resolve();
+      }));
+      return { FS: {}, callMain() {} };
+    } },
+  });
+  vm.runInContext(loaderSource, scope);
+  // A second configuration reproduces reopening the page with cached bytes.
+  for (let opening = 0; opening < 2; opening++) {
+    const config = vm.runInContext(`(() => { ${configSource}; return config; })()`, scope);
+    const compiled = await config.qt.module;
+    assert.ok(compiled instanceof WebAssembly.Module);
+    await scope.qtLoad(config);
+  }
+  assert.equal(instantiations, 2);
 });

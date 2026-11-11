@@ -315,6 +315,10 @@ async function start() {
         config.FS.writeFile(dir + '/_sysconfigdata__emscripten_wasm64-emscripten.py', encoder.encode(sysconfig));
       }],
       qt: {
+        // This pinned Emscripten build ignores Module.wasmBinary when loading
+        // the engine. Qt's explicit module path prevents a second, unverified
+        // fetch while wasmBinary remains available to the FreeCAD PyEM bridge.
+        module: WebAssembly.compile(wasm),
         entryFunction: window.FreeCAD_entry,
         containerElements: [$('screen')],
         onLoaded: () => { window.__fcAppReady = true; readyAt = performance.now(); },
