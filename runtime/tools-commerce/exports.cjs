@@ -1,6 +1,7 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'comparador-cronogramas': ['csv', 'svg'],
   'epanet-inp': ['csv', 'inp', 'json'],
   'quantitativos-dxf': ['csv', 'json'],
   'conversor-utm-sirgas-2000': ['csv'],

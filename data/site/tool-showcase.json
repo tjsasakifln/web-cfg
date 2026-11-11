@@ -1198,6 +1198,32 @@
           "dwg"
         ]
       }
+    },
+    {
+      "id": "comparador-cronogramas",
+      "group": "obras",
+      "title": "Comparador de cronogramas",
+      "summary": "Preserve a baseline, compare durações e dependências e teste quanto um evento altera o término. Veja a folga e o caminho crítico.",
+      "format": "CSV · SVG · JSON",
+      "file_formats": [
+        "CSV",
+        "SVG",
+        "JSON"
+      ],
+      "action": "Comparar cronogramas",
+      "href": "/ferramentas/comparador-cronogramas/",
+      "art": "timeline",
+      "mark": "BASELINE E IMPACTO",
+      "keywords": "gantt cronograma atraso impacto pleito baseline caminho crítico folga planejamento obra",
+      "page": {
+        "title": "Comparador de cronogramas e impacto de atrasos",
+        "desc": "Compare a baseline com um cronograma atualizado, veja a mudança do caminho crítico e simule quanto um atraso afeta o término da obra.",
+        "related": [
+          "caminho-critico-obra",
+          "atrasos",
+          "margem"
+        ]
+      }
     }
   ]
 }
