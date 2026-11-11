@@ -1,6 +1,7 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'trelicas-e-porticos': ['html', 'csv', 'json'],
   'secao-de-concreto-armado': ['html', 'csv', 'json'],
   'propriedades-de-secoes': ['html', 'csv', 'json'],
   'memorial-de-calculo': ['html', 'csv', 'json', 'tex'],

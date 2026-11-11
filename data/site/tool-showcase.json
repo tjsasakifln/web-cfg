@@ -1397,6 +1397,31 @@
           "memorial-de-calculo"
         ]
       }
+    },
+    {
+      "id": "trelicas-e-porticos",
+      "group": "calculo",
+      "title": "Treliças e pórticos planos",
+      "summary": "Modele treliças e pórticos planos, calcule esforços, reações e deslocamentos e compare análise linear com P-Delta pelo PyNite.",
+      "format": "HTML · CSV · JSON",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Calcular estrutura",
+      "href": "/ferramentas/trelicas-e-porticos/",
+      "art": "mesh",
+      "mark": "ESFORÇOS E FLECHAS",
+      "keywords": "análise de treliças e pórticos planos cálculo grátis engenharia online",
+      "page": {
+        "title": "Análise de treliças e pórticos planos",
+        "desc": "Modele treliças e pórticos planos, calcule esforços, reações e deslocamentos e compare análise linear com P-Delta pelo PyNite.",
+        "related": [
+          "analise-de-viga-continua",
+          "propriedades-de-secoes"
+        ]
+      }
     }
   ]
 }
