@@ -130,6 +130,7 @@ jobs:
           # release. No package installation or new service occurs on Netcup.
           python3 -B runtime/science-tools/build_runtime.py
           node --test runtime/science-tools/tests/platform.test.cjs
+          node --test runtime/science-tools/tests/http.test.mjs
           OPENBLAS_NUM_THREADS=1 runtime/science-tools/python/bin/python3.12 -B runtime/science-tools/tests/test_mesh.py
           python3 -B runtime/science-tools/tests/validate_runtime.py
           source_date_epoch=$(git show -s --format=%ct "$RELEASE_SHA")

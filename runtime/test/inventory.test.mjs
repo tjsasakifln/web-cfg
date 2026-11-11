@@ -19,6 +19,7 @@ const EXPECTED_FUNCTIONS = [
   "offer-eligibility",
   "offer-terms-accept",
   "ops",
+  "science-tools",
   "search-observation-tick",
   "tool-credits",
   "tool-credits-webhook",
@@ -27,10 +28,10 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 52);
-  assert.equal(inventory.function_count, 19);
+  assert.equal(inventory.file_count, 53);
+  assert.equal(inventory.function_count, 20);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 19);
+  assert.equal(inventory.validation.loaded_handlers, 20);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,
@@ -80,6 +81,9 @@ test("inventory classifies frontend, schedules, probes and ops without assuming 
   const credits = byName.get("tool-credits");
   assert.equal(credits.usage_state, "public_runtime");
   assert.ok(credits.consumers.frontend.some(({ path }) => path === "assets/js/tool-credits.mjs"));
+  const science = byName.get("science-tools");
+  assert.equal(science.usage_state, "public_runtime");
+  assert.ok(science.consumers.frontend.some(({ path }) => path === "assets/js/science-tools.mjs"));
   // The provider callback is routed by the host, with no frontend caller.
   assert.equal(byName.get("tool-credits-webhook").usage_state, "unreferenced_legacy_candidate");
   assert.equal(byName.get("search-observation-tick").usage_state, "scheduled");

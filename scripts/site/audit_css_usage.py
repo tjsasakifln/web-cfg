@@ -41,6 +41,9 @@ BASELINE = ROOT / "data" / "design" / "css-usage-baseline.json"
 
 SKIP_DIRS = (
     "node_modules",
+    # Private server interpreter and third-party packages never enter _site.
+    # They cannot consume the public decoration budget or keep visitor CSS alive.
+    "runtime/science-tools/python",
     "_site",
     "build",
     ".git",

@@ -103,15 +103,6 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node scripts/site/measure_first_fold.mjs --write
-      - name: Preserve source first-fold measurements
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: first-fold-source-${{ github.sha }}
-          path: |
-            data/commercial/first-fold-measurements.v1.json
-            data/commercial/first-fold-contract.v1.json
-          if-no-files-found: error
       # This wallet fixture serves source assets and needs no public build.
       # Run it early for isolated browser input and prompt failure evidence;
       # artifact-specific browser gates remain after Build public site.
@@ -269,6 +260,11 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node scripts/site/test_tool_showcase_browser.mjs _site
+      - name: Published DXF hydraulic and schedule calculation journeys
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          REPORT_TOOLS_SCREENSHOTS: build/reports/report-tools-browser
+        run: node tests/report-tools-browser.mjs _site
       - name: Market radar filters, failures and export in Chrome
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -330,6 +326,15 @@ jobs:
           PUBLIC_ARTIFACT_REQUIRED: "1"
         run: |
           node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json
+      - name: Preserve source first-fold measurements
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: first-fold-source-${{ github.sha }}
+          path: |
+            data/commercial/first-fold-measurements.v1.json
+            data/commercial/first-fold-contract.v1.json
+          if-no-files-found: error
       - name: Preserve mandatory first-fold evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
