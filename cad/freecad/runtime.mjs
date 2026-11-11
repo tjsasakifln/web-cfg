@@ -47,13 +47,36 @@ window.fcwebNotify = text => {
 window.fcwebEvent = () => {}; // No upstream analytics.
 window.fcwebCallPy = (instance, pointer) => instance._fcweb_run_python(BigInt(pointer));
 window.fcRunPy = (instance, pointer) => {
-  if (window.__fcPyBusy) { instance._free(pointer); return Promise.resolve(false); }
+  if (!window.__fcAppReady || window.__fcPyBusy) { instance._free(pointer); return Promise.resolve(false); }
   window.__fcPyBusy = true;
   let result;
   try { result = window.fcwebCallPy(instance, pointer); } catch (error) { result = Promise.reject(error); }
   return Promise.resolve(result).then(() => true, error => { window.append(error?.stack || error, 'err'); fail('A operação 3D foi interrompida. Seu arquivo pode ser recuperado em “Arquivos e exportações”.'); return false; })
     .finally(() => { instance._free(pointer); window.__fcPyBusy = false; });
 };
+
+function observeNativeEventLoop() {
+  // FreeCAD-Web v1.0.9 / FreeCAD 1.1.3: tryRunEventLoop emits this line
+  // after GUI startup and the event-loop lock, immediately before exec().
+  // FcwebConsoleMirror -> emscripten_log(EM_LOG_CONSOLE) -> console.log(str)
+  // in the pinned JS; this message does not pass through Module.print/append.
+  const original = console.log;
+  let listening = true;
+  const restore = () => {
+    listening = false;
+    if (console.log === observe) console.log = original;
+  };
+  function observe(...args) {
+    const result = Reflect.apply(original, this, args);
+    if (listening && args.length === 1 && args[0] === '[fc] Init: Executing event loop…\n') {
+      window.__fcAppReady = true;
+      restore();
+    }
+    return result;
+  }
+  console.log = observe;
+  return restore;
+}
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function rawPython(source) {
@@ -285,6 +308,7 @@ async function start() {
   const support = await capabilities();
   if (!support.ok) { $('capability').textContent = support.reason; $('start').disabled = false; return; }
   started = true; $('entry').hidden = true; $('workspace').hidden = false;
+  let stopObservingNative;
   try {
     const response = await fetch('/assets/freecad/runtime.json');
     if (!response.ok) throw new Error('O ambiente ainda não está disponível nesta publicação.');
@@ -307,6 +331,7 @@ async function start() {
     ]);
     await loadScript('/cad/freecad/vendor/graphics.js');
     await loadScript('/cad/freecad/vendor/qtloader.js');
+    stopObservingNative = observeNativeEventLoop();
     await loadScript(files['FreeCAD.js'].path, integrity(files['FreeCAD.js'].sha256));
     report('js', files['FreeCAD.js'].size);
     $('phase').textContent = 'Iniciando o FreeCAD'; $('progress').removeAttribute('value');
@@ -316,7 +341,7 @@ async function start() {
       getPreloadedPackage: (_name, size) => { if (size !== data.byteLength) throw new Error('Pacote FreeCAD incompatível com o motor.'); return data; },
       locateFile: file => files[file]?.path || '/assets/freecad/' + file,
       print: text => window.append(text), printErr: text => window.append(text, 'err'),
-      onAbort: reason => { fail(`O motor foi interrompido: ${String(reason).slice(0, 180)}. Recupere uma cópia FCStd se disponível.`); $('boot-progress').hidden = true; },
+      onAbort: reason => { stopObservingNative(); window.__fcAppReady = false; fail(`O motor foi interrompido: ${String(reason).slice(0, 180)}. Recupere uma cópia FCStd se disponível.`); $('boot-progress').hidden = true; },
       preRun: [function () {
         const dir = '/usr/local/lib/python3.13/site-packages';
         config.FS.mkdirTree(dir);
@@ -329,8 +354,8 @@ async function start() {
         module: WebAssembly.compile(wasm),
         entryFunction: window.FreeCAD_entry,
         containerElements: [$('screen')],
-        onLoaded: () => { window.__fcAppReady = true; readyAt = performance.now(); },
-        onExit: result => { ready = false; for (const id of ['open', 'sample', 'backup', 'export']) $(id).disabled = true; fail(result?.crashed ? 'O motor foi interrompido. Procure uma cópia FCStd em “Arquivos e exportações”.' : 'O ambiente de modelagem foi encerrado.'); },
+        onLoaded: () => { readyAt = performance.now(); },
+        onExit: result => { stopObservingNative(); window.__fcAppReady = false; ready = false; for (const id of ['open', 'sample', 'backup', 'export']) $(id).disabled = true; fail(result?.crashed ? 'O motor foi interrompido. Procure uma cópia FCStd em “Arquivos e exportações”.' : 'O ambiente de modelagem foi encerrado.'); },
       },
     };
     module = window.fcInstance = await window.qtLoad(config);
@@ -342,7 +367,7 @@ async function start() {
     while (!window.__fcWorkReady) {
       if (performance.now() > deadline) throw new Error('A interface não concluiu a inicialização. Você pode consultar o registro técnico e tentar outro navegador.');
       await sleep(600);
-      if (window.__fcPyBusy || performance.now() - readyAt < 8000) continue;
+      if (!window.__fcAppReady || window.__fcPyBusy || performance.now() - readyAt < 8000) continue;
       await rawPython("import FreeCADGui as _g, sys as _s\ntry:\n _wb = _g.activeWorkbench()\n if _wb is not None:\n  _s.__stderr__.write('FCWORKREADY\\n'); _s.__stderr__.flush()\nexcept Exception: pass\n");
     }
     await operation(dialogs + '\n' + bootstrap);
@@ -359,6 +384,7 @@ async function start() {
     window.dispatchEvent(new Event('resize'));
     status('Modelador pronto. Crie uma peça de exemplo ou abra seu arquivo. A cópia FCStd é gratuita.');
   } catch (error) {
+    stopObservingNative?.(); window.__fcAppReady = false;
     fail(error); $('boot-progress').hidden = true;
     $('entry').hidden = false; $('start').hidden = true;
     $('capability').textContent = 'Reabra a página para tentar novamente. Antes de fechar, procure cópias FCStd em “Arquivos e exportações”.';
