@@ -25,11 +25,19 @@ afirma compatibilidade por uma lista de versões de navegadores.
 - COOP/COEP e permissão de WebAssembly ficam no ambiente técnico. A página
   pública preserva a política global e continua leve.
 - O JavaScript Emscripten fixado utiliza `new Function` nos invocadores Embind.
-  Por isso, somente os documentos `/cad/freecad/` e `/cad/freecad/index.html`
-  recebem `script-src 'unsafe-eval'`. A política global, o launcher, a página
-  de licenças e os assets não recebem essa permissão. Scripts inline,
+  Por isso, os documentos `/cad/freecad/` e `/cad/freecad/index.html` e o worker
+  exato `/assets/freecad/FreeCAD-3f8c1ff4a0ee.js` recebem `script-src 'unsafe-eval'`.
+  O worker usa a política da própria resposta, independente do documento. A
+  política global, o launcher, a página de licenças e os demais assets não
+  recebem essa permissão. Scripts inline,
   complementos remotos e frames continuam bloqueados. O gerador da política
   de produção mantém esse mesmo escopo, conferido pelo teste de distribuição.
+- WASM e dados usam Cache Storage exclusivo dos componentes públicos. Tamanho e
+  SHA-256 são verificados na rede e em toda reutilização. Conteúdo corrompido é
+  descartado; bloqueio de armazenamento ou falta de quota não impede usar os
+  bytes já verificados em memória. Modelos, exportações e conta nunca entram
+  nesse cache. O teste de segunda abertura desativa o cache HTTP para conferir
+  que os 501.757.581 bytes de WASM e dados não sejam solicitados novamente.
 - O sistema de arquivos, geometria, modelo importado e cópia FCStd ficam no
   navegador. O backup FCStd não chama a carteira, inclusive em falhas de saldo.
 - Saídas técnicas usam `exportToolResult` e o contrato existente
@@ -49,15 +57,19 @@ contratos; serviço de créditos existente para autorização da entrega.
 
 ## Qualificação e reversão
 
-Verificação local da primeira entrega: sete testes Node de rede, requisitos,
-arquivos e exportação; quarenta testes Python da distribuição, CSP e cache;
-instalação real dos três binários com verificação de 503.224.999 bytes; sintaxe
-dos módulos, bootstrap Python e diálogos preservados.
+Verificação local da continuidade em 11/11/2026: 35 testes Node de rede,
+requisitos, arquivos, cache e repetição da autorização; 49 testes Python da
+distribuição, CSP e cache; montagem real do site com os três binários fixados.
+O botão de retomada conserva o mesmo resultado congelado e a carteira preserva
+o bloqueio de outro resultado enquanto a tentativa anterior estiver pendente.
 
 O navegador deste executor não inicia por restrição de socket do ambiente. A
-validação de boot real, geração da peça, cópia FCStd reaberta e STEP/STL é
-obrigatória no Chrome contratado do CI antes de promover esta ferramenta. Não
-se considera o boot aprovado apenas pela integridade dos downloads.
+validação de inicialização real, esboço totalmente restringido, extrusão,
+alteração de medidas, cópia FCStd reaberta e STEP/STL é obrigatória no Chrome
+contratado do CI antes de promover esta ferramenta. O ensaio compara a peça
+original de 180.000 mm³ com a peça alterada de 288.000 mm³, além da retomada
+idempotente pelo botão do arquivo. Não se considera a inicialização aprovada
+apenas pela integridade dos downloads.
 
 O catálogo, o mapa do site e a imagem social entram na integração coordenada
 das ferramentas. `modelador-abrir` registra `cta_click`, sem afirmar conversão

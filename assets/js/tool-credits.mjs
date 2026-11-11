@@ -450,7 +450,10 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
 }
 
 /** Authorizes the tool's normal delivery after its local generator has succeeded. */
-export function exportToolResult({ toolId, format, content, deliver }) {
+export function exportToolResult(result) {
+  const { toolId } = result;
   if (!localWallets.has(toolId)) localWallets.set(toolId, createToolCredits({ toolId, shared: true }));
-  return localWallets.get(toolId).deliverLocal({ format, content, deliver });
+  // Preserve the caller's result identity so its own retry action can resume
+  // an interrupted emission. A different result remains blocked by the wallet.
+  return localWallets.get(toolId).deliverLocal(result);
 }

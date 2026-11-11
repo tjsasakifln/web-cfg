@@ -195,6 +195,47 @@ try {
   await page.screenshot({ path: join(reports, 'native-model.png'), fullPage: true });
   record('native OCCT produces a valid 100 × 60 × 30 mm solid with 180000 mm³ volume');
 
+  const parametric = await python(`import FreeCAD as App, FreeCADGui as Gui, Part, Sketcher
+App.closeDocument(App.ActiveDocument.Name)
+d=App.newDocument('EnsaioParametrico')
+body=d.addObject('PartDesign::Body','Corpo')
+sketch=d.addObject('Sketcher::SketchObject','Esboco')
+body.addObject(sketch)
+points=[(0,0),(100,0),(100,60),(0,60)]
+for i in range(4):
+ a,b=points[i],points[(i+1)%4]
+ sketch.addGeometry(Part.LineSegment(App.Vector(a[0],a[1],0),App.Vector(b[0],b[1],0)),False)
+sketch.addConstraint(Sketcher.Constraint('Coincident',0,1,-1,1))
+for i in range(4): sketch.addConstraint(Sketcher.Constraint('Coincident',i,2,(i+1)%4,1))
+for i in (0,2): sketch.addConstraint(Sketcher.Constraint('Horizontal',i))
+for i in (1,3): sketch.addConstraint(Sketcher.Constraint('Vertical',i))
+width=sketch.addConstraint(Sketcher.Constraint('Distance',0,100.0))
+sketch.addConstraint(Sketcher.Constraint('Distance',1,60.0))
+d.recompute()
+pad=body.newObject('PartDesign::Pad','Extrusao')
+pad.Profile=sketch
+pad.Length=30
+sketch.Visibility=False
+d.recompute()
+before=pad.Shape.Volume
+sketch.setDatum(width,App.Units.Quantity('120 mm'))
+pad.Length=40
+d.recompute()
+Gui.activeDocument().activeView().viewIsometric()
+Gui.activeDocument().activeView().fitAll()
+Gui.Selection.clearSelection()
+Gui.Selection.addSelection(pad)
+Gui.updateGui()
+proof={'before':before,'after':pad.Shape.Volume,'valid':pad.Shape.isValid(),'constrained':sketch.FullyConstrained,'profile':pad.Profile[0].Name if isinstance(pad.Profile,tuple) else pad.Profile.Name,'length':pad.Length.Value,'bounds':[pad.Shape.BoundBox.XLength,pad.Shape.BoundBox.YLength,pad.Shape.BoundBox.ZLength]}`);
+  assert.ok(Math.abs(parametric.before - 180000) <= 1e-6);
+  assert.ok(Math.abs(parametric.after - 288000) <= 1e-6);
+  assert.equal(parametric.valid, true); assert.equal(parametric.constrained, true);
+  assert.equal(parametric.profile, 'Esboco'); assert.equal(parametric.length, 40);
+  parametric.bounds.forEach((value, index) => assert.ok(Math.abs(value - [120,60,40][index]) <= 1e-6));
+  await page.screenshot({ path: join(reports, 'native-parametric.png'), fullPage: true });
+  report.parametric = parametric;
+  record('a fully constrained Sketch and PartDesign Pad recompute after dimension edits from 180000 to 288000 mm³');
+
   await page.click('#backup');
   await page.waitForFunction(() => window.__freecadTestDownloads.some(item => /\.FCStd$/i.test(item.name)), { timeout: 60000 });
   const backup = await page.evaluate(async () => {
@@ -207,16 +248,27 @@ try {
   const backupPath = join(reports, 'example.FCStd'); await writeFile(backupPath, Buffer.from(backup.bytes));
   record('free native FCStd backup is a real archive and bypasses the wallet');
 
+  const binariesBeforeReload = report.requests.filter(path => /\/assets\/freecad\/FreeCAD-.*\.(wasm|data)$/.test(path)).length;
+  const cacheEntries = await page.evaluate(async () => {
+    const cache = await caches.open('confenge-freecad-engine-v1');
+    return (await cache.keys()).map(request => new URL(request.url).pathname);
+  });
+  assert.deepEqual(cacheEntries.sort(), [manifest.files['FreeCAD.data'].path, manifest.files['FreeCAD.wasm'].path].sort());
+  // Disable the browser's HTTP cache so this proves the explicit binary cache.
+  await page.setCacheEnabled(false);
   await page.reload({ waitUntil: 'networkidle0' });
   assert.equal(await page.$eval('#start', el => el.disabled), false, 'reload does not retain the one-use launch consent');
   await page.click('#start'); await waitReady();
+  assert.equal(report.requests.filter(path => /\/assets\/freecad\/FreeCAD-.*\.(wasm|data)$/.test(path)).length, binariesBeforeReload,
+    'a second boot must reuse verified binaries even with the HTTP cache disabled');
+  record('second boot reuses the 501757581 verified WASM/data bytes without another binary request');
   await python("import FreeCAD as App\nfor name in list(App.listDocuments()): App.closeDocument(name)\nproof={'closed': True}");
   const chooser = page.waitForFileChooser(); await page.click('#open');
   await (await chooser).accept([backupPath]);
   await page.waitForFunction(() => document.querySelector('#status').textContent.startsWith('Modelo aberto.'), { timeout: 60000 });
-  const reopened = await python("import FreeCAD as App, FreeCADGui as Gui\nd=App.ActiveDocument\nb=d.getObject('Bloco')\nGui.Selection.clearSelection()\nGui.Selection.addSelection(b)\nproof={'volume':b.Shape.Volume,'length':b.Length.Value}");
-  assert.equal(reopened.length, 100);
-  assert.ok(Math.abs(reopened.volume - 180000) <= 1e-6, 'reopened solid preserves volume within OCCT numerical tolerance');
+  const reopened = await python("import FreeCAD as App, FreeCADGui as Gui\nd=App.ActiveDocument\nb=d.getObject('Extrusao')\ns=d.getObject('Esboco')\nGui.Selection.clearSelection()\nGui.Selection.addSelection(b)\nproof={'volume':b.Shape.Volume,'length':b.Length.Value,'profile':b.Profile[0].Name if isinstance(b.Profile,tuple) else b.Profile.Name,'constrained':s.FullyConstrained}");
+  assert.equal(reopened.length, 40); assert.equal(reopened.profile, 'Esboco'); assert.equal(reopened.constrained, true);
+  assert.ok(Math.abs(reopened.volume - 288000) <= 1e-6, 'reopened sketch and extrusion preserve native geometry and parameters');
   assert.equal(exports.length, 0, 'reopening a free backup never creates an export receipt');
   record('a fresh engine load reopens the downloaded FCStd with editable native geometry');
 
@@ -232,7 +284,10 @@ try {
   assert.equal(exports.length, 1);
   assert.equal(await page.evaluate(() => window.__freecadTestDownloads.length), 0, 'transient receipt failure cannot deliver STEP');
   const firstRequest = exports[0];
-  await page.click('.tool-credits__export-notice button:first-of-type');
+  // Use the file row promised by the shell, not the wallet's separate notice.
+  const retryRow = await page.$('#downloads li:first-child button');
+  assert.match(await retryRow.evaluate(el => el.textContent), /Retomar autorização/);
+  await retryRow.click();
   await page.waitForFunction(() => window.__freecadTestDownloads.some(item => item.name.endsWith('.step')), { timeout: 30000 });
   assert.equal(exports.length, 2);
   assert.equal(exports[1].requestId, firstRequest.requestId, 'retry must preserve idempotency');
@@ -278,6 +333,8 @@ try {
   await page.screenshot({ path: join(reports, 'native-exports.png'), fullPage: true });
   record('remote feature requests are rejected before reaching any endpoint');
   assert.deepEqual(report.errors, [], 'uncaught browser errors are release blockers');
+  assert.equal(report.console.some(entry => /worker sent an error|Uncaught EvalError|violates the following Content Security Policy/i.test(entry.text)), false,
+    'a pthread CSP failure cannot be hidden inside the native log');
   report.ok = true;
 } catch (error) {
   report.ok = false; report.failure = String(error.stack || error);
