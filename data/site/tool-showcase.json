@@ -1372,6 +1372,31 @@
           "memorial-de-calculo"
         ]
       }
+    },
+    {
+      "id": "secao-de-concreto-armado",
+      "group": "calculo",
+      "title": "Seção de concreto armado",
+      "summary": "Trace interação N-M, interação biaxial e momento-curvatura de seções de concreto armado com geometria e barras definidas por você.",
+      "format": "HTML · CSV · JSON",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Calcular seção de concreto",
+      "href": "/ferramentas/secao-de-concreto-armado/",
+      "art": "part",
+      "mark": "INTERAÇÃO N-M",
+      "keywords": "análise de seção de concreto armado cálculo grátis engenharia online",
+      "page": {
+        "title": "Análise de seção de concreto armado",
+        "desc": "Trace interação N-M, interação biaxial e momento-curvatura de seções de concreto armado com geometria e barras definidas por você.",
+        "related": [
+          "propriedades-de-secoes",
+          "memorial-de-calculo"
+        ]
+      }
     }
   ]
 }
