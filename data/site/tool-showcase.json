@@ -1321,6 +1321,32 @@
           "federacao-bcf"
         ]
       }
+    },
+    {
+      "id": "memorial-de-calculo",
+      "group": "calculo",
+      "title": "Memorial de cálculo com fórmulas",
+      "summary": "Gere memórias de cálculo de vigas biapoiadas, barras axiais e perda de carga, com fórmulas, valores substituídos e equações LaTeX.",
+      "format": "HTML · CSV · JSON · TEX",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON",
+        "TEX"
+      ],
+      "action": "Calcular e conferir memória",
+      "href": "/ferramentas/memorial-de-calculo/",
+      "art": "sheet",
+      "mark": "FÓRMULAS E PREMISSAS",
+      "keywords": "memorial de cálculo com fórmulas e substituições cálculo grátis engenharia online",
+      "page": {
+        "title": "Memorial de cálculo com fórmulas e substituições",
+        "desc": "Gere memórias de cálculo de vigas biapoiadas, barras axiais e perda de carga, com fórmulas, valores substituídos e equações LaTeX.",
+        "related": [
+          "analise-de-viga-continua",
+          "rede-de-agua"
+        ]
+      }
     }
   ]
 }

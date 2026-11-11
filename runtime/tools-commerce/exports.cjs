@@ -1,6 +1,7 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'memorial-de-calculo': ['html', 'csv', 'json', 'tex'],
   'bim-georreferenciador': ['ifc', 'json'],
   'bim-federacao': ['bcfzip'],
   'bim-cortes': ['svg'],
