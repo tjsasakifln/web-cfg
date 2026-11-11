@@ -1422,6 +1422,31 @@
           "propriedades-de-secoes"
         ]
       }
+    },
+    {
+      "id": "geotecnia-cpt-estacas",
+      "group": "calculo",
+      "title": "CPT e resistência de estacas",
+      "summary": "Normalize ensaios CPT e calcule resistência axial de estacas cravadas por camadas com os métodos geotécnicos do Groundhog.",
+      "format": "HTML · CSV · JSON",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Calcular CPT e estacas",
+      "href": "/ferramentas/geotecnia-cpt-estacas/",
+      "art": "profile",
+      "mark": "SOLO E FUNDAÇÕES",
+      "keywords": "cpt e resistência axial de estacas cálculo grátis engenharia online",
+      "page": {
+        "title": "CPT e resistência axial de estacas",
+        "desc": "Normalize ensaios CPT e calcule resistência axial de estacas cravadas por camadas com os métodos geotécnicos do Groundhog.",
+        "related": [
+          "memorial-de-calculo",
+          "orcamento-de-obras"
+        ]
+      }
     }
   ]
 }
