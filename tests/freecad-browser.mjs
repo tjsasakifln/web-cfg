@@ -322,11 +322,26 @@ proof={'before':before,'after':pad.Shape.Volume,'valid':pad.Shape.isValid(),'con
   assert.equal(approved.length, 2);
   record('native STL mesh is receipt-bound without creating or simulating a purchase');
 
-  report.imports = await qualifyImports({ page, python, reports, record });
-  assert.equal(exports.length, 3, 'opening interchange models never requests another export');
-
-  report.nativeMenus = await testNativeMenus({ page, python, record, exportRequests: exports, reportDirectory: reports });
-  assert.equal(approved.length, 3, 'the native menu adds exactly one authorized STL result');
+  // Collect both independent qualifications before rejecting the run. A failed
+  // format cannot hide the evidence for native saving or the other importers.
+  const qualificationFailures = report.qualificationFailures = [];
+  const interchangeDocument = await python("proof={'name': App.ActiveDocument.Name}");
+  report.nativeMenus = {};
+  try {
+    await testNativeMenus({ page, python, record, exportRequests: exports, reportDirectory: reports, evidence: report.nativeMenus });
+    assert.equal(approved.length, 3, 'the native menu adds exactly one authorized STL result');
+  } catch (error) {
+    qualificationFailures.push({ area: 'native menus', error: String(error.stack || error) });
+  }
+  await python(`App.setActiveDocument(${JSON.stringify(interchangeDocument.name)})\nproof={'restored':App.ActiveDocument.Name}`);
+  const requestsBeforeImports = exports.length;
+  try {
+    report.imports = await qualifyImports({ page, python, reports, record });
+    qualificationFailures.push(...report.imports.failures.map(failure => ({ area: 'import', ...failure })));
+    assert.equal(exports.length, requestsBeforeImports, 'opening interchange models never requests another export');
+  } catch (error) {
+    qualificationFailures.push({ area: 'imports', error: String(error.stack || error) });
+  }
 
   const denied = await page.evaluate(async () => {
     const results = [];
@@ -343,6 +358,7 @@ proof={'before':before,'after':pad.Shape.Volume,'valid':pad.Shape.isValid(),'con
   assert.deepEqual(report.errors, [], 'uncaught browser errors are release blockers');
   assert.equal(report.console.some(entry => /worker sent an error|Uncaught EvalError|violates the following Content Security Policy/i.test(entry.text)), false,
     'a pthread CSP failure cannot be hidden inside the native log');
+  assert.deepEqual(qualificationFailures, [], 'every native command and advertised import format must pass');
   report.ok = true;
 } catch (error) {
   report.ok = false; report.failure = String(error.stack || error);

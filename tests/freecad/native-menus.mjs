@@ -8,9 +8,9 @@ import { join } from 'node:path';
 // Gui/FileDialog.cpp: getSaveFileName registers fcwebRegisterSave before writing.
 // FreeCAD 1.1.3 src/Gui/CommandDoc.cpp: Std_Export reads FileExportFilter;
 // src/Mod/Mesh/Init.py registers the exact STL filter used below.
-export async function testNativeMenus({ page, python, record, exportRequests, reportDirectory }) {
+export async function testNativeMenus({ page, python, record, exportRequests, reportDirectory, evidence = {} }) {
   const documentName = `EnsaioMenuNativo_${randomUUID().slice(0, 8)}`;
-  const report = { documentName, actions: [] };
+  const report = Object.assign(evidence, { documentName, actions: [] });
   const requestsBefore = exportRequests.length;
   let configured = false;
   const downloadCount = () => page.evaluate(() => window.__freecadTestDownloads.length);
@@ -175,6 +175,11 @@ proof = {'modules': App.getExportType('stl')}`);
     report.export = { name: exported.name, bytes: stl.length, sha256: digest(stl), bounds, registrations: exportPaths };
     record('native File > Export QAction produces STL through the native bridge and receipt-bound delivery');
     return report;
+  } catch (error) {
+    report.failure = String(error.stack || error);
+    report.registrations = await page.evaluate(() => [...window.__freecadNativeRegistrations]).catch(() => []);
+    await page.screenshot({ path: join(reportDirectory, 'native-menus-failure.png'), fullPage: true }).catch(() => {});
+    throw error;
   } finally {
     if (configured) await python(`App.closeDocument(_cfg_menu_document.Name)
 _cfg_menu_params.SetString('FileExportFilter', _cfg_menu_previous['filter'])
