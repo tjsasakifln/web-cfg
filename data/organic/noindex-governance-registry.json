@@ -1,6 +1,6 @@
 {
   "schema_version": "noindex-governance-v1",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-11",
   "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
   "reason_codes": {
     "interactive_workbench": {
@@ -107,6 +107,11 @@
       "description": "Familia consumidora de contrato do extra-cli em que o produtor nunca concede INDEX: DATA_READY autoriza no maximo um rascunho noindex e a indexacao e decisao deste repositorio, por pagina, vinculada ao hash do payload. Analogo de pending_founder_hash_approval, mas para outro gate, outro artefato de aprovacao e outra issue: ADR-STRAT-003 e data/editorial/market-panorama/approvals.json, nao contract-analysis-publication-gate/1.0.",
       "class": "REMEDIABLE",
       "context": "market-panorama"
+    },
+    "software_distribution_notice": {
+      "description": "Avisos de autoria, licenças, versões e código-fonte que acompanham uma distribuição de software. Permanecem publicamente acessíveis a partir da ferramenta; a página editorial de apresentação do produto concentra sua descoberta orgânica.",
+      "class": "PERMANENT",
+      "context": "software-distribution"
     }
   },
   "families": [
@@ -263,6 +268,20 @@
       "owner_issue": 577,
       "review_at": null,
       "note": "A área de trabalho é acessada pelo portal e pelos guias indexáveis em /bim/. A política abrange apenas a execução das ferramentas."
+    },
+    {
+      "family_id": "cad-freecad-aplicativo",
+      "reason_code": "interactive_workbench",
+      "owner_issue": 827,
+      "review_at": null,
+      "note": "A rota /cad/freecad/ executa o modelador local e aponta canonicamente para /ferramentas/modelador-parametrico-3d/, página indexável de apresentação. O noindex aplica-se apenas à área de trabalho, seguindo o padrão dos aplicativos BIM."
+    },
+    {
+      "family_id": "cad-freecad-fontes-licencas",
+      "reason_code": "software_distribution_notice",
+      "owner_issue": 827,
+      "review_at": null,
+      "note": "A rota /cad/freecad/creditos.html reúne os avisos e as fontes da distribuição local, acessíveis pelo modelador. Não é uma página de descoberta nem de oferta. O noindex preserva a página indexável /ferramentas/modelador-parametrico-3d/ como entrada da ferramenta e não restringe o acesso às licenças."
     }
   ]
 }

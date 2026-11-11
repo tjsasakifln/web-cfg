@@ -1962,6 +1962,45 @@
       "declared_at": "2026-11-06",
       "owner_issue": 577,
       "debt": []
+    },
+    {
+      "id": "cad-freecad-aplicativo",
+      "visitor_job": "Modelar e editar arquivos localmente no ambiente paramétrico 3D, guardar uma cópia editável e preparar uma exportação técnica.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/cad/freecad/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-11",
+      "owner_issue": 827,
+      "debt": [],
+      "note": "Área de execução noindex acessada pela página indexável /ferramentas/modelador-parametrico-3d/. A declaração cobre somente a rota de execução; apresentação, descoberta e condições da ferramenta permanecem na página pública."
+    },
+    {
+      "id": "cad-freecad-fontes-licencas",
+      "visitor_job": "Consultar autoria, versões, licenças, código-fonte e instruções de reconstrução dos componentes distribuídos no modelador paramétrico 3D.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "match": {
+        "prefix": "/cad/freecad/creditos.html"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-11",
+      "owner_issue": 827,
+      "debt": [],
+      "exemption_reason": "Avisos de autoria, fontes e licenças que acompanham a distribuição de software, sem oferta precificada ou captura comercial própria. O visitante consulta seus direitos e a proveniência dos componentes.",
+      "note": "Correspondência unitária com /cad/freecad/creditos.html, como o precedente /404.html: o registro usa o nome completo do arquivo porque match.routes exige barra final. O teste de escopo impede que outras páginas herdem esta família. A página de apresentação /ferramentas/modelador-parametrico-3d/ permanece indexável e fora desta classificação."
     }
   ]
 }
