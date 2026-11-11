@@ -6775,7 +6775,7 @@
           "href": "/ferramentas/checklist-reequilibrio/",
           "stage": "calculate",
           "commitment": "low",
-          "current_label": "Conferir documentos no checklist",
+          "current_label": "Checklist de reequilíbrio",
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
