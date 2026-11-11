@@ -15,8 +15,11 @@
 <script type="module" src="/assets/tool-showcase/showcase.mjs"></script>
 </head>
 <body>
-<header class="bar">
-<a class="back" href="/ferramentas/modelador-parametrico-3d/"><strong>CONFENGE</strong> · Modelador 3D</a>
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+
+<header class="site-header bar">
+<a class="brand" href="/" aria-label="CONFENGE, página inicial"><img src="/assets/logo-confenge-500-f8a83f6d.png" alt="CONFENGE Inteligência Técnica" width="224" height="58"></a>
+<a class="back" href="/ferramentas/modelador-parametrico-3d/">Modelador 3D</a>
 <button id="open" type="button" disabled>Abrir modelo</button>
 <button id="sample" type="button" disabled>Criar peça de exemplo</button>
 <button id="backup" type="button" disabled>Salvar cópia FCStd grátis</button>
@@ -42,7 +45,7 @@
 <p><a href="/ferramentas/">Outras ferramentas</a> · <a href="/cad/freecad/creditos.html">Fontes e licenças</a> · <a href="/termos-de-uso/#creditos-ferramentas">Condições de exportação</a></p>
 <details><summary>Registro técnico desta aba</summary><pre id="log"></pre></details>
 </aside>
-<main>
+<main id="conteudo" tabindex="-1">
 <section id="entry" class="entry" aria-labelledby="title">
 <p class="eyebrow">Modelagem paramétrica no seu navegador</p>
 <h1 id="title">Abra seu espaço de modelagem 3D</h1>
@@ -59,5 +62,12 @@
 </section>
 </main>
 <dialog id="question" aria-labelledby="question-title"><h2 id="question-title"></h2><p id="question-text"></p><label id="question-label" hidden>Resposta<input id="question-input" type="text"></label><div id="question-buttons" class="dialog-buttons"></div></dialog>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
 </body>
 </html>

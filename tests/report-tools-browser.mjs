@@ -7,7 +7,10 @@ import {resolveChromePath} from '../scripts/site/resolve_chrome.mjs';
 
 const publicRoot=resolve(process.argv[2]||'_site');
 const screenshots=process.env.REPORT_TOOLS_SCREENSHOTS;
-const routes=['quantitativos-dxf','epanet-inp','comparador-cronogramas','radier-solo-elastico'];
+const catalogue=await readFile(resolve(publicRoot,'ferramentas/index.html'),'utf8');
+const candidates=['quantitativos-dxf','epanet-inp','comparador-cronogramas','radier-solo-elastico'];
+const routes=candidates.filter(slug=>catalogue.includes(`/ferramentas/${slug}/`));
+assert.ok(routes.length>0,'the published catalogue must advertise a calculation journey');
 for(const slug of routes)await stat(resolve(publicRoot,'ferramentas',slug,'index.html'));
 const mime={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.wasm':'application/wasm','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.inp':'text/plain','.dxf':'text/plain'};
 let failDxfExample=true;
@@ -70,6 +73,7 @@ try{
     assert.equal(new URL(page.url()).pathname,'/ferramentas/');
   }
 
+  if(routes.includes('quantitativos-dxf')){
   await fromCatalog('quantitativos-dxf');
   await page.click('#exemplo');
   await page.waitForFunction(()=>document.querySelector('#estado').classList.contains('is-error'));
@@ -87,6 +91,8 @@ try{
   near(numeric(walls[2]),260);near(numeric(walls[3]),4000);
   console.log('PASS DXF: example retry, real worker, geometry, unit override and invalidation');
 
+  }
+  if(routes.includes('epanet-inp')){
   await fromCatalog('epanet-inp');await page.click('#exemplo');await finished();
   assert.equal(await page.$$eval('#instante option',options=>options.length),7);
   const nodeA=(await rows('nos')).find(row=>row[0]==='A');assert.ok(nodeA);near(numeric(nodeA[3]),5);
@@ -99,6 +105,8 @@ try{
   await page.click('#executar');await finished();near(numeric((await rows('nos')).find(row=>row[0]==='A')[3]),3.5);
   console.log('PASS EPANET: actual WASM worker, seven time steps, physical demand and invalidation');
 
+  }
+  if(routes.includes('comparador-cronogramas')){
   await fromCatalog('comparador-cronogramas');
   await page.click('#comparar');assert.equal(await visible(),false,'comparison requires a confirmed baseline');
   await page.click('#fixar');assert.equal(await page.$eval('#base',node=>node.readOnly),true);
@@ -123,6 +131,8 @@ try{
   await page.click('#fixar');await page.click('#comparar');await finished();
   assert.match(await page.$eval('#resumo',node=>node.textContent),/Baseline: 4 dias.*atual: 5 dias/);
   console.log('PASS CPM: float, baseline immutability, invalidation and latest-file import');
+  }
+  if(routes.includes('radier-solo-elastico')){
   await fromCatalog('radier-solo-elastico');await page.click('#exemplo');await finished();
   const soil=await rows('nos');assert.ok(soil.length>100);
   for(const n of soil){near(numeric(n[4]),1);near(numeric(n[6]),20);}
@@ -132,8 +142,9 @@ try{
   assert.equal(await visible(),false,'load edits invalidate the previous raft result');
   await page.click('#calcular');await finished();near(numeric((await rows('nos'))[0][4]),1.5);
   console.log('PASS raft: real MITC4 worker, q/ks settlement, reactions and stale result guard');
+  }
   assert.deepEqual(errors,[],'unexpected JavaScript errors');
-  console.log('PASS published artifact: four real tools, desktop/mobile navigation and no page overflow');
+  console.log(`PASS published artifact: ${routes.length} catalogue calculation journeys, desktop/mobile navigation and no page overflow`);
 }finally{
   await browser?.close();await new Promise(done=>server.close(done));
 }

@@ -538,9 +538,8 @@
       "            _g.SetInt('CompressionLevel', 0)",
       "            try:",
       "                for d in list(_App.listDocuments().values()):",
-      "                    fn = getattr(d, 'FileName', '') or ''",
-      "                    if fn.startswith('/freecad/'):",
-      "                        continue",          // bundled examples are read-only, not work
+      // An opened example can be edited while retaining its /freecad/ FileName.
+      // Copy every open document to recovery; never overwrite its source file.
       "                    names.add(d.Name)",
       "                    try:",
       "                        d.saveCopy(_os.path.join(self.DIR, d.Name + '.FCStd'))",
