@@ -7305,6 +7305,15 @@
       "action": "/api/web/market-radar",
       "method": "post",
       "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/ferramentas/radier-solo-elastico/",
+      "form_id": "dados",
+      "form_class": "",
+      "kind": "tool_form",
+      "action": "",
+      "method": "get",
+      "nojs_degradation": "noscript_note"
     }
   ]
 }

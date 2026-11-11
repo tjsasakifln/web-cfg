@@ -40,6 +40,10 @@ function showInspection(data) {
 }
 async function open(example=false) {
   stop();const current=epoch;
+  // A new file is a new coordinate context. Never carry an origin from the
+  // previous model into a model that has no declared MapConversion.
+  for(const id of ['easting','northing','verticalDatum','pontos'])el(id).value='';
+  for(const id of ['height','rotation'])el(id).value='0';
   try {
     let file=el('arquivo').files[0];
     if(example){const response=await fetch(new URL('../examples/modelo-piloto.ifc',import.meta.url));if(!response.ok)throw Error('O exemplo não está disponível.');file=new File([await response.blob()],'modelo-piloto.ifc');}
@@ -84,13 +88,19 @@ el('preparar').onclick=()=>{
 };
 async function download(format) {
   if(!prepared)return;
-  const snapshot=prepared,content=format==='ifc'?new Blob([snapshot.bytes],{type:'application/x-step'}):JSON.stringify({...snapshot.report,sourceFile:filename},null,2);
-  const stem=filename.replace(/\.ifc$/i,'').replace(/[\\/\u0000-\u001f]/g,'_');
+  if(format!=='ifc'&&format!=='json')throw Error('Formato de exportação inválido.');
+  const snapshot=prepared,payload=format==='ifc'?snapshot.bytes:JSON.stringify({...snapshot.report,sourceFile:filename},null,2);
+  const content=new Blob([payload],{type:'application/octet-stream'});
   const button=el('baixar-'+format);button.disabled=true;
   try {
     await exportToolResult({toolId:'bim-georreferenciador',format,content,deliver:()=>{
-      const blob=content instanceof Blob?content:new Blob([content],{type:'application/json'});
-      const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=stem+'-georreferenciado.'+format;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+      // Treat model-supplied names and metadata as an attachment, never HTML.
+      // Fixed filenames and an explicit binary MIME also cover browser fallback
+      // if a download is opened in a new document instead of being saved.
+      const blob=new Blob([content],{type:'application/octet-stream'});
+      const url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download=format==='ifc'?'modelo-georreferenciado.ifc':'relatorio-georreferenciamento.json';
+      a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
     }});
   }catch(error){status(error.message||'Exportação não concluída.');}finally{button.disabled=false;}
 }
