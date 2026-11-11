@@ -106,6 +106,10 @@ test('each executable linked by the published showcase has a wallet export', () 
   const hubs = new Set(['/bim/', '/cad/aplicativos/']);
   const special = {
     '/cad/': 'cad-editor',
+    '/ferramentas/inventario-ifc/': 'bim-inventario',
+    '/ferramentas/plantas-cortes-ifc/': 'bim-cortes',
+    '/ferramentas/federacao-bcf/': 'bim-federacao',
+    '/ferramentas/georreferenciador-ifc/': 'bim-georreferenciador',
     '/analise-cnpj/': 'analise-cnpj',
     '/avaliacao-imoveis-urbanos/inferencia/': TOOL,
   };
@@ -114,7 +118,7 @@ test('each executable linked by the published showcase has a wallet export', () 
     const url = new URL(href, 'https://confenge.com.br');
     const slug = url.pathname.split('/').filter(Boolean).at(-1);
     let id = special[url.pathname];
-    if (url.pathname.startsWith('/ferramentas/')) id = slug;
+    if (!id && url.pathname.startsWith('/ferramentas/')) id = slug;
     if (url.pathname.startsWith('/bim/web/')) id = 'bim-' + slug.replace(/\.html$/, '');
     if (url.pathname === '/cad/aplicativos/') {
       id = url.hash.startsWith('#calculo-') ? 'cad-suite-calculos' : 'cad-suite-' + url.hash.slice(1);
