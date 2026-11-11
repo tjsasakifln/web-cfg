@@ -152,10 +152,18 @@ async function openFile() {
       const path = `${folder}/${fileName(file.name)}`;
       const bytes = new Uint8Array(await file.arrayBuffer());
       module.FS.mkdirTree(folder); module.FS.writeFile(path, bytes);
+      const hasGeometry = `def _cfg_import_has_geometry(document):\n return any((hasattr(obj, 'Shape') and not obj.Shape.isNull()) or (hasattr(obj, 'Mesh') and obj.Mesh.CountFacets > 0) for obj in document.Objects)`;
       const load = ext === 'fcstd' ? `d = App.openDocument(${JSON.stringify(path)})`
         : ['dxf', 'svg'].includes(ext) ? `d = App.newDocument('Importado')\nimport ${ext === 'dxf' ? 'importDXF' : 'importSVG'} as _importer\n_importer.insert(${JSON.stringify(path)}, d.Name)`
           : `d = App.newDocument('Importado')\nApp.loadFile(${JSON.stringify(path)}, d.Name)`;
-      await operation(`import FreeCAD as App, FreeCADGui as Gui\n${load}\nd.recompute()\nGui.activeDocument().activeView().viewIsometric()\nGui.activeDocument().activeView().fitAll()\nGui.updateGui()`);
+      // ImportGui's XCAF reader can return without an exception or any shapes.
+      // Preserve its color/assembly import first; the native Part reader is the
+      // geometry fallback only for an otherwise empty IGES result.
+      const fallback = ['iges', 'igs'].includes(ext)
+        ? `\nif not _cfg_import_has_geometry(d):\n App.Console.PrintWarning('CONFENGE: retomando a importação IGES pelo leitor geométrico nativo.\\n')\n import Part as _cfg_iges\n _cfg_iges.insert(${JSON.stringify(path)}, d.Name)\n d.recompute()` : '';
+      const verify = ext === 'fcstd' ? ''
+        : `\nif not _cfg_import_has_geometry(d):\n raise ValueError('O arquivo não produziu geometria compatível. Confira o formato e tente novamente.')`;
+      await operation(`import FreeCAD as App, FreeCADGui as Gui\n${hasGeometry}\n${load}\nd.recompute()${fallback}${verify}\nApp.setActiveDocument(d.Name)\nGui.activeDocument().activeView().viewIsometric()\nGui.activeDocument().activeView().fitAll()\nGui.updateGui()`);
       status('Modelo aberto. Salve uma cópia FCStd para preservar suas alterações.');
     } catch (error) { fail(error); }
   }, { once: true });
