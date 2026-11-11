@@ -1340,21 +1340,53 @@ FOCUS_CSS_FLOOR = (
 FOCUS_CSS_SKIP_PARTS = {".git", ".claude", ".worktrees", "_site", "node_modules", "scripts"}
 
 
-def focus_css_surface() -> tuple[str, ...]:
+def focus_css_surface(root: Path | None = None, *, source_tree: bool = True) -> tuple[str, ...]:
     """Every stylesheet the public surface ships, discovered rather than listed.
 
     A hardcoded list only holds the sheets that were already wrong. Discovery is
     what makes the hundredth stylesheet inherit the measured ring instead of
     reinventing an rgba nobody measured.
     """
-    found = sorted(
-        path.relative_to(ROOT).as_posix()
-        for path in ROOT.rglob("*.css")
-        if not any(part in FOCUS_CSS_SKIP_PARTS for part in path.relative_to(ROOT).parts)
-    )
+    from scripts.site.public_copy_scope import PRIVATE_SOURCE_PREFIXES
+
+    base = ROOT if root is None else root
+    found = []
+    for path in base.rglob("*.css"):
+        relative = path.relative_to(base)
+        if source_tree and (
+            any(part in FOCUS_CSS_SKIP_PARTS for part in relative.parts)
+            or any(relative.parts[:len(prefix)] == prefix for prefix in PRIVATE_SOURCE_PREFIXES)
+        ):
+            continue
+        # A compiled artifact is a physical census: even leaked private files
+        # must remain visible to its gate. The exclusions apply only to source.
+        found.append(relative.as_posix())
+    found.sort()
     missing = [name for name in FOCUS_CSS_FLOOR if name not in found]
     assert not missing, f"focus CSS discovery stopped seeing shipped sheets: {missing}"
     return tuple(found)
+
+
+def test_focus_css_source_excludes_only_the_exact_private_runtime_prefix():
+    import tempfile
+
+    public_paths = set(FOCUS_CSS_FLOOR) | {
+        "runtime/styles.css",
+        "runtime/science-tools/styles.css",
+        "runtime/science-tools/python.css",
+        "runtime/science-tools/python-public/styles.css",
+        "python/styles.css",
+        "ferramentas/runtime/science-tools/python/styles.css",
+    }
+    private = "runtime/science-tools/python/lib/vendor/styles.css"
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        for relative in public_paths | {private}:
+            path = root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("a:focus{outline:1px solid #f00}", encoding="utf-8")
+        assert set(focus_css_surface(root)) == public_paths
+        assert set(focus_css_surface(root, source_tree=False)) == public_paths | {private}
 
 # Every background the focus ring can land on, taken from the token palette.
 FOCUS_BACKGROUND_TOKENS = (

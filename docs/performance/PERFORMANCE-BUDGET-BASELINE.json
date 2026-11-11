@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1117.8,
+    "asset_raw_kb_max_route": 1117.83,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 287
+    "routes_measured": 289
   },
   "budget": {
     "cls_max": 0.05,
@@ -139,7 +139,7 @@
         "route": "/especialista/tiago-jun-sasaki/"
       },
       {
-        "cls": 0.0,
+        "cls": 0.01078859494298715,
         "route": "/ferramentas/"
       },
       {
@@ -149,6 +149,10 @@
       {
         "cls": 0.0,
         "route": "/ferramentas/prontidao-tecnica-obra-privada/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/ferramentas/radar-mercado-publico/"
       },
       {
         "cls": 0.0,
@@ -263,7 +267,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 61
+    "routes_measured": 62
   },
   "fonts": {
     "font_files_total": 1,
@@ -481,10 +485,12 @@
       "/ferramentas/conversor-utm-sirgas-2000/",
       "/ferramentas/diagnostico-defesa-margem/",
       "/ferramentas/diagrama-unifilar/",
+      "/ferramentas/epanet-inp/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
       "/ferramentas/orcamento-de-obras/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/ferramentas/quantitativos-dxf/",
       "/ferramentas/radar-mercado-publico/",
       "/ferramentas/rede-de-agua/",
       "/guias-contratos-obras/",
@@ -770,10 +776,12 @@
       "/ferramentas/conversor-utm-sirgas-2000/",
       "/ferramentas/diagnostico-defesa-margem/",
       "/ferramentas/diagrama-unifilar/",
+      "/ferramentas/epanet-inp/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
       "/ferramentas/orcamento-de-obras/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/ferramentas/quantitativos-dxf/",
       "/ferramentas/radar-mercado-publico/",
       "/ferramentas/rede-de-agua/",
       "/guias-contratos-obras/",
