@@ -563,6 +563,9 @@ def assemble_public_artifact(
     if (root / "scripts/cad/suite/releases.json").is_file():
         subprocess.run([sys.executable, str(root / "scripts/cad/suite/install.py"), str(dest.resolve())], check=True)
 
+    if (root / "scripts/freecad/runtime.json").is_file():
+        subprocess.run([sys.executable, str(root / "scripts/freecad/install.py"), str(dest.resolve())], check=True)
+
     if (root / "avaliacao-imoveis-urbanos/inferencia/index.html").is_file():
         subprocess.run([sys.executable, str(root / "scripts/modela/publicar.py"), str(dest.resolve())], check=True)
 

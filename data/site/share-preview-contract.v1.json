@@ -48,6 +48,16 @@
       "reason": "Resultado individual endereçado por identificador opaco, fora da superfície pública compartilhável."
     },
     {
+      "path": "cad/freecad/index.html",
+      "reason_code": "interactive_workbench",
+      "reason": "Ambiente local de execução do FreeCAD, carregado após uma ação explícita. A descoberta orgânica e o compartilhamento usam /ferramentas/modelador-parametrico-3d/."
+    },
+    {
+      "path": "cad/freecad/creditos.html",
+      "reason_code": "interactive_workbench",
+      "reason": "Documento técnico de fontes e licenças do ambiente FreeCAD, acessível a partir da ferramenta. A página pública compartilhável é /ferramentas/modelador-parametrico-3d/."
+    },
+    {
       "path": "comercial/radar-decisorio/index.html",
       "reason_code": "commercial_transactional_form",
       "governance_family_id": "comercial-condicoes",

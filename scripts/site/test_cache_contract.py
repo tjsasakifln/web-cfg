@@ -243,6 +243,8 @@ def _headers(body: str) -> str:
         "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
         "/cad/editor/*\n"
         "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
+        "/cad/freecad/*\n"
+        "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
     )
 
 

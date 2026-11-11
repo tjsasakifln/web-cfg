@@ -1523,6 +1523,36 @@
           "geotecnia-cpt-estacas"
         ]
       }
+    },
+    {
+      "id": "modelador-parametrico-3d",
+      "group": "modelos",
+      "title": "Modelador paramétrico 3D",
+      "summary": "Crie sólidos e esboços com FreeCAD no navegador. Altere medidas, salve o arquivo FCStd gratuitamente e prepare STEP ou STL. Ambiente de 503 MB, aberto sob demanda.",
+      "format": "FCStd · STEP · STL",
+      "file_formats": [
+        "FCSTD",
+        "STEP",
+        "STL",
+        "IGES",
+        "3MF",
+        "SVG",
+        "DXF"
+      ],
+      "action": "Conhecer o modelador 3D",
+      "href": "/ferramentas/modelador-parametrico-3d/",
+      "art": "iso",
+      "mark": "MODELAGEM 3D",
+      "keywords": "freecad grátis modelador cad paramétrico sólido sketch esboço extrusão peça desenho 3d",
+      "page": {
+        "title": "Modelador paramétrico 3D grátis no navegador",
+        "desc": "Crie sólidos, esboços e peças com FreeCAD no navegador. Salve uma cópia editável FCStd grátis e prepare exportações STEP e STL.",
+        "related": [
+          "dwg",
+          "inventario-ifc",
+          "quantitativos-dxf"
+        ]
+      }
     }
   ]
 }
