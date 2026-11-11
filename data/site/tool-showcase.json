@@ -1347,6 +1347,31 @@
           "rede-de-agua"
         ]
       }
+    },
+    {
+      "id": "propriedades-de-secoes",
+      "group": "calculo",
+      "title": "Propriedades de seções e tensões",
+      "summary": "Calcule área, centroide, inércias, torção e tensões de uma seção poligonal com furos. Compare malhas e consulte os resultados por nó.",
+      "format": "HTML · CSV · JSON",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Calcular propriedades",
+      "href": "/ferramentas/propriedades-de-secoes/",
+      "art": "part",
+      "mark": "GEOMETRIA E INÉRCIA",
+      "keywords": "propriedades de seções e tensões elásticas cálculo grátis engenharia online",
+      "page": {
+        "title": "Propriedades de seções e tensões elásticas",
+        "desc": "Calcule área, centroide, inércias, torção e tensões de uma seção poligonal com furos. Compare malhas e consulte os resultados por nó.",
+        "related": [
+          "analise-de-viga-continua",
+          "memorial-de-calculo"
+        ]
+      }
     }
   ]
 }

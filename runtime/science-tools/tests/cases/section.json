@@ -1,0 +1,139 @@
+[
+  {
+    "name": "rectangle-properties-stress",
+    "request": {
+      "operation": "section",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            300,
+            0
+          ],
+          [
+            300,
+            500
+          ],
+          [
+            0,
+            500
+          ]
+        ],
+        "mesh": 64,
+        "axial": 0,
+        "momentX": 10,
+        "momentY": 0,
+        "warping": true
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 150000
+      },
+      {
+        "index": 3,
+        "value": 3125000000.0
+      },
+      {
+        "index": 4,
+        "value": 1125000000.0
+      },
+      {
+        "index": 10,
+        "value": -0.8
+      },
+      {
+        "index": 11,
+        "value": 0.8
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "section-hole",
+    "request": {
+      "operation": "section",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ]
+        ],
+        "holes": [
+          [
+            [
+              4,
+              4
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              4,
+              6
+            ]
+          ]
+        ],
+        "mesh": 32,
+        "warping": false
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 96
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "crossed-polygon-rejected",
+    "request": {
+      "operation": "section",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            10,
+            0
+          ]
+        ]
+      }
+    },
+    "summary": [],
+    "invalid": true
+  }
+]
