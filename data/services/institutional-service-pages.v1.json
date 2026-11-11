@@ -579,7 +579,13 @@
             "Entenda por que região, data-base, desoneração e o regime de empreitada mudam a leitura da planilha antes de decidir ou contratar.",
             "/conteudos/sinapi-desonerado-nao-desonerado/"
           ]
-        ]
+        ],
+        "tool": {
+          "intro": "Para organizar serviços e preços por etapa e exportar uma planilha editável,",
+          "label": "abra a ferramenta de orçamento de obras",
+          "href": "/ferramentas/orcamento-de-obras/",
+          "cta_id": "quantitativos-resource-budget"
+        }
       },
       "contact": {
         "title": "Solicite uma proposta de quantitativos ou orçamento.",
