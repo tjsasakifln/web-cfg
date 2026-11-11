@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 283
+    "expected_declared_ctas": 287
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 41,
-    "declared_ctas": 283,
+    "declared_ctas": 287,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4601,6 +4601,51 @@
           ]
         },
         {
+          "cta_id": "home-resource-guides",
+          "position": "home_services",
+          "href": "/conteudos/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ler guias técnicos",
+          "useful_next_state": "Abre o destino declarado por “Ler guias técnicos” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-resource-tools",
+          "position": "home_services",
+          "href": "/ferramentas/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Explorar ferramentas de engenharia",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-resource-radar",
+          "position": "home_services",
+          "href": "/ferramentas/radar-mercado-publico/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Pesquisar contratos públicos no Radar",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
           "cta_id": "home-how-we-work",
           "position": "conduction",
           "href": "/como-trabalhamos/",
@@ -6722,6 +6767,21 @@
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "obras-publicas-resource-checklist",
+          "position": "related_resources",
+          "href": "/ferramentas/checklist-reequilibrio/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Checklist de reequilíbrio",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {

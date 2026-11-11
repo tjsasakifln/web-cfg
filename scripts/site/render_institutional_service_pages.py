@@ -246,10 +246,17 @@ def render_related_guides(block: dict) -> str:
         f'<li><span class="list-ruled__index">{index:02d}</span><div><h3>{esc(title)}</h3><p>{esc(text)}</p><p><a class="text-link" href="{esc(href)}">Ler orientação</a></p></div></li>'
         for index, (title, text, href) in enumerate(block["items"], 1)
     )
+    tool_link = ""
+    if tool := block.get("tool"):
+        tool_link = (
+            f'\n<p>{esc(tool["intro"])} <a class="text-link" data-event-name="cta_click" '
+            f'data-cta-id="{esc(tool["cta_id"])}" data-cta-position="related_resources" '
+            f'href="{esc(tool["href"])}">{esc(tool["label"])}</a>.</p>'
+        )
     return f'''<section aria-labelledby="guias-relacionados-title" class="sec sec--soft" id="guias-relacionados">
 <div class="container">
 <header class="sec-head sec-head--split"><span class="t-kicker">Orientação para contratar</span><h2 class="t-editorial" id="guias-relacionados-title">{esc(block['title'])}</h2><p>{esc(block['intro'])}</p></header>
-<ol class="list-ruled">{items}</ol>
+<ol class="list-ruled">{items}</ol>{tool_link}
 </div></section>'''
 
 

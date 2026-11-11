@@ -657,6 +657,9 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
         "home-project-eletrico",
         "home-project-hidrossanitario",
         "home-project-terceirizacao",
+        "home-resource-guides",
+        "home-resource-tools",
+        "home-resource-radar",
     }
     extra = re.search(r'<p class="home-services__all">.*?</p>', home, re.S)
     assert extra, "home deve manter o atalho discreto de inteligência de mercado"
