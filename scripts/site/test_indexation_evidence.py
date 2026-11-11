@@ -293,9 +293,9 @@ def test_home_has_its_own_authority_without_waiving_content_freshness():
     assert len(pages) == 1
     modified = pages[0]["dateModified"]
     # This timestamp is the substantive home content change in commit
-    # 02dd3b2a6ed87061b49c31e0ef03ca1add5e440b (the pre-fix HTML blob is
-    # 9ee98507ce5a3a2209adeff22608c70ba1890029), not the test/run clock.
-    assert datetime.fromisoformat(modified) >= datetime.fromisoformat("2026-11-10T23:49:48-03:00")
+    # 6a9069b406211a6239b579fbc3b5f9b924c65b39 (the pre-fix HTML blob is
+    # 8b7a2c7f1c56b7e7ca030e60cd8db861c1697456), not the test/run clock.
+    assert datetime.fromisoformat(modified) >= datetime.fromisoformat("2026-11-11T00:59:32-03:00")
     assert datetime.fromisoformat(modified).date() <= ctx().today
 
     undated = re.sub(r',?"dateModified"\s*:\s*"[^"]+"', "", html)
