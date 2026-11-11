@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-11-09",
+  "as_of": "2026-11-11",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -144,7 +144,22 @@
       },
       "declared_at": "2026-09-05",
       "owner_issue": 577,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "A página inicial é a apresentação institucional da própria CONFENGE e descreve seus serviços, ferramentas e canais. Não representa um registro adquirido de terceiros; a autoridade das afirmações é a constituição comercial e a taxonomia da empresa. Atualidade, segurança pública, identidade, conversão e demais verificações continuam aplicáveis.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "docs/architecture/ADR-STRAT-004-commercial-constitution-and-finite-portfolio.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/corporate/taxonomy.v1.json"
+        ],
+        "declared_at": "2026-11-11",
+        "owner_issue": 577
+      }
     },
     {
       "id": "servicos-corporativos",

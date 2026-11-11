@@ -38,6 +38,8 @@ afirma compatibilidade por uma lista de versões de navegadores.
   bytes já verificados em memória. Modelos, exportações e conta nunca entram
   nesse cache. O teste de segunda abertura desativa o cache HTTP para conferir
   que os 501.757.581 bytes de WASM e dados não sejam solicitados novamente.
+  O carregador Qt recebe o módulo compilado desses bytes verificados, pois o
+  Emscripten desta versão não usa `Module.wasmBinary` para iniciar o motor.
 - O sistema de arquivos, geometria, modelo importado e cópia FCStd ficam no
   navegador. O backup FCStd não chama a carteira, inclusive em falhas de saldo.
 - Saídas técnicas usam `exportToolResult` e o contrato existente
@@ -57,7 +59,7 @@ contratos; serviço de créditos existente para autorização da entrega.
 
 ## Qualificação e reversão
 
-Verificação local da continuidade em 11/11/2026: 35 testes Node de rede,
+Verificação local da continuidade em 11/11/2026: 36 testes Node de rede,
 requisitos, arquivos, cache e repetição da autorização; 49 testes Python da
 distribuição, CSP e cache; montagem real do site com os três binários fixados.
 O botão de retomada conserva o mesmo resultado congelado e a carteira preserva
@@ -70,6 +72,12 @@ contratado do CI antes de promover esta ferramenta. O ensaio compara a peça
 original de 180.000 mm³ com a peça alterada de 288.000 mm³, além da retomada
 idempotente pelo botão do arquivo. Não se considera a inicialização aprovada
 apenas pela integridade dos downloads.
+
+O mesmo ensaio exige abertura dos arquivos STEP, IGES, STL, 3MF, DXF e SVG pelo
+seletor do produto, com conferência das dimensões em milímetros. Ele também
+aciona os comandos nativos File > Save As, Save e Export, acompanha a ponte de
+gravação original, reabre a cópia FCStd alterada e confere o STL autorizado.
+Esses casos só contam como aprovados com execução real no navegador.
 
 O catálogo, o mapa do site e a imagem social entram na integração coordenada
 das ferramentas. `modelador-abrir` registra `cta_click`, sem afirmar conversão

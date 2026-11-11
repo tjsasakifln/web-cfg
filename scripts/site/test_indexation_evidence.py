@@ -10,8 +10,10 @@ from NOINDEX_JUSTIFIED.
 
 from __future__ import annotations
 
+import json
+import re
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -270,6 +272,36 @@ def test_a_declaration_may_not_waive_anything_but_the_two_external_subgates():
         else:
             raise AssertionError(f"waiving {waived} must not be accepted")
     G.validate_index_evidence_declarations([_first_party("casos", ["citable_source"])])
+
+
+def test_home_has_its_own_authority_without_waiving_content_freshness():
+    family = ctx().route_family["/"]
+    html = ctx().html_by_route["/"]
+    declared = family[G.INDEX_EVIDENCE_KEY]
+    assert declared["substrate"] == G.SUBSTRATE_FIRST_PARTY
+    assert declared["not_applicable"] == ["citable_source"]
+    G.validate_index_evidence_declarations([family])
+    _, detail = G.instance_index_ready_for_route("/", html, family, ctx())
+    assert detail["subgates"]["citable_source"]["applicable"] is False
+    assert detail["subgates"]["official_live"]["applicable"] is True
+    assert detail["subgates"]["freshness"]["applicable"] is True
+    assert detail["subgates"]["freshness"]["passed"] is True
+
+    blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
+    pages = [node for block in blocks for node in json.loads(block).get("@graph", [])
+             if node.get("@type") == "WebPage" and node.get("url") == "https://confenge.com.br/"]
+    assert len(pages) == 1
+    modified = pages[0]["dateModified"]
+    # This timestamp is the substantive home content change in commit
+    # 02dd3b2a6ed87061b49c31e0ef03ca1add5e440b (the pre-fix HTML blob is
+    # 9ee98507ce5a3a2209adeff22608c70ba1890029), not the test/run clock.
+    assert datetime.fromisoformat(modified) >= datetime.fromisoformat("2026-11-10T23:49:48-03:00")
+    assert datetime.fromisoformat(modified).date() <= ctx().today
+
+    undated = re.sub(r',?"dateModified"\s*:\s*"[^"]+"', "", html)
+    assert not G._sub_freshness(undated, ctx()).passed
+    future = html.replace(modified, "2099-01-01T00:00:00-03:00")
+    assert not G._sub_freshness(future, ctx()).passed
 
 
 def test_a_family_of_external_records_may_never_declare_first_party():
