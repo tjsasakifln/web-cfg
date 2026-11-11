@@ -1472,6 +1472,31 @@
           "calculadora-de-beiral"
         ]
       }
+    },
+    {
+      "id": "energia-solar-fotovoltaica",
+      "group": "calculo",
+      "title": "Energia solar fotovoltaica",
+      "summary": "Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib.",
+      "format": "HTML · CSV · JSON",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Calcular geração solar",
+      "href": "/ferramentas/energia-solar-fotovoltaica/",
+      "art": "chart",
+      "mark": "GERAÇÃO E PERDAS",
+      "keywords": "simulador de energia solar fotovoltaica cálculo grátis engenharia online",
+      "page": {
+        "title": "Simulador de energia solar fotovoltaica",
+        "desc": "Calcule irradiância no plano, temperatura de célula, potência e energia fotovoltaica com a sua série meteorológica e o motor pvlib.",
+        "related": [
+          "conforto-termico",
+          "calculadora-de-beiral"
+        ]
+      }
     }
   ]
 }
