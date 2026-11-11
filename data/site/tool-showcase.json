@@ -1224,6 +1224,31 @@
           "margem"
         ]
       }
+    },
+    {
+      "id": "inventario-ifc",
+      "group": "modelos",
+      "title": "Inventário de propriedades IFC",
+      "summary": "Extraia elementos, espaços, sistemas e propriedades de tipo e ocorrência em tabelas. Preserve a origem de cada valor no CSV ou JSON.",
+      "format": "IFC · CSV · JSON",
+      "file_formats": [
+        "IFC",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Extrair inventário IFC",
+      "href": "/ferramentas/inventario-ifc/",
+      "art": "table",
+      "mark": "INVENTÁRIO BIM",
+      "keywords": "inventário de propriedades ifc bim revit dados geometria local",
+      "page": {
+        "title": "Inventário de propriedades IFC online",
+        "desc": "Extraia elementos, espaços, sistemas e propriedades de tipo e ocorrência em tabelas. Preserve a origem de cada valor no CSV ou JSON.",
+        "related": [
+          "ifc-excel",
+          "ids"
+        ]
+      }
     }
   ]
 }
