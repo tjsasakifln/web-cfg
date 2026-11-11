@@ -258,8 +258,15 @@ LOCAL_FILE_TOOLS = frozenset(
     "cad/index.html",
     "cad/aplicativos/index.html",
     "avaliacao-imoveis-urbanos/inferencia/index.html",
+    "ferramentas/comparador-cronogramas/index.html",
     "ferramentas/diagrama-unifilar/index.html",
+    "ferramentas/epanet-inp/index.html",
+    "ferramentas/federacao-bcf/index.html",
+    "ferramentas/georreferenciador-ifc/index.html",
+    "ferramentas/inventario-ifc/index.html",
     "ferramentas/orcamento-de-obras/index.html",
+    "ferramentas/plantas-cortes-ifc/index.html",
+    "ferramentas/quantitativos-dxf/index.html",
     "ferramentas/rede-de-agua/index.html",
 }
 
