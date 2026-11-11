@@ -23,6 +23,7 @@ if str(ROOT) not in sys.path:
 from scripts.editorial.naturalness import jaccard_similarity  # noqa: E402
 from scripts.site import inbound_gates as G  # noqa: E402
 from scripts.site.universe_sweep import BUCKET_ORDER, sweep  # noqa: E402
+from scripts.site.visible_parity import compare_visible_parity  # noqa: E402
 
 _CTX = None
 
@@ -298,9 +299,23 @@ def test_home_has_its_own_authority_without_waiving_content_freshness():
     assert datetime.fromisoformat(modified) >= datetime.fromisoformat("2026-11-11T00:59:32-03:00")
     assert datetime.fromisoformat(modified).date() <= ctx().today
 
-    undated = re.sub(r',?"dateModified"\s*:\s*"[^"]+"', "", html)
+    visible_date = datetime.fromisoformat(modified).date().isoformat()
+    updates = re.findall(r'<p\b[^>]*data-page-updated[^>]*>.*?</p>\s*', html, re.S)
+    assert len(updates) == 1
+    assert f'<time datetime="{visible_date}">' in updates[0]
+    assert set(G.page_dates(html)) == {date.fromisoformat(visible_date)}
+    parity = compare_visible_parity(html)
+    assert parity["ok"], parity["defects"]
+
+    without_visible_date = html.replace(updates[0], "", 1)
+    assert any(defect["code"] == "schema_date_stale"
+               for defect in compare_visible_parity(without_visible_date)["defects"])
+    undated = re.sub(r',?"dateModified"\s*:\s*"[^"]+"', "", without_visible_date)
+    assert G.page_dates(undated) == []
     assert not G._sub_freshness(undated, ctx()).passed
     future = html.replace(modified, "2099-01-01T00:00:00-03:00")
+    future = future.replace(f'datetime="{visible_date}"', 'datetime="2099-01-01"')
+    assert set(G.page_dates(future)) == {date(2099, 1, 1)}
     assert not G._sub_freshness(future, ctx()).passed
 
 
