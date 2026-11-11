@@ -131,13 +131,13 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 287,
-    "logo_image_occurrences": 541,
-    "header_lockup_occurrences": 262,
-    "footer_lockup_occurrences": 265,
+    "source_html_files_scanned": 288,
+    "logo_image_occurrences": 543,
+    "header_lockup_occurrences": 263,
+    "footer_lockup_occurrences": 266,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 276,
-      "/assets/logo-confenge-white-500-1677038e.png": 265
+      "/assets/logo-confenge-500-f8a83f6d.png": 277,
+      "/assets/logo-confenge-white-500-1677038e.png": 266
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -146,7 +146,8 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "2026-11-09. Censo do HTML fonte após a integração das nove ferramentas de engenharia e do Radar de Mercado Público."
+    "observation_note": "2026-11-09. Censo do HTML fonte após a integração das nove ferramentas de engenharia e do Radar de Mercado Público.",
+    "inventory_note_pt_br": "Censo da árvore pública deste candidato, incluindo somente as ferramentas presentes. Os bytes e a geometria dos ativos de marca permanecem conferidos pelo contrato."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
