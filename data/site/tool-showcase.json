@@ -1447,6 +1447,31 @@
           "orcamento-de-obras"
         ]
       }
+    },
+    {
+      "id": "conforto-termico",
+      "group": "calculo",
+      "title": "Conforto e estresse térmico",
+      "summary": "Compare ambientes por PMV, PPD, SET e UTCI com temperatura, radiação, umidade, velocidade do ar, atividade e vestimenta.",
+      "format": "HTML · CSV · JSON",
+      "file_formats": [
+        "HTML",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Calcular conforto térmico",
+      "href": "/ferramentas/conforto-termico/",
+      "art": "chart",
+      "mark": "PMV · PPD · SET · UTCI",
+      "keywords": "conforto térmico: pmv, ppd, set e utci cálculo grátis engenharia online",
+      "page": {
+        "title": "Conforto térmico: PMV, PPD, SET e UTCI",
+        "desc": "Compare ambientes por PMV, PPD, SET e UTCI com temperatura, radiação, umidade, velocidade do ar, atividade e vestimenta.",
+        "related": [
+          "calculadora-psicrometrica",
+          "calculadora-de-beiral"
+        ]
+      }
     }
   ]
 }
