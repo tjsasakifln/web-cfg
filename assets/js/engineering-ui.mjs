@@ -11,7 +11,7 @@ export function number(value, label = 'Valor', min = -Infinity, max = Infinity) 
 export function csv(rows) {
   return '\uFEFF' + rows.map(row => row.map(value => {
     let s = value == null ? '' : String(value);
-    if (/^[\s\u0000-\u001f]*[=+\-@]/.test(s) || /^[\t\r\n]/.test(s)) s = "'" + s;
+    if (typeof value !== 'number' && (/^[\s\u0000-\u001f]*[=+\-@]/.test(s) || /^[\t\r\n]/.test(s))) s = "'" + s;
     return '"' + s.replaceAll('"', '""') + '"';
   }).join(';')).join('\r\n');
 }
