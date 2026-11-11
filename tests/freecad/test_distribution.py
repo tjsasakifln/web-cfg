@@ -47,17 +47,30 @@ def test_isolation_and_wasm_authority_do_not_leak_to_the_launcher(tmp_path):
     assert runtime["cross-origin-opener-policy"] == "same-origin"
     assert runtime["cross-origin-embedder-policy"] == "require-corp"
     assert "noindex" in runtime["x-robots-tag"]
+    for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
+        assert "'unsafe-eval'" not in parsed[pattern]["content-security-policy"]
+        assert "identitytoolkit.googleapis.com" not in parsed[pattern]["content-security-policy"]
+        assert "securetoken.googleapis.com" not in parsed[pattern]["content-security-policy"]
     assert "wasm-unsafe-eval" not in parsed["/*"]["content-security-policy"]
     for route in ["cad/freecad", "ferramentas/modelador-parametrico-3d"]:
         (tmp_path / route).mkdir(parents=True)
         (tmp_path / route / "index.html").write_text("<html></html>")
     result = parse_header_rules(apply_wallet_document_policies(headers, tmp_path))
-    app = result["/cad/freecad/"]["content-security-policy"]
     launcher = result["/ferramentas/modelador-parametrico-3d/"]["content-security-policy"]
-    assert "wasm-unsafe-eval" in app and "wasm-unsafe-eval" not in launcher
-    assert "identitytoolkit.googleapis.com" in app
-    assert "apis.google.com" not in app and "firebaseapp.com" not in app
-    assert "frame-src 'none'" in app
+    assert "wasm-unsafe-eval" not in launcher and "'unsafe-eval'" not in launcher
+    for route in ["/cad/freecad/", "/cad/freecad/index.html"]:
+        for policies in [parsed, result]:
+            app = policies[route]["content-security-policy"]
+            assert "'unsafe-eval'" in app and "wasm-unsafe-eval" in app
+            assert "identitytoolkit.googleapis.com" in app
+            assert "apis.google.com" not in app and "firebaseapp.com" not in app
+            assert "script-src-attr 'none'" in app
+            assert "frame-src 'none'" in app and "object-src 'none'" in app
+            assert "'unsafe-inline'" not in csp_directives_from_text("Content-Security-Policy: " + app)["script-src"]
+    built = apply_wallet_document_policies(headers, tmp_path)
+    assert apply_wallet_document_policies(built, tmp_path) == built
+    for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
+        assert result[pattern] == parsed[pattern]
 
 
 def test_engine_cannot_be_downloaded_by_reading_the_public_page():

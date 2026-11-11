@@ -49,7 +49,8 @@ FIREBASE_POPUP_FRAMES = (
     "https://confenge-ferramentas-pj-hml.firebaseapp.com",
 )
 WALLET_ISOLATED_DOCUMENT = "/bim/fotogrametria/"
-WALLET_ISOLATED_DOCUMENTS = (WALLET_ISOLATED_DOCUMENT, "/cad/freecad/")
+FREECAD_RUNTIME_DOCUMENTS = ("/cad/freecad/", "/cad/freecad/index.html")
+WALLET_ISOLATED_DOCUMENTS = (WALLET_ISOLATED_DOCUMENT, *FREECAD_RUNTIME_DOCUMENTS)
 WALLET_DOCUMENTS = (
     "/analise-cnpj/",
     "/analise-cnpj/r/",
@@ -64,7 +65,7 @@ WALLET_DOCUMENTS = (
     "/bim/web/regua.html",
     "/bim/web/visualizador.html",
     WALLET_ISOLATED_DOCUMENT,
-    "/cad/freecad/",
+    *FREECAD_RUNTIME_DOCUMENTS,
     "/ferramentas/modelador-parametrico-3d/",
     "/cad/",
     "/cad/aplicativos/",
@@ -318,9 +319,15 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
             parent = "/bim/web/*"
         elif route == WALLET_ISOLATED_DOCUMENT:
             parent = "/bim/fotogrametria/*"
-        elif route == "/cad/freecad/":
+        elif route in FREECAD_RUNTIME_DOCUMENTS:
             parent = "/cad/freecad/*"
         directives = csp_directives_from_text(lines[policies[parent]])
+        if route in FREECAD_RUNTIME_DOCUMENTS:
+            # The pinned Emscripten build creates Embind invokers with
+            # new Function. wasm-unsafe-eval alone cannot authorize that.
+            # Grant this only to the runtime document and its explicit alias,
+            # never to the launcher, license page or whole CAD directory.
+            directives["script-src"].append("'unsafe-eval'")
         directives["connect-src"].extend(FIREBASE_AUTH_CONNECTIONS)
         if route not in WALLET_ISOLATED_DOCUMENTS:
             directives["script-src"].append(FIREBASE_POPUP_SCRIPT)

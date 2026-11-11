@@ -11,6 +11,8 @@ on:
       - tests/freecad-browser.mjs
       - runtime/tools-commerce/exports.cjs
       - scripts/pseo/public_artifact.py
+      - scripts/site/csp_contract.py
+      - _headers
       - .github/workflows/freecad-browser.yml
   workflow_dispatch:
 
