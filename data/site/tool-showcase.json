@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-09",
+  "updated": "2026-11-11",
   "groups": [
     {
       "id": "destaques",
@@ -1144,6 +1144,32 @@
         "related": [
           "cnpj",
           "aditivos"
+        ]
+      }
+    },
+    {
+      "id": "quantitativos-dxf",
+      "group": "desenho",
+      "title": "Quantitativos de DXF por camada",
+      "summary": "Meça comprimentos e áreas de contornos, conte blocos e extraia textos. Confira unidades e exclusões antes de exportar CSV ou JSON.",
+      "format": "DXF · CSV · JSON",
+      "file_formats": [
+        "DXF",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Levantar quantitativos",
+      "href": "/ferramentas/quantitativos-dxf/",
+      "art": "plan",
+      "mark": "QUANTITATIVOS 2D",
+      "keywords": "comprimentos blocos levantamento orçamento autocad texto camada",
+      "page": {
+        "title": "Quantitativos DXF online: áreas, comprimentos e blocos",
+        "desc": "Extraia quantitativos de DXF por camada no navegador: comprimentos, áreas de contornos, blocos e textos. Confira unidades e exporte CSV ou JSON.",
+        "related": [
+          "dwg",
+          "orcamento-de-obras",
+          "ifc-excel"
         ]
       }
     }

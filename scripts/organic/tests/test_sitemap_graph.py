@@ -40,6 +40,7 @@ from scripts.organic.sitemap_graph import (
     UrlEntry,
 )
 from scripts.organic.sitemap_hygiene import audit_sitemaps
+from scripts.site.public_copy_scope import artifact_html_files
 
 AS_OF = date(2026, 8, 19)
 MA = "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
@@ -603,6 +604,51 @@ def test_published_inventory_derives_from_routes_not_allowlist(tmp_path: Path):
     after = published_route_inventory(tmp_path)
     assert after["only_indexable"] == []
     assert set(after["indexable"]) == set(after["sitemap"])
+
+
+def test_private_scientific_templates_do_not_change_public_source_inventory(tmp_path: Path):
+    # Only the root-relative runtime/science-tools/python directory is private.
+    # Similar public names must remain in scope and keep failing without a sitemap.
+    public_relpaths = (
+        "index.html",
+        "runtime/index.html",
+        "runtime/science-tools/index.html",
+        "runtime/science-tools/python.html",
+        "runtime/science-tools/python-public/index.html",
+        "ferramentas/runtime/science-tools/python/index.html",
+        "python/index.html",
+    )
+    public_routes = {
+        "/", "/runtime/", "/runtime/science-tools/",
+        "/runtime/science-tools/python.html",
+        "/runtime/science-tools/python-public/",
+        "/ferramentas/runtime/science-tools/python/", "/python/",
+    }
+    for rel in public_relpaths:
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True, exist_ok=True)
+        page.write_text(_html(f"{SITE}/{rel}"), encoding="utf-8")
+    before = published_route_inventory(tmp_path)
+    assert set(before["indexable"]) == public_routes
+    assert set(before["only_indexable"]) == public_routes
+
+    private_relpaths = (
+        "runtime/science-tools/python/index.html",
+        "runtime/science-tools/python/lib/python3.12/site-packages/Pynite/Report_Template.html",
+        "runtime/science-tools/python/lib/python3.12/site-packages/matplotlib/backends/web_backend/all_figures.html",
+        "runtime/science-tools/python/lib/python3.12/site-packages/numba/core/annotations/template.html",
+    )
+    for rel in private_relpaths:
+        page = tmp_path / rel
+        page.parent.mkdir(parents=True, exist_ok=True)
+        page.write_text("<html><title>Upstream internal template</title></html>", encoding="utf-8")
+    assert published_route_inventory(tmp_path) == before
+    assert {issue.url for issue in indexability_graph_issues(tmp_path, [])} == public_routes
+
+    # Applying the independent artifact scanner to these same bytes must expose
+    # every private template, so the source exception cannot conceal a release leak.
+    artifact_relpaths = {page.relative_to(tmp_path).as_posix() for page in artifact_html_files(tmp_path)}
+    assert artifact_relpaths == set(public_relpaths) | set(private_relpaths)
 
 
 def test_published_inventory_requires_real_schema_and_clean_self_canonical(tmp_path: Path):

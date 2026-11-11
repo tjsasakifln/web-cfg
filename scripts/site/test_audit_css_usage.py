@@ -299,6 +299,17 @@ def test_prototype_markup_does_not_keep_a_public_class_alive() -> None:
             assert not rel.startswith(PROTOTYPE_SOURCE_DIR + "/"), f"{name} kept alive by {rel}"
 
 
+
+def test_private_scientific_runtime_cannot_keep_public_css_alive() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        private = root / "runtime/science-tools/python/lib/vendor"
+        private.mkdir(parents=True)
+        (private / "screen.css").write_text(".runtime-only { border-radius: 100px; }")
+        (private / "screen.html").write_text('<div class="public-dead-class">private documentation</div>')
+        assert public_css_files(root) == []
+        assert "public-dead-class" not in used_classes(root)
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):
@@ -350,3 +361,4 @@ def test_neutralising_declarations_do_not_spend_the_decoration_ceiling():
     counts = decoration_counts(ornament)
     assert counts["border_radius"] == 4, counts
     assert counts["box_shadow"] == 3, counts
+
