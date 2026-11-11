@@ -30,12 +30,15 @@ export function prepareDownload({ name, bytes, authorize, deliver }) {
   if (!backup && !EXPORT_FORMATS.has(format)) throw new Error('Este formato não está habilitado para exportação. Salve uma cópia FCStd para continuar no FreeCAD do computador.');
   let inFlight, delivered = false;
   const send = async () => { await deliver(content, safeName); delivered = true; };
+  // The wallet binds an interrupted attempt to this exact frozen result. Keep
+  // its identity when the file row retries, as well as its immutable bytes.
+  const authorization = Object.freeze({ toolId: 'modelador-parametrico-3d', format, content, deliver: send });
   return { name: safeName, size: content.size, backup, async run() {
     if (delivered) return true;
     if (inFlight) return inFlight;
     inFlight = (async () => {
       if (backup) { await send(); return true; }
-      return authorize({ toolId: 'modelador-parametrico-3d', format, content, deliver: send });
+      return authorize(authorization);
     })();
     try { return await inFlight; } finally { inFlight = undefined; }
   } };

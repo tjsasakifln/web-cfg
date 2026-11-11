@@ -46,7 +46,7 @@ jobs:
           chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Distribution integrity and recovery contracts
         run: |
-          node --test tests/freecad/core.test.mjs
+          node --test tests/freecad/*.test.mjs
           python3 -m pytest tests/freecad -q
       - name: Build the real public artifact
         run: npm run build:site

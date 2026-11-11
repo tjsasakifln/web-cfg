@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { capabilities } from './capabilities.mjs';
-import { installNetworkBoundary } from './network.mjs';
+import { fetchRuntimeBytes, installNetworkBoundary } from './network.mjs';
 import { createSaveWatcher, fileName, isBackup, prepareDownload, validateInput } from './files.mjs';
 
 const $ = id => document.getElementById(id);
@@ -265,26 +265,6 @@ function loadScript(path, integrity) {
 }
 const integrity = hex => 'sha256-' + btoa(String.fromCharCode(...hex.match(/../g).map(byte => parseInt(byte, 16))));
 
-async function fetchBytes(spec, onProgress) {
-  const response = await fetch(spec.path, { integrity: integrity(spec.sha256) });
-  if (!response.ok) throw new Error(`Não foi possível baixar o ambiente (HTTP ${response.status}).`);
-  if (!response.body) {
-    const buffer = await response.arrayBuffer();
-    if (buffer.byteLength !== spec.size) throw new Error('O arquivo do ambiente está incompleto. Tente abrir a ferramenta novamente.');
-    onProgress(spec.size); return buffer;
-  }
-  const bytes = new Uint8Array(spec.size), reader = response.body.getReader();
-  let offset = 0;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (offset + value.length > bytes.length) { await reader.cancel(); throw new Error('O tamanho do ambiente diverge da versão publicada.'); }
-    bytes.set(value, offset); offset += value.length; onProgress(offset);
-  }
-  if (offset !== spec.size) throw new Error('O download do ambiente foi interrompido. Reabra a ferramenta para tentar novamente.');
-  return bytes.buffer;
-}
-
 async function textFile(path) {
   const response = await fetch(path);
   if (!response.ok) throw new Error('Não foi possível carregar a configuração do ambiente.');
@@ -304,16 +284,16 @@ async function start() {
     if (manifest.schema !== 'confenge.freecad-runtime/v1' || manifest.version !== '1.0.9' || manifest.decoded_bytes !== 503224999) throw new Error('Versão de ambiente incompatível. Reabra a ferramenta.');
     const files = manifest.files;
     const progress = {};
-    $('phase').textContent = 'Baixando o ambiente de modelagem';
-    status('Download iniciado após sua solicitação. Os modelos continuarão neste dispositivo.');
+    $('phase').textContent = 'Preparando o ambiente de modelagem';
+    status('Conferindo os componentes salvos e baixando o que faltar. Os modelos continuarão neste dispositivo.');
     const report = (key, bytes) => {
       progress[key] = bytes;
       const total = Object.values(progress).reduce((a, b) => a + b, 0);
       $('progress').value = total;
-      $('progress-detail').textContent = `${(total / 1000000).toFixed(0)} de 503 MB recebidos. Mantenha esta aba aberta.`;
+      $('progress-detail').textContent = `${(total / 1000000).toFixed(0)} de 503 MB preparados. Mantenha esta aba aberta.`;
     };
-    const wasm = await fetchBytes(files['FreeCAD.wasm'], value => report('wasm', value));
-    const data = await fetchBytes(files['FreeCAD.data'], value => report('data', value));
+    const wasm = await fetchRuntimeBytes(files['FreeCAD.wasm'], value => report('wasm', value));
+    const data = await fetchRuntimeBytes(files['FreeCAD.data'], value => report('data', value));
     const [sysconfig, bootstrap, dialogs] = await Promise.all([
       textFile('/assets/freecad/sysconfig.txt'), textFile('/cad/freecad/bootstrap.txt'), textFile('/cad/freecad/vendor/dialogs.txt'),
     ]);

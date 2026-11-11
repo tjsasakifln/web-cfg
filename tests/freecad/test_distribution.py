@@ -71,6 +71,20 @@ def test_isolation_and_wasm_authority_do_not_leak_to_the_launcher(tmp_path):
     assert apply_wallet_document_policies(built, tmp_path) == built
     for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
         assert result[pattern] == parsed[pattern]
+    # pthread workers use the CSP on their own script response. Grant Embind's
+    # dynamic invokers only to the exact, integrity-pinned engine, not all assets.
+    engine = installer.MANIFEST["files"]["FreeCAD.js"]["path"]
+    assert engine == "/assets/freecad/FreeCAD-3f8c1ff4a0ee.js"
+    for policies in [parsed, result]:
+        policy = csp_directives_from_text("Content-Security-Policy: " + policies[engine]["content-security-policy"])
+        assert policy["script-src"] == ["'self'", "'wasm-unsafe-eval'", "'unsafe-eval'"]
+        assert policy["connect-src"] == ["'self'"]
+        assert "'unsafe-inline'" not in policy["script-src"]
+        assert not any("google" in token or "firebase" in token for values in policy.values() for token in values)
+        exceptions = {route for route, values in policies.items()
+                      if "'unsafe-eval'" in values.get("content-security-policy", "")
+                      and route.startswith(("/cad/freecad", "/assets/freecad"))}
+        assert exceptions == {"/cad/freecad/", "/cad/freecad/index.html", engine}
 
 
 def test_engine_cannot_be_downloaded_by_reading_the_public_page():

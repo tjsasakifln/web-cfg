@@ -214,6 +214,11 @@
   X-Robots-Tag: noindex
   Cache-Control: public, max-age=0, must-revalidate, no-transform
 
+# The same pinned Emscripten module also starts pthread workers. Their CSP
+# comes from this response, independently of the runtime document's policy.
+/assets/freecad/FreeCAD-3f8c1ff4a0ee.js
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'
+
 /assets/freecad/FreeCAD-fafb7fb93d7c.wasm
   Content-Type: application/wasm
 
