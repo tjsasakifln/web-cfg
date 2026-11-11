@@ -30,7 +30,9 @@ export async function simulate(text, scenario={mode:'base'}) {
    // A private flat pattern prevents inheritance of the model's default pattern.
    let name='CFG_FIRE';while((text.includes(name)))name+='X';
    p.addPattern(name);const index=p.getPatternIndex(name);p.setPattern(index,[1]);
-   p.addDemand(affected.index,scenario.flow,name,'CONFENGE_FIRE');
+   const demandMultiplier=p.getOption(4); // EN_DEMANDMULT also applies to newly added demands.
+   if(!Number.isFinite(demandMultiplier)||demandMultiplier<=0)throw Error('O multiplicador global de demanda deve ser positivo para aplicar uma vazão adicional física.');
+   p.addDemand(affected.index,scenario.flow/demandMultiplier,name,'CONFENGE_FIRE');
   } else if(scenario.mode==='shutdown') {
    affected=pipes.find(n=>n.id===scenario.id);if(!affected)throw Error('O trecho escolhido não existe no modelo.');
    if(affected.type===0)throw Error('Uma tubulação com válvula de retenção não aceita fechamento manual no EPANET. Escolha outro trecho.');

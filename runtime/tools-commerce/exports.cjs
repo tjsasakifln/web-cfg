@@ -1,6 +1,7 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'bim-federacao': ['bcfzip'],
   'bim-cortes': ['svg'],
   'bim-inventario': ['csv', 'json'],
   'comparador-cronogramas': ['csv', 'svg'],

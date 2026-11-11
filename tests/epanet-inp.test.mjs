@@ -18,6 +18,12 @@ test('shutdown on loop reroutes flow and closes the saved scenario',async()=>{
  for(const s of r.variant.series){const p=s.links.find(l=>l.id==='T2');assert.equal(p.status,0);near(p.flow,0,1e-6);}
  assert.ok(r.variant.series[0].nodes.every(n=>Number.isFinite(n.pressure)));assert.ok(r.variant.inp.includes('[STATUS]'));
 });
+test('global demand multiplier does not multiply the physical extra flow',async()=>{
+ const text=inp().replace('[OPTIONS]','[OPTIONS]\nDEMAND MULTIPLIER 2');
+ const r=await compareInp(text,{mode:'fire',id:'A',flow:1});
+ near(r.base.series[0].nodes[0].demand,5);near(r.variant.series[0].nodes[0].demand,6);
+ await assert.rejects(()=>simulate(inp().replace('[OPTIONS]','[OPTIONS]\nDEMAND MULTIPLIER 0'),{mode:'fire',id:'A',flow:1}),/multiplicador|EPANET Error 200/);
+});
 test('malformed models, excess duration and unknown nodes fail rather than fabricate data',async()=>{
  await assert.rejects(()=>simulate('broken'),/JUNCTIONS/);
  await assert.rejects(()=>simulate(inp().replace('DURATION 0','DURATION 100')),/48 horas/);
