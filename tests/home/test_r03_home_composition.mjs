@@ -62,6 +62,16 @@ for (const [id, href] of [
   assert.ok(fs.existsSync(path.join(root, href.slice(1), "index.html")), href);
 }
 
+// A descoberta do catálogo permanece no bloco de ferramentas, sem duplicar
+// o mesmo destino na navegação de guias e pesquisa.
+const tools = main.match(/<div class="home-tools">[\s\S]*?<\/p>\s*<\/div>/)?.[0];
+assert.ok(tools, "A home mantém os atalhos de ferramentas antes dos serviços");
+for (const href of ["/cad/", "/bim/", "/ferramentas/orcamento-de-obras/", "/ferramentas/analise-de-viga-continua/", "/ferramentas/"]) {
+  assert.ok(tools.includes(`href="${href}"`), href);
+  assert.ok(fs.existsSync(path.join(root, href.slice(1), "index.html")), href);
+}
+assert.ok(!resources.includes('href="/ferramentas/"'));
+
 // Contraprova editorial: o miolo antigo voltado a disciplinas e ao processo de
 // projeto não pode reaparecer depois das sete escolhas.
 assert.doesNotMatch(main, /Competências de projeto|Onde projetamos|Do conceito à documentação/);
