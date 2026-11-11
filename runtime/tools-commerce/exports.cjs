@@ -1,6 +1,7 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'radier-solo-elastico': ['csv', 'json', 'svg'],
   'energia-solar-fotovoltaica': ['html', 'csv', 'json'],
   'conforto-termico': ['html', 'csv', 'json'],
   'geotecnia-cpt-estacas': ['html', 'csv', 'json'],

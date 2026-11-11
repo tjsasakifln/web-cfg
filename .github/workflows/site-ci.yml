@@ -483,6 +483,8 @@ jobs:
             build/reports/convergence/
             build/reports/contact-journeys/
             build/reports/public-surface-coverage.json
+            build/reports/report-tools-browser/
+            build/reports/freecad/
             build/reports/first-fold-current.json
             build/reports/site-excellence.json
             build/reports/site-excellence.md
@@ -527,6 +529,7 @@ jobs:
             --required-step "Build public site" \
             --required-step "Final public-surface coverage and copy gate" \
             --required-step "Published HTML and FAQ integrity" \
+            --required-step "Published DXF hydraulic and schedule calculation journeys" \
             --required-step "Public artifact audit" \
             --required-step "Commercial visitor journeys on the built artifact" \
             --required-step "Rendered first-fold measurement on exact artifact" \

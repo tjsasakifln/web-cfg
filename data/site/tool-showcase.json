@@ -1497,6 +1497,32 @@
           "calculadora-de-beiral"
         ]
       }
+    },
+    {
+      "id": "radier-solo-elastico",
+      "group": "calculo",
+      "title": "Radier sobre solo elástico",
+      "summary": "Analise um radier retangular com placa MITC4 e molas de Winkler. Compare recalques, pressões no solo e momentos, com cargas uniformes e pontuais.",
+      "format": "CSV · JSON · SVG",
+      "file_formats": [
+        "CSV",
+        "JSON",
+        "SVG"
+      ],
+      "action": "Analisar radier",
+      "href": "/ferramentas/radier-solo-elastico/",
+      "art": "plan",
+      "mark": "PLACA E SOLO",
+      "keywords": "radier fundação laje placa solo elástico winkler cálculo estrutural grátis recalque pressão momento",
+      "page": {
+        "title": "Cálculo de radier sobre solo elástico online",
+        "desc": "Analise um radier retangular com placa MITC4 e molas de Winkler. Compare recalques, pressões no solo e momentos, com cargas uniformes e pontuais.",
+        "related": [
+          "trelicas-e-porticos",
+          "secao-de-concreto-armado",
+          "geotecnia-cpt-estacas"
+        ]
+      }
     }
   ]
 }
