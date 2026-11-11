@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
 import { allowedRequest } from '../../cad/freecad/network.mjs';
 import { capabilities } from '../../cad/freecad/capabilities.mjs';
 import { createSaveWatcher, fileName, isBackup, MAX_INPUT_BYTES, prepareDownload, stagePath, validateInput } from '../../cad/freecad/files.mjs';
@@ -90,4 +92,63 @@ test('native export waits for writer close and stable bytes, including a same-si
   watcher.tick(); watcher.tick(); watcher.tick();
   assert.equal(emitted.length, 2);
   assert.deepEqual(errors, []);
+});
+
+test('memory pressure confirms the Python receipt and browser persistence before announcing recovery', async () => {
+  const graphics = fs.readFileSync(new URL('../../cad/freecad/vendor/graphics.js', import.meta.url), 'utf8');
+  const runner = graphics.slice(graphics.indexOf('    function runPy(src){'), graphics.indexOf('    window.__fcRunPyGuarded'));
+  const recovery = graphics.slice(graphics.indexOf('    async function forceAutosaveConfirmed(){'), graphics.indexOf('    setInterval(checkMemoryPressure, 5000);'));
+  assert.ok(runner && recovery, 'exercise the production functions');
+  for (const scenario of [
+    { name: 'confirmed', receipt: true, expected: true },
+    { name: 'Python did not acknowledge', receipt: false, expected: false },
+    { name: 'storage failed', receipt: true, storageError: true, expected: false },
+    { name: 'interpreter busy', busy: true, expected: false },
+    { name: 'allocation failed', noMemory: true, expected: false },
+  ]) {
+    const files = new Map([['/tmp/.confenge_autosave_stale', 'ok']]);
+    const notifications = [];
+    let source = '', calls = 0, persisted = 0;
+    const module = {
+      _fcweb_run_python() {},
+      _malloc: () => scenario.noMemory ? 0 : 64,
+      stringToUTF8: value => { source = value; },
+      FS: {
+        readFile: path => { if (!files.has(path)) throw new Error('missing receipt'); return files.get(path); },
+        unlink: path => files.delete(path),
+        syncfs: (populate, callback) => {
+          assert.equal(populate, false);
+          persisted++;
+          callback(scenario.storageError ? new Error('quota exceeded') : null);
+        },
+      },
+    };
+    const scope = vm.createContext({
+      window: { fcInstance: module, __fcAppReady: true, __fcPyBusy: Boolean(scenario.busy), fcwebNotify: message => notifications.push(message) },
+      TextEncoder,
+      crypto: { randomUUID: () => 'fresh' },
+      __memState: 0,
+      checkAutosaveHealth() {},
+      heapUsedFraction: () => 0.98,
+      heapCapMB: () => 4096,
+      memCritAt: () => 0.95,
+      memWarnAt: () => 0.8,
+      fcRunPy: async () => {
+        calls++;
+        assert.ok(source.indexOf('_cfg_saver.dirty = True') < source.indexOf('_cfg_saver.save(True)'));
+        assert.match(source, /if not _cfg_saver\.dirty and not _os\.path\.exists/);
+        const marker = source.match(/with open\(("[^"]+"), 'w'\)/);
+        assert.ok(marker);
+        if (scenario.receipt) files.set(JSON.parse(marker[1]), 'ok');
+        return true;
+      },
+    });
+    vm.runInContext(runner + '\n' + recovery, scope);
+    assert.equal(await scope.checkMemoryPressure(), scenario.expected, scenario.name);
+    assert.doesNotMatch(notifications[0], /confirmada|been saved/);
+    assert.match(notifications.at(-1), scenario.expected ? /Cópia de recuperação confirmada/ : /Não foi possível confirmar/);
+    assert.equal(calls, scenario.busy || scenario.noMemory ? 0 : 1);
+    assert.equal(persisted, scenario.receipt ? 1 : 0);
+    assert.equal(files.has('/tmp/.confenge_autosave_fresh'), false, 'temporary confirmation is removed');
+  }
 });

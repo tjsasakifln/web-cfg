@@ -4,6 +4,7 @@
 // Exact source: https://github.com/Virtastic/freecad-web/blob/v1.0.9/play-gui/freecad-gui.html
 // Adapted script blocks 7 and 8: removed addon-install API and remote-session tick.
 // Local recovery copies are retained instead of expiring or pruning unopened files.
+// Memory-pressure recovery is acknowledged by Python and browser persistence.
 // Debug URL switches are disabled to keep query values out of generated Python.
 // No networking or server-session code. See NOTICE.txt for the adaptation.
 
@@ -432,11 +433,12 @@
     // event-loop trap (or any reload) never loses work — web-app "always restore"
     // model. saveCopy() persists without touching the doc's own path/dirty state.
     function runPy(src){
-      try{ var m=window.fcInstance; if(!window.__fcAppReady||!m||!m._fcweb_run_python) return;
-        if(window.__fcPyBusy) return;   // skip tick while a call is suspended (no reentrancy)
+      try{ var m=window.fcInstance; if(!window.__fcAppReady||!m||!m._fcweb_run_python) return false;
+        if(window.__fcPyBusy) return false;   // skip tick while a call is suspended (no reentrancy)
         var n=new TextEncoder().encode(src).length+1; var q=m._malloc(n);
-        m.stringToUTF8(src,q,n); fcRunPy(m,q);
-      }catch(e){}
+        if(!q) return false;
+        m.stringToUTF8(src,q,n); return fcRunPy(m,q);
+      }catch(e){ return false; }
     }
     window.__fcRunPyGuarded = runPy;   // shared sessions reuse this rather than re-deriving the malloc dance
     // Autosave is driven by EDITS, not by a clock, and lives in its own directory.
@@ -681,6 +683,49 @@
         }
       } catch (e) {}
     }
+    async function forceAutosaveConfirmed(){
+      var m = window.fcInstance;
+      if (!window.__fcAppReady || window.__fcPyBusy || !m || !m.FS) return false;
+      var receipt = '/tmp/.confenge_autosave_' + crypto.randomUUID();
+      try {
+        // A fresh receipt proves this invocation completed. Dirty is set first
+        // so even a failed save whose failure marker cannot be written is false.
+        var source = "import FreeCAD as _App, os as _os\n" +
+          "_cfg_saver = _App._fcweb_saver\n" +
+          "_cfg_saver.dirty = True\n" +
+          "_cfg_saver.save(True)\n" +
+          "_App.saveParameter()\n" +
+          "if not _cfg_saver.dirty and not _os.path.exists(_cfg_saver.DIR + '/.failed'):\n" +
+          " with open(" + JSON.stringify(receipt) + ", 'w') as _cfg_receipt:\n" +
+          "  _cfg_receipt.write('ok')\n";
+        if (!await runPy(source)) return false;
+        if (m.FS.readFile(receipt, { encoding: 'utf8' }) !== 'ok') return false;
+        await new Promise(function(resolve, reject){
+          m.FS.syncfs(false, function(error){ error ? reject(error) : resolve(); });
+        });
+        return true;
+      } catch (error) {
+        return false;
+      } finally {
+        try { m.FS.unlink(receipt); } catch (error) {}
+      }
+    }
+    var __memWarningSeq = 0;
+    function memoryWarning(message){
+      var sequence = ++__memWarningSeq;
+      if (typeof window.fcwebNotify === 'function') {
+        window.fcwebNotify(message + ' Tentando atualizar a cópia de recuperação. Baixe uma cópia FCStd para guardar seu trabalho.', 'warn');
+      }
+      return forceAutosaveConfirmed().then(function(saved){
+        if (sequence !== __memWarningSeq) return saved;
+        if (typeof window.fcwebNotify === 'function') {
+          window.fcwebNotify(message + (saved
+            ? ' Cópia de recuperação confirmada neste navegador. Baixe também uma cópia FCStd para guardar fora do navegador.'
+            : ' Não foi possível confirmar a cópia automática. Baixe uma cópia FCStd para guardar seu trabalho.'), 'warn');
+        }
+        return saved;
+      });
+    }
     function checkMemoryPressure(){
       checkAutosaveHealth();
       var f = heapUsedFraction();
@@ -690,22 +735,13 @@
       var capGB = (capMB / 1024).toFixed(capMB % 1024 ? 1 : 0);
       if (f >= memCritAt() && __memState < 2) {
         __memState = 2;
-        try { py(AUTOSAVE_FORCE); } catch (e) {}
-        if (typeof window.fcwebNotify === 'function') {
-          window.fcwebNotify('Memory is nearly full (' + mb + ' MB of ' + capMB + ' MB). Your work has '
-            + 'been saved. Save a copy with File \u2192 Save and close documents you are not '
-            + 'using -- the browser build cannot grow past ' + capGB + ' GB.', 'warn');
-        }
+        return memoryWarning('A memória está quase cheia (' + mb + ' MB de ' + capMB + ' MB). Feche documentos que não está usando; o limite deste ambiente é ' + capGB + ' GB.');
       } else if (f >= memWarnAt() && __memState < 1) {
         __memState = 1;
-        try { py(AUTOSAVE_FORCE); } catch (e) {}
-        if (typeof window.fcwebNotify === 'function') {
-          window.fcwebNotify('This model is using ' + mb + ' MB of the ' + capGB + ' GB the browser build '
-            + 'has. Your work has been saved. Consider simplifying it or closing documents you '
-            + 'are not using.', 'warn');
-        }
+        return memoryWarning('Este modelo usa ' + mb + ' MB dos ' + capGB + ' GB disponíveis. Considere simplificá-lo ou fechar documentos que não está usando.');
       } else if (f < memWarnAt() - 0.05) {
         __memState = 0;              // recovered (documents closed); allow warning again
+        ++__memWarningSeq;
       }
     }
     setInterval(checkMemoryPressure, 5000);

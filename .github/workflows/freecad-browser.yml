@@ -45,7 +45,7 @@ jobs:
       - name: Distribution integrity and recovery contracts
         run: |
           node --test tests/freecad/core.test.mjs
-          python3 -m pytest tests/freecad/test_distribution.py -q
+          python3 -m pytest tests/freecad -q
       - name: Build the real public artifact
         run: npm run build:site
       - name: Real FreeCAD creation recovery and authorized exports
