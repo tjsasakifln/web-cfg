@@ -134,13 +134,41 @@ ambiente em 14,14 s com cache frio e 3,22 s com cache quente, com PMV e PPD
 idênticos. As medições variam conforme o host. Não há garantia de latência para
 qualquer modelo que caiba nos limites de entrada.
 
+### Capacidade conhecida e resposta à ocupação
+
+Os sete módulos científicos compartilham **uma única execução simultânea por
+processo Node**, sem fila de espera no servidor. Um segundo pedido, inclusive
+de outra pessoa, recebe HTTP 429 `CALCULATION_BUSY` e `Retry-After: 5`.
+O limite por endereço de origem é de **12 tentativas em cinco minutos**,
+incluindo pedidos recebidos durante ocupação; ao atingir esse limite, a resposta
+é HTTP 429 `RATE_LIMIT`, com `Retry-After` entre 1 e 300 segundos até a janela
+atual terminar. Os endereços são representados apenas por HMAC efêmero.
+
+A interface informa o motivo e a espera indicada pelo servidor, mantém todos
+os campos e libera o botão **Tentar novamente** após esse prazo. Não recalcula
+automaticamente. Os campos continuam editáveis durante a espera; a nova
+tentativa usa os valores presentes naquele momento. O prazo não reserva uma
+vaga: outro cálculo pode estar em andamento quando a pessoa tentar de novo.
+
+Os 23 casos de cálculo e rejeição, a execução pelo HTTP real e a relocação comprovam
+o funcionamento dentro desses limites. **Não há ensaio de carga que comprove
+atendimento científico simultâneo em massa.** A medição de 14,14 s com cache
+frio e 3,22 s com cache quente refere-se a um ambiente do cálculo de conforto,
+não à capacidade média de todas as operações. Aumentar a concorrência exige
+medir CPU, RAM, latência e taxa de 429 no host Netcup, preservando o atendimento
+das demais rotas. Ferramentas que calculam inteiramente no navegador, como DXF,
+EPANET, cronogramas e BIM, não ocupam esse processo científico do servidor.
+
 O navegador invalida resultados quando os dados mudam, inclusive durante uma
 resposta em andamento. Tabelas usam textContent; exportações CSV protegem
 prefixos de fórmulas; geometria preserva escala igual nos eixos. Exportações
 usam a carteira compartilhada existente, com os slugs como `toolId`.
 
 O script `tests/browser.mjs` exercita as páginas existentes e os cálculos reais,
-incluindo largura de 390 px e uma resposta atrasada. Chromium não pôde iniciar
+incluindo largura de 390 px, uma resposta atrasada, importações CSV fora de ordem
+e recuperação de 429. O teste de espera usa duas respostas controladas com prazo
+curto e, depois, uma tentativa manual com cálculo real e valores editados.
+Chromium não pôde iniciar
 no ambiente de execução desta sessão devido à restrição de socket Unix; essa
 verificação deve rodar no runner do CI e não foi declarada como aprovação local.
 
