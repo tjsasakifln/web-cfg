@@ -26,6 +26,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 PUBLIC_DIR_NAME = "_site"
 
+# Public supporting documents with a filename URL need explicit coverage too.
+# Keep this finite instead of admitting arbitrary HTML from vendored engines.
+PUBLIC_NESTED_HTML_DOCUMENTS = frozenset({"cad/freecad/creditos.html"})
+
 # Top-level directories that may appear under the public artifact when present
 # at the repo root (static commercial pages + generated pSEO + assets).
 PUBLIC_TOP_DIRS = frozenset(
@@ -452,6 +456,9 @@ def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
             if not route.endswith("/"):
                 route += "/"
             html_routes.append(route)
+    for rel in sorted(PUBLIC_NESTED_HTML_DOCUMENTS):
+        if rel not in PUBLIC_EXCLUDED_RELPATHS and (root / rel).is_file():
+            html_routes.append("/" + rel)
     if (root / "index.html").is_file():
         html_routes.insert(0, "/")
     return {
