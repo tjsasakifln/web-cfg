@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-11",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry. Package families use real artifact representatives; the official-live opportunity overlay has an exact runtime owner contract and mandatory SHA-bound post-stage Lighthouse evidence, never a virtual fixture representative.",
   "axe": {
     "viewports": [
@@ -379,6 +379,18 @@
         "route": "/bim/fotogrametria/",
         "reason": "Exercises the application shell for the locally processed photogrammetry workspace.",
         "seo_exempt_reason": "The reconstruction workspace is noindex. The indexable BIM hub describes its purpose and links to it."
+      },
+      {
+        "family_id": "cad-freecad-aplicativo",
+        "route": "/cad/freecad/",
+        "reason": "Exercises the entry screen of the local parametric CAD application; the engine loads only after an explicit visitor action.",
+        "seo_exempt_reason": "The execution workspace is intentionally noindex. Discovery and instructions belong to the indexable /ferramentas/modelador-parametrico-3d/ page."
+      },
+      {
+        "family_id": "cad-freecad-fontes-licencas",
+        "route": "/cad/freecad/creditos.html",
+        "reason": "Exercises the source, authorship and license disclosure distributed with the parametric CAD application.",
+        "seo_exempt_reason": "The technical attribution document is intentionally noindex. The indexable modeler page remains the discovery entry point."
       }
     ],
     "additional_pages": [
