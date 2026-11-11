@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core';
 import { qualifyImports } from './freecad/imports.mjs';
 import { testNativeMenus } from './freecad/native-menus.mjs';
+import { createBrowserEvidence } from './freecad/browser-evidence.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const site = resolve(root, process.env.FREECAD_SITE || '_site');
@@ -21,7 +22,8 @@ for (const entry of Object.values(manifest.files)) {
 await mkdir(reports, { recursive: true });
 await mkdir(join(reports, 'downloads'), { recursive: true });
 const report = { schema: 'confenge.freecad-browser/v1', checks: [], requests: [], errors: [], console: [], dialogs: [] };
-const record = name => { report.checks.push(name); console.log(`FreeCAD: ${name}`); };
+const evidence = createBrowserEvidence(report, reports);
+const { record, phase } = evidence;
 const rules = [];
 for (const line of (await readFile(join(site, '_headers'), 'utf8')).split('\n')) {
   if (!line.trim() || line.trimStart().startsWith('#')) continue;
@@ -79,16 +81,20 @@ const server = createServer(async (request, response) => {
   } catch { response.writeHead(404); response.end(); }
 });
 
-let browser, page;
+let browser, page, originalError;
 const heavyCount = () => report.requests.filter(path => /\/assets\/freecad\/FreeCAD-[a-f0-9]+\.(js|wasm|data)$/.test(path)).length;
 try {
+  phase('server:listen');
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
+  phase('browser:launch');
   browser = await puppeteer.launch({ executablePath: chrome, headless: true, protocolTimeout: 360000,
     args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  phase('browser:version');
   report.chrome = (await browser.version()).replace(/^[^/]+\//, '');
   assert.equal(report.chrome, PUPPETEER_REVISIONS.chrome, 'the engine must be qualified using contracted Chrome');
 
+  phase('launcher:new-page');
   const mobile = await browser.newPage();
   await mobile.setViewport({ width: 375, height: 820 });
   await mobile.goto(origin + '/ferramentas/modelador-parametrico-3d/', { waitUntil: 'networkidle0' });
@@ -100,9 +106,11 @@ try {
   const launch = await mobile.$eval('#modelador-abrir', el => ({ text: el.textContent, h: el.getBoundingClientRect().height, href: el.getAttribute('href') }));
   assert.match(launch.text, /503 MB/); assert.ok(launch.h >= 44); assert.equal(launch.href, '/cad/freecad/');
   await mobile.screenshot({ path: join(reports, 'launcher-375.png'), fullPage: true });
+  phase('launcher:close');
   await mobile.close();
   record('indexable mobile launcher is usable and never preloads WASM/data');
 
+  phase('unsupported:new-page');
   const unsupported = await browser.newPage();
   await unsupported.evaluateOnNewDocument(() => { Object.defineProperty(WebAssembly, 'Suspending', { value: undefined, configurable: true }); });
   await unsupported.goto(origin + '/cad/freecad/', { waitUntil: 'networkidle0' });
@@ -112,10 +120,13 @@ try {
   assert.equal(heavyCount(), 0, 'unsupported browser must fail before any heavy download');
   assert.equal(calls.some(op => op !== 'config'), false, 'browser fallback must not provision an account or start an export');
   await unsupported.screenshot({ path: join(reports, 'unsupported.png'), fullPage: true });
+  phase('unsupported:close');
   await unsupported.close();
   record('unsupported JSPI has an actionable fallback without any heavy request');
 
+  phase('native:new-page');
   page = await browser.newPage();
+  phase('native:set-viewport');
   await page.setViewport({ width: 1440, height: 1000 });
   page.on('console', message => { if (report.console.length < 300) report.console.push({ type: message.type(), text: message.text().slice(0, 1200) }); });
   page.on('pageerror', error => report.errors.push(String(error.stack || error)));
@@ -124,6 +135,7 @@ try {
     if (dialog.type() === 'confirm' && dialog.message().startsWith('Exportar este resultado')) await dialog.accept();
     else await dialog.dismiss();
   });
+  phase('native:install-download-observer');
   await page.evaluateOnNewDocument(() => {
     window.__freecadTestDownloads = [];
     const blobs = new Map();
@@ -141,26 +153,35 @@ try {
       return response;
     };
   });
+  phase('native:create-CDP-session');
   const client = await page.createCDPSession();
+  phase('native:allow-downloads');
   await client.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: join(reports, 'downloads') });
   const waitReady = async () => {
+    phase('boot:wait-ready');
     await page.waitForFunction(() =>
       (window.fcInstance?.FS && window.__fcWorkReady && document.getElementById('sample')?.disabled === false)
       || (document.getElementById('entry')?.hidden === false && document.getElementById('start')?.hidden === true),
       { timeout: 300000, polling: 500 });
+    phase('boot:inspect-state');
     const boot = await page.evaluate(() => ({
       ready: Boolean(window.fcInstance?.FS && window.__fcWorkReady && document.getElementById('sample')?.disabled === false),
       message: document.getElementById('status')?.textContent,
     }));
     assert.equal(boot.ready, true, `the runtime reported a terminal startup failure: ${boot.message}`);
     // Let the observer complete its restore pass before testing user operations.
+    phase('boot:confirm-recovery');
     assert.equal(await page.evaluate(() => window.fcInstance.FS.analyzePath('/tmp/.confenge_restore_complete').exists), true,
       'user actions must wait for the confirmed local recovery pass');
   };
+  phase('boot:navigate');
   await page.goto(origin + '/cad/freecad/', { waitUntil: 'networkidle0' });
+  phase('boot:check-isolation');
   assert.equal(await page.evaluate(() => crossOriginIsolated), true, 'artifact headers provide the isolation required by the engine');
+  phase('boot:probe-capabilities');
   const support = await page.evaluate(async () => (await import('/cad/freecad/capabilities.mjs')).capabilities());
   assert.deepEqual(support, { ok: true }, 'contracted Chrome must support the real memory64 and JSPI probe');
+  phase('boot:click-start');
   await page.click('#start');
   await waitReady();
   assert.ok(heavyCount() >= 3);
@@ -359,26 +380,37 @@ proof={'before':before,'after':pad.Shape.Volume,'valid':pad.Shape.isValid(),'con
   assert.equal(report.console.some(entry => /worker sent an error|Uncaught EvalError|violates the following Content Security Policy/i.test(entry.text)), false,
     'a pthread CSP failure cannot be hidden inside the native log');
   assert.deepEqual(qualificationFailures, [], 'every native command and advertised import format must pass');
-  report.ok = true;
+  report.status = 'checks-passed';
+  phase('checks-complete');
 } catch (error) {
-  report.ok = false; report.failure = String(error.stack || error);
+  originalError = evidence.fail(error);
   if (page) {
-    report.state = await page.evaluate(() => ({ status: document.querySelector('#status')?.textContent,
+    report.state = await evidence.diagnostic('page-state', () => page.evaluate(() => ({ status: document.querySelector('#status')?.textContent,
       capability: document.querySelector('#capability')?.textContent, phase: document.querySelector('#phase')?.textContent,
       appReady: window.__fcAppReady, workReady: window.__fcWorkReady, pythonBusy: window.__fcPyBusy,
-      instance: Boolean(window.fcInstance), isolation: crossOriginIsolated })).catch(() => null);
-    await page.click('#help-toggle').catch(() => {});
+      instance: Boolean(window.fcInstance), isolation: crossOriginIsolated }))) ?? null;
+    await evidence.diagnostic('open-help', () => page.click('#help-toggle'));
     await new Promise(resolve => setTimeout(resolve, 1100));
-    report.nativeLog = await page.$eval('#log', el => el.textContent).catch(() => 'unavailable');
-    await page.screenshot({ path: join(reports, 'failure.png'), fullPage: true }).catch(() => {});
+    report.nativeLog = await evidence.diagnostic('native-log', () => page.$eval('#log', el => el.textContent)) ?? 'unavailable';
+    await evidence.diagnostic('failure-screenshot', () => page.screenshot({ path: join(reports, 'failure.png'), fullPage: true }));
   }
   console.error(JSON.stringify({ failure: report.failure, state: report.state, nativeLog: report.nativeLog }, null, 2));
   throw error;
 } finally {
   report.exports = exports;
   report.apiCalls = calls;
-  await writeFile(join(reports, 'browser.json'), JSON.stringify(report, null, 2) + '\n');
-  await browser?.close();
-  server.closeAllConnections?.();
-  await new Promise(resolve => server.close(resolve));
+  // Cleanup keeps its existing deadlines. Preserve the first failure even if
+  // closing a resource also fails, and save the phase before waiting for it.
+  for (const [name, close] of [
+    ['browser', () => browser?.close()],
+    ['server', () => { server.closeAllConnections?.(); return new Promise(resolve => server.close(resolve)); }],
+  ]) {
+    try { phase(`cleanup:${name}`); await close(); }
+    catch (error) {
+      if (!originalError) originalError = evidence.fail(error);
+      else evidence.diagnosticFailure(`cleanup:${name}`, error);
+    }
+  }
+  if (originalError) throw originalError;
 }
+evidence.complete();
