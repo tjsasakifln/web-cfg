@@ -275,19 +275,16 @@ def measure_published_route_census(
     """Compare independently derived source, artifact and publish-manifest sets."""
     from scripts.site.public_copy_scope import (
         MANIFEST_ROUTE_EXEMPT,
-        relpath,
-        route_for,
+        manifest_routes_for_html,
         visitor_facing_html_files,
         visitor_facing_routes,
     )
 
     source = set(visitor_facing_routes(source_root))
     artifact = set(visitor_facing_routes(artifact_root))
-    manifest_expected = {
-        route_for(relpath(path, source_root))
-        for path in visitor_facing_html_files(source_root)
-        if path.name == "index.html"
-    } - MANIFEST_ROUTE_EXEMPT
+    manifest_expected = set(manifest_routes_for_html(
+        visitor_facing_html_files(source_root), source_root
+    )) - MANIFEST_ROUTE_EXEMPT
     payload = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else {}
     manifest = {
         str(route)
