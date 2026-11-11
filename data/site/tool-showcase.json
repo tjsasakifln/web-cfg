@@ -1273,6 +1273,30 @@
           "dwg"
         ]
       }
+    },
+    {
+      "id": "federacao-bcf",
+      "group": "modelos",
+      "title": "Federação IFC e apontamentos BCF",
+      "summary": "Sobreponha modelos IFC na origem comum, isole disciplinas e registre apontamentos com seleção de elementos para exportar BCF.",
+      "format": "IFC · BCF",
+      "file_formats": [
+        "IFC",
+        "BCF"
+      ],
+      "action": "Coordenar modelos IFC",
+      "href": "/ferramentas/federacao-bcf/",
+      "art": "iso",
+      "mark": "COORDENAÇÃO BIM",
+      "keywords": "federação ifc e apontamentos bcf bim revit dados geometria local",
+      "page": {
+        "title": "Federação IFC e apontamentos BCF online",
+        "desc": "Sobreponha modelos IFC na origem comum, isole disciplinas e registre apontamentos com seleção de elementos para exportar BCF.",
+        "related": [
+          "ifc-revisoes",
+          "ids"
+        ]
+      }
     }
   ]
 }
