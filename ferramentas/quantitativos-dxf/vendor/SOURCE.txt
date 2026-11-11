@@ -1,0 +1,3 @@
+dxf-parser 1.1.2, MIT. Fonte: https://github.com/gdsestimating/dxf-parser
+Pacote npm fixado dxf-parser@1.1.2. Bundle ESM gerado com esbuild; inclui loglevel (MIT).
+A rotina de quantitativos da CONFENGE fica em ../takeoff.mjs.
