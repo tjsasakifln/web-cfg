@@ -645,6 +645,10 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     assert services.start() < conduction.start() < deliverable.start()
     fronts = set(re.findall(r'data-cta-id="([^"]+)"', services.group(0)))
     assert fronts - {"home-market-intelligence"} == {
+        "home-tools-cad",
+        "home-tools-ifc",
+        "home-tools-budget",
+        "home-tools-beam",
         "home-service-projects",
         "home-private-quantities-budget",
         "home-service-inspection",
