@@ -42,6 +42,10 @@ afirma compatibilidade por uma lista de versões de navegadores.
   Emscripten desta versão não usa `Module.wasmBinary` para iniciar o motor.
 - O sistema de arquivos, geometria, modelo importado e cópia FCStd ficam no
   navegador. O backup FCStd não chama a carteira, inclusive em falhas de saldo.
+- A importação IGES preserva a tentativa normal pelo ImportGui. Se ela não
+  produzir geometria, usa o leitor nativo Part como recuperação. Arquivos de
+  intercâmbio vazios não recebem uma confirmação de sucesso; documentos FCStd
+  vazios continuam válidos para iniciar ou retomar um trabalho.
 - Saídas técnicas usam `exportToolResult` e o contrato existente
   `confenge.tools.emission/v1`. Só formato, tamanho e SHA-256 chegam ao serviço.
   Os bytes são congelados antes da autorização; cancelar permite retomar o mesmo
@@ -65,19 +69,29 @@ distribuição, CSP e cache; montagem real do site com os três binários fixado
 O botão de retomada conserva o mesmo resultado congelado e a carteira preserva
 o bloqueio de outro resultado enquanto a tentativa anterior estiver pendente.
 
-O navegador deste executor não inicia por restrição de socket do ambiente. A
-validação de inicialização real, esboço totalmente restringido, extrusão,
-alteração de medidas, cópia FCStd reaberta e STEP/STL é obrigatória no Chrome
-contratado do CI antes de promover esta ferramenta. O ensaio compara a peça
-original de 180.000 mm³ com a peça alterada de 288.000 mm³, além da retomada
-idempotente pelo botão do arquivo. Não se considera a inicialização aprovada
-apenas pela integridade dos downloads.
+Qualificação real concluída em 11/11/2026 no Chrome contratado
+152.0.7977.42, com 21 verificações aprovadas. Evidência da ferramenta em
+`2cc3f1bcc41ecb3244e10e483ba9c77ef3b1d0e2`:
+[execução 43024778339](https://github.com/tjsasakifln/web-cfg/actions/runs/43024778339).
+Evidência da integração em `58c3d84f313fd1659c99ee1c824106c34f4caa5b`:
+[execução 43024787289](https://github.com/tjsasakifln/web-cfg/actions/runs/43024787289).
 
-O mesmo ensaio exige abertura dos arquivos STEP, IGES, STL, 3MF, DXF e SVG pelo
-seletor do produto, com conferência das dimensões em milímetros. Ele também
-aciona os comandos nativos File > Save As, Save e Export, acompanha a ponte de
-gravação original, reabre a cópia FCStd alterada e confere o STL autorizado.
-Esses casos só contam como aprovados com execução real no navegador.
+O ensaio confirmou inicialização real, esboço totalmente restringido, extrusão,
+alteração da peça de 180.000 mm³ para 288.000 mm³, cópia FCStd reaberta com seus
+parâmetros, STEP/STL autorizados e retomada idempotente pelo botão do arquivo.
+A segunda abertura reutilizou os 501.757.581 bytes de WASM e dados mesmo com
+o cache HTTP desativado. Não houve erros não tratados no navegador.
+
+STEP, IGES, STL, 3MF, DXF e SVG abriram pelo seletor do produto com dimensões
+conferidas em milímetros. Os modelos 3D preservaram 120 × 60 × 40 mm; os dois
+desenhos 2D preservaram as quatro arestas de 100 × 60 mm. Os comandos nativos
+File > Save As, Save e Export passaram pela ponte de gravação original. A
+cópia FCStd editada reabriu com altura de 14 mm, e o STL entregue preservou
+as dimensões 7 × 11 × 14 mm e o resumo criptográfico do recibo.
+
+A publicação depende também das verificações gerais do site. Toda alteração
+seguinte deve manter o ensaio real aprovado na versão candidata. A autorização
+usou uma conta e um serviço de teste, sem operações financeiras reais.
 
 O catálogo, o mapa do site e a imagem social entram na integração coordenada
 das ferramentas. `modelador-abrir` registra `cta_click`, sem afirmar conversão
