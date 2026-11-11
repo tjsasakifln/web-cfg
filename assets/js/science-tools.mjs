@@ -97,10 +97,19 @@ export function mountScienceTool(config) {
   const refresh=()=>{for(const {field,wrap} of sections){const visible=!field.when||field.when.values.includes(controls.get(field.when.key)?.value);wrap.hidden=!visible;wrap.querySelectorAll('input,select,textarea,button').forEach(input=>input.disabled=!visible);}};
   controls.forEach(c=>c.addEventListener('change',refresh));refresh();
   const actions=el('div');actions.className='science-actions';const calculate=el('button','Calcular');calculate.type='submit';calculate.className='button button-primary';actions.append(calculate);form.append(fields,actions,status);mount.replaceChildren(form,output);
+  let retryUntil=0,retryTimer,retryNotice='';
+  const updateRetry=()=>{
+    clearTimeout(retryTimer);const remaining=Math.max(0,Math.ceil((retryUntil-Date.now())/1000));
+    calculate.disabled=remaining>0;
+    if(remaining){calculate.textContent=`Tentar novamente em ${remaining} s`;retryTimer=setTimeout(updateRetry,Math.min(1000,retryUntil-Date.now()));}
+    else if(retryUntil){retryUntil=0;calculate.textContent='Tentar novamente';if(status.textContent===retryNotice){status.dataset.error='false';status.textContent='Você já pode tentar novamente. Seus dados foram mantidos.';}}
+  };
   form.addEventListener('input',()=>{revision++;output.hidden=true;status.dataset.error='false';status.textContent='Dados alterados. Calcule novamente para atualizar o resultado.';});
-  form.onsubmit=async event=>{event.preventDefault();if(calculate.disabled)return;if(pendingImport===revision){status.textContent='Aguarde a leitura do arquivo antes de calcular.';return;}const submittedRevision=revision;output.hidden=true;status.dataset.error='false';calculate.disabled=true;status.textContent='Calculando. Aguarde até 20 segundos…';
+  form.onsubmit=async event=>{event.preventDefault();if(calculate.disabled)return;if(pendingImport===revision){status.textContent='Aguarde a leitura do arquivo antes de calcular.';return;}const submittedRevision=revision;output.hidden=true;status.dataset.error='false';calculate.disabled=true;calculate.textContent='Calcular';status.textContent='Calculando. O processamento pode levar até 21 segundos…';
     try {let data=Object.fromEntries(sections.filter(s=>!s.wrap.hidden).map(s=>[s.field.key,s.read()]));if(config.transform)data=config.transform(data);const payload=JSON.stringify({operation:config.operation,data});if(new TextEncoder().encode(payload).length>480*1024)throw new Error('Os dados excedem 480 KiB. Reduza a série ou o modelo.');
-      const response=await fetch('/api/web/science-tools',{method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:AbortSignal.timeout(26000)});const body=await response.json();if(!response.ok||!body.ok)throw new Error(body.message||'Não foi possível concluir o cálculo agora. Tente novamente em instantes.');
+      const response=await fetch('/api/web/science-tools',{method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:AbortSignal.timeout(26000)});const body=await response.json();
+      if(response.status===429){const advertised=Number(response.headers.get('Retry-After'));const seconds=Number.isInteger(advertised)&&advertised>0?Math.min(advertised,300):body.error==='RATE_LIMIT'?300:5;retryUntil=Date.now()+seconds*1000;const reason=body.error==='RATE_LIMIT'?'Você atingiu o limite de cálculos deste intervalo.':'Há um cálculo em andamento.';retryNotice=`${reason} Seus dados foram mantidos. Aguarde ${seconds} ${seconds===1?'segundo':'segundos'} para tentar novamente.`;status.dataset.error='true';status.textContent=retryNotice;return;}
+      if(!response.ok||!body.ok)throw new Error(body.message||'Não foi possível concluir o cálculo agora. Tente novamente em instantes.');
       if(revision!==submittedRevision){status.textContent='Os dados foram alterados durante o cálculo. Calcule novamente.';return;}const result=body.result;output.replaceChildren(resultView(result));const exports=el('div');exports.className='science-actions';
       for(const kind of ['html','csv','json',...(result.latex?['tex']:[])]){const button=el('button',{html:'Baixar relatório para impressão',csv:'Baixar tabelas CSV',json:'Baixar modelo e resultados',tex:'Baixar equações LaTeX'}[kind]);button.type='button';button.className='button button-secondary';
         button.onclick=async()=>{button.disabled=true;try {let content,type;const name=config.slug+'.'+kind;
@@ -111,6 +120,6 @@ export function mountScienceTool(config) {
           await exportToolResult({toolId:config.slug,format:kind,content,deliver:()=>save(content,name,type)});
         }catch(error){status.dataset.error='true';status.textContent=error.message||'Exportação não concluída.';}finally{button.disabled=false;}};exports.append(button);}
       output.append(exports);output.hidden=false;status.textContent='Cálculo concluído. Confira os resultados e as hipóteses abaixo.';
-    }catch(error){status.dataset.error='true';status.textContent=error.name==='TimeoutError'?'O cálculo excedeu o tempo disponível. Reduza o modelo.':error.message;}finally{calculate.disabled=false;}
+    }catch(error){status.dataset.error='true';status.textContent=error.name==='TimeoutError'?'O cálculo excedeu o tempo disponível. Reduza o modelo.':error.message;}finally{updateRetry();}
   };
 }

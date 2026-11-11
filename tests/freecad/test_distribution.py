@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sys
 import runpy
+import subprocess
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -101,3 +102,48 @@ def test_dialog_escape_and_bridge_errors_never_accept_an_action(monkeypatch):
     instance = messagebox()
     instance.standardButtons = lambda: (_ for _ in ()).throw(RuntimeError('bridge failed'))
     assert instance.exec() == messagebox.NoButton
+
+
+def test_autosave_preserves_edits_to_an_opened_example(tmp_path, monkeypatch):
+    # Execute the Python saver shipped inside the compatibility script. Merely
+    # checking that save(True) was called would miss the old /freecad/ skip.
+    extract = r"""
+import fs from 'node:fs';
+import vm from 'node:vm';
+const graphics = fs.readFileSync('cad/freecad/vendor/graphics.js', 'utf8');
+const code = graphics.slice(graphics.indexOf('    var AUTOSAVE_INSTALL = ['), graphics.indexOf('    var RESTORE_PY = ['));
+if (!code) throw new Error('production saver not found');
+const scope = vm.createContext({URLSearchParams, AUTOSAVE_DIR: process.argv[1], AUTOSAVE_MARKER: process.argv[2]});
+vm.runInContext(code, scope);
+process.stdout.write(scope.AUTOSAVE_INSTALL);
+"""
+    recovery = tmp_path / "recovery"
+    marker = tmp_path / "installed"
+    source = subprocess.check_output(
+        ["node", "--input-type=module", "-e", extract, str(recovery), str(marker)],
+        cwd=ROOT,
+        text=True,
+    )
+    saved = []
+
+    def document(name, filename, content):
+        def save_copy(target):
+            path = Path(target)
+            saved.append(path)
+            path.write_bytes(content)
+        return SimpleNamespace(Name=name, FileName=filename, saveCopy=save_copy)
+
+    docs = {
+        "Example": document("Example", "/freecad/data/examples/PartDesign.FCStd", b"edited example"),
+        "Project": document("Project", "/home/web_user/project.FCStd", b"edited project"),
+    }
+    params = SimpleNamespace(SetBool=lambda *_: None, SetInt=lambda *_: None, GetInt=lambda *_: 3)
+    app = SimpleNamespace(ParamGet=lambda *_: params, listDocuments=lambda: docs, addDocumentObserver=lambda *_: None)
+    monkeypatch.setitem(sys.modules, "FreeCAD", app)
+    exec(compile(source, "production-autosaver", "exec"), {})
+    app._fcweb_saver.save(True)
+    assert set(saved) == {recovery / "Example.FCStd", recovery / "Project.FCStd"}
+    assert (recovery / "Example.FCStd").read_bytes() == b"edited example"
+    assert (recovery / "Project.FCStd").read_bytes() == b"edited project"
+    assert app._fcweb_saver.dirty is False
+    assert not (recovery / ".failed").exists()

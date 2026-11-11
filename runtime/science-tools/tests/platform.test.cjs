@@ -22,9 +22,9 @@ test('rejects hostile origins, methods, payloads and deep JSON before spawn',asy
 });
 test('keeps a single worker active, releases it on close, and enforces per-client rate',async()=>{
  const m=isolated();const first=m.handler(event());assert.equal(m.calls(),1);
- const busy=await m.handler(event({},'198.51.100.2'));assert.equal(busy.statusCode,429);assert.equal(JSON.parse(busy.body).error,'CALCULATION_BUSY');assert.equal(m.calls(),1);
+ const busy=await m.handler(event({},'198.51.100.2'));assert.equal(busy.statusCode,429);assert.equal(JSON.parse(busy.body).error,'CALCULATION_BUSY');assert.equal(busy.headers['Retry-After'],'5');assert.equal(m.calls(),1);
  m.finish();assert.equal((await first).statusCode,200);
  for(let i=0;i<11;i++){const p=m.handler(event());m.finish();assert.equal((await p).statusCode,200);}
- assert.equal(JSON.parse((await m.handler(event())).body).error,'RATE_LIMIT');assert.equal(m.calls(),12);
+ const limited=await m.handler(event());assert.equal(limited.statusCode,429);assert.equal(JSON.parse(limited.body).error,'RATE_LIMIT');assert.match(limited.headers['Retry-After'],/^\d+$/);assert.ok(Number(limited.headers['Retry-After'])>=1&&Number(limited.headers['Retry-After'])<=300);assert.equal(m.calls(),12);
  const next=m.handler(event({},'198.51.100.3'));m.finish();assert.equal((await next).statusCode,200);
 });
