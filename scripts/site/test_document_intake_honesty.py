@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-from scripts.site.document_intake import capture_forms_with_file_input, dishonest_hits, visitor_html_files
+from scripts.site.document_intake import LOCAL_FILE_TOOLS, capture_forms_with_file_input, dishonest_hits, visitor_html_files
 
 
 def test_seo_confirmation_gate_rejects_unconditional_success_and_missing_guard():
@@ -66,22 +66,21 @@ def test_home_form_keeps_labels_consent_and_return_channel():
 
 
 def test_local_bim_file_picker_cannot_become_document_intake():
-    route = "bim/web/digitalizar.html"
     local = '<input type="file" data-leitura-local>'
-    for local_route in (
-        route,
-        "ferramentas/diagrama-unifilar/index.html",
-        "ferramentas/orcamento-de-obras/index.html",
-        "ferramentas/rede-de-agua/index.html",
-    ):
-        assert not capture_forms_with_file_input(local, local_route)
-        assert capture_forms_with_file_input(f'<form action="/envio">{local}</form>', local_route)
+    for route in sorted(LOCAL_FILE_TOOLS):
+        assert not capture_forms_with_file_input(local, route), route
+        assert capture_forms_with_file_input('<input type=file>', route), route
+        assert capture_forms_with_file_input(f'<form action="/envio">{local}</form>', route), route
+        for attribute in ("name", "form", "action", "formaction", "formmethod", "formenctype"):
+            for value in ("", "lead"):
+                control = f'<input type="file" data-leitura-local {attribute}="{value}">'
+                assert capture_forms_with_file_input(control, route), (route, attribute, value)
+        assert capture_forms_with_file_input(
+            '<form id="lead"></form><input type="file" data-leitura-local form="lead">', route
+        ), route
     assert capture_forms_with_file_input(local, "triagem-tecnica/index.html")
     assert capture_forms_with_file_input(local, "bim/web/novo.html")
-    assert capture_forms_with_file_input('<input type=file>', route)
-    assert capture_forms_with_file_input(f'<form action="/envio">{local}</form>', route)
-    assert capture_forms_with_file_input('<form id="lead"></form><input type="file" data-leitura-local form="lead">', route)
-    assert capture_forms_with_file_input('<input name="desenho" type=file data-leitura-local>', route)
+    assert capture_forms_with_file_input(local, "ferramentas/novo/index.html")
 
 
 def test_all_visitor_forms_remain_truthful_about_upload():

@@ -10,8 +10,10 @@ from NOINDEX_JUSTIFIED.
 
 from __future__ import annotations
 
+import json
+import re
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,6 +23,7 @@ if str(ROOT) not in sys.path:
 from scripts.editorial.naturalness import jaccard_similarity  # noqa: E402
 from scripts.site import inbound_gates as G  # noqa: E402
 from scripts.site.universe_sweep import BUCKET_ORDER, sweep  # noqa: E402
+from scripts.site.visible_parity import compare_visible_parity  # noqa: E402
 
 _CTX = None
 
@@ -270,6 +273,50 @@ def test_a_declaration_may_not_waive_anything_but_the_two_external_subgates():
         else:
             raise AssertionError(f"waiving {waived} must not be accepted")
     G.validate_index_evidence_declarations([_first_party("casos", ["citable_source"])])
+
+
+def test_home_has_its_own_authority_without_waiving_content_freshness():
+    family = ctx().route_family["/"]
+    html = ctx().html_by_route["/"]
+    declared = family[G.INDEX_EVIDENCE_KEY]
+    assert declared["substrate"] == G.SUBSTRATE_FIRST_PARTY
+    assert declared["not_applicable"] == ["citable_source"]
+    G.validate_index_evidence_declarations([family])
+    _, detail = G.instance_index_ready_for_route("/", html, family, ctx())
+    assert detail["subgates"]["citable_source"]["applicable"] is False
+    assert detail["subgates"]["official_live"]["applicable"] is True
+    assert detail["subgates"]["freshness"]["applicable"] is True
+    assert detail["subgates"]["freshness"]["passed"] is True
+
+    blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
+    pages = [node for block in blocks for node in json.loads(block).get("@graph", [])
+             if node.get("@type") == "WebPage" and node.get("url") == "https://confenge.com.br/"]
+    assert len(pages) == 1
+    modified = pages[0]["dateModified"]
+    # This timestamp is the substantive home content change in commit
+    # 6a9069b406211a6239b579fbc3b5f9b924c65b39 (the pre-fix HTML blob is
+    # 8b7a2c7f1c56b7e7ca030e60cd8db861c1697456), not the test/run clock.
+    assert datetime.fromisoformat(modified) >= datetime.fromisoformat("2026-11-11T00:59:32-03:00")
+    assert datetime.fromisoformat(modified).date() <= ctx().today
+
+    visible_date = datetime.fromisoformat(modified).date().isoformat()
+    updates = re.findall(r'<p\b[^>]*data-page-updated[^>]*>.*?</p>\s*', html, re.S)
+    assert len(updates) == 1
+    assert f'<time datetime="{visible_date}">' in updates[0]
+    assert set(G.page_dates(html)) == {date.fromisoformat(visible_date)}
+    parity = compare_visible_parity(html)
+    assert parity["ok"], parity["defects"]
+
+    without_visible_date = html.replace(updates[0], "", 1)
+    assert any(defect["code"] == "schema_date_stale"
+               for defect in compare_visible_parity(without_visible_date)["defects"])
+    undated = re.sub(r',?"dateModified"\s*:\s*"[^"]+"', "", without_visible_date)
+    assert G.page_dates(undated) == []
+    assert not G._sub_freshness(undated, ctx()).passed
+    future = html.replace(modified, "2099-01-01T00:00:00-03:00")
+    future = future.replace(f'datetime="{visible_date}"', 'datetime="2099-01-01"')
+    assert set(G.page_dates(future)) == {date(2099, 1, 1)}
+    assert not G._sub_freshness(future, ctx()).passed
 
 
 def test_a_family_of_external_records_may_never_declare_first_party():

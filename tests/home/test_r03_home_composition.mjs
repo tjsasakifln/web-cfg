@@ -51,12 +51,26 @@ assert.deepEqual(
 assert.match(main, /class="section home-evidence" data-section-archetype="content_editorial"/);
 assert.match(main, /class="section home-contexts" data-section-archetype="sector_editorial"/);
 
-const resources = main.match(/<nav aria-label="Guias e ferramentas de engenharia"[\s\S]*?<\/nav>/)?.[0];
-assert.ok(resources, "A home oferece guias e ferramentas no corpo da página");
-for (const href of ["/conteudos/", "/ferramentas/", "/ferramentas/radar-mercado-publico/"]) {
+const resources = main.match(/<nav aria-label="Guias e pesquisa de engenharia"[\s\S]*?<\/nav>/)?.[0];
+assert.ok(resources, "A home oferece guias e pesquisa no corpo da página");
+for (const [id, href] of [
+  ["home-resource-guides", "/conteudos/"],
+  ["home-resource-radar", "/ferramentas/radar-mercado-publico/"],
+]) {
+  assert.equal((main.match(new RegExp(`data-cta-id="${id}"`, "g")) || []).length, 1, id);
   assert.ok(resources.includes(`href="${href}"`), href);
   assert.ok(fs.existsSync(path.join(root, href.slice(1), "index.html")), href);
 }
+
+// A descoberta do catálogo permanece no bloco de ferramentas, sem duplicar
+// o mesmo destino na navegação de guias e pesquisa.
+const tools = main.match(/<div class="home-tools">[\s\S]*?<\/p>\s*<\/div>/)?.[0];
+assert.ok(tools, "A home mantém os atalhos de ferramentas antes dos serviços");
+for (const href of ["/cad/", "/bim/", "/ferramentas/orcamento-de-obras/", "/ferramentas/analise-de-viga-continua/", "/ferramentas/"]) {
+  assert.ok(tools.includes(`href="${href}"`), href);
+  assert.ok(fs.existsSync(path.join(root, href.slice(1), "index.html")), href);
+}
+assert.ok(!resources.includes('href="/ferramentas/"'));
 
 // Contraprova editorial: o miolo antigo voltado a disciplinas e ao processo de
 // projeto não pode reaparecer depois das sete escolhas.

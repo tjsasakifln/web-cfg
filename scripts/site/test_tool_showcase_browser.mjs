@@ -11,6 +11,7 @@ const shots = process.env.TOOL_SHOWCASE_SCREENSHOTS;
 const events = [];
 let commerceConfig = { enabled: false };
 let mockCommerce = null;
+let legacyCatalogue = false;
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript',
   '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };
 const server = createServer(async (req, res) => {
@@ -41,7 +42,12 @@ const server = createServer(async (req, res) => {
     let file = resolve(root, '.' + decodeURIComponent(url.pathname));
     if (!file.startsWith(root + sep) && file !== root) return res.writeHead(403).end();
     if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html');
-    res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }).end(await readFile(file));
+    let body = await readFile(file);
+    if (legacyCatalogue && file === resolve(root, 'ferramentas/index.html')) {
+      body = body.toString().replace(/<label class="ts-format-label"[\s\S]*?<\/label>/, '')
+        .replace(/<button[^>]*data-show-more[^>]*>[\s\S]*?<\/button>/g, '');
+    }
+    res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' }).end(body);
   } catch {
     res.writeHead(404).end();
   }
@@ -85,11 +91,49 @@ try {
 
   const count = await page.$$eval('[data-tool-card]', cards => cards.length);
   assert.ok(count >= 25, count);
+  const initialVisible = await page.$$eval('[data-tool-card]:not([hidden])', cards => cards.length);
+  assert.ok(initialVisible < count, 'large groups must offer a compact initial selection');
+  assert.equal(await page.$$eval('.ts-quickstart a[href]', nodes => nodes.length), 4,
+    'the hero must offer four working destinations');
   await page.waitForSelector('[data-tool-search]', { visible: true });
   await page.type('#ts-query', '  REEQUILIBRIO  ');
   assert.deepEqual(await page.$$eval('[data-tool-card]:not([hidden])', nodes => nodes.map(n => n.dataset.toolCard)), ['reequilibrio']);
   await page.click('[data-search-clear]');
-  assert.equal(await page.$$eval('[data-tool-card]:not([hidden])', nodes => nodes.length), count);
+  assert.equal(await page.$$eval('[data-tool-card]:not([hidden])', nodes => nodes.length), initialVisible);
+  await page.select('#ts-format', 'XLSX');
+  const sheets = await page.$$eval('[data-tool-card]:not([hidden])', nodes => nodes.map(n => n.dataset.toolCard));
+  assert.ok(sheets.includes('ifc-excel') && sheets.includes('orcamento-de-obras'));
+  assert.ok(!sheets.includes('dwg'), 'file filter must hide unrelated tools');
+  await page.type('#ts-query', 'SINAPI');
+  assert.deepEqual(await page.$$eval('[data-tool-card]:not([hidden])', nodes => nodes.map(n => n.dataset.toolCard)), ['orcamento-de-obras']);
+  await page.click('[data-search-clear]');
+  assert.equal(await page.$eval('#ts-format', el => el.value), '');
+  await page.select('#ts-format', 'CSV');
+  const csvTools = await page.$$eval('[data-tool-card]:not([hidden])', cards => cards.map(el => el.dataset.toolCard));
+  assert.ok(['calculadora-bdi', 'conversor-utm-sirgas-2000', 'rede-de-agua', 'radar-mercado-publico'].every(id => csvTools.includes(id)),
+    'file filtering must use the implemented formats, even when editorial labels omit them');
+  await page.click('[data-search-clear]');
+  await page.type('#ts-query', 'Excel');
+  assert.ok((await page.$$eval('[data-tool-card]:not([hidden])', cards => cards.map(el => el.dataset.toolCard))).includes('orcamento-de-obras'));
+  await page.click('[data-search-clear]');
+  const hiddenTarget = await page.$eval('[data-tool-card][hidden]', el => el.id);
+  const expandedGroup = await page.$eval('[data-show-more]:not([hidden])', el => el.closest('[data-group]').dataset.group);
+  await page.click('[data-show-more]:not([hidden])');
+  assert.equal(await page.$$eval(`[data-group="${expandedGroup}"] [data-tool-card][hidden]`, nodes => nodes.length), 0,
+    'show more must expose all remaining tools');
+  await load('/ferramentas/#' + hiddenTarget);
+  await page.waitForSelector('#' + hiddenTarget, { visible: true });
+  assert.equal(await page.$eval('#' + hiddenTarget, el => el.hidden), false,
+    'a shared link must reveal its target even in a collapsed group');
+  legacyCatalogue = true;
+  await load('/ferramentas/');
+  await page.waitForSelector('[data-tool-search]', { visible: true });
+  assert.equal(await page.$$eval('[data-tool-card]:not([hidden])', cards => cards.length), count,
+    'an older catalogue without expansion buttons must keep every card accessible');
+  await page.type('#ts-query', 'REEQUILIBRIO');
+  assert.deepEqual(await page.$$eval('[data-tool-card]:not([hidden])', cards => cards.map(el => el.dataset.toolCard)), ['reequilibrio']);
+  legacyCatalogue = false;
+  await load('/ferramentas/');
   await page.$eval('#ts-query', el => {
     el.value = '<img src=x onerror=alert(1)>';
     el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -115,6 +159,7 @@ try {
     await paint();
   };
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
+  assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), true);
   assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
   for (const config of [
     { enabled: true, purchasesEnabled: false, tools: ['modela-memoria'] },
@@ -124,13 +169,19 @@ try {
     commerceConfig = config;
     await loadWithCommerce('/ferramentas/');
     assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
+    assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), true);
   }
   await loadWithCommerce('/ferramentas/calculadora-de-beiral/');
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
-  commerceConfig = { enabled: true, purchasesEnabled: true, sharedExportsEnabled: true, tools: ['modela-memoria'] };
+  commerceConfig = { enabled: true, purchasesEnabled: true, sharedExportsEnabled: true,
+    tools: ['modela-memoria'], packages: [{ credits: 1, amountCents: 1490 }] };
   mockCommerce = true;
   await load('/ferramentas/#programa-indicacao');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
+  const initialTerms = await page.$eval('[data-tool-export-terms]', el => el.textContent);
+  assert.match(initialTerms, /primeira exportação da conta verificada é cortesia/);
+  assert.match(initialTerms, /seguintes usam 1 crédito/);
+  assert.match(initialTerms, /Crédito avulso: R\$\s*14,90/);
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
     '/ferramentas/#programa-indicacao');
   assert.match(await page.$eval('[data-referral-entry]', el => el.textContent), /primeira exportação paga/);
@@ -146,6 +197,25 @@ try {
   await page.waitForFunction(() => window.referralOpened === 1);
   assert.equal(await page.evaluate(() => window.sharedWalletOptions?.shared), true);
   assert.equal(await page.evaluate(() => window.sharedWalletOptions?.toolId), 'modela-memoria');
+  await loadWithCommerce('/cad/');
+  assert.doesNotMatch(await page.$eval('.content-lead', el => el.textContent), /sem cadastro/);
+  assert.match(await page.$eval('[data-tool-export-terms]', el => el.textContent), /Crédito avulso/);
+  commerceConfig = { ...commerceConfig, packages: [{ credits: 1, amountCents: 1990 }] };
+  await loadWithCommerce('/ferramentas/conversor-utm-sirgas-2000/');
+  assert.match(await page.$eval('[data-tool-export-terms]', el => el.textContent), /R\$\s*19,90/,
+    'pre-use price must follow the runtime, never a copy constant');
+  assert.equal(await page.evaluate(() => document.querySelector('[data-tool-export-terms]').compareDocumentPosition(document.getElementById('conversor')) & Node.DOCUMENT_POSITION_FOLLOWING), 4,
+    'terms must be visible before the coordinate input');
+  commerceConfig = { ...commerceConfig, purchasesEnabled: false };
+  await loadWithCommerce('/ferramentas/');
+  const pausedPurchases = await page.$eval('[data-tool-export-terms]', el => el.textContent);
+  assert.match(pausedPurchases, /Novas compras estão temporariamente indisponíveis/);
+  assert.doesNotMatch(pausedPurchases, /Crédito avulso|R\$/);
+  commerceConfig = { ...commerceConfig, exportsPaused: true };
+  await loadWithCommerce('/ferramentas/');
+  const pausedExports = await page.$eval('[data-tool-export-terms]', el => el.textContent);
+  assert.match(pausedExports, /exportações por créditos estão temporariamente pausadas/);
+  assert.doesNotMatch(pausedExports, /é cortesia|Crédito avulso|R\$/);
   mockCommerce = null;
   commerceConfig = { enabled: false };
 

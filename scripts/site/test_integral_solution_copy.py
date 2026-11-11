@@ -253,7 +253,10 @@ def coverage_problems(
         if not manifest.is_file():
             return [f"artifact manifest missing: {manifest}"]
         data = json.loads(manifest.read_text(encoding="utf-8"))
-        expected = {route.strip("/") + "/index.html" if route != "/" else "index.html" for route in data.get("html_routes", [])}
+        expected = {
+            route.lstrip("/") + ("index.html" if route.endswith("/") else "")
+            for route in data.get("html_routes", [])
+        }
         expected |= {name for name in data.get("root_files", []) if name.endswith(".html")}
         if data.get("html_route_count") != len(data.get("html_routes", [])):
             problems.append("manifest html_route_count disagrees with html_routes")

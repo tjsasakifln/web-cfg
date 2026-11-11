@@ -251,7 +251,7 @@ def render_related_guides(block: dict) -> str:
         tool_link = (
             f'\n<p>{esc(tool["intro"])} <a class="text-link" data-event-name="cta_click" '
             f'data-cta-id="{esc(tool["cta_id"])}" data-cta-position="related_resources" '
-            f'href="{esc(tool["href"])}">{esc(tool["label"])}</a>.</p>'
+            f'href="{esc(local_bridge_href(tool["href"]))}">{esc(tool["label"])}</a>.</p>'
         )
     return f'''<section aria-labelledby="guias-relacionados-title" class="sec sec--soft" id="guias-relacionados">
 <div class="container">

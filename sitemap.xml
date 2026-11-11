@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  <url>
  <loc>https://confenge.com.br/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/acompanhamento-contratos-obras/</loc>
@@ -28,7 +29,7 @@
  </url>
  <url>
  <loc>https://confenge.com.br/avaliacao-imoveis-urbanos/inferencia/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/bid-room-licitacoes-obras/</loc>
@@ -36,7 +37,7 @@
  </url>
  <url>
  <loc>https://confenge.com.br/bim/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/bim/guias/dwg-para-ifc-paredes/</loc>
@@ -56,11 +57,11 @@
  </url>
  <url>
  <loc>https://confenge.com.br/cad/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/cad/aplicativos/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/cad/guias/escala-e-unidade-do-dwg/</loc>
@@ -300,67 +301,135 @@
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/analise-de-viga-continua/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/calculadora-bdi/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/calculadora-de-beiral/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/calculadora-psicrometrica/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/caminho-critico-obra/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/checklist-reequilibrio/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/comparador-cronogramas/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/comparador-geometrico-ifc/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/conforto-termico/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/conversor-utm-sirgas-2000/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/diagnostico-defesa-margem/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/diagrama-unifilar/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/epanet-inp/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/federacao-bcf/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/georreferenciador-ifc/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/geotecnia-cpt-estacas/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/inventario-ifc/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/matriz-atraso-obra/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/memorial-de-calculo/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/modelador-parametrico-3d/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/orcamento-de-obras/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/plantas-cortes-ifc/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/propriedades-de-secoes/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/quantitativos-dxf/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/radar-mercado-publico/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/radier-solo-elastico/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/rede-de-agua/</loc>
- <lastmod>2026-11-09</lastmod>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/secao-de-concreto-armado/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/trelicas-e-porticos/</loc>
+ <lastmod>2026-11-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/imprensa/</loc>

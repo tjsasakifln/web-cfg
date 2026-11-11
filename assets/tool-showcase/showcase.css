@@ -118,3 +118,7 @@
 }
 
 .tool-result-share{display:inline-flex;align-items:center;min-height:44px}
+
+.tool-export-terms{max-width:76ch;font-size:.875rem;line-height:1.5;margin:12px 0;padding:9px 12px;border:1px solid #789d9780;color:inherit;background:transparent}
+.tool-export-terms a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.tool-export-terms[hidden]{display:none}

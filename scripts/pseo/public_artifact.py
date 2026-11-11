@@ -26,6 +26,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 PUBLIC_DIR_NAME = "_site"
 
+# Public supporting documents with a filename URL need explicit coverage too.
+# Keep this finite instead of admitting arbitrary HTML from vendored engines.
+PUBLIC_NESTED_HTML_DOCUMENTS = frozenset({"cad/freecad/creditos.html"})
+
 # Top-level directories that may appear under the public artifact when present
 # at the repo root (static commercial pages + generated pSEO + assets).
 PUBLIC_TOP_DIRS = frozenset(
@@ -297,6 +301,19 @@ SECRET_PATTERNS = [
     re.compile(r"(?i)site-confenge-guides"),
 ]
 
+
+def is_freecad_virtual_home_reference(relative: str, match: re.Match[str]) -> bool:
+    """Emscripten's public virtual home is not a server or developer path.
+
+    Only the two FreeCAD sources use this fixed in-memory filesystem root.
+    Other home paths and every credential pattern in the same file still fail.
+    The installer verifies the generated engine's full SHA-256 independently.
+    """
+    return match.group() == "/home/web_user/" and (
+        relative == "cad/freecad/vendor/graphics.js"
+        or relative == "assets/freecad/FreeCAD-3f8c1ff4a0ee.js"
+    )
+
 TEXT_SCAN_SUFFIXES = frozenset(
     {".html", ".js", ".css", ".json", ".xml", ".txt", ".webmanifest", ".map"}
 )
@@ -439,6 +456,9 @@ def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
             if not route.endswith("/"):
                 route += "/"
             html_routes.append(route)
+    for rel in sorted(PUBLIC_NESTED_HTML_DOCUMENTS):
+        if rel not in PUBLIC_EXCLUDED_RELPATHS and (root / rel).is_file():
+            html_routes.append("/" + rel)
     if (root / "index.html").is_file():
         html_routes.insert(0, "/")
     return {
@@ -562,6 +582,9 @@ def assemble_public_artifact(
 
     if (root / "scripts/cad/suite/releases.json").is_file():
         subprocess.run([sys.executable, str(root / "scripts/cad/suite/install.py"), str(dest.resolve())], check=True)
+
+    if (root / "scripts/freecad/runtime.json").is_file():
+        subprocess.run([sys.executable, str(root / "scripts/freecad/install.py"), str(dest.resolve())], check=True)
 
     if (root / "avaliacao-imoveis-urbanos/inferencia/index.html").is_file():
         subprocess.run([sys.executable, str(root / "scripts/modela/publicar.py"), str(dest.resolve())], check=True)
@@ -761,7 +784,8 @@ def audit_public_artifact(
                 )
                 continue
             for pat in SECRET_PATTERNS:
-                m = pat.search(text)
+                m = next((match for match in pat.finditer(text)
+                          if not is_freecad_virtual_home_reference(rel, match)), None)
                 if m:
                     findings.append(
                         {

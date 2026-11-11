@@ -1,0 +1,79 @@
+[
+  {
+    "name": "groundhog-cpt-reference",
+    "request": {
+      "operation": "geotechnical",
+      "data": {
+        "mode": "cpt",
+        "cpt": [
+          {
+            "depth": 5,
+            "qc": 10,
+            "fs": 0.05,
+            "u2": 0.05,
+            "total": 100,
+            "effective": 50
+          }
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 2,
+        "value": 10.01
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "groundhog-pile-reference",
+    "request": {
+      "operation": "geotechnical",
+      "data": {
+        "mode": "pile",
+        "layers": [
+          {
+            "top": 0,
+            "bottom": 10,
+            "soil": "clay",
+            "sigmaTop": 0,
+            "sigmaBottom": 100,
+            "su": 50
+          }
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 392.69908169872417
+      },
+      {
+        "index": 1,
+        "value": 88.35729338221293
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "non-contiguous-layers-rejected",
+    "request": {
+      "operation": "geotechnical",
+      "data": {
+        "mode": "pile",
+        "layers": [
+          {
+            "top": 1,
+            "bottom": 10,
+            "soil": "clay",
+            "sigmaTop": 0,
+            "sigmaBottom": 100,
+            "su": 50
+          }
+        ]
+      }
+    },
+    "summary": [],
+    "invalid": true
+  }
+]

@@ -98,3 +98,8 @@ data/live_intelligence/accepted.last/
 
 # chrome-launcher scratch profiles created at the repo root under WSL (Windows LOCALAPPDATA path)
 /C:*
+
+# Generated immutable scientific runtime (built from requirements.lock)
+/runtime/science-tools/python/
+/runtime/science-tools/runtime-manifest.json
+/runtime/science-tools/license-inventory.json

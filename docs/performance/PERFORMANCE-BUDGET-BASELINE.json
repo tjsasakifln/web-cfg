@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1117.8,
+    "asset_raw_kb_max_route": 1117.83,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 287
+    "routes_measured": 306
   },
   "budget": {
     "cls_max": 0.05,
@@ -139,7 +139,7 @@
         "route": "/especialista/tiago-jun-sasaki/"
       },
       {
-        "cls": 0.0,
+        "cls": 0.01078859494298715,
         "route": "/ferramentas/"
       },
       {
@@ -149,6 +149,10 @@
       {
         "cls": 0.0,
         "route": "/ferramentas/prontidao-tecnica-obra-privada/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/ferramentas/radar-mercado-publico/"
       },
       {
         "cls": 0.0,
@@ -263,7 +267,7 @@
         "route": "/triagem-tecnica/"
       }
     ],
-    "routes_measured": 61
+    "routes_measured": 62
   },
   "fonts": {
     "font_files_total": 1,
@@ -306,6 +310,8 @@
       "/bim/web/visualizador.html",
       "/cad/",
       "/cad/aplicativos/",
+      "/cad/freecad/",
+      "/cad/freecad/creditos.html",
       "/cad/guias/escala-e-unidade-do-dwg/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
@@ -478,15 +484,32 @@
       "/ferramentas/calculadora-psicrometrica/",
       "/ferramentas/caminho-critico-obra/",
       "/ferramentas/checklist-reequilibrio/",
+      "/ferramentas/comparador-cronogramas/",
+      "/ferramentas/comparador-geometrico-ifc/",
+      "/ferramentas/conforto-termico/",
       "/ferramentas/conversor-utm-sirgas-2000/",
       "/ferramentas/diagnostico-defesa-margem/",
       "/ferramentas/diagrama-unifilar/",
+      "/ferramentas/energia-solar-fotovoltaica/",
+      "/ferramentas/epanet-inp/",
+      "/ferramentas/federacao-bcf/",
+      "/ferramentas/georreferenciador-ifc/",
+      "/ferramentas/geotecnia-cpt-estacas/",
+      "/ferramentas/inventario-ifc/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
+      "/ferramentas/memorial-de-calculo/",
+      "/ferramentas/modelador-parametrico-3d/",
       "/ferramentas/orcamento-de-obras/",
+      "/ferramentas/plantas-cortes-ifc/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/ferramentas/propriedades-de-secoes/",
+      "/ferramentas/quantitativos-dxf/",
       "/ferramentas/radar-mercado-publico/",
+      "/ferramentas/radier-solo-elastico/",
       "/ferramentas/rede-de-agua/",
+      "/ferramentas/secao-de-concreto-armado/",
+      "/ferramentas/trelicas-e-porticos/",
       "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
       "/guias-contratos-obras/contestar-glosa-medicao/",
@@ -595,6 +618,8 @@
       "/bim/web/visualizador.html",
       "/cad/",
       "/cad/aplicativos/",
+      "/cad/freecad/",
+      "/cad/freecad/creditos.html",
       "/cad/guias/escala-e-unidade-do-dwg/",
       "/casos/",
       "/casos/aditivo-art125-demonstrativo/",
@@ -767,15 +792,32 @@
       "/ferramentas/calculadora-psicrometrica/",
       "/ferramentas/caminho-critico-obra/",
       "/ferramentas/checklist-reequilibrio/",
+      "/ferramentas/comparador-cronogramas/",
+      "/ferramentas/comparador-geometrico-ifc/",
+      "/ferramentas/conforto-termico/",
       "/ferramentas/conversor-utm-sirgas-2000/",
       "/ferramentas/diagnostico-defesa-margem/",
       "/ferramentas/diagrama-unifilar/",
+      "/ferramentas/energia-solar-fotovoltaica/",
+      "/ferramentas/epanet-inp/",
+      "/ferramentas/federacao-bcf/",
+      "/ferramentas/georreferenciador-ifc/",
+      "/ferramentas/geotecnia-cpt-estacas/",
+      "/ferramentas/inventario-ifc/",
       "/ferramentas/limite-acrescimos-supressoes/",
       "/ferramentas/matriz-atraso-obra/",
+      "/ferramentas/memorial-de-calculo/",
+      "/ferramentas/modelador-parametrico-3d/",
       "/ferramentas/orcamento-de-obras/",
+      "/ferramentas/plantas-cortes-ifc/",
       "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/ferramentas/propriedades-de-secoes/",
+      "/ferramentas/quantitativos-dxf/",
       "/ferramentas/radar-mercado-publico/",
+      "/ferramentas/radier-solo-elastico/",
       "/ferramentas/rede-de-agua/",
+      "/ferramentas/secao-de-concreto-armado/",
+      "/ferramentas/trelicas-e-porticos/",
       "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
       "/guias-contratos-obras/contestar-glosa-medicao/",

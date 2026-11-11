@@ -30,6 +30,8 @@ function readJson(relative) {
   return JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
 }
 
+const publicToolDestinations = new Set(readJson("data/site/tool-showcase.json").entries.map(entry => entry.href));
+
 function publicHtmlFiles() {
   return childProcess.execFileSync("git", ["ls-files", "*.html"], {
     cwd: root,
@@ -170,7 +172,7 @@ function commercialActions(html, profile) {
         nextState = "Abre a configuração comercial do pedido antes de qualquer instrução de pagamento.";
       } else if (href === "/ferramentas/#programa-indicacao" || href === "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao") {
         nextState = "Abre a área de indicação da carteira para acessar o link pessoal com a conta verificada.";
-      } else if (/^\/ferramentas\//i.test(href)) {
+      } else if (/^\/ferramentas\//i.test(href) || publicToolDestinations.has(href)) {
         stage = "calculate";
         nextState = "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.";
       } else if (/^\/casos\//i.test(href)) {

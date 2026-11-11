@@ -82,7 +82,6 @@ HOME_SERVICE_DESTINATIONS = {
     "/servicos-obras-publicas/",
     "/inteligencia/",
     "/conteudos/",
-    "/ferramentas/",
     "/ferramentas/radar-mercado-publico/",
     "/projeto-estrutural-concreto-armado/",
     "/projeto-estrutura-metalica/",
@@ -534,6 +533,14 @@ def main() -> int:
         failures.append("home institutional discovery must precede transversal conduction")
     if 'href="/servicos-obras-publicas/"' not in home:
         failures.append("public-works vertical lost its canonical entry")
+
+    public_works = (ROOT / "servicos-obras-publicas" / "index.html").read_text(encoding="utf-8")
+    checklist = re.findall(
+        r'<a\b(?=[^>]*data-cta-id="obras-publicas-resource-checklist")[^>]*href="([^"]+)"',
+        public_works,
+    )
+    if checklist != ["/ferramentas/checklist-reequilibrio/"]:
+        failures.append(f"public-works rebalancing checklist entry differs: {checklist}")
 
     failures.extend(
         f"nav hygiene: {err}" for err in audit_primary_nav_hygiene(ROOT, ia)

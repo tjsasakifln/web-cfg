@@ -15,6 +15,10 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+# Register the controlled runtime dependencies for the package fixture below;
+# importing make_site inside the test does not register its module's fixtures.
+from deploy.netcup.tests.test_release_control import private_dependency_fixture  # noqa: E402,F401
+
 from scripts.pseo.public_artifact import (  # noqa: E402
     assemble_public_artifact,
     audit_public_artifact,

@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 287
+    "expected_declared_ctas": 290
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 41,
-    "declared_ctas": 287,
+    "declared_ctas": 290,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4406,6 +4406,66 @@
           ]
         },
         {
+          "cta_id": "home-tools-cad",
+          "position": "home_tools",
+          "href": "/cad/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Abrir e editar DWG Confira a planta e continue o desenho em DWG ou DXF.",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-tools-ifc",
+          "position": "home_tools",
+          "href": "/bim/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Conferir um modelo IFC Visualização 3D, comparação de revisões e quantitativos.",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-tools-budget",
+          "position": "home_tools",
+          "href": "/ferramentas/orcamento-de-obras/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Montar um orçamento Etapas, custos, SINAPI e BDI em uma planilha editável.",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-tools-beam",
+          "position": "home_tools",
+          "href": "/ferramentas/analise-de-viga-continua/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Calcular uma viga contínua Reações, cortantes, momentos e flechas por vão.",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
           "cta_id": "home-service-projects",
           "position": "home_services",
           "href": "/projetos/",
@@ -4608,21 +4668,6 @@
           "commitment": "low",
           "current_label": "Ler guias técnicos",
           "useful_next_state": "Abre o destino declarado por “Ler guias técnicos” para continuar a decisão.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
-          "event_semantics": [
-            "cta_click"
-          ]
-        },
-        {
-          "cta_id": "home-resource-tools",
-          "position": "home_services",
-          "href": "/ferramentas/",
-          "stage": "calculate",
-          "commitment": "low",
-          "current_label": "Explorar ferramentas de engenharia",
-          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
@@ -7304,6 +7349,15 @@
       "kind": "tool_form",
       "action": "/api/web/market-radar",
       "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/ferramentas/radier-solo-elastico/",
+      "form_id": "dados",
+      "form_class": "",
+      "kind": "tool_form",
+      "action": "",
+      "method": "get",
       "nojs_degradation": "noscript_note"
     }
   ]

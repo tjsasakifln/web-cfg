@@ -645,6 +645,12 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     assert services.start() < conduction.start() < deliverable.start()
     fronts = set(re.findall(r'data-cta-id="([^"]+)"', services.group(0)))
     assert fronts - {"home-market-intelligence"} == {
+        "home-tools-cad",
+        "home-tools-ifc",
+        "home-tools-budget",
+        "home-tools-beam",
+        "home-resource-guides",
+        "home-resource-radar",
         "home-service-projects",
         "home-private-quantities-budget",
         "home-service-inspection",
@@ -657,9 +663,6 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
         "home-project-eletrico",
         "home-project-hidrossanitario",
         "home-project-terceirizacao",
-        "home-resource-guides",
-        "home-resource-tools",
-        "home-resource-radar",
     }
     extra = re.search(r'<p class="home-services__all">.*?</p>', home, re.S)
     assert extra, "home deve manter o atalho discreto de inteligência de mercado"
