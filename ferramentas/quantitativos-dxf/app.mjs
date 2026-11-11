@@ -25,8 +25,8 @@ async function analyze(text){
   byId('resumo').textContent=result.layers.length+' camadas medidas, '+result.blocks.reduce((s,r)=>s+r.count,0)+' instâncias de blocos e '+result.texts.length+' textos. Unidade: '+format(result.metresPerUnit,9)+' m por unidade do desenho.';
   draw(result.preview);byId('resultado').hidden=false;message('Levantamento concluído. Confira as unidades e os itens não incluídos antes de exportar.');
  };
- worker.onerror=()=>{done();message('Não foi possível interpretar o arquivo. Confira se é um DXF ASCII íntegro.',true);};
- timer=setTimeout(()=>{done();message('A leitura ultrapassou 30 segundos. Divida o desenho em arquivos menores.',true);},30000);
+ worker.onerror=()=>{if(token!==revision)return;done();message('Não foi possível interpretar o arquivo. Confira se é um DXF ASCII íntegro.',true);};
+ timer=setTimeout(()=>{if(token!==revision)return;done();message('A leitura ultrapassou 30 segundos. Divida o desenho em arquivos menores.',true);},30000);
  worker.postMessage({text,unit:byId('unidade').value});
 }
 byId('arquivo').addEventListener('change',invalidate);byId('unidade').addEventListener('change',invalidate);
@@ -35,7 +35,18 @@ byId('analisar').addEventListener('click',catchAction(async()=>{
  const token=revision;const text=await file.text();if(token!==revision)return;await analyze(text);
 }));
 byId('exemplo').addEventListener('click',catchAction(async()=>{
- const token=revision;const response=await fetch('./exemplo.dxf');if(!response.ok)throw Error('Não foi possível abrir o exemplo.');const text=await response.text();if(token!==revision)return;byId('unidade').value='';await analyze(text);
+ invalidate();const token=revision;byId('analisar').disabled=true;message('Carregando o exemplo DXF…');
+ let text;
+ try{
+  const response=await fetch('./exemplo.dxf');
+  if(token!==revision)return;
+  if(!response.ok)throw Error('Não foi possível abrir o exemplo.');
+  text=await response.text();
+ }catch(error){
+  if(token!==revision)return;
+  byId('analisar').disabled=false;throw error;
+ }
+ if(token!==revision)return;byId('unidade').value='';await analyze(text);
 }));
 byId('csv').addEventListener('click',catchAction(async()=>{
  if(!result)return;
