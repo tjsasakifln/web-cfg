@@ -1,34 +1,36 @@
-# Market fit do catálogo ampliado: pacote de execução v1
+# Market fit multi-vertical: pacote de execucao v3
 
-Este pacote torna a issue #336 executável sem declarar que a pesquisa ocorreu.
-O estado permanece `NOT_STARTED`: não há participante, oportunidade comercial,
-proposta, pagamento, venda ou disposição a pagar registrada neste repositório.
+Este pacote torna a issue #336 executavel sem declarar que a pesquisa ocorreu.
+O estado permanece `NOT_STARTED`: nao ha participante, oportunidade comercial,
+proposta, pagamento, venda ou disposicao a pagar registrada neste repositorio.
 
-## O que está pronto
+A pesquisa humana e unica. Nao ha segunda amostra e nao se abre outra issue de
+pesquisa. A composicao 8/3/3/3/3 e amostragem qualitativa predeclarada, nao
+verdade de mercado. Uma unica revisao e permitida antes da primeira sessao,
+mantendo n=20 e documentando a razao.
 
-- matriz congelada de 20 slots por 18 cartões, gerada de forma reproduzível;
-- quotas de cinco slots para cada um dos quatro papéis do ICP;
-- cobertura de 54/54 entregáveis com ao menos seis exposições por item;
-- fronteiras críticas apresentadas em conjunto ao menos três vezes;
-- ordem dos cartões congelada antes das sessões;
-- templates agregados, de chaves fechadas e sem PII, para pesquisa, QCOs e
-  decisões por produto;
-- validador fail-closed que reconcilia funil, quotas, hash real, entregas,
-  outcomes e os números usados por PROMOTE;
+## O que esta pronto
 
-A matriz usa `MF-P01` a `MF-P20` como posições do desenho, não como
-identificadores de pessoas. A associação entre slot e participante real fica no
-armazenamento operacional privado e nunca entra no Git ou em analytics.
+- 20 slots sem identidade, 12 tarefas cada, ordem congelada;
+- quotas 8 (canario de engenharia privada), 3 pericia, 3 avaliacao, 3 SST, 3 B2G;
+- B2G permanece presente;
+- contrato semantico de mensuracao, matriz de privacidade e regras de
+  atribuicao;
+- templates agregados sem PII para pesquisa, QCO por nucleo e decisoes;
+- validador fail-closed.
+
+A matriz usa `MF-P01` a `MF-P20` como posicoes do desenho, nao como
+identificadores de pessoas.
 
 ## Fronteiras de dados
 
 - contato, triagem, consentimento e notas brutas: armazenamento operacional
   privado, conforme o pacote `icp-trust-session-v1`;
-- ação comercial, proposta, decisão e outcome: Warmbly;
-- analytics: somente dimensões agregadas permitidas, com fonte
+- acao comercial, proposta, decisao e outcome: Warmbly;
+- analytics: somente dimensoes agregadas permitidas, com fonte
   `CONFENGE_WEB`, sem PII;
-- repositório: matriz sem identidade, contagens agregadas e hashes de export,
-  nunca registros individuais.
+- QCO, proposta e receita nao sao eventos client-side;
+- repositorio: matriz sem identidade, contagens agregadas e hashes de export.
 
 ## Comandos
 
@@ -36,27 +38,16 @@ armazenamento operacional privado e nunca entra no Git ou em analytics.
 node scripts/commercial/market_fit_exposure_plan.mjs --check
 node scripts/commercial/market_fit_evidence.mjs --check
 npm run test:market-fit-protocol
+node tests/measurement/test_multivertical_measurement_contract.mjs
 ```
 
-O primeiro comando detecta qualquer troca de cartão depois do congelamento. O
-segundo valida os templates e artefatos agregados que venham a ser adicionados.
-O gate pode confirmar prontidão do instrumento, mas somente sessões e QCOs
-reais podem alterar o estado de evidência. Uma decisão PROMOTE não aceita
-contadores digitados isoladamente: eles precisam coincidir com os agregados
-revisados de pesquisa e Warmbly do mesmo ciclo.
-
-## Estado decisório
+## Estado decisorio
 
 - Prioridade: P2.
-- Estado: MEASUREMENT_WAIT_VALID, com instrumento pronto e evidência humana/comercial pendente.
+- Estado: MEASUREMENT_WAIT_VALID, instrumento pronto, evidencia humana pendente.
 - Frente: INBOUND ENGINE.
-- Tempo para evidência: 30 dias.
 - Alavancas: customer, revenue, data e trust.
-- North Star: oportunidades comerciais qualificadas, nunca volume de sessões,
-  cartões, mensagens ou páginas.
+- North Star: QCO por nucleo ligado a proposta/receita downstream.
 
-Em 100 repetições, o desenho melhora o sistema apenas quando acumula evidência
-comparável sobre decisão, preço, entrega e outcome. Repetir entrevista sem QCO,
-proposta e retorno decisório cria trabalho, não valida market fit. Warmbly executa
-a operação comercial e Governance/Control Center supervisiona; `web-cfg` apenas
-consome o agregado versionado, sem fila, cadência, aprovação ou estado de contato.
+Em 100 repeticoes, o desenho melhora o sistema quando acumula evidencia
+comparavel. Repetir entrevista sem QCO cria trabalho, nao valida market fit.

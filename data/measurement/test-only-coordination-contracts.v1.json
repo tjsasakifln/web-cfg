@@ -1,0 +1,62 @@
+{
+  "schema": "confenge.measurement-coordination-fixtures/1.0",
+  "authority": "test_only_not_production_fallback",
+  "campaign_id": 13,
+  "fail_closed_on_missing_or_divergent_hash": true,
+  "not_a_runtime_fallback": true,
+  "ratification_owner": "goal_97",
+  "invariants": {
+    "source": "CONFENGE_WEB",
+    "outbound_eligible": false,
+    "auto_send": false
+  },
+  "nuclei": [
+    "expert_evidence_assistance",
+    "property_valuation",
+    "building_engineering_documentation",
+    "occupational_safety",
+    "public_works_b2g"
+  ],
+  "contracts": [
+    {
+      "id": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+      "kind": "taxonomy",
+      "sha256": "f7535545e37a87fa535b88bde1ac87eb4a8717f00200570c17f98fe89a8d6b30"
+    },
+    {
+      "id": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+      "kind": "catalog",
+      "sha256": "0cdda75d4dbd39c3aa206f30888e4b4b368ae3434ca9f3222ac028739b9d5812"
+    },
+    {
+      "id": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904",
+      "kind": "public_intake",
+      "sha256": "452b567d565c660e788602a7ea13dd6582aea412844a51e722974970ae3059df"
+    },
+    {
+      "id": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
+      "kind": "admission_policy",
+      "sha256": "5deaa0b3e9de7bfdd87e26dc6fb59ee888d1983380598d0d984cc31c6fa41f29"
+    },
+    {
+      "id": "CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904",
+      "kind": "inbound_commercial_state",
+      "sha256": "072f42aba092d709429ac8c164aa49e540e277a7be6c11cbd0349feab39040dd"
+    },
+    {
+      "id": "MEETCFG_HANDRAISER_CONTEXT/1.0.0-draft.20260904",
+      "kind": "meetcfg_context",
+      "sha256": "18920ee2ca96a1389d631c0884014db0dc0e96401da6e104a1d90a2e32558859"
+    },
+    {
+      "id": "private_project_technical_readiness_v1",
+      "kind": "private_asset",
+      "sha256": "ee9ab719d52f7afade3039c76d80d5794bc9466a0eb07d25a850bc22ef90514e"
+    },
+    {
+      "id": "private_project_technical_readiness_assessment",
+      "kind": "offer_candidate",
+      "sha256": "c2d4273f0153294e33d5186fe74214f34cdc99c0d29f31c532b5f9532e756bf5"
+    }
+  ]
+}

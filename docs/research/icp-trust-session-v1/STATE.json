@@ -1,12 +1,12 @@
 {
   "schema": "confenge.icp-trust-session-state.v1",
-  "protocol_version": "1.1.0",
-  "as_of": "2026-08-24",
+  "protocol_version": "1.2.0",
+  "as_of": "2026-09-04",
   "owner_role": "CONFENGE founder / research moderator",
-  "next_review_at": "2026-09-13",
+  "next_review_at": "2026-10-04",
   "operational_package": "READY",
   "human_execution": "BLOCKED_HUMAN_PARTICIPANTS",
-  "required_eligible_consented_completions": 5,
+  "required_eligible_consented_completions": 20,
   "observed": {
     "eligible_consented_completions": 0,
     "sessions_executed": 0,
@@ -22,5 +22,5 @@
     "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
     "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW"
   },
-  "next_action": "Recruit five eligible people from the named source, record consent privately, execute the two active protocols, then commit only aggregate no-PII evidence and a separate interpretation."
+  "next_action": "Do not recruit a second sample. Execute the unique #336 twenty-person protocol using this package as session machinery, then commit only aggregate no-PII evidence."
 }
