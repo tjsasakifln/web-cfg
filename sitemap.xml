@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  <url>
  <loc>https://confenge.com.br/</loc>
+ <lastmod>2026-11-10</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/acompanhamento-contratos-obras/</loc>
@@ -383,6 +384,10 @@
  <lastmod>2026-11-11</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/ferramentas/modelador-parametrico-3d/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
  <loc>https://confenge.com.br/ferramentas/orcamento-de-obras/</loc>
  <lastmod>2026-11-11</lastmod>
  </url>
@@ -404,6 +409,10 @@
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/radar-mercado-publico/</loc>
+ <lastmod>2026-11-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/ferramentas/radier-solo-elastico/</loc>
  <lastmod>2026-11-11</lastmod>
  </url>
  <url>
@@ -535,13 +544,5 @@
  <url>
  <loc>https://confenge.com.br/triagem-tecnica/</loc>
  <lastmod>2026-10-03</lastmod>
- </url>
- <url>
- <loc>https://confenge.com.br/ferramentas/radier-solo-elastico/</loc>
- <lastmod>2026-11-11</lastmod>
- </url>
- <url>
- <loc>https://confenge.com.br/ferramentas/modelador-parametrico-3d/</loc>
- <lastmod>2026-11-11</lastmod>
  </url>
 </urlset>
