@@ -1297,6 +1297,30 @@
           "ids"
         ]
       }
+    },
+    {
+      "id": "georreferenciador-ifc",
+      "group": "modelos",
+      "title": "Georreferenciador IFC para SIRGAS 2000",
+      "summary": "Defina origem e rotação do IFC ou ajuste pontos de controle em SIRGAS 2000/UTM. Confira resíduos e exporte o modelo georreferenciado.",
+      "format": "IFC · JSON",
+      "file_formats": [
+        "IFC",
+        "JSON"
+      ],
+      "action": "Georreferenciar IFC",
+      "href": "/ferramentas/georreferenciador-ifc/",
+      "art": "profile",
+      "mark": "SIRGAS 2000 / UTM",
+      "keywords": "georreferenciador ifc para sirgas 2000 bim revit dados geometria local",
+      "page": {
+        "title": "Georreferenciador IFC para SIRGAS 2000 online",
+        "desc": "Defina origem e rotação do IFC ou ajuste pontos de controle em SIRGAS 2000/UTM. Confira resíduos e exporte o modelo georreferenciado.",
+        "related": [
+          "conversor-utm-sirgas-2000",
+          "federacao-bcf"
+        ]
+      }
     }
   ]
 }
