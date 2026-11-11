@@ -21,16 +21,24 @@ const SITE_ROOT = resolveSiteRoot(ROOT);
 const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
-// Current institutional discovery paths; legacy situation aliases remain URL
-// compatibility only. Geometry protects the seven visible public fronts. The
-// project hub keeps the discipline-level choices one click farther.
-const HOME_DISCOVERY_SELECTOR = ".home-service-links > a[href]";
+// Commits 4683b3c2a and 02dd3b2a6 added four tool shortcuts and placed them
+// beside the seven institutional fronts. Both groups reuse the visual class;
+// only the service destinations promise commercial explanation and contact.
+// Keep the global selector exact as well, so an extra card cannot evade gates.
+const HOME_DISCOVERY_SELECTOR = ".home-services > .container > .home-service-links > a[href]";
 const HOME_DISCOVERY = [
   "/projetos/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/",
   "/assistencia-tecnica-pericial-engenharia/", "/servicos/#servico-avaliacao",
   "/seguranca-trabalho-apoio-tecnico/", "/servicos-obras-publicas/",
 ];
 const EXPECTED_DISCOVERY = HOME_DISCOVERY.length;
+const HOME_TOOLS_SELECTOR = ".home-tools > .home-service-links > a[href]";
+const HOME_TOOLS = [
+  "/cad/", "/bim/", "/ferramentas/orcamento-de-obras/",
+  "/ferramentas/analise-de-viga-continua/",
+];
+const HOME_ALL_DISCOVERY_SELECTOR = ".home-service-links > a[href]";
+const HOME_ALL_DISCOVERY = [...HOME_TOOLS, ...HOME_DISCOVERY];
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -669,13 +677,13 @@ async function main() {
         channels: document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]').length,
         deliveryExplained: /(projetos|planilhas|relatórios|laudos|pareceres|dossiês)/i.test(delivery) && /demonstrativo/i.test(delivery),
       };
-    }, HOME_DISCOVERY_SELECTOR);
+    }, HOME_ALL_DISCOVERY_SELECTOR);
     await page.setJavaScriptEnabled(true);
-    if (!nojs.h1 || !nojs.projectPath || nojs.channels < 2 || !nojs.deliveryExplained || JSON.stringify(nojs.paths) !== JSON.stringify(HOME_DISCOVERY)) throw new Error(JSON.stringify(nojs));
+    if (!nojs.h1 || !nojs.projectPath || nojs.channels < 2 || !nojs.deliveryExplained || JSON.stringify(nojs.paths) !== JSON.stringify(HOME_ALL_DISCOVERY)) throw new Error(JSON.stringify(nojs));
     ok("essential_content_without_js");
   } catch (e) { await page.setJavaScriptEnabled(true); fail("essential_content_without_js", e.message || e); }
 
-  // 10) Every discovery path remains visible and usable on narrow screens.
+  // 10) All four tools and seven service paths stay visible on narrow screens.
   try {
     for (const width of [320, 390, 430, 699, 700, 900, 1100, 1440]) {
       await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
@@ -683,8 +691,8 @@ async function main() {
       const rows = await page.evaluate((selector) => [...document.querySelectorAll(selector)].map(a => {
         const r = a.getBoundingClientRect(), cs = getComputedStyle(a);
         return { href: a.getAttribute("href"), label: a.textContent.trim(), width: r.width, height: r.height, left: r.left, right: r.right, visible: cs.display !== "none" && cs.visibility !== "hidden" };
-      }), HOME_DISCOVERY_SELECTOR);
-      if (JSON.stringify(rows.map(r => r.href)) !== JSON.stringify(HOME_DISCOVERY)) throw new Error(`discovery routes at ${width}: ${JSON.stringify(rows)}`);
+      }), HOME_ALL_DISCOVERY_SELECTOR);
+      if (JSON.stringify(rows.map(r => r.href)) !== JSON.stringify(HOME_ALL_DISCOVERY)) throw new Error(`discovery routes at ${width}: ${JSON.stringify(rows)}`);
       for (const row of rows) if (!row.visible || !row.label || row.width < 44 || row.height < 43.5 || row.left < -0.5 || row.right > width + 0.5) throw new Error(`unusable discovery at ${width}: ${JSON.stringify(row)}`);
       const panel = await page.evaluate(() => {
         const container = document.querySelector(".home-proposal .container"), r = container.getBoundingClientRect(), cs = getComputedStyle(container);
@@ -754,58 +762,69 @@ async function main() {
     ]) {
       await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
       await page.goto(`${BASE}/`, { waitUntil: "networkidle0", timeout: 30000 });
-      const rep = await page.evaluate(() => {
+      const rep = await page.evaluate((selectors) => {
         const overflow =
           document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
         const title = document.querySelector("#servicos-title");
-        const firstCard = document.querySelector(".home-service-links > a");
-        const firstCta = firstCard;
         const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
         const header = document.querySelector(".site-header");
         const titleLines = title
           ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
           : 0;
         const titleFs = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
-        const bodyP = document.querySelector(".home-service-links small");
-        const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
-        const ctaBox = firstCta ? firstCta.getBoundingClientRect() : null;
         const floatBox = floatEl ? floatEl.getBoundingClientRect() : null;
-        let floatObscuresCta = false;
-        if (ctaBox && floatBox && floatBox.width > 0 && getComputedStyle(floatEl).display !== "none") {
-          const overlapX = Math.min(ctaBox.right, floatBox.right) - Math.max(ctaBox.left, floatBox.left);
-          const overlapY = Math.min(ctaBox.bottom, floatBox.bottom) - Math.max(ctaBox.top, floatBox.top);
-          const overlapArea = Math.max(0, overlapX) * Math.max(0, overlapY);
-          const ctaArea = Math.max(1, ctaBox.width * ctaBox.height);
-          floatObscuresCta = overlapArea / ctaArea > 0.35;
-        }
+        const groups = Object.entries(selectors).map(([name, selector]) => {
+          const cards = [...document.querySelectorAll(selector)];
+          const firstCard = cards[0];
+          const bodyP = firstCard?.querySelector("small");
+          const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
+          const ctaBox = firstCard ? firstCard.getBoundingClientRect() : null;
+          let floatObscuresCta = false;
+          if (ctaBox && floatBox && floatBox.width > 0 && getComputedStyle(floatEl).display !== "none") {
+            const overlapX = Math.min(ctaBox.right, floatBox.right) - Math.max(ctaBox.left, floatBox.left);
+            const overlapY = Math.min(ctaBox.bottom, floatBox.bottom) - Math.max(ctaBox.top, floatBox.top);
+            const overlapArea = Math.max(0, overlapX) * Math.max(0, overlapY);
+            const ctaArea = Math.max(1, ctaBox.width * ctaBox.height);
+            floatObscuresCta = overlapArea / ctaArea > 0.35;
+          }
+          return {
+            name,
+            routes: cards.map(a => a.getAttribute("href")),
+            bodyFs,
+            ctaW: ctaBox?.width || 0,
+            ctaH: ctaBox?.height || 0,
+            ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,
+            floatObscuresCta,
+          };
+        });
         const container = document.querySelector(".home-services .container") || document.querySelector(".container");
         const padLeft = container ? container.getBoundingClientRect().left : 0;
         return {
           overflow,
           titleLines,
           titleFs,
-          bodyFs,
           headerH: header ? header.getBoundingClientRect().height : 0,
           cardCount: document.querySelectorAll(".home-service-links > a").length,
-          ctaW: ctaBox?.width || 0,
-          ctaH: ctaBox?.height || 0,
-          ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,
-          floatObscuresCta,
+          groups,
           padLeft,
           titleText: (title?.textContent || "").trim().slice(0, 80),
         };
-      });
+      }, { services: HOME_DISCOVERY_SELECTOR, tools: HOME_TOOLS_SELECTOR });
       reports.push({ w, h, ...rep });
       if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
-      if (rep.cardCount !== 7) throw new Error(`${w}: expected 7 public fronts, saw ${rep.cardCount}`);
+      if (rep.cardCount !== HOME_ALL_DISCOVERY.length) throw new Error(`${w}: expected ${HOME_ALL_DISCOVERY.length} discovery cards, saw ${rep.cardCount}`);
       if (rep.titleLines > 4) throw new Error(`${w}: situations title ${rep.titleLines} lines > 4`);
       if (rep.titleFs > 36) throw new Error(`${w}: situations title font ${rep.titleFs}px too large`);
-      if (rep.bodyFs < 16 || rep.bodyFs > 20) throw new Error(`${w}: body font ${rep.bodyFs}px outside 16–20`);
       if (rep.headerH > 96) throw new Error(`${w}: header height ${rep.headerH} absurd`);
-      if (rep.ctaH < 44 || rep.ctaW < 120) throw new Error(`${w}: CTA too small ${rep.ctaW}x${rep.ctaH}`);
-      if (!rep.ctaFullyInLayout) throw new Error(`${w}: CTA overflows viewport`);
-      if (rep.floatObscuresCta) throw new Error(`${w}: floating WhatsApp obscures situation CTA`);
       if (rep.padLeft < 18) throw new Error(`${w}: lateral padding ${rep.padLeft} < 18`);
+      for (const group of rep.groups) {
+        const expected = group.name === "services" ? HOME_DISCOVERY : HOME_TOOLS;
+        if (JSON.stringify(group.routes) !== JSON.stringify(expected)) throw new Error(`${w}: expected ${expected.length} ${group.name} paths, saw ${JSON.stringify(group.routes)}`);
+        if (group.bodyFs < 16 || group.bodyFs > 20) throw new Error(`${w}: ${group.name} body font ${group.bodyFs}px outside 16–20`);
+        if (group.ctaH < 44 || group.ctaW < 120) throw new Error(`${w}: ${group.name} CTA too small ${group.ctaW}x${group.ctaH}`);
+        if (!group.ctaFullyInLayout) throw new Error(`${w}: ${group.name} CTA overflows viewport`);
+        if (group.floatObscuresCta) throw new Error(`${w}: floating WhatsApp obscures ${group.name} CTA`);
+      }
     }
     ok(`journeys_mobile_hierarchy (${reports.map((r) => r.w).join(",")})`);
   } catch (e) {
@@ -1256,6 +1275,7 @@ async function main() {
   try {
     const paths = [
       "/",
+      ...HOME_TOOLS,
       "/diretoria-b2g/",
       "/diagnostico-b2g-360/",
       "/bid-room-licitacoes-obras/",
@@ -1321,13 +1341,13 @@ async function main() {
     fail("thankyou_specialist_cta_family", e.message || e);
   }
 
-  // 22) All institutional discovery paths are usable without JavaScript.
+  // 22) All tool and institutional paths are usable without JavaScript.
   try {
     await page.setViewport({ width: 390, height: 844 }); await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
-    const rows = await page.evaluate(selector => [...document.querySelectorAll(selector)].map(a => { const r = a.getBoundingClientRect(); return { href: a.getAttribute("href"), visible: r.width > 0 && r.height >= 43.5 && getComputedStyle(a).visibility !== "hidden" }; }), HOME_DISCOVERY_SELECTOR);
+    const rows = await page.evaluate(selector => [...document.querySelectorAll(selector)].map(a => { const r = a.getBoundingClientRect(); return { href: a.getAttribute("href"), visible: r.width > 0 && r.height >= 43.5 && getComputedStyle(a).visibility !== "hidden" }; }), HOME_ALL_DISCOVERY_SELECTOR);
     await page.setJavaScriptEnabled(true);
-    if (JSON.stringify(rows.map(r => r.href)) !== JSON.stringify(HOME_DISCOVERY) || rows.some(r => !r.visible)) throw new Error(JSON.stringify(rows));
+    if (JSON.stringify(rows.map(r => r.href)) !== JSON.stringify(HOME_ALL_DISCOVERY) || rows.some(r => !r.visible)) throw new Error(JSON.stringify(rows));
     ok("institutional_discovery_without_js");
   } catch (e) { await page.setJavaScriptEnabled(true); fail("institutional_discovery_without_js", e.message || e); }
 
