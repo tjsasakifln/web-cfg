@@ -1249,6 +1249,30 @@
           "ids"
         ]
       }
+    },
+    {
+      "id": "plantas-cortes-ifc",
+      "group": "modelos",
+      "title": "Plantas e cortes de modelos IFC",
+      "summary": "Corte a geometria real do IFC em um plano horizontal ou vertical. Confira dimensões e exporte uma vista vetorial SVG em escala.",
+      "format": "IFC · SVG",
+      "file_formats": [
+        "IFC",
+        "SVG"
+      ],
+      "action": "Gerar plantas e cortes",
+      "href": "/ferramentas/plantas-cortes-ifc/",
+      "art": "plan",
+      "mark": "CORTE GEOMÉTRICO",
+      "keywords": "plantas e cortes de modelos ifc bim revit dados geometria local",
+      "page": {
+        "title": "Plantas e cortes de modelos IFC online",
+        "desc": "Corte a geometria real do IFC em um plano horizontal ou vertical. Confira dimensões e exporte uma vista vetorial SVG em escala.",
+        "related": [
+          "ifc-3d",
+          "dwg"
+        ]
+      }
     }
   ]
 }
