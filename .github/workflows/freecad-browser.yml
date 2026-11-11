@@ -1,0 +1,62 @@
+name: FreeCAD browser modeler
+
+on:
+  pull_request:
+    paths:
+      - cad/freecad/**
+      - scripts/freecad/**
+      - assets/freecad/**
+      - ferramentas/modelador-parametrico-3d/**
+      - tests/freecad/**
+      - tests/freecad-browser.mjs
+      - runtime/tools-commerce/exports.cjs
+      - scripts/pseo/public_artifact.py
+      - .github/workflows/freecad-browser.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freecad-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Install locked dependencies
+        run: |
+          npm ci --engine-strict
+          python3 -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Resolve contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Setup contracted Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: setup-chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
+      - name: Distribution integrity and recovery contracts
+        run: |
+          node --test tests/freecad/core.test.mjs
+          python3 -m pytest tests/freecad -q
+      - name: Build the real public artifact
+        run: npm run build:site
+      - name: Real FreeCAD creation recovery and authorized exports
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: node tests/freecad-browser.mjs
+      - name: Preserve native and visual evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: freecad-browser-${{ github.sha }}
+          path: build/reports/freecad/
+          if-no-files-found: warn
+          retention-days: 7

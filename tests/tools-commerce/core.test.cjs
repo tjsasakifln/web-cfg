@@ -106,6 +106,7 @@ test('each executable linked by the published showcase has a wallet export', () 
   const hubs = new Set(['/bim/', '/cad/aplicativos/']);
   const special = {
     '/cad/': 'cad-editor',
+    '/ferramentas/comparador-geometrico-ifc/': 'bim-comparador-geometrico',
     '/ferramentas/inventario-ifc/': 'bim-inventario',
     '/ferramentas/plantas-cortes-ifc/': 'bim-cortes',
     '/ferramentas/federacao-bcf/': 'bim-federacao',

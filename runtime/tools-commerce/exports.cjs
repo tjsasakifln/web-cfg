@@ -1,6 +1,8 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'bim-comparador-geometrico': ['csv', 'json'],
+  'radier-solo-elastico': ['csv', 'json', 'svg'],
   'energia-solar-fotovoltaica': ['html', 'csv', 'json'],
   'conforto-termico': ['html', 'csv', 'json'],
   'geotecnia-cpt-estacas': ['html', 'csv', 'json'],
@@ -31,6 +33,7 @@ const LOCAL_FORMATS = Object.freeze({
   'radar-mercado-publico': ['csv'],
   'orcamento-de-obras': ['xlsx', 'csv'],
   'cad-editor': ['dwg', 'dxf'],
+  'modelador-parametrico-3d': ['step', 'stp', 'iges', 'igs', 'stl', '3mf', 'svg', 'dxf'],
   'analise-cnpj': ['txt'],
   'bim-cad': ['dxf', 'dwg'],
   'bim-digitalizar': ['dxf', 'dwg'],

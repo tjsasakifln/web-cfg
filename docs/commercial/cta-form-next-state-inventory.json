@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 287
+    "expected_declared_ctas": 290
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 41,
-    "declared_ctas": 287,
+    "declared_ctas": 290,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4661,6 +4661,36 @@
           ]
         },
         {
+          "cta_id": "home-resource-guides",
+          "position": "home_services",
+          "href": "/conteudos/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ler guias técnicos",
+          "useful_next_state": "Abre o destino declarado por “Ler guias técnicos” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-resource-radar",
+          "position": "home_services",
+          "href": "/ferramentas/radar-mercado-publico/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Pesquisar contratos públicos no Radar",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
           "cta_id": "home-how-we-work",
           "position": "conduction",
           "href": "/como-trabalhamos/",
@@ -6785,6 +6815,21 @@
           ]
         },
         {
+          "cta_id": "obras-publicas-resource-checklist",
+          "position": "related_resources",
+          "href": "/ferramentas/checklist-reequilibrio/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Checklist de reequilíbrio",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
           "cta_id": "",
           "position": "",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Sou%20de%20um%20%C3%B3rg%C3%A3o%20p%C3%BAblico%20planejando%20a%20contrata%C3%A7%C3%A3o%20de%20uma%20obra%20e%20quero%20estruturar%20escopo%2C%20or%C3%A7amento%20e%20crit%C3%A9rios%20de%20medi%C3%A7%C3%A3o.",
@@ -7304,6 +7349,15 @@
       "kind": "tool_form",
       "action": "/api/web/market-radar",
       "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/ferramentas/radier-solo-elastico/",
+      "form_id": "dados",
+      "form_class": "",
+      "kind": "tool_form",
+      "action": "",
+      "method": "get",
       "nojs_degradation": "noscript_note"
     }
   ]

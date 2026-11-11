@@ -7,7 +7,7 @@ import {resolveChromePath} from '../scripts/site/resolve_chrome.mjs';
 
 const publicRoot=resolve(process.argv[2]||'_site');
 const screenshots=process.env.REPORT_TOOLS_SCREENSHOTS;
-const routes=['quantitativos-dxf','epanet-inp','comparador-cronogramas'];
+const routes=['quantitativos-dxf','epanet-inp','comparador-cronogramas','radier-solo-elastico'];
 for(const slug of routes)await stat(resolve(publicRoot,'ferramentas',slug,'index.html'));
 const mime={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.wasm':'application/wasm','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.inp':'text/plain','.dxf':'text/plain'};
 let failDxfExample=true;
@@ -53,6 +53,8 @@ try{
   const fromCatalog=async slug=>{
     await load('/ferramentas/');
     const selector=`a[href="/ferramentas/${slug}/"]`;
+    const query={'quantitativos-dxf':'quantitativos de DXF','epanet-inp':'redes EPANET','comparador-cronogramas':'comparador de cronogramas','radier-solo-elastico':'radier sobre solo elástico'}[slug];
+    await page.waitForSelector('#ts-query',{visible:true});await page.type('#ts-query',query);
     await page.waitForSelector(selector,{visible:true});
     await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.click(selector)]);
     assert.equal(new URL(page.url()).pathname,`/ferramentas/${slug}/`);
@@ -80,7 +82,9 @@ try{
   await page.select('#unidade','0.01');assert.equal(await visible(),false,'unit edits invalidate DXF quantities');
   await (await page.$('#arquivo')).uploadFile(resolve(publicRoot,'ferramentas/quantitativos-dxf/exemplo.dxf'));
   await page.click('#analisar');await finished();walls=(await rows('camadas')).find(row=>row[0]==='PAREDES');
-  near(numeric(walls[2]),0.26);near(numeric(walls[3]),0.004,0.00001);
+  // The source rectangle is 8,000 × 5,000 drawing units. Interpreting each
+  // unit as 0.01 m yields 260 m of perimeter and 4,000 m² of enclosed area.
+  near(numeric(walls[2]),260);near(numeric(walls[3]),4000);
   console.log('PASS DXF: example retry, real worker, geometry, unit override and invalidation');
 
   await fromCatalog('epanet-inp');await page.click('#exemplo');await finished();
@@ -119,8 +123,17 @@ try{
   await page.click('#fixar');await page.click('#comparar');await finished();
   assert.match(await page.$eval('#resumo',node=>node.textContent),/Baseline: 4 dias.*atual: 5 dias/);
   console.log('PASS CPM: float, baseline immutability, invalidation and latest-file import');
+  await fromCatalog('radier-solo-elastico');await page.click('#exemplo');await finished();
+  const soil=await rows('nos');assert.ok(soil.length>100);
+  for(const n of soil){near(numeric(n[4]),1);near(numeric(n[6]),20);}
+  assert.match(await page.$eval('#resumo',node=>node.textContent),/1[.]600/);
+  await layout('radier-solo-elastico');
+  await page.$eval('#pressure',input=>{input.value='30';input.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.equal(await visible(),false,'load edits invalidate the previous raft result');
+  await page.click('#calcular');await finished();near(numeric((await rows('nos'))[0][4]),1.5);
+  console.log('PASS raft: real MITC4 worker, q/ks settlement, reactions and stale result guard');
   assert.deepEqual(errors,[],'unexpected JavaScript errors');
-  console.log('PASS published artifact: three real tools, desktop/mobile navigation and no page overflow');
+  console.log('PASS published artifact: four real tools, desktop/mobile navigation and no page overflow');
 }finally{
   await browser?.close();await new Promise(done=>server.close(done));
 }

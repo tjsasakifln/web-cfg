@@ -131,13 +131,13 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 287,
-    "logo_image_occurrences": 541,
-    "header_lockup_occurrences": 262,
-    "footer_lockup_occurrences": 265,
+    "source_html_files_scanned": 306,
+    "logo_image_occurrences": 575,
+    "header_lockup_occurrences": 279,
+    "footer_lockup_occurrences": 282,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 276,
-      "/assets/logo-confenge-white-500-1677038e.png": 265
+      "/assets/logo-confenge-500-f8a83f6d.png": 293,
+      "/assets/logo-confenge-white-500-1677038e.png": 282
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -146,7 +146,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "2026-11-09. Censo do HTML fonte após a integração das nove ferramentas de engenharia e do Radar de Mercado Público."
+    "observation_note": "2026-11-11. Contagem efetiva de 306 arquivos HTML públicos fonte após a inclusão das ferramentas do relatório e do modelador paramétrico. Os cinco templates privados do interpretador em runtime/science-tools/python ficam fora deste censo. Integridade e proporção dos arquivos de marca mantidas."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",

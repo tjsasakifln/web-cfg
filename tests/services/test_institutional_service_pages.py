@@ -331,6 +331,12 @@ class InstitutionalServicePagesTest(unittest.TestCase):
         for item in required:
             self.assertIn(item, html)
 
+        self.assertEqual(
+            cta_href(html, "quantitativos-resource-budget"),
+            "/ferramentas/orcamento-de-obras/",
+        )
+        self.assertEqual(html.count('data-cta-id="quantitativos-resource-budget"'), 1)
+
         asset = ROOT / "assets" / "quantitativos-orcamento-obras" / "banco-disciplinas.svg"
         self.assertTrue(asset.is_file())
         svg = asset.read_text(encoding="utf-8")

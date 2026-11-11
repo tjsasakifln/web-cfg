@@ -49,6 +49,7 @@ FIREBASE_POPUP_FRAMES = (
     "https://confenge-ferramentas-pj-hml.firebaseapp.com",
 )
 WALLET_ISOLATED_DOCUMENT = "/bim/fotogrametria/"
+WALLET_ISOLATED_DOCUMENTS = (WALLET_ISOLATED_DOCUMENT, "/cad/freecad/")
 WALLET_DOCUMENTS = (
     "/analise-cnpj/",
     "/analise-cnpj/r/",
@@ -63,6 +64,8 @@ WALLET_DOCUMENTS = (
     "/bim/web/regua.html",
     "/bim/web/visualizador.html",
     WALLET_ISOLATED_DOCUMENT,
+    "/cad/freecad/",
+    "/ferramentas/modelador-parametrico-3d/",
     "/cad/",
     "/cad/aplicativos/",
     "/ferramentas/",
@@ -199,7 +202,7 @@ def csp_directives_from_text(text: str) -> dict[str, list[str]]:
 def _uses_global_policy(root: Path, page: Path) -> bool:
     # The CAD and photogrammetry documents run under their own local-only CSP.
     # Their code must never grant inline-script or style authority to the site.
-    return page.relative_to(root).parts[:2] not in {("bim", "web"), ("bim", "fotogrametria")}
+    return page.relative_to(root).parts[:2] not in {("bim", "web"), ("bim", "fotogrametria"), ("cad", "freecad")}
 
 
 def executable_inline_hashes(root: Path) -> Counter[str]:
@@ -315,9 +318,11 @@ def apply_wallet_document_policies(headers_text: str, root: Path) -> str:
             parent = "/bim/web/*"
         elif route == WALLET_ISOLATED_DOCUMENT:
             parent = "/bim/fotogrametria/*"
+        elif route == "/cad/freecad/":
+            parent = "/cad/freecad/*"
         directives = csp_directives_from_text(lines[policies[parent]])
         directives["connect-src"].extend(FIREBASE_AUTH_CONNECTIONS)
-        if route != WALLET_ISOLATED_DOCUMENT:
+        if route not in WALLET_ISOLATED_DOCUMENTS:
             directives["script-src"].append(FIREBASE_POPUP_SCRIPT)
             directives["frame-src"].extend(FIREBASE_POPUP_FRAMES)
         if route == "/avaliacao-imoveis-urbanos/inferencia/":

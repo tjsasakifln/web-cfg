@@ -51,6 +51,17 @@ assert.deepEqual(
 assert.match(main, /class="section home-evidence" data-section-archetype="content_editorial"/);
 assert.match(main, /class="section home-contexts" data-section-archetype="sector_editorial"/);
 
+const resources = main.match(/<nav aria-label="Guias e pesquisa de engenharia"[\s\S]*?<\/nav>/)?.[0];
+assert.ok(resources, "A home oferece guias e pesquisa no corpo da página");
+for (const [id, href] of [
+  ["home-resource-guides", "/conteudos/"],
+  ["home-resource-radar", "/ferramentas/radar-mercado-publico/"],
+]) {
+  assert.equal((main.match(new RegExp(`data-cta-id="${id}"`, "g")) || []).length, 1, id);
+  assert.ok(resources.includes(`href="${href}"`), href);
+  assert.ok(fs.existsSync(path.join(root, href.slice(1), "index.html")), href);
+}
+
 // Contraprova editorial: o miolo antigo voltado a disciplinas e ao processo de
 // projeto não pode reaparecer depois das sete escolhas.
 assert.doesNotMatch(main, /Competências de projeto|Onde projetamos|Do conceito à documentação/);

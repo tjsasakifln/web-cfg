@@ -56,7 +56,7 @@ function resultView(result,full=false) {
 
 export function mountScienceTool(config) {
   const mount=document.querySelector('[data-science-tool]');if(!mount)return;
-  const form=el('form');form.noValidate=true;const fields=el('div');fields.className='science-fields';const controls=new Map();const sections=[];let revision=0;
+  const form=el('form');form.noValidate=true;const fields=el('div');fields.className='science-fields';const controls=new Map();const sections=[];let revision=0,pendingImport=null;
   const status=el('p');status.className='science-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   const output=el('section');output.hidden=true;output.id='resultado';output.setAttribute('aria-label','Resultados do cálculo');
   const makeControl=(field,value)=>{let input;if(field.options){input=el('select');for(const [v,label] of field.options){const option=el('option',label);option.value=v;input.append(option);}}else{input=el('input');input.type='text';if(field.type!=='text')input.inputMode='decimal';}input.value=value??'';return input;};
@@ -70,7 +70,26 @@ export function mountScienceTool(config) {
       read=()=>Array.from(body.children).map((row,index)=>Object.fromEntries(field.columns.map(col=>{const value=row.querySelector(`[data-key="${col.key}"]`).value;return[col.key,col.type==='text'||col.options?value:numeric(value,`${field.label}, linha ${index+1}, ${col.label}`)];})));
     } else if(field.type==='csv'||field.type==='holes') {
       const input=el('textarea');input.id=id;input.value=field.value||'';input.spellcheck=false;wrap.append(input);
-      if(field.type==='csv'){const upload=el('input');upload.type='file';upload.accept='.csv,.txt,text/csv,text/plain';upload.setAttribute('aria-label','Carregar '+field.label);upload.onchange=async()=>{const file=upload.files?.[0];if(!file)return;if(file.size>470*1024){status.textContent='O arquivo deve ter no máximo 470 KiB.';return;}input.value=await file.text();form.dispatchEvent(new Event('input'));};wrap.append(upload);}
+      if(field.type==='csv'){
+        const upload=el('input');upload.type='file';upload.accept='.csv,.txt,text/csv,text/plain';upload.setAttribute('aria-label','Carregar '+field.label);
+        upload.onchange=async()=>{
+          // Invalidate at selection time, before a slow read can finish or a
+          // previous calculation can publish results for the old textarea.
+          form.dispatchEvent(new Event('input'));pendingImport=null;
+          const file=upload.files?.[0];if(!file)return;
+          if(file.size>470*1024){status.dataset.error='true';status.textContent='O arquivo deve ter no máximo 470 KiB.';return;}
+          const selectedRevision=revision;pendingImport=selectedRevision;status.textContent='Lendo o arquivo…';
+          try {
+            const text=await file.text();
+            if(revision!==selectedRevision)return;
+            pendingImport=null;input.value=text;form.dispatchEvent(new Event('input'));
+            status.textContent='Arquivo carregado. Calcule novamente para atualizar o resultado.';
+          } catch {
+            if(revision!==selectedRevision)return;
+            pendingImport=null;status.dataset.error='true';status.textContent='Não foi possível ler o arquivo. Escolha-o novamente.';
+          }
+        };wrap.append(upload);
+      }
       read=()=>field.type==='holes'?input.value.trim().split(/\n\s*\n/).filter(Boolean).map(block=>parseCsv(block).map(row=>{if(row.length!==2)throw new Error('Cada vértice de furo precisa de x e y.');return row.map(v=>numeric(v,'Vértice do furo'));})):parseCsv(input.value).filter((row,i)=>!(i===0&&/data|time/i.test(row[0]))).map(row=>{if(row.length!==6)throw new Error('Cada leitura meteorológica deve ter 6 colunas.');return[row[0],...row.slice(1).map(v=>numeric(v,'Leitura meteorológica'))];});
     } else {const input=makeControl(field,field.value);input.id=id;wrap.append(input);read=()=>field.options?input.value:numeric(input.value,field.label);controls.set(field.key,input);}
     if(field.help)wrap.append(el('small',field.help));sections.push({field,wrap,read});fields.append(wrap);
@@ -78,8 +97,8 @@ export function mountScienceTool(config) {
   const refresh=()=>{for(const {field,wrap} of sections){const visible=!field.when||field.when.values.includes(controls.get(field.when.key)?.value);wrap.hidden=!visible;wrap.querySelectorAll('input,select,textarea,button').forEach(input=>input.disabled=!visible);}};
   controls.forEach(c=>c.addEventListener('change',refresh));refresh();
   const actions=el('div');actions.className='science-actions';const calculate=el('button','Calcular');calculate.type='submit';calculate.className='button button-primary';actions.append(calculate);form.append(fields,actions,status);mount.replaceChildren(form,output);
-  form.addEventListener('input',()=>{revision++;if(!output.hidden){output.hidden=true;status.textContent='Dados alterados. Calcule novamente para atualizar o resultado.';}});
-  form.onsubmit=async event=>{event.preventDefault();if(calculate.disabled)return;const submittedRevision=revision;output.hidden=true;status.dataset.error='false';calculate.disabled=true;status.textContent='Calculando. Aguarde até 20 segundos…';
+  form.addEventListener('input',()=>{revision++;output.hidden=true;status.dataset.error='false';status.textContent='Dados alterados. Calcule novamente para atualizar o resultado.';});
+  form.onsubmit=async event=>{event.preventDefault();if(calculate.disabled)return;if(pendingImport===revision){status.textContent='Aguarde a leitura do arquivo antes de calcular.';return;}const submittedRevision=revision;output.hidden=true;status.dataset.error='false';calculate.disabled=true;status.textContent='Calculando. Aguarde até 20 segundos…';
     try {let data=Object.fromEntries(sections.filter(s=>!s.wrap.hidden).map(s=>[s.field.key,s.read()]));if(config.transform)data=config.transform(data);const payload=JSON.stringify({operation:config.operation,data});if(new TextEncoder().encode(payload).length>480*1024)throw new Error('Os dados excedem 480 KiB. Reduza a série ou o modelo.');
       const response=await fetch('/api/web/science-tools',{method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:AbortSignal.timeout(26000)});const body=await response.json();if(!response.ok||!body.ok)throw new Error(body.message||'Não foi possível concluir o cálculo agora. Tente novamente em instantes.');
       if(revision!==submittedRevision){status.textContent='Os dados foram alterados durante o cálculo. Calcule novamente.';return;}const result=body.result;output.replaceChildren(resultView(result));const exports=el('div');exports.className='science-actions';

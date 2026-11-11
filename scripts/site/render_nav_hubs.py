@@ -174,6 +174,14 @@ def _situation_block(situation: dict[str, Any], *, start: int) -> str:
                 if row.get("form_anchor")
                 else ""
             )
+            + (
+                ' <a class="list-ruled__action" data-event-name="cta_click" '
+                f'data-cta-id="{e(row["tool"]["cta_id"])}" data-cta-position="related_resources" '
+                f'href="{e(row["tool"]["href"])}">{e(row["tool"]["label"])} '
+                '<svg class="icon"><use href="#i-arrow"></use></svg></a>'
+                if row.get("tool")
+                else ""
+            )
             + "</div></article></li>"
             for i, row in enumerate(situation["rows"])
         )
@@ -471,6 +479,11 @@ def _services_situations() -> list[dict[str, Any]]:
                         "Fato, nexo, impacto e cálculo ligados aos documentos que a Administração "
                         "exige no pedido."
                     ),
+                    "tool": {
+                        "href": "/ferramentas/checklist-reequilibrio/",
+                        "label": "Checklist de reequilíbrio",
+                        "cta_id": "obras-publicas-resource-checklist",
+                    },
                 },
                 {
                     "url": "/defesa-margem-contratos-publicos/",
