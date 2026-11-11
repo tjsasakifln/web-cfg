@@ -208,3 +208,6 @@
 
 /bim/web/modelagem-step.mjs
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'self'; object-src 'none'
+
+/ferramentas/epanet-inp/worker.mjs
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'none'; object-src 'none'; base-uri 'none'

@@ -1172,6 +1172,32 @@
           "ifc-excel"
         ]
       }
+    },
+    {
+      "id": "epanet-inp",
+      "group": "calculo",
+      "title": "Simulador de redes EPANET",
+      "summary": "Importe um INP e compare a rede original com demanda adicional ou fechamento de um trecho. Confira pressão e vazão ao longo do período.",
+      "format": "INP · CSV · JSON",
+      "file_formats": [
+        "INP",
+        "CSV",
+        "JSON"
+      ],
+      "action": "Simular arquivo INP",
+      "href": "/ferramentas/epanet-inp/",
+      "art": "plan",
+      "mark": "PRESSÃO E VAZÃO",
+      "keywords": "epanet hidráulica rede abastecimento hidrante incêndio válvula fechamento watermain",
+      "page": {
+        "title": "Simulador EPANET: vazão adicional e fechamento de redes",
+        "desc": "Abra seu arquivo INP, simule a rede de água e compare pressão e vazão após aumentar a demanda ou fechar um trecho.",
+        "related": [
+          "rede-de-agua",
+          "diagrama-unifilar",
+          "dwg"
+        ]
+      }
     }
   ]
 }
