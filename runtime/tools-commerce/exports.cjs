@@ -1,6 +1,7 @@
 const { check, mac } = require('./policy.cjs');
 
 const LOCAL_FORMATS = Object.freeze({
+  'bim-comparador-geometrico': ['csv', 'json'],
   'radier-solo-elastico': ['csv', 'json', 'svg'],
   'energia-solar-fotovoltaica': ['html', 'csv', 'json'],
   'conforto-termico': ['html', 'csv', 'json'],
