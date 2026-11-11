@@ -21,6 +21,8 @@ from typing import Any, Iterable, Iterator
 from urllib.parse import urlparse
 from xml.sax.saxutils import escape as xml_escape
 
+from scripts.site.public_copy_scope import PRIVATE_SOURCE_PREFIXES
+
 SITE = "https://confenge.com.br"
 SM_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 INDEX_NAME = "sitemap-index.xml"
@@ -1030,6 +1032,11 @@ def local_indexable_paths(root: Path, *, headers_text: str = "") -> set[str]:
         except ValueError:
             continue
         if any(part in PUBLIC_HTML_SKIP_DIRS for part in rel.parts):
+            continue
+        # Source inventory shares the exact private-runtime boundary with the
+        # public copy census. The independent artifact census must still report
+        # any of these templates if a packaging error publishes them.
+        if any(rel.parts[:len(prefix)] == prefix for prefix in PRIVATE_SOURCE_PREFIXES):
             continue
         if page.name == "index.html":
             path = "/" if rel.parent == Path(".") else f"/{rel.parent.as_posix()}/"

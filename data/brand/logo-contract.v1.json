@@ -146,7 +146,8 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "2026-11-09. Censo do HTML fonte após a integração das nove ferramentas de engenharia e do Radar de Mercado Público."
+    "observation_note": "2026-11-09. Censo do HTML fonte após a integração das nove ferramentas de engenharia e do Radar de Mercado Público.",
+    "inventory_note_pt_br": "Censo da árvore pública deste candidato, incluindo somente as ferramentas presentes. Os bytes e a geometria dos ativos de marca permanecem conferidos pelo contrato."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
