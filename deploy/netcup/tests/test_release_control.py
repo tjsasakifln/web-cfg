@@ -1203,6 +1203,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "scripts/storage/lib.cjs",
         "scripts/storage/retention.mjs",
         "scripts/site/shell_nav.py",
+        "scripts/site/navigation_discovery.py",
         "scripts/site/public_ia.py",
         "scripts/site/brand.py",
         "scripts/site/authority.py",
@@ -1278,7 +1279,7 @@ result = publish(
 )
 assert result['ok'] is True and result['skipped'] is False, result
 html = (payload / '_site' / 'oportunidades' / 'index.html').read_text(encoding='utf-8')
-for required in ('BreadcrumbList', 'Oportunidades públicas acompanhadas', 'Identificador público:', 'Origem dos dados:', 'data-cta-position="header_nav"', 'data-cta-position="mobile_nav"', 'Projetos', 'Empresa'):
+for required in ('BreadcrumbList', 'Oportunidades públicas acompanhadas', 'Identificador público:', 'Origem dos dados:', 'data-cta-position="header_nav"', 'data-cta-position="mobile_nav"', 'Projetos', 'A CONFENGE', 'href="/empresa/"'):
     assert required in html, required
 print('PAYLOAD_CANONICAL_SHELL_OK')
 """
@@ -1301,19 +1302,20 @@ print('PAYLOAD_CANONICAL_SHELL_OK')
     assert passed.returncode == 0, passed.stderr
     assert "PAYLOAD_CANONICAL_SHELL_OK" in passed.stdout
 
-    broken_payload = extract("payload-without-shell-nav")
-    (broken_payload / "scripts" / "site" / "shell_nav.py").unlink()
-    environment["PAYLOAD"] = str(broken_payload)
-    broken = subprocess.run(
-        command,
-        cwd=tmp_path,
-        env=environment,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    assert broken.returncode != 0
-    assert "shell_nav" in broken.stderr
+    for missing_module in ("shell_nav", "navigation_discovery"):
+        broken_payload = extract(f"payload-without-{missing_module}")
+        (broken_payload / "scripts" / "site" / f"{missing_module}.py").unlink()
+        environment["PAYLOAD"] = str(broken_payload)
+        broken = subprocess.run(
+            command,
+            cwd=tmp_path,
+            env=environment,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert broken.returncode != 0, missing_module
+        assert missing_module in broken.stderr
 
 
 def test_overlay_import_failure_is_fail_closed_when_official_present(
