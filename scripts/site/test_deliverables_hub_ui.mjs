@@ -707,7 +707,37 @@ if (screenshotDir) {
   await page.mouse.move(1, 1);
   const footer = await page.$("footer.site-footer");
   if (!footer) throw new Error("deliverables_footer_missing_for_review");
-  await footer.screenshot({ path: path.join(screenshotDir, "footer-mobile-390.png") });
+  const original = await page.evaluate(() => {
+    const footer = document.querySelector("footer.site-footer").getBoundingClientRect();
+    const header = document.querySelector("header.site-header").getBoundingClientRect();
+    return { footerWidth: footer.width, footerHeight: footer.height, headerHeight: header.height };
+  });
+  // Only the capture uses a taller viewport. Keep the entire footer below
+  // the sticky header without hiding either element or changing its CSS.
+  const captureHeight = Math.ceil(original.footerHeight + original.headerHeight + 2);
+  await page.setViewport({ width: 390, height: captureHeight, deviceScaleFactor: 1 });
+  await page.evaluate(async () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+  const framing = await page.evaluate(() => {
+    const footer = document.querySelector("footer.site-footer").getBoundingClientRect();
+    const header = document.querySelector("header.site-header").getBoundingClientRect();
+    return {
+      viewportWidth: window.innerWidth, viewportHeight: window.innerHeight,
+      footer: { width: footer.width, height: footer.height, top: footer.top, bottom: footer.bottom, left: footer.left, right: footer.right },
+      headerBottom: header.bottom,
+    };
+  });
+  const captureErrors = [];
+  if (framing.viewportWidth !== 390 || Math.abs(framing.footer.width - original.footerWidth) > 1
+    || Math.abs(framing.footer.height - original.footerHeight) > 1) captureErrors.push("footer_capture_geometry_changed");
+  if (framing.footer.top < framing.headerBottom + 0.5 || framing.footer.top < 0
+    || framing.footer.bottom > framing.viewportHeight || framing.footer.left < 0
+    || framing.footer.right > framing.viewportWidth) captureErrors.push("footer_capture_obscured_or_outside_viewport");
+  findings.push({ route: "/entregas/", check: "footer_review_capture", original, ...framing, errors: captureErrors });
+  if (captureErrors.length) failed += 1;
+  else await footer.screenshot({ path: path.join(screenshotDir, "footer-mobile-390.png") });
 }
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
