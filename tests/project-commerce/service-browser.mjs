@@ -24,7 +24,7 @@ fs.mkdirSync(downloads, { mode: 0o700 });
 fs.mkdirSync(reports, { recursive: true });
 const STORAGE_KEY = 'confenge.project-services.receipts.v1';
 const offer = readOffer();
-const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [];
+const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [], receiptRestorations = [];
 const facts = new Map();
 let time = Date.now(), creates = 0, providerResponseLost = false, clientResponseLost = false, statusTransportUnavailable = false;
 let app, base, browser, currentPage;
@@ -170,9 +170,26 @@ async function audit(page, label, width, height) {
   assert.deepEqual(findings.filter(finding => ['serious', 'critical'].includes(finding.impact)), [], `${label}: serious accessibility regressions`);
 }
 async function importReceipt(page, file) {
+  const expectedId = JSON.parse(fs.readFileSync(file, 'utf8')).id;
+  const restoration = { expectedOrderId: expectedId, visibilityBefore: await page.evaluate(() => document.visibilityState) };
+  receiptRestorations.push(restoration);
+  // Switching back from the other buyer tab is a real UI action. Puppeteer's
+  // default waitForFunction uses animation frames, which pause in hidden tabs.
+  await page.bringToFront();
+  restoration.visibilityAfter = await page.evaluate(() => document.visibilityState);
+  assert.equal(restoration.visibilityAfter, 'visible', 'recovery is exercised in the active buyer tab');
   await page.$eval('#rp-restore-details', node => { node.open = true; });
+  const response = page.waitForResponse(response => {
+    const url = new URL(response.url());
+    return url.pathname === '/api/web/project-orders' && url.searchParams.get('op') === 'service-status' && url.searchParams.get('id') === expectedId;
+  });
   await (await page.$('#rp-restore-file')).uploadFile(file);
+  restoration.apiStatus = (await response).status();
+  assert.equal(restoration.apiStatus, 200, 'the imported order is authorized by the actual handler');
   await waitText(page, '#rp-restore-message', 'Acesso recuperado');
+  restoration.recoveredOrderId = (await activeReceipt(page))?.id;
+  assert.equal(restoration.recoveredOrderId, expectedId, 'the imported order replaces the previous active receipt');
+  assert((await contents(page, '#rp-order-facts')).includes(expectedId), 'the displayed order matches the imported receipt');
 }
 async function authoritativePaid(id) {
   time += 20_000;
@@ -187,7 +204,7 @@ async function authoritativePaid(id) {
 
 const report = { schema: 'confenge.project-services.browser/v1', ok: false,
   source: publicRoot === root ? 'source' : 'public-artifact', environment: 'local-real-handler-fake-provider',
-  realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, uncaughtErrors: errors,
+  realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, receiptRestorations, uncaughtErrors: errors,
   pageSha256: createHash('sha256').update(fs.readFileSync(path.join(publicRoot, 'projetos-prontos/index.html'))).digest('hex') };
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));

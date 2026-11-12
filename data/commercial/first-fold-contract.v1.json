@@ -72,8 +72,12 @@
     {
       "route": "/projetos-prontos/",
       "surface_class": "money_hub",
-      "evidence_state": "PENDING",
-      "measurement": null
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-11-12",
+        "viewport": "1366x768",
+        "finding": "H1 de y=205 a y=394; substância técnica de y=528 a y=607; ação primária inteira de y=634 a y=692 em 1366x768, e de y=517 a y=570 em 390x844, dentro da dobra nos dois"
+      }
     },
     {
       "route": "/entregas/",
@@ -379,6 +383,13 @@
           }
         },
         {
+          "route": "/projetos-prontos/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
           "route": "/entregas/",
           "primary_actions_in_fold": {
             "1366x768": 1,
@@ -572,6 +583,22 @@
             "compatibilizacao",
             "confenge",
             "contratacao"
+          ]
+        },
+        {
+          "route": "/projetos-prontos/",
+          "ok": true,
+          "eyebrow_adds": [
+            "casas",
+            "contratacao",
+            "disciplina",
+            "projetos"
+          ],
+          "lead_adds": [
+            "confenge",
+            "encontrou",
+            "ideia",
+            "imaginou"
           ]
         },
         {
@@ -967,6 +994,19 @@
             "projetosorcamentoinspecao",
             "publicas",
             "sstobras"
+          ]
+        },
+        {
+          "route": "/projetos-prontos/",
+          "content_words": [
+            "dias",
+            "disciplinas",
+            "escolha",
+            "investimento",
+            "maior",
+            "menor",
+            "mercado",
+            "pagar"
           ]
         },
         {
