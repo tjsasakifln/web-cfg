@@ -87,3 +87,63 @@ test('real storage failure and invalid submission do not claim a persisted conta
   assert.equal(JSON.parse(failure.body).ok,false);
   assert.ok(!JSON.parse(failure.body).lead_id);
 });
+
+test('authenticated residential persist-only never reaches configured external delivery channels', async t => {
+  const inbound = require('../../netlify/functions/lib/inbound-handoff.cjs');
+  const settings = {
+    LEAD_PROBE_SECRET: 'p'.repeat(32),
+    CONFENGE_INBOUND_WEBHOOK_URL: 'https://api.confenge.com.br/api/v1/webhooks/confenge/inbound',
+    CONFENGE_INBOUND_WEBHOOK_SECRET: 'i'.repeat(40),
+    TURNSTILE_SECRET_KEY: 'controlled-turnstile-secret', LEAD_REQUIRE_TURNSTILE: '1',
+    RESEND_API_KEY: 'controlled-resend-key',
+    OPS_WEBHOOK_URL: 'https://ops.example.test/notify', OPS_WEBHOOK_ALLOWED_HOSTS: 'ops.example.test',
+    OPS_WEBHOOK_SECRET: 'n'.repeat(40), NTFY_URL: 'https://ntfy.example.test/controlled', NTFY_TOKEN: 'controlled-ntfy-token',
+  };
+  const old = Object.fromEntries(Object.keys(settings).map(key => [key, process.env[key]]));
+  Object.assign(process.env, settings);
+  const originalFetch = global.fetch;
+  let requests = 0;
+  const rejectNetwork = async () => { requests++; throw new Error('Unexpected external delivery in persist-only fixture'); };
+  global.fetch = rejectNetwork;
+  inbound.setFetchForTests(rejectNetwork);
+  t.after(() => {
+    global.fetch = originalFetch;
+    inbound.setFetchForTests(null);
+    for (const [key, value] of Object.entries(old)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  });
+  assert.equal(inbound.resolveInboundConfig(process.env).ok, true);
+  const request = event(payload({ idempotency_key: 'synthetic-probe-residential-persist-only' }));
+  Object.assign(request.headers, { 'x-confenge-probe': settings.LEAD_PROBE_SECRET, 'x-confenge-probe-persist-only': '1' });
+  const first = await endpoint.handler(request);
+  assert.equal(first.statusCode, 201, first.body);
+  const receipt = JSON.parse(first.body);
+  const retry = await endpoint.handler(request);
+  assert.equal(retry.statusCode, 200, retry.body);
+  assert.equal(JSON.parse(retry.body).lead_id, receipt.lead_id);
+  assert.equal(JSON.parse(retry.body).idempotent, true);
+  const stored = await store.get(receipt.lead_id);
+  assert.equal(stored.record_kind, 'synthetic');
+  assert.equal(stored.synthetic_probe_authenticated, true);
+  assert.equal(stored.persist_only_probe, true);
+  assert.equal(stored.next_action, 'exclude_from_commercial');
+  assert.equal(stored.project_interest.city, 'Florianópolis');
+  assert.equal(stored.handoff.status, 'SKIPPED');
+  assert.equal(stored.handoff.reason, 'persist_only_probe');
+  assert.equal(stored.handoff.attempts, 0);
+  assert.equal(stored.handoff.next_attempt_at, null);
+  assert.equal(stored.handoff.downstream, undefined);
+  assert.equal(stored.delivery.notify.status, 'skipped');
+  assert.equal(stored.delivery.email.status, 'skipped');
+  assert.equal(stored.delivery.qa_email, undefined);
+  assert.equal(requests, 0);
+
+  const qaRequest = event(payload({ idempotency_key: 'synthetic-probe-residential-no-qa-email' }));
+  Object.assign(qaRequest.headers, request.headers, { 'x-confenge-qa-email': '1' });
+  const denied = await endpoint.handler(qaRequest);
+  assert.equal(denied.statusCode, 400, denied.body);
+  assert.equal(JSON.parse(denied.body).error, 'qa_email_denied');
+  assert.equal((await store.list()).length, 1);
+  assert.equal(requests, 0);
+});

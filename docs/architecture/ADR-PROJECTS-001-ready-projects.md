@@ -57,7 +57,15 @@ Captação sozinha mede procura e orçamento solicitado, sem comprovar preço ac
 
 Release por PR revisada, `site-ci`, pacote exato, stage e promoção Netcup.
 Prova controlada verifica o formulário servido, persistência, leitura restrita
-e encaminhamento, sem e-mail e sem misturar ensaios com demanda real.
+e repetição idempotente, sem misturar ensaios com demanda real. O cenário
+residencial usa o modo autenticado `persist-only` já existente: o registro nasce
+com encaminhamento proibido, sem tentativa ou envio agendado. A prova exige
+reler essa decisão e os estados de notificação no armazenamento protegido.
+Seu resultado é `CAPTURE_PERSISTENCE_READY`, sem afirmar recebimento no Warmbly.
+Os cenários que verificam transporte continuam exigindo o gate Warmbly completo
+antes do primeiro POST. A indisponibilidade dessa integração não transforma
+captação em transporte aprovado; veja a
+[evidência de 12/11/2026](../projects-ready/PROVA-DE-CAPTACAO-2026-11-12.md).
 Reversão conserva `/var/lib/confenge-web` e Firestore. Desligar novas compras
 não elimina a conciliação e o atendimento de pedidos existentes.
 

@@ -10,6 +10,8 @@ process.env.OPS_TOKEN = 'o'.repeat(32);
 delete process.env.CONFENGE_STORAGE_DIR;
 delete process.env.CONFENGE_STORAGE_BACKEND;
 delete process.env.RUNTIME_PROFILE;
+delete process.env.CONFENGE_INBOUND_WEBHOOK_URL;
+delete process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
 const { FileStore } = require('../../netlify/functions/lib/lead-store.cjs');
 const { handler } = require('../../netlify/functions/ops.cjs');
 const { summarizeReadyProjectLeads } = require('../../netlify/functions/lib/ready-project-ops.cjs');
@@ -70,4 +72,35 @@ test('private export keeps qualification, provenance and manual gaps', async () 
     { kind: 'real', family: 'ready_projects' });
   assert.equal(pkg.records.length, 1);
   assert.equal(pkg.filters.family, 'ready_projects');
+});
+
+test('inbound receipt proves persist-only only for the authenticated synthetic durable marker', async () => {
+  const store = new FileStore(dir);
+  const base = { record_kind: 'synthetic', synthetic_probe_authenticated: true, persist_only_probe: true,
+    next_action: 'exclude_from_commercial', received_at: new Date().toISOString(),
+    email: 'private-receipt@example.com',
+    handoff: { status: 'SKIPPED', reason: 'persist_only_probe', attempts: 0, next_attempt_at: null },
+    delivery: { notify: { status: 'skipped' }, email: { status: 'skipped' } } };
+  const cases = [
+    ['valid', {}, true, 'persist_only_probe'],
+    ['missing', { persist_only_probe: undefined }, false, null],
+    ['false', { persist_only_probe: false }, false, null],
+    ['string', { persist_only_probe: 'true' }, false, null],
+    ['unauthenticated', { synthetic_probe_authenticated: false }, false, null],
+    ['real', { record_kind: 'real' }, false, null],
+    ['reason', { handoff: { ...base.handoff, reason: 'private-reason@example.com' } }, true, null],
+  ];
+  for (const [name, change, expectedMarker, expectedReason] of cases) {
+    const row = { ...base, ...change, lead_id: `persist_only_ops_${name}` };
+    await store.put(row, { onlyIfNew: true });
+    const denied = await call('inbound_handoff', { lead_id: row.lead_id }, '');
+    assert.equal(denied.statusCode, 401);
+    assert.doesNotMatch(denied.body, /private-receipt|persist_only_ops/);
+    const response = await call('inbound_handoff', { lead_id: row.lead_id });
+    assert.equal(response.statusCode, 200);
+    const receipt = JSON.parse(response.body).receipt;
+    assert.equal(receipt.persist_only_probe, expectedMarker, name);
+    assert.equal(receipt.handoff.reason, expectedReason, name);
+    assert.doesNotMatch(response.body, /private-receipt|private-reason/);
+  }
 });

@@ -1,9 +1,11 @@
 /**
  * Authenticated, non-human inbound proof against a base URL.
  *
- * The probe fails before POST unless both server credentials and the Warmbly
- * no-dispatch safety gate are ready. It creates one durable row, retries the
- * same idempotency key, then emits only aggregate booleans and a receipt hash.
+ * Transport probes fail before POST unless both server credentials and the
+ * Warmbly no-dispatch safety gate are ready. The residential persistence proof
+ * explicitly prohibits transport through the existing authenticated persist-only
+ * server mode. Both create one durable row, retry the same idempotency key, then
+ * emit only aggregate booleans and a receipt hash.
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
 import { createHash, createHmac, randomUUID } from "node:crypto";
@@ -343,7 +345,9 @@ const safeToProbe = Boolean(
   safety?.auto_send_off === true &&
   safety?.dispatch_attempted === false
 );
-if (!safeToProbe) finishEarly("warmbly_safety_gate_not_ready");
+// Only this scenario withholds all external delivery through the existing
+// server-enforced persist-only mode. Transport scenarios retain every gate.
+if (!readyProjectScenario && !safeToProbe) finishEarly("warmbly_safety_gate_not_ready");
 if (
   beforeFunnel.http !== 200 || beforeFunnel.data?.ok !== true || beforeFunnel.data?.commercial_only !== true ||
   beforeSystem.http !== 200 || beforeSystem.data?.ok !== true ||
@@ -517,6 +521,7 @@ const headers = {
   "X-Forwarded-For": "198.51.100.27",
   "X-Confenge-Probe": probeSecret,
   "Idempotency-Key": idem,
+  ...(readyProjectScenario ? { "X-Confenge-Probe-Persist-Only": "1" } : {}),
   ...(verifyQaEmail
     ? {
         "X-Confenge-QA-Email": "1",
@@ -582,10 +587,12 @@ const checks = {
   authenticated_synthetic_record: receipt?.authenticated_probe === true && receipt?.record_kind === "synthetic",
   excluded_from_commercial: receipt?.next_action === "exclude_from_commercial",
   canonical_source: receipt?.source === "CONFENGE_WEB",
-  warmbly_delivered: receipt?.handoff?.status === "DELIVERED",
-  exactly_one_handoff_attempt: receipt?.handoff?.attempts === 1,
-  downstream_receipt_matches: receipt?.handoff?.downstream?.downstream_receipt === leadId,
-  downstream_created_not_duplicate: receipt?.handoff?.downstream?.http === 201 && receipt?.handoff?.downstream?.duplicate === false,
+  ...(!readyProjectScenario ? {
+    warmbly_delivered: receipt?.handoff?.status === "DELIVERED",
+    exactly_one_handoff_attempt: receipt?.handoff?.attempts === 1,
+    downstream_receipt_matches: receipt?.handoff?.downstream?.downstream_receipt === leadId,
+    downstream_created_not_duplicate: receipt?.handoff?.downstream?.http === 201 && receipt?.handoff?.downstream?.duplicate === false,
+  } : {}),
   downstream_action_absent: !receipt?.handoff?.downstream?.action_id,
   persisted_exactly_once: afterCounters.ok && afterSynthetic - beforeSynthetic === 1,
   excluded_non_real_exactly_once: afterCounters.ok && afterExcluded - beforeExcluded === 1,
@@ -605,12 +612,20 @@ const checks = {
     (key) => !servedForm[key] || receipt?.[key] === servedForm[key],
   ),
   ...(readyProjectScenario ? {
+    project_persisted_receipt_matches: receipt?.lead_id === leadId && receipt?.receipt_id === leadId,
+    project_persist_only_record: receipt?.persist_only_probe === true,
+    project_handoff_skipped: receipt?.handoff?.status === "SKIPPED" && receipt?.handoff?.reason === "persist_only_probe",
+    project_handoff_never_attempted: receipt?.handoff?.attempts === 0,
+    project_handoff_not_scheduled: receipt?.handoff?.next_attempt_at === null,
+    project_no_downstream_receipt: receipt?.handoff?.downstream === null && receipt?.handoff?.delivered_at === null,
+    project_delivery_persisted_skipped: receipt?.delivery?.notify_status === "skipped" && receipt?.delivery?.email_status === "skipped",
     project_private_readback_matches: projectReadback?.http === 200 &&
+      projectReadback.data?.ok === true && projectReadback.data?.lead?.lead_id === leadId &&
       projectReadback.data?.lead?.record_kind === "synthetic" &&
       projectReadback.data?.lead?.intent === "ready_project_interest" &&
       Object.entries(READY_PROJECT_INTEREST).every(([key, value]) =>
         projectReadback.data?.lead?.project_interest?.[key] === value),
-    project_email_never_requested: !verifyQaEmail && !receipt?.delivery?.qa_email_provider_id,
+    project_email_never_requested: !verifyQaEmail && receipt?.delivery?.qa_email_status === null && receipt?.delivery?.qa_email_provider_id === null,
   } : {}),
   ...(browserJourney && priorityAditivoScenario
     ? {
@@ -647,7 +662,10 @@ const ok = Object.values(checks).every(Boolean);
 
 console.log(JSON.stringify({
   ok,
-  state: ok ? "TRANSPORT_READY" : "TRANSPORT_PROOF_FAILED",
+  state: readyProjectScenario
+    ? (ok ? "CAPTURE_PERSISTENCE_READY" : "CAPTURE_PERSISTENCE_FAILED")
+    : (ok ? "TRANSPORT_READY" : "TRANSPORT_PROOF_FAILED"),
+  proof_scope: readyProjectScenario ? "capture_persistence_only" : "capture_and_transport",
   base,
   live_sha: liveSha,
   scenario: probeScenario || (verifyQaEmail ? "legacy-sst" : "standard"),
@@ -671,8 +689,10 @@ console.log(JSON.stringify({
   warmbly: {
     destination_fingerprint: beforeInbound.data?.configuration?.destination_fingerprint || null,
     contract: safety?.contract || null,
-    auto_send: safety ? !safety.auto_send_off : null,
-    dispatch_attempted: safety?.dispatch_attempted ?? null,
+    status: safety?.status || null,
+    transport_tested: !readyProjectScenario,
+    auto_send: safeToProbe ? false : null,
+    dispatch_attempted: safeToProbe ? false : null,
   },
   deltas: {
     persisted_synthetic: Number.isFinite(afterSynthetic - beforeSynthetic) ? afterSynthetic - beforeSynthetic : null,
