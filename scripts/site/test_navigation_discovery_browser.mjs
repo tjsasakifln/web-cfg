@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
 import { resolveChromePath } from './resolve_chrome.mjs';
 
@@ -29,14 +30,65 @@ const report = { schema: 'confenge.navigation-discovery-ui/1.0', base_url: base,
 let browser;
 let context = { kind: 'launch' };
 
+async function pollFromNode(read, label, timeout = 6000) {
+  const deadline = Date.now() + timeout;
+  do {
+    const result = await read();
+    if (result) return result;
+    await delay(50);
+  } while (Date.now() < deadline);
+  throw new Error(`Timed out waiting for ${label}: ${JSON.stringify(context)}`);
+}
+
+async function waitForDOM(page, predicate, options = {}, ...args) {
+  if (page.isJavaScriptEnabled()) return page.waitForFunction(predicate, options, ...args);
+  // Page timers and Puppeteer's default rAF poller cannot run with scripting
+  // disabled. DevTools can still read native DOM state synchronously.
+  return pollFromNode(() => page.evaluate(predicate, ...args), options.label || 'native DOM state', options.timeout || 30000);
+}
+
+async function waitForVisible(page, selector) {
+  if (page.isJavaScriptEnabled()) return page.waitForSelector(selector, { visible: true });
+  return pollFromNode(() => page.evaluate(value => {
+    const element = document.querySelector(value);
+    if (!element) return false;
+    const rect = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+  }, selector), `visible native control ${selector}`);
+}
+
 async function settle(page) {
-  await page.evaluate(() => document.fonts.ready);
-  await page.evaluate(() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))));
+  if (page.isJavaScriptEnabled()) {
+    await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))));
+    return;
+  }
+  await pollFromNode(() => page.evaluate(() => document.readyState === 'complete' && document.fonts.status === 'loaded'), 'native document and fonts');
+  let previous = '';
+  let stableSamples = 0;
+  await pollFromNode(async () => {
+    const boxes = await page.evaluate(() => [
+      document.documentElement,
+      document.querySelector('.site-header, .pp-header'),
+      ...document.querySelectorAll('[data-nav-group][open] > .nav-panel'),
+    ].filter(Boolean).map(element => {
+      const rect = element.getBoundingClientRect();
+      return [rect.x, rect.y, rect.width, rect.height, element.scrollWidth, element.scrollHeight];
+    }));
+    const current = JSON.stringify(boxes);
+    stableSamples = current === previous ? stableSamples + 1 : 0;
+    previous = current;
+    return stableSamples >= 2;
+  }, 'stable native layout');
 }
 
 async function visit(page, route, width, height) {
   await page.setViewport({ width, height });
-  const response = await page.goto(base + route, { waitUntil: 'load', timeout: 30000 });
+  let response = await page.goto(base + route, { waitUntil: 'load', timeout: 30000 });
+  // Removing a fragment can be same-document navigation. Reload so each
+  // keyboard journey starts from a fresh document with its initial focus.
+  if (!response) response = await page.reload({ waitUntil: 'load', timeout: 30000 });
   assert.equal(response?.status(), 200, `${route}@${width}x${height}`);
   await settle(page);
 }
@@ -114,14 +166,19 @@ try {
           await page.keyboard.press('Enter');
           if (javascript) await page.waitForSelector(`${nav}[role="dialog"]`, { visible: true });
         }
-        await page.waitForSelector(`${nav} > .nav-group > summary`, { visible: true });
+        await waitForVisible(page, `${nav} > .nav-group > summary`);
         assert.deepEqual(await page.$$eval(`${nav} > .nav-group`, nodes => nodes.map(node => node.dataset.navGroup)), groups, `${label} six groups`);
+        if (!javascript) {
+          assert.equal(page.isJavaScriptEnabled(), false, 'native journeys keep scripting disabled');
+          assert.equal(await page.evaluate(() => document.documentElement.classList.contains('no-js')), true, 'the page bootstrap did not execute');
+          assert.equal(await page.$$eval(`${nav} > .nav-group > summary`, nodes => nodes.every(node => !node.hasAttribute('aria-expanded'))), true, 'native controls were not enhanced by application scripts');
+        }
         for (const id of groups) {
           const group = `${nav} [data-nav-group="${id}"]`;
           const summary = `${group} > summary`;
           await page.focus(summary);
           await page.keyboard.press('Enter');
-          await page.waitForFunction(selector => document.querySelector(selector)?.open, {}, group);
+          await waitForDOM(page, selector => document.querySelector(selector)?.open, {}, group);
           await settle(page);
           const geometry = await page.$eval(group, element => {
             const summary = element.querySelector(':scope > summary');
@@ -231,13 +288,21 @@ try {
       const targets = [];
       for (const id of ['contato', 'conteudo']) {
         await visit(page, '/', width, 900);
-        if (id === 'contato') await page.click('.hero-actions a[href="#contato"]');
+        if (id === 'contato') {
+          if (javascript) await page.click('.hero-actions a[href="#contato"]');
+          else {
+            // Puppeteer's click visibility check uses IntersectionObserver;
+            // focus plus Enter exercises the browser's native link action.
+            await page.focus('.hero-actions a[href="#contato"]');
+            await page.keyboard.press('Enter');
+          }
+        }
         else {
           await page.keyboard.press('Tab');
           assert.equal(await page.$eval('.skip-link', element => document.activeElement === element), true, 'skip link is the first keyboard destination');
           await page.keyboard.press('Enter');
         }
-        await page.waitForFunction(targetId => {
+        await waitForDOM(page, targetId => {
           const target = document.getElementById(targetId);
           const header = document.querySelector('.site-header');
           const sticky = ['sticky', 'fixed'].includes(getComputedStyle(header).position);

@@ -1,6 +1,6 @@
 /* Shared discovery navigation. Native details retain access without JavaScript. */
 html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-height,120px) + 16px)}
-.site-header,.pp-header{--nav-row-height:76px}
+.site-header,.pp-header{--nav-row-height:72px}
 .site-header .header-inner,.pp-header .pp-header__inner{position:static;min-height:var(--nav-row-height);gap:16px}
 .site-header .brand,.site-header .brand img,.pp-header .pp-brand img{width:176px}
 .site-header .desktop-nav,.pp-header .pp-nav{position:static;align-items:center;gap:2px}
@@ -83,7 +83,7 @@ html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-
   html.no-js:has(.site-header .nav-discovery){scroll-padding-top:16px}
   .site-header,.pp-header{--nav-row-height:64px}
   .site-header .brand,.site-header .brand img,.pp-header .pp-brand img{width:160px}
-  .nav-discovery__inner{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:0 18px;padding-block:2px}
+  .nav-discovery__inner{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:0 18px;padding-block:0}
   .nav-discovery__shortcuts{display:contents}
   .nav-discovery__label{display:none}
   .nav-discovery a{font-size:.8125rem;min-height:44px}
