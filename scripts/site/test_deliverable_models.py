@@ -12,6 +12,8 @@ import re
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from scripts.site.test_report_model_599 import assert_only_navigation_disclosures
+
 
 ROOT = Path(__file__).resolve().parents[2]
 ACTION_MATRIX = ROOT / "docs/contracts/intent-action/intent-action-matrix.v1.json"
@@ -139,8 +141,9 @@ def test_every_model_is_direct_public_html_without_friction() -> None:
         # The document stays readable without a gate. The only form allowed is
         # the persisted capture of the price (#289), and it lives after the
         # report, never in front of it.
-        for forbidden in ("<dialog", "<details", ".pdf", "download"):
+        for forbidden in ("<dialog", ".pdf", "download"):
             assert forbidden not in lowered, (slug, forbidden)
+        assert_only_navigation_disclosures(html)
         assert lowered.count("<form") == 1, slug
         assert lowered.index("<form") > lowered.index("<article"), slug
         # The em dash gate covers /casos/; keep the family clean at source.
