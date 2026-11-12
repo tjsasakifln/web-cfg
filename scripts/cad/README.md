@@ -40,9 +40,12 @@ Depois de construir o site com Node 22:
 npm run test:cad
 node --test tests/tools-commerce/core.test.cjs
 CHROME_PATH=/usr/bin/chromium node tests/cad/editor-browser.mjs _site
+CHROME_PATH=/usr/bin/chromium node tests/cad/engine-bridge-browser.cjs _site
 ```
 
 O primeiro comando confere o protocolo entre frame e host, os hashes do pacote e a preservação da suíte de aplicativos. O teste de navegador usa os módulos reais sob as políticas do artefato publicado: abre um DWG, edita geometria, testa a navegação, grava uma cópia e a reabre. A configuração da carteira nesse teste é uma fixture explícita sem cobrança. Capturas e resultados ficam em `build/reports/cad`.
+
+O teste adicional da ponte usa o mesmo motor e o mesmo script de inicialização, com um pai controlado. Ele mantém a confirmação pendente, cancela, rejeita e aceita exportações para conferir alterações pendentes, fechamento, lotes e reabertura de DWG/DXF. Essa fixture não substitui os testes da carteira. A confirmação indica que o navegador iniciou o download; a conclusão da gravação em disco continua sob controle do navegador e do usuário.
 
 Uma mudança de motor, leitor, gravador, ponte ou política do navegador exige repetir a verificação com o WASM que será entregue. Testes de protocolo isolados não substituem a prova de abrir, editar, salvar e reabrir no editor real.
 

@@ -377,6 +377,11 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           CAD_EVIDENCE: build/reports/cad
         run: node tests/cad/editor-browser.mjs _site
+      - name: OpenCAD export acknowledgement and cancellation in the real engine
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CAD_BRIDGE_REPORT_DIR: build/reports/cad/bridge
+        run: node tests/cad/engine-bridge-browser.cjs _site
       - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright
@@ -475,6 +480,7 @@ jobs:
             build/reports/wallet-input-*.json
             build/reports/wallet-input-*.png
             build/reports/tool-credits-pix-click-failure.png
+            build/reports/cad/
           if-no-files-found: ignore
 
   execution_evidence:

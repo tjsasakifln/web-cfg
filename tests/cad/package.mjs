@@ -16,12 +16,18 @@ const receipt=JSON.parse(await readFile(path.join(editor,'runtime.json'),'utf8')
 assert.equal(receipt.engine,'OpenCAD Studio');
 assert.equal(receipt.version,manifest.version);
 assert.equal(receipt.upstream.commit,manifest.upstream.commit);
+assert.equal(await digest('scripts/cad/opencad/build/confenge.patch'),manifest.build.patch_sha256,
+  'The source patch changed without rebuilding the pinned runtime');
 assert.equal(await digest(path.join(editor,'licencas/corresponding-source.tar.gz')),manifest.source.sha256);
 for(const [name,sha] of Object.entries(manifest.runtime.files)) {
   const file=path.join(editor,name);
   assert((await stat(file)).size>0,name);
-  // Worker references are content-versioned by the site installer.
-  if(name!=='ocs-parse-worker.js') assert.equal(await digest(file),sha,name);
+  // Reverse only the two authorized URL versions, then verify the original bytes.
+  if(name==='ocs-parse-worker.js') {
+    const original=(await readFile(file,'utf8')).replace(
+      /(\.\/worker_pkg\/ocs_web_worker(?:_bg\.wasm|\.js))\?v=[a-f0-9]{16}/g,'$1?v=5');
+    assert.equal(createHash('sha256').update(original).digest('hex'),sha,name);
+  } else assert.equal(await digest(file),sha,name);
   if(name.endsWith('.wasm')) assert.deepEqual((await readFile(file)).subarray(0,8),Buffer.from([0,97,115,109,1,0,0,0]));
 }
 const start=await readFile(path.join(editor,'start.js'),'utf8');

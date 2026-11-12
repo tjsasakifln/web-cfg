@@ -50,6 +50,10 @@ try {
   const input = await page.waitForSelector('[data-file]');
   const invalid = path.join(downloads,'invalido.dwg');
   await writeFile(invalid,'not a DWG');
+  const corrupt = path.join(downloads,'corrompido.dwg');
+  const damaged = Buffer.alloc(128);
+  damaged.write('AC1032');
+  await writeFile(corrupt,damaged);
   await input.uploadFile(invalid);
   await page.waitForSelector('.cad-status[data-error="true"]');
   assert.equal(await page.$('#cad-editor iframe'),null);
@@ -77,15 +81,16 @@ try {
   await act({op:'run',cmd:'LINE 6500,1000 7200,1900'});
   assert.equal((await raw({op:'entities'})).total,count+1);
   const currentId=(await state()).document_id;
-  await input.uploadFile(invalid);
+  await input.uploadFile(corrupt);
   await page.waitForSelector('.cad-status[data-error="true"]');
   assert.equal((await state()).document_id,currentId);
   assert.equal((await raw({op:'entities'})).total,count+1);
   assert.equal(active(await state()).dirty,true);
-  pass('failed second upload preserves edited drawing');
+  pass('native parser rejection of a corrupted second DWG preserves edited drawing');
 
   const canvas=await frame.waitForSelector('canvas');
-  await page.click('[data-fit]');
+  // Await the actual fit operation so its camera change cannot masquerade as pan.
+  await act({op:'action',name:'zoom_extents'});
   const bounds=await canvas.boundingBox();
   const x=bounds.x+bounds.width*.52,y=bounds.y+bounds.height*.56;
   const scroll=await page.evaluate(()=>window.scrollY);
@@ -116,7 +121,7 @@ try {
   });
   await act({op:'run',cmd:'QSAVE'});
   await completed;
-  const names=(await readdir(downloads)).filter(name=>name.endsWith('.dwg')&&name!=='invalido.dwg');
+  const names=(await readdir(downloads)).filter(name=>name.endsWith('.dwg')&&!['invalido.dwg','corrompido.dwg'].includes(name));
   assert.equal(names.length,1);
   const saved=await readFile(path.join(downloads,names[0]));
   assert.match(saved.subarray(0,6).toString(),/^AC10\d{2}$/);
@@ -127,7 +132,8 @@ try {
   assert.notEqual(after.document_id,currentId);
   assert.equal((await raw({op:'entities'})).total,count+1);
   const lines=await raw({op:'query',type:'Line',detail:'geometry'});
-  assert(lines.entities.some(line=>JSON.stringify(line).includes('6500')&&JSON.stringify(line).includes('7200')),'Edited line absent after DWG reopen');
+  assert(lines.entities.some(line=>JSON.stringify(line.start)===JSON.stringify([6500,1000,0]) &&
+    JSON.stringify(line.end)===JSON.stringify([7200,1900,0])),'Edited line endpoints changed after DWG reopen');
   pass('actual wallet delivery, saved DWG download and reopen keep the added line');
 
   await page.setViewport({width:390,height:844});

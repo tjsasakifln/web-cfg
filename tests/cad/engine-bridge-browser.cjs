@@ -38,7 +38,7 @@ async function openFixture(browser, format) {
     if(new URL(req.url()).pathname==='/cad/__bridge_smoke') req.respond({status:200,contentType:'text/html',body:fixture});
     else req.continue();
   });
-  const cdp=await page.createCDPSession();
+  const cdp=await browser.target().createCDPSession();
   await cdp.send('Browser.setDownloadBehavior',{behavior:'deny',eventsEnabled:true,browserContextId:context.id});
   cdp.on('Browser.downloadWillBegin',e=>downloads.push(e.url));
   await page.goto(origin+'/cad/__bridge_smoke',{waitUntil:'domcontentloaded',timeout:30000});
@@ -84,7 +84,7 @@ async function openFixture(browser, format) {
       {type:'Line',start:[0,0],end:[10,0],layer:'CONFENGE-WALLS'},
       {type:'Circle',center:[5,5],radius:2,layer:'CONFENGE-CIRCLES'},
       {type:'LwPolyline',vertices:[[0,0],[10,0],[10,10]],closed:true},
-      {type:'Text',value:'CONFENGE-TEST-01',position:[1,1],height:2.5},
+      {type:'Text',value:'CONFENGE: Revisão São José, cota 2,50 m',position:[1,1],height:2.5},
       {type:'Arc',center:[0,0],radius:5,start_angle_deg:0,end_angle_deg:90}
     ]});
     const lines=await raw({op:'query',type:'Line',detail:'geometry'});
@@ -94,6 +94,14 @@ async function openFixture(browser, format) {
   }
   async function semantics(){
     const entities=await raw({op:'query',detail:'geometry',limit:1000});assert(entities.ok,JSON.stringify(entities));
+    assert.equal(entities.entities.length,5,'Roundtrip entity count changed');
+    assert.deepEqual(entities.entities.map(e=>e.type).sort(),['Arc','Circle','Line','Polyline','Text']);
+    const polyline=entities.entities.find(e=>e.type==='Polyline');
+    const measure=await raw({op:'measure',handles:[polyline.handle]});
+    assert.equal(measure.ok,true,JSON.stringify(measure));
+    assert.equal(measure.measurements.length,1);
+    assert.equal(measure.measurements[0].curve.closed,true,'Polyline lost its closing segment');
+    assert.equal(measure.measurements[0].curve.area,50,'Closed triangle area changed');
     return entities.entities.map(({handle,owner,display_type,...e})=>e).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
   }
   return {context,page,frame,raw,state,begin,settle,act,waitExport,ack,count,bytes,active,makeDrawing,semantics,errors,downloads};
@@ -170,8 +178,10 @@ async function openFixture(browser, format) {
     const second=await h.waitExport(6);await h.ack(6,false);await h.settle(op);
     s=await h.state();
     const d1=s.documents.find(d=>d.id===id1),d2=s.documents.find(d=>d.id===id2);
+    assert.deepEqual([first.name,second.name].sort(),['batch-one.dwg','batch-two.dwg']);
+    assert(d1&&d2,'SAVEALL removed a drawing');
     assert.equal(d1.dirty,first.name!=='batch-one.dwg');assert.equal(d2.dirty,first.name!=='batch-two.dwg');
-    assert.notEqual(first.name,second.name);
+    assert.equal([d1,d2].filter(d=>!d.dirty).length,1);
     pass('SAVEALL cleans only the acknowledged document',{accepted:first.name,cancelled:second.name});
 
     // The wizard emits its settings and output as one sequenced operation.
