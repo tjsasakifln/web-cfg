@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { existsSync, mkdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, join, resolve, sep } from 'node:path';
 import { createRequire } from 'node:module';
 import puppeteer from 'puppeteer-core';
@@ -9,6 +9,16 @@ import puppeteer from 'puppeteer-core';
 // into the product. The real engineering domain validates form submissions.
 const root = process.cwd();
 const require = createRequire(import.meta.url);
+const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
+const axeViewports = JSON.parse(readFileSync(join(root, 'data/quality/interface-coverage-policy.json'), 'utf8')).axe.viewports;
+const axeStates = ['unavailable', 'registration', 'request', 'profile', 'quote', 'review'];
+const expectedAxeAudits = axeStates.flatMap(stateName => axeViewports.map(viewport => `${stateName}/${viewport.id}`)).sort();
+const axeAudits = [];
+// Keep the same rules and blocking impacts as scripts/site/audit_axe.mjs.
+const axeOptions = {
+  runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] },
+  rules: { 'label-content-name-mismatch': { enabled: true } },
+};
 const domain = require('../../apps/engineering-marketplace/config/domain.cjs');
 const canonicalIntents = require('../../apps/engineering-marketplace/config/intents.json').intents.map(item => item.intent_family);
 const chrome = process.env.CHROME_PATH;
@@ -145,6 +155,63 @@ async function capture(filename) {
   await page.waitForFunction(() => scrollX === 0 && scrollY === 0);
   await page.screenshot({ path: join(report, filename), fullPage: true });
 }
+async function auditAccessibility(stateName, visibleSelector) {
+  assert.ok(axeStates.includes(stateName), 'Accessibility state belongs to the required journey');
+  const originalViewport = page.viewport();
+  try {
+    for (const viewport of axeViewports) {
+      // Changing isMobile/hasTouch makes Puppeteer reload the document. Preserve
+      // its emulation and audit the actual authenticated state at policy widths,
+      // heights and DPR instead of replacing it with a freshly logged-out page.
+      await page.setViewport({ ...originalViewport, width: viewport.width, height: viewport.height,
+        deviceScaleFactor: viewport.device_scale_factor || 1 });
+      await visible(visibleSelector);
+      if (stateName === 'unavailable') assert.equal(await page.$eval('#market-workbench', node => node.hidden), true);
+      else await page.waitForFunction(selector => {
+        const form = document.querySelector(selector);
+        return form?.matches('form') && form.dataset.busy !== 'true'
+          && [...form.querySelectorAll('input,select,textarea')].some(control => !control.matches(':disabled')
+            && control.getBoundingClientRect().width > 0 && control.getBoundingClientRect().height > 0);
+      }, {}, visibleSelector);
+      await page.mouse.move(0, 0);
+      await page.evaluate(async () => {
+        document.activeElement?.blur?.();
+        await document.fonts.ready;
+        await Promise.all(document.getAnimations()
+          .filter(animation => Number.isFinite(animation.effect?.getComputedTiming().endTime))
+          .map(animation => animation.finished.catch(() => {})));
+      });
+      const filename = `axe-${stateName}-${viewport.id}`;
+      await capture(`${filename}.png`);
+      await page.addScriptTag({ content: axeSource });
+      const results = await page.evaluate(options => window.axe.run(document, options), axeOptions);
+      const counts = { critical: 0, serious: 0, moderate: 0, minor: 0 };
+      for (const violation of results.violations) counts[violation.impact] = (counts[violation.impact] || 0) + 1;
+      const blocking = counts.critical + counts.serious;
+      // Keep every finding and target, without copying form values or node HTML.
+      const findings = items => items.map(item => ({ id: item.id, impact: item.impact,
+        description: item.description, help: item.help, help_url: item.helpUrl,
+        nodes: item.nodes.map(node => ({ target: node.target, failure_summary: node.failureSummary })) }));
+      const evidence = {
+        schema_version: 'marketplace-accessibility-state-v1', generated_at: new Date().toISOString(),
+        route: '/profissionais/', fixture_only: true, state: stateName, scope: 'document',
+        required_visible: visibleSelector, viewport: { id: viewport.id, ...page.viewport(),
+          isMobile: Boolean(page.viewport().isMobile), hasTouch: Boolean(page.viewport().hasTouch) },
+        viewport_policy: 'data/quality/interface-coverage-policy.json',
+        axe_version: results.testEngine.version, options: axeOptions, blocking_impacts: ['critical', 'serious'],
+        counts, blocking, screenshot: `${filename}.png`, violations: findings(results.violations),
+        incomplete: findings(results.incomplete), passed_rules: results.passes.map(item => item.id),
+        inapplicable_rules: results.inapplicable.map(item => item.id),
+      };
+      writeFileSync(join(report, `${filename}.json`), `${JSON.stringify(evidence, null, 2)}\n`);
+      axeAudits.push({ state: stateName, viewport: viewport.id, counts, blocking, report: `${filename}.json` });
+      assert.equal(blocking, 0, `No critical/serious axe violations in ${stateName}/${viewport.id}: ${results.violations
+        .filter(item => ['critical', 'serious'].includes(item.impact)).map(item => item.id).join(', ')}`);
+    }
+  } finally {
+    await page.setViewport(originalViewport);
+  }
+}
 try {
   await page.setViewport({ width: 1280, height: 900 });
   await page.goto(url, { waitUntil: 'networkidle0' });
@@ -154,6 +221,7 @@ try {
   assert.equal(await page.$eval('#market-unavailable-actions a', node => node.getAttribute('href')), '/triagem-tecnica/');
   assert.equal(count('providers'), 0, 'Disabled service does not pretend to search');
   await capture('unavailable-desktop.png');
+  await auditAccessibility('unavailable', '#market-unavailable-actions');
 
   enabled = true; await page.click('#market-retry'); await visible('.market-provider-card');
   assert.match(await page.$eval('.market-provider-card', node => node.textContent), /Ainda sem avaliações/);
@@ -180,6 +248,7 @@ try {
   await page.click('#market-mode-register'); await checked('#market-auth-form input[value=customer]');
   await fill('#market-auth-form input[name=first_name]', 'Cliente'); await fill('#market-auth-form input[name=last_name]', 'Teste');
   await fill('#market-auth-form input[name=email]', 'cliente@example.invalid'); await fill('#market-password', 'browser-test-password');
+  await auditAccessibility('registration', '#market-auth-form');
   await submit('#market-auth-form'); assert.equal(count('register'), 0, 'Registration requires consent');
   await checked('#market-auth-form input[name=consent]'); await submit('#market-auth-form'); await visible('#market-request-form');
   assert.equal(latest('register').body.consent, true); assert.equal(latest('register').body.terms_version, terms);
@@ -188,6 +257,7 @@ try {
   await page.select('#market-request-intent', canonicalIntents[0]);
   await fill('#market-request-form textarea[name=description]', 'Preciso de revisão dos projetos estruturais e relatório técnico das interferências identificadas.');
   await fill('#market-request-form input[name=location]', 'Florianópolis, SC');
+  await auditAccessibility('request', '#market-request-form');
   await submit('#market-request-form'); assert.equal(count('request'), 0, 'Request requires explicit consent');
   await checked('#market-request-form input[name=consent]'); await submit('#market-request-form'); await visible('.market-request-card');
   assert.equal(latest('request').body.terms_version, terms); assert.equal(contracts[0].status, 'requested');
@@ -205,6 +275,7 @@ try {
   await fill('#market-profile-form input[name=website_url]', 'https://example.invalid');
   await submit('#market-profile-form'); await page.waitForFunction(() => document.querySelector('#market-profile-form [data-form-status]').dataset.tone === 'success');
   assert.equal(latest('vendor-profile').body.consent, true); assert.deepEqual(latest('vendor-profile').body.profile.specialties, [canonicalIntents[0]]);
+  await auditAccessibility('profile', '#market-profile-form');
   await geometry(390); await capture('provider-mobile.png'); await geometry(1280);
   assert.equal(await page.$eval('#market-connect', node => node.disabled), true, 'Unavailable payments cannot start onboarding');
   await tab('requests'); await visible('[data-action=quote]');
@@ -217,6 +288,7 @@ try {
   assert.equal(count('request-action'), 0, 'Ambiguous money notation is rejected');
   await fill(`${quote} input[name=amount]`, '1.234,56');
   assert.match(await page.$eval(quote, node => node.textContent), /123,45.*1\.111,11/s, 'Exact fee and professional share are shown before quote');
+  await auditAccessibility('quote', quote);
   await checked(`${quote} input[name=confirmed]`, false); await submit(quote); assert.equal(count('request-action'), 0, 'Provider commission acceptance is required');
   await checked(`${quote} input[name=confirmed]`); await submit(quote); await page.waitForFunction(() => document.querySelector('.market-state')?.textContent === 'Proposta recebida');
   assert.equal(latest('request-action').body.amount_cents, 123456); assert.equal(latest('request-action').body.deadline, '2099-12-31');
@@ -266,6 +338,7 @@ try {
   await checked('[data-action=complete] input[name=confirmed]'); await submit('[data-action=complete]'); await visible('[data-action=review]');
   await page.select('[data-action=review] select[name=rating]', '5');
   await fill('[data-action=review] textarea[name=note]', 'Entrega de teste conferida <img src=x onerror=alert(1)>');
+  await auditAccessibility('review', '[data-action=review]');
   await submit('[data-action=review]'); await page.waitForFunction(() => !document.querySelector('[data-action=review]'));
   assert.equal(contracts[0].review.rating, 5); assert.equal(await page.$$eval('.market-request-card img', nodes => nodes.length), 0);
   await geometry(390); await capture('completed-mobile.png');
@@ -293,10 +366,24 @@ try {
   assert.equal(await page.$$eval('[data-action=quote]', nodes => nodes.length), 0, 'Undefined commission cannot be silently accepted');
   assert.match(await page.$eval('#market-request-list', node => node.textContent), /definição das condições comerciais/);
   assert.deepEqual(runtimeErrors, [], `No browser/server errors: ${runtimeErrors.join(', ')}`);
-  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing and responsive layout.');
+  assert.deepEqual(axeAudits.map(item => `${item.state}/${item.viewport}`).sort(), expectedAxeAudits,
+    'Every required accessibility state is audited at every policy viewport');
+  console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing, responsive layout and six accessibility states at mobile/desktop widths.');
 } catch (error) {
   await capture('failure.png').catch(() => {});
   throw error;
 } finally {
-  await browser.close(); await new Promise(resolve => server.close(resolve));
+  try {
+    const complete = JSON.stringify(axeAudits.map(item => `${item.state}/${item.viewport}`).sort()) === JSON.stringify(expectedAxeAudits);
+    const blocking = axeAudits.reduce((total, item) => total + item.blocking, 0);
+    writeFileSync(join(report, 'axe-summary.json'), `${JSON.stringify({
+      schema_version: 'marketplace-accessibility-summary-v1', fixture_only: true,
+      complete, ok: complete && blocking === 0,
+      expected_audits: expectedAxeAudits.length, completed_audits: axeAudits.length,
+      blocking, audits: axeAudits,
+    }, null, 2)}\n`);
+  } finally {
+    try { await browser.close(); }
+    finally { await new Promise(resolve => server.close(resolve)); }
+  }
 }
