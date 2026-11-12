@@ -205,9 +205,27 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.match(runtimeLocations, /proxy_set_header X-Request-Id \$request_id;/);
   assert.match(runtimeLocations, /location = \/\.netlify\/functions\/tool-credits \{\n  client_max_body_size 4m;/);
   assert.match(runtimeLocations, /location = \/api\/web\/tool-credits \{\n  client_max_body_size 4m;/);
-  const pixWebhook = runtimeLocations.match(/location = \/api\/web\/tool-credits-webhook \{([^}]+)}/)?.[1];
-  assert.match(pixWebhook, /client_max_body_size 64k;/);
-  assert.match(pixWebhook, /proxy_set_header X-Request-Id \$http_x_request_id;/);
+  const runtimeBlocks = [...runtimeLocations.matchAll(/location ([^\n]+) \{\n([\s\S]*?)\n\}/g)];
+  const signedWebhookLocations = [];
+  for (const name of ["tool-credits-webhook", "project-orders-webhook"]) {
+    for (const prefix of ["/.netlify/functions", "/api/web"]) {
+      const selector = `= ${prefix}/${name}`;
+      signedWebhookLocations.push(selector);
+      const block = runtimeBlocks.find(([, candidate]) => candidate === selector)?.[2];
+      assert.equal(typeof block, "string", selector);
+      assert.match(block, /client_max_body_size 64k;/);
+      assert.match(block, /proxy_set_header X-Request-Id \$http_x_request_id;/);
+      assert.doesNotMatch(block, /proxy_set_header X-Request-Id \$request_id;/);
+    }
+  }
+  assert.deepEqual(runtimeBlocks
+    .filter(([, , block]) => /proxy_set_header X-Request-Id \$http_x_request_id;/.test(block))
+    .map(([, selector]) => selector).sort(), signedWebhookLocations.sort());
+  const genericRuntime = runtimeBlocks.find(([, selector]) =>
+    selector.startsWith("~ ^/(?:\\.netlify/functions|api/web)/"))?.[2];
+  assert.equal(typeof genericRuntime, "string");
+  assert.match(genericRuntime, /proxy_set_header X-Request-Id \$request_id;/);
+  assert.doesNotMatch(genericRuntime, /proxy_set_header X-Request-Id \$http_x_request_id;/);
   assert.doesNotMatch(runtimeLocations, /proxy_add_x_forwarded_for/);
   assert.doesNotMatch(runtimeLocations, /search-observation-tick/);
   assert.doesNotMatch(runtimeLocations, /location ~ \^\/\.netlify\/functions\/\.\*/);
