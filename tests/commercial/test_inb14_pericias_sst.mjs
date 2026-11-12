@@ -28,6 +28,7 @@ function visibleText(html) {
   return html
     .replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, " ")
     .replace(/<style\b[^>]*>[\s\S]*?<\/style\b[^>]*>/gi, " ")
+    .replace(/<template\b[^>]*>[\s\S]*?<\/template\b[^>]*>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
@@ -107,6 +108,72 @@ function decodeHref(href) {
 
 const PII_IN_CONTACT = /processo|autos|trabalhador|cpf|reclamante|\br[eé]u\b|atestado|laudo pericial anexo/i;
 const SCHEMA_OVERCLAIM = /perito nomeado|êxito garantido|êxito jur[ií]dico|parecer favor[aá]vel|PGR incluso no pacote|ato m[eé]dico|exame m[eé]dico ocupacional|engenheiro de seguran[cç]a do trabalho/i;
+const TECHNICAL_SCOPE = /<section\b(?=[^>]*\bid=["']criterios-da-assistencia["'])(?=[^>]*\bdata-commercial-presentation=["']technical-scope["'])[^>]*>[\s\S]*?<\/section>/gi;
+const HIDDEN_CONTENT = /<[^>]+(?:\shidden(?=\s|=|\/?>)|\saria-hidden=["']true["']|\sstyle=["'][^"']*(?:display\s*:\s*none|visibility\s*:\s*hidden))/i;
+const PERICIAL_FRONTS = [
+  { name: "documentary_basis", work: [/contratos|projetos/i, /registros|medições|histórico/i, /questões técnicas/i], delivery: [/matriz de evid[eê]ncias/i, /documentos|exames/i] },
+  { name: "examination_and_questions", work: [/alegações/i, /critérios|métodos/i, /constatações|hipóteses/i], delivery: [/quesitos/i, /diligências/i] },
+  { name: "reasoned_conclusions", work: [/argumentos/i, /fontes/i, /pontos controvertidos/i], delivery: [/manifesta[cç][aã]o|parecer/i, /fundamenta[cç][aã]o/i, /refer[eê]ncias/i, /conclus[aã]o/i] },
+];
+
+function hasDemonstrativeLabel(html) {
+  return /exemplo demonstrativo/i.test(visibleText(mainHtml(html)));
+}
+
+function pericialPresentationChecks(html) {
+  const source = mainHtml(html).replace(/<(script|style|template)\b[^>]*>[\s\S]*?<\/\1>/gi, " ");
+  const sections = [...source.matchAll(TECHNICAL_SCOPE)].map((match) => match[0]);
+  const scope = sections.length === 1 ? sections[0] : "";
+  const cards = [...scope.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/gi)].map((match) => match[0]);
+  const headings = cards.map((card) => visibleText(card.match(/<h3\b[^>]*>[\s\S]*?<\/h3>/i)?.[0] || ""));
+  const checks = {
+    technical_scope: sections.length === 1 && !HIDDEN_CONTENT.test(scope)
+      && /<section\b[^>]*\baria-labelledby=["']technical-scope-title["']/i.test(scope)
+      && /<h2\b[^>]*\bid=["']technical-scope-title["'][^>]*>[^<]+<\/h2>/i.test(scope),
+    technical_articles: cards.length === 3 && headings.every(Boolean) && new Set(headings).size === 3,
+    technical_scope_honesty: Boolean(scope)
+      && !/exemplo demonstrativo|caso real|cliente real|case de sucesso|portf[óo]lio|obra executada/i.test(visibleText(scope)),
+  };
+  const used = new Set();
+  for (const front of PERICIAL_FRONTS) {
+    const matches = cards.filter((card) => {
+      if (HIDDEN_CONTENT.test(card)) return false;
+      const paragraphs = [...card.matchAll(/<p\b[^>]*>[\s\S]*?<\/p>/gi)].map((match) => match[0]);
+      const delivery = paragraphs.filter((p) => /<strong\b[^>]*>\s*Entrega:\s*<\/strong>/i.test(p));
+      const work = paragraphs.filter((p) => !delivery.includes(p));
+      return delivery.length === 1 && work.length >= 1
+        && front.work.every((pattern) => pattern.test(visibleText(work.join(" "))))
+        && front.delivery.every((pattern) => pattern.test(visibleText(delivery[0])));
+    });
+    checks[`technical_${front.name}`] = matches.length === 1 && !used.has(matches[0]);
+    if (matches.length === 1) used.add(matches[0]);
+  }
+  return checks;
+}
+
+function scanPresentationCounterexamples(htmlA, htmlB) {
+  const scope = [...mainHtml(htmlA).matchAll(TECHNICAL_SCOPE)][0]?.[0] || "";
+  const cards = [...scope.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/gi)].map((match) => match[0]);
+  assert("14a_presentation_counterexample_fixture", Boolean(scope) && cards.length === 3, "published technical scope");
+  const mutations = [
+    ["missing_scope", htmlA.replace(scope, "")],
+    ["hidden_scope", htmlA.replace(scope, scope.replace("<section", "<section hidden"))],
+    ["duplicate_scope", htmlA.replace(scope, scope + scope)],
+    ["scope_only_in_template", htmlA.replace(scope, `<template>${scope}</template>`)],
+    ["fictitious_case", htmlA.replace(scope, scope.replace("Fundamentação técnica", "Caso real de cliente"))],
+    ["demonstrative_as_authority", htmlA.replace(scope, scope.replace("Fundamentação técnica", "Exemplo demonstrativo"))],
+  ];
+  cards.forEach((card, index) => {
+    mutations.push([`missing_front_${index}`, htmlA.replace(card, "")]);
+    mutations.push([`missing_delivery_${index}`, htmlA.replace(card, card.replace(/<p><strong>Entrega:<\/strong>[\s\S]*?<\/p>/i, ""))]);
+    mutations.push([`hidden_work_${index}`, htmlA.replace(card, card.replace("<p>", "<p hidden>"))]);
+  });
+  for (const [name, mutated] of mutations) {
+    assert(`14a_rejects_${name}`, mutated !== htmlA && Object.values(pericialPresentationChecks(mutated)).some((ok) => !ok), name);
+  }
+  const unlabelledDemo = htmlB.replace(/exemplo demonstrativo/gi, "Quadro documental");
+  assert("14b_rejects_unlabelled_demonstrative", unlabelledDemo !== htmlB && !hasDemonstrativeLabel(unlabelledDemo), "SST educational example keeps its label");
+}
 
 function scanPage(label, html, spec) {
   const visible = visibleText(html);
@@ -129,7 +196,11 @@ function scanPage(label, html, spec) {
   assert(`${label}_contact_no_pii`, !PII_IN_CONTACT.test(decoded), decoded);
   assert(`${label}_schema_no_overclaim`, !SCHEMA_OVERCLAIM.test(schema), schema);
   assert(`${label}_meta_no_overclaim`, !SCHEMA_OVERCLAIM.test(meta), meta);
-  assert(`${label}_demonstrative`, /exemplo demonstrativo/i.test(main), "exemplo demonstrativo");
+  if (spec.presentation === "technical-scope") {
+    for (const [name, ok] of Object.entries(pericialPresentationChecks(html))) assert(`${label}_${name}`, ok, name);
+  } else {
+    assert(`${label}_demonstrative`, spec.presentation === "demonstrative" && hasDemonstrativeLabel(html), "exemplo demonstrativo");
+  }
   for (const needle of spec.must) {
     const haystack = needle.startsWith("/") ? html : main;
     assert(`${label}_has_${needle.slice(0, 40)}`, haystack.toLowerCase().includes(needle.toLowerCase()), needle);
@@ -226,6 +297,7 @@ function scanCampaignReceipts() {
 }
 
 const specA = {
+  presentation: "technical-scope",
   h1: "Assistência técnica de engenharia em disputas",
   canonical: "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
   must: [
@@ -247,6 +319,7 @@ const specA = {
 };
 
 const specB = {
+  presentation: "demonstrative",
   h1: "Passe a documentação de SST para quem vai executar",
   canonical: "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
   must: [
@@ -285,7 +358,10 @@ if (MUTATE) {
 
 scanPage("14a", htmlA, specA);
 scanPage("14b", htmlB, specB);
-if (!MUTATE) scanCampaignReceipts();
+if (!MUTATE) {
+  scanCampaignReceipts();
+  scanPresentationCounterexamples(htmlA, htmlB);
+}
 
 const failed = results.filter((r) => !r.ok);
 const passed = results.filter((r) => r.ok);

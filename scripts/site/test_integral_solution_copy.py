@@ -761,25 +761,38 @@ def redundancy_problems(rel: str, html: str) -> list[str]:
         if not re.search(r"pr[ée]-lit[íi]gio", main_text, re.I):
             problems.append(f"{rel}: não explica o apoio técnico pré-litígio")
     if rel == "inspecao-diagnostico-edificacoes/index.html":
-        # A-03(b): recebimento, reforma e o construído são pedidos nomeados em
-        # #entrega, nomeados na descrição e provados por uma amostra rotulada.
-        # Protect the service explanation, rather than a rejected list of
-        # literal H3s in one prescribed section.
+        # A-03(b): recebimento, reforma e o construído precisam de critérios
+        # e entregas próprios. A apresentação comercial descreve o trabalho;
+        # não exige uma demonstração hipotética como prova de execução.
         for term in ("recebimento", "reforma", "constru[íi]do"):
             if not re.search(term, main_text, re.I):
                 problems.append(f"{rel}: conteúdo não explica '{term}'")
         desc = re.search(r'<meta\s+content="([^"]*)"\s+name="description"', html, re.I)
         if not desc or not re.search(r"constru[íi]do|as-built", desc.group(1), re.I):
             problems.append(f"{rel}: meta description não nomeia o construído/as-built")
-        captions = [
-            _visible(c)
-            for c in re.findall(r"<figcaption\b[^>]*>[\s\S]*?</figcaption>", main, re.I)
-        ]
-        if not any(
-            re.search(r"demonstrativ", c, re.I) and re.search(r"recebimento|reforma|as-built|constru[íi]do", c, re.I)
-            for c in captions
+        applications = re.findall(r"<(?:article|li)\b[^>]*>[\s\S]*?</(?:article|li)>", main, re.I)
+        for topic, criteria in (
+            (r"recebimento", r"condi[çc][ãa]o|aceite|corre[çc][ãa]o|ressalva"),
+            (r"reforma", r"interfer[êe]ncias|prioridades|requisitos|interven[çc][ãa]o"),
+            (r"constru[íi]do|as-built", r"reconcilia|lacunas|documenta[çc][ãa]o|documentos"),
         ):
-            problems.append(f"{rel}: nenhuma figure/table rotulada cita recebimento, reforma ou as-built")
+            if not any(
+                re.search(rf"<h3\b[^>]*>[^<]*(?:{topic})", block, re.I)
+                and re.search(criteria, _visible(" ".join(re.findall(r"<p\b[^>]*>[\s\S]*?</p>", block, re.I))), re.I)
+                for block in applications
+            ):
+                problems.append(f"{rel}: aplicação '{topic}' sem critério técnico próprio")
+        scope = next((block for _, block in sections if 'data-commercial-presentation="technical-scope"' in block), "")
+        records = re.findall(r"<article\b[^>]*>[\s\S]*?</article>", scope, re.I)
+        if len(records) < 3 or any(
+            not re.search(r"<h3\b[^>]*>[^<]+</h3>", record, re.I)
+            or len(re.findall(r"<p\b[^>]*>[\s\S]*?</p>", record, re.I)) < 2
+            or not re.search(r"<strong>Entrega:</strong>\s*\S", record, re.I)
+            for record in records
+        ):
+            problems.append(f"{rel}: critérios técnicos precisam relacionar três análises às respectivas entregas")
+        if re.search(r"caso real|case de sucesso|portf[óo]lio|economia comprovada", _visible(scope), re.I):
+            problems.append(f"{rel}: escopo técnico apresentado como comprovação de caso executado")
     if rel == "casos/index.html":
         # RESSALVAS-06: a ressalva sintética (hipotético) em no máximo duas
         # seções: topo e prova-autorizada.
@@ -892,7 +905,27 @@ def test_redundancy_rule_catches_repeated_reservation_and_leaves_single_statemen
 
 def test_csv_inventories_preserve_context_and_do_not_hide_repeated_prose() -> None:
     rel = "quantitativos-orcamento-obras/index.html"
-    document = (ROOT / rel).read_text(encoding="utf-8")
+    # The commercial page now explains the contracted technical work.  Keep
+    # the demonstrative-download exception covered with an explicit fixture,
+    # rather than requiring a teaching example to remain in the sales journey.
+    def inventory(context: str, source: str) -> str:
+        links = " ".join(
+            f'<a href="/casos/{source}/data/{name}.csv">{name}.csv</a>'
+            for name in ("quantitativos", "orcamento", "coordenacao", "revisao")
+        )
+        return (
+            f'<article class="qty-proof-entrance" data-proof-entrance="{context}" '
+            f'data-demonstrative-id="{source}">'
+            f'<p class="qty-proof-files">Arquivos abertos deste recorte: {links}.</p>'
+            '</article>'
+        )
+
+    document = (
+        '<main><section id="exemplos-conferiveis">'
+        + inventory("edificacao", "demonstrativo-projeto-privado")
+        + inventory("infraestrutura", "demonstrativo-infraestrutura")
+        + '</section></main>'
+    )
     assert not redundancy_problems(rel, document)
     moved = document.replace('id="exemplos-conferiveis"', 'id="inventario-deslocado"', 1)
     assert moved != document
