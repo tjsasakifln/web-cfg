@@ -1,0 +1,106 @@
+name: Read-only diagnosis of residential capture acceptance
+
+# EXECUTE_NOW: diagnose PR #832's blocked pre-POST acceptance. No lead,
+# queue, message, setting, credential, server release or protection is changed.
+on:
+  push:
+    branches: [diagnostic/projetos-prontos-inbound-20261112]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: confenge-projects-inbound-read-only
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    if: github.ref == 'refs/heads/diagnostic/projetos-prontos-inbound-20261112'
+    runs-on: ubuntu-latest
+    environment: netcup-production
+    timeout-minutes: 3
+    steps:
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+      - name: Read exact institutional endpoints and retain allowlisted states
+        env:
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { mkdirSync, writeFileSync } from 'node:fs';
+          const token = process.env.OPS_TOKEN || '';
+          const bool = value => typeof value === 'boolean' ? value : null;
+          const oneOf = (value, allowed) => allowed.includes(value) ? value : 'UNKNOWN';
+          const reason = value => {
+            if (value == null) return null;
+            const known = ['not_configured', 'secret_missing', 'secret_too_short', 'invalid_url', 'host_not_allowed', 'noncanonical_destination', 'pii_on_url', 'invalid_path', 'https_required', 'configuration_not_ready', 'destination_safety_gate_failed'];
+            if (known.includes(value)) return value;
+            if (/abort|timeout|timedout/i.test(String(value))) return 'TIMEOUT';
+            if (/fetch failed|network|econn|enotfound/i.test(String(value))) return 'NETWORK_ERROR';
+            return 'OTHER';
+          };
+          async function get(url, authenticated = false) {
+            if (authenticated && !token) return { http: null, error: 'TOKEN_UNAVAILABLE', body: {} };
+            try {
+              const response = await fetch(url, {
+                method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(20000),
+                headers: { Accept: 'application/json', ...(authenticated ? { Authorization: `Bearer ${token}` } : {}) },
+              });
+              const body = await response.json().catch(() => null);
+              return { http: response.status, json: body !== null, body: body && typeof body === 'object' ? body : {} };
+            } catch { return { http: null, error: 'TRANSPORT_ERROR', body: {} }; }
+          }
+          const [build, auth, inbound, destination] = await Promise.all([
+            get('https://confenge.com.br/.well-known/build-info.json'),
+            get('https://confenge.com.br/.netlify/functions/ops?action=health', true),
+            get('https://confenge.com.br/.netlify/functions/ops?action=inbound_handoff', true),
+            get('https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/health'),
+          ]);
+          const response = result => ({ http: result.http, json: result.json === true, error: result.error || null });
+          const cfg = inbound.body.configuration || {}, gate = inbound.body.safety_gate || {};
+          const report = {
+            schema: 'confenge.project-capture-read-only-diagnosis/v1',
+            ts: new Date().toISOString(),
+            workflow_sha: /^[0-9a-f]{40}$/.test(process.env.GITHUB_SHA || '') ? process.env.GITHUB_SHA : null,
+            credential_scope: 'netcup-production',
+            requests: { method: 'GET', planned_count: 4, attempted_count: token ? 4 : 2, redirects_followed: false },
+            ops_token_available: Boolean(token),
+            build: { ...response(build), commit: /^[0-9a-f]{40}$/.test(build.body.commit || '') ? build.body.commit : null },
+            ops_health: { ...response(auth), ok: bool(auth.body.ok), auth_configured: bool(auth.body.auth_configured) },
+            inbound: {
+              ...response(inbound), ok: bool(inbound.body.ok),
+              configuration: {
+                contract: oneOf(cfg.contract, ['READY', 'UNSET', 'BLOCKED']),
+                destination_fingerprint: oneOf(cfg.destination_fingerprint, ['WARMBLY_PRODUCTION_V1', 'MISSING', 'UNEXPECTED']),
+                webhook_url: oneOf(cfg.webhook_url, ['SET', 'UNSET']),
+                webhook_secret: oneOf(cfg.webhook_secret, ['SET', 'UNSET']),
+                reason: reason(cfg.reason),
+              },
+              safety_gate: {
+                ok: bool(gate.ok), contract: oneOf(gate.contract, ['READY', 'UNSET', 'BLOCKED']),
+                status: oneOf(gate.status, ['READY', 'BLOCKED', 'UNKNOWN']),
+                auto_send_off: bool(gate.auto_send_off), dispatch_attempted: bool(gate.dispatch_attempted),
+                reason: reason(gate.reason),
+              },
+            },
+            destination_health: {
+              ...response(destination), status: oneOf(destination.body.status, ['READY', 'BLOCKED']),
+              auto_send_enabled: bool(destination.body.auto_send_enabled),
+              dispatch_attempted: bool(destination.body.dispatch_attempted),
+              reasons: Array.isArray(destination.body.reasons) ? destination.body.reasons.slice(0, 8).map(value =>
+                oneOf(value, ['outreach_disabled', 'auto_send_enabled', 'inbound_secret_missing', 'inbound_org_missing'])) : null,
+            },
+          };
+          mkdirSync('build/reports', { recursive: true });
+          writeFileSync('build/reports/ready-projects-inbound-diagnostic.json', JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+          console.log(JSON.stringify(report, null, 2));
+          NODE
+      - name: Preserve only the allowlisted diagnosis
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ready-projects-inbound-diagnostic-${{ github.sha }}
+          path: build/reports/ready-projects-inbound-diagnostic.json
+          if-no-files-found: error
+          retention-days: 14
