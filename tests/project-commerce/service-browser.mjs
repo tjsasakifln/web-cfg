@@ -24,7 +24,7 @@ fs.mkdirSync(downloads, { mode: 0o700 });
 fs.mkdirSync(reports, { recursive: true });
 const STORAGE_KEY = 'confenge.project-services.receipts.v1';
 const offer = readOffer();
-const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [], receiptRestorations = [], reviewGeometry = [];
+const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [], receiptRestorations = [], reviewGeometry = [], deadlineTouchTargets = [];
 const facts = new Map();
 let time = Date.now(), creates = 0, providerResponseLost = false, clientResponseLost = false, statusTransportUnavailable = false;
 let app, base, browser, currentPage;
@@ -154,6 +154,31 @@ async function screenshot(page, label, selector = null) {
   else await page.screenshot({ path: path.join(reports, file), fullPage: true });
   screenshots.push(file);
 }
+async function assertDeadlineTouchTargets(page) {
+  const expected = ['#rp-deadline', ...[15, 30, 45, 60, 90].map(days => `[data-deadline="${days}"]`)];
+  for (const width of [360, 390]) {
+    await page.setViewport({ width, height: 844 });
+    const measurement = await page.evaluate(() => ({
+      viewport: { width: innerWidth, height: innerHeight },
+      controls: [...document.querySelectorAll('#rp-deadline, .rp-deadline-options button')].map(node => {
+        const rect = node.getBoundingClientRect(), style = getComputedStyle(node);
+        return { target: node.id ? `#${node.id}` : `[data-deadline="${node.dataset.deadline}"]`,
+          width: rect.width, height: rect.height, left: rect.left, right: rect.right,
+          visible: style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0 };
+      }),
+    }));
+    deadlineTouchTargets.push(measurement);
+    assert.equal(measurement.viewport.width, width);
+    assert.deepEqual(measurement.controls.map(control => control.target), expected, 'the range and all five deadline buttons are measured');
+    for (const control of measurement.controls) {
+      assert(control.visible && control.width >= 44 && control.height >= 44,
+        `${width}px: deadline touch target must be at least 44 by 44 CSS pixels: ${JSON.stringify(control)}`);
+      assert(control.left >= -1 && control.right <= width + 1,
+        `${width}px: deadline touch target must fit the viewport: ${JSON.stringify(control)}`);
+    }
+    if (width === 360) await screenshot(page, 'deadline-controls-360', '.rp-deadline');
+  }
+}
 async function assertReviewLayout(page) {
   for (const target of [null, '#rp-purchase-title', '.rp-checkout-footer']) {
     if (target) await page.$eval(target, node => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
@@ -220,7 +245,7 @@ async function authoritativePaid(id) {
 
 const report = { schema: 'confenge.project-services.browser/v1', ok: false,
   source: publicRoot === root ? 'source' : 'public-artifact', environment: 'local-real-handler-fake-provider',
-  realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, receiptRestorations, reviewGeometry, uncaughtErrors: errors,
+  realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, receiptRestorations, reviewGeometry, deadlineTouchTargets, uncaughtErrors: errors,
   pageSha256: createHash('sha256').update(fs.readFileSync(path.join(publicRoot, 'projetos-prontos/index.html'))).digest('hex') };
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -233,8 +258,9 @@ try {
   const page = await newPage();
   await audit(page, 'offer-desktop', 1440, 1000);
   await audit(page, 'offer-mobile', 390, 844);
+  await assertDeadlineTouchTargets(page);
   await page.setViewport({ width: 1440, height: 1000 });
-  checks.push('desktop-mobile-usable-and-accessible');
+  checks.push('desktop-mobile-usable-and-accessible', 'deadline-controls-44px-at-360-and-390');
 
   await configureAndReview(page, { area: 120, deadline: 30, structure: true });
   await assertReviewLayout(page);

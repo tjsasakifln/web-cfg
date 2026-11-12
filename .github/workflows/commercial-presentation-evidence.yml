@@ -94,6 +94,7 @@ jobs:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: node scripts/site/measure_first_fold.mjs --write --report "$RUNNER_TEMP/commercial-presentation/first-fold-report.json"
       - name: Collect measured source contracts
+        id: source_contracts
         if: always() && steps.chrome.outcome == 'success'
         env:
           EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -118,6 +119,34 @@ jobs:
           JS
           mkdir -p "$RUNNER_TEMP/commercial-presentation/contracts"
           cp data/commercial/first-fold-contract.v1.json data/commercial/first-fold-measurements.v1.json "$RUNNER_TEMP/commercial-presentation/contracts/"
+      - name: Export measured evidence for remote review
+        if: always() && steps.source_contracts.outcome == 'success'
+        run: |
+          # Only public source measurements and synthetic browser evidence are
+          # exported. Byte counts and blob hashes bind remote review to the
+          # unchanged files also retained in the workflow artifact.
+          node --input-type=module <<'JS'
+          import { readFileSync, existsSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const dir = process.env.RUNNER_TEMP + '/commercial-presentation/contracts/';
+          const files = [
+            ['first-fold-contract.v1.json', dir + 'first-fold-contract.v1.json'],
+            ['first-fold-measurements.v1.json', dir + 'first-fold-measurements.v1.json'],
+          ];
+          for (const name of ['report.json', 'deadline-controls-360.png']) {
+            const path = 'build/reports/project-services/' + name;
+            if (existsSync(path)) files.push([name, path]);
+          }
+          for (const [name, path] of files) {
+            const bytes = readFileSync(path);
+            const sha256 = createHash('sha256').update(bytes).digest('hex');
+            const blob = createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+            console.log('REVIEW_FILE_BEGIN ' + JSON.stringify({ name, bytes: bytes.length, sha256, blob }));
+            const encoded = bytes.toString('base64');
+            for (let offset = 0; offset < encoded.length; offset += 8192) console.log(encoded.slice(offset, offset + 8192));
+            console.log('REVIEW_FILE_END ' + name);
+          }
+          JS
       - name: Verify remaining published figures
         if: always() && steps.chrome.outcome == 'success' && github.head_ref == 'fix/comunicacao-servicos-profissional'
         env:
