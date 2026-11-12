@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-11-09",
+  "as_of": "2026-11-12",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -39,6 +39,26 @@
     "reported_in": "docs/seo/INBOUND-GATES-REPORT.json → gates.conversion.stats.exemptions"
   },
   "families": [
+    {
+      "id": "marketplace-engenharia",
+      "visitor_job": "Encontrar um profissional de engenharia, preencher o perfil, solicitar e acompanhar uma proposta, contratar e avaliar a entrega; enquanto o serviço estiver indisponível, conversar com a CONFENGE pela triagem técnica.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/profissionais/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-12",
+      "owner_issue": 830,
+      "debt": [],
+      "note": "Rota noindex até a implantação e a validação operacional descritas em docs/architecture/ADR-MARKETPLACE-001-engineering-services.md e docs/marketplace/operations.md. A declaração de família não autoriza indexação, cadastro, contratação ou pagamento. A ação terminal e os demais gates devem ser comprovados antes de qualquer futura indexação."
+    },
     {
       "id": "radar-mercado-publico",
       "visitor_job": "Investigar demanda pública contratada por objeto, órgão, fornecedor e fim de vigência registrado, com acesso às fontes e continuidade em pesquisa sob encomenda.",

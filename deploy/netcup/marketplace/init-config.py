@@ -32,7 +32,9 @@ def main():
         ]),
         'runtime.env': '\n'.join([
             'NODE_ENV=production', 'MEDUSA_DISABLE_TELEMETRY=true', 'MERCUR_DISABLE_TELEMETRY=true', 'DO_NOT_TRACK=1',
-            f'DATABASE_URL=postgresql://marketplace:{db_password}@postgres:5432/marketplace',
+            # The private Docker PostgreSQL endpoint has no TLS listener. Medusa
+            # otherwise assumes SSL for its separate migration-lock connection.
+            f'DATABASE_URL=postgresql://marketplace:{db_password}@postgres:5432/marketplace?sslmode=disable',
             f'REDIS_URL=redis://:{redis_password}@redis:6379/0',
             f'JWT_SECRET={jwt}', f'COOKIE_SECRET={cookie}',
             f'MARKETPLACE_GATEWAY_KEY={gateway}',

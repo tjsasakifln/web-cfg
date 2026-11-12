@@ -133,6 +133,7 @@ async function main() {
     for (const [key, value] of Object.entries(runtime)) if (key.startsWith('STRIPE_')) assert.equal(value, '', 'Stripe credentials are forbidden in this check');
     const db = new URL(runtime.DATABASE_URL), redis = new URL(runtime.REDIS_URL);
     assert.equal(db.username, 'marketplace'); assert.equal(db.hostname, 'postgres'); assert.equal(db.pathname, '/marketplace');
+    assert.equal(db.searchParams.get('sslmode'), 'disable', 'The internal Compose database does not have a TLS listener');
     assert.equal(redis.hostname, 'redis'); assert.ok(redis.password);
     await compose('Validating the production Compose without printing configuration', ['config', '--quiet']);
     composeConfigured = true;
