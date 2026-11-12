@@ -221,6 +221,7 @@ jobs:
         run: PUBLIC_ARTIFACT_REQUIRED=1 node scripts/site/third_party_analytics_gate.mjs
       - name: Tool catalogue, SEO and share images in the gated artifact
         run: |
+          python3 -m pytest scripts/site/test_tool_showcase_dates.py -q
           python3 scripts/site/render_tool_showcase.py --check
           python3 scripts/site/verify_tool_showcase.py --root _site
       - name: Promised public downloads are in the gated artifact
