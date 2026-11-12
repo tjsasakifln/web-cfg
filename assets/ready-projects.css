@@ -32,8 +32,7 @@
 .rp-form .rp-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
 .rp-form .rp-wide { grid-column: 1 / -1; }
 .rp-form label { display: block; color: #173247; font-weight: 650; margin-bottom: .35rem; }
-.rp-form input:not([type=checkbox]):not([type=hidden]), .rp-form select, .rp-form textarea { display: block; width: 100%; min-height: 48px; border: 1px solid #8498a4; border-radius: 3px; background: #fff; color: #081b2e; padding: .7rem; font: inherit; box-sizing: border-box; }
-.rp-form input:focus-visible, .rp-form select:focus-visible, .rp-form textarea:focus-visible, .rp-form summary:focus-visible { outline: 2px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
+.rp-form input:not([type=checkbox]):not([type=hidden]), .rp-form select, .rp-form textarea { display: block; width: 100%; min-height: 48px; border: 1px solid #8498a4; border-radius: 0; background: #fff; color: #081b2e; padding: .7rem; font: inherit; box-sizing: border-box; }
 .rp-form .form-hint, .rp-form .rp-hint { font-size: .9rem; color: #405968; line-height: 1.55; margin: .6rem 0 1.1rem; }
 .rp-form .form-status:not(:empty) { padding: 1rem; margin-top: 1rem; border: 2px solid #2d6f2d; line-height: 1.65; color: #173247; }
 .rp-form details { border-top: 1px solid #d0d9dd; margin-top: 1.7rem; padding-top: .5rem; }
@@ -41,7 +40,7 @@
 .rp-form details[open] summary { margin-bottom: .8rem; }
 .rp-form .rp-consent { display: flex; align-items: flex-start; gap: .7rem; margin: 1.4rem 0; font-weight: 400; font-size: .92rem; line-height: 1.55; }
 .rp-consent input { width: 22px; height: 22px; flex: 0 0 22px; margin: .1rem 0 0; accent-color: #2d6f2d; }
-.rp-form button[type=submit] { width: 100%; min-height: 52px; font-size: 1rem; border-radius: 2px; }
+.rp-form button[type=submit] { width: 100%; min-height: 52px; font-size: 1rem; border-radius: 0; }
 .rp-form button:disabled { opacity: .7; cursor: default; }
 .rp-honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .rp-faq { max-width: 860px; }
