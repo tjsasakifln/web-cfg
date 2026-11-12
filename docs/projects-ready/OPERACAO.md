@@ -1,11 +1,26 @@
-# Projetos prontos: operação do experimento
+# Projetos residenciais: operação comercial
 
 ## Situação de lançamento
 
 Oferta: `https://confenge.com.br/projetos-prontos/`.
-Catálogo de licenças: vazio. Nenhum produto ou preço aprovado foi recuperado.
-O formulário recebe consultas de projeto pronto, adaptação, complementares e
-desenvolvimento sob medida. A página não anuncia entrega imediata nem cobra.
+A solicitação de 12/11/2026 autoriza vender serviços de desenvolvimento de
+projetos por disciplina e prazo. A oferta vigente está em
+`data/projects-ready/service-offer.v1.json`; arquitetura, estrutura, elétrica e
+hidrossanitário podem ser contratados separadamente. O preço é calculado no
+servidor para 15 a 90 dias e área de 50 a 250 m², conforme o enquadramento
+informado. A página mantém o formulário para casos que exigem proposta própria.
+
+A configuração, operação financeira e recuperação dos pedidos desse serviço
+estão em [SERVICE-ORDERS.md](../../runtime/project-commerce/SERVICE-ORDERS.md).
+O pagamento só é oferecido quando vendedor, credenciais de produção e
+armazenamento persistente passam pelas verificações do servidor. Código
+publicado, pedido criado, pagamento confirmado e recebimento conciliado são
+fatos diferentes. A equipe deve acompanhar pedidos e solicitações no painel
+privado existente e cumprir os prazos de insumos e atendimento dos termos.
+
+O catálogo de licenças de arquivos permanece vazio. As seções de licenciamento
+abaixo só se aplicam a um futuro produto técnico previamente aprovado; não são
+pré-requisito nem descrição da contratação atual de serviços.
 
 Link dos primeiros acessos:
 `https://confenge.com.br/projetos-prontos/?utm_source=confenge&utm_medium=owned&utm_campaign=projetos_prontos_piloto&utm_content=primeira_divulgacao`.
@@ -51,7 +66,7 @@ node scripts/revops/export_leads.mjs --kind real --family ready_projects \
   --out /CAMINHO_PRIVADO/projetos-prontos.jsonl
 ```
 
-## Cadastrar o primeiro produto
+## Cadastrar futuramente uma licença de projeto pronto
 
 1. Escolha um projeto original ou com licença que permita a comercialização e
    a adaptação pretendidas. Guarde documentos de autoria, direitos, escopo e
@@ -75,11 +90,11 @@ node scripts/revops/export_leads.mjs --kind real --family ready_projects \
    e de `_site`. Confira o hash, tamanho, permissões e integridade. Nunca use
    um link público permanente como entrega comercial.
 
-O primeiro lançamento pago deve ter um único modelo tecnicamente preparado.
+O primeiro lançamento pago de licenças deve ter um único modelo tecnicamente preparado.
 Novos modelos reutilizam catálogo e processo; não é necessário produzir um
 catálogo extenso antes de testar demanda.
 
-## Cobrança, pedidos, entrega e cancelamento
+## Cobrança, pedidos, entrega e cancelamento de licenças
 
 A área preparada é `/projetos-prontos/pedidos/`, sem indexação. Com modo desligado
 ela informa a indisponibilidade e não carrega autenticação. O backend separado

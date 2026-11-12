@@ -85,8 +85,14 @@ test("inventory classifies frontend, schedules, probes and ops without assuming 
   const credits = byName.get("tool-credits");
   assert.equal(credits.usage_state, "public_runtime");
   assert.ok(credits.consumers.frontend.some(({ path }) => path === "assets/js/tool-credits.mjs"));
-  // The provider callback is routed by the host, with no frontend caller.
-  assert.equal(byName.get("tool-credits-webhook").usage_state, "unreferenced_legacy_candidate");
+  // Provider callbacks have no frontend caller; the shared routing regression
+  // now exercises this handler directly.
+  const creditsWebhook = byName.get("tool-credits-webhook");
+  assert.equal(creditsWebhook.usage_state, "test_or_legacy_only");
+  assert.equal(creditsWebhook.consumers.frontend?.length ?? 0, 0);
+  assert.ok(creditsWebhook.consumers.probes_tests.some(({ path, kinds }) =>
+    path === "tests/project-commerce/shared-webhook.test.cjs"
+    && kinds.includes("direct_module")));
   assert.equal(byName.get("search-observation-tick").usage_state, "scheduled");
   assert.deepEqual(byName.get("search-observation-tick").schedule, {
     cron: "30 11 * * *",

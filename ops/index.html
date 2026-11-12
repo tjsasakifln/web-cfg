@@ -38,6 +38,18 @@
  .note { background:var(--green-100); border-left:3px solid var(--green-700); }
  .err { color:#a12431; border-left:3px solid currentColor; }
  code { font-size:.85em; }
+ .service-toolbar { display:flex; flex-wrap:wrap; align-items:end; gap:.75rem; }
+ .service-toolbar label { flex:1 1 18rem; }
+ .service-toolbar input { display:block; width:100%; margin-top:.25rem; }
+ .service-table { overflow:auto; max-width:100%; }
+ .service-table table { min-width:42rem; }
+ .service-table code,#service-order-detail { overflow-wrap:anywhere; }
+ .service-facts { display:grid; grid-template-columns:minmax(7rem,1fr) minmax(0,3fr); gap:.4rem 1rem; }
+ .service-facts dt { font-weight:650; }
+ .service-facts dd { margin:0; white-space:pre-wrap; }
+ .service-request { border-top:1px solid var(--line); padding-top:.75rem; margin-top:.75rem; }
+ #service-order-terms { white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; }
+ #service-order-detail h4 { margin-bottom:.5rem; }
  </style>
 </head>
 <body>
@@ -136,6 +148,40 @@
  <p>Custos de aquisição, tarifas e horas de atendimento precisam de registro manual. Campos não informados ficam vazios na exportação. A receita de licenças e a de adaptações e outros serviços permanecem separadas.</p>
  <pre id="projects-values" style="white-space:pre-wrap">Valores ainda não consultados.</pre>
  </div>
+ <div class="card" style="margin-top:1rem" aria-labelledby="service-orders-title">
+ <h3 id="service-orders-title">Pedidos contratados online</h3>
+ <p>Elaboração residencial por disciplina. A situação financeira vem do Mercado Pago. Alterar um estágio comercial não confirma pagamento, cancela a cobrança ou faz estorno.</p>
+ <div class="service-toolbar">
+ <button type="button" id="btn-service-orders">Consultar pedidos online</button>
+ <label for="service-order-id">Número completo do pedido
+ <input id="service-order-id" type="text" autocomplete="off" spellcheck="false" maxlength="36" placeholder="Identificador informado ao cliente" /></label>
+ <button type="button" id="btn-service-detail" class="secondary">Abrir pedido</button>
+ </div>
+ <p id="service-orders-message" role="status" aria-live="polite">Aguardando consulta autenticada.</p>
+ <p id="service-orders-readiness" class="muted"></p>
+ <div id="service-orders-kpi" class="grid"></div>
+ <p id="service-orders-interpretation" class="muted"></p>
+ <div class="service-table">
+ <table><caption>Pedidos recentes e solicitações de atendimento</caption>
+ <thead><tr><th>Pedido</th><th>Registro</th><th>Disciplinas e prazo</th><th>Situação financeira</th><th>Total</th><th>Solicitações recebidas</th><th>Consulta</th></tr></thead>
+ <tbody id="service-orders-body"><tr><td colspan="7">Dados ainda não consultados.</td></tr></tbody>
+ </table></div>
+ <p id="service-order-message" role="status" aria-live="polite"></p>
+ <section id="service-order-detail" aria-labelledby="service-order-heading" hidden>
+ <h4 id="service-order-heading" tabindex="-1">Detalhe do pedido</h4>
+ <p>Dados privados para condução do atendimento. Esta consulta não altera o pedido.</p>
+ <dl id="service-order-facts" class="service-facts"></dl>
+ <h4>Disciplinas contratadas</h4>
+ <ul id="service-order-items"></ul>
+ <h4>Contato e contexto informado</h4>
+ <dl id="service-order-customer" class="service-facts"></dl>
+ <h4>Suporte e cancelamento</h4>
+ <p>Solicitação recebida não significa cancelamento concluído nem devolução. Confira o pedido, responda pelo atendimento autorizado e conduza eventual estorno no Mercado Pago. O valor devolvido só é confirmado após consulta ao provedor.</p>
+ <div id="service-order-requests"></div>
+ <details><summary>Eventos registrados</summary><ul id="service-order-events"></ul></details>
+ <details><summary>Condições aceitas neste pedido</summary><pre id="service-order-terms"></pre></details>
+ </section>
+ </div>
  </section>
 
  <section id="panel-analytics" class="panel">
@@ -160,6 +206,7 @@
  let projectContacts = [];
  let projectReport = null;
  let projectRevision = 0;
+ let serviceEpoch = 0, serviceListSequence = 0, serviceDetailSequence = 0;
  const projectKinds = { license: "Licença de projeto", adaptation: "Adaptação ao terreno", complementary: "Projetos complementares", custom: "Projeto sob medida" };
  const projectStages = { lead_persisted: "Recebido", contacted: "Contato realizado", qualified: "Qualificado", meeting: "Reunião", proposal: "Proposta", won: "Contrato", lost: "Encerrado" };
  const lotLabels = { owned: "Terreno próprio", buying: "Em negociação", searching: "Procurando terreno", unknown: "Não informado" };
@@ -169,6 +216,7 @@
    projectRevision++;
    projectContacts = []; projectReport = null;
    $("projects-body").replaceChildren(); $("btn-project-export").disabled = true;
+   resetServiceOrders();
  });
 
  function token() { return tokenEl.value.trim(); }
@@ -189,6 +237,128 @@
  return data;
  }
 
+ const serviceStatuses = { creating: "Registro em conferência", pending: "Pagamento ainda não confirmado", paid: "Pagamento confirmado pelo Mercado Pago", review: "Conferência financeira necessária", failed: "Pagamento não confirmado", refunded: "Devolução integral confirmada" };
+ const serviceDisciplines = { arquitetura: "Arquitetura", estrutura: "Estrutura", eletrica: "Elétrica", hidrossanitario: "Hidrossanitário" };
+ const serviceEvents = { checkout_started: "Pedido registrado antes do pagamento", creation_uncertain: "Criação da cobrança em conferência", payment_pending: "Aguardando pagamento", payment_paid: "Pagamento confirmado", payment_review: "Conferência financeira necessária", payment_failed: "Pagamento não confirmado", payment_refunded: "Devolução integral confirmada", request_support: "Suporte solicitado", request_cancellation: "Cancelamento solicitado" };
+ const serviceIdValid = id => /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+ const serviceMoney = cents => Number.isSafeInteger(cents) && cents >= 0 ? money(cents / 100) : "Não informado";
+ const serviceDate = value => Number.isFinite(value) && value > 0 ? new Date(value).toLocaleString("pt-BR") : "Não informado";
+ function serviceText(tag, value) {
+   const node = document.createElement(tag); node.textContent = value == null || value === "" ? "Não informado" : String(value); return node;
+ }
+ function serviceEmpty(message) {
+   const row = document.createElement("tr"), cell = serviceText("td", message); cell.colSpan = 7; row.append(cell); $("service-orders-body").replaceChildren(row);
+ }
+ function clearServiceDetail() {
+   $("service-order-detail").hidden = true;
+   for (const id of ["service-order-facts", "service-order-items", "service-order-customer", "service-order-requests", "service-order-events", "service-order-terms"]) $(id).replaceChildren();
+   $("service-order-heading").textContent = "Detalhe do pedido";
+   $("service-order-message").textContent = "";
+ }
+ function resetServiceOrders() {
+   serviceEpoch++; serviceListSequence++; serviceDetailSequence++;
+   clearServiceDetail(); $("service-order-id").value = "";
+   $("service-orders-kpi").replaceChildren();
+   $("service-orders-readiness").textContent = "";
+   $("service-orders-interpretation").textContent = "";
+   $("service-orders-message").textContent = "Aguardando consulta autenticada.";
+   $("btn-service-orders").disabled = false; $("btn-service-detail").disabled = false;
+   serviceEmpty("Dados ainda não consultados.");
+ }
+ function serviceReadiness(readiness = {}) {
+   const mode = readiness.mode === "live" ? "Produção" : readiness.mode === "sandbox" ? "Teste, sem vendas reais" : "Desligado";
+   $("service-orders-readiness").textContent = "Ambiente: " + mode + ". " +
+     (readiness.readyForPurchase ? "Novas contratações habilitadas neste ambiente." : "Novas contratações indisponíveis neste ambiente.") + " " +
+     "Conta vendedora: " + (readiness.sellerVerified ? "verificada" : "verificação pendente") + ". " +
+     "Armazenamento: " + (readiness.durableStoreVerified ? "verificado" : "verificação pendente") + ".";
+ }
+ function serviceFailure(error) {
+   const known = { unauthorized: "Acesso não autorizado. Confira a chave de acesso.", UNAUTHORIZED: "Acesso não autorizado. Confira a chave de acesso.",
+     ORDER_NOT_FOUND: "Pedido não encontrado neste ambiente.", INVALID_ORDER_ID: "Informe o número completo do pedido.",
+     TOO_MANY_REQUESTS: "Aguarde antes de repetir a consulta." };
+   return known[error.message] || "Não foi possível concluir a consulta. Confira o acesso e tente novamente.";
+ }
+ async function loadServiceOrders() {
+   serviceDetailSequence++; clearServiceDetail(); $("btn-service-detail").disabled = false;
+   const sequence = ++serviceListSequence, epoch = serviceEpoch, access = token();
+   const current = () => sequence === serviceListSequence && epoch === serviceEpoch && access === token();
+   $("service-orders-kpi").replaceChildren(); $("service-orders-interpretation").textContent = "";
+   $("service-orders-readiness").textContent = ""; serviceEmpty("Consultando pedidos...");
+   if (!access) { $("service-orders-message").textContent = "Informe a chave de acesso antes de consultar."; serviceEmpty("Aguardando consulta autenticada."); return; }
+   $("btn-service-orders").disabled = true; $("service-orders-message").textContent = "Consultando pedidos...";
+   try {
+     const data = await api("project_services");
+     if (!current()) return;
+     serviceReadiness(data.readiness);
+     if (!data.available) { serviceEmpty("Consulta indisponível neste ambiente."); $("service-orders-message").textContent = "A configuração deste ambiente ainda não permite consultar os pedidos."; return; }
+     const rows = Array.isArray(data.orders) ? data.orders : [];
+     const metrics = data.metrics || {};
+     for (const [label, value] of [["Pedidos registrados", metrics.createdOrders], ["Já tiveram pagamento confirmado", metrics.confirmedPayments],
+       ["Pedidos com pagamento mantido", metrics.keptPaidOrders], ["Pagamentos mantidos, antes de tarifas", serviceMoney(metrics.keptPaidCents)],
+       ["Devoluções confirmadas", serviceMoney(metrics.refundedCents)], ["Liquidação bancária", "Não verificada neste relatório"]]) {
+       const card = document.createElement("div"); card.className = "card"; card.append(serviceText("strong", value), serviceText("span", label)); $("service-orders-kpi").append(card);
+     }
+     $("service-orders-interpretation").textContent = data.interpretation || "Confirmação de pagamento não comprova liquidação bancária nem aceite técnico.";
+     $("service-orders-body").replaceChildren();
+     for (const order of rows) {
+       const row = document.createElement("tr"), idCell = document.createElement("td"); idCell.append(serviceText("code", order.id)); row.append(idCell);
+       row.append(serviceText("td", serviceDate(order.createdAt)), serviceText("td", (order.disciplines || []).map(id => serviceDisciplines[id] || id).join(", ") + "; " + order.deadlineDays + " dias corridos"),
+         serviceText("td", serviceStatuses[order.status] || "Situação indisponível"), serviceText("td", serviceMoney(order.amountCents)), serviceText("td", order.openRequests));
+       const action = document.createElement("td"), button = serviceText("button", "Ver detalhe"); button.type = "button"; button.className = "secondary";
+       button.disabled = !serviceIdValid(order.id); button.addEventListener("click", () => { $("service-order-id").value = order.id; void loadServiceDetail(); }); action.append(button); row.append(action); $("service-orders-body").append(row);
+     }
+     if (!rows.length) serviceEmpty("Nenhum pedido registrado neste ambiente.");
+     $("service-orders-message").textContent = rows.length + " pedido(s) exibido(s). " + (data.limited ? "A lista mostra os 100 mais recentes. Consulte pedidos anteriores pelo número completo." : "Consulta concluída.");
+   } catch (error) { if (current()) { serviceEmpty("Consulta não concluída."); $("service-orders-message").textContent = serviceFailure(error); } }
+   finally { if (current()) $("btn-service-orders").disabled = false; }
+ }
+ function serviceFacts(target, entries) {
+   for (const [label, value] of entries) target.append(serviceText("dt", label), serviceText("dd", value));
+ }
+ async function loadServiceDetail() {
+   const sequence = ++serviceDetailSequence, epoch = serviceEpoch, access = token(), id = $("service-order-id").value.trim().toLowerCase();
+   const current = () => sequence === serviceDetailSequence && epoch === serviceEpoch && access === token();
+   clearServiceDetail();
+   if (!access) { $("service-order-message").textContent = "Informe a chave de acesso antes de consultar."; return; }
+   if (!serviceIdValid(id)) { $("service-order-message").textContent = "Informe o número completo do pedido no formato recebido pelo cliente."; return; }
+   $("btn-service-detail").disabled = true; $("service-order-message").textContent = "Consultando o pedido...";
+   try {
+     const data = await api("project_services", { qs: "&order_id=" + encodeURIComponent(id) });
+     if (!current()) return;
+     if (!data.available || !data.order) { $("service-order-message").textContent = "Consulta indisponível neste ambiente."; return; }
+     const order = data.order;
+     if (order.id !== id) throw Error("ORDER_RESPONSE_MISMATCH");
+     serviceReadiness(data.readiness);
+     $("service-order-heading").textContent = "Pedido " + order.id;
+     serviceFacts($("service-order-facts"), [["Situação financeira", serviceStatuses[order.status] || "Situação indisponível"], ["Total contratado", serviceMoney(order.amountCents)],
+       ["Área e prazo", order.areaM2 + " m²; " + order.deadlineDays + " dias corridos após as condições de início"], ["Registrado em", serviceDate(order.createdAt)],
+       ["Pagamento confirmado em", serviceDate(order.paidAt)], ["Devolução integral em", serviceDate(order.refundedAt)], ["Identificador no Mercado Pago", order.providerId],
+       ["Próxima ação", order.nextAction], ["Versão das condições", order.termsVersion], ["Identificador das condições aceitas", order.termsHash]]);
+     for (const item of order.items || []) $("service-order-items").append(serviceText("li", item.title + ": " + serviceMoney(item.amountCents)));
+     const customer = order.customer || {};
+     serviceFacts($("service-order-customer"), [["Nome", customer.name], ["E-mail", customer.email], ["Telefone", customer.phone],
+       ["Município / UF", [customer.city, customer.state].filter(Boolean).join(" / ")], ["Referências e contexto", customer.reference]]);
+     const requests = Array.isArray(order.requests) ? order.requests : [];
+     if (!requests.length) $("service-order-requests").append(serviceText("p", "Nenhuma solicitação registrada neste pedido."));
+     for (const request of requests) {
+       const card = document.createElement("div"); card.className = "service-request";
+       card.append(serviceText("h5", request.kind === "cancellation" ? "Cancelamento solicitado" : "Solicitação de suporte"));
+       const facts = document.createElement("dl"); facts.className = "service-facts";
+       serviceFacts(facts, [["Protocolo", request.id], ["Recebido em", serviceDate(request.createdAt)], ["Tratamento", request.status === "received" ? "Recebido para análise; conclusão não registrada" : "Conferir com a equipe responsável"],
+         ["Mensagem", request.message || (request.kind === "cancellation" ? "Sem justificativa, conforme permitido." : "Não informada")]]); card.append(facts); $("service-order-requests").append(card);
+     }
+     for (const event of order.events || []) $("service-order-events").append(serviceText("li", serviceDate(event.at) + ": " + (serviceEvents[event.type] || "Evento registrado") +
+       (event.refundUnresolved ? ". Devolução com valor indeterminado; manter conferência." : "") + (event.refundedAmountCents > 0 ? ". Devolução confirmada acumulada: " + serviceMoney(event.refundedAmountCents) : "")));
+     $("service-order-terms").textContent = order.terms?.text || "Condições indisponíveis nesta consulta.";
+     $("service-order-detail").hidden = false; $("service-order-message").textContent = "Pedido consultado. Dados privados exibidos abaixo.";
+     $("service-order-heading").focus();
+   } catch (error) { if (current()) { clearServiceDetail(); $("service-order-message").textContent = serviceFailure(error); } }
+   finally { if (current()) $("btn-service-detail").disabled = false; }
+ }
+ $("btn-service-orders").addEventListener("click", () => { void loadServiceOrders(); });
+ $("btn-service-detail").addEventListener("click", () => { void loadServiceDetail(); });
+ $("service-order-id").addEventListener("input", () => { serviceDetailSequence++; clearServiceDetail(); $("btn-service-detail").disabled = false; });
+
  document.querySelectorAll(".tabs button").forEach((btn) => {
  btn.addEventListener("click", () => {
  document.querySelectorAll(".tabs button").forEach((b) => b.classList.remove("active"));
@@ -205,7 +375,9 @@
  projectReport = null;
  $("projects-body").textContent = "";
  $("btn-project-export").disabled = true;
+ resetServiceOrders();
  sessionStorage.setItem(tokenKey, token());
+ void loadServiceOrders();
  try {
  const funnel = await api("funnel");
  const f = funnel.funnel || {};

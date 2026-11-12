@@ -351,7 +351,7 @@
     "test:contact-journeys": "node scripts/site/test_contact_journeys.mjs",
     "test:b2g-openings": "python3 scripts/site/render_institutional_b2g_openings.py",
     "test:ready-projects": "node --test tests/ready-projects/*.test.cjs tests/ready-projects/*.test.mjs && node --test tests/project-commerce/*.test.cjs",
-    "test:ready-projects:browser": "node tests/ready-projects/browser.mjs && node tests/project-commerce/orders-browser.mjs",
+    "test:ready-projects:browser": "node tests/ready-projects/browser.mjs && node tests/project-commerce/orders-browser.mjs && node tests/project-commerce/service-browser.mjs",
     "test:marketplace": "node --test tests/marketplace/gateway.test.cjs",
     "test:marketplace:browser": "node tests/marketplace/browser.mjs"
   },

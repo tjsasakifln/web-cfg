@@ -56,13 +56,16 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
     else if (cfg.mode === 'emulator') check(/^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d{2,5})?$/.test(header(event, 'origin') || ''), 'ORIGIN_FORBIDDEN', 403);
     else if (env.TOOLS_COMMERCE_SANDBOX_ORIGIN) check(header(event, 'origin') === env.TOOLS_COMMERCE_SANDBOX_ORIGIN, 'ORIGIN_FORBIDDEN', 403);
   }
-  async function reconcile({ provider, ledger }, id, options) {
+  async function readPaymentFact(provider, id) {
     check(validProviderId(id), 'INVALID_PROVIDER_ORDER', 422);
     const fact = await provider.getOrder(id);
     check(fact?.providerId?.toLowerCase() === id.toLowerCase() && validId(fact.reference) &&
       Number.isSafeInteger(fact.amountCents) && fact.amountCents > 0 && fact.currency === 'BRL' &&
       ['pending', 'paid', 'reversed', 'failed', 'review'].includes(fact.state), 'PAYMENT_MISMATCH', 422);
-    return ledger.observe(fact, options);
+    return fact;
+  }
+  async function reconcile({ provider, ledger }, id, options) {
+    return ledger.observe(await readPaymentFact(provider, id), options);
   }
 
   async function api(event) {
@@ -155,7 +158,7 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
     } catch (error) { return failure(error); }
   }
 
-  async function webhook(event) {
+  async function webhook(event, { onUnmatchedOrder } = {}) {
     try {
       const cfg = config();
       if (cfg.mode === 'off' || !cfg.accessToken || !cfg.webhookSecret) return reply(404, { error: 'FEATURE_DISABLED' });
@@ -167,12 +170,24 @@ function createCommerceHttp({ env = process.env, config: injectedConfig, firebas
       let providerId;
       try { ({ providerId } = dep.provider.parseWebhook({ headers: event.headers, query })); }
       catch { check(false, 'INVALID_WEBHOOK', 401); }
-      try { await reconcile(dep, providerId); }
+      let fact;
+      let order;
+      try {
+        await dep.provider.verifySellerEnvironment();
+        fact = await readPaymentFact(dep.provider, providerId);
+        order = await dep.ledger.observe(fact);
+      }
       catch (error) {
         if (!(error instanceof CommerceError) || error.status >= 500) throw error;
         // Permanent inconsistencies require reconciliation by the operator. Never credit from them.
         onIncident('PAYMENT_RECONCILIATION_MISMATCH');
+        return reply(200, { received: true });
       }
+      // The shared application can also sell residential services. Only an
+      // authenticated GET with no tools order may reach another ledger. Keep
+      // its errors outside the tools mismatch acknowledgement, so a failed
+      // service write is retried instead of being silently acknowledged.
+      if (order === null && typeof onUnmatchedOrder === 'function') await onUnmatchedOrder(fact, cfg);
       return reply(200, { received: true });
     } catch (error) { return failure(error); }
   }

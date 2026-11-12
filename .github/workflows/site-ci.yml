@@ -227,6 +227,7 @@ jobs:
           node tests/ready-projects/browser.mjs
           node tests/ready-projects/ops-browser.mjs
           node tests/project-commerce/orders-browser.mjs
+          node tests/project-commerce/service-browser.mjs
       - name: Consent and third-party policy on the generated public artifact
         run: PUBLIC_ARTIFACT_REQUIRED=1 node scripts/site/third_party_analytics_gate.mjs
       - name: Tool catalogue, SEO and share images in the gated artifact
@@ -495,6 +496,7 @@ jobs:
             build/ready-project-ops/
             build/reports/ready-projects/
             build/reports/project-orders/
+            build/reports/project-services/
           if-no-files-found: ignore
 
   execution_evidence:

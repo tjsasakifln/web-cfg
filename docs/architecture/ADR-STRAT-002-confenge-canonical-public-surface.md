@@ -10,6 +10,16 @@
 
 ## Application prepared on 2026-11-08: self-service tool exports
 
+## Aplicação autorizada em 2026-11-12: projeto residencial por disciplina
+
+O fundador autorizou preço por área e prazo de 15 a 90 dias, pagamento pelo
+Mercado Pago e publicação da oferta de elaboração residencial. A fronteira
+está em [ADR-PROJECTS-001](ADR-PROJECTS-001-ready-projects.md): contratação e
+recibo privados na superfície canônica, sem CRM paralelo, sem liberar produtos
+de arquivo não aprovados e sem alterar a autorização dos créditos de ferramentas.
+O preço é decisão comercial inicial; margem e pagamento operante exigem
+evidências próprias. A configuração do runtime decide disponibilidade de compra.
+
 ## Aplicação autorizada em 2026-11-12: marketplace de engenharia
 
 O fundador solicitou investigar, adaptar e publicar uma plataforma de contratação

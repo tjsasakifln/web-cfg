@@ -1,0 +1,81 @@
+{
+  "schema": "confenge.project-service-offer/1",
+  "version": "2026-11-12-v1",
+  "currency": "BRL",
+  "authorization": {
+    "state": "EXECUTE_NOW",
+    "date": "2026-11-12",
+    "reference": "Solicitação expressa do fundador para venda por disciplina, preços por prazo de 15 a 90 dias e pagamento Mercado Pago.",
+    "publicPrices": true,
+    "checkout": true,
+    "marginValidated": false
+  },
+  "pricing": {
+    "areaMin": 50,
+    "areaMax": 250,
+    "deadlineMin": 15,
+    "deadlineMax": 90,
+    "defaultAreaM2": 100,
+    "defaultDeadlineDays": 60,
+    "formula": "max(areaM2 * rateCents, minCents) * (0.85 + 13.5 / deadlineDays)",
+    "rounding": "Área com até duas casas decimais. Base e preço final de cada disciplina arredondados ao centavo mais próximo, com meio centavo para cima. Total é a soma das disciplinas.",
+    "disciplines": [
+      {
+        "id": "arquitetura",
+        "title": "Projeto arquitetônico",
+        "rateCents": 1490,
+        "minCents": 149000
+      },
+      {
+        "id": "estrutura",
+        "title": "Projeto estrutural",
+        "rateCents": 1290,
+        "minCents": 129000
+      },
+      {
+        "id": "eletrica",
+        "title": "Projeto elétrico",
+        "rateCents": 690,
+        "minCents": 69000
+      },
+      {
+        "id": "hidrossanitario",
+        "title": "Projeto hidrossanitário",
+        "rateCents": 690,
+        "minCents": 69000
+      }
+    ]
+  },
+  "scope": {
+    "buildingType": "new-residential",
+    "terrain": "flat-or-gentle",
+    "maxFloors": 2,
+    "description": "Residência unifamiliar nova, de 50 a 250 m², até dois pavimentos, em sistema convencional e terreno plano ou de declividade suave, sem contenções especiais, subsolo ou piscina.",
+    "included": [
+      "Elaboração das disciplinas selecionadas, com pranchas em PDF e arquivos editáveis DWG.",
+      "Compatibilização entre as disciplinas contratadas e as bases recebidas.",
+      "Verificação das regras urbanísticas e condominiais aplicáveis ao escopo, com os documentos do terreno.",
+      "ART ou RRT da elaboração por profissional com atribuição para o serviço.",
+      "Duas rodadas de ajustes solicitados de forma consolidada antes da conclusão, dentro do programa e da área contratados."
+    ],
+    "excluded": [
+      "Levantamento topográfico, sondagem, levantamentos e visitas ao local.",
+      "Taxas públicas, licenças, protocolo e acompanhamento de aprovação em órgãos ou condomínio.",
+      "Execução da obra, responsabilidade pela execução e gerenciamento de obra.",
+      "Estruturas especiais, contenções, subsolos, piscinas, reforma, regularização e edificações multifamiliares."
+    ]
+  },
+  "supplier": {
+    "legalName": "Confenge Serviços de Desenhos Técnicos Ltda",
+    "registration": "52.407.089/0001-09",
+    "email": "tiago.sasaki@confenge.com.br",
+    "phone": "+5548988344559",
+    "address": "Avenida Prefeito Osmar Cunha, 416, sala 1108, Centro, Florianópolis/SC, CEP 88015-100",
+    "serviceLocation": "Atendimento online ou no local do cliente, mediante agendamento."
+  },
+  "terms": {
+    "version": "2026-11-12-v1",
+    "url": "/projetos-prontos/condicoes/",
+    "text": "CONDIÇÕES DA CONTRATAÇÃO DE PROJETOS RESIDENCIAIS\n\n1. Objeto. O pedido corresponde à elaboração sob encomenda das disciplinas selecionadas, para uma residência unifamiliar nova de 50 a 250 m², até dois pavimentos, sistema convencional, terreno plano ou de declividade suave, sem contenções especiais, subsolo ou piscina. Não é a compra de um arquivo pronto com entrega imediata. A área informada é a soma das áreas construídas de todos os pavimentos.\n\n2. Entregas. A disciplina arquitetônica inclui implantação, plantas, cortes, fachadas, cobertura e documentação gráfica para análise de aprovação. A estrutural inclui fundações e estrutura convencional, dimensionamento, detalhamento e especificações, conforme os dados de solo e a arquitetura validados. A elétrica inclui pontos, circuitos, quadros, diagramas, dimensionamento e especificações. A hidrossanitária inclui água fria, esgoto sanitário e águas pluviais, dimensionamento e especificações. As pranchas são entregues em PDF e os desenhos em DWG. Incluem-se compatibilização entre as disciplinas contratadas, ART ou RRT de elaboração por profissional habilitado e duas rodadas de ajustes consolidados antes da conclusão, dentro do programa, área e solução contratados. Correção de erro do projeto não consome essas rodadas.\n\n3. Referências e terreno. O cliente pode enviar links de sites, imagens de revista, fotos ou esboços próprios como referência de necessidades e preferências. A solução é desenvolvida para o terreno e as regras aplicáveis. A reprodução ou alteração de projeto protegido de terceiros depende da autorização do titular. A compra não transfere direitos sobre projetos de terceiros. Documentos e arquivos são recebidos pelo atendimento após o pedido, em canal informado pela CONFENGE.\n\n4. Verificação inicial. Em até dois dias úteis após a confirmação do pagamento, a CONFENGE envia a lista específica de insumos necessários para o pedido. A conferência considera área, município, documentos do terreno, restrições urbanísticas, normas do condomínio quando houver, atribuições e formalidades profissionais. Em até três dias úteis após cada envio de documentos pelo cliente, a equipe confirma por escrito o início e a data final do pedido ou informa as pendências específicas que ainda impedem o início. Recebida a documentação completa, o início e a data final são confirmados nesse mesmo prazo de até três dias úteis. Se a demanda não se enquadrar nas condições contratadas ou não puder ser atendida, o cliente escolhe entre uma nova proposta, sem obrigação de aceitá-la, ou cancelamento com devolução integral. Nenhum serviço adicional é cobrado sem orçamento e aceite prévios.\n\n5. Prazo. O prazo escolhido, de 15 a 90 dias corridos, cobre a entrega de todas as disciplinas incluídas no mesmo pedido. Com o pagamento confirmado e os documentos completos, o prazo de elaboração começa até o terceiro dia útil após o recebimento completo; a comunicação por escrito registra esse início e a data final. Os documentos completos abrangem os documentos do terreno, o programa e os dados necessários ao pedido. Pendências reais devem ser informadas de forma específica em até três dias úteis de cada envio, sem adiamento genérico do início. Quando arquitetura e complementares forem contratados juntos, a elaboração e a consolidação da arquitetura pela CONFENGE integram o prazo escolhido; não são condição prévia para iniciar a contagem nem geram prazo adicional para as demais disciplinas. A arquitetura consolidada fornecida pelo cliente é necessária somente quando houver contratação de complementares sem o projeto arquitetônico. Para o projeto de fundações, são necessários dados geotécnicos suficientes. A contagem pode ser suspensa somente enquanto a CONFENGE aguarda documentos ou decisões que dependam do cliente, com comunicação por escrito identificando a pendência e seus efeitos na data final. Atrasos internos da CONFENGE não suspendem o prazo. Mudança de escopo somente altera preço ou prazo mediante orçamento e aceite prévios. Prazos de análise de prefeitura, condomínio e outros terceiros não integram o prazo de elaboração. A contratação não garante aprovação administrativa.\n\n6. Preço e pagamento. Cada disciplina tem preço próprio, calculado a partir da área, do valor mínimo e do prazo. O total exibido antes do pagamento é a soma das disciplinas selecionadas. O pagamento é realizado no ambiente seguro do Mercado Pago, conforme os meios e condições que ele disponibilizar. O eventual parcelamento e seus custos devem ser conferidos no Mercado Pago antes de confirmar. O retorno ao site não é comprovante de aprovação: o pedido é confirmado após consulta do servidor ao provedor.\n\n7. Itens não incluídos. Levantamento topográfico, sondagem, visita ou levantamento em campo, taxas públicas, licenças, protocolo e acompanhamento de aprovação em órgãos ou condomínio, execução e responsabilidade técnica de execução e gerenciamento da obra. Reformas, regularizações, uso multifamiliar, estruturas especiais, contenções, subsolos e piscinas requerem proposta própria. A CONFENGE informa as providências necessárias para a continuidade do projeto.\n\n8. Cancelamento e atendimento. Nas contratações pela internet, o consumidor pode exercer o direito legal de arrependimento no prazo de sete dias da contratação, nos termos do Código de Defesa do Consumidor. O pedido pode ser apresentado pelo canal de atendimento ou pela função de solicitação do pedido, sem motivo obrigatório. A solicitação gera um protocolo e é analisada pela equipe; o estorno somente é confirmado quando processado pelo provedor. Permanecem preservados os demais direitos legais.\n\n9. Uso e responsabilidade. A entrega é destinada ao imóvel identificado no pedido e à finalidade contratada. Mudanças de terreno, área, programa ou solução após a validação podem exigir novo orçamento. A execução deve observar o projeto concluído, as aprovações e o responsável técnico de execução. Os dados do pedido são tratados conforme a Política de Privacidade da CONFENGE para execução contratual, atendimento e obrigações legais."
+  }
+}

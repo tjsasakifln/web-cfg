@@ -73,6 +73,7 @@ def test_local_bim_file_picker_cannot_become_document_intake():
         "ferramentas/diagrama-unifilar/index.html",
         "ferramentas/orcamento-de-obras/index.html",
         "ferramentas/rede-de-agua/index.html",
+        "projetos-prontos/index.html",
     ):
         assert not capture_forms_with_file_input(local, local_route)
         assert capture_forms_with_file_input(f'<form action="/envio">{local}</form>', local_route)
