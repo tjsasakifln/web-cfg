@@ -7,6 +7,14 @@
     // esta tabela, stageToJourney devolvia 'operacao' e uma pericia, uma
     // demanda de SST ou um projeto viravam, em silencio, jornada B2G.
     const HOME_SITUATIONS = {
+      'projetos-prontos': {
+        journey: 'projeto', ladder: false,
+        next_step: 'A equipe confere a disponibilidade e conversa com você sobre a casa e o terreno.',
+        detail: 'A consulta não gera cobrança. Preço, prazo e escopo são definidos antes da contratação.',
+        route: '/projetos-prontos/', route_label: 'Consultar projetos residenciais',
+        whatsapp: 'Olá, CONFENGE. Quero consultar um projeto residencial e sua adequação ao meu terreno.',
+        placeholder: 'Se quiser, conte como imagina a casa. Não inclua documentos ou dados sensíveis.',
+      },
       'pesquisa de mercado': {
         journey: 'outro',
         ladder: false,

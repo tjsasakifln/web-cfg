@@ -125,6 +125,7 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
     "NURTURE_ADVANCE_WITHOUT_RESEND",
     "NURTURE_TOKEN_SECRET",
     "OPS_TOKEN",
+    "PROJECT_COMMERCE_MODE",
     "REAL_MONEY_MUTATION_ENABLED",
     "RESEND_API_KEY",
     "RUNTIME_FUNCTIONS_DIR",
@@ -143,6 +144,7 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
   process.env.NURTURE_TOKEN_SECRET = "n".repeat(40);
   process.env.NURTURE_ADVANCE_WITHOUT_RESEND = "1";
   process.env.OPS_TOKEN = "ops-token-for-runtime-parity";
+  process.env.PROJECT_COMMERCE_MODE = "off";
   process.env.ASAAS_MODE = "disabled";
   process.env.ENGINEERING_MARKETPLACE_MODE = "off";
   delete process.env.ENGINEERING_MARKETPLACE_URL;
@@ -245,6 +247,8 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
     { name: "offer-eligibility", method: "GET", path: "/.netlify/functions/offer-eligibility" },
     { name: "offer-terms-accept", method: "GET", path: "/.netlify/functions/offer-terms-accept" },
     { name: "ops", method: "GET", path: "/.netlify/functions/ops?action=health" },
+    { name: "project-orders", method: "GET", path: "/.netlify/functions/project-orders?op=config" },
+    { name: "project-orders-webhook", method: "POST", path: "/.netlify/functions/project-orders-webhook", body: "{}" },
     { name: "tool-credits", method: "GET", path: "/.netlify/functions/tool-credits?op=config" },
     { name: "tool-credits-webhook", method: "POST", path: "/.netlify/functions/tool-credits-webhook", body: "{}" },
   ];

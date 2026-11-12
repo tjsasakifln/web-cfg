@@ -44,6 +44,7 @@ PUBLIC_TOP_DIRS = frozenset(
         "confianca",
         "servicos",
         "projetos",
+        "projetos-prontos",
         # Founder-authorized engineering marketplace. Noindex and disabled until
         # the independent private application passes operational activation.
         "profissionais",
@@ -262,6 +263,13 @@ FORBIDDEN_PUBLIC_PATH_PREFIXES = (
 RETIRED_PUBLIC_ARTIFACT_PATHS = frozenset(
     {"avaliacao-imoveis-urbanos/inferencia/modela-pro-completo.zip"}
 )
+
+
+def is_ready_project_archive(rel_posix: str) -> bool:
+    """Residential delivery archives belong only in authenticated storage."""
+    rel = rel_posix.lower()
+    return rel.endswith(".zip") and rel.startswith(("assets/projects-ready/", "projetos-prontos/"))
+
 
 # Explicit public demonstrative downloads. Not a license to copy repo-root
 # data/, ops/data, fixtures, GSC, logs, handoffs, or anything under tests/.
@@ -504,6 +512,10 @@ def assemble_public_artifact(
             for n in names:
                 candidate = Path(directory) / n
                 nested = f"{rel_dir}/{n}".lstrip("/")
+                if is_ready_project_archive(nested):
+                    skip.add(n)
+                    errors.append(f"private_project_archive:{nested}")
+                    continue
                 if candidate.is_symlink():
                     skip.add(n)
                     continue
@@ -699,6 +711,14 @@ def audit_public_artifact(
         file_count += 1
         name = p.name
         suf = p.suffix.lower()
+        if is_ready_project_archive(rel):
+            findings.append(
+                {
+                    "code": "private_project_archive",
+                    "path": rel,
+                    "detail": "project delivery ZIP must be served only after authenticated payment verification",
+                }
+            )
         parent_rel = Path(rel).parent.as_posix()
         if is_authorized_public_nested_data_dir(parent_rel):
             if not is_authorized_public_nested_data_file(rel):

@@ -385,6 +385,22 @@
         "route": "/bim/fotogrametria/",
         "reason": "Exercises the application shell for the locally processed photogrammetry workspace.",
         "seo_exempt_reason": "The reconstruction workspace is noindex. The indexable BIM hub describes its purpose and links to it."
+      },
+      {
+        "family_id": "ready_projects",
+        "route": "/projetos-prontos/",
+        "reason": "Single-route residential-project enquiry surface with the shared persistent lead form."
+      },
+      {
+        "family_id": "ready_projects_terms",
+        "route": "/projetos-prontos/condicoes/",
+        "reason": "Indexable conditions page for residential-project enquiries, licensing, adaptation and delivery scope."
+      },
+      {
+        "family_id": "ready_projects_orders",
+        "route": "/projetos-prontos/pedidos/",
+        "reason": "Residential-project order and support workspace, including the initial purchase-disabled state.",
+        "seo_exempt_reason": "The transactional account area is permanently noindex. Public discovery and conditions use the indexable residential-project pages."
       }
     ],
     "additional_pages": [

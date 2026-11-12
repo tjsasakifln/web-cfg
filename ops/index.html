@@ -64,6 +64,7 @@
  <button type="button" data-tab="funnel" class="active">Funil real</button>
  <button type="button" data-tab="health">System Health</button>
  <button type="button" data-tab="leads">Leads reais</button>
+ <button type="button" data-tab="projects">Projetos prontos</button>
  <button type="button" data-tab="analytics">Analytics</button>
  <button type="button" data-tab="gsc">Demanda orgânica</button>
  <button type="button" data-tab="weekly">Semanal</button>
@@ -107,8 +108,33 @@
  </select>
  <input id="stage-note" placeholder="nota (sem colar PII extra)" style="min-width:12rem" />
  <input id="stage-value" placeholder="proposal/contract value" type="number" min="0" step="1" />
+ <label>Recebimento registrado (R$)<input id="stage-received" type="number" min="0" step="0.01" /></label>
  <button type="button" id="btn-stage">Salvar estágio</button>
  </div>
+ </div>
+ </section>
+
+ <section id="panel-projects" class="panel" aria-labelledby="projects-title">
+ <h2 id="projects-title">Projetos prontos</h2>
+ <p>Solicitações e qualificação desta oferta. Contato recebido, contrato e pagamento são fatos distintos.</p>
+ <div class="grid" id="projects-kpi"></div>
+ <p id="projects-period" class="muted">Informe a chave de acesso e selecione Carregar.</p>
+ <div class="card">
+ <h3>Contatos e terreno</h3>
+ <p>Os dados de contato são exibidos somente depois da consulta autenticada.</p>
+ <button type="button" id="btn-project-contacts">Mostrar contatos e qualificação</button>
+ <button type="button" id="btn-project-export" class="secondary" disabled>Exportar registros privados</button>
+ <div style="overflow:auto;margin-top:1rem">
+ <table><caption>Solicitações reais da oferta de projetos prontos</caption>
+ <thead><tr><th>Contato</th><th>Interesse</th><th>Terreno e construção</th><th>Atendimento</th></tr></thead>
+ <tbody id="projects-body"><tr><td colspan="4">Aguardando consulta autenticada.</td></tr></tbody>
+ </table></div>
+ </div>
+ <div class="card" style="margin-top:1rem">
+ <h3>Pedidos, recebimentos e custos</h3>
+ <p>Pedidos, pagamentos confirmados, cancelamentos, reembolsos e acessos à entrega são consultados no relatório privado de pedidos. O estágio “contrato” não confirma pagamento. Valores recebidos aqui são registros manuais da equipe.</p>
+ <p>Custos de aquisição, tarifas e horas de atendimento precisam de registro manual. Campos não informados ficam vazios na exportação. A receita de licenças e a de adaptações e outros serviços permanecem separadas.</p>
+ <pre id="projects-values" style="white-space:pre-wrap">Valores ainda não consultados.</pre>
  </div>
  </section>
 
@@ -131,6 +157,19 @@
  const tokenKey = "confenge_ops_token";
  const tokenEl = $("token");
  tokenEl.value = sessionStorage.getItem(tokenKey) || "";
+ let projectContacts = [];
+ let projectReport = null;
+ let projectRevision = 0;
+ const projectKinds = { license: "Licença de projeto", adaptation: "Adaptação ao terreno", complementary: "Projetos complementares", custom: "Projeto sob medida" };
+ const projectStages = { lead_persisted: "Recebido", contacted: "Contato realizado", qualified: "Qualificado", meeting: "Reunião", proposal: "Proposta", won: "Contrato", lost: "Encerrado" };
+ const lotLabels = { owned: "Terreno próprio", buying: "Em negociação", searching: "Procurando terreno", unknown: "Não informado" };
+ const buildLabels = { "0_6m": "Até 6 meses", "6_12m": "De 6 a 12 meses", over_12m: "Após 12 meses", unknown: "Prazo não informado" };
+ const money = value => value == null ? "Não informado" : new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+ tokenEl.addEventListener("input", () => {
+   projectRevision++;
+   projectContacts = []; projectReport = null;
+   $("projects-body").replaceChildren(); $("btn-project-export").disabled = true;
+ });
 
  function token() { return tokenEl.value.trim(); }
  function headers() {
@@ -161,6 +200,11 @@
 
  async function load() {
  showErr("");
+ projectRevision++;
+ projectContacts = [];
+ projectReport = null;
+ $("projects-body").textContent = "";
+ $("btn-project-export").disabled = true;
  sessionStorage.setItem(tokenKey, token());
  try {
  const funnel = await api("funnel");
@@ -212,6 +256,28 @@
  }).join("") || "<tr><td colspan=8 class=muted>Nenhum lead real no store</td></tr>";
  document.querySelectorAll(".pick-lead").forEach((b) => b.addEventListener("click", () => { $("stage-id").value = b.dataset.id; }));
 
+ projectReport = await api("ready_projects");
+ const total = projectReport.contacts.total;
+ $("projects-kpi").replaceChildren();
+ for (const [label, value] of [
+   ["Solicitações recebidas", total.contacts_received], ["Qualificados pela equipe", total.contacts_qualified],
+   ["Contratos registrados", total.contracts_registered], ["Interesse em licença", projectReport.contacts.license.contacts_received],
+   ["Adaptação e outros serviços", projectReport.contacts.additional_services.contacts_received],
+   ["Visualizações observadas (14 dias)", projectReport.visits.page_views],
+ ]) {
+   const card = document.createElement("div"); card.className = "card";
+   const strong = document.createElement("strong"); strong.textContent = value == null ? "Não informado" : String(value);
+   const span = document.createElement("span"); span.textContent = label; card.append(strong, span); $("projects-kpi").append(card);
+ }
+ $("projects-period").textContent = "Solicitações: todos os registros reais disponíveis. Visualizações: últimos 14 dias, conforme as escolhas de privacidade dos visitantes; não representam pessoas únicas. Testes ficam fora destes indicadores.";
+ $("projects-values").textContent = ["license", "additional_services"].map(key => {
+   const values = projectReport.contacts[key].manual_values;
+   return (key === "license" ? "Licenças" : "Adaptação e outros serviços") + "\n" +
+     "Propostas: " + money(values.proposal.value) + " (" + values.proposal.records + " registros)\n" +
+     "Contratado: " + money(values.contracted.value) + " (" + values.contracted.records + " registros)\n" +
+     "Recebimento manual: " + money(values.received.value) + " (" + values.received.records + " registros)";
+ }).join("\n\n");
+
  const an = await api("analytics_summary");
  $("analytics-pre").textContent = JSON.stringify({
  events_loaded: an.events_loaded,
@@ -252,6 +318,39 @@
  }
 
  $("btn-load").addEventListener("click", load);
+ $("btn-project-contacts").addEventListener("click", async () => {
+ showErr(""); projectContacts = []; $("projects-body").replaceChildren(); $("btn-project-export").disabled = true;
+ const revision = ++projectRevision;
+ const requestToken = token();
+ try {
+   const result = await api("leads", { qs: "&pii=1&kind=real&family=ready_projects" });
+   if (revision !== projectRevision || token() !== requestToken) return;
+   projectContacts = result.leads || [];
+   for (const lead of projectContacts) {
+     const project = lead.project_interest || {};
+     const row = document.createElement("tr");
+     const cell = value => { const td = document.createElement("td"); td.style.whiteSpace = "pre-line"; td.textContent = value; row.append(td); return td; };
+     cell([lead.nome, lead.email, lead.telefone].filter(Boolean).join("\n"));
+     cell((projectKinds[project.kind] || "Não informado") + (project.product_id ? "\nModelo: " + project.product_id : "\nSem modelo selecionado"));
+     cell([project.city && project.uf ? project.city + "/" + project.uf : "Município não informado",
+       project.lot_width_m && project.lot_depth_m ? project.lot_width_m + " × " + project.lot_depth_m + " m" : "Dimensões não informadas",
+       lotLabels[project.lot_status] || "Posse não informada", "Dormitórios: " + (project.bedrooms === "unknown" ? "Não informado" : project.bedrooms || "Não informado"),
+       buildLabels[project.build_when] || "Prazo não informado"].join("\n"));
+     const action = cell((projectStages[lead.commercial_stage] || lead.commercial_stage || "Recebido") + "\n" + (lead.received_at || ""));
+     const button = document.createElement("button"); button.type = "button"; button.className = "secondary"; button.textContent = "Atualizar atendimento";
+     button.addEventListener("click", () => { $("stage-id").value = lead.lead_id; $("stage-received").value = ""; document.querySelector('[data-tab="leads"]').click(); $("stage-id").focus(); });
+     action.append(document.createElement("br"), button); $("projects-body").append(row);
+   }
+   if (!projectContacts.length) { const row = document.createElement("tr"); const cell = document.createElement("td"); cell.colSpan = 4; cell.textContent = "Nenhuma solicitação real recebida nesta oferta."; row.append(cell); $("projects-body").append(row); }
+   $("btn-project-export").disabled = false;
+ } catch (error) { if (revision === projectRevision) showErr(String(error.message || error)); }
+ });
+ $("btn-project-export").addEventListener("click", () => {
+   const payload = { schema_version: "ready-project-ops-export/v1", exported_at: new Date().toISOString(), records: projectContacts, report: projectReport,
+     manual_finance: { payment_fees: null, acquisition_expenses: null, support_hours: null, source: "manual_record_required" } };
+   const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
+   const link = document.createElement("a"); link.href = url; link.download = "confenge-projetos-prontos-" + new Date().toISOString().slice(0, 10) + ".json"; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+ });
  $("btn-stage").addEventListener("click", async () => {
  showErr("");
  try {
@@ -264,6 +363,8 @@
  loss_reason: $("loss-reason").value || undefined,
  };
  const val = $("stage-value").value;
+ const received = $("stage-received").value;
+ if (received !== "") body.revenue_received = Number(received);
  if (val) {
  if (stage === "won") body.contract_value = Number(val);
  else if (stage === "proposal") body.proposal_value = Number(val);

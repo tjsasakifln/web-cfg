@@ -19,14 +19,17 @@ from scripts.site.csp_contract import (  # noqa: E402
     FIREBASE_AUTH_CONNECTIONS,
     FIREBASE_POPUP_FRAMES,
     FIREBASE_POPUP_SCRIPT,
+    PROJECT_ORDERS_DOCUMENT,
     WALLET_DOCUMENTS,
     WALLET_ISOLATED_DOCUMENT,
     apply_artifact_csp_hashes,
     apply_script_src_hashes,
     apply_style_src_hashes,
     apply_wallet_document_policies,
+    apply_project_order_document_policy,
     csp_directives_from_text,
     evaluate_security_headers,
+    evaluate_project_order_policy,
     executable_inline_hashes,
     inline_style_hashes,
     parse_styles,
@@ -97,6 +100,45 @@ def test_websfm_meta_allows_firebase_without_popup_sources() -> None:
     assert set(FIREBASE_AUTH_CONNECTIONS) <= set(directives["connect-src"])
     assert FIREBASE_POPUP_SCRIPT not in directives["script-src"]
     assert "'wasm-unsafe-eval'" in directives["script-src"]
+
+
+def test_project_orders_password_policy_is_exact_and_isolated() -> None:
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        (root / "projetos-prontos/pedidos").mkdir(parents=True)
+        page = root / "projetos-prontos/pedidos/index.html"
+        page.write_text('<script>privateBootstrap()</script><style>.private{color:red}</style>', encoding="utf-8")
+        (root / "index.html").write_text('<script>publicBootstrap()</script>', encoding="utf-8")
+        original = _headers_with_script_src("'self'") + (
+            "\n/ferramentas/\n  Content-Security-Policy: script-src 'self' https://apis.google.com\n"
+            "\n/projetos-prontos/\n  X-Content-Type-Options: nosniff\n"
+            f"\n{PROJECT_ORDERS_DOCUMENT}\n  Cache-Control: no-store\n"
+        )
+        result = apply_project_order_document_policy(original, root)
+        assert apply_project_order_document_policy(result, root) == result
+        before, after = map(parse_header_rules, (original, result))
+        for route in ("/*", "/ferramentas/", "/projetos-prontos/"):
+            assert after[route] == before[route]
+        assert after[PROJECT_ORDERS_DOCUMENT]["cache-control"] == "no-store"
+        policy = _policy(after[PROJECT_ORDERS_DOCUMENT]["content-security-policy"])
+        assert evaluate_project_order_policy(policy) == []
+        assert policy["script-src"] == policy["style-src"] == ["'self'"]
+        assert policy["connect-src"] == ["'self'", *FIREBASE_AUTH_CONNECTIONS]
+        assert policy["img-src"] == ["'self'", "data:", "blob:"]
+        assert policy["frame-src"] == ["'none'"]
+        assert "google-analytics" not in str(policy) and FIREBASE_POPUP_SCRIPT not in str(policy)
+        assert len(executable_inline_hashes(root)) == 1
+        assert sum(inline_style_hashes(root)[0].values()) == 0
+        for directive, source in (("connect-src", "https://www.google-analytics.com"),
+                                  ("script-src", FIREBASE_POPUP_SCRIPT),
+                                  ("frame-src", FIREBASE_POPUP_FRAMES[0])):
+            widened = {key: list(values) for key, values in policy.items()}
+            widened[directive].append(source)
+            assert evaluate_project_order_policy(widened)
+        page.unlink()
+        assert apply_project_order_document_policy(original, root) == original
 
 
 def test_build_refreshes_canonical_csp_before_final_host_render() -> None:
@@ -313,8 +355,15 @@ def evaluate_live() -> tuple[list[str], Counter[str], Counter[str], Counter[str]
             errors.append(f"Wallet CSP blocks Firebase OAuth: {route}")
         if len(value.encode("utf-8")) > 7168:
             errors.append(f"Wallet CSP exceeds 7168 bytes: {route}")
+    order_policy = rules.get(PROJECT_ORDERS_DOCUMENT, {}).get("content-security-policy", "")
+    if not (SITE / "projetos-prontos/pedidos/index.html").is_file():
+        errors.append("Project orders document missing from the artifact")
+    if not order_policy:
+        errors.append("Project orders document has no scoped CSP")
+    else:
+        errors.extend(evaluate_project_order_policy(_policy(order_policy)))
     for route, values in rules.items():
-        if route in WALLET_DOCUMENTS or "content-security-policy" not in values:
+        if route in (*WALLET_DOCUMENTS, PROJECT_ORDERS_DOCUMENT) or "content-security-policy" not in values:
             continue
         if any(origin in values["content-security-policy"]
                for origin in (*FIREBASE_AUTH_CONNECTIONS, FIREBASE_POPUP_SCRIPT, *FIREBASE_POPUP_FRAMES)):

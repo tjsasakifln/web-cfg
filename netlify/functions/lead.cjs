@@ -107,13 +107,15 @@ const STANDARD_IDEMPOTENCY_MATERIAL_FIELDS = Object.freeze([
   "faixa_contrato", "risco_em_jogo", "frequencia", "maturidade_documental",
   "capacidade_interna", "public_contract_id", "public_entity_id", "public_id_slug",
   "cnpj", "offer_id", "terms_id", "document_intent", "intent_kind", "canal_seguro",
-  "radar_params",
+  "radar_params", "project_interest",
 ]);
 
 function standardIdempotencyMaterialHash(lead) {
   if (!lead || lead.adaptive_intake === true) return null;
   const material = {};
   for (const field of STANDARD_IDEMPOTENCY_MATERIAL_FIELDS) {
+    // Preserve pre-launch hashes for every existing, non-residential form.
+    if (field === "project_interest" && !lead.project_interest) continue;
     if (field === "radar_params" && lead.radar_params) {
       const radar = lead.radar_params;
       material[field] = {

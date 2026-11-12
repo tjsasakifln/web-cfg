@@ -275,6 +275,13 @@
       "owner_issue": 577,
       "review_at": null,
       "note": "A área de trabalho é acessada pelo portal e pelos guias indexáveis em /bim/. A política abrange apenas a execução das ferramentas."
+    },
+    {
+      "family_id": "ready_projects_orders",
+      "reason_code": "commercial_transactional_form",
+      "owner_issue": 61,
+      "review_at": null,
+      "note": "Área de conta, contratação, pedidos, arquivos protegidos e atendimento. Noindex permanente, inclusive após habilitar um produto aprovado. A oferta de descoberta está em /projetos-prontos/; ADR-PROJECTS-001."
     }
   ]
 }
