@@ -151,3 +151,21 @@ Ver [provisionamento e operação](../tools-commerce/README.md). O modo padrão 
 | `TOOLS_COMMERCE_MP_LIVE_SELLER_ID` | User ID numérico positivo da conta vendedora de produção. Obrigatório com credenciais ou compras no modo live; não pode coexistir com o ID de Teste. |
 | `TOOLS_COMMERCE_MP_TEST_BUYER`, `TOOLS_COMMERCE_SANDBOX_UIDS`, `TOOLS_COMMERCE_SANDBOX_ORIGIN` | E-mail opcional de comprador de teste, UIDs permitidos e origem explícita, somente no sandbox. |
 | `FIREBASE_AUTH_EMULATOR_HOST`, `FIRESTORE_EMULATOR_HOST` | Hosts loopback, somente no projeto demo. |
+
+## Marketplace de engenharia
+
+O gateway roda no runtime web existente; PostgreSQL, Redis, API e worker Mercur são um serviço privado separado. Ver [provisionamento e operação](../marketplace/operations.md). A publicação estática não provisiona esse serviço nem ativa pagamentos.
+
+| Variável no runtime web | Finalidade |
+| --- | --- |
+| `ENGINEERING_MARKETPLACE_MODE` | `off` por padrão; `sandbox` somente fora do perfil de produção; `live` exige `RUNTIME_PROFILE=netcup-production` e todas as chaves válidas. |
+| `ENGINEERING_MARKETPLACE_URL` | Origem privada HTTP loopback, sem caminho, credenciais ou query, porta 1024..65535. A receita usa `http://127.0.0.1:19050`. Nunca controlada pelo navegador. |
+| `ENGINEERING_MARKETPLACE_PUBLISHABLE_KEY` | Chave `pk_` dedicada, emitida pelo setup Mercur e ligada ao canal de vendas. Usada apenas pelo servidor neste gateway. |
+| `ENGINEERING_MARKETPLACE_SESSION_KEY` | Chave privada estável de 32 bytes em base64url canônica, 43 caracteres sem padding; cifra o cookie HttpOnly da sessão. |
+| `ENGINEERING_MARKETPLACE_GATEWAY_KEY` | Segredo ASCII base64url/hex de 32..256 caracteres, idêntico a `MARKETPLACE_GATEWAY_KEY` no backend. O navegador não o recebe. |
+| `ENGINEERING_MARKETPLACE_CONNECT_WEBHOOK_SECRET` | Valor exato de `STRIPE_SELLERS_WEBHOOK_SECRET` do backend; valida o corpo original e timestamp Stripe antes de encaminhar `/hooks/payout`. Distinto do segredo do webhook financeiro. |
+| `ENGINEERING_MARKETPLACE_SANDBOX_ORIGIN` | Origem `http://localhost:PORT` ou `http://127.0.0.1:PORT`, somente no sandbox. Em produção a origem aceita é fixa: `https://confenge.com.br`. |
+
+No backend privado, `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET`, `COOKIE_SECRET`, `MARKETPLACE_GATEWAY_KEY`, `MARKETPLACE_COMMISSION_BPS`, `MARKETPLACE_PAYMENT_MODE`, `MARKETPLACE_PAYMENTS_ENABLED` e os três valores Stripe são configurados conforme `apps/engineering-marketplace/.env.example`. `MEDUSA_DISABLE_TELEMETRY=true` e `MERCUR_DISABLE_TELEMETRY=true` acompanham o wrapper obrigatório `scripts/medusa.cjs`. Não incluir essas credenciais no ambiente de build público.
+
+Desligar `ENGINEERING_MARKETPLACE_MODE` suspende novas operações do navegador, preservando os dois webhooks quando o backend está configurado. Desligar `MARKETPLACE_PAYMENTS_ENABLED` suspende novas cobranças/onboarding, preservando as credenciais e a conciliação existente. Nunca apagar chaves Stripe ou retirar handlers de webhook para pausar vendas.

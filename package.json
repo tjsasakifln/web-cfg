@@ -349,7 +349,9 @@
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
     "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs",
     "test:contact-journeys": "node scripts/site/test_contact_journeys.mjs",
-    "test:b2g-openings": "python3 scripts/site/render_institutional_b2g_openings.py"
+    "test:b2g-openings": "python3 scripts/site/render_institutional_b2g_openings.py",
+    "test:marketplace": "node --test tests/marketplace/gateway.test.cjs",
+    "test:marketplace:browser": "node tests/marketplace/browser.mjs"
   },
   "engines": {
     "node": ">=22.19 <23"

@@ -44,6 +44,9 @@ PUBLIC_TOP_DIRS = frozenset(
         "confianca",
         "servicos",
         "projetos",
+        # Founder-authorized engineering marketplace. Noindex and disabled until
+        # the independent private application passes operational activation.
+        "profissionais",
         "edificacoes",
         "como-trabalhamos",
         "empresa",

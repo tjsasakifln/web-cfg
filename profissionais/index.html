@@ -1,0 +1,155 @@
+<!doctype html>
+<html class="no-js" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#061a33">
+  <meta name="robots" content="noindex,follow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Encontre profissionais de engenharia | CONFENGE</title>
+  <meta name="description" content="Encontre profissionais para o seu projeto, peça uma proposta e acompanhe a contratação, a entrega e a avaliação pela CONFENGE.">
+  <link rel="canonical" href="https://confenge.com.br/profissionais/">
+  <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/assets/marketplace/marketplace.css">
+  <script>document.documentElement.classList.replace('no-js','js')</script>
+  <script defer src="/script.js"></script>
+  <script type="module" src="/assets/marketplace/marketplace.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header"><div class="container header-inner"><a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"></a><nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="header_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
+<a data-cta-position="header_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+</nav><a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a><button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button"><span>Menu</span></button></div><nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/projetos/" style="min-height:44px">Projetos</a>
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços</a>
+<a data-cta-position="mobile_nav" href="/engenharia-condominios/" style="min-height:44px">Condomínios</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/ferramentas/" style="min-height:44px">Ferramentas</a>
+<a data-cta-position="mobile_nav" href="/empresa/" style="min-height:44px">Empresa</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
+</nav></header>
+<main id="conteudo" class="marketplace">
+  <nav class="breadcrumbs container" aria-label="Breadcrumb"><ol><li><a href="/">Início</a></li><li aria-current="page">Profissionais de engenharia</li></ol></nav>
+  <header class="market-hero container">
+    <div><p class="eyebrow">Engenharia, Perícias e Inteligência Técnica</p><h1>O profissional certo para o seu projeto</h1><p class="content-lead">Compare especialidades, descreva o serviço e acompanhe a proposta e a entrega em um só lugar.</p></div>
+    <aside class="market-hero-note"><strong>Comece pelo que precisa resolver.</strong><p>O escopo, o prazo e o valor ficam definidos na proposta antes da contratação.</p><button id="market-provider-entry" type="button" class="market-text-button" disabled>Sou profissional e quero me cadastrar</button></aside>
+  </header>
+  <section class="container market-availability" id="market-availability" aria-label="Disponibilidade">
+    <p id="market-availability-message" role="status" aria-live="polite">Verificando a disponibilidade dos cadastros e contratações…</p>
+    <div id="market-unavailable-actions" class="market-actions" hidden><a class="button button-primary" href="/triagem-tecnica/">Conversar sobre meu projeto</a><button class="button button-secondary" type="button" id="market-retry">Tentar novamente</button></div>
+  </section>
+  <noscript><section class="container market-empty"><h2>Atendimento para o seu projeto</h2><p>Ative o JavaScript para consultar os perfis e acompanhar contratações. Você também pode falar com a equipe CONFENGE.</p><a class="button button-primary" href="/triagem-tecnica/">Solicitar atendimento</a></section></noscript>
+  <section class="container market-workbench" id="market-workbench" hidden aria-label="Profissionais e contratações">
+    <div class="market-tabs" role="tablist" aria-label="O que você quer fazer?">
+      <button id="market-tab-search" type="button" role="tab" aria-selected="true" aria-controls="market-panel-search" tabindex="0" data-market-tab="search">Buscar profissionais</button>
+      <button id="market-tab-account" type="button" role="tab" aria-selected="false" aria-controls="market-panel-account" tabindex="-1" data-market-tab="account">Minha conta</button>
+      <button id="market-tab-requests" type="button" role="tab" aria-selected="false" aria-controls="market-panel-requests" tabindex="-1" data-market-tab="requests">Contratações</button>
+    </div>
+    <p id="market-notice" class="market-status" role="status" aria-live="polite" hidden></p>
+    <section id="market-panel-search" role="tabpanel" aria-labelledby="market-tab-search" tabindex="0">
+      <div id="market-search-view">
+        <form id="market-search-form" class="market-search-form" action="/api/web/engineering-marketplace" method="get">
+          <label for="market-query">Busque pelo nome ou pela atuação do profissional<input id="market-query" name="q" maxlength="100" type="search" placeholder="Ex.: nome do profissional, estruturas, inspeções" autocomplete="off"></label>
+          <button type="submit" class="button button-primary">Buscar profissionais</button>
+        </form>
+        <div class="market-result-heading"><h2>Profissionais</h2><p id="market-result-count" role="status" aria-live="polite"></p></div>
+        <p id="market-search-status" class="market-status" role="status" aria-live="polite" hidden></p>
+        <div id="market-provider-list" class="market-provider-list"></div>
+        <nav id="market-pagination" class="market-pagination" aria-label="Páginas de profissionais"></nav>
+      </div>
+      <section id="market-provider-view" class="market-provider-view" hidden aria-label="Perfil profissional">
+        <button type="button" id="market-back-search" class="market-text-button">Voltar à busca</button>
+        <div id="market-provider-detail"></div>
+        <div class="market-actions"><button id="market-request-start" class="button button-primary" type="button">Pedir uma proposta</button></div>
+        <section id="market-request-entry" class="market-request-entry" hidden aria-labelledby="market-request-heading">
+          <h3 id="market-request-heading">Conte o que precisa</h3>
+          <p id="market-request-recipient"></p>
+          <div id="market-request-signin" class="market-empty" hidden><p>Entre como cliente para enviar o pedido e acompanhar a resposta do profissional.</p><button type="button" class="button button-secondary" id="market-request-login">Entrar ou criar conta</button></div>
+          <form id="market-request-form" class="market-form" method="post" action="/api/web/engineering-marketplace" hidden>
+            <fieldset>
+              <label>Qual é o serviço?<input name="title" maxlength="160" minlength="6" required placeholder="Ex.: projeto estrutural de residência"></label>
+              <label>Tipo de necessidade<select name="intent_family" id="market-request-intent" required><option value="">Selecione</option></select></label>
+              <label>Descreva o objeto e a entrega esperada<textarea name="description" rows="5" minlength="30" maxlength="6000" required placeholder="Explique o que precisa, a fase do trabalho e quais informações já estão disponíveis."></textarea></label>
+              <label>Local do serviço<input name="location" minlength="2" maxlength="200" required placeholder="Cidade e UF, ou atendimento remoto"></label>
+              <label class="market-check"><input name="consent" type="checkbox" required><span>Concordo com os <a href="/termos-de-uso/#marketplace-engenharia" target="_blank" rel="noopener">termos da contratação</a> e autorizo o envio deste pedido ao profissional escolhido, conforme a <a href="/privacidade/" target="_blank" rel="noopener">política de privacidade</a>.</span></label>
+              <button class="button button-primary" type="submit">Enviar pedido de proposta</button>
+            </fieldset>
+            <p class="market-status" data-form-status role="status" aria-live="polite" hidden></p>
+          </form>
+        </section>
+      </section>
+    </section>
+    <section id="market-panel-account" role="tabpanel" aria-labelledby="market-tab-account" tabindex="0" hidden>
+      <div id="market-auth-view" class="market-account-layout">
+        <div><p class="eyebrow">Sua conta</p><h2 id="market-auth-heading">Entre para continuar</h2><p id="market-auth-intro">Acompanhe propostas, entregas e avaliações dos seus serviços.</p><p class="market-small">Seus dados de acesso não aparecem no perfil público.</p></div>
+        <div>
+          <div class="market-segmented" role="group" aria-label="Acesso à conta"><button id="market-mode-login" type="button" aria-pressed="true">Entrar</button><button id="market-mode-register" type="button" aria-pressed="false">Criar conta</button></div>
+          <form id="market-auth-form" class="market-form" method="post" action="/api/web/engineering-marketplace">
+            <fieldset>
+              <fieldset class="market-choice"><legend>Como você vai usar a conta?</legend><label><input name="role" type="radio" value="customer" checked> Quero contratar</label><label><input name="role" type="radio" value="provider"> Sou profissional</label></fieldset>
+              <div id="market-register-fields" class="market-form" hidden>
+                <div class="market-form-pair"><label>Nome<input name="first_name" autocomplete="given-name" maxlength="100" disabled></label><label>Sobrenome<input name="last_name" autocomplete="family-name" maxlength="100" disabled></label></div>
+                <label id="market-register-name" hidden>Nome do perfil profissional<input name="name" minlength="3" maxlength="120" autocomplete="organization" disabled></label>
+              </div>
+              <label>E-mail<input name="email" type="email" maxlength="254" autocomplete="username" required></label>
+              <label>Senha<input id="market-password" name="password" type="password" maxlength="128" autocomplete="current-password" required></label>
+              <p id="market-password-hint" class="market-small" hidden>Use pelo menos 12 caracteres.</p>
+              <label id="market-register-consent" class="market-check" hidden><input name="consent" type="checkbox" disabled><span>Li e aceito os <a href="/termos-de-uso/#marketplace-engenharia" target="_blank" rel="noopener">termos de uso</a> e a <a href="/privacidade/" target="_blank" rel="noopener">política de privacidade</a>.</span></label>
+              <button type="submit" class="button button-primary" id="market-auth-submit">Entrar</button>
+            </fieldset>
+            <p class="market-status" data-form-status role="status" aria-live="polite" hidden></p>
+          </form>
+          <p class="market-small">Precisa de ajuda para acessar sua conta? <a href="/triagem-tecnica/">Fale com a equipe CONFENGE</a>.</p>
+        </div>
+      </div>
+      <div id="market-account-view" hidden>
+        <div class="market-account-heading"><div><p class="eyebrow" id="market-account-role">Sua conta</p><h2 id="market-account-name"></h2><p id="market-account-email" class="market-small"></p></div><button id="market-logout" type="button" class="button button-secondary">Sair da conta</button></div>
+        <form id="market-seller-select-form" class="market-form market-select-seller" hidden><label>Perfil profissional<select id="market-seller-select" name="seller_id" required></select></label><button class="button button-secondary" type="submit">Usar este perfil</button><p class="market-status" data-form-status role="status" hidden></p></form>
+        <div id="market-customer-summary" class="market-empty" hidden><h3>Seu próximo passo</h3><p>Escolha um profissional para pedir uma proposta ou consulte as suas contratações.</p><div class="market-actions"><button class="button button-secondary" type="button" data-market-open="search">Buscar profissionais</button><button class="button button-secondary" type="button" data-market-open="requests">Ver contratações</button></div></div>
+        <section id="market-profile-section" hidden aria-labelledby="market-profile-title">
+          <div class="market-section-heading"><h3 id="market-profile-title">Seu perfil profissional</h3><p>Apresente sua atuação e os locais que atende. Os dados abaixo compõem o seu perfil.</p></div>
+          <p id="market-profile-visibility" class="market-status" role="status" aria-live="polite" hidden></p>
+          <p id="market-profile-load-status" class="market-status" role="status" aria-live="polite" hidden></p>
+          <form id="market-profile-form" class="market-form" method="post" action="/api/web/engineering-marketplace">
+            <fieldset disabled>
+              <label>Nome do perfil<input name="name" minlength="3" maxlength="120" required autocomplete="organization"></label>
+              <label>Apresentação profissional<textarea name="description" rows="4" minlength="30" maxlength="3000" required placeholder="Explique sua atuação, experiência e os serviços que oferece."></textarea></label>
+              <div class="market-form-pair"><label>Cidade<input name="city" minlength="2" maxlength="100" required autocomplete="address-level2"></label><label>UF<select name="uf" id="market-profile-uf" required><option value="">Selecione</option></select></label></div>
+              <div class="market-form-pair"><label>Conselho profissional<select name="registration_board" required><option value="CREA">CREA</option><option value="CAU">CAU</option></select></label><label>Número do registro<input name="registration" minlength="3" maxlength="40" required></label></div>
+              <fieldset class="market-choice"><legend>Forma de atendimento</legend><label><input name="modalities" type="checkbox" value="remoto"> Remoto</label><label><input name="modalities" type="checkbox" value="presencial"> Presencial</label></fieldset>
+              <fieldset class="market-specialties"><legend>Áreas de atuação</legend><div id="market-specialties"></div></fieldset>
+              <div class="market-form-pair"><label>Site <span class="market-optional">(opcional)</span><input name="website_url" type="url" maxlength="500" placeholder="https://"></label><label>Portfólio <span class="market-optional">(opcional)</span><input name="portfolio_url" type="url" maxlength="500" placeholder="https://"></label></div>
+              <label>Telefone de contato <span class="market-optional">(opcional, restrito à conta)</span><input name="phone" type="tel" minlength="8" maxlength="40" autocomplete="tel"></label>
+              <label class="market-check"><input name="consent" type="checkbox" required><span>Confirmo a veracidade dos dados e aceito os <a href="/termos-de-uso/#marketplace-engenharia" target="_blank" rel="noopener">termos de participação</a> e a publicação das informações profissionais conforme a <a href="/privacidade/" target="_blank" rel="noopener">política de privacidade</a>.</span></label>
+              <button type="submit" class="button button-primary">Salvar perfil</button>
+            </fieldset>
+            <p class="market-status" data-form-status role="status" aria-live="polite" hidden></p>
+          </form>
+          <section class="market-payment-setup" aria-labelledby="market-payment-heading"><div><h3 id="market-payment-heading">Recebimentos</h3><p>Conecte sua conta para receber os pagamentos dos serviços contratados. Os dados bancários são preenchidos no ambiente do parceiro de pagamentos.</p><p class="market-small">O crédito na conta bancária segue os prazos do parceiro de pagamentos. A conclusão do serviço não condiciona esse repasse.</p><p id="market-connect-status" class="market-status" role="status" aria-live="polite" hidden></p></div><button type="button" class="button button-secondary" id="market-connect" disabled>Configurar recebimentos</button></section>
+        </section>
+      </div>
+    </section>
+    <section id="market-panel-requests" role="tabpanel" aria-labelledby="market-tab-requests" tabindex="0" hidden>
+      <div class="market-result-heading"><div><h2>Suas contratações</h2><p id="market-requests-intro">Acompanhe os pedidos, as propostas e as entregas.</p></div><button type="button" id="market-refresh-requests" class="button button-secondary">Atualizar</button></div>
+      <div id="market-requests-signin" class="market-empty" hidden><p>Entre na sua conta para consultar as contratações.</p><button class="button button-secondary" type="button" data-market-open="account">Entrar na minha conta</button></div>
+      <p id="market-requests-status" class="market-status" role="status" aria-live="polite" hidden></p>
+      <div id="market-request-list" class="market-request-list"></div>
+    </section>
+  </section>
+  <section class="container market-help" aria-labelledby="market-help-title"><h2 id="market-help-title">Uma contratação com etapas claras</h2><ol class="market-steps"><li><strong>Descreva o serviço</strong><span>Escolha o profissional e explique a necessidade.</span></li><li><strong>Confira a proposta</strong><span>Leia o escopo, o prazo e o valor antes do aceite.</span></li><li><strong>Acompanhe a entrega</strong><span>Registre a conclusão e avalie o serviço contratado.</span></li></ol><p>Precisa de ajuda para definir o trabalho? <a href="/triagem-tecnica/">Converse com a CONFENGE</a>. Consulte os <a href="/termos-de-uso/#marketplace-engenharia">termos de contratação</a>.</p></section>
+</main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"><p>Engenharia, perícias e inteligência técnica para empreendimentos privados e públicos.</p></div>
+<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div>
+</footer>
+</body>
+</html>

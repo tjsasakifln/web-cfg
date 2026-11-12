@@ -1,0 +1,8 @@
+node_modules/
+.medusa/
+.mercur/
+.env
+.env.*
+!.env.example
+static/
+coverage/
