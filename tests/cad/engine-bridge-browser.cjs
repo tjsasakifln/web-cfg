@@ -12,6 +12,7 @@ const siteRoot = path.resolve(process.argv[3] || (origin ? '.' : endpoint || '.'
 const output = path.resolve(process.env.CAD_BRIDGE_REPORT_DIR || 'build/reports/cad/bridge');
 const passed = [];
 const diagnostics = [];
+const contractFailures = [];
 const pause = ms => new Promise(r => setTimeout(r, ms));
 function pass(name, detail = {}) { const item = { name, ...detail }; passed.push(item); console.log(JSON.stringify({passed:item})); }
 const fixture = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:#111827}iframe{width:100%;height:100%;border:0}</style></head><body>
@@ -184,14 +185,23 @@ async function openFixture(browser, format) {
     await h.page.evaluate(()=>document.getElementById('editor').contentWindow.postMessage({type:'confenge-cad:export-result',id:'unknown-id',ok:true},location.origin));
     await pause(150);assert.equal(h.active(await h.state()).dirty,true);
     pass('Pending and forged acknowledgements preserve unsaved state');
-    await h.ack(0,false);const rejected=await h.settle(op);assert.equal(rejected.ok,false,JSON.stringify(rejected));
+    await h.ack(0,false);const rejected=await h.settle(op);
+    if(rejected.ok===true&&rejected.status==='completed'){
+      contractFailures.push({scenario:'QSAVE cancellation',expected:{ok:false},actual:{ok:rejected.ok,status:rejected.status,request_id:rejected.request_id}});
+    }else assert.equal(rejected.ok,false,JSON.stringify(rejected));
     assert.equal(h.active(await h.state()).dirty,true);assert.deepEqual(h.active(await h.state()).path,h.active(initial).path);
     assert.deepEqual(await h.semantics(),original);
     pass('Cancellation preserves drawing, path and dirty state');
 
     op=await h.begin({op:'run',cmd:'QSAVE'});await h.waitExport(1);await h.ack(1,false,'Intentional wallet failure');
-    const failed=await h.settle(op);assert.equal(failed.ok,false);assert.equal(h.active(await h.state()).dirty,true);
-    pass('Host failure never becomes save success');
+    const failed=await h.settle(op);
+    if(failed.ok===true&&failed.status==='completed'){
+      contractFailures.push({scenario:'QSAVE host failure',expected:{ok:false},actual:{ok:failed.ok,status:failed.status,request_id:failed.request_id}});
+    }else assert.equal(failed.ok,false,JSON.stringify(failed));
+    assert.equal(h.active(await h.state()).dirty,true);
+    assert.deepEqual(h.active(await h.state()).path,h.active(initial).path);
+    assert.deepEqual(await h.semantics(),original);
+    if(failed.ok===false)pass('Host failure never becomes save success');
 
     op=await h.begin({op:'run',cmd:'QSAVE'});e=await h.waitExport(2);const saved=await h.bytes(2);
     assert.equal(saved.subarray(0,6).toString(),'AC1032');
@@ -311,10 +321,11 @@ async function openFixture(browser, format) {
     await d.ack(offset,false);assert.equal((await d.settle(op)).ok,false);
     pass('PNG capture cancellation is a failed export, not a completed capture');
     assert.deepEqual(d.downloads,[]);assert.deepEqual(d.errors,[]);await d.context.close();
-    await fs.writeFile(path.join(output,'result.json'),JSON.stringify({ok:true,fixture:'same-origin controlled host; actual engine and bridge; wallet replaced explicitly, no credits spent',passed,diagnostics},null,2));
+    assert.deepEqual(contractFailures,[],'Known save-contract failures must be fixed before this run can pass');
+    await fs.writeFile(path.join(output,'result.json'),JSON.stringify({ok:true,fixture:'same-origin controlled host; actual engine and bridge; wallet replaced explicitly, no credits spent',passed,diagnostics,contractFailures},null,2));
   }catch(error){
     if(browser){let i=0;for(const page of await browser.pages()){try{await page.screenshot({path:path.join(output,'failure-'+(++i)+'.png')});}catch{}}}
-    await fs.writeFile(path.join(output,'result.json'),JSON.stringify({ok:false,passed,diagnostics,error:String(error),stack:error.stack},null,2));
+    await fs.writeFile(path.join(output,'result.json'),JSON.stringify({ok:false,passed,diagnostics,contractFailures,error:String(error),stack:error.stack},null,2));
     console.error(error);process.exitCode=1;
   }finally{if(browser)await browser.close();if(server){server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}}
 })();

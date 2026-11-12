@@ -100,6 +100,13 @@ try {
   assert.equal((await raw({op:'entities'})).total,count+1);
   assert.equal(active(await state()).dirty,true);
   pass('native parser rejection of a corrupted second DWG preserves edited drawing');
+  const recovery=await state();
+  assert(recovery.modal==='Recovery'||recovery.tool_windows?.at(-1)==='Recovery',
+    'Expected the native report for the corrupted drawing');
+  await act({op:'action',name:'close_modal'});
+  const afterRecovery=await state();
+  assert.notEqual(afterRecovery.modal,'Recovery');
+  assert(!afterRecovery.tool_windows.includes('Recovery'));
 
   const canvas=await frame.waitForSelector('canvas');
   // Await the actual fit operation so its camera change cannot masquerade as pan.
