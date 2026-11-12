@@ -409,9 +409,12 @@ for (const width of widths) {
   if (errors.length) failed += 1;
 }
 
-// The GA preference belongs to the footer, but it is not unrelated hub
-// content. Keep the historical 390px ceiling on the page with this component
-// removed, and give the component a small, explicit budget of its own.
+// Keep the historical 390px ceiling and the GA component's separate budget.
+// PR #836 adds only two credited navigation items: the 89px discovery bar
+// and the 44px footer link plus its existing 10px grid gap. The base pSEO run
+// 43225430844 measured 24285px without GA; run 43299220190 measured 24432px.
+// Their 147px difference is 89 + 54 + 4px in the header. The header receives
+// no credit: those 4px remain inside the unchanged historical 24300px ceiling.
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
 const preferenceHeightGate = await page.evaluate(() => {
@@ -468,6 +471,147 @@ const preferenceHeightGate = await page.evaluate(() => {
   };
   const initialStyle = preference?.getAttribute("style");
   const baseline = measure();
+  const main = document.querySelector("main");
+  const mainHeight = () => main?.getBoundingClientRect().height ?? Number.NaN;
+  const initialMainHeight = mainHeight();
+  const restoreStyle = (element, style) => {
+    if (!element) return;
+    if (style === null) element.removeAttribute("style");
+    else element.setAttribute("style", style);
+  };
+  const visibleInTree = (element) => {
+    if (!element || element.closest('[hidden], [inert], [aria-hidden="true"]')) return false;
+    const rect = element.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return false;
+    for (let node = element; node; node = node.parentElement) {
+      const style = getComputedStyle(node);
+      if (style.display === "none" || ["hidden", "collapse"].includes(style.visibility)
+        || Number.parseFloat(style.opacity) === 0) return false;
+    }
+    return true;
+  };
+  const identities = (links) => links.map((link) => [link.getAttribute("href"), link.textContent.trim()]);
+  const discoveryLinks = [
+    ["/cad/", "Editor DWG"], ["/bim/", "BIM e IFC"], ["/projetos-prontos/", "Projetos prontos"],
+    ["/ferramentas/radar-mercado-publico/", "Radar público"], ["/empresa/", "A CONFENGE"],
+  ];
+  const projectsLinks = [
+    ["/projetos-prontos/", "Projetos prontos"], ["/projetos/estruturas/", "Estruturas"],
+    ["/projetos/instalacoes/", "Instalações"], ["/projetos/infraestrutura/", "Infraestrutura"],
+    ["/projetos/coordenacao-multidisciplinar/", "Coordenação multidisciplinar"],
+  ];
+  // Fixed budgets, never taken from the current page's height or a mutation.
+  const navigationDefinitions = [
+    { name: "discovery", selector: ".nav-discovery-region", budget: 90 },
+    { name: "footerReadyProjects", selector: 'footer.site-footer a[href="/projetos-prontos/"]', budget: 54 },
+  ];
+  const measureNavigation = () => {
+    const fullHeight = documentHeight();
+    const contentHeight = mainHeight();
+    const components = navigationDefinitions.map(({ name, selector, budget }) => {
+      const matches = [...document.querySelectorAll(selector)];
+      const element = matches[0];
+      const rect = element?.getBoundingClientRect();
+      const style = element ? getComputedStyle(element) : null;
+      const marginTop = style ? Number.parseFloat(style.marginTop) : Number.NaN;
+      const marginBottom = style ? Number.parseFloat(style.marginBottom) : Number.NaN;
+      const links = name === "discovery" ? [...(element?.querySelectorAll("a") || [])] : element ? [element] : [];
+      const parent = element?.parentElement;
+      const rowGap = name === "footerReadyProjects" && parent ? Number.parseFloat(getComputedStyle(parent).rowGap) : 0;
+      const outerHeight = rect ? rect.height + marginTop + marginBottom : Number.NaN;
+      const contribution = outerHeight + rowGap;
+      const targets = links.map((link) => {
+        const box = link.getBoundingClientRect();
+        return {
+          width: box.width, height: box.height, top: box.top,
+          visible: visibleInTree(link),
+          inside: Boolean(rect && box.left >= rect.left - 1 && box.right <= rect.right + 1
+            && box.top >= rect.top - 1 && box.bottom <= rect.bottom + 1),
+          clipped: link.scrollWidth > link.clientWidth + 1 || link.scrollHeight > link.clientHeight + 1,
+        };
+      });
+      const discovery = name === "discovery";
+      const checks = {
+        identity: Boolean(matches.length === 1 && (discovery
+          ? element?.matches('nav[aria-label="Acesso direto"]')
+            && element.parentElement === document.body
+            && element.previousElementSibling?.matches("header.site-header")
+            && element.nextElementSibling?.matches("main#conteudo")
+            && element.children.length === 1
+            && element.firstElementChild.matches('.nav-discovery[data-nav-discovery="true"]')
+            && document.querySelectorAll('[data-nav-discovery="true"]').length === 1
+            && JSON.stringify(identities(links)) === JSON.stringify(discoveryLinks)
+          : parent?.matches(".site-footer > .footer-top > .footer-links")
+            && parent === document.querySelector("footer.site-footer .footer-links")
+            && parent.firstElementChild?.matches("strong")
+            && parent.firstElementChild.textContent.trim() === "Projetos"
+            && element.previousElementSibling === parent.firstElementChild
+            && JSON.stringify(identities([...parent.querySelectorAll(":scope > a")])) === JSON.stringify(projectsLinks))),
+        geometry: visibleInTree(element) && style?.position === "static" && style.float === "none"
+          && style.transform === "none" && marginTop === 0 && marginBottom === 0
+          && (discovery ? style.display === "block" : getComputedStyle(parent).display === "grid" && rowGap === 10)
+          && !(element.scrollWidth > element.clientWidth + 1 || element.scrollHeight > element.clientHeight + 1),
+        targets: targets.length === (discovery ? 5 : 1) && targets.every((target) => target.visible
+          && target.width >= 44 && target.height >= 44 && target.inside && !target.clipped),
+        budget: Number.isFinite(contribution) && contribution > 0 && contribution <= budget,
+        rows: discovery ? new Set(targets.map((target) => Math.round(target.top))).size === 2 : rect?.height === 44,
+      };
+      const savedStyle = element?.getAttribute("style");
+      if (element) element.style.display = "none";
+      const hiddenHeight = documentHeight();
+      const hiddenMainHeight = mainHeight();
+      restoreStyle(element, savedStyle);
+      const restoredHeight = documentHeight();
+      const delta = fullHeight - hiddenHeight;
+      checks.triangular = Number.isFinite(contribution) && Math.abs(delta - contribution) <= 1;
+      checks.restored = restoredHeight === fullHeight;
+      checks.mainPreserved = Number.isFinite(contentHeight) && hiddenMainHeight === contentHeight && mainHeight() === contentHeight;
+      return { name, selector, budget, selectorCount: matches.length, outerHeight, rowGap, contribution,
+        hiddenHeight, delta, restoredHeight, targets, checks, valid: Object.values(checks).every(Boolean) };
+    });
+    const elements = navigationDefinitions.map(({ selector }) => document.querySelector(selector));
+    const savedStyles = elements.map((element) => element?.getAttribute("style"));
+    for (const element of elements) if (element) element.style.display = "none";
+    const hiddenTogetherHeight = documentHeight();
+    const hiddenTogetherMainHeight = mainHeight();
+    elements.forEach((element, index) => restoreStyle(element, savedStyles[index]));
+    const totalContribution = components.reduce((total, component) => total + component.contribution, 0);
+    const combinedChecks = {
+      triangular: Number.isFinite(totalContribution) && Math.abs(fullHeight - hiddenTogetherHeight - totalContribution) <= 1,
+      restored: documentHeight() === fullHeight,
+      mainPreserved: document.querySelectorAll("main").length === 1 && Number.isFinite(contentHeight)
+        && hiddenTogetherMainHeight === contentHeight && mainHeight() === contentHeight,
+    };
+    const valid = components.every((component) => component.valid) && Object.values(combinedChecks).every(Boolean);
+    return { components, combinedChecks, hiddenTogetherHeight, totalContribution, mainHeight: contentHeight,
+      valid, creditedHeight: valid ? totalContribution : 0 };
+  };
+  const navigation = measureNavigation();
+  const navigationNegativeControls = {};
+  for (const definition of navigationDefinitions) {
+    const element = document.querySelector(definition.selector);
+    if (!element) {
+      navigationNegativeControls[`${definition.name}Growth`] = false;
+      navigationNegativeControls[`${definition.name}Hidden`] = false;
+      navigationNegativeControls[`${definition.name}Duplicate`] = false;
+      continue;
+    }
+    const savedStyle = element.getAttribute("style");
+    element.style.minHeight = `${definition.budget + 1}px`;
+    const expanded = measureNavigation();
+    navigationNegativeControls[`${definition.name}Growth`] = !expanded.valid && expanded.creditedHeight === 0
+      && expanded.components.find(({ name }) => name === definition.name).contribution > definition.budget;
+    restoreStyle(element, savedStyle);
+    element.style.display = "none";
+    const hidden = measureNavigation();
+    navigationNegativeControls[`${definition.name}Hidden`] = !hidden.valid && hidden.creditedHeight === 0;
+    restoreStyle(element, savedStyle);
+    const duplicate = element.cloneNode(true);
+    element.after(duplicate);
+    const duplicated = measureNavigation();
+    navigationNegativeControls[`${definition.name}Duplicate`] = !duplicated.valid && duplicated.creditedHeight === 0;
+    duplicate.remove();
+  }
   // Measured 113.86px on 2026-10-26, plus 16px of fixed rendering headroom.
   // Never derive the budget from the current run: that would accept growth.
   const componentBudget = 130;
@@ -481,7 +625,7 @@ const preferenceHeightGate = await page.evaluate(() => {
   const restoredHeight = documentHeight();
   const delta = baseline.fullHeight - hiddenHeight;
   const baselineChecks = {
-    historical: baseline.normalizedHeight !== null && baseline.normalizedHeight <= 24300,
+    historical: baseline.normalizedHeight !== null && Math.round(baseline.fullHeight - baseline.preferenceOuterHeight - navigation.creditedHeight) <= 24300,
     component: componentBudget !== null && baseline.preferenceOuterHeight <= componentBudget,
     componentMaximum: componentBudget !== null && componentBudget <= 190,
     triangular: Number.isFinite(baseline.preferenceOuterHeight)
@@ -501,14 +645,22 @@ const preferenceHeightGate = await page.evaluate(() => {
   if (preference) {
     const before = document.createElement("div");
     before.setAttribute("data-height-gate-probe", "true");
-    const probeHeight = Math.max(1, Math.ceil(24301 - baseline.normalizedHeight));
+    const normalizedBaseline = baseline.fullHeight - baseline.preferenceOuterHeight - navigation.creditedHeight;
+    const probeHeight = Math.max(1, Math.ceil(24301 - normalizedBaseline));
     before.style.cssText = `display:block; height:${probeHeight}px; min-height:${probeHeight}px; margin:0; padding:0; border:0; clear:both;`;
-    preference.before(before);
+    // Grow actual hub content outside both credited navigation components.
+    if (main) main.append(before);
+    else preference.before(before);
     const expanded = measure();
-    historicalRegression = expanded.normalizedHeight > 24300;
+    const expandedNavigation = measureNavigation();
+    historicalRegression = Math.round(expanded.fullHeight - expanded.preferenceOuterHeight - expandedNavigation.creditedHeight) > 24300
+      && expandedNavigation.creditedHeight === navigation.creditedHeight;
     before.remove();
   }
   const afterNegativeTests = measure();
+  const restoredNavigation = measureNavigation();
+  navigationNegativeControls.restored = afterNegativeTests.fullHeight === baseline.fullHeight
+    && mainHeight() === initialMainHeight && restoredNavigation.creditedHeight === navigation.creditedHeight;
   return {
     ...baseline,
     componentBudget,
@@ -516,6 +668,8 @@ const preferenceHeightGate = await page.evaluate(() => {
     delta,
     restoredHeight,
     baselineChecks,
+    navigation,
+    navigationNegativeControls,
     negativeControls: { componentRegression, historicalRegression, restored: afterNegativeTests.fullHeight === baseline.fullHeight },
   };
 });
@@ -533,7 +687,15 @@ const validPreferenceContribution = preferenceHeightErrors.length === 0
   && preferenceHeightGate.baselineChecks.component && preferenceHeightGate.baselineChecks.triangular
   && preferenceHeightGate.baselineChecks.restored;
 preferenceHeightGate.creditedPreferenceHeight = validPreferenceContribution ? preferenceHeightGate.preferenceOuterHeight : 0;
-preferenceHeightGate.normalizedHeight = Math.round(preferenceHeightGate.fullHeight - preferenceHeightGate.creditedPreferenceHeight);
+for (const component of preferenceHeightGate.navigation.components) {
+  for (const [name, passed] of Object.entries(component.checks)) if (!passed) preferenceHeightErrors.push(`navigation_${component.name}_${name}`);
+}
+for (const [name, passed] of Object.entries(preferenceHeightGate.navigation.combinedChecks)) if (!passed) preferenceHeightErrors.push(`navigation_combined_${name}`);
+const navigationControlsPassed = Object.values(preferenceHeightGate.navigationNegativeControls).every(Boolean);
+if (!navigationControlsPassed) preferenceHeightErrors.push("navigation_negative_controls");
+preferenceHeightGate.creditedNavigationHeight = preferenceHeightGate.navigation.valid && navigationControlsPassed
+  ? preferenceHeightGate.navigation.creditedHeight : 0;
+preferenceHeightGate.normalizedHeight = Math.round(preferenceHeightGate.fullHeight - preferenceHeightGate.creditedPreferenceHeight - preferenceHeightGate.creditedNavigationHeight);
 preferenceHeightGate.baselineChecks.historical = preferenceHeightGate.normalizedHeight <= 24300;
 for (const [name, passed] of Object.entries(preferenceHeightGate.baselineChecks)) if (!passed) preferenceHeightErrors.push(`preference_${name}`);
 if (!preferenceHeightGate.negativeControls.componentRegression || !preferenceHeightGate.negativeControls.historicalRegression

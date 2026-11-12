@@ -284,6 +284,22 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_event_semantics.mjs 2>&1 | tee build/reports/navigation-artifact-qa/event-semantics.log
+      - name: Verify the complete deliverables hub in the artifact
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          UI_GEOMETRY_REQUIRED: "1"
+          DELIVERABLES_HUB_REPORT: build/reports/navigation-artifact-qa/deliverables-hub-ui.json
+        run: |
+          set -o pipefail
+          npm run test:deliverables-hub-ui 2>&1 | tee build/reports/navigation-artifact-qa/deliverables-hub-ui.log
+      - name: Verify the money asset canary
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -o pipefail
+          npm run test:money-asset-canary-e2e 2>&1 | tee build/reports/navigation-artifact-qa/money-asset-canary.log
       - name: Measure first fold in the compiled artifact
         if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
         env:
@@ -323,7 +339,7 @@ jobs:
               "navigation/desktop-ferramentas.png", "navigation/mobile-projetos.png",
               "navigation/projetos-prontos-desktop.png", "navigation/mobile-header-360.png",
               "navigation/diagnostico-first-viewport-1280.png", "navigation/failure.png",
-              "navigation/report.json", "provenance.json", "first-fold.json",
+              "navigation/report.json", "provenance.json", "first-fold.json", "deliverables-hub-ui.json",
           ]
           for name in names:
               path = root / name
