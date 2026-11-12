@@ -1,9 +1,65 @@
 # Projetos residenciais: consulta, licença e entrega
 
-Status: EXECUTE_NOW para implantação da captação; comercialização condicionada.
+Status: EXECUTE_NOW para captação e contratação de elaboração residencial por disciplina.
 Decisão expressa do fundador em 12/11/2026. Frente: aquisição e receita.
 Evidência inicial: contato recebido e qualificação; disposição a pagar somente
 quando existir produto efetivamente disponível e compra mantida.
+
+## Decisão posterior de 12/11/2026: elaboração por disciplina e prazo
+
+O fundador solicitou expressamente liberar a venda por Mercado Pago, definir
+preços competitivos conforme prazo de 15 a 90 dias, permitir contratação por
+disciplina e publicar. Esta decisão autoriza preço público e checkout desta
+oferta de serviço. Não afirma margem validada, não libera licenças de arquivos
+sem produto aprovado e não muda as autorizações das ferramentas ou do B2G.
+
+O contrato canônico é `data/projects-ready/service-offer.v1.json`: residência
+unifamiliar nova de 50 a 250 m², até dois pavimentos, sistema convencional,
+terreno plano ou de declividade suave. O preço parte de área e mínimo por
+disciplina e acrescenta prioridade de prazo inversamente proporcional ao
+número de dias. A parcela fixa protege o trabalho mínimo. Os valores são uma
+decisão comercial inicial, apoiada em referências públicas e sujeita à medição
+de custo efetivo, margem, conversão, cancelamento e recebimento.
+
+A oferta acolhe links, revistas, fotos e rascunhos como referências para
+desenvolver solução própria. Adaptação de obra protegida depende de autorização
+do titular. A adequação urbanística e condominial, a atribuição profissional e
+os insumos são conferidos antes do início técnico. O pedido registra o prazo
+escolhido, o marco inicial, as disciplinas, a área, o total e as condições. Uma
+incompatibilidade inicial permite cancelamento com devolução integral ou nova
+proposta expressamente aceita; nunca gera cobrança adicional automática.
+
+O módulo de serviço é separado da licença de ZIP: usa `project-orders`,
+Checkout Pro do Mercado Pago e armazenamento persistente em
+`/var/lib/confenge-web`. Dispensa cadastro para a compra e usa recibo aleatório
+de 256 bits por pedido, enviado apenas em cabeçalho. O segredo não é gravado
+em URL, analytics, provedor ou banco. O comprador pode guardar um arquivo de
+acesso privado e recuperá-lo no próprio navegador. A operação administrativa
+reutiliza a autenticação de OPS e expõe somente o necessário ao atendimento.
+
+O servidor recalcula preços, grava o pedido antes da cobrança e concilia
+pagamento via API autenticada e webhook assinado. Valores do navegador,
+parâmetros de retorno e pedido criado não comprovam pagamento. Antes de
+anunciar checkout disponível, verifica vendedor real, ambiente de produção,
+credenciais específicas e capacidade de persistência. A configuração do
+webhook e a abertura real do checkout também integram o aceite operacional.
+A falha de configuração mantém a simulação e o contato, com estado honesto.
+
+Hipótese de aquisição: referências de plantas e preço transparente atraem
+pessoas que já decidiram projetar; a flexibilidade de prazo distribui produção
+e permite preço de entrada com escopo delimitado. Frente: REVENUE_NOW e
+INBOUND_ENGINE. Evidência: primeiras contratações e recebimentos verificados,
+sem confundir simulação, consulta, pedido, aprovação do pagamento e liquidação.
+Leverage: revenue, trust e customer. As mesmas quatro disciplinas e a mesma
+regra atendem cem pedidos sem criar páginas por município ou novo CRM.
+
+A medição pública continua sem dados pessoais e sem token de pedido. O
+histórico financeiro e a execução comercial permanecem distinguíveis;
+Warmbly continua proprietário de proposta, relacionamento e resultado.
+Rollback: revert da PR pelo fluxo Netcup ou `PROJECT_SERVICE_PURCHASES=0`
+para pausar novas compras, preservando pedidos, suporte e conciliação.
+
+As seções seguintes preservam a decisão inicial sobre catálogo de arquivos.
 
 ## Decisão e fronteiras
 

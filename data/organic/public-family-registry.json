@@ -1989,8 +1989,8 @@
     },
     {
       "id": "ready_projects",
-      "visitor_job": "Consultar disponibilidade de projeto residencial, adaptação ao terreno e complementares para construir uma casa.",
-      "profile": "commercial_content",
+      "visitor_job": "Configurar e contratar projeto residencial por disciplina, área e prazo, ou solicitar atendimento para adaptação ao terreno e regras locais.",
+      "profile": "priced_offer",
       "terminal_action": "capture_form",
       "match": {
         "routes": [
@@ -2011,21 +2011,23 @@
           "official_live",
           "citable_source"
         ],
-        "reason": "Consulta de disponibilidade da própria CONFENGE. Sem produto, preço, estoque ou venda anunciados até aprovação documentada.",
+        "reason": "Oferta própria de elaboração residencial sob encomenda. Preço público e checkout autorizados expressamente pelo fundador em 12/11/2026; disponibilidade de pagamento confirmada pelo runtime e vendedor institucional.",
         "authority": [
           "docs/architecture/ADR-PROJECTS-001-ready-projects.md",
-          "data/corporate/intent-family-matrix.v1.json"
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/projects-ready/service-offer.v1.json"
         ],
         "declared_at": "2026-11-12",
         "owner_issue": 61
       },
       "intent_family": "projetar_revisar_compatibilizar",
       "canonical_service_family": "engineering_projects_coordination",
-      "nucleus_id": "building_engineering_documentation"
+      "nucleus_id": "building_engineering_documentation",
+      "note": "Preços por disciplina e prazo, com contratação server-side e pagamento confirmado pelo Mercado Pago. O formulário canônico de consulta continua disponível. Não há licença de modelo não aprovado ou entrega imediata anunciada."
     },
     {
       "id": "ready_projects_terms",
-      "visitor_job": "Compreender consulta, aquisição, licença, adaptação e atendimento dos projetos residenciais.",
+      "visitor_job": "Compreender escopo, preço por prazo, condições, responsabilidade, pagamento, atendimento e cancelamento da elaboração residencial.",
       "profile": "trust_or_legal",
       "terminal_action": "none",
       "match": {
@@ -2047,14 +2049,14 @@
           "official_live",
           "citable_source"
         ],
-        "reason": "Condições de primeira parte sem preço nem produto à venda.",
+        "reason": "Condições contratuais da oferta própria, com identificação do fornecedor, escopo, formação de preço e direitos do consumidor; não é uma página alternativa de compra.",
         "authority": [
           "docs/architecture/ADR-PROJECTS-001-ready-projects.md"
         ],
         "declared_at": "2026-11-12",
         "owner_issue": 61
       },
-      "exemption_reason": "Condições da consulta e da futura aquisição, sem oferta paga disponível."
+      "exemption_reason": "Documento de condições da oferta residencial, sem formulário de contratação ou preço independente; a seleção e a compra acontecem na página da oferta."
     },
     {
       "id": "ready_projects_orders",
@@ -2076,7 +2078,7 @@
       "owner_issue": 61,
       "debt": [],
       "exemption_reason": "Área transacional autenticada, permanentemente fora da indexação. A descoberta e a consulta de disponibilidade acontecem em /projetos-prontos/. Condições e preço de uma futura compra são conferidos antes do aceite nesta área, sem compor uma página de aquisição orgânica.",
-      "note": "Dados de pedido e arquivos exigem comprador autorizado. O modo inicial informa compras indisponíveis; não há produto ou cobrança habilitados."
+      "note": "Área legada de licença e arquivos condicionada a produto aprovado. Pedidos de elaboração sob encomenda usam recibo privado na própria página da oferta, sem expor dados no HTML público."
     }
   ]
 }
