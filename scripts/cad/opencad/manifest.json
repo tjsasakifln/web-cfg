@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "engine": "OpenCAD Studio",
+  "version": "2026.45+confenge.1",
+  "upstream": {
+    "repository": "https://github.com/HakanSeven12/OpenCADStudio",
+    "ref": "v2026.45",
+    "commit": "fb0a667e269b6c924233ecd450a11dd7cba40eea"
+  },
+  "build": {
+    "rust": "1.99.1",
+    "wasm_bindgen": "0.2.108",
+    "profile": "release",
+    "optimization": 3,
+    "jobs": 1,
+    "patch_sha256": "d87a5b41c7011eeb6bc1da1d119cde8acd28d05958d78909c6d44458173974c0",
+    "logo_sha256": "e6bb135d070993411cb46adce88747187f3decd2f85f23e9899a9c89e97e7586",
+    "host_commit": "6201fae95fd891550dad1026a4c283032b0f17b9",
+    "host_files": {
+      "cad/index.html": "b63167b4136a6856695946c0e31beafc41661a92d766accc1aec6b4d5196abe7",
+      "cad/editor.css": "a4f1dbbb9aac989b153de133150d1aad65f74699b6d7d90cd1525b1e93681b77",
+      "cad/editor.js": "5ddb36ecb4714c2a6defcd850cf8ef211aed47c4444d72889cca260816773f2f",
+      "cad/host-protocol.mjs": "cde6174fac7a8f397418a5349408563910005d33d6a6648217378f7f1b9d920e",
+      "cad/editor/frame.htm": "6ea39fea8c08185dfb9755c565c3b6e55532598054621b16fd09f28b0d77b47d",
+      "cad/editor/frame.css": "978a72a35a27a63bb8b58381084cf91f313f34aba94f7fae12b962133b5a7441",
+      "cad/editor/start.js": "ae523dc9381b78eb7bc9c8e07b40100807f3af0454c9effbaf0f77754bdb4d75",
+      "assets/js/tool-credits.mjs": "430d7d17680ec0a3eaf9700ea5a2ed27792739cc84e72db0e5944e3ef212e560",
+      "assets/js/tool-referral.mjs": "71df9a0804914f8eb1756827f0630a0a2c0f8cffe9ced4fb71384937b79dbb1d",
+      "assets/css/tool-credits.css": "6d21394cc0c994f855a6f1a82368155d55e6c4bc52bdfa53aaed09cd5ec6401b",
+      "assets/logo-confenge-white.png": "e6bb135d070993411cb46adce88747187f3decd2f85f23e9899a9c89e97e7586",
+      "runtime/tools-commerce/exports.cjs": "9b1ba3f953dbcad724d2452f6a055617d4ad972eb8b6956c11b1cc61ecb88bfc",
+      "scripts/cad/publicar.py": "8e9e8e8c2bb99717502e92504edfe5ef22bb087384860cbd631b4246cf3ba7f1",
+      "_headers": "0e036532ae9627c4e98c562ef2a5f1d12b081b0dfdd161692780ae7deabd2b2c"
+    }
+  },
+  "runtime": {
+    "archive": "opencad-runtime.tar.gz",
+    "sha256": "3d6c79a853d5e02606a0c0356dd0d23375aed3d3b26131d981b26bb83da4a926",
+    "bytes": 66223570,
+    "parts": [
+      {
+        "file": "opencad-runtime.tar.gz.part-001",
+        "sha256": "f72e6026187777e901cf63c38fd09914eda9125e4336e21e461bf5c504db6003",
+        "bytes": 50331648
+      },
+      {
+        "file": "opencad-runtime.tar.gz.part-002",
+        "sha256": "669062baadf5723acb5ebf4573fa9fabe64b514996f717b49f68cb74008d6f2b",
+        "bytes": 15891922
+      }
+    ],
+    "files": {
+      "confenge-cad.d.ts": "b3f2ae065dd80bd38acb66e08c4e6704eb45258fada193ff1f3f6e0405b89ff3",
+      "confenge-cad.js": "e8bb63bcab00b5693e4f3537e35b492a06eead87fd33da73e48d7aed421c0a3b",
+      "confenge-cad_bg.wasm": "c975127163670924f3e26692d2d009296efd8cb13d35192fe6aff9082ea847a0",
+      "confenge-cad_bg.wasm.d.ts": "9bdaf9f883ec23f1152476289bbebc60a7f3ff929d13c89390b979a8d9e576e1",
+      "fonts/OFL.txt": "9be65bbf38e7f3ed5674dfeaf95d8b6d8deaef0017305c0daf5e3cc4f2ab9e20",
+      "fonts/arabic.ttf": "db48ee15affac605c3d59625549f2833f539cd8e8b03cc5dd68b72aa74f47bfb",
+      "fonts/armenian.ttf": "884611894c1b25bda08e14ad4b4ddbef6b6d97e2c144534cc90ffbcacd4059cf",
+      "fonts/chinese.ttf": "2a9b215b78b83f16b419a94cabddc8691a62426939a1892c0949fc143ebc188d",
+      "fonts/cyrillic.ttf": "e3deb8c95efd555f894529375f4f465cb835690ca545eb1334e42a7e6339f2a6",
+      "fonts/devanagari.ttf": "32b354203022d79c02cc27598a959df93a0162ccad3f355c0478def96c64e790",
+      "fonts/georgian.ttf": "91b96d74a60df0753ed71b6ae7103ff3167ba675cf959a723586dcdfc82f6a70",
+      "fonts/greek.ttf": "55f7a19d4accc1bc724c7d3e71e023a0ebe41fe98f1a4d8be526b57db0775d15",
+      "fonts/hebrew.ttf": "17b19add393ca3f82a5a0e31df2f9e2a781d208f5f713addb7c1904cd750d0dc",
+      "fonts/japanese.ttf": "ac51fec9b461855a09f9cda81873511950d881ae55a64421d27917322c4d8d04",
+      "fonts/korean.ttf": "8ee3cee3f50b323f988481b91ce34492bad0e56d3b900b7f37bd73567c44e58b",
+      "fonts/lao.ttf": "f5babca90faa4001803d67a8ee6f13cac7a563c45fad7f2960467624360e0644",
+      "fonts/latin.ttf": "c87019810a9f4f4172fc974eb65bb8899f1fdd8ded9f44914a32a4d317c01f90",
+      "fonts/thai.ttf": "f3c7fbb5f1680b7e01c3619a881db8ef725d03b8a57192eaab29de4c6779f259",
+      "fonts/traditional_chinese.ttf": "e065bd066732eb2a1ad0c2fc72a111b1dc208ca6b074c32a57191fc5772b7b7e",
+      "logo.png": "e6bb135d070993411cb46adce88747187f3decd2f85f23e9899a9c89e97e7586",
+      "ocs-control.js": "58d4b6bc3ad63f13275f70762b5184e47010fe6e1123c28fc0894854d6067cf5",
+      "ocs-parse-worker.js": "14ac8c2ef7bc00565644746f9045ead973c65b949e4f137a489528872ae6aee8",
+      "snippets/OpenCADStudio-e070e3e413f700c0/web/clipboard.js": "2645337a10a3d77da5ebde0177aabdb37ec0c691c6650b8b3d5ecb2b53cfedc1",
+      "worker_pkg/ocs_web_worker.d.ts": "b3f82c6b10f920d41fd6b7195d0502cb1bce9f476e549b955d7179f6b8c53ca9",
+      "worker_pkg/ocs_web_worker.js": "9182a6b503b2dc77144ee076d60e4642a10790ce47be7db0932bf22d40849eeb",
+      "worker_pkg/ocs_web_worker_bg.wasm": "08771c02bac649c3f527b8bd0cd61abd88811c2f65fe6ba31b9cc05ac6c5dd3b",
+      "worker_pkg/ocs_web_worker_bg.wasm.d.ts": "a596cf4fe0a1dcbe62a82906f6fba04d001dac34f31012e776ade33dfb02ec74"
+    }
+  },
+  "source": {
+    "archive": "corresponding-source.tar.gz",
+    "sha256": "ff886f647586e4639ca097c9b92643eca7a28299999d5578c6a4ed808dca2077",
+    "bytes": 184785791,
+    "parts": [
+      {
+        "file": "corresponding-source.tar.gz.part-001",
+        "sha256": "51ec19f57061916e60228dfe09beb617e6d01d849b555fc87f223f2a2aa38012",
+        "bytes": 50331648
+      },
+      {
+        "file": "corresponding-source.tar.gz.part-002",
+        "sha256": "ed43cf06ccb2fa985ad1564c7b995a2b5acdd7955e0021fffac18dd0eea251fa",
+        "bytes": 50331648
+      },
+      {
+        "file": "corresponding-source.tar.gz.part-003",
+        "sha256": "d24cad950737a40f5d00388a80283e344bbb1284c42fc85fb4062cb54515b213",
+        "bytes": 50331648
+      },
+      {
+        "file": "corresponding-source.tar.gz.part-004",
+        "sha256": "31619fe02c8e1ce10d3869331fb56c0ea368e39482e9a27fe79fdb6699777158",
+        "bytes": 33790847
+      }
+    ]
+  }
+}
