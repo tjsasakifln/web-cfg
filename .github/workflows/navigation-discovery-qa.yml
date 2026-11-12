@@ -48,6 +48,11 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Install locked Python review dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-ci.txt
       - name: Install locked dependencies
         id: dependencies
         run: npm ci --engine-strict
@@ -129,6 +134,57 @@ jobs:
       - name: Verify measured first-fold contract without exceptions
         if: always() && steps.first-fold-evidence.outcome == 'success'
         run: npm run test:first-fold-contract
+      - name: Verify source geometry at the full contracted viewport matrix
+        id: geometry
+        if: always() && steps.dependencies.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          SITE_ROOT: .
+        run: |
+          set -o pipefail
+          test ! -f _site/index.html
+          node scripts/site/test_ui_geometry.mjs 2>&1 | tee build/reports/convergence/navigation-discovery/ui-geometry.log
+      - name: Prove the presentation recapture without changing authority
+        if: success() && github.head_ref == 'feat/navigation-discovery-20261112'
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 scripts/site/prepare_navigation_presentation_review.py --output build/reports/convergence/navigation-discovery/presentation
+      - name: Expose public review evidence for remote inspection
+        if: always() && github.head_ref == 'feat/navigation-discovery-20261112'
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, subprocess
+          from pathlib import Path
+          sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          assert sha == os.environ["EXPECTED_HEAD_SHA"]
+          root = Path("build/reports/convergence/navigation-discovery")
+          names = [
+              "desktop-ferramentas.png", "mobile-projetos.png", "projetos-prontos-desktop.png",
+              "mobile-header-360.png", "diagnostico-first-viewport-1280.png", "failure.png",
+              "report.json", "provenance.json",
+              "first-fold/report.json", "first-fold/contracts/first-fold-contract.v1.json",
+              "first-fold/contracts/first-fold-measurements.v1.json",
+              "presentation/evidence.json", "presentation/candidate/source.html",
+              "presentation/candidate/public.html",
+          ]
+          for name in names:
+              path = root / name
+              if not path.is_file():
+                  continue
+              data = path.read_bytes()
+              assert len(data) <= 4000000, name
+              encoded = base64.b64encode(data).decode("ascii")
+              print("NAV_EVIDENCE_BEGIN " + json.dumps({
+                  "file": name, "source_sha": sha, "bytes": len(data),
+                  "sha256": hashlib.sha256(data).hexdigest(), "encoding": "base64"
+              }, separators=(",", ":")))
+              for start in range(0, len(encoded), 30000):
+                  print("NAV_EVIDENCE_DATA " + encoded[start:start+30000])
+              print("NAV_EVIDENCE_END " + name)
+          PY
       # Evidence can be inspected before an approved editorial recapture.
       # This workflow does not rebuild frozen hashes, deploy or replace site-ci.
       - name: Preserve navigation review evidence
@@ -210,6 +266,15 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_navigation_discovery_browser.mjs _site 2>&1 | tee build/reports/navigation-artifact-qa/navigation.log
+      - name: Verify the complete UI contract after compilation
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          SITE_ROOT: _site
+          PUBLIC_ARTIFACT_REQUIRED: "1"
+        run: |
+          set -o pipefail
+          npm run test:ui 2>&1 | tee build/reports/navigation-artifact-qa/ui-contract.log
       - name: Verify artifact event semantics
         if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
         env:

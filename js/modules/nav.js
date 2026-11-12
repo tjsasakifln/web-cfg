@@ -146,7 +146,7 @@
     const projectMenu = document.querySelector('.pp-mobile');
     const projectToggle = projectMenu?.querySelector(':scope > summary');
     const projectPanel = projectMenu?.querySelector(':scope > nav');
-    const discoveryHeader = document.querySelector('.site-header:has(.nav-discovery)');
+    const discoveryHeader = document.querySelector('.site-header:has(.nav-group), .pp-header:has(.nav-group)');
     const headerNavigationOffset = () => {
       if (!discoveryHeader) return 0;
       const position = window.getComputedStyle(discoveryHeader).position;
@@ -210,7 +210,7 @@
     let closeButton = null;
     let bodyWasLocked = false;
     const backdropCandidates = (context) => [...document.querySelectorAll(
-      'main, footer, .whatsapp-float, .skip-link, .nav-discovery, .desktop-nav, .pp-nav, .site-head .brand, .site-head .button, header .brand, header .button, .pp-header .pp-brand, .pp-header .pp-button--compact'
+      'main, footer, .whatsapp-float, .skip-link, .nav-discovery-region, .nav-discovery, .desktop-nav, .pp-nav, .site-head .brand, .site-head .button, header .brand, header .button, .pp-header .pp-brand, .pp-header .pp-button--compact'
     )].filter((element) => element !== context.trigger && !element.contains(context.panel) && !context.panel.contains(element));
     const closeMobile = (returnFocus = false) => {
       const context = activeMobile;

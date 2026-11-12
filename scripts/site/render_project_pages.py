@@ -164,8 +164,8 @@ def _header(active: str, page: dict[str, Any]) -> str:
 <a class="pp-button pp-button--compact" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header" data-cta-position="header">Solicitar proposta</a>
 <details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav class="pp-mobile-nav" aria-label="Navegação móvel">{mobile}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
 </div>
-{render_discovery_bar()}
-</header>"""
+</header>
+{render_discovery_bar()}"""
 
 
 def _active_header_route(page: dict[str, Any]) -> str:

@@ -26,7 +26,9 @@ def header() -> str:
 <nav class="pp-nav" aria-label="Navegação principal">{links}</nav>
 <a class="pp-button pp-button--compact" href="{ROUTE}#contato-projetos">Consultar projeto</a>
 <details class="pp-mobile"><summary aria-label="Menu"><span>Menu</span></summary><nav class="pp-mobile-nav" aria-label="Navegação móvel">{mobile}<a href="{ROUTE}#contato-projetos">Consultar projeto</a></nav></details>
-</div>{render_discovery_bar()}</header>'''
+</div>
+</header>
+{render_discovery_bar()}'''
 
 
 def page(route: str, title: str, description: str, body: str) -> str:

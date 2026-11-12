@@ -165,8 +165,8 @@ def _build_header() -> str:
 {mobile}
 <a class="button button-primary" href="{cta['href']}">{cta['label']}</a>
 </nav>
-{render_discovery_bar()}
-</header>"""
+</header>
+{render_discovery_bar()}"""
 
 
 def _build_footer() -> str:

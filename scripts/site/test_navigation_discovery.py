@@ -158,14 +158,25 @@ def test_published_shell_families_compile_the_same_discovery_contract(relative):
     assert len(tracking_ids) == len(set(tracking_ids)), relative
     bars = _nodes(dom.root, "div", "nav-discovery")
     assert len(bars) == 1, relative
+    shortcut_regions = _nodes(dom.root, "nav", "nav-discovery-region")
+    assert len(shortcut_regions) == 1, relative
+    assert shortcut_regions[0]["attrs"].get("aria-label") == "Acesso direto", relative
+    assert _nodes(shortcut_regions[0], "div", "nav-discovery") == bars, relative
+    headers = [node for node in _nodes(dom.root, "header") if {"site-header", "pp-header"} & set(node["attrs"].get("class", "").split())]
+    assert len(headers) == 1, relative
+    assert not _nodes(headers[0], "div", "nav-discovery"), relative
+    assert re.search(r'</header>\s*<!-- BEGIN NAV DISCOVERY -->', rendered), relative
     header = load_ia_map()["header"]
     assert [(a["attrs"]["href"], _text(a)) for a in _nodes(bars[0], "a")] == [(item["href"], item["label"]) for item in header["quick_links"] + header["utility_links"]]
 
 
-def test_discovery_bar_is_navigation_without_extra_landmarks_or_loading_apps():
+def test_discovery_bar_has_one_named_landmark_without_loading_apps():
     rendered = render_discovery_bar()
     dom = _DOM(rendered)
-    assert not _nodes(dom.root, "nav")
+    landmarks = _nodes(dom.root, "nav")
+    assert len(landmarks) == 1
+    assert landmarks[0]["attrs"].get("aria-label") == "Acesso direto"
+    assert "nav-discovery-region" in landmarks[0]["attrs"].get("class", "").split()
     assert not _nodes(dom.root, "script")
     assert not _nodes(dom.root, "iframe")
     assert not _nodes(dom.root, "img")

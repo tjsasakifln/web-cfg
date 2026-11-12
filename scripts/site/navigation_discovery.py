@@ -92,25 +92,27 @@ def render_discovery_bar(ia: dict[str, Any] | None = None) -> str:
     )
     return (
         '<!-- BEGIN NAV DISCOVERY -->'
+        '<nav class="nav-discovery-region" aria-label="Acesso direto">'
         '<div class="nav-discovery" data-nav-discovery="true">'
         '<div class="container nav-discovery__inner">'
         '<div class="nav-discovery__shortcuts">'
         '<span class="nav-discovery__label">Acesso direto</span>'
-        f'{shortcuts}</div>{utilities}</div></div>'
+        f'{shortcuts}</div>{utilities}</div></div></nav>'
         '<!-- END NAV DISCOVERY -->'
     )
 
 
 _BAR_RE = re.compile(r"<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->", re.S)
 _HEADER_RE = re.compile(
-    r'(<header\b(?=[^>]*\bclass=["\'][^"\']*\b(?:site-header|pp-header)\b)[^>]*>)(.*?)(</header>)',
+    r'(<header\b(?=[^>]*\bclass=["\'][^"\']*\b(?:site-header|pp-header)\b)[^>]*>)(.*?)(</header>)'
+    r'(?:\s*<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->)?',
     re.S | re.I,
 )
 
 
 def sync_discovery_bar(html: str) -> str:
-    """Add or update one shortcut row without touching the page's body."""
+    """Keep one shortcut region after the sticky header, preserving page content."""
     def replace(match: re.Match[str]) -> str:
         inner = _BAR_RE.sub("", match.group(2)).rstrip()
-        return f"{match.group(1)}{inner}\n{render_discovery_bar()}\n{match.group(3)}"
+        return f"{match.group(1)}{inner}\n{match.group(3)}\n{render_discovery_bar()}"
     return _HEADER_RE.sub(replace, html, count=1)

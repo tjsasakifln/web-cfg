@@ -1270,7 +1270,7 @@ p .text-link,li .text-link,p .journey-alt-link{font-size:inherit;line-height:inh
 .breakout-bars-pan:focus-visible{outline:3px solid var(--green-700);outline-offset:3px}
 
 
-html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-height,120px) + 16px)}
+html:has(:is(.site-header,.pp-header) .nav-group){scroll-padding-top:calc(var(--site-header-height,74px) + 16px)}
 .site-header,.pp-header{--nav-row-height:72px}
 .site-header .header-inner,.pp-header .pp-header__inner{position:static;min-height:var(--nav-row-height);gap:16px}
 .site-header .brand,.site-header .brand img,.pp-header .pp-brand img{width:176px}
@@ -1309,11 +1309,11 @@ html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-
 .mobile-nav__utility>a:hover{text-decoration:underline;text-underline-offset:4px}
 
 @media (min-width:1121px){
-  html.no-js body .site-header:has(.nav-discovery){position:relative}
+  html.no-js body .site-header:has(.nav-group){position:relative}
   .site-header .desktop-nav,.pp-header .pp-nav{display:flex}
   .site-header .menu-toggle,.site-header .mobile-nav,.pp-header .pp-mobile{display:none}
-  .site-header .header-cta{display:inline-flex;flex:none;font-size:.8125rem;padding-inline:14px;white-space:nowrap}
-  .pp-header .pp-button--compact{flex:none;font-size:.8125rem;white-space:nowrap}
+  .site-header .header-cta{display:inline-flex;flex:none;font-size:.875rem;padding-inline:14px;white-space:nowrap}
+  .pp-header .pp-button--compact{flex:none;font-size:.875rem;white-space:nowrap}
 }
 @media (min-width:1121px) and (max-width:1240px){
   .site-header .header-inner,.pp-header .pp-header__inner{gap:8px}
@@ -1321,6 +1321,7 @@ html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-
   .nav-group>.nav-group__toggle{gap:6px;padding-inline:8px;font-size:.8125rem}
 }
 @media (max-width:1120px){
+  html:has(:is(.site-header,.pp-header) .nav-group){scroll-padding-top:calc(var(--site-header-height,70px) + 16px)}
   .site-header,.pp-header{--nav-row-height:68px}
   .site-header .header-inner,.pp-header .pp-header__inner{min-height:var(--nav-row-height);gap:12px}
   .site-header .desktop-nav,.site-header .header-cta,.pp-header .pp-nav,.pp-header>.pp-container>.pp-button{display:none}
@@ -1347,12 +1348,12 @@ html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-
   .nav-discovery__shortcuts{gap:0 20px}
   html.no-js .site-header .menu-toggle{display:none}
   html.no-js .site-header{position:static}
-  html.no-js:has(.site-header .nav-discovery){scroll-padding-top:16px}
+  html.no-js:has(.site-header .nav-group){scroll-padding-top:16px}
   html.no-js .site-header .mobile-nav{position:static;display:block;width:min(calc(100% - 24px),var(--container));max-height:none;margin:0 auto 12px;overflow:visible;box-shadow:none}
 }
 @media (max-width:700px){
-  html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-height,156px) + 16px)}
-  html.no-js:has(.site-header .nav-discovery){scroll-padding-top:16px}
+  html:has(:is(.site-header,.pp-header) .nav-group){scroll-padding-top:calc(var(--site-header-height,66px) + 16px)}
+  html.no-js:has(.site-header .nav-group){scroll-padding-top:16px}
   .site-header,.pp-header{--nav-row-height:64px}
   .site-header .brand,.site-header .brand img,.pp-header .pp-brand img{width:160px}
   .nav-discovery__inner{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:0 18px;padding-block:0}
@@ -1447,6 +1448,13 @@ body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1
   body[data-offer-id="diagnostico-b2g-360"] .hero-actions{gap:8px}
 }
 
+
+@media (min-width:1121px){
+  body[data-route-family="diagnostico-b2g-expansao"] .content-hero.offer-hero{padding-top:16px}
+  body[data-route-family="diagnostico-b2g-expansao"] .offer-hero h1{margin-bottom:8px}
+  body[data-route-family="diagnostico-b2g-expansao"] .offer-hero .offer-proof-line{margin-top:8px}
+  body[data-route-family="diagnostico-b2g-expansao"] .offer-hero>.container>.hero-actions{margin-top:8px}
+}
 
 @media (min-width:1051px){
   body[data-route-family="aditivos"] .content-hero{padding-top:24px}

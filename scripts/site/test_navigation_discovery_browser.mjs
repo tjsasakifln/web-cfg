@@ -99,7 +99,7 @@ async function assertRestored(page, trigger, returnFocus = true) {
     expanded: element.getAttribute('aria-expanded'),
     focus: !focus || document.activeElement === element,
     locked: document.body.classList.contains('menu-open'),
-    inert: Boolean(document.querySelector('main[inert], .nav-discovery[inert]')),
+    inert: Boolean(document.querySelector('main[inert], .nav-discovery[inert], .nav-discovery-region[inert]')),
     dialog: Boolean(document.querySelector('nav[aria-modal="true"]')),
   }), returnFocus);
   assert.deepEqual(state, { expanded: 'false', focus: true, locked: false, inert: false, dialog: false }, 'menu restores focus, scrolling and background');
@@ -165,7 +165,10 @@ try {
         if (mobile && (javascript || project)) {
           await page.focus(trigger);
           await page.keyboard.press('Enter');
-          if (javascript) await page.waitForSelector(`${nav}[role="dialog"]`, { visible: true });
+          if (javascript) {
+            await page.waitForSelector(`${nav}[role="dialog"]`, { visible: true });
+            assert.equal(await page.$eval('.nav-discovery-region', element => element.hasAttribute('inert')), true, `${label} hides the background shortcut landmark from the modal`);
+          }
         }
         await waitForVisible(page, `${nav} > .nav-group > summary`);
         assert.deepEqual(await page.$$eval(`${nav} > .nav-group`, nodes => nodes.map(node => node.dataset.navGroup)), groups, `${label} six groups`);
@@ -348,11 +351,53 @@ try {
     }
   }
 
+  // Reproduce the two viewport regressions found by the complete UI gate.
+  // Keep the shortcuts readable while protecting the sticky header and CTA.
+  await page.setJavaScriptEnabled(true);
+  context = { kind: 'first-viewport', route: '/', javascript: true, width: 360, height: 800 };
+  await visit(page, '/', 360, 800);
+  const mobileFold = await page.evaluate(() => {
+    const header = document.querySelector('.site-header');
+    const region = document.querySelector('.nav-discovery-region');
+    const headerBox = header.getBoundingClientRect();
+    const regionBox = region.getBoundingClientRect();
+    return {
+      headerHeight: headerBox.height,
+      headerBottom: headerBox.bottom,
+      shortcutTop: regionBox.top,
+      shortcutsOutsideHeader: !header.contains(region),
+      shortcuts: [...region.querySelectorAll('a')].map(link => {
+        const box = link.getBoundingClientRect();
+        return { href: link.getAttribute('href'), height: box.height, left: box.left, right: box.right };
+      }),
+    };
+  });
+  assert.ok(mobileFold.headerHeight <= 96, `mobile header exceeds 96px: ${JSON.stringify(mobileFold)}`);
+  assert.ok(mobileFold.shortcutsOutsideHeader && mobileFold.shortcutTop >= mobileFold.headerBottom - 1, 'shortcut region follows the sticky header');
+  assert.equal(mobileFold.shortcuts.length, 5, 'all shortcuts and company access remain visible');
+  assert.ok(mobileFold.shortcuts.every(link => link.height >= 44 && link.left >= 0 && link.right <= 361), 'shortcut targets fit the mobile viewport');
+  await screenshot(page, 'mobile-header-360.png');
+  report.scenarios.push({ ...context, ...mobileFold, status: 'passed' });
+
+  context = { kind: 'first-viewport', route: '/diagnostico-b2g-expansao/', javascript: true, width: 1280, height: 720 };
+  await visit(page, context.route, 1280, 720);
+  const offerFold = await page.evaluate(() => {
+    const cta = document.querySelector('.offer-hero .button-primary');
+    const box = cta.getBoundingClientRect();
+    const headerCta = document.querySelector('.header-cta');
+    return { ctaTop: box.top, ctaBottom: box.bottom, ctaHeight: box.height, ctaHref: cta.getAttribute('href'), headerCtaFont: parseFloat(getComputedStyle(headerCta).fontSize), viewport: innerHeight, scrollY };
+  });
+  assert.ok(offerFold.headerCtaFont >= 14, `header CTA text below 14px: ${JSON.stringify(offerFold)}`);
+  assert.ok(offerFold.scrollY <= 1 && offerFold.ctaTop >= 0 && offerFold.ctaBottom <= offerFold.viewport && offerFold.ctaHeight >= 44, `complete offer CTA must fit before scrolling: ${JSON.stringify(offerFold)}`);
+  assert.equal(offerFold.ctaHref, '#pedido-diagnostico', 'the offer retains its existing request target');
+  await screenshot(page, 'diagnostico-first-viewport-1280.png');
+  report.scenarios.push({ ...context, ...offerFold, status: 'passed' });
+
   assert.deepEqual(report.page_errors, [], 'uncaught errors in navigation journeys');
-  assert.equal(report.screenshots.length, 3, 'three reviewable menu screenshots');
+  assert.equal(report.screenshots.length, 5, 'three menu screenshots and two viewport regression screenshots');
   assert.equal(report.scenarios.filter(row => row.kind === 'disclosures').length, 33, '24 enhanced and nine native disclosure journeys');
   report.status = 'passed';
-  console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize and 6 fragment journeys; evidence ${evidenceDir}`);
+  console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize, 6 fragment journeys and 2 first-viewport regressions; evidence ${evidenceDir}`);
 } catch (error) {
   report.status = 'failed';
   const failure = { ...context, message: error.message, stack: error.stack };

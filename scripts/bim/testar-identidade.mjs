@@ -52,10 +52,11 @@ const pages = ['bim/web', 'bim/fotogrametria'].flatMap(dir => {
 for (const page of pages) {
   try {
     const nodes = elements(parse(read(page)));
-    for (const [tag, cls] of [['header', 'site-header'], ['footer', 'site-footer']]) {
+    for (const [tag, cls] of [['header', 'site-header'], ['nav', 'nav-discovery-region'], ['footer', 'site-footer']]) {
       const matches = ns => ns.filter(n => n.tagName === tag && hasClass(n, cls));
       const sections = matches(nodes);
       assert.equal(sections.length, 1, cls + ' ausente ou repetido');
+      if (cls === 'nav-discovery-region') assert.equal(attr(sections[0], 'aria-label'), 'Acesso direto', 'Atalhos com landmark nomeado');
       const source = matches(portal);
       assert.equal(source.length, 1);
       const signature = section => elements(section)
