@@ -8,6 +8,7 @@ import puppeteer from 'puppeteer-core';
 
 const require = createRequire(import.meta.url);
 const root = path.resolve(import.meta.dirname, '../..');
+const publicRoot = fs.existsSync(path.join(root, '_site/ops/index.html')) ? path.join(root, '_site') : root;
 const output = path.resolve(process.argv[2] || path.join(root, 'build/ready-project-ops'));
 const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), 'project-ops-browser-'));
 Object.assign(process.env, { NODE_ENV: 'test', LEAD_STORE_DIR: storeDir, OPS_TOKEN: 'b'.repeat(32) });
@@ -35,8 +36,8 @@ const server = http.createServer(async (req, res) => {
         queryStringParameters: Object.fromEntries(url.searchParams), body });
       res.writeHead(result.statusCode, result.headers); res.end(result.body); return;
     }
-    const target = path.resolve(root, '.' + (url.pathname === '/ops/' ? '/ops/index.html' : url.pathname));
-    if (!target.startsWith(root + path.sep) || !fs.existsSync(target) || !fs.statSync(target).isFile()) { res.writeHead(404); res.end(); return; }
+    const target = path.resolve(publicRoot, '.' + (url.pathname === '/ops/' ? '/ops/index.html' : url.pathname));
+    if (!target.startsWith(publicRoot + path.sep) || !fs.existsSync(target) || !fs.statSync(target).isFile()) { res.writeHead(404); res.end(); return; }
     const type = { '.html': 'text/html', '.css': 'text/css', '.png': 'image/png', '.woff2': 'font/woff2' }[path.extname(target)] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': type }); fs.createReadStream(target).pipe(res);
   } catch { res.writeHead(500); res.end(); }
@@ -78,7 +79,7 @@ try {
   assert.equal(await page.$eval('#projects-body', el => el.textContent), '');
   assert.equal(await page.$eval('#btn-project-export', el => el.disabled), true);
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ ok: true, checks: ['unauthenticated_denied', 'private_qualification_visible', 'export_available', 'desktop_mobile_no_overflow', 'existing_stage_editor_reused', 'no_script_errors'], screenshots: output }));
+  console.log(JSON.stringify({ ok: true, source: publicRoot === root ? 'source' : 'public-artifact', checks: ['unauthenticated_denied', 'private_qualification_visible', 'export_available', 'desktop_mobile_no_overflow', 'existing_stage_editor_reused', 'no_script_errors'], screenshots: output }));
 } finally {
   await browser?.close(); await new Promise(resolve => server.close(resolve));
   fs.rmSync(storeDir, { recursive: true, force: true });

@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { extname, resolve, sep } from 'node:path';
 import puppeteer from 'puppeteer-core';
@@ -9,6 +10,7 @@ import { resolveChromePath } from '../../scripts/site/resolve_chrome.mjs';
 import projectPolicy from '../../runtime/project-commerce/policy.cjs';
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
+const publicRoot = existsSync(resolve(root, '_site/projetos-prontos/pedidos/index.html')) ? resolve(root, '_site') : root;
 const reportDir = resolve(root, 'build/reports/project-orders');
 const calls = [], creations = [], supportCalls = [], errors = [];
 const fixtureSupplier = {legalName:'Fornecedor de ensaio sem oferta comercial',registrationType:'CNPJ',registration:'11222333000181',address:{street:'Rua de ensaio',number:'100',neighborhood:'Área de testes',city:'Município de ensaio',state:'SC',postalCode:'88000000',country:'BR'},email:'supplier@controlled.example.test',phone:'+5548999999999'};
@@ -52,7 +54,7 @@ const server = createServer(async (req,res) => {
     return send(res,{error:'UNKNOWN'},400);
   }
   const pathname=url.pathname.endsWith('/')?`${url.pathname}index.html`:url.pathname;
-  const path=resolve(root,`.${pathname}`);if(!path.startsWith(root+sep)){res.statusCode=403;return res.end();}
+  const path=resolve(publicRoot,`.${pathname}`);if(!path.startsWith(publicRoot+sep)){res.statusCode=403;return res.end();}
   try {const contents=await readFile(path);res.setHeader('content-type',({'.html':'text/html; charset=utf-8','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.png':'image/png','.woff2':'font/woff2'})[extname(path)]||'application/octet-stream');res.end(contents);}catch{res.statusCode=404;res.end();}
 });
 let browser;
@@ -125,6 +127,6 @@ try {
   purchasesEnabled=false;orders=[];await page.reload({waitUntil:'networkidle0'});await login(page);await waitText(page,'Novas compras pausadas');assert.equal(await page.$('[data-product-id]'),null,'pause preserves account and orders without purchase controls');
   purchasesEnabled=true;delete fixtureProduct.terms.supplier;await page.reload({waitUntil:'networkidle0'});await login(page);await waitText(page,'Não há um projeto disponível');assert.equal(await page.$('[data-product-id]'),null,'missing supplier closes the purchase UI');fixtureProduct.terms.supplier=fixtureSupplier;
   assert.deepEqual(errors,[],'no uncaught browser errors');
-  const report={schema:'confenge.project-orders.browser/v1',environment:'controlled-local-fixtures',realPayments:false,realEmails:false,checks:['off-no-sdk','query-cannot-enable-or-pay','config-failure-closed','verified-email-required','server-product-price-terms','supplier-before-acceptance','supplier-required','explicit-terms-consent','request-idempotency','pending-not-downloadable','authenticated-delivery','safe-checkout-origin','support-real-receipt-only','cancellation-without-reason','support-idempotency','resolved-support-replay','distinct-order-states','logout-invalidates-delivery','purchase-pause-preserves-orders','mobile-no-overflow','wcag-axe'],accessibility,enabledAccessibility,uncaughtErrors:errors};
+  const report={schema:'confenge.project-orders.browser/v1',source:publicRoot===root?'source':'public-artifact',environment:'controlled-local-fixtures',realPayments:false,realEmails:false,checks:['off-no-sdk','query-cannot-enable-or-pay','config-failure-closed','verified-email-required','server-product-price-terms','supplier-before-acceptance','supplier-required','explicit-terms-consent','request-idempotency','pending-not-downloadable','authenticated-delivery','safe-checkout-origin','support-real-receipt-only','cancellation-without-reason','support-idempotency','resolved-support-replay','distinct-order-states','logout-invalidates-delivery','purchase-pause-preserves-orders','mobile-no-overflow','wcag-axe'],accessibility,enabledAccessibility,uncaughtErrors:errors};
   await writeFile(resolve(reportDir,'browser.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
 } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}

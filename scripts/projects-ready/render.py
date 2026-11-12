@@ -50,14 +50,15 @@ def page(route: str, title: str, description: str, body: str) -> str:
 <meta property="og:image" content="{ORIGIN}/assets/og-confenge.jpg"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <link rel="icon" href="/favicon.ico"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/assets/project-practices.css"/><link rel="stylesheet" href="/assets/ready-projects.css"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <script defer src="/script.js"></script>
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False, separators=(',', ':'))}</script>
 </head><body class="ready-projects-page" data-content-type="service" data-route-family="ready_projects" data-asset-id="ready-projects">
-<a class="skip-link" href="#main">Pular para o conteúdo</a>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 {header()}
-<main id="main">{breadcrumbs}{body}</main>
+<main id="conteudo">{breadcrumbs}{body}</main>
 {render_public_footer(published_at='2026-11-12', modified_at='2026-11-12')}
 </body></html>
 '''

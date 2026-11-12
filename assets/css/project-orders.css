@@ -17,12 +17,12 @@
 .po-field { display: grid; gap: .4rem; font-weight: 650; }
 .po-field input, .po-field textarea, .po-field select { width: 100%; min-height: 48px; padding: .75rem; border: 1px solid #7b8c93; border-radius: 0; background: #fff; color: var(--pp-ink); font: inherit; font-weight: 400; }
 .po-field textarea { min-height: 6rem; resize: vertical; }
-.po-field input:focus, .po-field textarea:focus, .po-field select:focus { outline: 3px solid #2d6f2d; outline-offset: 2px; }
+.po-field input:focus, .po-field textarea:focus, .po-field select:focus { outline: 2px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
 .po-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem 1rem; margin: 1rem 0 0; }
 .po-actions > :is(button,a) { min-height: 44px; }
 .po-button { display: inline-flex; justify-content: center; align-items: center; min-height: 44px; padding: .7rem 1rem; border: 1px solid var(--pp-ink); border-radius: 0; background: #fff; color: var(--pp-ink); font: inherit; font-weight: 650; line-height: 1.3; cursor: pointer; }
 .po-button:hover { background: var(--pp-soft); }
-.po-main :is(button,a,summary):focus-visible, .po-header-links a:focus-visible { outline: 3px solid #2d6f2d; outline-offset: 4px; }
+.po-main :is(button,a,summary):focus-visible, .po-header-links a:focus-visible { outline: 2px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
 .po-main button:disabled { opacity: .58; cursor: wait; transform: none; }
 .po-choice { display: flex; gap: .75rem; align-items: flex-start; padding-block: .5rem; line-height: 1.5; }
 .po-choice input { flex: none; margin-top: .2rem; min-width: 20px; min-height: 20px; accent-color: var(--pp-accent); }
