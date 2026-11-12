@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from scripts.site.public_footer import render_public_footer
+from scripts.site.navigation_discovery import render_navigation, render_discovery_bar
 
 ORIGIN = "https://confenge.com.br"
 ROUTE = "/projetos-prontos/"
@@ -18,14 +19,14 @@ WA = "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20consult
 
 
 def header() -> str:
-    brand = json.loads((ROOT / "data/site/brand.json").read_text())
-    links = "".join(f'<a href="{escape(x["href"])}"' + (' aria-current="page"' if x["href"] == '/projetos/' else '') + f'>{escape(x["label"])}</a>' for x in brand['navigation']['desktop'])
+    links = render_navigation(kind="pp-desktop", current=ROUTE)
+    mobile = render_navigation(kind="pp-mobile", current=ROUTE)
     return f'''<header class="pp-header"><div class="pp-container pp-header__inner">
 <a class="pp-brand" href="/" aria-label="CONFENGE, página inicial"><img src="/assets/logo-confenge-500-f8a83f6d.png" width="224" height="58" alt="CONFENGE"/></a>
 <nav class="pp-nav" aria-label="Navegação principal">{links}</nav>
 <a class="pp-button pp-button--compact" href="{ROUTE}#contato-projetos">Consultar projeto</a>
-<details class="pp-mobile"><summary aria-label="Menu"><span>Menu</span></summary><nav aria-label="Navegação móvel">{links}</nav></details>
-</div></header>'''
+<details class="pp-mobile"><summary aria-label="Menu"><span>Menu</span></summary><nav class="pp-mobile-nav" aria-label="Navegação móvel">{mobile}<a href="{ROUTE}#contato-projetos">Consultar projeto</a></nav></details>
+</div>{render_discovery_bar()}</header>'''
 
 
 def page(route: str, title: str, description: str, body: str) -> str:

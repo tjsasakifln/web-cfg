@@ -143,37 +143,92 @@
     // BEGIN SHARED SITE MENU (also used in the offline BIM workspace)
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
-    // O menu movel SE COMPORTA como modal: cobre a tela, trava a rolagem do
-    // fundo e prende o Tab. Faltava DECLARAR isso. Sem role/aria-modal e sem
-    // inert no fundo, quem navega por cursor virtual continuava alcancando e
-    // ouvindo o conteudo de tras -- comportamento modal com semantica de
-    // simples expansor. As marcacoes sao aplicadas em tempo de execucao, na
-    // abertura, e nao no HTML: assim o shell servido nao muda.
-    // Tudo que fica ATRAS do painel vira inerte. O botao que abre e a unica
-    // excecao: ele e o controle de fechar do proprio dialogo e continua na
-    // ordem de foco. A marca, a CTA do cabecalho e o botao flutuante ficavam
-    // alcancaveis por Tab e por cursor virtual mesmo cobertos pelo painel.
-    // O dialogo e o proprio #mobile-menu, que ja tem nome acessivel
-    // ("Navegacao movel"). O botao que abre e IRMAO dele, nao filho: aprovar um
-    // ciclo de foco que sai do dialogo para alcancar o botao de fechar seria
-    // aprovar um dialogo sem controle de fechar dentro. Por isso o fechamento
-    // passa a existir DENTRO do painel, e o botao externo fica inerte enquanto
-    // ele esta aberto. O botao interno e injetado em tempo de execucao e
-    // estilizado inline, porque folhas de estilo compartilhadas fazem parte do
-    // hash de aprovacao editorial da analise publicada.
+    const projectMenu = document.querySelector('.pp-mobile');
+    const projectToggle = projectMenu?.querySelector(':scope > summary');
+    const projectPanel = projectMenu?.querySelector(':scope > nav');
+    const discoveryHeader = document.querySelector('.site-header:has(.nav-discovery)');
+    const headerNavigationOffset = () => {
+      if (!discoveryHeader) return 0;
+      const position = window.getComputedStyle(discoveryHeader).position;
+      if (position !== 'sticky' && position !== 'fixed') return 0;
+      const height = discoveryHeader.getBoundingClientRect().height;
+      return height > 0 ? Math.ceil(height) + 16 : 0;
+    };
+    const updateHeaderHeight = () => {
+      if (!discoveryHeader) return;
+      document.documentElement.style.setProperty('--site-header-height', `${Math.max(0, headerNavigationOffset() - 16)}px`);
+    };
+    updateHeaderHeight();
+    if (discoveryHeader && typeof ResizeObserver === 'function') {
+      new ResizeObserver(updateHeaderHeight).observe(discoveryHeader);
+    }
+    const navGroups = [...document.querySelectorAll('details[data-nav-group]')];
+    const groupToggle = (group) => group.querySelector(':scope > summary');
+    const syncGroupState = (group) => groupToggle(group)?.setAttribute('aria-expanded', String(group.open));
+    const closeGroup = (group, returnFocus = false) => {
+      group.open = false;
+      syncGroupState(group);
+      if (returnFocus) groupToggle(group)?.focus();
+    };
+    const visibleNavigationControl = (element) => {
+      if (!element) return false;
+      if (element.closest('[hidden], [inert]') || !element.getClientRects().length) return false;
+      if (window.getComputedStyle(element).visibility === 'hidden') return false;
+      // Some engines give descendants of closed details a non-null offsetParent.
+      // Only that details element's own summary belongs in the tab sequence.
+      for (let details = element.closest('details'); details; details = details.parentElement?.closest('details')) {
+        if (!details.open && !details.querySelector(':scope > summary')?.contains(element)) return false;
+      }
+      return true;
+    };
+    const navigationFocusable = (root) => [...root.querySelectorAll(
+      'a[href], button:not([disabled]), summary, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )].filter((element) => element.tabIndex >= 0 && visibleNavigationControl(element));
+
+    navGroups.forEach((group) => {
+      syncGroupState(group);
+      group.addEventListener('toggle', () => {
+        syncGroupState(group);
+        if (!group.open) return;
+        const navigation = group.closest('nav');
+        navGroups.forEach((other) => {
+          if (other !== group && other.open && other.closest('nav') === navigation) closeGroup(other);
+        });
+      });
+      group.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          if (group.open && !group.contains(document.activeElement)) closeGroup(group);
+        }, 0);
+      });
+    });
+
+    const mobileContexts = [];
+    if (toggle && menu) mobileContexts.push({ trigger: toggle, panel: menu, details: null });
+    if (projectToggle && projectPanel) mobileContexts.push({ trigger: projectToggle, panel: projectPanel, details: projectMenu });
+    let activeMobile = null;
     let inertApplied = [];
     let closeButton = null;
-    // O botao do menu NAO entra: e o controle do proprio dialogo (mostra o X,
-    // aria-expanded e aria-controls). Torna-lo inerte deixava um controle
-    // visivel que nenhuma tecnologia assistiva alcancava e cujo toque chegava
-    // ao ancestral, fechando o menu com o foco perdido no body.
-    const backdropCandidates = () => [
-      ...document.querySelectorAll('main, footer, .whatsapp-float, .skip-link, .site-head .brand, .site-head .button, header .brand, header .button'),
-    ].filter((element) => element && element !== toggle && !element.contains(menu) && !menu.contains(element));
-    // Os dois lados importam: nao tornar inerte um ANCESTRAL do dialogo, e
-    // nao alcancar nada DENTRO dele. O seletor 'header .button' pegava a CTA
-    // 'Solicitar proposta' que vive dentro do proprio painel, deixando-a
-    // inalcancavel por Tab: o foco saia do dialogo para o body.
+    let bodyWasLocked = false;
+    const backdropCandidates = (context) => [...document.querySelectorAll(
+      'main, footer, .whatsapp-float, .skip-link, .nav-discovery, .desktop-nav, .pp-nav, .site-head .brand, .site-head .button, header .brand, header .button, .pp-header .pp-brand, .pp-header .pp-button--compact'
+    )].filter((element) => element !== context.trigger && !element.contains(context.panel) && !context.panel.contains(element));
+    const closeMobile = (returnFocus = false) => {
+      const context = activeMobile;
+      if (!context) return;
+      activeMobile = null;
+      context.trigger.setAttribute('aria-expanded', 'false');
+      context.trigger.setAttribute('aria-label', 'Abrir menu');
+      context.panel.classList.remove('is-open');
+      context.panel.removeAttribute('role');
+      context.panel.removeAttribute('aria-modal');
+      if (context.details) context.details.open = false;
+      context.panel.querySelectorAll('details[data-nav-group][open]').forEach((group) => closeGroup(group));
+      if (closeButton?.parentNode === context.panel) closeButton.remove();
+      inertApplied.forEach((element) => element.removeAttribute('inert'));
+      inertApplied = [];
+      if (!bodyWasLocked) document.body.classList.remove('menu-open');
+      if (returnFocus) context.trigger.focus();
+    };
     const ensureCloseButton = () => {
       if (closeButton) return closeButton;
       closeButton = document.createElement('button');
@@ -181,71 +236,92 @@
       closeButton.className = 'mobile-nav__close';
       closeButton.setAttribute('aria-label', 'Fechar menu');
       closeButton.textContent = 'Fechar';
-      closeButton.style.cssText = 'display:flex;align-items:center;justify-content:center;'
-        + 'min-height:44px;min-width:44px;margin:0 0 8px auto;padding:8px 14px;'
-        + 'font:inherit;font-weight:700;color:inherit;background:transparent;'
-        + 'border:1px solid currentColor;border-radius:6px;cursor:pointer';
-      closeButton.addEventListener('click', () => closeMenu(true));
+      closeButton.addEventListener('click', () => closeMobile(true));
       return closeButton;
     };
-    const setModalSemantics = (on) => {
-      if (!menu) return;
-      if (on) {
-        menu.setAttribute('role', 'dialog');
-        menu.setAttribute('aria-modal', 'true');
-        menu.insertBefore(ensureCloseButton(), menu.firstChild);
-        // Guarda SO os que este menu tornou inertes: um inert preexistente de
-        // outro componente nao pode ser removido ao fechar.
-        inertApplied = backdropCandidates().filter((element) => !element.hasAttribute('inert'));
-        inertApplied.forEach((element) => element.setAttribute('inert', ''));
+    const openMobile = (context) => {
+      if (activeMobile === context) return;
+      if (activeMobile) closeMobile();
+      activeMobile = context;
+      bodyWasLocked = document.body.classList.contains('menu-open');
+      context.trigger.setAttribute('aria-expanded', 'true');
+      context.trigger.setAttribute('aria-label', 'Fechar menu');
+      context.panel.classList.add('is-open');
+      context.panel.setAttribute('role', 'dialog');
+      context.panel.setAttribute('aria-modal', 'true');
+      context.panel.insertBefore(ensureCloseButton(), context.panel.firstChild);
+      if (context.details) context.details.open = true;
+      document.body.classList.add('menu-open');
+      // Restore only the inert state owned by this menu; other dialogs keep theirs.
+      inertApplied = backdropCandidates(context).filter((element) => !element.hasAttribute('inert'));
+      inertApplied.forEach((element) => element.setAttribute('inert', ''));
+      closeButton.focus();
+    };
+    mobileContexts.forEach((context) => {
+      context.trigger.setAttribute('aria-expanded', String(Boolean(context.details?.open)));
+      if (context.details) {
+        context.details.addEventListener('toggle', () => {
+          if (context.details.open && window.innerWidth <= 1120) openMobile(context);
+          else if (activeMobile === context) closeMobile();
+        });
       } else {
-        menu.removeAttribute('role');
-        menu.removeAttribute('aria-modal');
-        if (closeButton && closeButton.parentNode === menu) menu.removeChild(closeButton);
-        inertApplied.forEach((element) => element.removeAttribute('inert'));
-        inertApplied = [];
+        context.trigger.addEventListener('click', () => activeMobile === context ? closeMobile(true) : openMobile(context));
       }
-    };
-    const closeMenu = (returnFocus = false) => {
-      if (!toggle || !menu) return;
-      toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Abrir menu');
-      menu.classList.remove('is-open'); document.body.classList.remove('menu-open');
-      setModalSemantics(false);
-      if (returnFocus) toggle.focus();
-    };
-    if (toggle && menu) {
-      toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), setModalSemantics(true), (closeButton || menu.querySelector('a'))?.focus()));
-      menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
-      document.addEventListener('keydown', (event) => {
-        // Escape so pertence ao menu quando o menu esta aberto. Antes, uma
-        // tecla Escape em qualquer lugar da pagina roubava o foco para o botao
-        // do menu.
-        if (event.key === 'Escape') {
-          if (toggle.getAttribute('aria-expanded') === 'true') closeMenu(true);
+      context.panel.addEventListener('click', (event) => {
+        if (event.target.closest('a[href]')) closeMobile();
+      });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.defaultPrevented) return;
+      if (event.key === 'Escape') {
+        const openGroups = navGroups.filter((group) => group.open && visibleNavigationControl(groupToggle(group)));
+        const currentGroup = openGroups.find((group) => group.contains(document.activeElement)) || openGroups[0];
+        if (currentGroup) {
+          event.preventDefault();
+          event.stopPropagation();
+          closeGroup(currentGroup, true);
           return;
         }
-        if (event.key !== 'Tab' || toggle.getAttribute('aria-expanded') !== 'true') return;
-        const focusable = [...menu.querySelectorAll('a[href], button:not([disabled])')]
-          .filter((element) => element.offsetParent !== null);
-        if (!focusable.length) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
+        if (activeMobile) {
           event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
+          event.stopPropagation();
+          closeMobile(true);
         }
+        return;
+      }
+      if (event.key !== 'Tab' || !activeMobile) return;
+      const focusable = navigationFocusable(activeMobile.panel);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!activeMobile.panel.contains(document.activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      navGroups.forEach((group) => {
+        if (group.open && !group.contains(event.target)) closeGroup(group);
       });
-      document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
-      window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
-    }
+      if (activeMobile && !activeMobile.panel.contains(event.target) && !activeMobile.trigger.contains(event.target)) closeMobile(true);
+    });
+    window.addEventListener('resize', () => {
+      updateHeaderHeight();
+      if (window.innerWidth > 1120) closeMobile();
+      else navGroups.forEach((group) => {
+        if (group.open && group.closest('.desktop-nav, .pp-nav')) closeGroup(group);
+      });
+    }, { passive: true });
     const currentYear = String(new Date().getFullYear());
     document.querySelectorAll('#year').forEach((element) => {
       if (element.textContent !== currentYear) element.textContent = currentYear;
     });
-
     // END SHARED SITE MENU
 
     // Journey rail progressive enhancement — all stages remain in the DOM for no-JS
@@ -700,6 +776,7 @@
     document.addEventListener('click', (event) => {
       const a = event.target && event.target.closest && event.target.closest('a[href]');
       if (!a || !a.dataset) return;
+      if (a.getAttribute('data-navigation-link') === 'true') return;
       applyDatasetToForm(a);
       rememberPreselectForRoute(a);
       const prior = readStoredPseo();
@@ -986,7 +1063,7 @@
     const anchorOffsetFor = (el) => {
       const margin = parseFloat(window.getComputedStyle(el).scrollMarginTop) || 0;
       const padding = parseFloat(window.getComputedStyle(scrollRoot).scrollPaddingTop) || 0;
-      return Math.max(margin, padding);
+      return Math.max(margin, padding, headerNavigationOffset());
     };
     const anchorTargetY = (el) => {
       const wanted = el.getBoundingClientRect().top + window.scrollY - anchorOffsetFor(el);
@@ -1488,6 +1565,16 @@
         track('cta_click', {
           page_path: pagePath, cta_position: position, cta_label: label,
           destination_type: position === 'tool_share' ? 'external' : position === 'tool_intro' ? 'anchor' : 'route',
+          cta_id: el.getAttribute(A_CTA_ID) || '', event_id: eventId,
+        });
+        return;
+      }
+      // Shared navigation expresses discovery, even on a service page.
+      // Do not inherit that page's commercial journey or record a lead intent.
+      if (el.getAttribute('data-navigation-link') === 'true') {
+        track('cta_click', {
+          page_path: pagePath, cta_position: position, cta_label: label,
+          destination_type: 'route', destination_path: canonicalizeDestination(href).path,
           cta_id: el.getAttribute(A_CTA_ID) || '', event_id: eventId,
         });
         return;

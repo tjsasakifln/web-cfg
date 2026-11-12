@@ -176,6 +176,42 @@ for (const route of ["/", "/servicos/", "/triagem-tecnica/"]) {
     && transitions.length === 0 && diff.added.length === 1 && clicks[0].page_path === route, diff);
 }
 
+// A discovery-menu click stays a route choice even on an SST offer or an
+// editorial page. It must not manufacture service demand or overwrite capture
+// context merely because the menu is shared with that page.
+for (const route of ["/", "/projetos/", "/seguranca-trabalho-apoio-tecnico/", "/conteudos/"]) {
+  await open(page, route);
+  const contextBefore = await page.evaluate(() => ({
+    attribution: sessionStorage.getItem('confenge_pseo_attribution'),
+    preselect: sessionStorage.getItem('confenge_form_preselect'),
+    fields: [...document.querySelectorAll('form input[type="hidden"]')].map(input => [input.name, input.value]),
+  }));
+  for (const selector of [
+    'a[data-navigation-link="true"][data-nav-destination="cad"]',
+    'a[data-navigation-link="true"][data-nav-primary="true"]',
+    'a[data-navigation-link="true"][data-cta-position="header_shortcut"]',
+    'a[data-navigation-link="true"][data-cta-position="header_utility"]',
+  ]) {
+    const diff = await clickAndDiff(page, selector);
+    const clicks = diff.added.filter(event => event.event === 'cta_click');
+    check('discovery_is_navigation_not_service_intent', route,
+      !diff.missing && diff.added.length === 1 && clicks.length === 1
+      && clicks[0].destination_type === 'route'
+      && !('journey' in clicks[0]) && !('tema' in clicks[0])
+      && !('offer_id' in clicks[0]) && !('cta_kind' in clicks[0])
+      && piiViolations(diff.added).length === 0, diff);
+  }
+  const contextAfter = await page.evaluate(() => ({
+    attribution: sessionStorage.getItem('confenge_pseo_attribution'),
+    preselect: sessionStorage.getItem('confenge_form_preselect'),
+    fields: [...document.querySelectorAll('form input[type="hidden"]')].map(input => [input.name, input.value]),
+  }));
+  check('discovery_preserves_capture_context', route,
+    JSON.stringify(contextBefore) === JSON.stringify(contextAfter), { contextUnchanged: JSON.stringify(contextBefore) === JSON.stringify(contextAfter) });
+  const summary = await clickAndDiff(page, 'details[data-nav-group] > summary');
+  check('disclosure_open_is_not_a_conversion', route, !summary.missing && summary.added.length === 0, summary);
+}
+
 // (7a) issue #706 W3: header "Solicitar proposta" whose href is an internal
 // route masked as PII (a long digit run in the path) still carries
 // destination_type=route -- it must not silently drop the field into

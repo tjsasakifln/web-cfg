@@ -1,0 +1,86 @@
+name: navigation-discovery-qa
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: navigation-discovery-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  navigation-review:
+    name: Navigation discovery review
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # Review the actual PR revision. Required site-ci still evaluates
+          # the merge candidate and the complete generated public artifact.
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Initialize source review evidence
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          if sha != os.environ["EXPECTED_HEAD_SHA"]:
+              raise SystemExit("checkout does not match the pull request revision")
+          output = Path("build/reports/convergence/navigation-discovery")
+          output.mkdir(parents=True, exist_ok=True)
+          (output / "provenance.json").write_text(json.dumps({
+              "source_sha": sha,
+              "surface": "source",
+              "site_root": ".",
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "workflow_run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "scope": "Navigation review evidence; required publication gates remain unchanged"
+          }, indent=2) + "\n")
+          PY
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install locked dependencies
+        id: dependencies
+        run: npm ci --engine-strict
+      - name: Resolve contracted Chrome version
+        id: browser-contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Setup Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        with:
+          chrome-version: ${{ steps.browser-contract.outputs.version }}
+      - name: Review navigation on the source revision
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          NAVIGATION_EVIDENCE_DIR: build/reports/convergence/navigation-discovery
+        run: |
+          set -o pipefail
+          node scripts/site/test_navigation_discovery_browser.mjs . 2>&1 | tee build/reports/convergence/navigation-discovery/navigation.log
+      - name: Verify navigation and commercial event semantics
+        if: always() && steps.dependencies.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          SITE_ROOT: .
+          EVENT_SEMANTICS_REPORT: build/reports/convergence/navigation-discovery/event-semantics.json
+        run: |
+          set -o pipefail
+          node scripts/site/test_event_semantics.mjs 2>&1 | tee build/reports/convergence/navigation-discovery/event-semantics.log
+      # Evidence can be inspected before an approved editorial recapture.
+      # This workflow does not rebuild frozen hashes, deploy or replace site-ci.
+      - name: Preserve navigation review evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: navigation-discovery-qa
+          path: build/reports/convergence/navigation-discovery/
+          if-no-files-found: error
+          retention-days: 14

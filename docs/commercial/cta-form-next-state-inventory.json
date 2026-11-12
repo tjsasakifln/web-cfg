@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 293
+    "expected_declared_ctas": 294
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 42,
-    "declared_ctas": 293,
+    "declared_ctas": 294,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -6537,6 +6537,21 @@
         }
       ],
       "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "/projetos-prontos/#contato-projetos",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "current_label": "Consultar projeto",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
         {
           "cta_id": "",
           "position": "",

@@ -140,7 +140,8 @@ for (const width of widths) {
     const archetypes = [...document.querySelectorAll('main > [data-section-archetype]')]
       .map((element) => element.getAttribute('data-section-archetype'));
     const primaries = document.querySelectorAll('main .button-primary').length;
-    const desktopProjects = document.querySelector('.desktop-nav a[href="/projetos/"]');
+    const desktopProjects = document.querySelector('.desktop-nav [data-nav-group="projetos"] > summary')
+      || document.querySelector('.desktop-nav a[href="/projetos/"]');
     const footerNavigation = [...document.querySelectorAll('footer .footer-links')].map((column) => ({
       heading: column.querySelector('strong')?.textContent?.trim() || "",
       links: [...column.querySelectorAll('a[href^="/"]')].map((link) => ({ label: link.textContent.trim(), href: link.getAttribute('href') })),
@@ -378,15 +379,17 @@ for (const width of widths) {
   if (metrics.navProjects !== "Projetos" || !footerMatches(metrics.footerNavigation, footerColumns)) errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 
-  if (width <= 900) {
+  const mobileMenuVisible = await page.$eval('.menu-toggle', element => element.getClientRects().length > 0 && getComputedStyle(element).display !== 'none');
+  if (mobileMenuVisible) {
     await page.click(".menu-toggle");
+    await page.click('.mobile-nav [data-nav-group="projetos"] > summary');
     const mobile = await page.evaluate(() => {
       const menu = document.querySelector(".mobile-nav");
-      const link = menu?.querySelector('a[href="/projetos/"]');
+      const link = menu?.querySelector('a[data-nav-primary="true"][href="/projetos/"]');
       return {
         expanded: document.querySelector(".menu-toggle")?.getAttribute("aria-expanded"),
         linkVisible: Boolean(link && link.getBoundingClientRect().height >= 44),
-        linkText: link?.textContent?.trim() || "",
+        linkText: link?.getAttribute('data-nav-label') || "",
       };
     });
     if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Projetos") {
@@ -629,8 +632,9 @@ for (const width of [390, 901, 960, 1000, 1120, 1240, 1366, 1661]) {
     };
   });
   const errors = [];
-  // At or below the mobile breakpoint the opened menu carries the CTA instead.
-  if (width > 900 && !header.ctaVisible) errors.push("header_cta_missing");
+  // The opened mobile menu carries the CTA when the responsive toggle replaces
+  // the desktop navigation. Observe that state instead of assuming a breakpoint.
+  if (header.navVisible && !header.ctaVisible) errors.push("header_cta_missing");
   if (!header.navVisible && !header.toggleVisible) errors.push("header_nav_unreachable");
   if (header.ctaOverflowsHeader) errors.push("header_cta_overflows");
   if (header.overflow) errors.push("document_overflow");
@@ -646,8 +650,9 @@ for (const { route, expectedNav } of [
   await page.setViewport({ width: 1024, height: 900, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate((currentRoute) => {
-    const nav = [...document.querySelectorAll(".desktop-nav a")].map((a) => ({
-      text: a.textContent?.trim(), href: a.getAttribute("href"),
+    const grouped = Boolean(document.querySelector('.desktop-nav .nav-group'));
+    const nav = [...document.querySelectorAll(grouped ? '.desktop-nav [data-nav-primary="true"]' : '.desktop-nav a')].map((a) => ({
+      text: a.getAttribute('data-nav-label') || a.textContent?.trim(), href: a.getAttribute("href"),
     }));
     return {
       route: currentRoute,

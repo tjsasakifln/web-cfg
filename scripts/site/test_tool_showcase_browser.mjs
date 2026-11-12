@@ -68,16 +68,23 @@ try {
   for (const width of [320, 390, 768, 1024, 1440]) {
     await page.setViewport({ width, height: 880 });
     await load('/');
-    const nav = width > 900 ? '.desktop-nav' : '.mobile-nav';
-    if (width <= 900) {
+    const mobile = await page.$eval('.menu-toggle', el => el.getClientRects().length > 0 && getComputedStyle(el).display !== 'none');
+    const nav = mobile ? '.mobile-nav' : '.desktop-nav';
+    if (mobile) {
       await page.waitForSelector('.menu-toggle', { visible: true });
       await page.click('.menu-toggle');
     }
-    await page.waitForSelector(nav + ' a[href="/ferramentas/"]', { visible: true });
-    await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click(nav + ' a[href="/ferramentas/"]')]);
+    const groupToggle = nav + ' [data-nav-group="ferramentas"] > summary';
+    await page.waitForSelector(groupToggle, { visible: true });
+    const targetSize = await page.$eval(groupToggle, el => ({ width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height }));
+    assert.ok(targetSize.width >= 44 && targetSize.height >= 44, 'menu touch target ' + width);
+    await page.click(groupToggle);
+    const overview = nav + ' a[data-nav-primary="true"][href="/ferramentas/"]';
+    await page.waitForSelector(overview, { visible: true });
+    await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click(overview)]);
     assert.equal(new URL(page.url()).pathname, '/ferramentas/');
     assert.equal(await overflow(), false, 'catalogue viewport ' + width);
-    assert.equal(await page.$eval(nav + ' a[href="/ferramentas/"]', el => el.getAttribute('aria-current')), 'page');
+    assert.equal(await page.$eval(overview, el => el.getAttribute('aria-current')), 'page');
     if (shots && [390, 1440].includes(width)) {
       await page.screenshot({ path: resolve(shots, 'catalogue-' + width + '.png') });
     }

@@ -70,18 +70,23 @@ class _NavParser(HTMLParser):
         self.capture = False
         self.buf: list[str] = []
         self.labels: list[str] = []
+        self.grouped = False
+        self.nav_label = ""
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         ad = {key: (value or "") for key, value in attrs}
         if tag == "nav" and "desktop-nav" in ad.get("class", "").split():
             self.in_desktop = True
+        elif self.in_desktop and tag == "details" and "nav-group" in ad.get("class", "").split():
+            self.grouped = True
         elif self.in_desktop and tag == "a":
-            self.capture = True
+            self.capture = not self.grouped or ad.get("data-nav-primary") == "true"
+            self.nav_label = ad.get("data-nav-label", "")
             self.buf = []
 
     def handle_endtag(self, tag: str) -> None:
         if self.capture and tag == "a":
-            self.labels.append(re.sub(r"\s+", " ", "".join(self.buf)).strip())
+            self.labels.append(self.nav_label or re.sub(r"\s+", " ", "".join(self.buf)).strip())
             self.capture = False
         elif self.in_desktop and tag == "nav":
             self.in_desktop = False
@@ -750,13 +755,13 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
     expected_labels = [label for label, _ in CANONICAL_NAV_ITEMS]
     for index, block in enumerate(blocks):
         anchors = re.findall(r'<a\b[^>]*>.*?</a>', block, flags=re.DOTALL)
-        navigation = [anchor for anchor in anchors if 'class="button ' not in anchor]
+        navigation = [anchor for anchor in anchors if 'data-nav-primary="true"' in anchor]
         hrefs = [
             re.search(r'href="([^"]+)"', anchor).group(1)
             for anchor in navigation
         ]
         labels = [
-            re.sub(r"<[^>]+>", "", anchor).strip() for anchor in navigation
+            re.search(r'data-nav-label="([^"]+)"', anchor).group(1) for anchor in navigation
         ]
         assert hrefs == expected_hrefs
         assert labels == expected_labels

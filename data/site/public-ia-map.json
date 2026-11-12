@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "updated_at": "2026-11-12",
-  "purpose": "Source of truth for institutional services navigation, projects and public-works discovery, and route/job/parent/contact/index relationships.",
+  "purpose": "Single navigation contract: six visitor-oriented groups, direct product access and consistent discovery on every public page.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
     "decision_state": "EXECUTE_NOW",
@@ -198,46 +198,337 @@
   "header": {
     "destinations": [
       {
+        "id": "projetos",
         "label": "Projetos",
         "href": "/projetos/",
-        "surface": "engineering_projects_hub"
+        "overview_label": "Todos os projetos",
+        "eyebrow": "Projetar e construir",
+        "description": "Da concepção à documentação para execução, com as disciplinas coordenadas.",
+        "children": [
+          {
+            "id": "projetos-prontos",
+            "label": "Projetos prontos",
+            "href": "/projetos-prontos/",
+            "description": "Consulte disponibilidade e adaptação ao terreno."
+          },
+          {
+            "id": "estruturas",
+            "label": "Projetos estruturais",
+            "href": "/projetos/estruturas/",
+            "description": "Concreto, aço e soluções para o empreendimento."
+          },
+          {
+            "id": "instalacoes",
+            "label": "Projetos de instalações",
+            "href": "/projetos/instalacoes/",
+            "description": "Sistemas elétricos, hidráulicos e complementares."
+          },
+          {
+            "id": "infraestrutura",
+            "label": "Projetos de infraestrutura",
+            "href": "/projetos/infraestrutura/",
+            "description": "Redes, drenagem, urbanização e obras de arte."
+          },
+          {
+            "id": "coordenacao",
+            "label": "Coordenação multidisciplinar",
+            "href": "/projetos/coordenacao-multidisciplinar/",
+            "description": "Disciplinas, interfaces e revisões integradas."
+          },
+          {
+            "id": "compatibilizacao",
+            "label": "Revisão e compatibilização",
+            "href": "/compatibilizacao-projetos-engenharia/",
+            "description": "Análise das interferências entre projetos."
+          },
+          {
+            "id": "terceirizacao",
+            "label": "Projetos para escritórios",
+            "href": "/terceirizacao-projetos-engenharia/",
+            "description": "Apoio técnico à capacidade de entrega do seu time."
+          },
+          {
+            "id": "edificacoes",
+            "label": "Engenharia de edificações",
+            "href": "/edificacoes/",
+            "description": "Projetos e documentação ao longo do empreendimento."
+          }
+        ]
       },
       {
+        "id": "servicos",
         "label": "Serviços",
         "href": "/servicos/",
-        "surface": "corporate_services_hub"
+        "overview_label": "Todos os serviços",
+        "eyebrow": "Contratar engenharia",
+        "description": "Encontre o trabalho técnico para a sua obra, imóvel ou decisão.",
+        "children": [
+          {
+            "id": "orcamento",
+            "label": "Quantitativos e orçamento",
+            "href": "/quantitativos-orcamento-obras/",
+            "description": "Uma base para comparar propostas e contratar."
+          },
+          {
+            "id": "inspecao",
+            "label": "Inspeção e diagnóstico",
+            "href": "/inspecao-diagnostico-edificacoes/",
+            "description": "Condição da edificação, falhas e intervenções."
+          },
+          {
+            "id": "pericia",
+            "label": "Perícia e assistência técnica",
+            "href": "/assistencia-tecnica-pericial-engenharia/",
+            "description": "Fundamentação de engenharia para disputas."
+          },
+          {
+            "id": "avaliacao",
+            "label": "Avaliação de imóveis",
+            "href": "/avaliacao-imoveis-urbanos/",
+            "description": "Valor fundamentado para uma finalidade definida."
+          },
+          {
+            "id": "sst",
+            "label": "Segurança do trabalho",
+            "href": "/seguranca-trabalho-apoio-tecnico/",
+            "description": "Elaboração e revisão de documentação de SST."
+          },
+          {
+            "id": "condominios",
+            "label": "Engenharia para condomínios",
+            "href": "/engenharia-condominios/",
+            "description": "Reformas, recebimento e decisões do condomínio."
+          }
+        ]
       },
       {
-        "label": "Condomínios",
-        "href": "/engenharia-condominios/",
-        "surface": "condominium_engineering_hub"
-      },
-      {
-        "label": "Obras públicas",
-        "href": "/servicos-obras-publicas/",
-        "vertical": "public_works_b2g"
-      },
-      {
+        "id": "ferramentas",
         "label": "Ferramentas",
         "href": "/ferramentas/",
-        "surface": "engineering_tools"
+        "overview_label": "Todas as ferramentas",
+        "eyebrow": "Usar no navegador",
+        "description": "Abra desenhos e modelos, faça cálculos e organize o trabalho técnico.",
+        "children": [
+          {
+            "id": "cad",
+            "label": "Editor DWG",
+            "href": "/cad/",
+            "description": "Abra, edite e exporte desenhos CAD."
+          },
+          {
+            "id": "bim",
+            "label": "BIM e IFC",
+            "href": "/bim/",
+            "description": "Visualize modelos e explore as ferramentas BIM."
+          },
+          {
+            "id": "modela",
+            "label": "Modela Pro",
+            "href": "/avaliacao-imoveis-urbanos/inferencia/",
+            "description": "Inferência estatística para avaliação de imóveis."
+          },
+          {
+            "id": "orcamento-obra",
+            "label": "Orçamento de obras",
+            "href": "/ferramentas/orcamento-de-obras/",
+            "description": "Composições, custos e planilhas de orçamento."
+          },
+          {
+            "id": "viga",
+            "label": "Análise de vigas",
+            "href": "/ferramentas/analise-de-viga-continua/",
+            "description": "Esforços, reações e deformações em vigas contínuas."
+          },
+          {
+            "id": "cronograma",
+            "label": "Cronograma de obra",
+            "href": "/ferramentas/caminho-critico-obra/",
+            "description": "Atividades, dependências e caminho crítico."
+          }
+        ]
       },
       {
-        "label": "Empresa",
-        "href": "/empresa/",
-        "surface": "company"
+        "id": "inteligencia",
+        "label": "Inteligência",
+        "href": "/inteligencia/",
+        "overview_label": "Inteligência de mercado",
+        "eyebrow": "Pesquisar para decidir",
+        "description": "Estudos com fontes públicas para decisões comerciais e de expansão.",
+        "children": [
+          {
+            "id": "clientes",
+            "label": "Clientes e parceiros",
+            "href": "/inteligencia/orgaos/",
+            "description": "Seleção de compradores e empresas por critérios."
+          },
+          {
+            "id": "mercados",
+            "label": "Mercados e expansão",
+            "href": "/inteligencia/mercados/",
+            "description": "Demanda observada por categoria e território."
+          },
+          {
+            "id": "concorrentes",
+            "label": "Concorrentes e carteiras",
+            "href": "/inteligencia/concorrencia/",
+            "description": "Presença e atuação documentada de empresas."
+          },
+          {
+            "id": "precos",
+            "label": "Referências de preços",
+            "href": "/inteligencia/precos/",
+            "description": "Pesquisa de valores e condições comparáveis."
+          },
+          {
+            "id": "pesquisa",
+            "label": "Pesquisa sob encomenda",
+            "href": "/inteligencia/pesquisa-sob-encomenda/",
+            "description": "Um estudo delimitado pela sua decisão."
+          },
+          {
+            "id": "radar",
+            "label": "Radar de Mercado Público",
+            "href": "/ferramentas/radar-mercado-publico/",
+            "description": "Explore contratos públicos e seus mercados."
+          }
+        ]
+      },
+      {
+        "id": "obras-publicas",
+        "label": "Obras públicas",
+        "href": "/servicos-obras-publicas/",
+        "overview_label": "Serviços para obras públicas",
+        "eyebrow": "Licitações e contratos",
+        "description": "Suporte técnico da análise do edital aos eventos da execução.",
+        "children": [
+          {
+            "id": "edital",
+            "label": "Edital e proposta",
+            "href": "/bid-room-licitacoes-obras/",
+            "description": "Análise técnica para decidir e preparar a disputa."
+          },
+          {
+            "id": "medicoes",
+            "label": "Medições e glosas",
+            "href": "/medicoes-glosas-obras-publicas/",
+            "description": "Documentação e cálculos para sustentar a medição."
+          },
+          {
+            "id": "aditivos",
+            "label": "Aditivos contratuais",
+            "href": "/aditivos-obras-publicas/",
+            "description": "Escopo, quantidades e fundamentação técnica."
+          },
+          {
+            "id": "atrasos",
+            "label": "Atrasos e prorrogação",
+            "href": "/atrasos-prorrogacao-obras-publicas/",
+            "description": "Cronologia, impacto e análise dos prazos."
+          },
+          {
+            "id": "reequilibrio",
+            "label": "Reequilíbrio econômico",
+            "href": "/reequilibrio-obras-publicas/",
+            "description": "Apuração dos efeitos de eventos no contrato."
+          },
+          {
+            "id": "acompanhamento",
+            "label": "Acompanhamento de contratos",
+            "href": "/acompanhamento-contratos-obras/",
+            "description": "Organização técnica dos eventos da execução."
+          }
+        ]
+      },
+      {
+        "id": "conteudos",
+        "label": "Conteúdos",
+        "href": "/conteudos/",
+        "overview_label": "Biblioteca completa",
+        "eyebrow": "Consultar e aprender",
+        "description": "Guias, referências e exemplos para entender o trabalho e decidir.",
+        "children": [
+          {
+            "id": "biblioteca",
+            "label": "Biblioteca técnica",
+            "href": "/conteudos/",
+            "description": "Artigos sobre projetos, obras e serviços técnicos."
+          },
+          {
+            "id": "guias",
+            "label": "Guias e checklists",
+            "href": "/guias-contratos-obras/",
+            "description": "Roteiros para examinar contratos de obras."
+          },
+          {
+            "id": "entregas",
+            "label": "Exemplos de entregas",
+            "href": "/entregas/",
+            "description": "Conheça as peças e a utilidade de cada entrega."
+          },
+          {
+            "id": "casos",
+            "label": "Casos e demonstrações",
+            "href": "/casos/",
+            "description": "Examine aplicações e exemplos identificados."
+          },
+          {
+            "id": "lei",
+            "label": "Lei 14.133 aplicada a obras",
+            "href": "/lei-14133-obras/",
+            "description": "Referências organizadas para consulta."
+          },
+          {
+            "id": "metodo",
+            "label": "Como trabalhamos",
+            "href": "/como-trabalhamos/",
+            "description": "Escopo, desenvolvimento e revisão das entregas."
+          }
+        ]
       }
     ],
     "cta": {
       "label": "Solicitar proposta",
       "href": "/triagem-tecnica/"
-    }
+    },
+    "quick_links": [
+      {
+        "id": "cad",
+        "label": "Editor DWG",
+        "href": "/cad/"
+      },
+      {
+        "id": "bim",
+        "label": "BIM e IFC",
+        "href": "/bim/"
+      },
+      {
+        "id": "projetos-prontos",
+        "label": "Projetos prontos",
+        "href": "/projetos-prontos/"
+      },
+      {
+        "id": "radar",
+        "label": "Radar público",
+        "href": "/ferramentas/radar-mercado-publico/"
+      }
+    ],
+    "utility_links": [
+      {
+        "id": "empresa",
+        "label": "A CONFENGE",
+        "href": "/empresa/"
+      }
+    ]
   },
   "footer": {
     "columns": [
       {
         "heading": "Projetos",
         "links": [
+          {
+            "label": "Projetos prontos",
+            "href": "/projetos-prontos/"
+          },
           {
             "label": "Estruturas",
             "href": "/projetos/estruturas/"
@@ -447,11 +738,11 @@
     {
       "id": "inteligencia",
       "route": "/inteligencia/",
-      "role": "evidencia",
+      "role": "solucao_comercial",
       "label": "Inteligência",
       "next_action": "/#formulario-contato",
-      "chrome": "footer",
-      "chrome_reason": "Hub público indexável, descoberto pelo diretório de serviços e pelo rodapé compartilhado."
+      "chrome": "header",
+      "chrome_reason": "Pesquisa multissetorial acessível diretamente no menu de descoberta."
     },
     {
       "id": "metodologia",
@@ -858,7 +1149,7 @@
     },
     {
       "prefix": "/como-trabalhamos/",
-      "href": "/como-trabalhamos/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/empresa/",
@@ -866,7 +1157,7 @@
     },
     {
       "prefix": "/engenharia-condominios/",
-      "href": "/engenharia-condominios/"
+      "href": "/servicos/"
     },
     {
       "prefix": "/servicos/",
@@ -950,39 +1241,39 @@
     },
     {
       "prefix": "/conteudos/quando-compatibilizar-projetos/",
-      "href": "/projetos/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/conteudos/como-contratar-compatibilizacao-projetos/",
-      "href": "/projetos/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/conteudos/como-contratar-revisao-tecnica-projeto/",
-      "href": "/projetos/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
-      "href": "/projetos/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/conteudos/como-contratar-projetos-complementares/",
-      "href": "/projetos/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/conteudos/",
-      "href": "/servicos-obras-publicas/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/guias-contratos-obras/",
-      "href": "/servicos-obras-publicas/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/lei-14133-obras/",
-      "href": "/servicos-obras-publicas/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/jurisprudencia-contratos-obras/",
-      "href": "/servicos-obras-publicas/"
+      "href": "/conteudos/"
     },
     {
       "prefix": "/cad/",
@@ -1002,15 +1293,15 @@
     },
     {
       "prefix": "/compatibilizacao-projetos-engenharia/",
-      "href": "/servicos/"
+      "href": "/projetos/"
     },
     {
       "prefix": "/revisao-tecnica-projetos-engenharia/",
-      "href": "/servicos/"
+      "href": "/projetos/"
     },
     {
       "prefix": "/projetos-complementares-engenharia/",
-      "href": "/servicos/"
+      "href": "/projetos/"
     },
     {
       "prefix": "/inspecao-diagnostico-edificacoes/",
@@ -1043,6 +1334,18 @@
     {
       "prefix": "/parcerias-engenharia/",
       "href": "/servicos/"
+    },
+    {
+      "prefix": "/inteligencia/",
+      "href": "/inteligencia/"
+    },
+    {
+      "prefix": "/entregas/",
+      "href": "/conteudos/"
+    },
+    {
+      "prefix": "/casos/",
+      "href": "/conteudos/"
     }
   ],
   "removed_from_primary_nav": [
@@ -1059,7 +1362,7 @@
     {
       "label": "Entregas",
       "href": "/entregas/",
-      "reason": "Catálogo de evidência acessível por Casos, demonstrações e páginas de ofertas; o rodapé promove projetos, serviços e a empresa."
+      "reason": "Acesso direto pelo grupo Conteúdos, com exemplos identificados e contexto de uso."
     },
     {
       "label": "Quem responde",
@@ -1077,11 +1380,6 @@
       "label": "Radar",
       "href": "/radar/",
       "reason": "Evidência profunda; permanece acessível pelo hub de conteúdos."
-    },
-    {
-      "label": "Lei 14.133",
-      "href": "/lei-14133-obras/",
-      "reason": "Educação profunda; permanece acessível pelo hub e busca."
     },
     {
       "label": "Jurisprudência",

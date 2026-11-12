@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.public_footer import render_public_footer  # noqa: E402
+from scripts.site.navigation_discovery import render_navigation, render_discovery_bar
 from scripts.site.shell_nav import load_brand  # noqa: E402
 
 DATA = ROOT / "data/projects/project-pages.v1.json"
@@ -154,26 +155,23 @@ def _whatsapp_href(page: dict[str, Any]) -> str:
 
 
 def _header(active: str, page: dict[str, Any]) -> str:
-    links = load_brand()["navigation"]["desktop"]
-    nav = "".join(
-        f'<a href="{esc(item["href"])}"{current}>{esc(item["label"])}</a>'
-        for item in links
-        for current in (' aria-current="page"' if item["href"] == active else "",)
-    )
+    nav = render_navigation(kind="pp-desktop", current=page["route"], active=active)
+    mobile = render_navigation(kind="pp-mobile", current=page["route"], active=active)
     return f"""<header class="pp-header">
 <div class="pp-container pp-header__inner">
 <a class="pp-brand" href="/" aria-label="CONFENGE, página inicial"><img src="/assets/logo-confenge-500-f8a83f6d.png" width="224" height="58" alt="CONFENGE Inteligência Técnica"/></a>
 <nav class="pp-nav" aria-label="Navegação principal">{nav}</nav>
 <a class="pp-button pp-button--compact" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header" data-cta-position="header">Solicitar proposta</a>
-<details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav aria-label="Navegação móvel">{nav}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
+<details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav class="pp-mobile-nav" aria-label="Navegação móvel">{mobile}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
 </div>
+{render_discovery_bar()}
 </header>"""
 
 
 def _active_header_route(page: dict[str, Any]) -> str:
     route = page["route"]
     if route == "/como-trabalhamos/":
-        return "/empresa/"
+        return "/conteudos/"
     project_branch = {
         "/edificacoes/",
         "/terceirizacao-projetos-engenharia/",

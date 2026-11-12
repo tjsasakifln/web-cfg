@@ -146,14 +146,9 @@ def _build_header() -> str:
         "label": "Solicitar proposta",
         "href": "/triagem-tecnica/",
     }
-    links = "\n".join(
-        f'<a data-cta-position="header_nav" href="{html.escape(n["href"], quote=True)}" style="min-height:44px">{html.escape(n["label"])}</a>'
-        for n in nav
-    )
-    mobile = "\n".join(
-        f'<a data-cta-position="mobile_nav" href="{html.escape(n["href"], quote=True)}" style="min-height:44px">{html.escape(n["label"])}</a>'
-        for n in nav
-    )
+    from scripts.site.navigation_discovery import render_navigation, render_discovery_bar
+    links = render_navigation(kind="desktop")
+    mobile = render_navigation(kind="mobile")
     return f"""<header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
@@ -170,6 +165,7 @@ def _build_header() -> str:
 {mobile}
 <a class="button button-primary" href="{cta['href']}">{cta['label']}</a>
 </nav>
+{render_discovery_bar()}
 </header>"""
 
 
@@ -188,7 +184,7 @@ def _build_footer() -> str:
     else:
         columns = ""
     if not columns:
-        columns = '<div class="footer-links"><strong>Projetos</strong><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>'
+        columns = '<div class="footer-links"><strong>Projetos</strong><a href="/projetos-prontos/">Projetos prontos</a><a href="/projetos/estruturas/">Estruturas</a><a href="/projetos/instalacoes/">Instalações</a><a href="/projetos/infraestrutura/">Infraestrutura</a><a href="/projetos/coordenacao-multidisciplinar/">Coordenação multidisciplinar</a></div><div class="footer-links"><strong>Serviços e conhecimento</strong><a href="/edificacoes/">Edificações</a><a href="/inteligencia/">Inteligência de mercado</a><a href="/servicos-obras-publicas/">Obras públicas</a><a href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho</a><a href="/conteudos/">Conteúdos técnicos</a><a href="/ferramentas/">Ferramentas</a></div><div class="footer-links"><strong>CONFENGE</strong><a href="/empresa/">Empresa</a><a href="/como-trabalhamos/">Como trabalhamos</a><a href="/especialista/tiago-jun-sasaki/">Liderança técnica</a><a href="/triagem-tecnica/">Solicitar proposta</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil.</span></div>'
     return f"""<footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>{html.escape(blurb)}</p></div>
