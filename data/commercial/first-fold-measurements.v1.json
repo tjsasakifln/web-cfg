@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-12T17:03:11.810Z",
+  "measured_at": "2026-11-12T17:22:51.582Z",
   "measured_on": "2026-11-12",
-  "commit_sha": "e4d46ff1f08997057b84c7a0fc1509c5e6a818c2",
+  "commit_sha": "ca58ce13b5d109fded8ea46d988be10e68832d63",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -23,7 +23,7 @@
     "assets/project-practices.css": "e4c26c5f24d5c1e49f14e9a43a1e3a1951fcbceb67d931df028b887613e650f0",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
-    "assets/ready-projects.css": "ba19af1f439b9ac8a2f634af34b38d9cf5479c7dfb9a01dacf5c83cdf735f024",
+    "assets/ready-projects.css": "915a31866a89149733d92b1247d9c3be2f57e179ffb1f7c520b7ccada7e30bc8",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
