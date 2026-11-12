@@ -290,6 +290,7 @@ jobs:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
           DELIVERABLES_HUB_REPORT: build/reports/navigation-artifact-qa/deliverables-hub-ui.json
+          DELIVERABLES_SCREENSHOT_DIR: build/reports/navigation-artifact-qa/deliverables
         run: |
           set -o pipefail
           npm run test:deliverables-hub-ui 2>&1 | tee build/reports/navigation-artifact-qa/deliverables-hub-ui.log
@@ -340,6 +341,7 @@ jobs:
               "navigation/projetos-prontos-desktop.png", "navigation/mobile-header-360.png",
               "navigation/diagnostico-first-viewport-1280.png", "navigation/failure.png",
               "navigation/report.json", "provenance.json", "first-fold.json", "deliverables-hub-ui.json",
+              "deliverables/footer-mobile-390.png",
           ]
           for name in names:
               path = root / name

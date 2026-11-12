@@ -702,6 +702,13 @@ if (!preferenceHeightGate.negativeControls.componentRegression || !preferenceHei
   || !preferenceHeightGate.negativeControls.restored) preferenceHeightErrors.push("preference_negative_controls");
 findings.push({ route: "/entregas/", check: "footer_analytics_preference_height", ...preferenceHeightGate, errors: preferenceHeightErrors });
 if (preferenceHeightErrors.length) failed += 1;
+if (screenshotDir) {
+  fs.mkdirSync(screenshotDir, { recursive: true });
+  await page.mouse.move(1, 1);
+  const footer = await page.$("footer.site-footer");
+  if (!footer) throw new Error("deliverables_footer_missing_for_review");
+  await footer.screenshot({ path: path.join(screenshotDir, "footer-mobile-390.png") });
+}
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
