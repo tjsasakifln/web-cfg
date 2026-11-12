@@ -24,7 +24,7 @@ fs.mkdirSync(downloads, { mode: 0o700 });
 fs.mkdirSync(reports, { recursive: true });
 const STORAGE_KEY = 'confenge.project-services.receipts.v1';
 const offer = readOffer();
-const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [], receiptRestorations = [];
+const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [], receiptRestorations = [], reviewGeometry = [];
 const facts = new Map();
 let time = Date.now(), creates = 0, providerResponseLost = false, clientResponseLost = false, statusTransportUnavailable = false;
 let app, base, browser, currentPage;
@@ -73,7 +73,9 @@ const server = http.createServer(async (req, res) => {
       calls.push({ op: q.op, status: result.statusCode, body: body ? JSON.parse(body) : null,
         response: JSON.parse(result.body), hasAuthorization: Boolean(req.headers.authorization), url: req.url });
       if (q.op === 'service-checkout' && clientResponseLost && result.statusCode < 300) {
-        clientResponseLost = false; req.socket.destroy(); return;
+        // Keep the transport unavailable through Chromium's automatic retry.
+        // The scenario clears this only after the buyer observes the failure.
+        req.socket.destroy(); return;
       }
       res.writeHead(result.statusCode, result.headers); res.end(result.body); return;
     }
@@ -152,6 +154,20 @@ async function screenshot(page, label, selector = null) {
   else await page.screenshot({ path: path.join(reports, file), fullPage: true });
   screenshots.push(file);
 }
+async function assertReviewLayout(page) {
+  for (const target of [null, '#rp-purchase-title', '.rp-checkout-footer']) {
+    if (target) await page.$eval(target, node => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    const geometry = await page.evaluate(() => {
+      const box = selector => { const r = document.querySelector(selector).getBoundingClientRect();
+        return { top: r.top, bottom: r.bottom, left: r.left, right: r.right }; };
+      return { scrollY, summary: box('.rp-summary'), purchase: box('#rp-purchase-details') };
+    });
+    reviewGeometry.push({ checkpoint: target || 'after-review', ...geometry });
+    assert(geometry.summary.bottom <= geometry.purchase.top + 1,
+      `the estimate must stay above the full-width review and consent: ${JSON.stringify(geometry)}`);
+  }
+  await screenshot(page, 'review-open-desktop', '#rp-purchase-details');
+}
 async function audit(page, label, width, height) {
   await page.setViewport({ width, height });
   const overflow = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth,
@@ -204,7 +220,7 @@ async function authoritativePaid(id) {
 
 const report = { schema: 'confenge.project-services.browser/v1', ok: false,
   source: publicRoot === root ? 'source' : 'public-artifact', environment: 'local-real-handler-fake-provider',
-  realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, receiptRestorations, uncaughtErrors: errors,
+  realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, receiptRestorations, reviewGeometry, uncaughtErrors: errors,
   pageSha256: createHash('sha256').update(fs.readFileSync(path.join(publicRoot, 'projetos-prontos/index.html'))).digest('hex') };
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -221,6 +237,8 @@ try {
   checks.push('desktop-mobile-usable-and-accessible');
 
   await configureAndReview(page, { area: 120, deadline: 30, structure: true });
+  await assertReviewLayout(page);
+  checks.push('review-and-consent-clear-of-estimate-at-each-scroll-position');
   const reviewed = calls.filter(call => call.op === 'service-quote').at(-1).response;
   assert.equal(reviewed.amountCents, 433680);
   assert.equal(reviewed.amountCents, quote({ areaM2: 120, deadlineDays: 30, disciplines: ['arquitetura', 'estrutura'],
@@ -332,10 +350,18 @@ try {
   // even when a later corrected form is invalid before server persistence lookup.
   const lost = await newPage();
   await configureAndReview(lost); await fillBuyer(lost); await accept(lost);
-  clientResponseLost = true; await lost.click('#rp-pay-button');
-  await waitText(lost, '#rp-checkout-message', 'Não foi possível conferir a resposta');
+  const lostCallsStart = calls.length;
+  clientResponseLost = true;
+  try {
+    await lost.click('#rp-pay-button');
+    await waitText(lost, '#rp-checkout-message', 'Não foi possível conferir a resposta');
+  } finally { clientResponseLost = false; }
   const receiptC = await activeReceipt(lost); assert(receiptC);
+  const lostCheckouts = calls.slice(lostCallsStart).filter(call => call.op === 'service-checkout');
+  assert(lostCheckouts.length >= 1);
+  assert.deepEqual([...new Set(lostCheckouts.map(call => call.body.requestId))], [receiptC.id], 'automatic transport retries reuse the original durable order');
   assert.equal(creates, 3);
+  report.responseLoss = { transportAttempts: lostCheckouts.length, requestId: receiptC.id, providerCreations: creates };
   statusTransportUnavailable = true;
   await lost.reload({ waitUntil: 'networkidle0' });
   await waitText(lost, '#rp-order-state', 'temporariamente indisponível');
