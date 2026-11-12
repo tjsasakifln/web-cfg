@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-11T04:09:04.037Z",
-  "measured_on": "2026-11-11",
-  "commit_sha": "d521f7e6862c41ebda3e85602a3cbb5cbf29edb0",
+  "measured_at": "2026-11-12T04:37:18.768Z",
+  "measured_on": "2026-11-12",
+  "commit_sha": "177e591f4d596dc76de8070b84b05ce17c7434d4",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -17,7 +17,7 @@
     "assets/editorial-article.css": "b0e2fe57e76e860bb885c7091caa74bbf46751d7ec54a717a2053b902faf2a1b",
     "assets/editorial.css": "7d20c2e78c5ccc3a56a77821d1efb11b10e68dd13fb278a452e0628fd05c86ec",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "2bcc9fc804d5c063ed6c71d6ba278b070deceb7ebe3ecee5ca3d07cd4acb4218",
+    "assets/home-10x.css": "95bb8e8fad9320f18c915969a3dacda9ef77f8d85fe5ed1b411f4f9ff2e7d0f2",
     "assets/home-base.css": "62ba1fb9962c1e559895c1b333e41608476c0aa3088a90cddf114fd142cd3aef",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
@@ -51,13 +51,13 @@
     "diretoria-b2g/index.html": "9356dc6d27b06a22f2b04d0fb773d67ef426ff5ac5ba24dd0504de59062ffd79",
     "entregas/index.html": "06a25fc9bd9640694022069d6acbe1b51303a58fbd7044417dbdb4768364ece9",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "c5890f1bc0623a8c7cbe7acb41640ef930f888c9bc5b804d8e24eb4e064385ed",
+    "index.html": "11c9e13688ccfa316920f16b1748b12d646666f6171979e2c33aa421d94e6b7f",
     "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
     "problemas-que-resolvemos/index.html": "3978ec2b8667a6bcbdef618e6a6cb7ebbfcb1b13fade4ac8953be23bed044be8",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
     "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
     "servicos-obras-publicas/index.html": "cf718f20444bada39698a5a1e90dfc55b8d25fa4e979d000a482f6c10fd95226",
-    "styles-hubs.css": "c902871c37dcb6d89766181efe8ad761be5237c269ddaf65ca51ac1252b51080",
+    "styles-hubs.css": "04d161f9d370fb5d535552e2373be6bfee86083aba1e672c3cc4deb3782b085e",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
@@ -113,8 +113,8 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "c5890f1bc0623a8c7cbe7acb41640ef930f888c9bc5b804d8e24eb4e064385ed",
-      "measured_on": "2026-11-11",
+      "html_sha256": "11c9e13688ccfa316920f16b1748b12d646666f6171979e2c33aa421d94e6b7f",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -147,19 +147,19 @@
               "selector": ".hero-lead",
               "box": {
                 "top": 287,
-                "bottom": 415,
+                "bottom": 447,
                 "left": 83,
                 "right": 653,
                 "width": 570,
-                "height": 128
+                "height": 160
               },
-              "text": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação e segurança do trabalho. Entregamos projetos, planilhas e laudos para construir, contratar ou decidir, com apoio especializado a obras públi"
+              "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Desenvolvemos projetos, planilhas e laudos com critérios técnicos, detalhamento e compatibilização para apoiar a contratação e a execução do empreendimento."
             },
             "substance": {
               "selector": ".home-opening__scope",
               "box": {
-                "top": 519,
-                "bottom": 594,
+                "top": 551,
+                "bottom": 626,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -170,8 +170,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 443,
-                "bottom": 487,
+                "top": 475,
+                "bottom": 519,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -185,8 +185,8 @@
               "text": "Solicitar proposta",
               "href": "#contato",
               "box": {
-                "top": 443,
-                "bottom": 487,
+                "top": 475,
+                "bottom": 519,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -239,7 +239,7 @@
                 "width": 353,
                 "height": 144
               },
-              "text": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação e segurança do trabalho. Entregamos projetos, planilhas e laudos para construir, contratar ou decidir, com apoio especializado a obras públi"
+              "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Desenvolvemos projetos, planilhas e laudos com critérios técnicos, detalhamento e compatibilização para apoiar a contratação e a execução do empreendimento."
             },
             "substance": {
               "selector": ".home-opening__scope",
@@ -299,33 +299,30 @@
           "publicas"
         ],
         "lead_new": [
-          "apoio",
-          "avaliacao",
+          "apoiar",
+          "compatibilizacao",
           "confenge",
-          "construir",
-          "contratar",
+          "contratacao",
           "coordena",
-          "decidir",
+          "criterios",
+          "desenvolvemos",
+          "detalhamento",
           "elabora",
-          "entregamos",
-          "especializado",
-          "inspecao",
+          "empreendimento",
+          "estruturas",
+          "execucao",
+          "infraestrutura",
+          "instalacoes",
           "laudos",
-          "obras",
-          "orcamento",
-          "pericia",
           "planilhas",
-          "presta",
-          "publi",
-          "seguranca",
-          "trabalho"
+          "tecnicos"
         ]
       }
     },
     {
       "route": "/entregas/",
       "html_sha256": "06a25fc9bd9640694022069d6acbe1b51303a58fbd7044417dbdb4768364ece9",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -523,7 +520,7 @@
     {
       "route": "/servicos-obras-publicas/",
       "html_sha256": "cf718f20444bada39698a5a1e90dfc55b8d25fa4e979d000a482f6c10fd95226",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -713,7 +710,7 @@
     {
       "route": "/problemas-que-resolvemos/",
       "html_sha256": "3978ec2b8667a6bcbdef618e6a6cb7ebbfcb1b13fade4ac8953be23bed044be8",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -903,7 +900,7 @@
     {
       "route": "/diagnostico-b2g-expansao/",
       "html_sha256": "653e12ec9126717b210c7af3ca80532aece157288993a9fd88975ea6125c445a",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1105,7 +1102,7 @@
     {
       "route": "/diagnostico-pre-licitacao/",
       "html_sha256": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1313,7 +1310,7 @@
     {
       "route": "/auditoria-orcamento-licitacao/",
       "html_sha256": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1522,7 +1519,7 @@
     {
       "route": "/bid-room-licitacoes-obras/",
       "html_sha256": "4b135d9a18a93a3b63dc9ca86853e6218cd7192b3d4bb708df6026b10739c0b0",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1722,7 +1719,7 @@
     {
       "route": "/defesa-margem-contratos-publicos/",
       "html_sha256": "ab3d3c50cc1d233fdc6614f7131fac8cd7b576f3a83db46ff31fc766c1dc8a74",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1923,7 +1920,7 @@
     {
       "route": "/medicoes-glosas-obras-publicas/",
       "html_sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2128,7 +2125,7 @@
     {
       "route": "/aditivos-obras-publicas/",
       "html_sha256": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2329,7 +2326,7 @@
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
       "html_sha256": "10407842d79c3b3f129fff45ced9d63afd35115a383af266141cc6c5542af8cb",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2534,7 +2531,7 @@
     {
       "route": "/reequilibrio-obras-publicas/",
       "html_sha256": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2737,7 +2734,7 @@
     {
       "route": "/defesa-tecnica-contratos-publicos/",
       "html_sha256": "0f42b64a0a47d11a15ee577c9a0a597af1378aee470cc95f9f3fad52b2394b57",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2938,7 +2935,7 @@
     {
       "route": "/diagnostico-b2g-360/",
       "html_sha256": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3151,7 +3148,7 @@
     {
       "route": "/acompanhamento-contratos-obras/",
       "html_sha256": "21e207788f774361d3e57b95ab3012620fd35e4bd30756dea3bce929754db24e",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3354,7 +3351,7 @@
     {
       "route": "/diretoria-b2g/",
       "html_sha256": "9356dc6d27b06a22f2b04d0fb773d67ef426ff5ac5ba24dd0504de59062ffd79",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3552,7 +3549,7 @@
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
       "html_sha256": "2343982f9337a7277fdfd4b7fd855df61133b5a7e25ac266109b12ca064fa6b0",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3754,7 +3751,7 @@
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
       "html_sha256": "7357184b3ec13f25ddb56af4c02bec3913971a233c3a277a55ff7a878df68609",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3956,7 +3953,7 @@
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
       "html_sha256": "0057f3c84db0ecbd5b768240c3edde595b33e9e6358cdee736a61ba351586bca",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4160,7 +4157,7 @@
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
       "html_sha256": "e894698848ff988029bc375ffcc10e83b0d0ffc43aa8646dce7f1b508ed41d59",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4364,7 +4361,7 @@
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
       "html_sha256": "35d222cf0859ede7340a801d7757dfbf9d92fa670f39a66e7af2b2cea22edce1",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4459,19 +4456,19 @@
               "selector": ".report-kicker",
               "box": {
                 "top": 90,
-                "bottom": 108,
+                "bottom": 126,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 18
+                "height": 36
               },
               "text": "Radar de Contratos Próximos da Renovação"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 256,
+                "top": 136,
+                "bottom": 274,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4482,8 +4479,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 270,
-                "bottom": 452,
+                "top": 288,
+                "bottom": 470,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4494,8 +4491,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 557,
-                "bottom": 614,
+                "top": 575,
+                "bottom": 632,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4506,8 +4503,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 630,
-                "bottom": 690,
+                "top": 648,
+                "bottom": 708,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4521,8 +4518,8 @@
               "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
-                "top": 630,
-                "bottom": 690,
+                "top": 648,
+                "bottom": 708,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4569,7 +4566,7 @@
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
       "html_sha256": "56582e8efb11564e320b41014c793b8bca7fc9064537330d37738b2fc765c62a",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4769,7 +4766,7 @@
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
       "html_sha256": "2b0bef36d792f4eb561f8fea60a605eacb9154b5ca96eb747a8016c73b654e46",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4864,19 +4861,19 @@
               "selector": ".report-kicker",
               "box": {
                 "top": 90,
-                "bottom": 108,
+                "bottom": 126,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 18
+                "height": 36
               },
               "text": "Referências de Preços de Obras Públicas"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 291,
+                "top": 136,
+                "bottom": 309,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4887,8 +4884,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 305,
-                "bottom": 419,
+                "top": 323,
+                "bottom": 437,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4899,8 +4896,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 524,
-                "bottom": 581,
+                "top": 542,
+                "bottom": 599,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4911,8 +4908,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 597,
-                "bottom": 656,
+                "top": 615,
+                "bottom": 674,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4926,8 +4923,8 @@
               "text": "Pedir as referências de preços de obra por R$ 2.400",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
-                "top": 597,
-                "bottom": 656,
+                "top": 615,
+                "bottom": 674,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4975,7 +4972,7 @@
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
       "html_sha256": "c5b6c4d6564672826666c35ec3c81c44a1f5547f0cfcc757bf6b3bbfd3942376",
-      "measured_on": "2026-11-11",
+      "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
