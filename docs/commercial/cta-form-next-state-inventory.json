@@ -7305,6 +7305,51 @@
       "action": "/api/web/market-radar",
       "method": "post",
       "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/profissionais/",
+      "form_id": "market-search-form",
+      "form_class": "market-search-form",
+      "kind": "tool_form",
+      "action": "/api/web/engineering-marketplace",
+      "method": "get",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/profissionais/",
+      "form_id": "market-request-form",
+      "form_class": "market-form",
+      "kind": "tool_form",
+      "action": "/api/web/engineering-marketplace",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/profissionais/",
+      "form_id": "market-auth-form",
+      "form_class": "market-form",
+      "kind": "tool_form",
+      "action": "/api/web/engineering-marketplace",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/profissionais/",
+      "form_id": "market-seller-select-form",
+      "form_class": "market-form market-select-seller",
+      "kind": "tool_form",
+      "action": "",
+      "method": "get",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/profissionais/",
+      "form_id": "market-profile-form",
+      "form_class": "market-form",
+      "kind": "tool_form",
+      "action": "/api/web/engineering-marketplace",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
     }
   ]
 }

@@ -58,6 +58,7 @@ const expectedRoutes = new Set([
   "/ferramentas/matriz-atraso-obra/",
   "/ferramentas/prontidao-tecnica-obra-privada/",
   "/ferramentas/radar-mercado-publico/",
+  "/profissionais/",
 ]);
 assert.deepEqual(new Set(tools.map((form) => form.route)), expectedRoutes, JSON.stringify(tools.map((f) => f.route)));
 

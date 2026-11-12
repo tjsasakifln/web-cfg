@@ -1,7 +1,7 @@
 # Serviços de engenharia CONFENGE
 
 Aplicação privada baseada em Mercur **2.4.1**, Medusa **2.22.3** e Node
-**22.22.0**, integrada ao site em `/profissionais/`. O frontend existente
+**22.22.2**, integrada ao site em `/profissionais/`. O frontend existente
 consome somente as operações declaradas pelo gateway de mesma origem.
 
 O serviço acrescenta o ciclo de engenharia: solicitação, proposta com escopo,
@@ -24,7 +24,7 @@ bancos, configuração das contas e homologação descrita no runbook.
 
 ## Desenvolvimento e verificação
 
-Use Node 22.22.0 e uma cópia local de `.env.example`. Dados e chaves reais
+Use Node 22.22.2 e uma cópia local de `.env.example`. Dados e chaves reais
 ficam somente no ambiente privado. O launcher `scripts/medusa.cjs` aplica a
 opção de desativação da telemetria do framework antes de carregar sua CLI.
 
