@@ -415,12 +415,42 @@ try {
   await screenshot(page, 'diagnostico-first-viewport-1280.png');
   report.scenarios.push({ ...context, ...offerFold, status: 'passed' });
 
+  // Exercise native activation without waiting for the queued details toggle.
+  // The unchanged responsive matrix also checks Enter followed by Escape.
+  for (const route of ['/projetos/', '/projeto-estrutura-metalica/']) {
+    context = { kind: 'rapid-native', route, javascript: true, width: 390, height: 844 };
+    await visit(page, route, 390, 844);
+    const trigger = '.pp-mobile > summary';
+    const activations = [];
+    for (const key of ['Enter', 'Space']) {
+      await page.focus(trigger);
+      await page.keyboard.press(key);
+      assert.equal(await page.$eval('.pp-mobile', element => element.open && element.querySelector(':scope > nav')?.getAttribute('role') === 'dialog'), true, `${route} ${key} initializes the native modal during activation`);
+      await page.keyboard.press('Escape');
+      assert.equal(await page.$eval('.pp-mobile', element => element.open), false, `${route} ${key} then immediate Escape closes the native menu`);
+      await assertRestored(page, trigger);
+      activations.push(key);
+    }
+    await page.click(trigger);
+    const reopened = await page.$eval('.pp-mobile', element => {
+      element.open = false;
+      element.querySelector(':scope > summary').click();
+      return element.open && element.querySelector(':scope > nav')?.getAttribute('role') === 'dialog';
+    });
+    assert.equal(reopened, true, `${route} reopening before the queued close restores the modal`);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.$eval('.pp-mobile', element => element.open), false, `${route} immediate Escape also closes the reopened native menu`);
+    await assertRestored(page, trigger);
+    report.scenarios.push({ ...context, activations, queued_close_reopen: true, status: 'passed' });
+  }
+
   assert.deepEqual(report.page_errors, [], 'uncaught errors in navigation journeys');
   assert.equal(report.screenshots.length, 5, 'three menu screenshots and two viewport regression screenshots');
   assert.equal(report.scenarios.filter(row => row.kind === 'immediate-escape').length, 2, 'both native project menus close before their queued toggle');
+  assert.equal(report.scenarios.filter(row => row.kind === 'rapid-native').length, 2, 'both native project menus support rapid keyboard activation and stale-toggle reopening');
   assert.equal(report.scenarios.filter(row => row.kind === 'disclosures').length, 33, '24 enhanced and nine native disclosure journeys');
   report.status = 'passed';
-  console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize, 6 fragment journeys, 2 first-viewport regressions and 2 immediate Escape journeys; evidence ${evidenceDir}`);
+  console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize, 6 fragment journeys, 2 first-viewport, 2 immediate Escape and 2 rapid-native regressions; evidence ${evidenceDir}`);
 } catch (error) {
   report.status = 'failed';
   const failure = { ...context, message: error.message, stack: error.stack };

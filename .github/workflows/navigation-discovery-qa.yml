@@ -308,6 +308,38 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_contact_journeys.mjs 2>&1 | tee build/reports/navigation-artifact-qa/contact-journeys.log
+      - name: Expose compiled public captures for review
+        if: always() && steps.build.outcome == 'success'
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, subprocess
+          from pathlib import Path
+          sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          assert sha == os.environ["EXPECTED_HEAD_SHA"]
+          root = Path("build/reports/navigation-artifact-qa")
+          names = [
+              "navigation/desktop-ferramentas.png", "navigation/mobile-projetos.png",
+              "navigation/projetos-prontos-desktop.png", "navigation/mobile-header-360.png",
+              "navigation/diagnostico-first-viewport-1280.png", "navigation/failure.png",
+              "navigation/report.json", "provenance.json", "first-fold.json",
+          ]
+          for name in names:
+              path = root / name
+              if not path.is_file():
+                  continue
+              data = path.read_bytes()
+              assert len(data) <= 4000000, name
+              encoded = base64.b64encode(data).decode("ascii")
+              print("NAV_ARTIFACT_EVIDENCE_BEGIN " + json.dumps({
+                  "file": name, "source_sha": sha, "bytes": len(data),
+                  "sha256": hashlib.sha256(data).hexdigest(), "encoding": "base64"
+              }, separators=(",", ":")))
+              for start in range(0, len(encoded), 30000):
+                  print("NAV_ARTIFACT_EVIDENCE_DATA " + encoded[start:start+30000])
+              print("NAV_ARTIFACT_EVIDENCE_END " + name)
+          PY
       - name: Preserve artifact review evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
