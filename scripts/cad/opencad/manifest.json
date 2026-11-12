@@ -13,14 +13,14 @@
     "profile": "release",
     "optimization": 3,
     "jobs": 1,
-    "patch_sha256": "d87a5b41c7011eeb6bc1da1d119cde8acd28d05958d78909c6d44458173974c0",
+    "patch_sha256": "36e42daf3820538129df4f3bcc5ab8430c446acf8b348cc35c413539774c6991",
     "logo_sha256": "e6bb135d070993411cb46adce88747187f3decd2f85f23e9899a9c89e97e7586",
-    "host_commit": "6201fae95fd891550dad1026a4c283032b0f17b9",
+    "host_commit": "4743d22835ad25e710848eaf8a55dc00a43e8fb1",
     "host_files": {
       "cad/index.html": "b63167b4136a6856695946c0e31beafc41661a92d766accc1aec6b4d5196abe7",
       "cad/editor.css": "a4f1dbbb9aac989b153de133150d1aad65f74699b6d7d90cd1525b1e93681b77",
-      "cad/editor.js": "5ddb36ecb4714c2a6defcd850cf8ef211aed47c4444d72889cca260816773f2f",
-      "cad/host-protocol.mjs": "cde6174fac7a8f397418a5349408563910005d33d6a6648217378f7f1b9d920e",
+      "cad/editor.js": "697d469c0ef7fc07a3abdeb799f1422666472bfaf3835d02cf9da41b3bdec125",
+      "cad/host-protocol.mjs": "f2bbd38847b0baf0ab92b35e4333ad9ae5d22f47fdc9ee212843f39ce88b7379",
       "cad/editor/frame.htm": "6ea39fea8c08185dfb9755c565c3b6e55532598054621b16fd09f28b0d77b47d",
       "cad/editor/frame.css": "978a72a35a27a63bb8b58381084cf91f313f34aba94f7fae12b962133b5a7441",
       "cad/editor/start.js": "ae523dc9381b78eb7bc9c8e07b40100807f3af0454c9effbaf0f77754bdb4d75",
@@ -35,24 +35,24 @@
   },
   "runtime": {
     "archive": "opencad-runtime.tar.gz",
-    "sha256": "3d6c79a853d5e02606a0c0356dd0d23375aed3d3b26131d981b26bb83da4a926",
-    "bytes": 66223570,
+    "sha256": "96098bd7be6a083645848cd8561b2d99445b67b25e6209d9fc816d9435da54a2",
+    "bytes": 66223242,
     "parts": [
       {
         "file": "opencad-runtime.tar.gz.part-001",
-        "sha256": "f72e6026187777e901cf63c38fd09914eda9125e4336e21e461bf5c504db6003",
+        "sha256": "269dab63e0504a08e255a8181b067a72ac70b58746fae42b4b2500f04d84d0af",
         "bytes": 50331648
       },
       {
         "file": "opencad-runtime.tar.gz.part-002",
-        "sha256": "669062baadf5723acb5ebf4573fa9fabe64b514996f717b49f68cb74008d6f2b",
-        "bytes": 15891922
+        "sha256": "435a37867416384dd18b52f46507d3f952097ddedcc0eaec283c044e1dfbece8",
+        "bytes": 15891594
       }
     ],
     "files": {
       "confenge-cad.d.ts": "b3f2ae065dd80bd38acb66e08c4e6704eb45258fada193ff1f3f6e0405b89ff3",
       "confenge-cad.js": "e8bb63bcab00b5693e4f3537e35b492a06eead87fd33da73e48d7aed421c0a3b",
-      "confenge-cad_bg.wasm": "c975127163670924f3e26692d2d009296efd8cb13d35192fe6aff9082ea847a0",
+      "confenge-cad_bg.wasm": "e8f2d6ebf67bfd6a45c85cf9b76829f3238fbf5a7b39d608603c814d704a58ab",
       "confenge-cad_bg.wasm.d.ts": "9bdaf9f883ec23f1152476289bbebc60a7f3ff929d13c89390b979a8d9e576e1",
       "fonts/OFL.txt": "9be65bbf38e7f3ed5674dfeaf95d8b6d8deaef0017305c0daf5e3cc4f2ab9e20",
       "fonts/arabic.ttf": "db48ee15affac605c3d59625549f2833f539cd8e8b03cc5dd68b72aa74f47bfb",
@@ -81,28 +81,28 @@
   },
   "source": {
     "archive": "corresponding-source.tar.gz",
-    "sha256": "ff886f647586e4639ca097c9b92643eca7a28299999d5578c6a4ed808dca2077",
-    "bytes": 184785791,
+    "sha256": "93e8691a9c27ecb9c3f3face3ccb94541040626290b83cd5ede89ff3b0fa1cb4",
+    "bytes": 184787808,
     "parts": [
       {
         "file": "corresponding-source.tar.gz.part-001",
-        "sha256": "51ec19f57061916e60228dfe09beb617e6d01d849b555fc87f223f2a2aa38012",
+        "sha256": "32f848cafec6c1f28587ed5716c9c8a420ec488144430d0e4cdb9072431b5cf5",
         "bytes": 50331648
       },
       {
         "file": "corresponding-source.tar.gz.part-002",
-        "sha256": "ed43cf06ccb2fa985ad1564c7b995a2b5acdd7955e0021fffac18dd0eea251fa",
+        "sha256": "b7d865366a32e97b9afb79b5cf19572614d3d769bb97e97f57cb358443db5278",
         "bytes": 50331648
       },
       {
         "file": "corresponding-source.tar.gz.part-003",
-        "sha256": "d24cad950737a40f5d00388a80283e344bbb1284c42fc85fb4062cb54515b213",
+        "sha256": "c14b44a494a32ade8b293b6dd8b862cf3e282dcd0ee2ba1e97177808c284fe1c",
         "bytes": 50331648
       },
       {
         "file": "corresponding-source.tar.gz.part-004",
-        "sha256": "31619fe02c8e1ce10d3869331fb56c0ea368e39482e9a27fe79fdb6699777158",
-        "bytes": 33790847
+        "sha256": "4d32ba3f1fbbd2487a4ceb357f5a903a1cb4fe9fa77bc2fd135544316a86db22",
+        "bytes": 33792864
       }
     ]
   }

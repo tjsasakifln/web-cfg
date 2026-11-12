@@ -15,4 +15,4 @@ Texto integral da licença GNU GPL v3:
 As fontes tipográficas incluídas conservam a licença SIL Open Font License, disponível em /cad/editor/fonts/OFL.txt e no pacote correspondente. As demais licenças estão junto de suas dependências em opencad-vendor.
 
 A pasta hosting do pacote registra os arquivos da ponte CONFENGE usados nesta compilação.
-Revisão da hospedagem: 6201fae95fd891550dad1026a4c283032b0f17b9
+Revisão da hospedagem: 4743d22835ad25e710848eaf8a55dc00a43e8fb1
