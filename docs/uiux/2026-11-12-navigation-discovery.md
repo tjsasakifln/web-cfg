@@ -114,3 +114,12 @@ A matriz responsiva do artefato `a9a11c99` identificou dois casos em 390 px, nas
 A ativação do botão nativo passa a inicializar e fechar o modal no próprio clique, que também atende Enter e Space. O listener de `toggle` continua atendendo alterações programáticas. A correção conserva o limite de largura, o foco, o controle de fundo inerte e a navegação sem JavaScript. Quatro jornadas adicionais cobrem fechamento imediato no mesmo ciclo de execução, Enter/Escape, Space/Escape e reabertura antes do evento de fechamento pendente. A matriz responsiva original permanece sem espera adicional e sem critérios reduzidos.
 
 A mudança de comportamento afeta somente o módulo e seu bundle JavaScript. Não altera HTML, CSS ou o registro de aprovação do canário. Após a nova QA, a atualização derivada fica limitada ao hash congelado de `script.js` e às duas medições de primeira dobra. As capturas do artefato compilado passam também a ser emitidas pelo workflow, em lista fechada de arquivos públicos, para permitir inspeção independente da disponibilidade do ambiente local.
+
+
+## Evidência da ativação síncrona
+
+O [QA de fonte 43296642366](https://github.com/tjsasakifln/web-cfg/actions/runs/43296642366), no commit `0196297247d41f74a1ea4d3a0883ad41225b26b4`, concluiu com sucesso os 48 cenários de navegação, os eventos, as 25 rotas de primeira dobra, a geometria completa e a preservação da apresentação. As medições foram produzidas em árvore limpa e identificam o mesmo bundle JavaScript revisado. As cinco capturas são byte a byte idênticas às imagens de `geometry-00cd0fad`, já inspecionadas pelo integrador e por revisores independentes. Os arquivos e seus hashes estão em `2026-11-12-navigation-evidence/activation-01962972/`.
+
+A atualização derivada altera somente o hash congelado de `script.js` e o JSON medido de primeira dobra. O contrato de primeira dobra não mudou. Os 16 outros hashes congelados, os seis pilares e a aprovação editorial do canário permanecem intactos. O histórico conserva a proveniência da recaptura; não há alegação de nova revisão humana ou factual. O digest do ZIP é o informado pela API, enquanto os bytes de cada arquivo aqui persistido foram conferidos contra os registros emitidos pela QA.
+
+Esta evidência da fonte não declara publicação concluída. Os testes integrais do artefato, os controles obrigatórios da PR e a liberação Netcup no SHA exato de main continuam necessários.

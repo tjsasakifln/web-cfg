@@ -1,0 +1,86 @@
+{
+  "schema": "confenge.navigation-discovery-derived-review/1.0",
+  "source_sha": "0196297247d41f74a1ea4d3a0883ad41225b26b4",
+  "source_tree_sha": "36a9061f207a5c78379266bbb02291e7a8276017",
+  "qa_workflow_run_id": "43296642366",
+  "qa_source_job_id": "131459555854",
+  "qa_source_conclusion": "success",
+  "source_navigation_scenarios": 48,
+  "first_fold_routes": 25,
+  "source_tree_dirty": false,
+  "bundle_sha256": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
+  "screenshots_identical_to_reviewed_geometry": true,
+  "reference_directory": "docs/uiux/2026-11-12-navigation-evidence/geometry-00cd0fad",
+  "review_type": "agent_review",
+  "human_review_claimed": false,
+  "changed_frozen_hashes": [
+    "script.js"
+  ],
+  "unchanged_frozen_hashes": 16,
+  "pillars_preserved": 6,
+  "editorial_approval_changed": false,
+  "source_artifact": {
+    "id": "13979942299",
+    "api_digest": "sha256:40f66aa8a56758c0b9e425eb4fa188a924a146c92e6064a4c25187a8493344d4",
+    "zip_downloaded": false,
+    "file_bytes_verified_against_log_record": true
+  },
+  "files": [
+    {
+      "path": "desktop-ferramentas.png",
+      "bytes": 165153,
+      "sha256": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0"
+    },
+    {
+      "path": "mobile-projetos.png",
+      "bytes": 70190,
+      "sha256": "455497240dd89cdfec10ddb27286d5d5c635da97664d6bb4a4ea770e2a276917"
+    },
+    {
+      "path": "projetos-prontos-desktop.png",
+      "bytes": 167014,
+      "sha256": "69e5d28c82fb9f4dcbf16ca9956e645c0a230969bff9b27da7a936dc0d40df08"
+    },
+    {
+      "path": "mobile-header-360.png",
+      "bytes": 76737,
+      "sha256": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b"
+    },
+    {
+      "path": "diagnostico-first-viewport-1280.png",
+      "bytes": 132548,
+      "sha256": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
+    },
+    {
+      "path": "report.json",
+      "bytes": 409018,
+      "sha256": "9ad508523a56a137c57ba4d85d5d03f21ca09c08f1a48ef4a77a2d4afc96457f"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 259,
+      "sha256": "7adc35cfabdaee8f9d6376676613857eece40e1d8c741d873102ae2567c5754c"
+    },
+    {
+      "path": "first-fold/report.json",
+      "bytes": 169678,
+      "sha256": "f71f55c32b825230a80d33011362103e1537ec3d9fb6f91f1a694b51fcd9caad"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-contract.v1.json",
+      "bytes": 39989,
+      "sha256": "80d0e6fb8bdd6b2a8d3fdcdec3727711cdc50dafdb5cabd412936bb51c113712"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-measurements.v1.json",
+      "bytes": 169583,
+      "sha256": "458ca02ff8542d6de98cd94f9d0874e2b0353cc4953c25bba1f00100f55dfe7c"
+    },
+    {
+      "path": "presentation/evidence.json",
+      "bytes": 2121,
+      "sha256": "52135c9cddd74cb9c8a7ee49ac6d3d5be009a28707646db5d6dd384dcd5ff548"
+    }
+  ],
+  "scope": "Source review only. Required PR gates and exact-main Netcup publication acceptance remain mandatory."
+}
