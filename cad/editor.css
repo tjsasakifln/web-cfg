@@ -108,3 +108,6 @@ html.cad-page-locked { overflow:hidden; overscroll-behavior:none; }
 .cad-related a { display:inline-block; padding:.55rem .75rem; color:var(--green-700); background:var(--green-100); }
 .cad-credits { margin:1.5rem 0; font-size:var(--text-caption); color:var(--muted); }
 .cad-credits summary { cursor:pointer; }
+
+/* Export recovery remains reachable above the enlarged drawing. */
+body:has(#cad-editor.cad-expanded) .tool-credits__export-notice { z-index:10020; }

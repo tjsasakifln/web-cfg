@@ -1,11 +1,23 @@
-CONFENGE CAD, edição para navegador baseada no CADCraft Web 0.18.0.
-A CONFENGE adaptou a identificação visual e os controles de integração com o site. Distribuição original:
-https://github.com/storytold/cadcraft/releases/tag/v0.18.0
-Código-fonte exato e dependências: https://github.com/storytold/cadcraft/tree/32238e83c2c8bf643994132883e94bc96961f649
-As atribuições de recursos da distribuição estão em NOTICE.txt, ATTRIBUTION.txt, LICENSE-MIT.txt e LICENSE-APACHE.txt.
-O repositório de fontes usado pelo processo de lançamento está fixado em https://github.com/storytold/craft-fonts/tree/b076417b5880bd4154bd22f00695b1d28c6bea83
-As licenças de fontes da distribuição estão em fontes.txt, egui-fontes.txt e hack.txt. Os perfis ICC de Krilla estão sob CC0-1.0 (icc.txt).
-O código-fonte da biblioteca acadrust 0.6.6 indicada no NOTICE está disponível em https://crates.io/crates/acadrust/0.6.6
-A versão Web usa o leitor e gravador DWG @node-projects/acad-ts 3.8.0 distribuído sob MIT com a correção da CONFENGE para os limites de folhas DWG. Licença: /bim/web/vendor-cad/acad-LICENSE
-Código: https://github.com/node-projects/acad-ts
-As marcas dos projetos de origem identificam os componentes utilizados.
+CONFENGE CAD
+Edição 2026.45+confenge.1, modificada em 11 de novembro de 2026.
+
+Este editor utiliza OpenCAD Studio v2026.45, de seus respectivos autores,
+distribuído sob a GNU General Public License, versão 3.
+Repositório de origem: https://github.com/HakanSeven12/OpenCADStudio
+Revisão: fb0a667e269b6c924233ecd450a11dd7cba40eea
+
+A edição CONFENGE adapta a identidade visual, o idioma inicial, as preferências,
+a navegação e a confirmação de exportações pelo site. A marca CONFENGE não
+altera os créditos nem os direitos sobre o projeto de origem.
+
+Licença: /cad/editor/licencas/GPL-3.0.txt
+Código correspondente e dependências:
+/cad/editor/licencas/corresponding-source.tar.gz
+Versão e hashes do pacote: /cad/editor/runtime.json
+
+O pacote de fontes contém o código modificado, o patch, Cargo.lock,
+as licenças das dependências e instruções de reconstrução.
+O código da página e da integração está em:
+https://github.com/tjsasakifln/web-cfg/tree/main/cad
+
+Este aviso é atualizado pelo instalador com a procedência do pacote publicado.

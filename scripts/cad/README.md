@@ -1,15 +1,54 @@
 # CONFENGE CAD
 
-A página usa o editor CADCraft 0.18.0 distribuído em [storytold/cadcraft](https://github.com/storytold/cadcraft/releases/tag/v0.18.0). O download acontece na construção do site. O instalador valida o SHA-256 do ZIP e publica a edição CONFENGE com as licenças MIT/Apache-2.0, NOTICE e atribuições dos componentes em `/cad/editor/licencas/`. A integração externa usa o protocolo de hospedagem documentado na mesma release. O navegador busca os recursos no domínio da Confenge.
+O editor principal de `/cad/` usa a edição CONFENGE do [OpenCAD Studio v2026.45](https://github.com/HakanSeven12/OpenCADStudio/releases/tag/v2026.45), fixada no commit `fb0a667e269b6c924233ecd450a11dd7cba40eea`. O leitor, o editor e o gravador DWG/DXF são os do OpenCAD Studio. A página não converte os desenhos pelo motor anterior.
 
-O navegador desta versão upstream edita DXF. Um worker local usa a distribuição MIT de [acad-ts](https://github.com/node-projects/acad-ts), já instalada pela construção de `/bim/web/`, para abrir DWG e gravar DWG 2000. As licenças da distribuição BIM permanecem em `/bim/web/vendor-cad/acad-LICENSE` e `/bim/web/avisos/`. Para atualizar o editor, confira o SHA, nomes de arquivos e mensagens do host e repita os testes de abertura, edição e gravação em navegador.
+O aplicativo Rust é compilado para WebAssembly com um worker local para leitura e gravação. A edição inclui a marca CONFENGE dentro do canvas, idioma inicial português brasileiro, preferências próprias e integração com a carteira existente do site. Os oito aplicativos de `/cad/aplicativos/` têm instalador independente e continuam disponíveis.
 
-Para executar a prova de conversão depois de construir o site, use `node tests/cad/roundtrip.mjs _site`. A página inclui uma planta de exemplo criada para o teste. O teste compara geometria, camadas e nomes de blocos e verifica a posição exata de uma linha após reabrir o DWG de saída. O editor salva uma primeira cópia temporária em memória para que a interface identifique omissões na importação antes de permitir uma cópia DWG. Objetos proprietários e dependências externas podem impedir a exportação. Essa verificação não certifica fidelidade de fontes, estilos, cotas associativas, sólidos ou impressão.
+## Instalação e procedência
 
-## Identidade do editor
+`publicar.py` instala o pacote local de `opencad/` durante a construção canônica do site. `manifest.json` registra a origem, a versão da edição, os hashes de cada parte dos arquivos compactados e os hashes dos recursos de execução. O instalador recusa arquivos ausentes, corrompidos ou inesperados, caminhos fora do pacote, links e entradas duplicadas. Não baixa um editor de uma revisão móvel durante o build do site.
 
-A aba Início e a janela Sobre desenham no próprio canvas os arquivos de logotipo da CONFENGE, nas variantes clara e escura. Os nomes dos dispositivos de impressão no DWG e as mensagens de integração seguem a convenção da edição de origem.
+O código correspondente inclui as alterações CONFENGE, `Cargo.lock`, as fontes das dependências e instruções de reconstrução. É publicado em `/cad/editor/licencas/corresponding-source.tar.gz`, junto com a GPL-3.0 e os avisos. O arquivo `/cad/editor/runtime.json` permite conferir a versão e a procedência do motor servido. O código de hospedagem está neste repositório, em `cad/`.
 
-Para reconstruir os módulos, use o código de `storytold/cadcraft` na revisão `32238e83c2c8bf643994132883e94bc96961f649`. Execute `python3 scripts/cad/branding/prepare.py <checkout-limpo-do-cadcraft> <caminho-absoluto-para-assets-do-site>` neste repositório. Em `apps/cadcraft-web` do checkout adaptado, use Rust 1.99.1 com o alvo `wasm32-unknown-unknown`, Trunk 0.21.14, wasm-bindgen 0.2.129 e Binaryen 123. Execute `CADCRAFT_BUILD_SHA=confenge.1 trunk build --release --locked` sem pacote adicional de fontes.
+Os scripts em `opencad/build/` reconstroem o motor a partir da revisão fixada e do patch legível. O workflow `build-opencad-confenge.yml` prepara os módulos e o código correspondente em uma branch de trabalho. Ele não publica o site. A entrega de produção continua passando pelos testes e pelo processo Netcup canônico.
 
-A construção do site usa os deltas de `branding/` aplicados com `zstd --patch-from`. O instalador confere os SHA-256 do módulo de origem, do delta e do módulo publicado em `branding/runtime.json`. As alterações da interface devem passar pelo teste de abrir a guia Início, consultar Sobre e retornar ao desenho, além do ciclo de gravação e reabertura em DWG.
+## Abertura e edição
+
+A página aceita arquivos DWG e DXF locais de até 64 MiB e oferece um exemplo. A validação inicial recusa um DWG sem assinatura compatível antes de iniciar o motor. A abertura de outro arquivo usa uma nova aba nativa; uma tentativa inválida não descarta o desenho atual. Fontes ausentes e referências externas são sinalizadas quando o motor as informa.
+
+O comando **Salvar como** abre a escolha nativa de nome, formato e versão. O motor oferece DWG/DXF R14 a 2018. Não se promete equivalência para todo objeto proprietário, fonte, vínculo ou recurso de outro aplicativo. O usuário deve conferir a cópia no fluxo de trabalho em que será utilizada.
+
+O editor ampliado mantém a página travada, preserva o pan com botão central e permite voltar à página sem destruir a sessão. Escape atua sobre o comando de desenho e não encerra o modo ampliado.
+
+## Confirmação de exportação
+
+`cad/editor/start.js` registra `window.openCadStudioSaveFile(name, bytes)` antes de iniciar o motor. A função retorna `Promise<boolean>`. O pai valida a origem exata, a janela emissora, o identificador, o nome, o formato e os bytes; então chama `exportToolResult` da carteira existente. Uma resposta positiva só é enviada após a autorização e o início da entrega pelo navegador.
+
+O Rust aguarda essa confirmação antes de marcar a versão exportada como salva ou concluir um fechamento pendente. Cancelamento, falha, ausência da ponte ou edição posterior ao snapshot preservam as alterações. Lotes aguardam cada arquivo. A API de automação não fornece um caminho de gravação que contorne esse fluxo. Autosave e recuperação continuam locais.
+
+As mensagens usam `confenge-cad:export` e `confenge-cad:export-result`, com identificadores únicos e janela de espera de dez minutos. Pedidos simultâneos e repetidos não geram uma segunda entrega. Os formatos permitidos pelo host e pela carteira devem permanecer iguais. Os dados do desenho passam apenas entre o frame e a página do mesmo domínio; esta integração não envia desenhos para um serviço de conversão.
+
+## Política do navegador
+
+Os módulos, o worker, as fontes e as imagens são servidos pelo próprio site. A edição não inclui analytics externos nem registra o service worker do projeto de origem. A política de `/cad/editor/*` em `_headers` admite WebAssembly e o worker local. As referências de inicialização recebem versões derivadas de conteúdo para evitar a mistura de arquivos em cache.
+
+## Verificação
+
+Depois de construir o site com Node 22:
+
+```sh
+npm run test:cad
+node --test tests/tools-commerce/core.test.cjs
+CHROME_PATH=/usr/bin/chromium node tests/cad/editor-browser.mjs _site
+CHROME_PATH=/usr/bin/chromium node tests/cad/engine-bridge-browser.cjs _site
+```
+
+O primeiro comando confere o protocolo entre frame e host, os hashes do pacote e a preservação da suíte de aplicativos. O teste de navegador usa os módulos reais sob as políticas do artefato publicado: abre um DWG, edita geometria, testa a navegação, grava uma cópia e a reabre. A configuração da carteira nesse teste é uma fixture explícita sem cobrança. Capturas e resultados ficam em `build/reports/cad`.
+
+O teste adicional da ponte usa o mesmo motor e o mesmo script de inicialização, com um pai controlado. Ele mantém a confirmação pendente, cancela, rejeita e aceita exportações para conferir alterações pendentes, fechamento, lotes e reabertura de DWG/DXF. Essa fixture não substitui os testes da carteira. A confirmação indica que o navegador iniciou o download; a conclusão da gravação em disco continua sob controle do navegador e do usuário.
+
+Uma mudança de motor, leitor, gravador, ponte ou política do navegador exige repetir a verificação com o WASM que será entregue. Testes de protocolo isolados não substituem a prova de abrir, editar, salvar e reabrir no editor real.
+
+## Reversão
+
+O rollback é a restauração da versão anterior completa pelo processo Netcup, incluindo HTML, JavaScript, WASM e políticas do navegador. Não misture o loader de uma edição com os módulos de outra. Os arquivos originais dos visitantes permanecem em seus dispositivos.

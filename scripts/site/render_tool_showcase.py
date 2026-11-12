@@ -322,6 +322,7 @@ def catalogue(html: str, data: dict) -> str:
 
 def tool_page(html: str, item: dict, by_id: dict, updated: str) -> str:
     path, key, page = item["href"], item["id"], item["page"]
+    updated = page.get("updated", updated)
     html = set_head(html, path, page["title"], page["desc"], key, updated=updated, index=page.get("index", True))
     # Align the schema for this public tool page, not the dates of its
     # underlying example, evidence or reference material.

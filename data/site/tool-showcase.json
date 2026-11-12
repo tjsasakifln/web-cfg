@@ -53,7 +53,8 @@
       "keywords": "autocad planta baixa arquivo dxf",
       "page": {
         "title": "Editor de DWG online: abrir e editar plantas",
-        "desc": "Abra e edite DWG ou DXF online. Confira camadas e medidas, teste com uma planta de exemplo e salve uma cópia em DWG 2000 ou DXF.",
+        "updated": "2026-11-11",
+        "desc": "Abra e edite DWG ou DXF online. Confira camadas e medidas, teste com uma planta de exemplo e salve uma cópia em DWG ou DXF.",
         "related": [
           "cad-suite",
           "pdf-cad"

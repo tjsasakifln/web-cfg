@@ -1,0 +1,18 @@
+# CONFENGE CAD
+
+Edição web modificada em 11 de novembro de 2026 a partir de OpenCAD Studio v2026.45, commit fb0a667e269b6c924233ecd450a11dd7cba40eea.
+
+OpenCAD Studio e seus autores conservam seus direitos autorais e a licença GNU GPL v3. As modificações desta edição (identidade, início, idioma, hospedagem e integração de exportação) são disponibilizadas sob a mesma licença. Consulte LICENSE e os avisos das dependências no código-fonte correspondente.
+
+A marca e os logotipos CONFENGE identificam esta distribuição. A licença do código não concede direitos sobre marcas de terceiros.
+
+Código-fonte correspondente desta edição, com dependências e instruções de compilação:
+/cad/editor/licencas/corresponding-source.tar.gz
+
+Texto integral da licença GNU GPL v3:
+/cad/editor/licencas/GPL-3.0.txt
+
+As fontes tipográficas incluídas conservam a licença SIL Open Font License, disponível em /cad/editor/fonts/OFL.txt e no pacote correspondente. As demais licenças estão junto de suas dependências em opencad-vendor.
+
+A pasta hosting do pacote registra os arquivos da ponte CONFENGE usados nesta compilação.
+Revisão da hospedagem: 4743d22835ad25e710848eaf8a55dc00a43e8fb1
