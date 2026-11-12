@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-12",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry. Package families use real artifact representatives; the official-live opportunity overlay has an exact runtime owner contract and mandatory SHA-bound post-stage Lighthouse evidence, never a virtual fixture representative.",
   "axe": {
     "viewports": [
@@ -60,6 +60,12 @@
           "family_id": "home",
           "route": "/",
           "reason": "single-route canonical family"
+        },
+        {
+          "family_id": "marketplace-engenharia",
+          "route": "/profissionais/",
+          "reason": "Rota única de busca, cadastro e acompanhamento de serviços de engenharia, com disponibilidade declarada pelo serviço.",
+          "seo_exempt_reason": "A rota permanece noindex até o provisionamento e a validação operacional de docs/marketplace/operations.md, conforme marketplace_operation_pending no registro de governança."
         },
         {
           "family_id": "engineering-projects-commercial-architecture",
