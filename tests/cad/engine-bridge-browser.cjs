@@ -279,11 +279,19 @@ async function openFixture(browser, format) {
     op=await h.begin({op:'action',name:'data_extraction',value:'finish'});
     config=await h.waitExport(offset);await h.ack(offset,true);
     table=await h.waitExport(offset+1);const csv=await h.bytes(offset+1);await h.ack(offset+1,true);
-    assert.equal((await h.settle(op)).ok,true);assert.equal((await h.state()).modal,null);
+    const extractionAccepted=await h.settle(op);assert.equal(extractionAccepted.ok,true);
+    const extractionState=await h.state();
+    const extractionClosed=!hasDialog(extractionState,'DataExtraction');
+    if(!extractionClosed){
+      contractFailures.push({scenario:'Acknowledged extraction wizard remained open',expected:{dialog_open:false},actual:{ok:extractionAccepted.ok,status:extractionAccepted.status,request_id:extractionAccepted.request_id,modal:extractionState.modal,tool_windows:extractionState.tool_windows}});
+      assert(extractionState.modal==='DataExtraction'||(!extractionState.modal&&extractionState.tool_windows?.at(-1)==='DataExtraction'),'Refusing to close a different dialog: '+JSON.stringify(extractionState));
+      await h.act({op:'action',name:'close_modal'});
+    }
+    assert.equal((await h.state()).modal,null);
     assertDialog(await h.state(),'DataExtraction',false);
     assert.deepEqual(await h.semantics(),beforeExtraction);
     await fs.writeFile(path.join(output,'extraction.csv'),csv);
-    pass('Extraction closes only after settings and CSV are acknowledged',{bytes:csv.length});
+    if(extractionClosed)pass('Extraction closes only after settings and CSV are acknowledged',{bytes:csv.length});
 
     // Programmatic PDF output uses the same transaction and exposes
     // no completed success before the real host decision.
