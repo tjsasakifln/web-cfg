@@ -119,7 +119,29 @@ try {
   page.on('request', request => request.url().startsWith('data:') || new URL(request.url()).origin === origin ? request.continue() : request.abort());
   page.on('pageerror', error => report.page_errors.push({ ...context, message: String(error) }));
 
-  // Capture the three review states first so a later matrix failure retains
+  // Native details updates `open` before its queued toggle event. Keep an
+  // immediate Escape in that same task so this race cannot pass by timing.
+  for (const route of ['/projetos/', '/projeto-estrutura-metalica/']) {
+    context = { kind: 'immediate-escape', route, javascript: true, width: 390, height: 844 };
+    await visit(page, route, 390, 844);
+    const state = await page.evaluate(() => {
+      const details = document.querySelector('.pp-mobile');
+      const trigger = details.querySelector(':scope > summary');
+      trigger.focus();
+      trigger.click();
+      const opened = details.open;
+      document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape', bubbles: true, cancelable: true,
+      }));
+      return { opened, closed: !details.open };
+    });
+    assert.deepEqual(state, { opened: true, closed: true }, `${route} immediate Escape closes the native mobile menu`);
+    await settle(page);
+    await assertRestored(page, '.pp-mobile > summary');
+    report.scenarios.push({ ...context, ...state, status: 'passed' });
+  }
+
+  // Capture the three review states before the full matrix so later failures retain
   // evidence for the reviewer and the authorized frozen-source recapture.
   for (const capture of [
     { route: '/', width: 1366, height: 900, group: 'ferramentas', file: 'desktop-ferramentas.png' },
@@ -395,9 +417,10 @@ try {
 
   assert.deepEqual(report.page_errors, [], 'uncaught errors in navigation journeys');
   assert.equal(report.screenshots.length, 5, 'three menu screenshots and two viewport regression screenshots');
+  assert.equal(report.scenarios.filter(row => row.kind === 'immediate-escape').length, 2, 'both native project menus close before their queued toggle');
   assert.equal(report.scenarios.filter(row => row.kind === 'disclosures').length, 33, '24 enhanced and nine native disclosure journeys');
   report.status = 'passed';
-  console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize, 6 fragment journeys and 2 first-viewport regressions; evidence ${evidenceDir}`);
+  console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize, 6 fragment journeys, 2 first-viewport regressions and 2 immediate Escape journeys; evidence ${evidenceDir}`);
 } catch (error) {
   report.status = 'failed';
   const failure = { ...context, message: error.message, stack: error.stack };

@@ -264,9 +264,14 @@
           if (context.details.open && window.innerWidth <= 1120) openMobile(context);
           else if (activeMobile === context) closeMobile();
         });
-      } else {
-        context.trigger.addEventListener('click', () => activeMobile === context ? closeMobile(true) : openMobile(context));
       }
+      context.trigger.addEventListener('click', (event) => {
+        // Native details queues `toggle` after changing `open`. Activate the
+        // enhanced menu in this task so an immediate Escape can close it.
+        // Without JavaScript the summary keeps its native behavior.
+        if (context.details) event.preventDefault();
+        activeMobile === context ? closeMobile(true) : openMobile(context);
+      });
       context.panel.addEventListener('click', (event) => {
         if (event.target.closest('a[href]')) closeMobile();
       });
