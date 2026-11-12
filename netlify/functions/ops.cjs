@@ -1150,8 +1150,8 @@ exports.handler = async (event) => {
     const inboundConfig = resolveInboundConfig(process.env);
     // Read-only destination safety proof. This is deliberately evaluated by the
     // server, where the canonical destination is configured, so callers never
-    // receive a URL, credential or signed request. A synthetic live proof must
-    // observe these controls before it is allowed to create its flagged row.
+    // receive a URL, credential or signed request. A synthetic transport proof
+    // must observe these controls before it creates a row allowed to cross.
     const destinationSafety = await probeInboundDestinationHealth({ env: process.env });
     const requestedLeadId = String(event.queryStringParameters?.lead_id || "").trim();
     const requestedLead = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/.test(requestedLeadId)
@@ -1164,6 +1164,8 @@ exports.handler = async (event) => {
       ? specializedQaTechnicalContextSha256(requestedLead)
       : null;
     const priorityAditivoContextSha256 = priorityAditivoPersistedContextSha256(requestedLead);
+    const persistOnlyProbeReceipt = requestedLead?.record_kind === "synthetic" &&
+      requestedLead?.synthetic_probe_authenticated === true && requestedLead?.persist_only_probe === true;
     const configuration = {
       webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
@@ -1194,6 +1196,7 @@ exports.handler = async (event) => {
               receipt_id: requestedLead.receipt_id || requestedLead.lead_id,
               record_kind: requestedLead.record_kind || "real",
               authenticated_probe: requestedLead.synthetic_probe_authenticated === true,
+              persist_only_probe: persistOnlyProbeReceipt,
               source: requestedLead.source || "CONFENGE_WEB",
               next_action: requestedLead.next_action || null,
               asset_id: requestedLead.asset_id || null,
@@ -1211,6 +1214,8 @@ exports.handler = async (event) => {
               handoff: requestedLead.handoff
                 ? {
                     status: requestedLead.handoff.status,
+                    reason: persistOnlyProbeReceipt && requestedLead.handoff.reason === "persist_only_probe"
+                      ? "persist_only_probe" : null,
                     attempts: requestedLead.handoff.attempts,
                     delivered_at: requestedLead.handoff.delivered_at || null,
                     downstream: requestedLead.handoff.downstream || null,

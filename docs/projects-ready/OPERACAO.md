@@ -22,8 +22,16 @@ interesse e os dados do terreno. O acesso a nome e contato é explícito e restr
 A origem permanece `CONFENGE_WEB`, a família `ready_projects` e o ativo
 `ready-projects`. O objeto `project_interest` guarda interesse, produto quando
 existir, município/UF, medidas opcionais, situação do lote, dormitórios e prazo.
-O processamento envia esse contexto ao fluxo comercial institucional existente.
+O registro protegido é a fonte da captação. Depois da gravação, o processamento
+tenta encaminhar esse contexto ao Warmbly pelo fluxo institucional existente.
+Uma falha de encaminhamento não apaga o contato nem impede sua consulta no OPS.
 Dados de ensaio são marcados `synthetic` e excluídos de contatos e resultados.
+
+Na observação de 12/11/2026 às 10:48 UTC, o health canônico do Warmbly respondeu
+HTTP 410, sem confirmação de disponibilidade. Até a integração ser restabelecida
+e verificada, consulte os interessados e registre o atendimento no OPS existente.
+Não presuma recebimento no CRM a partir do protocolo de captação. O diagnóstico
+e o limite da prova estão em [PROVA-DE-CAPTACAO-2026-11-12.md](PROVA-DE-CAPTACAO-2026-11-12.md).
 
 Use as etapas existentes: recebido, contatado, qualificado, proposta,
 contratação ou perda. Qualifique somente após confirmar necessidade, local,
@@ -133,9 +141,19 @@ anúncios, fornecedores ou desembolsos nesta implantação.
 A PR passa por testes de formulário, persistência, privacidade, fluxo comercial,
 pagamento e entrega, além dos gates do repositório. A `main` publica pelo
 workflow Netcup existente, com artefato exato, stage e promoção atômica.
-O passo residencial pós-publicação confere a página e o registro sintético sem
-e-mail e sem misturar testes com contatos comerciais. Os relatórios ficam nos artefatos da execução, sem tokens ou conteúdo pessoal
-em arquivos e logs públicos.
+O passo residencial pós-publicação usa a prova autenticada de persistência local.
+Confere o formulário servido, a gravação, a repetição com o mesmo protocolo, os
+campos residenciais na leitura privada e a exclusão dos indicadores comerciais.
+Exige também a marca persistida `persist_only_probe`, encaminhamento `SKIPPED`
+pelo motivo correspondente, zero tentativas, nenhum agendamento ou recibo externo
+e notificações/e-mail persistidos como `skipped`. Os relatórios ficam nos
+artefatos da execução, sem tokens ou conteúdo pessoal em arquivos e logs públicos.
+
+`CAPTURE_PERSISTENCE_READY` comprova somente esse percurso de captação. O modo
+residencial proíbe transporte ao Warmbly e e-mail controlado. A prova de
+transporte continua separada e exige o gate externo `READY` antes de criar o
+registro. Sua falha anterior permanece registrada; a nova prova não a converte
+em aprovação de transporte.
 
 Confira `/.well-known/build-info.json` e `/.well-known/runtime-info.json`, a rota
 pública, a leitura restrita e o estado de compras após integração. A reversão
