@@ -17,7 +17,6 @@ jobs:
   diagnose:
     if: github.ref == 'refs/heads/diagnostic/projetos-prontos-inbound-20261112'
     runs-on: ubuntu-latest
-    environment: netcup-production
     timeout-minutes: 3
     steps:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -51,9 +50,9 @@ jobs:
               return { http: response.status, json: body !== null, body: body && typeof body === 'object' ? body : {} };
             } catch { return { http: null, error: 'TRANSPORT_ERROR', body: {} }; }
           }
-          const [build, auth, inbound, destination] = await Promise.all([
+          const [build, runtime, inbound, destination] = await Promise.all([
             get('https://confenge.com.br/.well-known/build-info.json'),
-            get('https://confenge.com.br/.netlify/functions/ops?action=health', true),
+            get('https://confenge.com.br/.well-known/runtime-info.json'),
             get('https://confenge.com.br/.netlify/functions/ops?action=inbound_handoff', true),
             get('https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/health'),
           ]);
@@ -63,11 +62,15 @@ jobs:
             schema: 'confenge.project-capture-read-only-diagnosis/v1',
             ts: new Date().toISOString(),
             workflow_sha: /^[0-9a-f]{40}$/.test(process.env.GITHUB_SHA || '') ? process.env.GITHUB_SHA : null,
-            credential_scope: 'netcup-production',
-            requests: { method: 'GET', planned_count: 4, attempted_count: token ? 4 : 2, redirects_followed: false },
+            credential_scope: 'repository',
+            requests: { method: 'GET', planned_count: 4, attempted_count: token ? 4 : 3, redirects_followed: false },
             ops_token_available: Boolean(token),
             build: { ...response(build), commit: /^[0-9a-f]{40}$/.test(build.body.commit || '') ? build.body.commit : null },
-            ops_health: { ...response(auth), ok: bool(auth.body.ok), auth_configured: bool(auth.body.auth_configured) },
+            runtime_info: {
+              ...response(runtime),
+              release_sha: /^[0-9a-f]{40}$/.test(runtime.body.release_sha || '') ? runtime.body.release_sha : null,
+              profile: oneOf(runtime.body.profile, ['netcup-production']),
+            },
             inbound: {
               ...response(inbound), ok: bool(inbound.body.ok),
               configuration: {
