@@ -62,3 +62,7 @@ O [QA 43255326548](https://github.com/tjsasakifln/web-cfg/actions/runs/432553265
 A comparação dos 269 HTML alterados nesse commit confirmou identidade byte a byte de `head` e `main` contra a base `fdbc687a1d1b5ba5ede77698c8cbd64cd9f9f376`. A análise contratual aprovada recebeu prova específica de preservação do conteúdo, da autoridade e de todo o artefato fora do cabeçalho, rodapé e fingerprint CSS. A recaptura de apresentação mantém os campos factuais intactos e registra a proveniência e os hashes das capturas; não atribui aprovação humana a uma revisão feita por agentes.
 
 As fontes dos seis pilares protegidos permanecem intactas. O compilador aplica a navegação compartilhada ao artefato público. A primeira dobra do artefato final, os gates completos da PR e o fluxo de publicação no SHA integrado continuam obrigatórios. A aprovação da fonte não declara que a publicação já ocorreu.
+
+## Seleção de jornadas nos testes de atribuição
+
+A CI do commit `afab6ef1` encontrou uma seleção antiga pelo primeiro `href` da página: o novo link de navegação para assistência pericial precede o link comercial no conteúdo. O teste passou a selecionar o caminho comercial dentro de `main`, preservando as dez jornadas e todas as exigências de atribuição e admissão pelo coletor. Dois casos adicionais exercitam os links reais de navegação aos mesmos destinos e exigem apenas um clique de rota, sem transição comercial. A suíte `test:analytics` passou com essa correção. Não houve alteração no código de produção nem nos controles obrigatórios.
