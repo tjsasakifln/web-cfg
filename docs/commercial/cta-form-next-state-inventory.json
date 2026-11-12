@@ -6468,19 +6468,19 @@
       "route": "/projetos-prontos/",
       "file": "projetos-prontos/index.html",
       "family_id": "ready_projects",
-      "family_profile": "commercial_content",
+      "family_profile": "priced_offer",
       "terminal_action": "capture_form",
       "forms": [
         {
           "action": "/.netlify/functions/lead",
-          "cta_id": "",
+          "cta_id": "ready-projects-interest-submit",
           "form_contract": "next-state/v1",
           "profile": "ready_project_interest",
           "runtime_profile": "shared_lead_form_v1",
           "stage": "request_fit_review",
           "commitment": "low",
-          "submit_label": "Consultar disponibilidade",
-          "current_label": "Consultar disponibilidade",
+          "submit_label": "Conversar sobre meu projeto",
+          "current_label": "Conversar sobre meu projeto",
           "useful_next_state": "O protocolo confirma a consulta recebida. A equipe confere disponibilidade e conversa sobre a casa e o terreno antes de uma proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "pre_form_value": "Conte como imagina sua casa. A equipe confere a disponibilidade e orienta o próximo passo.",
@@ -6538,44 +6538,14 @@
       ],
       "actions": [
         {
-          "cta_id": "",
-          "position": "",
-          "href": "/projetos-prontos/#contato-projetos",
-          "stage": "request_fit_review",
-          "commitment": "low",
-          "current_label": "Consultar projeto",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
-          "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
-          "event_semantics": [
-            "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "/projetos-prontos/#contato-projetos",
-          "stage": "request_fit_review",
-          "commitment": "low",
-          "current_label": "Consultar projeto",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
-          "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
-          "event_semantics": [
-            "no_direct_event_declared"
-          ]
-        },
-        {
           "cta_id": "ready-projects-hero",
           "position": "hero",
-          "href": "#contato-projetos",
-          "stage": "request_fit_review",
+          "href": "#monte-seu-projeto",
+          "stage": "compare",
           "commitment": "low",
-          "current_label": "Consultar disponibilidade",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "current_label": "Calcular meu projeto ↗",
+          "useful_next_state": "Abre o destino declarado por “Calcular meu projeto ↗” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
@@ -6588,7 +6558,7 @@
           "href": "#contato-projetos",
           "stage": "request_fit_review",
           "commitment": "low",
-          "current_label": "Consultar um projeto pronto",
+          "current_label": "Conversar sobre a minha referência",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
@@ -6603,7 +6573,7 @@
           "href": "#contato-projetos",
           "stage": "request_fit_review",
           "commitment": "low",
-          "current_label": "Consultar adaptação",
+          "current_label": "Seu caso é diferente? Vamos preparar uma proposta.",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
@@ -6618,13 +6588,43 @@
           "href": "#contato-projetos",
           "stage": "request_fit_review",
           "commitment": "low",
-          "current_label": "Solicitar complementares",
+          "current_label": "Preciso de ajuda para escolher",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
           "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "tiago.sasaki@confenge.com.br",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Atendimento%20de%20pedido%20residencial",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar com a CONFENGE por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
+          "event_semantics": [
+            "email_click"
           ]
         },
         {
@@ -7528,6 +7528,24 @@
       "form_class": "market-form",
       "kind": "tool_form",
       "action": "/api/web/engineering-marketplace",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/projetos-prontos/",
+      "form_id": "rp-service-form",
+      "form_class": "rp-builder",
+      "kind": "tool_form",
+      "action": "/api/web/project-orders?op=service-checkout",
+      "method": "post",
+      "nojs_degradation": "noscript_note"
+    },
+    {
+      "route": "/projetos-prontos/",
+      "form_id": "rp-support-form",
+      "form_class": "",
+      "kind": "tool_form",
+      "action": "/api/web/project-orders?op=service-support",
       "method": "post",
       "nojs_degradation": "noscript_note"
     }

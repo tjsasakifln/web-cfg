@@ -264,20 +264,30 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
       if (!normalized.providerId || normalized.reference !== id || normalized.amountCents !== amountCents) throw new Error('Mercado Pago order did not match the requested reference and amount');
       return { ...normalized, paymentFlow: 'pix' };
     },
-    async createCheckoutOrder({ id, amountCents, email, label, returnUrl: requestedReturnUrl } = {}) {
+    async createCheckoutOrder({ id, amountCents, email, label, returnUrl: requestedReturnUrl, items: requestedItems } = {}) {
       id = required(id, 'id');
       if (!UUID.test(id) || id.length > 64) throw new Error('id must be a stable UUID');
       label = required(label, 'label');
       if (label.length > 256) throw new Error('label is too long');
       const amount = toMoney(amountCents);
       const destination = returnUrl(requestedReturnUrl);
+      let items = [{ title: label, quantity: 1, unit_price: amount }];
+      if (requestedItems !== undefined) {
+        if (!Array.isArray(requestedItems) || requestedItems.length < 1 || requestedItems.length > 10 ||
+            requestedItems.some(item => !item || typeof item.title !== 'string' || !item.title.trim() || item.title.length > 256 ||
+              !Number.isSafeInteger(item.amountCents) || item.amountCents < 1 || item.quantity !== 1) ||
+            requestedItems.reduce((sum, item) => sum + item.amountCents, 0) !== amountCents) {
+          throw new Error('Checkout items must sum to the requested amount');
+        }
+        items = requestedItems.map(item => ({ title: item.title, quantity: 1, unit_price: toMoney(item.amountCents) }));
+      }
       const payer = sandbox ? { email: required(sandboxPayerEmail, 'sandboxPayerEmail'), first_name: 'APRO' } :
         { email: required(email, 'email') };
       const body = {
         type: 'online', processing_mode: 'manual', capture_mode: 'automatic_async',
         external_reference: id, total_amount: amount, description: label,
         payer,
-        items: [{ title: label, quantity: 1, unit_price: amount }],
+        items,
         config: { online: { success_url: destination, failure_url: destination, pending_url: destination, auto_return: 'approved' } }
       };
       await verifySellerEnvironment();

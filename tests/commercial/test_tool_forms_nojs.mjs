@@ -5,6 +5,10 @@
  * or the tools pattern (a rendered status + controls disabled until the
  * runtime enables them). Before this test the census left the tool forms out,
  * so nobody checked what a visitor without JavaScript sees.
+ * `tool_form` is the census bucket for non-lead forms, not a claim that they
+ * run only in the browser. The residential checkout/support forms have their
+ * own server runtime and are checked explicitly below without becoming leads
+ * or adding an exception to the no-JavaScript requirement.
  *
  * Counter-proof: a synthetic page whose tool form has neither is `none` and
  * fails; the shipped tree has exactly one such form, registered below as a
@@ -59,8 +63,54 @@ const expectedRoutes = new Set([
   "/ferramentas/prontidao-tecnica-obra-privada/",
   "/ferramentas/radar-mercado-publico/",
   "/profissionais/",
+  "/projetos-prontos/",
 ]);
 assert.deepEqual(new Set(tools.map((form) => form.route)), expectedRoutes, JSON.stringify(tools.map((f) => f.route)));
+
+// Residential service transactions: exact endpoints, explicit runtime and a
+// usable no-JS contact path. A generic page note cannot make enabled checkout
+// controls or an unauthenticated support form acceptable without the runtime.
+const serviceRoute = "/projetos-prontos/";
+const serviceContract = [
+  { form_id: "rp-service-form", action: "/api/web/project-orders?op=service-checkout" },
+  { form_id: "rp-support-form", action: "/api/web/project-orders?op=service-support" },
+];
+assert.deepEqual(tools.filter(form => form.route === serviceRoute).map(({ form_id, action, method, nojs_degradation }) => ({ form_id, action, method, nojs_degradation })),
+  serviceContract.map(form => ({ ...form, method: "post", nojs_degradation: "noscript_note" })));
+
+function assertServiceNoJsContract(html) {
+  const forms = [...html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi)];
+  for (const { form_id, action } of serviceContract) {
+    const form = forms.find(match => match[1].includes(`id="${form_id}"`));
+    assert.ok(form, `${form_id}: declared transaction form`);
+    assert.match(form[1], /\bdata-runtime-profile="project_service_checkout_v1"/, `${form_id}: own runtime profile`);
+    assert.ok(form[1].includes(`action="${action}"`) && /\bmethod="post"/.test(form[1]), `${form_id}: exact transaction endpoint`);
+  }
+  assert.match(html, /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\/assets\/js\/ready-project-services\.mjs")[^>]*>/,
+    "service forms: their runtime is actually loaded");
+  const outsideLead = html.replace(/<form\b(?=[^>]*\bid="formulario-contato")[^>]*>[\s\S]*?<\/form>/gi, " ");
+  const serviceNote = [...outsideLead.matchAll(/<noscript\b[^>]*>([\s\S]*?)<\/noscript>/gi)]
+    .map(match => match[1]).find(note => /JavaScript/.test(note) && /href="#contato-projetos"/.test(note));
+  assert.ok(serviceNote, "service forms: their no-JS note links to the contact alternative outside lead capture");
+  const contact = outsideLead.match(/<section\b(?=[^>]*\bid="contato-projetos")[^>]*>([\s\S]*?)<\/section>/i);
+  assert.ok(contact && /<a\b[^>]*\bhref="(?:mailto:|https:\/\/wa\.me\/)/.test(contact[1]),
+    "service forms: the no-JS destination contains a usable direct contact channel");
+  for (const id of ["rp-config-fields", "rp-discipline-fields"]) {
+    assert.match(html, new RegExp(`<fieldset\\b(?=[^>]*\\bid="${id}")(?=[^>]*\\bdisabled\\b)[^>]*>`), `${id}: configuration starts disabled`);
+  }
+  for (const id of ["rp-review-button", "rp-pay-button"]) {
+    assert.match(html, new RegExp(`<button\\b(?=[^>]*\\bid="${id}")(?=[^>]*\\bdisabled\\b)[^>]*>`), `${id}: no native checkout before runtime confirmation`);
+  }
+  assert.match(html, /<section\b(?=[^>]*\bid="pedido")(?=[^>]*\bhidden\b)[^>]*>(?:(?!<\/section>)[\s\S])*<form\b[^>]*\bid="rp-support-form"/,
+    "support: stays inside the initially hidden authenticated-order panel");
+}
+const serviceHtml = fs.readFileSync("projetos-prontos/index.html", "utf8");
+assertServiceNoJsContract(serviceHtml);
+// Counter-proofs ensure adding the route did not turn it into a generic bypass.
+assert.throws(() => assertServiceNoJsContract(serviceHtml.replaceAll('data-runtime-profile="project_service_checkout_v1"', "")), /own runtime profile/);
+assert.throws(() => assertServiceNoJsContract(serviceHtml.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, "")), /no-JS note links/);
+assert.throws(() => assertServiceNoJsContract(serviceHtml.replace(/(<button\b[^>]*\bid="rp-pay-button")\s+disabled/, "$1")), /no native checkout/);
+assert.throws(() => assertServiceNoJsContract(serviceHtml.replace(/(<section\b[^>]*\bid="pedido")\s+hidden/, "$1")), /initially hidden authenticated-order panel/);
 
 // Pendência datada, route-exact (2026-09-19, #705): o alinhador SINAPI
 // (form.breakout-tool, gerado por scripts/organic/breakout.py) não explica o

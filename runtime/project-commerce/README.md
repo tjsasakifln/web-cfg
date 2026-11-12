@@ -1,5 +1,10 @@
 # Compra e entrega de projetos
 
+Para o serviço de elaboração sob encomenda, contratado por disciplina e prazo,
+consulte [SERVICE-ORDERS.md](SERVICE-ORDERS.md). Esse fluxo usa Checkout Pro,
+recibo privado e armazenamento do host, com autorização própria de 12/11/2026.
+As instruções abaixo continuam específicas das licenças de arquivos prontos.
+
 Esta implementação prepara a compra de licenças de projetos. O lançamento de
 12/11/2026 recebe consultas e mantém o catálogo vazio e as compras desativadas.
 Nenhum preço, projeto, aprovação profissional ou conta de produção é presumido.

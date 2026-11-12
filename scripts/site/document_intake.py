@@ -261,6 +261,9 @@ LOCAL_FILE_TOOLS = frozenset(
     "ferramentas/diagrama-unifilar/index.html",
     "ferramentas/orcamento-de-obras/index.html",
     "ferramentas/rede-de-agua/index.html",
+    # Local receipt parsing only; credentials are then used for authenticated
+    # order lookup. No source file or technical document is uploaded.
+    "projetos-prontos/index.html",
 }
 
 

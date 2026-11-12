@@ -28,6 +28,7 @@
  *        (A06-RECEBIMENTO-02: explicit operator reclassification of one real
  *        record after human QA; snapshot + audit; undo via rollback_record_kind)
  *   GET  inbound_handoff
+ *   GET  project_services   (payment readiness and orders; auth required)
  *   GET  audit_inbound_requeue
  *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit: 1, approval_reference?: string }
  *   POST drain_inbound     (Warmbly handoffs due + lead e-mail retry, same key, 24 h window)
@@ -442,6 +443,22 @@ exports.handler = async (event) => {
   if (!rl.ok) {
     safeLog("warn", "ops_rate_limited", { ip: clientIp(event).slice(0, 20) });
     return json(429, { ok: false, error: "rate_limited", retry_after: rl.retryAfter }, origin);
+  }
+
+  if (action === "project_services" && event.httpMethod === "GET") {
+    if ((event.multiValueQueryStringParameters?.order_id || []).length > 1) {
+      return json(400, { ok: false, error: "invalid_order_id" }, origin);
+    }
+    try {
+      const services = require("../../runtime/project-commerce/service-ops.cjs");
+      const result = qs.op === "preflight" ? await services.preflight() :
+        await services.report(qs.order_id ? { orderId: qs.order_id } : {});
+      return json(200, { ok: true, ...result }, origin);
+    } catch (error) {
+      const known = { INVALID_ORDER_ID: [400, "invalid_order_id"], ORDER_NOT_FOUND: [404, "order_not_found"] };
+      const [status, reason] = known[error.message] || [503, "project_services_unavailable"];
+      return json(status, { ok: false, error: reason }, origin);
+    }
   }
 
   bindBlobs(event);
