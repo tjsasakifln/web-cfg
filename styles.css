@@ -1309,6 +1309,7 @@ html:has(.site-header .nav-discovery){scroll-padding-top:calc(var(--site-header-
 .mobile-nav__utility>a:hover{text-decoration:underline;text-underline-offset:4px}
 
 @media (min-width:1121px){
+  html.no-js body .site-header:has(.nav-discovery){position:relative}
   .site-header .desktop-nav,.pp-header .pp-nav{display:flex}
   .site-header .menu-toggle,.site-header .mobile-nav,.pp-header .pp-mobile{display:none}
   .site-header .header-cta{display:inline-flex;flex:none;font-size:.8125rem;padding-inline:14px;white-space:nowrap}

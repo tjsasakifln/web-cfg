@@ -52,7 +52,8 @@ def render_navigation(
                 f'<span class="nav-destination__description">{escape(item["description"])}</span></a>'
             )
         parts.append(
-            f'<details class="{group_class}" data-nav-group="{escape(group_id, quote=True)}">'
+            f'<details class="{group_class}" name="nav-{kind}" '
+            f'data-nav-group="{escape(group_id, quote=True)}">'
             f'<summary class="nav-group__toggle" aria-controls="{panel_id}">'
             f'<span>{escape(group["label"])}</span>'
             '<span class="nav-group__chevron" aria-hidden="true"></span></summary>'

@@ -61,10 +61,11 @@ def _text(node):
     return " ".join(" ".join(child if isinstance(child, str) else _text(child) for child in node["children"]).split())
 
 
-def _assert_menu_contract(menu, groups):
+def _assert_menu_contract(menu, groups, kind):
     assert not _nodes(menu, "nav"), "navigation landmarks must not nest"
     actual_groups = _nodes(menu, "details", "nav-group")
     assert [node["attrs"]["data-nav-group"] for node in actual_groups] == [group["id"] for group in groups]
+    assert {node["attrs"].get("name") for node in actual_groups} == {f"nav-{kind}"}, "native groups must be exclusive within their own navigation"
     assert len(_nodes(menu, "summary")) == len(groups)
     for actual, expected in zip(actual_groups, groups, strict=True):
         assert "open" not in actual["attrs"], "menus must not cover the page on arrival"
@@ -128,7 +129,7 @@ def test_each_shell_has_complete_native_navigation_without_javascript(kind):
     rendered = render_navigation(kind=kind, current="/cad/")
     dom = _DOM(f'<nav>{rendered}</nav>')
     menu = _nodes(dom.root, "nav")[0]
-    _assert_menu_contract(menu, groups)
+    _assert_menu_contract(menu, groups, kind)
     current = [a for a in _nodes(menu, "a") if a["attrs"].get("aria-current") == "page"]
     assert len(current) == 1 and current[0]["attrs"]["href"] == "/ferramentas/"
     assert not _nodes(menu, "script")
@@ -146,9 +147,11 @@ def test_published_shell_families_compile_the_same_discovery_contract(relative):
     groups = load_ia_map()["header"]["destinations"]
     menus = [node for node in _nodes(dom.root, "nav") if {"desktop-nav", "mobile-nav", "pp-nav", "pp-mobile-nav"} & set(node["attrs"].get("class", "").split())]
     assert len(menus) == 2, relative
+    kinds = {"desktop-nav": "desktop", "mobile-nav": "mobile", "pp-nav": "pp-desktop", "pp-mobile-nav": "pp-mobile"}
     for menu in menus:
+        kind = next(value for cls, value in kinds.items() if cls in menu["attrs"].get("class", "").split())
         # CTA has its own declared analytics and is already independently gated.
-        _assert_menu_contract({**menu, "children": [child for child in menu["children"] if isinstance(child, str) or child["tag"] != "a"]}, groups)
+        _assert_menu_contract({**menu, "children": [child for child in menu["children"] if isinstance(child, str) or child["tag"] != "a"]}, groups, kind)
     panel_ids = [node["attrs"]["id"] for node in _nodes(dom.root, "div", "nav-panel")]
     assert len(panel_ids) == len(set(panel_ids)), relative
     tracking_ids = [node["attrs"]["data-cta-id"] for node in _nodes(dom.root, "a") if node["attrs"].get("data-navigation-link") == "true"]

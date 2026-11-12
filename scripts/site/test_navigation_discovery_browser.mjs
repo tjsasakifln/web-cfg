@@ -28,6 +28,7 @@ const enhancedViewports = [[320, 568], [390, 844], [768, 1024], [1024, 768], [11
 const nativeViewports = [[320, 900], [1024, 900], [1366, 900]];
 const report = { schema: 'confenge.navigation-discovery-ui/1.0', base_url: base, status: 'running', scenarios: [], screenshots: [], page_errors: [], failures: [] };
 let browser;
+let page;
 let context = { kind: 'launch' };
 
 async function pollFromNode(read, label, timeout = 6000) {
@@ -112,7 +113,7 @@ async function screenshot(page, filename) {
 try {
   await mkdir(evidenceDir, { recursive: true });
   browser = await puppeteer.launch({ executablePath: resolveChromePath(), headless: true, args: ['--no-sandbox'] });
-  const page = await browser.newPage();
+  page = await browser.newPage();
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await page.setRequestInterception(true);
   page.on('request', request => request.url().startsWith('data:') || new URL(request.url()).origin === origin ? request.continue() : request.abort());
@@ -174,6 +175,7 @@ try {
           assert.equal(await page.$$eval(`${nav} > .nav-group > summary`, nodes => nodes.every(node => !node.hasAttribute('aria-expanded'))), true, 'native controls were not enhanced by application scripts');
         }
         for (const id of groups) {
+          context = { kind: 'disclosures', route, javascript, width, height, group: id, phase: 'open-group' };
           const group = `${nav} [data-nav-group="${id}"]`;
           const summary = `${group} > summary`;
           await page.focus(summary);
@@ -197,12 +199,13 @@ try {
               }),
             };
           });
+          context = { ...context, phase: 'panel-geometry', geometry };
           assert.ok(geometry.left >= -1 && geometry.right <= width + 1 && geometry.scrollWidth <= geometry.clientWidth + 1, `${label} panel containment: ${id} ${JSON.stringify(geometry)}`);
           assert.ok(geometry.targetWidth >= 44 && geometry.targetHeight >= 44, `${label} summary target ${id}`);
           assert.ok(geometry.links.length >= 2 && geometry.links.every(link => link.href?.startsWith('/') && link.height >= 44 && link.width >= 44 && link.scrollWidth <= link.clientWidth + 1), `${label} reachable touch destinations ${id}`);
           // The native standard mobile fallback is inline; enhanced and PP menus scroll inside the viewport.
-          if (mobile && (javascript || project)) assert.ok(geometry.navTop >= -1 && geometry.navBottom <= height + 1, `${label} mobile scroll container`);
-          if (!mobile) assert.ok(geometry.top >= -1 && geometry.bottom <= height + 1, `${label} desktop panel height`);
+          if (mobile && (javascript || project)) assert.ok(geometry.navTop >= -1 && geometry.navBottom <= height + 1, `${label} mobile scroll container: ${id} ${JSON.stringify(geometry)}`);
+          if (!mobile) assert.ok(geometry.top >= -1 && geometry.bottom <= height + 1, `${label} desktop panel height: ${id} ${JSON.stringify(geometry)}`);
           if (javascript) {
             assert.equal(await page.$$eval(`${nav} > .nav-group[open]`, nodes => nodes.length), 1, `${label} one disclosure at a time`);
             await page.keyboard.press('Escape');
@@ -214,6 +217,27 @@ try {
             assert.equal(await page.$eval(group, element => element.open), false, `${label} ${id} works without JavaScript`);
           }
           row.groups.push({ id, ...geometry });
+        }
+        if (!javascript) {
+          context = { kind: 'disclosures', route, javascript, width, height, group: 'projetos', phase: 'native-exclusive-switch' };
+          const first = `${nav} [data-nav-group="projetos"]`;
+          const second = `${nav} [data-nav-group="servicos"]`;
+          await page.focus(`${first} > summary`);
+          await page.keyboard.press('Enter');
+          await waitForDOM(page, selector => document.querySelector(selector)?.open, {}, first);
+          await waitForVisible(page, `${first} .nav-overview`);
+          // Do not close the first group. The native details name must do so
+          // when another group opens, with application scripting disabled.
+          context = { ...context, group: 'servicos' };
+          await page.focus(`${second} > summary`);
+          await page.keyboard.press('Enter');
+          await waitForDOM(page, selector => document.querySelector(selector)?.open, {}, second);
+          assert.deepEqual(await page.$$eval(`${nav} > .nav-group[open]`, nodes => nodes.map(node => node.dataset.navGroup)), ['servicos'], `${label} native switching leaves only the second group open`);
+          await waitForVisible(page, `${second} .nav-overview`);
+          await page.keyboard.press('Enter');
+          await waitForDOM(page, selector => !document.querySelector(selector)?.open, {}, second);
+          assert.equal(await page.$$eval(`${nav} > .nav-group[open]`, nodes => nodes.length), 0, `${label} native second group closes`);
+          row.native_switch = { from: 'projetos', to: 'servicos', exclusive: true, closed_after: true };
         }
         if (javascript) {
           const first = `${nav} [data-nav-group="projetos"] > summary`;
@@ -331,7 +355,16 @@ try {
   console.log(`PASS navigation discovery: 24 enhanced, 9 native, 3 resize and 6 fragment journeys; evidence ${evidenceDir}`);
 } catch (error) {
   report.status = 'failed';
-  report.failures.push({ ...context, message: error.message, stack: error.stack });
+  const failure = { ...context, message: error.message, stack: error.stack };
+  if (page && !page.isClosed()) {
+    try {
+      await page.screenshot({ path: resolve(evidenceDir, 'failure.png') });
+      failure.screenshot = 'failure.png';
+    } catch (captureError) {
+      failure.screenshot_error = String(captureError);
+    }
+  }
+  report.failures.push(failure);
   process.exitCode = 1;
   console.error(`FAIL navigation discovery: ${JSON.stringify(context)}\n${error.stack}`);
 } finally {
