@@ -70,6 +70,12 @@
       }
     },
     {
+      "route": "/projetos-prontos/",
+      "surface_class": "money_hub",
+      "evidence_state": "PENDING",
+      "measurement": null
+    },
+    {
       "route": "/entregas/",
       "surface_class": "money_hub",
       "evidence_state": "MEASURED_PASS",

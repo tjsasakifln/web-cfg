@@ -6,6 +6,15 @@ on:
       - index.html
       - assets/home-10x.css
       - assets/project-practices.css
+      - assets/ready-projects.css
+      - assets/js/ready-project-services.mjs
+      - projetos-prontos/**
+      - data/projects-ready/**
+      - data/commercial/first-fold-contract.v1.json
+      - runtime/project-commerce/**
+      - tests/project-commerce/service-browser.mjs
+      - scripts/site/measure_first_fold.mjs
+      - scripts/site/capture_screenshots.mjs
       - data/projects/**
       - data/services/**
       - data/site/brand.json
@@ -26,7 +35,7 @@ concurrency:
 jobs:
   evidence:
     name: Commercial presentation review
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'fix/comunicacao-servicos-profissional'
+    if: github.event.pull_request.head.repo.full_name == github.repository && (github.head_ref == 'fix/comunicacao-servicos-profissional' || github.head_ref == 'feat/projetos-pagamento-prazo-20261112')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -52,20 +61,29 @@ jobs:
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         with:
           chrome-version: ${{ steps.browser-contract.outputs.version }}
-      - name: Verify home and project geometry
+      - name: Verify the exact clean source revision
         env:
-          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
           EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
           test -z "$(git status --porcelain)"
+      - name: Verify home and project geometry
+        if: github.head_ref == 'fix/comunicacao-servicos-profissional'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
           node scripts/site/test_home_first_fold.mjs
           node scripts/site/test_project_diagram_geometry.mjs
+      - name: Verify residential service purchase and recovery
+        if: github.head_ref == 'feat/projetos-pagamento-prazo-20261112'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/project-commerce/service-browser.mjs
       - name: Capture desktop and mobile presentation
         if: always() && steps.chrome.outcome == 'success'
         env:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
-          CAPTURE_PATHS: /,/projetos/,/projetos/estruturas/,/servicos/,/quantitativos-orcamento-obras/,/compatibilizacao-projetos-engenharia/
+          CAPTURE_PATHS: ${{ github.head_ref == 'feat/projetos-pagamento-prazo-20261112' && '/projetos-prontos/,/projetos-prontos/condicoes/' || '/,/projetos/,/projetos/estruturas/,/servicos/,/quantitativos-orcamento-obras/,/compatibilizacao-projetos-engenharia/' }}
           CAPTURE_VIEWPORTS: 1366x768,390x844
           CAPTURE_FULLPAGE: "1"
           CAPTURE_ALLOW_EPHEMERAL: "1"
@@ -101,10 +119,17 @@ jobs:
           mkdir -p "$RUNNER_TEMP/commercial-presentation/contracts"
           cp data/commercial/first-fold-contract.v1.json data/commercial/first-fold-measurements.v1.json "$RUNNER_TEMP/commercial-presentation/contracts/"
       - name: Verify remaining published figures
-        if: always() && steps.chrome.outcome == 'success'
+        if: always() && steps.chrome.outcome == 'success' && github.head_ref == 'fix/comunicacao-servicos-profissional'
         env:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: node scripts/site/test_svg_figure_legibility.mjs
+      - name: Preserve service browser observations
+        if: always() && steps.chrome.outcome == 'success' && github.head_ref == 'feat/projetos-pagamento-prazo-20261112'
+        run: |
+          if [ -d build/reports/project-services ]; then
+            mkdir -p "$RUNNER_TEMP/commercial-presentation/project-services"
+            cp -R build/reports/project-services/. "$RUNNER_TEMP/commercial-presentation/project-services/"
+          fi
       # The complete interface gate requires canonical _site assembly, including
       # public_navigation.py. It remains mandatory in site-ci and pSEO; this
       # workflow deliberately measures the clean source without rebuilding it.
