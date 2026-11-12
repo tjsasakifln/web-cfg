@@ -2,7 +2,7 @@
 
 ## Estado desta entrega
 
-Este documento descreve o provisionamento de um novo serviço privado no Netcup. A publicação do site pode entregar a página `/profissionais/` e os handlers do gateway, mas o workflow de publicação do site **não instala Docker, não cria PostgreSQL/Redis, não executa migrações e não configura Stripe no host de produção**. O acesso de release existente não confere essas permissões de administração do host. Até concluir o procedimento abaixo, o gateway permanece `off` e a página encaminha a demanda à CONFENGE sem registrar cadastros, contratações ou pagamentos fictícios.
+Este documento descreve o provisionamento de um novo serviço privado no Netcup. A publicação do site pode entregar a página `/profissionais/` e os handlers do gateway, mas o workflow de publicação do site **não instala Docker, não cria PostgreSQL/Redis, não executa migrações e não configura Stripe no host de produção**. O acesso de release existente não confere essas permissões de administração do host. Durante a preparação da infraestrutura e o ensaio isolado, o gateway permanece `off` e a página encaminha a demanda à CONFENGE. A primeira abertura de cadastros reais, ainda sem perfis publicados, segue as fases da seção 5.1; não criar cadastros, contratações ou pagamentos fictícios na produção.
 
 O código e as instruções são entregues para execução pelo operador com acesso ao host e à conta Stripe. Build de imagem, inicialização real dos containers, restauração e transação externa precisam de evidência própria; testes unitários não substituem essas etapas.
 
@@ -87,7 +87,7 @@ O healthcheck dos containers verifica apenas se o processo HTTP responde a `/hea
 
 O gateway exige backend em HTTP loopback, chave `pk_`, chave privada ASCII de 32 a 256 caracteres e chave de sessão base64url canônica de 32 bytes. O gerador entrega os formatos corretos. As chaves JWT/cookie devem ser estáveis entre API e worker e sobreviver ao rollback. Uma rotação deliberada encerra sessões e deve ser registrada.
 
-Após a conferência profissional, executar o comando privado de revisão com os valores fornecidos pelo operador. O exemplo abaixo é um modelo: substituir ID, operador e referência por registros reais antes de executar. A decisão `withdraw` suspende um perfil anteriormente publicado.
+O comando privado abaixo publica o profissional após a conferência; na primeira implantação, executá-lo somente na última fase da seção 5.1. Substituir ID, operador e referência por registros reais antes de executar. A decisão `withdraw` suspende um perfil anteriormente publicado e impede seu acesso às rotas de cadastro profissional e Connect; não usá-la para representar um cadastro inicial pendente.
 
 ```sh
 sudo ./marketplacectl run --rm \
@@ -98,11 +98,11 @@ sudo ./marketplacectl run --rm \
   tools exec ./src/scripts/review-provider.js
 ```
 
-O comando valida os campos e o aceite dos termos, registra operador, referência e instante, e altera `engineering_verified`/status. A referência de evidência fica na metadata privada; ela precisa corresponder à verificação humana efetivamente realizada, não a um texto genérico de aprovação.
+O comando valida os campos e o aceite dos termos, registra operador, referência e instante, e altera `engineering_verified`/status. A decisão `approve` define `engineering_verified=true` e `status=open`, tornando o perfil elegível ao diretório e às solicitações. O comando não verifica a conta Stripe: a conferência financeira anterior é responsabilidade do operador. A referência de evidência fica na metadata privada; ela precisa corresponder à verificação humana efetivamente realizada, não a um texto genérico de aprovação.
 
 ## 4. Configurar Stripe e condições comerciais
 
-Preencher no backend, primeiro com a conta de testes:
+No backend do ensaio isolado, preencher com a conta de testes. Os arquivos da produção recebem somente credenciais `live`, na fase indicada pela seção 5.1:
 
 | Variável | Valor esperado |
 | --- | --- |
@@ -124,6 +124,8 @@ Habilitar os eventos descritos em [payments.md](payments.md) para a implementaç
 
 O provider nativo configura país BR e `manualPayouts=false`. As transferências, reversões e liquidações automáticas do fluxo de pedidos de comércio foram desativadas porque a contratação de engenharia cria uma cobrança com destination charge própria. A captura nativa trabalha com payment collections do comércio, que não são criadas para `engineering_request`. Não reabilitar esses fluxos: isso pode duplicar movimentos financeiros. A disponibilidade de cadastro, cobrança e recebimento depende da conta Stripe e da habilitação do prestador; o código não comprova elegibilidade comercial no Brasil. O cliente aceita a revisão exata da proposta, e a comissão informada ao profissional fica congelada nela. Mudança de taxa exige nova proposta.
 
+O agendamento nativo de abertura de contas, `payout-sync-onboarding`, permanece sem criar contas por `onboarding.enabled=false`; seu wrapper pode registrar uma execução como ignorada. A abertura inicial da conta financeira reaproveita os workflows nativos do Mercur somente na ação explícita do proprietário em **Configurar recebimentos**; a rota exige pagamentos habilitados e mantém seu bloqueio de concorrência por prestador. Essa opção não desativa os workflows explícitos, o monitor de KYC nem os webhooks assinados. A sincronização e a renovação de links de contas já existentes continuam operantes durante a pausa, preservando a conciliação. Referências: [configuração da aplicação](../../apps/engineering-marketplace/config/stripe-connect.cjs) e [agendamentos da tag 2.4.1](https://github.com/mercurjs/mercur/blob/v2.4.1/packages/plugins/stripe-connector/src/workflows/jobs.ts).
+
 ## 5. Aceitação antes da primeira transação
 
 Primeiro executar o fluxo completo em base e conta Stripe de teste, com dados de teste identificados e sem publicá-los na produção. O modo `sandbox` do gateway é permitido apenas fora de `netcup-production`; uma página pública não pode anunciar contratação real usando o ambiente de teste.
@@ -140,9 +142,21 @@ Registrar evidência de:
 6. Entrega, confirmação do cliente e uma avaliação vinculada ao serviço pago/concluído. Reembolso e disputa posteriores devem atualizar o estado financeiro preservando avaliações históricas que já eram elegíveis; criar uma nova avaliação continua exigindo serviço concluído e pagamento confirmado.
 7. Interrupção/reinício de API e worker, falha de Redis, backup/restauração em ambiente isolado e retomada de eventos pendentes.
 
-Para ativar na produção, registrar responsável, SHA/digests, resultado do ensaio, comissão, conta Stripe real e primeiro profissional habilitado. Trocar para credenciais `live`, executar a migração necessária caso o plugin Stripe tenha sido habilitado depois do primeiro bootstrap, recriar API/worker, repetir readiness e só então definir `ENGINEERING_MARKETPLACE_MODE=live` no runtime web. Reiniciar `confenge-web-runtime.service` pelo procedimento operacional existente e conferir `GET /api/web/engineering-marketplace?op=config` com `enabled:true`, versão esperada e `paymentsEnabled` coerente.
-
 Não marcar esse gate como concluído com base em um 200 da página, no healthcheck estático, em fixtures ou na URL de retorno do checkout. A evidência financeira vem dos eventos verificados e da consulta à Stripe. A revisão profissional é executada pelo comando privado de operação documentado no README da aplicação, nunca pelo perfil público.
+
+### 5.1. Primeira ativação em produção, por fases
+
+Aplicar esta sequência à primeira implantação, em uma base de produção separada do ensaio e ainda sem profissionais aprovados, solicitações ou propostas aceitas. Registrar responsável, SHA/digests, resultado do ensaio isolado, decisão de comissão e o profissional real que participará da abertura. O cadastro desse profissional e sua conta Connect serão concluídos nas fases seguintes; não exigir uma conta já habilitada antes de abrir o cadastro.
+
+1. **Abrir cadastros reais com pagamentos desligados.** Manter `MARKETPLACE_PAYMENTS_ENABLED=false`, definir `MARKETPLACE_PAYMENT_MODE=live` e deixar as três credenciais `STRIPE_*` vazias nesta base nova. Recriar API/worker e repetir `ready.cjs` conforme a seção 3. Depois definir `ENGINEERING_MARKETPLACE_MODE=live` no runtime web e reiniciar `confenge-web-runtime.service` pelo procedimento existente. Conferir `GET /api/web/engineering-marketplace?op=config`: `enabled:true`, versão dos termos esperada e `paymentsEnabled:false`. Essa fase abre o cadastro público e o preenchimento de perfis, com checkout e botão de recebimentos indisponíveis.
+2. **Cadastrar e conferir o primeiro perfil sem publicá-lo.** O próprio profissional cria sua conta, aceita os termos e salva os dados profissionais completos. Registrar seu ID `sel_` real para a revisão posterior. O Mercur cria o vendedor com `status=pending_approval`; o salvamento do perfil define `engineering_verified=false`. Manter esse estado, sem executar `approve` nem `withdraw`. Conferir que o perfil não aparece no diretório. As rotas de solicitação e de proposta exigem perfil aprovado; um cadastro pendente pode acessar seu perfil e preparar o Connect, mas não receber solicitações por essa integração.
+3. **Habilitar a integração financeira com todos os perfis ainda pendentes.** Conferir que não há perfil aprovado nem solicitação/proposta anterior nesta implantação. Configurar somente credenciais Stripe `live`, os dois webhooks da seção 4 e a comissão aprovada; copiar o segredo Connect para o runtime web. Definir `MARKETPLACE_PAYMENTS_ENABLED=true`, executar a migração necessária à inclusão do plugin e recriar API/worker, seguindo o procedimento das seções 3 e 4. Repetir readiness e reiniciar o runtime web após incorporar seu segredo. A configuração pública passa a retornar `paymentsEnabled:true`. Esse flag habilita tanto checkout quanto onboarding; nesta fase, a ausência de perfis aprovados e de contratos aceitos impede o caminho de cobrança. A tarefa automática de abertura de contas continua desativada; o profissional inicia sua conta financeira no passo seguinte.
+4. **Concluir o Connect antes da publicação.** O profissional recarrega `/profissionais/#minha-conta` e usa o botão de configuração de recebimentos com sua conta proprietária. A rota Connect exige o proprietário, pagamentos habilitados, comissão definida e modo `live` compatível; não exige `engineering_verified=true` nem `status=open`. O middleware nativo permite `pending_approval` e bloqueia `suspended`/`terminated`. Conferir a conta real na Stripe, seus requisitos e a atualização privada do `payout_account` associado: `status=active`, `charges_enabled=true` e `payouts_enabled=true`. Confirmar o recebimento dos eventos assinados e registrar a evidência; voltar à página não comprova habilitação.
+5. **Publicar após as duas conferências.** Somente depois da revisão profissional e da habilitação financeira, executar `review-provider.js` com `approve`, ID real, operador e referência de evidência, conforme a seção 3. Conferir a presença do perfil no diretório. A partir desse momento, solicitações reais podem avançar para proposta, aceite e checkout. Uma alteração posterior no perfil exige nova revisão. Registrar a conclusão operacional; a indexação da página continua sujeita aos seus próprios critérios e não é liberada automaticamente por esse procedimento.
+
+Se a implantação já tiver contratos ou contas financeiras, não aplicar novamente a fase inicial que mantém credenciais vazias. Seguir pausa, conciliação e reversão da seção 8, preservando webhooks e chaves. A sequência acima não cria um modo exclusivo de onboarding nem um cadastro restrito por convite; ela usa os controles existentes de pagamento e aprovação profissional.
+
+Condições conferidas nas [rotas da aplicação](../../apps/engineering-marketplace/src/api/engineering.ts), no [comando de aprovação](../../apps/engineering-marketplace/src/scripts/review-provider.ts) e no [middleware de vendedor da tag 2.4.1](https://github.com/mercurjs/mercur/blob/v2.4.1/packages/core/src/api/utils/ensure-seller-middleware.ts).
 
 ## 6. Monitorar e manter
 
@@ -178,7 +192,7 @@ Restaurar um snapshot pode perder operações posteriores ao ponto de recuperaç
 
 ## 8. Pausa e rollback
 
-Para suspender novas contratações, definir `ENGINEERING_MARKETPLACE_MODE=off` e reiniciar apenas o runtime web pelo procedimento existente. Os dois handlers de webhook continuam encaminhando eventos se o backend estiver configurado. Para suspender apenas novas cobranças/onboarding, usar `MARKETPLACE_PAYMENTS_ENABLED=false` e recriar API/worker, preservando as chaves Stripe e os webhooks para conciliação. Não parar o worker para fazer uma pausa comercial.
+Para suspender novas contratações, definir `ENGINEERING_MARKETPLACE_MODE=off` e reiniciar apenas o runtime web pelo procedimento existente. Os dois handlers de webhook continuam encaminhando eventos se o backend estiver configurado. Para suspender apenas novas cobranças/onboarding, usar `MARKETPLACE_PAYMENTS_ENABLED=false` e recriar API/worker, preservando as chaves Stripe, o monitor de KYC e os webhooks para conciliação. A criação automática de contas já fica desativada em todos os modos; o clique de configuração de recebimentos também será recusado durante essa pausa. Não parar o worker para fazer uma pausa comercial.
 
 Rollback do site e rollback do marketplace são operações distintas. O site usa o bundle e o procedimento de [release Netcup](../../deploy/netcup/README.md). O marketplace usa a imagem anterior, compatível com o schema atual, e o diretório versionado correspondente. Aplicar backup antes de migrar; se a migração não for retrocompatível, preparar restauração/compensação explícita com interrupção e conciliação, sem executar downgrade automático.
 

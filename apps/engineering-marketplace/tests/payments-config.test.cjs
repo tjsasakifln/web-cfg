@@ -28,10 +28,33 @@ test('default and unconfigured disabled integrations do not register financial p
 
 test('disabling new charges keeps configured reconciliation and connected accounts alive', () => {
   const config = buildStripeConnectConfig(fixture({ MARKETPLACE_PAYMENTS_ENABLED: 'false' }));
+  const enabled = buildStripeConnectConfig(fixture());
   assert.equal(config.paymentsEnabled, false);
   assert.equal(config.integrationConfigured, true);
   assert.equal(config.plugins.length, 1);
   assert.equal(config.modules.length, 1);
+  assert.equal(config.plugins[0].options.kycMonitor.enabled, true);
+  assert.deepEqual(config.modules, enabled.modules);
+  assert.deepEqual(config.plugins, enabled.plugins);
+  assert.deepEqual(config.webhookPaths, enabled.webhookPaths);
+});
+
+test('the pinned native onboarding job cannot create accounts in paused or enabled configurations', async () => {
+  // Exercise the job's business workflow. The scheduler wrapper may still
+  // record a skipped run; this check prevents seller selection/account creation.
+  const { jobWorkflow } = require('@mercurjs/stripe-connector-plugin/workflows/jobs');
+  const { STRIPE_CONNECTOR_MODULE } = require('@mercurjs/stripe-connector-plugin/types');
+  for (const payments of ['false', 'true']) {
+    const config = buildStripeConnectConfig(fixture({ MARKETPLACE_PAYMENTS_ENABLED: payments }));
+    const resolved = [];
+    const container = { resolve(name) {
+      resolved.push(name);
+      assert.equal(name, STRIPE_CONNECTOR_MODULE, 'Disabled onboarding workflow must stop before seller selection or account creation');
+      return { getOptions: () => config.plugins[0].options };
+    } };
+    assert.deepEqual(await jobWorkflow('payout-sync-onboarding', container)(), { skipped: 'onboarding disabled' });
+    assert.deepEqual(resolved, [STRIPE_CONNECTOR_MODULE]);
+  }
 });
 
 test('payment modes must be explicit and recognized before any provider is configured', () => {

@@ -94,7 +94,11 @@ function buildStripeConnectConfig(env = process.env) {
       options: {
         apiKey,
         webhookSecret: connectWebhookSecret,
-        onboarding: { enabled: true },
+        // Disable the native account-creation cron. The authenticated Connect
+        // route invokes Mercur's payout/onboarding workflows explicitly under
+        // its seller lock and paymentsEnabled guard; those workflows do not
+        // consult this scheduler option. KYC and signed webhooks stay active.
+        onboarding: { enabled: false },
         // Engineering requests have their own Stripe Checkout destination
         // charge. Never create a second Transfer from a Mercur Order.
         transfers: { enabled: false, requiredFulfillmentStatus: 'delivered' },
