@@ -32,6 +32,12 @@ export function currentDocument(state) {
   return state?.documents?.find(document => document.id === state.document_id && !document.start);
 }
 
+export function documentName(document) {
+  // OpenCAD keeps the initial tab title after opening a named local file.
+  const filename = typeof document?.path === 'string' ? document.path.split(/[\\/]/).pop() : '';
+  return filename || document?.title || 'Área de desenho';
+}
+
 export function drawingWarnings(state) {
   const messages = [];
   if (Array.isArray(state?.missing_fonts) && state.missing_fonts.length) {

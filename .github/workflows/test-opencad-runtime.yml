@@ -52,7 +52,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build/cad-smoke-site build/reports/cad
-          cp -a cad assets index.html styles.css script.js manifest.webmanifest _headers build/cad-smoke-site/
+          cp -a cad assets index.html styles.css styles-tokens.css script.js manifest.webmanifest favicon.ico _headers build/cad-smoke-site/
           python3 scripts/cad/publicar.py build/cad-smoke-site
           python3 scripts/site/csp_contract.py --write build/cad-smoke-site/_headers --root build/cad-smoke-site
           node tests/cad/package.mjs build/cad-smoke-site 2>&1 | tee build/reports/cad/package.log

@@ -1,4 +1,4 @@
-import { currentDocument, drawingWarnings, exportRequest } from './host-protocol.mjs';
+import { currentDocument, documentName, drawingWarnings, exportRequest } from './host-protocol.mjs';
 
 const editor = document.getElementById('cad-editor');
 
@@ -59,7 +59,7 @@ if (editor) {
     state = next;
     const document = currentDocument(next);
     const available = !!document;
-    find('.cad-name').textContent = document?.title || 'Área de desenho';
+    find('.cad-name').textContent = documentName(document);
     find('.cad-caption').textContent = document?.dirty ? 'Alterações em edição' : 'Edição local no navegador';
     saveButton.hidden = fitButton.hidden = !available;
     expandButton.hidden = pageButton.hidden = false;

@@ -70,13 +70,26 @@ try {
     assert.equal(reply.ok,true,JSON.stringify(reply)); return reply;
   };
   const initial = await state();
-  assert.match(active(initial).title,/exemplo/);
+  assert.equal(path.basename(active(initial).path),'exemplo.dwg');
+  assert.equal(await page.$eval('.cad-name',element=>element.textContent),'exemplo.dwg');
   const count = (await raw({op:'entities'})).total;
   assert(count>0);
   assert.equal(await frame.evaluate(()=>document.fullscreenEnabled),false);
   const identity = await page.$eval('.cad-brand',img=>({alt:img.alt,loaded:img.naturalWidth>0}));
   assert(identity.loaded); assert.match(identity.alt,/CONFENGE/);
   pass('real DWG opens in branded local OpenCAD');
+
+  // The CI browser explicitly uses SwiftShader. Acknowledge its real warning
+  // before interacting with the drawing, without changing visitor preferences.
+  await frame.waitForFunction(async()=>{
+    const state=await window.ocsControl.request({op:'state'});
+    return state.modal==='GpuWarning'||state.tool_windows?.includes('GpuWarning');
+  },{timeout:15000});
+  await act({op:'action',name:'close_modal'});
+  const afterWarning=await state();
+  assert.notEqual(afterWarning.modal,'GpuWarning');
+  assert(!afterWarning.tool_windows.includes('GpuWarning'));
+  pass('software-rendering warning acknowledged in the test browser');
 
   await act({op:'run',cmd:'LINE 6500,1000 7200,1900'});
   assert.equal((await raw({op:'entities'})).total,count+1);
@@ -150,10 +163,11 @@ try {
   let state;
   if (page) {
     await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});
-    state=await page.evaluate(()=>({status:document.querySelector('.cad-status')?.textContent,
+    state=await page.evaluate(async()=>({status:document.querySelector('.cad-status')?.textContent,
       busy:document.querySelector('#cad-editor')?.getAttribute('aria-busy'),
-      frames:[...document.querySelectorAll('iframe')].map(frame=>({src:frame.src,
-        text:frame.contentDocument?.body?.innerText,canvas:!!frame.contentDocument?.querySelector('canvas')}))})).catch(()=>null);
+      frames:await Promise.all([...document.querySelectorAll('iframe')].map(async frame=>({src:frame.src,
+        text:frame.contentDocument?.body?.innerText,canvas:!!frame.contentDocument?.querySelector('canvas'),
+        control:await frame.contentWindow?.ocsControl?.request({op:'state'},{timeoutMs:3000}).catch(error=>({error:String(error)}))})))})).catch(()=>null);
   }
   await writeFile(path.join(output,'browser-result.json'),JSON.stringify({ok:false,base,passed,error:String(error),stack:error.stack,
     state,errors,violations,external,consoleMessages},null,2)+'\n');

@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import { createRequire } from 'node:module';
 import { randomUUID } from 'node:crypto';
 import vm from 'node:vm';
-import { currentDocument, drawingWarnings, exportRequest, EXPORT_FORMATS, MAX_EXPORT_BYTES } from '../../cad/host-protocol.mjs';
+import { currentDocument, documentName, drawingWarnings, exportRequest, EXPORT_FORMATS, MAX_EXPORT_BYTES } from '../../cad/host-protocol.mjs';
 
 const message = (overrides = {}) => ({
   type: 'confenge-cad:export', id: 'save:fixture_1', name: 'planta.dwg',
@@ -129,7 +129,7 @@ async function parentFixture(wallet = async request => { await request.deliver()
   const blobs = new Map(); let blobId = 0;
   await script(await readFile(new URL('../../cad/editor.js', import.meta.url), 'utf8'), {
     document, window, location: { origin }, HTMLElement: Element,
-    currentDocument, drawingWarnings, exportRequest, Blob, ArrayBuffer, Uint8Array,
+    currentDocument, documentName, drawingWarnings, exportRequest, Blob, ArrayBuffer, Uint8Array,
     crypto: { randomUUID },
     setTimeout: timers.setTimeout, clearTimeout: timers.clearTimeout,
     setInterval: () => 1, clearInterval() {}, requestAnimationFrame: fn => fn(),
@@ -184,6 +184,10 @@ test('document status uses the active drawing, not the first tab', () => {
   assert.equal(currentDocument({ document_id: 9, documents: [{ id: 1, start: true }, drawing] }), drawing);
   assert.equal(currentDocument({ document_id: 1, documents: [{ id: 1, start: true }, drawing] }), undefined);
   assert.equal(currentDocument(undefined), undefined);
+  assert.equal(documentName({ title: 'Drawing1', path: 'exemplo.dwg' }), 'exemplo.dwg');
+  assert.equal(documentName({ title: 'Drawing1', path: 'C:\\obra\\revisão.dwg' }), 'revisão.dwg');
+  assert.equal(documentName({ title: 'Drawing1', path: null }), 'Drawing1');
+  assert.equal(documentName(undefined), 'Área de desenho');
   assert.equal(drawingWarnings({ missing_fonts: ['Font'], xrefs: [{ status: 'missing', name: 'base.dwg' }] }).length, 2);
 });
 

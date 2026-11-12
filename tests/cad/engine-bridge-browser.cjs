@@ -47,6 +47,8 @@ async function openFixture(browser, format) {
   const frame=page.frames().find(f=>f.url().includes('/cad/editor/frame.htm'));
   assert(frame,'Editor iframe missing');
   let serial=0;
+  let lastOperation=null;
+  let graphicsNoticeAcknowledged=false;
   async function raw(req) {
     return frame.evaluate(async req=>{
       const api=window.wasmBindings;
@@ -57,11 +59,41 @@ async function openFixture(browser, format) {
     },req);
   }
   const state=()=>raw({op:'state'});
-  async function begin(req){
+  async function submit(req){
     const s=await state();
     const doc=req.document_id===undefined?s.document_id:req.document_id;
     const rev=s.documents.find(x=>x.id===doc)?.revision;
-    return raw({protocol:1,request_id:'bridge-smoke-'+(++serial),document_id:doc,revision:rev,...req});
+    const payload={protocol:1,request_id:'bridge-smoke-'+(++serial),document_id:doc,revision:rev,...req};
+    const reply=await raw(payload);
+    lastOperation={request:{op:payload.op,cmd:payload.cmd,name:payload.name,request_id:payload.request_id,document_id:payload.document_id,revision:payload.revision},reply};
+    return reply;
+  }
+  const hasGraphicsWarning=s=>s.modal==='GpuWarning'||s.tool_windows?.includes('GpuWarning');
+  async function acknowledgeGraphicsWarning(waitForNotice=false){
+    const deadline=Date.now()+20000;
+    const requireNotice=waitForNotice&&!graphicsNoticeAcknowledged;
+    let s=await state();
+    while(requireNotice&&!hasGraphicsWarning(s)&&Date.now()<deadline){
+      await pause(50);s=await state();
+    }
+    if(requireNotice)assert(hasGraphicsWarning(s),'The forced SwiftShader fixture did not show its graphics notice: '+JSON.stringify(s));
+    if(!hasGraphicsWarning(s))return;
+    // The real OK button emits CloseModal. A native-style tool window can
+    // hold this notice even when state.modal is null. Do not dismiss a
+    // different dialog or silence the device warning in production settings.
+    assert(s.modal==='GpuWarning'||(!s.modal&&s.tool_windows?.at(-1)==='GpuWarning'),'Graphics notice is behind another dialog: '+JSON.stringify(s));
+    await page.screenshot({path:path.join(output,'graphics-warning-'+format.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png')});
+    const reply=await settle(await submit({op:'action',name:'close_modal'}));
+    assert.equal(reply.ok,true,JSON.stringify(reply));
+    const closeDeadline=Date.now()+5000;
+    do {await pause(40);s=await state();}while(hasGraphicsWarning(s)&&Date.now()<closeDeadline);
+    assert(!hasGraphicsWarning(s),'Graphics notice did not close: '+JSON.stringify(s));
+    graphicsNoticeAcknowledged=true;
+    diagnostics.push({format,event:'acknowledged_graphics_warning',action:'close_modal',modal:s.modal,tool_windows:s.tool_windows});
+  }
+  async function begin(req){
+    if(!(req.op==='action'&&req.name==='close_modal'))await acknowledgeGraphicsWarning();
+    return submit(req);
   }
   async function settle(reply){
     const deadline=Date.now()+120000;
@@ -72,14 +104,32 @@ async function openFixture(browser, format) {
     return reply;
   }
   async function act(req){ const reply=await settle(await begin(req)); assert.equal(reply.ok,true,JSON.stringify({req,reply}));return reply; }
-  async function waitExport(index){await page.waitForFunction(i=>harness.exports.length>i,{timeout:120000},index);return page.evaluate(i=>({id:harness.exports[i].id,name:harness.exports[i].name,size:harness.exports[i].bytes.length}),index);}
+  async function waitExport(index){
+    try{
+      assert.notEqual(lastOperation?.reply?.ok,false,'Export operation was refused: '+JSON.stringify(lastOperation));
+      await page.waitForFunction(i=>harness.exports.length>i,{timeout:120000},index);
+      return page.evaluate(i=>({id:harness.exports[i].id,name:harness.exports[i].name,size:harness.exports[i].bytes.length}),index);
+    }catch(error){
+      const snapshot=await state().catch(error=>({read_error:String(error)}));
+      const operation=lastOperation?.request?.request_id
+        ?await raw({op:'operation',request_id:lastOperation.request.request_id}).catch(error=>({read_error:String(error)})):null;
+      const exports=await page.evaluate(()=>harness.exports.map(({id,name,bytes,acked})=>({id,name,size:bytes.length,acked}))).catch(error=>({read_error:String(error)}));
+      const detail={format,event:'export_not_received',index,lastOperation,operation,state:snapshot,exports,errors};
+      diagnostics.push(detail);
+      throw new Error('Export did not reach the host: '+JSON.stringify(detail),{cause:error});
+    }
+  }
   const ack=(index,ok,error)=>page.evaluate(({index,ok,error})=>harness.ack(index,ok,error),{index,ok,error});
   const count=()=>page.evaluate(()=>harness.exports.length);
   const bytes=async index=>Buffer.from(await page.evaluate(i=>Array.from(harness.exports[i].bytes),index));
   const active=(s)=>s.documents.find(d=>d.id===s.document_id);
   async function makeDrawing(){
-    let s=await state();if(s.modal)await act({op:'action',name:'close_modal'});
+    await acknowledgeGraphicsWarning();
+    const s=await state();assert.equal(s.modal,null,'Unexpected startup modal: '+JSON.stringify(s));
     await act({op:'new'});
+    // GPU detection happens only after the first viewport frame. Wait for
+    // and acknowledge the software-renderer warning before issuing CAD work.
+    await acknowledgeGraphicsWarning(true);
     await act({op:'entities_create',entities:[
       {type:'Line',start:[0,0],end:[10,0],layer:'CONFENGE-WALLS'},
       {type:'Circle',center:[5,5],radius:2,layer:'CONFENGE-CIRCLES'},
@@ -90,6 +140,7 @@ async function openFixture(browser, format) {
     const lines=await raw({op:'query',type:'Line',detail:'geometry'});
     await act({op:'entities_transform',handles:[lines.entities[0].handle],action:'move',vector:[5,0]});
     await act({op:'action',name:'zoom_extents'});
+    await acknowledgeGraphicsWarning();
     assert.equal((await raw({op:'entities'})).total,5);
   }
   async function semantics(){
