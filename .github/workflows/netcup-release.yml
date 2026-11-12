@@ -606,6 +606,25 @@ jobs:
             https://confenge.com.br \
             --expected-sha="$RELEASE_SHA" \
             --report="build/reports/runtime-public-acceptance-$RELEASE_SHA.json"
+      - name: Verify published project requests without sending messages
+        id: ready_project_capture
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+          LEAD_PROBE_SECRET: ${{ secrets.LEAD_PROBE_SECRET }}
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+          PROBE_SCENARIO: ready-projects
+          PROBE_PAGE_PATH: /projetos-prontos/
+          PROBE_VERIFY_EMAIL: "0"
+        run: |
+          set -euo pipefail
+          mkdir -p build/reports
+          proof="build/reports/ready-project-contact-proof-$EXPECTED_SHA.json"
+          if [ -f _site/projetos-prontos/index.html ]; then
+            node scripts/site/synthetic_lead_probe.mjs https://confenge.com.br > "$proof"
+          else
+            printf '%s\n' '{"state":"NOT_PUBLISHED","reason":"project_offer_not_in_release"}' > "$proof"
+          fi
+          cat "$proof"
       - name: Confirm accepted release still matches main
         id: accepted_matches_main
         env:
@@ -630,6 +649,7 @@ jobs:
           RELEASE_SHA: ${{ github.sha }}
           COVERAGE: ${{ steps.served_coverage.outcome }}
           ACCEPTANCE: ${{ steps.runtime_acceptance.outcome }}
+          PROJECT_CAPTURE: ${{ steps.ready_project_capture.outcome }}
           PROMOTED: ${{ steps.atomic_promote.outcome }}
         run: |
           set -uo pipefail
@@ -648,6 +668,7 @@ jobs:
             echo "| promotion | $PROMOTED |"
             echo "| served coverage | $COVERAGE |"
             echo "| runtime acceptance | $ACCEPTANCE |"
+            echo "| project request persistence | $PROJECT_CAPTURE |"
             echo "| lighthouse terminal state | $state |"
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Assert every mandatory evidence file was persisted
@@ -671,6 +692,7 @@ jobs:
           for required in \
             "build/reports/server-inventory-$RELEASE_SHA.json" \
             "build/reports/runtime-public-acceptance-$RELEASE_SHA.json" \
+            "build/reports/ready-project-contact-proof-$RELEASE_SHA.json" \
             "docs/lighthouse-runs/summary-$RELEASE_SHA.json"; do
             if [ ! -s "$required" ]; then
               echo "NETCUP_EVIDENCE_MISSING $required" >&2
@@ -695,6 +717,7 @@ jobs:
             build/reports/server-inventory-${{ github.sha }}.json
             build/reports/served-public-acceptance/
             build/reports/runtime-public-acceptance-${{ github.sha }}.json
+            build/reports/ready-project-contact-proof-${{ github.sha }}.json
             docs/lighthouse-runs/summary-${{ github.sha }}.json
             docs/lighthouse-runs/*-${{ github.sha }}*.json
           if-no-files-found: error
@@ -706,7 +729,7 @@ jobs:
         # release serving visitors with nothing to withdraw it. Best effort by
         # nature — the runner may be torn down first — which is why the
         # measurement budget above is ordered to expire well inside the job.
-        if: cancelled() && steps.atomic_promote.outcome == 'success' && steps.runtime_acceptance.outcome != 'success'
+        if: cancelled() && steps.atomic_promote.outcome == 'success' && (steps.runtime_acceptance.outcome != 'success' || steps.ready_project_capture.outcome != 'success')
         env:
           RELEASE_SHA: ${{ github.sha }}
           PREVIOUS_SHA: ${{ needs.stage.outputs.recovery_target }}
@@ -756,6 +779,7 @@ jobs:
           && (steps.atomic_promote.outcome != 'success'
               || steps.served_coverage.outcome != 'success'
               || steps.runtime_acceptance.outcome != 'success'
+              || steps.ready_project_capture.outcome != 'success'
               || steps.accepted_matches_main.outcome != 'success')
         env:
           RELEASE_SHA: ${{ github.sha }}

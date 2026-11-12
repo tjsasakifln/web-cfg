@@ -661,13 +661,38 @@ async function main() {
     await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const nojs = await page.evaluate((selector) => {
-      const delivery = document.querySelector(".home-evidence")?.textContent || "";
+      const deliveryCards = [...document.querySelectorAll(".home-evidence article")];
+      const expectedDeliveries = [
+        ["/projetos/coordenacao-multidisciplinar/", /dimensionamento|compatibiliza|interfaces|revisões/i, /pranchas|memoriais|desenhos|documentação/i],
+        ["/quantitativos-orcamento-obras/", /quantidades|quantitativos|medição/i, /planilhas|orçamento|custos/i],
+        ["/entregas/", /relatórios|laudos|pareceres|dossiês/i, /verificações|fundamentação|conclusão/i],
+      ];
+      const visible = element => {
+        if (!element) return false;
+        const bounds = element.getBoundingClientRect();
+        return bounds.width > 0 && bounds.height > 0
+          && element.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true });
+      };
+      const matchedCards = new Set();
+      const deliveryExplained = deliveryCards.length === expectedDeliveries.length && expectedDeliveries.every(([href, work, output]) => {
+        const matchingCards = deliveryCards.filter(card => card.querySelector(`a[href="${href}"]`));
+        if (matchingCards.length !== 1) return false;
+        const card = matchingCards[0], link = card.querySelector(`a[href="${href}"]`);
+        if (matchedCards.has(card)) return false;
+        matchedCards.add(card);
+        const heading = card.querySelector("h3");
+        const description = [...card.querySelectorAll("p:not(.home-evidence__kind)")]
+          .filter(visible).map(paragraph => paragraph.innerText.trim()).join(" ");
+        return visible(card) && visible(heading) && Boolean(heading.innerText.trim())
+          && work.test(description) && output.test(description)
+          && visible(link) && Boolean(link.innerText.trim());
+      });
       return {
         h1: Boolean(document.querySelector("#hero-title")),
         projectPath: Boolean(document.querySelector('.hero a[href="/servicos/"]')),
         paths: [...document.querySelectorAll(selector)].map(a => a.getAttribute("href")),
         channels: document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]').length,
-        deliveryExplained: /(projetos|planilhas|relatórios|laudos|pareceres|dossiês)/i.test(delivery) && /demonstrativo/i.test(delivery),
+        deliveryExplained,
       };
     }, HOME_DISCOVERY_SELECTOR);
     await page.setJavaScriptEnabled(true);

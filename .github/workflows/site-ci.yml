@@ -199,11 +199,14 @@ jobs:
       - name: "Editorial: no AI mention on visitor surface"
         run: npm run test:ai-mention
       - name: Contact and lead pathway gates
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           npm run test:form-funnel
           npm run test:priority-pages
           npm run test:cta-form-next-state
           npm run test:lead-function
+          npm run test:ready-projects
       - name: INB-15 strict regression on the candidate tree
         run: npm run test:inb-20260911-15-strict
       - name: POS-INB-09 acceptance on the candidate tree
@@ -217,6 +220,13 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Verify project offer and private operations in Chrome
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: |
+          node tests/ready-projects/browser.mjs
+          node tests/ready-projects/ops-browser.mjs
+          node tests/project-commerce/orders-browser.mjs
       - name: Consent and third-party policy on the generated public artifact
         run: PUBLIC_ARTIFACT_REQUIRED=1 node scripts/site/third_party_analytics_gate.mjs
       - name: Tool catalogue, SEO and share images in the gated artifact
@@ -482,6 +492,9 @@ jobs:
             build/reports/wallet-input-*.png
             build/reports/tool-credits-pix-click-failure.png
             build/reports/cad/
+            build/ready-project-ops/
+            build/reports/ready-projects/
+            build/reports/project-orders/
           if-no-files-found: ignore
 
   execution_evidence:
@@ -517,6 +530,7 @@ jobs:
             --required-step "Contact and lead pathway gates" \
             --required-step "Money asset production inspection is read-only" \
             --required-step "Build public site" \
+            --required-step "Verify project offer and private operations in Chrome" \
             --required-step "Final public-surface coverage and copy gate" \
             --required-step "Published HTML and FAQ integrity" \
             --required-step "Public artifact audit" \

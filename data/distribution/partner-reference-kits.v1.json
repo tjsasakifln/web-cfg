@@ -63,9 +63,9 @@
       },
       "sample": {
         "path": "/revisao-tecnica-projetos-engenharia/",
-        "fragment": "#extrato-demonstrativo",
+        "fragment": "#criterios-de-revisao",
         "id": "extrato-apontamentos-revisao",
-        "label": "Amostra de apontamentos de revisão",
+        "label": "Critérios e entregas da revisão técnica",
         "kind": "review_findings",
         "required": true
       },
@@ -82,8 +82,8 @@
         "cta_id": "share-copy-kit-revisao",
         "utm_campaign": "posinb05_revisao",
         "title": "Revisão técnica de projetos de engenharia",
-        "fragment": "#extrato-demonstrativo",
-        "copyable_summary": "Revisão técnica de projeto. A CONFENGE confere o pacote que você já tem e devolve apontamentos com evidência. O cliente permanece com o escritório.\nAmostra de apontamentos: https://confenge.com.br/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo\nServiço: https://confenge.com.br/revisao-tecnica-projetos-engenharia/"
+        "fragment": "#criterios-de-revisao",
+        "copyable_summary": "Revisão técnica de projeto. A CONFENGE confere o pacote que você já tem e devolve apontamentos com evidência. O cliente permanece com o escritório.\nCritérios e entregas da revisão técnica: https://confenge.com.br/revisao-tecnica-projetos-engenharia/#criterios-de-revisao\nServiço: https://confenge.com.br/revisao-tecnica-projetos-engenharia/"
       }
     },
     {
@@ -101,9 +101,9 @@
       },
       "sample": {
         "path": "/compatibilizacao-projetos-engenharia/",
-        "fragment": "#registro-interferencias",
+        "fragment": "#criterios-de-compatibilizacao",
         "id": "registro-interferencias-interfaces",
-        "label": "Amostra de conflito e interfaces",
+        "label": "Critérios e entregas da compatibilização",
         "kind": "clash_interfaces",
         "required": true
       },
@@ -120,8 +120,8 @@
         "cta_id": "share-copy-kit-compatibilizacao",
         "utm_campaign": "posinb05_compat",
         "title": "Compatibilização de projetos de engenharia",
-        "fragment": "#registro-interferencias",
-        "copyable_summary": "Compatibilização de disciplinas. A CONFENGE registra interferências e interfaces entre os projetos do pacote. O escritório segue com o cliente.\nAmostra de conflito e interfaces: https://confenge.com.br/compatibilizacao-projetos-engenharia/#registro-interferencias\nServiço: https://confenge.com.br/compatibilizacao-projetos-engenharia/"
+        "fragment": "#criterios-de-compatibilizacao",
+        "copyable_summary": "Compatibilização de disciplinas. A CONFENGE registra interferências e interfaces entre os projetos do pacote. O escritório segue com o cliente.\nCritérios e entregas da compatibilização: https://confenge.com.br/compatibilizacao-projetos-engenharia/#criterios-de-compatibilizacao\nServiço: https://confenge.com.br/compatibilizacao-projetos-engenharia/"
       }
     },
     {

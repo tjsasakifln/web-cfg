@@ -10,6 +10,15 @@
 
 ## Application prepared on 2026-11-08: self-service tool exports
 
+## Aplicação autorizada em 2026-11-12: marketplace de engenharia
+
+O fundador solicitou investigar, adaptar e publicar uma plataforma de contratação
+entre clientes e prestadores, com perfis, avaliações e pagamentos. A fronteira
+específica e a implantação estão em [ADR-MARKETPLACE-001](ADR-MARKETPLACE-001-engineering-services.md).
+O serviço usa a marca CONFENGE e o domínio canônico. A operação comercial própria
+continua no Warmbly; os participantes e transações do marketplace não são um CRM
+de prospecção. Publicação de código não comprova serviço ou pagamento operante.
+
 ## Aplicação autorizada em 2026-11-09: Radar de Mercado Público
 
 O fundador autorizou implementar e publicar no catálogo uma ferramenta de

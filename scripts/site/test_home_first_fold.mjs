@@ -136,8 +136,14 @@ function inspectPanel() {
   const leaves = [...sheet.querySelectorAll("p,h2,dt,dd,small")];
   const fonts = leaves.map((node) => Number.parseFloat(getComputedStyle(node).fontSize));
   if (!sheet.querySelector("h2") || sheet.querySelectorAll("dd").length !== 3 || Math.min(...fonts) < 16) problems.push("panel_text_below_16px_or_missing");
-  const drawing = sheet.querySelector("img");
-  if (!drawing?.complete || !drawing.naturalWidth || drawing.getBoundingClientRect().width < 180) problems.push("quantity_drawing_missing");
+  const scopeRows = [...sheet.querySelectorAll(".home-scope__criteria > div")];
+  if (figure.dataset.contentKind !== "service-scope" || scopeRows.length !== 3
+      || scopeRows.some((row) => !row.querySelector("dt")?.textContent.trim() || !row.querySelector("dd")?.textContent.trim())) {
+    problems.push("technical_scope_missing");
+  }
+  if (sheet.querySelector("img") || /banheiro|6,84|10 cm|exemplo demonstrativo/i.test(sheet.textContent)) problems.push("elementary_example_as_commercial_proof");
+  const scopeLink = figure.querySelector('a[href="/projetos/"]');
+  if (!scopeLink || scopeLink.getBoundingClientRect().height < 44) problems.push("scope_link_missing_or_small");
   const box = sheet.getBoundingClientRect();
   if (box.left < 0 || box.right > innerWidth || sheet.scrollWidth > sheet.clientWidth + 1) problems.push("panel_overflow");
   const frame = getComputedStyle(figure, "::before");

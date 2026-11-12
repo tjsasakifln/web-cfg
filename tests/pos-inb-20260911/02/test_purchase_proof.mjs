@@ -10,19 +10,22 @@ import {
   loadCanonicalExcerpt,
   missingRequiredInputs,
   trailStepText,
+  renderSampleTrail,
 } from "../../../quantitativos-orcamento-obras/sample-trail.mjs";
 import {
   CANONICAL_06_PATHS,
   assertHonestExtract,
   classifyExtract,
   injectReviewExtract,
+  renderExtractHtml,
 } from "../../../scripts/campaigns/inb-20260911/05/project_review_extract.mjs";
-import { composePurchaseProof } from "../../../scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs";
+import { composePurchaseProof, preserveProfessionalPresentation } from "../../../scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs";
 import { publicStateLabel } from "../../../scripts/campaigns/pos-inb-20260911/02/public_state.mjs";
 import {
   displayEstado,
   loadPublicRegister,
   renderFindingHtml,
+  renderRegisterHtml,
 } from "../../../scripts/coordination/interference_register.mjs";
 
 const ROOT = path.resolve(".");
@@ -60,8 +63,8 @@ function copyTree(relPaths, destRoot) {
   }
 }
 
-test("shipped quantitativos trail is complete, matches consumption and needs no JS", () => {
-  const html = read(QTY);
+test("educational quantity trail matches consumption and remains independent of commercial presentation", () => {
+  const html = `<p>Exemplo demonstrativo. Quantidade não é preço.</p>${renderSampleTrail(loadCanonicalExcerpt(ROOT))}`;
   const withoutJs = stripScripts(html);
   const excerpt = loadCanonicalExcerpt(ROOT);
   const consumption = JSON.parse(read(CONSUMPTION));
@@ -97,8 +100,8 @@ test("shipped quantitativos trail is complete, matches consumption and needs no 
   assert.doesNotMatch(visible(withoutJs), /SELECT do demonstrativo|aprovado pelo fundador|resolved_in_R01/);
 });
 
-test("shipped revisão extract is Portuguese, without SELECT, founder or raw resolved_in_R01", () => {
-  const html = read(REVIEW);
+test("educational review extract is Portuguese and keeps evidence classes", () => {
+  const html = renderExtractHtml(classifyExtract(JSON.parse(read(CONSUMPTION)), { revisaoCsv: read(path.join(ROOT, CANONICAL_06_PATHS.revisaoCsv)) }));
   const withoutJs = stripScripts(html);
   const text = visible(withoutJs);
   assert.match(withoutJs, /data-extract-kind="demonstrative"/);
@@ -123,8 +126,8 @@ test("shipped revisão extract is Portuguese, without SELECT, founder or raw res
   assert.equal((rf1.implication || "").includes("resolved_in_R01"), false);
 });
 
-test("shipped compatibilização shows interference, forwarding, state and keeps missing info as pedido", () => {
-  const html = read(COORD);
+test("educational coordination record keeps missing information separate from findings", () => {
+  const html = renderRegisterHtml(loadPublicRegister(ROOT));
   const withoutJs = stripScripts(html);
   const geo = withoutJs.match(/data-finding-id="CF-GEO-01"[\s\S]*?<\/article>/)?.[0] || "";
   const info = withoutJs.match(/data-finding-id="CF-INFO-01"[\s\S]*?<\/article>/)?.[0] || "";
@@ -248,7 +251,8 @@ test("two compose runs on identical inputs produce identical purchase HTML", () 
   assert.equal(mid.qty, after.qty);
   assert.equal(mid.review, after.review);
   assert.equal(mid.coord, after.coord);
-  assert.match(after.qty, /data-sample-trail-state="canonical"/);
+  assert.match(after.qty, /data-commercial-presentation="technical-scope"/);
+  assert.deepEqual(before, after, "legacy composers must not reinsert elementary examples");
   assert.equal(before.qty.includes("awaiting-canonical-excerpt") && after.qty.includes("awaiting-canonical-excerpt"), false);
 });
 
@@ -260,10 +264,24 @@ test("review inject round-trip keeps four honest classes", () => {
   const consumption = JSON.parse(read(CONSUMPTION));
   const csv = read(path.join(ROOT, CANONICAL_06_PATHS.revisaoCsv));
   const classified = classifyExtract(consumption, { revisaoCsv: csv });
-  const injected = injectReviewExtract(read(REVIEW), classified);
+  const injected = injectReviewExtract("<!--pos-inb-02:review-extract--><!--/pos-inb-02:review-extract-->", classified);
   assert.match(injected, /data-extract-class="constatacao_sustentada"/);
   assert.match(injected, /data-extract-class="informacao_faltante"/);
   assert.match(injected, /data-extract-class="recomendacao"/);
   assert.match(injected, /data-extract-class="verificacao_nao_realizada"/);
   assert.doesNotMatch(visible(injected), /SELECT do demonstrativo|aprovado pelo fundador|resolved_in_R01/);
+});
+
+
+test("professional pages preserve labelled links without publishing the classroom excerpts", () => {
+  for (const [file, fragment] of [[QTY, "quantitativos"], [REVIEW, "revisao"], [COORD, "compatibilizacao"]]) {
+    const html = read(file);
+    const href = `/casos/demonstrativo-projeto-privado/#${fragment}`;
+    assert.equal(preserveProfessionalPresentation(html, href), true);
+    assert.doesNotMatch(visible(html), /19,60|6,84|WN-01|banheiro/);
+    const missing = html.replaceAll(href, "/projetos/");
+    assert.throws(() => preserveProfessionalPresentation(missing, href), /required_demonstrative_resource_missing/);
+    const unlabelled = html.replaceAll("Exemplo demonstrativo", "Material");
+    assert.throws(() => preserveProfessionalPresentation(unlabelled, href), /required_demonstrative_resource_missing/);
+  }
 });

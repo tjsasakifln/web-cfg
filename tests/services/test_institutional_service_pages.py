@@ -100,7 +100,7 @@ class InstitutionalServicePagesTest(unittest.TestCase):
                 parser.feed(html)
 
                 self.assertEqual(parser.h1_count, 1)
-                self.assertGreaterEqual(parser.figures, 1)
+                self.assertTrue(parser.figures >= 1 or 'data-commercial-presentation="technical-scope"' in html)
                 self.assertGreaterEqual(parser.proposal_links, 1)
                 self.assertIn("Solicit", html)
                 self.assertIn('id="competencias"', html)
@@ -311,40 +311,19 @@ class InstitutionalServicePagesTest(unittest.TestCase):
             observed.add(tuple(key for key, _ in sorted(positions.items(), key=lambda item: item[1])))
         self.assertGreaterEqual(len(observed), 4)
 
-    def test_quantity_page_keeps_auditable_measurement_and_adds_discipline_bank(self):
-        html = (ROOT / "quantitativos-orcamento-obras" / "index.html").read_text(
-            encoding="utf-8"
-        )
-
-        required = (
-            "/assets/quantitativos-orcamento-obras/banco-disciplinas.svg",
-            "concreto em m³",
-            "fôrma em m²",
-            "armadura em kg",
-            "Origem",
-            "Revisão",
-            "Critério",
-            "Unidade",
-            "data-sample-trail-state=\"canonical\"",
-            "19,60",
-        )
-        for item in required:
-            self.assertIn(item, html)
-
-        asset = ROOT / "assets" / "quantitativos-orcamento-obras" / "banco-disciplinas.svg"
-        self.assertTrue(asset.is_file())
-        svg = asset.read_text(encoding="utf-8")
-        for item in (
-            "m³",
-            "m²",
-            "kg",
-            "E-STR-R02",
-            "b × h × H",
-            "Σ faces medidas × H",
-            "Σ(n × comp. × kg/m)",
-            "smallinv",
-        ):
-            self.assertIn(item, svg)
+    def test_services_publish_specific_technical_scope_without_classroom_examples(self):
+        for route in ROUTES:
+            with self.subTest(route=route):
+                document = (ROOT / route / "index.html").read_text(encoding="utf-8")
+                self.assertIn('data-commercial-presentation="technical-scope"', document)
+                for phrase in ("19,60", "6,84", "banheiro", "WN-01", "2,30 m", "0,40 mm"):
+                    self.assertNotIn(phrase, document)
+        quantity = (ROOT / "quantitativos-orcamento-obras/index.html").read_text(encoding="utf-8")
+        for term in ("critérios de medição", "composições", "data-base", "equalização"):
+            self.assertIn(term, quantity.lower())
+        for route in ("demonstrativo-projeto-privado", "demonstrativo-infraestrutura"):
+            self.assertIn(f'href="/casos/{route}/#quantitativos"', quantity)
+            self.assertTrue((ROOT / "casos" / route / "index.html").is_file())
 
     def test_renderer_and_source_are_stable(self):
         source = ROOT / "data" / "services" / "institutional-service-pages.v1.json"
@@ -360,7 +339,7 @@ class InstitutionalServicePagesTest(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def test_renderer_cannot_drop_the_canonical_quantity_examples(self):
+    def test_renderer_owns_scope_and_does_not_restore_old_demonstrations(self):
         spec = importlib.util.spec_from_file_location(
             "institutional_service_renderer",
             ROOT / "scripts/site/render_institutional_service_pages.py",
@@ -368,21 +347,21 @@ class InstitutionalServicePagesTest(unittest.TestCase):
         renderer = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(renderer)
         data = json.loads(renderer.SOURCE.read_text(encoding="utf-8"))
-        page = next(item for item in data["pages"] if item["route"] == "quantitativos-orcamento-obras")
-        document = (ROOT / page["route"] / "index.html").read_text(encoding="utf-8")
-        self.assertEqual(renderer.render_page(page, document), document)
-        changed = copy.deepcopy(page)
-        changed["preserve_sections"].remove("exemplos-conferiveis")
-        with self.assertRaisesRegex(ValueError, "canonical quantity examples must be preserved"):
-            renderer.render_page(changed, document)
-        missing_section = re.sub(
-            r'<section\b(?=[^>]*\bid="exemplos-conferiveis")[^>]*>[\s\S]*?</section>',
-            "",
-            document,
-        )
-        self.assertNotEqual(missing_section, document)
-        with self.assertRaisesRegex(ValueError, "section not found: exemplos-conferiveis"):
-            renderer.render_page(page, missing_section)
+        for page in data["pages"]:
+            if not page.get("technical_scope"):
+                continue
+            document = (ROOT / page["route"] / "index.html").read_text(encoding="utf-8")
+            self.assertEqual(renderer.render_page(page, document), document)
+            damaged = re.sub(
+                r'<section\b(?=[^>]*data-commercial-presentation="technical-scope")[^>]*>[\s\S]*?</section>',
+                '<section id="legacy-example">Banheiro 6,84 m²</section>', document,
+            )
+            self.assertNotEqual(damaged, document)
+            restored = renderer.render_page(page, damaged)
+            self.assertEqual(restored, document)
+            ids = re.findall(r'(?<![\w-])id="([^"]+)"', restored)
+            self.assertEqual(len(ids), len(set(ids)), page["route"])
+
 
 
 if __name__ == "__main__":

@@ -122,7 +122,13 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert 'href="#contato"' in hero and 'href="/servicos/"' in hero
     assert all(term in text for term in ("orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"))
     assert hero.count("button-primary") == 1
-    assert DEMONSTRATIVE_LABEL.search(text) or "ilustração técnica original" in text
+    # The founder retired elementary calculations as commercial proof. The
+    # opening now describes contracted work; it must not masquerade as a case.
+    assert 'data-content-kind="service-scope"' in hero
+    for term in ("dimensionamento", "integração entre disciplinas", "detalhamento", "pranchas", "memoriais"):
+        assert term in text, term
+    assert not DEMONSTRATIVE_LABEL.search(text)
+    assert "/casos/" not in hero and "home-quantitativo-r01.svg" not in hero
     assert "Como conferir credenciais e limites" not in hero and "PNCP" not in hero
     brand = json.loads(BRAND.read_text(encoding="utf-8"))
     assert brand["hero"]["meta_description"] in _home()

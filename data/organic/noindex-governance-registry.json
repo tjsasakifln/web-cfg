@@ -1,8 +1,13 @@
 {
   "schema_version": "noindex-governance-v1",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-12",
   "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
   "reason_codes": {
+    "marketplace_operation_pending": {
+      "description": "Interface de contratação mantida fora do índice enquanto a aplicação privada, a persistência, a revisão de profissionais e o ciclo de pagamento ainda não tiverem evidência operacional. A publicação do site não ativa essas funções.",
+      "class": "REMEDIABLE",
+      "context": "engineering-marketplace"
+    },
     "interactive_workbench": {
       "description": "Interface de processamento de arquivos. A descoberta orgânica ocorre nas páginas editoriais que explicam a tarefa e conduzem à ferramenta.",
       "class": "PERMANENT",
@@ -110,6 +115,13 @@
     }
   },
   "families": [
+    {
+      "family_id": "marketplace-engenharia",
+      "reason_code": "marketplace_operation_pending",
+      "owner_issue": 830,
+      "review_at": null,
+      "note": "Aplica-se somente a /profissionais/, declarada por rota exata no registro de famílias públicas. Decisão ADR-MARKETPLACE-001: ENGINEERING_MARKETPLACE_MODE=off e noindex durante preparação, sem perfis, avaliações ou transações fictícias. Reavaliar após a implantação do backend e a validação de cadastro, persistência, aprovação profissional e fluxo financeiro real em ambiente de teste, conforme docs/marketplace/operations.md. A ativação em produção exige configuração real; a indexação continua dependente dos gates próprios, sem aprovação automática por data ou por merge."
+    },
     {
       "family_id": "live-intelligence-cnpj-result",
       "reason_code": "cnpj_individual_result",
@@ -263,6 +275,13 @@
       "owner_issue": 577,
       "review_at": null,
       "note": "A área de trabalho é acessada pelo portal e pelos guias indexáveis em /bim/. A política abrange apenas a execução das ferramentas."
+    },
+    {
+      "family_id": "ready_projects_orders",
+      "reason_code": "commercial_transactional_form",
+      "owner_issue": 61,
+      "review_at": null,
+      "note": "Área de conta, contratação, pedidos, arquivos protegidos e atendimento. Noindex permanente, inclusive após habilitar um produto aprovado. A oferta de descoberta está em /projetos-prontos/; ADR-PROJECTS-001."
     }
   ]
 }
