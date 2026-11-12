@@ -40,6 +40,32 @@ async function expectLocation(expected) {
   assert.equal(actual, expected);
 }
 
+// A script-enhanced anchor updates history synchronously, then settles its
+// scroll position in animation frames (also with reduced motion). Observing
+// the hash alone can race that lifecycle and cancel it with the next Enter.
+// Wait for the same in-viewport condition at a stable position; never scroll
+// the page from the test to make an unsuccessful keyboard navigation pass.
+async function expectAnchorArrival(expected, selector, context) {
+  await expectLocation(expected);
+  const deadline = Date.now() + 3000;
+  let actual;
+  let previousTop = null;
+  let stable = 0;
+  do {
+    actual = await page.$eval(selector, el => ({
+      top: el.getBoundingClientRect().top,
+      viewportHeight: window.innerHeight,
+      scrollX: window.scrollX,
+    }));
+    const arrived = actual.top >= -1 && actual.top < actual.viewportHeight && actual.scrollX === 0;
+    stable = arrived ? (previousTop !== null && Math.abs(actual.top - previousTop) <= 1 ? stable + 1 : 1) : 0;
+    previousTop = actual.top;
+    if (stable >= 3) return;
+    await sleep(40);
+  } while (Date.now() < deadline);
+  assert.fail(`${context}; observed ${JSON.stringify(actual)}`);
+}
+
 function problems() {
   const errors = new Set();
   const width = document.documentElement.clientWidth;
@@ -92,9 +118,8 @@ try {
         const link = '.pp-hero__visual a[href="#criterios-tecnicos"]';
         await page.focus(link);
         await page.keyboard.press('Enter');
-        await expectLocation(origin + item.route + '#criterios-tecnicos');
-        const top = await page.$eval('#criterios-tecnicos', el => el.getBoundingClientRect().top);
-        assert.ok(top >= -1 && top < 900, `keyboard link did not reach the technical criteria on ${item.route}`);
+        await expectAnchorArrival(origin + item.route + '#criterios-tecnicos', '#criterios-tecnicos',
+          `keyboard link did not reach the technical criteria on ${item.route} (scripts=false)`);
         assert.equal(await page.evaluate(() => scrollX), 0);
       }
     }
@@ -104,15 +129,16 @@ try {
     await page.setJavaScriptEnabled(scripts);
     for (const item of pages) {
       await page.goto(origin + item.route, { waitUntil: 'load' });
+      await page.evaluate(() => document.fonts.ready);
       // Both links are native anchors and must work with page scripts disabled.
       await page.focus('.pp-hero__visual a[href="#criterios-tecnicos"]');
       await page.keyboard.press('Enter');
-      await expectLocation(origin + item.route + '#criterios-tecnicos');
+      await expectAnchorArrival(origin + item.route + '#criterios-tecnicos', '#criterios-tecnicos',
+        `keyboard link did not reach the technical criteria on ${item.route} (scripts=${scripts})`);
       await page.focus('.pp-record a[href="#entregaveis"]');
       await page.keyboard.press('Enter');
-      await expectLocation(origin + item.route + '#entregaveis');
-      const deliverablesTop = await page.$eval('#entregaveis', el => el.getBoundingClientRect().top);
-      assert.ok(deliverablesTop >= -1 && deliverablesTop < 900, `keyboard link did not reach deliverables on ${item.route}`);
+      await expectAnchorArrival(origin + item.route + '#entregaveis', '#entregaveis',
+        `keyboard link did not reach deliverables on ${item.route} (scripts=${scripts})`);
       assert.deepEqual(await page.evaluate(problems), [], item.route + ' criteria to deliverables');
       assert.equal(await page.$eval('#contato-projetos .pp-button', el => el.getAttribute('href')), '/#contato');
     }

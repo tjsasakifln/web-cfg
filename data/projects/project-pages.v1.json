@@ -392,7 +392,7 @@
       "service_type": "Projetos de engenharia para edificações"
     },
     {
-      "id": "how-we-work", "route": "/como-trabalhamos/", "breadcrumb": "Como trabalhamos", "title": "Como contratar um projeto ou serviço de engenharia", "description": "Veja o que enviar para pedir uma proposta, o que conferir antes de contratar e como usar as pranchas, planilhas e pareceres na obra.",
+      "id": "how-we-work", "route": "/como-trabalhamos/", "breadcrumb": "Como trabalhamos", "title": "Como contratar um projeto ou serviço de engenharia", "description": "Conheça como a CONFENGE define o escopo, coordena especialidades e revisa as entregas de projetos e serviços de engenharia.",
       "eyebrow": "Como trabalhamos", "h1": "O que você recebe ao contratar a CONFENGE?", "lead": "A CONFENGE organiza projetos e serviços de engenharia desde a definição do escopo até a entrega técnica. Critérios, responsabilidades, interfaces e revisões dão ao contratante uma visão clara do trabalho e das decisões necessárias.", "summary": "A proposta parte da necessidade do empreendimento e das informações disponíveis. O desenvolvimento combina análise, produção técnica e coordenação das especialidades previstas na contratação.", "cta": "Solicitar proposta", "hero_note": "Escopo, entregas, prazos, honorários e responsabilidades são definidos na proposta.", "whatsapp_context": "um serviço de engenharia",
       "section_order": ["method", "technical_review", "deliverables", "scope", "contact", "related"],
       "method_kicker": "Da primeira conversa à obra",

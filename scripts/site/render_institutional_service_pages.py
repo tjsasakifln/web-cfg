@@ -550,11 +550,11 @@ def render_technical_scope(page: dict) -> str:
     )
     resources = ""
     if block.get("resources"):
-        links = " · ".join(
-            f'<a class="text-link" data-demonstrative-resource="{esc(item["id"])}" href="{esc(local_bridge_href(item["href"]))}">{esc(item["label"])}</a>'
+        links = "\n".join(
+            f'<li><a class="text-link" data-demonstrative-resource="{esc(item["id"])}" href="{esc(local_bridge_href(item["href"]))}">{esc(item["label"])}</a></li>'
             for item in block["resources"]
         )
-        resources = f'<p class="measure">Material de apoio: {links}.</p>'
+        resources = f'<div class="measure"><p>Material de apoio:</p><ul>{links}</ul></div>'
     return f'''<section class="sec sec--soft" id="{esc(block['id'])}" aria-labelledby="technical-scope-title" data-commercial-presentation="technical-scope">
 <div class="container">{aliases}
 <header class="sec-head sec-head--split"><span class="t-kicker">{esc(block['kicker'])}</span><h2 class="t-editorial" id="technical-scope-title">{esc(block['title'])}</h2><p>{esc(block['intro'])}</p></header>

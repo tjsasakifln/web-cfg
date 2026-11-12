@@ -144,7 +144,21 @@
       "contact": {
         "title": "Solicite uma proposta de projetos complementares.",
         "intro": "Conte a finalidade do empreendimento, a fase atual, as disciplinas desejadas e as referências já disponíveis. A CONFENGE devolve a definição do serviço e os dados necessários para a proposta.",
-        "boundary": "Você pode compartilhar referências não sigilosas por WhatsApp ou e-mail. Quando o material exigir controle de acesso ou contiver dados sensíveis, combinamos o canal adequado. O tratamento dos dados segue a Política de Privacidade."
+        "boundary": "Você pode compartilhar referências não sigilosas por WhatsApp ou e-mail. Quando o material exigir controle de acesso ou contiver dados sensíveis, combinamos o canal adequado. O tratamento dos dados segue a Política de Privacidade.",
+        "prep": [
+          [
+            "Empreendimento e fase",
+            "Tipo de empreendimento, localização, uso previsto e fase em que o projeto se encontra."
+          ],
+          [
+            "Disciplinas e documentos",
+            "Especialidades necessárias ou já conhecidas e arquitetura, levantamentos ou estudos disponíveis, mesmo que parciais."
+          ],
+          [
+            "Decisão e prazo",
+            "O próximo uso dos projetos, o prazo desejado e as interfaces já conhecidas com outros trabalhos."
+          ]
+        ]
       },
       "faq": {
         "kicker": "Dúvidas de contratação",
@@ -316,7 +330,21 @@
       "contact": {
         "title": "Solicite uma proposta de revisão técnica.",
         "intro": "Informe o tipo de projeto, a decisão que a revisão deve apoiar e as disciplinas envolvidas. Se houver uma lista de documentos ou revisões, ela já ajuda a dimensionar o trabalho.",
-        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Para modelos, pranchas ou documentos com acesso restrito, combinamos o canal e as permissões adequadas. O tratamento dos dados segue a Política de Privacidade."
+        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Para modelos, pranchas ou documentos com acesso restrito, combinamos o canal e as permissões adequadas. O tratamento dos dados segue a Política de Privacidade.",
+        "prep": [
+          [
+            "Objetivo da revisão",
+            "Decisão que a análise deve apoiar, como contratação, execução, alteração ou recebimento de um projeto."
+          ],
+          [
+            "Documentos disponíveis",
+            "Disciplinas, pranchas, memoriais e modelos existentes, com suas revisões quando identificadas."
+          ],
+          [
+            "Pontos de atenção e prazo",
+            "Dúvidas ou requisitos já conhecidos, se houver, e prazo desejado para a devolutiva."
+          ]
+        ]
       },
       "description": "Revisão técnica de projetos de engenharia: análise de soluções, interfaces e detalhamento, com registro de achados e recomendações para a equipe de projeto.",
       "faq": {
@@ -381,7 +409,7 @@
       "journey": "projeto",
       "contact_id": "pedido-compatibilizacao",
       "hero": {
-        "eyebrow": "Interfaces resolvidas antes de chegarem à obra",
+        "eyebrow": "Coordenação técnica antes da execução",
         "title": "Compatibilização de projetos de engenharia",
         "lead": "A CONFENGE coordena a leitura conjunta das disciplinas, registra interferências e conduz decisões até que desenhos, modelos e memoriais expressem a solução acordada.",
         "value": "Cada apontamento recebe localização, documentos de origem, responsável, encaminhamento e estado. A entrega permite contratar e executar sobre revisões coerentes entre si.",
@@ -485,7 +513,21 @@
       "contact": {
         "title": "Solicite uma proposta de compatibilização.",
         "intro": "Informe as disciplinas existentes, a fase do projeto, os formatos disponíveis e a decisão que o pacote precisa alcançar. Uma relação simples dos arquivos e revisões ajuda a estimar as rodadas.",
-        "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Modelos e documentos controlados são recebidos pelo canal e com as permissões combinadas para o projeto. O tratamento dos dados segue a Política de Privacidade."
+        "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Modelos e documentos controlados são recebidos pelo canal e com as permissões combinadas para o projeto. O tratamento dos dados segue a Política de Privacidade.",
+        "prep": [
+          [
+            "Disciplinas e interlocutores",
+            "Projetos já existentes e especialidades ou equipes envolvidas, quando definidas."
+          ],
+          [
+            "Fase e arquivos disponíveis",
+            "Estágio do projeto, formatos dos arquivos e revisões disponíveis para coordenação."
+          ],
+          [
+            "Decisão e prazo",
+            "O que precisa ser compatibilizado e quando o conjunto será usado para aprovar, contratar ou executar."
+          ]
+        ]
       },
       "faq": {
         "kicker": "Dúvidas de contratação",
@@ -687,7 +729,21 @@
       "contact": {
         "title": "Solicite uma proposta de quantitativos ou orçamento.",
         "intro": "Informe o tipo de obra, a finalidade da base, as disciplinas e os documentos disponíveis. Uma lista de pranchas, a planilha existente ou um resumo do escopo já permite dimensionar a proposta.",
-        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade."
+        "boundary": "Referências não sigilosas podem ser compartilhadas por WhatsApp ou e-mail. Arquivos controlados, planilhas sensíveis ou documentos de contratação seguem pelo canal adequado ao projeto. O tratamento dos dados segue a Política de Privacidade.",
+        "prep": [
+          [
+            "Finalidade e prazo",
+            "Se a base será usada para estimar, contratar, comparar propostas ou controlar a obra, e para quando é necessária."
+          ],
+          [
+            "Obra e documentação",
+            "Tipo e localização da obra, disciplinas e revisões disponíveis, mesmo que o projeto ainda esteja em desenvolvimento."
+          ],
+          [
+            "Base existente",
+            "Planilha, propostas, critérios ou referências de preço, se já houver."
+          ]
+        ]
       },
       "faq": {
         "kicker": "Dúvidas de contratação",

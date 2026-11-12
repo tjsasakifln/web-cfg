@@ -102,3 +102,10 @@
 }
 .service-samples__body p { margin: .5rem 0; }
 .service-samples a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Separate service areas without changing other hubs or the home page. */
+[data-content-cluster="corporate-services"] #areas .corporate-service-row + .corporate-service-row {
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--line);
+}
