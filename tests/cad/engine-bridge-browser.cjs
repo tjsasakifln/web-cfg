@@ -265,7 +265,7 @@ async function openFixture(browser, format) {
     await fs.writeFile(path.join(output,'extraction.csv'),csv);
     pass('Extraction closes only after settings and CSV are acknowledged',{bytes:csv.length});
 
-    // Programmatic PDF and PNG output share the same transaction and expose
+    // Programmatic PDF output uses the same transaction and exposes
     // no completed success before the real host decision.
     offset=await h.count();
     op=await h.begin({op:'run',cmd:'EXPORTPDF bridge-test.pdf'});
@@ -276,11 +276,6 @@ async function openFixture(browser, format) {
     await h.waitExport(offset);await h.ack(offset,true);assert.equal((await h.settle(op)).ok,true);
     await fs.writeFile(path.join(output,'drawing.pdf'),await h.bytes(offset));
     pass('Direct PDF export reports success only after acknowledgement');
-    offset=await h.count();op=await h.begin({op:'capture',path:'bridge-capture.png',scope:'viewport'});
-    await h.waitExport(offset);assert.deepEqual((await h.bytes(offset)).subarray(0,8),Buffer.from([137,80,78,71,13,10,26,10]));
-    assert(['accepted','running'].includes((await h.raw({op:'operation',request_id:op.request_id})).status));
-    await h.ack(offset,false);assert.equal((await h.settle(op)).ok,false);
-    pass('PNG capture cancellation is a failed export, not a completed capture');
     await h.page.screenshot({path:path.join(output,'engine-dwg.png')});
 
     const dirtyBeforeQuit=(await h.state()).documents.filter(doc=>doc.dirty).map(doc=>doc.id);
@@ -307,8 +302,15 @@ async function openFixture(browser, format) {
     assert(dxf.toString().includes('AC1032'));await d.ack(0,true);await d.settle(op);await d.act({op:'close'});
     await d.act({op:'open',name:'roundtrip.dxf',data_base64:dxf.toString('base64')});assert.deepEqual(await d.semantics(),expect);
     assert.deepEqual(d.downloads,[]);assert.deepEqual(d.errors,[]);await fs.writeFile(path.join(output,'roundtrip.dxf'),dxf);
-    await d.page.screenshot({path:path.join(output,'engine-dxf.png')});await d.context.close();
+    await d.page.screenshot({path:path.join(output,'engine-dxf.png')});
     pass('DXF 2018 saved, closed and reopened with matching entity geometry/layers/text',{bytes:dxf.length});
+    // Keep the graphics capture separate from the drawing save and close checks.
+    offset=await d.count();op=await d.begin({op:'capture',path:'bridge-capture.png',view:'viewport'});
+    await d.waitExport(offset);assert.deepEqual((await d.bytes(offset)).subarray(0,8),Buffer.from([137,80,78,71,13,10,26,10]));
+    assert(['accepted','running'].includes((await d.raw({op:'operation',request_id:op.request_id})).status));
+    await d.ack(offset,false);assert.equal((await d.settle(op)).ok,false);
+    pass('PNG capture cancellation is a failed export, not a completed capture');
+    assert.deepEqual(d.downloads,[]);assert.deepEqual(d.errors,[]);await d.context.close();
     await fs.writeFile(path.join(output,'result.json'),JSON.stringify({ok:true,fixture:'same-origin controlled host; actual engine and bridge; wallet replaced explicitly, no credits spent',passed,diagnostics},null,2));
   }catch(error){
     if(browser){let i=0;for(const page of await browser.pages()){try{await page.screenshot({path:path.join(output,'failure-'+(++i)+'.png')});}catch{}}}
