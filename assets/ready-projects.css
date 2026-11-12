@@ -1,0 +1,67 @@
+/* Residential enquiries, using CONFENGE's existing typography and palette. */
+.rp-hero { padding: 2rem 0 4rem; }
+.rp-hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 4rem; align-items: start; }
+.rp-hero h1 { font-size: clamp(2.4rem,4.5vw,4.35rem); line-height: 1.07; letter-spacing: -.045em; margin: .8rem 0 1.5rem; text-wrap: balance; }
+.rp-intro { font-size: 1.18rem; max-width: 55ch; color: #344d5e; line-height: 1.65; }
+.rp-availability { margin: 1.6rem 0 0; padding: 1rem 1.1rem; border-left: 3px solid #2d6f2d; background: #f0f5ef; max-width: 60ch; line-height: 1.6; }
+.rp-brief { background: #081b2e; color: #fff; padding: 2rem; border-top: 4px solid #c8df72; }
+.rp-brief h2 { color: #fff; font-size: 1.75rem; line-height: 1.2; margin: .8rem 0 1.5rem; }
+.rp-brief .pp-kicker { color: #c8df72; }
+.rp-brief dl { margin: 0; }
+.rp-brief dl div { padding: 1.1rem 0; border-top: 1px solid #3b5367; }
+.rp-brief dt { font-size: .85rem; color: #c8df72; font-weight: 700; margin-bottom: .35rem; }
+.rp-brief dd { margin: 0; line-height: 1.55; color: #e2eaf0; }
+.rp-section { padding: 3.5rem 0; }
+.rp-section h2 { font-size: clamp(1.8rem,3.2vw,2.65rem); line-height: 1.16; letter-spacing: -.025em; max-width: 27ch; }
+.rp-section-lead { max-width: 72ch; color: #405968; line-height: 1.7; }
+.rp-services { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1.3rem; margin: 2rem 0; }
+.rp-services article { border: 1px solid #b8c7ce; padding: 1.7rem; background: #fff; }
+.rp-services h3 { font-size: 1.4rem; line-height: 1.25; margin: .8rem 0; }
+.rp-services p { line-height: 1.6; color: #405968; }
+.rp-services .rp-number { color: #286028; font-size: .85rem; font-weight: 750; }
+.rp-services a { display: inline-flex; align-items: center; min-height: 44px; color: #245c24; font-weight: 700; text-underline-offset: .25em; }
+.rp-contact { background: #f3f5f4; border-block: 1px solid #d5dedb; }
+.rp-contact-grid { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 4rem; align-items: start; }
+.rp-contact-copy { position: sticky; top: 2rem; }
+.rp-contact-copy p { line-height: 1.7; }
+.rp-contact-copy .contact-alt { margin-top: 1.5rem; display: grid; gap: .6rem; }
+.rp-contact-copy a { min-height: 44px; display: inline-flex; align-items: center; overflow-wrap: anywhere; }
+.rp-form { width: 100%; margin: 0; padding: 1.8rem; background: #fff; border: 1px solid #b8c7ce; box-shadow: none; color: #081b2e; }
+.rp-form fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+.rp-form legend { font-size: 1.1rem; font-weight: 750; margin-bottom: 1rem; }
+.rp-form .rp-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.rp-form .rp-wide { grid-column: 1 / -1; }
+.rp-form label { display: block; color: #173247; font-weight: 650; margin-bottom: .35rem; }
+.rp-form input:not([type=checkbox]):not([type=hidden]), .rp-form select, .rp-form textarea { display: block; width: 100%; min-height: 48px; border: 1px solid #8498a4; border-radius: 3px; background: #fff; color: #081b2e; padding: .7rem; font: inherit; box-sizing: border-box; }
+.rp-form input:focus-visible, .rp-form select:focus-visible, .rp-form textarea:focus-visible, .rp-form summary:focus-visible { outline: 3px solid #2d6f2d; outline-offset: 3px; }
+.rp-form .form-hint, .rp-form .rp-hint { font-size: .9rem; color: #405968; line-height: 1.55; margin: .6rem 0 1.1rem; }
+.rp-form .form-status:not(:empty) { padding: 1rem; margin-top: 1rem; border: 2px solid #2d6f2d; line-height: 1.65; color: #173247; }
+.rp-form details { border-top: 1px solid #d0d9dd; margin-top: 1.7rem; padding-top: .5rem; }
+.rp-form summary { cursor: pointer; min-height: 48px; padding: .8rem 0; font-weight: 700; }
+.rp-form details[open] summary { margin-bottom: .8rem; }
+.rp-form .rp-consent { display: flex; align-items: flex-start; gap: .7rem; margin: 1.4rem 0; font-weight: 400; font-size: .92rem; line-height: 1.55; }
+.rp-consent input { width: 22px; height: 22px; flex: 0 0 22px; margin: .1rem 0 0; accent-color: #2d6f2d; }
+.rp-form button[type=submit] { width: 100%; min-height: 52px; font-size: 1rem; border-radius: 2px; }
+.rp-form button:disabled { opacity: .7; cursor: default; }
+.rp-honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.rp-faq { max-width: 860px; }
+.rp-faq details { border-top: 1px solid #b8c7ce; }
+.rp-faq summary { padding: 1.3rem 0; cursor: pointer; font-size: 1.1rem; font-weight: 700; min-height: 48px; }
+.rp-faq p { color: #405968; line-height: 1.75; margin: 0 0 1.5rem; }
+.rp-terms { max-width: 850px; padding-block: 1.5rem 4rem; }
+.rp-terms h1 { font-size: clamp(2rem,4vw,3.5rem); line-height: 1.12; }
+.rp-terms h2 { font-size: 1.55rem; margin-top: 2rem; }
+.rp-terms p, .rp-terms li { line-height: 1.75; }
+@media(max-width: 880px) {
+  .rp-hero-grid, .rp-contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .rp-contact-copy { position: static; }
+  .rp-services { grid-template-columns: 1fr; }
+  .rp-section { padding-block: 2.5rem; }
+  .rp-brief { padding: 1.5rem; }
+}
+@media(max-width: 480px) {
+  .rp-form { padding: 1.1rem; }
+  .rp-form .rp-fields { grid-template-columns: 1fr; }
+  .rp-hero { padding-top: 1rem; }
+}
+@media(prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

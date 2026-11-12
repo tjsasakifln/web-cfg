@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-10-14",
+  "updated_at": "2026-11-12",
   "purpose": "Source of truth for institutional services navigation, projects and public-works discovery, and route/job/parent/contact/index relationships.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -146,7 +146,10 @@
     "/inteligencia/pesquisa-sob-encomenda/": "Contratar pesquisa sob encomenda ou institucional",
     "/inteligencia/relacoes-compradores-fornecedores/": "Relações documentadas",
     "/inteligencia/composicao-contratos-amostra/": "Composição dos contratos",
-    "/inteligencia/fornecedores-climatizacao-contratos-publicos/": "Fornecedores de climatização"
+    "/inteligencia/fornecedores-climatizacao-contratos-publicos/": "Fornecedores de climatização",
+    "/projetos-prontos/": "Projetos prontos",
+    "/projetos-prontos/condicoes/": "Condições",
+    "/projetos-prontos/pedidos/": "Meus pedidos"
   },
   "quality_baseline": {
     "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
@@ -461,6 +464,15 @@
     }
   ],
   "parents": [
+    {
+      "prefix": "/projetos-prontos/",
+      "parent": "/projetos/",
+      "exact": true
+    },
+    {
+      "prefix": "/projetos-prontos/",
+      "parent": "/projetos-prontos/"
+    },
     {
       "prefix": "/cad/aplicativos/",
       "parent": "/cad/",
@@ -812,6 +824,10 @@
     }
   ],
   "active_header": [
+    {
+      "prefix": "/projetos-prontos/",
+      "href": "/projetos/"
+    },
     {
       "prefix": "/projetos/",
       "href": "/projetos/"

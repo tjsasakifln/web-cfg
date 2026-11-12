@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-11-09",
+  "as_of": "2026-11-12",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -1004,19 +1004,38 @@
       "visitor_job": "Comparar fornecedores de climatização por papel documentado em cinco contratos públicos antes de solicitar seleção aplicada ao próprio catálogo e território.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/inteligencia/fornecedores-climatizacao-contratos-publicos/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
-      "value_first_header_cta": {
-        "mode": "local_fragment_before_contact", "label": "Solicitar seleção", "href": "#captura-estudo",
-        "desktop_cta_id": "im-climatizacao-header", "mobile_cta_id": "im-climatizacao-mobile",
-        "journey": "outro", "tema": "Pesquisa de mercado"
+      "match": {
+        "routes": [
+          "/inteligencia/fornecedores-climatizacao-contratos-publicos/"
+        ]
       },
-      "declared_at": "2026-10-14", "owner_issue": 61, "debt": [],
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Solicitar seleção",
+        "href": "#captura-estudo",
+        "desktop_cta_id": "im-climatizacao-header",
+        "mobile_cta_id": "im-climatizacao-mobile",
+        "journey": "outro",
+        "tema": "Pesquisa de mercado"
+      },
+      "declared_at": "2026-10-14",
+      "owner_issue": 61,
+      "debt": [],
       "index_evidence": {
-        "substrate": "external_record", "not_applicable": [],
+        "substrate": "external_record",
+        "not_applicable": [],
         "reason": "Cinco contratos PNCP e documentos oficiais verificados, seleção limitada não censitária; papéis observados são vinculados à fonte e ao manifesto independente, sem inferir demanda aberta ou base instalada.",
-        "authority": ["data/pseo/climatizacao-sample.v1.json", "data/pseo/climatizacao-verification.v1.json"],
-        "declared_at": "2026-10-14", "owner_issue": 61
+        "authority": [
+          "data/pseo/climatizacao-sample.v1.json",
+          "data/pseo/climatizacao-verification.v1.json"
+        ],
+        "declared_at": "2026-10-14",
+        "owner_issue": 61
       }
     },
     {
@@ -1947,6 +1966,97 @@
       "declared_at": "2026-11-06",
       "owner_issue": 577,
       "debt": []
+    },
+    {
+      "id": "ready_projects",
+      "visitor_job": "Consultar disponibilidade de projeto residencial, adaptação ao terreno e complementares para construir uma casa.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {
+        "routes": [
+          "/projetos-prontos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-12",
+      "owner_issue": 61,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Consulta de disponibilidade da própria CONFENGE. Sem produto, preço, estoque ou venda anunciados até aprovação documentada.",
+        "authority": [
+          "docs/architecture/ADR-PROJECTS-001-ready-projects.md",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
+        "declared_at": "2026-11-12",
+        "owner_issue": 61
+      },
+      "intent_family": "projetar_revisar_compatibilizar",
+      "canonical_service_family": "engineering_projects_coordination",
+      "nucleus_id": "building_engineering_documentation"
+    },
+    {
+      "id": "ready_projects_terms",
+      "visitor_job": "Compreender consulta, aquisição, licença, adaptação e atendimento dos projetos residenciais.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "match": {
+        "routes": [
+          "/projetos-prontos/condicoes/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-12",
+      "owner_issue": 61,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Condições de primeira parte sem preço nem produto à venda.",
+        "authority": [
+          "docs/architecture/ADR-PROJECTS-001-ready-projects.md"
+        ],
+        "declared_at": "2026-11-12",
+        "owner_issue": 61
+      },
+      "exemption_reason": "Condições da consulta e da futura aquisição, sem oferta paga disponível."
+    },
+    {
+      "id": "ready_projects_orders",
+      "visitor_job": "Consultar os próprios pedidos de projetos, documentos da contratação, arquivos adquiridos e solicitações de atendimento.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "TRANSACTIONAL_ACCOUNT",
+      "match": {
+        "routes": [
+          "/projetos-prontos/pedidos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-12",
+      "owner_issue": 61,
+      "debt": [],
+      "exemption_reason": "Área transacional autenticada, permanentemente fora da indexação. A descoberta e a consulta de disponibilidade acontecem em /projetos-prontos/. Condições e preço de uma futura compra são conferidos antes do aceite nesta área, sem compor uma página de aquisição orgânica.",
+      "note": "Dados de pedido e arquivos exigem comprador autorizado. O modo inicial informa compras indisponíveis; não há produto ou cobrança habilitados."
     }
   ]
 }

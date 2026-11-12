@@ -145,6 +145,24 @@ function providerTimestamp(value) {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
+function refundAmountFor(order, payment, amountCents, paymentCount, state) {
+  // stateFor already requires a coherent full refund/settled chargeback and
+  // rejects conflicting refund totals. Some responses omit one total field.
+  if (state === 'reversed') return { refundAmountKnown: true, refundedAmountCents: amountCents };
+  const values = [order.total_refunded_amount, payment?.refunded_amount];
+  const hasValues = values.some(value => value !== undefined);
+  const partial = [order.status_detail, payment?.status_detail].includes('partially_refunded');
+  if (!hasValues && !partial) return {};
+  const [orderRefund, paymentRefund] = values.map(toCents);
+  const match = paymentCount === 1 && payment && methodFor(payment) &&
+    toCents(payment.amount) === amountCents && orderRefund !== undefined && orderRefund === paymentRefund &&
+    orderRefund >= 0 && orderRefund <= amountCents;
+  if (!match || partial && !(orderRefund > 0 && orderRefund < amountCents)) return { refundAmountKnown: false };
+  if (orderRefund === 0 && state !== 'reversed') return { refundAmountKnown: true, refundedAmountCents: 0 };
+  if (toCents(order.total_paid_amount) !== amountCents || toCents(payment.paid_amount) !== amountCents) return { refundAmountKnown: false };
+  return { refundAmountKnown: true, refundedAmountCents: orderRefund };
+}
+
 function normalize(order, expectedSellerId) {
   if (!order || typeof order !== 'object') throw new Error('Mercado Pago returned an invalid order');
   const payments = Array.isArray(order.transactions && order.transactions.payments) ? order.transactions.payments : [];
@@ -173,6 +191,8 @@ function normalize(order, expectedSellerId) {
     amountCents,
     currency: 'BRL',
     state,
+    ...refundAmountFor(order, payment, amountCents, payments.length, state),
+    ...(typeof order.status === 'string' && /^[a-z_]{1,40}$/i.test(order.status) ? { providerStatus: order.status.toLowerCase() } : {}),
     paymentFlow,
     ...(dispute ? { dispute } : {}),
     ...(providerUpdatedAt !== undefined ? { providerUpdatedAt } : {}),

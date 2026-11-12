@@ -48,6 +48,23 @@ FIREBASE_POPUP_FRAMES = (
     "https://confenge-ferramentas-pj-prod.firebaseapp.com",
     "https://confenge-ferramentas-pj-hml.firebaseapp.com",
 )
+PROJECT_ORDERS_DOCUMENT = "/projetos-prontos/pedidos/"
+PROJECT_ORDERS_POLICY = {
+    "default-src": ("'none'",),
+    "script-src": ("'self'",),
+    "script-src-attr": ("'none'",),
+    "style-src": ("'self'",),
+    "style-src-attr": ("'none'",),
+    "img-src": ("'self'", "data:", "blob:"),
+    "font-src": ("'self'",),
+    "connect-src": ("'self'", *FIREBASE_AUTH_CONNECTIONS),
+    "frame-src": ("'none'",),
+    "frame-ancestors": ("'self'",),
+    "object-src": ("'none'",),
+    "form-action": ("'self'",),
+    "base-uri": ("'self'",),
+    "upgrade-insecure-requests": (),
+}
 WALLET_ISOLATED_DOCUMENT = "/bim/fotogrametria/"
 WALLET_DOCUMENTS = (
     "/analise-cnpj/",
@@ -199,7 +216,10 @@ def csp_directives_from_text(text: str) -> dict[str, list[str]]:
 def _uses_global_policy(root: Path, page: Path) -> bool:
     # The CAD and photogrammetry documents run under their own local-only CSP.
     # Their code must never grant inline-script or style authority to the site.
-    return page.relative_to(root).parts[:2] not in {("bim", "web"), ("bim", "fotogrametria")}
+    relative = page.relative_to(root)
+    return relative.as_posix() != "projetos-prontos/pedidos/index.html" and relative.parts[:2] not in {
+        ("bim", "web"), ("bim", "fotogrametria")
+    }
 
 
 def executable_inline_hashes(root: Path) -> Counter[str]:
@@ -283,7 +303,38 @@ def apply_artifact_csp_hashes(headers_text: str, root: Path) -> str:
     style_blocks, style_attributes = inline_style_hashes(root)
     updated = apply_script_src_hashes(headers_text, list(scripts))
     updated = apply_style_src_hashes(updated, list(style_blocks + style_attributes))
-    return apply_wallet_document_policies(updated, root)
+    updated = apply_wallet_document_policies(updated, root)
+    return apply_project_order_document_policy(updated, root)
+
+
+def apply_project_order_document_policy(headers_text: str, root: Path) -> str:
+    """Keep password-only project authentication separate from wallet OAuth."""
+    if not (root / "projetos-prontos/pedidos/index.html").is_file():
+        return headers_text
+    value = "; ".join(" ".join([name, *sources]) for name, sources in PROJECT_ORDERS_POLICY.items())
+    header = f"  Content-Security-Policy: {value}\n"
+    lines = headers_text.splitlines(keepends=True)
+    route = ""
+    block = None
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("/"):
+            route = stripped
+            if route == PROJECT_ORDERS_DOCUMENT:
+                block = index
+        elif route == PROJECT_ORDERS_DOCUMENT and stripped.lower().startswith("content-security-policy:"):
+            lines[index] = header
+            return "".join(lines)
+    if block is not None:
+        lines.insert(block + 1, header)
+    else:
+        lines.append(f"\n{PROJECT_ORDERS_DOCUMENT}\n{header}")
+    return "".join(lines)
+
+
+def evaluate_project_order_policy(directives: dict[str, list[str]]) -> list[str]:
+    expected = {name: list(sources) for name, sources in PROJECT_ORDERS_POLICY.items()}
+    return [] if directives == expected else ["Project orders CSP must match the exact password-only policy"]
 
 
 def apply_wallet_document_policies(headers_text: str, root: Path) -> str:

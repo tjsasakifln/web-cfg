@@ -1,6 +1,6 @@
 {
   "schema_version": "noindex-governance-v1",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-12",
   "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
   "reason_codes": {
     "interactive_workbench": {
@@ -263,6 +263,13 @@
       "owner_issue": 577,
       "review_at": null,
       "note": "A área de trabalho é acessada pelo portal e pelos guias indexáveis em /bim/. A política abrange apenas a execução das ferramentas."
+    },
+    {
+      "family_id": "ready_projects_orders",
+      "reason_code": "commercial_transactional_form",
+      "owner_issue": 61,
+      "review_at": null,
+      "note": "Área de conta, contratação, pedidos, arquivos protegidos e atendimento. Noindex permanente, inclusive após habilitar um produto aprovado. A oferta de descoberta está em /projetos-prontos/; ADR-PROJECTS-001."
     }
   ]
 }

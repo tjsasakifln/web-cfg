@@ -21,6 +21,8 @@ import {
   priorityAditivoContextSha256,
   validatePriorityAditivoJourney,
 } from "./synthetic_priority_aditivo_journey.mjs";
+import { READY_PROJECT_PATH, READY_PROJECT_CONTEXT, READY_PROJECT_INTEREST,
+  readyProjectFormMatches } from "./ready_project_probe_contract.mjs";
 
 const blockedProbe = Symbol("controlled_probe_block");
 const require = createRequire(import.meta.url);
@@ -102,6 +104,7 @@ const verifyQaEmailRaw = String(process.env.PROBE_VERIFY_EMAIL || "").trim();
 const verifyQaEmail = verifyQaEmailRaw === "1";
 const probeScenario = String(process.env.PROBE_SCENARIO || "").trim();
 const priorityAditivoScenario = probeScenario === "priority-aditivo";
+const readyProjectScenario = probeScenario === "ready-projects";
 const stamp = Date.now();
 // Ordinary probes remain random. The authorized QA-email probe instead uses a
 // stable HMAC so a rerun cannot create another delivery.
@@ -135,10 +138,12 @@ if (opsToken.length < 16) finishEarly("ops_token_missing_or_short");
 if (verifyQaEmailRaw && !["0", "1"].includes(verifyQaEmailRaw)) {
   finishEarly("probe_verify_email_opt_in_invalid");
 }
-if (probeScenario && !["priority-aditivo", "legacy-sst"].includes(probeScenario)) {
+if (probeScenario && !["priority-aditivo", "legacy-sst", "ready-projects"].includes(probeScenario)) {
   finishEarly("probe_scenario_invalid");
 }
 if (priorityAditivoScenario && verifyQaEmail) finishEarly("priority_aditivo_email_forbidden");
+if (readyProjectScenario && verifyQaEmail) finishEarly("ready_project_email_forbidden");
+if (readyProjectScenario && !/^[0-9a-f]{40}$/.test(expectedSha)) finishEarly("ready_project_exact_sha_required");
 if (verifyQaEmail && !/^[0-9a-f]{40}$/.test(expectedSha)) {
   finishEarly("qa_expected_release_sha_required");
 }
@@ -380,6 +385,7 @@ for (const [env, field] of [
 // Any mismatch blocks the POST (no synthetic row is created for a page
 // context that is not the published one).
 const pagePath = String(process.env.PROBE_PAGE_PATH || "").trim();
+if (readyProjectScenario && pagePath !== READY_PROJECT_PATH) finishEarly("ready_project_page_path_mismatch");
 let servedForm = null;
 if (pagePath) {
   if (!/^\/[\w./-]{0,200}$/.test(pagePath)) finishEarly("probe_page_path_invalid");
@@ -387,6 +393,7 @@ if (pagePath) {
     .then(async (r) => ({ http: r.status, text: await r.text() }))
     .catch(() => ({ http: 0, text: "" }));
   if (page.http !== 200) finishEarly("probe_page_unavailable");
+  if (readyProjectScenario && !readyProjectFormMatches(page.text)) finishEarly("ready_project_form_contract_mismatch");
   const served = servedFormContext(page.text);
   if (!served) finishEarly("probe_page_capture_form_missing");
   if (served.error) {
@@ -403,6 +410,9 @@ if (pagePath) {
     throw blockedProbe;
   }
   servedForm = served.context;
+  if (readyProjectScenario && Object.entries(READY_PROJECT_CONTEXT).some(([key, value]) => servedForm[key] !== value)) {
+    finishEarly("ready_project_attribution_mismatch");
+  }
   const mismatch = Object.keys(pageContext).filter(
     (key) => pageContext[key] !== (key === "landing_page" ? pagePath : servedForm[key]),
   );
@@ -491,6 +501,9 @@ const payload = {
   landing_page: "/",
   mensagem: "synthetic probe do not contact",
   ...pageContext,
+  ...(readyProjectScenario ? {
+    intent: "ready_project_interest", source_asset_id: "ready-projects", project_interest: READY_PROJECT_INTEREST,
+  } : {}),
   test_mode: true,
   record_kind: "synthetic",
   idempotency_key: idem,
@@ -537,6 +550,12 @@ const [receiptOps, afterFunnel, afterSystem, afterWeekly] = await Promise.all([
   ops("weekly_report"),
 ]);
 const receipt = receiptOps.data?.receipt;
+// The authenticated private DTO is the operator's real read path. Only the
+// literal synthetic fixture is compared; no raw private response is printed.
+const projectReadback = readyProjectScenario && leadId ? await jsonRequest(
+  `/.netlify/functions/ops?action=lead&id=${encodeURIComponent(leadId)}&pii=1`,
+  { headers: authHeaders },
+) : null;
 const afterCommercial = commercialSnapshot(afterFunnel, afterWeekly);
 const afterCounters = syntheticCounters(afterSystem, afterWeekly);
 const afterOperational = operationalSnapshot(afterSystem, receiptOps);
@@ -585,6 +604,14 @@ const checks = {
   served_form_context_persisted: !servedForm || ["asset_id", "route_family", "cta_id"].every(
     (key) => !servedForm[key] || receipt?.[key] === servedForm[key],
   ),
+  ...(readyProjectScenario ? {
+    project_private_readback_matches: projectReadback?.http === 200 &&
+      projectReadback.data?.lead?.record_kind === "synthetic" &&
+      projectReadback.data?.lead?.intent === "ready_project_interest" &&
+      Object.entries(READY_PROJECT_INTEREST).every(([key, value]) =>
+        projectReadback.data?.lead?.project_interest?.[key] === value),
+    project_email_never_requested: !verifyQaEmail && !receipt?.delivery?.qa_email_provider_id,
+  } : {}),
   ...(browserJourney && priorityAditivoScenario
     ? {
         // The private ops API computes this digest from the durable row. A

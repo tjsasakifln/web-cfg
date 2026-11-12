@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 287
+    "expected_declared_ctas": 294
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
-    "active_capture_routes": 41,
-    "declared_ctas": 287,
+    "active_capture_routes": 42,
+    "declared_ctas": 294,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -98,7 +98,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -255,7 +255,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -461,7 +461,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -648,7 +648,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -821,7 +821,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -964,7 +964,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1095,7 +1095,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1241,7 +1241,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1387,7 +1387,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1533,7 +1533,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1679,7 +1679,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1825,7 +1825,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -1971,7 +1971,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -2117,7 +2117,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -2279,7 +2279,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -2606,7 +2606,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -2793,7 +2793,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -3138,7 +3138,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -3295,7 +3295,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -3440,7 +3440,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -4016,7 +4016,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -4112,7 +4112,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -4210,7 +4210,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -4331,7 +4331,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -4863,7 +4863,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5020,7 +5020,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5132,7 +5132,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5289,7 +5289,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5416,7 +5416,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5573,7 +5573,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5730,7 +5730,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -5887,7 +5887,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -6044,7 +6044,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -6201,7 +6201,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -6313,7 +6313,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -6480,6 +6480,186 @@
       ]
     },
     {
+      "route": "/projetos-prontos/",
+      "file": "projetos-prontos/index.html",
+      "family_id": "ready_projects",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "",
+          "form_contract": "next-state/v1",
+          "profile": "ready_project_interest",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "submit_label": "Consultar disponibilidade",
+          "current_label": "Consultar disponibilidade",
+          "useful_next_state": "O protocolo confirma a consulta recebida. A equipe confere disponibilidade e conversa sobre a casa e o terreno antes de uma proposta.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "pre_form_value": "Conte como imagina sua casa. A equipe confere a disponibilidade e orienta o próximo passo.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Nome, um meio de contato, município, UF e interesse permitem atender sua consulta. Os detalhes do terreno e da casa são opcionais.",
+            "visible": true,
+            "required": [
+              "nome",
+              "city",
+              "uf",
+              "project_kind",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "bot-field",
+              "telefone",
+              "email",
+              "lot_width_m",
+              "lot_depth_m",
+              "lot_status",
+              "bedrooms",
+              "build_when",
+              "mensagem"
+            ]
+          },
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "/projetos-prontos/#contato-projetos",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "current_label": "Consultar projeto",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "ready-projects-hero",
+          "position": "hero",
+          "href": "#contato-projetos",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "current_label": "Consultar disponibilidade",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "project_cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#contato-projetos",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "current_label": "Consultar um projeto pronto",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#contato-projetos",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "current_label": "Consultar adaptação",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#contato-projetos",
+          "stage": "request_fit_review",
+          "commitment": "low",
+          "current_label": "Solicitar complementares",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "ready-projects-whatsapp",
+          "position": "form-alternative",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20consultar%20um%20projeto%20residencial%20e%20sua%20adequa%C3%A7%C3%A3o%20ao%20meu%20terreno.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Prefere conversar pelo WhatsApp?",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "ready-projects-email",
+          "position": "form-alternative",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Consulta%20sobre%20projeto%20residencial",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "tiago.sasaki@confenge.com.br",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "event_semantics": [
+            "email_click"
+          ]
+        }
+      ]
+    },
+    {
       "route": "/reequilibrio-obras-publicas/",
       "file": "reequilibrio-obras-publicas/index.html",
       "family_id": "service-pillars",
@@ -6530,7 +6710,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -6710,7 +6890,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -6941,7 +7121,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,
@@ -7037,7 +7217,7 @@
             "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
             "loading": "Enviando…",
             "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
-            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "success": "Após resposta persistida, exibe protocolo no próprio formulário quando data-success-inline=true; nos demais casos redireciona para a confirmação da jornada.",
             "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
           },
           "turnstile_ready": true,

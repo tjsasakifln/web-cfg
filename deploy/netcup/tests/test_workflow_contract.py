@@ -290,11 +290,12 @@ def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
         "- name: Restore the predecessor after material public acceptance failure",
     )
 
-    def evaluate(failed, promote_outcome, already_current, coverage, acceptance, matches_main):
+    def evaluate(failed, promote_outcome, already_current, coverage, acceptance, matches_main, capture="success"):
         expression = condition.replace("failure()", repr(failed))
         expression = expression.replace("steps.atomic_promote.outcome", repr(promote_outcome))
         expression = expression.replace("steps.served_coverage.outcome", repr(coverage))
         expression = expression.replace("steps.runtime_acceptance.outcome", repr(acceptance))
+        expression = expression.replace("steps.ready_project_capture.outcome", repr(capture))
         expression = expression.replace("steps.accepted_matches_main.outcome", repr(matches_main))
         expression = expression.replace(
             "needs.stage.outputs.expected_current", repr("b" if already_current else "a")
@@ -318,6 +319,8 @@ def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
         (True, "success", False, ok, False, "an accessory failure must not withdraw an accepted release"),
     ):
         assert evaluate(failed, outcome, already_current, *material) is expected, why
+    for capture in ("failure", "skipped", "cancelled"):
+        assert evaluate(True, "success", False, *ok, capture=capture) is True
 
 
 def test_promotion_rechecks_main_after_the_remote_swap_and_public_acceptance(tmp_path) -> None:

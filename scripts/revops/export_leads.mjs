@@ -18,10 +18,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
 const { createStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+const { projectInterestProjection, isReadyProjectLead } = require(path.join(root, "netlify/functions/lib/ready-project-ops.cjs"));
+const { filterCommercialLeads } = require(path.join(root, "netlify/functions/lib/record-kind.cjs"));
 
 // 1.2.0 (2026-09-20): adds the four sanitized public-authority preparation
 // fields so an ops export preserves declared procurement context.
-export const SCHEMA_VERSION = "1.2.0";
+export const SCHEMA_VERSION = "1.3.0";
 
 // origin_class is derived at persist time since 2026-09-19 13:36 -03
 // (lead-core.cjs deriveOriginClass). Earlier rows have no value: that reads
@@ -36,6 +38,7 @@ export function parseArgs(argv = process.argv.slice(2)) {
   const out = {
     out: null,
     kind: "all", // all | real
+    family: null,
     from: null,
     to: null,
     stdoutJson: false,
@@ -45,6 +48,7 @@ export function parseArgs(argv = process.argv.slice(2)) {
     const a = argv[i];
     if (a === "--out") out.out = argv[++i];
     else if (a === "--kind") out.kind = argv[++i];
+    else if (a === "--family") out.family = argv[++i];
     else if (a === "--from") out.from = argv[++i];
     else if (a === "--to") out.to = argv[++i];
     else if (a === "--stdout-json") out.stdoutJson = true;
@@ -53,10 +57,13 @@ export function parseArgs(argv = process.argv.slice(2)) {
   return out;
 }
 
-export function filterLeads(leads, { kind = "all", from = null, to = null } = {}) {
+export function filterLeads(leads, { kind = "all", family = null, from = null, to = null } = {}) {
+  if (family && family !== "ready_projects") throw new Error("unknown_family_filter");
   const fromTs = from ? Date.parse(from) : null;
   const toTs = to ? Date.parse(to + (to.length === 10 ? "T23:59:59.999Z" : "")) : null;
-  return (leads || []).filter((l) => {
+  const candidates = family === "ready_projects" && kind === "real" ? filterCommercialLeads(leads || []) : leads || [];
+  return candidates.filter((l) => {
+    if (family === "ready_projects" && !isReadyProjectLead(l)) return false;
     if (kind === "real" && l.record_kind && l.record_kind !== "real") return false;
     if (kind === "real" && !l.record_kind) {
       /* treat missing as real for legacy fixtures */
@@ -86,6 +93,8 @@ export function toExportRecord(lead) {
     utm_source: lead.utm_source || null,
     utm_medium: lead.utm_medium || null,
     utm_campaign: lead.utm_campaign || null,
+    utm_content: lead.utm_content || null,
+    utm_term: lead.utm_term || null,
     origin_class: lead.origin_class || null,
     origin_class_status: originClassStatus(lead),
     // Journey columns (MEDICAO-08): which CTA, route family, asset and topic
@@ -100,6 +109,20 @@ export function toExportRecord(lead) {
     procurement_stage: lead.procurement_stage || null,
     procurement_regulation: lead.procurement_regulation || null,
     funding_source: lead.funding_source || null,
+    intent: lead.intent || null,
+    project_interest: projectInterestProjection(lead),
+    proposal_value: lead.proposal_value ?? null,
+    contract_value: lead.contract_value ?? null,
+    revenue_received: lead.revenue_received ?? null,
+    owner: lead.owner || null,
+    next_action: lead.next_action || null,
+    stage_history: lead.stage_history || [],
+    // Blank manual fields are not zero costs or hours. Fill in the private
+    // financial record; contact stages do not prove an order or a payment.
+    ...(isReadyProjectLead(lead) ? { manual_finance: {
+      payment_fees: null, acquisition_expenses: null, support_hours: null,
+      source: "manual_record_required",
+    } } : {}),
     // Contact fields included in file artifact only (ops-side). Not printed to stdout by default.
     nome: lead.nome || null,
     email: lead.email || null,
@@ -116,6 +139,7 @@ export function buildExportPackage(leads, opts = {}) {
     exported_at: opts.now || new Date().toISOString(),
     filters: {
       kind: opts.kind || "all",
+      family: opts.family || null,
       from: opts.from || null,
       to: opts.to || null,
     },
@@ -151,6 +175,7 @@ async function main() {
     console.log(`export_leads.mjs — schema_version=${SCHEMA_VERSION}
   --out PATH       write JSONL (preferred) or .json package
   --kind all|real  default all
+  --family ready_projects  only the residential project experiment
   --from ISO       received_at lower bound
   --to ISO         received_at upper bound
   --stdout-json    print full package JSON (CI only; contains PII from fixtures)
@@ -162,12 +187,13 @@ Default: prints output path only (no PII on stdout).`);
   const outPath =
     args.out ||
     path.join(root, "data", "revops", "exports", `leads-export-${Date.now()}.jsonl`);
-  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.mkdirSync(path.dirname(outPath), { recursive: true, mode: 0o700 });
   if (outPath.endsWith(".json") && !outPath.endsWith(".jsonl")) {
-    fs.writeFileSync(outPath, JSON.stringify(pkg, null, 2), "utf8");
+    fs.writeFileSync(outPath, JSON.stringify(pkg, null, 2), { encoding: "utf8", mode: 0o600 });
   } else {
-    fs.writeFileSync(outPath, packageToJsonl(pkg), "utf8");
+    fs.writeFileSync(outPath, packageToJsonl(pkg), { encoding: "utf8", mode: 0o600 });
   }
+  fs.chmodSync(outPath, 0o600);
   if (args.stdoutJson) {
     // intentional for tests — fixtures only
     process.stdout.write(JSON.stringify({ ok: true, path: outPath, count: pkg.count, schema_version: SCHEMA_VERSION }) + "\n");
