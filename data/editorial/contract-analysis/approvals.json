@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
-      "rendered_content_hash_previous": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
+      "rendered_content_hash": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
+      "rendered_content_hash_previous": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-11-12T16:12:17Z",
-      "rendered_hash_recapture_reason": "Otimização do menu autorizada para publicação pelo usuário em 2026-11-12, no escopo shared_navigation/shared_footer da emenda de apresentação já registrada. Comparação determinística contra fdbc687a1 confirma identidade byte a byte do conteúdo técnico, head editorial, fontes, cálculos, autoria, datas, canonical, robots, JSON-LD e CTA contextual. No artefato público, o delta se limita ao cabeçalho compartilhado, rodapé compartilhado e fingerprint de styles.css. Recaptura exclusiva de apresentação; nenhuma nova aprovação técnica ou revisão humana é alegada.",
-      "rendered_hash_recapture_reason_previous": "Vitrine CONFENGE autorizada para publicação em 2026-11-09; escopo shared_navigation da emenda de apresentação já registrada. Comparação do artefato final com a base 3c65897: diferença byte a byte limitada às duas âncoras do menu (desktop e móvel). Miolo técnico, fontes, cálculos, autoria, CTA contextual, robots e canonical preservados. Recaptura de apresentação; nenhuma nova aprovação técnica ou revisão humana.",
+      "rendered_hash_recaptured_at": "2026-11-12T19:25:30Z",
+      "rendered_hash_recapture_reason": "Otimização do menu autorizada pelo usuário em 2026-11-12, PR #836. Após revisão visual pelo agente coordenador das cinco capturas e QA remoto no head 00cd0faddc3414080f287d3ec491260278310a91, run 43288875329, a barra Acesso direto passa a landmark adjacente fora do cabeçalho sticky. A prova determinística conserva conteúdo técnico, head editorial, fatos, fontes, cálculos, autoria, condições e autoridade. Delta de apresentação limitado à navegação compartilhada e ao fingerprint de styles.css. Nenhuma nova aprovação técnica, revisão humana ou autorização comercial é alegada.",
+      "rendered_hash_recapture_reason_previous": "Otimização do menu autorizada para publicação pelo usuário em 2026-11-12, no escopo shared_navigation/shared_footer da emenda de apresentação já registrada. Comparação determinística contra fdbc687a1 confirma identidade byte a byte do conteúdo técnico, head editorial, fontes, cálculos, autoria, datas, canonical, robots, JSON-LD e CTA contextual. No artefato público, o delta se limita ao cabeçalho compartilhado, rodapé compartilhado e fingerprint de styles.css. Recaptura exclusiva de apresentação; nenhuma nova aprovação técnica ou revisão humana é alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -953,6 +953,33 @@
         "desktop-ferramentas.png": "538ee4b23968b9b34573788c082aa5f48013835d4cded32e789d0c291da93c12",
         "mobile-projetos.png": "815f3c0a80ce34ef8a602e1eb0e45d0e3bbdee57091db97098d288506c33a536",
         "projetos-prontos-desktop.png": "e7df2d000ac58561ca2850951e95ede32834ceac1fe8d2887af8a459f8b594ff"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "at": "2026-11-12T19:25:30Z",
+      "authority": "Pedido do usuário em 2026-11-12 para aprimorar o menu e publicar; apresentação compartilhada no escopo existente.",
+      "reviewer": "Revisão visual e adversarial por agentes; nenhuma nova revisão técnica humana alegada.",
+      "rendered_content_hash_previous": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
+      "rendered_content_hash": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
+      "reason": "Otimização do menu autorizada pelo usuário em 2026-11-12, PR #836. Após revisão visual pelo agente coordenador das cinco capturas e QA remoto no head 00cd0faddc3414080f287d3ec491260278310a91, run 43288875329, a barra Acesso direto passa a landmark adjacente fora do cabeçalho sticky. A prova determinística conserva conteúdo técnico, head editorial, fatos, fontes, cálculos, autoria, condições e autoridade. Delta de apresentação limitado à navegação compartilhada e ao fingerprint de styles.css. Nenhuma nova aprovação técnica, revisão humana ou autorização comercial é alegada.",
+      "qa_source_head_sha": "00cd0faddc3414080f287d3ec491260278310a91",
+      "qa_source_tree_sha": "f46dfbbec4db14d8233c40468da5e29b427d6776",
+      "qa_workflow_run_id": "43288875329",
+      "qa_workflow_run_attempt": "1",
+      "qa_evidence_sha256": "774046dd24058747e2c1a9d134471b299ab4986c391bc75ba751451b0d975ef8",
+      "qa_provenance_sha256": "9cfc522bacb7dcdbb5d21bbc356e886958750a2f5053243ea79c2fecc49053f0",
+      "qa_presentation_proof_sha256": "ab5c70acd20d18a44bf013dd148f6124efe7ef2972087488bc20852c48425dd3",
+      "qa_geometry_log_sha256": "901df529677f45e288d9123fc3e92980e94265e41101895135e94b856da56a77",
+      "qa_event_semantics_sha256": "2705cefae98d2aab14a9aea84eb5e8240ecafa1d96b1b12d52b3b2442ee70e03",
+      "qa_screenshot_sha256": {
+        "desktop-ferramentas.png": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0",
+        "mobile-projetos.png": "455497240dd89cdfec10ddb27286d5d5c635da97664d6bb4a4ea770e2a276917",
+        "projetos-prontos-desktop.png": "69e5d28c82fb9f4dcbf16ca9956e645c0a230969bff9b27da7a936dc0d40df08",
+        "mobile-header-360.png": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b",
+        "diagnostico-first-viewport-1280.png": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
       }
     }
   ]

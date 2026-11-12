@@ -1,0 +1,78 @@
+UI_GEOMETRY_SITE_ROOT .
+OK stable_top_guard_detects_late_scroll
+OK no_horizontal_overflow_320_1920
+OK home_height_text_cta (7957px/1440, 12709px/390, 7242 chars, 5 primary)
+OK hero_first_viewport_desktop
+OK mobile_hero_cta_without_decor_panel
+OK home_hero_fold_390_768_1440
+OK functional_text_min_14px (14px across home/offer/specialist)
+OK footer_type_hierarchy_13_12_8_14px
+OK targets_min_44x44px (118 visible targets across both footer families)
+OK focus_visible_rule (runtime outline=solid)
+OK mobile_menu_escape
+OK mobile_menu_toggle_tap_returns_focus
+OK mobile_menu_visual_identity (92.16x44px, 14px)
+OK entregas_deliverable_option_drives_journey
+OK journey_default_stage_is_neutral (contrato,outro,operacao)
+OK essential_content_without_js
+OK institutional_discovery_mobile_geometry_and_panel_padding
+OK form_invalid_without_fields
+OK no_internal_language_home
+OK journeys_mobile_hierarchy (360,390,412)
+OK journey_cta_binds_form
+OK primary_cta_reaches_proposal_form
+OK in_page_service_anchor_reveals_target (320,390,430,1440)
+OK anchor_manual_input_wins_during_smooth_phase
+OK latest_anchor_wins_competing_navigation
+OK back_cancels_inflight_anchor_navigation
+OK query_changing_fragment_link_preserves_context
+OK section_composition_variety (8 blocks)
+OK tab_order_starts_with_skip (8 early focusables)
+OK zoom_200_400_usable
+OK prefers_reduced_motion_respected
+OK form_error_by_text
+OK anchors_resolve (35 refs)
+OK critical_paths_http_ok
+OK thankyou_specialist_cta_family
+OK institutional_discovery_without_js
+OK images_have_dimensions (3)
+OK axe_home_no_critical_serious (violations=0)
+OK offer_context_geometry (7 routes × 2 viewports)
+OK offer_context_computed (3col=3 ddml=0px 4items=4)
+OK offer_cta_first_viewport_and_progressive_detail (/diretoria-b2g/@390:10825px, /bid-room-licitacoes-obras/@390:10665px, /defesa-margem-contratos-publicos/@390:14781px, /diagnostico-b2g-expansao/@390:8408px, /diretoria-b2g/@1280:7528px, /bid-room-licitacoes-obras/@1280:8067px, /defesa-margem-contratos-publicos/@1280:10194px, /diagnostico-b2g-expansao/@1280:5552px)
+OK editorial_cover_scope_geometry (/conteudos/documentos-reequilibrio-obra-publica/@320:hero=378,answer=662, /acompanhamento-contratos-obras/@320:hero=2148,answer=null, /atrasos-prorrogacao-obras-publicas/@320:hero=2237,answer=null, /conteudos/documentos-reequilibrio-obra-publica/@390:hero=327,answer=611, /acompanhamento-contratos-obras/@390:hero=1936,answer=null, /atrasos-prorrogacao-obras-publicas/@390:hero=1970,answer=null, /conteudos/documentos-reequilibrio-obra-publica/@768:hero=295,answer=470, /acompanhamento-contratos-obras/@768:hero=1259,answer=null, /atrasos-prorrogacao-obras-publicas/@768:hero=1352,answer=null, /conteudos/documentos-reequilibrio-obra-publica/@1024:hero=322,answer=503, /acompanhamento-contratos-obras/@1024:hero=1067,answer=null, /atrasos-prorrogacao-obras-publicas/@1024:hero=1117,answer=null, /conteudos/documentos-reequilibrio-obra-publica/@1440:hero=356,answer=551, /acompanhamento-contratos-obras/@1440:hero=1044,answer=null, /atrasos-prorrogacao-obras-publicas/@1440:hero=1073,answer=null)
+OK header_brand_and_nav_fit (901:176px/0px, 1000:176px/0px, 1121:160px/44px, 1180:160px/44px, 1240:160px/44px, 1280:176px/44px, 1366:176px/44px, 1440:176px/44px, 1920:176px/44px)
+OK fixture_focus_offscreen_fails
+OK fixture_focus_vertically_offscreen_fails
+OK fixture_text_42px_fails
+OK fixture_overflow_fails
+OK fixture_useless_anchor_fails
+OK fixture_missing_sticky_cta_fails
+OK fixture_broken_form_fails
+OK fixture_hidden_capture_form_fails
+OK fixture_result_gated_capture_passes_when_revealed
+OK fixture_result_gated_capture_without_source_fails
+OK fixture_hidden_only_capture_form_fails
+OK fixture_authority_gated_capture_requires_registry_contract
+OK fixture_authority_gated_capture_passes_with_registry_contract
+OK fixture_authority_gated_capture_without_channel_fails
+OK fixture_authority_gated_inert_capture_with_channel_passes
+OK fixture_hidden_sticky_cta_fails
+OK fixture_layout_pass
+OK fixture_hover_lift_fails (hover_lift a.whatsapp-float -3.0px)
+OK fixture_hover_lift_pass
+OK no_hover_lift /@1440
+OK no_hover_lift /@768
+OK no_hover_lift /entregas/@1440
+OK no_hover_lift /conteudos/documentos-reequilibrio-obra-publica/@1440
+OK contact_float_hover_affordance (background+borderColor, 56x56px)
+OK type_floor_gate_detects_historical_collapse (9.76px)
+OK type_floor_seven_families (7×4; min critical 14px body 16px)
+OK cls_seven_families_le_0_05
+OK action_list_usable_width (390x844:min=289.2:decimal; 768x1024:min=621.3:decimal; 1024x768:min=533.5:decimal; 1440x900:min=621.3:decimal)
+OK action_list_two_child_prose_column (n=6 min=309px)
+OK form_step_focus_in_viewport (next=legend@81 back=legend@81)
+OK form_contact_group_aria
+OK form_no_production_post
+
+All UI geometry tests passed
