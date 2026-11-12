@@ -16,9 +16,11 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE_SHA = "5a4fa1ff828189ae2d0acbca7de2ad8009891fd3"
+BASE_SHA = "7c570c0a103fcd7e6174cb922cbc7def79ce413d"
 APPROVALS = "data/editorial/contract-analysis/approvals.json"
 ANALYSIS_ID = "13ec615146b3d348190a9b0b9148831e"
+PROJECT_DESCRIPTION_BEFORE = "Consulte disponibilidade e adaptação ao terreno."
+PROJECT_DESCRIPTION_AFTER = "Calcule seu projeto por disciplina e prazo."
 PRESENTATION_FIELDS = {
     "rendered_content_hash_previous", "rendered_content_hash",
     "rendered_hash_recaptured_at", "rendered_hash_recapture_reason",
@@ -109,6 +111,25 @@ def header_without_discovery(source: str) -> str:
     header = re.sub(r"<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->", "", shared(source, "header").group(), flags=re.S)
     return re.sub(r"\s*</header>$", "\n</header>", header)
 
+def header_with_project_calculator_description(source: str) -> str:
+    """Allow only the reviewed description on the two identified project links."""
+    header = shared(source, "header").group()
+    for position in ("header_nav", "mobile_nav"):
+        anchor = (
+            '<a class="nav-destination" href="/projetos-prontos/" '
+            'data-nav-destination="projetos-prontos" '
+            f'data-cta-position="{position}" '
+            f'data-cta-id="nav-{position}-projetos-projetos-prontos" '
+            'data-event-name="cta_click" data-navigation-link="true">'
+            '<span class="nav-destination__title">Projetos prontos</span>'
+            f'<span class="nav-destination__description">{PROJECT_DESCRIPTION_BEFORE}</span></a>'
+        )
+        assert header.count(anchor) == 1, ("project_description_binding", position, header.count(anchor))
+        old_span = f'<span class="nav-destination__description">{PROJECT_DESCRIPTION_BEFORE}</span>'
+        new_span = f'<span class="nav-destination__description">{PROJECT_DESCRIPTION_AFTER}</span>'
+        header = header.replace(anchor, anchor.replace(old_span, new_span, 1), 1)
+    return header
+
 def without_chrome(source: str) -> str:
     bar, header = discovery(source), shared(source, "header")
     inside = header.start() <= bar.start() and bar.end() <= header.end()
@@ -186,14 +207,16 @@ def main() -> None:
         after = (output / "candidate/source.html").read_text()
         before_public = (output / "baseline/public.html").read_text()
         after_public = (output / "candidate/public.html").read_text()
+        external_named_discovery(before)
+        external_named_discovery(before_public)
         external_named_discovery(after)
         external_named_discovery(after_public)
         checks = {
             "source_main_byte_identical": region(before,"main") == region(after,"main"),
             "source_head_byte_identical": region(before,"head") == region(after,"head"),
             "public_main_byte_identical": region(before_public,"main") == region(after_public,"main"),
-            "source_header_unchanged_except_bar": header_without_discovery(before) == header_without_discovery(after),
-            "public_header_unchanged_except_bar": header_without_discovery(before_public) == header_without_discovery(after_public),
+            "source_header_exact_project_description_update": header_with_project_calculator_description(before) == shared(after, "header").group(),
+            "public_header_exact_project_description_update": header_with_project_calculator_description(before_public) == shared(after_public, "header").group(),
             "source_footer_byte_identical": shared(before,"footer").group() == shared(after,"footer").group(),
             "public_footer_byte_identical": shared(before_public,"footer").group() == shared(after_public,"footer").group(),
             "source_bar_content_byte_identical": discovery_content(before) == discovery_content(after),
@@ -202,8 +225,8 @@ def main() -> None:
             "public_outside_shared_navigation_footer_css_fingerprint_byte_identical": without_fingerprint(without_chrome(before_public)) == without_fingerprint(without_chrome(after_public)),
         }
         frozen = json.loads((baseline_root / "data/bofu-dominance/frozen-specs/hashes.json").read_text())
-        protected = [name for name in frozen["forbidden"] if name not in {"script.js","styles.css"}]
-        checks["fifteen_other_protected_files_unchanged"] = len(protected) == 15 and all((ROOT/name).read_bytes() == (baseline_root/name).read_bytes() for name in protected)
+        protected = list(frozen["forbidden"])
+        checks["seventeen_protected_files_unchanged"] = len(protected) == 17 and all((ROOT/name).read_bytes() == (baseline_root/name).read_bytes() for name in protected)
         checks["six_source_pillars_unchanged"] = len(frozen["pillars"]) == 6 and all((ROOT/slug/"index.html").read_bytes() == (baseline_root/slug/"index.html").read_bytes() for slug in frozen["pillars"])
         assert all(checks.values()), checks
         report = {
@@ -226,6 +249,8 @@ def main() -> None:
             "styles_css_sha256": digest((ROOT/"styles.css").read_bytes()),
             "factual_approval_fields_unchanged": True,
             "human_review_claimed": False,
+            "project_description_update": {"before": PROJECT_DESCRIPTION_BEFORE, "after": PROJECT_DESCRIPTION_AFTER,
+                                           "href": "/projetos-prontos/", "positions": ["header_nav", "mobile_nav"]},
         }
         (output/"evidence.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
         print(json.dumps(report,ensure_ascii=False))
