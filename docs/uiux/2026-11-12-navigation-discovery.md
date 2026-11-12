@@ -72,3 +72,9 @@ A revisão dos outros percursos identificou três preparações de teste depende
 ## Dependência do pacote Netcup
 
 O teste de execução isolada do pacote em `d9c081f3` identificou a ausência do novo renderizador na lista explícita de arquivos enviados ao servidor. `navigation_discovery.py` foi incluído nas duas listas do pacote, com suas dependências transitivas já cobertas. Passaram os testes de conteúdo/reprodutibilidade e execução isolada sob `-I -S`, incluindo contraprovas separadas que retiram `shell_nav.py` e `navigation_discovery.py`. As oito suítes restantes da etapa estática, ainda não alcançadas na CI interrompida, também passaram localmente. A validação integral e a publicação permanecem condicionadas à CI da revisão final.
+
+## Atribuição e conferência antecipada do artefato
+
+A suíte pSEO em `b1d1d71d` encontrou um mock de âncora sem `getAttribute`, método DOM usado pela proteção que separa navegação de ação comercial. A simulação foi completada sem alterar o código publicado. A suíte de atribuição passou localmente, incluindo uma contraprova que mantém o contexto comercial salvo após clicar em navegação. Uma varredura dos mocks equivalentes não encontrou outro caso concreto.
+
+Para reduzir o tempo até detectar regressões no HTML compilado, o workflow de revisão ganhou uma conferência paralela restrita à branch desta alteração. Ela compila `_site` e executa os testes existentes de navegação, eventos, primeira dobra, catálogo e contato com o mesmo Chrome contratado. Esse job é somente de leitura, não publica e não substitui os controles integrais da PR nem a liberação Netcup.

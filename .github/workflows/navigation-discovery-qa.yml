@@ -139,3 +139,115 @@ jobs:
           path: build/reports/convergence/navigation-discovery/
           if-no-files-found: error
           retention-days: 14
+
+  navigation-artifact-review:
+    name: Navigation artifact review
+    if: github.head_ref == 'feat/navigation-discovery-20261112'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Initialize artifact review evidence
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          if sha != os.environ["EXPECTED_HEAD_SHA"]:
+              raise SystemExit("checkout does not match the pull request revision")
+          output = Path("build/reports/navigation-artifact-qa")
+          output.mkdir(parents=True, exist_ok=True)
+          (output / "provenance.json").write_text(json.dumps({
+              "source_sha": sha,
+              "surface": "built_artifact",
+              "site_root": "_site",
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "workflow_run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "scope": "Targeted artifact review; required publication gates remain unchanged"
+          }, indent=2) + "\n")
+          PY
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Install locked dependencies
+        run: |
+          npm ci --engine-strict
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Resolve contracted Chrome version
+        id: browser-contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Setup Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        with:
+          chrome-version: ${{ steps.browser-contract.outputs.version }}
+      - name: Build the pull request artifact
+        id: build
+        env:
+          COMMIT_REF: ${{ github.event.pull_request.head.sha }}
+          CONTEXT: ""
+          TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+        run: |
+          set -o pipefail
+          npm run build:site 2>&1 | tee build/reports/navigation-artifact-qa/build.log
+      - name: Review navigation in the compiled artifact
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          NAVIGATION_EVIDENCE_DIR: build/reports/navigation-artifact-qa/navigation
+        run: |
+          set -o pipefail
+          node scripts/site/test_navigation_discovery_browser.mjs _site 2>&1 | tee build/reports/navigation-artifact-qa/navigation.log
+      - name: Verify artifact event semantics
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          SITE_ROOT: _site
+          EVENT_SEMANTICS_REPORT: build/reports/navigation-artifact-qa/event-semantics.json
+        run: |
+          set -o pipefail
+          node scripts/site/test_event_semantics.mjs 2>&1 | tee build/reports/navigation-artifact-qa/event-semantics.log
+      - name: Measure first fold in the compiled artifact
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUBLIC_ARTIFACT_REQUIRED: "1"
+        run: |
+          set -o pipefail
+          node scripts/site/measure_first_fold.mjs --artifact --report build/reports/navigation-artifact-qa/first-fold.json 2>&1 | tee build/reports/navigation-artifact-qa/first-fold.log
+      - name: Verify artifact tool catalogue and sharing
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -o pipefail
+          node scripts/site/test_tool_showcase_browser.mjs _site 2>&1 | tee build/reports/navigation-artifact-qa/tool-showcase.log
+      - name: Verify artifact contact journeys
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          SITE_ROOT: _site
+          CONTACT_JOURNEY_REPORT_DIR: build/reports/navigation-artifact-qa/contact-journeys
+        run: |
+          set -o pipefail
+          node scripts/site/test_contact_journeys.mjs 2>&1 | tee build/reports/navigation-artifact-qa/contact-journeys.log
+      - name: Preserve artifact review evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: navigation-artifact-qa
+          path: build/reports/navigation-artifact-qa/
+          if-no-files-found: error
+          retention-days: 14

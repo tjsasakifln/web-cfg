@@ -370,10 +370,27 @@ const anchor = {
     journey: "edital",
     segmentKey: "pavimentacao-infraestrutura-viaria",
   },
+  getAttribute(name) {
+    if (name === "href") return this.href;
+    if (!name.startsWith("data-")) return null;
+    const key = name.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    return Object.hasOwn(this.dataset, key) ? this.dataset[key] : null;
+  },
   closest(sel) {
     return String(sel).includes("a[href]") ? this : null;
   },
 };
+const beforeNavigation = JSON.stringify(clickStore);
+const navigationAnchor = {
+  ...anchor,
+  href: "/servicos/",
+  dataset: { ...anchor.dataset, navigationLink: "true" },
+};
+clickFns.forEach((fn) => fn({ target: navigationAnchor }));
+if (JSON.stringify(clickStore) !== beforeNavigation) {
+  fail("navigation_click_rewrites_attribution", clickStore);
+}
+pass("navigation_click_preserves_attribution");
 clickFns.forEach((fn) => fn({ target: anchor }));
 const afterClick = JSON.parse(clickStore.confenge_pseo_attribution || "{}");
 if (afterClick.origem !== "/conteudos/sinapi-desonerado-nao-desonerado/") {
