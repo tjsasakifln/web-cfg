@@ -730,14 +730,21 @@ if (screenshotDir) {
     };
   });
   const captureErrors = [];
+  // scrollHeight is integral, while the footer rectangle can end between
+  // CSS pixels. Credit at most one pixel at this bottom edge only.
+  const bottomOverflow = Math.max(0, framing.footer.bottom - framing.viewportHeight);
+  const bottomTolerance = 1;
   if (framing.viewportWidth !== 390 || Math.abs(framing.footer.width - original.footerWidth) > 1
     || Math.abs(framing.footer.height - original.footerHeight) > 1) captureErrors.push("footer_capture_geometry_changed");
   if (framing.footer.top < framing.headerBottom + 0.5 || framing.footer.top < 0
-    || framing.footer.bottom > framing.viewportHeight || framing.footer.left < 0
+    || bottomOverflow > bottomTolerance || framing.footer.left < 0
     || framing.footer.right > framing.viewportWidth) captureErrors.push("footer_capture_obscured_or_outside_viewport");
-  findings.push({ route: "/entregas/", check: "footer_review_capture", original, ...framing, errors: captureErrors });
+  findings.push({ route: "/entregas/", check: "footer_review_capture", original, ...framing, bottomOverflow, bottomTolerance, errors: captureErrors });
   if (captureErrors.length) failed += 1;
-  else await footer.screenshot({ path: path.join(screenshotDir, "footer-mobile-390.png") });
+  else await footer.screenshot({
+    path: path.join(screenshotDir, "footer-mobile-390.png"),
+    scrollIntoView: false, captureBeyondViewport: true,
+  });
 }
 
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
