@@ -21,6 +21,7 @@ jobs:
           # Review the actual PR revision. Required site-ci still evaluates
           # the merge candidate and the complete generated public artifact.
           ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
           persist-credentials: false
       - name: Initialize source review evidence
         env:
@@ -74,6 +75,60 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_event_semantics.mjs 2>&1 | tee build/reports/convergence/navigation-discovery/event-semantics.log
+      - name: Measure first fold on the clean source revision
+        id: first-fold
+        if: always() && steps.dependencies.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          test -z "$(git status --porcelain)"
+          node scripts/site/measure_first_fold.mjs --write --report "$RUNNER_TEMP/navigation-first-fold/report.json"
+      - name: Collect fresh first-fold contracts and provenance
+        id: first-fold-evidence
+        if: always() && steps.dependencies.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # Never package a previous commit's measurements after a browser
+          # failure. Fresh failed measurements remain diagnostic evidence;
+          # the normal first-fold gate below still rejects every failure.
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
+          import { firstFoldInputHashes } from './scripts/site/first_fold_identity.mjs';
+          const files = ['data/commercial/first-fold-contract.v1.json', 'data/commercial/first-fold-measurements.v1.json'];
+          const reportPath = process.env.RUNNER_TEMP + '/navigation-first-fold/report.json';
+          const report = JSON.parse(readFileSync(reportPath, 'utf8'));
+          const contract = JSON.parse(readFileSync(files[0], 'utf8'));
+          const measured = JSON.parse(readFileSync(files[1], 'utf8'));
+          const original = JSON.parse(execFileSync('git', ['show', process.env.EXPECTED_HEAD_SHA + ':' + files[0]], { encoding: 'utf8' }));
+          for (const evidence of [report, measured]) {
+            assert.equal(evidence.schema, 'confenge.first-fold-measurements/1.0');
+            assert.equal(evidence.commit_sha, process.env.EXPECTED_HEAD_SHA);
+            assert.equal(evidence.surface, 'source');
+            assert.equal(evidence.tree_dirty, false);
+            assert.ok(evidence.routes.length > 0);
+          }
+          assert.deepEqual(contract.census.map(row => row.route), original.census.map(row => row.route));
+          assert.equal(report.planned, report.executed);
+          assert.equal(report.executed, contract.census.length);
+          assert.equal(report.executed, measured.routes.length);
+          assert.deepEqual(report.input_hashes, measured.input_hashes);
+          assert.deepEqual(report.input_hashes, firstFoldInputHashes(process.cwd(), contract.census.map(row => row.route)));
+          assert.deepEqual(report.routes, measured.routes);
+          const changed = execFileSync('git', ['diff', '--name-only'], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+          assert.ok(changed.every(file => files.includes(file)), 'measurement may change only its two derived contracts');
+          const output = 'build/reports/convergence/navigation-discovery/first-fold';
+          mkdirSync(output + '/contracts', { recursive: true });
+          copyFileSync(reportPath, output + '/report.json');
+          for (const file of files) copyFileSync(file, output + '/contracts/' + file.split('/').at(-1));
+          JS
+      - name: Verify measured first-fold contract without exceptions
+        if: always() && steps.first-fold-evidence.outcome == 'success'
+        run: npm run test:first-fold-contract
       # Evidence can be inspected before an approved editorial recapture.
       # This workflow does not rebuild frozen hashes, deploy or replace site-ci.
       - name: Preserve navigation review evidence
