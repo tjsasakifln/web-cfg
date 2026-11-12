@@ -13,14 +13,14 @@ Uma única configuração em `data/site/public-ia-map.json` define seis grupos, 
 
 | Grupo | Trabalho do visitante |
 | --- | --- |
-| Projetos | Conhecer disciplinas, coordenação, revisão e consulta de projetos residenciais |
+| Projetos | Conhecer disciplinas, coordenação e revisão; calcular projetos residenciais por disciplina e prazo |
 | Serviços | Encontrar orçamento, inspeção, perícia, avaliação, SST e serviços condominiais |
 | Ferramentas | Abrir DWG/IFC, avaliar imóveis, orçar, calcular e planejar |
 | Inteligência | Pesquisar clientes, mercados, concorrentes e referências de preços |
 | Obras públicas | Analisar edital, medições, aditivos, atrasos e reequilíbrio |
 | Conteúdos | Consultar biblioteca, guias, exemplos, casos e referências legais |
 
-Editor DWG, BIM e IFC, Projetos prontos e Radar público permanecem visíveis na barra de acesso direto. A CONFENGE possui acesso institucional visível. Todos os links têm destino existente e indexável. Projetos prontos conduz à consulta de disponibilidade, sem anunciar compra ou catálogo já disponível. A operação de profissionais desativada permanece fora da navegação.
+Editor DWG, BIM e IFC, Projetos prontos e Radar público permanecem visíveis na barra de acesso direto. A CONFENGE possui acesso institucional visível. Todos os links têm destino existente e indexável. Projetos prontos conduz ao cálculo de projetos residenciais por disciplina e prazo e à revisão do pedido. O pagamento pelo Mercado Pago depende da disponibilidade da contratação online. A operação de profissionais desativada permanece fora da navegação.
 
 Os painéis usam `details` e `summary` nativos, com links no HTML entregue. Funcionam por clique, toque e teclado, inclusive sem JavaScript. A implementação abrange o cabeçalho geral, a família de Projetos, Projetos prontos, páginas geradas e o shell compartilhado do BIM.
 
@@ -164,7 +164,7 @@ A incorporação desses derivados e do ajuste de captura não altera os 60 insum
 
 A revisão da integração identificou a descrição herdada “Consulte disponibilidade e adaptação ao terreno.” no destino Projetos prontos. Ela passa a ser “Calcule seu projeto por disciplina e prazo.”, em acordo com o simulador e o botão Calcular meu projeto da oferta integrada. O rótulo, a URL, os preços, as condições e o funcionamento da contratação permanecem iguais. A frase descreve o cálculo disponível e não afirma que o pagamento esteja habilitado.
 
-O contrato de navegação e os 269 HTML mutáveis recebem somente essa descrição, nos links identificados que já existem em cada cabeçalho: 536 spans ao todo. O canário editorial permanece com a fonte anterior até a nova inspeção. A prova de apresentação usa o checkpoint `7c570c0a` e exige a troca exata dos dois spans do canário, com igualdade byte a byte de todo o restante do cabeçalho, na fonte e no HTML finalizado. Head, main, rodapé, barra, conteúdo externo, 17 arquivos protegidos e seis pilares continuam sujeitos à igualdade estrita. Contraprovas recusam vínculos, rótulos, URLs, eventos, descrições e quantidades incorretos.
+O contrato de navegação e os 269 HTML mutáveis recebem somente essa descrição, nos links identificados que já existem em cada cabeçalho: 536 spans ao todo. No candidato `e58244c9`, o canário editorial permaneceu com a fonte anterior até a nova inspeção. A prova de apresentação usa o checkpoint `7c570c0a` e exige a troca exata dos dois spans do canário, com igualdade byte a byte de todo o restante do cabeçalho, na fonte e no HTML finalizado. Head, main, rodapé, barra, conteúdo externo, 17 arquivos protegidos e seis pilares continuam sujeitos à igualdade estrita. Contraprovas recusam vínculos, rótulos, URLs, eventos, descrições e quantidades incorretos.
 
 A nova medição em fonte limpa e a inspeção das imagens precedem qualquer atualização dos cinco campos de apresentação e do evento de auditoria do canário. Os dois JSON de primeira dobra serão incorporados a partir dos arquivos originais da mesma execução. Nenhuma aprovação factual, estado humano ou registro congelado é alterado por esse ajuste de navegação. Os controles completos e a publicação do SHA integrado continuam pendentes.
 
