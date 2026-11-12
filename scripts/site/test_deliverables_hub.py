@@ -622,9 +622,11 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     assert 'data-section-archetype="content_editorial"' in block
     articles = re.findall(r"<article>.*?</article>", block, re.S)
     assert len(articles) == 3
-    for term in ("projetos", "planilhas", "relatórios", "laudos", "pareceres", "dossiês", "demonstrativo"):
+    for term in ("projetos", "planilhas", "relatórios", "laudos", "pareceres", "dossiês", "dimensionamento", "critérios de medição"):
         assert term in text, term
-    for destination in ("/casos/demonstrativo-projeto-privado/", "/entregas/", "/casos/medicao-glosa-demonstrativo/"):
+    assert not re.search(r"banheiro|10 cm|6,84|exemplo demonstrativo", text)
+    assert "/casos/" not in block, "educational examples are not institutional proof"
+    for destination in ("/projetos/coordenacao-multidisciplinar/", "/entregas/", "/quantitativos-orcamento-obras/"):
         assert f'href="{destination}"' in block
     conduction = re.search(r'<section\b[^>]*id="como-conduzimos"[^>]*>.*?</section>', home, re.S)
     assert conduction
@@ -674,7 +676,7 @@ def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None
 
 def test_home_delivery_contract_rejects_lost_substance_or_responsive_layout() -> None:
     home, css = _html(ROOT / "index.html"), _html(ROOT / "assets/home-10x.css")
-    for old, new in (("relatórios", "objetos"), ('href="/casos/demonstrativo-projeto-privado/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
+    for old, new in (("Relatórios", "Objetos"), ('href="/projetos/coordenacao-multidisciplinar/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
         assert old in home
         with pytest.raises(AssertionError):
             _assert_home_delivery_contract(home.replace(old, new), css)

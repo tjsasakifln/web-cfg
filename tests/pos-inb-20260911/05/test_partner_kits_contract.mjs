@@ -54,12 +54,12 @@ if (String(orc.sample.path).includes("modelo-base-quantitativa-canonica")) fail(
 if (!String(orc.sample.href).includes("#quantitativos")) fail("orc_fragment", orc.sample);
 const rev = kits.find((k) => k.id === "revisao-tecnica");
 if (rev.sample.kind !== "review_findings") fail("rev_kind", rev.sample);
-if (!String(rev.sample.href).includes("apontamento") && !String(rev.sample.href).includes("#extrato-demonstrativo")) {
+if (!String(rev.sample.href).includes("#criterios-de-revisao")) {
   fail("rev_fragment", rev.sample);
 }
 const compat = kits.find((k) => k.id === "compatibilizacao-interfaces");
 if (compat.sample.kind !== "clash_interfaces") fail("compat_kind", compat.sample);
-if (!String(compat.sample.href).includes("#registro-interferencias")) fail("compat_fragment", compat.sample);
+if (!String(compat.sample.href).includes("#criterios-de-compatibilizacao")) fail("compat_fragment", compat.sample);
 const elab = kits.find((k) => k.id === "elaboracao-complementar");
 if (elab.sample.kind === "clash_interfaces") fail("elab_clash");
 if (elab.sample.kind !== "illustrative_schema" || !elab.sample.labeled_as_illustration) {

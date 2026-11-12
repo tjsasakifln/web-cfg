@@ -66,7 +66,7 @@
       "measurement": {
         "date": "2026-11-12",
         "viewport": "1366x768",
-        "finding": "H1 de y=151 a y=267; substância técnica de y=519 a y=594; ação primária inteira de y=443 a y=487 em 1366x768, e de y=384 a y=428 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=151 a y=267; substância técnica de y=551 a y=626; ação primária inteira de y=475 a y=519 em 1366x768, e de y=384 a y=428 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -562,10 +562,10 @@
             "publicas"
           ],
           "lead_adds": [
-            "apoio",
-            "avaliacao",
+            "apoiar",
+            "compatibilizacao",
             "confenge",
-            "construir"
+            "contratacao"
           ]
         },
         {

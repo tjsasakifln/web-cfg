@@ -39,17 +39,27 @@ export function composeProofEntrances(rootDir, { check = false } = {}) {
   }
   const entrances = loadEntrances(root);
   const current = fs.readFileSync(landingPath, "utf8");
-  const html = injectProofEntrances(current, entrances);
+  const professional = /<section\b[^>]*data-commercial-presentation="technical-scope"/.test(current);
+  if (professional) {
+    for (const entrance of entrances) {
+      const expected = `${entrance.url}#quantitativos`;
+      const links = [...current.matchAll(/<a\b(?=[^>]*data-demonstrative-resource=)[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+      if (!links.some((link) => link[1] === expected && /Exemplo demonstrativo/i.test(link[2]))) {
+        throw new Error(`required_demonstrative_resource_missing:${expected}`);
+      }
+    }
+  }
+  const html = professional ? current : injectProofEntrances(current, entrances);
   if (check) {
     if (html !== current) {
       throw new Error(`proof_entrances_out_of_date:${LANDING_REL}`);
     }
-  } else {
+  } else if (html !== current) {
     fs.writeFileSync(landingPath, html);
   }
   return {
     checked: check,
-    written: check ? [] : [LANDING_REL],
+    written: check || html === current ? [] : [LANDING_REL],
     entrances: entrances.map((entrance) => ({
       key: entrance.key,
       proof_id: entrance.proof_id,

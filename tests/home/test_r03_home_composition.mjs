@@ -64,18 +64,30 @@ assert.doesNotMatch(main, /Competências de projeto|Onde projetamos|Do conceito 
 assert.doesNotMatch(main, /class="[^"]*(?:home-capabilities|home-sectors|home-delivery-flow)[^"]*"/);
 assert.match(main, /Um projeto, uma inspeção, uma avaliação, uma perícia, uma documentação de SST ou uma questão de obra pública exigem métodos diferentes/);
 
-// Provas de naturezas distintas permanecem identificadas e levam a recursos
-// públicos existentes, sem criar alegação de cliente.
-for (const href of [
-  "/casos/demonstrativo-projeto-privado/",
-  "/entregas/",
-  "/casos/medicao-glosa-demonstrativo/",
-]) {
-  assert.match(main, new RegExp(`href="${href.replaceAll("/", "\\/")}"`));
+// Cada entrega explica trabalho e documentação em um bloco próprio, com
+// destino público existente, sem criar alegação de cliente.
+const evidence = main.match(/<section[^>]+class="[^"]*\bhome-evidence\b[^"]*"[\s\S]*?<\/section>/i)?.[0] || "";
+const deliveryCards = [...evidence.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/gi)].map(match => match[0]);
+const deliveries = [
+  ["/projetos/coordenacao-multidisciplinar/", /dimensionamento|interfaces|revisões/i, /pranchas|memoriais/i],
+  ["/quantitativos-orcamento-obras/", /quantidades|critérios de medição/i, /planilhas|custos/i],
+  ["/entregas/", /verificações|fundamentação/i, /relatórios|laudos|pareceres|dossiês/i],
+];
+assert.equal(deliveryCards.length, deliveries.length, "três conteúdos de entrega");
+const matchedCards = new Set();
+for (const [href, work, output] of deliveries) {
+  const cards = deliveryCards.filter(card => card.includes(`href="${href}"`));
+  assert.equal(cards.length, 1, href);
+  assert.equal(matchedCards.has(cards[0]), false, `bloco próprio para ${href}`);
+  matchedCards.add(cards[0]);
+  assert.match(cards[0], /<h3\b[^>]*>[^<]+<\/h3>/i, href);
+  const description = [...cards[0].matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)].map(match => match[1]).join(" ");
+  assert.match(description, work, href);
+  assert.match(description, output, href);
   assert.equal(fs.existsSync(path.join(root, href.slice(1), "index.html")), true, href);
 }
-assert.match(main, /Quando um material é demonstrativo, ele permanece identificado como tal/);
 assert.doesNotMatch(main, /caso de cliente|cliente atendido|resultado comprovado/i);
+assert.doesNotMatch(evidence, /caso real|case de sucesso|portf[óo]lio/i);
 
 // Condomínios e Parcerias são caminhos contextuais posteriores às sete frentes.
 assert.match(main, /data-cta-id="home-context-condominiums"[^>]+href="\/engenharia-condominios\/"/);

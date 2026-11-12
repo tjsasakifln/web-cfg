@@ -5,7 +5,6 @@ These tests drive the real shipped HTML/CSS/JSON — not re-implementations.
 
 from __future__ import annotations
 
-import csv
 import hashlib
 import json
 import re
@@ -507,8 +506,9 @@ def test_home_five_second_clarity():
     assert "necessidades públicas e privadas" in fold_lower
     assert "elabora e coordena" in fold_lower
     assert "entrega técnica" in fold_lower
-    for front in ("orçamento", "inspeção", "perícia", "avaliação", "segurança do trabalho", "obras públicas"):
+    for front in ("orçamento", "inspeção", "perícia", "avaliação", "obras públicas"):
         assert front in fold_lower
+    assert re.search(r"segurança do trabalho|\bsst\b", fold_lower), "occupational safety scope missing"
     assert "solicitar proposta" in fold_lower
     assert 'href="#contato"' in fold
     assert 'href="/servicos/"' in fold
@@ -535,26 +535,25 @@ def test_home_decision_fold_hierarchy():
     assert 'id="como-conduzimos"' in html and 'id="contextos"' in html
     assert html.find('id="servicos-complementares"') < html.find('id="como-conduzimos"')
     assert html.find('id="contextos"') < html.find('id="solicitar-proposta"')
-    # The sample on the first screen must be traceable to the published
-    # takeoff. Check the material quantities independently of the illustration.
-    panel = re.search(r'<figure class="home-opening__figure"[\s\S]*?</figure>', hero_html)
-    assert panel, "hero takeoff sample missing"
+    # A scope description names the work and its use. It must not imply a
+    # client project or present an elementary teaching calculation as proof.
+    panel = re.search(r'<figure class="home-opening__figure"[^>]*data-content-kind="service-scope"[^>]*>[\s\S]*?</figure>', hero_html)
+    assert panel, "hero professional scope missing"
     panel_html = panel.group(0)
-    case = ROOT / "casos/demonstrativo-projeto-privado"
-    with (case / "data/quantitativos.csv").open(encoding="utf-8") as stream:
-        rows = {row["id"]: row for row in csv.DictReader((line for line in stream if not line.startswith("#")), delimiter=";")}
-    floor = float(rows["Q-PISO-01"]["quantidade"])
-    membrane = float(rows["Q-IMP-01"]["quantidade"])
-    for value in (floor, membrane - floor, membrane):
-        assert f"{value:.2f}".replace(".", ",") + " m²" in panel_html
-    assert "Exemplo demonstrativo" in panel_html
-    assert rows["Q-IMP-01"]["revisao"] in panel_html
-    assert 'src="/assets/home-quantitativo-r01.svg"' in panel_html
-    assert (ROOT / "assets/home-quantitativo-r01.svg").is_file()
-    for href in ("/casos/demonstrativo-projeto-privado/#quantitativos", "/quantitativos-orcamento-obras/#triagem-quantitativos"):
-        assert f'href="{href}"' in panel_html
-        path, anchor = href.split("#")
-        assert f'id="{anchor}"' in (ROOT / path.strip("/") / "index.html").read_text(encoding="utf-8")
+    assert 'aria-labelledby="hero-plate-cap"' in panel_html
+    assert 'id="hero-plate-cap"' in panel_html
+    assert '<h2 class="home-scope__title">' in panel_html
+    terms = re.findall(r"<dt(?:\s[^>]*)?>(.*?)</dt>", panel_html, re.S)
+    definitions = re.findall(r"<dd(?:\s[^>]*)?>(.*?)</dd>", panel_html, re.S)
+    assert len(terms) == len(definitions) == 3, "three engineering criteria are required"
+    assert len(set(terms)) == 3 and all(value.strip() for value in definitions)
+    text = re.sub(r"<[^>]+>", " ", panel_html).casefold()
+    for concept in ("concepção", "dimensionamento", "integração", "disciplinas", "detalhamento", "pranchas", "memoriais", "fase contratada"):
+        assert concept in text, f"missing scope substance: {concept}"
+    assert not re.search(r"caso real|case de sucesso|portfólio|economia comprovada|exemplo demonstrativo|banheiro|6,84", text)
+    assert "/casos/" not in panel_html and "home-quantitativo-r01.svg" not in panel_html
+    assert 'href="/projetos/"' in panel_html
+    assert (ROOT / "projetos" / "index.html").is_file()
 
 
 def test_form_qualification_minimal():
@@ -1634,38 +1633,50 @@ def test_page_index_guard_catches_a_hidden_anchor():
     assert not ({"a", "d", "s"} & parser.hidden_ids)
 
 
-def test_project_demonstrations_are_distinct_semantic_and_on_brand():
-    """Each project route needs a technical demonstration that substantiates its
-    local narrative instead of repeating the decorative hero diagram."""
+def test_project_criteria_are_distinct_semantic_and_on_brand():
+    """Each project route explains its own engineering decisions and deliveries.
+
+    Technical service descriptions are semantic HTML, not teaching diagrams
+    or implied evidence of completed client work. The project family keeps the
+    same brand colors and no-script access to criteria and deliverables.
+    """
     source = json.loads(
         (ROOT / "data" / "projects" / "project-pages.v1.json").read_text(encoding="utf-8")
     )
     pages = source["pages"]
     assert len(pages) == 13
-    examples = [
-        tuple((row["label"], row["value"]) for row in page["demonstration"]["rows"])
-        for page in pages
-    ]
-    assert len(set(examples)) == len(pages), "each page must interpret the example for its service"
+    for field in ("technical_panel", "technical_review"):
+        records = [
+            tuple((row["label"], row["value"]) for row in page[field]["rows"])
+            for page in pages
+        ]
+        assert len(set(records)) == len(pages), f"{field}: criteria must be specific to each service"
+        for page in pages:
+            record = page[field]
+            assert len(record["rows"]) >= 3, f"{page['route']}: technical criteria missing"
+            assert all(row["label"].strip() and row["value"].strip() for row in record["rows"])
+            assert len({row["label"] for row in record["rows"]}) == len(record["rows"])
+            assert record["title"].strip() and record["label"].strip()
+            text = json.dumps(record, ensure_ascii=False)
+            assert not re.search(r"caso real|case de sucesso|portfólio|economia comprovada", text, re.I), (
+                f"{page['route']}: a description of the service is not client proof"
+            )
     for page in pages:
-        visual = page["visual"]
-        demo = page["demonstration"]
-        assert len(demo["rows"]) >= 3, f"{page['route']}: evidence record missing"
-        assert demo["href"] != visual["src"], f"{page['route']}: evidence link repeats the opening"
-        asset = ROOT / visual["src"].removeprefix("/")
-        assert asset.is_file(), f"missing technical detail: {asset}"
-        root = ET.parse(asset).getroot()
-        assert root.get("viewBox"), f"{asset}: detail needs a scalable drawing"
-        assert root.get("role") == "img", f"{asset}: drawing needs an image role"
-        for tag in ("title", "desc"):
-            assert root.findtext(f"{{http://www.w3.org/2000/svg}}{tag}"), f"{asset}: missing {tag}"
-        assert visual["alt"].strip(), f"{asset}: illustration needs an accessible description"
-        assert not root.findall(".//{http://www.w3.org/2000/svg}text"), (
-            f"{asset}: put measurements and instructions in the responsive HTML"
-        )
-        assert re.search(r"(exemplo|demonstrativ|ilustrativ)", " ".join([
-            visual["label"], demo["label"], demo["body"]
-        ]), re.I), f"{page['route']}: identify the illustrative nature of the example"
+        assert "visual" not in page and "demonstration" not in page
+        document = (ROOT / page["route"].strip("/") / "index.html").read_text(encoding="utf-8")
+        for tag, name, heading in (
+            ("aside", "pp-hero__visual", "technical-panel-title"),
+            ("article", "pp-record", "technical-review-title"),
+        ):
+            block = re.search(rf'<{tag} class="{name}"[^>]*aria-labelledby="{heading}"[^>]*>(.*?)</{tag}>', document, re.S)
+            assert block, f"{page['route']}: accessible {name} missing"
+            content = block.group(1)
+            assert f'id="{heading}"' in content
+            assert len(re.findall(r"<dt(?:\s|>)", content)) >= 3
+            assert len(re.findall(r"<dd(?:\s|>)", content)) >= 3
+            assert "<img" not in content, f"{page['route']}: criteria must be readable HTML"
+        assert 'href="#criterios-tecnicos"' in document
+        assert 'href="#entregaveis"' in document
 
     family = (ROOT / "assets" / "project-practices.css").read_text(encoding="utf-8")
     family += "".join(

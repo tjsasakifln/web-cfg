@@ -150,26 +150,35 @@ export async function runMutations(srcRoot, options = {}) {
   }, (ctrl, mut) => rowStatus(mut.report, "Q01.http.body.quantitativos.csv") === "fail");
 
   mutate("wipe_excerpt", (dir) => {
-    const page = path.join(dir, ORCAMENTO_PAGE);
+    const page = path.join(dir, DEMO_PAGE);
     if (!fs.existsSync(page)) return;
-    let html = fs.readFileSync(page, "utf8");
-    const csvPath = path.join(dir, CSV_DIR, "quantitativos.csv");
-    const csv = fs.existsSync(csvPath) ? fs.readFileSync(csvPath, "utf8") : "";
-    const qtyLine = csv.split(/\r?\n/).find((line) => line.startsWith(`${EXCERPT_ITEM_ID};`));
-    const qty = qtyLine ? qtyLine.split(";")[3] : null;
-    if (qty) {
-      const localized = String(qty).replace(".", ",");
-      const short = localized.replace(/0+$/, "").replace(/,$/, "");
-      html = html.split(qty).join("").split(localized).join("");
-      if (short && short !== localized) html = html.split(short).join("");
-    }
-    html = html.replace(/data-trail-quantity="[^"]*"/g, 'data-trail-quantity=""');
-    html = html.replace(/data-trail-item-quantity="[^"]*"/g, 'data-trail-item-quantity=""');
-    if (!html.includes("awaiting-canonical-excerpt")) {
-      html = html.replace("<main", '<div data-sample-trail-state="awaiting-canonical-excerpt"></div><main');
-    }
+    const html = fs.readFileSync(page, "utf8").replace(/<tr\b[^>]*>[\s\S]*?<\/tr>/g,
+      (row) => row.includes(`<td>${EXCERPT_ITEM_ID}</td>`) ? "" : row);
     fs.writeFileSync(page, html);
-  }, (ctrl, mut) => rowStatus(mut.report, "Q02.excerpt.not_awaiting") === "fail" || rowStatus(mut.report, "Q02.excerpt.numeric") === "fail");
+  }, (ctrl, mut) => rowStatus(ctrl.report, "Q02.demonstrative.numeric") === "pass" && rowStatus(mut.report, "Q02.demonstrative.numeric") === "fail");
+
+  mutate("remove_budget_scope", (dir) => {
+    const page = path.join(dir, ORCAMENTO_PAGE);
+    const html = fs.readFileSync(page, "utf8").replace(
+      /<section\b(?=[^>]*\bid="criterios-do-orcamento")[^>]*>[\s\S]*?<\/section>/, "");
+    fs.writeFileSync(page, html);
+  }, (ctrl, mut) => rowStatus(ctrl.report, "Q02.landing.technical_scope") === "pass" && rowStatus(mut.report, "Q02.landing.technical_scope") === "fail");
+
+  mutate("unlabelled_budget_resource", (dir) => {
+    const page = path.join(dir, ORCAMENTO_PAGE);
+    const html = fs.readFileSync(page, "utf8").replace(
+      /<a\b[^>]*\bdata-demonstrative-resource="edificacao"[^>]*>[\s\S]*?<\/a>/,
+      (link) => link.replace("Exemplo demonstrativo", "Resultado de cliente"));
+    fs.writeFileSync(page, html);
+  }, (ctrl, mut) => rowStatus(ctrl.report, "Q02.landing.support_resources") === "pass" && rowStatus(mut.report, "Q02.landing.support_resources") === "fail");
+
+  mutate("wrong_budget_contact_context", (dir) => {
+    const page = path.join(dir, ORCAMENTO_PAGE);
+    const html = fs.readFileSync(page, "utf8").replace(
+      /<a\b[^>]*\bdata-cta-id="quantitativos-orcamento-obras-hero-calm"[^>]*>/,
+      (link) => link.replace('data-journey="orcamento"', 'data-journey="projeto"'));
+    fs.writeFileSync(page, html);
+  }, (ctrl, mut) => rowStatus(ctrl.report, "Q02.landing.contextual_contact") === "pass" && rowStatus(mut.report, "Q02.landing.contextual_contact") === "fail");
 
   mutate("remove_revisao_map", (dir) => {
     const page = path.join(dir, PRONTIDAO_PAGE);

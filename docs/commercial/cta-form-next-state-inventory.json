@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 294
+    "expected_declared_ctas": 293
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 42,
-    "declared_ctas": 294,
+    "declared_ctas": 293,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4376,28 +4376,13 @@
           ]
         },
         {
-          "cta_id": "home-hero-quantity-example",
-          "position": "hero_sample",
-          "href": "/casos/demonstrativo-projeto-privado/#quantitativos",
-          "stage": "inspect",
-          "commitment": "low",
-          "current_label": "Conferir a memória de cálculo",
-          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
-          "event_semantics": [
-            "cta_click"
-          ]
-        },
-        {
-          "cta_id": "home-hero-quantity-request",
-          "position": "hero_sample",
-          "href": "/quantitativos-orcamento-obras/#triagem-quantitativos",
+          "cta_id": "home-hero-project-scope",
+          "position": "hero_scope",
+          "href": "/projetos/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Pedir um levantamento",
-          "useful_next_state": "Abre o destino declarado por “Pedir um levantamento” para continuar a decisão.",
+          "current_label": "Conhecer os projetos",
+          "useful_next_state": "Abre o destino declarado por “Conhecer os projetos” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
@@ -4661,13 +4646,13 @@
           ]
         },
         {
-          "cta_id": "home-proof-private-project",
-          "position": "evidence",
-          "href": "/casos/demonstrativo-projeto-privado/",
-          "stage": "inspect",
+          "cta_id": "home-delivery-coordination",
+          "position": "deliverables",
+          "href": "/projetos/coordenacao-multidisciplinar/",
+          "stage": "compare",
           "commitment": "low",
-          "current_label": "Comparar as pranchas",
-          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
+          "current_label": "Conhecer a coordenação",
+          "useful_next_state": "Abre o destino declarado por “Conhecer a coordenação” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
@@ -4676,28 +4661,28 @@
           ]
         },
         {
-          "cta_id": "home-proof-deliverables",
-          "position": "evidence",
+          "cta_id": "home-delivery-budget",
+          "position": "deliverables",
+          "href": "/quantitativos-orcamento-obras/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Conhecer o orçamento",
+          "useful_next_state": "Abre o destino declarado por “Conhecer o orçamento” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-delivery-documents",
+          "position": "deliverables",
           "href": "/entregas/",
           "stage": "compare",
           "commitment": "low",
           "current_label": "Conhecer as entregas",
           "useful_next_state": "Abre o destino declarado por “Conhecer as entregas” para continuar a decisão.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
-          "event_semantics": [
-            "cta_click"
-          ]
-        },
-        {
-          "cta_id": "home-proof-public-contract",
-          "position": "evidence",
-          "href": "/casos/medicao-glosa-demonstrativo/",
-          "stage": "inspect",
-          "commitment": "low",
-          "current_label": "Abrir o dossiê demonstrativo",
-          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",

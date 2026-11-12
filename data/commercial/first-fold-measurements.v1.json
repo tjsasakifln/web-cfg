@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-12T05:30:53.477Z",
+  "measured_at": "2026-11-12T04:37:18.768Z",
   "measured_on": "2026-11-12",
-  "commit_sha": "dd11d3591ef7c57566c90d7db9ec1b27920e832b",
+  "commit_sha": "177e591f4d596dc76de8070b84b05ce17c7434d4",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -17,7 +17,7 @@
     "assets/editorial-article.css": "b0e2fe57e76e860bb885c7091caa74bbf46751d7ec54a717a2053b902faf2a1b",
     "assets/editorial.css": "7d20c2e78c5ccc3a56a77821d1efb11b10e68dd13fb278a452e0628fd05c86ec",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "2bcc9fc804d5c063ed6c71d6ba278b070deceb7ebe3ecee5ca3d07cd4acb4218",
+    "assets/home-10x.css": "95bb8e8fad9320f18c915969a3dacda9ef77f8d85fe5ed1b411f4f9ff2e7d0f2",
     "assets/home-base.css": "62ba1fb9962c1e559895c1b333e41608476c0aa3088a90cddf114fd142cd3aef",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
@@ -51,13 +51,13 @@
     "diretoria-b2g/index.html": "9356dc6d27b06a22f2b04d0fb773d67ef426ff5ac5ba24dd0504de59062ffd79",
     "entregas/index.html": "06a25fc9bd9640694022069d6acbe1b51303a58fbd7044417dbdb4768364ece9",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "c5890f1bc0623a8c7cbe7acb41640ef930f888c9bc5b804d8e24eb4e064385ed",
+    "index.html": "11c9e13688ccfa316920f16b1748b12d646666f6171979e2c33aa421d94e6b7f",
     "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
     "problemas-que-resolvemos/index.html": "3978ec2b8667a6bcbdef618e6a6cb7ebbfcb1b13fade4ac8953be23bed044be8",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-    "script.js": "088c57970426f0c555483521ee61b4020ae6d3a24bc2b3e46404ed62b368f89a",
+    "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
     "servicos-obras-publicas/index.html": "cf718f20444bada39698a5a1e90dfc55b8d25fa4e979d000a482f6c10fd95226",
-    "styles-hubs.css": "c902871c37dcb6d89766181efe8ad761be5237c269ddaf65ca51ac1252b51080",
+    "styles-hubs.css": "04d161f9d370fb5d535552e2373be6bfee86083aba1e672c3cc4deb3782b085e",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
@@ -113,7 +113,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "c5890f1bc0623a8c7cbe7acb41640ef930f888c9bc5b804d8e24eb4e064385ed",
+      "html_sha256": "11c9e13688ccfa316920f16b1748b12d646666f6171979e2c33aa421d94e6b7f",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -147,19 +147,19 @@
               "selector": ".hero-lead",
               "box": {
                 "top": 287,
-                "bottom": 415,
+                "bottom": 447,
                 "left": 83,
                 "right": 653,
                 "width": 570,
-                "height": 128
+                "height": 160
               },
-              "text": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação e segurança do trabalho. Entregamos projetos, planilhas e laudos para construir, contratar ou decidir, com apoio especializado a obras públi"
+              "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Desenvolvemos projetos, planilhas e laudos com critérios técnicos, detalhamento e compatibilização para apoiar a contratação e a execução do empreendimento."
             },
             "substance": {
               "selector": ".home-opening__scope",
               "box": {
-                "top": 519,
-                "bottom": 594,
+                "top": 551,
+                "bottom": 626,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -170,8 +170,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 443,
-                "bottom": 487,
+                "top": 475,
+                "bottom": 519,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -185,8 +185,8 @@
               "text": "Solicitar proposta",
               "href": "#contato",
               "box": {
-                "top": 443,
-                "bottom": 487,
+                "top": 475,
+                "bottom": 519,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -239,7 +239,7 @@
                 "width": 353,
                 "height": 144
               },
-              "text": "A CONFENGE elabora e coordena projetos e presta serviços de orçamento, inspeção, perícia, avaliação e segurança do trabalho. Entregamos projetos, planilhas e laudos para construir, contratar ou decidir, com apoio especializado a obras públi"
+              "text": "A CONFENGE elabora e coordena projetos de estruturas, instalações e infraestrutura. Desenvolvemos projetos, planilhas e laudos com critérios técnicos, detalhamento e compatibilização para apoiar a contratação e a execução do empreendimento."
             },
             "substance": {
               "selector": ".home-opening__scope",
@@ -299,26 +299,23 @@
           "publicas"
         ],
         "lead_new": [
-          "apoio",
-          "avaliacao",
+          "apoiar",
+          "compatibilizacao",
           "confenge",
-          "construir",
-          "contratar",
+          "contratacao",
           "coordena",
-          "decidir",
+          "criterios",
+          "desenvolvemos",
+          "detalhamento",
           "elabora",
-          "entregamos",
-          "especializado",
-          "inspecao",
+          "empreendimento",
+          "estruturas",
+          "execucao",
+          "infraestrutura",
+          "instalacoes",
           "laudos",
-          "obras",
-          "orcamento",
-          "pericia",
           "planilhas",
-          "presta",
-          "publi",
-          "seguranca",
-          "trabalho"
+          "tecnicos"
         ]
       }
     },

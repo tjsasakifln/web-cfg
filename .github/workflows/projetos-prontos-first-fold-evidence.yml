@@ -1,0 +1,173 @@
+name: projetos-prontos-first-fold-evidence
+
+# Temporary evidence collection for the integration of PRs #831 and #832.
+# The normal site-ci and pSEO gates remain mandatory.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: projetos-prontos-first-fold-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  evidence:
+    name: Integrated source first-fold evidence
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feat/projetos-prontos-20261112'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --engine-strict
+      - name: Resolve contracted Chrome version
+        id: browser-contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Setup Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        with:
+          chrome-version: ${{ steps.browser-contract.outputs.version }}
+      - name: Bind evidence to the clean integrated source
+        id: source
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CHROME_VERSION: ${{ steps.browser-contract.outputs.version }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+          import { DESKTOP_VIEWPORT, MOBILE_VIEWPORT } from './scripts/site/first_fold_rules.mjs';
+          const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+          const hash = file => createHash('sha256').update(readFileSync(file)).digest('hex');
+          const sourceSha = git('rev-parse', 'HEAD');
+          assert.equal(sourceSha, process.env.EXPECTED_HEAD_SHA);
+          assert.equal(git('status', '--porcelain'), '');
+          const integratedParents = ['04c32e526c15cf8fef61eac7b9ac95227dfeb63a', 'ba3f9df4ef3eba356ccfe4c6a6553c2979c967c1'];
+          for (const parent of integratedParents) git('merge-base', '--is-ancestor', parent, sourceSha);
+          const contract = JSON.parse(readFileSync('data/commercial/first-fold-contract.v1.json', 'utf8'));
+          const routes = contract.census.map(row => row.route);
+          assert.equal(routes.length, 25);
+          assert.equal(new Set(routes).size, 25);
+          assert.deepEqual([DESKTOP_VIEWPORT, MOBILE_VIEWPORT], ['1366x768', '390x844']);
+          const sourceFiles = [
+            'data/commercial/first-fold-contract.v1.json',
+            'data/organic/public-family-registry.json',
+            'data/bofu-dominance/frozen-specs/unlock-plan.v1.json',
+            'scripts/site/first_fold_rules.mjs',
+            'scripts/site/first_fold_identity.mjs',
+            'scripts/site/measure_first_fold.mjs',
+            'scripts/site/resolve_chrome_version.mjs',
+            'package-lock.json',
+          ];
+          const chromeVersion = execFileSync(process.env.CHROME_PATH, ['--version'], { encoding: 'utf8' }).trim();
+          assert.ok(chromeVersion.includes(process.env.CHROME_VERSION));
+          const target = process.env.RUNNER_TEMP + '/projetos-prontos-first-fold';
+          mkdirSync(target, { recursive: true });
+          writeFileSync(target + '/source-provenance.json', JSON.stringify({
+            schema: 'confenge.first-fold-source-provenance/1.0',
+            source_sha: sourceSha,
+            source_tree_sha: git('rev-parse', 'HEAD^{tree}'),
+            source_parents: git('show', '-s', '--format=%P', 'HEAD').split(' '),
+            integrated_ancestor_shas: integratedParents,
+            tree_dirty: false,
+            surface: 'source',
+            run_id: process.env.GITHUB_RUN_ID,
+            run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+            run_url: process.env.GITHUB_SERVER_URL + '/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID,
+            node_version: process.version,
+            chrome_version: chromeVersion,
+            contracted_chrome_version: process.env.CHROME_VERSION,
+            recorded_at: new Date().toISOString(),
+            planned_routes: routes,
+            viewports: [DESKTOP_VIEWPORT, MOBILE_VIEWPORT],
+            source_file_sha256: Object.fromEntries(sourceFiles.map(file => [file, hash(file)])),
+          }, null, 2) + '\n');
+          JS
+      - name: Measure all source routes in both viewports
+        id: measurement
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: node scripts/site/measure_first_fold.mjs --write --report "$RUNNER_TEMP/projetos-prontos-first-fold/first-fold-report.json"
+      - name: Preserve the complete measured output and provenance
+        if: always() && steps.source.outcome == 'success'
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+          import { firstFoldInputHashes, firstFoldIdentityProblems } from './scripts/site/first_fold_identity.mjs';
+          const target = process.env.RUNNER_TEMP + '/projetos-prontos-first-fold';
+          const read = file => JSON.parse(readFileSync(file, 'utf8'));
+          const source = read(target + '/source-provenance.json');
+          const report = read(target + '/first-fold-report.json');
+          const measured = read('data/commercial/first-fold-measurements.v1.json');
+          const contract = read('data/commercial/first-fold-contract.v1.json');
+          assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), source.source_sha);
+          for (const evidence of [report, measured]) {
+            assert.equal(evidence.commit_sha, process.env.EXPECTED_HEAD_SHA);
+            assert.equal(evidence.commit_sha, source.source_sha);
+            assert.equal(evidence.surface, 'source');
+            assert.equal(evidence.tree_dirty, false);
+            assert.deepEqual(evidence.viewports, source.viewports);
+            assert.deepEqual(evidence.routes.map(row => row.route), source.planned_routes);
+            for (const row of evidence.routes) assert.deepEqual(Object.keys(row.viewports), source.viewports);
+          }
+          assert.equal(report.planned, 25);
+          assert.equal(report.executed, 25);
+          assert.equal(report.executed, measured.routes.length);
+          assert.equal(report.passes + report.fails + report.pending, 25);
+          assert.equal(report.ok, report.fails === 0 && report.pending === 0);
+          assert.deepEqual(report.input_hashes, measured.input_hashes);
+          assert.deepEqual(report.routes, measured.routes);
+          assert.deepEqual(contract.census.map(row => row.route), source.planned_routes);
+          assert.deepEqual(firstFoldIdentityProblems(measured, firstFoldInputHashes(process.cwd(), source.planned_routes)), []);
+          mkdirSync(target + '/contracts', { recursive: true });
+          for (const name of ['first-fold-contract.v1.json', 'first-fold-measurements.v1.json']) {
+            copyFileSync('data/commercial/' + name, target + '/contracts/' + name);
+          }
+          const outputs = ['source-provenance.json', 'first-fold-report.json', 'contracts/first-fold-contract.v1.json', 'contracts/first-fold-measurements.v1.json'];
+          const outputFiles = Object.fromEntries(outputs.map(file => {
+            const bytes = readFileSync(target + '/' + file);
+            return [file, { sha256: createHash('sha256').update(bytes).digest('hex'), size_bytes: bytes.length }];
+          }));
+          writeFileSync(target + '/provenance.json', JSON.stringify({
+            ...source,
+            collected_at: new Date().toISOString(),
+            measured_at: measured.measured_at,
+            planned: report.planned,
+            executed: report.executed,
+            passes: report.passes,
+            fails: report.fails,
+            pending: report.pending,
+            ok: report.ok,
+            output_files: outputFiles,
+          }, null, 2) + '\n');
+          JS
+      - name: Validate the generated source contract
+        if: success()
+        run: node tests/commercial/test_first_fold_contract.mjs
+      - name: Preserve review evidence
+        if: always() && steps.source.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: projetos-prontos-first-fold-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/projetos-prontos-first-fold/
+          if-no-files-found: error
+          retention-days: 14
