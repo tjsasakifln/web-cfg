@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-12T18:34:23.751Z",
+  "measured_at": "2026-11-12T19:59:40.513Z",
   "measured_on": "2026-11-12",
-  "commit_sha": "0941eb7e19ea99b25db0bdd561abcde661bcee65",
+  "commit_sha": "7809b2fe4a61d0830d603dc9db68bc1aabc1a539",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
@@ -19,7 +19,7 @@
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "95bb8e8fad9320f18c915969a3dacda9ef77f8d85fe5ed1b411f4f9ff2e7d0f2",
     "assets/home-base.css": "62ba1fb9962c1e559895c1b333e41608476c0aa3088a90cddf114fd142cd3aef",
-    "assets/js/ready-project-services.mjs": "549288f701749680c99e3b23970adff45cf382696392606647f4ab5b2d3d8a60",
+    "assets/js/ready-project-services.mjs": "74f01e91505699e94fd7787c2356dabf95e06b161a85f05819f180f364036551",
     "assets/project-practices.css": "e4c26c5f24d5c1e49f14e9a43a1e3a1951fcbceb67d931df028b887613e650f0",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",

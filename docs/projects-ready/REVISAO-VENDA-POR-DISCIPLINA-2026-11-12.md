@@ -109,8 +109,11 @@ precedência e falhas na gravação residencial continuam permitindo reenvio.
 A recuperação local de recibos também passou a exigir identificador e campos
 próprios, com cópia independente da credencial. O estado financeiro armazenado
 no navegador nunca substitui a consulta do pedido no servidor. Essa alteração
-remove as atribuições ao objeto recuperado sinalizadas pelo CodeQL; a nova
-execução do analisador deve confirmar o resultado.
+remove as atribuições ao objeto recuperado sinalizadas pelo CodeQL. A execução
+[43295477661](https://github.com/tjsasakifln/web-cfg/actions/runs/43295477661)
+aprovou o commit `7809b2fe4a61d0830d603dc9db68bc1aabc1a539`, sem novos alertas
+nem anotações. Os três diagnósticos de parsing anteriores permanecem em arquivos
+idênticos aos da base e não foram introduzidos por esta mudança.
 
 Dois revisores examinaram o encaminhamento e sua contraprova. A verificação
 do integrador executou 153 testes no Node 22, incluindo serviços, captação,
@@ -121,7 +124,19 @@ referência desconhecida e falhas de persistência/provedor. Os transportes
 externos são simulados, sem criar pagamento real.
 
 O Chrome contratado foi instalado, mas o ambiente local recusou a abertura de
-socket antes do início do teste. A execução de navegador e a nova medição da
-primeira dobra devem ocorrer no workflow de evidência já existente, sobre o
-commit limpo. Seus arquivos serão incorporados com os bytes e hashes originais;
-a limitação local não altera critérios nem equivale a aprovação.
+socket antes do início do teste. A execução no CI
+[43295477581](https://github.com/tjsasakifln/web-cfg/actions/runs/43295477581)
+aprovou os 25 cenários de navegador no commit limpo acima. As quatro verificações
+de acessibilidade não registraram violações; os controles de prazo mantiveram
+44 px de altura nas larguras de 360 e 390 px. A primeira dobra foi medida em
+26 rotas, com 60 arquivos de entrada. Os dois JSONs foram importados com os
+bytes originais, conferidos por tamanho, SHA-256 e hash de blob Git; o contrato
+permaneceu idêntico e a medição registra a nova revisão.
+
+A inspeção autenticada do painel Mercado Pago confirmou a aplicação
+CONFENGE Ferramentas em produção, o evento `Order (Mercado Pago)` marcado e a
+URL `https://confenge.com.br/api/web/tool-credits-webhook`. Nenhuma credencial
+foi exposta, substituída ou regenerada. Não foi necessário mudar o callback;
+o encaminhamento compartilhado preserva essa configuração. A publicação e a
+abertura do checkout real continuam sujeitas à verificação posterior ao merge,
+sem pagamento de dinheiro real.
