@@ -404,11 +404,12 @@ function renderRequest(request) {
   const details = node('details'); details.append(node('summary', 'Ver pedido original'), node('p', request.description || 'Descrição não disponível.')); card.append(details);
   const providerAtQuote = proposalProvider(request);
   if (!providerAtQuote) {
-    const who = node('div', null, 'market-request-provider'); who.append(node('p', `Prestador: ${request.seller_id || 'Identificação não disponível'}`, 'market-request-reference'));
+    const who = node('div', null, 'market-request-provider');
     if (typeof request.seller_id === 'string') who.append(button('Consultar perfil do prestador', event => {
       openTab('search', true); $('#market-search-view').hidden = false; $('#market-provider-view').hidden = true;
       void showProvider(request.seller_id, event.currentTarget);
     }, 'market-text-button'));
+    else who.append(node('p', 'Identificação do profissional não disponível.', 'market-request-reference'));
     card.append(who);
   }
   if (request.proposal) {
