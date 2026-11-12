@@ -88,79 +88,13 @@
 </div></div>
 </section>
 
-<section aria-labelledby="rv-extract-title" class="sec sec--soft" data-section-archetype="evidence_claims" id="extrato-demonstrativo">
-<div class="container">
-<header class="sec-head sec-head--split">
-<span class="t-kicker">Extrato de revisão</span>
-<h2 class="t-editorial" id="rv-extract-title">Em linguagem comum: como o relatório separa o que sabe do que pergunta.</h2>
-<p>No exemplo do banheiro, a verga da janela <code>WN-01</code> entra 0,10 m no volume da viga <code>B-01</code>: o relatório localiza a peça e a cota, propõe rebaixar a verga para 2,10 m e registra que a norma de dimensionamento não foi examinada. O poço <code>HS-01</code> não informa vão livre nem diâmetros: isso entra como pedido de informação ao autor, não como falha comprovada. Abaixo, o extrato completo, na forma em que o relatório separa constatação sustentada, recomendação, verificação ainda não realizada e informação faltante.</p>
-</header>
-<figure class="plate plate--dominant" aria-labelledby="rv-plate-cap">
-<div aria-label="Prancha técnica com rolagem horizontal" class="plate__sheet plate__sheet--native-pan" role="group" tabindex="0"><!-- plate:revisao-conferencia -->
-<picture class="plate__picture"><source media="(min-width:700px)" srcset="/assets/pranchas/revisao-conferencia-desktop.svg" width="1200" height="620"/><img alt="Prancha PB · Conferência de revisão RF-01 e RF-02 sobre a elevação leste e o poço HS-01 · exemplo demonstrativo" decoding="async" loading="lazy" src="/assets/pranchas/revisao-conferencia-mobile.svg" width="360" height="420"/></picture>
-<!-- /plate --></div>
-<figcaption class="plate__caption" id="rv-plate-cap"><span class="tag">Exemplo demonstrativo</span>Prancha PB, conferência de revisão sobre o recorte de banheiro (trecho de exemplo): <b>RF-01</b> marca na elevação leste a verga da janela WN-01 (2,30 m) dentro da viga B-01 (fundo 2,20 m), com a base da conferência e a ação proposta; <b>RF-02</b> marca no detalhe do poço HS-01 a informação que não foi declarada. WN-01 = janela do exemplo; B-01 = viga do exemplo; RF-01 e RF-02 = itens do relatório.</figcaption>
-</figure>
-<!--pos-inb-02:review-extract--><div class="rv-extract-slot" data-extract-kind="demonstrative" data-extract-canonical-source="inb-06" data-demonstrative-id="demo-private-project-pilot-2026-09">
-<p class="section-lead rv-note">Exemplo demonstrativo do <a href="/casos/demonstrativo-projeto-privado/">recorte de banheiro</a> e do <a href="/casos/demonstrativo-projeto-privado/data/revisao.csv">arquivo de revisão</a>. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>
-<div class="rv-extract">
-<article class="rv-extract-item" data-extract-class="constatacao_sustentada" data-extract-id="RF-01">
-<p class="rv-class">Constatação sustentada</p>
-<h3>RF-01 · PR-ARQ-R00</h3>
-<dl>
-<dt>Documento</dt><dd>PR-ARQ-R00 (extrato em R01)</dd>
-<dt>Constatação</dt><dd>A verga da janela WN-01 invade o volume da viga B-01 no estado original.</dd>
-<dt>Implicação</dt><dd>No estado original R00 a verga da janela está em 2,30 m e o fundo da viga B-01 em 2,20 m, com sobreposição de 0,10 m no eixo Z. Corrigido na revisão R01.</dd>
-<dt>Recomendação</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.</dd>
-<dt>Elementos no desenho</dt><dd><code>WN-01 B-01</code></dd>
-</dl>
-</article>
-<article class="rv-extract-item" data-extract-class="recomendacao" data-extract-id="RF-01-acao">
-<p class="rv-class">Recomendação</p>
-<h3>Ação de RF-01 no mesmo recorte</h3>
-<dl>
-<dt>Documento</dt><dd>PR-ARQ-R00 (extrato em R01)</dd>
-<dt>Implicação</dt><dd>Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.</dd>
-<dt>Recomendação</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.</dd>
-<dt>Elementos no desenho</dt><dd><code>WN-01 B-01</code></dd>
-</dl>
-</article>
-<article class="rv-extract-item" data-extract-class="verificacao_nao_realizada" data-extract-id="RF-01-norma">
-<p class="rv-class">Verificação ainda não realizada</p>
-<h3>Norma de dimensionamento não examinada</h3>
-<dl>
-<dt>Documento</dt><dd>PR-ARQ-R00 (extrato em R01)</dd>
-<dt>Constatação</dt><dd>Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.</dd>
-<dt>Recomendação</dt><dd>Manter a pergunta técnica: qual critério normativo, se algum, se aplica a este recorte? Sem norma examinada, não se conclui risco nem não conformidade.</dd>
-<dt>Elementos no desenho</dt><dd><code>WN-01 B-01</code></dd>
-</dl>
-</article>
-<article class="rv-extract-item" data-extract-class="informacao_faltante" data-extract-id="RF-02">
-<p class="rv-class">Informação faltante</p>
-<h3>RF-02 · PR-HID-R00</h3>
-<dl>
-<dt>Documento</dt><dd>PR-HID-R00 (extrato em R01)</dd>
-<dt>Constatação</dt><dd>O poço hidrossanitário HS-01 não declara vão livre interno nem diâmetros.</dd>
-<dt>Implicação</dt><dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
-<dt>Recomendação</dt><dd>Registrar pedido de informação; não converter a lacuna em falha comprovada.</dd>
-<dt>Elementos no desenho</dt><dd><code>HS-01</code></dd>
-</dl>
-</article>
-<article class="rv-extract-item" data-extract-class="verificacao_nao_realizada" data-extract-id="RF-02-norma">
-<p class="rv-class">Verificação ainda não realizada</p>
-<h3>Norma de dimensionamento não examinada</h3>
-<dl>
-<dt>Documento</dt><dd>PR-HID-R00 (extrato em R01)</dd>
-<dt>Constatação</dt><dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
-<dt>Recomendação</dt><dd>Manter a pergunta técnica: qual critério normativo, se algum, se aplica a este recorte? Sem norma examinada, não se conclui risco nem não conformidade.</dd>
-<dt>Elementos no desenho</dt><dd><code>HS-01</code></dd>
-</dl>
-</article>
-</div>
-</div><!--/pos-inb-02:review-extract-->
-<p class="measure">Como contratar a revisão, insumos e entrega: <a href="/conteudos/como-contratar-revisao-tecnica-projeto/">ver o guia de contratação</a>.</p>
-</div>
-</section>
+<section class="sec sec--soft" id="criterios-de-revisao" aria-labelledby="technical-scope-title" data-commercial-presentation="technical-scope">
+<div class="container"><span id="extrato-demonstrativo"></span><span id="rv-extract-title"></span><span id="rv-plate-cap"></span><span id="demo-private-project-pilot-2026-09"></span><span id="RF-01"></span><span id="RF-01-acao"></span><span id="RF-01-norma"></span><span id="RF-02"></span><span id="RF-02-norma"></span>
+<header class="sec-head sec-head--split"><span class="t-kicker">Critérios de revisão</span><h2 class="t-editorial" id="technical-scope-title">O alcance da verificação acompanha o risco da decisão.</h2><p>A revisão técnica pode abranger a concepção, os cálculos, o detalhamento e a consistência entre documentos. Os critérios e a profundidade são definidos para o projeto examinado.</p></header>
+<div class="grid-3"><article><h3>Premissas e verificações</h3><p>Ações, combinações, condições de contorno e requisitos de desempenho são confrontados com o uso previsto e com as referências do projeto.</p><p><strong>Entrega:</strong> Registro das verificações realizadas, da fundamentação e dos pontos que exigem resposta do autor.</p></article>
+<article><h3>Cálculo, desenho e especificação</h3><p>São examinadas a correspondência entre memórias e peças gráficas, a completude do detalhamento e as consequências de mudanças de solução.</p><p><strong>Entrega:</strong> Achados vinculados ao documento e à revisão, com implicação técnica e recomendação.</p></article>
+<article><h3>Prioridades e devolutivas</h3><p>Os achados são organizados pelo efeito sobre aprovação, contratação, execução ou operação. As respostas dos autores orientam a conferência seguinte.</p><p><strong>Entrega:</strong> Síntese das decisões, revisões examinadas e situação de cada apontamento.</p></article></div><p class="measure">Material de apoio: <a class="text-link" data-demonstrative-resource="private-project-review" href="/casos/demonstrativo-projeto-privado/#revisao">Exemplo demonstrativo de organização de um registro de revisão</a>.</p>
+</div></section>
 <section aria-labelledby="entregas-servico-title" class="sec" id="entregas-servico">
 <div class="container">
 

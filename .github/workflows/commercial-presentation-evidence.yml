@@ -1,0 +1,110 @@
+name: commercial-presentation-evidence
+
+on:
+  pull_request:
+    paths:
+      - index.html
+      - assets/home-10x.css
+      - assets/project-practices.css
+      - data/projects/**
+      - data/services/**
+      - data/site/brand.json
+      - scripts/site/render_project_pages.py
+      - scripts/site/render_institutional_service_pages.py
+      - scripts/site/render_nav_hubs.py
+      - scripts/site/test_home_first_fold.mjs
+      - scripts/site/test_project_diagram_geometry.mjs
+      - .github/workflows/commercial-presentation-evidence.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commercial-presentation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  evidence:
+    name: Commercial presentation review
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'fix/comunicacao-servicos-profissional'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # Evidence must name a commit in the PR's actual ancestry, not the
+          # temporary merge ref. Existing site-ci still validates that merge.
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install locked dependencies
+        id: dependencies
+        run: npm ci --engine-strict
+      - name: Resolve contracted Chrome version
+        id: browser-contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Setup Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        with:
+          chrome-version: ${{ steps.browser-contract.outputs.version }}
+      - name: Verify home and project geometry
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          test -z "$(git status --porcelain)"
+          node scripts/site/test_home_first_fold.mjs
+          node scripts/site/test_project_diagram_geometry.mjs
+      - name: Capture desktop and mobile presentation
+        if: always() && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CAPTURE_PATHS: /,/projetos/,/projetos/estruturas/,/servicos/,/quantitativos-orcamento-obras/,/compatibilizacao-projetos-engenharia/
+          CAPTURE_VIEWPORTS: 1366x768,390x844
+          CAPTURE_FULLPAGE: "1"
+          CAPTURE_ALLOW_EPHEMERAL: "1"
+        run: node scripts/site/capture_screenshots.mjs "$RUNNER_TEMP/commercial-presentation/screenshots"
+      - name: Measure the clean source revision
+        if: always() && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: node scripts/site/measure_first_fold.mjs --write --report "$RUNNER_TEMP/commercial-presentation/first-fold-report.json"
+      - name: Collect measured source contracts
+        if: always() && steps.chrome.outcome == 'success'
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # A measurement that stopped before writing its report must not
+          # package the previous commit's contracts as fresh evidence.
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          const report = JSON.parse(readFileSync(process.env.RUNNER_TEMP + '/commercial-presentation/first-fold-report.json', 'utf8'));
+          const measured = JSON.parse(readFileSync('data/commercial/first-fold-measurements.v1.json', 'utf8'));
+          for (const evidence of [report, measured]) {
+            assert.equal(evidence.commit_sha, process.env.EXPECTED_HEAD_SHA);
+            assert.equal(evidence.surface, 'source');
+            assert.equal(evidence.tree_dirty, false);
+            assert.ok(evidence.routes.length > 0);
+          }
+          assert.equal(report.planned, report.executed);
+          assert.equal(report.executed, measured.routes.length);
+          assert.deepEqual(report.input_hashes, measured.input_hashes);
+          assert.deepEqual(report.routes, measured.routes);
+          JS
+          mkdir -p "$RUNNER_TEMP/commercial-presentation/contracts"
+          cp data/commercial/first-fold-contract.v1.json data/commercial/first-fold-measurements.v1.json "$RUNNER_TEMP/commercial-presentation/contracts/"
+      - name: Preserve review evidence
+        if: always() && steps.chrome.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: commercial-presentation-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/commercial-presentation/
+          if-no-files-found: error
+          retention-days: 14

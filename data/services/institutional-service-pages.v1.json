@@ -100,9 +100,7 @@
           ]
         ]
       },
-      "preserve_sections": [
-        "amostra-disponivel"
-      ],
+      "preserve_sections": [],
       "deliverables_id": "entregas-servico",
       "deliverables_legacy_anchor_ids": [
         "entregaveis"
@@ -161,6 +159,35 @@
             "Como comparo duas propostas de projetos?",
             "Compare disciplinas, fase de desenvolvimento, formatos, memoriais, revisões, coordenação e dependências de levantamentos. Uma lista de nomes semelhante pode esconder entregas e responsabilidades diferentes."
           ]
+        ]
+      },
+      "technical_scope": {
+        "id": "criterios-de-projeto",
+        "aliases": [
+          "amostra-disponivel",
+          "pce-sample-title",
+          "pce-plate-cap",
+          "pce-matriz-cap"
+        ],
+        "kicker": "Desenvolvimento de projetos",
+        "title": "As decisões de engenharia precisam chegar ao detalhamento.",
+        "intro": "Concepção, dimensionamento e documentação são desenvolvidos a partir do programa, das condições de implantação e das interfaces entre disciplinas.",
+        "items": [
+          {
+            "title": "Concepção e critérios",
+            "analysis": "Alternativas de sistemas, ações, demandas e condições de contorno são avaliadas antes de consolidar a solução.",
+            "delivery": "Critérios de projeto e premissas que orientam o cálculo e as especificações."
+          },
+          {
+            "title": "Dimensionamento e interfaces",
+            "analysis": "Geometria, desempenho, requisitos de operação e encontros entre estruturas e instalações são tratados em conjunto.",
+            "delivery": "Memórias, modelos e desenhos com as decisões incorporadas nas disciplinas contratadas."
+          },
+          {
+            "title": "Detalhamento para a etapa contratada",
+            "analysis": "Plantas, cortes, detalhes, listas e especificações precisam corresponder à solução calculada e ao uso previsto da documentação.",
+            "delivery": "Conjunto de peças identificado por disciplina, finalidade e revisão, com responsabilidade técnica definida."
+          }
         ]
       }
     },
@@ -263,9 +290,7 @@
           ]
         ]
       },
-      "preserve_sections": [
-        "extrato-demonstrativo"
-      ],
+      "preserve_sections": [],
       "section_order": [
         "technical",
         "deliverables",
@@ -307,6 +332,47 @@
             "O que devo informar para pedir a revisão?",
             "Indique a disciplina, a fase, os arquivos disponíveis, a decisão a apoiar e o prazo desejado. Não é preciso conhecer previamente todas as verificações necessárias."
           ]
+        ]
+      },
+      "technical_scope": {
+        "id": "criterios-de-revisao",
+        "aliases": [
+          "extrato-demonstrativo",
+          "rv-extract-title",
+          "rv-plate-cap",
+          "demo-private-project-pilot-2026-09",
+          "RF-01",
+          "RF-01-acao",
+          "RF-01-norma",
+          "RF-02",
+          "RF-02-norma"
+        ],
+        "kicker": "Critérios de revisão",
+        "title": "O alcance da verificação acompanha o risco da decisão.",
+        "intro": "A revisão técnica pode abranger a concepção, os cálculos, o detalhamento e a consistência entre documentos. Os critérios e a profundidade são definidos para o projeto examinado.",
+        "items": [
+          {
+            "title": "Premissas e verificações",
+            "analysis": "Ações, combinações, condições de contorno e requisitos de desempenho são confrontados com o uso previsto e com as referências do projeto.",
+            "delivery": "Registro das verificações realizadas, da fundamentação e dos pontos que exigem resposta do autor."
+          },
+          {
+            "title": "Cálculo, desenho e especificação",
+            "analysis": "São examinadas a correspondência entre memórias e peças gráficas, a completude do detalhamento e as consequências de mudanças de solução.",
+            "delivery": "Achados vinculados ao documento e à revisão, com implicação técnica e recomendação."
+          },
+          {
+            "title": "Prioridades e devolutivas",
+            "analysis": "Os achados são organizados pelo efeito sobre aprovação, contratação, execução ou operação. As respostas dos autores orientam a conferência seguinte.",
+            "delivery": "Síntese das decisões, revisões examinadas e situação de cada apontamento."
+          }
+        ],
+        "resources": [
+          {
+            "id": "private-project-review",
+            "href": "/casos/demonstrativo-projeto-privado/#revisao",
+            "label": "Exemplo demonstrativo de organização de um registro de revisão"
+          }
         ]
       }
     },
@@ -359,7 +425,7 @@
           ],
           [
             "Gestão de decisões",
-            "Reuniões objetivas, registros de issue, responsáveis, prazos de resposta e conferência da solução incorporada."
+            "Reuniões objetivas, registros de apontamentos, responsáveis, prazos de resposta e conferência da solução incorporada."
           ]
         ]
       },
@@ -409,9 +475,7 @@
           ]
         ]
       },
-      "preserve_sections": [
-        "registro-interferencias"
-      ],
+      "preserve_sections": [],
       "section_order": [
         "competencies",
         "deliverables",
@@ -436,6 +500,43 @@
             "Preciso ter todos os projetos concluídos?",
             "Informe quais disciplinas e versões já existem. A proposta define o estágio de coordenação possível e as dependências que precisam ser resolvidas para avançar."
           ]
+        ]
+      },
+      "technical_scope": {
+        "id": "criterios-de-compatibilizacao",
+        "aliases": [
+          "registro-interferencias",
+          "coord-register-title",
+          "coord-plate-cap",
+          "CF-GEO-01",
+          "CF-INFO-01"
+        ],
+        "kicker": "Interfaces de projeto",
+        "title": "Geometria, desempenho e execução precisam convergir.",
+        "intro": "A coordenação considera como cada solução afeta as demais disciplinas e acompanha a incorporação das decisões nas versões emitidas.",
+        "items": [
+          {
+            "title": "Espaços e reservas técnicas",
+            "analysis": "Níveis, acessos, passagens, espaços de manutenção e reservas são examinados nas interfaces entre arquitetura, estruturas e instalações.",
+            "delivery": "Apontamentos localizados, com disciplinas envolvidas e alternativas a decidir."
+          },
+          {
+            "title": "Dependências entre sistemas",
+            "analysis": "Cargas de equipamentos, pontos de conexão, demandas, drenagem e sequências construtivas precisam ser coerentes entre os projetos.",
+            "delivery": "Matriz de interfaces, responsáveis pelas respostas e decisões que orientam as revisões."
+          },
+          {
+            "title": "Incorporação e emissão",
+            "analysis": "A resposta ao apontamento é confrontada com a revisão emitida e com seus reflexos nos demais documentos do conjunto.",
+            "delivery": "Histórico de decisões, controle de versões e síntese dos itens resolvidos e em acompanhamento."
+          }
+        ],
+        "resources": [
+          {
+            "id": "private-project-coordination",
+            "href": "/casos/demonstrativo-projeto-privado/#compatibilizacao",
+            "label": "Exemplo demonstrativo de organização de apontamentos"
+          }
         ]
       }
     },
@@ -544,11 +645,7 @@
           "after_link": " delimita fontes e comparáveis para essa pergunta."
         }
       },
-      "preserve_sections": [
-        "banco-disciplinas",
-        "amostra-quantitativos",
-        "exemplos-conferiveis"
-      ],
+      "preserve_sections": [],
       "section_order": [
         "technical",
         "competencies",
@@ -605,6 +702,57 @@
             "Qual é a diferença entre quantitativos e orçamento?",
             "O levantamento organiza quantidades e sua memória. O orçamento relaciona essas quantidades aos serviços, referências e critérios de preço pertinentes. A proposta identifica quais partes serão entregues."
           ]
+        ]
+      },
+      "technical_scope": {
+        "id": "criterios-do-orcamento",
+        "aliases": [
+          "banco-disciplinas",
+          "qty-bank-title",
+          "qty-bank-cap",
+          "amostra-quantitativos",
+          "qty-sample-title",
+          "qty-plate-cap",
+          "qty-sample-trail",
+          "W-02",
+          "RF-01",
+          "exemplos-conferiveis",
+          "exemplos-conferiveis-title",
+          "qty-proof-entrances",
+          "demo-private-project-pilot-2026-09",
+          "demo-infrastructure-pilot-2026-09"
+        ],
+        "kicker": "Consistência do orçamento",
+        "title": "Uma base técnica comum para comparar, contratar e controlar.",
+        "intro": "Construtora, empresa de engenharia, escritório de projeto e contratante público precisam relacionar o custo ao escopo efetivamente previsto. A organização considera as disciplinas, as frentes de execução e a finalidade da contratação.",
+        "items": [
+          {
+            "title": "Quantidades vinculadas ao projeto",
+            "analysis": "Elementos, locais, critérios de medição e revisões sustentam cada quantidade. A consolidação por disciplina permite conferir inclusões, descontos e alterações.",
+            "delivery": "Banco de quantitativos e memória com origem, revisão, critério, unidade e cálculo verificáveis."
+          },
+          {
+            "title": "Composições e condições de execução",
+            "analysis": "Serviços, insumos, produtividade, encargos, BDI, fontes e data-base são tratados conforme a finalidade e o nível contratado.",
+            "delivery": "Planilha orçamentária com critérios de formação dos preços e referências identificadas."
+          },
+          {
+            "title": "Comparação e impacto das revisões",
+            "analysis": "Propostas e revisões são confrontadas sobre escopos, unidades, quantidades, inclusões e responsabilidades equivalentes.",
+            "delivery": "Quadro de equalização ou relatório de revisão com divergências e efeitos sobre o orçamento."
+          }
+        ],
+        "resources": [
+          {
+            "id": "edificacao",
+            "href": "/casos/demonstrativo-projeto-privado/#quantitativos",
+            "label": "Exemplo demonstrativo de rastreabilidade em edificação"
+          },
+          {
+            "id": "infraestrutura",
+            "href": "/casos/demonstrativo-infraestrutura/#quantitativos",
+            "label": "Exemplo demonstrativo de rastreabilidade em infraestrutura"
+          }
         ]
       }
     },
@@ -770,9 +918,7 @@
           ]
         ]
       },
-      "preserve_sections": [
-        "amostra-disponivel"
-      ],
+      "preserve_sections": [],
       "section_order": [
         "competencies",
         "technical",
@@ -837,6 +983,35 @@
           ]
         ],
         "boundary": "Referências não sigilosas podem seguir por WhatsApp ou e-mail. Dados pessoais, endereços completos e documentos controlados são tratados pelo canal adequado ao escopo e com as permissões necessárias. Não envie documentos sensíveis antes de combinarmos esse recebimento. O tratamento dos dados segue a Política de Privacidade."
+      },
+      "technical_scope": {
+        "id": "criterios-de-inspecao",
+        "aliases": [
+          "amostra-disponivel",
+          "insp-sample-title",
+          "insp-plate-cap",
+          "insp-matriz-cap"
+        ],
+        "kicker": "Investigação e intervenção",
+        "title": "Do registro da condição à orientação técnica para intervir.",
+        "intro": "A inspeção organiza os sinais observados, o histórico e os documentos da edificação. O diagnóstico aprofunda a investigação necessária para fundamentar causas e medidas de intervenção.",
+        "items": [
+          {
+            "title": "Condição e contexto",
+            "analysis": "Sistemas, manifestações, histórico de manutenção e intervenções anteriores são considerados em conjunto com os registros de campo.",
+            "delivery": "Registro de condição com localização, documentação fotográfica e caracterização do que foi examinado."
+          },
+          {
+            "title": "Hipóteses e investigação",
+            "analysis": "A análise distingue sinais observados de causas demonstradas e define onde medições, ensaios ou verificações complementares são necessários.",
+            "delivery": "Análise técnica e plano de aprofundamento coerentes com a finalidade da contratação."
+          },
+          {
+            "title": "Prioridades de intervenção",
+            "analysis": "Os achados são relacionados ao uso da edificação e às medidas de acompanhamento, manutenção ou intervenção pertinentes.",
+            "delivery": "Relatório com orientações, prioridades e encaminhamento para projeto de intervenção quando necessário."
+          }
+        ]
       }
     },
     {
@@ -966,9 +1141,7 @@
           ]
         ]
       },
-      "preserve_sections": [
-        "amostra-disponivel"
-      ],
+      "preserve_sections": [],
       "section_order": [
         "competencies",
         "stages",
@@ -1044,6 +1217,35 @@
             "/assistencia-tecnica-pericia-trabalhista/"
           ]
         ]
+      },
+      "technical_scope": {
+        "id": "criterios-da-assistencia",
+        "aliases": [
+          "amostra-disponivel",
+          "atp-example-title",
+          "atp-plate-cap",
+          "atp-evidencia-cap"
+        ],
+        "kicker": "Fundamentação técnica",
+        "title": "Documentos, medições e argumentos ligados aos pontos em discussão.",
+        "intro": "A assistência técnica estrutura a análise de engenharia em torno do objeto da controvérsia e da etapa do caso, em articulação com a condução jurídica da parte.",
+        "items": [
+          {
+            "title": "Objeto e documentação",
+            "analysis": "Contratos, projetos, registros de execução, medições e histórico são relacionados às questões técnicas relevantes.",
+            "delivery": "Matriz de evidências e identificação dos documentos e exames necessários para a análise."
+          },
+          {
+            "title": "Exame técnico e quesitos",
+            "analysis": "A análise confronta alegações, critérios, métodos e resultados, distinguindo constatações, hipóteses e informações ainda necessárias.",
+            "delivery": "Quesitos, análise de documentos e preparação técnica para diligências conforme a etapa contratada."
+          },
+          {
+            "title": "Conclusões fundamentadas",
+            "analysis": "Os argumentos precisam ser consistentes com as fontes examinadas e explicar a relevância técnica dos resultados para os pontos controvertidos.",
+            "delivery": "Manifestação ou parecer com fundamentação, referências e conclusão vinculada ao objeto."
+          }
+        ]
       }
     },
     {
@@ -1055,7 +1257,10 @@
       "hero": {
         "eyebrow": "Valor fundamentado para a decisão sobre o imóvel",
         "title": "Avaliação de imóveis urbanos",
-        "tool": {"href": "/avaliacao-imoveis-urbanos/inferencia/", "label": "Abrir o Modela Pro gratuito"},
+        "tool": {
+          "href": "/avaliacao-imoveis-urbanos/inferencia/",
+          "label": "Abrir o Modela Pro gratuito"
+        },
         "lead": "Compra e venda, partilha, inventário e decisões patrimoniais podem exigir mais que um preço anunciado. A CONFENGE organiza a avaliação conforme o imóvel, a finalidade e a data de referência.",
         "value": "Conheça os elementos do trabalho e informe como o documento será utilizado. A proposta define o método, os dados necessários, a vistoria, a responsabilidade técnica e o produto adequado à sua decisão.",
         "cta": "Conversar sobre a avaliação",
@@ -1471,16 +1676,16 @@
       "coverage": "A prioridade comercial desta frente é a Grande Florianópolis. A conversa inicial e a leitura documental podem ocorrer a distância. Quando o trabalho depende de campo, o município, os acessos, a logística, a disponibilidade de visita e as formalidades profissionais são confirmados na proposta antes do aceite técnico. O atendimento presencial ocorre no local do cliente, mediante agendamento.",
       "samples": [
         {
-          "title": "Registro de condição da fachada",
-          "text": "Exemplo demonstrativo com manifestações localizadas, registro visual e limites do que a evidência permite concluir.",
-          "href": "/inspecao-diagnostico-edificacoes/#amostra-disponivel",
-          "cta": "Ver amostra de inspeção"
+          "title": "Inspeção, diagnóstico e intervenção",
+          "text": "Como o registro de condição, a investigação e as orientações técnicas apoiam as decisões sobre a edificação.",
+          "href": "/inspecao-diagnostico-edificacoes/#criterios-de-inspecao",
+          "cta": "Conhecer o conteúdo da inspeção"
         },
         {
-          "title": "Quesitos e evidências em uma disputa",
-          "text": "Exemplo demonstrativo do mesmo mapa técnico organizado para perguntas, evidências e conclusão delimitada da parte.",
-          "href": "/assistencia-tecnica-pericial-engenharia/#amostra-disponivel",
-          "cta": "Ver amostra de assistência técnica"
+          "title": "Assistência técnica em disputas",
+          "text": "Como documentos, medições e quesitos são organizados para fundamentar a análise dos pontos em discussão.",
+          "href": "/assistencia-tecnica-pericial-engenharia/#criterios-da-assistencia",
+          "cta": "Conhecer a assistência técnica"
         }
       ],
       "faq": {
