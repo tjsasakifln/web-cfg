@@ -108,7 +108,21 @@ function readRecords() {
 }
 
 function validReceipt(value) {
-  return value && typeof value === 'object' && UUID.test(value.id || '') && TOKEN.test(value.receiptToken || '');
+  return value && typeof value === 'object' && !Array.isArray(value) &&
+    Object.hasOwn(value, 'id') && typeof value.id === 'string' && UUID.test(value.id) &&
+    Object.hasOwn(value, 'receiptToken') && typeof value.receiptToken === 'string' && TOKEN.test(value.receiptToken);
+}
+
+export function receiptFromStore(records, requestedId = '') {
+  if (!records || typeof records !== 'object' || Array.isArray(records)) return null;
+  const id = typeof requestedId === 'string' && UUID.test(requestedId) ? requestedId.toLowerCase() :
+    Object.hasOwn(records, 'active') ? records.active : '';
+  if (typeof id !== 'string' || !UUID.test(id) || !Object.hasOwn(records, id)) return null;
+  const record = records[id];
+  if (!validReceipt(record) || record.id.toLowerCase() !== id.toLowerCase()) return null;
+  // Restore only an owned credential, never an inherited receiver or a cached
+  // payment claim. The status is independently fetched from the server.
+  return { id: record.id.toLowerCase(), receiptToken: record.receiptToken };
 }
 
 function saveRecord(record, active = true) {
@@ -310,11 +324,10 @@ if (form) {
       $('rp-support-message-hint').textContent = '(obrigatória para atendimento)';
     }
     $('rp-support-status').textContent = '';
-    currentRecord = record;
+    currentRecord = { id: record.id, receiptToken: record.receiptToken,
+      lastStatus: order.status, createdAt: order.createdAt };
     currentOrder = order;
-    record.lastStatus = order.status;
-    record.createdAt = order.createdAt;
-    saveRecord(record);
+    saveRecord(currentRecord);
     $('pedido').hidden = false;
     const statuses = {
       creating: 'Pedido em conferência. Aguarde antes de tentar outra compra.',
@@ -555,9 +568,9 @@ if (form) {
   // Browser/provider success flags cannot change payment state.
   const requestedId = new URL(location.href).searchParams.get('pedido');
   const records = readRecords();
-  const restoreId = UUID.test(requestedId || '') ? requestedId.toLowerCase() : records.active;
-  if (validReceipt(records[restoreId])) {
-    currentRecord = records[restoreId];
+  const restored = receiptFromStore(records, requestedId);
+  if (restored) {
+    currentRecord = restored;
     refreshOrder(currentRecord, Boolean(requestedId));
   } else if (UUID.test(requestedId || '')) {
     $('rp-restore-details').open = true;

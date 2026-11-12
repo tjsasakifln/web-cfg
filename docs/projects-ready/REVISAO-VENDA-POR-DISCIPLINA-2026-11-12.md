@@ -95,3 +95,33 @@ atendimento disponíveis sem criar uma cobrança. Testes com provedor simulado n
 comprovam checkout externo, recebimento ou configuração da conta institucional.
 O procedimento completo está em
 [SERVICE-ORDERS.md](../../runtime/project-commerce/SERVICE-ORDERS.md).
+
+## Continuidade da revisão em 12/11/2026
+
+A retomada confirmou na API pública que a venda de créditos das ferramentas
+estava ativa. A configuração de serviço admite compartilhar essa aplicação,
+mas o callback anterior de ferramentas não encaminhava ordens residenciais.
+Foi corrigido o encaminhamento interno, preservando a URL e o ledger das
+ferramentas. Assinatura, vendedor e consulta autenticada precedem o uso do fato;
+modo, vendedor, token e segredo precisam coincidir. Uma ordem de créditos tem
+precedência e falhas na gravação residencial continuam permitindo reenvio.
+
+A recuperação local de recibos também passou a exigir identificador e campos
+próprios, com cópia independente da credencial. O estado financeiro armazenado
+no navegador nunca substitui a consulta do pedido no servidor. Essa alteração
+remove as atribuições ao objeto recuperado sinalizadas pelo CodeQL; a nova
+execução do analisador deve confirmar o resultado.
+
+Dois revisores examinaram o encaminhamento e sua contraprova. A verificação
+do integrador executou 153 testes no Node 22, incluindo serviços, captação,
+recuperação e o adaptador de pagamentos: todos passaram, sem testes ignorados.
+Os 11 cenários do callback incluem o handler exportado, pedidos de ferramentas
+e serviços, repetição, estorno, credenciais diferentes, assinatura inválida,
+referência desconhecida e falhas de persistência/provedor. Os transportes
+externos são simulados, sem criar pagamento real.
+
+O Chrome contratado foi instalado, mas o ambiente local recusou a abertura de
+socket antes do início do teste. A execução de navegador e a nova medição da
+primeira dobra devem ocorrer no workflow de evidência já existente, sobre o
+commit limpo. Seus arquivos serão incorporados com os bytes e hashes originais;
+a limitação local não altera critérios nem equivale a aprovação.

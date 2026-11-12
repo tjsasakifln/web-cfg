@@ -1,7 +1,7 @@
 'use strict';
 
 const { createMercadoPago } = require('../tools-commerce/mercado-pago.cjs');
-const { CommerceError, check, UUID, TOKEN, SELECTION_KEYS, CHECKOUT_KEYS, sha, safeText,
+const { CommerceError, check, UUID, TOKEN, SELECTION_KEYS, CHECKOUT_KEYS, sha, sameSecret, safeText,
   readOffer, termsFor, publicPricing, quote, normalizeCheckout, loadServiceConfig } = require('./service-policy.cjs');
 const { createServiceLedger, publicServiceOrder, providerIdValid } = require('./service-ledger.cjs');
 
@@ -64,6 +64,22 @@ function createServiceHttp({ env = process.env, config: injected, offerLoader = 
     const next = await reconcile(dep, providerId);
     check(next?.id === order.id, 'PAYMENT_MISMATCH', 422);
     return next;
+  }
+  function observeSharedWebhook(fact, sourceConfig) {
+    const cfg = config();
+    // Internal handoff only: the tools webhook has verified its signature,
+    // seller and GET response, and found no corresponding tools order. Exact
+    // credentials bind that fact to this same application and environment;
+    // another seller, token or webhook secret must use its own callback.
+    if (fact?.paymentFlow !== 'checkout' || !cfg.configured || !['live', 'sandbox'].includes(cfg.mode) || !sourceConfig ||
+        sourceConfig.mode !== cfg.mode || sourceConfig.sellerId !== cfg.sellerId ||
+        !['accessToken', 'webhookSecret'].every(key =>
+          typeof sourceConfig[key] === 'string' && sourceConfig[key].length > 0 &&
+          typeof cfg[key] === 'string' && cfg[key].length > 0 &&
+          sameSecret(sha(sourceConfig[key]), sha(cfg[key])))) return null;
+    // Pausing new purchases must not stop payment/reversal reconciliation.
+    // Reuse the verified fact; do not fetch the provider's order a second time.
+    return dependencies(cfg).ledger.observe(fact);
   }
   function requireOrigin(event, cfg) {
     const origin = header(event, 'origin');
@@ -167,7 +183,7 @@ function createServiceHttp({ env = process.env, config: injected, offerLoader = 
       return reply(200, { received: true, matched: Boolean(order) });
     } catch (error) { return failure(error); }
   }
-  return { api, webhook, config, dependencies, reconcile };
+  return { api, webhook, config, dependencies, reconcile, observeSharedWebhook };
 }
 
 module.exports = { createServiceHttp, projectServiceHttp: createServiceHttp() };

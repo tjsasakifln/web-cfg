@@ -45,6 +45,15 @@ credenciais específicas e capacidade de persistência. A configuração do
 webhook e a abertura real do checkout também integram o aceite operacional.
 A falha de configuração mantém a simulação e o contato, com estado honesto.
 
+Quando a elaboração residencial usa a mesma aplicação Mercado Pago das
+ferramentas, preserva-se o callback já existente de créditos. O encaminhamento
+interno só alcança o pedido residencial depois de validar a assinatura,
+conferir o vendedor e consultar a ordem no provedor. Exige coincidência de
+ambiente, vendedor, token e segredo da configuração efetiva; ordens de créditos
+mantêm seu tratamento próprio. Isso permite conciliar pedidos residenciais sem
+trocar a URL de notificação das vendas em curso nem criar outra conta ou runtime.
+Aplicações separadas conservam callbacks e credenciais próprios.
+
 Hipótese de aquisição: referências de plantas e preço transparente atraem
 pessoas que já decidiram projetar; a flexibilidade de prazo distribui produção
 e permite preço de entrada com escopo delimitado. Frente: REVENUE_NOW e

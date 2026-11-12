@@ -69,14 +69,38 @@ de oferecer checkout, consulta `/users/me`, verifica o seller esperado e a
 ausência de `test_user`, e comprova escrita e releitura no armazenamento. Essa
 verificação não comprova configuração correta da URL de callback ou pagamento.
 
-Configurar na aplicação Mercado Pago o callback Orders:
+Quando serviços e ferramentas compartilham exatamente modo, vendedor, Access
+Token e segredo de assinatura da mesma aplicação, preservar o callback Orders
+das ferramentas:
+
+`https://confenge.com.br/api/web/tool-credits-webhook`
+
+Esse handler valida assinatura e vendedor, consulta a ordem uma única vez no
+Mercado Pago e procura primeiro o pedido de créditos. Somente quando não existe
+pedido nesse ledger, encaminha o fato autenticado ao ledger residencial. O
+encaminhamento exige coincidência exata das credenciais; não reaproveita fatos
+de outra aplicação ou ambiente. Cada ledger conserva seus controles de valor,
+referência e idempotência. Falha no armazenamento residencial não recebe uma
+confirmação de sucesso; o provedor pode reenviar. Pausar novas contratações não
+interrompe a conciliação dos pedidos existentes.
+
+Para uma aplicação própria, com credenciais distintas das ferramentas,
+configurar o callback Orders de serviços:
 
 `https://confenge.com.br/api/web/project-orders-webhook?flow=service`
 
-Se a mesma aplicação atender outros produtos, preservar seus callbacks e
-conferir a roteirização adequada antes de mudar a configuração. O retorno do
+Não substituir o callback da aplicação compartilhada pelo callback exclusivo de
+serviços, pois isso interromperia as notificações das ferramentas. A existência
+desses handlers no código não comprova qual URL está configurada no painel;
+conferir a URL e testar a recepção no ambiente correspondente antes de declarar
+a integração externa validada. O retorno do
 pagamento é `https://confenge.com.br/projetos-prontos/?pedido=UUID#pedido`.
 Uma URL de retorno nunca contém credencial nem confirma pagamento.
+
+Se o serviço herdar `PROJECT_COMMERCE_*` de outra aplicação compartilhada com
+licenças de arquivos, o encaminhamento descrito acima não modifica o callback
+daquela aplicação. Preservar seus consumidores e conferir o roteamento próprio
+antes de operar essa configuração.
 
 Sem credenciais e vendedor válidos, `service-config` retorna preços e termos,
 mas `purchasesEnabled=false`. Não existe link de cobrança fictício ou fallback
@@ -168,3 +192,8 @@ assinatura, confirmação independente, respostas perdidas, corrida de webhook,
 estornos, devoluções parciais, suporte e discriminação das disciplinas.
 Os testes são locais com provedor simulado. Não provam aquisição real, acesso
 ao painel institucional, configuração do callback ou recebimento de dinheiro.
+O teste `shared-webhook.test.cjs` executa os ledgers de ferramentas e serviços,
+com transporte Firestore em memória e armazenamento residencial real em disco.
+Confere assinatura, vendedor, coincidência de credenciais, uma única consulta
+da ordem por notificação, repetição, devolução e falhas de dependências. Também
+confere a ligação do handler publicado. Nenhum teste cria cobrança externa.
