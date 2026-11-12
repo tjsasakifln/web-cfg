@@ -105,12 +105,9 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: node scripts/site/test_svg_figure_legibility.mjs
-      - name: Verify the current commercial interface
-        if: always() && steps.chrome.outcome == 'success'
-        env:
-          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
-          UI_GEOMETRY_REQUIRED: "1"
-        run: node scripts/site/test_ui_geometry.mjs
+      # The complete interface gate requires canonical _site assembly, including
+      # public_navigation.py. It remains mandatory in site-ci and pSEO; this
+      # workflow deliberately measures the clean source without rebuilding it.
       - name: Preserve review evidence
         if: always() && steps.chrome.outcome == 'success'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
