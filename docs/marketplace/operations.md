@@ -2,9 +2,11 @@
 
 ## Estado desta entrega
 
-Este documento descreve o provisionamento de um novo serviço privado no Netcup. A publicação do site pode entregar a página `/profissionais/` e os handlers do gateway, mas o workflow atual de `web-cfg` **não instala Docker, não cria PostgreSQL/Redis, não executa migrações e não configura Stripe**. O acesso de release existente não confere essas permissões de administração do host. Até concluir o procedimento abaixo, o gateway permanece `off` e a página encaminha a demanda à CONFENGE sem registrar cadastros, contratações ou pagamentos fictícios.
+Este documento descreve o provisionamento de um novo serviço privado no Netcup. A publicação do site pode entregar a página `/profissionais/` e os handlers do gateway, mas o workflow de publicação do site **não instala Docker, não cria PostgreSQL/Redis, não executa migrações e não configura Stripe no host de produção**. O acesso de release existente não confere essas permissões de administração do host. Até concluir o procedimento abaixo, o gateway permanece `off` e a página encaminha a demanda à CONFENGE sem registrar cadastros, contratações ou pagamentos fictícios.
 
 O código e as instruções são entregues para execução pelo operador com acesso ao host e à conta Stripe. Build de imagem, inicialização real dos containers, restauração e transação externa precisam de evidência própria; testes unitários não substituem essas etapas.
+
+O job `production-container` do workflow `engineering-marketplace` executa `tests/marketplace/container.mjs` em um runner descartável do GitHub. Ele constrói este Dockerfile, usa este Compose com projeto e imagem locais exclusivos de CI, migra o banco, repete o setup e inicia API e worker com as restrições da receita de produção. Confere os dois healthchecks, o usuário PostgreSQL sem privilégios administrativos e o `ready.cjs` autenticado. A configuração temporária mantém pagamentos desligados e não contém credenciais Stripe; o encerramento remove apenas volumes e containers daquele projeto CI. Seu resultado deve ser consultado na execução do SHA a promover. Esse teste não provisiona o host público nem substitui o ensaio de pagamento e restauração abaixo.
 
 ## Serviços e fronteiras
 

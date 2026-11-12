@@ -136,6 +136,15 @@ async function geometry(width) {
   assert.equal(result.overflow, false, `No horizontal overflow at ${width}px`);
   assert.deepEqual(result.badTargets, [], `Touchable buttons at ${width}px`);
 }
+async function capture(filename) {
+  await page.evaluate(async () => {
+    document.activeElement?.blur?.();
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  });
+  await page.waitForFunction(() => scrollX === 0 && scrollY === 0);
+  await page.screenshot({ path: join(report, filename), fullPage: true });
+}
 try {
   await page.setViewport({ width: 1280, height: 900 });
   await page.goto(url, { waitUntil: 'networkidle0' });
@@ -144,14 +153,14 @@ try {
   assert.equal(await page.$eval('meta[name=robots]', node => node.content), 'noindex,follow');
   assert.equal(await page.$eval('#market-unavailable-actions a', node => node.getAttribute('href')), '/triagem-tecnica/');
   assert.equal(count('providers'), 0, 'Disabled service does not pretend to search');
-  await page.screenshot({ path: join(report, 'unavailable-desktop.png'), fullPage: true });
+  await capture('unavailable-desktop.png');
 
   enabled = true; await page.click('#market-retry'); await visible('.market-provider-card');
   assert.match(await page.$eval('.market-provider-card', node => node.textContent), /Ainda sem avaliações/);
   assert.equal(await page.$$eval('.market-provider-card img', nodes => nodes.length), 0, 'Provider text is not executable HTML');
   assert.deepEqual(await page.$$eval('#market-request-intent option[value]:not([value=""])', nodes => nodes.map(node => node.value)), canonicalIntents, 'Public category IDs match the backend subset');
   for (const width of [320, 390, 768, 1280]) await geometry(width);
-  await page.screenshot({ path: join(report, 'search-desktop.png'), fullPage: true });
+  await capture('search-desktop.png');
   await page.focus('#market-tab-search'); await page.keyboard.press('ArrowRight');
   assert.equal(await page.$eval('#market-tab-account', node => node.getAttribute('aria-selected')), 'true', 'Tabs support keyboard navigation');
   await tab('search');
@@ -196,7 +205,7 @@ try {
   await fill('#market-profile-form input[name=website_url]', 'https://example.invalid');
   await submit('#market-profile-form'); await page.waitForFunction(() => document.querySelector('#market-profile-form [data-form-status]').dataset.tone === 'success');
   assert.equal(latest('vendor-profile').body.consent, true); assert.deepEqual(latest('vendor-profile').body.profile.specialties, [canonicalIntents[0]]);
-  await geometry(390); await page.screenshot({ path: join(report, 'provider-mobile.png'), fullPage: true }); await geometry(1280);
+  await geometry(390); await capture('provider-mobile.png'); await geometry(1280);
   assert.equal(await page.$eval('#market-connect', node => node.disabled), true, 'Unavailable payments cannot start onboarding');
   await tab('requests'); await visible('[data-action=quote]');
   const quote = '[data-action=quote]';
@@ -259,7 +268,7 @@ try {
   await fill('[data-action=review] textarea[name=note]', 'Entrega de teste conferida <img src=x onerror=alert(1)>');
   await submit('[data-action=review]'); await page.waitForFunction(() => !document.querySelector('[data-action=review]'));
   assert.equal(contracts[0].review.rating, 5); assert.equal(await page.$$eval('.market-request-card img', nodes => nodes.length), 0);
-  await geometry(390); await page.screenshot({ path: join(report, 'completed-mobile.png'), fullPage: true });
+  await geometry(390); await capture('completed-mobile.png');
 
   // A stale private response must not reappear after logout.
   delayRequests = true; await tab('requests'); await tab('account'); await page.click('#market-logout'); await visible('#market-auth-view');
@@ -271,7 +280,14 @@ try {
   assert.doesNotMatch(storage, /browser-test-password|cliente@example\.invalid|provider@example\.invalid/, 'No marketplace credentials or personal fields in browser storage');
 
   session = account('provider'); commissionBps = null; contracts[0].status = 'requested'; contracts[0].proposal = null;
+  const sessionReadsBeforeReturn = count('session');
   await page.goto(`${url}#minha-conta`, { waitUntil: 'networkidle0' });
+  // A hash-only navigation keeps the logged-out document. An external Connect
+  // return loads a new document, so reload explicitly and verify its session.
+  await page.reload({ waitUntil: 'networkidle0' });
+  assert.ok(count('session') > sessionReadsBeforeReturn, 'Connect return reloads the authenticated session');
+  await visible('#market-account-view');
+  await page.waitForFunction(() => !document.querySelector('#market-profile-form > fieldset').disabled);
   assert.equal(await page.$eval('#market-tab-account', node => node.getAttribute('aria-selected')), 'true', 'Connect return opens the account');
   await tab('requests'); await visible('.market-request-card');
   assert.equal(await page.$$eval('[data-action=quote]', nodes => nodes.length), 0, 'Undefined commission cannot be silently accepted');
@@ -279,7 +295,7 @@ try {
   assert.deepEqual(runtimeErrors, [], `No browser/server errors: ${runtimeErrors.join(', ')}`);
   console.log('Marketplace browser checks passed: unavailable state, canonical categories, XSS-safe rendering, forms and consent, exact BRL, quote revision, commission, payment gating, delivery/review, session clearing and responsive layout.');
 } catch (error) {
-  await page.screenshot({ path: join(report, 'failure.png'), fullPage: true }).catch(() => {});
+  await capture('failure.png').catch(() => {});
   throw error;
 } finally {
   await browser.close(); await new Promise(resolve => server.close(resolve));
