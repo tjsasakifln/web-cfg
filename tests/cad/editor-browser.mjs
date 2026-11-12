@@ -103,6 +103,8 @@ try {
   assert.equal((await state()).document_id,currentId);
   assert.equal((await raw({op:'entities'})).total,count+1);
   assert.equal(active(await state()).dirty,true);
+  assert.equal(await page.$eval('.cad-status',element=>element.textContent),
+    'Não foi possível abrir este desenho. Confira o arquivo ou tente uma cópia de segurança.');
   pass('native parser rejection of a corrupted second DWG preserves edited drawing');
   const recovery=await state();
   assert(recovery.modal==='Recovery'||recovery.tool_windows?.at(-1)==='Recovery',
@@ -126,6 +128,8 @@ try {
   assert.notDeepEqual((await state()).camera,camera);
   pass('middle-button pan moves drawing without scrolling the page');
   await page.click('[data-expand]');
+  assert.equal(await page.$eval('.cad-status',element=>element.dataset.error),'false');
+  assert.equal(await page.$eval('.cad-status',element=>element.textContent),'Continue a edição do desenho.');
   await page.keyboard.type('L'); await page.keyboard.press('Escape');
   assert(await page.$eval('#cad-editor',el=>el.classList.contains('cad-expanded')));
   assert.equal((await raw({op:'entities'})).total,count+1);
@@ -160,10 +164,28 @@ try {
     JSON.stringify(line.end)===JSON.stringify([7200,1900,0])),'Edited line endpoints changed after DWG reopen');
   pass('actual wallet delivery, saved DWG download and reopen keep the added line');
 
+  const beforeCompact=await state();
   await page.setViewport({width:390,height:844});
+  const waitForUsefulViewport=()=>frame.waitForFunction(async()=>{
+    const state=await window.ocsControl.request({op:'state'});
+    const width=document.querySelector('canvas').getBoundingClientRect().width;
+    return !state.operation && state.properties_visible===false && state.viewport_size[0]>=width*.7;
+  },{timeout:15000});
+  await waitForUsefulViewport();
+  // A native menu choice must survive the host's regular state polling.
+  await act({op:'action',name:'toggle_properties'});
+  await new Promise(resolve=>setTimeout(resolve,1600));
+  assert.equal((await state()).properties_visible,true,'Host closed manually reopened Properties');
+  await act({op:'action',name:'toggle_properties'});
+  await waitForUsefulViewport();
+  assert.equal((await raw({op:'entities'})).total,count+1);
+  const afterCompact=await state();
+  assert.equal(afterCompact.document_id,beforeCompact.document_id);
+  assert.equal(afterCompact.revision,beforeCompact.revision);
+  assert.equal(active(afterCompact).dirty,active(beforeCompact).dirty);
   await page.screenshot({path:path.join(output,'mobile-editor.png')});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1));
-  pass('page stays within narrow viewport');
+  pass('compact workspace keeps drawing width, geometry and manual panel choices');
   assert.deepEqual(external,[],'Editor requested external resources');
   assert.deepEqual(violations,[],'Actual CSP blocked required resources');
   assert.deepEqual(errors,[]);

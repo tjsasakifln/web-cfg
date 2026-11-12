@@ -23,6 +23,8 @@ if (editor) {
   let state, destroyed = false, booted = false;
   const seenExports = new Set();
   const inertSiblings = new Set();
+  const compactViewport = window.matchMedia('(max-width: 660px)');
+  let compactEntry = 0, compactHandled = -1, compactApplying = false;
 
   function say(message, error = false) {
     status.textContent = message;
@@ -35,6 +37,7 @@ if (editor) {
     fitButton.disabled = loading;
     editor.setAttribute('aria-busy', String(loading || saving));
     stage.dataset.busy = String(loading);
+    if (!loading) void applyCompactWorkspace();
   }
   function canvas() { return frame?.contentDocument?.querySelector('canvas'); }
   function focusDrawing() { canvas()?.focus({ preventScroll: true }); }
@@ -70,6 +73,7 @@ if (editor) {
     }));
     issue.querySelector('p').textContent = 'Confira estes elementos do desenho.';
     issue.hidden = !warnings.length;
+    void applyCompactWorkspace();
   }
   async function refreshState() {
     if (statePending || !frame?.contentWindow?.ocsControl || destroyed) return;
@@ -78,6 +82,29 @@ if (editor) {
     catch { /* Opening a large drawing can temporarily occupy the engine. */ }
     finally { statePending = false; }
   }
+  async function applyCompactWorkspace() {
+    if (!compactViewport.matches || compactHandled === compactEntry || compactApplying ||
+        loading || saving || saveCommand || !currentDocument(state)) return;
+    const entry = compactEntry;
+    compactApplying = true;
+    try {
+      const current = await control({ op: 'state' }, 15000);
+      if (entry !== compactEntry || !compactViewport.matches || loading || saving || saveCommand ||
+          !currentDocument(current) || current.operation || current.command || current.modal || current.tool_windows?.length) return;
+      if (current.properties_visible === true) {
+        await control({ op: 'action', name: 'toggle_properties' });
+      }
+      // Consume this entry even when the panel was already closed. Native menu
+      // choices made afterwards remain in the user's control until the next entry.
+      compactHandled = entry;
+      reflectState(await control({ op: 'state' }, 15000));
+    } catch { /* Retry this entry after a temporary busy state, without hiding an error. */ }
+    finally { compactApplying = false; }
+  }
+  compactViewport.addEventListener('change', () => {
+    compactEntry += 1;
+    void applyCompactWorkspace();
+  });
 
   function startFrame() {
     if (ready) return ready;
@@ -98,6 +125,7 @@ if (editor) {
   function removeFailedFrame() {
     clearInterval(pollTimer);
     frame?.remove(); frame = ready = state = undefined; booted = false;
+    compactEntry += 1;
     find('.cad-welcome').hidden = false;
     find('.cad-help').hidden = true;
     saveButton.hidden = fitButton.hidden = expandButton.hidden = pageButton.hidden = true;
@@ -171,6 +199,7 @@ if (editor) {
   async function openFile(file, example = false) {
     if (loading || saving) return;
     setBusy(true);
+    let nativeOpenFailed = false;
     try {
       if (example) {
         say('Abrindo o desenho de exemplo…');
@@ -193,7 +222,8 @@ if (editor) {
       say('Carregando a área de edição…');
       await startFrame();
       say('Abrindo ' + file.name + '…');
-      await control({ op: 'open', name: file.name, data_base64: encoded });
+      try { await control({ op: 'open', name: file.name, data_base64: encoded }); }
+      catch (error) { nativeOpenFailed = true; throw error; }
       await control({ op: 'action', name: 'zoom_extents' });
       await refreshState();
       say('Desenho aberto. Selecione um objeto ou escolha uma ferramenta.');
@@ -201,7 +231,9 @@ if (editor) {
     } catch (error) {
       // An invalid second file never destroys a drawing already being edited.
       if (!booted) removeFailedFrame();
-      say(error.message || 'Não foi possível abrir o arquivo.', true);
+      say(nativeOpenFailed
+        ? 'Não foi possível abrir este desenho. Confira o arquivo ou tente uma cópia de segurança.'
+        : error.message || 'Não foi possível abrir o arquivo.', true);
     } finally { setBusy(false); }
   }
   openButton.addEventListener('click', () => fileInput.click());
@@ -264,7 +296,12 @@ if (editor) {
     expandButton.querySelector('span').textContent = expanded ? 'Reduzir editor' : 'Ampliar editor';
     pageButton.textContent = working ? 'Voltar à página' : 'Retomar edição';
     if (mode === 'inline') alignInline();
-    if (working) focusDrawing();
+    if (working) {
+      focusDrawing();
+      if (!loading && !saving && !saveCommand && currentDocument(state)) {
+        say('Continue a edição do desenho.');
+      }
+    }
   }
   function bindCanvasResume() {
     const drawing = canvas();

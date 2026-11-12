@@ -51,7 +51,9 @@ jobs:
           echo 'd15d7e476feec78d0ec9edc27b8f77279ec7a3e6227756e7036e5cd2066800f4  .cache/opencad-tools/wasm-bindgen.tar.gz' | sha256sum --check
           tar -xzf .cache/opencad-tools/wasm-bindgen.tar.gz -C .cache/opencad-tools
           echo "$GITHUB_WORKSPACE/.cache/opencad-tools/wasm-bindgen-0.2.108-x86_64-unknown-linux-musl" >> "$GITHUB_PATH"
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      - name: Restore the Rust compiler cache
+        id: rust_cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             ~/.cargo/registry/index
@@ -66,6 +68,16 @@ jobs:
           set -euo pipefail
           mkdir -p build/reports/cad
           python3 -u scripts/cad/opencad/build/build_remote.py 2>&1 | tee build/reports/cad/build.log
+      - name: Preserve the compiled cache before the browser tests
+        if: steps.rust_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            .cache/opencad-target
+          key: confenge-opencad-linux-rust1.99.1-fb0a667e-${{ hashFiles('scripts/cad/opencad/build/confenge.patch') }}
       - name: Commit the generated packages to the same branch
         env:
           BUILD_SOURCE_SHA: ${{ github.sha }}
@@ -78,7 +90,7 @@ jobs:
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- scripts/cad/opencad/manifest.json scripts/cad/opencad/LICENSE.txt scripts/cad/opencad/NOTICE.txt scripts/cad/opencad/*.tar.gz.part-*
+          git add -A -- scripts/cad/opencad/manifest.json scripts/cad/opencad/LICENSE.txt scripts/cad/opencad/NOTICE.txt 'scripts/cad/opencad/*.tar.gz.part-*'
           if git diff --cached --quiet; then
             exit 0
           fi
@@ -104,7 +116,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build/cad-smoke-site
-          cp -a cad assets styles.css script.js manifest.webmanifest _headers build/cad-smoke-site/
+          cp -a cad assets index.html styles.css styles-tokens.css script.js manifest.webmanifest favicon.ico _headers build/cad-smoke-site/
           python3 scripts/cad/publicar.py build/cad-smoke-site
           python3 scripts/site/csp_contract.py --write build/cad-smoke-site/_headers --root build/cad-smoke-site
           node tests/cad/package.mjs build/cad-smoke-site

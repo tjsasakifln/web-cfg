@@ -195,7 +195,7 @@ index 0000000..2cc9f96
 +cp web/fonts/*.ttf web/fonts/OFL.txt "$out_dir/fonts/"
 +printf '%s\n' 'Assets ready. The hosting wrapper and export bridge are maintained in web-cfg/cad/editor.'
 diff --git a/src/app/annotation_data.rs b/src/app/annotation_data.rs
-index e1782f9..439b629 100644
+index e1782f9..8e262f1 100644
 --- a/src/app/annotation_data.rs
 +++ b/src/app/annotation_data.rs
 @@ -1812,6 +1812,13 @@ impl OpenCADStudio {
@@ -276,7 +276,7 @@ index e1782f9..439b629 100644
      }
  
      pub(super) fn on_table_insert_style(&mut self, style: String) -> Task<Message> {
-@@ -3024,21 +3052,77 @@ impl OpenCADStudio {
+@@ -3024,21 +3052,79 @@ impl OpenCADStudio {
      }
  
      pub(super) fn on_data_extraction_finish(&mut self) -> Task<Message> {
@@ -339,8 +339,10 @@ index e1782f9..439b629 100644
 +        // The user may have closed the wizard while the wallet was open.
 +        // Delivery is still valid, but it must not close another dialog or
 +        // start placing a table into a different document.
-+        if self.active_modal != Some(ModalKind::DataExtraction)
-+            || self.tabs[self.active_tab].id != tab_id
++        // A parked tool is still open. Focus this wizard before its normal
++        // close path so it can remove only the matching tool window.
++        if self.tabs[self.active_tab].id != tab_id
++            || !self.focus_dialog(ModalKind::DataExtraction)
 +        {
 +            self.command_line
 +                .push_output("Exportação da extração concluída.");
@@ -632,10 +634,27 @@ index 46c1963..12f27c8 100644
  #[cfg(not(target_arch = "wasm32"))]
  fn config_path() -> Option<std::path::PathBuf> {
 diff --git a/src/app/control/mod.rs b/src/app/control/mod.rs
-index 243c78a..28474f4 100644
+index 243c78a..6801e50 100644
 --- a/src/app/control/mod.rs
 +++ b/src/app/control/mod.rs
-@@ -1477,54 +1477,15 @@ impl OpenCADStudio {
+@@ -607,6 +607,7 @@ impl OpenCADStudio {
+         let tab = &self.tabs[self.active_tab];
+         let command = tab.active_cmd.as_deref().map(active_command_metadata);
+         let missing_fonts = crate::io::font_repo::missing_shx_fonts(&tab.scene.document);
++        let properties = crate::ui::dock::PanelId::Properties;
+         json!({"ok":true,"protocol":1,"session_id":session_id(),"version":env!("OCS_APP_VERSION"),
+             "mode":if self.main_window.is_some(){"gui"}else{"headless"},"enabled":self.control.enabled,
+             "read_only":self.read_only,"missing_fonts":missing_fonts,
+@@ -619,6 +620,8 @@ impl OpenCADStudio {
+             "selection_revision":self.control.selection_revision,
+             "command":command,"modal":self.active_modal.as_ref().map(|m|format!("{m:?}")),
+             "tool_windows":self.tool_windows.iter().map(|t|format!("{:?}",t.kind)).collect::<Vec<_>>(),
++            // A tucked-away panel must not be toggled into view by the host.
++            "properties_visible":self.dock_panel_visible(properties) && self.dock_panel_on_screen(properties),
+             "layout":tab.scene.current_layout,
+             "block_editor":tab.active_block_edit
+                 .and_then(|index| tab.block_edits.get(index))
+@@ -1477,54 +1480,15 @@ impl OpenCADStudio {
                      )
                  }
              }
@@ -697,7 +716,62 @@ index 243c78a..28474f4 100644
              }
              #[cfg(not(target_arch = "wasm32"))]
              "save_verified" => {
-@@ -1893,9 +1854,16 @@ impl OpenCADStudio {
+@@ -1544,6 +1508,7 @@ impl OpenCADStudio {
+                         "view region needs bounds [min_x, min_y, max_x, max_y]",
+                     ));
+                 }
++                #[cfg(not(target_arch = "wasm32"))]
+                 self.main_window
+                     .ok_or_else(|| failure("gui_required", "Capture requires a GUI window"))?;
+                 string(req, "path")?;
+@@ -1652,14 +1617,28 @@ impl OpenCADStudio {
+         task.map(move |m| Message::ControlStep(id.clone(), Box::new(m)))
+             .chain(Task::done(Message::ControlTaskDone(end)))
+     }
++    #[cfg(target_arch = "wasm32")]
++    fn release_discarded_control_export(&mut self, msg: &Message) {
++        if matches!(msg, Message::DataExtractionExportFinished { .. }) {
++            // Cancelling automation or closing its tab does not release this
++            // flag. New extractions remain blocked until this single completion
++            // arrives, so it cannot release a newer extraction. Only unblock
++            // the wizard; a discarded callback must not change any document.
++            self.data_extraction_export_pending = false;
++        }
++    }
+     pub(super) fn control_step(&mut self, id: String, msg: Message) -> Task<Message> {
+         if !self.control.pending.as_ref().is_some_and(|p| p.id == id) {
++            #[cfg(target_arch = "wasm32")]
++            self.release_discarded_control_export(&msg);
+             return Task::none();
+         }
+         let previous = self.active_tab;
+         let target = self.control.pending.as_ref().and_then(|p| p.document_id);
+         if let Some(doc) = target {
+             let Some(i) = self.tabs.iter().position(|t| t.id == doc) else {
++                #[cfg(target_arch = "wasm32")]
++                self.release_discarded_control_export(&msg);
+                 self.command_line
+                     .push_error(crate::t!("Automation target document closed").as_ref());
+                 return Task::none();
+@@ -1740,6 +1719,17 @@ impl OpenCADStudio {
+         {
+             return;
+         }
++        #[cfg(target_arch = "wasm32")]
++        if !force
++            && (crate::io::fs_access::web_save_in_flight().is_some()
++                || self.pending_web_thumbnail_save.is_some())
++        {
++            // Web thumbnail capture resumes from a frame subscription, outside
++            // the tracked Task chain. Keep the operation open through the
++            // host acknowledgement; WebSaveWritten releases the slot and
++            // records a failure before this operation can settle.
++            return;
++        }
+         let p = self.control.pending.take().unwrap();
+         let previous = self.active_tab;
+         if let Some(index) = p
+@@ -1893,9 +1883,16 @@ impl OpenCADStudio {
          &mut self,
          path: String,
          screenshot: Option<iced::window::Screenshot>,
@@ -716,7 +790,7 @@ index 243c78a..28474f4 100644
              let s = screenshot
                  .ok_or("The window is minimized or has no size; restore it and capture again")?;
              let requested_scope = self
-@@ -2074,7 +2042,38 @@ impl OpenCADStudio {
+@@ -2074,7 +2071,38 @@ impl OpenCADStudio {
                  "annotations": grounding.visible_entities.clone(),
                  "visible_entities": grounding.visible_entities,
              }))

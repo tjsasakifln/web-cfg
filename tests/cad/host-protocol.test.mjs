@@ -93,6 +93,7 @@ async function parentFixture(wallet = async request => { await request.deliver()
   editor.querySelector('.cad-issue').selectors.set('p', new Element('p'));
   editor.querySelector('[data-expand]').selectors.set('span', new Element('span'));
   const window = new Element('window'); window.scrollBy = () => {};
+  window.matchMedia = () => ({ matches: false, addEventListener() {} });
   let frame, frameCount = 0, revision = 7;
   const document = {
     body, documentElement: new Element('html'),
