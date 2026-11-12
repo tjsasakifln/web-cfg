@@ -15,6 +15,10 @@ const diagnostics = [];
 const contractFailures = [];
 const pause = ms => new Promise(r => setTimeout(r, ms));
 function pass(name, detail = {}) { const item = { name, ...detail }; passed.push(item); console.log(JSON.stringify({passed:item})); }
+function hasDialog(state, kind) { return state.modal===kind || state.tool_windows?.includes(kind)===true; }
+function assertDialog(state, kind, open=true) {
+  assert.equal(hasDialog(state,kind),open,`${kind} must be ${open?'open':'closed'} in both modal/tool-window state: ${JSON.stringify(state)}`);
+}
 const fixture = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:#111827}iframe{width:100%;height:100%;border:0}</style></head><body>
 <iframe id="editor" src="/cad/editor/frame.htm"></iframe><script>
 window.harness={ready:false,exports:[],acks:[],fail:null};
@@ -34,10 +38,12 @@ async function openFixture(browser, format) {
   await page.evaluateOnNewDocument(format=>{
     localStorage.setItem('confenge.cad.settings',JSON.stringify({settings:{language:'en-US',default_save_format:format,savetime_min:0}}));
   },format);
-  await page.setRequestInterception(true);
-  page.on('request',req=>{
-    if(new URL(req.url()).pathname==='/cad/__bridge_smoke') req.respond({status:200,contentType:'text/html',body:fixture});
-    else req.continue();
+  const fixtureCdp=await page.createCDPSession();
+  await fixtureCdp.send('Fetch.enable',{patterns:[{urlPattern:'*/cad/__bridge_smoke',requestStage:'Request'}]});
+  fixtureCdp.on('Fetch.requestPaused',event=>{
+    void fixtureCdp.send('Fetch.fulfillRequest',{requestId:event.requestId,responseCode:200,
+      responseHeaders:[{name:'Content-Type',value:'text/html'}],
+      body:Buffer.from(fixture).toString('base64')}).catch(error=>errors.push(String(error)));
   });
   const cdp=await browser.target().createCDPSession();
   await cdp.send('Browser.setDownloadBehavior',{behavior:'deny',eventsEnabled:true,browserContextId:context.id});
@@ -219,14 +225,17 @@ async function openFixture(browser, format) {
     const line=(await h.raw({op:'query',type:'Line',detail:'geometry'})).entities[0];
     await h.act({op:'entities_transform',handles:[line.handle],action:'move',vector:[1,0]});
     const closingId=(await h.state()).document_id;
-    await h.act({op:'action',name:'close_document'});assert.equal((await h.state()).modal,'Unsaved');
+    await h.act({op:'action',name:'close_document'});assertDialog(await h.state(),'Unsaved');
     op=await h.begin({op:'action',name:'dialog_ok'});await h.waitExport(3);await h.ack(3,false);await h.settle(op);
-    let s=await h.state();assert(s.documents.some(d=>d.id===closingId&&d.dirty));assert.equal(s.modal,'Unsaved');
+    let s=await h.state();assert(s.documents.some(d=>d.id===closingId&&d.dirty));assertDialog(s,'Unsaved');
     pass('Declined save-before-close keeps tab and unsaved prompt');
     await h.act({op:'action',name:'dialog_cancel'});
+    assertDialog(await h.state(),'Unsaved',false);
     await h.act({op:'action',name:'close_document'});
+    assertDialog(await h.state(),'Unsaved');
     op=await h.begin({op:'action',name:'dialog_ok'});await h.waitExport(4);await h.ack(4,true);await h.settle(op);
     assert(!(await h.state()).documents.some(d=>d.id===closingId));
+    assertDialog(await h.state(),'Unsaved',false);
     pass('Acknowledged save-before-close completes close');
 
     await h.act({op:'open',name:'batch-one.dwg',data_base64:saved.toString('base64')});const id1=(await h.state()).document_id;
@@ -250,7 +259,7 @@ async function openFixture(browser, format) {
     // must leave the wizard available to retry with all its input intact.
     const beforeExtraction=await h.semantics();
     await h.act({op:'run',cmd:'DATAEXTRACTION'});
-    assert.equal((await h.state()).modal,'DataExtraction');
+    assertDialog(await h.state(),'DataExtraction');
     for(const value of ['settings=bridge-extraction.dxex','next','next','next','next','next','file=on','path=bridge-extraction.csv','table=off','next']){
       await h.act({op:'action',name:'data_extraction',value});
     }
@@ -258,12 +267,12 @@ async function openFixture(browser, format) {
     op=await h.begin({op:'action',name:'data_extraction',value:'finish'});
     let config=await h.waitExport(offset);assert(config.name.endsWith('.dxex'),config.name);
     await pause(150);assert.equal(await h.count(),offset+1,'Extraction exported both files concurrently');
-    assert.equal((await h.state()).modal,'DataExtraction');
+    assertDialog(await h.state(),'DataExtraction');
     await h.ack(offset,true);
     let table=await h.waitExport(offset+1);assert(table.name.endsWith('.csv'),table.name);
     assert((await h.bytes(offset+1)).length>10,'Empty extraction table');
     await h.ack(offset+1,false);assert.equal((await h.settle(op)).ok,false);
-    assert.equal((await h.state()).modal,'DataExtraction');
+    assertDialog(await h.state(),'DataExtraction');
     assert.deepEqual(await h.semantics(),beforeExtraction);
     pass('Extraction sequences settings and CSV and retains wizard after second-file cancellation');
     offset=await h.count();
@@ -271,6 +280,7 @@ async function openFixture(browser, format) {
     config=await h.waitExport(offset);await h.ack(offset,true);
     table=await h.waitExport(offset+1);const csv=await h.bytes(offset+1);await h.ack(offset+1,true);
     assert.equal((await h.settle(op)).ok,true);assert.equal((await h.state()).modal,null);
+    assertDialog(await h.state(),'DataExtraction',false);
     assert.deepEqual(await h.semantics(),beforeExtraction);
     await fs.writeFile(path.join(output,'extraction.csv'),csv);
     pass('Extraction closes only after settings and CSV are acknowledged',{bytes:csv.length});
@@ -290,18 +300,20 @@ async function openFixture(browser, format) {
 
     const dirtyBeforeQuit=(await h.state()).documents.filter(doc=>doc.dirty).map(doc=>doc.id);
     assert(dirtyBeforeQuit.length>0,'QUIT fixture must have unsaved work');
-    await h.act({op:'run',cmd:'QUIT'});assert.equal((await h.state()).modal,'Unsaved');
+    await h.act({op:'run',cmd:'QUIT'});assertDialog(await h.state(),'Unsaved');
     offset=await h.count();op=await h.begin({op:'action',name:'dialog_ok'});
     await h.waitExport(offset);await h.ack(offset,false);await h.settle(op);
-    s=await h.state();assert.equal(s.modal,'Unsaved');
+    s=await h.state();assertDialog(s,'Unsaved');
     assert(s.documents.some(doc=>dirtyBeforeQuit.includes(doc.id)&&doc.dirty));
     await h.act({op:'action',name:'dialog_cancel'});
+    assertDialog(await h.state(),'Unsaved',false);
     pass('QUIT respects unsaved prompt and declined host export');
     await h.act({op:'run',cmd:'EXIT'});
-    for(let attempt=0;attempt<10&&(await h.state()).modal==='Unsaved';attempt++){
+    for(let attempt=0;attempt<10&&hasDialog(await h.state(),'Unsaved');attempt++){
       await h.act({op:'action',name:'dialog_discard'});
     }
     s=await h.state();assert.equal(s.ok,true);assert(s.documents.every(doc=>doc.start),'EXIT did not finish closing documents');
+    assertDialog(s,'Unsaved',false);
     await h.page.screenshot({path:path.join(output,'engine-exit-start.png')});
     pass('EXIT closes confirmed throwaway drawings and leaves the hosted editor running');
     assert.deepEqual(h.downloads,[],'Editor attempted a direct browser download outside parent');

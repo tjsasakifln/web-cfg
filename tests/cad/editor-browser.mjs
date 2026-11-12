@@ -21,7 +21,7 @@ const browser = await puppeteer.launch({
 const passed = [];
 const pass = name => { passed.push(name); console.log('CAD PASS: ' + name); };
 let page;
-const errors = [], violations = [], external = [], consoleMessages = [];
+const errors = [], violations = [], external = [], consoleMessages = [], network = [];
 try {
   page = await browser.newPage();
   page.on('pageerror', error => errors.push(String(error)));
@@ -33,16 +33,20 @@ try {
   await page.evaluateOnNewDocument(() => {
     window.addEventListener('securitypolicyviolation', e => window.cadViolation({ directive:e.effectiveDirective, blocked:e.blockedURI }));
   });
-  await page.setRequestInterception(true);
+  page.on('response',response=>{if(response.status()>=400)network.push({url:response.url(),status:response.status()});});
+  page.on('requestfailed',request=>network.push({url:request.url(),failure:request.failure()?.errorText}));
+  page.on('workercreated',worker=>network.push({worker:worker.url()}));
   page.on('request', request => {
     const url = new URL(request.url());
-    if (url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'config') {
-      // Explicit local fixture: validate the actual wallet's disabled/free branch.
-      request.respond({ status:200, contentType:'application/json', body:'{"enabled":false}' });
-    } else {
-      if (request.frame()?.url().includes('/cad/editor/') && /^https?:/.test(url.protocol) && url.origin !== new URL(base).origin) external.push(url.origin);
-      request.continue();
-    }
+    if (request.frame()?.url().includes('/cad/editor/') && /^https?:/.test(url.protocol) && url.origin !== new URL(base).origin) external.push(url.origin);
+  });
+  // Stub only wallet configuration. Let module workers and WASM load normally.
+  const fixtureCdp=await page.createCDPSession();
+  await fixtureCdp.send('Fetch.enable',{patterns:[{urlPattern:'*/api/web/tool-credits?op=config*',requestStage:'Request'}]});
+  fixtureCdp.on('Fetch.requestPaused',event=>{
+    void fixtureCdp.send('Fetch.fulfillRequest',{requestId:event.requestId,responseCode:200,
+      responseHeaders:[{name:'Content-Type',value:'application/json'}],
+      body:Buffer.from('{"enabled":false}').toString('base64')}).catch(error=>errors.push(String(error)));
   });
   const cdp = await browser.target().createCDPSession();
   await cdp.send('Browser.setDownloadBehavior', {behavior:'allow', downloadPath:downloads, eventsEnabled:true});
@@ -177,6 +181,6 @@ try {
         control:await frame.contentWindow?.ocsControl?.request({op:'state'},{timeoutMs:3000}).catch(error=>({error:String(error)}))})))})).catch(()=>null);
   }
   await writeFile(path.join(output,'browser-result.json'),JSON.stringify({ok:false,base,passed,error:String(error),stack:error.stack,
-    state,errors,violations,external,consoleMessages},null,2)+'\n');
+    state,errors,violations,external,consoleMessages,network},null,2)+'\n');
   throw error;
 } finally { await browser.close(); local?.server.close(); }
