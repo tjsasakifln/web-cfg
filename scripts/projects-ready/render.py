@@ -99,7 +99,7 @@ def landing() -> str:
 <p id="rp-contact-hint" class="rp-hint rp-wide">Informe WhatsApp com DDD ou e-mail. Um dos dois é suficiente para receber o retorno.</p>
 <div><label for="city">Município do terreno</label><input id="city" name="city" autocomplete="address-level2" minlength="2" maxlength="80" required/></div>
 <div><label for="uf">UF</label><select id="uf" name="uf" autocomplete="address-level1" required><option value="">Selecione</option>{ufs}</select></div>
-<div class="rp-wide"><label for="project_kind">O que você procura?</label><select id="project_kind" name="project_kind" required><option value="license">Consultar um projeto pronto</option><option value="adaptation">Adaptar um projeto ao terreno</option><option value="complementary">Contratar projetos complementares</option><option value="custom">Conversar sobre um projeto sob medida</option></select></div>
+<div class="rp-wide"><label for="project_kind">O que você procura?</label><select id="project_kind" name="project_kind" required><option value="license">Consultar um projeto pronto</option><option value="adaptation">Adaptar um projeto ao terreno</option><option value="complementary">Contratar projetos complementares</option><option value="custom">Solicitar o projeto da minha casa</option></select></div>
 </div>
 <details><summary>Detalhes da casa e do terreno <span class="rp-hint">(opcional)</span></summary><div class="rp-fields">
 <div><label for="lot_width_m">Frente do lote, em metros</label><input id="lot_width_m" name="lot_width_m" type="number" min="0.5" max="10000" step="0.01" inputmode="decimal"/></div>
@@ -119,7 +119,7 @@ def landing() -> str:
 <details><summary>Posso comprar e baixar um projeto hoje?</summary><p>Ainda não. Estamos recebendo consultas para a primeira seleção. Quando um modelo estiver disponível, você poderá conferir as amostras reais, o conteúdo, o preço e as condições antes de comprar. O formulário atual não cria um pedido de compra.</p></details>
 <details><summary>Preciso saber todas as medidas para consultar?</summary><p>Não. Informe o município e a UF, além de um contato. Se souber a frente, a profundidade e os ambientes desejados, inclua esses dados. Eles ajudam a entender a necessidade, mas não substituem levantamento do terreno.</p></details>
 <details><summary>Um projeto pronto serve para qualquer terreno?</summary><p>A implantação depende de dimensões, relevo, orientação, solo, acessos e exigências locais. Um profissional habilitado precisa avaliar a adequação e definir as adaptações necessárias antes da execução. A aprovação é feita pelos órgãos competentes.</p></details>
-<details><summary>E se eu precisar de outra distribuição ou de mais disciplinas?</summary><p>Conte o que precisa mudar ou acrescentar. A proposta pode combinar adaptação, desenvolvimento sob medida e projetos complementares, com as responsabilidades e as entregas de cada escopo identificadas.</p></details>
+<details><summary>E se eu precisar de outra distribuição ou de mais disciplinas?</summary><p>Conte o que precisa mudar ou acrescentar. A proposta pode combinar a elaboração do projeto da casa, sua adaptação ao terreno e os projetos complementares, com as entregas e responsabilidades definidas.</p></details>
 </div></section>'''
     return page(ROUTE, 'Projetos prontos residenciais: consulte a disponibilidade', 'Consulte projetos residenciais, adaptação ao terreno e complementares. Informe município, contato e o que pretende construir. Consulta sem cobrança.', body)
 
