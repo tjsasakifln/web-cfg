@@ -43,3 +43,22 @@ A comparação dos corpos principais das páginas alteradas protege o conteúdo 
 Os testes verificam contrato, destinos e fragmentos, paridade entre os quatro menus, identificadores, controles nativos, compilação determinística, acessibilidade, foco, comportamento responsivo e ausência de promessa comercial indevida. A aprovação inclui inspeção renderizada, checks de PR e o fluxo integral Netcup no SHA integrado.
 
 A publicação usa o artefato aprovado, a promoção atômica e a verificação pública do fluxo `netcup-release`. A recuperação usa a versão anterior pelo procedimento já definido em `deploy/netcup/README.md` e `docs/ops/ROLLBACK.md`. Reverter a mudança de navegação e seus artefatos derivados não altera dados de clientes nem transações.
+
+## Evidência revisada
+
+O [QA 43255326548](https://github.com/tjsasakifln/web-cfg/actions/runs/43255326548) aprovou o commit fonte `00bd838d128c438b7db0da4e0c39c9c89fc1e5aa`, árvore `80ba18e77eda1a11ec2ae94faa3f67ae614fd048`. A inspeção das três capturas foi realizada pelo integrador e por dois revisores. Os arquivos originais estão em `2026-11-12-navigation-evidence/`.
+
+| Verificação executada | Resultado |
+| --- | --- |
+| Navegação com JavaScript, três famílias e oito tamanhos | 24/24 |
+| Navegação sem JavaScript, três famílias e três tamanhos | 9/9 |
+| Abertura exclusiva de grupos sem JavaScript | 9/9 |
+| Mudanças de largura em ambos os sentidos | 3/3 |
+| Contato e salto para conteúdo, com e sem JavaScript | 6/6 |
+| Semântica de eventos e atribuição | 67/67 |
+| Primeira dobra comercial em fonte limpa | 25/25 rotas; 1.942 verificações |
+| Erros de página e falhas de navegação | 0 |
+
+A comparação dos 269 HTML alterados nesse commit confirmou identidade byte a byte de `head` e `main` contra a base `fdbc687a1d1b5ba5ede77698c8cbd64cd9f9f376`. A análise contratual aprovada recebeu prova específica de preservação do conteúdo, da autoridade e de todo o artefato fora do cabeçalho, rodapé e fingerprint CSS. A recaptura de apresentação mantém os campos factuais intactos e registra a proveniência e os hashes das capturas; não atribui aprovação humana a uma revisão feita por agentes.
+
+As fontes dos seis pilares protegidos permanecem intactas. O compilador aplica a navegação compartilhada ao artefato público. A primeira dobra do artefato final, os gates completos da PR e o fluxo de publicação no SHA integrado continuam obrigatórios. A aprovação da fonte não declara que a publicação já ocorreu.

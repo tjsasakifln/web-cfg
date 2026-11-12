@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
-      "rendered_content_hash_previous": "aac54b38d71b96d5936a81d7ca22f1dbfd377c9c3d93e0fa4eede88b720260a5",
+      "rendered_content_hash": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
+      "rendered_content_hash_previous": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-11-09T03:11:57Z",
-      "rendered_hash_recapture_reason": "Vitrine CONFENGE autorizada para publicação em 2026-11-09; escopo shared_navigation da emenda de apresentação já registrada. Comparação do artefato final com a base 3c65897: diferença byte a byte limitada às duas âncoras do menu (desktop e móvel). Miolo técnico, fontes, cálculos, autoria, CTA contextual, robots e canonical preservados. Recaptura de apresentação; nenhuma nova aprovação técnica ou revisão humana.",
-      "rendered_hash_recapture_reason_previous": "CONFENGE-CONVERSAO-MEDICAO-20261025: correcao autorizada da regressao de altura introduzida pelo consentimento GA4. Regras restritas ao rodape, com alvos de 44px e contraste preservados. Comparacao deterministica confirma HTML tecnico byte-identico e artefato final diferente somente no fingerprint de styles.css. Material, fontes, autoria, datas, canonical, robots e CTA preservados. Recaptura de apresentacao pelo procedimento existente; nenhuma nova aprovacao tecnica ou revisao humana alegada.",
+      "rendered_hash_recaptured_at": "2026-11-12T16:12:17Z",
+      "rendered_hash_recapture_reason": "Otimização do menu autorizada para publicação pelo usuário em 2026-11-12, no escopo shared_navigation/shared_footer da emenda de apresentação já registrada. Comparação determinística contra fdbc687a1 confirma identidade byte a byte do conteúdo técnico, head editorial, fontes, cálculos, autoria, datas, canonical, robots, JSON-LD e CTA contextual. No artefato público, o delta se limita ao cabeçalho compartilhado, rodapé compartilhado e fingerprint de styles.css. Recaptura exclusiva de apresentação; nenhuma nova aprovação técnica ou revisão humana é alegada.",
+      "rendered_hash_recapture_reason_previous": "Vitrine CONFENGE autorizada para publicação em 2026-11-09; escopo shared_navigation da emenda de apresentação já registrada. Comparação do artefato final com a base 3c65897: diferença byte a byte limitada às duas âncoras do menu (desktop e móvel). Miolo técnico, fontes, cálculos, autoria, CTA contextual, robots e canonical preservados. Recaptura de apresentação; nenhuma nova aprovação técnica ou revisão humana.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -932,6 +932,28 @@
       "rendered_content_hash_previous": "aac54b38d71b96d5936a81d7ca22f1dbfd377c9c3d93e0fa4eede88b720260a5",
       "rendered_content_hash": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
       "reason": "Vitrine CONFENGE autorizada para publicação em 2026-11-09; escopo shared_navigation da emenda de apresentação já registrada. Comparação do artefato final com a base 3c65897: diferença byte a byte limitada às duas âncoras do menu (desktop e móvel). Miolo técnico, fontes, cálculos, autoria, CTA contextual, robots e canonical preservados. Recaptura de apresentação; nenhuma nova aprovação técnica ou revisão humana."
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Pedido do usuário em 2026-11-12 para aprimorar o menu e publicar; escopo shared_navigation/shared_footer da emenda de apresentação existente.",
+      "at": "2026-11-12T16:12:17Z",
+      "reviewer": "Verificação determinística e revisão adversarial por agentes; nenhuma nova revisão humana alegada.",
+      "rendered_content_hash_previous": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
+      "rendered_content_hash": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
+      "reason": "Otimização do menu autorizada para publicação pelo usuário em 2026-11-12, no escopo shared_navigation/shared_footer da emenda de apresentação já registrada. Comparação determinística contra fdbc687a1 confirma identidade byte a byte do conteúdo técnico, head editorial, fontes, cálculos, autoria, datas, canonical, robots, JSON-LD e CTA contextual. No artefato público, o delta se limita ao cabeçalho compartilhado, rodapé compartilhado e fingerprint de styles.css. Recaptura exclusiva de apresentação; nenhuma nova aprovação técnica ou revisão humana é alegada.",
+      "qa_evidence_sha256": "f51398bab035e2aa0853a347c368e8f5b3405d05749ac33db232092c2fc83f85",
+      "qa_provenance_sha256": "2cf095d33a4d05209b51f5903420149bf67863cd363d92fa76694edb7afcfefd",
+      "qa_source_tree_sha": "80ba18e77eda1a11ec2ae94faa3f67ae614fd048",
+      "qa_source_head_sha": "00bd838d128c438b7db0da4e0c39c9c89fc1e5aa",
+      "qa_workflow_run_id": "43255326548",
+      "qa_workflow_run_attempt": "1",
+      "qa_screenshot_sha256": {
+        "desktop-ferramentas.png": "538ee4b23968b9b34573788c082aa5f48013835d4cded32e789d0c291da93c12",
+        "mobile-projetos.png": "815f3c0a80ce34ef8a602e1eb0e45d0e3bbdee57091db97098d288506c33a536",
+        "projetos-prontos-desktop.png": "e7df2d000ac58561ca2850951e95ede32834ceac1fe8d2887af8a459f8b594ff"
+      }
     }
   ]
 }

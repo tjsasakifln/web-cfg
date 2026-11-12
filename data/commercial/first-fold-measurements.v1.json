@@ -1,15 +1,15 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-12T06:56:58.756Z",
+  "measured_at": "2026-11-12T16:10:58.892Z",
   "measured_on": "2026-11-12",
-  "commit_sha": "dacbcb7376b53c758bbe44af0e101e045f6d9834",
+  "commit_sha": "00bd838d128c438b7db0da4e0c39c9c89fc1e5aa",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
     "@control/scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
     "@control/scripts/site/measure_first_fold.mjs": "e1637d957ea1275998261e00e022825f89548cefb555b6406ae55a15af0a786a",
-    "acompanhamento-contratos-obras/index.html": "21e207788f774361d3e57b95ab3012620fd35e4bd30756dea3bce929754db24e",
+    "acompanhamento-contratos-obras/index.html": "6c0b2a3f1dceff156ae0223be9b9b3fd9a0077057a9654e725af99f23c5ae7e4",
     "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/conteudos/como-contratar-projetos-complementares-mobile.svg": "78faf44bfd07b7505bde169bccdaecfc358a101cf30aba5025fb6312165adec6",
@@ -18,50 +18,50 @@
     "assets/editorial.css": "7d20c2e78c5ccc3a56a77821d1efb11b10e68dd13fb278a452e0628fd05c86ec",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "95bb8e8fad9320f18c915969a3dacda9ef77f8d85fe5ed1b411f4f9ff2e7d0f2",
-    "assets/home-base.css": "62ba1fb9962c1e559895c1b333e41608476c0aa3088a90cddf114fd142cd3aef",
+    "assets/home-base.css": "344b34b98eb7e47b3f7e0bc3804339fa631d65cc57d306d7d3d67ed974b7f8b8",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg": "dd313aa6bdf1870b5b6a6bbd7d5cba788dccb680a7867af91571441e00760aea",
     "assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg": "c500e4c6b5fdfb13f8748b1d0d65e925d0277d115034f2c60d2bf5b6b63ac361",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
-    "atrasos-prorrogacao-obras-publicas/index.html": "10407842d79c3b3f129fff45ced9d63afd35115a383af266141cc6c5542af8cb",
+    "atrasos-prorrogacao-obras-publicas/index.html": "f67e986b94df209989e29310542ef564ecd223d38ea31333c8e04def56c9116d",
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-    "bid-room-licitacoes-obras/index.html": "4b135d9a18a93a3b63dc9ca86853e6218cd7192b3d4bb708df6026b10739c0b0",
-    "casos/modelo-apresentacao-executiva-resultados/index.html": "0057f3c84db0ecbd5b768240c3edde595b33e9e6358cdee736a61ba351586bca",
+    "bid-room-licitacoes-obras/index.html": "3361a00b18d590190aebc512df69ef3af0e44683209f4094fa4d650b3d5f9b3a",
+    "casos/modelo-apresentacao-executiva-resultados/index.html": "b3295a26139c3129cd1eb5d8da4589208b976a2d1bef73ba597907de69532daf",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
-    "casos/modelo-base-quantitativa-canonica/index.html": "7357184b3ec13f25ddb56af4c02bec3913971a233c3a277a55ff7a878df68609",
+    "casos/modelo-base-quantitativa-canonica/index.html": "3d3539d074f38af7e0f41fed2b57a3c7a85f439e05b8ca770b53065806e47ed7",
     "casos/modelo-base-quantitativa-canonica/styles.css": "c8d0c0fcc67bb3ff7368e313a7eb7978728dd012668bbd57c6d4584fd3331d83",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html": "35d222cf0859ede7340a801d7757dfbf9d92fa670f39a66e7af2b2cea22edce1",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": "fb8761164446fe6409bb91e49f4531c93f2301e71ba9d6a22d3f73064eca874e",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
-    "casos/modelo-mapa-compradores-publicos/index.html": "e894698848ff988029bc375ffcc10e83b0d0ffc43aa8646dce7f1b508ed41d59",
+    "casos/modelo-mapa-compradores-publicos/index.html": "6fdd451c49300982080bdac46328d683a6b434c5ce78d2da415caed6bfb12a1c",
     "casos/modelo-mapa-compradores-publicos/styles.css": "211910fc1bd872792301284632b6139e460777be5f8eb10f0880eccc13ec450d",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "56582e8efb11564e320b41014c793b8bca7fc9064537330d37738b2fc765c62a",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "3662075bdb3c5bbfb1071c392158717cd33c74e90b935857b54b8b9687c7cefe",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
-    "casos/modelo-painel-precos-obras-publicas/index.html": "2b0bef36d792f4eb561f8fea60a605eacb9154b5ca96eb747a8016c73b654e46",
+    "casos/modelo-painel-precos-obras-publicas/index.html": "d7f093c09ad56f00de68d0398810b9e49fc0f7a569c3679b79f2b7fa16a021e1",
     "casos/modelo-painel-precos-obras-publicas/styles.css": "eddc3b734030a33898728fe41affb4c3bce7ccee5338d13ff05a8cbf7d669e6a",
-    "casos/modelo-relatorio-executivo-consolidado/index.html": "c5b6c4d6564672826666c35ec3c81c44a1f5547f0cfcc757bf6b3bbfd3942376",
+    "casos/modelo-relatorio-executivo-consolidado/index.html": "af1d2b941af9f10e95fe285f8015c10fe361d9cfd7744e15cfcda28219d79ee5",
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "2343982f9337a7277fdfd4b7fd855df61133b5a7e25ac266109b12ca064fa6b0",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "a70d358767a2c22f617605251e7ed7dc5c292af7f26af616986dbbb06f362984",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
-    "defesa-margem-contratos-publicos/index.html": "ab3d3c50cc1d233fdc6614f7131fac8cd7b576f3a83db46ff31fc766c1dc8a74",
-    "defesa-tecnica-contratos-publicos/index.html": "0f42b64a0a47d11a15ee577c9a0a597af1378aee470cc95f9f3fad52b2394b57",
+    "defesa-margem-contratos-publicos/index.html": "cbf45ef27799bd53b7493ff8924d944db0f2210dc1e4b114aec660f961ed492f",
+    "defesa-tecnica-contratos-publicos/index.html": "bc5b0008a24b4f80bd40ebd982af09fde8563f113736326353a563fab0d79c1c",
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
-    "diagnostico-b2g-expansao/index.html": "653e12ec9126717b210c7af3ca80532aece157288993a9fd88975ea6125c445a",
+    "diagnostico-b2g-expansao/index.html": "148d488baeaa716ac216d35a3f1a1d0251777e0f3e56abb2570665443ed71cc0",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-    "diretoria-b2g/index.html": "9356dc6d27b06a22f2b04d0fb773d67ef426ff5ac5ba24dd0504de59062ffd79",
-    "entregas/index.html": "06a25fc9bd9640694022069d6acbe1b51303a58fbd7044417dbdb4768364ece9",
+    "diretoria-b2g/index.html": "1626923bec66078f8240acf367d3a3fb96edc7c9c56f8a93c7870b666ab2870d",
+    "entregas/index.html": "931b0bed7d1333e80bf87ef89a25dace046a06b6228082894d838e06a6607041",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "11c9e13688ccfa316920f16b1748b12d646666f6171979e2c33aa421d94e6b7f",
+    "index.html": "6bf8680c85441649f1bced8f858bb314ba58b6a1881623bdfc7b15142a09293d",
     "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-    "problemas-que-resolvemos/index.html": "3978ec2b8667a6bcbdef618e6a6cb7ebbfcb1b13fade4ac8953be23bed044be8",
+    "problemas-que-resolvemos/index.html": "ede86c9f027fc6963c50b18acb29833d23f1475cba872eda3955dafddc305b43",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-    "script.js": "088c57970426f0c555483521ee61b4020ae6d3a24bc2b3e46404ed62b368f89a",
-    "servicos-obras-publicas/index.html": "cf718f20444bada39698a5a1e90dfc55b8d25fa4e979d000a482f6c10fd95226",
+    "script.js": "b371cb77a50a494e47f155eeda4f94bf3076f3f1129a46509bf3e7a17a9930c5",
+    "servicos-obras-publicas/index.html": "ec61dad6b203e3d368f83da08ac330b69fd70096362ffdffee087299d59f4b26",
     "styles-hubs.css": "04d161f9d370fb5d535552e2373be6bfee86083aba1e672c3cc4deb3782b085e",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-    "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6"
+    "styles.css": "43cf3b8e78c5369c00ad4103c4d29f21f7fd15559426dbdf847c671796282ce8"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -113,7 +113,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "11c9e13688ccfa316920f16b1748b12d646666f6171979e2c33aa421d94e6b7f",
+      "html_sha256": "6bf8680c85441649f1bced8f858bb314ba58b6a1881623bdfc7b15142a09293d",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -122,8 +122,8 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 115,
-                "bottom": 135,
+                "top": 150,
+                "bottom": 170,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -134,8 +134,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 151,
-                "bottom": 267,
+                "top": 186,
+                "bottom": 302,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -146,8 +146,8 @@
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 287,
-                "bottom": 447,
+                "top": 322,
+                "bottom": 482,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -158,8 +158,8 @@
             "substance": {
               "selector": ".home-opening__scope",
               "box": {
-                "top": 551,
-                "bottom": 626,
+                "top": 586,
+                "bottom": 661,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -170,8 +170,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 475,
-                "bottom": 519,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -185,8 +185,8 @@
               "text": "Solicitar proposta",
               "href": "#contato",
               "box": {
-                "top": 475,
-                "bottom": 519,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -208,8 +208,8 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 85,
-                "bottom": 124,
+                "top": 178,
+                "bottom": 217,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -220,8 +220,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 140,
-                "bottom": 210,
+                "top": 233,
+                "bottom": 303,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -232,8 +232,8 @@
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 224,
-                "bottom": 368,
+                "top": 317,
+                "bottom": 461,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -244,8 +244,8 @@
             "substance": {
               "selector": ".home-opening__scope",
               "box": {
-                "top": 498,
-                "bottom": 604,
+                "top": 591,
+                "bottom": 697,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -256,8 +256,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 384,
-                "bottom": 428,
+                "top": 477,
+                "bottom": 521,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -271,8 +271,8 @@
               "text": "Solicitar proposta",
               "href": "#contato",
               "box": {
-                "top": 384,
-                "bottom": 428,
+                "top": 477,
+                "bottom": 521,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -321,7 +321,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "06a25fc9bd9640694022069d6acbe1b51303a58fbd7044417dbdb4768364ece9",
+      "html_sha256": "931b0bed7d1333e80bf87ef89a25dace046a06b6228082894d838e06a6607041",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -330,8 +330,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 195,
+                "bottom": 214,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -342,8 +342,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 341,
+                "top": 226,
+                "bottom": 376,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -354,8 +354,8 @@
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 355,
-                "bottom": 414,
+                "top": 390,
+                "bottom": 449,
                 "left": 83,
                 "right": 619,
                 "width": 536,
@@ -366,8 +366,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 434,
-                "bottom": 542,
+                "top": 469,
+                "bottom": 577,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -378,8 +378,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 623,
-                "bottom": 667,
+                "top": 658,
+                "bottom": 702,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -393,8 +393,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 623,
-                "bottom": 667,
+                "top": 658,
+                "bottom": 702,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -416,8 +416,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 135,
-                "bottom": 155,
+                "top": 228,
+                "bottom": 248,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -428,8 +428,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 167,
-                "bottom": 267,
+                "top": 260,
+                "bottom": 360,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -440,8 +440,8 @@
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 280,
-                "bottom": 359,
+                "top": 373,
+                "bottom": 452,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -452,8 +452,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 379,
-                "bottom": 499,
+                "top": 472,
+                "bottom": 592,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -464,8 +464,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 602,
-                "bottom": 646,
+                "top": 695,
+                "bottom": 739,
                 "left": 18,
                 "right": 272,
                 "width": 254,
@@ -479,8 +479,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 602,
-                "bottom": 646,
+                "top": 695,
+                "bottom": 739,
                 "left": 18,
                 "right": 272,
                 "width": 254,
@@ -519,7 +519,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "cf718f20444bada39698a5a1e90dfc55b8d25fa4e979d000a482f6c10fd95226",
+      "html_sha256": "ec61dad6b203e3d368f83da08ac330b69fd70096362ffdffee087299d59f4b26",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -528,8 +528,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 195,
+                "bottom": 214,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -540,8 +540,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 291,
+                "top": 226,
+                "bottom": 326,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -552,8 +552,8 @@
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 305,
-                "bottom": 391,
+                "top": 340,
+                "bottom": 426,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -564,8 +564,8 @@
             "substance": {
               "selector": ".section-proof",
               "box": {
-                "top": 469,
-                "bottom": 555,
+                "top": 504,
+                "bottom": 590,
                 "left": 83,
                 "right": 532,
                 "width": 449,
@@ -576,8 +576,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 411,
-                "bottom": 455,
+                "top": 446,
+                "bottom": 490,
                 "left": 83,
                 "right": 453,
                 "width": 370,
@@ -591,8 +591,8 @@
               "text": "Conhecer o apoio para medições e glosas",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
-                "top": 411,
-                "bottom": 455,
+                "top": 446,
+                "bottom": 490,
                 "left": 83,
                 "right": 453,
                 "width": 370,
@@ -609,8 +609,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 135,
-                "bottom": 155,
+                "top": 228,
+                "bottom": 248,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -621,8 +621,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 167,
-                "bottom": 267,
+                "top": 260,
+                "bottom": 360,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -633,8 +633,8 @@
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 280,
-                "bottom": 384,
+                "top": 373,
+                "bottom": 477,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -645,8 +645,8 @@
             "substance": {
               "selector": ".section-proof",
               "box": {
-                "top": 536,
-                "bottom": 620,
+                "top": 629,
+                "bottom": 713,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -657,8 +657,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 404,
-                "bottom": 464,
+                "top": 497,
+                "bottom": 557,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -672,8 +672,8 @@
               "text": "Conhecer o apoio para medições e glosas",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
-                "top": 404,
-                "bottom": 464,
+                "top": 497,
+                "bottom": 557,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -709,7 +709,7 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "3978ec2b8667a6bcbdef618e6a6cb7ebbfcb1b13fade4ac8953be23bed044be8",
+      "html_sha256": "ede86c9f027fc6963c50b18acb29833d23f1475cba872eda3955dafddc305b43",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -718,8 +718,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 195,
+                "bottom": 214,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -730,8 +730,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 341,
+                "top": 226,
+                "bottom": 376,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -742,8 +742,8 @@
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 355,
-                "bottom": 441,
+                "top": 390,
+                "bottom": 476,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -754,8 +754,8 @@
             "substance": {
               "selector": ".section-proof",
               "box": {
-                "top": 519,
-                "bottom": 562,
+                "top": 554,
+                "bottom": 597,
                 "left": 83,
                 "right": 532,
                 "width": 449,
@@ -766,8 +766,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 461,
-                "bottom": 505,
+                "top": 496,
+                "bottom": 540,
                 "left": 83,
                 "right": 429,
                 "width": 346,
@@ -781,8 +781,8 @@
               "text": "Ver o Diagnóstico de Riscos à Margem",
               "href": "/defesa-margem-contratos-publicos/",
               "box": {
-                "top": 461,
-                "bottom": 505,
+                "top": 496,
+                "bottom": 540,
                 "left": 83,
                 "right": 429,
                 "width": 346,
@@ -799,8 +799,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 135,
-                "bottom": 155,
+                "top": 228,
+                "bottom": 248,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -811,8 +811,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 167,
-                "bottom": 300,
+                "top": 260,
+                "bottom": 393,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -823,8 +823,8 @@
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 314,
-                "bottom": 418,
+                "top": 407,
+                "bottom": 511,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -835,8 +835,8 @@
             "substance": {
               "selector": ".section-proof",
               "box": {
-                "top": 495,
-                "bottom": 537,
+                "top": 588,
+                "bottom": 630,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -847,8 +847,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 438,
-                "bottom": 482,
+                "top": 531,
+                "bottom": 575,
                 "left": 18,
                 "right": 364,
                 "width": 346,
@@ -862,8 +862,8 @@
               "text": "Ver o Diagnóstico de Riscos à Margem",
               "href": "/defesa-margem-contratos-publicos/",
               "box": {
-                "top": 438,
-                "bottom": 482,
+                "top": 531,
+                "bottom": 575,
                 "left": 18,
                 "right": 364,
                 "width": 346,
@@ -899,7 +899,7 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "html_sha256": "653e12ec9126717b210c7af3ca80532aece157288993a9fd88975ea6125c445a",
+      "html_sha256": "148d488baeaa716ac216d35a3f1a1d0251777e0f3e56abb2570665443ed71cc0",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -908,8 +908,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 203,
+                "bottom": 222,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -920,8 +920,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 199,
-                "bottom": 337,
+                "top": 234,
+                "bottom": 372,
                 "left": 83,
                 "right": 553,
                 "width": 470,
@@ -932,8 +932,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 353,
-                "bottom": 439,
+                "top": 388,
+                "bottom": 474,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -944,8 +944,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 539,
-                "bottom": 586,
+                "top": 574,
+                "bottom": 621,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -956,8 +956,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 687,
-                "bottom": 731,
+                "top": 722,
+                "bottom": 766,
                 "left": 83,
                 "right": 321,
                 "width": 238,
@@ -971,8 +971,8 @@
               "text": "Solicitar o diagnóstico",
               "href": "#pedido-diagnostico",
               "box": {
-                "top": 687,
-                "bottom": 731,
+                "top": 722,
+                "bottom": 766,
                 "left": 83,
                 "right": 321,
                 "width": 238,
@@ -994,8 +994,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 174,
-                "bottom": 213,
+                "top": 267,
+                "bottom": 306,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1006,8 +1006,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 225,
-                "bottom": 335,
+                "top": 318,
+                "bottom": 428,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1018,8 +1018,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 351,
-                "bottom": 455,
+                "top": 444,
+                "bottom": 548,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1030,8 +1030,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 467,
-                "bottom": 509,
+                "top": 560,
+                "bottom": 602,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1042,8 +1042,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 651,
-                "bottom": 695,
+                "top": 744,
+                "bottom": 788,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1057,8 +1057,8 @@
               "text": "Solicitar o diagnóstico",
               "href": "#pedido-diagnostico",
               "box": {
-                "top": 651,
-                "bottom": 695,
+                "top": 744,
+                "bottom": 788,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1066,12 +1066,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Tirar uma dúvida pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
-            }
-          ],
+          "secondary_actions_in_fold": [],
           "horizontal_overflow": false
         }
       },
@@ -1110,8 +1105,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 150,
+                "bottom": 169,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1122,8 +1117,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 241,
+                "top": 181,
+                "bottom": 231,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1134,8 +1129,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 255,
-                "bottom": 341,
+                "top": 245,
+                "bottom": 331,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -1146,8 +1141,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 361,
-                "bottom": 496,
+                "top": 351,
+                "bottom": 486,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -1158,8 +1153,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 520,
-                "bottom": 564,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1173,8 +1168,8 @@
               "text": "Descrever a licitação",
               "href": "#captura-pilar",
               "box": {
-                "top": 520,
-                "bottom": 564,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1196,8 +1191,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 184,
+                "top": 168,
+                "bottom": 188,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1208,8 +1203,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 295,
+                "top": 200,
+                "bottom": 299,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1220,8 +1215,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 309,
-                "bottom": 439,
+                "top": 313,
+                "bottom": 443,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1232,8 +1227,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 459,
-                "bottom": 627,
+                "top": 463,
+                "bottom": 631,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1244,8 +1239,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 651,
-                "bottom": 695,
+                "top": 655,
+                "bottom": 699,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1259,8 +1254,8 @@
               "text": "Descrever a licitação",
               "href": "#captura-pilar",
               "box": {
-                "top": 651,
-                "bottom": 695,
+                "top": 655,
+                "bottom": 699,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1318,8 +1313,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 150,
+                "bottom": 169,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1330,8 +1325,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 241,
+                "top": 181,
+                "bottom": 231,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1342,8 +1337,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 255,
-                "bottom": 341,
+                "top": 245,
+                "bottom": 331,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -1354,8 +1349,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 361,
-                "bottom": 496,
+                "top": 351,
+                "bottom": 486,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -1366,8 +1361,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 520,
-                "bottom": 564,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 328,
                 "width": 245,
@@ -1381,8 +1376,8 @@
               "text": "Descrever o orçamento",
               "href": "#captura-pilar",
               "box": {
-                "top": 520,
-                "bottom": 564,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 328,
                 "width": 245,
@@ -1404,8 +1399,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 184,
+                "top": 168,
+                "bottom": 188,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1416,8 +1411,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 262,
+                "top": 200,
+                "bottom": 266,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1428,8 +1423,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 276,
-                "bottom": 406,
+                "top": 280,
+                "bottom": 410,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1440,8 +1435,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 426,
-                "bottom": 594,
+                "top": 430,
+                "bottom": 598,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1452,8 +1447,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 618,
-                "bottom": 662,
+                "top": 622,
+                "bottom": 666,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1467,8 +1462,8 @@
               "text": "Descrever o orçamento",
               "href": "#captura-pilar",
               "box": {
-                "top": 618,
-                "bottom": 662,
+                "top": 622,
+                "bottom": 666,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1518,7 +1513,7 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "4b135d9a18a93a3b63dc9ca86853e6218cd7192b3d4bb708df6026b10739c0b0",
+      "html_sha256": "3361a00b18d590190aebc512df69ef3af0e44683209f4094fa4d650b3d5f9b3a",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -1527,8 +1522,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 203,
+                "bottom": 222,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1539,8 +1534,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 199,
-                "bottom": 291,
+                "top": 234,
+                "bottom": 326,
                 "left": 83,
                 "right": 553,
                 "width": 470,
@@ -1551,8 +1546,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 307,
-                "bottom": 393,
+                "top": 342,
+                "bottom": 428,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -1563,8 +1558,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 407,
-                "bottom": 477,
+                "top": 442,
+                "bottom": 512,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -1575,8 +1570,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 578,
-                "bottom": 622,
+                "top": 613,
+                "bottom": 657,
                 "left": 83,
                 "right": 380,
                 "width": 297,
@@ -1590,8 +1585,8 @@
               "text": "Solicitar proposta para o edital",
               "href": "#captura-pilar",
               "box": {
-                "top": 578,
-                "bottom": 622,
+                "top": 613,
+                "bottom": 657,
                 "left": 83,
                 "right": 380,
                 "width": 297,
@@ -1613,8 +1608,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 145,
-                "bottom": 184,
+                "top": 238,
+                "bottom": 277,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1625,8 +1620,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 269,
+                "top": 289,
+                "bottom": 362,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1637,8 +1632,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 285,
-                "bottom": 390,
+                "top": 378,
+                "bottom": 483,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1649,8 +1644,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 402,
-                "bottom": 486,
+                "top": 495,
+                "bottom": 579,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1661,8 +1656,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 606,
-                "bottom": 650,
+                "top": 699,
+                "bottom": 743,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1676,8 +1671,8 @@
               "text": "Solicitar proposta para o edital",
               "href": "#captura-pilar",
               "box": {
-                "top": 606,
-                "bottom": 650,
+                "top": 699,
+                "bottom": 743,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1718,7 +1713,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "ab3d3c50cc1d233fdc6614f7131fac8cd7b576f3a83db46ff31fc766c1dc8a74",
+      "html_sha256": "cbf45ef27799bd53b7493ff8924d944db0f2210dc1e4b114aec660f961ed492f",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -1727,8 +1722,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 203,
+                "bottom": 222,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -1739,8 +1734,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 199,
-                "bottom": 399,
+                "top": 234,
+                "bottom": 434,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -1751,8 +1746,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 415,
-                "bottom": 473,
+                "top": 450,
+                "bottom": 508,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -1763,8 +1758,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 551,
-                "bottom": 597,
+                "top": 586,
+                "bottom": 632,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -1775,8 +1770,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 493,
-                "bottom": 537,
+                "top": 528,
+                "bottom": 572,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -1790,8 +1785,8 @@
               "text": "Solicitar proposta",
               "href": "#captura-pilar",
               "box": {
-                "top": 493,
-                "bottom": 537,
+                "top": 528,
+                "bottom": 572,
                 "left": 83,
                 "right": 287,
                 "width": 204,
@@ -1813,8 +1808,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 145,
-                "bottom": 184,
+                "top": 238,
+                "bottom": 277,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1825,8 +1820,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 363,
+                "top": 289,
+                "bottom": 456,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1837,8 +1832,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 379,
-                "bottom": 457,
+                "top": 472,
+                "bottom": 550,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1849,8 +1844,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 593,
-                "bottom": 656,
+                "top": 686,
+                "bottom": 749,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1861,8 +1856,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 477,
-                "bottom": 521,
+                "top": 570,
+                "bottom": 614,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1876,8 +1871,8 @@
               "text": "Solicitar proposta",
               "href": "#captura-pilar",
               "box": {
-                "top": 477,
-                "bottom": 521,
+                "top": 570,
+                "bottom": 614,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1928,8 +1923,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 150,
+                "bottom": 169,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1940,8 +1935,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 241,
+                "top": 181,
+                "bottom": 231,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1952,8 +1947,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 255,
-                "bottom": 341,
+                "top": 245,
+                "bottom": 331,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -1964,8 +1959,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 361,
-                "bottom": 496,
+                "top": 351,
+                "bottom": 486,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -1976,8 +1971,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 520,
-                "bottom": 564,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -1991,8 +1986,8 @@
               "text": "Descrever a medição",
               "href": "#captura-pilar",
               "box": {
-                "top": 520,
-                "bottom": 564,
+                "top": 510,
+                "bottom": 554,
                 "left": 83,
                 "right": 311,
                 "width": 228,
@@ -2014,8 +2009,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 184,
+                "top": 168,
+                "bottom": 188,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2026,8 +2021,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 295,
+                "top": 200,
+                "bottom": 299,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2038,8 +2033,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 309,
-                "bottom": 413,
+                "top": 313,
+                "bottom": 417,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2050,8 +2045,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 433,
-                "bottom": 601,
+                "top": 437,
+                "bottom": 605,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2062,8 +2057,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 625,
-                "bottom": 669,
+                "top": 629,
+                "bottom": 673,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2077,8 +2072,8 @@
               "text": "Descrever a medição",
               "href": "#captura-pilar",
               "box": {
-                "top": 625,
-                "bottom": 669,
+                "top": 629,
+                "bottom": 673,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2133,8 +2128,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 150,
+                "bottom": 169,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2145,8 +2140,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 291,
+                "top": 181,
+                "bottom": 281,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2157,8 +2152,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 305,
-                "bottom": 398,
+                "top": 295,
+                "bottom": 388,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -2169,8 +2164,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 418,
-                "bottom": 553,
+                "top": 408,
+                "bottom": 543,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -2181,8 +2176,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 577,
-                "bottom": 621,
+                "top": 567,
+                "bottom": 611,
                 "left": 83,
                 "right": 298,
                 "width": 215,
@@ -2196,8 +2191,8 @@
               "text": "Descrever o aditivo",
               "href": "#captura-pilar",
               "box": {
-                "top": 577,
-                "bottom": 621,
+                "top": 567,
+                "bottom": 611,
                 "left": 83,
                 "right": 298,
                 "width": 215,
@@ -2219,8 +2214,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 203,
+                "top": 168,
+                "bottom": 207,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2231,8 +2226,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 215,
-                "bottom": 348,
+                "top": 219,
+                "bottom": 352,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2243,8 +2238,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 362,
-                "bottom": 492,
+                "top": 366,
+                "bottom": 496,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2255,8 +2250,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 512,
-                "bottom": 680,
+                "top": 516,
+                "bottom": 684,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2267,8 +2262,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 704,
-                "bottom": 748,
+                "top": 708,
+                "bottom": 752,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2282,8 +2277,8 @@
               "text": "Descrever o aditivo",
               "href": "#captura-pilar",
               "box": {
-                "top": 704,
-                "bottom": 748,
+                "top": 708,
+                "bottom": 752,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2325,7 +2320,7 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "10407842d79c3b3f129fff45ced9d63afd35115a383af266141cc6c5542af8cb",
+      "html_sha256": "f67e986b94df209989e29310542ef564ecd223d38ea31333c8e04def56c9116d",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -2334,8 +2329,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 195,
+                "bottom": 214,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -2346,8 +2341,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 391,
+                "top": 226,
+                "bottom": 426,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -2358,8 +2353,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 415,
-                "bottom": 501,
+                "top": 450,
+                "bottom": 536,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -2370,8 +2365,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 579,
-                "bottom": 626,
+                "top": 614,
+                "bottom": 661,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -2382,8 +2377,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 521,
-                "bottom": 565,
+                "top": 556,
+                "bottom": 600,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2397,8 +2392,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 521,
-                "bottom": 565,
+                "top": 556,
+                "bottom": 600,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2420,8 +2415,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 203,
+                "top": 257,
+                "bottom": 296,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2432,8 +2427,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 215,
-                "bottom": 381,
+                "top": 308,
+                "bottom": 474,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2444,8 +2439,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 405,
-                "bottom": 510,
+                "top": 498,
+                "bottom": 603,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2456,8 +2451,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 646,
-                "bottom": 709,
+                "top": 739,
+                "bottom": 802,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2468,8 +2463,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 530,
-                "bottom": 574,
+                "top": 623,
+                "bottom": 667,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2483,8 +2478,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 530,
-                "bottom": 574,
+                "top": 623,
+                "bottom": 667,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2539,8 +2534,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 150,
+                "bottom": 169,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2551,8 +2546,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 241,
+                "top": 181,
+                "bottom": 231,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2563,8 +2558,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 255,
-                "bottom": 370,
+                "top": 245,
+                "bottom": 360,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -2575,8 +2570,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 390,
-                "bottom": 552,
+                "top": 380,
+                "bottom": 542,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -2587,8 +2582,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 576,
-                "bottom": 620,
+                "top": 566,
+                "bottom": 610,
                 "left": 83,
                 "right": 290,
                 "width": 207,
@@ -2602,8 +2597,8 @@
               "text": "Descrever o pleito",
               "href": "#captura-pilar",
               "box": {
-                "top": 576,
-                "bottom": 620,
+                "top": 566,
+                "bottom": 610,
                 "left": 83,
                 "right": 290,
                 "width": 207,
@@ -2625,8 +2620,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 184,
+                "top": 168,
+                "bottom": 188,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2637,8 +2632,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 295,
+                "top": 200,
+                "bottom": 299,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2649,8 +2644,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 309,
-                "bottom": 465,
+                "top": 313,
+                "bottom": 469,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2661,8 +2656,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 485,
-                "bottom": 677,
+                "top": 489,
+                "bottom": 681,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2673,8 +2668,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 701,
-                "bottom": 745,
+                "top": 705,
+                "bottom": 749,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2688,8 +2683,8 @@
               "text": "Descrever o pleito",
               "href": "#captura-pilar",
               "box": {
-                "top": 701,
-                "bottom": 745,
+                "top": 705,
+                "bottom": 749,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2733,7 +2728,7 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "0f42b64a0a47d11a15ee577c9a0a597af1378aee470cc95f9f3fad52b2394b57",
+      "html_sha256": "bc5b0008a24b4f80bd40ebd982af09fde8563f113736326353a563fab0d79c1c",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -2742,8 +2737,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 195,
+                "bottom": 214,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -2754,8 +2749,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 391,
+                "top": 226,
+                "bottom": 426,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -2766,8 +2761,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 415,
-                "bottom": 501,
+                "top": 450,
+                "bottom": 536,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -2778,8 +2773,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 579,
-                "bottom": 626,
+                "top": 614,
+                "bottom": 661,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -2790,8 +2785,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 521,
-                "bottom": 565,
+                "top": 556,
+                "bottom": 600,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2805,8 +2800,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 521,
-                "bottom": 565,
+                "top": 556,
+                "bottom": 600,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2828,8 +2823,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 203,
+                "top": 257,
+                "bottom": 296,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2840,8 +2835,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 215,
-                "bottom": 348,
+                "top": 308,
+                "bottom": 441,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2852,8 +2847,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 372,
-                "bottom": 476,
+                "top": 465,
+                "bottom": 569,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2864,8 +2859,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 612,
-                "bottom": 675,
+                "top": 705,
+                "bottom": 768,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2876,8 +2871,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 496,
-                "bottom": 540,
+                "top": 589,
+                "bottom": 633,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2891,8 +2886,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 496,
-                "bottom": 540,
+                "top": 589,
+                "bottom": 633,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2943,8 +2938,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 150,
+                "bottom": 169,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2955,8 +2950,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 241,
+                "top": 181,
+                "bottom": 231,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2967,8 +2962,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 255,
-                "bottom": 370,
+                "top": 245,
+                "bottom": 360,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -2979,8 +2974,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 390,
-                "bottom": 525,
+                "top": 380,
+                "bottom": 515,
                 "left": 83,
                 "right": 621,
                 "width": 538,
@@ -2991,8 +2986,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 549,
-                "bottom": 593,
+                "top": 539,
+                "bottom": 583,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3006,8 +3001,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 549,
-                "bottom": 593,
+                "top": 539,
+                "bottom": 583,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3029,8 +3024,8 @@
             "eyebrow": {
               "selector": ".eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 184,
+                "top": 168,
+                "bottom": 188,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3041,8 +3036,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 295,
+                "top": 200,
+                "bottom": 299,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3053,8 +3048,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 309,
-                "bottom": 470,
+                "top": 313,
+                "bottom": 474,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3065,8 +3060,8 @@
             "substance": {
               "selector": ".hero-deliverable",
               "box": {
-                "top": 482,
-                "bottom": 650,
+                "top": 486,
+                "bottom": 654,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3077,8 +3072,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 674,
-                "bottom": 718,
+                "top": 678,
+                "bottom": 722,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3092,8 +3087,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 674,
-                "bottom": 718,
+                "top": 678,
+                "bottom": 722,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3147,7 +3142,7 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "21e207788f774361d3e57b95ab3012620fd35e4bd30756dea3bce929754db24e",
+      "html_sha256": "6c0b2a3f1dceff156ae0223be9b9b3fd9a0077057a9654e725af99f23c5ae7e4",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -3156,8 +3151,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 160,
-                "bottom": 179,
+                "top": 195,
+                "bottom": 214,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -3168,8 +3163,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 191,
-                "bottom": 391,
+                "top": 226,
+                "bottom": 426,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -3180,8 +3175,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 415,
-                "bottom": 473,
+                "top": 450,
+                "bottom": 508,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -3192,8 +3187,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 551,
-                "bottom": 597,
+                "top": 586,
+                "bottom": 632,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -3204,8 +3199,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 493,
-                "bottom": 537,
+                "top": 528,
+                "bottom": 572,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -3219,8 +3214,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 493,
-                "bottom": 537,
+                "top": 528,
+                "bottom": 572,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -3242,8 +3237,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 164,
-                "bottom": 203,
+                "top": 257,
+                "bottom": 296,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3254,8 +3249,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 215,
-                "bottom": 348,
+                "top": 308,
+                "bottom": 441,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3266,8 +3261,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 372,
-                "bottom": 450,
+                "top": 465,
+                "bottom": 543,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3278,8 +3273,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 586,
-                "bottom": 649,
+                "top": 679,
+                "bottom": 742,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3290,8 +3285,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 470,
-                "bottom": 514,
+                "top": 563,
+                "bottom": 607,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3305,8 +3300,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 470,
-                "bottom": 514,
+                "top": 563,
+                "bottom": 607,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3350,7 +3345,7 @@
     },
     {
       "route": "/diretoria-b2g/",
-      "html_sha256": "9356dc6d27b06a22f2b04d0fb773d67ef426ff5ac5ba24dd0504de59062ffd79",
+      "html_sha256": "1626923bec66078f8240acf367d3a3fb96edc7c9c56f8a93c7870b666ab2870d",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -3359,8 +3354,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 203,
+                "bottom": 222,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -3371,8 +3366,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 199,
-                "bottom": 291,
+                "top": 234,
+                "bottom": 326,
                 "left": 83,
                 "right": 553,
                 "width": 470,
@@ -3383,8 +3378,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 307,
-                "bottom": 364,
+                "top": 342,
+                "bottom": 399,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -3395,8 +3390,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 378,
-                "bottom": 425,
+                "top": 413,
+                "bottom": 460,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -3407,8 +3402,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 630,
-                "bottom": 674,
+                "top": 665,
+                "bottom": 709,
                 "left": 83,
                 "right": 324,
                 "width": 241,
@@ -3422,8 +3417,8 @@
               "text": "Falar sobre a operação",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
               "box": {
-                "top": 630,
-                "bottom": 674,
+                "top": 665,
+                "bottom": 709,
                 "left": 83,
                 "right": 324,
                 "width": 241,
@@ -3445,8 +3440,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 145,
-                "bottom": 184,
+                "top": 238,
+                "bottom": 277,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3457,8 +3452,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 196,
-                "bottom": 306,
+                "top": 289,
+                "bottom": 399,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3469,8 +3464,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 322,
-                "bottom": 374,
+                "top": 415,
+                "bottom": 467,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3481,8 +3476,8 @@
             "substance": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 386,
-                "bottom": 449,
+                "top": 479,
+                "bottom": 542,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3493,8 +3488,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 698,
-                "bottom": 742,
+                "top": 791,
+                "bottom": 835,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3508,8 +3503,8 @@
               "text": "Falar sobre a operação",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
               "box": {
-                "top": 698,
-                "bottom": 742,
+                "top": 791,
+                "bottom": 835,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3517,12 +3512,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Avaliar na sua empresa, nesta página",
-              "href": "#pedido-enquadramento"
-            }
-          ],
+          "secondary_actions_in_fold": [],
           "horizontal_overflow": false
         }
       },
@@ -3548,7 +3538,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "html_sha256": "2343982f9337a7277fdfd4b7fd855df61133b5a7e25ac266109b12ca064fa6b0",
+      "html_sha256": "a70d358767a2c22f617605251e7ed7dc5c292af7f26af616986dbbb06f362984",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -3557,8 +3547,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 178,
-                "bottom": 196,
+                "top": 213,
+                "bottom": 231,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3569,8 +3559,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 210,
-                "bottom": 290,
+                "top": 245,
+                "bottom": 325,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3581,8 +3571,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 304,
-                "bottom": 376,
+                "top": 339,
+                "bottom": 411,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -3593,8 +3583,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 471,
-                "bottom": 510,
+                "top": 506,
+                "bottom": 545,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -3605,8 +3595,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 526,
-                "bottom": 574,
+                "top": 561,
+                "bottom": 609,
                 "left": 83,
                 "right": 512,
                 "width": 429,
@@ -3620,8 +3610,8 @@
               "text": "Pedir a análise dos editais prioritários por R$ 599",
               "href": "/comercial/radar-decisorio/",
               "box": {
-                "top": 526,
-                "bottom": 574,
+                "top": 561,
+                "bottom": 609,
                 "left": 83,
                 "right": 512,
                 "width": 429,
@@ -3643,8 +3633,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 108,
+                "top": 183,
+                "bottom": 201,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3655,8 +3645,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 222,
+                "top": 211,
+                "bottom": 315,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3667,8 +3657,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 236,
-                "bottom": 349,
+                "top": 329,
+                "bottom": 442,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3679,8 +3669,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 439,
-                "bottom": 496,
+                "top": 532,
+                "bottom": 589,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3691,8 +3681,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 512,
-                "bottom": 571,
+                "top": 605,
+                "bottom": 664,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3706,8 +3696,8 @@
               "text": "Pedir a análise dos editais prioritários por R$ 599",
               "href": "/comercial/radar-decisorio/",
               "box": {
-                "top": 512,
-                "bottom": 571,
+                "top": 605,
+                "bottom": 664,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3750,7 +3740,7 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "html_sha256": "7357184b3ec13f25ddb56af4c02bec3913971a233c3a277a55ff7a878df68609",
+      "html_sha256": "3d3539d074f38af7e0f41fed2b57a3c7a85f439e05b8ca770b53065806e47ed7",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -3759,8 +3749,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 184,
-                "bottom": 202,
+                "top": 219,
+                "bottom": 237,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3771,8 +3761,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 216,
-                "bottom": 296,
+                "top": 251,
+                "bottom": 331,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3783,8 +3773,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 310,
-                "bottom": 382,
+                "top": 345,
+                "bottom": 417,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -3795,8 +3785,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 477,
-                "bottom": 516,
+                "top": 512,
+                "bottom": 551,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -3807,8 +3797,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 532,
-                "bottom": 580,
+                "top": 567,
+                "bottom": 615,
                 "left": 83,
                 "right": 549,
                 "width": 466,
@@ -3822,8 +3812,8 @@
               "text": "Pedir a base de mercado de obras públicas por R$ 690",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
               "box": {
-                "top": 532,
-                "bottom": 580,
+                "top": 567,
+                "bottom": 615,
                 "left": 83,
                 "right": 549,
                 "width": 466,
@@ -3845,8 +3835,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 108,
+                "top": 183,
+                "bottom": 201,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3857,8 +3847,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 222,
+                "top": 211,
+                "bottom": 315,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3869,8 +3859,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 236,
-                "bottom": 349,
+                "top": 329,
+                "bottom": 442,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3881,8 +3871,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 439,
-                "bottom": 496,
+                "top": 532,
+                "bottom": 589,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3893,8 +3883,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 512,
-                "bottom": 571,
+                "top": 605,
+                "bottom": 664,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3908,8 +3898,8 @@
               "text": "Pedir a base de mercado de obras públicas por R$ 690",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
               "box": {
-                "top": 512,
-                "bottom": 571,
+                "top": 605,
+                "bottom": 664,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3952,7 +3942,7 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "html_sha256": "0057f3c84db0ecbd5b768240c3edde595b33e9e6358cdee736a61ba351586bca",
+      "html_sha256": "b3295a26139c3129cd1eb5d8da4589208b976a2d1bef73ba597907de69532daf",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -3961,8 +3951,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 197,
-                "bottom": 215,
+                "top": 232,
+                "bottom": 250,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3973,8 +3963,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 229,
-                "bottom": 349,
+                "top": 264,
+                "bottom": 384,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3985,8 +3975,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 363,
-                "bottom": 435,
+                "top": 398,
+                "bottom": 470,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -3997,8 +3987,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 529,
-                "bottom": 569,
+                "top": 564,
+                "bottom": 604,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -4009,8 +3999,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 585,
-                "bottom": 633,
+                "top": 620,
+                "bottom": 668,
                 "left": 83,
                 "right": 531,
                 "width": 448,
@@ -4024,8 +4014,8 @@
               "text": "Pedir a síntese executiva dos resultados por R$ 890",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
               "box": {
-                "top": 585,
-                "bottom": 633,
+                "top": 620,
+                "bottom": 668,
                 "left": 83,
                 "right": 531,
                 "width": 448,
@@ -4047,8 +4037,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 108,
+                "top": 183,
+                "bottom": 201,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4059,8 +4049,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 256,
+                "top": 211,
+                "bottom": 349,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4071,8 +4061,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 270,
-                "bottom": 407,
+                "top": 363,
+                "bottom": 500,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4083,8 +4073,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 512,
-                "bottom": 569,
+                "top": 605,
+                "bottom": 662,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4095,8 +4085,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 585,
-                "bottom": 645,
+                "top": 678,
+                "bottom": 738,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4110,8 +4100,8 @@
               "text": "Pedir a síntese executiva dos resultados por R$ 890",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
               "box": {
-                "top": 585,
-                "bottom": 645,
+                "top": 678,
+                "bottom": 738,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4156,7 +4146,7 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "html_sha256": "e894698848ff988029bc375ffcc10e83b0d0ffc43aa8646dce7f1b508ed41d59",
+      "html_sha256": "6fdd451c49300982080bdac46328d683a6b434c5ce78d2da415caed6bfb12a1c",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -4165,8 +4155,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 205,
-                "bottom": 223,
+                "top": 240,
+                "bottom": 258,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4177,8 +4167,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 237,
-                "bottom": 317,
+                "top": 272,
+                "bottom": 352,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4189,8 +4179,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 331,
-                "bottom": 427,
+                "top": 366,
+                "bottom": 462,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -4201,8 +4191,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 521,
-                "bottom": 561,
+                "top": 556,
+                "bottom": 596,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -4213,8 +4203,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 577,
-                "bottom": 625,
+                "top": 612,
+                "bottom": 660,
                 "left": 83,
                 "right": 524,
                 "width": 441,
@@ -4228,8 +4218,8 @@
               "text": "Pedir o mapa de órgãos compradores por R$ 1.200",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
               "box": {
-                "top": 577,
-                "bottom": 625,
+                "top": 612,
+                "bottom": 660,
                 "left": 83,
                 "right": 524,
                 "width": 441,
@@ -4251,8 +4241,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 108,
+                "top": 183,
+                "bottom": 201,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4263,8 +4253,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 256,
+                "top": 211,
+                "bottom": 349,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4275,8 +4265,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 270,
-                "bottom": 407,
+                "top": 363,
+                "bottom": 500,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4287,8 +4277,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 496,
-                "bottom": 553,
+                "top": 589,
+                "bottom": 646,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4299,8 +4289,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 569,
-                "bottom": 629,
+                "top": 662,
+                "bottom": 722,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4314,8 +4304,8 @@
               "text": "Pedir o mapa de órgãos compradores por R$ 1.200",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
               "box": {
-                "top": 569,
-                "bottom": 629,
+                "top": 662,
+                "bottom": 722,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4360,7 +4350,7 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "html_sha256": "35d222cf0859ede7340a801d7757dfbf9d92fa670f39a66e7af2b2cea22edce1",
+      "html_sha256": "fb8761164446fe6409bb91e49f4531c93f2301e71ba9d6a22d3f73064eca874e",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -4369,8 +4359,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 210,
-                "bottom": 228,
+                "top": 245,
+                "bottom": 263,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4381,8 +4371,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 242,
-                "bottom": 362,
+                "top": 277,
+                "bottom": 397,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4393,8 +4383,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 376,
-                "bottom": 496,
+                "top": 411,
+                "bottom": 531,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -4405,8 +4395,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 591,
-                "bottom": 630,
+                "top": 626,
+                "bottom": 665,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -4417,8 +4407,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 646,
-                "bottom": 694,
+                "top": 681,
+                "bottom": 729,
                 "left": 83,
                 "right": 528,
                 "width": 445,
@@ -4432,8 +4422,8 @@
               "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
-                "top": 646,
-                "bottom": 694,
+                "top": 681,
+                "bottom": 729,
                 "left": 83,
                 "right": 528,
                 "width": 445,
@@ -4455,8 +4445,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 126,
+                "top": 183,
+                "bottom": 219,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4467,8 +4457,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 136,
-                "bottom": 274,
+                "top": 229,
+                "bottom": 367,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4479,8 +4469,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 288,
-                "bottom": 470,
+                "top": 381,
+                "bottom": 563,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4491,8 +4481,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 575,
-                "bottom": 632,
+                "top": 668,
+                "bottom": 725,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4503,8 +4493,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 648,
-                "bottom": 708,
+                "top": 741,
+                "bottom": 801,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4518,8 +4508,8 @@
               "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
-                "top": 648,
-                "bottom": 708,
+                "top": 741,
+                "bottom": 801,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4565,7 +4555,7 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "html_sha256": "56582e8efb11564e320b41014c793b8bca7fc9064537330d37738b2fc765c62a",
+      "html_sha256": "3662075bdb3c5bbfb1071c392158717cd33c74e90b935857b54b8b9687c7cefe",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -4574,8 +4564,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 211,
-                "bottom": 229,
+                "top": 246,
+                "bottom": 264,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4586,8 +4576,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 243,
-                "bottom": 323,
+                "top": 278,
+                "bottom": 358,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4598,8 +4588,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 337,
-                "bottom": 409,
+                "top": 372,
+                "bottom": 444,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -4610,8 +4600,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 526,
-                "bottom": 566,
+                "top": 561,
+                "bottom": 601,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -4622,8 +4612,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 582,
-                "bottom": 630,
+                "top": 617,
+                "bottom": 665,
                 "left": 83,
                 "right": 470,
                 "width": 387,
@@ -4637,8 +4627,8 @@
               "text": "Pedir o mapa de concorrentes por R$ 1.900",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
               "box": {
-                "top": 582,
-                "bottom": 630,
+                "top": 617,
+                "bottom": 665,
                 "left": 83,
                 "right": 470,
                 "width": 387,
@@ -4660,8 +4650,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 108,
+                "top": 183,
+                "bottom": 201,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4672,8 +4662,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 222,
+                "top": 211,
+                "bottom": 315,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4684,8 +4674,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 236,
-                "bottom": 372,
+                "top": 329,
+                "bottom": 465,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4696,8 +4686,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 477,
-                "bottom": 534,
+                "top": 570,
+                "bottom": 627,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4708,8 +4698,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 550,
-                "bottom": 610,
+                "top": 643,
+                "bottom": 703,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4723,8 +4713,8 @@
               "text": "Pedir o mapa de concorrentes por R$ 1.900",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
               "box": {
-                "top": 550,
-                "bottom": 610,
+                "top": 643,
+                "bottom": 703,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4765,7 +4755,7 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "html_sha256": "2b0bef36d792f4eb561f8fea60a605eacb9154b5ca96eb747a8016c73b654e46",
+      "html_sha256": "d7f093c09ad56f00de68d0398810b9e49fc0f7a569c3679b79f2b7fa16a021e1",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -4774,8 +4764,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 185,
-                "bottom": 203,
+                "top": 220,
+                "bottom": 238,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4786,8 +4776,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 217,
-                "bottom": 338,
+                "top": 252,
+                "bottom": 373,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4798,8 +4788,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 352,
-                "bottom": 424,
+                "top": 387,
+                "bottom": 459,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -4810,8 +4800,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 541,
-                "bottom": 580,
+                "top": 576,
+                "bottom": 615,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -4822,8 +4812,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 596,
-                "bottom": 644,
+                "top": 631,
+                "bottom": 679,
                 "left": 83,
                 "right": 531,
                 "width": 448,
@@ -4837,8 +4827,8 @@
               "text": "Pedir as referências de preços de obra por R$ 2.400",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
-                "top": 596,
-                "bottom": 644,
+                "top": 631,
+                "bottom": 679,
                 "left": 83,
                 "right": 531,
                 "width": 448,
@@ -4860,8 +4850,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 126,
+                "top": 183,
+                "bottom": 219,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4872,8 +4862,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 136,
-                "bottom": 309,
+                "top": 229,
+                "bottom": 402,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4884,8 +4874,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 323,
-                "bottom": 437,
+                "top": 416,
+                "bottom": 530,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4896,8 +4886,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 542,
-                "bottom": 599,
+                "top": 635,
+                "bottom": 692,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4908,8 +4898,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 615,
-                "bottom": 674,
+                "top": 708,
+                "bottom": 767,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4923,8 +4913,8 @@
               "text": "Pedir as referências de preços de obra por R$ 2.400",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
-                "top": 615,
-                "bottom": 674,
+                "top": 708,
+                "bottom": 767,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -4971,7 +4961,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "html_sha256": "c5b6c4d6564672826666c35ec3c81c44a1f5547f0cfcc757bf6b3bbfd3942376",
+      "html_sha256": "af1d2b941af9f10e95fe285f8015c10fe361d9cfd7744e15cfcda28219d79ee5",
       "measured_on": "2026-11-12",
       "viewports": {
         "1366x768": {
@@ -4980,8 +4970,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 179,
-                "bottom": 197,
+                "top": 214,
+                "bottom": 232,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4992,8 +4982,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 211,
-                "bottom": 332,
+                "top": 246,
+                "bottom": 367,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -5004,8 +4994,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 346,
-                "bottom": 418,
+                "top": 381,
+                "bottom": 453,
                 "left": 83,
                 "right": 706,
                 "width": 623,
@@ -5016,8 +5006,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 512,
-                "bottom": 552,
+                "top": 547,
+                "bottom": 587,
                 "left": 83,
                 "right": 613,
                 "width": 530,
@@ -5028,8 +5018,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 568,
-                "bottom": 616,
+                "top": 603,
+                "bottom": 651,
                 "left": 83,
                 "right": 444,
                 "width": 361,
@@ -5043,8 +5033,8 @@
               "text": "Pedir o plano de expansão por R$ 3.750",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
               "box": {
-                "top": 568,
-                "bottom": 616,
+                "top": 603,
+                "bottom": 651,
                 "left": 83,
                 "right": 444,
                 "width": 361,
@@ -5066,8 +5056,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 90,
-                "bottom": 108,
+                "top": 183,
+                "bottom": 201,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -5078,8 +5068,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 118,
-                "bottom": 256,
+                "top": 211,
+                "bottom": 349,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -5090,8 +5080,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 270,
-                "bottom": 384,
+                "top": 363,
+                "bottom": 477,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -5102,8 +5092,8 @@
             "substance": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 473,
-                "bottom": 530,
+                "top": 566,
+                "bottom": 623,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -5114,8 +5104,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 546,
-                "bottom": 606,
+                "top": 639,
+                "bottom": 699,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -5129,8 +5119,8 @@
               "text": "Pedir o plano de expansão por R$ 3.750",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20CONFENGE.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
               "box": {
-                "top": 546,
-                "bottom": 606,
+                "top": 639,
+                "bottom": 699,
                 "left": 18,
                 "right": 372,
                 "width": 353,
