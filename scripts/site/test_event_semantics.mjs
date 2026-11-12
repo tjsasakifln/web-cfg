@@ -397,7 +397,7 @@ for (const [route, selector, label] of [
 {
   const route = "/conteudos/glosa-de-medicao-obra-publica/";
   await open(page, route);
-  const diff = await clickAndDiff(page, 'a[href="/medicoes-glosas-obras-publicas/"]');
+  const diff = await clickAndDiff(page, 'main a[href="/medicoes-glosas-obras-publicas/"]');
   const transitions = diff.added.filter((e) => e.event === "content_to_service");
   const clicks = diff.added.filter((e) => e.event === "cta_click");
   check("article_plain_pillar_link_content_to_service", route, !diff.missing && transitions.length === 1
