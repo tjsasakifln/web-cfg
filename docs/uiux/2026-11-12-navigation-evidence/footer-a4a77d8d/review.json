@@ -1,0 +1,24 @@
+{
+  "source_sha": "a4a77d8d6805fc91aef7b4aab46f3a1573ed85f5",
+  "surface": "artifact",
+  "qa_workflow_run_id": "43314396142",
+  "qa_job_id": "131518485545",
+  "job_conclusion": "cancelled_after_substantive_tests_passed",
+  "deliverables_step_conclusion": "success",
+  "review_type": "agent_review",
+  "human_review_claimed": false,
+  "footer_image_accepted": true,
+  "review": "Integrator and independent reviewer inspected all footer links, analytics preference and privacy link. No sticky header or skip-link overlap.",
+  "files": [
+    {
+      "path": "footer-mobile-390.png",
+      "bytes": 85230,
+      "sha256": "b72311c1ead0589958b0a7d2e96e3dfe33c9130cc6dcaff7a4a3a769e796504f"
+    },
+    {
+      "path": "deliverables-hub-ui.json",
+      "bytes": 130933,
+      "sha256": "99391c30e060435d7784ed881121c9a1d8abe880b28e858c53db9c2a509afdfd"
+    }
+  ]
+}

@@ -66,12 +66,12 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
-      "rendered_content_hash_previous": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
+      "rendered_content_hash": "7d2a34502d7cd623c6a8916e36ce817fe7c6895beda77a23c6da6a6b18588cb1",
+      "rendered_content_hash_previous": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-11-12T19:25:30Z",
-      "rendered_hash_recapture_reason": "Otimização do menu autorizada pelo usuário em 2026-11-12, PR #836. Após revisão visual pelo agente coordenador das cinco capturas e QA remoto no head 00cd0faddc3414080f287d3ec491260278310a91, run 43288875329, a barra Acesso direto passa a landmark adjacente fora do cabeçalho sticky. A prova determinística conserva conteúdo técnico, head editorial, fatos, fontes, cálculos, autoria, condições e autoridade. Delta de apresentação limitado à navegação compartilhada e ao fingerprint de styles.css. Nenhuma nova aprovação técnica, revisão humana ou autorização comercial é alegada.",
-      "rendered_hash_recapture_reason_previous": "Otimização do menu autorizada para publicação pelo usuário em 2026-11-12, no escopo shared_navigation/shared_footer da emenda de apresentação já registrada. Comparação determinística contra fdbc687a1 confirma identidade byte a byte do conteúdo técnico, head editorial, fontes, cálculos, autoria, datas, canonical, robots, JSON-LD e CTA contextual. No artefato público, o delta se limita ao cabeçalho compartilhado, rodapé compartilhado e fingerprint de styles.css. Recaptura exclusiva de apresentação; nenhuma nova aprovação técnica ou revisão humana é alegada.",
+      "rendered_hash_recaptured_at": "2026-11-12T22:17:50Z",
+      "rendered_hash_recapture_reason": "Otimização do menu e publicação autorizadas pelo usuário em 2026-11-12, PR #836. A descrição de Projetos prontos passa a Calcule seu projeto por disciplina e prazo, em acordo com a oferta integrada. Recaptura restrita aos dois spans vinculados a esse destino no cabeçalho compartilhado, após inspeção das duas imagens novas pelo integrador e pelo revisor independente. QA de fonte limpa e58244c9fefa90e872f01ce401759c30925e7031, run 43317003538, tentativa 1. A prova contra 7c570c0a preserva head, main, rodapé, barra, conteúdo externo, 17 arquivos protegidos, seis pilares e campos factuais. Nenhuma nova aprovação técnica, revisão humana ou autorização comercial é alegada.",
+      "rendered_hash_recapture_reason_previous": "Otimização do menu autorizada pelo usuário em 2026-11-12, PR #836. Após revisão visual pelo agente coordenador das cinco capturas e QA remoto no head 00cd0faddc3414080f287d3ec491260278310a91, run 43288875329, a barra Acesso direto passa a landmark adjacente fora do cabeçalho sticky. A prova determinística conserva conteúdo técnico, head editorial, fatos, fontes, cálculos, autoria, condições e autoridade. Delta de apresentação limitado à navegação compartilhada e ao fingerprint de styles.css. Nenhuma nova aprovação técnica, revisão humana ou autorização comercial é alegada.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -981,6 +981,34 @@
         "mobile-header-360.png": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b",
         "diagnostico-first-viewport-1280.png": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
       }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "at": "2026-11-12T22:17:50Z",
+      "authority": "Pedido do usuário em 2026-11-12 para aprimorar o menu e publicar; apresentação compartilhada no escopo existente.",
+      "reviewer": "Revisão visual e adversarial por agentes; nenhuma nova revisão técnica humana alegada.",
+      "rendered_content_hash_previous": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
+      "rendered_content_hash": "7d2a34502d7cd623c6a8916e36ce817fe7c6895beda77a23c6da6a6b18588cb1",
+      "reason": "Otimização do menu e publicação autorizadas pelo usuário em 2026-11-12, PR #836. A descrição de Projetos prontos passa a Calcule seu projeto por disciplina e prazo, em acordo com a oferta integrada. Recaptura restrita aos dois spans vinculados a esse destino no cabeçalho compartilhado, após inspeção das duas imagens novas pelo integrador e pelo revisor independente. QA de fonte limpa e58244c9fefa90e872f01ce401759c30925e7031, run 43317003538, tentativa 1. A prova contra 7c570c0a preserva head, main, rodapé, barra, conteúdo externo, 17 arquivos protegidos, seis pilares e campos factuais. Nenhuma nova aprovação técnica, revisão humana ou autorização comercial é alegada.",
+      "qa_source_head_sha": "e58244c9fefa90e872f01ce401759c30925e7031",
+      "qa_source_tree_sha": "04607a8646f213f99fea944bce50661aaaae768e",
+      "qa_workflow_run_id": "43317003538",
+      "qa_workflow_run_attempt": "1",
+      "qa_source_job_id": "131527708986",
+      "qa_evidence_sha256": "9c3c03bc8da3e87ead560e706f04b0ac0abc1972cef11c74784586c508a26d3e",
+      "qa_provenance_sha256": "be5f93cb48ceeb8585f54ad5fc44af999415583cac167e2f2a83738a160a67a4",
+      "qa_presentation_proof_sha256": "2926edd474d98acfc0005b059d1d7326cbb00eba8bf4d2e9e4f2823f276a021d",
+      "qa_first_fold_measurements_sha256": "8a01adf28ebb8054bf7b5e9f59a59ffb9e0f2c5edef91ef0a8728204788728b3",
+      "qa_screenshot_sha256": {
+        "desktop-ferramentas.png": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0",
+        "mobile-projetos.png": "e08a8a1c0f06a3fb982169e12841a3d866f57cbf46239957302b3e31d2f0949f",
+        "projetos-prontos-desktop.png": "7ec3c78a6308133bab83675b7c4f9e838ca7065bab98c7513c313a19a625646a",
+        "mobile-header-360.png": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b",
+        "diagnostico-first-viewport-1280.png": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
+      },
+      "human_review_claimed": false
     }
   ]
 }

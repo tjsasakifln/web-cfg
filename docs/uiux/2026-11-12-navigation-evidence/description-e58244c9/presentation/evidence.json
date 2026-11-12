@@ -1,0 +1,46 @@
+{
+  "schema": "confenge.navigation-presentation-proof/1.0",
+  "base_sha": "7c570c0a103fcd7e6174cb922cbc7def79ce413d",
+  "candidate_head_sha": "e58244c9fefa90e872f01ce401759c30925e7031",
+  "candidate_tree_sha": "04607a8646f213f99fea944bce50661aaaae768e",
+  "workflow_run_id": "43317003538",
+  "workflow_run_attempt": "1",
+  "checks": {
+    "source_main_byte_identical": true,
+    "source_head_byte_identical": true,
+    "public_main_byte_identical": true,
+    "source_header_exact_project_description_update": true,
+    "public_header_exact_project_description_update": true,
+    "source_footer_byte_identical": true,
+    "public_footer_byte_identical": true,
+    "source_bar_content_byte_identical": true,
+    "public_bar_content_byte_identical": true,
+    "source_outside_shared_navigation_footer_byte_identical": true,
+    "public_outside_shared_navigation_footer_css_fingerprint_byte_identical": true,
+    "seventeen_protected_files_unchanged": true,
+    "six_source_pillars_unchanged": true
+  },
+  "approval_registry_state": "PENDING_PRESENTATION_RECAPTURE",
+  "approval_registry_modified_by_proof": false,
+  "canonical_path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+  "source_main_sha256": "87048a553b0a80eb481f45f0debdbf8c8b9aceaf308f1725c725e6290eab9fa1",
+  "public_main_sha256": "87048a553b0a80eb481f45f0debdbf8c8b9aceaf308f1725c725e6290eab9fa1",
+  "source_head_sha256": "39ceb12dc9c81c2fb94358a0f2bc3af9e3b90b53c11ce269bde7286849033b07",
+  "previous_public_sha256": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
+  "candidate_public_sha256": "7d2a34502d7cd623c6a8916e36ce817fe7c6895beda77a23c6da6a6b18588cb1",
+  "candidate_source_sha256": "6c63ae9780766607f2d8f413065f74ffee5fee3b7dffbe47960f4d5796257536",
+  "script_js_sha256": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
+  "styles_css_sha256": "5ddd6681a9bdf783073e136551282a8d419a0c0147b17e5de671aa2a5bbb1a58",
+  "factual_approval_fields_unchanged": true,
+  "human_review_claimed": false,
+  "project_description_update": {
+    "before": "Consulte disponibilidade e adaptação ao terreno.",
+    "after": "Calcule seu projeto por disciplina e prazo.",
+    "href": "/projetos-prontos/",
+    "positions": [
+      "header_nav",
+      "mobile_nav"
+    ]
+  }
+}
