@@ -1,0 +1,134 @@
+name: Verify published CONFENGE CAD
+
+on:
+  push:
+    branches: [qa/cad-public-20261112]
+    paths: [.github/workflows/test-cad-public.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: confenge-cad-public-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  public_editor:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    env:
+      CAD_EXPECTED_RELEASE: fdbc687a1d1b5ba5ede77698c8cbd64cd9f9f376
+      CAD_PUBLIC_EVIDENCE: build/reports/cad-public
+    steps:
+      - name: Restrict this verification to its QA branch
+        run: test "$GITHUB_REF" = 'refs/heads/qa/cad-public-20261112'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # Use the reviewed release's test, sample, lockfile and Chrome contract.
+          ref: fdbc687a1d1b5ba5ede77698c8cbd64cd9f9f376
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Verify public release identity before testing
+        id: identity_before
+        run: |
+          set -euo pipefail
+          mkdir -p "$CAD_PUBLIC_EVIDENCE"
+          test "$(git rev-parse HEAD)" = "$CAD_EXPECTED_RELEASE"
+          cat > "$RUNNER_TEMP/cad-public-identity.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import { mkdir, writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+
+          const phase = process.argv[2];
+          assert(['before', 'after'].includes(phase));
+          const expected = process.env.CAD_EXPECTED_RELEASE;
+          assert.match(expected, /^[a-f0-9]{40}$/);
+          const output = process.env.CAD_PUBLIC_EVIDENCE;
+          await mkdir(output, { recursive: true });
+          const endpoints = [
+            { name: 'build', path: '/.well-known/build-info.json', field: 'commit' },
+            { name: 'runtime', path: '/.well-known/runtime-info.json', field: 'release_sha' },
+          ];
+          const results = await Promise.all(endpoints.map(async endpoint => {
+            const url = new URL(endpoint.path, 'https://confenge.com.br');
+            url.searchParams.set('cad-verification', `${process.env.GITHUB_RUN_ID}-${phase}-${Date.now()}`);
+            try {
+              const response = await fetch(url, {
+                redirect: 'error', cache: 'no-store',
+                headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' },
+                signal: AbortSignal.timeout(30000),
+              });
+              const text = await response.text();
+              let body;
+              try { body = JSON.parse(text); } catch { body = null; }
+              const observed = body?.[endpoint.field];
+              return {
+                name: endpoint.name, url: url.href, status: response.status,
+                ok: response.ok && observed === expected,
+                observed, body,
+                headers: Object.fromEntries(['content-type', 'cache-control', 'age', 'cf-cache-status']
+                  .map(key => [key, response.headers.get(key)])),
+                ...(body === null ? { response_excerpt: text.slice(0, 500) } : {}),
+              };
+            } catch (error) {
+              return { name: endpoint.name, url: url.href, ok: false, error: String(error) };
+            }
+          }));
+          const report = {
+            ok: results.every(result => result.ok), phase, checked_at: new Date().toISOString(),
+            expected_release: expected, test_source_commit: expected,
+            workflow_commit: process.env.GITHUB_SHA,
+            public_base: 'https://confenge.com.br',
+            wallet_fixture: 'The existing browser test intercepts only tool-credits config with enabled:false; no payment or account operation.',
+            results,
+          };
+          await writeFile(path.join(output, `identity-${phase}.json`), JSON.stringify(report, null, 2) + '\n');
+          assert(report.ok, `Public release identity mismatch: ${JSON.stringify(results.map(({ name, status, observed, error }) => ({ name, status, observed, error })))}`);
+          console.log(`CAD public identity ${phase}: ${expected}`);
+          NODE
+          node "$RUNNER_TEMP/cad-public-identity.mjs" before 2>&1 | tee "$CAD_PUBLIC_EVIDENCE/identity-before.log"
+      - name: Prepare browser dependencies
+        run: npm ci --ignore-scripts --engine-strict
+      - name: Resolve the site's contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
+      - name: Open, edit, export and reopen DWG on the public website
+        id: editor_browser
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CAD_EVIDENCE: build/reports/cad-public/editor
+        run: |
+          set -euo pipefail
+          # The existing test keeps its explicit wallet fixture and SwiftShader
+          # flags. All editor HTML, JavaScript, workers and WASM come from HTTPS.
+          node tests/cad/editor-browser.mjs https://confenge.com.br 2>&1 | tee "$CAD_PUBLIC_EVIDENCE/editor-browser.log"
+      - name: Verify public release identity after testing
+        if: ${{ !cancelled() && steps.identity_before.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          node "$RUNNER_TEMP/cad-public-identity.mjs" after 2>&1 | tee "$CAD_PUBLIC_EVIDENCE/identity-after.log"
+      - name: Require the public test evidence
+        run: |
+          set -euo pipefail
+          test -s "$CAD_PUBLIC_EVIDENCE/identity-before.json"
+          test -s "$CAD_PUBLIC_EVIDENCE/identity-after.json"
+          test -s "$CAD_PUBLIC_EVIDENCE/editor/browser-result.json"
+          test -s "$CAD_PUBLIC_EVIDENCE/editor/desktop-editor.png"
+          test -s "$CAD_PUBLIC_EVIDENCE/editor/mobile-editor.png"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: confenge-cad-public-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/reports/cad-public
+          if-no-files-found: error
+          retention-days: 7
