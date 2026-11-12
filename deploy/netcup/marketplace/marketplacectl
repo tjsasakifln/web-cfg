@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+marketplace_deploy_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+marketplace_config_file="${MARKETPLACE_COMPOSE_ENV:-/etc/confenge-marketplace/compose.env}"
+if [[ ! -f "$marketplace_config_file" ]]; then
+  printf '%s\n' 'Private marketplace environment is not configured.' >&2
+  exit 78
+fi
+exec docker compose --env-file "$marketplace_config_file" --file "$marketplace_deploy_dir/compose.yaml" "$@"

@@ -9,6 +9,9 @@ const EXPECTED_FUNCTIONS = [
   "collect",
   "conversion-intake",
   "correction",
+  "engineering-marketplace",
+  "engineering-marketplace-connect-webhook",
+  "engineering-marketplace-webhook",
   "lead",
   "live-intelligence-analyze",
   "market-answer-intake",
@@ -29,10 +32,10 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 56);
-  assert.equal(inventory.function_count, 21);
+  assert.equal(inventory.file_count, 59);
+  assert.equal(inventory.function_count, 24);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 21);
+  assert.equal(inventory.validation.loaded_handlers, 24);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,

@@ -62,6 +62,12 @@
           "reason": "single-route canonical family"
         },
         {
+          "family_id": "marketplace-engenharia",
+          "route": "/profissionais/",
+          "reason": "Rota única de busca, cadastro e acompanhamento de serviços de engenharia, com disponibilidade declarada pelo serviço.",
+          "seo_exempt_reason": "A rota permanece noindex até o provisionamento e a validação operacional de docs/marketplace/operations.md, conforme marketplace_operation_pending no registro de governança."
+        },
+        {
           "family_id": "engineering-projects-commercial-architecture",
           "route": "/projetos/",
           "reason": "canonical hub for the multidisciplinary engineering-project architecture and its shared responsive project-page system"
