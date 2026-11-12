@@ -6523,7 +6523,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -6562,7 +6562,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -6577,7 +6577,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "project_cta_click"
           ]
@@ -6592,7 +6592,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -6607,7 +6607,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -6622,7 +6622,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -6637,7 +6637,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -6652,7 +6652,7 @@
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
-          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+          "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
           "event_semantics": [
             "email_click"
           ]

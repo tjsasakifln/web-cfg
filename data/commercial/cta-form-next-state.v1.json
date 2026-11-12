@@ -266,7 +266,7 @@
       "pre_form_value": "Conte como imagina sua casa. A equipe confere a disponibilidade e orienta o próximo passo.",
       "field_purpose": "Nome, um meio de contato, município, UF e interesse permitem atender sua consulta. Os detalhes do terreno e da casa são opcionais.",
       "format_hint": "",
-      "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar. Os dados serão usados para este atendimento, sem adesão a comunicações promocionais. Consulte a Política de Privacidade. Retenção de até 730 dias; você pode solicitar a exclusão pelos canais institucionais.",
+      "boundary": "O envio registra uma consulta, sem cobrança ou obrigação de contratar.",
       "next_useful_state": "O protocolo confirma a consulta recebida. A equipe confere disponibilidade e conversa sobre a casa e o terreno antes de uma proposta.",
       "actual_receipt": "lead_id ou receipt_id persistido, exibido no próprio formulário"
     }
