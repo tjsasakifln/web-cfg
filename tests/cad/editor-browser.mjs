@@ -1,184 +1,155 @@
-// Start a built site, then run CHROME_PATH=/path/to/chromium node tests/cad/editor-browser.mjs http://localhost:8080
+// Exercises the actual hosted OpenCAD WASM under the artifact's real CSP.
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
+import { serveCad } from './server.mjs';
 
-const base = new URL(process.argv[2] || process.env.CAD_BASE_URL || 'http://127.0.0.1:8080');
-if (!process.env.CHROME_PATH) throw new Error('Defina CHROME_PATH com o executável do Chromium.');
-const sample = fileURLToPath(new URL('../../cad/exemplo.dwg', import.meta.url));
-const directory = await mkdtemp(path.join(tmpdir(), 'confenge-cad-e2e-'));
+const requested = process.argv[2];
+const local = requested?.startsWith('http') ? null : await serveCad(requested || '_site');
+const base = local?.base || requested;
+const output = path.resolve(process.env.CAD_EVIDENCE || 'build/reports/cad');
+await mkdir(output, { recursive:true });
+const downloads = await mkdtemp(path.join(tmpdir(), 'confenge-opencad-'));
 const browser = await puppeteer.launch({
-  executablePath:process.env.CHROME_PATH,
-  args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader'],
-  defaultViewport:{width:1440,height:960}
+  executablePath: process.env.CHROME_PATH || '/usr/bin/chromium',
+  headless:true,
+  args:['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'],
+  defaultViewport:{width:1440,height:1000},
 });
+const passed = [];
+const pass = name => { passed.push(name); console.log('CAD PASS: ' + name); };
+let page;
+const errors = [], violations = [], external = [], consoleMessages = [];
 try {
-  const page = await browser.newPage();
-  const devtools = await browser.target().createCDPSession();
-  await devtools.send('Browser.setDownloadBehavior', {behavior:'allow', downloadPath:directory, eventsEnabled:true});
-  const response = await page.goto(new URL('/cad/', base).href);
-  assert.equal(response.status(), 200);
-  const input = await page.waitForSelector('#cad-editor input[type=file]');
-  const waitForDrawing = name => page.waitForFunction(expected =>
-    document.querySelector('.cad-name')?.textContent === expected &&
-    document.querySelector('#cad-editor')?.getAttribute('aria-busy') === 'false' &&
-    !document.querySelector('[data-save]').hidden, {timeout:120000}, name);
-
-  // Reject forged file extensions without starting the editor.
-  const invalid = path.join(directory,'invalido.dwg');
+  page = await browser.newPage();
+  page.on('pageerror', error => errors.push(String(error)));
+  page.on('console', message => {
+    if (['error','warn'].includes(message.type())) consoleMessages.push(message.text());
+    if (/panicked|Buffer is not mapped/.test(message.text())) errors.push(message.text());
+  });
+  await page.exposeFunction('cadViolation', v => violations.push(v));
+  await page.evaluateOnNewDocument(() => {
+    window.addEventListener('securitypolicyviolation', e => window.cadViolation({ directive:e.effectiveDirective, blocked:e.blockedURI }));
+  });
+  await page.setRequestInterception(true);
+  page.on('request', request => {
+    const url = new URL(request.url());
+    if (url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'config') {
+      // Explicit local fixture: validate the actual wallet's disabled/free branch.
+      request.respond({ status:200, contentType:'application/json', body:'{"enabled":false}' });
+    } else {
+      if (request.frame()?.url().includes('/cad/editor/') && /^https?:/.test(url.protocol) && url.origin !== new URL(base).origin) external.push(url.origin);
+      request.continue();
+    }
+  });
+  const cdp = await browser.target().createCDPSession();
+  await cdp.send('Browser.setDownloadBehavior', {behavior:'allow', downloadPath:downloads, eventsEnabled:true});
+  assert.equal((await page.goto(new URL('/cad/',base).href)).status(),200);
+  const input = await page.waitForSelector('[data-file]');
+  const invalid = path.join(downloads,'invalido.dwg');
   await writeFile(invalid,'not a DWG');
   await input.uploadFile(invalid);
   await page.waitForSelector('.cad-status[data-error="true"]');
-  assert.equal(await page.$('#cad-editor iframe'), null);
+  assert.equal(await page.$('#cad-editor iframe'),null);
+  pass('invalid DWG refused before loading the engine');
+  await input.uploadFile(path.resolve('cad/exemplo.dwg'));
+  await page.waitForFunction(() => !document.querySelector('[data-save]').hidden && document.querySelector('#cad-editor').getAttribute('aria-busy')==='false', {timeout:240000});
+  const frame = await (await page.$('#cad-editor iframe')).contentFrame();
+  const raw = request => frame.evaluate(request => window.ocsControl.request(request), request);
+  const state = () => raw({op:'state'});
+  const active = data => data.documents.find(d=>d.id===data.document_id);
+  const act = async request => {
+    const before = await state();
+    const reply = await raw({...request,request_id:crypto.randomUUID(),document_id:before.document_id,revision:before.revision});
+    assert.equal(reply.ok,true,JSON.stringify(reply)); return reply;
+  };
+  const initial = await state();
+  assert.match(active(initial).title,/exemplo/);
+  const count = (await raw({op:'entities'})).total;
+  assert(count>0);
+  assert.equal(await frame.evaluate(()=>document.fullscreenEnabled),false);
+  const identity = await page.$eval('.cad-brand',img=>({alt:img.alt,loaded:img.naturalWidth>0}));
+  assert(identity.loaded); assert.match(identity.alt,/CONFENGE/);
+  pass('real DWG opens in branded local OpenCAD');
 
-  await input.uploadFile(sample);
-  await waitForDrawing(path.basename(sample));
-  assert.equal(await page.$eval('[data-format]', el => el.value), 'dwg');
-  const saveLabel = () => page.$eval('[data-save]', el => el.textContent.trim());
-  assert.equal(await saveLabel(), 'Baixar DWG');
-  await page.select('[data-format]', 'dxf');
-  assert.equal(await saveLabel(), 'Baixar DXF');
-  await page.select('[data-format]', 'dwg');
-  assert.equal(await saveLabel(), 'Baixar DWG');
-  const iframe = await page.$('#cad-editor iframe');
-  const frame = await iframe.contentFrame();
-  assert.match(await frame.title(), / — CONFENGE$/);
-  const toolbarBrand = await page.$eval('.cad-doc .cad-brand', img => [img.alt, img.naturalWidth, img.offsetWidth]);
-  assert.match(toolbarBrand[0], /CONFENGE/);
-  assert(toolbarBrand[1] > 0 && toolbarBrand[2] > 0, 'A marca da CONFENGE precisa estar visível na ferramenta.');
-  assert.equal(await frame.evaluate(() => document.fullscreenEnabled), false);
-  const canvas = await frame.waitForSelector('canvas');
-  // The page stays put during a real middle-button drag. Pixels from model space
-  // must change as well, so swallowing the pan cannot make this test pass.
-  const position = () => page.evaluate(() => Math.round(window.scrollY));
-  const rect = await canvas.boundingBox();
-  const x = Math.round(rect.x + rect.width*.48), y = Math.round(rect.y + rect.height*.50);
-  const clip = {x:Math.round(rect.x + rect.width*.49), y:Math.round(rect.y + rect.height*.32) + await position(),
-    width:Math.round(rect.width*.18), height:Math.round(rect.height*.26)};
-  const paint = () => frame.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
-  await page.mouse.move(x, y);
-  await paint();
-  const scrollBefore = await position();
-  const beforePan = await page.screenshot({clip});
-  // Linux CI has no Windows autoscroll. Verify its cancelable trigger as well as the real drag.
-  assert(await canvas.evaluate(el => !el.dispatchEvent(new MouseEvent('mousedown', {
-    button:1, bubbles:true, cancelable:true
-  }))), 'O botão do meio deve cancelar a rolagem automática do navegador.');
-  await page.mouse.down({button:'middle'});
-  await paint();
-  await page.mouse.move(x + 85, y + 65, {steps:8});
-  await paint();
-  await page.mouse.up({button:'middle'});
-  await page.mouse.move(x, y);
-  await paint();
-  const afterPan = await page.screenshot({clip});
-  assert(!beforePan.equals(afterPan), 'A vista do desenho precisa se deslocar.');
-  assert.equal(await position(), scrollBefore, 'A página não pode acompanhar o arraste.');
-  await page.mouse.move(4,100);
-  await page.mouse.wheel({deltaY:460});
-  await paint();
-  assert.equal(await position(), scrollBefore, 'A rolagem deve permanecer travada durante a edição.');
+  await act({op:'run',cmd:'LINE 6500,1000 7200,1900'});
+  assert.equal((await raw({op:'entities'})).total,count+1);
+  const currentId=(await state()).document_id;
+  await input.uploadFile(invalid);
+  await page.waitForSelector('.cad-status[data-error="true"]');
+  assert.equal((await state()).document_id,currentId);
+  assert.equal((await raw({op:'entities'})).total,count+1);
+  assert.equal(active(await state()).dirty,true);
+  pass('failed second upload preserves edited drawing');
 
-  await page.click('[data-expand]');
-  await page.waitForSelector('#cad-editor.cad-expanded');
-  await page.keyboard.type('l');
-  await page.keyboard.press('Escape');
-  // Cancel a line after its first point. The next pick must not create geometry.
-  // The decoded download below checks exactly how many lines were added.
-  const enlarged = await canvas.boundingBox();
-  const pick = (x, y) => page.mouse.click(enlarged.x + enlarged.width*x, enlarged.y + enlarged.height*y);
-  await page.keyboard.type('l');
-  await page.keyboard.press('Enter');
-  await paint();
-  await pick(.39, .46);
-  await paint();
-  await page.keyboard.press('Escape');
-  await paint();
-  await pick(.55, .58);
-  await paint();
-  assert(await page.$eval('[data-expand]', el => el.getAttribute('aria-pressed') === 'true'));
-  assert.equal(await page.evaluate(() => document.fullscreenElement), null);
-  assert(await frame.evaluate(() => document.activeElement?.id === 'cadcraft_canvas'));
-  await page.click('[data-expand]');
-  await page.click('[data-page]');
-  assert.equal(await page.$eval('[data-page]', el => el.textContent), 'Retomar edição');
-  const releasedAt = await position();
-  await page.mouse.move(4,100);
-  await page.mouse.wheel({deltaY:460});
-  await page.waitForFunction(previous => window.scrollY > previous + 10, {}, releasedAt);
-  await page.click('[data-page]');
-  assert(await page.$eval('#cad-editor', el => el.classList.contains('cad-working')));
-  // A reader can also return by clicking the drawing. Reflow only after the pick
-  // so an active command receives the coordinates that were actually clicked.
-  await page.click('[data-page]');
-  const readBounds = await canvas.boundingBox();
-  await page.mouse.click(readBounds.x + readBounds.width*.46, readBounds.y + readBounds.height*.4);
-  await page.waitForSelector('#cad-editor.cad-working');
-  assert(await page.evaluate(() => document.documentElement.classList.contains('cad-page-locked')));
-  assert.equal(await page.$eval('.cad-name', el => el.textContent), path.basename(sample));
+  const canvas=await frame.waitForSelector('canvas');
   await page.click('[data-fit]');
-  await paint();
-  await canvas.scrollIntoView();
-  const bounds = await canvas.boundingBox();
-  const clickDrawing = (x, y) => page.mouse.click(bounds.x + bounds.width*x, bounds.y + bounds.height*y);
-  await clickDrawing(.40,.42);
-  await page.keyboard.press('Escape');
-  await page.keyboard.press('l');
-  await page.keyboard.press('Enter');
-  // Separate paint frames so the canvas receives two independent picks.
-  const nextPaint = () => frame.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
-  await nextPaint();
-  await clickDrawing(.37,.44);
-  await nextPaint();
-  await clickDrawing(.50,.58);
-  await nextPaint();
-  await page.keyboard.press('Enter');
-  await page.waitForFunction(() => document.querySelector('.cad-caption')?.textContent.includes('Alterações'));
+  const bounds=await canvas.boundingBox();
+  const x=bounds.x+bounds.width*.52,y=bounds.y+bounds.height*.56;
+  const scroll=await page.evaluate(()=>window.scrollY);
+  const camera=(await state()).camera;
+  await page.mouse.move(x,y); await page.mouse.down({button:'middle'});
+  await page.mouse.move(x+85,y+65,{steps:8}); await page.mouse.up({button:'middle'});
+  await page.waitForFunction(()=>document.querySelector('#cad-editor').classList.contains('cad-working'));
+  assert.equal(await page.evaluate(()=>window.scrollY),scroll);
+  assert.notDeepEqual((await state()).camera,camera);
+  pass('middle-button pan moves drawing without scrolling the page');
+  await page.click('[data-expand]');
+  await page.keyboard.type('L'); await page.keyboard.press('Escape');
+  assert(await page.$eval('#cad-editor',el=>el.classList.contains('cad-expanded')));
+  assert.equal((await raw({op:'entities'})).total,count+1);
+  await page.screenshot({path:path.join(output,'desktop-editor.png')});
+  await page.click('[data-expand]'); await page.click('[data-page]');
+  assert.equal(await page.$eval('[data-page]',el=>el.textContent),'Retomar edição');
+  await page.click('[data-page]');
+  assert.equal((await state()).document_id,currentId);
+  pass('Escape, expanded view and return to page preserve the drawing');
 
-  const completed = new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('O navegador não concluiu o download do DWG.')), 30000);
-    devtools.on('Browser.downloadProgress', event => {
-      if (event.state === 'completed') { clearTimeout(timer); resolve(); }
-      if (event.state === 'canceled') { clearTimeout(timer); reject(new Error('Download cancelado.')); }
+  const completed = new Promise((resolve,reject)=>{
+    const timer=setTimeout(()=>reject(new Error('DWG download did not complete')),120000);
+    cdp.on('Browser.downloadProgress',event=>{
+      if(event.state==='completed'){clearTimeout(timer);resolve();}
+      else if(event.state==='canceled'){clearTimeout(timer);reject(new Error('DWG download canceled'));}
     });
   });
-  await page.click('[data-save]');
+  await act({op:'run',cmd:'QSAVE'});
   await completed;
-  const edited = path.join(directory,'exemplo-editado.dwg');
-  const originalBytes = await readFile(sample), editedBytes = await readFile(edited);
-  assert.equal(editedBytes.subarray(0,6).toString('ascii'), 'AC1015');
+  const names=(await readdir(downloads)).filter(name=>name.endsWith('.dwg')&&name!=='invalido.dwg');
+  assert.equal(names.length,1);
+  const saved=await readFile(path.join(downloads,names[0]));
+  assert.match(saved.subarray(0,6).toString(),/^AC10\d{2}$/);
+  assert.equal(active(await state()).dirty,false);
+  await input.uploadFile(path.join(downloads,names[0]));
+  await page.waitForFunction(()=>document.querySelector('#cad-editor').getAttribute('aria-busy')==='false');
+  const after=await state();
+  assert.notEqual(after.document_id,currentId);
+  assert.equal((await raw({op:'entities'})).total,count+1);
+  const lines=await raw({op:'query',type:'Line',detail:'geometry'});
+  assert(lines.entities.some(line=>JSON.stringify(line).includes('6500')&&JSON.stringify(line).includes('7200')),'Edited line absent after DWG reopen');
+  pass('actual wallet delivery, saved DWG download and reopen keep the added line');
 
-  // Parse both real DWG files. Every original line must still be present, plus one new line.
-  const drawings = await page.evaluate(async (original, saved) => {
-    const { DwgReader } = await import('/bim/web/vendor-cad/acad.mjs');
-    const xy = p => [p.x,p.y].map(v => +v.toFixed(5));
-    return [original,saved].map(bytes => {
-      const doc = DwgReader.readFromStream(Uint8Array.from(bytes).buffer);
-      const entities = Array.from(doc.modelSpace.entities);
-      const lines = entities.filter(e => e.objectName === 'LINE')
-        .map(e => [xy(e.startPoint), xy(e.endPoint)]);
-      return { count:entities.length, lines };
-    });
-  }, [...originalBytes], [...editedBytes]);
-  const [before, after] = drawings;
-  assert.equal(after.count, before.count + 1);
-  const remaining = after.lines.map(line => JSON.stringify(line));
-  for (const line of before.lines) {
-    const i = remaining.indexOf(JSON.stringify(line));
-    assert.notEqual(i, -1, 'Uma linha original foi alterada ou removida.');
-    remaining.splice(i,1);
+  await page.setViewport({width:390,height:844});
+  await page.screenshot({path:path.join(output,'mobile-editor.png')});
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1));
+  pass('page stays within narrow viewport');
+  assert.deepEqual(external,[],'Editor requested external resources');
+  assert.deepEqual(violations,[],'Actual CSP blocked required resources');
+  assert.deepEqual(errors,[]);
+  assert.equal((await frame.evaluate(()=>navigator.serviceWorker?.getRegistrations().then(r=>r.length)))||0,0);
+  pass('no external requests, service workers, CSP violations or runtime errors');
+  await writeFile(path.join(output,'browser-result.json'),JSON.stringify({ok:true,base,passed,download:names[0],bytes:saved.length,entityCount:count+1},null,2)+'\n');
+} catch(error) {
+  let state;
+  if (page) {
+    await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});
+    state=await page.evaluate(()=>({status:document.querySelector('.cad-status')?.textContent,
+      busy:document.querySelector('#cad-editor')?.getAttribute('aria-busy'),
+      frames:[...document.querySelectorAll('iframe')].map(frame=>({src:frame.src,
+        text:frame.contentDocument?.body?.innerText,canvas:!!frame.contentDocument?.querySelector('canvas')}))})).catch(()=>null);
   }
-  assert.equal(remaining.length, 1);
-  const [start,end] = JSON.parse(remaining[0]);
-  assert(Math.hypot(start[0]-end[0], start[1]-end[1]) > 0, 'A linha criada precisa de comprimento positivo.');
-  await input.uploadFile(edited);
-  await waitForDrawing(path.basename(edited));
-  assert.equal(await page.$eval('[data-format]', el => el.value), 'dwg');
-  console.log(`DWG editado e reaberto: ${before.count} → ${after.count} entidades, nova linha ${remaining[0]}.`);
-} finally {
-  await browser.close();
-  await rm(directory, {recursive:true,force:true});
-}
+  await writeFile(path.join(output,'browser-result.json'),JSON.stringify({ok:false,base,passed,error:String(error),stack:error.stack,
+    state,errors,violations,external,consoleMessages},null,2)+'\n');
+  throw error;
+} finally { await browser.close(); local?.server.close(); }

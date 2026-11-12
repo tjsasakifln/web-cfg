@@ -98,3 +98,10 @@ data/live_intelligence/accepted.last/
 
 # chrome-launcher scratch profiles created at the repo root under WSL (Windows LOCALAPPDATA path)
 /C:*
+
+# Source for the reproducible OpenCAD builder; generated outputs remain ignored.
+!scripts/cad/opencad/build/
+scripts/cad/opencad/build/*
+!scripts/cad/opencad/build/README.md
+!scripts/cad/opencad/build/build_remote.py
+!scripts/cad/opencad/build/confenge.patch

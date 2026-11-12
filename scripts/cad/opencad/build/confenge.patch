@@ -1,0 +1,2797 @@
+diff --git a/CONFENGE-BUILD.md b/CONFENGE-BUILD.md
+new file mode 100644
+index 0000000..b91cc7a
+--- /dev/null
++++ b/CONFENGE-BUILD.md
+@@ -0,0 +1,21 @@
++# Build da edição CONFENGE
++
++Versão de origem: OpenCAD Studio v2026.45, commit fb0a667e269b6c924233ecd450a11dd7cba40eea.
++Versão da edição: 2026.45+confenge.1. Mudanças identificadas em CONFENGE-NOTICE.md e no patch incluído.
++
++Requisitos: Rust 1.99.1, alvo wasm32-unknown-unknown, wasm-bindgen-cli 0.2.108, Git (apenas para as dependências quando o vendor não for utilizado).
++
++```sh
++rustup toolchain install 1.99.1
++rustup target add --toolchain 1.99.1 wasm32-unknown-unknown
++cargo install wasm-bindgen-cli --version 0.2.108 --locked
++CARGO_BUILD_JOBS=1 sh scripts/build-confenge-web.sh
++```
++
++O script gera os módulos WebAssembly e JavaScript em dist/confenge, incluindo o worker e as fontes. O arquivo Cargo.lock fixa todas as versões e revisões git. O pacote correspondente de dependências contém os arquivos fonte e licenças de todas as dependências, sem exigir acesso a serviços de conversão. O arquivo correspondente inclui opencad-vendor ao lado deste projeto, com .cargo/config.toml já configurado para essas dependências. CONFENGE-VENDOR-CONFIG.toml conserva o mapeamento. O caminho do vendor é relativo à raiz do projeto. Use CARGO_NET_OFFLINE=true para compilar sem acesso à rede após instalar a toolchain.
++
++O editor é servido em /cad/editor/. O HTML/JavaScript de hospedagem CONFENGE deve expor window.openCadStudioSaveFile(name, bytes), que retorna Promise<boolean>, e inicializar window.wasmBindings antes de carregar ocs-control.js. A função resolve true somente depois da autorização e entrega; false cancela. A origem, o emissor e o identificador de cada mensagem precisam ser conferidos pelo pai. Os módulos do motor não baixam arquivos diretamente quando essa ponte falta.
++
++O código de hospedagem e da ponte desta compilação acompanha o pacote na pasta hosting, com hashes e revisão em hosting/ORIGIN.json. As licenças e os hashes do pacote publicado também estão no repositório tjsasakifln/web-cfg. Não é preciso instalar o aplicativo desktop ou disponibilizar um backend de desenhos.
++
++A compilação final usa o perfil release original (otimização nível 3) e CARGO_BUILD_JOBS=1. O código completo requer mais de 10 GiB de memória durante a geração do aplicativo; use máquina com 16 GiB ou mais e swap.
+diff --git a/CONFENGE-NOTICE.md b/CONFENGE-NOTICE.md
+new file mode 100644
+index 0000000..c924a72
+--- /dev/null
++++ b/CONFENGE-NOTICE.md
+@@ -0,0 +1,7 @@
++# CONFENGE CAD
++
++Edição web modificada em 11 de novembro de 2026 a partir de OpenCAD Studio v2026.45, commit fb0a667e269b6c924233ecd450a11dd7cba40eea.
++
++OpenCAD Studio e seus autores conservam seus direitos autorais e a licença GNU GPL v3. As modificações desta edição (identidade, início, idioma, hospedagem e integração de exportação) são disponibilizadas sob a mesma licença. Consulte LICENSE e os avisos das dependências no código-fonte correspondente.
++
++A marca e os logotipos CONFENGE identificam esta distribuição. A licença do código não concede direitos sobre marcas de terceiros.
+diff --git a/CONFENGE-VENDOR-CONFIG.toml b/CONFENGE-VENDOR-CONFIG.toml
+new file mode 100644
+index 0000000..a856551
+--- /dev/null
++++ b/CONFENGE-VENDOR-CONFIG.toml
+@@ -0,0 +1,50 @@
++[source.crates-io]
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/HakanSeven12/iced_aw.git?branch=agent/fix-iced-fonts"]
++git = "https://github.com/HakanSeven12/iced_aw.git"
++branch = "agent/fix-iced-fonts"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/HakanSeven12/opencaddocument.git?rev=b9e1762"]
++git = "https://github.com/HakanSeven12/opencaddocument.git"
++rev = "b9e1762"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/HakanSeven12/opencadgraph.git?rev=5e4dc20"]
++git = "https://github.com/HakanSeven12/opencadgraph.git"
++rev = "5e4dc20"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/HakanSeven12/opencadkernel.git?rev=f058795"]
++git = "https://github.com/HakanSeven12/opencadkernel.git"
++rev = "f058795"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/OpenAEC-Foundation/ifccad.git?rev=21660ce10453bf8a32afd22281e085d16980f70a"]
++git = "https://github.com/OpenAEC-Foundation/ifccad.git"
++rev = "21660ce10453bf8a32afd22281e085d16980f70a"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/hakanaktt/acadrust.git?rev=eababc03"]
++git = "https://github.com/hakanaktt/acadrust.git"
++rev = "eababc03"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/iced-rs/cryoglyph.git?rev=53ba3e879539d19ed8162942126a977ec896cc3b"]
++git = "https://github.com/iced-rs/cryoglyph.git"
++rev = "53ba3e879539d19ed8162942126a977ec896cc3b"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/iced-rs/iced.git?rev=23604ff22ab0aad9e00b9327cb7b8546ed84db39"]
++git = "https://github.com/iced-rs/iced.git"
++rev = "23604ff22ab0aad9e00b9327cb7b8546ed84db39"
++replace-with = "vendored-sources"
++
++[source."git+https://github.com/iced-rs/winit.git?rev=05b8ff17a06562f0a10bb46e6eaacbe2a95cb5ed"]
++git = "https://github.com/iced-rs/winit.git"
++rev = "05b8ff17a06562f0a10bb46e6eaacbe2a95cb5ed"
++replace-with = "vendored-sources"
++
++[source.vendored-sources]
++directory = "../opencad-vendor"
+diff --git a/Trunk.toml b/Trunk.toml
+index 73c9a13..2969a5a 100644
+--- a/Trunk.toml
++++ b/Trunk.toml
+@@ -9,7 +9,7 @@
+ [build]
+ target = "web-app.html"
+ dist = "dist/app"
+-public_url = "/app/"
++public_url = "/cad/editor/"
+ html_output = "index.html"
+ # The crate has no Cargo features: the geometry kernel is pure Rust and
+ # cross-compiles to wasm, so the web build gets the same solid modelling the
+diff --git a/build.rs b/build.rs
+index 5ba45df..a814038 100644
+--- a/build.rs
++++ b/build.rs
+@@ -17,15 +17,9 @@ fn main() {
+     };
+     println!("cargo:rustc-env=OCS_APP_VERSION={app_version}");
+     watch_git_inputs();
+-    let revision =
+-        git_output(&["rev-parse", "--short=12", "HEAD"]).unwrap_or_else(|| "unknown".to_string());
+-    // diff-index exits 1 for differences and 128 when there is no repository,
+-    // so only a real difference marks the build dirty.
+-    let dirty = std::process::Command::new("git")
+-        .args(["diff-index", "--quiet", "HEAD", "--"])
+-        .status()
+-        .ok()
+-        .is_some_and(|status| status.code() == Some(1));
++    // CONFENGE edition metadata is stable when rebuilt from the published source archive.
++    let revision = "fb0a667e269b-confenge.1".to_string();
++    let dirty = false;
+     let commit = revision.clone();
+     let revision = if dirty {
+         format!("{revision}-dirty")
+@@ -39,26 +33,19 @@ fn main() {
+     // so counting first-parent commits from that tag ties the distance to
+     // the version the app already claims. Shallow clones and source
+     // tarballs have no tag to count from and fall back to the hash alone.
+-    let tag_distance = git_output(&[
+-        "rev-list",
+-        "--count",
+-        "--first-parent",
+-        &format!("v{app_version}..HEAD"),
+-    ])
+-    .and_then(|value| value.parse::<u64>().ok());
++    let tag_distance = Some(0_u64);
+     println!(
+         "cargo:rustc-env=OCS_TAG_DISTANCE={}",
+         tag_distance.map_or_else(|| "unknown".to_string(), |n| n.to_string())
+     );
+-    let commit_date =
+-        git_output(&["log", "-1", "--format=%cs", "HEAD"]).unwrap_or_else(|| "unknown".to_string());
++    let commit_date = "2026-11-11".to_string();
+     println!("cargo:rustc-env=OCS_COMMIT_DATE={commit_date}");
+ 
+     // Semver-style build metadata: empty for a clean build on the release
+     // tag, `+N.g<hash>` for N first-parent commits past it, `+g<hash>` when
+     // the distance is unknown, and `.dirty` appended for uncommitted changes.
+     let short_hash = (commit != "unknown").then(|| commit[..commit.len().min(8)].to_string());
+-    let mut metadata_parts: Vec<String> = Vec::new();
++    let mut metadata_parts: Vec<String> = vec!["confenge.1".to_string()];
+     match (tag_distance, &short_hash) {
+         (Some(0), _) => {}
+         (Some(n), Some(hash)) => {
+diff --git a/rust-toolchain.toml b/rust-toolchain.toml
+new file mode 100644
+index 0000000..7c1837e
+--- /dev/null
++++ b/rust-toolchain.toml
+@@ -0,0 +1,4 @@
++[toolchain]
++channel = "1.99.1"
++profile = "minimal"
++targets = ["wasm32-unknown-unknown"]
+diff --git a/scripts/build-confenge-web.sh b/scripts/build-confenge-web.sh
+new file mode 100755
+index 0000000..2cc9f96
+--- /dev/null
++++ b/scripts/build-confenge-web.sh
+@@ -0,0 +1,18 @@
++#!/bin/sh
++# Modified CONFENGE edition, 2026-11-11. Distributed under GPL-3.0.
++set -eu
++cd "$(dirname "$0")/.."
++case "$(wasm-bindgen --version)" in
++  'wasm-bindgen 0.2.108') ;;
++  *) echo 'Use wasm-bindgen-cli 0.2.108 to match Cargo.lock.' >&2; exit 1 ;;
++esac
++out_dir=${CONFENGE_CAD_OUTPUT:-dist/confenge}
++mkdir -p "$out_dir/worker_pkg" "$out_dir/fonts"
++cargo build --locked --release --target wasm32-unknown-unknown --package ocs_web_worker
++cargo build --locked --release --target wasm32-unknown-unknown --bin OpenCADStudio
++wasm-bindgen --target web --out-dir "$out_dir" --out-name confenge-cad target/wasm32-unknown-unknown/release/OpenCADStudio.wasm
++wasm-bindgen --target web --out-dir "$out_dir/worker_pkg" --out-name ocs_web_worker target/wasm32-unknown-unknown/release/ocs_web_worker.wasm
++cp web/ocs-parse-worker.js web/ocs-control.js "$out_dir/"
++cp assets/confenge-logo.png "$out_dir/logo.png"
++cp web/fonts/*.ttf web/fonts/OFL.txt "$out_dir/fonts/"
++printf '%s\n' 'Assets ready. The hosting wrapper and export bridge are maintained in web-cfg/cad/editor.'
+diff --git a/src/app/annotation_data.rs b/src/app/annotation_data.rs
+index e1782f9..439b629 100644
+--- a/src/app/annotation_data.rs
++++ b/src/app/annotation_data.rs
+@@ -1812,6 +1812,13 @@ impl OpenCADStudio {
+     }
+ 
+     pub(super) fn open_data_extraction(&mut self) {
++        #[cfg(target_arch = "wasm32")]
++        if self.data_extraction_export_pending {
++            self.command_line.push_info(
++                "Aguarde a confirmação da exportação para continuar a extração.",
++            );
++            return;
++        }
+         let i = self.active_tab;
+         // The extraction keeps settings next to the drawing and lists the
+         // drawing among its sources, so it needs a saved drawing.
+@@ -1875,7 +1882,7 @@ impl OpenCADStudio {
+ 
+     /// -DATAEXTRACTION with a settings file: run that extraction on the
+     /// drawing — its external file, then its table at a picked point.
+-    pub(in crate::app) fn run_extraction_template(&mut self, path: &str) {
++    pub(in crate::app) fn run_extraction_template(&mut self, path: &str) -> Task<Message> {
+         let i = self.active_tab;
+         let mut state = DataExtractionState {
+             settings_path: path.to_string(),
+@@ -1883,7 +1890,7 @@ impl OpenCADStudio {
+         };
+         if let Err(error) = load_extraction_settings(&mut state) {
+             self.command_line.push_error(&error);
+-            return;
++            return Task::none();
+         }
+         let rows = match rerun_extraction(
+             &self.tabs[i].scene.document,
+@@ -1893,9 +1900,11 @@ impl OpenCADStudio {
+             Ok(rows) => rows,
+             Err(error) => {
+                 self.command_line.push_error(&error);
+-                return;
++                return Task::none();
+             }
+         };
++        #[cfg(target_arch = "wasm32")]
++        let mut export_task = Task::none();
+         if state.output_file && !state.output_path.trim().is_empty() {
+             // A relative output file goes next to the drawing.
+             let mut file = PathBuf::from(state.output_path.trim());
+@@ -1907,6 +1916,21 @@ impl OpenCADStudio {
+             {
+                 file = dir.join(file);
+             }
++            #[cfg(target_arch = "wasm32")]
++            {
++                let export_rows = rows.clone();
++                export_task = Task::perform(
++                    crate::sys::with_acknowledged_exports(move || {
++                        write_extraction_file(&file, &export_rows)?;
++                        Ok(crate::tf!(
++                            "External file \"{}\" was successfully created.",
++                            file.display()
++                        ).into_owned())
++                    }),
++                    |result| Message::BackgroundIoFinished(result, false),
++                );
++            }
++            #[cfg(not(target_arch = "wasm32"))]
+             match write_extraction_file(&file, &rows) {
+                 Ok(()) => self.command_line.push_output(
+                     crate::tf!(
+@@ -1929,6 +1953,10 @@ impl OpenCADStudio {
+             self.command_line.push_info(&command.prompt());
+             self.tabs[i].active_cmd = Some(Box::new(command));
+         }
++        #[cfg(target_arch = "wasm32")]
++        return export_task;
++        #[cfg(not(target_arch = "wasm32"))]
++        Task::none()
+     }
+ 
+     pub(super) fn on_table_insert_style(&mut self, style: String) -> Task<Message> {
+@@ -3024,21 +3052,77 @@ impl OpenCADStudio {
+     }
+ 
+     pub(super) fn on_data_extraction_finish(&mut self) -> Task<Message> {
++        #[cfg(target_arch = "wasm32")]
++        if self.data_extraction_export_pending {
++            return Task::none();
++        }
+         self.update_extraction_preview();
+         if !self.data_extraction.error.is_empty() {
+             return Task::none();
+         }
+-        if let Err(error) = save_extraction_settings(&self.data_extraction) {
+-            self.data_extraction.error = error;
++        #[cfg(target_arch = "wasm32")]
++        {
++            let state = self.data_extraction.clone();
++            let tab_id = self.tabs[self.active_tab].id;
++            self.data_extraction_export_pending = true;
++            return Task::perform(
++                crate::sys::with_acknowledged_exports(move || {
++                    save_extraction_settings(&state)?;
++                    if state.output_file {
++                        let path = PathBuf::from(state.output_path.trim());
++                        write_extraction_file(&path, &state.preview)?;
++                    }
++                    Ok(())
++                }),
++                move |result| Message::DataExtractionExportFinished { tab_id, result },
++            );
++        }
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            if let Err(error) = save_extraction_settings(&self.data_extraction) {
++                self.data_extraction.error = error;
++                return Task::none();
++            }
++            if self.data_extraction.output_file {
++                let path = PathBuf::from(self.data_extraction.output_path.trim());
++                if let Err(error) = write_extraction_file(&path, &self.data_extraction.preview) {
++                    self.data_extraction.error = error;
++                    return Task::none();
++                }
++            }
++            self.finish_data_extraction()
++        }
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    pub(super) fn on_data_extraction_export_finished(
++        &mut self,
++        tab_id: u64,
++        result: Result<(), String>,
++    ) -> Task<Message> {
++        self.data_extraction_export_pending = false;
++        if let Err(error) = result {
++            self.data_extraction.error = error.clone();
++            self.command_line.push_error(&error);
++            return Task::none();
++        }
++        // The user may have closed the wizard while the wallet was open.
++        // Delivery is still valid, but it must not close another dialog or
++        // start placing a table into a different document.
++        if self.active_modal != Some(ModalKind::DataExtraction)
++            || self.tabs[self.active_tab].id != tab_id
++        {
++            self.command_line
++                .push_output("Exportação da extração concluída.");
+             return Task::none();
+         }
++        self.finish_data_extraction()
++    }
++
++    fn finish_data_extraction(&mut self) -> Task<Message> {
+         let rows = self.data_extraction.preview.clone();
+         if self.data_extraction.output_file {
+             let path = PathBuf::from(self.data_extraction.output_path.trim());
+-            if let Err(error) = write_extraction_file(&path, &rows) {
+-                self.data_extraction.error = error;
+-                return Task::none();
+-            }
+             self.command_line.push_output(
+                 crate::tf!(
+                     "External file \"{}\" was successfully created.",
+diff --git a/src/app/commands/display.rs b/src/app/commands/display.rs
+index db8c7bc..ea67e7e 100644
+--- a/src/app/commands/display.rs
++++ b/src/app/commands/display.rs
+@@ -1225,6 +1225,25 @@ impl OpenCADStudio {
+                     )
+                     .as_ref(),
+                 );
++                #[cfg(target_arch = "wasm32")]
++                {
++                    let prepared = crate::sys::prepare_acknowledged_exports(|| {
++                        self.export_pdf_layout_names(&path, &names)
++                    });
++                    return Some(Task::perform(
++                        async move {
++                            let ((pages, _, _), exports) = prepared?;
++                            let bytes: usize = exports.iter().map(|(_, data)| data.len()).sum();
++                            crate::sys::acknowledge_prepared_exports(Ok(((), exports))).await?;
++                            Ok(crate::tf!(
++                                "Published: {}  {pages} page(s), {bytes} bytes",
++                                path.display()
++                            ).into_owned())
++                        },
++                        |result| Message::BackgroundIoFinished(result, false),
++                    ));
++                }
++                #[cfg(not(target_arch = "wasm32"))]
+                 match self.export_pdf_layout_names(&path, &names) {
+                     Ok((pages, bytes, sheets)) => {
+                         for (name, (_, width, height)) in names.iter().zip(sheets.iter()) {
+@@ -1244,6 +1263,7 @@ impl OpenCADStudio {
+                         self.command_line.push_error(&error);
+                     }
+                 }
++                #[cfg(not(target_arch = "wasm32"))]
+                 return Some(Task::none());
+             }
+             cmd if cmd.starts_with("EXPORTPDF ") || cmd.starts_with("EXPORT ") => {
+@@ -1262,6 +1282,25 @@ impl OpenCADStudio {
+                     return Some(Task::none());
+                 }
+                 let path = std::path::PathBuf::from(path_text);
++                #[cfg(target_arch = "wasm32")]
++                {
++                    let prepared = crate::sys::prepare_acknowledged_exports(|| {
++                        self.export_pdf_direct(&path, all_layouts)
++                    });
++                    return Some(Task::perform(
++                        async move {
++                            let ((pages, _, (width, height)), exports) = prepared?;
++                            let bytes: usize = exports.iter().map(|(_, data)| data.len()).sum();
++                            crate::sys::acknowledge_prepared_exports(Ok(((), exports))).await?;
++                            Ok(crate::tf!(
++                                "Exported: {}  {pages} page(s), {bytes} bytes, {width:.1}×{height:.1} mm",
++                                path.display()
++                            ).into_owned())
++                        },
++                        |result| Message::BackgroundIoFinished(result, false),
++                    ));
++                }
++                #[cfg(not(target_arch = "wasm32"))]
+                 match self.export_pdf_direct(&path, all_layouts) {
+                     Ok((pages, bytes, (width, height))) => {
+                         self.command_line.push_output(
+@@ -1276,6 +1315,7 @@ impl OpenCADStudio {
+                         self.command_line.push_error(&error);
+                     }
+                 }
++                #[cfg(not(target_arch = "wasm32"))]
+                 return Some(Task::none());
+             }
+             "EXPORTPDF" => {
+diff --git a/src/app/commands/fileops.rs b/src/app/commands/fileops.rs
+index e8033d9..333f785 100644
+--- a/src/app/commands/fileops.rs
++++ b/src/app/commands/fileops.rs
+@@ -23,6 +23,15 @@ impl OpenCADStudio {
+     }
+ 
+     pub(super) fn dispatch_fileops(&mut self, cmd: &str, i: usize) -> Option<Task<Message>> {
++        // The hosted editor has no native main window to close. Keep the
++        // application and Start tab alive, and let the normal close queue
++        // ask about every changed drawing before discarding anything.
++        // Dispatch as a message so a command prompt never removes its own
++        // tab while the current command step is still using that index.
++        #[cfg(target_arch = "wasm32")]
++        if matches!(cmd, "EXIT" | "QUIT" | "EXIT YES" | "EXIT NO") {
++            return Some(Task::done(Message::DocTabCloseAll));
++        }
+         match cmd {
+             // QNEW starts from the default template (Options > Files); NEW
+             // asks which template to start from (#1635).
+@@ -1216,19 +1225,33 @@ impl OpenCADStudio {
+         for (name, data) in deps {
+             push_entry(&mut entries, name, data);
+         }
+-        match build_zip(&entries) {
++        let export = match build_zip(&entries) {
+             Ok(zip) => {
+-                crate::sys::download_bytes(&zip_name, &zip);
+-                // The same report shape the native folder transmittal makes.
+                 let copied = entries.len();
+-                self.command_line.push_output(
+-                    crate::tf!("{cmd}: packaged {copied} file(s) into {}", zip_name).as_ref(),
++                let message =
++                    crate::tf!("{cmd}: packaged {copied} file(s) into {}", zip_name).into_owned();
++                let export_command = cmd.clone();
++                // A prepared archive has not been delivered yet. Report
++                // success only after the host authorizes its download.
++                Task::perform(
++                    async move {
++                        crate::sys::download_bytes_async(&zip_name, &zip)
++                            .await
++                            .map_err(|error| {
++                                crate::tf!("{export_command}: export failed: {error}").into_owned()
++                            })?;
++                        Ok(message)
++                    },
++                    |result| Message::BackgroundIoFinished(result, false),
++                )
++            }
++            Err(e) => {
++                self.command_line.push_error(
++                    crate::tf!("{cmd}: cannot build the transmittal ZIP ({e}).").as_ref(),
+                 );
++                Task::none()
+             }
+-            Err(e) => self
+-                .command_line
+-                .push_error(crate::tf!("{cmd}: cannot build the transmittal ZIP ({e}).").as_ref()),
+-        }
++        };
+         if !skipped.is_empty() {
+             let n = skipped.len();
+             let names = skipped.join(", ");
+@@ -1239,7 +1262,7 @@ impl OpenCADStudio {
+                 .as_ref(),
+             );
+         }
+-        Task::none()
++        export
+     }
+ }
+ 
+diff --git a/src/app/commands/inquiry.rs b/src/app/commands/inquiry.rs
+index a84ed99..5a35c75 100644
+--- a/src/app/commands/inquiry.rs
++++ b/src/app/commands/inquiry.rs
+@@ -1004,7 +1004,7 @@ impl OpenCADStudio {
+             }
+             cmd if cmd.starts_with("-DATAEXTRACTION _RUN ") => {
+                 let path = cmd.trim_start_matches("-DATAEXTRACTION _RUN ").trim().to_string();
+-                self.run_extraction_template(&path);
++                return Some(self.run_extraction_template(&path));
+             }
+ 
+             // ── Find / Replace ────────────────────────────────────────────────
+diff --git a/src/app/commands/view.rs b/src/app/commands/view.rs
+index 1a3cd04..f1d651e 100644
+--- a/src/app/commands/view.rs
++++ b/src/app/commands/view.rs
+@@ -71,28 +71,28 @@ impl OpenCADStudio {
+         match cmd {
+             "DONATE" => {
+                 self.command_line
+-                    .push_info(crate::t!("Opening Patreon page...").as_ref());
++                    .push_info("Abrindo os créditos e as licenças da edição CONFENGE.");
+                 return Some(crate::sys::open_url(
+-                    "https://patreon.com/HakanSeven12",
++                    "/cad/editor/licencas/fontes-e-codigo.txt",
+                     self.main_window,
+                 ));
+             }
+ 
+             "WEBVERSION" => {
+                 self.command_line
+-                    .push_info(crate::t!("Opening OCS Web...").as_ref());
++                    .push_info("Abrindo o CAD da CONFENGE.");
+                 return Some(crate::sys::open_url(
+-                    "https://hakanseven12.github.io/OpenCADStudio/",
++                    "/cad/",
+                     self.main_window,
+                 ));
+             }
+ 
+             "HELP" => {
+                 self.command_line.push_info(
+-                    crate::t!("Opening OCS Discussions for help and questions...").as_ref(),
++                    "Abrindo a ajuda da CONFENGE.",
+                 );
+                 return Some(crate::sys::open_url(
+-                    "https://github.com/HakanSeven12/OpenCADStudio/discussions",
++                    "/cad/#como-usar",
+                     self.main_window,
+                 ));
+             }
+@@ -168,26 +168,9 @@ impl OpenCADStudio {
+             }
+ 
+             "REPORT" => {
+-                // Pre-fill the GitHub issue body with version + platform so
+-                // reports arrive with the basics already filled in. The rule
+-                // is `***`: text typed right above a `---` line turns into a
+-                // Markdown heading.
+-                let body = format!(
+-                    "<!-- Describe the issue and the steps to reproduce it. -->\n\n\n\
+-                     ***\n- Open CAD Studio: v{}\n- Revision: {} ({}, {})\n- Platform: {}\n",
+-                    env!("OCS_FULL_VERSION"),
+-                    env!("OCS_GIT_REV"),
+-                    env!("OCS_COMMIT_DATE"),
+-                    env!("OCS_BUILD_PROFILE"),
+-                    crate::sys::platform_info(),
+-                );
+-                let url = format!(
+-                    "https://github.com/HakanSeven12/OpenCADStudio/issues/new?body={}",
+-                    crate::sys::percent_encode(&body)
+-                );
+                 self.command_line
+-                    .push_info(crate::t!("Opening feedback page...").as_ref());
+-                return Some(crate::sys::open_url(&url, self.main_window));
++                    .push_info("Abrindo o contato da CONFENGE.");
++                return Some(crate::sys::open_url("/triagem-tecnica/", self.main_window));
+             }
+ 
+             "ABOUT" => {
+@@ -200,9 +183,9 @@ impl OpenCADStudio {
+ 
+             "CHANGELOG" => {
+                 self.command_line
+-                    .push_info(crate::t!("Opening release notes...").as_ref());
++                    .push_info("Abrindo os créditos e as licenças da edição CONFENGE.");
+                 return Some(crate::sys::open_url(
+-                    "https://github.com/HakanSeven12/OpenCADStudio/releases",
++                    "/cad/editor/licencas/fontes-e-codigo.txt",
+                     self.main_window,
+                 ));
+             }
+diff --git a/src/app/config.rs b/src/app/config.rs
+index 46c1963..12f27c8 100644
+--- a/src/app/config.rs
++++ b/src/app/config.rs
+@@ -115,10 +115,17 @@ pub struct UiThemeConfig {
+ 
+ impl Default for UiThemeConfig {
+     fn default() -> Self {
+-        let theme = iced::Theme::Oxocarbon;
++        // CONFENGE: existing design-system colours, adapted to the dark CAD workspace.
+         Self {
+-            name: theme.to_string(),
+-            palette: UiThemePalette::from_iced(theme.seed()),
++            name: "Custom".to_string(),
++            palette: UiThemePalette {
++                background: [6, 26, 51],
++                text: [255, 255, 255],
++                primary: [206, 214, 42],
++                success: [61, 130, 56],
++                warning: [206, 214, 42],
++                danger: [196, 68, 68],
++            },
+         }
+     }
+ }
+@@ -656,7 +663,7 @@ impl AppConfig {
+ }
+ 
+ #[cfg(target_arch = "wasm32")]
+-const WEB_CONFIG_KEY: &str = "opencadstudio.settings";
++const WEB_CONFIG_KEY: &str = "confenge.cad.settings";
+ 
+ #[cfg(not(target_arch = "wasm32"))]
+ fn config_path() -> Option<std::path::PathBuf> {
+diff --git a/src/app/control/mod.rs b/src/app/control/mod.rs
+index 243c78a..28474f4 100644
+--- a/src/app/control/mod.rs
++++ b/src/app/control/mod.rs
+@@ -1477,54 +1477,15 @@ impl OpenCADStudio {
+                     )
+                 }
+             }
+-            // Web: no filesystem path; the drawing comes back in the reply.
++            // This hosted edition exports through the acknowledged CONFENGE
++            // transaction. Raw serialization is not a completed save and must
++            // never clear dirty state or bypass the normal Save workflow.
+             #[cfg(target_arch = "wasm32")]
+             "save" => {
+-                if self.tabs[i].block_test.is_some() {
+-                    return Err(failure(
+-                        "temporary_document",
+-                        "Test Block is temporary and cannot be saved",
+-                    ));
+-                }
+-                use base64::Engine as _;
+-                let default_is_dxf = crate::io::source_is_dxf(None, &self.tabs[i].scene.document);
+-                let (version, is_dxf) = super::automation::requested_save_target(
+-                    req,
+-                    self.tabs[i].scene.document.version,
+-                    default_is_dxf,
+-                    None,
+-                )
+-                .map_err(|error| failure("invalid_target", error))?;
+-                let losses = super::automation::SaveLosses::of(
+-                    &self.tabs[i].scene.document,
+-                    version,
+-                    is_dxf,
+-                );
+-                let dropped = losses.dropped;
+-                if !losses.lossless() && req["allow_lossy"].as_bool() != Some(true) {
+-                    return Err(lossy_refusal(&losses));
+-                }
+-                let ext = if is_dxf { "dxf" } else { "dwg" };
+-                self.sync_view_state_for_save(i);
+-                super::update::util::sync_annotation_scale_header(&mut self.tabs[i].scene);
+-                self.stamp_header_sysvars(i);
+-                self.sync_solid_models_for_save(i);
+-                self.tabs[i].scene.sync_native_parametric_graph();
+-                let bytes = crate::io::save_to_bytes(&self.tabs[i].scene.document, ext, version)
+-                    .map_err(|error| failure("save_failed", error))?;
+-                self.tabs[i].dirty = false;
+-                let name = req["name"].as_str().filter(|name| !name.is_empty());
+-                let name = name.map_or_else(|| format!("drawing.{ext}"), str::to_string);
+-                self.set_control_result(json!({
+-                    "name": name,
+-                    "target_format": ext,
+-                    "target_version": format!("{version:?}"),
+-                    "dropped_on_save": dropped,
+-                    "mtext_losses": losses.mtext_json(),
+-                    "bytes": bytes.len(),
+-                    "data_base64": base64::engine::general_purpose::STANDARD.encode(&bytes),
+-                }));
+-                Task::none()
++                return Err(failure(
++                    "host_export_required",
++                    "Use Salvar ou Salvar como para autorizar a exportação.",
++                ));
+             }
+             #[cfg(not(target_arch = "wasm32"))]
+             "save_verified" => {
+@@ -1893,9 +1854,16 @@ impl OpenCADStudio {
+         &mut self,
+         path: String,
+         screenshot: Option<iced::window::Screenshot>,
+-    ) {
++    ) -> Task<Message> {
++        #[cfg(target_arch = "wasm32")]
++        let Some(request_id) = self.control.pending.as_ref()
++            .filter(|pending| pending.request["op"] == "capture")
++            .map(|pending| pending.id.clone())
++        else {
++            return Task::none();
++        };
+         let waited_for_frame = self.control.capture_after_redraw;
+-        let result = (|| -> Result<Value, String> {
++        let work = || -> Result<Value, String> {
+             let s = screenshot
+                 .ok_or("The window is minimized or has no size; restore it and capture again")?;
+             let requested_scope = self
+@@ -2074,7 +2042,38 @@ impl OpenCADStudio {
+                 "annotations": grounding.visible_entities.clone(),
+                 "visible_entities": grounding.visible_entities,
+             }))
+-        })();
++        };
++        #[cfg(target_arch = "wasm32")]
++        {
++            let prepared = crate::sys::prepare_acknowledged_exports(work);
++            Task::perform(
++                crate::sys::acknowledge_prepared_exports(prepared),
++                move |result| Message::ControlScreenshotExported(request_id, result),
++            )
++        }
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            let result = work();
++            self.finish_control_screenshot(result);
++            Task::none()
++        }
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    pub(super) fn on_control_screenshot_exported(
++        &mut self,
++        request_id: &str,
++        result: Result<Value, String>,
++    ) -> Task<Message> {
++        if self.control.pending.as_ref().is_some_and(|pending| {
++            pending.id == request_id && pending.request["op"] == "capture"
++        }) {
++            self.finish_control_screenshot(result);
++        }
++        Task::none()
++    }
++
++    fn finish_control_screenshot(&mut self, result: Result<Value, String>) {
+         match result {
+             Ok(v) => {
+                 if let Some(p) = self.control.pending.as_mut() {
+diff --git a/src/app/mod.rs b/src/app/mod.rs
+index d3d00e6..83e286e 100644
+--- a/src/app/mod.rs
++++ b/src/app/mod.rs
+@@ -2151,6 +2151,8 @@ pub(super) struct OpenCADStudio {
+     /// The Table Style list shows only the styles in use.
+     tablestyle_in_use_only: bool,
+     data_extraction: crate::ui::window::annotation_data::DataExtractionState,
++    #[cfg(target_arch = "wasm32")]
++    data_extraction_export_pending: bool,
+ 
+     // ── Plot Style Panel ──────────────────────────────────────────────────
+     /// Selected ACI index in the panel (1-255).
+@@ -3508,6 +3510,8 @@ pub enum Message {
+     ControlStep(String, Box<Message>),
+     ControlTaskDone(String),
+     ControlScreenshot(String, Option<iced::window::Screenshot>),
++    #[cfg(target_arch = "wasm32")]
++    ControlScreenshotExported(String, Result<serde_json::Value, String>),
+     /// A frame has been drawn (or the anti-hang timer expired) for a parked
+     /// `capture` request: take the screenshot now, so it shows the latest
+     /// state instead of the previous frame (C11).
+@@ -6047,6 +6051,11 @@ pub enum Message {
+     DataExtractionBrowseOutput,
+     DataExtractionBrowseOutputResult(Option<std::path::PathBuf>),
+     DataExtractionFinish,
++    #[cfg(target_arch = "wasm32")]
++    DataExtractionExportFinished {
++        tab_id: u64,
++        result: Result<(), String>,
++    },
+     /// Save the never-saved drawing so the extraction can start.
+     DataExtractionSaveDrawing,
+     DataExtractionSaveDrawingResult(Option<std::path::PathBuf>),
+@@ -6751,6 +6760,8 @@ impl OpenCADStudio {
+             tablestyle_parent_table: false,
+             tablestyle_in_use_only: false,
+             data_extraction: Default::default(),
++            #[cfg(target_arch = "wasm32")]
++            data_extraction_export_pending: false,
+             layout_manager_rename_buf: String::new(),
+             plotstyle_panel_aci: 1,
+             ps_color_buf: String::new(),
+@@ -7154,18 +7165,8 @@ impl OpenCADStudio {
+     fn boot_web() -> (Self, Task<Message>) {
+         #[cfg_attr(target_arch = "wasm32", allow(unused_mut))]
+         let mut s = Self::new();
+-        // A web host that intends to automate can opt in before the first
+-        // control request by setting `opencadstudio.automation` to "1" in
+-        // localStorage (the same pre-load mechanism the settings use): the
+-        // startup donation prompt then never queues (#1349).
+-        if web_sys::window()
+-            .and_then(|window| window.local_storage().ok().flatten())
+-            .and_then(|storage| storage.get_item("opencadstudio.automation").ok().flatten())
+-            == Some("1".to_string())
+-        {
+-            s.control.automation_seen = true;
+-        }
+-        s.queue_startup_prompts();
++        // The hosted edition has no donation or association startup prompts.
++        // Recovery prompts are still queued by their dedicated result handlers.
+         let focus = s.focus_cmd_input();
+         let primary_font =
+             crate::scene::text::web_font::preload_language(&crate::i18n::active_language_tag());
+@@ -7173,16 +7174,6 @@ impl OpenCADStudio {
+             Task::done(Message::PollWebFonts),
+             Task::done(Message::ApplyWebFont(primary_font)),
+         ]);
+-        // Web can't reach the Patreon API directly (CORS); fetch the CI-built
+-        // supporters.json served on the same origin instead.
+-        let patrons = Task::perform(crate::patreon::fetch_patrons_web(), Message::PatronsFetched);
+-        s.videos_loading = true;
+-        let videos = Task::perform(crate::videos::fetch_playlist_web(), Message::VideosFetched);
+-        s.discussions_loading = true;
+-        let discussions = Task::perform(
+-            crate::discussions::fetch_discussions_web(),
+-            Message::DiscussionsFetched,
+-        );
+         let thumbs_fetch = s.refresh_recent_thumbs();
+         // Crash-recovery scan: OPFS snapshots newer than a drawing's last
+         // saved copy come back as a restore prompt (stale ones are deleted).
+@@ -7232,16 +7223,7 @@ impl OpenCADStudio {
+         };
+         (
+             s,
+-            Task::batch([
+-                focus,
+-                fonts,
+-                patrons,
+-                videos,
+-                discussions,
+-                thumbs_fetch,
+-                autosave_scan,
+-                deep_link,
+-            ]),
++            Task::batch([focus, fonts, thumbs_fetch, autosave_scan, deep_link]),
+         )
+     }
+ }
+@@ -7275,13 +7257,13 @@ pub fn run() -> iced::Result {
+             let dot = if tab.dirty { "● " } else { "" };
+             let name = tab.tab_display_name();
+             format!(
+-                "{}Open CAD Studio {} - {}",
++                "{}CONFENGE CAD {} - {}",
+                 dot,
+                 env!("OCS_APP_VERSION"),
+                 name
+             )
+         } else {
+-            concat!("Open CAD Studio ", env!("OCS_APP_VERSION")).to_string()
++            concat!("CONFENGE CAD ", env!("OCS_APP_VERSION")).to_string()
+         }
+     })
+     .theme(|state: &OpenCADStudio, _| state.active_theme.clone())
+@@ -7327,7 +7309,7 @@ pub fn run_web() -> iced::Result {
+     )
+     .subscription(OpenCADStudio::subscription)
+     .title(|_state: &OpenCADStudio| {
+-        concat!("Open CAD Studio ", env!("OCS_APP_VERSION")).to_string()
++        concat!("CONFENGE CAD ", env!("OCS_APP_VERSION")).to_string()
+     })
+     .theme(|state: &OpenCADStudio| state.active_theme.clone())
+     .backend(iced::Backend::Hardware(iced::backend::Api::OpenGL))
+diff --git a/src/app/node_graph.rs b/src/app/node_graph.rs
+index 8e3da44..1fb9495 100644
+--- a/src/app/node_graph.rs
++++ b/src/app/node_graph.rs
+@@ -465,6 +465,16 @@ impl OpenCADStudio {
+             GraphMsg::New => self.tabs[i].graph = Default::default(),
+             GraphMsg::Save => {
+                 let bytes = self.graph_file_bytes(i);
++                #[cfg(target_arch = "wasm32")]
++                return Task::perform(
++                    async move {
++                        Some(crate::sys::download_bytes_async("graph.ocg", &bytes)
++                            .await
++                            .map(|()| "graph.ocg".to_owned()))
++                    },
++                    |result| Message::Graph(GraphMsg::Saved(result)),
++                );
++                #[cfg(not(target_arch = "wasm32"))]
+                 return Task::perform(
+                     async move {
+                         let handle = crate::sys::file_dialog()
+diff --git a/src/app/settings.rs b/src/app/settings.rs
+index 1646bd8..e93c025 100644
+--- a/src/app/settings.rs
++++ b/src/app/settings.rs
+@@ -1579,7 +1579,7 @@ impl Default for UserSettings {
+             quick_properties: false,
+             quick_properties_float: false,
+             quick_properties_pos: [40.0, 40.0],
+-            language: crate::i18n::Language::default(),
++            language: crate::i18n::Language::PtBr,
+             cliprompt_lines: 3,
+             commandline_fade_ms: 3000,
+             command_line_opacity: 80,
+diff --git a/src/app/update/dialog.rs b/src/app/update/dialog.rs
+index de064f9..222e863 100644
+--- a/src/app/update/dialog.rs
++++ b/src/app/update/dialog.rs
+@@ -353,15 +353,12 @@ impl OpenCADStudio {
+             // refuse a second one (the window is seconds — refuse, don't
+             // queue) instead of letting two serializer rounds race for the
+             // same tab's bookkeeping.
+-            if let Some(busy_tab) = crate::io::fs_access::web_save_in_flight() {
+-                if self.tabs.iter().any(|tab| tab.id == busy_tab) {
+-                    self.command_line
+-                        .push_info(crate::t!("Save already running for this drawing.").as_ref());
+-                    return Task::none();
+-                }
+-                // Stale marker (its tab closed before settling): clear it
+-                // rather than block this save forever.
+-                crate::io::fs_access::end_web_save(busy_tab);
++            if crate::io::fs_access::web_save_in_flight().is_some() {
++                // A closed tab may still own an authorization or a SAVEALL
++                // batch. Only its completion may release that transaction.
++                self.command_line
++                    .push_info(crate::t!("Save already running for this drawing.").as_ref());
++                return Task::none();
+             }
+             match self.pending_close.take() {
+                 Some(crate::app::PendingClose::Tab(tab_id)) => {
+diff --git a/src/app/update/file.rs b/src/app/update/file.rs
+index 4152b1f..2475c38 100644
+--- a/src/app/update/file.rs
++++ b/src/app/update/file.rs
+@@ -37,6 +37,24 @@ fn write_export(path: &std::path::Path, bytes: &[u8]) -> Result<(), String> {
+     }
+ }
+ 
++/// A mesh export finishes only after its generated files have passed through
++/// the host. Desktop keeps the existing background writer.
++fn acknowledged_export_task<F, M>(context: impl Into<String>, work: F, map: M) -> Task<Message>
++where
++    F: FnOnce() -> Result<(), String> + Send + 'static,
++    M: FnOnce(Result<(), String>) -> Message + Send + 'static,
++{
++    #[cfg(target_arch = "wasm32")]
++    {
++        let _ = context;
++        Task::perform(crate::sys::with_acknowledged_exports(work), map)
++    }
++    #[cfg(not(target_arch = "wasm32"))]
++    {
++        background_task(context, work, map)
++    }
++}
++
+ /// Run `work` on a worker thread and map its result into a `Message`.
+ ///
+ /// `context` names the operation for error reporting. A worker panic never
+@@ -2784,13 +2802,11 @@ impl OpenCADStudio {
+             let version = document.version;
+             let prepared = crate::io::prepare_document_for_save(document, version);
+             Task::perform(
+-                async move { crate::io::serialize_prepared_document(&prepared, &ext, false).await },
+-                move |result| Message::WebWblockSerialized {
+-                    block_name,
+-                    path,
+-                    filename,
+-                    result,
++                async move {
++                    let bytes = crate::io::serialize_prepared_document(&prepared, &ext, false).await?;
++                    crate::sys::download_bytes_async(&filename, &bytes).await
+                 },
++                move |result| Message::WblockWriteFinished(block_name, path, result),
+             )
+         }
+     }
+@@ -2809,6 +2825,11 @@ impl OpenCADStudio {
+     /// writer ran.
+     #[cfg(target_arch = "wasm32")]
+     pub(in crate::app) fn saveall_web(&mut self) -> Task<Message> {
++        if crate::io::fs_access::web_save_in_flight().is_some() {
++            self.command_line
++                .push_info(crate::t!("Save already running for this drawing.").as_ref());
++            return Task::none();
++        }
+         // Collect per-document alpha consent before capturing or writing any batch output.
+         if let Some(tab_id) = self.tabs.iter().enumerate().find_map(|(i, tab)| {
+             let ext = tab.current_path.as_ref()?.extension()?.to_str()?;
+@@ -2874,12 +2895,22 @@ impl OpenCADStudio {
+             self.report_saveall_web(0, skipped);
+             return Task::none();
+         }
++        // Keep the same single-save slot for the whole batch. A toolbar or
++        // keyboard Save As must not replace another capture while this batch
++        // is still waiting for the host's decisions.
++        crate::io::fs_access::begin_web_save(pending[0].0.tab_id, "");
+         Task::perform(
+             async move {
+                 let mut results = Vec::with_capacity(pending.len());
+                 for (mut entry, prepared) in pending {
+-                    entry.result =
+-                        crate::io::serialize_prepared_document(&prepared, &entry.ext, false).await;
++                    entry.result = match
++                        crate::io::serialize_prepared_document(&prepared, &entry.ext, false).await
++                    {
++                        Ok(bytes) => crate::sys::download_bytes_async(&entry.filename, &bytes)
++                            .await
++                            .map(|_| bytes),
++                        Err(error) => Err(error),
++                    };
+                     results.push(entry);
+                 }
+                 results
+@@ -2900,11 +2931,13 @@ impl OpenCADStudio {
+         skipped: usize,
+         results: Vec<crate::app::WebSaveallEntry>,
+     ) -> Task<Message> {
++        if let Some(entry) = results.first() {
++            crate::io::fs_access::end_web_save(entry.tab_id);
++        }
+         let mut saved = 0usize;
+         for entry in results {
+             match entry.result {
+-                Ok(bytes) => {
+-                    crate::sys::download_bytes(&entry.filename, &bytes);
++                Ok(_bytes) => {
+                     saved += 1;
+                     let Some(i) = self.tabs.iter().position(|tab| tab.id == entry.tab_id) else {
+                         continue;
+@@ -2959,7 +2992,7 @@ impl OpenCADStudio {
+             .filter_map(|s| s.lods.first().cloned())
+             .collect();
+         let worker_path = path.clone();
+-        background_task(
++        acknowledged_export_task(
+             crate::t!("STL export"),
+             move || {
+                 let mesh_refs: Vec<_> = meshes.iter().collect();
+@@ -2981,7 +3014,7 @@ impl OpenCADStudio {
+             .filter_map(|s| s.lods.first().cloned())
+             .collect();
+         let worker_path = path.clone();
+-        background_task(
++        acknowledged_export_task(
+             crate::t!("STEP export"),
+             move || {
+                 let mesh_refs: Vec<_> = meshes.iter().collect();
+@@ -3016,7 +3049,7 @@ impl OpenCADStudio {
+             _ => 2.54,
+         };
+         let worker_path = path.clone();
+-        background_task(
++        acknowledged_export_task(
+             crate::t!("FBX export"),
+             move || {
+                 let mesh_refs: Vec<_> = meshes.iter().collect();
+@@ -3222,14 +3255,9 @@ impl OpenCADStudio {
+         )
+     }
+ 
+-    /// Web SAVE completion: the serializer worker (or inline fallback) has the
+-    /// drawing bytes. When the tab still exists AND holds a File System
+-    /// Access handle picked for the format these bytes were serialized as,
+-    /// they go to it in place (createWritable needs no user gesture, so the
+-    /// write may happen long after the pick); completion continues in
+-    /// `on_web_save_written`. Anything else takes the legacy download — the
+-    /// only artifact of the save, launched even if the tab was closed while
+-    /// serialization was in flight.
++    /// The worker produced a snapshot, but it is not saved yet. Wait for the
++    /// CONFENGE host to acknowledge authorization and delivery before changing
++    /// the tab path, dirty flag, recovery copy, or pending-close continuation.
+     #[cfg(target_arch = "wasm32")]
+     pub(super) fn on_web_save_serialized(
+         &mut self,
+@@ -3251,82 +3279,29 @@ impl OpenCADStudio {
+                 return self.finish_web_save(false);
+             }
+         };
+-        // In-place write eligibility, all three required:
+-        // * the tab still exists — a tab that closed while serialization ran
+-        //   means the user declined this save (discard/close), and the
+-        //   legacy contract for closed tabs is download-only;
+-        // * a handle is held AND it was picked for the format these bytes
+-        //   were serialized for (the pending ext recorded at capture time):
+-        //   a Save As whose re-pick failed falls back to the download, and
+-        //   the stale handle from the previous format must not receive the
+-        //   fallback bytes (a .dwg file must never silently hold DXF).
+-        let tab_exists = self.tabs.iter().position(|tab| tab.id == tab_id).is_some();
+-        let target_ext = crate::io::fs_access::take_pending_save_ext(tab_id);
+-        let write_in_place = tab_exists
+-            && crate::io::fs_access::write_or_download(
+-                crate::io::fs_access::handle_ext(tab_id).as_deref(),
+-                target_ext.as_deref(),
+-            );
+-        if !write_in_place {
+-            // Whatever handle is held is stale for these bytes (wrong
+-            // format, unverifiable format, or a tab that declined the
+-            // save): drop it so the next save re-picks instead of hitting
+-            // the same mismatch. No handle held: the drop is a no-op.
+-            crate::io::fs_access::drop_handle(tab_id);
+-        } else if let Some(picked_name) = crate::io::fs_access::handle_name(tab_id) {
+-            // The bookkeeping runs at write completion (WebSaveWritten) so a
+-            // failed write cannot clear the dirty flag; the bytes ride back
+-            // with the completion message so the OPFS recent store gets the
+-            // same copy the download path uses.
+-            let download_name = picked_name.clone();
+-            return Task::perform(
+-                async move {
+-                    let result = if let Err(error) =
+-                        crate::io::fs_access::write_handle(tab_id, &bytes).await
+-                    {
+-                        // Keep the save alive: the drawing still lands
+-                        // somewhere via the legacy download (which needs no
+-                        // activation), and the error travels with the
+-                        // completion message for the command-line note.
+-                        crate::sys::download_bytes(&download_name, &bytes);
+-                        Err(error)
+-                    } else {
+-                        Ok(())
+-                    };
+-                    (result, bytes)
+-                },
+-                move |(result, bytes)| Message::WebSaveWritten {
+-                    tab_id,
+-                    filename: picked_name,
+-                    autosave_key,
+-                    version,
+-                    geometry_epoch,
+-                    edit_revision,
+-                    camera_generation,
+-                    result,
+-                    bytes,
+-                },
+-            );
+-        }
+-        // The download is the only artifact of the save — fire it even if the
+-        // tab was closed while serialization was in flight.
+-        crate::sys::download_bytes(&filename, &bytes);
+-        self.finalize_web_save(
+-            tab_id,
+-            filename,
+-            autosave_key,
+-            version,
+-            geometry_epoch,
+-            edit_revision,
+-            camera_generation,
+-            bytes,
++        crate::io::fs_access::drop_handle(tab_id);
++        let download_name = filename.clone();
++        Task::perform(
++            async move {
++                let result = crate::sys::download_bytes_async(&download_name, &bytes).await;
++                (result, bytes)
++            },
++            move |(result, bytes)| Message::WebSaveWritten {
++                tab_id,
++                filename,
++                autosave_key,
++                version,
++                geometry_epoch,
++                edit_revision,
++                camera_generation,
++                result,
++                bytes,
++            },
+         )
+     }
+ 
+-    /// Web SAVE in-place completion: the retained handle's write settled.
+-    /// Success keeps the handle for the next plain Save; failure drops it
+-    /// (the task already downloaded a copy — note that in the command line,
+-    /// and re-pick on the next save instead of failing the same way again).
++    /// The host transaction settled. A cancelled or failed delivery keeps
++    /// the existing path, dirty state and recovery snapshot intact.
+     #[cfg(target_arch = "wasm32")]
+     pub(super) fn on_web_save_written(
+         &mut self,
+@@ -3342,10 +3317,10 @@ impl OpenCADStudio {
+     ) -> Task<Message> {
+         if let Err(error) = result {
+             crate::io::fs_access::drop_handle(tab_id);
+-            self.command_line.push_error(
+-                crate::tf!("In-place save failed ({error}); a copy was downloaded instead")
+-                    .as_ref(),
+-            );
++            crate::io::fs_access::end_web_save(tab_id);
++            self.command_line
++                .push_error(crate::tf!("Save failed: {error}").as_ref());
++            return self.finish_web_save(false);
+         }
+         self.finalize_web_save(
+             tab_id,
+@@ -3423,12 +3398,12 @@ impl OpenCADStudio {
+             .as_ref()
+             .map(|path| path.to_string_lossy().into_owned())
+             .unwrap_or_default();
+-        if self.web_autosave_in_flight {
++        if snapshot_is_current && self.web_autosave_in_flight {
+             self.web_autosave_clear_after.push(autosave_key);
+             if !new_key.is_empty() {
+                 self.web_autosave_clear_after.push(new_key);
+             }
+-        } else {
++        } else if snapshot_is_current {
+             recent_task = Task::batch([
+                 recent_task,
+                 Task::perform(
+@@ -3458,7 +3433,16 @@ impl OpenCADStudio {
+                     .take_if(|pending| matches!(pending, crate::app::PendingClose::Tab(_)))
+                 {
+                     let continuation = self.update(Message::TabClose(tab_id));
+-                    let rest = self.continue_tab_close_queue();
++                    // A drawing changed while awaiting authorization must
++                    // keep the fresh unsaved prompt. Do not replace that
++                    // pending close with the next document in a close-all.
++                    let rest = if self.pending_close.is_none()
++                        && self.pending_block_close.is_none()
++                    {
++                        self.continue_tab_close_queue()
++                    } else {
++                        Task::none()
++                    };
+                     return Task::batch([continuation, rest]);
+                 }
+             } else if matches!(self.pending_close, Some(crate::app::PendingClose::Quit)) {
+@@ -4253,15 +4237,10 @@ impl OpenCADStudio {
+             // capture → serialize → write/download chain at a time. The
+             // window is seconds, so refuse rather than queue — same
+             // localized message the native flow shows.
+-            if let Some(busy_tab) = crate::io::fs_access::web_save_in_flight() {
+-                if self.tabs.iter().any(|tab| tab.id == busy_tab) {
+-                    self.command_line
+-                        .push_info(crate::t!("Save already running for this drawing.").as_ref());
+-                    return Task::none();
+-                }
+-                // Stale marker (its tab closed before the save could
+-                // settle): clear it instead of blocking every later save.
+-                crate::io::fs_access::end_web_save(busy_tab);
++            if crate::io::fs_access::web_save_in_flight().is_some() {
++                self.command_line
++                    .push_info(crate::t!("Save already running for this drawing.").as_ref());
++                return Task::none();
+             }
+             self.sync_view_state_for_save(i);
+             self.stamp_header_sysvars(i);
+@@ -4358,6 +4337,12 @@ impl OpenCADStudio {
+     }
+ 
+     pub(super) fn on_save_dialog_confirm(&mut self) -> Task<Message> {
++        #[cfg(target_arch = "wasm32")]
++        if crate::io::fs_access::web_save_in_flight().is_some() {
++            self.command_line
++                .push_info(crate::t!("Save already running for this drawing.").as_ref());
++            return Task::none();
++        }
+         let (ext, version) = crate::io::parse_save_format(&self.save_dialog_format);
+         // Warn before a lossy Save-As that would drop unsupported
+         // (AEC / application) objects kept only as verbatim
+@@ -4513,6 +4498,11 @@ impl OpenCADStudio {
+         ext: String,
+         version: document::DxfVersion,
+     ) -> Task<Message> {
++        if crate::io::fs_access::web_save_in_flight().is_some() {
++            self.command_line
++                .push_info(crate::t!("Save already running for this drawing.").as_ref());
++            return Task::none();
++        }
+         if !self.conversion_loss_allowed {
+             let tab = self.tabs.iter().position(|tab| tab.id == tab_id);
+             if let Some(losses) =
+@@ -6183,10 +6173,18 @@ impl OpenCADStudio {
+     where
+         F: FnOnce() -> Result<String, String> + Send + 'static,
+     {
+-        if background {
+-            background_task(crate::t!("Print all"), work, Message::PrintAllFinished)
+-        } else {
+-            Task::done(Message::PrintAllFinished(work()))
++        #[cfg(target_arch = "wasm32")]
++        {
++            let _ = background;
++            Task::perform(crate::sys::with_acknowledged_exports(work), Message::PrintAllFinished)
++        }
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            if background {
++                background_task(crate::t!("Print all"), work, Message::PrintAllFinished)
++            } else {
++                Task::done(Message::PrintAllFinished(work()))
++            }
+         }
+     }
+ 
+@@ -6194,14 +6192,24 @@ impl OpenCADStudio {
+     where
+         F: FnOnce() -> Result<String, String> + Send + 'static,
+     {
+-        if background {
+-            background_task(crate::t!("Plot"), work, move |result| {
++        #[cfg(target_arch = "wasm32")]
++        {
++            let _ = background;
++            Task::perform(crate::sys::with_acknowledged_exports(work), move |result| {
+                 Message::BackgroundIoFinished(result, reopen_plot)
+             })
+-        } else {
+-            let result = work();
+-            self.report_plot_result(result, reopen_plot);
+-            Task::none()
++        }
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            if background {
++                background_task(crate::t!("Plot"), work, move |result| {
++                    Message::BackgroundIoFinished(result, reopen_plot)
++                })
++            } else {
++                let result = work();
++                self.report_plot_result(result, reopen_plot);
++                Task::none()
++            }
+         }
+     }
+ 
+diff --git a/src/app/update/mod.rs b/src/app/update/mod.rs
+index c959c05..a76baf7 100644
+--- a/src/app/update/mod.rs
++++ b/src/app/update/mod.rs
+@@ -1362,8 +1362,11 @@ impl OpenCADStudio {
+                 Task::none()
+             }
+             Message::ControlScreenshot(path, screenshot) => {
+-                self.control_screenshot(path, screenshot);
+-                Task::none()
++                self.control_screenshot(path, screenshot)
++            }
++            #[cfg(target_arch = "wasm32")]
++            Message::ControlScreenshotExported(id, result) => {
++                self.on_control_screenshot_exported(&id, result)
+             }
+             Message::ControlCaptureFrame { redrew } => self.on_control_capture_frame(redrew),
+             Message::Graph(message) => self.on_graph(message),
+@@ -2543,6 +2546,31 @@ impl OpenCADStudio {
+             Message::DataLinkDelete => self.on_data_link_delete(),
+             Message::DataLinkInsert => self.on_data_link_insert(),
+             Message::DataLinkClose => self.on_data_link_close(),
++            // Freeze the extraction inputs until its captured settings and
++            // output have both been delivered. Closing the dialog remains
++            // possible; a late completion never opens or closes another one.
++            #[cfg(target_arch = "wasm32")]
++            Message::DataExtractionOpen
++            | Message::DataExtractionField(_)
++            | Message::DataExtractionBack
++            | Message::DataExtractionNext
++            | Message::DataExtractionBrowseSettings
++            | Message::DataExtractionBrowseSettingsResult(_)
++            | Message::DataExtractionAddDrawings
++            | Message::DataExtractionAddDrawingsResult(_)
++            | Message::DataExtractionAddFolder
++            | Message::DataExtractionAddFolderResult(_)
++            | Message::DataExtractionClearSources
++            | Message::DataExtractionBrowseOutput
++            | Message::DataExtractionBrowseOutputResult(_)
++            | Message::DataExtractionFinish
++                if self.data_extraction_export_pending =>
++            {
++                self.command_line.push_info(
++                    "Aguarde a confirmação da exportação para continuar a extração.",
++                );
++                Task::none()
++            }
+             Message::DataExtractionOpen => {
+                 self.open_data_extraction();
+                 Task::none()
+@@ -2575,6 +2603,10 @@ impl OpenCADStudio {
+                 self.on_data_extraction_browse_output_result(path)
+             }
+             Message::DataExtractionFinish => self.on_data_extraction_finish(),
++            #[cfg(target_arch = "wasm32")]
++            Message::DataExtractionExportFinished { tab_id, result } => {
++                self.on_data_extraction_export_finished(tab_id, result)
++            }
+             Message::DataExtractionSaveDrawing => self.on_data_extraction_save_drawing(),
+             Message::DataExtractionSaveDrawingResult(path) => {
+                 self.on_data_extraction_save_drawing_result(path)
+@@ -2603,27 +2635,40 @@ impl OpenCADStudio {
+                     .file_name()
+                     .map(|n| n.to_string_lossy().into_owned())
+                     .unwrap_or_else(|| path.to_string_lossy().into_owned());
+-                // The browser has no writable path behind the picked name:
+-                // the CSV leaves as a download instead of an fs::write.
++                // The browser has no writable path behind the picked name.
++                // Wait for the host before reporting a successful CSV export.
+                 #[cfg(target_arch = "wasm32")]
+-                let write_result: Result<(), String> = {
+-                    crate::sys::download_bytes(&fname, csv.as_bytes());
+-                    Ok(())
+-                };
++                {
++                    let rows = csv.lines().count().saturating_sub(1);
++                    let message =
++                        crate::tf!("DATAEXTRACTION  {rows} rows → \"{fname}\"").into_owned();
++                    Task::perform(
++                        async move {
++                            crate::sys::download_bytes_async(&fname, csv.as_bytes())
++                                .await
++                                .map_err(|error| {
++                                    crate::tf!("DATAEXTRACTION: write failed: {error}").into_owned()
++                                })?;
++                            Ok(message)
++                        },
++                        |result| Message::BackgroundIoFinished(result, false),
++                    )
++                }
+                 #[cfg(not(target_arch = "wasm32"))]
+-                let write_result = std::fs::write(&path, csv.as_bytes()).map_err(|e| e.to_string());
+-                match write_result {
+-                    Ok(()) => {
+-                        let rows = csv.lines().count().saturating_sub(1);
+-                        self.command_line.push_output(
+-                            crate::tf!("DATAEXTRACTION  {rows} rows → \"{fname}\"").as_ref(),
+-                        );
++                {
++                    match std::fs::write(&path, csv.as_bytes()) {
++                        Ok(()) => {
++                            let rows = csv.lines().count().saturating_sub(1);
++                            self.command_line.push_output(
++                                crate::tf!("DATAEXTRACTION  {rows} rows → \"{fname}\"").as_ref(),
++                            );
++                        }
++                        Err(e) => self
++                            .command_line
++                            .push_error(crate::tf!("DATAEXTRACTION: write failed: {e}").as_ref()),
+                     }
+-                    Err(e) => self
+-                        .command_line
+-                        .push_error(crate::tf!("DATAEXTRACTION: write failed: {e}").as_ref()),
++                    Task::none()
+                 }
+-                Task::none()
+             }
+ 
+             Message::DataExtractionSaveResult(_, None) => Task::none(),
+@@ -2889,6 +2934,13 @@ impl OpenCADStudio {
+             Message::ExtractionOutdated(choice) => self.on_extraction_outdated(choice),
+ 
+             Message::SaveAs => {
++                #[cfg(target_arch = "wasm32")]
++                if crate::io::fs_access::web_save_in_flight().is_some() {
++                    self.command_line.push_info(
++                        crate::t!("Save already running for this drawing.").as_ref(),
++                    );
++                    return Task::none();
++                }
+                 if self.read_only {
+                     self.command_line.push_error(
+                         crate::t!("Read-only session (--read-only): saving is disabled.").as_ref(),
+@@ -10841,6 +10893,15 @@ impl OpenCADStudio {
+             }
+             Message::KeyListExportTo(path, table) => {
+                 if let Some(path) = path {
++                    #[cfg(target_arch = "wasm32")]
++                    return Task::perform(
++                        crate::sys::with_acknowledged_exports(move || {
++                            crate::app::annotation_data::write_extraction_file(&path, &table)?;
++                            Ok(crate::tf!("Exported: {}", path.display()).into_owned())
++                        }),
++                        |result| Message::BackgroundIoFinished(result, false),
++                    );
++                    #[cfg(not(target_arch = "wasm32"))]
+                     match crate::app::annotation_data::write_extraction_file(&path, &table) {
+                         Ok(()) => self
+                             .command_line
+diff --git a/src/app/view/mod.rs b/src/app/view/mod.rs
+index 78e1926..766caf9 100644
+--- a/src/app/view/mod.rs
++++ b/src/app/view/mod.rs
+@@ -4376,700 +4376,100 @@ fn start_page_content<'a>(
+     active: super::StartSection,
+     templates: Option<&'a [std::path::PathBuf]>,
+ ) -> Element<'a, Message> {
+-    let headline = text("Open CAD Studio").size(40).style(start_primary_style);
+-
+-    // Plain outlined button (Open / New / Help / Contribute).
+-    let outline_btn = |label: String, msg: Message| {
+-        button(text(label).size(14))
+-            .on_press(msg)
+-            .padding([10, 22])
+-            .style(move |theme: &Theme, status| {
+-                let palette = theme.palette();
+-                let pair = match status {
+-                    button::Status::Hovered => palette.background.strong,
+-                    _ => palette.background.weak,
+-                };
+-                start_action_shape(button::Style {
+-                    background: Some(Background::Color(pair.color)),
+-                    text_color: pair.text,
+-                    border: Border {
+-                        color: palette.background.neutral.color,
+-                        width: 1.0,
+-                        ..Default::default()
+-                    },
+-                    ..Default::default()
+-                })
+-            })
+-    };
+-
+-    // Donate — the prominent call-to-action, using the theme's danger role.
+-    let donate_btn = {
+-        button(
+-            row![
+-                crate::ui::icons::themed_danger_text(crate::ui::icons::HEART, 14.0),
+-                text(crate::tr!("start", "donate")).size(14),
+-            ]
+-            .spacing(5)
+-            .align_y(iced::Center),
+-        )
+-        .on_press(Message::RibbonToolClick {
+-            tool_id: "DONATE".to_string(),
+-            event: crate::modules::ModuleEvent::Command("DONATE".to_string()),
+-        })
+-        .padding([10, 22])
+-        .style(|theme: &Theme, status| start_action_shape(button::danger(theme, status)))
++    let _ = (
++        patrons,
++        videos,
++        videos_loading,
++        video_thumbs,
++        discussions,
++        discussions_loading,
++        action_width_out,
++        active,
++        templates,
++    );
++    let action = |label: String, message: Message| {
++        button(text(label).size(15))
++            .on_press(message)
++            .padding([12, 24])
++            .style(|theme: &Theme, status| start_action_shape(button::primary(theme, status)))
+     };
+-
+-    let primary_row = WrapFlow::new(vec![
+-        outline_btn(crate::tr!("start", "new-drawing"), Message::TabNew).into(),
+-        // The templates beside the default one, then Browse (NEW asks for a
+-        // .dwt, .dwg or .dxf); straight to NEW when there is no such folder.
+-        {
+-            let head = outline_btn(
+-                crate::tr!("start", "new-from-template"),
+-                Message::StartTemplates(templates.is_none()),
+-            );
+-            match templates {
+-                Some(templates) => {
+-                    let mut list = column![].spacing(1);
+-                    for path in templates {
+-                        let name = path
+-                            .file_stem()
+-                            .map(|stem| stem.to_string_lossy().into_owned())
+-                            .unwrap_or_default();
+-                        list = list.push(
+-                            button(text(name).size(13))
+-                                .on_press(Message::NewFromTemplate(Some(path.clone())))
+-                                .style(crate::ui::color_select::list_row_style)
+-                                .padding([4, 10])
+-                                .width(Fill),
+-                        );
+-                    }
+-                    list = list.push(
+-                        button(text(crate::t!("Browse...")).size(13))
+-                            .on_press(Message::RibbonToolClick {
+-                                tool_id: "NEW".to_string(),
+-                                event: crate::modules::ModuleEvent::Command("NEW".to_string()),
+-                            })
+-                            .style(crate::ui::color_select::list_row_style)
+-                            .padding([4, 10])
+-                            .width(Fill),
+-                    );
+-                    let height = ((templates.len() + 1) as f32 * 26.0).min(360.0);
+-                    let popup = container(scrollable(list).height(height))
+-                        .style(crate::ui::color_select::popup_panel_style)
+-                        .padding(2);
+-                    crate::ui::drop_down_fit::drop_down_fit(
+-                        iced_aw::DropDown::new(head, popup, true)
+-                            .width(iced::Length::Fixed(260.0))
+-                            .alignment(iced_aw::drop_down::Alignment::Bottom)
+-                            .offset(2.0)
+-                            .on_dismiss(Message::StartTemplates(false)),
+-                    )
+-                }
+-                None => head.into(),
+-            }
+-        },
+-        outline_btn(crate::tr!("start", "open-file"), Message::OpenFile).into(),
+-        donate_btn.into(),
+-    ])
+-    .spacing_x(12.0)
+-    .row_h(48.0)
+-    .report_natural_width(action_width_out.clone());
+-
+-    #[cfg_attr(target_arch = "wasm32", allow(unused_mut))]
+-    let mut secondary_items: Vec<Element<'a, Message>> = vec![
+-        outline_btn(
+-            crate::tr!("start", "send-feedback"),
++    let actions = Row::with_children(vec![
++        action(crate::tr!("start", "open-file"), Message::OpenFile).into(),
++        action(crate::tr!("start", "new-drawing"), Message::TabNew).into(),
++        action(
++            crate::tr!("start", "new-from-template"),
+             Message::RibbonToolClick {
+-                tool_id: "REPORT".to_string(),
+-                event: crate::modules::ModuleEvent::Command("REPORT".to_string()),
++                tool_id: "NEW".to_string(),
++                event: crate::modules::ModuleEvent::Command("NEW".to_string()),
+             },
+         )
+         .into(),
+-        outline_btn(crate::tr!("action", "options"), Message::OptionsOpen).into(),
+-    ];
+-    secondary_items
+-        .push(outline_btn(crate::tr!("action", "plugins"), Message::PluginManagerOpen).into());
+-    // The web build is already in the browser, so only the desktop offers a
+-    // link to the web version.
+-    #[cfg(not(target_arch = "wasm32"))]
+-    {
+-        // Filled with the active theme's primary colour.
+-        secondary_items.push(
+-            button(text(crate::t!("OCS Web")).size(14))
+-                .on_press(Message::RibbonToolClick {
+-                    tool_id: "WEBVERSION".to_string(),
+-                    event: crate::modules::ModuleEvent::Command("WEBVERSION".to_string()),
+-                })
+-                .padding([10, 22])
+-                .style(|theme: &Theme, status| start_action_shape(button::primary(theme, status)))
+-                .into(),
+-        );
+-    }
+-    #[cfg(target_arch = "wasm32")]
+-    secondary_items.push(
+-        button(text(crate::t!("OCS Desktop")).size(14))
++    ])
++    .spacing(12)
++    .wrap()
++    .vertical_spacing(12);
++    let links = Row::with_children(vec![
++        button(text(crate::tr!("action", "options")).size(13))
++            .on_press(Message::OptionsOpen)
++            .padding([10, 18])
++            .into(),
++        button(text("Sobre e licenças").size(13))
+             .on_press(Message::OpenUrl(
+-                "https://github.com/HakanSeven12/OpenCADStudio/releases/latest".to_string(),
++                "/cad/editor/licencas/fontes-e-codigo.txt".to_string(),
+             ))
+-            .padding([10, 22])
+-            .style(|theme: &Theme, status| start_action_shape(button::primary(theme, status)))
++            .padding([10, 18])
+             .into(),
+-    );
+-    let secondary_row = WrapFlow::new(secondary_items)
+-        .spacing_x(12.0)
+-        .row_h(44.0)
+-        .report_natural_width(action_width_out.clone());
+-
+-    let reddit_btn = button(
+-        row![
+-            iced::widget::svg(iced::widget::svg::Handle::from_memory(include_bytes!(
+-                "../../../assets/icons/reddit.svg"
+-            )))
+-            .width(20)
+-            .height(20),
+-            text("r/OpenCADStudio").size(14),
++    ])
++    .spacing(8)
++    .wrap();
++    let logo_width = (avail_w - 88.0).clamp(160.0, 320.0);
++    let welcome = container(
++        scrollable(column![
++            crate::ui::icons::logo(true, logo_width, logo_width * 0.26),
++            text("Desenhe. Edite. Continue seu projeto.").size(26),
++            text("Abra um DWG ou DXF, ou comece um novo desenho.")
++                .size(16)
++                .style(start_muted_style),
++            Space::new().height(12),
++            actions,
++            links,
+         ]
+-        .spacing(7)
+-        .align_y(iced::Center),
++        .spacing(18)
++        .align_x(iced::Center)).height(Fill),
+     )
+-    .on_press(Message::OpenUrl(
+-        "https://www.reddit.com/r/OpenCADStudio/".to_string(),
+-    ))
+-    .padding([10, 22])
+-    .style(|theme: &Theme, status| {
+-        let palette = theme.palette();
+-        let pair = match status {
+-            button::Status::Hovered => palette.background.strong,
+-            _ => palette.background.weak,
+-        };
+-        start_action_shape(button::Style {
+-            background: Some(Background::Color(pair.color)),
+-            text_color: pair.text,
+-            border: Border {
+-                color: Color::from_rgb8(255, 69, 0),
+-                width: 1.0,
+-                ..Default::default()
+-            },
+-            ..Default::default()
+-        })
+-    });
+-
+-    let sponsors = column![
+-        text(crate::tr!("start", "sponsors")).size(15),
+-        mouse_area(
+-            container(
+-                iced::widget::svg(iced::widget::svg::Handle::from_memory(include_bytes!(
+-                    "../../../assets/sponsors/openaec-logo-dark-on-light.svg"
+-                )))
+-                .width(Fill)
+-                .height(iced::Length::Fixed(120.0))
+-                .content_fit(iced::ContentFit::Contain),
+-            )
+-            .width(Fill.max(300.0)),
+-        )
+-        .interaction(iced::mouse::Interaction::Pointer)
+-        .on_press(Message::OpenUrl("https://open-aec.com/".to_string())),
+-    ]
+-    .spacing(10)
+-    .align_x(iced::alignment::Horizontal::Center)
+-    .width(Fill);
+-
+-    let content = column![
+-        Space::new().height(iced::Length::Fixed(28.0)),
+-        container(headline).center_x(Fill),
+-        Space::new().height(iced::Length::Fixed(22.0)),
+-        container(primary_row).center_x(Fill),
+-        Space::new().height(iced::Length::Fixed(10.0)),
+-        container(secondary_row).center_x(Fill),
+-        Space::new().height(iced::Length::Fixed(10.0)),
+-        container(reddit_btn).center_x(Fill),
+-        Space::new().height(iced::Length::Fixed(20.0)),
+-        sponsors,
+-        Space::new().height(iced::Length::Fixed(52.0)),
+-    ]
+-    .spacing(0)
++    .padding(28)
++    .center_x(Fill)
++    .center_y(Fill)
+     .width(Fill)
+     .height(Fill);
+-
+-    // Collapse side panels one at a time as width shrinks: Tutorials first,
+-    // then Discussions, Supporters, and Recent Documents last.
+-    #[derive(Clone, Copy, PartialEq, Eq)]
+-    enum StartLayout {
+-        AllPanels,
+-        WithoutVideos,
+-        WithoutVideosAndDiscussions,
+-        RecentAndWelcome,
+-        Compact,
+-    }
+-    let panel_w = 280.0f32;
+-    const VIDEO_PANEL_PADDING: f32 = 16.0;
+-    const VIDEO_SCROLL_GUTTER: f32 = 14.0;
+-    let measured_action_w =
+-        f32::from_bits(action_width_out.load(std::sync::atomic::Ordering::Relaxed));
+-    let welcome_wide_min = measured_action_w.max(360.0);
+-    let avail = (avail_w - 16.0).max(0.0); // minus the page's l/r padding
+-    let panel_widths = [panel_w; 4];
+-    let mut panel_visible = [true, true, true, true];
+-    let required_width = |visible: &[bool; 4]| {
+-        let visible_panels = visible.iter().filter(|&&shown| shown).count();
+-        welcome_wide_min
+-            + panel_widths
+-                .iter()
+-                .zip(visible)
+-                .filter_map(|(width, shown)| shown.then_some(*width))
+-                .sum::<f32>()
+-            + visible_panels as f32 * 16.0
+-    };
+-    // Re-measure after every collapse. There are no independent breakpoints:
+-    // the available width and the panels' preferred widths decide the state.
+-    for panel in [1usize, 2, 3, 0] {
+-        if required_width(&panel_visible) <= avail {
+-            break;
+-        }
+-        panel_visible[panel] = false;
+-    }
+-    let start_layout = match panel_visible {
+-        [true, true, true, true] => StartLayout::AllPanels,
+-        [true, false, true, true] => StartLayout::WithoutVideos,
+-        [true, false, false, true] => StartLayout::WithoutVideosAndDiscussions,
+-        [true, false, false, false] => StartLayout::RecentAndWelcome,
+-        _ => StartLayout::Compact,
+-    };
+-
+     let recent = recent_files_panel(
+         recents,
+         thumbs,
+         recent_limit,
+         recent_limit_input,
+         recent_view,
+-        match start_layout {
+-            StartLayout::AllPanels
+-            | StartLayout::WithoutVideos
+-            | StartLayout::WithoutVideosAndDiscussions
+-            | StartLayout::RecentAndWelcome => iced::Length::Fixed(panel_w),
+-            StartLayout::Compact => iced::Length::Fill,
++        if avail_w >= 900.0 {
++            iced::Length::Fixed(280.0)
++        } else {
++            Fill
+         },
+     );
+-    let welcome = container(content).width(Fill).height(Fill);
+-
+-    // Tutorial-videos rail: the official playlist, fetched at boot (cached on
+-    // disk) — thumbnail card + title per video, click opens the browser.
+-    let videos_panel: Element<'a, Message> = {
+-        // Derive the 16:9 cover box from the actual shared list width so the
+-        // whole thumbnail remains visible when that width changes.
+-        let thumb_h = (panel_w - VIDEO_PANEL_PADDING * 2.0 - VIDEO_SCROLL_GUTTER) * 9.0 / 16.0;
+-        let mut list = column![text(crate::tr!("start", "tutorials")).size(15)]
+-            .spacing(10)
+-            .width(Fill)
+-            // Keep the scrollbar off the thumbnails.
+-            .padding(iced::Padding {
+-                right: VIDEO_SCROLL_GUTTER,
+-                ..iced::Padding::ZERO
+-            });
+-        for v in videos {
+-            let mut card = column![].spacing(6).width(Fill);
+-            if let Some(handle) = video_thumbs.get(&v.id) {
+-                card = card.push(
+-                    container(
+-                        iced::widget::image(handle.clone())
+-                            .width(Fill)
+-                            .height(iced::Length::Fixed(thumb_h))
+-                            .content_fit(iced::ContentFit::Contain),
+-                    )
+-                    .width(Fill)
+-                    .height(iced::Length::Fixed(thumb_h))
+-                    .style(|theme: &Theme| container::Style {
+-                        border: Border {
+-                            color: theme.palette().background.neutral.color,
+-                            width: 1.0,
+-                            radius: 6.0.into(),
+-                        },
+-                        ..Default::default()
+-                    })
+-                    .clip(true),
+-                );
+-            }
+-            card = card.push(text(v.title.clone()).size(12).style(start_muted_style));
+-            list = list.push(
+-                mouse_area(card)
+-                    .interaction(iced::mouse::Interaction::Pointer)
+-                    .on_press(Message::OpenUrl(crate::videos::watch_url(&v.id))),
+-            );
+-        }
+-        if videos.is_empty() {
+-            let note = if videos_loading {
+-                crate::tr!("start", "loading-videos")
+-            } else {
+-                crate::tr!("start", "videos-online")
+-            };
+-            list = list.push(text(note).size(12).style(start_muted_style));
+-        }
+-        let playlist_btn = mouse_area(
+-            container(text(crate::tr!("start", "open-playlist")).size(12))
+-                .padding([6, 10])
+-                .width(Fill)
+-                .center_x(Fill)
+-                .style(|theme: &Theme| {
+-                    let pair = theme.palette().danger.base;
+-                    container::Style {
+-                        background: Some(Background::Color(pair.color)),
+-                        border: Border {
+-                            color: Color::TRANSPARENT,
+-                            width: 0.0,
+-                            radius: 6.0.into(),
+-                        },
+-                        text_color: Some(pair.text),
+-                        ..Default::default()
+-                    }
+-                }),
+-        )
+-        .interaction(iced::mouse::Interaction::Pointer)
+-        .on_press(Message::OpenUrl(crate::videos::PLAYLIST_URL.to_string()));
+-        container(column![
+-            iced::widget::scrollable(list).height(Fill),
+-            Space::new().height(iced::Length::Fixed(12.0)),
+-            playlist_btn,
+-        ])
+-        .width(match start_layout {
+-            StartLayout::AllPanels => iced::Length::Fixed(panel_w),
+-            StartLayout::WithoutVideos
+-            | StartLayout::WithoutVideosAndDiscussions
+-            | StartLayout::RecentAndWelcome
+-            | StartLayout::Compact => iced::Length::Fill,
+-        })
+-        .height(Fill)
+-        .padding(VIDEO_PANEL_PADDING)
+-        .style(|theme: &Theme| {
+-            let palette = theme.palette();
+-            container::Style {
+-                background: Some(Background::Color(palette.background.weak.color)),
+-                border: Border {
+-                    color: palette.background.neutral.color,
+-                    width: 1.0,
+-                    radius: 8.0.into(),
+-                },
+-                ..Default::default()
+-            }
+-        })
+-        .into()
+-    };
+-
+-    // GitHub Discussions rail. Native builds refresh from GitHub's public feed;
+-    // web builds read the CI-generated snapshot. Both sources mark pinned
+-    // discussions and sort them before the rest of the list.
+-    let discussions_panel: Element<'a, Message> = {
+-        let mut list = column![text(crate::tr!("start", "discussions")).size(15)]
+-            .spacing(8)
+-            .width(Fill);
+-        for discussion in discussions {
+-            let mut meta = iced::widget::row![text(format!("#{}", discussion.number))
+-                .size(10)
+-                .style(start_muted_style),]
+-            .spacing(6)
+-            .align_y(iced::Center);
+-            if discussion.pinned {
+-                meta = meta.push(
+-                    text(crate::tr!("start", "pinned"))
+-                        .size(10)
+-                        .style(start_primary_style),
+-                );
+-            }
+-            if !discussion.author.is_empty() {
+-                meta = meta.push(
+-                    text(format!("@{}", discussion.author))
+-                        .size(10)
+-                        .style(start_muted_style),
+-                );
+-            }
+-            let card =
+-                container(column![text(discussion.title.clone()).size(12), meta,].spacing(4))
+-                    .padding([8, 10])
+-                    .width(Fill)
+-                    .style(|theme: &Theme| {
+-                        let palette = theme.palette();
+-                        container::Style {
+-                            background: Some(Background::Color(
+-                                palette.background.base.color.scale_alpha(0.42),
+-                            )),
+-                            border: Border {
+-                                color: palette.background.neutral.color,
+-                                width: 1.0,
+-                                radius: 6.0.into(),
+-                            },
+-                            ..Default::default()
+-                        }
+-                    });
+-            list = list.push(
+-                mouse_area(card)
+-                    .interaction(iced::mouse::Interaction::Pointer)
+-                    .on_press(Message::OpenUrl(discussion.url.clone())),
+-            );
+-        }
+-        if discussions.is_empty() {
+-            let note = if discussions_loading {
+-                crate::tr!("start", "loading-discussions")
+-            } else {
+-                crate::tr!("start", "discussions-online")
+-            };
+-            list = list.push(text(note).size(12).style(start_muted_style));
+-        }
+-        let open_btn = mouse_area(
+-            container(text(crate::tr!("start", "open-discussions")).size(12))
+-                .padding([6, 10])
+-                .width(Fill)
+-                .center_x(Fill)
+-                .style(|theme: &Theme| {
+-                    let pair = theme.palette().primary.base;
+-                    container::Style {
+-                        background: Some(Background::Color(pair.color)),
+-                        border: Border {
+-                            color: Color::TRANSPARENT,
+-                            width: 0.0,
+-                            radius: 6.0.into(),
+-                        },
+-                        text_color: Some(pair.text),
+-                        ..Default::default()
+-                    }
+-                }),
+-        )
+-        .interaction(iced::mouse::Interaction::Pointer)
+-        .on_press(Message::OpenUrl(
+-            crate::discussions::DISCUSSIONS_URL.to_string(),
+-        ));
+-        container(column![
+-            iced::widget::scrollable(list).height(Fill),
+-            Space::new().height(iced::Length::Fixed(12.0)),
+-            open_btn,
+-        ])
+-        .width(match start_layout {
+-            StartLayout::AllPanels | StartLayout::WithoutVideos => iced::Length::Fixed(panel_w),
+-            StartLayout::WithoutVideosAndDiscussions
+-            | StartLayout::RecentAndWelcome
+-            | StartLayout::Compact => iced::Length::Fill,
+-        })
+-        .height(Fill)
+-        .padding(16)
+-        .style(|theme: &Theme| {
+-            let palette = theme.palette();
+-            container::Style {
+-                background: Some(Background::Color(palette.background.weak.color)),
+-                border: Border {
+-                    color: palette.background.neutral.color,
+-                    width: 1.0,
+-                    radius: 8.0.into(),
+-                },
+-                ..Default::default()
+-            }
+-        })
+-        .into()
+-    };
+-
+-    // Right rail: Patreon supporters, fetched at boot. When the list is empty
+-    // (no token configured / offline) only the "Support on Patreon" button
+-    // shows, so the rail always invites support.
+-    let supporters: Element<'a, Message> = {
+-        let mut list = column![
+-            text(crate::tr!("start", "supporters")).size(15),
+-            Space::new().height(iced::Length::Fixed(12.0)),
+-        ]
+-        .spacing(6)
+-        .padding(iced::Padding {
+-            right: 12.0,
+-            ..iced::Padding::ZERO
+-        })
+-        .width(Fill);
+-        for (name, cents) in patrons {
+-            // Patreon payments are normalized to USD cents while the list is
+-            // generated; hand-maintained entries use USD cents as well.
+-            let amount = format!("${:.2}", *cents as f64 / 100.0);
+-            list = list.push(
+-                iced::widget::row![
+-                    text(name).size(12).style(start_muted_style).width(Fill),
+-                    text(amount).size(12).style(start_muted_style),
+-                ]
+-                .spacing(6),
+-            );
+-        }
+-        let support_btn = mouse_area(
+-            container(
+-                iced::widget::row![
+-                    crate::ui::icons::themed_danger_text(crate::ui::icons::HEART, 13.0),
+-                    text(crate::tr!("start", "support-on-patreon")).size(12),
+-                ]
+-                .spacing(6)
+-                .align_y(iced::Center),
+-            )
+-            .padding([6, 10])
+-            .width(Fill)
+-            .center_x(Fill)
+-            .style(|theme: &Theme| {
+-                let pair = theme.palette().danger.base;
+-                container::Style {
+-                    background: Some(Background::Color(pair.color)),
+-                    border: Border {
+-                        color: Color::TRANSPARENT,
+-                        width: 0.0,
+-                        radius: 6.0.into(),
+-                    },
+-                    text_color: Some(pair.text),
+-                    ..Default::default()
+-                }
+-            }),
+-        )
+-        .interaction(iced::mouse::Interaction::Pointer)
+-        .on_press(Message::OpenUrl(
+-            "https://patreon.com/HakanSeven12".to_string(),
+-        ));
+-        container(column![
+-            iced::widget::scrollable(list).height(Fill),
+-            Space::new().height(iced::Length::Fixed(12.0)),
+-            support_btn,
+-        ])
+-        .width(match start_layout {
+-            StartLayout::AllPanels
+-            | StartLayout::WithoutVideos
+-            | StartLayout::WithoutVideosAndDiscussions => iced::Length::Fixed(panel_w),
+-            StartLayout::RecentAndWelcome | StartLayout::Compact => iced::Length::Fill,
+-        })
+-        .height(Fill)
+-        .padding(20)
+-        .style(|theme: &Theme| {
+-            let palette = theme.palette();
+-            container::Style {
+-                background: Some(Background::Color(palette.background.weak.color)),
+-                border: Border {
+-                    color: palette.background.neutral.color,
+-                    width: 1.0,
+-                    radius: 8.0.into(),
+-                },
+-                ..Default::default()
+-            }
+-        })
+-        .into()
+-    };
+-
+-    let body: Element<'a, Message> = match start_layout {
+-        StartLayout::AllPanels => {
+-            iced::widget::row![recent, videos_panel, welcome, discussions_panel, supporters,]
+-                .spacing(16)
+-                .height(Fill)
+-                .into()
+-        }
+-        StartLayout::WithoutVideos => {
+-            iced::widget::row![recent, welcome, discussions_panel, supporters]
+-                .spacing(16)
+-                .height(Fill)
+-                .into()
+-        }
+-        StartLayout::WithoutVideosAndDiscussions => iced::widget::row![recent, welcome, supporters]
+-            .spacing(16)
+-            .height(Fill)
+-            .into(),
+-        StartLayout::RecentAndWelcome => iced::widget::row![recent, welcome]
+-            .spacing(16)
+-            .height(Fill)
+-            .into(),
+-        StartLayout::Compact => {
+-            let tab_btn = |label: String, section: super::StartSection| {
+-                let is_active = active == section;
+-                button(text(label).size(14))
+-                    .on_press(Message::StartSectionSelect(section))
+-                    .padding([8, 18])
+-                    .style(move |theme: &Theme, status| {
+-                        let palette = theme.palette();
+-                        let pair = match (is_active, status) {
+-                            (true, _) => Some(palette.primary.weak),
+-                            (false, button::Status::Hovered) => Some(palette.background.strong),
+-                            _ => None,
+-                        };
+-                        button::Style {
+-                            background: pair.map(|p| Background::Color(p.color)),
+-                            text_color: pair
+-                                .map(|p| p.text)
+-                                .unwrap_or(palette.background.base.text.scale_alpha(0.68)),
+-                            border: Border {
+-                                color: if is_active {
+-                                    palette.primary.base.color
+-                                } else {
+-                                    Color::TRANSPARENT
+-                                },
+-                                width: if is_active { 1.0 } else { 0.0 },
+-                                radius: 6.0.into(),
+-                            },
+-                            ..Default::default()
+-                        }
+-                    })
+-            };
+-            let tab_bar = Row::with_children(vec![
+-                tab_btn(
+-                    crate::tr!("start", "recent-files"),
+-                    super::StartSection::Recent,
+-                )
+-                .into(),
+-                tab_btn(crate::tr!("start", "videos"), super::StartSection::Videos).into(),
+-                tab_btn(crate::tr!("start", "welcome"), super::StartSection::Welcome).into(),
+-                tab_btn(
+-                    crate::tr!("start", "discussions"),
+-                    super::StartSection::Discussions,
+-                )
+-                .into(),
+-                tab_btn(
+-                    crate::tr!("start", "supporters"),
+-                    super::StartSection::Supporters,
+-                )
+-                .into(),
+-            ])
+-            .spacing(6.0)
+-            .align_y(iced::Center)
+-            .wrap()
+-            .vertical_spacing(0.0);
+-            let section_body: Element<'a, Message> = match active {
+-                super::StartSection::Recent => container(recent)
+-                    .width(Fill)
+-                    .height(Fill)
+-                    .center_x(Fill)
+-                    .into(),
+-                super::StartSection::Videos => container(videos_panel)
+-                    .width(Fill)
+-                    .height(Fill)
+-                    .center_x(Fill)
+-                    .into(),
+-                super::StartSection::Welcome => welcome.into(),
+-                super::StartSection::Discussions => container(discussions_panel)
+-                    .width(Fill)
+-                    .height(Fill)
+-                    .center_x(Fill)
+-                    .into(),
+-                super::StartSection::Supporters => container(supporters)
+-                    .width(Fill)
+-                    .height(Fill)
+-                    .center_x(Fill)
+-                    .into(),
+-            };
+-            column![
+-                container(tab_bar).center_x(Fill),
+-                Space::new().height(iced::Length::Fixed(12.0)),
+-                section_body,
+-            ]
+-            .width(Fill)
++    let body: Element<'a, Message> = if avail_w >= 900.0 {
++        row![recent, welcome].spacing(20).height(Fill).into()
++    } else if recents.is_empty() {
++        welcome.into()
++    } else {
++        column![welcome, container(recent).height(220)]
++            .spacing(12)
+             .height(Fill)
+             .into()
+-        }
+     };
+-
+     container(body)
+         .style(|theme: &Theme| container::Style {
+             background: Some(Background::Color(theme.palette().background.base.color)),
+             ..Default::default()
+         })
+-        .padding(iced::Padding {
+-            top: 16.0,
+-            right: 8.0,
+-            bottom: 16.0,
+-            left: 8.0,
+-        })
++        .padding(16)
+         .width(Fill)
+         .height(Fill)
+         .into()
+diff --git a/src/io/fs_access.rs b/src/io/fs_access.rs
+index 935cab1..3d60762 100644
+--- a/src/io/fs_access.rs
++++ b/src/io/fs_access.rs
+@@ -234,13 +234,10 @@ mod browser {
+         PENDING_SAVE_EXTS.with(|exts| exts.borrow_mut().remove(&tab_id))
+     }
+ 
+-    /// Feature-detect `showSaveFilePicker` — never assume it: Firefox and
+-    /// Safari keep the download flow precisely because this returns false.
++    /// CONFENGE exports must pass through the host's acknowledged transaction.
++    /// Direct File System Access writes would bypass that transaction.
+     pub fn supported() -> bool {
+-        web_sys::window().is_some_and(|window| {
+-            js_sys::Reflect::has(window.as_ref(), &JsValue::from_str("showSaveFilePicker"))
+-                .unwrap_or(false)
+-        })
++        false
+     }
+ 
+     /// Open `showSaveFilePicker` for `tab_id` and retain the chosen
+@@ -262,6 +259,9 @@ mod browser {
+         suggested_name: &str,
+         ext: &str,
+     ) -> Result<Option<String>, String> {
++        if !supported() {
++            return Err("A exportação deve ser confirmada pela página da CONFENGE.".to_string());
++        }
+         let window = web_sys::window().ok_or_else(|| "browser window unavailable".to_string())?;
+         // Dynamic call — see the module docs for why the typed web-sys
+         // binding (`show_save_file_picker_with_options`) is not used.
+@@ -316,6 +316,9 @@ mod browser {
+     /// released — otherwise every later write to the same handle would fail
+     /// the same way for the rest of the session.
+     pub async fn write_handle(tab_id: u64, bytes: &[u8]) -> Result<(), String> {
++        if !supported() {
++            return Err("A exportação deve ser confirmada pela página da CONFENGE.".to_string());
++        }
+         let handle = SAVE_HANDLES.with(|handles| {
+             handles
+                 .borrow()
+diff --git a/src/sys.rs b/src/sys.rs
+index 33e6a72..011f6f2 100644
+--- a/src/sys.rs
++++ b/src/sys.rs
+@@ -716,40 +716,112 @@ pub async fn pick_file_with_filter(
+     Some((handle_path(&handle), index))
+ }
+ 
+-/// Trigger a browser download of `bytes` as `name`. Builds a Blob, points a
+-/// hidden `<a download>` at it and clicks it programmatically — because this
+-/// runs inside the Save button's click (a user gesture), the file downloads
+-/// immediately with no extra "click to download" link. Web only.
++/// Queue an export through the CONFENGE host. This compatibility entry point
++/// is for exports that do not change the drawing's saved/dirty state. Save
++/// operations must await `download_bytes_async` before committing success.
++/// There is deliberately no direct-download fallback in this hosted build.
+ #[cfg(target_arch = "wasm32")]
+ pub fn download_bytes(name: &str, bytes: &[u8]) {
+-    use wasm_bindgen::JsCast;
+-    let Some(window) = web_sys::window() else {
+-        return;
+-    };
+-    let array = js_sys::Uint8Array::from(bytes);
+-    // A host page that embeds the app takes the file instead of a download.
+-    if let Some(hook) = save_hook() {
+-        let _ = hook.call2(&window, &wasm_bindgen::JsValue::from_str(name), &array);
++    let mut export = Some((name.to_owned(), bytes.to_vec()));
++    let captured = HOST_EXPORT_CAPTURE.with(|capture| {
++        if let Some(pending) = capture.borrow_mut().as_mut() {
++            pending.push(export.take().expect("export is present"));
++            true
++        } else {
++            false
++        }
++    });
++    if captured {
+         return;
+     }
+-    let Some(document) = window.document() else {
+-        return;
+-    };
+-    let parts = js_sys::Array::new();
+-    parts.push(&array.buffer());
+-    let Ok(blob) = web_sys::Blob::new_with_u8_array_sequence(&parts) else {
+-        return;
+-    };
+-    let Ok(url) = web_sys::Url::create_object_url_with_blob(&blob) else {
+-        return;
+-    };
+-    if let Ok(el) = document.create_element("a") {
+-        let a: web_sys::HtmlAnchorElement = el.unchecked_into();
+-        a.set_href(&url);
+-        a.set_download(name);
+-        a.click();
++    let (name, bytes) = export.expect("uncaptured export is present");
++    wasm_bindgen_futures::spawn_local(async move {
++        if let Err(error) = download_bytes_async(&name, &bytes).await {
++            // The host displays the actual wallet/download outcome. Keep a
++            // diagnostic here without ever reporting an unsuccessful export
++            // as a saved document or silently starting a second download.
++            web_sys::console::warn_1(&wasm_bindgen::JsValue::from_str(&error));
++        }
++    });
++}
++
++#[cfg(target_arch = "wasm32")]
++thread_local! {
++    // PDF and mesh writers are synchronous, but their completion messages
++    // must wait for asynchronous host delivery. Collect their byte outputs
++    // while they run, then release this slot before awaiting any host reply.
++    static HOST_EXPORT_CAPTURE: std::cell::RefCell<Option<Vec<(String, Vec<u8>)>>> =
++        const { std::cell::RefCell::new(None) };
++}
++
++/// Run a synchronous exporter and acknowledge every file it produced before
++/// returning its success result to the app. A declined transaction aborts the
++/// completion, and a failed writer never sends partial output to the host.
++#[cfg(target_arch = "wasm32")]
++pub async fn with_acknowledged_exports<T, F>(work: F) -> Result<T, String>
++where
++    F: FnOnce() -> Result<T, String>,
++{
++    acknowledge_prepared_exports(prepare_acknowledged_exports(work)).await
++}
++
++/// Capture outputs synchronously so callers may borrow app state while
++/// preparing them, then hand the owned result to an asynchronous Task.
++#[cfg(target_arch = "wasm32")]
++pub fn prepare_acknowledged_exports<T, F>(
++    work: F,
++) -> Result<(T, Vec<(String, Vec<u8>)>), String>
++where
++    F: FnOnce() -> Result<T, String>,
++{
++    if HOST_EXPORT_CAPTURE.with(|capture| capture.borrow().is_some()) {
++        return Err("Outra exportação está sendo preparada. Tente novamente.".to_string());
++    }
++    HOST_EXPORT_CAPTURE.with(|capture| *capture.borrow_mut() = Some(Vec::new()));
++    let result = work();
++    let pending = HOST_EXPORT_CAPTURE.with(|capture| capture.borrow_mut().take().unwrap_or_default());
++    let result = result?;
++    Ok((result, pending))
++}
++
++#[cfg(target_arch = "wasm32")]
++pub async fn acknowledge_prepared_exports<T>(
++    prepared: Result<(T, Vec<(String, Vec<u8>)>), String>,
++) -> Result<T, String> {
++    let (result, pending) = prepared?;
++    for (name, bytes) in pending {
++        download_bytes_async(&name, &bytes).await?;
++    }
++    Ok(result)
++}
++
++/// Deliver bytes only through the host's acknowledged export transaction.
++/// `openCadStudioSaveFile` must return a Promise that resolves to the boolean
++/// `true` after the host has authorized and delivered the file. Cancellation,
++/// rejection, a missing hook, or an invalid return value are failures.
++#[cfg(target_arch = "wasm32")]
++pub async fn download_bytes_async(name: &str, bytes: &[u8]) -> Result<(), String> {
++    use wasm_bindgen::JsCast;
++    use wasm_bindgen_futures::JsFuture;
++
++    let window = web_sys::window()
++        .ok_or_else(|| "Não foi possível acessar a página de exportação.".to_string())?;
++    let hook = save_hook().ok_or_else(|| {
++        "Abra o CAD pela página da CONFENGE para exportar o desenho.".to_string()
++    })?;
++    let array = js_sys::Uint8Array::from(bytes);
++    let promise = hook
++        .call2(&window, &wasm_bindgen::JsValue::from_str(name), &array)
++        .map_err(crate::io::web_recent::js_error)?
++        .dyn_into::<js_sys::Promise>()
++        .map_err(|_| "A página não confirmou o pedido de exportação.".to_string())?;
++    let accepted = JsFuture::from(promise)
++        .await
++        .map_err(crate::io::web_recent::js_error)?;
++    if accepted.as_bool() != Some(true) {
++        return Err("Exportação cancelada. O desenho continua aberto e não foi salvo.".to_string());
+     }
+-    let _ = web_sys::Url::revoke_object_url(&url);
++    Ok(())
+ }
+ 
+ /// The `window.openCadStudioSaveFile(name, bytes)` function an embedding page
+diff --git a/src/ui/icons.rs b/src/ui/icons.rs
+index c345563..2fa9d95 100644
+--- a/src/ui/icons.rs
++++ b/src/ui/icons.rs
+@@ -487,11 +487,14 @@ impl<M> Widget<M, Theme, Renderer> for Logo {
+ /// The application logo in the theme's colours, `width` × `height`; with
+ /// `letters` only its letters.
+ pub fn logo<'a, M: 'a>(letters: bool, width: f32, height: f32) -> Element<'a, M> {
+-    Element::new(Logo {
+-        letters,
+-        width,
+-        height,
+-    })
++    let _ = letters;
++    iced::widget::image(iced::widget::image::Handle::from_bytes(
++        include_bytes!("../../assets/confenge-logo.png").as_slice(),
++    ))
++    .width(width)
++    .height(height)
++    .content_fit(ContentFit::Contain)
++    .into()
+ }
+ 
+ /// Render a multi-colour tool icon using semantic colours from the active theme.
+diff --git a/src/ui/menu_bar.rs b/src/ui/menu_bar.rs
+index a041663..2808a6d 100644
+--- a/src/ui/menu_bar.rs
++++ b/src/ui/menu_bar.rs
+@@ -663,7 +663,7 @@ const MENUS: &[(&str, &[Entry])] = &[
+             Cmd("Keyboard Shortcuts", "SHORTCUTS", ""),
+             Cmd("Send Feedback", "FEEDBACK", ""),
+             Sep,
+-            Cmd("About Open CAD Studio", "ABOUT", ""),
++            Cmd("Sobre o CAD da CONFENGE", "ABOUT", ""),
+         ],
+     ),
+ ];
+diff --git a/src/ui/ribbon/app_menu.rs b/src/ui/ribbon/app_menu.rs
+index 0b58a4d..ecb1da3 100644
+--- a/src/ui/ribbon/app_menu.rs
++++ b/src/ui/ribbon/app_menu.rs
+@@ -19,7 +19,7 @@ pub const APP_MENU_ID: &str = "APP_MENU";
+ const LOGO: f32 = 38.0;
+ pub(super) const LOGO_PAD: f32 = 6.0;
+ /// The compact logo at the start of the tab row.
+-const COMPACT_W: f32 = 38.0;
++const COMPACT_W: f32 = 94.0;
+ const COMPACT_H: f32 = 18.0;
+ const MENU_W: f32 = 300.0;
+ const ROW_H: f32 = 28.0;
+@@ -49,7 +49,7 @@ impl Ribbon {
+     pub fn logo_button(&self, big: bool) -> Element<'_, Message> {
+         let open = self.open_dropdown.as_deref() == Some(APP_MENU_ID);
+         let (logo, padding, radius) = if big {
+-            (icons::logo(false, LOGO, LOGO), Padding::new(LOGO_PAD), 0.0)
++            (icons::logo(false, 112.0, LOGO), Padding::new(LOGO_PAD), 0.0)
+         } else {
+             (
+                 icons::logo(true, COMPACT_W - 8.0, COMPACT_H - 6.0),
+diff --git a/src/ui/window/about.rs b/src/ui/window/about.rs
+index 9c6415e..7bc4c80 100644
+--- a/src/ui/window/about.rs
++++ b/src/ui/window/about.rs
+@@ -2,7 +2,7 @@ use crate::app::Message;
+ use crate::t;
+ use crate::ui::style::common::muted_style;
+ use crate::ui::style::form::dialog_button;
+-use iced::widget::{column, container, row, svg, text, Space};
++use iced::widget::{column, container, row, text, Space};
+ use iced::{Background, Border, Element, Fill, Length, Shrink, Theme};
+ 
+ fn primary_style(theme: &Theme) -> iced::widget::text::Style {
+@@ -111,7 +111,7 @@ pub(crate) fn report() -> String {
+     let sys = system_info();
+     #[allow(unused_mut)]
+     let mut out = format!(
+-        "Open CAD Studio v{}\nRevision: {}\nCommit date: {}\nProfile: {}\nFeatures: {}\n\n\
++        "CONFENGE CAD (OpenCAD Studio) v{}\nRevision: {}\nCommit date: {}\nProfile: {}\nFeatures: {}\n\n\
+          [System]\nOS: {} ({} {})\nCPU: {}\nLogical processors: {}\nRAM: {} total, {} available\n",
+         env!("OCS_FULL_VERSION"),
+         env!("OCS_GIT_REV"),
+@@ -185,17 +185,13 @@ pub fn view_window(sizing: crate::ui::modal::ModalSizing) -> Element<'static, Me
+     } else {
+         Length::Fixed(148.0)
+     };
+-    let logo = svg(svg::Handle::from_memory(include_bytes!(
+-        "../../../assets/logo.svg"
+-    )))
+-    .width(Length::Fixed(72.0))
+-    .height(Length::Fixed(72.0));
++    let logo = crate::ui::icons::logo(true, 160.0, 44.0);
+ 
+     let hero = container(
+         row![
+             logo,
+             column![
+-                text("Open CAD Studio").size(28).style(primary_style),
++                text("CONFENGE CAD").size(28).style(primary_style),
+                 text(t!("CAD application for Architecture & Engineering"))
+                     .size(11)
+                     .style(muted_style),
+@@ -244,6 +240,7 @@ pub fn view_window(sizing: crate::ui::modal::ModalSizing) -> Element<'static, Me
+     container(
+         column![
+             hero,
++            text("Edição CONFENGE baseada no OpenCAD Studio. Licença GPL-3.0.\nCódigo-fonte e atribuições em confenge.com.br/cad/editor/licencas/fontes-e-codigo.txt.").size(12),
+             metadata,
+             build_info,
+             system,
+diff --git a/web-app.html b/web-app.html
+index 0c4f3a0..28f4b55 100644
+--- a/web-app.html
++++ b/web-app.html
+@@ -1,16 +1,15 @@
+ <!doctype html>
+-<html lang="en">
++<html lang="pt-BR">
+   <head>
+     <link rel="manifest" href="app.webmanifest" />
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <meta name="robots" content="noindex, follow" />
+-    <meta name="theme-color" content="#1e1e1e" />
+-    <title>Open CAD Studio Web App</title>
+-    <script id="openaec-analytics-loader" src="https://open-aec.com/shared/analytics.js?v=20261026" defer></script>
++    <meta name="theme-color" content="#061a33" />
++    <title>CONFENGE | CAD</title>
+     <link data-trunk rel="icon" href="assets/logo.svg" />
+     <style>
+-      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #1e1e1e; }
++      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #061a33; }
+       canvas { display: block; }
+       #loading {
+         position: fixed;
+@@ -20,7 +19,7 @@
+         align-items: center;
+         justify-content: center;
+         gap: 22px;
+-        background: #1e1e1e;
++        background: #061a33;
+         color: #cfcfcf;
+         font-family: system-ui, sans-serif;
+         z-index: 9999;
+@@ -28,13 +27,13 @@
+       }
+       #loading.hide { opacity: 0; pointer-events: none; }
+       #loading .title { font-size: 22px; font-weight: 600; letter-spacing: 0.5px; }
+-      #loading .title span { color: #3399e6; }
++      #loading .title span { color: #ced62a; }
+       #loading .sub { font-size: 12px; color: #777; }
+       #loading .spinner {
+         width: 46px;
+         height: 46px;
+         border: 4px solid #2e2e2e;
+-        border-top-color: #3399e6;
++        border-top-color: #ced62a;
+         border-radius: 50%;
+         animation: ocs-spin 0.9s linear infinite;
+       }
+@@ -47,45 +46,23 @@
+     <link data-trunk rel="copy-file" href="web/videos.json" />
+     <link data-trunk rel="copy-file" href="web/locale-labels.json" />
+     <link data-trunk rel="copy-file" href="web/ocs-control.js" />
+-    <link data-trunk rel="copy-file" href="web/sw.js" />
+     <link data-trunk rel="copy-file" href="web/app.webmanifest" />
+     <link data-trunk rel="copy-file" href="assets/logo.svg" />
+   </head>
+   <body>
+     <div id="loading">
+       <div class="spinner"></div>
+-      <div class="title">Open <span>CAD</span> Studio</div>
+-      <div class="sub">Loading…</div>
++      <div class="title">CONFENGE <span>CAD</span></div>
++      <div class="sub">Carregando o editor…</div>
+     </div>
+     <script src="ocs-control.js" defer></script>
+-    <script>
+-      // Offline support: register the service worker. It is copied next to
+-      // this page by Trunk (see the copy-file link in <head>), so the
+-      // relative URL resolves to /app/sw.js and the registration scope is
+-      // /app/ — the whole app. Registered immediately (not on load) so the
+-      // worker starts capturing this visit's asset requests as early as
+-      // possible. sw.js never reloads the page on update: a new worker
+-      // waits until every tab on the old version has closed.
+-      // A sandboxed iframe without allow-same-origin has an opaque origin:
+-      // there even reading navigator.serviceWorker throws (#2257).
+-      (() => {
+-        if (self.origin === "null" || !("serviceWorker" in navigator)) return;
+-        try {
+-          navigator.serviceWorker.register("sw.js").catch(error => {
+-            console.warn("service worker registration failed; offline support disabled:", error);
+-          });
+-        } catch (error) {
+-          console.warn("service worker unavailable; offline support disabled:", error);
+-        }
+-      })();
+-    </script>
+     <script>
+       (() => {
+         const splash = document.getElementById("loading");
+         fetch("locale-labels.json").then(response => response.json()).then(labels => {
+           let saved;
+           try {
+-            saved = JSON.parse(localStorage.getItem("opencadstudio.settings"))?.settings?.language;
++            saved = JSON.parse(localStorage.getItem("confenge.cad.settings"))?.settings?.language;
+           } catch {}
+           const preferred = navigator.languages?.length ? navigator.languages : [navigator.language];
+           const requested = typeof saved === "string" && saved !== "system" ? [saved, ...preferred] : preferred;
+diff --git a/web/app.webmanifest b/web/app.webmanifest
+index 0e79b2c..e528142 100644
+--- a/web/app.webmanifest
++++ b/web/app.webmanifest
+@@ -1,12 +1,12 @@
+ {
+-  "name": "Open CAD Studio",
+-  "short_name": "OCS",
++  "name": "CONFENGE CAD",
++  "short_name": "CONFENGE",
+   "description": "A free CAD editor for DWG and DXF drawings.",
+-  "start_url": "./",
+-  "scope": "./",
++  "start_url": "/cad/",
++  "scope": "/cad/",
+   "display": "standalone",
+-  "background_color": "#1e1e1e",
+-  "theme_color": "#1e1e1e",
++  "background_color": "#061a33",
++  "theme_color": "#061a33",
+   "icons": [
+     {
+       "src": "logo.svg",
+diff --git a/web/locale-labels.json b/web/locale-labels.json
+index ce47146..d6846e6 100644
+--- a/web/locale-labels.json
++++ b/web/locale-labels.json
+@@ -1,94 +1,94 @@
+ {
+   "ar-SA": {
+-    "title": "Open CAD Studio — الويب",
++    "title": "CONFENGE | CAD",
+     "loading": "جارٍ التحميل…"
+   },
+   "bg-BG": {
+-    "title": "Open CAD Studio — Уеб",
++    "title": "CONFENGE | CAD",
+     "loading": "Зареждане…"
+   },
+   "cs-CZ": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Načítání…"
+   },
+   "de-DE": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Wird geladen…"
+   },
+   "el-GR": {
+-    "title": "Open CAD Studio — Ιστός",
++    "title": "CONFENGE | CAD",
+     "loading": "Φόρτωση…"
+   },
+   "en-US": {
+-    "title": "Open CAD Studio Web App",
++    "title": "CONFENGE | CAD",
+     "loading": "Loading…"
+   },
+   "es-ES": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Cargando…"
+   },
+   "fi-FI": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Ladataan…"
+   },
+   "fr-FR": {
+-    "title": "Open CAD Studio — Site Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Chargement…"
+   },
+   "hi-IN": {
+-    "title": "Open CAD Studio — वेब",
++    "title": "CONFENGE | CAD",
+     "loading": "लोड हो रहा है…"
+   },
+   "hu-HU": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Betöltés…"
+   },
+   "it-IT": {
+-    "title": "Open CAD Studio — Rete",
++    "title": "CONFENGE | CAD",
+     "loading": "Caricamento…"
+   },
+   "ja-JP": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "読み込み中…"
+   },
+   "ko-KR": {
+-    "title": "Open CAD Studio — 웹",
++    "title": "CONFENGE | CAD",
+     "loading": "로드 중…"
+   },
+   "lo-LA": {
+-    "title": "ເວັບແອັບ Open CAD Studio",
++    "title": "CONFENGE | CAD",
+     "loading": "ກຳລັງໂຫຼດ…"
+   },
+   "nl-NL": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Laden…"
+   },
+   "pl-PL": {
+-    "title": "Open CAD Studio — Sieć",
++    "title": "CONFENGE | CAD",
+     "loading": "Ładowanie…"
+   },
+   "pt-BR": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Carregando…"
+   },
+   "ru-RU": {
+-    "title": "Open CAD Studio — Веб-сайт",
++    "title": "CONFENGE | CAD",
+     "loading": "Загрузка…"
+   },
+   "tr-TR": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Yükleniyor…"
+   },
+   "vi-VN": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "Đang tải…"
+   },
+   "zh-CN": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "正在加载…"
+   },
+   "zh-TW": {
+-    "title": "Open CAD Studio — Web",
++    "title": "CONFENGE | CAD",
+     "loading": "載入中…"
+   }
+ }
