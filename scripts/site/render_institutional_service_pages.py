@@ -454,7 +454,7 @@ def render_condominium_hub(hub: dict, template: str) -> str:
     process = render_deliverables(hub["process"], "como-contratar")
     continuity = render_grid(hub["continuity"], "continuidade-tecnica", soft=True)
     samples = render_hub_links(hub["samples"])
-    sample_section = f'''<section aria-labelledby="amostras-title" class="sec" id="amostras-demonstrativas"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Amostras de entrega</span><h2 class="t-editorial" id="amostras-title">Exemplos demonstrativos para avaliar a organização do trabalho.</h2><p>São materiais sintéticos, sem imóvel, processo ou resultado de cliente. Eles mostram como evidências, perguntas e encaminhamentos podem ser apresentados.</p></header><div class="grid-2">{samples}</div></div></section>'''
+    sample_section = f'''<section aria-labelledby="amostras-title" class="sec" id="amostras-demonstrativas"><div class="container"><header class="sec-head sec-head--split"><span class="t-kicker">Conteúdo técnico</span><h2 class="t-editorial" id="amostras-title">Critérios e entregas para as decisões do condomínio.</h2><p>Conheça o trabalho desenvolvido em cada frente, os documentos entregues e como eles apoiam a intervenção ou a análise técnica de uma disputa.</p></header><div class="grid-2">{samples}</div></div></section>'''
     hero = hub["hero"]
     attr = tracking_attributes(hub)
     main = f'''<main id="conteudo">
@@ -531,9 +531,38 @@ def replace_hub_head(document: str, hub: dict) -> str:
     return re.sub(r'<head>[\s\S]*?</head>', head, document, count=1)
 
 
+
+def render_technical_scope(page: dict) -> str:
+    """Describe contracted analysis, not an invented completed assignment.
+
+    Legacy fragments remain usable. The explicit presentation marker tells
+    historical demonstrative composers to keep samples in /casos/ instead of
+    reinserting classroom calculations into commercial service pages.
+    """
+    block = page["technical_scope"]
+    aliases = "".join(
+        f'<span id="{esc(alias)}"></span>' for alias in block.get("aliases", [])
+    )
+    items = "\n".join(
+        f'<article><h3>{esc(item["title"])}</h3><p>{esc(item["analysis"])}</p>'
+        f'<p><strong>Entrega:</strong> {esc(item["delivery"])}</p></article>'
+        for item in block["items"]
+    )
+    resources = ""
+    if block.get("resources"):
+        links = "\n".join(
+            f'<li><a class="text-link" data-demonstrative-resource="{esc(item["id"])}" href="{esc(local_bridge_href(item["href"]))}">{esc(item["label"])}</a></li>'
+            for item in block["resources"]
+        )
+        resources = f'<div class="measure"><p>Material de apoio:</p><ul>{links}</ul></div>'
+    return f'''<section class="sec sec--soft" id="{esc(block['id'])}" aria-labelledby="technical-scope-title" data-commercial-presentation="technical-scope">
+<div class="container">{aliases}
+<header class="sec-head sec-head--split"><span class="t-kicker">{esc(block['kicker'])}</span><h2 class="t-editorial" id="technical-scope-title">{esc(block['title'])}</h2><p>{esc(block['intro'])}</p></header>
+<div class="grid-3">{items}</div>{resources}
+</div></section>'''
+
+
 def render_page(page: dict, document: str) -> str:
-    if page["route"] == "quantitativos-orcamento-obras" and "exemplos-conferiveis" not in page["preserve_sections"]:
-        raise ValueError("canonical quantity examples must be preserved")
     old_main = main_of(document)
     breadcrumb = re.search(r'<nav aria-label="Navegação estrutural"[\s\S]*?</nav>', old_main)
     if not breadcrumb:
@@ -551,7 +580,7 @@ def render_page(page: dict, document: str) -> str:
         "assistencia-tecnica-pericial-engenharia",
     }:
         technical_sections = [strip_empty_client_frame(item) for item in technical_sections]
-    technical = "\n".join(technical_sections)
+    technical = render_technical_scope(page) if page.get("technical_scope") else "\n".join(technical_sections)
     blocks = {
         "competencies": render_grid(page["competencies"], "competencias", soft=False),
         "deliverables": render_deliverables(

@@ -238,9 +238,12 @@ def test_sample_trail_renders_a_derived_client_memory_without_internal_formula()
     assert "m²" in html
 
 
-def test_packaged_sample_and_demonstrative_render_the_current_derived_memory() -> None:
+def test_packaged_demonstrative_keeps_memory_and_service_uses_professional_scope() -> None:
     excerpt = build_sample_trail(derive(load_source(root=ROOT)))
-    _assert_published_memory(_read("quantitativos-orcamento-obras"), excerpt)
+    service = _read("quantitativos-orcamento-obras")
+    assert 'data-commercial-presentation="technical-scope"' in service
+    assert 'href="/casos/demonstrativo-projeto-privado/#quantitativos"' in service
+    assert 'data-trail-memory="true"' not in service
     _assert_published_memory(
         (ARTIFACT / "casos/demonstrativo-projeto-privado/index.html").read_text(encoding="utf-8"),
         excerpt,
@@ -248,7 +251,7 @@ def test_packaged_sample_and_demonstrative_render_the_current_derived_memory() -
 
 
 def test_old_packaged_memory_is_not_accepted_after_a_source_change() -> None:
-    stale_html = _read("quantitativos-orcamento-obras")
+    stale_html = (ARTIFACT / "casos/demonstrativo-projeto-privado/index.html").read_text(encoding="utf-8")
     changed = build_sample_trail(derive(_source_with_window_height("0.75")))
     with pytest.raises(AssertionError):
         _assert_published_memory(stale_html, changed)

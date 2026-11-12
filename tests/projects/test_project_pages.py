@@ -198,39 +198,31 @@ class TestProjectPages(unittest.TestCase):
         ):
             self.assertIn(f'href="{route}"', main.group(1), route)
 
-    def test_examples_are_readable_html_and_link_to_the_evidence(self) -> None:
+    def test_technical_scope_is_readable_html_and_reaches_deliverables(self) -> None:
         for page in self.pages:
             with self.subTest(route=page["route"]):
                 source = self.rendered[page["route"]]
-                hero = re.search(r'<figure class="pp-hero__visual"[^>]*>(.*?)</figure>', source, re.S)
-                record = re.search(r'<figure class="pp-record"[^>]*>(.*?)</figure>', source, re.S)
+                hero = re.search(r'<aside class="pp-hero__visual"[^>]*>(.*?)</aside>', source, re.S)
+                record = re.search(r'<article class="pp-record"[^>]*>(.*?)</article>', source, re.S)
                 self.assertIsNotNone(hero)
                 self.assertIsNotNone(record)
-                for element, rows, minimum in (
-                    (hero, page["visual"]["readings"], 2),
-                    (record, page["demonstration"]["rows"], 3),
+                for element, rows in (
+                    (hero, page["technical_panel"]["rows"]),
+                    (record, page["technical_review"]["rows"]),
                 ):
                     markup = element.group(1)
-                    self.assertIn("<figcaption", markup)
-                    self.assertGreaterEqual(len(rows), minimum)
+                    self.assertGreaterEqual(len(rows), 3)
                     for tag, field in (("dt", "label"), ("dd", "value")):
                         entries = re.findall(rf"<{tag}\b[^>]*>(.*?)</{tag}>", markup, re.S)
                         texts = [unescape(re.sub(r"<[^>]+>", "", entry)).strip() for entry in entries]
                         self.assertEqual([row[field] for row in rows], texts)
-                self.assertIn('href="#demonstracao"', hero.group(1))
-                detail = page["demonstration"]
-                parser = ProjectHTMLParser()
-                parser.feed(record.group(1))
-                if detail["href"].endswith(".svg"):
-                    self.assertIn("#desenho-ampliado", [link["href"] for link in parser.links])
-                    parser = ProjectHTMLParser()
-                    parser.feed(source)
-                    self.assertIn("desenho-ampliado", parser.ids)
-                    self.assertTrue(any(img.get("src") == detail["href"] and img.get("alt") for img in parser.images))
-                else:
-                    self.assertIn(detail["href"], [link["href"] for link in parser.links])
-                self.assertIn(detail["link_label"], unescape(record.group(1)))
-                self.assertNotIn("deslize para ver o diagrama", source.casefold())
+                    # Service descriptions must not masquerade as drawings or
+                    # completed client work; text stays accessible without JS.
+                    self.assertNotIn("<img", markup)
+                    self.assertNotIn("Exemplo demonstrativo", markup)
+                self.assertIn('href="#criterios-tecnicos"', hero.group(1))
+                self.assertIn('href="#entregaveis"', record.group(1))
+                self.assertIn(page["technical_review"]["link_label"], unescape(record.group(1)))
 
     def test_page_composition_follows_purpose_instead_of_one_fixed_sequence(self) -> None:
         orders = {
@@ -258,39 +250,31 @@ class TestProjectPages(unittest.TestCase):
         self.assertIn("Engenheiro Civil formado pela Escola de Engenharia de São Carlos", company)
         self.assertIn("cada disciplina é desenvolvida e assinada pelo profissional habilitado", company)
 
-    def test_revision_examples_match_the_cited_findings(self) -> None:
-        # The published teaching case distinguishes a measured conflict from
-        # a request for missing information. Protect both meanings.
-        how = self.rendered["/como-trabalhamos/"]
-        for measurement in ("2,20 m", "2,30 m", "2,10 m", "10 cm"):
-            self.assertIn(measurement, how)
-        installations = next(page for page in self.pages if page["id"] == "installations")
-        note = installations["demonstration"]
-        self.assertTrue(note["href"].endswith("#CF-INFO-01"))
-        observations = " ".join(row["value"] for row in note["rows"]).casefold()
-        for fact in ("0,40 m", "vão livre", "diâmetros"):
-            self.assertIn(fact, observations)
-
-    def test_illustrations_and_evidence_links_resolve_locally(self) -> None:
+    def test_retired_teaching_cases_are_not_promoted_as_commercial_proof(self) -> None:
+        retired = (
+            "Banheiro R01", "4,32 m²", "6,84 m²", "10 cm", "40 × 40 cm",
+            "42 m³", "/casos/demonstrativo-projeto-privado/",
+            "/casos/demonstrativo-infraestrutura/",
+            "/assets/project-practices/details/", "sample-source",
+        )
         for page in self.pages:
             with self.subTest(route=page["route"]):
-                visual = page["visual"]
-                asset = urlsplit(visual["src"])
-                self.assertEqual("", asset.netloc)
-                self.assertTrue(asset.path.startswith("/assets/project-practices/"))
-                self.assertTrue(asset.path.endswith(".svg"))
-                self.assertTrue((ROOT / asset.path.lstrip("/")).is_file())
-                link = urlsplit(page["demonstration"]["href"])
-                self.assertFalse(link.scheme or link.netloc)
-                self.assertTrue(link.path.startswith("/"))
-                target = ROOT / link.path.lstrip("/")
-                if target.is_dir():
-                    target = target / "index.html"
-                self.assertTrue(target.is_file(), link.path)
-                if link.fragment:
-                    parser = ProjectHTMLParser()
-                    parser.feed(target.read_text(encoding="utf-8"))
-                    self.assertIn(link.fragment, parser.ids)
+                self.assertNotIn("visual", page)
+                self.assertNotIn("demonstration", page)
+                for text in retired:
+                    self.assertNotIn(text, self.rendered[page["route"]])
+
+    def test_technical_navigation_and_legacy_anchor_resolve(self) -> None:
+        for page in self.pages:
+            with self.subTest(route=page["route"]):
+                parser = ProjectHTMLParser()
+                parser.feed(self.rendered[page["route"]])
+                for anchor in ("criterios-tecnicos", "demonstracao", "entregaveis"):
+                    self.assertIn(anchor, parser.ids)
+                for link in parser.links:
+                    destination = urlsplit(str(link.get("href", "")))
+                    if destination.fragment and not destination.path and not destination.netloc:
+                        self.assertIn(destination.fragment, parser.ids)
 
     def test_editorial_depth_and_no_placeholder_language(self) -> None:
         forbidden = re.compile(
@@ -311,7 +295,7 @@ class TestProjectPages(unittest.TestCase):
                 plain = re.sub(r"<[^>]+>", " ", editorial)
                 self.assertGreater(len(plain.split()), 650)
                 self.assertIsNone(forbidden.search(plain))
-                self.assertIn(page["demonstration"]["label"], plain)
+                self.assertIn(page["technical_review"]["label"], plain)
                 section_order = page.get(
                     "section_order", self.payload["shared"]["default_section_order"]
                 )
