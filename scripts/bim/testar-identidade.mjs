@@ -33,7 +33,18 @@ const footerLogo = logo('site-footer');
 for (const file of html) {
   const nodes = elements(parse(read(file)));
   const styles = nodes.filter(n => n.tagName === 'link' && attr(n, 'rel') === 'stylesheet').map(n => attr(n, 'href'));
-  const requiredStyles = file === 'index.html' ? [files['assets/home-base.css'].href, files['assets/home-10x.css'].href] : [siteCss];
+  // Both bounded projections retain the institutional styles from styles.css.
+  // Require their actual content-addressed files, including the diagnostic's
+  // complementary sheet; all other routes still require the complete canon.
+  const requiredSources = file === 'index.html'
+    ? ['assets/home-base.css', 'assets/home-10x.css']
+    : file === 'ferramentas/diagnostico-defesa-margem/index.html'
+      ? ['assets/tool-bundles/diagnostico-base.css', 'assets/tool-bundles/diagnostico-defesa-margem.css']
+      : ['styles.css'];
+  const requiredStyles = requiredSources.map(source => {
+    assert.ok(files[source]?.href, file + ': folha institucional ausente do manifesto: ' + source);
+    return files[source].href;
+  });
   if (!requiredStyles.every(href => styles.includes(href))) problems.push(file + ': folha de estilo institucional ausente');
   const privateConsole = file === join('ops', 'index.html');
   const header = nodes.find(n => n.tagName === 'header'

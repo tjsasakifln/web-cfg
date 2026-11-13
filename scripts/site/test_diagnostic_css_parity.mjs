@@ -1,7 +1,9 @@
 /**
  * Compare the diagnostic route's projected CSS with the canonical global sheet.
- * Each comparison swaps only one stylesheet in the SAME live DOM, then restores
- * it. Real local interactions expose the runtime states a static purge misses.
+ * Both stylesheets stay loaded next to each other at the original cascade
+ * position. A single task switches their media, then restores the projected
+ * sheet, so an unloaded CSS interval cannot clamp scrolling or reset fonts.
+ * Real local interactions expose the runtime states a static purge misses.
  * Usage: node scripts/site/test_diagnostic_css_parity.mjs [site-root]
  * No request can reach an external host or persist a lead: non-GET requests are
  * intercepted, and the local static server independently refuses them.
@@ -29,7 +31,7 @@ const report = {
   schema: 'confenge.diagnostic-css-parity/1.0', site_root: root, route,
   source_sha: null, workflow_sha: process.env.GITHUB_SHA || null,
   run_id: process.env.GITHUB_RUN_ID || null, run_attempt: process.env.GITHUB_RUN_ATTEMPT || null,
-  status: 'running', scenarios: [], screenshots: [], blocked_requests: [],
+  status: 'running', scenarios: [], screenshots: [], blocked_requests: [], font_contracts: [],
   page_errors: [], failures: [],
 };
 const server = createServer(async (request, response) => {
@@ -82,6 +84,10 @@ const properties = [
 const digest = value => createHash('sha256').update(value).digest('hex');
 let browser;
 let page;
+let cdp;
+let isolatedContext;
+let stylesheetPair;
+let blockedFonts = 0;
 let context = { state: 'setup' };
 let base;
 let pendingLead = null;
@@ -129,7 +135,7 @@ async function settle() {
 }
 
 async function snapshot() {
-  return page.evaluate(keys => {
+  const data = await page.evaluate(keys => {
     const elements = [document.documentElement, ...document.body.querySelectorAll('*')];
     elements.splice(1, 0, document.body);
     const round = value => Math.round(value * 10000) / 10000;
@@ -160,6 +166,41 @@ async function snapshot() {
       active: elements.indexOf(document.activeElement), scroll: [scrollX, scrollY], nodes,
     };
   }, properties);
+  data.fonts = await platformFonts();
+  return data;
+}
+
+const fontSelectors = ['.tool-page-hero h1', '.tool-page-hero .content-lead',
+  '.tool-page-hero .eyebrow', '.nav-group[open] > summary'];
+
+async function platformFonts() {
+  const { root: documentNode } = await cdp.send('DOM.getDocument');
+  const nodes = [];
+  for (const selector of fontSelectors) {
+    const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: documentNode.nodeId, selector });
+    if (!nodeId) { nodes.push({ selector, fonts: [] }); continue; }
+    const { fonts } = await cdp.send('CSS.getPlatformFontsForNode', { nodeId });
+    nodes.push({ selector, fonts: fonts.filter(font => font.glyphCount > 0)
+      .sort((a, b) => `${a.familyName}|${a.postScriptName}`.localeCompare(`${b.familyName}|${b.postScriptName}`)) });
+  }
+  return nodes;
+}
+
+function assertFontMode(fonts) {
+  for (const [index, { selector, fonts: used }] of fonts.entries()) {
+    if (index < 3) assert.ok(used.length, `${selector} has observed glyphs in ${context.font_mode} mode`);
+    if (!used.length) continue; // The menu label has no painted glyphs while closed/printing.
+    if (context.font_mode === 'loaded') {
+      assert.ok(used.every(font => font.isCustomFont && /Archivo/i.test(font.familyName + font.postScriptName)),
+        `${selector} actually uses Archivo: ${JSON.stringify(used)}`);
+    } else {
+      assert.ok(blockedFonts > 0, 'fallback mode intercepted a web-font request with cache disabled');
+      assert.ok(used.every(font => typeof font.familyName === 'string' && font.familyName.trim()
+        && typeof font.postScriptName === 'string' && font.postScriptName.trim()
+        && !/Archivo/i.test(font.familyName + font.postScriptName)),
+      `${selector} actually uses an identified non-Archivo fallback: ${JSON.stringify(used)}`);
+    }
+  }
 }
 
 function compare(left, right) {
@@ -170,6 +211,7 @@ function compare(left, right) {
     record('html', 'attributes', left.html_attributes, right.html_attributes);
   }
   if (left.active !== right.active) record('document', 'active element', left.active, right.active);
+  if (JSON.stringify(left.fonts) !== JSON.stringify(right.fonts)) record('document', 'platform fonts', left.fonts, right.fonts);
   if (JSON.stringify(left.scroll) !== JSON.stringify(right.scroll)) record('document', 'scroll position', left.scroll, right.scroll);
   if (left.nodes.length !== right.nodes.length) record('document', 'element count', left.nodes.length, right.nodes.length);
   for (let i = 0; i < Math.min(left.nodes.length, right.nodes.length); i += 1) {
@@ -195,18 +237,71 @@ function compare(left, right) {
   return differences;
 }
 
-async function swapStylesheet(index, href) {
-  await page.evaluate((index, href) => { document.querySelectorAll('link[rel="stylesheet"]')[index].href = href; }, index, href);
-  await waitDOM((index, href) => {
-    const sheet = document.querySelectorAll('link[rel="stylesheet"]')[index]?.sheet;
-    try { return sheet?.href === new URL(href, location.href).href && sheet.cssRules.length > 0; }
-    catch { return false; }
-  }, 'replacement stylesheet loaded', index, href);
+async function activateStylesheet(canonical) {
+  await page.evaluate((canonical, projectedMedia, loadFont) => {
+    const projected = document.querySelector('link[data-css-parity="projected"]');
+    const reference = document.querySelector('link[data-css-parity="canonical"]');
+    // No layout read occurs between these assignments. Both resources and their
+    // CSSStyleSheet objects remain resident; exactly one becomes applicable.
+    projected.media = canonical ? 'not all' : projectedMedia;
+    reference.media = canonical ? 'all' : 'not all';
+    if (loadFont) void document.fonts.load('400 16px "Archivo Var"', 'Diagnóstico público 0123456789').catch(() => {});
+  }, canonical, stylesheetPair.projected_media, context.font_mode === 'loaded');
   await settle();
 }
 
+async function warmFontMedia() {
+  // font-display:optional may retain fallback after its short initial window.
+  // Warm both already-loaded sheets before the baseline, then prove the actual
+  // glyph fonts through CDP. This never changes font-display or CSS declarations.
+  await activateStylesheet(true);
+  const canonical = await platformFonts();
+  assertFontMode(canonical);
+  await activateStylesheet(false);
+  const projected = await platformFonts();
+  assertFontMode(projected);
+  assert.deepEqual(projected, canonical, 'both resident sheets use the same platform fonts before comparison');
+}
+
+async function prepareStylesheets() {
+  stylesheetPair = await page.evaluate(canonicalHref => {
+    const matches = [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .filter(link => /\/diagnostico-base(?:\.[a-f0-9]+)?\.css(?:\?|$)/.test(link.getAttribute('href')));
+    if (matches.length !== 1) throw new Error('one projected base stylesheet is required');
+    const projected = matches[0];
+    const reference = document.createElement('link');
+    reference.rel = 'stylesheet';
+    reference.href = canonicalHref;
+    reference.media = 'not all';
+    reference.dataset.cssParity = 'canonical';
+    projected.dataset.cssParity = 'projected';
+    // Preserve the existing order relative to the tool's own bundle.
+    projected.after(reference);
+    return { projected_href: projected.getAttribute('href'), canonical_href: canonicalHref,
+      projected_media: projected.media || 'all' };
+  }, fullSheet);
+  await waitDOM(() => [...document.querySelectorAll('link[data-css-parity]')].length === 2
+    && [...document.querySelectorAll('link[data-css-parity]')].every(link => {
+      try { return link.sheet?.href === link.href && link.sheet.cssRules.length > 0; } catch { return false; }
+    }), 'both resident stylesheets loaded');
+  const faces = await page.evaluate(() => {
+    const read = rules => [...rules].flatMap(rule => {
+      if (rule.type === CSSRule.FONT_FACE_RULE) return [rule.cssText];
+      if (rule.type === CSSRule.IMPORT_RULE) return read(rule.styleSheet.cssRules);
+      return rule.cssRules ? read(rule.cssRules) : [];
+    });
+    return Object.fromEntries([...document.querySelectorAll('link[data-css-parity]')]
+      .map(link => [link.dataset.cssParity, read(link.sheet.cssRules)]));
+  });
+  assert.ok(faces.projected.length > 0, 'authored font-face rules are present');
+  assert.deepEqual(faces.projected, faces.canonical, 'projection preserves every font-face descriptor and its order');
+  report.font_contracts.push({ ...context, font_face_count: faces.projected.length,
+    font_face_sha256: digest(JSON.stringify(faces.projected)), cache_disabled: context.font_mode === 'fallback' });
+  await warmFontMedia();
+}
+
 async function capture(name) {
-  const filename = `${context.javascript ? 'js' : 'nojs'}-${context.width}-${context.state}-${name}.png`;
+  const filename = `${context.font_mode}-${context.javascript ? 'js' : 'nojs'}-${context.width}-${context.state}-${name}.png`;
   await page.screenshot({ path: resolve(evidenceDir, filename) });
   report.screenshots.push({ file: filename, ...context, stylesheet: name });
 }
@@ -215,26 +310,27 @@ async function parity(state, screenshots = false) {
   context = { ...context, state };
   await page.mouse.move(0, 0);
   await settle();
-  const link = await page.evaluate(() => [...document.querySelectorAll('link[rel="stylesheet"]')]
-    .map((link, index) => ({ index, href: link.getAttribute('href') }))
-    .filter(link => /\/diagnostico-base(?:\.[a-f0-9]+)?\.css(?:\?|$)/.test(link.href)));
-  assert.equal(link.length, 1, 'one projected base stylesheet is present');
   const before = await snapshot();
+  assertFontMode(before.fonts);
   if (screenshots) await capture('projected');
   let canonical;
   let restored;
   try {
-    await swapStylesheet(link[0].index, fullSheet);
+    await activateStylesheet(true);
     canonical = await snapshot();
+    assertFontMode(canonical.fonts);
     if (screenshots) await capture('canonical');
   } finally {
-    await swapStylesheet(link[0].index, link[0].href);
+    await activateStylesheet(false);
     restored = await snapshot();
+    assertFontMode(restored.fonts);
   }
   const differences = compare(before, canonical);
   const restoration = compare(before, restored);
   const row = { ...context, elements: before.nodes.length, properties: properties.length,
-    dom_sha256: digest(before.dom), projected_href: link[0].href, canonical_href: fullSheet,
+    dom_sha256: digest(before.dom), ...stylesheetPair,
+    platform_fonts: before.fonts, canonical_platform_fonts: canonical.fonts,
+    restored_platform_fonts: restored.fonts, blocked_font_requests: blockedFonts,
     differences: differences.length, restoration_differences: restoration.length,
     samples: differences.slice(0, 100), restoration_samples: restoration.slice(0, 30),
     status: differences.length || restoration.length ? 'failed' : 'passed' };
@@ -268,13 +364,21 @@ async function visit() {
   await waitDOM(() => [...document.images].every(image => image.complete), 'authored images loaded');
   await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
   await settle();
+  await prepareStylesheets();
 }
 
-async function newPage(width, javascript) {
+async function newPage(width, javascript, fontMode = 'loaded') {
   if (page) await page.close();
-  page = await browser.newPage();
-  context = { width, height: 900, javascript, state: 'visit' };
+  if (isolatedContext) await isolatedContext.close();
+  isolatedContext = fontMode === 'fallback' ? await browser.createBrowserContext() : null;
+  page = await (isolatedContext || browser).newPage();
+  cdp = await page.createCDPSession();
+  await cdp.send('DOM.enable');
+  await cdp.send('CSS.enable');
+  blockedFonts = 0;
+  context = { width, height: 900, javascript, font_mode: fontMode, state: 'visit' };
   await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
+  if (fontMode === 'fallback') await page.setCacheEnabled(false);
   await page.setJavaScriptEnabled(javascript);
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   // Exercise the real fallback handler when the browser denies clipboard/share.
@@ -301,6 +405,13 @@ async function newPage(width, javascript) {
     }
     if (!local && !request.url().startsWith('data:')) {
       report.blocked_requests.push({ method: 'GET', origin: url.origin, path: url.pathname });
+      void request.abort().catch(() => {});
+      return;
+    }
+    if (fontMode === 'fallback' && (request.resourceType() === 'font' || /\.(?:woff2?|ttf|otf)$/i.test(url.pathname))) {
+      blockedFonts += 1;
+      report.blocked_requests.push({ method: 'GET', origin: url.origin, path: url.pathname,
+        reason: 'font-fallback-fixture', width });
       void request.abort().catch(() => {});
       return;
     }
@@ -365,8 +476,10 @@ try {
     await waitDOM(() => !document.querySelector('#diagnostic-result').hidden && document.activeElement?.id === 'diagnostic-result', 'successful result is focused');
     await parity('result', true);
     await page.emulateMediaType('print');
+    await warmFontMedia();
     await parity('print-result', true);
     await page.emulateMediaType('screen');
+    await warmFontMedia();
     await page.click('#btn-reset');
     await waitDOM(() => document.querySelector('#diagnostic-result').hidden, 'reset hides result');
     await parity('cleared');
@@ -435,8 +548,27 @@ try {
       await parity('native-navigation', true);
     }
     await page.emulateMediaType('print');
+    await warmFontMedia();
     await parity('native-print');
     assert.equal(page.isJavaScriptEnabled(), false, 'native states never enable application scripts');
+  }
+  // Separate cold contexts prevent an already-cached web font from making the
+  // fallback fixture pass without actually exercising the local font stack.
+  for (const width of [390, 1440]) {
+    await newPage(width, true, 'fallback');
+    await visit();
+    await waitDOM(() => !document.querySelector('#lookup .tool-runtime-fields').disabled, 'fallback snapshot loaded');
+    await parity('fallback-ready', true);
+    const nav = width <= 1120 ? '.mobile-nav' : '.desktop-nav';
+    if (width <= 1120) await keyboardActivate('.menu-toggle');
+    await keyboardActivate(`${nav} [data-nav-group="ferramentas"] > summary`);
+    await waitDOM(selector => document.querySelector(selector)?.open, 'fallback menu opened', `${nav} [data-nav-group="ferramentas"]`);
+    await parity('fallback-navigation', true);
+    await page.keyboard.press('Escape');
+    if (width <= 1120) await page.keyboard.press('Escape');
+    await page.emulateMediaType('print');
+    await warmFontMedia();
+    await parity('fallback-print', true);
   }
   assert.equal(report.page_errors.length, 0, JSON.stringify(report.page_errors));
   assert.equal(report.failures.length, 0, 'projected stylesheet must match canonical CSS in every state');
