@@ -28,6 +28,8 @@ const calls = [], analytics = [], errors = [], incidents = [], accessibility = [
 const facts = new Map();
 let time = Date.now(), creates = 0, providerResponseLost = false, clientResponseLost = false, statusTransportUnavailable = false;
 let configTransportUnavailable = false, quoteTransportUnavailable = false, configResponseGate = null;
+let statusResponseGate = null;
+let checkoutRateLimited = false, rejectNextProviderCheckout = false, providerRejections = 0;
 let app, base, browser, currentPage;
 const config = { mode: 'sandbox', configured: true, purchasesEnabled: true,
   origin: '', storageRoot, accessToken: 'local-fixture-never-a-real-token',
@@ -37,7 +39,6 @@ const provider = {
   async verifySellerEnvironment() {},
   parseWebhook: signatureParser.parseWebhook,
   async createCheckoutOrder(input) {
-    creates++;
     const browserReceipt = await activeReceipt(currentPage);
     assert.equal(browserReceipt?.id, input.id, 'the buyer keeps private recovery access before the provider is contacted');
     assert.match(browserReceipt?.receiptToken || '', /^[A-Za-z0-9_-]{43}$/);
@@ -46,6 +47,20 @@ const provider = {
     assert.equal(stored.quote.amountCents, input.amountCents);
     assert.equal(input.items.reduce((sum, item) => sum + item.amountCents, 0), input.amountCents);
     assert.equal(input.returnUrl, `https://confenge.com.br/projetos-prontos/?pedido=${input.id}#pedido`);
+    if (rejectNextProviderCheckout) {
+      rejectNextProviderCheckout = false;
+      providerRejections++;
+      // Exercise the real adapter's typed refusal. A generic thrown Error is
+      // deliberately insufficient evidence to release an uncertain purchase.
+      const rejecting = createMercadoPago({ ...config, fetchImpl: async (url, options) => {
+        if (url.endsWith('/users/me')) return { ok: true, json: async () => ({ id: 123, tags: ['test_user'] }) };
+        assert.equal(url, 'https://api.mercadopago.com/v1/orders');
+        assert.equal(options.method, 'POST');
+        return { ok: false, status: 422 };
+      } });
+      return rejecting.createCheckoutOrder(input);
+    }
+    creates++;
     const providerId = `ORD${String(creates).padStart(12, '0')}`;
     const fact = { providerId, reference: input.id, amountCents: input.amountCents,
       currency: 'BRL', state: 'pending', paymentFlow: 'checkout', providerStatus: 'created',
@@ -67,7 +82,11 @@ const server = http.createServer(async (req, res) => {
       const event = { httpMethod: req.method, queryStringParameters: q,
         multiValueQueryStringParameters: Object.fromEntries([...new Set(url.searchParams.keys())].map(key => [key, url.searchParams.getAll(key)])),
         headers: req.headers, requestContext: { identity: { sourceIp: '192.0.2.21' } }, ...(body ? { body } : {}) };
-      let result = await app.api(event);
+      // A rejected first attempt must not accidentally reach the real handler
+      // and create a durable order behind the simulated rate-limit response.
+      let result = q.op === 'service-checkout' && checkoutRateLimited ?
+        { statusCode: 429, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'private, no-store' },
+          body: JSON.stringify({ error: 'TOO_MANY_REQUESTS' }) } : await app.api(event);
       if (q.op === 'service-status' && statusTransportUnavailable) {
         result = { ...result, statusCode: 503, body: JSON.stringify({ error: 'PAYMENT_UNAVAILABLE' }) };
       }
@@ -85,6 +104,7 @@ const server = http.createServer(async (req, res) => {
         req.socket.destroy(); return;
       }
       if (q.op === 'service-config' && configResponseGate) await configResponseGate;
+      if (q.op === 'service-status' && statusResponseGate) await statusResponseGate;
       res.writeHead(result.statusCode, result.headers); res.end(result.body); return;
     }
     if (url.pathname.endsWith('/collect')) {
@@ -421,6 +441,95 @@ async function authoritativePaid(id) {
   assert.equal(response.statusCode, 200);
 }
 
+async function assertCheckoutRecovery() {
+  time += 60_000;
+  const recovered = await newPage();
+  await configureAndReview(recovered); await fillBuyer(recovered); await accept(recovered);
+  await setInput(recovered, '#rp-customer-email', 'recovery-rate@example.test');
+  const initialCreates = creates;
+  const rateStart = calls.length;
+  checkoutRateLimited = true;
+  try {
+    const response = responseFor(recovered, 'service-checkout');
+    await recovered.click('#rp-pay-button');
+    assert.equal((await response).status(), 429);
+    await waitText(recovered, '#rp-checkout-message', 'Aguarde um minuto');
+  } finally { checkoutRateLimited = false; }
+  const rateReceipt = await activeReceipt(recovered);
+  assert(rateReceipt, 'the retry keeps its private access even when no order was created');
+  assert.equal(app.dependencies(config).ledger.orders.get(rateReceipt.id), null);
+  assert.equal(creates, initialCreates, 'a rate refusal cannot reach the provider');
+  await setInput(recovered, '#rp-customer-name', 'Comprador com dados corrigidos');
+  let response = responseFor(recovered, 'service-checkout');
+  await recovered.click('#rp-pay-button');
+  assert.equal((await response).status(), 201);
+  await waitText(recovered, '#rp-order-state', 'Pagamento ainda não confirmado');
+  const recoveredCalls = calls.slice(rateStart).filter(call => call.op === 'service-checkout');
+  assert.equal(recoveredCalls.length, 2);
+  assert.deepEqual(recoveredCalls.map(call => call.body.requestId), [rateReceipt.id, rateReceipt.id]);
+  assert(recoveredCalls.every(call => call.body.receiptToken === rateReceipt.receiptToken));
+  assert.notEqual(recoveredCalls[0].body.name, recoveredCalls[1].body.name);
+  assert.equal(app.dependencies(config).ledger.orders.get(rateReceipt.id).customer.name, 'Comprador com dados corrigidos');
+  assert.equal(creates, initialCreates + 1, 'editing a refused attempt creates exactly one provider order');
+  checks.push('initial-429-edit-and-retry-keeps-id-and-creates-once');
+  await recovered.close();
+
+  const declined = await newPage();
+  await configureAndReview(declined); await fillBuyer(declined); await accept(declined);
+  await setInput(declined, '#rp-customer-email', 'recovery-decline@example.test');
+  const declineStart = calls.length;
+  rejectNextProviderCheckout = true;
+  response = responseFor(declined, 'service-checkout');
+  await declined.click('#rp-pay-button');
+  assert.equal((await response).status(), 200);
+  await declined.waitForFunction(() => !document.querySelector('#rp-new-order').hidden);
+  const declinedReceipt = await activeReceipt(declined);
+  const declinedOrder = app.dependencies(config).ledger.orders.get(declinedReceipt.id);
+  assert.equal(declinedOrder.status, 'failed');
+  assert.equal(declinedOrder.providerId, null);
+  assert.equal(await declined.$eval('#rp-order-pay', node => node.hidden), true);
+  assert.match(await contents(declined, '#rp-new-order'), /Tentar contratar novamente/);
+  assert.equal(creates, initialCreates + 1, 'an explicit provider refusal did not create a provider order');
+  let releaseStatus;
+  statusResponseGate = new Promise(resolve => { releaseStatus = resolve; });
+  const statusResponse = responseFor(declined, 'service-status');
+  try {
+    await declined.click('#rp-order-refresh');
+    await declined.waitForFunction(() => document.querySelector('#rp-order-refresh').disabled);
+    await declined.click('#rp-new-order');
+    assert.equal((await activeReceipt(declined))?.id, declinedReceipt.id,
+      'new-order action cannot discard the active receipt while its status is being refreshed');
+    assert.equal(await declined.$eval('#pedido', node => node.hidden), false);
+  } finally { statusResponseGate = null; releaseStatus(); }
+  assert.equal((await statusResponse).status(), 200);
+  await declined.waitForFunction(() => !document.querySelector('#rp-order-refresh').disabled);
+  assert.equal((await activeReceipt(declined))?.id, declinedReceipt.id);
+  checks.push('new-attempt-cannot-race-an-in-flight-status-refresh');
+  const callsBeforeChoice = callCount('service-checkout');
+  await declined.click('#rp-new-order');
+  assert.equal(callCount('service-checkout'), callsBeforeChoice, 'the retry action returns to configuration without charging');
+  assert.equal(await activeReceipt(declined), null);
+  assert.equal(await declined.$eval('#rp-purchase-details', node => node.hidden), true);
+  await configureAndReview(declined);
+  assert.equal(await declined.$eval('#rp-accept-terms', node => node.checked), false, 'a deliberate new attempt requires renewed acceptance');
+  await accept(declined);
+  response = responseFor(declined, 'service-checkout');
+  await declined.click('#rp-pay-button');
+  assert.equal((await response).status(), 201);
+  await waitText(declined, '#rp-order-state', 'Pagamento ainda não confirmado');
+  const retriedReceipt = await activeReceipt(declined);
+  assert.notEqual(retriedReceipt.id, declinedReceipt.id, 'a definitively refused order needs a deliberate new request id');
+  assert.notEqual(retriedReceipt.receiptToken, declinedReceipt.receiptToken);
+  assert.equal(app.dependencies(config).ledger.orders.get(declinedReceipt.id).status, 'failed');
+  assert.equal(app.dependencies(config).ledger.orders.get(retriedReceipt.id).status, 'pending');
+  assert.equal(creates, initialCreates + 2);
+  assert.equal(providerRejections, 1);
+  assert.deepEqual(calls.slice(declineStart).filter(call => call.op === 'service-checkout').map(call => call.response.status), ['failed', 'pending']);
+  checks.push('definitive-provider-refusal-offers-deliberate-new-attempt', 'new-attempt-requires-new-acceptance-and-preserves-refused-order');
+  await declined.close();
+  return [rateReceipt, declinedReceipt, retriedReceipt];
+}
+
 const report = { schema: 'confenge.project-services.browser/v1', ok: false,
   source: publicRoot === root ? 'source' : 'public-artifact', environment: 'local-real-handler-fake-provider',
   realPayments: false, externalNetwork: false, analyticsConsent: 'denied', checks, screenshots, accessibility, receiptRestorations, reviewGeometry, deadlineTouchTargets, uncaughtErrors: errors,
@@ -577,6 +686,19 @@ try {
   assert.equal((await activeReceipt(lost)).id, receiptC.id, 'validation after an earlier uncertain creation keeps the original access');
   assert.equal((await activeReceipt(lost)).receiptToken, receiptC.receiptToken);
   assert.equal(creates, 3);
+  const conflictStart = callCount('service-checkout');
+  await setInput(lost, '#rp-customer-name', 'Comprador com referência corrigida');
+  result = responseFor(lost, 'service-checkout'); await lost.click('#rp-pay-button');
+  assert.equal((await result).status(), 409, 'the server, not a stale local fingerprint, decides an uncertain conflict');
+  await waitText(lost, '#rp-checkout-message', 'Já existe uma tentativa');
+  assert.equal(callCount('service-checkout'), conflictStart + 1);
+  const conflict = calls.filter(call => call.op === 'service-checkout').at(-1);
+  assert.equal(conflict.body.requestId, receiptC.id);
+  assert.equal(conflict.body.receiptToken, receiptC.receiptToken);
+  assert.equal(conflict.response.error, 'REQUEST_CONFLICT');
+  assert.equal((await activeReceipt(lost)).id, receiptC.id);
+  assert.equal(creates, 3, 'a changed uncertain retry cannot create another charge');
+  checks.push('edited-uncertain-attempt-reaches-server-and-conflicts-without-duplicate');
   statusTransportUnavailable = false;
   await lost.click('#rp-order-refresh');
   await waitText(lost, '#rp-order-state', 'Pagamento ainda não confirmado');
@@ -605,8 +727,12 @@ try {
   await unavailable.goto(base + '/projetos-prontos/condicoes/', { waitUntil: 'networkidle0' });
   await audit(unavailable, 'conditions-mobile', 390, 844);
   assert.match(await contents(unavailable, 'main'), /terceiro dia útil/);
+  config.purchasesEnabled = true;
+  const recoveryReceipts = await assertCheckoutRecovery();
   assert.deepEqual(errors, [], 'no uncaught page or fixture errors');
-  const sensitive = [receiptA.receiptToken, receiptB.receiptToken, receiptC.receiptToken, 'browser-project@example.test', 'Comprador de ensaio'];
+  const sensitive = [receiptA.receiptToken, receiptB.receiptToken, receiptC.receiptToken,
+    ...recoveryReceipts.map(receipt => receipt.receiptToken), 'browser-project@example.test', 'Comprador de ensaio',
+    'recovery-rate@example.test', 'recovery-decline@example.test'];
   for (const value of sensitive) {
     assert(!analytics.join('\n').includes(value), 'private data cannot enter analytics');
     assert(!calls.some(call => call.url.includes(value)), 'private data cannot enter an API URL');
@@ -621,6 +747,7 @@ try {
   throw error;
 } finally {
   report.providerCreations = creates;
+  report.providerRejections = providerRejections;
   report.incidents = incidents;
   // Reports contain outcomes and synthetic IDs only, never secret access files or full customer payloads.
   report.apiOutcomes = calls.map(({ op, status, body, hasAuthorization }) => ({ op, status, hasAuthorization,

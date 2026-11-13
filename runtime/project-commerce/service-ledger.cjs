@@ -17,7 +17,7 @@ function publicServiceOrder(order) {
     message: order.status === 'paid' ? 'Pagamento confirmado. A equipe confere os dados e informa os documentos necessários para iniciar o prazo contratado.' :
       order.status === 'refunded' ? 'Devolução integral confirmada pelo Mercado Pago.' :
         order.status === 'review' || order.status === 'creating' ? 'Estamos conferindo este pedido. Consulte novamente antes de tentar outra compra.' :
-          order.status === 'failed' ? 'O Mercado Pago não confirmou o pagamento deste pedido. Entre em contato para continuar.' :
+          order.status === 'failed' ? 'Esta tentativa não foi concluída. Você pode tentar contratar novamente.' :
             'Pedido registrado. O pagamento ainda precisa ser confirmado pelo Mercado Pago.' };
 }
 
@@ -78,10 +78,25 @@ function createServiceLedger({ storageRoot, mode, clock = Date.now, backend: inj
       return next;
     });
   }
+  function rejected(id) {
+    return backend.withExclusiveLock(() => {
+      const old = orders.get(id);
+      check(old, 'ORDER_NOT_FOUND', 404);
+      // A verified webhook may already have bound or paid this order. A
+      // creation refusal can close only a still-unbound creating attempt.
+      if (old.status !== 'creating' || old.providerId || old.paidAt) return old;
+      const now = clock();
+      const next = { ...old, status: 'failed', reason: 'creation_rejected', updatedAt: now,
+        events: [...old.events, { type: 'checkout_creation_rejected', at: now }] };
+      orders._putUnlocked(id, next);
+      return next;
+    });
+  }
   function shouldPoll(id, receiptHash) {
     return backend.withExclusiveLock(() => {
       const order = own(id, receiptHash);
-      if (order.nextPollAt > clock() || ['refunded'].includes(order.status)) return { order, poll: false };
+      if (order.nextPollAt > clock() || ['refunded'].includes(order.status) ||
+          order.status === 'failed' && order.reason === 'creation_rejected' && !order.providerId) return { order, poll: false };
       const next = { ...order, nextPollAt: clock() + 15_000 };
       orders._putUnlocked(id, next);
       return { order: next, poll: true };
@@ -164,7 +179,7 @@ function createServiceLedger({ storageRoot, mode, clock = Date.now, backend: inj
     probes.delete(key);
     return true;
   }
-  return { backend, orders, previous, start, own, shouldPoll, observe, uncertain, support, probe };
+  return { backend, orders, previous, start, own, shouldPoll, observe, uncertain, rejected, support, probe };
 }
 
 module.exports = { createServiceLedger, publicServiceOrder, providerIdValid };

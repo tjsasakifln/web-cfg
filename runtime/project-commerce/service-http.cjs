@@ -1,6 +1,6 @@
 'use strict';
 
-const { createMercadoPago } = require('../tools-commerce/mercado-pago.cjs');
+const { createMercadoPago, isDefinitiveOrderRejection } = require('../tools-commerce/mercado-pago.cjs');
 const { CommerceError, check, UUID, TOKEN, SELECTION_KEYS, CHECKOUT_KEYS, sha, sameSecret, safeText,
   readOffer, termsFor, publicPricing, quote, normalizeCheckout, loadServiceConfig } = require('./service-policy.cjs');
 const { createServiceLedger, publicServiceOrder, providerIdValid } = require('./service-ledger.cjs');
@@ -144,7 +144,11 @@ function createServiceHttp({ env = process.env, config: injected, offerLoader = 
             returnUrl: `https://confenge.com.br/projetos-prontos/?pedido=${order.id}#pedido` });
           check(fact.reference === order.id, 'PAYMENT_MISMATCH', 422);
           return reply(201, publicServiceOrder(dep.ledger.observe(fact, { creation: true })));
-        } catch {
+        } catch (error) {
+          if (isDefinitiveOrderRejection(error)) {
+            onIncident('CHECKOUT_CREATION_REJECTED');
+            return reply(200, publicServiceOrder(dep.ledger.rejected(order.id)));
+          }
           onIncident('CHECKOUT_CREATION_UNCERTAIN');
           return reply(202, publicServiceOrder(dep.ledger.uncertain(order.id)));
         }

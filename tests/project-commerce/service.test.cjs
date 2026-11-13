@@ -248,6 +248,82 @@ test('a lost provider response is reconciled by original reference without creat
   assert.equal(s.counts().creates, 1);
 });
 
+function rejectCheckoutAtProvider(s, status) {
+  let posts = 0;
+  const adapter = createMercadoPago({ ...s.config, fetchImpl: async (url, options) => {
+    if (url.endsWith('/users/me')) return { ok: true, json: async () => ({ id: 123, tags: ['test_user'] }) };
+    assert.equal(options.method, 'POST');
+    assert.equal(url, 'https://api.mercadopago.com/v1/orders');
+    posts++;
+    return { ok: false, status, json: async () => ({ error: 'provider-private-detail' }) };
+  } });
+  s.provider.createCheckoutOrder = adapter.createCheckoutOrder;
+  return () => posts;
+}
+
+test('an explicit provider refusal closes only that attempt and lets the buyer try again', async t => {
+  for (const status of [400, 401, 403, 422]) await t.test(`HTTP ${status}`, async t => {
+    const s = setup(t), input = s.input();
+    const create = s.provider.createCheckoutOrder;
+    const posts = rejectCheckoutAtProvider(s, status);
+    const first = await s.app.api(s.event('service-checkout', input));
+    assert.equal(first.statusCode, 200);
+    assert.equal(decoded(first).status, 'failed');
+    assert.equal(decoded(first).checkoutUrl, undefined);
+    const stored = s.app.dependencies(s.config).ledger.orders.get(input.requestId);
+    assert.equal(stored.reason, 'creation_rejected');
+    assert.equal(stored.providerId, null);
+    assert.equal(stored.paidAt, undefined);
+    assert(!first.body.includes('provider-private-detail'));
+    s.provider.findOrderId = async () => { throw Error('a rejected creation has no order to poll'); };
+    s.advance();
+    assert.equal(decoded(await s.app.api(s.status(input))).status, 'failed');
+    assert.equal(decoded(await s.app.api(s.event('service-checkout', input))).status, 'failed');
+    assert.equal(posts(), 1, 'replaying the failed receipt never creates another order');
+    s.provider.createCheckoutOrder = create;
+    const next = s.input();
+    const retried = await s.app.api(s.event('service-checkout', next));
+    assert.equal(retried.statusCode, 201);
+    assert.equal(decoded(retried).status, 'pending');
+    assert.notEqual(decoded(retried).id, input.requestId);
+    assert.equal(s.counts().creates, 1, 'a deliberate new attempt can reach checkout');
+  });
+});
+
+test('ambiguous provider responses stay in review and cannot silently create another order', async t => {
+  for (const status of [408, 409, 423, 429, 500, 503]) await t.test(`HTTP ${status}`, async t => {
+    const s = setup(t), input = s.input();
+    const posts = rejectCheckoutAtProvider(s, status);
+    const first = await s.app.api(s.event('service-checkout', input));
+    assert.equal(first.statusCode, 202);
+    assert.equal(decoded(first).status, 'review');
+    s.advance();
+    assert.equal(decoded(await s.app.api(s.status(input))).status, 'review');
+    assert.equal(decoded(await s.app.api(s.event('service-checkout', input))).status, 'review');
+    assert.equal(posts(), 1);
+    assert.equal(decoded(first).checkoutUrl, undefined);
+  });
+});
+
+test('a verified webhook wins even if creation later reports a definitive refusal', async t => {
+  const s = setup(t), input = s.input();
+  const create = s.provider.createCheckoutOrder;
+  rejectCheckoutAtProvider(s, 422);
+  const reject = s.provider.createCheckoutOrder;
+  s.provider.createCheckoutOrder = async payload => {
+    const fact = await create(payload);
+    s.change(fact.providerId, 'paid');
+    assert.equal((await s.app.webhook(s.webhook(fact.providerId))).statusCode, 200);
+    return reject(payload);
+  };
+  const result = await s.app.api(s.event('service-checkout', input));
+  assert.equal(result.statusCode, 200);
+  assert.equal(decoded(result).status, 'paid');
+  const stored = s.app.dependencies(s.config).ledger.orders.get(input.requestId);
+  assert.equal(stored.reason, undefined);
+  assert.equal(stored.events.filter(event => event.type === 'checkout_creation_rejected').length, 0);
+});
+
 test('verified webhook wins a creation-response race and an older financial reversal suspends fulfilment', async t => {
   const s = setup(t); const input = s.input();
   const create = s.provider.createCheckoutOrder;

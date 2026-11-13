@@ -8,6 +8,21 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[47][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f
 const ORDER_ID = /^ORD[A-Z0-9]+$/;
 const TRANSITIONAL = new Set(['created', 'pending', 'in_process', 'processing', 'action_required', 'authorized']);
 
+class MercadoPagoRequestError extends Error {
+  constructor(status, url, method) {
+    super('Mercado Pago request failed (HTTP ' + (status || 'unknown') + ')');
+    // Only an explicit refusal of the creation POST proves that this attempt
+    // did not create an order. Conflicts, locks, rate limits, server errors and
+    // interrupted responses remain uncertain and must be reconciled.
+    this.orderCreationRejected = url === API_ROOT + '/v1/orders' && method === 'POST' &&
+      [400, 401, 403, 422].includes(status);
+  }
+}
+
+function isDefinitiveOrderRejection(error) {
+  return error instanceof MercadoPagoRequestError && error.orderCreationRejected === true;
+}
+
 function required(value, name) {
   if (typeof value !== 'string' || !value.trim()) throw new Error(name + ' is required');
   return value.trim();
@@ -218,7 +233,7 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
     let response;
     try { response = await fetchImpl(url, { ...options, signal: AbortSignal.timeout(8000), redirect: 'error' }); }
     catch { throw new Error('Mercado Pago request could not be completed; reconcile the existing order before retrying'); }
-    if (!response || !response.ok) throw new Error('Mercado Pago request failed (HTTP ' + (response && response.status || 'unknown') + ')');
+    if (!response || !response.ok) throw new MercadoPagoRequestError(response?.status, url, options?.method);
     try { return await response.json(); } catch { throw new Error('Mercado Pago returned an invalid response'); }
   }
   let sellerCheck;
@@ -351,4 +366,4 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
   };
 }
 
-module.exports = { createMercadoPago };
+module.exports = { createMercadoPago, isDefinitiveOrderRejection };

@@ -86,7 +86,7 @@ function assertServiceNoJsContract(html) {
     assert.match(form[1], /\bdata-runtime-profile="project_service_checkout_v1"/, `${form_id}: own runtime profile`);
     assert.ok(form[1].includes(`action="${action}"`) && /\bmethod="post"/.test(form[1]), `${form_id}: exact transaction endpoint`);
   }
-  assert.match(html, /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\/assets\/js\/ready-project-services\.mjs")[^>]*>/,
+  assert.match(html, /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\/assets\/js\/ready-project-services\.mjs\?v=[a-f0-9]{12}")[^>]*>/,
     "service forms: their runtime is actually loaded");
   const outsideLead = html.replace(/<form\b(?=[^>]*\bid="formulario-contato")[^>]*>[\s\S]*?<\/form>/gi, " ");
   const serviceNote = [...outsideLead.matchAll(/<noscript\b[^>]*>([\s\S]*?)<\/noscript>/gi)]
