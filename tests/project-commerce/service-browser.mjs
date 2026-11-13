@@ -27,6 +27,7 @@ const offer = readOffer();
 const calls = [], analytics = [], errors = [], incidents = [], accessibility = [], screenshots = [], checks = [], receiptRestorations = [], reviewGeometry = [], deadlineTouchTargets = [];
 const facts = new Map();
 let time = Date.now(), creates = 0, providerResponseLost = false, clientResponseLost = false, statusTransportUnavailable = false;
+let configTransportUnavailable = false, quoteTransportUnavailable = false, configResponseGate = null;
 let app, base, browser, currentPage;
 const config = { mode: 'sandbox', configured: true, purchasesEnabled: true,
   origin: '', storageRoot, accessToken: 'local-fixture-never-a-real-token',
@@ -70,6 +71,12 @@ const server = http.createServer(async (req, res) => {
       if (q.op === 'service-status' && statusTransportUnavailable) {
         result = { ...result, statusCode: 503, body: JSON.stringify({ error: 'PAYMENT_UNAVAILABLE' }) };
       }
+      if (q.op === 'service-config' && configTransportUnavailable) {
+        result = { ...result, statusCode: 503, body: JSON.stringify({ error: 'PAYMENT_UNAVAILABLE' }) };
+      }
+      if (q.op === 'service-quote' && quoteTransportUnavailable) {
+        result = { ...result, statusCode: 503, body: JSON.stringify({ error: 'NETWORK_ERROR' }) };
+      }
       calls.push({ op: q.op, status: result.statusCode, body: body ? JSON.parse(body) : null,
         response: JSON.parse(result.body), hasAuthorization: Boolean(req.headers.authorization), url: req.url });
       if (q.op === 'service-checkout' && clientResponseLost && result.statusCode < 300) {
@@ -77,6 +84,7 @@ const server = http.createServer(async (req, res) => {
         // The scenario clears this only after the buyer observes the failure.
         req.socket.destroy(); return;
       }
+      if (q.op === 'service-config' && configResponseGate) await configResponseGate;
       res.writeHead(result.statusCode, result.headers); res.end(result.body); return;
     }
     if (url.pathname.endsWith('/collect')) {
@@ -100,6 +108,7 @@ const server = http.createServer(async (req, res) => {
 const contents = (page, selector) => page.$eval(selector, node => node.textContent);
 const waitText = (page, selector, value) => page.waitForFunction((selector, value) => document.querySelector(selector)?.textContent.includes(value), {}, selector, value);
 const responseFor = (page, op) => page.waitForResponse(response => new URL(response.url()).pathname === '/api/web/project-orders' && new URL(response.url()).searchParams.get('op') === op);
+const callCount = op => calls.filter(call => call.op === op).length;
 async function setInput(page, selector, value) {
   await page.focus(selector); await page.keyboard.down('Control'); await page.keyboard.press('A'); await page.keyboard.up('Control');
   await page.keyboard.press('Backspace'); await page.type(selector, String(value));
@@ -144,6 +153,175 @@ async function accept(page) {
   for (const selector of ['#rp-accept-terms', '#rp-accept-privacy']) {
     if (!await page.$eval(selector, node => node.checked)) await page.click(selector);
   }
+}
+async function assertPurchaseButtonRecovery() {
+  const analyticsBeforeGuidance = analytics.length;
+  const guidance = await newPage();
+  const posts = [];
+  guidance.on('request', request => { if (request.method() === 'POST') posts.push(request.url()); });
+  const initialQuotes = callCount('service-quote'), initialCheckouts = callCount('service-checkout');
+  assert.equal(await guidance.$eval('#rp-terrain', node => node.value), '');
+  assert.equal(await guidance.$eval('#rp-review-button', node => node.disabled), false);
+  assert.match(await contents(guidance, '#rp-review-button'), /Revisar minha contratação/);
+  await guidance.click('#rp-review-button');
+  await guidance.waitForFunction(() => document.activeElement?.id === 'rp-terrain');
+  assert.match(await contents(guidance, '#rp-eligibility'), /terreno/i);
+  assert.equal(await guidance.$eval('#rp-eligibility', node => !node.hidden && Boolean(node.closest('.rp-summary'))), true,
+    'the missing-field explanation stays beside the review action');
+  assert.equal(callCount('service-quote'), initialQuotes, 'missing terrain must not request a quote');
+  assert.equal(callCount('service-checkout'), initialCheckouts);
+  checks.push('missing-terrain-click-guides-buyer-without-requesting-quote');
+
+  await guidance.select('#rp-building-type', 'other');
+  await guidance.select('#rp-terrain', 'other');
+  await guidance.$eval('#rp-deadline', node => { node.value = '52'; node.dispatchEvent(new Event('input', { bubbles: true })); });
+  const selectedConditions = await guidance.evaluate(() => ['#rp-building-type', '#rp-terrain']
+    .map(selector => document.querySelector(selector).selectedOptions[0].textContent.trim()));
+  assert.match(await contents(guidance, '#rp-review-button'), /Solicitar proposta para meu caso/);
+  assert.equal(await guidance.$eval('#rp-review-button', node => node.disabled), false);
+  assert.equal((await contents(guidance, '#rp-total')).trim(), 'Sob proposta');
+  assert.equal(await guidance.$$eval('[data-discipline-price]', nodes => nodes.length > 0 && nodes.every(node => node.textContent.trim() === 'Sob proposta')), true,
+    'out-of-scope inputs do not retain prices offered only for the standard scope');
+  assert.equal(await guidance.$eval('#rp-summary-deadline', node => node.previousElementSibling.textContent.trim()), 'Prazo desejado');
+  assert.equal(await guidance.$eval('#rp-payment-availability', node => node.hidden), true,
+    'a specific proposal must not imply that its payment is already available');
+  const privateProposalNote = 'Referência privada de ensaio: proposta-privada@example.test, telefone 48912345678.';
+  await guidance.$eval('#mensagem', (node, value) => { node.value = value; }, privateProposalNote);
+  await audit(guidance, 'proposal-mobile', 390, 844);
+  await screenshot(guidance, 'proposal-summary-mobile', '.rp-summary');
+  await guidance.click('#rp-review-button');
+  await guidance.waitForFunction(() => document.activeElement?.id === 'nome');
+  await guidance.waitForNetworkIdle({ idleTime: 100 });
+  const proposalMessage = await guidance.$eval('#mensagem', node => node.value);
+  assert.match(proposalMessage, /100\s*m²/);
+  assert.match(proposalMessage, /52\s*dias/);
+  assert(proposalMessage.includes(privateProposalNote), 'preparing a proposal preserves the buyer\'s existing private context');
+  for (const condition of selectedConditions) assert(proposalMessage.includes(condition), `proposal context retains the selected condition: ${condition}`);
+  assert.equal(await guidance.$eval('#nome', node => Boolean(node.closest('#contato-projetos'))), true);
+  assert.equal(callCount('service-quote'), initialQuotes, 'a specific proposal must not use the standard quote');
+  assert.equal(callCount('service-checkout'), initialCheckouts);
+  assert.deepEqual(posts.filter(url => url !== `${base}/api/web/collect`), [],
+    'guidance must not send a contact form, quote, checkout or any other non-collector POST');
+  // Focusing the contact form emits lead_form_start. First-party metadata may
+  // flush here, while Google Analytics remains denied. Inspect both sent and
+  // queued events so batching cannot hide a false submission or private data.
+  const collectedGuidance = analytics.slice(analyticsBeforeGuidance).flatMap(body => {
+    const batch = JSON.parse(body);
+    assert(Array.isArray(batch.events), 'collector requests use the event batch contract');
+    return batch.events;
+  });
+  const queuedGuidance = await guidance.evaluate(() => (window.dataLayer || []).filter(entry => entry && typeof entry.event === 'string'));
+  assert.equal(queuedGuidance.filter(entry => entry.event === 'lead_form_start').length, 1,
+    'focusing the buyer name records only one form start');
+  const guidanceEvents = [...collectedGuidance, ...queuedGuidance.map(entry => ({ event: entry.event, props: entry }))];
+  assert.deepEqual(guidanceEvents.filter(entry => /^(?:lead_|form_|pseo_form_)/.test(entry.event) && entry.event !== 'lead_form_start'), [],
+    'proposal guidance cannot claim a form submission, success, persistence or another form advance');
+  const privateKey = /(?:^|_)(?:name|nome|email|phone|telefone|tel|whatsapp|message|mensagem|reference|customer|address|endereco|cpf|cnpj|comment|description|text|note)(?:$|_)/i;
+  for (const entry of guidanceEvents) {
+    assert.equal(entry.props?.source, 'CONFENGE_WEB');
+    assert.equal(entry.props?.pii_policy, 'aggregate_allowlist_empty');
+    for (const [key, value] of Object.entries(entry.props)) {
+      assert(!privateKey.test(key), `form data must not enter aggregate metadata: ${key}`);
+      assert(['string', 'number', 'boolean'].includes(typeof value), 'aggregate metadata cannot contain a nested form payload');
+    }
+  }
+  const serializedGuidance = JSON.stringify(guidanceEvents);
+  for (const value of [proposalMessage, privateProposalNote, 'proposta-privada@example.test', '48912345678']) {
+    assert(!serializedGuidance.includes(value), 'private proposal context must not enter sent or queued analytics');
+  }
+  report.proposalGuidance = { collectorRequests: posts.length,
+    collectedEvents: [...new Set(collectedGuidance.map(entry => entry.event))],
+    queuedEvents: [...new Set(queuedGuidance.map(entry => entry.event))],
+    submissionRequests: 0, privateMarkersAbsent: true };
+  checks.push('out-of-scope-click-prepares-proposal-without-price-or-submission');
+  await guidance.close();
+
+  configTransportUnavailable = true;
+  let retry;
+  try { retry = await newPage(); } finally { configTransportUnavailable = false; }
+  assert.equal(calls.filter(call => call.op === 'service-config').at(-1).status, 503);
+  assert.equal(await retry.$eval('#rp-review-button', node => node.disabled), false,
+    'an unavailable initial config must leave a way to retry');
+  assert.match(await contents(retry, '#rp-payment-availability'), /Revisar minha contratação.*tentar novamente/);
+  assert.equal(await retry.$eval('#rp-payment-availability', node => !node.hidden && Boolean(node.textContent.trim()) && Boolean(node.closest('.rp-summary'))), true,
+    'the initial availability error is visible beside the review action');
+  await retry.select('#rp-terrain', 'flat-or-gentle');
+  const documentStartedAt = await retry.evaluate(() => performance.timeOrigin);
+  const configCallsBeforeRetry = callCount('service-config'), quotesBeforeRetry = callCount('service-quote');
+  let releaseConfigResponse;
+  configResponseGate = new Promise(resolve => { releaseConfigResponse = resolve; });
+  const retryRequest = retry.waitForRequest(request => new URL(request.url()).pathname === '/api/web/project-orders' && new URL(request.url()).searchParams.get('op') === 'service-config');
+  const retryConfigResponse = responseFor(retry, 'service-config'), retryQuoteResponse = responseFor(retry, 'service-quote');
+  try {
+    await retry.click('#rp-review-button');
+    await retryRequest;
+    assert.equal(await retry.$eval('#rp-review-button', node => node.disabled), true,
+      'the retry enters its busy state before the config request completes');
+    await retry.click('#rp-review-button');
+    assert.equal(callCount('service-quote'), quotesBeforeRetry, 'a quote waits for the authoritative config');
+  } finally {
+    releaseConfigResponse();
+    configResponseGate = null;
+  }
+  assert.equal((await retryConfigResponse).status(), 200);
+  assert.equal((await retryQuoteResponse).status(), 200);
+  await retry.waitForSelector('#rp-purchase-details:not([hidden])');
+  await retry.waitForNetworkIdle({ idleTime: 100 });
+  assert.equal(callCount('service-config'), configCallsBeforeRetry + 1, 'repeated clicks share one config retry');
+  assert.equal(callCount('service-quote'), quotesBeforeRetry + 1);
+  assert.equal(callCount('service-checkout'), initialCheckouts);
+  assert.equal(await retry.evaluate(() => performance.timeOrigin), documentStartedAt, 'recovery does not reload the document');
+  checks.push('initial-config-failure-recovers-with-one-busy-retry-without-reload');
+  await retry.close();
+
+  const changed = await newPage();
+  await configureAndReview(changed);
+  await fillBuyer(changed);
+  await accept(changed);
+  const quotesBeforeEdit = callCount('service-quote');
+  await setInput(changed, '#rp-area', 120);
+  await changed.click('[data-deadline="30"]');
+  assert.equal(await changed.$eval('#rp-pay-button', node => node.disabled), false,
+    'editing a reviewed selection keeps an actionable path to a fresh summary');
+  assert.match(await contents(changed, '#rp-pay-button'), /Atualizar resumo/);
+  assert.equal(await changed.$eval('#rp-accept-terms', node => node.checked), false);
+  assert.equal(callCount('service-quote'), quotesBeforeEdit, 'editing does not silently accept another quote');
+  quoteTransportUnavailable = true;
+  try {
+    const failedQuoteResponse = responseFor(changed, 'service-quote');
+    await changed.click('#rp-pay-button');
+    assert.equal((await failedQuoteResponse).status(), 503);
+    await waitText(changed, '#rp-checkout-message', 'Não foi possível conferir a resposta');
+    assert.equal(await changed.$eval('#rp-checkout-message', node => !node.hidden), true,
+      'a failed summary update explains the error beside the final action');
+    assert.equal(await contents(changed, '#rp-checkout-message'), await contents(changed, '#rp-review-message'),
+      'both review actions expose the failed request instead of retaining stale guidance');
+    await changed.waitForFunction(() => !document.querySelector('#rp-pay-button').disabled);
+    assert.match(await contents(changed, '#rp-pay-button'), /Atualizar resumo/);
+    assert.equal(callCount('service-checkout'), initialCheckouts);
+  } finally { quoteTransportUnavailable = false; }
+  const updatedQuoteResponse = responseFor(changed, 'service-quote');
+  await changed.click('#rp-pay-button');
+  assert.equal((await updatedQuoteResponse).status(), 200);
+  await waitText(changed, '#rp-pay-button', 'Criar pedido para pagar');
+  await changed.waitForFunction(() => !document.querySelector('#rp-pay-button').disabled);
+  const updatedQuote = calls.filter(call => call.op === 'service-quote').at(-1);
+  assert.equal(updatedQuote.response.amountCents, quote({ areaM2: 120, deadlineDays: 30, disciplines: ['arquitetura'],
+    floors: 1, buildingType: 'new-residential', terrain: 'flat-or-gentle' }, offer).amountCents);
+  assert.match(await contents(changed, '#rp-confirmed-summary'), /2\.324,40/);
+  assert.equal(callCount('service-quote'), quotesBeforeEdit + 2, 'a failed update can be retried from the final action');
+  assert.equal(callCount('service-checkout'), initialCheckouts, 'updating a summary never falls through to checkout');
+  assert.equal((await contents(changed, '#rp-checkout-message')).trim(), '', 'a successful update clears the checkout error');
+  assert.equal((await contents(changed, '#rp-review-message')).trim(), '', 'a successful update clears the review error');
+  assert.equal(await changed.$eval('#rp-accept-terms', node => node.checked), false, 'the new quote needs a new acceptance');
+  await changed.click('#rp-pay-button');
+  await changed.waitForFunction(() => document.activeElement?.id === 'rp-accept-terms');
+  await changed.waitForNetworkIdle({ idleTime: 100 });
+  assert.equal(callCount('service-checkout'), initialCheckouts, 'previous acceptance cannot authorize the revised quote');
+  assert.equal(await activeReceipt(changed), null);
+  assert.equal(creates, 0, 'button recovery scenarios must not create any provider order');
+  checks.push('edited-quote-final-button-updates-summary-and-requires-new-acceptance');
+  await changed.close();
 }
 async function activeReceipt(page) {
   return page.evaluate(key => { const records = JSON.parse(sessionStorage.getItem(key) || '{}'); return records[records.active] || null; }, STORAGE_KEY);
@@ -255,6 +433,7 @@ try {
   browser = await puppeteer.launch({ executablePath: resolveChromePath(), headless: true,
     args: ['--no-sandbox', '--disable-dev-shm-usage'] });
 
+  await assertPurchaseButtonRecovery();
   const page = await newPage();
   await audit(page, 'offer-desktop', 1440, 1000);
   await audit(page, 'offer-mobile', 390, 844);
@@ -408,12 +587,20 @@ try {
   config.purchasesEnabled = false;
   const unavailable = await newPage();
   await waitText(unavailable, '#rp-payment-availability', 'temporariamente indisponível');
+  const pausedCheckouts = callCount('service-checkout'), pausedQuotes = callCount('service-quote');
   await configureAndReview(unavailable);
   assert.equal(await unavailable.$eval('#rp-pay-button', node => node.disabled), true);
+  assert.equal(callCount('service-quote'), pausedQuotes + 1);
+  assert.match(await contents(unavailable, '#rp-checkout-message'), /temporariamente indisponível/);
+  assert.equal(await unavailable.$eval('#rp-checkout-message', node => !node.hidden), true);
+  await fillBuyer(unavailable); await accept(unavailable);
+  await unavailable.click('#rp-pay-button');
+  await unavailable.waitForNetworkIdle({ idleTime: 100 });
+  assert.equal(callCount('service-checkout'), pausedCheckouts, 'paused payment cannot submit even with complete buyer details and acceptance');
   assert.equal(creates, 3);
   assert.match(await contents(unavailable, '#rp-confirmed-summary'), /1\.601,75/);
   await screenshot(unavailable, 'payment-unavailable-desktop', '#monte-seu-projeto');
-  checks.push('unavailable-allows-quote-without-charge');
+  checks.push('unavailable-allows-quote-without-charge', 'paused-payment-shows-reason-and-never-submits');
 
   await unavailable.goto(base + '/projetos-prontos/condicoes/', { waitUntil: 'networkidle0' });
   await audit(unavailable, 'conditions-mobile', 390, 844);
