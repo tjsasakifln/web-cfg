@@ -386,9 +386,10 @@ def build_release(
             "scripts/storage/retention.mjs",
             # The official opportunity overlay renders its index through
             # ``shell_nav.sync_text``.  Keep that canonical shell chain portable:
-            # shell_nav needs the shared breadcrumb helper, the brand helpers and
-            # the public IA map, while ``declared_value_first_cta`` reads the
-            # family registry.  This is intentionally a file allowlist rather
+            # shell_nav needs the discovery renderer, the shared breadcrumb
+            # helper, the brand helpers and the public IA map, while
+            # ``declared_value_first_cta`` reads the family registry.
+            # This is intentionally a file allowlist rather
             # than the whole site/pSEO tree.
             "scripts/site/__init__.py",
             "scripts/site/svg_sprite.py",
@@ -396,6 +397,7 @@ def build_release(
             "scripts/site/public_ia.py",
             "scripts/site/authority.py",
             "scripts/site/public_footer.py",
+            "scripts/site/navigation_discovery.py",
             "scripts/site/shell_nav.py",
             "scripts/pseo/__init__.py",
             "scripts/pseo/html_shell.py",
@@ -486,6 +488,7 @@ def build_release(
                 "scripts/site/public_ia.py",
                 "scripts/site/authority.py",
                 "scripts/site/public_footer.py",
+                "scripts/site/navigation_discovery.py",
                 "scripts/site/shell_nav.py",
                 "scripts/pseo/__init__.py",
                 "scripts/pseo/html_shell.py",

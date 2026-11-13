@@ -15,6 +15,7 @@ from pathlib import Path
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
 from scripts.site.public_ia import active_header_href
+from scripts.site.navigation_discovery import render_navigation, sync_discovery_bar
 from scripts.site.shell_nav import FROZEN_SHELL_FILES, value_first_cta_contract
 
 
@@ -26,13 +27,13 @@ BRAND_PATH = ROOT / "data/site/brand.json"
 FROZEN_NAV_HTML_PATHS = frozenset(item["html_rel"] for item in PILLARS) & FROZEN_SHELL_FILES
 
 _NAV_RE = re.compile(
-    r'(<nav\b[^>]*\bclass="[^"]*\b(?:desktop-nav|mobile-nav)\b[^"]*"[^>]*>)'
+    r'(<nav\b[^>]*\bclass="[^"]*(?<![\w-])(?:desktop-nav|mobile-nav)(?![\w-])[^"]*"[^>]*>)'
     r'(.*?)'
     r'(</nav>)',
     flags=re.IGNORECASE | re.DOTALL,
 )
 _ANY_TOP_NAV_OPEN_RE = re.compile(
-    r"<nav\b[^>]*\bclass\s*=\s*(['\"])[^'\"]*\b(?:desktop-nav|mobile-nav)\b"
+    r"<nav\b[^>]*\bclass\s*=\s*(['\"])[^'\"]*(?<![\w-])(?:desktop-nav|mobile-nav)(?![\w-])"
     r"[^'\"]*\1[^>]*>",
     flags=re.IGNORECASE,
 )
@@ -243,7 +244,7 @@ def _canonicalize_nav_block(
 ) -> str:
     anchors = [match.group(0) for match in _ANCHOR_RE.finditer(inner)]
     residual = _ANCHOR_RE.sub("", inner)
-    if residual.strip():
+    if residual.strip() and 'data-nav-group="' not in inner:
         raise ValueError(
             f"{relative_path}: unsupported content inside top navigation"
         )
@@ -271,10 +272,9 @@ def _canonicalize_nav_block(
             )
 
     current = _current_hrefs(anchors, relative_path)
-    rendered = [
-        _canonical_anchor(label, href, current=href in current, kind=kind)
-        for label, href in CANONICAL_NAV_ITEMS
-    ]
+    rendered = [render_navigation(
+        kind=kind, current=_public_path(relative_path), active=next(iter(current), "")
+    )]
     if kind == "mobile":
         rendered.append(
             _value_first_cta_anchor(relative_path, kind="mobile")
@@ -287,22 +287,22 @@ def _validate_canonical_block(
     inner: str, *, opening: str, relative_path: str
 ) -> None:
     anchors = [match.group(0) for match in _ANCHOR_RE.finditer(inner)]
-    navigation = [anchor for anchor in anchors if not _is_button(anchor)]
+    navigation = [anchor for anchor in anchors if _attribute(anchor, "data-nav-primary") == "true"]
     signature = tuple(
-        (_anchor_text(anchor), _attribute(anchor, "href"))
+        (_attribute(anchor, "data-nav-label"), _attribute(anchor, "href"))
         for anchor in navigation
     )
     if signature != CANONICAL_NAV_ITEMS:
-        raise ValueError(
-            f"{relative_path}: public navigation differs from brand contract; "
-            f"expected={CANONICAL_NAV_ITEMS!r}, actual={signature!r}"
-        )
-    if sum(
-        _attribute(anchor, "aria-current") == "page" for anchor in navigation
-    ) > 1:
-        raise ValueError(
-            f"{relative_path}: multiple current pages in top navigation"
-        )
+        raise ValueError(f"{relative_path}: public navigation differs from brand contract")
+    if sum(_attribute(anchor, "aria-current") == "page" for anchor in navigation) > 1:
+        raise ValueError(f"{relative_path}: multiple current pages in top navigation")
+    kind = _nav_kind(opening)
+    expected_menu = render_navigation(kind=kind, current=_public_path(relative_path),
+        active=next(iter(_current_hrefs(navigation, relative_path)), ""))
+    without_cta = _ANCHOR_RE.sub(lambda m: "" if _is_button(m.group(0)) else m.group(0), inner).strip()
+    if without_cta != expected_menu:
+        raise ValueError(f"{relative_path}: discovery groups or destinations differ from public IA contract")
+
     utility = [anchor for anchor in anchors if _is_button(anchor)]
     if _nav_kind(opening) == "mobile":
         value_first = _value_first_cta_anchor(relative_path, kind="mobile")
@@ -381,7 +381,7 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
         pieces.append(block.group(3))
         cursor = block.end()
     pieces.append(html[cursor:])
-    result = "".join(pieces)
+    result = sync_discovery_bar("".join(pieces))
 
     header_ctas = list(_HEADER_CTA_RE.finditer(result))
     if len(header_ctas) > 1:

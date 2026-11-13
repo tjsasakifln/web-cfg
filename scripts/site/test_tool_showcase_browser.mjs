@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import { readFile, stat, mkdir } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { createRequire } from 'node:module';
+import { setTimeout as delay } from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
 import { resolveChromePath } from './resolve_chrome.mjs';
 
@@ -68,16 +69,23 @@ try {
   for (const width of [320, 390, 768, 1024, 1440]) {
     await page.setViewport({ width, height: 880 });
     await load('/');
-    const nav = width > 900 ? '.desktop-nav' : '.mobile-nav';
-    if (width <= 900) {
+    const mobile = await page.$eval('.menu-toggle', el => el.getClientRects().length > 0 && getComputedStyle(el).display !== 'none');
+    const nav = mobile ? '.mobile-nav' : '.desktop-nav';
+    if (mobile) {
       await page.waitForSelector('.menu-toggle', { visible: true });
       await page.click('.menu-toggle');
     }
-    await page.waitForSelector(nav + ' a[href="/ferramentas/"]', { visible: true });
-    await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click(nav + ' a[href="/ferramentas/"]')]);
+    const groupToggle = nav + ' [data-nav-group="ferramentas"] > summary';
+    await page.waitForSelector(groupToggle, { visible: true });
+    const targetSize = await page.$eval(groupToggle, el => ({ width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height }));
+    assert.ok(targetSize.width >= 44 && targetSize.height >= 44, 'menu touch target ' + width);
+    await page.click(groupToggle);
+    const overview = nav + ' a[data-nav-primary="true"][href="/ferramentas/"]';
+    await page.waitForSelector(overview, { visible: true });
+    await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click(overview)]);
     assert.equal(new URL(page.url()).pathname, '/ferramentas/');
     assert.equal(await overflow(), false, 'catalogue viewport ' + width);
-    assert.equal(await page.$eval(nav + ' a[href="/ferramentas/"]', el => el.getAttribute('aria-current')), 'page');
+    assert.equal(await page.$eval(overview, el => el.getAttribute('aria-current')), 'page');
     if (shots && [390, 1440].includes(width)) {
       await page.screenshot({ path: resolve(shots, 'catalogue-' + width + '.png') });
     }
@@ -229,8 +237,28 @@ try {
   await page.setJavaScriptEnabled(false);
   await page.setViewport({ width: 320, height: 800 });
   await load('/');
-  await page.waitForSelector('.mobile-nav a[href="/ferramentas/"]', { visible: true });
-  await load('/ferramentas/');
+  const nativeGroup = '.mobile-nav [data-nav-group="ferramentas"]';
+  const nativeOverview = nativeGroup + ' a[data-nav-primary="true"][href="/ferramentas/"]';
+  await page.focus(nativeGroup + ' > summary');
+  await page.keyboard.press('Enter');
+  assert.equal(await page.$eval(nativeGroup, el => el.open), true, 'native tools disclosure opens with scripting disabled');
+  // Browser timers/rAF do not run with scripting disabled. Poll native layout
+  // from Node instead of waiting for a page-side visibility poller.
+  const nativeDeadline = Date.now() + 6000;
+  let nativeOverviewVisible = false;
+  while (Date.now() < nativeDeadline) {
+    nativeOverviewVisible = await page.$eval(nativeOverview, el => {
+      const box = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return box.width > 0 && box.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+    });
+    if (nativeOverviewVisible) break;
+    await delay(50);
+  }
+  assert.equal(nativeOverviewVisible, true, 'native tools overview is visible');
+  await page.focus(nativeOverview);
+  await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.keyboard.press('Enter')]);
+  assert.equal(new URL(page.url()).pathname, '/ferramentas/', 'native tools link reaches the catalogue');
   assert.equal(await overflow(), false);
   assert.equal(await page.$$eval('.ts-card-action[href]', nodes => nodes.length), count);
   assert.equal(await page.$eval('[data-tool-search]', el => el.hidden), true);

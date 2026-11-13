@@ -1,0 +1,21 @@
+{
+  "approval_scope": "public_artifact_v2",
+  "approved_assembled_html_sha256": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
+  "full_build_html_sha256": "28276b02fa1f1aae1d987da70eeabbe3d7a44f70c317a453ff9d95cb38cffb90",
+  "exact_match_after_existing_responsive_and_script_transforms": true,
+  "responsive": {
+    "files": 1,
+    "currency_files": 0,
+    "opaque_token_files": 1,
+    "marker_files": 0
+  },
+  "main_script": {
+    "algorithm": "sha256-16",
+    "fingerprint": "67d1a16f110d36a3",
+    "src": "/script.js?v=67d1a16f110d36a3",
+    "files": 1,
+    "references": 1
+  },
+  "production_transformers_modified": false,
+  "local_build_exit_code": 0
+}

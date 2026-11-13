@@ -118,8 +118,11 @@ class TestProjectPages(unittest.TestCase):
                 ]
                 active_route = self.renderer._active_header_route(page)
                 if page["route"] == "/como-trabalhamos/":
-                    self.assertEqual(active_route, "/empresa/")
-                self.assertEqual(active_header, [active_route, active_route])
+                    self.assertEqual(active_route, "/conteudos/")
+                self.assertEqual(active_header, [active_route, active_route] if active_route in menu_routes else [])
+                if page["route"] == "/empresa/":
+                    self.assertNotIn("/empresa/", menu_routes)
+                    self.assertTrue(any(link.get("href") == "/empresa/" and link.get("data-cta-position") == "header_utility" for link in parser.links))
                 whatsapp = [
                     link for link in parser.links
                     if str(link.get("href", "")).startswith("https://wa.me/")
