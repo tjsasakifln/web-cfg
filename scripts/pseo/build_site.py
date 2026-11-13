@@ -406,6 +406,9 @@ _NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','
 _MAIN_SCRIPT_SRC_RE = re.compile(
     r'(?is)(<script\b[^>]*\bsrc=["\'])/script\.js(?:\?[^"\']*)?(["\'])'
 )
+_READY_PROJECT_MODULE_SRC_RE = re.compile(
+    r'(?is)(<script\b[^>]*\bsrc=["\'])/assets/js/ready-project-services\.mjs(?:\?[^"\']*)?(["\'])'
+)
 
 
 def _has_behaviour_script(html: str) -> bool:
@@ -608,6 +611,39 @@ def fingerprint_main_script(public_root: Path) -> dict[str, str | int]:
         "fingerprint": fingerprint,
         "src": versioned_src,
         "files": files,
+        "references": references,
+    }
+
+
+def fingerprint_ready_project_module(public_root: Path) -> dict[str, str | int]:
+    """Bind existing project module references to its final published bytes."""
+    pages = []
+    for path in sorted(public_root.rglob("*.html")):
+        raw = path.read_text(encoding="utf-8")
+        if _READY_PROJECT_MODULE_SRC_RE.search(raw):
+            pages.append((path, raw))
+    if not pages:
+        return {"algorithm": "sha256-16", "files": 0, "references": 0}
+
+    script_path = public_root / "assets/js/ready-project-services.mjs"
+    if not script_path.is_file():
+        raise RuntimeError("ready_project_module_missing_from_public_artifact")
+    fingerprint = hashlib.sha256(script_path.read_bytes()).hexdigest()[:16]
+    versioned_src = f"/assets/js/ready-project-services.mjs?v={fingerprint}"
+    references = 0
+    for path, raw in pages:
+        rewritten, count = _READY_PROJECT_MODULE_SRC_RE.subn(
+            lambda match: f"{match.group(1)}{versioned_src}{match.group(2)}",
+            raw,
+        )
+        references += count
+        if rewritten != raw:
+            path.write_text(rewritten, encoding="utf-8")
+    return {
+        "algorithm": "sha256-16",
+        "fingerprint": fingerprint,
+        "src": versioned_src,
+        "files": len(pages),
         "references": references,
     }
 
@@ -891,6 +927,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL-CLOSED minify_public_js exception: {exc}", file=sys.stderr)
         return 2
 
+    # Use the final artifact bytes, after script transforms and before identity
+    # stamping, so returning visitors cannot reuse an older project module.
+    ready_project_module_fingerprint: dict[str, str | int] = {}
+    try:
+        ready_project_module_fingerprint = fingerprint_ready_project_module(
+            ROOT / PUBLIC_DIR_NAME
+        )
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"ready_project_module_fingerprint_failed:{exc}")
+
     # Responsive token wrappers affect extracted word boundaries. Derive the
     # final Article metadata after every HTML transform and before tree hashing.
     final_word_counts = sync_article_word_counts(ROOT / PUBLIC_DIR_NAME)
@@ -994,6 +1040,7 @@ def main(argv: list[str] | None = None) -> int:
         "prototype_isolation": prototype_isolation,
         "turnstile": turnstile_config,
         "main_script_fingerprint": main_script_fingerprint,
+        "ready_project_module_fingerprint": ready_project_module_fingerprint,
         "responsive_html": responsive_html,
         "article_word_counts": {"final_metadata_updated": len(final_word_counts)},
         "public_artifact": {

@@ -1,9 +1,13 @@
+import hashlib
 from pathlib import Path
+
+import pytest
 
 from scripts.pseo.build_site import (
     atomize_visible_currency,
     ensure_progressive_enhancement_marker,
     fingerprint_main_script,
+    fingerprint_ready_project_module,
     mark_visible_opaque_tokens,
     normalize_responsive_public_html,
 )
@@ -147,3 +151,75 @@ def test_main_script_fingerprint_changes_with_bundle_bytes(tmp_path: Path) -> No
 
     assert first["fingerprint"] != second["fingerprint"]
     assert second["src"] in page.read_text(encoding="utf-8")
+
+
+def test_project_module_fingerprint_replaces_stale_and_missing_queries(tmp_path: Path) -> None:
+    script = tmp_path / "assets/js/ready-project-services.mjs"
+    script.parent.mkdir(parents=True)
+    script.write_bytes(b"export const release = 'current';\n")
+    first = tmp_path / "index.html"
+    first.write_text(
+        '<script type="module" src="/assets/js/ready-project-services.mjs?v=old"></script>',
+        encoding="utf-8",
+    )
+    nested = tmp_path / "projetos-prontos"
+    nested.mkdir()
+    second = nested / "index.html"
+    other = '<script type="module" src="/assets/js/other.mjs?v=keep"></script>'
+    second.write_text(
+        "<script src='/assets/js/ready-project-services.mjs' type='module'></script>" + other,
+        encoding="utf-8",
+    )
+
+    report = fingerprint_ready_project_module(tmp_path)
+
+    assert report["algorithm"] == "sha256-16"
+    assert report["files"] == 2
+    assert report["references"] == 2
+    assert report["fingerprint"] == hashlib.sha256(script.read_bytes()).hexdigest()[:16]
+    assert report["src"] == f"/assets/js/ready-project-services.mjs?v={report['fingerprint']}"
+    assert first.read_text(encoding="utf-8") == f'<script type="module" src="{report["src"]}"></script>'
+    assert second.read_text(encoding="utf-8") == f"<script src='{report['src']}' type='module'></script>" + other
+    assert script.read_bytes() == b"export const release = 'current';\n"
+    assert fingerprint_ready_project_module(tmp_path) == report
+    assert first.read_text(encoding="utf-8").count("?v=") == 1
+    assert second.read_text(encoding="utf-8").count("?v=") == 2
+
+
+def test_project_module_fingerprint_changes_with_published_bytes(tmp_path: Path) -> None:
+    script = tmp_path / "assets/js/ready-project-services.mjs"
+    script.parent.mkdir(parents=True)
+    script.write_bytes(b"export const release = 'a';")
+    page = tmp_path / "index.html"
+    page.write_text('<script type="module" src="/assets/js/ready-project-services.mjs"></script>', encoding="utf-8")
+    first = fingerprint_ready_project_module(tmp_path)
+
+    script.write_bytes(b"export const release = 'b';")
+    second = fingerprint_ready_project_module(tmp_path)
+
+    assert first["src"] != second["src"]
+    assert second["src"] in page.read_text(encoding="utf-8")
+    assert first["src"] not in page.read_text(encoding="utf-8")
+    assert page.read_text(encoding="utf-8").count("?v=") == 1
+
+
+def test_project_module_fingerprint_skips_pages_without_the_module(tmp_path: Path) -> None:
+    page = tmp_path / "index.html"
+    html = '<script src="/script.js?v=keep"></script><script type="module" src="/assets/js/other.mjs"></script>'
+    page.write_text(html, encoding="utf-8")
+
+    assert fingerprint_ready_project_module(tmp_path) == {
+        "algorithm": "sha256-16", "files": 0, "references": 0,
+    }
+    assert page.read_text(encoding="utf-8") == html
+    assert not (tmp_path / "assets").exists()
+
+
+def test_project_module_fingerprint_requires_a_referenced_module(tmp_path: Path) -> None:
+    page = tmp_path / "index.html"
+    html = '<script type="module" src="/assets/js/ready-project-services.mjs"></script>'
+    page.write_text(html, encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="ready_project_module_missing_from_public_artifact"):
+        fingerprint_ready_project_module(tmp_path)
+    assert page.read_text(encoding="utf-8") == html
