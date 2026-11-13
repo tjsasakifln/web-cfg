@@ -1,0 +1,90 @@
+{
+  "schema": "confenge-search-metadata/v1",
+  "decision": "EXECUTE_NOW",
+  "source_authority": "O título e a descrição pertencem ao HTML ou ao contrato do gerador de cada página. Este contrato só projeta esses valores para as prévias e relaciona entidades já descritas no conteúdo.",
+  "default_image": {
+    "url": "https://confenge.com.br/assets/og-confenge.jpg",
+    "alt": "CONFENGE: projetos e serviços de engenharia",
+    "width": 1200,
+    "height": 630,
+    "type": "image/jpeg"
+  },
+  "routes": {
+    "/": {},
+    "/acompanhamento-contratos-obras/": {},
+    "/assistencia-tecnica-pericial-engenharia/": {},
+    "/atrasos-prorrogacao-obras-publicas/": {},
+    "/bid-room-licitacoes-obras/": {},
+    "/casos/": {
+      "page_type": "CollectionPage",
+      "directory_prefix": "/casos/"
+    },
+    "/casos/aditivo-art125-demonstrativo/": {},
+    "/casos/medicao-glosa-demonstrativo/": {},
+    "/casos/modelo-apresentacao-executiva-resultados/": {},
+    "/casos/modelo-base-quantitativa-canonica/": {},
+    "/casos/modelo-contratos-vincendos-relicitacao/": {},
+    "/casos/modelo-mapa-compradores-publicos/": {},
+    "/casos/modelo-mapeamento-concorrentes-publicos/": {},
+    "/casos/modelo-painel-precos-obras-publicas/": {},
+    "/casos/modelo-relatorio-executivo-consolidado/": {},
+    "/casos/modelo-relatorio-inteligencia-licitacoes/": {},
+    "/como-trabalhamos/": {},
+    "/compatibilizacao-projetos-engenharia/": {},
+    "/conteudos/como-contratar-compatibilizacao-projetos/": {},
+    "/conteudos/como-contratar-projetos-complementares/": {},
+    "/conteudos/como-contratar-revisao-tecnica-projeto/": {},
+    "/conteudos/comparar-propostas-execucao-obra/": {
+      "article": true
+    },
+    "/conteudos/documentos-para-levantamento-quantitativos/": {
+      "article": true
+    },
+    "/conteudos/quando-compatibilizar-projetos/": {},
+    "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/": {},
+    "/conteudos/revisar-ou-refazer-orcamento-obra/": {
+      "article": true
+    },
+    "/defesa-margem-contratos-publicos/": {},
+    "/defesa-tecnica-contratos-publicos/": {},
+    "/edificacoes/": {},
+    "/elaboracao-pgr/": {},
+    "/empresa/": {
+      "page_type": "AboutPage"
+    },
+    "/engenharia-condominios/": {},
+    "/entregas/": {},
+    "/ferramentas/prontidao-tecnica-obra-privada/": {},
+    "/imprensa/": {},
+    "/inspecao-diagnostico-edificacoes/": {},
+    "/metodologia-inteligencia/": {},
+    "/parcerias-engenharia/": {},
+    "/pgr-documentacao-sst-obras/": {},
+    "/problemas-que-resolvemos/": {
+      "page_type": "CollectionPage"
+    },
+    "/projeto-eletrico/": {},
+    "/projeto-estrutura-metalica/": {},
+    "/projeto-estrutural-concreto-armado/": {},
+    "/projeto-hidrossanitario/": {},
+    "/projetos-complementares-engenharia/": {},
+    "/projetos-prontos/": {},
+    "/projetos/": {},
+    "/projetos/coordenacao-multidisciplinar/": {},
+    "/projetos/estruturas/": {},
+    "/projetos/infraestrutura/": {},
+    "/projetos/instalacoes/": {},
+    "/quantitativos-orcamento-obras/": {},
+    "/revisao-atualizacao-pgr/": {},
+    "/revisao-tecnica-projetos-engenharia/": {},
+    "/seguranca-trabalho-apoio-tecnico/": {},
+    "/servicos-obras-publicas/": {
+      "page_type": "CollectionPage"
+    },
+    "/servicos/": {
+      "page_type": "CollectionPage"
+    },
+    "/terceirizacao-documentacao-sst/": {},
+    "/terceirizacao-projetos-engenharia/": {}
+  }
+}

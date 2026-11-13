@@ -1,15 +1,15 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-13T12:42:32.080Z",
+  "measured_at": "2026-11-13T18:17:52.170Z",
   "measured_on": "2026-11-13",
-  "commit_sha": "77f5b26f5f1029155f8fb865c7faff276692be6b",
+  "commit_sha": "82e3d9aec9f75876d23895df2f95bb9db52b7896",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
     "@control/scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
     "@control/scripts/site/measure_first_fold.mjs": "640885fc9f7a7ddfde0fc691e6689c951625ee35cba7d46f2c0360ace9d4a696",
-    "acompanhamento-contratos-obras/index.html": "75a5b83c8037b1c0e7f9d719512441703aa2dcbcf27d34ca7a67552e9014c8d8",
+    "acompanhamento-contratos-obras/index.html": "952e0371ae95edd03de0eaa2592d1adc06b1c5e491bb0146a3f2e92b5f5a2340",
     "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/conteudos/como-contratar-projetos-complementares-mobile.svg": "78faf44bfd07b7505bde169bccdaecfc358a101cf30aba5025fb6312165adec6",
@@ -27,40 +27,40 @@
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
-    "atrasos-prorrogacao-obras-publicas/index.html": "98788b6c7e6593b2995fc3976ffea4764fa51c3ee0c7cf33ff0be2bfa681e946",
+    "atrasos-prorrogacao-obras-publicas/index.html": "d6b50d79ec39df5b7f6135b68205df017189be1c9ce1509b45ded98e5e27d347",
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-    "bid-room-licitacoes-obras/index.html": "e06fd75b5729faa3c655900aed5683dda4445c37b9028ebc91071313a0d5fa26",
-    "casos/modelo-apresentacao-executiva-resultados/index.html": "dc08278bed7d63ad020314b49495de2aa31b9e7abb9fb4f4e422a48a0c53c594",
+    "bid-room-licitacoes-obras/index.html": "a1f06332e2f706de50ec3f9d557f83f3a9db7ec1764d2fea8843f4ad83b48410",
+    "casos/modelo-apresentacao-executiva-resultados/index.html": "e088423efbb0a72aad1a6af18751ea5ae9631a663c90ed5c65c04411ea905d54",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
-    "casos/modelo-base-quantitativa-canonica/index.html": "40d844daeed3993938009f612bb726472ebc04e3f29730803affb9aa14e6ba05",
+    "casos/modelo-base-quantitativa-canonica/index.html": "ea4b2f31ea0290dfc077f649168e18136beef94297aa9b116ce5a17f33ef55ae",
     "casos/modelo-base-quantitativa-canonica/styles.css": "c8d0c0fcc67bb3ff7368e313a7eb7978728dd012668bbd57c6d4584fd3331d83",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html": "9dd9868ce357eeb48e6292765a9f2764eea4d1f85bd9ceb9480f284f554b7dea",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": "928a64a170a415e924d6b5786bbdebfd9ed9feec91d209a3f2da155aff1b9453",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
-    "casos/modelo-mapa-compradores-publicos/index.html": "b84ed840b484af081a14a58ca71eef7cde2cd19b75caf1c7ba9c5a54159161bb",
+    "casos/modelo-mapa-compradores-publicos/index.html": "c19447b4195c7da7407f44edd60ba90a3db8a349b2e1a8806d21fd03442c21c7",
     "casos/modelo-mapa-compradores-publicos/styles.css": "211910fc1bd872792301284632b6139e460777be5f8eb10f0880eccc13ec450d",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "a35ff0ff1fb37e157af4f9f9b79be0988e3decd1f25141e90efee87e14d0a50f",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "f59d0d08c0abb5a3c36fafccc766b90d18f4f9bf596a64842b96daa06f484e0f",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
-    "casos/modelo-painel-precos-obras-publicas/index.html": "16667e75a4f70cc9e7eb504bd53e1b0fae600fc2c1af20a1e4b4db41bbada8ed",
+    "casos/modelo-painel-precos-obras-publicas/index.html": "bed5098433d136de79a6ecbce4bcc95a7cee114aebec0cabf7b36d5e978d6915",
     "casos/modelo-painel-precos-obras-publicas/styles.css": "eddc3b734030a33898728fe41affb4c3bce7ccee5338d13ff05a8cbf7d669e6a",
-    "casos/modelo-relatorio-executivo-consolidado/index.html": "f16607cc0110bf798b86dfa94cd57816fa6d92dacb8052ef4824cc9ae77bc96b",
+    "casos/modelo-relatorio-executivo-consolidado/index.html": "44a3fa04edf0aada253af6591cf2948eefe90437aa6d756ef142459b6c4e77dd",
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "034559b67c2b14cc387b7d4a781067acfb271edb0b6a432a4151d57f15439a47",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "a121717ea695482a35427c437ede9f4e8c0125d818868aecb21bce7e8977573b",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
-    "defesa-margem-contratos-publicos/index.html": "761ebb49114a1217d6c98fedb4f54a1a68e29ebd82abcdd3c9768a21fb0c0cce",
-    "defesa-tecnica-contratos-publicos/index.html": "3f123f4e3cc0e7f901a8df14cf6b3508269c923fe8229f1493af92b9aee52981",
+    "defesa-margem-contratos-publicos/index.html": "509b1fcc009244fc18d65775fddb8978cea001d772e0abef3fdd952e6c74dd5a",
+    "defesa-tecnica-contratos-publicos/index.html": "69636bbe1fbdee07f1e433f895d2916bb654da5678b3c30f753af812875d6549",
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
     "diagnostico-b2g-expansao/index.html": "b5867cdbc90a082410580c4110b2e7dd06580909e6d132ee777d9005469a26cb",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
     "diretoria-b2g/index.html": "303debc8790a0c2069ab42edc7d66d11da0109c6dbd162838f0829e19caffd9e",
-    "entregas/index.html": "41ab319b7c9f61a580078dde514a3cc54a367c0fb406eb952c61784a48a6d226",
+    "entregas/index.html": "e61b95d68ece59f9afa0a2c0409358c0e9902954233552ef61735bd88063e7d9",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "86df181bb3d780f88f218a86cb0adcebe3ff92de93b37841a58361541ea8932b",
+    "index.html": "c90877a9a1722a90c9f53e868ed8b6dc32034ae9928e1e1ee26b30c047600f6c",
     "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-    "problemas-que-resolvemos/index.html": "2e79e356fc06277ec0f7feba50c5a7f21c6726195183ee9969cc4eae5e17924d",
-    "projetos-prontos/index.html": "2632a54ce4726e56cf08a915d8f97f9bfad859d549767e7c5113f8b2ae7584c2",
+    "problemas-que-resolvemos/index.html": "35032bd9767ed739080b5bd13967e33242e968e375892718cb28dbbac73565e5",
+    "projetos-prontos/index.html": "90cff252e594865582cd1a7ccab30246e68d1686056eff5e5ef4286c6a012de5",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
     "script.js": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
-    "servicos-obras-publicas/index.html": "60e030f94b3dff230616839a00816b221168ce13497d50f44118e58ebc251223",
+    "servicos-obras-publicas/index.html": "a0e5683cb101a930bdae0219ca6c6e6f4fa07c7ab2910840ab2753fa6acf1b5c",
     "styles-hubs.css": "04d161f9d370fb5d535552e2373be6bfee86083aba1e672c3cc4deb3782b085e",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
@@ -117,7 +117,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "86df181bb3d780f88f218a86cb0adcebe3ff92de93b37841a58361541ea8932b",
+      "html_sha256": "c90877a9a1722a90c9f53e868ed8b6dc32034ae9928e1e1ee26b30c047600f6c",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -325,7 +325,7 @@
     },
     {
       "route": "/projetos-prontos/",
-      "html_sha256": "2632a54ce4726e56cf08a915d8f97f9bfad859d549767e7c5113f8b2ae7584c2",
+      "html_sha256": "90cff252e594865582cd1a7ccab30246e68d1686056eff5e5ef4286c6a012de5",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -514,7 +514,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "41ab319b7c9f61a580078dde514a3cc54a367c0fb406eb952c61784a48a6d226",
+      "html_sha256": "e61b95d68ece59f9afa0a2c0409358c0e9902954233552ef61735bd88063e7d9",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -712,7 +712,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "60e030f94b3dff230616839a00816b221168ce13497d50f44118e58ebc251223",
+      "html_sha256": "a0e5683cb101a930bdae0219ca6c6e6f4fa07c7ab2910840ab2753fa6acf1b5c",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -902,7 +902,7 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "2e79e356fc06277ec0f7feba50c5a7f21c6726195183ee9969cc4eae5e17924d",
+      "html_sha256": "35032bd9767ed739080b5bd13967e33242e968e375892718cb28dbbac73565e5",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -1706,7 +1706,7 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "e06fd75b5729faa3c655900aed5683dda4445c37b9028ebc91071313a0d5fa26",
+      "html_sha256": "a1f06332e2f706de50ec3f9d557f83f3a9db7ec1764d2fea8843f4ad83b48410",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -1906,7 +1906,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "761ebb49114a1217d6c98fedb4f54a1a68e29ebd82abcdd3c9768a21fb0c0cce",
+      "html_sha256": "509b1fcc009244fc18d65775fddb8978cea001d772e0abef3fdd952e6c74dd5a",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -2513,7 +2513,7 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "98788b6c7e6593b2995fc3976ffea4764fa51c3ee0c7cf33ff0be2bfa681e946",
+      "html_sha256": "d6b50d79ec39df5b7f6135b68205df017189be1c9ce1509b45ded98e5e27d347",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -2921,7 +2921,7 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "3f123f4e3cc0e7f901a8df14cf6b3508269c923fe8229f1493af92b9aee52981",
+      "html_sha256": "69636bbe1fbdee07f1e433f895d2916bb654da5678b3c30f753af812875d6549",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -3335,7 +3335,7 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "75a5b83c8037b1c0e7f9d719512441703aa2dcbcf27d34ca7a67552e9014c8d8",
+      "html_sha256": "952e0371ae95edd03de0eaa2592d1adc06b1c5e491bb0146a3f2e92b5f5a2340",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -3731,7 +3731,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "html_sha256": "034559b67c2b14cc387b7d4a781067acfb271edb0b6a432a4151d57f15439a47",
+      "html_sha256": "a121717ea695482a35427c437ede9f4e8c0125d818868aecb21bce7e8977573b",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -3933,7 +3933,7 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "html_sha256": "40d844daeed3993938009f612bb726472ebc04e3f29730803affb9aa14e6ba05",
+      "html_sha256": "ea4b2f31ea0290dfc077f649168e18136beef94297aa9b116ce5a17f33ef55ae",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -4135,7 +4135,7 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "html_sha256": "dc08278bed7d63ad020314b49495de2aa31b9e7abb9fb4f4e422a48a0c53c594",
+      "html_sha256": "e088423efbb0a72aad1a6af18751ea5ae9631a663c90ed5c65c04411ea905d54",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -4339,7 +4339,7 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "html_sha256": "b84ed840b484af081a14a58ca71eef7cde2cd19b75caf1c7ba9c5a54159161bb",
+      "html_sha256": "c19447b4195c7da7407f44edd60ba90a3db8a349b2e1a8806d21fd03442c21c7",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -4543,7 +4543,7 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "html_sha256": "9dd9868ce357eeb48e6292765a9f2764eea4d1f85bd9ceb9480f284f554b7dea",
+      "html_sha256": "928a64a170a415e924d6b5786bbdebfd9ed9feec91d209a3f2da155aff1b9453",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -4748,7 +4748,7 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "html_sha256": "a35ff0ff1fb37e157af4f9f9b79be0988e3decd1f25141e90efee87e14d0a50f",
+      "html_sha256": "f59d0d08c0abb5a3c36fafccc766b90d18f4f9bf596a64842b96daa06f484e0f",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -4948,7 +4948,7 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "html_sha256": "16667e75a4f70cc9e7eb504bd53e1b0fae600fc2c1af20a1e4b4db41bbada8ed",
+      "html_sha256": "bed5098433d136de79a6ecbce4bcc95a7cee114aebec0cabf7b36d5e978d6915",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -5154,7 +5154,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "html_sha256": "f16607cc0110bf798b86dfa94cd57816fa6d92dacb8052ef4824cc9ae77bc96b",
+      "html_sha256": "44a3fa04edf0aada253af6591cf2948eefe90437aa6d756ef142459b6c4e77dd",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {

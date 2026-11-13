@@ -68,7 +68,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
           test -z "$(git status --porcelain)"
       - name: Verify home and project geometry
-        if: github.head_ref == 'fix/comunicacao-servicos-profissional'
+        if: github.head_ref == 'fix/comunicacao-servicos-profissional' || github.head_ref == 'feat/projetos-copy-seo-20261113'
         env:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: |
@@ -83,7 +83,7 @@ jobs:
         if: always() && steps.chrome.outcome == 'success'
         env:
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
-          CAPTURE_PATHS: ${{ startsWith(github.head_ref, 'feat/projetos-') && '/projetos-prontos/,/projetos-prontos/condicoes/' || '/,/projetos/,/projetos/estruturas/,/servicos/,/quantitativos-orcamento-obras/,/compatibilizacao-projetos-engenharia/' }}
+          CAPTURE_PATHS: ${{ github.head_ref == 'feat/projetos-copy-seo-20261113' && '/,/projetos/,/projetos/estruturas/,/projetos/instalacoes/,/projetos/infraestrutura/,/projetos/coordenacao-multidisciplinar/,/edificacoes/,/como-trabalhamos/,/empresa/,/terceirizacao-projetos-engenharia/,/projeto-estrutural-concreto-armado/,/projeto-estrutura-metalica/,/projeto-eletrico/,/projeto-hidrossanitario/,/triagem-tecnica/,/conteudos/,/parcerias-engenharia/,/projetos-prontos/,/projetos-prontos/condicoes/,/ferramentas/prontidao-tecnica-obra-privada/' || startsWith(github.head_ref, 'feat/projetos-') && '/projetos-prontos/,/projetos-prontos/condicoes/' || '/,/projetos/,/projetos/estruturas/,/servicos/,/quantitativos-orcamento-obras/,/compatibilizacao-projetos-engenharia/' }}
           CAPTURE_VIEWPORTS: 1366x768,390x844
           CAPTURE_FULLPAGE: "1"
           CAPTURE_ALLOW_EPHEMERAL: "1"

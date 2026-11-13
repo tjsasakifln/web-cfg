@@ -175,6 +175,10 @@ function commercialActions(html, profile) {
         stage = "configure_scope";
         commitment = "commercial_configuration";
         nextState = "Abre a configuração comercial do pedido antes de qualquer instrução de pagamento.";
+      } else if (href === "/projetos-prontos/#monte-seu-projeto") {
+        stage = "calculate";
+        nextState = "Abre o simulador residencial para escolher área, disciplinas e prazo, antes de revisar a contratação.";
+        actualReceipt = "Simulação local; a abertura não registra pedido, pagamento ou recibo.";
       } else if (href === "/ferramentas/#programa-indicacao" || href === "/avaliacao-imoveis-urbanos/inferencia/#programa-indicacao") {
         nextState = "Abre a área de indicação da carteira para acessar o link pessoal com a conta verificada.";
       } else if (/^\/ferramentas\//i.test(href)) {

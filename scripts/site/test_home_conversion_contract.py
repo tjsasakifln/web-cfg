@@ -95,7 +95,11 @@ def _visible(fragment: str) -> str:
 # after the Turnstile slot changed from normal to compact to fit the first
 # viewport. Capture routing, controls, consent, privacy, receipt and token
 # handling are protected by the assertions below and remain unchanged.
-CAPTURE_FORM_SHA256 = "7d733ae97146d18fb4fe4f8ef46804c9792444ab9d85b45e878d94e093672db6"
+# 2026-11-13: reviewed C02/C23 copy changes. The submit now says "Enviar
+# solicitação" and urgency is identified as the visitor's desired deadline.
+# Reversing those two exact text substitutions reproduces the previous form
+# bytes and SHA above. Controls, validation, consent and receipt are unchanged.
+CAPTURE_FORM_SHA256 = "6a1da8aa89793e4768de80ff979e09c95d2a3c5f558f7bff493780712cba7576"
 
 
 def _home() -> str:
@@ -438,7 +442,7 @@ def test_home_select_separates_valuation_and_drops_unpublished_inspection_promis
 
 def test_triage_separates_valuation_dispute_and_documental_sst() -> None:
     valuation = _triage_item("avaliacao-imovel")
-    assert 'href="/servicos/#servico-avaliacao"' in valuation
+    assert 'href="/avaliacao-imoveis-urbanos/"' in valuation
     assert "https://wa.me/5548988344559" in valuation and "mailto:tiago.sasaki@confenge.com.br" in valuation, "valuation fragment must reach contextual contact"
     dispute = _triage_item("pericia-avaliacao")
     assert 'href="/assistencia-tecnica-pericial-engenharia/"' in dispute

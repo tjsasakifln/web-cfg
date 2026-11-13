@@ -22,6 +22,7 @@ from urllib.parse import urlparse
 import pytest
 
 from scripts.demonstrative.private_project.derive import build_sample_trail, derive, load_source
+from scripts.site.test_brand_contract import _unique_head_meta_content
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -29,10 +30,10 @@ ARTIFACT = Path(os.environ.get("PUBLIC_ARTIFACT_DIR", ROOT)).resolve()
 CANONICAL_HOST = "https://confenge.com.br"
 OG_IMAGE = f"{CANONICAL_HOST}/assets/og-confenge.jpg"
 ROUTES = {
-    "quantitativos-orcamento-obras": ("Quantitativos e orçamento de obras", "orçamento"),
-    "revisao-tecnica-projetos-engenharia": ("Revisão técnica de projetos de engenharia", "projeto"),
-    "compatibilizacao-projetos-engenharia": ("Compatibilização de projetos de engenharia", "interfaces"),
-    "projetos-complementares-engenharia": ("Projetos complementares de engenharia", "elaboração"),
+    "quantitativos-orcamento-obras": ("Quantitativos e orçamento de obras | CONFENGE", "orçamento"),
+    "revisao-tecnica-projetos-engenharia": ("Revisão técnica de projetos de engenharia | CONFENGE", "projeto"),
+    "compatibilizacao-projetos-engenharia": ("Compatibilização de projetos de engenharia | CONFENGE", "interferências"),
+    "projetos-complementares-engenharia": ("Projetos complementares de engenharia | CONFENGE", "projetos estruturais"),
 }
 PUBLIC_LABEL = "Área das paredes menos as aberturas descontáveis."
 INTERNAL_FORMULA = "sum(length*height)-openings>=0.50"
@@ -42,6 +43,8 @@ class _Head(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.in_head = False
+        self.in_title = False
+        self.titles: list[str] = []
         self.metas: list[dict[str, str]] = []
         self.links: list[dict[str, str]] = []
 
@@ -55,10 +58,20 @@ class _Head(HTMLParser):
             self.metas.append(record)
         elif tag == "link":
             self.links.append(record)
+        elif tag == "title":
+            self.in_title = True
+            self.titles.append("")
+
+    def handle_data(self, data: str) -> None:
+        if self.in_head and self.in_title:
+            self.titles[-1] += data
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "head":
             self.in_head = False
+            self.in_title = False
+        elif tag == "title":
+            self.in_title = False
 
 
 def _read(route: str, *, root: Path = ARTIFACT) -> str:
@@ -92,10 +105,17 @@ def _assert_sharing_contract(route: str, html: str, *, root: Path = ARTIFACT) ->
     assert _property_values(parsed, "og:type") == ["website"]
     assert _property_values(parsed, "og:url") == [expected_url]
     assert _canonical(parsed) == [expected_url]
-    assert _property_values(parsed, "og:title") == [expected_title]
-    description = _property_values(parsed, "og:description")[0]
+    # The approved editorial title is also the sharing title; the service
+    # identity from ATIVACAO-03 remains exact, including the current brand suffix.
+    assert parsed.titles == [expected_title], f"{route}: title must be unique and match the approved service title"
+    assert _property_values(parsed, "og:title") == [expected_title], f"{route}: og:title must match the approved title"
+    assert _unique_head_meta_content(html, "og:title") == expected_title
+    description = _unique_head_meta_content(html, "og:description")
+    assert description == _unique_head_meta_content(html, "description", attribute="name"), (
+        f"{route}: og:description must match the primary description"
+    )
     assert len(description) > 30
-    assert description_anchor.casefold() in description.casefold()
+    assert description_anchor.casefold() in description.casefold(), f"{route}: og:description must identify the service"
 
     image_value = _property_values(parsed, "og:image")[0]
     assert len(_property_values(parsed, "og:image:alt")) == 1
@@ -158,6 +178,60 @@ def _assert_jpeg(path: Path, *, expected_size: tuple[int, int]) -> bytes:
 @pytest.mark.parametrize("route", ROUTES)
 def test_priority_heads_are_static_complete_and_reference_a_real_social_image(route: str) -> None:
     _assert_sharing_contract(route, _read(route))
+
+
+def _replace_meta(html: str, attribute: str, key: str, replacement: str) -> str:
+    pattern = rf"<meta\b(?=[^>]*\b{attribute}=[\"']{re.escape(key)}[\"'])[^>]*>"
+    mutated, count = re.subn(pattern, lambda _: replacement, html, count=1, flags=re.I)
+    assert count == 1, f"expected metadata to mutate: {key}"
+    return mutated
+
+
+@pytest.mark.parametrize("route", ROUTES)
+def test_priority_sharing_rejects_stale_and_other_service_titles(route: str) -> None:
+    html = _read(route)
+    expected_title = ROUTES[route][0]
+    other_title = next(title for other, (title, _) in ROUTES.items() if other != route)
+    for wrong_title in (expected_title.removesuffix(" | CONFENGE"), other_title):
+        for change_primary in (False, True):
+            mutated = _replace_meta(html, "property", "og:title", f'<meta property="og:title" content="{wrong_title}">')
+            if change_primary:
+                mutated = mutated.replace(f"<title>{expected_title}</title>", f"<title>{wrong_title}</title>")
+            assert mutated != html
+            with pytest.raises(AssertionError, match="title"):
+                _assert_sharing_contract(route, mutated)
+
+
+@pytest.mark.parametrize("route", ROUTES)
+def test_priority_sharing_rejects_divergent_or_unidentified_descriptions(route: str) -> None:
+    html = _read(route)
+    generic = "Informações institucionais e atendimento técnico da CONFENGE."
+    for target in ("primary", "sharing", "both"):
+        mutated = html
+        if target in ("primary", "both"):
+            mutated = _replace_meta(mutated, "name", "description", f'<meta name="description" content="{generic}">')
+        if target in ("sharing", "both"):
+            mutated = _replace_meta(mutated, "property", "og:description", f'<meta property="og:description" content="{generic}">')
+        assert mutated != html
+        with pytest.raises(AssertionError, match="og:description"):
+            _assert_sharing_contract(route, mutated)
+
+
+@pytest.mark.parametrize("key", ("title", "description"))
+@pytest.mark.parametrize("mutation", ("missing", "duplicate", "outside_head"))
+def test_priority_sharing_rejects_missing_duplicate_or_misplaced_primary_metadata(key: str, mutation: str) -> None:
+    route = "quantitativos-orcamento-obras"
+    html = _read(route)
+    pattern = r"<title>[^<]*</title>" if key == "title" else r"<meta\b(?=[^>]*\bname=[\"']description[\"'])[^>]*>"
+    matches = re.findall(pattern, html, flags=re.I)
+    assert len(matches) == 1
+    original = matches[0]
+    replacement = original * 2 if mutation == "duplicate" else ""
+    mutated = html.replace(original, replacement, 1)
+    if mutation == "outside_head":
+        mutated = mutated.replace("</head>", f"</head>{original}", 1)
+    with pytest.raises(AssertionError, match=key):
+        _assert_sharing_contract(route, mutated)
 
 
 @pytest.mark.parametrize("route", ROUTES)

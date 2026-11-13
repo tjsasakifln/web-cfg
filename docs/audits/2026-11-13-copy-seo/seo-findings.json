@@ -1,0 +1,1447 @@
+{
+  "schema": "confenge-seo-council-audit/v1",
+  "baseline_commit": "1bf90c9",
+  "scope_note": "34 oportunidades editoriais por rota e 16 mecanismos técnicos. Ocorrências por rota não representam mecanismos distintos nem defeitos de ranking. Não há promessa de indexação, posições ou rich results.",
+  "items": [
+    {
+      "id": "S01",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/",
+      "source": "index.html",
+      "weakness": "A apresentação na busca usa a sigla SST, menos clara para visitantes que procuram segurança do trabalho.",
+      "before": {
+        "title": "CONFENGE | Projetos e serviços de engenharia",
+        "description": "Projetos, orçamento, inspeção, perícia, avaliação e SST para obras e empresas. Serviços documentais nacionais e vistorias na Grande Florianópolis."
+      },
+      "after": {
+        "title": "CONFENGE | Projetos e serviços de engenharia",
+        "description": "Projetos de engenharia, orçamento, inspeção, perícia, avaliação e segurança do trabalho. Entregas documentais no Brasil e vistorias na Grande Florianópolis."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S02",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/empresa/",
+      "source": "empresa/index.html",
+      "weakness": "O título repete CONFENGE no início e no final, enquanto a descrição fala de organização interna da contratação.",
+      "before": {
+        "title": "CONFENGE: empresa de engenharia, perícias e inteligência técnica | CONFENGE",
+        "description": "A CONFENGE reúne especialidades por contratação, com atribuições, interfaces e responsabilidades definidas para o objeto."
+      },
+      "after": {
+        "title": "Empresa de engenharia, perícias e inteligência técnica | CONFENGE",
+        "description": "Conheça a CONFENGE: projetos estruturais e de instalações, perícias, avaliações e inteligência técnica, com coordenação e responsabilidades definidas."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S03",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/parcerias-engenharia/",
+      "source": "parcerias-engenharia/index.html",
+      "weakness": "O título começa por Encaminhar e enumera atividades sem nomear a parceria nem os escritórios que procuram esse apoio.",
+      "before": {
+        "title": "Encaminhar orçamento, revisão, compatibilização ou elaboração | CONFENGE",
+        "description": "Orçamento, revisão, compatibilização ou elaboração complementar para escritórios e empresas de projeto. O cliente permanece com quem encaminha."
+      },
+      "after": {
+        "title": "Parcerias de engenharia para escritórios | CONFENGE",
+        "description": "Apoio a escritórios de arquitetura e engenharia com projetos, revisão, compatibilização e orçamento. Seu escritório mantém o relacionamento com o cliente."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S04",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/projetos-prontos/",
+      "source": "projetos-prontos/index.html",
+      "weakness": "O título não explicita a contratação online, embora a página permita simular e contratar por disciplina e prazo.",
+      "before": {
+        "title": "Projeto de casa por disciplina, prazo e preço | CONFENGE",
+        "description": "Transforme sua planta ou rascunho em projeto para o seu terreno. Escolha arquitetura, estrutura, elétrica ou hidráulica, de 15 a 90 dias. Pague pelo Mercado Pago."
+      },
+      "after": {
+        "title": "Projeto de casa online por disciplina e prazo | CONFENGE",
+        "description": "Transforme sua planta ou rascunho em projeto para o seu terreno. Escolha arquitetura, estrutura, elétrica ou hidráulica, de 15 a 90 dias. Pague pelo Mercado Pago."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S05",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/projetos-complementares-engenharia/",
+      "source": "projetos-complementares-engenharia/index.html",
+      "weakness": "A descrição conserva o enquadramento limitado a insumos de origem e não resume as disciplinas e entregas apresentadas na página.",
+      "before": {
+        "title": "Projetos complementares de engenharia | CONFENGE",
+        "description": "Elaboração de projetos complementares de engenharia a partir da arquitetura e dos insumos de origem, com disciplina, interfaces, entregáveis e responsável delimitados."
+      },
+      "after": {
+        "title": "Projetos complementares de engenharia | CONFENGE",
+        "description": "Projetos estruturais, de instalações e infraestrutura coordenados com a arquitetura. Desenhos, cálculos, memoriais e especificações conforme a fase contratada."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S06",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "source": "compatibilizacao-projetos-engenharia/index.html",
+      "weakness": "A abertura Registro de interferências, localizado e encaminhado descreve o processamento sem situar claramente as disciplinas do serviço.",
+      "before": {
+        "title": "Compatibilização de projetos de engenharia | CONFENGE",
+        "description": "Registro de interferências entre disciplinas, localizado e encaminhado: conferimos as interfaces e conduzimos os ajustes com os autores do projeto."
+      },
+      "after": {
+        "title": "Compatibilização de projetos de engenharia | CONFENGE",
+        "description": "Compatibilização de projetos: análise de interferências entre arquitetura, estruturas e instalações, com relatório de ocorrências e coordenação dos ajustes."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S07",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/quantitativos-orcamento-obras/",
+      "source": "quantitativos-orcamento-obras/index.html",
+      "weakness": "A descrição prioriza critérios administrativos e não evidencia a planilha, a memória de cálculo e a finalidade de contratação.",
+      "before": {
+        "title": "Quantitativos e orçamento de obras | CONFENGE",
+        "description": "Levantamento de quantitativos, orçamento e revisão de planilha de obra, com origem, critério e data-base conferíveis, responsável técnico no escopo contratado."
+      },
+      "after": {
+        "title": "Quantitativos e orçamento de obras | CONFENGE",
+        "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Planilhas com memória de cálculo, composições e referências para comparar e contratar."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S08",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "source": "assistencia-tecnica-pericial-engenharia/index.html",
+      "weakness": "O título usa disputas de forma ampla, enquanto a página trata especificamente de assistência técnica pericial.",
+      "before": {
+        "title": "Assistência técnica de engenharia em disputas | CONFENGE",
+        "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido."
+      },
+      "after": {
+        "title": "Assistência técnica em perícias de engenharia | CONFENGE",
+        "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S09",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/engenharia-condominios/",
+      "source": "engenharia-condominios/index.html",
+      "weakness": "O título enumera quatro serviços e a descrição não deixa igualmente visível a entrega de projetos e orçamento existente na página.",
+      "before": {
+        "title": "Engenharia para condomínios: inspeção, perícia, reforma e manutenção | CONFENGE",
+        "description": "Engenharia para condomínios na Grande Florianópolis: escolha entre investigação de fissuras e infiltrações, assistência técnica em disputas e apoio a recebimento, reforma ou manutenção."
+      },
+      "after": {
+        "title": "Engenharia para condomínios: projetos e inspeção | CONFENGE",
+        "description": "Inspeção, diagnóstico, perícia, projetos e orçamento para condomínios. Atendimento presencial na Grande Florianópolis, com proposta para a necessidade do condomínio."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S10",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/entregas/",
+      "source": "entregas/index.html",
+      "weakness": "A descrição prende o catálogo à contagem de oito ofertas, misturando o diretório de entregas e a quantidade de produtos comerciais.",
+      "before": {
+        "title": "Entregas de engenharia, exemplos e ofertas publicadas | CONFENGE",
+        "description": "Veja o que a CONFENGE entrega em projetos, compatibilização, orçamento, inspeção e análise técnica. Oito ofertas de inteligência para obras públicas têm preço e exemplos demonstrativos publicados."
+      },
+      "after": {
+        "title": "Entregas de engenharia, exemplos e ofertas publicadas | CONFENGE",
+        "description": "Conheça as entregas de projetos, orçamento, compatibilização e análise técnica. Veja exemplos demonstrativos e os escopos das ofertas com preço publicado."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S11",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/acompanhamento-contratos-obras/",
+      "source": "acompanhamento-contratos-obras/index.html",
+      "weakness": "A descrição menciona registros e indicadores de forma genérica, sem explicitar a rotina mensal de um contrato nem o painel e a pauta de decisão já oferecidos na página.",
+      "before": {
+        "title": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente | CONFENGE",
+        "description": "Rotina preventiva e recorrente de acompanhamento de contrato de obra pública: registros, indicadores e decisão da direção antes do desvio virar defesa tardia."
+      },
+      "after": {
+        "title": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente | CONFENGE",
+        "description": "Acompanhamento mensal de um contrato de obra pública: matriz de obrigações, painel de prazo, medição e caixa, alertas e pauta para decisões da direção."
+      },
+      "correction": "Explicar diretamente a entrega e seu uso na descrição, preservando no título a frase que distingue este serviço segundo o contrato editorial da página.",
+      "acceptance": "Título, H1 e WebPage.name conservam a frase distintiva exigida. A descrição corresponde ao conteúdo e às condições publicadas; corpo, preços, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      },
+      "review_note": "O encurtamento inicialmente proposto para o título foi descartado porque removia uma frase obrigatória do serviço. A melhoria implementada neste item está na descrição; o título de origem foi preservado."
+    },
+    {
+      "id": "S12",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "source": "atrasos-prorrogacao-obras-publicas/index.html",
+      "weakness": "A descrição usa espaço para negar outras páginas (artigo de chuva e dossiê de margem), em vez de explicar diretamente a análise de atrasos e o uso da documentação no pedido de prazo.",
+      "before": {
+        "title": "Atrasos e prorrogações em obras públicas: causa, responsabilidade, caminho crítico e registro contemporâneo | CONFENGE",
+        "description": "Causa, responsabilidade, caminho crítico e registro contemporâneo de atraso, paralisação e prorrogação em obra pública. Não é o artigo de chuva nem o dossiê de defesa de margem."
+      },
+      "after": {
+        "title": "Atrasos e prorrogações em obras públicas: causa, responsabilidade, caminho crítico e registro contemporâneo | CONFENGE",
+        "description": "Análise de atrasos em obras públicas: eventos, responsabilidades, caminho crítico e documentação para fundamentar pedidos de prorrogação de prazo."
+      },
+      "correction": "Explicar diretamente a entrega e seu uso na descrição, preservando no título a frase que distingue este serviço segundo o contrato editorial da página.",
+      "acceptance": "Título, H1 e WebPage.name conservam a frase distintiva exigida. A descrição corresponde ao conteúdo e às condições publicadas; corpo, preços, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      },
+      "review_note": "O encurtamento inicialmente proposto para o título foi descartado porque removia uma frase obrigatória do serviço. A melhoria implementada neste item está na descrição; o título de origem foi preservado."
+    },
+    {
+      "id": "S13",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/defesa-margem-contratos-publicos/",
+      "source": "defesa-margem-contratos-publicos/index.html",
+      "weakness": "A descrição repete margem e enumera atividades genéricas, sem informar a unidade já publicada do Diagnóstico de Riscos à Margem: um contrato e até cinco eventos.",
+      "before": {
+        "title": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão | CONFENGE",
+        "description": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão da margem com cronologia, evidências e posição para a direção."
+      },
+      "after": {
+        "title": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão | CONFENGE",
+        "description": "Diagnóstico para proteção de margem em contratos públicos: análise de um contrato e até cinco eventos, com cronologia, evidências e cálculos para a decisão."
+      },
+      "correction": "Explicitar na descrição a unidade do diagnóstico já publicada e sua utilidade para a decisão. Alinhar o título ao H1, preservando a frase detecção, documentação, cálculo e decisão que distingue este serviço.",
+      "acceptance": "Título, H1 e WebPage.name preservam as quatro etapas exigidas pelo contrato da página. Descrição corresponde a CFG-D17 e ao escopo visível; corpo, preço, condições, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py; data/commercial/page-contract-contratos.v1.json e data/commercial/deliverables-registry.v1.json, item CFG-D17",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      },
+      "review_note": "A proposta inicial de encurtar o título retirava a frase obrigatória do serviço e foi descartada na revisão. O ganho editorial implementado é a descrição concreta do diagnóstico; a troca de Proteção por Defesa no título apenas acompanha o H1 preservado."
+    },
+    {
+      "id": "S14",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "source": "defesa-tecnica-contratos-publicos/index.html",
+      "weakness": "A descrição começa pela ressalva profissional e resume a entrega como fatos e pedido, sem apresentar com clareza a base de engenharia oferecida para responder a notificações em obras públicas.",
+      "before": {
+        "title": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia | CONFENGE",
+        "description": "Subsídio técnico, não advocacia, para notificação, sanção ou risco de extinção em contrato público de obra. Fatos, cronologia e pedido coerente para o jurídico."
+      },
+      "after": {
+        "title": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia | CONFENGE",
+        "description": "Análise de notificações e controvérsias em contratos de obras públicas, com cronologia, documentos e fundamentos de engenharia para apoiar a resposta técnica."
+      },
+      "correction": "Explicar diretamente a entrega e seu uso na descrição, preservando no título a frase que distingue este serviço segundo o contrato editorial da página.",
+      "acceptance": "Título, H1 e WebPage.name conservam a frase distintiva exigida. A descrição corresponde ao conteúdo e às condições publicadas; corpo, preços, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      },
+      "review_note": "O encurtamento inicialmente proposto para o título foi descartado porque removia uma frase obrigatória do serviço. A melhoria implementada neste item está na descrição; o título de origem foi preservado."
+    },
+    {
+      "id": "S15",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/bid-room-licitacoes-obras/",
+      "source": "bid-room-licitacoes-obras/index.html",
+      "weakness": "Operação de Proposta para Licitação Crítica é uma denominação interna que não comunica diretamente preparar uma proposta de obra.",
+      "before": {
+        "title": "Operação de Proposta para Licitação Crítica | CONFENGE",
+        "description": "Coordenação de propostas para licitações de obras: leitura do edital, habilitação, acervo, orçamento, cronograma e revisão crítica antes do envio."
+      },
+      "after": {
+        "title": "Preparação de propostas para licitações de obras | CONFENGE",
+        "description": "Coordenação de propostas para licitações de obras: leitura do edital, habilitação, acervo, orçamento, cronograma e revisão crítica antes do envio."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S16",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "source": "casos/medicao-glosa-demonstrativo/index.html",
+      "weakness": "A descrição apenas anuncia demonstração metodológica, sem identificar o conteúdo do dossiê consultável.",
+      "before": {
+        "title": "Demonstrativo. Medição glosada: do apontamento ao pedido certo | CONFENGE",
+        "description": "Demonstração metodológica de dossiê frente a glosa de medição."
+      },
+      "after": {
+        "title": "Dossiê demonstrativo de medição com glosa | CONFENGE",
+        "description": "Exemplo demonstrativo de dossiê para medição com glosa: apontamentos, registros de execução e documentos organizados para fundamentar a análise técnica."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; marcador demonstrativo explícito no título preservado, assim como H1, schema, corpo, canonical, preços, condições e indexabilidade.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/test_permissioned_proof.py; test:real-proof-registry e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S17",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "source": "casos/aditivo-art125-demonstrativo/index.html",
+      "weakness": "O título longo enfatiza protocolar e o número de artigo antes de identificar a consulta a um exemplo de análise de aditivos.",
+      "before": {
+        "title": "Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar | CONFENGE",
+        "description": "Exemplo demonstrativo: verificar o saldo de acréscimos e supressões do art. 125 antes de protocolar um termo aditivo."
+      },
+      "after": {
+        "title": "Exemplo demonstrativo de análise de aditivos em obras | CONFENGE",
+        "description": "Exemplo demonstrativo: verificar o saldo de acréscimos e supressões do art. 125 antes de protocolar um termo aditivo."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; marcador demonstrativo explícito no título preservado, assim como H1, schema, corpo, canonical, preços, condições e indexabilidade.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/test_permissioned_proof.py; test:real-proof-registry e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S18",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/metodologia-inteligencia/",
+      "source": "metodologia-inteligencia/index.html",
+      "weakness": "Metodologia de inteligência parece restrita a pesquisa de mercado, embora a página explique provas e premissas em vários serviços de engenharia.",
+      "before": {
+        "title": "Metodologia de inteligência | CONFENGE",
+        "description": "Como a CONFENGE separa fato, cálculo, hipótese e ponto sem prova em perícia, avaliação, projeto, orçamento e leitura de mercado público."
+      },
+      "after": {
+        "title": "Método de análise técnica e fontes | CONFENGE",
+        "description": "Como a CONFENGE separa fato, cálculo, hipótese e ponto sem prova em perícia, avaliação, projeto, orçamento e leitura de mercado público."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S19",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/imprensa/",
+      "source": "imprensa/index.html",
+      "weakness": "A descrição curta se limita a Kit institucional e Radar aberto, sem explicar acesso a fontes e contato.",
+      "before": {
+        "title": "Imprensa e pesquisa | CONFENGE",
+        "description": "Kit institucional, metodologia e Radar aberto para imprensa e associações."
+      },
+      "after": {
+        "title": "Imprensa e pesquisa | CONFENGE",
+        "description": "Kit institucional e materiais de referência para imprensa, pesquisa e associações. Perfil técnico, exemplos de entrega, método e contato da CONFENGE."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S20",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "source": "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+      "weakness": "A descrição expõe a regra interna sem lista completa nem upload, em vez de resumir os critérios de contratação ensinados.",
+      "before": {
+        "title": "Como contratar compatibilização de projetos | CONFENGE",
+        "description": "Como delimitar escopo, insumos e entrega da conferência de interfaces entre disciplinas, sem lista completa nem upload no primeiro contato."
+      },
+      "after": {
+        "title": "Como contratar compatibilização de projetos | CONFENGE",
+        "description": "Veja como contratar compatibilização de projetos: disciplinas, documentos disponíveis, relatório de interferências, responsabilidades e escopo da proposta."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S21",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/como-contratar-projetos-complementares/",
+      "source": "conteudos/como-contratar-projetos-complementares/index.html",
+      "weakness": "O snippet contém literalmente sem preço, prazo ou formato obrigatório inventados, linguagem de bastidor que enfraquece a relevância da resposta.",
+      "before": {
+        "title": "Como contratar projetos complementares de engenharia | CONFENGE",
+        "description": "Como preparar insumos, definir interfaces e versões e conferir o que deve constar da proposta de elaboração complementar, sem preço, prazo ou formato obrigatório inventados."
+      },
+      "after": {
+        "title": "Como contratar projetos complementares de engenharia | CONFENGE",
+        "description": "Saiba o que conferir ao contratar projetos complementares: disciplinas, fases, documentos de referência, interfaces, responsabilidade e entregas na proposta."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S22",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "source": "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+      "weakness": "O título repete insumos e entrega depois da intenção principal; a descrição já explica esses aspectos e permite concentrar o título na busca de contratação.",
+      "before": {
+        "title": "Como contratar revisão técnica de projeto: insumos e entrega | CONFENGE",
+        "description": "O que enviar, o que a proposta delimita e o que você recebe numa revisão técnica de projeto de engenharia, mesmo com material parcial."
+      },
+      "after": {
+        "title": "Como contratar revisão técnica de projetos | CONFENGE",
+        "description": "O que enviar, o que a proposta delimita e o que você recebe numa revisão técnica de projeto de engenharia, mesmo com material parcial."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S23",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "source": "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+      "weakness": "Título e descrição repetem enumerações extensas; a decisão entre três modalidades não é apresentada de forma direta no resultado.",
+      "before": {
+        "title": "Revisar, compatibilizar ou elaborar o projeto: o que cada etapa resolve | CONFENGE",
+        "description": "O que revisão técnica, compatibilização e elaboração de projeto de engenharia entregam, a partir da decisão que você precisa tomar e do material que já existe, e como a proposta combina as etapas."
+      },
+      "after": {
+        "title": "Revisão, compatibilização ou projeto novo? | CONFENGE",
+        "description": "Entenda o que muda entre revisar um projeto, compatibilizar disciplinas e elaborar uma solução, e como combinar as etapas na proposta de engenharia."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S24",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/comparar-propostas-execucao-obra/",
+      "source": "conteudos/comparar-propostas-execucao-obra/index.html",
+      "weakness": "O snippet começa por Equalize, termo menos direto para o proprietário que precisa comparar propostas de execução.",
+      "before": {
+        "title": "Como comparar propostas de execução de obra | CONFENGE",
+        "description": "Equalize propostas de execução por escopo, unidades, exclusões, quantidades e responsabilidades. O menor total não decide sozinho."
+      },
+      "after": {
+        "title": "Como comparar propostas de execução de obra | CONFENGE",
+        "description": "Compare propostas de obra pelo mesmo escopo: quantidades, unidades, exclusões e responsabilidades. Veja por que analisar apenas o total pode esconder diferenças."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S25",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/documentos-para-levantamento-quantitativos/",
+      "source": "conteudos/documentos-para-levantamento-quantitativos/index.html",
+      "weakness": "O título omite obra e pode ser confundido com levantamento de quantidades de outros setores; a página trata de projetos de engenharia.",
+      "before": {
+        "title": "Documentos para levantamento de quantitativos | CONFENGE",
+        "description": "O que enviar para a CONFENGE levantar quantitativos de obra pública ou privada, mesmo com projeto ainda parcial, e o que esperar de volta."
+      },
+      "after": {
+        "title": "Documentos para levantar quantitativos de obra | CONFENGE",
+        "description": "O que enviar para a CONFENGE levantar quantitativos de obra pública ou privada, mesmo com projeto ainda parcial, e o que esperar de volta."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S26",
+      "kind": "oportunidade_editorial",
+      "group": "intencao_e_snippet_por_rota",
+      "route": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "source": "conteudos/revisar-ou-refazer-orcamento-obra/index.html",
+      "weakness": "A descrição não especifica os critérios de decisão, embora a página os desenvolva para comparar revisão e elaboração de novo orçamento.",
+      "before": {
+        "title": "Revisar ou refazer o orçamento da obra | CONFENGE",
+        "description": "Quando basta revisar a planilha existente e quando o projeto já mudou o bastante para elaborar o orçamento de novo."
+      },
+      "after": {
+        "title": "Revisar ou refazer o orçamento da obra | CONFENGE",
+        "description": "Veja quando revisar a planilha de orçamento e quando refazê-la: mudanças no projeto, nas quantidades, nas premissas e nas referências de custos da obra."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S27",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-apresentacao-executiva-resultados/",
+      "source": "casos/modelo-apresentacao-executiva-resultados/index.html",
+      "weakness": "O resultado desta demonstração de apresentação executiva enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Síntese Executiva de Expansão | Demonstrativo CONFENGE",
+        "description": "R$ 890 por unidade: a leitura da diretoria vira uma reunião de decisão, sem criar um único número novo fora do relatório e da base."
+      },
+      "after": {
+        "title": "Síntese Executiva de Expansão | Demonstrativo CONFENGE",
+        "description": "Exemplo de apresentação executiva de pesquisa de mercado, com síntese e decisões documentadas. Consulte o escopo e o preço da elaboração sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S28",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-base-quantitativa-canonica/",
+      "source": "casos/modelo-base-quantitativa-canonica/index.html",
+      "weakness": "O resultado desta demonstração de base quantitativa enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Base de Mercado para Expansão | Demonstrativo CONFENGE",
+        "description": "R$ 690 por unidade: a planilha que sustenta todos os entregáveis, com 13 abas, 252 campos de natureza declarada e 30 controles de qualidade."
+      },
+      "after": {
+        "title": "Base de Mercado para Expansão | Demonstrativo CONFENGE",
+        "description": "Exemplo de base quantitativa para pesquisa de mercado: campos, memória de cálculo e controles de qualidade. Consulte a elaboração sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S29",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "source": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+      "weakness": "O resultado desta demonstração de vencimento de contratos enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Radar de Contratos Próximos da Renovação | Demonstrativo CONFENGE",
+        "description": "R$ 1.450 por unidade: os contratos que vencem entre 91 e 179 dias, com propensão à recontratação medida e o silêncio da fonte declarado."
+      },
+      "after": {
+        "title": "Radar de Contratos Próximos da Renovação | Demonstrativo CONFENGE",
+        "description": "Exemplo de análise de contratos próximos do vencimento, com fontes e critérios de acompanhamento. Veja o escopo da pesquisa sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S30",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-mapa-compradores-publicos/",
+      "source": "casos/modelo-mapa-compradores-publicos/index.html",
+      "weakness": "O resultado desta demonstração de compradores públicos enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Mapa de Órgãos com Maior Potencial | Demonstrativo CONFENGE",
+        "description": "R$ 1.200 por unidade: os órgãos que compram o tipo de obra da sua construtora, ordenados por frequência, escala e acessibilidade."
+      },
+      "after": {
+        "title": "Mapa de Órgãos com Maior Potencial | Demonstrativo CONFENGE",
+        "description": "Exemplo de mapa de compradores públicos por objeto, frequência e escala de contratação. Veja os critérios e o escopo da pesquisa sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S31",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "source": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+      "weakness": "O resultado desta demonstração de concorrência enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Mapa de Concorrentes Relevantes | Demonstrativo CONFENGE",
+        "description": "R$ 1.900 por unidade: contra quem a sua construtora disputa, quanto cada rival depende de um só comprador e em que faixa de valor ele opera."
+      },
+      "after": {
+        "title": "Mapa de Concorrentes Relevantes | Demonstrativo CONFENGE",
+        "description": "Exemplo de mapeamento de concorrentes por comprador, carteira e faixa de contrato. Consulte as entregas e o preço da pesquisa sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S32",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "source": "casos/modelo-painel-precos-obras-publicas/index.html",
+      "weakness": "O resultado desta demonstração de referências de preços enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Referências de Preços de Obras Públicas | Demonstrativo CONFENGE",
+        "description": "R$ 2.400 por unidade: a escala de contrato que o mercado adjudica, por tipologia e por ano, com o que a base não responde declarado."
+      },
+      "after": {
+        "title": "Referências de Preços de Obras Públicas | Demonstrativo CONFENGE",
+        "description": "Exemplo de painel de valores de contratos por tipo de obra e período, com fontes e limites de comparação. Consulte a pesquisa de preços sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S33",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-relatorio-executivo-consolidado/",
+      "source": "casos/modelo-relatorio-executivo-consolidado/index.html",
+      "weakness": "O resultado desta demonstração de consolidação executiva enfatiza a oferta ou preço antes de esclarecer que o arquivo consultado é um exemplo.",
+      "before": {
+        "title": "Plano Executivo de Expansão | Demonstrativo CONFENGE",
+        "description": "R$ 3.750 por unidade: os cinco módulos do diagnóstico viram uma leitura de diretoria, com quatro decisões assináveis e cada número re-derivável na base."
+      },
+      "after": {
+        "title": "Plano Executivo de Expansão | Demonstrativo CONFENGE",
+        "description": "Exemplo de relatório executivo que reúne pesquisa de compradores, concorrência e contratos para orientar decisões. Veja a elaboração sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S34",
+      "kind": "oportunidade_editorial",
+      "group": "clareza_dos_exemplos_por_rota",
+      "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "source": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "weakness": "O snippet apresenta o resultado comercial e só depois informa Modelo integral; descrever o exemplo primeiro torna mais direta a expectativa de quem abre a página.",
+      "before": {
+        "title": "Relatório executivo de priorização de licitações | Demonstrativo CONFENGE",
+        "description": "Veja como a CONFENGE transforma editais e a realidade da construtora em decisões de participar, condicionar ou recusar. Modelo integral; relatório adaptado por R$ 599."
+      },
+      "after": {
+        "title": "Relatório executivo de priorização de licitações | Demonstrativo CONFENGE",
+        "description": "Exemplo de relatório para priorizar licitações conforme edital e capacidade da construtora. Consulte o conteúdo e o preço da elaboração sob encomenda."
+      },
+      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
+      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
+        "criteria": [
+          "relevancia_da_busca",
+          "fidelidade_ao_conteudo",
+          "clareza_do_resultado",
+          "coerencia_comercial"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S35",
+      "kind": "defeito_semantico",
+      "group": "schema_tipo_diretorio",
+      "route": "/casos/",
+      "source": "casos/index.html",
+      "weakness": "O diretório de exemplos está marcado como TechArticle, embora reúna doze demonstrações distintas.",
+      "before": "@type=TechArticle; sem ItemList dos cartões visíveis.",
+      "after": "CollectionPage e ItemList derivados dos títulos e links visíveis.",
+      "correction": "CollectionPage e ItemList derivados dos títulos e links visíveis.",
+      "acceptance": "CollectionPage tem exatamente os links dos cartões, na mesma ordem, sem transformar exemplos em trabalhos de clientes.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S36",
+      "kind": "oportunidade_semantica",
+      "group": "schema_tipo_hubs",
+      "route": "/servicos/",
+      "source": "scripts/site/render_nav_hubs.py",
+      "weakness": "Os três hubs gerados têm ItemList, mas são descritos como WebPage genérica sem conexão ao catálogo.",
+      "before": "WebPage e ItemList desconectados em /servicos/, /servicos-obras-publicas/ e /problemas-que-resolvemos/.",
+      "after": "CollectionPage com mainEntity apontando ao ItemList existente.",
+      "correction": "CollectionPage com mainEntity apontando ao ItemList existente.",
+      "acceptance": "Os três hubs mantêm a lista original e vinculam o catálogo sem alterar links ou itens.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S37",
+      "kind": "oportunidade_semantica",
+      "group": "schema_empresa",
+      "route": "/empresa/",
+      "source": "data/projects/project-pages.v1.json",
+      "weakness": "A página institucional não explicita no grafo que descreve a organização CONFENGE.",
+      "before": "WebPage sem about da organização.",
+      "after": "AboutPage com about para a identidade canônica existente.",
+      "correction": "AboutPage com about para a identidade canônica existente.",
+      "acceptance": "AboutPage referencia https://confenge.com.br/#organization, sem criar outra empresa.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S38",
+      "kind": "oportunidade_semantica",
+      "group": "schema_guias",
+      "route": "/conteudos/comparar-propostas-execucao-obra/",
+      "source": "conteudos/comparar-propostas-execucao-obra/index.html",
+      "weakness": "Três guias de decisão de obra são páginas genéricas sem identificação de seu conteúdo editorial.",
+      "before": "Somente WebPage nos guias de comparar propostas, documentos para quantitativos e revisar ou refazer orçamento.",
+      "after": "Article com headline do H1, descrição da fonte e publisher CONFENGE.",
+      "correction": "Article com headline do H1, descrição da fonte e publisher CONFENGE.",
+      "acceptance": "Três Articles representam os guias; nenhuma data, autor, avaliação ou imagem editorial é inventada.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S39",
+      "kind": "oportunidade_semantica",
+      "group": "schema_autoria",
+      "route": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "source": "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+      "weakness": "Referências explícitas ao autor do guia usam somente um identificador, sem nome ou URL de perfil no objeto.",
+      "before": "author: {\"@id\":\"https://confenge.com.br/#tiago\"}.",
+      "after": "Enriquecer apenas a referência já existente com Person, Tiago Jun Sasaki e perfil público.",
+      "correction": "Enriquecer apenas a referência já existente com Person, Tiago Jun Sasaki e perfil público.",
+      "acceptance": "Referências preexistentes identificadas; páginas que não declaravam autor continuam sem atribuição nova.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S40",
+      "kind": "oportunidade_de_navegacao",
+      "group": "breadcrumb_navegacao_estrutural",
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "source": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "weakness": "A página de prontidão não apresenta navegação estrutural para voltar ao catálogo de ferramentas e não descreve essa hierarquia no BreadcrumbList, embora o mapa de navegação canônico já a defina.",
+      "before": "Na base 1bf90c9, ferramentas/prontidao-tecnica-obra-privada/index.html não contém nav de navegação estrutural nem BreadcrumbList. data/site/public-ia-map.json já define a página e sua posição em Ferramentas.",
+      "after": "Início / Ferramentas / Prontidão técnica de obra privada aparece antes do H1, com links aos dois níveis anteriores e BreadcrumbList idêntico à navegação visível.",
+      "correction": "Gerar a trilha com breadcrumb_trail e breadcrumbs_html, projetar o mesmo caminho com sync_breadcrumbs e manter a landing como WebPage.",
+      "acceptance": "Trilha visível e BreadcrumbList correspondem ao mapa canônico, sem hierarquia paralela; links internos existem; o texto cabe em celular. WebPage, resultados locais, perguntas, canonical e robots preservados, sem WebApplication.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/test_private_project_technical_readiness.mjs; scripts/site/test_public_ia.py; sync_breadcrumbs idempotente e capturas oficiais desktop/mobile",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      },
+      "review_note": "A hipótese inicial de WebApplication foi descartada por contrariar a autorização de indexação da landing em docs/campaigns/inb-20260911/07/shared-changes.json (inb07-landing-robots-index). Sua remoção não é contada como melhoria; S40 registra a ausência comprovada e a implantação da navegação estrutural."
+    },
+    {
+      "id": "S41",
+      "kind": "incoerencia_de_metadados",
+      "group": "schema_titulo_atual",
+      "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "source": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "weakness": "A página do relatório de priorização ainda identifica a entidade como Radar de Licitações Prioritárias, denominação diferente do título atual.",
+      "before": {
+        "title": "Relatório executivo de priorização de licitações | Demonstrativo CONFENGE",
+        "WebPage.name": "Radar de Licitações Prioritárias: demonstrativo CONFENGE"
+      },
+      "after": "Derivar WebPage.name do título mantido na fonte.",
+      "correction": "Derivar WebPage.name do título mantido na fonte.",
+      "acceptance": "Em todas as rotas do contrato com WebPage, name corresponde ao título final sem modificar headline de artigos arbitrários.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S42",
+      "kind": "incoerencia_de_metadados",
+      "group": "schema_descricao_atual",
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "source": "compatibilizacao-projetos-engenharia/index.html",
+      "weakness": "A entidade WebPage conserva uma descrição anterior que amplia a condução até a obra poder ser executada, contratada ou alterada, enquanto o snippet atual delimita o registro e encaminhamento dos ajustes.",
+      "before": {
+        "meta_description": "Registro de interferências entre disciplinas, localizado e encaminhado: conferimos as interfaces e conduzimos os ajustes com os autores do projeto.",
+        "WebPage.description": "Conferimos as interfaces entre disciplinas, registramos as interferências e conduzimos os ajustes com os autores até a obra poder ser executada, contratada ou alterada com uma referência comum."
+      },
+      "after": "Sincronizar somente a descrição da entidade da própria página a partir da meta description.",
+      "correction": "Sincronizar somente a descrição da entidade da própria página a partir da meta description.",
+      "acceptance": "Entidade da página e snippet convergem; Service, Offer, preços, datas e FAQ permanecem preservados.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S43",
+      "kind": "incoerencia_de_metadados",
+      "group": "og_titulos",
+      "route": "/bid-room-licitacoes-obras/",
+      "source": "bid-room-licitacoes-obras/index.html",
+      "weakness": "Várias prévias usam frases promocionais antigas que não identificam o serviço do título atual.",
+      "before": "og:title=Para o edital que exige coordenação da proposta, não improviso.",
+      "after": "Projetar o título atual para og:title nas rotas revisadas.",
+      "additional_evidence": {
+        "route": "/defesa-margem-contratos-publicos/",
+        "source": "defesa-margem-contratos-publicos/index.html",
+        "authority": "data/site/brand.json > offers[id=contract-defense].headline",
+        "before": "Na base 1bf90c9, 'Quando cada dia sem registro enfraquece sua posição.' existia apenas em og:title; o headline institucional ainda repetia essa frase.",
+        "after": "og:title acompanha o title atual. O headline institucional acompanha o H1 preservado: Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão."
+      },
+      "correction": "Projetar o título atual para og:title nas rotas revisadas e alinhar o headline institucional de defesa de margem ao H1 já publicado, preservando oferta, preço e CTA.",
+      "acceptance": "Prévia identifica o mesmo assunto e marca do title; Google continua livre para compor seu próprio title link.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site; scripts/site/test_brand_contract.py verifica valor único de og:title independentemente da ordem dos atributos e headline de defesa no H1 visível",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S44",
+      "kind": "incoerencia_de_metadados",
+      "group": "og_descricoes",
+      "route": "/projetos-complementares-engenharia/",
+      "source": "projetos-complementares-engenharia/index.html",
+      "weakness": "A descrição social mantém enquadramentos anteriores após revisão do conteúdo de contratação.",
+      "before": "og:description=Elaboração complementar a partir da arquitetura existente, com disciplina, interfaces e responsável combinados na proposta.",
+      "after": "Projetar a descrição atual para og:description.",
+      "correction": "Projetar a descrição atual para og:description.",
+      "acceptance": "Oferta resumida no compartilhamento corresponde à descrição publicada, sem excluir condições do corpo.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S45",
+      "kind": "oportunidade_de_descoberta",
+      "group": "og_ausente",
+      "route": "/imprensa/",
+      "source": "imprensa/index.html",
+      "weakness": "Páginas de referência não fornecem o conjunto de identificação para prévias de compartilhamento.",
+      "before": "/imprensa/ e /metodologia-inteligencia/ não têm og:title, og:description, og:type ou og:url.",
+      "after": "Completar identificação a partir de título, descrição e canonical existentes.",
+      "correction": "Completar identificação a partir de título, descrição e canonical existentes.",
+      "acceptance": "Uma ocorrência por mecanismo, ainda que múltiplas páginas sejam corrigidas; og:url permanece igual ao canonical.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S46",
+      "kind": "oportunidade_de_descoberta",
+      "group": "og_imagem",
+      "route": "/servicos/",
+      "source": "scripts/site/render_nav_hubs.py",
+      "weakness": "Os hubs e parte das páginas comerciais não indicam imagem para compartilhamento.",
+      "before": "og:image ausente nos hubs de serviços e páginas de SST.",
+      "after": "Usar o cartão institucional existente onde não há imagem específica, preservando as imagens específicas já indicadas.",
+      "correction": "Usar o cartão institucional existente onde não há imagem específica, preservando as imagens específicas já indicadas.",
+      "acceptance": "A imagem institucional é arquivo real e não é apresentada como fotografia de obra nem adicionada ao Article.image.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S47",
+      "kind": "oportunidade_de_descoberta",
+      "group": "cartoes_sociais",
+      "route": "/projetos/",
+      "source": "scripts/site/render_project_pages.py",
+      "weakness": "Páginas geradas de projetos não mantêm cartão social explícito e as demais fontes variam entre configurações incompletas.",
+      "before": "Ausência de twitter:card, twitter:title, twitter:description, twitter:image no gerador de projetos.",
+      "after": "Derivar o cartão e seus campos do mesmo título, descrição e imagem já aprovados.",
+      "correction": "Derivar o cartão e seus campos do mesmo título, descrição e imagem já aprovados.",
+      "acceptance": "Um cartão completo por página, sem duplicados; title e description mantêm uma fonte proprietária.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S48",
+      "kind": "oportunidade_de_descoberta",
+      "group": "imagem_social_descricao_dimensoes",
+      "route": "/projetos/",
+      "source": "scripts/site/render_project_pages.py",
+      "weakness": "O cartão institucional não tem descrição alternativa e dimensões consistentes nas rotas que o reutilizam.",
+      "before": "O gerador de projetos já apontava para assets/og-confenge.jpg, mas não emitia og:image:alt, og:image:width nem og:image:height.",
+      "after": "Informar descrição institucional e dimensões reais 1200 × 630; preservar o alt das imagens específicas.",
+      "correction": "Informar descrição institucional e dimensões reais 1200 × 630; preservar o alt das imagens específicas.",
+      "acceptance": "Imagem padrão medida; alt não alega conteúdo de projeto real; metadados só descrevem o ativo indicado.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S49",
+      "kind": "lacuna_de_regressao",
+      "group": "fonte_regeneravel",
+      "route": "/projetos/",
+      "source": "scripts/site/render_project_pages.py",
+      "weakness": "O pipeline não exige que metadados derivados acompanhem a alteração da fonte ou sobrevivam à regeneração de páginas.",
+      "before": "Sem verificação dedicada da coerência title/description, OG, Twitter e WebPage nos geradores.",
+      "after": "Aplicar a mesma projeção no gerador de projetos, hubs e comando de manutenção; adicionar contraprovas.",
+      "correction": "Aplicar a mesma projeção no gerador de projetos, hubs e comando de manutenção; adicionar contraprovas.",
+      "acceptance": "Duas execuções idênticas, falha em duplicados e dados inválidos, body/canonical/robots preservados e geradores --check aprovados.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "id": "S50",
+      "kind": "lacuna_de_regressao",
+      "group": "artefato_publicavel",
+      "route": "/",
+      "source": "scripts/pseo/build_site.py",
+      "weakness": "Transformações posteriores à geração de fontes e recursos de compartilhamento ausentes no pacote podem deixar a publicação diferente da fonte revisada sem uma verificação específica dessa relação.",
+      "before": "O build valida SEO geral, mas não verifica a correspondência entre título/descrição da fonte, prévias sociais finais e presença dos respectivos arquivos no artefato.",
+      "after": "Validar o artefato final antes de calcular sua identidade, rejeitando rota ausente, divergência e imagem inexistente.",
+      "correction": "Validar o artefato final antes de calcular sua identidade, rejeitando rota ausente, divergência e imagem inexistente.",
+      "acceptance": "Gate independente da escrita inspeciona o HTML montado e fecha a publicação em divergência.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "status": "implemented",
+      "simulated_consensus": {
+        "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
+        "criteria": [
+          "fidelidade_ao_conteudo",
+          "compreensao_da_pagina",
+          "consistencia_de_sinais",
+          "preservacao_de_condicoes"
+        ],
+        "accepted": true
+      }
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://developers.google.com/search/docs/appearance/title-link",
+      "application": "Títulos claros, descritivos e coerentes; não há limite fixo nem promessa de posições."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/appearance/snippet",
+      "application": "Descrições relevantes para cada página; Google pode usar trechos diferentes."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/appearance/structured-data/sd-policies",
+      "application": "Marcação representa conteúdo real e não garante resultado enriquecido."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/appearance/structured-data/article",
+      "application": "Identificação de artigos e autoria já declarada, sem inventar datas ou autores."
+    }
+  ]
+}

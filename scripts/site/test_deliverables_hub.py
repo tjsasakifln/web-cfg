@@ -22,6 +22,7 @@ from scripts.site.public_navigation import (
     promote_public_navigation,
 )
 from scripts.site.shell_nav import HASH_BOUND_EDITORIAL_FILES, value_first_cta_contract
+from scripts.site.test_brand_contract import _unique_head_meta_content
 from scripts.site.test_report_model_599 import (
     _assert_no_scope_contradictions,
     _visible_text,
@@ -182,6 +183,43 @@ def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
         assert f"min-height:{minimum}px" in rule.group(1)
 
 
+@pytest.mark.parametrize(
+    "attribute,key",
+    [("name", "description"), ("property", "og:title"), ("property", "og:description")],
+)
+def test_metadata_reader_accepts_attribute_order_and_decodes_entities(attribute: str, key: str) -> None:
+    for meta in (
+        f'<meta content="Entregas &amp; ofertas" {attribute}="{key}"/>',
+        f"<meta {attribute}='{key}' content='Entregas &amp; ofertas'>",
+        f'<META {attribute.upper()}="{key}" data-extra="allowed" CONTENT="Entregas &amp; ofertas">',
+    ):
+        assert _unique_head_meta_content(f"<head>{meta}</head>", key, attribute=attribute) == "Entregas & ofertas"
+
+
+@pytest.mark.parametrize(
+    "attribute,key",
+    [("name", "description"), ("property", "og:title"), ("property", "og:description")],
+)
+def test_metadata_reader_rejects_missing_duplicate_or_ambiguous_metadata(attribute: str, key: str) -> None:
+    correct = f'<meta {attribute}="{key}" content="Entregas e ofertas">'
+    other_attribute = "property" if attribute == "name" else "name"
+    for html in (
+        "<head></head>",
+        correct,
+        f"<head>{correct}",
+        f"<head>{correct}{correct}</head>",
+        f"<head>{correct}</head><head></head>",
+        f"<head></head><body>{correct}</body>",
+        f'<head><meta {attribute}="{key}" content="Primeiro" content="Segundo"></head>',
+        f'<head><meta {attribute}="{key}" {attribute}="outro" content="Entregas"></head>',
+        f'<head><meta {attribute}="{key}" {other_attribute}="outro" content="Entregas"></head>',
+        f'<head><meta {attribute}="{key}"></head>',
+        f'<head><meta {attribute}="{key}" content=""></head>',
+    ):
+        with pytest.raises(AssertionError):
+            _unique_head_meta_content(html, key, attribute=attribute)
+
+
 def test_public_ia_separates_engineering_services_examples_and_priced_offers() -> None:
     """Internal portfolio state remains governed without becoming buyer copy."""
     html = _html()
@@ -210,11 +248,9 @@ def test_public_ia_separates_engineering_services_examples_and_priced_offers() -
     assert "bloqueada" not in visible
 
     title = re.search(r"<title>([^<]+)</title>", html).group(1)
-    description = re.search(r'<meta content="([^"]+)" name="description"/>', html).group(1)
-    og_title = re.search(r'<meta content="([^"]+)" property="og:title"/>', html).group(1)
-    og_description = re.search(
-        r'<meta content="([^"]+)" property="og:description"/>', html
-    ).group(1)
+    description = _unique_head_meta_content(html, "description", attribute="name")
+    og_title = _unique_head_meta_content(html, "og:title")
+    og_description = _unique_head_meta_content(html, "og:description")
     # Metadata describes the page's three public concepts without exporting
     # the internal inventory or implying that examples are client cases.
     assert all(term in title.casefold() for term in ("entregas", "ofertas", "confenge"))

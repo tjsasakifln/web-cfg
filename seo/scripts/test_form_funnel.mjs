@@ -44,7 +44,7 @@ for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
   "Quero combinar o envio reservado de documentos confidenciais",
-  "Descrever minha situação",
+  "Enviar solicitação",
   'data-journey="edital"',
   'data-journey="operacao"',
   'id="estagio"',
@@ -72,6 +72,12 @@ if (!home.includes("Falar sobre obras públicas")) {
 const formMatch = home.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
 if (!formMatch) {
   console.error("FAIL: home form missing");
+  process.exit(1);
+}
+const submitLabels = [...formMatch[0].matchAll(/<button\b(?=[^>]*\btype="submit")[^>]*>([\s\S]*?)<\/button>/g)]
+  .map((match) => match[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
+if (submitLabels.length !== 1 || submitLabels[0] !== "Enviar solicitação") {
+  console.error("FAIL: home form must have one submit naming the reviewed action", submitLabels);
   process.exit(1);
 }
 // Step 1 may contain semantic sub-fieldsets (for example the conditional SST

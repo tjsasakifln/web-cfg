@@ -137,9 +137,12 @@ class TestProjectPages(unittest.TestCase):
                 self.assertEqual(1, len(parser.jsonld))
                 graph = json.loads(parser.jsonld[0])["@graph"]
                 types = {item["@type"] for item in graph}
-                self.assertIn("WebPage", types)
+                page_type = "AboutPage" if page["route"] == "/empresa/" else "WebPage"
+                self.assertIn(page_type, types)
                 self.assertIn("BreadcrumbList", types)
-                webpage = next(item for item in graph if item["@type"] == "WebPage")
+                webpage = next(item for item in graph if item["@type"] == page_type)
+                if page_type == "AboutPage":
+                    self.assertEqual({"@id": "https://confenge.com.br/#organization"}, webpage["about"])
                 self.assertEqual(
                     page.get("published_at", self.payload["published_at"]),
                     webpage["datePublished"],

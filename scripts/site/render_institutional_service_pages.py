@@ -471,7 +471,10 @@ def render_condominium_hub(hub: dict, template: str) -> str:
     rendered = template.replace(main_of(template), main)
     rendered = re.sub(r'<body\b[^>]*>', '<body data-content-cluster="engenharia-condominios" data-analytics-surface="engenharia-condominios">', rendered, count=1)
     rendered = rendered.replace('href="#contato-inspecao">Conversar sobre a edificação', 'href="#contato-condominios">Solicitar proposta para o condomínio')
-    return sync_text(replace_hub_head(rendered, hub), load_brand(), f'/{hub["route"]}/')
+    from scripts.site.search_metadata import normalize_metadata_html
+
+    route = f'/{hub["route"]}/'
+    return normalize_metadata_html(sync_text(replace_hub_head(rendered, hub), load_brand(), route), route)
 
 
 def replace_hub_head(document: str, hub: dict) -> str:
@@ -637,7 +640,10 @@ def render_page(page: dict, document: str) -> str:
     # same canonical header, footer and breadcrumbs enforced by shell_nav.
     # Applying the shared producer here keeps a fresh route correct on its
     # first render and makes the two producers commute idempotently.
-    return sync_text(rendered, load_brand(), f'/{page["route"]}/')
+    from scripts.site.search_metadata import normalize_metadata_html
+
+    route = f'/{page["route"]}/'
+    return normalize_metadata_html(sync_text(rendered, load_brand(), route), route)
 
 
 def run(write: bool) -> int:
