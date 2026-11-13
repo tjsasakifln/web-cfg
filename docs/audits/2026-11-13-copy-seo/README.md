@@ -124,6 +124,18 @@ A descrição de imprensa foi ajustada ao conteúdo visível, preservando o
 controle existente de paridade. As duas correções passaram por revisão
 independente e contraprovas antes da publicação.
 
+A revisão dos contratos existentes descartou o encurtamento de quatro títulos
+que retirava as expressões responsáveis por distinguir os serviços de obras
+públicas. Os títulos preservam essas expressões, e os respectivos achados
+registram melhorias concretas nas descrições, apoiadas no escopo já publicado.
+
+Na ferramenta de prontidão técnica, a proposta inicial de marcar uma aplicação
+foi descartada porque a autorização vigente trata a página como uma landing
+editorial com resultados pessoais somente no navegador. O achado S40 registra
+uma ausência diferente, demonstrada na base: a trilha de navegação estrutural.
+A correção usa o mapa canônico para apresentar os níveis visíveis e o mesmo
+BreadcrumbList, sem alterar perguntas, resultados ou envio de informações.
+
 ### Evidência de interface
 
 O workflow de apresentação da [PR #842](https://github.com/tjsasakifln/web-cfg/pull/842)

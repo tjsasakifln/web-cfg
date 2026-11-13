@@ -58,6 +58,30 @@ def test_editorial_findings_match_the_current_source_not_a_second_override():
         assert parser.metas["description"] == [item["after"]["description"]], item["id"]
 
 
+def test_readiness_breadcrumbs_match_canonical_ia_and_preserve_landing_semantics():
+    from scripts.site.public_ia import breadcrumb_trail, parse_jsonld_breadcrumb_trail, parse_visible_breadcrumb_trail
+    from scripts.site.shell_nav import sync_breadcrumbs
+
+    route = "/ferramentas/prontidao-tecnica-obra-privada/"
+    text = (sm.ROOT / route.strip("/") / "index.html").read_text()
+    expected = breadcrumb_trail(route)
+    assert expected == [
+        ("Início", "/"),
+        ("Ferramentas", "/ferramentas/"),
+        ("Prontidão técnica de obra privada", None),
+    ]
+    assert parse_visible_breadcrumb_trail(text) == expected
+    assert parse_jsonld_breadcrumb_trail(text, route) == expected
+    assert text.index('aria-label="Navegação estrutural"') < text.index("<h1>")
+    for _, href in expected:
+        if href is not None:
+            assert (sm.ROOT / href.strip("/") / "index.html").is_file()
+    pages = [node for node in graphs(text) if node.get("@type") == "WebPage"]
+    assert len(pages) == 1 and pages[0]["url"] == sm.SITE + route
+    assert "WebApplication" not in text
+    assert sync_breadcrumbs(text, route) == text
+
+
 def test_projection_preserves_body_canonical_robots_scripts_offers_and_dates():
     before = document()
     after = sm.normalize_metadata_html(before, "/probe/", config())

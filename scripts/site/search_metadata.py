@@ -148,13 +148,6 @@ def _schema(head: str, body: str, route: str, title: str, description: str, sett
                 "itemListElement": [{"@type": "ListItem", "position": i, "name": name, "url": SITE + url}
                                     for i, (url, name) in enumerate(directory.items, 1)],
             }
-        if settings.get("web_application"):
-            page["mainEntity"] = {
-                "@type": "WebApplication", "@id": canonical + "#application",
-                "name": title, "url": canonical, "description": description,
-                "applicationCategory": "BusinessApplication", "operatingSystem": "Web",
-                "inLanguage": "pt-BR", "publisher": {"@id": SITE + "/#organization", "name": "CONFENGE"},
-            }
     if settings.get("page_type") and page is None:
         raise ValueError(f"search_metadata_page_schema_missing:{route}")
     extra = None

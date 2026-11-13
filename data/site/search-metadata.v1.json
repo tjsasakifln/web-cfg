@@ -54,9 +54,7 @@
     },
     "/engenharia-condominios/": {},
     "/entregas/": {},
-    "/ferramentas/prontidao-tecnica-obra-privada/": {
-      "web_application": true
-    },
+    "/ferramentas/prontidao-tecnica-obra-privada/": {},
     "/imprensa/": {},
     "/inspecao-diagnostico-edificacoes/": {},
     "/metodologia-inteligencia/": {},

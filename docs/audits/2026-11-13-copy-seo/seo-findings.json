@@ -309,18 +309,18 @@
       "group": "intencao_e_snippet_por_rota",
       "route": "/acompanhamento-contratos-obras/",
       "source": "acompanhamento-contratos-obras/index.html",
-      "weakness": "O título inclui rotina preventiva e recorrente antes de transmitir uma denominação simples do serviço procurado.",
+      "weakness": "A descrição menciona registros e indicadores de forma genérica, sem explicitar a rotina mensal de um contrato nem o painel e a pauta de decisão já oferecidos na página.",
       "before": {
         "title": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente | CONFENGE",
         "description": "Rotina preventiva e recorrente de acompanhamento de contrato de obra pública: registros, indicadores e decisão da direção antes do desvio virar defesa tardia."
       },
       "after": {
-        "title": "Acompanhamento técnico de contratos de obras públicas | CONFENGE",
-        "description": "Rotina preventiva e recorrente de acompanhamento de contrato de obra pública: registros, indicadores e decisão da direção antes do desvio virar defesa tardia."
+        "title": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente | CONFENGE",
+        "description": "Acompanhamento mensal de um contrato de obra pública: matriz de obrigações, painel de prazo, medição e caixa, alertas e pauta para decisões da direção."
       },
-      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
-      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
-      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "correction": "Explicar diretamente a entrega e seu uso na descrição, preservando no título a frase que distingue este serviço segundo o contrato editorial da página.",
+      "acceptance": "Título, H1 e WebPage.name conservam a frase distintiva exigida. A descrição corresponde ao conteúdo e às condições publicadas; corpo, preços, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py e verificação do HTML publicado",
       "status": "implemented",
       "simulated_consensus": {
         "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
@@ -331,7 +331,8 @@
           "coerencia_comercial"
         ],
         "accepted": true
-      }
+      },
+      "review_note": "O encurtamento inicialmente proposto para o título foi descartado porque removia uma frase obrigatória do serviço. A melhoria implementada neste item está na descrição; o título de origem foi preservado."
     },
     {
       "id": "S12",
@@ -339,18 +340,18 @@
       "group": "intencao_e_snippet_por_rota",
       "route": "/atrasos-prorrogacao-obras-publicas/",
       "source": "atrasos-prorrogacao-obras-publicas/index.html",
-      "weakness": "O título acumula causa, responsabilidade, caminho crítico e registro contemporâneo, disputando espaço com a intenção principal da busca.",
+      "weakness": "A descrição usa espaço para negar outras páginas (artigo de chuva e dossiê de margem), em vez de explicar diretamente a análise de atrasos e o uso da documentação no pedido de prazo.",
       "before": {
         "title": "Atrasos e prorrogações em obras públicas: causa, responsabilidade, caminho crítico e registro contemporâneo | CONFENGE",
         "description": "Causa, responsabilidade, caminho crítico e registro contemporâneo de atraso, paralisação e prorrogação em obra pública. Não é o artigo de chuva nem o dossiê de defesa de margem."
       },
       "after": {
-        "title": "Atrasos e prorrogação de obras públicas | CONFENGE",
+        "title": "Atrasos e prorrogações em obras públicas: causa, responsabilidade, caminho crítico e registro contemporâneo | CONFENGE",
         "description": "Análise de atrasos em obras públicas: eventos, responsabilidades, caminho crítico e documentação para fundamentar pedidos de prorrogação de prazo."
       },
-      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
-      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
-      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "correction": "Explicar diretamente a entrega e seu uso na descrição, preservando no título a frase que distingue este serviço segundo o contrato editorial da página.",
+      "acceptance": "Título, H1 e WebPage.name conservam a frase distintiva exigida. A descrição corresponde ao conteúdo e às condições publicadas; corpo, preços, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py e verificação do HTML publicado",
       "status": "implemented",
       "simulated_consensus": {
         "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
@@ -361,7 +362,8 @@
           "coerencia_comercial"
         ],
         "accepted": true
-      }
+      },
+      "review_note": "O encurtamento inicialmente proposto para o título foi descartado porque removia uma frase obrigatória do serviço. A melhoria implementada neste item está na descrição; o título de origem foi preservado."
     },
     {
       "id": "S13",
@@ -369,18 +371,18 @@
       "group": "intencao_e_snippet_por_rota",
       "route": "/defesa-margem-contratos-publicos/",
       "source": "defesa-margem-contratos-publicos/index.html",
-      "weakness": "O título repete uma cadeia de etapas de trabalho após o serviço, dificultando a leitura rápida do tema na busca.",
+      "weakness": "A descrição repete margem e enumera atividades genéricas, sem informar a unidade já publicada do Diagnóstico de Riscos à Margem: um contrato e até cinco eventos.",
       "before": {
         "title": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão | CONFENGE",
         "description": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão da margem com cronologia, evidências e posição para a direção."
       },
       "after": {
-        "title": "Proteção de margem em contratos públicos | CONFENGE",
-        "description": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão da margem com cronologia, evidências e posição para a direção."
+        "title": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão | CONFENGE",
+        "description": "Diagnóstico para proteção de margem em contratos públicos: análise de um contrato e até cinco eventos, com cronologia, evidências e cálculos para a decisão."
       },
-      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
-      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
-      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "correction": "Explicitar na descrição a unidade do diagnóstico já publicada e sua utilidade para a decisão. Alinhar o título ao H1, preservando a frase detecção, documentação, cálculo e decisão que distingue este serviço.",
+      "acceptance": "Título, H1 e WebPage.name preservam as quatro etapas exigidas pelo contrato da página. Descrição corresponde a CFG-D17 e ao escopo visível; corpo, preço, condições, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py; data/commercial/page-contract-contratos.v1.json e data/commercial/deliverables-registry.v1.json, item CFG-D17",
       "status": "implemented",
       "simulated_consensus": {
         "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
@@ -391,7 +393,8 @@
           "coerencia_comercial"
         ],
         "accepted": true
-      }
+      },
+      "review_note": "A proposta inicial de encurtar o título retirava a frase obrigatória do serviço e foi descartada na revisão. O ganho editorial implementado é a descrição concreta do diagnóstico; a troca de Proteção por Defesa no título apenas acompanha o H1 preservado."
     },
     {
       "id": "S14",
@@ -399,18 +402,18 @@
       "group": "intencao_e_snippet_por_rota",
       "route": "/defesa-tecnica-contratos-publicos/",
       "source": "defesa-tecnica-contratos-publicos/index.html",
-      "weakness": "O título dedica espaço à ressalva não advocacia e não explicita obras; a condição profissional já está preservada no conteúdo.",
+      "weakness": "A descrição começa pela ressalva profissional e resume a entrega como fatos e pedido, sem apresentar com clareza a base de engenharia oferecida para responder a notificações em obras públicas.",
       "before": {
         "title": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia | CONFENGE",
         "description": "Subsídio técnico, não advocacia, para notificação, sanção ou risco de extinção em contrato público de obra. Fatos, cronologia e pedido coerente para o jurídico."
       },
       "after": {
-        "title": "Defesa técnica de contratos de obras públicas | CONFENGE",
+        "title": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia | CONFENGE",
         "description": "Análise de notificações e controvérsias em contratos de obras públicas, com cronologia, documentos e fundamentos de engenharia para apoiar a resposta técnica."
       },
-      "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
-      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
-      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "correction": "Explicar diretamente a entrega e seu uso na descrição, preservando no título a frase que distingue este serviço segundo o contrato editorial da página.",
+      "acceptance": "Título, H1 e WebPage.name conservam a frase distintiva exigida. A descrição corresponde ao conteúdo e às condições publicadas; corpo, preços, canonical e indexabilidade permanecem intactos.",
+      "validation": "scripts/site/test_search_metadata.py; tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py; scripts/site/test_visible_parity.py e verificação do HTML publicado",
       "status": "implemented",
       "simulated_consensus": {
         "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
@@ -421,7 +424,8 @@
           "coerencia_comercial"
         ],
         "accepted": true
-      }
+      },
+      "review_note": "O encurtamento inicialmente proposto para o título foi descartado porque removia uma frase obrigatória do serviço. A melhoria implementada neste item está na descrição; o título de origem foi preservado."
     },
     {
       "id": "S15",
@@ -1145,16 +1149,16 @@
     },
     {
       "id": "S40",
-      "kind": "oportunidade_semantica",
-      "group": "schema_ferramenta",
+      "kind": "oportunidade_de_navegacao",
+      "group": "breadcrumb_navegacao_estrutural",
       "route": "/ferramentas/prontidao-tecnica-obra-privada/",
       "source": "ferramentas/prontidao-tecnica-obra-privada/index.html",
-      "weakness": "O checklist interativo é descrito somente como página de texto.",
-      "before": "WebPage com about Thing, sem descrição da aplicação.",
-      "after": "WebApplication como mainEntity, com nome e descrição da própria página.",
-      "correction": "WebApplication como mainEntity, com nome e descrição da própria página.",
-      "acceptance": "A aplicação é identificada sem adicionar preços, avaliações, requisitos técnicos fictícios ou promessa de resultado.",
-      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "weakness": "A página de prontidão não apresenta navegação estrutural para voltar ao catálogo de ferramentas e não descreve essa hierarquia no BreadcrumbList, embora o mapa de navegação canônico já a defina.",
+      "before": "Na base 1bf90c9, ferramentas/prontidao-tecnica-obra-privada/index.html não contém nav de navegação estrutural nem BreadcrumbList. data/site/public-ia-map.json já define a página e sua posição em Ferramentas.",
+      "after": "Início / Ferramentas / Prontidão técnica de obra privada aparece antes do H1, com links aos dois níveis anteriores e BreadcrumbList idêntico à navegação visível.",
+      "correction": "Gerar a trilha com breadcrumb_trail e breadcrumbs_html, projetar o mesmo caminho com sync_breadcrumbs e manter a landing como WebPage.",
+      "acceptance": "Trilha visível e BreadcrumbList correspondem ao mapa canônico, sem hierarquia paralela; links internos existem; o texto cabe em celular. WebPage, resultados locais, perguntas, canonical e robots preservados, sem WebApplication.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/test_private_project_technical_readiness.mjs; scripts/site/test_public_ia.py; sync_breadcrumbs idempotente e capturas oficiais desktop/mobile",
       "status": "implemented",
       "simulated_consensus": {
         "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",
@@ -1165,7 +1169,8 @@
           "preservacao_de_condicoes"
         ],
         "accepted": true
-      }
+      },
+      "review_note": "A hipótese inicial de WebApplication foi descartada por contrariar a autorização de indexação da landing em docs/campaigns/inb-20260911/07/shared-changes.json (inb07-landing-robots-index). Sua remoção não é contada como melhoria; S40 registra a ausência comprovada e a implantação da navegação estrutural."
     },
     {
       "id": "S41",
