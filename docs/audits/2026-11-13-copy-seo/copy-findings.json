@@ -1,0 +1,1553 @@
+{
+  "schema": "confenge.copy-audit/1.0",
+  "status": "source_reviewed_pending_ci_and_production",
+  "baseline": "1bf90c9",
+  "method": "Simulação analítica de dez perspectivas de copy; participação real dos autores não alegada. Oportunidades editoriais são hipóteses, não resultados comerciais comprovados.",
+  "findings": [
+    {
+      "id": "C01",
+      "type": "observed_inconsistency",
+      "title": "Chamada residencial ainda descrevia apenas consulta",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/; /edificacoes/",
+      "before": "Projetos residenciais: consulte a disponibilidade",
+      "after": "Projetos residenciais: calcular e contratar online",
+      "reason": "Duas entradas para uma oferta com compra ativa omitiam a ação disponível. As duas ocorrências contam como um mecanismo.",
+      "group": "Chamada residencial ainda descrevia apenas consulta",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C02",
+      "type": "observed_inconsistency",
+      "title": "Botão de envio parecia abrir mais uma etapa",
+      "file": "index.html; scripts/commercial/render_cta_form_next_state.mjs",
+      "route": "/",
+      "before": ">Descrever minha situação <svg",
+      "after": ">Enviar solicitação <svg",
+      "reason": "O botão type=submit envia os dados já preenchidos; o verbo descrever sugere que ainda seria preciso redigir.",
+      "group": "Botão de envio parecia abrir mais uma etapa",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C03",
+      "type": "editorial_opportunity",
+      "title": "Alternativa sem JavaScript equiparava canais e protocolo",
+      "file": "index.html",
+      "route": "/",
+      "before": "Fale pelo WhatsApp ou pelo e-mail indicados acima: chegam direto e valem o mesmo.",
+      "after": "Fale pelo WhatsApp ou pelo e-mail indicados acima para solicitar atendimento.",
+      "reason": "A expressão valem o mesmo é ambígua quanto à continuidade e à confirmação do contato. O novo texto indica a alternativa sem equiparar registro ou protocolo.",
+      "group": "Alternativa sem JavaScript equiparava canais e protocolo",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C04",
+      "type": "editorial_opportunity",
+      "title": "Abertura da home não distinguia a contratação residencial online",
+      "file": "index.html",
+      "route": "/",
+      "before": "<p class=\"form-hint\">Projetos e serviços documentais em todo o Brasil. Vistorias presenciais na Grande Florianópolis.</p>",
+      "after": "<p class=\"form-hint\">Projetos e serviços documentais em todo o Brasil. Vistorias presenciais na Grande Florianópolis.</p>\n<p class=\"form-hint\"><a class=\"text-link\" href=\"/projetos-prontos/#monte-seu-projeto\" data-event-name=\"cta_click\" data-cta-id=\"home-residential-price\" data-cta-position=\"hero\">Projeto de casa: calcular por disciplina e prazo</a></p>",
+      "reason": "A chamada principal oferece proposta; uma alternativa específica permite ao comprador residencial descobrir preço e prazo sem percorrer serviços técnicos.",
+      "group": "Abertura da home não distinguia a contratação residencial online",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C05",
+      "type": "editorial_opportunity",
+      "title": "Busca da biblioteca pressupunha uma obra já travada",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Projeto para completar ou conferir, propostas de obra para comparar, infiltração, valor de imóvel, disputa técnica, segurança do trabalho, ou glosa, aditivo, reequilíbrio e atraso em contrato público. Digite o que travou a obra: a lista abre o guia ou o serviço que assume o trabalho, com a entrega e o próximo passo.",
+      "after": "Busque o tema que precisa entender: projetos, orçamento, inspeção, avaliação de imóveis, segurança do trabalho ou contratos de obras. Encontre orientações para planejar, conferir documentos e decidir o próximo passo.",
+      "reason": "O texto anterior era uma enumeração extensa e excluía na linguagem quem ainda está planejando ou estudando uma contratação.",
+      "group": "Busca da biblioteca pressupunha uma obra já travada",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C06",
+      "type": "observed_inconsistency",
+      "title": "Descrição do diretório negava os artigos de projetos privados",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Os caminhos servem a obra pública e privada; as análises do diretório tratam de contrato público.",
+      "after": "Os caminhos e artigos atendem projetos, orçamentos e contratos de obras públicas e privadas.",
+      "reason": "O diretório contém artigos de quantitativos, revisão e compatibilização, além de contratos públicos.",
+      "group": "Escopo do diretório editorial",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C07",
+      "type": "observed_inconsistency",
+      "title": "Biblioteca reduzia a empresa a completar arquitetura de terceiros",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Elaboramos a disciplina que falta a partir da arquitetura. Você recebe o projeto complementar assinado para aprovar e executar.",
+      "after": "Desenvolvemos projetos e coordenamos as disciplinas necessárias ao empreendimento. A proposta define desenhos, memórias, responsáveis e a fase de entrega para aprovação, orçamento ou execução.",
+      "reason": "A oferta atual inclui elaboração e coordenação de projetos; a frase anterior limitava a percepção do serviço e confundia fases de entrega.",
+      "group": "Biblioteca reduzia a empresa a completar arquitetura de terceiros",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C08",
+      "type": "editorial_opportunity",
+      "title": "Resumo de inspeção reduzia a análise a observação visual e reparo",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Infiltração, fissura ou condição do prédio: registramos o que pode ser visto e as causas que a evidência sustenta. Você recebe o relatório para decidir o reparo.",
+      "after": "Infiltrações, fissuras ou condições do prédio: registramos a situação, investigamos as causas e indicamos as providências compatíveis com os exames realizados. O relatório orienta manutenção, reparo ou investigação complementar.",
+      "reason": "A página de serviço já prevê investigação e exames; a chamada fechava a conclusão em reparo, embora também possa indicar manutenção ou aprofundamento.",
+      "group": "Resumo de inspeção reduzia a análise a observação visual e reparo",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C09",
+      "type": "editorial_opportunity",
+      "title": "Resumo de perícia encerrava com um resultado externo",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Assistência técnica do seu lado: quesitos, análise do laudo e manifestação técnica. O resultado do processo permanece com o juízo.",
+      "after": "Quesitos, análise de laudos e manifestações de engenharia para apoiar a parte e seu advogado. O trabalho organiza a prova técnica e os pontos que precisam de esclarecimento.",
+      "reason": "A chamada deve explicar o uso do trabalho técnico. O papel do juízo continua expresso na página de serviço, sem prometer resultado processual.",
+      "group": "Resumo de perícia encerrava com um resultado externo",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C10",
+      "type": "observed_inconsistency",
+      "title": "Título do diretório escondia parte de seu conteúdo",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "id=\"dir-title\">Análises de licitação e contrato público",
+      "after": "id=\"dir-title\">Artigos sobre projetos, orçamentos e contratos",
+      "reason": "Há artigos privados de revisão e orçamento no mesmo diretório; o título podia levar o leitor a abandonar a busca.",
+      "group": "Escopo do diretório editorial",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C11",
+      "type": "observed_inconsistency",
+      "title": "Biblioteca proibia referências técnicas aceitas no contato",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Contrato, planilha, medições ou projeto só entram depois, pelo canal seguro combinado; não envie documentos no primeiro contato.",
+      "after": "Referências técnicas não sigilosas podem ser compartilhadas por e-mail ou WhatsApp. Para contratos, peças de processo ou arquivos com dados pessoais e conteúdo confidencial, combinamos uma forma reservada de envio.",
+      "reason": "A proibição indiscriminada contradizia a orientação atual da home. A proteção de sigilo permanece e o formulário não passa a prometer upload.",
+      "group": "Orientação para referências e documentos no primeiro contato",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C12",
+      "type": "editorial_opportunity",
+      "title": "Gratuidade de uso não distinguia exportações",
+      "file": "conteudos/index.html",
+      "route": "/conteudos/",
+      "before": "Use as ferramentas gratuitas para testar os seus números e o Radar aberto para acompanhar a demanda pública, com a metodologia à vista.",
+      "after": "Use gratuitamente as ferramentas para conferir números, desenhos e modelos. As condições de exportação são informadas em cada ferramenta. O Radar permite pesquisar contratações públicas e consultar a cobertura dos dados.",
+      "reason": "Preserva o uso gratuito e esclarece que as condições de exportação são apresentadas em cada ferramenta; trata possível dúvida, não afirma cobrança pelo cálculo.",
+      "group": "Gratuidade ampla não explicava as condições de exportação",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C13",
+      "type": "observed_inconsistency",
+      "title": "Parceiros recebiam proibição absoluta de plantas e arquivos",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": [
+        "conversa técnica, sem contratação nem pagamento, sem planta nem arquivo nesta etapa. A resposta nomeia o trabalho, o que você recebe e o que falta reunir para a proposta.",
+        "O trabalho, o que já existe e quem permanece com o cliente. Sem anexo e sem dado sensível."
+      ],
+      "after": [
+        "descreva a necessidade e compartilhe as referências técnicas não sigilosas que já tiver. Documentos confidenciais e dados de terceiros seguem pelo canal reservado combinado com a equipe.",
+        "Informe o trabalho, as referências disponíveis e quem coordena o contato com o cliente. Preserve documentos confidenciais até combinarmos o envio reservado."
+      ],
+      "reason": "Referências técnicas não sigilosas já são aceitas pelo contato canônico; preservados sigilo, conflito e dados de terceiros.",
+      "group": "Orientação para referências e documentos no primeiro contato",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C14",
+      "type": "editorial_opportunity",
+      "title": "Parceria expressava posse do cliente em vez de responsabilidade",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": "Você diz o que falta; nós entregamos a parte de engenharia; o cliente continua seu.",
+      "after": "Sua equipe mantém o relacionamento. A CONFENGE desenvolve a engenharia combinada.",
+      "reason": "A promessa comercial útil é a continuidade do relacionamento e a divisão do trabalho, sem tratar o cliente como propriedade.",
+      "group": "Parceria expressava posse do cliente em vez de responsabilidade",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C15",
+      "type": "editorial_opportunity",
+      "title": "Roteiro de parceria impunha sequência rígida sem necessidade",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": "Três passos, sempre na mesma ordem, para quem encaminha uma necessidade em nome de um cliente ou de um projeto que já conduz.",
+      "after": "Da definição do serviço à entrega para sua equipe, combinamos as etapas conforme o que já existe e o que precisa ser desenvolvido.",
+      "reason": "Demandas podem chegar em fases diferentes. A mesma página acolhe escopo e documentos parciais; o absoluto sempre na mesma ordem cria rigidez desnecessária.",
+      "group": "Roteiro de parceria impunha sequência rígida sem necessidade",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C16",
+      "type": "editorial_opportunity",
+      "title": "Cartões de parceria usavam a categoria interna Compra",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": [
+        "Compra: levantar ou revisar quantidades e custos",
+        "Compra: conferir um projeto existente e devolver apontamentos",
+        "Compra: registrar interferências e interfaces entre disciplinas",
+        "Compra: produzir a disciplina de engenharia que falta no pacote"
+      ],
+      "after": [
+        "Para comparar custos e contratar a obra",
+        "Para conferir um projeto antes da obra",
+        "Para resolver encontros entre disciplinas",
+        "Para desenvolver a disciplina que falta"
+      ],
+      "reason": "Os quatro rótulos agora situam o objetivo do comprador. Um mecanismo de comunicação, não quatro fragilidades artificiais.",
+      "group": "Cartões de parceria usavam a categoria interna Compra",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C17",
+      "type": "observed_inconsistency",
+      "title": "Revisão terminava no autor sem explicar a continuidade",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": "Não substituímos o autor de origem: ele decide e corrige.",
+      "after": "Os apontamentos identificam a revisão examinada e o responsável pelo ajuste. A proposta pode incluir a condução das devolutivas com os autores, preservando a autoria de cada projeto.",
+      "reason": "A página de revisão já oferece condução das devolutivas. O resumo anterior sugeria encerramento na lista de falhas.",
+      "group": "Revisão terminava no autor sem explicar a continuidade",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C18",
+      "type": "editorial_opportunity",
+      "title": "Legenda demonstrativa explicava apenas o que o exemplo não prova",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": "O esquema da entrega é ilustração do método, não prova de cálculo completo.",
+      "after": "A ilustração mostra como as entregas são organizadas, com dados hipotéticos.",
+      "reason": "Mantém a identificação de demonstração e dados hipotéticos, acrescentando o que o parceiro pode aprender com ela.",
+      "group": "Legenda demonstrativa explicava apenas o que o exemplo não prova",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C19",
+      "type": "editorial_opportunity",
+      "title": "Título de contato repetia o processo em uma chamada extensa",
+      "file": "parcerias-engenharia/index.html",
+      "route": "/parcerias-engenharia/",
+      "before": "Descreva o que falta no pacote. Respondemos com o trabalho, a entrega e o que precisamos para a proposta.",
+      "after": "Qual trabalho sua equipe precisa integrar ao projeto?",
+      "reason": "A seção já explica a resposta e os canais. Uma pergunta ligada ao trabalho facilita reconhecer a ação sem repetir o parágrafo.",
+      "group": "Título de contato repetia o processo em uma chamada extensa",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C20",
+      "type": "observed_inconsistency",
+      "title": "Coordenação herdava etapas de cálculo e concepção de disciplinas",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/coordenacao-multidisciplinar/",
+      "before": [
+        {
+          "label": "Entender",
+          "title": "Entender o objeto e a decisão",
+          "body": "A abertura consolida finalidade, fase, condicionantes, documentação disponível e critérios de entrega. As informações adicionais necessárias são identificadas para orientar o desenvolvimento."
+        },
+        {
+          "label": "Conceber",
+          "title": "Comparar sistemas e fixar critérios",
+          "body": "Alternativas tecnicamente pertinentes são confrontadas pelas interfaces, execução, operação e documentação exigida. A escolha do sistema precede o detalhamento."
+        },
+        {
+          "label": "Desenvolver",
+          "title": "Calcular, modelar e documentar",
+          "body": "O sistema definido é dimensionado e representado no nível contratado. Premissas, decisões e versões permanecem rastreáveis entre memória, modelo e desenhos."
+        },
+        {
+          "label": "Coordenar",
+          "title": "Fechar interfaces entre disciplinas",
+          "body": "Interferências e dependências são distribuídas aos responsáveis. Cada retorno informa o que mudou, o impacto nas outras partes e a versão usada como referência."
+        },
+        {
+          "label": "Entregar",
+          "title": "Revisar o pacote para seu uso previsto",
+          "body": "A conferência final verifica coerência entre as peças, revisões, formatos e responsabilidades. A emissão identifica a etapa, as conclusões e as orientações necessárias à finalidade contratada."
+        }
+      ],
+      "after": [
+        {
+          "label": "Organizar",
+          "title": "Reunir referências e responsáveis",
+          "body": "Relacionamos disciplinas, autores, arquivos e revisões de partida. O plano registra formatos, etapas e quem responde por cada decisão."
+        },
+        {
+          "label": "Examinar",
+          "title": "Localizar conflitos e dependências",
+          "body": "Conferimos os encontros entre disciplinas e registramos cada questão com localização, documentos de origem e efeito sobre o projeto."
+        },
+        {
+          "label": "Conduzir",
+          "title": "Combinar as soluções com os autores",
+          "body": "Encaminhamos os pontos aos responsáveis e acompanhamos decisões, prioridades e retornos. A autoria das alterações permanece identificada."
+        },
+        {
+          "label": "Conferir",
+          "title": "Verificar a solução nas novas revisões",
+          "body": "Confrontamos a resposta com os desenhos, modelos e memoriais atualizados e registramos o que foi incorporado ou segue pendente."
+        }
+      ],
+      "reason": "O método compartilhado dizia calcular e modelar como etapa padrão também da coordenação. A sequência própria descreve decisões, autores e revisões sem ampliar autoria.",
+      "group": "Coordenação herdava etapas de cálculo e concepção de disciplinas",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C21",
+      "type": "editorial_opportunity",
+      "title": "Apresentação da liderança discutia o porte da empresa em vez do atendimento",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/empresa/",
+      "before": "A liderança combina formação e experiência próprias com a mobilização dos especialistas habilitados para cada disciplina, sem reduzir a empresa à atuação de uma única pessoa.",
+      "after": "Tiago coordena a definição do serviço e a integração das entregas. Os profissionais de cada disciplina são identificados conforme o trabalho contratado e suas atribuições.",
+      "reason": "O contratante precisa entender quem coordena e quem responde pelas disciplinas; a defesa contra percepção de empresa individual era um argumento interno.",
+      "group": "Apresentação da liderança discutia o porte da empresa em vez do atendimento",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C22",
+      "type": "editorial_opportunity",
+      "title": "Sigla de governança não explicava a divisão de trabalho",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/terceirizacao-projetos-engenharia/",
+      "before": "Matriz RACI ou equivalente",
+      "after": "Responsáveis por produzir, revisar, aprovar e receber cada entrega",
+      "reason": "O parceiro consegue avaliar a integração pela descrição dos papéis sem precisar conhecer RACI. O conceito de responsabilização permanece.",
+      "group": "Sigla de governança não explicava a divisão de trabalho",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C23",
+      "type": "editorial_opportunity",
+      "title": "Campo de urgência não dizia a que prazo se referia",
+      "file": "index.html",
+      "route": "/",
+      "before": "<label for=\"urgencia\">Urgência <span class=\"optional-mark\">opcional</span></label>",
+      "after": "<label for=\"urgencia\">Prazo desejado para sua necessidade <span class=\"optional-mark\">opcional</span></label>",
+      "reason": "As opções de 48 horas, 7 dias e 30 dias descrevem a necessidade do visitante. O novo rótulo evita que sejam entendidas como promessa de prazo de retorno ou entrega.",
+      "group": "Campo de urgência não dizia a que prazo se referia",
+      "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
+      "commercial_effect": "Hipótese de reduzir dúvidas ou atrito; efeito sobre conversão não medido.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C24",
+      "type": "editorial_opportunity",
+      "title": "Distinção entre fase de aprovação e documentação executiva",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/",
+      "before": {
+        "question_not_explicit": "Projeto para aprovação e projeto executivo são a mesma entrega?",
+        "existing_evidence": "Plantas, cortes, detalhes, modelos, memórias, especificações e listas conforme a fase e o objeto contratados.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Projeto para aprovação e projeto executivo são a mesma entrega?",
+        "answer": "São etapas com finalidades diferentes. A documentação para aprovação atende à análise dos órgãos competentes; o projeto executivo detalha as soluções necessárias à execução. A proposta identifica a fase, as peças e o uso previsto, para que você saiba o que está contratando."
+      },
+      "reason": "A abertura reúne aprovar, orçar e executar sem responder diretamente se os mesmos documentos atendem a todas essas finalidades.",
+      "group": "Resposta de contratação: projects-hub",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C25",
+      "type": "editorial_opportunity",
+      "title": "Escolha entre elaboração, revisão e compatibilização",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/",
+      "before": {
+        "question_not_explicit": "Preciso elaborar, revisar ou compatibilizar um projeto?",
+        "existing_evidence": "O trabalho pode começar na concepção, desenvolver uma especialidade completa, coordenar um pacote multidisciplinar ou consolidar a documentação executiva.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Preciso elaborar, revisar ou compatibilizar um projeto?",
+        "answer": "A elaboração desenvolve a disciplina. A revisão examina um projeto existente. A compatibilização trata os encontros entre disciplinas, como passagens de instalações pela estrutura. A proposta pode combinar esses trabalhos conforme o que já existe e a entrega necessária."
+      },
+      "reason": "O visitante encontra práticas e coordenação, mas não uma comparação direta das três formas de contratar.",
+      "group": "Resposta de contratação: projects-hub",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C26",
+      "type": "editorial_opportunity",
+      "title": "Escolha do sistema sem exigir decisão técnica prévia do comprador",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/estruturas/",
+      "before": {
+        "question_not_explicit": "Preciso escolher o sistema estrutural antes de pedir a proposta?",
+        "existing_evidence": "A prática abrange sistemas em concreto armado ou protendido, aço, pré-moldados, alvenaria estrutural e soluções combinadas",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Preciso escolher o sistema estrutural antes de pedir a proposta?",
+        "answer": "Você pode começar pelo uso da obra, pela arquitetura disponível e pelas condições do terreno. A definição do sistema pode fazer parte da concepção contratada, com comparação de alternativas de materiais, vãos, execução e integração com as demais disciplinas."
+      },
+      "reason": "A lista de materiais e sistemas não esclarecia se a escolha precisava chegar pronta para contratar.",
+      "group": "Resposta de contratação: structures",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C27",
+      "type": "editorial_opportunity",
+      "title": "Entrada de uma demanda de estrutura existente",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/estruturas/",
+      "before": {
+        "question_not_explicit": "Como começa o trabalho em uma estrutura existente?",
+        "existing_evidence": "Intervenções começam pelo diagnóstico das condições existentes e pela compatibilidade entre o sistema original, a causa e a solução proposta.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Como começa o trabalho em uma estrutura existente?",
+        "answer": "Começa pela identificação da estrutura, de seu uso atual e da intervenção desejada, com os documentos e levantamentos disponíveis. A proposta define a investigação, a verificação estrutural e o eventual projeto de reforço, conforme a condição encontrada e a finalidade do trabalho."
+      },
+      "reason": "A página anuncia reforço e recuperação, mas o caminho de contratação ficava misturado ao projeto de estrutura nova.",
+      "group": "Resposta de contratação: structures",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C28",
+      "type": "editorial_opportunity",
+      "title": "Contratação de uma instalação preservando as demais",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/instalacoes/",
+      "before": {
+        "question_not_explicit": "Posso contratar uma instalação sem refazer todas as outras?",
+        "existing_evidence": "As disciplinas podem ser contratadas isoladamente ou em um pacote coordenado.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Posso contratar uma instalação sem refazer todas as outras?",
+        "answer": "Sim. A proposta pode contemplar uma disciplina ou um conjunto coordenado. Identificamos as redes existentes, os projetos que serão mantidos e os pontos de ligação, para definir onde o novo trabalho precisa se integrar às demais instalações."
+      },
+      "reason": "A oferta de disciplinas isoladas não explicava a relação com os sistemas que o cliente já possui.",
+      "group": "Resposta de contratação: installations",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C29",
+      "type": "editorial_opportunity",
+      "title": "Equipamentos indefinidos e decisões necessárias durante o projeto",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/instalacoes/",
+      "before": {
+        "question_not_explicit": "E se os equipamentos ainda não estiverem todos definidos?",
+        "existing_evidence": "Quadros de áreas e usos, cargas ou equipamentos especiais e informações disponíveis das concessionárias.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "E se os equipamentos ainda não estiverem todos definidos?",
+        "answer": "Informe o que já conhece sobre uso, áreas, ocupação e equipamentos. A proposta organiza as informações necessárias e o momento de cada definição. Mudanças de potência, consumo ou posição durante o projeto precisam ser avaliadas porque podem alterar o dimensionamento e os traçados."
+      },
+      "reason": "A lista de cargas especiais não explicava ao comprador por que equipamentos pendentes precisam de um momento de definição.",
+      "group": "Resposta de contratação: installations",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C30",
+      "type": "editorial_opportunity",
+      "title": "Separação entre projeto de infraestrutura e levantamentos de base",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/infraestrutura/",
+      "before": {
+        "question_not_explicit": "Topografia e investigação do solo entram automaticamente no serviço?",
+        "existing_evidence": "Levantamentos topográficos, investigações, diretrizes e pontos de conexão quando já disponíveis.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Topografia e investigação do solo entram automaticamente no serviço?",
+        "answer": "A proposta identifica os levantamentos e estudos necessários, o que já está disponível e o que precisa ser contratado ou fornecido. Essa definição permite relacionar terreno, volumes, redes e estruturas às informações que sustentam o projeto."
+      },
+      "reason": "A página pede estudos disponíveis, mas não explicava que a composição desses serviços precisa aparecer na proposta.",
+      "group": "Resposta de contratação: infrastructure",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C31",
+      "type": "editorial_opportunity",
+      "title": "Responsabilidades sobre conexões e aprovações externas",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/infraestrutura/",
+      "before": {
+        "question_not_explicit": "Como o projeto considera as redes públicas e as aprovações?",
+        "existing_evidence": "Diretrizes, faixas, pontos de conexão e condicionantes de órgãos ou concessionárias permanecem identificados como dependências externas.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Como o projeto considera as redes públicas e as aprovações?",
+        "answer": "Os pontos de conexão, as diretrizes de órgãos e concessionárias e as informações recebidas são registrados no projeto. A proposta define a documentação e a atuação contratadas nesse processo. A análise e os prazos das autoridades permanecem sob responsabilidade de cada órgão."
+      },
+      "reason": "Dependências externas eram citadas tecnicamente sem uma resposta direta sobre a divisão de responsabilidades.",
+      "group": "Resposta de contratação: infrastructure",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C32",
+      "type": "editorial_opportunity",
+      "title": "Autoria e responsabilidade na coordenação",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/coordenacao-multidisciplinar/",
+      "before": {
+        "question_not_explicit": "A coordenação passa a assinar os projetos de todos os autores?",
+        "existing_evidence": "Cada interface tem um dono de cada lado, sem transferir silenciosamente autoria ou obrigação a quem coordena.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "A coordenação passa a assinar os projetos de todos os autores?",
+        "answer": "A autoria de cada disciplina permanece identificada. A coordenação organiza referências, decisões e revisões entre os responsáveis. A proposta distingue quem projeta, quem coordena, quem revisa e quem responde tecnicamente por cada entrega."
+      },
+      "reason": "O nome coordenação pode ser entendido como transferência de responsabilidade por todos os projetos; a distinção estava dispersa.",
+      "group": "Resposta de contratação: multidisciplinary-coordination",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C33",
+      "type": "editorial_opportunity",
+      "title": "Diferença entre detectar interferências e conduzir as soluções",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projetos/coordenacao-multidisciplinar/",
+      "before": {
+        "question_not_explicit": "O trabalho termina em uma lista de interferências?",
+        "existing_evidence": "Cada questão registra local, disciplinas, evidência, responsável, decisão e estado de incorporação.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "O trabalho termina em uma lista de interferências?",
+        "answer": "A coordenação relaciona cada questão à localização, às disciplinas envolvidas e ao responsável pela resposta. A condução acompanha as decisões e a incorporação nas revisões previstas na contratação, para que o registro mostre o que foi resolvido e o que ainda depende de ação."
+      },
+      "reason": "A página contém o método, mas faltava responder à objeção de que o cliente receberia somente uma lista de problemas.",
+      "group": "Resposta de contratação: multidisciplinary-coordination",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C34",
+      "type": "editorial_opportunity",
+      "title": "Triagem não apresentava a pesquisa de inteligência de mercado",
+      "file": "triagem-tecnica/index.html",
+      "route": "/triagem-tecnica/",
+      "before": [
+        "Converse com a CONFENGE sobre a sua necessidade de engenharia, inspeção, perícia, avaliação, segurança do trabalho ou obras públicas.",
+        "<li id=\"planejamento-publico\"><a href=\"/servicos-obras-publicas/\">Engenharia e apoio a obras públicas</a></li>"
+      ],
+      "after": [
+        "Converse com a CONFENGE sobre projetos, inspeção, perícia, avaliação, segurança do trabalho, obras públicas ou inteligência de mercado.",
+        "<li id=\"planejamento-publico\"><a href=\"/servicos-obras-publicas/\">Engenharia e apoio a obras públicas</a></li>\n        <li id=\"inteligencia-mercado\"><a href=\"/inteligencia/\">Pesquisa de clientes, mercados, concorrentes e referências de preços</a></li>"
+      ],
+      "reason": "A página usada para contato comercial listava áreas técnicas e obras públicas, mas omitia uma oferta atual inteira. A chamada agora permite reconhecer demandas de mercado, clientes e preços.",
+      "group": "Descoberta de serviço na triagem",
+      "acceptance": "Abertura menciona inteligência de mercado e lista contém link direto para /inteligencia/; canais e proteção de documentos preservados.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C35",
+      "type": "editorial_opportunity",
+      "title": "Caminho para reforma e ampliação no serviço de edificações",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/edificacoes/",
+      "before": {
+        "question_not_explicit": "É possível projetar uma reforma ou ampliação de uma edificação existente?",
+        "existing_evidence": "Programa de necessidades, arquitetura disponível e informações do terreno ou edifício existente.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "É possível projetar uma reforma ou ampliação de uma edificação existente?",
+        "answer": "A demanda começa pelo uso atual, pela alteração pretendida e pelos registros disponíveis do edifício. A proposta define as disciplinas, os levantamentos e as verificações necessários para desenvolver a intervenção e integrar o novo trabalho aos sistemas existentes."
+      },
+      "reason": "A página citava informações de edifício existente entre os insumos, mas a oferta predominante podia ser lida como apenas construção nova.",
+      "group": "Resposta de contratação: buildings",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C36",
+      "type": "editorial_opportunity",
+      "title": "Escolha entre oferta residencial online e proposta de edificações",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/edificacoes/",
+      "before": {
+        "question_not_explicit": "A contratação online de uma casa vale para qualquer edificação?",
+        "existing_evidence": "Edificações são enquadradas pelas necessidades concretas de uso, ocupação, operação e aprovação do objeto.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "A contratação online de uma casa vale para qualquer edificação?",
+        "answer": "A oferta online tem condições próprias para residências unifamiliares novas. Edificações comerciais, industriais, institucionais e casos fora desse enquadramento recebem proposta conforme uso, área, disciplinas e fase do trabalho. Consulte o enquadramento antes de escolher a modalidade."
+      },
+      "reason": "O público da página inclui vários usos; o atalho residencial precisava ser acompanhado de distinção clara de modalidade.",
+      "group": "Resposta de contratação: buildings",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C37",
+      "type": "editorial_opportunity",
+      "title": "Critério para conferir a proposta antes do aceite",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/como-trabalhamos/",
+      "before": {
+        "question_not_explicit": "O que deve estar claro na proposta antes de contratar?",
+        "existing_evidence": "Escopo, entregas, prazos, honorários e responsabilidades são definidos na proposta.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "O que deve estar claro na proposta antes de contratar?",
+        "answer": "A proposta identifica o trabalho, as disciplinas, os documentos de entrega, os formatos, o prazo, os honorários e as responsabilidades. As informações a fornecer e as etapas de revisão também precisam estar relacionadas ao serviço, para que você possa comparar o combinado com o que receberá."
+      },
+      "reason": "Os elementos da proposta estavam distribuídos entre etapas; faltava reuni-los como uma conferência prática do comprador.",
+      "group": "Resposta de contratação: how-we-work",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C38",
+      "type": "editorial_opportunity",
+      "title": "Consequências de uma alteração de escopo durante o desenvolvimento",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/como-trabalhamos/",
+      "before": {
+        "question_not_explicit": "Como uma mudança durante o trabalho é tratada?",
+        "existing_evidence": "Quando uma escolha afeta prazo, custo ou execução, mostramos a diferença entre as opções.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Como uma mudança durante o trabalho é tratada?",
+        "answer": "A mudança é registrada e examinada quanto aos efeitos nas disciplinas, nas entregas e no prazo. Quando altera o escopo contratado, as condições são alinhadas com o contratante. As novas revisões identificam o que foi modificado e qual versão passa a orientar o trabalho."
+      },
+      "reason": "O método mostrava decisões e revisões, mas não ligava explicitamente uma mudança à necessidade de alinhar suas condições.",
+      "group": "Resposta de contratação: how-we-work",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C39",
+      "type": "editorial_opportunity",
+      "title": "Chamada de avaliação levava a um resumo em vez do serviço completo",
+      "file": "triagem-tecnica/index.html; conteudos/index.html",
+      "route": "/triagem-tecnica/; /conteudos/",
+      "before": "href=\"/servicos/#servico-avaliacao\"",
+      "after": "href=\"/avaliacao-imoveis-urbanos/\"",
+      "reason": "As duas chamadas prometem o serviço de avaliação e desviavam para uma seção de resumo, apesar de existir página específica com método, entregas, finalidade e contratação. Uma única fragilidade de destino, com duas ocorrências.",
+      "group": "Destino do serviço de avaliação",
+      "acceptance": "As chamadas de avaliação nas duas rotas abrem /avaliacao-imoveis-urbanos/; destino existente e declarado no site.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C40",
+      "type": "editorial_opportunity",
+      "title": "Alcance do atendimento e trabalho de campo",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/empresa/",
+      "before": {
+        "question_not_explicit": "Como funciona o atendimento fora de Florianópolis?",
+        "existing_evidence": "A CONFENGE elabora projetos de estruturas, instalações e infraestrutura e presta serviços de engenharia para empreendimentos públicos e privados.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Como funciona o atendimento fora de Florianópolis?",
+        "answer": "Projetos e serviços documentais atendem demandas de todas as regiões do Brasil. As vistorias presenciais são realizadas na Grande Florianópolis; outras necessidades de campo dependem do local, da logística e dos responsáveis definidos na proposta. O formato de atendimento é confirmado antes da contratação."
+      },
+      "reason": "A página institucional não explicava a diferença entre serviço documental remoto e atendimento presencial divulgada na home.",
+      "group": "Resposta de contratação: company",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C41",
+      "type": "editorial_opportunity",
+      "title": "Limite de capacidade em uma contratação recorrente",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/terceirizacao-projetos-engenharia/",
+      "before": {
+        "question_not_explicit": "Como funciona uma sequência recorrente de projetos?",
+        "existing_evidence": "Fluxo com priorização, entradas, marcos e revisões acordados para uma sequência de projetos ou entregas.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Como funciona uma sequência recorrente de projetos?",
+        "answer": "A proposta combina disciplinas, volume, capacidade prevista, prioridades, marcos e revisões. Sua equipe pode conferir quais entregas estão incluídas e alinhar novas demandas, prazos e capacidade antes de acrescentá-las ao trabalho contratado."
+      },
+      "reason": "Capacidade técnica continuada pode ser confundida com disponibilidade irrestrita; a resposta identifica condições que precisam constar da proposta, sem inventar mensalidade ou rotina operacional.",
+      "group": "Resposta de contratação: project-outsourcing",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C42",
+      "type": "editorial_opportunity",
+      "title": "Compatibilidade da entrega com o padrão do parceiro",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/terceirizacao-projetos-engenharia/",
+      "before": {
+        "question_not_explicit": "Os arquivos seguem o padrão do meu escritório?",
+        "existing_evidence": "Templates, bibliotecas, critérios, nomenclaturas e ambientes são incorporados quando fornecidos e pertinentes.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Os arquivos seguem o padrão do meu escritório?",
+        "answer": "Os padrões fornecidos pelo contratante são alinhados antes do desenvolvimento: formatos, ferramentas, nomenclatura, bibliotecas, organização das pranchas e revisão. A proposta identifica o que será entregue e como será recebido pela equipe que integra o projeto."
+      },
+      "reason": "A página listava templates e bibliotecas, mas não esclarecia quando os formatos e a recepção precisam ser definidos.",
+      "group": "Resposta de contratação: project-outsourcing",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C43",
+      "type": "editorial_opportunity",
+      "title": "Finalidade da arquitetura e da investigação geotécnica",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-estrutural-concreto-armado/",
+      "before": {
+        "question_not_explicit": "Por que arquitetura e informações do solo são solicitadas?",
+        "existing_evidence": "Arquitetura, levantamento ou modelo, sondagens disponíveis e quadro de cargas ou usos especiais.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Por que arquitetura e informações do solo são solicitadas?",
+        "answer": "A arquitetura orienta vãos, níveis, uso e posição dos elementos. As informações do solo sustentam a definição das fundações. Você pode iniciar a conversa com os documentos existentes; a proposta identifica os dados adicionais necessários para desenvolver o projeto."
+      },
+      "reason": "A solicitação desses documentos podia parecer burocrática ou impeditiva sem explicar seu papel na definição de estrutura e fundações.",
+      "group": "Resposta de contratação: reinforced-concrete",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C44",
+      "type": "editorial_opportunity",
+      "title": "Diferença entre duas entregas estruturais com usos distintos",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-estrutural-concreto-armado/",
+      "before": {
+        "question_not_explicit": "O que diferencia plantas de forma e detalhamento de armaduras?",
+        "existing_evidence": "Formas, armaduras e memórias compartilham geometria, materiais e critérios de projeto.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "O que diferencia plantas de forma e detalhamento de armaduras?",
+        "answer": "As plantas de forma apresentam a geometria, os níveis e as dimensões dos elementos. O detalhamento de armaduras apresenta barras, posições, ancoragens e emendas dos elementos contratados. São peças complementares, relacionadas à mesma solução estrutural e à fase de desenvolvimento."
+      },
+      "reason": "A lista de peças não tornava direta a utilidade de cada uma para quem contrata sem formação estrutural.",
+      "group": "Resposta de contratação: reinforced-concrete",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C45",
+      "type": "editorial_opportunity",
+      "title": "Fronteira entre cálculo estrutural e detalhamento de fabricação",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-estrutura-metalica/",
+      "before": {
+        "question_not_explicit": "O projeto estrutural já inclui todos os desenhos de fabricação?",
+        "existing_evidence": "Ligações, chapas, parafusos, soldas e materiais conforme a fronteira contratada entre projeto e fabricação.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "O projeto estrutural já inclui todos os desenhos de fabricação?",
+        "answer": "O projeto estrutural e o detalhamento de fabricação têm níveis de informação diferentes. A proposta identifica desenhos de conjunto, ligações, listas e detalhes incluídos, além dos dados que dependem do fabricante. Essa divisão é alinhada antes de produzir as peças."
+      },
+      "reason": "A expressão fronteira contratada não ajudava o comprador a saber se receberia arquivos suficientes para fabricar.",
+      "group": "Resposta de contratação: steel-structure",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C46",
+      "type": "editorial_opportunity",
+      "title": "Dependências de fabricação, equipamentos e montagem",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-estrutura-metalica/",
+      "before": {
+        "question_not_explicit": "Quais informações do fabricante e dos equipamentos precisam ser alinhadas?",
+        "existing_evidence": "Geometria, cargas de equipamentos, ambiente, interfaces com fundações e restrições de fabricação ou montagem.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Quais informações do fabricante e dos equipamentos precisam ser alinhadas?",
+        "answer": "Dimensões, cargas dos equipamentos, apoios, restrições de transporte e condições de montagem influenciam o projeto. Registramos as informações disponíveis e os pontos que dependem dos fornecedores, com responsáveis e etapas definidos para o desenvolvimento."
+      },
+      "reason": "A lista técnica de cargas e restrições não explicava a coordenação necessária com fornecedores.",
+      "group": "Resposta de contratação: steel-structure",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C47",
+      "type": "editorial_opportunity",
+      "title": "Sistemas adicionais não são inclusão automática no elétrico",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-eletrico/",
+      "before": {
+        "question_not_explicit": "SPDA, telecomunicações e automação fazem parte de qualquer projeto elétrico?",
+        "existing_evidence": "O escopo pode envolver baixa, média ou alta tensão, entrada de energia, subestação, distribuição, iluminação, emergência, SPDA, aterramento e interfaces com telecomunicações, automação e sistemas especiais.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "SPDA, telecomunicações e automação fazem parte de qualquer projeto elétrico?",
+        "answer": "Esses sistemas podem ser coordenados com o projeto elétrico, mas precisam estar identificados no escopo. A proposta informa quais instalações serão desenvolvidas, suas interfaces e os documentos previstos para cada uma, conforme o uso do empreendimento."
+      },
+      "reason": "A enumeração de sistemas na abertura poderia ser lida como inclusão automática em qualquer contratação.",
+      "group": "Resposta de contratação: electrical-project",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C48",
+      "type": "editorial_opportunity",
+      "title": "Projeto elétrico, obra e ligação são responsabilidades diferentes",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-eletrico/",
+      "before": {
+        "question_not_explicit": "Contratar o projeto também inclui executar a instalação e pedir a ligação?",
+        "existing_evidence": "O desenvolvimento reúne estudo das demandas, distribuição, proteção e documentação para implantação dos sistemas contratados.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "Contratar o projeto também inclui executar a instalação e pedir a ligação?",
+        "answer": "A contratação de projeto produz a documentação das instalações definidas. Execução, fornecimento de materiais e procedimentos junto à concessionária têm responsabilidades próprias. A proposta identifica a atuação da CONFENGE e os documentos necessários para que essas etapas possam ser conduzidas."
+      },
+      "reason": "A finalidade implantação não esclarecia diretamente o que acontece depois da entrega do projeto.",
+      "group": "Resposta de contratação: electrical-project",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C49",
+      "type": "editorial_opportunity",
+      "title": "Gás listado junto ao hidrossanitário sem distinção comercial direta",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-hidrossanitario/",
+      "before": {
+        "question_not_explicit": "A instalação de gás está incluída no hidrossanitário?",
+        "existing_evidence": "O escopo pode reunir água fria e quente, esgoto sanitário, ventilação, águas pluviais, drenagem, recalque, gás e sistemas relacionados ao empreendimento.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "A instalação de gás está incluída no hidrossanitário?",
+        "answer": "A instalação de gás é identificada como sistema próprio quando fizer parte da contratação. A proposta delimita água, esgoto, águas pluviais e os sistemas adicionais necessários, com documentos e responsabilidades definidos para cada frente."
+      },
+      "reason": "A enumeração podia ser interpretada como escopo automático, apesar de gás depender de uma definição específica do trabalho.",
+      "group": "Resposta de contratação: plumbing-project",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    },
+    {
+      "id": "C50",
+      "type": "editorial_opportunity",
+      "title": "Dados externos determinantes para o hidrossanitário",
+      "file": "data/projects/project-pages.v1.json",
+      "route": "/projeto-hidrossanitario/",
+      "before": {
+        "question_not_explicit": "O que preciso informar sobre as conexões de água e esgoto?",
+        "existing_evidence": "Pontos de conexão, pressões ou cotas disponíveis, usos, ocupação e equipamentos que consomem ou descarregam fluidos.",
+        "distribution_note": "Informação relacionada já consta no trecho citado. A oportunidade é responder diretamente à decisão de contratação e reunir suas implicações, sem alegar ausência absoluta do tema."
+      },
+      "after": {
+        "question": "O que preciso informar sobre as conexões de água e esgoto?",
+        "answer": "Se disponíveis, informe os pontos de ligação, as cotas de entrada e saída, a pressão de abastecimento e as redes existentes. Esses dados ajudam a definir reservação, distribuição e escoamento. As informações ainda necessárias são relacionadas para orientar o desenvolvimento."
+      },
+      "reason": "A lista de pressões e cotas estava no fim dos insumos sem relacioná-la à função do projeto para o comprador.",
+      "group": "Resposta de contratação: plumbing-project",
+      "acceptance": "Pergunta e resposta específica presentes no HTML renderizado da rota; texto fiel ao escopo já declarado e sem preço, prazo ou habilitação novos.",
+      "commercial_effect": "Hipótese de facilitar escolha e diminuir dúvidas; não há medição de efeito em conversão.",
+      "review_criteria": [
+        "clareza",
+        "benefício",
+        "especificidade",
+        "prova",
+        "público",
+        "objeções",
+        "ação",
+        "confiança",
+        "leitura",
+        "coerência"
+      ],
+      "simulated_consensus": "Construção analítica sob dez perspectivas; sem participação, votos ou endosso dos autores reais."
+    }
+  ],
+  "review_note": "Revisão independente substituiu dois itens redundantes (C34 e C39), esclareceu a condição de capacidade em C41 e reclassificou C03/C12 como oportunidades editoriais. Há 9 inconsistências constatadas e 41 oportunidades de clareza. Produção e medições visuais dependem dos controles de publicação."
+}

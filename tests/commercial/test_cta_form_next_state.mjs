@@ -25,6 +25,22 @@ assert.equal(report.coverage.active_capture_routes, 42);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
 
+// 2026-11-13, C04: the new home link is a real commercial action. Keep it
+// in the derived census and bind its meaning to the existing calculator.
+const residentialPriceActions = report.surfaces
+  .filter((surface) => surface.route === "/")
+  .flatMap((surface) => surface.actions)
+  .filter((action) => action.cta_id === "home-residential-price");
+assert.equal(residentialPriceActions.length, 1, "one residential calculator entry on home");
+const residentialPrice = residentialPriceActions[0];
+assert.equal(residentialPrice.href, "/projetos-prontos/#monte-seu-projeto");
+assert.equal(residentialPrice.position, "hero");
+assert.equal(residentialPrice.stage, "calculate");
+assert.equal(residentialPrice.commitment, "low");
+assert.deepEqual(residentialPrice.event_semantics, ["cta_click"]);
+assert.match(residentialPrice.actual_receipt, /não registra pedido, pagamento ou recibo/);
+assert.match(fs.readFileSync("projetos-prontos/index.html", "utf8"), /id="monte-seu-projeto"/);
+
 // Navigation is discovery, not a declared form commitment. Exercise the real
 // census with HTML fixtures injected only into reads, leaving repository files
 // untouched. A marker alone must never hide a commercial or external action.
@@ -105,7 +121,14 @@ for (const form of forms) {
   assert.ok(report.contract.allowed_commitments.includes(form.commitment), `${form.route}: ${form.commitment}`);
   assert.ok(form.profile, `${form.route}: profile`);
   assert.ok(form.current_label, `${form.route}: current label`);
-  assert.doesNotMatch(form.current_label, /^(?:Enviar|Quero)\b/i, `${form.route}: generic submit`);
+  if (form.route === "/" && form.profile === "general_triage") {
+    // C02: this is the final submit, after the fields have been completed.
+    // Bind the reviewed wording exactly; all context, consent, persistence
+    // and next-state assertions below still apply to the same form.
+    assert.equal(form.current_label, "Enviar solicitação", "home submit names the actual action");
+  } else {
+    assert.doesNotMatch(form.current_label, /^(?:Enviar|Quero)\b/i, `${form.route}: generic submit`);
+  }
   assert.ok(form.useful_next_state.length >= 32, `${form.route}: useful next state`);
   assert.ok(form.actual_receipt.length >= 16, `${form.route}: actual receipt`);
   assert.ok(form.pre_form_value.length >= 32, `${form.route}: pre-form value`);

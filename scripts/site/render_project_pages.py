@@ -262,6 +262,7 @@ SECTION_NAV = {
     "method": ("metodo", "Desenvolvimento"),
     "inputs": ("insumos", "Informações iniciais"),
     "responsibility": ("responsabilidade", "Responsabilidade"),
+    "questions": ("duvidas-contratacao", "Dúvidas"),
     "leadership": ("lideranca", "Liderança"),
     "contact": ("contato-projetos", "Proposta"),
     "partnership": ("parcerias", "Parcerias"),
@@ -298,6 +299,13 @@ def _technical_panel(panel: dict[str, Any]) -> str:
 
 
 def _render_section(key: str, page: dict[str, Any]) -> str:
+    if key == "questions":
+        questions = "".join(
+            f'<article><h3>{esc(item["question"])}</h3><p>{esc(item["answer"])}</p></article>'
+            for item in page["questions"]
+        )
+        layout = ' class="pp-interface-grid"' if len(page["questions"]) > 1 else ""
+        return f'''<section class="pp-section pp-section--soft" id="duvidas-contratacao" aria-labelledby="questions-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">Antes de contratar</p><h2 id="questions-title">Dúvidas sobre a contratação</h2></header><div{layout}>{questions}</div></div></section>'''
     if key == "scope":
         return f'''<section class="pp-section" id="escopo" aria-labelledby="scope-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('scope_kicker', 'Atuação técnica'))}</p><h2 id="scope-title">{esc(page['scope_title'])}</h2><p>{esc(page['scope_intro'])}</p></header><div class="pp-scope-grid">{_scope_groups(page)}</div></div></section>'''
     if key == "deliverables":
@@ -366,7 +374,7 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
     route = page["route"]
     crumbs = _crumbs(page, by_route)
     sections = "\n".join(_render_section(key, page) for key in page["section_order"])
-    return f"""<!DOCTYPE html>
+    rendered = f"""<!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -412,6 +420,10 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
 </html>
 """
 
+    from scripts.site.search_metadata import normalize_metadata_html
+
+    return normalize_metadata_html(rendered, route)
+
 
 def render_pages() -> dict[str, str]:
     payload = json.loads(DATA.read_text(encoding="utf-8"))
@@ -425,9 +437,11 @@ def render_pages() -> dict[str, str]:
         page["requirements"] = [
             *shared["requirements"], *source.get("requirements", [])
         ]
-        page["section_order"] = source.get(
+        page["section_order"] = list(source.get(
             "section_order", shared["default_section_order"]
-        )
+        ))
+        if page.get("questions") and "questions" not in page["section_order"]:
+            page["section_order"].insert(page["section_order"].index("contact"), "questions")
         pages.append(page)
     by_route = {page["route"]: page for page in pages}
     return {page["route"]: _render(page, by_route) for page in pages}

@@ -6,7 +6,17 @@
   "published_at": "2026-10-02",
   "modified_at": "2026-11-11",
   "shared": {
-    "default_section_order": ["scope", "technical_review", "interfaces", "deliverables", "method", "inputs", "responsibility", "contact", "related"],
+    "default_section_order": [
+      "scope",
+      "technical_review",
+      "interfaces",
+      "deliverables",
+      "method",
+      "inputs",
+      "responsibility",
+      "contact",
+      "related"
+    ],
     "requirements": [
       "Finalidade da contratação e decisão que o projeto precisa sustentar.",
       "Local, implantação, fase pretendida e condicionantes já conhecidas.",
@@ -14,18 +24,57 @@
       "Prazo desejado, marcos de aprovação e agentes que participarão das decisões."
     ],
     "method": [
-      {"label": "Entender", "title": "Entender o objeto e a decisão", "body": "A abertura consolida finalidade, fase, condicionantes, documentação disponível e critérios de entrega. As informações adicionais necessárias são identificadas para orientar o desenvolvimento."},
-      {"label": "Conceber", "title": "Comparar sistemas e fixar critérios", "body": "Alternativas tecnicamente pertinentes são confrontadas pelas interfaces, execução, operação e documentação exigida. A escolha do sistema precede o detalhamento."},
-      {"label": "Desenvolver", "title": "Calcular, modelar e documentar", "body": "O sistema definido é dimensionado e representado no nível contratado. Premissas, decisões e versões permanecem rastreáveis entre memória, modelo e desenhos."},
-      {"label": "Coordenar", "title": "Fechar interfaces entre disciplinas", "body": "Interferências e dependências são distribuídas aos responsáveis. Cada retorno informa o que mudou, o impacto nas outras partes e a versão usada como referência."},
-      {"label": "Entregar", "title": "Revisar o pacote para seu uso previsto", "body": "A conferência final verifica coerência entre as peças, revisões, formatos e responsabilidades. A emissão identifica a etapa, as conclusões e as orientações necessárias à finalidade contratada."}
+      {
+        "label": "Entender",
+        "title": "Entender o objeto e a decisão",
+        "body": "A abertura consolida finalidade, fase, condicionantes, documentação disponível e critérios de entrega. As informações adicionais necessárias são identificadas para orientar o desenvolvimento."
+      },
+      {
+        "label": "Conceber",
+        "title": "Comparar sistemas e fixar critérios",
+        "body": "Alternativas tecnicamente pertinentes são confrontadas pelas interfaces, execução, operação e documentação exigida. A escolha do sistema precede o detalhamento."
+      },
+      {
+        "label": "Desenvolver",
+        "title": "Calcular, modelar e documentar",
+        "body": "O sistema definido é dimensionado e representado no nível contratado. Premissas, decisões e versões permanecem rastreáveis entre memória, modelo e desenhos."
+      },
+      {
+        "label": "Coordenar",
+        "title": "Fechar interfaces entre disciplinas",
+        "body": "Interferências e dependências são distribuídas aos responsáveis. Cada retorno informa o que mudou, o impacto nas outras partes e a versão usada como referência."
+      },
+      {
+        "label": "Entregar",
+        "title": "Revisar o pacote para seu uso previsto",
+        "body": "A conferência final verifica coerência entre as peças, revisões, formatos e responsabilidades. A emissão identifica a etapa, as conclusões e as orientações necessárias à finalidade contratada."
+      }
     ]
   },
   "pages": [
     {
-      "id": "projects-hub", "modified_at": "2026-11-11", "route": "/projetos/", "breadcrumb": "Projetos", "title": "Projetos de engenharia e coordenação técnica", "description": "Projetos de estruturas, instalações e infraestrutura, com desenhos, memórias e coordenação entre disciplinas. Solicite uma proposta para o seu empreendimento.",
-      "eyebrow": "Engenharia de projetos", "h1": "Projetos de engenharia para planejar, orçar e construir.", "lead": "A CONFENGE elabora projetos de estruturas, instalações e infraestrutura para edificações e indústria. Reunimos desenhos, memórias e especificações na fase necessária para aprovar, orçar ou executar o empreendimento.", "summary": "O trabalho pode começar na concepção, desenvolver uma especialidade completa, coordenar um pacote multidisciplinar ou consolidar a documentação executiva. A equipe é estruturada de acordo com o objeto, com autoria e responsabilidade definidas na contratação.", "cta": "Solicitar proposta", "hero_note": "Informe o tipo de empreendimento, o local e a fase desejada. Você pode solicitar uma proposta com as informações que já tiver.",
-      "section_order": ["scope", "interfaces", "deliverables", "technical_review", "method", "contact", "partnership", "related"],
+      "id": "projects-hub",
+      "modified_at": "2026-11-11",
+      "route": "/projetos/",
+      "breadcrumb": "Projetos",
+      "title": "Projetos de engenharia e coordenação técnica",
+      "description": "Projetos de estruturas, instalações e infraestrutura, com desenhos, memórias e coordenação entre disciplinas. Solicite uma proposta para o seu empreendimento.",
+      "eyebrow": "Engenharia de projetos",
+      "h1": "Projetos de engenharia para planejar, orçar e construir.",
+      "lead": "A CONFENGE elabora projetos de estruturas, instalações e infraestrutura para edificações e indústria. Reunimos desenhos, memórias e especificações na fase necessária para aprovar, orçar ou executar o empreendimento.",
+      "summary": "O trabalho pode começar na concepção, desenvolver uma especialidade completa, coordenar um pacote multidisciplinar ou consolidar a documentação executiva. A equipe é estruturada de acordo com o objeto, com autoria e responsabilidade definidas na contratação.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Informe o tipo de empreendimento, o local e a fase desejada. Você pode solicitar uma proposta com as informações que já tiver.",
+      "section_order": [
+        "scope",
+        "interfaces",
+        "deliverables",
+        "technical_review",
+        "method",
+        "contact",
+        "partnership",
+        "related"
+      ],
       "proposal_title": "Apresente o empreendimento e receba uma proposta compatível com a fase atual.",
       "technical_panel": {
         "label": "Projetos integrados",
@@ -46,23 +95,82 @@
           }
         ]
       },
-      "scope_title": "Estruturas, instalações, infraestrutura e coordenação.", "scope_intro": "O escopo combina as disciplinas necessárias ao empreendimento, com responsabilidade e critérios de entrega definidos para cada frente.",
+      "scope_title": "Estruturas, instalações, infraestrutura e coordenação.",
+      "scope_intro": "O escopo combina as disciplinas necessárias ao empreendimento, com responsabilidade e critérios de entrega definidos para cada frente.",
       "scope_groups": [
-        {"label": "Prática", "title": "Estruturas", "body": "Concepção, análise, dimensionamento e detalhamento do sistema resistente, considerando estabilidade, construtibilidade e interfaces.", "items": ["Concreto, aço, pré-moldado e sistemas combinados", "Fundações, contenções e estruturas especiais", "Edificações, indústria e obras de infraestrutura"]},
-        {"label": "Prática", "title": "Instalações", "body": "Sistemas prediais, industriais e especiais desenvolvidos de forma integrada ao espaço, à estrutura, à operação e às exigências do objeto.", "items": ["Elétrica, energia, SPDA e telecomunicações", "Hidrossanitário, drenagem, gás e incêndio", "Climatização, ventilação, mecânica e automação"]},
-        {"label": "Prática", "title": "Infraestrutura", "body": "Implantação e redes externas tratadas como sistemas conectados ao terreno, às estruturas, às utilidades e às fases do empreendimento.", "items": ["Terraplenagem, pavimentação e sistemas viários", "Drenagem, água, esgoto e saneamento", "Urbanização, contenções e obras de arte"]},
-        {"label": "Integração", "title": "Coordenação multidisciplinar", "body": "Premissas compartilhadas, decisões com responsáveis e ciclos de compatibilização mantêm o pacote coerente enquanto o projeto evolui.", "items": ["Matriz de escopo e interfaces", "Controle de versões e pendências", "Compatibilização e consistência documental"]}
+        {
+          "label": "Prática",
+          "title": "Estruturas",
+          "body": "Concepção, análise, dimensionamento e detalhamento do sistema resistente, considerando estabilidade, construtibilidade e interfaces.",
+          "items": [
+            "Concreto, aço, pré-moldado e sistemas combinados",
+            "Fundações, contenções e estruturas especiais",
+            "Edificações, indústria e obras de infraestrutura"
+          ]
+        },
+        {
+          "label": "Prática",
+          "title": "Instalações",
+          "body": "Sistemas prediais, industriais e especiais desenvolvidos de forma integrada ao espaço, à estrutura, à operação e às exigências do objeto.",
+          "items": [
+            "Elétrica, energia, SPDA e telecomunicações",
+            "Hidrossanitário, drenagem, gás e incêndio",
+            "Climatização, ventilação, mecânica e automação"
+          ]
+        },
+        {
+          "label": "Prática",
+          "title": "Infraestrutura",
+          "body": "Implantação e redes externas tratadas como sistemas conectados ao terreno, às estruturas, às utilidades e às fases do empreendimento.",
+          "items": [
+            "Terraplenagem, pavimentação e sistemas viários",
+            "Drenagem, água, esgoto e saneamento",
+            "Urbanização, contenções e obras de arte"
+          ]
+        },
+        {
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar",
+          "body": "Premissas compartilhadas, decisões com responsáveis e ciclos de compatibilização mantêm o pacote coerente enquanto o projeto evolui.",
+          "items": [
+            "Matriz de escopo e interfaces",
+            "Controle de versões e pendências",
+            "Compatibilização e consistência documental"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Definição do sistema e critérios", "body": "Registro da solução adotada, alternativas avaliadas, premissas e condicionantes que governam o desenvolvimento.", "use": "alinhar decisões antes que o custo de mudança aumente"},
-        {"title": "Documentação da disciplina", "body": "Plantas, cortes, detalhes, modelos, memórias, especificações e listas conforme a fase e o objeto contratados.", "use": "aprovar, coordenar, orçar, contratar ou executar no nível definido"},
-        {"title": "Matriz de interfaces e revisões", "body": "Pontos de encontro, responsáveis, pendências, versões e efeitos de cada alteração no restante do pacote.", "use": "evitar que uma decisão local se torne inconsistência entre documentos"}
+        {
+          "title": "Definição do sistema e critérios",
+          "body": "Registro da solução adotada, alternativas avaliadas, premissas e condicionantes que governam o desenvolvimento.",
+          "use": "alinhar decisões antes que o custo de mudança aumente"
+        },
+        {
+          "title": "Documentação da disciplina",
+          "body": "Plantas, cortes, detalhes, modelos, memórias, especificações e listas conforme a fase e o objeto contratados.",
+          "use": "aprovar, coordenar, orçar, contratar ou executar no nível definido"
+        },
+        {
+          "title": "Matriz de interfaces e revisões",
+          "body": "Pontos de encontro, responsáveis, pendências, versões e efeitos de cada alteração no restante do pacote.",
+          "use": "evitar que uma decisão local se torne inconsistência entre documentos"
+        }
       ],
-      "interfaces_title": "A coordenação começa antes da sobreposição de modelos.", "interfaces_intro": "Critérios e referências são compartilhados entre disciplinas, com acompanhamento das interferências e das revisões ao longo do desenvolvimento.",
+      "interfaces_title": "A coordenação começa antes da sobreposição de modelos.",
+      "interfaces_intro": "Critérios e referências são compartilhados entre disciplinas, com acompanhamento das interferências e das revisões ao longo do desenvolvimento.",
       "interfaces": [
-        {"title": "Arquitetura e uso", "body": "Espaços, modulação, acessos, níveis, vãos e necessidades de operação orientam sistemas que também devolvem condicionantes ao partido."},
-        {"title": "Estruturas e instalações", "body": "Reservas, passagens, cargas, suportação e zonas técnicas são tratadas enquanto ainda existe espaço para decidir."},
-        {"title": "Implantação e redes", "body": "Cotas, drenagem, acessos, contenções e pontos de conexão precisam fechar com edificações e utilidades externas."}
+        {
+          "title": "Arquitetura e uso",
+          "body": "Espaços, modulação, acessos, níveis, vãos e necessidades de operação orientam sistemas que também devolvem condicionantes ao partido."
+        },
+        {
+          "title": "Estruturas e instalações",
+          "body": "Reservas, passagens, cargas, suportação e zonas técnicas são tratadas enquanto ainda existe espaço para decidir."
+        },
+        {
+          "title": "Implantação e redes",
+          "body": "Cotas, drenagem, acessos, contenções e pontos de conexão precisam fechar com edificações e utilidades externas."
+        }
       ],
       "technical_review": {
         "title": "O que precisa estar definido antes de emitir um projeto.",
@@ -84,16 +192,96 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Da concepção à entrega conferida.", "method_intro": "Cada etapa relaciona as informações de referência aos critérios, às decisões e à documentação das disciplinas contratadas.",
-      "requirements": ["Disciplinas já contratadas e pontos que ainda precisam de definição."],
-      "partnership": {"kicker": "Para escritórios e autores de projeto", "title": "Uma disciplina complementar sem perder a autoria de origem.", "body": "Quando o empreendimento já tem arquitetura, coordenação ou outra disciplina em curso, a proposta delimita a especialidade da CONFENGE, as informações de partida, as interfaces e a versão devolvida. O escritório que encaminha o trabalho continua identificado na troca técnica.", "href": "/parcerias-engenharia/", "cta": "Ver como funcionam as parcerias de engenharia"},
+      "method_title": "Da concepção à entrega conferida.",
+      "method_intro": "Cada etapa relaciona as informações de referência aos critérios, às decisões e à documentação das disciplinas contratadas.",
+      "requirements": [
+        "Disciplinas já contratadas e pontos que ainda precisam de definição."
+      ],
+      "partnership": {
+        "kicker": "Para escritórios e autores de projeto",
+        "title": "Uma disciplina complementar sem perder a autoria de origem.",
+        "body": "Quando o empreendimento já tem arquitetura, coordenação ou outra disciplina em curso, a proposta delimita a especialidade da CONFENGE, as informações de partida, as interfaces e a versão devolvida. O escritório que encaminha o trabalho continua identificado na troca técnica.",
+        "href": "/parcerias-engenharia/",
+        "cta": "Ver como funcionam as parcerias de engenharia"
+      },
+      "questions": [
+        {
+          "question": "Projeto para aprovação e projeto executivo são a mesma entrega?",
+          "answer": "São etapas com finalidades diferentes. A documentação para aprovação atende à análise dos órgãos competentes; o projeto executivo detalha as soluções necessárias à execução. A proposta identifica a fase, as peças e o uso previsto, para que você saiba o que está contratando."
+        },
+        {
+          "question": "Preciso elaborar, revisar ou compatibilizar um projeto?",
+          "answer": "A elaboração desenvolve a disciplina. A revisão examina um projeto existente. A compatibilização trata os encontros entre disciplinas, como passagens de instalações pela estrutura. A proposta pode combinar esses trabalhos conforme o que já existe e a entrega necessária."
+        }
+      ],
       "related": [
-        {"route": "/projetos-prontos/", "label": "Para construir sua casa", "title": "Projetos residenciais: consulte a disponibilidade"},{"route": "/projetos/estruturas/", "label": "Especialidade", "title": "Projetos estruturais"}, {"route": "/projetos/instalacoes/", "label": "Especialidade", "title": "Projetos de instalações"}, {"route": "/projeto-estrutural-concreto-armado/", "label": "Sistema", "title": "Projeto estrutural em concreto armado"}, {"route": "/projeto-estrutura-metalica/", "label": "Sistema", "title": "Projeto de estrutura metálica"}, {"route": "/projeto-eletrico/", "label": "Disciplina", "title": "Projeto elétrico"}, {"route": "/projeto-hidrossanitario/", "label": "Disciplina", "title": "Projeto hidrossanitário"}, {"route": "/projetos/infraestrutura/", "label": "Prática", "title": "Projetos de infraestrutura"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}, {"route": "/terceirizacao-projetos-engenharia/", "label": "Forma de contratação", "title": "Terceirização de projetos de engenharia"}],
+        {
+          "route": "/projetos-prontos/",
+          "label": "Para construir sua casa",
+          "title": "Projetos residenciais: calcular e contratar online"
+        },
+        {
+          "route": "/projetos/estruturas/",
+          "label": "Especialidade",
+          "title": "Projetos estruturais"
+        },
+        {
+          "route": "/projetos/instalacoes/",
+          "label": "Especialidade",
+          "title": "Projetos de instalações"
+        },
+        {
+          "route": "/projeto-estrutural-concreto-armado/",
+          "label": "Sistema",
+          "title": "Projeto estrutural em concreto armado"
+        },
+        {
+          "route": "/projeto-estrutura-metalica/",
+          "label": "Sistema",
+          "title": "Projeto de estrutura metálica"
+        },
+        {
+          "route": "/projeto-eletrico/",
+          "label": "Disciplina",
+          "title": "Projeto elétrico"
+        },
+        {
+          "route": "/projeto-hidrossanitario/",
+          "label": "Disciplina",
+          "title": "Projeto hidrossanitário"
+        },
+        {
+          "route": "/projetos/infraestrutura/",
+          "label": "Prática",
+          "title": "Projetos de infraestrutura"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        },
+        {
+          "route": "/terceirizacao-projetos-engenharia/",
+          "label": "Forma de contratação",
+          "title": "Terceirização de projetos de engenharia"
+        }
+      ],
       "service_type": "Elaboração e coordenação de projetos de engenharia"
     },
     {
-      "id": "structures", "modified_at": "2026-11-11", "route": "/projetos/estruturas/", "parent": "/projetos/", "breadcrumb": "Estruturas", "title": "Projetos estruturais e fundações", "description": "Projetos estruturais em concreto, aço e outros sistemas: concepção, cálculo, fundações, desenhos e detalhamento para edificações e indústria.",
-      "eyebrow": "Prática de estruturas", "h1": "Projetos estruturais com cálculo, desenhos e detalhamento.", "lead": "A CONFENGE desenvolve a concepção, o cálculo e o detalhamento da estrutura, considerando uso, arquitetura, fundações e instalações. As entregas permitem conferir a solução, levantar quantidades e orientar a execução na fase contratada.", "summary": "A prática abrange sistemas em concreto armado ou protendido, aço, pré-moldados, alvenaria estrutural e soluções combinadas, além de fundações, contenções, reforços e estruturas especiais quando pertinentes ao objeto.", "cta": "Solicitar proposta", "hero_note": "Conte o tipo de obra e a fase do projeto. Arquitetura, sondagem e informações de cargas ajudam a definir a proposta; envie o que já estiver disponível.",
+      "id": "structures",
+      "modified_at": "2026-11-11",
+      "route": "/projetos/estruturas/",
+      "parent": "/projetos/",
+      "breadcrumb": "Estruturas",
+      "title": "Projetos estruturais e fundações",
+      "description": "Projetos estruturais em concreto, aço e outros sistemas: concepção, cálculo, fundações, desenhos e detalhamento para edificações e indústria.",
+      "eyebrow": "Prática de estruturas",
+      "h1": "Projetos estruturais com cálculo, desenhos e detalhamento.",
+      "lead": "A CONFENGE desenvolve a concepção, o cálculo e o detalhamento da estrutura, considerando uso, arquitetura, fundações e instalações. As entregas permitem conferir a solução, levantar quantidades e orientar a execução na fase contratada.",
+      "summary": "A prática abrange sistemas em concreto armado ou protendido, aço, pré-moldados, alvenaria estrutural e soluções combinadas, além de fundações, contenções, reforços e estruturas especiais quando pertinentes ao objeto.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Conte o tipo de obra e a fase do projeto. Arquitetura, sondagem e informações de cargas ajudam a definir a proposta; envie o que já estiver disponível.",
       "technical_panel": {
         "label": "Desenvolvimento estrutural",
         "title": "Concepção, desempenho e execução.",
@@ -113,19 +301,73 @@
           }
         ]
       },
-      "scope_title": "Sistemas estruturais, fundações, contenções e reforços.", "scope_intro": "A seleção do sistema considera comportamento, geometria, construção, durabilidade, disponibilidade de materiais e encontros com outras disciplinas.",
+      "scope_title": "Sistemas estruturais, fundações, contenções e reforços.",
+      "scope_intro": "A seleção do sistema considera comportamento, geometria, construção, durabilidade, disponibilidade de materiais e encontros com outras disciplinas.",
       "scope_groups": [
-        {"label": "Sistemas", "title": "Estruturas de edificações e indústria", "body": "Soluções resistentes para edifícios residenciais, comerciais, institucionais, industriais e de uso misto, definidas conforme objeto, sistema e critérios da contratação.", "items": ["Concreto armado e protendido", "Estruturas metálicas e mistas", "Pré-moldados e alvenaria estrutural"]},
-        {"label": "Infraestrutura", "title": "Fundações, contenções e obras especiais", "body": "Elementos estruturais que dependem diretamente da implantação, da geotecnia, das ações ambientais e do método construtivo.", "items": ["Fundações e blocos", "Muros, cortinas e contenções", "Pontes, passarelas, viadutos e estruturas especiais"]},
-        {"label": "Intervenção", "title": "Reforço e recuperação", "body": "Intervenções começam pelo diagnóstico das condições existentes e pela compatibilidade entre o sistema original, a causa e a solução proposta.", "items": ["Levantamento e hipóteses verificáveis", "Verificação da estrutura existente", "Sequência de intervenção e escoramento quando aplicável"]}
+        {
+          "label": "Sistemas",
+          "title": "Estruturas de edificações e indústria",
+          "body": "Soluções resistentes para edifícios residenciais, comerciais, institucionais, industriais e de uso misto, definidas conforme objeto, sistema e critérios da contratação.",
+          "items": [
+            "Concreto armado e protendido",
+            "Estruturas metálicas e mistas",
+            "Pré-moldados e alvenaria estrutural"
+          ]
+        },
+        {
+          "label": "Infraestrutura",
+          "title": "Fundações, contenções e obras especiais",
+          "body": "Elementos estruturais que dependem diretamente da implantação, da geotecnia, das ações ambientais e do método construtivo.",
+          "items": [
+            "Fundações e blocos",
+            "Muros, cortinas e contenções",
+            "Pontes, passarelas, viadutos e estruturas especiais"
+          ]
+        },
+        {
+          "label": "Intervenção",
+          "title": "Reforço e recuperação",
+          "body": "Intervenções começam pelo diagnóstico das condições existentes e pela compatibilidade entre o sistema original, a causa e a solução proposta.",
+          "items": [
+            "Levantamento e hipóteses verificáveis",
+            "Verificação da estrutura existente",
+            "Sequência de intervenção e escoramento quando aplicável"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Concepção e critérios estruturais", "body": "Sistema, caminho de cargas, juntas, estabilidade, materiais, ações e condicionantes documentados para orientar o desenvolvimento.", "use": "comparar alternativas e fechar premissas com arquitetura e construção"},
-        {"title": "Modelo, análise e memória", "body": "Hipóteses, combinações, verificações e resultados organizados conforme o sistema e a fase definidos.", "use": "permitir conferência técnica e rastrear as decisões de dimensionamento"},
-        {"title": "Desenhos e detalhes", "body": "Formas, armações, perfis, ligações, elementos de fundação e detalhes executivos pertinentes ao escopo.", "use": "coordenar, quantificar e construir com a referência aprovada"}
+        {
+          "title": "Concepção e critérios estruturais",
+          "body": "Sistema, caminho de cargas, juntas, estabilidade, materiais, ações e condicionantes documentados para orientar o desenvolvimento.",
+          "use": "comparar alternativas e fechar premissas com arquitetura e construção"
+        },
+        {
+          "title": "Modelo, análise e memória",
+          "body": "Hipóteses, combinações, verificações e resultados organizados conforme o sistema e a fase definidos.",
+          "use": "permitir conferência técnica e rastrear as decisões de dimensionamento"
+        },
+        {
+          "title": "Desenhos e detalhes",
+          "body": "Formas, armações, perfis, ligações, elementos de fundação e detalhes executivos pertinentes ao escopo.",
+          "use": "coordenar, quantificar e construir com a referência aprovada"
+        }
       ],
-      "interfaces_title": "A estrutura condiciona e é condicionada pelo restante do projeto.", "interfaces_intro": "Vãos, níveis, cargas, aberturas e sequências construtivas precisam ser decididos entre responsáveis, com versões compatíveis.",
-      "interfaces": [{"title": "Arquitetura", "body": "Modulação, pé-direito, fachadas, circulações e flexibilidade de uso interferem na geometria e na escolha do sistema."}, {"title": "Instalações", "body": "Passagens, shafts, casas de máquinas, reservatórios, equipamentos e suportes precisam de reservas e cargas previamente coordenadas."}, {"title": "Geotecnia e execução", "body": "Investigações, vizinhança, contenções, acessos, içamentos, etapas e tolerâncias alteram fundações, ligações e detalhamento."}],
+      "interfaces_title": "A estrutura condiciona e é condicionada pelo restante do projeto.",
+      "interfaces_intro": "Vãos, níveis, cargas, aberturas e sequências construtivas precisam ser decididos entre responsáveis, com versões compatíveis.",
+      "interfaces": [
+        {
+          "title": "Arquitetura",
+          "body": "Modulação, pé-direito, fachadas, circulações e flexibilidade de uso interferem na geometria e na escolha do sistema."
+        },
+        {
+          "title": "Instalações",
+          "body": "Passagens, shafts, casas de máquinas, reservatórios, equipamentos e suportes precisam de reservas e cargas previamente coordenadas."
+        },
+        {
+          "title": "Geotecnia e execução",
+          "body": "Investigações, vizinhança, contenções, acessos, içamentos, etapas e tolerâncias alteram fundações, ligações e detalhamento."
+        }
+      ],
       "technical_review": {
         "title": "Escolhas estruturais com consequências para toda a obra.",
         "body": "A avaliação de uma solução considera comportamento, consumo de materiais, condições de construção e efeitos nas demais disciplinas. A documentação registra os critérios que sustentam essas escolhas.",
@@ -146,14 +388,54 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Concepção antes do detalhamento.", "method_intro": "Sistema resistente, ações, estabilidade e condições de construção orientam a análise e o detalhamento dos elementos.",
-      "requirements": ["Arquitetura ou geometria disponível, sondagens quando existentes e informações de cargas especiais."],
-      "related": [{"route": "/projeto-estrutural-concreto-armado/", "label": "Sistema", "title": "Projeto estrutural em concreto armado"}, {"route": "/projeto-estrutura-metalica/", "label": "Sistema", "title": "Projeto de estrutura metálica"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}],
+      "method_title": "Concepção antes do detalhamento.",
+      "method_intro": "Sistema resistente, ações, estabilidade e condições de construção orientam a análise e o detalhamento dos elementos.",
+      "requirements": [
+        "Arquitetura ou geometria disponível, sondagens quando existentes e informações de cargas especiais."
+      ],
+      "questions": [
+        {
+          "question": "Preciso escolher o sistema estrutural antes de pedir a proposta?",
+          "answer": "Você pode começar pelo uso da obra, pela arquitetura disponível e pelas condições do terreno. A definição do sistema pode fazer parte da concepção contratada, com comparação de alternativas de materiais, vãos, execução e integração com as demais disciplinas."
+        },
+        {
+          "question": "Como começa o trabalho em uma estrutura existente?",
+          "answer": "Começa pela identificação da estrutura, de seu uso atual e da intervenção desejada, com os documentos e levantamentos disponíveis. A proposta define a investigação, a verificação estrutural e o eventual projeto de reforço, conforme a condição encontrada e a finalidade do trabalho."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projeto-estrutural-concreto-armado/",
+          "label": "Sistema",
+          "title": "Projeto estrutural em concreto armado"
+        },
+        {
+          "route": "/projeto-estrutura-metalica/",
+          "label": "Sistema",
+          "title": "Projeto de estrutura metálica"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        }
+      ],
       "service_type": "Projeto estrutural"
     },
     {
-      "id": "installations", "modified_at": "2026-11-11", "route": "/projetos/instalacoes/", "parent": "/projetos/", "breadcrumb": "Instalações", "title": "Projetos de instalações elétricas, hidráulicas e incêndio", "description": "Projetos de instalações elétricas, hidrossanitárias, incêndio e sistemas especiais. Dimensionamento, plantas e memórias coordenados com arquitetura e estrutura.",
-      "eyebrow": "Prática de instalações", "h1": "Projetos de instalações para coordenar redes antes da obra.", "lead": "A CONFENGE elabora projetos elétricos, hidrossanitários, de incêndio e de outras instalações do empreendimento. Dimensionamento, plantas, diagramas e memórias organizam as redes, os equipamentos e seus pontos de encontro com arquitetura e estrutura.", "summary": "A prática reúne baixa, média e alta tensão, telecomunicações, automação, água, esgoto, drenagem, gás, climatização, ventilação, exaustão, instalações mecânicas, incêndio e sistemas especiais. As disciplinas podem ser contratadas isoladamente ou em um pacote coordenado.", "cta": "Solicitar proposta", "hero_note": "Informe as disciplinas necessárias, o uso e a localização do empreendimento. A proposta define as entregas e os responsáveis por cada sistema.",
+      "id": "installations",
+      "modified_at": "2026-11-11",
+      "route": "/projetos/instalacoes/",
+      "parent": "/projetos/",
+      "breadcrumb": "Instalações",
+      "title": "Projetos de instalações elétricas, hidráulicas e incêndio",
+      "description": "Projetos de instalações elétricas, hidrossanitárias, incêndio e sistemas especiais. Dimensionamento, plantas e memórias coordenados com arquitetura e estrutura.",
+      "eyebrow": "Prática de instalações",
+      "h1": "Projetos de instalações para coordenar redes antes da obra.",
+      "lead": "A CONFENGE elabora projetos elétricos, hidrossanitários, de incêndio e de outras instalações do empreendimento. Dimensionamento, plantas, diagramas e memórias organizam as redes, os equipamentos e seus pontos de encontro com arquitetura e estrutura.",
+      "summary": "A prática reúne baixa, média e alta tensão, telecomunicações, automação, água, esgoto, drenagem, gás, climatização, ventilação, exaustão, instalações mecânicas, incêndio e sistemas especiais. As disciplinas podem ser contratadas isoladamente ou em um pacote coordenado.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Informe as disciplinas necessárias, o uso e a localização do empreendimento. A proposta define as entregas e os responsáveis por cada sistema.",
       "technical_panel": {
         "label": "Sistemas prediais",
         "title": "Capacidade, espaço técnico e operação.",
@@ -173,19 +455,73 @@
           }
         ]
       },
-      "scope_title": "Cada sistema tem cálculos próprios e interfaces compartilhadas.", "scope_intro": "A divisão por disciplina dá responsabilidade clara; a coordenação mantém coerentes rotas, reservas, fontes, demandas e operação.",
+      "scope_title": "Cada sistema tem cálculos próprios e interfaces compartilhadas.",
+      "scope_intro": "A divisão por disciplina dá responsabilidade clara; a coordenação mantém coerentes rotas, reservas, fontes, demandas e operação.",
       "scope_groups": [
-        {"label": "Energia e dados", "title": "Instalações elétricas e sistemas de comunicação", "body": "Da origem ao ponto de utilização, o projeto organiza demanda, distribuição, proteção, segurança, disponibilidade e documentação.", "items": ["Baixa, média e alta tensão conforme o objeto", "Entradas, subestações, distribuição e iluminação", "SPDA, aterramento, telecomunicações e automação"]},
-        {"label": "Fluidos", "title": "Hidrossanitário, drenagem e gás", "body": "Abastecimento, aquecimento, coleta, ventilação, lançamento e drenagem dependem de níveis, pressões, traçados e condições externas.", "items": ["Água fria e quente", "Esgoto sanitário e águas pluviais", "Gás e sistemas de recalque quando aplicáveis"]},
-        {"label": "Ambiente e segurança", "title": "Mecânica, climatização e incêndio", "body": "Conforto, renovação, extração, equipamentos e medidas de segurança são coordenados com ocupação, compartimentação, estrutura e manutenção.", "items": ["Climatização, ventilação e exaustão", "Instalações mecânicas", "Prevenção e combate a incêndio e sistemas especiais"]}
+        {
+          "label": "Energia e dados",
+          "title": "Instalações elétricas e sistemas de comunicação",
+          "body": "Da origem ao ponto de utilização, o projeto organiza demanda, distribuição, proteção, segurança, disponibilidade e documentação.",
+          "items": [
+            "Baixa, média e alta tensão conforme o objeto",
+            "Entradas, subestações, distribuição e iluminação",
+            "SPDA, aterramento, telecomunicações e automação"
+          ]
+        },
+        {
+          "label": "Fluidos",
+          "title": "Hidrossanitário, drenagem e gás",
+          "body": "Abastecimento, aquecimento, coleta, ventilação, lançamento e drenagem dependem de níveis, pressões, traçados e condições externas.",
+          "items": [
+            "Água fria e quente",
+            "Esgoto sanitário e águas pluviais",
+            "Gás e sistemas de recalque quando aplicáveis"
+          ]
+        },
+        {
+          "label": "Ambiente e segurança",
+          "title": "Mecânica, climatização e incêndio",
+          "body": "Conforto, renovação, extração, equipamentos e medidas de segurança são coordenados com ocupação, compartimentação, estrutura e manutenção.",
+          "items": [
+            "Climatização, ventilação e exaustão",
+            "Instalações mecânicas",
+            "Prevenção e combate a incêndio e sistemas especiais"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Balanços, demandas e critérios", "body": "Premissas de ocupação, simultaneidade, consumos, cargas, fontes, autonomias e critérios de seleção dos sistemas.", "use": "dimensionar com base em necessidades explícitas e revisar mudanças de programa"},
-        {"title": "Diagramas, plantas e detalhes", "body": "Lançamento de redes, prumadas, diagramas, centrais, reservas, detalhes e identificação de componentes no nível contratado.", "use": "coordenar rotas, aprovar soluções e orientar execução"},
-        {"title": "Memoriais, listas e especificações", "body": "Cálculos, critérios, materiais, equipamentos e requisitos documentais vinculados aos desenhos.", "use": "comparar propostas e conferir a coerência do fornecimento"}
+        {
+          "title": "Balanços, demandas e critérios",
+          "body": "Premissas de ocupação, simultaneidade, consumos, cargas, fontes, autonomias e critérios de seleção dos sistemas.",
+          "use": "dimensionar com base em necessidades explícitas e revisar mudanças de programa"
+        },
+        {
+          "title": "Diagramas, plantas e detalhes",
+          "body": "Lançamento de redes, prumadas, diagramas, centrais, reservas, detalhes e identificação de componentes no nível contratado.",
+          "use": "coordenar rotas, aprovar soluções e orientar execução"
+        },
+        {
+          "title": "Memoriais, listas e especificações",
+          "body": "Cálculos, critérios, materiais, equipamentos e requisitos documentais vinculados aos desenhos.",
+          "use": "comparar propostas e conferir a coerência do fornecimento"
+        }
       ],
-      "interfaces_title": "Espaços técnicos, redes e manutenção.", "interfaces_intro": "Centrais, shafts, forros, cruzamentos e pontos de manutenção são decisões de projeto com impacto direto nas demais disciplinas.",
-      "interfaces": [{"title": "Arquitetura e operação", "body": "Uso, ocupação, compartimentação, acessibilidade a equipamentos e manutenção definem demanda e posicionamento."}, {"title": "Estrutura", "body": "Furos, inserts, suportes, cargas de equipamentos e travessias precisam ser avaliados antes da execução."}, {"title": "Concessionárias e sistemas externos", "body": "Disponibilidade, pontos de entrega, lançamento e aprovações precisam ser confirmados para o local e a fase."}],
+      "interfaces_title": "Espaços técnicos, redes e manutenção.",
+      "interfaces_intro": "Centrais, shafts, forros, cruzamentos e pontos de manutenção são decisões de projeto com impacto direto nas demais disciplinas.",
+      "interfaces": [
+        {
+          "title": "Arquitetura e operação",
+          "body": "Uso, ocupação, compartimentação, acessibilidade a equipamentos e manutenção definem demanda e posicionamento."
+        },
+        {
+          "title": "Estrutura",
+          "body": "Furos, inserts, suportes, cargas de equipamentos e travessias precisam ser avaliados antes da execução."
+        },
+        {
+          "title": "Concessionárias e sistemas externos",
+          "body": "Disponibilidade, pontos de entrega, lançamento e aprovações precisam ser confirmados para o local e a fase."
+        }
+      ],
       "technical_review": {
         "title": "A coordenação começa nas premissas de cada sistema.",
         "body": "O projeto precisa acomodar redes e equipamentos sem perder de vista capacidade, segurança de operação e acesso para manutenção. O escopo define as disciplinas e os estudos necessários.",
@@ -206,14 +542,54 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Da demanda aos sistemas coordenados.", "method_intro": "Dimensionar começa por entender uso e operação. As rotas e centrais evoluem junto com o espaço disponível e com as decisões estruturais.",
-      "requirements": ["Quadros de áreas e usos, cargas ou equipamentos especiais e informações disponíveis das concessionárias."],
-      "related": [{"route": "/projeto-eletrico/", "label": "Disciplina", "title": "Projeto elétrico"}, {"route": "/projeto-hidrossanitario/", "label": "Disciplina", "title": "Projeto hidrossanitário"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}],
+      "method_title": "Da demanda aos sistemas coordenados.",
+      "method_intro": "Dimensionar começa por entender uso e operação. As rotas e centrais evoluem junto com o espaço disponível e com as decisões estruturais.",
+      "requirements": [
+        "Quadros de áreas e usos, cargas ou equipamentos especiais e informações disponíveis das concessionárias."
+      ],
+      "questions": [
+        {
+          "question": "Posso contratar uma instalação sem refazer todas as outras?",
+          "answer": "Sim. A proposta pode contemplar uma disciplina ou um conjunto coordenado. Identificamos as redes existentes, os projetos que serão mantidos e os pontos de ligação, para definir onde o novo trabalho precisa se integrar às demais instalações."
+        },
+        {
+          "question": "E se os equipamentos ainda não estiverem todos definidos?",
+          "answer": "Informe o que já conhece sobre uso, áreas, ocupação e equipamentos. A proposta organiza as informações necessárias e o momento de cada definição. Mudanças de potência, consumo ou posição durante o projeto precisam ser avaliadas porque podem alterar o dimensionamento e os traçados."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projeto-eletrico/",
+          "label": "Disciplina",
+          "title": "Projeto elétrico"
+        },
+        {
+          "route": "/projeto-hidrossanitario/",
+          "label": "Disciplina",
+          "title": "Projeto hidrossanitário"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        }
+      ],
       "service_type": "Projetos de instalações de engenharia"
     },
     {
-      "id": "infrastructure", "modified_at": "2026-11-11", "route": "/projetos/infraestrutura/", "parent": "/projetos/", "breadcrumb": "Infraestrutura", "title": "Projetos de infraestrutura: drenagem, vias e saneamento", "description": "Projetos de drenagem, terraplenagem, pavimentação, água e esgoto. Plantas, perfis, seções e memórias para implantação e infraestrutura do empreendimento.",
-      "eyebrow": "Prática de infraestrutura", "h1": "Projetos de infraestrutura para implantação, vias e redes.", "lead": "A CONFENGE desenvolve projetos de terraplenagem, pavimentação, drenagem e saneamento, coordenando terreno, acessos e redes externas. Plantas, perfis, seções e memórias dão base para aprovar, quantificar e executar os sistemas contratados.", "summary": "O escopo pode reunir sistemas viários, pavimentação, terraplenagem, drenagem, água, esgoto, urbanização, contenções, estruturas, obras de arte e especialidades complementares pertinentes.", "cta": "Solicitar proposta", "hero_note": "Comece pelo local, pela área e pelo objetivo do empreendimento. Levantamentos, estudos existentes ou termo de referência ajudam a definir a proposta.",
+      "id": "infrastructure",
+      "modified_at": "2026-11-11",
+      "route": "/projetos/infraestrutura/",
+      "parent": "/projetos/",
+      "breadcrumb": "Infraestrutura",
+      "title": "Projetos de infraestrutura: drenagem, vias e saneamento",
+      "description": "Projetos de drenagem, terraplenagem, pavimentação, água e esgoto. Plantas, perfis, seções e memórias para implantação e infraestrutura do empreendimento.",
+      "eyebrow": "Prática de infraestrutura",
+      "h1": "Projetos de infraestrutura para implantação, vias e redes.",
+      "lead": "A CONFENGE desenvolve projetos de terraplenagem, pavimentação, drenagem e saneamento, coordenando terreno, acessos e redes externas. Plantas, perfis, seções e memórias dão base para aprovar, quantificar e executar os sistemas contratados.",
+      "summary": "O escopo pode reunir sistemas viários, pavimentação, terraplenagem, drenagem, água, esgoto, urbanização, contenções, estruturas, obras de arte e especialidades complementares pertinentes.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Comece pelo local, pela área e pelo objetivo do empreendimento. Levantamentos, estudos existentes ou termo de referência ajudam a definir a proposta.",
       "technical_panel": {
         "label": "Implantação e infraestrutura",
         "title": "Terreno, vias e redes coordenados.",
@@ -233,19 +609,73 @@
           }
         ]
       },
-      "scope_title": "A implantação coordena superfícies, redes e conexões.", "scope_intro": "A proposta identifica sistemas, trechos, áreas, estudos de referência, pontos de conexão, aprovações e informações de campo necessárias.",
+      "scope_title": "A implantação coordena superfícies, redes e conexões.",
+      "scope_intro": "A proposta identifica sistemas, trechos, áreas, estudos de referência, pontos de conexão, aprovações e informações de campo necessárias.",
       "scope_groups": [
-        {"label": "Implantação", "title": "Terraplenagem, vias e pavimentação", "body": "Geometria, greide, volumes, acessos, circulação e estrutura de pavimento são relacionados ao terreno e às fases executivas.", "items": ["Sistemas viários e acessos", "Terraplenagem e balanço de massas", "Pavimentação e urbanização"]},
-        {"label": "Água", "title": "Drenagem e saneamento", "body": "Captação, transporte, reserva, lançamento e tratamento são organizados conforme bacias, níveis, demandas e pontos externos disponíveis.", "items": ["Micro e macrodrenagem conforme o objeto", "Abastecimento de água", "Coleta e afastamento de esgoto"]},
-        {"label": "Estruturas", "title": "Contenções e obras de arte", "body": "Travessias, contenções, pontes, viadutos e estruturas especiais dependem do traçado, da geotecnia, da hidrologia e da construção.", "items": ["Muros e contenções", "Bueiros, galerias e travessias", "Pontes, viadutos e passarelas"]}
+        {
+          "label": "Implantação",
+          "title": "Terraplenagem, vias e pavimentação",
+          "body": "Geometria, greide, volumes, acessos, circulação e estrutura de pavimento são relacionados ao terreno e às fases executivas.",
+          "items": [
+            "Sistemas viários e acessos",
+            "Terraplenagem e balanço de massas",
+            "Pavimentação e urbanização"
+          ]
+        },
+        {
+          "label": "Água",
+          "title": "Drenagem e saneamento",
+          "body": "Captação, transporte, reserva, lançamento e tratamento são organizados conforme bacias, níveis, demandas e pontos externos disponíveis.",
+          "items": [
+            "Micro e macrodrenagem conforme o objeto",
+            "Abastecimento de água",
+            "Coleta e afastamento de esgoto"
+          ]
+        },
+        {
+          "label": "Estruturas",
+          "title": "Contenções e obras de arte",
+          "body": "Travessias, contenções, pontes, viadutos e estruturas especiais dependem do traçado, da geotecnia, da hidrologia e da construção.",
+          "items": [
+            "Muros e contenções",
+            "Bueiros, galerias e travessias",
+            "Pontes, viadutos e passarelas"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Estudos de implantação e critérios", "body": "Referências topográficas, condicionantes, alternativas, cotas, conexões e critérios de desenvolvimento registrados.", "use": "comparar soluções antes de consolidar redes e estruturas"},
-        {"title": "Plantas, perfis, seções e detalhes", "body": "Geometria em planta e em perfil, redes, dispositivos e elementos construtivos no nível acordado.", "use": "aprovar, coordenar, quantificar e executar por trechos e sistemas"},
-        {"title": "Memórias e documentação de apoio", "body": "Cálculos, quantitativos, especificações, listas e registros de interfaces conforme o escopo.", "use": "conferir premissas e ligar decisões gráficas aos critérios adotados"}
+        {
+          "title": "Estudos de implantação e critérios",
+          "body": "Referências topográficas, condicionantes, alternativas, cotas, conexões e critérios de desenvolvimento registrados.",
+          "use": "comparar soluções antes de consolidar redes e estruturas"
+        },
+        {
+          "title": "Plantas, perfis, seções e detalhes",
+          "body": "Geometria em planta e em perfil, redes, dispositivos e elementos construtivos no nível acordado.",
+          "use": "aprovar, coordenar, quantificar e executar por trechos e sistemas"
+        },
+        {
+          "title": "Memórias e documentação de apoio",
+          "body": "Cálculos, quantitativos, especificações, listas e registros de interfaces conforme o escopo.",
+          "use": "conferir premissas e ligar decisões gráficas aos critérios adotados"
+        }
       ],
-      "interfaces_title": "Níveis, conexões e condições de implantação.", "interfaces_intro": "A coerência do conjunto depende de topografia, geotecnia, hidrologia, edificações, concessionárias, licenciamento e sequência executiva.",
-      "interfaces": [{"title": "Terreno e geotecnia", "body": "Levantamentos, sondagens, estabilidade, materiais e condições de escavação informam greides, volumes, fundações e contenções."}, {"title": "Edificações e indústria", "body": "Acessos, plataformas, lançamentos, utilidades e cargas precisam fechar nos limites entre lote, prédio, processo e rede externa."}, {"title": "Aprovações e terceiros", "body": "Diretrizes, faixas, pontos de conexão e condicionantes de órgãos ou concessionárias permanecem identificados como dependências externas."}],
+      "interfaces_title": "Níveis, conexões e condições de implantação.",
+      "interfaces_intro": "A coerência do conjunto depende de topografia, geotecnia, hidrologia, edificações, concessionárias, licenciamento e sequência executiva.",
+      "interfaces": [
+        {
+          "title": "Terreno e geotecnia",
+          "body": "Levantamentos, sondagens, estabilidade, materiais e condições de escavação informam greides, volumes, fundações e contenções."
+        },
+        {
+          "title": "Edificações e indústria",
+          "body": "Acessos, plataformas, lançamentos, utilidades e cargas precisam fechar nos limites entre lote, prédio, processo e rede externa."
+        },
+        {
+          "title": "Aprovações e terceiros",
+          "body": "Diretrizes, faixas, pontos de conexão e condicionantes de órgãos ou concessionárias permanecem identificados como dependências externas."
+        }
+      ],
       "technical_review": {
         "title": "Decisões de implantação que repercutem em custo e execução.",
         "body": "Terraplenagem, pavimentação e redes precisam compartilhar referências topográficas e condições de conexão. O projeto registra como essas dependências foram consideradas na solução.",
@@ -266,15 +696,85 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Referências comuns antes de detalhar cada sistema.", "method_intro": "Implantação, terreno, redes e estruturas compartilham coordenadas, níveis e fases. O método mantém essas referências visíveis ao longo das revisões.",
-      "requirements": ["Levantamentos topográficos, investigações, diretrizes e pontos de conexão quando já disponíveis."],
-      "related": [{"route": "/projetos/estruturas/", "label": "Prática", "title": "Estruturas para infraestrutura"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}, {"route": "/terceirizacao-projetos-engenharia/", "label": "Forma de contratação", "title": "Terceirização de projetos"}],
+      "method_title": "Referências comuns antes de detalhar cada sistema.",
+      "method_intro": "Implantação, terreno, redes e estruturas compartilham coordenadas, níveis e fases. O método mantém essas referências visíveis ao longo das revisões.",
+      "requirements": [
+        "Levantamentos topográficos, investigações, diretrizes e pontos de conexão quando já disponíveis."
+      ],
+      "questions": [
+        {
+          "question": "Topografia e investigação do solo entram automaticamente no serviço?",
+          "answer": "A proposta identifica os levantamentos e estudos necessários, o que já está disponível e o que precisa ser contratado ou fornecido. Essa definição permite relacionar terreno, volumes, redes e estruturas às informações que sustentam o projeto."
+        },
+        {
+          "question": "Como o projeto considera as redes públicas e as aprovações?",
+          "answer": "Os pontos de conexão, as diretrizes de órgãos e concessionárias e as informações recebidas são registrados no projeto. A proposta define a documentação e a atuação contratadas nesse processo. A análise e os prazos das autoridades permanecem sob responsabilidade de cada órgão."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/estruturas/",
+          "label": "Prática",
+          "title": "Estruturas para infraestrutura"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        },
+        {
+          "route": "/terceirizacao-projetos-engenharia/",
+          "label": "Forma de contratação",
+          "title": "Terceirização de projetos"
+        }
+      ],
       "service_type": "Projeto de infraestrutura"
     },
     {
-      "id": "multidisciplinary-coordination", "modified_at": "2026-11-11", "route": "/projetos/coordenacao-multidisciplinar/", "parent": "/projetos/", "breadcrumb": "Coordenação multidisciplinar", "title": "Coordenação multidisciplinar de projetos", "description": "Coordenação multidisciplinar de projetos: premissas, interfaces, interferências e revisões organizadas entre arquitetura, estruturas e instalações.",
-      "eyebrow": "Integração de projetos", "h1": "Coordenação de projetos para resolver conflitos entre disciplinas.", "lead": "A CONFENGE coordena as decisões entre arquitetura, estruturas, instalações e infraestrutura. Uma matriz de interfaces, o registro de interferências e o controle de revisões mostram quem resolve cada ponto e qual versão orienta o conjunto.", "summary": "A coordenação relaciona decisões de projeto a seus efeitos em execução, operação e custo. O acompanhamento organiza prioridades, responsabilidades e revisões para que as soluções sejam incorporadas ao conjunto.", "cta": "Solicitar proposta", "hero_note": "Conte quais disciplinas participam, a fase atual e o que precisa ser entregue. Podemos integrar projetos próprios e de terceiros no mesmo escopo de coordenação.",
-      "section_order": ["scope", "interfaces", "method", "technical_review", "deliverables", "contact", "related"],
+      "id": "multidisciplinary-coordination",
+      "method": [
+        {
+          "label": "Organizar",
+          "title": "Reunir referências e responsáveis",
+          "body": "Relacionamos disciplinas, autores, arquivos e revisões de partida. O plano registra formatos, etapas e quem responde por cada decisão."
+        },
+        {
+          "label": "Examinar",
+          "title": "Localizar conflitos e dependências",
+          "body": "Conferimos os encontros entre disciplinas e registramos cada questão com localização, documentos de origem e efeito sobre o projeto."
+        },
+        {
+          "label": "Conduzir",
+          "title": "Combinar as soluções com os autores",
+          "body": "Encaminhamos os pontos aos responsáveis e acompanhamos decisões, prioridades e retornos. A autoria das alterações permanece identificada."
+        },
+        {
+          "label": "Conferir",
+          "title": "Verificar a solução nas novas revisões",
+          "body": "Confrontamos a resposta com os desenhos, modelos e memoriais atualizados e registramos o que foi incorporado ou segue pendente."
+        }
+      ],
+      "modified_at": "2026-11-11",
+      "route": "/projetos/coordenacao-multidisciplinar/",
+      "parent": "/projetos/",
+      "breadcrumb": "Coordenação multidisciplinar",
+      "title": "Coordenação multidisciplinar de projetos",
+      "description": "Coordenação multidisciplinar de projetos: premissas, interfaces, interferências e revisões organizadas entre arquitetura, estruturas e instalações.",
+      "eyebrow": "Integração de projetos",
+      "h1": "Coordenação de projetos para resolver conflitos entre disciplinas.",
+      "lead": "A CONFENGE coordena as decisões entre arquitetura, estruturas, instalações e infraestrutura. Uma matriz de interfaces, o registro de interferências e o controle de revisões mostram quem resolve cada ponto e qual versão orienta o conjunto.",
+      "summary": "A coordenação relaciona decisões de projeto a seus efeitos em execução, operação e custo. O acompanhamento organiza prioridades, responsabilidades e revisões para que as soluções sejam incorporadas ao conjunto.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Conte quais disciplinas participam, a fase atual e o que precisa ser entregue. Podemos integrar projetos próprios e de terceiros no mesmo escopo de coordenação.",
+      "section_order": [
+        "scope",
+        "interfaces",
+        "method",
+        "technical_review",
+        "deliverables",
+        "contact",
+        "related"
+      ],
       "technical_panel": {
         "label": "Coordenação multidisciplinar",
         "title": "Decisões incorporadas ao conjunto de projetos.",
@@ -294,19 +794,73 @@
           }
         ]
       },
-      "scope_title": "Plano de coordenação, interfaces e revisões.", "scope_intro": "A coordenação acompanha as referências de entrada, as decisões entre disciplinas e a conferência das revisões emitidas.",
+      "scope_title": "Plano de coordenação, interfaces e revisões.",
+      "scope_intro": "A coordenação acompanha as referências de entrada, as decisões entre disciplinas e a conferência das revisões emitidas.",
       "scope_groups": [
-        {"label": "Governança técnica", "title": "Escopo, autoria e referências", "body": "A matriz de responsabilidades esclarece quem produz, quem informa, quem valida e qual versão cada disciplina deve usar.", "items": ["Matriz de escopo e interfaces", "Plano de entregas e referências", "Critérios de nomeação e revisão"]},
-        {"label": "Coordenação", "title": "Interferências e decisões", "body": "Questões são classificadas por impacto e distribuídas aos responsáveis com evidência suficiente para decidir.", "items": ["Compatibilização geométrica e funcional", "Registro de pendências e decisões", "Verificação de incorporação nas revisões"]},
-        {"label": "Consistência", "title": "Pacote documental", "body": "Pranchas, modelos, memórias e especificações são conferidos nas interfaces materiais do escopo contratado.", "items": ["Coerência entre documentos", "Controle de versões", "Pendências declaradas na entrega"]}
+        {
+          "label": "Governança técnica",
+          "title": "Escopo, autoria e referências",
+          "body": "A matriz de responsabilidades esclarece quem produz, quem informa, quem valida e qual versão cada disciplina deve usar.",
+          "items": [
+            "Matriz de escopo e interfaces",
+            "Plano de entregas e referências",
+            "Critérios de nomeação e revisão"
+          ]
+        },
+        {
+          "label": "Coordenação",
+          "title": "Interferências e decisões",
+          "body": "Questões são classificadas por impacto e distribuídas aos responsáveis com evidência suficiente para decidir.",
+          "items": [
+            "Compatibilização geométrica e funcional",
+            "Registro de pendências e decisões",
+            "Verificação de incorporação nas revisões"
+          ]
+        },
+        {
+          "label": "Consistência",
+          "title": "Pacote documental",
+          "body": "Pranchas, modelos, memórias e especificações são conferidos nas interfaces materiais do escopo contratado.",
+          "items": [
+            "Coerência entre documentos",
+            "Controle de versões",
+            "Pendências declaradas na entrega"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Plano de coordenação", "body": "Disciplinas, responsáveis, marcos, referências, formatos e regras de troca definidos para o projeto.", "use": "dar previsibilidade ao fluxo e impedir referências concorrentes"},
-        {"title": "Matriz de interfaces e pendências", "body": "Cada questão registra local, disciplinas, evidência, responsável, decisão e estado de incorporação.", "use": "transformar detecção em condução verificável até o fechamento"},
-        {"title": "Relatório de consistência", "body": "Situação das interfaces examinadas, decisões incorporadas, pendências e limitações da rodada.", "use": "apoiar a decisão de emissão com a situação das interfaces e revisões documentada"}
+        {
+          "title": "Plano de coordenação",
+          "body": "Disciplinas, responsáveis, marcos, referências, formatos e regras de troca definidos para o projeto.",
+          "use": "dar previsibilidade ao fluxo e impedir referências concorrentes"
+        },
+        {
+          "title": "Matriz de interfaces e pendências",
+          "body": "Cada questão registra local, disciplinas, evidência, responsável, decisão e estado de incorporação.",
+          "use": "transformar detecção em condução verificável até o fechamento"
+        },
+        {
+          "title": "Relatório de consistência",
+          "body": "Situação das interfaces examinadas, decisões incorporadas, pendências e limitações da rodada.",
+          "use": "apoiar a decisão de emissão com a situação das interfaces e revisões documentada"
+        }
       ],
-      "interfaces_title": "Decisões acompanhadas até a revisão do projeto.", "interfaces_intro": "Cada apontamento registra o impacto, o responsável pela solução e as disciplinas afetadas. A conferência verifica sua incorporação aos documentos.",
-      "interfaces": [{"title": "Premissas compartilhadas", "body": "Níveis, eixos, coordenadas, usos, cargas, reservas e critérios comuns são registrados e controlados."}, {"title": "Responsáveis identificados", "body": "Cada interface tem um dono de cada lado, sem transferir silenciosamente autoria ou obrigação a quem coordena."}, {"title": "Fechamento verificável", "body": "A resposta só é considerada incorporada depois de aparecer na versão documental combinada."}],
+      "interfaces_title": "Decisões acompanhadas até a revisão do projeto.",
+      "interfaces_intro": "Cada apontamento registra o impacto, o responsável pela solução e as disciplinas afetadas. A conferência verifica sua incorporação aos documentos.",
+      "interfaces": [
+        {
+          "title": "Premissas compartilhadas",
+          "body": "Níveis, eixos, coordenadas, usos, cargas, reservas e critérios comuns são registrados e controlados."
+        },
+        {
+          "title": "Responsáveis identificados",
+          "body": "Cada interface tem um dono de cada lado, sem transferir silenciosamente autoria ou obrigação a quem coordena."
+        },
+        {
+          "title": "Fechamento verificável",
+          "body": "A resposta só é considerada incorporada depois de aparecer na versão documental combinada."
+        }
+      ],
       "technical_review": {
         "title": "Uma interferência só se encerra após a conferência da solução.",
         "body": "A detecção abre uma questão de projeto. A coordenação avalia o efeito da solução nas outras disciplinas, acompanha sua incorporação e registra a condição do conjunto na emissão.",
@@ -327,14 +881,53 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Do apontamento à revisão conferida.", "method_intro": "O método mantém continuidade entre as perguntas abertas, as reuniões, os modelos e os documentos emitidos.",
-      "requirements": ["Lista de disciplinas, responsáveis, cronograma e ambiente de troca já definido, se houver."],
-      "related": [{"route": "/projetos/", "label": "Visão geral", "title": "Projetos de engenharia"}, {"route": "/como-trabalhamos/", "label": "Método", "title": "Como trabalhamos"}, {"route": "/terceirizacao-projetos-engenharia/", "label": "Forma de contratação", "title": "Terceirização de projetos"}],
+      "method_title": "Do apontamento à revisão conferida.",
+      "method_intro": "O método mantém continuidade entre as perguntas abertas, as reuniões, os modelos e os documentos emitidos.",
+      "requirements": [
+        "Lista de disciplinas, responsáveis, cronograma e ambiente de troca já definido, se houver."
+      ],
+      "questions": [
+        {
+          "question": "A coordenação passa a assinar os projetos de todos os autores?",
+          "answer": "A autoria de cada disciplina permanece identificada. A coordenação organiza referências, decisões e revisões entre os responsáveis. A proposta distingue quem projeta, quem coordena, quem revisa e quem responde tecnicamente por cada entrega."
+        },
+        {
+          "question": "O trabalho termina em uma lista de interferências?",
+          "answer": "A coordenação relaciona cada questão à localização, às disciplinas envolvidas e ao responsável pela resposta. A condução acompanha as decisões e a incorporação nas revisões previstas na contratação, para que o registro mostre o que foi resolvido e o que ainda depende de ação."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/",
+          "label": "Visão geral",
+          "title": "Projetos de engenharia"
+        },
+        {
+          "route": "/como-trabalhamos/",
+          "label": "Método",
+          "title": "Como trabalhamos"
+        },
+        {
+          "route": "/terceirizacao-projetos-engenharia/",
+          "label": "Forma de contratação",
+          "title": "Terceirização de projetos"
+        }
+      ],
       "service_type": "Coordenação multidisciplinar de projetos"
     },
     {
-      "id": "buildings", "modified_at": "2026-11-11", "route": "/edificacoes/", "breadcrumb": "Edificações", "title": "Projetos de engenharia para edificações", "description": "Projetos de estruturas, instalações e coordenação para edificações residenciais, comerciais e industriais. Defina as disciplinas e solicite sua proposta.",
-      "eyebrow": "Edificações", "h1": "Projetos de engenharia para a sua edificação.", "lead": "A CONFENGE elabora e coordena projetos de estruturas e instalações para edificações residenciais, comerciais, institucionais e industriais. As disciplinas são desenvolvidas com referências comuns de arquitetura, implantação e uso.", "summary": "O programa de necessidades orienta cargas, demandas, espaços técnicos e condições de operação. A coordenação relaciona essas decisões ao desenvolvimento de cada disciplina e às etapas do empreendimento.", "cta": "Solicitar proposta", "hero_note": "Informe o uso, a área aproximada, o município e a fase pretendida. A proposta identifica disciplinas, entregas, prazos e responsabilidades.",
+      "id": "buildings",
+      "modified_at": "2026-11-11",
+      "route": "/edificacoes/",
+      "breadcrumb": "Edificações",
+      "title": "Projetos de engenharia para edificações",
+      "description": "Projetos de estruturas, instalações e coordenação para edificações residenciais, comerciais e industriais. Defina as disciplinas e solicite sua proposta.",
+      "eyebrow": "Edificações",
+      "h1": "Projetos de engenharia para a sua edificação.",
+      "lead": "A CONFENGE elabora e coordena projetos de estruturas e instalações para edificações residenciais, comerciais, institucionais e industriais. As disciplinas são desenvolvidas com referências comuns de arquitetura, implantação e uso.",
+      "summary": "O programa de necessidades orienta cargas, demandas, espaços técnicos e condições de operação. A coordenação relaciona essas decisões ao desenvolvimento de cada disciplina e às etapas do empreendimento.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Informe o uso, a área aproximada, o município e a fase pretendida. A proposta identifica disciplinas, entregas, prazos e responsabilidades.",
       "technical_panel": {
         "label": "Engenharia de edificações",
         "title": "Sistemas definidos para o uso do edifício.",
@@ -354,19 +947,73 @@
           }
         ]
       },
-      "scope_title": "Projetos definidos pelo uso e pela operação.", "scope_intro": "Cada uso traz ocupação, fluxos, cargas, operação e aprovações diferentes. O projeto começa por essas condições.",
+      "scope_title": "Projetos definidos pelo uso e pela operação.",
+      "scope_intro": "Cada uso traz ocupação, fluxos, cargas, operação e aprovações diferentes. O projeto começa por essas condições.",
       "scope_groups": [
-        {"label": "Usos", "title": "Programas diversos", "body": "Edificações são enquadradas pelas necessidades concretas de uso, ocupação, operação e aprovação do objeto.", "items": ["Residencial, comercial e uso misto", "Institucional, educação e saúde", "Industrial, administrativo e usos especiais"]},
-        {"label": "Disciplinas", "title": "Sistemas coordenados", "body": "A proposta reúne somente as disciplinas necessárias e identifica as interfaces com autores ou projetistas externos.", "items": ["Estruturas e fundações", "Instalações e sistemas especiais", "Implantação e infraestrutura externa"]},
-        {"label": "Fases", "title": "Da viabilidade à documentação executiva", "body": "O nível de desenvolvimento acompanha a decisão pretendida, evitando apresentar estudo como projeto pronto para construir.", "items": ["Estudos e concepção", "Anteprojeto e aprovações", "Projeto executivo e apoio técnico contratado"]}
+        {
+          "label": "Usos",
+          "title": "Programas diversos",
+          "body": "Edificações são enquadradas pelas necessidades concretas de uso, ocupação, operação e aprovação do objeto.",
+          "items": [
+            "Residencial, comercial e uso misto",
+            "Institucional, educação e saúde",
+            "Industrial, administrativo e usos especiais"
+          ]
+        },
+        {
+          "label": "Disciplinas",
+          "title": "Sistemas coordenados",
+          "body": "A proposta reúne somente as disciplinas necessárias e identifica as interfaces com autores ou projetistas externos.",
+          "items": [
+            "Estruturas e fundações",
+            "Instalações e sistemas especiais",
+            "Implantação e infraestrutura externa"
+          ]
+        },
+        {
+          "label": "Fases",
+          "title": "Da viabilidade à documentação executiva",
+          "body": "O nível de desenvolvimento acompanha a decisão pretendida, evitando apresentar estudo como projeto pronto para construir.",
+          "items": [
+            "Estudos e concepção",
+            "Anteprojeto e aprovações",
+            "Projeto executivo e apoio técnico contratado"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Critérios integrados", "body": "Programa, referências, disciplinas, requisitos e decisões estruturantes consolidados antes do detalhamento.", "use": "reduzir ambiguidades entre contratante, arquitetura e engenharias"},
-        {"title": "Pacotes por disciplina", "body": "Desenhos, memórias, especificações, modelos e listas conforme a fase e as responsabilidades definidas.", "use": "aprovar, coordenar, contratar ou executar com documentação compatível"},
-        {"title": "Registro de interfaces", "body": "Shafts, reservas, cargas, níveis, acessos, equipamentos e conexões acompanhados entre disciplinas.", "use": "preservar decisões importantes durante as revisões"}
+        {
+          "title": "Critérios integrados",
+          "body": "Programa, referências, disciplinas, requisitos e decisões estruturantes consolidados antes do detalhamento.",
+          "use": "reduzir ambiguidades entre contratante, arquitetura e engenharias"
+        },
+        {
+          "title": "Pacotes por disciplina",
+          "body": "Desenhos, memórias, especificações, modelos e listas conforme a fase e as responsabilidades definidas.",
+          "use": "aprovar, coordenar, contratar ou executar com documentação compatível"
+        },
+        {
+          "title": "Registro de interfaces",
+          "body": "Shafts, reservas, cargas, níveis, acessos, equipamentos e conexões acompanhados entre disciplinas.",
+          "use": "preservar decisões importantes durante as revisões"
+        }
       ],
-      "interfaces_title": "O desempenho do edifício atravessa várias disciplinas.", "interfaces_intro": "Estrutura, instalações, vedações e implantação são coordenadas com os espaços de uso e as condições de operação.",
-      "interfaces": [{"title": "Programa e arquitetura", "body": "Uso, ocupação, fluxos e flexibilidade determinam demandas que os sistemas de engenharia precisam acomodar."}, {"title": "Estrutura e zonas técnicas", "body": "Vãos, pés-direitos, passagens, equipamentos e fachadas exigem decisões conjuntas antes do detalhamento."}, {"title": "Lote e conexões", "body": "Acessos, níveis, drenagem e utilidades externas conectam o edifício à infraestrutura do empreendimento."}],
+      "interfaces_title": "O desempenho do edifício atravessa várias disciplinas.",
+      "interfaces_intro": "Estrutura, instalações, vedações e implantação são coordenadas com os espaços de uso e as condições de operação.",
+      "interfaces": [
+        {
+          "title": "Programa e arquitetura",
+          "body": "Uso, ocupação, fluxos e flexibilidade determinam demandas que os sistemas de engenharia precisam acomodar."
+        },
+        {
+          "title": "Estrutura e zonas técnicas",
+          "body": "Vãos, pés-direitos, passagens, equipamentos e fachadas exigem decisões conjuntas antes do detalhamento."
+        },
+        {
+          "title": "Lote e conexões",
+          "body": "Acessos, níveis, drenagem e utilidades externas conectam o edifício à infraestrutura do empreendimento."
+        }
+      ],
       "technical_review": {
         "title": "O uso do edifício orienta decisões de todas as disciplinas.",
         "body": "A integração técnica considera o que precisa funcionar no empreendimento e como será construído, utilizado e mantido. As decisões devem permanecer coerentes nas sucessivas etapas de projeto.",
@@ -387,16 +1034,66 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Uso e condicionantes conduzem o desenvolvimento.", "method_intro": "A progressão do projeto preserva a ligação entre programa, critérios, sistemas e documentação emitida.",
-      "requirements": ["Programa de necessidades, arquitetura disponível e informações do terreno ou edifício existente."],
+      "method_title": "Uso e condicionantes conduzem o desenvolvimento.",
+      "method_intro": "A progressão do projeto preserva a ligação entre programa, critérios, sistemas e documentação emitida.",
+      "requirements": [
+        "Programa de necessidades, arquitetura disponível e informações do terreno ou edifício existente."
+      ],
+      "questions": [
+        {
+          "question": "É possível projetar uma reforma ou ampliação de uma edificação existente?",
+          "answer": "A demanda começa pelo uso atual, pela alteração pretendida e pelos registros disponíveis do edifício. A proposta define as disciplinas, os levantamentos e as verificações necessários para desenvolver a intervenção e integrar o novo trabalho aos sistemas existentes."
+        },
+        {
+          "question": "A contratação online de uma casa vale para qualquer edificação?",
+          "answer": "A oferta online tem condições próprias para residências unifamiliares novas. Edificações comerciais, industriais, institucionais e casos fora desse enquadramento recebem proposta conforme uso, área, disciplinas e fase do trabalho. Consulte o enquadramento antes de escolher a modalidade."
+        }
+      ],
       "related": [
-        {"route": "/projetos-prontos/", "label": "Para construir sua casa", "title": "Projetos residenciais: consulte a disponibilidade"},{"route": "/projetos/", "label": "Práticas", "title": "Projetos de engenharia"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}, {"route": "/como-trabalhamos/", "label": "Método", "title": "Como trabalhamos"}],
+        {
+          "route": "/projetos-prontos/",
+          "label": "Para construir sua casa",
+          "title": "Projetos residenciais: calcular e contratar online"
+        },
+        {
+          "route": "/projetos/",
+          "label": "Práticas",
+          "title": "Projetos de engenharia"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        },
+        {
+          "route": "/como-trabalhamos/",
+          "label": "Método",
+          "title": "Como trabalhamos"
+        }
+      ],
       "service_type": "Projetos de engenharia para edificações"
     },
     {
-      "id": "how-we-work", "route": "/como-trabalhamos/", "breadcrumb": "Como trabalhamos", "title": "Como contratar um projeto ou serviço de engenharia", "description": "Conheça como a CONFENGE define o escopo, coordena especialidades e revisa as entregas de projetos e serviços de engenharia.",
-      "eyebrow": "Como trabalhamos", "h1": "O que você recebe ao contratar a CONFENGE?", "lead": "A CONFENGE organiza projetos e serviços de engenharia desde a definição do escopo até a entrega técnica. Critérios, responsabilidades, interfaces e revisões dão ao contratante uma visão clara do trabalho e das decisões necessárias.", "summary": "A proposta parte da necessidade do empreendimento e das informações disponíveis. O desenvolvimento combina análise, produção técnica e coordenação das especialidades previstas na contratação.", "cta": "Solicitar proposta", "hero_note": "Escopo, entregas, prazos, honorários e responsabilidades são definidos na proposta.", "whatsapp_context": "um serviço de engenharia",
-      "section_order": ["method", "technical_review", "deliverables", "scope", "contact", "related"],
+      "id": "how-we-work",
+      "route": "/como-trabalhamos/",
+      "breadcrumb": "Como trabalhamos",
+      "title": "Como contratar um projeto ou serviço de engenharia",
+      "description": "Conheça como a CONFENGE define o escopo, coordena especialidades e revisa as entregas de projetos e serviços de engenharia.",
+      "eyebrow": "Como trabalhamos",
+      "h1": "O que você recebe ao contratar a CONFENGE?",
+      "lead": "A CONFENGE organiza projetos e serviços de engenharia desde a definição do escopo até a entrega técnica. Critérios, responsabilidades, interfaces e revisões dão ao contratante uma visão clara do trabalho e das decisões necessárias.",
+      "summary": "A proposta parte da necessidade do empreendimento e das informações disponíveis. O desenvolvimento combina análise, produção técnica e coordenação das especialidades previstas na contratação.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Escopo, entregas, prazos, honorários e responsabilidades são definidos na proposta.",
+      "whatsapp_context": "um serviço de engenharia",
+      "section_order": [
+        "method",
+        "technical_review",
+        "deliverables",
+        "scope",
+        "contact",
+        "related"
+      ],
       "method_kicker": "Da primeira conversa à obra",
       "technical_panel": {
         "label": "Condução técnica",
@@ -417,17 +1114,57 @@
           }
         ]
       },
-      "scope_kicker": "Primeiro contato", "scope_title": "Informações que ajudam a definir a contratação.", "scope_intro": "Informe o empreendimento, a finalidade e o prazo desejado. As referências disponíveis ajudam a dimensionar a frente técnica; o contexto pode ser completado na conversa.",
+      "scope_kicker": "Primeiro contato",
+      "scope_title": "Informações que ajudam a definir a contratação.",
+      "scope_intro": "Informe o empreendimento, a finalidade e o prazo desejado. As referências disponíveis ajudam a dimensionar a frente técnica; o contexto pode ser completado na conversa.",
       "scope_groups": [
-        {"label": "Projetos", "title": "Desenvolvimento e coordenação", "body": "Informe o tipo de empreendimento, a fase e as disciplinas necessárias.", "items": ["Programa de necessidades e referências disponíveis", "Padrões de documentação e marcos do empreendimento"]},
-        {"label": "Orçamento e contratos", "title": "Base técnica para contratar e acompanhar", "body": "Indique a finalidade do orçamento ou a questão contratual que requer análise.", "items": ["Projetos, planilhas e critérios de medição disponíveis", "Prazos e documentos associados à decisão"]},
-        {"label": "Inspeção, avaliação e perícia", "title": "Análise e conclusão de engenharia", "body": "Descreva o imóvel ou objeto, a finalidade e o histórico pertinente.", "items": ["Registros, documentação e acesso para levantamento", "Perguntas técnicas e destinatário da conclusão"]}
+        {
+          "label": "Projetos",
+          "title": "Desenvolvimento e coordenação",
+          "body": "Informe o tipo de empreendimento, a fase e as disciplinas necessárias.",
+          "items": [
+            "Programa de necessidades e referências disponíveis",
+            "Padrões de documentação e marcos do empreendimento"
+          ]
+        },
+        {
+          "label": "Orçamento e contratos",
+          "title": "Base técnica para contratar e acompanhar",
+          "body": "Indique a finalidade do orçamento ou a questão contratual que requer análise.",
+          "items": [
+            "Projetos, planilhas e critérios de medição disponíveis",
+            "Prazos e documentos associados à decisão"
+          ]
+        },
+        {
+          "label": "Inspeção, avaliação e perícia",
+          "title": "Análise e conclusão de engenharia",
+          "body": "Descreva o imóvel ou objeto, a finalidade e o histórico pertinente.",
+          "items": [
+            "Registros, documentação e acesso para levantamento",
+            "Perguntas técnicas e destinatário da conclusão"
+          ]
+        }
       ],
-      "deliverables_kicker": "Conteúdo da entrega", "deliverables_title": "Documentação preparada para o uso contratado.", "deliverables_intro": "A finalidade orienta a composição do trabalho, o nível de detalhamento e a forma de apresentar a conclusão.",
+      "deliverables_kicker": "Conteúdo da entrega",
+      "deliverables_title": "Documentação preparada para o uso contratado.",
+      "deliverables_intro": "A finalidade orienta a composição do trabalho, o nível de detalhamento e a forma de apresentar a conclusão.",
       "deliverables": [
-        {"title": "Projetos e documentação técnica", "body": "Desenhos, modelos, memórias, especificações e registros de coordenação compõem as disciplinas e a fase contratadas.", "use": "orientar aprovações, contratação e execução com referências consistentes"},
-        {"title": "Planilha de quantitativos com memória de cálculo", "body": "Cada serviço remete à medida, à unidade e ao desenho de origem.", "use": "colocar os fornecedores na mesma base ao comparar propostas."},
-        {"title": "Dossiê para uma medição contestada", "body": "Relaciona os itens questionados ao boletim, aos registros de campo e aos cálculos.", "use": "identificar o que cabe reapresentar e o que exige nova conferência em campo."}
+        {
+          "title": "Projetos e documentação técnica",
+          "body": "Desenhos, modelos, memórias, especificações e registros de coordenação compõem as disciplinas e a fase contratadas.",
+          "use": "orientar aprovações, contratação e execução com referências consistentes"
+        },
+        {
+          "title": "Planilha de quantitativos com memória de cálculo",
+          "body": "Cada serviço remete à medida, à unidade e ao desenho de origem.",
+          "use": "colocar os fornecedores na mesma base ao comparar propostas."
+        },
+        {
+          "title": "Dossiê para uma medição contestada",
+          "body": "Relaciona os itens questionados ao boletim, aos registros de campo e aos cálculos.",
+          "use": "identificar o que cabe reapresentar e o que exige nova conferência em campo."
+        }
       ],
       "technical_review": {
         "title": "Como o contratante acompanha o conteúdo técnico.",
@@ -449,23 +1186,106 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Quem faz o quê, da proposta à entrega.", "method_intro": "Você acompanha o que foi combinado e sabe em que momento precisa decidir.",
+      "method_title": "Quem faz o quê, da proposta à entrega.",
+      "method_intro": "Você acompanha o que foi combinado e sabe em que momento precisa decidir.",
       "method": [
-        {"label": "Contexto", "title": "Definir a necessidade", "body": "Consolidamos o objetivo do empreendimento, a etapa pretendida, as informações disponíveis e os prazos relevantes."},
-        {"label": "Proposta", "title": "Nós definimos o serviço", "body": "Você confere o escopo, o preço, o prazo e quem responde pelas entregas antes de contratar."},
-        {"label": "Desenvolvimento", "title": "Produzir e integrar", "body": "Desenvolvemos os projetos, cálculos, levantamentos ou análises previstos, coordenando as interfaces e registrando as decisões técnicas."},
-        {"label": "Revisão", "title": "Você acompanha a decisão", "body": "Quando uma escolha afeta prazo, custo ou execução, mostramos a diferença entre as opções."},
-        {"label": "Entrega", "title": "Emitir a documentação", "body": "Conferimos o conjunto, identificamos suas revisões e apresentamos conclusões e orientações de uso para a finalidade contratada."}
+        {
+          "label": "Contexto",
+          "title": "Definir a necessidade",
+          "body": "Consolidamos o objetivo do empreendimento, a etapa pretendida, as informações disponíveis e os prazos relevantes."
+        },
+        {
+          "label": "Proposta",
+          "title": "Nós definimos o serviço",
+          "body": "Você confere o escopo, o preço, o prazo e quem responde pelas entregas antes de contratar."
+        },
+        {
+          "label": "Desenvolvimento",
+          "title": "Produzir e integrar",
+          "body": "Desenvolvemos os projetos, cálculos, levantamentos ou análises previstos, coordenando as interfaces e registrando as decisões técnicas."
+        },
+        {
+          "label": "Revisão",
+          "title": "Você acompanha a decisão",
+          "body": "Quando uma escolha afeta prazo, custo ou execução, mostramos a diferença entre as opções."
+        },
+        {
+          "label": "Entrega",
+          "title": "Emitir a documentação",
+          "body": "Conferimos o conjunto, identificamos suas revisões e apresentamos conclusões e orientações de uso para a finalidade contratada."
+        }
       ],
-      "proposal_title": "Qual decisão está esperando uma resposta de engenharia?", "proposal_body": "Descreva o problema, a cidade da obra e a data em que precisa decidir. Com isso, podemos indicar os documentos necessários e preparar a proposta.",
-      "related": [{"route": "/projetos/", "label": "Projetos", "title": "Elaboração e coordenação de projetos de engenharia"}, {"route": "/quantitativos-orcamento-obras/", "label": "Custos", "title": "Quantitativos e orçamento de obras"}, {"route": "/servicos/", "label": "Serviços", "title": "Outras frentes de engenharia"}]
+      "proposal_title": "Qual decisão está esperando uma resposta de engenharia?",
+      "proposal_body": "Descreva o problema, a cidade da obra e a data em que precisa decidir. Com isso, podemos indicar os documentos necessários e preparar a proposta.",
+      "questions": [
+        {
+          "question": "O que deve estar claro na proposta antes de contratar?",
+          "answer": "A proposta identifica o trabalho, as disciplinas, os documentos de entrega, os formatos, o prazo, os honorários e as responsabilidades. As informações a fornecer e as etapas de revisão também precisam estar relacionadas ao serviço, para que você possa comparar o combinado com o que receberá."
+        },
+        {
+          "question": "Como uma mudança durante o trabalho é tratada?",
+          "answer": "A mudança é registrada e examinada quanto aos efeitos nas disciplinas, nas entregas e no prazo. Quando altera o escopo contratado, as condições são alinhadas com o contratante. As novas revisões identificam o que foi modificado e qual versão passa a orientar o trabalho."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/",
+          "label": "Projetos",
+          "title": "Elaboração e coordenação de projetos de engenharia"
+        },
+        {
+          "route": "/quantitativos-orcamento-obras/",
+          "label": "Custos",
+          "title": "Quantitativos e orçamento de obras"
+        },
+        {
+          "route": "/servicos/",
+          "label": "Serviços",
+          "title": "Outras frentes de engenharia"
+        }
+      ]
     },
     {
-      "id": "company", "route": "/empresa/", "breadcrumb": "Empresa", "title": "CONFENGE: empresa de engenharia, perícias e inteligência técnica", "description": "A CONFENGE reúne especialidades por contratação, com atribuições, interfaces e responsabilidades definidas para o objeto.",
-      "eyebrow": "CONFENGE", "h1": "Projetos e serviços de engenharia com coordenação técnica.", "lead": "A CONFENGE elabora projetos de estruturas, instalações e infraestrutura e presta serviços de engenharia para empreendimentos públicos e privados. O trabalho reúne as especialidades necessárias ao objeto, com coordenação e responsabilidade técnica definidas.", "summary": "Estruturas, instalações e infraestrutura podem integrar o mesmo projeto. Orçamentos, inspeções, perícias, avaliações e segurança do trabalho têm escopo e responsável definidos conforme a contratação.", "cta": "Solicitar proposta", "hero_note": "A empresa atua sob a razão social Confenge Serviços de Desenhos Técnicos Ltda., CNPJ 52.407.089/0001-09.", "whatsapp_context": "uma necessidade de engenharia para a CONFENGE",
-      "section_order": ["scope", "leadership", "interfaces", "deliverables", "technical_review", "contact", "related"],
+      "id": "company",
+      "route": "/empresa/",
+      "breadcrumb": "Empresa",
+      "title": "Empresa de engenharia, perícias e inteligência técnica",
+      "description": "Conheça a CONFENGE: projetos estruturais e de instalações, perícias, avaliações e inteligência técnica, com coordenação e responsabilidades definidas.",
+      "eyebrow": "CONFENGE",
+      "h1": "Projetos e serviços de engenharia com coordenação técnica.",
+      "lead": "A CONFENGE elabora projetos de estruturas, instalações e infraestrutura e presta serviços de engenharia para empreendimentos públicos e privados. O trabalho reúne as especialidades necessárias ao objeto, com coordenação e responsabilidade técnica definidas.",
+      "summary": "Estruturas, instalações e infraestrutura podem integrar o mesmo projeto. Orçamentos, inspeções, perícias, avaliações e segurança do trabalho têm escopo e responsável definidos conforme a contratação.",
+      "cta": "Solicitar proposta",
+      "hero_note": "A empresa atua sob a razão social Confenge Serviços de Desenhos Técnicos Ltda., CNPJ 52.407.089/0001-09.",
+      "whatsapp_context": "uma necessidade de engenharia para a CONFENGE",
+      "section_order": [
+        "scope",
+        "leadership",
+        "interfaces",
+        "deliverables",
+        "technical_review",
+        "contact",
+        "related"
+      ],
       "scope_kicker": "Atuação da empresa",
-      "leadership": {"title": "Tiago Sasaki conduz a leitura inicial e a coordenação técnica pela CONFENGE.", "intro": "A liderança combina formação e experiência próprias com a mobilização dos especialistas habilitados para cada disciplina, sem reduzir a empresa à atuação de uma única pessoa.", "items": [{"title": "Formação", "body": "Engenheiro Civil formado pela Escola de Engenharia de São Carlos da Universidade de São Paulo (EESC-USP) e Engenheiro de Segurança do Trabalho."}, {"title": "Atuação", "body": "Sócio e condutor técnico da CONFENGE, com experiência na iniciativa privada e na Administração Pública, fiscalização e gestão contratual, análise de processos e orçamentação com referências oficiais."}, {"title": "Responsabilidade", "body": "Tiago conduz a definição inicial do escopo e a coordenação pela empresa; cada disciplina é desenvolvida e assinada pelo profissional habilitado mobilizado para o objeto."}]},
+      "leadership": {
+        "title": "Tiago Sasaki conduz a leitura inicial e a coordenação técnica pela CONFENGE.",
+        "intro": "Tiago coordena a definição do serviço e a integração das entregas. Os profissionais de cada disciplina são identificados conforme o trabalho contratado e suas atribuições.",
+        "items": [
+          {
+            "title": "Formação",
+            "body": "Engenheiro Civil formado pela Escola de Engenharia de São Carlos da Universidade de São Paulo (EESC-USP) e Engenheiro de Segurança do Trabalho."
+          },
+          {
+            "title": "Atuação",
+            "body": "Sócio e condutor técnico da CONFENGE, com experiência na iniciativa privada e na Administração Pública, fiscalização e gestão contratual, análise de processos e orçamentação com referências oficiais."
+          },
+          {
+            "title": "Responsabilidade",
+            "body": "Tiago conduz a definição inicial do escopo e a coordenação pela empresa; cada disciplina é desenvolvida e assinada pelo profissional habilitado mobilizado para o objeto."
+          }
+        ]
+      },
       "proposal_title": "Converse com a CONFENGE sobre a sua necessidade de engenharia.",
       "technical_panel": {
         "label": "CONFENGE",
@@ -486,19 +1306,73 @@
           }
         ]
       },
-      "scope_title": "Especialidades coordenadas para cada objeto.", "scope_intro": "A empresa reúne diferentes especialidades por contratação, com atribuições, interfaces e responsabilidades definidas para o objeto.",
+      "scope_title": "Especialidades coordenadas para cada objeto.",
+      "scope_intro": "A empresa reúne diferentes especialidades por contratação, com atribuições, interfaces e responsabilidades definidas para o objeto.",
       "scope_groups": [
-        {"label": "Posicionamento", "title": "Engenharia, Perícias e Inteligência Técnica", "body": "Uma única marca pública acolhe projetos, avaliações técnicas, documentação e demandas ligadas a obras públicas e privadas.", "items": ["Projetos e coordenação", "Perícias e assistência técnica", "Análises, documentação e inteligência técnica"]},
-        {"label": "Organização", "title": "Equipe estruturada conforme o objeto", "body": "Especialistas são mobilizados segundo disciplinas, complexidade e exigências profissionais do objeto.", "items": ["Responsáveis identificados", "Interfaces conduzidas", "Atribuições confirmadas na proposta"]},
-        {"label": "Relação", "title": "Clareza de contratação", "body": "A proposta registra objeto, entregas, dependências e responsáveis.", "items": ["Escopo verificável", "Revisões controladas", "Pendências declaradas"]}
+        {
+          "label": "Posicionamento",
+          "title": "Engenharia, Perícias e Inteligência Técnica",
+          "body": "Uma única marca pública acolhe projetos, avaliações técnicas, documentação e demandas ligadas a obras públicas e privadas.",
+          "items": [
+            "Projetos e coordenação",
+            "Perícias e assistência técnica",
+            "Análises, documentação e inteligência técnica"
+          ]
+        },
+        {
+          "label": "Organização",
+          "title": "Equipe estruturada conforme o objeto",
+          "body": "Especialistas são mobilizados segundo disciplinas, complexidade e exigências profissionais do objeto.",
+          "items": [
+            "Responsáveis identificados",
+            "Interfaces conduzidas",
+            "Atribuições confirmadas na proposta"
+          ]
+        },
+        {
+          "label": "Relação",
+          "title": "Clareza de contratação",
+          "body": "A proposta registra objeto, entregas, dependências e responsáveis.",
+          "items": [
+            "Escopo verificável",
+            "Revisões controladas",
+            "Pendências declaradas"
+          ]
+        }
       ],
       "deliverables": [
-          {"title": "Leitura do objeto", "body": "A demanda é analisada antes de selecionar disciplinas, profissionais e método.", "use": "formar uma proposta que responda à situação real"},
-        {"title": "Estrutura de trabalho", "body": "Responsáveis, interfaces, entregas e marcos são definidos para a contratação específica.", "use": "dar ao contratante uma coordenação clara, com papéis e interfaces explicitados"},
-        {"title": "Conclusão técnica documentada", "body": "O resultado toma a forma adequada: projeto, relatório, memória, matriz, parecer técnico ou outro entregável nomeado.", "use": "sustentar a decisão para a qual o trabalho foi contratado"}
+        {
+          "title": "Leitura do objeto",
+          "body": "A demanda é analisada antes de selecionar disciplinas, profissionais e método.",
+          "use": "formar uma proposta que responda à situação real"
+        },
+        {
+          "title": "Estrutura de trabalho",
+          "body": "Responsáveis, interfaces, entregas e marcos são definidos para a contratação específica.",
+          "use": "dar ao contratante uma coordenação clara, com papéis e interfaces explicitados"
+        },
+        {
+          "title": "Conclusão técnica documentada",
+          "body": "O resultado toma a forma adequada: projeto, relatório, memória, matriz, parecer técnico ou outro entregável nomeado.",
+          "use": "sustentar a decisão para a qual o trabalho foi contratado"
+        }
       ],
-      "interfaces_title": "Um ponto de coordenação para reunir decisões e entregas.", "interfaces_intro": "Projetos, orçamentos e análises são coordenados para atender à finalidade da contratação, com continuidade entre as etapas e as especialidades.",
-      "interfaces": [{"title": "Contratante", "body": "A finalidade, as restrições e os critérios de decisão orientam a formação do escopo."}, {"title": "Especialistas", "body": "Cada disciplina atua dentro de atribuições e interfaces definidas para o objeto."}, {"title": "Terceiros e autoridades", "body": "Autores, órgãos, concessionárias e demais agentes permanecem identificados nas dependências do trabalho."}],
+      "interfaces_title": "Um ponto de coordenação para reunir decisões e entregas.",
+      "interfaces_intro": "Projetos, orçamentos e análises são coordenados para atender à finalidade da contratação, com continuidade entre as etapas e as especialidades.",
+      "interfaces": [
+        {
+          "title": "Contratante",
+          "body": "A finalidade, as restrições e os critérios de decisão orientam a formação do escopo."
+        },
+        {
+          "title": "Especialistas",
+          "body": "Cada disciplina atua dentro de atribuições e interfaces definidas para o objeto."
+        },
+        {
+          "title": "Terceiros e autoridades",
+          "body": "Autores, órgãos, concessionárias e demais agentes permanecem identificados nas dependências do trabalho."
+        }
+      ],
       "technical_review": {
         "title": "Responsabilidade clara em uma solução técnica integrada.",
         "body": "O contratante precisa conhecer o trabalho assumido, como as especialidades se relacionam e o conteúdo da entrega. Essa definição orienta a condução do serviço e a avaliação do resultado.",
@@ -519,13 +1393,54 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "A configuração vem depois do entendimento da demanda.", "method_intro": "O desenvolvimento conecta as necessidades do empreendimento às especialidades, às entregas e aos responsáveis definidos na proposta.",
-      "requirements": ["Contexto da decisão e agente responsável por consolidar as informações do contratante."],
-      "related": [{"route": "/projetos/", "label": "Atuação", "title": "Projetos de engenharia"}, {"route": "/como-trabalhamos/", "label": "Método", "title": "Como trabalhamos"}, {"route": "/servicos/", "label": "Outras situações", "title": "Serviços de engenharia"}, {"route": "/imprensa/", "label": "Institucional", "title": "Imprensa e pesquisa"}]
+      "method_title": "A configuração vem depois do entendimento da demanda.",
+      "method_intro": "O desenvolvimento conecta as necessidades do empreendimento às especialidades, às entregas e aos responsáveis definidos na proposta.",
+      "requirements": [
+        "Contexto da decisão e agente responsável por consolidar as informações do contratante."
+      ],
+      "questions": [
+        {
+          "question": "Como funciona o atendimento fora de Florianópolis?",
+          "answer": "Projetos e serviços documentais atendem demandas de todas as regiões do Brasil. As vistorias presenciais são realizadas na Grande Florianópolis; outras necessidades de campo dependem do local, da logística e dos responsáveis definidos na proposta. O formato de atendimento é confirmado antes da contratação."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/",
+          "label": "Atuação",
+          "title": "Projetos de engenharia"
+        },
+        {
+          "route": "/como-trabalhamos/",
+          "label": "Método",
+          "title": "Como trabalhamos"
+        },
+        {
+          "route": "/servicos/",
+          "label": "Outras situações",
+          "title": "Serviços de engenharia"
+        },
+        {
+          "route": "/imprensa/",
+          "label": "Institucional",
+          "title": "Imprensa e pesquisa"
+        }
+      ]
     },
     {
-      "id": "project-outsourcing", "modified_at": "2026-11-11", "route": "/terceirizacao-projetos-engenharia/", "parent": "/projetos/", "breadcrumb": "Terceirização de projetos", "title": "Terceirização de projetos de engenharia", "description": "Terceirização de projetos para escritórios, construtoras e indústrias. Desenvolvimento de disciplinas e pacotes com formatos, revisões e responsabilidades definidos.",
-      "eyebrow": "Forma de contratação", "h1": "Terceirização de projetos com entregas e revisões definidas.", "lead": "Amplie a produção de projetos do seu escritório, construtora ou indústria com disciplinas desenvolvidas pela CONFENGE. Você pode contratar uma especialidade, um pacote de projetos ou uma demanda recorrente, com coordenação junto à sua equipe.", "summary": "Seu escritório define a arquitetura de referência e o padrão de entrega. A proposta discrimina quais pranchas, modelos ou memórias cabem à CONFENGE e quem recebe cada revisão na sua equipe.", "cta": "Solicitar proposta", "hero_note": "Conte quais disciplinas precisa contratar, o volume e o prazo desejado. Alinhamos ferramentas, arquivos de entrega, autoria e revisões na proposta.",
+      "id": "project-outsourcing",
+      "modified_at": "2026-11-11",
+      "route": "/terceirizacao-projetos-engenharia/",
+      "parent": "/projetos/",
+      "breadcrumb": "Terceirização de projetos",
+      "title": "Terceirização de projetos de engenharia",
+      "description": "Terceirização de projetos para escritórios, construtoras e indústrias. Desenvolvimento de disciplinas e pacotes com formatos, revisões e responsabilidades definidos.",
+      "eyebrow": "Forma de contratação",
+      "h1": "Terceirização de projetos com entregas e revisões definidas.",
+      "lead": "Amplie a produção de projetos do seu escritório, construtora ou indústria com disciplinas desenvolvidas pela CONFENGE. Você pode contratar uma especialidade, um pacote de projetos ou uma demanda recorrente, com coordenação junto à sua equipe.",
+      "summary": "Seu escritório define a arquitetura de referência e o padrão de entrega. A proposta discrimina quais pranchas, modelos ou memórias cabem à CONFENGE e quem recebe cada revisão na sua equipe.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Conte quais disciplinas precisa contratar, o volume e o prazo desejado. Alinhamos ferramentas, arquivos de entrega, autoria e revisões na proposta.",
       "technical_panel": {
         "label": "Produção de projetos",
         "title": "Capacidade técnica integrada à sua equipe.",
@@ -545,19 +1460,73 @@
           }
         ]
       },
-      "scope_title": "Produção técnica com escopo e integração definidos.", "scope_intro": "O modelo de trabalho organiza responsabilidades, referências, padrões e devoluções para incorporar a produção à equipe contratante.",
+      "scope_title": "Produção técnica com escopo e integração definidos.",
+      "scope_intro": "O modelo de trabalho organiza responsabilidades, referências, padrões e devoluções para incorporar a produção à equipe contratante.",
       "scope_groups": [
-        {"label": "Demanda pontual", "title": "Uma disciplina ou pacote", "body": "Elaboração ou desenvolvimento delimitado a partir das referências e critérios fornecidos pelo contratante.", "items": ["Disciplina complementar", "Detalhamento ou documentação executiva", "Pacote por etapa ou empreendimento"]},
-        {"label": "Demanda recorrente", "title": "Capacidade técnica continuada", "body": "Fluxo com priorização, entradas, marcos e revisões acordados para uma sequência de projetos ou entregas.", "items": ["Fila de trabalho visível", "Padrões e templates acordados", "Capacidade reavaliada por ciclo"]},
-        {"label": "Integração", "title": "Interface com a equipe interna", "body": "Pontos de decisão, retornos e incorporação são distribuídos entre a CONFENGE e os responsáveis do contratante.", "items": ["Matriz RACI ou equivalente", "Controle de versões", "Ritos técnicos proporcionais ao projeto"]}
+        {
+          "label": "Demanda pontual",
+          "title": "Uma disciplina ou pacote",
+          "body": "Elaboração ou desenvolvimento delimitado a partir das referências e critérios fornecidos pelo contratante.",
+          "items": [
+            "Disciplina complementar",
+            "Detalhamento ou documentação executiva",
+            "Pacote por etapa ou empreendimento"
+          ]
+        },
+        {
+          "label": "Demanda recorrente",
+          "title": "Capacidade técnica continuada",
+          "body": "Fluxo com priorização, entradas, marcos e revisões acordados para uma sequência de projetos ou entregas.",
+          "items": [
+            "Fila de trabalho visível",
+            "Padrões e templates acordados",
+            "Capacidade reavaliada por ciclo"
+          ]
+        },
+        {
+          "label": "Integração",
+          "title": "Interface com a equipe interna",
+          "body": "Pontos de decisão, retornos e incorporação são distribuídos entre a CONFENGE e os responsáveis do contratante.",
+          "items": [
+            "Responsáveis por produzir, revisar, aprovar e receber cada entrega",
+            "Controle de versões",
+            "Ritos técnicos proporcionais ao projeto"
+          ]
+        }
       ],
       "deliverables": [
-        {"title": "Plano de mobilização", "body": "Disciplina, volume, prioridades, perfis técnicos, marcos e dependências definidos para o ciclo.", "use": "dimensionar a capacidade externa com base em trabalho concreto"},
-        {"title": "Pacotes técnicos delimitados", "body": "Desenhos, modelos, memórias, especificações e listas conforme a disciplina e o nível contratados.", "use": "integrar a produção terceirizada ao pacote principal"},
-        {"title": "Controle de retorno", "body": "Revisões, comentários, decisões e pendências organizados entre a equipe interna e a frente terceirizada.", "use": "evitar retrabalho causado por referências concorrentes"}
+        {
+          "title": "Plano de mobilização",
+          "body": "Disciplina, volume, prioridades, perfis técnicos, marcos e dependências definidos para o ciclo.",
+          "use": "dimensionar a capacidade externa com base em trabalho concreto"
+        },
+        {
+          "title": "Pacotes técnicos delimitados",
+          "body": "Desenhos, modelos, memórias, especificações e listas conforme a disciplina e o nível contratados.",
+          "use": "integrar a produção terceirizada ao pacote principal"
+        },
+        {
+          "title": "Controle de retorno",
+          "body": "Revisões, comentários, decisões e pendências organizados entre a equipe interna e a frente terceirizada.",
+          "use": "evitar retrabalho causado por referências concorrentes"
+        }
       ],
-      "interfaces_title": "Padrões e responsabilidades alinhados entre equipes.", "interfaces_intro": "Referências, alterações e prioridades são organizadas entre os interlocutores responsáveis pelas decisões e pelas devoluções.",
-      "interfaces": [{"title": "Padrões do contratante", "body": "Templates, bibliotecas, critérios, nomenclaturas e ambientes são incorporados quando fornecidos e pertinentes."}, {"title": "Autores e responsáveis", "body": "Produção, coordenação, revisão e emissão permanecem separadas conforme a responsabilidade definida."}, {"title": "Capacidade e prioridade", "body": "A cadência é revista com base na fila real e nos marcos, sem promessa ilimitada de alocação."}],
+      "interfaces_title": "Padrões e responsabilidades alinhados entre equipes.",
+      "interfaces_intro": "Referências, alterações e prioridades são organizadas entre os interlocutores responsáveis pelas decisões e pelas devoluções.",
+      "interfaces": [
+        {
+          "title": "Padrões do contratante",
+          "body": "Templates, bibliotecas, critérios, nomenclaturas e ambientes são incorporados quando fornecidos e pertinentes."
+        },
+        {
+          "title": "Autores e responsáveis",
+          "body": "Produção, coordenação, revisão e emissão permanecem separadas conforme a responsabilidade definida."
+        },
+        {
+          "title": "Capacidade e prioridade",
+          "body": "A cadência é revista com base na fila real e nos marcos, sem promessa ilimitada de alocação."
+        }
+      ],
       "technical_review": {
         "title": "Uma contratação que se integra à produção do escritório.",
         "body": "A produção externa precisa acompanhar os padrões técnicos e o fluxo de decisão da equipe contratante. O alinhamento inicial define o trabalho e evita referências concorrentes durante as revisões.",
@@ -578,15 +1547,80 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Produção integrada ao projeto principal.", "method_intro": "Referências comuns, responsáveis definidos e controle de revisões integram a produção à equipe contratante.",
-      "requirements": ["Estimativa de volume, cadência, disciplinas, padrões internos e ferramentas desejadas."],
-      "market_intelligence_bridge": {"before_link": "Para escolher empresas com objetos contratuais compatíveis com a sua capacidade técnica, o ", "link_label": "mapeamento de clientes e parceiros", "href": "/inteligencia/orgaos/", "after_link": " entrega uma seleção documental por disciplina e território. Para produzir uma obrigação de projeto já definida, solicite a terceirização técnica nesta página."},
-      "related": [{"route": "/projeto-estrutural-concreto-armado/", "label": "Sistema", "title": "Projeto estrutural em concreto armado"}, {"route": "/projeto-estrutura-metalica/", "label": "Sistema", "title": "Projeto de estrutura metálica"}, {"route": "/projeto-eletrico/", "label": "Disciplina", "title": "Projeto elétrico"}, {"route": "/projeto-hidrossanitario/", "label": "Disciplina", "title": "Projeto hidrossanitário"}, {"route": "/projetos/", "label": "Práticas", "title": "Projetos de engenharia"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}, {"route": "/como-trabalhamos/", "label": "Método", "title": "Como trabalhamos"}],
+      "method_title": "Produção integrada ao projeto principal.",
+      "method_intro": "Referências comuns, responsáveis definidos e controle de revisões integram a produção à equipe contratante.",
+      "requirements": [
+        "Estimativa de volume, cadência, disciplinas, padrões internos e ferramentas desejadas."
+      ],
+      "market_intelligence_bridge": {
+        "before_link": "Para escolher empresas com objetos contratuais compatíveis com a sua capacidade técnica, o ",
+        "link_label": "mapeamento de clientes e parceiros",
+        "href": "/inteligencia/orgaos/",
+        "after_link": " entrega uma seleção documental por disciplina e território. Para produzir uma obrigação de projeto já definida, solicite a terceirização técnica nesta página."
+      },
+      "questions": [
+        {
+          "question": "Como funciona uma sequência recorrente de projetos?",
+          "answer": "A proposta combina disciplinas, volume, capacidade prevista, prioridades, marcos e revisões. Sua equipe pode conferir quais entregas estão incluídas e alinhar novas demandas, prazos e capacidade antes de acrescentá-las ao trabalho contratado."
+        },
+        {
+          "question": "Os arquivos seguem o padrão do meu escritório?",
+          "answer": "Os padrões fornecidos pelo contratante são alinhados antes do desenvolvimento: formatos, ferramentas, nomenclatura, bibliotecas, organização das pranchas e revisão. A proposta identifica o que será entregue e como será recebido pela equipe que integra o projeto."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projeto-estrutural-concreto-armado/",
+          "label": "Sistema",
+          "title": "Projeto estrutural em concreto armado"
+        },
+        {
+          "route": "/projeto-estrutura-metalica/",
+          "label": "Sistema",
+          "title": "Projeto de estrutura metálica"
+        },
+        {
+          "route": "/projeto-eletrico/",
+          "label": "Disciplina",
+          "title": "Projeto elétrico"
+        },
+        {
+          "route": "/projeto-hidrossanitario/",
+          "label": "Disciplina",
+          "title": "Projeto hidrossanitário"
+        },
+        {
+          "route": "/projetos/",
+          "label": "Práticas",
+          "title": "Projetos de engenharia"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        },
+        {
+          "route": "/como-trabalhamos/",
+          "label": "Método",
+          "title": "Como trabalhamos"
+        }
+      ],
       "service_type": "Terceirização de projetos de engenharia"
     },
     {
-      "id": "reinforced-concrete", "modified_at": "2026-11-11", "route": "/projeto-estrutural-concreto-armado/", "parent": "/projetos/", "breadcrumb": "Concreto armado", "title": "Projeto estrutural de concreto armado", "description": "Projeto estrutural de concreto armado com cálculo, formas, armações e fundações. Coordenação com arquitetura e instalações, conforme a fase contratada.",
-      "eyebrow": "Projeto estrutural", "h1": "Projeto estrutural de concreto armado, do cálculo ao detalhamento.", "lead": "A CONFENGE desenvolve o cálculo e o detalhamento de lajes, vigas, pilares, escadas e fundações em concreto armado. Formas, armações e memórias registram a solução e suas interfaces com arquitetura, instalações e execução.", "summary": "Formas, armaduras e memórias compartilham geometria, materiais e critérios de projeto. O detalhamento considera regiões críticas, interferências e condições de execução para orientar o trabalho da equipe de obra.", "cta": "Solicitar proposta", "hero_note": "Informe o tipo de obra e a fase necessária. A arquitetura e a sondagem disponíveis ajudam a definir a proposta e os dados que precisam ser obtidos.",
+      "id": "reinforced-concrete",
+      "modified_at": "2026-11-11",
+      "route": "/projeto-estrutural-concreto-armado/",
+      "parent": "/projetos/",
+      "breadcrumb": "Concreto armado",
+      "title": "Projeto estrutural de concreto armado",
+      "description": "Projeto estrutural de concreto armado com cálculo, formas, armações e fundações. Coordenação com arquitetura e instalações, conforme a fase contratada.",
+      "eyebrow": "Projeto estrutural",
+      "h1": "Projeto estrutural de concreto armado, do cálculo ao detalhamento.",
+      "lead": "A CONFENGE desenvolve o cálculo e o detalhamento de lajes, vigas, pilares, escadas e fundações em concreto armado. Formas, armações e memórias registram a solução e suas interfaces com arquitetura, instalações e execução.",
+      "summary": "Formas, armaduras e memórias compartilham geometria, materiais e critérios de projeto. O detalhamento considera regiões críticas, interferências e condições de execução para orientar o trabalho da equipe de obra.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Informe o tipo de obra e a fase necessária. A arquitetura e a sondagem disponíveis ajudam a definir a proposta e os dados que precisam ser obtidos.",
       "technical_panel": {
         "label": "Concreto armado",
         "title": "Análise estrutural e detalhamento coerentes.",
@@ -606,15 +1640,73 @@
           }
         ]
       },
-      "scope_title": "Cálculo e detalhamento para orientar a execução.", "scope_intro": "A análise global, as verificações locais e o detalhamento devem compartilhar materiais, geometria, ações e critérios.",
+      "scope_title": "Cálculo e detalhamento para orientar a execução.",
+      "scope_intro": "A análise global, as verificações locais e o detalhamento devem compartilhar materiais, geometria, ações e critérios.",
       "scope_groups": [
-        {"label": "Concepção", "title": "Sistema resistente", "body": "Arranjo de lajes, vigas, pilares, paredes, juntas e fundações compatível com vãos, estabilidade e construção.", "items": ["Caminho de cargas", "Estabilidade global", "Compatibilidade de deformações"]},
-        {"label": "Desenvolvimento", "title": "Análise e dimensionamento", "body": "Modelos, combinações e verificações adequados ao sistema e às informações disponíveis.", "items": ["Estados limites pertinentes", "Efeitos locais e globais", "Durabilidade e cobrimentos contextualizados"]},
-        {"label": "Documentação", "title": "Formas e armações", "body": "Geometrias, níveis, reservas, armaduras e detalhes organizados para coordenação e execução.", "items": ["Plantas de forma", "Detalhamento de armaduras", "Notas, listas e detalhes construtivos"]}
+        {
+          "label": "Concepção",
+          "title": "Sistema resistente",
+          "body": "Arranjo de lajes, vigas, pilares, paredes, juntas e fundações compatível com vãos, estabilidade e construção.",
+          "items": [
+            "Caminho de cargas",
+            "Estabilidade global",
+            "Compatibilidade de deformações"
+          ]
+        },
+        {
+          "label": "Desenvolvimento",
+          "title": "Análise e dimensionamento",
+          "body": "Modelos, combinações e verificações adequados ao sistema e às informações disponíveis.",
+          "items": [
+            "Estados limites pertinentes",
+            "Efeitos locais e globais",
+            "Durabilidade e cobrimentos contextualizados"
+          ]
+        },
+        {
+          "label": "Documentação",
+          "title": "Formas e armações",
+          "body": "Geometrias, níveis, reservas, armaduras e detalhes organizados para coordenação e execução.",
+          "items": [
+            "Plantas de forma",
+            "Detalhamento de armaduras",
+            "Notas, listas e detalhes construtivos"
+          ]
+        }
       ],
-      "deliverables": [{"title": "Critérios e memória estrutural", "body": "Sistema, materiais, ações, combinações, hipóteses e verificações documentados conforme a fase.", "use": "conferir a coerência entre concepção e dimensionamento"}, {"title": "Plantas de forma", "body": "Geometria, níveis, seções, elementos, reservas e referências de execução.", "use": "coordenar arquitetura, instalações, escoramento e quantitativos"}, {"title": "Detalhamento de armaduras", "body": "Armaduras, ancoragens, emendas e regiões especiais representadas para os elementos do escopo.", "use": "orientar montagem e conferência no nível contratado"}],
-      "interfaces_title": "Arquitetura, instalações e estrutura compatibilizadas.", "interfaces_intro": "Alterações de arquitetura e instalações são avaliadas quanto aos efeitos na geometria, nas ações e no detalhamento estrutural.",
-      "interfaces": [{"title": "Arquitetura", "body": "Vãos, balanços, escadas, fachadas, níveis e mudanças de uso influenciam o sistema e as deformações."}, {"title": "Instalações", "body": "Furos, shafts, equipamentos, piscinas e reservatórios precisam de posição e carga confirmadas."}, {"title": "Geotecnia e obra", "body": "Sondagens, vizinhança, método construtivo, juntas e sequência afetam fundações e detalhamento."}],
+      "deliverables": [
+        {
+          "title": "Critérios e memória estrutural",
+          "body": "Sistema, materiais, ações, combinações, hipóteses e verificações documentados conforme a fase.",
+          "use": "conferir a coerência entre concepção e dimensionamento"
+        },
+        {
+          "title": "Plantas de forma",
+          "body": "Geometria, níveis, seções, elementos, reservas e referências de execução.",
+          "use": "coordenar arquitetura, instalações, escoramento e quantitativos"
+        },
+        {
+          "title": "Detalhamento de armaduras",
+          "body": "Armaduras, ancoragens, emendas e regiões especiais representadas para os elementos do escopo.",
+          "use": "orientar montagem e conferência no nível contratado"
+        }
+      ],
+      "interfaces_title": "Arquitetura, instalações e estrutura compatibilizadas.",
+      "interfaces_intro": "Alterações de arquitetura e instalações são avaliadas quanto aos efeitos na geometria, nas ações e no detalhamento estrutural.",
+      "interfaces": [
+        {
+          "title": "Arquitetura",
+          "body": "Vãos, balanços, escadas, fachadas, níveis e mudanças de uso influenciam o sistema e as deformações."
+        },
+        {
+          "title": "Instalações",
+          "body": "Furos, shafts, equipamentos, piscinas e reservatórios precisam de posição e carga confirmadas."
+        },
+        {
+          "title": "Geotecnia e obra",
+          "body": "Sondagens, vizinhança, método construtivo, juntas e sequência afetam fundações e detalhamento."
+        }
+      ],
       "technical_review": {
         "title": "O detalhamento traduz as decisões do cálculo em condições de execução.",
         "body": "A consistência entre modelo, formas e armações é central para desenvolver o projeto. A conferência abrange as hipóteses estruturais e as condições de montagem e concretagem dos elementos.",
@@ -635,14 +1727,54 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Do sistema resistente às peças executivas.", "method_intro": "O detalhamento conserva o vínculo com as hipóteses do modelo e com as decisões de coordenação.",
-      "requirements": ["Arquitetura, levantamento ou modelo, sondagens disponíveis e quadro de cargas ou usos especiais."],
-      "related": [{"route": "/projetos/estruturas/", "label": "Prática", "title": "Projetos estruturais"}, {"route": "/projeto-estrutura-metalica/", "label": "Outro sistema", "title": "Estruturas metálicas"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}],
+      "method_title": "Do sistema resistente às peças executivas.",
+      "method_intro": "O detalhamento conserva o vínculo com as hipóteses do modelo e com as decisões de coordenação.",
+      "requirements": [
+        "Arquitetura, levantamento ou modelo, sondagens disponíveis e quadro de cargas ou usos especiais."
+      ],
+      "questions": [
+        {
+          "question": "Por que arquitetura e informações do solo são solicitadas?",
+          "answer": "A arquitetura orienta vãos, níveis, uso e posição dos elementos. As informações do solo sustentam a definição das fundações. Você pode iniciar a conversa com os documentos existentes; a proposta identifica os dados adicionais necessários para desenvolver o projeto."
+        },
+        {
+          "question": "O que diferencia plantas de forma e detalhamento de armaduras?",
+          "answer": "As plantas de forma apresentam a geometria, os níveis e as dimensões dos elementos. O detalhamento de armaduras apresenta barras, posições, ancoragens e emendas dos elementos contratados. São peças complementares, relacionadas à mesma solução estrutural e à fase de desenvolvimento."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/estruturas/",
+          "label": "Prática",
+          "title": "Projetos estruturais"
+        },
+        {
+          "route": "/projeto-estrutura-metalica/",
+          "label": "Outro sistema",
+          "title": "Estruturas metálicas"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        }
+      ],
       "service_type": "Projeto estrutural de concreto armado"
     },
     {
-      "id": "steel-structure", "modified_at": "2026-11-11", "route": "/projeto-estrutura-metalica/", "parent": "/projetos/", "breadcrumb": "Estrutura metálica", "title": "Projeto de estrutura metálica", "description": "Projeto de estrutura metálica para coberturas, mezaninos e estruturas industriais. Cálculo, ligações, desenhos e interfaces de fabricação e montagem.",
-      "eyebrow": "Projeto estrutural", "h1": "Projeto de estrutura metálica com cálculo e detalhamento.", "lead": "A CONFENGE elabora projetos de estruturas metálicas para coberturas, mezaninos, passarelas e estruturas industriais. O trabalho relaciona estabilidade, perfis, ligações e desenhos às condições de fabricação e montagem.", "summary": "O projeto coordena o comportamento da estrutura com ligações, apoios e condições de montagem. As peças de entrega são definidas conforme a divisão de responsabilidades entre projeto estrutural e detalhamento de fabricação.", "cta": "Solicitar proposta", "hero_note": "Conte o uso da estrutura, os vãos e o local da obra, mesmo com dados iniciais parciais. Definimos a fase e o nível de detalhamento na proposta.",
+      "id": "steel-structure",
+      "modified_at": "2026-11-11",
+      "route": "/projeto-estrutura-metalica/",
+      "parent": "/projetos/",
+      "breadcrumb": "Estrutura metálica",
+      "title": "Projeto de estrutura metálica",
+      "description": "Projeto de estrutura metálica para coberturas, mezaninos e estruturas industriais. Cálculo, ligações, desenhos e interfaces de fabricação e montagem.",
+      "eyebrow": "Projeto estrutural",
+      "h1": "Projeto de estrutura metálica com cálculo e detalhamento.",
+      "lead": "A CONFENGE elabora projetos de estruturas metálicas para coberturas, mezaninos, passarelas e estruturas industriais. O trabalho relaciona estabilidade, perfis, ligações e desenhos às condições de fabricação e montagem.",
+      "summary": "O projeto coordena o comportamento da estrutura com ligações, apoios e condições de montagem. As peças de entrega são definidas conforme a divisão de responsabilidades entre projeto estrutural e detalhamento de fabricação.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Conte o uso da estrutura, os vãos e o local da obra, mesmo com dados iniciais parciais. Definimos a fase e o nível de detalhamento na proposta.",
       "technical_panel": {
         "label": "Estruturas metálicas",
         "title": "Estabilidade, ligações e montagem.",
@@ -662,15 +1794,73 @@
           }
         ]
       },
-      "scope_title": "A ligação e a montagem fazem parte da concepção.", "scope_intro": "Escolhas de perfil só fazem sentido dentro do caminho de cargas, da estabilidade, da fabricação e das restrições de obra.",
+      "scope_title": "A ligação e a montagem fazem parte da concepção.",
+      "scope_intro": "Escolhas de perfil só fazem sentido dentro do caminho de cargas, da estabilidade, da fabricação e das restrições de obra.",
       "scope_groups": [
-        {"label": "Sistema", "title": "Geometria e estabilidade", "body": "Arranjo de pórticos, treliças, contraventamentos e diafragmas para ações verticais e horizontais.", "items": ["Caminho de cargas", "Estabilidade global e local", "Deslocamentos e vibrações pertinentes"]},
-        {"label": "Conexões", "title": "Ligações e bases", "body": "Transferência de esforços, rigidez, tolerâncias, acesso e sequência de montagem incorporados aos detalhes.", "items": ["Ligações parafusadas ou soldadas conforme o sistema", "Chapas de base e chumbadores", "Interfaces com concreto e elementos mistos"]},
-        {"label": "Produção", "title": "Fabricação e montagem", "body": "Documentação alinhada ao nível de detalhamento contratado e às informações do fabricante ou montador.", "items": ["Desenhos gerais e detalhes", "Listas de materiais", "Premissas de transporte, içamento e montagem"]}
+        {
+          "label": "Sistema",
+          "title": "Geometria e estabilidade",
+          "body": "Arranjo de pórticos, treliças, contraventamentos e diafragmas para ações verticais e horizontais.",
+          "items": [
+            "Caminho de cargas",
+            "Estabilidade global e local",
+            "Deslocamentos e vibrações pertinentes"
+          ]
+        },
+        {
+          "label": "Conexões",
+          "title": "Ligações e bases",
+          "body": "Transferência de esforços, rigidez, tolerâncias, acesso e sequência de montagem incorporados aos detalhes.",
+          "items": [
+            "Ligações parafusadas ou soldadas conforme o sistema",
+            "Chapas de base e chumbadores",
+            "Interfaces com concreto e elementos mistos"
+          ]
+        },
+        {
+          "label": "Produção",
+          "title": "Fabricação e montagem",
+          "body": "Documentação alinhada ao nível de detalhamento contratado e às informações do fabricante ou montador.",
+          "items": [
+            "Desenhos gerais e detalhes",
+            "Listas de materiais",
+            "Premissas de transporte, içamento e montagem"
+          ]
+        }
       ],
-      "deliverables": [{"title": "Modelo e memória de cálculo", "body": "Materiais, ações, combinações, imperfeições, verificações e resultados organizados para o sistema.", "use": "conferir a relação entre concepção, perfis e estabilidade"}, {"title": "Desenhos de conjunto", "body": "Eixos, níveis, perfis, contraventamentos, bases e referências de ligação.", "use": "coordenar arquitetura, fundações, equipamentos e montagem"}, {"title": "Detalhes e listas", "body": "Ligações, chapas, parafusos, soldas e materiais conforme a fronteira contratada entre projeto e fabricação.", "use": "reduzir ambiguidades de produção sem confundir níveis de detalhamento"}],
-      "interfaces_title": "Ligações, fundações e fabricação coordenadas.", "interfaces_intro": "Responsabilidades entre projeto estrutural, detalhamento de fabricação, fundações e montagem precisam estar expressas.",
-      "interfaces": [{"title": "Arquitetura e fechamento", "body": "Modulação, fachadas, cobertura, vedações e tolerâncias influenciam geometria, deformações e detalhes."}, {"title": "Equipamentos e instalações", "body": "Cargas dinâmicas, suportes, passarelas, dutos e bandejas exigem posições e critérios conhecidos."}, {"title": "Fabricação, montagem e base", "body": "Emendas, acesso, transporte, içamento, chumbadores e sequência precisam fechar com fornecedores e concreto."}],
+      "deliverables": [
+        {
+          "title": "Modelo e memória de cálculo",
+          "body": "Materiais, ações, combinações, imperfeições, verificações e resultados organizados para o sistema.",
+          "use": "conferir a relação entre concepção, perfis e estabilidade"
+        },
+        {
+          "title": "Desenhos de conjunto",
+          "body": "Eixos, níveis, perfis, contraventamentos, bases e referências de ligação.",
+          "use": "coordenar arquitetura, fundações, equipamentos e montagem"
+        },
+        {
+          "title": "Detalhes e listas",
+          "body": "Ligações, chapas, parafusos, soldas e materiais conforme a fronteira contratada entre projeto e fabricação.",
+          "use": "reduzir ambiguidades de produção sem confundir níveis de detalhamento"
+        }
+      ],
+      "interfaces_title": "Ligações, fundações e fabricação coordenadas.",
+      "interfaces_intro": "Responsabilidades entre projeto estrutural, detalhamento de fabricação, fundações e montagem precisam estar expressas.",
+      "interfaces": [
+        {
+          "title": "Arquitetura e fechamento",
+          "body": "Modulação, fachadas, cobertura, vedações e tolerâncias influenciam geometria, deformações e detalhes."
+        },
+        {
+          "title": "Equipamentos e instalações",
+          "body": "Cargas dinâmicas, suportes, passarelas, dutos e bandejas exigem posições e critérios conhecidos."
+        },
+        {
+          "title": "Fabricação, montagem e base",
+          "body": "Emendas, acesso, transporte, içamento, chumbadores e sequência precisam fechar com fornecedores e concreto."
+        }
+      ],
       "technical_review": {
         "title": "O sistema estrutural precisa ser compatível com a fabricação e a montagem.",
         "body": "Perfis, ligações e apoios são desenvolvidos em conjunto. A proposta define a documentação de projeto e o detalhamento necessário para integrar fabricação e execução ao escopo.",
@@ -691,14 +1881,54 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Conceber para resistir, fabricar e montar.", "method_intro": "O desenvolvimento mantém compatíveis o modelo analítico, as ligações e a realidade de produção.",
-      "requirements": ["Geometria, cargas de equipamentos, ambiente, interfaces com fundações e restrições de fabricação ou montagem."],
-      "related": [{"route": "/projetos/estruturas/", "label": "Prática", "title": "Projetos estruturais"}, {"route": "/projeto-estrutural-concreto-armado/", "label": "Outro sistema", "title": "Concreto armado"}, {"route": "/terceirizacao-projetos-engenharia/", "label": "Forma de contratação", "title": "Terceirização de projetos"}],
+      "method_title": "Conceber para resistir, fabricar e montar.",
+      "method_intro": "O desenvolvimento mantém compatíveis o modelo analítico, as ligações e a realidade de produção.",
+      "requirements": [
+        "Geometria, cargas de equipamentos, ambiente, interfaces com fundações e restrições de fabricação ou montagem."
+      ],
+      "questions": [
+        {
+          "question": "O projeto estrutural já inclui todos os desenhos de fabricação?",
+          "answer": "O projeto estrutural e o detalhamento de fabricação têm níveis de informação diferentes. A proposta identifica desenhos de conjunto, ligações, listas e detalhes incluídos, além dos dados que dependem do fabricante. Essa divisão é alinhada antes de produzir as peças."
+        },
+        {
+          "question": "Quais informações do fabricante e dos equipamentos precisam ser alinhadas?",
+          "answer": "Dimensões, cargas dos equipamentos, apoios, restrições de transporte e condições de montagem influenciam o projeto. Registramos as informações disponíveis e os pontos que dependem dos fornecedores, com responsáveis e etapas definidos para o desenvolvimento."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/estruturas/",
+          "label": "Prática",
+          "title": "Projetos estruturais"
+        },
+        {
+          "route": "/projeto-estrutural-concreto-armado/",
+          "label": "Outro sistema",
+          "title": "Concreto armado"
+        },
+        {
+          "route": "/terceirizacao-projetos-engenharia/",
+          "label": "Forma de contratação",
+          "title": "Terceirização de projetos"
+        }
+      ],
       "service_type": "Projeto de estrutura metálica"
     },
     {
-      "id": "electrical-project", "modified_at": "2026-11-11", "route": "/projeto-eletrico/", "parent": "/projetos/", "breadcrumb": "Projeto elétrico", "title": "Projeto elétrico: dimensionamento, plantas e diagramas", "description": "Projeto elétrico com levantamento de cargas, dimensionamento, plantas, diagramas e especificações para edificações e indústria. Solicite uma proposta.",
-      "eyebrow": "Projeto de instalações", "h1": "Projeto elétrico: demanda, distribuição e proteção.", "lead": "A CONFENGE elabora projetos elétricos para edificações, instalações industriais e infraestrutura. O desenvolvimento reúne estudo das demandas, distribuição, proteção e documentação para implantação dos sistemas contratados.", "summary": "O escopo pode envolver baixa, média ou alta tensão, entrada de energia, subestação, distribuição, iluminação, emergência, SPDA, aterramento e interfaces com telecomunicações, automação e sistemas especiais.", "cta": "Solicitar proposta", "hero_note": "Informe o uso e a área do empreendimento, o município e a fase desejada. Plantas e cargas conhecidas ajudam a preparar a proposta.",
+      "id": "electrical-project",
+      "modified_at": "2026-11-11",
+      "route": "/projeto-eletrico/",
+      "parent": "/projetos/",
+      "breadcrumb": "Projeto elétrico",
+      "title": "Projeto elétrico: dimensionamento, plantas e diagramas",
+      "description": "Projeto elétrico com levantamento de cargas, dimensionamento, plantas, diagramas e especificações para edificações e indústria. Solicite uma proposta.",
+      "eyebrow": "Projeto de instalações",
+      "h1": "Projeto elétrico: demanda, distribuição e proteção.",
+      "lead": "A CONFENGE elabora projetos elétricos para edificações, instalações industriais e infraestrutura. O desenvolvimento reúne estudo das demandas, distribuição, proteção e documentação para implantação dos sistemas contratados.",
+      "summary": "O escopo pode envolver baixa, média ou alta tensão, entrada de energia, subestação, distribuição, iluminação, emergência, SPDA, aterramento e interfaces com telecomunicações, automação e sistemas especiais.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Informe o uso e a área do empreendimento, o município e a fase desejada. Plantas e cargas conhecidas ajudam a preparar a proposta.",
       "technical_panel": {
         "label": "Instalações elétricas",
         "title": "Demanda, distribuição e proteção.",
@@ -718,15 +1948,73 @@
           }
         ]
       },
-      "scope_title": "A arquitetura elétrica começa pelo balanço de energia e pela continuidade necessária.", "scope_intro": "O projeto relaciona demanda, fontes, proteção, distribuição, segurança e pontos de uso ao espaço e à operação.",
+      "scope_title": "A arquitetura elétrica começa pelo balanço de energia e pela continuidade necessária.",
+      "scope_intro": "O projeto relaciona demanda, fontes, proteção, distribuição, segurança e pontos de uso ao espaço e à operação.",
       "scope_groups": [
-        {"label": "Energia", "title": "Origem e distribuição", "body": "Ponto de entrega, transformação, geração, distribuição e quadros definidos conforme cargas e critérios de continuidade.", "items": ["Entradas e subestações quando aplicáveis", "Alimentadores, quadros e circuitos", "Geração de emergência e fontes especiais"]},
-        {"label": "Uso", "title": "Iluminação e força", "body": "Pontos, circuitos e comandos relacionados a ocupação, equipamentos, manutenção e desempenho pretendido.", "items": ["Iluminação normal e de emergência", "Tomadas e cargas específicas", "Comandos e interfaces de automação"]},
-        {"label": "Proteção", "title": "Segurança e equipotencialização", "body": "Medidas de proteção articuladas com aterramento, SPDA, seletividade e características da instalação.", "items": ["Proteções contra sobrecorrente e choques", "Aterramento e equipotencialização", "SPDA e coordenação de proteções quando no escopo"]}
+        {
+          "label": "Energia",
+          "title": "Origem e distribuição",
+          "body": "Ponto de entrega, transformação, geração, distribuição e quadros definidos conforme cargas e critérios de continuidade.",
+          "items": [
+            "Entradas e subestações quando aplicáveis",
+            "Alimentadores, quadros e circuitos",
+            "Geração de emergência e fontes especiais"
+          ]
+        },
+        {
+          "label": "Uso",
+          "title": "Iluminação e força",
+          "body": "Pontos, circuitos e comandos relacionados a ocupação, equipamentos, manutenção e desempenho pretendido.",
+          "items": [
+            "Iluminação normal e de emergência",
+            "Tomadas e cargas específicas",
+            "Comandos e interfaces de automação"
+          ]
+        },
+        {
+          "label": "Proteção",
+          "title": "Segurança e equipotencialização",
+          "body": "Medidas de proteção articuladas com aterramento, SPDA, seletividade e características da instalação.",
+          "items": [
+            "Proteções contra sobrecorrente e choques",
+            "Aterramento e equipotencialização",
+            "SPDA e coordenação de proteções quando no escopo"
+          ]
+        }
       ],
-      "deliverables": [{"title": "Balanço de cargas e critérios", "body": "Cargas, demanda, simultaneidade, fontes, níveis de tensão e critérios de continuidade registrados.", "use": "dimensionar a arquitetura elétrica e revisar alterações de programa"}, {"title": "Diagramas e plantas", "body": "Unifilares, distribuição, pontos, rotas, quadros, aterramento e detalhes conforme o escopo.", "use": "coordenar, aprovar e executar a instalação"}, {"title": "Memórias, listas e especificações", "body": "Cálculos pertinentes, requisitos de componentes, listas e notas vinculados aos desenhos.", "use": "conferir proteção, fornecimento e compatibilidade entre peças"}],
-      "interfaces_title": "Cargas, espaços técnicos e proteções coordenados.", "interfaces_intro": "Equipamentos, arquitetura, estrutura, climatização, automação e concessionária fornecem entradas que alteram a solução elétrica.",
-      "interfaces": [{"title": "Equipamentos e processo", "body": "Potência, partida, harmônicos, criticidade e regime de operação precisam ser informados pelos responsáveis."}, {"title": "Arquitetura e estrutura", "body": "Salas, shafts, rotas, suportes, acessos e travessias devem ser reservados e coordenados."}, {"title": "Concessionária e sistemas especiais", "body": "Ponto de entrega, medição, telecomunicações, segurança, incêndio e automação mantêm limites de responsabilidade claros."}],
+      "deliverables": [
+        {
+          "title": "Balanço de cargas e critérios",
+          "body": "Cargas, demanda, simultaneidade, fontes, níveis de tensão e critérios de continuidade registrados.",
+          "use": "dimensionar a arquitetura elétrica e revisar alterações de programa"
+        },
+        {
+          "title": "Diagramas e plantas",
+          "body": "Unifilares, distribuição, pontos, rotas, quadros, aterramento e detalhes conforme o escopo.",
+          "use": "coordenar, aprovar e executar a instalação"
+        },
+        {
+          "title": "Memórias, listas e especificações",
+          "body": "Cálculos pertinentes, requisitos de componentes, listas e notas vinculados aos desenhos.",
+          "use": "conferir proteção, fornecimento e compatibilidade entre peças"
+        }
+      ],
+      "interfaces_title": "Cargas, espaços técnicos e proteções coordenados.",
+      "interfaces_intro": "Equipamentos, arquitetura, estrutura, climatização, automação e concessionária fornecem entradas que alteram a solução elétrica.",
+      "interfaces": [
+        {
+          "title": "Equipamentos e processo",
+          "body": "Potência, partida, harmônicos, criticidade e regime de operação precisam ser informados pelos responsáveis."
+        },
+        {
+          "title": "Arquitetura e estrutura",
+          "body": "Salas, shafts, rotas, suportes, acessos e travessias devem ser reservados e coordenados."
+        },
+        {
+          "title": "Concessionária e sistemas especiais",
+          "body": "Ponto de entrega, medição, telecomunicações, segurança, incêndio e automação mantêm limites de responsabilidade claros."
+        }
+      ],
       "technical_review": {
         "title": "A solução elétrica acompanha o funcionamento do empreendimento.",
         "body": "As decisões sobre alimentação, distribuição e proteção dependem das cargas e dos requisitos de operação. Os estudos e sistemas incluídos são definidos conforme o objeto e o nível de desenvolvimento.",
@@ -747,14 +2035,54 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Demanda, arquitetura do sistema, dimensionamento e documentação.", "method_intro": "Dimensionamento, rotas e espaços técnicos são desenvolvidos em conjunto com as condições de operação.",
-      "requirements": ["Relação de cargas e equipamentos, tipo de fornecimento, dados da concessionária e criticidade de operação."],
-      "related": [{"route": "/projetos/instalacoes/", "label": "Prática", "title": "Projetos de instalações"}, {"route": "/projeto-hidrossanitario/", "label": "Outra disciplina", "title": "Projeto hidrossanitário"}, {"route": "/projetos/coordenacao-multidisciplinar/", "label": "Integração", "title": "Coordenação multidisciplinar"}],
+      "method_title": "Demanda, arquitetura do sistema, dimensionamento e documentação.",
+      "method_intro": "Dimensionamento, rotas e espaços técnicos são desenvolvidos em conjunto com as condições de operação.",
+      "requirements": [
+        "Relação de cargas e equipamentos, tipo de fornecimento, dados da concessionária e criticidade de operação."
+      ],
+      "questions": [
+        {
+          "question": "SPDA, telecomunicações e automação fazem parte de qualquer projeto elétrico?",
+          "answer": "Esses sistemas podem ser coordenados com o projeto elétrico, mas precisam estar identificados no escopo. A proposta informa quais instalações serão desenvolvidas, suas interfaces e os documentos previstos para cada uma, conforme o uso do empreendimento."
+        },
+        {
+          "question": "Contratar o projeto também inclui executar a instalação e pedir a ligação?",
+          "answer": "A contratação de projeto produz a documentação das instalações definidas. Execução, fornecimento de materiais e procedimentos junto à concessionária têm responsabilidades próprias. A proposta identifica a atuação da CONFENGE e os documentos necessários para que essas etapas possam ser conduzidas."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/instalacoes/",
+          "label": "Prática",
+          "title": "Projetos de instalações"
+        },
+        {
+          "route": "/projeto-hidrossanitario/",
+          "label": "Outra disciplina",
+          "title": "Projeto hidrossanitário"
+        },
+        {
+          "route": "/projetos/coordenacao-multidisciplinar/",
+          "label": "Integração",
+          "title": "Coordenação multidisciplinar"
+        }
+      ],
       "service_type": "Projeto de instalações elétricas"
     },
     {
-      "id": "plumbing-project", "modified_at": "2026-11-11", "route": "/projeto-hidrossanitario/", "parent": "/projetos/", "breadcrumb": "Projeto hidrossanitário", "title": "Projeto hidrossanitário: água, esgoto e águas pluviais", "description": "Projeto hidrossanitário com dimensionamento de água, esgoto e águas pluviais. Plantas, isométricos, memórias e especificações para a fase contratada.",
-      "eyebrow": "Projeto de instalações", "h1": "Projeto hidrossanitário de água, esgoto e águas pluviais.", "lead": "A CONFENGE desenvolve projetos de água, esgoto sanitário e águas pluviais, integrando dimensionamento e traçados à arquitetura e à implantação. Plantas, isométricos e memórias registram os critérios para execução e operação dos sistemas.", "summary": "O escopo pode reunir água fria e quente, esgoto sanitário, ventilação, águas pluviais, drenagem, recalque, gás e sistemas relacionados ao empreendimento.", "cta": "Solicitar proposta", "hero_note": "Informe o uso, a área, o município e a fase necessária. Comece com as plantas e os dados disponíveis para definirmos a proposta.",
+      "id": "plumbing-project",
+      "modified_at": "2026-11-11",
+      "route": "/projeto-hidrossanitario/",
+      "parent": "/projetos/",
+      "breadcrumb": "Projeto hidrossanitário",
+      "title": "Projeto hidrossanitário: água, esgoto e águas pluviais",
+      "description": "Projeto hidrossanitário com dimensionamento de água, esgoto e águas pluviais. Plantas, isométricos, memórias e especificações para a fase contratada.",
+      "eyebrow": "Projeto de instalações",
+      "h1": "Projeto hidrossanitário de água, esgoto e águas pluviais.",
+      "lead": "A CONFENGE desenvolve projetos de água, esgoto sanitário e águas pluviais, integrando dimensionamento e traçados à arquitetura e à implantação. Plantas, isométricos e memórias registram os critérios para execução e operação dos sistemas.",
+      "summary": "O escopo pode reunir água fria e quente, esgoto sanitário, ventilação, águas pluviais, drenagem, recalque, gás e sistemas relacionados ao empreendimento.",
+      "cta": "Solicitar proposta",
+      "hero_note": "Informe o uso, a área, o município e a fase necessária. Comece com as plantas e os dados disponíveis para definirmos a proposta.",
       "technical_panel": {
         "label": "Sistemas hidrossanitários",
         "title": "Abastecimento, escoamento e manutenção.",
@@ -774,15 +2102,73 @@
           }
         ]
       },
-      "scope_title": "Vazões, pressões e condições de escoamento.", "scope_intro": "O projeto relaciona consumos, pressões, vazões, níveis, manutenção e lançamento às condições concretas do empreendimento.",
+      "scope_title": "Vazões, pressões e condições de escoamento.",
+      "scope_intro": "O projeto relaciona consumos, pressões, vazões, níveis, manutenção e lançamento às condições concretas do empreendimento.",
       "scope_groups": [
-        {"label": "Abastecimento", "title": "Água e reserva", "body": "Entrada, medição, reservação, pressurização, aquecimento e distribuição conforme demanda e disponibilidade.", "items": ["Água fria e quente", "Reservatórios e recalque", "Medição e setorização quando aplicáveis"]},
-        {"label": "Coleta", "title": "Esgoto e ventilação", "body": "Aparelhos, ramais, prumadas, ventilação, inspeção e conexão externa coordenados com níveis e espaços técnicos.", "items": ["Esgoto sanitário", "Ventilação do sistema", "Estações elevatórias quando necessárias"]},
-        {"label": "Chuva", "title": "Águas pluviais e drenagem", "body": "Captação, condução, retenção e lançamento relacionados a coberturas, áreas externas, cotas e condicionantes locais.", "items": ["Coberturas e terraços", "Áreas externas e subsolos", "Retenção, infiltração ou lançamento conforme o caso"]}
+        {
+          "label": "Abastecimento",
+          "title": "Água e reserva",
+          "body": "Entrada, medição, reservação, pressurização, aquecimento e distribuição conforme demanda e disponibilidade.",
+          "items": [
+            "Água fria e quente",
+            "Reservatórios e recalque",
+            "Medição e setorização quando aplicáveis"
+          ]
+        },
+        {
+          "label": "Coleta",
+          "title": "Esgoto e ventilação",
+          "body": "Aparelhos, ramais, prumadas, ventilação, inspeção e conexão externa coordenados com níveis e espaços técnicos.",
+          "items": [
+            "Esgoto sanitário",
+            "Ventilação do sistema",
+            "Estações elevatórias quando necessárias"
+          ]
+        },
+        {
+          "label": "Chuva",
+          "title": "Águas pluviais e drenagem",
+          "body": "Captação, condução, retenção e lançamento relacionados a coberturas, áreas externas, cotas e condicionantes locais.",
+          "items": [
+            "Coberturas e terraços",
+            "Áreas externas e subsolos",
+            "Retenção, infiltração ou lançamento conforme o caso"
+          ]
+        }
       ],
-      "deliverables": [{"title": "Demandas e critérios hidráulicos", "body": "Consumos, contribuições, pressões, vazões, cotas, disponibilidade e critérios de operação registrados.", "use": "dimensionar sistemas e identificar dependências externas"}, {"title": "Plantas, esquemas e detalhes", "body": "Redes, prumadas, isométricos, reservação, dispositivos e detalhes conforme a fase contratada.", "use": "coordenar rotas, reservas, execução e manutenção"}, {"title": "Memórias e especificações", "body": "Cálculos, materiais, componentes, listas e requisitos vinculados às peças gráficas.", "use": "conferir dimensionamento e compatibilidade do fornecimento"}],
-      "interfaces_title": "Conexões, níveis e acessos para manutenção.", "interfaces_intro": "Arquitetura, estrutura, drenagem externa e concessionárias precisam compartilhar cotas e pontos de conexão confiáveis.",
-      "interfaces": [{"title": "Arquitetura", "body": "Ambientes molhados, shafts, forros, acessos e manutenção condicionam os traçados e dispositivos."}, {"title": "Estrutura", "body": "Furos, rebaixos, reservatórios, bombas e suportes precisam ser previstos sem improviso em obra."}, {"title": "Infraestrutura externa", "body": "Cotas de chegada e saída, pressão disponível, redes públicas e dispositivos do lote definem conexões e recalques."}],
+      "deliverables": [
+        {
+          "title": "Demandas e critérios hidráulicos",
+          "body": "Consumos, contribuições, pressões, vazões, cotas, disponibilidade e critérios de operação registrados.",
+          "use": "dimensionar sistemas e identificar dependências externas"
+        },
+        {
+          "title": "Plantas, esquemas e detalhes",
+          "body": "Redes, prumadas, isométricos, reservação, dispositivos e detalhes conforme a fase contratada.",
+          "use": "coordenar rotas, reservas, execução e manutenção"
+        },
+        {
+          "title": "Memórias e especificações",
+          "body": "Cálculos, materiais, componentes, listas e requisitos vinculados às peças gráficas.",
+          "use": "conferir dimensionamento e compatibilidade do fornecimento"
+        }
+      ],
+      "interfaces_title": "Conexões, níveis e acessos para manutenção.",
+      "interfaces_intro": "Arquitetura, estrutura, drenagem externa e concessionárias precisam compartilhar cotas e pontos de conexão confiáveis.",
+      "interfaces": [
+        {
+          "title": "Arquitetura",
+          "body": "Ambientes molhados, shafts, forros, acessos e manutenção condicionam os traçados e dispositivos."
+        },
+        {
+          "title": "Estrutura",
+          "body": "Furos, rebaixos, reservatórios, bombas e suportes precisam ser previstos sem improviso em obra."
+        },
+        {
+          "title": "Infraestrutura externa",
+          "body": "Cotas de chegada e saída, pressão disponível, redes públicas e dispositivos do lote definem conexões e recalques."
+        }
+      ],
       "technical_review": {
         "title": "O dimensionamento precisa fechar com a implantação e a operação.",
         "body": "Os sistemas são desenvolvidos a partir das condições de consumo, escoamento e manutenção. O projeto relaciona cálculos e traçados às limitações do terreno, da edificação e das conexões externas.",
@@ -803,9 +2189,38 @@
         ],
         "link_label": "Ver o conteúdo das entregas"
       },
-      "method_title": "Demanda, níveis, traçados, dimensionamento e coordenação.", "method_intro": "Traçados e dimensionamento consideram as condições de conexão, os níveis disponíveis e o acesso para manutenção.",
-      "requirements": ["Pontos de conexão, pressões ou cotas disponíveis, usos, ocupação e equipamentos que consomem ou descarregam fluidos."],
-      "related": [{"route": "/projetos/instalacoes/", "label": "Prática", "title": "Projetos de instalações"}, {"route": "/projeto-eletrico/", "label": "Outra disciplina", "title": "Projeto elétrico"}, {"route": "/projetos/infraestrutura/", "label": "Conexões externas", "title": "Projetos de infraestrutura"}],
+      "method_title": "Demanda, níveis, traçados, dimensionamento e coordenação.",
+      "method_intro": "Traçados e dimensionamento consideram as condições de conexão, os níveis disponíveis e o acesso para manutenção.",
+      "requirements": [
+        "Pontos de conexão, pressões ou cotas disponíveis, usos, ocupação e equipamentos que consomem ou descarregam fluidos."
+      ],
+      "questions": [
+        {
+          "question": "A instalação de gás está incluída no hidrossanitário?",
+          "answer": "A instalação de gás é identificada como sistema próprio quando fizer parte da contratação. A proposta delimita água, esgoto, águas pluviais e os sistemas adicionais necessários, com documentos e responsabilidades definidos para cada frente."
+        },
+        {
+          "question": "O que preciso informar sobre as conexões de água e esgoto?",
+          "answer": "Se disponíveis, informe os pontos de ligação, as cotas de entrada e saída, a pressão de abastecimento e as redes existentes. Esses dados ajudam a definir reservação, distribuição e escoamento. As informações ainda necessárias são relacionadas para orientar o desenvolvimento."
+        }
+      ],
+      "related": [
+        {
+          "route": "/projetos/instalacoes/",
+          "label": "Prática",
+          "title": "Projetos de instalações"
+        },
+        {
+          "route": "/projeto-eletrico/",
+          "label": "Outra disciplina",
+          "title": "Projeto elétrico"
+        },
+        {
+          "route": "/projetos/infraestrutura/",
+          "label": "Conexões externas",
+          "title": "Projetos de infraestrutura"
+        }
+      ],
       "service_type": "Projeto de instalações hidrossanitárias"
     }
   ]

@@ -891,6 +891,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL-CLOSED minify_public_js exception: {exc}", file=sys.stderr)
         return 2
 
+    # Verify the exact rendered metadata and local preview assets before hashing.
+    # Page owners supply title/description; this gate never rewrites the artifact.
+    from scripts.site.search_metadata import synchronize as verify_search_metadata
+
+    search_metadata = verify_search_metadata(ROOT / PUBLIC_DIR_NAME)
+    if not search_metadata["ok"]:
+        errors.append("search_metadata_artifact:" + json.dumps(search_metadata, ensure_ascii=False))
+
     # Responsive token wrappers affect extracted word boundaries. Derive the
     # final Article metadata after every HTML transform and before tree hashing.
     final_word_counts = sync_article_word_counts(ROOT / PUBLIC_DIR_NAME)
@@ -995,6 +1003,7 @@ def main(argv: list[str] | None = None) -> int:
         "turnstile": turnstile_config,
         "main_script_fingerprint": main_script_fingerprint,
         "responsive_html": responsive_html,
+        "search_metadata": search_metadata,
         "article_word_counts": {"final_metadata_updated": len(final_word_counts)},
         "public_artifact": {
             "assembled": True,

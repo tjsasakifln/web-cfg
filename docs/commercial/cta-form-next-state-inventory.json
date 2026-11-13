@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 294
+    "expected_declared_ctas": 295
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 42,
-    "declared_ctas": 294,
+    "declared_ctas": 295,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4286,8 +4286,8 @@
           "runtime_profile": "shared_lead_form_v1",
           "stage": "register_context",
           "commitment": "medium",
-          "submit_label": "Descrever minha situação",
-          "current_label": "Descrever minha situação",
+          "submit_label": "Enviar solicitação",
+          "current_label": "Enviar solicitação",
           "useful_next_state": "O protocolo confirma o registro da solicitação. A CONFENGE retorna para conversar sobre a necessidade e preparar a proposta.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "pre_form_value": "Conte sua necessidade e indique um canal para retorno. Você pode começar com as informações que já tiver.",
@@ -4369,6 +4369,21 @@
           "current_label": "Ver serviços",
           "useful_next_state": "Abre o destino declarado por “Ver serviços” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "home-residential-price",
+          "position": "hero",
+          "href": "/projetos-prontos/#monte-seu-projeto",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Projeto de casa: calcular por disciplina e prazo",
+          "useful_next_state": "Abre o simulador residencial para escolher área, disciplinas e prazo, antes de revisar a contratação.",
+          "actual_receipt": "Simulação local; a abertura não registra pedido, pagamento ou recibo.",
           "field_purpose": "not_applicable",
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [

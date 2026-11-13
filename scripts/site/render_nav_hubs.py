@@ -976,7 +976,9 @@ def render_pages() -> dict[str, str]:
         items=items,
         cluster="problemas",
     )
-    return out
+    from scripts.site.search_metadata import normalize_metadata_html
+
+    return {route: normalize_metadata_html(text, route) for route, text in out.items()}
 
 
 def run(write: bool) -> int:

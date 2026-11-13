@@ -178,7 +178,7 @@ function usefulSubmitLabel(profileId, current) {
   if (/^Registrar pedido de segunda leitura deste contrato$/i.test(current)) return "Pedir uma segunda leitura do contrato";
   if (!/^(?:Enviar solicitação|Enviar para análise|Registrar situação para triagem|Registrar contexto para revisão de encaixe|Registrar evento e identificar a prova faltante|Registrar decisão para indicar a entrega|Enviar minha situação|Enviar meu contexto|Enviar o que aconteceu|Enviar e ver a entrega indicada)$/i.test(current)) return current;
   const labels = {
-    general_triage: "Descrever minha situação",
+    general_triage: "Enviar solicitação",
     service_fit_review: "Descrever meu caso",
     case_evidence_review: "Contar o que aconteceu",
     delivery_selection: "Ver a entrega indicada para o meu caso",

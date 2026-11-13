@@ -203,7 +203,8 @@
             "delivery": "Conjunto de peças identificado por disciplina, finalidade e revisão, com responsabilidade técnica definida."
           }
         ]
-      }
+      },
+      "description": "Projetos estruturais, de instalações e infraestrutura coordenados com a arquitetura. Desenhos, cálculos, memoriais e especificações conforme a fase contratada."
     },
     {
       "route": "revisao-tecnica-projetos-engenharia",
@@ -580,7 +581,8 @@
             "label": "Exemplo demonstrativo de organização de apontamentos"
           }
         ]
-      }
+      },
+      "description": "Compatibilização de projetos: análise de interferências entre arquitetura, estruturas e instalações, com relatório de ocorrências e coordenação dos ajustes."
     },
     {
       "route": "quantitativos-orcamento-obras",
@@ -810,7 +812,8 @@
             "label": "Exemplo demonstrativo de rastreabilidade em infraestrutura"
           }
         ]
-      }
+      },
+      "description": "Levantamento de quantitativos e orçamento de obras públicas e privadas. Planilhas com memória de cálculo, composições e referências para comparar e contratar."
     },
     {
       "route": "inspecao-diagnostico-edificacoes",
@@ -819,7 +822,7 @@
       "description": "Inspeção e diagnóstico de edificações para fissuras, infiltrações, recebimento, reforma, manutenção e documentação do construído (as-built), com proposta definida para a decisão.",
       "sharing": {
         "title": "Inspeção e diagnóstico de edificações | CONFENGE",
-        "description": "Entenda quando contratar inspeção, investigação de causas ou projeto de intervenção e quais informações ajudam a compor a proposta."
+        "description": "Inspeção e diagnóstico de edificações para fissuras, infiltrações, recebimento, reforma, manutenção e documentação do construído (as-built), com proposta definida para a decisão."
       },
       "hero": {
         "eyebrow": "Condição registrada, causa investigada, providência orientada",
@@ -1076,8 +1079,8 @@
       "contact_id": "contato-assistencia",
       "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido.",
       "sharing": {
-        "title": "Assistência técnica pericial de engenharia | CONFENGE",
-        "description": "Entenda a atuação do assistente técnico da parte antes dos quesitos, na diligência e na análise do laudo, com proposta adequada à etapa do caso."
+        "title": "Assistência técnica em perícias de engenharia | CONFENGE",
+        "description": "Assistência técnica de engenharia para partes, condomínios, empresas e advogados: quesitos, diligência, análise de laudo e manifestação técnica com escopo definido."
       },
       "hero": {
         "eyebrow": "Engenharia para organizar a posição técnica da parte",
@@ -1625,11 +1628,11 @@
       "template_route": "inspecao-diagnostico-edificacoes",
       "journey": "outro",
       "asset_id": "condominium_engineering_editorial_route_v1",
-      "title": "Engenharia para condomínios: inspeção, perícia, reforma e manutenção | CONFENGE",
-      "description": "Engenharia para condomínios na Grande Florianópolis: escolha entre investigação de fissuras e infiltrações, assistência técnica em disputas e apoio a recebimento, reforma ou manutenção.",
+      "title": "Engenharia para condomínios: projetos e inspeção | CONFENGE",
+      "description": "Inspeção, diagnóstico, perícia, projetos e orçamento para condomínios. Atendimento presencial na Grande Florianópolis, com proposta para a necessidade do condomínio.",
       "sharing": {
-        "title": "Engenharia para condomínios | CONFENGE",
-        "description": "Um caminho para síndicos, conselhos e administradoras escolherem inspeção, assistência técnica, documentação, projeto ou orçamento conforme a situação."
+        "title": "Engenharia para condomínios: projetos e inspeção | CONFENGE",
+        "description": "Inspeção, diagnóstico, perícia, projetos e orçamento para condomínios. Atendimento presencial na Grande Florianópolis, com proposta para a necessidade do condomínio."
       },
       "hero": {
         "eyebrow": "Engenharia para a decisão do condomínio",
