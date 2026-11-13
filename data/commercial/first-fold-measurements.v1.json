@@ -1,15 +1,15 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-11-13T17:36:49.718Z",
+  "measured_at": "2026-11-13T18:17:52.170Z",
   "measured_on": "2026-11-13",
-  "commit_sha": "7832efb0abcb884d420d6d77cc90103bc37499d2",
+  "commit_sha": "82e3d9aec9f75876d23895df2f95bb9db52b7896",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
     "@control/scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
     "@control/scripts/site/measure_first_fold.mjs": "640885fc9f7a7ddfde0fc691e6689c951625ee35cba7d46f2c0360ace9d4a696",
-    "acompanhamento-contratos-obras/index.html": "96027d3937c1840a530a6167a464db53280038b6e26f97b8eaa0ee7907479557",
+    "acompanhamento-contratos-obras/index.html": "952e0371ae95edd03de0eaa2592d1adc06b1c5e491bb0146a3f2e92b5f5a2340",
     "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
     "assets/archivo-var-latin-b19be0f7.woff2": "b19be0f7c6fcf0139b8f1fa3061dcb28ff62ee420523127810f9a0a6796a6b0f",
     "assets/conteudos/como-contratar-projetos-complementares-mobile.svg": "78faf44bfd07b7505bde169bccdaecfc358a101cf30aba5025fb6312165adec6",
@@ -27,7 +27,7 @@
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
-    "atrasos-prorrogacao-obras-publicas/index.html": "5ed0172d225cc5b2a57f309d223fb9ec60f4ba5d806045e219cee46878f8a943",
+    "atrasos-prorrogacao-obras-publicas/index.html": "d6b50d79ec39df5b7f6135b68205df017189be1c9ce1509b45ded98e5e27d347",
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
     "bid-room-licitacoes-obras/index.html": "a1f06332e2f706de50ec3f9d557f83f3a9db7ec1764d2fea8843f4ad83b48410",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "e088423efbb0a72aad1a6af18751ea5ae9631a663c90ed5c65c04411ea905d54",
@@ -46,8 +46,8 @@
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
     "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "a121717ea695482a35427c437ede9f4e8c0125d818868aecb21bce7e8977573b",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
-    "defesa-margem-contratos-publicos/index.html": "61545a8ddc239a143c358dd8d637b3f9aa065e5d47ab3092568291d1613051a3",
-    "defesa-tecnica-contratos-publicos/index.html": "8c362354c28f83c1a019e721d1b8a8ee99a02a1aaf81373ad7938da244e2354d",
+    "defesa-margem-contratos-publicos/index.html": "509b1fcc009244fc18d65775fddb8978cea001d772e0abef3fdd952e6c74dd5a",
+    "defesa-tecnica-contratos-publicos/index.html": "69636bbe1fbdee07f1e433f895d2916bb654da5678b3c30f753af812875d6549",
     "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
     "diagnostico-b2g-expansao/index.html": "b5867cdbc90a082410580c4110b2e7dd06580909e6d132ee777d9005469a26cb",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
@@ -1906,7 +1906,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "61545a8ddc239a143c358dd8d637b3f9aa065e5d47ab3092568291d1613051a3",
+      "html_sha256": "509b1fcc009244fc18d65775fddb8978cea001d772e0abef3fdd952e6c74dd5a",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -2513,7 +2513,7 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "5ed0172d225cc5b2a57f309d223fb9ec60f4ba5d806045e219cee46878f8a943",
+      "html_sha256": "d6b50d79ec39df5b7f6135b68205df017189be1c9ce1509b45ded98e5e27d347",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -2921,7 +2921,7 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "8c362354c28f83c1a019e721d1b8a8ee99a02a1aaf81373ad7938da244e2354d",
+      "html_sha256": "69636bbe1fbdee07f1e433f895d2916bb654da5678b3c30f753af812875d6549",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
@@ -3335,7 +3335,7 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "96027d3937c1840a530a6167a464db53280038b6e26f97b8eaa0ee7907479557",
+      "html_sha256": "952e0371ae95edd03de0eaa2592d1adc06b1c5e491bb0146a3f2e92b5f5a2340",
       "measured_on": "2026-11-13",
       "viewports": {
         "1366x768": {
