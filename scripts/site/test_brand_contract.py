@@ -61,6 +61,7 @@ class _MetadataParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.in_head = False
         self.head_count = 0
+        self.head_end_count = 0
         self.metas: list[tuple[bool, list[tuple[str, str | None]]]] = []
 
     def handle_starttag(self, tag, attrs):
@@ -73,24 +74,37 @@ class _MetadataParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "head":
             self.in_head = False
+            self.head_end_count += 1
+
+
+def _unique_head_meta_content(html: str, key: str, *, attribute: str = "property") -> str:
+    """Leia um metadado único no head sem depender da ordem dos atributos."""
+    assert attribute in ("name", "property"), "unsupported metadata selector"
+    parser = _MetadataParser()
+    parser.feed(html)
+    parser.close()
+    assert parser.head_count == parser.head_end_count == 1, "expected exactly one complete head"
+    matches = [
+        (in_head, attrs)
+        for in_head, attrs in parser.metas
+        if (attribute, key) in attrs
+    ]
+    assert len(matches) == 1, f"expected exactly one {key}, got {len(matches)}"
+    in_head, attrs = matches[0]
+    assert in_head, f"{key} must be inside head"
+    assert [value for name, value in attrs if name == attribute] == [key]
+    other_attribute = "property" if attribute == "name" else "name"
+    assert not any(name == other_attribute for name, _ in attrs), f"ambiguous selector for {key}"
+    content = [value for name, value in attrs if name == "content"]
+    assert (
+        len(content) == 1 and isinstance(content[0], str) and content[0].strip()
+    ), f"missing or duplicate content for {key}"
+    return content[0]
 
 
 def _assert_unique_meta_content(html: str, property_name: str, expected: str) -> None:
     """A representação dos atributos pode variar; unicidade e valor são exatos."""
-    parser = _MetadataParser()
-    parser.feed(html)
-    parser.close()
-    assert parser.head_count == 1, "expected exactly one head"
-    matches = [
-        (in_head, attrs)
-        for in_head, attrs in parser.metas
-        if ("property", property_name) in attrs
-    ]
-    assert len(matches) == 1, f"expected exactly one {property_name}, got {len(matches)}"
-    in_head, attrs = matches[0]
-    assert in_head, f"{property_name} must be inside head"
-    assert [value for name, value in attrs if name == "property"] == [property_name]
-    assert [value for name, value in attrs if name == "content"] == [expected]
+    assert _unique_head_meta_content(html, property_name) == expected
 
 
 def test_metadata_contract_accepts_attribute_order_and_html_serialization():
