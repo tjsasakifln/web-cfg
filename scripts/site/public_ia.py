@@ -55,10 +55,10 @@ SKIP_DIR_PARTS = frozenset(
 JOURNEY_PHRASES = (
     "projetos",
     "serviços",
-    "condomínios",
-    "obras públicas",
     "ferramentas",
-    "empresa",
+    "inteligência",
+    "obras públicas",
+    "conteúdos",
 )
 # VALOR-IMEDIATO-20260914: quantitativos/orçamento e avaliação de imóvel
 # viraram situações próprias. O conjunto continua sendo o contrato (igualdade
@@ -623,13 +623,17 @@ def footer_columns_html(ia: dict[str, Any] | None = None) -> str:
 def chrome_hrefs(ia: dict[str, Any] | None = None) -> list[str]:
     data = ia or load_ia_map()
     hrefs: list[str] = []
-    for item in header_items(data):
+    header = data.get("header") or {}
+    for item in header.get("destinations") or []:
         hrefs.append(item["href"])
+        hrefs.extend(child["href"] for child in item.get("children", []))
+    for key in ("quick_links", "utility_links"):
+        hrefs.extend(item["href"] for item in header.get(key, []))
     hrefs.append(header_cta(data)["href"])
     for column in (data.get("footer") or {}).get("columns") or []:
         for item in column.get("links") or []:
             hrefs.append(str(item.get("href") or ""))
-    return hrefs
+    return list(dict.fromkeys(hrefs))
 
 
 def _sub_situation_errors(row: dict[str, Any], root: Path | None = None) -> list[str]:
@@ -670,7 +674,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
             f"header has {len(destinations)} destinations; max is {MAX_HEADER_DESTINATIONS}"
         )
     if len(destinations) < 3:
-        errors.append("header must expose projects, services, public works, tools, and company")
+        errors.append("header must expose projects, services, tools, intelligence, public works and content")
     hrefs = [item["href"] for item in destinations]
     if len(set(hrefs)) != len(hrefs):
         errors.append("header has duplicate hrefs")
@@ -681,6 +685,24 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         errors.append(f"header misses corporate destinations in visitor language: {missing}")
     if "b2g" in labels:
         errors.append("header requires the term B2G")
+    groups = (data.get("header") or {}).get("destinations") or []
+    ids = [group.get("id") for group in groups]
+    if len(set(ids)) != len(ids) or any(not isinstance(x, str) or not re.fullmatch(r"[a-z0-9-]+", x) for x in ids):
+        errors.append("header groups must have unique stable IDs")
+    for group in groups:
+        if not all(group.get(key) for key in ("description", "eyebrow", "overview_label")):
+            errors.append(f"header group lacks explanation: {group.get('id')}")
+        children = group.get("children") or []
+        if not 4 <= len(children) <= 8:
+            errors.append(f"header group must offer 4 to 8 direct destinations: {group.get('id')}")
+        if len({child.get("id") for child in children}) != len(children):
+            errors.append(f"duplicate child ID: {group.get('id')}")
+        for child in children:
+            if not all(child.get(key) for key in ("id", "label", "href", "description")):
+                errors.append(f"incomplete direct destination: {group.get('id')}")
+    for href in chrome_hrefs(data):
+        if not href.startswith("/") or href.startswith("//") or "\\" in href or any(ord(c) < 32 for c in href):
+            errors.append(f"navigation destination must be local: {href}")
     cta = header_cta(data)
     if not cta.get("label") or not cta.get("href"):
         errors.append("header CTA missing")

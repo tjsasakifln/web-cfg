@@ -126,6 +126,13 @@ function commercialActions(html, profile) {
       const label = visibleText(match[2]);
       const position = attrValue(attrs, "data-cta-position");
       const id = attrValue(attrs, "data-cta-id");
+      // Shared navigation records discovery, never a form commitment. Only
+      // canonical local route links with the renderer's controlled ID qualify.
+      if (attrValue(attrs, "data-navigation-link") === "true"
+        && /^nav-(?:header_nav|mobile_nav|header_shortcut|header_utility)-[a-z0-9-]+$/.test(id)
+        && ["header_nav", "mobile_nav", "header_shortcut", "header_utility"].includes(position)
+        && /^\/(?!\/)[^?#]*\/$/.test(href)
+        && !attrValue(attrs, "data-next-action-id")) return null;
       // A share composer has no CONFENGE recipient. A tool jump opens a
       // utility, not its lead form. Keep both outside the commercial census.
       if (position === "tool_share" && /^tool-share-(?:wa|linkedin)-[a-z0-9-]+$/.test(id)

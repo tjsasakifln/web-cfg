@@ -1,0 +1,4714 @@
+{
+  "ok": true,
+  "generated_at": "2026-11-12T22:05:21.385Z",
+  "findings": [
+    {
+      "route": "/entregas/",
+      "width": 320,
+      "height": 844,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 843.484375,
+      "firstReportVisible": true,
+      "documentHeight": 27960,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 6130,
+      "offersSectionTop": 5809,
+      "pageIndexOffersLinkTop": 1592,
+      "decisionNavHeight": 479,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 126,
+      "decisionNavFontSize": 16,
+      "firstOfferTop": 6630,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 96,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 231,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 78,
+          "analysisCtaHeight": 44
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 29,
+          "right": 389
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 29,
+          "right": 389
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 360,
+      "height": 844,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 793.09375,
+      "firstReportVisible": true,
+      "documentHeight": 25678,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 5656,
+      "offersSectionTop": 5361,
+      "pageIndexOffersLinkTop": 1482,
+      "decisionNavHeight": 456,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 126,
+      "decisionNavFontSize": 16,
+      "firstOfferTop": 6133,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 271,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 29,
+          "right": 389
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 29,
+          "right": 389
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 738.828125,
+      "firstReportVisible": true,
+      "documentHeight": 24547,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 5308,
+      "offersSectionTop": 5041,
+      "pageIndexOffersLinkTop": 1384,
+      "decisionNavHeight": 456,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 126,
+      "decisionNavFontSize": 16,
+      "firstOfferTop": 5785,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 53
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 301,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 60,
+          "analysisCtaHeight": 44
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 768,
+      "height": 1024,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 610.203125,
+      "firstReportVisible": true,
+      "documentHeight": 19080,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 4160,
+      "offersSectionTop": 3901,
+      "pageIndexOffersLinkTop": 1020,
+      "decisionNavHeight": 196,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 4381,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 356,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 37,
+          "right": 1409
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 37,
+          "right": 1409
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 900,
+      "height": 900,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 619.671875,
+      "firstReportVisible": true,
+      "documentHeight": 19809,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 4298,
+      "offersSectionTop": 4057,
+      "pageIndexOffersLinkTop": 1044,
+      "decisionNavHeight": 196,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 4522,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 43,
+          "right": 1415
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 43,
+          "right": 1415
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 901,
+      "height": 900,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 619.71875,
+      "firstReportVisible": true,
+      "documentHeight": 18685,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 4282,
+      "offersSectionTop": 4041,
+      "pageIndexOffersLinkTop": 1044,
+      "decisionNavHeight": 196,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 4506,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 44
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 375,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 43,
+          "right": 1415
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 43,
+          "right": 1415
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 1024,
+      "height": 768,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 723.78125,
+      "firstReportVisible": true,
+      "documentHeight": 15988,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 3905,
+      "offersSectionTop": 3676,
+      "pageIndexOffersLinkTop": 843,
+      "decisionNavHeight": 144,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 4081,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 392,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 49,
+          "right": 1421
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 49,
+          "right": 1421
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 1200,
+      "height": 800,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 693.390625,
+      "firstReportVisible": true,
+      "documentHeight": 14679,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 3738,
+      "offersSectionTop": 3488,
+      "pageIndexOffersLinkTop": 816,
+      "decisionNavHeight": 144,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 3919,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 55,
+          "right": 1427
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 55,
+          "right": 1427
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 702.359375,
+      "firstReportVisible": true,
+      "documentHeight": 13917,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 3707,
+      "offersSectionTop": 3447,
+      "pageIndexOffersLinkTop": 825,
+      "decisionNavHeight": 144,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 3888,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 100,
+          "right": 1472
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 100,
+          "right": 1472
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 702.359375,
+      "firstReportVisible": true,
+      "documentHeight": 13929,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 3713,
+      "offersSectionTop": 3451,
+      "pageIndexOffersLinkTop": 825,
+      "decisionNavHeight": 144,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 3894,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [
+        {
+          "tag": "PICTURE",
+          "className": "plate__picture",
+          "left": 137,
+          "right": 1509
+        },
+        {
+          "tag": "IMG",
+          "className": "",
+          "left": 137,
+          "right": 1509
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "width": 1661,
+      "height": 939,
+      "overflow": false,
+      "longestArchetypeRun": 1,
+      "primaries": 2,
+      "h1Count": 1,
+      "h1Text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "heroCtaHref": "#servicos-e-entregas",
+      "heroCtaTargetExists": true,
+      "heroCtaVisible": true,
+      "heroCtaBottom": 702.359375,
+      "firstReportVisible": true,
+      "documentHeight": 14226,
+      "intelligenceFooterLinkCount": 1,
+      "intelligenceFooterLinkVisible": true,
+      "intelligenceFooterLinkFontSize": 14,
+      "decisionNavTop": 3713,
+      "offersSectionTop": 3451,
+      "pageIndexOffersLinkTop": 825,
+      "decisionNavHeight": 144,
+      "decisionNavShortTargets": 0,
+      "decisionNavOverflow": false,
+      "decisionNavBrokenWords": [],
+      "decisionNavMinTextWidth": 138.8,
+      "decisionNavFontSize": 18,
+      "firstOfferTop": 3894,
+      "mainLinks": 62,
+      "offers": [
+        {
+          "id": "CFG-D01",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 599",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D02",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 690",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D03",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 890",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D04",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.200",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D05",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.450",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D06",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 1.900",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D07",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 2.400",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        },
+        {
+          "id": "CFG-D08",
+          "state": "PUBLISHED",
+          "visible": true,
+          "hiddenEssential": 0,
+          "factLabels": [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          "nameWidth": 394,
+          "priceText": "R$ 3.750",
+          "priceLines": 1,
+          "exampleCtaHeight": 48,
+          "analysisCtaHeight": 48
+        }
+      ],
+      "capabilityRoll": {
+        "rowCount": 0,
+        "stateCounts": {},
+        "groups": 5,
+        "substantiveGroups": 5,
+        "openGroups": 0,
+        "shortSummaries": 0
+      },
+      "navProjects": "Projetos",
+      "navCurrent": "",
+      "footerNavigation": [
+        {
+          "heading": "Projetos",
+          "links": [
+            {
+              "label": "Projetos prontos",
+              "href": "/projetos-prontos/"
+            },
+            {
+              "label": "Estruturas",
+              "href": "/projetos/estruturas/"
+            },
+            {
+              "label": "Instalações",
+              "href": "/projetos/instalacoes/"
+            },
+            {
+              "label": "Infraestrutura",
+              "href": "/projetos/infraestrutura/"
+            },
+            {
+              "label": "Coordenação multidisciplinar",
+              "href": "/projetos/coordenacao-multidisciplinar/"
+            }
+          ]
+        },
+        {
+          "heading": "Serviços e conhecimento",
+          "links": [
+            {
+              "label": "Edificações",
+              "href": "/edificacoes/"
+            },
+            {
+              "label": "Inteligência de mercado",
+              "href": "/inteligencia/"
+            },
+            {
+              "label": "Obras públicas",
+              "href": "/servicos-obras-publicas/"
+            },
+            {
+              "label": "Segurança do trabalho",
+              "href": "/seguranca-trabalho-apoio-tecnico/"
+            },
+            {
+              "label": "Conteúdos técnicos",
+              "href": "/conteudos/"
+            },
+            {
+              "label": "Ferramentas",
+              "href": "/ferramentas/"
+            }
+          ]
+        },
+        {
+          "heading": "CONFENGE",
+          "links": [
+            {
+              "label": "Empresa",
+              "href": "/empresa/"
+            },
+            {
+              "label": "Como trabalhamos",
+              "href": "/como-trabalhamos/"
+            },
+            {
+              "label": "Liderança técnica",
+              "href": "/especialista/tiago-jun-sasaki/"
+            },
+            {
+              "label": "Solicitar proposta",
+              "href": "/triagem-tecnica/"
+            }
+          ]
+        }
+      ],
+      "emptyPlaceholders": 0,
+      "overflowOffenders": [],
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "check": "footer_analytics_preference_height",
+      "fullHeight": 24547,
+      "preferenceOuterHeight": 115.3,
+      "normalizedHeight": 24289,
+      "selectorCount": 1,
+      "idCount": 1,
+      "directLastChild": true,
+      "visible": true,
+      "display": "block",
+      "position": "static",
+      "float": "none",
+      "transform": "none",
+      "marginTop": 8,
+      "marginBottom": 0,
+      "contentClipped": false,
+      "interactiveCount": 3,
+      "buttonCount": 2,
+      "privacyLinkCount": 1,
+      "defaultDenied": true,
+      "interactiveTargets": [
+        {
+          "tag": "button",
+          "type": "button",
+          "href": null,
+          "width": 186.38,
+          "height": 44,
+          "visible": true,
+          "inside": true
+        },
+        {
+          "tag": "button",
+          "type": "button",
+          "href": null,
+          "width": 102.19,
+          "height": 44,
+          "visible": true,
+          "inside": true
+        },
+        {
+          "tag": "a",
+          "type": null,
+          "href": "/privacidade/",
+          "width": 161.91,
+          "height": 44,
+          "visible": true,
+          "inside": true
+        }
+      ],
+      "componentBudget": 130,
+      "hiddenHeight": 24432,
+      "delta": 115,
+      "restoredHeight": 24547,
+      "baselineChecks": {
+        "historical": true,
+        "component": true,
+        "componentMaximum": true,
+        "triangular": true,
+        "restored": true
+      },
+      "navigation": {
+        "components": [
+          {
+            "name": "discovery",
+            "selector": ".nav-discovery-region",
+            "budget": 90,
+            "selectorCount": 1,
+            "outerHeight": 89,
+            "rowGap": 0,
+            "contribution": 89,
+            "hiddenHeight": 24458,
+            "delta": 89,
+            "restoredHeight": 24547,
+            "targets": [
+              {
+                "width": 71.21875,
+                "height": 44,
+                "top": 66,
+                "visible": true,
+                "inside": true,
+                "clipped": false
+              },
+              {
+                "width": 58.046875,
+                "height": 44,
+                "top": 66,
+                "visible": true,
+                "inside": true,
+                "clipped": false
+              },
+              {
+                "width": 101.375,
+                "height": 44,
+                "top": 66,
+                "visible": true,
+                "inside": true,
+                "clipped": false
+              },
+              {
+                "width": 84.171875,
+                "height": 44,
+                "top": 110,
+                "visible": true,
+                "inside": true,
+                "clipped": false
+              },
+              {
+                "width": 86.890625,
+                "height": 44,
+                "top": 110,
+                "visible": true,
+                "inside": true,
+                "clipped": false
+              }
+            ],
+            "checks": {
+              "identity": true,
+              "geometry": true,
+              "targets": true,
+              "budget": true,
+              "rows": true,
+              "triangular": true,
+              "restored": true,
+              "mainPreserved": true
+            },
+            "valid": true
+          },
+          {
+            "name": "footerReadyProjects",
+            "selector": "footer.site-footer a[href=\"/projetos-prontos/\"]",
+            "budget": 54,
+            "selectorCount": 1,
+            "outerHeight": 44,
+            "rowGap": 10,
+            "contribution": 54,
+            "hiddenHeight": 24493,
+            "delta": 54,
+            "restoredHeight": 24547,
+            "targets": [
+              {
+                "width": 353.1875,
+                "height": 44,
+                "top": 23135.828125,
+                "visible": true,
+                "inside": true,
+                "clipped": false
+              }
+            ],
+            "checks": {
+              "identity": true,
+              "geometry": true,
+              "targets": true,
+              "budget": true,
+              "rows": true,
+              "triangular": true,
+              "restored": true,
+              "mainPreserved": true
+            },
+            "valid": true
+          }
+        ],
+        "combinedChecks": {
+          "triangular": true,
+          "restored": true,
+          "mainPreserved": true
+        },
+        "hiddenTogetherHeight": 24404,
+        "totalContribution": 143,
+        "mainHeight": 22709.4375,
+        "valid": true,
+        "creditedHeight": 143
+      },
+      "navigationNegativeControls": {
+        "discoveryGrowth": true,
+        "discoveryHidden": true,
+        "discoveryDuplicate": true,
+        "footerReadyProjectsGrowth": true,
+        "footerReadyProjectsHidden": true,
+        "footerReadyProjectsDuplicate": true,
+        "restored": true
+      },
+      "negativeControls": {
+        "componentRegression": true,
+        "historicalRegression": true,
+        "restored": true
+      },
+      "creditedPreferenceHeight": 115.3,
+      "creditedNavigationHeight": 143,
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "check": "footer_review_capture",
+      "original": {
+        "footerWidth": 390,
+        "footerHeight": 1683.703125,
+        "headerHeight": 65
+      },
+      "viewportWidth": 390,
+      "viewportHeight": 1751,
+      "footer": {
+        "width": 390,
+        "height": 1683.9375,
+        "top": 67.4375,
+        "bottom": 1751.375,
+        "left": 0,
+        "right": 390
+      },
+      "headerBottom": 65,
+      "bottomOverflow": 0.375,
+      "bottomTolerance": 1,
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "check": "public_vitrine",
+      "catalogLazyBefore": [],
+      "catalogBoot": {
+        "enhanced": false,
+        "dataSchema": "",
+        "dataCount": 0,
+        "filterPresent": false,
+        "cards": 8,
+        "backlogCards": 0,
+        "capabilityRows": 0,
+        "capabilityGroups": 5
+      },
+      "frameKeyboard": {
+        "href": "#entrega-01",
+        "active": true
+      },
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "check": "catalog_noscript",
+      "noScriptCatalog": {
+        "cards": 8,
+        "visibleCards": 8,
+        "backlogCards": 0,
+        "capabilityRows": 0,
+        "capabilityGroups": 5,
+        "decisionNav": true,
+        "essentialFactSets": [
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ],
+          [
+            "Decisão",
+            "Trabalho realizado",
+            "Como a entrega será usada",
+            "O que você pode inspecionar",
+            "Situação",
+            "Informações necessárias",
+            "Trabalho incluído",
+            "Saída",
+            "Por que este preço",
+            "Prazo",
+            "Quando a contagem começa",
+            "Pacote e crédito"
+          ]
+        ],
+        "filters": false
+      },
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 390,
+      "ctaVisible": false,
+      "navVisible": false,
+      "toggleVisible": true,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 901,
+      "ctaVisible": false,
+      "navVisible": false,
+      "toggleVisible": true,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 960,
+      "ctaVisible": false,
+      "navVisible": false,
+      "toggleVisible": true,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 1000,
+      "ctaVisible": false,
+      "navVisible": false,
+      "toggleVisible": true,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 1120,
+      "ctaVisible": false,
+      "navVisible": false,
+      "toggleVisible": true,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 1240,
+      "ctaVisible": true,
+      "navVisible": true,
+      "toggleVisible": false,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 1366,
+      "ctaVisible": true,
+      "navVisible": true,
+      "toggleVisible": false,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "check": "header_commercial_path",
+      "width": 1661,
+      "ctaVisible": true,
+      "navVisible": true,
+      "toggleVisible": false,
+      "ctaOverflowsHeader": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "route": "/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": true,
+      "sections": 8,
+      "errors": []
+    },
+    {
+      "route": "/ferramentas/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/casos/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/privacidade/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/radar/nacional-obras-publicas/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Projetos",
+          "href": "/projetos/"
+        },
+        {
+          "text": "Serviços",
+          "href": "/servicos/"
+        },
+        {
+          "text": "Ferramentas",
+          "href": "/ferramentas/"
+        },
+        {
+          "text": "Inteligência",
+          "href": "/inteligencia/"
+        },
+        {
+          "text": "Obras públicas",
+          "href": "/servicos-obras-publicas/"
+        },
+        {
+          "text": "Conteúdos",
+          "href": "/conteudos/"
+        }
+      ],
+      "navLabels": [
+        "Projetos",
+        "Serviços",
+        "Ferramentas",
+        "Inteligência",
+        "Obras públicas",
+        "Conteúdos"
+      ],
+      "corporateProjectsPath": null,
+      "sections": null,
+      "errors": []
+    },
+    {
+      "route": "/entregas/",
+      "check": "analytics",
+      "analytics": {
+        "count": 1,
+        "event": {
+          "event": "cta_click",
+          "page_path": "/entregas/",
+          "content_cluster": "other",
+          "cta_position": "example_01_open",
+          "event_id": "e-sessa836-mwe3jgk7-npz4lt",
+          "correlation_id": "c0f96dd7-a53d-4d05-8968-fc7170b43461",
+          "cta_label": "Examinar o demonstrativo do radar de licitações",
+          "destination_type": "route",
+          "source_page_type": "deliverables",
+          "asset_id": "entregas-exemplos-hub",
+          "cta_id": "deliverables-open-report",
+          "session_id": "sess-a83698d9e62eff3cf1c3ed2fcba",
+          "source": "CONFENGE_WEB",
+          "schema_version": "1.4.0",
+          "pii_policy": "aggregate_allowlist_empty",
+          "consent": "not_required"
+        },
+        "hasPiiKey": false,
+        "hasPiiValue": false
+      },
+      "errors": []
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "check": "anchor_cta_click",
+      "cta_id": "quantitativos-orcamento-obras-hero-proposal",
+      "actual": {
+        "count": 1,
+        "href": "#triagem-quantitativos",
+        "targetCount": 1,
+        "position": "hero",
+        "family": "private-engineering-quantities-budget",
+        "asset": "private_quantities_budget_route_v1"
+      },
+      "analytics": {
+        "count": 1,
+        "event": {
+          "event": "cta_click",
+          "page_path": "/quantitativos-orcamento-obras/",
+          "content_cluster": "orcamento-bdi",
+          "cta_position": "hero",
+          "event_id": "e-sessa836-mwe3jh3a-om92pk",
+          "correlation_id": "c0f96dd7-a53d-4d05-8968-fc7170b43461",
+          "cta_label": "Solicitar proposta de quantitativos e orçamento",
+          "destination_type": "form",
+          "source_page_type": "private-engineering-quantities-budget",
+          "asset_id": "private_quantities_budget_route_v1",
+          "route_family": "private-engineering-quantities-budget",
+          "cta_id": "quantitativos-orcamento-obras-hero-proposal",
+          "session_id": "sess-a83698d9e62eff3cf1c3ed2fcba",
+          "source": "CONFENGE_WEB",
+          "schema_version": "1.4.0",
+          "pii_policy": "aggregate_allowlist_empty",
+          "consent": "not_required"
+        },
+        "hasPiiKey": false,
+        "hasPiiValue": false
+      },
+      "errors": []
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "check": "anchor_cta_click",
+      "cta_id": "compatibilizacao-projetos-engenharia-hero-proposal",
+      "actual": {
+        "count": 1,
+        "href": "#pedido-compatibilizacao",
+        "targetCount": 1,
+        "position": "hero",
+        "family": "engineering-projects-coordination-clash",
+        "asset": "engineering_coordination_clash_route_v1"
+      },
+      "analytics": {
+        "count": 1,
+        "event": {
+          "event": "cta_click",
+          "page_path": "/compatibilizacao-projetos-engenharia/",
+          "content_cluster": "other",
+          "cta_position": "hero",
+          "event_id": "e-sessa836-mwe3jhqf-858vdj",
+          "correlation_id": "c0f96dd7-a53d-4d05-8968-fc7170b43461",
+          "cta_label": "Solicitar proposta de compatibilização",
+          "destination_type": "form",
+          "offer_id": "bim_coordination_clash_register",
+          "source_page_type": "engineering-projects-coordination-clash",
+          "asset_id": "engineering_coordination_clash_route_v1",
+          "route_family": "engineering-projects-coordination-clash",
+          "cta_id": "compatibilizacao-projetos-engenharia-hero-proposal",
+          "session_id": "sess-a83698d9e62eff3cf1c3ed2fcba",
+          "source": "CONFENGE_WEB",
+          "schema_version": "1.4.0",
+          "pii_policy": "aggregate_allowlist_empty",
+          "consent": "not_required"
+        },
+        "hasPiiKey": false,
+        "hasPiiValue": false
+      },
+      "errors": []
+    }
+  ],
+  "axe": [],
+  "hardAxe": []
+}

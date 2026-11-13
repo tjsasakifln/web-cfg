@@ -28,8 +28,9 @@
  * infrastructure.
  */
 import { writeFileSync, mkdtempSync, rmSync, readFileSync } from "fs";
+import { createHash } from "crypto";
 import { tmpdir } from "os";
-import { join } from "path";
+import { basename, join } from "path";
 import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
 import { headerByteWeight, lcpNetworkAllowanceMs, measureContentByteWeight } from "./lighthouse_payload.mjs";
@@ -132,6 +133,63 @@ function describe(error) {
   const message = String(error?.message || error || "unknown error");
   const code = error?.code || error?.protocolMethod || null;
   return code && !message.includes(String(code)) ? `${message} [${code}]` : message;
+}
+
+/** Retain the artifacts from this result only, after the measured LHR is safe.
+ * These files are diagnostic, never an outcome or a reason to navigate again.
+ * Keep the .json suffix: the existing qualification/runtime uploads include it.
+ */
+function retainMeasurementDiagnostics(runnerResult, lhrJson) {
+  const stem = spec.out_json.replace(/\.json$/, "");
+  const manifestPath = `${stem}.diagnostics.json`;
+  const digest = (text) => createHash("sha256").update(text).digest("hex");
+  const manifest = {
+    schema: "confenge.lighthouse-diagnostics/1.0",
+    source: "same_lighthouse_runner_result",
+    path: spec.path,
+    run: spec.run,
+    attempt: spec.attempt,
+    lighthouse_version: runnerResult.lhr.lighthouseVersion || null,
+    fetch_time: runnerResult.lhr.fetchTime || null,
+    workflow_run_id: process.env.GITHUB_RUN_ID || null,
+    workflow_run_attempt: process.env.GITHUB_RUN_ATTEMPT || null,
+    lhr: { file: basename(spec.out_json), bytes: Buffer.byteLength(lhrJson), sha256: digest(lhrJson) },
+    files: {},
+    errors: [],
+  };
+  const artifacts = [
+    ["trace", runnerResult.artifacts?.Trace, (value) => Array.isArray(value?.traceEvents)],
+    ["devtoolslog", runnerResult.artifacts?.DevtoolsLog, Array.isArray],
+  ];
+  for (const [name, value, valid] of artifacts) {
+    const file = `${stem}.${name}.json`;
+    try {
+      // A failed retention must not leave an older artifact looking current.
+      rmSync(file, { force: true });
+      if (!valid(value)) throw new Error(`Missing or invalid ${name} in the measured runnerResult`);
+      const text = JSON.stringify(value);
+      writeFileSync(file, text);
+      manifest.files[name] = { file: basename(file), bytes: Buffer.byteLength(text), sha256: digest(text) };
+    } catch (error) {
+      manifest.errors.push({ artifact: name, error: describe(error) });
+    }
+  }
+  manifest.status = manifest.errors.length ? "incomplete" : "complete";
+  try {
+    rmSync(manifestPath, { force: true });
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+  } catch (error) {
+    manifest.status = "incomplete";
+    manifest.errors.push({ artifact: "manifest", error: describe(error) });
+  }
+  const notice = {
+    path: spec.path, run: spec.run, attempt: spec.attempt,
+    status: manifest.status, manifest: basename(manifestPath),
+    bytes: Object.fromEntries(Object.entries(manifest.files).map(([name, file]) => [name, file.bytes])),
+    errors: manifest.errors,
+  };
+  if (manifest.errors.length) console.error("LIGHTHOUSE_DIAGNOSTICS", JSON.stringify(notice));
+  else console.log("LIGHTHOUSE_DIAGNOSTICS", JSON.stringify(notice));
 }
 
 /**
@@ -302,8 +360,18 @@ try {
 
   // The measurement now exists. Persist it before anything else can fail:
   // from here on no error may cause a new navigation for this run.
-  writeFileSync(spec.out_json, JSON.stringify(runnerResult.lhr, null, 2));
+  const lhrJson = JSON.stringify(runnerResult.lhr, null, 2);
+  writeFileSync(spec.out_json, lhrJson);
   lhrWritten = true;
+  try {
+    retainMeasurementDiagnostics(runnerResult, lhrJson);
+  } catch (error) {
+    // Even an unexpected diagnostic error cannot change the measured result.
+    console.error("LIGHTHOUSE_DIAGNOSTICS", JSON.stringify({
+      path: spec.path, run: spec.run, attempt: spec.attempt,
+      status: "incomplete", error: describe(error),
+    }));
+  }
   phase = "payload";
   markProgress("payload");
 

@@ -12,7 +12,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import vm from "vm";
-import { isAlreadyMinified, minifySource } from "./minify_public_js.mjs";
+import { isAlreadyMinified, minifySource, PUBLIC_MODULE_PATHS, run } from "./minify_public_js.mjs";
 
 let failures = 0;
 
@@ -122,6 +122,60 @@ await checkAsync("minifySource: real repo tools-common.js fixture shrinks and pr
     assert.ok(out.includes("window.confengeToolsCommon"));
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+await checkAsync("minifySource: module exports and literal boundaries survive", async () => {
+  const source = `
+    export const prefix = "pncp_" + "supplier_" + "contracts:";
+    export function describe(value) {
+      const label = "keep  two spaces";
+      return label + ": " + value;
+    }
+    export const load = () => import('/assets/js/tool-credits.mjs');
+  `;
+  const compact = await minifySource("fixture.mjs", source);
+  const moduleFor = code => import(`data:text/javascript;base64,${Buffer.from(code).toString("base64")}`);
+  const before = await moduleFor(source);
+  const after = await moduleFor(compact);
+  assert.deepEqual(Object.keys(after), Object.keys(before));
+  assert.equal(after.prefix, before.prefix);
+  assert.equal(after.describe("contrato"), before.describe("contrato"));
+  assert.ok(!compact.includes("pncp_supplier_contracts:"), "evaluate:false must preserve the intentional literal boundary");
+  assert.ok(compact.includes("/assets/js/tool-credits.mjs"), "dynamic import target must stay exact");
+});
+
+await checkAsync("minifySource: malformed modules fail closed", async () => {
+  await assert.rejects(minifySource("broken.mjs", "export const = ;\n"));
+});
+
+await checkAsync("publication: only the two explicit modules join existing JS candidates", async () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "minify-public-modules-test-"));
+  const source = "export function describe(value) {\n  const label = 'contrato';\n  return label + value;\n}\n";
+  const paths = [...PUBLIC_MODULE_PATHS, "assets/js/unrelated.mjs", "assets/js/fixture.js"];
+  const originals = new Map();
+  try {
+    assert.deepEqual(PUBLIC_MODULE_PATHS, ["assets/tool-showcase/showcase.mjs", "assets/js/tool-referral.mjs"]);
+    for (const rel of paths) {
+      const text = rel.endsWith(".js") ? IIFE_SOURCE : source;
+      originals.set(rel, text);
+      for (const base of [root, path.join(root, "_site")]) {
+        const target = path.join(base, rel);
+        fs.mkdirSync(path.dirname(target), { recursive: true });
+        fs.writeFileSync(target, text);
+      }
+    }
+    assert.equal(await run({ check: false, root }), 0);
+    assert.equal(await run({ check: true, root }), 0);
+    for (const rel of paths) assert.equal(fs.readFileSync(path.join(root, rel), "utf8"), originals.get(rel));
+    for (const rel of PUBLIC_MODULE_PATHS) {
+      assert.equal(fs.readFileSync(path.join(root, "_site", rel), "utf8"), await minifySource(rel, source));
+    }
+    assert.equal(fs.readFileSync(path.join(root, "_site/assets/js/unrelated.mjs"), "utf8"), source);
+    fs.rmSync(path.join(root, "_site", PUBLIC_MODULE_PATHS[0]));
+    assert.equal(await run({ check: true, root }), 2, "a missing declared public module must fail closed");
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
   }
 });
 

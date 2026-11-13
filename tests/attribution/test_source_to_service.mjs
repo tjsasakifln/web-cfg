@@ -359,8 +359,13 @@ const journeys = [
 const journeyResults = [];
 for (const j of journeys) {
   const html = htmlOf(j.html);
-  const attrs = findAnchor(html, j.pick);
+  // Commercial journeys start in the page content. Shared navigation can
+  // deliberately link to the same destination without being a conversion.
+  const main = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i);
+  if (!main) fail("html_main_missing", { name: j.name, file: j.html });
+  const attrs = findAnchor(main[0], j.pick);
   if (!attrs) fail("html_anchor_missing", { name: j.name, file: j.html });
+  if (attrs["data-navigation-link"] === "true") fail("journey_selected_navigation", j.name);
   const body = bodyAttrs(html);
   const el = makeEl(attrs, "CTA");
   const driven = driveScript({
@@ -413,6 +418,31 @@ for (const j of journeys) {
     data_cta_id: attrs["data-cta-id"] || "",
     data_asset_id: attrs["data-asset-id"] || body["data-asset-id"] || "",
   });
+}
+
+// The same destination in shared navigation must remain a discovery click.
+// These shipped links precede the commercial anchors that the journeys above
+// exercise, so an unscoped href lookup would silently test the wrong action.
+const navigationResults = [];
+for (const name of ["condominio_assistencia_pericial", "limite_aditivos"]) {
+  const j = journeys.find((journey) => journey.name === name);
+  const html = htmlOf(j.html);
+  const attrs = findAnchor(html, (a) => a.href === j.expectDest && a["data-navigation-link"] === "true");
+  if (!attrs) fail("navigation_fixture_missing", name);
+  const el = makeEl(attrs, "Navegação");
+  const driven = driveScript({ pathname: j.pathname, body: bodyAttrs(html), hrefEls: [el], namedEls: [el] });
+  el.click();
+  await settleAnalyticsFlush();
+  if (transitionsOf(driven.dataLayer).length !== 0) fail("navigation_became_commercial_transition", name);
+  const clicks = driven.dataLayer.filter((event) => event.event === "cta_click");
+  if (clicks.length !== 1 || clicks[0].destination_path !== j.expectDest || clicks[0].destination_type !== "route") {
+    fail("navigation_route_click", { name, events: driven.dataLayer });
+  }
+  const flushed = flushedEvents(driven.fetches);
+  if (flushed.length !== 1 || flushed[0].event !== "cta_click" || !contract.admitEvent(flushed[0]).ok) {
+    fail("navigation_collector_semantics", { name, flushed });
+  }
+  navigationResults.push({ name, destination_path: j.expectDest, event: "cta_click" });
 }
 
 // --- Production identity: flushed click correlation_id joins a lead with no session_id ---
@@ -1255,6 +1285,7 @@ const primary = {
     destination_service_id: j.destination_service_id,
     destination_path: j.destination_path,
   })),
+  navigation: navigationResults,
   duplicate_listener: 1,
   unknown_service: "UNKNOWN_SERVICE",
   coverage_unknown: true,

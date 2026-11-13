@@ -156,20 +156,20 @@
         "href": "/servicos/"
       },
       {
-        "label": "Condomínios",
-        "href": "/engenharia-condominios/"
+        "label": "Ferramentas",
+        "href": "/ferramentas/"
+      },
+      {
+        "label": "Inteligência",
+        "href": "/inteligencia/"
       },
       {
         "label": "Obras públicas",
         "href": "/servicos-obras-publicas/"
       },
       {
-        "label": "Ferramentas",
-        "href": "/ferramentas/"
-      },
-      {
-        "label": "Empresa",
-        "href": "/empresa/"
+        "label": "Conteúdos",
+        "href": "/conteudos/"
       }
     ],
     "cta": {

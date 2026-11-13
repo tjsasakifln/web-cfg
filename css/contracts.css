@@ -76,6 +76,14 @@ body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1
   body[data-offer-id="diagnostico-b2g-360"] .hero-actions{gap:8px}
 }
 
+/* Keep the expansion diagnosis action fully visible on short desktop screens.
+ * All copy, type sizes and contractual conditions retain their existing order. */
+@media (min-width:1121px){
+  body[data-route-family="diagnostico-b2g-expansao"] .content-hero.offer-hero{padding-top:16px}
+  body[data-route-family="diagnostico-b2g-expansao"] .offer-hero h1{margin-bottom:8px}
+  body[data-route-family="diagnostico-b2g-expansao"] .offer-hero .offer-proof-line{margin-top:8px}
+  body[data-route-family="diagnostico-b2g-expansao"] .offer-hero>.container>.hero-actions{margin-top:8px}
+}
 /* The long aditivos title remains intact and at its established type size.
  * At desktop width the fold margin comes from hero whitespace only. */
 @media (min-width:1051px){

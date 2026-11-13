@@ -1,0 +1,65 @@
+{
+  "source_head": "00cd0faddc3414080f287d3ec491260278310a91",
+  "source_tree": "f46dfbbec4db14d8233c40468da5e29b427d6776",
+  "workflow_run_id": "43288875329",
+  "workflow_run_attempt": "1",
+  "presentation_fields": [
+    "rendered_content_hash",
+    "rendered_content_hash_previous",
+    "rendered_hash_recapture_reason",
+    "rendered_hash_recapture_reason_previous",
+    "rendered_hash_recaptured_at"
+  ],
+  "audit_entries_added": 1,
+  "source_html_sha256": "16e6f3e2681d9c06ad1cf086fbe12f52f82b5ba83493d06cdb00453d6570cef2",
+  "approval_public_html_sha256": "905caa77b27d137b579007e77f2ab06db4d180e033380716ece7efb2e91d6604",
+  "protected_other_files": 15,
+  "protected_source_pillars": 6,
+  "human_review_claimed": false,
+  "qa_evidence_sha256": "774046dd24058747e2c1a9d134471b299ab4986c391bc75ba751451b0d975ef8",
+  "qa_provenance_sha256": "9cfc522bacb7dcdbb5d21bbc356e886958750a2f5053243ea79c2fecc49053f0",
+  "qa_presentation_proof_sha256": "ab5c70acd20d18a44bf013dd148f6124efe7ef2972087488bc20852c48425dd3",
+  "qa_geometry_log_sha256": "901df529677f45e288d9123fc3e92980e94265e41101895135e94b856da56a77",
+  "qa_event_semantics_sha256": "2705cefae98d2aab14a9aea84eb5e8240ecafa1d96b1b12d52b3b2442ee70e03",
+  "qa_screenshot_sha256": {
+    "desktop-ferramentas.png": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0",
+    "mobile-projetos.png": "455497240dd89cdfec10ddb27286d5d5c635da97664d6bb4a4ea770e2a276917",
+    "projetos-prontos-desktop.png": "69e5d28c82fb9f4dcbf16ca9956e645c0a230969bff9b27da7a936dc0d40df08",
+    "mobile-header-360.png": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b",
+    "diagnostico-first-viewport-1280.png": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
+  },
+  "writes": [
+    {
+      "path": "data/editorial/contract-analysis/approvals.json",
+      "before_sha256": "38943440ab33b0d4084a50523151698aa6adb82b4c3e9205a407bf1861a42974",
+      "after_sha256": "9e6e9f6e31bb2713543246a01ff68f43104326eb0b91b169925c2bc3b07c7d8b",
+      "bytes": 75531
+    },
+    {
+      "path": "data/bofu-dominance/frozen-specs/hashes.json",
+      "before_sha256": "e4056bd0c0b48192bd5aa55ac224480aacba74f8a230e206eb5d8c23be50b2ad",
+      "after_sha256": "7f9275f514ee91d242e2eecf71a39f6cd32611f2d712771e5b61718e2d9733c7",
+      "bytes": 144536
+    },
+    {
+      "path": "data/commercial/first-fold-contract.v1.json",
+      "before_sha256": "1f2384f881c21886927b41f5f63be208185ec450fb5f1d968778a3ed5e801760",
+      "after_sha256": "80d0e6fb8bdd6b2a8d3fdcdec3727711cdc50dafdb5cabd412936bb51c113712",
+      "bytes": 39989
+    },
+    {
+      "path": "data/commercial/first-fold-measurements.v1.json",
+      "before_sha256": "28199ee386de8e8ca82542429abf4b1e8d276f1574a8d1af0c56eb574646c0e8",
+      "after_sha256": "ba09237fac415bd872969a5a8760ae762807a9c91bd179e57fb37cddf2fdfe9f",
+      "bytes": 169583
+    },
+    {
+      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+      "before_sha256": "30b5469c3ba94a278898dbb378ce95ea24d4472d7a3952b374d19fc9c4771aa1",
+      "after_sha256": "16e6f3e2681d9c06ad1cf086fbe12f52f82b5ba83493d06cdb00453d6570cef2",
+      "bytes": 79814
+    }
+  ],
+  "mode": "applied",
+  "screenshots_review_confirmed": true
+}

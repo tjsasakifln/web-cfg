@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -29,6 +30,7 @@ from scripts.site.public_ia import (
     validate_contract,
 )
 from scripts.site.shell_nav import FROZEN_SHELL_FILES, load_brand, nav_items, sync_text
+from scripts.site.test_nav_taskflow import nav_links, public_target_exists
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,10 +47,10 @@ def test_ia_contract_is_valid_without_html():
     assert "b2g" not in labels
     assert all(
         phrase in labels
-        for phrase in ("projetos", "serviços", "condomínios", "obras públicas", "ferramentas", "empresa")
+        for phrase in ("projetos", "serviços", "ferramentas", "inteligência", "obras públicas", "conteúdos")
     )
     assert "projetos" in labels
-    assert any(item == {"label": "Ferramentas", "href": "/ferramentas/"} for item in items)
+    assert any(item["label"] == "Ferramentas" and item["href"] == "/ferramentas/" for item in items)
     ia = load_ia_map()
     situations = ia["service_situations"]
     # VALOR-IMEDIATO-20260914: a taxonomia e uma so (brand.json = mapa de IA) e
@@ -94,17 +96,18 @@ def test_brand_header_mirrors_ia_map():
     assert brand_labels == ia_labels
 
 
-def test_project_content_does_not_inherit_the_public_works_header_branch():
-    """Specific project-content routes override the generic B2G content rule."""
+def test_content_library_and_project_services_keep_distinct_header_branches():
+    """Articles belong to the library; service routes retain their project branch."""
     assert (
         active_header_href("/conteudos/como-contratar-projetos-complementares/")
-        == "/projetos/"
+        == "/conteudos/"
     )
-    # Negative control: the broad rule still owns public-works content.
     assert (
         active_header_href("/conteudos/ata-reuniao-ordem-servico-obra-publica/")
-        == "/servicos-obras-publicas/"
+        == "/conteudos/"
     )
+    assert active_header_href("/projetos/estruturas/") == "/projetos/"
+    assert active_header_href("/medicoes-glosas-obras-publicas/") == "/servicos-obras-publicas/"
 
 
 def test_each_hub_has_exactly_one_role():
@@ -215,18 +218,16 @@ def test_shipped_home_header_names_a_journey():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert first_viewport_names_journey(home)
     desktop = home.split('class="desktop-nav"', 1)[1].split("</nav>", 1)[0]
-    assert desktop.lower().count("href=") <= MAX_HEADER_DESTINATIONS
+    assert len(nav_links(home, "desktop-nav")) == len(header_items())
+    assert desktop.count('class="nav-group"') <= MAX_HEADER_DESTINATIONS
 
 
-def test_mobile_menu_preserves_order_and_44px_anchor_floor():
+def test_mobile_menu_preserves_order_and_native_disclosure_controls():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     mobile = home.split('class="mobile-nav"', 1)[1].split("</nav>", 1)[0]
-    cursor = -1
-    for item in header_items():
-        anchor = f'href="{item["href"]}" style="min-height:44px">{item["label"]}</a>'
-        position = mobile.find(anchor)
-        assert position > cursor, item
-        cursor = position
+    assert nav_links(home, "mobile-nav") == [(item["href"], item["label"]) for item in header_items()]
+    assert mobile.count('class="nav-group"') == len(header_items())
+    assert mobile.count('<summary ') == len(header_items())
     assert 'class="button button-primary"' in mobile
     assert 'class="menu-toggle"' in home
     assert 'aria-controls="mobile-menu"' in home
@@ -243,7 +244,9 @@ def test_footer_is_not_a_taxonomy_dump():
     assert rendered.count("<strong>") == 3
     assert '<a href="/inteligencia/">Inteligência de mercado</a>' in rendered
     assert "Metodologia" not in rendered
-    assert rendered.count("<a ") <= 16
+    # Fifteen discovery links plus the two direct contact channels. The new
+    # ready-project entry adds one destination to the previous compact footer.
+    assert rendered.count("<a ") == 17
     assert "Perícias e avaliações" not in rendered
     for href in ("/projetos/estruturas/", "/projetos/instalacoes/", "/projetos/infraestrutura/", "/inteligencia/", "/empresa/"):
         assert f'href="{href}"' in rendered, href

@@ -2,6 +2,7 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import path from "node:path";
 import { buildInventory } from "../../scripts/commercial/cta_form_next_state_audit.mjs";
 
 const report = buildInventory();
@@ -23,6 +24,59 @@ assert.equal(report.coverage.manual_route_allowlist, false);
 assert.equal(report.coverage.active_capture_routes, 42);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
+
+// Navigation is discovery, not a declared form commitment. Exercise the real
+// census with HTML fixtures injected only into reads, leaving repository files
+// untouched. A marker alone must never hide a commercial or external action.
+const navigationPositions = ["header_nav", "mobile_nav", "header_shortcut", "header_utility"];
+const censusFixtures = [
+  ...navigationPositions.map((position) => ({ name: position, excluded: true, attrs: { "data-cta-position": position, "data-cta-id": `nav-${position}-fixture-route` } })),
+  { name: "marker-false", attrs: { "data-navigation-link": "false" } },
+  { name: "marker-missing", attrs: { "data-navigation-link": null } },
+  { name: "uncontrolled-id", attrs: { "data-cta-id": "fixture-commercial-action" } },
+  { name: "commercial-position", attrs: { "data-cta-position": "hero" } },
+  { name: "local-form", attrs: { href: "#contato" } },
+  { name: "route-form", attrs: { href: "/cad/#contato" } },
+  { name: "route-query", attrs: { href: "/cad/?context=fixture" } },
+  { name: "external-route", attrs: { href: "https://example.invalid/cad/" } },
+  { name: "protocol-relative", attrs: { href: "//example.invalid/cad/" } },
+  { name: "next-action", attrs: { "data-next-action-id": "fixture-register-context" } },
+];
+const fixturePrefix = "Navigation census fixture: ";
+const fixtureHtml = censusFixtures.map(({ name, attrs }) => {
+  const attributes = {
+    href: "/cad/", "data-navigation-link": "true", "data-event-name": "cta_click",
+    "data-cta-position": "header_nav", "data-cta-id": `nav-header_nav-fixture-${name}`,
+    ...attrs,
+  };
+  const serialized = Object.entries(attributes).filter(([, value]) => value !== null).map(([key, value]) => `${key}="${value}"`).join(" ");
+  return `<a ${serialized}>${fixturePrefix}${name}</a>`;
+}).join("\n");
+const homeFile = path.resolve("index.html");
+const originalReadFile = fs.readFileSync;
+let fixtureInventory;
+let injectedReads = 0;
+try {
+  fs.readFileSync = function (file, ...options) {
+    const contents = originalReadFile.call(this, file, ...options);
+    if (typeof file === "string" && path.resolve(file) === homeFile && typeof contents === "string") {
+      assert.match(contents, /<\/main>/i, "fixture injection needs the real home main");
+      injectedReads += 1;
+      return contents.replace(/<\/main>/i, `${fixtureHtml}</main>`);
+    }
+    return contents;
+  };
+  fixtureInventory = buildInventory();
+} finally {
+  fs.readFileSync = originalReadFile;
+}
+assert.ok(injectedReads > 0, "the census must read the fixture-bearing home");
+const retainedFixtures = fixtureInventory.surfaces.flatMap((surface) => surface.actions)
+  .filter((action) => action.current_label.startsWith(fixturePrefix))
+  .map((action) => action.current_label.slice(fixturePrefix.length));
+assert.deepEqual(retainedFixtures, censusFixtures.filter((fixture) => !fixture.excluded).map((fixture) => fixture.name), "only controlled canonical navigation routes leave the commercial census");
+assert.equal(fixtureInventory.coverage.declared_ctas, report.coverage.declared_ctas + retainedFixtures.length, "real commercial actions and the existing census remain intact");
+
 // Os seis pilares protegidos capturam on-page por decisao expressa; nenhum
 // outro pilar protegido pode ganhar formulario sem entrar nesta lista.
 const unlockPlan = JSON.parse(fs.readFileSync("data/bofu-dominance/frozen-specs/unlock-plan.v1.json", "utf8"));

@@ -103,6 +103,9 @@ class _NavLinks(HTMLParser):
         self._href: str | None = None
         self._cls: str = ""
         self._buf: list[str] = []
+        self._grouped = False
+        self._primary = False
+        self._nav_label = ""
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         ad = {k: (v or "") for k, v in attrs}
@@ -111,18 +114,22 @@ class _NavLinks(HTMLParser):
             return
         if not self._depth:
             return
+        if tag == "details" and "nav-group" in ad.get("class", "").split():
+            self._grouped = True
         if tag == "nav":
             self._depth += 1
         if tag == "a":
             self._href = ad.get("href", "")
             self._cls = ad.get("class", "")
             self._buf = []
+            self._primary = ad.get("data-nav-primary") == "true"
+            self._nav_label = ad.get("data-nav-label", "")
 
     def handle_endtag(self, tag: str) -> None:
         if self._depth and tag == "a" and self._href is not None:
-            label = re.sub(r"\s+", " ", "".join(self._buf)).strip()
+            label = self._nav_label if self._primary else re.sub(r"\s+", " ", "".join(self._buf)).strip()
             # The trailing CTA button is not a taxonomy item.
-            if label and "button" not in (self._cls or "").split():
+            if label and "button" not in (self._cls or "").split() and (self._primary or not self._grouped):
                 self.links.append((self._href, label))
             self._href = None
         if self._depth and tag == "nav":
@@ -168,6 +175,14 @@ def main() -> int:
         href = item["href"]
         if not public_target_exists(href):
             failures.append(f"nav label {item['label']!r} target missing: {href}")
+    discovery_items = [
+        child
+        for group in ia["header"]["destinations"]
+        for child in group.get("children", [])
+    ] + ia["header"].get("quick_links", []) + ia["header"].get("utility_links", [])
+    for item in discovery_items:
+        if not public_target_exists(item["href"]):
+            failures.append(f"discovery target missing: {item['label']!r} -> {item['href']}")
 
     services = hub(brand, "services")
     problems = hub(brand, "problems")
@@ -340,7 +355,7 @@ def main() -> int:
         "/bid-room-licitacoes-obras/": services["url"],
         "/diretoria-b2g/": services["url"],
         "/defesa-tecnica-contratos-publicos/": services["url"],
-        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": services["url"],
+        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
         "/ferramentas/limite-acrescimos-supressoes/": "/ferramentas/",
     }
     for current, active in active_cases.items():
@@ -394,7 +409,7 @@ def main() -> int:
         if target.is_file():
             hub_targets[href] = internal_hrefs(target.read_text(encoding="utf-8"))
 
-    header = {href for href, _ in expected}
+    header = {href for href, _ in expected} | {item["href"] for item in discovery_items}
     attempts = len(TASKS)
     successes = 0
     misses: list[str] = []
