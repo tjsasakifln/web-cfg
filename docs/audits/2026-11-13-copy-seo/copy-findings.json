@@ -1,6 +1,6 @@
 {
   "schema": "confenge.copy-audit/1.0",
-  "status": "source_reviewed_pending_ci_and_production",
+  "status": "implemented_and_source_reviewed",
   "baseline": "1bf90c9",
   "method": "Simulação analítica de dez perspectivas de copy; participação real dos autores não alegada. Oportunidades editoriais são hipóteses, não resultados comerciais comprovados.",
   "findings": [
@@ -324,11 +324,13 @@
       "route": "/parcerias-engenharia/",
       "before": [
         "conversa técnica, sem contratação nem pagamento, sem planta nem arquivo nesta etapa. A resposta nomeia o trabalho, o que você recebe e o que falta reunir para a proposta.",
-        "O trabalho, o que já existe e quem permanece com o cliente. Sem anexo e sem dado sensível."
+        "O trabalho, o que já existe e quem permanece com o cliente. Sem anexo e sem dado sensível.",
+        "Em texto, sem planta nem arquivo; este primeiro contato não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre com dados de terceiros. O que for sensível segue depois, por canal seguro combinado com você."
       ],
       "after": [
         "descreva a necessidade e compartilhe as referências técnicas não sigilosas que já tiver. Documentos confidenciais e dados de terceiros seguem pelo canal reservado combinado com a equipe.",
-        "Informe o trabalho, as referências disponíveis e quem coordena o contato com o cliente. Preserve documentos confidenciais até combinarmos o envio reservado."
+        "Informe o trabalho, as referências disponíveis e quem coordena o contato com o cliente. Preserve documentos confidenciais até combinarmos o envio reservado.",
+        "Descreva a necessidade e compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Documentos confidenciais, endereço exato, CPF e dados de terceiros seguem pelo canal reservado combinado com você."
       ],
       "reason": "Referências técnicas não sigilosas já são aceitas pelo contato canônico; preservados sigilo, conflito e dados de terceiros.",
       "group": "Orientação para referências e documentos no primeiro contato",
