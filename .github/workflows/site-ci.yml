@@ -31,7 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXTRA_CLI_REQUIRED: "1"
-    timeout-minutes: 60
+    # Keep time for the complete Lighthouse matrix and its downstream gates.
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
