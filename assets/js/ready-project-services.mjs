@@ -210,6 +210,7 @@ if (form) {
     $('rp-deadline-output').textContent = `${selection.deadlineDays} dias`;
     $('rp-deadline').setAttribute('aria-valuetext', `${selection.deadlineDays} dias corridos`);
     $('rp-summary-area').textContent = Number.isFinite(selection.areaM2) ? `${number(selection.areaM2)} m²` : 'Informe a área';
+    $('rp-summary-deadline').previousElementSibling.textContent = needsProposal ? 'Prazo desejado' : 'Prazo de elaboração';
     $('rp-summary-deadline').textContent = `${selection.deadlineDays} dias corridos`;
     for (const button of form.querySelectorAll('[data-deadline]')) button.setAttribute('aria-pressed', String(Number(button.dataset.deadline) === selection.deadlineDays));
     for (const node of form.querySelectorAll('[data-discipline-price]')) {
@@ -224,6 +225,7 @@ if (form) {
     $('rp-savings').textContent = needsProposal ? 'O valor e o prazo serão definidos na proposta para o seu caso.' : saving > 0 ? `Com 90 dias, este projeto fica ${money(saving)} mais econômico.` :
       selected?.items.length ? 'Você escolheu o menor valor desta faixa de prazo.' : 'O total é a soma das disciplinas escolhidas.';
     $('rp-included-note').hidden = needsProposal;
+    $('rp-payment-availability').hidden = needsProposal;
     message($('rp-eligibility'), issue?.message);
     updateActions();
   }

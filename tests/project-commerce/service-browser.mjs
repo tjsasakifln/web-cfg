@@ -155,6 +155,7 @@ async function accept(page) {
   }
 }
 async function assertPurchaseButtonRecovery() {
+  const analyticsBeforeGuidance = analytics.length;
   const guidance = await newPage();
   const posts = [];
   guidance.on('request', request => { if (request.method() === 'POST') posts.push(request.url()); });
@@ -181,6 +182,11 @@ async function assertPurchaseButtonRecovery() {
   assert.equal((await contents(guidance, '#rp-total')).trim(), 'Sob proposta');
   assert.equal(await guidance.$$eval('[data-discipline-price]', nodes => nodes.length > 0 && nodes.every(node => node.textContent.trim() === 'Sob proposta')), true,
     'out-of-scope inputs do not retain prices offered only for the standard scope');
+  assert.equal(await guidance.$eval('#rp-summary-deadline', node => node.previousElementSibling.textContent.trim()), 'Prazo desejado');
+  assert.equal(await guidance.$eval('#rp-payment-availability', node => node.hidden), true,
+    'a specific proposal must not imply that its payment is already available');
+  const privateProposalNote = 'Referência privada de ensaio: proposta-privada@example.test, telefone 48912345678.';
+  await guidance.$eval('#mensagem', (node, value) => { node.value = value; }, privateProposalNote);
   await audit(guidance, 'proposal-mobile', 390, 844);
   await screenshot(guidance, 'proposal-summary-mobile', '.rp-summary');
   await guidance.click('#rp-review-button');
@@ -189,11 +195,44 @@ async function assertPurchaseButtonRecovery() {
   const proposalMessage = await guidance.$eval('#mensagem', node => node.value);
   assert.match(proposalMessage, /100\s*m²/);
   assert.match(proposalMessage, /52\s*dias/);
+  assert(proposalMessage.includes(privateProposalNote), 'preparing a proposal preserves the buyer\'s existing private context');
   for (const condition of selectedConditions) assert(proposalMessage.includes(condition), `proposal context retains the selected condition: ${condition}`);
   assert.equal(await guidance.$eval('#nome', node => Boolean(node.closest('#contato-projetos'))), true);
   assert.equal(callCount('service-quote'), initialQuotes, 'a specific proposal must not use the standard quote');
   assert.equal(callCount('service-checkout'), initialCheckouts);
-  assert.deepEqual(posts, [], 'guidance prepares the contact form without sending it');
+  assert.deepEqual(posts.filter(url => url !== `${base}/api/web/collect`), [],
+    'guidance must not send a contact form, quote, checkout or any other non-collector POST');
+  // Focusing the contact form emits lead_form_start. First-party metadata may
+  // flush here, while Google Analytics remains denied. Inspect both sent and
+  // queued events so batching cannot hide a false submission or private data.
+  const collectedGuidance = analytics.slice(analyticsBeforeGuidance).flatMap(body => {
+    const batch = JSON.parse(body);
+    assert(Array.isArray(batch.events), 'collector requests use the event batch contract');
+    return batch.events;
+  });
+  const queuedGuidance = await guidance.evaluate(() => (window.dataLayer || []).filter(entry => entry && typeof entry.event === 'string'));
+  assert.equal(queuedGuidance.filter(entry => entry.event === 'lead_form_start').length, 1,
+    'focusing the buyer name records only one form start');
+  const guidanceEvents = [...collectedGuidance, ...queuedGuidance.map(entry => ({ event: entry.event, props: entry }))];
+  assert.deepEqual(guidanceEvents.filter(entry => /^(?:lead_|form_|pseo_form_)/.test(entry.event) && entry.event !== 'lead_form_start'), [],
+    'proposal guidance cannot claim a form submission, success, persistence or another form advance');
+  const privateKey = /(?:^|_)(?:name|nome|email|phone|telefone|tel|whatsapp|message|mensagem|reference|customer|address|endereco|cpf|cnpj|comment|description|text|note)(?:$|_)/i;
+  for (const entry of guidanceEvents) {
+    assert.equal(entry.props?.source, 'CONFENGE_WEB');
+    assert.equal(entry.props?.pii_policy, 'aggregate_allowlist_empty');
+    for (const [key, value] of Object.entries(entry.props)) {
+      assert(!privateKey.test(key), `form data must not enter aggregate metadata: ${key}`);
+      assert(['string', 'number', 'boolean'].includes(typeof value), 'aggregate metadata cannot contain a nested form payload');
+    }
+  }
+  const serializedGuidance = JSON.stringify(guidanceEvents);
+  for (const value of [proposalMessage, privateProposalNote, 'proposta-privada@example.test', '48912345678']) {
+    assert(!serializedGuidance.includes(value), 'private proposal context must not enter sent or queued analytics');
+  }
+  report.proposalGuidance = { collectorRequests: posts.length,
+    collectedEvents: [...new Set(collectedGuidance.map(entry => entry.event))],
+    queuedEvents: [...new Set(queuedGuidance.map(entry => entry.event))],
+    submissionRequests: 0, privateMarkersAbsent: true };
   checks.push('out-of-scope-click-prepares-proposal-without-price-or-submission');
   await guidance.close();
 
