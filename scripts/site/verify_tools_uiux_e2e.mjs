@@ -813,9 +813,65 @@ await keyboardPage.setViewport({ width: 1440, height: 1000 });
   else pass("keyboard_complete_diagnostico");
   report.keyboard.push({ page: "diagnostico", completed });
 
-  const hasFocusStyle = await keyboardPage.evaluate(() => !!document.querySelector('link[href*="styles"]'));
-  if (!hasFocusStyle) fail("focus_css_link");
+  // The bounded institutional projection has no "styles" substring. Resolve
+  // its exact shipped files, as the BIM identity gate does, and require CSSOM.
+  const cssSources = ["assets/tool-bundles/diagnostico-base.css", "assets/tool-bundles/diagnostico-defesa-margem.css"];
+  let expectedStyles = [];
+  try {
+    const files = SITE_ROOT === ROOT ? null : JSON.parse(readFileSync(join(SITE_ROOT, ".well-known/css-assets.json"), "utf8")).files;
+    expectedStyles = cssSources.map((source) => {
+      const href = SITE_ROOT === ROOT ? `/${source}` : files?.[source]?.href;
+      if (typeof href !== "string" || !href.startsWith("/")) throw new Error(`institutional stylesheet missing: ${source}`);
+      return href;
+    });
+  } catch (error) {
+    fail("focus_css_manifest " + error.message);
+  }
+  const sheets = await keyboardPage.evaluate((expected) => expected.map((href) => {
+    const links = [...document.querySelectorAll('link[rel~="stylesheet"]')].filter((link) => link.getAttribute("href") === href);
+    const link = links[0];
+    let rules = 0;
+    try { rules = link?.sheet?.cssRules.length || 0; } catch (_) {}
+    return { href, count: links.length, rules, applied: !!(link && !link.disabled && !link.sheet?.disabled && (!link.media || matchMedia(link.media).matches)) };
+  }), expectedStyles);
+  const stylesLoaded = expectedStyles.length === 2 && new Set(expectedStyles).size === 2
+    && sheets.every((sheet) => sheet.count === 1 && sheet.rules > 0 && sheet.applied);
+  if (!stylesLoaded) fail("focus_css_link " + JSON.stringify(sheets));
   else pass("focus_css_link");
+
+  // Observe real keyboard focus and its painted indicator. Comparing the same
+  // form before/after blur avoids coupling the check to color/shadow strings.
+  const focusSelector = "#lookup button.tool-run";
+  const settleFocus = () => keyboardPage.$eval("#lookup", async (form) => {
+    await document.fonts.ready;
+    void form.getBoundingClientRect();
+    await Promise.all(form.getAnimations({ subtree: true }).map((animation) => animation.finished.catch(() => {})));
+  });
+  await keyboardPage.focus("#qid");
+  const tabReached = await tabToSelector(keyboardPage, focusSelector);
+  await settleFocus();
+  const focusVisible = await keyboardPage.$eval(focusSelector, (button) => document.activeElement === button && button.matches(":focus-visible"));
+  const form = await keyboardPage.$("#lookup");
+  const formBefore = await form.evaluate((element) => element.outerHTML);
+  let indicatorPainted = false;
+  let formUnchanged = false;
+  let focusRestored = false;
+  try {
+    const focused = await form.screenshot({ path: join(OUT, "screenshots", "after", "diagnostico-keyboard-focus.png") });
+    await keyboardPage.$eval(focusSelector, (button) => button.blur());
+    await settleFocus();
+    const blurred = await form.screenshot({ path: join(OUT, "screenshots", "after", "diagnostico-keyboard-blur.png") });
+    indicatorPainted = !Buffer.from(focused).equals(Buffer.from(blurred));
+    formUnchanged = formBefore === await form.evaluate((element) => element.outerHTML);
+  } finally {
+    await keyboardPage.focus("#qid");
+    const returned = await tabToSelector(keyboardPage, focusSelector);
+    await settleFocus();
+    focusRestored = returned && await keyboardPage.$eval(focusSelector, (button) => document.activeElement === button && button.matches(":focus-visible"));
+  }
+  report.focus = { expectedStyles, sheets, tabReached, focusVisible, indicatorPainted, formUnchanged, focusRestored };
+  if (!tabReached || !focusVisible || !indicatorPainted || !formUnchanged || !focusRestored) fail("diagnostico_keyboard_focus_visible " + JSON.stringify(report.focus));
+  else pass("diagnostico_keyboard_focus_visible");
 }
 await keyboardContext.close();
 

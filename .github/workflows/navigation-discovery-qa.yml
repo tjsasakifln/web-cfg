@@ -340,6 +340,59 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_contact_journeys.mjs 2>&1 | tee build/reports/navigation-artifact-qa/contact-journeys.log
+      # The required site-ci still runs these gates after Lighthouse. Run the
+      # same tests here too, so a late browser assertion is visible earlier.
+      - name: Verify complete tool journeys before release
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          PUBLIC_ARTIFACT_REQUIRED: "1"
+        run: |
+          set -o pipefail
+          node scripts/site/verify_tools_uiux_e2e.mjs build/reports/navigation-artifact-qa/tools-uiux 2>&1 | tee build/reports/navigation-artifact-qa/tools-uiux.log
+      - name: Verify real DWG editing and export before release
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CAD_EVIDENCE: build/reports/navigation-artifact-qa/cad
+        run: |
+          set -o pipefail
+          node tests/cad/editor-browser.mjs _site 2>&1 | tee build/reports/navigation-artifact-qa/cad-editor.log
+      - name: Verify DWG export acknowledgement and cancellation before release
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CAD_BRIDGE_REPORT_DIR: build/reports/navigation-artifact-qa/cad/bridge
+        run: |
+          set -o pipefail
+          node tests/cad/engine-bridge-browser.cjs _site 2>&1 | tee build/reports/navigation-artifact-qa/cad-bridge.log
+      - name: Install the existing Playwright checklist browser
+        id: review_playwright
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        run: |
+          set -o pipefail
+          npm install --no-save playwright 2>&1 | tee build/reports/navigation-artifact-qa/playwright-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee -a build/reports/navigation-artifact-qa/playwright-install.log
+      - name: Verify the existing final browser checklist before release
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success' && steps.review_playwright.outcome == 'success'
+        env:
+          CONFENGE_BASE: http://127.0.0.1:8765
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -o pipefail
+          python3 -m http.server 8765 --directory _site > build/reports/navigation-artifact-qa/checklist-server.log 2>&1 &
+          review_http_pid=$!
+          trap 'kill "$review_http_pid" 2>/dev/null || true' EXIT
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            curl -fsS "$CONFENGE_BASE/" >/dev/null && break
+            sleep 1
+          done
+          curl -fsS "$CONFENGE_BASE/" >/dev/null
+          review_checklist_status=0
+          node scripts/site/playwright_local_checklist.mjs 2>&1 | tee build/reports/navigation-artifact-qa/playwright-checklist.log || review_checklist_status=1
+          node scripts/modela/verificar-projeto.mjs "$CONFENGE_BASE" 2>&1 | tee build/reports/navigation-artifact-qa/modela-project.log || review_checklist_status=1
+          node scripts/cad/suite/verificar-rascunho.mjs "$CONFENGE_BASE" 2>&1 | tee build/reports/navigation-artifact-qa/cad-draft.log || review_checklist_status=1
+          exit "$review_checklist_status"
       - name: Expose compiled public captures for review
         if: always() && steps.build.outcome == 'success'
         env:
