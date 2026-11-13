@@ -180,3 +180,26 @@ Os dois JSON de primeira dobra provêm dos originais da mesma execução; o cont
 A [QA de artefato de S](https://github.com/tjsasakifln/web-cfg/actions/runs/43314396142/job/131518485545) passou no controle completo de entregas e gerou o rodapé sem recentralização. O integrador e o revisor independente aprovaram o PNG, hash `b72311c1ead0589958b0a7d2e96e3dfe33c9130cc6dcaff7a4a3a769e796504f`: Estruturas, Instalações, contatos, políticas e preferência de analytics estão legíveis e completos. A borda inferior excede a viewport em 0,375 px, dentro do limite de 1 px; a altura normalizada é 24.289 px para o teto histórico de 24.300 px. Imagem e relatório originais estão em [footer-a4a77d8d](2026-11-12-navigation-evidence/footer-a4a77d8d/review.json). O job foi cancelado pela atualização seguinte depois dos testes substantivos, portanto essa evidência não equivale a uma execução integral concluída.
 
 Os controles completos da revisão derivada, a integração por merge commit e a liberação Netcup no SHA exato de main continuam obrigatórios. A aprovação destas capturas não declara publicação concluída.
+
+## Correção de desempenho após a medição completa
+
+A QA funcional da revisão `12db134a7e2fd08c1fa1355865340a288beb9e39` passou na fonte e no artefato. O [site-ci 43319312840](https://github.com/tjsasakifln/web-cfg/actions/runs/43319312840), porém, concluiu suas 83 medições com `MEASURED_FAIL`, sem erro de infraestrutura nem rotas não medidas. A publicação permaneceu bloqueada.
+
+| Página | Reprovação medida |
+| --- | --- |
+| Home e Diretoria B2G | 893 elementos para limite de 800, nos três runs |
+| Entregas | 1.241 elementos para limite de 1.100, nos três runs |
+| Diagnóstico de defesa da margem | 157.755 bytes comprimidos para limite de 153.600; LCP de 2.030,43 ms no segundo run, para limite de 2.000 ms |
+| Documentos para reequilíbrio | TBT de 290,6512 ms e performance 94 no terceiro run, para limites de 200 ms e 95 |
+
+O artefato `site-ci-reports`, ID `13994215192`, foi baixado e verificado: 52.166.468 bytes e SHA256 `d9b41ad7ea6ee1f474c9439c2df891405dd6b31c2c3392230cf6c694d38342c4`. Esses resultados permanecem registrados. Nenhum limite, quantidade de medições, configuração de simulação ou regra de classificação foi afrouxado.
+
+A correção estrutural retira 80 elementos de cada variante de menu, portanto 160 nas páginas que carregam desktop e celular. Títulos e summaries passam a usar texto direto; indicadores decorativos passam para CSS. Os painéis deixam de repetir introduções genéricas e apresentam diretamente os destinos, com a visão geral no rodapé. Permanecem os 38 destinos, suas descrições, atributos, IDs, controles nativos, teclado e funcionamento sem JavaScript. O JavaScript do menu permanece idêntico.
+
+O integrador e o revisor de interface conferiram os [269 HTML alterados](2026-11-12-navigation-evidence/compact-source-audit.json). Todo byte fora de `details.nav-group` permanece igual à base `12db`, assim como os endereços, atributos e textos dos links, descontada somente a seta decorativa. Há 267 páginas com os dois menus e duas páginas que já possuíam apenas desktop. Nos dois documentos de Projetos prontos, a atualização foi restrita aos grupos; oferta, condições, formulários, CTAs e scripts da PR #837 permanecem intactos. Os seis pilares e a fonte do canário ainda não foram alterados.
+
+A publicação dos estilos passa por minificação de espaços e comentários, após incorporar os tokens e antes de calcular o hash do arquivo. Nenhuma regra, seletor, identificador ou string é removida. O compositor de CSS fonte permanece byte a byte igual e avisos do parser bloqueiam a publicação. Dois módulos públicos, `showcase.mjs` e `tool-referral.mjs`, entram na minificação já usada pelos scripts das ferramentas; o escopo é explícito, as fontes continuam legíveis e a avaliação de constantes permanece desabilitada. Sobre os ativos realmente carregados em `12db`, a redução calculada é de 4.415 bytes comprimidos, antes do ganho adicional da compactação do HTML. Isso é uma estimativa por compressão dos ativos, não uma nova medição Lighthouse ou um aceite de LCP.
+
+O pico de TBT foi localizado em uma tarefa tardia sem atribuição de função. Um resultado equivalente já havia ocorrido na tentativa 1 da publicação de `d59`, sem este menu, mas isso não autoriza descartar a reprovação. O coletor passa a preservar Trace e DevtoolsLog do mesmo resultado medido, vinculados ao LHR por tamanho e SHA256. A retenção ocorre após gravar a medição; falhas de retenção ficam explícitas e não mudam o resultado nem permitem nova navegação. As 17 contraprovas do coletor passaram em Node 22.
+
+A prova de apresentação agora usa `12db` como base. Uma transformação independente admite somente a compactação exata do cabeçalho. Fora do módulo de navegação, o CSS é comparado por bytes, com compositor imutável. Seis testes locais incluem contraprovas que recusam mudanças em links, textos, controles, quantidades, regras externas e finais de linha. Os testes de publicação passaram em 18 cenários de CSS e 12 de JavaScript. A nova inspeção visual em navegador, a medição de primeira dobra, a recaptura derivada e os controles completos continuam necessários antes da integração.

@@ -48,24 +48,19 @@ def render_navigation(
                 f'<a class="nav-destination" href="{escape(item["href"], quote=True)}" '
                 f'data-nav-destination="{escape(item["id"], quote=True)}" '
                 f'{_analytics(position, group_id + "-" + item["id"])}>'
-                f'<span class="nav-destination__title">{escape(item["label"])}</span>'
+                f'{escape(item["label"])}'
                 f'<span class="nav-destination__description">{escape(item["description"])}</span></a>'
             )
         parts.append(
             f'<details class="{group_class}" name="nav-{kind}" '
             f'data-nav-group="{escape(group_id, quote=True)}">'
             f'<summary class="nav-group__toggle" aria-controls="{panel_id}">'
-            f'<span>{escape(group["label"])}</span>'
-            '<span class="nav-group__chevron" aria-hidden="true"></span></summary>'
-            f'<div class="nav-panel" id="{panel_id}">'
-            '<div class="nav-panel__intro">'
-            f'<p class="nav-panel__eyebrow">{escape(group["eyebrow"])}</p>'
-            f'<p class="nav-panel__description">{escape(group["description"])}</p>'
+            f'{escape(group["label"])}</summary>'
+            f'<div class="nav-panel" id="{panel_id}">{"".join(links)}'
             f'<a class="nav-overview" data-nav-primary="true" '
             f'data-nav-label="{escape(group["label"], quote=True)}"{aria} '
             f'href="{escape(group["href"], quote=True)}" {_analytics(position, group_id + "-overview")}>'
-            f'{escape(group["overview_label"])}<span aria-hidden="true"> →</span></a></div>'
-            f'<div class="nav-panel__links">{"".join(links)}</div></div></details>'
+            f'{escape(group["overview_label"])}</a></div></details>'
         )
     if mobile:
         utility = "".join(

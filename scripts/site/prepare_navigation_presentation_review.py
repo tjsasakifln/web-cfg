@@ -16,11 +16,9 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE_SHA = "7c570c0a103fcd7e6174cb922cbc7def79ce413d"
+BASE_SHA = "12db134a7e2fd08c1fa1355865340a288beb9e39"
 APPROVALS = "data/editorial/contract-analysis/approvals.json"
 ANALYSIS_ID = "13ec615146b3d348190a9b0b9148831e"
-PROJECT_DESCRIPTION_BEFORE = "Consulte disponibilidade e adaptação ao terreno."
-PROJECT_DESCRIPTION_AFTER = "Calcule seu projeto por disciplina e prazo."
 PRESENTATION_FIELDS = {
     "rendered_content_hash_previous", "rendered_content_hash",
     "rendered_hash_recaptured_at", "rendered_hash_recapture_reason",
@@ -111,24 +109,58 @@ def header_without_discovery(source: str) -> str:
     header = re.sub(r"<!-- BEGIN NAV DISCOVERY -->.*?<!-- END NAV DISCOVERY -->", "", shared(source, "header").group(), flags=re.S)
     return re.sub(r"\s*</header>$", "\n</header>", header)
 
-def header_with_project_calculator_description(source: str) -> str:
-    """Allow only the reviewed description on the two identified project links."""
+def header_with_compact_navigation(source: str) -> str:
+    """Remove only redundant wrappers and generic group introductions.
+
+    The approved header is the input. Every destination, description, link
+    attribute, group binding and outside byte survives this exact transform.
+    Overview links move after their group's destinations, without new copy.
+    This is independent of the candidate renderer and cannot admit arbitrary
+    header replacement, a changed destination or a changed commercial claim.
+    """
     header = shared(source, "header").group()
-    for position in ("header_nav", "mobile_nav"):
-        anchor = (
-            '<a class="nav-destination" href="/projetos-prontos/" '
-            'data-nav-destination="projetos-prontos" '
-            f'data-cta-position="{position}" '
-            f'data-cta-id="nav-{position}-projetos-projetos-prontos" '
-            'data-event-name="cta_click" data-navigation-link="true">'
-            '<span class="nav-destination__title">Projetos prontos</span>'
-            f'<span class="nav-destination__description">{PROJECT_DESCRIPTION_BEFORE}</span></a>'
-        )
-        assert header.count(anchor) == 1, ("project_description_binding", position, header.count(anchor))
-        old_span = f'<span class="nav-destination__description">{PROJECT_DESCRIPTION_BEFORE}</span>'
-        new_span = f'<span class="nav-destination__description">{PROJECT_DESCRIPTION_AFTER}</span>'
-        header = header.replace(anchor, anchor.replace(old_span, new_span, 1), 1)
+    header, titles = re.subn(
+        r'(<a class="nav-destination"[^>]*>)<span class="nav-destination__title">([^<]*)</span>'
+        r'(<span class="nav-destination__description">[^<]*</span></a>)',
+        r'\1\2\3', header)
+    assert titles == 76, ("compact_title_bindings", titles)
+    header, summaries = re.subn(
+        r'(<summary class="nav-group__toggle" aria-controls="nav-(?:desktop|mobile)-[a-z-]+">)'
+        r'<span>([^<]*)</span><span class="nav-group__chevron" aria-hidden="true"></span></summary>',
+        r'\1\2</summary>', header)
+    assert summaries == 12, ("compact_summary_bindings", summaries)
+    panel_pattern = (
+        r'(<div class="nav-panel" id="nav-(?:desktop|mobile)-[a-z-]+">)'
+        r'<div class="nav-panel__intro">'
+        r'<p class="nav-panel__eyebrow">[^<]*</p>'
+        r'<p class="nav-panel__description">[^<]*</p>'
+        r'(<a class="nav-overview"[^>]*>[^<]*)<span aria-hidden="true"> →</span></a></div>'
+        r'<div class="nav-panel__links">'
+        r'((?:<a class="nav-destination"[^>]*>[^<]*<span class="nav-destination__description">[^<]*</span></a>)+)'
+        r'</div></div>'
+    )
+    header, panels = re.subn(panel_pattern, r'\1\3\2</a></div>', header)
+    assert panels == 12, ("compact_panel_bindings", panels)
     return header
+
+
+def assert_compact_header(before: str, after: str) -> bool:
+    assert header_with_compact_navigation(before) == shared(after, "header").group(), "compact_header_exact_transform"
+    return True
+
+
+def assert_navigation_css_only(
+    before_css: bytes, after_css: bytes, before_module: bytes, after_module: bytes,
+    before_compiler: bytes, after_compiler: bytes,
+) -> bool:
+    """Require literal outside bytes and the unchanged source compositor."""
+    assert before_compiler == after_compiler, "source_css_compositor_byte_identical"
+    from scripts.site.build_css import strip_comments
+    old = strip_comments(before_module.decode("utf-8")).strip().encode("utf-8")
+    new = strip_comments(after_module.decode("utf-8")).strip().encode("utf-8")
+    assert old and new and before_css.count(old) == 1 and after_css.count(new) == 1, "unique_navigation_css_block"
+    assert before_css.replace(old, b"[REVIEWED NAVIGATION CSS]", 1) == after_css.replace(new, b"[REVIEWED NAVIGATION CSS]", 1), "outside_navigation_css_byte_identical"
+    return True
 
 def without_chrome(source: str) -> str:
     bar, header = discovery(source), shared(source, "header")
@@ -215,8 +247,8 @@ def main() -> None:
             "source_main_byte_identical": region(before,"main") == region(after,"main"),
             "source_head_byte_identical": region(before,"head") == region(after,"head"),
             "public_main_byte_identical": region(before_public,"main") == region(after_public,"main"),
-            "source_header_exact_project_description_update": header_with_project_calculator_description(before) == shared(after, "header").group(),
-            "public_header_exact_project_description_update": header_with_project_calculator_description(before_public) == shared(after_public, "header").group(),
+            "source_header_exact_compact_navigation": assert_compact_header(before, after),
+            "public_header_exact_compact_navigation": assert_compact_header(before_public, after_public),
             "source_footer_byte_identical": shared(before,"footer").group() == shared(after,"footer").group(),
             "public_footer_byte_identical": shared(before_public,"footer").group() == shared(after_public,"footer").group(),
             "source_bar_content_byte_identical": discovery_content(before) == discovery_content(after),
@@ -226,8 +258,13 @@ def main() -> None:
         }
         frozen = json.loads((baseline_root / "data/bofu-dominance/frozen-specs/hashes.json").read_text())
         protected = list(frozen["forbidden"])
-        checks["seventeen_protected_files_unchanged"] = len(protected) == 17 and all((ROOT/name).read_bytes() == (baseline_root/name).read_bytes() for name in protected)
+        checks["sixteen_protected_files_unchanged"] = len(protected) == 17 and all((ROOT/name).read_bytes() == (baseline_root/name).read_bytes() for name in protected if name != "styles.css")
         checks["six_source_pillars_unchanged"] = len(frozen["pillars"]) == 6 and all((ROOT/slug/"index.html").read_bytes() == (baseline_root/slug/"index.html").read_bytes() for slug in frozen["pillars"])
+        checks["shared_stylesheet_outside_navigation_byte_identical"] = assert_navigation_css_only(
+            (baseline_root/"styles.css").read_bytes(), (ROOT/"styles.css").read_bytes(),
+            (baseline_root/"css/navigation.css").read_bytes(), (ROOT/"css/navigation.css").read_bytes(),
+            (baseline_root/"scripts/site/build_css.py").read_bytes(), (ROOT/"scripts/site/build_css.py").read_bytes())
+        checks["information_architecture_contract_byte_identical"] = (ROOT/"data/site/public-ia-map.json").read_bytes() == (baseline_root/"data/site/public-ia-map.json").read_bytes()
         assert all(checks.values()), checks
         report = {
             "schema": "confenge.navigation-presentation-proof/1.0",
@@ -249,8 +286,11 @@ def main() -> None:
             "styles_css_sha256": digest((ROOT/"styles.css").read_bytes()),
             "factual_approval_fields_unchanged": True,
             "human_review_claimed": False,
-            "project_description_update": {"before": PROJECT_DESCRIPTION_BEFORE, "after": PROJECT_DESCRIPTION_AFTER,
-                                           "href": "/projetos-prontos/", "positions": ["header_nav", "mobile_nav"]},
+            "navigation_compaction": {"removed_elements_per_page": 160,
+                                      "destination_links_preserved": 76,
+                                      "overview_links_preserved": 12,
+                                      "description_copy_changed": False,
+                                      "javascript_behavior_changed": False},
         }
         (output/"evidence.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
         print(json.dumps(report,ensure_ascii=False))

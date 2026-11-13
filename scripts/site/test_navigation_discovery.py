@@ -61,6 +61,10 @@ def _text(node):
     return " ".join(" ".join(child if isinstance(child, str) else _text(child) for child in node["children"]).split())
 
 
+def _direct_text(node):
+    return " ".join(" ".join(child for child in node["children"] if isinstance(child, str)).split())
+
+
 def _assert_menu_contract(menu, groups, kind):
     assert not _nodes(menu, "nav"), "navigation landmarks must not nest"
     actual_groups = _nodes(menu, "details", "nav-group")
@@ -72,6 +76,8 @@ def _assert_menu_contract(menu, groups, kind):
         summaries = _nodes(actual, "summary")
         assert len(summaries) == 1
         assert _text(summaries[0]) == expected["label"]
+        assert _direct_text(summaries[0]) == expected["label"]
+        assert not _nodes(summaries[0]), "native summary labels do not need decorative DOM wrappers"
         assert summaries[0]["attrs"].get("role") not in {"menu", "menuitem", "button"}
         panels = _nodes(actual, "div", "nav-panel")
         assert len(panels) == 1
@@ -80,15 +86,20 @@ def _assert_menu_contract(menu, groups, kind):
         assert len(overviews) == 1
         assert overviews[0]["attrs"]["href"] == expected["href"]
         assert overviews[0]["attrs"]["data-nav-label"] == expected["label"]
-        assert _text(overviews[0]).removesuffix(" →") == expected["overview_label"]
+        assert _text(overviews[0]) == expected["overview_label"]
         children = _nodes(actual, "a", "nav-destination")
         assert len(children) == len(expected["children"])
         assert len(_nodes(actual, "a")) == len(children) + 1, "unexpected or hidden menu link"
+        panel_children = [child for child in panels[0]["children"] if not isinstance(child, str)]
+        assert panel_children == [*children, overviews[0]], "destinations lead directly to the full-width overview footer"
         for child, declared in zip(children, expected["children"], strict=True):
             assert child["attrs"]["href"] == declared["href"]
             assert child["attrs"]["data-nav-destination"] == declared["id"]
-            assert _text(_nodes(child, "span", "nav-destination__title")[0]) == declared["label"]
-            assert _text(_nodes(child, "span", "nav-destination__description")[0]) == declared["description"]
+            assert _direct_text(child) == declared["label"]
+            descriptions = _nodes(child, "span", "nav-destination__description")
+            assert len(descriptions) == 1
+            assert _text(descriptions[0]) == declared["description"]
+            assert _nodes(child) == descriptions, "only the visible description needs its own element"
             assert "aria-current" not in child["attrs"], "only the primary branch owns current-page state"
     anchors = _nodes(menu, "a")
     assert len([a for a in anchors if a["attrs"].get("aria-current") == "page"]) <= 1

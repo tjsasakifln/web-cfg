@@ -1,0 +1,1631 @@
+{
+  "schema": "confenge.navigation-source-compaction-audit/1.0",
+  "base_sha": "12db134a7e2fd08c1fa1355865340a288beb9e39",
+  "reviewed_at": "2026-11-12T23:49:26.179395+00:00",
+  "reviewers": [
+    "root",
+    "ux_audit"
+  ],
+  "scope": "All bytes outside details.nav-group and all anchor attributes/copy preserved; only overview decorative arrow removed. Native menu destinations compacted without changing the offer.",
+  "changed_html": 269,
+  "pages_with_two_menus": 267,
+  "pages_with_desktop_only": 2,
+  "source_pillars_unchanged": true,
+  "human_review_claimed": false,
+  "files": [
+    {
+      "path": "404.html",
+      "groups": 12,
+      "before_sha256": "acf5209cf5b530032f04fc771034a2d488b46c1a89777bd761565f988791b191",
+      "after_sha256": "46bf648734d024687b476ed6392d9d042de46c870cd73357652be5063a59e7d6"
+    },
+    {
+      "path": "acompanhamento-contratos-obras/index.html",
+      "groups": 12,
+      "before_sha256": "8d86f68c0d9a47a671d9d96a5d2e21c2c47d640df217bbaf4eb4b505a5c3969e",
+      "after_sha256": "75a5b83c8037b1c0e7f9d719512441703aa2dcbcf27d34ca7a67552e9014c8d8"
+    },
+    {
+      "path": "analise-cnpj/index.html",
+      "groups": 12,
+      "before_sha256": "e0d18615e2c2f32e8c1e7e11be2f51d937c0a4c072c90a10e03f66ab4bce323a",
+      "after_sha256": "020970a2faf01fbecc4b89f8ebf13112ec9b9102e4fff75589fb6a06053ff2d6"
+    },
+    {
+      "path": "analise-cnpj/r/index.html",
+      "groups": 6,
+      "before_sha256": "88f9fc588e50c5caa9022f97dd98813af84f34c53a1f803367a7eb9220aaeaa1",
+      "after_sha256": "641d81830bd3580444783e4b9881a4d2bd46b4e193997ad105804cd566dbeaa0"
+    },
+    {
+      "path": "analises-contratos-publicos/index.html",
+      "groups": 12,
+      "before_sha256": "1848ad7e8ffe36e31dafa42d3cc503fd3bd6b4cf8e64219c64099d1e0aac068b",
+      "after_sha256": "427b9ef1a9697dc586ace4c2e63aad4ee5915df4427e2f12eefdd34d04f1a8ef"
+    },
+    {
+      "path": "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html",
+      "groups": 12,
+      "before_sha256": "4f112bf3897123081539141fdcf24c9190cabb8f17bcbea87e691c8bbacb563a",
+      "after_sha256": "80b3937b2847fa7eacc1735c7ca6c58f22df4f0a817260df3c5c559878927e2e"
+    },
+    {
+      "path": "assistencia-tecnica-pericia-trabalhista/index.html",
+      "groups": 12,
+      "before_sha256": "7be53593ed7f3eeae4f1ea391e042feb7591ec17876e4f10a6e168bc790155ec",
+      "after_sha256": "cd012103abf459115ca0d63d522ffa0be7f68b273e6fb54ac8dff476c9485c09"
+    },
+    {
+      "path": "assistencia-tecnica-pericial-engenharia/index.html",
+      "groups": 12,
+      "before_sha256": "a1dc2a2d47411d03540b5f8b5e626f2216387b7a953e0cf186fd774e1ec8f684",
+      "after_sha256": "adf2c905207a3a1b7cc0185f2575d8d07f8851ecb5938f6730936a34c04c6ce5"
+    },
+    {
+      "path": "atrasos-prorrogacao-obras-publicas/index.html",
+      "groups": 12,
+      "before_sha256": "9abc2cb76fb435acf91e197339913073ab373822e51eb72c757883f30973f1ec",
+      "after_sha256": "98788b6c7e6593b2995fc3976ffea4764fa51c3ee0c7cf33ff0be2bfa681e946"
+    },
+    {
+      "path": "avaliacao-imoveis-urbanos/index.html",
+      "groups": 12,
+      "before_sha256": "0b5e530f8e0da6a2529f8821744e25e35268311ff2b3507352caff5aebe97732",
+      "after_sha256": "d1a8d69ba220133382d7cdef610805f7e574bd055cc3c4a2cd575c9353e04e0c"
+    },
+    {
+      "path": "avaliacao-imoveis-urbanos/inferencia/index.html",
+      "groups": 12,
+      "before_sha256": "707b226ca39a113c6a506dc6858b41b00decfc0f9c320dfd009b4d8e3d51688b",
+      "after_sha256": "92912cbfb4b2ea58fb76f044d9a2cd915fccf05abecb4a80ec00d5e466caf75c"
+    },
+    {
+      "path": "bid-room-licitacoes-obras/index.html",
+      "groups": 12,
+      "before_sha256": "9e5b3b4e75fd7ec2ee80aa55a230180bf7f9b0cf387bcce1975360f19a21f005",
+      "after_sha256": "e06fd75b5729faa3c655900aed5683dda4445c37b9028ebc91071313a0d5fa26"
+    },
+    {
+      "path": "bim/guias/dwg-para-ifc-paredes/index.html",
+      "groups": 12,
+      "before_sha256": "8b4c420ee91c2b844dba83c97936a051a4cf4b385522804e4bd71e2bcc34269f",
+      "after_sha256": "2bccd057614b0cf45ca745a2623face05a46e21c5ebdded0e8378c3f02e681fe"
+    },
+    {
+      "path": "bim/guias/medir-distancia-area-foto/index.html",
+      "groups": 12,
+      "before_sha256": "c0b63f8c8917d29b2986340fd93adfdb9468cc33a13f85b226578b53c653937f",
+      "after_sha256": "79c8471589cd26ac608513f0bc5c630551a513355784b963393ac950404d85ae"
+    },
+    {
+      "path": "bim/guias/pdf-escaneado-para-dwg/index.html",
+      "groups": 12,
+      "before_sha256": "5716fa8b70d6e13415f91a94662110557f5f2f2af3acef276ace842a0f01134f",
+      "after_sha256": "a2ecd40bc982356c63ed46e242a1fe5690c65b4480ae07490198dc4c9769ac46"
+    },
+    {
+      "path": "bim/guias/quantitativos-ifc-para-excel/index.html",
+      "groups": 12,
+      "before_sha256": "f334da951729406f969f53f5d2724e08b0bd58101f52108fa08ae07cb6a8a6ad",
+      "after_sha256": "c6f69e52a5536b413c690bf0a56120dcb94750248dd3ef46d47dd27a68cc5080"
+    },
+    {
+      "path": "bim/index.html",
+      "groups": 12,
+      "before_sha256": "5a149018ddd52d4afcde0992741265f1b24fb5c8759c82076cf46d2972f91376",
+      "after_sha256": "6a98a8ccc527ff5f4879986391baf127a802c45aaeff664b056ac42704924166"
+    },
+    {
+      "path": "cad/aplicativos/index.html",
+      "groups": 12,
+      "before_sha256": "9da82242c9c90975b258e24f5506422ad85be52365bc2f51fb08da7619e2fbd2",
+      "after_sha256": "7d26778e60d9ea051998783bcd7501d371f03bf9b507139dff12d468435ba0e0"
+    },
+    {
+      "path": "cad/guias/escala-e-unidade-do-dwg/index.html",
+      "groups": 12,
+      "before_sha256": "527a7942158fbb462a9f971e37aacc13b19fb920dfd08c3044eadffec68f156b",
+      "after_sha256": "069b8c06f1fee48e5bccdfa2b7f362194ece96307e33fbe7d94f1e2477bf8486"
+    },
+    {
+      "path": "cad/index.html",
+      "groups": 12,
+      "before_sha256": "93a3fd7f47237b6770568abaf643bd95e19f5e25051f72c450aaa1ad2306e126",
+      "after_sha256": "2ac63a252ed7db5366f10c649c6a9866f6e3464ddfff5c17283016efd2f1cf2a"
+    },
+    {
+      "path": "casos/aditivo-art125-demonstrativo/index.html",
+      "groups": 12,
+      "before_sha256": "173951490354da5715a42890606cde9eef460ec56646d2a6b1c38ff69bc8764f",
+      "after_sha256": "5cac30213e4163b70dfda746f8a40368852e4d0b506f69df10d8fb5526a9b46d"
+    },
+    {
+      "path": "casos/demonstrativo-infraestrutura/index.html",
+      "groups": 12,
+      "before_sha256": "cc415b00ddc939fd7f5ef77b3b1893611f98ddad6531e73e46af95840b659575",
+      "after_sha256": "e3cabe2911d6ce627328e91c430e0a9ec1cb27c57baa9019188a6dd646f474d3"
+    },
+    {
+      "path": "casos/demonstrativo-projeto-privado/index.html",
+      "groups": 12,
+      "before_sha256": "9e331cb376d4e642d74e7224067393e1a2d500d9dbcd190ac737ed5d58514846",
+      "after_sha256": "0126e2d190111b4ed764e3445e1b659b96a25d1a4417df1449fa48b532c035bd"
+    },
+    {
+      "path": "casos/index.html",
+      "groups": 12,
+      "before_sha256": "a4b849d22a20b0c4be3797033a787d0a0468f04015ee4eb35627624d7b510f70",
+      "after_sha256": "e4cea64abc635e77c3e7497e8b97ec7594ff149ca7602fb316c6b4832d369e61"
+    },
+    {
+      "path": "casos/medicao-glosa-demonstrativo/index.html",
+      "groups": 12,
+      "before_sha256": "a7643d1d5947412236ba3d7ae8dcfa55f1abf8d3257794c8677ca9096477951a",
+      "after_sha256": "ac9c11fdb50a0e59519e077a3a696b11845a0000626142337b14443747118d9f"
+    },
+    {
+      "path": "casos/modelo-apresentacao-executiva-resultados/index.html",
+      "groups": 12,
+      "before_sha256": "20dd6172fa5f5ba7bfef4ecac42dd11d09451e253e139e296075fba28cfebdf9",
+      "after_sha256": "dc08278bed7d63ad020314b49495de2aa31b9e7abb9fb4f4e422a48a0c53c594"
+    },
+    {
+      "path": "casos/modelo-base-quantitativa-canonica/index.html",
+      "groups": 12,
+      "before_sha256": "3d53ff3d1ca98bd57c123189947fe51dbbd65bb3a61cde7d3ab386f7a8aac4ef",
+      "after_sha256": "40d844daeed3993938009f612bb726472ebc04e3f29730803affb9aa14e6ba05"
+    },
+    {
+      "path": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+      "groups": 12,
+      "before_sha256": "995ff99d3f9ae5b719f16124b2142d8a227012f5d8ead479f6fa5bab6b385eaf",
+      "after_sha256": "9dd9868ce357eeb48e6292765a9f2764eea4d1f85bd9ceb9480f284f554b7dea"
+    },
+    {
+      "path": "casos/modelo-mapa-compradores-publicos/index.html",
+      "groups": 12,
+      "before_sha256": "1ff93a6b4cd19377f028fed2132cdc184cb060ae4058efa89ba24c7efd931d71",
+      "after_sha256": "b84ed840b484af081a14a58ca71eef7cde2cd19b75caf1c7ba9c5a54159161bb"
+    },
+    {
+      "path": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+      "groups": 12,
+      "before_sha256": "85410bd5dd83019defe37de4cd8f2e5a52c9c609afbf49ab0f1a0ec00cc3a7c7",
+      "after_sha256": "a35ff0ff1fb37e157af4f9f9b79be0988e3decd1f25141e90efee87e14d0a50f"
+    },
+    {
+      "path": "casos/modelo-painel-precos-obras-publicas/index.html",
+      "groups": 12,
+      "before_sha256": "8d67d63b8fcc8b3491bde9b9bc0ca3de592e4b5a47b6c5acddd03818cf416451",
+      "after_sha256": "16667e75a4f70cc9e7eb504bd53e1b0fae600fc2c1af20a1e4b4db41bbada8ed"
+    },
+    {
+      "path": "casos/modelo-relatorio-executivo-consolidado/index.html",
+      "groups": 12,
+      "before_sha256": "4f3fa4adab54ce4fd4ae0eeb5bd64f864e04b1507899920a9e19fec85bdce55d",
+      "after_sha256": "f16607cc0110bf798b86dfa94cd57816fa6d92dacb8052ef4824cc9ae77bc96b"
+    },
+    {
+      "path": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "groups": 12,
+      "before_sha256": "ba2452ee5ced9b67642a14cd21465bdfc11b519c269dc86431303b87a21ec439",
+      "after_sha256": "034559b67c2b14cc387b7d4a781067acfb271edb0b6a432a4151d57f15439a47"
+    },
+    {
+      "path": "comercial/radar-decisorio/index.html",
+      "groups": 12,
+      "before_sha256": "6ded5ad91c22e4ce77317df5912876f74b704ba8f7518a4201670f4f76437ae8",
+      "after_sha256": "861efb4f39bf5c708ec96b48f54e5047dc9549c6fc0159f6778cebfec97303f3"
+    },
+    {
+      "path": "como-trabalhamos/index.html",
+      "groups": 12,
+      "before_sha256": "b4c48258c3763dd8b053479f96920c7445b8dc9bd7f4b0746eec67ace4f8fa8d",
+      "after_sha256": "5fc65ebccbd394fd3b657179b5144f47ecc622ac5ce183ebf467571e8fc33491"
+    },
+    {
+      "path": "compatibilizacao-projetos-engenharia/index.html",
+      "groups": 12,
+      "before_sha256": "0c08ec1aace4bef303e6511a34d4a39c5e6ea15e0386d1b584f59309b2d6f648",
+      "after_sha256": "ed666221de4e8ae922334f1522db6fdebcfe77ca4344413682526c0fb8a191e7"
+    },
+    {
+      "path": "confianca/index.html",
+      "groups": 12,
+      "before_sha256": "533e23defb676c569f0b0a445adc9e620fb1bec3fab4e7da9e41855eba234ed9",
+      "after_sha256": "b4c0cc28fe368f802c7776affeba3d4ac3ff2a8b2aa511ee33a79389ce84a06d"
+    },
+    {
+      "path": "conflitos/index.html",
+      "groups": 12,
+      "before_sha256": "05da96d045f7802da10b0cd15ff438a6d67690200405197528ff9705830721a6",
+      "after_sha256": "987b0084103c75a29a036436c0a2a8ddc37dc35723683799e95b8d0616f394b4"
+    },
+    {
+      "path": "conteudos/aceleracao-obra-publica-custo-adicional/index.html",
+      "groups": 12,
+      "before_sha256": "479a1c6a4973af53e52eefd6354cba578beea0ee05822bb4860496149ee3063d",
+      "after_sha256": "e0d5383c81c6e77762ffb0b745d5f062ce12344ee9b64303002d3ff523019249"
+    },
+    {
+      "path": "conteudos/aditivo-empreitada-por-preco-global/index.html",
+      "groups": 12,
+      "before_sha256": "b0de0b20b60482b9ffb5dd7ac1e11d24559762d3c9b7037fc1756fea9d5b55ac",
+      "after_sha256": "7876460c2cde07b339403a156e9706be54fb02a00964070720963507de616784"
+    },
+    {
+      "path": "conteudos/aditivo-qualitativo-quantitativo/index.html",
+      "groups": 12,
+      "before_sha256": "87e396cd89baff0e6f09492dfd0038e2c05b5d6d446d13ccd61462fa1ea8bd0b",
+      "after_sha256": "ea4af1badc60aeb04a9ec4f155abeab18f77123eb2ccee10fa1710382f82c3d7"
+    },
+    {
+      "path": "conteudos/administracao-local-orcamento-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "05353d37977c981f97d9ddc7cdcfa8f8be1a6af8d8221b34747686fd4d985c5b",
+      "after_sha256": "c781f11b96d4d79d93c6df531c23fea777917d9859bc5c4b4d5289643d2483ee"
+    },
+    {
+      "path": "conteudos/administracao-local-prolongada-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "c070b9df9ee63c4c9e3118ec59fc83161fd11c3e5c9bbb26a63177708577a42f",
+      "after_sha256": "89c2b752ab7007ab562c93acf24c9cfd07df7926b87cb0c00c473c822efc92d8"
+    },
+    {
+      "path": "conteudos/analise-edital-obra-publica-construtora/index.html",
+      "groups": 12,
+      "before_sha256": "aa0acc8197241ba6020125e6ca4b3b4d400f6ddd16f150684593506533b515e9",
+      "after_sha256": "6806176844ced11dab8ccaed7ae2ae59f1e9c5afdf8d11b88c3b17d8ea02cefc"
+    },
+    {
+      "path": "conteudos/ata-reuniao-ordem-servico-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "d18db2b7ce5a3aa9117dc8252836138b56fda0e400b6305f9a945489426b7a9d",
+      "after_sha256": "a5047e93d44050d45e5bd8b2c767b1f89b7e1b47e8ce637ecd4fdd23207331c0"
+    },
+    {
+      "path": "conteudos/atraso-obra-culpa-administracao/index.html",
+      "groups": 12,
+      "before_sha256": "145f5c39dc22e529cc338455e211009aae2c82fef3c80e4ad3c029bcd7f5dbf6",
+      "after_sha256": "9812b8b586435cbc31de4566171d8ab6a26ed48110c407b0285abf544c98f411"
+    },
+    {
+      "path": "conteudos/atraso-pagamento-contrato-publico-suspender/index.html",
+      "groups": 12,
+      "before_sha256": "6a00595d15e9d6b29cb5e4c93a33458bf575f72b597c72620f35aac35b69e31f",
+      "after_sha256": "5e4dd76d606eb93200b8a5ea9af789b46847d33c6d22c733f2f6e13f49923349"
+    },
+    {
+      "path": "conteudos/atraso-projeto-executivo-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "5cc696a68d8dc8d1bbc3e37041cb55970d45de7587649acb7c51b3b96e88ab79",
+      "after_sha256": "1440ba219992eb6dcb9a77f86fc3099b3e7a54b64c80a7bc3d8afd070e9d37b5"
+    },
+    {
+      "path": "conteudos/auditoria-contrato-obra-publica-mensal/index.html",
+      "groups": 12,
+      "before_sha256": "682f4cbe1e4a22e07e753edf87630df933856e577885cdc572077a6f01ae832b",
+      "after_sha256": "1987ecd605815643023a82eda71c9dea369f2750a9f24c13aa58cb6b1895f4a1"
+    },
+    {
+      "path": "conteudos/aumento-material-reequilibrio-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "eca257a2aecc93f65f8119c427bb9c650bde9e2583e516dced9be327df7001b9",
+      "after_sha256": "bcc77f61853d1d17f13dd3f7aa07ac2459f7a642295adeffe98194a5ec8bea0c"
+    },
+    {
+      "path": "conteudos/bdi-diferenciado-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "3b70210c920111cc9626947fa2274ca2530329736dc55e14bbebb2090e1907ab",
+      "after_sha256": "cd84cb7621ac72e4026948a3da35ec78ca25960cd21b859e6a1a68030a291ccc"
+    },
+    {
+      "path": "conteudos/bdi-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "6d920aa0f79cfbbf959d80550ab67a4b0ec8f746ab1af2606d37a7a9ccedc113",
+      "after_sha256": "391081016ebbdb79dd143feeb4792610b1fe872b4b286d4578b8b0c06cb34cc2"
+    },
+    {
+      "path": "conteudos/calculo-reequilibrio-economico-financeiro/index.html",
+      "groups": 12,
+      "before_sha256": "778986a769b6c716e07ac2d390a77ca69cb571af62a1a8fd3ea1838c3bd55ce4",
+      "after_sha256": "b3c0b3959c8271ab709fe08519378f73b686514d5a60392d6b6d0d1a20bef003"
+    },
+    {
+      "path": "conteudos/capacidade-tecnica-operacional-profissional-licitacao/index.html",
+      "groups": 12,
+      "before_sha256": "39e5d524a2c0dd01a30d17bb03eee68e3e256f7a9e40730162e4c1a7f3d438b8",
+      "after_sha256": "dfd50f4d56f22312c998b88f8d914f950aca9c6a86440cabf2622656b04a24fa"
+    },
+    {
+      "path": "conteudos/clausula-matriz-risco-abusiva-edital/index.html",
+      "groups": 12,
+      "before_sha256": "9f750e8c6da43503f2d87abaf3922f9bb41bb9829039b40f3d75d2910c5f0994",
+      "after_sha256": "45392abc10e4a0753e1b55598725d753eeb4b9ae3e96b6edac031887f00bb3ad"
+    },
+    {
+      "path": "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+      "groups": 12,
+      "before_sha256": "74a04fc6f4340df67e134d95d393fa86c5e4e187c6a1df99efee96322b3ce273",
+      "after_sha256": "11702c5aef81da00eb0ccb5b2f83864f343382b26cf68766db1a8662e7ddcdd4"
+    },
+    {
+      "path": "conteudos/como-contratar-projetos-complementares/index.html",
+      "groups": 12,
+      "before_sha256": "051a3e6e0d312de43db52fa82a9f47a81fb71c97b298261c086379aee289328f",
+      "after_sha256": "c123fc013ff35fc06161cd0e298e4865f9361685cce697d7129cfdbe60836d88"
+    },
+    {
+      "path": "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+      "groups": 12,
+      "before_sha256": "9f3a15fa053343c5edc2ba32b1142f2900bc5b83b40338c44b324016b6881538",
+      "after_sha256": "f8cad0e6b6669ce02cf9e95778e4b231ef51a1471d8707362c1f4e6937822bab"
+    },
+    {
+      "path": "conteudos/como-provar-atraso-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "b61801fb83231610c5ab33dbf6e8dc031da18e865884c0deb2dd04c1e4a62343",
+      "after_sha256": "bb39f9b748ddb727243301a43c543ec0d6807d87b8c5139708933c68d693a1d3"
+    },
+    {
+      "path": "conteudos/comparar-propostas-execucao-obra/index.html",
+      "groups": 12,
+      "before_sha256": "94b1a0e284151ca41c81e20d3126bb9108d7a6fc8acd11df7634d5a7781ede4c",
+      "after_sha256": "e8e89e30a6d9c629c9f53d794b2d3976ce6f5413ab5f9e321a8b618bf007de50"
+    },
+    {
+      "path": "conteudos/compensacao-acrescimo-supressao-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "aa78f203ad1aa60014e290cb9f2f5783853154d9c0fd5bf8de433c251d77ea48",
+      "after_sha256": "a7ffbe5672bc995982daec3ee09c7ae0b2e45220b31738ad531b029864729384"
+    },
+    {
+      "path": "conteudos/composicao-propria-preco-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "2d2c2c7b9e7c9163d27ab5057fdf09fb3ae5a1da28f21f905cca8abd830224d6",
+      "after_sha256": "e8c17a2e56b3e6df9c12c7252ce97d4009c7a95f0ac8306b2bfd34a85ec475b5"
+    },
+    {
+      "path": "conteudos/comprovacao-exequibilidade-proposta-obra/index.html",
+      "groups": 12,
+      "before_sha256": "0f2d93e6b057bcfe985a051cb1ce7b2d3093fcd4304d49ae8b7665bcd21809c3",
+      "after_sha256": "cfbecf45938a2aae7f2e5260febc00611cf9b344a1e0e66ade6f1c671a1bdf1f"
+    },
+    {
+      "path": "conteudos/comunicacao-fiscal-contrato-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "d5f47126d0fbb01acc87803c98a9825addd20b74c53fb0e905fdcfa6c771e6f4",
+      "after_sha256": "5fa000eda04b85a6c84ce6e5969cc82949150e10541740554fa94aa87f071b02"
+    },
+    {
+      "path": "conteudos/consorcio-subcontratacao-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "322a57576686edc3cb375f93321fbf8d842cca4f32166b80fb2403f4196529a2",
+      "after_sha256": "ec6c48681b5c92132a8e6fac1d90b2fafb3dd51d79a93284cfe7977d091c97a4"
+    },
+    {
+      "path": "conteudos/consultoria-b2g-engenharia-construtora/index.html",
+      "groups": 12,
+      "before_sha256": "5ba1550397fc6232db3bf20137fcde59e0fe141a42abee5d4b86c4006bab64a3",
+      "after_sha256": "189ce5ce4b4f0df20c1a42f9ebed5df8c5c0bec19d75b2bdccf1c0c0f2850653"
+    },
+    {
+      "path": "conteudos/consultoria-contrato-obra-publica-construtora/index.html",
+      "groups": 12,
+      "before_sha256": "ebed5a17aaba438b111f95091f6e56eb00ee7e189ceccffe8b775a25868ab65c",
+      "after_sha256": "0c16815b64b93a58ae2f2e54a60cd12d02086e4cd900454d24b9f7373482be49"
+    },
+    {
+      "path": "conteudos/contratacao-integrada-semi-integrada-obra/index.html",
+      "groups": 12,
+      "before_sha256": "0a6b788ca4a749ff43cf4f560642ebab1060c5f802a050c75e31b40f1b15bd7e",
+      "after_sha256": "2c5c2b061044417bf9a45486d46e6bc0e5dc878f990d40d16265e9afb9e24d51"
+    },
+    {
+      "path": "conteudos/controle-mudancas-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "a7ea0f32e1f62ccdd0044dde3650124cc10a3d109333e193532e0317d3d147a0",
+      "after_sha256": "8a26589ebe71dca1a60e0d06b160f7c461191124230bac224a55cf859469f946"
+    },
+    {
+      "path": "conteudos/cotacao-mercado-orcamento-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "71b1d0a728e94aad01848449c1cc4e218a24e58a0c44f9e182a28ea893c58c14",
+      "after_sha256": "df1e7e78d56f7a955ad49f9eb10ca5ba145392e19e83655bf1d0848cb3908aa2"
+    },
+    {
+      "path": "conteudos/criterio-de-medicao-nao-previsto-contrato/index.html",
+      "groups": 12,
+      "before_sha256": "9893c07c5a763c7c1b687e4887fc8cb0b5300c205bb06581a807cbba028995a7",
+      "after_sha256": "81fc9a6c80176a8a805d4bfeabe083dd86bdb6c99329d7a90353890ecd3417da"
+    },
+    {
+      "path": "conteudos/cronograma-fisico-financeiro-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "9e07bedc5a0dbb5d84869fe51f4ce27577f538a135573bf14192719b9aea226f",
+      "after_sha256": "b326e61e3fbf0de52ef655348815dd0729884a16c58f9b5d413dc27a6b5c2b92"
+    },
+    {
+      "path": "conteudos/cronologia-contrato-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "ca15a9cb6be147238637b2a74a86fadb14274e954a9a7cc9a4baad940db2c1a4",
+      "after_sha256": "92b9976e84e6101b11971725ac85f0585707a342f2970171b86fae428fb47906"
+    },
+    {
+      "path": "conteudos/culpa-sancao-atraso-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "b81c4deb36f3234f502be1dc272d902b1c152b783076d6e2a0c549b310e929f1",
+      "after_sha256": "c46530464d4aa2e7880ac68420101818e61c56a49663664f1cea796e37872f30"
+    },
+    {
+      "path": "conteudos/curva-abc-orcamento-obra/index.html",
+      "groups": 12,
+      "before_sha256": "c722a6c512fa3047aed72bfb01b21e94d8f5e9af43ba64aea135b2d3bf63895f",
+      "after_sha256": "f91c2474c225794a5d3a8dfdb094b6f272b3906300e0d52f0a80ea2d598f74b7"
+    },
+    {
+      "path": "conteudos/curva-abc-reequilibrio-contrato/index.html",
+      "groups": 12,
+      "before_sha256": "eefdc50b3eb58578a267bd03bb27dda3464691d7cd5fee3908ec7921383e9413",
+      "after_sha256": "518a3159c291a33caa9f9da015afbab23dc76275b68efd4d812ed9eb2d4b8a29"
+    },
+    {
+      "path": "conteudos/data-base-orcamento-reajuste-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "edc51f3845069f3dc2bffb8d4872509c1a86fae3885be401de9ed531c5c912f1",
+      "after_sha256": "8629a860878f4e75ef9fae4c4cfc9a4c2ff94ff1045daeae8dc2bf343d26376d"
+    },
+    {
+      "path": "conteudos/defesa-processo-sancionador-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "6b830df0d806652c5e325f61dc5b8802538a4a38a037ccb3dd5bd3b9c636d4ad",
+      "after_sha256": "cfdf465c3ba23fe14258a46d6a1a35408ec905b074c7636e931d2d7850245b28"
+    },
+    {
+      "path": "conteudos/demolicao-nao-prevista-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "d9324152cc9b2104b50ec4067134f3a7863798e576f1ce77b5cab0900bb903fe",
+      "after_sha256": "a6ffcfcfee0bc60132f01e22f4e2338b202d10990608074264b61e49c3216da2"
+    },
+    {
+      "path": "conteudos/demora-decisao-administracao-contrato-obra/index.html",
+      "groups": 12,
+      "before_sha256": "862cce1dd93dbb79c27f67025f0a0456c39af8ac57bfc517865d4069692c0cb3",
+      "after_sha256": "8aeab7a8742dfe2a2bdf88d8bc1a2859c893bb204ec217d53175f87f0f07583e"
+    },
+    {
+      "path": "conteudos/desagio-licitacao-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "f2f252dffb3e7dbf398bc47276f6637dd7a6a45e2c3dcc84af93349d9893f34f",
+      "after_sha256": "8b9d402acd15116f1b28e8b11ebf7921e790636f33903d2372f7f3a4d6510f7c"
+    },
+    {
+      "path": "conteudos/desconto-da-proposta-em-item-novo-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "bb60a2e25b4985d8d2c9a3a26a9177a0688d2680637b65d230c772ccca779a18",
+      "after_sha256": "3ba857640174bd2d3cb3ae4fe5e36604819c4739e996811236fd730e6cbddc21"
+    },
+    {
+      "path": "conteudos/diario-de-obra-pleito-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "f0c0dcaf0e1116431b4375bc24b36bbf2f0d45166c01db62695897a7726293aa",
+      "after_sha256": "45b4dadd489f2cdca307846089c9f1277434b8c8365a6f375f9fb66b5ab8cd46"
+    },
+    {
+      "path": "conteudos/divergencia-diario-obra-fiscalizacao/index.html",
+      "groups": 12,
+      "before_sha256": "639e8f368fd06d9375710c6caa6a50af8f890e5cbe09c9663a474060b2d93ebf",
+      "after_sha256": "65a8c03e9f7612d516bb8b6175c38eee388c3ca49bcca4785716f580906e184c"
+    },
+    {
+      "path": "conteudos/divergencia-quantitativo-medicao-as-built/index.html",
+      "groups": 12,
+      "before_sha256": "19936a3a9c586a781341a154e157e7c079594084fe7e02fe1f65062dd0ab7e52",
+      "after_sha256": "533aa2e813d560b197bef873fb078b7cfb407defbf7de6cc9eb57c3cb7be15b8"
+    },
+    {
+      "path": "conteudos/documentos-para-levantamento-quantitativos/index.html",
+      "groups": 12,
+      "before_sha256": "1ec18a31098b11357d4e153afc8440bfb3e2812705f7e4ecc10080182a6bd4c0",
+      "after_sha256": "32db4f1c22fc2d693b610b8f4d53847b9c861746294810a5b799b59643dcf4d4"
+    },
+    {
+      "path": "conteudos/documentos-reequilibrio-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "57425306a42dc9ab580d3b24a4f18da32d57fe702867c14c42c069fba533a21f",
+      "after_sha256": "466e6029ca9e83a8753502a3e0298186420d3ed981eca58e39ba57c6c4a2a73b"
+    },
+    {
+      "path": "conteudos/dosimetria-multa-contrato-administrativo/index.html",
+      "groups": 12,
+      "before_sha256": "781d3617f34209f84c67c2a29a687706e00a920c59a5298c0d93e2351cdfc738",
+      "after_sha256": "79a00a08b72f0e124bdeda143ed1d3729a9f8e7e7111339075cbc863bda13eba"
+    },
+    {
+      "path": "conteudos/empreitada-preco-global-preco-unitario/index.html",
+      "groups": 12,
+      "before_sha256": "5b69acc6f95981b9f04bc563428f29148002b662e653e945642335d1c0355cb0",
+      "after_sha256": "31f6edd1376c39559cd70b823f9643f32e4c158d6b085628304f4046bf2884d9"
+    },
+    {
+      "path": "conteudos/erro-de-projeto-gera-aditivo-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "b35b0dac49c7e775cab316ab6fb4b61f7a43c19468fb277061439a5402861fa5",
+      "after_sha256": "3952ab1075534c45dbec9f2a6f7963e3a90d27138e75f2c04d9961a44538b8c3"
+    },
+    {
+      "path": "conteudos/erros-comunicacao-contrato-publico-construtora/index.html",
+      "groups": 12,
+      "before_sha256": "36b46899046f270f865f21026d41d0bcbcd0b31fb002caee5f37003e44d202bc",
+      "after_sha256": "359d3ceceb63c34d3b3f94f32a10a1696ff87a7258e2a8ed270b13bc8f0b7447"
+    },
+    {
+      "path": "conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/index.html",
+      "groups": 12,
+      "before_sha256": "aa9d58a00bcf7956a464c2eb77547798e881558b863e554dca404aea5b7eda2a",
+      "after_sha256": "6612b6de8c5e4bf1dc6de3c86798cc847dfd6d44abfe45eb64574dd510605a50"
+    },
+    {
+      "path": "conteudos/extincao-contrato-culpa-administracao/index.html",
+      "groups": 12,
+      "before_sha256": "d177d82a28e43ff2f5f20bc23f35a2ff6eb99c652e421177e8f82795005afc2a",
+      "after_sha256": "7821907f10e8785941aec1b9053d1df92b3de41708498bb680de1896c014142f"
+    },
+    {
+      "path": "conteudos/extincao-contrato-obra-publica-pelo-contratado/index.html",
+      "groups": 12,
+      "before_sha256": "eec7623b28b22f49f232f89e6661679e37d88737bdad13ecc986addcbd9792a0",
+      "after_sha256": "ddbd3b3593dce0ad929ebb12daefc0fea75c21eb5f3a64ad418ca7827da97377"
+    },
+    {
+      "path": "conteudos/fiscal-mandou-executar-sem-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "08518d3b590225b4321b6a0e9037923fd199de4e7560c78c2ab3d06f30263678",
+      "after_sha256": "bf4e85860f98b76ebb19158609fa57561cc9c4d0c275d50153eba144bdef0d03"
+    },
+    {
+      "path": "conteudos/frente-de-servico-nao-liberada-obra/index.html",
+      "groups": 12,
+      "before_sha256": "9c8c8571a067b1da46013f58e27a51da524f5311b42eeb8a3ea7bc1dce8943b4",
+      "after_sha256": "03dd47aced96abf092caec6d592405ac38ea5dc9e58f0a750544482819a66a12"
+    },
+    {
+      "path": "conteudos/garantia-proposta-licitacao-obra/index.html",
+      "groups": 12,
+      "before_sha256": "ca3ec3d7008478a907d9ca56299ab1e5c973c08aec7868c805c3ea3177d9f75f",
+      "after_sha256": "907c42bcaef03a818d7e048c7a25a1565d7cf1540e82eecf69373216602323a5"
+    },
+    {
+      "path": "conteudos/gestao-contrato-obra-publica-indicadores/index.html",
+      "groups": 12,
+      "before_sha256": "02b2f52d935f560f2e150e01b87293888a38e6215cd9088e001f164160199b7d",
+      "after_sha256": "d481bab2572bb99f4d5a33b6c2bfde7b0bf40c2c80ca29ecca73d78efe9a478d"
+    },
+    {
+      "path": "conteudos/glosa-por-qualidade-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "5579a303051e2874c9ba7c67644e0bb17a3041c176996c487f3a92a6822ec6a1",
+      "after_sha256": "2d77e47390e1a69a354ec366be7b00533448cfcb564a81d428f58bcc1565943e"
+    },
+    {
+      "path": "conteudos/impedimento-de-licitar-construtora/index.html",
+      "groups": 12,
+      "before_sha256": "57261afead1b7bc914f02df206a10f269c9fe57a38ebbbd5f8a5b2594ae34275",
+      "after_sha256": "9e254b4991ab1a05cbd9d02e1ad1cd3d3e82389564c364cbbf10d81c5c4f197b"
+    },
+    {
+      "path": "conteudos/indenizacao-servico-extracontratual-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "3e84e6847428370bfed7aea650f17ae62a9adf358ab04eee37d94f8c508f2c2a",
+      "after_sha256": "3e1c4348dba924b2a2f4addf201175b760e77695a7025aa06d05ba29a3c33cab"
+    },
+    {
+      "path": "conteudos/index.html",
+      "groups": 12,
+      "before_sha256": "86be5b444325e6914ae106f39ef299e93992a547ed012fc08aa1f5a1d94a61a8",
+      "after_sha256": "b4e5c3426a89f09d62da92c98a57a6dfb53ea76b6654afbbff13dcb311ca1a0d"
+    },
+    {
+      "path": "conteudos/interferencia-concessionaria-obra-publica-atraso/index.html",
+      "groups": 12,
+      "before_sha256": "66a365f3889ed5fef0284a63e45d38335d12146a07bf7c8c2b6bd47636f7aad3",
+      "after_sha256": "a735d309cc550bf44a9fe08a997d2a31f11ff75b5dc7b4f5c26f6a7ce6de0478"
+    },
+    {
+      "path": "conteudos/juros-atraso-pagamento-contrato-administrativo/index.html",
+      "groups": 12,
+      "before_sha256": "2cfaecd8ac5c2db82e0358b068da79bd3237f04f02ec8b6f4afa56b9ec4e6014",
+      "after_sha256": "a8bb6de67b0a2e9b368ea615a67bcb6da08a6d2da1c2591ddeca53482034cbc8"
+    },
+    {
+      "path": "conteudos/limite-aditivo-25-50-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "31f04b0bb2c57a88b4d03858682557ac611fb2c0ad4552b6182830807b087a6e",
+      "after_sha256": "b5a0f0afdb2d850e0fc02e026454cf6ae623791aacbe307fb0a80b27c7a4903d"
+    },
+    {
+      "path": "conteudos/manutencao-habilitacao-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "d399b9c134e42bbd45077eb5dd152f2a404f7c43ae0fa1ae7029bc3d38a95fe7",
+      "after_sha256": "2d9e13cc601cdf5bc50988161ded666dc7de7f86025088af42998180eef968cb"
+    },
+    {
+      "path": "conteudos/matriz-de-riscos-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "b234d0b06afd183963b1d1277d0d774014d430fb7a6dcc4d3e746796e286af4b",
+      "after_sha256": "8772caf6441c48f5316fac8148953c7f3f497a7a2ba04b5b77a48616e0fbc796"
+    },
+    {
+      "path": "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
+      "groups": 12,
+      "before_sha256": "b1c52ecc9941c45c90d167bcde437cc1f7547d5b0cc1c14c8600fc36238a042a",
+      "after_sha256": "c180abd28d814c7073623cc2711532bbadab4ab22a80b94a8af6ea8cd47323c1"
+    },
+    {
+      "path": "conteudos/medicao-por-evento-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "65d36865b1ffb0e17d6a4f59b51cf9e429c4d901cebf96751035ceb2e0b58ace",
+      "after_sha256": "f7bbe11b43ee9f2c975e0a504058ba42242443c8743ccc6c726cd1bfec862840"
+    },
+    {
+      "path": "conteudos/mobilizacao-desmobilizacao-orcamento-obra/index.html",
+      "groups": 12,
+      "before_sha256": "0fdfad13c64bca756d8bff95de22448aa42d2c630ce560fa1f8c7bee8d143e78",
+      "after_sha256": "8e214b9bc319517bfb747bed6d9d6f44a63fbde6d92e8ea0eed37459cb98f6d3"
+    },
+    {
+      "path": "conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "8cc26f2ef9a06c58fa43e00a96e2253280cc9a4cb92d3401c116c6545c6f387e",
+      "after_sha256": "cb93b692a51abf3428f17167cca6e16674edc2fcfcc2c42f2ca434f65408ede5"
+    },
+    {
+      "path": "conteudos/multa-atraso-parcial-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "900ad37f19401965d8cdab3cc0153badd451664e5e5b0ae5307b768e6b59bc1e",
+      "after_sha256": "030a68793a38c4cc89c9b2c16fb8037aef83af0f7c7316f6075bafc31c874b0c"
+    },
+    {
+      "path": "conteudos/multa-contrato-obra-publica-defesa/index.html",
+      "groups": 12,
+      "before_sha256": "cc2fa3da27d640540cdf61a12f3f474b382a22565f1864d64c5bdee1c0482bfd",
+      "after_sha256": "e023a7af095fb3081d39d8bcc7589a33aa11a489b7f4d1ec5601d20bbd892115"
+    },
+    {
+      "path": "conteudos/notas-fiscais-reequilibrio-contrato/index.html",
+      "groups": 12,
+      "before_sha256": "a40cd7f944b3322ffe9883e7bb2f0954111797c12d0a135af23f76165b2a0556",
+      "after_sha256": "9a6fd1276d8b740fa9b5e4065f89fbc9759b81794b7d947c640febbe3b70e741"
+    },
+    {
+      "path": "conteudos/notificacao-impacto-prazo-custo-obra/index.html",
+      "groups": 12,
+      "before_sha256": "d551f6e2f376fd4fe2c47084fbe2740a80249d580f0697d105d904035f3af219",
+      "after_sha256": "9c1e055d35018d4ca98b2f5eca6af4f4628f536f382c8673a156428c6ae7a9a8"
+    },
+    {
+      "path": "conteudos/orcamento-incompleto-edital-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "885917b7269f6f29a4b0ca614a8649eedf006d795da10d31704af5965e497a63",
+      "after_sha256": "3abdb87906259f827b4d67e1c844d0fa550178b598681a0e2fe085d242b18ddf"
+    },
+    {
+      "path": "conteudos/orcamento-sigiloso-licitacao-obra/index.html",
+      "groups": 12,
+      "before_sha256": "bbf04a85085f36e1b4cf0857f56eb6495a361c24601ae35928a1c1280cd78f6f",
+      "after_sha256": "7a9efb73f0c000e290c33f23b775639e72e8616f268eae9fa44acbe00f042704"
+    },
+    {
+      "path": "conteudos/ordem-paralisacao-obra-publica-custos/index.html",
+      "groups": 12,
+      "before_sha256": "974f9b626ca94ac1f5479ea28587822781ebb81883cbda040af61c02be978d1e",
+      "after_sha256": "644856128f050bd204e8085b3ac476adb6f261d0bff970debf6157168eed487a"
+    },
+    {
+      "path": "conteudos/pagamento-contrato-publico-certidao-vencida/index.html",
+      "groups": 12,
+      "before_sha256": "c0294bdd1015768498149a731acbc8750206cb31ee5a5e2f9351be0eda5ec695",
+      "after_sha256": "dd7c8b4734937bb7e008e41c5c19f4733f1c8b6f2f5170058ce0ed4ff2559648"
+    },
+    {
+      "path": "conteudos/pagamento-parcial-etapa-empreitada-global/index.html",
+      "groups": 12,
+      "before_sha256": "10e0d335449f31a00dc07fb5a5c59ec038ba7921f41a5f022c17770ee1656b67",
+      "after_sha256": "f1446c9332f302e30b7cd2dea70785676b1f5b7d5ccb7fb044af6c4f3eccc4d1"
+    },
+    {
+      "path": "conteudos/parcela-incontroversa-medicao-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "12965d6c2ce999a932ab44daa9e6b24dfcd974448700af6db69f64230b7c5740",
+      "after_sha256": "1da5c1d720943709fd2c0e32ca3d0e18de8e95d8e3facb918ab9d5ef5aef5c9a"
+    },
+    {
+      "path": "conteudos/pedido-de-reequilibrio-negado/index.html",
+      "groups": 12,
+      "before_sha256": "5fa1f34394166aa264194bba3c472deef0d36218fddefe8c3a1ab6deed1036e0",
+      "after_sha256": "e0f33449b726caf4fd4d8f6cd0f6f596b50c8a849aaabe925ba36cce8bbc5ce1"
+    },
+    {
+      "path": "conteudos/pedido-prorrogacao-prazo-antes-vencimento/index.html",
+      "groups": 12,
+      "before_sha256": "f90f62a6fd7b88f02d4e1554cc239099a8f9f4f00a67cdcd323829bb872788d4",
+      "after_sha256": "d84ca6ee47d904b0b2e67814c584ed712ed9718c9ef6ef2ccd76884510711961"
+    },
+    {
+      "path": "conteudos/plano-recuperacao-obra-atrasada/index.html",
+      "groups": 12,
+      "before_sha256": "5b1020c20c04de0bdb6d8151b98f3382ab2a0b0b5c92be584b1d256ff453578a",
+      "after_sha256": "33277f6a8c79f72172d41c3b0dc03a8a249da4c9ee1ee69ce6fb187d673a94d3"
+    },
+    {
+      "path": "conteudos/pleito-tecnico-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "382a2f1153ff26c860c58ae9041cb2705a4075dac6fefcae403476a20b45e08a",
+      "after_sha256": "c7e3581a83ff4aa3cf66e3a14c5a01863a7d078d5675afd6bd77a08df1f178f8"
+    },
+    {
+      "path": "conteudos/prazo-vigencia-prazo-execucao-contrato-obra/index.html",
+      "groups": 12,
+      "before_sha256": "00d1d8b53204a6e69d89874ba94919dd94b9ab6de10416ae2d0885d2cf24a6d1",
+      "after_sha256": "2771450c8bccb0f310c5fcf67dd9a77a5c54f92b9e8c73f3843a70c19f925fb6"
+    },
+    {
+      "path": "conteudos/preco-de-item-novo-aditivo-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "dcbc22e73278aa9b41c1c538b464b083713f564d7829f24f2925d6419131c4e3",
+      "after_sha256": "5e8ee958dc991fa91f904e86ebfe4d9309f35e4486eba79656d3f0fafe0877ed"
+    },
+    {
+      "path": "conteudos/preco-unitario-acima-referencia-proposta-global/index.html",
+      "groups": 12,
+      "before_sha256": "3e19d28bbdb4cc0314c10adc53fbf5cc81005b8844fe5acf1eb3879d6d847260",
+      "after_sha256": "233744e0b4d4f9b889ddb29383c5125814d97710d5b1377a44e9375ac4f5341d"
+    },
+    {
+      "path": "conteudos/produtividade-sinapi-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "928d398845c13038355f015db49f498d391646c17667ea9278e33555400e4ddb",
+      "after_sha256": "02f301412809c43e6e2debc2740c5240cb1fe418da8f07adee64863d5eedc6e7"
+    },
+    {
+      "path": "conteudos/projeto-basico-incompleto-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "a56265d072aede776841441af9657c7877a7f2ff11c64471be1f4881aa0e9c6f",
+      "after_sha256": "cdd1bb584d5cb8ec3ac11775cb3f2d9d86383b2e4f78840ae88af1b8768368d9"
+    },
+    {
+      "path": "conteudos/proposta-inexequivel-obra-publica-lei-14133/index.html",
+      "groups": 12,
+      "before_sha256": "12e0c2b6d65960c26a37983e8d3efc78034b1286dda0dad2077e553cc3d067f6",
+      "after_sha256": "a86b470dc5ab35999625fe8017056d37c2cdf532d1b61d09c99330845dd873e9"
+    },
+    {
+      "path": "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html",
+      "groups": 12,
+      "before_sha256": "1c55650baa3d3514eb5246c7f1d21d10b85f4f85c5c8a8a006d950c463e366d0",
+      "after_sha256": "2723b990ad0c316cc106f6e37f6523ee3a64d10fcd2324caffaa16a0253bb50b"
+    },
+    {
+      "path": "conteudos/prova-custos-adicionais-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "5c43069de32e909a1802fb820e4eb2870d25fa477deca7085900307c548633af",
+      "after_sha256": "98bcb5b800462a4e2487c3277615c4d309c4d7c651b2baa1da2e6d9682acc5ea"
+    },
+    {
+      "path": "conteudos/prova-de-medicao-diario-de-obra-fotos/index.html",
+      "groups": 12,
+      "before_sha256": "650a9318fc858b8316b44c6567e59de8f5faf408d86aae0cea2d51661ead39e1",
+      "after_sha256": "53483fa49ac145ad57fa14aac5505ce0563f5f41d2040cc0704b7b0be3eab5f1"
+    },
+    {
+      "path": "conteudos/quando-compatibilizar-projetos/index.html",
+      "groups": 12,
+      "before_sha256": "70aa5d705606e0bd90601e6b1e0f8f68eac330de7ee3b576a3fbdd2417d87d40",
+      "after_sha256": "2f6070d694d0ee7a853d66ca986b00fdcdd5585b30d025444718c679702d8ee0"
+    },
+    {
+      "path": "conteudos/quantitativo-insuficiente-planilha-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "25f61024e505a7791d27f005d471939fc40fa711906f29a1acbdda013a79aa2a",
+      "after_sha256": "671d9db0b7a52d786936d7490cd5db5fb4d30a48b3dc28a71b655f6adafe5562"
+    },
+    {
+      "path": "conteudos/reajuste-repactuacao-reequilibrio-diferenca/index.html",
+      "groups": 12,
+      "before_sha256": "cb45d2f7b19ad8aa810db024326f1df8e497a9540e3ed9d3a627999f6d878439",
+      "after_sha256": "07c138b452212cb81f57031417ff59efec2aa08f02a743561c7b5dffc937bc26"
+    },
+    {
+      "path": "conteudos/recuperar-contrato-obra-publica-problematico/index.html",
+      "groups": 12,
+      "before_sha256": "f3a11906330596677ee19dc936af1b6ed5cda252ea8c447a43f8b7be9a1ef027",
+      "after_sha256": "8cb7ee4e2a15bb674816cda015204734d94e7cadab6d8cff7820c05bcd4a7eac"
+    },
+    {
+      "path": "conteudos/recurso-inabilitacao-tecnica-licitacao/index.html",
+      "groups": 12,
+      "before_sha256": "31820bf2cad6667f3de4fdb87c0c3aaced340d6b27217ce35a8de96e932ab1cd",
+      "after_sha256": "dee7014523a0f3c5dc4151440104873a1d34e524db3b9a505d845a8b9a7b050a"
+    },
+    {
+      "path": "conteudos/reequilibrio-antes-da-prorrogacao-contrato/index.html",
+      "groups": 12,
+      "before_sha256": "149724831544f33e9069949376d55fd2974555aa3ad4f7559806a4147079edff",
+      "after_sha256": "b9fc63aa5afcb91288f7eee7e2bb269e6fd6e4e2216b828c2a180cf2a16a0ea6"
+    },
+    {
+      "path": "conteudos/reequilibrio-apos-fim-do-contrato/index.html",
+      "groups": 12,
+      "before_sha256": "0d8eedbc80402033fab069990971ff0e8900e169c5dcedad0ad424f4ef1ee8cd",
+      "after_sha256": "fc2388bff50adfc981015148f15c281d34a083e0a3cce447964aa0d5ee4516bb"
+    },
+    {
+      "path": "conteudos/reequilibrio-economico-financeiro-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "f5d767457d2ba455a73b3241f02fa20bdd21bf21bcd8733c0d06921c9dc0ba6a",
+      "after_sha256": "50da51cd9e759559f14880d45ad4cf6a664be40abc448a0099bd95e6aeafe22c"
+    },
+    {
+      "path": "conteudos/reequilibrio-empreitada-preco-global/index.html",
+      "groups": 12,
+      "before_sha256": "a95834610e57bb845e5a25baa5b3dbbf36c561c61aa75f90f5d96443ee2c8f1e",
+      "after_sha256": "26e937f8fb7bef62104089ca027b6937ebfb498d95b55832a4c63325e7532b76"
+    },
+    {
+      "path": "conteudos/registro-contemporaneo-pleito-obra/index.html",
+      "groups": 12,
+      "before_sha256": "a0f861814649a64510efeeece45f6abef9a2ea829cde59b7a141ec0f771ac916",
+      "after_sha256": "f1558c99344ecc25da7d862ace138433bbf5bb045ae5b3a7b70b1c94f1d08c2b"
+    },
+    {
+      "path": "conteudos/reprogramacao-cronograma-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "0591e554aa2152e7dddbefb89f7413a23567437219e0ff29097ae42d5dce0ae8",
+      "after_sha256": "50cc812f03938adc544286a61f9ab550ae53d39208ea04aad13e1403c52230f3"
+    },
+    {
+      "path": "conteudos/rescisao-unilateral-contrato-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "b298581219a8b802c871bd91b2ccd4d427df5732f5753ca6d93ceda84f3b07f5",
+      "after_sha256": "95e55256470cf518b2946a9b055627f57feba6334b35f9db265332281895a621"
+    },
+    {
+      "path": "conteudos/resposta-notificacao-atraso-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "ea5a97ffd5a49e356f37998e50a5e0cb57d6f5188bff15051a0f3d01ef77557a",
+      "after_sha256": "5211dc615b67db9545cca5f4075875b1fa2951a3ef5f18a9a1f9a8cb3173c3a9"
+    },
+    {
+      "path": "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+      "groups": 12,
+      "before_sha256": "a6a40503a412e2603eb5dc5f6f95f89d4f117811581c814122f4c4d7d2d6323d",
+      "after_sha256": "114564aa3613c1976ba84111e6e4d267cab5c5d3b03768d2d4025f122e463bd0"
+    },
+    {
+      "path": "conteudos/revisar-ou-refazer-orcamento-obra/index.html",
+      "groups": 12,
+      "before_sha256": "3f39a66ce3c38eb85ac5c7d6cd7143877b12245f295565c99372f5643bf269f8",
+      "after_sha256": "43937829ac815997df920d56d22c0cebc45c1521e2bf54a53fd1c821485420c8"
+    },
+    {
+      "path": "conteudos/seguro-garantia-execucao-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "492ad5b81118eb6f7754d7be2874c4baf04bca29fa8ec93bb011df21fdf44e83",
+      "after_sha256": "e0d2e29de7f8a84064ab008634dc97c871cab9df4a0f0de102a196dbee0a28b6"
+    },
+    {
+      "path": "conteudos/servico-executado-sem-projeto-aprovado/index.html",
+      "groups": 12,
+      "before_sha256": "d1f6e3aee10e1c36f6d97a21dc836181eba014426388af50ee5cb10329522e01",
+      "after_sha256": "403c4426ced368f2e0a51ecd6d8cc36394b853e391053ea71a0f64403a547baa"
+    },
+    {
+      "path": "conteudos/servico-executado-sem-termo-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "6cbad5032fa02da10c50074cdde4bb6b80c17ca2454232b9090443623af8c607",
+      "after_sha256": "9c1fd727010a7b2f611e557bcf1e832d77fdfcdf25bcafb65764d4e42c6523b3"
+    },
+    {
+      "path": "conteudos/servico-nao-previsto-na-planilha-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "754f9ac0d2180f8c294a864ad99ecca3f897cff99832f6bea3ffae625de0f3c8",
+      "after_sha256": "a41865fd3478ce2d497986c50fd09d06ab8d4d7199cc94bcb233b1649f610b02"
+    },
+    {
+      "path": "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+      "groups": 12,
+      "before_sha256": "46bdbef58911cea334f8ca1529aedbc9a6a1d630a14239328572e8a45e0447e2",
+      "after_sha256": "c5f39ef2f6665d81f6cf23239eef9526b1e304ac63746f7e2f6a6eb6974ed254"
+    },
+    {
+      "path": "conteudos/sinapi-ou-sicro-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "7c55ae5b356795d8f9516cbccf6e833b0f47a8fbbb7a9ea4cfd553df30e9bbac",
+      "after_sha256": "978eea8293d088827ab0461c609b76d01affdd20219414e65cbc7e8c84dc3122"
+    },
+    {
+      "path": "conteudos/subcontratacao-obra-publica-autorizacao/index.html",
+      "groups": 12,
+      "before_sha256": "1774eaeb66b4702887b7e575d1015d84e9cc04f833927b2ea5db42e6d390eee9",
+      "after_sha256": "79ac75f591d85f00045cb65596f005db2fce9fcaacdf2e8bedafe2c9919a52b8"
+    },
+    {
+      "path": "conteudos/suspensao-execucao-contrato-publico-contratado/index.html",
+      "groups": 12,
+      "before_sha256": "77b98ea3fc2b89cfa1aa4d1ba802ba262edf4f332a5d8d17a316ff09431b37e8",
+      "after_sha256": "40e55e78799077faff99961a4d4f528b6c76166915030dcf28c8c67f1e810d81"
+    },
+    {
+      "path": "conteudos/tributos-bdi-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "a34267b30e42f1a341c4f736f818081435407f5e8e0b50aa47456d7f9e89903a",
+      "after_sha256": "8bccb23f58962013fba668e5fd566ea33ab107fd258616eb0b6bd2f15a8fede5"
+    },
+    {
+      "path": "conteudos/troca-responsavel-tecnico-contrato-publico/index.html",
+      "groups": 12,
+      "before_sha256": "6971a9080cc432bffbe82f144eb5ee848f61e010b4c9f1fddf8551956c255c77",
+      "after_sha256": "6d80213dbfc88592731e7cd29c293708f9c476f18f2966df77eb9aa0a46e4763"
+    },
+    {
+      "path": "conteudos/visita-tecnica-licitacao-obra-publica/index.html",
+      "groups": 12,
+      "before_sha256": "970d2944a1a3ff8034d2a48a6f51d2d3811386f0624bf04c2ffb38a00ada34f4",
+      "after_sha256": "10ba8da91dd95644338073ecde4637250185cc31ff14f27e089c554178c34fe8"
+    },
+    {
+      "path": "defesa-margem-contratos-publicos/index.html",
+      "groups": 12,
+      "before_sha256": "4d08eb05182e7c77f68ec7b21f78e34dce974273b7305e175ad2a687e87838b7",
+      "after_sha256": "761ebb49114a1217d6c98fedb4f54a1a68e29ebd82abcdd3c9768a21fb0c0cce"
+    },
+    {
+      "path": "defesa-tecnica-contratos-publicos/index.html",
+      "groups": 12,
+      "before_sha256": "e817a789d3d8daf3849ec956c3157b85b036bfb98c75230fc1db0bd7bcf2af1a",
+      "after_sha256": "3f123f4e3cc0e7f901a8df14cf6b3508269c923fe8229f1493af92b9aee52981"
+    },
+    {
+      "path": "diagnostico-b2g-expansao/cancelado/index.html",
+      "groups": 12,
+      "before_sha256": "e186404fd4d1526aa18467854cf70dc6ddd99b6d1a11371e4492d163b0652f2b",
+      "after_sha256": "72accb4cd79f1a74bfb1e53f68f84825c87327fab4624494444ad2ac08513c27"
+    },
+    {
+      "path": "diagnostico-b2g-expansao/expirado/index.html",
+      "groups": 12,
+      "before_sha256": "3fb4a195f9e50596357df1bc1a3a696cf7ea7bb731a0d4f5ca64c7b2a6ed3fda",
+      "after_sha256": "44d270cd3ab07b96457438baf928000686782296329289dd5e09e57246e8f72d"
+    },
+    {
+      "path": "diagnostico-b2g-expansao/index.html",
+      "groups": 12,
+      "before_sha256": "30bce8fc3781f994856e515afc236e2750cd5f65b8b6a6ac31c859a02639a964",
+      "after_sha256": "b5867cdbc90a082410580c4110b2e7dd06580909e6d132ee777d9005469a26cb"
+    },
+    {
+      "path": "diagnostico-b2g-expansao/obrigado/index.html",
+      "groups": 12,
+      "before_sha256": "05d28762184efac8c741585ea04dcf9fe46c614202347ae349dd84826914552b",
+      "after_sha256": "f510eea82c00282eebe917047525c310633951841f7a588ce688923862cec8aa"
+    },
+    {
+      "path": "diretoria-b2g/index.html",
+      "groups": 12,
+      "before_sha256": "86d1ee7c5c2e0199228b3050067f347bfcfab74ef7b55fb153a3efc1ad2a2ebc",
+      "after_sha256": "303debc8790a0c2069ab42edc7d66d11da0109c6dbd162838f0829e19caffd9e"
+    },
+    {
+      "path": "edificacoes/index.html",
+      "groups": 12,
+      "before_sha256": "94383b39f4f06af0060981612e75959ea3c728726fc341d8c258fefe0ff7ed1f",
+      "after_sha256": "ad83958f3c2327347ed264051f497ea96326098e6a55511b2f1f38fa590a8f9c"
+    },
+    {
+      "path": "elaboracao-pgr/index.html",
+      "groups": 12,
+      "before_sha256": "c1c09ddac6816dbf0875438b04185c342751d32425f3a080f432e1229226a380",
+      "after_sha256": "f9410d40aad646f3eb1507e55a2dc445cb858532c0cbc0599625390820f3725f"
+    },
+    {
+      "path": "empresa/index.html",
+      "groups": 12,
+      "before_sha256": "14ca3212bd2199cd34a52205426ff0227aad5eafad32749f845a26900d0928dc",
+      "after_sha256": "60b2e5af152c98f75e246f3cd59469b801970f3c1ebf0c947a9710c186e5d8e5"
+    },
+    {
+      "path": "engenharia-condominios/index.html",
+      "groups": 12,
+      "before_sha256": "d097169512ef45c69cb4db59d6f6a0087e716af022cc8d513fe853f609956e5e",
+      "after_sha256": "0b76316ebd891da8e033b238860e406c60e161adb41200fb0e12237824dcb534"
+    },
+    {
+      "path": "entregas/index.html",
+      "groups": 12,
+      "before_sha256": "19a226a086829eb5141d4c15613f43bcb7946408e123e8fa53dac0cde6292ba7",
+      "after_sha256": "41ab319b7c9f61a580078dde514a3cc54a367c0fb406eb952c61784a48a6d226"
+    },
+    {
+      "path": "especialista/tiago-jun-sasaki/index.html",
+      "groups": 12,
+      "before_sha256": "690348c43cddff6ebf22764be7760a218f4d2d3f2e53a1fefa3c22345535addd",
+      "after_sha256": "e2be875dabbdae44aa5d705289ce2241b68c9adaf630015f75dacac389e01a24"
+    },
+    {
+      "path": "ferramentas/analise-de-viga-continua/index.html",
+      "groups": 12,
+      "before_sha256": "07b98afe5b01b1cc2caa0d2751a00040f1b6100b53ad2b1ea36292665dcbf463",
+      "after_sha256": "5b86a63575dd56e6d95c4079df6e99b3e68bf941f4d404982ac357944e5d294b"
+    },
+    {
+      "path": "ferramentas/calculadora-bdi/index.html",
+      "groups": 12,
+      "before_sha256": "360be2c1fa4ea264b9646d0524f87849e3e0b40f2b42071ebe51e15d04f3962a",
+      "after_sha256": "8732e3eaac0aea374a66be9ff2f2e25e4fbebe405fe7e12d316bb0be81babef9"
+    },
+    {
+      "path": "ferramentas/calculadora-de-beiral/index.html",
+      "groups": 12,
+      "before_sha256": "de823fd526a979e8759e45552b4bd5bcea616986183b46d31a423d576da40ae3",
+      "after_sha256": "0c050dab73dac8e79327c4c3b65931698112795eeb763c24df767c36e1fbddef"
+    },
+    {
+      "path": "ferramentas/calculadora-psicrometrica/index.html",
+      "groups": 12,
+      "before_sha256": "3e2b88e5d153a5145ed1bd148867b7554faa0ba2118ddf43ad1b981abfce533b",
+      "after_sha256": "f7e0dca3a589976b7afaa4a11bbde66f18f548403ba29be10cce8419dbf05754"
+    },
+    {
+      "path": "ferramentas/caminho-critico-obra/index.html",
+      "groups": 12,
+      "before_sha256": "cd3dfddadf1184f249b418d4bd216e7d7157096c5963e99c1354756965bef128",
+      "after_sha256": "f58af4681521ea4e0092f15edfdc2578e8bbab22e7181f0d3e187d01d92ef083"
+    },
+    {
+      "path": "ferramentas/checklist-reequilibrio/index.html",
+      "groups": 12,
+      "before_sha256": "4ba8f8faefa826c49ac4b728a2d08bc7a434dec80609b220b51b93405ee5d3e6",
+      "after_sha256": "6eed0bdc9d842d5b7dc253e0fd9884cc0c3f90963b2686205eb87a1865e63212"
+    },
+    {
+      "path": "ferramentas/conversor-utm-sirgas-2000/index.html",
+      "groups": 12,
+      "before_sha256": "6e2447a67c01bea015d4833a429b77dc65a7d9cb631ada4d116a904a1bdbce9b",
+      "after_sha256": "966b504025676cf62d88683598b0e585121cb5c747528223edab8c2b23ab2c68"
+    },
+    {
+      "path": "ferramentas/diagnostico-defesa-margem/index.html",
+      "groups": 12,
+      "before_sha256": "237cede787929a3865b3121f9318fa6bd90bf738656150dad5efe432a8dc7b05",
+      "after_sha256": "ade83237a3d2ae42be7f3194bdce135899ca6a5fca28f339cc5e7209c1086c9c"
+    },
+    {
+      "path": "ferramentas/diagrama-unifilar/index.html",
+      "groups": 12,
+      "before_sha256": "f17456fa910af8e338c76974845179507684e8df9dc134c9e663b77bf928c416",
+      "after_sha256": "01f8b89aa65b80fb7eec2c403761a8ec03758108bdd31e6615832673dec554e1"
+    },
+    {
+      "path": "ferramentas/index.html",
+      "groups": 12,
+      "before_sha256": "91be64b7d0e99d0cf8f636925dc707c2bff08efd1715b71934ea00f470799688",
+      "after_sha256": "26d48acdfea2b0cbdb31802c942a69a234df28e2bc28bb902b5de4ae96033497"
+    },
+    {
+      "path": "ferramentas/limite-acrescimos-supressoes/index.html",
+      "groups": 12,
+      "before_sha256": "205e83c00175fcecb4aca4012e3e2306cfd8afa4020e8e1f7ac031dc99a125e3",
+      "after_sha256": "724fab9879a1d8bd7c89593ead499009f824498c669327439a7ff8df16e24727"
+    },
+    {
+      "path": "ferramentas/matriz-atraso-obra/index.html",
+      "groups": 12,
+      "before_sha256": "3e4cd9d21f22f56c70c8eb079257740a4bc990ddfae36863bd471bd7b00dfaf8",
+      "after_sha256": "08c41b56931b5ef0d243883134df1883492651ffb8beba70fc98e508ceff5198"
+    },
+    {
+      "path": "ferramentas/orcamento-de-obras/index.html",
+      "groups": 12,
+      "before_sha256": "46cdd40c8dcd1089a6b4b473b45793970d56631420733ecd3cc0e1673c96f30b",
+      "after_sha256": "44ba76062956b9d5e1d65b36c0d5d28641c28e43fa1be81f8e3991c0cccaf5e7"
+    },
+    {
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "groups": 12,
+      "before_sha256": "9c8ff99680f3a3a613ba5284b3e968ab32f020526500d19a3a3a28887f90dc1b",
+      "after_sha256": "196b416872ada6f649c1e627b45ad8e691cccba8513ca2e17d37510a0184825f"
+    },
+    {
+      "path": "ferramentas/radar-mercado-publico/index.html",
+      "groups": 12,
+      "before_sha256": "8d27138062a4a68e3f309bfd9788b2459ccabec9694e62b150da30ae13b19f9e",
+      "after_sha256": "94ba19ad1232915ba14ad13a2ad37013d85cc95ab245748de8f23d06ee13f03b"
+    },
+    {
+      "path": "ferramentas/rede-de-agua/index.html",
+      "groups": 12,
+      "before_sha256": "3f2f75a15c60dfcd4286dae7093f45eae24bccfec1223c5c532bccd7550afb72",
+      "after_sha256": "620e5915c72e3f8ae37a47fbddb0d9a07b5e2afa17fb57b44ff14d0b00e5bda3"
+    },
+    {
+      "path": "guias-contratos-obras/checklist-pedido-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "9a19f6d49e7935aa94a619e187b360ce8b0b47e278d9e2f9fb1b05d97a04bdc0",
+      "after_sha256": "4cd369ce50ab459850e31af10fe04dc15029104885474ced2db294a06c2f2b8c"
+    },
+    {
+      "path": "guias-contratos-obras/contestar-glosa-medicao/index.html",
+      "groups": 12,
+      "before_sha256": "f2c2e0e1bad7cb7069d047414445add022c1f059d899caa9e5ebdcd68462a572",
+      "after_sha256": "f1ce747468a70799db59dd0f8ad8fc4a4ff60bb7bd59922822e37b9adfcbd5ec"
+    },
+    {
+      "path": "guias-contratos-obras/documentos-pedido-reequilibrio/index.html",
+      "groups": 12,
+      "before_sha256": "158fdbb3b8be6d8bfd25009935a02e69849d4f224cf298c5ec99dd8e104c76b3",
+      "after_sha256": "a223f7f05f1e2a7d9ec33457143822950eb6249abd90b90741f2fe09892330d2"
+    },
+    {
+      "path": "guias-contratos-obras/index.html",
+      "groups": 12,
+      "before_sha256": "dd37bebab717a388ed6e2c7687a52bca44e6ecccbcf482fb5c7acfbd23989b60",
+      "after_sha256": "f8d175c4dc67687a0e46849605a1f3d7fa2f220575c1a5d5b81a7e24b83f6107"
+    },
+    {
+      "path": "guias-contratos-obras/responder-notificacao-atraso/index.html",
+      "groups": 12,
+      "before_sha256": "d653a37b265889592930af535b3aff8701c54cfbcedbdd669921da28563bb2c4",
+      "after_sha256": "85629b037102330d55850d87812938af801e7dd9e654cf282e7782cebbbd523c"
+    },
+    {
+      "path": "imprensa/index.html",
+      "groups": 12,
+      "before_sha256": "9ec1e548b1eb56d702f7f488e0e1744ec6266a07a9e301e95bfae88421a17884",
+      "after_sha256": "c11a1d975fe65b9e6c8410ccd2d933c43c375bc7fb48fd5a1f0b8a10d909ae3b"
+    },
+    {
+      "path": "index.html",
+      "groups": 12,
+      "before_sha256": "b89a53d7f6a7f64e3ec06111d1fde54b2c3ca946a6d60d6375a4884937cbf95e",
+      "after_sha256": "86df181bb3d780f88f218a86cb0adcebe3ff92de93b37841a58361541ea8932b"
+    },
+    {
+      "path": "inspecao-diagnostico-edificacoes/index.html",
+      "groups": 12,
+      "before_sha256": "5a4df3315b5ed77af8ea4999cfe1fd7a72ccdcbea09ffa2bc8e3f34980d0cab0",
+      "after_sha256": "29f1c86c90257baa5e2a6524d88e2a2333261813cbe6a0dd6921a87fb9cb94bf"
+    },
+    {
+      "path": "inteligencia/acompanhamento/index.html",
+      "groups": 12,
+      "before_sha256": "94df1513c2c552037b7d26a33c8b13da96af36e684624f73fddb37c7ddb5bf03",
+      "after_sha256": "39eca56c54027529fd21e36ff71859ce8ddad8b070b512ec4492a3ea06d11542"
+    },
+    {
+      "path": "inteligencia/cenarios/aditivos-e-risco-de-margem/index.html",
+      "groups": 12,
+      "before_sha256": "0a02ae90e5e25c47e89ed13bb0bdce80d566911c33772ca1db4254478abda7a2",
+      "after_sha256": "12448f9c819348759a48afc756b6d908f27d1832d4200210bda76807e0f2da05"
+    },
+    {
+      "path": "inteligencia/cenarios/inconsistencia-orcamento-edital/index.html",
+      "groups": 12,
+      "before_sha256": "451a53e2e4c97e59e372e60e33bf1c527347f6f17ded3d34998dbabdd513b8d2",
+      "after_sha256": "a791c5cd93beca8d213da44e20966078fc0eee8d3f23ba10fe9e1a5f3c0fa129"
+    },
+    {
+      "path": "inteligencia/cenarios/index.html",
+      "groups": 12,
+      "before_sha256": "36f9bdcbb7a84addb96ed77329b71965b0cb29bc9c2944a65f27c0443e39c153",
+      "after_sha256": "4c3aef7247f5f26679f7a0de701f1e28a26eaf7311e4e278c648926602683d80"
+    },
+    {
+      "path": "inteligencia/cenarios/medicao-glosa-contratos-recorrentes/index.html",
+      "groups": 12,
+      "before_sha256": "77c8145e836dcf78b25315623e69ec83bf4f479e823a546a459467c20e61892d",
+      "after_sha256": "629c4536a86684ccf1ffc8366c17958653a48ab3346facebcc00d1a7ab1d0f35"
+    },
+    {
+      "path": "inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/index.html",
+      "groups": 12,
+      "before_sha256": "81206a9757ece0f6e350e55ddd9386d2321681076dfc480f5d3bade9ea6b3ab9",
+      "after_sha256": "e203ea9b6ad055b199a6f6602c4cd815637fb6fd4f81a8a7049c1cf2094a1d11"
+    },
+    {
+      "path": "inteligencia/cenarios/referencia-sinapi-sicro-margem/index.html",
+      "groups": 12,
+      "before_sha256": "97c8d46d902fa7f9cc0d17ddd0963727aa713971a31fc053acab425d4d2c0582",
+      "after_sha256": "d12548d0b8458ddddaaae4bce8c73a328529f9c6c55bde490029c1c532207fc2"
+    },
+    {
+      "path": "inteligencia/composicao-contratos-amostra/index.html",
+      "groups": 12,
+      "before_sha256": "24530e086b84438a453173a28dfdd2d0445b9b5af75a7ce254685ee3327cb700",
+      "after_sha256": "a053c194ac82f00630f234104baa8bd2d40c16739053d0e7dc08d54931907d70"
+    },
+    {
+      "path": "inteligencia/concorrencia/index.html",
+      "groups": 12,
+      "before_sha256": "c5fa93b17a89e73bbb0d6684e3fc050e130b2bddbceccc7db298774071cef518",
+      "after_sha256": "e306d98a5c144b627af6572721e1489c67851efa0d894f57b3cc94c7e7506c22"
+    },
+    {
+      "path": "inteligencia/fornecedores-climatizacao-contratos-publicos/index.html",
+      "groups": 12,
+      "before_sha256": "5d44c44ce2d1a163811acf0b75907889a795131568a84d04b5073ade63a5e4c9",
+      "after_sha256": "0bc0ba61a01d033dc9f19cca2f8b1829021e7c4946da0552e43d5736e9aa9677"
+    },
+    {
+      "path": "inteligencia/index.html",
+      "groups": 12,
+      "before_sha256": "ae65d87cd8898d0cf797e92e61bb5046f9b536e7e4b40f4f726869e131fbd36d",
+      "after_sha256": "c120aedbe20f0d8077c9df35b3b1e88356f5b4ee8518859ad2c450ace8146323"
+    },
+    {
+      "path": "inteligencia/mercados/index.html",
+      "groups": 12,
+      "before_sha256": "060985b729e86de255f28cfaf1c35595994c3bcf78c73c0865e7a7bbfaf30bb4",
+      "after_sha256": "cf68e2260b45953b99abf737355625ffa694842006cc9397b312d82374837388"
+    },
+    {
+      "path": "inteligencia/orgaos/index.html",
+      "groups": 12,
+      "before_sha256": "5271b218644f97bc014f13fee785c039309e952312e82b2d721fa879ab481ddc",
+      "after_sha256": "37fc65fb7266b41f181e79a7cb64787252ae558e1ddcf914caec6da0433d5f81"
+    },
+    {
+      "path": "inteligencia/pesquisa-sob-encomenda/index.html",
+      "groups": 12,
+      "before_sha256": "c0b467b5945c19203d7c2e85f651b5092f57da58a9b83ca7a27fd6d36e100fc2",
+      "after_sha256": "494fcfbba9d144c030f397024141002559f2a826dec615aeac679187385bb7ee"
+    },
+    {
+      "path": "inteligencia/precos/index.html",
+      "groups": 12,
+      "before_sha256": "43158793e96f2462d1848c5410755f47d09c7d1c1cad98225ab64d1cb172f878",
+      "after_sha256": "1cd90fc8be10b6db073a7e02c12d27df88f43cd4b9cb57d6806883ebb1682a7f"
+    },
+    {
+      "path": "inteligencia/relacoes-compradores-fornecedores/index.html",
+      "groups": 12,
+      "before_sha256": "ea268c58356a5a8da7f01c15748496d07c4d1e1fac93c1e27b01a39029c23372",
+      "after_sha256": "3852a32e372b3c68a6909eb7fda6d81317599d9e761758630b34a6d479b91416"
+    },
+    {
+      "path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+      "groups": 6,
+      "before_sha256": "814dfea8cbcb3994842d46e03b04c6326f6ea9134d3cae3b14e7fb84d131ebd1",
+      "after_sha256": "b41f688ab2f53209f53b1e55e4beff153df1add1937ef80914b7bd851d5b326b"
+    },
+    {
+      "path": "jurisprudencia-contratos-obras/index.html",
+      "groups": 12,
+      "before_sha256": "aa9d25aa2b87927fecb01776c97f0e9deb9467c25e904773733d6927580c24a5",
+      "after_sha256": "5ea12429c7d789776ebfad63fb056814aa133d2b22a02b09a91642ef472bff30"
+    },
+    {
+      "path": "jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/index.html",
+      "groups": 12,
+      "before_sha256": "bc4276759a72628ea87ed2fb5d056a0dc5e4746f8cd06fabeef351af44892e1c",
+      "after_sha256": "694698fc95d190754418baee832e60cb4401198ffa4a8cd18c67a58426b6f9ad"
+    },
+    {
+      "path": "lei-14133-obras/art-124-alteracao-contratual-obra/index.html",
+      "groups": 12,
+      "before_sha256": "42df306ccbbfa91b72c1f4bcc71e5e4f56f5aa66aec33aab6dabe92188cb8a17",
+      "after_sha256": "fe2bc91643bfbcb85b2b40cd69e5b6485f8a4dd527ee9f730c3e9248339ee924"
+    },
+    {
+      "path": "lei-14133-obras/atraso-imputavel-administracao/index.html",
+      "groups": 12,
+      "before_sha256": "c515feba9724854493c11d7eee68763103486098f1bf653558e1f4f711eb4cc8",
+      "after_sha256": "3bf7bea44d434736b2bbba4aec361f1aff312c055384840800316779cf40efcc"
+    },
+    {
+      "path": "lei-14133-obras/index.html",
+      "groups": 12,
+      "before_sha256": "ce17463c9c55a628f1784615a2593baffc34d72b69238476fb3fccabc78ed434",
+      "after_sha256": "180e34b8ec14cd74ab3bf197ead1f7a688305a236c2081d91fa9d0b95e52fcca"
+    },
+    {
+      "path": "lei-14133-obras/limite-25-50-aditivo-obra/index.html",
+      "groups": 12,
+      "before_sha256": "17f65b2db4c946d576a6650dbb443458eb5a57a175f0084205d0847a56a0b6ac",
+      "after_sha256": "4f6f114e5d7264c4f00aacafa56d24402de1db934aec05209168577c6bc2c369"
+    },
+    {
+      "path": "lei-14133-obras/parcela-incontroversa-medicao-pagamento/index.html",
+      "groups": 12,
+      "before_sha256": "bebb00b58726befb4d25aaba061847e28fc6dee2d75da0be1fc7ce0f34f5a42b",
+      "after_sha256": "db0743efd7b9d09d118f34b56247d7c83de76468c9d30e152ed1f8ad3b98fa9a"
+    },
+    {
+      "path": "lei-14133-obras/preco-item-novo-desconto-proposta/index.html",
+      "groups": 12,
+      "before_sha256": "067bc76262e53bcd37647aded1c5782b8a87f36bf3e050e441839bea8b709714",
+      "after_sha256": "c3505d2878b336bcc0360e7b6a3de9641d6d1e172cb3dab3fd9d223fcb15322d"
+    },
+    {
+      "path": "lei-14133-obras/reequilibrio-reajuste-repactuacao/index.html",
+      "groups": 12,
+      "before_sha256": "cadf5affe6c752bae6d4f2eb476e11d18d58e701440272453855170d7e6760cd",
+      "after_sha256": "a0b381b1c60c9d96313776558b78251591120ae464b0e242773c4222e42ef12e"
+    },
+    {
+      "path": "lei-14133-obras/servico-executado-sem-termo-aditivo/index.html",
+      "groups": 12,
+      "before_sha256": "2449b5d84cbafe67dfa36bd856d192c79c1df13a93ed309e14fb3eae2820fb08",
+      "after_sha256": "0f6f0e5f3ded5caa92a958d25744e8361451d16ce6c7aee804692a540b654142"
+    },
+    {
+      "path": "metodologia-inteligencia/index.html",
+      "groups": 12,
+      "before_sha256": "cf9a2902957a173010bf948e19c6483f2c892fad34bab22716825849e69fefb9",
+      "after_sha256": "91bfa0fef022bd537da74c39d363475776aae6cb73117bab86cf99ebf7e643ba"
+    },
+    {
+      "path": "nurture/index.html",
+      "groups": 12,
+      "before_sha256": "d8499058fec9b6f87761ee1bd09b19cb5d810cd845b6abad3b501b9ddfdbdd9c",
+      "after_sha256": "cd686aaeb13e4a7b414cd835b616eaa6c5a439eafa86942d0a5ec4dbd56cf12d"
+    },
+    {
+      "path": "nurture/sair/index.html",
+      "groups": 12,
+      "before_sha256": "9a307e98b9338b5467b9f47c28cdbaeb50eff0677469194f43db241f09febddd",
+      "after_sha256": "4ab023d5cd791c686014914d85e5105c075ff6488aba216e52fc125e811da79d"
+    },
+    {
+      "path": "obrigado-contrato.html",
+      "groups": 12,
+      "before_sha256": "90bbf5a0e13c18f35a0abba4742938391673b6655004e02da24821f98db2edcc",
+      "after_sha256": "b3df6d91fa74bdc7c132a3fb6c98518556a71d897cdf205737971f3b39f38070"
+    },
+    {
+      "path": "obrigado-edital.html",
+      "groups": 12,
+      "before_sha256": "c7b5b4220b29a26eee70698fd8f2c27317ef9e7f6fd3bf641df452e6371f8cd3",
+      "after_sha256": "a4127e4479dee56601666f68e41ff6fffd5723f21625bcddf075cdcd15664aeb"
+    },
+    {
+      "path": "obrigado-operacao.html",
+      "groups": 12,
+      "before_sha256": "506f4bd81be235448199f8352d53b68bbeab5d7b043bf4a321a32f9c33c9d98e",
+      "after_sha256": "2b0bed16072bd802eb7459033b754f796ad1aababf21117b87150d4a25305099"
+    },
+    {
+      "path": "obrigado.html",
+      "groups": 12,
+      "before_sha256": "6216c9366e2b5160ec111e09ca5460c94d9eb7b42292046368b7d54fe8984d13",
+      "after_sha256": "37fb6756ec578a310cd2f34fa0dcf037721094db1659a38ee2860d75920e0ada"
+    },
+    {
+      "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+      "groups": 12,
+      "before_sha256": "1961fe717f632f946e77bc92a9a99e9dd0ae04b742c55d9ae7682fb2ba956802",
+      "after_sha256": "06f0dcd296c1834ce260178de780f67f52d25daaff6123f1cfd9c7112fce3855"
+    },
+    {
+      "path": "oportunidades/index.html",
+      "groups": 12,
+      "before_sha256": "58a5f2dec5ad83906d41ea7623ab2e3b7c2c7a2ee5c35b85e48f9ef774199080",
+      "after_sha256": "4a6edb5665f82192d669cccc5d46ac3277a76b5909382ecf3e7962877cf0b946"
+    },
+    {
+      "path": "oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html",
+      "groups": 12,
+      "before_sha256": "5e0acfcb889e9635e892d9c539be288ddb12c6aae952f01d669157f916986a11",
+      "after_sha256": "7ebceafca76848e0daafd29a5bdbf4def3433aebf641be18b0d0108e8878b637"
+    },
+    {
+      "path": "oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html",
+      "groups": 12,
+      "before_sha256": "265d1390fcdbd0c6adeb4f33ad4817d22f9dd23de70bf8431d222e34b313891b",
+      "after_sha256": "9d0ab9e918118bf6e37e6075ceb1f1232927b2f0df6bf8859aaebf8c7bfaae6e"
+    },
+    {
+      "path": "oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/index.html",
+      "groups": 12,
+      "before_sha256": "f4f17f6eb9f598d105e20aa9686e0eba610886bc459d99e93d9b0ee1eedf34a8",
+      "after_sha256": "c10eb96e101e35365f74b908b0505d07bf8fee08aa8405464f1ac5cde0a0ff3e"
+    },
+    {
+      "path": "panorama-mercado-obras-publicas/index.html",
+      "groups": 12,
+      "before_sha256": "10ae3f3c4b3480e0beb6fd004942481152fe58189c7e3ff2d3086d3227cc7766",
+      "after_sha256": "c62ea848262d440e62022057c200914e5375558b020b2d0b8675b22575fd3c0b"
+    },
+    {
+      "path": "panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/index.html",
+      "groups": 12,
+      "before_sha256": "2b9dd11a5aa3027360534ad3381a46f87833bf548ea6361f3a3ed421b713cb9e",
+      "after_sha256": "a71a69f425ebb802562f2871ff498ff80354116909e5472705c424c184771b1a"
+    },
+    {
+      "path": "parcerias-engenharia/index.html",
+      "groups": 12,
+      "before_sha256": "038957f0ecd234b42b42d08d01d0d2a8cbd0cb8a9f8238de25686f361334ee25",
+      "after_sha256": "8151e3809e8e2168e468244a477ab2d7fd4ce30ee6beb90dde4cfbf2970ca264"
+    },
+    {
+      "path": "pgr-documentacao-sst-obras/index.html",
+      "groups": 12,
+      "before_sha256": "50c46ca22ce3e41e3f1da42622c90b6353ad1e3d3cf3ee950ea727edbadd67ff",
+      "after_sha256": "47ccce7679a22c7746af1cef28c3467e6695811aabbf65866d4e94d9d940438a"
+    },
+    {
+      "path": "politica-editorial/historico/index.html",
+      "groups": 12,
+      "before_sha256": "b41eb16780a861a9f5cb6d438c5f1dcef796672fc7565d1756fde81cddb2558f",
+      "after_sha256": "de4c9a1127ec88419e07b9492c34677151e3fffcedee4463c098f017296165d3"
+    },
+    {
+      "path": "politica-editorial/index.html",
+      "groups": 12,
+      "before_sha256": "3e3134dcbc00820b6f6984ede596a66039ec9a5bf4e211deaa2e05293b89b5aa",
+      "after_sha256": "9abd91a02376ac493cbfab05e21b27536b7cb8a13c3a1e7a07400e4e6ace8d27"
+    },
+    {
+      "path": "privacidade/index.html",
+      "groups": 12,
+      "before_sha256": "d9b7951a58c977dff3002668b5fe47896b334bc2afe51b3ba73630381234d8ca",
+      "after_sha256": "9a8b756d910ca087bc1d82caad112362e603a0ece3a886bb334777f66e7c0dee"
+    },
+    {
+      "path": "problemas-que-resolvemos/index.html",
+      "groups": 12,
+      "before_sha256": "83439359a03674607ab4e2fd430103d4f2ab9ef104cdb43d73d6eec7d0cc07b5",
+      "after_sha256": "2e79e356fc06277ec0f7feba50c5a7f21c6726195183ee9969cc4eae5e17924d"
+    },
+    {
+      "path": "profissionais/index.html",
+      "groups": 12,
+      "before_sha256": "8abd00fd7fb4a6ea1975aa769480101bcad44086652868f69cf6c5f1733c2541",
+      "after_sha256": "8b1488ec08b03de4a07cd45a1ded1635b1a8012fbb9b48acab62e56d485a05f0"
+    },
+    {
+      "path": "projeto-eletrico/index.html",
+      "groups": 12,
+      "before_sha256": "19fe713fe54c7e85969c03307bdfdb101a79ce134436e255c1e9a75410b68dd9",
+      "after_sha256": "4b7e4ff7bb9c98ab3a03ff88652ec414beb7fc2543c79b678c5d01605f859d92"
+    },
+    {
+      "path": "projeto-estrutura-metalica/index.html",
+      "groups": 12,
+      "before_sha256": "74ebaeaea6ba95979267dd8908cfbae46e1d0c1a8caa8e88bd3270ffc4ce20fc",
+      "after_sha256": "821ebc3b565cad781400f37a6bbd393e7567d81c5b1addd6058deb20c253d61f"
+    },
+    {
+      "path": "projeto-estrutural-concreto-armado/index.html",
+      "groups": 12,
+      "before_sha256": "3bfd8702019a3e97f94e1450f61b0225f558654a559cdca1c6b73ede13a0e031",
+      "after_sha256": "721d7d094771b0587943c52799fa7ceb6a2cee3c22c65bad8efff74e90bab280"
+    },
+    {
+      "path": "projeto-hidrossanitario/index.html",
+      "groups": 12,
+      "before_sha256": "5c49c7082307d387219c4249e808214f04698fef4fc8b51d47b7c21b4cd0f51d",
+      "after_sha256": "e6f144274267b3c2d4d9bbfb0e612d789877be687b1da77a8701ea4faef717bb"
+    },
+    {
+      "path": "projetos-complementares-engenharia/index.html",
+      "groups": 12,
+      "before_sha256": "c231f3095acc110352372ae4b0ecfda055752c327fc560e20feb345309a393fa",
+      "after_sha256": "f3b2f10b7173edf093c96a0f07a179a695cd365674f1a7492f797d9ebf1f99b0"
+    },
+    {
+      "path": "projetos-prontos/condicoes/index.html",
+      "groups": 12,
+      "before_sha256": "ae311a06a4b1fbef8692df645c1e8fe46c1557e458877ec5c3b527666c6e1b69",
+      "after_sha256": "4d30d686c46acdad35e29722809d9bbad95f41d89fc2106323b67abe03093b81"
+    },
+    {
+      "path": "projetos-prontos/index.html",
+      "groups": 12,
+      "before_sha256": "20a7c278262607b494e838287474bc087d8be81fdbc3d1d273d64f6c44c256e4",
+      "after_sha256": "80ad3542acda80886fc5c1fc7a49b54277d9f575c69b23610ab37e5eef15579e"
+    },
+    {
+      "path": "projetos/coordenacao-multidisciplinar/index.html",
+      "groups": 12,
+      "before_sha256": "53a2d332eb5f8ca2e21b7fa248490b484dd961c07bda361d0c8fcb7ce52dff56",
+      "after_sha256": "65001f6b4709d6f5456d3d573479a809917099f16919c7af661f89735049496b"
+    },
+    {
+      "path": "projetos/estruturas/index.html",
+      "groups": 12,
+      "before_sha256": "5d8981aa8a939d05829078a9040b992f3638e9fd7132fdd7d48abed849ba3608",
+      "after_sha256": "e67e9e6c0e0cbf5c2606d5bf714f5656a969964a3e2e4b642a726b9c6adc7ffc"
+    },
+    {
+      "path": "projetos/index.html",
+      "groups": 12,
+      "before_sha256": "89043a3fc81c1a394d1cb201a1caecf8dab34ca119fefa9cfa565eba7a936938",
+      "after_sha256": "4dc3c47170016f7e8affc1c35f23142bed08c5aaf71a0e90c93ba2ab25ddb0ae"
+    },
+    {
+      "path": "projetos/infraestrutura/index.html",
+      "groups": 12,
+      "before_sha256": "8dc5add907eaa1934714e68678ab7945e0242c1ce947ea84bd78d6239ed302d3",
+      "after_sha256": "8c98218cfe56d2dc9840010c9b642214d1f120c9bc5f563932535ea9793c790b"
+    },
+    {
+      "path": "projetos/instalacoes/index.html",
+      "groups": 12,
+      "before_sha256": "99ab7daeff708450887cf78bf83d11975e1c6911ab653d1efecdfbe2a2826fe4",
+      "after_sha256": "592462d7e935ba4d451c093e55a6638cfd8c3612b9d9271c71fcdb18f458b564"
+    },
+    {
+      "path": "quantitativos-orcamento-obras/index.html",
+      "groups": 12,
+      "before_sha256": "0eb7860fca60588c3619ce030897a429cf097d0bfbbe2949500b3a5ad4598c6a",
+      "after_sha256": "42c73d488aa3ea822abd8db3d53e0e499aef5236f6418756db151125d65851ff"
+    },
+    {
+      "path": "radar/index.html",
+      "groups": 12,
+      "before_sha256": "5d243619b3fcbd443fa01b5f2c1f612aa81ab37003ad1ad0c0f0c5e4d8be16a8",
+      "after_sha256": "713304ac36596c6a64168ee0d387829a95a8fada5fd0dfb35b1c412c37c2e75b"
+    },
+    {
+      "path": "radar/nacional-obras-publicas/index.html",
+      "groups": 12,
+      "before_sha256": "bea259e2ec9036f567289475fe8da8d9720995371eb683b406a883e0d676d197",
+      "after_sha256": "34c1c6db15c125126a4c607d6f7278da9217a6657f1e62ea82de706765cddd14"
+    },
+    {
+      "path": "revisao-atualizacao-pgr/index.html",
+      "groups": 12,
+      "before_sha256": "358ad6aa250a607299b006f5ee42124416774a34f7b590ce8386665025b892b7",
+      "after_sha256": "cd4eaebc02ad3fddf1b74645f0642eccd59898ae9ba4ccd2e1e64d3a80f6fcae"
+    },
+    {
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "groups": 12,
+      "before_sha256": "92f07076edda4a7239cbe45df3bb3849b71869388266bcb5d862be3d84c95ee8",
+      "after_sha256": "880cbc2dec7b627bffcbe8eec1881f6000d43e5adb98aef752b5a293bb316c93"
+    },
+    {
+      "path": "seguranca-trabalho-apoio-tecnico/index.html",
+      "groups": 12,
+      "before_sha256": "2a79fe9a5c4dc9e409322c6be54eb7e229777ddaeb77cf570933c77211a2ecb8",
+      "after_sha256": "c932717017527b4088062b5510a293cb3ee4ce402016510fe600311676db250f"
+    },
+    {
+      "path": "servicos-obras-publicas/index.html",
+      "groups": 12,
+      "before_sha256": "c09c5f35017b62901b34607c44ee39b9b72c48a996c9b78c99cb1c8dd2c20e77",
+      "after_sha256": "60e030f94b3dff230616839a00816b221168ce13497d50f44118e58ebc251223"
+    },
+    {
+      "path": "servicos/index.html",
+      "groups": 12,
+      "before_sha256": "8af8a7dabff6cba13f76fb8468948c4aab48a2e2d3077ae0699c187da50d5020",
+      "after_sha256": "6479ae8e3888b762a77f55f43bcce2dcca687eeeca81364ba513fb891bf7bc02"
+    },
+    {
+      "path": "terceirizacao-documentacao-sst/index.html",
+      "groups": 12,
+      "before_sha256": "17ee27a0baf6dbe0e39566f2246a3fff027e9885d7c6100383282cd42b2bae33",
+      "after_sha256": "b54931b183a37922a5fab2e06f87a730b3eb338444bab91a725c1c6e5f0ce278"
+    },
+    {
+      "path": "terceirizacao-projetos-engenharia/index.html",
+      "groups": 12,
+      "before_sha256": "0f073b85f85c922be06ce279b9016789050aee727e028724fa9a18a5bad42fac",
+      "after_sha256": "10becb826725e5693258e2d23347fc917890ca858721f8b34db1cc13863c6652"
+    },
+    {
+      "path": "termos-de-uso/index.html",
+      "groups": 12,
+      "before_sha256": "90982455987e8c59dc06c95b79348f35da307458245448ed3058f31402cad782",
+      "after_sha256": "40095ef8cc213ea04dbf52733b5113bee93413caebdd940e18885c0fa3a87803"
+    },
+    {
+      "path": "triagem-tecnica/index.html",
+      "groups": 12,
+      "before_sha256": "62ac20890966232e5c4c3f82f73bc98aeb1f97456151d23eb6c761545000b942",
+      "after_sha256": "d3c1e4f2de1aca980c807086dff05d0fa6638bd033e27eaf3357ccfb59a484c0"
+    }
+  ]
+}

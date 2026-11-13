@@ -144,7 +144,7 @@ jobs:
           set -o pipefail
           test ! -f _site/index.html
           node scripts/site/test_ui_geometry.mjs 2>&1 | tee build/reports/convergence/navigation-discovery/ui-geometry.log
-      - name: Verify the bounded presentation description proof
+      - name: Verify the bounded navigation presentation proof
         if: success() && github.head_ref == 'feat/navigation-discovery-20261112'
         run: python3 -m unittest scripts.site.test_navigation_presentation_copy -v
       - name: Prove the presentation recapture without changing authority
