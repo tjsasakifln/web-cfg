@@ -152,7 +152,7 @@ jobs:
         env:
           EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          python3 scripts/site/prepare_navigation_presentation_review.py --output build/reports/convergence/navigation-discovery/presentation
+          python3 -m scripts.site.prepare_navigation_presentation_review --output build/reports/convergence/navigation-discovery/presentation
       - name: Expose public review evidence for remote inspection
         if: always() && github.head_ref == 'feat/navigation-discovery-20261112'
         env:
