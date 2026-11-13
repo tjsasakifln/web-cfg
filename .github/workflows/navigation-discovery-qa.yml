@@ -71,6 +71,12 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_navigation_discovery_browser.mjs . 2>&1 | tee build/reports/convergence/navigation-discovery/navigation.log
+      - name: Compare diagnostic CSS with the complete canonical stylesheet
+        if: always() && steps.dependencies.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          DIAGNOSTIC_CSS_REPORT_DIR: build/reports/convergence/navigation-discovery/diagnostic-css
+        run: node scripts/site/test_diagnostic_css_parity.mjs .
       - name: Verify navigation and commercial event semantics
         if: always() && steps.dependencies.outcome == 'success' && steps.chrome.outcome == 'success'
         env:
@@ -269,6 +275,12 @@ jobs:
         run: |
           set -o pipefail
           node scripts/site/test_navigation_discovery_browser.mjs _site 2>&1 | tee build/reports/navigation-artifact-qa/navigation.log
+      - name: Compare diagnostic CSS in the compiled artifact
+        if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          DIAGNOSTIC_CSS_REPORT_DIR: build/reports/navigation-artifact-qa/diagnostic-css
+        run: node scripts/site/test_diagnostic_css_parity.mjs _site
       - name: Verify the complete UI contract after compilation
         if: always() && steps.build.outcome == 'success' && steps.chrome.outcome == 'success'
         env:
