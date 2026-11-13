@@ -150,6 +150,8 @@ if (form) {
   let pricing;
   try { pricing = JSON.parse($('rp-pricing').textContent); } catch { pricing = null; }
   let config = null;
+  let configRequest = null;
+  let proposalContext = '';
   let confirmed = null;
   let confirmedSelection = '';
   let quoteSequence = 0;
@@ -171,25 +173,38 @@ if (form) {
   const sameSelection = () => confirmed && confirmedSelection === JSON.stringify(select());
 
   function eligibility(selection) {
-    if (!pricing || !Number.isFinite(selection.areaM2) || selection.areaM2 < pricing.areaMin || selection.areaM2 > pricing.areaMax ||
-        ![1, 2].includes(selection.floors) || selection.buildingType !== 'new-residential' || selection.terrain === 'other') {
-      return 'Para esta área ou condição, preparamos uma proposta específica. Use o atendimento abaixo para contar o que precisa.';
+    if (!pricing) return { kind: 'config', message: 'Clique em revisar para consultar as condições da contratação.' };
+    if (!$('rp-area').value.trim() || !Number.isFinite(selection.areaM2)) {
+      return { kind: 'input', field: 'rp-area', message: 'Informe a área construída total para continuar.' };
     }
-    if (!selection.disciplines.length) return 'Selecione ao menos uma disciplina para calcular seu projeto.';
-    if (!selection.terrain) return 'Selecione as condições do terreno para revisar a contratação.';
-    if (!$('rp-area').validity.valid) return 'Informe a área com até duas casas decimais, entre 50 e 250 m².';
-    return '';
+    const conditions = [];
+    if (selection.areaM2 < pricing.areaMin || selection.areaM2 > pricing.areaMax) conditions.push(`área fora de ${pricing.areaMin} a ${pricing.areaMax} m²`);
+    if (![1, 2].includes(selection.floors)) conditions.push('outro número de pavimentos');
+    if (selection.buildingType !== 'new-residential') conditions.push('reforma ou outro tipo de obra');
+    if (selection.terrain === 'other') conditions.push('terreno inclinado, com contenções ou ainda não definido');
+    if (conditions.length) return { kind: 'scope', message: `Sua seleção inclui: ${conditions.join('; ')}. Vamos preparar uma proposta para essas condições. Continue no botão abaixo.` };
+    if (!selection.disciplines.length) return { kind: 'input', field: 'rp-arquitetura', message: 'Selecione ao menos uma disciplina para calcular seu projeto.' };
+    if (!selection.terrain) return { kind: 'input', field: 'rp-terrain', message: 'Selecione as condições do terreno para revisar a contratação.' };
+    if (!$('rp-area').validity.valid) return { kind: 'input', field: 'rp-area', message: 'Informe a área com até duas casas decimais, entre 50 e 250 m².' };
+    return null;
   }
 
   function updateActions() {
-    const eligible = !eligibility(select());
-    $('rp-review-button').disabled = busy || !config || !eligible;
-    $('rp-pay-button').disabled = busy || !config?.purchasesEnabled || !sameSelection();
+    const issue = eligibility(select());
+    const needsReview = !sameSelection();
+    $('rp-review-button').disabled = busy;
+    $('rp-pay-button').disabled = busy || (!needsReview && !config?.purchasesEnabled);
+    if (!busy) {
+      $('rp-review-button').textContent = issue?.kind === 'scope' ? 'Solicitar proposta para meu caso' : 'Revisar minha contratação';
+      $('rp-pay-button').textContent = needsReview ? 'Atualizar resumo' : 'Criar pedido para pagar';
+    }
   }
 
   function renderEstimate() {
-    if (!pricing) return;
+    if (!pricing) { updateActions(); return; }
     const selection = select();
+    const issue = eligibility(selection);
+    const needsProposal = issue?.kind === 'scope';
     const all = estimateProject(pricing, { ...selection, disciplines: pricing.disciplines.map(d => d.id) });
     const selected = estimateProject(pricing, selection);
     $('rp-deadline-output').textContent = `${selection.deadlineDays} dias`;
@@ -199,15 +214,17 @@ if (form) {
     for (const button of form.querySelectorAll('[data-deadline]')) button.setAttribute('aria-pressed', String(Number(button.dataset.deadline) === selection.deadlineDays));
     for (const node of form.querySelectorAll('[data-discipline-price]')) {
       const item = all?.items.find(item => item.id === node.dataset.disciplinePrice);
-      node.textContent = item ? money(item.amountCents) : 'Sob consulta';
+      node.textContent = needsProposal ? 'Sob proposta' : item ? money(item.amountCents) : 'Sob consulta';
     }
-    listItems($('rp-summary-items'), selected?.items || []);
-    $('rp-total').textContent = selected && selection.disciplines.length ? money(selected.amountCents) : 'Selecione seu projeto';
+    if (needsProposal) {
+      $('rp-summary-items').replaceChildren(...pricing.disciplines.filter(d => selection.disciplines.includes(d.id)).map(d => element('li', d.title)));
+    } else listItems($('rp-summary-items'), selected?.items || []);
+    $('rp-total').textContent = needsProposal ? 'Sob proposta' : selected && selection.disciplines.length ? money(selected.amountCents) : 'Selecione seu projeto';
     const saving = selected ? selected.amountCents - selected.items.reduce((total, item) => total + item.baseAmountCents, 0) : 0;
-    $('rp-savings').textContent = saving > 0 ? `Com 90 dias, este projeto fica ${money(saving)} mais econômico.` :
+    $('rp-savings').textContent = needsProposal ? 'O valor e o prazo serão definidos na proposta para o seu caso.' : saving > 0 ? `Com 90 dias, este projeto fica ${money(saving)} mais econômico.` :
       selected?.items.length ? 'Você escolheu o menor valor desta faixa de prazo.' : 'O total é a soma das disciplinas escolhidas.';
-    const reason = eligibility(selection);
-    message($('rp-eligibility'), reason);
+    $('rp-included-note').hidden = needsProposal;
+    message($('rp-eligibility'), issue?.message);
     updateActions();
   }
 
@@ -216,9 +233,9 @@ if (form) {
     confirmed = null;
     confirmedSelection = '';
     $('rp-accept-terms').checked = false;
-    $('rp-pay-button').disabled = true;
+    message($('rp-review-message'), '');
     if (!$('rp-purchase-details').hidden) {
-      message($('rp-checkout-message'), 'Você alterou a configuração. Use “Revisar minha contratação” para conferir o novo resumo antes de pagar.');
+      message($('rp-checkout-message'), 'Você alterou a configuração. Clique em “Atualizar resumo” abaixo para conferir as novas condições antes de pagar.');
       $('rp-confirmed-summary').replaceChildren(element('p', 'Configuração alterada. O resumo precisa ser atualizado.', 'rp-hint'));
     }
     renderEstimate();
@@ -243,28 +260,65 @@ if (form) {
     }
   }
 
-  async function loadConfig() {
-    try {
-      const result = await api('service-config');
-      if (!result.pricing || !Array.isArray(result.pricing.disciplines) || !result.terms?.text || !/^[a-f0-9]{64}$/.test(result.terms.sha256 || '')) throw requestError('PAYMENT_UNAVAILABLE');
-      config = result;
-      pricing = result.pricing;
-      $('rp-payment-availability').textContent = result.purchasesEnabled ?
-        'Pagamento pelo Mercado Pago. Confira as condições antes de confirmar.' :
-        'Pagamento online temporariamente indisponível. Você pode calcular, revisar o escopo e falar com a CONFENGE.';
-    } catch {
-      config = null;
-      $('rp-payment-availability').textContent = 'Não foi possível conferir o pagamento online. O cálculo continua disponível; use o atendimento para contratar.';
+  function loadConfig() {
+    if (configRequest) return configRequest;
+    configRequest = (async () => {
+      try {
+        const result = await api('service-config');
+        if (!result.pricing || !Array.isArray(result.pricing.disciplines) || !result.terms?.text || !/^[a-f0-9]{64}$/.test(result.terms.sha256 || '')) throw requestError('PAYMENT_UNAVAILABLE');
+        config = result;
+        pricing = result.pricing;
+        $('rp-payment-availability').textContent = result.purchasesEnabled ?
+          'Pagamento pelo Mercado Pago. Confira as condições antes de confirmar.' :
+          'Pagamento online temporariamente indisponível. Você pode calcular, revisar o escopo e falar com a CONFENGE.';
+      } catch {
+        config = null;
+        $('rp-payment-availability').textContent = 'Não foi possível conferir o pagamento online. Clique em “Revisar minha contratação” para tentar novamente.';
+      }
+      renderEstimate();
+    })().finally(() => { configRequest = null; });
+    return configRequest;
+  }
+
+  function requestProposal() {
+    const selection = select();
+    const option = id => $(id).selectedOptions[0]?.textContent || 'Não informado';
+    const context = ['Solicitação de proposta pelo simulador.',
+      `Área construída: ${number(selection.areaM2)} m².`, `Pavimentos: ${option('rp-floors')}.`,
+      `Tipo de obra: ${option('rp-building-type')}.`, `Terreno: ${option('rp-terrain')}.`,
+      `Disciplinas: ${pricing.disciplines.filter(d => selection.disciplines.includes(d.id)).map(d => d.title).join(', ') || 'A definir'}.`,
+      `Prazo desejado: ${selection.deadlineDays} dias.`].join('\n');
+    const reference = $('mensagem');
+    const previous = reference.value;
+    const value = proposalContext && previous.includes(proposalContext) ? previous.replace(proposalContext, context) :
+      previous.trim() ? `${context}\n\n${previous}` : context;
+    if (value.length <= reference.maxLength) { reference.value = value; proposalContext = context; }
+    $('project_kind').value = 'custom';
+    reference.closest('details').open = true;
+    $('nome').focus({ preventScroll: true });
+    $('nome').scrollIntoView({ behavior: 'auto', block: 'center' });
+  }
+
+  function guideSelection(issue) {
+    message($('rp-eligibility'), issue.message);
+    if (issue.kind === 'scope') requestProposal();
+    else if (issue.field) {
+      $(issue.field).focus({ preventScroll: true });
+      $(issue.field).scrollIntoView({ behavior: 'auto', block: 'center' });
     }
-    renderEstimate();
+  }
+
+  function showReviewError(text) {
+    message($('rp-review-message'), text);
+    if (!$('rp-purchase-details').hidden) message($('rp-checkout-message'), text);
   }
 
   async function review() {
     if (busy) return;
     const selection = select();
-    const reason = eligibility(selection);
-    if (reason) { message($('rp-checkout-message'), reason); return; }
-    if (!config) { await loadConfig(); if (!config) return; }
+    const issue = eligibility(selection);
+    message($('rp-review-message'), '');
+    if (issue && issue.kind !== 'config') { guideSelection(issue); return; }
     const sequence = ++quoteSequence;
     confirmed = null;
     confirmedSelection = '';
@@ -273,6 +327,11 @@ if (form) {
     $('rp-review-button').textContent = 'Conferindo o resumo...';
     updateActions();
     try {
+      if (!config?.purchasesEnabled) await loadConfig();
+      if (!config) { showReviewError('A consulta do pagamento não respondeu. Tente revisar novamente ou use o atendimento abaixo.'); return; }
+      if (sequence !== quoteSequence || JSON.stringify(selection) !== JSON.stringify(select())) return;
+      const currentIssue = eligibility(selection);
+      if (currentIssue) { guideSelection(currentIssue); return; }
       const result = await api('service-quote', { method: 'POST', body: selection });
       if (sequence !== quoteSequence || JSON.stringify(selection) !== JSON.stringify(select())) return;
       if (!Array.isArray(result.items) || !Number.isSafeInteger(result.amountCents) || result.amountCents <= 0 || result.currency !== 'BRL' ||
@@ -293,10 +352,10 @@ if (form) {
       $('rp-purchase-title').focus({ preventScroll: true });
       $('rp-purchase-details').scrollIntoView({ behavior: 'auto', block: 'start' });
     } catch (error) {
-      message($('rp-checkout-message'), explain(error));
+      showReviewError(explain(error));
       if (error.code === 'QUOTE_CHANGED') { confirmed = null; confirmedSelection = ''; $('rp-accept-terms').checked = false; }
     }
-    finally { busy = false; $('rp-review-button').textContent = 'Revisar minha contratação'; updateActions(); }
+    finally { busy = false; updateActions(); }
   }
 
   function selectedReference() {
@@ -546,7 +605,7 @@ if (form) {
     $('pedido').hidden = true;
     $('rp-purchase-details').hidden = true;
     invalidate();
-    message($('rp-checkout-message'), 'Escolha as disciplinas do novo pedido e revise o total antes de contratar. O acesso ao pedido anterior continua no arquivo que você salvou.');
+    message($('rp-review-message'), 'Escolha as disciplinas do novo pedido e revise o total antes de contratar. O acesso ao pedido anterior continua no arquivo que você salvou.');
     $('monte-seu-projeto').scrollIntoView({ block: 'start', behavior: 'auto' });
     $('rp-area').focus({ preventScroll: true });
   });
