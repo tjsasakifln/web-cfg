@@ -129,14 +129,14 @@ independente e contraprovas antes da publicação.
 O workflow de apresentação da [PR #842](https://github.com/tjsasakifln/web-cfg/pull/842)
 capturou as 19 rotas declaradas em 1366 × 768 e 390 × 844, usando
 Chrome 152.0.7977.42 e a fonte limpa
-`221d1b72e99ee5ac1da34e1c2115170197062153`.
+`7832efb0abcb884d420d6d77cc90103bc37499d2`.
 As 26 rotas previstas na medição da primeira dobra foram aprovadas, sem
 rotas pendentes. Os dois contratos foram importados sem reescrita dos
 arquivos do workflow; 60 hashes de entrada e 2.010 verificações passaram.
 
-Execução: [43472203148](https://github.com/tjsasakifln/web-cfg/actions/runs/43472203148).
+Execução: [43473815555](https://github.com/tjsasakifln/web-cfg/actions/runs/43473815555).
 SHA-256 do pacote de evidência:
-`3c377b2654593d74d44c75b7ac8dff10e2868f3e1707fc304fa43056239c9601`.
+`4ee00e19678a23e4a1d5028351c68ba6df2caefa681dd8ca4d55f7d09f7c6f1c`.
 Os resultados do CI da versão final, o parecer visual e a confirmação da
 publicação ficam registrados na PR. Sessões com compradores reais não
 foram realizadas nesta auditoria.

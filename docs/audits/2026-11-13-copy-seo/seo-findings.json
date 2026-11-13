@@ -465,12 +465,12 @@
         "description": "Demonstração metodológica de dossiê frente a glosa de medição."
       },
       "after": {
-        "title": "Exemplo de dossiê de medição com glosa | CONFENGE",
+        "title": "Dossiê demonstrativo de medição com glosa | CONFENGE",
         "description": "Exemplo demonstrativo de dossiê para medição com glosa: apontamentos, registros de execução e documentos organizados para fundamentar a análise técnica."
       },
       "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
-      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
-      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; marcador demonstrativo explícito no título preservado, assim como H1, schema, corpo, canonical, preços, condições e indexabilidade.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/test_permissioned_proof.py; test:real-proof-registry e verificação do HTML publicado",
       "status": "implemented",
       "simulated_consensus": {
         "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
@@ -495,12 +495,12 @@
         "description": "Exemplo demonstrativo: verificar o saldo de acréscimos e supressões do art. 125 antes de protocolar um termo aditivo."
       },
       "after": {
-        "title": "Exemplo de análise de aditivos em obras | CONFENGE",
+        "title": "Exemplo demonstrativo de análise de aditivos em obras | CONFENGE",
         "description": "Exemplo demonstrativo: verificar o saldo de acréscimos e supressões do art. 125 antes de protocolar um termo aditivo."
       },
       "correction": "Atualizar apenas o título e/ou a descrição na fonte proprietária e projetá-los para as prévias.",
-      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; canonical, corpo, preços, condições e indexabilidade preservados.",
-      "validation": "scripts/site/test_search_metadata.py e verificação do HTML publicado",
+      "acceptance": "Título e descrição correspondem ao conteúdo e aos valores revisados; marcador demonstrativo explícito no título preservado, assim como H1, schema, corpo, canonical, preços, condições e indexabilidade.",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/test_permissioned_proof.py; test:real-proof-registry e verificação do HTML publicado",
       "status": "implemented",
       "simulated_consensus": {
         "method": "10 perspectivas metodológicas aplicadas aos mesmos critérios; não são votos ou falas das pessoas citadas.",
@@ -1230,9 +1230,16 @@
       "weakness": "Várias prévias usam frases promocionais antigas que não identificam o serviço do título atual.",
       "before": "og:title=Para o edital que exige coordenação da proposta, não improviso.",
       "after": "Projetar o título atual para og:title nas rotas revisadas.",
-      "correction": "Projetar o título atual para og:title nas rotas revisadas.",
+      "additional_evidence": {
+        "route": "/defesa-margem-contratos-publicos/",
+        "source": "defesa-margem-contratos-publicos/index.html",
+        "authority": "data/site/brand.json > offers[id=contract-defense].headline",
+        "before": "Na base 1bf90c9, 'Quando cada dia sem registro enfraquece sua posição.' existia apenas em og:title; o headline institucional ainda repetia essa frase.",
+        "after": "og:title acompanha o title atual. O headline institucional acompanha o H1 preservado: Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão."
+      },
+      "correction": "Projetar o título atual para og:title nas rotas revisadas e alinhar o headline institucional de defesa de margem ao H1 já publicado, preservando oferta, preço e CTA.",
       "acceptance": "Prévia identifica o mesmo assunto e marca do title; Google continua livre para compor seu próprio title link.",
-      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site",
+      "validation": "scripts/site/test_search_metadata.py; scripts/site/search_metadata.py; build_site.py sobre _site; scripts/site/test_brand_contract.py verifica valor único de og:title independentemente da ordem dos atributos e headline de defesa no H1 visível",
       "status": "implemented",
       "simulated_consensus": {
         "method": "Consenso metodológico simulado de dez perspectivas, não participação pessoal.",

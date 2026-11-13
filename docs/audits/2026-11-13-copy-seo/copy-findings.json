@@ -356,8 +356,14 @@
       "title": "Parceria expressava posse do cliente em vez de responsabilidade",
       "file": "parcerias-engenharia/index.html",
       "route": "/parcerias-engenharia/",
-      "before": "Você diz o que falta; nós entregamos a parte de engenharia; o cliente continua seu.",
-      "after": "Sua equipe mantém o relacionamento. A CONFENGE desenvolve a engenharia combinada.",
+      "before": [
+        "Você diz o que falta; nós entregamos a parte de engenharia; o cliente continua seu.",
+        "o autor original decide e corrige, e o cliente continua seu."
+      ],
+      "after": [
+        "Sua equipe mantém o relacionamento. A CONFENGE desenvolve a engenharia combinada.",
+        "o autor original decide e corrige, e sua equipe mantém o relacionamento com o cliente."
+      ],
       "reason": "A promessa comercial útil é a continuidade do relacionamento e a divisão do trabalho, sem tratar o cliente como propriedade.",
       "group": "Parceria expressava posse do cliente em vez de responsabilidade",
       "acceptance": "Texto anterior corrigido na fonte; texto final presente no HTML renderizado da rota, com destinos e condições comerciais preservados.",
@@ -1075,7 +1081,7 @@
       },
       "after": {
         "question": "A contratação online de uma casa vale para qualquer edificação?",
-        "answer": "A oferta online tem condições próprias para residências unifamiliares novas. Edificações comerciais, industriais, institucionais e casos fora desse enquadramento recebem proposta conforme uso, área, disciplinas e fase do trabalho. Consulte o enquadramento antes de escolher a modalidade."
+        "answer": "A oferta online tem condições próprias para residências unifamiliares novas. Edificações comerciais, industriais, institucionais e casos que não atendam a essas condições recebem proposta conforme uso, área, disciplinas e fase do trabalho. Antes de contratar online, confira se a oferta atende ao seu caso."
       },
       "reason": "O público da página inclui vários usos; o atalho residencial precisava ser acompanhado de distinção clara de modalidade.",
       "group": "Resposta de contratação: buildings",

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -54,6 +55,74 @@ def _visible_home_text(html: str) -> str:
     stripped = re.sub(r"(?s)<!--.*?-->", " ", stripped)
     return _h.unescape(re.sub(r"<[^>]+>", " ", stripped))
 
+
+class _MetadataParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.in_head = False
+        self.head_count = 0
+        self.metas: list[tuple[bool, list[tuple[str, str | None]]]] = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "head":
+            self.in_head = True
+            self.head_count += 1
+        elif tag == "meta":
+            self.metas.append((self.in_head, attrs))
+
+    def handle_endtag(self, tag):
+        if tag == "head":
+            self.in_head = False
+
+
+def _assert_unique_meta_content(html: str, property_name: str, expected: str) -> None:
+    """A representação dos atributos pode variar; unicidade e valor são exatos."""
+    parser = _MetadataParser()
+    parser.feed(html)
+    parser.close()
+    assert parser.head_count == 1, "expected exactly one head"
+    matches = [
+        (in_head, attrs)
+        for in_head, attrs in parser.metas
+        if ("property", property_name) in attrs
+    ]
+    assert len(matches) == 1, f"expected exactly one {property_name}, got {len(matches)}"
+    in_head, attrs = matches[0]
+    assert in_head, f"{property_name} must be inside head"
+    assert [value for name, value in attrs if name == "property"] == [property_name]
+    assert [value for name, value in attrs if name == "content"] == [expected]
+
+
+def test_metadata_contract_accepts_attribute_order_and_html_serialization():
+    expected = "Projetos & serviços de engenharia"
+    for meta in (
+        '<meta content="Projetos &amp; serviços de engenharia" property="og:title"/>',
+        "<meta property='og:title' content='Projetos &amp; serviços de engenharia'>",
+        '<META PROPERTY="og:title" data-extra="ok" CONTENT="Projetos &amp; serviços de engenharia">',
+    ):
+        _assert_unique_meta_content(f"<head>{meta}</head><body></body>", "og:title", expected)
+
+
+def test_metadata_contract_rejects_missing_duplicate_or_wrong_values():
+    correct = '<meta property="og:title" content="Mensagem atual">'
+    invalid = (
+        "<head></head>",
+        '<head><meta property="og:title" content="Mensagem anterior"></head>',
+        f"<head>{correct}{correct}</head>",
+        '<head><meta property="og:title" content="Mensagem atual" content="Outra"></head>',
+        '<head><meta property="og:title" property="outra" content="Mensagem atual"></head>',
+        '<head><meta property="og:title"></head>',
+        f"<head></head><body>{correct}</body>",
+        f"<head>{correct}</head><head></head>",
+    )
+    for html in invalid:
+        try:
+            _assert_unique_meta_content(html, "og:title", "Mensagem atual")
+        except AssertionError:
+            continue
+        raise AssertionError(f"invalid metadata accepted: {html}")
+
+
 def test_home_has_canonical_copy():
     brand = load_brand()
     hero = brand["hero"]
@@ -67,8 +136,7 @@ def test_home_has_canonical_copy():
     for key in ("eyebrow", "h1", "subheadline", "cta_primary", "cta_secondary"):
         assert hero[key] in visible, key
     assert brand["positioning"]["org_description"] in html
-    og_title = re.search(r'<meta content="([^"]+)" property="og:title"/>', html)
-    assert og_title and og_title.group(1) == hero["og_title"]
+    _assert_unique_meta_content(html, "og:title", hero["og_title"])
 
     for section_id in (
         "como-conduzimos",
@@ -120,6 +188,15 @@ def test_offer_pages_exist_with_canonical():
         assert o["headline"] in html
         assert "application/ld+json" in html
         assert "extra-cli" not in html.lower()
+
+
+def test_contract_defense_headline_matches_visible_h1():
+    offer = next(o for o in load_brand()["offers"] if o["id"] == "contract-defense")
+    html = (ROOT / offer["url"].strip("/") / "index.html").read_text(encoding="utf-8")
+    headings = re.findall(r"(?is)<h1\b[^>]*>(.*?)</h1>", html)
+    assert len(headings) == 1, "contract defense must have exactly one h1"
+    visible_h1 = re.sub(r"\s+", " ", _visible_home_text(headings[0])).strip()
+    assert visible_h1 == offer["headline"]
 
 
 def test_forbidden_phrases_on_commercial_pages():
