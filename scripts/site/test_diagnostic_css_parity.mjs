@@ -31,13 +31,19 @@ const report = {
   schema: 'confenge.diagnostic-css-parity/1.0', site_root: root, route,
   source_sha: null, workflow_sha: process.env.GITHUB_SHA || null,
   run_id: process.env.GITHUB_RUN_ID || null, run_attempt: process.env.GITHUB_RUN_ATTEMPT || null,
-  status: 'running', scenarios: [], screenshots: [], blocked_requests: [], font_contracts: [],
+  status: 'running', scenarios: [], screenshots: [], blocked_requests: [], font_contracts: [], font_warmups: [],
   page_errors: [], failures: [],
 };
 const server = createServer(async (request, response) => {
   if (request.method !== 'GET') return response.writeHead(405).end();
   try {
     const url = new URL(request.url, 'http://localhost');
+    if (url.pathname === '/_qa/diagnostic-font-warmup/') {
+      return response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }).end(
+        '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">'
+        + '<title>CSS font preparation</title><link rel="stylesheet" href="/styles.css">'
+        + '</head><body></body></html>');
+    }
     if (url.pathname === '/api/web/tool-credits' && url.searchParams.get('op') === 'config') {
       return response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({
         enabled: commerceEnabled, purchasesEnabled: commerceEnabled,
@@ -50,7 +56,9 @@ const server = createServer(async (request, response) => {
     let file = resolve(root, '.' + decodeURIComponent(url.pathname));
     if (file !== root && !file.startsWith(root + sep)) return response.writeHead(403).end();
     if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html');
-    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' })
+    const headers = { 'Content-Type': mime[extname(file)] || 'application/octet-stream' };
+    if (/\.(?:woff2?|ttf|otf)$/i.test(file)) headers['Cache-Control'] = 'public, max-age=3600, immutable';
+    response.writeHead(200, headers)
       .end(await readFile(file));
   } catch { response.writeHead(404).end(); }
 });
@@ -251,9 +259,9 @@ async function activateStylesheet(canonical) {
 }
 
 async function warmFontMedia() {
-  // font-display:optional may retain fallback after its short initial window.
-  // Warm both already-loaded sheets before the baseline, then prove the actual
-  // glyph fonts through CDP. This never changes font-display or CSS declarations.
+  // Resource loading happened in a separate document before this route painted.
+  // Exercise both resident sheets in the current screen/print media and prove
+  // the actual glyph fonts through CDP, without changing authored declarations.
   await activateStylesheet(true);
   const canonical = await platformFonts();
   assertFontMode(canonical);
@@ -354,7 +362,35 @@ async function fill(selector, value) {
   await page.keyboard.type(value);
 }
 
+async function primeFontBeforeDocument() {
+  if (context.font_mode !== 'loaded') return;
+  const javascript = page.isJavaScriptEnabled();
+  const response = await page.goto(base + '/_qa/diagnostic-font-warmup/', { waitUntil: 'load', timeout: 30000 });
+  assert.equal(response?.status(), 200, 'same-origin font preparation document');
+  assert.equal(await page.evaluate(() => document.scripts.length), 0, 'font preparation has no application scripts');
+  // A late load cannot reverse optional's fallback decision in a painted page.
+  // Decode the exact authored face in this empty document, then navigate fresh.
+  // Native tests keep scripts disabled on the application route throughout;
+  // only this empty preparation document needs to resolve FontFace.load().
+  if (!javascript) await page.setJavaScriptEnabled(true);
+  try {
+    const faces = await page.evaluate(async () => {
+      const faces = [...document.fonts].filter(face => face.family.replace(/["']/g, '') === 'Archivo Var');
+      if (!faces.length) throw new Error('canonical stylesheet has no Archivo Var FontFace');
+      await Promise.all(faces.map(face => face.load()));
+      await document.fonts.ready;
+      return faces.map(face => ({ family: face.family, status: face.status, weight: face.weight,
+        stretch: face.stretch, style: face.style, display: face.display }));
+    });
+    assert.ok(faces.every(face => face.status === 'loaded'), 'authored Archivo bytes decoded before route navigation');
+    report.font_warmups.push({ ...context, url: new URL(page.url()).pathname, application_scripts: 0, faces });
+  } finally {
+    if (!javascript) await page.setJavaScriptEnabled(false);
+  }
+}
+
 async function visit() {
+  await primeFontBeforeDocument();
   let response = await page.goto(base + route, { waitUntil: 'load', timeout: 30000 });
   if (!response) response = await page.reload({ waitUntil: 'load', timeout: 30000 });
   assert.equal(response?.status(), 200, route);
