@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
 const { readOffer, quote, publicPricing } = require('../../runtime/project-commerce/service-policy.cjs');
 const load = () => import('../../assets/js/ready-project-services.mjs');
 const pricing = publicPricing(readOffer());
@@ -99,4 +100,12 @@ test('published prices and the browser seed use the same server-owned offer vers
   assert.match(html, /id="formulario-contato"/);
   assert.match(html, /id="rp-pay-button" disabled/);
   assert.doesNotMatch(html, /Nenhum modelo está disponível para compra/);
+});
+
+test('the checkout module URL changes with its content so returning visitors receive fixes', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../../projetos-prontos/index.html'), 'utf8');
+  const source = fs.readFileSync(path.join(__dirname, '../../assets/js/ready-project-services.mjs'));
+  const version = createHash('sha256').update(source).digest('hex').slice(0, 12);
+  assert(html.includes(`src="/assets/js/ready-project-services.mjs?v=${version}"`),
+    'the published module URL must carry the current content hash, not an older cache key');
 });

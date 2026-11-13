@@ -136,6 +136,16 @@ esquecer de alterar a versão textual do catálogo.
 Cada disciplina entra como item separado do Checkout Pro. Uma resposta incerta
 fica em conferência e é recuperada pela referência original, sem reemitir.
 
+Uma recusa explícita HTTP 400, 401, 403 ou 422 do POST de criação encerra somente
+aquela tentativa como `failed`, permitindo ao comprador revisar e iniciar uma
+nova tentativa. O recibo recusado continua idempotente e não faz novas consultas
+ao provedor quando nunca recebeu um `providerId`. O encerramento é atômico e não
+substitui uma ordem já vinculada ou confirmada por webhook. Timeout, HTTP 408,
+409, 423, 429, erros 5xx, resposta inválida e erro de consulta mantêm a conferência;
+não liberam outra cobrança automaticamente. A distinção segue os
+[erros de criação da Orders API](https://www.mercadopago.com.br/developers/pt/reference/online-payments/checkout-pro-orders/create-order/post)
+e não usa mensagens privadas do provedor no recibo ou nos logs.
+
 O callback assinado somente identifica qual ordem consultar. Pagamento
 confirmado requer resposta autenticada GET do provedor, com vendedor,
 referência, moeda e valor coincidentes. O estado enviado pelo navegador é

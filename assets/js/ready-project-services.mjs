@@ -194,6 +194,7 @@ if (form) {
     const needsReview = !sameSelection();
     $('rp-review-button').disabled = busy;
     $('rp-pay-button').disabled = busy || (!needsReview && !config?.purchasesEnabled);
+    $('rp-new-order').disabled = busy || polling || importBusy;
     if (!busy) {
       $('rp-review-button').textContent = issue?.kind === 'scope' ? 'Solicitar proposta para meu caso' : 'Revisar minha contratação';
       $('rp-pay-button').textContent = needsReview ? 'Atualizar resumo' : 'Criar pedido para pagar';
@@ -394,7 +395,7 @@ if (form) {
       creating: 'Pedido em conferência. Aguarde antes de tentar outra compra.',
       pending: 'Pedido registrado. Pagamento ainda não confirmado.',
       paid: 'Pagamento confirmado pelo Mercado Pago.',
-      failed: 'Pagamento não confirmado. Consulte o atendimento para continuar.',
+      failed: 'Esta tentativa não foi concluída. Você pode tentar contratar novamente.',
       cancelled: 'Pedido cancelado pelo provedor.',
       refunded: 'Devolução integral confirmada pelo Mercado Pago.',
       review: 'O pedido precisa de conferência. O atendimento vai orientar os próximos passos.',
@@ -414,6 +415,7 @@ if (form) {
     $('rp-order-next').textContent = order.status === 'paid' ?
       'Em até 2 dias úteis após o pagamento, a equipe envia a lista específica de insumos. Em até 3 dias úteis de cada envio, confirma o início ou aponta as pendências específicas. Com pagamento confirmado e documentos completos, o prazo começa até o terceiro dia útil após o recebimento completo; o aviso por escrito registra o início e a data final. Um único prazo cobre todas as disciplinas do pedido.' :
       order.status === 'pending' ? 'Salve seu acesso ao pedido e siga ao Mercado Pago. Ao voltar, atualize a situação. O retorno à página, sozinho, não confirma pagamento.' :
+        order.status === 'failed' ? 'Clique em “Tentar contratar novamente” para conferir seus dados e iniciar uma nova tentativa. O registro desta tentativa continua disponível no seu arquivo de acesso.' :
         order.status === 'refunded' ? 'O provedor confirmou a devolução integral. O prazo para o crédito aparecer depende do meio de pagamento utilizado.' :
           'Guarde o número do pedido e use o atendimento abaixo. Não repita a compra enquanto a situação estiver em conferência.';
     const target = order.status === 'pending' ? paymentDestination(order.checkoutUrl) : '';
@@ -423,6 +425,7 @@ if (form) {
     $('rp-order-refresh').disabled = false;
     $('rp-order-support').hidden = false;
     $('rp-new-order').hidden = !['paid', 'failed', 'cancelled', 'refunded'].includes(order.status);
+    $('rp-new-order').textContent = order.status === 'failed' ? 'Tentar contratar novamente' : 'Contratar outra disciplina';
     $('rp-order-terms-text').textContent = order.terms?.text || 'As condições deste pedido podem ser solicitadas pelo atendimento, com o número do pedido.';
     $('rp-order-contact').href = `mailto:tiago.sasaki@confenge.com.br?subject=${encodeURIComponent(`Atendimento do pedido residencial ${order.id}`)}`;
     if (order.requests?.length) {
@@ -436,6 +439,7 @@ if (form) {
     if (!validReceipt(record) || polling || busy || importBusy) return;
     const sequence = ++orderSequence;
     polling = true;
+    updateActions();
     $('pedido').hidden = false;
     $('rp-order-refresh').disabled = true;
     $('rp-order-state').textContent = 'Conferindo a situação do pedido...';
@@ -449,7 +453,7 @@ if (form) {
       $('rp-order-pay').hidden = true;
       $('rp-order-pay').removeAttribute('href');
       if (!currentOrder) $('rp-order-support').hidden = true;
-    } finally { polling = false; $('rp-order-refresh').disabled = importBusy; }
+    } finally { polling = false; $('rp-order-refresh').disabled = importBusy; updateActions(); }
   }
 
   async function checkout(event) {
@@ -474,12 +478,14 @@ if (form) {
         pricingVersion: confirmed.pricingVersion, termsVersion: confirmed.termsVersion, termsHash: confirmed.termsHash,
         quoteHash: confirmed.quoteHash };
       if (!checkoutAttempt || checkoutAttempt.fingerprint !== JSON.stringify(base)) {
-        if (checkoutAttempt) throw requestError('REQUEST_CONFLICT');
+        if (checkoutAttempt && currentOrder) throw requestError('REQUEST_CONFLICT');
         // After an interrupted response, retry the same opaque request id.
-        // The server verifies the original request content before reusing it.
+        // A pre-creation failure may require corrected buyer data. Preserve
+        // the same credential and let the server decide whether an earlier
+        // request was persisted; a local fingerprint cannot establish that.
         const recovered = Boolean(currentRecord && !currentOrder);
-        const receipt = recovered ? currentRecord : generateReceipt();
-        checkoutAttempt = { fingerprint: JSON.stringify(base), receipt, uncertain: recovered,
+        const receipt = checkoutAttempt?.receipt || (recovered ? currentRecord : generateReceipt());
+        checkoutAttempt = { fingerprint: JSON.stringify(base), receipt, uncertain: Boolean(checkoutAttempt?.uncertain || recovered),
           body: { ...base, requestId: receipt.id, receiptToken: receipt.receiptToken } };
       }
       saveRecord(checkoutAttempt.receipt);
@@ -487,6 +493,7 @@ if (form) {
       renderOrder(result, checkoutAttempt.receipt, true);
       message($('rp-checkout-message'), result.status === 'paid' ? 'Pagamento confirmado. Consulte abaixo os próximos passos e salve seu acesso ao pedido.' : result.status === 'pending' ?
         'Pedido registrado. Você pode salvar seu acesso e seguir para o Mercado Pago no botão abaixo.' :
+        result.status === 'failed' ? 'Esta tentativa não foi concluída. Use “Tentar contratar novamente” abaixo para continuar.' :
         'O pedido foi registrado e está em conferência. Consulte sua situação antes de iniciar outra compra.');
       $('rp-accept-terms').checked = false;
     } catch (error) {
@@ -533,6 +540,7 @@ if (form) {
     if (busy) { $('rp-restore-message').textContent = 'Aguarde a conclusão da etapa atual antes de recuperar outro pedido.'; return; }
     const sequence = ++orderSequence;
     importBusy = true;
+    updateActions();
     $('rp-restore-message').textContent = 'Conferindo o acesso ao pedido...';
     try {
       if (file.size > 16384) throw requestError('INVALID_REQUEST');
@@ -547,7 +555,7 @@ if (form) {
       renderOrder(result, receipt, true);
       $('rp-restore-message').textContent = 'Acesso recuperado. A situação do pedido está abaixo.';
     } catch (error) { $('rp-restore-message').textContent = error.code ? explain(error) : 'Este arquivo não é um acesso de pedido válido. Selecione o arquivo recebido ao contratar.'; }
-    finally { importBusy = false; $('rp-restore-file').value = ''; $('rp-order-refresh').disabled = polling; }
+    finally { importBusy = false; $('rp-restore-file').value = ''; $('rp-order-refresh').disabled = polling; updateActions(); }
   }
 
   async function requestSupport(event) {
@@ -594,12 +602,14 @@ if (form) {
   $('rp-order-print').addEventListener('click', () => printSummary('order'));
   $('rp-order-download').addEventListener('click', downloadAccess);
   $('rp-new-order').addEventListener('click', () => {
+    if (busy || polling || importBusy) return;
     if (!currentOrder || !['paid', 'failed', 'cancelled', 'refunded'].includes(currentOrder.status)) return;
-    // A second discipline is a deliberate new purchase, never a retry of an
-    // unsettled payment. Previous receipts remain in this tab's private store.
+    // A new purchase or retry is deliberate and only follows a settled state.
+    // Previous receipts remain in this tab's private store.
     const records = readRecords();
     delete records.active;
     try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(records)); } catch { return; }
+    orderSequence++;
     currentRecord = null;
     currentOrder = null;
     checkoutAttempt = null;
