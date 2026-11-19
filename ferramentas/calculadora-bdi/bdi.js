@@ -1,5 +1,6 @@
 import {calculateBdiRate, Decimal} from "./vendor/precifica-bdi.js";
 import {exportToolResult} from "/assets/js/tool-credits.mjs";
+import {isBudgetBdiRate, saveBdiContext, clearBdiContext} from "/assets/js/bdi-budget-context.mjs";
 
 const field = id => document.getElementById(id);
 const form = field("composicao");
@@ -12,9 +13,14 @@ const br = (decimal, places) => {
   return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "," + frac;
 };
 let lines = null;
+let budgetRate = null;
 function invalidate() {
   result.hidden = true;
   lines = null;
+  budgetRate = null;
+  field("continuar-orcamento").disabled = true;
+  field("bdi-continuacao-status").textContent = "";
+  clearBdiContext();
   status.textContent = "";
 }
 form.addEventListener("input", invalidate);
@@ -48,6 +54,12 @@ form.addEventListener("submit", event => {
     const amount = base.times(rate);
     const final = base.plus(amount);
     const pct = rate.times(100);
+    const roundedRate = pct.toFixed(4);
+    budgetRate = isBudgetBdiRate(roundedRate) ? roundedRate : null;
+    field("continuar-orcamento").disabled = budgetRate === null;
+    field("bdi-continuacao-status").textContent = budgetRate === null
+      ? "Esta taxa supera o limite de 999,9999% do orçamento. Confira a composição antes de continuar."
+      : "Taxa para o orçamento: " + br(pct, 4) + "%. Você confirma a aplicação na próxima etapa.";
     field("preco").textContent = "R$ " + br(final, 2);
     field("taxa").textContent = br(pct, 4) + "%";
     field("acrescimo").textContent = "R$ " + br(amount, 2);
@@ -63,6 +75,14 @@ form.addEventListener("submit", event => {
   } catch (error) {
     status.textContent = error.message;
   }
+});
+field("continuar-orcamento").addEventListener("click", () => {
+  if (result.hidden || budgetRate === null) return;
+  if (!saveBdiContext(budgetRate)) {
+    field("bdi-continuacao-status").textContent = "O navegador não permitiu levar a taxa à outra página. Seu cálculo continua aqui; anote a taxa para informá-la no orçamento.";
+    return;
+  }
+  window.location.assign("/ferramentas/orcamento-de-obras/");
 });
 field("exportar").addEventListener("click", async () => {
   if (!lines) return;

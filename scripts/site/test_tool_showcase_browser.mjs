@@ -370,6 +370,87 @@ try {
   commerceConfig = { enabled: false };
   assert.deepEqual(errors, []);
 
+  // A free calculation can continue into an existing budget without consuming
+  // an export or silently changing that budget. The real JSON save/reopen path
+  // must preserve the accepted rate and the user's work.
+  await load('/ferramentas/orcamento-de-obras/');
+  await page.waitForSelector('#demonstrar:not([disabled])');
+  await page.click('#demonstrar');
+  await page.$eval('#nome-obra', el => {
+    el.value = 'Projeto privado de teste da continuidade';
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  const budgetKey = 'confenge.orcamento-de-obras.v2';
+  await page.waitForFunction(key => JSON.parse(sessionStorage.getItem(key))?.titulo ===
+    'Projeto privado de teste da continuidade', {}, budgetKey);
+  const originalBudget = await page.evaluate(key => JSON.parse(sessionStorage.getItem(key)), budgetKey);
+  const commerceRequestsBefore = events.filter(event => event.path.includes('tool-credits')).length;
+  await load('/ferramentas/calculadora-bdi/');
+  await page.waitForSelector('#campos:not([disabled])');
+  await page.click('#exemplo');
+  await page.click('#composicao button[type="submit"]');
+  await page.waitForSelector('#resultado:not([hidden])');
+  assert.equal(await page.$eval('#taxa', el => el.textContent), '19,4458%');
+  for (const width of [320, 390, 1440]) {
+    await page.setViewport({ width, height: 880 });
+    await page.$eval('#continuar-orcamento', el => {
+      const box = el.getBoundingClientRect();
+      window.scrollTo({ top: Math.max(0, scrollY + box.top - (innerHeight - box.height) / 2), behavior: 'instant' });
+    });
+    await paint();
+    await captureInViewport('#continuar-orcamento', 'bdi-next-' + width);
+    assert.equal(await overflow(), false, 'BDI continuation viewport ' + width);
+  }
+  await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click('#continuar-orcamento')]);
+  assert.equal(new URL(page.url()).pathname, '/ferramentas/orcamento-de-obras/');
+  assert.equal(new URL(page.url()).search, '', 'the BDI must not enter a URL');
+  await page.waitForSelector('#bdi-recebido:not([hidden])');
+  assert.match(await page.$eval('#bdi-recebido-taxa', el => el.textContent), /19,4458/);
+  assert.equal(await page.$eval('#bdi-obra', el => el.value), '20', 'arrival must not apply a rate');
+  assert.equal(await page.$eval('#nome-obra', el => el.value), originalBudget.titulo);
+  for (const width of [320, 390, 1440]) {
+    await page.setViewport({ width, height: 880 });
+    await page.$eval('#bdi-recebido', el => {
+      const box = el.getBoundingClientRect();
+      window.scrollTo({ top: Math.max(0, scrollY + box.top - (innerHeight - box.height) / 2), behavior: 'instant' });
+    });
+    await paint();
+    await captureInViewport('#bdi-recebido', 'budget-received-' + width);
+    assert.equal(await overflow(), false, 'budget continuation viewport ' + width);
+  }
+  await page.click('#aplicar-bdi');
+  await page.waitForFunction(() => document.getElementById('bdi-obra').value === '19,4458');
+  await page.waitForFunction(key => JSON.parse(sessionStorage.getItem(key))?.bdi === '19.4458', {}, budgetKey);
+  const appliedBudget = await page.evaluate(key => JSON.parse(sessionStorage.getItem(key)), budgetKey);
+  assert.deepEqual(appliedBudget.itens, originalBudget.itens);
+  assert.equal(appliedBudget.titulo, originalBudget.titulo);
+  await page.evaluate(() => {
+    const original = URL.createObjectURL;
+    URL.createObjectURL = blob => { window.savedBudgetBlob = blob; return original.call(URL, blob); };
+  });
+  await page.click('#json');
+  await page.waitForFunction(() => window.savedBudgetBlob instanceof Blob);
+  const savedBudget = await page.evaluate(async () => JSON.parse(await window.savedBudgetBlob.text()));
+  assert.deepEqual(savedBudget, appliedBudget, 'the actual free JSON contains the accepted budget');
+  const roundtripDir = resolve(shots || 'build/reports/tool-showcase');
+  await mkdir(roundtripDir, { recursive: true });
+  const roundtripFile = resolve(roundtripDir, 'budget-roundtrip-fixture.json');
+  await writeFile(roundtripFile, JSON.stringify(savedBudget));
+  await page.$eval('#abrir', el => { el.closest('details').open = true; });
+  page.once('dialog', dialog => dialog.accept());
+  await page.click('#novo');
+  assert.equal(await page.$eval('#bdi-obra', el => el.value), '0');
+  await (await page.$('#abrir')).uploadFile(roundtripFile);
+  await page.waitForFunction(() => document.getElementById('nome-obra').value ===
+    'Projeto privado de teste da continuidade');
+  assert.equal(await page.$eval('#bdi-obra', el => el.value), '19,4458');
+  assert.match(await page.$eval('#contagem', el => el.textContent), /3 serviços/);
+  assert.equal(events.filter(event => event.path.includes('tool-credits')).length, commerceRequestsBefore,
+    'BDI continuation and free JSON must not request a paid export or create an order');
+  assert.ok(events.every(event => !/Projeto privado de teste|19[.,]4458/.test(event.body)),
+    'calculation and project data must not enter analytics');
+  assert.deepEqual(errors, []);
+
   for (const route of ['/bim/guias/quantitativos-ifc-para-excel/',
     '/bim/guias/pdf-escaneado-para-dwg/', '/cad/guias/escala-e-unidade-do-dwg/']) {
     for (const width of [390, 1440]) {

@@ -296,10 +296,10 @@ def catalogue(html: str, data: dict) -> str:
     section_html = "\n".join(sections)
     by_id = {item["id"]: item for item in entries}
     starts = [
-        ("dwg", "Ajustar uma planta", "Abra DWG ou DXF e continue o desenho."),
-        ("ifc-excel", "Levar IFC para uma planilha", "Comprimentos, áreas e volumes declarados."),
-        ("orcamento-de-obras", "Montar um orçamento", "Etapas, custos e BDI em uma planilha."),
-        ("analise-de-viga-continua", "Conferir uma viga", "Reações, esforços e flechas por vão."),
+        ("calculadora-bdi", "Calcular BDI e preço", "Compare cenários grátis e leve a taxa ao orçamento."),
+        ("orcamento-de-obras", "Montar e retomar um orçamento", "Calcule e salve o projeto JSON grátis para continuar depois."),
+        ("ifc-excel", "Conferir quantitativos IFC", "Consulte as quantidades grátis; o Excel segue a regra de créditos."),
+        ("dwg", "Ajustar uma planta", "Abra, meça e edite grátis. Exporte conforme as condições da conta."),
     ]
     quickstarts = "".join(
         f'<li><a href="{escape(by_id[key]["href"])}" {cta_attrs("tool-quick-" + key, "tool_intro")}>'
@@ -320,7 +320,7 @@ def catalogue(html: str, data: dict) -> str:
 {export_terms(public_intro=True)}
 <dl class="ts-hero-facts"><div><dt>{total}</dt><dd>opções de uso</dd></div><div><dt>{len(data["groups"])}</dt><dd>frentes de trabalho</dd></div><div><dt>web</dt><dd>uso direto no navegador</dd></div></dl>
 </div>
-<nav class="ts-quickstart" aria-label="Comece por uma tarefa"><p>Um próximo passo concreto</p><ul>{quickstarts}</ul></nav>
+<nav class="ts-quickstart" aria-label="Comece por uma tarefa"><p>Para usar no dia a dia</p><ul>{quickstarts}</ul></nav>
 </div></header>
 <section class="ts-browser" aria-labelledby="ts-browser-title"><div class="container">
 <div class="ts-browser-heading"><div><p class="ts-browser-kicker">Seu ponto de partida</p><h2 id="ts-browser-title">O que você precisa fazer?</h2></div>
@@ -333,9 +333,9 @@ def catalogue(html: str, data: dict) -> str:
 <p class="ts-browser-kicker">Do primeiro resultado às próximas entregas</p>
 <h2 id="ts-how-title">Comece grátis. Exporte quando precisar.</h2>
 <ol class="ts-how-steps">
-<li><strong>1. Escolha e experimente</strong><p>Abra uma ferramenta, use um exemplo quando disponível ou trabalhe com seu arquivo. Confira o resultado na tela sem pagar.</p></li>
+<li><strong>1. Use sempre que precisar</strong><p>Calcule, consulte e edite na tela sem pagar. No orçamento de obras, salve o projeto JSON grátis e reabra nesta ferramenta para continuar em outro dia.</p></li>
 <li><strong>2. Exporte pela primeira vez</strong><p>Entre e confirme seu e-mail para usar a primeira exportação grátis da conta. É uma cortesia única, compartilhada entre as ferramentas.</p></li>
-<li><strong>3. Continue com créditos</strong><p>Cada nova exportação seguinte usa 1 crédito do mesmo saldo. Compre só quando precisar, sem assinatura e sem prazo de validade dos créditos.</p></li>
+<li><strong>3. Exporte novamente com créditos</strong><p>Cada exportação de resultado após a cortesia usa 1 crédito do mesmo saldo. Os projetos editáveis identificados como gratuitos continuam livres. Compre só quando precisar, sem assinatura e sem prazo de validade dos créditos.</p></li>
 </ol>
 <div class="ts-pricing-heading"><div><h3>Quanto custa continuar?</h3><p>Escolha a quantidade de exportações que faz sentido para o seu trabalho.</p></div><a href="/termos-de-uso/#creditos-ferramentas">Condições de uso dos créditos</a></div>
 <p class="ts-pricing-status" data-credit-pricing-status role="status">Consulte os pacotes na sua conta. Os valores e os meios de pagamento são apresentados antes de confirmar a compra.</p>

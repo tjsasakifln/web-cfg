@@ -1024,7 +1024,7 @@
       "id": "calculadora-bdi",
       "group": "obras",
       "title": "Calculadora de BDI",
-      "summary": "Componha as parcelas do BDI e calcule o preço de venda a partir do custo direto.",
+      "summary": "Calcule BDI e preço de venda grátis. Compare cenários e leve a taxa calculada para o orçamento de obras.",
       "format": "Orçamento · BDI",
       "file_formats": [
         "CSV"
@@ -1035,12 +1035,12 @@
       "mark": "BDI",
       "keywords": "bdi benefícios despesas indiretas custo preço lucro tributos",
       "page": {
-        "title": "Calculadora de BDI e preço de venda da obra",
-        "desc": "Calcule BDI e preço de venda com as despesas, o lucro e os tributos que você informar. Compare cenários de orçamento.",
+        "title": "Calculadora de BDI grátis: taxa e preço de venda",
+        "desc": "Calcule BDI e preço de venda grátis. Use a taxa no orçamento de obras e exporte a composição CSV conforme as condições da conta.",
         "related": [
           "orcamento-de-obras"
         ],
-        "updated": "2026-11-11"
+        "updated": "2026-11-19"
       }
     },
     {
@@ -1070,7 +1070,7 @@
       "id": "orcamento-de-obras",
       "group": "obras",
       "title": "Orçamento de obras",
-      "summary": "Organize serviços por etapa, use preços próprios ou importe o XLSX do SINAPI e exporte uma planilha editável.",
+      "summary": "Organize serviços por etapa, use preços próprios ou SINAPI e salve o projeto JSON grátis para continuar depois. Excel e CSV seguem a regra de créditos.",
       "format": "SINAPI · XLSX · CSV",
       "file_formats": [
         "XLSX",
@@ -1086,7 +1086,7 @@
       "keywords": "planilha sinapi orçamento obra orçamento custo etapa composições",
       "page": {
         "title": "Orçamento de obra grátis: planilha SINAPI online",
-        "desc": "Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta.",
+        "desc": "Monte seu orçamento com SINAPI e BDI. Salve e reabra o projeto JSON grátis. Exporte Excel com fórmulas ou CSV conforme as condições da conta.",
         "related": [
           "calculadora-bdi"
         ],

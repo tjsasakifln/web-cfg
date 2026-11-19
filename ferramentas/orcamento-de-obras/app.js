@@ -1,6 +1,7 @@
 import {calcular, csv, exemplo, formatar, lerComposicao, limiteJson, novaPlanilha, numeroBR, validarPlanilha} from './orcamento.js';
 import {tabDraft} from '/assets/js/tab-draft.mjs';
 import {exportToolResult} from '/assets/js/tool-credits.mjs';
+import {readBdiContext, clearBdiContext} from '/assets/js/bdi-budget-context.mjs';
 
 const q = id => document.getElementById(id);
 const tool = 'orcamento-de-obras';
@@ -9,12 +10,25 @@ let resultado;
 let editando = null;
 let bdiValido = true;
 let rascunho = false;
+let receivedBdi = null;
 const moeda = valor => 'R$ ' + formatar(valor,2);
 const avisar = texto => { q('avisos').textContent=texto; };
 const draft = tabDraft('confenge.orcamento-de-obras.v2', () => projeto, () => false, avisar);
 
 function guardar() {
   draft.schedule();
+}
+function mostrarBdiRecebido() {
+  q('bdi-recebido').hidden = receivedBdi === null;
+  if (receivedBdi === null) return;
+  q('bdi-recebido-taxa').textContent = formatar(receivedBdi.rate, 4) + '%';
+  q('bdi-atual-taxa').textContent = formatar(projeto.bdi, 4) + '%';
+}
+function esquecerBdiRecebido() {
+  const cleared = clearBdiContext();
+  receivedBdi = null;
+  mostrarBdiRecebido();
+  return cleared;
 }
 function elemento(tag, valor) {
   const el=document.createElement(tag);
@@ -57,6 +71,7 @@ function atualizar() {
     }
   }
   q('linhas').replaceChildren(out);
+  mostrarBdiRecebido();
 }
 function tipoPreco() {
   const analitico=q('tipo-preco').value==='composicao';
@@ -84,8 +99,13 @@ function preencher(i) {
   q('insumos').value=i.composicao?.map(k=>[k.tipo,k.descricao,k.unidade,formatar(k.coef),formatar(k.preco)].join('\t')).join('\n') || '';
   tipoPreco();
 }
-function trocarPlanilha(p) {
-  projeto=validarPlanilha(p);bdiValido=true;
+function trocarPlanilha(p, {keepBdiContext = false} = {}) {
+  const validado = validarPlanilha(p);
+  if (!keepBdiContext) {
+    esquecerBdiRecebido();
+    q('bdi-transferencia-status').textContent = '';
+  }
+  projeto=validado;bdiValido=true;
   q('nome-obra').value=projeto.titulo;q('bdi-obra').value=formatar(projeto.bdi);
   q('erro-bdi').textContent='';q('bdi-obra').removeAttribute('aria-invalid');
   limparEditor();atualizar();
@@ -132,6 +152,44 @@ q('linhas').addEventListener('click',e=>{
   }
 });
 q('cancelar').onclick=()=>limparEditor();
+q('aplicar-bdi').addEventListener('click', () => {
+  if (receivedBdi === null) return;
+  const current = readBdiContext();
+  if (current === null || current.rate !== receivedBdi.rate || current.createdAt !== receivedBdi.createdAt) {
+    receivedBdi = current;
+    mostrarBdiRecebido();
+    q('bdi-transferencia-status').textContent = current === null
+      ? 'A taxa recebida expirou ou não está mais disponível. Refaça a transferência na calculadora quando precisar.'
+      : 'A taxa recebida mudou. Confira os valores antes de aplicar.';
+    return;
+  }
+  try {
+    const updated = validarPlanilha({...projeto, bdi: current.rate});
+    if (!clearBdiContext()) {
+      q('bdi-transferencia-status').textContent = 'O navegador não permitiu concluir a transferência. O orçamento não foi alterado; você pode informar a taxa no campo BDI.';
+      return;
+    }
+    projeto = updated;
+    bdiValido = true;
+    q('bdi-obra').value = formatar(projeto.bdi);
+    q('erro-bdi').textContent = '';
+    q('bdi-obra').removeAttribute('aria-invalid');
+    receivedBdi = null;
+    guardar();atualizar();
+    q('bdi-transferencia-status').textContent = 'Taxa recebida aplicada no lugar do BDI anterior. Os serviços, o título e os dados em edição foram preservados.';
+    q('bdi-obra').focus();
+  } catch (error) {
+    q('bdi-transferencia-status').textContent = error.message;
+  }
+});
+q('descartar-bdi').addEventListener('click', () => {
+  if (receivedBdi === null) return;
+  const cleared = esquecerBdiRecebido();
+  q('bdi-transferencia-status').textContent = cleared
+    ? 'Taxa recebida descartada. O BDI do orçamento foi mantido.'
+    : 'A sugestão foi fechada nesta página. O navegador impediu sua limpeza na aba; o BDI do orçamento foi mantido.';
+  q('bdi-obra').focus();
+});
 q('bdi-obra').addEventListener('input',()=>{
   try {
     const bdi=numeroBR(q('bdi-obra').value,'o BDI');
@@ -169,7 +227,9 @@ try {
   const raw=draft.read();
   if(raw)carregado=validarPlanilha(raw);
 } catch {avisar('O rascunho desta aba não pôde ser lido. Você pode abrir sua cópia JSON.');}
-trocarPlanilha(carregado);
+trocarPlanilha(carregado, {keepBdiContext: true});
+receivedBdi = readBdiContext();
+mostrarBdiRecebido();
 for (const id of ['demonstrar','nome-obra','bdi-obra','campos-servico','gravar-item','abrir','novo']) q(id).disabled=false;
 window.ConfengeTools?.bindToolLifecycle({tool});
 q('opcoes-importar').addEventListener('toggle',async function iniciarImportador(){
