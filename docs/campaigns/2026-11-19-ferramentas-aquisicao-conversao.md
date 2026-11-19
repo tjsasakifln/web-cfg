@@ -79,6 +79,14 @@ serviço, ausência de pedido ao selecionar pacote, estados de indisponibilidade
 visibilidade em telas pequenas, ausência de dados privados na medição e
 retomada sem débito automático ou duplicado.
 
+Os registros de integridade foram atualizados após a revisão dos componentes
+e dos arquivos compartilhados. A projeção CSS do diagnóstico continua usando
+as mesmas 266 exclusões, conferidas contra as 14 fontes de execução. A captura
+dos arquivos protegidos vem do commit `4f2fcefb36e57526495af8f9ebf3800b403ecf04`:
+somente analytics, seu bundle e as datas dos dois sitemaps têm novos hashes.
+O histórico anterior permanece registrado, sem declarar aprovação humana que
+não ocorreu.
+
 Os gates existentes de `site-ci` e pSEO continuam obrigatórios para o merge.
 A promoção usa o artefato aprovado e o fluxo de release Netcup. Conferir
 `/.well-known/build-info.json` e a jornada pública depois da promoção.

@@ -17,7 +17,7 @@
 .ts-credit-grid .ts-credit-unit{font-size:.86rem;margin:0 0 20px;line-height:1.5;color:#465c54}
 .ts-credit-choose{margin-top:auto;min-height:46px;width:100%;padding:10px 12px;background:#124f3e;border:1px solid #124f3e;color:#fff;font:700 .94rem/1.4 var(--sans);cursor:pointer}
 .ts-credit-choose:hover{background:#0b392d}.ts-credit-choose:disabled{opacity:.65;cursor:wait}
-.ts-credit-choose:focus-visible,.ts-how summary:focus-visible,.ts-learn a:focus-visible{outline:3px solid #287d62;outline-offset:4px}
+.ts-credit-choose:focus-visible,.ts-how summary:focus-visible,.ts-learn a:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)}
 .ts-pricing-note{font-size:.9rem;line-height:1.6;color:#465c54;max-width:85ch}
 .ts-how-questions{margin:28px 0}
 .ts-how-questions details{padding:17px 0;border-bottom:1px solid #c6d8d0}
