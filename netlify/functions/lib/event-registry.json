@@ -542,6 +542,111 @@
       ],
       "semantic": "Tool page bound/viewed."
     },
+    "tool_commerce_step": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": [
+        "assets/tool-showcase/showcase.mjs",
+        "assets/js/tool-credits.mjs"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
+      "strict_property_allowlist": true,
+      "required_properties": [
+        "step",
+        "tool_id"
+      ],
+      "property_allowlist": {
+        "step": [
+          "pricing_view",
+          "wallet_view",
+          "auth_required",
+          "credits_required",
+          "order_started",
+          "payment_confirmed",
+          "export_delivered",
+          "export_failed"
+        ],
+        "tool_id": [
+          "analise-cnpj",
+          "analise-de-viga-continua",
+          "bim-cad",
+          "bim-chapas",
+          "bim-comparador-geometrico",
+          "bim-comparar",
+          "bim-cortes",
+          "bim-digitalizar",
+          "bim-federacao",
+          "bim-fotogrametria",
+          "bim-georreferenciador",
+          "bim-ifc-excel",
+          "bim-inventario",
+          "bim-modelagem",
+          "bim-oficina",
+          "bim-regua",
+          "bim-visualizador",
+          "cad-editor",
+          "cad-suite-bimcraft",
+          "cad-suite-cadcraft",
+          "cad-suite-calculos",
+          "cad-suite-civilcraft",
+          "cad-suite-detailcraft",
+          "cad-suite-markupcraft",
+          "cad-suite-modelcraft",
+          "cad-suite-partcraft",
+          "cad-suite-takeoffcraft",
+          "calculadora-bdi",
+          "calculadora-de-beiral",
+          "calculadora-psicrometrica",
+          "caminho-critico-obra",
+          "checklist-reequilibrio",
+          "comparador-cronogramas",
+          "conforto-termico",
+          "conversor-utm-sirgas-2000",
+          "diagnostico-defesa-margem",
+          "diagrama-unifilar",
+          "energia-solar-fotovoltaica",
+          "epanet-inp",
+          "geotecnia-cpt-estacas",
+          "limite-acrescimos-supressoes",
+          "matriz-atraso-obra",
+          "memorial-de-calculo",
+          "modela-memoria",
+          "modelador-parametrico-3d",
+          "orcamento-de-obras",
+          "prontidao-tecnica-obra-privada",
+          "propriedades-de-secoes",
+          "quantitativos-dxf",
+          "radar-mercado-publico",
+          "radier-solo-elastico",
+          "rede-de-agua",
+          "secao-de-concreto-armado",
+          "shared-wallet",
+          "trelicas-e-porticos"
+        ],
+        "payment_flow": [
+          "pix",
+          "checkout"
+        ],
+        "credit_bucket": [
+          "free",
+          "promo",
+          "paid"
+        ],
+        "package_id": [
+          "creditos-1",
+          "creditos-3",
+          "creditos-5",
+          "creditos-10",
+          "creditos-25",
+          "creditos-50"
+        ]
+      },
+      "semantic": "Observed public tool-credit journey step. payment_confirmed requires the authenticated account response after provider reconciliation and is deduplicated per order in memory. export_delivered requires successful delivery, never entitlement alone. Finite tool, package, flow and credit category only; no account, file, input, balance, order, receipt or payment identifiers. Engagement observation, never a financial ledger, received revenue, qualified lead or pipeline."
+    },
     "tool_referral_visit": {
       "layer": "engagement",
       "owner": "web-cfg",

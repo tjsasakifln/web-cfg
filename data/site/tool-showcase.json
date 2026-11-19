@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-11",
+  "updated": "2026-11-19",
   "groups": [
     {
       "id": "destaques",
@@ -93,7 +93,8 @@
         "related": [
           "ifc-excel",
           "ifc-revisoes"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -121,7 +122,8 @@
           "prontidao",
           "dwg"
         ],
-        "start_label": "Começar pela amostra"
+        "start_label": "Começar pela amostra",
+        "updated": "2026-11-11"
       }
     },
     {
@@ -153,7 +155,8 @@
         "related": [
           "dwg",
           "bim"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -626,7 +629,8 @@
         "related": [
           "reequilibrio",
           "atrasos"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -651,7 +655,8 @@
         "related": [
           "aditivos",
           "margem"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -676,7 +681,8 @@
         "related": [
           "reequilibrio",
           "margem"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -701,7 +707,8 @@
         "related": [
           "aditivos",
           "atrasos"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -724,7 +731,8 @@
         "related": [
           "medir-planta",
           "modela"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -759,7 +767,8 @@
         "desc": "Informe as atividades, durações e predecessoras. Veja o prazo total da obra, o início e o fim de cada tarefa e as folgas.",
         "related": [
           "orcamento-de-obras"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -961,7 +970,8 @@
         "desc": "Calcule o avanço de um beiral horizontal e a sombra na janela pela posição do sol, orientação da fachada, data e hora.",
         "related": [
           "calculadora-psicrometrica"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -983,7 +993,8 @@
         "desc": "Converta coordenadas geográficas e UTM no mesmo referencial SIRGAS 2000. Confira fuso, hemisfério e unidades no resultado.",
         "related": [
           "bim"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1005,7 +1016,8 @@
         "desc": "Calcule ponto de orvalho ou geada, bulbo úmido e outras propriedades do ar com temperatura, umidade e pressão ou altitude.",
         "related": [
           "calculadora-de-beiral"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -1027,7 +1039,8 @@
         "desc": "Calcule BDI e preço de venda com as despesas, o lucro e os tributos que você informar. Compare cenários de orçamento.",
         "related": [
           "orcamento-de-obras"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1049,7 +1062,8 @@
         "desc": "Calcule reações, cortantes, momentos e flechas de vigas com até seis vãos grátis no navegador. Exporte a memória CSV conforme as condições da conta.",
         "related": [
           "dwg"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -1075,7 +1089,8 @@
         "desc": "Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta.",
         "related": [
           "calculadora-bdi"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -1098,7 +1113,8 @@
         "desc": "Desenhe um diagrama unifilar no navegador com símbolos e conexões. Baixe em SVG ou salve o projeto em JSON para editar depois.",
         "related": [
           "dwg"
-        ]
+        ],
+        "updated": "2026-11-19"
       }
     },
     {
@@ -1122,7 +1138,8 @@
         "desc": "Compare pressões e vazões de uma rede de água em dois cenários de consumo, com o motor EPANET 2.2 rodando no navegador.",
         "related": [
           "calculadora-bdi"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1145,7 +1162,8 @@
         "related": [
           "cnpj",
           "aditivos"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1171,7 +1189,8 @@
           "dwg",
           "orcamento-de-obras",
           "ifc-excel"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1197,7 +1216,8 @@
           "rede-de-agua",
           "diagrama-unifilar",
           "dwg"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1223,7 +1243,8 @@
           "caminho-critico-obra",
           "atrasos",
           "margem"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1248,7 +1269,8 @@
         "related": [
           "ifc-excel",
           "ids"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1272,7 +1294,8 @@
         "related": [
           "ifc-3d",
           "dwg"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1296,7 +1319,8 @@
         "related": [
           "ifc-revisoes",
           "ids"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1320,7 +1344,8 @@
         "related": [
           "conversor-utm-sirgas-2000",
           "federacao-bcf"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1346,7 +1371,8 @@
         "related": [
           "analise-de-viga-continua",
           "rede-de-agua"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1371,7 +1397,8 @@
         "related": [
           "analise-de-viga-continua",
           "memorial-de-calculo"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1396,7 +1423,8 @@
         "related": [
           "propriedades-de-secoes",
           "memorial-de-calculo"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1421,7 +1449,8 @@
         "related": [
           "analise-de-viga-continua",
           "propriedades-de-secoes"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1446,7 +1475,8 @@
         "related": [
           "memorial-de-calculo",
           "orcamento-de-obras"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1471,7 +1501,8 @@
         "related": [
           "calculadora-psicrometrica",
           "calculadora-de-beiral"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1496,7 +1527,8 @@
         "related": [
           "conforto-termico",
           "calculadora-de-beiral"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1522,7 +1554,8 @@
           "trelicas-e-porticos",
           "secao-de-concreto-armado",
           "geotecnia-cpt-estacas"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1552,7 +1585,8 @@
           "dwg",
           "inventario-ifc",
           "quantitativos-dxf"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {
@@ -1578,7 +1612,8 @@
           "ifc-revisoes",
           "inventario-ifc",
           "federacao-bcf"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     }
   ]

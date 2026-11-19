@@ -377,6 +377,29 @@ if (optedOut.calls.length !== 0) {
   if (gaScripts.length || gaWindow.confengeGaQueue) {
     console.error("FAIL: Google Analytics loaded before explicit consent", { gaScripts, queue: gaWindow.confengeGaQueue }); process.exit(1);
   }
+  gaWindow.confengeTrack("tool_commerce_step", {
+    step: "pricing_view", tool_id: "shared-wallet", package_id: "creditos-1",
+    order_id: "private-order", uid: "private-account", receipt_id: "private-receipt",
+    file_hash: "private-file", input: "private-input", email: "private@example.test",
+    event_id: "private-id", page_path: "/private-account/", balance: 200,
+  });
+  const privateSafe = gaWindow.dataLayer.filter((entry) => entry.event === "tool_commerce_step");
+  if (gaScripts.length || gaWindow.confengeGaQueue || privateSafe.length !== 1
+      || JSON.stringify(privateSafe).includes("private") || "balance" in privateSafe[0]
+      || !/^evt-/.test(privateSafe[0].event_id)) {
+    console.error("FAIL: commerce event consent or finite projection", { privateSafe }); process.exit(1);
+  }
+  const validCount = gaWindow.dataLayer.length;
+  for (const props of [
+    { step: "payment_confirmed", tool_id: "customer-account" },
+    { step: "paid_from_redirect", tool_id: "shared-wallet" },
+    { step: "wallet_view", tool_id: "shared-wallet", payment_flow: "private@example.test" },
+    { step: "wallet_view", tool_id: "shared-wallet", package_id: "creditos-1000" },
+    { step: "wallet_view" },
+  ]) gaWindow.confengeTrack("tool_commerce_step", props);
+  if (gaWindow.dataLayer.length !== validCount) {
+    console.error("FAIL: invalid commerce dimensions entered the client queue"); process.exit(1);
+  }
   gaWindow.confengeSetGoogleAnalyticsConsent("granted");
   gaWindow.confengeTrack("lead_form_submit", { page_path: "/contato?email=blocked@example.test", route_family: "contact", lead_id: "lead-0123456789abcdef0123456789a", mensagem: "private" });
   const gaQueue = gaWindow.confengeGaQueue || [];
@@ -397,10 +420,18 @@ if (optedOut.calls.length !== 0) {
   if (!initialConsent || !grantedConsent || JSON.stringify(initialConsent[2]) !== expectedConsent || JSON.stringify(grantedConsent[2]) !== expectedConsent.replace('"analytics_storage":"denied"', '"analytics_storage":"granted"') || !config || config[1] !== "G-MT2G5L4KBR" || config[2].allow_google_signals !== false || config[2].send_page_view !== false || JSON.stringify({ page_location: config[2].page_location, page_referrer: config[2].page_referrer, page_title: config[2].page_title }) !== expectedProjection || projectedEvents.some((item) => JSON.stringify(item[2]) !== expectedProjection)) {
     console.error("FAIL: GA4 consent or event projection changed", { gaQueue }); process.exit(1);
   }
+  const beforeCommerce = gaQueue.length;
+  gaWindow.confengeTrack("tool_commerce_step", { step: "order_started", tool_id: "bim-ifc-excel",
+    package_id: "creditos-3", payment_flow: "pix", order_id: "private-order", value: 3990 });
+  gaWindow.confengeTrack("tool_complete", { tool: "private-customer-input", result: 600, uid: "private-uid" });
+  if (gaQueue.length !== beforeCommerce) {
+    console.error("FAIL: first-party tool observations changed the external analytics export contract"); process.exit(1);
+  }
   const beforeRevoke = gaQueue.length;
   gaWindow.confengeSetGoogleAnalyticsConsent("denied");
   const afterRevoke = gaQueue.length;
   gaWindow.confengeTrack("cta_click", { page_path: "/", cta_id: "hero" });
+  gaWindow.confengeTrack("tool_commerce_step", { step: "payment_confirmed", tool_id: "shared-wallet", payment_flow: "pix" });
   if (gaQueue.length !== afterRevoke || afterRevoke !== beforeRevoke + 1 || gaWindow[`ga-disable-G-MT2G5L4KBR`] !== true) {
     console.error("FAIL: revoked GA4 consent still exported an event", { beforeRevoke, afterRevoke, gaQueue }); process.exit(1);
   }

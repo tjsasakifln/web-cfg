@@ -13,6 +13,7 @@ const {
   acceptWarmblyObservation,
   isFixtureOrSynthetic,
   lookupDestinationServiceId,
+  admitEvent,
 } = require("./event-contract.cjs");
 
 const FUNNEL_EVENTS = [
@@ -82,6 +83,7 @@ function aggregateEvents(events, opts) {
   const journeys = new Map();
   const vitals = { lcp: [], inp: [], cls: [], ttfb: [] };
   const seenIds = new Set();
+  const toolCommerce = new Map();
 
   for (const ev of events || []) {
     const eid = eventIdOf(ev);
@@ -96,6 +98,16 @@ function aggregateEvents(events, opts) {
     const path = String(ev.path || ev.props?.page_path || "/").slice(0, 180);
     const sid = String(ev.sid || "").slice(0, 32);
     const props = ev.props || {};
+    if (name === "tool_commerce_step") {
+      const admitted = admitEvent(ev);
+      if (admitted.ok) {
+        const dimensions = admitted.event.props;
+        const key = `${day}|${dimensions.tool_id}`;
+        if (!toolCommerce.has(key)) toolCommerce.set(key, { day, tool_id: dimensions.tool_id, steps: {} });
+        const steps = toolCommerce.get(key).steps;
+        steps[dimensions.step] = (steps[dimensions.step] || 0) + 1;
+      }
+    }
 
     if (!byDay.has(day)) {
       byDay.set(day, {
@@ -223,6 +235,10 @@ function aggregateEvents(events, opts) {
     cta_totals: Object.fromEntries([...ctas.entries()].sort((a, b) => b[1] - a[1]).slice(0, 50)),
     cluster_totals: Object.fromEntries([...clusters.entries()].sort((a, b) => b[1] - a[1]).slice(0, 50)),
     journey_totals: Object.fromEntries(journeys),
+    tool_commerce: {
+      measurement: "observed_steps_not_revenue",
+      rows: [...toolCommerce.values()].sort((a, b) => a.day.localeCompare(b.day) || a.tool_id.localeCompare(b.tool_id)),
+    },
     web_vitals: summarizeVitals(vitals),
     origin_destination: buildOriginDestinationMatrix(events),
     funnel_layers: buildFunnelLayers(events, warmbly),

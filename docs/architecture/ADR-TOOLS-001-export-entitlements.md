@@ -1,7 +1,8 @@
 # ADR-TOOLS-001 — Créditos das ferramentas CONFENGE
 
-- **Estado:** `EXECUTE_NOW` para implementação e ensaio; `VALIDATE` para margem,
-  termos, conta de pagamento e piloto; checkout público ainda desativado.
+- **Estado:** `EXECUTE_NOW` para implementação e publicação autorizada da
+  carteira comum; `VALIDATE` para margem e desempenho comercial. A configuração
+  do serviço determina a disponibilidade efetiva de compra e exportação.
 - **Data:** 2026-11-08. **Frente:** Inbound Compounding. **Efeito:** receita,
   distribuição e confiança. **Evidência inicial:** ensaio com emulador e sandbox;
   no piloto, revisar conversão, margem e estornos após 30 dias ou 100 exportações.
@@ -59,3 +60,18 @@ apenas indica onde consultar o pedido. Em disputas e devoluções parciais, a
 operação verifica o pedido antes de liberar saldo. A compra pública depende de
 integração e ensaio de todas as ferramentas do catálogo, com paridade de
 formatos e confirmação de ambos os fluxos de pagamento no Netcup.
+
+## Aquisição e continuidade da exportação, 19/11/2026
+
+O fundador autorizou revisar a aquisição e a conversão, integrar a PR validada
+e publicar na Netcup. A aplicação está registrada em
+[Ferramentas: aquisição e conversão](../campaigns/2026-11-19-ferramentas-aquisicao-conversao.md).
+A consulta pública da configuração nesta data retornou compra, checkout e
+exportação compartilhada habilitados, sem pausa de emissão. Essa observação
+de disponibilidade não comprova pagamento nem substitui a conciliação.
+
+O catálogo apresenta os pacotes do serviço antes do cadastro e explicita a
+cortesia única da conta. A retomada após login ou compra exige nova ação do
+visitante, preservando conta, resultado e idempotência. A medição pública
+permanece agregada e não recebe os dados da conta ou do arquivo. Os fatos
+financeiros continuam no registro operacional, sem mudança de owner.
