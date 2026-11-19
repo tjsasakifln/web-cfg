@@ -476,26 +476,23 @@ def test_existing_css_js_only():
 
 
 def test_git_diff_is_exclusive_area():
-    """Experiment HTML stays frozen. Hash-bound BOFU pillars may change only
-    when frozen-spec snapshots match live HTML (byte-equality with origin/main
-    is not the gate on this convergence branch).
-    """
+    """Changed BOFU pillars must match the active reviewed hash checkpoint."""
     from scripts.bofu_dominance.frozen_specs.constants import PILLARS
+    from scripts.bofu_dominance.frozen_specs.hashing import committed_forbidden_hashes
     from scripts.bofu_dominance.frozen_specs.snapshot import snapshot_pillar
-    from scripts.bofu_dominance.frozen_specs.spec import load_spec
 
     names = git_diff_names()
-    # Chrome-only deltas (#187 SVG, #183 nav, #126 SINAPI snippet) are
-    # authorized on former experiment HTML. Hash-bound BOFU pillars still
-    # require frozen-spec recapture below.
+    reviewed = committed_forbidden_hashes(ROOT)
+    # Specs and their patches retain historical bytes. Current approved
+    # recaptures belong to hashes.json, whose provenance is verified separately.
     for pillar in PILLARS:
         rel = pillar["html_rel"]
         if rel not in names:
             continue
         live = snapshot_pillar(pillar["slug"], ROOT)
-        spec = load_spec(pillar["slug"])
-        assert spec["snapshot"]["content_sha256"] == live["content_sha256"], (
-            f"{rel} changed without frozen-spec recapture"
+        assert rel in reviewed, f"{rel} has no reviewed hash checkpoint"
+        assert reviewed[rel] == live["content_sha256"], (
+            f"{rel} changed without reviewed checkpoint recapture"
         )
     for slug in PAGES:
         assert any(n.startswith(f"{slug}/") for n in names) or (ROOT / slug / "index.html").is_file()

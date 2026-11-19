@@ -24,10 +24,10 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "24271188f0abb5d22e81f3993f20b1caf64b60e054fd05750333923ebbf2ef7e",
-    "after_sha256_recaptured_at": "2026-10-03",
-    "after_sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada.",
-    "after_sha256_previous": "8d05505cfbdae7a3d8d633bb45d3740e47e320d982a54367d7b3133e337fe771"
+    "after_sha256": "3e698937a4a5ee75d8bcaae47a5df2550ff546d193235eb33be551ff7f59c386",
+    "after_sha256_recaptured_at": "2026-11-18",
+    "after_sha256_recapture_reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: sincronização de metadados derivados com a política existente. Corpo visível, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato preservados. Os metadados Open Graph, Twitter e JSON-LD passam pelo normalizador já adotado no site. Recaptura autônoma após comparação com de81f1be7b409d765a7cf4d76ef6ca619e138f8b; sem nova revisão humana alegada e sem liberar a segunda onda do experimento #389.",
+    "after_sha256_previous": "24271188f0abb5d22e81f3993f20b1caf64b60e054fd05750333923ebbf2ef7e"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -144,10 +144,10 @@
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-      "sha256_previous": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
-      "sha256_recaptured_at": "2026-10-29T15:51:25Z",
-      "sha256_recapture_reason": "CONFENGE trafego qualificado 2026-10-29: conteudo e metadados de medicoes e aditivos revisados, rotas e captura preservadas",
+      "sha256": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
+      "sha256_previous": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+      "sha256_recaptured_at": "2026-11-18",
+      "sha256_recapture_reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: sincronização de metadados derivados com a política existente. Corpo visível, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato preservados. Os metadados Open Graph, Twitter e JSON-LD passam pelo normalizador já adotado no site. Recaptura autônoma após comparação com de81f1be7b409d765a7cf4d76ef6ca619e138f8b; sem nova revisão humana alegada e sem liberar a segunda onda do experimento #389.",
       "sha256_recapture_history": [
         {
           "sha256": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
@@ -332,6 +332,44 @@
           },
           "after_sha256": "e7e76b55521c08408431d2d0178f454cbf7080cc17a21cfa2bf1f148a400a107",
           "review_scope": "2026-10-03: resultado real de primeira dobra em 8cc14cec9 (22 PASS, 3 FAIL) motivou posicionar a descrição do trabalho antes das ações nas seis aberturas B2G. Nesta página só mudou a posição do mesmo parágrafo de substância; fatos técnicos, números, fontes, condições, formulário e destinos permanecem iguais. Revisão autônoma, sem nova aprovação humana alegada."
+        }
+      ]
+    }
+  ],
+  "search_metadata_recaptures": [
+    {
+      "date": "2026-11-18",
+      "authorization": "docs/seo/2026-11-18-search-performance.md",
+      "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/847",
+      "compared_from": "de81f1be7b409d765a7cf4d76ef6ca619e138f8b",
+      "reviewed_page_commit": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
+      "new_human_review_claimed": false,
+      "second_wave_released": false,
+      "reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: sincronização de metadados derivados com a política existente. Corpo visível, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato preservados. Os metadados Open Graph, Twitter e JSON-LD passam pelo normalizador já adotado no site. Recaptura autônoma após comparação com de81f1be7b409d765a7cf4d76ef6ca619e138f8b; sem nova revisão humana alegada e sem liberar a segunda onda do experimento #389.",
+      "entries": [
+        {
+          "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+          "previous_binding": {
+            "after_sha256": "24271188f0abb5d22e81f3993f20b1caf64b60e054fd05750333923ebbf2ef7e",
+            "after_sha256_previous": "8d05505cfbdae7a3d8d633bb45d3740e47e320d982a54367d7b3133e337fe771",
+            "after_sha256_recaptured_at": "2026-10-03",
+            "after_sha256_recapture_reason": "CONFENGE-COMUNICACAO-INSTITUCIONAL-20261003: Corpo técnico, fatos, cálculos, títulos, fontes, datas, canonical, robots e destino comercial preservados. Saudação institucional nos prefills e wordCount derivado do texto visível; sem nova revisão humana alegada."
+          },
+          "after_sha256": "3e698937a4a5ee75d8bcaae47a5df2550ff546d193235eb33be551ff7f59c386",
+          "visible_body_sha256": "0621a4ac51a5c5fcde211ab8110b8b8510da042e0042a690273bc9e64eece672",
+          "change_matches_existing_metadata_normalizer": true
+        },
+        {
+          "path": "medicoes-glosas-obras-publicas/index.html",
+          "previous_binding": {
+            "sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+            "sha256_previous": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+            "sha256_recaptured_at": "2026-10-29T15:51:25Z",
+            "sha256_recapture_reason": "CONFENGE trafego qualificado 2026-10-29: conteudo e metadados de medicoes e aditivos revisados, rotas e captura preservadas"
+          },
+          "after_sha256": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
+          "visible_body_sha256": "3f52abbd8e40a951484398cf2558dd3a533668c2d88b2cca1c01506a6eeb8dd2",
+          "change_matches_existing_metadata_normalizer": true
         }
       ]
     }
