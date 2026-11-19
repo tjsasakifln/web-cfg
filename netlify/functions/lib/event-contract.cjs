@@ -355,11 +355,32 @@ function admitEvent(raw) {
     };
   }
 
-  const rawProps = input.props && typeof input.props === "object" && !Array.isArray(input.props)
+  let rawProps = input.props && typeof input.props === "object" && !Array.isArray(input.props)
     ? input.props
     : Object.fromEntries(
         Object.entries(input).filter(([k]) => !["event", "name", "props", "path", "sid", "session_id", "ts"].includes(k)),
       );
+  if (def.strict_property_allowlist === true) {
+    // Only finite event dimensions plus the first-party transport envelope.
+    // No opaque account/order/receipt IDs or caller-defined fields survive.
+    const allowed = new Set([
+      ...Object.keys(def.property_allowlist || {}), "page_path", "event_id", "session_id",
+    ]);
+    rawProps = Object.fromEntries(Object.entries(rawProps).filter(([key]) => allowed.has(key)));
+    const missing = (def.required_properties || []).filter((key) => !Object.prototype.hasOwnProperty.call(rawProps, key));
+    if (missing.length) {
+      return { ok: false, reason: "missing_required_property", original, canonical, fields: missing };
+    }
+    const invalid = invalidPropertyAllowlist(def, rawProps);
+    if (invalid.length) {
+      return { ok: false, reason: "invalid_property_value", original, canonical, fields: invalid };
+    }
+    // The browser creates these values itself. Do not accept arbitrary strings
+    // through an otherwise finite event by calling collect directly.
+    if (rawProps.event_id && !/^evt-[a-z0-9-]{1,76}$/i.test(rawProps.event_id)) {
+      return { ok: false, reason: "invalid_event_id", original, canonical };
+    }
+  }
   const forbiddenStrictProps = strictPiiProps(def, rawProps);
   if (forbiddenStrictProps.length) {
     return {

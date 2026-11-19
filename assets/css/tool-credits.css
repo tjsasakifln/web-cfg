@@ -113,6 +113,10 @@
 }
 .tool-credits__export-notice p { margin: 0 0 .55rem; }
 .tool-credits__export-notice button { margin-right: .55rem; min-height: 44px; font: inherit; }
+.tool-credits__print-frame { position: fixed; inset: 0 auto auto -10000px; width: 1px; height: 1px; border: 0; }
+.tool-credits__print-document { margin: 18mm; color: #17242f; background: #fff; font-family: Arial, sans-serif; font-size: 11pt; }
+.tool-credits__print-document h1 { margin: 0 0 1rem; font-size: 17pt; }
+.tool-credits__print-text { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.45; }
 @media print {
   .tool-credits__export-notice { display: none; }
 }

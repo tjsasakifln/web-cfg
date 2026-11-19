@@ -986,7 +986,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                 '<h2 id="noticias-contratos-publicos" class="t-editorial">Notícias de obras e contratos públicos</h2>'
                 '<p class="measure">Acompanhe registros recentes de obras, projetos e infraestrutura, '
                 'com valores informados, vigência e acesso à fonte oficial do PNCP.</p>'
-                '<p><a class="text-link" href="/noticias/contratos-publicos/" data-news-discovery="true" '
+                '<p><a class="text-link" href="/noticias/contratos-publicos/" data-news-discovery="true" data-navigation-link="true" '
                 'data-event-name="cta_click" data-cta-id="intelligence-contract-news" '
                 'data-cta-position="content">Ver notícias de contratos públicos</a></p>'
                 '</section>'

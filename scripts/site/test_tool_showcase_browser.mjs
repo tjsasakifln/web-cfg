@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile, stat, mkdir } from 'node:fs/promises';
+import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { createRequire } from 'node:module';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -23,7 +23,7 @@ const server = createServer(async (req, res) => {
         window.sharedWalletOptions = options;
         return ({
         ready: async () => ${mockCommerce},
-        open: async () => {},
+        open: async options => { window.openedPackageId = options?.packageId; return ${mockCommerce}; },
         openReferral: async () => { window.referralOpened = (window.referralOpened || 0) + 1; return ${mockCommerce}; }
       }); };
       export const exportToolResult = async () => ({ ok: true });`);
@@ -158,6 +158,29 @@ try {
   // Personal rewards require an active commerce program. Public sharing remains
   // usable while checkout is unavailable, without implying credit attribution.
   const paint = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const captureInViewport = async (selector, name) => {
+    const bounds = await page.$eval(selector, el => {
+      const box = el.getBoundingClientRect();
+      const ancestors = [];
+      for (let node = el.parentElement; node; node = node.parentElement) {
+        ancestors.push({ tag: node.tagName, className: node.className,
+          scrollTop: node.scrollTop, scrollHeight: node.scrollHeight,
+          clientHeight: node.clientHeight, overflow: getComputedStyle(node).overflow });
+      }
+      return { target: { top: box.top, bottom: box.bottom, left: box.left, right: box.right,
+        width: box.width, height: box.height }, viewport: { width: innerWidth, height: innerHeight },
+        scrollY, headerBottom: document.querySelector('.site-header')?.getBoundingClientRect().bottom,
+        ancestors };
+    });
+    if (shots) {
+      await page.screenshot({ path: resolve(shots, name + '.png') });
+      await writeFile(resolve(shots, name + '.json'), JSON.stringify(bounds, null, 2));
+    }
+    const box = bounds.target;
+    assert.ok(box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= bounds.viewport.height
+      && box.left >= 0 && box.right <= bounds.viewport.width,
+    'capture target must be inside the viewport: ' + name + ' ' + JSON.stringify(bounds));
+  };
   const loadWithCommerce = async route => {
     const [response] = await Promise.all([
       page.waitForResponse(result => result.url() === base + '/api/web/tool-credits?op=config'),
@@ -167,7 +190,8 @@ try {
     await paint();
   };
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
-  assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), true);
+  assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), false,
+    'the hub must explain free use even when paid exports are unavailable');
   assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
   for (const config of [
     { enabled: true, purchasesEnabled: false, tools: ['modela-memoria'] },
@@ -177,12 +201,14 @@ try {
     commerceConfig = config;
     await loadWithCommerce('/ferramentas/');
     assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
-    assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), true);
+    assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), false);
+    assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true);
   }
   await loadWithCommerce('/ferramentas/calculadora-de-beiral/');
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   commerceConfig = { enabled: true, purchasesEnabled: true, sharedExportsEnabled: true,
-    tools: ['modela-memoria'], packages: [{ credits: 1, amountCents: 1490 }] };
+    tools: ['modela-memoria'], packages: [{ id: 'creditos-1', credits: 1, amountCents: 1490 },
+      { id: 'creditos-5', credits: 5, amountCents: 5990 }] };
   mockCommerce = true;
   await load('/ferramentas/#programa-indicacao');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
@@ -190,6 +216,14 @@ try {
   assert.match(initialTerms, /primeira exportação da conta verificada é cortesia/);
   assert.match(initialTerms, /seguintes usam 1 crédito/);
   assert.match(initialTerms, /Crédito avulso: R\$\s*14,90/);
+  assert.match(initialTerms, /cortesia é única e compartilhada/);
+  await page.waitForSelector('[data-credit-packages]:not([hidden])');
+  assert.equal(await page.$$eval('[data-credit-packages] li', nodes => nodes.length), 2);
+  assert.match(await page.$eval('[data-credit-packages]', el => el.textContent), /R\$\s*59,90/);
+  await page.click('[data-package-id="creditos-5"]');
+  await page.waitForFunction(() => window.openedPackageId === 'creditos-5');
+  assert.equal(events.filter(event => event.path.includes('tool-credits')).length, 0,
+    'choosing a public package only opens the account, without creating a payment');
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
     '/ferramentas/#programa-indicacao');
   assert.match(await page.$eval('[data-referral-entry]', el => el.textContent), /primeira exportação paga/);
@@ -197,6 +231,28 @@ try {
   assert.equal(await page.evaluate(() => window.sharedWalletOptions?.shared), true);
   await page.click('[data-referral-entry] a');
   await page.waitForFunction(() => window.referralOpened === 2);
+  // Fragment arrival has its own real navigation settling cycle. Finish that
+  // case before inspecting another section on a fresh page without a fragment.
+  await loadWithCommerce('/ferramentas/');
+  assert.equal(new URL(page.url()).hash, '');
+  await page.waitForSelector('[data-credit-packages]:not([hidden])');
+  await page.evaluate(async () => { await document.fonts.ready; });
+  for (const width of [320, 390, 414, 1440]) {
+    await page.setViewport({ width, height: 880 });
+    await page.$eval('[data-credit-packages]', el => {
+      const box = el.getBoundingClientRect();
+      window.scrollTo({ top: Math.max(0, scrollY + box.top - (innerHeight - box.height) / 2),
+        behavior: 'instant' });
+    });
+    await paint();
+    await captureInViewport('[data-credit-packages]', 'prices-' + width);
+    assert.equal(await overflow(), false, 'public prices viewport ' + width);
+  }
+  await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
+  const pricingViolations = await page.evaluate(async () => (await window.axe.run('#como-funciona', {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+  })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })));
+  assert.deepEqual(pricingViolations, [], JSON.stringify(pricingViolations));
   await load('/ferramentas/calculadora-de-beiral/');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
@@ -208,7 +264,15 @@ try {
   await loadWithCommerce('/cad/');
   assert.doesNotMatch(await page.$eval('.content-lead', el => el.textContent), /sem cadastro/);
   assert.match(await page.$eval('[data-tool-export-terms]', el => el.textContent), /Crédito avulso/);
-  commerceConfig = { ...commerceConfig, packages: [{ credits: 1, amountCents: 1990 }] };
+  commerceConfig = { ...commerceConfig, packages: [{ id: 'creditos-1', credits: 1, amountCents: 1990 }] };
+  await loadWithCommerce('/ferramentas/');
+  assert.match(await page.$eval('[data-credit-packages]', el => el.textContent), /R\$\s*19,90/,
+    'public package prices must follow the runtime');
+  commerceConfig = { ...commerceConfig, packages: [{ id: 'creditos-5', credits: 1, amountCents: 1990 }] };
+  await loadWithCommerce('/ferramentas/');
+  assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true,
+    'an inconsistent package must not create a purchase CTA');
+  commerceConfig = { ...commerceConfig, packages: [{ id: 'creditos-1', credits: 1, amountCents: 1990 }] };
   await loadWithCommerce('/ferramentas/conversor-utm-sirgas-2000/');
   assert.match(await page.$eval('[data-tool-export-terms]', el => el.textContent), /R\$\s*19,90/,
     'pre-use price must follow the runtime, never a copy constant');
@@ -219,11 +283,13 @@ try {
   const pausedPurchases = await page.$eval('[data-tool-export-terms]', el => el.textContent);
   assert.match(pausedPurchases, /Novas compras estão temporariamente indisponíveis/);
   assert.doesNotMatch(pausedPurchases, /Crédito avulso|R\$/);
+  assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true);
   commerceConfig = { ...commerceConfig, exportsPaused: true };
   await loadWithCommerce('/ferramentas/');
   const pausedExports = await page.$eval('[data-tool-export-terms]', el => el.textContent);
   assert.match(pausedExports, /exportações por créditos estão temporariamente pausadas/);
   assert.doesNotMatch(pausedExports, /é cortesia|Crédito avulso|R\$/);
+  assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true);
   mockCommerce = null;
   commerceConfig = { enabled: false };
 
@@ -304,6 +370,20 @@ try {
   commerceConfig = { enabled: false };
   assert.deepEqual(errors, []);
 
+  for (const route of ['/bim/guias/quantitativos-ifc-para-excel/',
+    '/bim/guias/pdf-escaneado-para-dwg/', '/cad/guias/escala-e-unidade-do-dwg/']) {
+    for (const width of [390, 1440]) {
+      await page.setViewport({ width, height: 880 });
+      await load(route);
+      await page.$eval('.tool-guide-next', el =>
+        el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      await paint();
+      await captureInViewport('.tool-guide-next a[href="/ferramentas/#como-funciona"]',
+        'guide-' + route.split('/').filter(Boolean).at(-1) + '-' + width);
+      assert.equal(await overflow(), false, 'guide return CTA ' + route + ' ' + width);
+    }
+  }
+
   await page.setJavaScriptEnabled(false);
   await page.setViewport({ width: 320, height: 800 });
   await load('/');
@@ -331,6 +411,9 @@ try {
   assert.equal(new URL(page.url()).pathname, '/ferramentas/', 'native tools link reaches the catalogue');
   assert.equal(await overflow(), false);
   assert.equal(await page.$$eval('.ts-card-action[href]', nodes => nodes.length), count);
+  assert.match(await page.$eval('[data-public-export-intro]', el => el.textContent),
+    /primeira exportação da conta verificada é cortesia/,
+    'material free-use conditions must be visible and indexable without scripting');
   assert.equal(await page.$eval('[data-tool-search]', el => el.hidden), true);
   assert.equal(await page.$$eval('.tool-share-social a[href]', nodes => nodes.length), 2);
   console.log('Browser catalogue: desktop/mobile menu, no-JS, axe, search, referral and share fallback OK.');

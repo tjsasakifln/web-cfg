@@ -148,6 +148,18 @@ for (const name of producerNames) {
 const maps = contract.clientMaps();
 const script = fs.readFileSync(path.join(root, "script.js"), "utf8");
 const analyticsMod = fs.readFileSync(path.join(root, "js/modules/analytics.js"), "utf8");
+const commerceDef = contract.getRegistry().events.tool_commerce_step;
+const { LOCAL_FORMATS } = require(path.join(root, "runtime/tools-commerce/exports.cjs"));
+const { PACKAGES, TOOL } = require(path.join(root, "runtime/tools-commerce/policy.cjs"));
+const expectedTools = [TOOL, "shared-wallet", ...Object.keys(LOCAL_FORMATS)].sort();
+if (JSON.stringify(commerceDef.property_allowlist.tool_id) !== JSON.stringify(expectedTools)
+    || JSON.stringify(commerceDef.property_allowlist.package_id) !== JSON.stringify(PACKAGES.map((pack) => pack.id))) {
+  fail("commerce_dimensions_drift_from_runtime");
+}
+const clientCommerce = analyticsMod.match(/const TOOL_COMMERCE_PROPERTIES = (\{[\s\S]*?\n  \});/);
+if (!clientCommerce || JSON.stringify(JSON.parse(clientCommerce[1])) !== JSON.stringify(commerceDef.property_allowlist)) {
+  fail("commerce_client_server_dimensions_drift");
+}
 if (!analyticsMod.includes("EVENT_CONTRACT_CLIENT_START") || !script.includes("EVENT_CONTRACT_CLIENT_START")) {
   fail("client_contract_markers_missing");
 }
@@ -273,6 +285,41 @@ for (const props of [
   const rejected = contract.admitEvent({ event: "lead_form_error", props });
   if (rejected.ok) fail("validation_category_or_pii_admitted", { props, rejected });
 }
+
+// Tool commerce records contain finite journey observations, never monetary facts.
+for (const step of commerceDef.property_allowlist.step) {
+  const admitted = contract.admitEvent({
+    event: "tool_commerce_step", path: "/ferramentas/?email=private@example.test",
+    props: { step, tool_id: "shared-wallet", payment_flow: "pix", package_id: "creditos-1",
+      uid: "private-account", order_id: "private-order", receipt_id: "private-receipt",
+      file_hash: "private-file", payload: "private-input", amount: 1490,
+      email: "private@example.test", referral_code: "private-referral" },
+  });
+  if (!admitted.ok || admitted.layer !== "engagement" || admitted.event.path !== "/ferramentas/"
+      || admitted.event.props.step !== step || JSON.stringify(admitted.event).includes("private")
+      || "amount" in admitted.event.props) fail("commerce_finite_event", admitted);
+}
+for (const props of [
+  {}, { step: "pricing_view" }, { tool_id: "shared-wallet" },
+  { step: "paid_by_redirect", tool_id: "shared-wallet" },
+  { step: "wallet_view", tool_id: "customer-supplied" },
+  { step: "wallet_view", tool_id: "shared-wallet", package_id: "customer-account" },
+  { step: "wallet_view", tool_id: "shared-wallet", payment_flow: "customer@example.test" },
+  { step: "export_delivered", tool_id: "shared-wallet", credit_bucket: "unknown" },
+]) {
+  if (contract.admitEvent({ event: "tool_commerce_step", props }).ok) fail("commerce_invalid_dimension_admitted", props);
+}
+const { aggregateEvents } = require(path.join(root, "netlify/functions/lib/analytics-agg.cjs"));
+const commerceEvent = { event: "tool_commerce_step", ts: "2026-11-19T12:00:00Z", path: "/ferramentas/",
+  props: { step: "pricing_view", tool_id: "shared-wallet", event_id: "evt-commerce-1" } };
+const commerceSummary = aggregateEvents([
+  commerceEvent, commerceEvent,
+  { ...commerceEvent, props: { step: "payment_confirmed", tool_id: "shared-wallet", event_id: "evt-commerce-2" } },
+  { ...commerceEvent, props: { step: "wallet_view", tool_id: "private@example.test", event_id: "evt-commerce-3" } },
+]).tool_commerce;
+if (commerceSummary.measurement !== "observed_steps_not_revenue" || commerceSummary.rows.length !== 1
+    || JSON.stringify(commerceSummary.rows[0].steps) !== JSON.stringify({ pricing_view: 1, payment_confirmed: 1 })
+    || JSON.stringify(commerceSummary).includes("private")) fail("commerce_aggregate_semantics", commerceSummary);
 
 // --- 4. Client track path ---
 function driveClient() {

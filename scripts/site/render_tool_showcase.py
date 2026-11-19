@@ -16,10 +16,10 @@ from urllib.parse import urlencode, urlsplit
 ROOT = Path(__file__).resolve().parents[2]
 HOST = "https://confenge.com.br"
 HUB = "/ferramentas/"
-TITLE = "Ferramentas de engenharia online: CAD, BIM, obras e imóveis"
+TITLE = "Ferramentas grátis de engenharia: CAD, BIM e cálculos"
 DESCRIPTION = (
-    "Abra e edite DWG, trabalhe com IFC, calcule limites de aditivos e avalie imóveis "
-    "com o Modela Pro. Escolha uma ferramenta de engenharia e use no navegador."
+    "Calcule BDI, monte orçamentos e extraia quantitativos IFC no navegador. "
+    "Primeira exportação grátis por conta verificada; próximas com créditos."
 )
 CSS = '<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>'
 HUB_CSS = '<link rel="stylesheet" href="/assets/tool-showcase/vitrine.css"/>'
@@ -137,16 +137,21 @@ def share_url(path: str, source: str) -> str:
     return f"{HOST}{parsed.path}?{query}" + (f"#{parsed.fragment}" if parsed.fragment else "")
 
 
-def export_terms(tool_id: str | None = None) -> str:
+def export_terms(tool_id: str | None = None, *, public_intro: bool = False) -> str:
     """Expose current export terms before use without loading authentication."""
     scope = ('<strong>A cópia editável FCStd é sempre gratuita. '
              'Para STEP, STL e outras exportações técnicas:</strong> '
              if tool_id == "modelador-parametrico-3d" else "")
-    return ('<p class="tool-export-terms" data-tool-export-terms hidden>'
+    visibility = ' data-public-export-intro' if public_intro else ' hidden'
+    fallback = ('Simule e confira resultados sem pagar. A primeira exportação da conta verificada é cortesia; '
+                'as seguintes usam 1 crédito. A cortesia é única e compartilhada entre as ferramentas.'
+                if public_intro else '')
+    access_href = '#como-funciona' if public_intro else '/ferramentas/#meus-creditos'
+    access_label = 'Como funcionam os créditos' if public_intro else 'Minha conta e créditos'
+    return ('<p class="tool-export-terms" data-tool-export-terms' + visibility + '>'
             + scope +
-            '<span data-tool-export-copy></span> '
-            '<a href="/ferramentas/#meus-creditos" data-tool-export-wallet>'
-            'Minha conta e créditos</a></p>')
+            '<span data-tool-export-copy>' + fallback + '</span> '
+            f'<a href="{access_href}" data-tool-export-wallet>{access_label}</a></p>')
 
 
 def share_panel(path: str, title: str, key: str, related: list[dict]) -> str:
@@ -234,7 +239,7 @@ def set_head(html: str, path: str, title: str, desc: str, key: str, *, updated: 
             f'<meta property="og:updated_time" content="{escape(updated)}"/>',
         ))
     css = f"{CSS}\n{HUB_CSS}" if path == HUB else ROUTE_CSS.get(path, CSS)
-    js = JS.replace("showcase.mjs", "showcase.mjs?v=vitrine2") if path == HUB else JS
+    js = JS.replace("showcase.mjs", "showcase.mjs?v=growth20261119") if path == HUB else JS
     tags += [meta_tags(path, title, desc, key), css, js]
     return marker(head + "</head>", "head", "\n".join(tags), "</head>") + rest
 
@@ -307,12 +312,12 @@ def catalogue(html: str, data: dict) -> str:
 <nav class="breadcrumbs container ts-crumb" aria-label="Navegação estrutural"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Ferramentas</li></ol></nav>
 <header class="ts-hero"><div class="container ts-hero-inner">
 <div class="ts-hero-copy">
-<p class="eyebrow">CONFENGE · Ferramentas online</p>
-<h1>Ferramentas de engenharia <span>para usar agora.</span></h1>
-<p data-tool-job>Da planta ao orçamento: abra arquivos, confira cálculos e prepare sua próxima entrega. Escolha a tarefa e comece no navegador.</p>
-<div class="ts-hero-actions"><a class="button button-primary" href="#ts-browser-title">Encontrar minha ferramenta</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
+<p class="eyebrow">CONFENGE · Ferramentas grátis</p>
+<h1>Ferramentas de engenharia <span>para começar grátis.</span></h1>
+<p data-tool-job>Transforme seu arquivo em uma entrega: edite plantas, extraia quantitativos, monte orçamentos e confira cálculos no navegador.</p>
+<div class="ts-hero-actions"><a class="button button-primary" href="#ts-browser-title" {cta_attrs('tool-catalog-start', 'tool_intro')}>Escolher minha ferramenta</a><a class="ts-hero-link" href="#como-funciona" {cta_attrs('tool-pricing-explain', 'tool_intro')}>Como funciona e preços</a><button type="button" class="ts-hero-link" id="meus-creditos" hidden>Minha conta e créditos</button></div>
 <p id="meus-creditos-status" role="status"></p>
-{export_terms()}
+{export_terms(public_intro=True)}
 <dl class="ts-hero-facts"><div><dt>{total}</dt><dd>opções de uso</dd></div><div><dt>{len(data["groups"])}</dt><dd>frentes de trabalho</dd></div><div><dt>web</dt><dd>uso direto no navegador</dd></div></dl>
 </div>
 <nav class="ts-quickstart" aria-label="Comece por uma tarefa"><p>Um próximo passo concreto</p><ul>{quickstarts}</ul></nav>
@@ -324,6 +329,34 @@ def catalogue(html: str, data: dict) -> str:
 </div></section>
 <div class="container"><p class="ts-search-status" role="status" data-search-status></p></div>
 {section_html}
+<section class="container ts-how" id="como-funciona" aria-labelledby="ts-how-title">
+<p class="ts-browser-kicker">Do primeiro resultado às próximas entregas</p>
+<h2 id="ts-how-title">Comece grátis. Exporte quando precisar.</h2>
+<ol class="ts-how-steps">
+<li><strong>1. Escolha e experimente</strong><p>Abra uma ferramenta, use um exemplo quando disponível ou trabalhe com seu arquivo. Confira o resultado na tela sem pagar.</p></li>
+<li><strong>2. Exporte pela primeira vez</strong><p>Entre e confirme seu e-mail para usar a primeira exportação grátis da conta. É uma cortesia única, compartilhada entre as ferramentas.</p></li>
+<li><strong>3. Continue com créditos</strong><p>Cada nova exportação seguinte usa 1 crédito do mesmo saldo. Compre só quando precisar, sem assinatura e sem prazo de validade dos créditos.</p></li>
+</ol>
+<div class="ts-pricing-heading"><div><h3>Quanto custa continuar?</h3><p>Escolha a quantidade de exportações que faz sentido para o seu trabalho.</p></div><a href="/termos-de-uso/#creditos-ferramentas">Condições de uso dos créditos</a></div>
+<p class="ts-pricing-status" data-credit-pricing-status role="status">Consulte os pacotes na sua conta. Os valores e os meios de pagamento são apresentados antes de confirmar a compra.</p>
+<ul class="ts-credit-grid" data-credit-packages aria-label="Pacotes de créditos para exportação" hidden></ul>
+<p class="ts-pricing-note" data-credit-pricing-note hidden>Confira a forma de pagamento e o total do pacote antes de confirmar a compra. O saldo é liberado após a confirmação do pagamento.</p>
+<div class="ts-how-questions">
+<details><summary>“Ferramentas grátis” significa uso ilimitado?</summary><p>Você pode experimentar e consultar os resultados na tela sem pagar. A primeira exportação da conta verificada é grátis. Novas exportações usam créditos. Formatos editáveis que a própria ferramenta identifica como gratuitos continuam livres.</p></details>
+<details><summary>Preciso comprar antes de testar?</summary><p>Não. Comece pela ferramenta e confira o resultado. A conta com e-mail confirmado é necessária para a exportação por créditos, inclusive para a cortesia inicial.</p></details>
+<details><summary>Recebo uma exportação grátis em cada ferramenta?</summary><p>Não. A conta tem uma única cortesia inicial para usar entre as ferramentas. Depois, o mesmo saldo de créditos serve para novas exportações nas ferramentas participantes.</p></details>
+<details><summary>Qual arquivo vou receber?</summary><p>Cada ferramenta informa os formatos disponíveis junto às ações de exportação. Escolha pela tarefa ou pelo filtro de formato do catálogo e confira o resultado antes de exportar.</p></details>
+</div>
+<a class="button button-primary" href="#ts-browser-title" {cta_attrs('tool-pricing-start-free', 'tool_pricing')}>Escolher uma ferramenta e começar grátis</a>
+</section>
+<section class="container ts-learn" aria-labelledby="ts-learn-title">
+<p class="ts-browser-kicker">Veja como chegar ao resultado</p><h2 id="ts-learn-title">Guias para usar no seu próximo trabalho</h2>
+<ul class="ts-learn-grid">
+<li><a href="/bim/guias/quantitativos-ifc-para-excel/" {cta_attrs('tool-guide-ifc-excel', 'tool_catalog')}><strong>Quantitativos IFC para Excel</strong><span>Entenda comprimentos, áreas e volumes antes de levar o modelo à planilha.</span></a></li>
+<li><a href="/bim/guias/pdf-escaneado-para-dwg/" {cta_attrs('tool-guide-pdf-dwg', 'tool_catalog')}><strong>PDF escaneado para DWG</strong><span>Prepare a imagem, ajuste a escala e confira o desenho convertido.</span></a></li>
+<li><a href="/cad/guias/escala-e-unidade-do-dwg/" {cta_attrs('tool-guide-dwg-scale', 'tool_catalog')}><strong>Escala e unidade do DWG</strong><span>Confira as medidas antes de editar ou aproveitar um desenho recebido.</span></a></li>
+</ul>
+</section>
 <div class="container ts-end" id="metodo">
 <h2>Da ferramenta à decisão</h2>
 <p data-tool-decision>Comece pela tarefa que você tem em mãos. Algumas ferramentas oferecem arquivos de exemplo. Nas de contratos, o resultado distingue fato, cálculo, inferência e o que ainda é desconhecido. A prontidão de obra privada é opcional e não é etapa obrigatória para solicitar um serviço.</p>

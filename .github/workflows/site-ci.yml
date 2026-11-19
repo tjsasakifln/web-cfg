@@ -277,6 +277,7 @@ jobs:
       - name: Tool catalogue navigation and sharing in Chrome
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          TOOL_SHOWCASE_SCREENSHOTS: build/reports/tool-showcase
         run: node scripts/site/test_tool_showcase_browser.mjs _site
       - name: Published DXF hydraulic and schedule calculation journeys
         env:
@@ -516,6 +517,7 @@ jobs:
             build/reports/contact-journeys/
             build/reports/public-surface-coverage.json
             build/reports/report-tools-browser/
+            build/reports/tool-showcase/
             build/reports/freecad/
             build/reports/first-fold-current.json
             build/reports/site-excellence.json

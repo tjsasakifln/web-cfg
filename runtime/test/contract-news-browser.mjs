@@ -191,7 +191,25 @@ try {
   await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle0' }), page.click(discovery)]);
   assert.equal(new URL(page.url()).pathname, PREFIX);
   assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
-  report.scenarios.push({ name: 'intelligence body to news archive', passed: true });
+  const discoveryId = 'intelligence-contract-news';
+  // The native navigation flushes the prior document's analytics queue. Wait
+  // for its real first-party request, then verify the entire discovery action.
+  const discoveryDeadline = Date.now() + 5_000;
+  while (!collectedEvents.some(event => event.props?.cta_id === discoveryId) && Date.now() < discoveryDeadline) {
+    await new Promise(done => setTimeout(done, 25));
+  }
+  const discoveryEvents = collectedEvents.filter(event => event.props?.cta_id === discoveryId);
+  assert.equal(discoveryEvents.length, 1, 'news discovery sends exactly one collector event');
+  const discoveryEvent = discoveryEvents[0];
+  assert.equal(discoveryEvent.event, 'cta_click', 'news discovery is a navigation click');
+  assert.equal(discoveryEvent.props.page_path, '/inteligencia/');
+  assert.equal(discoveryEvent.props.destination_type, 'route');
+  assert.equal(discoveryEvent.props.destination_path, PREFIX);
+  assert.equal(discoveryEvent.props.cta_position, 'content');
+  assert.ok(discoveryEvent.props.event_id);
+  assert.equal(collectedEvents.filter(event => event.event === 'content_to_service').length, 0,
+    'news discovery must not emit a service conversion');
+  report.scenarios.push({ name: 'intelligence body to news archive', passed: true, event: 'cta_click', destination_type: 'route', service_events: 0 });
 
   for (const [name, width, height] of [['desktop', 1440, 1000], ['mobile', 390, 844]]) {
     await page.setViewport({ width, height, deviceScaleFactor: 1 });
@@ -242,6 +260,8 @@ try {
   assert.equal(transitions.length, 2, 'the existing first-party transport sends both physical activations once');
   assert.equal(new Set(transitions.map(event => event.props.event_id)).size, 2);
   assert.ok(transitions.every(event => event.props.source_path === articlePath && event.props.source_asset_id === assetId(article)));
+  assert.equal(collectedEvents.filter(event => event.props?.cta_id === discoveryId).length, 1,
+    'news discovery stays a single event across subsequent article navigations');
   report.scenarios.push({ name: 'existing first-party collector transport', passed: true, events: transitions.length });
 
   await page.setJavaScriptEnabled(false);

@@ -135,11 +135,98 @@
     sst_page_view: 1, sst_cta_click: 1, sst_whatsapp_click: 1,
     sst_form_start: 1, sst_form_submit: 1,
     pgr_cta: 1, pgr_review_cta: 1, sst_obra_cta: 1, sst_outsourcing_cta: 1,
-    tool_complete: 1, tool_copy: 1, tool_download: 1, tool_referral_action: 1,
+    tool_commerce_step: 1, tool_complete: 1, tool_copy: 1, tool_download: 1, tool_referral_action: 1,
     tool_referral_panel_view: 1, tool_referral_visit: 1, tool_reset: 1, tool_start: 1,
     tool_to_content: 1, tool_to_form: 1, tool_to_offer: 1, tool_to_whatsapp: 1,
     tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
     xray_start: 1, xray_timeout: 1,
+  };
+  // Finite commerce dimensions mirror event-registry.json. No visitor input or identifiers.
+  const TOOL_COMMERCE_PROPERTIES = {
+    "step": [
+      "pricing_view",
+      "wallet_view",
+      "auth_required",
+      "credits_required",
+      "order_started",
+      "payment_confirmed",
+      "export_delivered",
+      "export_failed"
+    ],
+    "tool_id": [
+      "analise-cnpj",
+      "analise-de-viga-continua",
+      "bim-cad",
+      "bim-chapas",
+      "bim-comparador-geometrico",
+      "bim-comparar",
+      "bim-cortes",
+      "bim-digitalizar",
+      "bim-federacao",
+      "bim-fotogrametria",
+      "bim-georreferenciador",
+      "bim-ifc-excel",
+      "bim-inventario",
+      "bim-modelagem",
+      "bim-oficina",
+      "bim-regua",
+      "bim-visualizador",
+      "cad-editor",
+      "cad-suite-bimcraft",
+      "cad-suite-cadcraft",
+      "cad-suite-calculos",
+      "cad-suite-civilcraft",
+      "cad-suite-detailcraft",
+      "cad-suite-markupcraft",
+      "cad-suite-modelcraft",
+      "cad-suite-partcraft",
+      "cad-suite-takeoffcraft",
+      "calculadora-bdi",
+      "calculadora-de-beiral",
+      "calculadora-psicrometrica",
+      "caminho-critico-obra",
+      "checklist-reequilibrio",
+      "comparador-cronogramas",
+      "conforto-termico",
+      "conversor-utm-sirgas-2000",
+      "diagnostico-defesa-margem",
+      "diagrama-unifilar",
+      "energia-solar-fotovoltaica",
+      "epanet-inp",
+      "geotecnia-cpt-estacas",
+      "limite-acrescimos-supressoes",
+      "matriz-atraso-obra",
+      "memorial-de-calculo",
+      "modela-memoria",
+      "modelador-parametrico-3d",
+      "orcamento-de-obras",
+      "prontidao-tecnica-obra-privada",
+      "propriedades-de-secoes",
+      "quantitativos-dxf",
+      "radar-mercado-publico",
+      "radier-solo-elastico",
+      "rede-de-agua",
+      "secao-de-concreto-armado",
+      "shared-wallet",
+      "trelicas-e-porticos"
+    ],
+    "payment_flow": [
+      "pix",
+      "checkout"
+    ],
+    "credit_bucket": [
+      "free",
+      "promo",
+      "paid"
+    ],
+    "package_id": [
+      "creditos-1",
+      "creditos-3",
+      "creditos-5",
+      "creditos-10",
+      "creditos-25",
+      "creditos-50"
+    ]
   };
   const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1, handoff_accepted: 1 };
   const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
@@ -476,6 +563,20 @@
         return;
       }
       if (AGGREGATE_PII_ALLOWLIST.length) return;
+      if (resolved.canonical === 'tool_commerce_step') {
+        if (!params || typeof params !== 'object' || Array.isArray(params)) return;
+        if (!TOOL_COMMERCE_PROPERTIES.step.includes(params.step)
+            || !TOOL_COMMERCE_PROPERTIES.tool_id.includes(params.tool_id)) return;
+        const finite = {};
+        for (const [key, allowed] of Object.entries(TOOL_COMMERCE_PROPERTIES)) {
+          if (!Object.prototype.hasOwnProperty.call(params, key)) continue;
+          if (!allowed.includes(params[key])) return;
+          finite[key] = params[key];
+        }
+        // Rebuild the transport envelope below. Caller-supplied IDs and paths
+        // must never turn a finite commerce step into a private-data carrier.
+        params = finite;
+      }
       if (resolved.canonical === 'lead_form_error' && params.validation_category && !/^(required|contact_format|rate_limited)$/.test(params.validation_category)) return;
       const safe = {};
       let invalidEntityId = false;

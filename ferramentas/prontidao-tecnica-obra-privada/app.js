@@ -342,7 +342,7 @@
           toolId: "prontidao-tecnica-obra-privada",
           format: "print",
           content: content,
-          deliver: function () { window.print(); },
+          deliver: function (receipt, assertCurrent) { return commerce.printToolResultSnapshot(content, {assertCurrent: assertCurrent}); },
         });
       } catch {
         if (printStatus) printStatus.textContent = "Não foi possível preparar a impressão. Tente novamente.";

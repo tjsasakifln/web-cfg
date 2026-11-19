@@ -17,14 +17,90 @@ const sharedWallet = async () => {
   wallet ??= createToolCredits({ toolId: 'modela-memoria', shared: true });
   return wallet;
 };
-const openWallet = async () => {
+const openWallet = async (packageId) => {
   try {
-    if (!await (await sharedWallet()).open()) throw new Error('wallet unavailable');
+    const options = typeof packageId === 'string' ? { packageId } : undefined;
+    if (!await (await sharedWallet()).open(options)) throw new Error('wallet unavailable');
     if (walletStatus) walletStatus.textContent = '';
     return true;
   } catch {
     if (walletStatus) walletStatus.textContent = 'A conta de créditos está indisponível. Tente novamente.';
     return false;
+  }
+};
+const pricing = document.querySelector('[data-credit-packages]');
+const pricingStatus = document.querySelector('[data-credit-pricing-status]');
+const pricingNote = document.querySelector('[data-credit-pricing-note]');
+const publicIntro = document.querySelector('[data-public-export-intro]');
+const pricingUnavailable = (message) => {
+  if (pricing) { pricing.replaceChildren(); pricing.hidden = true; }
+  if (pricingStatus) pricingStatus.textContent = message;
+  if (pricingNote) pricingNote.hidden = true;
+};
+const renderPricing = config => {
+  if (!pricing) return;
+  const available = config?.enabled === true && config.sharedExportsEnabled === true
+    && Array.isArray(config.tools) && config.tools.includes('modela-memoria');
+  if (!available) {
+    pricingUnavailable('A conta de créditos está temporariamente indisponível. Continue experimentando as ferramentas e tente novamente mais tarde.');
+    return;
+  }
+  if (config.purchasesEnabled !== true || config.exportsPaused === true) {
+    pricingUnavailable(config.exportsPaused === true
+      ? 'As exportações estão temporariamente pausadas. Você pode continuar experimentando as ferramentas.'
+      : 'Novas compras estão temporariamente indisponíveis. Consulte sua conta para ver o saldo e as exportações disponíveis.');
+    return;
+  }
+  const packs = (Array.isArray(config.packages) ? config.packages : []).filter(pack =>
+    /^creditos-(1|3|5|10|25|50)$/.test(pack.id) &&
+    Number.isSafeInteger(pack.credits) && pack.credits > 0 &&
+    pack.id === `creditos-${pack.credits}` && Number.isSafeInteger(pack.amountCents) && pack.amountCents > 0
+  ).sort((a, b) => a.credits - b.credits);
+  if (!packs.length || new Set(packs.map(pack => pack.id)).size !== packs.length) {
+    pricingUnavailable('Não foi possível consultar os preços agora. Tente novamente ou confira os pacotes na sua conta.');
+    return;
+  }
+  const brl = value => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value / 100);
+  const nodes = packs.map(pack => {
+    const card = document.createElement('li');
+    const heading = document.createElement('h4');
+    heading.textContent = `${pack.credits} ${pack.credits === 1 ? 'crédito' : 'créditos'}`;
+    const total = document.createElement('p');
+    total.className = 'ts-credit-total'; total.textContent = brl(pack.amountCents);
+    const unit = document.createElement('p');
+    unit.className = 'ts-credit-unit';
+    unit.textContent = pack.credits === 1 ? 'Uma exportação de resultado.'
+      : `${brl(pack.amountCents / pack.credits)} por exportação, em média.`;
+    const action = document.createElement('button');
+    action.type = 'button'; action.className = 'ts-credit-choose';
+    action.textContent = `Escolher ${pack.credits} ${pack.credits === 1 ? 'crédito' : 'créditos'}`;
+    action.dataset.packageId = pack.id;
+    action.dataset.eventName = 'cta_click';
+    action.dataset.ctaId = `tool-pack-${pack.id}`;
+    action.dataset.ctaPosition = 'tool_pricing';
+    action.addEventListener('click', async () => {
+      action.disabled = true;
+      try {
+        if (!await openWallet(pack.id) && pricingStatus) {
+          pricingStatus.textContent = 'Não foi possível abrir a conta. Seu pagamento não foi iniciado. Tente novamente.';
+        }
+      } finally { action.disabled = false; }
+    });
+    card.append(heading, total, unit, action);
+    return card;
+  });
+  pricing.replaceChildren(...nodes); pricing.hidden = false;
+  if (pricingStatus) pricingStatus.textContent = 'Pacotes avulsos, sem assinatura. O preço abaixo é o total da compra.';
+  if (pricingNote) pricingNote.hidden = false;
+  // A view is observed only when the prices enter the viewport. No search text,
+  // account identity, input file or payment identifier enters public analytics.
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      try { window.confengeTrack?.('tool_commerce_step', { step: 'pricing_view', tool_id: 'shared-wallet' }); } catch {}
+    });
+    observer.observe(pricing);
   }
 };
 const openSharedReferral = async (entry = referralEntries[0]) => {
@@ -43,6 +119,7 @@ if (walletButton || referralEntries.length || exportTerms.length) {
   fetch('/api/web/tool-credits?op=config', { headers: { Accept: 'application/json' } })
     .then(response => response.ok ? response.json() : null)
     .then(config => {
+      renderPricing(config);
       const sharedEnabled = config?.enabled === true && config.sharedExportsEnabled === true
         && Array.isArray(config.tools) && config.tools.includes('modela-memoria');
       const modelaEnabled = isModela && config?.enabled === true
@@ -56,6 +133,7 @@ if (walletButton || referralEntries.length || exportTerms.length) {
         const copy = config.exportsPaused === true
           ? 'Use a ferramenta gratuitamente. As exportações por créditos estão temporariamente pausadas.'
           : 'Use a ferramenta gratuitamente. A primeira exportação da conta verificada é cortesia; as seguintes usam 1 crédito.'
+            + (publicIntro ? ' A cortesia é única e compartilhada entre as ferramentas.' : '')
             + (config.purchasesEnabled === true
               ? (price ? ` Crédito avulso: ${price}. Há pacotes na carteira.` : '')
               : ' Novas compras estão temporariamente indisponíveis.');
@@ -63,6 +141,8 @@ if (walletButton || referralEntries.length || exportTerms.length) {
           notice.querySelector('[data-tool-export-copy]').textContent = copy;
           notice.hidden = false;
           const access = notice.querySelector('[data-tool-export-wallet]');
+          access.href = '/ferramentas/#meus-creditos';
+          access.textContent = 'Minha conta e créditos';
           access.target = '_blank';
           access.rel = 'noopener';
           access.addEventListener('click', async event => {
@@ -78,7 +158,12 @@ if (walletButton || referralEntries.length || exportTerms.length) {
           });
         }
       }
-      if (walletButton && config?.enabled === true && config.sharedExportsEnabled === true) {
+      if (publicIntro && !sharedEnabled) {
+        publicIntro.querySelector('[data-tool-export-copy]').textContent =
+          'Experimente as ferramentas gratuitamente. A emissão por créditos está temporariamente indisponível.';
+        publicIntro.querySelector('[data-tool-export-wallet]').hidden = true;
+      }
+      if (walletButton && sharedEnabled) {
         walletButton.hidden = false;
         walletButton.addEventListener('click', openWallet);
         if (returning) openWallet();
@@ -97,7 +182,14 @@ if (walletButton || referralEntries.length || exportTerms.length) {
         });
         if (sharedReferralEnabled && returningToReferral) openSharedReferral();
       }
-    }).catch(() => {});
+    }).catch(() => {
+      pricingUnavailable('Não foi possível consultar os preços agora. Atualize a página ou tente novamente mais tarde.');
+      if (publicIntro) {
+        publicIntro.querySelector('[data-tool-export-copy]').textContent =
+          'Experimente as ferramentas gratuitamente. Não foi possível consultar a disponibilidade de exportação agora.';
+        publicIntro.querySelector('[data-tool-export-wallet]').hidden = true;
+      }
+    });
 }
 
 const simplify = (value) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();

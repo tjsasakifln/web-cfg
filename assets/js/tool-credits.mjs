@@ -2,8 +2,11 @@ import { referralFirstTouch, validReferral } from './tool-referral.mjs';
 
 const ENDPOINT = '/api/web/tool-credits';
 const ORDER_KEY = 'confenge-tool-orders-v1';
-const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos2';
+const CREDIT_STYLES = '/assets/css/tool-credits.css?v=creditos3';
 const localWallets = new Map();
+// A page can host a tool wallet and the shared wallet simultaneously. These
+// keys stay in memory and never enter analytics or browser storage.
+const startedOrders = new Set(), confirmedOrders = new Set();
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 const makeId = () => crypto.randomUUID();
 const el = (tag, text) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; return n; };
@@ -31,6 +34,7 @@ const message = e => ({
   EMAIL_UNVERIFIED: 'Este acesso não forneceu um e-mail confirmado. Entre com e-mail e senha ou escolha outro provedor.',
   NO_CREDITS: 'Você não tem créditos disponíveis.',
   ACCOUNT_BLOCKED: 'Esta conta está temporariamente bloqueada.',
+  ACCOUNT_CHANGED: 'A conta de acesso mudou. Entre novamente na conta usada para esta exportação e retome o mesmo resultado.',
   EXPORT_PAUSED: 'As exportações estão temporariamente pausadas.',
   'auth/popup-closed-by-user': 'A janela de acesso foi fechada antes da conclusão.',
   'auth/popup-blocked': 'O navegador bloqueou a janela de acesso. Permita pop-ups para confenge.com.br e tente novamente.',
@@ -75,12 +79,56 @@ function exportNotice(text, { receipt, retry, referral } = {}) {
   document.body.append(notice);
 }
 
+/** Prints only the prepared text, never the mutable calculator underneath. */
+export async function printToolResultSnapshot(content, { assertCurrent = () => {} } = {}) {
+  const text = typeof content === 'string' ? content : content instanceof Blob ? await content.text() : '';
+  if (!text) throw new Error('O resultado está vazio.');
+  assertCurrent();
+  loadStyles();
+  const frame = el('iframe');
+  frame.className = 'tool-credits__print-frame';
+  frame.title = 'Impressão do resultado preparado';
+  frame.setAttribute('aria-hidden', 'true');
+  frame.src = 'about:blank';
+  document.body.append(frame);
+  const doc = frame.contentDocument, printWindow = frame.contentWindow;
+  let expiry;
+  const remove = () => { clearTimeout(expiry); frame.remove(); };
+  try {
+    if (!doc || !printWindow) throw new Error('Não foi possível preparar a impressão.');
+    doc.title = 'CONFENGE | Resultado da ferramenta';
+    doc.documentElement.lang = 'pt-BR';
+    doc.body.className = 'tool-credits__print-document';
+    const heading = doc.createElement('h1'); heading.textContent = 'CONFENGE';
+    const prepared = doc.createElement('pre');
+    prepared.className = 'tool-credits__print-text';
+    prepared.textContent = text;
+    doc.body.replaceChildren(heading, prepared);
+    const stylesheet = doc.createElement('link');
+    stylesheet.rel = 'stylesheet'; stylesheet.href = CREDIT_STYLES;
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Não foi possível preparar a impressão.')), 10000);
+      stylesheet.onload = () => { clearTimeout(timeout); resolve(); };
+      stylesheet.onerror = () => { clearTimeout(timeout); reject(new Error('Não foi possível preparar a impressão.')); };
+      doc.head.append(stylesheet);
+    });
+    assertCurrent();
+    printWindow.addEventListener('afterprint', remove, { once: true });
+    printWindow.focus();
+    printWindow.print();
+    // Some embedded browsers do not send afterprint. The private snapshot is
+    // still temporary and never written to storage or an external window.
+    if (frame.isConnected) expiry = setTimeout(remove, 120000);
+  } catch (error) { remove(); throw error; }
+}
+
 /** Fail-closed export entitlement UI with consent-aware aggregate referral measurement. */
 export function createToolCredits({ toolId, root = document.body, fetchImpl = fetch, shared = false } = {}) {
   if (!toolId) throw new Error('toolId is required');
   let config, firebase, auth, account, dialog, init, provisionedUid, opening, renderVersion = 0, pollTimer;
   let preferredFlow = 'pix';
   let referralFocusPending = false, referralPanelTracked = false;
+  let pendingExport, selectedPackageId;
   referralFirstTouch();
   const referralDestination = toolId === 'modela-memoria' && !shared
     ? { url: '/avaliacao-imoveis-urbanos/inferencia/', kind: 'modela', label: 'Modela Pro' }
@@ -89,6 +137,13 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     if (!shared && toolId !== 'modela-memoria') return;
     try { window.confengeTrack?.(event, { tool_id: shared ? 'shared-wallet' : toolId, destination_kind: referralDestination.kind, ...props }); } catch {}
   };
+  const commerceStep = (step, props = {}) => {
+    try { window.confengeTrack?.('tool_commerce_step', {
+      step, tool_id: shared && toolId === 'modela-memoria' ? 'shared-wallet' : toolId, ...props,
+    }); } catch {}
+  };
+  const packageProps = id => config?.packages?.some(pack => pack.id === id && pack.id === `creditos-${pack.credits}`)
+    ? { package_id: id } : {};
   const url = (op, more = '') => `${ENDPOINT}?op=${encodeURIComponent(op)}${more}`;
   const ready = async () => {
     if (init) return init;
@@ -117,6 +172,9 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         account = undefined;
         provisionedUid = undefined;
         preferredFlow = 'pix';
+        // A prepared result stays only in this page and cannot follow an
+        // already identified visitor into another account.
+        if (pendingExport?.uid && pendingExport.uid !== auth.currentUser?.uid && !pendingExport.recovery) pendingExport = undefined;
         if (dialog?.open) render();
       });
       return true;
@@ -127,22 +185,56 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       return available;
     } catch (error) { init = undefined; throw error; }
   };
-  const token = async () => { if (!auth?.currentUser) throw { error: 'AUTH_REQUIRED' }; return auth.currentUser.getIdToken(); };
-  const api = async (op, options = {}, extra = '') => {
-    const response = await fetchImpl(url(op, extra), { ...options, headers: { Accept: 'application/json', Authorization: `Bearer ${await token()}`, ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...options.headers } });
-    return asJson(response);
+  const requireUser = user => {
+    if (!user) throw { error: 'AUTH_REQUIRED' };
+    if (auth?.currentUser !== user || auth.currentUser.uid !== user.uid) throw { error: 'ACCOUNT_CHANGED', status: 409 };
+    return user;
   };
-  const provision = async () => {
-    const user = auth.currentUser; if (!user) throw { error: 'AUTH_REQUIRED' }; await user.reload();
-    if (!user.emailVerified) throw { error: 'EMAIL_UNVERIFIED' }; await user.getIdToken(true);
+  const token = async user => {
+    requireUser(user);
+    const value = await user.getIdToken();
+    requireUser(user);
+    return value;
+  };
+  const authorizedFetch = async (op, options = {}, extra = '', user = auth?.currentUser, onSend) => {
+    const bearer = await token(user);
+    requireUser(user);
+    onSend?.();
+    const response = await fetchImpl(url(op, extra), { ...options, headers: { Accept: 'application/json', Authorization: `Bearer ${bearer}`, ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...options.headers } });
+    requireUser(user);
+    return response;
+  };
+  const api = async (op, options = {}, extra = '', user = auth?.currentUser, onSend) => {
+    const response = await authorizedFetch(op, options, extra, user, onSend);
+    const data = await asJson(response);
+    requireUser(user);
+    return data;
+  };
+  const provision = async (user = auth?.currentUser) => {
+    requireUser(user);
+    await user.reload();
+    requireUser(user);
+    if (!user.emailVerified) throw { error: 'EMAIL_UNVERIFIED' };
+    await user.getIdToken(true);
+    requireUser(user);
     if (provisionedUid !== user.uid) {
       const referralCode = referralFirstTouch();
-      account = await api('account', { method: 'POST', body: JSON.stringify(referralCode ? { referralCode } : {}) });
+      const provisioned = await api('account', { method: 'POST', body: JSON.stringify(referralCode ? { referralCode } : {}) }, '', user);
+      requireUser(user);
+      account = provisioned;
       provisionedUid = user.uid;
     }
     return account;
   };
-  const refresh = async () => { await provision(); account = await api('account'); return account; };
+  const refresh = async () => {
+    const user = auth?.currentUser;
+    await provision(user);
+    requireUser(user);
+    const refreshed = await api('account', {}, '', user);
+    requireUser(user);
+    account = refreshed;
+    return account;
+  };
   const orderKey = () => `${ORDER_KEY}:${auth?.currentUser?.uid || 'anonymous'}`;
   const cleanOrders = all => Object.fromEntries(Object.entries(all).filter(([, value]) => value?.at > Date.now() - 2 * 864e5 || value?.creating));
   const saveOrder = order => { const all = cleanOrders(getStore(orderKey())); all[order.id] = { id: order.id, status: order.status, at: Date.now() }; setStore(orderKey(), all); };
@@ -160,7 +252,10 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
   const configuredProviders = () => Object.entries(AUTH_PROVIDER_DETAILS)
     .filter(([id]) => Array.isArray(config?.authProviders) && config.authProviders.includes(id));
   const authView = (host, notice) => {
-    host.append(el('h2', 'Seu primeiro uso completo é gratuito'), el('p', 'Entre para guardar seus créditos e exportações.')); note(host, notice);
+    host.append(el('h2', 'Sua primeira exportação é grátis'),
+      el('p', 'Uma exportação de cortesia por conta verificada, compartilhada entre as ferramentas. Depois, cada nova exportação usa 1 crédito.'));
+    if (pendingExport) host.append(el('p', 'Seu resultado continua pronto nesta página. Após entrar, você poderá concluir a exportação.'));
+    note(host, notice);
     const authContent = el('div'); authContent.className = 'tool-credits__auth-content';
     const form = el('form'), email = el('input'), password = el('input'); email.type = 'email'; email.required = true; email.autocomplete = 'email'; password.type = 'password'; password.required = true; password.minLength = 6; password.autocomplete = 'current-password';
     for (const [text, field] of [['E-mail', email], ['Senha', password]]) { const label = el('label', text); label.append(field); form.append(label); }
@@ -268,6 +363,27 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     if (config.sharedExportsEnabled) summary.append(el('p', 'Use o mesmo saldo em qualquer ferramenta com exportação por créditos.'));
     host.append(summary);
     note(host, notice);
+    if (pendingExport && (!pendingExport.uid || pendingExport.uid === auth.currentUser?.uid)) {
+      pendingExport.uid ||= auth.currentUser?.uid;
+      const resume = el('section');
+      resume.className = 'tool-credits__resume';
+      resume.append(el('h3', 'Concluir sua exportação'), el('p', amount > 0
+        ? 'O resultado preparado continua nesta página. Confirme abaixo para baixar o arquivo.'
+        : 'O resultado preparado continua nesta página. Após a confirmação do pagamento, conclua a exportação aqui.'));
+      const continueExport = btn(account?.freeAvailable ? 'Concluir exportação grátis' : 'Concluir exportação por 1 crédito', async () => {
+        const pending = pendingExport;
+        const user = auth.currentUser;
+        if (!pending || pending.uid !== user?.uid) return;
+        // Returning to the result is a separate, explicit action. Neither
+        // login nor a confirmed payment authorizes a debit or a download.
+        dialog.close();
+        try { await pending.resume(user); } catch { /* the export path displays its own recovery state */ }
+      });
+      continueExport.dataset.resumeExport = '';
+      continueExport.disabled = amount < 1 || account?.blocked || config.exportsPaused === true;
+      resume.append(continueExport);
+      host.append(resume);
+    }
     const section = el('section'); section.append(el('h3', config.checkoutEnabled ? 'Comprar créditos' : 'Comprar por Pix'));
     if (account?.blocked) section.append(el('p', 'Sua conta está em análise. Fale com a CONFENGE pelo contato nos termos.'));
     else if (!config.purchasesEnabled) section.append(el('p', 'As compras ainda não estão disponíveis.'));
@@ -289,13 +405,17 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       accepted.type = 'checkbox';
       termsLabel.append(accepted, ' Li e aceito os termos aplicáveis.');
       cards.className = 'tool-credits__packs';
+      const selected = config.packages?.find(pack => pack.id === selectedPackageId);
+      if (selected) section.append(el('p', `Pacote escolhido: ${selected.credits} crédito${selected.credits === 1 ? '' : 's'} por ${BRL.format(selected.amountCents / 100)}. Confira a forma de pagamento e os termos antes de comprar.`));
       for (const pack of config.packages || []) {
         const unit = BRL.format(pack.amountCents / pack.credits / 100);
         const quantity = `${pack.credits} crédito${pack.credits === 1 ? '' : 's'}`;
         const price = BRL.format(pack.amountCents / 100);
         const choice = btn('', () => createOrder(pack.id, accepted.checked, paymentMethod.value || 'pix'));
+        choice.dataset.packageId = pack.id;
         choice.setAttribute('aria-label', `Comprar ${quantity} por ${price}. ${unit} por crédito.`);
         choice.append(el('span', quantity), el('strong', price), el('small', `${unit} por crédito`));
+        if (pack.id === selectedPackageId) choice.append(el('small', 'Pacote escolhido'));
         cards.append(choice);
       }
       section.append(termsLabel, cards);
@@ -316,6 +436,7 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     try { await refresh(); } catch (error) { notice = message(error); } if (version !== renderVersion) return; accountView(host, notice);
   };
   const createOrder = async (packageId, accepted, paymentFlow) => {
+    selectedPackageId = packageId;
     if (!accepted) return render('Confirme que leu os termos para continuar.');
     const key = orderKey(), store = getStore(key);
     const attempt = `${config.termsVersion}:${paymentFlow}:${packageId}`;
@@ -325,7 +446,14 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     try {
       const order = await api('orders', { method: 'POST', body: JSON.stringify({ packageId, requestId, termsVersion: config.termsVersion, paymentFlow }) });
       delete store.creating[attempt]; setStore(key, store);
-      if (key === orderKey()) { saveOrder(order); showOrder(order); }
+      if (key === orderKey()) {
+        const measurementKey = `${key}:${order.id}`;
+        if (!startedOrders.has(measurementKey)) {
+          startedOrders.add(measurementKey);
+          commerceStep('order_started', { payment_flow: paymentFlow, ...packageProps(packageId) });
+        }
+        saveOrder(order); showOrder(order);
+      }
     } catch (e) { if (key === orderKey()) render(`${message(e)} Você pode tentar novamente; a identificação do pedido será preservada.`); }
   };
   const checkOrder = async (id, remaining = 15) => {
@@ -339,6 +467,12 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     clearTimeout(pollTimer);
     const key = orderKey();
     if (['paid', 'failed', 'review', 'reversed'].includes(order.status)) {
+      const measurementKey = `${key}:${order.id}`;
+      if (order.status === 'paid' && !confirmedOrders.has(measurementKey)) {
+        confirmedOrders.add(measurementKey);
+        commerceStep('payment_confirmed', { ...packageProps(order.packageId),
+          ...(['pix', 'checkout'].includes(order.paymentFlow) ? { payment_flow: order.paymentFlow } : {}) });
+      }
       dropOrder(order.id);
       return render(order.status === 'paid' ? 'Pagamento confirmado. Seus créditos foram atualizados.' : order.status === 'review' ? 'Pedido em análise. Consulte os termos para falar com a CONFENGE.' : order.status === 'reversed' ? 'Pagamento estornado.' : 'Não foi possível concluir este pagamento.');
     }
@@ -364,35 +498,59 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     if (remaining > 0) pollTimer = setTimeout(() => checkOrder(order.id, remaining - 1), 8000);
   };
   const ensure = () => { if (dialog) return; loadStyles(); dialog = el('dialog'); dialog.className = 'tool-credits'; dialog.setAttribute('aria-label', 'Créditos CONFENGE'); const close = btn('×', () => dialog.close()); close.className = 'tool-credits__close'; close.setAttribute('aria-label', 'Fechar'); const content = el('div'); content.className = 'tool-credits__content'; dialog.append(close, content); dialog.addEventListener('close', () => clearTimeout(pollTimer)); dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); }); root.append(dialog); };
-  const open = async notice => { if (opening) return opening; opening = (async () => { if (!await ready()) return false; ensure(); if (!dialog.open) dialog.showModal(); await render(notice); return true; })(); try { return await opening; } finally { opening = undefined; } };
+  const open = async options => {
+    if (opening) return opening;
+    opening = (async () => {
+      if (!await ready()) return false;
+      const notice = typeof options === 'string' ? options : options?.notice;
+      if (typeof options?.packageId === 'string' && config.packages?.some(pack => pack.id === options.packageId)) selectedPackageId = options.packageId;
+      ensure();
+      if (!dialog.open) {
+        dialog.showModal();
+        commerceStep('wallet_view');
+        if (!auth.currentUser) commerceStep('auth_required');
+      }
+      await render(typeof notice === 'string' ? notice : undefined);
+      return true;
+    })();
+    try { return await opening; } finally { opening = undefined; }
+  };
   const openReferral = async () => {
     if (!await ready() || !config?.purchasesEnabled) return false;
     referralFocusPending = true;
     return open(auth?.currentUser ? undefined : 'Entre ou crie sua conta para acessar seu link pessoal de indicação.');
   };
   const attempts = new Map();
+  const preparedResults = new WeakMap();
   let exporting = false, interrupted;
-  async function deliverLocal(result) {
+  async function deliverLocal(result, expectedUser = auth?.currentUser) {
     if (exporting) return false;
     if (interrupted && interrupted.result !== result) {
       exportNotice('Há uma emissão pendente nesta página. Retome-a antes de exportar outro resultado.',
         { retry: () => deliverLocal(interrupted.result) });
       return false;
     }
-    const { format, content, deliver } = result;
+    let prepared = preparedResults.get(result);
+    if (!prepared) {
+      const { format, content, deliver } = result;
+      prepared = Object.freeze({ format, deliver, file: typeof content === 'string' ? new Blob([content]) : content });
+      preparedResults.set(result, prepared);
+    }
+    const { format, file, deliver } = prepared;
     exporting = true;
     let key, ownerUid, started = false;
     try {
       if (!await ready()) { await deliver(); return true; }
-      await provision();
-      const user = auth.currentUser;
-      if (interrupted && interrupted.uid !== user?.uid) throw { error: 'AUTH_REQUIRED' };
+      const user = expectedUser || auth.currentUser;
       ownerUid = user?.uid;
-      const file = typeof content === 'string' ? new Blob([content]) : content;
+      requireUser(user);
+      if (interrupted && interrupted.uid !== user.uid) throw { error: 'ACCOUNT_CHANGED', status: 409 };
+      await provision(user);
+      requireUser(user);
       if (!(file instanceof Blob) || !file.size) throw new Error('O resultado está vazio.');
       const hash = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
       const sha256 = Array.from(new Uint8Array(hash), value => value.toString(16).padStart(2, '0')).join('');
-      if (auth.currentUser !== user) throw { error: 'AUTH_REQUIRED' };
+      requireUser(user);
       key = `confenge-export-v1:${user.uid}:${toolId}:${format}:${sha256}:${file.size}`;
       let requestId = attempts.get(key);
       try { requestId ||= sessionStorage.getItem(key); } catch { /* storage is optional */ }
@@ -402,15 +560,19 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
         attempts.set(key, requestId);
         try { sessionStorage.setItem(key, requestId); } catch { /* storage is optional */ }
       }
-      started = true;
       const receipt = await api('export-local', { method: 'POST',
-        body: JSON.stringify({ toolId, requestId, payload: { format, bytes: file.size, sha256 } }) });
+        body: JSON.stringify({ toolId, requestId, payload: { format, bytes: file.size, sha256 } }) }, '', user, () => { started = true; });
       if (receipt.schema !== 'confenge.tools.emission/v1' || receipt.toolId !== toolId ||
           receipt.format !== format || receipt.bytes !== file.size || receipt.sha256 !== sha256 ||
           !/^[0-9a-f]{64}$/.test(receipt.id || '') || !/^[0-9a-f]{64}$/.test(receipt.proof || '')) {
         throw new Error('Comprovante indisponível. Tente novamente.');
       }
-      await deliver(receipt);
+      requireUser(user);
+      await deliver(receipt, () => requireUser(user));
+      requireUser(user);
+      pendingExport = undefined;
+      preparedResults.delete(result);
+      commerceStep('export_delivered');
       interrupted = undefined;
       attempts.delete(key);
       try { sessionStorage.removeItem(key); } catch { /* storage is optional */ }
@@ -420,10 +582,19 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
       });
       return true;
     } catch (error) {
-      if (started && (!error.status || error.status >= 500)) {
+      if (['AUTH_REQUIRED', 'EMAIL_UNVERIFIED', 'NO_CREDITS'].includes(error.error)) {
+        if (!ownerUid || ownerUid === auth.currentUser?.uid) pendingExport = { uid: ownerUid, resume: user => deliverLocal(result, user) };
+        if (error.error === 'NO_CREDITS') commerceStep('credits_required');
+      } else commerceStep('export_failed');
+      if (started && (!error.status || error.status >= 500 || error.error === 'ACCOUNT_CHANGED')) {
         interrupted ??= { result, uid: ownerUid };
         exportNotice('A exportação foi interrompida. Retome o mesmo resultado para evitar outro débito.',
           { retry: () => deliverLocal(result) });
+        return false;
+      }
+      if (error.error === 'ACCOUNT_CHANGED') {
+        if (!interrupted) { pendingExport = undefined; preparedResults.delete(result); }
+        exportNotice(message(error), interrupted ? { retry: () => deliverLocal(interrupted.result) } : {});
         return false;
       }
       if (started && ['NO_CREDITS', 'ACCOUNT_BLOCKED', 'REQUEST_CONFLICT'].includes(error.error)) {
@@ -437,16 +608,50 @@ export function createToolCredits({ toolId, root = document.body, fetchImpl = fe
     } finally { exporting = false; }
   }
 
-  return { ready, open, openReferral, deliverLocal, async exportReport({ payload, requestId = makeId() } = {}) {
+  async function exportReport({ payload, requestId = makeId(), deliver } = {}, expectedUser = auth?.currentUser,
+    preparedBody = JSON.stringify({ toolId, requestId, payload })) {
     if (!await ready()) return null;
+    const user = expectedUser || auth.currentUser;
+    const ownerUid = user?.uid;
+    let started = false;
+    const resume = nextUser => {
+      if (ownerUid && nextUser?.uid !== ownerUid) { exportNotice(message({error:'ACCOUNT_CHANGED'})); return false; }
+      return exportReport({ payload, requestId, deliver }, nextUser, preparedBody);
+    };
     try {
-      await provision();
-      const response = await fetchImpl(url('export'), { method: 'POST', headers: { Authorization: `Bearer ${await token()}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ toolId, requestId, payload }) });
-      if (!response.ok) throw Object.assign(new Error(), await response.json().catch(() => ({})));
+      requireUser(user);
+      await provision(user);
+      const response = await authorizedFetch('export', { method: 'POST', body: preparedBody }, '', user, () => { started = true; });
+      if (!response.ok) throw Object.assign(new Error(), await response.json().catch(() => ({})), { status: response.status });
       if (!/^attachment;/i.test(response.headers.get('Content-Disposition') || '')) throw new Error('Arquivo indisponível. Tente novamente.');
-      return response.blob();
-    } catch (error) { try { await open(message(error)); } catch {} throw error; }
-  } };
+      const blob = await response.blob();
+      requireUser(user);
+      if (typeof deliver === 'function') {
+        await deliver(blob);
+        requireUser(user);
+        pendingExport = undefined;
+        commerceStep('export_delivered');
+      }
+      return blob;
+    } catch (error) {
+      if (['AUTH_REQUIRED', 'EMAIL_UNVERIFIED', 'NO_CREDITS'].includes(error.error)) {
+        if (typeof deliver === 'function' && (!ownerUid || ownerUid === auth.currentUser?.uid)) {
+          pendingExport = { uid: ownerUid, resume };
+        }
+        if (error.error === 'NO_CREDITS') commerceStep('credits_required');
+      } else commerceStep('export_failed');
+      if (error.error === 'ACCOUNT_CHANGED') {
+        if (started && typeof deliver === 'function') {
+          pendingExport = { uid: ownerUid, resume, recovery: true };
+          exportNotice(message(error), { retry: async () => { try { await resume(auth.currentUser); } catch {} } });
+        } else exportNotice(message(error));
+        throw error;
+      }
+      try { await open(message(error)); } catch {}
+      throw error;
+    }
+  }
+  return { ready, open, openReferral, deliverLocal, exportReport };
 }
 
 /** Authorizes the tool's normal delivery after its local generator has succeeded. */
