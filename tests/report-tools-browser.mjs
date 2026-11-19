@@ -4,6 +4,7 @@ import {readFile,stat,mkdir} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
 import puppeteer from 'puppeteer-core';
 import {resolveChromePath} from '../scripts/site/resolve_chrome.mjs';
+import {parseHeaders} from '../scripts/migration/netcup/lib/contract.mjs';
 
 const publicRoot=resolve(process.argv[2]||'_site');
 const screenshots=process.env.REPORT_TOOLS_SCREENSHOTS;
@@ -12,6 +13,10 @@ const candidates=['quantitativos-dxf','epanet-inp','comparador-cronogramas','rad
 const routes=candidates.filter(slug=>catalogue.includes(`/ferramentas/${slug}/`));
 assert.ok(routes.length>0,'the published catalogue must advertise a calculation journey');
 for(const slug of routes)await stat(resolve(publicRoot,'ferramentas',slug,'index.html'));
+const epanetWorkerPath='/ferramentas/epanet-inp/worker.mjs';
+const headerRules=parseHeaders(await readFile(resolve(publicRoot,'_headers'),'utf8'));
+const epanetWorkerCsp=headerRules.find(rule=>rule.match==='exact'&&rule.path===epanetWorkerPath)?.headers.find(header=>header.name.toLowerCase()==='content-security-policy')?.value;
+if(routes.includes('epanet-inp'))assert.ok(epanetWorkerCsp,'the published EPANET worker must have an exact artifact CSP');
 const mime={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.wasm':'application/wasm','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.inp':'text/plain','.dxf':'text/plain'};
 const boundaryProbePath='/__report-tools-worker-boundary';
 let foreignProbeHits=0;
@@ -29,7 +34,10 @@ const server=createServer(async(request,response)=>{
     let file=resolve(publicRoot,'.'+decodeURIComponent(path));
     if(file!==publicRoot&&!file.startsWith(publicRoot+sep))return response.writeHead(403).end();
     if((await stat(file)).isDirectory())file=resolve(file,'index.html');
-    response.writeHead(200,{'Content-Type':mime[extname(file)]||'application/octet-stream'}).end(await readFile(file));
+    const headers={'Content-Type':mime[extname(file)]||'application/octet-stream'};
+    // Keep the boundary probe free of CSP so CDP must block its second origin.
+    if(path===epanetWorkerPath&&epanetWorkerCsp)headers['Content-Security-Policy']=epanetWorkerCsp;
+    response.writeHead(200,headers).end(await readFile(file));
   }catch{response.writeHead(404).end();}
 });
 await new Promise(done=>server.listen(0,'127.0.0.1',done));

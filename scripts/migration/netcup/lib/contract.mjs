@@ -558,6 +558,84 @@ function mergeHashedCssCacheRules(root, headers) {
   return headers;
 }
 
+export function mergePublishedFreecadCacheRules(root, headers) {
+  const site = resolve(root, "_site");
+  if (!existsSync(site)) return { headers, sources: [] };
+  const pinSource = "scripts/freecad/runtime.json";
+  const publishedSource = "_site/assets/freecad/runtime.json";
+  const pinPath = resolve(root, pinSource);
+  const publishedPath = resolve(root, publishedSource);
+  if (!existsSync(publishedPath)) {
+    // Source checks may stage only css-assets.json, without a public artifact.
+    // Once HTML or release identity exists, a missing runtime is incomplete.
+    if (!existsSync(resolve(site, "index.html")) && !existsSync(resolve(site, ".well-known/build-info.json"))) {
+      return { headers, sources: [] };
+    }
+    fail("HC_FREECAD_MANIFEST_MISSING", publishedSource, 0, "published artifact is missing its pinned FreeCAD manifest");
+  }
+  function readManifest(path, source, code) {
+    try {
+      const value = JSON.parse(readFileSync(path, "utf8"));
+      if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("expected an object");
+      return value;
+    } catch {
+      fail(code, source, 0, "FreeCAD manifest is unreadable or invalid");
+    }
+  }
+  const pin = readManifest(pinPath, pinSource, "HC_FREECAD_PIN_INVALID");
+  const published = readManifest(publishedPath, publishedSource, "HC_FREECAD_MANIFEST_INVALID");
+  const names = ["FreeCAD.data", "FreeCAD.js", "FreeCAD.wasm"];
+  if (pin.schema !== "confenge.freecad-runtime/v1" || !pin.files
+    || stableJson(Object.keys(pin.files).sort()) !== stableJson(names)) {
+    fail("HC_FREECAD_PIN_INVALID", pinSource, 0, "the pin must declare exactly the FreeCAD JS, WASM and data files");
+  }
+  const publicPin = Object.fromEntries(Object.entries(pin).filter(([name]) => name !== "adapted_sources"));
+  if (stableJson(published) !== stableJson(publicPin)) {
+    fail("HC_FREECAD_MANIFEST_MISMATCH", publishedSource, 0, "published FreeCAD manifest differs from the installer pin");
+  }
+  const immutable = "public, max-age=31536000, immutable";
+  const compatibleCache = (value) => {
+    const directives = new Set(value.split(",").map((part) => part.trim().toLowerCase()).filter(Boolean));
+    return ["public", "max-age=31536000", "immutable"].every((part) => directives.has(part))
+      && [...directives].every((part) => ["public", "max-age=31536000", "immutable", "no-transform"].includes(part));
+  };
+  const planned = [];
+  for (const name of names) {
+    const file = pin.files[name];
+    const extension = name.slice("FreeCAD.".length);
+    if (!file || typeof file.sha256 !== "string" || !/^[a-f0-9]{64}$/.test(file.sha256) || !Number.isSafeInteger(file.size) || file.size <= 0
+      || file.path !== `/assets/freecad/FreeCAD-${file.sha256.slice(0, 12)}.${extension}`) {
+      fail("HC_FREECAD_PIN_INVALID", pinSource, 0, `invalid content-addressed FreeCAD file: ${name}`);
+    }
+    const artifactPath = resolve(site, file.path.slice(1));
+    if (!existsSync(artifactPath) || !statSync(artifactPath).isFile() || statSync(artifactPath).size !== file.size) {
+      fail("HC_FREECAD_ASSET_INVALID", publishedSource, 0, `published FreeCAD file is absent or has the wrong size: ${file.path}`);
+    }
+    const identity = normalizedSelectorIdentity(file.path, "exact");
+    const existing = headers.find((rule) => normalizedSelectorIdentity(rule.path, rule.match) === identity);
+    const cache = existing?.headers.find((header) => header.name.toLowerCase() === "cache-control");
+    if (cache && !compatibleCache(cache.value)) {
+      fail("HC_FREECAD_CACHE_CONFLICT", "_headers", cache.line, `authored Cache-Control conflicts with the pinned FreeCAD cache: ${file.path}`);
+    }
+    planned.push({ file, existing, cache });
+  }
+  // The installer verifies full SHA-256 before publication and the release
+  // package attests every byte. Bind its manifests and size-checked files here
+  // without rehashing the 500 MB engine on every host-contract render.
+  const sources = [sourceRecord(root, pinPath), sourceRecord(root, publishedPath)];
+  for (const { file, existing, cache } of planned) {
+    const rule = existing || {
+      order: headers.length, path: file.path, match: "exact", headers: [], provenance: [],
+    };
+    if (!existing) headers.push(rule);
+    if (!cache) rule.headers.push({ name: "Cache-Control", value: immutable, semantic: "cache-control", line: 0 });
+    for (const source of [pinSource, publishedSource]) {
+      if (!rule.provenance.some((entry) => entry.source === source)) rule.provenance.push({ source, line: 0 });
+    }
+  }
+  return { headers, sources };
+}
+
 export function buildHostContract(root = MODULE_ROOT) {
   const resolvedRoot = resolve(root);
   const headersPath = resolve(resolvedRoot, "_headers");
@@ -587,10 +665,12 @@ export function buildHostContract(root = MODULE_ROOT) {
     ...sitemapPaths,
     ...verificationPaths,
   ].map((path) => sourceRecord(resolvedRoot, path));
-  const headers = mergeHashedCssCacheRules(
+  const cssHeaders = mergeHashedCssCacheRules(
     resolvedRoot,
     parseHeaders(readFileSync(headersPath, "utf8"), { source: "_headers" }),
   );
+  const { headers, sources: freecadSources } = mergePublishedFreecadCacheRules(resolvedRoot, cssHeaders);
+  sources.push(...freecadSources);
   const primary = parseRedirects(readFileSync(redirectsPath, "utf8"), { source: "_redirects" });
   const netlify = parseNetlifyRedirects(netlifyToml, {
     source: "netlify.toml",
