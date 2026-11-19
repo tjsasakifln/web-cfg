@@ -1,0 +1,963 @@
+{
+  "schema": "confenge.lighthouse-evidence-review/v1",
+  "record_type": "derived_review_receipt",
+  "purpose": "Importacao da evidencia autentica de laboratorio da PR849; aceite de producao permanece separado.",
+  "reviewed_at": "2026-11-19T18:56:30.843868+00:00",
+  "repository": "tjsasakifln/web-cfg",
+  "pull_request": 849,
+  "source": {
+    "head_sha": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+    "checkout_sha": "786154235cc1a6b04414d88fb3131716739cea10",
+    "checkout_tree_sha": "f9657ece701f821af468620202f96b095389d5e3",
+    "checkout_parents": [
+      "71c608ffad6e317573ab2a8312587ab6cb45dfe7",
+      "03aed0004e1bb60faa71ca86fa323e51695c24a3"
+    ],
+    "head_tree_equals_checkout_tree": true,
+    "checkout_commit_api_url": "https://api.github.com/repos/tjsasakifln/web-cfg/commits/786154235cc1a6b04414d88fb3131716739cea10",
+    "checkout_log_observation": "2026-11-19T17:47:55.3197521Z git log -1 --format=%H returned 786154235cc1a6b04414d88fb3131716739cea10 at 17:47:55.3213216Z.",
+    "tree_scope": "A arvore f9657 identifica o checkout Git original. O relatorio first-fold registra tree_dirty=true depois da geracao do site; nao atesta uma worktree pos-build intacta."
+  },
+  "workflow": {
+    "run_id": 44580916689,
+    "run_attempt": 1,
+    "run_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/44580916689",
+    "event": "pull_request",
+    "path": ".github/workflows/site-ci.yml",
+    "head_sha": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+    "status": "completed",
+    "conclusion": "success",
+    "updated_at": "2026-11-19T18:43:34Z",
+    "final_status_observed_at": "2026-11-19T18:47:56Z",
+    "initial_status_observation": {
+      "file": "workflow-run.json",
+      "phase": "before artifact download",
+      "api_updated_at": "2026-11-19T18:43:08Z",
+      "status": "in_progress",
+      "conclusion": null,
+      "observed_at": null,
+      "observation_time_note": "Exact local retrieval timestamp was not recorded; API updated_at is retained as returned."
+    },
+    "job": {
+      "id": 135760990805,
+      "name": "site-validation",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-19T17:47:25Z",
+      "completed_at": "2026-11-19T18:43:04Z",
+      "html_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/44580916689/job/135760990805"
+    },
+    "measurement_step": {
+      "name": "Lighthouse local (_site)",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 58,
+      "started_at": "2026-11-19T18:29:09Z",
+      "completed_at": "2026-11-19T18:40:22Z"
+    }
+  },
+  "artifact": {
+    "metadata_file": "github-artifact.json",
+    "metadata_sha256": "76fa950dbf23440460b16d03dadcff1332f2b43b044be4d99cec4fdf8345f6a7",
+    "id": 14564260186,
+    "name": "site-ci-reports",
+    "size_in_bytes": 98106560,
+    "zip_sha256": "54b3ba3324fcee9cd4209db0aa9b8f566c04c07055889670b888891ef027af2f",
+    "digest_matches_downloaded_bytes": true,
+    "zip_member_count": 538,
+    "standalone_build_info_or_provenance_found": false
+  },
+  "nested_build_identity": {
+    "archive_member": "build/reports/first-fold-current.json",
+    "member_sha256": "8103e14ae441c9dc0ff1b4bfcb5cc5e3b3fe4ca3f7a9a730b747baf77e1cac99",
+    "report_schema": "confenge.first-fold-measurements/1.0",
+    "report_measured_at": "2026-11-19T18:21:33.512Z",
+    "report_commit_sha": "786154235cc1a6b04414d88fb3131716739cea10",
+    "report_tree_dirty": true,
+    "artifact_identity": {
+      "artifact_hash": "84ff0865bfa6a0dba9854f287f2291bcc124248b665bdb7554fdc23de9360757",
+      "build_time": "2026-11-19T18:05:25Z",
+      "commit": "786154235cc1a6b04414d88fb3131716739cea10",
+      "deploy_id": null,
+      "environment": "local",
+      "manifest_hash": "8ab2420158ce146a6b5095fc6ad1af0f5e9e63eab96bfeb9ee04a8008695e326",
+      "schema_version": "1.2.0",
+      "site_schema_version": "1.1.0",
+      "source": "build_site.write_build_info",
+      "versioned_timestamp_fields": [
+        "build_time",
+        "generated_at",
+        "preview_generated_at"
+      ]
+    },
+    "interpretation": "Identidade aninhada copiada do relatorio original. O pacote recebido nao contem o _site completo; seu artifact_hash nao foi recomputado nesta revisao."
+  },
+  "measurement": {
+    "kind": "local_static_artifact",
+    "base": "http://127.0.0.1:8766",
+    "generated_at": "2026-11-19T18:39:55.267Z",
+    "summary_file": "../../lighthouse-runs/summary.json",
+    "summary_sha256": "2efc2d97a22aae39493397df2e3d36b2d94dfe605a8553631593d5cea871e22f",
+    "summary_bytes": 381864,
+    "previous_summary_sha256": "79cca4fdf8be2daa96f3765f0df537497872b73541692fea18fc286f44812837",
+    "previous_summary_available_at_commit": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+    "terminal_state": "MEASURED_PASS",
+    "fatal": null,
+    "unmeasured": [],
+    "evaluation": {
+      "ok": true,
+      "errors": [],
+      "home": {
+        "expected_runs": 3,
+        "observed_runs": 3,
+        "minimum_performance": 100,
+        "p75_tbt_ms": 0,
+        "maximum_own_long_task_ms": 0,
+        "minimum_lcp_ms": 1726.0008,
+        "maximum_lcp_ms": 1727.7909,
+        "maximum_lcp_net_ms": 1727.7909,
+        "maximum_lcp_network_allowance_ms": 0,
+        "maximum_cls": 0
+      }
+    },
+    "page_count": 70,
+    "row_count": 86,
+    "critical_page_count": 8,
+    "repeated_runs": 3,
+    "lighthouse_versions": [
+      "13.4.1"
+    ],
+    "host_user_agents": [
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+    ],
+    "form_factor": "mobile",
+    "screen_emulation": {
+      "mobile": true,
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 2,
+      "disabled": false
+    },
+    "raw_fetch_time_first": "2026-11-19T18:29:12.646Z",
+    "raw_fetch_time_last": "2026-11-19T18:39:49.699Z",
+    "all_referenced_raw_reports_within_measurement_step": true,
+    "all_referenced_raw_reports_without_runtime_error": true,
+    "all_referenced_urls_match_summary_base_and_route": true,
+    "independent_raw_digest_manifests_match": true,
+    "referenced_raw_report_bytes": 70851134,
+    "referenced_raw_reports": [
+      {
+        "path": "/profissionais/",
+        "run": 1,
+        "file": "profissionais.json",
+        "bytes": 600779,
+        "sha256": "8423a8d1158255ee46ac7e078fb7c4855cbe73e7223e54615ad1957cf6394590",
+        "fetch_time": "2026-11-19T18:29:12.646Z"
+      },
+      {
+        "path": "/ferramentas/radar-mercado-publico/",
+        "run": 1,
+        "file": "ferramentas_radar-mercado-publico.json",
+        "bytes": 649035,
+        "sha256": "e1fe20d2be2c28d4732a51c4aaacbf23232b161903670f8093d5eb7bb43c745f",
+        "fetch_time": "2026-11-19T18:29:19.778Z"
+      },
+      {
+        "path": "/triagem-tecnica/",
+        "run": 1,
+        "file": "triagem-tecnica.json",
+        "bytes": 655166,
+        "sha256": "00136d2dd8a4e7a9ef320c72854f9b1dad4e70cb06c5f2cf48790e5c3b89fb89",
+        "fetch_time": "2026-11-19T18:29:27.025Z"
+      },
+      {
+        "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "run": 1,
+        "file": "ferramentas_prontidao-tecnica-obra-privada.json",
+        "bytes": 715275,
+        "sha256": "cbc710bdce23fd1216bd4141d199783e3a9c94f6256e97025142c136b7325f52",
+        "fetch_time": "2026-11-19T18:29:34.202Z"
+      },
+      {
+        "path": "/",
+        "run": 1,
+        "file": "home-run-1.json",
+        "bytes": 954416,
+        "sha256": "b5a22ceed20647d5183857a3df95cd8f55e3a18128716a142e3773d8f227af91",
+        "fetch_time": "2026-11-19T18:29:41.633Z"
+      },
+      {
+        "path": "/",
+        "run": 2,
+        "file": "home-run-2.json",
+        "bytes": 954533,
+        "sha256": "715582b364bf4e82697e3ac593d100cae64c8321af459fa9d3317d27aab637f4",
+        "fetch_time": "2026-11-19T18:29:49.509Z"
+      },
+      {
+        "path": "/",
+        "run": 3,
+        "file": "home-run-3.json",
+        "bytes": 954426,
+        "sha256": "14bbcb1cdf77534797e3bc713c5bde5aa0b55f993051889b67c4ccc70044830e",
+        "fetch_time": "2026-11-19T18:29:57.395Z"
+      },
+      {
+        "path": "/servicos/",
+        "run": 1,
+        "file": "servicos.json",
+        "bytes": 773052,
+        "sha256": "7ab9cf68b2ba89f81af7793fd8e58e359cb6408d0d714b33e0ec8c2e5aad26e8",
+        "fetch_time": "2026-11-19T18:30:05.311Z"
+      },
+      {
+        "path": "/quantitativos-orcamento-obras/",
+        "run": 1,
+        "file": "quantitativos-orcamento-obras.json",
+        "bytes": 915505,
+        "sha256": "0357444cff9ca2dee3e6d112d341888af479e0f7077d2c1fc18779c4c352973f",
+        "fetch_time": "2026-11-19T18:30:12.696Z"
+      },
+      {
+        "path": "/acompanhamento-contratos-obras/",
+        "run": 1,
+        "file": "acompanhamento-contratos-obras.json",
+        "bytes": 990306,
+        "sha256": "df95e8262a4f01c485d209871df9a236b63d4b50973a8aab26af9431990c43c1",
+        "fetch_time": "2026-11-19T18:30:20.344Z"
+      },
+      {
+        "path": "/termos-de-uso/",
+        "run": 1,
+        "file": "termos-de-uso.json",
+        "bytes": 833096,
+        "sha256": "78b7eb364b7003201a5dd708c18bb03bee1fee87f48c32395c80473fb4a2b08c",
+        "fetch_time": "2026-11-19T18:30:28.140Z"
+      },
+      {
+        "path": "/comercial/privacidade-leads/",
+        "run": 1,
+        "file": "comercial_privacidade-leads.json",
+        "bytes": 680431,
+        "sha256": "76747532c072d58701db86bef39014ea385d9c77f17f3c25bcbbe495bfe73aee",
+        "fetch_time": "2026-11-19T18:30:35.669Z"
+      },
+      {
+        "path": "/politica-editorial/",
+        "run": 1,
+        "file": "politica-editorial.json",
+        "bytes": 695608,
+        "sha256": "c64d078106e13e0f082aabdd2d5d3336a5b113c6222210143da769d2c9d673a0",
+        "fetch_time": "2026-11-19T18:30:42.918Z"
+      },
+      {
+        "path": "/conteudos/atraso-na-medicao-obra-publica/",
+        "run": 1,
+        "file": "conteudos_atraso-na-medicao-obra-publica.json",
+        "bytes": 935325,
+        "sha256": "a2ac334e9790dc068d99c1d1d21622dbc34b6f916dbc27fa2c2f9334b853f131",
+        "fetch_time": "2026-11-19T18:30:50.331Z"
+      },
+      {
+        "path": "/conteudos/",
+        "run": 1,
+        "file": "conteudos.json",
+        "bytes": 1130830,
+        "sha256": "a4ecac3a2ffacae3c926ab857c0a2af2055dc900500fcc5b2f1cece0b6583ac4",
+        "fetch_time": "2026-11-19T18:30:58.172Z"
+      },
+      {
+        "path": "/guias-contratos-obras/",
+        "run": 1,
+        "file": "guias-contratos-obras.json",
+        "bytes": 636465,
+        "sha256": "6290aa9443087369c16d0eaa72d6ed8be436a4555791fba1d247b32ff6e356b2",
+        "fetch_time": "2026-11-19T18:31:06.183Z"
+      },
+      {
+        "path": "/lei-14133-obras/",
+        "run": 1,
+        "file": "lei-14133-obras.json",
+        "bytes": 616448,
+        "sha256": "8c086ac116f83f1fedddfdd9a7fac558a32ccd32c860df369884661790a2ccd2",
+        "fetch_time": "2026-11-19T18:31:13.409Z"
+      },
+      {
+        "path": "/especialista/tiago-jun-sasaki/",
+        "run": 1,
+        "file": "especialista_tiago-jun-sasaki-run-1.json",
+        "bytes": 714052,
+        "sha256": "5dd0551eff32dc2880d6c2ebfe9bf322e918d0cab3922636c249d18a7a0fe041",
+        "fetch_time": "2026-11-19T18:31:20.600Z"
+      },
+      {
+        "path": "/especialista/tiago-jun-sasaki/",
+        "run": 2,
+        "file": "especialista_tiago-jun-sasaki-run-2.json",
+        "bytes": 714136,
+        "sha256": "ab77878e8eb24750ae9f9dcc6ac5d0cd1405d3525b410983a9760f54686c0a04",
+        "fetch_time": "2026-11-19T18:31:27.923Z"
+      },
+      {
+        "path": "/especialista/tiago-jun-sasaki/",
+        "run": 3,
+        "file": "especialista_tiago-jun-sasaki-run-3.json",
+        "bytes": 714588,
+        "sha256": "1e23622523d4be2f07b35866804986beff587fab60d3cb54d703f8c0b9669b04",
+        "fetch_time": "2026-11-19T18:31:35.272Z"
+      },
+      {
+        "path": "/nurture/",
+        "run": 1,
+        "file": "nurture.json",
+        "bytes": 683473,
+        "sha256": "879481ce845c6bc3a9005ee75a98dc35a6327c8891bb68d386f872aa82306470",
+        "fetch_time": "2026-11-19T18:31:42.600Z"
+      },
+      {
+        "path": "/metodologia-inteligencia/",
+        "run": 1,
+        "file": "metodologia-inteligencia.json",
+        "bytes": 667999,
+        "sha256": "086f5618054c4488b8d76b9e361ed1d0b26d850c646a385fb388ec3f6969ae2b",
+        "fetch_time": "2026-11-19T18:31:49.834Z"
+      },
+      {
+        "path": "/radar/nacional-obras-publicas/",
+        "run": 1,
+        "file": "radar_nacional-obras-publicas.json",
+        "bytes": 848082,
+        "sha256": "9694712a3b4b73bdf58bc6f3f277832f1dd3cf84ce83caa48cada1cebea0f7a7",
+        "fetch_time": "2026-11-19T18:31:57.062Z"
+      },
+      {
+        "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+        "run": 1,
+        "file": "analises-contratos-publicos_reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026.json",
+        "bytes": 1311877,
+        "sha256": "e3e80f992c5a7398491e0539853c56cf5e0a3932a86fb64f182db5408b8f500c",
+        "fetch_time": "2026-11-19T18:32:04.518Z"
+      },
+      {
+        "path": "/casos/",
+        "run": 1,
+        "file": "casos-run-1.json",
+        "bytes": 912469,
+        "sha256": "65d9bd868bb31110f43ea73c032a71b7c1d99ab1463d6da4044f0a77fcaf8950",
+        "fetch_time": "2026-11-19T18:32:12.488Z"
+      },
+      {
+        "path": "/casos/",
+        "run": 2,
+        "file": "casos-run-2.json",
+        "bytes": 911774,
+        "sha256": "43ba553ac448004cbde5f500519e00f745bd5be9f054935c79783dc0438f7f78",
+        "fetch_time": "2026-11-19T18:32:20.071Z"
+      },
+      {
+        "path": "/casos/",
+        "run": 3,
+        "file": "casos-run-3.json",
+        "bytes": 911714,
+        "sha256": "5f45e50c857594b046c8de129021030f60dff33f5fe8e98c02a209d847470f7a",
+        "fetch_time": "2026-11-19T18:32:27.606Z"
+      },
+      {
+        "path": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "run": 1,
+        "file": "casos_modelo-relatorio-inteligencia-licitacoes.json",
+        "bytes": 1228140,
+        "sha256": "6dbb74bb7f3f5b980990b8a05b0a2545bce6f0563d5ceef735ac65e4ae5d870b",
+        "fetch_time": "2026-11-19T18:32:35.195Z"
+      },
+      {
+        "path": "/entregas/",
+        "run": 1,
+        "file": "entregas-run-1.json",
+        "bytes": 1519867,
+        "sha256": "9c890cd0ed0b2445b97d6c15a57bfc750da4afd21fdb63e3503c0fbcd2e95912",
+        "fetch_time": "2026-11-19T18:32:43.587Z"
+      },
+      {
+        "path": "/entregas/",
+        "run": 2,
+        "file": "entregas-run-2.json",
+        "bytes": 1520679,
+        "sha256": "d6f15699a65bafc6ba62dcbf0024087dd1b1519d0076a009351f858ec3237c36",
+        "fetch_time": "2026-11-19T18:32:52.030Z"
+      },
+      {
+        "path": "/entregas/",
+        "run": 3,
+        "file": "entregas-run-3.json",
+        "bytes": 1520014,
+        "sha256": "e96d8cd817c4a5d345d732733397092715a436a276114314c80a8ffcee6ba072",
+        "fetch_time": "2026-11-19T18:33:00.381Z"
+      },
+      {
+        "path": "/servicos-obras-publicas/",
+        "run": 1,
+        "file": "servicos-obras-publicas.json",
+        "bytes": 1200126,
+        "sha256": "29726a2c65a2f8a40444352cc096b54d8384740c5f7b5dbf0cc4715a3d92c4f3",
+        "fetch_time": "2026-11-19T18:33:08.717Z"
+      },
+      {
+        "path": "/problemas-que-resolvemos/",
+        "run": 1,
+        "file": "problemas-que-resolvemos.json",
+        "bytes": 846248,
+        "sha256": "aeebedb48b2eacc84b4fab10de4e79090032322495f619b9902774ff54aa5600",
+        "fetch_time": "2026-11-19T18:33:16.726Z"
+      },
+      {
+        "path": "/ferramentas/",
+        "run": 1,
+        "file": "ferramentas.json",
+        "bytes": 946606,
+        "sha256": "dea4c1bb6501140a198b5f25ac3801ac7a42b4d9306d0c5b728282c50efbc52d",
+        "fetch_time": "2026-11-19T18:33:24.181Z"
+      },
+      {
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "run": 1,
+        "file": "ferramentas_diagnostico-defesa-margem-run-1.json",
+        "bytes": 962780,
+        "sha256": "1149b5c58a524bb0e03d0e7a49fa5c71d780e07f0f4b49ad9adf175d6208ebf7",
+        "fetch_time": "2026-11-19T18:33:32.360Z"
+      },
+      {
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "run": 2,
+        "file": "ferramentas_diagnostico-defesa-margem-run-2.json",
+        "bytes": 962740,
+        "sha256": "14e383e7c0601bd8ece52e53d732745b6c0d4f1e7a20edb4e5f22c37468cc9a7",
+        "fetch_time": "2026-11-19T18:33:39.985Z"
+      },
+      {
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "run": 3,
+        "file": "ferramentas_diagnostico-defesa-margem-run-3.json",
+        "bytes": 962815,
+        "sha256": "ad9afbf755fb59588d6a9cb396031ea389c167e955bbeef9662a2e3d8496010d",
+        "fetch_time": "2026-11-19T18:33:47.564Z"
+      },
+      {
+        "path": "/analise-cnpj/",
+        "run": 1,
+        "file": "analise-cnpj.json",
+        "bytes": 554170,
+        "sha256": "3bb3bb53c4b04f28b1574d87dd7301441ae4772f374fbd2e7a5934b1a08f5c25",
+        "fetch_time": "2026-11-19T18:33:55.184Z"
+      },
+      {
+        "path": "/analise-cnpj/r/",
+        "run": 1,
+        "file": "analise-cnpj_r.json",
+        "bytes": 511693,
+        "sha256": "e338c3e6a593554840d5d8c61619639e302607cec31bb73cb01a63d3d51d697b",
+        "fetch_time": "2026-11-19T18:34:02.373Z"
+      },
+      {
+        "path": "/diagnostico-b2g-expansao/cancelado/",
+        "run": 1,
+        "file": "diagnostico-b2g-expansao_cancelado.json",
+        "bytes": 537133,
+        "sha256": "ff6a0d7388f6af9ba1713f5f753ce044be703f2c9de13a43bf0270451ad0ca10",
+        "fetch_time": "2026-11-19T18:34:09.386Z"
+      },
+      {
+        "path": "/obrigado.html",
+        "run": 1,
+        "file": "obrigado.html.json",
+        "bytes": 565550,
+        "sha256": "d8020215a5d260621dbd03c57688abb2373ade26b3fc5f7a83117b1448725bd1",
+        "fetch_time": "2026-11-19T18:34:16.410Z"
+      },
+      {
+        "path": "/404.html",
+        "run": 1,
+        "file": "404.html.json",
+        "bytes": 600019,
+        "sha256": "91a2af29a01ab3905a88df35535932d58c59a7dacbca05039fb48ca4da346abb",
+        "fetch_time": "2026-11-19T18:34:23.417Z"
+      },
+      {
+        "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "run": 1,
+        "file": "inteligencia_valor-tipico-contratos-pavimentacao.json",
+        "bytes": 742492,
+        "sha256": "cbf194a42bb22f428083364a6653ecde8660f39ab66ad57e9db0d1ae76b20b99",
+        "fetch_time": "2026-11-19T18:34:30.485Z"
+      },
+      {
+        "path": "/inteligencia/orgaos/",
+        "run": 1,
+        "file": "inteligencia_orgaos.json",
+        "bytes": 814485,
+        "sha256": "d7fbeb3dfd9667da104a31cdaff35e48c8cca737273db22106e23e743659ee47",
+        "fetch_time": "2026-11-19T18:34:37.693Z"
+      },
+      {
+        "path": "/inteligencia/relacoes-compradores-fornecedores/",
+        "run": 1,
+        "file": "inteligencia_relacoes-compradores-fornecedores.json",
+        "bytes": 890679,
+        "sha256": "9bf7051488e471519e2947a89529b097d37eae58f04283fc4490b59de1d9aa9b",
+        "fetch_time": "2026-11-19T18:34:45.052Z"
+      },
+      {
+        "path": "/inteligencia/fornecedores-climatizacao-contratos-publicos/",
+        "run": 1,
+        "file": "inteligencia_fornecedores-climatizacao-contratos-publicos.json",
+        "bytes": 811944,
+        "sha256": "57ccea76b9a4ae7ea5f84508e9e0af98ea46ea816eacf746f2e6ed40ec49bb22",
+        "fetch_time": "2026-11-19T18:34:52.725Z"
+      },
+      {
+        "path": "/inteligencia/cenarios/",
+        "run": 1,
+        "file": "inteligencia_cenarios.json",
+        "bytes": 653109,
+        "sha256": "db8a7f766d59a3c3a49152a9593f0dc462a136ba311ac4b318461e23519f59f9",
+        "fetch_time": "2026-11-19T18:35:00.185Z"
+      },
+      {
+        "path": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+        "run": 1,
+        "file": "assets_data-desk_valor-tipico-contratos-pavimentacao-sc_v1.json",
+        "bytes": 505721,
+        "sha256": "640026bc8e536a630acdfc93ab9c56a0e6985c290dc2c0035c3830ec408e98e8",
+        "fetch_time": "2026-11-19T18:35:07.431Z"
+      },
+      {
+        "path": "/jurisprudencia-contratos-obras/",
+        "run": 1,
+        "file": "jurisprudencia-contratos-obras.json",
+        "bytes": 574830,
+        "sha256": "9355f58892bca558460d6ce0214b4c57bbdf8a7864a595ea3115bb329a5425d7",
+        "fetch_time": "2026-11-19T18:35:14.415Z"
+      },
+      {
+        "path": "/compatibilizacao-projetos-engenharia/",
+        "run": 1,
+        "file": "compatibilizacao-projetos-engenharia.json",
+        "bytes": 823185,
+        "sha256": "f21748fad133fe37e2746eb8d0996645020063d4127d8ed578092e7a29fea8d6",
+        "fetch_time": "2026-11-19T18:35:21.510Z"
+      },
+      {
+        "path": "/conteudos/quando-compatibilizar-projetos/",
+        "run": 1,
+        "file": "conteudos_quando-compatibilizar-projetos.json",
+        "bytes": 789711,
+        "sha256": "12a30d2ced01786a2c855c06b4aad086d4d9dd0efabf971d188744589c18692f",
+        "fetch_time": "2026-11-19T18:35:28.955Z"
+      },
+      {
+        "path": "/revisao-tecnica-projetos-engenharia/",
+        "run": 1,
+        "file": "revisao-tecnica-projetos-engenharia.json",
+        "bytes": 879194,
+        "sha256": "032355885908a270268075cad24371de26d60686a9e1c3cd2a233fe23b0185c4",
+        "fetch_time": "2026-11-19T18:35:36.251Z"
+      },
+      {
+        "path": "/parcerias-engenharia/",
+        "run": 1,
+        "file": "parcerias-engenharia.json",
+        "bytes": 1110482,
+        "sha256": "20bfd7a5b953bee34bdea47cfa49330a567cd0a97a9337ea9433dc433b1f8125",
+        "fetch_time": "2026-11-19T18:35:43.702Z"
+      },
+      {
+        "path": "/projetos-complementares-engenharia/",
+        "run": 1,
+        "file": "projetos-complementares-engenharia.json",
+        "bytes": 916248,
+        "sha256": "6af359a18d2c043bd03ca579e2e32c2bb800ea3391a3648ab06f1673777ba176",
+        "fetch_time": "2026-11-19T18:35:51.437Z"
+      },
+      {
+        "path": "/conteudos/como-contratar-projetos-complementares/",
+        "run": 1,
+        "file": "conteudos_como-contratar-projetos-complementares.json",
+        "bytes": 825556,
+        "sha256": "a9333f8e270410d58c3a948a7d1a73994ce077d34b3daebcb22438a407b14f2f",
+        "fetch_time": "2026-11-19T18:35:59.001Z"
+      },
+      {
+        "path": "/engenharia-condominios/",
+        "run": 1,
+        "file": "engenharia-condominios.json",
+        "bytes": 892926,
+        "sha256": "8d8474b643402e7beaab1e97fdcafc1b7bb649b4e80a6fd5de14d8017710d183",
+        "fetch_time": "2026-11-19T18:36:06.631Z"
+      },
+      {
+        "path": "/inspecao-diagnostico-edificacoes/",
+        "run": 1,
+        "file": "inspecao-diagnostico-edificacoes.json",
+        "bytes": 995011,
+        "sha256": "a089e2d634887e79f4e20b9a90dfd2ab296251061946f7544e891c2f8f45cd70",
+        "fetch_time": "2026-11-19T18:36:14.166Z"
+      },
+      {
+        "path": "/assistencia-tecnica-pericial-engenharia/",
+        "run": 1,
+        "file": "assistencia-tecnica-pericial-engenharia.json",
+        "bytes": 946134,
+        "sha256": "1246f53dd1605a29a2a5afd57fae6f93cdca1f1321bf530e3ea7edac90951f62",
+        "fetch_time": "2026-11-19T18:36:21.782Z"
+      },
+      {
+        "path": "/seguranca-trabalho-apoio-tecnico/",
+        "run": 1,
+        "file": "seguranca-trabalho-apoio-tecnico.json",
+        "bytes": 1024863,
+        "sha256": "3aa1cb216a1a7f2458a45c3bcef7c8bdc35d5b5983266c0e8e71bf612f610fa7",
+        "fetch_time": "2026-11-19T18:36:29.341Z"
+      },
+      {
+        "path": "/elaboracao-pgr/",
+        "run": 1,
+        "file": "elaboracao-pgr.json",
+        "bytes": 766221,
+        "sha256": "eae9fbc23b2e1eda556009d6369ff303f4071842fd3ec49d1b539fe405bb5784",
+        "fetch_time": "2026-11-19T18:36:37.024Z"
+      },
+      {
+        "path": "/revisao-atualizacao-pgr/",
+        "run": 1,
+        "file": "revisao-atualizacao-pgr.json",
+        "bytes": 767147,
+        "sha256": "68212a6b5dc51f78876567c17b14478d262fa26006d6d9bb9f275f793bb0843a",
+        "fetch_time": "2026-11-19T18:36:44.419Z"
+      },
+      {
+        "path": "/pgr-documentacao-sst-obras/",
+        "run": 1,
+        "file": "pgr-documentacao-sst-obras.json",
+        "bytes": 809282,
+        "sha256": "32b629bdf657f6e782e6895606acbe6fc17525ce0ae117a2827ad78c54cc9860",
+        "fetch_time": "2026-11-19T18:36:51.841Z"
+      },
+      {
+        "path": "/terceirizacao-documentacao-sst/",
+        "run": 1,
+        "file": "terceirizacao-documentacao-sst.json",
+        "bytes": 814543,
+        "sha256": "1cf090ef3095a35ef1ba6fcbce7e64c31f73090c87968a5143fb983a06794356",
+        "fetch_time": "2026-11-19T18:36:59.292Z"
+      },
+      {
+        "path": "/projetos/",
+        "run": 1,
+        "file": "projetos.json",
+        "bytes": 901698,
+        "sha256": "dbf12229691344be4788e5275458409448767b7210c5a116f5acbd75ba31c393",
+        "fetch_time": "2026-11-19T18:37:06.766Z"
+      },
+      {
+        "path": "/avaliacao-imoveis-urbanos/inferencia/",
+        "run": 1,
+        "file": "avaliacao-imoveis-urbanos_inferencia.json",
+        "bytes": 676101,
+        "sha256": "933e5ff64a0d18ad22476095acc3c32c3765bcfab685d0b2e659a67dedc00b75",
+        "fetch_time": "2026-11-19T18:37:14.567Z"
+      },
+      {
+        "path": "/avaliacao-imoveis-urbanos/",
+        "run": 1,
+        "file": "avaliacao-imoveis-urbanos.json",
+        "bytes": 855269,
+        "sha256": "61a85ae4d6601cf0de9b4969780dacac49dd716e8f47b4b9d7467c6debaa2876",
+        "fetch_time": "2026-11-19T18:37:22.041Z"
+      },
+      {
+        "path": "/assistencia-tecnica-pericia-trabalhista/",
+        "run": 1,
+        "file": "assistencia-tecnica-pericia-trabalhista.json",
+        "bytes": 856358,
+        "sha256": "91dcc44fc7047d389f2c16f77d2e7e3a4bd385a088261a290cdee44641af46fe",
+        "fetch_time": "2026-11-19T18:37:29.516Z"
+      },
+      {
+        "path": "/bim/",
+        "run": 1,
+        "file": "bim.json",
+        "bytes": 727025,
+        "sha256": "15b9521301a198c828f2c04fad7ca37cd5c18cca0ffda96cef4b3b0b1fabc644",
+        "fetch_time": "2026-11-19T18:37:37.052Z"
+      },
+      {
+        "path": "/bim/web/",
+        "run": 1,
+        "file": "bim_web.json",
+        "bytes": 645370,
+        "sha256": "f37e95c3729e87e14c9e208736543e86e9b41cce36f4f20e468c4593e92abb8b",
+        "fetch_time": "2026-11-19T18:37:44.498Z"
+      },
+      {
+        "path": "/bim/fotogrametria/",
+        "run": 1,
+        "file": "bim_fotogrametria.json",
+        "bytes": 560238,
+        "sha256": "f731ff67d1ceff3e0c9d7472e56dd8121ef1dd85ddf136728f33cbfd0293feef",
+        "fetch_time": "2026-11-19T18:37:51.803Z"
+      },
+      {
+        "path": "/projetos-prontos/",
+        "run": 1,
+        "file": "projetos-prontos.json",
+        "bytes": 886549,
+        "sha256": "59116b04b838bb8085a2160b2b4f84964dfdf75abbe70aa8ae0cc843334ff03d",
+        "fetch_time": "2026-11-19T18:37:58.828Z"
+      },
+      {
+        "path": "/projetos-prontos/condicoes/",
+        "run": 1,
+        "file": "projetos-prontos_condicoes.json",
+        "bytes": 920257,
+        "sha256": "82266777fda65bd71ce95185b025dd03a2229bbd43ce2296b04e04f1ea3d6f52",
+        "fetch_time": "2026-11-19T18:38:07.020Z"
+      },
+      {
+        "path": "/projetos-prontos/pedidos/",
+        "run": 1,
+        "file": "projetos-prontos_pedidos.json",
+        "bytes": 502604,
+        "sha256": "387e5b05bfda94a262d52351ddaa9820429a802184b46d80d6ee36ba97708a72",
+        "fetch_time": "2026-11-19T18:38:14.443Z"
+      },
+      {
+        "path": "/cad/freecad/",
+        "run": 1,
+        "file": "cad_freecad.json",
+        "bytes": 533251,
+        "sha256": "e3accd3b6cf44b0ffeb95e3de8244ab4e4a21d36c9c8ae618dadd958eb261af9",
+        "fetch_time": "2026-11-19T18:38:21.380Z"
+      },
+      {
+        "path": "/cad/freecad/creditos.html",
+        "run": 1,
+        "file": "cad_freecad_creditos.html.json",
+        "bytes": 600977,
+        "sha256": "83641b9177ddac5fcd016200f7df5bd36fcc84b2a4940786d480a8d26cad43ea",
+        "fetch_time": "2026-11-19T18:38:28.285Z"
+      },
+      {
+        "path": "/noticias/contratos-publicos/",
+        "run": 1,
+        "file": "noticias_contratos-publicos.json",
+        "bytes": 542380,
+        "sha256": "1545e03e50495818187172cc82fc030fd8d0dc29ce2b87cfadcef4c6c9844e33",
+        "fetch_time": "2026-11-19T18:38:35.203Z"
+      },
+      {
+        "path": "/ops/",
+        "run": 1,
+        "file": "ops.json",
+        "bytes": 485905,
+        "sha256": "15d437c5845f32bba6b977f98bcd589e9dc92a06c77f1cc8196dfd870386b364",
+        "fetch_time": "2026-11-19T18:38:42.260Z"
+      },
+      {
+        "path": "/diretoria-b2g/",
+        "run": 1,
+        "file": "diretoria-b2g-run-1.json",
+        "bytes": 836452,
+        "sha256": "7053e5f25f65edf7150a544597a3c034f2877a333be53e60d8826f8f1c6e4033",
+        "fetch_time": "2026-11-19T18:38:48.999Z"
+      },
+      {
+        "path": "/diretoria-b2g/",
+        "run": 2,
+        "file": "diretoria-b2g-run-2.json",
+        "bytes": 837611,
+        "sha256": "bed810001e722928cf34b2e428dcd6f808a27871952d74d3906036e4f1677f19",
+        "fetch_time": "2026-11-19T18:38:56.638Z"
+      },
+      {
+        "path": "/diretoria-b2g/",
+        "run": 3,
+        "file": "diretoria-b2g-run-3.json",
+        "bytes": 837000,
+        "sha256": "3a02e5a6dd52b63a070a5e0324f859bca5577168134239e80119912f2a1bc2a8",
+        "fetch_time": "2026-11-19T18:39:04.291Z"
+      },
+      {
+        "path": "/diagnostico-b2g-expansao/",
+        "run": 1,
+        "file": "diagnostico-b2g-expansao-run-1.json",
+        "bytes": 764495,
+        "sha256": "87cfa19f8eb2c4218f8d5991e033a673e321dbf69c3e0ad6de04529f6690b564",
+        "fetch_time": "2026-11-19T18:39:11.961Z"
+      },
+      {
+        "path": "/diagnostico-b2g-expansao/",
+        "run": 2,
+        "file": "diagnostico-b2g-expansao-run-2.json",
+        "bytes": 764323,
+        "sha256": "3de612dd28ea82702f67869ce8f16c2e3c84f1a95b0812ec99a8b09a7bc5c998",
+        "fetch_time": "2026-11-19T18:39:19.393Z"
+      },
+      {
+        "path": "/diagnostico-b2g-expansao/",
+        "run": 3,
+        "file": "diagnostico-b2g-expansao-run-3.json",
+        "bytes": 764309,
+        "sha256": "b4a806f535611fef8c5b3fa1cb724fbf5ac544c43506bd2f3707a80e05a015a0",
+        "fetch_time": "2026-11-19T18:39:26.847Z"
+      },
+      {
+        "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "run": 1,
+        "file": "conteudos_documentos-reequilibrio-obra-publica-run-1.json",
+        "bytes": 826214,
+        "sha256": "deb5fd02b64ae02f18e95a80e738144f43ac07b640e7464e89ff1dfd2ad844ec",
+        "fetch_time": "2026-11-19T18:39:34.318Z"
+      },
+      {
+        "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "run": 2,
+        "file": "conteudos_documentos-reequilibrio-obra-publica-run-2.json",
+        "bytes": 826851,
+        "sha256": "60d4af57991517347e3be1921f1d41d4d07dfc05e1761b3dbbb4f025026ef850",
+        "fetch_time": "2026-11-19T18:39:42.015Z"
+      },
+      {
+        "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "run": 3,
+        "file": "conteudos_documentos-reequilibrio-obra-publica-run-3.json",
+        "bytes": 826694,
+        "sha256": "3a165633c9816c68ad9ca8f44be26e587c8c027db8420f9180e34988c8c35dea",
+        "fetch_time": "2026-11-19T18:39:49.699Z"
+      }
+    ]
+  },
+  "news": {
+    "path": "/noticias/contratos-publicos/",
+    "raw_file": "../../lighthouse-runs/noticias_contratos-publicos.json",
+    "raw_sha256": "1545e03e50495818187172cc82fc030fd8d0dc29ce2b87cfadcef4c6c9844e33",
+    "raw_bytes": 542380,
+    "fetch_time": "2026-11-19T18:38:35.203Z",
+    "performance": 100,
+    "accessibility": 100,
+    "best_practices": 100,
+    "seo_raw": 69,
+    "seo_without_crawlability": 100,
+    "is_crawlable_score": 0,
+    "blocking_directive": "<meta name=\"robots\" content=\"noindex,follow\" />",
+    "lcp_ms": 1728.3934,
+    "cls": 0,
+    "tbt_ms": 0,
+    "in_seo_only_exempt_pages": true,
+    "in_broad_seo_exempt_pages": false,
+    "scope": "Indice estatico local vazio. O SEO bruto e 69; 100 e o calculo local sem is-crawlable. Nenhuma nota de SEO da origem publica e afirmada."
+  },
+  "controls": {
+    "thresholds": {
+      "performance": 90,
+      "accessibility": 95,
+      "best_practices": 95,
+      "seo": 95
+    },
+    "cls_max": 0.05,
+    "critical_lcp_max_ms": 2000,
+    "critical_content_bytes_max": 153600,
+    "unchanged_from_measured_source_sha": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+    "unchanged_control_sha256": {
+      ".github/workflows/site-ci.yml": "d13aefa14dfbc1cb5eba2d20a7181f5e3a0435ca14ec8dfbb1dfd5e95ba659cf",
+      "data/quality/interface-coverage-policy.json": "c5a1679700e22c4aafccc60eceb7879d4028fc7ef8588daa399f51a064e46c72",
+      "data/organic/public-family-registry.json": "a0d342341c260623394ea67b4d5351bd6539e9efdc840868dbfdfe90bba027b6",
+      "data/site/design-system.json": "d724bc8ca10ba0deecc704d2ea0c127217d63682789279318e7357707a52cb10",
+      "scripts/site/lighthouse_thresholds.mjs": "d2bf45a1a52f9d6804c3bdd043f1329b97ce3e8a851962a6a0f79c62e68276ed",
+      "scripts/site/lighthouse_measure_child.mjs": "71d468575cb21e0d10a54201a5d2980f047f8698cb0f1db91a582c458f036c45",
+      "scripts/site/test_lighthouse_thresholds.mjs": "e5cf62823ced95b0550fed5896b7dd6e5fe112a3ab12f3df5167f31b37e5e942",
+      "scripts/site/interface_coverage.mjs": "7a2943c5762bf93ce289b5402c6a4d4b588de9ecfb543084bc435c04ce8c7044",
+      "scripts/site/run_lighthouse.mjs": "3555a2d9e98ba48595cb207f59ef283db35e9d18739f684a1b1272d34474ecd3"
+    },
+    "local_allowance_does_not_apply_to_explicit_origin": true,
+    "production_acceptance": "deploy/contract-news/verify_public.py",
+    "initial_runtime_503_acceptance_unchanged": true
+  },
+  "review_validation": {
+    "kind": "independent_recomputation_from_original_reports; no new browser measurement",
+    "private_checkout_sha": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+    "private_checkout_tree": "f9657ece701f821af468620202f96b095389d5e3",
+    "node_version": "v22.23.5",
+    "canonical_build": {
+      "command": "npm run build:site",
+      "exit_code": 0,
+      "started_at": "2026-11-19T18:13:59.935805+00:00",
+      "finished_at": "2026-11-19T18:16:07.964926+00:00",
+      "elapsed_seconds": 128.03,
+      "head": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+      "tree": "f9657ece701f821af468620202f96b095389d5e3",
+      "new_lighthouse_measurement": false
+    },
+    "commands": [
+      {
+        "command": "LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates",
+        "exit_code": 0,
+        "started_at": "2026-11-19T18:47:45.648661+00:00",
+        "finished_at": "2026-11-19T18:48:10.854041+00:00",
+        "elapsed_seconds": 25.21,
+        "log_sha256": "a5782a9e99118274eadc096ca0ec7d73ddbcddc5ae6cc5667b32fe893a1fdadb"
+      },
+      {
+        "command": "npm run audit:performance",
+        "exit_code": 0,
+        "started_at": "2026-11-19T18:48:10.854413+00:00",
+        "finished_at": "2026-11-19T18:48:13.509914+00:00",
+        "elapsed_seconds": 2.66,
+        "log_sha256": "b5f7bbaec1111f9fb6d3af5ed842064106a73cb129b21e8097ac17647f6ae304"
+      }
+    ],
+    "raw_evidence_mode": "LH_REQUIRE_RAW_EVIDENCE=1",
+    "new_lighthouse_measurements": 0
+  },
+  "metadata_record_sha256": {
+    "workflow-run-final.json": {
+      "sha256": "a9dd1da3af3af841114c1f049c1091d262998ee50879516926a4a25f2205dfde",
+      "retention": "review working records; key observations reproduced in this receipt"
+    },
+    "workflow-run-observations.json": {
+      "sha256": "f7e98f64bb2c6fe12f21305650df728cc141a0aab9a0373186e8f668a44bc45d",
+      "retention": "review working records; key observations reproduced in this receipt"
+    },
+    "workflow-jobs.json": {
+      "sha256": "79ac40b6dac5d4587f039b2325800d9a82df162efe66dedc202ac4565005f9cb",
+      "retention": "review working records; key observations reproduced in this receipt"
+    },
+    "checkout-identity-observed.json": {
+      "sha256": "1b9f35c30b9b408780675ec76baa850ac7f0e7bebd8bcda818ce5a1cf0b54e03",
+      "retention": "review working records; key observations reproduced in this receipt"
+    },
+    "checkout-and-lighthouse-log-excerpt.txt": {
+      "sha256": "89c7e90df1648a0cb44b334f8af2d4d279172f7621690bf652eb736489e8bb10",
+      "retention": "review working records; key observations reproduced in this receipt"
+    },
+    "artifact-inspection.json": {
+      "sha256": "b3bef9342ce9686ef872b1ce1f01d4c8ec6e79c3e0664e86d645a9159cb7fd73",
+      "retention": "review working records; key observations reproduced in this receipt"
+    }
+  },
+  "evidence_only_delta": {
+    "base_commit": "03aed0004e1bb60faa71ca86fa323e51695c24a3",
+    "base_tree": "f9657ece701f821af468620202f96b095389d5e3",
+    "files": [
+      "docs/lighthouse-runs/summary.json",
+      "docs/lighthouse-runs/noticias_contratos-publicos.json",
+      "docs/performance/contract-news-lighthouse-2026-11-19/github-artifact.json",
+      "docs/performance/contract-news-lighthouse-2026-11-19/review-receipt.json",
+      "docs/performance/CONTRACT-NEWS-LIGHTHOUSE-2026-11-19.md"
+    ],
+    "scope": "A evidencia mede o checkout original f9657, anterior ao commit de importacao. O delta preparado sobre 03aed000 limita-se a estes cinco arquivos de evidencia.",
+    "unrelated_historical_raw_reports_replaced": false,
+    "thresholds_or_tests_changed": false,
+    "summary_copied_byte_for_byte": true,
+    "summary_rows_combined_from_multiple_runs": false
+  }
+}
