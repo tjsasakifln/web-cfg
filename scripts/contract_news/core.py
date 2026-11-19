@@ -245,6 +245,9 @@ def validate_draft(draft: Any, facts: dict) -> dict:
         stripped = TOKEN_RE.sub("", value)
         if any(token not in replacements for token in TOKEN_RE.findall(value)):
             raise NewsError("unknown_or_missing_fact_token")
+        # Apply the editorial style only to authored prose, never official facts.
+        if "\u2013" in stripped or "\u2014" in stripped:
+            raise NewsError("unsupported_editorial_punctuation")
         if re.search(r"[0-9{}<>@]|https?://", stripped) or any(unicodedata.category(c) in {"Cc", "Cf", "Cs"} for c in value):
             raise NewsError("uncontrolled_numeric_or_markup_claim")
         if FORBIDDEN.search(fold(stripped)) or SPELLED_NUMBERS.search(fold(stripped)) or INJECTION.search(fold(stripped)):

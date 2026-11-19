@@ -179,6 +179,47 @@ class PipelineTests(unittest.TestCase):
                 with self.assertRaises(NewsError):
                     validate_draft(corrupted, fact())
 
+    def test_authorial_dashes_are_rejected_in_every_prose_field(self):
+        for punctuation in ("\u2013", "\u2014"):
+            for field in ("title", "description", "lead", "paragraphs"):
+                with self.subTest(punctuation=punctuation, field=field):
+                    corrupted = draft()
+                    extra = f" {punctuation} conforme registro no PNCP."
+                    if field == "paragraphs":
+                        corrupted[field][-1] += extra
+                    else:
+                        corrupted[field] += extra
+                    with self.assertRaisesRegex(NewsError, "unsupported_editorial_punctuation"):
+                        validate_draft(corrupted, fact())
+
+    def test_authorial_dash_stops_before_verifier_and_preserves_prior_snapshot(self):
+        self.run_pipeline()
+        previous = (self.settings.output_dir / "current.json").read_bytes()
+        client = FakeClient(changes={"lead": draft()["lead"] + " O fornecedor \u2014 conforme registro \u2014 consta no PNCP."})
+        result = self.run_pipeline([fact(value="3000000.0000")], client)
+        self.assertEqual(result["calls"], 1)
+        self.assertEqual(client.calls, [("generate", fact()["id"])])
+        self.assertEqual(result["published"], 0)
+        self.assertIn("unsupported_editorial_punctuation", result["rejections"])
+        self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), previous)
+
+    def test_official_dashes_survive_bound_tokens_without_mutating_facts(self):
+        source = fact()
+        source["buyer"] += " \u2013 SC"
+        source["supplier"] += " \u2014 Obras"
+        source["object"] = "Construção de unidade escolar \u2014 instalações elétricas e hidráulicas \u2013 bairro Central."
+        original = copy.deepcopy(source)
+        subject = "Construção de unidade escolar \u2014 instalações elétricas"
+        result = self.run_pipeline([source], FakeClient(changes={"subject": subject}))
+        self.assertEqual(result["published"], 1)
+        article = self.current()["articles"][0]
+        self.assertIn(subject, article["title"])
+        self.assertIn(source["buyer"], article["lead"])
+        self.assertIn(source["supplier"], article["paragraphs"][0])
+        self.assertIn(source["object"], article["paragraphs"][1])
+        self.assertEqual(article["facts"], original)
+        self.assertEqual(source, original)
+
     def test_subject_must_be_literal_and_missing_dates_cannot_be_invented(self):
         changed = draft()
         changed["subject"] = "Construção de hospital de referência"
