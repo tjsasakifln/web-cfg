@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-11-12",
+  "updated_at": "2026-11-18",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry. Package families use real artifact representatives; the official-live opportunity overlay has an exact runtime owner contract and mandatory SHA-bound post-stage Lighthouse evidence, never a virtual fixture representative.",
   "axe": {
     "viewports": [
@@ -55,25 +55,25 @@
       "seo": 95
     },
     "thresholds_note": "#293 widens coverage only. Any change to these numbers belongs to a different issue.",
-      "canonical_representatives": [
-        {
-          "family_id": "home",
-          "route": "/",
-          "reason": "single-route canonical family"
-        },
-        {
-          "family_id": "marketplace-engenharia",
-          "route": "/profissionais/",
-          "reason": "Rota única de busca, cadastro e acompanhamento de serviços de engenharia, com disponibilidade declarada pelo serviço.",
-          "seo_exempt_reason": "A rota permanece noindex até o provisionamento e a validação operacional de docs/marketplace/operations.md, conforme marketplace_operation_pending no registro de governança."
-        },
-        {
-          "family_id": "engineering-projects-commercial-architecture",
-          "route": "/projetos/",
-          "reason": "canonical hub for the multidisciplinary engineering-project architecture and its shared responsive project-page system"
-        },
-        {
-          "family_id": "servicos-corporativos",
+    "canonical_representatives": [
+      {
+        "family_id": "home",
+        "route": "/",
+        "reason": "single-route canonical family"
+      },
+      {
+        "family_id": "marketplace-engenharia",
+        "route": "/profissionais/",
+        "reason": "Rota única de busca, cadastro e acompanhamento de serviços de engenharia, com disponibilidade declarada pelo serviço.",
+        "seo_exempt_reason": "A rota permanece noindex até o provisionamento e a validação operacional de docs/marketplace/operations.md, conforme marketplace_operation_pending no registro de governança."
+      },
+      {
+        "family_id": "engineering-projects-commercial-architecture",
+        "route": "/projetos/",
+        "reason": "canonical hub for the multidisciplinary engineering-project architecture and its shared responsive project-page system"
+      },
+      {
+        "family_id": "servicos-corporativos",
         "route": "/servicos/",
         "reason": "single-route corporate services hub and primary multivertical decision path"
       },
@@ -401,6 +401,18 @@
         "route": "/projetos-prontos/pedidos/",
         "reason": "Residential-project order and support workspace, including the initial purchase-disabled state.",
         "seo_exempt_reason": "The transactional account area is permanently noindex. Public discovery and conditions use the indexable residential-project pages."
+      },
+      {
+        "family_id": "cad-freecad-aplicativo",
+        "route": "/cad/freecad/",
+        "reason": "Exercises the entry screen of the local parametric CAD application; the engine loads only after an explicit visitor action.",
+        "seo_exempt_reason": "The execution workspace is intentionally noindex. Discovery and instructions belong to the indexable /ferramentas/modelador-parametrico-3d/ page."
+      },
+      {
+        "family_id": "cad-freecad-fontes-licencas",
+        "route": "/cad/freecad/creditos.html",
+        "reason": "Exercises the source, authorship and license disclosure distributed with the parametric CAD application.",
+        "seo_exempt_reason": "The technical attribution document is intentionally noindex. The indexable modeler page remains the discovery entry point."
       }
     ],
     "additional_pages": [

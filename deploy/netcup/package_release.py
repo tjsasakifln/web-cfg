@@ -30,6 +30,7 @@ HEX_256 = re.compile(r"^[0-9a-f]{64}$")
 FORBIDDEN_PATH_PARTS = {".git", "node_modules", "__pycache__", ".pytest_cache"}
 TOOLS_COMMERCE_DEPS = Path("runtime/tools-commerce/deps")
 TOOLS_COMMERCE_NODE_MODULES = Path("runtime/tools-commerce/node_modules")
+SCIENCE_TOOLS = Path("runtime/science-tools")
 FORBIDDEN_FILE_SUFFIXES = {".pem", ".key", ".sql", ".dump", ".sqlite", ".sqlite3"}
 
 
@@ -101,12 +102,13 @@ def assert_payload_hygiene(root: Path) -> None:
             raise PackageError(f"release payload contains private-key material: {rel}")
 
 
-def copy_tree(source: Path, destination: Path, *, exclude: Path | None = None) -> None:
+def copy_tree(source: Path, destination: Path, *, exclude: Path | Iterable[Path] | None = None) -> None:
     assert_regular_tree(source, source.name)
     exclude_cache = shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache")
+    excluded = {exclude} if isinstance(exclude, Path) else set(exclude or ())
 
     def ignored(directory: str, names: list[str]) -> set[str]:
-        return set(exclude_cache(directory, names)) | {name for name in names if Path(directory) / name == exclude}
+        return set(exclude_cache(directory, names)) | {name for name in names if Path(directory) / name in excluded}
 
     shutil.copytree(
         source,
@@ -122,6 +124,36 @@ def iter_files(root: Path) -> Iterable[Path]:
     ):
         if path.is_file() and not path.is_symlink():
             yield path
+
+
+def validate_science_runtime(source: Path) -> dict[str, Any]:
+    """Require the locked calculation closure before any release can stage."""
+    manifest = load_json(source / "runtime-manifest.json")
+    if (manifest.get("schema") != "confenge.science-runtime/v1"
+            or manifest.get("platform") != "linux-x86_64-gnu"
+            or manifest.get("python") != "3.12.16"
+            or manifest.get("triangle_included") is not False):
+        raise PackageError("scientific runtime manifest is invalid")
+    for filename, key in (("requirements.lock", "requirements_sha256"), ("license-inventory.json", "licenses_sha256")):
+        if not (source / filename).is_file() or sha256_file(source / filename) != manifest.get(key):
+            raise PackageError(f"scientific runtime {filename} differs from its manifest")
+    python = source / "python" / "bin" / "python3.12"
+    if not python.is_file() or python.is_symlink() or not os.access(python, os.X_OK):
+        raise PackageError("scientific Python executable is missing; run build_runtime.py")
+    with python.open("rb") as handle:
+        if handle.read(4) != b"\x7fELF":
+            raise PackageError("scientific Python must be the Linux ELF executable")
+    site = source / "python/lib/python3.12/site-packages"
+    if any(site.glob("*triangle*")):
+        raise PackageError("commercial scientific runtime must not include Triangle/CyTriangle")
+    patches = manifest.get("patches", [])
+    if {patch.get("path") for patch in patches} != {"sectionproperties/pre/pre.py", "concreteproperties/analysis_section.py"}:
+        raise PackageError("scientific mesher patches are missing")
+    for patch in patches:
+        file = site / patch["path"]
+        if not file.is_file() or sha256_file(file) != patch.get("modified_sha256"):
+            raise PackageError("scientific mesher patch digest mismatch")
+    return manifest
 
 
 def files_manifest(root: Path, excluded: set[str] | None = None) -> str:
@@ -346,10 +378,20 @@ def build_release(
         ):
             if not required.is_dir() or required.is_symlink():
                 raise PackageError(f"required portable {label} tree is missing")
-        copy_tree(runtime_source, payload / "runtime", exclude=runtime_source / "tools-commerce" / "deps" / "node_modules")
+        science_source = repo_root / SCIENCE_TOOLS
+        validate_science_runtime(science_source)
+        copy_tree(runtime_source, payload / "runtime", exclude=(
+            runtime_source / "tools-commerce" / "deps" / "node_modules",
+            runtime_source / "science-tools" / "python",
+            runtime_source / "science-tools" / "runtime-manifest.json",
+            runtime_source / "science-tools" / "license-inventory.json",
+        ))
+        copy_tree(science_source / "python", payload / "runtime/science-tools/python")
+        for name in ("runtime-manifest.json", "license-inventory.json", "requirements.lock"):
+            shutil.copy2(science_source / name, payload / "runtime/science-tools" / name)
         copy_tree(functions_source, payload / "netlify" / "functions")
-        # This is the only production dependency closure in the portable
-        # runtime. It is prepared in the package job from its committed lock,
+        # Both production dependency closures are prepared in the package job
+        # from committed locks. Each is
         # carried inside the immutable tarball, and covered by files.sha256.
         # Never install dependencies during stage or promote: that would make a
         # rollback depend on a mutable registry response.

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 import { evaluateHomeAcquisition } from "../../../site/home_acquisition_contract.mjs";
 
@@ -10,6 +10,7 @@ import {
   HostContractError,
   buildHostContract,
   mergeRedirectRules,
+  mergePublishedFreecadCacheRules,
   parseHeaders,
   parseNetlifyRedirects,
   parseRedirects,
@@ -62,6 +63,55 @@ function mapBlock(rendered, variable) {
 }
 
 const DOCUMENT_MAP_SOURCE = '"$confenge_document_marker$request_uri"';
+
+/** Resolve emitted header maps as nginx does for a response's URI/type. */
+function renderedHeaderValue(rendered, variable, requestUri, contentType) {
+  const variables = [...rendered.matchAll(/^map [^\n]+ (\$[a-z0-9_]+) \{$/gm)]
+    .map((match) => match[1])
+    .filter((name) => name === variable || name.startsWith(`${variable}_part_`));
+  assert(variables.length, `no emitted map for ${variable}`);
+  return variables.map((name) => {
+    const block = mapBlock(rendered, name);
+    const key = block.source === DOCUMENT_MAP_SOURCE && /^text\/html/i.test(contentType)
+      ? `html:${requestUri}` : requestUri;
+    const match = block.entries.find((entry) => entry.key.startsWith("~")
+      && new RegExp(entry.key.slice(1)).test(key));
+    return (match || block.entries.find((entry) => entry.key === "default")).value;
+  }).join("");
+}
+
+function publishedFreecadFixture(t) {
+  const root = mkdtempSync(join(tmpdir(), "confenge-freecad-contract-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const files = {};
+  for (const name of ["FreeCAD.js", "FreeCAD.wasm", "FreeCAD.data"]) {
+    const bytes = Buffer.from(`contract fixture: ${name}`);
+    const hash = sha256(bytes);
+    const path = `/assets/freecad/FreeCAD-${hash.slice(0, 12)}.${name.split(".")[1]}`;
+    const target = resolve(root, "_site", path.slice(1));
+    mkdirSync(resolve(root, "_site/assets/freecad"), { recursive: true });
+    writeFileSync(target, bytes);
+    files[name] = { path, size: bytes.length, sha256: hash, url: `https://fixture.invalid/${name}` };
+  }
+  const pin = { schema: "confenge.freecad-runtime/v1", version: "fixture", files, adapted_sources: { installer: "private" } };
+  const published = { schema: pin.schema, version: pin.version, files: structuredClone(files) };
+  mkdirSync(resolve(root, "scripts/freecad"), { recursive: true });
+  writeFileSync(resolve(root, "scripts/freecad/runtime.json"), JSON.stringify(pin));
+  writeFileSync(resolve(root, "_site/assets/freecad/runtime.json"), JSON.stringify(published));
+  writeFileSync(resolve(root, "_site/index.html"), "<!doctype html><title>Published fixture</title>");
+  const headers = parseHeaders(`/*
+  Cache-Control: no-cache, max-age=0, must-revalidate, no-transform
+/assets/freecad/*
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: same-origin
+${files["FreeCAD.js"].path}
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'
+${files["FreeCAD.wasm"].path}
+  Content-Type: application/wasm
+`);
+  return { root, pin, published, headers };
+}
 
 test("parses nominal 301, 302, 200 rewrite and 410 actions", () => {
   const inputs = [
@@ -392,6 +442,185 @@ test("a scoped CSP override applies to documents only and never shadows the glob
     { key: "~^html:/ops/.*(?:\\?.*)?$", value: "default-src 'self' https://ops.confenge.com.br" },
     { key: "~^html:", value: "default-src 'self'" },
   ]);
+});
+
+test("pinned FreeCAD and imported EPANET workers receive their exact CSP on JavaScript responses", () => {
+  const headers = parseHeaders(readFileSync(resolve(ROOT, "_headers"), "utf8"));
+  const rendered = renderHeaders({ headers });
+  const policies = [
+    ["/assets/freecad/FreeCAD-3f8c1ff4a0ee.js", "default-src 'none'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'"],
+    ["/ferramentas/epanet-inp/worker.mjs", "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'none'; object-src 'none'; base-uri 'none'"],
+  ];
+  for (const [path, policy] of policies) {
+    for (const requestUri of [path, `${path}?probe=worker-policy`]) {
+      assert.equal(
+        renderedHeaderValue(rendered, "$confenge_header_content_security_policy", requestUri, "application/javascript"),
+        policy,
+        `${requestUri} must receive the worker policy from the emitted maps`,
+      );
+    }
+  }
+  for (const path of [
+    "/assets/freecad/FreeCAD.js",
+    "/assets/freecad/FreeCAD-ffffffffffff.js",
+    "/assets/freecad/FreeCAD-3f8c1ff4a0ee.js.map",
+    "/assets/freecad/FreeCAD-fafb7fb93d7c.wasm",
+    "/ferramentas/epanet-inp/app.mjs",
+    "/ferramentas/epanet-inp/engine.mjs",
+    "/ferramentas/epanet-inp/worker.mjs/other",
+  ]) {
+    assert.equal(
+      renderedHeaderValue(rendered, "$confenge_header_content_security_policy", path, "application/javascript"),
+      "",
+      `${path} must not inherit a worker execution exception`,
+    );
+  }
+});
+
+test("FreeCAD isolation headers survive the renderer on documents and binary/script assets", () => {
+  const headers = parseHeaders(readFileSync(resolve(ROOT, "_headers"), "utf8"));
+  const rendered = renderHeaders({ headers });
+  for (const path of ["/cad/freecad/", "/cad/freecad/index.html"]) {
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_cross_origin_opener_policy", path, "text/html"), "same-origin");
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_cross_origin_embedder_policy", path, "text/html"), "require-corp");
+  }
+  for (const [path, type] of [
+    ["/assets/freecad/FreeCAD-3f8c1ff4a0ee.js", "application/javascript"],
+    ["/assets/freecad/FreeCAD-fafb7fb93d7c.wasm", "application/wasm"],
+    ["/assets/freecad/FreeCAD-e3cae3720c2f.data", "application/octet-stream"],
+  ]) {
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_cross_origin_embedder_policy", path, type), "require-corp");
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_cross_origin_resource_policy", path, type), "same-origin");
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_x_robots_tag", path, type), "noindex");
+  }
+});
+
+test("published FreeCAD cache composes exact selectors and binds both manifests", (t) => {
+  const { root, pin, headers } = publishedFreecadFixture(t);
+  const original = structuredClone(headers);
+  const result = mergePublishedFreecadCacheRules(root, headers);
+  assert.equal(new Set(result.headers.map((rule) => rule.path)).size, result.headers.length);
+  for (const rule of original) {
+    const updated = result.headers.find((entry) => entry.path === rule.path);
+    for (const header of rule.headers) assert.deepEqual(updated.headers.find((entry) => entry.name === header.name), header);
+  }
+  const rendered = renderHeaders({ headers: result.headers });
+  for (const file of Object.values(pin.files)) {
+    const rule = result.headers.find((entry) => entry.path === file.path);
+    assert.equal(rule.headers.filter((header) => header.name.toLowerCase() === "cache-control").length, 1);
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_cache_control", file.path, "application/octet-stream"), "public, max-age=31536000, immutable");
+    assert.ok(rule.provenance.some((entry) => entry.source === "_site/assets/freecad/runtime.json"));
+  }
+  for (const path of ["/", "/assets/freecad/runtime.json"]) {
+    const cache = renderedHeaderValue(rendered, "$confenge_header_cache_control", path, "text/html");
+    assert.match(cache, /max-age=0/);
+    assert.doesNotMatch(cache, /immutable/);
+  }
+  assert.deepEqual(result.sources.map((source) => source.path), ["scripts/freecad/runtime.json", "_site/assets/freecad/runtime.json"]);
+  for (const source of result.sources) assert.equal(source.sha256, sha256(readFileSync(resolve(root, source.path))));
+  const once = stableJson(result.headers);
+  assert.equal(stableJson(mergePublishedFreecadCacheRules(root, result.headers).headers), once);
+});
+
+test("source-only CSS fixtures remain valid but a published artifact needs FreeCAD", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "confenge-freecad-source-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const headers = parseHeaders("/*\n  Cache-Control: no-cache\n");
+  assert.deepEqual(mergePublishedFreecadCacheRules(root, headers), { headers, sources: [] });
+  mkdirSync(resolve(root, "_site/.well-known"), { recursive: true });
+  writeFileSync(resolve(root, "_site/.well-known/css-assets.json"), '{"files":{}}');
+  assert.deepEqual(mergePublishedFreecadCacheRules(root, headers), { headers, sources: [] });
+  writeFileSync(resolve(root, "_site/.well-known/build-info.json"), "{}");
+  expectCode(() => mergePublishedFreecadCacheRules(root, headers), "HC_FREECAD_MANIFEST_MISSING");
+});
+
+test("complete host-contract render carries published FreeCAD cache and source attestations", (t) => {
+  const { root, pin } = publishedFreecadFixture(t);
+  const inputs = ["_headers", "_redirects", "netlify.toml", "404.html", "robots.txt", ".well-known/README.md", "runtime/contract.json",
+    ...readdirSync(resolve(ROOT, "netlify/functions")).filter((name) => name.endsWith(".cjs")).map((name) => `netlify/functions/${name}`),
+    ...readdirSync(ROOT).filter((name) => /^sitemap(?:-[a-z0-9-]+)?\.(?:xml|txt)$/i.test(name)),
+  ];
+  for (const path of inputs) {
+    const target = resolve(root, path);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, readFileSync(resolve(ROOT, path)));
+  }
+  const realPin = JSON.parse(readFileSync(resolve(ROOT, "scripts/freecad/runtime.json"), "utf8"));
+  let headers = readFileSync(resolve(root, "_headers"), "utf8");
+  for (const name of Object.keys(pin.files)) headers = headers.replaceAll(realPin.files[name].path, pin.files[name].path);
+  writeFileSync(resolve(root, "_headers"), headers);
+  const { contract } = buildHostContract(root);
+  for (const path of ["scripts/freecad/runtime.json", "_site/assets/freecad/runtime.json"]) {
+    assert.equal(contract.sources.find((source) => source.path === path)?.sha256, sha256(readFileSync(resolve(root, path))));
+  }
+  const outputDir = resolve(root, "host-output");
+  const first = writeRenderedContract({ root, outputDir });
+  const second = writeRenderedContract({ root, outputDir });
+  assert.equal(first.contractHash, second.contractHash);
+  assert.equal(first.manifestHash, second.manifestHash);
+  const manifest = JSON.parse(readFileSync(resolve(outputDir, "manifest.json"), "utf8"));
+  assert.deepEqual(manifest.sources, contract.sources);
+  const rendered = readFileSync(resolve(outputDir, "headers.generated.conf"), "utf8");
+  for (const file of Object.values(pin.files)) {
+    assert.equal(renderedHeaderValue(rendered, "$confenge_header_cache_control", file.path, "application/octet-stream"), "public, max-age=31536000, immutable");
+  }
+});
+
+test("published FreeCAD manifests must match the pin without extra or missing files", (t) => {
+  for (const mutate of [
+    (manifest) => { manifest.version = "unreviewed"; },
+    (manifest) => { manifest.files["FreeCAD.js"].sha256 = "0".repeat(64); },
+    (manifest) => { manifest.files["FreeCAD.wasm"].size += 1; },
+    (manifest) => { delete manifest.files["FreeCAD.data"]; },
+    (manifest) => { manifest.files.extra = manifest.files["FreeCAD.js"]; },
+  ]) {
+    const { root, headers, published } = publishedFreecadFixture(t);
+    mutate(published);
+    writeFileSync(resolve(root, "_site/assets/freecad/runtime.json"), JSON.stringify(published));
+    expectCode(() => mergePublishedFreecadCacheRules(root, headers), "HC_FREECAD_MANIFEST_MISMATCH");
+  }
+});
+
+test("FreeCAD pins reject non-string hashes and unsafe content-addressed paths", (t) => {
+  for (const mutate of [
+    (file) => { file.sha256 = [file.sha256]; },
+    (file) => { file.path = "/assets/freecad/../mutable.js"; },
+  ]) {
+    const { root, headers, pin, published } = publishedFreecadFixture(t);
+    mutate(pin.files["FreeCAD.js"]);
+    published.files = structuredClone(pin.files);
+    writeFileSync(resolve(root, "scripts/freecad/runtime.json"), JSON.stringify(pin));
+    writeFileSync(resolve(root, "_site/assets/freecad/runtime.json"), JSON.stringify(published));
+    expectCode(() => mergePublishedFreecadCacheRules(root, headers), "HC_FREECAD_PIN_INVALID");
+  }
+});
+
+test("FreeCAD cache refuses absent or truncated published files without mutating headers", (t) => {
+  for (const absent of [true, false]) {
+    const { root, headers, pin } = publishedFreecadFixture(t);
+    const target = resolve(root, "_site", pin.files["FreeCAD.data"].path.slice(1));
+    if (absent) rmSync(target);
+    else writeFileSync(target, "truncated");
+    const original = stableJson(headers);
+    expectCode(() => mergePublishedFreecadCacheRules(root, headers), "HC_FREECAD_ASSET_INVALID");
+    assert.equal(stableJson(headers), original);
+  }
+});
+
+test("FreeCAD cache preserves compatible authored directives and rejects conflicts", (t) => {
+  for (const value of ["IMMUTABLE, public, max-age=31536000, no-transform,", "private, no-store"]) {
+    const { root, headers, pin } = publishedFreecadFixture(t);
+    const rule = headers.find((entry) => entry.path === pin.files["FreeCAD.js"].path);
+    rule.headers.push({ name: "cache-control", value, semantic: "cache-control", line: 1 });
+    if (value.includes("private")) {
+      const original = stableJson(headers);
+      expectCode(() => mergePublishedFreecadCacheRules(root, headers), "HC_FREECAD_CACHE_CONFLICT");
+      assert.equal(stableJson(headers), original);
+    } else {
+      mergePublishedFreecadCacheRules(root, headers);
+      assert.deepEqual(rule.headers.filter((header) => header.name.toLowerCase() === "cache-control").map((header) => header.value), [value]);
+    }
+  }
 });
 
 test("exact header selectors are not overwritten by a same-base terminal wildcard", () => {

@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
-  "recaptured_at": "2026-11-19T03:28:32Z",
-  "recapture_reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: recaptura dos vínculos ativos de metadados derivados em medicoes-glosas-obras-publicas e diagnostico-b2g-360, mais lastmod SINAPI 2026-11-18 nos dois sitemaps. As páginas correspondem exatamente ao normalizador existente; corpo, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato permanecem preservados. Bytes protegidos conferidos no commit 171754ee9c09344c3077cdbf0e91988bbb5527c1 contra de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Demais superfícies protegidas e registros históricos preservados; sem nova revisão humana, aprovação técnica ou autorização comercial alegada.",
+  "baseline_commit": "5acf551f34d17d284dccc870ec3ac8faf07d758f",
+  "recaptured_at": "2026-11-19T05:43:31Z",
+  "recapture_reason": "PR #825, integração e publicação autorizadas por Tiago. Checkpoint 5acf551f34d17d284dccc870ec3ac8faf07d758f com os pais 8635a9e2f9c85901cc9286d42938fa8c7d200ccd e 99c768aba3794ef9389e4f1e8070fe0dbaa7fc55. Recaptura restrita a sitemap.xml e sitemap.txt após incorporar a PR #847: preserva as URLs dos dois ramos, as ferramentas da PR #825 e a revisão material SINAPI de 18/11/2026. O sitemap-index.xml mantém o hash da main com lastmod de 18/11; os outros 14 arquivos protegidos e os seis pilares também mantêm os bytes da main 99c768a. Registros ativos e históricos dos dois ramos preservados. Revisão independente por agentes dos arquivos e sitemaps; nenhuma nova aprovação técnica ou humana alegada.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
@@ -25,14 +25,14 @@
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-    "sitemap.xml": "4464d11ac1a6424964a4e1688d21e67ea37999684a767b602f4d5ffc982f895a",
-    "sitemap.txt": "9bb2cdab9478f89ad94286178f773c3468f083959d99d86b27cd8a776d0aeb27",
+    "sitemap.xml": "538d39effaccb191c6dfc2a47a7458889ae7bfab7bacb31a5b2db407d5dee60f",
+    "sitemap.txt": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
     "sitemap-index.xml": "241166e3e82807ae8fde3d1cb1e0bb89cef287784d902a754b7b4f062c0814d5",
     "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e"
   },
-  "previous_baseline_commit": "6822954b0b85be603c8c6a9af304f444f58d17ea",
+  "previous_baseline_commit": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -1283,6 +1283,40 @@
       "previous_baseline_commit": "bdaeb7304684472df18f454fc82d08c124039f21"
     },
     {
+      "baseline_commit": "d574806f8f3c8b4f00e332126f2857e4c5b2ea23",
+      "recaptured_at": "2026-11-09T15:31:40Z",
+      "recapture_reason": "PR #796: recaptura exclusiva de sitemap.xml após revisão adversarial da atualização SINAPI. O lastmod de 09/11/2026 corresponde ao snippet e aos novos links efetivamente publicados, concorda com Article e data visível de atualização. Revisão técnica, acesso às fontes e HowTo permanecem em 29/08/2026. Os outros 16 arquivos protegidos preservam os bytes do checkpoint anterior.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
+        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "4993d65fbb3490c5f005abcfc3b1eba52a9859c9007d4d55944ded170027f4f6",
+        "sitemap.txt": "9ddcbba2bda56f293a12ef827879a926a7671a6a35f8f5ea11a9981cc4e0b1ad",
+        "sitemap-index.xml": "da39587f62527f3523c3eb01debda963de8c73477c0790d27928e860fbed9b2a",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "34cf4985eb3326f649b2395ff91a58aaaee16496bd3888863f767ed6d4bfa906"
+      },
+      "previous_baseline_commit": "a88573f4d1b9f4d337d100d8d126b72504694df2"
+    },
+    {
       "schema": "bofu_frozen_hashes/v1",
       "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
       "baseline_commit": "33cb4e34b987b3901d049a1aaf328f15755b1ed8",
@@ -1319,40 +1353,6 @@
       "previous_baseline_commit": "bdaeb7304684472df18f454fc82d08c124039f21"
     },
     {
-      "baseline_commit": "d574806f8f3c8b4f00e332126f2857e4c5b2ea23",
-      "recaptured_at": "2026-11-09T15:31:40Z",
-      "recapture_reason": "PR #796: recaptura exclusiva de sitemap.xml após revisão adversarial da atualização SINAPI. O lastmod de 09/11/2026 corresponde ao snippet e aos novos links efetivamente publicados, concorda com Article e data visível de atualização. Revisão técnica, acesso às fontes e HowTo permanecem em 29/08/2026. Os outros 16 arquivos protegidos preservam os bytes do checkpoint anterior.",
-      "html_mutation": false,
-      "pillars": {
-        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
-        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
-      },
-      "forbidden": {
-        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
-        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-        "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
-        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
-        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
-        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-        "sitemap.xml": "4993d65fbb3490c5f005abcfc3b1eba52a9859c9007d4d55944ded170027f4f6",
-        "sitemap.txt": "9ddcbba2bda56f293a12ef827879a926a7671a6a35f8f5ea11a9981cc4e0b1ad",
-        "sitemap-index.xml": "da39587f62527f3523c3eb01debda963de8c73477c0790d27928e860fbed9b2a",
-        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
-        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-        "js/modules/analytics.js": "34cf4985eb3326f649b2395ff91a58aaaee16496bd3888863f767ed6d4bfa906"
-      },
-      "previous_baseline_commit": "a88573f4d1b9f4d337d100d8d126b72504694df2"
-    },
-    {
       "baseline_commit": "df8bdd1d569658a8b8cb38decee9ee3a4be21cb0",
       "recaptured_at": "2026-11-09T17:19:55.541117Z",
       "recapture_reason": "Integração do Radar de Mercado Público autorizado por Tiago em 2026-11-09 com main/PR796. Recaptura exclusiva dos sitemaps: preserva a nova rota do radar e a atualização SINAPI já revisada em main. Os outros arquivos protegidos mantêm os hashes de main; históricos dos dois checkpoints preservados. Conferência técnica do diff canônico, sem alegar revisão humana independente.",
@@ -1387,6 +1387,74 @@
       "previous_baseline_commit": "d574806f8f3c8b4f00e332126f2857e4c5b2ea23"
     },
     {
+      "baseline_commit": "028fb950bcabfe7a039eab334d533dc7a17aaeaf",
+      "recaptured_at": "2026-11-11T13:19:20Z",
+      "recapture_reason": "Continuação da validação das ferramentas CONFENGE autorizada por Tiago, PR #825, incluindo #828. Recaptura exclusiva dos dois sitemaps após conferir 17 rotas novas com páginas canônicas, nenhuma remoção e as 20 datas de ferramentas já atualizadas na release. O sitemap de texto foi derivado do grafo XML canônico. Os outros 15 arquivos protegidos e os seis pilares preservam os hashes anteriores. Checkpoint publicado e ancestral real; revisão técnica por agentes, sem alegar nova aprovação humana.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
+        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "4825674230b888ebc5307ffc760432d6c1463dc72b50143cdc6e1e0139d8e838",
+        "sitemap.txt": "ae145e40733ddd2169ab6e89e54b3e2ecd6ffc23b7fbe9dc4621c3438a9ac35c",
+        "sitemap-index.xml": "da39587f62527f3523c3eb01debda963de8c73477c0790d27928e860fbed9b2a",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "34cf4985eb3326f649b2395ff91a58aaaee16496bd3888863f767ed6d4bfa906"
+      },
+      "previous_baseline_commit": "df8bdd1d569658a8b8cb38decee9ee3a4be21cb0"
+    },
+    {
+      "baseline_commit": "fbdfc550ff48f6850ecdca0f98c4594a93f34ba4",
+      "recaptured_at": "2026-11-11T13:43:05Z",
+      "recapture_reason": "PR #825: sincronização dos XMLs com close_graph, usado por editorial:build. A home usa a data 2026-11-11 já comprovada nos metadados; o índice usa 2026-11-11, maior data existente nos filhos. A ordenação segue o gerador canônico. Nenhuma URL ou data das demais páginas mudou; sitemap.txt permanece igual. A execução editorial em checkout isolado preservou os 17 arquivos protegidos. Recaptura exclusiva de sitemap.xml e sitemap-index.xml, com os 15 demais hashes e os seis pilares preservados. Checkpoint real criado no GitHub e ancestral local; revisão técnica por agentes, sem alegar nova aprovação humana.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
+        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "c81059850cafb59ca8864a4b2c95be9c9a9717363cb834041f0d61a2658c4fc7",
+        "sitemap.txt": "ae145e40733ddd2169ab6e89e54b3e2ecd6ffc23b7fbe9dc4621c3438a9ac35c",
+        "sitemap-index.xml": "d8e9fe086197826eb598b55d17840bc0b06b8d66a0b0e3f924b9ab48d55e7f4c",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "34cf4985eb3326f649b2395ff91a58aaaee16496bd3888863f767ed6d4bfa906"
+      },
+      "previous_baseline_commit": "028fb950bcabfe7a039eab334d533dc7a17aaeaf"
+    },
+    {
       "baseline_commit": "52c2d8258e561a599ded066688ea5cd1fc86a3a4",
       "recaptured_at": "2026-11-12T05:09:15.883015Z",
       "recapture_reason": "Sincronização canônica dos lastmod dos 13 conteúdos de projetos reformulados em 2026-11-11, conforme fonte e HTMLs do PR #831. Recaptura exclusiva de sitemap.xml e sitemap-index.xml no commit fonte 52c2d8258e561a599ded066688ea5cd1fc86a3a4; preserva URLs, regras de indexação, demais hashes protegidos e todo o histórico. Nenhuma data material foi derivada do relógio de execução.",
@@ -1412,6 +1480,40 @@
         "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
         "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
         "sitemap.xml": "f51cd7875cd26e57fb6c31ccd4556d743590549fc5661f01bce719c449872262",
+        "sitemap.txt": "1d378106002bba4d4cb45845da81eabe57763cd36c6d284ab4e094ce9c37b6b6",
+        "sitemap-index.xml": "d8e9fe086197826eb598b55d17840bc0b06b8d66a0b0e3f924b9ab48d55e7f4c",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "34cf4985eb3326f649b2395ff91a58aaaee16496bd3888863f767ed6d4bfa906"
+      },
+      "previous_baseline_commit": "df8bdd1d569658a8b8cb38decee9ee3a4be21cb0"
+    },
+    {
+      "baseline_commit": "e72041c34c83b9187537651fddba7e3fb5032fd8",
+      "recaptured_at": "2026-11-12T05:24:12Z",
+      "recapture_reason": "Migração do editor principal CAD para o OpenCAD Studio solicitada por Tiago (PR 833). Recaptura exclusiva das datas canônicas de /cad/ e de sitemap.xml no índice, de 2026-11-09 para 2026-11-11. URLs, ordem, 15 outros arquivos protegidos, seis pilares e autorizações preservados. Diff técnico e geração idempotente conferidos por agentes; nenhuma revisão humana adicional alegada.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
+        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "a19278f195894199237234d6506bff6fcde715e98965e1122ecaaa837173bd37",
         "sitemap.txt": "1d378106002bba4d4cb45845da81eabe57763cd36c6d284ab4e094ce9c37b6b6",
         "sitemap-index.xml": "d8e9fe086197826eb598b55d17840bc0b06b8d66a0b0e3f924b9ab48d55e7f4c",
         "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
@@ -1451,40 +1553,6 @@
         "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
         "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
         "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e"
-      },
-      "previous_baseline_commit": "df8bdd1d569658a8b8cb38decee9ee3a4be21cb0"
-    },
-    {
-      "baseline_commit": "e72041c34c83b9187537651fddba7e3fb5032fd8",
-      "recaptured_at": "2026-11-12T05:24:12Z",
-      "recapture_reason": "Migração do editor principal CAD para o OpenCAD Studio solicitada por Tiago (PR 833). Recaptura exclusiva das datas canônicas de /cad/ e de sitemap.xml no índice, de 2026-11-09 para 2026-11-11. URLs, ordem, 15 outros arquivos protegidos, seis pilares e autorizações preservados. Diff técnico e geração idempotente conferidos por agentes; nenhuma revisão humana adicional alegada.",
-      "html_mutation": false,
-      "pillars": {
-        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
-        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
-      },
-      "forbidden": {
-        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
-        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
-        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
-        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-        "script.js": "5d80a3122d591fc4ef043811b8adeacb5d568170bee11e242d0f86daa560d839",
-        "styles.css": "42a60216d310e3f0a5ac049649f8eb89c175ca353abd9de8d6844f78acc1dcd6",
-        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
-        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
-        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-        "sitemap.xml": "a19278f195894199237234d6506bff6fcde715e98965e1122ecaaa837173bd37",
-        "sitemap.txt": "1d378106002bba4d4cb45845da81eabe57763cd36c6d284ab4e094ce9c37b6b6",
-        "sitemap-index.xml": "d8e9fe086197826eb598b55d17840bc0b06b8d66a0b0e3f924b9ab48d55e7f4c",
-        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
-        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-        "js/modules/analytics.js": "34cf4985eb3326f649b2395ff91a58aaaee16496bd3888863f767ed6d4bfa906"
       },
       "previous_baseline_commit": "df8bdd1d569658a8b8cb38decee9ee3a4be21cb0"
     },
@@ -1713,17 +1781,105 @@
         "artifact_zip_sha256": "eb007478b06375f9e42aa86c78d293aea2b91ab0a4adeb929415b49680db81b6",
         "human_review_claimed": false
       }
+    },
+    {
+      "baseline_commit": "5272294df7d69dfc90b01128e5f09b813f6fc2d1",
+      "recaptured_at": "2026-11-19T03:01:22Z",
+      "recapture_reason": "PR #825, integração e publicação autorizadas por Tiago em 18/11/2026. Checkpoint 5272294df7d69dfc90b01128e5f09b813f6fc2d1 com os pais 668fb8c30cbedf890fce09df0b096b4142617802 e de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Recaptura restrita aos três sitemaps após fechar o grafo canônico de 164 URLs: preserva as URLs dos dois ramos, incorpora as ferramentas da PR e usa para a home a alteração material comprovada de 13/11/2026 no commit 221d1b72e99ee5ac1da34e1c2115170197062153. Os outros 14 arquivos protegidos e os seis pilares mantêm os hashes da main. Históricos dos dois ramos preservados. Revisão independente por agente dos HTMLs, contratos e sitemaps; nenhuma nova aprovação técnica ou humana alegada.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
+        "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "aa31c8d000dbb6c5ad784e659c1e65b3bd75d0f7ec6c683a3d0d9d6e50913c4d",
+        "sitemap.txt": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
+        "sitemap-index.xml": "e0c5bcba4d6e840a11be487cac692f12feaf41317cb52fe68e2b1c7198a5c5ae",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e"
+      },
+      "previous_baseline_commit": "6822954b0b85be603c8c6a9af304f444f58d17ea"
+    },
+    {
+      "baseline_commit": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
+      "recaptured_at": "2026-11-19T03:28:32Z",
+      "recapture_reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: recaptura dos vínculos ativos de metadados derivados em medicoes-glosas-obras-publicas e diagnostico-b2g-360, mais lastmod SINAPI 2026-11-18 nos dois sitemaps. As páginas correspondem exatamente ao normalizador existente; corpo, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato permanecem preservados. Bytes protegidos conferidos no commit 171754ee9c09344c3077cdbf0e91988bbb5527c1 contra de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Demais superfícies protegidas e registros históricos preservados; sem nova revisão humana, aprovação técnica ou autorização comercial alegada.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
+        "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "4464d11ac1a6424964a4e1688d21e67ea37999684a767b602f4d5ffc982f895a",
+        "sitemap.txt": "9bb2cdab9478f89ad94286178f773c3468f083959d99d86b27cd8a776d0aeb27",
+        "sitemap-index.xml": "241166e3e82807ae8fde3d1cb1e0bb89cef287784d902a754b7b4f062c0814d5",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e"
+      },
+      "previous_baseline_commit": "6822954b0b85be603c8c6a9af304f444f58d17ea",
+      "recapture_evidence": {
+        "source_head_sha": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
+        "compared_from": "de81f1be7b409d765a7cf4d76ef6ca619e138f8b",
+        "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/847",
+        "authorization": "docs/seo/2026-11-18-search-performance.md",
+        "changed_protected_paths": [
+          "medicoes-glosas-obras-publicas/index.html",
+          "diagnostico-b2g-360/index.html",
+          "sitemap.xml",
+          "sitemap-index.xml"
+        ],
+        "human_review_claimed": false
+      }
     }
   ],
   "recapture_evidence": {
-    "source_head_sha": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
-    "compared_from": "de81f1be7b409d765a7cf4d76ef6ca619e138f8b",
-    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/847",
-    "authorization": "docs/seo/2026-11-18-search-performance.md",
+    "source_head_sha": "5acf551f34d17d284dccc870ec3ac8faf07d758f",
+    "source_tree_sha": "c1b07854fabf65f6e9aeea369a6da244a14bb5ca",
+    "compared_from": "99c768aba3794ef9389e4f1e8070fe0dbaa7fc55",
+    "integration_parents": [
+      "8635a9e2f9c85901cc9286d42938fa8c7d200ccd",
+      "99c768aba3794ef9389e4f1e8070fe0dbaa7fc55"
+    ],
+    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/825",
     "changed_protected_paths": [
-      "medicoes-glosas-obras-publicas/index.html",
-      "diagnostico-b2g-360/index.html",
       "sitemap.xml",
+      "sitemap.txt"
+    ],
+    "reviewed_sitemap_paths": [
+      "sitemap.xml",
+      "sitemap.txt",
       "sitemap-index.xml"
     ],
     "human_review_claimed": false

@@ -1,6 +1,8 @@
 """A tool's own revision date must survive rendering and artifact verification."""
 from __future__ import annotations
 
+from copy import deepcopy
+from datetime import date
 import re
 import shutil
 import xml.etree.ElementTree as ET
@@ -8,19 +10,51 @@ from pathlib import Path
 
 import pytest
 
+from scripts.site import render_tool_showcase
 from scripts.site.hub_link_composition import href_to_relpath
 from scripts.site.render_tool_showcase import HOST, HUB, ROOT, load_registry, rendered_pages
 from scripts.site.verify_tool_showcase import Markup, verify
 
 
-def test_cad_revision_does_not_redate_other_tool_pages():
+def test_cad_revision_does_not_redate_other_tool_pages(monkeypatch: pytest.MonkeyPatch):
+    # Keep the fallback and the page override distinct even when the real
+    # catalogue and CAD happen to share their latest reviewed revision date.
+    data = load_registry(ROOT)
+    data["updated"] = "2000-01-01"
+    by_route = {entry["href"]: entry for entry in data["entries"]}
+    by_route["/cad/"]["page"]["updated"] = "2000-01-02"
+    by_route["/bim/"]["page"].pop("updated", None)
+    monkeypatch.setattr(render_tool_showcase, "load_registry", lambda root: deepcopy(data))
+    before = rendered_pages(ROOT)
+
+    by_route["/cad/"]["page"]["updated"] = "2000-01-03"
+    after = rendered_pages(ROOT)
+    for pages, cad_updated in ((before, "2000-01-02"), (after, "2000-01-03")):
+        for route, expected in (("/cad/", cad_updated), ("/bim/", "2000-01-01")):
+            html = pages[ROOT / route.lstrip("/") / "index.html"]
+            assert len(Markup(html).match("meta", property="og:updated_time", content=expected)) == 1
+            assert set(re.findall(r'"dateModified"\s*:\s*"([^"]+)"', html)) == {expected}
+    cad_path = ROOT / "cad/index.html"
+    assert before[cad_path] != after[cad_path]
+    assert {path: html for path, html in before.items() if path != cad_path} == {
+        path: html for path, html in after.items() if path != cad_path
+    }
+
+
+def test_catalogue_render_preserves_reviewed_pages():
     pages = rendered_pages(ROOT)
-    for route, expected in (("/cad/", "2026-11-11"), ("/bim/", "2026-11-09")):
-        html = pages[ROOT / route.lstrip("/") / "index.html"]
-        assert len(Markup(html).match("meta", property="og:updated_time", content=expected)) == 1
-        assert set(re.findall(r'"dateModified"\s*:\s*"([^"]+)"', html)) == {expected}
     # Rebuilding the catalogue must preserve every already reviewed page.
     assert all(path.read_text(encoding="utf-8") == html for path, html in pages.items())
+    # This is the page's visible revision note, not a date on its references.
+    data = load_registry(ROOT)
+    bim = next(entry for entry in data["entries"] if entry["href"] == "/bim/")
+    updated = date.fromisoformat(bim["page"].get("updated", data["updated"]))
+    months = ("janeiro", "fevereiro", "março", "abril", "maio", "junho",
+              "julho", "agosto", "setembro", "outubro", "novembro", "dezembro")
+    label = f"{updated.day} de {months[updated.month - 1]} de {updated.year}"
+    notes = re.findall(r'Página atualizada em\s*<time datetime="([^"]+)">([^<]+)</time>',
+                       pages[ROOT / "bim/index.html"])
+    assert notes == [(updated.isoformat(), label)]
 
 
 @pytest.fixture

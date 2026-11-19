@@ -1,0 +1,73 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# CONFENGE browser shell. Window-state compatibility adapted from Virtastic v1.0.9.
+import FreeCAD as App
+import FreeCADGui as Gui
+import sys
+from PySide6 import QtCore, QtGui, QtWidgets
+
+# Keep the wrapper alive: otherwise Shiboken can invalidate child toolbar wrappers.
+sys._fcweb_mw = Gui.getMainWindow()
+mw = sys._fcweb_mw
+App.ParamGet('User parameter:BaseApp/Preferences/View').SetBool('UseVBO', True)
+App.ParamGet('User parameter:BaseApp/Preferences/View').SetInt('RenderCache', 1)
+App.ParamGet('User parameter:BaseApp/Preferences/Document').SetBool('SaveThumbnail', False)
+App.ParamGet('User parameter:BaseApp/Preferences/Mod/BIM').SetBool('FirstTime', False)
+App.ParamGet('User parameter:BaseApp/Preferences/Mod/Draft').SetBool('dxfShowDialog', False)
+App.ParamGet('User parameter:BaseApp/Preferences/Mod/Arch').SetBool('ifcShowDialog', False)
+App.ParamGet('User parameter:BaseApp/Preferences/Mod/Draft').SetBool('dxfAllowDownload', False)
+# Gmsh/CalculiX and remote addon services are not part of this product distribution.
+for workbench in ('FemWorkbench',):
+    if workbench in Gui.listWorkbenches():
+        Gui.removeWorkbench(workbench)
+
+def _confenge_local_interface():
+    try:
+        window = Gui.getMainWindow()
+        if not window.isFullScreen():
+            window.showFullScreen()
+        # The corresponding JS network boundary also rejects these requests.
+        denied = {'Std_AddonMgr', 'Std_OnlineHelp', 'Std_FreeCADWeb', 'Std_FreeCADUserHub',
+                  'Std_FreeCADPowerUserHub', 'Std_FreeCADForum', 'Std_ReportBug'}
+        for action in window.findChildren(QtGui.QAction):
+            if action.objectName() in denied:
+                action.setEnabled(False)
+                action.setVisible(False)
+    except Exception:
+        pass
+
+def _confenge_subwindow(sub):
+    try:
+        widget = sub.widget() if sub is not None else None
+        is3d = widget is not None and 'View3DInventor' in widget.metaObject().className()
+        sys.__stderr__.write('FCACTIVE-%s\n' % ('3D' if is3d else 'OTHER'))
+        sys.__stderr__.flush()
+        if is3d:
+            for child in widget.findChildren(QtWidgets.QWidget):
+                if 'QOpenGLWidget' in child.metaObject().className():
+                    child.update()
+    except Exception:
+        pass
+
+if mw is not None:
+    mw.showNormal()
+    mw.showFullScreen()
+    mw.setWindowTitle('CONFENGE | Modelador paramétrico 3D')
+    for dock in mw.findChildren(QtWidgets.QDockWidget):
+        if dock.objectName() == 'Report view':
+            dock.hide()
+    mdi = mw.findChild(QtWidgets.QMdiArea)
+    if mdi is not None:
+        mdi.subWindowActivated.connect(_confenge_subwindow)
+        _confenge_subwindow(mdi.activeSubWindow())
+    timer = QtCore.QTimer()
+    timer.timeout.connect(_confenge_local_interface)
+    timer.start(1000)
+    App._confenge_interface_timer = timer
+    _confenge_local_interface()
+    Gui.activateWorkbench('PartDesignWorkbench')
+try:
+    App.saveParameter()
+except Exception:
+    pass
+sys.__stderr__.write('CONFENGE-READY\n')
+sys.__stderr__.flush()

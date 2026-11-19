@@ -249,6 +249,7 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
     { name: "ops", method: "GET", path: "/.netlify/functions/ops?action=health" },
     { name: "project-orders", method: "GET", path: "/.netlify/functions/project-orders?op=config" },
     { name: "project-orders-webhook", method: "POST", path: "/.netlify/functions/project-orders-webhook", body: "{}" },
+    { name: "science-tools", method: "GET", path: "/.netlify/functions/science-tools" },
     { name: "tool-credits", method: "GET", path: "/.netlify/functions/tool-credits?op=config" },
     { name: "tool-credits-webhook", method: "POST", path: "/.netlify/functions/tool-credits-webhook", body: "{}" },
   ];

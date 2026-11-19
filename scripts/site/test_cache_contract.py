@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -17,8 +18,11 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.cache_contract import (  # noqa: E402
     HASHED_DASH,
+    IMMUTABLE_CACHE,
     evaluate_cache_contract,
     parse_header_rules,
+    render_hashed_cache_block,
+    upsert_hashed_cache_block,
 )
 from scripts.site.fingerprint_css import (  # noqa: E402
     is_fingerprinted_stylesheet_href,
@@ -243,6 +247,8 @@ def _headers(body: str) -> str:
         "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
         "/cad/editor/*\n"
         "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
+        "/cad/freecad/*\n"
+        "  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
     )
 
 
@@ -251,6 +257,122 @@ def test_parser_reads_the_shipped_header_source() -> None:
     assert "/*" in parsed
     assert "/assets/*" in parsed
     assert parsed["/*"]["cache-control"]
+
+
+def _parse_netcup_headers(text: str) -> dict[str, Any]:
+    result = subprocess.run(
+        ["node", "--input-type=module", "-e", """
+import { readFileSync } from 'node:fs';
+import { parseHeaders } from './scripts/migration/netcup/lib/contract.mjs';
+let result;
+try { result = { rules: parseHeaders(readFileSync(0, 'utf8')) }; }
+catch (error) { result = { error: error.code }; }
+process.stdout.write(JSON.stringify(result));
+"""],
+        input=text, text=True, capture_output=True, check=True, cwd=ROOT, timeout=10,
+    )
+    return json.loads(result.stdout)
+
+
+def _netcup_policies(text: str) -> dict[str, dict[str, str]]:
+    result = _parse_netcup_headers(text)
+    assert "error" not in result, result
+    return {rule["path"]: {header["name"].lower(): header["value"]
+                          for header in rule["headers"]} for rule in result["rules"]}
+
+
+def _freecad_hrefs() -> list[str]:
+    manifest = json.loads((ROOT / "scripts/freecad/runtime.json").read_text())
+    return [entry["path"] for entry in manifest["files"].values()]
+
+
+FREECAD_CACHE_MARKERS = {
+    "begin": "# BEGIN FREECAD HASHED ASSETS", "end": "# END FREECAD HASHED ASSETS",
+}
+CSS_CACHE_MARKERS = {"begin": "# BEGIN hashed-css-cache", "end": "# END hashed-css-cache"}
+
+
+def test_hashed_cache_composes_freecad_policies_for_the_strict_host_parser() -> None:
+    source = HEADERS.read_text(encoding="utf-8")
+    hrefs = _freecad_hrefs()
+    # Reproduce the old composition with the real source and pinned filenames.
+    duplicate = source + "\n" + render_hashed_cache_block(hrefs, **FREECAD_CACHE_MARKERS)
+    assert _parse_netcup_headers(duplicate) == {"error": "HC_HEADER_SELECTOR_DUPLICATE"}
+
+    built = upsert_hashed_cache_block(source, hrefs, **FREECAD_CACHE_MARKERS)
+    assert upsert_hashed_cache_block(duplicate, hrefs, **FREECAD_CACHE_MARKERS) == built
+    before, after = _netcup_policies(source), _netcup_policies(built)
+    for route, policy in before.items():
+        expected = dict(policy)
+        if route in hrefs:
+            expected["cache-control"] = IMMUTABLE_CACHE
+        assert after[route] == expected, route
+    for href in hrefs:
+        assert after[href]["cache-control"] == IMMUTABLE_CACHE, href
+    assert set(after) == set(before) | set(hrefs)
+    assert [route for route in after if route in before] == list(before)
+    assert upsert_hashed_cache_block(built, hrefs, **FREECAD_CACHE_MARKERS) == built
+
+
+def test_hashed_cache_removes_only_its_obsolete_asset_rules_and_fields() -> None:
+    source = HEADERS.read_text(encoding="utf-8")
+    hrefs = _freecad_hrefs()
+    wasm = next(href for href in hrefs if href.endswith(".wasm"))
+    replacement = "/assets/freecad/FreeCAD-0123456789ab.data"
+    built = upsert_hashed_cache_block(source, hrefs, **FREECAD_CACHE_MARKERS)
+    updated = upsert_hashed_cache_block(built, [wasm, replacement], **FREECAD_CACHE_MARKERS)
+    policies, original = _netcup_policies(updated), _netcup_policies(source)
+    for href in set(hrefs) - {wasm}:
+        if href in original:
+            assert policies[href] == original[href], href
+        else:
+            assert href not in policies, href
+    assert policies[wasm] == {**original[wasm], "cache-control": IMMUTABLE_CACHE}
+    assert policies[replacement] == {"cache-control": IMMUTABLE_CACHE}
+    assert upsert_hashed_cache_block(updated, [wasm, replacement], **FREECAD_CACHE_MARKERS) == updated
+    removed = upsert_hashed_cache_block(updated, [], **FREECAD_CACHE_MARKERS)
+    assert _netcup_policies(removed) == original
+
+
+def test_hashed_cache_owners_do_not_remove_each_others_policy() -> None:
+    css = "/assets/css/pinned.0123456789ab.css"
+    source = HEADERS.read_text(encoding="utf-8") + f"\n{css}\n  Content-Type: text/css\n"
+    owners = [(_freecad_hrefs(), FREECAD_CACHE_MARKERS), ([css], CSS_CACHE_MARKERS)]
+    original = _netcup_policies(source)
+    for first, second in (owners, owners[::-1]):
+        first_hrefs, first_markers = first
+        second_hrefs, second_markers = second
+        built = upsert_hashed_cache_block(source, first_hrefs, **first_markers)
+        built = upsert_hashed_cache_block(built, second_hrefs, **second_markers)
+        assert upsert_hashed_cache_block(built, first_hrefs, **first_markers) == built
+        assert upsert_hashed_cache_block(built, second_hrefs, **second_markers) == built
+        pruned = upsert_hashed_cache_block(built, [], **first_markers)
+        policies = _netcup_policies(pruned)
+        for href in second_hrefs:
+            assert policies[href]["cache-control"] == IMMUTABLE_CACHE
+        assert _netcup_policies(upsert_hashed_cache_block(pruned, [], **second_markers)) == original
+
+
+def test_hashed_cache_preserves_compatible_authored_cache_and_refuses_conflicts() -> None:
+    href = "/assets/pinned.0123456789ab.js"
+    for value in (IMMUTABLE_CACHE, "immutable, public, max-age=31536000, no-transform"):
+        source = _headers(f"{href}\n  Content-Type: text/javascript\n  cAcHe-CoNtRoL: {value}\n")
+        built = upsert_hashed_cache_block(source, [href], **FREECAD_CACHE_MARKERS)
+        assert f"  cAcHe-CoNtRoL: {value}\n" in built
+        assert _netcup_policies(built)[href]["cache-control"] == value
+        removed = upsert_hashed_cache_block(built, [], **FREECAD_CACHE_MARKERS)
+        assert _netcup_policies(removed) == _netcup_policies(source)
+    for fields in (
+        "  Cache-Control: no-store\n",
+        "  Cache-Control: public, max-age=60, must-revalidate\n",
+        f"  Cache-Control: {IMMUTABLE_CACHE}\n  cache-control: {IMMUTABLE_CACHE}\n",
+    ):
+        try:
+            upsert_hashed_cache_block(f"{href}\n{fields}", [href], **FREECAD_CACHE_MARKERS)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Conflicting or duplicate authored cache was accepted")
 
 
 def test_html_default_must_not_be_immutable() -> None:

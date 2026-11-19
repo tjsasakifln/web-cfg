@@ -61,6 +61,12 @@ SKIP_PARTS = {
     "ops",  # operator UI is non-commercial; artifact census applies exact controls
 }
 
+# The packaged scientific interpreter is private runtime material, including
+# upstream HTML templates. Match only this root-relative directory; neither
+# "runtime" nor "python" is a blanket exception for future public pages.
+# Artifact scans deliberately retain these files if a packaging error ships them.
+PRIVATE_SOURCE_PREFIXES = (("runtime", "science-tools", "python"),)
+
 # Non-HTML public text surfaces that ship visitor-readable copy.
 EXTRA_TEXT_SURFACES = ("llms.txt",)
 
@@ -244,6 +250,8 @@ def visitor_facing_html_files(root: Path | None = None) -> list[Path]:
         rel_parts = path.relative_to(base).parts
         if any(part in SKIP_PARTS for part in rel_parts):
             continue
+        if any(rel_parts[:len(prefix)] == prefix for prefix in PRIVATE_SOURCE_PREFIXES):
+            continue
         out.append(path)
     return sorted(out)
 
@@ -277,6 +285,23 @@ def artifact_index_routes(artifact_root: Path) -> list[str]:
         for path in artifact_html_files(base)
         if path.name == "index.html"
     ]
+
+
+def manifest_routes_for_html(files: list[Path], root: Path) -> list[str]:
+    """Project a physical HTML census onto the explicit manifest route class.
+
+    Source and artifact callers keep their independent filesystem walks. Only
+    directory indexes and declared supporting documents belong in html_routes;
+    other HTML, including vendor files, stays in the full copy census.
+    """
+    from scripts.pseo.public_artifact import PUBLIC_NESTED_HTML_DOCUMENTS
+
+    routes: list[str] = []
+    for path in files:
+        rel = relpath(path, root)
+        if path.name == "index.html" or rel in PUBLIC_NESTED_HTML_DOCUMENTS:
+            routes.append(route_for(rel))
+    return routes
 
 
 def visitor_facing_relpaths(root: Path | None = None) -> list[str]:

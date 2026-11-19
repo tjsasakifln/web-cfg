@@ -62,6 +62,7 @@ const expectedRoutes = new Set([
   "/ferramentas/matriz-atraso-obra/",
   "/ferramentas/prontidao-tecnica-obra-privada/",
   "/ferramentas/radar-mercado-publico/",
+  "/ferramentas/radier-solo-elastico/",
   "/profissionais/",
   "/projetos-prontos/",
 ]);

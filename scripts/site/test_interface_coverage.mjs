@@ -112,6 +112,22 @@ assert(coverage.lighthouse.pages.includes("/ferramentas/prontidao-tecnica-obra-p
 assert(coverage.lighthouse.pages.includes("/triagem-tecnica/"));
 assert(coverage.lighthouse.pages.includes("/servicos/"));
 assert(coverage.lighthouse.pages.includes("/quantitativos-orcamento-obras/"));
+for (const [id, route] of [
+  ["cad-freecad-aplicativo", "/cad/freecad/"],
+  ["cad-freecad-fontes-licencas", "/cad/freecad/creditos.html"],
+]) {
+  const family = coverage.lighthouse.families.find((entry) => entry.id === id);
+  assert.equal(family?.kind, "canonical", `FreeCAD route must retain canonical coverage: ${route}`);
+  assert.equal(family.route_count, 1, `FreeCAD family must cover only its declared document: ${id}`);
+  assert.equal(family.lighthouse_representative, route);
+  assert.equal(family.seo_exempt, true, `FreeCAD execution and attribution documents remain noindex: ${route}`);
+  assert(!family.runtime_only, `FreeCAD is a packaged page, not an official-live runtime exception: ${route}`);
+  assert(coverage.lighthouse.pages.includes(route), `FreeCAD document must be measured: ${route}`);
+  assert(coverage.lighthouse.seo_exempt_pages.includes(route));
+}
+const modelerLanding = "/ferramentas/modelador-parametrico-3d/";
+assert(!isNoindex(readFileSync(routeToFile(ROOT, modelerLanding), "utf8")), "the modeler discovery page must remain indexable");
+assert(!coverage.lighthouse.seo_exempt_pages.includes(modelerLanding), "runtime exemptions must not extend to the public modeler landing");
 assert.equal(new Set(coverage.lighthouse.pages).size, coverage.lighthouse.pages.length);
 assert.deepEqual(
   new Set(coverage.lighthouse.families.filter((family) => family.kind === "canonical").map((family) => family.id)),

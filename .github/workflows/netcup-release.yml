@@ -87,7 +87,7 @@ jobs:
     name: immutable release package and attestation
     needs: [gates, pseo_gates]
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     permissions:
       contents: read
       id-token: write
@@ -126,6 +126,13 @@ jobs:
           # is locked, included in the immutable tarball and never installed on
           # the VPS during stage or promotion.
           npm ci --omit=dev --ignore-scripts --no-bin-links --prefix runtime/tools-commerce/deps
+          # Build the pinned Python scientific closure into this immutable
+          # release. No package installation or new service occurs on Netcup.
+          python3 -B runtime/science-tools/build_runtime.py
+          node --test runtime/science-tools/tests/platform.test.cjs
+          node --test runtime/science-tools/tests/http.test.mjs
+          OPENBLAS_NUM_THREADS=1 runtime/science-tools/python/bin/python3.12 -B runtime/science-tools/tests/test_mesh.py
+          python3 -B runtime/science-tools/tests/validate_runtime.py
           source_date_epoch=$(git show -s --format=%ct "$RELEASE_SHA")
           node_version=$(node --version)
           python_version=$(python3 --version | awk '{print $2}')
@@ -155,6 +162,11 @@ jobs:
           smoke=$(mktemp -d)
           tar -xzf "dist/netcup/$RELEASE_SHA/confenge-web-$RELEASE_SHA.tar.gz" -C "$smoke" --wildcards 'runtime/tools-commerce/*'
           node -e 'const {sdk}=require(process.argv[1]); for (const module of ["app","auth","firestore"]) sdk("firebase-admin/"+module)' "$smoke/runtime/tools-commerce/firebase.cjs"
+          tar -xzf "dist/netcup/$RELEASE_SHA/confenge-web-$RELEASE_SHA.tar.gz" -C "$smoke" --wildcards 'runtime/science-tools/*'
+          # Run from the extracted location with isolated Python and a scrubbed
+          # child environment, proving the interpreter is relocatable.
+          python3 -B "$smoke/runtime/science-tools/tests/validate_runtime.py"
+          rm -rf "$smoke"
       - name: Attest immutable deploy artifact
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:

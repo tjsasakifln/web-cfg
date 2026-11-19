@@ -20,7 +20,8 @@ BRANDS = re.compile(r'(?<![A-Za-z0-9_.])(' + '|'.join(NAMES) + r')(?![A-Za-z0-9_
 ICON = (ROOT / 'assets/favicon-32.png').read_bytes()
 ICO = (ROOT / 'favicon.ico').read_bytes()
 EXTRA_EXPORTS = Path(__file__).with_name('extra_exports.py').read_bytes()
-REV = '0.8.1-confenge-' + sha256(Path(__file__).read_bytes() + EXTRA_EXPORTS + ICON + ICO).hexdigest()[:12]
+TERRAIN_QUANTITIES = Path(__file__).with_name('terrain_quantities.mjs').read_bytes()
+REV = '0.8.1-confenge-' + sha256(Path(__file__).read_bytes() + EXTRA_EXPORTS + TERRAIN_QUANTITIES + ICON + ICO).hexdigest()[:12]
 CREDIT = "CONFENGE adaptou a interface, os nomes, a ajuda e os recursos offline desta edição. "
 
 EXPORT_BRIDGE = r"""// Entitlement bridge for the CONFENGE browser edition. No login token enters this frame.
@@ -124,6 +125,50 @@ def adapted(slug, name, data):
         extra = patch_extra_exports(slug, name, data.decode(), bridge_url(slug))
         if extra is not None:
             return path, extra.encode()
+    if name == 'assets/apps/bimcraft/0.8.1/res-terrain.js':
+        text = "import { sampleTerrainVolumes } from './confenge-terrain-quantities.mjs';\n" + data.decode()
+        before = """export function cutFill(existing, finished, { cell = 250 } = {}) {
+  const b = existing.stats().bounds;
+  let cut = 0, fill = 0;
+  for (let x = b.minX + cell / 2; x < b.maxX; x += cell) for (let y = b.minY + cell / 2; y < b.maxY; y += cell) {
+    const e = existing.elevationAt(x, y), f = finished.elevationAt(x, y);
+    if (e === null || f === null) continue;
+    const d = (f - e) * cell * cell;
+    if (d > 0) fill += d; else cut -= d;
+  }
+  return { cut: cut / 1e9, fill: fill / 1e9 };
+}"""
+        text = replace_one(text, before, """export function cutFill(existing, finished, { cell = 250 } = {}) {
+  return sampleTerrainVolumes(existing, finished, null, { cell });
+}""")
+        text = replace_one(text,
+                           '  const pads = readPads(w).map((pd) => padShape(w, pd, levels)).filter(Boolean);',
+                           '  const pads = readPads(w).map((pd) => { const shape = padShape(w, pd, levels); return shape ? { ...shape, id: pd.id } : null; }).filter(Boolean);')
+        text = replace_one(text, '  const key = shapeKey(trn.pts.length,', "  const key = 'confenge-grid-v2:' + shapeKey(trn.pts.length,")
+        text = replace_one(text,
+                           '  const cf = pads.length ? cutFill(existing, finished) : { cut: 0, fill: 0 };',
+                           """  const independent = pads.length <= 16 ? pads.map((pad) => gradeSurface(existing, [pad])) : null;
+  const cf = pads.length ? sampleTerrainVolumes(existing, finished, independent) : { cut: 0, fill: 0, byPad: [], cellMm: 250 };
+  const quantities = new Map(pads.map((pad, i) => [pad.id, cf.byPad?.[i]]));""")
+        text = replace_one(text, "[['ShapeKey', 'IFCIDENTIFIER', key], ['Cut',", "[['ShapeKey', 'IFCIDENTIFIER', key], ['VolumeMethod', 'IFCLABEL', 'Grid midpoint; cell mm: ' + cf.cellMm + '; no bulking'], ['Cut',")
+        text = replace_one(text,
+                           '  // each pad: its footprint and its share of the cut / fill (all of it when there is one)',
+                           '  // A per-pad quantity is available only for reconciled, disjoint sampled surfaces.')
+        text = replace_one(text,
+                           "    w.upsertPset(pd.id, PAD_PSET, [['PadZ', 'IFCLENGTHMEASURE', round(w.u(sh.z))], ['Cut', 'IFCVOLUMEMEASURE', round(cf.cut / Math.max(1, pads.length), 3)], ['Fill', 'IFCVOLUMEMEASURE', round(cf.fill / Math.max(1, pads.length), 3)]]);",
+                           """    const quantity = quantities.get(pd.id);
+    const volume = key => quantity ? [key, 'IFCVOLUMEMEASURE', round(quantity[key.toLowerCase()], 3)] : [key, 'IFCLABEL', 'Somente total do terreno'];
+    w.upsertPset(pd.id, PAD_PSET, [['PadZ', 'IFCLENGTHMEASURE', round(w.u(sh.z))], volume('Cut'), volume('Fill'),
+      ['QuantityMethod', 'IFCLABEL', quantity ? 'grid-independent-v2' : 'aggregate-only'],
+      ['VolumeMethod', 'IFCLABEL', 'Grid midpoint; cell mm: ' + cf.cellMm + '; no bulking']]);""")
+        return path, text.encode()
+    if name == 'assets/apps/bimcraft/0.8.1/res-ui.js':
+        text = replace_one(data.decode(),
+                           "      kit.rows.push(el('dt', {}, t('res.tr.cut')), el('dd', { 'data-mp-padcut': '' }, Number(ps.Cut || 0).toFixed(1) + ' m³'), el('dt', {}, t('res.tr.fill')), el('dd', {}, Number(ps.Fill || 0).toFixed(1) + ' m³'));",
+                           """      const padVolume = key => ps.QuantityMethod === 'grid-independent-v2' && Number.isFinite(Number(ps[key])) ? Number(ps[key]).toFixed(1) + ' m³' : 'Somente total do terreno';
+      kit.rows.push(el('dt', {}, t('res.tr.cut')), el('dd', { 'data-mp-padcut': '' }, padVolume('Cut')), el('dt', {}, t('res.tr.fill')), el('dd', {}, padVolume('Fill')));
+      kit.rows.push(el('dt', {}, 'Medição'), el('dd', {}, ps.QuantityMethod === 'grid-independent-v2' ? 'Superfícies independentes; consulte a malha em VolumeMethod.' : 'Interação ou medição individual não conferida. Consulte o total nas propriedades do terreno.'));""")
+        return path, text.encode()
     if name == 'favicon.svg':
         encoded = b64encode(ICON).decode()
         return path, (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><image width="32" height="32" href="data:image/png;base64,{encoded}"/></svg>').encode()
@@ -136,8 +181,9 @@ def adapted(slug, name, data):
     if name == 'index.html':
         text = data.decode().replace(old, new)
         text = replace_one(text, '"version":"0.8.1","site":"https://getcadcraft.com"', f'"version":"{REV}","site":"https://confenge.com.br"')
+        extra_precache = f'"{new}confenge-terrain-quantities.mjs",' if slug == 'bimcraft' else ''
         text = replace_one(text, '"sw":"sw.js","scope":"./","urls":[',
-                           f'"sw":"sw.js?v={REV}","scope":"./","urls":["creditos.html","LICENSE","NOTICE","TRADEMARKS.md","THIRD_PARTY.md","{new}confenge-export.js",')
+                           f'"sw":"sw.js?v={REV}","scope":"./","urls":["creditos.html","LICENSE","NOTICE","TRADEMARKS.md","THIRD_PARTY.md","{new}confenge-export.js",' + extra_precache)
         text = replace_one(text, './favicon.svg', f'./favicon-32.png?v={REV}').replace('type="image/svg+xml"', 'type="image/png"', 1)
         text = replace_one(text, '<i class="bi bi-bounding-box"></i></span>', f'<img width="28" height="28" src="./favicon-32.png?v={REV}" alt=""></span>')
         text = replace_one(text, f'<span>{source}</span>', f'<span><a href="./creditos.html" target="_blank" rel="noopener" title="Sobre e licenças" style="color:inherit;text-decoration:none">{source}</a></span>')
@@ -443,6 +489,9 @@ def build_archive(slug, archive, target):
             dst.writestr(info, credits(slug), compress_type=ZIP_DEFLATED)
             info = ZipInfo(prefix + f'assets/apps/{slug}/{REV}/confenge-export.js', (2026, 11, 9, 0, 0, 0))
             dst.writestr(info, EXPORT_BRIDGE.encode(), compress_type=ZIP_DEFLATED)
+            if slug == 'bimcraft':
+                info = ZipInfo(prefix + f'assets/apps/{slug}/{REV}/confenge-terrain-quantities.mjs', (2026, 11, 11, 0, 0, 0))
+                dst.writestr(info, TERRAIN_QUANTITIES, compress_type=ZIP_DEFLATED)
         with path.open('rb') as src:
             digest = file_digest(src, 'sha256').hexdigest()
         result = target / f'{slug}-{digest[:16]}.zip'

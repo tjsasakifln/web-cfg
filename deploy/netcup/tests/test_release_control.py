@@ -39,6 +39,29 @@ def private_dependency_fixture(tmp_path_factory: pytest.TempPathFactory):
         (package_dir / "package.json").write_text("{}\n", encoding="utf-8")
     with pytest.MonkeyPatch.context() as monkeypatch:
         monkeypatch.setattr("deploy.netcup.package_release.TOOLS_COMMERCE_DEPS", directory)
+        # Keep control-plane unit fixtures small. The real scientific closure
+        # and calculations are tested before and after extraction in CI.
+        science = directory / "science"
+        science.mkdir()
+        (science / "requirements.lock").write_text("fixture==1\n")
+        (science / "license-inventory.json").write_text("[]\n")
+        binary = science / "python/bin/python3.12"
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"\x7fELFcontrolled-unit-fixture")
+        binary.chmod(0o755)
+        patches = []
+        for relative in ("sectionproperties/pre/pre.py", "concreteproperties/analysis_section.py"):
+            file = science / "python/lib/python3.12/site-packages" / relative
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_text("# controlled unit fixture\n")
+            patches.append({"path": relative, "modified_sha256": sha256_file(file)})
+        (science / "runtime-manifest.json").write_text(json.dumps({
+            "schema":"confenge.science-runtime/v1", "platform":"linux-x86_64-gnu",
+            "python":"3.12.16", "triangle_included":False, "patches":patches,
+            "requirements_sha256":sha256_file(science / "requirements.lock"),
+            "licenses_sha256":sha256_file(science / "license-inventory.json"),
+        }))
+        monkeypatch.setattr("deploy.netcup.package_release.SCIENCE_TOOLS", science)
         yield
 
 

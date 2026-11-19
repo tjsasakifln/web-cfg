@@ -35,6 +35,7 @@ from scripts.site.public_copy_scope import (
     artifact_html_files,
     artifact_index_routes,
     is_indexable_html,
+    manifest_routes_for_html,
     relpath,
     route_for,
     visible_text,
@@ -690,7 +691,7 @@ def coverage_report(
     index_routes = artifact_index_routes(artifact)
     if len(index_routes) != len(set(index_routes)):
         errors.append("artifact_index_routes_duplicate")
-    artifact_set = set(index_routes)
+    artifact_set = set(manifest_routes_for_html(files, artifact))
     manifest_set = set(manifest_routes)
     unlisted = sorted(artifact_set - manifest_set)
     missing = sorted(manifest_set - artifact_set)
@@ -759,6 +760,7 @@ def coverage_report(
         "manifest": str(manifest),
         "artifact_html_total": len(files),
         "artifact_index_routes": len(index_routes),
+        "artifact_manifest_routes": len(artifact_set),
         "manifest_routes": len(manifest_routes),
         "copy_scanned_html": len(scanned),
         "copy_scanned_noindex_html": noindex,
@@ -1391,6 +1393,7 @@ def main() -> int:
         "ok": report["ok"],
         "artifact_html_total": report["artifact_html_total"],
         "artifact_index_routes": report["artifact_index_routes"],
+        "artifact_manifest_routes": report["artifact_manifest_routes"],
         "manifest_routes": report["manifest_routes"],
         "copy_scanned_html": report["copy_scanned_html"],
         "copy_scanned_noindex_html": report["copy_scanned_noindex_html"],

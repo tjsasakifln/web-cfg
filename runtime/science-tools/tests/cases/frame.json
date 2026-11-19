@@ -1,0 +1,206 @@
+[
+  {
+    "name": "pynite-cantilever-reference",
+    "request": {
+      "operation": "frame",
+      "data": {
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "support": "fixed"
+          },
+          {
+            "id": "B",
+            "x": 3,
+            "y": 0,
+            "support": "free"
+          }
+        ],
+        "members": [
+          {
+            "id": "M",
+            "start": "A",
+            "end": "B"
+          }
+        ],
+        "loads": [
+          {
+            "node": "B",
+            "fy": -10
+          }
+        ],
+        "distributed": [],
+        "elastic": 200,
+        "area": 100,
+        "inertia": 10000
+      }
+    },
+    "summary": [
+      {
+        "index": 2,
+        "value": 4.5
+      },
+      {
+        "index": 3,
+        "value": 10
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "pynite-truss",
+    "request": {
+      "operation": "frame",
+      "data": {
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "support": "pin"
+          },
+          {
+            "id": "B",
+            "x": 4,
+            "y": 0,
+            "support": "rollerY"
+          },
+          {
+            "id": "C",
+            "x": 2,
+            "y": 3,
+            "support": "free"
+          }
+        ],
+        "members": [
+          {
+            "id": "M1",
+            "start": "A",
+            "end": "B"
+          },
+          {
+            "id": "M2",
+            "start": "A",
+            "end": "C"
+          },
+          {
+            "id": "M3",
+            "start": "B",
+            "end": "C"
+          }
+        ],
+        "loads": [
+          {
+            "node": "C",
+            "fy": -10
+          }
+        ],
+        "distributed": [],
+        "kind": "truss"
+      }
+    },
+    "summary": [
+      {
+        "index": 3,
+        "value": 10
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "pynite-pdelta",
+    "request": {
+      "operation": "frame",
+      "data": {
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "support": "fixed"
+          },
+          {
+            "id": "B",
+            "x": 0,
+            "y": 3,
+            "support": "free"
+          }
+        ],
+        "members": [
+          {
+            "id": "M",
+            "start": "A",
+            "end": "B"
+          }
+        ],
+        "loads": [
+          {
+            "node": "B",
+            "fx": 10,
+            "fy": -100
+          }
+        ],
+        "distributed": [],
+        "elastic": 200,
+        "area": 100,
+        "inertia": 10000,
+        "analysis": "pdelta"
+      }
+    },
+    "summary": [
+      {
+        "index": 2,
+        "min": 4.55,
+        "max": 4.7
+      },
+      {
+        "index": 3,
+        "value": 100
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "unstable-frame-rejected",
+    "request": {
+      "operation": "frame",
+      "data": {
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "support": "free"
+          },
+          {
+            "id": "B",
+            "x": 3,
+            "y": 0,
+            "support": "free"
+          }
+        ],
+        "members": [
+          {
+            "id": "M",
+            "start": "A",
+            "end": "B"
+          }
+        ],
+        "loads": [
+          {
+            "node": "B",
+            "fy": -10
+          }
+        ],
+        "distributed": [],
+        "elastic": 200,
+        "area": 100,
+        "inertia": 10000
+      }
+    },
+    "summary": [],
+    "invalid": true
+  }
+]
