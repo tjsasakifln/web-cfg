@@ -79,13 +79,15 @@ serviço, ausência de pedido ao selecionar pacote, estados de indisponibilidade
 visibilidade em telas pequenas, ausência de dados privados na medição e
 retomada sem débito automático ou duplicado.
 
-Os registros de integridade foram atualizados após a revisão dos componentes
-e dos arquivos compartilhados. A projeção CSS do diagnóstico continua usando
+Na entrega inicial da PR #848, os registros de integridade foram atualizados após
+a revisão dos componentes e dos arquivos compartilhados. A projeção CSS do diagnóstico continua usando
 as mesmas 266 exclusões, conferidas contra as 14 fontes de execução. A captura
-dos arquivos protegidos vem do commit `4f2fcefb36e57526495af8f9ebf3800b403ecf04`:
+inicial dos arquivos protegidos vem do commit `4f2fcefb36e57526495af8f9ebf3800b403ecf04`:
 somente analytics, seu bundle e as datas dos dois sitemaps têm novos hashes.
 O histórico anterior permanece registrado, sem declarar aprovação humana que
 não ocorreu.
+As recapturas das continuações ficam no mesmo manifesto, vinculadas aos respectivos
+commits alcançáveis, sem substituir a evidência histórica dessa entrega inicial.
 
 Os gates existentes de `site-ci` e pSEO continuam obrigatórios para o merge.
 A promoção usa o artefato aprovado e o fluxo de release Netcup. Conferir
@@ -169,7 +171,7 @@ carregar exemplo ou começar de novo não aplica uma sugestão anterior.
 
 O arquivo JSON conserva os dados para reabertura na própria ferramenta. Sua
 entrega ao navegador não comprova salvamento permanente nem retorno posterior.
-Cliques em levar, aplicar ou salvar são observações de intenção, não um percurso
+Cliques em levar, aplicar ou salvar são observações de uso, não um percurso
 individual completo nem prova de uma aplicação ou compra bem-sucedida. A leitura
 comercial combina entrada orgânica nas mesmas URLs, utilização observada,
 exportações com crédito pago, recebimentos conciliados, estornos, taxas,

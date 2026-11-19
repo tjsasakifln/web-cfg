@@ -445,6 +445,11 @@ try {
     'Projeto privado de teste da continuidade');
   assert.equal(await page.$eval('#bdi-obra', el => el.value), '19,4458');
   assert.match(await page.$eval('#contagem', el => el.textContent), /3 serviços/);
+  await page.$eval('#bdi-obra', el => {
+    el.value = '12,3456';
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await page.waitForFunction(key => JSON.parse(sessionStorage.getItem(key))?.bdi === '12.3456', {}, budgetKey);
   await load('/ferramentas/calculadora-bdi/');
   await page.waitForSelector('#campos:not([disabled])');
   await page.click('#exemplo');
@@ -453,7 +458,8 @@ try {
   await page.waitForSelector('#bdi-recebido:not([hidden])');
   await page.click('#descartar-bdi');
   assert.equal(await page.$eval('#bdi-recebido', el => el.hidden), true);
-  assert.equal(await page.$eval('#bdi-obra', el => el.value), '19,4458', 'discard keeps the current budget rate');
+  assert.equal(await page.$eval('#bdi-obra', el => el.value), '12,3456', 'discard keeps the different current budget rate');
+  assert.equal(await page.evaluate(key => JSON.parse(sessionStorage.getItem(key)).bdi, budgetKey), '12.3456');
   await load('/ferramentas/'); // Actual navigation flushes the first-party queue.
   const usageIds = new Set(['tool-bdi-continue-budget', 'tool-budget-apply-bdi',
     'tool-budget-discard-bdi', 'tool-budget-save-json']);
@@ -478,7 +484,7 @@ try {
   }
   assert.equal(events.filter(event => event.path.includes('tool-credits')).length, commerceRequestsBefore,
     'BDI continuation and free JSON must not request a paid export or create an order');
-  assert.ok(events.every(event => !/Projeto privado de teste|19[.,]4458/.test(event.body)),
+  assert.ok(events.every(event => !/Projeto privado de teste|19[.,]4458|12[.,]3456/.test(event.body)),
     'calculation and project data must not enter analytics');
   assert.deepEqual(errors, []);
 
