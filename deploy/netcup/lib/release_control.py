@@ -2412,6 +2412,44 @@ def _gone_contract_probes(
     return dict(sorted(probes.items()))
 
 
+def _contract_news_runtime_inventory(
+    release: Path, sha: str, host_contract: dict[str, Any],
+    html: dict[str, str], assets: dict[str, str],
+) -> dict[str, Any] | None:
+    """Attest the exact four runtime documents without changing package hashes."""
+    prefix = "/noticias/contratos-publicos/"
+    documents = {
+        prefix.lstrip("/") + name
+        for name in ("index.html", "sitemap.xml", "news-sitemap.xml", "feed.xml")
+    }
+    present = {rel for rel in {*html, *assets} if rel.startswith(prefix.lstrip("/"))}
+    declared = (host_contract.get("runtime") or {}).get("contractNewsPrefix")
+    if declared is None and not present:
+        return None  # Releases before this namespace remain verifiable.
+    if declared != prefix or present != documents:
+        raise ReleaseError("contract news runtime requires its exact four packaged documents")
+    try:
+        result = subprocess.run(
+            ["node", "runtime/contract-news/attest.mjs", sha], cwd=release,
+            check=True, capture_output=True, text=True, timeout=60,
+        )
+        if len(result.stdout.encode()) > 32 * 1024 * 1024:
+            raise ReleaseError("contract news attestation exceeds its bound")
+        proof = json.loads(result.stdout)
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
+        # JSON parser diagnostics may quote a damaged snapshot. The publication
+        # is unverified; no source bytes or arbitrary subprocess stderr escape.
+        raise ReleaseError("contract news runtime attestation failed; publication is not verified") from exc
+    if (not isinstance(proof, dict)
+            or proof.get("schema") != "confenge.contract-news-runtime/v1"
+            or proof.get("release_sha") != sha or proof.get("prefix") != prefix
+            or set(proof.get("documents") or {}) != documents
+            or proof.get("state") not in {"bootstrap", "empty", "published"}):
+        raise ReleaseError("contract news runtime attestation identity is invalid")
+    proof["physical_sha256"] = {rel: (html | assets)[rel] for rel in sorted(documents)}
+    return proof
+
+
 def served_html_inventory(sha: str) -> dict[str, Any]:
     """Inventory the actual current release independently of build manifests."""
     sha = validate_sha(sha)
@@ -2446,6 +2484,9 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
         routes = host_contract.get("routes")
         if not isinstance(routes, list):
             raise ReleaseError("host contract routes are not a list")
+        contract_news = _contract_news_runtime_inventory(
+            release, sha, host_contract, html_sha256, non_html_sha256,
+        )
         http_dispositions = {}
         for rel in html_sha256:
             request_path = _html_request_path(rel)
@@ -2480,6 +2521,7 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
             "non_html_sha256": non_html_sha256,
             "http_dispositions": http_dispositions,
             "contract_probes": contract_probes,
+            "contract_news": contract_news,
             "overlay": load_json(public_overlay) if public_overlay.is_file() else None,
             "cache_transition": cache_transition,
             "build_info": build_info,

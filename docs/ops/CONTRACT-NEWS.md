@@ -79,14 +79,49 @@ validação da projeção. O passo seguinte consulta o domínio público, verifi
 Arquivo vazio recebe `noindex` e contagem zero. Uma execução vazia não comprova
 geração real pela OpenAI.
 
+`producer_summary` permite diagnosticar uma rodada vazia sem abrir registros
+privados: `official_requests` conta detalhes consultados no PNCP,
+`verified_records` conta fatos confirmados, incluindo rechecagens, e
+`excluded_count` soma as exclusões do produtor. Esses totais não equivalem a
+novidades elegíveis nem a publicações. `source_as_of`, quando válido, informa o
+corte original da projeção. Somente inteiros limitados e esse horário em UTC são
+expostos; nomes, objetos, documentos, URLs e mensagens de erro do produtor não
+são copiados para o resumo. Metadados ausentes ou inválidos são omitidos, sem
+alterar os gates editoriais.
+
 ```sh
 python3 -m scripts.contract_news check --input /var/lib/confenge-web/contract-news/public/current.json
 python3 deploy/contract-news/verify_public.py --base https://confenge.com.br
 ```
 
+Durante a implantação, o controlador preserva os hashes físicos dos quatro
+documentos incluídos no pacote e acrescenta uma prova do conteúdo dinâmico,
+vinculada ao commit, ao código de renderização e ao snapshot. O índice, os dois
+sitemaps, o RSS e seus endereços alternativos são consultados no domínio público.
+Os demais documentos do site continuam sujeitos à comparação integral com o
+artefato aprovado. O conteúdo recente do sitemap é conferido contra os fatos do
+snapshot e a janela de 48 horas, com tolerância temporal limitada ao cache.
+
+O estado `bootstrap` só admite a resposta inicial `503` com `noindex` quando
+não há ponteiro nem arquivos de publicação anteriores. Ponteiro inválido,
+arquivo corrompido ou resíduos sem ponteiro impedem a aceitação. Um acervo já
+inicializado exige respostas `200` com os mesmos bytes, cabeçalhos e identidade
+de snapshot atestados. A propagação de cache tem prazo limitado e não transforma
+uma divergência persistente em aprovação. O relatório distingue
+`infrastructure_published` de `archive_initialized`; nenhum deles, isoladamente,
+comprova que uma notícia real foi gerada.
+
 O workflow `Contract news readiness`, disparado em `main`, faz inspeção de
 presença e acesso sem expor valores de credenciais. Seus resultados devem ser
 consultados antes de solicitar mudanças de configuração.
+
+A rotina editorial consulta o estado da implantação antes de empacotar o
+produtor ou acessar credenciais. A execução mais recente de `netcup-release`
+para o mesmo repositório, `main` e commit precisa ter concluído com sucesso,
+incluindo o job `Authorized atomic promote` da tentativa atual. Qualquer
+execução correspondente ainda em andamento impede o início da rodada. Uma
+execução que apenas empacotou ou preparou a versão não atende essa condição.
+O resumo registra a espera, sem indicar que houve publicação.
 
 Para suspender novas publicações, definir a variável GitHub
 `CONFENGE_NEWS_ENABLED=0`, a mesma opção no arquivo privado, ou criar

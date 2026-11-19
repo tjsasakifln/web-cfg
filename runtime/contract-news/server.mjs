@@ -40,10 +40,12 @@ export function createPublicationStore(directory, { now = () => new Date() } = {
     cache = { identity, digest, snapshot };
     return snapshot;
   }
-  return async function publication() {
+  const publication = async function publication() {
     pending ??= load().finally(() => { pending = null; });
     return pending;
   };
+  publication.digest = () => cache?.digest || null;
+  return publication;
 }
 
 export function createContractNews({ directory = process.env.CONFENGE_NEWS_DIR || DEFAULT_NEWS_DIRECTORY, now = () => new Date() } = {}) {
@@ -51,6 +53,7 @@ export function createContractNews({ directory = process.env.CONFENGE_NEWS_DIR |
   return async function serve(req, res) {
     const raw = (req.url || '').split('?', 1)[0];
     if (raw !== PREFIX.slice(0, -1) && !raw.startsWith(PREFIX)) return false;
+    res.setHeader('X-Confenge-Contract-News', 'confenge.contract-news-runtime/v1');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     const send = (status, body, type = 'text/html; charset=utf-8', jsonld = '') => {
@@ -74,6 +77,7 @@ export function createContractNews({ directory = process.env.CONFENGE_NEWS_DIR |
     if (raw.length > 512 || /[%\\\u0000-\u0020]/.test(raw)) return failure(404);
     if (raw === PREFIX.slice(0, -1)) { res.writeHead(308, { Location: PREFIX, 'Cache-Control': 'public, max-age=300' }).end(); return true; }
     const suffix = raw.slice(PREFIX.length);
+    if (suffix === 'index.html') { res.writeHead(308, { Location: PREFIX, 'Cache-Control': 'public, max-age=300' }).end(); return true; }
     const xmlKind = ['sitemap.xml', 'news-sitemap.xml', 'feed.xml'].includes(suffix) ? suffix : null;
     const pageMatch = /^pagina\/([1-9]\d{0,5})\/$/.exec(suffix);
     const slugMatch = /^([a-z0-9]+(?:-[a-z0-9]+)*)\/$/.exec(suffix);
@@ -85,7 +89,9 @@ export function createContractNews({ directory = process.env.CONFENGE_NEWS_DIR |
     }
     if (pageMatch && Number(pageMatch[1]) === 1) { res.writeHead(308, { Location: PREFIX, 'Cache-Control': 'public, max-age=300' }).end(); return true; }
     let snapshot;
-    try { snapshot = await publication(); } catch { return failure(503); }
+    try { snapshot = await publication(); } catch { res.setHeader('X-Confenge-News-State', 'unavailable'); return failure(503); }
+    res.setHeader('X-Confenge-News-State', snapshot.articles.length ? 'published' : 'empty');
+    res.setHeader('X-Confenge-News-Snapshot', publication.digest());
     if (xmlKind === 'sitemap.xml') return send(200, renderSitemap(snapshot), 'application/xml; charset=utf-8');
     if (xmlKind === 'news-sitemap.xml') return send(200, renderSitemap(snapshot, { news: true, now: now() }), 'application/xml; charset=utf-8');
     if (xmlKind === 'feed.xml') return send(200, renderFeed(snapshot), 'application/rss+xml; charset=utf-8');

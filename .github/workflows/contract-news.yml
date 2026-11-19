@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: contract-news-publication
@@ -42,8 +43,16 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.12'
+      - name: Wait for the exact Netcup release to finish acceptance
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/ops/contract_news_release.py \
+            --release-sha "$NEWS_RELEASE_SHA" --repository "$GITHUB_REPOSITORY" --ref "$GITHUB_REF"
       - name: Read approved source revision
         id: source
+        if: steps.release.outputs.ready == 'true'
         run: |
           python3 - <<'PY'
           import json, os, re
@@ -59,6 +68,7 @@ jobs:
               print('sha=' + sha, file=output)
           PY
       - name: Package the fixed producer without database credentials
+        if: steps.release.outputs.ready == 'true'
         env:
           NEWS_PRODUCER_SHA: ${{ steps.source.outputs.sha }}
         run: |
@@ -72,6 +82,7 @@ jobs:
             --sha "$NEWS_PRODUCER_SHA" --output "$RUNNER_TEMP/contract-news-producer.tar.gz"
       - name: Run the currently deployed publisher
         id: publisher
+        if: steps.release.outputs.ready == 'true'
         env:
           NEWS_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
           NEWS_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
@@ -151,5 +162,5 @@ jobs:
                   print('verify=true', file=output)
           PY
       - name: Verify public archive and article metadata
-        if: steps.publisher.outputs.verify == 'true'
+        if: steps.release.outputs.ready == 'true' && steps.publisher.outputs.verify == 'true'
         run: python3 deploy/contract-news/verify_public.py --base https://confenge.com.br

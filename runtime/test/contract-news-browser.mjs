@@ -63,6 +63,7 @@ await writeFile(join(publicationDirectory, 'current.json'), JSON.stringify({
 }));
 
 const serveNews = createContractNews({ directory: publicationDirectory });
+const collectedEvents = [];
 const mime = { '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
 const server = createServer(async (request, response) => {
   try {
@@ -70,15 +71,17 @@ const server = createServer(async (request, response) => {
     const pathname = new URL(request.url, 'http://localhost').pathname;
     // The browser's first-party analytics transport is local and non-persistent.
     if (['/api/web/collect', '/.netlify/functions/collect'].includes(pathname) && request.method === 'POST') {
-      request.resume();
+      const chunks = [];
+      for await (const chunk of request) chunks.push(chunk);
+      collectedEvents.push(...JSON.parse(Buffer.concat(chunks).toString('utf8')).events);
       response.writeHead(200, { 'Content-Type': 'application/json' }).end('{"ok":true}');
       return;
     }
-    if (pathname === '/inteligencia/') {
-      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }).end(await readFile(join(root, 'inteligencia/index.html')));
+    if (['/inteligencia/', '/acompanhamento-contratos-obras/'].includes(pathname)) {
+      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }).end(await readFile(join(root, pathname.slice(1), 'index.html')));
       return;
     }
-    if (!pathname.startsWith('/assets/') && !['/styles.css', '/styles-tokens.css', '/script.js', '/favicon.ico', '/manifest.webmanifest'].includes(pathname)) {
+    if (!pathname.startsWith('/assets/') && !['/styles.css', '/styles-tokens.css', '/styles-offers.css', '/script.js', '/favicon.ico', '/manifest.webmanifest'].includes(pathname)) {
       response.writeHead(404).end();
       return;
     }
@@ -145,6 +148,29 @@ async function assertLayout(page, label) {
   return geometry;
 }
 
+async function assertServiceClick(page, mode) {
+  const selector = '[data-news-service-link="true"]';
+  const previous = await page.evaluate(() => (window.dataLayer || []).filter(event => event.event === 'content_to_service').length);
+  // Keep this test on the article while activating a native anchor. The
+  // production scripts do not cancel its default navigation.
+  await page.$eval(selector, link => link.addEventListener('click', event => event.preventDefault(), { once: true }));
+  if (mode === 'keyboard') {
+    await page.focus(selector);
+    await page.keyboard.press('Enter');
+  } else await page.click(selector);
+  const transitions = await page.evaluate(() => (window.dataLayer || []).filter(event => event.event === 'content_to_service'));
+  assert.equal(transitions.length, previous + 1, mode + ': exactly one event per activation');
+  const event = transitions.at(-1);
+  assert.equal(event.source_path, articlePath);
+  assert.equal(event.source_asset_id, assetId(article));
+  assert.equal(event.source_asset_family, 'editorial');
+  assert.equal(event.destination_path, '/acompanhamento-contratos-obras/');
+  assert.equal(event.destination_service_id, 'acompanhamento-contratos-obras');
+  assert.equal(event.route_family, 'noticias-contratos-publicos');
+  assert.ok(event.event_id);
+  report.scenarios.push({ name: mode + ' news-to-service click', passed: true, events: 1, asset_id: event.source_asset_id });
+}
+
 try {
   browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--no-sandbox', '--disable-background-networking', '--no-first-run'] });
   const page = await browser.newPage();
@@ -205,12 +231,28 @@ try {
       await page.setViewport({ width: 320, height: 740, deviceScaleFactor: 1 });
       await assertLayout(page, 'small mobile');
     }
+    await assertServiceClick(page, name === 'mobile' ? 'keyboard' : 'pointer');
   }
   const indexResponse = await page.goto(base + PREFIX, { waitUntil: 'networkidle0', timeout: 30_000 });
   assert.equal(indexResponse.status(), 200);
   assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
   await visitBrandImages(page);
   await assertLayout(page, 'mobile index');
+  const transitions = collectedEvents.filter(event => event.event === 'content_to_service');
+  assert.equal(transitions.length, 2, 'the existing first-party transport sends both physical activations once');
+  assert.equal(new Set(transitions.map(event => event.props.event_id)).size, 2);
+  assert.ok(transitions.every(event => event.props.source_path === articlePath && event.props.source_asset_id === assetId(article)));
+  report.scenarios.push({ name: 'existing first-party collector transport', passed: true, events: transitions.length });
+
+  await page.setJavaScriptEnabled(false);
+  await page.goto(base + articlePath, { waitUntil: 'networkidle0' });
+  const [serviceResponse] = await Promise.all([
+    page.waitForNavigation({ waitUntil: 'networkidle0' }),
+    page.click('[data-news-service-link="true"]'),
+  ]);
+  assert.equal(new URL(page.url()).pathname, '/acompanhamento-contratos-obras/');
+  assert.equal(serviceResponse.status(), 200);
+  report.scenarios.push({ name: 'native service navigation without JavaScript', passed: true });
   assert.deepEqual(report.errors, []);
   report.status = 'passed';
   await writeFile(join(evidenceDirectory, 'report.json'), JSON.stringify(report, null, 2) + '\n');

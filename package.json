@@ -10,7 +10,7 @@
     "runtime:inventory": "node runtime/inventory.mjs",
     "runtime:schedule": "node runtime/schedule.mjs",
     "test:runtime": "node --test --test-concurrency=1 runtime/test/*.test.mjs",
-    "test:contract-news": "python3 -m unittest discover -s tests/contract_news -v && node --test runtime/test/contract-news*.test.mjs && python3 -m pytest scripts/organic/tests/test_contract_news_sitemap.py -q",
+    "test:contract-news": "python3 -m unittest discover -s tests/contract_news -v && node --test runtime/test/contract-news*.test.mjs && python3 -m pytest scripts/organic/tests/test_contract_news_sitemap.py scripts/site/test_contract_news_runtime.py -q",
     "test:contract-news:browser": "node runtime/test/contract-news-browser.mjs",
     "test:market-radar": "node --test --test-concurrency=1 tests/market-radar/*.test.cjs",
     "test:market-radar:browser": "node tests/market-radar/browser.mjs",

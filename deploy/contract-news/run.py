@@ -16,12 +16,15 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 
 SHA = re.compile(r"[0-9a-f]{40}")
 DIGEST = re.compile(r"[0-9a-f]{64}")
 MAX_BUNDLE = 16 * 1024 * 1024
 MAX_FILES = 128
+FACT_SCHEMA = "confenge.contract-news-facts/v1"
+MAX_FACTS = 512 * 1024
 DEFAULT_STATE = Path("/var/lib/confenge-web/contract-news")
 
 
@@ -167,8 +170,13 @@ def process_json(command: list[str], cwd: Path, env: dict, timeout: int) -> dict
     result = subprocess.run(command, cwd=cwd, env=env, capture_output=True, text=True, timeout=timeout, check=False)
     # Subprocess output is intentionally not relayed. In particular, an HTTP
     # library exception must not put Authorization or private facts in logs.
+    # The publisher emits its JSON error on stderr. Only a failed worker with
+    # no stdout may use that channel, and the same code filter applies below.
+    output = result.stdout
+    if result.returncode and not output:
+        output = result.stderr
     try:
-        value = json.loads(result.stdout)
+        value = json.loads(output)
     except (ValueError, UnicodeError):
         raise RunError("worker_invalid_response") from None
     if result.returncode or not isinstance(value, dict):
@@ -177,6 +185,43 @@ def process_json(command: list[str], cwd: Path, env: dict, timeout: int) -> dict
             code = "worker_failed"
         raise RunError(code)
     return value
+
+
+def producer_summary(response: dict, facts_path: Path) -> dict:
+    """Only bounded numeric totals and the source clock may leave private facts."""
+    summary = {}
+    if response.get("ok") is not True or response.get("schema") != FACT_SCHEMA:
+        return summary
+    requests = response.get("official_requests")
+    verified = response.get("verified_records")
+    excluded = response.get("excluded")
+    if (type(requests) is int and 0 <= requests <= 20
+            and type(verified) is int and 0 <= verified <= 20
+            and isinstance(excluded, dict) and len(excluded) <= 20
+            and all(type(value) is int and 0 <= value <= 20 for value in excluded.values())):
+        excluded_count = sum(excluded.values())
+        # Every attempted detail is either confirmed or excluded. Rechecks
+        # absent from the persisted source make no HTTP request and count in
+        # neither total. Invalid diagnostics never change publication gates.
+        if verified + excluded_count == requests:
+            summary.update(official_requests=requests, verified_records=verified, excluded_count=excluded_count)
+    # v1 emits source_as_of in the facts header, not in its stdout summary.
+    # Never copy response fields, reason strings or any record into job logs.
+    try:
+        facts = read_json(facts_path, MAX_FACTS)
+    except (RunError, OSError):
+        return summary
+    source_clock = facts.get("source_as_of")
+    if (facts.get("schema") != FACT_SCHEMA or facts.get("producer") != "extra-cli"
+            or not isinstance(source_clock, str)
+            or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)", source_clock)):
+        return summary
+    try:
+        parsed = datetime.fromisoformat(source_clock)
+        summary["source_as_of"] = parsed.astimezone(UTC).isoformat().replace("+00:00", "Z")
+    except (ValueError, OverflowError):
+        pass
+    return summary
 
 
 def run(args: argparse.Namespace) -> dict:
@@ -226,9 +271,10 @@ def run(args: argparse.Namespace) -> dict:
                 handle.flush()
                 os.fsync(handle.fileno())
             os.replace(name, private / "published-ids.json")
-            process_json([sys.executable, "-S", "-m", "scripts.public_exports.contract_news",
-                          "--radar-pointer", str(args.radar_pointer), "--published-ids", str(private / "published-ids.json"),
-                          "--output", str(private / "facts.json"), "--producer-commit", expected_producer], producer, env, 480)
+            exported = process_json([sys.executable, "-S", "-m", "scripts.public_exports.contract_news",
+                                     "--radar-pointer", str(args.radar_pointer), "--published-ids", str(private / "published-ids.json"),
+                                     "--output", str(private / "facts.json"), "--producer-commit", expected_producer], producer, env, 480)
+            source_summary = producer_summary(exported, private / "facts.json")
             approved_release(args.current, args.expected_release)
             env.update(OPENAI_API_KEY=api_key, CONFENGE_NEWS_ENABLED="1",
                        CONFENGE_NEWS_RELEASE_LINK=str(args.current), CONFENGE_NEWS_RELEASE_SHA=args.expected_release)
@@ -244,6 +290,7 @@ def run(args: argparse.Namespace) -> dict:
                 result["verified_articles"] = checked.get("articles")
             result["release"] = args.expected_release
             result["producer_commit"] = expected_producer
+            result["producer_summary"] = source_summary
             return result
         finally:
             shutil.rmtree(producer)

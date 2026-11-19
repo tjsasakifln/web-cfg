@@ -312,6 +312,118 @@ class OperationsTests(unittest.TestCase):
             ops.process_json(["python"], self.release, {}, 1)
         self.assertNotIn(KEY, str(failure.exception))
 
+    def test_real_publisher_cli_preserves_safe_stderr_error_without_key_or_api(self):
+        facts = self.root / "invalid-facts.json"
+        facts.write_text(json.dumps({"schema": "wrong"}))
+        private, public = self.root / "cli-private", self.root / "cli-public"
+        command = [ops.sys.executable, "-S", "-m", "scripts.contract_news", "generate",
+                   "--input", str(facts), "--state-dir", str(private),
+                   "--output-dir", str(public), "--dry-run"]
+        env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "PYTHONDONTWRITEBYTECODE": "1"}
+        with self.assertRaisesRegex(ops.RunError, "^invalid_facts_contract$"):
+            ops.process_json(command, RUN_PATH.parents[2], env, 10)
+        self.assertFalse(private.exists())
+        self.assertFalse(public.exists())
+
+    def test_worker_stderr_fallback_requires_failure_empty_stdout_and_safe_json_code(self):
+        from subprocess import CompletedProcess
+        raw = f"Authorization: Bearer {KEY}\nprivate facts"
+        safe_error = json.dumps({"status": "error", "code": "invalid_json_file", "detail": raw})
+        cases = (
+            (1, "", safe_error, "invalid_json_file"),
+            (1, "", raw, "worker_invalid_response"),
+            (1, "", json.dumps({"code": raw}), "worker_failed"),
+            (1, "", json.dumps({"code": {"secret": KEY}}), "worker_failed"),
+            (1, "", json.dumps([{"code": "invalid_json_file"}]), "worker_failed"),
+            (1, "", json.dumps({"detail": raw}), "worker_failed"),
+            (0, "", safe_error, "worker_invalid_response"),
+            (1, raw, safe_error, "worker_invalid_response"),
+            (1, " ", safe_error, "worker_invalid_response"),
+            (1, json.dumps({"code": "producer_unavailable"}), safe_error, "producer_unavailable"),
+        )
+        for returncode, stdout, stderr, expected in cases:
+            with self.subTest(returncode=returncode, expected=expected):
+                process = CompletedProcess(["python"], returncode, stdout=stdout, stderr=stderr)
+                with patch.object(ops.subprocess, "run", return_value=process), self.assertRaises(ops.RunError) as failure:
+                    ops.process_json(["python"], self.release, {}, 1)
+                self.assertEqual(str(failure.exception), expected)
+                self.assertNotIn(KEY, str(failure.exception))
+        success = CompletedProcess(["python"], 0, stdout='{"status":"ok"}', stderr=raw)
+        with patch.object(ops.subprocess, "run", return_value=success):
+            self.assertEqual(ops.process_json(["python"], self.release, {}, 1), {"status": "ok"})
+
+    def test_producer_summary_only_exposes_bounded_counts_and_header_clock(self):
+        facts = self.root / "facts.private.json"
+        facts.write_text(json.dumps({
+            "schema": ops.FACT_SCHEMA, "producer": "extra-cli", "source_as_of": "2026-11-19T12:30:00-03:00",
+            "records": [{"buyer": "private buyer", "object": "private object", "supplier": KEY,
+                         "id": "11222333000181-2-000123/2026", "source_url": "https://pncp.gov.br/private"}],
+        }))
+        response = {
+            "ok": True, "schema": ops.FACT_SCHEMA, "official_requests": 4, "verified_records": 1,
+            "excluded": {"object_not_engineering": 1, "private error " + KEY: 2},
+            "raw_error": KEY, "source_as_of": KEY, "buyer": "private buyer", "records": [{"secret": KEY}],
+        }
+        result = ops.producer_summary(response, facts)
+        self.assertEqual(result, {"official_requests": 4, "verified_records": 1, "excluded_count": 3,
+                                  "source_as_of": "2026-11-19T15:30:00Z"})
+        serialized = json.dumps(result)
+        for forbidden in (KEY, "private", "11222333000181", "pncp.gov.br", "object_not_engineering"):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_producer_summary_omits_invalid_and_unreconciled_counts(self):
+        valid = {"ok": True, "schema": ops.FACT_SCHEMA, "official_requests": 2,
+                 "verified_records": 1, "excluded": {"object_not_engineering": 1}}
+        absent = self.root / "absent-facts.json"
+        for changes in (
+            {"ok": 1}, {"schema": "wrong"}, {"official_requests": True}, {"official_requests": "2"},
+            {"official_requests": 21}, {"official_requests": -1}, {"verified_records": False},
+            {"verified_records": 3}, {"verified_records": -1}, {"excluded": [1]},
+            {"excluded": {"reason": KEY}}, {"excluded": {"reason": True}},
+            {"excluded": {"reason": -1}}, {"excluded": {"reason": 21}},
+            {"excluded": {"reason": 0}}, {"excluded": {str(index): 0 for index in range(21)}},
+        ):
+            with self.subTest(changes=changes):
+                self.assertEqual(ops.producer_summary({**valid, **changes}, absent), {})
+        self.assertEqual(ops.producer_summary(valid, absent),
+                         {"official_requests": 2, "verified_records": 1, "excluded_count": 1})
+        self.assertEqual(ops.producer_summary({**valid, "official_requests": 0, "verified_records": 0, "excluded": {}}, absent),
+                         {"official_requests": 0, "verified_records": 0, "excluded_count": 0})
+
+    def test_source_clock_rejects_invalid_formats_dates_and_symlink(self):
+        response = {"ok": True, "schema": ops.FACT_SCHEMA, "official_requests": 0, "verified_records": 0, "excluded": {}}
+        counts = {"official_requests": 0, "verified_records": 0, "excluded_count": 0}
+        facts = self.root / "facts.private.json"
+        for clock in (None, True, 2026, {"secret": KEY}, "2026-11-19T12:30:00", "2026-02-30T12:30:00Z",
+                      "2026-11-19T12:30:00Z\n" + KEY, "2026-11-19T12:30:00+99:00", "2026-11-19T12:30:00+00:60",
+                      "0001-01-01T00:00:00+23:59", "9999-12-31T23:59:00-23:59"):
+            with self.subTest(clock=clock):
+                facts.write_text(json.dumps({"schema": ops.FACT_SCHEMA, "producer": "extra-cli", "source_as_of": clock}))
+                self.assertEqual(ops.producer_summary(response, facts), counts)
+        facts.write_text("{invalid private json " + KEY)
+        self.assertEqual(ops.producer_summary(response, facts), counts)
+        alias = self.root / "facts-alias.json"
+        alias.symlink_to(facts)
+        self.assertEqual(ops.producer_summary(response, alias), counts)
+
+    def test_orchestrator_returns_sanitized_producer_summary_without_raw_payload(self):
+        def worker(command, cwd, env, timeout):
+            result = self.fake_worker(command, cwd, env, timeout)
+            if "scripts.public_exports.contract_news" in command:
+                facts = self.args.state / "private/facts.json"
+                facts.write_text(json.dumps({"schema": ops.FACT_SCHEMA, "producer": "extra-cli",
+                                             "source_as_of": "2026-11-19T15:30:00.123456Z", "records": [{"key": KEY}]}))
+                result.update(schema=ops.FACT_SCHEMA, official_requests=2, verified_records=0,
+                              excluded={KEY: 2}, raw_error=KEY)
+            return result
+        with patch.object(ops, "process_json", side_effect=worker):
+            result = ops.run(self.args)
+        self.assertEqual(result["producer_summary"], {
+            "official_requests": 2, "verified_records": 0, "excluded_count": 2,
+            "source_as_of": "2026-11-19T15:30:00.123456Z",
+        })
+        self.assertNotIn(KEY, json.dumps(result))
+
 
 if __name__ == "__main__":
     unittest.main()

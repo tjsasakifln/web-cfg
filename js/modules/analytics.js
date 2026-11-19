@@ -66,7 +66,6 @@
     '/guias-contratos-obras/': 'editorial',
     '/analises-contratos-publicos/': 'editorial',
     '/panorama-mercado-obras-publicas/': 'editorial',
-    '/noticias/contratos-publicos/': 'editorial',
     '/casos/': 'case',
     '/servicos-obras-publicas/': 'hub',
     '/servicos/': 'hub',

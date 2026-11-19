@@ -104,6 +104,7 @@ def host(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     monkeypatch.setenv("CONFENGE_RELEASE_TEST_MODE", "1")
     monkeypatch.setenv("CONFENGE_RELEASE_ROOT", str(root))
     monkeypatch.setenv("CONFENGE_ORIGIN_HOST", "confenge.com.br")
+    monkeypatch.setenv("CONFENGE_NEWS_DIR", str(tmp_path / "contract-news-public"))
     monkeypatch.setattr(control, "CACHE_TRANSITION_MIN_AGE_SECONDS", 0)
     return root
 
@@ -112,6 +113,10 @@ def make_site(tmp_path: Path, sha: str) -> Path:
     site = tmp_path / f"site-{sha[0]}"
     well_known = site / ".well-known"
     well_known.mkdir(parents=True)
+    news = site / "noticias/contratos-publicos"
+    news.mkdir(parents=True)
+    for name in ("index.html", "sitemap.xml", "news-sitemap.xml", "feed.xml"):
+        shutil.copy2(REPO_ROOT / "noticias/contratos-publicos" / name, news / name)
     artifact_hash = sha256_file(Path(__file__))
     manifest_hash = sha256_file(REPO_ROOT / "deploy" / "netcup" / "package_release.py")
     (site / "404.html").write_text(

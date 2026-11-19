@@ -1620,9 +1620,11 @@ export const SUITE_GRAPH = Object.freeze({
   "test:contract-news": {
     producers: [
       "scripts/contract_news/",
+      "scripts/ops/contract_news_release.py",
       "tests/contract_news/",
       "runtime/contract-news/",
       "runtime/test/contract-news*.mjs",
+      "assets/js/contract-news.js",
       "runtime/lib/server.mjs",
       "runtime/contract.json",
       "deploy/contract-news/",
@@ -1631,6 +1633,10 @@ export const SUITE_GRAPH = Object.freeze({
       "docs/ops/CONTRACT-NEWS.md",
       "scripts/organic/sitemap_graph.py",
       "scripts/organic/tests/test_contract_news_sitemap.py",
+      "scripts/site/test_contract_news_runtime.py",
+      "scripts/site/contract_news_runtime.py",
+      "scripts/site/public_server_acceptance.py",
+      "deploy/netcup/lib/release_control.py",
       "noticias/contratos-publicos/",
     ],
     artifacts: ["noticias/contratos-publicos/"],
