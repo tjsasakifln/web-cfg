@@ -550,6 +550,21 @@ export function renderRuntimeLocations(contract) {
     }
     lines.push(...runtimeProxyDirectives(), "}", "");
   }
+  if (contract.runtime.contractNewsPrefix) {
+    const prefix = contract.runtime.contractNewsPrefix;
+    if (prefix !== "/noticias/contratos-publicos/") throw new Error("Invalid contract news prefix");
+    lines.push(`location = ${prefix.slice(0, -1)} {`, "  absolute_redirect off;", `  return 308 ${prefix};`, "}", "");
+    lines.push(`location ^~ ${prefix} {`);
+    // Published articles change independently of the code release. The news
+    // renderer supplies per-response JSON-LD hashes, cache validators and status.
+    // Suppress inherited versions of those headers instead of composing two CSPs.
+    for (const { lower, name } of allHeaderNames(contract)) {
+      if (!["content-security-policy", "cache-control", "content-type", "x-robots-tag", "x-content-type-options", "referrer-policy"].includes(lower)) {
+        lines.push(`  add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
+      }
+    }
+    lines.push(...runtimeProxyDirectives(), "}", "");
+  }
   for (const path of ["/healthz", "/ready", "/runtime-identity", contract.runtime.identityPath]) {
     lines.push(`location = ${path} {`);
     lines.push(...runtimeProxyDirectives());

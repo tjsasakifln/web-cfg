@@ -81,6 +81,29 @@ function expectSubset(result, mustInclude, because) {
 
 {
   for (const input of [
+    "scripts/contract_news/pipeline.py",
+    "scripts/ops/contract_news_release.py",
+    "tests/contract_news/test_pipeline.py",
+    "runtime/contract-news/render.mjs",
+    "runtime/test/contract-news.test.mjs",
+    "runtime/test/contract-news-host.test.mjs",
+    "assets/js/contract-news.js",
+    "deploy/contract-news/run.py",
+    ".github/workflows/contract-news.yml",
+    "data/editorial/contract-news-source.json",
+    "scripts/organic/tests/test_contract_news_sitemap.py",
+    "scripts/site/test_contract_news_runtime.py",
+    "scripts/site/contract_news_runtime.py",
+    "scripts/site/public_server_acceptance.py",
+    "deploy/netcup/lib/release_control.py",
+    "noticias/contratos-publicos/index.html",
+  ]) {
+    expectSubset(selectAffected([input], scripts), ["test:contract-news"], `contract news input ${input}`);
+  }
+}
+
+{
+  for (const input of [
     "scripts/demand_radar/engine.py",
     "data/demand_radar/ledger.v1.json",
     "docs/demand-radar/REPORT.md",

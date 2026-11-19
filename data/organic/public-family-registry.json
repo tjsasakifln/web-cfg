@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-11-18",
+  "as_of": "2026-11-19",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -2133,6 +2133,39 @@
       "debt": [],
       "exemption_reason": "Avisos de autoria, fontes e licenças que acompanham a distribuição de software, sem oferta precificada ou captura comercial própria. O visitante consulta seus direitos e a proveniência dos componentes.",
       "note": "Correspondência unitária com /cad/freecad/creditos.html, como o precedente /404.html: o registro usa o nome completo do arquivo porque match.routes exige barra final. O teste de escopo impede que outras páginas herdem esta família. A página de apresentação /ferramentas/modelador-parametrico-3d/ permanece indexável e fora desta classificação."
+    },
+    {
+      "id": "noticias-contratos-publicos",
+      "visitor_job": "Acompanhar contratações recentes de obras, projetos e infraestrutura, conferir valor e fonte e conhecer apoio técnico para a execução contratual.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "prefix": "/noticias/contratos-publicos/"
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "canonical_service_family": "public_contract_execution",
+      "nucleus_id": "public_works_b2g",
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-11-19",
+      "owner_issue": 61,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "external_record",
+        "not_applicable": [],
+        "reason": "Notícias derivadas de contratos PNCP confirmados pelo extra-cli, com valor tipado, identidade, fonte e datas conferidos antes de cada publicação pelo validador do HTML efetivamente servido.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "runtime/contract-news/validate.mjs",
+          "scripts/contract_news/pipeline.py"
+        ],
+        "declared_at": "2026-11-19",
+        "owner_issue": 61
+      },
+      "note": "O acervo é servido pelo runtime a partir de publicação durável. O censo estático inclui somente o índice vazio noindex usado para montagem e prévia. Cada publicação passa pelo mesmo schema e renderer Node antes da troca atômica do ponteiro; nenhuma revisão humana é alegada."
     }
   ]
 }

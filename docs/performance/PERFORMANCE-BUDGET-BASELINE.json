@@ -1,9 +1,9 @@
 {
   "assets_snapshot": {
-    "asset_files_max_route": 25,
-    "asset_raw_kb_max_route": 1117.83,
+    "asset_files_max_route": 23,
+    "asset_raw_kb_max_route": 1134.61,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
-    "routes_measured": 306
+    "routes_measured": 311
   },
   "budget": {
     "cls_max": 0.05,
@@ -546,6 +546,7 @@
       "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
       "/medicoes-glosas-obras-publicas/",
       "/metodologia-inteligencia/",
+      "/noticias/contratos-publicos/",
       "/nurture/",
       "/nurture/sair/",
       "/obrigado-contrato.html",
@@ -858,6 +859,7 @@
       "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
       "/medicoes-glosas-obras-publicas/",
       "/metodologia-inteligencia/",
+      "/noticias/contratos-publicos/",
       "/nurture/",
       "/nurture/sair/",
       "/obrigado-contrato.html",

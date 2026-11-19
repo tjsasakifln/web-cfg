@@ -361,6 +361,7 @@ def build_release(
         control_root = repo_root / "deploy" / "netcup"
         copy_tree(control_root / "bin", payload / "ops" / "bin")
         copy_tree(control_root / "lib", payload / "ops" / "lib")
+        copy_tree(repo_root / "deploy" / "contract-news", payload / "ops" / "contract-news")
         for source_name, target_name in (
             ("nginx", "nginx"),
             ("schedules", "schedules"),
@@ -415,6 +416,7 @@ def build_release(
                 payload / "scripts" / "live_intelligence",
             ),
             (repo_root / "scripts" / "organic", payload / "scripts" / "organic"),
+            (repo_root / "scripts" / "contract_news", payload / "scripts" / "contract_news"),
             (repo_root / "data" / "commercial", payload / "data" / "commercial"),
             (repo_root / "data" / "conversion", payload / "data" / "conversion"),
         ):
@@ -464,6 +466,7 @@ def build_release(
             "data/revops/closed-loop-funnel.v1.json",
             "data/nurture/tracks.json",
             "data/site/editorial-policy.json",
+            "data/editorial/contract-news-source.json",
             "data/site/brand.json",
             "data/site/public-ia-map.json",
             "data/organic/public-family-registry.json",
@@ -521,6 +524,8 @@ def build_release(
                 "scripts/offers/",
                 "scripts/live_intelligence/",
                 "scripts/organic/",
+                "scripts/contract_news/",
+                "ops/contract-news/",
                 "scripts/__init__.py",
                 "scripts/storage/lib.cjs",
                 "scripts/storage/retention.mjs",
@@ -539,6 +544,7 @@ def build_release(
                 "data/conversion/",
                 "data/nurture/tracks.json",
                 "data/site/editorial-policy.json",
+                "data/editorial/contract-news-source.json",
                 "data/site/brand.json",
                 "data/site/public-ia-map.json",
                 "data/organic/public-family-registry.json",

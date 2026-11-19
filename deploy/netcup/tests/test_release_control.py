@@ -104,6 +104,7 @@ def host(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     monkeypatch.setenv("CONFENGE_RELEASE_TEST_MODE", "1")
     monkeypatch.setenv("CONFENGE_RELEASE_ROOT", str(root))
     monkeypatch.setenv("CONFENGE_ORIGIN_HOST", "confenge.com.br")
+    monkeypatch.setenv("CONFENGE_NEWS_DIR", str(tmp_path / "contract-news-public"))
     monkeypatch.setattr(control, "CACHE_TRANSITION_MIN_AGE_SECONDS", 0)
     return root
 
@@ -112,6 +113,10 @@ def make_site(tmp_path: Path, sha: str) -> Path:
     site = tmp_path / f"site-{sha[0]}"
     well_known = site / ".well-known"
     well_known.mkdir(parents=True)
+    news = site / "noticias/contratos-publicos"
+    news.mkdir(parents=True)
+    for name in ("index.html", "sitemap.xml", "news-sitemap.xml", "feed.xml"):
+        shutil.copy2(REPO_ROOT / "noticias/contratos-publicos" / name, news / name)
     artifact_hash = sha256_file(Path(__file__))
     manifest_hash = sha256_file(REPO_ROOT / "deploy" / "netcup" / "package_release.py")
     (site / "404.html").write_text(
@@ -1198,6 +1203,8 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
     for required in (
         "_site/index.html",
         "runtime/server.mjs",
+        "runtime/contract-news/server.mjs",
+        "runtime/contract-news/validate.mjs",
         "runtime/contract.json",
         "runtime/tools-commerce/deps/package.json",
         "runtime/tools-commerce/deps/package-lock.json",
@@ -1207,6 +1214,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "data/revops/closed-loop-funnel.v1.json",
         "data/nurture/tracks.json",
         "data/site/editorial-policy.json",
+        "data/editorial/contract-news-source.json",
         "data/bofu-dominance/core/gsc-live-overlay.v1.json",
         "data/offers/flags.json",
         "data/offers/catalog.snapshot.json",
@@ -1220,9 +1228,15 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "ops/bin/verify-release",
         "ops/bin/promote-release",
         "ops/bin/rollback",
+        "ops/contract-news/run.py",
+        "ops/contract-news/verify_public.py",
         "scripts/__init__.py",
         "scripts/live_intelligence/publish.py",
         "scripts/organic/sitemap_graph.py",
+        "scripts/contract_news/__main__.py",
+        "scripts/contract_news/pipeline.py",
+        "scripts/contract_news/core.py",
+        "scripts/contract_news/openai_client.py",
         "scripts/storage/lib.cjs",
         "scripts/storage/retention.mjs",
         "scripts/site/shell_nav.py",

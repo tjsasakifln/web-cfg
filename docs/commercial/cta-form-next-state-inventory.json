@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 298
+    "expected_declared_ctas": 299
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 42,
-    "declared_ctas": 298,
+    "declared_ctas": 299,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -5503,6 +5503,21 @@
           "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "intelligence-contract-news",
+          "position": "content",
+          "href": "/noticias/contratos-publicos/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver notícias de contratos públicos",
+          "useful_next_state": "Abre o destino declarado por “Ver notícias de contratos públicos” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp. Para documentos confidenciais, combinamos uma forma reservada de envio.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {

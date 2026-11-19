@@ -104,6 +104,10 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: node scripts/site/measure_first_fold.mjs --write
+      - name: Verify contract news in desktop and mobile Chrome
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:contract-news:browser
       # This wallet fixture serves source assets and needs no public build.
       # Run it early for isolated browser input and prompt failure evidence;
       # artifact-specific browser gates remain after Build public site.
@@ -127,6 +131,7 @@ jobs:
         run: |
           npm run discovery:test
           npm run test:runtime-authority
+          npm run test:contract-news
           npm run editorial:test
           npm run editorial:build
           npm run test:inbound-gates

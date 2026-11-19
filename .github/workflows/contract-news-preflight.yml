@@ -1,0 +1,58 @@
+name: Contract news readiness
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/contract-news-preflight.yml
+      - scripts/ops/contract_news_preflight.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contract-news-readiness
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    name: Read-only news prerequisites
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: netcup-stage
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Inspect existing configuration without exposing values
+        env:
+          NEWS_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NEWS_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NEWS_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NEWS_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NEWS_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+          NEWS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$NEWS_DEPLOY_HOST"
+          test -n "$NEWS_DEPLOY_PORT"
+          test -n "$NEWS_DEPLOY_USER"
+          test -n "$NEWS_SSH_PRIVATE_KEY"
+          test -n "$NEWS_SSH_KNOWN_HOSTS"
+          [[ "$NEWS_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]]
+          [[ "$NEWS_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]]
+          [[ "$NEWS_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]
+          (( NEWS_DEPLOY_PORT <= 65535 ))
+          install -d -m 0700 "$RUNNER_TEMP/news-ssh"
+          printf '%s\n' "$NEWS_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/news-ssh/key"
+          printf '%s\n' "$NEWS_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/news-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/news-ssh/key" "$RUNNER_TEMP/news-ssh/known_hosts"
+          if [ -n "$NEWS_OPENAI_KEY" ]; then
+            echo 'OPENAI_API_KEY configured in Actions: true'
+          else
+            echo 'OPENAI_API_KEY configured in Actions: false'
+          fi
+          ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            -o "UserKnownHostsFile=$RUNNER_TEMP/news-ssh/known_hosts" \
+            -p "$NEWS_DEPLOY_PORT" -i "$RUNNER_TEMP/news-ssh/key" \
+            "$NEWS_DEPLOY_USER@$NEWS_DEPLOY_HOST" 'python3 -' < scripts/ops/contract_news_preflight.py

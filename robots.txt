@@ -48,3 +48,4 @@ Disallow: /.netlify/
 Allow: /analises-contratos-publicos/
 Allow: /analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/
 # Contract-analysis family — end
+Sitemap: https://confenge.com.br/noticias/contratos-publicos/sitemap.xml

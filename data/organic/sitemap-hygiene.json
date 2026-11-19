@@ -1,8 +1,18 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 145,
-  "unique_paths": 145,
+  "url_count": 164,
+  "static_url_count": 164,
+  "dynamic_sitemaps": [
+    {
+      "loc": "https://confenge.com.br/noticias/contratos-publicos/sitemap.xml",
+      "scope": "durable_runtime_archive",
+      "included_in_static_url_count": false,
+      "http_checked": false,
+      "url_count": null
+    }
+  ],
+  "unique_paths": 164,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -91,15 +101,32 @@
     "https://confenge.com.br/ferramentas/calculadora-psicrometrica/",
     "https://confenge.com.br/ferramentas/caminho-critico-obra/",
     "https://confenge.com.br/ferramentas/checklist-reequilibrio/",
+    "https://confenge.com.br/ferramentas/comparador-cronogramas/",
+    "https://confenge.com.br/ferramentas/comparador-geometrico-ifc/",
+    "https://confenge.com.br/ferramentas/conforto-termico/",
     "https://confenge.com.br/ferramentas/conversor-utm-sirgas-2000/",
     "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
     "https://confenge.com.br/ferramentas/diagrama-unifilar/",
+    "https://confenge.com.br/ferramentas/energia-solar-fotovoltaica/",
+    "https://confenge.com.br/ferramentas/epanet-inp/",
+    "https://confenge.com.br/ferramentas/federacao-bcf/",
+    "https://confenge.com.br/ferramentas/georreferenciador-ifc/",
+    "https://confenge.com.br/ferramentas/geotecnia-cpt-estacas/",
+    "https://confenge.com.br/ferramentas/inventario-ifc/",
     "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/",
     "https://confenge.com.br/ferramentas/matriz-atraso-obra/",
+    "https://confenge.com.br/ferramentas/memorial-de-calculo/",
+    "https://confenge.com.br/ferramentas/modelador-parametrico-3d/",
     "https://confenge.com.br/ferramentas/orcamento-de-obras/",
+    "https://confenge.com.br/ferramentas/plantas-cortes-ifc/",
     "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+    "https://confenge.com.br/ferramentas/propriedades-de-secoes/",
+    "https://confenge.com.br/ferramentas/quantitativos-dxf/",
     "https://confenge.com.br/ferramentas/radar-mercado-publico/",
+    "https://confenge.com.br/ferramentas/radier-solo-elastico/",
     "https://confenge.com.br/ferramentas/rede-de-agua/",
+    "https://confenge.com.br/ferramentas/secao-de-concreto-armado/",
+    "https://confenge.com.br/ferramentas/trelicas-e-porticos/",
     "https://confenge.com.br/imprensa/",
     "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
     "https://confenge.com.br/medicoes-glosas-obras-publicas/",
@@ -117,6 +144,8 @@
     "https://confenge.com.br/projeto-hidrossanitario/",
     "https://confenge.com.br/projetos/",
     "https://confenge.com.br/projetos-complementares-engenharia/",
+    "https://confenge.com.br/projetos-prontos/",
+    "https://confenge.com.br/projetos-prontos/condicoes/",
     "https://confenge.com.br/projetos/coordenacao-multidisciplinar/",
     "https://confenge.com.br/projetos/estruturas/",
     "https://confenge.com.br/projetos/infraestrutura/",
@@ -151,7 +180,7 @@
     "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
-    "core": 129,
+    "core": 148,
     "editorial": 4,
     "inteligencia": 10,
     "contract_analysis": 2
@@ -169,7 +198,8 @@
     "sitemap-analises-contratos.xml"
   ],
   "robots_sitemaps": [
-    "https://confenge.com.br/sitemap-index.xml"
+    "https://confenge.com.br/sitemap-index.xml",
+    "https://confenge.com.br/noticias/contratos-publicos/sitemap.xml"
   ],
   "broken": 0,
   "orphan_indexable": 0,
