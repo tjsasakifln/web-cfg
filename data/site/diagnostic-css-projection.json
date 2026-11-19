@@ -4,9 +4,9 @@
   "source": "styles.css",
   "target": "assets/tool-bundles/diagnostico-base.css",
   "method": "Remove only whole rules when every selector begins with an explicitly absent component class. Preserve declaration and cascade bytes. Do not use first-viewport coverage.",
-  "runtime_review": "HTML, shared module sources and bundle, inline tool code, static and conditional imports reviewed together. A changed source hash requires component review before regeneration. Firebase entry and bundler are covered; provider SDK does not create the reviewed site component classes.",
+  "runtime_review": "HTML, shared module sources and bundle, inline tool code, static and conditional imports reviewed together. A changed source hash requires component review before regeneration. Firebase entry and bundler are covered; provider SDK does not create the reviewed site component classes. PR #825 integration review (a2516631f0282e0274b5afd44e280a965a1984ec against main de81f1be7b409d765a7cf4d76ef6ca619e138f8b): the diagnostic HTML adds dates and the tool-export-terms paragraph; tool-credits adds an existing wallet action and preserves export-result identity; showcase reveals export terms and filters existing catalogue cards. Imports remain unchanged. The added tool-export-terms class and existing wallet actions remain covered by the loaded diagnostic and wallet stylesheets; no excluded base component was introduced. All 14 runtime sources were checked against the unchanged 266 exclusions, and the projected CSS remains byte-identical.",
   "runtime_sources": {
-    "ferramentas/diagnostico-defesa-margem/index.html": "4269485e6f5013ce588817fe02e81b13fdbecf7b02a8914414fa02d95e1713cf",
+    "ferramentas/diagnostico-defesa-margem/index.html": "e885b721dd2ad25f3333cc9f0925d7272ca69c243725722905ee570b6623c4ad",
     "script.js": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
     "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e",
     "js/modules/nav.js": "1b0abe2470f2a4d61f752936be8a16b520098d535ccfb0d6ea06da4275819eee",
@@ -16,8 +16,8 @@
     "assets/js/tools-common.js": "0beda7447f392abcfb2e70086700b3a7e66c87e132139c33e8c9ddfaf8253763",
     "assets/js/diagnose-margin.js": "8adfbbf78cbe6fd205a0b34a5b921d933badc18fb3d714cc69c6c3e35153dd82",
     "assets/js/tool-referral.mjs": "71df9a0804914f8eb1756827f0630a0a2c0f8cffe9ced4fb71384937b79dbb1d",
-    "assets/js/tool-credits.mjs": "430d7d17680ec0a3eaf9700ea5a2ed27792739cc84e72db0e5944e3ef212e560",
-    "assets/tool-showcase/showcase.mjs": "805cf1cfb68de7ad3bb1d859cfb7e851ca3fcad061df8a3a229d7c85389bd450",
+    "assets/js/tool-credits.mjs": "47d8cfe323e498090abd2be0317e6c11fb99034246b2fc1231cbfd564e26329a",
+    "assets/tool-showcase/showcase.mjs": "a53baff58a3173cf87440bf105209e208f5533483f87641917f94a2505751214",
     "scripts/tools-commerce/firebase-auth-entry.mjs": "d9503c8f0844d07b7ed57b1b8ad8b76351a6df9704527d94fc3314de8ea5f092",
     "scripts/tools-commerce/bundle-firebase-auth.mjs": "fb359dd6359811a51c5c91bb62ac1e6bb1638579b21d68737bd962ae5432f8da"
   },
