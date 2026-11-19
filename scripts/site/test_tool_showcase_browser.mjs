@@ -445,6 +445,37 @@ try {
     'Projeto privado de teste da continuidade');
   assert.equal(await page.$eval('#bdi-obra', el => el.value), '19,4458');
   assert.match(await page.$eval('#contagem', el => el.textContent), /3 serviços/);
+  await load('/ferramentas/calculadora-bdi/');
+  await page.waitForSelector('#campos:not([disabled])');
+  await page.click('#exemplo');
+  await page.click('#composicao button[type="submit"]');
+  await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click('#continuar-orcamento')]);
+  await page.waitForSelector('#bdi-recebido:not([hidden])');
+  await page.click('#descartar-bdi');
+  assert.equal(await page.$eval('#bdi-recebido', el => el.hidden), true);
+  assert.equal(await page.$eval('#bdi-obra', el => el.value), '19,4458', 'discard keeps the current budget rate');
+  await load('/ferramentas/'); // Actual navigation flushes the first-party queue.
+  const usageIds = new Set(['tool-bdi-continue-budget', 'tool-budget-apply-bdi',
+    'tool-budget-discard-bdi', 'tool-budget-save-json']);
+  const collectedUsage = () => events.filter(event => event.path === '/api/web/collect')
+    .flatMap(event => JSON.parse(event.body).events || []).filter(event => usageIds.has(event.props?.cta_id));
+  const usageDeadline = Date.now() + 5000;
+  while (new Set(collectedUsage().map(event => event.props.cta_id)).size < usageIds.size && Date.now() < usageDeadline) {
+    await delay(50);
+  }
+  const usage = collectedUsage();
+  assert.deepEqual(new Set(usage.map(event => event.props.cta_id)), usageIds, 'all four usage clicks reach the collector');
+  const {admitEvent} = require('../../netlify/functions/lib/event-contract.cjs');
+  const {aggregateEvents} = require('../../netlify/functions/lib/analytics-agg.cjs');
+  for (const event of usage) {
+    const admitted = admitEvent(event);
+    assert.equal(admitted.ok, true, JSON.stringify(admitted));
+    assert.equal(admitted.event.props.destination_type, 'tool_action');
+    const summary = aggregateEvents([admitted.event]);
+    assert.ok(summary.daily.length > 0);
+    assert.ok(summary.daily.every(day => day.cta_clicks === 0 && day.cta_clicks_legacy_unclassified === 0),
+      'a tool action must not inflate commercial intent: ' + event.props.cta_id);
+  }
   assert.equal(events.filter(event => event.path.includes('tool-credits')).length, commerceRequestsBefore,
     'BDI continuation and free JSON must not request a paid export or create an order');
   assert.ok(events.every(event => !/Projeto privado de teste|19[.,]4458/.test(event.body)),

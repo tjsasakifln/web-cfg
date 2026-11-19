@@ -154,8 +154,9 @@ As três prioridades desta continuação são:
    descartá-la. Itens e título do orçamento são preservados. Nenhuma exportação,
    compra ou débito é acionado por essa passagem.
 3. Observar a utilização e o resultado econômico pelo sistema existente. Os
-   cliques têm identificadores estáticos, sem taxa, custo, nome de obra, arquivo
-   ou dados da conta. As etapas comerciais agregadas e o registro operacional
+   cliques têm identificadores estáticos e destino `tool_action`, sem taxa, custo,
+   nome de obra, arquivo ou dados da conta. Esse destino os mantém fora da contagem
+   de intenção comercial. As etapas comerciais agregadas e o registro operacional
    continuam separados.
 
 O orçamento aceita a taxa com quatro casas decimais, exibidas antes da aplicação.
