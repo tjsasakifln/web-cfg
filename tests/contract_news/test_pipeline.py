@@ -406,11 +406,30 @@ class ResponsesClientTests(unittest.TestCase):
         request = send.call_args.args[0]
         body = json.loads(request.data)
         self.assertEqual(request.full_url, "https://api.openai.com/v1/responses")
+        self.assertEqual(body["model"], "gpt-6-luna")
+        self.assertEqual(body["reasoning"], {"effort": "none"})
         self.assertFalse(body["store"])
         self.assertNotIn("tools", body)
         self.assertTrue(body["text"]["format"]["strict"])
         self.assertEqual(body["max_output_tokens"], 1800)
         self.assertEqual(send.call_args.kwargs["timeout"], 45)
+
+    def test_review_uses_luna_effort_without_sending_it_to_model_overrides(self):
+        verdict = {"supported": True, "issues": []}
+        response = self.response({"status": "completed", "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(verdict)}]}]})
+        for model in ("gpt-6-luna", "chosen-structured-model"):
+            with self.subTest(model=model), patch("urllib.request.urlopen", return_value=response) as send:
+                actual = ResponsesClient("secret-test-only", model=model).call("review", fact(), validate_draft(draft(), fact()))
+            self.assertEqual(actual, verdict)
+            body = json.loads(send.call_args.args[0].data)
+            self.assertEqual(body["model"], model)
+            self.assertEqual(body["max_output_tokens"], 900)
+            self.assertEqual(body["text"]["format"]["name"], "contract_news_review")
+            if model == "gpt-6-luna":
+                self.assertEqual(body["reasoning"], {"effort": "none"})
+            else:
+                self.assertNotIn("reasoning", body)
+            self.assertEqual(send.call_count, 1)
 
     def test_timeout_incomplete_refusal_and_invalid_json_do_not_fallback(self):
         client = ResponsesClient("secret-test-only")

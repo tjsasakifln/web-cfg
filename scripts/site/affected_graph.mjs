@@ -61,6 +61,7 @@ const PUBLIC_SURFACE_PREFIXES = Object.freeze([
   "obrigado",
   "ops/",
   "inteligencia/",
+  "noticias/contratos-publicos/",
 ]);
 
 /**
@@ -1615,6 +1616,30 @@ export const SUITE_GRAPH = Object.freeze({
     ],
     artifacts: ["seo/visible-parity.json", "seo/visible-parity.md"],
     surfaces: [],
+  },
+  "test:contract-news": {
+    producers: [
+      "scripts/contract_news/",
+      "tests/contract_news/",
+      "runtime/contract-news/",
+      "runtime/test/contract-news*.mjs",
+      "runtime/lib/server.mjs",
+      "runtime/contract.json",
+      "deploy/contract-news/",
+      ".github/workflows/contract-news*.yml",
+      "data/editorial/contract-news-source.json",
+      "docs/ops/CONTRACT-NEWS.md",
+      "scripts/organic/sitemap_graph.py",
+      "scripts/organic/tests/test_contract_news_sitemap.py",
+      "noticias/contratos-publicos/",
+    ],
+    artifacts: ["noticias/contratos-publicos/"],
+    surfaces: [
+      "/noticias/contratos-publicos/",
+      "/noticias/contratos-publicos/sitemap.xml",
+      "/noticias/contratos-publicos/news-sitemap.xml",
+      "/noticias/contratos-publicos/feed.xml",
+    ],
   },
   "test:contract-analysis": {
     producers: [

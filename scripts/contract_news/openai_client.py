@@ -9,7 +9,7 @@ import urllib.request
 
 from .core import NewsError, json_bytes
 
-DEFAULT_MODEL = "gpt-4.1-mini"
+DEFAULT_MODEL = "gpt-6-luna"
 ENDPOINT = "https://api.openai.com/v1/responses"
 MAX_RESPONSE_BYTES = 256 * 1024
 
@@ -123,6 +123,8 @@ class ResponsesClient:
                 "strict": True, "schema": REVIEW_SCHEMA if review else DRAFT_SCHEMA,
             }},
         }
+        if self.model == "gpt-6-luna":
+            payload["reasoning"] = {"effort": "none"}
         request = urllib.request.Request(ENDPOINT, data=json_bytes(payload), method="POST", headers={
             "Authorization": "Bearer " + self._api_key,
             "Content-Type": "application/json",

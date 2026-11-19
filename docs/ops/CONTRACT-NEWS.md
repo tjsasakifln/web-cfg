@@ -38,8 +38,12 @@ Sem chave disponível, a rotina termina com `missing_openai_api_key`; isso não 
 uma publicação concluída. Não há texto fictício como substituição.
 
 As configurações opcionais no arquivo privado são `CONFENGE_NEWS_MODEL`, padrão
-`gpt-4.1-mini`, e `CONFENGE_NEWS_NODE`, padrão `node`. O modelo precisa suportar
-Responses com o formato JSON estrito usado pelo consumidor.
+`gpt-6-luna`, e `CONFENGE_NEWS_NODE`, padrão `node`. O modelo precisa suportar
+Responses com o formato JSON estrito usado pelo consumidor. Para
+[`gpt-6-luna`](https://developers.openai.com/api/docs/models/gpt-6-luna), o cliente
+envia `reasoning.effort=none` na redação e na revisão, mantendo os limites de
+tokens e tempo. Outros modelos configurados não recebem essa opção. Não há
+troca de modelo nem nova tentativa paga após uma falha.
 
 ## Estado durável e limites
 

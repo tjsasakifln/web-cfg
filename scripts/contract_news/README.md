@@ -26,7 +26,9 @@ criar arquivos, usar chave ou chamar a API. Não gera uma notícia de demonstra�
 
 Para gerar, o serviço precisa de `CONFENGE_NEWS_ENABLED=1` e `OPENAI_API_KEY` no
 ambiente privado. `CONFENGE_NEWS_MODEL` permite escolher o modelo; o padrão é
-`gpt-4.1-mini`. `CONFENGE_NEWS_NODE` pode indicar o executável Node instalado; o
+`gpt-6-luna`, com `reasoning.effort=none` nas duas chamadas. Essa opção de raciocínio
+é enviada somente para esse modelo; outros modelos configurados preservam seus
+próprios padrões. `CONFENGE_NEWS_NODE` pode indicar o executável Node instalado; o
 padrão é `node`. Nenhuma chave entra em JSON, argumento do processo, snapshot,
 mensagem de erro ou registro de orçamento.
 
@@ -132,6 +134,6 @@ API, injeção, datas, concorrência, integridade do ponteiro, recuperação ap�
 interrupção e a execução do validador Node real antes da publicação.
 
 Referências da integração: [Responses e JSON estrito](https://developers.openai.com/api/docs/guides/structured-outputs)
-e [modelo GPT-4.1 mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
+e [modelo GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna).
 Estas capacidades não garantem indexação, tráfego ou receita; os eventos e os
 resultados comerciais são acompanhados pelos sistemas proprietários existentes.

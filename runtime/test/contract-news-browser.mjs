@@ -117,6 +117,18 @@ async function capture(page, filename) {
   }
 }
 
+async function visitBrandImages(page) {
+  const images = await page.$$('.brand img,.footer-brand img');
+  assert.equal(images.length, 2, 'Header and footer brand images must be present');
+  // The footer is below the lazy-loading distance on narrow viewports. Visit
+  // both images as a reader would, then restore the first fold for evidence.
+  for (const image of images) {
+    await image.evaluate(element => element.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await page.waitForFunction(element => element.complete && element.naturalWidth > 0, { timeout: 10_000 }, image);
+  }
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+}
+
 async function assertLayout(page, label) {
   const geometry = await page.evaluate(() => ({
     viewport: innerWidth, document: document.documentElement.scrollWidth,
@@ -160,6 +172,7 @@ try {
     const response = await page.goto(base + articlePath, { waitUntil: 'networkidle0', timeout: 30_000 });
     assert.equal(response.status(), 200);
     await page.evaluate(() => document.fonts.ready);
+    await visitBrandImages(page);
     const metadata = await page.evaluate(() => ({
       h1: [...document.querySelectorAll('h1')].map(element => element.textContent),
       canonical: document.querySelector('link[rel="canonical"]')?.href,
@@ -196,6 +209,7 @@ try {
   const indexResponse = await page.goto(base + PREFIX, { waitUntil: 'networkidle0', timeout: 30_000 });
   assert.equal(indexResponse.status(), 200);
   assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
+  await visitBrandImages(page);
   await assertLayout(page, 'mobile index');
   assert.deepEqual(report.errors, []);
   report.status = 'passed';
