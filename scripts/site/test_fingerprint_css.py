@@ -9,9 +9,11 @@ from __future__ import annotations
 
 import json
 import hashlib
+import re
 import sys
 import tempfile
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -26,6 +28,7 @@ from scripts.site.fingerprint_css import (  # noqa: E402
     stylesheet_hrefs,
     validate_css_asset_manifest,
 )
+from scripts.site import fingerprint_css as fingerprint_module  # noqa: E402
 
 
 COMMERCIAL_ROUTES = (
@@ -182,6 +185,91 @@ def test_source_html_may_keep_unversioned_href_for_local_dev():
     html = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
     assert "/styles.css" in html
     assert "/styles-offers.css" in html
+
+
+def test_public_minification_preserves_source_rules_states_and_strings_in_one_cached_batch():
+    source = '''@import url("/styles-tokens.css");
+/* Publication may remove this author comment. */
+.nav-group[open] > .nav-panel { display: -webkit-box; display: flex; }
+.nav-panel:focus-within { width: calc(100% - 2rem); }
+html.no-js .nav-group { --message: "keep  two spaces"; }
+.nav-panel::after { content: "literal /* keep */ and ; { }"; }
+@media (max-width: 1120px) { .nav-group[open] { min-height: 44px; } }
+@supports selector(:has(*)) { body:has(.nav-group[open]) { overflow: hidden; } }
+@keyframes nav-reveal { from { opacity: 0; } to { opacity: 1; } }
+'''
+    tokens = ':root { --accent: #123456; --label: "a  b"; }\n'
+    with tempfile.TemporaryDirectory() as td:
+        dest = Path(td)
+        (dest / "styles.css").write_text(source, encoding="utf-8")
+        (dest / "styles-tokens.css").write_text(tokens, encoding="utf-8")
+        page = dest / "index.html"
+        page.write_text('<link rel="stylesheet" href="/styles.css">', encoding="utf-8")
+        fingerprint_module._MINIFIED_CSS_CACHE.clear()
+        with mock.patch.object(
+            fingerprint_module.subprocess, "run", wraps=fingerprint_module.subprocess.run
+        ) as runner:
+            first = fingerprint_published_css(dest)
+            assert runner.call_count == 1, "every stylesheet must share one minifier process"
+            second = fingerprint_published_css(dest)
+            assert runner.call_count == 1, "identical approval/finalization inputs must reuse the cache"
+        assert first == second
+        assert (dest / "styles.css").read_text(encoding="utf-8") == source
+        assert (dest / "styles-tokens.css").read_text(encoding="utf-8") == tokens
+        entry = first["files"]["styles.css"]
+        compact = (dest / entry["href"].lstrip("/")).read_text(encoding="utf-8")
+        assert "Publication may remove" not in compact
+        assert "@import" not in compact
+        assert len(compact) < len(source) + len(tokens)
+        for required in (
+            ".nav-group[open]>.nav-panel", "display:-webkit-box;display:flex",
+            ".nav-panel:focus-within", "calc(100% - 2rem)",
+            "html.no-js .nav-group", "keep  two spaces", "literal /* keep */ and ; { }",
+            "@media", "1120px", "min-height:44px", "@supports", "body:has(.nav-group[open])",
+            "@keyframes nav-reveal", '"a  b"',
+        ):
+            assert required in compact, required
+        assert re.search(r"--accent:\s*#123456(?:;|})", compact)
+        assert entry["sha256"] == hashlib.sha256(compact.encode("utf-8")).hexdigest()
+        assert validate_css_asset_manifest(dest) == first
+
+
+def test_css_parser_warning_fails_before_html_or_manifest_is_published():
+    with tempfile.TemporaryDirectory() as td:
+        dest = Path(td)
+        source = '.nav-group { color: red; broken }\n'
+        (dest / "styles.css").write_text(source, encoding="utf-8")
+        page = dest / "index.html"
+        original = '<link rel="stylesheet" href="/styles.css">'
+        page.write_text(original, encoding="utf-8")
+        try:
+            fingerprint_published_css(dest)
+        except ValueError as exc:
+            assert "CSS parser warning" in str(exc), str(exc)
+        else:
+            raise AssertionError("CSS parser recovery was silently published")
+        assert page.read_text(encoding="utf-8") == original
+        assert (dest / "styles.css").read_text(encoding="utf-8") == source
+        assert not (dest / MANIFEST_REL).exists()
+
+
+def test_css_minifier_missing_or_incomplete_result_fails_closed():
+    for returned in ("not JSON", '{"schema_version":"CONFENGE_PUBLIC_CSS_MINIFY/1.0","files":{}}'):
+        completed = mock.Mock(returncode=0, stdout=returned, stderr="")
+        with mock.patch.object(fingerprint_module.subprocess, "run", return_value=completed):
+            try:
+                fingerprint_module._minify_css_batch({"/missing-batch.css": ".missing-batch{color:navy}"})
+            except ValueError as exc:
+                assert "minification returned" in str(exc)
+            else:
+                raise AssertionError("invalid minifier response was accepted")
+    with mock.patch.object(fingerprint_module.subprocess, "run", side_effect=OSError("node unavailable")):
+        try:
+            fingerprint_module._minify_css_batch({"/missing-node.css": ".missing-node{display:block}"})
+        except ValueError as exc:
+            assert "could not run" in str(exc)
+        else:
+            raise AssertionError("missing CSS minifier was accepted")
 
 
 def test_duplicate_stylesheet_hrefs_ignore_cache_tokens():

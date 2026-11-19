@@ -9,6 +9,9 @@ const EXPECTED_FUNCTIONS = [
   "collect",
   "conversion-intake",
   "correction",
+  "engineering-marketplace",
+  "engineering-marketplace-connect-webhook",
+  "engineering-marketplace-webhook",
   "lead",
   "live-intelligence-analyze",
   "market-answer-intake",
@@ -19,6 +22,8 @@ const EXPECTED_FUNCTIONS = [
   "offer-eligibility",
   "offer-terms-accept",
   "ops",
+  "project-orders",
+  "project-orders-webhook",
   "science-tools",
   "search-observation-tick",
   "tool-credits",
@@ -28,17 +33,17 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 53);
-  assert.equal(inventory.function_count, 20);
+  assert.equal(inventory.file_count, 60);
+  assert.equal(inventory.function_count, 25);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 20);
+  assert.equal(inventory.validation.loaded_handlers, 25);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "support_library").length,
-    31,
+    33,
   );
   for (const name of ["market-radar-client", "market-radar-dates", "market-radar-worker"]) {
     assert.ok(inventory.files.some((entry) =>
@@ -84,8 +89,14 @@ test("inventory classifies frontend, schedules, probes and ops without assuming 
   const science = byName.get("science-tools");
   assert.equal(science.usage_state, "public_runtime");
   assert.ok(science.consumers.frontend.some(({ path }) => path === "assets/js/science-tools.mjs"));
-  // The provider callback is routed by the host, with no frontend caller.
-  assert.equal(byName.get("tool-credits-webhook").usage_state, "unreferenced_legacy_candidate");
+  // Provider callbacks have no frontend caller; the shared routing regression
+  // now exercises this handler directly.
+  const creditsWebhook = byName.get("tool-credits-webhook");
+  assert.equal(creditsWebhook.usage_state, "test_or_legacy_only");
+  assert.equal(creditsWebhook.consumers.frontend?.length ?? 0, 0);
+  assert.ok(creditsWebhook.consumers.probes_tests.some(({ path, kinds }) =>
+    path === "tests/project-commerce/shared-webhook.test.cjs"
+    && kinds.includes("direct_module")));
   assert.equal(byName.get("search-observation-tick").usage_state, "scheduled");
   assert.deepEqual(byName.get("search-observation-tick").schedule, {
     cron: "30 11 * * *",

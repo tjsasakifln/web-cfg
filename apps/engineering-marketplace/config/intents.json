@@ -1,0 +1,46 @@
+{
+  "source": "data/corporate/intent-family-matrix.v1.json",
+  "sha256": "668f2b27cfcd9c8a5c8f128409d4da6b7d8bef0a5c5040e0cdf73b58a375d059",
+  "intents": [
+    {
+      "intent_family": "projetar_revisar_compatibilizar",
+      "public_wording": "Preciso elaborar, revisar ou compatibilizar projetos de engenharia antes da obra.",
+      "canonical_service_family": "engineering_projects_coordination"
+    },
+    {
+      "intent_family": "orcar_planejar_decidir",
+      "public_wording": "Preciso levantar quantidades, revisar custos ou testar a viabilidade técnica da obra.",
+      "canonical_service_family": "cost_planning_feasibility"
+    },
+    {
+      "intent_family": "inspecionar_diagnosticar",
+      "public_wording": "Preciso entender uma fissura, infiltração, falha ou condição da edificação antes de decidir o reparo.",
+      "canonical_service_family": "building_condition_documentation"
+    },
+    {
+      "intent_family": "receber_entregar_reformar",
+      "public_wording": "Preciso vistoriar recebimento, entrega ou reforma e registrar o que deve ser corrigido.",
+      "canonical_service_family": "building_condition_documentation"
+    },
+    {
+      "intent_family": "documentar_as_built_regularizar",
+      "public_wording": "Preciso registrar o que foi construído e organizar a documentação técnica que falta.",
+      "canonical_service_family": "building_condition_documentation"
+    },
+    {
+      "intent_family": "avaliar_imovel",
+      "public_wording": "Preciso de um valor de imóvel para uma finalidade e uma data definidas.",
+      "canonical_service_family": "property_valuation"
+    },
+    {
+      "intent_family": "produzir_prova_tecnica",
+      "public_wording": "Preciso organizar prova técnica ou assistência de engenharia para uma disputa.",
+      "canonical_service_family": "technical_evidence_disputes"
+    },
+    {
+      "intent_family": "organizar_sst",
+      "public_wording": "Preciso elaborar, revisar ou organizar a documentação de SST e quero transferir essa frente documental para um responsável técnico.",
+      "canonical_service_family": "occupational_safety"
+    }
+  ]
+}

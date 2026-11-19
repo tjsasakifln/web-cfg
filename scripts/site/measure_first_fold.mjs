@@ -50,6 +50,7 @@ const MIME = {
   ".css": "text/css",
   ".html": "text/html; charset=utf-8",
   ".js": "application/javascript",
+  ".mjs": "application/javascript",
   ".json": "application/json",
   ".png": "image/png",
   ".jpg": "image/jpeg",

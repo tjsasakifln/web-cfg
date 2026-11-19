@@ -68,6 +68,7 @@ const downstream = http.createServer((req, res) => {
       data: {
         lead: { id: `wb-${body.lead_id}` },
         action: { id: `act-${body.lead_id}` },
+        receipt_id: body.receipt_id || body.lead_id,
         duplicate,
         dispatch_attempted: false,
       },
@@ -146,12 +147,7 @@ const app = http.createServer((req, res) => {
     res.end("not found");
     return;
   }
-  let content = fs.readFileSync(file);
-  if (url.pathname === "/ferramentas/diagnostico-defesa-margem/") {
-    content = Buffer.from(
-      content.toString("utf8").replace('data-submit-timeout-ms="15000"', 'data-submit-timeout-ms="1000"'),
-    );
-  }
+  const content = fs.readFileSync(file);
   res.writeHead(200, { "Content-Type": mime[path.extname(file)] || "application/octet-stream" });
   res.end(content);
 });
@@ -261,6 +257,13 @@ try {
   if (refreshedKey !== geometry.key) fail("refresh_changed_idempotency", { before: geometry.key, after: refreshedKey });
   pass("mobile_refresh_and_a11y", { viewport: 390, idempotency_stable: true });
 
+  // Only this request exercises the short client deadline. All other requests
+  // keep the shipped form timeout, including the idempotent resend below.
+  const originalSubmitTimeout = await mobile.$eval("#lead-form", (form) => {
+    const original = form.getAttribute("data-submit-timeout-ms");
+    form.setAttribute("data-submit-timeout-ms", "1000");
+    return original;
+  });
   responseDelayMs = 1300;
   await fillAndSubmit(mobile, "timeout");
   await mobile.waitForFunction(
@@ -274,6 +277,10 @@ try {
   if (!fallback.whatsapp) fail("timeout_not_actionable", fallback);
   await new Promise((resolve) => setTimeout(resolve, 500));
   responseDelayMs = 0;
+  await mobile.$eval("#lead-form", (form, original) => {
+    if (original === null) form.removeAttribute("data-submit-timeout-ms");
+    else form.setAttribute("data-submit-timeout-ms", original);
+  }, originalSubmitTimeout);
   await mobile.click('#lead-form [type="submit"]');
   await waitForThanks(mobile, { label: "timeout" });
   const timeoutRecords = await fixtureStore.list();
@@ -290,6 +297,14 @@ try {
   const submittedPayload = leadRequests.at(-1);
   if (!firstPayload?.lead_id || !submittedPayload?.idempotency_key || requests.length !== beforePosts + 1) {
     fail("success_handoff", requests.slice(beforePosts));
+  }
+  const delivered = await fixtureStore.get(firstPayload.lead_id);
+  if (delivered?.handoff?.status !== "DELIVERED"
+    || delivered.handoff.downstream?.downstream_receipt !== (firstPayload.receipt_id || firstPayload.lead_id)) {
+    fail("success_handoff_receipt", {
+      status: delivered?.handoff?.status,
+      receipt: delivered?.handoff?.downstream?.downstream_receipt,
+    });
   }
   const replay = await success.evaluate(async (payload) => {
     const response = await fetch("/.netlify/functions/lead", {

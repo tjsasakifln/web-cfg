@@ -24,6 +24,9 @@ import {
   renderProofEntrances,
 } from "../../../quantitativos-orcamento-obras/proof-entrances.mjs";
 
+import { loadCanonicalExcerpt, renderSampleTrail } from "../../../quantitativos-orcamento-obras/sample-trail.mjs";
+import { composeProofEntrances } from "../../../scripts/campaigns/orc-b2b-20260913/compose_proof_entrances.mjs";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 
 const LANDING_REL = "quantitativos-orcamento-obras/index.html";
@@ -35,6 +38,12 @@ const SUPPORT_RELS = Object.freeze([
 
 function read(rel) {
   return fs.readFileSync(path.join(root, rel), "utf8");
+}
+
+// Educational rendering remains covered without forcing a classroom example
+// back onto the commercial page. Production examples continue under /casos/.
+function educationalFixture() {
+  return `<html><head></head><body><main>${renderProofEntrances(loadEntrances(root))}${renderSampleTrail(loadCanonicalExcerpt(root))}</main></body></html>`;
 }
 
 /**
@@ -124,7 +133,7 @@ export function declaresContractedService(html) {
 }
 
 export function namesWhoContracts(html) {
-  const body = text(entranceBlock(html, "edificacao") + entranceBlock(html, "infraestrutura"));
+  const body = nodeText(scopedNode(html, "criterios-do-orcamento"));
   return ["construtora", "empresa de engenharia", "escritório de projeto", "contratante público"].every(
     (term) => body.toLowerCase().includes(term),
   );
@@ -302,7 +311,7 @@ test("C. contratante que quer revisão de planilha não é mandado para projeto 
 });
 
 test("D. comprador de infraestrutura encontra o demonstrativo certo, sua natureza e os arquivos", () => {
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "infraestrutura");
   const entrance = buildEntrance(spec, root);
   assert.equal(entrance.url, "/casos/demonstrativo-infraestrutura/");
@@ -319,7 +328,7 @@ test("D. comprador de infraestrutura encontra o demonstrativo certo, sua naturez
 });
 
 test("D2. a entrada de edificação preserva a memória Q-PAR-01 e os arquivos publicados", () => {
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "edificacao");
   const entrance = buildEntrance(spec, root);
   assert.equal(entrance.quantity_id, "Q-PAR-01");
@@ -407,27 +416,25 @@ test("o removedor termina e preserva o conteúdo estático legítimo", () => {
   const real = read(LANDING_REL);
   const realBody = staticBody(real);
   for (const kept of [
-    'data-proof-entrance="edificacao"',
-    'data-proof-entrance="infraestrutura"',
-    'data-trail-step="quantity"',
+    'data-commercial-presentation="technical-scope"',
+    'data-demonstrative-resource="edificacao"',
+    'data-demonstrative-resource="infraestrutura"',
     'id="triagem-quantitativos"',
-    "19,60 m",
+    "Planilha orçamentária",
   ]) {
     assert.ok(realBody.includes(kept), `o removedor não pode descartar ${kept}`);
   }
 });
 
-test("F. visitante sem JavaScript vê a oferta, a prova essencial e um canal de contato", () => {
+test("F. visitante sem JavaScript vê escopo, entregas, recursos identificados e contato", () => {
   const html = read(LANDING_REL);
   const body = staticBody(html);
-  assert.ok(body.includes('data-proof-entrance="edificacao"'), "a prova não pode depender de JS");
-  assert.ok(body.includes('data-proof-entrance="infraestrutura"'));
-  assert.ok(body.includes('data-trail-step="quantity"'), "a trilha precisa estar no HTML");
+  assert.ok(body.includes('data-commercial-presentation="technical-scope"'));
+  assert.ok(body.includes('data-demonstrative-resource="edificacao"'));
+  assert.ok(body.includes('data-demonstrative-resource="infraestrutura"'));
+  assert.ok(body.includes("Planilha orçamentária"));
   assert.ok(contactChannelsAreStatic(html), "telefone e e-mail precisam funcionar sem script");
-  assert.ok(
-    !/data-proof-entrances-state="awaiting-canonical-descriptors"/.test(html),
-    "a composição precisa ter rodado; o estado de espera não pode ser publicado",
-  );
+  assert.doesNotMatch(body, /data-trail-step=|data-proof-entrance=|awaiting-canonical-descriptors/);
 });
 
 // -------------------------------------------------------------- counterproofs
@@ -456,7 +463,7 @@ test("contraprova: remover um arquivo prometido reprova a composição", (t) => 
 });
 
 test("contraprova: trocar a modalidade de orçamento por revisão de projeto reprova o cenário D", () => {
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "infraestrutura");
   const entrance = buildEntrance(spec, root);
   const expected = {
@@ -478,7 +485,7 @@ test("contraprova: trocar a modalidade de orçamento por revisão de projeto rep
 });
 
 test("contraprova: omitir a prova na composição reprova o cenário F", () => {
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   assert.ok(staticBody(html).includes('data-proof-entrance="infraestrutura"'), "controle passa");
 
   const emptied = html.replace(
@@ -544,7 +551,7 @@ test("contraprova: voltar a um rótulo fixo no contato da prontidão reprova", (
 });
 
 test("as entradas publicam critério legível, não notação de máquina", () => {
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   for (const key of ["edificacao", "infraestrutura"]) {
     const block = entranceBlock(html, key);
     assert.ok(/<dt>Critério<\/dt>/.test(block), `${key} precisa publicar o critério canônico`);
@@ -568,7 +575,7 @@ test("as entradas não reivindicam o marcador reservado de prova real de cliente
   const { unregisteredClientClaimProblems } = await import(
     "../../../scripts/commercial/real_proof_registry.mjs"
   );
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   for (const key of ["edificacao", "infraestrutura"]) {
     const block = entranceBlock(html, key);
     assert.ok(
@@ -591,7 +598,7 @@ test("contraprova: reivindicar o marcador reservado ou um resultado de cliente r
   const { unregisteredClientClaimProblems } = await import(
     "../../../scripts/commercial/real_proof_registry.mjs"
   );
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   assert.deepEqual(unregisteredClientClaimProblems(html, LANDING_REL), [], "controle passa");
 
   const claimed = html.replace(
@@ -617,7 +624,7 @@ test("contraprova: reivindicar o marcador reservado ou um resultado de cliente r
 });
 
 test("contraprova: esconder o rótulo visível reprova só a entrada mutada (por contexto)", () => {
-  const html = read(LANDING_REL);
+  const html = educationalFixture();
   for (const key of ["edificacao", "infraestrutura"]) {
     assert.ok(entranceDeclaresDemonstrativeNature(html, key), `controle passa em ${key}`);
   }
@@ -752,4 +759,13 @@ test("contraprova: número divergente do descritor canônico reprova a entrada",
     /proof_entrance_quantity_diverges/,
     "quantidade divergente entre planilha e quantitativo precisa reprovar",
   );
+});
+
+
+test("legacy composition validates resources without restoring elementary commercial examples", () => {
+  const before = read(LANDING_REL);
+  const result = composeProofEntrances(root, { check: true });
+  assert.deepEqual(result.written, []);
+  assert.equal(read(LANDING_REL), before);
+  assert.doesNotMatch(before, /19,60|6,84|banheiro/);
 });

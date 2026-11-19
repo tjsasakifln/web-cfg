@@ -127,8 +127,8 @@ def test_central_route_preserves_scope_coverage_and_contact_context():
         "disponibilidade de visita",
         "no local do cliente, mediante agendamento",
         "sem presumir quem pode aprovar sozinho",
-        "Exemplos demonstrativos",
-        "sem imóvel, processo ou resultado de cliente",
+        "Critérios e entregas para as decisões do condomínio",
+        "Conhecer o conteúdo da inspeção",
         'data-route-family="engenharia-condominios"',
         'data-journey="outro"',
         'data-origem="/engenharia-condominios/"',
@@ -175,8 +175,8 @@ def test_central_links_to_real_specialist_anchors():
     destinations = {
         "/inspecao-diagnostico-edificacoes/#fissuras-infiltracoes": INSPECTION,
         "/inspecao-diagnostico-edificacoes/#reforma-condominio": INSPECTION,
-        "/inspecao-diagnostico-edificacoes/#amostra-disponivel": INSPECTION,
-        "/assistencia-tecnica-pericial-engenharia/#amostra-disponivel": ASSISTANCE,
+        "/inspecao-diagnostico-edificacoes/#criterios-de-inspecao": INSPECTION,
+        "/assistencia-tecnica-pericial-engenharia/#criterios-da-assistencia": ASSISTANCE,
     }
     for href, destination in destinations.items():
         assert f'href="{href}"' in hub
@@ -206,7 +206,8 @@ def test_specialist_pages_answer_purchase_questions_without_losing_general_buyer
         assert phrase in assistance
     for document in (inspection, assistance):
         assert "Cliente</dt><dd>Nenhum" not in document
-        assert document.count("Exemplo demonstrativo") >= 2
+        assert 'data-commercial-presentation="technical-scope"' in document
+        assert 'data-proof-id="' not in document
         assert 'property="og:image"' in document
         assert 'name="twitter:card"' in document
         assert "FAQPage" in types(document)

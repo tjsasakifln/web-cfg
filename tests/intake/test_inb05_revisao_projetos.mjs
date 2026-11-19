@@ -40,16 +40,9 @@ test("landing explains depth, evidence classes and accountable deliverable", () 
   ]) {
     assert.match(text, new RegExp(expected, "i"), expected);
   }
-  for (const kind of [
-    "constatacao_sustentada",
-    "informacao_faltante",
-    "recomendacao",
-    "verificacao_nao_realizada",
-  ]) {
-    assert.match(main, new RegExp(`data-extract-class="${kind}"`));
-  }
-  assert.match(text, /Item de checklist não respondido e norma não examinada não viram erro do projeto/i);
-  assert.match(text, /Sem norma examinada, não se conclui risco nem não conformidade/i);
+  assert.match(main, /data-commercial-presentation="technical-scope"/);
+  assert.match(text, /constatação sustentada, recomendação, informação faltante e verificação ainda não realizada/i);
+  assert.match(text, /sem converter lacuna de informação em falha comprovada/i);
 });
 
 test("review preserves origin authorship and avoids unsupported promises", () => {
@@ -60,14 +53,12 @@ test("review preserves origin authorship and avoids unsupported promises", () =>
   assert.doesNotMatch(text, /\d+\s+dias úteis|\d+\s+revisões incluídas/i);
 });
 
-test("review sample remains explicitly demonstrative and technically bounded", () => {
+test("review keeps educational references separate from the contracted scope", () => {
   const main = mainOf(pages.landing);
-  assert.match(main, /data-extract-kind="demonstrative"/);
-  assert.match(main, /data-extract-canonical-source="inb-06"/);
-  assert.match(main, /Exemplo demonstrativo/);
-  assert.match(main, /RF-01/);
-  assert.match(main, /WN-01/);
-  assert.match(main, /HS-01/);
+  assert.match(main, /data-commercial-presentation="technical-scope"/);
+  assert.match(main, /Exemplo demonstrativo de organização de um registro de revisão/);
+  assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\/#revisao"/);
+  assert.doesNotMatch(main, /data-extract-kind="demonstrative"|WN-01|HS-01/);
   assert.doesNotMatch(main, /aprovado pelo fundador|resolved_in_R01|\bSELECT\b/);
 });
 

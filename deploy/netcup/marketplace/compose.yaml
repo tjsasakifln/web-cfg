@@ -1,0 +1,107 @@
+name: confenge-engineering-marketplace
+
+x-logs: &logs
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: '3'
+
+x-app: &app
+  image: ${MARKETPLACE_IMAGE:?Set an immutable marketplace image digest}
+  env_file:
+    - ${MARKETPLACE_RUNTIME_ENV:?Set the private backend environment file}
+  init: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp:rw,nosuid,nodev,size=128m,mode=1777
+    - /home/node/.config:rw,nosuid,nodev,size=8m,uid=1000,gid=1000,mode=0700
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  mem_limit: 2g
+  cpus: '1.5'
+  stop_grace_period: 45s
+  logging: *logs
+  networks: [data, egress]
+  depends_on:
+    postgres: {condition: service_healthy}
+    redis: {condition: service_healthy}
+  healthcheck:
+    test: [CMD, node, -e, "fetch('http://127.0.0.1:9000/health',{signal:AbortSignal.timeout(4000)}).then(r=>process.exit(r.status===200?0:1)).catch(()=>process.exit(1))"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 90s
+
+services:
+  postgres:
+    image: postgres:17.11-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${MARKETPLACE_DB_ADMIN_PASSWORD:?Set the private database bootstrap password}
+      MARKETPLACE_APP_DB_PASSWORD: ${MARKETPLACE_DB_PASSWORD:?Set the private application database password}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init.sh:/docker-entrypoint-initdb.d/10-marketplace.sh:ro
+    networks: [data]
+    shm_size: 256m
+    mem_limit: 1g
+    cpus: '1'
+    stop_grace_period: 60s
+    logging: *logs
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U marketplace -d marketplace']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.2.17-bookworm
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${MARKETPLACE_REDIS_PASSWORD:?Set the private Redis password}
+    # Preserve the official entrypoint's transition to the unprivileged redis
+    # user. Compose's resolved configuration contains secrets: never log it.
+    command: [redis-server, --requirepass, '${MARKETPLACE_REDIS_PASSWORD:?Set the private Redis password}', --appendonly, 'yes', --appendfsync, everysec, --maxmemory, 512mb, --maxmemory-policy, noeviction]
+    volumes: [redis_data:/data]
+    networks: [data]
+    mem_limit: 768m
+    cpus: '0.5'
+    stop_grace_period: 45s
+    logging: *logs
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$REDIS_PASSWORD" redis-cli ping | grep -qx PONG']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    <<: *app
+    environment:
+      MEDUSA_WORKER_MODE: server
+    ports: ['127.0.0.1:19050:9000']
+
+  worker:
+    <<: *app
+    environment:
+      MEDUSA_WORKER_MODE: worker
+
+  tools:
+    <<: *app
+    profiles: [ops]
+    restart: 'no'
+    environment:
+      MEDUSA_WORKER_MODE: shared
+    command: [db:migrate]
+    healthcheck: {disable: true}
+
+networks:
+  data: {internal: true}
+  egress: {}
+
+volumes:
+  postgres_data: {}
+  redis_data: {}

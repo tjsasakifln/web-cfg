@@ -37,6 +37,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.pseo.html_shell import breadcrumbs_html  # noqa: E402
+from scripts.site.navigation_discovery import render_navigation, sync_discovery_bar
 from scripts.site.brand import footer_blurb  # noqa: E402
 from scripts.site.svg_sprite import ensure_sprite  # noqa: E402
 from scripts.site.public_ia import (  # noqa: E402
@@ -309,19 +310,11 @@ def _nav_anchor(position: str, href: str, label: str, current: bool) -> str:
 
 
 def desktop_links(brand: dict[str, Any], current: str | None = None) -> str:
-    active = active_nav_href(brand, current)
-    return "\n".join(
-        _nav_anchor("header_nav", i["href"], i["label"], i["href"] == active)
-        for i in nav_items(brand)
-    )
+    return render_navigation(kind="desktop", current=current, active=active_nav_href(brand, current))
 
 
 def mobile_links(brand: dict[str, Any], current: str | None = None) -> str:
-    active = active_nav_href(brand, current)
-    return "\n".join(
-        _nav_anchor("mobile_nav", i["href"], i["label"], i["href"] == active)
-        for i in nav_items(brand)
-    )
+    return render_navigation(kind="mobile", current=current, active=active_nav_href(brand, current))
 
 
 def footer_nav_links(brand: dict[str, Any], current: str | None = None) -> str:
@@ -552,6 +545,7 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         inner = f"{mobile_links(brand, current)}\n{utility}"
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
+    text = sync_discovery_bar(text)
     text = sync_footer(text, brand)
 
     text = sync_breadcrumbs(text, current)

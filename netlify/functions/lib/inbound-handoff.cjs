@@ -233,7 +233,7 @@ function mapLeadToInboundV1(record) {
 
   // Analytics/store stay CONFENGE_WEB; Warmbly receives the same canonical source.
   body.source = SOURCE_WARMBLY;
-  if (record.adaptive_intake === true) {
+  if (record.adaptive_intake === true || record.intent === "ready_project_interest") {
     body.outbound_eligible = false;
     body.auto_send = false;
   }
@@ -334,6 +334,15 @@ function mapLeadToInboundV1(record) {
     : "";
   const qualification = [
     ["situação", record.jornada],
+    ["interesse residencial", record.project_interest?.kind],
+    ["projeto consultado", record.project_interest?.product_id],
+    ["município do terreno", record.project_interest?.city],
+    ["UF do terreno", record.project_interest?.uf],
+    ["frente em metros", record.project_interest?.lot_width_m],
+    ["profundidade em metros", record.project_interest?.lot_depth_m],
+    ["situação do terreno", record.project_interest?.lot_status],
+    ["dormitórios desejados", record.project_interest?.bedrooms],
+    ["prazo para construir", record.project_interest?.build_when],
     ["situação declarada", declaredSituation],
     ["entrega", deliverableId],
     ["família de serviço", serviceFamily],

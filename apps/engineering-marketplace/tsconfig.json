@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "declaration": false,
+    "sourceMap": false,
+    "outDir": "./.medusa/server",
+    "rootDir": "./",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["src/**/*", "config/**/*", "medusa-config.ts"],
+  "exclude": ["node_modules", ".medusa", "tests"]
+}

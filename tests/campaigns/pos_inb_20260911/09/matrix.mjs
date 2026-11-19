@@ -45,7 +45,7 @@ export const REQUIRED_DESTINATIONS = {
   },
 };
 
-/** CSV item whose quantity is the consumed excerpt on the orçamento landing. Not Q-PISO-01. */
+/** CSV item verified in the linked educational document, not on the commercial landing. */
 export const EXCERPT_ITEM_ID = "Q-PAR-01";
 
 export const KIT_EXPECTED = {

@@ -9,7 +9,13 @@ hashes verify. Producer 1.1 uses `manifest_sha256` and
 `root_content_hash` over `{ids, hashes}`; 1.0 packs keep
 `manifest_sha` / `manifest.content_hash`.
 
+Rendering, validation and approval hashes use the same public CSS finalizer as
+the site build. They require Node 22 (`>=22.19 <23`) and the locked npm
+dependencies, including esbuild, even when the entry point is Python. Install
+them from the repository root before running these commands:
+
 ```bash
+npm ci --engine-strict
 python3 -m scripts.contract_analysis build
 python3 -m scripts.contract_analysis validate
 python3 -m pytest scripts/contract_analysis/tests -q

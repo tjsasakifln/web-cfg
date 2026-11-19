@@ -156,9 +156,40 @@ let server = null;
 let BASE = baseArg;
 
 if (!BASE) {
+  // The lab uses the same service-config implementation as project-orders,
+  // with a private environment that cannot load credentials or enable sales.
+  const { default: serviceHttp } = await import("../../runtime/project-commerce/service-http.cjs");
+  const localProjectServices = serviceHttp.createServiceHttp({
+    env: { PROJECT_SERVICE_MODE: "off" },
+  });
   const siteRoot = existsSync(join(ROOT, "_site", "index.html")) ? join(ROOT, "_site") : ROOT;
   const gzipCache = new Map();
-  server = createServer((req, res) => {
+  server = createServer(async (req, res) => {
+    const requestUrl = new URL(req.url || "/", "http://127.0.0.1");
+    if (requestUrl.pathname === "/api/web/project-orders"
+      && requestUrl.searchParams.get("op") === "service-config") {
+      const result = await localProjectServices.api({
+        httpMethod: req.method,
+        headers: req.headers,
+        queryStringParameters: Object.fromEntries(requestUrl.searchParams),
+        multiValueQueryStringParameters: Object.fromEntries(
+          [...new Set(requestUrl.searchParams.keys())].map((key) => [key, requestUrl.searchParams.getAll(key)]),
+        ),
+        requestContext: { identity: { sourceIp: req.socket.remoteAddress || "127.0.0.1" } },
+      });
+      const body = Buffer.from(result.body);
+      const headers = { ...result.headers, Vary: "Accept-Encoding" };
+      if (/\bgzip\b/.test(String(req.headers["accept-encoding"] || ""))
+        && COMPRESSIBLE.test(headers["Content-Type"] || "") && body.length >= GZIP_MIN_LENGTH) {
+        headers["Content-Encoding"] = "gzip";
+        res.writeHead(result.statusCode, headers);
+        res.end(gzipSync(body, { level: 6 }));
+      } else {
+        res.writeHead(result.statusCode, headers);
+        res.end(body);
+      }
+      return;
+    }
     let urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
     if (urlPath.endsWith("/")) urlPath += "index.html";
     const filePath = join(siteRoot, urlPath);

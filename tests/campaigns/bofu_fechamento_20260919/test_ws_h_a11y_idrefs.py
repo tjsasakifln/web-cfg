@@ -46,7 +46,7 @@ def _broken(path: Path) -> list[str]:
 def test_conteudos_directory_section_is_named_by_its_heading():
     html = (ROOT / "conteudos/index.html").read_text(encoding="utf-8")
     assert 'aria-labelledby="dir-title"' in html
-    assert re.search(r'<h2 id="dir-title">Análises de licitação e contrato público</h2>', html)
+    assert re.search(r'<h2 id="dir-title">Artigos sobre projetos, orçamentos e contratos</h2>', html)
 
 
 def test_aria_idrefs_resolve_in_every_source_page():

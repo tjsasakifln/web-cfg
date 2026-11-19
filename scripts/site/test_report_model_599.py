@@ -6,6 +6,7 @@ import json
 import re
 from decimal import Decimal
 from html import unescape
+from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
@@ -25,6 +26,58 @@ HANDRAISE_ID = "handraise-report-intelligence-599-v1"
 
 def _html() -> str:
     return PAGE.read_text(encoding="utf-8")
+
+
+def assert_only_navigation_disclosures(html: str) -> None:
+    """Permit shared navigation groups without letting them hide the report."""
+    class DisclosureScope(HTMLParser):
+        def __init__(self) -> None:
+            super().__init__()
+            self.stack: list[tuple[str, set[str]]] = []
+
+        def handle_starttag(self, tag, attrs):
+            classes = set((dict(attrs).get("class") or "").split())
+            if tag == "details":
+                header = next((i for i in range(len(self.stack) - 1, -1, -1)
+                               if self.stack[i][0] == "header"
+                               and "site-header" in self.stack[i][1]), -1)
+                navigation = any(parent == "nav" and names & {"desktop-nav", "mobile-nav"}
+                                 for parent, names in self.stack[header + 1:])
+                assert (header >= 0 and navigation and "nav-group" in classes
+                        and not any(parent == "main" for parent, _ in self.stack)), (
+                    "report disclosures are allowed only in the shared header navigation"
+                )
+            if tag == "main":
+                assert not any(parent == "details" for parent, _ in self.stack), (
+                    "report main must not be wrapped in a disclosure"
+                )
+            if tag not in {"area", "base", "br", "col", "embed", "hr", "img", "input",
+                           "link", "meta", "param", "source", "track", "wbr"}:
+                self.stack.append((tag, classes))
+
+        def handle_endtag(self, tag):
+            for index in range(len(self.stack) - 1, -1, -1):
+                if self.stack[index][0] == tag:
+                    del self.stack[index:]
+                    break
+
+    parser = DisclosureScope()
+    parser.feed(html)
+    parser.close()
+
+
+@pytest.mark.parametrize("markup", [
+    '<main><details><summary>Report</summary><article>Content</article></details></main>',
+    '<details><summary>Report</summary><main>Content</main></details>',
+    '<header class="site-header"><details class="nav-group">Content</details></header>',
+    '<nav class="desktop-nav"><details class="nav-group">Content</details></nav>',
+    '<header class="site-header"><nav class="desktop-nav"><details>Content</details></nav></header>',
+    '<main><header class="site-header"><nav class="desktop-nav"><details class="nav-group">Content</details></nav></header></main>',
+    '<header class="site-header"><nav class="desktop-nav"><details class="nav-group"><main>Content</main></details></nav></header>',
+])
+def test_report_content_cannot_hide_in_navigation_disclosures(markup: str) -> None:
+    with pytest.raises(AssertionError):
+        assert_only_navigation_disclosures(markup)
 
 
 def test_shared_report_a11y_override_uses_a_new_immutable_url():
@@ -813,7 +866,8 @@ def test_page_is_direct_public_html_without_friction() -> None:
     assert '<main id="conteudo">' in html
     assert '<meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>' in html
     assert f'<link href="{CANONICAL}" rel="canonical"/>' in html
-    assert not any(token in lowered for token in ("<dialog", "<details", ".pdf", "download"))
+    assert not any(token in lowered for token in ("<dialog", ".pdf", "download"))
+    assert_only_navigation_disclosures(html)
     # The report is never gated. The single form is the persisted capture of the
     # published price (#289) and it sits after the document, not in front of it.
     assert lowered.count("<form") == 1

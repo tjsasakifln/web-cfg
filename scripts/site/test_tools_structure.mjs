@@ -21,7 +21,7 @@ for(const rel of pages){
   else if(rel!=="ferramentas/index.html") console.log("PASS csslink",rel);
   if (rel === "ferramentas/diagnostico-defesa-margem/index.html") {
     const stylesheetHrefs = stylesheetHrefsOf(html);
-    const expected = ["/styles.css", "/assets/tool-bundles/diagnostico-defesa-margem.css"];
+    const expected = ["/assets/tool-bundles/diagnostico-base.css", "/assets/tool-bundles/diagnostico-defesa-margem.css"];
     if (JSON.stringify(stylesheetHrefs) !== JSON.stringify(expected)) {
       console.error("FAIL margin_css_request_budget", stylesheetHrefs); fail++;
     } else console.log("PASS margin_css_request_budget", stylesheetHrefs.length);

@@ -1,0 +1,89 @@
+{
+  "schema": "confenge.first-fold-source-provenance/1.0",
+  "source_sha": "dacbcb7376b53c758bbe44af0e101e045f6d9834",
+  "source_tree_sha": "04d1918dce7e72fffcc76f512965e1bdc7799a25",
+  "source_parents": [
+    "04c32e526c15cf8fef61eac7b9ac95227dfeb63a",
+    "ba3f9df4ef3eba356ccfe4c6a6553c2979c967c1"
+  ],
+  "integrated_ancestor_shas": [
+    "04c32e526c15cf8fef61eac7b9ac95227dfeb63a",
+    "ba3f9df4ef3eba356ccfe4c6a6553c2979c967c1"
+  ],
+  "tree_dirty": false,
+  "surface": "source",
+  "run_id": "43171512778",
+  "run_attempt": "1",
+  "run_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/43171512778",
+  "node_version": "v22.23.4",
+  "chrome_version": "Google Chrome for Testing 152.0.7977.42",
+  "contracted_chrome_version": "152.0.7977.42",
+  "recorded_at": "2026-11-12T06:56:07.698Z",
+  "planned_routes": [
+    "/",
+    "/entregas/",
+    "/servicos-obras-publicas/",
+    "/problemas-que-resolvemos/",
+    "/diagnostico-b2g-expansao/",
+    "/diagnostico-pre-licitacao/",
+    "/auditoria-orcamento-licitacao/",
+    "/bid-room-licitacoes-obras/",
+    "/defesa-margem-contratos-publicos/",
+    "/medicoes-glosas-obras-publicas/",
+    "/aditivos-obras-publicas/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/defesa-tecnica-contratos-publicos/",
+    "/diagnostico-b2g-360/",
+    "/acompanhamento-contratos-obras/",
+    "/diretoria-b2g/",
+    "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    "/casos/modelo-base-quantitativa-canonica/",
+    "/casos/modelo-apresentacao-executiva-resultados/",
+    "/casos/modelo-mapa-compradores-publicos/",
+    "/casos/modelo-contratos-vincendos-relicitacao/",
+    "/casos/modelo-mapeamento-concorrentes-publicos/",
+    "/casos/modelo-painel-precos-obras-publicas/",
+    "/casos/modelo-relatorio-executivo-consolidado/"
+  ],
+  "viewports": [
+    "1366x768",
+    "390x844"
+  ],
+  "source_file_sha256": {
+    "data/commercial/first-fold-contract.v1.json": "a8b7f1d478bea5d998fd6e6af1d97853e63cfb116243f076f186a6de4a9396e2",
+    "data/organic/public-family-registry.json": "c8f939bb362f62cb15588bb1398cb52b0ab42e4e60e0bf432401d48895066b25",
+    "data/bofu-dominance/frozen-specs/unlock-plan.v1.json": "fdab1560045f289cde67fb5a5d85504ffac3e1f5c02220c22b6685e77b1f7c0f",
+    "scripts/site/first_fold_rules.mjs": "dba5082501d6d59d7741427206d3d0a6de3ce50154c39eaefe9f6194261d4117",
+    "scripts/site/first_fold_identity.mjs": "135b7e4d3ebe597be850661da04d7ed655442db37b07529ee843894e9b04f0b4",
+    "scripts/site/measure_first_fold.mjs": "e1637d957ea1275998261e00e022825f89548cefb555b6406ae55a15af0a786a",
+    "scripts/site/resolve_chrome_version.mjs": "cde1e94767bfff1f53e9125b3d3b768975fceada68d297bf2af75067f6c93c9d",
+    "package-lock.json": "ec05d634d0b268b0b8c2a58cb46e503fc9526618cd95f704287859099d72809e"
+  },
+  "collected_at": "2026-11-12T06:56:58.886Z",
+  "measured_at": "2026-11-12T06:56:58.756Z",
+  "planned": 25,
+  "executed": 25,
+  "passes": 25,
+  "fails": 0,
+  "pending": 0,
+  "ok": true,
+  "output_files": {
+    "source-provenance.json": {
+      "sha256": "7eab62f9b6c63b872717edefb090cee6c6b63461fe074132ae33e671c7951cc2",
+      "size_bytes": 2802
+    },
+    "first-fold-report.json": {
+      "sha256": "0c6edc6ea716df8a4a19b9d687cc9a90c850a870ccb59b7a439f634a790f3a35",
+      "size_bytes": 170087
+    },
+    "contracts/first-fold-contract.v1.json": {
+      "sha256": "a8b7f1d478bea5d998fd6e6af1d97853e63cfb116243f076f186a6de4a9396e2",
+      "size_bytes": 39989
+    },
+    "contracts/first-fold-measurements.v1.json": {
+      "sha256": "d99138a389645037384e4a67be11ae2d197199f5baf5621e168192f0436bc78d",
+      "size_bytes": 169992
+    }
+  }
+}

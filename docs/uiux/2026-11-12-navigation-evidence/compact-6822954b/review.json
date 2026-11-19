@@ -1,0 +1,117 @@
+{
+  "schema": "confenge.navigation-discovery-derived-review/1.0",
+  "source_sha": "6822954b0b85be603c8c6a9af304f444f58d17ea",
+  "source_tree_sha": "bb09d1c60c63473deac23f1e9958c943fea16873",
+  "qa_workflow_run_id": "43334909007",
+  "qa_workflow_run_attempt": "1",
+  "qa_source_job_id": "131588527340",
+  "qa_source_conclusion": "success",
+  "source_tree_dirty": false,
+  "source_navigation_scenarios": 48,
+  "source_event_checks": 67,
+  "first_fold_routes": 26,
+  "first_fold_input_hashes_verified": 60,
+  "presentation_checks": 15,
+  "review_type": "agent_review",
+  "human_review_claimed": false,
+  "visual_review": "Root and independent UX agent inspected all five original b62 images; all five 682 originals are byte identical.",
+  "visual_reference_source_sha": "b62eeb1b671940052736c50101910ac96e5c2bcc",
+  "presentation_fields_changed": [
+    "rendered_content_hash",
+    "rendered_content_hash_previous",
+    "rendered_hash_recapture_reason",
+    "rendered_hash_recapture_reason_previous",
+    "rendered_hash_recaptured_at"
+  ],
+  "factual_approval_fields_unchanged": true,
+  "changed_frozen_hashes": [
+    "styles.css"
+  ],
+  "unchanged_frozen_hashes": 16,
+  "pillars_preserved": 6,
+  "source_artifact": {
+    "id": "13997261392",
+    "api_digest": "sha256:eb007478b06375f9e42aa86c78d293aea2b91ab0a4adeb929415b49680db81b6",
+    "zip_bytes": 1075578,
+    "zip_downloaded": true,
+    "zip_sha256_verified": true
+  },
+  "files": [
+    {
+      "path": "desktop-ferramentas.png",
+      "bytes": 160569,
+      "sha256": "7c85c2e548beb6146eb465cfac7dae02c1a4df4c8e92d65db14658691c1dd9f5"
+    },
+    {
+      "path": "mobile-projetos.png",
+      "bytes": 67106,
+      "sha256": "613c48a89c17d889eb73aaf9c081ceb2bccd63f383c504f6073ff58fe37dab41"
+    },
+    {
+      "path": "projetos-prontos-desktop.png",
+      "bytes": 384376,
+      "sha256": "5825eae8039f934ab8e171ee50643517c5e274f67fb3ef8590687eada95cc1f0"
+    },
+    {
+      "path": "mobile-header-360.png",
+      "bytes": 76737,
+      "sha256": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b"
+    },
+    {
+      "path": "diagnostico-first-viewport-1280.png",
+      "bytes": 132562,
+      "sha256": "59e9a13848375f67857c2ff30ee7cc581fdb147ec9ff6673a4e64bd335d40e05"
+    },
+    {
+      "path": "report.json",
+      "bytes": 404432,
+      "sha256": "2b3ae9a26ff0d816000f24965fe4b4b7dfae9b5633a2998512d82a5788622b1c"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 259,
+      "sha256": "76f21ac9e20e02324a142e23b331da812d37197c8486a334d9eca861ab8ef6ab"
+    },
+    {
+      "path": "event-semantics.json",
+      "bytes": 61230,
+      "sha256": "284766980b88fee37565c2c6bc69323de80ca77d8f2b0ce48636597ffb16d635"
+    },
+    {
+      "path": "ui-geometry.log",
+      "bytes": 4797,
+      "sha256": "901df529677f45e288d9123fc3e92980e94265e41101895135e94b856da56a77"
+    },
+    {
+      "path": "first-fold/report.json",
+      "bytes": 175858,
+      "sha256": "f98d21e1bfaa4a2246fe76739e9acfd7635a93fe13791a7512ff2558c342e483"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-contract.v1.json",
+      "bytes": 41204,
+      "sha256": "8dc42511744c4fb9c0f2dace0e6c5addb5493799321f6c0c73819b4134c2ff71"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-measurements.v1.json",
+      "bytes": 175763,
+      "sha256": "bc125c6a77a6204086d025e023af06329d23e3db93f4c761087eadf73079ab99"
+    },
+    {
+      "path": "presentation/evidence.json",
+      "bytes": 2475,
+      "sha256": "9cf2da5dc3a506f79492984175077d35ef60f03ced7524bf2832d42b590be515"
+    },
+    {
+      "path": "presentation/candidate/source.html",
+      "bytes": 72346,
+      "sha256": "47f280a89e11084edc3c93a55618f98997f16a43371feaf24033d8635a130334"
+    },
+    {
+      "path": "presentation/candidate/public.html",
+      "bytes": 72583,
+      "sha256": "2d9b4c35e386d0983be90e835a76a4ba19e0464714b1815a5349490b47f9e4b9"
+    }
+  ],
+  "scope": "Source review and presentation recapture only. Required PR gates and exact-main Netcup publication acceptance remain mandatory."
+}

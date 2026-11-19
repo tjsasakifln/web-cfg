@@ -158,7 +158,8 @@ function sha256(buf) {
 {
   const landing = read("quantitativos-orcamento-obras/index.html");
   assert.doesNotMatch(landing, /quando o demonstrativo canônico da CONFENGE estiver publicado/);
-  assert.match(landing, /data-sample-trail-state="canonical"/);
+  assert.match(landing, /data-commercial-presentation="technical-scope"/);
+  assert.doesNotMatch(landing, /data-trail-step=|19,60|6,84/);
   assert.match(landing, /casos\/demonstrativo-projeto-privado/);
   const excerptRel = "casos/demonstrativo-projeto-privado/excerpt-quantitativo.v1.json";
   assert.equal(fs.existsSync(path.join(root, excerptRel)), true);

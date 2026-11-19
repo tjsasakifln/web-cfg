@@ -47,6 +47,7 @@
     '/engenharia-condominios/': 'engenharia-condominios',
     '/seguranca-trabalho-apoio-tecnico/': 'seguranca-trabalho-apoio-tecnico',
     '/projetos/': 'engineering-projects',
+    '/projetos-prontos/': 'ready-projects',
     '/projetos/estruturas/': 'engineering-projects-structures',
     '/projetos/instalacoes/': 'engineering-projects-installations',
     '/projetos/infraestrutura/': 'engineering-projects-infrastructure',

@@ -1,0 +1,80 @@
+name: Verify CONFENGE OpenCAD runtime
+
+on:
+  push:
+    branches: [feat/cad-opencad-studio-confenge]
+    paths:
+      - .github/workflows/test-opencad-runtime.yml
+      - cad/**
+      - tests/cad/**
+      - scripts/cad/publicar.py
+      - scripts/site/csp_contract.py
+      - assets/js/tool-credits.mjs
+      - assets/js/tool-referral.mjs
+      - _headers
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: confenge-opencad-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - name: Refuse any destination except the implementation branch
+        run: test "$GITHUB_REF" = 'refs/heads/feat/cad-opencad-studio-confenge'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Prepare the browser dependencies
+        run: |
+          npm ci --ignore-scripts --engine-strict
+          npm run build:firebase-auth
+      - name: Resolve the site's contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
+      - name: Install and verify the committed runtime with the actual CSP
+        run: |
+          set -euo pipefail
+          mkdir -p build/cad-smoke-site build/reports/cad
+          cp -a cad assets index.html styles.css styles-tokens.css script.js manifest.webmanifest favicon.ico _headers build/cad-smoke-site/
+          python3 scripts/cad/publicar.py build/cad-smoke-site
+          python3 scripts/site/csp_contract.py --write build/cad-smoke-site/_headers --root build/cad-smoke-site
+          node tests/cad/package.mjs build/cad-smoke-site 2>&1 | tee build/reports/cad/package.log
+      - name: Open, edit, export and reopen the actual DWG
+        id: editor_browser
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CAD_EVIDENCE: build/reports/cad/editor
+        run: |
+          set -euo pipefail
+          node tests/cad/editor-browser.mjs build/cad-smoke-site 2>&1 | tee build/reports/cad/editor-browser.log
+      - name: Verify acknowledgement and cancellation in the actual engine
+        if: ${{ !cancelled() && steps.editor_browser.outcome != 'skipped' }}
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          node tests/cad/engine-bridge-browser.cjs build/cad-smoke-site 2>&1 | tee build/reports/cad/engine-bridge-browser.log
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: confenge-opencad-evidence-${{ github.sha }}
+          path: build/reports/cad
+          if-no-files-found: warn
+          retention-days: 14

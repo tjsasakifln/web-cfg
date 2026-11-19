@@ -28,6 +28,7 @@
  *        (A06-RECEBIMENTO-02: explicit operator reclassification of one real
  *        record after human QA; snapshot + audit; undo via rollback_record_kind)
  *   GET  inbound_handoff
+ *   GET  project_services   (payment readiness and orders; auth required)
  *   GET  audit_inbound_requeue
  *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit: 1, approval_reference?: string }
  *   POST drain_inbound     (Warmbly handoffs due + lead e-mail retry, same key, 24 h window)
@@ -38,6 +39,8 @@
 const crypto = require("crypto");
 const { corsHeaders, clientIp, safeLog } = require("./lib/lead-core.cjs");
 const { createStore } = require("./lib/lead-store.cjs");
+const { projectInterestProjection, isReadyProjectLead, summarizeReadyProjectLeads } = require("./lib/ready-project-ops.cjs");
+const { isFixtureOrSynthetic } = require("./lib/event-contract.cjs");
 const {
   isProductionProfile,
   resolveStorageConfig,
@@ -369,9 +372,17 @@ async function loadRecentAnalytics(event) {
 }
 
 function redactLeadForExport(record, { includePii }) {
-  if (!includePii) return publicLeadSummary(record);
-  return {
+  const project = projectInterestProjection(record);
+  const summary = {
     ...publicLeadSummary(record),
+    ...(project ? { intent: record.intent, route_family: record.route_family,
+      project_kind: project.kind, product_id: project.product_id,
+      utm_medium: record.utm_medium || null, utm_content: record.utm_content || null,
+      utm_term: record.utm_term || null } : {}),
+  };
+  if (!includePii) return summary;
+  return {
+    ...summary,
     nome: record.nome,
     telefone: record.telefone,
     email: record.email,
@@ -379,6 +390,7 @@ function redactLeadForExport(record, { includePii }) {
     mensagem: record.mensagem ? "[present]" : null,
     stage_history: record.stage_history || [],
     delivery: record.delivery || null,
+    ...(project ? { project_interest: project } : {}),
   };
 }
 
@@ -433,9 +445,41 @@ exports.handler = async (event) => {
     return json(429, { ok: false, error: "rate_limited", retry_after: rl.retryAfter }, origin);
   }
 
+  if (action === "project_services" && event.httpMethod === "GET") {
+    if ((event.multiValueQueryStringParameters?.order_id || []).length > 1) {
+      return json(400, { ok: false, error: "invalid_order_id" }, origin);
+    }
+    try {
+      const services = require("../../runtime/project-commerce/service-ops.cjs");
+      const result = qs.op === "preflight" ? await services.preflight() :
+        await services.report(qs.order_id ? { orderId: qs.order_id } : {});
+      return json(200, { ok: true, ...result }, origin);
+    } catch (error) {
+      const known = { INVALID_ORDER_ID: [400, "invalid_order_id"], ORDER_NOT_FOUND: [404, "order_not_found"] };
+      const [status, reason] = known[error.message] || [503, "project_services_unavailable"];
+      return json(status, { ok: false, error: reason }, origin);
+    }
+  }
+
   bindBlobs(event);
   const gscReadOnly = event.httpMethod === "GET" && ["gsc_history", "gsc_insights"].includes(action);
   const store = await createStore({ event, readOnly: gscReadOnly });
+
+  if (action === "ready_projects" && event.httpMethod === "GET") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const rows = await listLeads(store);
+    const events = (await loadRecentAnalytics(event)).filter(entry => !isFixtureOrSynthetic(entry) &&
+      !isFixtureOrSynthetic(entry.props) &&
+      /^\/projetos-prontos(?:\/|$)/.test(String(entry.path || entry.props?.page_path || "")) &&
+      !/^\/projetos-prontos\/(?:pedidos|entrega|checkout)(?:\/|$)/.test(String(entry.path || entry.props?.page_path || "")));
+    const aggregate = aggregateEvents(events);
+    return json(200, {
+      ok: true,
+      contacts: summarizeReadyProjectLeads(rows),
+      visits: { window_days: 14, source: "consented_analytics", unique_visitors: null,
+        page_views: aggregate.daily.reduce((total, day) => total + day.page_views, 0) },
+    }, origin);
+  }
 
   if (action === "gsc_history" && event.httpMethod === "GET") {
     if (!store || typeof store.getSystemRecord !== "function") {
@@ -623,6 +667,10 @@ exports.handler = async (event) => {
       filtered = filtered.filter((l) => (normalizeKind(l.record_kind) || "real") === kindFilter);
     }
     if (stage) filtered = filtered.filter((l) => (l.commercial_stage || l.status) === stage);
+    if (qs.family) {
+      if (qs.family !== "ready_projects") return json(400, { ok: false, error: "unknown_family_filter" }, origin);
+      filtered = filtered.filter(isReadyProjectLead);
+    }
     const summaries = filtered
       .map((l) => redactLeadForExport(l, { includePii }))
       .sort((a, b) => String(b.received_at).localeCompare(String(a.received_at)));
@@ -1119,8 +1167,8 @@ exports.handler = async (event) => {
     const inboundConfig = resolveInboundConfig(process.env);
     // Read-only destination safety proof. This is deliberately evaluated by the
     // server, where the canonical destination is configured, so callers never
-    // receive a URL, credential or signed request. A synthetic live proof must
-    // observe these controls before it is allowed to create its flagged row.
+    // receive a URL, credential or signed request. A synthetic transport proof
+    // must observe these controls before it creates a row allowed to cross.
     const destinationSafety = await probeInboundDestinationHealth({ env: process.env });
     const requestedLeadId = String(event.queryStringParameters?.lead_id || "").trim();
     const requestedLead = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/.test(requestedLeadId)
@@ -1133,6 +1181,8 @@ exports.handler = async (event) => {
       ? specializedQaTechnicalContextSha256(requestedLead)
       : null;
     const priorityAditivoContextSha256 = priorityAditivoPersistedContextSha256(requestedLead);
+    const persistOnlyProbeReceipt = requestedLead?.record_kind === "synthetic" &&
+      requestedLead?.synthetic_probe_authenticated === true && requestedLead?.persist_only_probe === true;
     const configuration = {
       webhook_url: process.env.CONFENGE_INBOUND_WEBHOOK_URL ? "SET" : "UNSET",
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
@@ -1163,6 +1213,7 @@ exports.handler = async (event) => {
               receipt_id: requestedLead.receipt_id || requestedLead.lead_id,
               record_kind: requestedLead.record_kind || "real",
               authenticated_probe: requestedLead.synthetic_probe_authenticated === true,
+              persist_only_probe: persistOnlyProbeReceipt,
               source: requestedLead.source || "CONFENGE_WEB",
               next_action: requestedLead.next_action || null,
               asset_id: requestedLead.asset_id || null,
@@ -1180,6 +1231,8 @@ exports.handler = async (event) => {
               handoff: requestedLead.handoff
                 ? {
                     status: requestedLead.handoff.status,
+                    reason: persistOnlyProbeReceipt && requestedLead.handoff.reason === "persist_only_probe"
+                      ? "persist_only_probe" : null,
                     attempts: requestedLead.handoff.attempts,
                     delivered_at: requestedLead.handoff.delivered_at || null,
                     downstream: requestedLead.handoff.downstream || null,

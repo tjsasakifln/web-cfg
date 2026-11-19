@@ -387,13 +387,22 @@ try {
     await page.setViewport({ width: 683, height: 450 }); await page.goto(routeUrl(journey.direct, `${journey.id}-zoom`), { waitUntil: "domcontentloaded" });
     const zoomed = await facts(page, new URL(journey.direct, base).hash); required("journey_zoom_200_reflow_no_overflow", !zoomed.overflow, JSON.stringify(zoomed), { journey: journey.id, route: journey.direct, viewport: "1366@200%-equivalent(683css)" });
     await page.goto(routeUrl("/", `${journey.id}-home`), { waitUntil: "domcontentloaded" });
-    // A header entry is reached through the mobile menu at the reflow width.
-    // Exercise the real control instead of inspecting its hidden desktop twin.
+    // Reach header entries through the controls in the visible navigation.
+    // Opening the mobile shell alone does not expose a grouped destination.
     if (journey.homeContainer === "inicio") {
       const menu = await page.$('#inicio .menu-toggle');
-      if (menu && await menu.evaluate(button => button.getBoundingClientRect().width > 0)) {
+      const mobile = Boolean(menu && await menu.evaluate(button => button.getBoundingClientRect().width > 0));
+      if (mobile) {
         await menu.focus();
         await page.keyboard.press("Enter");
+      }
+      if (journey.id === "condominio_contratacao") {
+        const navigation = mobile ? '#inicio .mobile-nav' : '#inicio .desktop-nav';
+        const group = `${navigation} [data-nav-group="servicos"]`;
+        const summary = await page.waitForSelector(`${group} > summary`, { visible: true });
+        await summary.focus();
+        await page.keyboard.press("Enter");
+        await page.waitForFunction(selector => document.querySelector(selector)?.open, {}, group);
       }
     }
     let homeLink = null;

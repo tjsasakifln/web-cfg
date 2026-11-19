@@ -1,5 +1,6 @@
 /**
- * Inject demonstrative extracts into the three priority purchase pages.
+ * Maintain demonstrative extracts and the commercial service presentation.
+ * The professional presentation keeps educational extracts in /casos/.
  *
  * Precondition: source.v1.json, consumption.v1.json and the four public CSVs
  * exist. Missing required input fails closed; it does not publish a
@@ -41,6 +42,15 @@ function resolveRoot(argv = process.argv.slice(2), cwd = process.cwd()) {
   return path.resolve(cwd);
 }
 
+export function preserveProfessionalPresentation(html, requiredHref) {
+  if (!/<section\b[^>]*data-commercial-presentation="technical-scope"/.test(html)) return false;
+  const links = [...html.matchAll(/<a\b(?=[^>]*data-demonstrative-resource=)[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+  if (!links.some((link) => link[1] === requiredHref && /Exemplo demonstrativo/i.test(link[2]))) {
+    throw new Error(`required_demonstrative_resource_missing:${requiredHref}`);
+  }
+  return true;
+}
+
 export function composePurchaseProof(rootDir) {
   const root = path.resolve(rootDir);
   assertRequiredInputs(root);
@@ -66,13 +76,20 @@ export function composePurchaseProof(rootDir) {
     }
   }
 
-  const qtyHtml = injectSampleTrail(fs.readFileSync(qtyPath, "utf8"), excerpt);
-  const rvHtml = injectReviewExtract(fs.readFileSync(rvPath, "utf8"), classified);
-  const coordHtml = injectCoordinationRegister(fs.readFileSync(coordPath, "utf8"), register);
+  const qtyCurrent = fs.readFileSync(qtyPath, "utf8");
+  const rvCurrent = fs.readFileSync(rvPath, "utf8");
+  const coordCurrent = fs.readFileSync(coordPath, "utf8");
+  const qtyHtml = preserveProfessionalPresentation(qtyCurrent, "/casos/demonstrativo-projeto-privado/#quantitativos") ? qtyCurrent : injectSampleTrail(qtyCurrent, excerpt);
+  const rvHtml = preserveProfessionalPresentation(rvCurrent, "/casos/demonstrativo-projeto-privado/#revisao") ? rvCurrent : injectReviewExtract(rvCurrent, classified);
+  const coordHtml = preserveProfessionalPresentation(coordCurrent, "/casos/demonstrativo-projeto-privado/#compatibilizacao") ? coordCurrent : injectCoordinationRegister(coordCurrent, register);
 
-  fs.writeFileSync(qtyPath, qtyHtml);
-  fs.writeFileSync(rvPath, rvHtml);
-  fs.writeFileSync(coordPath, coordHtml);
+  const written = [];
+  for (const [file, current, rendered] of [[qtyPath, qtyCurrent, qtyHtml], [rvPath, rvCurrent, rvHtml], [coordPath, coordCurrent, coordHtml]]) {
+    if (current !== rendered) {
+      fs.writeFileSync(file, rendered);
+      written.push(path.relative(root, file));
+    }
+  }
 
   return {
     excerpt_quantity: excerpt.quantity.value,
@@ -80,7 +97,7 @@ export function composePurchaseProof(rootDir) {
     review_items: classified.items.map((item) => item.id),
     coord_finding: register.finding.id,
     coord_estado: register.finding.provider_state,
-    written: Object.values(PURCHASE_RELS),
+    written,
   };
 }
 

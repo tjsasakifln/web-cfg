@@ -20,6 +20,7 @@ on:
         options:
           - priority-aditivo
           - legacy-sst
+          - ready-projects
 
 permissions:
   contents: read
@@ -50,6 +51,7 @@ jobs:
           esac
           case "$SCENARIO:$VERIFY_EMAIL" in
             priority-aditivo:false|legacy-sst:true) ;;
+            ready-projects:false) ;;
             *) echo "priority-aditivo forbids email; legacy-sst requires explicit email opt-in" >&2; exit 1 ;;
           esac
           [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
@@ -69,6 +71,7 @@ jobs:
         with:
           chrome-version: ${{ steps.browser_contract.outputs.version }}
       - name: Capture fixed proof journey without submitting
+        if: inputs.scenario != 'ready-projects'
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           EXPECTED_SHA: ${{ inputs.expected_sha }}
@@ -103,6 +106,10 @@ jobs:
           case "$SCENARIO" in
             priority-aditivo) export PROBE_SCENARIO=priority-aditivo PROBE_PAGE_PATH=/aditivos-obras-publicas/ ;;
             legacy-sst) export PROBE_SCENARIO=legacy-sst PROBE_PAGE_PATH=/ ;;
+            ready-projects)
+              export PROBE_SCENARIO=ready-projects PROBE_PAGE_PATH=/projetos-prontos/
+              unset PROBE_BROWSER_CONTEXT_FILE
+              ;;
             *) echo "unsupported proof scenario" >&2; exit 1 ;;
           esac
           mkdir -p build/reports

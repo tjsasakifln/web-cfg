@@ -1,0 +1,50 @@
+{
+  "schema": "confenge.first-fold-integration-history/1.0",
+  "purpose_pt_br": "Preservar integralmente as provas dos dois pais da integração. Nenhuma destas medições pertence ao código combinado. A nova medição depende do commit real com ambos os pais e de checkout limpo.",
+  "parents": [
+    {
+      "parent_pr": 832,
+      "parent_commit_sha": "04c32e526c15cf8fef61eac7b9ac95227dfeb63a",
+      "parent_tree_sha": "a497a46a36460ea130e70516ac8e457bcb60d382",
+      "measurement_source_commit_sha": "dd11d3591ef7c57566c90d7db9ec1b27920e832b",
+      "surface": "source",
+      "tree_dirty": false,
+      "files": [
+        {
+          "source_path": "data/commercial/first-fold-contract.v1.json",
+          "archive_path": "pr832/first-fold-contract.v1.json",
+          "sha256": "118683d8efa3852b12bfdf35c3c4f901e9266913326bcbeb5305bc07b0b900ee",
+          "size_bytes": 39979
+        },
+        {
+          "source_path": "data/commercial/first-fold-measurements.v1.json",
+          "archive_path": "pr832/first-fold-measurements.v1.json",
+          "sha256": "e6fa0744e0c22d00deef387b63db5a48f0d5287cefc12c67b1cb200dfd122ea2",
+          "size_bytes": 170019
+        }
+      ]
+    },
+    {
+      "parent_pr": 831,
+      "parent_commit_sha": "ba3f9df4ef3eba356ccfe4c6a6553c2979c967c1",
+      "parent_tree_sha": "a069f360385d8ff188a986abb65868448e45d6b7",
+      "measurement_source_commit_sha": "177e591f4d596dc76de8070b84b05ce17c7434d4",
+      "surface": "source",
+      "tree_dirty": false,
+      "files": [
+        {
+          "source_path": "data/commercial/first-fold-contract.v1.json",
+          "archive_path": "pr831/first-fold-contract.v1.json",
+          "sha256": "a8b7f1d478bea5d998fd6e6af1d97853e63cfb116243f076f186a6de4a9396e2",
+          "size_bytes": 39989
+        },
+        {
+          "source_path": "data/commercial/first-fold-measurements.v1.json",
+          "archive_path": "pr831/first-fold-measurements.v1.json",
+          "sha256": "309e1b1694c359b8c771388e99da50630b83b6aa2cc6d6f00d28046d2b1dfc06",
+          "size_bytes": 169992
+        }
+      ]
+    }
+  ]
+}

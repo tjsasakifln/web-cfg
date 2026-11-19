@@ -19,7 +19,9 @@
  * attempt loop all execute for real.
  */
 import assert from "assert";
-import { mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync } from "fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from "fs";
+import { createHash } from "crypto";
+import { spawn as spawnMeasurement } from "child_process";
 import { tmpdir } from "os";
 import { join } from "path";
 import { fileURLToPath } from "url";
@@ -33,6 +35,32 @@ import {
 const CHILD = fileURLToPath(new URL("./lighthouse_measure_child.mjs", import.meta.url));
 const INJECT = fileURLToPath(new URL("./test_fixtures/lighthouse_fault_injection.mjs", import.meta.url));
 const WORK = mkdtempSync(join(tmpdir(), "confenge-real-fault-"));
+const DIAGNOSTIC_INJECT = join(WORK, "diagnostic-injection.mjs");
+writeFileSync(DIAGNOSTIC_INJECT, `
+import { registerHooks } from "node:module";
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier === "lighthouse") return { url: "diagnostic:lighthouse", shortCircuit: true };
+    if (specifier === "diagnostic:original") return { url: "fault:lighthouse", shortCircuit: true };
+    return nextResolve(specifier, context);
+  },
+  load(url, context, nextLoad) {
+    if (url !== "diagnostic:lighthouse") return nextLoad(url, context);
+    return { format: "module", shortCircuit: true, source: [
+      'import original from "diagnostic:original";',
+      'import { appendFileSync } from "node:fs";',
+      'export default async function lighthouse(...args) {',
+      '  appendFileSync(process.env.LH_CAPTURE_MARKER, "called");',
+      '  const result = await original(...args);',
+      '  result.artifacts = JSON.parse(process.env.LH_CAPTURE_ARTIFACTS);',
+      '  result.lhr.categories.performance.score = 0.94;',
+      '  result.lhr.audits["total-blocking-time"].numericValue = 290.6512;',
+      '  return result;',
+      '}',
+    ].join(String.fromCharCode(10)) };
+  },
+});
+`);
 let ok = 0;
 const pass = (name) => {
   ok += 1;
@@ -41,12 +69,17 @@ const pass = (name) => {
 
 let seq = 0;
 /** Runs one real measurement attempt with a fault injected into Lighthouse. */
-async function attempt(fault, { once = false, marker = "", timeoutMs = 30000 } = {}) {
+async function attempt(fault, {
+  once = false, marker = "", timeoutMs = 30000, diagnostics = null, blockedDiagnostics = [],
+} = {}) {
   seq += 1;
   const id = `${fault}-${seq}`;
   const specPath = join(WORK, `spec-${id}.json`);
   const outcomePath = join(WORK, `outcome-${id}.json`);
   const lhrPath = join(WORK, `lhr-${id}.json`);
+  const diagnosticMarker = join(WORK, `diagnostic-calls-${id}`);
+  const output = { stdout: "", stderr: "" };
+  for (const name of blockedDiagnostics) mkdirSync(lhrPath.replace(/\.json$/, `.${name}.json`));
   writeFileSync(
     specPath,
     JSON.stringify({
@@ -71,15 +104,25 @@ async function attempt(fault, { once = false, marker = "", timeoutMs = 30000 } =
     timeoutMs,
     // `--import` loads the fault fixture before the real child module.
     nodeExecutable: process.execPath,
+    ...(diagnostics ? {
+      spawnFn: (executable, args, options) => {
+        const child = spawnMeasurement(executable, args, { ...options, stdio: ["ignore", "pipe", "pipe"] });
+        child.stdout.on("data", (data) => { output.stdout += data.toString(); });
+        child.stderr.on("data", (data) => { output.stderr += data.toString(); });
+        return child;
+      },
+    } : {}),
     env: {
       ...process.env,
-      NODE_OPTIONS: `${process.env.NODE_OPTIONS || ""} --import ${INJECT}`.trim(),
+      NODE_OPTIONS: `${process.env.NODE_OPTIONS || ""} --import ${INJECT}${diagnostics ? ` --import ${DIAGNOSTIC_INJECT}` : ""}`.trim(),
       LH_FAULT: fault,
       LH_FAULT_ONCE: once ? "1" : "0",
       LH_FAULT_MARKER: marker,
+      LH_CAPTURE_ARTIFACTS: diagnostics ? JSON.stringify(diagnostics) : "",
+      LH_CAPTURE_MARKER: diagnosticMarker,
     },
   });
-  return { outcome, lhrPath, outcomePath };
+  return { outcome, lhrPath, outcomePath, diagnosticMarker, output };
 }
 
 // ---------------------------------------------------------------------------
@@ -246,6 +289,71 @@ pass("real_page_failures_during_measurement_are_never_recovered_as_infrastructur
   assert.equal(outcome.row.cls, 0);
   assert.equal(existsSync(lhrPath), true);
   pass("a_clean_measurement_produces_a_complete_row_through_the_real_child");
+}
+
+// ---------------------------------------------------------------------------
+// 9. Retention uses the SAME result, without altering or re-sampling a measured
+//    regression. Exercise real filesystem failures in the real child, including
+//    the fallback log when even the diagnostic manifest cannot be written.
+// ---------------------------------------------------------------------------
+{
+  const artifacts = {
+    Trace: { traceEvents: [{ name: "RunTask", ts: 2260203, dur: 145980, ph: "X", pid: 7, tid: 8 }] },
+    DevtoolsLog: [{ method: "Network.responseReceived", params: { requestId: "measured-once" } }],
+  };
+  let originalRow;
+  for (const scenario of [
+    { name: "complete", artifacts, blocked: [] },
+    { name: "trace_write_failure", artifacts, blocked: ["trace"], failed: "trace" },
+    { name: "manifest_write_failure", artifacts, blocked: ["diagnostics"], failed: "manifest" },
+    { name: "missing_artifacts", artifacts: {}, blocked: [], failed: "trace" },
+  ]) {
+    const { outcome, lhrPath, diagnosticMarker, output } = await attempt("ok", {
+      diagnostics: scenario.artifacts, blockedDiagnostics: scenario.blocked,
+    });
+    assert.equal(outcome.outcome, OUTCOME.MEASURED, JSON.stringify(outcome));
+    assert.equal(outcome.lhr_written, true);
+    assert.equal(isRetryableOutcome(outcome), false, "retention must never authorize another navigation");
+    assert.equal(outcome.row.performance, 94, "the measured regression must not be rewritten");
+    assert.equal(outcome.row.tbt_ms, 290.6512);
+    assert.equal(readFileSync(diagnosticMarker, "utf8"), "called", "Lighthouse must run exactly once");
+    if (originalRow) assert.deepEqual(outcome.row, originalRow, "retention failures cannot change the measured row");
+    else originalRow = outcome.row;
+
+    const lhrBytes = readFileSync(lhrPath);
+    assert.equal(JSON.parse(lhrBytes).categories.performance.score, 0.94);
+    const stem = lhrPath.replace(/\.json$/, "");
+    if (scenario.failed === "manifest") {
+      assert.match(output.stderr, /LIGHTHOUSE_DIAGNOSTICS/);
+      assert.match(output.stderr, /"artifact":"manifest"/);
+      assert.match(output.stderr, /"status":"incomplete"/);
+    } else {
+      const manifest = JSON.parse(readFileSync(`${stem}.diagnostics.json`, "utf8"));
+      assert.equal(manifest.source, "same_lighthouse_runner_result");
+      assert.equal(manifest.run, 1);
+      assert.equal(manifest.attempt, 1);
+      assert.equal(manifest.lhr.bytes, lhrBytes.length);
+      assert.equal(manifest.lhr.sha256, createHash("sha256").update(lhrBytes).digest("hex"));
+      assert.equal(manifest.status, scenario.failed ? "incomplete" : "complete");
+      if (scenario.failed) {
+        assert.ok(manifest.errors.some((error) => error.artifact === scenario.failed));
+        assert.equal(manifest.files[scenario.failed], undefined, "failed bytes cannot be claimed as retained");
+        assert.match(output.stderr, /LIGHTHOUSE_DIAGNOSTICS/);
+      }
+      for (const [name, file] of Object.entries(manifest.files)) {
+        const bytes = readFileSync(`${stem}.${name}.json`);
+        assert.equal(file.bytes, bytes.length);
+        assert.equal(file.sha256, createHash("sha256").update(bytes).digest("hex"));
+      }
+    }
+    if (scenario.name !== "missing_artifacts") {
+      assert.deepEqual(JSON.parse(readFileSync(`${stem}.devtoolslog.json`, "utf8")), artifacts.DevtoolsLog);
+      if (scenario.failed !== "trace") {
+        assert.deepEqual(JSON.parse(readFileSync(`${stem}.trace.json`, "utf8")), artifacts.Trace);
+      }
+    }
+    pass(`same_measurement_diagnostics_${scenario.name}`);
+  }
 }
 
 // ---------------------------------------------------------------------------

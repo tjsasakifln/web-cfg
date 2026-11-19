@@ -22,6 +22,7 @@ from scripts.site.public_navigation import (
     promote_public_navigation,
 )
 from scripts.site.shell_nav import HASH_BOUND_EDITORIAL_FILES, value_first_cta_contract
+from scripts.site.test_brand_contract import _unique_head_meta_content
 from scripts.site.test_report_model_599 import (
     _assert_no_scope_contradictions,
     _visible_text,
@@ -70,18 +71,23 @@ class _NavParser(HTMLParser):
         self.capture = False
         self.buf: list[str] = []
         self.labels: list[str] = []
+        self.grouped = False
+        self.nav_label = ""
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         ad = {key: (value or "") for key, value in attrs}
         if tag == "nav" and "desktop-nav" in ad.get("class", "").split():
             self.in_desktop = True
+        elif self.in_desktop and tag == "details" and "nav-group" in ad.get("class", "").split():
+            self.grouped = True
         elif self.in_desktop and tag == "a":
-            self.capture = True
+            self.capture = not self.grouped or ad.get("data-nav-primary") == "true"
+            self.nav_label = ad.get("data-nav-label", "")
             self.buf = []
 
     def handle_endtag(self, tag: str) -> None:
         if self.capture and tag == "a":
-            self.labels.append(re.sub(r"\s+", " ", "".join(self.buf)).strip())
+            self.labels.append(self.nav_label or re.sub(r"\s+", " ", "".join(self.buf)).strip())
             self.capture = False
         elif self.in_desktop and tag == "nav":
             self.in_desktop = False
@@ -177,6 +183,43 @@ def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
         assert f"min-height:{minimum}px" in rule.group(1)
 
 
+@pytest.mark.parametrize(
+    "attribute,key",
+    [("name", "description"), ("property", "og:title"), ("property", "og:description")],
+)
+def test_metadata_reader_accepts_attribute_order_and_decodes_entities(attribute: str, key: str) -> None:
+    for meta in (
+        f'<meta content="Entregas &amp; ofertas" {attribute}="{key}"/>',
+        f"<meta {attribute}='{key}' content='Entregas &amp; ofertas'>",
+        f'<META {attribute.upper()}="{key}" data-extra="allowed" CONTENT="Entregas &amp; ofertas">',
+    ):
+        assert _unique_head_meta_content(f"<head>{meta}</head>", key, attribute=attribute) == "Entregas & ofertas"
+
+
+@pytest.mark.parametrize(
+    "attribute,key",
+    [("name", "description"), ("property", "og:title"), ("property", "og:description")],
+)
+def test_metadata_reader_rejects_missing_duplicate_or_ambiguous_metadata(attribute: str, key: str) -> None:
+    correct = f'<meta {attribute}="{key}" content="Entregas e ofertas">'
+    other_attribute = "property" if attribute == "name" else "name"
+    for html in (
+        "<head></head>",
+        correct,
+        f"<head>{correct}",
+        f"<head>{correct}{correct}</head>",
+        f"<head>{correct}</head><head></head>",
+        f"<head></head><body>{correct}</body>",
+        f'<head><meta {attribute}="{key}" content="Primeiro" content="Segundo"></head>',
+        f'<head><meta {attribute}="{key}" {attribute}="outro" content="Entregas"></head>',
+        f'<head><meta {attribute}="{key}" {other_attribute}="outro" content="Entregas"></head>',
+        f'<head><meta {attribute}="{key}"></head>',
+        f'<head><meta {attribute}="{key}" content=""></head>',
+    ):
+        with pytest.raises(AssertionError):
+            _unique_head_meta_content(html, key, attribute=attribute)
+
+
 def test_public_ia_separates_engineering_services_examples_and_priced_offers() -> None:
     """Internal portfolio state remains governed without becoming buyer copy."""
     html = _html()
@@ -205,11 +248,9 @@ def test_public_ia_separates_engineering_services_examples_and_priced_offers() -
     assert "bloqueada" not in visible
 
     title = re.search(r"<title>([^<]+)</title>", html).group(1)
-    description = re.search(r'<meta content="([^"]+)" name="description"/>', html).group(1)
-    og_title = re.search(r'<meta content="([^"]+)" property="og:title"/>', html).group(1)
-    og_description = re.search(
-        r'<meta content="([^"]+)" property="og:description"/>', html
-    ).group(1)
+    description = _unique_head_meta_content(html, "description", attribute="name")
+    og_title = _unique_head_meta_content(html, "og:title")
+    og_description = _unique_head_meta_content(html, "og:description")
     # Metadata describes the page's three public concepts without exporting
     # the internal inventory or implying that examples are client cases.
     assert all(term in title.casefold() for term in ("entregas", "ofertas", "confenge"))
@@ -622,9 +663,11 @@ def _assert_home_delivery_contract(home: str, home_css: str) -> None:
     assert 'data-section-archetype="content_editorial"' in block
     articles = re.findall(r"<article>.*?</article>", block, re.S)
     assert len(articles) == 3
-    for term in ("projetos", "planilhas", "relatórios", "laudos", "pareceres", "dossiês", "demonstrativo"):
+    for term in ("projetos", "planilhas", "relatórios", "laudos", "pareceres", "dossiês", "dimensionamento", "critérios de medição"):
         assert term in text, term
-    for destination in ("/casos/demonstrativo-projeto-privado/", "/entregas/", "/casos/medicao-glosa-demonstrativo/"):
+    assert not re.search(r"banheiro|10 cm|6,84|exemplo demonstrativo", text)
+    assert "/casos/" not in block, "educational examples are not institutional proof"
+    for destination in ("/projetos/coordenacao-multidisciplinar/", "/entregas/", "/quantitativos-orcamento-obras/"):
         assert f'href="{destination}"' in block
     conduction = re.search(r'<section\b[^>]*id="como-conduzimos"[^>]*>.*?</section>', home, re.S)
     assert conduction
@@ -677,7 +720,7 @@ def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None
 
 def test_home_delivery_contract_rejects_lost_substance_or_responsive_layout() -> None:
     home, css = _html(ROOT / "index.html"), _html(ROOT / "assets/home-10x.css")
-    for old, new in (("relatórios", "objetos"), ('href="/casos/demonstrativo-projeto-privado/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
+    for old, new in (("Relatórios", "Objetos"), ('href="/projetos/coordenacao-multidisciplinar/"', 'href="/x/"'), (".home-opening__grid{grid-template-columns:1fr}", ".home-opening__grid{grid-template-columns:2fr}")):
         assert old in home
         with pytest.raises(AssertionError):
             _assert_home_delivery_contract(home.replace(old, new), css)
@@ -751,13 +794,13 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
     expected_labels = [label for label, _ in CANONICAL_NAV_ITEMS]
     for index, block in enumerate(blocks):
         anchors = re.findall(r'<a\b[^>]*>.*?</a>', block, flags=re.DOTALL)
-        navigation = [anchor for anchor in anchors if 'class="button ' not in anchor]
+        navigation = [anchor for anchor in anchors if 'data-nav-primary="true"' in anchor]
         hrefs = [
             re.search(r'href="([^"]+)"', anchor).group(1)
             for anchor in navigation
         ]
         labels = [
-            re.sub(r"<[^>]+>", "", anchor).strip() for anchor in navigation
+            re.search(r'data-nav-label="([^"]+)"', anchor).group(1) for anchor in navigation
         ]
         assert hrefs == expected_hrefs
         assert labels == expected_labels

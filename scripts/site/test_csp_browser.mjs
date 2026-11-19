@@ -38,6 +38,7 @@ const walletRoutes = new Set([
   "/ferramentas/matriz-atraso-obra/",
   "/ferramentas/radar-mercado-publico/",
 ]);
+const projectOrdersRoute = "/projetos-prontos/pedidos/";
 const authProbes = [
   "https://identitytoolkit.googleapis.com/confenge-csp-probe",
   "https://securetoken.googleapis.com/confenge-csp-probe",
@@ -59,6 +60,7 @@ const routes = [
   "/ferramentas/matriz-atraso-obra/",
   "/ferramentas/radar-mercado-publico/",
   "/ops/",
+  projectOrdersRoute,
 ];
 
 function publicBlockedUri(value) {
@@ -141,7 +143,7 @@ const failures = [];
 try {
   for (const route of routes) {
     const page = await browser.newPage();
-    if (walletRoutes.has(route)) {
+    if (walletRoutes.has(route) || route === projectOrdersRoute) {
       await page.setRequestInterception(true);
       page.on("request", (request) => {
         if (authProbes.includes(request.url())) {
@@ -165,7 +167,7 @@ try {
     const response = await page.goto(`${base}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
     if (response?.status() !== 200) failures.push(`${route} returned ${response?.status() || "no response"}`);
 
-    if (walletRoutes.has(route)) {
+    if (walletRoutes.has(route) || route === projectOrdersRoute) {
       const passed = await page.evaluate((probes) => Promise.all(probes.map(async (url) => {
         try { return (await fetch(url)).status === 204; }
         catch { return false; }

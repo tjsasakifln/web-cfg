@@ -9,15 +9,6 @@ const port = 8831;
 const widths = [320, 390, 1440];
 const figures = [
   {
-    route: "/quantitativos-orcamento-obras/",
-    selector: 'img[src$="/assets/quantitativos-orcamento-obras/banco-disciplinas.svg"]',
-    mobile: "/assets/quantitativos-orcamento-obras/banco-disciplinas-mobile.svg",
-    wide: "/assets/quantitativos-orcamento-obras/banco-disciplinas-wide.svg",
-    altTerms: ["estrutura", "memória", "revisão"],
-    captionTerms: ["elemento", "memória"],
-    assetTerms: ["Quantidades e composições dependem dos documentos do empreendimento."],
-  },
-  {
     route: "/conteudos/como-contratar-projetos-complementares/",
     selector: '.article-cover img[src$="/assets/conteudos/como-contratar-projetos-complementares.svg"]',
     mobile: "/assets/conteudos/como-contratar-projetos-complementares-mobile.svg",
@@ -27,6 +18,16 @@ const figures = [
     assetTerms: ["Isso só entra com autorização e evidência na proposta."],
   },
 ];
+// The commercial migration removed banco-disciplinas from its only public
+// consumer. The remaining responsive figure is still checked in every viewport.
+// Shared-plate census: 277aaca had 24 plates on 22 routes; the current surface
+// has 18 on 17 routes. One plate left each of these six commercial pages:
+// assistencia-tecnica-pericial-engenharia, compatibilizacao-projetos-engenharia,
+// inspecao-diagnostico-edificacoes, projetos-complementares-engenharia (3 -> 2),
+// quantitativos-orcamento-obras, revisao-tecnica-projetos-engenharia.
+// Keep scanning every manifest route and reject any further unaccounted loss.
+const MIN_PUBLISHED_PLATES = 18;
+const panControlRoute = "/medicoes-glosas-obras-publicas/";
 
 function routeFile(route) {
   return join(root, route.replace(/^\//, ""), "index.html");
@@ -63,7 +64,7 @@ function assertSharedPlateContracts() {
       plateCount += 1;
     }
   }
-  assert.ok(plateCount >= 20, `censo de pranchas incompleto: ${plateCount}`);
+  assert.ok(plateCount >= MIN_PUBLISHED_PLATES, `censo de pranchas incompleto: ${plateCount}`);
   return { plateCount, routes };
 }
 
@@ -226,8 +227,10 @@ try {
 
   // An area that consumes arrow keys must fail the real keyboard interaction.
   await page.setViewport({ width: 320, height: 900, deviceScaleFactor: 1 });
-  await page.goto(`http://127.0.0.1:${port}/assistencia-tecnica-pericial-engenharia/`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://127.0.0.1:${port}${panControlRoute}`, { waitUntil: 'networkidle0' });
   const blockedPan = await page.$('.plate__sheet--native-pan');
+  assert.ok(blockedPan, 'contraprova requer prancha publicada com pan');
+  assert.ok(await blockedPan.evaluate(sheet => sheet.scrollWidth > sheet.clientWidth + 1), 'contraprova requer conteúdo com rolagem');
   await blockedPan.evaluate(sheet => {
     sheet.scrollLeft = 0;
     sheet.addEventListener('keydown', event => event.preventDefault());
@@ -238,23 +241,24 @@ try {
   assert.equal(await blockedPan.evaluate(sheet => sheet.scrollLeft), 0, 'contraprova deve bloquear pan pelo teclado');
   checked += 1;
 
-  // The expert-report plate carries the smallest desktop source type (10.5px).
-  // This browser negative proves that the former 1310px viewport is insufficient.
+  // The former expert-report plate no longer has a public consumer. The current
+  // measurement plate has 11px source type at 1200px; compressing it to 1280px
+  // must violate the same 11.9px legibility floor while its native size passes.
   await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
-  await page.goto(`http://127.0.0.1:${port}/assistencia-tecnica-pericial-engenharia/`, { waitUntil: "networkidle0", timeout: 30000 });
-  const forensic = await page.$eval('.plate__sheet--native-pan img', async (image) => {
+  await page.goto(`http://127.0.0.1:${port}${panControlRoute}`, { waitUntil: "networkidle0", timeout: 30000 });
+  const compressed = await page.$eval('.plate__sheet--native-pan img', async (image) => {
     image.scrollIntoView({ block: "center" });
     await image.decode().catch(() => undefined);
     const picture = image.closest("picture");
     const measuredWidth = image.getBoundingClientRect().width;
-    picture.style.setProperty("width", "1310px", "important");
+    picture.style.setProperty("width", "1280px", "important");
     const negativeWidth = image.getBoundingClientRect().width;
     return { asset: new URL(image.currentSrc || image.src, location.href).pathname, measuredWidth, negativeWidth };
   });
-  const forensicMeta = svgMetrics(forensic.asset);
-  assert.ok(forensic.measuredWidth >= 1372, `prancha pericial renderizou só ${forensic.measuredWidth}px`);
-  assert.ok(forensicMeta.minFont * forensic.measuredWidth / forensicMeta.viewBoxWidth >= 11.9, "prancha pericial abaixo do piso legível");
-  assert.ok(forensicMeta.minFont * forensic.negativeWidth / forensicMeta.viewBoxWidth < 11.9, "controle negativo 1310px deveria reprovar a prancha pericial");
+  const compressedMeta = svgMetrics(compressed.asset);
+  assert.ok(compressed.measuredWidth >= 1372, `prancha de medição renderizou só ${compressed.measuredWidth}px`);
+  assert.ok(compressedMeta.minFont * compressed.measuredWidth / compressedMeta.viewBoxWidth >= 11.9, "prancha de medição abaixo do piso legível");
+  assert.ok(compressedMeta.minFont * compressed.negativeWidth / compressedMeta.viewBoxWidth < 11.9, "controle negativo 1280px deveria reprovar a prancha de medição");
   checked += 1;
   await page.close();
 } finally {

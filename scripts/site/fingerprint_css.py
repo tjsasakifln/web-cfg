@@ -15,6 +15,7 @@ import html
 import json
 import posixpath
 import re
+import subprocess
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
@@ -26,6 +27,10 @@ HASH_LEN = 12
 ASSET_DIR = "assets/css"
 MANIFEST_REL = ".well-known/css-assets.json"
 CANONICAL_HOST = "confenge.com.br"
+CSS_MINIFY_SCHEMA = "CONFENGE_PUBLIC_CSS_MINIFY/1.0"
+CSS_MINIFIER = Path(__file__).with_name("minify_public_css.mjs")
+CSS_MINIFIER_SETUP = "Use Node 22 (>=22.19 <23) and run npm ci --engine-strict at the repository root."
+_MINIFIED_CSS_CACHE: dict[str, str] = {}
 
 IMPORT_RE = re.compile(
     r"""(@import\s+url\(\s*["']?)(/styles-tokens\.css)(?:[?#][^"')\s]*)?(["']?\s*\))""",
@@ -340,6 +345,51 @@ def _inline_tokens_import(css: str, tokens_css: str) -> str:
     return TOKENS_IMPORT_STATEMENT_RE.sub(_sub, css, count=1)
 
 
+def _minify_css_batch(sources: dict[str, str]) -> dict[str, str]:
+    """One Node invocation for new CSS bytes; reuse identical approval/build inputs.
+
+    The source sheets and their composition stay unchanged. Only flattened
+    publication bytes pass through the parser, before content hashes are made.
+    """
+    keys = {name: sha256_hex(css.encode("utf-8")) for name, css in sources.items()}
+    pending = {name: css for name, css in sources.items() if keys[name] not in _MINIFIED_CSS_CACHE}
+    if pending:
+        request = {"schema_version": CSS_MINIFY_SCHEMA, "files": pending}
+        try:
+            result = subprocess.run(
+                ["node", str(CSS_MINIFIER)],
+                input=json.dumps(request, ensure_ascii=False),
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=60,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise ValueError(f"public CSS minification could not run: {exc}. {CSS_MINIFIER_SETUP}") from exc
+        if result.returncode:
+            detail = (result.stderr or result.stdout).strip()[:2000]
+            raise ValueError(f"public CSS minification failed: {detail}. {CSS_MINIFIER_SETUP}")
+        try:
+            response = json.loads(result.stdout)
+        except json.JSONDecodeError as exc:
+            raise ValueError("public CSS minification returned invalid JSON") from exc
+        files = response.get("files") if isinstance(response, dict) else None
+        if (
+            not isinstance(response, dict)
+            or response.get("schema_version") != CSS_MINIFY_SCHEMA
+            or not isinstance(files, dict)
+            or set(files) != set(pending)
+            or any(not isinstance(css, str) for css in files.values())
+        ):
+            raise ValueError("public CSS minification returned an incomplete batch")
+        for name, css in files.items():
+            _validate_relocatable_css(css, name)
+        for name, css in files.items():
+            _MINIFIED_CSS_CACHE[keys[name]] = css
+    return {name: _MINIFIED_CSS_CACHE[keys[name]] for name in sources}
+
+
 def fingerprint_published_css(dest: Path) -> dict[str, Any]:
     """Rewrite dest HTML to content-hashed CSS; write css-assets.json.
 
@@ -392,12 +442,6 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
 
     token_path = dest / "styles-tokens.css"
     token_bytes = token_path.read_bytes() if token_path.is_file() else b""
-    token_hash = short_hash(token_bytes) if token_bytes else ""
-    token_href = (
-        f"/{ASSET_DIR}/{hashed_filename('styles-tokens.css', token_hash)}"
-        if token_hash
-        else "/styles-tokens.css"
-    )
 
     css_dir = dest / ASSET_DIR
     if token_bytes:
@@ -406,21 +450,8 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
     if sources:
         css_dir.mkdir(parents=True, exist_ok=True)
 
-    if token_bytes:
-        token_rel = _hashed_asset_rel("/styles-tokens.css", token_hash)
-        token_output = dest / token_rel
-        token_output.parent.mkdir(parents=True, exist_ok=True)
-        token_output.write_bytes(token_bytes)
-        mapping["/styles-tokens.css"] = token_href
-        files["styles-tokens.css"] = {
-            "sha256": sha256_hex(token_bytes),
-            "hash": token_hash,
-            "href": token_href,
-        }
-
+    prepared: dict[str, str] = {}
     for source_href in sorted(sources):
-        if source_href == "/styles-tokens.css":
-            continue
         path = sources[source_href]
         raw = path.read_text(encoding="utf-8")
         # The tokens sheet is inlined where the source says `@import url(/styles-tokens.css)`:
@@ -431,7 +462,13 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
         # local viewing; only the published artifact is flattened.
         rewritten = _inline_tokens_import(raw, token_bytes.decode("utf-8")) if token_bytes else raw
         _validate_relocatable_css(rewritten, source_href)
-        data = rewritten.encode("utf-8")
+        prepared[source_href] = rewritten
+
+    # Keep every rule, selector, identifier and string. Comments and formatting
+    # are removed only after token imports have been flattened: esbuild's import
+    # serialization must not introduce a second fetch or evade that flattening.
+    for source_href, compact in _minify_css_batch(prepared).items():
+        data = compact.encode("utf-8")
         digest = short_hash(data)
         hashed_rel = _hashed_asset_rel(source_href, digest)
         hashed_path = dest / hashed_rel

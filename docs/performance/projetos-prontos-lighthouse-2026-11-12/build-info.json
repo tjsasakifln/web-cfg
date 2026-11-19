@@ -1,0 +1,16 @@
+{
+  "artifact_hash": "9575ae33b220bd2ed3cf88bb2f2e6f442ae8e8510c8f8f35faf99e624d642ee5",
+  "build_time": "2026-11-12T06:17:01Z",
+  "commit": "9c425bad6ee3b3dc51152d8ee0d275a5c6d221e4",
+  "deploy_id": null,
+  "environment": "local",
+  "manifest_hash": "ef1265519f0fe632395ef1afaeb1a875a670b789172af9574c72bab5822e2e01",
+  "schema_version": "1.2.0",
+  "site_schema_version": "1.1.0",
+  "source": "build_site.write_build_info",
+  "versioned_timestamp_fields": [
+    "build_time",
+    "generated_at",
+    "preview_generated_at"
+  ]
+}

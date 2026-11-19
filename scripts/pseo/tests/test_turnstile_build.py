@@ -253,6 +253,7 @@ ISSUE_440_CAPTURE_ROUTES = {
     "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",
     "medicoes-glosas-obras-publicas/index.html",
+    "projetos-prontos/index.html",
     "reequilibrio-obras-publicas/index.html",
     "servicos-obras-publicas/index.html",
 }

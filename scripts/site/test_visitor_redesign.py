@@ -119,6 +119,8 @@ class _DesktopNav(HTMLParser):
         self._capture = False
         self._buf: list[str] = []
         self._is_cta = False
+        self._grouped = False
+        self._nav_label = ""
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         ad = {k: (v or "") for k, v in attrs}
@@ -128,20 +130,24 @@ class _DesktopNav(HTMLParser):
             self.depth = 1
             return
         if self.in_nav:
+            if tag == "details" and "nav-group" in cls.split():
+                self._grouped = True
             if tag == "nav":
                 self.depth += 1
             if tag == "a":
-                self._capture = True
+                self._capture = not self._grouped or ad.get("data-nav-primary") == "true"
+                self._nav_label = ad.get("data-nav-label", "")
                 self._buf = []
                 self._is_cta = False
         if tag == "a" and "header-cta" in cls.split():
             self._capture = True
+            self._nav_label = ""
             self._buf = []
             self._is_cta = True
 
     def handle_endtag(self, tag: str) -> None:
         if self._capture and tag == "a":
-            text = re.sub(r"\s+", " ", "".join(self._buf)).strip()
+            text = self._nav_label or re.sub(r"\s+", " ", "".join(self._buf)).strip()
             if self._is_cta:
                 self.cta = text
             elif self.in_nav and text:

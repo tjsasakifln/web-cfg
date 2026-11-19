@@ -206,65 +206,96 @@ export async function checkQ02(report, root) {
     return;
   }
   const page = read(root, ORCAMENTO_PAGE);
-  const awaiting = /awaiting-canonical-excerpt/.test(page) || /quando o demonstrativo canônico/.test(page);
+  const main = html.mainHtml(page);
+  const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1] || "";
+  const scope = main.match(/<section\b(?=[^>]*\bid="criterios-do-orcamento")(?=[^>]*\bdata-commercial-presentation="technical-scope")[^>]*>[\s\S]*?<\/section>/)?.[0] || "";
+  const articles = [...scope.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/g)].map((match) => match[1]);
+  const scopeText = html.visibleText(scope);
+  const explainsDecisions = [/(?:quantidades|medi[çc][aã]o)/i, /(?:composi[çc][õo]es|pre[çc]os)/i, /(?:compara[çc][aã]o|equaliza[çc][aã]o)/i]
+    .every((term) => term.test(scopeText));
+  const hasAnalysisAndDelivery = articles.length >= 3 && articles.every((article) =>
+    /<h3\b[^>]*>[^<]+<\/h3>/.test(article) &&
+    [...article.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].filter((match) => html.visibleText(match[1]).length > 30).length >= 2 &&
+    /<strong>Entrega:<\/strong>/.test(article));
+  const awaiting = /awaiting-canonical-excerpt|quando o demonstrativo canônico/.test(main);
+  const obsoleteExcerpt = /\bdata-trail-(?:step|quantity)=|\bdata-proof-entrance=/.test(main);
   passFail(
     report,
     {
-      id: "Q02.excerpt.not_awaiting",
+      id: "Q02.landing.technical_scope",
       campaign: "02",
       owner: "02",
       path: ORCAMENTO_PAGE,
-      expected: "numeric excerpt from the published demonstrativo, not awaiting-canonical-excerpt",
-      observed: awaiting ? "awaiting-canonical-excerpt or future promise" : "no awaiting marker",
+      expected: "measurement, pricing and comparison criteria with analysis and deliverables, without an elementary excerpt or pending promise",
+      observed: { articles: articles.length, explainsDecisions, hasAnalysisAndDelivery, awaiting, obsoleteExcerpt },
       severity: SEVERITY.JOURNEY,
     },
-    !awaiting,
+    explainsDecisions && hasAnalysisAndDelivery && !awaiting && !obsoleteExcerpt,
   );
+
+  const resourceLinks = [...scope.matchAll(/<a\b[^>]*\bdata-demonstrative-resource="[^"]+"[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0]);
+  const resources = [
+    ["edificacao", "/casos/demonstrativo-projeto-privado/#quantitativos"],
+    ["infraestrutura", "/casos/demonstrativo-infraestrutura/#quantitativos"],
+  ].map(([id, href]) => {
+    const link = resourceLinks.find((tag) => attribute(tag, "data-demonstrative-resource") === id) || "";
+    const [route, fragment] = href.split("#");
+    const target = `${route.slice(1)}index.html`;
+    return { id, href: attribute(link, "href"), ok: attribute(link, "href") === href &&
+      /exemplo demonstrativo/i.test(html.visibleText(link)) && existsInRoot(root, target) &&
+      read(root, target).includes(`id="${fragment}"`) };
+  });
+  passFail(report, {
+    id: "Q02.landing.support_resources", campaign: "02", owner: "02", path: ORCAMENTO_PAGE,
+    expected: "labelled demonstrative resources link to existing quantity sections", observed: resources,
+    severity: SEVERITY.JOURNEY,
+  }, resources.every((item) => item.ok));
+
+  const anchors = [...main.matchAll(/<a\b[^>]*>/g)].map((match) => match[0]);
+  const contextual = ["hero-proposal", "hero-calm", "contact-calm"].map((suffix) => {
+    const id = `quantitativos-orcamento-obras-${suffix}`;
+    const tag = anchors.find((anchor) => attribute(anchor, "data-cta-id") === id) || "";
+    const common = attribute(tag, "data-journey") === "orcamento" &&
+      attribute(tag, "data-route-family") === "private-engineering-quantities-budget" &&
+      attribute(tag, "data-asset-id") === "private_quantities_budget_route_v1";
+    const destination = suffix === "hero-proposal"
+      ? attribute(tag, "href") === "#triagem-quantitativos" && /<section\b[^>]*\bid="triagem-quantitativos"/.test(main)
+      : attribute(tag, "href") === "/#contato" && attribute(tag, "data-origem") === "/quantitativos-orcamento-obras/" &&
+        attribute(tag, "data-origin-url") === "/quantitativos-orcamento-obras/" && /quantitativos.*orçamento/i.test(attribute(tag, "data-tema"));
+    return { id, ok: common && destination };
+  });
+  passFail(report, {
+    id: "Q02.landing.contextual_contact", campaign: "02", owner: "02", path: ORCAMENTO_PAGE,
+    expected: "proposal and form paths preserve the budget journey, asset and source context", observed: contextual,
+    severity: SEVERITY.JOURNEY,
+  }, contextual.every((item) => item.ok));
+
+  // Numerical traceability belongs to the educational document linked above.
+  // Match the identified table row, not an unrelated number elsewhere on the page.
   const csvRel = `${CSV_DIR}/quantitativos.csv`;
-  if (!existsInRoot(root, csvRel)) {
+  if (!existsInRoot(root, csvRel) || !existsInRoot(root, DEMO_PAGE)) {
     record(report, {
-      id: "Q02.excerpt.tracks_source",
-      campaign: "02",
-      owner: "02",
-      path: csvRel,
-      status: FAIL,
-      severity: SEVERITY.JOURNEY,
-      expected: "quantitativos.csv source for excerpt",
-      observed: "csv absent",
+      id: "Q02.demonstrative.tracks_source", campaign: "02", owner: "02", path: DEMO_PAGE,
+      status: FAIL, severity: SEVERITY.JOURNEY,
+      expected: "published demonstrative and quantitative CSV", observed: "document or CSV absent",
     });
     return;
   }
-  const csv = read(root, csvRel);
-  const qtyLine = csv.split(/\r?\n/).find((line) => line.startsWith(`${EXCERPT_ITEM_ID};`));
-  const qty = qtyLine ? qtyLine.split(";")[3] : null;
-  const qtyNumber = qty ? Number(String(qty).replace(",", ".")) : NaN;
-  const visible = html.visibleText(page);
-  const localized = Number.isFinite(qtyNumber) ? String(qtyNumber).replace(".", ",") : null;
-  const dotted = Number.isFinite(qtyNumber) ? String(qtyNumber) : null;
-  const visibleHasQty = Boolean(
-    qty &&
-      Number.isFinite(qtyNumber) &&
-      (visible.includes(qty) ||
-        (localized && visible.includes(localized)) ||
-        (dotted && visible.includes(dotted))),
-  );
-  const trail = page.match(/data-trail-quantity="([^"]+)"/);
-  const trailNumber = trail ? Number(String(trail[1]).replace(",", ".")) : NaN;
-  const trailMatchesSource = Number.isFinite(qtyNumber) && Number.isFinite(trailNumber) && trailNumber === qtyNumber;
-  const hasNumber = visibleHasQty && (trailMatchesSource || !trail);
-  passFail(
-    report,
-    {
-      id: "Q02.excerpt.numeric",
-      campaign: "02",
-      owner: "02",
-      path: ORCAMENTO_PAGE,
-      expected: `visible numeric excerpt containing ${EXCERPT_ITEM_ID} quantity ${qty}`,
-      observed: hasNumber ? qty : visible.slice(0, 180),
-      severity: SEVERITY.JOURNEY,
-    },
-    Boolean(hasNumber),
-  );
+  const sourceRow = read(root, csvRel).split(/\r?\n/).find((line) => line.startsWith(`${EXCERPT_ITEM_ID};`))?.split(";") || [];
+  const demo = read(root, DEMO_PAGE);
+  const quantity = Number(String(sourceRow[3] || "NaN").replace(",", "."));
+  const demoRow = [...html.mainHtml(demo).matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)]
+    .map((match) => [...match[1].matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/g)].map((cell) => html.visibleText(cell[1])))
+    .find((cells) => cells[0] === EXCERPT_ITEM_ID) || [];
+  const publishedQuantity = Number(String(demoRow[3] || "NaN").replace(",", "."));
+  const matchesSource = Number.isFinite(quantity) && publishedQuantity === quantity &&
+    demoRow[2] === sourceRow[2] && demoRow[5] === sourceRow[4] && demoRow[6] === sourceRow[5] && Boolean(demoRow[4]);
+  passFail(report, {
+    id: "Q02.demonstrative.numeric", campaign: "02", owner: "02", path: DEMO_PAGE,
+    expected: `${EXCERPT_ITEM_ID} quantity, unit, elements and drawing match the CSV in a labelled demonstrative`,
+    observed: { sourceQuantity: quantity, publishedQuantity, matchesSource, item: demoRow[0] || null },
+    severity: SEVERITY.JOURNEY,
+  }, matchesSource && /exemplo demonstrativo/i.test(html.h1Of(demo)) && html.extractHrefs(demo).includes("data/quantitativos.csv"));
 }
 
 export async function checkQ03(report, root) {

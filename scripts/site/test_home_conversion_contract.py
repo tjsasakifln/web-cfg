@@ -95,7 +95,11 @@ def _visible(fragment: str) -> str:
 # after the Turnstile slot changed from normal to compact to fit the first
 # viewport. Capture routing, controls, consent, privacy, receipt and token
 # handling are protected by the assertions below and remain unchanged.
-CAPTURE_FORM_SHA256 = "7d733ae97146d18fb4fe4f8ef46804c9792444ab9d85b45e878d94e093672db6"
+# 2026-11-13: reviewed C02/C23 copy changes. The submit now says "Enviar
+# solicitação" and urgency is identified as the visitor's desired deadline.
+# Reversing those two exact text substitutions reproduces the previous form
+# bytes and SHA above. Controls, validation, consent and receipt are unchanged.
+CAPTURE_FORM_SHA256 = "6a1da8aa89793e4768de80ff979e09c95d2a3c5f558f7bff493780712cba7576"
 
 
 def _home() -> str:
@@ -122,7 +126,13 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert 'href="#contato"' in hero and 'href="/servicos/"' in hero
     assert all(term in text for term in ("orçamento", "inspeção", "perícia", "avaliação", "sst", "obras públicas"))
     assert hero.count("button-primary") == 1
-    assert DEMONSTRATIVE_LABEL.search(text) or "ilustração técnica original" in text
+    # The founder retired elementary calculations as commercial proof. The
+    # opening now describes contracted work; it must not masquerade as a case.
+    assert 'data-content-kind="service-scope"' in hero
+    for term in ("dimensionamento", "integração entre disciplinas", "detalhamento", "pranchas", "memoriais"):
+        assert term in text, term
+    assert not DEMONSTRATIVE_LABEL.search(text)
+    assert "/casos/" not in hero and "home-quantitativo-r01.svg" not in hero
     assert "Como conferir credenciais e limites" not in hero and "PNCP" not in hero
     brand = json.loads(BRAND.read_text(encoding="utf-8"))
     assert brand["hero"]["meta_description"] in _home()
@@ -432,7 +442,7 @@ def test_home_select_separates_valuation_and_drops_unpublished_inspection_promis
 
 def test_triage_separates_valuation_dispute_and_documental_sst() -> None:
     valuation = _triage_item("avaliacao-imovel")
-    assert 'href="/servicos/#servico-avaliacao"' in valuation
+    assert 'href="/avaliacao-imoveis-urbanos/"' in valuation
     assert "https://wa.me/5548988344559" in valuation and "mailto:tiago.sasaki@confenge.com.br" in valuation, "valuation fragment must reach contextual contact"
     dispute = _triage_item("pericia-avaliacao")
     assert 'href="/assistencia-tecnica-pericial-engenharia/"' in dispute

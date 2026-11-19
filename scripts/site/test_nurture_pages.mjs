@@ -104,7 +104,7 @@ for (const rel of shellPages) {
       fail++;
     }
   }
-  if (html.includes('class="logo"') || html.includes("nav-desktop")) {
+  if (html.includes('class="logo"') || /class=["'][^"']*\bnav-desktop\b/.test(html)) {
     console.error("FAIL legacy_light_chrome", rel);
     fail++;
   } else console.log("PASS brand_shell", rel);

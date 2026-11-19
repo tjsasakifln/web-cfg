@@ -1,0 +1,12 @@
+node_modules
+.medusa
+.git
+.env
+.env.*
+!.env.example
+tests
+coverage
+*.log
+*.pem
+*.key
+Dockerfile

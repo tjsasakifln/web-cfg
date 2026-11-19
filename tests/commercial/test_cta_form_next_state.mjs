@@ -2,6 +2,7 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import path from "node:path";
 import { buildInventory } from "../../scripts/commercial/cta_form_next_state_audit.mjs";
 
 const report = buildInventory();
@@ -20,9 +21,78 @@ assert.equal(report.coverage.manual_route_allowlist, false);
 // componente compartilhado (shared_lead_form_v1), encerrando o debito
 // route-exact que expiraria em 2026-09-30. A contagem e escrituracao; cada
 // formulario continua verificado pelo contrato next-state/v1 abaixo.
-assert.equal(report.coverage.active_capture_routes, 41);
+assert.equal(report.coverage.active_capture_routes, 42);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
+
+// 2026-11-13, C04: the new home link is a real commercial action. Keep it
+// in the derived census and bind its meaning to the existing calculator.
+const residentialPriceActions = report.surfaces
+  .filter((surface) => surface.route === "/")
+  .flatMap((surface) => surface.actions)
+  .filter((action) => action.cta_id === "home-residential-price");
+assert.equal(residentialPriceActions.length, 1, "one residential calculator entry on home");
+const residentialPrice = residentialPriceActions[0];
+assert.equal(residentialPrice.href, "/projetos-prontos/#monte-seu-projeto");
+assert.equal(residentialPrice.position, "hero");
+assert.equal(residentialPrice.stage, "calculate");
+assert.equal(residentialPrice.commitment, "low");
+assert.deepEqual(residentialPrice.event_semantics, ["cta_click"]);
+assert.match(residentialPrice.actual_receipt, /não registra pedido, pagamento ou recibo/);
+assert.match(fs.readFileSync("projetos-prontos/index.html", "utf8"), /id="monte-seu-projeto"/);
+
+// Navigation is discovery, not a declared form commitment. Exercise the real
+// census with HTML fixtures injected only into reads, leaving repository files
+// untouched. A marker alone must never hide a commercial or external action.
+const navigationPositions = ["header_nav", "mobile_nav", "header_shortcut", "header_utility"];
+const censusFixtures = [
+  ...navigationPositions.map((position) => ({ name: position, excluded: true, attrs: { "data-cta-position": position, "data-cta-id": `nav-${position}-fixture-route` } })),
+  { name: "marker-false", attrs: { "data-navigation-link": "false" } },
+  { name: "marker-missing", attrs: { "data-navigation-link": null } },
+  { name: "uncontrolled-id", attrs: { "data-cta-id": "fixture-commercial-action" } },
+  { name: "commercial-position", attrs: { "data-cta-position": "hero" } },
+  { name: "local-form", attrs: { href: "#contato" } },
+  { name: "route-form", attrs: { href: "/cad/#contato" } },
+  { name: "route-query", attrs: { href: "/cad/?context=fixture" } },
+  { name: "external-route", attrs: { href: "https://example.invalid/cad/" } },
+  { name: "protocol-relative", attrs: { href: "//example.invalid/cad/" } },
+  { name: "next-action", attrs: { "data-next-action-id": "fixture-register-context" } },
+];
+const fixturePrefix = "Navigation census fixture: ";
+const fixtureHtml = censusFixtures.map(({ name, attrs }) => {
+  const attributes = {
+    href: "/cad/", "data-navigation-link": "true", "data-event-name": "cta_click",
+    "data-cta-position": "header_nav", "data-cta-id": `nav-header_nav-fixture-${name}`,
+    ...attrs,
+  };
+  const serialized = Object.entries(attributes).filter(([, value]) => value !== null).map(([key, value]) => `${key}="${value}"`).join(" ");
+  return `<a ${serialized}>${fixturePrefix}${name}</a>`;
+}).join("\n");
+const homeFile = path.resolve("index.html");
+const originalReadFile = fs.readFileSync;
+let fixtureInventory;
+let injectedReads = 0;
+try {
+  fs.readFileSync = function (file, ...options) {
+    const contents = originalReadFile.call(this, file, ...options);
+    if (typeof file === "string" && path.resolve(file) === homeFile && typeof contents === "string") {
+      assert.match(contents, /<\/main>/i, "fixture injection needs the real home main");
+      injectedReads += 1;
+      return contents.replace(/<\/main>/i, `${fixtureHtml}</main>`);
+    }
+    return contents;
+  };
+  fixtureInventory = buildInventory();
+} finally {
+  fs.readFileSync = originalReadFile;
+}
+assert.ok(injectedReads > 0, "the census must read the fixture-bearing home");
+const retainedFixtures = fixtureInventory.surfaces.flatMap((surface) => surface.actions)
+  .filter((action) => action.current_label.startsWith(fixturePrefix))
+  .map((action) => action.current_label.slice(fixturePrefix.length));
+assert.deepEqual(retainedFixtures, censusFixtures.filter((fixture) => !fixture.excluded).map((fixture) => fixture.name), "only controlled canonical navigation routes leave the commercial census");
+assert.equal(fixtureInventory.coverage.declared_ctas, report.coverage.declared_ctas + retainedFixtures.length, "real commercial actions and the existing census remain intact");
+
 // Os seis pilares protegidos capturam on-page por decisao expressa; nenhum
 // outro pilar protegido pode ganhar formulario sem entrar nesta lista.
 const unlockPlan = JSON.parse(fs.readFileSync("data/bofu-dominance/frozen-specs/unlock-plan.v1.json", "utf8"));
@@ -44,14 +114,21 @@ const forms = report.surfaces.flatMap((surface) => surface.forms.map((form) => (
   route: surface.route,
   ...form,
 })));
-assert.equal(forms.length, 41); // baseline 31 + dez rotas de inteligência (2026-10-14)
+assert.equal(forms.length, 42); // inclui consulta residencial autorizada em 2026-11-12
 for (const form of forms) {
   assert.equal(form.form_contract, "next-state/v1", `${form.route}: form contract`);
   assert.ok(report.contract.allowed_stages.includes(form.stage), `${form.route}: ${form.stage}`);
   assert.ok(report.contract.allowed_commitments.includes(form.commitment), `${form.route}: ${form.commitment}`);
   assert.ok(form.profile, `${form.route}: profile`);
   assert.ok(form.current_label, `${form.route}: current label`);
-  assert.doesNotMatch(form.current_label, /^(?:Enviar|Quero)\b/i, `${form.route}: generic submit`);
+  if (form.route === "/" && form.profile === "general_triage") {
+    // C02: this is the final submit, after the fields have been completed.
+    // Bind the reviewed wording exactly; all context, consent, persistence
+    // and next-state assertions below still apply to the same form.
+    assert.equal(form.current_label, "Enviar solicitação", "home submit names the actual action");
+  } else {
+    assert.doesNotMatch(form.current_label, /^(?:Enviar|Quero)\b/i, `${form.route}: generic submit`);
+  }
   assert.ok(form.useful_next_state.length >= 32, `${form.route}: useful next state`);
   assert.ok(form.actual_receipt.length >= 16, `${form.route}: actual receipt`);
   assert.ok(form.pre_form_value.length >= 32, `${form.route}: pre-form value`);

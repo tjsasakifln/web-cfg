@@ -1,0 +1,50 @@
+{
+  "base_sha": "fdbc687a1",
+  "candidate_head_sha": "00bd838d128c438b7db0da4e0c39c9c89fc1e5aa",
+  "candidate_tree_sha": "80ba18e77eda1a11ec2ae94faa3f67ae614fd048",
+  "canonical_path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "source_main_sha256": "87048a553b0a80eb481f45f0debdbf8c8b9aceaf308f1725c725e6290eab9fa1",
+  "public_main_sha256": "87048a553b0a80eb481f45f0debdbf8c8b9aceaf308f1725c725e6290eab9fa1",
+  "source_head_sha256": "39ceb12dc9c81c2fb94358a0f2bc3af9e3b90b53c11ce269bde7286849033b07",
+  "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+  "previous_public_sha256": "cb6f63ff64c7d048f63dfae2e70b25d41bd546d1c28f56d938e8ff1c4cc004b8",
+  "candidate_public_sha256": "5a1decfa7c513d8df6c8a39236f668a8516fb852ad44f9ce0ebc42d11e86e0eb",
+  "script_js_sha256": "b371cb77a50a494e47f155eeda4f94bf3076f3f1129a46509bf3e7a17a9930c5",
+  "styles_css_sha256": "43cf3b8e78c5369c00ad4103c4d29f21f7fd15559426dbdf847c671796282ce8",
+  "mutable_presentation_fields": [
+    "rendered_content_hash",
+    "rendered_content_hash_previous",
+    "rendered_hash_recapture_reason",
+    "rendered_hash_recapture_reason_previous",
+    "rendered_hash_recaptured_at"
+  ],
+  "audit_action": "recapture_rendered_presentation",
+  "qa_rendered_approval_recorded": true,
+  "approval_register_modified": true,
+  "qa_evidence": "/workspace/scratch/934de057b861/qa-navigation/ci-00bd/report.json",
+  "qa_evidence_sha256": "f51398bab035e2aa0853a347c368e8f5b3405d05749ac33db232092c2fc83f85",
+  "qa_provenance_sha256": "2cf095d33a4d05209b51f5903420149bf67863cd363d92fa76694edb7afcfefd",
+  "qa_screenshot_sha256": {
+    "desktop-ferramentas.png": "538ee4b23968b9b34573788c082aa5f48013835d4cded32e789d0c291da93c12",
+    "mobile-projetos.png": "815f3c0a80ce34ef8a602e1eb0e45d0e3bbdee57091db97098d288506c33a536",
+    "projetos-prontos-desktop.png": "e7df2d000ac58561ca2850951e95ede32834ceac1fe8d2887af8a459f8b594ff"
+  },
+  "qa_source_head_sha": "00bd838d128c438b7db0da4e0c39c9c89fc1e5aa",
+  "recaptured_at": "2026-11-12T16:12:17Z",
+  "original_proof_sha256": "681daab015f61ab4a4844d74b060f7a18b4c2a3f450c0beda7970e4ceab9430d",
+  "pre_recapture_checks": {
+    "source_main_byte_identical": true,
+    "source_head_byte_identical": true,
+    "source_outside_header_footer_byte_identical": true,
+    "public_main_byte_identical": true,
+    "public_outside_header_footer_css_fingerprint_byte_identical": true,
+    "entire_editorial_approval_register_unchanged": true,
+    "baseline_public_hash_matches_active_approval": true
+  },
+  "pre_recapture_scope": "Comparação realizada antes da escrita dos campos de apresentação.",
+  "post_recapture_checks": {
+    "all_non_presentation_approval_fields_unchanged": true,
+    "previous_audit_entries_unchanged": true,
+    "presentation_audit_entries_added": 1
+  }
+}

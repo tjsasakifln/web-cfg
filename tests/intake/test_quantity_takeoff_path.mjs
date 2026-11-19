@@ -164,35 +164,25 @@ test("public renderer refuses to publish the test fixture", () => {
   );
 });
 
-test("shipped landing presents the canonical trail, not the test fixture or a future promise", () => {
+test("service landing presents technical scope and keeps demonstratives as labelled resources", () => {
   const html = read(LANDING);
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+  assert.match(main, /data-commercial-presentation="technical-scope"/);
   assert.match(main, /id="qty-sample-trail"/);
-  assert.match(main, /data-sample-trail-state="canonical"/);
-  assert.equal(main.includes("awaiting-canonical-excerpt"), false);
-  assert.equal(main.includes("Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico"), false);
-  // Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the sample
-  // is identified by the visible label "Exemplo demonstrativo".
-  assert.match(main, /Exemplo demonstrativo/);
-  assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\//);
-  for (const token of FIXTURE_TOKENS) {
-    assert.equal(html.includes(token), false, `public HTML leaked fixture token ${token}`);
-  }
-  assert.equal(main.includes('data-trail-step="element"'), true);
-  assert.equal(main.includes('data-trail-step="criterion"'), true);
-  assert.equal(main.includes('data-trail-step="calculation"'), true);
-  assert.equal(main.includes('data-trail-step="quantity"'), true);
-  assert.equal(main.includes('data-trail-step="spreadsheet_item"'), true);
-  assert.equal(main.includes('data-trail-step="review_reference"'), true);
-  const pending = renderPendingTrail();
-  assert.equal(pending.includes('data-sample-trail-state="awaiting-canonical-excerpt"'), true);
+  assert.match(main, /critério.*unidade.*cálculo/i);
+  assert.match(main, /composições|Composições/);
+  assert.match(main, /data-base/);
+  assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\/#quantitativos"/);
+  assert.match(main, /Exemplo demonstrativo de rastreabilidade/);
+  assert.doesNotMatch(main, /data-trail-step=|19,60|banheiro|awaiting-canonical-excerpt/);
+  for (const token of FIXTURE_TOKENS) assert.equal(html.includes(token), false, `public HTML leaked fixture token ${token}`);
 });
 
 test("canonical excerpt is loaded from consumption and injects real numbers", () => {
   const excerpt = loadCanonicalExcerpt(ROOT);
   assert.equal(isTestFixture(excerpt), false);
   assert.equal(excerpt.status, "canonical");
-  const injected = injectSampleTrail(read(LANDING), excerpt);
+  const injected = injectSampleTrail('<div id="qty-sample-trail" data-sample-trail-slot="canonical"></div>', excerpt);
   assert.match(injected, /data-sample-trail-state="canonical"/);
   assertTrailMatchesExcerpt(injected, excerpt);
 });

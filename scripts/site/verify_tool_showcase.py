@@ -50,8 +50,9 @@ def verify(artifact: Path) -> None:
     data = load_registry(ROOT)
     page_entries = [e for e in data["entries"] if "page" in e]
     indexed = {HOST + e["href"] for e in page_entries if e["page"].get("index", True)}
-    routes = [(HUB, "catalogo", True)] + [
-        (entry["href"], entry["id"], entry["page"].get("index", True)) for entry in page_entries
+    routes = [(HUB, "catalogo", True, data["updated"])] + [
+        (entry["href"], entry["id"], entry["page"].get("index", True),
+         entry["page"].get("updated", data["updated"])) for entry in page_entries
     ]
     meta_urls = indexed | {HOST + HUB}
     sitemap = ET.parse(artifact / "sitemap.xml")
@@ -62,7 +63,7 @@ def verify(artifact: Path) -> None:
         sitemap_urls[loc] = url.findtext("{*}lastmod")
     assert {loc for loc in sitemap_urls if loc.startswith(HOST + HUB)} <= meta_urls, "Tool sitemap entry missing from catalogue"
     titles, descriptions, images = set(), set(), set()
-    for route, key, indexable in routes:
+    for route, key, indexable, expected_updated in routes:
         html = (artifact / route.lstrip("/") / "index.html").read_text(encoding="utf-8")
         dom = Markup(html)
         title = re.findall(r"<title>(.*?)</title>", html, re.S)
@@ -78,9 +79,9 @@ def verify(artifact: Path) -> None:
             assert "max-image-preview:large" in robots[0]["content"], route
             canonical, = dom.match("link", rel="canonical")
             assert canonical["href"] == HOST + route, route
-            assert sitemap_urls[HOST + route] == data["updated"], route
-            assert len(dom.match("meta", property="og:updated_time", content=data["updated"])) == 1, route
-            assert set(re.findall(r'"dateModified"\s*:\s*"([^"]+)"', html)) <= {data["updated"]}, route
+            assert sitemap_urls[HOST + route] == expected_updated, route
+            assert len(dom.match("meta", property="og:updated_time", content=expected_updated)) == 1, route
+            assert set(re.findall(r'"dateModified"\s*:\s*"([^"]+)"', html)) <= {expected_updated}, route
         else:
             assert HOST + route not in sitemap_urls, route
         og_url = dom.match("meta", property="og:url")

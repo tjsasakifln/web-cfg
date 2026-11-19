@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Deterministic build-time minification of the PUBLIC copies of the tool
- * scripts served from _site/assets/js/*.js.
+ * scripts served from _site/assets/js/*.js and two explicit tool modules.
  *
  * Why: the Lighthouse gate caps critical payload at 153600 gzip content
  * bytes. Source files under assets/js/ stay readable and untouched — this
- * script only rewrites the already-copied files inside _site/assets/js/
- * (assemble_public_artifact copies assets/js verbatim from source).
+ * script only rewrites copied publication files, including the explicit
+ * showcase/referral modules. Authored source files remain untouched.
  *
  * Usage:
  *   node scripts/site/minify_public_js.mjs           # minify _site in place
@@ -27,6 +27,10 @@ export const PUBLIC_DIR_NAME = "_site";
 // script.js is a separate, already-minified public asset built by
 // build_script_modules.mjs — never touched here, and not under assets/js/.
 const NEVER_TOUCH = new Set(["script.js"]);
+export const PUBLIC_MODULE_PATHS = Object.freeze([
+  "assets/tool-showcase/showcase.mjs",
+  "assets/js/tool-referral.mjs",
+]);
 
 const TERSER_OPTIONS = {
   // evaluate:false — some source deliberately splits sensitive-looking
@@ -63,21 +67,23 @@ export function listCandidates(sourceDir = SOURCE_DIR) {
 /** Minify one source string. Throws on terser failure (fail-closed). */
 export async function minifySource(name, text) {
   if (isAlreadyMinified(name, text)) return text;
-  const result = await minify(text, TERSER_OPTIONS);
+  const result = await minify(text, {
+    ...TERSER_OPTIONS,
+    ...(name.endsWith(".mjs") ? { module: true } : {}),
+  });
   if (!result.code) {
     throw new Error(`terser returned empty output for ${name}`);
   }
   return `${result.code}\n`;
 }
 
-async function run({ check }) {
-  const candidates = listCandidates();
-  if (candidates.length === 0) {
-    console.log("minify_public_js: no assets/js/*.js source files found");
-    return 0;
-  }
-
-  const publicDir = path.join(ROOT, PUBLIC_DIR_NAME, "assets/js");
+async function run({ check, root = ROOT }) {
+  const sourceDir = path.join(root, "assets/js");
+  const candidates = [
+    ...listCandidates(sourceDir).map(name => `assets/js/${name}`),
+    ...PUBLIC_MODULE_PATHS,
+  ];
+  const publicDir = path.join(root, PUBLIC_DIR_NAME);
   const publicArtifactRequired = process.env.PUBLIC_ARTIFACT_REQUIRED === "1";
 
   if (!fs.existsSync(publicDir)) {
@@ -94,8 +100,12 @@ async function run({ check }) {
   let skipped = 0;
 
   for (const name of candidates) {
-    const srcPath = path.join(SOURCE_DIR, name);
+    const srcPath = path.join(root, name);
     const pubPath = path.join(publicDir, name);
+    if (!fs.existsSync(srcPath)) {
+      console.error(`FAIL-CLOSED minify_public_js: missing source ${srcPath}`);
+      return 2;
+    }
     const srcText = fs.readFileSync(srcPath, "utf8");
 
     let expected;

@@ -1,0 +1,34 @@
+{
+  "source_head_sha": "00cd0faddc3414080f287d3ec491260278310a91",
+  "source_tree_sha": "f46dfbbec4db14d8233c40468da5e29b427d6776",
+  "workflow_run_id": 43288875329,
+  "workflow_run_attempt": 1,
+  "source_job_id": 131429480094,
+  "source_job_conclusion": "success",
+  "artifact_id": 13975248602,
+  "artifact_zip_sha256": "3a0f98c3697f3792d560e88378c229aa04d22e55f8552b2983b04d9d4ed098f8",
+  "screenshots_reviewed_by": [
+    "coordinating_agent",
+    "independent_ux_reviewer",
+    "release_reviewer"
+  ],
+  "human_review_claimed": false,
+  "files": {
+    "desktop-ferramentas.png": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0",
+    "mobile-projetos.png": "455497240dd89cdfec10ddb27286d5d5c635da97664d6bb4a4ea770e2a276917",
+    "projetos-prontos-desktop.png": "69e5d28c82fb9f4dcbf16ca9956e645c0a230969bff9b27da7a936dc0d40df08",
+    "mobile-header-360.png": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b",
+    "diagnostico-first-viewport-1280.png": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d",
+    "report.json": "774046dd24058747e2c1a9d134471b299ab4986c391bc75ba751451b0d975ef8",
+    "provenance.json": "9cfc522bacb7dcdbb5d21bbc356e886958750a2f5053243ea79c2fecc49053f0",
+    "event-semantics.json": "2705cefae98d2aab14a9aea84eb5e8240ecafa1d96b1b12d52b3b2442ee70e03",
+    "ui-geometry.log": "901df529677f45e288d9123fc3e92980e94265e41101895135e94b856da56a77",
+    "presentation/evidence.json": "ab5c70acd20d18a44bf013dd148f6124efe7ef2972087488bc20852c48425dd3",
+    "first-fold/report.json": "216b29fd69fa1f4de5d8af77931a83770efeca45b48208a3e1cc793b894b7932"
+  },
+  "local_build": {
+    "proof_file": "local-build-canary-proof.json",
+    "proof_sha256": "4a5430b48ef7968b7019e5a140bcf33f94453555c9802f20def1a326dc7eca4e",
+    "exit_code": 0
+  }
+}

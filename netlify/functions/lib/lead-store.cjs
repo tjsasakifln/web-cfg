@@ -799,6 +799,7 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     // Radar Decisório purchase parameters. Durable record of what was bought;
     // never rendered into analytics, fixtures or git.
     radar_params: lead.radar_params || null,
+    ...(lead.project_interest ? { project_interest: lead.project_interest, intent: "ready_project_interest", marketing_opt_in: false } : {}),
     external_reference: lead.external_reference || null,
     document_intent: lead.document_intent || null,
     // Live-intelligence next action. Already narrowed to the server-side
@@ -837,8 +838,8 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     admission_policy_id: lead.admission_policy_id || null,
     admission_policy_hash: lead.admission_policy_hash || null,
     governance_source_sha: lead.governance_source_sha || null,
-    outbound_eligible: lead.adaptive_intake ? false : null,
-    auto_send: lead.adaptive_intake ? false : null,
+    outbound_eligible: lead.adaptive_intake || lead.project_interest ? false : null,
+    auto_send: lead.adaptive_intake || lead.project_interest ? false : null,
     sensitive_docs_ack: lead.sensitive_docs_ack || null,
     claim_stage: lead.claim_stage || null,
     valuation_purpose: lead.valuation_purpose || null,

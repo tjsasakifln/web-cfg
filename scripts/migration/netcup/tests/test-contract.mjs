@@ -205,9 +205,27 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.match(runtimeLocations, /proxy_set_header X-Request-Id \$request_id;/);
   assert.match(runtimeLocations, /location = \/\.netlify\/functions\/tool-credits \{\n  client_max_body_size 4m;/);
   assert.match(runtimeLocations, /location = \/api\/web\/tool-credits \{\n  client_max_body_size 4m;/);
-  const pixWebhook = runtimeLocations.match(/location = \/api\/web\/tool-credits-webhook \{([^}]+)}/)?.[1];
-  assert.match(pixWebhook, /client_max_body_size 64k;/);
-  assert.match(pixWebhook, /proxy_set_header X-Request-Id \$http_x_request_id;/);
+  const runtimeBlocks = [...runtimeLocations.matchAll(/location ([^\n]+) \{\n([\s\S]*?)\n\}/g)];
+  const signedWebhookLocations = [];
+  for (const name of ["tool-credits-webhook", "project-orders-webhook"]) {
+    for (const prefix of ["/.netlify/functions", "/api/web"]) {
+      const selector = `= ${prefix}/${name}`;
+      signedWebhookLocations.push(selector);
+      const block = runtimeBlocks.find(([, candidate]) => candidate === selector)?.[2];
+      assert.equal(typeof block, "string", selector);
+      assert.match(block, /client_max_body_size 64k;/);
+      assert.match(block, /proxy_set_header X-Request-Id \$http_x_request_id;/);
+      assert.doesNotMatch(block, /proxy_set_header X-Request-Id \$request_id;/);
+    }
+  }
+  assert.deepEqual(runtimeBlocks
+    .filter(([, , block]) => /proxy_set_header X-Request-Id \$http_x_request_id;/.test(block))
+    .map(([, selector]) => selector).sort(), signedWebhookLocations.sort());
+  const genericRuntime = runtimeBlocks.find(([, selector]) =>
+    selector.startsWith("~ ^/(?:\\.netlify/functions|api/web)/"))?.[2];
+  assert.equal(typeof genericRuntime, "string");
+  assert.match(genericRuntime, /proxy_set_header X-Request-Id \$request_id;/);
+  assert.doesNotMatch(genericRuntime, /proxy_set_header X-Request-Id \$http_x_request_id;/);
   assert.doesNotMatch(runtimeLocations, /proxy_add_x_forwarded_for/);
   assert.doesNotMatch(runtimeLocations, /search-observation-tick/);
   assert.doesNotMatch(runtimeLocations, /location ~ \^\/\.netlify\/functions\/\.\*/);
@@ -432,10 +450,13 @@ test("production home acceptance requires institutional scope, attributed paths 
     ["necessidades públicas e privadas", "projetos privados", "headingScope"],
     ["Projetos e serviços de", "Atuação para", "headingScope"],
     ["A CONFENGE elabora e coordena projetos", "A CONFENGE apresenta serviços", "executionScope"],
-    ["Entregamos projetos, planilhas e laudos", "Entregamos documentos técnicos", "executionScope"],
-    ["segurança do trabalho.", "apoio técnico.", "amplitudeScope"],
+    ["Desenvolvemos projetos, planilhas e laudos", "Desenvolvemos documentos técnicos", "executionScope"],
+    ["para apoiar a contratação e a execução do empreendimento.", "ao longo do trabalho.", "executionScope"],
     ["Conduzir e integrar", "Conduzir", "processScope"],
-    ["formatos, raciocínio e rastreabilidade", "formatos disponíveis", "deliveryProof"],
+    ["critérios de medição explícitos", "informações disponíveis", "deliveryProof"],
+    ["com quantidades vinculadas aos desenhos", "com referências disponíveis", "deliveryProof"],
+    ["reúnem verificações e fundamentação técnica", "reúnem informações técnicas", "deliveryProof"],
+    ["Documentação técnica que sustenta", "Caso real de sucesso: documentação técnica que sustenta", "deliveryProof"],
     ['data-cta-id="home-service-projects"', 'data-cta-id="outro"', "discoveryPaths"],
     ['href="/inspecao-diagnostico-edificacoes/"', 'href="/x/"', "discoveryPaths"],
     ['data-cta-position="home_services"', 'data-cta-position="outro"', "discoveryPaths"],
@@ -449,7 +470,44 @@ test("production home acceptance requires institutional scope, attributed paths 
     assert.ok(html.includes(old), old);
     assert.equal(evaluateHomeAcquisition(html.replaceAll(old, replacement))[field], false, field);
   }
-  for (const [id, field] of [["home-service-projects", "discoveryPaths"], [null, "proposalPath"]]) {
+  const scope = html.match(/<ul\b[^>]*class="[^"]*\bhome-opening__scope\b[^"]*"[^>]*>[\s\S]*?<\/ul>/i)?.[0];
+  assert.ok(scope);
+  for (const need of ["Projetos", "Orçamento", "Inspeção", "perícia", "Avaliação", "SST", "Obras públicas"]) {
+    assert.ok(scope.includes(need), need);
+    const missingNeed = html.replace(scope, scope.replace(need, "Apoio"));
+    assert.equal(evaluateHomeAcquisition(missingNeed).amplitudeScope, false, `missing visible need: ${need}`);
+    assert.equal(evaluateHomeAcquisition(missingNeed + `<footer>${need}</footer>`).amplitudeScope, false, `footer cannot supply ${need}`);
+  }
+  assert.equal(evaluateHomeAcquisition(html.replace(scope, scope.replace("SST", "Segurança do trabalho"))).amplitudeScope, true);
+  for (const hidden of [' hidden', ' aria-hidden="true"']) {
+    assert.equal(evaluateHomeAcquisition(html.replace(scope, scope.replace("<ul", `<ul${hidden}`))).amplitudeScope, false);
+    assert.equal(evaluateHomeAcquisition(html.replace(scope, scope.replace("<li", `<li${hidden}`))).amplitudeScope, false, "hidden list item cannot supply a service need");
+  }
+  assert.equal(evaluateHomeAcquisition(html.replace(scope, `<script type="application/json">${scope}</script>`)).amplitudeScope, false, "metadata cannot supply the visible scope");
+
+  const deliveryIds = ["home-delivery-coordination", "home-delivery-budget", "home-delivery-documents"];
+  const deliveryArticles = [];
+  for (const id of deliveryIds) {
+    const article = [...html.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/gi)].map((match) => match[0])
+      .find((value) => value.includes(`data-cta-id="${id}"`));
+    assert.ok(article, id);
+    deliveryArticles.push(article);
+    assert.equal(evaluateHomeAcquisition(html.replace(article, "")).deliveryProof, false, `missing delivery: ${id}`);
+    assert.equal(evaluateHomeAcquisition(html.replace(article, article.replace("<article", "<article hidden"))).deliveryProof, false, `hidden delivery: ${id}`);
+    assert.ok(article.includes("<p>"), id);
+    assert.equal(evaluateHomeAcquisition(html.replace(article, article.replace("<p>", "<p hidden>"))).deliveryProof, false, `hidden technical content: ${id}`);
+    const anchor = article.match(/<a\b[^>]*>[\s\S]*?<\/a>/i)?.[0];
+    assert.ok(anchor, id);
+    assert.equal(evaluateHomeAcquisition(html.replace(anchor, anchor.replace("<a", "<a hidden"))).deliveryProof, false, `hidden delivery link: ${id}`);
+    const emptyPromise = `<article><h3>Entrega técnica</h3><p>Documentação conforme o escopo.</p>${anchor}</article>`;
+    assert.equal(evaluateHomeAcquisition(html.replace(article, emptyPromise)).deliveryProof, false, `content-free delivery: ${id}`);
+    assert.equal(evaluateHomeAcquisition(html.replace(anchor, anchor.replace(/href="[^"]+"/, 'href="/x/"'))).deliveryProof, false, `wrong delivery destination: ${id}`);
+  }
+  const combinedContent = deliveryArticles.map((article) => article.replace(/^<article\b[^>]*>|<\/article>$/gi, "")).join("\n");
+  const collapsedCards = deliveryArticles.slice(1).reduce((source, article) => source.replace(article, ""), html)
+    .replace(deliveryArticles[0], `<article>${combinedContent}</article><article></article><article></article>`);
+  assert.equal(evaluateHomeAcquisition(collapsedCards).deliveryProof, false, "three placeholders cannot replace three distinct technical deliveries");
+  for (const [id, field] of [["home-service-projects", "discoveryPaths"], [null, "proposalPath"], ...deliveryIds.map((id) => [id, "deliveryProof"])]) {
     const anchor = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0])
       .find((value) => id ? value.includes(`data-cta-id="${id}"`) : value.includes('data-cta-position="hero"') && value.includes("button-primary"));
     assert.ok(anchor);

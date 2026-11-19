@@ -118,3 +118,30 @@ def test_route_bundle_preserves_source_order_and_check_is_read_only(tmp_path: Pa
         "assets/tool-bundles/diagnostico-defesa-margem.css"
     ]
     assert target.read_bytes() == before
+
+
+def test_home_navigation_carries_native_and_runtime_rules_and_detects_drift(tmp_path: Path) -> None:
+    root, _ = _fixture_root(tmp_path)
+    home = root / "assets" / "home-base.css"
+    source = root / "css" / "navigation.css"
+    home.write_text(".existing{color:navy}\n", encoding="utf-8")
+    navigation = (
+        ".nav-group:not([open])>.nav-panel{display:none}\n"
+        "@media(max-width:1120px){.mobile-nav__close{min-height:44px}}\n"
+    )
+    source.write_text(navigation, encoding="utf-8")
+    original = home.read_bytes()
+    assert build_css.sync_home_navigation(root, check=True) is True
+    assert home.read_bytes() == original
+    assert build_css.sync_home_navigation(root) is True
+    generated = home.read_text(encoding="utf-8")
+    assert generated.startswith(".existing{color:navy}\n")
+    assert navigation in generated
+    assert build_css.sync_home_navigation(root, check=True) is False
+
+    source.write_text(navigation + ".nav-discovery a{min-height:44px}\n", encoding="utf-8")
+    assert build_css.sync_home_navigation(root, check=True) is True
+    assert home.read_text(encoding="utf-8") == generated
+    assert build_css.sync_home_navigation(root) is True
+    assert home.read_text(encoding="utf-8").count("BEGIN home shared navigation") == 1
+    assert ".nav-discovery a{min-height:44px}" in home.read_text(encoding="utf-8")

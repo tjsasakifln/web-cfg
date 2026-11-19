@@ -1010,6 +1010,12 @@ function validateAndNormalize(data) {
     return { ok: true, honeypot: true };
   }
 
+  const projectResult = require("./ready-project-interest.cjs").normalizeProjectInterest(data);
+  if (!projectResult.ok) return projectResult;
+  if (projectResult.handled && (adaptiveIntake.isAdaptivePayload(data) || data.offer_id || data.deliverable_id || data.terms_id || data.radar_params)) {
+    return { ok: false, status: 422, error: "project_interest_invalid", field: "project_interest", message: "Envie a consulta residencial separadamente de outros pedidos." };
+  }
+
   const conflictParties = adaptiveIntake.rejectConflictParties(data);
   if (conflictParties) return conflictParties;
 
@@ -1355,6 +1361,23 @@ function validateAndNormalize(data) {
       data.canal_seguro === "sim" ||
       clamp(data.document_intent, MAX_FIELD.document_intent) === "secure_channel_request",
   };
+
+  if (projectResult.handled) {
+    lead.project_interest = projectResult.interest;
+    lead.intent = "ready_project_interest";
+    lead.estagio = "projetos-prontos";
+    lead.jornada = "projeto";
+    lead.route_family = "ready_projects";
+    lead.asset_id = "ready-projects";
+    lead.source_asset_id = "ready-projects";
+    lead.city = projectResult.interest.city;
+    lead.uf = projectResult.interest.uf;
+    lead.nucleus_id = "building_engineering_documentation";
+    lead.qualification_state = "NEEDS_CONTEXT";
+    lead.marketing_opt_in = false;
+    lead.outbound_eligible = false;
+    lead.auto_send = false;
+  }
 
   // Server-derived, from sanitized fields only; see deriveOriginClass.
   lead.origin_class = deriveOriginClass(lead);

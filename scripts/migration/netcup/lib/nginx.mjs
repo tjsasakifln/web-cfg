@@ -518,11 +518,12 @@ export function renderRuntimeLocations(contract) {
       lines.push(...runtimeProxyDirectives(), "}", "");
     }
   }
-  if (contract.runtime.httpFunctions.includes("tool-credits-webhook")) {
+  for (const name of ["tool-credits-webhook", "project-orders-webhook"]) {
+    if (!contract.runtime.httpFunctions.includes(name)) continue;
     for (const prefix of ["/.netlify/functions", "/api/web"]) {
       // Mercado Pago signs the original X-Request-Id; the generic proxy
       // deliberately replaces this header for all other functions.
-      lines.push(`location = ${prefix}/tool-credits-webhook {`);
+      lines.push(`location = ${prefix}/${name} {`);
       lines.push("  client_max_body_size 64k;");
       lines.push(...runtimeProxyDirectives("  ", "$http_x_request_id"), "}", "");
     }

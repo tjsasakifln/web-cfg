@@ -1,0 +1,42 @@
+{
+  "name": "confenge-engineering-marketplace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mercur com extens\u00e3o de contrata\u00e7\u00e3o de servi\u00e7os de engenharia CONFENGE",
+  "engines": {
+    "node": ">=22.22.2 <23"
+  },
+  "scripts": {
+    "build": "node scripts/medusa.cjs build",
+    "typecheck": "tsc --noEmit",
+    "start": "node scripts/medusa.cjs start --host 0.0.0.0",
+    "dev": "node scripts/medusa.cjs develop --host 127.0.0.1",
+    "migrate": "node scripts/medusa.cjs db:migrate",
+    "seed": "node scripts/medusa.cjs exec ./src/scripts/setup.ts",
+    "test": "node --test tests/*.test.cjs",
+    "test:integration": "node tests/integration.mjs",
+    "review:provider": "node scripts/medusa.cjs exec ./src/scripts/review-provider.ts"
+  },
+  "dependencies": {
+    "@medusajs/admin-sdk": "2.22.3",
+    "@medusajs/cli": "2.22.3",
+    "@medusajs/core-flows": "2.22.3",
+    "@medusajs/draft-order": "2.22.3",
+    "@medusajs/framework": "2.22.3",
+    "@medusajs/medusa": "2.22.3",
+    "@medusajs/payment-stripe": "2.22.3",
+    "@mercurjs/core": "2.4.1",
+    "@mercurjs/stripe-connector-plugin": "2.4.1",
+    "@mercurjs/types": "2.4.1",
+    "express": "4.21.2",
+    "http-proxy-middleware": "3.0.7",
+    "stripe": "19.1.0",
+    "zod": "4.6.6"
+  },
+  "devDependencies": {
+    "@medusajs/test-utils": "2.22.3",
+    "@types/node": "22.19.15",
+    "ts-node": "10.9.2",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,10 +1,10 @@
-/** Exercise the project examples in the shipped pages, including without page scripts. */
+/** Exercise professional project criteria and deliverable links, including without page scripts. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve, join, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { setInterval, setTimeout as sleep } from 'node:timers/promises';
+import { setTimeout as sleep } from 'node:timers/promises';
 import puppeteer from 'puppeteer-core';
 import { resolveChromePath } from './resolve_chrome.mjs';
 
@@ -40,31 +40,57 @@ async function expectLocation(expected) {
   assert.equal(actual, expected);
 }
 
+// A script-enhanced anchor updates history synchronously, then settles its
+// scroll position in animation frames (also with reduced motion). Observing
+// the hash alone can race that lifecycle and cancel it with the next Enter.
+// Wait for the same in-viewport condition at a stable position; never scroll
+// the page from the test to make an unsuccessful keyboard navigation pass.
+async function expectAnchorArrival(expected, selector, context) {
+  await expectLocation(expected);
+  const deadline = Date.now() + 3000;
+  let actual;
+  let previousTop = null;
+  let stable = 0;
+  do {
+    actual = await page.$eval(selector, el => ({
+      top: el.getBoundingClientRect().top,
+      viewportHeight: window.innerHeight,
+      scrollX: window.scrollX,
+    }));
+    const arrived = actual.top >= -1 && actual.top < actual.viewportHeight && actual.scrollX === 0;
+    stable = arrived ? (previousTop !== null && Math.abs(actual.top - previousTop) <= 1 ? stable + 1 : 1) : 0;
+    previousTop = actual.top;
+    if (stable >= 3) return;
+    await sleep(40);
+  } while (Date.now() < deadline);
+  assert.fail(`${context}; observed ${JSON.stringify(actual)}`);
+}
+
 function problems() {
   const errors = new Set();
   const width = document.documentElement.clientWidth;
   if (document.documentElement.scrollWidth > width + 1) errors.add('page overflows');
   for (const figure of document.querySelectorAll('.pp-hero__visual,.pp-record')) {
     const bounds = figure.getBoundingClientRect();
-    if (bounds.left < -1 || bounds.right > width + 1) errors.add('figure exceeds viewport');
+    if (bounds.left < -1 || bounds.right > width + 1) errors.add('technical panel exceeds viewport');
     for (const el of [figure, ...figure.querySelectorAll('*')]) {
-      if (el.clientWidth && el.scrollWidth > el.clientWidth + 1) errors.add('figure needs horizontal scrolling');
+      if (el.clientWidth && el.scrollWidth > el.clientWidth + 1) errors.add('technical panel needs horizontal scrolling');
     }
     const terms = [...figure.querySelectorAll('dt,dd')];
     const links = [...figure.querySelectorAll('a[href]')];
-    if (!terms.length || !links.length) errors.add('missing readable example or action');
+    if (!terms.length || !links.length) errors.add('missing readable technical criteria or action');
     const lines = [];
     for (const el of [...terms, ...links]) {
       const rect = el.getBoundingClientRect();
       if (!rect.width || !rect.height || !el.innerText.trim() || !el.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true })) {
-        errors.add('example or action hidden');
+        errors.add('technical criteria or action hidden');
       }
-      if (parseFloat(getComputedStyle(el).fontSize) < 12) errors.add('text smaller than 12px');
+      if (parseFloat(getComputedStyle(el).fontSize) < 16) errors.add('text smaller than 16px');
       const range = document.createRange();
       range.selectNodeContents(el);
       for (const line of range.getClientRects()) {
         if (!line.width || !line.height) continue;
-        if (line.left < bounds.left - 1 || line.right > bounds.right + 1) errors.add('example text clipped');
+        if (line.left < bounds.left - 1 || line.right > bounds.right + 1) errors.add('technical criteria text clipped');
         for (const other of lines) {
           if (other.el !== el && Math.min(other.line.right, line.right) - Math.max(other.line.left, line.left) > 2 &&
               Math.min(other.line.bottom, line.bottom) - Math.max(other.line.top, line.top) > 2) errors.add('overlapping readings');
@@ -73,7 +99,7 @@ function problems() {
       }
     }
   }
-  if (document.querySelectorAll('figure.pp-hero__visual,figure.pp-record').length !== 2) errors.add('missing example');
+  if (document.querySelectorAll('.pp-hero__visual,.pp-record').length !== 2) errors.add('missing technical panel');
   return [...errors];
 }
 
@@ -85,18 +111,15 @@ try {
       assert.equal(result.status(), 200);
       await page.evaluate(() => document.fonts.ready);
       assert.deepEqual(await page.evaluate(problems), [], `${item.route} at ${width}px`);
-      const artLoaded = await page.$eval('.pp-hero__visual img', img => img.complete && img.naturalWidth > 0);
-      assert.ok(artLoaded, `missing graphic on ${item.route}`);
       if (width === 320) {
         for (const nav of ['.pp-nav', '.pp-mobile nav']) {
           assert.equal(await page.$$eval(`${nav} a[href="/ferramentas/"]`, links => links.length), 1, item.route);
         }
-        const link = '.pp-hero__visual a[href="#demonstracao"]';
+        const link = '.pp-hero__visual a[href="#criterios-tecnicos"]';
         await page.focus(link);
         await page.keyboard.press('Enter');
-        await expectLocation(origin + item.route + '#demonstracao');
-        const top = await page.$eval('#demonstracao', el => el.getBoundingClientRect().top);
-        assert.ok(top >= -1 && top < 900, `keyboard link did not reach the example on ${item.route}`);
+        await expectAnchorArrival(origin + item.route + '#criterios-tecnicos', '#criterios-tecnicos',
+          `keyboard link did not reach the technical criteria on ${item.route} (scripts=false)`);
         assert.equal(await page.evaluate(() => scrollX), 0);
       }
     }
@@ -104,39 +127,31 @@ try {
   await page.setViewport({ width: 320, height: 900, deviceScaleFactor: 1 });
   for (const scripts of [false, true]) {
     await page.setJavaScriptEnabled(scripts);
-    for (const item of pages.filter(p => p.demonstration.href.endsWith('.svg'))) {
+    for (const item of pages) {
       await page.goto(origin + item.route, { waitUntil: 'load' });
-      await page.focus('.pp-record a');
+      await page.evaluate(() => document.fonts.ready);
+      // Both links are native anchors and must work with page scripts disabled.
+      await page.focus('.pp-hero__visual a[href="#criterios-tecnicos"]');
       await page.keyboard.press('Enter');
-      assert.ok(await page.$eval('.pp-enlargement', details => details.open), item.route);
-      await page.keyboard.press('Tab');
-      assert.ok(await page.$eval('.pp-drawing', el => el === document.activeElement));
-      assert.equal(await page.$eval('.pp-drawing img', img => img.getBoundingClientRect().width), 960);
-      await page.keyboard.press('ArrowRight');
-      // Poll from Node as page timers are disabled during the no-script iteration.
-      for await (const tick of setInterval(40, null, { signal: AbortSignal.timeout(3000) })) {
-        if (await page.$eval('.pp-drawing', el => el.scrollLeft > 0 && el.firstElementChild.naturalWidth > 0)) break;
-      }
-      assert.deepEqual(await page.evaluate(problems), [], item.route + ' expanded drawing');
-      await page.keyboard.press('Tab');
-      assert.ok(await page.evaluate(() => document.activeElement.matches('.pp-enlargement a[href="#contato-projetos"]')), item.route);
+      await expectAnchorArrival(origin + item.route + '#criterios-tecnicos', '#criterios-tecnicos',
+        `keyboard link did not reach the technical criteria on ${item.route} (scripts=${scripts})`);
+      await page.focus('.pp-record a[href="#entregaveis"]');
       await page.keyboard.press('Enter');
-      await expectLocation(origin + item.route + '#contato-projetos');
+      await expectAnchorArrival(origin + item.route + '#entregaveis', '#entregaveis',
+        `keyboard link did not reach deliverables on ${item.route} (scripts=${scripts})`);
+      assert.deepEqual(await page.evaluate(problems), [], item.route + ' criteria to deliverables');
       assert.equal(await page.$eval('#contato-projetos .pp-button', el => el.getAttribute('href')), '/#contato');
-      await page.focus('.pp-enlargement summary');
-      await page.keyboard.press('Enter');
-      assert.ok(await page.$eval('.pp-enlargement', details => !details.open));
     }
   }
   await page.setJavaScriptEnabled(true);
   await page.setViewport({ width: 320, height: 900 });
   await page.goto(origin + '/como-trabalhamos/', { waitUntil: 'load' });
   for (const [css, expected] of [
-    ['.pp-record{min-width:680px!important}', 'figure exceeds viewport'],
-    ['.pp-hero__visual{overflow:auto!important}.pp-hero__visual dl{width:700px!important}', 'figure needs horizontal scrolling'],
-    ['.pp-record dd{font-size:8px!important}', 'text smaller than 12px'],
+    ['.pp-record{min-width:680px!important}', 'technical panel exceeds viewport'],
+    ['.pp-hero__visual{overflow:auto!important}.pp-hero__visual dl{width:700px!important}', 'technical panel needs horizontal scrolling'],
+    ['.pp-record dd{font-size:8px!important}', 'text smaller than 16px'],
     ['.pp-record{position:relative!important}.pp-record dd{position:absolute!important;top:35px!important;left:16px!important}', 'overlapping readings'],
-    ['.pp-hero__visual a{display:none!important}', 'example or action hidden'],
+    ['.pp-hero__visual a{display:none!important}', 'technical criteria or action hidden'],
   ]) {
     const style = await page.addStyleTag({ content: css });
     await page.evaluate(() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))));
@@ -144,13 +159,13 @@ try {
     assert.ok(observed.includes(expected), `missed regression: ${expected} (observed: ${observed.join(', ')})`);
     await style.evaluate(el => el.remove());
   }
-  // A failed illustration must leave the readings and native action available.
+  // Technical criteria remain semantic HTML; image or script loading is not required.
   await page.setJavaScriptEnabled(false);
   await page.reload({ waitUntil: 'load' });
-  await page.$eval('.pp-hero__visual img', img => img.remove());
+  assert.equal(await page.$$eval('.pp-hero__visual img,.pp-record img', images => images.length), 0);
   assert.deepEqual(await page.evaluate(problems), []);
 } finally {
   await browser.close();
   server.close();
 }
-console.log(`PROJECT_DIAGRAM_GEOMETRY_PASS routes=${pages.length} widths=${widths.length} checks=${pages.length * widths.length} mutations=5`);
+console.log(`PROJECT_TECHNICAL_CRITERIA_GEOMETRY_PASS routes=${pages.length} widths=${widths.length} checks=${pages.length * widths.length} mutations=5`);

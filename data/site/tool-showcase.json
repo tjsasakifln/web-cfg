@@ -56,12 +56,13 @@
       "mark": "A–A",
       "keywords": "autocad planta baixa arquivo dxf",
       "page": {
-        "title": "Editor DWG online grátis: alternativa ao AutoCAD",
-        "desc": "Abra e edite DWG ou DXF grátis no navegador. Uma alternativa para ajustes 2D no lugar do AutoCAD. Confira as condições de exportação por créditos.",
+        "title": "Editor de DWG online: abrir e editar plantas",
+        "desc": "Abra e edite DWG ou DXF online. Confira camadas e medidas, teste com uma planta de exemplo e salve uma cópia em DWG ou DXF.",
         "related": [
           "cad-suite",
           "pdf-cad"
-        ]
+        ],
+        "updated": "2026-11-11"
       }
     },
     {

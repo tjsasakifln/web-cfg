@@ -1,9 +1,11 @@
 /**
  * Authenticated, non-human inbound proof against a base URL.
  *
- * The probe fails before POST unless both server credentials and the Warmbly
- * no-dispatch safety gate are ready. It creates one durable row, retries the
- * same idempotency key, then emits only aggregate booleans and a receipt hash.
+ * Transport probes fail before POST unless both server credentials and the
+ * Warmbly no-dispatch safety gate are ready. The residential persistence proof
+ * explicitly prohibits transport through the existing authenticated persist-only
+ * server mode. Both create one durable row, retry the same idempotency key, then
+ * emit only aggregate booleans and a receipt hash.
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
 import { createHash, createHmac, randomUUID } from "node:crypto";
@@ -21,6 +23,8 @@ import {
   priorityAditivoContextSha256,
   validatePriorityAditivoJourney,
 } from "./synthetic_priority_aditivo_journey.mjs";
+import { READY_PROJECT_PATH, READY_PROJECT_CONTEXT, READY_PROJECT_INTEREST,
+  readyProjectFormMatches } from "./ready_project_probe_contract.mjs";
 
 const blockedProbe = Symbol("controlled_probe_block");
 const require = createRequire(import.meta.url);
@@ -102,6 +106,7 @@ const verifyQaEmailRaw = String(process.env.PROBE_VERIFY_EMAIL || "").trim();
 const verifyQaEmail = verifyQaEmailRaw === "1";
 const probeScenario = String(process.env.PROBE_SCENARIO || "").trim();
 const priorityAditivoScenario = probeScenario === "priority-aditivo";
+const readyProjectScenario = probeScenario === "ready-projects";
 const stamp = Date.now();
 // Ordinary probes remain random. The authorized QA-email probe instead uses a
 // stable HMAC so a rerun cannot create another delivery.
@@ -135,10 +140,12 @@ if (opsToken.length < 16) finishEarly("ops_token_missing_or_short");
 if (verifyQaEmailRaw && !["0", "1"].includes(verifyQaEmailRaw)) {
   finishEarly("probe_verify_email_opt_in_invalid");
 }
-if (probeScenario && !["priority-aditivo", "legacy-sst"].includes(probeScenario)) {
+if (probeScenario && !["priority-aditivo", "legacy-sst", "ready-projects"].includes(probeScenario)) {
   finishEarly("probe_scenario_invalid");
 }
 if (priorityAditivoScenario && verifyQaEmail) finishEarly("priority_aditivo_email_forbidden");
+if (readyProjectScenario && verifyQaEmail) finishEarly("ready_project_email_forbidden");
+if (readyProjectScenario && !/^[0-9a-f]{40}$/.test(expectedSha)) finishEarly("ready_project_exact_sha_required");
 if (verifyQaEmail && !/^[0-9a-f]{40}$/.test(expectedSha)) {
   finishEarly("qa_expected_release_sha_required");
 }
@@ -338,7 +345,9 @@ const safeToProbe = Boolean(
   safety?.auto_send_off === true &&
   safety?.dispatch_attempted === false
 );
-if (!safeToProbe) finishEarly("warmbly_safety_gate_not_ready");
+// Only this scenario withholds all external delivery through the existing
+// server-enforced persist-only mode. Transport scenarios retain every gate.
+if (!readyProjectScenario && !safeToProbe) finishEarly("warmbly_safety_gate_not_ready");
 if (
   beforeFunnel.http !== 200 || beforeFunnel.data?.ok !== true || beforeFunnel.data?.commercial_only !== true ||
   beforeSystem.http !== 200 || beforeSystem.data?.ok !== true ||
@@ -380,6 +389,7 @@ for (const [env, field] of [
 // Any mismatch blocks the POST (no synthetic row is created for a page
 // context that is not the published one).
 const pagePath = String(process.env.PROBE_PAGE_PATH || "").trim();
+if (readyProjectScenario && pagePath !== READY_PROJECT_PATH) finishEarly("ready_project_page_path_mismatch");
 let servedForm = null;
 if (pagePath) {
   if (!/^\/[\w./-]{0,200}$/.test(pagePath)) finishEarly("probe_page_path_invalid");
@@ -387,6 +397,7 @@ if (pagePath) {
     .then(async (r) => ({ http: r.status, text: await r.text() }))
     .catch(() => ({ http: 0, text: "" }));
   if (page.http !== 200) finishEarly("probe_page_unavailable");
+  if (readyProjectScenario && !readyProjectFormMatches(page.text)) finishEarly("ready_project_form_contract_mismatch");
   const served = servedFormContext(page.text);
   if (!served) finishEarly("probe_page_capture_form_missing");
   if (served.error) {
@@ -403,6 +414,9 @@ if (pagePath) {
     throw blockedProbe;
   }
   servedForm = served.context;
+  if (readyProjectScenario && Object.entries(READY_PROJECT_CONTEXT).some(([key, value]) => servedForm[key] !== value)) {
+    finishEarly("ready_project_attribution_mismatch");
+  }
   const mismatch = Object.keys(pageContext).filter(
     (key) => pageContext[key] !== (key === "landing_page" ? pagePath : servedForm[key]),
   );
@@ -491,6 +505,9 @@ const payload = {
   landing_page: "/",
   mensagem: "synthetic probe do not contact",
   ...pageContext,
+  ...(readyProjectScenario ? {
+    intent: "ready_project_interest", source_asset_id: "ready-projects", project_interest: READY_PROJECT_INTEREST,
+  } : {}),
   test_mode: true,
   record_kind: "synthetic",
   idempotency_key: idem,
@@ -504,6 +521,7 @@ const headers = {
   "X-Forwarded-For": "198.51.100.27",
   "X-Confenge-Probe": probeSecret,
   "Idempotency-Key": idem,
+  ...(readyProjectScenario ? { "X-Confenge-Probe-Persist-Only": "1" } : {}),
   ...(verifyQaEmail
     ? {
         "X-Confenge-QA-Email": "1",
@@ -537,6 +555,12 @@ const [receiptOps, afterFunnel, afterSystem, afterWeekly] = await Promise.all([
   ops("weekly_report"),
 ]);
 const receipt = receiptOps.data?.receipt;
+// The authenticated private DTO is the operator's real read path. Only the
+// literal synthetic fixture is compared; no raw private response is printed.
+const projectReadback = readyProjectScenario && leadId ? await jsonRequest(
+  `/.netlify/functions/ops?action=lead&id=${encodeURIComponent(leadId)}&pii=1`,
+  { headers: authHeaders },
+) : null;
 const afterCommercial = commercialSnapshot(afterFunnel, afterWeekly);
 const afterCounters = syntheticCounters(afterSystem, afterWeekly);
 const afterOperational = operationalSnapshot(afterSystem, receiptOps);
@@ -563,10 +587,12 @@ const checks = {
   authenticated_synthetic_record: receipt?.authenticated_probe === true && receipt?.record_kind === "synthetic",
   excluded_from_commercial: receipt?.next_action === "exclude_from_commercial",
   canonical_source: receipt?.source === "CONFENGE_WEB",
-  warmbly_delivered: receipt?.handoff?.status === "DELIVERED",
-  exactly_one_handoff_attempt: receipt?.handoff?.attempts === 1,
-  downstream_receipt_matches: receipt?.handoff?.downstream?.downstream_receipt === leadId,
-  downstream_created_not_duplicate: receipt?.handoff?.downstream?.http === 201 && receipt?.handoff?.downstream?.duplicate === false,
+  ...(!readyProjectScenario ? {
+    warmbly_delivered: receipt?.handoff?.status === "DELIVERED",
+    exactly_one_handoff_attempt: receipt?.handoff?.attempts === 1,
+    downstream_receipt_matches: receipt?.handoff?.downstream?.downstream_receipt === leadId,
+    downstream_created_not_duplicate: receipt?.handoff?.downstream?.http === 201 && receipt?.handoff?.downstream?.duplicate === false,
+  } : {}),
   downstream_action_absent: !receipt?.handoff?.downstream?.action_id,
   persisted_exactly_once: afterCounters.ok && afterSynthetic - beforeSynthetic === 1,
   excluded_non_real_exactly_once: afterCounters.ok && afterExcluded - beforeExcluded === 1,
@@ -585,6 +611,22 @@ const checks = {
   served_form_context_persisted: !servedForm || ["asset_id", "route_family", "cta_id"].every(
     (key) => !servedForm[key] || receipt?.[key] === servedForm[key],
   ),
+  ...(readyProjectScenario ? {
+    project_persisted_receipt_matches: receipt?.lead_id === leadId && receipt?.receipt_id === leadId,
+    project_persist_only_record: receipt?.persist_only_probe === true,
+    project_handoff_skipped: receipt?.handoff?.status === "SKIPPED" && receipt?.handoff?.reason === "persist_only_probe",
+    project_handoff_never_attempted: receipt?.handoff?.attempts === 0,
+    project_handoff_not_scheduled: receipt?.handoff?.next_attempt_at === null,
+    project_no_downstream_receipt: receipt?.handoff?.downstream === null && receipt?.handoff?.delivered_at === null,
+    project_delivery_persisted_skipped: receipt?.delivery?.notify_status === "skipped" && receipt?.delivery?.email_status === "skipped",
+    project_private_readback_matches: projectReadback?.http === 200 &&
+      projectReadback.data?.ok === true && projectReadback.data?.lead?.lead_id === leadId &&
+      projectReadback.data?.lead?.record_kind === "synthetic" &&
+      projectReadback.data?.lead?.intent === "ready_project_interest" &&
+      Object.entries(READY_PROJECT_INTEREST).every(([key, value]) =>
+        projectReadback.data?.lead?.project_interest?.[key] === value),
+    project_email_never_requested: !verifyQaEmail && receipt?.delivery?.qa_email_status === null && receipt?.delivery?.qa_email_provider_id === null,
+  } : {}),
   ...(browserJourney && priorityAditivoScenario
     ? {
         // The private ops API computes this digest from the durable row. A
@@ -620,7 +662,10 @@ const ok = Object.values(checks).every(Boolean);
 
 console.log(JSON.stringify({
   ok,
-  state: ok ? "TRANSPORT_READY" : "TRANSPORT_PROOF_FAILED",
+  state: readyProjectScenario
+    ? (ok ? "CAPTURE_PERSISTENCE_READY" : "CAPTURE_PERSISTENCE_FAILED")
+    : (ok ? "TRANSPORT_READY" : "TRANSPORT_PROOF_FAILED"),
+  proof_scope: readyProjectScenario ? "capture_persistence_only" : "capture_and_transport",
   base,
   live_sha: liveSha,
   scenario: probeScenario || (verifyQaEmail ? "legacy-sst" : "standard"),
@@ -644,8 +689,10 @@ console.log(JSON.stringify({
   warmbly: {
     destination_fingerprint: beforeInbound.data?.configuration?.destination_fingerprint || null,
     contract: safety?.contract || null,
-    auto_send: safety ? !safety.auto_send_off : null,
-    dispatch_attempted: safety?.dispatch_attempted ?? null,
+    status: safety?.status || null,
+    transport_tested: !readyProjectScenario,
+    auto_send: safeToProbe ? false : null,
+    dispatch_attempted: safeToProbe ? false : null,
   },
   deltas: {
     persisted_synthetic: Number.isFinite(afterSynthetic - beforeSynthetic) ? afterSynthetic - beforeSynthetic : null,

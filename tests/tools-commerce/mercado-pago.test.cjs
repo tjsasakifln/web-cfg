@@ -2,7 +2,7 @@
 const assert = require('node:assert/strict');
 const { createHmac } = require('node:crypto');
 const test = require('node:test');
-const { createMercadoPago } = require('../../runtime/tools-commerce/mercado-pago.cjs');
+const { createMercadoPago, isDefinitiveOrderRejection } = require('../../runtime/tools-commerce/mercado-pago.cjs');
 const ID = '018f0f34-7a01-7c75-b7b8-c5c5f169c6ac';
 const ORDER = 'ORD01J49MMW3SSBK5PSV3DFR32959';
 const SELLER_PROFILE = 'https://api.mercadolibre.com/users/me';
@@ -18,6 +18,29 @@ function checkoutOrder(overrides = {}) {
     checkout_url: 'https://www.mercadopago.com.br/checkout/v1/redirect?order_id=' + ORDER,
     country_code: 'BRA', currency: 'BRL', user_id: SELLER_ID, transactions: { payments: [] }, ...overrides };
 }
+test('only an explicit refusal of the order creation POST is definitive', async () => {
+  const privateDetail = 'private-payer@example.com';
+  let status = 422;
+  const client = createMercadoPago({ accessToken: 'private-access-token', webhookSecret: 'secret', sellerId: SELLER_ID,
+    fetchImpl: async url => url === SELLER_PROFILE ? response({ tags: ['normal'], id: SELLER_ID }) :
+      response({ message: privateDetail }, status) });
+  const input = { id: ID, amountCents: 1490, email: 'buyer@example.com', label: 'Projeto',
+    returnUrl: 'https://confenge.com.br/projetos-prontos/' };
+  for (status of [400, 401, 403, 422]) {
+    await assert.rejects(client.createCheckoutOrder(input), error => {
+      assert.equal(isDefinitiveOrderRejection(error), true);
+      assert(!String(error).includes(privateDetail));
+      assert(!JSON.stringify(error).includes('private-access-token'));
+      return true;
+    });
+    await assert.rejects(client.getOrder(ORDER), error => !isDefinitiveOrderRejection(error),
+      'a GET refusal is not evidence that the order was never created');
+  }
+  for (status of [404, 408, 409, 423, 429, 500, 503]) {
+    await assert.rejects(client.createCheckoutOrder(input), error => !isDefinitiveOrderRejection(error));
+  }
+  assert.equal(isDefinitiveOrderRejection(Object.assign(Error('HTTP 422'), { orderCreationRejected: true })), false);
+});
 test('creates a single automatic Pix order with stable idempotency reference', async () => {
   let call;
   let profileId = '1170000101';

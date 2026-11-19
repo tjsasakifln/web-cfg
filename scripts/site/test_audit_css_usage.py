@@ -9,6 +9,7 @@ boundary, so ``\\b`` reported a dead class as used.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import re
 import shutil
@@ -37,6 +38,11 @@ from scripts.site.audit_css_usage import (  # noqa: E402
     used_classes,
 )
 from scripts.site.build_css import ROUTE_BUNDLES, route_bundle  # noqa: E402
+from scripts.site.build_diagnostic_css import (  # noqa: E402
+    MANIFEST as DIAGNOSTIC_MANIFEST,
+    TARGET as DIAGNOSTIC_TARGET,
+    expected_css as expected_diagnostic_css,
+)
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "css-usage"
 
@@ -73,6 +79,31 @@ def _derived_bundle_fixture() -> tuple[Path, str, tuple[str, ...]]:
         encoding="utf-8",
     )
     return root, rel, sources
+
+
+def _diagnostic_projection_fixture() -> tuple[Path, dict]:
+    root, _, _ = _derived_bundle_fixture()
+    manifest = json.loads((ROOT / DIAGNOSTIC_MANIFEST).read_text(encoding="utf-8"))
+    manifest["excluded_component_classes"] = ["unused-component"]
+    for rel in manifest["runtime_sources"]:
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if rel.endswith(".html"):
+            text = f'<link rel="stylesheet" href="/{DIAGNOSTIC_TARGET}"><main class="kept"></main>\n'
+        else:
+            text = "// reviewed fixture runtime\n"
+        path.write_text(text, encoding="utf-8", newline="\n")
+        manifest["runtime_sources"][rel] = hashlib.sha256(path.read_bytes()).hexdigest()
+    (root / "styles.css").write_text(
+        ".kept{border-radius:4px;box-shadow:0 1px #000}\n"
+        ".unused-component{border-radius:8px}\n",
+        encoding="utf-8",
+    )
+    manifest_path = root / DIAGNOSTIC_MANIFEST
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    (root / DIAGNOSTIC_TARGET).write_text(expected_diagnostic_css(root), encoding="utf-8")
+    return root, manifest
 
 
 def test_word_boundary_does_not_swallow_a_prefixed_class() -> None:
@@ -169,6 +200,147 @@ def test_missing_route_bundle_fails_closed() -> None:
         assert result["derived_css_bundles"] == []
         assert result["invalid_derived_css_bundles"] == {rel: "missing generated bundle"}
         assert f"invalid_derived_stylesheet {rel}: missing generated bundle" in compare(result, baseline)
+    finally:
+        shutil.rmtree(root)
+
+
+def test_diagnostic_projection_requires_exact_reviewed_bytes_for_discount() -> None:
+    root, _ = _diagnostic_projection_fixture()
+    try:
+        source_before = (root / "styles.css").read_bytes()
+        target_before = (root / DIAGNOSTIC_TARGET).read_bytes()
+        result = audit(root)
+        assert DIAGNOSTIC_TARGET in result["derived_css_bundles"]
+        assert result["invalid_derived_css_bundles"] == {}
+        assert result["decoration"][DIAGNOSTIC_TARGET] == {
+            "border_radius": 0, "box_shadow": 0, "gradient": 0,
+        }
+        assert result["decoration"]["styles.css"]["border_radius"] == 2
+        assert compare(result, result) == []
+        assert (root / "styles.css").read_bytes() == source_before
+        assert (root / DIAGNOSTIC_TARGET).read_bytes() == target_before
+    finally:
+        shutil.rmtree(root)
+
+
+def test_minimal_tree_without_diagnostic_projection_is_allowed() -> None:
+    root, _, _ = _derived_bundle_fixture()
+    try:
+        owner = root / "ferramentas/diagnostico-defesa-margem/index.html"
+        owner.parent.mkdir(parents=True, exist_ok=True)
+        owner.write_text('<link rel="stylesheet" href="/styles.css">', encoding="utf-8")
+        valid, invalid = derived_route_bundles(root)
+        assert DIAGNOSTIC_TARGET not in valid
+        assert DIAGNOSTIC_TARGET not in invalid
+    finally:
+        shutil.rmtree(root)
+
+
+def test_partial_diagnostic_projection_always_fails_closed() -> None:
+    for only in ("manifest", "target", "link"):
+        root, _, _ = _derived_bundle_fixture()
+        try:
+            rel = {
+                "manifest": DIAGNOSTIC_MANIFEST,
+                "target": DIAGNOSTIC_TARGET,
+                "link": "ferramentas/diagnostico-defesa-margem/index.html",
+            }[only]
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            text = f'<link rel="stylesheet" href="/{DIAGNOSTIC_TARGET}?v=fixture">' if only == "link" else "{}"
+            path.write_text(text, encoding="utf-8")
+            valid, invalid = derived_route_bundles(root)
+            assert DIAGNOSTIC_TARGET not in valid, only
+            assert DIAGNOSTIC_TARGET in invalid, (only, invalid)
+        finally:
+            shutil.rmtree(root)
+
+
+def test_tampered_diagnostic_projection_is_counted_and_rejected() -> None:
+    root, _ = _diagnostic_projection_fixture()
+    try:
+        baseline = audit(root)
+        target = root / DIAGNOSTIC_TARGET
+        target.write_text(target.read_text(encoding="utf-8") + ".extra{box-shadow:0 2px #000}\n", encoding="utf-8")
+        result = audit(root)
+        assert DIAGNOSTIC_TARGET not in result["derived_css_bundles"]
+        assert result["decoration"][DIAGNOSTIC_TARGET]["box_shadow"] == 2
+        assert f"invalid_derived_stylesheet {DIAGNOSTIC_TARGET}: does not match its reviewed projection" in compare(result, baseline)
+    finally:
+        shutil.rmtree(root)
+
+
+def test_stale_diagnostic_projection_is_rejected() -> None:
+    root, _ = _diagnostic_projection_fixture()
+    try:
+        canonical = root / "styles.css"
+        canonical.write_text(canonical.read_text(encoding="utf-8") + ".kept{color:green}\n", encoding="utf-8")
+        valid, invalid = derived_route_bundles(root)
+        assert DIAGNOSTIC_TARGET not in valid
+        assert invalid[DIAGNOSTIC_TARGET] == "does not match its reviewed projection"
+    finally:
+        shutil.rmtree(root)
+
+
+def test_diagnostic_projection_requires_each_input_and_runtime_hash() -> None:
+    for change in ("missing_manifest", "missing_runtime", "changed_runtime", "incomplete_review"):
+        root, manifest = _diagnostic_projection_fixture()
+        try:
+            if change == "missing_manifest":
+                (root / DIAGNOSTIC_MANIFEST).unlink()
+            elif change == "missing_runtime":
+                (root / "script.js").unlink()
+            elif change == "changed_runtime":
+                (root / "script.js").write_text("// runtime changed after review\n", encoding="utf-8")
+            else:
+                del manifest["runtime_sources"]["script.js"]
+                (root / DIAGNOSTIC_MANIFEST).write_text(json.dumps(manifest), encoding="utf-8")
+            result = audit(root)
+            assert DIAGNOSTIC_TARGET not in result["derived_css_bundles"], change
+            assert DIAGNOSTIC_TARGET in result["invalid_derived_css_bundles"], change
+            assert result["decoration"][DIAGNOSTIC_TARGET]["border_radius"] == 1, change
+            assert any(f"invalid_derived_stylesheet {DIAGNOSTIC_TARGET}:" in value for value in compare(result, result)), change
+        finally:
+            shutil.rmtree(root)
+
+
+def test_diagnostic_projection_rejects_invalid_manifest() -> None:
+    root, manifest = _diagnostic_projection_fixture()
+    try:
+        manifest["route"] = "/unreviewed/"
+        (root / DIAGNOSTIC_MANIFEST).write_text(json.dumps(manifest), encoding="utf-8")
+        valid, invalid = derived_route_bundles(root)
+        assert DIAGNOSTIC_TARGET not in valid
+        assert "unexpected diagnostic CSS owner route" in invalid[DIAGNOSTIC_TARGET]
+    finally:
+        shutil.rmtree(root)
+
+
+def test_reviewed_runtime_with_an_excluded_component_is_rejected() -> None:
+    root, manifest = _diagnostic_projection_fixture()
+    try:
+        runtime = root / "script.js"
+        runtime.write_text("document.body.classList.add('unused-component');\n", encoding="utf-8")
+        manifest["runtime_sources"]["script.js"] = hashlib.sha256(runtime.read_bytes()).hexdigest()
+        (root / DIAGNOSTIC_MANIFEST).write_text(json.dumps(manifest), encoding="utf-8")
+        valid, invalid = derived_route_bundles(root)
+        assert DIAGNOSTIC_TARGET not in valid
+        assert "excluded component occurs in script.js" in invalid[DIAGNOSTIC_TARGET]
+    finally:
+        shutil.rmtree(root)
+
+
+def test_regenerated_projection_does_not_hide_new_source_decoration() -> None:
+    root, _ = _diagnostic_projection_fixture()
+    try:
+        baseline = audit(root)
+        canonical = root / "styles.css"
+        canonical.write_text(canonical.read_text(encoding="utf-8") + ".kept{border-radius:99px}\n", encoding="utf-8")
+        (root / DIAGNOSTIC_TARGET).write_text(expected_diagnostic_css(root), encoding="utf-8")
+        result = audit(root)
+        assert DIAGNOSTIC_TARGET in result["derived_css_bundles"]
+        assert result["invalid_derived_css_bundles"] == {}
+        assert any(value.startswith("decoration_regression border_radius ") for value in compare(result, baseline))
     finally:
         shutil.rmtree(root)
 

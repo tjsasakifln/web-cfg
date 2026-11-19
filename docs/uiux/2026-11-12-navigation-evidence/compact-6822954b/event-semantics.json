@@ -1,0 +1,1666 @@
+{
+  "ok": true,
+  "generated_at": "2026-11-13T00:12:46.313Z",
+  "site_root": "repo",
+  "findings": [
+    {
+      "check": "home_hero_form_cta",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": ".hero a[data-event-name=\"cta_click\"][href=\"#contato\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "content_cluster": "home",
+            "cta_position": "hero",
+            "event_id": "e-sess36e8-mwe82hbv-a9xtg1",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "form",
+            "source_page_type": "home",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "cta_kind": "service",
+            "alias_from": "service_cta_click"
+          }
+        ],
+        "href": "#contato"
+      }
+    },
+    {
+      "check": "project_page_view_cluster",
+      "route": "/projeto-eletrico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "event": "page_view",
+        "page_path": "/projeto-eletrico/",
+        "content_cluster": "engineering-projects",
+        "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+        "source": "CONFENGE_WEB",
+        "schema_version": "1.4.0",
+        "pii_policy": "aggregate_allowlist_empty",
+        "consent": "not_required",
+        "event_id": "evt-570b216c-3299-4630-b2f6-cbdb473286bf-2"
+      }
+    },
+    {
+      "check": "project_cta_alias",
+      "route": "/projeto-eletrico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": ".pp-hero a[data-event-name=\"project_cta_click\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projeto-eletrico/",
+            "content_cluster": "engineering-projects",
+            "cta_position": "hero",
+            "event_id": "e-sess36e8-mwe82i41-5a7b8x",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "form",
+            "source_page_type": "engineering-projects",
+            "asset_id": "electrical-project",
+            "route_family": "electrical-project",
+            "cta_id": "electrical-project-hero",
+            "cta_kind": "project",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "alias_from": "project_cta_click"
+          }
+        ],
+        "href": "/#contato"
+      }
+    },
+    {
+      "check": "home_situation_action_route_cta",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-id=\"home-private-quantities-budget\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "content_cluster": "home",
+            "cta_position": "home_services",
+            "event_id": "e-sess36e8-mwe82ixz-ag1m53",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Quantitativos e orçamentosLevantamento, memória e base para comparar ou contrata",
+            "destination_type": "route",
+            "source_page_type": "home",
+            "cta_id": "home-private-quantities-budget",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/quantitativos-orcamento-obras/"
+      }
+    },
+    {
+      "check": "home_contact_anchor_form_cta",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-position=\"proposal_band\"][href=\"#contato\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "content_cluster": "home",
+            "cta_position": "proposal_band",
+            "event_id": "e-sess36e8-mwe82jp9-08yqi9",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "form",
+            "source_page_type": "home",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "cta_kind": "service",
+            "alias_from": "service_cta_click"
+          }
+        ],
+        "href": "#contato"
+      }
+    },
+    {
+      "check": "home_whatsapp_cta_kind_from_alias",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": ".whatsapp-float[data-event-name=\"whatsapp_click\"]",
+        "added": [
+          {
+            "event": "whatsapp_click",
+            "page_path": "/",
+            "content_cluster": "home",
+            "cta_position": "float",
+            "event_id": "e-sess36e8-mwe82kiy-e7gado",
+            "correlation_id": "CFG-WA-IYE7GADO",
+            "cta_label": "whatsapp",
+            "destination_type": "whatsapp",
+            "journey": "projeto",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+CONFENGE.+Quero+conversar+sobre+um+projeto+ou+servi%C3%A7o+de+engenharia+e+solicitar+uma+proposta.%0AProtocolo+CONFENGE%3A+CFG-WA-IYE7GADO"
+      }
+    },
+    {
+      "check": "header_cta_route",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "content_cluster": "home",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82lag-8ln5bz",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "route",
+            "source_page_type": "home",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/triagem-tecnica/"
+      }
+    },
+    {
+      "check": "header_cta_route",
+      "route": "/servicos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/servicos/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82mhr-5y2993",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "route",
+            "source_page_type": "corporate-services",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/triagem-tecnica/"
+      }
+    },
+    {
+      "check": "header_cta_route",
+      "route": "/triagem-tecnica/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/triagem-tecnica/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82no5-c2twm5",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "route",
+            "source_page_type": "triagem-tecnica",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/triagem-tecnica/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-destination=\"cad\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "cta_position": "header_nav",
+            "cta_label": "Editor DWGAbra, edite e exporte desenhos CAD.",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_nav-ferramentas-cad",
+            "event_id": "e-sess36e8-mwe82og4-4rxfnw",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-primary=\"true\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "cta_position": "header_nav",
+            "cta_label": "Todos os projetos",
+            "destination_type": "route",
+            "destination_path": "/projetos/",
+            "cta_id": "nav-header_nav-projetos-overview",
+            "event_id": "e-sess36e8-mwe82ohk-5car2k",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/projetos/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_shortcut\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "cta_position": "header_shortcut",
+            "cta_label": "Editor DWG",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_shortcut-cad",
+            "event_id": "e-sess36e8-mwe82oj0-ryr5tu",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_utility\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "cta_position": "header_utility",
+            "cta_label": "A CONFENGE",
+            "destination_type": "route",
+            "destination_path": "/empresa/",
+            "cta_id": "nav-header_utility-empresa",
+            "event_id": "e-sess36e8-mwe82okf-8c9m5o",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/empresa/"
+      }
+    },
+    {
+      "check": "discovery_preserves_capture_context",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "contextUnchanged": true
+      }
+    },
+    {
+      "check": "disclosure_open_is_not_a_conversion",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "details[data-nav-group] > summary",
+        "added": [],
+        "href": null
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/projetos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-destination=\"cad\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projetos/",
+            "cta_position": "header_nav",
+            "cta_label": "Editor DWGAbra, edite e exporte desenhos CAD.",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_nav-ferramentas-cad",
+            "event_id": "e-sess36e8-mwe82pt7-4e9jyf",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/projetos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-primary=\"true\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projetos/",
+            "cta_position": "header_nav",
+            "cta_label": "Todos os projetos",
+            "destination_type": "route",
+            "destination_path": "/projetos/",
+            "cta_id": "nav-header_nav-projetos-overview",
+            "event_id": "e-sess36e8-mwe82pun-aiy1rg",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/projetos/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/projetos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_shortcut\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projetos/",
+            "cta_position": "header_shortcut",
+            "cta_label": "Editor DWG",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_shortcut-cad",
+            "event_id": "e-sess36e8-mwe82pw2-j1us7z",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/projetos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_utility\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projetos/",
+            "cta_position": "header_utility",
+            "cta_label": "A CONFENGE",
+            "destination_type": "route",
+            "destination_path": "/empresa/",
+            "cta_id": "nav-header_utility-empresa",
+            "event_id": "e-sess36e8-mwe82pxi-z60ex8",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/empresa/"
+      }
+    },
+    {
+      "check": "discovery_preserves_capture_context",
+      "route": "/projetos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "contextUnchanged": true
+      }
+    },
+    {
+      "check": "disclosure_open_is_not_a_conversion",
+      "route": "/projetos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "details[data-nav-group] > summary",
+        "added": [],
+        "href": null
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-destination=\"cad\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/seguranca-trabalho-apoio-tecnico/",
+            "cta_position": "header_nav",
+            "cta_label": "Editor DWGAbra, edite e exporte desenhos CAD.",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_nav-ferramentas-cad",
+            "event_id": "e-sess36e8-mwe82r6a-rzq7ga",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-primary=\"true\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/seguranca-trabalho-apoio-tecnico/",
+            "cta_position": "header_nav",
+            "cta_label": "Todos os projetos",
+            "destination_type": "route",
+            "destination_path": "/projetos/",
+            "cta_id": "nav-header_nav-projetos-overview",
+            "event_id": "e-sess36e8-mwe82r7q-6o9zrd",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/projetos/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_shortcut\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/seguranca-trabalho-apoio-tecnico/",
+            "cta_position": "header_shortcut",
+            "cta_label": "Editor DWG",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_shortcut-cad",
+            "event_id": "e-sess36e8-mwe82r95-ritiex",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_utility\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/seguranca-trabalho-apoio-tecnico/",
+            "cta_position": "header_utility",
+            "cta_label": "A CONFENGE",
+            "destination_type": "route",
+            "destination_path": "/empresa/",
+            "cta_id": "nav-header_utility-empresa",
+            "event_id": "e-sess36e8-mwe82ral-cktfl3",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/empresa/"
+      }
+    },
+    {
+      "check": "discovery_preserves_capture_context",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "contextUnchanged": true
+      }
+    },
+    {
+      "check": "disclosure_open_is_not_a_conversion",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "details[data-nav-group] > summary",
+        "added": [],
+        "href": null
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/conteudos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-destination=\"cad\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/conteudos/",
+            "cta_position": "header_nav",
+            "cta_label": "Editor DWGAbra, edite e exporte desenhos CAD.",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_nav-ferramentas-cad",
+            "event_id": "e-sess36e8-mwe82s67-09yhv4",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/conteudos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-nav-primary=\"true\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/conteudos/",
+            "cta_position": "header_nav",
+            "cta_label": "Todos os projetos",
+            "destination_type": "route",
+            "destination_path": "/projetos/",
+            "cta_id": "nav-header_nav-projetos-overview",
+            "event_id": "e-sess36e8-mwe82s7n-tuptq1",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/projetos/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/conteudos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_shortcut\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/conteudos/",
+            "cta_position": "header_shortcut",
+            "cta_label": "Editor DWG",
+            "destination_type": "route",
+            "destination_path": "/cad/",
+            "cta_id": "nav-header_shortcut-cad",
+            "event_id": "e-sess36e8-mwe82s92-a38iy0",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/cad/"
+      }
+    },
+    {
+      "check": "discovery_is_navigation_not_service_intent",
+      "route": "/conteudos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-navigation-link=\"true\"][data-cta-position=\"header_utility\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/conteudos/",
+            "cta_position": "header_utility",
+            "cta_label": "A CONFENGE",
+            "destination_type": "route",
+            "destination_path": "/empresa/",
+            "cta_id": "nav-header_utility-empresa",
+            "event_id": "e-sess36e8-mwe82sai-mgmimz",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/empresa/"
+      }
+    },
+    {
+      "check": "discovery_preserves_capture_context",
+      "route": "/conteudos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "contextUnchanged": true
+      }
+    },
+    {
+      "check": "disclosure_open_is_not_a_conversion",
+      "route": "/conteudos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "details[data-nav-group] > summary",
+        "added": [],
+        "href": null
+      }
+    },
+    {
+      "check": "header_cta_pii_masked_route_not_legacy_unclassified",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/",
+            "content_cluster": "home",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82t2d-nnnitg",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "route",
+            "source_page_type": "home",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ]
+      }
+    },
+    {
+      "check": "header_cta_capture_anchor_form",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/quantitativos-orcamento-obras/",
+            "content_cluster": "orcamento-bdi",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82u9o-0jtcq7",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta de orçamento",
+            "destination_type": "form",
+            "source_page_type": "private-engineering-quantities-budget",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#triagem-quantitativos"
+      }
+    },
+    {
+      "check": "header_cta_capture_anchor_form",
+      "route": "/projetos-complementares-engenharia/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projetos-complementares-engenharia/",
+            "content_cluster": "engineering-projects",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82vh0-6qt3hm",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Conversar sobre o projeto",
+            "destination_type": "form",
+            "source_page_type": "complementary-engineering-elaboration",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#escopo-projeto"
+      }
+    },
+    {
+      "check": "header_cta_capture_anchor_form",
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/inspecao-diagnostico-edificacoes/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82w5i-vxcrmt",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Conversar sobre a edificação",
+            "destination_type": "form",
+            "source_page_type": "building-inspection-diagnosis",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "cta_kind": "service",
+            "alias_from": "service_cta_click"
+          }
+        ],
+        "href": "#contato-inspecao"
+      }
+    },
+    {
+      "check": "header_cta_capture_anchor_form",
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/compatibilizacao-projetos-engenharia/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82wob-qfpwmb",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Pedir proposta da compatibilização",
+            "destination_type": "form",
+            "source_page_type": "engineering-projects-coordination-clash",
+            "route_family": "engineering-projects-coordination-clash",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#pedido-compatibilizacao"
+      }
+    },
+    {
+      "check": "header_cta_capture_anchor_form",
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/ferramentas/prontidao-tecnica-obra-privada/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82xct-abvljc",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Iniciar diagnóstico",
+            "destination_type": "form",
+            "source_page_type": "other",
+            "asset_id": "private_project_technical_readiness_v1",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#diagnostico"
+      }
+    },
+    {
+      "check": "header_cta_route_on_tool",
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.header-cta",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/ferramentas/diagnostico-defesa-margem/",
+            "content_cluster": "defesa-sancoes",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82xwa-h44axz",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "route",
+            "source_page_type": "defesa-sancoes",
+            "asset_id": "diagnostico-defesa-margem",
+            "route_family": "defesa-margem-diagnostico",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/triagem-tecnica/"
+      }
+    },
+    {
+      "check": "hero_capture_anchor_form_cta",
+      "route": "/projetos-complementares-engenharia/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-id=\"projetos-complementares-engenharia-hero-proposal\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/projetos-complementares-engenharia/",
+            "content_cluster": "engineering-projects",
+            "cta_position": "hero",
+            "event_id": "e-sess36e8-mwe82yk4-ly4vby",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta de projetos complementares",
+            "destination_type": "form",
+            "offer_id": "complementary_engineering_project_review",
+            "source_page_type": "complementary-engineering-elaboration",
+            "asset_id": "complementary_engineering_elaboration_route_v1",
+            "route_family": "complementary-engineering-elaboration",
+            "cta_id": "projetos-complementares-engenharia-hero-proposal",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#escopo-projeto"
+      }
+    },
+    {
+      "check": "hero_capture_anchor_form_cta",
+      "route": "/parcerias-engenharia/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-id=\"partner-hero-describe\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/parcerias-engenharia/",
+            "content_cluster": "other",
+            "cta_position": "hero",
+            "event_id": "e-sess36e8-mwe82z3m-dh2haz",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Descrever o que falta no pacote",
+            "destination_type": "form",
+            "source_page_type": "parcerias-engenharia",
+            "asset_id": "partner-reference-kits-v1",
+            "route_family": "parcerias-engenharia",
+            "cta_id": "partner-hero-describe",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#encaminhar"
+      }
+    },
+    {
+      "check": "capture_anchor_without_cta_id_form",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.button[href=\"#triagem-quantitativos\"]:not(.header-cta):not([data-cta-id])",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/quantitativos-orcamento-obras/",
+            "content_cluster": "orcamento-bdi",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe82zrg-0y9j7a",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta de orçamento",
+            "destination_type": "form",
+            "source_page_type": "private-engineering-quantities-budget",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#triagem-quantitativos"
+      }
+    },
+    {
+      "check": "toc_prose_anchor_silent",
+      "route": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "nav.article-toc a[href=\"#diagnostico\"]",
+        "added": [],
+        "href": "#diagnostico"
+      }
+    },
+    {
+      "check": "skip_link_wrapper_anchor_silent",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.skip-link[href=\"#conteudo\"]",
+        "added": [],
+        "href": "#conteudo"
+      }
+    },
+    {
+      "check": "skip_link_wrapper_anchor_silent",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.skip-link[href=\"#conteudo\"]",
+        "added": [],
+        "href": "#conteudo"
+      }
+    },
+    {
+      "check": "skip_link_wrapper_anchor_silent",
+      "route": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.skip-link[href=\"#conteudo\"]",
+        "added": [],
+        "href": "#conteudo"
+      }
+    },
+    {
+      "check": "tool_submit_cta_click_form",
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "button[type=\"submit\"][data-event-name=\"cta_click\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/ferramentas/diagnostico-defesa-margem/",
+            "content_cluster": "defesa-sancoes",
+            "cta_position": "money-asset",
+            "event_id": "e-sess36e8-mwe832lj-ig7giw",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Pedir uma segunda leitura do contrato",
+            "destination_type": "form",
+            "source_page_type": "defesa-sancoes",
+            "asset_id": "diagnostico-defesa-margem",
+            "route_family": "defesa-margem-diagnostico",
+            "cta_id": "segunda-leitura-contrato",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          },
+          {
+            "event": "tool_to_form",
+            "tool": "diagnostico-defesa-margem",
+            "page_path": "/ferramentas/diagnostico-defesa-margem/",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "event_id": "evt-af5e3fa0-b825-4190-8e4d-c197b1bcd426-8"
+          }
+        ],
+        "href": null
+      }
+    },
+    {
+      "check": "home_footer_mailto_no_address_in_payload",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "diff": {
+          "missing": false,
+          "selector": "footer a[href^=\"mailto:\"]",
+          "added": [
+            {
+              "event": "email_click",
+              "page_path": "/",
+              "content_cluster": "home",
+              "cta_position": "inline",
+              "event_id": "e-sess36e8-mwe8338v-38omlp",
+              "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+              "destination_type": "email",
+              "journey": "projeto",
+              "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+              "source": "CONFENGE_WEB",
+              "schema_version": "1.4.0",
+              "pii_policy": "aggregate_allowlist_empty",
+              "consent": "not_required"
+            }
+          ],
+          "href": "mailto:tiago.sasaki@confenge.com.br"
+        },
+        "pii": []
+      }
+    },
+    {
+      "check": "quantities_hero_form_cta",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-id=\"quantitativos-orcamento-obras-hero-proposal\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/quantitativos-orcamento-obras/",
+            "content_cluster": "orcamento-bdi",
+            "cta_position": "hero",
+            "event_id": "e-sess36e8-mwe833s1-v5npwo",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta de quantitativos e orçamento",
+            "destination_type": "form",
+            "source_page_type": "private-engineering-quantities-budget",
+            "asset_id": "private_quantities_budget_route_v1",
+            "route_family": "private-engineering-quantities-budget",
+            "cta_id": "quantitativos-orcamento-obras-hero-proposal",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "#triagem-quantitativos"
+      }
+    },
+    {
+      "check": "quantities_email_click_attribution",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "mail": {
+          "missing": false,
+          "selector": "a[data-cta-id=\"quantities-budget-alternative-email\"]",
+          "added": [
+            {
+              "event": "email_click",
+              "page_path": "/quantitativos-orcamento-obras/",
+              "content_cluster": "orcamento-bdi",
+              "cta_position": "inline",
+              "event_id": "e-sess36e8-mwe834ek-czgabw",
+              "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+              "cta_label": "Solicitar proposta por e-mail",
+              "destination_type": "email",
+              "journey": "orcamento",
+              "asset_id": "private_quantities_budget_route_v1",
+              "route_family": "private-engineering-quantities-budget",
+              "cta_id": "quantities-budget-alternative-email",
+              "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+              "source": "CONFENGE_WEB",
+              "schema_version": "1.4.0",
+              "pii_policy": "aggregate_allowlist_empty",
+              "consent": "not_required"
+            }
+          ],
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20quantitativos%20e%20or%C3%A7amento"
+        },
+        "pii": []
+      }
+    },
+    {
+      "check": "quantities_tel_click_attribution",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "tel": {
+          "missing": false,
+          "selector": "a[data-cta-id=\"quantities-budget-alternative-phone\"]",
+          "added": [
+            {
+              "event": "outbound_click",
+              "page_path": "/quantitativos-orcamento-obras/",
+              "content_cluster": "orcamento-bdi",
+              "cta_position": "inline",
+              "event_id": "e-sess36e8-mwe834g0-6f7wkg",
+              "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+              "destination_type": "tel",
+              "journey": "orcamento",
+              "asset_id": "private_quantities_budget_route_v1",
+              "route_family": "private-engineering-quantities-budget",
+              "cta_id": "quantities-budget-alternative-phone",
+              "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+              "source": "CONFENGE_WEB",
+              "schema_version": "1.4.0",
+              "pii_policy": "aggregate_allowlist_empty",
+              "consent": "not_required"
+            }
+          ],
+          "href": "tel:+5548988344559"
+        },
+        "pii": []
+      }
+    },
+    {
+      "check": "quantities_whatsapp_click_attribution",
+      "route": "/quantitativos-orcamento-obras/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-id=\"quantities-budget-alternative-whatsapp\"]",
+        "added": [
+          {
+            "event": "whatsapp_click",
+            "page_path": "/quantitativos-orcamento-obras/",
+            "content_cluster": "orcamento-bdi",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe834hg-w05qv4",
+            "correlation_id": "CFG-WA-HGW05QV4",
+            "cta_label": "Solicitar proposta pelo WhatsApp",
+            "destination_type": "whatsapp",
+            "journey": "orcamento",
+            "asset_id": "private_quantities_budget_route_v1",
+            "route_family": "private-engineering-quantities-budget",
+            "cta_id": "quantities-budget-alternative-whatsapp",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+CONFENGE.+Quero+solicitar+proposta+de+levantamento+de+quantitativos+ou+or%C3%A7amento+de+uma+obra.%0AProtocolo+CONFENGE%3A+CFG-WA-HGW05QV4"
+      }
+    },
+    {
+      "check": "hub_servicos_content_to_service_known",
+      "route": "/servicos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "#servico-orcamento a[href=\"/quantitativos-orcamento-obras/\"]",
+        "added": [
+          {
+            "event": "content_to_service",
+            "page_path": "/servicos/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe83500-038qgo",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Quantitativos e orçamento",
+            "destination_type": "service",
+            "source_page_type": "corporate-services",
+            "source_path": "/servicos/",
+            "source_asset_id": "servicos",
+            "source_asset_family": "hub",
+            "destination_path": "/quantitativos-orcamento-obras/",
+            "destination_service_id": "quantitativos-orcamento-obras",
+            "cta_id": "unspecified",
+            "route_family": "unspecified",
+            "asset_id": "servicos",
+            "asset_family": "hub",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/quantitativos-orcamento-obras/"
+      }
+    },
+    {
+      "check": "hub_servicos_triage_link_route_cta",
+      "route": "/servicos/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[data-cta-id=\"services-proposal\"][href=\"/triagem-tecnica/\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/servicos/",
+            "content_cluster": "other",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe835k8-l5xk42",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Solicitar proposta",
+            "destination_type": "route",
+            "source_page_type": "corporate-services",
+            "asset_id": "corporate_services_hub_v1",
+            "route_family": "servicos-corporativos",
+            "cta_id": "services-proposal",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/triagem-tecnica/"
+      }
+    },
+    {
+      "check": "article_cross_route_capture_anchor_form_cta",
+      "route": "/conteudos/glosa-de-medicao-obra-publica/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a[href=\"/medicoes-glosas-obras-publicas/#captura-pilar\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/conteudos/glosa-de-medicao-obra-publica/",
+            "content_cluster": "medicoes-pagamentos",
+            "cta_position": "form",
+            "event_id": "e-sess36e8-mwe8362n-osd5ha",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Continuar pelo formulário",
+            "destination_type": "form",
+            "source_page_type": "medicoes-pagamentos",
+            "asset_id": "glosa-de-medicao-obra-publica",
+            "destination_path": "/medicoes-glosas-obras-publicas/",
+            "source_path": "/conteudos/glosa-de-medicao-obra-publica/",
+            "source_asset_id": "glosa-de-medicao-obra-publica",
+            "source_asset_family": "editorial",
+            "asset_family": "editorial",
+            "destination_service_id": "medicoes-glosas-obras-publicas",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "cta_kind": "service",
+            "alias_from": "service_cta_click"
+          }
+        ],
+        "href": "/medicoes-glosas-obras-publicas/#captura-pilar"
+      }
+    },
+    {
+      "check": "case_cross_route_capture_anchor_form_cta",
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "a.button-primary[href=\"/medicoes-glosas-obras-publicas/#captura-pilar\"]",
+        "added": [
+          {
+            "event": "cta_click",
+            "page_path": "/casos/medicao-glosa-demonstrativo/",
+            "content_cluster": "medicoes-pagamentos",
+            "cta_position": "form",
+            "event_id": "e-sess36e8-mwe836pv-zm3hq5",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Enviar minha medição glosada",
+            "destination_type": "form",
+            "source_page_type": "medicoes-pagamentos",
+            "asset_id": "medicao-glosa-demonstrativo",
+            "destination_path": "/medicoes-glosas-obras-publicas/",
+            "source_path": "/casos/medicao-glosa-demonstrativo/",
+            "source_asset_id": "medicao-glosa-demonstrativo",
+            "source_asset_family": "case",
+            "asset_family": "case",
+            "destination_service_id": "medicoes-glosas-obras-publicas",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required",
+            "cta_kind": "service",
+            "alias_from": "service_cta_click"
+          }
+        ],
+        "href": "/medicoes-glosas-obras-publicas/#captura-pilar"
+      }
+    },
+    {
+      "check": "article_plain_pillar_link_content_to_service",
+      "route": "/conteudos/glosa-de-medicao-obra-publica/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "selector": "main a[href=\"/medicoes-glosas-obras-publicas/\"]",
+        "added": [
+          {
+            "event": "content_to_service",
+            "page_path": "/conteudos/glosa-de-medicao-obra-publica/",
+            "content_cluster": "medicoes-pagamentos",
+            "cta_position": "inline",
+            "event_id": "e-sess36e8-mwe8377y-4a3pzc",
+            "correlation_id": "64dc26c9-cc9a-467a-ad8b-548b59fae08e",
+            "cta_label": "Ver todos em Medições e pagamentos",
+            "destination_type": "service",
+            "source_page_type": "medicoes-pagamentos",
+            "source_path": "/conteudos/glosa-de-medicao-obra-publica/",
+            "source_asset_id": "glosa-de-medicao-obra-publica",
+            "source_asset_family": "editorial",
+            "destination_path": "/medicoes-glosas-obras-publicas/",
+            "destination_service_id": "medicoes-glosas-obras-publicas",
+            "cta_id": "unspecified",
+            "route_family": "unspecified",
+            "asset_id": "glosa-de-medicao-obra-publica",
+            "asset_family": "editorial",
+            "session_id": "sess-36e8d7d3448a630e26c6d899eaa",
+            "source": "CONFENGE_WEB",
+            "schema_version": "1.4.0",
+            "pii_policy": "aggregate_allowlist_empty",
+            "consent": "not_required"
+          }
+        ],
+        "href": "/medicoes-glosas-obras-publicas/"
+      }
+    },
+    {
+      "check": "home_no_forbidden_events",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "clicked": 122,
+        "forbidden": [],
+        "untyped": 0,
+        "events": [
+          "web_vital",
+          "page_view",
+          "cta_click",
+          "sst_cta_click",
+          "whatsapp_click"
+        ]
+      }
+    },
+    {
+      "check": "origem_from_query_overrides_prerendered",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "fromQuery": "/radar/pavimentacao-infraestrutura-viaria-sc/"
+      }
+    },
+    {
+      "check": "origem_from_session_overrides_prerendered",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "origem": "artigo",
+        "landing": "/conteudos/documentos-reequilibrio-obra-publica/"
+      }
+    },
+    {
+      "check": "origem_query_pii_dropped",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "origem": "/",
+        "stored": "{\"landing_url\":\"/\",\"correlation_id\":\"35dc11d1-60d9-4d14-89a6-3859d98a37f4\",\"origem\":\"/\",\"saved_at\":\"1794528760826\"}",
+        "layer": "[{\"event\":\"web_vital\",\"metric\":\"ttfb\",\"value\":2.2,\"nav\":\"navigate\",\"page_path\":\"/\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"event_id\":\"evt-c49f7e2d-f54c-4337-815d-050ba58d1619-1\"},{\"event\":\"session_start\",\"page_path\":\"/\",\"content_cluster\":\"home\",\"landing_page\":\"/\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"event_id\":\"evt-cedb3a3d-60c5-4d57-85f1-2d8493124640-2\"},{\"event\":\"page_view\",\"page_path\":\"/\",\"content_cluster\":\"home\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"event_id\":\"evt-5ceafb4d-427e-4ad4-a4b1-961fde4bee4e-3\"},{\"event\":\"scroll_depth\",\"page_path\":\"/\",\"content_cluster\":\"home\",\"cta_position\":\"scroll_50\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"alias_from\":\"qualified_scroll\",\"event_id\":\"evt-93854c7e-9514-49c6-8842-9ce179c3fffc-4\"},{\"event\":\"scroll_depth\",\"page_path\":\"/\",\"content_cluster\":\"home\",\"cta_position\":\"scroll_75\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"alias_from\":\"qualified_scroll\",\"event_id\":\"evt-07874bca-29ba-47b1-9b25-abcb7c648196-5\"},{\"event\":\"web_vital\",\"metric\":\"lcp\",\"value\":124,\"nav\":\"navigate\",\"page_path\":\"/\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"event_id\":\"evt-2d183059-aea1-4b4f-8cdc-cdab62db5aaf-6\"},{\"event\":\"cta_view\",\"page_path\":\"/\",\"cta_position\":\"contact_form\",\"cta_id\":\"formulario-contato\",\"session_id\":\"sess-6ae46b12153ae2b3cb7deaf839f\",\"source\":\"CONFENGE_WEB\",\"schema_version\":\"1.4.0\",\"pii_policy\":\"aggregate_allowlist_empty\",\"consent\":\"not_required\",\"event_id\":\"evt-eee05e13-9a34-446e-9fac-e3ad4b436cc2-7\"}]"
+      }
+    },
+    {
+      "check": "origem_prerendered_kept_without_attribution",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "plain": "/"
+      }
+    },
+    {
+      "check": "origem_route_identity_not_overwritten",
+      "route": "/entregas/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "routeIdentity": "entregas"
+      }
+    },
+    {
+      "check": "home_situation_avaliacao_declared",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "situation": {
+          "journey": "avaliacao",
+          "ladder": false,
+          "next_step": "Conte a finalidade da avaliação, o tipo de imóvel e a data-base. A resposta diz qual trabalho de avaliação atende, o que você recebe e o que precisa ser levantado.",
+          "detail": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; documentos confidenciais seguem por envio reservado.",
+          "route": "/servicos/#servico-avaliacao",
+          "route_label": "Ver avaliação de imóvel",
+          "whatsapp": "Olá, CONFENGE. Preciso de avaliação de imóvel e quero explicar a finalidade.",
+          "placeholder": "A finalidade da avaliação, o tipo de imóvel e a data-base."
+        },
+        "journeyAction": "/obrigado",
+        "needCode": null,
+        "intentFamily": "documentar_as_built_regularizar",
+        "jornada": "obra",
+        "estagio": "obra ou imóvel para inspecionar ou documentar",
+        "mensagem": "Demanda relacionada a: Registro do construído.\n\nContexto:\n",
+        "origem": "/ferramentas/prontidao-tecnica-obra-privada/"
+      }
+    },
+    {
+      "check": "tool_context_reaches_home_form",
+      "route": "/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "situation": {
+          "journey": "avaliacao",
+          "ladder": false,
+          "next_step": "Conte a finalidade da avaliação, o tipo de imóvel e a data-base. A resposta diz qual trabalho de avaliação atende, o que você recebe e o que precisa ser levantado.",
+          "detail": "Compartilhe referências técnicas não sigilosas por e-mail ou WhatsApp; documentos confidenciais seguem por envio reservado.",
+          "route": "/servicos/#servico-avaliacao",
+          "route_label": "Ver avaliação de imóvel",
+          "whatsapp": "Olá, CONFENGE. Preciso de avaliação de imóvel e quero explicar a finalidade.",
+          "placeholder": "A finalidade da avaliação, o tipo de imóvel e a data-base."
+        },
+        "journeyAction": "/obrigado",
+        "needCode": null,
+        "intentFamily": "documentar_as_built_regularizar",
+        "jornada": "obra",
+        "estagio": "obra ou imóvel para inspecionar ou documentar",
+        "mensagem": "Demanda relacionada a: Registro do construído.\n\nContexto:\n",
+        "origem": "/ferramentas/prontidao-tecnica-obra-privada/"
+      }
+    },
+    {
+      "check": "hub_cta_preselects_contract_event",
+      "route": "/servicos-obras-publicas/",
+      "ok": true,
+      "errors": [],
+      "detail": {
+        "missing": false,
+        "afterKnown": "outro",
+        "afterUnknown": "outro",
+        "stored": "{\"landing_url\":\"/servicos-obras-publicas/\",\"correlation_id\":\"081285fa-eb53-4424-aadf-f2e21e679077\",\"origem\":\"/servicos-obras-publicas/\",\"saved_at\":\"1794528765163\"}"
+      }
+    }
+  ]
+}

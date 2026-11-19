@@ -208,4 +208,4 @@ html[data-theme="dark"] .bim-tool.bancada-fotos > :where(div, dialog, ul, aside,
 .bim-tool.bancada-fotos #app { background: var(--bg); }
 
 /* The parent modeling page already provides navigation around its IFC preview. */
-.bim-previa-incorporada :is(.site-header, .breadcrumbs, .site-footer, .skip-link) { display: none; }
+.bim-previa-incorporada :is(.site-header, .nav-discovery-region, .breadcrumbs, .site-footer, .skip-link) { display: none; }

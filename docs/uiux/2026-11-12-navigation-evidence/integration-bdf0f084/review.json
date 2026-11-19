@@ -1,0 +1,99 @@
+{
+  "schema": "confenge.navigation-discovery-derived-review/1.0",
+  "source_sha": "bdf0f0846956b7227ca9c0ed24ba81e1899a37af",
+  "source_tree_sha": "193ec30259c3f6200bc228da002a80356101bcc1",
+  "source_parents": [
+    "535746b2edc40174bdd1328a277efd4a981782c6",
+    "d59f9166889b5eb49c9a718e21beabf402e932e2"
+  ],
+  "qa_workflow_run_id": "43309372181",
+  "qa_source_job_id": "131501061112",
+  "qa_source_conclusion": "success",
+  "source_navigation_scenarios": 48,
+  "source_event_checks": 67,
+  "first_fold_routes": 26,
+  "first_fold_checks_passed": 2010,
+  "first_fold_input_hashes_verified": 60,
+  "source_tree_dirty": false,
+  "bundle_sha256": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
+  "screenshots_identical_to_previous_review": [
+    "desktop-ferramentas.png",
+    "mobile-projetos.png",
+    "mobile-header-360.png",
+    "diagnostico-first-viewport-1280.png"
+  ],
+  "new_screenshots_reviewed": [
+    "projetos-prontos-desktop.png"
+  ],
+  "reference_directory": "docs/uiux/2026-11-12-navigation-evidence/activation-01962972",
+  "review_type": "agent_review",
+  "human_review_claimed": false,
+  "changed_frozen_hashes": [],
+  "unchanged_frozen_hashes": 17,
+  "pillars_preserved": 6,
+  "editorial_approval_changed": false,
+  "source_artifact": {
+    "id": "13986640496",
+    "api_digest": "sha256:64d2b021c6e4d73e57b443806f03349b03674ac0044a1af68af5bf0e24c2bc66",
+    "zip_downloaded": false,
+    "file_bytes_verified_against_log_record": true
+  },
+  "files": [
+    {
+      "path": "desktop-ferramentas.png",
+      "bytes": 165153,
+      "sha256": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0"
+    },
+    {
+      "path": "mobile-projetos.png",
+      "bytes": 70190,
+      "sha256": "455497240dd89cdfec10ddb27286d5d5c635da97664d6bb4a4ea770e2a276917"
+    },
+    {
+      "path": "projetos-prontos-desktop.png",
+      "bytes": 346221,
+      "sha256": "f2d6b23c5fb58ac551796453e7536a825939a9aeb01b0e2262e4008cefb9110c"
+    },
+    {
+      "path": "mobile-header-360.png",
+      "bytes": 76737,
+      "sha256": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b"
+    },
+    {
+      "path": "diagnostico-first-viewport-1280.png",
+      "bytes": 132548,
+      "sha256": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
+    },
+    {
+      "path": "report.json",
+      "bytes": 409059,
+      "sha256": "6ba57a9deedd9698604c923d0acc513792deb52eadfbc2e5f350dfb74918e5b3"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 259,
+      "sha256": "1752ce91c2f3437e73d018008c186434f50eaecd2aa27d91f62909df850322cf"
+    },
+    {
+      "path": "first-fold/report.json",
+      "bytes": 175858,
+      "sha256": "74afaba694024cf440800776112892389272f9570395948a52aa4e5ff927737d"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-contract.v1.json",
+      "bytes": 41204,
+      "sha256": "b5ce0277f0b0b0db1665f8a7155dc1ee8d914970fbd08057c3e2640f58f22e95"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-measurements.v1.json",
+      "bytes": 175763,
+      "sha256": "daca4fb83db0c809b91bd5325ead38e7e86f8039f3da0bd38e64aae922a28d35"
+    },
+    {
+      "path": "presentation/evidence.json",
+      "bytes": 2121,
+      "sha256": "325f65709653a8812cfdfbcb48e0602d014bf3c3ffff5eda54e38049027f9177"
+    }
+  ],
+  "scope": "Source review of combined navigation and project contracting only. Required PR gates and exact-main Netcup publication acceptance remain mandatory."
+}

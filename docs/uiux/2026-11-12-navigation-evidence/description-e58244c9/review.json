@@ -1,0 +1,112 @@
+{
+  "schema": "confenge.navigation-discovery-derived-review/1.0",
+  "source_sha": "e58244c9fefa90e872f01ce401759c30925e7031",
+  "source_tree_sha": "04607a8646f213f99fea944bce50661aaaae768e",
+  "qa_workflow_run_id": "43317003538",
+  "qa_workflow_run_attempt": "1",
+  "qa_source_job_id": "131527708986",
+  "qa_source_conclusion": "success",
+  "source_tree_dirty": false,
+  "source_navigation_scenarios": 48,
+  "source_event_checks": 67,
+  "first_fold_routes": 26,
+  "first_fold_checks_passed": 2010,
+  "first_fold_input_hashes_verified": 60,
+  "review_type": "agent_review",
+  "human_review_claimed": false,
+  "screenshots_identical_to_previous_review": [
+    "desktop-ferramentas.png",
+    "mobile-header-360.png",
+    "diagnostico-first-viewport-1280.png"
+  ],
+  "new_screenshots_reviewed": [
+    "mobile-projetos.png",
+    "projetos-prontos-desktop.png"
+  ],
+  "reference_directory": "docs/uiux/2026-11-12-navigation-evidence/integration-bdf0f084",
+  "presentation_fields_changed": [
+    "rendered_content_hash",
+    "rendered_content_hash_previous",
+    "rendered_hash_recapture_reason",
+    "rendered_hash_recapture_reason_previous",
+    "rendered_hash_recaptured_at"
+  ],
+  "factual_approval_fields_unchanged": true,
+  "changed_frozen_hashes": [],
+  "unchanged_frozen_hashes": 17,
+  "pillars_preserved": 6,
+  "source_artifact": {
+    "id": "13989820412",
+    "api_digest": "sha256:e08ff7fe6ef7bec44f19ad230fe96001420b9627cb6dce98f34f8daefefee788",
+    "zip_downloaded": false,
+    "file_bytes_verified_against_log_record": true
+  },
+  "files": [
+    {
+      "path": "desktop-ferramentas.png",
+      "bytes": 165153,
+      "sha256": "4017bbb3597963eee7cee75365a4e278f079158fd68fc2dd6b07cdaf2ebe3fa0"
+    },
+    {
+      "path": "mobile-projetos.png",
+      "bytes": 69808,
+      "sha256": "e08a8a1c0f06a3fb982169e12841a3d866f57cbf46239957302b3e31d2f0949f"
+    },
+    {
+      "path": "projetos-prontos-desktop.png",
+      "bytes": 345607,
+      "sha256": "7ec3c78a6308133bab83675b7c4f9e838ca7065bab98c7513c313a19a625646a"
+    },
+    {
+      "path": "mobile-header-360.png",
+      "bytes": 76737,
+      "sha256": "bb127276179fd604b0abfce45a247ef7bd886da4a731f8c542fc44dc1d762f1b"
+    },
+    {
+      "path": "diagnostico-first-viewport-1280.png",
+      "bytes": 132548,
+      "sha256": "532bcb35b9f899d5c667cfc559695ca5f2e617e44cca8cf8808cfb5b3a59688d"
+    },
+    {
+      "path": "report.json",
+      "bytes": 409041,
+      "sha256": "9c3c03bc8da3e87ead560e706f04b0ac0abc1972cef11c74784586c508a26d3e"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 259,
+      "sha256": "be5f93cb48ceeb8585f54ad5fc44af999415583cac167e2f2a83738a160a67a4"
+    },
+    {
+      "path": "first-fold/report.json",
+      "bytes": 175858,
+      "sha256": "346892376df5a7b1bfc83184b302554b16014e5ddc4db247337f46422e06acc3"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-contract.v1.json",
+      "bytes": 41204,
+      "sha256": "b5ce0277f0b0b0db1665f8a7155dc1ee8d914970fbd08057c3e2640f58f22e95"
+    },
+    {
+      "path": "first-fold/contracts/first-fold-measurements.v1.json",
+      "bytes": 175763,
+      "sha256": "8a01adf28ebb8054bf7b5e9f59a59ffb9e0f2c5edef91ef0a8728204788728b3"
+    },
+    {
+      "path": "presentation/evidence.json",
+      "bytes": 2404,
+      "sha256": "2926edd474d98acfc0005b059d1d7326cbb00eba8bf4d2e9e4f2823f276a021d"
+    },
+    {
+      "path": "presentation/candidate/source.html",
+      "bytes": 79800,
+      "sha256": "6c63ae9780766607f2d8f413065f74ffee5fee3b7dffbe47960f4d5796257536"
+    },
+    {
+      "path": "presentation/candidate/public.html",
+      "bytes": 80037,
+      "sha256": "7d2a34502d7cd623c6a8916e36ce817fe7c6895beda77a23c6da6a6b18588cb1"
+    }
+  ],
+  "scope": "Source review and presentation recapture only. Required PR gates and exact-main Netcup publication acceptance remain mandatory."
+}

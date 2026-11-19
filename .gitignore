@@ -103,3 +103,10 @@ data/live_intelligence/accepted.last/
 /runtime/science-tools/python/
 /runtime/science-tools/runtime-manifest.json
 /runtime/science-tools/license-inventory.json
+
+# Source for the reproducible OpenCAD builder; generated outputs remain ignored.
+!scripts/cad/opencad/build/
+scripts/cad/opencad/build/*
+!scripts/cad/opencad/build/README.md
+!scripts/cad/opencad/build/build_remote.py
+!scripts/cad/opencad/build/confenge.patch

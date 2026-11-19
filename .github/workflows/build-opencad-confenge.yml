@@ -1,0 +1,161 @@
+name: Build CONFENGE OpenCAD runtime
+
+on:
+  push:
+    branches: [feat/cad-opencad-studio-confenge]
+    paths:
+      - .github/workflows/build-opencad-confenge.yml
+      - scripts/cad/opencad/build/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: confenge-opencad-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    env:
+      CARGO_BUILD_JOBS: "1"
+      CARGO_INCREMENTAL: "0"
+      RUST_MIN_STACK: "67108864"
+    steps:
+      - name: Refuse any destination except the implementation branch
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = 'refs/heads/feat/cad-opencad-studio-confenge'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Preserve a bounded compiler memory reserve
+        run: |
+          set -euo pipefail
+          free -h
+          df -h /mnt
+          sudo fallocate -l 8G /mnt/confenge-opencad.swap
+          sudo chmod 600 /mnt/confenge-opencad.swap
+          sudo mkswap /mnt/confenge-opencad.swap
+          sudo swapon /mnt/confenge-opencad.swap
+      - name: Install the pinned Rust target and bindgen
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
+          rustup default 1.99.1
+          mkdir -p .cache/opencad-tools
+          curl --fail --location --retry 3 https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.108/wasm-bindgen-0.2.108-x86_64-unknown-linux-musl.tar.gz -o .cache/opencad-tools/wasm-bindgen.tar.gz
+          echo 'd15d7e476feec78d0ec9edc27b8f77279ec7a3e6227756e7036e5cd2066800f4  .cache/opencad-tools/wasm-bindgen.tar.gz' | sha256sum --check
+          tar -xzf .cache/opencad-tools/wasm-bindgen.tar.gz -C .cache/opencad-tools
+          echo "$GITHUB_WORKSPACE/.cache/opencad-tools/wasm-bindgen-0.2.108-x86_64-unknown-linux-musl" >> "$GITHUB_PATH"
+      - name: Restore the Rust compiler cache
+        id: rust_cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            .cache/opencad-target
+          key: confenge-opencad-linux-rust1.99.1-fb0a667e-${{ hashFiles('scripts/cad/opencad/build/confenge.patch') }}
+          restore-keys: |
+            confenge-opencad-linux-rust1.99.1-fb0a667e-
+      - name: Compile and package the exact source
+        run: |
+          set -euo pipefail
+          mkdir -p build/reports/cad
+          python3 -u scripts/cad/opencad/build/build_remote.py 2>&1 | tee build/reports/cad/build.log
+      - name: Preserve the compiled cache before the browser tests
+        if: steps.rust_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            .cache/opencad-target
+          key: confenge-opencad-linux-rust1.99.1-fb0a667e-${{ hashFiles('scripts/cad/opencad/build/confenge.patch') }}
+      - name: Commit the generated packages to the same branch
+        env:
+          BUILD_SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin "$GITHUB_REF_NAME" --depth=1
+          if [ "$(git rev-parse FETCH_HEAD)" != "$BUILD_SOURCE_SHA" ]; then
+            echo 'Branch changed during compilation. Packages are in the workflow artifact; rerun the new head before committing.' >&2
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- scripts/cad/opencad/manifest.json scripts/cad/opencad/LICENSE.txt scripts/cad/opencad/NOTICE.txt 'scripts/cad/opencad/*.tar.gz.part-*'
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'build(cad): package pinned CONFENGE OpenCAD runtime and source'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Prepare the browser dependencies
+        run: |
+          npm ci --ignore-scripts --engine-strict
+          npm run build:firebase-auth
+      - name: Resolve the site's contracted Chrome version
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Set up Chrome for the real WASM tests
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
+      - name: Assemble the isolated CAD site with its actual CSP
+        run: |
+          set -euo pipefail
+          mkdir -p build/cad-smoke-site
+          cp -a cad assets index.html styles.css styles-tokens.css script.js manifest.webmanifest favicon.ico _headers build/cad-smoke-site/
+          python3 scripts/cad/publicar.py build/cad-smoke-site
+          python3 scripts/site/csp_contract.py --write build/cad-smoke-site/_headers --root build/cad-smoke-site
+          node tests/cad/package.mjs build/cad-smoke-site
+      - name: Open, edit, export and reopen the actual DWG
+        id: editor_browser
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CAD_EVIDENCE: build/reports/cad/editor
+        run: |
+          set -euo pipefail
+          node tests/cad/editor-browser.mjs build/cad-smoke-site 2>&1 | tee build/reports/cad/editor-browser.log
+      - name: Verify export acknowledgement and cancellation in the actual engine
+        if: ${{ !cancelled() && steps.editor_browser.outcome != 'skipped' }}
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          node tests/cad/engine-bridge-browser.cjs build/cad-smoke-site 2>&1 | tee build/reports/cad/engine-bridge-browser.log
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: confenge-opencad-${{ github.sha }}
+          path: |
+            scripts/cad/opencad/manifest.json
+            scripts/cad/opencad/LICENSE.txt
+            scripts/cad/opencad/NOTICE.txt
+            scripts/cad/opencad/*.tar.gz.part-*
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: confenge-opencad-evidence-${{ github.sha }}
+          path: build/reports/cad
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Release the compiler reserve
+        if: always()
+        run: |
+          sudo swapoff /mnt/confenge-opencad.swap || true
+          sudo rm -f /mnt/confenge-opencad.swap

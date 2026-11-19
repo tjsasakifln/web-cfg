@@ -20,13 +20,13 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote, urlsplit
-from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.public_footer import render_public_footer  # noqa: E402
+from scripts.site.navigation_discovery import render_navigation, render_discovery_bar
 from scripts.site.shell_nav import load_brand  # noqa: E402
 
 DATA = ROOT / "data/projects/project-pages.v1.json"
@@ -155,26 +155,23 @@ def _whatsapp_href(page: dict[str, Any]) -> str:
 
 
 def _header(active: str, page: dict[str, Any]) -> str:
-    links = load_brand()["navigation"]["desktop"]
-    nav = "".join(
-        f'<a href="{esc(item["href"])}"{current}>{esc(item["label"])}</a>'
-        for item in links
-        for current in (' aria-current="page"' if item["href"] == active else "",)
-    )
+    nav = render_navigation(kind="pp-desktop", current=page["route"], active=active)
+    mobile = render_navigation(kind="pp-mobile", current=page["route"], active=active)
     return f"""<header class="pp-header">
 <div class="pp-container pp-header__inner">
 <a class="pp-brand" href="/" aria-label="CONFENGE, página inicial"><img src="/assets/logo-confenge-500-f8a83f6d.png" width="224" height="58" alt="CONFENGE Inteligência Técnica"/></a>
 <nav class="pp-nav" aria-label="Navegação principal">{nav}</nav>
 <a class="pp-button pp-button--compact" href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header" data-cta-position="header">Solicitar proposta</a>
-<details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav aria-label="Navegação móvel">{nav}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
+<details class="pp-mobile"><summary aria-label="Menu">{_icon('menu')}<span>Menu</span></summary><nav class="pp-mobile-nav" aria-label="Navegação móvel">{mobile}<a href="#contato-projetos" data-value-first-cta="true" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="project-header-mobile" data-cta-position="mobile-menu">Solicitar proposta</a></nav></details>
 </div>
-</header>"""
+</header>
+{render_discovery_bar()}"""
 
 
 def _active_header_route(page: dict[str, Any]) -> str:
     route = page["route"]
     if route == "/como-trabalhamos/":
-        return "/empresa/"
+        return "/conteudos/"
     project_branch = {
         "/edificacoes/",
         "/terceirizacao-projetos-engenharia/",
@@ -261,10 +258,11 @@ SECTION_NAV = {
     "scope": ("escopo", "Atuação"),
     "deliverables": ("entregaveis", "Entregas"),
     "interfaces": ("coordenacao", "Integração"),
-    "demonstration": ("demonstracao", "Demonstração"),
+    "technical_review": ("criterios-tecnicos", "Critérios técnicos"),
     "method": ("metodo", "Desenvolvimento"),
     "inputs": ("insumos", "Informações iniciais"),
     "responsibility": ("responsabilidade", "Responsabilidade"),
+    "questions": ("duvidas-contratacao", "Dúvidas"),
     "leadership": ("lideranca", "Liderança"),
     "contact": ("contato-projetos", "Proposta"),
     "partnership": ("parcerias", "Parcerias"),
@@ -290,47 +288,40 @@ def _readings(items: list[dict[str, str]]) -> str:
     )
 
 
-def _project_sheet(visual: dict[str, Any]) -> str:
-    return f'''<figure class="pp-hero__visual">
-<figcaption><span class="pp-sheet__label">{esc(visual['label'])}</span>
-<strong class="pp-sheet__title">{esc(visual['title'])}</strong>
-<span class="pp-sheet__caption">{esc(visual['caption'])}</span></figcaption>
-<img class="pp-sheet__art" src="{esc(visual['src'])}" width="360" height="168" alt="{esc(visual['alt'])}"/>
-<dl class="pp-sheet__readings">{_readings(visual['readings'])}</dl>
-<a class="pp-sheet__link" href="#demonstracao">Ver a conferência {_icon('arrow')}</a>
-</figure>'''
+def _technical_panel(panel: dict[str, Any]) -> str:
+    return f'''<aside class="pp-hero__visual" aria-labelledby="technical-panel-title">
+<header><p class="pp-sheet__label">{esc(panel['label'])}</p>
+<h2 class="pp-sheet__title" id="technical-panel-title">{esc(panel['title'])}</h2>
+<p class="pp-sheet__caption">{esc(panel['caption'])}</p></header>
+<dl class="pp-sheet__readings">{_readings(panel['rows'])}</dl>
+<a class="pp-sheet__link" href="#criterios-tecnicos">Conhecer os critérios técnicos {_icon('arrow')}</a>
+</aside>'''
 
 
 def _render_section(key: str, page: dict[str, Any]) -> str:
+    if key == "questions":
+        questions = "".join(
+            f'<article><h3>{esc(item["question"])}</h3><p>{esc(item["answer"])}</p></article>'
+            for item in page["questions"]
+        )
+        layout = ' class="pp-interface-grid"' if len(page["questions"]) > 1 else ""
+        return f'''<section class="pp-section pp-section--soft" id="duvidas-contratacao" aria-labelledby="questions-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">Antes de contratar</p><h2 id="questions-title">Dúvidas sobre a contratação</h2></header><div{layout}>{questions}</div></div></section>'''
     if key == "scope":
         return f'''<section class="pp-section" id="escopo" aria-labelledby="scope-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('scope_kicker', 'Atuação técnica'))}</p><h2 id="scope-title">{esc(page['scope_title'])}</h2><p>{esc(page['scope_intro'])}</p></header><div class="pp-scope-grid">{_scope_groups(page)}</div></div></section>'''
     if key == "deliverables":
         return f'''<section class="pp-section pp-section--ink" id="entregaveis" aria-labelledby="deliverables-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('deliverables_kicker', 'Documentação e resultados'))}</p><h2 id="deliverables-title">{esc(page.get('deliverables_title', 'Entregas que sustentam a próxima decisão.'))}</h2><p>{esc(page.get('deliverables_intro', 'A proposta relaciona entregáveis, formatos, revisões e finalidade de uso para que o pacote técnico seja compreendido e contratado com clareza.'))}</p></header><ol class="pp-deliverables">{_deliverables(page)}</ol></div></section>'''
     if key == "interfaces":
         return f'''<section class="pp-section pp-section--soft" id="coordenacao" aria-labelledby="interfaces-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('interfaces_kicker', 'Integração'))}</p><h2 id="interfaces-title">{esc(page['interfaces_title'])}</h2><p>{esc(page['interfaces_intro'])}</p></header><div class="pp-interface-grid">{_interfaces(page)}</div></div></section>'''
-    if key == "demonstration":
-        demo = page["demonstration"]
-        href = esc(demo["href"])
-        source = href
-        enlargement = ""
-        if demo["href"].endswith(".svg"):
-            drawing = ElementTree.parse(ROOT / demo["href"].lstrip("/")).getroot()
-            description = drawing.findtext("{http://www.w3.org/2000/svg}desc") or demo["title"]
-            source = "#desenho-ampliado"
-            enlargement = f'''<details class="pp-container pp-enlargement">
-<summary>Desenho ampliado</summary>
-<h3 id="desenho-ampliado" tabindex="-1">{esc(demo['label'])}</h3>
-<p id="drawing-help">Percorra o desenho com o dedo ou com as teclas de seta.</p>
-<div class="pp-drawing" role="region" aria-labelledby="desenho-ampliado" aria-describedby="drawing-help" tabindex="0">
-<img src="{href}" width="960" height="600" loading="lazy" alt="{esc(description)}"/></div>
-<div class="pp-actions"><a class="pp-text-link" href="#contato-projetos">Ver opções para solicitar proposta</a></div></details>'''
-        return f'''<section class="pp-section pp-section--soft" id="demonstracao" aria-labelledby="demo-title">
-<div class="pp-container pp-demo"><div><p class="pp-kicker">Exemplo demonstrativo</p>
-<h2 id="demo-title">{esc(demo['title'])}</h2><p>{esc(demo['body'])}</p></div>
-<figure class="pp-record"><figcaption>{esc(demo['label'])}</figcaption>
-<dl>{_readings(demo['rows'])}</dl>
-<a class="pp-text-link" data-event-name="cta_click" data-cta-id="{esc(page['id'])}-sample-source" data-cta-position="demonstration" href="{source}">{esc(demo['link_label'])} {_icon('arrow')}</a>
-</figure></div>{enlargement}</section>'''
+    if key == "technical_review":
+        review = page["technical_review"]
+        return f'''<section class="pp-section pp-section--soft" id="criterios-tecnicos" aria-labelledby="criteria-title">
+<span id="demonstracao" aria-hidden="true"></span>
+<div class="pp-container pp-demo"><div><p class="pp-kicker">Critérios técnicos</p>
+<h2 id="criteria-title">{esc(review['title'])}</h2><p>{esc(review['body'])}</p></div>
+<article class="pp-record" aria-labelledby="technical-review-title"><h3 id="technical-review-title">{esc(review['label'])}</h3>
+<dl>{_readings(review['rows'])}</dl>
+<a class="pp-text-link" href="#entregaveis">{esc(review['link_label'])} {_icon('arrow')}</a>
+</article></div></section>'''
     if key == "method":
         return f'''<section class="pp-section pp-section--rule" id="metodo" aria-labelledby="method-title"><div class="pp-container"><header class="pp-section__head"><p class="pp-kicker">{esc(page.get('method_kicker', 'Desenvolvimento'))}</p><h2 id="method-title">{esc(page['method_title'])}</h2><p>{esc(page['method_intro'])}</p></header><ol class="pp-method">{_method(page)}</ol></div></section>'''
     if key == "inputs":
@@ -383,7 +374,7 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
     route = page["route"]
     crumbs = _crumbs(page, by_route)
     sections = "\n".join(_render_section(key, page) for key in page["section_order"])
-    return f"""<!DOCTYPE html>
+    rendered = f"""<!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -416,7 +407,7 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
 <p class="pp-eyebrow">{esc(page['eyebrow'])}</p><h1 id="page-title">{esc(page['h1'])}</h1>
 <p class="pp-lead">{esc(page['lead'])}</p>
 <div class="pp-actions"><a class="pp-button" href="{_proposal_href()}" data-event-name="project_cta_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero" data-cta-position="hero">Solicitar proposta {_icon('arrow')}</a><a class="pp-text-link" href="{esc(_whatsapp_href(page))}" target="_blank" rel="noopener" data-event-name="whatsapp_click" {_contact_attrs(page)} data-cta-id="{esc(page['id'])}-hero-whatsapp" data-cta-position="hero">Conversar pelo WhatsApp</a></div></div>
-{_project_sheet(page['visual'])}
+{_technical_panel(page['technical_panel'])}
 <div class="pp-hero__support">
 <p class="pp-summary">{esc(page['summary'])}</p>
 <p class="pp-note">{esc(page['hero_note'])}</p></div>
@@ -428,6 +419,10 @@ def _render(page: dict[str, Any], by_route: dict[str, dict[str, Any]]) -> str:
 </body>
 </html>
 """
+
+    from scripts.site.search_metadata import normalize_metadata_html
+
+    return normalize_metadata_html(rendered, route)
 
 
 def render_pages() -> dict[str, str]:
@@ -442,9 +437,11 @@ def render_pages() -> dict[str, str]:
         page["requirements"] = [
             *shared["requirements"], *source.get("requirements", [])
         ]
-        page["section_order"] = source.get(
+        page["section_order"] = list(source.get(
             "section_order", shared["default_section_order"]
-        )
+        ))
+        if page.get("questions") and "questions" not in page["section_order"]:
+            page["section_order"].insert(page["section_order"].index("contact"), "questions")
         pages.append(page)
     by_route = {page["route"]: page for page in pages}
     return {page["route"]: _render(page, by_route) for page in pages}

@@ -8,6 +8,21 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[47][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f
 const ORDER_ID = /^ORD[A-Z0-9]+$/;
 const TRANSITIONAL = new Set(['created', 'pending', 'in_process', 'processing', 'action_required', 'authorized']);
 
+class MercadoPagoRequestError extends Error {
+  constructor(status, url, method) {
+    super('Mercado Pago request failed (HTTP ' + (status || 'unknown') + ')');
+    // Only an explicit refusal of the creation POST proves that this attempt
+    // did not create an order. Conflicts, locks, rate limits, server errors and
+    // interrupted responses remain uncertain and must be reconciled.
+    this.orderCreationRejected = url === API_ROOT + '/v1/orders' && method === 'POST' &&
+      [400, 401, 403, 422].includes(status);
+  }
+}
+
+function isDefinitiveOrderRejection(error) {
+  return error instanceof MercadoPagoRequestError && error.orderCreationRejected === true;
+}
+
 function required(value, name) {
   if (typeof value !== 'string' || !value.trim()) throw new Error(name + ' is required');
   return value.trim();
@@ -145,6 +160,24 @@ function providerTimestamp(value) {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
+function refundAmountFor(order, payment, amountCents, paymentCount, state) {
+  // stateFor already requires a coherent full refund/settled chargeback and
+  // rejects conflicting refund totals. Some responses omit one total field.
+  if (state === 'reversed') return { refundAmountKnown: true, refundedAmountCents: amountCents };
+  const values = [order.total_refunded_amount, payment?.refunded_amount];
+  const hasValues = values.some(value => value !== undefined);
+  const partial = [order.status_detail, payment?.status_detail].includes('partially_refunded');
+  if (!hasValues && !partial) return {};
+  const [orderRefund, paymentRefund] = values.map(toCents);
+  const match = paymentCount === 1 && payment && methodFor(payment) &&
+    toCents(payment.amount) === amountCents && orderRefund !== undefined && orderRefund === paymentRefund &&
+    orderRefund >= 0 && orderRefund <= amountCents;
+  if (!match || partial && !(orderRefund > 0 && orderRefund < amountCents)) return { refundAmountKnown: false };
+  if (orderRefund === 0 && state !== 'reversed') return { refundAmountKnown: true, refundedAmountCents: 0 };
+  if (toCents(order.total_paid_amount) !== amountCents || toCents(payment.paid_amount) !== amountCents) return { refundAmountKnown: false };
+  return { refundAmountKnown: true, refundedAmountCents: orderRefund };
+}
+
 function normalize(order, expectedSellerId) {
   if (!order || typeof order !== 'object') throw new Error('Mercado Pago returned an invalid order');
   const payments = Array.isArray(order.transactions && order.transactions.payments) ? order.transactions.payments : [];
@@ -173,6 +206,8 @@ function normalize(order, expectedSellerId) {
     amountCents,
     currency: 'BRL',
     state,
+    ...refundAmountFor(order, payment, amountCents, payments.length, state),
+    ...(typeof order.status === 'string' && /^[a-z_]{1,40}$/i.test(order.status) ? { providerStatus: order.status.toLowerCase() } : {}),
     paymentFlow,
     ...(dispute ? { dispute } : {}),
     ...(providerUpdatedAt !== undefined ? { providerUpdatedAt } : {}),
@@ -198,7 +233,7 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
     let response;
     try { response = await fetchImpl(url, { ...options, signal: AbortSignal.timeout(8000), redirect: 'error' }); }
     catch { throw new Error('Mercado Pago request could not be completed; reconcile the existing order before retrying'); }
-    if (!response || !response.ok) throw new Error('Mercado Pago request failed (HTTP ' + (response && response.status || 'unknown') + ')');
+    if (!response || !response.ok) throw new MercadoPagoRequestError(response?.status, url, options?.method);
     try { return await response.json(); } catch { throw new Error('Mercado Pago returned an invalid response'); }
   }
   let sellerCheck;
@@ -244,20 +279,30 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
       if (!normalized.providerId || normalized.reference !== id || normalized.amountCents !== amountCents) throw new Error('Mercado Pago order did not match the requested reference and amount');
       return { ...normalized, paymentFlow: 'pix' };
     },
-    async createCheckoutOrder({ id, amountCents, email, label, returnUrl: requestedReturnUrl } = {}) {
+    async createCheckoutOrder({ id, amountCents, email, label, returnUrl: requestedReturnUrl, items: requestedItems } = {}) {
       id = required(id, 'id');
       if (!UUID.test(id) || id.length > 64) throw new Error('id must be a stable UUID');
       label = required(label, 'label');
       if (label.length > 256) throw new Error('label is too long');
       const amount = toMoney(amountCents);
       const destination = returnUrl(requestedReturnUrl);
+      let items = [{ title: label, quantity: 1, unit_price: amount }];
+      if (requestedItems !== undefined) {
+        if (!Array.isArray(requestedItems) || requestedItems.length < 1 || requestedItems.length > 10 ||
+            requestedItems.some(item => !item || typeof item.title !== 'string' || !item.title.trim() || item.title.length > 256 ||
+              !Number.isSafeInteger(item.amountCents) || item.amountCents < 1 || item.quantity !== 1) ||
+            requestedItems.reduce((sum, item) => sum + item.amountCents, 0) !== amountCents) {
+          throw new Error('Checkout items must sum to the requested amount');
+        }
+        items = requestedItems.map(item => ({ title: item.title, quantity: 1, unit_price: toMoney(item.amountCents) }));
+      }
       const payer = sandbox ? { email: required(sandboxPayerEmail, 'sandboxPayerEmail'), first_name: 'APRO' } :
         { email: required(email, 'email') };
       const body = {
         type: 'online', processing_mode: 'manual', capture_mode: 'automatic_async',
         external_reference: id, total_amount: amount, description: label,
         payer,
-        items: [{ title: label, quantity: 1, unit_price: amount }],
+        items,
         config: { online: { success_url: destination, failure_url: destination, pending_url: destination, auto_return: 'approved' } }
       };
       await verifySellerEnvironment();
@@ -321,4 +366,4 @@ function createMercadoPago({ accessToken, webhookSecret, mode = 'live', sellerId
   };
 }
 
-module.exports = { createMercadoPago };
+module.exports = { createMercadoPago, isDefinitiveOrderRejection };

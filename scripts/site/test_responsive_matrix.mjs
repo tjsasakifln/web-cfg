@@ -243,7 +243,7 @@ async function renderedGeometry(page, route, width) {
     const headerStyle = header ? getComputedStyle(header) : null;
     const headerColor = headerStyle?.backgroundColor.match(/[\d.]+/g)?.map(Number) || [];
     const headerAlpha = headerColor.length >= 4 ? headerColor[3] : 1;
-    const desktopLinks = [...document.querySelectorAll(".desktop-nav a,.pp-nav a")]
+    const desktopLinks = [...document.querySelectorAll(".desktop-nav > a,.pp-nav > a,.desktop-nav > .nav-group > summary,.pp-nav > .nav-group > summary")]
       .map((element) => ({ text: element.textContent.trim(), box: boxOf(element) }))
       .filter(({ box }) => box);
     return {
@@ -335,10 +335,7 @@ async function renderedGeometry(page, route, width) {
       await page.keyboard.press("Escape");
       const expanded = await page.$eval(".menu-toggle,.pp-mobile summary", (element) => {
         const nativeDetails = element.closest("details");
-        if (nativeDetails) {
-          element.click();
-          return String(nativeDetails.open);
-        }
+        if (nativeDetails) return String(nativeDetails.open);
         return element.getAttribute("aria-expanded");
       });
       if (expanded !== "false") errors.push({ code: "menu_escape_failed", detail: expanded });

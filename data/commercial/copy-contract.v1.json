@@ -931,15 +931,15 @@
   },
   "money_page_scan": {
     "state": "MEASURED_PASS",
-    "measured_at": "2026-10-03",
-    "measured_against": "Clean source 8832d49612ddb9b2bfeeb18d4f38daf0accfe960; institutional campaign 2026-10-03; canonical registry-derived audit",
+    "measured_at": "2026-11-12",
+    "measured_against": "Source ce9ba33c600ef22b02c41c309d13f0f1ebb1a3f8; residential services authorized 2026-11-12; canonical registry-derived audit",
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
     "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção no texto visível; aliases antigos ficam apenas em metadados de busca, analytics e compatibilidade.",
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
-      "routes_derived": 23,
+      "routes_derived": 24,
       "language_boundaries": 26,
       "language_observations": 0,
       "language_violations": 0,
@@ -1050,7 +1050,7 @@
     },
     "observations": [],
     "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas 23 rotas derivadas em 2026-08-25.",
-    "live_measurement_note": "25 fronteiras desde 2026-09-17 (SALTO-INSTITUCIONAL-02): a lista 'Quando não contratar' de /diagnostico-b2g-360/ foi recomposta como parte da abertura em uma coluna e a citação 'vitória garantida' deixou de estar dentro da seção estrutural de exclusão; a frase passou a negar explicitamente ('Sem promessa de “vitória garantida” em 30 dias'), contada como fronteira de negação (GX-01). Nenhuma violação; a substância do limite não mudou. Antes: 78 desde 2026-09-08. Era 79. A frase de limite da secao de captura de /servicos-obras-publicas/ fechava a conversao com duas negativas seguidas (\"Nao conclui contratacao nem substitui revisao juridica\") e foi reescrita de forma afirmativa: o retorno diz qual entrega resolve o caso, em qual prazo e por qual preco, e a decisao de contratar continua sendo do visitante. A substancia do limite permanece; o que saiu foi a formulacao autodepreciativa.",
+    "live_measurement_note": "25 fronteiras desde 2026-09-17 (SALTO-INSTITUCIONAL-02): a lista 'Quando não contratar' de /diagnostico-b2g-360/ foi recomposta como parte da abertura em uma coluna e a citação 'vitória garantida' deixou de estar dentro da seção estrutural de exclusão; a frase passou a negar explicitamente ('Sem promessa de “vitória garantida” em 30 dias'), contada como fronteira de negação (GX-01). Nenhuma violação; a substância do limite não mudou. Antes: 78 desde 2026-09-08. Era 79. A frase de limite da secao de captura de /servicos-obras-publicas/ fechava a conversao com duas negativas seguidas (\"Nao conclui contratacao nem substitui revisao juridica\") e foi reescrita de forma afirmativa: o retorno diz qual entrega resolve o caso, em qual prazo e por qual preco, e a decisao de contratar continua sendo do visitante. A substancia do limite permanece; o que saiu foi a formulacao autodepreciativa. Em 12/11/2026, a autorização de preços e contratação por disciplina em /projetos-prontos/ acrescentou uma família priced_offer ao censo: 24 rotas derivadas, sem nova violação de linguagem; a medição histórica permanece preservada.",
     "measurement_history": [
       {
         "measured_at": "2026-09-09",

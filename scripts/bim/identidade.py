@@ -25,7 +25,7 @@ BRAND_HEAD = "\n".join((
 
 # Vendor styles also style dialogs mounted on the document body. Keep them in
 # that document while preventing their global resets from touching site chrome.
-SCOPE = "@scope (:root) to (.site-header, .site-footer, .breadcrumbs, .skip-link, .svg-sprite)"
+SCOPE = "@scope (:root) to (.site-header, .nav-discovery-region, .site-footer, .breadcrumbs, .skip-link, .svg-sprite)"
 
 
 def apply_bim_shell(site: Path) -> None:

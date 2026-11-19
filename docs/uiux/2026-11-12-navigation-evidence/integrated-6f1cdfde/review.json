@@ -1,0 +1,36 @@
+{
+  "schema": "confenge.integrated-navigation-source-review/1.0",
+  "source_sha": "6f1cdfde48e25cd5277b9c20681c7ce602c4fd71",
+  "source_tree": "57fba5599669a1da0b0e68c2ff987fa5ca69e4fe",
+  "integrated_main_sha": "ae72197e687a1a2b55d71834bc1435bb343691d6",
+  "workflow_run_id": 43346686446,
+  "workflow_run_attempt": 1,
+  "source_job_id": 131627617586,
+  "source_job_conclusion": "failure",
+  "artifact_id": 14002481493,
+  "artifact_bytes": 3352500,
+  "artifact_sha256": "c21fb4f9a85cc89f7b6a8f1334f46d6715220b9f9936a3694a3678ea024da4d7",
+  "accepted_evidence": {
+    "navigation_scenarios": 48,
+    "event_findings": 67,
+    "first_fold_passes": 26,
+    "first_fold_failures": 0,
+    "first_fold_pending": 0,
+    "source_input_hashes_verified": 60,
+    "measurement_control_files_verified": 3,
+    "source_geometry": "passed",
+    "navigation_screenshots_byte_identical_to_07f": 5,
+    "first_fold_copied_verbatim": {
+      "first-fold-contract.v1.json": "8dc42511744c4fb9c0f2dace0e6c5addb5493799321f6c0c73819b4134c2ff71",
+      "first-fold-measurements.v1.json": "4bcd22f3f7b87412e07dd2edb7779f05cd7612f0ac49426d58ae69274f678db5"
+    }
+  },
+  "unresolved_evidence": {
+    "css_parity": "37 scenarios executed;19 scenarios failed; retained for diagnosis. Not represented as a pass.",
+    "compiled_artifact": "Build blocked on institution stylesheet identity requiring old global href for diagnostic. No compiled UI execution."
+  },
+  "binding_scope": "Only the passing original first-fold measurement is incorporated. Source SHA, timestamp and all original measurement bytes remain unchanged. CSS parity and the full artifact still require a corrected candidate and all final gates.",
+  "editorial_approval_changed": false,
+  "frozen_baseline_changed": false,
+  "human_review_claimed": false
+}

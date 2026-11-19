@@ -103,6 +103,7 @@
       };
       const receiptRequired = form.getAttribute('data-receipt-required') === 'true';
       let submissionInFlight = false;
+      let submissionCompleted = false;
 
       const receiptStorageKey = () => {
         const asset = (form.querySelector('[name="asset_id"]')?.value || 'form').slice(0, 80);
@@ -146,6 +147,8 @@
       const MATERIAL_FIELDS = [
         'nome', 'telefone', 'email', 'empresa', 'mensagem', 'estagio',
         'deliverable_id', 'consentimento',
+        ...(form.getAttribute('data-intent') === 'ready_project_interest'
+          ? ['project_kind', 'product_id', 'city', 'uf', 'lot_width_m', 'lot_depth_m', 'lot_status', 'bedrooms', 'build_when'] : []),
       ];
       // Storage can be unavailable in private/restricted contexts. Keep the
       // material fingerprint only for this live form/session in that case so
@@ -474,6 +477,10 @@
           event.preventDefault();
           return;
         }
+        if (submissionCompleted) {
+          event.preventDefault();
+          return;
+        }
         if (multi) {
           // LAPIDACAO-COMERCIAL-20260918 (§8.1). O painel de detalhes e
           // opcional de verdade: consentimento e envio ficam fora dos dois
@@ -600,6 +607,14 @@
               }
             } catch (_) { /* private mode */ }
             if (receiptRequired) volatileMaterialHashes.delete(materialStorageKey());
+            if (form.getAttribute('data-success-inline') === 'true') {
+              submissionCompleted = true;
+              form.querySelectorAll('fieldset').forEach(fieldset => { fieldset.disabled = true; });
+              showFormStatus(`Sua consulta foi registrada. Protocolo: ${protocol}. A equipe da CONFENGE retornará pelo contato informado para conferir a disponibilidade e definir os próximos passos. Nenhuma cobrança foi realizada.`, 'ok');
+              if (statusEl) { statusEl.tabIndex = -1; statusEl.focus(); }
+              flushAnalytics();
+              return;
+            }
             const q = protocol
               ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(protocol)}`
               : dest;
@@ -692,6 +707,12 @@
               finishOk(data);
               return;
             }
+            if ((res.status === 400 || res.status === 422) && data.error === 'project_interest_invalid') {
+              restoreSubmitFocus = true;
+              resetTurnstile();
+              showFormStatus('Confira o município, a UF e o interesse. As dimensões do terreno podem ficar em branco.', 'error');
+              return;
+            }
             if (res.status === 429) {
               restoreSubmitFocus = true;
               resetTurnstile();
@@ -724,7 +745,7 @@
             if (timeoutId) clearTimeout(timeoutId);
             submissionInFlight = false;
             if (submitBtn) {
-              submitBtn.disabled = false;
+              submitBtn.disabled = submissionCompleted;
               // Disabling a focused button moves focus to body in browsers.
               // Restore its place only after failure and only if the visitor
               // did not move focus elsewhere while the request was pending.
@@ -745,6 +766,15 @@
           validation_category: validationCategory(),
         });
       }, true);
+      if (form.getAttribute('data-intent') === 'ready_project_interest') {
+        document.querySelectorAll('[data-project-interest]').forEach(link => {
+          link.addEventListener('click', () => {
+            const select = form.querySelector('[name="project_kind"]');
+            const kind = link.getAttribute('data-project-interest');
+            if (select && [...select.options].some(option => option.value === kind)) select.value = kind;
+          });
+        });
+      }
       // Exposes readiness for deterministic UI verification after all handlers bind.
       form.dataset.formReady = 'true';
     }
