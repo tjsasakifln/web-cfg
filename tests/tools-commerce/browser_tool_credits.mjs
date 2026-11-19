@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -10,6 +11,21 @@ const root = new URL('../../', import.meta.url);
 const source = await readFile(new URL('assets/js/tool-credits.mjs', root));
 const referral = await readFile(new URL('assets/js/tool-referral.mjs', root));
 const css = await readFile(new URL('assets/css/tool-credits.css', root));
+// This source browser gate runs before the public build. Use the production
+// policy generator, rather than a relaxed fixture CSP or a stale _site tree.
+const printRoute = '/ferramentas/checklist-reequilibrio/';
+const walletHeaders = execFileSync('python3', ['-c', [
+  'from pathlib import Path',
+  'from scripts.site.csp_contract import apply_wallet_document_policies',
+  'root = Path(".")',
+  'print(apply_wallet_document_policies((root / "_headers").read_text(), root), end="")',
+].join('\n')], { cwd: root, encoding: 'utf8' });
+let headerRoute = '', printCsp = '';
+for (const line of walletHeaders.split('\n')) {
+  if (line.startsWith('/')) headerRoute = line.trim();
+  else if (headerRoute === printRoute && /^\s+Content-Security-Policy:/i.test(line)) printCsp = line.replace(/^\s*Content-Security-Policy:\s*/i, '');
+}
+assert.ok(printCsp, 'the real print route must have its generated wallet CSP');
 const firstRef = 'first_______0001';
 const secondRef = 'other_______0002';
 const fixtureEmail = 'wallet-browser-fixture@example.test';
@@ -33,10 +49,12 @@ const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['model
   purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
   authProviders:['google.com','linkedin.com','invalid.example'], packages:[{id:'one',credits:1,amountCents:1490}]};
 let toolCreditsConfig = sharedEnabledConfig;
+let printStylesGate;
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   if (url.pathname === '/') { if (url.searchParams.has('isolated')) { res.setHeader('cross-origin-opener-policy', 'same-origin'); res.setHeader('cross-origin-embedder-policy', 'require-corp'); } res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>fixture</title><link rel="stylesheet" href="/assets/css/tool-credits.css"><body></body>'); }
-  if (url.pathname === '/assets/css/tool-credits.css') { res.setHeader('content-type', 'text/css'); return res.end(css); }
+  if (url.pathname === printRoute) { res.setHeader('content-security-policy', printCsp); res.setHeader('content-type', 'text/html'); return res.end('<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><title>Print fixture</title><body></body>'); }
+  if (url.pathname === '/assets/css/tool-credits.css') { res.setHeader('content-type', 'text/css'); res.setHeader('cache-control', 'no-store'); if (printStylesGate) await printStylesGate.released; return res.end(css); }
   if (url.pathname === '/assets/js/tool-credits.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(source); }
   if (url.pathname === '/assets/js/tool-referral.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(referral); }
   if (url.pathname === '/assets/tools-commerce/firebase-auth.mjs') { res.setHeader('content-type', 'text/javascript'); return res.end(firebase); }
@@ -830,6 +848,89 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.match(await reportPage.evaluate(()=>window.reportBytes),/prepared-report/);
   await reportPage.close();
 
+  // Exercise the real about:blank frame, inherited route CSP and external CSS.
+  // Only the native print dialog is intercepted; frame creation and navigation,
+  // document content, stylesheet loading and afterprint cleanup stay real.
+  const printPage = await browser.newPage();
+  await printPage.setCacheEnabled(false);
+  const printResponse = await printPage.goto(`http://127.0.0.1:${port}${printRoute}`);
+  assert.equal(printResponse.headers()['content-security-policy'], printCsp);
+  await printPage.evaluate(() => {
+    window.printObservations = [];
+    window.printCspViolations = [];
+    window.printMarkupExecuted = false;
+    const recordViolation = event => window.printCspViolations.push({directive:event.effectiveDirective,blockedURI:event.blockedURI});
+    document.addEventListener('securitypolicyviolation', recordViolation);
+    new MutationObserver(records => {
+      for (const record of records) for (const frame of record.addedNodes) {
+        if (!(frame instanceof HTMLIFrameElement) || !frame.classList.contains('tool-credits__print-frame')) continue;
+        frame.contentDocument.addEventListener('securitypolicyviolation', recordViolation);
+        const printWindow = frame.contentWindow;
+        printWindow.print = () => {
+          const doc = frame.contentDocument, prepared = doc.querySelector('.tool-credits__print-text');
+          const stylesheet = doc.querySelector('link[rel=stylesheet]');
+          window.printObservations.push({
+            text: prepared?.textContent,
+            title: doc.title,
+            lang: doc.documentElement.lang,
+            heading: doc.querySelector('h1')?.textContent,
+            parsedElements: prepared?.children.length,
+            unsafeElements: doc.querySelectorAll('script,img').length,
+            stylesheetLoaded: Boolean(stylesheet?.sheet?.cssRules.length),
+            whiteSpace: prepared && printWindow.getComputedStyle(prepared).whiteSpace,
+            connected: frame.isConnected,
+          });
+          printWindow.dispatchEvent(new printWindow.Event('afterprint'));
+        };
+      }
+    }).observe(document.body, {childList:true});
+  });
+  const printText = 'Resultado preparado\nAço: 25 mm\n<script>window.printMarkupExecuted=true</script>\n<img src=x onerror="window.printMarkupExecuted=true">';
+  const printed = await printPage.evaluate(async text => {
+    const {printToolResultSnapshot} = await import('/assets/js/tool-credits.mjs');
+    let checks = 0;
+    await printToolResultSnapshot(new Blob([text], {type:'text/plain'}), {assertCurrent:()=>{checks++;}});
+    return {checks, observations:window.printObservations, frames:document.querySelectorAll('.tool-credits__print-frame').length,
+      markupExecuted:window.printMarkupExecuted, violations:window.printCspViolations};
+  }, printText);
+  assert.deepEqual(printed, {checks:2, observations:[{
+    text:printText, title:'CONFENGE | Resultado da ferramenta', lang:'pt-BR', heading:'CONFENGE',
+    parsedElements:0, unsafeElements:0, stylesheetLoaded:true, whiteSpace:'pre-wrap', connected:true,
+  }], frames:0, markupExecuted:false, violations:[]}, 'the snapshot must survive real frame navigation, load CSS and clean up after printing');
+
+  // Hold the actual stylesheet response while the account guard changes.
+  // A successful CSS load must recheck ownership before invoking print.
+  let releasePrintStyles;
+  printStylesGate = {released:new Promise(resolve=>{releasePrintStyles=resolve;}), release:()=>releasePrintStyles()};
+  const heldStyleRequest = printPage.waitForRequest(request =>
+    new URL(request.url()).pathname === '/assets/css/tool-credits.css' && request.frame()?.parentFrame() === printPage.mainFrame(),
+  {timeout:5000});
+  await printPage.evaluate(async () => {
+    const {printToolResultSnapshot} = await import('/assets/js/tool-credits.mjs');
+    window.printContextCurrent = true;
+    window.printGuardChecks = 0;
+    window.printAttempt = printToolResultSnapshot('Resultado da conta original', {assertCurrent:()=>{
+      window.printGuardChecks++;
+      if (!window.printContextCurrent) throw new Error('ACCOUNT_CHANGED');
+    }}).then(()=>({ok:true}), error=>({ok:false,error:error.message}));
+  });
+  await heldStyleRequest;
+  const waitingPrint = await printPage.evaluate(() => {
+    const frame = document.querySelector('.tool-credits__print-frame');
+    window.printContextCurrent = false;
+    return {checks:window.printGuardChecks, prints:window.printObservations.length,
+      connected:Boolean(frame?.isConnected), stylesheetLoaded:Boolean(frame?.contentDocument.querySelector('link')?.sheet)};
+  });
+  assert.deepEqual(waitingPrint, {checks:1,prints:1,connected:true,stylesheetLoaded:false});
+  printStylesGate.release();
+  const canceledPrint = await printPage.evaluate(async () => ({outcome:await window.printAttempt, checks:window.printGuardChecks,
+    prints:window.printObservations.length, frames:document.querySelectorAll('.tool-credits__print-frame').length,
+    violations:window.printCspViolations}));
+  printStylesGate = undefined;
+  assert.deepEqual(canceledPrint, {outcome:{ok:false,error:'ACCOUNT_CHANGED'},checks:2,prints:1,frames:0,violations:[]},
+    'an account change during real stylesheet loading must cancel printing and remove the frame');
+  await printPage.close();
+
   const malformed = await browser.newPage();
   await malformed.goto(`http://127.0.0.1:${port}/?ref=${firstRef}&ref=${secondRef}`);
   const malformedResult = await malformed.evaluate(async () => {
@@ -870,6 +971,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   await early.close();
   console.log('browser tool credits: ok');
 } finally {
+  printStylesGate?.release();
   try {
     await browser?.close();
   } finally {

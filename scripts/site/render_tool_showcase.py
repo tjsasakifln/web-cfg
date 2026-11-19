@@ -22,7 +22,7 @@ DESCRIPTION = (
     "Primeira exportação grátis por conta verificada; próximas com créditos."
 )
 CSS = '<link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>'
-HUB_CSS = '<link rel="stylesheet" href="/assets/tool-showcase/vitrine.css?v=growth20261119"/>'
+HUB_CSS = '<link rel="stylesheet" href="/assets/tool-showcase/vitrine.css"/>'
 JS = '<script type="module" src="/assets/tool-showcase/showcase.mjs"></script>'
 ROUTE_CSS = {
     "/ferramentas/diagnostico-defesa-margem/": (
