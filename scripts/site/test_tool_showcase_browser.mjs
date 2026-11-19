@@ -203,8 +203,15 @@ try {
     'choosing a public package only opens the account, without creating a payment');
   for (const width of [320, 390, 414, 1440]) {
     await page.setViewport({ width, height: 880 });
-    await page.$eval('#como-funciona', el => el.scrollIntoView());
+    await page.$eval('[data-credit-packages]', el =>
+      el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await paint();
     assert.equal(await overflow(), false, 'public prices viewport ' + width);
+    assert.equal(await page.$eval('[data-credit-packages]', el => {
+      const box = el.getBoundingClientRect();
+      return box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight
+        && box.left >= 0 && box.right <= innerWidth;
+    }), true, 'the price capture must show the package grid at ' + width);
     if (shots) await page.screenshot({ path: resolve(shots, 'prices-' + width + '.png') });
   }
   await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
@@ -341,10 +348,15 @@ try {
     for (const width of [390, 1440]) {
       await page.setViewport({ width, height: 880 });
       await load(route);
-      await page.$eval('.tool-guide-next', el => el.scrollIntoView({ block: 'center' }));
+      await page.$eval('.tool-guide-next', el =>
+        el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      await paint();
       assert.equal(await overflow(), false, 'guide return CTA ' + route + ' ' + width);
-      assert.equal(await page.$eval('.tool-guide-next a[href="/ferramentas/#como-funciona"]', el =>
-        el.getBoundingClientRect().width > 0), true);
+      assert.equal(await page.$eval('.tool-guide-next a[href="/ferramentas/#como-funciona"]', el => {
+        const box = el.getBoundingClientRect();
+        return box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight
+          && box.left >= 0 && box.right <= innerWidth;
+      }), true, 'the guide capture must show the return link ' + route + ' ' + width);
       if (shots) await page.screenshot({ path: resolve(shots, 'guide-' + route.split('/').filter(Boolean).at(-1) + '-' + width + '.png') });
     }
   }
