@@ -340,7 +340,7 @@ def catalogue(html: str, data: dict) -> str:
 <div class="ts-pricing-heading"><div><h3>Quanto custa continuar?</h3><p>Escolha a quantidade de exportações que faz sentido para o seu trabalho.</p></div><a href="/termos-de-uso/#creditos-ferramentas">Condições de uso dos créditos</a></div>
 <p class="ts-pricing-status" data-credit-pricing-status role="status">Consulte os pacotes na sua conta. Os valores e os meios de pagamento são apresentados antes de confirmar a compra.</p>
 <ul class="ts-credit-grid" data-credit-packages aria-label="Pacotes de créditos para exportação" hidden></ul>
-<p class="ts-pricing-note" data-credit-pricing-note hidden>O total do pacote aparece antes do pagamento. Pix preferencial; outros meios disponíveis no Mercado Pago. O saldo é liberado após a confirmação do pagamento.</p>
+<p class="ts-pricing-note" data-credit-pricing-note hidden>Confira a forma de pagamento e o total do pacote antes de confirmar a compra. O saldo é liberado após a confirmação do pagamento.</p>
 <div class="ts-how-questions">
 <details><summary>“Ferramentas grátis” significa uso ilimitado?</summary><p>Você pode experimentar e consultar os resultados na tela sem pagar. A primeira exportação da conta verificada é grátis. Novas exportações usam créditos. Formatos editáveis que a própria ferramenta identifica como gratuitos continuam livres.</p></details>
 <details><summary>Preciso comprar antes de testar?</summary><p>Não. Comece pela ferramenta e confira o resultado. A conta com e-mail confirmado é necessária para a exportação por créditos, inclusive para a cortesia inicial.</p></details>
