@@ -1,6 +1,6 @@
 {
   "schema_version": "noindex-governance-v1",
-  "as_of": "2026-11-12",
+  "as_of": "2026-11-19",
   "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
   "reason_codes": {
     "marketplace_operation_pending": {
@@ -112,6 +112,16 @@
       "description": "Familia consumidora de contrato do extra-cli em que o produtor nunca concede INDEX: DATA_READY autoriza no maximo um rascunho noindex e a indexacao e decisao deste repositorio, por pagina, vinculada ao hash do payload. Analogo de pending_founder_hash_approval, mas para outro gate, outro artefato de aprovacao e outra issue: ADR-STRAT-003 e data/editorial/market-panorama/approvals.json, nao contract-analysis-publication-gate/1.0.",
       "class": "REMEDIABLE",
       "context": "market-panorama"
+    },
+    "software_distribution_notice": {
+      "description": "Avisos de autoria, licenças, versões e código-fonte que acompanham uma distribuição de software. Permanecem publicamente acessíveis a partir da ferramenta; a página editorial de apresentação do produto concentra sua descoberta orgânica.",
+      "class": "PERMANENT",
+      "context": "software-distribution"
+    },
+    "dynamic_publication_shell": {
+      "description": "Índice estático vazio para montagem e prévia de uma seção dinâmica. Não contém notícias de exemplo. Em produção o runtime serve o acervo validado e libera indexação somente quando há artigos.",
+      "class": "PERMANENT",
+      "context": "contract-news-static-shell"
     }
   },
   "families": [
@@ -282,6 +292,27 @@
       "owner_issue": 61,
       "review_at": null,
       "note": "Área de conta, contratação, pedidos, arquivos protegidos e atendimento. Noindex permanente, inclusive após habilitar um produto aprovado. A oferta de descoberta está em /projetos-prontos/; ADR-PROJECTS-001."
+    },
+    {
+      "family_id": "cad-freecad-aplicativo",
+      "reason_code": "interactive_workbench",
+      "owner_issue": 827,
+      "review_at": null,
+      "note": "A rota /cad/freecad/ executa o modelador local e aponta canonicamente para /ferramentas/modelador-parametrico-3d/, página indexável de apresentação. O noindex aplica-se apenas à área de trabalho, seguindo o padrão dos aplicativos BIM."
+    },
+    {
+      "family_id": "cad-freecad-fontes-licencas",
+      "reason_code": "software_distribution_notice",
+      "owner_issue": 827,
+      "review_at": null,
+      "note": "A rota /cad/freecad/creditos.html reúne os avisos e as fontes da distribuição local, acessíveis pelo modelador. Não é uma página de descoberta nem de oferta. O noindex preserva a página indexável /ferramentas/modelador-parametrico-3d/ como entrada da ferramenta e não restringe o acesso às licenças."
+    },
+    {
+      "family_id": "noticias-contratos-publicos",
+      "reason_code": "dynamic_publication_shell",
+      "owner_issue": 61,
+      "review_at": null,
+      "note": "Esta justificativa se aplica ao índice vazio estático e ao estado vazio do runtime. Não autoriza indexar conteúdo sem a validação de publicação nem constitui adiamento editorial do acervo real."
     }
   ]
 }

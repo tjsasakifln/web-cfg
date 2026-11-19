@@ -1,0 +1,215 @@
+[
+  {
+    "name": "concrete-compression-reference",
+    "request": {
+      "operation": "concrete",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            300,
+            0
+          ],
+          [
+            300,
+            500
+          ],
+          [
+            0,
+            500
+          ]
+        ],
+        "bars": [
+          {
+            "x": 50,
+            "y": 50,
+            "area": 314
+          },
+          {
+            "x": 250,
+            "y": 50,
+            "area": 314
+          },
+          {
+            "x": 50,
+            "y": 450,
+            "area": 314
+          },
+          {
+            "x": 250,
+            "y": 450,
+            "area": 314
+          }
+        ],
+        "points": 12,
+        "mode": "interaction"
+      }
+    },
+    "summary": [
+      {
+        "index": 1,
+        "value": 1256
+      },
+      {
+        "index": 2,
+        "value": 4420.972
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "concrete-biaxial",
+    "request": {
+      "operation": "concrete",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            300,
+            0
+          ],
+          [
+            300,
+            500
+          ],
+          [
+            0,
+            500
+          ]
+        ],
+        "bars": [
+          {
+            "x": 50,
+            "y": 50,
+            "area": 314
+          },
+          {
+            "x": 250,
+            "y": 50,
+            "area": 314
+          },
+          {
+            "x": 50,
+            "y": 450,
+            "area": 314
+          },
+          {
+            "x": 250,
+            "y": 450,
+            "area": 314
+          }
+        ],
+        "points": 12,
+        "mode": "biaxial"
+      }
+    },
+    "summary": [
+      {
+        "index": 3,
+        "min": 100,
+        "max": 400
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "concrete-curvature",
+    "request": {
+      "operation": "concrete",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            300,
+            0
+          ],
+          [
+            300,
+            500
+          ],
+          [
+            0,
+            500
+          ]
+        ],
+        "bars": [
+          {
+            "x": 50,
+            "y": 50,
+            "area": 314
+          },
+          {
+            "x": 250,
+            "y": 50,
+            "area": 314
+          },
+          {
+            "x": 50,
+            "y": 450,
+            "area": 314
+          },
+          {
+            "x": 250,
+            "y": 450,
+            "area": 314
+          }
+        ],
+        "points": 12,
+        "mode": "curvature"
+      }
+    },
+    "summary": [
+      {
+        "index": 2,
+        "min": 50,
+        "max": 1000
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "bar-outside-rejected",
+    "request": {
+      "operation": "concrete",
+      "data": {
+        "vertices": [
+          [
+            0,
+            0
+          ],
+          [
+            300,
+            0
+          ],
+          [
+            300,
+            500
+          ],
+          [
+            0,
+            500
+          ]
+        ],
+        "bars": [
+          {
+            "x": 0,
+            "y": 0,
+            "area": 314
+          }
+        ],
+        "points": 12
+      }
+    },
+    "summary": [],
+    "invalid": true
+  }
+]

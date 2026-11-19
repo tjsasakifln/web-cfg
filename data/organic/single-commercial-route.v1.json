@@ -141,11 +141,11 @@
         128,
         291
       ],
-      "expected_sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+      "expected_sha256": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
       "expected_sha256_note": "Hash recapturado para a melhoria comercial autorizada da página prioritária, mantendo fatos, fontes, termos, campos, destinos e controles do canário #389.",
-      "expected_sha256_recaptured_at": "2026-10-29T15:51:25Z",
-      "expected_sha256_recapture_reason": "CONFENGE trafego qualificado 2026-10-29: conteudo e metadados de medicoes e aditivos revisados, rotas e captura preservadas",
-      "expected_sha256_previous": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+      "expected_sha256_recaptured_at": "2026-11-19T03:28:32Z",
+      "expected_sha256_recapture_reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: recaptura dos vínculos ativos de metadados derivados em medicoes-glosas-obras-publicas e diagnostico-b2g-360, mais lastmod SINAPI 2026-11-18 nos dois sitemaps. As páginas correspondem exatamente ao normalizador existente; corpo, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato permanecem preservados. Bytes protegidos conferidos no commit 171754ee9c09344c3077cdbf0e91988bbb5527c1 contra de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Demais superfícies protegidas e registros históricos preservados; sem nova revisão humana, aprovação técnica ou autorização comercial alegada.",
+      "expected_sha256_previous": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
       "commercial_recapture_history": [
         {
           "recorded_sha256": "b909e81f7326a5677ad2fee40d3e2786ecc72526a3c05b555e37dedb6e90cda6",
@@ -173,6 +173,12 @@
           "expected_sha256_previous": "c064e97c11cf95f0a806ea737e9507be6839d5294249d36b01ec89ff25ec2515",
           "expected_sha256_recaptured_at": "2026-10-25T01:03:06-03:00",
           "expected_sha256_recapture_reason": "CONFENGE-CONVERSAO-MEDICAO-20261025: #captura-pilar passou a esclarecer que o pedido preserva o contexto da medição ou glosa e que documentos complementares podem ser enviados depois, se necessários. Formulário, campos, atributos de origem, CTA, destino, conteúdo técnico, preços, fontes, canonical e robots permanecem inalterados."
+        },
+        {
+          "expected_sha256": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+          "expected_sha256_previous": "1871a2b3e3af44d89c928a5a49abcd1557f11fd490d3147c7fe31f4bf16e2155",
+          "expected_sha256_recaptured_at": "2026-10-29T15:51:25Z",
+          "expected_sha256_recapture_reason": "CONFENGE trafego qualificado 2026-10-29: conteudo e metadados de medicoes e aditivos revisados, rotas e captura preservadas"
         }
       ]
     }

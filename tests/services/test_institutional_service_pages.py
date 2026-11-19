@@ -319,6 +319,11 @@ class InstitutionalServicePagesTest(unittest.TestCase):
                 for phrase in ("19,60", "6,84", "banheiro", "WN-01", "2,30 m", "0,40 mm"):
                     self.assertNotIn(phrase, document)
         quantity = (ROOT / "quantitativos-orcamento-obras/index.html").read_text(encoding="utf-8")
+        self.assertEqual(
+            cta_href(quantity, "quantitativos-resource-budget"),
+            "/ferramentas/orcamento-de-obras/",
+        )
+        self.assertEqual(quantity.count('data-cta-id="quantitativos-resource-budget"'), 1)
         for term in ("critérios de medição", "composições", "data-base", "equalização"):
             self.assertIn(term, quantity.lower())
         for route in ("demonstrativo-projeto-privado", "demonstrativo-infraestrutura"):

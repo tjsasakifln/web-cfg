@@ -1,0 +1,55 @@
+[
+  {
+    "name": "pythermalcomfort-reference",
+    "request": {
+      "operation": "comfort",
+      "data": {
+        "environments": [
+          {
+            "name": "Sala",
+            "tdb": 25,
+            "tr": 25,
+            "velocity": 0.1,
+            "rh": 50,
+            "met": 1.2,
+            "clo": 0.5,
+            "wind10": 1
+          }
+        ]
+      }
+    },
+    "summary": [
+      {
+        "index": 1,
+        "value": 0.08413730767729101
+      },
+      {
+        "index": 2,
+        "value": 5.146587049954462
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "comfort-outside-domain-rejected",
+    "request": {
+      "operation": "comfort",
+      "data": {
+        "environments": [
+          {
+            "name": "Sala",
+            "tdb": 100,
+            "tr": 25,
+            "velocity": 0.1,
+            "rh": 50,
+            "met": 1.2,
+            "clo": 0.5,
+            "wind10": 1
+          }
+        ]
+      }
+    },
+    "summary": [],
+    "invalid": true
+  }
+]

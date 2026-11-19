@@ -2,7 +2,7 @@ name: Contract news readiness
 
 on:
   push:
-    branches: [feat/pncp-news-20261119]
+    branches: [main]
     paths:
       - .github/workflows/contract-news-preflight.yml
       - scripts/ops/contract_news_preflight.py
@@ -18,6 +18,7 @@ concurrency:
 jobs:
   inspect:
     name: Read-only news prerequisites
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment: netcup-stage

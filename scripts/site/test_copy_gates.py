@@ -269,6 +269,46 @@ def test_new_public_family_is_gated_without_editing_a_list(tmp_path=None):
     assert found == ["familia-nova-2027/index.html"], found
 
 
+def test_private_scientific_python_does_not_change_public_inventory():
+    """Exclude only the private interpreter, while a shipped leak stays visible."""
+    import tempfile
+
+    from scripts.site.public_copy_scope import artifact_html_files
+
+    public_paths = [
+        "index.html",
+        "ferramentas/memorial-de-calculo/index.html",
+        "runtime/index.html",
+        "runtime/science-tools/index.html",
+        "runtime/science-tools/python.html",
+        "runtime/science-tools/python-public/index.html",
+        "python/index.html",
+        "ferramentas/runtime/science-tools/python/index.html",
+    ]
+    private_paths = [
+        "runtime/science-tools/python/lib/python3.12/site-packages/Pynite/Report_Template.html",
+        "runtime/science-tools/python/lib/python3.12/site-packages/matplotlib/backends/web_backend/all_figures.html",
+        "runtime/science-tools/python/lib/python3.12/site-packages/numba/core/annotations/template.html",
+    ]
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        for relative in public_paths:
+            path = root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("<html><body>Página pública</body></html>", encoding="utf-8")
+        before = [p.relative_to(root).as_posix() for p in visitor_facing_html_files(root)]
+        assert before == sorted(public_paths), before
+        for relative in private_paths:
+            path = root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("<html><body>Private engine template</body></html>", encoding="utf-8")
+        after = [p.relative_to(root).as_posix() for p in visitor_facing_html_files(root)]
+        assert after == before, after
+        # The independent release census must still see leaked private HTML.
+        artifact = {p.relative_to(root).as_posix() for p in artifact_html_files(root)}
+        assert artifact == set(public_paths + private_paths), artifact
+
+
 def test_lint_phrase_rules_govern_ok_and_exit_code():
     """#298 defect 1: the five phrase rules must fail the lint, not just report."""
     from scripts.site import lint_editorial_copy as lint
@@ -758,6 +798,7 @@ if __name__ == "__main__":
         test_copy_gate_scope_covers_every_published_route,
         test_copy_gate_scope_has_no_handwritten_route_allowlist,
         test_new_public_family_is_gated_without_editing_a_list,
+        test_private_scientific_python_does_not_change_public_inventory,
         test_every_copy_exception_is_justified_and_precise,
         test_lint_phrase_rules_govern_ok_and_exit_code,
     ):

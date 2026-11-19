@@ -11,10 +11,19 @@ if (!target) throw Error('Informe o diretório do artefato público.');
 const site = path.resolve(target);
 if (site === root || site === path.parse(site).root) throw Error('Destino de publicação inválido.');
 const source = path.join(here, 'aplicativo.tar.gz');
+const overrides = path.join(here, 'overrides');
 const postcss = path.join(here, 'postcss.config.cjs');
-const digest = createHash('sha256').update(fs.readFileSync(source)).update(fs.readFileSync(__filename))
+const hash = createHash('sha256').update(fs.readFileSync(source)).update(fs.readFileSync(__filename))
   .update(fs.readFileSync(postcss))
-  .update([process.version, process.platform, process.arch].join('/')).digest('hex');
+  .update([process.version, process.platform, process.arch].join('/'));
+// Readable source overrides are versioned separately from the base distribution.
+// Include names and bytes so every change gets its own immutable build cache.
+if (fs.existsSync(overrides)) for (const name of fs.readdirSync(overrides, {recursive:true}).sort()) {
+  const file=path.join(overrides,name);
+  if(fs.lstatSync(file).isSymbolicLink()) throw Error('A fonte BIM não aceita links simbólicos.');
+  if(fs.statSync(file).isFile()) hash.update(name.replaceAll(path.sep,'/')).update('\0').update(fs.readFileSync(file));
+}
+const digest = hash.digest('hex');
 // Compilers and npm packages must remain entirely outside the site's source census.
 const cache = path.join(os.homedir(), '.cache', 'confenge-web-bim');
 fs.mkdirSync(cache, { recursive: true, mode: 0o700 });
@@ -28,6 +37,7 @@ function build(stage) {
     execFileSync(program, args, { cwd: stage, stdio: 'inherit' });
   }
   run('tar', ['-xzf', source]);
+  if(fs.existsSync(overrides)) fs.cpSync(overrides, stage, {recursive:true});
   run('npm', ['ci', '--ignore-scripts', '--include=dev', '--no-audit', '--no-fund']);
   // acad-ts 3.8.0 writes the lower plot limit twice. Correct the unminified writer
   // in this disposable build and regenerate its browser bundle using the upstream flags.

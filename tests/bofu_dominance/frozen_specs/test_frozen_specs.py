@@ -115,14 +115,24 @@ def test_historical_patch_hash_is_retained_but_cannot_mutate_current_html():
         assert parsed["earliest_safe_action_at"] == EARLIEST_SAFE_ACTION_AT.isoformat()
         assert parsed["html_mutation_authorized"] is False
         assert parsed["replacements"]
+        page = html_path(slug, ROOT)
+        before = page.read_bytes()
         result = apply_frozen_patch(
             slug, root=ROOT, mutate=False, now=FROZEN_NOW, evidential_close=False
         )
         pending = any(item["before"] != item["after"] for item in parsed["replacements"])
-        if pending:
-            assert result["would_mutate"] is True
+        assert result["hash_match"] is (
+            parsed["content_sha256"] == content_sha256(page)
+        )
+        if result["hash_match"]:
+            assert result["would_mutate"] is pending
+        else:
+            # Reviewed pages may no longer contain a historical before-string.
+            # A stale patch must be refused, not forced to remain applicable.
+            assert result["reason"] == "hash_mismatch"
         assert result["html_mutation"] is False
         assert result["refused"] is True
+        assert page.read_bytes() == before
 
 
 def test_apply_refused_before_gate_and_html_mutation_false():

@@ -20,11 +20,10 @@ const BANNER = [
 const NGINX_MAP_VALUE_CHUNK_BYTES = 3000;
 const HOST_ONLY_STATIC_CONTROL_PATHS = ["/_headers", "/_redirects"];
 
-// A browser only honours these four headers on a document. Emitting them on a
-// stylesheet, script, font, image or JSON response changes nothing a user agent
-// enforces and costs ~6 KB of transfer per response, which the home page paid
-// on every critical resource. They stay byte-identical on documents; every
-// other header keeps being emitted unconditionally.
+// Corporate document policies stay off ordinary static assets, saving the
+// ~6 KB the home page paid on each critical resource. They stay byte-identical
+// on documents; explicit worker CSP exceptions below retain their execution
+// policies, and every other header keeps being emitted unconditionally.
 export const DOCUMENT_ONLY_HEADERS = new Set([
   "content-security-policy",
   "x-frame-options",
@@ -36,7 +35,9 @@ export const DOCUMENT_ONLY_HEADERS = new Set([
 // an add_header whose evaluated value is empty, which is what a non-document
 // response resolves to.
 const DOCUMENT_MARKER_VARIABLE = "$confenge_document_marker";
-export const LOCAL_EXECUTION_POLICY_PATH = /^\/(?:bim\/(?:web|fotogrametria)\/|cad\/editor\/|ferramentas\/rede-de-agua\/motor\.js$)/;
+// Additional tool workers are exact paths: the FreeCAD eval exception belongs
+// only to its pinned glue module, and imported EPANET networks run in one worker.
+export const LOCAL_EXECUTION_POLICY_PATH = /^\/(?:bim\/(?:web|fotogrametria)\/|cad\/editor\/|ferramentas\/rede-de-agua\/motor\.js$|ferramentas\/epanet-inp\/worker\.mjs$|assets\/freecad\/FreeCAD-3f8c1ff4a0ee\.js$)/;
 const DOCUMENT_MARKER_PREFIX = "html:";
 
 function escapeLiteral(value) {
@@ -544,6 +545,21 @@ export function renderRuntimeLocations(contract) {
     // A location-level add_header prevents the site's global CSP from doubling it.
     for (const { lower, name } of allHeaderNames(contract)) {
       if (!["content-security-policy", "cache-control", "content-type", "x-robots-tag", "x-content-type-options"].includes(lower)) {
+        lines.push(`  add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
+      }
+    }
+    lines.push(...runtimeProxyDirectives(), "}", "");
+  }
+  if (contract.runtime.contractNewsPrefix) {
+    const prefix = contract.runtime.contractNewsPrefix;
+    if (prefix !== "/noticias/contratos-publicos/") throw new Error("Invalid contract news prefix");
+    lines.push(`location = ${prefix.slice(0, -1)} {`, "  absolute_redirect off;", `  return 308 ${prefix};`, "}", "");
+    lines.push(`location ^~ ${prefix} {`);
+    // Published articles change independently of the code release. The news
+    // renderer supplies per-response JSON-LD hashes, cache validators and status.
+    // Suppress inherited versions of those headers instead of composing two CSPs.
+    for (const { lower, name } of allHeaderNames(contract)) {
+      if (!["content-security-policy", "cache-control", "content-type", "x-robots-tag", "x-content-type-options", "referrer-policy"].includes(lower)) {
         lines.push(`  add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
       }
     }

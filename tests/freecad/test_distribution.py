@@ -1,0 +1,176 @@
+from hashlib import sha256
+import importlib.util
+import json
+from pathlib import Path
+import sys
+import runpy
+import subprocess
+from types import SimpleNamespace
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+spec = importlib.util.spec_from_file_location("freecad_installer", ROOT / "scripts/freecad/install.py")
+installer = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(installer)
+from scripts.site.cache_contract import parse_header_rules, require_html_override_no_transform
+from scripts.site.csp_contract import apply_wallet_document_policies, csp_directives_from_text
+
+
+def test_release_is_pinned_and_public_manifest_has_exact_payload():
+    private = installer.MANIFEST
+    public = json.loads((ROOT / "assets/freecad/runtime.json").read_text())
+    assert {k: v for k, v in private.items() if k != "adapted_sources"} == public
+    assert private["decoded_bytes"] == 503224999
+    assert sum(entry["size"] for entry in private["files"].values()) == private["decoded_bytes"]
+    for name, entry in private["files"].items():
+        assert entry["url"] == "https://github.com/Virtastic/freecad-web/releases/download/v1.0.9/" + name
+        assert entry["sha256"][:12] in entry["path"]
+
+
+def test_corrupt_cached_payload_is_never_accepted(tmp_path):
+    data = b"fixed runtime"
+    expected = {"size": len(data), "sha256": sha256(data).hexdigest()}
+    path = tmp_path / "runtime"
+    path.write_bytes(data)
+    assert installer.verified(path, expected)
+    path.write_bytes(b"wrong runtime")
+    assert not installer.verified(path, expected)
+    path.write_bytes(data[:-1])
+    assert not installer.verified(path, expected)
+
+
+def test_isolation_and_wasm_authority_do_not_leak_to_the_launcher(tmp_path):
+    headers = (ROOT / "_headers").read_text()
+    parsed = parse_header_rules(headers)
+    assert not require_html_override_no_transform(parsed=parsed, label="source")
+    runtime = parsed["/cad/freecad/*"]
+    assert runtime["cross-origin-opener-policy"] == "same-origin"
+    assert runtime["cross-origin-embedder-policy"] == "require-corp"
+    assert "noindex" in runtime["x-robots-tag"]
+    for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
+        assert "'unsafe-eval'" not in parsed[pattern]["content-security-policy"]
+        assert "identitytoolkit.googleapis.com" not in parsed[pattern]["content-security-policy"]
+        assert "securetoken.googleapis.com" not in parsed[pattern]["content-security-policy"]
+    assert "wasm-unsafe-eval" not in parsed["/*"]["content-security-policy"]
+    for route in ["cad/freecad", "ferramentas/modelador-parametrico-3d"]:
+        (tmp_path / route).mkdir(parents=True)
+        (tmp_path / route / "index.html").write_text("<html></html>")
+    result = parse_header_rules(apply_wallet_document_policies(headers, tmp_path))
+    launcher = result["/ferramentas/modelador-parametrico-3d/"]["content-security-policy"]
+    assert "wasm-unsafe-eval" not in launcher and "'unsafe-eval'" not in launcher
+    for route in ["/cad/freecad/", "/cad/freecad/index.html"]:
+        for policies in [parsed, result]:
+            app = policies[route]["content-security-policy"]
+            assert "'unsafe-eval'" in app and "wasm-unsafe-eval" in app
+            assert "identitytoolkit.googleapis.com" in app
+            assert "apis.google.com" not in app and "firebaseapp.com" not in app
+            assert "script-src-attr 'none'" in app
+            assert "frame-src 'none'" in app and "object-src 'none'" in app
+            assert "'unsafe-inline'" not in csp_directives_from_text("Content-Security-Policy: " + app)["script-src"]
+    built = apply_wallet_document_policies(headers, tmp_path)
+    assert apply_wallet_document_policies(built, tmp_path) == built
+    for pattern in ["/*", "/cad/freecad/*", "/assets/freecad/*"]:
+        assert result[pattern] == parsed[pattern]
+    # pthread workers use the CSP on their own script response. Grant Embind's
+    # dynamic invokers only to the exact, integrity-pinned engine, not all assets.
+    engine = installer.MANIFEST["files"]["FreeCAD.js"]["path"]
+    assert engine == "/assets/freecad/FreeCAD-3f8c1ff4a0ee.js"
+    for policies in [parsed, result]:
+        policy = csp_directives_from_text("Content-Security-Policy: " + policies[engine]["content-security-policy"])
+        assert policy["script-src"] == ["'self'", "'wasm-unsafe-eval'", "'unsafe-eval'"]
+        assert policy["connect-src"] == ["'self'"]
+        assert "'unsafe-inline'" not in policy["script-src"]
+        assert not any("google" in token or "firebase" in token for values in policy.values() for token in values)
+        exceptions = {route for route, values in policies.items()
+                      if "'unsafe-eval'" in values.get("content-security-policy", "")
+                      and route.startswith(("/cad/freecad", "/assets/freecad"))}
+        assert exceptions == {"/cad/freecad/", "/cad/freecad/index.html", engine}
+
+
+def test_engine_cannot_be_downloaded_by_reading_the_public_page():
+    page = (ROOT / "ferramentas/modelador-parametrico-3d/index.html").read_text()
+    script = (ROOT / "ferramentas/modelador-parametrico-3d/launcher.mjs").read_text()
+    assert "503 MB" in page and "cópia" in page and "FCStd" in page
+    assert "FreeCAD.wasm" not in page and "FreeCAD.data" not in page
+    assert "fetch(" not in script and "import(" not in script
+    assert 'addEventListener(\'click\'' in script
+    assert '<h1 id="titulo">Modelador paramétrico 3D grátis no navegador</h1>' in page
+
+
+def test_copied_compatibility_does_not_install_remote_features_or_inject_query_into_python():
+    graphics = (ROOT / "cad/freecad/vendor/graphics.js").read_text()
+    runtime = (ROOT / "cad/freecad/runtime.mjs").read_text()
+    assert "_fcaddonreq" not in graphics
+    assert "fcweb_share" not in graphics
+    assert "location.search" not in graphics
+    assert "7 * 86400" not in graphics
+    assert "_os.remove(_os.path.join(self.DIR, f))" not in graphics
+    assert "__fcHttpDeviceInstall" not in runtime
+    assert "__fcSessionPreboot" not in runtime
+    assert "getPreloadedPackage" in runtime and "wasmBinary: wasm" in runtime
+    assert "FemWorkbench" in (ROOT / "cad/freecad/bootstrap.txt").read_text()
+    assert "GPL-3.0-only" in (ROOT / "cad/freecad/vendor/qtloader.js").read_text()
+    for path in ["LICENSE-FreeCAD-Web.txt", "NOTICE-upstream.txt", "NOTICE.txt", "licenses/GPL-3.0-only.txt", "licenses/LGPL-3.0-only.txt"]:
+        assert (ROOT / "cad/freecad" / path).is_file()
+
+
+def test_dialog_escape_and_bridge_errors_never_accept_an_action(monkeypatch):
+    roles = ['Ok', 'Yes', 'YesToAll', 'No', 'NoToAll', 'Abort', 'Retry', 'Ignore',
+             'Save', 'SaveAll', 'Discard', 'Apply', 'Reset', 'Close', 'Cancel']
+    messagebox = type("MessageBox", (), {name: 1 << i for i, name in enumerate(roles)})
+    messagebox.NoButton = 0
+    bridge = SimpleNamespace(confirm=lambda *_: -1)
+    monkeypatch.setitem(sys.modules, "PySide6", SimpleNamespace(QtWidgets=SimpleNamespace(QMessageBox=messagebox)))
+    monkeypatch.setitem(sys.modules, "_fcwebdlg", bridge)
+    runpy.run_path(str(ROOT / "cad/freecad/vendor/dialogs.txt"))
+    assert messagebox.question(None, 'title', 'body', messagebox.Yes) == messagebox.NoButton
+    assert messagebox.question(None, 'title', 'body', messagebox.Yes | messagebox.No) == messagebox.No
+    assert messagebox.question(None, 'title', 'body', messagebox.Save | messagebox.Discard | messagebox.Cancel) == messagebox.Cancel
+    instance = messagebox()
+    instance.standardButtons = lambda: (_ for _ in ()).throw(RuntimeError('bridge failed'))
+    assert instance.exec() == messagebox.NoButton
+
+
+def test_autosave_preserves_edits_to_an_opened_example(tmp_path, monkeypatch):
+    # Execute the Python saver shipped inside the compatibility script. Merely
+    # checking that save(True) was called would miss the old /freecad/ skip.
+    extract = r"""
+import fs from 'node:fs';
+import vm from 'node:vm';
+const graphics = fs.readFileSync('cad/freecad/vendor/graphics.js', 'utf8');
+const code = graphics.slice(graphics.indexOf('    var AUTOSAVE_INSTALL = ['), graphics.indexOf('    var RESTORE_PY = ['));
+if (!code) throw new Error('production saver not found');
+const scope = vm.createContext({URLSearchParams, AUTOSAVE_DIR: process.argv[1], AUTOSAVE_MARKER: process.argv[2]});
+vm.runInContext(code, scope);
+process.stdout.write(scope.AUTOSAVE_INSTALL);
+"""
+    recovery = tmp_path / "recovery"
+    marker = tmp_path / "installed"
+    source = subprocess.check_output(
+        ["node", "--input-type=module", "-e", extract, str(recovery), str(marker)],
+        cwd=ROOT,
+        text=True,
+    )
+    saved = []
+
+    def document(name, filename, content):
+        def save_copy(target):
+            path = Path(target)
+            saved.append(path)
+            path.write_bytes(content)
+        return SimpleNamespace(Name=name, FileName=filename, saveCopy=save_copy)
+
+    docs = {
+        "Example": document("Example", "/freecad/data/examples/PartDesign.FCStd", b"edited example"),
+        "Project": document("Project", "/home/web_user/project.FCStd", b"edited project"),
+    }
+    params = SimpleNamespace(SetBool=lambda *_: None, SetInt=lambda *_: None, GetInt=lambda *_: 3)
+    app = SimpleNamespace(ParamGet=lambda *_: params, listDocuments=lambda: docs, addDocumentObserver=lambda *_: None)
+    monkeypatch.setitem(sys.modules, "FreeCAD", app)
+    exec(compile(source, "production-autosaver", "exec"), {})
+    app._fcweb_saver.save(True)
+    assert set(saved) == {recovery / "Example.FCStd", recovery / "Project.FCStd"}
+    assert (recovery / "Example.FCStd").read_bytes() == b"edited example"
+    assert (recovery / "Project.FCStd").read_bytes() == b"edited project"
+    assert app._fcweb_saver.dirty is False
+    assert not (recovery / ".failed").exists()

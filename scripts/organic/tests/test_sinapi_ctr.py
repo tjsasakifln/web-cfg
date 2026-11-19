@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import sys
+import re
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
@@ -67,3 +70,29 @@ def test_title_that_omits_sinapi_fails_closed():
     report = evaluate_sinapi_snippet(omitted)
     assert report["ok"] is False
     assert "title_omits_sinapi" in report["fails"]
+
+
+@pytest.mark.parametrize("directive", [
+    '<meta name="robots" content="noindex,follow">',
+    "<meta content='NOINDEX, FOLLOW' name='ROBOTS'>",
+    '<meta name="robots" content="none">',
+    '<meta name="googlebot" content="noindex">',
+    '<meta name="robots" content="index,follow"><meta name="robots" content="noindex">',
+])
+def test_crawler_exclusions_are_detected_after_the_title(directive):
+    html = SINAPI_PATH.read_text(encoding="utf-8")
+    # Preserve the real article and its title, replacing only crawler metadata.
+    html = re.sub(r'<meta\b(?=[^>]*\bname=["\']robots["\'])[^>]*>', "", html, flags=re.I)
+    candidate = html.replace("</head>", directive + "</head>", 1)
+    assert parse_title(candidate) == CANONICAL_TITLE
+    report = evaluate_sinapi_snippet(candidate)
+    assert not report["ok"]
+    assert "unexpected_noindex" in report["fails"]
+
+
+def test_indexable_directives_and_visible_word_noindex_are_not_exclusions():
+    html = SINAPI_PATH.read_text(encoding="utf-8")
+    candidate = html.replace("</head>", '<meta name="googlebot" content="index,follow,max-snippet:-1"></head>', 1)
+    candidate = candidate.replace("</body>", "<p>noindex</p></body>", 1)
+    report = evaluate_sinapi_snippet(candidate)
+    assert report["ok"], report["fails"]

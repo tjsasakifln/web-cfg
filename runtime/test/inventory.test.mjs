@@ -24,6 +24,7 @@ const EXPECTED_FUNCTIONS = [
   "ops",
   "project-orders",
   "project-orders-webhook",
+  "science-tools",
   "search-observation-tick",
   "tool-credits",
   "tool-credits-webhook",
@@ -32,10 +33,10 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 59);
-  assert.equal(inventory.function_count, 24);
+  assert.equal(inventory.file_count, 60);
+  assert.equal(inventory.function_count, 25);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 24);
+  assert.equal(inventory.validation.loaded_handlers, 25);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,
@@ -85,6 +86,9 @@ test("inventory classifies frontend, schedules, probes and ops without assuming 
   const credits = byName.get("tool-credits");
   assert.equal(credits.usage_state, "public_runtime");
   assert.ok(credits.consumers.frontend.some(({ path }) => path === "assets/js/tool-credits.mjs"));
+  const science = byName.get("science-tools");
+  assert.equal(science.usage_state, "public_runtime");
+  assert.ok(science.consumers.frontend.some(({ path }) => path === "assets/js/science-tools.mjs"));
   // Provider callbacks have no frontend caller; the shared routing regression
   // now exercises this handler directly.
   const creditsWebhook = byName.get("tool-credits-webhook");

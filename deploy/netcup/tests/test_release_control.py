@@ -39,6 +39,29 @@ def private_dependency_fixture(tmp_path_factory: pytest.TempPathFactory):
         (package_dir / "package.json").write_text("{}\n", encoding="utf-8")
     with pytest.MonkeyPatch.context() as monkeypatch:
         monkeypatch.setattr("deploy.netcup.package_release.TOOLS_COMMERCE_DEPS", directory)
+        # Keep control-plane unit fixtures small. The real scientific closure
+        # and calculations are tested before and after extraction in CI.
+        science = directory / "science"
+        science.mkdir()
+        (science / "requirements.lock").write_text("fixture==1\n")
+        (science / "license-inventory.json").write_text("[]\n")
+        binary = science / "python/bin/python3.12"
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"\x7fELFcontrolled-unit-fixture")
+        binary.chmod(0o755)
+        patches = []
+        for relative in ("sectionproperties/pre/pre.py", "concreteproperties/analysis_section.py"):
+            file = science / "python/lib/python3.12/site-packages" / relative
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_text("# controlled unit fixture\n")
+            patches.append({"path": relative, "modified_sha256": sha256_file(file)})
+        (science / "runtime-manifest.json").write_text(json.dumps({
+            "schema":"confenge.science-runtime/v1", "platform":"linux-x86_64-gnu",
+            "python":"3.12.16", "triangle_included":False, "patches":patches,
+            "requirements_sha256":sha256_file(science / "requirements.lock"),
+            "licenses_sha256":sha256_file(science / "license-inventory.json"),
+        }))
+        monkeypatch.setattr("deploy.netcup.package_release.SCIENCE_TOOLS", science)
         yield
 
 
@@ -1175,6 +1198,8 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
     for required in (
         "_site/index.html",
         "runtime/server.mjs",
+        "runtime/contract-news/server.mjs",
+        "runtime/contract-news/validate.mjs",
         "runtime/contract.json",
         "runtime/tools-commerce/deps/package.json",
         "runtime/tools-commerce/deps/package-lock.json",
@@ -1184,6 +1209,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "data/revops/closed-loop-funnel.v1.json",
         "data/nurture/tracks.json",
         "data/site/editorial-policy.json",
+        "data/editorial/contract-news-source.json",
         "data/bofu-dominance/core/gsc-live-overlay.v1.json",
         "data/offers/flags.json",
         "data/offers/catalog.snapshot.json",
@@ -1197,9 +1223,15 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "ops/bin/verify-release",
         "ops/bin/promote-release",
         "ops/bin/rollback",
+        "ops/contract-news/run.py",
+        "ops/contract-news/verify_public.py",
         "scripts/__init__.py",
         "scripts/live_intelligence/publish.py",
         "scripts/organic/sitemap_graph.py",
+        "scripts/contract_news/__main__.py",
+        "scripts/contract_news/pipeline.py",
+        "scripts/contract_news/core.py",
+        "scripts/contract_news/openai_client.py",
         "scripts/storage/lib.cjs",
         "scripts/storage/retention.mjs",
         "scripts/site/shell_nav.py",

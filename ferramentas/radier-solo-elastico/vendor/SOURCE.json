@@ -1,0 +1,12 @@
+{
+  "source": "https://github.com/getcadcraft/bimcraft/releases/download/bimcraft-v0.8.1/bimcraft-browser-edition-v0.8.1.zip",
+  "archive_sha256": "93ccdf2500eab65a001b98594eeda63c6ddee40e98e3283b66863abbe2a3673a",
+  "license": "Apache-2.0",
+  "files": {
+    "frame-model.js": "bd00c76620b0716c95a6032d3f955e61992fd6c0a6e3ad52604ae0a6e04bce99",
+    "frame-solve.js": "0716cde92a4c476cf2114000d4dd72a552914b5e8da5b1e27331226db5b86fc9",
+    "plate-model.js": "7cc50450d64b85054f195ceffdbd97ac63c9d2f95e788fd63dafdcd8e4b33218",
+    "plate-solve.js": "4aa31a83156a7cb783169609ff4bd14f327166ab6150a433815902888349edba",
+    "plate.js": "6537fc2eff8d4b5ae84421604a104b5605441080372a9ff15aa3d5774da01c2b"
+  }
+}

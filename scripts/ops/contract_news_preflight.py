@@ -31,10 +31,18 @@ def main() -> None:
         {"path": item, "exists": Path(item).exists(), "readable": os.access(item, os.R_OK),
          "writable": os.access(item, os.W_OK)}
         for item in ("/etc/confenge-web/runtime.env", "/var/lib/confenge-web",
-                     "/var/lib/confenge-market-radar", "/var/lib/confenge-contract-news",
+                     "/var/lib/confenge-market-radar", "/var/lib/confenge-market-radar/current.json",
+                     "/var/lib/confenge-web/contract-news",
                      "/opt/extra-consultoria", "/opt/confenge-web/current", "/opt/confenge-web/shared")
     ]
     result["runtime_env"] = inspect_env(Path("/etc/confenge-web/runtime.env"))
+    result["versions"] = {}
+    for executable in ("python3", "node"):
+        try:
+            proc = subprocess.run([executable, "--version"], capture_output=True, text=True, timeout=5)
+            result["versions"][executable] = proc.stdout.strip() if proc.returncode == 0 else "unavailable"
+        except (OSError, subprocess.TimeoutExpired):
+            result["versions"][executable] = "unavailable"
     try:
         proc = subprocess.run(["systemctl", "list-unit-files", "--no-pager", "--no-legend", "*pncp*", "*radar*", "*contract-news*"], capture_output=True, text=True, timeout=10)
         units = [line.split()[0] for line in proc.stdout.splitlines() if line.split()]

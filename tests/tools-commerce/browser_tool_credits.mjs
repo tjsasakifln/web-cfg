@@ -671,6 +671,12 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.deepEqual(Object.keys(attempts[0].payload).sort(), ['bytes', 'format', 'sha256']);
   assert.ok(!JSON.stringify(attempts[0]).includes('dado privado'));
   await page.waitForFunction(() => document.querySelector('.tool-credits__export-notice')?.textContent.includes('Baixar comprovante'));
+  assert.match(await page.$eval('.tool-credits__export-notice', notice => notice.textContent), /Indique e ganhe créditos/);
+  assert.equal(await page.$('dialog[open]'), null, 'successful export must not open a referral popup');
+  await activateVisibleControl(page, '.tool-credits__export-notice button:nth-of-type(2)');
+  await page.waitForSelector('dialog[open] #tool-credits-referral');
+  assert.match(await page.$eval('dialog[open] #tool-credits-referral', section => section.textContent), /primeira exportação paga/);
+  await activateVisibleControl(page, 'dialog[open] .tool-credits__close');
 
   toolCreditsConfig = {...sharedEnabledConfig}; delete toolCreditsConfig.sharedExportsEnabled;
   const gated = await browser.newPage();

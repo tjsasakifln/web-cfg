@@ -17,6 +17,7 @@ HTML_SERVING_CACHE_OVERRIDES = (
     "/bim/web/*",
     "/bim/fotogrametria/*",
     "/cad/editor/*",
+    "/cad/freecad/*",
 )
 
 
@@ -89,19 +90,74 @@ def render_hashed_cache_block(hrefs: list[str], *, begin: str, end: str) -> str:
 
 
 def upsert_hashed_cache_block(text: str, hrefs: list[str], *, begin: str, end: str) -> str:
-    block = render_hashed_cache_block(hrefs, begin=begin, end=end)
-    start = text.find(begin)
-    if start != -1:
-        stop = text.find(end, start)
-        if stop == -1:
+    # A pinned worker can already own an exact CSP or Content-Type selector.
+    # Keep that selector in place and mark only the cache field we add, so a
+    # later asset list can remove our field without removing its source policy.
+    field_begin = f"  {begin} (existing selector)"
+    field_end = f"  {end} (existing selector)"
+    field = f"{field_begin}\n  Cache-Control: {IMMUTABLE_CACHE}\n{field_end}\n"
+    text = re.sub(
+        rf"(?m)^{re.escape(field_begin)}\r?\n"
+        rf"  Cache-Control: {re.escape(IMMUTABLE_CACHE)}\r?\n"
+        rf"{re.escape(field_end)}(?:\r?\n|$)",
+        "", text,
+    )
+    if field_begin in text or field_end in text:
+        raise ValueError(f"{begin} has a changed or unclosed owned cache field")
+
+    starts = list(re.finditer(rf"(?m)^{re.escape(begin)}\r?$", text))
+    ends = list(re.finditer(rf"(?m)^{re.escape(end)}\r?$", text))
+    if starts:
+        if len(starts) != 1 or len(ends) != 1 or ends[0].start() < starts[0].end():
             raise ValueError(f"{begin} is unclosed")
-        stop += len(end)
-        while stop < len(text) and text[stop] == "\n":
+        stop = ends[0].end()
+        if stop < len(text) and text[stop] == "\n":
             stop += 1
-        return text[:start] + block + text[stop:]
-    if text and not text.endswith("\n"):
-        text += "\n"
-    return text + ("\n" if text else "") + block
+        parts = [text[:starts[0].start()], text[stop:]]
+    else:
+        if ends:
+            raise ValueError(f"{end} has no opening marker")
+        parts = [text, ""]
+
+    requested = set(hrefs)
+    existing: set[str] = set()
+    required_cache = cache_directives(IMMUTABLE_CACHE)
+    for index, part in enumerate(parts):
+        lines = part.splitlines(keepends=True)
+        selectors = [i for i, line in enumerate(lines)
+                     if line.strip() and not line.startswith((" ", "\t", "#"))]
+        insertions = []
+        for position, start in enumerate(selectors):
+            href = lines[start].strip()
+            if href not in requested:
+                continue
+            if href in existing:
+                raise ValueError(f"duplicate header selector: {href}")
+            existing.add(href)
+            stop = selectors[position + 1] if position + 1 < len(selectors) else len(lines)
+            cache = [match.group(1).strip() for line in lines[start + 1:stop]
+                     if (match := re.match(r"^[ \t]+cache-control\s*:\s*(.*?)\s*$", line, re.I))]
+            if len(cache) > 1:
+                raise ValueError(f"duplicate Cache-Control under {href}")
+            if cache:
+                directives = cache_directives(cache[0])
+                if not required_cache <= directives or directives - required_cache - {"no-transform"}:
+                    raise ValueError(f"authored Cache-Control conflicts with immutable asset: {href}")
+            else:
+                if not lines[start].endswith("\n"):
+                    lines[start] += "\n"
+                insertions.append((start + 1, field))
+        for position, value in reversed(insertions):
+            lines.insert(position, value)
+        parts[index] = "".join(lines)
+
+    block = render_hashed_cache_block(sorted(requested - existing), begin=begin, end=end)
+    if starts:
+        return parts[0] + block + parts[1]
+    prefix = parts[0]
+    if prefix and not prefix.endswith("\n"):
+        prefix += "\n"
+    return prefix + ("\n" if prefix else "") + block
 
 
 def evaluate_cache_contract(

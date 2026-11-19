@@ -22,6 +22,7 @@ from scripts.site.csp_contract import (  # noqa: E402
     PROJECT_ORDERS_DOCUMENT,
     WALLET_DOCUMENTS,
     WALLET_ISOLATED_DOCUMENT,
+    WALLET_ISOLATED_DOCUMENTS,
     apply_artifact_csp_hashes,
     apply_script_src_hashes,
     apply_style_src_hashes,
@@ -110,6 +111,10 @@ def test_project_orders_password_policy_is_exact_and_isolated() -> None:
         (root / "projetos-prontos/pedidos").mkdir(parents=True)
         page = root / "projetos-prontos/pedidos/index.html"
         page.write_text('<script>privateBootstrap()</script><style>.private{color:red}</style>', encoding="utf-8")
+        (root / "cad/freecad").mkdir(parents=True)
+        (root / "cad/freecad/index.html").write_text(
+            '<script>freecadBootstrap()</script><style>.freecad{color:blue}</style>', encoding="utf-8"
+        )
         (root / "index.html").write_text('<script>publicBootstrap()</script>', encoding="utf-8")
         original = _headers_with_script_src("'self'") + (
             "\n/ferramentas/\n  Content-Security-Policy: script-src 'self' https://apis.google.com\n"
@@ -328,6 +333,33 @@ def test_style_parser_covers_blocks_and_attributes() -> None:
     assert attributes == ["--bar: 25%"]
 
 
+def wallet_policy_errors(route: str, value: str) -> list[str]:
+    errors = []
+    wallet = _policy(value)
+    if not set(FIREBASE_AUTH_CONNECTIONS) <= set(wallet.get("connect-src", [])):
+        errors.append(f"Wallet CSP blocks Firebase Auth: {route}")
+    frames = set(wallet.get("frame-src", []))
+    popup_script = FIREBASE_POPUP_SCRIPT in wallet.get("script-src", [])
+    if route in WALLET_ISOLATED_DOCUMENTS:
+        if popup_script or frames.intersection(FIREBASE_POPUP_FRAMES):
+            errors.append(f"Isolated wallet should open social login in the catalogue: {route}")
+    elif not popup_script or not set(FIREBASE_POPUP_FRAMES) <= frames:
+        errors.append(f"Wallet CSP blocks Firebase OAuth: {route}")
+    if len(value.encode("utf-8")) > 7168:
+        errors.append(f"Wallet CSP exceeds 7168 bytes: {route}")
+    return errors
+
+
+def test_isolated_wallet_policy_accepts_token_auth_and_rejects_popup_sources() -> None:
+    base = "default-src 'none'; script-src 'self'; connect-src 'self' " + " ".join(FIREBASE_AUTH_CONNECTIONS) + "; frame-src 'none'"
+    for route in WALLET_ISOLATED_DOCUMENTS:
+        assert wallet_policy_errors(route, base) == []
+        assert wallet_policy_errors(route, base.replace("script-src 'self'", "script-src 'self' " + FIREBASE_POPUP_SCRIPT))
+        assert wallet_policy_errors(route, base.replace("frame-src 'none'", "frame-src " + FIREBASE_POPUP_FRAMES[0]))
+        assert wallet_policy_errors(route, base.replace(FIREBASE_AUTH_CONNECTIONS[0], ""))
+    assert wallet_policy_errors("/ferramentas/", base), "the catalogue still requires its social login policy"
+
+
 def evaluate_live() -> tuple[list[str], Counter[str], Counter[str], Counter[str]]:
     verify_parser_is_fail_closed()
     text = HEADERS.read_text(encoding="utf-8")
@@ -343,18 +375,7 @@ def evaluate_live() -> tuple[list[str], Counter[str], Counter[str], Counter[str]
         if not value:
             errors.append(f"Wallet document has no scoped CSP: {route}")
             continue
-        wallet = _policy(value)
-        if not set(FIREBASE_AUTH_CONNECTIONS) <= set(wallet.get("connect-src", [])):
-            errors.append(f"Wallet CSP blocks Firebase Auth: {route}")
-        frames = set(wallet.get("frame-src", []))
-        popup_script = FIREBASE_POPUP_SCRIPT in wallet.get("script-src", [])
-        if route == WALLET_ISOLATED_DOCUMENT:
-            if popup_script or frames.intersection(FIREBASE_POPUP_FRAMES):
-                errors.append(f"Isolated wallet should open social login in the catalogue: {route}")
-        elif not popup_script or not set(FIREBASE_POPUP_FRAMES) <= frames:
-            errors.append(f"Wallet CSP blocks Firebase OAuth: {route}")
-        if len(value.encode("utf-8")) > 7168:
-            errors.append(f"Wallet CSP exceeds 7168 bytes: {route}")
+        errors.extend(wallet_policy_errors(route, value))
     order_policy = rules.get(PROJECT_ORDERS_DOCUMENT, {}).get("content-security-policy", "")
     if not (SITE / "projetos-prontos/pedidos/index.html").is_file():
         errors.append("Project orders document missing from the artifact")

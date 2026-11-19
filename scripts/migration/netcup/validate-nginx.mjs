@@ -359,11 +359,91 @@ ${normalizeWrapper("confenge-web-public.conf")}
     `/assets/js/tab-draft.mjs: HTTP ${draftModule.status} ${draftModule.headers["content-type"]}`,
   );
 
+  // Workers enforce their response CSP independently of the containing page.
+  // Exercise the generated nginx maps on actual JavaScript responses, including
+  // the exact FreeCAD exception, while neighbouring modules stay unprivileged.
+  const immutableFreecadCache = (response) => {
+    const cache = (response.headers["cache-control"] || "").toLowerCase().split(",").map((part) => part.trim());
+    return ["public", "max-age=31536000", "immutable"].every((part) => cache.includes(part));
+  };
+  const revalidatableFreecadCache = (response) => {
+    const cache = (response.headers["cache-control"] || "").toLowerCase().split(",").map((part) => part.trim());
+    return cache.includes("max-age=0") && cache.includes("must-revalidate") && !cache.includes("immutable");
+  };
+  for (const path of [
+    "/assets/freecad/FreeCAD-3f8c1ff4a0ee.js",
+    "/ferramentas/epanet-inp/worker.mjs",
+  ]) {
+    const expected = contract.headers.find((rule) => rule.match === "exact" && rule.path === path)
+      ?.headers.find((header) => header.name.toLowerCase() === "content-security-policy")?.value;
+    assertProbe(`worker_csp_declared:${path}`, Boolean(expected), "an exact worker CSP must be declared");
+    const response = await client.request(path);
+    assertProbe(
+      `worker_javascript_response:${path}`,
+      response.status === 200 && /^(?:application|text)\/javascript(?:\s*;|$)/i.test(response.headers["content-type"] || ""),
+      `status=${response.status} content-type=${response.headers["content-type"]}`,
+    );
+    assertProbe(
+      `worker_csp_effective:${path}`,
+      response.headers["content-security-policy"] === expected,
+      `csp=${response.headers["content-security-policy"]} expected=${expected}`,
+    );
+    if (path.startsWith("/assets/freecad/")) {
+      assertProbe("freecad_script_immutable_cache", immutableFreecadCache(response), `cache=${response.headers["cache-control"]}`);
+      assertProbe("freecad_script_coep", response.headers["cross-origin-embedder-policy"] === "require-corp", JSON.stringify(response.headers));
+      assertProbe("freecad_script_corp", response.headers["cross-origin-resource-policy"] === "same-origin", JSON.stringify(response.headers));
+      assertProbe("freecad_script_noindex", response.headers["x-robots-tag"] === "noindex", JSON.stringify(response.headers));
+    }
+  }
+  const freecadDocument = await client.request("/cad/freecad/");
+  assertProbe(
+    "freecad_document_isolation",
+    freecadDocument.status === 200 && /^text\/html/i.test(freecadDocument.headers["content-type"] || "")
+      && freecadDocument.headers["cross-origin-opener-policy"] === "same-origin"
+      && freecadDocument.headers["cross-origin-embedder-policy"] === "require-corp"
+      && revalidatableFreecadCache(freecadDocument),
+    `status=${freecadDocument.status} headers=${JSON.stringify(freecadDocument.headers)}`,
+  );
+  const freecadWasm = await client.request("/assets/freecad/FreeCAD-fafb7fb93d7c.wasm", {
+    extraHeaders: { Range: "bytes=0-0" },
+  });
+  assertProbe(
+    "freecad_wasm_type_and_isolation",
+    freecadWasm.status === 206 && /^application\/wasm(?:\s*;|$)/i.test(freecadWasm.headers["content-type"] || "")
+      && freecadWasm.headers["cross-origin-embedder-policy"] === "require-corp"
+      && freecadWasm.headers["cross-origin-resource-policy"] === "same-origin"
+      && freecadWasm.headers["content-security-policy"] === undefined
+      && immutableFreecadCache(freecadWasm),
+    `status=${freecadWasm.status} headers=${JSON.stringify(freecadWasm.headers)}`,
+  );
+  const freecadData = await client.request("/assets/freecad/FreeCAD-e3cae3720c2f.data", {
+    extraHeaders: { Range: "bytes=0-0" },
+  });
+  assertProbe(
+    "freecad_data_isolation_and_immutable_cache",
+    freecadData.status === 206 && immutableFreecadCache(freecadData)
+      && freecadData.headers["cross-origin-embedder-policy"] === "require-corp"
+      && freecadData.headers["cross-origin-resource-policy"] === "same-origin"
+      && freecadData.headers["content-security-policy"] === undefined,
+    `status=${freecadData.status} headers=${JSON.stringify(freecadData.headers)}`,
+  );
+  for (const path of ["/assets/freecad/runtime.json", "/ferramentas/epanet-inp/app.mjs"]) {
+    const response = await client.request(path);
+    assertProbe(
+      `worker_neighbour_has_no_csp:${path}`,
+      response.status === 200 && !/^text\/html/i.test(response.headers["content-type"] || "")
+        && response.headers["content-security-policy"] === undefined,
+      `status=${response.status} csp=${response.headers["content-security-policy"]}`,
+    );
+    if (path === "/assets/freecad/runtime.json") {
+      assertProbe("freecad_manifest_revalidatable", revalidatableFreecadCache(response), `cache=${response.headers["cache-control"]}`);
+    }
+  }
+
   // --- Document-only security headers -------------------------------------
-  // Browsers honour Content-Security-Policy, X-Frame-Options, Permissions-Policy
-  // and Referrer-Policy only on a document. The generated host contract emits
-  // those four exclusively when $sent_http_content_type is text/html, so every
-  // asset stops paying ~6 KB of dead header bytes on every single response.
+  // Corporate CSP, X-Frame-Options, Permissions-Policy and Referrer-Policy stay
+  // on HTML responses. The explicit worker CSPs above are the only additional
+  // execution policies; ordinary assets avoid the corporate header payload.
   const documentOnlyHeaders = [
     "content-security-policy",
     "x-frame-options",

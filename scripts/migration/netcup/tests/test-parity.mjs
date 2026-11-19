@@ -141,3 +141,23 @@ test("only the hydraulic worker carries the local EPANET WebAssembly exception",
   const ui = {...baseCase, path: "/ferramentas/rede-de-agua/app.js"};
   assert.ok(compareResponses(ui, withPolicy, withPolicy).differences.some(d => d.field === "header:content-security-policy"));
 });
+
+test("parity preserves CSP only on the pinned FreeCAD and imported EPANET workers", () => {
+  for (const [workerPath, policy, neighbours] of [
+    ["/assets/freecad/FreeCAD-3f8c1ff4a0ee.js", "default-src 'none'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'", [
+      "/assets/freecad/FreeCAD.js", "/assets/freecad/FreeCAD-ffffffffffff.js", "/assets/freecad/runtime.json",
+    ]],
+    ["/ferramentas/epanet-inp/worker.mjs", "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'none'; object-src 'none'; base-uri 'none'", [
+      "/ferramentas/epanet-inp/app.mjs", "/ferramentas/epanet-inp/engine.mjs", "/ferramentas/epanet-inp/worker.mjs/other",
+    ]],
+  ]) {
+    const withPolicy = response({ headers: { "content-type": "application/javascript", "content-security-policy": policy } });
+    const withoutPolicy = response({ headers: { "content-type": "application/javascript" } });
+    const worker = { ...baseCase, path: workerPath };
+    assert.equal(compareResponses(worker, withPolicy, withPolicy).ok, true, workerPath);
+    assert.ok(compareResponses(worker, withPolicy, withoutPolicy).differences.some(d => d.field === "header:content-security-policy"), workerPath);
+    for (const path of neighbours) {
+      assert.ok(compareResponses({ ...baseCase, path }, withPolicy, withPolicy).differences.some(d => d.field === "header:content-security-policy"), path);
+    }
+  }
+});

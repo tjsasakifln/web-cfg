@@ -1,0 +1,86 @@
+[
+  {
+    "name": "beam-known-solution",
+    "request": {
+      "operation": "memory",
+      "data": {
+        "template": "beam",
+        "length": 5,
+        "load": 10,
+        "modulus": 30,
+        "inertia": 160000
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 25
+      },
+      {
+        "index": 1,
+        "value": 31.25
+      },
+      {
+        "index": 2,
+        "value": 1.6954210069444444
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "axial-known-solution",
+    "request": {
+      "operation": "memory",
+      "data": {
+        "template": "axial",
+        "length": 2,
+        "force": 100,
+        "area": 1000,
+        "modulus": 200
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 100
+      },
+      {
+        "index": 1,
+        "value": 1
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "hazen-reference",
+    "request": {
+      "operation": "memory",
+      "data": {
+        "template": "hazen",
+        "length": 100,
+        "flow": 10,
+        "diameter": 100,
+        "coefficient": 130
+      }
+    },
+    "summary": [
+      {
+        "index": 0,
+        "value": 1.9034493764926996
+      }
+    ],
+    "invalid": false
+  },
+  {
+    "name": "arbitrary-code-rejected",
+    "request": {
+      "operation": "memory",
+      "data": {
+        "template": "beam",
+        "code": "import os"
+      }
+    },
+    "summary": [],
+    "invalid": true
+  }
+]

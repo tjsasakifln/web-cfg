@@ -401,12 +401,17 @@ def evaluate_index_gate(
 
 
 def align_sinapi_base(edital: str, planilha: str, regime: str) -> dict[str, Any]:
-    """Coherence of SINAPI base vs edital vs company payroll regime."""
+    """Separate the administration's cost reference from the bidder's tax regime.
+
+    A different reference does not alone invalidate a proposal (TCU 421/2018).
+    This aid does not establish eligibility, acceptable prices or feasibility.
+    """
     edital_n = _text(edital)
     planilha_n = _text(planilha)
     regime_n = _text(regime)
-    allowed = {"desonerado", "nao_desonerado", "silente", "contraditorio", "mista", "incerto"}
-    if edital_n not in allowed or planilha_n not in allowed or regime_n not in allowed:
+    if (edital_n not in {"desonerado", "nao_desonerado", "silente", "contraditorio"}
+            or planilha_n not in {"desonerado", "nao_desonerado", "mista"}
+            or regime_n not in {"desonerado", "nao_desonerado", "incerto"}):
         return {
             "state": "INVALID_INPUT",
             "risk": "high",
@@ -417,40 +422,44 @@ def align_sinapi_base(edital: str, planilha: str, regime: str) -> dict[str, Any]
         return {
             "state": "CONTRADICTION",
             "risk": "high",
-            "verdict": "Há contradição ou mistura de bases. Não feche preço sem memória e sem a regra do órgão.",
+            "verdict": "Há pontos a esclarecer na referência ou na composição da planilha. Separe as bases, documente os ajustes e confira o edital antes de fechar preço.",
             "cannot_conclude": [
-                "Não se conclui qual tabela prevalece só pela página.",
-                "Não se conclui um desconto entre desonerado e não desonerado.",
+                "A seleção isolada não decide o enquadramento tributário nem a aceitação da proposta.",
             ],
+        }
+    if regime_n == "incerto":
+        return {
+            "state": "REGIME_UNKNOWN",
+            "risk": "medium",
+            "verdict": "Confirme o regime tributário da empresa antes de escolher os encargos da proposta. A base de referência do edital não define esse enquadramento.",
+            "cannot_conclude": ["Ainda faltam dados para concluir a coerência entre encargos e BDI."],
+        }
+    if planilha_n != regime_n:
+        return {
+            "state": "PROPOSAL_REGIME_GAP",
+            "risk": "high",
+            "verdict": "A base informada para a proposta difere do regime declarado. Confira encargos, CPRB, ajustes das composições e BDI; copiar a referência do edital não resolve essa diferença.",
+            "cannot_conclude": ["A divergência é um alerta para conferência, não uma decisão automática de desclassificação."],
         }
     if edital_n == "silente":
         return {
             "state": "EDITAL_SILENT",
             "risk": "medium",
-            "verdict": "O edital não fixou a base. Confirme planilha modelo, comunicação do órgão e data-base antes de escolher tabela.",
-            "cannot_conclude": ["Silêncio do edital não autoriza default nacional."],
+            "verdict": "A proposta acompanha o regime declarado, mas a referência do órgão não foi identificada. Confira anexos, competência, UF e critérios de aceitabilidade; esclareça a omissão.",
+            "cannot_conclude": ["Isso não demonstra exequibilidade nem aceitação da proposta."],
         }
-    aligned = edital_n == planilha_n and edital_n in {"desonerado", "nao_desonerado"}
-    regime_match = regime_n == edital_n
-    if aligned and regime_match:
+    if edital_n == planilha_n:
         return {
             "state": "ALIGNED",
             "risk": "low",
-            "verdict": "Edital, planilha e regime apontam a mesma base. Ainda confira data-base e BDI na mesma referência.",
+            "verdict": "Referência do órgão e proposta usam a mesma base, compatível com o regime declarado. Confira competência, UF, encargos e BDI.",
             "cannot_conclude": ["Alinhamento de base não prova exequibilidade da proposta."],
         }
-    if aligned and not regime_match:
-        return {
-            "state": "BASE_OK_REGIME_GAP",
-            "risk": "medium",
-            "verdict": "A planilha segue o edital, mas o regime da empresa não coincide com a base. Trate a diferença na margem real, não trocando a tabela do certame.",
-            "cannot_conclude": ["Não se conclui que a empresa deva mudar de regime só para caber na tabela."],
-        }
     return {
-        "state": "MISALIGNED",
-        "risk": "high",
-        "verdict": "Planilha e edital não estão na mesma base. Corrija antes de enviar. Trocar tabela para baratear unitário é o erro clássico.",
-        "cannot_conclude": ["Não se conclui um fator único para converter uma tabela na outra."],
+        "state": "REFERENCE_DIFFERS",
+        "risk": "medium",
+        "verdict": "A proposta acompanha o regime declarado e difere da referência do órgão. Essa diferença, por si só, não torna a proposta incorreta. Demonstre os custos e confira regras de apresentação, preços máximos e exequibilidade.",
+        "cannot_conclude": ["O resultado não autoriza descumprir o edital nem garante a aceitação da proposta."],
     }
 
 
@@ -579,7 +588,7 @@ def chassis_html(record: dict[str, Any]) -> str:
             },
         ],
         "author": {"@type": "Person", "name": record.get("author")},
-        "dateModified": CAMPAIGN_DAY.isoformat(),
+        "dateModified": record.get("updated_at", CAMPAIGN_DAY.isoformat()),
         "identifier": howto_id,
         "url": record.get("canonical"),
     }
@@ -636,19 +645,19 @@ def _visual_html(record: dict[str, Any]) -> str:
             "<h2>Alinhador de base SINAPI</h2>"
             "<p>Ferramenta de coerência. Não calcula preço e não publica fator de conversão.</p>"
             '<form class="breakout-tool" data-breakout-tool="sinapi-aligner" action="#" method="get">'
-            '<label>Base do edital <select name="edital">'
+            '<label>Base de referência do órgão <select name="edital">'
             '<option value="desonerado">Desonerado</option>'
             '<option value="nao_desonerado">Não desonerado</option>'
-            '<option value="silente">Silente</option>'
-            '<option value="contraditorio">Contraditório</option>'
+            '<option value="silente">Não identificada</option>'
+            '<option value="contraditorio">Contraditória</option>'
             "</select></label>"
-            '<label>Planilha em montagem <select name="planilha">'
+            '<label>Base de encargos da proposta <select name="planilha">'
             '<option value="desonerado">Desonerado</option>'
             '<option value="nao_desonerado">Não desonerado</option>'
             '<option value="mista">Mista</option>'
             "</select></label>"
-            '<label>Regime da empresa <select name="regime">'
-            '<option value="desonerado">Desonerada (CPRB / folha)</option>'
+            '<label>Regime tributário da empresa <select name="regime">'
+            '<option value="desonerado">Desonerada</option>'
             '<option value="nao_desonerado">Não desonerada</option>'
             '<option value="incerto">Incerto</option>'
             "</select></label>"
