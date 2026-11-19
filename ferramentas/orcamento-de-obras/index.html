@@ -3,16 +3,16 @@
 <link rel="canonical" href="https://confenge.com.br/ferramentas/orcamento-de-obras/"><meta name="theme-color" content="#061a33"><link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-b19be0f7.woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/styles-tools.css"><link rel="stylesheet" href="/assets/editorial-tool.css"><link rel="stylesheet" href="./orcamento.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Planilha de orçamento de obras","url":"https://confenge.com.br/ferramentas/orcamento-de-obras/","inLanguage":"pt-BR","applicationCategory":"BusinessApplication","operatingSystem":"Web","dateModified":"2026-11-19","description":"Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta.","isAccessibleForFree":true,"publisher":{"@type":"Organization","name":"CONFENGE","url":"https://confenge.com.br/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Ferramentas","item":"https://confenge.com.br/ferramentas/"},{"@type":"ListItem","position":3,"name":"Orçamento de obras","item":"https://confenge.com.br/ferramentas/orcamento-de-obras/"}]}]}</script>
-<script src="/assets/js/tools-common.js" defer></script><script src="/script.js" defer></script><script src="./app.js?v=creditos2" type="module"></script><!-- tool-showcase:head -->
+<script src="/assets/js/tools-common.js" defer></script><script src="/script.js" defer></script><script src="./app.js?v=continuidade1" type="module"></script><!-- tool-showcase:head -->
 <title>Orçamento de obra grátis: planilha SINAPI online | CONFENGE</title>
-<meta name="description" content="Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta."/>
+<meta name="description" content="Monte seu orçamento com SINAPI e BDI. Salve e reabra o projeto JSON grátis. Exporte Excel com fórmulas ou CSV conforme as condições da conta."/>
 <meta name="robots" content="index,follow,max-image-preview:large"/>
 <meta property="og:updated_time" content="2026-11-19"/>
 <meta property="og:type" content="website"/>
 <meta property="og:locale" content="pt_BR"/>
 <meta property="og:site_name" content="CONFENGE"/>
 <meta property="og:title" content="Orçamento de obra grátis: planilha SINAPI online | CONFENGE"/>
-<meta property="og:description" content="Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta."/>
+<meta property="og:description" content="Monte seu orçamento com SINAPI e BDI. Salve e reabra o projeto JSON grátis. Exporte Excel com fórmulas ou CSV conforme as condições da conta."/>
 <meta property="og:url" content="https://confenge.com.br/ferramentas/orcamento-de-obras/"/>
 <meta property="og:image" content="https://confenge.com.br/assets/tool-showcase/orcamento-de-obras.jpg"/>
 <meta property="og:image:type" content="image/jpeg"/>
@@ -21,7 +21,7 @@
 <meta property="og:image:alt" content="Orçamento de obra grátis: planilha SINAPI online, ilustração da ferramenta CONFENGE"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Orçamento de obra grátis: planilha SINAPI online | CONFENGE"/>
-<meta name="twitter:description" content="Monte um orçamento de obra grátis com quantitativos, preços próprios, SINAPI e BDI. Exporte Excel com fórmulas ou CSV conforme as condições da conta."/>
+<meta name="twitter:description" content="Monte seu orçamento com SINAPI e BDI. Salve e reabra o projeto JSON grátis. Exporte Excel com fórmulas ou CSV conforme as condições da conta."/>
 <meta name="twitter:image" content="https://confenge.com.br/assets/tool-showcase/orcamento-de-obras.jpg"/>
 <meta name="twitter:image:alt" content="Orçamento de obra grátis: planilha SINAPI online, ilustração da ferramenta CONFENGE"/>
 <link rel="stylesheet" href="/assets/tool-showcase/showcase.css"/>
@@ -74,9 +74,15 @@
 <section aria-labelledby="obra-titulo" class="orc-bloco"><div class="orc-topo"><h2 id="obra-titulo">Seu orçamento</h2><button type="button" id="demonstrar" class="button button-secondary" disabled>Carregar exemplo</button></div>
 <div class="orc-dados"><label for="nome-obra">Nome da obra<input id="nome-obra" maxlength="160" placeholder="Ex.: Reforma do térreo" disabled></label>
 <label for="bdi-obra">BDI (%)<input id="bdi-obra" inputmode="decimal" value="0" disabled></label></div>
+<aside id="bdi-recebido" aria-labelledby="bdi-recebido-titulo" hidden>
+<h3 id="bdi-recebido-titulo">Taxa recebida da calculadora de BDI</h3>
+<p>Taxa recebida: <strong id="bdi-recebido-taxa"></strong>. BDI atual do orçamento: <strong id="bdi-atual-taxa"></strong>.</p>
+<p>Ao aplicar, a taxa recebida substitui o BDI atual; ela não é somada a ele. Os serviços, o título e os dados em edição ficam preservados. Se você abrir outro projeto ou carregar um exemplo, a sugestão será descartada.</p>
+<div class="tool-actions"><button id="aplicar-bdi" type="button" class="button button-primary" data-event-name="cta_click" data-cta-id="tool-budget-apply-bdi" data-cta-position="tool_result">Aplicar taxa recebida</button><button id="descartar-bdi" type="button" class="button button-secondary" data-event-name="cta_click" data-cta-id="tool-budget-discard-bdi" data-cta-position="tool_result">Descartar taxa recebida</button></div>
+</aside><p id="bdi-transferencia-status" role="status"></p>
 <p id="erro-bdi" role="alert"></p>
 <div class="orc-resumo"><div>Custo direto<strong id="custo-direto">R$ 0,00</strong></div><div>BDI em reais<strong id="valor-bdi">R$ 0,00</strong></div><div>Total com BDI<strong id="total-obra">R$ 0,00</strong></div></div>
-<p id="gravacao" class="orc-nota">O cálculo e o rascunho ficam nesta aba do navegador ao clicar em “Adicionar à planilha” ou “Salvar alterações”. O projeto JSON continua disponível para levar uma cópia a outro aparelho ou manter uma versão permanente. A primeira exportação de resultado da conta é cortesia. As próximas exportações usam 1 crédito. A cortesia é única por conta com e-mail confirmado e compartilhada entre as ferramentas.</p></section>
+<p id="gravacao" class="orc-nota">Calcule e edite sem pagar. O rascunho fica nesta aba ao clicar em “Adicionar à planilha” ou “Salvar alterações”. Salvar e reabrir o projeto JSON é gratuito: ele preserva serviços, composições, quantidades, referências e BDI para continuar o trabalho em outro momento ou aparelho.</p></section>
 <section class="orc-bloco" aria-labelledby="titulo-editor"><h2 id="titulo-editor">Adicionar serviço</h2>
 <details id="opcoes-importar"><summary>Buscar preço em uma base SINAPI</summary><div id="importar-base"></div></details>
 <form id="editor-servico" method="post" action="/ferramentas/orcamento-de-obras/" class="tool-form">
@@ -97,7 +103,9 @@
 <section class="orc-bloco" aria-labelledby="titulo-planilha"><div class="orc-topo"><h2 id="titulo-planilha" tabindex="-1">Planilha por etapa</h2><span id="contagem">0 serviços</span></div>
 <p id="sem-itens">Sua planilha está vazia. Adicione o primeiro serviço ou carregue o exemplo de reforma.</p>
 <div id="rolagem" tabindex="0" role="region" aria-label="Planilha com rolagem horizontal" hidden><table><caption>Preços e subtotais antes do BDI</caption><thead><tr><th scope="col">Serviço</th><th scope="col">Un.</th><th scope="col">Quantidade</th><th scope="col">Unitário (R$)</th><th scope="col">Total (R$)</th><th scope="col">Ações</th></tr></thead><tbody id="linhas"></tbody></table></div>
-<div class="tool-actions"><button id="excel" type="button" class="button button-primary" data-tool-download disabled>Baixar Excel com fórmulas</button><button id="csv" type="button" class="button button-secondary" data-tool-download disabled>Baixar planilha CSV</button><button id="json" type="button" class="button button-secondary" disabled>Salvar projeto JSON</button></div><p>O Excel contém as abas Orçamento, Composições e Resumo. Alterar uma quantidade, o custo de um insumo ou o BDI atualiza os totais na planilha.</p>
+<div class="tool-actions"><button id="excel" type="button" class="button button-primary" data-tool-download disabled>Baixar Excel com fórmulas</button><button id="csv" type="button" class="button button-secondary" data-tool-download disabled>Baixar planilha CSV</button><button id="json" type="button" class="button button-secondary" data-event-name="cta_click" data-cta-id="tool-budget-save-json" data-cta-position="tool_result" disabled>Salvar projeto JSON grátis</button></div>
+<p>Salvar e reabrir o projeto JSON continua gratuito. Para baixar Excel ou CSV, a primeira exportação da conta verificada é cortesia; as seguintes usam 1 crédito. A cortesia é única e compartilhada entre as ferramentas. <a href="/termos-de-uso/#creditos-ferramentas">Condições dos créditos</a>.</p>
+<p>O Excel contém as abas Orçamento, Composições e Resumo. Alterar uma quantidade, o custo de um insumo ou o BDI atualiza os totais na planilha.</p>
 <details><summary>Abrir outro projeto ou começar de novo</summary>
 <label for="abrir">Abrir projeto salvo nesta ferramenta<input id="abrir" type="file" data-leitura-local accept=".json,application/json" disabled></label><button id="novo" class="button button-secondary" type="button" disabled>Começar orçamento vazio</button></details>
 <p id="avisos" role="status" aria-live="polite"></p></section>

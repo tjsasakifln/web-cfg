@@ -1571,6 +1571,19 @@
       const position = el.getAttribute('data-cta-position')
         || (el.classList && el.classList.contains('whatsapp-float') ? 'float' : 'inline');
       const label = (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+      // Local tool actions are usage, not an unclassified commercial CTA.
+      // Preserve explicit contact, offer and form semantics.
+      if (position === 'tool_result' && elMatches(el, 'button[type="button"]')
+        && el.getAttribute(A_EVENT_NAME) === 'cta_click' && !href
+        && !isFormSubmitCta(el) && !ctaKindFromEl(el)
+        && !el.hasAttribute('data-cta-channel') && !el.hasAttribute('data-tool-to-offer')
+        && !el.hasAttribute('data-tool-to-whatsapp')) {
+        track('cta_click', {
+          page_path: pagePath, cta_position: position, cta_label: label,
+          destination_type: 'tool_action', cta_id: el.getAttribute(A_CTA_ID) || '', event_id: eventId,
+        });
+        return;
+      }
       // Sharing and launching a tool are usage signals. A WhatsApp share
       // must not enter the commercial funnel or acquire a contact protocol.
       if (['tool_share', 'tool_catalog', 'tool_intro'].includes(position)) {

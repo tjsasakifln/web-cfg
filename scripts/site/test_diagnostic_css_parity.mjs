@@ -288,10 +288,19 @@ async function prepareStylesheets() {
     return { projected_href: projected.getAttribute('href'), canonical_href: canonicalHref,
       projected_media: projected.media || 'all' };
   }, fullSheet);
-  await waitDOM(() => [...document.querySelectorAll('link[data-css-parity]')].length === 2
-    && [...document.querySelectorAll('link[data-css-parity]')].every(link => {
-      try { return link.sheet?.href === link.href && link.sheet.cssRules.length > 0; } catch { return false; }
-    }), 'both resident stylesheets loaded');
+  await waitDOM(() => {
+    const importsReady = rules => [...rules].every(rule => {
+      if (rule.type === CSSRule.IMPORT_RULE) {
+        return Boolean(rule.styleSheet) && importsReady(rule.styleSheet.cssRules);
+      }
+      return rule.cssRules ? importsReady(rule.cssRules) : true;
+    });
+    try {
+      const links = [...document.querySelectorAll('link[data-css-parity]')];
+      return links.length === 2 && links.every(link => link.sheet?.href === link.href
+        && link.sheet.cssRules.length > 0 && importsReady(link.sheet.cssRules));
+    } catch { return false; }
+  }, 'both resident stylesheets loaded');
   const faces = await page.evaluate(() => {
     const read = rules => [...rules].flatMap(rule => {
       if (rule.type === CSSRule.FONT_FACE_RULE) return [rule.cssText];
