@@ -32,6 +32,7 @@ from scripts.site.public_surface_coverage import (  # noqa: E402
     run_mutation_contracts,
 )
 from scripts.site import robots_policy  # noqa: E402
+from scripts.site import contract_news_runtime  # noqa: E402
 from scripts.site.cache_contract import (  # noqa: E402
     HTML_SERVING_CACHE_OVERRIDES,
     cache_directives,
@@ -89,6 +90,12 @@ _EVIDENCE_HEADERS = (
     "X-Confenge-Build-Sha",
     "X-Confenge-Release-Id",
     "X-Release-Id",
+    "Content-Security-Policy",
+    "X-Robots-Tag",
+    "Retry-After",
+    "X-Confenge-Contract-News",
+    "X-Confenge-News-State",
+    "X-Confenge-News-Snapshot",
 )
 EXPECTED_SERVER_HEADER = "cloudflare"
 EXPECTED_HOST_ARCHITECTURE_VERSION = "confenge-nginx-node/v2"
@@ -326,6 +333,10 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
                 )
                 continue
             contract_probes[request_path] = dict(probe)
+    contract_news, news_errors = contract_news_runtime.validate_inventory(
+        payload.get("contract_news"), release_sha, normalized, assets,
+    )
+    errors.extend(news_errors)
     return {
         "payload": payload,
         "release_sha": release_sha,
@@ -334,6 +345,7 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         "cache_transition": cache_transition,
         "http_dispositions": dispositions,
         "contract_probes": contract_probes,
+        "contract_news": contract_news,
         "overlay": payload.get("overlay"),
         "build_info": payload.get("build_info"),
         "runtime_info": payload.get("runtime_info"),
@@ -1073,7 +1085,10 @@ def verify_non_html_assets(
         # still has to match the exact bytes, without JSON normalization.
         if not overlay or overlay.get("release_sha") != inventory.get("release_sha"):
             errors.append("server_non_html_overlay_identity_invalid")
-    requests = [("/" + rel, rel) for rel in sorted(host)]
+    # Their physical shell hashes above still reconcile with the artifact.
+    # Only the three exact XML documents have separate runtime HTTP evidence.
+    runtime_documents = set(contract_news_runtime.DOCUMENTS) - {contract_news_runtime.HTML} if inventory.get("contract_news") else set()
+    requests = [("/" + rel, rel) for rel in sorted(host) if rel not in runtime_documents]
     for rel in sorted(NONPUBLIC_CONFIG_FILES & set(host)):
         requests.extend([("/" + rel + "?download=1", rel), ("/%5F" + rel[1:], rel)])
 
@@ -1169,6 +1184,7 @@ def verify_non_html_assets(
         "passed": len(rows) - len(failures), "failures": failures,
         "results": rows, "robots_policy": policy, "errors": errors, "ok": not errors,
         "cache_transition": compatibility,
+        "runtime_documents": sorted(runtime_documents),
     }
 
 
@@ -1188,6 +1204,7 @@ def run_acceptance(
         [str, float], tuple[dict[str, Any], bytes | None]
     ] = _probe_first_hop,
     asset_fetcher: Callable | None = None,
+    news_fetcher: Callable | None = None,
     run_mutations: bool = True,
     cache_deadline_seconds: float = CACHE_PROPAGATION_SECONDS,
     clock: Callable[[], float] = time.monotonic,
@@ -1264,13 +1281,15 @@ def run_acceptance(
     fetch_inventory = report_dir / "server-inventory-fetch.txt"
     hashes = inventory.get("html_sha256") or {}
     dispositions = inventory.get("http_dispositions") or {}
+    news_proof = inventory.get("contract_news")
+    news_html = {contract_news_runtime.HTML} if news_proof else set()
     derived_inventory.write_text(
         "".join(f"{rel}\n" for rel in sorted(hashes)), encoding="utf-8"
     )
     fetch_rels = sorted(
         rel
         for rel, disposition in dispositions.items()
-        if disposition.get("status") != 410
+        if disposition.get("status") != 410 and rel not in news_html
     )
     fetch_inventory.write_text(
         "".join(f"{rel}\n" for rel in fetch_rels), encoding="utf-8"
@@ -1303,6 +1322,20 @@ def run_acceptance(
         _write_json(mirror_report_path, mirror_report)
     if not mirror_report.get("ok"):
         errors.append("server_html_fetch_incomplete")
+    news_report, news_bodies = contract_news_runtime.verify_public(
+        news_proof, site=site, base=base, timeout=timeout,
+        fetcher=news_fetcher or (lambda url, seconds: _probe_first_hop(url, seconds, limit=contract_news_runtime.MAX_RESPONSE)),
+        deadline_at=cache_deadline_at, clock=clock, sleeper=sleeper,
+    )
+    news_path = report_dir / "contract-news-runtime.json"
+    _write_json(news_path, news_report)
+    if not news_report["ok"]:
+        errors.append("contract_news_runtime_acceptance_failed")
+    for rel in news_html:
+        if rel in news_bodies:
+            target = mirror / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(news_bodies[rel])
     propagation_path = report_dir / "cache-propagation-attempts.json"
     _write_json(
         propagation_path,
@@ -1321,6 +1354,23 @@ def run_acceptance(
         if isinstance(row, dict)
     }
     for rel, physical_digest in sorted(hashes.items()):
+        if rel in news_html:
+            observed = next(row for row in news_report["responses"] if row["path"] == rel)
+            expected = news_proof["documents"][rel]
+            target = mirror / rel
+            http_rows.append({
+                "path": rel, "url": base + expected["request_path"], "status": observed["status"],
+                "final_url": base + expected["request_path"], "title": _title(target) if target.is_file() else None,
+                "content_type": observed["headers"].get("content-type"), "headers": observed["headers"],
+                "bytes": len(news_bodies[rel]) if rel in news_bodies else None,
+                "physical_sha256": physical_digest, "host_sha256": expected["sha256"],
+                "http_sha256": observed["sha256"], "digest_matches": observed["ok"],
+                "expected_first_hop_status": expected["status"], "expected_first_hop_location": None,
+                "expected_final_status": expected["status"], "expected_effective_html_path": rel,
+                "runtime_document": True, "first_hop": None,
+                "error": observed["errors"] or None,
+            })
+            continue
         disposition = dispositions.get(rel) or {}
         expected_status = disposition.get("status")
         expected_location = disposition.get("location")
@@ -1502,6 +1552,9 @@ def run_acceptance(
         ),
         "server_html_digest_matched": sum(1 for row in http_rows if row["digest_matches"]),
         "http_responses": http_rows,
+        "contract_news_runtime": news_report,
+        "static_html_expected": len(hashes) - len(news_html),
+        "runtime_html_expected": len(news_html),
         "contract_probes": {
             "planned": contract_probes["planned"],
             "executed": contract_probes["executed"],
@@ -1528,6 +1581,7 @@ def run_acceptance(
             "cache_propagation": str(propagation_path),
             "contract_probes": str(contract_probes_path),
             "non_html_assets": str(assets_path),
+            "contract_news_runtime": str(news_path),
             "mirror": str(mirror),
             "coverage": str(report_dir / "public-surface-coverage.json"),
         },

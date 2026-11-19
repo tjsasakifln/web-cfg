@@ -170,6 +170,12 @@
         "reason": "the individually approved, indexable analysis is the only packaged article in this family and exercises its rendered SEO contract"
       },
       {
+        "family_id": "noticias-contratos-publicos",
+        "route": "/noticias/contratos-publicos/",
+        "reason": "Índice vazio real do artefato local, medido sem conteúdo sintético. A publicação servida pelo runtime exige deploy/contract-news/verify_public.py e mantém o bootstrap 503 antes do primeiro snapshot.",
+        "seo_only_exempt_reason": "O único HTML empacotado desta família declara noindex por estar vazio. Somente a auditoria is-crawlable é retirada do cálculo SEO na medição estática local; acessibilidade, boas práticas, desempenho, CLS e as demais auditorias SEO mantêm seus limites. Esta declaração não se aplica à origem pública."
+      },
+      {
         "family_id": "casos",
         "route": "/casos/",
         "reason": "index of the demonstrative-case family"

@@ -563,21 +563,12 @@ def write_sitemap_index(lastmod: str) -> Path:
 
 
 def patch_main_sitemap_index() -> None:
-    """Keep robots.txt pointing at a single canonical sitemap index."""
+    """Keep the canonical static index and the exact declared news archive."""
+    from scripts.organic.sitemap_graph import robots_with_index_only
+
     robots = ROOT / "robots.txt"
     text = robots.read_text(encoding="utf-8")
-    lines = []
-    saw_index = False
-    for line in text.splitlines():
-        if line.strip().lower().startswith("sitemap:"):
-            if "sitemap-index.xml" in line and not saw_index:
-                lines.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
-                saw_index = True
-            continue
-        lines.append(line)
-    if not saw_index:
-        lines.append("Sitemap: https://confenge.com.br/sitemap-index.xml")
-    new_text = "\n".join(lines).rstrip() + "\n"
+    new_text = robots_with_index_only(text, root=ROOT)
     if new_text != text:
         robots.write_text(new_text, encoding="utf-8")
 
@@ -986,6 +977,20 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             eyebrow = "Inteligência de mercado sob encomenda"
             after_content_html = commercial_content[path]
         extra_html = ""
+        if path == "/inteligencia/":
+            # The durable news archive is discovered from the hub body. It is
+            # independent of pSEO instances and does not alter approved chrome.
+            extra_html = (
+                '<section aria-labelledby="noticias-contratos-publicos" class="sec sec--tight sec--rule-top">'
+                '<span class="t-kicker">Contratações públicas</span>'
+                '<h2 id="noticias-contratos-publicos" class="t-editorial">Notícias de obras e contratos públicos</h2>'
+                '<p class="measure">Acompanhe registros recentes de obras, projetos e infraestrutura, '
+                'com valores informados, vigência e acesso à fonte oficial do PNCP.</p>'
+                '<p><a class="text-link" href="/noticias/contratos-publicos/" data-news-discovery="true" data-navigation-link="true" '
+                'data-event-name="cta_click" data-cta-id="intelligence-contract-news" '
+                'data-cta-position="content">Ver notícias de contratos públicos</a></p>'
+                '</section>'
+            )
         if path == "/radar/":
             # /radar/ is the declared breadcrumb parent of the hand-authored
             # /radar/nacional-obras-publicas/, which is not a pSEO publication and so

@@ -1,0 +1,166 @@
+name: Contract news publication
+
+on:
+  schedule:
+    # Sao Paulo: 02:55, 06:55, 10:55, 14:55, 18:55, 22:55.
+    # The producer's existing Radar projection refreshes at :20 every 4 hours.
+    - cron: '55 1,5,9,13,17,21 * * *'
+  workflow_run:
+    workflows: [netcup-release]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: contract-news-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Confirm sources and publish bounded news
+    if: >-
+      github.repository == 'tjsasakifln/web-cfg' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name != 'workflow_run' ||
+       (github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.head_repository.full_name == github.repository))
+    environment: netcup-production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEWS_RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+      NEWS_ENABLED: ${{ vars.CONFENGE_NEWS_ENABLED == '0' && '0' || '1' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.12'
+      - name: Wait for the exact Netcup release to finish acceptance
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/ops/contract_news_release.py \
+            --release-sha "$NEWS_RELEASE_SHA" --repository "$GITHUB_REPOSITORY" --ref "$GITHUB_REF"
+      - name: Read approved source revision
+        id: source
+        if: steps.release.outputs.ready == 'true'
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          value = json.loads(Path('data/editorial/contract-news-source.json').read_text())
+          assert value['schema'] == 'confenge.contract-news-source/v1'
+          assert value['repository'] == 'tjsasakifln/extra-cli'
+          assert value['fact_contract'] == 'confenge.contract-news-facts/v1'
+          sha = value['producer_commit']
+          assert re.fullmatch('[0-9a-f]{40}', sha)
+          assert re.fullmatch('[0-9a-f]{40}', os.environ['NEWS_RELEASE_SHA'])
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('sha=' + sha, file=output)
+          PY
+      - name: Package the fixed producer without database credentials
+        if: steps.release.outputs.ready == 'true'
+        env:
+          NEWS_PRODUCER_SHA: ${{ steps.source.outputs.sha }}
+        run: |
+          set -euo pipefail
+          producer="$RUNNER_TEMP/contract-news-producer"
+          git init --quiet "$producer"
+          git -C "$producer" fetch --no-tags --depth=1 https://github.com/tjsasakifln/extra-cli.git "$NEWS_PRODUCER_SHA"
+          git -C "$producer" checkout --quiet --detach FETCH_HEAD
+          test "$(git -C "$producer" rev-parse HEAD)" = "$NEWS_PRODUCER_SHA"
+          python3 -S "$producer/scripts/public_exports/package_contract_news.py" \
+            --sha "$NEWS_PRODUCER_SHA" --output "$RUNNER_TEMP/contract-news-producer.tar.gz"
+      - name: Run the currently deployed publisher
+        id: publisher
+        if: steps.release.outputs.ready == 'true'
+        env:
+          NEWS_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NEWS_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NEWS_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NEWS_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NEWS_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+          NEWS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          echo 'verify=false' >> "$GITHUB_OUTPUT"
+          test -n "$NEWS_SSH_PRIVATE_KEY"
+          test -n "$NEWS_SSH_KNOWN_HOSTS"
+          [[ "$NEWS_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]]
+          [[ "$NEWS_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]]
+          [[ "$NEWS_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]
+          [[ "$NEWS_RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ ]]
+          [[ "$GITHUB_RUN_ATTEMPT" =~ ^[0-9]+$ ]]
+          (( NEWS_DEPLOY_PORT <= 65535 ))
+          install -d -m 0700 "$RUNNER_TEMP/news-ssh"
+          printf '%s\n' "$NEWS_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/news-ssh/key"
+          printf '%s\n' "$NEWS_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/news-ssh/known_hosts"
+          known_host="$NEWS_DEPLOY_HOST"
+          if [ "$NEWS_DEPLOY_PORT" != '22' ]; then
+            known_host="[$NEWS_DEPLOY_HOST]:$NEWS_DEPLOY_PORT"
+          fi
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/news-ssh/known_hosts" >/dev/null
+          ssh_options=(-o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/news-ssh/known_hosts"
+            -o ConnectTimeout=15 -p "$NEWS_DEPLOY_PORT" -i "$RUNNER_TEMP/news-ssh/key")
+          scp_options=(-o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/news-ssh/known_hosts"
+            -o ConnectTimeout=15 -P "$NEWS_DEPLOY_PORT" -i "$RUNNER_TEMP/news-ssh/key")
+          target="$NEWS_DEPLOY_USER@$NEWS_DEPLOY_HOST"
+          deployed="$(ssh "${ssh_options[@]}" "$target" 'readlink /opt/confenge-web/current')"
+          if [ "$deployed" != "releases/$NEWS_RELEASE_SHA" ] && [ "$deployed" != "/opt/confenge-web/releases/$NEWS_RELEASE_SHA" ]; then
+            echo '{"status":"waiting_for_release","published":0,"calls":0}'
+            echo 'News publication is waiting for this main revision to become the current Netcup release.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          upload="/opt/confenge-web/shared/contract-news-$NEWS_RELEASE_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          ssh "${ssh_options[@]}" "$target" "install -d -m 0700 '$upload'"
+          cleanup() {
+            rm -f "$RUNNER_TEMP/news-ssh/api-key"
+            ssh "${ssh_options[@]}" "$target" \
+              "rm -f '$upload/api-key' '$upload/producer.tar.gz'; rmdir '$upload'" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          scp "${scp_options[@]}" "$RUNNER_TEMP/contract-news-producer.tar.gz" "$target:$upload/producer.tar.gz"
+          digest="$(sha256sum "$RUNNER_TEMP/contract-news-producer.tar.gz" | cut -d ' ' -f 1)"
+          [[ "$digest" =~ ^[0-9a-f]{64}$ ]]
+          key_arg=''
+          if [ -n "$NEWS_OPENAI_KEY" ]; then
+            printf '%s' "$NEWS_OPENAI_KEY" > "$RUNNER_TEMP/news-ssh/api-key"
+            scp "${scp_options[@]}" "$RUNNER_TEMP/news-ssh/api-key" "$target:$upload/api-key"
+            key_arg="--key-file '$upload/api-key'"
+          fi
+          # Only fixed paths, full SHAs, numeric run IDs and a 0/1 switch enter
+          # this command. The credential itself is never an argument or log.
+          ssh "${ssh_options[@]}" "$target" \
+            "python3 /opt/confenge-web/current/ops/contract-news/run.py --expected-release '$NEWS_RELEASE_SHA' --bundle '$upload/producer.tar.gz' --bundle-sha256 '$digest' --enabled '$NEWS_ENABLED' $key_arg" \
+            | tee "$RUNNER_TEMP/contract-news-result.json"
+          {
+            echo '### Contract news publication'
+            echo
+            echo '```json'
+            cat "$RUNNER_TEMP/contract-news-result.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          value = json.loads((Path(os.environ['RUNNER_TEMP']) / 'contract-news-result.json').read_text())
+          if value.get('status') not in {'disabled', 'locked'}:
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+                  print('verify=true', file=output)
+          PY
+      - name: Verify public archive and article metadata
+        if: steps.release.outputs.ready == 'true' && steps.publisher.outputs.verify == 'true'
+        run: python3 deploy/contract-news/verify_public.py --base https://confenge.com.br

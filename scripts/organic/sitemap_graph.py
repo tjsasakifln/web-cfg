@@ -26,6 +26,9 @@ SM_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 INDEX_NAME = "sitemap-index.xml"
 TXT_NAME = "sitemap.txt"
 ROBOTS_SITEMAP = f"{SITE}/sitemap-index.xml"
+CONTRACT_NEWS_PREFIX = "/noticias/contratos-publicos/"
+CONTRACT_NEWS_SITEMAP = f"{SITE}{CONTRACT_NEWS_PREFIX}sitemap.xml"
+CONTRACT_NEWS_SITEMAP_FILE = "noticias/contratos-publicos/sitemap.xml"
 
 DEFAULT_MEMBERS = (
     "sitemap.xml",
@@ -121,6 +124,8 @@ def loc_key(url: str) -> str:
 
 
 def member_filename(index_loc: str) -> str:
+    if index_loc == CONTRACT_NEWS_SITEMAP:
+        return CONTRACT_NEWS_SITEMAP_FILE
     path = loc_path(index_loc)
     name = path.rsplit("/", 1)[-1]
     return name or INDEX_NAME
@@ -954,9 +959,95 @@ def render_sitemap_txt(locs: Iterable[str]) -> str:
     return "\n".join(unique) + ("\n" if unique else "")
 
 
-def robots_with_index_only(robots_text: str) -> str:
+def contract_news_runtime_declared(root: Path) -> bool:
+    """Only the implemented, exact runtime family may advertise a live urlset.
+
+    This proves wiring exists, not publication or HTTP availability. The latter
+    has its own probe and every publication executes the actual Node renderer.
+    """
+    try:
+        contract = json.loads((root / "runtime/contract.json").read_text(encoding="utf-8"))
+        handler = (root / "runtime/contract-news/server.mjs").read_text(encoding="utf-8")
+        server = (root / "runtime/lib/server.mjs").read_text(encoding="utf-8")
+        return (
+            contract.get("contract_news_prefix") == CONTRACT_NEWS_PREFIX
+            and "export function createContractNews(" in handler
+            and '../contract-news/server.mjs' in server
+            and "createContractNews()" in server
+        )
+    except (OSError, ValueError, TypeError):
+        return False
+
+
+def audit_contract_news_sitemap(
+    root: Path, *, runtime_base_url: str | None = None,
+) -> tuple[dict[str, Any], list[GraphIssue]]:
+    """Check the static empty shell separately from the durable live archive.
+
+    HTTP checking is explicit: an offline build does not pretend to have
+    counted or fetched the production archive. Redirects and non-200 replies
+    fail a requested live check, including the runtime's fail-closed 503.
+    """
+    issues: list[GraphIssue] = []
+    status: dict[str, Any] = {
+        "loc": CONTRACT_NEWS_SITEMAP,
+        "scope": "durable_runtime_archive",
+        "included_in_static_url_count": False,
+        "http_checked": False,
+        "url_count": None,
+    }
+    if not contract_news_runtime_declared(root):
+        issues.append(GraphIssue("high", "dynamic_sitemap_handler_missing", CONTRACT_NEWS_SITEMAP))
+    shell = root / CONTRACT_NEWS_SITEMAP_FILE
+    try:
+        document = ET.fromstring(shell.read_text(encoding="utf-8"))
+        if document.tag != f"{{{SM_NS}}}urlset" or list(document):
+            raise ValueError("Static news sitemap must be an empty urlset; articles live in the runtime")
+    except (OSError, ET.ParseError, ValueError) as exc:
+        issues.append(GraphIssue("high", "dynamic_sitemap_shell_invalid", CONTRACT_NEWS_SITEMAP, str(exc)))
+    if runtime_base_url is not None:
+        from urllib.error import HTTPError, URLError
+        from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+        class NoRedirect(HTTPRedirectHandler):
+            def redirect_request(self, req, fp, code, msg, headers, newurl):
+                return None
+
+        target = runtime_base_url.rstrip("/") + CONTRACT_NEWS_PREFIX + "sitemap.xml"
+        status["http_checked"] = True
+        try:
+            request = Request(target, headers={"Accept": "application/xml"})
+            with build_opener(NoRedirect).open(request, timeout=15) as response:
+                if response.status != 200:
+                    raise ValueError(f"HTTP {response.status}")
+                data = response.read(32 * 1024 * 1024 + 1)
+                if len(data) > 32 * 1024 * 1024:
+                    raise ValueError("sitemap exceeds 32 MiB")
+            document = ET.fromstring(data)
+            if document.tag != f"{{{SM_NS}}}urlset":
+                raise ValueError("response is not a sitemap urlset")
+            locs = [loc for loc, _ in parse_urlset_entries(data.decode("utf-8"))]
+            if len(locs) > 50_000 or len(locs) != len(set(locs)):
+                raise ValueError("sitemap contains excessive or duplicate URLs")
+            for loc in locs:
+                parsed = urlparse(loc)
+                if parsed.scheme != "https" or parsed.netloc != "confenge.com.br" or not parsed.path.startswith(CONTRACT_NEWS_PREFIX) or parsed.query or parsed.fragment:
+                    raise ValueError("sitemap URL outside the exact canonical news family")
+            status["url_count"] = len(locs)
+        except (OSError, HTTPError, URLError, ValueError, ET.ParseError) as exc:
+            issues.append(GraphIssue("high", "dynamic_sitemap_http_failed", CONTRACT_NEWS_SITEMAP, str(exc)))
+    return status, issues
+
+
+def robots_with_index_only(robots_text: str, *, root: Path | None = None) -> str:
+    """Keep the static index and only the explicitly implemented live archive."""
     lines_out: list[str] = []
     saw = False
+    retain_news = bool(
+        root is not None
+        and CONTRACT_NEWS_SITEMAP in robots_sitemap_hrefs(robots_text)
+        and contract_news_runtime_declared(root)
+    )
     for line in (robots_text or "").splitlines():
         if line.strip().lower().startswith("sitemap:"):
             if not saw:
@@ -968,6 +1059,8 @@ def robots_with_index_only(robots_text: str) -> str:
         if lines_out and lines_out[-1].strip():
             lines_out.append("")
         lines_out.append(f"Sitemap: {ROBOTS_SITEMAP}")
+    if retain_news:
+        lines_out.append(f"Sitemap: {CONTRACT_NEWS_SITEMAP}")
     return "\n".join(lines_out).rstrip() + "\n"
 
 
@@ -1064,6 +1157,7 @@ def audit_graph(
     *,
     as_of: date | None = None,
     market_answer_indexable: bool | None = None,
+    runtime_base_url: str | None = None,
 ) -> dict[str, Any]:
     """Shipped graph audit. Drift, inaccessible members and exact-one fail the gate."""
     as_of = as_of or utc_today()
@@ -1081,7 +1175,7 @@ def audit_graph(
                 detail=sm_dirs,
             )
         )
-    extra_sitemaps = [item for item in sm_dirs if not item.rstrip("/").endswith(INDEX_NAME)]
+    extra_sitemaps = [item for item in sm_dirs if not item.rstrip("/").endswith(INDEX_NAME) and item != CONTRACT_NEWS_SITEMAP]
     if extra_sitemaps:
         issues.append(
             GraphIssue(
@@ -1091,10 +1185,16 @@ def audit_graph(
             )
         )
 
+    dynamic_sitemaps: list[dict[str, Any]] = []
+    if CONTRACT_NEWS_SITEMAP in sm_dirs:
+        dynamic_status, dynamic_issues = audit_contract_news_sitemap(root, runtime_base_url=runtime_base_url)
+        dynamic_sitemaps.append(dynamic_status)
+        issues.extend(dynamic_issues)
+
     index_path = root / INDEX_NAME
     if not index_path.is_file():
         issues.append(GraphIssue(severity="high", code="missing_sitemap_index"))
-        return _report(issues, [], [], sm_dirs, market_answer_indexable=None, market_answer_in_graph=False)
+        return _report(issues, [], [], sm_dirs, market_answer_indexable=None, market_answer_in_graph=False, dynamic_sitemaps=dynamic_sitemaps)
 
     index_xml = index_path.read_text(encoding="utf-8")
     members = parse_sitemap_index(index_xml)
@@ -1175,6 +1275,7 @@ def audit_graph(
         sm_dirs,
         market_answer_indexable=ma_flag,
         market_answer_in_graph=ma_in_graph,
+        dynamic_sitemaps=dynamic_sitemaps,
     )
 
 
@@ -1186,6 +1287,7 @@ def _report(
     *,
     market_answer_indexable: bool | None = None,
     market_answer_in_graph: bool | None = None,
+    dynamic_sitemaps: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     high = [item for item in issues if item.severity == "high"]
     unique = {loc_key(entry.loc) for entry in entries}
@@ -1206,6 +1308,8 @@ def _report(
         "ok": len(high) == 0,
         "issues": [item.as_dict() for item in issues],
         "url_count": len(entries),
+        "static_url_count": len(entries),
+        "dynamic_sitemaps": dynamic_sitemaps or [],
         "unique_paths": len(unique),
         "locs": [entry.loc for entry in entries],
         "families": families,
@@ -1313,7 +1417,7 @@ def close_graph(
     robots_path = root / "robots.txt"
     if robots_path.is_file():
         robots_path.write_text(
-            robots_with_index_only(robots_path.read_text(encoding="utf-8")),
+            robots_with_index_only(robots_path.read_text(encoding="utf-8"), root=root),
             encoding="utf-8",
         )
     report = audit_graph(root, as_of=as_of, market_answer_indexable=ma_flag)

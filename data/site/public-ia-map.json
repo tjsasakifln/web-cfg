@@ -1,6 +1,6 @@
 {
   "schema_version": "1.2.0",
-  "updated_at": "2026-11-12",
+  "updated_at": "2026-11-19",
   "purpose": "Single navigation contract: six visitor-oriented groups, direct product access and consistent discovery on every public page.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -149,7 +149,8 @@
     "/inteligencia/fornecedores-climatizacao-contratos-publicos/": "Fornecedores de climatização",
     "/projetos-prontos/": "Projetos prontos",
     "/projetos-prontos/condicoes/": "Condições",
-    "/projetos-prontos/pedidos/": "Meus pedidos"
+    "/projetos-prontos/pedidos/": "Meus pedidos",
+    "/noticias/contratos-publicos/": "Notícias de contratos públicos"
   },
   "quality_baseline": {
     "source_git_head": "ec863006054684279baa45eb6c7ecc5f4e4d712f",
@@ -1112,6 +1113,10 @@
       "prefix": "/assistencia-tecnica-pericia-trabalhista/",
       "parent": "/servicos/",
       "exact": true
+    },
+    {
+      "prefix": "/noticias/contratos-publicos/",
+      "parent": "/conteudos/"
     }
   ],
   "active_header": [
@@ -1345,6 +1350,10 @@
     },
     {
       "prefix": "/casos/",
+      "href": "/conteudos/"
+    },
+    {
+      "prefix": "/noticias/contratos-publicos/",
       "href": "/conteudos/"
     }
   ],

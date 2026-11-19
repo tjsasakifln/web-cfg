@@ -39,6 +39,11 @@ export function loadPublicFamilyRegistry() {
   return JSON.parse(readFileSync(FAMILY_REGISTRY_PATH, "utf8"));
 }
 
+/** Packaged noindex HTML cannot attest the state served by an explicit origin. */
+export function localArtifactSeoOnlyExemptPages(coverage, baseUrl = "") {
+  return new Set(baseUrl ? [] : coverage.lighthouse.seo_only_exempt_pages || []);
+}
+
 export function loadManifestRoutes() {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
   const routes = manifest.html_routes || [];
@@ -218,6 +223,14 @@ function validatePolicyShape(policy, registry) {
   }
   for (const entry of representatives) {
     const family = registry.families.find((candidate) => candidate.id === entry.family_id);
+    if (Object.hasOwn(entry, "seo_only_exempt_reason") && (
+      typeof entry.seo_only_exempt_reason !== "string"
+      || !entry.seo_only_exempt_reason.trim()
+      || entry.seo_exempt_reason
+      || entry.runtime_only
+    )) {
+      throw new Error(`local noindex SEO reason must be nonempty and exclusive: ${entry.family_id}`);
+    }
     if (entry.runtime_only) validateRuntimeOnlyRepresentative(entry, family);
     else if (!entry.route) throw new Error(`canonical representative has no route: ${entry.family_id}`);
   }
@@ -545,6 +558,8 @@ export function deriveCoverage(options = {}) {
         image_gate: Boolean(representative.image_gate),
         seo_exempt: Boolean(representative.seo_exempt_reason),
         seo_exempt_reason: representative.seo_exempt_reason || null,
+        seo_only_exempt: Boolean(representative.seo_only_exempt_reason),
+        seo_only_exempt_reason: representative.seo_only_exempt_reason || null,
       }];
     }),
   );
@@ -633,8 +648,8 @@ export function deriveCoverage(options = {}) {
     const allNoindex = family.routes.every((route) =>
       isNoindex(readFileSync(routeToFile(siteRoot, route), "utf8"))
     );
-    if (!representativeNoindex) return family.seo_exempt;
-    return !family.seo_exempt_reason || !allNoindex;
+    if (!representativeNoindex) return family.seo_exempt || family.seo_only_exempt;
+    return !(family.seo_exempt_reason || family.seo_only_exempt_reason) || !allNoindex;
   });
   if (invalidCanonicalSeo.length) {
     throw new Error(
@@ -775,6 +790,8 @@ export function deriveCoverage(options = {}) {
         image_gate: Boolean(family.image_gate),
         seo_exempt: Boolean(family.seo_exempt),
         seo_exempt_reason: family.seo_exempt_reason || null,
+        seo_only_exempt: Boolean(family.seo_only_exempt),
+        seo_only_exempt_reason: family.seo_only_exempt_reason || null,
         runtime_only: family.runtime_only,
       })),
       runtime_families: families
@@ -796,6 +813,9 @@ export function deriveCoverage(options = {}) {
         ...families.filter((family) => family.seo_exempt).map((family) => family.lighthouse_representative),
         ...additionalLighthousePages.filter((entry) => entry.seo_exempt).map((entry) => entry.route),
       ],
+      seo_only_exempt_pages: families
+        .filter((family) => family.seo_only_exempt)
+        .map((family) => family.lighthouse_representative),
       not_sampled_count: lighthouseNotSampled.length,
       not_sampled: lighthouseNotSampled,
     },

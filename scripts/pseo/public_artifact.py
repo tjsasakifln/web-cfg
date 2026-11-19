@@ -38,6 +38,8 @@ PUBLIC_TOP_DIRS = frozenset(
         "bim",
         "cad",
         "conteudos",
+        # Runtime news archive; source contains only the honest empty preview.
+        "noticias",
         "especialista",
         "inteligencia",
         "radar",

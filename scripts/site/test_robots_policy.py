@@ -103,7 +103,10 @@ def test_content_signal_is_preserved_as_policy_even_though_it_is_not_standardize
         assert set(parsed.group_policy["*"]["content-signal"]) == {
             "search=yes,ai-train=no,use=reference"
         }
-    assert parsed.policy["sitemap"] == ["https://confenge.com.br/sitemap-index.xml"]
+    assert parsed.policy["sitemap"] == [
+        "https://confenge.com.br/sitemap-index.xml",
+        "https://confenge.com.br/noticias/contratos-publicos/sitemap.xml",
+    ]
 
 
 def test_equal_length_allow_beats_disallow_and_longer_disallow_still_wins():
