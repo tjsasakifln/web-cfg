@@ -54,6 +54,41 @@ def _write_snapshot(directory: Path, state: str) -> None:
         "article_count": len(snapshot["articles"])}))
 
 
+def test_runtime_navigation_matches_the_shared_writer_in_every_page_state(tmp_path):
+    from scripts.site.shell_nav import load_brand, sync_text
+
+    _write_snapshot(tmp_path, "published")
+    pointer = json.loads((tmp_path / "current.json").read_text())
+    snapshot = json.loads((tmp_path / pointer["file"]).read_text())
+    code = """
+import { readFileSync } from 'node:fs';
+import { renderIndex, renderArticle, renderError, articlePath, pagePath } from './runtime/contract-news/render.mjs';
+import { PREFIX } from './runtime/contract-news/schema.mjs';
+const snapshot = JSON.parse(readFileSync(0, 'utf8'));
+const article = snapshot.articles[0];
+const paginated = { ...snapshot, articles: Array.from({ length: 13 }, (_, index) => ({ ...article, slug: article.slug + '-' + index })) };
+const rows = [
+  { state: 'empty', path: PREFIX, ...renderIndex({ ...snapshot, articles: [] }) },
+  { state: 'published', path: PREFIX, ...renderIndex(snapshot) },
+  { state: 'article', path: articlePath(article), ...renderArticle(article) },
+  { state: 'pagination', path: pagePath(2), ...renderIndex(paginated, 2) },
+  { state: 'bootstrap', path: PREFIX, ...renderError(503, PREFIX) },
+  { state: 'not_found', path: PREFIX + 'missing/', ...renderError(404, PREFIX + 'missing/') },
+];
+process.stdout.write(JSON.stringify(rows));
+"""
+    result = subprocess.run([NODE, "--input-type=module", "-e", code], cwd=ROOT,
+                            input=json.dumps(snapshot), capture_output=True, text=True, check=True, timeout=15)
+    rows = json.loads(result.stdout)
+    for row in rows:
+        assert sync_text(row["html"], load_brand(), row["path"]) == row["html"], row["state"]
+        assert row["html"].count('data-nav-discovery="true"') == 1
+        assert '<span>Atendimento em todo o Brasil.</span>' in row["html"]
+        assert 'href="/conteudos/">Biblioteca</a>' in row["html"]
+        assert 'data-cta-id="nav-mobile_nav-empresa"' in row["html"]
+    assert (ROOT / news.HTML).read_text() == rows[0]["html"] + "\n"
+
+
 @contextmanager
 def _live_fixture(tmp_path: Path, state: str):
     directory = tmp_path / "private-publication"

@@ -26,24 +26,43 @@ export function money(value) {
   const cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0').slice(0, 2)) + ((fraction[2] || '0') >= '5' ? 1n : 0n);
   return 'R$ ' + String(cents / 100n).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + String(cents % 100n).padStart(2, '0');
 }
+const navAnalytics = (position, identifier) => `data-cta-position="${e(position)}" data-cta-id="nav-${e(position)}-${e(identifier)}" data-event-name="cta_click" data-navigation-link="true"`;
 function navigation(kind) {
   const position = kind === 'desktop' ? 'header_nav' : 'mobile_nav';
-  return IA.header.destinations.map(group => {
+  const parts = IA.header.destinations.map(group => {
     const id = 'nav-' + kind + '-' + group.id;
-    const attributes = suffix => `data-cta-position="${position}" data-cta-id="nav-${position}-${e(group.id)}-${e(suffix)}" data-event-name="cta_click" data-navigation-link="true"`;
-    return `<details class="nav-group${group.href === '/conteudos/' ? ' is-active' : ''}" name="nav-${kind}" data-nav-group="${e(group.id)}"><summary class="nav-group__toggle" aria-controls="${e(id)}">${e(group.label)}</summary><div class="nav-panel" id="${e(id)}">${group.children.map(item => `<a class="nav-destination" href="${e(item.href)}" data-nav-destination="${e(item.id)}" ${attributes(item.id)}>${e(item.label)}<span class="nav-destination__description">${e(item.description)}</span></a>`).join('')}<a class="nav-overview" href="${e(group.href)}" data-nav-primary="true" data-nav-label="${e(group.label)}"${group.href === '/conteudos/' ? ' aria-current="page"' : ''} ${attributes('overview')}>${e(group.overview_label)}</a></div></details>`;
-  }).join('');
+    const attributes = suffix => navAnalytics(position, group.id + '-' + suffix);
+    return `<details class="nav-group${group.href === '/conteudos/' ? ' is-active' : ''}" name="nav-${kind}" data-nav-group="${e(group.id)}"><summary class="nav-group__toggle" aria-controls="${e(id)}">${e(group.label)}</summary><div class="nav-panel" id="${e(id)}">${group.children.map(item => `<a class="nav-destination" href="${e(item.href)}" data-nav-destination="${e(item.id)}" ${attributes(item.id)}>${e(item.label)}<span class="nav-destination__description">${e(item.description)}</span></a>`).join('')}<a class="nav-overview" data-nav-primary="true" data-nav-label="${e(group.label)}"${group.href === '/conteudos/' ? ' aria-current="page"' : ''} href="${e(group.href)}" ${attributes('overview')}>${e(group.overview_label)}</a></div></details>`;
+  });
+  if (kind === 'mobile') parts.push(`<div class="mobile-nav__utility">${IA.header.utility_links.map(item => `<a href="${e(item.href)}" ${navAnalytics(position, item.id)}>${e(item.label)}</a>`).join('')}</div>`);
+  return parts.join('\n');
+}
+function discoveryBar() {
+  const shortcuts = IA.header.quick_links.map(item => `<a href="${e(item.href)}" ${navAnalytics('header_shortcut', item.id)}>${e(item.label)}</a>`).join('');
+  const utility = IA.header.utility_links.map(item => `<a class="nav-discovery__company" href="${e(item.href)}" ${navAnalytics('header_utility', item.id)}>${e(item.label)}</a>`).join('');
+  return `<!-- BEGIN NAV DISCOVERY --><nav class="nav-discovery-region" aria-label="Acesso direto"><div class="nav-discovery" data-nav-discovery="true"><div class="container nav-discovery__inner"><div class="nav-discovery__shortcuts"><span class="nav-discovery__label">Acesso direto</span>${shortcuts}</div>${utility}</div></div></nav><!-- END NAV DISCOVERY -->`;
 }
 function header() {
-  return `<header class="site-header news-site-header"><div class="container header-inner"><a class="brand" href="/" aria-label="CONFENGE, página inicial"><img src="${HEADER_LOGO}" width="224" height="58" alt="CONFENGE Inteligência Técnica"></a><nav class="desktop-nav" aria-label="Navegação principal">${navigation('desktop')}</nav><a class="button button-primary header-cta" href="${e(IA.header.cta.href)}" data-cta-position="header_cta" data-event-name="cta_click">${e(IA.header.cta.label)}</a><details class="news-mobile-menu"><summary>Menu</summary><nav class="news-mobile-nav" aria-label="Navegação móvel">${navigation('mobile')}<a class="button button-primary" href="${e(IA.header.cta.href)}">${e(IA.header.cta.label)}</a></nav></details></div></header>`;
+  return `<header class="site-header news-site-header"><div class="container header-inner"><a class="brand" href="/" aria-label="CONFENGE, página inicial"><img src="${HEADER_LOGO}" width="224" height="58" alt="CONFENGE Inteligência Técnica"></a><nav class="desktop-nav" aria-label="Navegação principal">\n${navigation('desktop')}\n</nav><a class="button button-primary header-cta" href="${e(IA.header.cta.href)}">${e(IA.header.cta.label)}</a><details class="news-mobile-menu"><summary>Menu</summary><nav class="news-mobile-nav" aria-label="Navegação móvel">\n${navigation('mobile')}\n<a class="button button-primary" href="${e(IA.header.cta.href)}">${e(IA.header.cta.label)}</a>\n</nav></details></div>\n</header>\n${discoveryBar()}`;
 }
 function footer() {
-  return `<footer class="site-footer"><div class="container footer-top"><div class="footer-brand"><img src="${FOOTER_LOGO}" width="224" height="58" loading="lazy" decoding="async" alt="CONFENGE"><p>${e(BRAND.positioning.footer_blurb)}</p></div>${IA.footer.columns.map(column => `<div class="footer-links"><strong>${e(column.heading)}</strong>${column.links.map(link => `<a href="${e(link.href)}">${e(link.label)}</a>`).join('')}${column.contact ? `<a href="mailto:${e(BRAND.contact.email)}">${e(BRAND.contact.email)}</a><a href="tel:${e(BRAND.contact.phone_e164.replace(/-/g, ''))}">${e(BRAND.contact.phone_display)}</a>` : ''}</div>`).join('')}</div><div class="container footer-bottom"><p>© <span id="year">2026</span> CONFENGE. CNPJ ${e(BRAND.contact.cnpj)}.</p><nav class="footer-authority" aria-label="Políticas e contato"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div></footer>`;
+  return `<footer class="site-footer"><div class="container footer-top"><div class="footer-brand"><img src="${FOOTER_LOGO}" width="224" height="58" loading="lazy" decoding="async" alt="CONFENGE"><p>${e(BRAND.positioning.footer_blurb)}</p></div>\n${IA.footer.columns.map(column => `<div class="footer-links"><strong>${e(column.heading)}</strong>${column.links.map(link => `<a href="${e(link.href)}">${e(link.label)}</a>`).join('')}${column.contact ? `<a href="mailto:${e(BRAND.contact.email)}">${e(BRAND.contact.email)}</a><a href="tel:${e(BRAND.contact.phone_e164.replace(/-/g, ''))}">${e(BRAND.contact.phone_display)}</a><span>Atendimento em todo o Brasil.</span>` : ''}</div>`).join('')}</div><div class="container footer-bottom"><p>© <span id="year">2026</span> CONFENGE. CNPJ ${e(BRAND.contact.cnpj)}.</p><nav class="footer-authority" aria-label="Políticas e contato"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a><a href="/termos-de-uso/">Termos de uso</a></nav></div></footer>`;
 }
 function breadcrumb(path, title, article = false) {
-  const entries = [{ '@type': 'ListItem', position: 1, name: 'Início', item: ORIGIN + '/' }, { '@type': 'ListItem', position: 2, name: 'Notícias de contratos públicos', item: ORIGIN + PREFIX }];
-  if (path !== PREFIX) entries.push({ '@type': 'ListItem', position: 3, name: title, item: ORIGIN + path });
-  return { data: { '@type': 'BreadcrumbList', itemListElement: entries }, html: `<nav class="breadcrumbs news-breadcrumbs" aria-label="Caminho da página"><a href="/">Início</a><span aria-hidden="true">/</span>${path === PREFIX ? '<span aria-current="page">Notícias de contratos públicos</span>' : `<a href="${PREFIX}">Notícias de contratos públicos</a><span aria-hidden="true">/</span><span aria-current="page">${article ? 'Contrato publicado' : e(title)}</span>`}</nav>` };
+  const trail = [];
+  const seen = new Set();
+  for (let cursor = path; cursor && !seen.has(cursor);) {
+    seen.add(cursor);
+    const name = cursor === '/' ? 'Início' : cursor === path && path !== PREFIX ? (article ? 'Contrato publicado' : title) : IA.breadcrumb_labels[cursor];
+    if (!name) throw new Error('contract_news_breadcrumb_label_missing');
+    trail.unshift({ name, path: cursor });
+    const rule = IA.parents.find(rule => rule.exact && rule.prefix === cursor)
+      || IA.parents.filter(rule => !rule.exact && cursor.startsWith(rule.prefix)).sort((a, b) => b.prefix.length - a.prefix.length)[0];
+    cursor = rule ? rule.parent : '/';
+  }
+  const entries = trail.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: ORIGIN + item.path }));
+  const items = trail.map((item, index) => index === trail.length - 1 ? `<li aria-current="page">${e(item.name)}</li>` : `<li><a href="${e(item.path)}">${e(item.name)}</a><span aria-hidden="true">/</span></li>`).join('');
+  return { data: { '@type': 'BreadcrumbList', itemListElement: entries }, html: `<nav class="breadcrumbs news-breadcrumbs" aria-label="Navegação estrutural"><ol>${items}</ol></nav>` };
 }
 function shell({ title, description, path, main, graph = [], article, noindex = false }) {
   const crumb = breadcrumb(path, article ? article.title : title, Boolean(article));

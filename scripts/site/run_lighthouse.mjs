@@ -33,6 +33,7 @@ import {
   deriveCoverage,
   formatCoverageDeclaration,
   loadPolicy,
+  localArtifactSeoOnlyExemptPages,
   resolveSiteRoot,
   runtimeLighthouseContractForRoute,
   verifyRuntimeAcceptedProjectionDocument,
@@ -91,11 +92,13 @@ if (omittedRuntimeRoutes.length) {
 }
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
+const LOCAL_SEO_ONLY_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_only_exempt_pages || []);
 if (!localRuntimeFixture) console.log(formatCoverageDeclaration(coverage));
 console.log(`lighthouse pages (${RUN_PAGES.length}/${PAGES.length}): ${RUN_PAGES.join(" ")}`);
 for (const [name, configuredPages] of [
   ["image_gate_pages", IMAGE_GATE_PAGES],
   ["seo_exempt_pages", SEO_EXEMPT_PAGES],
+  ["seo_only_exempt_pages", LOCAL_SEO_ONLY_EXEMPT_PAGES],
 ]) {
   const missingPages = [...configuredPages].filter((path) => !PAGES.includes(path));
   if (missingPages.length) {
@@ -406,7 +409,9 @@ const results = [];
 let fatal = null;
 
 let runtimeEvidence = null;
-const SEO_ONLY_EXEMPT_PAGES = new Set();
+// A packaged empty/noindex page is attested by deriveCoverage's HTML checks.
+// An explicit origin must independently prove its runtime state below.
+const SEO_ONLY_EXEMPT_PAGES = localArtifactSeoOnlyExemptPages(coverage, baseArg);
 try {
   runtimeEvidence = await verifyRuntimeEvidenceInputs();
   for (const item of runtimeEvidence?.routes || []) {

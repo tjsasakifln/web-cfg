@@ -11,6 +11,7 @@ import {
   evaluateLighthouseResults,
   percentile75,
   readDeclaredBudget,
+  seoScoreWithoutCrawlability,
   validateDeclaredBudget,
 } from "./lighthouse_thresholds.mjs";
 import { ROOT, deriveCoverage, loadPolicy } from "./interface_coverage.mjs";
@@ -359,6 +360,12 @@ for (const runtimeFamily of interfaceCoverage.lighthouse.runtime_families) {
   );
 }
 const seoExempt = new Set(interfaceCoverage.lighthouse.seo_exempt_pages || []);
+const seoOnlyExempt = new Set(interfaceCoverage.lighthouse.seo_only_exempt_pages || []);
+assert.deepEqual(
+  new Set(committedSummary.coverage.seo_only_exempt_pages || []),
+  seoOnlyExempt,
+  "committed package SEO-only allowances must match the verified noindex representatives",
+);
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
 const expectedRows = measuredPages.flatMap((path) =>
   CRITICAL_MONEY_PATHS.has(path)
@@ -391,6 +398,7 @@ const committedEvaluation = evaluateLighthouseResults(committedSummary.results, 
   criticalRuns: 3,
   imageGatePages: new Set(committedSummary.coverage.image_gate_pages),
   seoExemptPages: new Set(committedSummary.coverage.seo_exempt_pages),
+  seoOnlyExemptPages: new Set(committedSummary.coverage.seo_only_exempt_pages || []),
   thresholds: committedSummary.coverage.thresholds,
 });
 assert.deepEqual(
@@ -405,6 +413,7 @@ const liveMeasuredEvaluation = evaluateLighthouseResults(
     criticalRuns: 3,
     imageGatePages: new Set(interfaceCoverage.lighthouse.image_gate_pages),
     seoExemptPages: seoExempt,
+    seoOnlyExemptPages: seoOnlyExempt,
     thresholds: interfaceCoverage.lighthouse.thresholds,
   },
 );
@@ -425,6 +434,10 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
   );
   const categories = report.categories || {};
   const audits = report.audits || {};
+  if (seoOnlyExempt.has(row.path)) {
+    assert.equal(row.seo_without_crawlability, seoScoreWithoutCrawlability(categories.seo, audits),
+      `summary.json narrow SEO score does not match ${filename}`);
+  }
   const ownLongTasks = (audits["long-tasks"]?.details?.items || [])
     .filter((item) => String(item.url || "").startsWith(committedSummary.base))
     .map((item) => Number(item.duration) || 0);

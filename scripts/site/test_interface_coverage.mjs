@@ -11,6 +11,7 @@ import {
   loadManifestRoutes,
   loadPolicy,
   loadPublicFamilyRegistry,
+  localArtifactSeoOnlyExemptPages,
   resolveSiteRoot,
   routeToFile,
   runtimeLighthouseContractForRoute,
@@ -18,6 +19,7 @@ import {
   verifyRuntimeInventoryDocument,
   verifyRuntimeRenderedPageDocument,
 } from "./interface_coverage.mjs";
+import { evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
 
 const rootFixture = mkdtempSync(join(tmpdir(), "confenge-site-root-"));
 writeFileSync(join(rootFixture, "index.html"), "source");
@@ -128,6 +130,39 @@ for (const [id, route] of [
 const modelerLanding = "/ferramentas/modelador-parametrico-3d/";
 assert(!isNoindex(readFileSync(routeToFile(ROOT, modelerLanding), "utf8")), "the modeler discovery page must remain indexable");
 assert(!coverage.lighthouse.seo_exempt_pages.includes(modelerLanding), "runtime exemptions must not extend to the public modeler landing");
+const newsRoute = "/noticias/contratos-publicos/";
+const newsFamily = coverage.lighthouse.families.find((entry) => entry.id === "noticias-contratos-publicos");
+assert.equal(newsFamily.lighthouse_representative, newsRoute);
+assert.equal(newsFamily.route_count, 1, "the package contains only the real empty news index");
+assert.equal(newsFamily.seo_exempt, false, "news must retain accessibility, best-practices and SEO thresholds");
+assert.equal(newsFamily.seo_only_exempt, true);
+assert.equal(newsFamily.runtime_only, null, "the package index is not a fabricated runtime representative");
+assert(coverage.lighthouse.pages.includes(newsRoute), "the real package index must be measured");
+assert(!coverage.lighthouse.seo_exempt_pages.includes(newsRoute));
+assert.deepEqual(coverage.lighthouse.seo_only_exempt_pages, [newsRoute]);
+const localNewsSeo = localArtifactSeoOnlyExemptPages(coverage);
+assert.deepEqual([...localNewsSeo], [newsRoute]);
+for (const origin of ["https://confenge.com.br", "http://127.0.0.1:8766"]) {
+  assert.deepEqual([...localArtifactSeoOnlyExemptPages(coverage, origin)], [], "an explicit origin needs its own state evidence");
+}
+const newsScore = { path: newsRoute, run: 1, performance: 100, accessibility: 100, best_practices: 100, seo: 70,
+  seo_without_crawlability: 100, cls: 0, lcp_ms: 1000, tbt_ms: 0, longest_own_task_ms: 0 };
+const homeScore = { ...newsScore, path: "/", seo: 100, total_byte_weight: 1000, content_byte_weight: 1000,
+  dom_elements: 10, font_display_score: 1, lcp_network_allowance_ms: 0 };
+const newsScoreOptions = { measuredPages: ["/", newsRoute], homeRuns: 1,
+  thresholds: coverage.lighthouse.thresholds, seoOnlyExemptPages: localNewsSeo };
+assert.equal(evaluateLighthouseResults([homeScore, newsScore], newsScoreOptions).ok, true);
+for (const change of [
+  { performance: 89 }, { cls: 0.051 }, { accessibility: 94 }, { accessibility: undefined },
+  { best_practices: 94 }, { best_practices: undefined },
+  { seo_without_crawlability: 94 }, { seo_without_crawlability: undefined },
+]) {
+  assert.equal(evaluateLighthouseResults([homeScore, { ...newsScore, ...change }], newsScoreOptions).ok, false,
+    `noindex must not excuse a quality failure: ${JSON.stringify(change)}`);
+}
+assert.equal(evaluateLighthouseResults([homeScore, newsScore], {
+  ...newsScoreOptions, seoOnlyExemptPages: localArtifactSeoOnlyExemptPages(coverage, "https://confenge.com.br"),
+}).ok, false, "local noindex must not excuse a public-origin SEO failure");
 assert.equal(new Set(coverage.lighthouse.pages).size, coverage.lighthouse.pages.length);
 assert.deepEqual(
   new Set(coverage.lighthouse.families.filter((family) => family.kind === "canonical").map((family) => family.id)),
@@ -146,8 +181,8 @@ for (const family of coverage.lighthouse.families) {
   assert(coverage.lighthouse.pages.includes(family.lighthouse_representative));
   const html = readFileSync(routeToFile(ROOT, family.lighthouse_representative), "utf8");
   if (family.kind === "canonical") {
-    if (family.seo_exempt) {
-      assert(family.seo_exempt_reason, `canonical noindex family has no SEO reason: ${family.id}`);
+    if (family.seo_exempt || family.seo_only_exempt) {
+      assert(family.seo_exempt_reason || family.seo_only_exempt_reason, `canonical noindex family has no SEO reason: ${family.id}`);
       assert(isNoindex(html), `canonical SEO exemption is not noindex: ${family.id}`);
     } else {
       assert(!isNoindex(html), `canonical representative must exercise SEO: ${family.id}`);
@@ -215,6 +250,44 @@ assert.throws(
   () => deriveCoverage({ policy: noindexCanonical, registry, siteRoot: ROOT }),
   /must exercise SEO when an indexable family route exists/,
 );
+
+for (const value of ["", null, true]) {
+  const invalidReason = structuredClone(policy);
+  invalidReason.lighthouse.canonical_representatives.find((entry) => entry.family_id === newsFamily.id).seo_only_exempt_reason = value;
+  assert.throws(() => deriveCoverage({ policy: invalidReason, registry, siteRoot: ROOT }), /nonempty and exclusive/);
+}
+const ambiguousSeo = structuredClone(policy);
+ambiguousSeo.lighthouse.canonical_representatives.find((entry) => entry.family_id === newsFamily.id).seo_exempt_reason = "broad exemption";
+assert.throws(() => deriveCoverage({ policy: ambiguousSeo, registry, siteRoot: ROOT }), /nonempty and exclusive/);
+const indexableSeo = structuredClone(policy);
+indexableSeo.lighthouse.canonical_representatives.find((entry) => entry.family_id === "home").seo_only_exempt_reason = "unjustified noindex";
+assert.throws(() => deriveCoverage({ policy: indexableSeo, registry, siteRoot: ROOT }), /must exercise SEO when an indexable family route exists/);
+const wrongNewsOwner = structuredClone(policy);
+wrongNewsOwner.lighthouse.canonical_representatives.find((entry) => entry.family_id === newsFamily.id).route = "/casos/aditivo-art125-demonstrativo/";
+assert.throws(() => deriveCoverage({ policy: wrongNewsOwner, registry, siteRoot: ROOT }), /must belong to its resolved family/);
+
+const isolatedPolicy = structuredClone(policy);
+isolatedPolicy.lighthouse.canonical_representatives = isolatedPolicy.lighthouse.canonical_representatives.filter((entry) => entry.family_id === newsFamily.id);
+isolatedPolicy.lighthouse.additional_pages = [];
+isolatedPolicy.supplemental_families = [];
+const isolatedRegistry = { families: registry.families.filter((entry) => entry.id === newsFamily.id) };
+const isolatedNewsFile = routeToFile(rootFixture, newsRoute);
+mkdirSync(join(rootFixture, "noticias", "contratos-publicos"), { recursive: true });
+const emptyNewsHtml = readFileSync(routeToFile(ROOT, newsRoute), "utf8");
+writeFileSync(isolatedNewsFile, emptyNewsHtml);
+const isolatedOptions = { policy: isolatedPolicy, registry: isolatedRegistry, siteRoot: rootFixture, routes: [newsRoute] };
+assert.deepEqual(deriveCoverage(isolatedOptions).lighthouse.seo_only_exempt_pages, [newsRoute]);
+const indexableNewsHtml = emptyNewsHtml.replace(/<meta\b[^>]*name="robots"[^>]*>/i, '<meta name="robots" content="index,follow">');
+writeFileSync(isolatedNewsFile, indexableNewsHtml);
+assert.throws(() => deriveCoverage(isolatedOptions), /must exercise SEO when an indexable family route exists/,
+  "the same news representative must lose its noindex allowance when its actual HTML becomes indexable");
+writeFileSync(isolatedNewsFile, emptyNewsHtml);
+const indexableSibling = `${newsRoute}fixture-only/`;
+mkdirSync(join(rootFixture, "noticias", "contratos-publicos", "fixture-only"));
+writeFileSync(routeToFile(rootFixture, indexableSibling), indexableNewsHtml);
+assert.throws(() => deriveCoverage({ ...isolatedOptions, routes: [newsRoute, indexableSibling] }),
+  /must exercise SEO when an indexable family route exists/,
+  "an empty representative cannot excuse another indexable page in its family");
 
 const unclassified = structuredClone(policy);
 unclassified.supplemental_families = unclassified.supplemental_families.filter(
