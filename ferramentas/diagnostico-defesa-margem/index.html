@@ -427,7 +427,8 @@
     try {
       var commerce = await import("/assets/js/tool-credits.mjs");
       await commerce.exportToolResult({ toolId: TOOL, format: format, content: content,
-        deliver: function(){ return deliver(content); } });
+        deliver: function(receipt, assertCurrent){ return format === "print"
+          ? commerce.printToolResultSnapshot(content, {assertCurrent: assertCurrent}) : deliver(content); } });
     } catch {
       showStatus("Não foi possível preparar a exportação. Tente novamente.", "error");
     }
@@ -435,7 +436,7 @@
   if (btnDl && T.downloadText) btnDl.onclick = function(){
     return exportDiagnosis("txt", function(content){ T.downloadText("confenge-diagnostico-defesa-margem.txt", content); });
   };
-  if (btnPrint) btnPrint.onclick = function(){ return exportDiagnosis("print", function(){ window.print(); }); };
+  if (btnPrint) btnPrint.onclick = function(){ return exportDiagnosis("print"); };
   function clearDiagnosisUi(){
     resultEl.hidden = true;
     document.getElementById("public-contract-id").value = "";

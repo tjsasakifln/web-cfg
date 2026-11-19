@@ -335,16 +335,18 @@ byId('export-json').onclick=async()=>{
       const {target,features,subject,unit,targetScale,logFeatures}=tested;
       const payload={exemplo_ficticio:state.example,parametros:{target,features,subject,unit,targetScale,logFeatures},resultado:analysis};
       const requestId=await exportIdFor(analysis,payload);
-      const blob=await commerce.exportReport({payload,requestId});
+      const blob=await commerce.exportReport({payload,requestId,deliver:async file=>{
+        saveMemory(file);
+        try { sessionStorage.removeItem('cfg-modela-export-attempt'); } catch { /* storage is optional */ }
+        status('export-status','Memória de cálculo pronta.');
+      }});
       if(!blob)throw new Error('EXPORT_UNAVAILABLE');
-      saveMemory(blob);
-      try { sessionStorage.removeItem('cfg-modela-export-attempt'); } catch { /* storage is optional */ }
     }
     status('export-status','Memória de cálculo pronta.');
   } catch (error) {
     const code=error?.error||error?.code;
     status('export-status',['AUTH_REQUIRED','EMAIL_UNVERIFIED','NO_CREDITS','ACCOUNT_BLOCKED'].includes(code)
-      ? 'Conclua a etapa na sua conta e selecione Baixar memória de cálculo novamente.'
+      ? 'Conclua a etapa na sua conta e use Concluir sua exportação para baixar a memória.'
       : 'Não foi possível baixar a memória agora. Seu trabalho continua aberto; tente novamente.',true);
   } finally {button.disabled=false;}
 };

@@ -23,7 +23,7 @@ const server = createServer(async (req, res) => {
         window.sharedWalletOptions = options;
         return ({
         ready: async () => ${mockCommerce},
-        open: async () => {},
+        open: async options => { window.openedPackageId = options?.packageId; return ${mockCommerce}; },
         openReferral: async () => { window.referralOpened = (window.referralOpened || 0) + 1; return ${mockCommerce}; }
       }); };
       export const exportToolResult = async () => ({ ok: true });`);
@@ -167,7 +167,8 @@ try {
     await paint();
   };
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
-  assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), true);
+  assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), false,
+    'the hub must explain free use even when paid exports are unavailable');
   assert.match(await page.$eval('.tool-share h2', el => el.textContent), /Compartilhe/);
   for (const config of [
     { enabled: true, purchasesEnabled: false, tools: ['modela-memoria'] },
@@ -177,12 +178,14 @@ try {
     commerceConfig = config;
     await loadWithCommerce('/ferramentas/');
     assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
-    assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), true);
+    assert.equal(await page.$eval('[data-tool-export-terms]', el => el.hidden), false);
+    assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true);
   }
   await loadWithCommerce('/ferramentas/calculadora-de-beiral/');
   assert.equal(await page.$eval('[data-referral-entry]', el => el.hidden), true);
   commerceConfig = { enabled: true, purchasesEnabled: true, sharedExportsEnabled: true,
-    tools: ['modela-memoria'], packages: [{ credits: 1, amountCents: 1490 }] };
+    tools: ['modela-memoria'], packages: [{ id: 'creditos-1', credits: 1, amountCents: 1490 },
+      { id: 'creditos-5', credits: 5, amountCents: 5990 }] };
   mockCommerce = true;
   await load('/ferramentas/#programa-indicacao');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
@@ -190,6 +193,25 @@ try {
   assert.match(initialTerms, /primeira exportação da conta verificada é cortesia/);
   assert.match(initialTerms, /seguintes usam 1 crédito/);
   assert.match(initialTerms, /Crédito avulso: R\$\s*14,90/);
+  assert.match(initialTerms, /cortesia é única e compartilhada/);
+  await page.waitForSelector('[data-credit-packages]:not([hidden])');
+  assert.equal(await page.$$eval('[data-credit-packages] li', nodes => nodes.length), 2);
+  assert.match(await page.$eval('[data-credit-packages]', el => el.textContent), /R\$\s*59,90/);
+  await page.click('[data-package-id="creditos-5"]');
+  await page.waitForFunction(() => window.openedPackageId === 'creditos-5');
+  assert.equal(events.filter(event => event.path.includes('tool-credits')).length, 0,
+    'choosing a public package only opens the account, without creating a payment');
+  for (const width of [320, 390, 414, 1440]) {
+    await page.setViewport({ width, height: 880 });
+    await page.$eval('#como-funciona', el => el.scrollIntoView());
+    assert.equal(await overflow(), false, 'public prices viewport ' + width);
+    if (shots) await page.screenshot({ path: resolve(shots, 'prices-' + width + '.png') });
+  }
+  await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
+  const pricingViolations = await page.evaluate(async () => (await window.axe.run('#como-funciona', {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+  })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })));
+  assert.deepEqual(pricingViolations, [], JSON.stringify(pricingViolations));
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
     '/ferramentas/#programa-indicacao');
   assert.match(await page.$eval('[data-referral-entry]', el => el.textContent), /primeira exportação paga/);
@@ -208,7 +230,15 @@ try {
   await loadWithCommerce('/cad/');
   assert.doesNotMatch(await page.$eval('.content-lead', el => el.textContent), /sem cadastro/);
   assert.match(await page.$eval('[data-tool-export-terms]', el => el.textContent), /Crédito avulso/);
-  commerceConfig = { ...commerceConfig, packages: [{ credits: 1, amountCents: 1990 }] };
+  commerceConfig = { ...commerceConfig, packages: [{ id: 'creditos-1', credits: 1, amountCents: 1990 }] };
+  await loadWithCommerce('/ferramentas/');
+  assert.match(await page.$eval('[data-credit-packages]', el => el.textContent), /R\$\s*19,90/,
+    'public package prices must follow the runtime');
+  commerceConfig = { ...commerceConfig, packages: [{ id: 'creditos-5', credits: 1, amountCents: 1990 }] };
+  await loadWithCommerce('/ferramentas/');
+  assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true,
+    'an inconsistent package must not create a purchase CTA');
+  commerceConfig = { ...commerceConfig, packages: [{ id: 'creditos-1', credits: 1, amountCents: 1990 }] };
   await loadWithCommerce('/ferramentas/conversor-utm-sirgas-2000/');
   assert.match(await page.$eval('[data-tool-export-terms]', el => el.textContent), /R\$\s*19,90/,
     'pre-use price must follow the runtime, never a copy constant');
@@ -219,11 +249,13 @@ try {
   const pausedPurchases = await page.$eval('[data-tool-export-terms]', el => el.textContent);
   assert.match(pausedPurchases, /Novas compras estão temporariamente indisponíveis/);
   assert.doesNotMatch(pausedPurchases, /Crédito avulso|R\$/);
+  assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true);
   commerceConfig = { ...commerceConfig, exportsPaused: true };
   await loadWithCommerce('/ferramentas/');
   const pausedExports = await page.$eval('[data-tool-export-terms]', el => el.textContent);
   assert.match(pausedExports, /exportações por créditos estão temporariamente pausadas/);
   assert.doesNotMatch(pausedExports, /é cortesia|Crédito avulso|R\$/);
+  assert.equal(await page.$eval('[data-credit-packages]', el => el.hidden), true);
   mockCommerce = null;
   commerceConfig = { enabled: false };
 
@@ -304,6 +336,19 @@ try {
   commerceConfig = { enabled: false };
   assert.deepEqual(errors, []);
 
+  for (const route of ['/bim/guias/quantitativos-ifc-para-excel/',
+    '/bim/guias/pdf-escaneado-para-dwg/', '/cad/guias/escala-e-unidade-do-dwg/']) {
+    for (const width of [390, 1440]) {
+      await page.setViewport({ width, height: 880 });
+      await load(route);
+      await page.$eval('.tool-guide-next', el => el.scrollIntoView({ block: 'center' }));
+      assert.equal(await overflow(), false, 'guide return CTA ' + route + ' ' + width);
+      assert.equal(await page.$eval('.tool-guide-next a[href="/ferramentas/#como-funciona"]', el =>
+        el.getBoundingClientRect().width > 0), true);
+      if (shots) await page.screenshot({ path: resolve(shots, 'guide-' + route.split('/').filter(Boolean).at(-1) + '-' + width + '.png') });
+    }
+  }
+
   await page.setJavaScriptEnabled(false);
   await page.setViewport({ width: 320, height: 800 });
   await load('/');
@@ -331,6 +376,9 @@ try {
   assert.equal(new URL(page.url()).pathname, '/ferramentas/', 'native tools link reaches the catalogue');
   assert.equal(await overflow(), false);
   assert.equal(await page.$$eval('.ts-card-action[href]', nodes => nodes.length), count);
+  assert.match(await page.$eval('[data-public-export-intro]', el => el.textContent),
+    /primeira exportação da conta verificada é cortesia/,
+    'material free-use conditions must be visible and indexable without scripting');
   assert.equal(await page.$eval('[data-tool-search]', el => el.hidden), true);
   assert.equal(await page.$$eval('.tool-share-social a[href]', nodes => nodes.length), 2);
   console.log('Browser catalogue: desktop/mobile menu, no-JS, axe, search, referral and share fallback OK.');

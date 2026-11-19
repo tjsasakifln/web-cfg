@@ -16,9 +16,9 @@ const fixtureEmail = 'wallet-browser-fixture@example.test';
 // A fresh high-entropy fixture secret prevents Chrome's compromised-password
 // UI from intercepting the browser-trusted purchase click under test.
 const fixturePassword = `${randomBytes(24).toString('base64url')}Aa1!`;
-const firebase = `let listener, user; const auth={authStateReady:async()=>{},currentUser:null};
-export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const browserPopupRedirectResolver={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listener=fn;fn(user)};
-const set=u=>{user=u;auth.currentUser=u;listener?.(u)}; const make=(email,verified=false,providerId='password')=>({uid:'u1',email,emailVerified:verified,providerData:[{providerId}],reload:async()=>{},getIdToken:async()=> 'token'});
+const firebase = `let user; const listeners=new Set(); const auth={authStateReady:async()=>{},currentUser:null};
+export const getApps=()=>[]; export const initializeApp=x=>x; export const getAuth=()=>auth; export const initializeAuth=()=>auth; export const browserLocalPersistence={}; export const browserPopupRedirectResolver={}; export const connectAuthEmulator=()=>{}; export const onAuthStateChanged=(a,fn)=>{listeners.add(fn);fn(user);return()=>listeners.delete(fn)};
+const set=u=>{user=u;auth.currentUser=u;for(const listener of listeners)listener(u)}; const make=(email,verified=false,providerId='password')=>{const uid=email==='other@example.test'?'u2':'u1';return {uid,email,emailVerified:verified,providerData:[{providerId}],reload:async()=>{},getIdToken:async()=> 'token-'+uid}};
 class Provider { constructor(providerId){this.providerId=providerId} } export class GoogleAuthProvider extends Provider { constructor(){super('google.com')} } export class FacebookAuthProvider extends Provider { constructor(){super('facebook.com')} } export class GithubAuthProvider extends Provider { constructor(){super('github.com')} } export class TwitterAuthProvider extends Provider { constructor(){super('twitter.com')} } export class OAuthProvider extends Provider {};
 export const signInWithEmailAndPassword=async(a,email)=>{set(make(email,true));return {user}}; export const createUserWithEmailAndPassword=async(a,email)=>{set(make(email,false));return {user}}; export const signInWithPopup=async(a,provider,resolver)=>{if(resolver!==browserPopupRedirectResolver)throw new Error('popup resolver missing');globalThis.popupResolverSeen=true;set(make('social@example.test',true,provider.providerId));return {user}}; export const sendEmailVerification=async()=>{}; export const sendPasswordResetEmail=async()=>{}; export const signOut=async()=>set(null);`;
 const pendingPix = {id:'o1',status:'pending',paymentFlow:'pix',qrCode:'pix-code',qrImage:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+7B4n2QAAAABJRU5ErkJggg=='};
@@ -26,6 +26,9 @@ const pendingCheckout = {id:'o2',status:'pending',paymentFlow:'checkout',checkou
 let fixtureMayConfirm = false;
 const fixtureRejectsOrder = process.env.TOOL_CREDITS_FIXTURE_REJECT_ORDER === '1';
 const calls = [], registrations = [], orderRequests = [], attempts = [];
+const reportAttempts = [];
+let fixtureExportRequiresCredits = false;
+let fixtureAccount = {paid:2,promo:1,freeAvailable:false,referralCode:firstRef,invites:{earned:1,pending:0},recentOrders:[]};
 const sharedEnabledConfig = {enabled:true,firebase:{apiKey:'fake'},tools:['modela-memoria','calculadora-bdi'],
   purchasesEnabled:true,checkoutEnabled:true,sharedExportsEnabled:true,termsVersion:'v2',termsUrl:'/termos-de-uso/#creditos-ferramentas',
   authProviders:['google.com','linkedin.com','invalid.example'], packages:[{id:'one',credits:1,amountCents:1490}]};
@@ -43,7 +46,7 @@ const server = createServer(async (req, res) => {
   if (url.searchParams.get('op') === 'config') return send(toolCreditsConfig);
   if (url.searchParams.get('op') === 'account') {
     if (req.method === 'POST') registrations.push(JSON.parse(body));
-    return send({paid:2,promo:1,freeAvailable:false,referralCode:firstRef,invites:{earned:1,pending:0},recentOrders:[]});
+    return send(fixtureAccount);
   }
   if (url.searchParams.get('op') === 'orders') {
     const request = JSON.parse(body);
@@ -58,9 +61,15 @@ const server = createServer(async (req, res) => {
   if (url.searchParams.get('op') === 'export-local') {
     const request = JSON.parse(body);
     attempts.push(request);
+    if (fixtureExportRequiresCredits) { res.statusCode = 402; return send({error:'NO_CREDITS'}); }
     if (attempts.length === 1) { res.statusCode = 503; return send({ error: 'COMMERCE_UNAVAILABLE' }); }
     return send({ schema: 'confenge.tools.emission/v1', id: 'a'.repeat(64), proof: 'b'.repeat(64),
       toolId: request.toolId, ...request.payload });
+  }
+  if (url.searchParams.get('op') === 'export') {
+    reportAttempts.push(JSON.parse(body));
+    res.setHeader('content-disposition', 'attachment; filename="modela-pro-memoria.json"');
+    return send({schema:'fixture-report',result:'prepared-report'});
   }
   res.statusCode = 400; send({error:'bad'});
 });
@@ -390,7 +399,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   }, { referral, shared });
   assert.equal(opened, true);
   assert.equal(await page.$eval('dialog', dialog => dialog.open), true);
-  assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeiro uso completo/i);
+  assert.match(await page.$eval('dialog', dialog => dialog.textContent), /primeira exportação é grátis/i);
   await page.type('input[type=email]', fixtureEmail);
   await page.type('input[type=password]', fixturePassword);
   await activateVisibleControl(page, 'dialog button[type=submit]');
@@ -641,7 +650,7 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   });
   await openAndSignIn(checkoutPage, { shared: true });
   assert.match(await checkoutPage.$eval('#tool-credits-referral input', node => node.value), /^https:\/\/confenge\.com\.br\/ferramentas\/\?ref=/);
-  assert.deepEqual(await checkoutPage.evaluate(() => window.events), [['tool_referral_panel_view', { tool_id: 'shared-wallet', destination_kind: 'catalog' }]]);
+  assert.deepEqual(await checkoutPage.evaluate(() => window.events.filter(([name]) => name.startsWith('tool_referral'))), [['tool_referral_panel_view', { tool_id: 'shared-wallet', destination_kind: 'catalog' }]]);
   assert.equal(await checkoutPage.$eval('dialog select', select => select.value), 'pix');
   await checkoutPage.select('dialog select', 'checkout');
   await activateVisibleControl(checkoutPage, 'dialog input[type=checkbox]');
@@ -702,6 +711,124 @@ async function openAndSignIn(page, { referral = false, shared = false } = {}) {
   assert.deepEqual(gates, {disabled:false, paused:false, sharedMissing:false, sharedNull:false, sharedFalse:false, directResult:true, directDelivered:1, dialogs:0});
   await gated.close();
   toolCreditsConfig = sharedEnabledConfig;
+
+  // Login and payment must lead back to the exact prepared result. Neither
+  // transition may debit a credit or deliver anything without the resume click.
+  const resumePage = await browser.newPage();
+  await resumePage.setViewport({width:390,height:844});
+  await resumePage.goto(`http://127.0.0.1:${port}/`);
+  fixtureAccount = {...fixtureAccount,paid:0,promo:0,freeAvailable:true};
+  const beforeGuestExport = attempts.length;
+  await resumePage.evaluate(async () => {
+    window.events = [];
+    window.confengeTrack = (name, properties) => window.events.push([name, properties]);
+    window.confirm = () => true;
+    window.resumeDelivered = 0;
+    const {createToolCredits} = await import('/assets/js/tool-credits.mjs');
+    window.resumeWallet = createToolCredits({toolId:'calculadora-bdi',shared:true});
+    window.preparedResult = {format:'csv',content:'private prepared result',deliver:() => { window.resumeDelivered++; }};
+    await window.resumeWallet.deliverLocal(window.preparedResult);
+  });
+  assert.equal(attempts.length,beforeGuestExport,'guest export cannot debit before login');
+  assert.match(await resumePage.$eval('dialog[open]',node=>node.textContent),/resultado continua pronto/);
+  await activateVisibleControl(resumePage,'dialog[open] .tool-credits__provider--google');
+  await resumePage.waitForSelector('dialog[open] [data-resume-export]:not([disabled])');
+  assert.equal(attempts.length,beforeGuestExport,'login cannot debit or export automatically');
+  assert.equal(await resumePage.evaluate(()=>window.resumeDelivered),0);
+  assert.match(await resumePage.$eval('[data-resume-export]',node=>node.textContent),/grátis/);
+  await activateVisibleControl(resumePage,'dialog[open] [data-resume-export]');
+  await resumePage.waitForFunction(()=>window.resumeDelivered===1);
+  assert.equal(attempts.length,beforeGuestExport+1);
+  assert.equal(await resumePage.$('dialog[open]'),null);
+  assert.equal(await resumePage.evaluate(()=>window.events.filter(([name,p])=>name==='tool_commerce_step'&&p.step==='export_delivered').length),1);
+
+  fixtureAccount = {...fixtureAccount,paid:0,promo:0,freeAvailable:false};
+  fixtureExportRequiresCredits = true;
+  fixtureMayConfirm = false;
+  const beforeCreditExport = attempts.length;
+  await resumePage.evaluate(async()=>window.resumeWallet.deliverLocal(window.preparedResult));
+  await resumePage.waitForSelector('dialog[open] [data-resume-export][disabled]');
+  assert.equal(attempts.length,beforeCreditExport+1);
+  assert.equal(await resumePage.evaluate(()=>window.resumeDelivered),1);
+  assert.equal(await resumePage.evaluate(()=>window.events.filter(([name,p])=>name==='tool_commerce_step'&&p.step==='credits_required').length),1);
+  await activateVisibleControl(resumePage,'dialog[open] input[type=checkbox]');
+  await activateVisibleControl(resumePage,'dialog[open] .tool-credits__packs button');
+  await resumePage.waitForSelector('dialog[open] textarea');
+  assert.equal(await resumePage.evaluate(()=>window.resumeDelivered),1,'starting payment cannot export');
+  fixtureAccount = {...fixtureAccount,paid:1};
+  fixtureExportRequiresCredits = false;
+  fixtureMayConfirm = true;
+  await resumePage.evaluate(()=>[...document.querySelectorAll('dialog[open] button')].find(node=>node.textContent==='Atualizar pagamento').click());
+  await resumePage.waitForSelector('dialog[open] [data-resume-export]:not([disabled])');
+  assert.equal(attempts.length,beforeCreditExport+1,'confirmed payment cannot debit or export automatically');
+  assert.equal(await resumePage.evaluate(()=>window.resumeDelivered),1);
+  assert.equal(await resumePage.evaluate(()=>window.events.filter(([name,p])=>name==='tool_commerce_step'&&p.step==='payment_confirmed').length),1);
+  await activateVisibleControl(resumePage,'dialog[open] [data-resume-export]');
+  await resumePage.waitForFunction(()=>window.resumeDelivered===2);
+  assert.equal(attempts.length,beforeCreditExport+2);
+  assert.deepEqual(attempts[beforeCreditExport+1].payload,attempts[beforeCreditExport].payload,'resume must authorize the original content, size and format');
+
+  // Signing out clears an intent already bound to that account. The result
+  // cannot silently move with a later identity on the same page.
+  fixtureAccount = {...fixtureAccount,paid:0,freeAvailable:false};
+  fixtureExportRequiresCredits = true;
+  await resumePage.evaluate(async()=>window.resumeWallet.deliverLocal(window.preparedResult));
+  await resumePage.waitForSelector('dialog[open] [data-resume-export][disabled]');
+  await resumePage.evaluate(()=>[...document.querySelectorAll('dialog[open] button')].find(node=>node.textContent==='Sair').click());
+  await resumePage.waitForSelector('dialog[open] .tool-credits__provider--google');
+  fixtureAccount = {...fixtureAccount,paid:1};
+  fixtureExportRequiresCredits = false;
+  await activateVisibleControl(resumePage,'dialog[open] .tool-credits__provider--google');
+  await resumePage.waitForFunction(()=>document.querySelector('dialog[open]')?.textContent.includes('Créditos de exportação'));
+  assert.equal(await resumePage.$('[data-resume-export]'),null,'sign-out must clear the prepared account-bound action');
+  assert.equal(await resumePage.evaluate(()=>window.resumeDelivered),2);
+  const resumeObservations = await resumePage.evaluate(()=>({
+    events:window.events,
+    storage:JSON.stringify({...localStorage,...sessionStorage}),
+  }));
+  assert.ok(!JSON.stringify(resumeObservations).includes('private prepared result'));
+  assert.ok(resumeObservations.events.filter(([name])=>name==='tool_commerce_step').every(([,props])=>
+    Object.keys(props).every(key=>['step','tool_id','payment_flow','credit_bucket','package_id'].includes(key))));
+  await resumePage.close();
+
+  const selectionPage = await browser.newPage();
+  await selectionPage.goto(`http://127.0.0.1:${port}/`);
+  const beforeSelection = orderRequests.length;
+  await selectionPage.evaluate(async()=>{
+    const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
+    await createToolCredits({toolId:'modela-memoria',shared:true}).open({packageId:'one'});
+  });
+  await activateVisibleControl(selectionPage,'dialog[open] .tool-credits__provider--google');
+  await selectionPage.waitForFunction(()=>document.querySelector('dialog[open]')?.textContent.includes('Pacote escolhido:'));
+  assert.match(await selectionPage.$eval('[data-package-id="one"]',node=>node.textContent),/Pacote escolhido/);
+  assert.equal(orderRequests.length,beforeSelection,'a public package choice must survive login without ordering');
+  assert.equal(await selectionPage.$eval('input[type=checkbox]',node=>node.checked),false);
+  await selectionPage.close();
+
+  const reportPage = await browser.newPage();
+  await reportPage.goto(`http://127.0.0.1:${port}/`);
+  fixtureAccount = {...fixtureAccount,paid:0,freeAvailable:true};
+  const beforeReport = reportAttempts.length;
+  await reportPage.evaluate(async()=>{
+    window.reportDelivered=0;
+    const {createToolCredits}=await import('/assets/js/tool-credits.mjs');
+    const wallet=createToolCredits({toolId:'modela-memoria'});
+    await wallet.exportReport({
+      payload:{fixture:'private report result'},requestId:'b193a63c-2857-4fbf-879c-91a950f6efa5',
+      deliver:async file=>{window.reportBytes=await file.text();window.reportDelivered++;},
+    }).catch(()=>{});
+  });
+  assert.equal(reportAttempts.length,beforeReport);
+  await activateVisibleControl(reportPage,'dialog[open] .tool-credits__provider--google');
+  await reportPage.waitForSelector('dialog[open] [data-resume-export]:not([disabled])');
+  assert.equal(reportAttempts.length,beforeReport,'Modela login cannot emit a report automatically');
+  await activateVisibleControl(reportPage,'dialog[open] [data-resume-export]');
+  await reportPage.waitForFunction(()=>window.reportDelivered===1);
+  assert.equal(reportAttempts.length,beforeReport+1);
+  assert.equal(reportAttempts.at(-1).requestId,'b193a63c-2857-4fbf-879c-91a950f6efa5');
+  assert.deepEqual(reportAttempts.at(-1).payload,{fixture:'private report result'});
+  assert.match(await reportPage.evaluate(()=>window.reportBytes),/prepared-report/);
+  await reportPage.close();
 
   const malformed = await browser.newPage();
   await malformed.goto(`http://127.0.0.1:${port}/?ref=${firstRef}&ref=${secondRef}`);
