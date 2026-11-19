@@ -110,9 +110,16 @@ try{
   // Use both navigation modes before the actual calculation journeys.
   for(const width of [390,1280]){
     await page.setViewport({width,height:900});await load('/');
-    const nav=width<900?'.mobile-nav':'.desktop-nav';
-    if(width<900)await page.click('.menu-toggle');
-    const link=nav+' a[href="/ferramentas/"]';await page.waitForSelector(link,{visible:true});
+    const mobile=await page.$eval('.menu-toggle',el=>el.getClientRects().length>0&&getComputedStyle(el).display!=='none');
+    const nav=mobile?'.mobile-nav':'.desktop-nav';
+    if(mobile){
+      await page.waitForSelector('.menu-toggle',{visible:true});
+      await page.click('.menu-toggle');
+    }
+    const groupToggle=nav+' [data-nav-group="ferramentas"] > summary';
+    await page.waitForSelector(groupToggle,{visible:true});
+    await page.click(groupToggle);
+    const link=nav+' a[data-nav-primary="true"][href="/ferramentas/"]';await page.waitForSelector(link,{visible:true});
     await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.click(link)]);
     assert.equal(new URL(page.url()).pathname,'/ferramentas/');
   }
