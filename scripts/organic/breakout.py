@@ -656,8 +656,8 @@ def _visual_html(record: dict[str, Any]) -> str:
             '<option value="nao_desonerado">Não desonerado</option>'
             '<option value="mista">Mista</option>'
             "</select></label>"
-            '<label>Regime da empresa <select name="regime">'
-            '<option value="desonerado">Desonerada, conforme enquadramento tributário</option>'
+            '<label>Regime tributário da empresa <select name="regime">'
+            '<option value="desonerado">Desonerada</option>'
             '<option value="nao_desonerado">Não desonerada</option>'
             '<option value="incerto">Incerto</option>'
             "</select></label>"
