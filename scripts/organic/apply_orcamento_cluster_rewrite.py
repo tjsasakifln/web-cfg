@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from html import escape
 import json
 import re
 import sys
@@ -27,6 +28,10 @@ SICRO = "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-r
 TCU_EPG = "https://licitacoesecontratos.tcu.gov.br/4-4-1-2-empreitada-por-preco-global-epg/"
 TCU_REQ = "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
 TCU_SUMULA_253 = "https://pesquisa.apps.tcu.gov.br/resultado/sumula/%2A/NUMERO%253A253/sinonimos%253Dtrue"
+TCU_DESONERACAO = "https://pesquisa.apps.tcu.gov.br/doc/acordao-completo/421/2018/Plen%C3%A1rio"
+AGU_REGIME_REFERENCIA = "https://www.gov.br/pf/pt-br/assuntos/licitacoes/2025/roraima/concorrencias/concorrencia-eletronica-90001-2025/4-anexo-i-termo-de-justificativas-tecnicas-relevantes.pdf"
+SINAPI_UPDATED = "2026-11-18"
+SINAPI_UPDATED_LABEL = "18 de novembro de 2026"
 
 AUTHOR = """<section class="author-box"><div class="author-photo"><img src="/assets/tiago-sasaki-avatar-v11-sem-fundo.png" width="512" height="512" alt="Engº Tiago Sasaki" loading="lazy" decoding="async"/></div><div><span>Autor e responsável técnico pelo conteúdo</span><h2><a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a></h2><p>Engenheiro Civil formado pela EESC-USP, com experiência na iniciativa privada e na Administração Pública, atuando em fiscalização, gestão de contratos, orçamentação e decisões técnicas em obras públicas.</p><a class="text-link" href="/especialista/tiago-jun-sasaki/">Conhecer a experiência """ + ARROW + """</a></div></section>"""
 
@@ -168,16 +173,14 @@ def cta(
         "Não anexe arquivo nesta mensagem."
     )
     wa_url = "https://wa.me/5548988344559?text=" + quote(safe_message)
-    form = (
-        f"/?jornada={journey}&amp;tema={quote(theme)}&amp;origem=/conteudos/{slug}/#contato"
-    )
+    form = "/#contato"
     document_step = (
         "Solicitar canal seguro para envio fica para a etapa seguinte, quando a "
         "CONFENGE abre o canal para a documentação."
         if proposal_label
         else "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
     )
-    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>{visible_heading}</strong><p>{body} {document_step}</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">{visible_wa_label}</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{form}">Continuar pelo formulário</a></div></section>"""
+    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>{visible_heading}</strong><p>{body} {document_step}</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">{visible_wa_label}</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" data-tema="{escape(theme, quote=True)}" data-origem="/conteudos/{slug}/" href="{form}">Continuar pelo formulário</a></div></section>"""
 
 
 def qualified_whatsapp_url(request: str, documents: str) -> str:
@@ -746,6 +749,8 @@ def page_database(html: str) -> str:
 
 
 def page_empreitada(html: str) -> str:
+    from scripts.site.search_metadata import normalize_metadata_html
+
     slug = "empreitada-preco-global-preco-unitario"
     faqs = [
         (
@@ -853,7 +858,7 @@ def page_empreitada(html: str) -> str:
 {extract_bridge(html)}
 """
     html = replace_article(html, inner)
-    return set_head(
+    html = set_head(
         html,
         title="Empreitada por preço global ou unitário: diferenças | CONFENGE",
         description="Compare empreitada por preço global e preço unitário: critérios de medição, risco de quantitativos e alterações de projeto em obras públicas. Veja o que conferir.",
@@ -868,6 +873,7 @@ def page_empreitada(html: str) -> str:
         breadcrumb_label="Empreitada por preço global ou unitário",
         image_alt="Comparação entre empreitada por preço global e preço unitário | CONFENGE",
     )
+    return normalize_metadata_html(html, "/conteudos/empreitada-preco-global-preco-unitario/")
 
 
 def page_matriz(html: str) -> str:
@@ -1239,7 +1245,7 @@ SINAPI_EXAMPLE = example_section(
         ("rate_deson", "Taxa horária ilustrativa desonerada", "27.60", "BRL/h"),
     ],
     result_label="Vão de encargo na composição",
-    limit="185 × (34,80 − 27,60) = 1.332. A tabela que vale é a do edital na data-base, com CPRB só se o enquadramento da empresa se aplicar. Não publique este vão como coeficiente oficial e não use a troca de base para maquiar reajuste.",
+    limit="185 × (34,80 − 27,60) = 1.332. Esta diferença ilustra apenas o custo da mão de obra. Para comparar preços de proposta, confira também o regime efetivo da empresa, os encargos e o BDI, incluindo CPRB quando aplicável. O cálculo não é fator oficial de conversão nem demonstra economia total ou exequibilidade.",
 )
 
 
@@ -1371,7 +1377,121 @@ def patch_bdi(html: str) -> str:
     return sync_article_word_count(refresh_sources_reviewed(set_modified_date(html)))
 
 
+def _correct_sinapi_reference_guidance(html: str) -> str:
+    """Keep the public answer, worked example and tool source in agreement."""
+    from scripts.organic.breakout import content_hash, load_candidates, _visual_html
+
+    record = next(row for row in load_candidates(ROOT)["candidates"]
+                  if row["asset_id"] == "sinapi-desonerado-nao-desonerado")
+    replacements = {
+        "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Use a versão que o edital fixa (ou a planilha modelo do órgão), alinha BDI e regime da empresa à mesma base e confira data-base, misturar tabelas sem memória de cálculo distorce preço e exequibilidade.":
+            "SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra. Entenda essa diferença e separe a referência de preço do órgão dos custos da sua proposta, considerando o regime da empresa, o BDI e as regras da licitação.",
+        "A decisão exige quatro identificadores reproduzíveis: competência, localidade, base de encargos e versão do relatório mensal. Os valores desta página são premissas sintéticas; os livros CAIXA explicam o método, não publicam preço atual universal.":
+            "Sem desoneração é a denominação equivalente a não desonerado nas publicações SINAPI; com desoneração corresponde à base desonerada. Para comparar as duas, use a mesma competência, UF e composição. Os valores do exemplo abaixo são ilustrativos, não preços oficiais de um mês.",
+        "Quando edital, planilha modelo ou metodologia do órgão fixam base desonerada":
+            "No orçamento de referência, conforme a opção fundamentada do órgão. Na proposta, quando compatível com o regime tributário efetivo da empresa e com os critérios do certame.",
+        "Quando o certame fixa base não desonerada (ou a referência oficial do orçamento for essa)":
+            "No orçamento de referência, conforme a opção fundamentada do órgão. Na proposta, quando a empresa não utiliza a desoneração e demonstra custos e encargos aplicáveis.",
+        "Usar desonerado “para competir” contra edital em não desonerado":
+            "Usar encargos desonerados sem enquadramento ou sem considerar a CPRB e o BDI aplicáveis.",
+        "Fixar uma base única para a planilha": "Separar referência e proposta",
+        "Adote a base do certame. Só misture versões item a item com memória de cálculo e se o edital não proibir.":
+            "Identifique a base usada pelo órgão e calcule a proposta com os encargos efetivamente aplicáveis à empresa. Se as bases diferirem, demonstre a formação do preço e confira apresentação, limites de preço e exequibilidade.",
+        "Pergunta de negócio: se vencer, executa com esse unitário e esse fluxo? Se a resposta depende de “outra tabela”, a planilha está frágil.":
+            "Confira se os preços propostos cobrem os custos reais e o fluxo de execução. A comparação com o orçamento de referência não substitui essa verificação.",
+        "O edital manda; a planilha precisa fechar a conta.": "Referência do órgão e custos da empresa têm funções diferentes.",
+        "Preferência interna da orçamentação não prevalece sobre a referência do certame. Ajustes legítimos vêm por composição própria, cotação e premissas documentadas, não por “escolher a tabela mais cômoda”.":
+            f'O <a href="{TCU_DESONERACAO}" rel="noopener noreferrer" target="_blank">Acórdão 421/2018 do TCU</a> afastou a imposição de propostas desoneradas a empresas sem essa opção. A orientação do Parecer AGU 44/2019, reproduzida no <a href="{AGU_REGIME_REFERENCIA}" rel="noopener noreferrer" target="_blank">termo oficial da Polícia Federal, nota 9</a>, distingue o orçamento de referência da planilha formada segundo o regime do licitante. A proposta continua sujeita aos critérios de aceitabilidade do certame; dúvida ou exigência incompatível deve ser esclarecida no prazo.',
+        "Edital fixa SINAPI desonerado": "Órgão adota referência desonerada",
+        "Monte a planilha na base desonerada exigida, na data-base do certame. Depois teste se a margem real da empresa (encargos e eventual CPRB) ainda sustenta a execução, ganhar com unitário de referência e perder no canteiro não é vitória.":
+            "Confira a competência e os critérios do orçamento do órgão. Se a empresa não é desonerada, sua proposta deve demonstrar os encargos que efetivamente suporta. A diferença de regime não dispensa os preços máximos e as condições de aceitabilidade do certame.",
+        "Edital fixa não desonerado": "Órgão adota referência não desonerada",
+        "Adote a base não desonerada do órgão e alinhe BDI e encargos a ela. Trocar para desonerado “para competir” contra o edital cria planilha incoerente e risco de inexequibilidade ou de questionamento na análise de preço.":
+            "Se a empresa é desonerada, forme seus custos e BDI com o tratamento tributário aplicável, sem copiar encargos que não incidem. Demonstre a formação dos preços e verifique as regras do certame. Não basta trocar uma coluna para declarar a proposta exequível.",
+        "Esta página responde qual base SINAPI  -  desonerada ou não desonerada  -  o edital e a planilha modelo fixam na data-base. Se o que você precisa é levantar quantitativos, abrir composições ou revisar a planilha de uma obra, pública ou privada, isso é elaboração ou revisão de orçamento: outro serviço, com destino próprio.":
+            "A escolha da base integra a elaboração e a revisão do orçamento. A CONFENGE pode combinar levantamento de quantitativos, composições, encargos e BDI para organizar uma planilha coerente com o projeto e a finalidade da contratação, em obras públicas ou privadas.",
+        "Premissas de regime da empresa e da proposta (para coerência interna)":
+            "Enquadramento tributário da empresa e encargos efetivamente considerados na proposta",
+        "Edital/planilha modelo: base desonerada ou não está explícita?":
+            "A base de referência do órgão e os critérios de aceitabilidade estão identificados?",
+        "Regime da empresa (incl. CPRB, se houver) foi testado contra a margem real?":
+            "A proposta considera o regime efetivo da empresa, a CPRB quando aplicável e a margem de execução?",
+        "Escolha uma base coerente com o edital e documente. Não misture versões item a item sem justificativa.":
+            "Use encargos compatíveis com o regime da empresa, documente os ajustes e compare a proposta aos critérios de aceitabilidade do edital.",
+        "Confira se a fórmula do edital e os percentuais batem com a base adotada.":
+            "Confira o regime efetivo da empresa, a incidência dos tributos e a coerência entre custo direto e BDI, observadas as regras do certame.",
+        "Usar SINAPI desonerado porque “fica mais competitivo”, ignorando o edital.":
+            "Usar encargos desonerados sem comprovar enquadramento ou ignorar os critérios de aceitabilidade do edital.",
+        "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.":
+            "Base de preço, BDI e encargos precisam corresponder aos custos da empresa e aos critérios do certame. A revisão identifica diferenças que podem comprometer a proposta ou a margem da obra.",
+    }
+    for old, new in replacements.items():
+        html = html.replace(old, new)
+
+    # Update only this existing chassis, preserving its layout and contact links.
+    start = html.index('<!-- organic-breakout-chassis:sinapi-desonerado-nao-desonerado -->')
+    end = html.index('<!-- /organic-breakout-chassis -->', start)
+    chassis = html[start:end]
+    chassis = re.sub(r'data-content-hash="[^"]+"', f'data-content-hash="{content_hash(record)}"', chassis, count=1)
+    chassis = re.sub(r'(<p class="breakout-job"[^>]*>).*?</p>',
+                     lambda m: m.group(1) + '<strong>Quem chega a esta página.</strong> ' + escape(record["visitor_job"]) + '</p>', chassis, count=1)
+    chassis = re.sub(r'data-visitor-job="[^"]*"', 'data-visitor-job="' + escape(record["visitor_job"], quote=True) + '"', chassis, count=1)
+    chassis = re.sub(r'(<p class="breakout-answer"[^>]*>).*?</p>',
+                     lambda m: m.group(1) + '<strong>Resposta factual.</strong> ' + escape(record["answer"]) + '</p>', chassis, count=1)
+    chassis = re.sub(r'<dd data-breakout-method="[^"]*">.*?</dd>',
+                     '<dd data-breakout-method="' + record["method"]["id"] + '">' + escape(record["method"]["short"]) + '</dd>', chassis, count=1)
+    for label, value in (("Fonte", record["method"]["source"]), ("Período", record["period"])):
+        chassis = re.sub(r'(<dt>' + label + r'</dt><dd>).*?</dd>', lambda m: m.group(1) + escape(value) + '</dd>', chassis, count=1)
+    chassis = re.sub(r'<div class="breakout-visual".*?</script></div>', _visual_html(record), chassis, count=1, flags=re.S)
+    chassis = re.sub(r'(<div class="breakout-limits"[^>]*>).*?</div>',
+                     lambda m: m.group(1) + '\n<h2>Onde esta conferência se aplica</h2>\n<p>' + escape(record["limitations"][0]) + '</p>\n</div>', chassis, count=1, flags=re.S)
+    def sync_howto(match):
+        data = json.loads(match.group(1))
+        data.update(description=record["answer"], identifier=record["method"]["id"], dateModified=SINAPI_UPDATED)
+        data["step"][0]["text"] = record["method"]["short"]
+        data["step"][1]["text"] = record["limitations"][0]
+        return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + '</script>'
+    chassis = re.sub(r'<script type="application/ld\+json">(.*?)</script>', sync_howto, chassis, count=1, flags=re.S)
+    html = html[:start] + chassis + html[end:]
+
+    faqs = [
+        ("O edital pode impor SINAPI desonerado se a empresa não for desonerada?",
+         "A base escolhida pelo órgão para o orçamento de referência não define o regime tributário da empresa. O TCU afastou a imposição de propostas desoneradas no Acórdão 421/2018. A planilha do licitante deve demonstrar seus custos e encargos efetivos e atender aos critérios de aceitabilidade do certame. Se houver exigência incompatível ou ambígua, peça esclarecimento ou a revisão cabível no prazo."),
+        ("Qual a diferença prática entre SINAPI desonerado e não desonerado?",
+         "A diferença principal está nos encargos sociais da mão de obra nas composições. Compare competência, UF e composição iguais e confira os efeitos no BDI. Em 2026, a base desonerada considera a transição parcial da contribuição patronal; desonerado não significa ausência de encargos."),
+        ("Posso misturar as duas tabelas na mesma planilha?",
+         "Misturar composições sem justificar os encargos e o BDI impede uma comparação consistente. Ajustes devem ter memória de cálculo, corresponder ao regime aplicável e respeitar as regras do certame. O uso de uma referência diferente da proposta não equivale, por si só, a uma mistura indevida."),
+        ("Sem desoneração é o mesmo que não desonerado?",
+         "Sim, essas denominações identificam a base sem desoneração nas publicações SINAPI. Já com desoneração corresponde à base desonerada. Os percentuais dependem da competência e da localidade; a denominação não determina o enquadramento tributário da empresa."),
+    ]
+    html = re.sub(r'<section class="article-faq">.*?</section>', faq(faqs), html, count=1, flags=re.S)
+    def sync_faq(match):
+        data = json.loads(match.group(1))
+        for node in data.get("@graph", []):
+            if node.get("@type") == "FAQPage":
+                node["mainEntity"] = [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]
+            if node.get("@type") == "Article":
+                node["citation"] = list(dict.fromkeys(node.get("citation", []) + [TCU_DESONERACAO, AGU_REGIME_REFERENCIA]))
+        return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + '</script>'
+    html = re.sub(r'<script type="application/ld\+json">(\{"@context":"https://schema.org","@graph":.*?)</script>', sync_faq, html, count=1, flags=re.S)
+    def add_reference_sources(match):
+        section = match.group(0)
+        for url, label in ((TCU_DESONERACAO, "TCU: Acórdão 421/2018, regime tributário das propostas"),
+                           (AGU_REGIME_REFERENCIA, "Polícia Federal: nota 9, orientação do Parecer AGU 44/2019")):
+            if url not in section:
+                section = section.replace('</ul>', f'<li><a href="{url}" rel="noopener noreferrer" target="_blank">{label}{ARROW}</a></li></ul>', 1)
+        if 'class="reference-review"' not in section:
+            section = section.replace('<p class="technical-note">',
+                f'<p class="reference-review">A distinção entre orçamento de referência e regime da proposta foi conferida nas referências TCU e AGU acima em <time datetime="{SINAPI_UPDATED}">{SINAPI_UPDATED_LABEL}</time>. Para encargos e preços, consulte a publicação SINAPI da competência aplicável.</p><p class="technical-note">', 1)
+        return section
+    html = re.sub(r'<section class="sources-section" id="fontes">.*?</section>', add_reference_sources, html, count=1, flags=re.S)
+    return re.sub(r'Atualizado em <time datetime="[^"]+">[^<]+</time>',
+                  f'Atualizado em <time datetime="{SINAPI_UPDATED}">{SINAPI_UPDATED_LABEL}</time>', html, count=1)
+
+
 def patch_sinapi(html: str) -> str:
+    from scripts.site.search_metadata import normalize_metadata_html
+
     # The November presentation/link update is distinct from the August
     # technical review. Keep both visible and preserve source access dates.
     html = html.replace(
@@ -1382,10 +1502,12 @@ def patch_sinapi(html: str) -> str:
     )
     answer = (
         '<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>'
-        "Use a base SINAPI que o edital e a planilha modelo fixam para a competência e localidade do orçamento. "
+        "Separe o orçamento de referência do órgão da planilha de custos da empresa. "
+        "A referência da licitação não obriga, por si só, o licitante a adotar um regime tributário diferente do seu. "
         "Em 2026, <strong>desonerado não significa ausência total e genérica da contribuição patronal</strong>: "
         "o Livro de Cálculos e Parâmetros da CAIXA registra a transição parcial de 2025 a 2027. "
-        "Alinhe a publicação mensal, a base de encargos, o enquadramento da empresa e o BDI; não escolha a coluna apenas porque o resultado é menor.</p></div>"
+        "Na proposta, confira os encargos efetivamente aplicáveis, o BDI, a competência e a localidade, "
+        "além das regras de apresentação, dos preços máximos e da exequibilidade exigidos no certame.</p></div>"
     )
     html = re.sub(
         r'<div class="answer-box" id="resposta">.*?</div>',
@@ -1492,9 +1614,11 @@ def patch_sinapi(html: str) -> str:
         count=1,
         flags=re.S,
     )
-    return sync_article_word_count(
-        refresh_sources_reviewed(set_modified_date(html)), modified_date="2026-11-09"
+    html = refresh_sources_reviewed(set_modified_date(html))
+    html = sync_article_word_count(
+        _correct_sinapi_reference_guidance(html), modified_date=SINAPI_UPDATED
     )
+    return normalize_metadata_html(html, "/conteudos/sinapi-desonerado-nao-desonerado/")
 
 
 HANDLERS = {

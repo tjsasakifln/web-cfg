@@ -57,7 +57,9 @@ def test_sinapi_search_presentation_and_budget_offer_are_precise():
     html = read("conteudos/sinapi-desonerado-nao-desonerado/index.html")
 
     assert parse_title(html) == CANONICAL_TITLE
-    assert "Use a tabela que o edital e a planilha modelo fixam na data-base" in html
+    assert "O orçamento de referência do órgão e a proposta da empresa têm funções diferentes" in html
+    assert "critérios de aceitabilidade do certame" in html
+    assert "Use a tabela que o edital e a planilha modelo fixam na data-base" not in html
     assert "Pedir proposta de revisão do orçamento" in html
     assert 'href="/auditoria-orcamento-licitacao/#captura-pilar"' in html
     assert 'data-origem="/conteudos/sinapi-desonerado-nao-desonerado/"' in html

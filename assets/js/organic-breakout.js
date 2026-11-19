@@ -2,15 +2,12 @@
   "use strict";
 
   function alignSinapiBase(edital, planilha, regime) {
-    var allowed = {
-      desonerado: true,
-      nao_desonerado: true,
-      silente: true,
-      contraditorio: true,
-      mista: true,
-      incerto: true
-    };
-    if (!allowed[edital] || !allowed[planilha] || !allowed[regime]) {
+    edital = String(edital || "").trim();
+    planilha = String(planilha || "").trim();
+    regime = String(regime || "").trim();
+    if (["desonerado", "nao_desonerado", "silente", "contraditorio"].indexOf(edital) < 0 ||
+        ["desonerado", "nao_desonerado", "mista"].indexOf(planilha) < 0 ||
+        ["desonerado", "nao_desonerado", "incerto"].indexOf(regime) < 0) {
       return {
         verdict: "Entrada inválida. Use os valores do alinhador.",
         cannot: "Não se conclui enquadramento tributário nem um fator único de conversão."
@@ -18,32 +15,37 @@
     }
     if (edital === "contraditorio" || planilha === "mista") {
       return {
-        verdict: "Há contradição ou mistura de bases. Não feche preço sem memória e sem a regra do órgão.",
-        cannot: "Não se conclui qual tabela prevalece só pela página."
+        verdict: "Há pontos a esclarecer na referência ou na composição da planilha. Separe as bases, documente os ajustes e confira o edital antes de fechar preço.",
+        cannot: "A seleção isolada não decide o enquadramento tributário nem a aceitação da proposta."
+      };
+    }
+    if (regime === "incerto") {
+      return {
+        verdict: "Confirme o regime tributário da empresa antes de escolher os encargos da proposta. A base de referência do edital não define esse enquadramento.",
+        cannot: "Ainda faltam dados para concluir a coerência entre encargos e BDI."
+      };
+    }
+    if (planilha !== regime) {
+      return {
+        verdict: "A base informada para a proposta difere do regime declarado. Confira encargos, CPRB, ajustes das composições e BDI; copiar a referência do edital não resolve essa diferença.",
+        cannot: "A divergência é um alerta para conferência, não uma decisão automática de desclassificação."
       };
     }
     if (edital === "silente") {
       return {
-        verdict: "O edital não fixou a base. Confirme planilha modelo, comunicação do órgão e data-base antes de escolher tabela.",
-        cannot: "Silêncio do edital não autoriza default nacional."
+        verdict: "A proposta acompanha o regime declarado, mas a referência do órgão não foi identificada. Confira anexos, competência, UF e critérios de aceitabilidade; esclareça a omissão.",
+        cannot: "Isso não demonstra exequibilidade nem aceitação da proposta."
       };
     }
-    var aligned = edital === planilha && (edital === "desonerado" || edital === "nao_desonerado");
-    if (aligned && regime === edital) {
+    if (edital === planilha) {
       return {
-        verdict: "Edital, planilha e regime apontam a mesma base. Ainda confira data-base e BDI na mesma referência.",
+        verdict: "Referência do órgão e proposta usam a mesma base, compatível com o regime declarado. Confira competência, UF, encargos e BDI.",
         cannot: "Alinhamento de base não prova exequibilidade da proposta."
       };
     }
-    if (aligned && regime !== edital) {
-      return {
-        verdict: "A planilha segue o edital, mas o regime da empresa não coincide com a base. Trate a diferença na margem real, não trocando a tabela do certame.",
-        cannot: "Não se conclui que a empresa deva mudar de regime só para caber na tabela."
-      };
-    }
     return {
-      verdict: "Planilha e edital não estão na mesma base. Corrija antes de enviar. Trocar tabela para baratear unitário é o erro clássico.",
-      cannot: "Não se conclui um fator único para converter uma tabela na outra."
+      verdict: "A proposta acompanha o regime declarado e difere da referência do órgão. Essa diferença, por si só, não torna a proposta incorreta. Demonstre os custos e confira regras de apresentação, preços máximos e exequibilidade.",
+      cannot: "O resultado não autoriza descumprir o edital nem garante a aceitação da proposta."
     };
   }
 

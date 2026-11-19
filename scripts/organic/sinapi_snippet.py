@@ -6,6 +6,7 @@ Evaluates the shipped article HTML. Does not invent GSC outcomes.
 from __future__ import annotations
 
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -22,14 +23,26 @@ TITLE_SOFT_MAX = 60
 
 
 def _attr(html: str, name: str) -> str:
-    m = re.search(
-        rf'<title>(.*?)</title>|<meta[^>]*name=["\']{name}["\'][^>]*content=["\']([^"\']+)["\']|<meta[^>]*content=["\']([^"\']+)["\'][^>]*name=["\']{name}["\']',
-        html,
-        re.I | re.S,
-    )
-    if not m:
-        return ""
-    return (m.group(1) or m.group(2) or m.group(3) or "").strip()
+    """Read every matching meta tag, independently of title and attribute order.
+
+    Crawler directives are cumulative. Reading only the first tag would miss a
+    later noindex, and the former title alternative masked every robots value.
+    """
+    class MetaValues(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.values: list[str] = []
+
+        def handle_starttag(self, tag, attrs):
+            if tag != "meta":
+                return
+            attributes = dict(attrs)
+            if (attributes.get("name") or "").lower() == name.lower():
+                self.values.append((attributes.get("content") or "").strip())
+
+    parser = MetaValues()
+    parser.feed(html)
+    return ",".join(parser.values)
 
 
 def parse_title(html: str) -> str:
@@ -70,8 +83,8 @@ def evaluate_sinapi_snippet(html: str | None = None, *, path: Path | None = None
         fails.append("missing_edital_answer")
     if "Biblioteca CONFENGE" in meta:
         fails.append("generic_library_meta")
-    robots = _attr(text, "robots").lower()
-    if "noindex" in robots:
+    robots = ",".join((_attr(text, "robots"), _attr(text, "googlebot"))).lower()
+    if {"noindex", "none"} & set(re.split(r"[\s,]+", robots)):
         fails.append("unexpected_noindex")
     if not html_has_commercial_bridge(text):
         fails.append("missing_commercial_bridge")

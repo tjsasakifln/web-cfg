@@ -1,33 +1,33 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "5272294df7d69dfc90b01128e5f09b813f6fc2d1",
-  "recaptured_at": "2026-11-19T03:01:22Z",
-  "recapture_reason": "PR #825, integração e publicação autorizadas por Tiago em 18/11/2026. Checkpoint 5272294df7d69dfc90b01128e5f09b813f6fc2d1 com os pais 668fb8c30cbedf890fce09df0b096b4142617802 e de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Recaptura restrita aos três sitemaps após fechar o grafo canônico de 164 URLs: preserva as URLs dos dois ramos, incorpora as ferramentas da PR e usa para a home a alteração material comprovada de 13/11/2026 no commit 221d1b72e99ee5ac1da34e1c2115170197062153. Os outros 14 arquivos protegidos e os seis pilares mantêm os hashes da main. Históricos dos dois ramos preservados. Revisão independente por agente dos HTMLs, contratos e sitemaps; nenhuma nova aprovação técnica ou humana alegada.",
+  "baseline_commit": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
+  "recaptured_at": "2026-11-19T03:28:32Z",
+  "recapture_reason": "CONFENGE-SEARCH-PERFORMANCE-20261118, PR #847: recaptura dos vínculos ativos de metadados derivados em medicoes-glosas-obras-publicas e diagnostico-b2g-360, mais lastmod SINAPI 2026-11-18 nos dois sitemaps. As páginas correspondem exatamente ao normalizador existente; corpo, title, meta description, H1, canonical, robots, datas editoriais, fontes, campos e destinos de contato permanecem preservados. Bytes protegidos conferidos no commit 171754ee9c09344c3077cdbf0e91988bbb5527c1 contra de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Demais superfícies protegidas e registros históricos preservados; sem nova revisão humana, aprovação técnica ou autorização comercial alegada.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-    "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+    "medicoes-glosas-obras-publicas": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
     "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
     "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-    "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+    "diagnostico-b2g-360": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
     "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
   },
   "forbidden": {
     "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
-    "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+    "medicoes-glosas-obras-publicas/index.html": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
     "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
-    "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+    "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
     "script.js": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
     "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-    "sitemap.xml": "aa31c8d000dbb6c5ad784e659c1e65b3bd75d0f7ec6c683a3d0d9d6e50913c4d",
-    "sitemap.txt": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
-    "sitemap-index.xml": "e0c5bcba4d6e840a11be487cac692f12feaf41317cb52fe68e2b1c7198a5c5ae",
+    "sitemap.xml": "4464d11ac1a6424964a4e1688d21e67ea37999684a767b602f4d5ffc982f895a",
+    "sitemap.txt": "9bb2cdab9478f89ad94286178f773c3468f083959d99d86b27cd8a776d0aeb27",
+    "sitemap-index.xml": "241166e3e82807ae8fde3d1cb1e0bb89cef287784d902a754b7b4f062c0814d5",
     "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e"
@@ -1781,6 +1781,53 @@
         "artifact_zip_sha256": "eb007478b06375f9e42aa86c78d293aea2b91ab0a4adeb929415b49680db81b6",
         "human_review_claimed": false
       }
+    },
+    {
+      "baseline_commit": "5272294df7d69dfc90b01128e5f09b813f6fc2d1",
+      "recaptured_at": "2026-11-19T03:01:22Z",
+      "recapture_reason": "PR #825, integração e publicação autorizadas por Tiago em 18/11/2026. Checkpoint 5272294df7d69dfc90b01128e5f09b813f6fc2d1 com os pais 668fb8c30cbedf890fce09df0b096b4142617802 e de81f1be7b409d765a7cf4d76ef6ca619e138f8b. Recaptura restrita aos três sitemaps após fechar o grafo canônico de 164 URLs: preserva as URLs dos dois ramos, incorpora as ferramentas da PR e usa para a home a alteração material comprovada de 13/11/2026 no commit 221d1b72e99ee5ac1da34e1c2115170197062153. Os outros 14 arquivos protegidos e os seis pilares mantêm os hashes da main. Históricos dos dois ramos preservados. Revisão independente por agente dos HTMLs, contratos e sitemaps; nenhuma nova aprovação técnica ou humana alegada.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "47e2588236e9e53361dc19779c15135356eca05d39aa5f6ad9549727f6cbca0c",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "c2807e0ded418cb445d1d2d927e214ccec6d082ab1cc05301886e75640d07c5a",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "f483e32b659cc04969937800cd6802048e984a0bcfcc21fee29696f4e705ae1f",
+        "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+        "sitemap.xml": "aa31c8d000dbb6c5ad784e659c1e65b3bd75d0f7ec6c683a3d0d9d6e50913c4d",
+        "sitemap.txt": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
+        "sitemap-index.xml": "e0c5bcba4d6e840a11be487cac692f12feaf41317cb52fe68e2b1c7198a5c5ae",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "073d397b3c064f5cb7cdbc9a9f8c174385b6d154a08fca57033859025af32c5e"
+      },
+      "previous_baseline_commit": "6822954b0b85be603c8c6a9af304f444f58d17ea"
     }
-  ]
+  ],
+  "recapture_evidence": {
+    "source_head_sha": "171754ee9c09344c3077cdbf0e91988bbb5527c1",
+    "compared_from": "de81f1be7b409d765a7cf4d76ef6ca619e138f8b",
+    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/847",
+    "authorization": "docs/seo/2026-11-18-search-performance.md",
+    "changed_protected_paths": [
+      "medicoes-glosas-obras-publicas/index.html",
+      "diagnostico-b2g-360/index.html",
+      "sitemap.xml",
+      "sitemap-index.xml"
+    ],
+    "human_review_claimed": false
+  }
 }
