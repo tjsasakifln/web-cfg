@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile, stat, mkdir } from 'node:fs/promises';
+import { readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { createRequire } from 'node:module';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -158,6 +158,29 @@ try {
   // Personal rewards require an active commerce program. Public sharing remains
   // usable while checkout is unavailable, without implying credit attribution.
   const paint = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const captureInViewport = async (selector, name) => {
+    const bounds = await page.$eval(selector, el => {
+      const box = el.getBoundingClientRect();
+      const ancestors = [];
+      for (let node = el.parentElement; node; node = node.parentElement) {
+        ancestors.push({ tag: node.tagName, className: node.className,
+          scrollTop: node.scrollTop, scrollHeight: node.scrollHeight,
+          clientHeight: node.clientHeight, overflow: getComputedStyle(node).overflow });
+      }
+      return { target: { top: box.top, bottom: box.bottom, left: box.left, right: box.right,
+        width: box.width, height: box.height }, viewport: { width: innerWidth, height: innerHeight },
+        scrollY, headerBottom: document.querySelector('.site-header')?.getBoundingClientRect().bottom,
+        ancestors };
+    });
+    if (shots) {
+      await page.screenshot({ path: resolve(shots, name + '.png') });
+      await writeFile(resolve(shots, name + '.json'), JSON.stringify(bounds, null, 2));
+    }
+    const box = bounds.target;
+    assert.ok(box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= bounds.viewport.height
+      && box.left >= 0 && box.right <= bounds.viewport.width,
+    'capture target must be inside the viewport: ' + name + ' ' + JSON.stringify(bounds));
+  };
   const loadWithCommerce = async route => {
     const [response] = await Promise.all([
       page.waitForResponse(result => result.url() === base + '/api/web/tool-credits?op=config'),
@@ -201,24 +224,6 @@ try {
   await page.waitForFunction(() => window.openedPackageId === 'creditos-5');
   assert.equal(events.filter(event => event.path.includes('tool-credits')).length, 0,
     'choosing a public package only opens the account, without creating a payment');
-  for (const width of [320, 390, 414, 1440]) {
-    await page.setViewport({ width, height: 880 });
-    await page.$eval('[data-credit-packages]', el =>
-      el.scrollIntoView({ block: 'center', behavior: 'instant' }));
-    await paint();
-    assert.equal(await overflow(), false, 'public prices viewport ' + width);
-    assert.equal(await page.$eval('[data-credit-packages]', el => {
-      const box = el.getBoundingClientRect();
-      return box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight
-        && box.left >= 0 && box.right <= innerWidth;
-    }), true, 'the price capture must show the package grid at ' + width);
-    if (shots) await page.screenshot({ path: resolve(shots, 'prices-' + width + '.png') });
-  }
-  await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
-  const pricingViolations = await page.evaluate(async () => (await window.axe.run('#como-funciona', {
-    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
-  })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })));
-  assert.deepEqual(pricingViolations, [], JSON.stringify(pricingViolations));
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
     '/ferramentas/#programa-indicacao');
   assert.match(await page.$eval('[data-referral-entry]', el => el.textContent), /primeira exportação paga/);
@@ -226,6 +231,28 @@ try {
   assert.equal(await page.evaluate(() => window.sharedWalletOptions?.shared), true);
   await page.click('[data-referral-entry] a');
   await page.waitForFunction(() => window.referralOpened === 2);
+  // Fragment arrival has its own real navigation settling cycle. Finish that
+  // case before inspecting another section on a fresh page without a fragment.
+  await loadWithCommerce('/ferramentas/');
+  assert.equal(new URL(page.url()).hash, '');
+  await page.waitForSelector('[data-credit-packages]:not([hidden])');
+  await page.evaluate(async () => { await document.fonts.ready; });
+  for (const width of [320, 390, 414, 1440]) {
+    await page.setViewport({ width, height: 880 });
+    await page.$eval('[data-credit-packages]', el => {
+      const box = el.getBoundingClientRect();
+      window.scrollTo({ top: Math.max(0, scrollY + box.top - (innerHeight - box.height) / 2),
+        behavior: 'instant' });
+    });
+    await paint();
+    await captureInViewport('[data-credit-packages]', 'prices-' + width);
+    assert.equal(await overflow(), false, 'public prices viewport ' + width);
+  }
+  await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
+  const pricingViolations = await page.evaluate(async () => (await window.axe.run('#como-funciona', {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+  })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })));
+  assert.deepEqual(pricingViolations, [], JSON.stringify(pricingViolations));
   await load('/ferramentas/calculadora-de-beiral/');
   await page.waitForSelector('[data-referral-entry]:not([hidden])');
   assert.equal(await page.$eval('[data-referral-entry] a', el => el.getAttribute('href')),
@@ -351,13 +378,9 @@ try {
       await page.$eval('.tool-guide-next', el =>
         el.scrollIntoView({ block: 'center', behavior: 'instant' }));
       await paint();
+      await captureInViewport('.tool-guide-next a[href="/ferramentas/#como-funciona"]',
+        'guide-' + route.split('/').filter(Boolean).at(-1) + '-' + width);
       assert.equal(await overflow(), false, 'guide return CTA ' + route + ' ' + width);
-      assert.equal(await page.$eval('.tool-guide-next a[href="/ferramentas/#como-funciona"]', el => {
-        const box = el.getBoundingClientRect();
-        return box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight
-          && box.left >= 0 && box.right <= innerWidth;
-      }), true, 'the guide capture must show the return link ' + route + ' ' + width);
-      if (shots) await page.screenshot({ path: resolve(shots, 'guide-' + route.split('/').filter(Boolean).at(-1) + '-' + width + '.png') });
     }
   }
 
