@@ -41,10 +41,21 @@ def graphs(text):
 
 def test_all_approved_sources_are_stable_and_assets_exist():
     result = sm.synchronize(sm.ROOT)
-    assert result == {"ok": True, "checked": 59, "changed": [], "errors": []}
+    assert result == {"ok": True, "checked": 69, "changed": [], "errors": []}
     for route in sm.policy()["routes"]:
         source = (sm.ROOT / route.strip("/") / "index.html").read_text(encoding="utf-8")
         assert sm.normalize_metadata_html(source, route) == source, route
+
+
+def test_search_demand_priorities_are_in_the_metadata_policy():
+    # These three routes carry half of page-level impressions in the supplied
+    # October/November export. A later generator must not bypass their checks.
+    priorities = {
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/medicoes-glosas-obras-publicas/",
+        "/conteudos/empreitada-preco-global-preco-unitario/",
+    }
+    assert priorities <= sm.policy()["routes"].keys()
 
 
 def test_editorial_findings_match_the_current_source_not_a_second_override():

@@ -31,6 +31,8 @@
     "/casos/modelo-relatorio-inteligencia-licitacoes/": {},
     "/como-trabalhamos/": {},
     "/compatibilizacao-projetos-engenharia/": {},
+    "/conteudos/atraso-na-medicao-obra-publica/": {},
+    "/conteudos/atraso-pagamento-contrato-publico-suspender/": {},
     "/conteudos/como-contratar-compatibilizacao-projetos/": {},
     "/conteudos/como-contratar-projetos-complementares/": {},
     "/conteudos/como-contratar-revisao-tecnica-projeto/": {},
@@ -40,13 +42,18 @@
     "/conteudos/documentos-para-levantamento-quantitativos/": {
       "article": true
     },
+    "/conteudos/empreitada-preco-global-preco-unitario/": {},
+    "/conteudos/pagamento-parcial-etapa-empreitada-global/": {},
     "/conteudos/quando-compatibilizar-projetos/": {},
     "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/": {},
     "/conteudos/revisar-ou-refazer-orcamento-obra/": {
       "article": true
     },
+    "/conteudos/sinapi-desonerado-nao-desonerado/": {},
     "/defesa-margem-contratos-publicos/": {},
     "/defesa-tecnica-contratos-publicos/": {},
+    "/diagnostico-b2g-360/": {},
+    "/diagnostico-b2g-expansao/": {},
     "/edificacoes/": {},
     "/elaboracao-pgr/": {},
     "/empresa/": {
@@ -54,9 +61,11 @@
     },
     "/engenharia-condominios/": {},
     "/entregas/": {},
+    "/especialista/tiago-jun-sasaki/": {},
     "/ferramentas/prontidao-tecnica-obra-privada/": {},
     "/imprensa/": {},
     "/inspecao-diagnostico-edificacoes/": {},
+    "/medicoes-glosas-obras-publicas/": {},
     "/metodologia-inteligencia/": {},
     "/parcerias-engenharia/": {},
     "/pgr-documentacao-sst-obras/": {},
@@ -85,6 +94,7 @@
       "page_type": "CollectionPage"
     },
     "/terceirizacao-documentacao-sst/": {},
-    "/terceirizacao-projetos-engenharia/": {}
+    "/terceirizacao-projetos-engenharia/": {},
+    "/termos-de-uso/": {}
   }
 }

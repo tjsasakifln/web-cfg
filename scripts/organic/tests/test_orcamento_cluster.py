@@ -254,13 +254,14 @@ def test_metadata_canonical_schema_and_cta():
             flags=re.I,
         )
         # Keep technical source reviews separate from later presentation/link
-        # changes. The November SINAPI edit did not revalidate its sources.
+        # changes. The SINAPI correction adds a dated review of TCU/AGU
+        # guidance without claiming that every historical source was reviewed.
         expected_reviewed = (
             "2026-10-29" if slug == "empreitada-preco-global-preco-unitario"
             else "2026-08-29"
         )
         expected_modified = (
-            "2026-11-09" if slug == "sinapi-desonerado-nao-desonerado"
+            "2026-11-18" if slug == "sinapi-desonerado-nao-desonerado"
             else expected_reviewed
         )
         expected_label = (
@@ -284,13 +285,14 @@ def test_metadata_canonical_schema_and_cta():
         assert article_schema["dateModified"] == expected_modified, slug
         assert article_schema["wordCount"] == len(visible_text(article_html.group(0)).split()), slug
         if slug == "sinapi-desonerado-nao-desonerado":
-            assert 'Atualizado em <time datetime="2026-11-09">9 de novembro de 2026</time>' in html
+            assert 'Atualizado em <time datetime="2026-11-18">18 de novembro de 2026</time>' in html
             assert 'Revisão técnica em <time datetime="2026-08-29">' in html
             schemas = [json.loads(raw) for raw in re.findall(
                 r'<script type="application/ld\+json">(.*?)</script>', html, re.S
             )]
             howto = next(node for node in schemas if node.get("@type") == "HowTo")
-            assert howto["dateModified"] == "2026-08-29"
+            assert howto["dateModified"] == "2026-11-18"
+            assert 'class="reference-review"' in html
 
         assert not _proposal_cta_failures(html, row["service_path"]), slug
 

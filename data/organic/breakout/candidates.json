@@ -23,19 +23,20 @@
       "intent": "sinapi_desonerado_vs_nao",
       "preference_class": "gsc_observed_poorly_served",
       "why_not_generic": "Interactive regime-alignment tool plus explicit method, grain and limitations. A competitor cannot reproduce the decision table by rewriting prose. Historical GSC striking distance is labeled historical, not live demand.",
-      "visitor_job": "Uma construtora que está fechando planilha precisa decidir, antes de enviar a proposta, qual base SINAPI (desonerada ou não) o edital e o regime da empresa exigem, sem misturar tabelas nem tratar a escolha como atalho de preço.",
+      "visitor_job": "Uma construtora que está fechando a proposta precisa distinguir a referência SINAPI do órgão dos encargos aplicáveis à empresa, demonstrar seus custos e conferir as regras de apresentação e aceitabilidade do certame.",
       "question": "SINAPI desonerado ou não desonerado: qual usar?",
-      "answer": "Use a tabela que o edital e a planilha modelo fixam na data-base do certame; depois alinhe BDI, encargos da proposta e unitários à mesma base. SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra, não em um desconto universal. Escolher a tabela mais barata sem coerência com o edital e com o regime da empresa gera planilha incoerente e risco de inexequibilidade ou prejuízo.",
+      "answer": "O orçamento de referência do órgão e a proposta da empresa têm funções diferentes. Na proposta, os encargos e o BDI devem refletir o regime tributário efetivo da empresa, com custos demonstrados e observância dos critérios de aceitabilidade do certame. Uma diferença entre as bases não torna a proposta incorreta nem aceita automaticamente.",
       "method": {
-        "id": "sinapi-regime-alignment/1.0",
-        "short": "Ler edital e planilha modelo → identificar a base SINAPI da data-base → confrontar com o regime de encargos da empresa → recusar mistura sem memória.",
-        "source": "CAIXA, metodologia SINAPI; regra do edital; Lei 12.546/2011 e atualizações de desoneração da folha quando o enquadramento se aplica."
+        "id": "sinapi-regime-alignment/1.1",
+        "short": "Identificar a referência do órgão e os critérios do edital → confirmar o regime tributário da empresa → demonstrar custos, encargos e BDI → conferir preços máximos e exequibilidade.",
+        "source": "CAIXA, metodologia SINAPI; TCU, Acórdão 421/2018; Parecer AGU 44/2019 reproduzido no termo oficial da Polícia Federal, nota 9; regras do certame."
       },
-      "period": "Leitura operacional em 2026-08-18. A data-base que vale é a do edital, não a desta página.",
+      "period": "Orientação sobre referência e proposta conferida em 2026-11-18. Os encargos e preços dependem da competência e das regras aplicáveis ao certame.",
+      "updated_at": "2026-11-18",
       "geography": "Brasil, referência federal de composição. A aplicação é a do órgão licitante.",
       "grain": "Regime de encargos sociais da composição SINAPI (desonerado ou não desonerado)",
       "limitations": [
-        "O alinhador confere a coerência entre a base do edital, a base da planilha em montagem e o regime de encargos da empresa, para a data-base e a regra do edital analisado. Nova data-base ou mudança na regra de desoneração pede nova checagem, e edital silente ou contraditório pede leitura do caso concreto."
+        "O alinhador compara a referência do órgão, a base informada para a proposta e o regime declarado pela empresa. Não comprova enquadramento tributário, exequibilidade ou aceitação da proposta. Confira competência, UF, encargos, BDI, documentos e critérios do certame; mudança de regra ou referência contraditória exige nova análise."
       ],
       "visual_id": "sinapi-aligner",
       "author": "Engº Tiago Sasaki",
@@ -50,7 +51,7 @@
         "route_family": "orcamento-bdi",
         "source": "CONFENGE_WEB",
         "limitations": [
-          "O alinhador confere a coerência entre a base do edital, a base da planilha em montagem e o regime de encargos da empresa, para a data-base e a regra do edital analisado. Nova data-base ou mudança na regra de desoneração pede nova checagem, e edital silente ou contraditório pede leitura do caso concreto."
+          "O alinhador compara a referência do órgão, a base informada para a proposta e o regime declarado pela empresa. Não comprova enquadramento tributário, exequibilidade ou aceitação da proposta. Confira competência, UF, encargos, BDI, documentos e critérios do certame; mudança de regra ou referência contraditória exige nova análise."
         ]
       },
       "internal_links": [
