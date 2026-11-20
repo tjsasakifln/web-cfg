@@ -17,10 +17,22 @@ DRAFT_SCHEMA = {
     "type": "object",
     "additionalProperties": False,
     "properties": {
-        "subject": {"type": "string"},
+        "subject": {"type": "string", "pattern": r"^.{10,120}$"},
         "title": {"type": "string"},
         "description": {"type": "string"},
-        "lead": {"type": "string"},
+        "lead": {
+            "type": "string",
+            # Require each exact token in any order without regex lookarounds.
+            # Source binding and safe prose remain enforced by validate_draft.
+            "pattern": (
+                r"\{\{BUYER\}\}[\s\S]*\{\{VALUE\}\}[\s\S]*\{\{VALUE_KIND\}\}|"
+                r"\{\{BUYER\}\}[\s\S]*\{\{VALUE_KIND\}\}[\s\S]*\{\{VALUE\}\}|"
+                r"\{\{VALUE\}\}[\s\S]*\{\{BUYER\}\}[\s\S]*\{\{VALUE_KIND\}\}|"
+                r"\{\{VALUE\}\}[\s\S]*\{\{VALUE_KIND\}\}[\s\S]*\{\{BUYER\}\}|"
+                r"\{\{VALUE_KIND\}\}[\s\S]*\{\{BUYER\}\}[\s\S]*\{\{VALUE\}\}|"
+                r"\{\{VALUE_KIND\}\}[\s\S]*\{\{VALUE\}\}[\s\S]*\{\{BUYER\}\}"
+            ),
+        },
         "paragraphs": {"type": "array", "items": {"type": "string"}},
     },
     "required": ["subject", "title", "description", "lead", "paragraphs"],
@@ -47,7 +59,8 @@ Noticie a publicação/registro do contrato, com sobriedade e linguagem natural.
 
 Retorne estritamente o esquema. subject deve ser um trecho contínuo LITERAL do
 objeto, entre dez e cento e vinte caracteres, que identifique o serviço/obra.
-Não reescreva, abrevie ou acrescente nada ao subject. Nos demais campos use apenas
+Conte também os espaços; se o objeto completo ultrapassar o limite, selecione um
+trecho menor. Não reescreva, abrevie ou acrescente nada ao subject. Nos demais campos use apenas
 os marcadores exatos fornecidos para entidades, valor, datas e qualquer quantidade.
 Nenhum algarismo, número por extenso, URL, HTML, Markdown ou informação pessoal pode
 ser digitado fora dos marcadores. Para o escopo use {{SUBJECT}} ou {{OBJECT}}.
@@ -69,7 +82,9 @@ description: resumo específico em uma frase; procure cento e quarenta a cento e
 oitenta caracteres no texto final, com limite obrigatório entre cinquenta e
 quatrocentos caracteres. Não inclua um nome extenso se ele ultrapassar esse limite.
 lead: inclua obrigatoriamente {{BUYER}}, {{VALUE}} e {{VALUE_KIND}}, atribuindo o
-registro ao PNCP. paragraphs: dois a quatro parágrafos objetivos, sem repetir o
+registro ao PNCP. Preserve os três marcadores literalmente, inclusive {{VALUE_KIND}}.
+Modelo de lead: O PNCP registra contrato de {{BUYER}} para {{SUBJECT}}, com {{VALUE_KIND}} de {{VALUE}}.
+paragraphs: dois a quatro parágrafos objetivos, sem repetir o
 lead; inclua {{SUPPLIER}} e {{SOURCE_DATE}}. Pode explicar assinatura/vigência
 somente quando disponíveis. Não criar seção de impactos ou oportunidades.
 Não encha o texto: detalhe a identificação e o alcance registrado do objeto.
