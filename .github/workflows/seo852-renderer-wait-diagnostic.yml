@@ -1,0 +1,120 @@
+name: SEO852 renderer wait diagnostic (not release evidence)
+
+on:
+  push:
+    branches: [diagnostics/seo852-renderer-waits-20261120]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: seo852-renderer-wait-diagnostic
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    name: One diagnostic capture, no promotion authority
+    if: github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+        working-directory: source
+    steps:
+      - name: Checkout the registered experiment
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          path: experiment
+          persist-credentials: false
+      - name: Checkout the unchanged candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 608256ef5b009aa55e51936d72ab2a1853f3a80e
+          path: source
+          persist-credentials: false
+      - name: Setup the exact measured Node version
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22.23.4"
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+      - name: Install the unchanged locked toolchain
+        run: npm ci --ignore-scripts --engine-strict
+      - name: Resolve the unchanged browser contract
+        id: browser_contract
+        run: node scripts/site/resolve_chrome_version.mjs >> "$GITHUB_OUTPUT"
+      - name: Restore the exact public candidate
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          github-token: ${{ github.token }}
+          run-id: 44673482607
+          artifact-ids: "14602804178"
+          merge-multiple: true
+          path: source/_site
+      - name: Restore the same route inventory
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          github-token: ${{ github.token }}
+          run-id: 44673482607
+          artifact-ids: "14603342723"
+          merge-multiple: true
+          path: source/seo
+      - name: Preserve the same large bundle preparation
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          github-token: ${{ github.token }}
+          run-id: 44673482607
+          artifact-ids: "14604345215"
+          merge-multiple: true
+          path: source/dist/netcup/608256ef5b009aa55e51936d72ab2a1853f3a80e
+      - name: Setup the contracted Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: chrome
+        with:
+          chrome-version: ${{ steps.browser_contract.outputs.version }}
+      - name: Record diagnostic inputs and scheduler capability
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          EXPERIMENT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/seo852-diagnostic/cdp"
+          if [ -r /proc/sys/kernel/sched_schedstats ]; then
+            cat /proc/sys/kernel/sched_schedstats > "$RUNNER_TEMP/seo852-diagnostic/schedstats-before.txt"
+            if [ "$(cat /proc/sys/kernel/sched_schedstats)" = "0" ]; then
+              sudo --non-interactive sysctl -w kernel.sched_schedstats=1 > "$RUNNER_TEMP/seo852-diagnostic/schedstats-enable.txt" 2>&1 || true
+            fi
+            cat /proc/sys/kernel/sched_schedstats > "$RUNNER_TEMP/seo852-diagnostic/schedstats-after.txt"
+          fi
+          python3 ../experiment/scripts/diagnostics/seo852_record_experiment.py inputs
+      - name: Capture three home measurements with observers
+        id: capture
+        continue-on-error: true
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          LH_HOME_RUNS: "3"
+        run: |
+          set -euo pipefail
+          rm -f docs/lighthouse-runs/*.json
+          export LH_CDP_OBSERVER_DIR="$RUNNER_TEMP/seo852-diagnostic/cdp"
+          export NODE_OPTIONS="--import=$GITHUB_WORKSPACE/experiment/scripts/diagnostics/lighthouse_cdp_observer.mjs"
+          python3 ../experiment/scripts/diagnostics/lighthouse_scheduler_observer.py \
+            --output "$RUNNER_TEMP/seo852-diagnostic/scheduler.jsonl" \
+            -- node scripts/site/run_lighthouse.mjs --only=/ --label=seo852-renderer-waits
+      - name: Classify capture completeness without approving the candidate
+        if: always()
+        env:
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+        run: python3 ../experiment/scripts/diagnostics/seo852_record_experiment.py result
+      - name: Preserve every diagnostic result
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: seo852-renderer-waits-diagnostic-${{ github.run_id }}
+          path: |
+            source/docs/lighthouse-runs/*seo852-renderer-waits*.json
+            ${{ runner.temp }}/seo852-diagnostic/
+          if-no-files-found: error
+          retention-days: 30
