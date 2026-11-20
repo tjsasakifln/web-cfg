@@ -18,13 +18,17 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from .core import (
-    MAX_INPUT_BYTES, MAX_SNAPSHOT_BYTES, POINTER_SCHEMA, PUBLICATION_SCHEMA,
-    NewsError, classify, fingerprint, iso, json_bytes, slug_for, timestamp,
-    validate_draft, validate_input, validate_publication,
+    EDITORIAL_VERSION, MAX_INPUT_BYTES, MAX_SNAPSHOT_BYTES, POINTER_SCHEMA, PUBLICATION_SCHEMA,
+    NewsError, classify, fingerprint, iso, json_bytes, public_facts, slug_for, timestamp,
+    validate_analysis, validate_draft, validate_input, validate_publication,
+    validate_research, validate_review,
 )
-from .openai_client import DEFAULT_MODEL, ResponsesClient
+from .agents_client import AgentsClient
+from .editorial import editorial_ready
 
 LEDGER_SCHEMA = "confenge.contract-news-ledger/v1"
+EDITORIAL_STAGES = ("research", "analyze", "generate", "review")
+CALLS_PER_ARTICLE = len(EDITORIAL_STAGES)
 
 
 @dataclass(frozen=True)
@@ -36,11 +40,11 @@ class Settings:
     max_per_day: int = 6
     max_calls_per_day: int = 12
     max_attempts_per_record: int = 1
-    timeout: int = 45
-    model: str = DEFAULT_MODEL
+    timeout: int = 120
+    model: str | None = None
 
     def validate(self) -> None:
-        for value, maximum in ((self.max_per_run, 2), (self.max_per_day, 6), (self.max_calls_per_day, 12), (self.max_attempts_per_record, 2), (self.timeout, 60)):
+        for value, maximum in ((self.max_per_run, 2), (self.max_per_day, 6), (self.max_calls_per_day, 12), (self.max_attempts_per_record, 2), (self.timeout, 120)):
             if type(value) is not int or not 1 <= value <= maximum:
                 raise NewsError("invalid_operational_limit")
         state, public = self.state_dir.resolve(), self.output_dir.resolve()
@@ -90,6 +94,27 @@ def _new_ledger(now: datetime) -> dict:
     return {"schema": LEDGER_SCHEMA, "changed_at": iso(now), "articles": {}, "attempts": {}, "budget": {}}
 
 
+def _attempt_key(fact_fingerprint: str) -> str:
+    """A deliberate editorial revision may run once without losing paid history."""
+    return hashlib.sha256(json_bytes({
+        "fingerprint": fact_fingerprint, "editorial_version": EDITORIAL_VERSION,
+    })).hexdigest()
+
+
+def _needs_editorial_refresh(row: dict) -> bool:
+    return row.get("editorial_version") != EDITORIAL_VERSION
+
+
+def _agent_diagnostics(client: Any) -> dict:
+    """Expose verified platform identifiers only, never client configuration."""
+    identifiers = getattr(client, "agent_ids", None)
+    if (not isinstance(identifiers, dict) or set(identifiers) != set(EDITORIAL_STAGES)
+            or any(not isinstance(value, str) or not re.fullmatch(r"(?:ag|agent)_[A-Za-z0-9_-]{1,150}", value)
+                   for value in identifiers.values())):
+        return {}
+    return {"agent_ids": {stage: identifiers[stage] for stage in EDITORIAL_STAGES}}
+
+
 def _load_ledger(settings: Settings, now: datetime) -> dict:
     path = settings.state_dir / "ledger.json"
     if not path.exists():
@@ -107,6 +132,10 @@ def _load_ledger(settings: Settings, now: datetime) -> dict:
             raise NewsError("invalid_ledger_article")
         if row.get("fingerprint") != fingerprint(row["article"]["facts"]):
             raise NewsError("ledger_fingerprint_mismatch")
+        if row.get("editorial_version") != row["article"].get("editorial_version"):
+            raise NewsError("ledger_editorial_version_mismatch")
+        if "last_document_checked_at" in row:
+            timestamp(row["last_document_checked_at"], "last_document_checked_at")
     validate_publication(_snapshot(ledger))
     return ledger
 
@@ -229,7 +258,8 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
     facts, input_rejections = validate_input(document, now)
     # No creation of state/locks, API calls or publication in a dry run.
     if dry_run:
-        candidates = [f for f in facts if classify(f) and now - timestamp(f["source_published_at"]) <= timedelta(days=7)]
+        candidates = [f for f in facts if classify(f) and editorial_ready(f)
+                      and now - timestamp(f["source_published_at"]) <= timedelta(days=7)]
         return {"status": "dry_run", "valid_records": len(facts), "eligible_new": len(candidates), "rejections": input_rejections, "calls": 0, "published": 0}
     if _stopped(settings):
         return {"status": "disabled", "calls": 0, "published": 0}
@@ -248,13 +278,22 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
         initial_calls = sum(row["calls"] for row in ledger["budget"].values())
         processed = published = unchanged = 0
         rejections = list(input_rejections)
-        client = client or ResponsesClient(api_key, model=settings.model, timeout=settings.timeout)
-        candidates = sorted(facts, key=lambda f: (f["id"] in ledger["articles"], Decimal(f["value"]["amount"]), f["source_published_at"]), reverse=True)
+        client = client or AgentsClient(api_key, model=settings.model, timeout=settings.timeout, state_dir=settings.state_dir)
+        def priority(fact: dict) -> tuple:
+            existing = ledger["articles"].get(fact["id"])
+            return (bool(existing and _needs_editorial_refresh(existing)), bool(existing),
+                    Decimal(fact["value"]["amount"]), fact["source_published_at"])
+        candidates = sorted(facts, key=priority, reverse=True)
         # Rechecks advance an internal cursor even when public article bytes do not
         # change, so the same oldest identities cannot monopolize every batch.
         for fact in facts:
             if fact["id"] in ledger["articles"]:
                 ledger["articles"][fact["id"]]["last_source_checked"] = fact["source_checked_at"]
+                # All registry rechecks may happen together, while only a few
+                # documents are read. Advance this cursor only for an actual
+                # documentary attempt, including a failed list/PDF request.
+                if fact.get("editorial_context", {}).get("documents_status") in {"complete", "partial", "unavailable", "empty"}:
+                    ledger["articles"][fact["id"]]["last_document_checked_at"] = iso(now)
         for row in document.get("recheck_results", []):
             if isinstance(row, dict) and row.get("id") in ledger["articles"] and row.get("status") in {"verified", "ineligible", "unavailable"}:
                 ledger["articles"][row["id"]]["last_recheck_attempt_at"] = iso(now)
@@ -267,54 +306,70 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
             if not existing and now - timestamp(fact["source_published_at"]) > timedelta(days=7):
                 continue
             fp = fingerprint(fact)
-            if existing and existing["fingerprint"] == fp:
+            if existing and existing["fingerprint"] == fp and not _needs_editorial_refresh(existing):
                 unchanged += 1
                 continue
-            attempt = ledger["attempts"].get(fp, {"count": 0})
-            if type(attempt.get("count")) is not int:
+            if not editorial_ready(fact):
+                rejections.append("insufficient_source_context")
+                continue
+            attempt_key = _attempt_key(fp)
+            attempt = ledger["attempts"].get(attempt_key, {"count": 0})
+            if not isinstance(attempt, dict) or type(attempt.get("count")) is not int or attempt["count"] < 0:
                 raise NewsError("invalid_attempt_ledger")
             if attempt["count"] >= settings.max_attempts_per_record:
                 continue
-            if processed >= settings.max_per_run or budget["attempts"] >= settings.max_per_day or budget["publications"] >= settings.max_per_day or budget["calls"] + 2 > settings.max_calls_per_day:
+            if processed >= settings.max_per_run or budget["attempts"] >= settings.max_per_day or budget["publications"] >= settings.max_per_day or budget["calls"] + CALLS_PER_ARTICLE > settings.max_calls_per_day:
                 break
             if _stopped(settings):
                 break
             # Reserve the attempt and first call durably before any paid request.
             processed += 1
             budget["attempts"] += 1
-            ledger["attempts"][fp] = {"count": attempt["count"] + 1, "at": iso(now), "status": "started"}
+            ledger["attempts"][attempt_key] = {
+                "count": attempt["count"] + 1, "at": iso(now), "status": "started",
+                "fingerprint": fp, "editorial_version": EDITORIAL_VERSION,
+            }
             _reserve_call(settings, ledger, clock())
             try:
-                draft = client.call("generate", fact)
+                research = validate_research(client.call("research", fact), fact)
+                _reserve_call(settings, ledger, clock())
+                analysis = validate_analysis(client.call("analyze", fact, research), research)
+                _reserve_call(settings, ledger, clock())
+                draft = client.call("generate", fact, {"research": research, "analysis": analysis})
                 rendered = validate_draft(draft, fact)
                 _reserve_call(settings, ledger, clock())
-                review = client.call("review", fact, rendered)
-                if not isinstance(review, dict) or set(review) != {"supported", "issues"} or review["supported"] is not True or review["issues"] != []:
-                    raise NewsError("editorial_review_rejected")
+                validate_review(client.call("review", fact, {
+                    "article": rendered, "subject": draft["subject"],
+                    "research": research, "analysis": analysis,
+                }))
                 approved_at = clock()
                 budget = _day_budget(ledger, approved_at)
                 if budget["publications"] >= settings.max_per_day:
                     raise NewsError("daily_publication_budget_exhausted")
                 article = {
                     "id": fact["id"], "slug": existing["article"]["slug"] if existing else slug_for(fact, draft["subject"]),
-                    **rendered, "category": category,
+                    **rendered, "category": category, "editorial_version": EDITORIAL_VERSION,
                     "published_at": existing["article"]["published_at"] if existing else iso(approved_at),
-                    "modified_at": iso(approved_at), "facts": copy.deepcopy(fact),
+                    "modified_at": iso(approved_at), "facts": public_facts(fact),
                 }
                 prospective = copy.deepcopy(ledger)
-                prospective["articles"][fact["id"]] = {"fingerprint": fp, "article": article, "last_source_checked": fact["source_checked_at"], "last_recheck_attempt_at": iso(now)}
+                prospective["articles"][fact["id"]] = {
+                    "fingerprint": fp, "editorial_version": EDITORIAL_VERSION, "article": article,
+                    "last_source_checked": fact["source_checked_at"], "last_recheck_attempt_at": iso(now),
+                    "last_document_checked_at": iso(now),
+                }
                 prospective["changed_at"] = iso(approved_at)
                 validate_publication(_snapshot(prospective))
                 ledger["articles"][fact["id"]] = prospective["articles"][fact["id"]]
                 ledger["changed_at"] = prospective["changed_at"]
-                ledger["attempts"][fp]["status"] = "accepted"
+                ledger["attempts"][attempt_key]["status"] = "accepted"
                 budget["publications"] += 1
                 published += 1
                 # Persist acceptance before promotion: a crash cannot cause repaying.
                 _save_ledger(settings, ledger)
             except (NewsError, TimeoutError, OSError) as exc:
                 code = str(exc) if isinstance(exc, NewsError) else "generation_transport_error"
-                ledger["attempts"][fp].update(status="rejected", error=code)
+                ledger["attempts"][attempt_key].update(status="rejected", error=code)
                 _save_ledger(settings, ledger)
                 rejections.append(code)
         _save_ledger(settings, ledger)
@@ -328,6 +383,7 @@ def generate(document: Any, settings: Settings, *, api_key: str = "", client: An
             "unchanged": unchanged, "attempted": processed,
             "calls": sum(row["calls"] for row in ledger["budget"].values()) - initial_calls, "rejections": rejections,
             "snapshot_sha256": pointer["sha256"] if pointer else None,
+            "editorial_version": EDITORIAL_VERSION, **_agent_diagnostics(client),
         }
     finally:
         os.close(lock_fd)
@@ -349,7 +405,15 @@ def source_state(state_dir: Path) -> dict:
         if row.get("last_recheck_attempt_at"):
             values.append(row["last_recheck_attempt_at"])
         return max(timestamp(value) for value in values)
-    return {"published_ids": sorted(rows), "recheck_ids": sorted(rows, key=lambda identity: (checked(identity), identity))[:5]}
+    def documents_checked(identity: str) -> datetime:
+        value = rows[identity].get("last_document_checked_at")
+        return timestamp(value) if value else datetime.min.replace(tzinfo=timezone.utc)
+    return {
+        "published_ids": sorted(rows),
+        "recheck_ids": sorted(rows, key=lambda identity: (
+            not _needs_editorial_refresh(rows[identity]), documents_checked(identity), checked(identity), identity,
+        ))[:5],
+    }
 
 
 def check_publication(path: Path) -> dict:

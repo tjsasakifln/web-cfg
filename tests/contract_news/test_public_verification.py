@@ -10,6 +10,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
+from editorial_fixtures import enriched_fact, editorial_draft
+from scripts.contract_news.core import EDITORIAL_VERSION, public_facts, validate_draft, validate_publication
+
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("contract_news_public_verification", ROOT / "deploy/contract-news/verify_public.py")
 VERIFY = importlib.util.module_from_spec(SPEC)
@@ -69,6 +72,18 @@ process.stdout.write(JSON.stringify({
     }
 
 
+def reported_fixture():
+    facts = enriched_fact()
+    article = {
+        "id": facts["id"], "slug": SLUG,
+        **validate_draft(editorial_draft(facts), facts), "editorial_version": EDITORIAL_VERSION,
+        "category": "obras", "published_at": "2026-11-18T16:00:00Z", "modified_at": "2026-11-18T17:00:00Z",
+        "facts": public_facts(facts),
+    }
+    return validate_publication({"schema": "confenge.contract-news-publication/v1",
+                                 "generated_at": "2026-11-18T17:00:00Z", "articles": [article]})
+
+
 class PublicVerificationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -76,13 +91,14 @@ class PublicVerificationTests(unittest.TestCase):
         snapshot = fixture()
         snapshot["articles"] = []
         cls.empty = rendered(snapshot)
+        cls.reported = rendered(reported_fixture())
 
     def setUp(self):
         self.pages = copy.deepcopy(self.published)
 
-    def verify(self):
+    def verify(self, expected_editorial_version=None):
         with patch.object(VERIFY, "fetch", side_effect=lambda url: self.pages[url]):
-            return VERIFY.verify(BASE, now=NOW)
+            return VERIFY.verify(BASE, now=NOW, expected_editorial_version=expected_editorial_version)
 
     def change(self, url, old, new):
         html, kind, robots = self.pages[url]
@@ -96,6 +112,51 @@ class PublicVerificationTests(unittest.TestCase):
         self.assertEqual(result["recent_news_urls"], 1)
         self.assertEqual(result["verified_article"]["url"], URL)
         self.assertEqual(result["verified_article"]["published_at"], "2026-11-18T16:00:00Z")
+        self.assertIsNone(result["verified_article"]["editorial_version"])
+
+    def test_expected_editorial_version_distinguishes_migrated_content_from_legacy(self):
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_editorial_version_mismatch"):
+            self.verify("2026-11-20.1")
+        self.pages = copy.deepcopy(self.reported)
+        result = self.verify("2026-11-20.1")
+        self.assertEqual(result["verified_article"]["editorial_version"], "2026-11-20.1")
+        self.assertEqual(len(result["verified_article"]["sources"]), 2)
+        self.assertEqual(result["verified_article"]["source"], enriched_fact()["source_url"])
+        self.assertEqual(result["verified_article"]["published_at"], "2026-11-18T16:00:00Z")
+        self.assertEqual(result["verified_article"]["modified_at"], "2026-11-18T17:00:00Z")
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_editorial_version_mismatch"):
+            self.verify("2026-11-20.2")
+
+    def test_version_marker_alone_does_not_prove_documentary_reporting(self):
+        self.change(URL, '<body class="news-page"', '<body data-editorial-version="2026-11-20.1" class="news-page"')
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_provenance_invalid"):
+            self.verify("2026-11-20.1")
+
+    def test_reported_sources_must_be_bound_and_visible_with_section_headings(self):
+        self.pages = copy.deepcopy(self.reported)
+        document_url = enriched_fact()["editorial_context"]["documents"][0]["url"]
+        self.change(URL, document_url, document_url.replace("/2026/1/", "/2026/2/"))
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_provenance_invalid"):
+            self.verify(EDITORIAL_VERSION)
+        self.pages = copy.deepcopy(self.reported)
+        self.change(URL, 'href="' + document_url + '"', 'href="/"')
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_source_link_not_visible"):
+            self.verify(EDITORIAL_VERSION)
+        self.pages = copy.deepcopy(self.reported)
+        heading = reported_fixture()["articles"][0]["editorial"]["sections"][0]["heading"]
+        self.change(URL, '<h2 id="news-section-0">' + heading + '</h2>', '')
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_body_not_visible"):
+            self.verify(EDITORIAL_VERSION)
+
+    def test_empty_archive_cannot_prove_editorial_migration(self):
+        self.pages = copy.deepcopy(self.empty)
+        with self.assertRaisesRegex(VERIFY.VerificationError, "editorial_article_not_published"):
+            self.verify("2026-11-20.1")
+
+    def test_malformed_editorial_version_is_rejected(self):
+        self.change(URL, '<body class="news-page"', '<body data-editorial-version="arbitrary" class="news-page"')
+        with self.assertRaisesRegex(VERIFY.VerificationError, "article_editorial_version_invalid"):
+            self.verify()
 
     def test_does_not_accept_jsonld_headline_absent_from_real_heading(self):
         headline = fixture()["articles"][0]["title"]

@@ -2,6 +2,7 @@
 // Private synthetic publication, real HTTP renderer and first-party assets.
 // No fixture or screenshot is written to the repository or public artifact.
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
@@ -26,32 +27,20 @@ await mkdir(evidenceDirectory);
 
 const now = new Date();
 const publishedAt = new Date(now.getTime() - 60 * 60 * 1000).toISOString();
-const sourceAt = new Date(now.getTime() - 48 * 60 * 60 * 1000).toISOString();
-const year = now.getUTCFullYear();
-const id = `12345678000195-2-000001/${year}`;
-const article = {
-  id, slug: 'saneamento-municipio-exemplo-a4d2c93e10b57f68',
-  title: 'Município de Exemplo registra contrato de R$ 9,3 milhões para redes de saneamento',
-  description: 'Registro no PNCP informa contratação de redes de saneamento, com valor global, fornecedor e vigência. Consulte os dados e a fonte oficial.',
-  lead: 'O Município de Exemplo registrou no PNCP um contrato para a execução de redes de saneamento e serviços de engenharia. O valor global informado é de R$ 9.345.678,90.',
-  paragraphs: [
-    'O objeto registrado compreende a implantação de redes de saneamento e serviços de engenharia. A contratação foi firmada com Engenharia Exemplo Ltda., conforme identificação do fornecedor no registro consultado.',
-    'O valor global apresentado na fonte é de R$ 9.345.678,90. Esse campo identifica o montante informado no contrato, enquanto os dados de execução e pagamento dependem dos documentos correspondentes.',
-    'A unidade do órgão contratante está cadastrada em Florianópolis, Santa Catarina. O município informado no cadastro identifica a unidade administrativa e não define, por si só, a localização dos serviços.',
-    'As datas disponíveis, o objeto integral e o acesso ao registro oficial estão reunidos nesta página para consulta. A fonte permite conferir as informações diretamente no Portal Nacional de Contratações Públicas.',
-  ],
-  category: 'saneamento', published_at: publishedAt, modified_at: publishedAt,
-  facts: {
-    id, supplier_type: 'PJ', buyer: 'Município de Exemplo', supplier: 'Engenharia Exemplo Ltda.',
-    object: 'Execução de redes de saneamento e serviços de engenharia, incluindo implantação da infraestrutura e recomposição das áreas afetadas.',
-    value: { amount: '9345678.9042', kind: 'valorGlobal', currency: 'BRL' },
-    source_url: `https://pncp.gov.br/app/contratos/12345678000195/${year}/1`,
-    source_published_at: sourceAt, source_checked_at: now.toISOString(),
-    signed_at: sourceAt.slice(0, 10), starts_at: sourceAt.slice(0, 10),
-    ends_at: new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-    administrative_location: { city: 'Florianópolis', state: 'SC' },
-  },
-};
+// Exercise the same documentary schema and private/public projection as the
+// publisher. The legacy renderer has separate runtime regression coverage.
+const article = JSON.parse(execFileSync(process.env.PYTHON || 'python3', ['-c', `
+import json,sys
+sys.path.insert(0, 'tests/contract_news')
+from editorial_fixtures import enriched_fact, editorial_draft
+from scripts.contract_news.core import validate_draft, public_facts, EDITORIAL_VERSION
+fact = enriched_fact()
+draft = validate_draft(editorial_draft(fact), fact)
+print(json.dumps({**draft, 'id': fact['id'], 'slug': 'escola-exemplo-documentacao-instalacoes',
+    'category': 'obras', 'published_at': ${JSON.stringify(publishedAt)},
+    'modified_at': ${JSON.stringify(now.toISOString())}, 'facts': public_facts(fact),
+    'editorial_version': EDITORIAL_VERSION}, ensure_ascii=False))
+`], { cwd: root, encoding: 'utf8' }));
 const snapshot = { schema: PUBLICATION_SCHEMA, generated_at: now.toISOString(), articles: [article] };
 validateRenderedPublication(snapshot);
 const bytes = Buffer.from(JSON.stringify(snapshot));
@@ -232,11 +221,23 @@ try {
     assert.ok(metadata.robots.startsWith('index,follow'));
     assert.equal(metadata.schema.datePublished, publishedAt);
     assert.equal(metadata.schema.author['@type'], 'Organization');
+    assert.deepEqual(metadata.schema.citation, article.editorial.sources.map(source => source.url));
     assert.equal(metadata.source, article.facts.source_url);
     assert.equal(metadata.cta, '/acompanhamento-contratos-obras/');
     assert.ok(metadata.whatsapp.startsWith('https://wa.me/5548988344559?'));
     assert.ok(!metadata.whatsapp.includes('12345678000195'));
     assert.equal(metadata.assetId, assetId(article));
+    assert.equal(await page.$eval('body', body => body.dataset.editorialVersion), article.editorial_version);
+    assert.equal(await page.$$eval('.news-analysis', sections => sections.length), 1);
+    assert.equal(await page.$$eval('.news-summary li', items => items.length), 3);
+    assert.equal(await page.$eval('.news-original', details => details.open), false);
+    if (name === 'mobile') {
+      const order = await page.evaluate(() => ({
+        story: document.querySelector('.news-story').getBoundingClientRect().top,
+        registry: document.querySelector('.news-contract').getBoundingClientRect().top,
+      }));
+      assert.ok(order.story < order.registry, 'the mobile reader reaches the reporting before the raw registry');
+    }
     report.scenarios.push({ name, width, height, geometry: await assertLayout(page, name) });
     await capture(page, `contract-news-${name}.png`);
     if (name === 'mobile') {

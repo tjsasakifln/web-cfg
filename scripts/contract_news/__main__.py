@@ -9,7 +9,6 @@ import sys
 from pathlib import Path
 
 from .core import MAX_INPUT_BYTES, NewsError
-from .openai_client import DEFAULT_MODEL
 from .pipeline import Settings, check_publication, generate, read_json, source_state
 
 
@@ -25,7 +24,7 @@ def main() -> int:
     create.add_argument("--max-per-day", type=int, default=6)
     create.add_argument("--max-calls-per-day", type=int, default=12)
     create.add_argument("--max-attempts-per-record", type=int, default=1)
-    create.add_argument("--timeout", type=int, default=45)
+    create.add_argument("--timeout", type=int, default=120)
     check = commands.add_parser("check")
     check.add_argument("--input", required=True, type=Path)
     state = commands.add_parser("source-state")
@@ -43,7 +42,7 @@ def main() -> int:
                 max_per_run=args.max_per_run, max_per_day=args.max_per_day,
                 max_calls_per_day=args.max_calls_per_day,
                 max_attempts_per_record=args.max_attempts_per_record,
-                timeout=args.timeout, model=os.environ.get("CONFENGE_NEWS_MODEL", DEFAULT_MODEL),
+                timeout=args.timeout, model=os.environ.get("CONFENGE_NEWS_MODEL") or None,
             )
             result = generate(read_json(args.input, MAX_INPUT_BYTES), settings,
                               api_key=os.environ.get("OPENAI_API_KEY", ""), dry_run=args.dry_run)

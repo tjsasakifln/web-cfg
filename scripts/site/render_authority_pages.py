@@ -41,6 +41,7 @@ UPDATED_BR = {
     "2026-09-09": "9 de setembro de 2026",
     "2026-09-19": "19 de setembro de 2026",
     "2026-11-19": "19 de novembro de 2026",
+    "2026-11-20": "20 de novembro de 2026",
 }
 
 

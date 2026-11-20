@@ -23,6 +23,7 @@ SHA = re.compile(r"[0-9a-f]{40}")
 DIGEST = re.compile(r"[0-9a-f]{64}")
 MAX_BUNDLE = 16 * 1024 * 1024
 MAX_FILES = 128
+PYPDF_WHEEL = "scripts/public_exports/vendor/pypdf-6.21.4-py3-none-any.whl"
 FACT_SCHEMA = "confenge.contract-news-facts/v1"
 MAX_FACTS = 512 * 1024
 DEFAULT_STATE = Path("/var/lib/confenge-web/contract-news")
@@ -84,13 +85,15 @@ def unpack_producer(bundle: Path, digest: str, expected_sha: str, destination: P
         names: set[str] = set()
         hashes = {}
         total = 0
+        wheel_count = 0
         # Read the exact bytes whose digest was checked above. Reopening the
         # uploaded path would allow a replacement between verification and use.
         with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
             for member in archive:
                 name = member.name
                 path = PurePosixPath(name)
-                allowed = name == "producer-manifest.json" or (
+                wheel = name == PYPDF_WHEEL
+                allowed = name == "producer-manifest.json" or wheel or (
                     name.startswith("scripts/") and name.endswith(".py")
                     and re.fullmatch(r"[A-Za-z0-9_./-]+", name))
                 total += member.size
@@ -108,6 +111,10 @@ def unpack_producer(bundle: Path, digest: str, expected_sha: str, destination: P
                     content = source.read(member.size + 1)
                 if len(content) != member.size:
                     raise RunError("invalid_producer_member")
+                if wheel:
+                    wheel_count += 1
+                    if wheel_count > 1 or not content.startswith(b"PK\x03\x04"):
+                        raise RunError("unsafe_producer_wheel")
                 target = stage / name
                 target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
                 target.write_bytes(content)
@@ -283,7 +290,7 @@ def run(args: argparse.Namespace) -> dict:
                     env[key] = settings[key]
             result = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "generate",
                                    "--input", str(private / "facts.json"), "--state-dir", str(private),
-                                   "--output-dir", str(public)], release, env, 300)
+                                   "--output-dir", str(public)], release, env, 1200)
             if (public / "current.json").exists():
                 checked = process_json([sys.executable, "-S", "-m", "scripts.contract_news", "check",
                                         "--input", str(public / "current.json")], release, env, 30)
