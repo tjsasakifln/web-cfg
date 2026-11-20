@@ -15,7 +15,9 @@ export function validateRenderedPublication(snapshot, options = {}) {
     if (paths.has(canonical) || !page.html.includes('<link rel="canonical" href="' + canonical + '">') || !page.html.includes('data-asset-family="editorial"')) throw new Error('contract_news_render_identity');
     paths.add(canonical);
     const structured = JSON.parse(page.jsonld)['@graph'].find(item => item['@type'] === 'NewsArticle');
-    if (!structured || structured.headline !== article.title || structured.datePublished !== article.published_at || structured.dateModified !== article.modified_at || structured.citation !== article.facts.source_url) throw new Error('contract_news_render_facts');
+    const expectedCitations = article.editorial ? article.editorial.sources.map(source => source.url) : article.facts.source_url;
+    if (!structured || structured.headline !== article.title || structured.datePublished !== article.published_at || structured.dateModified !== article.modified_at || JSON.stringify(structured.citation) !== JSON.stringify(expectedCitations)) throw new Error('contract_news_render_facts');
+    if (article.editorial && (!page.html.includes('data-editorial-version="' + article.editorial_version + '"') || !page.html.includes('news-analysis') || !page.html.includes('Fontes consultadas'))) throw new Error('contract_news_editorial_render');
     if (/<script\b(?![^>]*\b(?:src=|type="application\/ld\+json"))[^>]*>/i.test(page.html)) throw new Error('contract_news_executable_inline_script');
   }
   return { ok: true, schema: snapshot.schema, articles: snapshot.articles.length };

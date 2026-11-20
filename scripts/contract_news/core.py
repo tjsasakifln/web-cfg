@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import copy
 import json
 import re
 import unicodedata
@@ -12,6 +13,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 FACTS_SCHEMA = "confenge.contract-news-facts/v1"
+EDITORIAL_VERSION = "2026-11-20.1"
 PUBLICATION_SCHEMA = "confenge.contract-news-publication/v1"
 POINTER_SCHEMA = "confenge.contract-news-pointer/v1"
 CATEGORIES = ("obras", "saneamento", "infraestrutura", "projetos", "manutencao")
@@ -142,6 +144,9 @@ def validate_fact(record: Any, now: datetime | None = None, *, fresh: bool = Fal
             raise NewsError("future_source")
         if fresh and now - checked > timedelta(hours=26):
             raise NewsError("stale_source_check")
+    if record.get("editorial_context") is not None:
+        from .editorial import validate_context
+        facts["editorial_context"] = validate_context(record["editorial_context"], facts, now)
     return facts
 
 
@@ -191,7 +196,51 @@ def classify(facts: dict) -> str | None:
 
 
 def fingerprint(facts: dict) -> str:
-    return digest({key: facts[key] for key in sorted(MATERIAL_KEYS)})
+    material = {key: facts[key] for key in sorted(MATERIAL_KEYS)}
+    if facts.get("editorial_context"):
+        context = copy.deepcopy(facts["editorial_context"])
+        context.pop("documents_checked_at", None)
+        procurement = context.get("procurement")
+        if isinstance(procurement, dict):
+            # The upstream JSON digest includes formatting and fields outside
+            # this editorial projection. Compare the projected facts instead.
+            procurement.pop("source_sha256", None)
+        for row in [context.get("procurement"), *context.get("documents", [])]:
+            if isinstance(row, dict):
+                for key in ("text", "source_checked_at", "checked_at"):
+                    row.pop(key, None)
+        material["editorial_context"] = context
+    return digest(material)
+
+
+def public_facts(facts: dict) -> dict:
+    """Public references retain provenance, never attachment text or signatures."""
+    public = copy.deepcopy(facts)
+    context = public.get("editorial_context")
+    if context:
+        allowed_context = {"schema", "contract", "procurement", "documents", "documents_status", "documents_total", "documents_checked_at"}
+        public["editorial_context"] = {key: value for key, value in context.items() if key in allowed_context}
+        public["editorial_context"]["documents"] = [
+            {key: value for key, value in document.items() if key in {
+                "id", "title", "url", "sha256", "checked_at", "pages", "text_pages", "pages_without_text", "extraction_note",
+            }} for document in context.get("documents", [])
+        ]
+    return public
+
+
+def validate_research(research: Any, facts: dict) -> dict:
+    from .editorial import validate_research as check
+    return check(research, facts)
+
+
+def validate_analysis(analysis: Any, research: dict) -> dict:
+    from .editorial import validate_analysis as check
+    return check(analysis, research)
+
+
+def validate_review(review: Any) -> dict:
+    from .editorial import validate_review as check
+    return check(review)
 
 
 def money(facts: dict) -> str:
@@ -228,6 +277,9 @@ INJECTION = re.compile(r"ignore.{0,40}(?:instrucoes|instructions|regras|previous
 
 
 def validate_draft(draft: Any, facts: dict) -> dict:
+    if isinstance(draft, dict) and "editorial" in draft:
+        from .editorial import validate_editorial_draft
+        return validate_editorial_draft(draft, facts)
     keys = {"subject", "title", "description", "lead", "paragraphs"}
     if not isinstance(draft, dict) or set(draft) != keys:
         raise NewsError("invalid_draft_schema")
@@ -288,8 +340,11 @@ def validate_publication(snapshot: Any) -> dict:
     ids, slugs = set(), set()
     for article in articles:
         expected = {"id", "slug", "title", "description", "lead", "paragraphs", "category", "published_at", "modified_at", "facts"}
-        if not isinstance(article, dict) or set(article) != expected:
+        optional = {"editorial", "editorial_version"}
+        if not isinstance(article, dict) or set(article) - optional != expected:
             raise NewsError("invalid_article_schema")
+        if "editorial_version" in article and (not isinstance(article["editorial_version"], str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}\.\d{1,3}", article["editorial_version"])):
+            raise NewsError("invalid_editorial_version")
         facts = validate_fact(article["facts"])
         if article["id"] != facts["id"] or article["id"] in ids or article["slug"] in slugs:
             raise NewsError("duplicate_or_unbound_article")
@@ -307,6 +362,9 @@ def validate_publication(snapshot: Any) -> dict:
             raise NewsError("invalid_paragraph_count")
         for paragraph in article["paragraphs"]:
             clean_text(paragraph, "paragraph", 30, 6500)
+        if article.get("editorial") is not None:
+            from .editorial import validate_published_editorial
+            validate_published_editorial(article["editorial"], facts)
         ids.add(article["id"])
         slugs.add(article["slug"])
     if len(json_bytes(snapshot)) > MAX_SNAPSHOT_BYTES:

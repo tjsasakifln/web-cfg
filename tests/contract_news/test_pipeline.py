@@ -9,38 +9,23 @@ import json
 import os
 import tempfile
 import unittest
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from itertools import permutations
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.contract_news.core import NewsError, fingerprint, validate_draft, validate_fact, validate_publication
+from scripts.contract_news.core import EDITORIAL_VERSION, NewsError, fingerprint, iso, json_bytes, public_facts, validate_draft, validate_fact, validate_publication
 from scripts.contract_news.openai_client import ResponsesClient
-from scripts.contract_news.pipeline import Settings, check_publication, generate, source_state
+from editorial_fixtures import enriched_fact, research_for, analysis_for, editorial_draft
+from scripts.contract_news.pipeline import Settings, check_publication, generate, promote, source_state
 
 
 NOW = datetime(2026, 11, 18, 16, tzinfo=timezone.utc)
 
 
 def fact(seq: int = 1, value: str = "2000000.0000") -> dict:
-    # Synthetic records exist only in this test module, never in shipped content.
-    return {
-        "id": f"12345678000199-2-{seq:06d}/2026",
-        "buyer": "Município de Teste Editorial",
-        "supplier": "Construtora de Teste Ltda.",
-        "supplier_type": "PJ",
-        "object": "Construção de unidade escolar com instalações elétricas e hidráulicas no bairro Central.",
-        "value": {"amount": value, "kind": "valorGlobal", "currency": "BRL"},
-        "source_url": f"https://pncp.gov.br/app/contratos/12345678000199/2026/{seq}",
-        "source_published_at": "2026-11-18T12:00:00Z",
-        "signed_at": "2026-11-17",
-        "starts_at": "2026-11-18",
-        "ends_at": "2027-11-18",
-        "source_checked_at": "2026-11-18T15:00:00Z",
-        "source_updated_at": None,
-        "source_sha256": "a" * 64,
-        "administrative_location": {"city": "Município de Teste", "state": "SC"},
-    }
+    return enriched_fact(seq, value)
 
 
 def document(*facts: dict, at: datetime = NOW) -> dict:
@@ -61,20 +46,30 @@ def draft() -> dict:
     }
 
 
+
+
+
+
 class FakeClient:
     def __init__(self, changes=None, review=None, failure=None):
         self.calls = []
         self.changes = changes or {}
-        self.review = review or {"supported": True, "issues": []}
+        self.review = review or {"supported": True, "issues": [], "factual_accuracy": True,
+                                 "editorial_quality": True, "technical_value": True,
+                                 "source_traceability": True, "publication_ready": True}
         self.failure = failure
 
     def call(self, stage, facts, rendered=None):
         self.calls.append((stage, facts["id"]))
         if self.failure:
             raise self.failure
+        if stage == "research":
+            return research_for(facts)
+        if stage == "analyze":
+            return analysis_for(rendered)
         if stage == "review":
             return copy.deepcopy(self.review)
-        result = draft()
+        result = editorial_draft(facts)
         result.update(self.changes)
         return result
 
@@ -95,15 +90,32 @@ class PipelineTests(unittest.TestCase):
         pointer = json.loads((self.settings.output_dir / "current.json").read_text())
         return json.loads((self.settings.output_dir / pointer["file"]).read_text())
 
+    def seed_legacy_publication(self, *, calls=3):
+        """Recreate an accepted v1 ledger and snapshot as found in production."""
+        self.run_pipeline()
+        ledger_path = self.settings.state_dir / "ledger.json"
+        ledger = json.loads(ledger_path.read_text())
+        row = ledger["articles"][fact()["id"]]
+        row.pop("editorial_version", None)
+        keys = {"id", "slug", "title", "description", "lead", "paragraphs", "category", "published_at", "modified_at", "facts"}
+        row["article"] = {key: value for key, value in row["article"].items() if key in keys}
+        original = copy.deepcopy(row["article"])
+        ledger["attempts"] = {fingerprint(fact()): {"count": 1, "at": iso(NOW), "status": "accepted"}}
+        ledger["budget"] = {"2026-11-18": {"attempts": 2, "calls": calls, "publications": 1}}
+        ledger_path.write_bytes(json_bytes(ledger))
+        promote(self.settings, ledger)
+        return original, copy.deepcopy(ledger)
+
     def test_publish_binds_facts_and_validates_pointer(self):
         client = FakeClient()
         result = self.run_pipeline(client=client)
         self.assertEqual(result["published"], 1)
-        self.assertEqual(result["calls"], 2)
-        self.assertEqual(len(client.calls), 2)
+        self.assertEqual(result["calls"], 4)
+        self.assertEqual([stage for stage, _ in client.calls], ["research", "analyze", "generate", "review"])
         article = self.current()["articles"][0]
-        self.assertEqual(article["facts"], fact())
-        self.assertIn("R$ 2.000.000,00", article["lead"])
+        self.assertEqual(article["facts"], public_facts(fact()))
+        self.assertIn("R$ 2.000.000,00", " ".join(article["paragraphs"]))
+        self.assertNotIn("text", article["facts"]["editorial_context"]["documents"][0])
         self.assertNotIn("12345678000199", article["slug"])
         self.assertEqual(check_publication(self.settings.output_dir / "current.json")["articles"], 1)
         self.assertEqual((self.settings.state_dir / "ledger.json").stat().st_mode & 0o777, 0o600)
@@ -129,9 +141,43 @@ class PipelineTests(unittest.TestCase):
         result = self.run_pipeline([source])
         self.assertEqual(result["published"], 1)
         article = self.current()["articles"][0]
-        self.assertIn("A publicação no PNCP ocorreu em 17/11/2026.", article["paragraphs"][0])
-        self.assertIn("vigência de 18/11/2026 a 18/11/2027", article["paragraphs"][1])
-        self.assertEqual(article["facts"], source)
+        bound = validate_draft(draft(), source)
+        self.assertIn("A publicação no PNCP ocorreu em 17/11/2026.", bound["paragraphs"][0])
+        self.assertIn("vigência de 18/11/2026 a 18/11/2027", bound["paragraphs"][1])
+        self.assertEqual(article["facts"], public_facts(source))
+
+    def test_procurement_repoll_preserves_paid_idempotency_but_material_changes_do_not(self):
+        original = fact()
+        original["editorial_context"]["procurement"] = {
+            "id": "12345678000199-1-000001/2026",
+            "source_url": "https://pncp.gov.br/app/editais/12345678000199/2026/1",
+            "source_api_url": "https://pncp.gov.br/api/consulta/v1/orgaos/12345678000199/compras/2026/1",
+            "source_checked_at": "2026-11-18T15:00:00Z", "source_sha256": "b" * 64,
+            "object": original["object"], "modality": "Concorrência",
+            "estimated_value": {"amount": "2000000.0000", "currency": "BRL"},
+        }
+        self.run_pipeline([original])
+        pointer = (self.settings.output_dir / "current.json").read_bytes()
+        repolled = copy.deepcopy(original)
+        procurement = repolled["editorial_context"]["procurement"]
+        procurement["source_checked_at"] = "2026-11-18T16:30:00Z"
+        procurement["source_sha256"] = "c" * 64
+        repolled["editorial_context"]["procurement"] = dict(reversed(list(procurement.items())))
+        result = self.run_pipeline([repolled], now=NOW + timedelta(hours=1))
+        self.assertEqual(result["calls"], 0)
+        self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), pointer)
+        self.assertEqual(fingerprint(original), fingerprint(repolled))
+        self.assertEqual(fingerprint(repolled), fingerprint(public_facts(repolled)))
+
+        for key, value in (("modality", "Credenciamento"),
+                           ("object", original["object"] + " Inclui a ampliação da biblioteca."),
+                           ("estimated_value", {"amount": "2500000.0000", "currency": "BRL"})):
+            changed = copy.deepcopy(repolled)
+            changed["editorial_context"]["procurement"][key] = value
+            self.assertNotEqual(fingerprint(original), fingerprint(changed), key)
+        changed_pdf = copy.deepcopy(repolled)
+        changed_pdf["editorial_context"]["documents"][0]["sha256"] = "d" * 64
+        self.assertNotEqual(fingerprint(original), fingerprint(changed_pdf))
 
     def test_correction_keeps_url_and_original_date(self):
         self.run_pipeline()
@@ -143,8 +189,114 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(article["slug"], original["slug"])
         self.assertEqual(article["published_at"], original["published_at"])
         self.assertNotEqual(article["modified_at"], original["modified_at"])
-        self.assertIn("R$ 2.500.000,00", article["lead"])
+        self.assertIn("R$ 2.500.000,00", " ".join(article["paragraphs"]))
         self.assertEqual(len(self.current()["articles"]), 1)
+
+    def test_editorial_migration_rewrites_unchanged_facts_once_and_keeps_paid_history(self):
+        original, previous_ledger = self.seed_legacy_publication()
+        client = FakeClient()
+        result = self.run_pipeline(client=client, now=NOW + timedelta(hours=1))
+        article = self.current()["articles"][0]
+        ledger = json.loads((self.settings.state_dir / "ledger.json").read_text())
+        self.assertEqual(result["published"], 1)
+        self.assertEqual(result["calls"], 4)
+        self.assertEqual(article["slug"], original["slug"])
+        self.assertEqual(article["published_at"], original["published_at"])
+        self.assertNotEqual(article["modified_at"], original["modified_at"])
+        self.assertEqual(article["facts"], original["facts"])
+        self.assertEqual(article["editorial_version"], EDITORIAL_VERSION)
+        self.assertEqual(ledger["articles"][article["id"]]["editorial_version"], EDITORIAL_VERSION)
+        self.assertEqual(ledger["budget"]["2026-11-18"], {"attempts": 3, "calls": 7, "publications": 2})
+        for key, row in previous_ledger["attempts"].items():
+            self.assertEqual(ledger["attempts"][key], row)
+        new_attempts = set(ledger["attempts"]) - set(previous_ledger["attempts"])
+        self.assertEqual(len(new_attempts), 1)
+        self.assertEqual(ledger["attempts"][new_attempts.pop()]["editorial_version"], EDITORIAL_VERSION)
+        accepted_pointer = (self.settings.output_dir / "current.json").read_bytes()
+        repeated = FakeClient()
+        result = self.run_pipeline(client=repeated, now=NOW + timedelta(hours=2))
+        self.assertEqual(result["calls"], 0)
+        self.assertEqual(result["published"], 0)
+        self.assertFalse(repeated.calls)
+        self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), accepted_pointer)
+        self.assertEqual(json.loads((self.settings.state_dir / "ledger.json").read_text())["budget"], ledger["budget"])
+
+    def test_editorial_migration_requires_room_for_all_four_calls_without_resetting_budget(self):
+        _, previous_ledger = self.seed_legacy_publication(calls=9)
+        pointer = (self.settings.output_dir / "current.json").read_bytes()
+        client = FakeClient()
+        result = self.run_pipeline(client=client, now=NOW + timedelta(hours=1))
+        self.assertEqual(result["calls"], 0)
+        self.assertEqual(result["attempted"], 0)
+        self.assertFalse(client.calls)
+        ledger = json.loads((self.settings.state_dir / "ledger.json").read_text())
+        self.assertEqual(ledger["budget"], previous_ledger["budget"])
+        self.assertEqual(ledger["attempts"], previous_ledger["attempts"])
+        self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), pointer)
+        next_day = self.run_pipeline(now=NOW + timedelta(days=1))
+        ledger = json.loads((self.settings.state_dir / "ledger.json").read_text())
+        self.assertEqual(next_day["published"], 1)
+        self.assertEqual(ledger["budget"]["2026-11-18"], previous_ledger["budget"]["2026-11-18"])
+        self.assertEqual(ledger["budget"]["2026-11-19"]["calls"], 4)
+
+    def test_rejected_editorial_migration_preserves_old_news_and_does_not_retry(self):
+        original, _ = self.seed_legacy_publication()
+        pointer = (self.settings.output_dir / "current.json").read_bytes()
+        rejected_review = copy.deepcopy(FakeClient().review)
+        rejected_review["editorial_quality"] = False
+        result = self.run_pipeline(client=FakeClient(review=rejected_review), now=NOW + timedelta(hours=1))
+        self.assertEqual(result["calls"], 4)
+        self.assertEqual(result["published"], 0)
+        self.assertIn("editorial_review_rejected", result["rejections"])
+        self.assertEqual(self.current()["articles"][0], original)
+        self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), pointer)
+        retry = FakeClient()
+        self.run_pipeline(client=retry, now=NOW + timedelta(hours=2))
+        self.assertFalse(retry.calls)
+
+    def test_editorial_migration_is_prioritized_over_larger_new_contract(self):
+        self.seed_legacy_publication()
+        client = FakeClient()
+        result = self.run_pipeline([fact(seq=2, value="900000000"), fact()], client,
+                                   NOW + timedelta(hours=1), replace(self.settings, max_per_run=1))
+        self.assertEqual(result["published"], 1)
+        self.assertEqual({identity for _, identity in client.calls}, {fact()["id"]})
+        self.assertEqual(len(self.current()["articles"]), 1)
+
+    def test_each_stage_reserves_its_call_before_request_and_passes_evidence_to_reviewer(self):
+        ledger_path = self.settings.state_dir / "ledger.json"
+        reservations, payloads = [], {}
+        class ObservingClient(FakeClient):
+            agent_ids = {stage: "agent_test_" + stage for stage in ("research", "analyze", "generate", "review")}
+            def call(self, stage, facts, rendered=None):
+                reservations.append(json.loads(ledger_path.read_text())["budget"]["2026-11-18"]["calls"])
+                payloads[stage] = copy.deepcopy(rendered)
+                return super().call(stage, facts, rendered)
+        result = self.run_pipeline(client=ObservingClient())
+        self.assertEqual(reservations, [1, 2, 3, 4])
+        self.assertEqual(set(payloads["generate"]), {"research", "analysis"})
+        self.assertEqual(set(payloads["review"]), {"article", "subject", "research", "analysis"})
+        self.assertEqual(payloads["review"]["subject"], editorial_draft(fact())["subject"])
+        self.assertEqual(payloads["review"]["research"], payloads["generate"]["research"])
+        self.assertEqual(payloads["review"]["analysis"], payloads["generate"]["analysis"])
+        self.assertEqual(result["agent_ids"], ObservingClient.agent_ids)
+        self.assertEqual(result["editorial_version"], EDITORIAL_VERSION)
+
+    def test_missing_editorial_context_uses_no_paid_attempt_and_enrichment_can_resume(self):
+        incomplete = fact()
+        incomplete.pop("editorial_context")
+        client = FakeClient()
+        result = self.run_pipeline([incomplete], client)
+        self.assertEqual(result["calls"], 0)
+        self.assertEqual(result["attempted"], 0)
+        self.assertIn("insufficient_source_context", result["rejections"])
+        self.assertFalse(client.calls)
+        ledger = json.loads((self.settings.state_dir / "ledger.json").read_text())
+        self.assertEqual(ledger["attempts"], {})
+        self.assertEqual(ledger["budget"]["2026-11-18"], {"attempts": 0, "calls": 0, "publications": 0})
+        resumed = self.run_pipeline(client=client)
+        self.assertEqual(resumed["published"], 1)
+        self.assertEqual(resumed["calls"], 4)
 
     def test_paid_timeout_reserved_before_call_and_not_retried_next_run(self):
         failing = FakeClient(failure=TimeoutError("secret request must not be logged"))
@@ -163,16 +315,16 @@ class PipelineTests(unittest.TestCase):
         previous = (self.settings.output_dir / "current.json").read_bytes()
         client = FakeClient(review={"supported": False, "issues": ["unsupported"]})
         result = self.run_pipeline([fact(value="3000000.0000")], client)
-        self.assertEqual(client.calls, [("generate", fact()["id"]), ("review", fact()["id"])])
-        self.assertEqual(result["calls"], 2)
+        self.assertEqual(client.calls, [(stage, fact()["id"]) for stage in ("research", "analyze", "generate", "review")])
+        self.assertEqual(result["calls"], 4)
         self.assertEqual(result["published"], 0)
         self.assertIn("editorial_review_rejected", result["rejections"])
         self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), previous)
 
     def test_numeric_fabrication_is_rejected_before_verifier(self):
-        client = FakeClient(changes={"lead": draft()["lead"] + " Serão construídas 200 salas."})
+        client = FakeClient(changes={"lead": editorial_draft(fact())["lead"] + " Serão construídas 200 salas."})
         result = self.run_pipeline(client=client)
-        self.assertEqual(result["calls"], 1)
+        self.assertEqual(result["calls"], 3)
         self.assertIn("uncontrolled_numeric_or_markup_claim", result["rejections"])
         self.assertFalse((self.settings.output_dir / "current.json").exists())
 
@@ -200,10 +352,10 @@ class PipelineTests(unittest.TestCase):
     def test_authorial_dash_stops_before_verifier_and_preserves_prior_snapshot(self):
         self.run_pipeline()
         previous = (self.settings.output_dir / "current.json").read_bytes()
-        client = FakeClient(changes={"lead": draft()["lead"] + " O fornecedor \u2014 conforme registro \u2014 consta no PNCP."})
+        client = FakeClient(changes={"lead": editorial_draft(fact())["lead"] + " O fornecedor \u2014 conforme registro \u2014 consta no PNCP."})
         result = self.run_pipeline([fact(value="3000000.0000")], client)
-        self.assertEqual(result["calls"], 1)
-        self.assertEqual(client.calls, [("generate", fact()["id"])])
+        self.assertEqual(result["calls"], 3)
+        self.assertEqual(client.calls, [(stage, fact()["id"]) for stage in ("research", "analyze", "generate")])
         self.assertEqual(result["published"], 0)
         self.assertIn("unsupported_editorial_punctuation", result["rejections"])
         self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), previous)
@@ -214,28 +366,28 @@ class PipelineTests(unittest.TestCase):
         source["supplier"] += " \u2014 Obras"
         source["object"] = "Construção de unidade escolar \u2014 instalações elétricas e hidráulicas \u2013 bairro Central."
         original = copy.deepcopy(source)
-        subject = "Construção de unidade escolar \u2014 instalações elétricas"
-        result = self.run_pipeline([source], FakeClient(changes={"subject": subject}))
+        revised = editorial_draft(source)
+        revised["editorial"]["display"] = {key: value.replace("\u2013", ",").replace("\u2014", ",")
+                                             for key, value in revised["editorial"]["display"].items()}
+        result = self.run_pipeline([source], FakeClient(changes=revised))
         self.assertEqual(result["published"], 1)
         article = self.current()["articles"][0]
-        self.assertIn(subject, article["title"])
-        self.assertIn(source["buyer"], article["lead"])
-        self.assertIn(source["supplier"], article["paragraphs"][0])
-        self.assertIn(source["object"], article["paragraphs"][1])
-        self.assertEqual(article["facts"], original)
+        self.assertNotIn("\u2014", article["title"])
+        self.assertEqual(article["facts"], public_facts(original))
         self.assertEqual(source, original)
 
-    def test_subject_must_be_literal_and_missing_dates_cannot_be_invented(self):
+    def test_legacy_subject_binding_and_editorial_review_prevent_scope_changes(self):
         changed = draft()
         changed["subject"] = "Construção de hospital de referência"
         with self.assertRaisesRegex(NewsError, "subject_not_from_source"):
             validate_draft(changed, fact())
-        client = FakeClient(changes={"subject": changed["subject"]})
+        rejected = {**FakeClient().review, "supported": False, "factual_accuracy": False, "issues": ["Alteração indevida do escopo contratado."]}
+        client = FakeClient(changes={"subject": changed["subject"]}, review=rejected)
         result = self.run_pipeline(client=client)
-        self.assertEqual(client.calls, [("generate", fact()["id"])])
-        self.assertEqual(result["calls"], 1)
+        self.assertEqual(client.calls, [(stage, fact()["id"]) for stage in ("research", "analyze", "generate", "review")])
+        self.assertEqual(result["calls"], 4)
         self.assertEqual(result["published"], 0)
-        self.assertIn("subject_not_from_source", result["rejections"])
+        self.assertIn("editorial_review_rejected", result["rejections"])
         self.assertFalse((self.settings.output_dir / "current.json").exists())
         changed["subject"] = draft()["subject"] + "\n"
         with self.assertRaisesRegex(NewsError, "unsafe_subject"):
@@ -284,12 +436,12 @@ class PipelineTests(unittest.TestCase):
     def test_daily_and_execution_caps_hold_across_multiple_runs(self):
         items = [fact(seq=i, value=str(1000000 + i)) for i in range(1, 10)]
         client = FakeClient()
-        for expected_total in (2, 4, 6, 6):
+        for expected_total in (2, 3, 3, 3):
             result = self.run_pipeline(items, client)
             self.assertLessEqual(result["published"], 2)
             self.assertEqual(result["total_articles"], expected_total)
         self.assertEqual(len(client.calls), 12)
-        self.assertEqual(len(list(self.settings.output_dir.glob("snapshot-*.json"))), 3)
+        self.assertEqual(len(list(self.settings.output_dir.glob("snapshot-*.json"))), 2)
 
     def test_rejections_also_exhaust_attempt_budget(self):
         items = [fact(seq=i) for i in range(1, 12)]
@@ -359,23 +511,72 @@ class PipelineTests(unittest.TestCase):
 
     def test_source_state_rotates_rechecks_without_rewriting_articles(self):
         items = [fact(seq=i) for i in range(1, 7)]
-        for _ in range(3):
-            self.run_pipeline(items)
+        for moment in (NOW, NOW, NOW + timedelta(days=1), NOW + timedelta(days=1)):
+            self.run_pipeline(items, now=moment)
         state = source_state(self.settings.state_dir)
         self.assertEqual(len(state["published_ids"]), 6)
         self.assertEqual(len(state["recheck_ids"]), 5)
         untouched = (set(state["published_ids"]) - set(state["recheck_ids"])).pop()
         raw_pointer = (self.settings.output_dir / "current.json").read_bytes()
         checked = [copy.deepcopy(f) for f in items if f["id"] in state["recheck_ids"]]
+        rechecked_at = NOW + timedelta(days=1, hours=2)
         for row in checked:
-            row["source_checked_at"] = "2026-11-18T17:00:00Z"
-        refresh = document(*checked, at=NOW + timedelta(hours=2))
+            row["source_checked_at"] = iso(rechecked_at)
+        refresh = document(*checked, at=rechecked_at)
         refresh["recheck_results"] = [{"id": row["id"], "status": "verified"} for row in checked]
         client = FakeClient()
-        generate(refresh, self.settings, client=client, now=NOW + timedelta(hours=2))
+        generate(refresh, self.settings, client=client, now=rechecked_at)
         self.assertFalse(client.calls)
         self.assertEqual(source_state(self.settings.state_dir)["recheck_ids"][0], untouched)
         self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), raw_pointer)
+
+    def test_source_state_prioritizes_legacy_editorial_version_before_recheck_age(self):
+        self.run_pipeline([fact(), fact(seq=2)])
+        path = self.settings.state_dir / "ledger.json"
+        ledger = json.loads(path.read_text())
+        legacy = ledger["articles"][fact()["id"]]
+        legacy.pop("editorial_version")
+        legacy["article"].pop("editorial_version")
+        legacy["article"].pop("editorial", None)
+        legacy["last_source_checked"] = iso(NOW + timedelta(hours=1))
+        legacy["last_recheck_attempt_at"] = iso(NOW + timedelta(hours=1))
+        path.write_bytes(json_bytes(ledger))
+        state = source_state(self.settings.state_dir)
+        self.assertEqual(state["published_ids"], sorted([fact()["id"], fact(seq=2)["id"]]))
+        self.assertEqual(state["recheck_ids"][0], fact()["id"])
+
+    def test_document_cursor_rotates_when_all_registry_rechecks_share_one_clock(self):
+        items = [fact(seq=i) for i in range(1, 4)]
+        self.run_pipeline(items)
+        self.run_pipeline(items)
+        original_pointer = (self.settings.output_dir / "current.json").read_bytes()
+        original_budget = json.loads((self.settings.state_dir / "ledger.json").read_text())["budget"]
+
+        for hour, status in enumerate(("complete", "unavailable"), 1):
+            with self.subTest(document_status=status):
+                before = source_state(self.settings.state_dir)["recheck_ids"]
+                at = NOW + timedelta(hours=hour)
+                checked = copy.deepcopy(items)
+                for row in checked:
+                    row["source_checked_at"] = iso(at)
+                    context = row["editorial_context"]
+                    context["documents_status"] = status if row["id"] == before[0] else "not_collected"
+                    if context["documents_status"] != "complete":
+                        context["documents"] = []
+                        context["documents_total"] = None
+                    # A failed list has no documents_checked_at value. It must
+                    # still advance the documentary cursor to avoid starvation.
+                    context["documents_checked_at"] = iso(at) if context["documents_status"] == "complete" else None
+                refresh = document(*checked, at=at)
+                refresh["recheck_results"] = [{"id": row["id"], "status": "verified"} for row in checked]
+                result = generate(refresh, self.settings, client=FakeClient(), now=at)
+                self.assertEqual(result["calls"], 0)
+                self.assertEqual(source_state(self.settings.state_dir)["recheck_ids"], before[1:] + before[:1])
+                ledger = json.loads((self.settings.state_dir / "ledger.json").read_text())
+                self.assertEqual({row["last_recheck_attempt_at"] for row in ledger["articles"].values()}, {iso(at)})
+                self.assertEqual(ledger["articles"][before[0]]["last_document_checked_at"], iso(at))
+                self.assertEqual(ledger["budget"], original_budget)
+                self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), original_pointer)
 
     def test_actual_node_gate_rejects_candidate_before_pointer_change(self):
         self.run_pipeline()
@@ -388,21 +589,21 @@ class PipelineTests(unittest.TestCase):
         client = FakeClient()
         self.run_pipeline([fact(value="2500000")], client)
         self.assertFalse(client.calls)
-        self.assertIn("R$ 2.500.000,00", self.current()["articles"][0]["lead"])
+        self.assertIn("R$ 2.500.000,00", " ".join(self.current()["articles"][0]["paragraphs"]))
 
     def test_daily_budgets_follow_sao_paulo_midnight_during_a_call(self):
         moment = [datetime(2026, 11, 19, 2, 59, 59, tzinfo=timezone.utc)]
         class MidnightClient(FakeClient):
             def call(self, stage, facts, rendered=None):
                 answer = super().call(stage, facts, rendered)
-                if stage == "generate":
+                if stage == "research":
                     moment[0] += timedelta(seconds=2)
                 return answer
         result = generate(document(fact(), at=moment[0]), self.settings, client=MidnightClient(), clock=lambda: moment[0])
         ledger = json.loads((self.settings.state_dir / "ledger.json").read_text())
-        self.assertEqual(result["calls"], 2)
+        self.assertEqual(result["calls"], 4)
         self.assertEqual(ledger["budget"]["2026-11-18"]["calls"], 1)
-        self.assertEqual(ledger["budget"]["2026-11-19"]["calls"], 1)
+        self.assertEqual(ledger["budget"]["2026-11-19"]["calls"], 3)
         self.assertEqual(ledger["budget"]["2026-11-19"]["publications"], 1)
 
     def test_release_switch_after_first_call_blocks_second_call_and_promotion(self):
@@ -418,7 +619,7 @@ class PipelineTests(unittest.TestCase):
             class SwitchClient(FakeClient):
                 def call(self, stage, facts, rendered=None):
                     result = super().call(stage, facts, rendered)
-                    if stage == "generate":
+                    if stage == "research":
                         link.unlink()
                         link.symlink_to(new, target_is_directory=True)
                     return result

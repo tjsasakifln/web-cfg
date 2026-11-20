@@ -15,6 +15,7 @@ from urllib.parse import urljoin, urlsplit
 from zoneinfo import ZoneInfo
 
 PREFIX = "/noticias/contratos-publicos/"
+EDITORIAL_VERSION = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}\.[1-9][0-9]*")
 NS = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "n": "http://www.google.com/schemas/sitemap-news/0.9"}
 
 
@@ -37,11 +38,13 @@ class ArticleParser(HTMLParser):
         self.buffer = ""
         self.h1 = 0
         self.headlines = []
+        self.section_headings = []
         self.paragraphs = []
         self.times = []
         self.links = []
         self.body = {}
         self._heading = None
+        self._section_heading = None
         self._paragraph = None
         self._time = None
         self._script = False
@@ -56,6 +59,8 @@ class ArticleParser(HTMLParser):
         if tag == "h1":
             self.h1 += 1
             self._heading = ""
+        if tag in {"h2", "h3"}:
+            self._section_heading = ""
         if tag == "p":
             self._paragraph = ""
         if tag == "time":
@@ -79,6 +84,8 @@ class ArticleParser(HTMLParser):
             return
         if self._heading is not None:
             self._heading += data
+        if self._section_heading is not None:
+            self._section_heading += data
         if self._paragraph is not None:
             self._paragraph += data
         if self._time is not None:
@@ -98,6 +105,9 @@ class ArticleParser(HTMLParser):
         if tag == "h1" and self._heading is not None:
             self.headlines.append(self._heading)
             self._heading = None
+        if tag in {"h2", "h3"} and self._section_heading is not None:
+            self.section_headings.append(self._section_heading)
+            self._section_heading = None
         if tag == "p" and self._paragraph is not None:
             self.paragraphs.append(self._paragraph)
             self._paragraph = None
@@ -153,8 +163,38 @@ def visible_timestamp(parser: ArticleParser, value: str) -> bool:
                for datetime_value, text in parser.times)
 
 
-def article_metadata(html: str, url: str, *, robots_header: str = "", now: datetime | None = None) -> dict:
+def official_citations(value, *, reported: bool) -> tuple[str, list[str]]:
+    citations = value if isinstance(value, list) else [value]
+    minimum = 2 if reported else 1
+    if (not isinstance(value, (str, list)) or not minimum <= len(citations) <= 5
+            or any(not isinstance(item, str) for item in citations)
+            or len(set(citations)) != len(citations)):
+        raise VerificationError("article_provenance_invalid")
+    contracts = [(item, re.fullmatch(r"https://pncp\.gov\.br/app/contratos/([0-9]{14})/([0-9]{4})/([1-9][0-9]*)", item))
+                 for item in citations]
+    contracts = [(item, match) for item, match in contracts if match]
+    if len(contracts) != 1:
+        raise VerificationError("article_provenance_invalid")
+    contract, identity = contracts[0]
+    cnpj, year, sequence = identity.groups()
+    for source in citations:
+        if source == contract:
+            continue
+        purchase = rf"https://pncp\.gov\.br/app/editais/{cnpj}/[0-9]{{4}}/[1-9][0-9]*"
+        document = rf"https://pncp\.gov\.br/pncp-api/v1/orgaos/{cnpj}/contratos/{year}/{sequence}/arquivos/[1-9][0-9]*"
+        if not re.fullmatch(purchase, source) and not re.fullmatch(document, source):
+            raise VerificationError("article_provenance_invalid")
+    return contract, citations
+
+
+def article_metadata(html: str, url: str, *, robots_header: str = "", now: datetime | None = None,
+                     expected_editorial_version: str | None = None) -> dict:
     parser = parse_page(html, url)
+    editorial_version = parser.body.get("data-editorial-version") or None
+    if editorial_version is not None and not EDITORIAL_VERSION.fullmatch(editorial_version):
+        raise VerificationError("article_editorial_version_invalid")
+    if expected_editorial_version is not None and editorial_version != expected_editorial_version:
+        raise VerificationError("article_editorial_version_mismatch")
     if is_noindex(*parser.robots, robots_header):
         raise VerificationError("article_indexability_invalid")
     graphs = [node for data in parser.scripts for node in (data.get("@graph", [data]) if isinstance(data, dict) else [])]
@@ -164,16 +204,16 @@ def article_metadata(html: str, url: str, *, robots_header: str = "", now: datet
     data = news[0]
     author = data.get("author")
     if (not isinstance(author, dict) or author.get("name") != "CONFENGE" or author.get("@type") != "Organization"
-            or data.get("url") != url or data.get("mainEntityOfPage") != url
-            or not re.fullmatch(r"https://pncp\.gov\.br/app/contratos/[0-9]{14}/[0-9]{4}/[1-9][0-9]*", data.get("citation", ""))):
+            or data.get("url") != url or data.get("mainEntityOfPage") != url):
         raise VerificationError("article_provenance_invalid")
+    contract_source, citations = official_citations(data.get("citation"), reported=editorial_version is not None)
     if not isinstance(data.get("headline"), str) or normalized(data["headline"]) != normalized(parser.headlines[0]):
         raise VerificationError("article_headline_not_visible")
     body = data.get("articleBody")
-    visible = {normalized(paragraph) for paragraph in parser.paragraphs}
+    visible = {normalized(paragraph) for paragraph in [*parser.paragraphs, *parser.section_headings]}
     if not isinstance(body, str) or not body.strip() or any(normalized(paragraph) not in visible for paragraph in body.split("\n\n")):
         raise VerificationError("article_body_not_visible")
-    if data["citation"] not in parser.links:
+    if any(source not in parser.links for source in citations):
         raise VerificationError("article_source_link_not_visible")
     try:
         published = instant(data["datePublished"])
@@ -184,7 +224,7 @@ def article_metadata(html: str, url: str, *, robots_header: str = "", now: datet
         raise VerificationError("article_publication_dates_invalid") from None
     if not visible_timestamp(parser, data["datePublished"]) or not visible_timestamp(parser, data["dateModified"]):
         raise VerificationError("article_dates_not_visible")
-    return {"url": url, "source": data["citation"], "published_at": data["datePublished"], "modified_at": data["dateModified"], "headline": data["headline"]}
+    return {"url": url, "source": contract_source, "sources": citations, "published_at": data["datePublished"], "modified_at": data["dateModified"], "headline": data["headline"], "editorial_version": editorial_version}
 
 
 def canonical_article_url(value: str, base: str) -> bool:
@@ -194,9 +234,11 @@ def canonical_article_url(value: str, base: str) -> bool:
                 and value.startswith(base + PREFIX))
 
 
-def verify(base: str, *, now: datetime | None = None) -> dict:
+def verify(base: str, *, now: datetime | None = None, expected_editorial_version: str | None = None) -> dict:
     if base != "https://confenge.com.br":
         raise VerificationError("unexpected_public_origin")
+    if expected_editorial_version is not None and not EDITORIAL_VERSION.fullmatch(expected_editorial_version):
+        raise VerificationError("invalid_expected_editorial_version")
     now = now or datetime.now(timezone.utc)
     robots, _, _ = fetch(base + "/robots.txt")
     if not re.search(r"(?im)^Sitemap:\s*" + re.escape(base + PREFIX + "sitemap.xml") + r"\s*$", robots):
@@ -262,7 +304,8 @@ def verify(base: str, *, now: datetime | None = None) -> dict:
         html, content_type, article_robots = fetch(articles[0])
         if content_type != "text/html":
             raise VerificationError("article_content_type_invalid")
-        checked = article_metadata(html, articles[0], robots_header=article_robots, now=now)
+        checked = article_metadata(html, articles[0], robots_header=article_robots, now=now,
+                                   expected_editorial_version=expected_editorial_version)
         result["verified_article"] = checked
         matching = next(row for row in archive.findall("s:url", NS) if row.findtext("s:loc", "", NS) == articles[0])
         if instant(matching.findtext("s:lastmod", "", NS)) != instant(checked["modified_at"]):
@@ -275,6 +318,8 @@ def verify(base: str, *, now: datetime | None = None) -> dict:
         if not feed_item or feed_item["date"] != instant(checked["published_at"]) or feed_item["title"] != checked["headline"]:
             raise VerificationError("feed_article_mismatch")
     else:
+        if expected_editorial_version is not None:
+            raise VerificationError("editorial_article_not_published")
         if not is_noindex(*index_page.robots) or news_urls or feed_metadata or any(canonical_article_url(urljoin(base, url), base) for url in index_page.links):
             raise VerificationError("empty_archive_must_be_noindex")
     return result
@@ -283,9 +328,10 @@ def verify(base: str, *, now: datetime | None = None) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", default="https://confenge.com.br")
+    parser.add_argument("--expected-editorial-version", help="Require the inspected article to use this editorial revision after reprocessing.")
     args = parser.parse_args()
     try:
-        print(json.dumps(verify(args.base), sort_keys=True))
+        print(json.dumps(verify(args.base, expected_editorial_version=args.expected_editorial_version), sort_keys=True))
         return 0
     except (VerificationError, OSError, ValueError, ET.ParseError, urllib.error.URLError) as exc:
         code = str(exc) if isinstance(exc, VerificationError) else "public_verification_failed"

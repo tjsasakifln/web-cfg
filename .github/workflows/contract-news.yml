@@ -31,7 +31,7 @@ jobs:
         github.event.workflow_run.head_repository.full_name == github.repository))
     environment: netcup-production
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     env:
       NEWS_RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       NEWS_ENABLED: ${{ vars.CONFENGE_NEWS_ENABLED == '0' && '0' || '1' }}

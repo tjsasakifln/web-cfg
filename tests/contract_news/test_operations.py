@@ -12,6 +12,7 @@ import os
 import tarfile
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -62,14 +63,17 @@ class OperationsTests(unittest.TestCase):
         self.tmp.cleanup()
 
     def make_bundle(self, *, content=b"# trusted producer\n", manifest_sha=PRODUCER_SHA,
-                    manifest_digest=None, extra=None):
+                    manifest_digest=None, extra=None, vendor_files=None):
+        files = {PRODUCER_PATH: content, **(vendor_files or {})}
         manifest = {
             "schema": "confenge.contract-news-producer/v1", "repository": "tjsasakifln/extra-cli",
             "fact_contract": "confenge.contract-news-facts/v1", "producer_commit": manifest_sha,
-            "files": {PRODUCER_PATH: manifest_digest or hashlib.sha256(content).hexdigest()},
+            "files": {name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()},
         }
+        if manifest_digest:
+            manifest["files"][PRODUCER_PATH] = manifest_digest
         with tarfile.open(self.bundle, "w:gz") as archive:
-            for name, raw in ((PRODUCER_PATH, content), ("producer-manifest.json", json.dumps(manifest).encode())):
+            for name, raw in (*files.items(), ("producer-manifest.json", json.dumps(manifest).encode())):
                 member = tarfile.TarInfo(name)
                 member.size = len(raw)
                 archive.addfile(member, io.BytesIO(raw))
@@ -111,6 +115,34 @@ class OperationsTests(unittest.TestCase):
         self.assertEqual((first / PRODUCER_PATH).read_bytes(), b"# trusted producer\n")
         self.assertEqual(first.stat().st_mode & 0o777, 0o700)
         self.assertEqual((first / PRODUCER_PATH).stat().st_mode & 0o777, 0o400)
+
+    def test_single_pinned_pypdf_wheel_is_verified_and_unpackaged_read_only(self):
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w") as archive:
+            archive.writestr("pypdf/__init__.py", "# isolated test fixture\n")
+        wheel = buffer.getvalue()
+        name = ops.PYPDF_WHEEL
+        self.make_bundle(vendor_files={name: wheel})
+        stage = self.unpack()
+        self.assertEqual((stage / name).read_bytes(), wheel)
+        self.assertEqual((stage / name).stat().st_mode & 0o777, 0o400)
+        manifest = json.loads((stage / "producer-manifest.json").read_text())
+        self.assertEqual(manifest["files"][name], hashlib.sha256(wheel).hexdigest())
+
+    def test_vendor_dependency_scope_magic_size_and_single_wheel_are_enforced(self):
+        name = ops.PYPDF_WHEEL
+        cases = (
+            ({name: b"not a wheel"}, "unsafe_producer_wheel"),
+            ({name: b"PK\x03\x04" + b"x" * (2 * 1024 * 1024)}, "unsafe_producer_archive"),
+            ({name.replace("pypdf-", "other-"): b"PK\x03\x04"}, "unsafe_producer_archive"),
+            ({name: b"PK\x03\x04", name.replace("6.21.4", "6.21.5"): b"PK\x03\x04"}, "unsafe_producer_archive"),
+        )
+        for files, error in cases:
+            with self.subTest(error=error, paths=list(files)):
+                self.make_bundle(vendor_files=files)
+                with self.assertRaisesRegex(ops.RunError, error):
+                    self.unpack()
+                self.assertEqual(list(self.destination.iterdir()), [])
 
     def test_mutated_archive_and_mutated_source_file_are_rejected(self):
         digest = self.bundle_digest()
@@ -283,6 +315,7 @@ class OperationsTests(unittest.TestCase):
         self.assertEqual(publisher["env"]["OPENAI_API_KEY"], KEY)
         self.assertEqual(publisher["env"]["CONFENGE_NEWS_RELEASE_SHA"], WEB_SHA)
         self.assertEqual(producer["timeout"], 480)
+        self.assertEqual(publisher["timeout"], 1200)
         self.assertIn("--radar-pointer", producer["command"])
         self.assertEqual(producer["command"][-2:], ["--producer-commit", PRODUCER_SHA])
         self.assertEqual(producer["cwd"].parent, self.args.state / "private/producer")

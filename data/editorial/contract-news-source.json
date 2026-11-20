@@ -1,7 +1,7 @@
 {
   "schema": "confenge.contract-news-source/v1",
   "repository": "tjsasakifln/extra-cli",
-  "producer_commit": "7d331a3cd48207b7db15e8c561c8f77e9cebf4a5",
+  "producer_commit": "818db4be4b2e2dbbf40efbf6c05244405e28f95f",
   "fact_contract": "confenge.contract-news-facts/v1",
-  "producer_pull_request": "https://github.com/tjsasakifln/extra-cli/pull/584"
+  "producer_pull_request": "https://github.com/tjsasakifln/extra-cli/pull/585"
 }
