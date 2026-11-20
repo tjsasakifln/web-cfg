@@ -11,10 +11,11 @@ const fixture = JSON.parse(execFileSync(process.env.PYTHON || 'python3', ['-c', 
 import json,sys
 sys.path.insert(0, 'tests/contract_news')
 from editorial_fixtures import enriched_fact, editorial_draft
-from scripts.contract_news.core import validate_draft, public_facts, EDITORIAL_VERSION
+from scripts.contract_news.core import validate_draft, public_facts, slug_for, EDITORIAL_VERSION
 fact = enriched_fact()
-draft = validate_draft(editorial_draft(fact), fact)
-print(json.dumps({**draft, 'id': fact['id'], 'slug': 'escola-exemplo-documentacao-instalacoes',
+candidate = editorial_draft(fact)
+draft = validate_draft(candidate, fact)
+print(json.dumps({**draft, 'id': fact['id'], 'slug': slug_for(fact, candidate['subject']),
     'category': 'obras', 'published_at': '2026-11-19T12:00:00Z',
     'modified_at': '2026-11-20T12:00:00Z', 'facts': public_facts(fact),
     'editorial_version': EDITORIAL_VERSION}, ensure_ascii=False))
