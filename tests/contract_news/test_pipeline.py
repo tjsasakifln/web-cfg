@@ -10,6 +10,7 @@ import os
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
+from itertools import permutations
 from pathlib import Path
 from unittest.mock import patch
 
@@ -160,8 +161,12 @@ class PipelineTests(unittest.TestCase):
     def test_rejected_correction_preserves_public_snapshot(self):
         self.run_pipeline()
         previous = (self.settings.output_dir / "current.json").read_bytes()
-        result = self.run_pipeline([fact(value="3000000.0000")], FakeClient(review={"supported": False, "issues": ["unsupported"]}))
+        client = FakeClient(review={"supported": False, "issues": ["unsupported"]})
+        result = self.run_pipeline([fact(value="3000000.0000")], client)
+        self.assertEqual(client.calls, [("generate", fact()["id"]), ("review", fact()["id"])])
+        self.assertEqual(result["calls"], 2)
         self.assertEqual(result["published"], 0)
+        self.assertIn("editorial_review_rejected", result["rejections"])
         self.assertEqual((self.settings.output_dir / "current.json").read_bytes(), previous)
 
     def test_numeric_fabrication_is_rejected_before_verifier(self):
@@ -224,6 +229,16 @@ class PipelineTests(unittest.TestCase):
         changed = draft()
         changed["subject"] = "Construção de hospital de referência"
         with self.assertRaisesRegex(NewsError, "subject_not_from_source"):
+            validate_draft(changed, fact())
+        client = FakeClient(changes={"subject": changed["subject"]})
+        result = self.run_pipeline(client=client)
+        self.assertEqual(client.calls, [("generate", fact()["id"])])
+        self.assertEqual(result["calls"], 1)
+        self.assertEqual(result["published"], 0)
+        self.assertIn("subject_not_from_source", result["rejections"])
+        self.assertFalse((self.settings.output_dir / "current.json").exists())
+        changed["subject"] = draft()["subject"] + "\n"
+        with self.assertRaisesRegex(NewsError, "unsafe_subject"):
             validate_draft(changed, fact())
         no_date = fact()
         no_date["starts_at"] = None
@@ -438,6 +453,48 @@ class ResponsesClientTests(unittest.TestCase):
             def read(self, limit):
                 return json.dumps(payload).encode()
         return Response()
+
+    def generation_schema(self):
+        response = self.response({"status": "completed", "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(draft())}]}]})
+        with patch("urllib.request.urlopen", return_value=response) as send:
+            ResponsesClient("secret-test-only").call("generate", fact())
+        send.assert_called_once()
+        return json.loads(send.call_args.args[0].data)["text"]["format"]["schema"]
+
+    def test_sent_schema_and_local_validator_enforce_subject_length_boundaries(self):
+        pattern = self.generation_schema()["properties"]["subject"]["pattern"]
+        source = fact()
+        source["object"] += " " + "á" * 121
+        for length in (9, 10, 120, 121):
+            with self.subTest(length=length):
+                candidate = draft()
+                candidate["subject"] = "á" * length
+                if 10 <= length <= 120:
+                    self.assertRegex(candidate["subject"], pattern)
+                    validate_draft(candidate, source)
+                else:
+                    self.assertNotRegex(candidate["subject"], pattern)
+                    with self.assertRaisesRegex(NewsError, "^invalid_subject$"):
+                        validate_draft(candidate, source)
+
+    def test_sent_schema_accepts_all_required_lead_token_orders(self):
+        pattern = self.generation_schema()["properties"]["lead"]["pattern"]
+        for order in permutations(("{{BUYER}}", "{{VALUE}}", "{{VALUE_KIND}}")):
+            with self.subTest(order=order):
+                candidate = draft()
+                candidate["lead"] = "O registro de contrato publicado no PNCP informa: " + ", ".join(order) + "."
+                self.assertRegex(candidate["lead"], pattern)
+                validate_draft(candidate, fact())
+
+    def test_sent_schema_and_local_validator_reject_each_missing_lead_token(self):
+        pattern = self.generation_schema()["properties"]["lead"]["pattern"]
+        for token in ("{{BUYER}}", "{{VALUE}}", "{{VALUE_KIND}}"):
+            with self.subTest(token=token):
+                candidate = draft()
+                candidate["lead"] = candidate["lead"].replace(token, "informado")
+                self.assertNotRegex(candidate["lead"], pattern)
+                with self.assertRaisesRegex(NewsError, "^lead_missing_bound_facts$"):
+                    validate_draft(candidate, fact())
 
     def test_request_uses_responses_strict_schema_no_storage_or_tools(self):
         response = self.response({"status": "completed", "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(draft())}]}]})
