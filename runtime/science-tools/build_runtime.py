@@ -41,7 +41,7 @@ def license_inventory(target):
     distributions=[]
     for metadata in sorted((target/'lib/python3.12/site-packages').glob('*.dist-info/METADATA')):
         info=Parser().parsestr(metadata.read_text())
-        notices=[p for p in metadata.parent.rglob('*') if p.is_file() and any(word in p.name.lower() for word in ('license','licence','copying','notice'))]
+        notices=[p for p in sorted(metadata.parent.rglob('*')) if p.is_file() and any(word in p.name.lower() for word in ('license','licence','copying','notice'))]
         if not notices:
             raise RuntimeError('License text missing for '+info['Name'])
         distributions.append({'name':info['Name'],'version':info['Version'],'project_urls':info.get_all('Project-URL',[]),'license':info.get('License-Expression') or info.get('License') or [v for v in info.get_all('Classifier',[]) if v.startswith('License ::')], 'notices':[{'path':str(p.relative_to(target)),'sha256':digest(p)} for p in notices]})
