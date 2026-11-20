@@ -9,6 +9,9 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # --- File extension / legacy HTML ---
 /privacidade.html  /privacidade/  301!
 
+# News entry point: the public contract-news index owns the canonical URL.
+/noticias  /noticias/contratos-publicos/  301!
+
 # The installable Modela Pro package was retired. The browser tool keeps its URL.
 /avaliacao-imoveis-urbanos/inferencia/modela-pro-completo.zip /404.html 410
 
