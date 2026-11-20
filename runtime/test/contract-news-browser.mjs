@@ -158,7 +158,16 @@ async function assertServiceClick(page, mode) {
   assert.equal(event.destination_service_id, 'acompanhamento-contratos-obras');
   assert.equal(event.route_family, 'noticias-contratos-publicos');
   assert.ok(event.event_id);
-  report.scenarios.push({ name: mode + ' news-to-service click', passed: true, events: 1, asset_id: event.source_asset_id });
+  // This scenario intentionally prevents link navigation to inspect the
+  // handler. Stay on the document until the real 30-second batch transport
+  // delivers this exact activation, including when a prior POST is pending.
+  const delivered = () => collectedEvents.filter(item => item.event === 'content_to_service' && item.props?.event_id === event.event_id);
+  const deadline = Date.now() + 35_000;
+  while (!delivered().length && Date.now() < deadline) {
+    await new Promise(done => setTimeout(done, 25));
+  }
+  assert.equal(delivered().length, 1, mode + ': native collector delivers this activation exactly once');
+  report.scenarios.push({ name: mode + ' news-to-service click', passed: true, events: 1, collector_events: 1, asset_id: event.source_asset_id });
 }
 
 try {
@@ -258,12 +267,6 @@ try {
   assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
   await visitBrandImages(page);
   await assertLayout(page, 'mobile index');
-  // pagehide sends the native keepalive/beacon transport asynchronously.
-  // The destination can finish loading before the old page's POST is read.
-  const transportDeadline = Date.now() + 5_000;
-  while (collectedEvents.filter(event => event.event === 'content_to_service').length < 2 && Date.now() < transportDeadline) {
-    await new Promise(done => setTimeout(done, 25));
-  }
   const transitions = collectedEvents.filter(event => event.event === 'content_to_service');
   assert.equal(transitions.length, 2, 'the existing first-party transport sends both physical activations once');
   assert.equal(new Set(transitions.map(event => event.props.event_id)).size, 2);
