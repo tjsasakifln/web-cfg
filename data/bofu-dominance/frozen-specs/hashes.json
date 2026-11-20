@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "65831022bc7bb58ef07e50bb2b9558c9f1b0507a",
-  "recaptured_at": "2026-11-19T21:08:36Z",
-  "recapture_reason": "PR #850, continuação autorizada por Tiago em 19/11/2026. Integração de main 7998271e96bca7aa58685ca02b171f5a65f856ae após a PR #849, sem perder o conteúdo de notícias. O conflito ficou restrito ao manifesto; todos os registros dos dois históricos e a evidência atual de main foram preservados integralmente. O commit de dois pais 65831022bc7bb58ef07e50bb2b9558c9f1b0507a reúne o script.js da classificação de uso, o robots.txt de notícias e o sitemap.xml com as datas editoriais de main e a data da calculadora BDI. Frente à main integrada, somente script.js e sitemap.xml diferem entre os 17 arquivos protegidos; os seis pilares são idênticos. Hashes extraídos desse commit alcançável e comparados à árvore revisada. Dois agentes conferiram a integração; bundle e projeção CSS passaram. A CI deve validar a árvore integrada, inclusive a jornada Chrome; nenhuma revisão humana ou resultado ainda não observado é alegado.",
+  "baseline_commit": "fc9a5725fc77367216b7e52e19d3f3b96a537023",
+  "recaptured_at": "2026-11-20T01:49:05Z",
+  "recapture_reason": "PR #852, execução do pedido de Tiago de 19/11/2026 para revisar, implementar e validar SEO e conversão. Recaptura dos bytes revisados do commit alcançável fc9a5725fc77367216b7e52e19d3f3b96a537023, tree 91dbece4a763d27459b7d83abaf3eb327033d007, comparado à main integrada 599870348a00ed09d13c123d00c45ef9b45f1f0c após a PR #851. Entre os 17 caminhos protegidos, somente script.js, js/modules/analytics.js e sitemap.xml mudaram. O cliente e o bundle acrescentam exclusivamente os prefixos /cad/ e /bim/ à família tool; removidas essas entradas, ambos são byte-idênticos à main. O sitemap altera somente as oito datas de revisão das ferramentas de 2026-11-11 para 2026-11-19. Os 14 caminhos protegidos restantes, incluindo os seis pilares, e todos os controles permanecem intactos. Produtor existente step_frozen/materialize executado em snapshot Git isolado, com frozen_recapture_provenance preservando integralmente os 58 registros históricos e acrescentando o checkpoint substituído. Revisão por agentes; não há nova aprovação técnica ou revisão humana alegada. A CI completa e a publicação permanecem pendentes.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
@@ -20,19 +20,19 @@
     "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
     "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
     "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
-    "script.js": "3e3feca9f718e0b39de501ae46fba7abcb754181e4fab25d4924a4cf3cf47d2e",
+    "script.js": "c7fcd395e722d1df9fc4f3c1e60dbae4744bbf0ac2d2b20db812339fd6da741f",
     "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
     "robots.txt": "52a0487f466e9801b7c810319e82c02a57c1770258b8cd39a735b085de1073c9",
-    "sitemap.xml": "a7a0eb1548d51aa0f4d2ab81782bfcc2c5f5bf3ddcd74dd0eda218fb07b2a073",
+    "sitemap.xml": "a15e83a5e748016b28618775246c13f0dc8f27075bea8e8c982a426f36fab988",
     "sitemap.txt": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
     "sitemap-index.xml": "afa0f1f1c75f935c13ccb961e0037ad2c39464d1cfdd9939c393cdf880ec036a",
     "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "79e62426161f09b37c731f2bf7acd970dd0d2cf65057d17c9ac20791cf5ef820"
+    "js/modules/analytics.js": "21fa90a44acb54a2ed5bd73a0353e4d23a242e54eca04bc99184272e2078a9f8"
   },
-  "previous_baseline_commit": "1f894b4b9735ef9691f2162354cc0fc870705d15",
+  "previous_baseline_commit": "65831022bc7bb58ef07e50bb2b9558c9f1b0507a",
   "recapture_history": [
     {
       "baseline_commit": "906fedbd6ae3878e8e08927ac32e17fae142db28",
@@ -2166,23 +2166,148 @@
         "reviewed_sitemap_paths": [],
         "human_review_claimed": false
       }
+    },
+    {
+      "baseline_commit": "65831022bc7bb58ef07e50bb2b9558c9f1b0507a",
+      "recaptured_at": "2026-11-19T21:08:36Z",
+      "recapture_reason": "PR #850, continuação autorizada por Tiago em 19/11/2026. Integração de main 7998271e96bca7aa58685ca02b171f5a65f856ae após a PR #849, sem perder o conteúdo de notícias. O conflito ficou restrito ao manifesto; todos os registros dos dois históricos e a evidência atual de main foram preservados integralmente. O commit de dois pais 65831022bc7bb58ef07e50bb2b9558c9f1b0507a reúne o script.js da classificação de uso, o robots.txt de notícias e o sitemap.xml com as datas editoriais de main e a data da calculadora BDI. Frente à main integrada, somente script.js e sitemap.xml diferem entre os 17 arquivos protegidos; os seis pilares são idênticos. Hashes extraídos desse commit alcançável e comparados à árvore revisada. Dois agentes conferiram a integração; bundle e projeção CSS passaram. A CI deve validar a árvore integrada, inclusive a jornada Chrome; nenhuma revisão humana ou resultado ainda não observado é alegado.",
+      "html_mutation": false,
+      "pillars": {
+        "aditivos-obras-publicas": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
+        "reequilibrio-obras-publicas": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
+        "diagnostico-pre-licitacao": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19"
+      },
+      "forbidden": {
+        "aditivos-obras-publicas/index.html": "9757bbba7bbe1908b2283c47393f29e5bfbf4ffff8fc9ee097e2f83c4cc492eb",
+        "medicoes-glosas-obras-publicas/index.html": "e8705fb9ca2611b9cc3d796793150be1168f3b49e87f1fb6d7b63d45a171cce8",
+        "reequilibrio-obras-publicas/index.html": "df7a531d53163ef6c36b09783c81533fe5fde9c80baa9f9aa79dc8b6084bccf4",
+        "auditoria-orcamento-licitacao/index.html": "6d1b4df4b171d703e48ebed1b6c5911d25070933f211e47034b651746c151c5a",
+        "diagnostico-b2g-360/index.html": "7979dda3cb251ed846c1408dc5e8666b56d4692d2136ea9146d58ef18b084494",
+        "diagnostico-pre-licitacao/index.html": "dca7f97bd3187d6ce7f725d2aa393308b8d255bedb7b01f9b3c2f21f74f80f19",
+        "script.js": "3e3feca9f718e0b39de501ae46fba7abcb754181e4fab25d4924a4cf3cf47d2e",
+        "styles.css": "9bcea8c595debdcfc48a58296f534a9c971630137a5e172c1a1b57b9f6b7c591",
+        "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
+        "styles-tools.css": "d27993b3cc686fbc80d904047e9e977886bc0ef1e7be14dad2b6c2ae928645cd",
+        "robots.txt": "52a0487f466e9801b7c810319e82c02a57c1770258b8cd39a735b085de1073c9",
+        "sitemap.xml": "a7a0eb1548d51aa0f4d2ab81782bfcc2c5f5bf3ddcd74dd0eda218fb07b2a073",
+        "sitemap.txt": "1b12763148ea1a611784fc26d58b941fc388a607542f0327969942b71ff98612",
+        "sitemap-index.xml": "afa0f1f1c75f935c13ccb961e0037ad2c39464d1cfdd9939c393cdf880ec036a",
+        "_redirects": "dd28f5ddf379dad27bdde1f572c283a7b5b6fc19d9d99979d7cac2aa37e6c3cd",
+        "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
+        "js/modules/analytics.js": "79e62426161f09b37c731f2bf7acd970dd0d2cf65057d17c9ac20791cf5ef820"
+      },
+      "previous_baseline_commit": "1f894b4b9735ef9691f2162354cc0fc870705d15",
+      "recapture_evidence": {
+        "source_head_sha": "65831022bc7bb58ef07e50bb2b9558c9f1b0507a",
+        "source_tree_sha": "ca1fa526b0e77b406d0054f7e77599e5679ee373",
+        "compared_from": "7998271e96bca7aa58685ca02b171f5a65f856ae",
+        "integrated_main_sha": "7998271e96bca7aa58685ca02b171f5a65f856ae",
+        "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/850",
+        "changed_protected_paths": [
+          "script.js",
+          "sitemap.xml"
+        ],
+        "reviewed_sitemap_paths": [
+          "sitemap.xml"
+        ],
+        "protected_paths_verified": 17,
+        "unchanged_protected_paths": 15,
+        "human_review_claimed": false
+      }
     }
   ],
   "recapture_evidence": {
-    "source_head_sha": "65831022bc7bb58ef07e50bb2b9558c9f1b0507a",
-    "source_tree_sha": "ca1fa526b0e77b406d0054f7e77599e5679ee373",
-    "compared_from": "7998271e96bca7aa58685ca02b171f5a65f856ae",
-    "integrated_main_sha": "7998271e96bca7aa58685ca02b171f5a65f856ae",
-    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/850",
+    "source_head_sha": "fc9a5725fc77367216b7e52e19d3f3b96a537023",
+    "source_tree_sha": "91dbece4a763d27459b7d83abaf3eb327033d007",
+    "compared_from": "599870348a00ed09d13c123d00c45ef9b45f1f0c",
+    "integrated_main_sha": "599870348a00ed09d13c123d00c45ef9b45f1f0c",
+    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/852",
+    "producer": "docs/campaigns/design-institucional/expansao/tools/recapture_chain.py",
+    "producer_steps": [
+      "committed_snapshot",
+      "step_frozen",
+      "materialize",
+      "frozen_recapture_provenance"
+    ],
+    "producer_output_scope": "isolated committed snapshot; only hashes.json copied to the working tree",
     "changed_protected_paths": [
       "script.js",
-      "sitemap.xml"
+      "sitemap.xml",
+      "js/modules/analytics.js"
     ],
+    "changed_protected_hashes": {
+      "script.js": {
+        "previous": "3e3feca9f718e0b39de501ae46fba7abcb754181e4fab25d4924a4cf3cf47d2e",
+        "current": "c7fcd395e722d1df9fc4f3c1e60dbae4744bbf0ac2d2b20db812339fd6da741f"
+      },
+      "sitemap.xml": {
+        "previous": "a7a0eb1548d51aa0f4d2ab81782bfcc2c5f5bf3ddcd74dd0eda218fb07b2a073",
+        "current": "a15e83a5e748016b28618775246c13f0dc8f27075bea8e8c982a426f36fab988"
+      },
+      "js/modules/analytics.js": {
+        "previous": "79e62426161f09b37c731f2bf7acd970dd0d2cf65057d17c9ac20791cf5ef820",
+        "current": "21fa90a44acb54a2ed5bd73a0353e4d23a242e54eca04bc99184272e2078a9f8"
+      }
+    },
     "reviewed_sitemap_paths": [
       "sitemap.xml"
     ],
+    "sitemap_lastmod_changes": [
+      {
+        "path": "/ferramentas/conforto-termico/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/energia-solar-fotovoltaica/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/geotecnia-cpt-estacas/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/memorial-de-calculo/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/modelador-parametrico-3d/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/propriedades-de-secoes/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/secao-de-concreto-armado/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      },
+      {
+        "path": "/ferramentas/trelicas-e-porticos/",
+        "before": "2026-11-11",
+        "after": "2026-11-19"
+      }
+    ],
+    "analytics_added_source_prefixes": {
+      "/cad/": "tool",
+      "/bim/": "tool"
+    },
+    "bundle_only_added_bytes": 30,
+    "bundle_and_analytics_identical_after_removing_added_prefixes": true,
     "protected_paths_verified": 17,
-    "unchanged_protected_paths": 15,
+    "unchanged_protected_paths": 14,
+    "unchanged_pillars": 6,
+    "retained_history_records": 58,
+    "appended_previous_checkpoint": true,
     "human_review_claimed": false
   }
 }

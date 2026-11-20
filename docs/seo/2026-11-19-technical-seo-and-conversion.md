@@ -143,3 +143,43 @@ preserva a recuperação automática da release anterior.
 - [Core Web Vitals e medidas de campo](https://web.dev/articles/vitals)
 - [Links rastreáveis](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)
 - [Conteúdo útil, autoria e finalidade](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
+
+## Recaptura do contrato de integridade em 19/11/2026
+
+A CI da PR #852 detectou que o manifesto BOFU ainda atestava o bundle anterior,
+em `runtime/test/contract-news-analytics.test.mjs`. A recaptura registra os bytes
+das alterações já autorizadas neste pedido, mantendo o teste e seus controles.
+Não representa nova aprovação técnica ou revisão humana.
+
+Fonte recapturada: `fc9a5725fc77367216b7e52e19d3f3b96a537023`, árvore
+`91dbece4a763d27459b7d83abaf3eb327033d007`. A comparação usa a main integrada
+`599870348a00ed09d13c123d00c45ef9b45f1f0c`, após a PR #851. O produtor existente
+`docs/campaigns/design-institucional/expansao/tools/recapture_chain.py` extraiu o
+commit com `committed_snapshot`; `step_frozen`, `materialize` e
+`frozen_recapture_provenance` foram executados nessa cópia isolada. Somente
+`data/bofu-dominance/frozen-specs/hashes.json` foi transferido ao checkout.
+Os demais artefatos produzidos na cópia não substituíram seus registros atuais.
+
+Foram conferidos os 17 caminhos protegidos. O delta é restrito a três:
+
+- `js/modules/analytics.js`: duas entradas, `/cad/` e `/bim/`, classificadas como
+  ferramentas. Removidas apenas essas entradas, os bytes coincidem com a base.
+- `script.js`: os mesmos dois prefixos acrescentam 30 bytes ao bundle minificado.
+  Sua remoção reproduz integralmente o bundle da base.
+- `sitemap.xml`: somente oito `lastmod` passam de `2026-11-11` a `2026-11-19`,
+  correspondendo às oito ferramentas revisadas nesta PR. URLs, ordem e demais
+  bytes permanecem iguais.
+
+Os outros 14 caminhos protegidos, incluindo os seis pilares comerciais, são
+idênticos à base. O manifesto conserva integralmente as 58 entradas históricas e
+acrescenta o checkpoint substituído, totalizando 59. O baseline anterior,
+`65831022bc7bb58ef07e50bb2b9558c9f1b0507a`, permanece nesse histórico com seus
+hashes e evidências. O novo registro lista cada caminho alterado, hashes antigos
+e novos, oito datas e a fonte Git alcançável.
+
+Validação local da recaptura: `npm run test:bofu-dominance`, 123 testes aprovados;
+`node --test runtime/test/contract-news-analytics.test.mjs`, quatro testes
+aprovados. Esses resultados cobrem o contrato que falhou, a preservação de
+histórico, a integridade dos arquivos protegidos e a integração dos eventos de
+notícias. A conclusão global da CI, a inspeção das capturas das oito ferramentas
+e a aceitação pública da release continuam pendentes nesta etapa.
