@@ -258,6 +258,12 @@ try {
   assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
   await visitBrandImages(page);
   await assertLayout(page, 'mobile index');
+  // pagehide sends the native keepalive/beacon transport asynchronously.
+  // The destination can finish loading before the old page's POST is read.
+  const transportDeadline = Date.now() + 5_000;
+  while (collectedEvents.filter(event => event.event === 'content_to_service').length < 2 && Date.now() < transportDeadline) {
+    await new Promise(done => setTimeout(done, 25));
+  }
   const transitions = collectedEvents.filter(event => event.event === 'content_to_service');
   assert.equal(transitions.length, 2, 'the existing first-party transport sends both physical activations once');
   assert.equal(new Set(transitions.map(event => event.props.event_id)).size, 2);
