@@ -60,7 +60,8 @@ export function createContractNews({ directory = process.env.CONFENGE_NEWS_DIR |
       const bytes = Buffer.from(body);
       res.setHeader('Content-Type', type);
       res.setHeader('Content-Security-Policy', contentPolicy(jsonld));
-      res.setHeader('Cache-Control', status === 200 ? 'public, max-age=60, must-revalidate, no-transform' : 'no-store');
+      // Error pages share the attested HTML shell and must also survive the edge unchanged.
+      res.setHeader('Cache-Control', status === 200 ? 'public, max-age=60, must-revalidate, no-transform' : 'no-store, no-transform');
       if (status !== 200) res.setHeader('X-Robots-Tag', 'noindex, nofollow');
       if (status === 503) res.setHeader('Retry-After', '300');
       const etag = '"' + createHash('sha256').update(bytes).digest('hex') + '"';

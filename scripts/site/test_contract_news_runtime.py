@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 import select
 import shutil
 import subprocess
@@ -207,6 +208,63 @@ def test_only_exact_code_bound_news_documents_are_classified_as_runtime(tmp_path
         fixture["inventory"].write_text(json.dumps(payload))
         parsed, errors = acceptance.load_served_inventory(fixture["inventory"])
         assert errors and parsed["contract_news"] is None
+
+
+@pytest.mark.parametrize("rel", news.DOCUMENTS)
+def test_bootstrap_attestation_without_no_transform_is_rejected(tmp_path, rel):
+    with _live_fixture(tmp_path, "bootstrap") as (fixture, proof, payload, _, _):
+        assert all(row["headers"]["cache-control"] == "no-store, no-transform"
+                   for row in proof["documents"].values())
+        _, original_errors = acceptance.load_served_inventory(fixture["inventory"])
+        assert not original_errors
+        payload["contract_news"]["documents"][rel]["headers"]["cache-control"] = "no-store"
+        fixture["inventory"].write_text(json.dumps(payload))
+        parsed, errors = acceptance.load_served_inventory(fixture["inventory"])
+        assert f"contract_news_bootstrap_response_invalid:{rel}" in errors
+        assert parsed["contract_news"] is None
+
+
+def test_bootstrap_email_obfuscation_still_fails_the_exact_public_digest(tmp_path):
+    with _live_fixture(tmp_path, "bootstrap") as (fixture, proof, _, fetch, _):
+        clock = _FakeTime()
+        documents = {news.ORIGIN + row["request_path"] for row in proof["documents"].values()}
+        calls = []
+
+        def transformed(url, timeout):
+            entry, body = fetch(url, timeout)
+            if url in documents:
+                calls.append(url)
+                assert entry["status"] == 503
+                assert entry["headers"]["cache-control"] == "no-store, no-transform"
+                original = body
+                mail = re.search(rb'<a href="mailto:([^\"]+)">([^<]+)</a>', body)
+                assert mail is not None, "the real bootstrap shell must include its public email link"
+                key = 0x42
+                encode = lambda value: (bytes([key]) + bytes(char ^ key for char in value)).hex().encode()
+                replacement = (b'<a href="/cdn-cgi/l/email-protection#' + encode(mail[1])
+                               + b'"><span class="__cf_email__" data-cfemail="' + encode(mail[2])
+                               + b'">[email&#160;protected]</span></a>')
+                body = body.replace(mail[0], replacement, 1)
+                body = body.replace(b'</body>', b'<script data-cfasync="false" '
+                                    b'src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">'
+                                    b'</script></body>', 1)
+                assert body != original
+                entry["sha256"] = hashlib.sha256(body).hexdigest()
+                entry["headers"]["cf-cache-status"] = "BYPASS" if url == news.ORIGIN + news.PREFIX else "DYNAMIC"
+            return entry, body
+
+        report, _ = news.verify_public(proof, site=fixture["site"], base=news.ORIGIN,
+                                      fetcher=transformed, timeout=3, deadline_at=30,
+                                      clock=clock.clock, sleeper=clock.sleep)
+        assert not report["ok"] and not report["infrastructure_published"]
+        assert report["state"] == "bootstrap" and not report["archive_initialized"]
+        assert len(calls) == len(documents) == 4 and set(calls) == documents
+        assert clock.sleeps == []
+        for row in report["responses"]:
+            assert row["status"] == 503
+            assert row["errors"] == ["snapshot_render_digest_mismatch"]
+            assert len(row["attempts"]) == 1
+            assert row["attempts"][0]["decision"] == "mismatch_no_retry"
 
 
 def test_other_static_html_still_requires_its_exact_public_bytes(tmp_path):
