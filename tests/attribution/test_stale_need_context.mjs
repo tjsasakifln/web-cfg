@@ -148,6 +148,50 @@ const firstTouch = JSON.stringify({
   utm_campaign: "sst",
 });
 
+// A new project request must replace a prior dispute/SST need while keeping
+// first-touch acquisition. Exercise each shipped tool CTA through the contact
+// page and its real shared-form destination, not only the analytics event.
+{
+  const triageHtml = fs.readFileSync(path.join(root, "triagem-tecnica/index.html"), "utf8");
+  const formLink = attrsOf(triageHtml.match(/<a\b(?=[^>]*data-cta-id="contact-shared-form")[^>]*>/i)?.[0] || "");
+  assert.equal(formLink.href, "/#contato");
+  for (const slug of [
+    "memorial-de-calculo", "propriedades-de-secoes", "secao-de-concreto-armado",
+    "trelicas-e-porticos", "geotecnia-cpt-estacas", "conforto-termico",
+    "energia-solar-fotovoltaica", "modelador-parametrico-3d",
+  ]) {
+    const toolPath = `/ferramentas/${slug}/`;
+    const html = fs.readFileSync(path.join(root, toolPath, "index.html"), "utf8");
+    const tag = html.match(new RegExp(`<a\\b(?=[^>]*data-cta-id="tool-contact-${slug}")[^>]*>`, "i"))?.[0] || "";
+    const attrs = attrsOf(tag);
+    assert.equal(attrs.href, "/triagem-tecnica/", `${slug}: contact route`);
+    assert.ok(attrs["data-tema"], `${slug}: contextual request`);
+    const tool = boot({
+      pathname: toolPath, hasForm: false,
+      stored: { confenge_pseo_attribution: firstTouch },
+    });
+    tool.click(clickDataset(attrs), attrs.href);
+    const triage = boot({
+      pathname: "/triagem-tecnica/", hasForm: false,
+      referrer: `https://confenge.com.br${toolPath}`, stored: tool.store,
+    });
+    triage.click(clickDataset(formLink), formLink.href);
+    const home = boot({
+      pathname: "/", stageValue: "", stored: triage.store,
+      referrer: "https://confenge.com.br/triagem-tecnica/",
+    });
+    assert.equal(home.fields.tema.value, attrs["data-tema"], slug);
+    assert.equal(home.fields.jornada.value, "projeto", `${slug}: previous need must be replaced`);
+    assert.equal(home.stage.value, "projeto, revisão ou compatibilização", slug);
+    assert.equal(home.message.value, automaticMessage(attrs["data-tema"]), slug);
+    assert.equal(home.fields.origem.value, "/servicos/", `${slug}: first-touch origin`);
+    assert.equal(home.fields.landing_page.value, "/servicos/", `${slug}: first-touch landing`);
+    assert.equal(home.fields.utm_source.value, "gsc", slug);
+    assert.equal(home.fields.utm_campaign.value, "sst", `${slug}: acquisition campaign is not current need`);
+    assert.equal(home.fields.source_origin_asset_id.value, slug, `${slug}: tool provenance`);
+  }
+}
+
 {
   // Exercise the generated clean service CTA and its data-* listener across
   // Google -> article -> service -> home. Current service attribution must

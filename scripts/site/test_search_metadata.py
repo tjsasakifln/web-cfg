@@ -41,7 +41,7 @@ def graphs(text):
 
 def test_all_approved_sources_are_stable_and_assets_exist():
     result = sm.synchronize(sm.ROOT)
-    assert result == {"ok": True, "checked": 69, "changed": [], "errors": []}
+    assert result == {"ok": True, "checked": 75, "audited_indexable": 164, "changed": [], "errors": []}
     for route in sm.policy()["routes"]:
         source = (sm.ROOT / route.strip("/") / "index.html").read_text(encoding="utf-8")
         assert sm.normalize_metadata_html(source, route) == source, route
@@ -184,7 +184,7 @@ def test_release_image_version_is_verified_against_the_actual_bytes(tmp_path, mo
     versioned = normalized.replace(base_url + '"', base_url + "?v=" + digest + '"')
     path.write_text(versioned)
     assert sm.normalize_metadata_html(versioned, "/probe/", config_cache) == versioned
-    assert sm.synchronize(tmp_path) == {"ok": True, "checked": 1, "changed": [], "errors": []}
+    assert sm.synchronize(tmp_path) == {"ok": True, "checked": 1, "audited_indexable": 1, "changed": [], "errors": []}
     image.write_bytes(b"unexpected-bytes")
     result = sm.synchronize(tmp_path)
     assert result["errors"] == ["social_asset_digest_mismatch:/probe/:/assets/og-confenge.jpg"]
@@ -241,3 +241,136 @@ def test_collection_schema_matches_the_visible_case_directory():
     entries = collection["mainEntity"]["itemListElement"]
     assert collection["mainEntity"]["numberOfItems"] == len(entries) == len(directory.items) == 12
     assert [(e["url"], e["name"]) for e in entries] == [(sm.SITE + url, name) for url, name in directory.items]
+
+
+@pytest.mark.parametrize(("mutation", "problem"), [
+    (lambda s: s.replace("<title>", "<title>Another title</title><title>"), "title_count:2"),
+    (lambda s: s.replace("Project &amp; scope | CONFENGE", " &#160; "), "title_empty"),
+    (lambda s: s.replace('<meta name="description" content="Drawings &amp; specifications."/>', ""), "description_count:0"),
+    (lambda s: s.replace("Drawings &amp; specifications.", "&#160;"), "description_empty"),
+    (lambda s: s.replace('</head>', '<meta content="second" name="description"></head>'), "description_count:2"),
+    (lambda s: s.replace('</head>', '<link href="https://confenge.com.br/probe/" rel="canonical"></head>'), "canonical_count:2"),
+    (lambda s: s.replace('href="https://confenge.com.br/probe/"', 'href="http://confenge.com.br/probe/"'), "canonical_mismatch"),
+    (lambda s: s.replace('href="https://confenge.com.br/probe/"', 'href="https://example.com/probe/"'), "canonical_mismatch"),
+    (lambda s: s.replace('href="https://confenge.com.br/probe/"', 'href="https://confenge.com.br/probe/?utm_source=test"'), "canonical_mismatch"),
+    (lambda s: s.replace('href="https://confenge.com.br/probe/"', 'href="https://confenge.com.br/probe/#title"'), "canonical_mismatch"),
+    (lambda s: s.replace('href="https://confenge.com.br/probe/"', 'href="/probe/"'), "canonical_mismatch"),
+    (lambda s: s.replace('<meta name="description"', '<meta name="description" content="first"'), "duplicate_metadata_attribute:description:content"),
+    (lambda s: s.replace('<link rel="canonical"', '<link rel="canonical" href="https://example.com/probe/"'), "duplicate_canonical_attribute:href"),
+    (lambda s: s.replace('</head>', '<meta name="robots" content="index,follow"></head>'), "duplicate_metadata:robots"),
+])
+def test_indexable_gate_rejects_ambiguous_or_empty_head_metadata(mutation, problem):
+    result = sm.inspect_search_head(mutation(document()), "/probe/")
+    assert problem in result["problems"]
+
+
+@pytest.mark.parametrize("wrapper", [
+    lambda value: f"<!-- {value} -->",
+    lambda value: f"<script>const example = '{value}';</script>",
+    lambda value: f"<template>{value}</template>",
+    lambda value: f"<title>{value}</title>",
+    lambda value: f"<noscript>{value}</noscript>",
+])
+def test_quoted_noindex_cannot_exempt_a_public_page(wrapper):
+    fake = wrapper('<meta name="robots" content="noindex">')
+    text = document().replace('</head>', fake + '</head>')
+    assert not sm.inspect_search_head(text, "/probe/")["noindex"]
+
+
+@pytest.mark.parametrize("head_prefix", ["<div>Body content</div>", "Body text", "&#160;"])
+def test_implicit_head_end_cannot_exempt_page_with_later_noindex(head_prefix):
+    # An HTML tree builder moves these nodes and all later source metadata to
+    # body. Neither its fake noindex nor its source title may pass this gate.
+    text = document(robots="noindex,follow").replace('<head>', '<head>' + head_prefix)
+    result = sm.inspect_search_head(text, "/probe/")
+    assert not result["noindex"]
+    assert {"title_count:0", "description_count:0", "canonical_count:0"} <= set(result["problems"])
+    late_head = document(robots="noindex,follow").replace('<head>', head_prefix + '<head>')
+    late_result = sm.inspect_search_head(late_head, "/probe/")
+    assert not late_result["noindex"]
+    assert {"title_count:0", "description_count:0", "canonical_count:0"} <= set(late_result["problems"])
+
+
+def test_head_script_style_and_noscript_raw_text_do_not_end_head():
+    text = document().replace('<head>', '<head><style>body { color: black; }</style><script>const text = "<div>body</div>";</script><noscript><meta name="robots" content="noindex"><div>fallback</div></noscript>')
+    result = sm.inspect_search_head(text, "/probe/")
+    assert not result["noindex"] and not result["problems"]
+
+
+def test_missing_head_metadata_cannot_be_supplied_by_comments_script_or_body():
+    text = document()
+    description = '<meta name="description" content="Drawings &amp; specifications."/>'
+    text = text.replace(description, '<!-- ' + description + ' -->')
+    text = text.replace('<body>', '<body>' + description)
+    text = text.replace('</head>', '<script>const sample = ' + json.dumps(description) + ';</script></head>')
+    result = sm.inspect_search_head(text, "/probe/")
+    assert "description_count:0" in result["problems"]
+    assert not sm.inspect_search_head(document().replace('<body>', '<body><meta name="robots" content="noindex">'), "/probe/")["noindex"]
+
+
+def test_ambiguous_robots_attribute_and_second_head_cannot_hide_metadata_errors():
+    duplicate = document().replace('content="index,follow"', 'content="index,follow" content="noindex"')
+    assert not sm.inspect_search_head(duplicate, "/probe/")["noindex"]
+    duplicate_head = document().replace('</head>', '</head><head><meta name="robots" content="noindex"></head>')
+    result = sm.inspect_search_head(duplicate_head, "/probe/")
+    assert "head_missing_or_duplicate" in result["problems"] and not result["noindex"]
+
+
+def test_head_reader_handles_attribute_order_case_entities_and_long_useful_snippets():
+    text = document().replace('<head>', '<HEAD>').replace('</head>', '</HEAD>')
+    text = text.replace('<meta name="description" content="Drawings &amp; specifications."/>', '<META CONTENT="Drawings &amp; specifications." NAME="Description">')
+    result = sm.inspect_search_head(text, "/probe/")
+    assert not result["problems"]
+    assert result["title"] == "Project & scope | CONFENGE"
+    assert result["description"] == "Drawings & specifications."
+    text = text.replace('Project &amp; scope | CONFENGE', 'Descriptive title ' * 8).replace('Drawings &amp; specifications.', 'Useful description ' * 20)
+    assert not sm.inspect_search_head(text, "/probe/")["problems"]
+
+
+def _write_page(root, route, text):
+    target = root / route.strip("/") / "index.html"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(text.replace('https://confenge.com.br/probe/', sm.SITE + route))
+    return target
+
+
+def test_all_indexable_routes_are_audited_without_adding_them_to_projection_policy(tmp_path):
+    _write_page(tmp_path, "/probe/", document())
+    later = _write_page(tmp_path, "/new-family/", document().replace('Project &amp; scope | CONFENGE', 'A distinct title').replace('Drawings &amp; specifications.', 'Another description.'))
+    assert sm.audit_indexable_metadata(tmp_path)["ok"]
+    later.write_text(later.read_text().replace('name="description"', 'name="example"'))
+    result = sm.audit_indexable_metadata(tmp_path)
+    assert not result["ok"] and result["checked"] == 2
+    assert result["errors"] == ["search_head:/new-family/:description_count:0"]
+
+
+def test_duplicate_snippets_decode_entities_and_collapse_whitespace(tmp_path):
+    _write_page(tmp_path, "/probe/", document())
+    _write_page(tmp_path, "/duplicate/", document().replace('Project &amp; scope | CONFENGE', 'project &#38;   scope | confenge').replace('Drawings &amp; specifications.', 'Drawings &#38;   specifications.'))
+    result = sm.audit_indexable_metadata(tmp_path)
+    assert sorted(result["errors"]) == ["duplicate_description:/duplicate/,/probe/", "duplicate_title:/duplicate/,/probe/"]
+
+
+def test_artifact_census_does_not_hide_new_html_in_internal_named_directories(tmp_path):
+    _write_page(tmp_path, "/probe/", document())
+    _write_page(tmp_path, "/docs/fixture/", "<html><head></head><body>Unexpected public fixture</body></html>")
+    assert sm.audit_indexable_metadata(tmp_path)["ok"]
+    result = sm.audit_indexable_metadata(tmp_path, artifact=True)
+    assert not result["ok"] and result["checked"] == 2
+    assert any("/docs/fixture/:description_count:0" in problem for problem in result["errors"])
+
+
+def test_real_noindex_headers_and_http_errors_are_not_indexable_metadata(tmp_path):
+    _write_page(tmp_path, "/probe/", document())
+    _write_page(tmp_path, "/private/", document(robots="NOINDEX,follow"))
+    _write_page(tmp_path, "/none/", document(robots="none"))
+    _write_page(tmp_path, "/header-only/", "<html><body>Private utility</body></html>")
+    _write_page(tmp_path, "/gone/", "<html><body>Withdrawn</body></html>")
+    _write_page(tmp_path, "/gone-family/child/", "<html><body>Withdrawn</body></html>")
+    (tmp_path / "_headers").write_text('/header-only/*\n  X-Robots-Tag: noindex,follow\n')
+    (tmp_path / "_redirects").write_text('/gone /404.html 410\n/gone-family/* /404.html 410\n')
+    result = sm.audit_indexable_metadata(tmp_path)
+    assert result == {"ok": True, "checked": 1, "routes": ["/probe/"], "errors": []}
+    (tmp_path / "_redirects").write_text('/gone /probe/ 200\n/gone /404.html 410\n/gone-family/* /404.html 410\n')
+    result = sm.audit_indexable_metadata(tmp_path)
+    assert not result["ok"] and any('/gone/:title_count:0' in problem for problem in result["errors"])

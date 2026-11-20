@@ -503,6 +503,32 @@ try {
   }
 
   await page.setJavaScriptEnabled(false);
+  // The acquisition-to-service path must exist in the initial HTML, including
+  // when the calculation runtime is unavailable. Capture the actual published
+  // sections at phone/desktop widths without starting any heavyweight engine.
+  for (const slug of ['memorial-de-calculo', 'propriedades-de-secoes',
+    'secao-de-concreto-armado', 'trelicas-e-porticos', 'geotecnia-cpt-estacas',
+    'conforto-termico', 'energia-solar-fotovoltaica', 'modelador-parametrico-3d']) {
+    for (const width of [390, 1440]) {
+      await page.setViewport({ width, height: 880 });
+      await load('/ferramentas/' + slug + '/');
+      const section = 'section[aria-labelledby="projeto"]';
+      await page.$eval(section, el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      const service = '[data-cta-id="tool-service-' + slug + '"]';
+      const contact = '[data-cta-id="tool-contact-' + slug + '"]';
+      await captureInViewport(service, 'service-' + slug + '-' + width);
+      await captureInViewport(contact, 'contact-' + slug + '-' + width);
+      assert.ok((await page.$eval(service, el => getComputedStyle(el).textDecorationLine)).includes('underline'),
+        'service link must be visually distinguishable from paragraph text: ' + slug + ' ' + width);
+      assert.equal(await page.$eval(contact, el => el.getAttribute('data-journey')), 'projeto');
+      const target = await page.$eval(service, el => el.getAttribute('href'));
+      assert.ok(target.startsWith('/') && !/[?#]/.test(target), 'canonical service destination ' + slug);
+      assert.equal(await overflow(), false, 'service section viewport ' + slug + ' ' + width);
+      const [navigation] = await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click(service)]);
+      assert.equal(navigation?.status(), 200, 'service HTTP status ' + slug);
+      assert.equal(new URL(page.url()).pathname, target, 'native service link ' + slug);
+    }
+  }
   await page.setViewport({ width: 320, height: 800 });
   await load('/');
   const nativeGroup = '.mobile-nav [data-nav-group="ferramentas"]';

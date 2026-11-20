@@ -253,6 +253,45 @@ async function postCollect(events) {
 
 // --- Named HTML journeys ---
 const journeys = [
+  ...[
+    ["memorial-de-calculo", "/revisao-tecnica-projetos-engenharia/", "revisao-tecnica-projetos-engenharia"],
+    ["propriedades-de-secoes", "/projetos/estruturas/", "engineering-projects-structures"],
+    ["secao-de-concreto-armado", "/projeto-estrutural-concreto-armado/", "structural-project-concrete"],
+    ["trelicas-e-porticos", "/projetos/estruturas/", "engineering-projects-structures"],
+    ["geotecnia-cpt-estacas", "/projetos/estruturas/", "engineering-projects-structures"],
+    ["conforto-termico", "/projetos/instalacoes/", "engineering-projects-installations"],
+    ["energia-solar-fotovoltaica", "/projeto-eletrico/", "installation-project-electrical"],
+    ["modelador-parametrico-3d", "/projetos/coordenacao-multidisciplinar/", "engineering-projects-coordination"],
+  ].map(([slug, destination, service]) => ({
+    name: `tool_service_${slug}`,
+    html: `ferramentas/${slug}/index.html`,
+    pathname: `/ferramentas/${slug}/`,
+    pick: (a) => a.href === destination && a["data-cta-id"] === `tool-service-${slug}`,
+    expectDest: destination,
+    expectService: service,
+    expectAsset: slug,
+    expectFamily: "tool",
+  })),
+  {
+    name: "cad_project_review",
+    html: "cad/index.html",
+    pathname: "/cad/",
+    pick: (a) => a.href === "/revisao-tecnica-projetos-engenharia/",
+    expectDest: "/revisao-tecnica-projetos-engenharia/",
+    expectService: "revisao-tecnica-projetos-engenharia",
+    expectAsset: "cad",
+    expectFamily: "tool",
+  },
+  {
+    name: "bim_quantity_service",
+    html: "bim/index.html",
+    pathname: "/bim/",
+    pick: (a) => a.href === "/quantitativos-orcamento-obras/",
+    expectDest: "/quantitativos-orcamento-obras/",
+    expectService: "quantitativos-orcamento-obras",
+    expectAsset: "bim",
+    expectFamily: "tool",
+  },
   {
     name: "servicos_avaliacao_urbana",
     html: "servicos/index.html",
@@ -378,6 +417,9 @@ for (const j of journeys) {
   await settleAnalyticsFlush();
   const hits = transitionsOf(driven.dataLayer);
   if (hits.length !== 1) fail("journey_event_count", { name: j.name, count: hits.length, events: driven.dataLayer.map((e) => e.event) });
+  if (driven.dataLayer.some((event) => /^lead_/.test(event.event))) {
+    fail("service_navigation_claimed_lead", { name: j.name, events: driven.dataLayer });
+  }
   const ev = hits[0];
   assertMinFields(ev, j.name);
   if (ev.destination_path !== j.expectDest) fail("journey_dest_path", { name: j.name, got: ev.destination_path, expect: j.expectDest });
@@ -418,6 +460,32 @@ for (const j of journeys) {
     data_cta_id: attrs["data-cta-id"] || "",
     data_asset_id: attrs["data-asset-id"] || body["data-asset-id"] || "",
   });
+}
+
+// Moving between tools is discovery, even when CAD/BIM now have source families.
+// Exercise real anchors and the emitted bundle as well as server classification.
+for (const [origin, destination, cta] of [
+  ["/cad/", "/bim/", "cad-ferramentas-bim"],
+  ["/bim/", "/cad/", "bim-abrir-dwg"],
+  ["/bim/", "/bim/web/ifc-excel.html", "bim-ifc-excel"],
+]) {
+  const html = htmlOf(`${origin.slice(1)}index.html`);
+  const main = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i);
+  const attrs = findAnchor(main[0], (a) => a.href === destination && a["data-cta-id"] === cta);
+  if (!attrs) fail("tool_discovery_anchor_missing", { origin, destination });
+  const el = makeEl(attrs, "Abrir ferramenta");
+  const driven = driveScript({
+    pathname: origin, body: bodyAttrs(html), hrefEls: [el],
+    namedEls: attrs["data-event-name"] ? [el] : [],
+  });
+  el.click();
+  await settleAnalyticsFlush();
+  if (transitionsOf(driven.dataLayer).length || flushedEvents(driven.fetches).some((event) => event.event === "content_to_service")) {
+    fail("tool_discovery_became_service", { origin, destination, events: driven.dataLayer });
+  }
+  if (sourceToService.classifyTransition({ origin_path: origin, href: destination }).event === "content_to_service") {
+    fail("server_tool_discovery_became_service", { origin, destination });
+  }
 }
 
 // The same destination in shared navigation must remain a discovery click.

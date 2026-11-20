@@ -29,6 +29,8 @@
     "/casos/modelo-painel-precos-obras-publicas/": {},
     "/casos/modelo-relatorio-executivo-consolidado/": {},
     "/casos/modelo-relatorio-inteligencia-licitacoes/": {},
+    "/comercial/privacidade-leads/": {},
+    "/comercial/termos-diagnostico-b2g/": {},
     "/como-trabalhamos/": {},
     "/compatibilizacao-projetos-engenharia/": {},
     "/conteudos/atraso-na-medicao-obra-publica/": {},
@@ -67,8 +69,10 @@
     "/inspecao-diagnostico-edificacoes/": {},
     "/medicoes-glosas-obras-publicas/": {},
     "/metodologia-inteligencia/": {},
+    "/nurture/": {},
     "/parcerias-engenharia/": {},
     "/pgr-documentacao-sst-obras/": {},
+    "/privacidade/": {},
     "/problemas-que-resolvemos/": {
       "page_type": "CollectionPage"
     },
@@ -84,6 +88,7 @@
     "/projetos/infraestrutura/": {},
     "/projetos/instalacoes/": {},
     "/quantitativos-orcamento-obras/": {},
+    "/radar/nacional-obras-publicas/": {},
     "/revisao-atualizacao-pgr/": {},
     "/revisao-tecnica-projetos-engenharia/": {},
     "/seguranca-trabalho-apoio-tecnico/": {},
@@ -95,6 +100,7 @@
     },
     "/terceirizacao-documentacao-sst/": {},
     "/terceirizacao-projetos-engenharia/": {},
-    "/termos-de-uso/": {}
+    "/termos-de-uso/": {},
+    "/triagem-tecnica/": {}
   }
 }

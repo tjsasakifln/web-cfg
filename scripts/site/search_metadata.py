@@ -18,10 +18,213 @@ import sys
 from urllib.parse import parse_qsl, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 SITE = "https://confenge.com.br"
 POLICY = ROOT / "data/site/search-metadata.v1.json"
 META = re.compile(r"<meta\b[^>]*>", re.I)
 LD = re.compile(r"(<script\b[^>]*type=[\"']application/ld\+json[\"'][^>]*>)(.*?)(</script>)", re.I | re.S)
+
+
+class SearchHead(HTMLParser):
+    """Read effective head tags, excluding examples, comments and script strings.
+
+    This is a read-only gate for every indexable route. The route-exact
+    normalization policy below still owns which social previews may be written.
+    """
+
+    # Search rendering has scripting enabled. In a head, noscript and noframes
+    # are raw text just like script/style, not alternate containers of metadata.
+    CDATA_CONTENT_ELEMENTS = ("script", "style", "noscript", "noframes")
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.head_starts = 0
+        self.head_ends = 0
+        self.in_head = False
+        self.in_body = False
+        self.template_depth = 0
+        self.in_title = False
+        self.raw_tag: str | None = None
+        self.titles: list[str] = []
+        self.canonicals: list[str] = []
+        self.metas: dict[str, list[str]] = {}
+        self.problems: list[str] = []
+
+    def handle_starttag(self, tag, attrs):
+        if self.head_starts == 0 and tag not in {"html", "head"}:
+            # A late explicit head cannot reopen metadata after earlier
+            # content has made the browser create an implicit head/body.
+            self.in_body = True
+        if self.in_title:
+            # HTML title is RCDATA: apparent tags inside it cannot supply
+            # metadata or exempt a document from indexing checks.
+            self.titles[-1] += self.get_starttag_text()
+            return
+        if tag == "template":
+            self.template_depth += 1
+            return
+        if self.template_depth:
+            return
+        if tag == "body":
+            self.in_body = True
+            self.in_head = False
+        if tag == "head":
+            self.head_starts += 1
+            self.in_head = not self.in_body
+        if not self.in_head:
+            return
+        if tag not in {"html", "head", "base", "basefont", "bgsound", "link", "meta", "title",
+                       "style", "script", "noscript", "noframes"}:
+            # A body element implicitly ends head in the HTML tree builder.
+            # Later source tags cannot supply effective head metadata.
+            self.in_head = False
+            self.in_body = True
+            return
+        if tag in self.CDATA_CONTENT_ELEMENTS:
+            self.raw_tag = tag
+            return
+        if tag == "title":
+            self.titles.append("")
+            self.in_title = True
+            return
+        if tag not in {"meta", "link"}:
+            return
+        names = [key for key, _ in attrs]
+        a = dict(attrs)
+        if tag == "link" and "canonical" in (a.get("rel") or "").lower().split():
+            for key in ("rel", "href"):
+                if names.count(key) > 1:
+                    self.problems.append(f"duplicate_canonical_attribute:{key}")
+            self.canonicals.append(a.get("href") or "")
+        if tag == "meta":
+            key = (a.get("name") or a.get("property") or "").lower()
+            if a.get("name") and a.get("property"):
+                self.problems.append("ambiguous_metadata_selector")
+            for attr in ("name", "property", "content"):
+                if names.count(attr) > 1:
+                    self.problems.append(f"duplicate_metadata_attribute:{key}:{attr}")
+            self.metas.setdefault(key, []).append(a.get("content") or "")
+
+    def handle_endtag(self, tag):
+        if tag == self.raw_tag:
+            self.raw_tag = None
+            return
+        if self.in_title:
+            if tag == "title":
+                self.in_title = False
+            else:
+                self.titles[-1] += f"</{tag}>"
+            return
+        if tag == "template" and self.template_depth:
+            self.template_depth -= 1
+            return
+        if self.template_depth:
+            return
+        if tag == "head":
+            self.head_ends += 1
+            self.in_head = False
+        if tag in {"body", "html", "br"} and self.in_head:
+            self.in_head = False
+            self.in_body = True
+
+    def handle_data(self, data):
+        if not self.head_starts and data.strip(" \t\r\n\f"):
+            self.in_body = True
+        elif self.in_head and self.in_title and not self.template_depth:
+            self.titles[-1] += data
+        elif self.in_head and not self.template_depth and not self.raw_tag and data.strip(" \t\r\n\f"):
+            self.in_head = False
+            self.in_body = True
+
+    @property
+    def noindex(self) -> bool:
+        if (self.head_starts, self.head_ends) != (1, 1) or any(
+            issue.startswith(("duplicate_metadata_attribute:robots:", "duplicate_metadata_attribute:googlebot:"))
+            or issue == "ambiguous_metadata_selector"
+            for issue in self.problems
+        ):
+            return False
+        directives = self.metas.get("robots", []) + self.metas.get("googlebot", [])
+        return any({"noindex", "none"} & set(re.split(r"[\s,]+", value.lower())) for value in directives)
+
+
+def inspect_search_head(text: str, route: str) -> dict:
+    """Validate cardinality and canonical identity without arbitrary word limits.
+
+    Callers decide which public status/route is indexable. Noindex is reported
+    from parsed head directives so a quoted tag cannot exempt a page from gates.
+    """
+    head = SearchHead()
+    head.feed(text)
+    head.close()
+    problems = list(head.problems)
+    if (head.head_starts, head.head_ends) != (1, 1):
+        problems.append("head_missing_or_duplicate")
+    values = {"title": head.titles, "description": head.metas.get("description", []), "canonical": head.canonicals}
+    normalized = {}
+    for key, entries in values.items():
+        normalized[key] = " ".join(entries[0].split()) if len(entries) == 1 else ""
+        if len(entries) != 1:
+            problems.append(f"{key}_count:{len(entries)}")
+        elif not normalized[key]:
+            problems.append(f"{key}_empty")
+    if len(head.canonicals) == 1 and head.canonicals[0] != SITE + route:
+        problems.append("canonical_mismatch")
+    for key, entries in head.metas.items():
+        if (key in {"robots", "googlebot"} or key.startswith(("og:", "twitter:"))) and len(entries) > 1:
+            problems.append(f"duplicate_metadata:{key}")
+    return {**normalized, "noindex": head.noindex, "problems": problems}
+
+
+def audit_indexable_metadata(root: Path, *, artifact: bool = False) -> dict:
+    """Audit source pages or every emitted HTML, without changing their content.
+
+    Source ignores internal fixtures through the existing public walker. An
+    artifact is already the publication boundary, so its independent census
+    includes every HTML file. Real noindex directives and the existing HTTP
+    header contract keep utility/error documents outside indexable metadata.
+    """
+    from scripts.organic.sitemap_graph import x_robots_noindex
+    from scripts.organic.sitemap_hygiene import parse_redirects
+    from scripts.site.public_copy_scope import artifact_html_files, route_for, visitor_facing_html_files
+
+    root = root.resolve()
+    pages = artifact_html_files(root) if artifact else visitor_facing_html_files(root)
+    headers_file = root / "_headers"
+    headers = headers_file.read_text(encoding="utf-8") if headers_file.is_file() else ""
+    redirect_file = root / "_redirects"
+    rules = parse_redirects(redirect_file.read_text(encoding="utf-8")) if redirect_file.is_file() else []
+    response_rules = []
+    for rule in rules:
+        if not rule["from"].startswith("/") or rule["from"].startswith("//"):
+            continue
+        pattern = re.escape(rule["from"].rstrip("/")).replace(r"\*", ".*")
+        pattern = re.sub(r":[A-Za-z_][A-Za-z0-9_]*", "[^/]+", pattern)
+        response_rules.append((re.compile(pattern + "/?"), rule["status"].rstrip("!")))
+    titles: dict[str, list[str]] = {}
+    descriptions: dict[str, list[str]] = {}
+    routes, problems = [], []
+    for page in pages:
+        route = route_for(page.relative_to(root).as_posix())
+        metadata = inspect_search_head(page.read_text(encoding="utf-8"), route)
+        # Honor the first matching path rule; a later 410 cannot hide a live
+        # rewrite. Other redirects remain subject to sitemap/inventory checks.
+        status = next((code for pattern, code in response_rules if pattern.fullmatch(route)), "200")
+        if (metadata["noindex"] or x_robots_noindex(headers, route)
+                or route in {"/404.html", "/obrigado.html"}
+                or status in {"404", "410"}):
+            continue
+        routes.append(route)
+        problems.extend(f"search_head:{route}:{problem}" for problem in metadata["problems"])
+        for key, index in (("title", titles), ("description", descriptions)):
+            if metadata[key]:
+                index.setdefault(metadata[key].casefold(), []).append(route)
+    for kind, index in (("title", titles), ("description", descriptions)):
+        for shared in index.values():
+            if len(shared) > 1:
+                problems.append(f"duplicate_{kind}:" + ",".join(shared))
+    return {"ok": not problems, "checked": len(routes), "routes": routes, "errors": problems}
 
 
 class Tags(HTMLParser):
@@ -259,7 +462,7 @@ def _social_asset_problem(root: Path, image: str) -> str | None:
     return None
 
 
-def synchronize(root: Path, *, write: bool = False) -> dict:
+def synchronize(root: Path, *, write: bool = False, artifact: bool = False) -> dict:
     config = policy()
     changed, errors = [], []
     for route in config["routes"]:
@@ -283,14 +486,18 @@ def synchronize(root: Path, *, write: bool = False) -> dict:
                     errors.append(f"{problem}:{route}:{parsed.path}")
         except (ValueError, json.JSONDecodeError) as exc:
             errors.append(f"{route}:{exc}")
-    return {"ok": not errors and (write or not changed), "checked": len(config["routes"]), "changed": changed, "errors": errors}
+    census = audit_indexable_metadata(root, artifact=artifact)
+    errors.extend(census["errors"])
+    return {"ok": not errors and (write or not changed), "checked": len(config["routes"]),
+            "audited_indexable": census["checked"], "changed": changed, "errors": errors}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--write", action="store_true")
+    parser.add_argument("--artifact", action="store_true", help="inspect every HTML in an assembled public root")
     args = parser.parse_args()
-    result = synchronize(args.root, write=args.write)
+    result = synchronize(args.root, write=args.write, artifact=args.artifact)
     print(json.dumps(result, ensure_ascii=False))
     sys.exit(0 if result["ok"] else 1)
