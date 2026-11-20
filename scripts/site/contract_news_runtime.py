@@ -126,7 +126,7 @@ def validate_inventory(raw: Any, release_sha: str, html: dict, assets: dict,
             if headers.get("content-type") != expected_type:
                 errors.append(f"contract_news_response_type_invalid:{rel}")
             if state == "bootstrap" and (headers.get("x-robots-tag") != "noindex, nofollow"
-                    or headers.get("retry-after") != "300" or headers.get("cache-control") != "no-store"):
+                    or headers.get("retry-after") != "300" or headers.get("cache-control") != "no-store, no-transform"):
                 errors.append(f"contract_news_bootstrap_response_invalid:{rel}")
     candidates = raw.get("news_candidates")
     if not isinstance(candidates, list) or not isinstance(count, int) or len(candidates) > max(0, count):

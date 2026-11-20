@@ -111,6 +111,14 @@ uma divergência persistente em aprovação. O relatório distingue
 `infrastructure_published` de `archive_initialized`; nenhum deles, isoladamente,
 comprova que uma notícia real foi gerada.
 
+As respostas com corpo preservam `Cache-Control: no-transform`, inclusive os
+erros `404`, `405` e `503`, que também mantêm `no-store`. Isso impede que a
+[ofuscação de e-mail da Cloudflare](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/)
+reescreva o rodapé e altere os bytes atestados. O verificador continua exigindo
+o hash integral da resposta, sem desfazer transformações da borda ou aceitar
+um `503` apenas pelo status. A ausência de `no-transform` reprova a prova de
+`bootstrap` antes da conferência pública.
+
 O workflow `Contract news readiness`, disparado em `main`, faz inspeção de
 presença e acesso sem expor valores de credenciais. Seus resultados devem ser
 consultados antes de solicitar mudanças de configuração.

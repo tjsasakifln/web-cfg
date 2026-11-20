@@ -169,26 +169,50 @@ test('all text fields are escaped, JSON-LD cannot terminate its script, exact de
 test('failed, missing, corrupt and unsafe snapshots fail closed without affecting other paths', async () => {
   const app = await setup();
   try {
-    let response = await fetch(app.origin + PREFIX);
-    assert.equal(response.status, 503);
-    assert.match(response.headers.get('x-robots-tag'), /noindex/);
-    assert.equal(response.headers.get('retry-after'), '300');
-    assert.match(await response.text(), /temporariamente indisponíveis/);
+    for (const suffix of ['', 'sitemap.xml', 'news-sitemap.xml', 'feed.xml']) {
+      const url = app.origin + PREFIX + suffix;
+      const response = await fetch(url);
+      assert.equal(response.status, 503, suffix);
+      assert.equal(response.headers.get('cache-control'), 'no-store, no-transform');
+      assert.equal(response.headers.get('content-type'), 'text/html; charset=utf-8');
+      assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
+      assert.equal(response.headers.get('x-confenge-news-state'), 'unavailable');
+      assert.equal(response.headers.get('retry-after'), '300');
+      const html = await response.text();
+      assert.match(html, /temporariamente indisponíveis/);
+      assert.match(html, /href="mailto:/);
+      const head = await fetch(url, { method: 'HEAD' });
+      assert.equal(head.status, 503, suffix);
+      for (const header of ['cache-control', 'content-type', 'content-security-policy', 'x-robots-tag', 'x-confenge-news-state', 'retry-after']) {
+        assert.equal(head.headers.get(header), response.headers.get(header), header);
+      }
+      assert.equal(head.headers.get('content-length'), String(Buffer.byteLength(html)));
+      assert.equal(await head.text(), '');
+    }
     const pointer = await publish(app.directory, publication());
     await writeFile(join(app.directory, pointer.file), '{"tampered":true}');
-    response = await fetch(app.origin + PREFIX);
+    const response = await fetch(app.origin + PREFIX);
     assert.equal(response.status, 503);
+    assert.equal(response.headers.get('cache-control'), 'no-store, no-transform');
     assert.ok(!(await response.text()).includes('tampered'));
     await writeFile(join(app.directory, 'current.json'), JSON.stringify({ ...pointer, file: '../secrets.json' }));
     assert.equal((await fetch(app.origin + PREFIX)).status, 503);
     await publish(app.directory, publication());
-    assert.equal((await fetch(app.origin + PREFIX + 'unknown-news/')).status, 404);
+    for (const method of ['GET', 'HEAD']) {
+      const missing = await fetch(app.origin + PREFIX + 'unknown-news/', { method });
+      assert.equal(missing.status, 404);
+      assert.equal(missing.headers.get('cache-control'), 'no-store, no-transform');
+      assert.equal(missing.headers.get('x-robots-tag'), 'noindex, nofollow');
+      if (method === 'HEAD') assert.equal(await missing.text(), '');
+    }
     for (const path of ['current.json', 'snapshot-abc.json', '.env', '%2e%2e%2f.env', 'a%2fb/', 'pagina/0/', 'pagina/0002/', 'sitemap.xml/']) {
       assert.equal((await fetch(app.origin + PREFIX + path, { redirect: 'manual' })).status, 404, path);
     }
     const unsupported = await fetch(app.origin + PREFIX, { method: 'POST', body: 'ignored' });
     assert.equal(unsupported.status, 405);
     assert.equal(unsupported.headers.get('allow'), 'GET, HEAD');
+    assert.equal(unsupported.headers.get('cache-control'), 'no-store, no-transform');
+    assert.equal(unsupported.headers.get('x-robots-tag'), 'noindex, nofollow');
     assert.equal((await fetch(app.origin + '/other-route/')).status, 404);
   } finally { await app.close(); }
 });
