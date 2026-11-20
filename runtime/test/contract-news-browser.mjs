@@ -170,6 +170,18 @@ async function assertServiceClick(page, mode) {
   report.scenarios.push({ name: mode + ' news-to-service click', passed: true, events: 1, collector_events: 1, asset_id: event.source_asset_id });
 }
 
+async function assertArchiveCard(page) {
+  const cards = await page.$$eval('.news-card h2 a', links => links.map(link => ({
+    title: link.textContent.trim(), href: link.getAttribute('href'),
+  })));
+  assert.deepEqual(cards, [{ title: article.title, href: articlePath }]);
+}
+
+function assertNewsRevisit(response, expectedEtag, description) {
+  assert.ok([200, 304].includes(response.status()), description + ': unchanged news remains available');
+  assert.equal(response.headers().etag, expectedEtag, description + ': ETag matches the initial response');
+}
+
 try {
   browser = await puppeteer.launch({ executablePath: chrome, headless: true, args: ['--no-sandbox', '--disable-background-networking', '--no-first-run'] });
   const page = await browser.newPage();
@@ -187,9 +199,12 @@ try {
   assert.equal(hubResponse.status(), 200);
   const discovery = 'main [data-news-discovery="true"]';
   await page.waitForSelector(discovery, { visible: true });
-  await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle0' }), page.click(discovery)]);
+  const [discoveryResponse] = await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle0' }), page.click(discovery)]);
+  assert.equal(discoveryResponse.status(), 200);
+  const archiveEtag = discoveryResponse.headers().etag;
+  assert.ok(archiveEtag, 'the initial news archive response includes an ETag');
   assert.equal(new URL(page.url()).pathname, PREFIX);
-  assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
+  await assertArchiveCard(page);
   const discoveryId = 'intelligence-contract-news';
   // The native navigation flushes the prior document's analytics queue. Wait
   // for its real first-party request, then verify the entire discovery action.
@@ -210,10 +225,17 @@ try {
     'news discovery must not emit a service conversion');
   report.scenarios.push({ name: 'intelligence body to news archive', passed: true, event: 'cta_click', destination_type: 'route', service_events: 0 });
 
+  let articleEtag;
   for (const [name, width, height] of [['desktop', 1440, 1000], ['mobile', 390, 844]]) {
     await page.setViewport({ width, height, deviceScaleFactor: 1 });
     const response = await page.goto(base + articlePath, { waitUntil: 'networkidle0', timeout: 30_000 });
-    assert.equal(response.status(), 200);
+    if (name === 'desktop') {
+      assert.equal(response.status(), 200);
+      articleEtag = response.headers().etag;
+      assert.ok(articleEtag, 'the initial news article response includes an ETag');
+    } else {
+      assertNewsRevisit(response, articleEtag, 'mobile article revisit');
+    }
     await page.evaluate(() => document.fonts.ready);
     await visitBrandImages(page);
     const metadata = await page.evaluate(() => ({
@@ -263,8 +285,10 @@ try {
     await assertServiceClick(page, name === 'mobile' ? 'keyboard' : 'pointer');
   }
   const indexResponse = await page.goto(base + PREFIX, { waitUntil: 'networkidle0', timeout: 30_000 });
-  assert.equal(indexResponse.status(), 200);
-  assert.equal(await page.$$eval('.news-card h2 a', links => links.length), 1);
+  // The native collector can keep this scenario open beyond max-age=60.
+  // Revalidation must retain the same resource and the full rendered card.
+  assertNewsRevisit(indexResponse, archiveEtag, 'news archive revisit');
+  await assertArchiveCard(page);
   await visitBrandImages(page);
   await assertLayout(page, 'mobile index');
   const transitions = collectedEvents.filter(event => event.event === 'content_to_service');
