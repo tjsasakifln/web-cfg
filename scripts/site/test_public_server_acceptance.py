@@ -167,6 +167,109 @@ def test_large_packaged_asset_requires_exact_served_bytes(tmp_path, monkeypatch,
     assert acceptance._probe_first_hop(CANONICAL_BASE + "/unlisted", 1)[0]["error"] == "first_hop_body_too_large"
 
 
+@pytest.mark.parametrize("outcome", ["recovered", "reset_again", "deadline_exhausted"])
+def test_asset_connection_reset_has_one_retry_within_original_timeout(tmp_path, monkeypatch, outcome):
+    rel = "rede-de-agua.jpg"
+    body = b"exact packaged image bytes"
+    expected = hashlib.sha256(body).hexdigest()
+    (tmp_path / rel).write_bytes(body)
+    now = [100.0]
+    timeouts = []
+
+    class Response(io.BytesIO):
+        status = 200
+        headers = {"Content-Length": str(len(body)), "Content-Type": "image/jpeg"}
+
+        def read(self, limit):
+            now[0] += 1.0 if outcome == "deadline_exhausted" else 0.25
+            if len(timeouts) == 1 or outcome == "reset_again":
+                raise ConnectionResetError("connection reset during asset body read")
+            return super().read(limit)
+
+    def open_response(_request, timeout):
+        timeouts.append(timeout)
+        return Response(body)
+
+    monkeypatch.setattr(
+        acceptance.urllib.request, "build_opener", lambda *_: SimpleNamespace(open=open_response),
+    )
+    report = acceptance.verify_non_html_assets(
+        site=tmp_path, inventory={"non_html_sha256": {rel: expected}}, overlay={},
+        base=CANONICAL_BASE, fetcher=None, concurrency=1, timeout=1,
+        clock=lambda: now[0],
+    )
+    row, = report["results"]
+    assert report["planned"] == report["executed"] == 1
+    assert report["ok"] is (outcome == "recovered")
+    first = row["attempts"][0]
+    assert first["status"] == 200
+    assert first["http_sha256"] is None
+    assert first["exception_type"] == "ConnectionResetError"
+    assert first["read_phase"] == "body_read"
+    assert first["bytes_received"] == 0
+    assert first["error"].startswith("first_hop_read_failed:ConnectionResetError:")
+    if outcome == "deadline_exhausted":
+        assert timeouts == [1]
+        assert len(row["attempts"]) == 1
+        assert first["decision"] == "transport_retry_deadline_exhausted"
+    else:
+        assert timeouts == [1, 0.75]
+        assert len(row["attempts"]) == 2
+        assert first["decision"] == "retry_transport_failure"
+        last = row["attempts"][1]
+        assert last["decision"] == ("verified" if outcome == "recovered" else "transport_retry_exhausted")
+        assert last["http_sha256"] == (expected if outcome == "recovered" else None)
+
+
+@pytest.mark.parametrize("mutation", [
+    "http_status", "content_type", "digest", "content_length", "content_encoding", "redirect",
+    "reset_wrong_http_status", "reset_wrong_content_type", "unclassified_read_error",
+])
+def test_asset_conclusive_failure_or_unclassified_error_is_never_retried(tmp_path, monkeypatch, mutation):
+    rel = "script.mjs"
+    body = b"export const valid = true;"
+    expected = hashlib.sha256(body).hexdigest()
+    (tmp_path / rel).write_bytes(body)
+    served = b"different bytes" if mutation == "digest" else body
+    headers = {"Content-Length": str(len(served)), "Content-Type": "application/javascript"}
+    status = 503 if mutation in {"http_status", "reset_wrong_http_status"} else 200
+    if mutation in {"content_type", "reset_wrong_content_type"}:
+        headers["Content-Type"] = "text/html"
+    if mutation == "content_length":
+        headers["Content-Length"] = str(len(served) + 1)
+    if mutation == "content_encoding":
+        headers["Content-Encoding"] = "gzip"
+    if mutation == "redirect":
+        headers["Location"] = "/somewhere-else"
+    calls = []
+
+    class Response(io.BytesIO):
+        def read(self, limit):
+            if mutation.startswith("reset_"):
+                raise ConnectionResetError("read failed after invalid response headers")
+            if mutation == "unclassified_read_error":
+                raise OSError("not classified as a transient interruption")
+            return super().read(limit)
+
+    def open_response(_request, timeout):
+        calls.append(timeout)
+        response = Response(served)
+        response.status, response.headers = status, headers
+        return response
+
+    monkeypatch.setattr(
+        acceptance.urllib.request, "build_opener", lambda *_: SimpleNamespace(open=open_response),
+    )
+    report = acceptance.verify_non_html_assets(
+        site=tmp_path, inventory={"non_html_sha256": {rel: expected}}, overlay={},
+        base=CANONICAL_BASE, fetcher=None, concurrency=1, timeout=1,
+    )
+    assert not report["ok"]
+    row, = report["failures"]
+    assert len(calls) == len(row["attempts"]) == 1
+    assert row["attempts"][0]["decision"] == "rejected"
+
+
 def test_empty_redirect_body_remains_legitimate():
     response = SimpleNamespace(read=lambda _limit: b"", headers={"Content-Length": "0"})
     record = acceptance._read_first_hop_body(response, 301)
