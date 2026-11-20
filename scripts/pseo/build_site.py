@@ -895,7 +895,7 @@ def main(argv: list[str] | None = None) -> int:
     # Page owners supply title/description; this gate never rewrites the artifact.
     from scripts.site.search_metadata import synchronize as verify_search_metadata
 
-    search_metadata = verify_search_metadata(ROOT / PUBLIC_DIR_NAME)
+    search_metadata = verify_search_metadata(ROOT / PUBLIC_DIR_NAME, artifact=True)
     if not search_metadata["ok"]:
         errors.append("search_metadata_artifact:" + json.dumps(search_metadata, ensure_ascii=False))
 

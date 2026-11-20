@@ -78,6 +78,8 @@
     '/inteligencia/': 'data',
     '/radar/': 'data',
     '/ferramentas/': 'tool',
+    '/cad/': 'tool',
+    '/bim/': 'tool',
   };
   const CHROME_PREFIXES = [
     '/especialista/', '/politica-editorial/', '/privacidade/', '/termos-de-uso/',

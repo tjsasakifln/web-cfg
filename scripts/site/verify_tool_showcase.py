@@ -19,10 +19,30 @@ from scripts.site.hub_link_composition import destination_present  # noqa: E402
 from scripts.site.render_tool_showcase import HOST, HUB, load_registry  # noqa: E402
 
 
+# Google documents applicationCategory as recommended, with these supported
+# values. This is a semantic gate, not a promise of a software rich result:
+# reviews, ratings and prices must never be invented to make markup eligible.
+# https://developers.google.com/search/docs/appearance/structured-data/software-app
+APPLICATION_CATEGORIES = frozenset({
+    "GameApplication", "SocialNetworkingApplication", "TravelApplication",
+    "ShoppingApplication", "SportsApplication", "LifestyleApplication",
+    "BusinessApplication", "DesignApplication", "DeveloperApplication",
+    "DriverApplication", "EducationalApplication", "HealthApplication",
+    "FinanceApplication", "SecurityApplication", "BrowserApplication",
+    "CommunicationApplication", "DesktopEnhancementApplication",
+    "EntertainmentApplication", "MultimediaApplication", "HomeApplication",
+    "UtilitiesApplication", "ReferenceApplication",
+})
+APPLICATION_TYPES = frozenset({"SoftwareApplication", "WebApplication"})
+
+
 class Markup(HTMLParser):
     def __init__(self, text: str):
         super().__init__(convert_charrefs=True)
         self.tags = []
+        self.jsonld: list[str] = []
+        self._jsonld_parts: list[str] | None = None
+        self._inert: list[str] = []
         self.feed(text)
         self.close()
 
@@ -30,7 +50,68 @@ class Markup(HTMLParser):
         return [a for t, a in self.tags if t == tag and all(a.get(k) == v for k, v in attrs.items())]
 
     def handle_starttag(self, tag, attrs):
-        self.tags.append((tag, dict(attrs)))
+        attributes = dict(attrs)
+        self.tags.append((tag, attributes))
+        # Templates and text examples are not active document structured data.
+        # The HTML parser also keeps script contents and comments as text, so a
+        # JSON-LD-looking string in an ordinary JS script cannot pass this gate.
+        if tag in {"template", "textarea", "title", "xmp", "iframe", "noscript"}:
+            self._inert.append(tag)
+        if tag == "script":
+            kind = (attributes.get("type") or "").strip().lower()
+            self._jsonld_parts = [] if kind == "application/ld+json" and not self._inert else None
+
+    def handle_data(self, data):
+        if self._jsonld_parts is not None:
+            self._jsonld_parts.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "script" and self._jsonld_parts is not None:
+            self.jsonld.append("".join(self._jsonld_parts))
+            self._jsonld_parts = None
+        if tag in self._inert:
+            index = len(self._inert) - 1 - self._inert[::-1].index(tag)
+            del self._inert[index:]
+
+
+def jsonld_nodes(markup: Markup, route: str) -> list[dict]:
+    """Read actual JSON-LD elements, including lists and nested @graph nodes."""
+    nodes: list[dict] = []
+
+    def walk(value):
+        if isinstance(value, dict):
+            nodes.append(value)
+            for child in value.values():
+                walk(child)
+        elif isinstance(value, list):
+            for child in value:
+                walk(child)
+
+    for index, block in enumerate(markup.jsonld):
+        try:
+            payload = json.loads(block)
+        except json.JSONDecodeError as error:
+            raise AssertionError(f"{route}: invalid_jsonld:{index}") from error
+        assert isinstance(payload, (dict, list)), f"{route}: invalid_jsonld_root:{index}"
+        walk(payload)
+    return nodes
+
+
+def verify_application_categories(markup: Markup, route: str) -> None:
+    for node in jsonld_nodes(markup, route):
+        types = node.get("@type", [])
+        types = [types] if isinstance(types, str) else types
+        if not isinstance(types, list) or not any(kind in APPLICATION_TYPES for kind in types if isinstance(kind, str)):
+            continue
+        # Optional in Google's contract. Missing category is not an excuse to
+        # change price, author or review data, or reject a CollectionPage hub.
+        if "applicationCategory" not in node:
+            continue
+        category = node["applicationCategory"]
+        categories = category if isinstance(category, list) else [category]
+        assert categories and all(isinstance(value, str) and value in APPLICATION_CATEGORIES for value in categories), (
+            f"{route}: unsupported_application_category:{category!r}"
+        )
 
 
 def jpeg_size(path: Path) -> tuple[int, int]:
@@ -66,6 +147,7 @@ def verify(artifact: Path) -> None:
     for route, key, indexable, expected_updated in routes:
         html = (artifact / route.lstrip("/") / "index.html").read_text(encoding="utf-8")
         dom = Markup(html)
+        verify_application_categories(dom, route)
         title = re.findall(r"<title>(.*?)</title>", html, re.S)
         assert len(title) == 1 and title[0] not in titles, route
         titles.add(title[0])
@@ -113,10 +195,7 @@ def verify(artifact: Path) -> None:
         target = parsed.path + (f"#{parsed.fragment}" if parsed.fragment else "")
         assert destination_present(target, artifact), target
 
-    schema = [
-        json.loads(block) for block in re.findall(r'<script type="application/ld\+json">\s*(.*?)</script>', html, re.S)
-    ]
-    collection, = (node for node in schema if node.get("@type") == "CollectionPage")
+    collection, = (node for node in jsonld_nodes(dom, HUB) if node.get("@type") == "CollectionPage")
     entries = collection["mainEntity"]["itemListElement"]
     assert {entry["url"] for entry in entries} == indexed
     assert [entry["position"] for entry in entries] == list(range(1, len(indexed) + 1))

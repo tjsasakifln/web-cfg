@@ -1488,7 +1488,9 @@
       "/problemas-que-resolvemos/": "hub",
       "/inteligencia/": "data",
       "/radar/": "data",
-      "/ferramentas/": "tool"
+      "/ferramentas/": "tool",
+      "/cad/": "tool",
+      "/bim/": "tool"
     },
     "chrome_prefixes": [
       "/especialista/",

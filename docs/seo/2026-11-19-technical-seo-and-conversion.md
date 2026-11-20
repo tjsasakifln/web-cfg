@@ -1,0 +1,145 @@
+# SEO técnico e passagem das ferramentas para serviços
+
+## Objetivo e decisão
+
+Decisão do fundador em 19/11/2026: `EXECUTE_NOW`, frente `INBOUND_ENGINE`.
+O pedido autoriza revisão adversarial, implementação, PR, integração após
+validação e acompanhamento da publicação Netcup. Efeitos esperados:
+distribuição, confiança e receita. A primeira evidência é técnica, na release;
+o efeito comercial depende de uso e de oportunidades efetivamente recebidas.
+
+O visitante quer resolver uma tarefa de engenharia e, quando precisa de apoio,
+identificar o serviço correspondente sem explicar novamente de onde veio.
+A hipótese é que uma passagem específica do cálculo/modelo para o serviço
+aumente contatos pertinentes. Clique, pedido recebido, proposta, contrato e
+recebimento permanecem eventos diferentes.
+
+Base examinada: `44b3897167febcc61bcfb0dadf1147d8c2f75b31`.
+As melhorias recentes de ferramentas, créditos, notícias e SEO são preservadas.
+Não há congelamento de funcionalidades nem migração de URLs nesta alteração.
+
+## Revisão do esboço recebido
+
+| Proposição | Constatação e decisão |
+| --- | --- |
+| Implantar infraestrutura SEO no Netlify | A produção é Cloudflare com origem nginx/Node na Netcup. O fluxo canônico existente continua responsável pelo build, promoção, conferência pública e rollback. |
+| Criar índice e sitemaps separados | Já há `sitemap-index.xml`, mapas por família e um mapa próprio do runtime de notícias. Preservar suas fontes e os validadores de URLs canônicas/indexáveis. |
+| Bloquear UTM para consolidar URLs | Não aplicar. O Google precisa rastrear para ler canonical e noindex. As URLs canônicas existentes continuam sem parâmetros de campanha. |
+| Impor 50 a 60 caracteres no título e 140 a 155 na descrição | Não são limites oficiais de indexação. O gate exige conteúdo presente, único e coerente; não rejeita uma página útil apenas por essas faixas. |
+| Recriar entidades de empresa e autor | O registro de credenciais e o saneamento de identidade já controlam fonte, revogação e superfícies permitidas. Reutilizar esse sistema. |
+| Garantir resultados enriquecidos de FAQ e Service | FAQ deixou de ser exibido pelo Google em 07/05/2026. Service não é um recurso autônomo da galeria. Perguntas úteis e semântica válida não garantem apresentação especial na busca. |
+| Usar EngineeringApplication | Não consta das categorias documentadas pelo Google. Oito utilitários passam a UtilitiesApplication, coerente com sua função. Não acrescentar avaliações ou notas fictícias. |
+| Criar novas árvores de ferramentas, soluções e projetos | As páginas existentes já têm catálogo, serviços, projetos, links e registro de intenção. Fortalecer os caminhos úteis sem criar páginas intercambiáveis ou mudar URLs para cumprir um modelo. |
+| Garantir LCP menor que 1,8 s e CLS zero no build | Preservar a matriz Lighthouse e seus limites existentes. Experiência real exige dados de campo, incluindo INP; o build não garante Core Web Vitals. |
+| Gerar lead ao clicar no contato | Preservar a separação entre navegação, clique de contato e lead persistido. Não criar uma segunda coleta comercial nem transportar dados pessoais em analytics. |
+
+## Alterações implementadas
+
+### Metadados conferidos no HTML final
+
+O validador passa a analisar o `head` efetivo em vez de aceitar a primeira
+ocorrência por expressão regular. Detecta ausência, vazio ou duplicidade de
+título, descrição e canonical, URL canônica divergente, atributos ambíguos e
+duplicidade de robots ou metadados de compartilhamento. Comentários, templates,
+strings de JavaScript e texto semelhante a tags dentro do título não satisfazem
+a verificação. Duplicidades entre páginas consideram entidades HTML, espaços e
+caixa.
+
+O build executa o mesmo censo em todo HTML montado. As regras de noindex e os
+status de retirada continuam sendo respeitados; o validador não muda a política
+de indexação. A projeção editorial permanece restrita às rotas declaradas.
+
+Seis páginas existentes passam a receber a projeção completa de Open Graph e
+Twitter a partir de seus próprios títulos, descrições e canonicals:
+`/triagem-tecnica/`, `/radar/nacional-obras-publicas/`, `/privacidade/`,
+`/comercial/privacidade-leads/`, `/comercial/termos-diagnostico-b2g/` e `/nurture/`.
+O conteúdo visível, preços, autoria e datas dessas seis páginas são preservados.
+
+### Próximo passo específico em oito ferramentas
+
+| Ferramenta | Serviço existente vinculado |
+| --- | --- |
+| Memorial de cálculo | Revisão técnica de projetos |
+| Propriedades de seções | Projetos estruturais |
+| Seção de concreto armado | Projeto estrutural de concreto armado |
+| Treliças e pórticos | Projetos estruturais |
+| CPT e estacas | Projetos de estruturas e fundações |
+| Conforto térmico | Projetos de instalações |
+| Energia solar fotovoltaica | Projeto elétrico |
+| Modelador paramétrico 3D | Coordenação multidisciplinar |
+
+Sete páginas substituem o bloco genérico existente. O modelador recebe uma
+passagem equivalente. Os links são HTML navegável com destino canônico e os
+botões utilizam a triagem atual. Não mudam cálculo, processamento, exportações,
+preços, licença nem responsabilidade pelo serviço.
+
+O formulário recebe a necessidade atual e conserva a primeira origem da sessão.
+Os contatos declaram a jornada de projeto para substituir uma seleção anterior
+incompatível, como perícia. Os canais diretos da triagem mantêm suas mensagens
+atuais; não se afirma que WhatsApp e e-mail recebem automaticamente esse tema.
+
+As oito revisões de conteúdo têm data atualizada no registro do catálogo,
+metadados, nota visível e sitemap. A correção somente semântica da categoria
+da viga contínua preserva sua data anterior.
+
+### Medição e integridade
+
+`/cad/` e `/bim/` passam a ser origens da família `tool` no registro do servidor
+e no cliente. As transições para os serviços usam `content_to_service` existente;
+a navegação entre ferramentas não é contada como contratação nem lead.
+Não há novo transporte, evento, identificador pessoal ou URL com texto livre.
+
+O verificador do catálogo confere categorias de aplicações em JSON-LD real,
+incluindo listas e grafos. Categoria ausente, recomendada mas não obrigatória
+pelo Google, não provoca invenção de preço ou avaliação. A verificação não
+declara elegibilidade a resultado enriquecido.
+
+A revisão de componentes do CSS do diagnóstico foi repetida após a adição dos
+dois prefixos em analytics. Nenhum componente, seletor, import ou regra de CSS
+foi acrescentado. Os dois hashes de fonte derivados foram atualizados; as 266
+exclusões e os bytes da folha projetada permanecem iguais.
+
+## Validação e publicação
+
+Antes da integração, executar os testes de metadados, categorias, atribuição,
+analytics, catálogo e build, além dos workflows obrigatórios da PR. O navegador
+da CI confere o artefato e as jornadas existentes. Uma medição local não substitui
+a aceitação pública da release.
+
+O aceite de produção exige o SHA integrado em `/.well-known/build-info.json`,
+runtime correspondente, conclusão do workflow Netcup e conferência de páginas,
+sitemap e comportamento público. O fluxo existente também prova persistência de
+captação sintética sem envio comercial. Não declarar submissão ao Search Console
+ou resultado comercial sem recibo próprio.
+
+Uma combinação de HTTP, www e caminho sem barra pode exigir mais de um salto.
+Esta alteração não promete eliminar toda cadeia de variantes. O vhost externo
+tem provisionamento próprio; editar um modelo local não comprovaria sua instalação.
+
+## Responsabilidade, medição e recuperação
+
+Aplicam-se ADR-STRAT-002, ADR-STRAT-004 e RUNTIME-AUTHORITY, sem mudança de
+fronteira. `web-cfg` mantém páginas e aquisição; `extra-cli`, fatos públicos e
+proveniência; Warmbly, ação comercial e resultados. O destino comercial existente
+recebe a origem `CONFENGE_WEB`.
+
+Comparar, por ferramenta e serviço, entradas orgânicas, passagens para serviços,
+abertura de contato e pedidos realmente persistidos. Examinar oportunidades e
+recebimentos no sistema comercial, sem atribuir causalidade a uma simples alta
+de cliques. Repetir essa estrutura em cem ferramentas reaproveita os mesmos
+contratos e validadores, sem criar cem funis independentes.
+
+Recuperação: reverter a PR completa e publicar pelo fluxo Netcup existente.
+Não há migração de dados ou alteração de armazenamento persistente. A publicação
+preserva a recuperação automática da release anterior.
+
+## Referências primárias consultadas em 19/11/2026
+
+- [Canonical e URLs duplicadas](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)
+- [Atualizações da documentação, retirada de FAQ em maio de 2026](https://developers.google.com/search/updates)
+- [Categorias e requisitos de SoftwareApplication](https://developers.google.com/search/docs/appearance/structured-data/software-app)
+- [Títulos na busca](https://developers.google.com/search/docs/appearance/title-link)
+- [Descrições na busca](https://developers.google.com/search/docs/appearance/snippet)
+- [Core Web Vitals e medidas de campo](https://web.dev/articles/vitals)
+- [Links rastreáveis](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)
+- [Conteúdo útil, autoria e finalidade](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)

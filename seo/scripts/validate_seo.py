@@ -10,7 +10,7 @@ import json
 import re
 import sys
 import tarfile
-from collections import Counter, defaultdict
+from collections import Counter
 from functools import lru_cache
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -23,6 +23,7 @@ from scripts.site.public_copy_scope import (  # noqa: E402
     is_indexable_html,
     visitor_facing_html_files,
 )
+from scripts.site.search_metadata import audit_indexable_metadata  # noqa: E402
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -239,7 +240,6 @@ def main() -> int:
     from scripts.organic.sitemap_graph import (
         load_graph_locs,
         load_index_members,
-        meta_robots_noindex,
         missing_referenced_sitemap_issues,
         published_route_inventory,
     )
@@ -254,73 +254,29 @@ def main() -> int:
     for issue in missing_referenced_sitemap_issues(ROOT):
         errors.append(f"{issue.code}: {issue.detail or issue.url}")
 
-    titles: dict[str, list[str]] = defaultdict(list)
-    descs: dict[str, list[str]] = defaultdict(list)
     paths_info: dict[str, Path] = {}
+    metadata_audit = audit_indexable_metadata(ROOT)
+    errors.extend(metadata_audit["errors"])
+    indexable = set(metadata_audit["routes"])
 
     for p in html_pages:
         t = p.read_text(encoding="utf-8", errors="replace")
         path = page_path(p)
         paths_info[path] = p
-        title = re.search(r"<title>([^<]*)</title>", t)
         h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", t, re.S)
-        can = re.search(
-            r'rel=["\']canonical["\'][^>]*href=["\']([^"\']+)["\']|href=["\']([^"\']+)["\'][^>]*rel=["\']canonical["\']',
-            t,
-        )
-        desc = re.search(
-            r'name=["\']description["\'][^>]*content=["\']([^"\']*)["\']|content=["\']([^"\']*)["\'][^>]*name=["\']description["\']',
-            t,
-        )
-        is_noindex = meta_robots_noindex(t)
-        is_utility = (
-            path in ("/404.html", "/obrigado.html")
-            or path.startswith("/obrigado")
-            or p.name.startswith("obrigado")
-        )
-        if is_utility or is_noindex:
+        if path not in indexable:
             # Journey confirmations and other noindex utilities are not indexable
             # SEO targets; skip title/canonical uniqueness gates.
             continue
-        if not title:
-            errors.append(f"no title {path}")
-        else:
-            titles[title.group(1)].append(path)
         if len(h1s) != 1:
             errors.append(f"h1 count {len(h1s)} {path}")
-        if not can:
-            errors.append(f"no canonical {path}")
-        else:
-            c = can.group(1) or can.group(2)
-            if urlparse(c).path != path:
-                errors.append(f"canonical mismatch {path} -> {c}")
-        if not desc:
-            warnings.append(f"no description {path}")
-        else:
-            d = desc.group(1) or desc.group(2)
-            descs[d].append(path)
         for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', t, re.S):
             try:
                 json.loads(block)
             except Exception as exc:  # noqa: BLE001
                 errors.append(f"JSON-LD invalid {path}: {exc}")
 
-    for t, ps in titles.items():
-        if len(ps) > 1:
-            errors.append(f"dup title {t}: {ps}")
-    for d, ps in descs.items():
-        if len(ps) > 1:
-            errors.append(f"dup desc: {ps}")
-
     sm_paths = {urlparse(u).path for u in sm_urls}
-    indexable: set[str] = set()
-    for path, p in paths_info.items():
-        if path in ("/404.html", "/obrigado.html") or path.startswith("/obrigado") or p.name.startswith("obrigado"):
-            continue
-        t = p.read_text(encoding="utf-8", errors="replace")
-        if meta_robots_noindex(t):
-            continue
-        indexable.add(path)
     if sm_paths - indexable:
         errors.append(f"sitemap not on FS: {sorted(sm_paths - indexable)}")
     if indexable - sm_paths:
@@ -798,7 +754,7 @@ def main() -> int:
         if not page.get("robots_allowed"):
             errors.append(f"inventory indexable route blocked by robots {path}")
         if not page.get("has_description"):
-            warnings.append(f"inventory no description {path}")
+            errors.append(f"inventory no description {path}")
         if page.get("schema_count", 0) < 1:
             errors.append(f"inventory missing schema {path}")
         elif not page.get("jsonld_parseable"):
