@@ -73,6 +73,13 @@ CACHE_TRANSIENT_STATES = {"HIT", "STALE", "UPDATING"}
 # budget would let a network blip spend the time reserved for edge propagation.
 TRANSPORT_RETRY_MAX_ATTEMPTS = 3
 TRANSPORT_RETRY_SLEEP = 2.0
+# Non-HTML bytes get at most one extra GET, sharing the original URL timeout.
+# Generic OSError/URLError also cover configuration and TLS failures, so only
+# explicit interrupted-transport exceptions qualify.
+ASSET_TRANSIENT_EXCEPTIONS = frozenset({
+    "ConnectionResetError", "ConnectionAbortedError", "BrokenPipeError",
+    "TimeoutError", "IncompleteRead", "RemoteDisconnected",
+})
 NON_RETRYABLE_STATUS = {401, 403, 407}
 _EVIDENCE_HEADERS = (
     "Age",
@@ -1042,6 +1049,7 @@ def verify_robots_policy(
 def verify_non_html_assets(
     *, site: Path, inventory: dict[str, Any], overlay: dict[str, Any],
     base: str, fetcher: Callable | None, concurrency: int, timeout: float,
+    clock: Callable[[], float] = time.monotonic,
 ) -> dict[str, Any]:
     """Reconcile physical assets independently, then verify exact public bytes."""
     host = inventory.get("non_html_sha256") or {}
@@ -1094,7 +1102,7 @@ def verify_non_html_assets(
 
     served_robots: dict[str, bytes] = {}
 
-    def verify_one(item: tuple[str, str]) -> dict[str, Any]:
+    def verify_attempt(item: tuple[str, str], request_timeout: float) -> dict[str, Any]:
         request_path, rel = item
         protected = rel in NONPUBLIC_CONFIG_FILES
         status = 404 if protected else 200
@@ -1105,9 +1113,9 @@ def verify_non_html_assets(
             limit = FIRST_HOP_LIMIT
             if rel in artifact and not protected:
                 limit = max(limit, (site / rel).stat().st_size)
-            entry, body = _probe_first_hop(base + request_path, timeout, limit=limit)
+            entry, body = _probe_first_hop(base + request_path, request_timeout, limit=limit)
         else:
-            entry, body = fetcher(base + request_path, timeout)
+            entry, body = fetcher(base + request_path, request_timeout)
         headers = entry.get("headers") or {}
         digest = hashlib.sha256(body).hexdigest() if body is not None else None
         expected_content_types = EXACT_ASSET_CONTENT_TYPES.get(rel) or EXECUTABLE_ASSET_CONTENT_TYPES.get(
@@ -1144,7 +1152,52 @@ def verify_non_html_assets(
             "config_body_withheld": protected and ok,
             "edge_contract": edge or None,
             "ok": ok, "error": entry.get("error"),
+            "read_completed": entry.get("read_completed"),
+            "read_phase": entry.get("read_phase"),
+            "exception_type": entry.get("exception_type"),
+            "bytes_received": entry.get("bytes_received"),
         }
+
+    def verify_one(item: tuple[str, str]) -> dict[str, Any]:
+        started = clock()
+        deadline = started + timeout
+        request_timeout = timeout
+        attempts: list[dict[str, Any]] = []
+        while True:
+            row = verify_attempt(item, request_timeout)
+            attempts.append({
+                **{key: row[key] for key in (
+                    "status", "http_sha256", "headers", "location", "ok", "error",
+                    "read_completed", "read_phase", "exception_type", "bytes_received",
+                )},
+                "attempt": len(attempts) + 1,
+                "timeout_seconds": request_timeout,
+                "at_offset_seconds": round(max(0.0, clock() - started), 3),
+                "decision": "verified" if row["ok"] else "rejected",
+            })
+            retryable = (
+                row["error"] is not None and row["read_completed"] is False
+                and row["http_sha256"] is None
+                and row["exception_type"] in ASSET_TRANSIENT_EXCEPTIONS
+                and row["location"] is None
+                and str(row["headers"].get("content-encoding") or "identity").lower() == "identity"
+                and (
+                    (row["status"] is None and row["read_phase"] == "connect")
+                    or (row["status"] == row["expected_status"] and row["content_type_ok"])
+                )
+            )
+            if not retryable:
+                break
+            if len(attempts) == 2:
+                attempts[-1]["decision"] = "transport_retry_exhausted"
+                break
+            remaining = deadline - clock()
+            if remaining <= 0:
+                attempts[-1]["decision"] = "transport_retry_deadline_exhausted"
+                break
+            attempts[-1]["decision"] = "retry_transport_failure"
+            request_timeout = remaining
+        return {**row, "attempts": attempts}
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as pool:
         rows = list(pool.map(verify_one, requests))
@@ -1482,7 +1535,7 @@ def run_acceptance(
         errors.append("withdrawn_contract_probes_failed")
     non_html_assets = verify_non_html_assets(
         site=site, inventory=inventory, overlay=overlay_payload, base=base,
-        fetcher=asset_fetcher, concurrency=concurrency, timeout=timeout,
+        fetcher=asset_fetcher, concurrency=concurrency, timeout=timeout, clock=clock,
     )
     assets_path = report_dir / "non-html-assets.json"
     _write_json(assets_path, non_html_assets)

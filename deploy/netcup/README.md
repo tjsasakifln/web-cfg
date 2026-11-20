@@ -123,7 +123,8 @@ Two measurements are deliberately made identical on both sides
   250 ms and zero when not measured. `metrics.timeToFirstByte` is never used:
   it is Lantern's simulated TTFB (~450 ms) and is identical in the lab. The
   budget number never moves; the allowance is evidence, visible in
-  `netcup-runtime-acceptance-<sha>` and recomputable from the raw report.
+  `netcup-runtime-acceptance-<sha>-<run_attempt>` and recomputable from the raw
+  report. Reruns retain a separate artifact for every attempt.
 - **Infrastructure failures are not measurements**: when the browser or its
   debugging session dies before a result exists (Lighthouse's own asynchronous
   `Protocol error … Session with given id not found`, run 34532136335, killed

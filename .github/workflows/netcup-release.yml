@@ -724,7 +724,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: netcup-runtime-acceptance-${{ github.sha }}
+          name: netcup-runtime-acceptance-${{ github.sha }}-${{ github.run_attempt }}
           path: |
             build/reports/server-inventory-${{ github.sha }}.json
             build/reports/served-public-acceptance/
