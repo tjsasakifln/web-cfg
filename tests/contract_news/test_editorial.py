@@ -10,7 +10,7 @@ from editorial_fixtures import enriched_fact, research_for, analysis_for, editor
 from scripts.contract_news.core import NewsError, fingerprint, public_facts, validate_fact, validate_draft
 from scripts.contract_news.editorial import (
     editorial_ready, source_catalog, validate_research, validate_analysis,
-    validate_review, validate_published_editorial,
+    validate_review, validate_published_editorial, _prose,
 )
 
 
@@ -92,6 +92,74 @@ class EditorialTests(unittest.TestCase):
         catalog = json.loads(source_catalog(fact)[0]['text'])
         self.assertEqual(catalog['source_published_at_date'], '2026-11-17')
         self.assertEqual(catalog['signed_at_date'], fact['signed_at'])
+
+    def test_ciminas_civil_dates_accept_brazilian_notation_in_the_draft(self):
+        fact = enriched_fact()
+        # Exact date fields from PNCP contract 19493732000199-2-000329/2026.
+        fact.update(source_published_at='2026-11-16T11:34:34Z', signed_at='2026-10-22',
+                    starts_at='2026-10-22', ends_at='2027-09-25')
+        draft = editorial_draft(fact)
+        draft['paragraphs'][0] += (' O cadastro foi publicado no PNCP em 16/11/2026, '
+                                    'com assinatura em 22/10/2026 e vigência até 25/09/2027.')
+        validate_draft(draft, fact)
+
+    def test_complete_valid_dates_accept_either_notation(self):
+        for source, prose in (
+            ('2026-11-16', '16/11/2026'),
+            ('16/11/2026', '2026-11-16'),
+            ('2028-02-29', '29/02/2028'),
+            ('29/02/2028', '2028-02-29'),
+        ):
+            with self.subTest(source=source, prose=prose):
+                _prose(prose, 'date_probe', 1, 100, source)
+
+    def test_legacy_date_separators_preserve_only_the_same_date_and_order(self):
+        for source, prose in (
+            ('10.11.2026', '10/11/2026'),
+            ('2026.11.10', '2026-11-10'),
+            ('10-11-2026', '10/11/2026'),
+            ('2026/11/10', '2026-11-10'),
+            ('29.02.2028', '29/02/2028'),
+        ):
+            with self.subTest(source=source, prose=prose):
+                _prose(prose, 'date_probe', 1, 100, source)
+        for source, prose in (
+            ('2026.11.10', '10/11/2026'),
+            ('10.11.2026', '2026-11-10'),
+            ('10 de novembro de 2026', '10/11/2026'),
+            ('29.02.2026', '29/02/2026'),
+            ('31.11.2026', '31/11/2026'),
+            ('77-10.11.2026', '10/11/2026'),
+            ('2011.11.20', '20/11/1120'),
+        ):
+            with self.subTest(source=source, prose=prose), self.assertRaisesRegex(NewsError, 'uncontrolled_numeric_or_markup_claim'):
+                _prose(prose, 'date_probe', 1, 100, source)
+
+    def test_date_equivalence_requires_a_complete_date_in_the_source(self):
+        for source, prose in (
+            ('Identificador 16112026.', '16/11/2026'),
+            ('Identificador 20261116.', '2026-11-16'),
+            ('Dia 16, mês 11 e ano 2026.', '16/11/2026'),
+            ('Processo 2026-11-16-329.', '16/11/2026'),
+            ('Processo 329-16/11/2026.', '2026-11-16'),
+            ('Data 2026-11-16; registro 17.', '17/11/2026'),
+        ):
+            with self.subTest(source=source, prose=prose), self.assertRaisesRegex(NewsError, 'uncontrolled_numeric_or_markup_claim'):
+                _prose(prose, 'date_probe', 1, 100, source)
+
+    def test_invalid_calendar_dates_are_rejected_even_if_in_the_source(self):
+        for value in ('2026-02-29', '29/02/2026', '2026-11-31', '31/11/2026', '16/13/2026', '0000-11-16'):
+            with self.subTest(value=value), self.assertRaisesRegex(NewsError, 'uncontrolled_numeric_or_markup_claim'):
+                _prose(value, 'date_probe', 1, 100, value)
+
+    def test_process_numbers_keep_their_existing_numeric_binding(self):
+        source = 'Contrato 225/2026. Processo 2026-11-16-329. Valor R$ 54.674,84.'
+        for value in ('225/2026', '2026-11-16-329', 'R$ 54.674,84'):
+            with self.subTest(value=value):
+                _prose(value, 'number_probe', 1, 100, source)
+        for value in ('2026/225', '226/2026'):
+            with self.subTest(value=value), self.assertRaisesRegex(NewsError, 'uncontrolled_numeric_or_markup_claim'):
+                _prose(value, 'number_probe', 1, 100, source)
 
     def test_no_paid_work_for_known_incomplete_document_set(self):
         fact = enriched_fact()
