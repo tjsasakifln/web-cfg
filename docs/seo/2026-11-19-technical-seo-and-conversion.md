@@ -183,3 +183,32 @@ aprovados. Esses resultados cobrem o contrato que falhou, a preservação de
 histórico, a integridade dos arquivos protegidos e a integração dos eventos de
 notícias. A conclusão global da CI, a inspeção das capturas das oito ferramentas
 e a aceitação pública da release continuam pendentes nesta etapa.
+
+## Revisão visual e medição da CI em 20/11/2026
+
+As oito seções foram inspecionadas nas capturas reais de 390 e 1440 pixels da
+[CI 44656688063](https://github.com/tjsasakifln/web-cfg/actions/runs/44656688063).
+Os botões e a disposição do conteúdo estavam íntegros. A revisão encontrou
+sete links de serviço sem distinção visual em relação ao texto do parágrafo.
+Esses links recebem a classe existente `text-link`; o modelador já os sublinha.
+O teste de navegador passa a conferir o sublinhado calculado nas oito páginas
+e nas duas larguras, além de visibilidade, ausência de transbordamento,
+navegação nativa e resposta HTTP 200. Não há mudança de CSS, destino ou oferta.
+
+Essa execução anterior reprovou o Lighthouse em
+`/conteudos/atraso-na-medicao-obra-publica/`: desempenho 80 para mínimo 90,
+TBT de 851,443 ms, LCP de 1655,114 ms e CLS zero. Foram preservados os 86
+resultados de 70 rotas, o relatório original e seus rastros. Os hashes do
+relatório, trace e DevTools Log conferem com o manifesto da mesma execução.
+
+No trace, a tarefa longa sem atribuição de script consumiu 391,195 ms de relógio
+e 1,180 ms de CPU da thread. A simulação a apresenta como 1565 ms. A maior tarefa
+atribuída ao código próprio foi 75 ms na simulação. Isso não identifica a causa
+da espera nem transforma a medição em aprovação. O HTML-fonte e os estilos
+da rota são iguais aos da base; os dois prefixos de origem acrescentam apenas
+30 bytes ao bundle, correspondentes a oito bytes comprimidos nessa resposta.
+
+A correção visual exige nova CI integral sobre o novo commit. A reprovação
+anterior permanece registrada: nenhum resultado é substituído, nenhum limite
+é reduzido e nenhuma repetição automática é acrescentada ao Lighthouse.
+Integração e publicação dependem da aprovação completa da nova versão.

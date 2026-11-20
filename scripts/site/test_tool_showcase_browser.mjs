@@ -518,6 +518,8 @@ try {
       const contact = '[data-cta-id="tool-contact-' + slug + '"]';
       await captureInViewport(service, 'service-' + slug + '-' + width);
       await captureInViewport(contact, 'contact-' + slug + '-' + width);
+      assert.ok((await page.$eval(service, el => getComputedStyle(el).textDecorationLine)).includes('underline'),
+        'service link must be visually distinguishable from paragraph text: ' + slug + ' ' + width);
       assert.equal(await page.$eval(contact, el => el.getAttribute('data-journey')), 'projeto');
       const target = await page.$eval(service, el => el.getAttribute('href'));
       assert.ok(target.startsWith('/') && !/[?#]/.test(target), 'canonical service destination ' + slug);
