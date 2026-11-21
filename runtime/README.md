@@ -195,10 +195,12 @@ header, path value, token or secret logging.
 GET /healthz proves only that the process can answer. It does not claim storage,
 Warmbly, Resend, Asaas or any other dependency is healthy.
 
-GET /ready re-evaluates the selected host-owned backend and performs an actual
-write/read/delete probe in production. A missing, unsafe or corrupt filesystem
-backend returns 503 and fails closed. Production never selects MemoryStore.
-Non-production can bind while readiness is false to support diagnosis.
+GET /ready checks configuration and access to the host-owned storage
+directories without traversing records or taking a writer lock. A missing or
+unsafe storage layout returns 503 in production. Production startup validates
+the record layout and lead idempotency indexes, then proves write access before
+binding. Record access continues to reject corrupt data. Non-production may
+bind while readiness is false to support diagnosis.
 
 GET /runtime-identity and GET /.well-known/runtime-info.json return the same
 public evidence:
