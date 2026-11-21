@@ -56,7 +56,7 @@ test("parses the shipped authority yaml from RUNTIME-AUTHORITY.md", () => {
   assert.equal(record.public_canonical.host_architecture_version, "confenge-nginx-node/v2");
   assert.equal(record.public_canonical.expected_environment, "production");
   assert.equal(record.public_canonical.dns.proxy, "cloudflare");
-  assert.deepEqual(record.public_canonical.dns.origin_apex_a, ["159.195.18.88"]);
+  assert.equal(record.public_canonical.dns.public_ipv4_provider, "cloudflare");
   assert.equal(record.public_canonical.dns.apex_a, undefined);
   assert.equal(record.public_canonical.dns.www_cname, "confenge.com.br");
   assert.equal(record.public_canonical.rollback.controller, "deploy/netcup/run_bundle_control.py");
@@ -144,11 +144,11 @@ test("Cloudflare anycast A changes are accepted without weakening origin protect
   assert.equal(result.ok, true, JSON.stringify(result.failures));
 });
 
-test("Cloudflare proxy fails closed when either public name exposes the origin", () => {
+test("Cloudflare proxy fails closed when either public name is outside Cloudflare", () => {
   const authority = loadAuthorityFromRepo();
   for (const field of ["apex_a", "www_a"]) {
     const observed = observationFromAuthority(authority);
-    observed.dns[field] = [...authority.public_canonical.dns.origin_apex_a];
+    observed.dns[field] = ["198.51.100.42"];
     const result = compareRuntimeAuthority({
       authority,
       observed,
@@ -188,8 +188,7 @@ test("non-proxied authority records retain exact A and CNAME comparison", () => 
   const authority = structuredClone(loadAuthorityFromRepo());
   const dns = authority.public_canonical.dns;
   delete dns.proxy;
-  dns.apex_a = [...dns.origin_apex_a];
-  delete dns.origin_apex_a;
+  dns.apex_a = ["198.51.100.42"];
   const observed = observationFromAuthority(authority);
   const matching = compareRuntimeAuthority({
     authority,
