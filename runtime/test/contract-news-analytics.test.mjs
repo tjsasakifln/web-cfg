@@ -81,7 +81,48 @@ function drive({ pathname = sourcePath, identity = assetId, denied = false, miss
 
 test('news integration preserves the approved shared bundle and uses the existing CSP', () => {
   const frozen = JSON.parse(readFileSync(new URL('data/bofu-dominance/frozen-specs/hashes.json', root), 'utf8'));
-  assert.equal(createHash('sha256').update(sharedScript).digest('hex'), frozen.forbidden['script.js']);
+  // The IFC script change is restricted to one analytics identifier. The
+  // simultaneous planilhas release legitimately recaptured three additional
+  // protected assets; retain their exact scope and historical hash evidence.
+  const ifcDimension = '"bim-editor-ifc",';
+  assert.equal(sharedScript.split(ifcDimension).length, 2, 'IFC dimension must occur exactly once');
+  const currentHash = createHash('sha256').update(sharedScript).digest('hex');
+  const priorHash = createHash('sha256').update(sharedScript.replace(ifcDimension, '')).digest('hex');
+  // Two separately audited transitions: the IFC tool identifier, then the
+  // final union of all indexed spreadsheet URLs. Do not confuse their scopes.
+  const beforeIfc = frozen.recapture_history.at(-2);
+  const afterIfc = frozen.recapture_history.at(-1);
+  const ifcScope = ['script.js', 'js/modules/analytics.js', 'sitemap.txt', 'sitemap.xml'];
+  const sitemapScope = ['sitemap.txt', 'sitemap-index.xml'];
+  assert.equal(currentHash, frozen.forbidden['script.js']);
+  assert.equal(priorHash, beforeIfc.forbidden['script.js']);
+  assert.equal(afterIfc.forbidden['script.js'], currentHash);
+  assert.deepEqual(afterIfc.recapture_evidence.changed_protected_paths, ifcScope);
+  assert.deepEqual(frozen.recapture_evidence.changed_protected_paths, sitemapScope);
+  assert.equal(afterIfc.recapture_evidence.human_review_claimed, false);
+  assert.equal(frozen.recapture_evidence.human_review_claimed, false);
+  for (const path of ifcScope) {
+    assert.ok(beforeIfc.forbidden[path], `missing earlier protected hash: ${path}`);
+    assert.notEqual(afterIfc.forbidden[path], beforeIfc.forbidden[path],
+      `unmodified protected asset incorrectly claimed by IFC recapture: ${path}`);
+    assert.equal(afterIfc.recapture_evidence.changed_protected_hashes[path].previous,
+      beforeIfc.forbidden[path]);
+    assert.equal(afterIfc.recapture_evidence.changed_protected_hashes[path].current,
+      afterIfc.forbidden[path]);
+  }
+  for (const [path, digest] of Object.entries(frozen.forbidden)) {
+    if (sitemapScope.includes(path)) {
+      assert.notEqual(digest, afterIfc.forbidden[path], `unmodified sitemap: ${path}`);
+      assert.equal(frozen.recapture_evidence.changed_protected_hashes[path].previous,
+        afterIfc.forbidden[path]);
+      assert.equal(frozen.recapture_evidence.changed_protected_hashes[path].current,
+        digest);
+    } else {
+      assert.equal(digest, afterIfc.forbidden[path], `unexpected protected drift: ${path}`);
+    }
+  }
+  assert.deepEqual(frozen.pillars, beforeIfc.pillars, 'the six frozen pillars must remain unchanged');
+  assert.deepEqual(frozen.pillars, afterIfc.pillars, 'the six frozen pillars must remain unchanged');
   assert.match(markup, /<script defer src="\/script\.js"><\/script><script defer src="\/assets\/js\/contract-news\.js"><\/script>/);
   assert.match(markup, /href="\/acompanhamento-contratos-obras\/" data-cta-id="news-contract-support" data-news-service-link="true"/);
   assert.match(contentPolicy(), /script-src 'self'/);
