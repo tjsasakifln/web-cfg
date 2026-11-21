@@ -89,9 +89,30 @@ try{
  assert.deepEqual(violations,[]);
  assert.deepEqual(errors,[]);
  const mobile=await browser.newPage();
- await mobile.setViewport({width:390,height:844,isMobile:true,hasTouch:true});
- await mobile.goto(url,{waitUntil:'domcontentloaded'});
- const geometry=await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));
- assert(geometry.scroll<=geometry.view+2,'Estouro horizontal no mobile: '+JSON.stringify(geometry));
- console.log('PASS editor IFC: rota, identidade, carregamento WASM, 3D, edicao, desfazer, refazer, reabertura e mobile');
+ for(const width of [360,390]){
+  await mobile.setViewport({width,height:844,isMobile:true,hasTouch:true});
+  await mobile.goto(url,{waitUntil:'domcontentloaded'});
+  const geometry=await mobile.evaluate(async()=>{
+   const label=document.querySelector('#ifce-model');
+   label.textContent='Arquivo_de_referencia_de_engenharia_com_nome_extenso_IFC.ifc';
+   await document.fonts.ready;
+   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+   const range=document.createRange();
+   range.selectNodeContents(label);
+   const labelRect=label.getBoundingClientRect();
+   const textRects=Array.from(range.getClientRects());
+   return {
+    scroll:document.documentElement.scrollWidth,
+    view:innerWidth,
+    labelWidth:label.clientWidth,
+    labelScrollWidth:label.scrollWidth,
+    textFullyVisible:textRects.every(rect=>rect.left>=labelRect.left-1&&rect.right<=labelRect.right+1),
+    overflowX:getComputedStyle(label).overflowX
+   };
+  });
+  assert(geometry.scroll<=geometry.view+2,'Estouro horizontal no mobile: '+JSON.stringify({width,...geometry}));
+  assert(geometry.labelScrollWidth<=geometry.labelWidth+1&&geometry.textFullyVisible,
+   'Nome IFC cortado no mobile: '+JSON.stringify({width,...geometry}));
+ }
+ console.log('PASS editor IFC: rota, identidade, carregamento WASM, 3D, edicao, desfazer, refazer, reabertura e mobile sem corte');
 } finally {await browser.close();await new Promise(ok=>server.server.close(ok));}
