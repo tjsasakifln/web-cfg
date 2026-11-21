@@ -82,7 +82,10 @@ test("a saída não reivindica revisão profissional nem expõe dados em analyti
   assert.match(html,/noindex,follow/);
   assert.match(html,/logo-confenge-500-f8a83f6d/);
   assert.match(html,/id="formulario" method="post"/);
-  assert.match(app,/exportToolResult\(preparedExport\)/);
+  assert.match(app,/credits\.deliverLocal\(preparedExport\)/);
+  assert.match(app,/if \(!await credits\.ready\(\)\)/);
+  assert.match(html,/header class="site-header"/);
+  assert.match(html,/footer class="site-footer"/);
   assert.doesNotMatch(app,/innerHTML\s*=/);
   assert.doesNotMatch(app,/localStorage|sessionStorage/);
   assert.match(app,/tool_complete/);
