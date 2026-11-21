@@ -35,13 +35,23 @@ export function parseSheet(source, papa, required = []) {
   if (!parsed.data.length || parsed.data.length > 2500) throw new Error("Use entre 1 e 2.500 linhas por análise.");
   const key = name => String(name ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
   const headers = parsed.meta.fields.map(key);
-  if (new Set(headers).size !== headers.length) throw new Error("Há cabeçalhos duplicados ou vazios.");
+  if (new Set(headers).size !== headers.length || headers.some(name => !/^[a-z][a-z0-9_]{0,60}$/.test(name)))
+    throw new Error("Cabeçalhos duplicados, vazios ou inválidos.");
   const absent = required.filter(name => !headers.includes(name));
   if (absent.length) throw new Error("Faltam colunas: " + absent.join(", ") + ".");
+  // Só projetar campos declarados pelo motor. Nunca copiar chaves do CSV
+  // para objetos convencionais, evitando alteração de protótipos.
+  const fields = required.map(name => ({ name, source: parsed.meta.fields[headers.indexOf(name)] }));
   const rows = parsed.data.map((line, i) => {
-    const r = { _linha: i + 2 };
-    parsed.meta.fields.forEach((name, j) => { r[headers[j]] = String(line[name] ?? "").trim(); });
-    return r;
+    const row = Object.create(null);
+    Object.defineProperty(row, "_linha", { value: i + 2, enumerable: true });
+    for (const field of fields) {
+      Object.defineProperty(row, field.name, {
+        value: String(line[field.source] ?? "").trim(),
+        enumerable: true,
+      });
+    }
+    return row;
   });
   return rows;
 }
