@@ -11,13 +11,34 @@
   font-weight: 580;
 }
 
-.nav-discovery__portals ~ .nav-discovery__company {
+.nav-discovery__portals .nav-discovery__company {
   margin-inline-start: 0;
 }
 
 @media (max-width: 780px) {
+  /* Fixed columns keep the header height stable during a web-font swap. */
+  .nav-discovery__inner:has(> .nav-discovery__portals) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .nav-discovery__inner:has(> .nav-discovery__portals) .nav-discovery__shortcuts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 8px;
+  }
+
   .nav-discovery__portals {
-    gap: 0 14px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.75fr) minmax(0, 1.11fr);
+    gap: 0 8px;
     margin-inline-start: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-discovery__inner:has(> .nav-discovery__portals) .nav-discovery__shortcuts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

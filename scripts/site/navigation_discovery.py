@@ -87,7 +87,7 @@ def render_discovery_bar(
         f'{_analytics("header_utility", item["id"])}>{escape(item["label"])}</a>'
         for item in header.get("utility_links", [])
     )
-    portals = ""
+    reserved_links = utilities
     if include_portals:
         links = "".join(
             f'<a class="nav-discovery__portal" href="{escape(item["href"], quote=True)}" '
@@ -95,7 +95,7 @@ def render_discovery_bar(
             for item in header.get("portal_links", [])
         )
         if links:
-            portals = f'<div class="nav-discovery__portals">{links}</div>'
+            reserved_links = f'<div class="nav-discovery__portals">{links}{utilities}</div>'
     return (
         '<!-- BEGIN NAV DISCOVERY -->'
         '<nav class="nav-discovery-region" aria-label="Acesso direto">'
@@ -103,7 +103,7 @@ def render_discovery_bar(
         '<div class="container nav-discovery__inner">'
         '<div class="nav-discovery__shortcuts">'
         '<span class="nav-discovery__label">Acesso direto</span>'
-        f'{shortcuts}</div>{portals}{utilities}</div></div></nav>'
+        f'{shortcuts}</div>{reserved_links}</div></div></nav>'
         '<!-- END NAV DISCOVERY -->'
     )
 
