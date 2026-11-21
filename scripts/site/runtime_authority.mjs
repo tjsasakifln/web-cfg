@@ -411,6 +411,24 @@ function isCloudflareProxy(dns) {
   return String(dns.proxy || "").trim().toLowerCase() === "cloudflare";
 }
 
+const CLOUDFLARE_IPV4_CIDRS = [
+  [173, 245, 48, 20], [103, 21, 244, 22], [103, 22, 200, 22], [103, 31, 4, 22],
+  [141, 101, 64, 18], [108, 162, 192, 18], [190, 93, 240, 20], [188, 114, 96, 20],
+  [197, 234, 240, 22], [198, 41, 128, 17], [162, 158, 0, 15], [104, 16, 0, 13],
+  [104, 24, 0, 14], [172, 64, 0, 13], [131, 0, 72, 22],
+];
+
+function cloudflareIpv4(value) {
+  const parts = String(value).split(".").map(Number);
+  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return false;
+  const address = ((parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0;
+  return CLOUDFLARE_IPV4_CIDRS.some(([a, b, c, prefix]) => {
+    const network = ((a << 24) | (b << 16) | (c << 8)) >>> 0;
+    const mask = (0xffffffff << (32 - prefix)) >>> 0;
+    return (address & mask) === (network & mask);
+  });
+}
+
 function fail(failures, code, detail) {
   failures.push({ code, detail });
 }
@@ -481,24 +499,20 @@ export function compareRuntimeAuthority({ authority, observed, expected = {} }) 
     fail(failures, "netlify_named_as_production_host", String(prod.host));
   }
   if (isCloudflareProxy(dns)) {
-    const originA = asList(dns.origin_apex_a);
     const apexA = asList(obsDns.apex_a);
     const wwwA = asList(obsDns.www_a);
-    if (originA.length === 0) {
-      fail(failures, "dns_origin_authority_missing", "proxied DNS must declare origin_apex_a");
-    }
-    if (apexA.length === 0 || overlaps(apexA, originA)) {
+    if (apexA.length === 0 || !apexA.every(cloudflareIpv4)) {
       fail(
         failures,
         "dns_apex_mismatch",
-        `proxied apex must have an A answer and hide origin=${JSON.stringify(originA)}; observed=${JSON.stringify(apexA)}`,
+        `proxied apex must contain only Cloudflare IPv4 addresses; observed=${JSON.stringify(apexA)}`,
       );
     }
-    if (wwwA.length === 0 || overlaps(wwwA, originA)) {
+    if (wwwA.length === 0 || !wwwA.every(cloudflareIpv4)) {
       fail(
         failures,
         "dns_www_mismatch",
-        `proxied www must have an A answer and hide origin=${JSON.stringify(originA)}; observed=${JSON.stringify(wwwA)}`,
+        `proxied www must contain only Cloudflare IPv4 addresses; observed=${JSON.stringify(wwwA)}`,
       );
     }
   } else {

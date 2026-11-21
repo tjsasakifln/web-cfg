@@ -1,17 +1,28 @@
 #suite-calculos {border-top:1px solid var(--rule);padding-block:var(--space-6);scroll-margin-top:6rem}
 #suite-calculos [hidden] {display:none}
 #suite-painel-calculo {max-width:100%;margin-top:1rem;border:1px solid var(--rule);border-top:3px solid var(--green-700);padding:clamp(.9rem,3vw,1.5rem);background:var(--white);color:var(--ink)}
-#suite-calculos .calc-options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-bottom:1rem}
-#suite-calculos .calc-options label {font-weight:700}
-#suite-calculos select,#suite-calculos textarea {display:block;width:100%;min-width:0;margin-top:.35rem;padding:.65rem;border:1px solid var(--muted);background:var(--white);color:var(--ink);font:inherit}
+#suite-calculos .calc-options,#suite-calculos .calc-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+#suite-calculos label,#pacotes label {font-weight:700}
+#suite-calculos select,#suite-calculos input,#suite-calculos textarea,#pacotes select {display:block;width:100%;min-width:0;margin-top:.35rem;padding:.65rem;border:1px solid var(--muted);background:var(--white);color:var(--ink);font:inherit}
+#pacotes select {max-width:34rem}
+#suite-calculos .calc-scenario {margin:1rem 0}
 #suite-calculos textarea {font-family:ui-monospace,monospace;font-size:.9rem;line-height:1.5;resize:vertical;min-height:8rem}
 #suite-calculos [data-input-help],#suite-calculos [data-status],#suite-calculos [data-draft-status] {font-size:var(--text-small);margin:.45rem 0}
 #suite-calculos [data-draft-status] {color:var(--muted)}
 #suite-calculos .calc-actions {display:flex;gap:.65rem;flex-wrap:wrap;margin:1rem 0}
+#suite-calculos details {margin:1rem 0}
+#suite-calculos summary {cursor:pointer;font-weight:700}
+#suite-calculos .calc-editor {border-top:1px solid var(--rule);padding-top:1rem;margin-bottom:0}
+#suite-calculos .calc-editor label {display:block;margin-top:.75rem;font-size:var(--text-small);font-weight:normal}
 #suite-calculos [data-results] {min-width:0}
+#suite-calculos [data-results] h3 {scroll-margin-top:8rem}
+#suite-calculos .calc-highlights {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:.75rem;margin:1rem 0}
+#suite-calculos .calc-highlights div {background:var(--surface);border:1px solid var(--rule);padding:.85rem}
+#suite-calculos .calc-highlights dt {font-size:var(--text-small)}
+#suite-calculos .calc-highlights dd {font-size:1.4rem;font-weight:700;margin:.2rem 0 0}
 #suite-calculos .calc-scroll {max-width:100%;overflow:auto;max-height:26rem;margin:1rem 0;border:1px solid var(--rule)}
 #suite-calculos table {width:100%;border-collapse:collapse;font-size:.9rem}
 #suite-calculos caption {font-weight:700;text-align:left;padding:.75rem}
 #suite-calculos th,#suite-calculos td {padding:.45rem .65rem;text-align:left;border-top:1px solid var(--rule)}
 #suite-calculos th {background:var(--surface,var(--white))}
-@media(max-width:600px){#suite-calculos .calc-options{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){#suite-calculos .calc-options,#suite-calculos .calc-fields{grid-template-columns:minmax(0,1fr)}}

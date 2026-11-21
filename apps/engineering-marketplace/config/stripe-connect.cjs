@@ -64,7 +64,8 @@ function buildStripeConnectConfig(env = process.env) {
     throw new Error('MARKETPLACE_PAYMENT_MODE must be test or live');
   }
   const apiKey = required(env, 'STRIPE_SECRET_KEY');
-  if (!apiKey.startsWith(`sk_${mode}_`)) {
+  // Restricted server keys preserve least privilege and remain mode-scoped.
+  if (!apiKey.startsWith(`rk_${mode}_`) && !apiKey.startsWith(`sk_${mode}_`)) {
     throw new Error('STRIPE_SECRET_KEY does not match MARKETPLACE_PAYMENT_MODE');
   }
   const platformWebhookSecret = required(env, 'STRIPE_OPERATOR_WEBHOOK_SECRET');

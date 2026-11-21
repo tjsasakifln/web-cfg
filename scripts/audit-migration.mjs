@@ -126,11 +126,11 @@ function pad(s, n) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const base = args.base;
-  const isProd =
-    base.includes("confenge.com.br") || base.includes("confenge.netlify.app");
-  const isLocal =
-    /localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]/i.test(base) ||
-    base.startsWith("http://127.");
+  const baseHost = new URL(base).hostname;
+  const corporateHosts = new Set([CANON_HOST, `www.${CANON_HOST}`]);
+  const isProd = corporateHosts.has(baseHost) || baseHost === "confenge.netlify.app";
+  const isLocal = ["localhost", "0.0.0.0", "[::1]"].includes(baseHost) ||
+    /^127(?:\.\d{1,3}){3}$/.test(baseHost);
   // Redirect rules from netlify.toml are not applied by plain static servers.
   // Test them only on a deployed edge: canonical Netcup or the legacy preview.
   const httpRedirectsAuthoritative = isProd && !isLocal;
@@ -497,7 +497,7 @@ async function main() {
     const can = extractCanonical(res.body);
     const expect = `https://${CANON_HOST}${p === "/" ? "/" : p}`;
     // local preview may rewrite hosts — only enforce apex on production base
-    if (isProd && base.includes(CANON_HOST)) {
+    if (corporateHosts.has(baseHost)) {
       check(can === expect || can === expect.replace(/\/$/, ""), `live canonical ${p} → ${can}`);
     } else {
       check(!!can || !isProd, `live has canonical or non-prod ${p}: ${can || "(none)"}`, false);
@@ -526,12 +526,13 @@ async function main() {
       {
         url: "https://confenge.netlify.app/conteudos/",
         want: [301, 308],
-        locIncludes: "confenge.com.br/conteudos",
+        locHost: "confenge.com.br",
+        locPath: "/conteudos/",
       },
       {
         url: "http://confenge.com.br/",
         want: [301, 308],
-        locIncludes: "https://",
+        locHost: "confenge.com.br",
       },
     ];
     for (const h of hosts) {
@@ -542,8 +543,10 @@ async function main() {
       }
       let pass = h.want.includes(res.status);
       const loc = res.location || "";
-      if (pass && h.locHost) pass = loc.includes(h.locHost);
-      if (pass && h.locIncludes) pass = loc.includes(h.locIncludes);
+      const target = URL.canParse(loc) ? new URL(loc) : null;
+      if (pass && h.finalHost) pass = new URL(res.url).hostname === h.finalHost;
+      if (pass && h.locHost) pass = target?.protocol === "https:" && target.hostname === h.locHost;
+      if (pass && h.locPath) pass = target?.pathname === h.locPath;
       check(pass, `host ${h.url} → ${res.status} ${loc || "(no loc)"}`);
     }
 
@@ -554,7 +557,7 @@ async function main() {
     if (!deep.ok) check(false, `netlify follow deep: ${deep.error}`);
     else {
       check(
-        deep.status === 200 && deep.url.includes("confenge.com.br"),
+        deep.status === 200 && new URL(deep.url).origin === `https://${CANON_HOST}`,
         `netlify.app/conteudos/ follows to apex 200 (${deep.status} ${deep.url})`,
         // if redirect not yet deployed, critical
         true

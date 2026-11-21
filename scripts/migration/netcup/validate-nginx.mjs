@@ -180,22 +180,40 @@ ${normalizeWrapper("confenge-web-public.conf")}
   const wrapperBinding = execFileSync("docker", ["port", wrapperContainer, "80/tcp"], { encoding: "utf8" }).trim();
   const wrapperPort = wrapperBinding.match(/:(\d+)$/)?.[1];
   if (!wrapperPort) throw new Error(`cannot determine nginx wrapper test port from ${wrapperBinding}`);
-  const privacyClient = createOriginClient({
-    label: "nginx-wrapper-public-privacy",
+  const ingressClient = createOriginClient({
+    label: "nginx-wrapper-untrusted-peer",
     baseUrl: `http://127.0.0.1:${wrapperPort}`,
     hostHeader: "confenge.com.br",
   });
-  let wrapperReady = false;
+  let wrapperStatus = null;
   for (let attempt = 0; attempt < 20; attempt += 1) {
     try {
-      const response = await privacyClient.request("/");
-      wrapperReady = response.status === 301;
-      if (wrapperReady) break;
+      wrapperStatus = (await ingressClient.request("/")).status;
+      break;
     } catch {
       await new Promise((done) => setTimeout(done, 50));
     }
   }
-  if (!wrapperReady) throw new Error("nginx wrapper test container did not become ready");
+  if (wrapperStatus === null) throw new Error("nginx wrapper test container did not become ready");
+  assertProbe("public_origin_rejects_untrusted_peer", wrapperStatus === 403, `status=${wrapperStatus}`);
+  // Published Docker ports connect from a bridge peer. Test the independently
+  // allowed host-local path from the wrapper namespace itself.
+  const requestWrapperLoopback = (path, headers = {}) => {
+    const lines = [
+      `GET ${path} HTTP/1.1`,
+      "Host: confenge.com.br",
+      "Connection: close",
+      ...Object.entries(headers).map(([name, value]) => `${name}: ${value}`),
+      "",
+      "",
+    ];
+    const response = execFileSync(
+      "docker",
+      ["exec", "-i", wrapperContainer, "nc", "-w", "5", "127.0.0.1", "80"],
+      { input: lines.join("\r\n"), encoding: "utf8", timeout: 15000 },
+    );
+    return Number(/^HTTP\/1\.[01] (\d{3})\b/.exec(response)?.[1]);
+  };
   const piiMarkers = [
     "private.person@example.com",
     "198.51.100.49",
@@ -214,8 +232,8 @@ ${normalizeWrapper("confenge-web-public.conf")}
   };
   const privacyWgetHeaders = Object.entries(privacyHeaders)
     .flatMap(([name, value]) => ["--header", `${name}: ${value}`]);
-  const publicPrivacyResponse = await privacyClient.request(privacyPath, { extraHeaders: privacyHeaders });
-  assertProbe("public_minimized_log_probe_status", publicPrivacyResponse.status === 301, `status=${publicPrivacyResponse.status}`);
+  const publicPrivacyStatus = requestWrapperLoopback(privacyPath, privacyHeaders);
+  assertProbe("public_minimized_log_probe_status", publicPrivacyStatus === 301, `status=${publicPrivacyStatus}`);
   // The candidate origin is deliberately bound to loopback inside the host.
   // Exercise that exact boundary from inside the container rather than
   // weakening the checked-in bind address for a test-only published port.

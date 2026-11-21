@@ -97,6 +97,18 @@ try {
     "read-only readiness created storage state",
     fs.readdirSync(untouchedRoot),
   );
+  const untouchedBackend = new HostFileBackend(untouchedRoot, { readOnly: true });
+  const untouchedAccess = untouchedBackend.checkAccess();
+  assert(
+    untouchedAccess.ok && untouchedAccess.initialized === false,
+    "constant-time access check rejected an empty provisioned root",
+    untouchedAccess,
+  );
+  assert(
+    JSON.stringify(fs.readdirSync(untouchedRoot)) === JSON.stringify(untouchedBefore),
+    "constant-time access check initialized storage",
+    fs.readdirSync(untouchedRoot),
+  );
 
   const initializedEmptyRoot = privateDir("confenge-read-only-layout-");
   cleanup.push(initializedEmptyRoot);
@@ -113,6 +125,67 @@ try {
     JSON.stringify(fs.readdirSync(initializedLayout)) === JSON.stringify(initializedBefore),
     "read-only readiness created namespaces",
     fs.readdirSync(initializedLayout),
+  );
+  const initializedAccess = new HostFileBackend(initializedEmptyRoot, { readOnly: true }).checkAccess();
+  assert(
+    initializedAccess.ok && initializedAccess.initialized === true,
+    "constant-time access check missed an initialized layout",
+    initializedAccess,
+  );
+
+  // Lock takeover is conservative. A live owner is never reclaimed solely
+  // because its mtime is old, while abandoned and partially-created locks are
+  // recovered after the stale threshold.
+  const lockRoot = privateDir("confenge-lock-ownership-");
+  cleanup.push(lockRoot);
+  const lockBackend = new HostFileBackend(lockRoot);
+  const lockPath = lockBackend.lockPath;
+  const oldTime = new Date(Date.now() - 10 * 60 * 1000);
+  const writeOldLock = (contents) => {
+    fs.writeFileSync(lockPath, contents, { mode: FILE_MODE });
+    fs.chmodSync(lockPath, FILE_MODE);
+    fs.utimesSync(lockPath, oldTime, oldTime);
+  };
+
+  writeOldLock(JSON.stringify({ pid: process.pid, acquired_at: oldTime.toISOString() }));
+  const originalDateNow = Date.now;
+  let nowCalls = 0;
+  Date.now = () => oldTime.getTime() + 20 * 60 * 1000 + (nowCalls++ === 0 ? 0 : 31_000);
+  let liveOwnerCode = null;
+  try { lockBackend._acquireLock(); } catch (err) { liveOwnerCode = err.code; } finally { Date.now = originalDateNow; }
+  assert(liveOwnerCode === "STORE_LOCK_TIMEOUT", "stale lock owned by a live process was reclaimed", liveOwnerCode);
+  assert(fs.existsSync(lockPath), "live owner's lock disappeared");
+  fs.unlinkSync(lockPath);
+
+  writeOldLock("");
+  const recoveredPartialOwner = lockBackend._acquireLock();
+  assert(recoveredPartialOwner && fs.existsSync(lockPath), "partial abandoned lock was not recovered");
+  lockBackend._releaseLock(recoveredPartialOwner);
+
+  writeOldLock(JSON.stringify({ pid: 99_999_999, acquired_at: oldTime.toISOString() }));
+  const recoveredDeadOwner = lockBackend._acquireLock();
+  assert(recoveredDeadOwner && fs.existsSync(lockPath), "dead legacy lock was not recovered");
+  lockBackend._releaseLock(recoveredDeadOwner);
+
+  const supersededOwner = lockBackend._acquireLock();
+  fs.unlinkSync(lockPath);
+  const replacement = {
+    schema: "confenge-host-file-lock/v1",
+    role: "writer",
+    token: "replacement-owner-token",
+    pid: process.pid,
+    acquired_at: new Date().toISOString(),
+  };
+  fs.writeFileSync(lockPath, JSON.stringify(replacement), { mode: FILE_MODE });
+  let ownershipCode = null;
+  try { lockBackend._releaseLock(supersededOwner); } catch (err) { ownershipCode = err.code; }
+  assert(ownershipCode === "STORE_LOCK_OWNERSHIP_LOST", "old owner released a replacement lock", ownershipCode);
+  assert(JSON.parse(fs.readFileSync(lockPath, "utf8")).token === replacement.token, "replacement lock was removed");
+  fs.unlinkSync(lockPath);
+  assert(
+    !fs.readdirSync(lockBackend.layoutDir).some((name) => name.startsWith(".writer-lock.")),
+    "normal lock lifecycle left owner artifacts",
+    fs.readdirSync(lockBackend.layoutDir),
   );
 
   // The scheduled consumer calls this authenticated GET. Opening the actual

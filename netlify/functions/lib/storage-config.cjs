@@ -109,13 +109,21 @@ function storageReadiness(env = process.env, options = {}) {
     return { ok: false, backend: cfg.backend, code: "storage_not_durable" };
   }
   if (cfg.backend === "filesystem") {
-    const writeProbe = options.writeProbe !== false;
+    const deep = options.deep !== false;
+    const writeProbe = deep && options.writeProbe !== false;
     const opened = createHostBackend(env, { ...options, readOnly: !writeProbe });
     if (!opened.backend) {
       return { ok: false, backend: "filesystem", code: opened.config.code };
     }
     try {
-      opened.backend.validate({ writeProbe });
+      if (deep) {
+        opened.backend.validate({ writeProbe });
+      } else {
+        const access = opened.backend.checkAccess();
+        if (isProductionProfile(env) && !access.initialized) {
+          return { ok: false, backend: "filesystem", code: "storage_layout_uninitialized" };
+        }
+      }
       return { ok: true, backend: "filesystem", legacy: cfg.legacy };
     } catch (err) {
       return {
