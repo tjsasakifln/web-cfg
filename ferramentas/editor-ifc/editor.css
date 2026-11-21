@@ -15,6 +15,8 @@
 .ifce-brand strong{display:block;color:#102e3f;font-size:15px;letter-spacing:-.015em}.ifce-brand small{display:block;color:#6a808d;font-size:11px;margin-top:2px}
 .ifce-buttons{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
 .ifce-button{appearance:none;border:1px solid #c8d8db;border-radius:8px;background:#fff;color:#14384a;padding:10px 13px;font-size:13px;font-weight:700;cursor:pointer;line-height:1.2;transition:background .15s,border-color .15s,box-shadow .15s}
+.ifce-button{min-height:44px;box-sizing:border-box}
+.ifce-tab,.ifce-search,.ifce-field input,.ifce-field select{min-height:44px;box-sizing:border-box}
 .ifce-button:hover:not(:disabled){border-color:#299d85;background:#eaf9f4}
 .ifce-button:focus-visible,.ifce-entity:focus-visible,.ifce-field input:focus-visible,.ifce-field select:focus-visible{outline:2px solid transparent;box-shadow:var(--focus-ring);outline-offset:2px}
 .ifce-button:disabled{opacity:.43;cursor:not-allowed}
