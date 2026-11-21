@@ -160,6 +160,12 @@
   line-height: 1;
 }
 .tool-credits .tool-credits__close:hover { background: #e7f4f0; border-color: #b7d6ce; }
+.tool-credits--auth .tool-credits__close {
+  /* Preserve full-width auth layout without sacrificing sticky dismissal. */
+  float: none;
+  top: .5rem;
+  margin: .4rem .4rem -44px auto;
+}
 .tool-credits :focus-visible {
   outline: 3px solid #247e72;
   outline-offset: 3px;
