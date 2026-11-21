@@ -201,6 +201,15 @@ Enquanto a aplicação, as contas e esses resultados não forem verificados, a c
 
 ## Alternativas consideradas
 
+Nas contratações de engenharia, a preferência é Mercado Pago quando a conta CONFENGE puder operar com Split 1:1. A habilitação depende de uma aplicação de marketplace, do OAuth individual dos profissionais, da comprovação em contas de teste e do tratamento de devoluções e disputas. As credenciais da integração de Ferramentas pertencem àquela operação. A seleção de Stripe Connect fica disponível se o Mercado Pago confirmar que o Split não pode ser usado pela conta.
+
+O preflight abaixo informa a situação dos parâmetros privados sem abrir checkout ou criar cobranças. A opção `--verify-stripe` consulta a conta e os destinos de webhook com a chave já instalada no ambiente da API. A conferência de Connect e a homologação de eventos assinados continuam necessárias.
+
+```sh
+sudo ./marketplacectl exec -T api node < payment-readiness.cjs
+sudo ./marketplacectl exec -T api node - --verify-stripe < payment-readiness.cjs
+```
+
 Mercado Pago Split 1:1 é tecnicamente viável, mas substituir Stripe agora reduziria o reaproveitamento do Mercur. O fluxo clássico pede autorização OAuth de cada vendedor e usa `marketplace_fee` no Checkout Pro. Há restrições para devolução quando o recebedor não tem saldo. Fontes: [integração de split](https://www.mercadopago.com.br/developers/pt/docs/split-payments/split-1-1/integration-configuration/integrate-marketplace) e [pré-requisitos](https://www.mercadopago.com.br/developers/pt/docs/split-payments/split-1-1/prerequisites).
 
 Não foi assumida equivalência entre o pagamento Pix de ferramentas da CONFENGE e um marketplace: documentos do Checkout Transparente Orders e Checkout Pro Orders descrevem caminhos diferentes para comissão. Uma migração futura precisa validar o produto exato, a conta recebedora, a divisão e a devolução. Fontes: [migração Payments para Orders](https://www.mercadopago.com.br/developers/pt/docs/checkout-api-orders/resources/migrate-payments-to-orders) e [Checkout Pro Orders](https://www.mercadopago.com.br/developers/pt/docs/checkout-pro-orders/create-order?scope=prod).

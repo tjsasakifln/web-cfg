@@ -33,6 +33,7 @@ const reviewSchema = z.object({
   sha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   source_ref: sourceRef.optional(), expires_at: z.iso.datetime().optional(),
   specialties: specialties.optional(), activity_id: officialId.optional(),
+  platform_request_id: z.string().regex(/^(engr|ereq)_[A-Za-z0-9]+$/).optional(),
   linked_arts: z.array(officialId).max(80).optional(),
   art_status: z.enum(['registered','closed']).optional(),
   execution_confirmed: z.boolean().optional(),

@@ -66,7 +66,7 @@ function relevance(record, specialty) {
   return Math.max(0, ...Object.values(grades).filter(validGrade)) / 4;
 }
 
-function technicalScore(records, policy, specialty) {
+function technicalScore(records, policy, specialty, creditedContracts) {
   // Keep all verified technical records in the connected component even if a
   // record is unrelated to this search. It can link two ARTs to one activity.
   const rows = records.filter(record => technicalKinds.includes(record.kind) &&
@@ -87,6 +87,7 @@ function technicalScore(records, policy, specialty) {
     const links = [`activity:${review.activity_id}`, ...(review.linked_arts || []).map(art => `art:${art}`)];
     if (record.kind === 'art' && review.official_id) links.push(`art:${review.official_id}`);
     if (record.sha256) links.push(`sha:${record.sha256}`);
+    if (review.platform_request_id) links.push(`contract:${review.platform_request_id}`);
     for (const key of links) {
       if (keys.has(key)) parents[root(index)] = root(keys.get(key));
       else keys.set(key, index);
@@ -94,6 +95,8 @@ function technicalScore(records, policy, specialty) {
   });
   const weights = policy.technical.weights;
   const winners = new Map();
+  const alreadyCredited = new Set(rows.flatMap((row, index) =>
+    creditedContracts.has(row.verification.platform_request_id) ? [root(index)] : []));
   rows.forEach((record, index) => {
     const { complexity, responsibility, scope } = record.verification;
     const fit = relevance(record, specialty);
@@ -101,6 +104,7 @@ function technicalScore(records, policy, specialty) {
     const weight = weights[record.kind];
     const value = weight * fit * complexity * responsibility * scope / 64;
     const group = root(index);
+    if (alreadyCredited.has(group)) return;
     const current = winners.get(group);
     if (!current || weight > current.weight || (weight === current.weight && value > current.value)) {
       winners.set(group, { weight, value });
@@ -190,8 +194,11 @@ function serviceScore(contracts, policy, specialty, cutoff) {
   // never creates a negative balance, and integrity flags require human review.
   const quality = (rating === null ? ratingPrior : rating) / 5;
   const timeliness = timed ? 0.85 + 0.15 * onTime / timed : 1;
-  return { points: quantity * quality * timeliness, completed: completed.size,
-    rating: rating === null ? null : round(rating), independentReviews: ratings.length, lowValue };
+  return {
+    credited: new Set(completed.keys()),
+    detail: { points: quantity * quality * timeliness, completed: completed.size,
+      rating: rating === null ? null : round(rating), independentReviews: ratings.length, lowValue },
+  };
 }
 
 function calculateReputation({ evidence, contracts, asOf, specialty = null }, configuration = readPolicy()) {
@@ -199,9 +206,10 @@ function calculateReputation({ evidence, contracts, asOf, specialty = null }, co
   if (!Number.isFinite(cutoff)) throw new Error('Reputation requires an explicit calculation time');
   const { policy, digest } = configuration;
   const accepted = evidence.filter(record => isVerified(record, cutoff));
+  const services = serviceScore(contracts, policy, specialty, cutoff);
   const details = {
-    services: serviceScore(contracts, policy, specialty, cutoff),
-    technical: technicalScore(accepted, policy, specialty),
+    services: services.detail,
+    technical: technicalScore(accepted, policy, specialty, services.credited),
     experience: experienceScore(accepted, policy, specialty, cutoff),
     education: credentials(accepted, policy, specialty, 'education'),
     training: credentials(accepted, policy, specialty, 'training'),

@@ -145,6 +145,12 @@ export async function reviewEvidence(scope: any, raw: unknown) {
     let update: any = { status: review.status }
     if (review.status === 'verified') {
       const kind = validateVerifiedEvidence(record, review, now)
+      if (review.platform_request_id) {
+        const related = await tx('engineering_request').where({
+          id: review.platform_request_id, seller_id: record.seller_id,
+        }).whereNull('deleted_at').first('id')
+        if (!related) throw new Error('Linked contract does not belong to the evidence owner')
+      }
       const { id, status, verified_kind, sha256, expires_at, ...facts } = review
       update = { ...update, kind, sha256, expires_at: expires_at || null,
         verification: asJson({ ...facts, at: now, official_id: record.official_id }) }
@@ -194,7 +200,7 @@ export async function rebuildReputation(scope: any, max = 30) {
       await tx(QUEUE).where({ seller_id: seller }).forUpdate().first()
       const now = new Date().toISOString()
       const [evidence, contracts, prior] = await Promise.all([
-        tx(EVIDENCE).where({ seller_id: seller }).select('kind', 'status', 'verification', 'sha256', 'expires_at'),
+        tx(EVIDENCE).where({ seller_id: seller }).select('id','seller_id','kind','status','verification','sha256','expires_at'),
         tx('engineering_request').where({ seller_id: seller, status: 'completed' }).whereNull('deleted_at')
           .select('id','customer_id','status','intent_family','payment','acceptance','delivery','review','events','proposal'),
         tx(PROJECTIONS).where({ seller_id: seller, specialty: '' }).first('payload'),
@@ -206,7 +212,12 @@ export async function rebuildReputation(scope: any, max = 30) {
         if (record.status !== 'verified') continue
         if (record.expires_at) {
           const until = canonicalDate(record.expires_at)
-          if (until <= now) continue
+          if (until <= now) {
+            await tx(EVIDENCE).where({ id: record.id, seller_id: seller }).update({ status: 'expired' })
+            await addEvent(tx, record, 'expire', 'expired', { at: now })
+            record.status = 'expired'
+            continue
+          }
           expiry.push(until)
           record.expires_at = until
         }
@@ -222,7 +233,8 @@ export async function rebuildReputation(scope: any, max = 30) {
           eligible: specialty ? eligibility.has(specialty) : eligibility.size > 0, total: result.total, qualification: result.qualification }
       })
       const current = JSON.parse(rows[0].payload)
-      if (JSON.stringify(prior?.payload?.points) !== JSON.stringify(current.points) || prior?.payload?.version !== current.version) {
+      const pointsChanged = Object.keys(current.points).some(key => prior?.payload?.points?.[key] !== current.points[key])
+      if (pointsChanged || prior?.payload?.version !== current.version) {
         await tx(HISTORY).insert({ seller_id: seller, payload: asJson({ total: current.total, points: current.points, version: current.version }), computed_at: now })
       }
       await tx(PROJECTIONS).where({ seller_id: seller }).delete()

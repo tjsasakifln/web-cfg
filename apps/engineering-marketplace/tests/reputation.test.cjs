@@ -105,6 +105,14 @@ test('credits only confirmed completed contracts and tempers ratings from one bu
   assert.equal(score([], ignored).total, null);
 });
 
+test('one activity linked to a paid completed platform contract cannot score in both dimensions', () => {
+  const job = contract('engr_fixture');
+  const cat = evidence('cat_with_attestation', 'work', { platform_request_id: job.id });
+  const art = evidence('art', 'work');
+  assert.equal(score([cat, art], [job]).points.technical, 0);
+  assert.equal(score([cat, art], []).points.technical, 8.82);
+});
+
 test('versioned policy is auditable and a verified newcomer has a separate qualification', () => {
   const custom = { ...policy, version: 'confenge-trust-2', technical: {
     ...policy.technical, weights: { cat_with_attestation: 6, cat_without_attestation: 3, art: 1 },
