@@ -77,7 +77,7 @@
       </div>
       <p id="ferramenta-descricao" class="portfolio-summary">As análises usam apenas as informações que você fornece. Nenhuma base oficial é consultada automaticamente.</p>
       <form id="formulario" method="post" novalidate>
-        <fieldset id="campos" disabled><legend class="visually-hidden">Dados da análise</legend></fieldset>
+        <fieldset id="campos" data-tool-runtime-fields disabled><legend class="visually-hidden">Dados da análise</legend></fieldset>
         <div class="portfolio-actions">
           <button class="portfolio-button primary" type="submit" id="calcular" disabled>Conferir e calcular</button>
           <button class="portfolio-button secondary" type="button" id="salvar" disabled>Salvar dados de trabalho</button>
@@ -85,7 +85,8 @@
           <input type="file" id="abrir-arquivo" accept=".json,application/json" hidden aria-label="Arquivo JSON de trabalho">
         </div>
       </form>
-      <p id="aviso" role="status" aria-live="polite" class="portfolio-status">Escolha uma ferramenta para começar.</p>
+      <noscript><p class="portfolio-status">Este cálculo precisa de JavaScript ativo no navegador. Ative-o para preencher os dados e obter o resultado.</p></noscript>
+      <p id="aviso" role="status" aria-live="polite" data-tool-runtime-status class="portfolio-status">Escolha uma ferramenta para começar.</p>
       <section id="resultado" class="portfolio-result" aria-labelledby="resultado-titulo" hidden>
         <div class="portfolio-result-header"><div><p class="portfolio-eyebrow">RESULTADO NO NAVEGADOR</p><h3 id="resultado-titulo">Análise</h3></div><span class="portfolio-local">Prévia gratuita</span></div>
         <div id="metricas" class="portfolio-metrics"></div>
