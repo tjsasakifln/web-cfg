@@ -157,7 +157,7 @@ async function main() {
       await compose(`Checking ${service} production environment and HTTP health`, ['exec', '-T', service, 'node'], { input: `
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-assert.equal(process.version, 'v22.22.2');
+assert.equal(process.version, 'v22.23.5');
 assert.equal(process.env.NODE_ENV, 'production');
 assert.equal(process.env.MEDUSA_WORKER_MODE, '${service === 'api' ? 'server' : 'worker'}');
 assert.equal(process.getuid(), 1000);

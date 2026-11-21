@@ -35,7 +35,7 @@ x-app: &app
 
 services:
   postgres:
-    image: postgres:17.11-bookworm
+    image: postgres:17.12-bookworm@sha256:837bed18782820fe967067cb5328b02b0d9992c1be9a37ee0c9c492cfc03af3b
     restart: unless-stopped
     environment:
       POSTGRES_DB: postgres
@@ -59,7 +59,7 @@ services:
       retries: 10
 
   redis:
-    image: redis:7.2.17-bookworm
+    image: redis:7.2.17-bookworm@sha256:5b816bb37d9707a70f10ef5002ecf8ee431750d397010fc4314c93dca887962f
     restart: unless-stopped
     environment:
       REDIS_PASSWORD: ${MARKETPLACE_REDIS_PASSWORD:?Set the private Redis password}
