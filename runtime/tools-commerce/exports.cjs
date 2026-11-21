@@ -11,6 +11,7 @@ const LOCAL_FORMATS = Object.freeze({
   'propriedades-de-secoes': ['html', 'csv', 'json'],
   'memorial-de-calculo': ['html', 'csv', 'json', 'tex'],
   'bim-georreferenciador': ['ifc', 'json'],
+  'bim-editor-ifc': ['ifc'],
   'bim-federacao': ['bcfzip'],
   'bim-cortes': ['svg'],
   'bim-inventario': ['csv', 'json'],
