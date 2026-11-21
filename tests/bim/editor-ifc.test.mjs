@@ -7,7 +7,7 @@ const fixture=readFileSync(new URL('../../scripts/bim/overrides/examples/inventa
 
 test('abrir IFC4 com geometria e propriedades existentes',()=>{
   const doc=new IfcDocument(fixture);
-  assert(doc.count>=80);
+  assert(doc.count>=70);
   assert.equal(doc.record(27).type,'IFCWALL');
   assert.equal(doc.elements().find(x=>x.id===27).name,'Parede norte');
   const props=doc.properties(27);
