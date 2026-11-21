@@ -86,9 +86,9 @@
           <button class="portfolio-button primary" type="submit" id="calcular" disabled>Conferir e calcular</button>
           <button class="portfolio-button secondary" type="button" id="salvar" disabled>Salvar dados de trabalho</button>
           <button class="portfolio-button secondary" type="button" id="abrir" disabled>Abrir dados salvos</button>
-          <input type="file" id="abrir-arquivo" accept=".json,application/json" hidden aria-label="Arquivo JSON de trabalho">
         </div>
       </form>
+      <input type="file" id="abrir-arquivo" data-leitura-local accept=".json,application/json" hidden aria-label="Arquivo JSON de trabalho">
       <noscript><p class="portfolio-status">Este cálculo precisa de JavaScript ativo no navegador. Ative-o para preencher os dados e obter o resultado.</p></noscript>
       <p id="aviso" role="status" aria-live="polite" data-tool-runtime-status class="portfolio-status">Escolha uma ferramenta para começar.</p>
       <section id="resultado" class="portfolio-result" aria-labelledby="resultado-titulo" hidden>
